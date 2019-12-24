@@ -1,0 +1,74 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title         = 'resetting.request.title' -%}
+{%- set title_domain  = 'FOSUserBundle' -%}
+{%- set title_icon    = 'eraser' -%}
+{%- set submit_text   = 'resetting.request.submit' -%}
+{%- set submit_domain = 'FOSUserBundle' -%}
+{%- set action        = path('fos_user_resetting_reset', {'token': token}) -%}
+{%- set cancel_path   = path('homepage') -%}
+{%- set form_attr     = form_attr|default({})|merge({
+						'class': 'fos_user_resetting_reset',
+						'data-equal_to': 'fos_user.password.mismatch'|trans([], 'validators') }) -%}
+
+
+{# class styles #}
+{% block card_container_class 'col-xl-8 offset-xl-2 my-auto h-75' %}
+
+{% block card_header %}
+{{ parent() }}
+{% if error|default(false) %}
+    <em class="text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</em>
+{% endif %}
+{% endblock %}
+
+{% block card_body -%}
+{{ form_row(form.username) }}
+{{ form_row(form.plainPassword.first, {attr: {minlength: 6, maxlength: 255}}) }}
+{{ form_row(form.plainPassword.second, {attr: {equalTo: '#plainPassword_first'}}) }}
+{{ form_widget(form) }}
+{%- endblock %}
+
+{% block card_footer -%}
+{{ parent() }}
+<hr class="mb-2">
+<div class="row">
+    <div class="col-md-6">
+        <small>{{ app_name_version }}</small>
+    </div>
+    <div class="col-md-6 text-md-right">
+        <small>{{ icons.copyright_link() }}</small>
+    </div>
+</div>
+{% endblock %}
+
+{# hide navigation and footer #}
+{% block navigation %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block stylesheets -%}
+{{ asset_css('css/center.css') }}
+{% endblock %}
+
+{% block javascripts -%}
+{#
+{% if recaptcha_used|default(false) and recaptcha_site|default(false) %}
+{{ asset_js('https://www.google.com/recaptcha/api.js?render=' ~ recaptcha_site, {'recaptcha-site': recaptcha_site, 'recaptcha-action': 'login'}) }}
+{%- endif %}
+#}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/vendor/zxcvbn/zxcvbn.js') }}
+{{ asset_js('js/app/plugins/password-strength.js') }}
+{{ asset_js('js/app/plugins/plugin-password.js') }}
+{{ asset_js('js/app/fos_user_recaptcha.js') }}
+{{ asset_js('js/app/fos_user_reset.js') }}
+{% else %}
+{{ asset_js('js/fos_user_reset.js') }}
+{% endif %}
+{%- endblock %}

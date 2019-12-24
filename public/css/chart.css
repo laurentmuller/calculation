@@ -1,0 +1,9 @@
+@import 'style.css';
+
+/**! compression tag for ftp-deployment */
+
+div.chart {
+    min-width: 400px;
+    min-height: 500px;
+    margin: 0 auto;
+}

@@ -1,0 +1,29 @@
+{# imports #}
+{% import 'about/about_macro.html.twig' as tools %}
+
+<div class="phpversion">
+    <table id="data-table-mysql" class="table table-hover table-sm mb-0">
+        <tbody>
+        {# version #}
+        <tr class="h">                                    
+            <td colspan="2">
+                <a href="https://www.mysql.com/" target="_blank" rel="noopener noreferrer">
+                    <img alt="MySQL logo" width="165" height="95" src="{{ asset('images/mysql.png') }}">    
+	               <h1 class="p text-body">{{ 'about.version'|trans({'%version%': version}) }}</h1>
+                </a>                   
+            </td>
+        </tr>
+        {# database #}
+        {{ tools.headerInfo('Database') }}
+        {% for key, value in database %}
+	        {{ tools.rowInfo(key, value) }}    
+        {% endfor %}
+        
+        {# configuration #}
+        {{ tools.headerInfo('Configuration') }}
+        {% for entry in configuration %}
+	        {{ tools.rowInfo(entry.Variable_name, entry.Value) }}    
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

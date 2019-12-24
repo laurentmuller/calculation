@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title = 'index.title' -%}
+
+{# show search #}
+{% block navigation -%}
+{%- set show_navigation = true -%}
+{{ parent() }}
+{%- endblock %}
+
+{% block body -%}
+<div class="row no-gutters">
+	<div class="col">
+        {%- include 'index/panel.last.html.twig'   -%}
+        {%- include 'index/panel.state.html.twig'  -%}
+        {%- include 'index/panel.month.html.twig'  -%}
+	</div>
+</div>
+{# switch user #}
+{%- include 'user/user_switch.html.twig' -%}
+{%- endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() -}}
+{{ asset_js('js/app/index.js') }}
+{% else -%}
+{{ asset_js('js/index.js') }}
+{% endif %}
+{% include 'cookie_banner.html.twig' %}
+{% endblock %}

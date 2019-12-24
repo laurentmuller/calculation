@@ -1,0 +1,6 @@
+{%- if item.countProducts > 0 -%}
+{%- set href = path('product_table', { 'query': item.code}) -%}
+<a href="{{ href }}" title="{{ 'category.list.product_title'|trans }}">{{ item.countProducts|integer }}</a>
+{%- else -%}
+{{ item.countProducts|integer }}
+{%- endif -%}

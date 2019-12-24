@@ -1,0 +1,33 @@
+{% extends 'cards/card_table.html.twig' %}
+
+{# parameters #}
+{%- set title       = 'duplicate.title' -%}
+{%- set title_icon  = 'copy far' -%}
+
+{%- set pdf_title   = 'calculation.list.pdf_title' -%}
+{%- set object_type = IEntityVoter.ENTITY_CALCULATION -%}
+
+{# actions #}
+{%- set params      = {'id' : 0} -%}
+{%- set add_path    = false -%}
+{%- set show_path   = path('calculation_show', params) -%}
+{%- set edit_path   = path('calculation_edit', params) -%}
+{%- set delete_path = path('calculation_delete', params) -%}
+{%- set pdf_path    = path('calculation_duplicate_pdf') -%}
+{%- set single_path = path('calculation_pdf_id', params) -%}
+
+
+{% block card_header -%}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ 'duplicate.description'|trans }}</p>
+{% if attributes.itemsCount > 0 and results.data|length > 0 -%}
+<p class="ml-4 mb-0">{{ 'duplicate.count'|trans({'%calculations%': results.data|length, '%items%': attributes.itemsCount }) }}</p>
+{%- endif %}
+{%- endblock %}
+
+{# other actions #}
+{% block table_actions %}
+{{ _self.item_data_external(single_path, 'common.button_pdf', 'file-pdf far') }}
+<div class="dropdown-divider"></div>
+{{ parent() }}
+{% endblock %}

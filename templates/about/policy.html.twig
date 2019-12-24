@@ -1,0 +1,22 @@
+{% extends 'cards/card_base.html.twig' %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title      = 'index.menu_policy' -%}
+{%- set title_icon = 'info-circle' -%}
+
+{% block card_container_class '' %}
+
+{% block card_body %}
+{% include 'about/policy_content.html.twig' with {'link': true} %}
+{% endblock %}
+
+{% block card_footer %}
+{{ icons.homepage() }}
+{% if app.debug or app_environment == 'dev' %}
+    {{ icons.button_pdf('about_policy_pdf') }}
+{% endif %}
+{{ icons.link(path('about_licence'), 'about.licence', 'btn btn-form btn-outline-success') }}
+{% endblock %}

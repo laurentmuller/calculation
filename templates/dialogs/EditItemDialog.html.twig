@@ -1,0 +1,79 @@
+{% import 'macros/_icons.html.twig' as icons %}
+
+<div id="item_modal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
+    <form id="item_form" autocomplete="off" data-add="{{ 'calculationitem.add.title'|trans }}" data-edit="{{ 'calculationitem.edit.title'|trans }}">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dialog-title">{{ 'calculationitem.edit.title'|trans }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          				<span aria-hidden="true">&times;</span>
+        			</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row" id="item_search_row">
+                        <div class="col-md-4 form-group">                            
+                            <input type="search" class="form-control" id="item_search_input" name="item_search_input" placeholder="{{ 'list.search_placeholder'|trans }}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="required" for="item_description">{{ 'calculationitem.fields.description'|trans }}</label>
+                                <input id="item_description" name="item_description" class="form-control" type="text" required="required">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label" for="item_unit">{{ 'calculationitem.fields.unit'|trans }}</label>
+                                <input id="item_unit"  name="item_unit" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="required" for="item_category">{{ 'calculationitem.fields.category'|trans }}</label> 
+                                <select id="item_category" name="item_category" class="form-control">
+                             	{% for category in categories %}
+                                    <option value="{{ category.id  }}">{{ category.code }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="required" for="item_price">{{ 'calculationitem.fields.price'|trans }}</label>
+                                <input id="item_price" name="item_price" class="form-control text-right" type="text" value="0.00" required="required">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="required" for="item_quantity">{{ 'calculationitem.fields.quantity'|trans }}</label>
+                                <input id="item_quantity" name="item_quantity" class="form-control text-right" type="text" value="1.00" required="required">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label" for="item_total">{{ 'calculationitem.fields.total'|trans }}</label>
+                                <input id="item_total" name="item_total" class="form-control text-right" type="text" value="0.00" disabled="disabled">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-8 text-right">
+                    	<input type="submit" id="item_submit_button" class="btn btn-form btn-primary" value="{{ 'common.button_ok'|trans }}">
+                        <input type="button" id="item_reset_button"  class="btn btn-form btn-secondary" value="{{ 'common.button_cancel'|trans }}" data-dismiss="modal">
+                        <input type="button" id="item_delete_button" class="btn btn-form btn-outline-danger" value="{{ 'common.button_delete'|trans }}">
+                    </div>
+                    <div class="col-md-4 text-md-right">
+                        <small class="text-danger">{{ 'common.required'|trans }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

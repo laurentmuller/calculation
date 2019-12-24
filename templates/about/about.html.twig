@@ -1,0 +1,67 @@
+{% extends 'cards/card_base.html.twig' %}
+
+{# imports #}
+{% import 'about/about_macro.html.twig' as tools %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title            = 'index.menu_info' -%}
+{%- set title_icon       = 'info-circle' -%}
+{%- set title_parameters = {'%app_name%': app_name} -%}
+
+{% block card_class 'mb-2' %}
+{% block card_container_class '' %}
+{% block card_footer_class 'd-none' %}
+
+{% block card_body %}
+{# application #}
+<div id="configuration" class="phpversion" data-error="{{ 'about.error'|trans }}">
+    <table id="data-table-application" class="table table-hover table-sm mb-0">
+        <tbody>
+            <tr class="h">
+                <td colspan="2">
+                    <p>
+                        <img alt="Application logo" width="72" height="72" src="{{ asset('images/icons/icon-072x072.png') }}">
+                        <h1 class="p">{{ 'about.version'|trans({'%version%': app_version}) }}</h1>
+                    </p>
+                </td>
+            </tr>
+            {{ tools.rowInfo('about.app_name'|trans, app_name) }}
+            {{ tools.rowInfo('about.app_version'|trans, app_version) }}
+            {{ tools.rowInfo('about.app_environment'|trans, ('environment.' ~ app_environment)|trans) }}
+            {{ tools.rowInfoLink('about.app_customer'|trans, app_customer, app_customer_url) }}
+            {{ tools.rowInfoLink('about.app_owner'|trans, app_owner, app_owner_url) }}            
+        </tbody>                
+    </table>
+</div>
+{% endblock %}
+
+{% block body %}
+{{ parent() }}
+{% include 'about/about_licence.html.twig' %}
+{% include 'about/about_policy.html.twig' %}
+{% if is_granted('ROLE_ADMIN') %}
+    {% include 'about/about_symfony.html.twig' %}
+    {% include 'about/about_php.html.twig' %}
+    {% include 'about/about_mysql.html.twig' %}
+{% endif %}
+<div class="row no-gutters">
+    <div class="col d-print-none">
+        {{ icons.homepage() }}    
+        {% if app.debug  or app_environment == 'dev' -%}{{ icons.button_pdf('about_pdf') }}{%- endif %}
+    </div>
+</div>    
+{% endblock %}
+
+{% block stylesheets %}
+{{ asset_css('css/phpinfo.css') }}
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/about.js') }}
+{% else %}
+{{ asset_js('js/about.js') }}
+{% endif %}
+{% endblock %}

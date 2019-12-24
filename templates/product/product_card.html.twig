@@ -1,0 +1,48 @@
+{% extends 'cards/card_flex.html.twig' %}
+
+{# imports #}
+{% import 'macros/_properties.html.twig' as properties %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title        = 'product.list.title' -%}
+{%- set title_icon   = 'file-alt far' -%}
+{%- set add_title    = 'product.list.add_title' -%}
+{%- set pdf_title    = 'product.list.pdf_title' -%}
+{%- set empty_list   = 'product.list.empty' -%}
+
+{# actions #}
+{%- set object_type  = IEntityVoter.ENTITY_PRODUCT -%}
+{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD,    object_type) ? 'product_add'    : null -%}
+{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'product_edit'   : null -%}
+{%- set clone_page   = is_granted(IEntityVoter.ATTRIBUTE_ADD,    object_type) ? 'product_clone'  : null -%}
+{%- set delete_page  = is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) ? 'product_delete' : null -%}
+{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW,   object_type) ? 'product_show'   : null -%}
+{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF,    object_type) ? 'product_pdf'    : null -%}
+{%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+
+{% block item_title %}
+{%- set item_title = item.description  -%}
+{%- if default_page -%}
+    <a href="{{ path(default_page, {'id': item.id}) }}" class="text-body rowlink-skip">{{ item_title }}</a>
+{%- else -%} 
+    {{ item_title }}
+{%- endif -%}
+{% endblock %}
+
+{% block item_title_class %}font-weight-bold{% endblock %}
+
+{% block item_property %}
+{{ properties.line(item.categoryCode) }}
+{{ properties.line(item.supplier) }}
+{{ properties.separator() }}
+{{ properties.property('product.fields.price', item.price|amount ~ (item.unit ? ' / ' ~ item.unit : ''), 'text-right pr-4') }}
+{% endblock %}
+
+{% block edit_action %}
+{{ parent() }}
+{%- if clone_page|default(false) -%}
+    {% set clone_path = path(clone_page, {'id': item.id, 'selection': item.id}) %}
+    {{ icons.dropdownItem(clone_path, 'common.button_clone', 'copy') }}
+{%- endif -%}
+{% endblock %}

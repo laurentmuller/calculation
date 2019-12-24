@@ -1,0 +1,165 @@
+{
+	"source": "https://cdnjs.cloudflare.com/ajax/libs/",
+	"target": "js/vendor/",
+	"bootswatch": "https://bootswatch.com/api/4.json",
+	"prefixes": {
+		"js": "/**! compression tag for ftp-deployment */\n\n",
+		"css": "/**! compression tag for ftp-deployment */\n\n"
+	},
+	"renames": {
+		"\\.src\\.": "."
+	},
+	"plugins": [
+		{
+			"name": "jquery",
+			"version": "3.4.1",
+			"files": [
+				"jquery.js"
+			]
+		},
+		{
+			"name": "twitter-bootstrap",
+			"version": "4.4.1",
+			"files": [
+				"js/bootstrap.bundle.js",
+				"js/bootstrap.bundle.js.map",
+				"css/bootstrap.css",
+				"css/bootstrap.css.map"
+			]
+		},
+		{
+			"name": "font-awesome",
+			"version": "5.11.2",
+			"files": [
+				"css/all.css",
+				
+				"webfonts/fa-brands-400.eot",
+				"webfonts/fa-brands-400.svg",
+				"webfonts/fa-brands-400.ttf",
+				"webfonts/fa-brands-400.woff",
+				"webfonts/fa-brands-400.woff2",
+				
+				"webfonts/fa-regular-400.eot",
+				"webfonts/fa-regular-400.svg",
+				"webfonts/fa-regular-400.ttf",
+				"webfonts/fa-regular-400.woff",
+				"webfonts/fa-regular-400.woff2",
+				
+				"webfonts/fa-solid-900.eot",
+				"webfonts/fa-solid-900.svg",
+				"webfonts/fa-solid-900.ttf",
+				"webfonts/fa-solid-900.woff",
+				"webfonts/fa-solid-900.woff2"
+			]
+		},
+		{
+			"name": "jquery-validate",
+			"version": "1.19.1",
+			"files": [
+				"jquery.validate.js",
+				"additional-methods.js",
+				"localization/messages_fr.js"
+			]
+		},
+		{
+			"name": "summernote",
+			"version": "0.8.12",
+			"files": [
+				"summernote-bs4.css",
+				"summernote-bs4.js",
+				"summernote-bs4.js.map",
+				"font/summernote.eot",
+				"font/summernote.ttf",
+				"font/summernote.woff",
+				"lang/summernote-fr-FR.js"
+			]
+		},
+		{
+			"name": "highcharts",
+			"version": "7.2.0",
+			"files": [
+				"highcharts.src.js"
+			]
+		},
+		{
+			"name": "html5sortable",
+			"version": "0.9.17",
+			"files": [
+				"html5sortable.js"
+			]
+		},
+		{
+			"name": "datatables",
+			"version": "1.10.19",
+			"files": [
+				"js/jquery.dataTables.js",
+				"js/dataTables.bootstrap4.js",
+				"css/dataTables.bootstrap4.css"
+			]
+		},
+		{
+			"source": "http://cdn.datatables.net/",
+			"name": "keytable",
+			"target": "datatables",
+			"version": "2.5.0",
+			"files": [
+				"js/dataTables.keyTable.js"
+			]
+		},
+		{
+			"source": "https://raw.githubusercontent.com/bartaz/sandbox.js/master",
+			"passthrough": true,
+			"name": "jquery.highlight",
+			"target": "datatables/js",
+			"version": "5",
+			"files": [
+				"jquery.highlight.js"
+			]
+		},
+		{
+			"source": "https://cdn.datatables.net/plug-ins/1.10.20/features/searchHighlight",
+			"passthrough": true,
+			"name": "dataTables.searchHighlight",
+			"target": "datatables/js",
+			"version": "1.10.20",
+			"files": [
+				"dataTables.searchHighlight.js"
+			]
+		},
+		{
+			"source": "https://cdn.datatables.net/plug-ins/1.10.20/features/conditionalPaging",
+			"passthrough": true,
+			"name": "dataTables.conditionalPaging",
+			"target": "datatables/js",
+			"version": "1.10.20",
+			"files": [
+				"dataTables.conditionalPaging.js"
+			]
+		},
+		{
+			"name": "zxcvbn",
+			"version": "4.4.2",
+			"files": [
+				"zxcvbn.js",
+				"zxcvbn.js.map"
+			]
+		},
+		{
+			"name": "jquery-contextmenu",
+			"version": "2.9.0",
+			"target": "contextmenu",
+			"files": [
+				"jquery.contextMenu.css",
+				"jquery.contextMenu.js"
+			]
+		},
+		{
+			"name": "clipboard.js",
+			"version": "2.0.4",
+			"target": "clipboard",
+			"files": [
+				"clipboard.js"
+			]
+		}
+	]
+}

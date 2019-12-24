@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{# customize the user margin field to display a tooltip #}
+{% block _calculation_userMargin_widget -%}
+    {%- set type = type|default('number') -%}
+    <div class="input-group">
+        {%- if not disabled -%}
+            <div class="input-group-prepend d-print-none">
+            	{%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': min_margin|percent }) -%}
+                {%- set template = '<div class="tooltip tooltip-success" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' -%}
+                <button class="btn btn-adjust btn-outline-secondary has-tooltip" type="button" data-html="true" data-toggle="tooltip" data-template="{{ template }}" data-title="{{ title }}"{% if not below %} disabled="disabled"{% endif %}>
+                    <i class="fas fa-wrench" aria-hidden="true"></i>
+                </button>
+            </div>
+        {%- endif -%}
+        {{- block('form_widget_simple') -}}
+        <div class="input-group-append">
+            <span class="input-group-text">%</span>
+        </div>
+    </div>
+{%- endblock %}
+{% form_theme form _self %}
+
+{# parameters #}
+{%- if new -%}
+{%- set title            = 'calculation.add.title' -%}
+{%- set title_parameters = {} -%}
+{%- else -%}
+{%- set title            = 'calculation.edit.title' -%}
+{%- set title_parameters = {'%id%' : item.id|identifier} -%}
+{%- endif -%}
+{%- set form_attr        = form_attr|default({})|merge({'id': 'edit-form'}) -%}
+{%- if editable -%}
+{%- set form_attr        = form_attr|merge({
+        				   	'data-title'           : title|trans(title_parameters),
+        				   	'data-grouping'        : grouping,
+        				   	'data-decimal'         : decimal,
+        					'data-update'          : url('ajax_update'), 
+        				   	'data-search-customer' : url('ajax_search_customer'),
+        				   	'data-search-product'  : url('ajax_search_product'),
+        				   	'data-search-unit'     : url('ajax_search_unit'),
+        				   	'data-error-update'    : 'calculation.edit.error.update_total'|trans, 
+        				   	'data-error-customer'  : 'calculation.edit.error.search_customer'|trans,
+        				   	'data-error-product'   : 'calculation.edit.error.search_product'|trans,
+        				   	'data-error-unit'      : 'calculation.edit.error.search_unit'|trans,
+        				   	'data-error-margin'    : 'calculation.edit.error.user_margin'|trans }) -%}
+{%- endif -%}
+
+{# cancel path #}
+{%- set cancel_path = cancelUrl(app.request, item.id|default(0), 'calculation_list') -%}
+
+{%- block container_class 'container-fluid' -%}
+
+{% block body -%}
+{# start form #}
+{{ form_start(form, {attr: form_attr}) }}
+<div class="row">
+	<div class="col-xl-4 pr-lg-0">
+		{% include 'calculation/calculation_edit_panel_main.html.twig' %}
+        {% include 'calculation/calculation_edit_panel_totals.html.twig' %}
+	</div>
+	<div class="col-xl-8">
+        {% include 'calculation/calculation_edit_panel_items.html.twig' %}
+	</div>
+</div>
+
+{# end form #}
+{{ form_end(form) }}
+
+{# dialogs #}
+{% if editable -%}{% include 'dialogs/EditItemDialog.html.twig' %}{%- endif %}
+{%- endblock %}
+
+{% block javascripts -%}
+{% if app.debug %}
+    {{ parent() }}
+    {{ asset_js('js/app/calculation_error.js') }}
+    {% if editable %}
+        {{ asset_js('js/vendor/jquery-validate/jquery.validate.js') }}
+        {{ asset_js('js/vendor/jquery-validate/additional-methods.js') }}
+        {{ asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}
+        {{ asset_js('js/vendor/html5sortable/html5sortable.js') }}
+        {{ asset_js('js/app/plugins/plugin-typeahead.js') }}
+        {{ asset_js('js/app/plugins/plugin-validator.js') }}
+        {{ asset_js('js/app/plugins/plugin-validator_fr.js') }}
+        {{ asset_js('js/app/plugins/plugin-rowlink.js') }}
+        {{ asset_js('js/app/plugins/plugin-input.js') }}
+        {{ asset_js('js/app/calculation_edit.js') }}
+    {% endif %}
+{% else %}
+    {% if editable %}
+        {{ asset_js('js/calculation_edit.js') }}
+    {% else %}    
+        {{ asset_js('js/calculation_error.js') }}
+    {% endif %}
+{% endif %}
+{%- endblock %}

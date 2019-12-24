@@ -1,0 +1,150 @@
+{% extends 'cards/card_base.html.twig' %}
+
+{# macros #}
+{% macro format(value) -%}
+{{ is_int(value) ? value|integer : value|amount }}
+{%- endmacro %}
+
+{% macro outputPopover(cell, value) -%}
+{%- set sep = ' <small><i class="fas fa-arrow-right" aria-hidden="true"></i></small> ' -%}
+<table class="table table-borderless table-sm mb-0">
+    <tbody>
+    	<tr>
+            <td class="font-weight-bold">Valeur</td>
+            <td class="text-currency" colspan="2">{{ value }}</td>
+        </tr>
+        <tr>
+            <td class="border-top font-weight-bold">Ligne</td>
+            <td class="border-top">{{ cell.rowTitle(sep)|raw }}</td>
+            <td class="border-top text-currency">{{ _self.format(cell.row.value) }}</td>
+        </tr>
+        <tr>
+            <td class="font-weight-bold">Colonne</td>
+            <td>{{ cell.columnTitle(sep)|raw }}</td>
+            <td class="text-currency">{{ _self.format(cell.column.value) }}</td>
+        </tr>
+    </tbody>
+</table>
+{% endmacro %}
+
+{% macro outputHeaders(nodes) -%}
+{%- for node in nodes %}
+    {%- if node.leaf -%}
+        <td class="text-currency not-hover">{{ node.title }}</td>
+    {%- else -%}
+        <td class="text-nowrap not-hover" colspan="{{ node.lastChildren|length }}">{{ node.title }}</td>
+    {%- endif -%}
+{%- endfor -%}
+{% endmacro %}
+
+{% macro outputValue(data, class) -%}
+{%- set class = ('text-currency ' ~  class|default(''))|trim -%}
+{% if data %}
+    {%- set popover = 'not-hover' not in class -%}
+    {%- set value   = _self.format(data.value) -%}    
+    <td class="{{ class }}"{% if popover %} data-toggle="popover" data-html="{{ _self.outputPopover(data, value)|e }}"{% endif %}>{{ value }}</td>
+{% else %}
+    <td class="{{ class }} not-hover">&nbsp;</td>
+{% endif %}
+{% endmacro %}
+
+{% macro outputCell(table, column, row, class) -%}
+{%- set cell = table.findCellByNode(column, row) -%}
+{{ _self.outputValue(cell, class) }}
+{% endmacro %}
+
+{% macro outputCells(table, columns, row) -%}
+{%- for column in columns %}
+    {{- _self.outputCell(table, column, row, 'hover') -}}
+{%- endfor -%} 
+{{ _self.outputValue(row, 'not-hover bg-success text-white') }}
+{% endmacro %}
+
+{% macro outputRow(table, columns, row) -%}
+{% if row.leaf %}
+    <tr>
+        <td class="text-nowrap not-hover">{{ row.title }}</td>
+        {{ _self.outputCells(table, columns, row) }}
+    </tr>
+{% else %}
+    <tr>
+        <td class="text-nowrap not-hover" rowspan="{{ row.lastChildren|length + 1 }}">{{ row.title }}</td>
+    </tr>    
+    {%- for child in row.children %}
+        {{ _self.outputRow(table, columns, child) }}
+    {%- endfor -%} 
+{% endif %}
+{% endmacro %}
+
+{% macro outputTitle(table) -%}
+<div class="row">
+    <div class="col-auto font-weight-bold mr-auto">{{ table.title }}</div>
+    <div class="col-auto">{{ table.column.title }}<i class="fas fa-fw fa-arrow-right" aria-hidden="true"></i></div>
+</div>
+<div class="row">
+    <div class="col"><i class="fas fa-fw fa-arrow-down" aria-hidden="true"></i> {{ table.row.title }}</div>
+</div>
+{%- endmacro %}
+
+{# parameters #}
+{%- set title       = 'pivot.title' -%}
+{%- set title_icon  = 'table' -%}
+{%- set col_level   = table.column.deepLevel -%}
+{%- set row_level   = table.row.deepLevel -%}
+{%- set total_title = table.totalTitle|default('calculation.fields.total'|trans) -%}
+
+{# classes #}
+{% block container_class 'container-fluid' %}
+{% block card_footer_class 'd-none' %}
+{% block card_container_class '' %}
+
+{# header #}
+{% block card_header %}
+<div class="row">
+    <div class="col-lg-5">{{ parent() }}</div>
+    <div class="col-lg-7 text-lg-right d-print-none">
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="highlight" name="highlight">
+            <label class="custom-control-label" for="highlight">{{ 'pivot.highlight'|trans }}</label>
+        </div>
+    </div>
+</div>
+{%- endblock %}
+
+{# body #}
+{% block card_body %}
+<div class="table-responsive">
+    <table id="pivot" class="table table-bordered table-sm mb-0">
+        <thead>
+            {%- for i in 1 .. col_level -%}
+            <tr>
+                {%- if i == 1 -%}<td  class="text-nowrap not-hover" rowspan="{{ col_level }}" colspan="{{ row_level }}">{{ _self.outputTitle(table) }}</td>{%- endif -%}
+                {{ _self.outputHeaders(table.column.levelChildren(i)) }}     
+                {%- if i == 1 -%}<td  rowspan="{{ col_level }}" class="text-currency bg-success text-white not-hover">{{ total_title }}</td>{%- endif -%}
+            </tr>
+            {%- endfor -%} 
+        </thead>
+        <tbody>
+            {%- set columns = table.column.lastChildren -%}
+            {%- for row in table.row.children %}
+                {{ _self.outputRow(table, columns, row) }}
+            {%- endfor -%}
+        </tbody>    
+        <tfoot>
+            <tr>
+                <td class="text-nowrap not-hover bg-success text-white" colspan="{{ row_level }}">{{ total_title }}</td>
+                {%- for col in table.column.lastChildren %}
+                    {{ _self.outputValue(col, 'not-hover bg-success text-white') }}
+                {%- endfor -%}
+                {{ _self.outputValue(table, 'not-hover bg-success text-white') }}
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{% endblock %}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('js/app/plugins/plugin-wholly.js') }}
+{{ asset_js('js/app/calculation_pivot.js') }}
+{%- endblock %}

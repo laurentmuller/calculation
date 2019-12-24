@@ -1,0 +1,21 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# parameters #}
+{%- set title         = 'test.recaptcha' -%}
+{%- set title_icon    = 'google fab' -%}
+{%- set cancel_path   = path('homepage') -%}
+{%- set submit_params = {'disabled' : 'disabled'} -%}
+
+{% block card_body %}
+{{ form_row(form.subject) }}
+{{ form_row(form.message) }}
+<div class="form-group text-right mb-0">
+    <a href="https://developers.google.com/recaptcha/intro" target="_blank" rel="noopener noreferrer">reCAPTCHA API</a>
+</div>
+{% endblock %}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('https://www.google.com/recaptcha/api.js?render=' ~ google_recaptcha_site_key, {'recaptcha-site': google_recaptcha_site_key, 'recaptcha-action': recaptcha_action}) }}
+{{ asset_js('js/app/test/recaptcha.js') }}
+{%- endblock %}

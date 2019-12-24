@@ -1,0 +1,54 @@
+{% extends 'cards/card_show.html.twig' %}
+
+{% macro formatArray(name, value) %}
+{%- if value|length -%}
+<tr>
+    <td class="w-25">{{ name|trans }}</td>
+    <td class="w-75 text-break" style="white-space: pre-wrap;">{{ value|var_export }}</td>
+</tr>
+{%- endif -%}
+{% endmacro %}
+
+{# imports #}
+{% import 'macros/_properties.html.twig' as properties %}
+
+{# parameters #}
+{%- set id     = item.id -%}
+{%- set title  = 'logs.show.title' -%}
+{%- set params = routeParams(app.request, id) %}
+
+{# actions #}
+{%- set cancel_path = cancelUrl(app.request, id, 'log_table') -%}
+
+{# classes #}
+{% block card_container_class '' %}
+{% block card_class -%}
+{% switch item.level -%}
+{%- case 'error' %}
+	border-danger
+{%- case 'critical' -%}
+	border-danger
+{%- case 'alert' -%}
+	border-danger
+{%- case 'emergency' -%}
+	border-danger
+{%- case 'warning' -%}
+    border-warning
+{%- case 'info' -%}
+    border-info
+{%- case 'notice' -%}
+    border-info
+{%- case 'debug' -%}
+    border-secondary
+{%- endswitch %} 
+{%- endblock %}
+
+{# properties #}
+{% block property_body %}
+{{ properties.property('logs.fields.date', item.createdAt|localedatetime(null, 'medium')) }}
+{{ properties.property('logs.fields.channel', item.channel|humanize) }}
+{{ properties.property('logs.fields.level', item.level|humanize) }}
+{{ properties.property('logs.fields.message', item.message, 'text-break') }}
+{{ _self.formatArray('logs.fields.context', item.context) }}
+{{ _self.formatArray('logs.fields.extra', item.extra) }}
+{% endblock %}

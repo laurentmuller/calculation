@@ -1,0 +1,104 @@
+{% extends 'cards/card_base.html.twig' %}
+
+{# macros #}
+{% macro button(type, icon) -%}
+<button type="button" data-type="{{ type }}" class="mb-2 btn btn-notify btn-form btn-{{ type }}">
+    {{- ('theme.background.' ~ type)|trans -}}
+</button>
+{%- endmacro %} 
+
+{% macro position(value, selection) -%}
+{%- set text = 'parameters.messagePosition.' ~ value|replace({'-': '_'}) -%}
+<option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
+{%- endmacro %}
+
+{% macro timeout(value, selection) -%}
+{%- set round = (value / 1000)|round(0, 'floor') -%}
+{%- set text  = 'parameters.messageTimeout.' ~ round -%}
+<option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
+{%- endmacro %}
+
+{% macro checkbox(id, text) -%}
+<div class="custom-control custom-switch custom-control-inline">
+  <input type="checkbox" class="custom-control-input" id="{{ id }}" checked="checked">
+  <label class="custom-control-label" for="{{ id }}">{{ text }}</label>
+</div>
+{%- endmacro %}
+
+{# parameters #}
+{%- set title      = 'test.notification' -%}
+{%- set title_icon = 'bell far' -%}
+
+{% block card_body %}
+<div class="form-row">
+    <div class="col">
+        <label class="horizontal-line">Type de message</label>
+    </div>
+</div>
+<div class="form-row">
+    <div class="col text-center">
+        {{ _self.button('success') }}
+        {{ _self.button('warning') }}
+        {{ _self.button('danger') }}
+        {{ _self.button('info') }}
+    </div>
+</div>
+<div class="form-row">
+    <div class="col text-center">
+        {{ _self.button('primary') }}
+        {{ _self.button('secondary') }}
+        {{ _self.button('dark') }}
+    </div>
+</div>
+<hr>
+<div class="form-row">
+    <div class="col-7">
+        <div class="form-group">
+            <label for="position">{{ 'parameters.fields.messagePosition'|trans }}</label>
+            <select id="position" name="position" class="form-control" data-position="{{ position }}" data-random="{{ url('ajax_random_text') }}">
+                {{ _self.position('top-left',      position) }}
+                {{ _self.position('top-center',    position) }}
+                {{ _self.position('top-right',     position) }}
+                {{ _self.position('bottom-left',   position) }}
+                {{ _self.position('bottom-center', position) }}
+                {{ _self.position('bottom-right',  position) }}
+            </select>
+        </div>
+    </div>
+    <div class="col-5">
+        <div class="form-group">
+            <label for="timeout">{{ 'parameters.fields.messageTimeout'|trans }}</label>
+            <select id="timeout" name="timeout" class="form-control">
+                {{ _self.timeout(1000, timeout) }}
+                {{ _self.timeout(2000, timeout) }}
+                {{ _self.timeout(3000, timeout) }}
+                {{ _self.timeout(4000, timeout) }}
+                {{ _self.timeout(5000, timeout) }}
+            </select>
+        </div>        
+    </div>    
+</div>
+<div class="form-row">
+    <div class="col">
+        <label class="horizontal-line">Options</label>
+    </div>
+</div>
+<div class="form-row">
+    <div class="col">
+        <div class="form-group">
+            {{ _self.checkbox('title',    'Titre') }}
+            {{ _self.checkbox('icon',     'Icône') }}
+            {{ _self.checkbox('subtitle', 'Sous-titre') }}
+            {{ _self.checkbox('close',    'Fermer') }}
+            {{ _self.checkbox('autohide', 'Masquer automatiquement') }}
+        </div>
+    </div>
+</div> 
+{% endblock %}
+
+{% block card_footer_class 'd-none' %}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('js/app/test/notification.js') }}
+{%- endblock %}

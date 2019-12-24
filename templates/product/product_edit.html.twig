@@ -1,0 +1,41 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# parameters #}
+{%- set title      = new ? 'product.add.title' : 'product.edit.title' -%}
+{%- set title_icon = 'file-alt far' -%}
+{%- set page_list  = 'product_list' -%}
+{%- set form_attr  = form_attr|default({})|merge({
+                     'data-title'           : title|trans,
+                     'data-search-unit'     : url('ajax_search_unit'),
+                     'data-search-supplier' : url('ajax_search_supplier'),
+                     'data-error-unit'      : 'product.edit.error_search_unit'|trans,
+                     'data-error-supplier'  : 'product.edit.error_search_supplier'|trans }) -%}
+                      
+{% block card_body %}
+{{ form_row(form.description) }}
+<div class="form-row">
+    <div class="col-md-3">
+    	{{ form_row(form.unit) }}
+    </div>
+    <div class="col-md-9">
+	    {{ form_row(form.category) }}
+    </div>
+</div>
+{{ form_row(form.supplier) }}
+<div class="form-row">
+    <div class="col-md-3">
+	    {{ form_row(form.price) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/plugins/plugin-typeahead.js') }}
+{{ asset_js('js/app/plugins/plugin-input.js') }}
+{{ asset_js('js/app/product_edit.js') }}
+{% else %}
+{{ asset_js('js/product_edit.js') }}
+{% endif %}
+{% endblock %}

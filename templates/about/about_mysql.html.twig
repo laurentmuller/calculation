@@ -1,0 +1,18 @@
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+<div class="row no-gutters">
+    <div class="col">
+        <div class="card mb-2">
+            <div class="card-header card-collapse">
+                <a data-toggle="collapse" href="#mysql" class="card-link" aria-expanded="false" aria-controls="mysql">{{ 'about.sql'|trans }}</a>
+            </div>
+            <div id="mysql" class="card-body collapse" aria-expanded="false" data-url="{{ path('ajax_mysql') }}">
+                <div class="alert mb-0">
+                    <span class="spinner-border spinner-border-sm text-secondary" role="status" aria-hidden="true"></span>
+                    <span>{{ 'about.loading'|trans }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    

@@ -1,0 +1,130 @@
+{% extends 'cards/card_base.html.twig' %}
+
+{# imports #}
+{% import 'macros/_datatables.html.twig' as helper %}
+
+{# macros #}
+{% macro button(class, text, action) %}
+{%- set path = path('homepage') ~ '_type_/' ~ action ~ '/_id_' -%}
+<a href="#" class="disabled btn btn-sm btn-form-sm {{ class }}" data-path="{{ path }}">{{ text|trans }}</a>
+{% endmacro %}
+
+{# parameters #}
+{%- set title       = 'search.title' -%}
+{%- set title_icon  = 'search' -%}
+{%- set ajax_path   = path(app.request.get('_route')) -%}
+{%- set ajax_lang   = path('ajax_language') -%}
+
+{%- set id          = app.request.get('id', 0) -%}
+{%- set orderdir    = app.session.get('FullSearchDataTable.orderdir') -%}
+{%- set ordercolumn = app.session.get('FullSearchDataTable.ordercolumn') -%}
+{%- set pagelength  = app.session.get('FullSearchDataTable.pagelength', 15) -%}
+
+{# header #}
+{% block card_header %}
+<div class="row">
+    <div class="col-lg-5 mt-1">{{ parent() }}</div>
+    <div class="col-lg-7 text-lg-right d-print-none">
+        <div class="btn-group" role="group" aria-label="{{ 'common.actions'|trans }}">
+        	{% if show_granted %}
+            {{ _self.button('btn-table-show btn-info', 'common.button_show', 'show') }}
+            {% endif %}
+            {% if edit_granted %}
+            {{ _self.button('btn-table-edit btn-success', 'common.button_edit', 'edit') }}
+            {% endif %}
+            {% if delete_granted %}
+            {{ _self.button('btn-table-delete btn-danger', 'common.button_delete', 'delete') }}
+            {% endif %}
+        </div>
+    </div>  
+</div>
+{% endblock %}
+
+{# body #}
+{% block card_body %}
+<div class="row mb-2 d-print-none">
+    <div class="col-auto mr-auto">
+        <div class="form-inline">
+             <label class="mr-2 required" for="table_search">{{ 'datatable.search'|trans }}</label>
+             <div class="input-group input-group-sm bg-white">
+                <input type="text" id="table_search" name="table_search" class="form-control form-control-sm form-control-border-right-0" autocomplete="off">
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-clear btn-outline-secondary border border-left-0" title="{{ 'datatable.clear'|trans }}">
+                        <i class="fas fa-eraser" aria-hidden="true"></i>
+                    </button>
+                </div>
+             </div>
+             <label id="minimum" class="ml-2 text-danger d-none">{{ 'search.minimum'|trans }}</label>
+        </div>
+    </div>
+    <div class="col-auto">
+        <div class="form-inline">
+            <label class="mr-2" for="table_length">{{ 'datatable.show'|trans }}</label>
+            <select id="table_length" name="table_length" class="form-control form-control-sm custom-select custom-select-sm">
+                {{ helper.page(10, pagelength) }}
+                {{ helper.page(15, pagelength) }}
+                {{ helper.page(20, pagelength) }}
+                {{ helper.page(25, pagelength) }}
+                {{ helper.page(30, pagelength) }}
+                {{ helper.page(50, pagelength) }}
+            </select>
+            <label class="ml-2">{{ 'datatable.elements'|trans }}</label>
+        </div>    
+    </div>
+</div>
+{%- set attributes = {
+        'id': 'data-table',
+        'class': 'table table-list table-hover table-sm dataTable border-bottom w-100',
+        'data-ajax': ajax_path,
+        'data-lang': ajax_lang,
+        'data-total': results.recordsTotal,
+        'data-filtered': results.recordsFiltered,
+        'data-pagelength': pagelength,        
+        'data-ordercolumn': ordercolumn,
+      	'data-orderdir': orderdir,
+        'data-edit': edit_action,
+        'data-search-highlight': true,
+        'data-debug': app.debug
+} -%}
+<table{{ helper.attribs(attributes) }}>
+    {{ helper.headers(columns) }}
+    <tbody>
+    	{% for row in results.data -%}
+    	 	<tr{% if row['id'] == id %} class="datatables-selection"{% endif %}>
+    	 	{% for column in columns -%}
+    	 		{%- set value = row[column.name] -%}
+    	 		<td class="{{ column.cellClassName }}">
+    	 			{{- column.rawData ? value|raw : value -}}	
+    	 		</td>
+    	 	{%- endfor %}
+			</tr>
+    	{%- endfor %}
+    </tbody>
+</table>
+{% endblock %}
+{# class #}
+{% block card_container_class '' %}
+{% block card_body_class 'px-3 pb-0' %}
+{% block card_footer_class 'd-none' %}
+
+{# stylesheets #}
+{% block stylesheets %}
+{{ asset_css('css/datatables.css') }}
+{%- endblock -%}
+
+{# java scripts #}
+{% block javascripts -%}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/vendor/datatables/js/jquery.dataTables.js') }}
+{{ asset_js('js/vendor/datatables/js/dataTables.bootstrap4.js') }}
+{{ asset_js('js/vendor/datatables/js/dataTables.keyTable.js') }}
+{{ asset_js('js/vendor/datatables/js/dataTables.conditionalPaging.js') }}
+{{ asset_js('js/vendor/datatables/js/jquery.highlight.js') }}
+{{ asset_js('js/vendor/datatables/js/dataTables.searchHighlight.js') }}
+{{ asset_js('js/app/extensions/datatables-extensions.js') }}
+{{ asset_js('js/app/search.js') }}
+{% else %}
+{{ asset_js('js/search.js') }}
+{% endif %}
+{% endblock %}

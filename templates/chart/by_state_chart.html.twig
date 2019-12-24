@@ -1,0 +1,54 @@
+{% extends 'chart/base_chart.html.twig' %}
+{% import 'macros/_properties.html.twig' as properties %}
+{% trans_default_domain 'chart' %}
+
+{# parameters #}
+{%- set title        = 'title_by_state' -%}
+{%- set title_icon   = 'flag far' -%}
+
+{% block data %}
+<div class="col my-2">
+    <table class="table table-bordered table-hover table-list table-sm">
+        <thead>
+            <tr>
+                <th>{{ 'fields.state'|trans }}</th>
+                <th class="text-currency">{{ 'fields.count'|trans }}</th>
+                <th class="text-currency">{{ 'fields.percent'|trans }}</th>
+                <th class="text-currency">{{ 'fields.sum'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody data-link="row" class="rowlink">
+            {% for item in data -%}
+            <tr title="{{ 'row_by_state'|trans({'%name%': item.code}) }}">
+                <td>
+                   <span class="mr-1" style="{{ properties.stateCss(item.color) }}"></span>
+	               <a href="{{ path('calculation_list', {'query': item.code}) }}">{{ item.code }}</a>
+                </td>
+                <td class="text-currency">{{ item.count|integer }}</td>
+                <td class="text-currency">{{ item.percent|percent(true, 1)}}</td>
+                <td class="text-currency">{{ item.total|amount }}</td>
+            </tr>
+            {% endfor -%}
+        </tbody>
+        <tfoot>
+            <tr>
+            	<th>{{ 'fields.total'|trans }}</th>
+            	<th class="text-currency">{{ count|integer }}</th>
+            	<th class="text-currency">{{ 1|percent(true, 1)}}</th>
+            	<th class="text-currency">{{ total|amount }}</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{% endblock %}
+
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/plugins/plugin-rowlink.js') }}
+{% else %}
+{{ asset_js('js/chart.js') }}
+<script nonce="{{ csp_nonce() }}">{{ chart(chart) }}</script>
+{% endif %}
+{% endblock %}

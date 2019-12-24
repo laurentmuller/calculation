@@ -1,0 +1,4 @@
+{# create a category entry - used by the product list #}
+{% macro categoryEntry(value, text, selection) %}
+    <option value="{{ value }}"{% if value == selection %} selected{% endif %}>{{ text }}</option>
+{% endmacro %}

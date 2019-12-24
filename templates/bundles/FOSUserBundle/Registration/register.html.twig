@@ -1,0 +1,25 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+{# parameters #}
+{%- set title        = "registration.submit" -%}
+{%- set title_domain = 'FOSUserBundle' -%}
+{%- set title_icon   = 'user-plus' -%}
+{%- set action       =  path('fos_user_registration_register') -%}
+{%- set form_attr    = form_attr|default({})|merge({ 'class': 'fos_user_registration_register' }) -%}
+{%- set cancel_path  = path("homepage") -%}
+
+{% block card_body -%}
+{{ form_widget(form) }}
+{%- endblock %}
+
+{% block javascripts -%}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/plugins/password-strength.js') }}
+{{ asset_js('js/app/plugins/plugin-password.js') }}
+{{ asset_js('js/app/validation_edit.js') }}    
+{% else %}
+{{ asset_js('js/fos_user_register.js') }}
+{% endif %}
+{%- endblock %}

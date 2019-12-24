@@ -1,0 +1,68 @@
+{# create a property row #}
+{% macro property(name, value, class) %}
+{%- set value = value|default('&nbsp;') -%}
+{%- set class = ('w-75 data-search  ' ~ class|default(''))|trim -%}
+<tr>
+    <td class="w-25">{{ name|trans }}</td>
+    <td class="{{ class }}">{{ value|raw }}</td>
+</tr>
+{% endmacro %}
+
+{# create a property row with a single value #}
+{% macro line(value, class) %}
+{%- set value = value|default('&nbsp;') -%}
+{%- set class = ('data-search d-table-cell ' ~ class|default('text-body'))|trim -%}
+<tr class="d-table-row">
+    <td colspan="2" class="{{ class }}">{{ value|raw }}</td>
+</tr>
+{% endmacro %}
+
+{# create a property row with an e-mail value #}
+{% macro email(value, class, name = false) %}
+{%- if value -%}
+    {%- set value = '<a href="mailto:{0}">{0}</a>'|replace({'{0}': value}) -%}
+{%- endif -%}
+{%- if name -%}
+    {{- _self.property(name, value, class) -}}    
+{%- else -%}
+    {{- _self.line(value, class) -}}
+{%- endif -%}
+{% endmacro %}
+
+{# create a property row with a link value #}
+{% macro link(href, text, class, name = false) %}
+{%- set text = text|default(href) -%}
+{%- if href -%}
+    {%- set href = '<a href="{0}">{1}</a>'|replace({'{0}': href, '{1}': text}) -%}
+{%- endif -%}    
+{%- if name -%}
+    {{- _self.property(name, href, class) -}}
+{%- else -%}
+    {{- _self.line(href, class) -}}
+{%- endif -%}
+{% endmacro %}
+
+{# create a property row with an external link #}
+{% macro externalLink(href, text, class, name = false) %}
+{%- set text = text|default(href) -%}
+{%- if href -%}
+    {%- set href = '<a href="{0}" target="_blank" rel="noopener noreferrer">{1}</a>'|replace({'{0}': href, '{1}': text}) -%}    
+{%- endif -%}
+{%- if name -%}
+    {{- _self.property(name, href, class) -}}    
+{%- else -%}
+    {{- _self.line(href, class) -}}
+{%- endif -%}
+{% endmacro %}
+
+{# create a property line separator #}
+{% macro separator() %}
+<tr>
+    <td colspan="2"><hr class="my-1 mr-3"></td>
+</tr>
+{% endmacro %}
+
+{# set the CSS left border style for the given state color #}
+{% macro stateCss(color) -%}
+{{ 'border-left:5px solid %s;'|format(color|default('transparent')) }}
+{%- endmacro %}

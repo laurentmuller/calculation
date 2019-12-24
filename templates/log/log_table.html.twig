@@ -1,0 +1,49 @@
+{% extends 'cards/card_table.html.twig' %}
+
+{# macros
+{% macro entry(entry, class) %}
+{%- set text = entry.name|humanize ~ ' (' ~ entry.count|integer ~ ')' -%}
+<a class="dropdown-item {{ class }}" href="#" data-name="{{ entry.name }}">{{ text }}</a>
+{% endmacro %}
+ #}
+ 
+{# parameters #}
+{%- set title       = 'logs.title' -%}
+{%- set title_icon  = 'book' -%}
+
+{%- set params      = {'id' : 0} -%}
+{%- set object_type = IEntityVoter.ENTITY_CUSTOMER -%}
+{%- set show_path   = path('log_show_entry', params) -%}
+
+{#
+{%- set pdf_title   = 'log.list.pdf_title' -%}
+#}
+{# actions
+{% block show_length_actions -%}
+{{ parent() }}
+<div class="btn-group ml-2">
+    <div class="btn-group" role="group">
+        <button id="levelGroup" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ 'logs.fields.level'|trans }}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="levelGroup">
+        <a class="dropdown-item active level" href="#" data-name="all">{{ 'logs.level_all'|trans }}</a>
+        {% for entry in levels %}{{ _self.entry(entry, 'level') }}{% endfor %}
+        </div>
+    </div>
+    <div class="btn-group" role="group">
+        <button id="channelGroup" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ 'logs.fields.channel'|trans }}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="channelGroup">
+        <a class="dropdown-item active channel" href="#" data-name="all">{{ 'logs.channel_all'|trans }}</a>
+        {% for entry in channels %}{{ _self.entry(entry, 'channel') }}{% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+#}
+ 
+{% block stylesheets %}
+{{ asset_css('css/logs_table.css') }}
+{% endblock %}

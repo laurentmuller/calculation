@@ -1,0 +1,23 @@
+search: 'Rechercher&nbsp;:'
+processing: Traitement en cours...
+lengthMenu: Afficher _MENU_ éléments
+info: Eléments _START_ - _END_ / _TOTAL_
+infoEmpty: Aucun élément correspondant
+infoFiltered: (filtre de _MAX_ éléments)
+infoPostFix: ''
+loadingRecords: Chargement en cours...
+zeroRecords: Aucun donnée ne correspond à la recherche.
+emptyTable: Aucune donnée disponible dans le tableau.
+paginate:
+    first: <i class="fa fa-step-backward" aria-hidden="true" title="Premier"></i>
+    previous: <i class="fa fa-caret-left fa-lg" aria-hidden="true" title="Précédent"></i>
+    next: <i class="fa fa-caret-right fa-lg" aria-hidden="true" title="Suivant"></i>
+    last: <i class="fa fa-step-forward" aria-hidden="true" title="Dernier"></i>
+aria:
+    sortAscending: :Cliquez pour trier la colonne par ordre croissant
+    sortDescending: :Cliquez pour trier la colonne par ordre décroissant
+select:
+    rows:
+        0: Aucune ligne sélectionnée
+        1: 1 ligne sélectionnée
+        _: '%d lignes sélectionnées'

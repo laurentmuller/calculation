@@ -1,0 +1,16 @@
+{% extends 'cards/card_base.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+{% import "macros/_icons.html.twig" as icons %}
+
+{# parameters #}
+{%- set title        = "registration.submit" -%}
+{%- set title_domain = 'FOSUserBundle' -%}
+{%- set title_icon   = 'user-plus' -%}
+
+{% block card_body %}
+<p class="mb-0">{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
+{% endblock %}
+
+{% block card_footer %}
+{{ icons.homepage() }}
+{% endblock %}

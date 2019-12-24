@@ -1,0 +1,96 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+
+{# parameters #}
+{%- set title       = 'translator.title' -%}
+{%- set title_icon  = 'globe' -%}
+{%- set action      = url('ajax_translate') -%}
+{%- set submit_text = 'translator.submit_text' -%}
+{%- set cancel_path = false -%}
+{%- set form_attr   = form_attr|default({})|merge({
+                     'data-title'        : 'translator.title'|trans,
+                     'data-success'      : 'translator.translate_sucess'|trans,
+                     'data-copy-success' : 'translator.copy_sucess'|trans,
+                     'data-copy-error'   : 'translator.copy_error'|trans,
+                     'data-detected'     : 'translator.detect_label'|trans, 
+                     'data-locale'       :  app.request.locale }) -%}
+
+{% block card_container_class '' %}
+
+{% block card_body %}
+<div class="form-row">
+    <div class="col-md-5">
+        <div class="form-group">
+            <label for="from" class="required">{{ 'translator.from_label'|trans }}</label>
+            <select id="from" name="from" class="form-control">
+                <option value="">{{ 'translator.auto_detect'|trans }}</option>
+                {% for key, value in languages %}
+            	<option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div class="form-group text-center">
+            <label>{{ 'translator.exchange_label'|trans }}</label>
+            <a href="#" role="button" class="btn btn-exchange btn-secondary form-control disabled" title="{{ 'translator.exchange_label'|trans }}">
+                <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="to" class="required">{{ 'translator.to_label'|trans }}</label> 
+            <select id="to" name="to" class="form-control" required="required" notEqualTo="#from">
+            {% for key, value in languages %}
+                <option value="{{ value }}"{%if value == language%} selected="selected" {%endif%}>{{ key }}</option>
+            {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label for="service" class="required">{{ 'translator.service_label'|trans }}</label> 
+            <select id="service" name="service" class="form-control" data-languages="{{ path('ajax_languages') }}">
+            {% for entry in services %}
+                <option value="{{ entry.class }}" data-api="{{ entry.api }}" {%if entry.name == service%} selected="selected" {%endif%}>{{ entry.name }}</option>
+            {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="text" class="required">{{ 'translator.text_label'|trans }}</label>
+            <textarea id="text" name="text" maxlength="4000" class="form-control fixed" rows="12" required="required" dir="auto" placeholder="{{ 'translator.placeholder'|trans }}"></textarea>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="result">{{ 'translator.result_label'|trans }}</label>
+            <textarea id="result" name="result" class="form-control fixed bg-white" rows="12" readonly="readonly" dir="auto"></textarea>
+        </div>
+    </div>    
+</div>
+<div class="form-row">
+    <div class="col-md-6">
+        <span id="detected" class="text-muted"></span>
+    </div>
+    <div class="col-md-6 text-md-right">
+        <a id="api-url" name="api-url" href="{{ service_url }}" target="_blank" rel="noopener noreferrer">Documentation (API)</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block actions_form -%}
+{{ parent() }}
+<button type="button" class="btn btn-copy btn-form btn-success" disabled="disabled" data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>
+{%- endblock %}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('js/vendor/clipboard/clipboard.js') }}
+{{ asset_js('js/app/test/translate.js') }}
+{%- endblock %}

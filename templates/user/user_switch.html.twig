@@ -1,0 +1,19 @@
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+<div class="row no-gutters">
+    <div class="col">
+        <div class="alert alert-warning mt-2 mb-0">
+            <div class="row">
+                <div class="col">
+                    {{- 'user.switch.connected'|trans({'%name%': app.user.username})|raw -}}
+                </div>
+                <div class="col text-right">
+                    {{ icons.link(path('user_list', {'_switch_user': '_exit'}), 'user.switch.exit.title', 'alert-link font-weight-normal', 'user-times') }}
+                </div>
+            </div>    
+        </div>
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,165 @@
+{% extends 'cards/card_base.html.twig' %}
+
+{# create a sort menu #}
+{% macro sortMenu(route, field, currentField, currentMode, separator) %}
+{% import 'macros/_icons.html.twig' as icons %}
+{%- set name       = field.name -%}
+{%- set label      = field.label|trans -%}
+{%- set numeric    = field.numeric is defined ? field.numeric : false -%}
+{%- set ascPath    = path(route, {'sortField': name, 'sortMode': 'ASC'}) -%}
+{%- set descPath   = path(route, {'sortField': name, 'sortMode': 'DESC'}) -%}
+{%- set ascActive  = name == currentField and currentMode == 'ASC' -%}
+{%- set descActive = name == currentField and currentMode == 'DESC' -%}
+<a class="dropdown-item{% if ascActive %} active{% endif %}" href="{{ ascPath }}">
+    {%- set icon = numeric ? 'sort-numeric-down': 'sort-alpha-down' -%}    
+    {{ icons.icon(icon, 'list.sort_ascending_title', null, {'%name%': label}) }}
+</a>
+<a class="dropdown-item{% if descActive %} active{% endif %}" href="{{ descPath }}">
+    {%- set icon = numeric ? 'sort-numeric-up' : 'sort-alpha-up' -%}
+    {{ icons.icon(icon, 'list.sort_desscending_title', null, {'%name%': label}) }}
+</a>
+{% if separator %}{{ icons.dropdownSeparator() }}{% endif %}
+{% endmacro %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set selection = selection|default(0) -%}
+{%- set caller    = caller|default('') %}
+
+{# class #}
+{% block card_container_class '' %}
+{% block card_body_class 'd-flex flex-row flex-wrap p-1' %}
+{% block card_footer_class 'd-none' %}
+
+{% block card_header %} 
+<div class="row">
+	{# title #}
+	<div class="col-md-4 mt-1">
+        {{ parent() }}
+	</div>
+	{# toolbar #}
+	<div class="col-md-8 d-print-none form-inline justify-content-lg-end">
+        {% block search_action %}
+        <small id="counter" class="text-muted mr-sm-2"></small>
+        <div class="input-group input-group-sm mr-sm-1 bg-white">
+            <input type="text" class="form-control form-control-border-right-0 form-query-input" id="query" name="query" placeholder="{{ 'list.search_placeholder'|trans }}" autocomplete="off" value="{{ query }}">
+            <div class="input-group-append">
+                <button class="btn btn-query-clear btn-outline-secondary border border-left-0" type="button" title="{{ 'search.clear'|trans }}">
+                    <i class="fas fa-eraser" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        {% endblock %}
+        <div class="input-group input-group-sm">
+            <div class="input-group-prepend">                
+                {%- if add_page|default(false) -%}
+                    {{ icons.link(path(add_page),'' , 'btn btn-success rowlink-skip', 'file far', add_title|default('common.button_add')) }}
+                {%- endif -%}
+            </div>
+            <div class="input-group-append">
+                {%- if pdf_page|default(false) -%}
+                    {{ icons.linkExternal(path(pdf_page),'', 'btn btn-outline-secondary', 'download', pdf_title|default('common.button_pdf')) }}
+                {%- endif -%}
+            	{# sortable fields #}
+                {% if sortFields is defined and sortFields|length %}
+                    {% set route = app.request.get('_route') %}
+                    {{ icons.dropdownEllipsis('sortButton', 'list.sort_title', 'btn btn-outline-secondary dropdown-toggle') }}                	
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sortButton">
+                    {% for field in sortFields %}
+                        {{ _self.sortMenu(route, field, sortField, sortMode, not loop.last) }}
+                    {% endfor %}
+                    </div>                    
+                {% endif %}
+                {%- block toolbar_actions -%}{%- endblock -%}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+ 
+{% block card_body %}
+{# pages #}
+{%- set show_page   = show_page|default(false) -%}
+{%- set edit_page   = edit_page|default(false) -%}
+{%- set delete_page = delete_page|default(false) -%}
+{%- set add_page    = add_page|default(false) -%}
+{%- set dropdown    = show_page or edit_page or delete_page or add_page -%}
+
+{# empty list #}
+{%- set empty_class = 'alert alert-warning flex-fill m-3' -%}
+{%- if items -%}{%- set empty_class = empty_class ~ ' d-none' -%}{%- endif -%}
+<div id="nomatch" role="alert" class="{{ empty_class }}" data-filter="{{ 'list.filter'|trans }}">
+    {{ empty_list|default('list.empty_list')|trans }}
+</div>
+
+{# items #}     
+{% for item in items %}
+    {# links parameters #}
+    {%- set id = item.id -%}
+    {%- set params = routeParams(app.request, id) -%}
+    
+    {# item class #}  
+    {%- set item_class = 'card-flex rounded border p-2 m-1 flex-fill' -%}
+    {%- if id == selection -%}
+        {%- set item_class = item_class ~ ' border-primary' -%}
+    {%- endif -%}
+    {%- if (query and not item.match(query)) -%}
+        {%- set item_class = item_class ~ ' d-none' -%}
+    {%- endif -%}
+    
+    <div class="{{ item_class }}">
+        <div class="row">
+            <div class="col-10 data-search mb-0 {% block item_title_class %}h5 card-title{% endblock %}">
+                {% block item_title %}{% endblock %}
+            </div>       
+            {%- if dropdown -%}
+            <div class="col-2 d-print-none">
+                <div class="dropdown dropleft text-right">
+                	{%- set menu_id = 'dropdown_' ~ id -%}
+                    {{ icons.dropdownEllipsis(menu_id) }}
+                    <div class="dropdown-menu" aria-labelledby="{{ menu_id }}">
+                        {%- if show_page -%}
+                            {%- set show_path = path(show_page, params) -%}
+                            {{ icons.dropdownItem(show_path, 'common.button_show', 'tv') }}
+                        {%- endif -%}
+                        {%- block edit_action -%}
+                        {%- if edit_page -%}
+                            {% set edit_path = path(edit_page, params) %}
+                            {{ icons.dropdownItem(edit_path, 'common.button_edit', 'pencil-alt') }}                        
+                        {%- endif -%}
+                        {% endblock %}
+                        {%- block delete_action -%}
+                        {%- if delete_page -%}
+                            {% set delete_path = path(delete_page, params) %}   
+                            {{ icons.dropdownItem(delete_path, 'common.button_delete', 'times') }}
+                        {%- endif -%}
+                        {% endblock %}
+                        {# custom actions #}
+                        {% block actions %}{% endblock -%}
+                        {% block add_action %}
+                        {%- if add_page -%}
+                            {{ icons.dropdownSeparator }}
+                            {% set add_path = path(add_page, params) %}
+                            {{ icons.dropdownItem(add_path, add_title|default('common.button_add'), 'file far') }}                        
+                        {%- endif -%}
+                        {% endblock %}                            
+                    </div>
+                </div>  
+            </div> 
+            {%- endif -%}                       
+        </div>
+        <table class="table table-borderless table-sm ml-2 my-0">
+            {% block item_property %}{% endblock %}
+        </table>                
+    </div>
+{% endfor %}    
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/card_flex.js') }}
+{% else %}
+{{ asset_js('js/card_flex.js') }}
+{% endif %}
+{% endblock %}

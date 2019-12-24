@@ -1,0 +1,23 @@
+{% extends 'cards/card_show.html.twig' %}
+
+{# imports #}
+{% import 'macros/_properties.html.twig' as properties %}
+
+{# parameters #}
+{%- set title  = 'product.show.title' -%}
+{%- set id     = item.id -%}
+{%- set params = routeParams(app.request, id) %}
+
+{# actions #}
+{%- set edit_path   = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   item) ? path('product_edit',   params) : null -%}
+{%- set delete_path = is_granted(IEntityVoter.ATTRIBUTE_DELETE, item) ? path('product_delete', params) : null -%}
+{%- set cancel_path = cancelUrl(app.request, id, 'product_list') -%}
+
+{# properties #}
+{% block property_body %}
+{{ properties.property('product.fields.description', item.description) }}
+{{ properties.property('product.fields.category', item.categoryCode) }}
+{{ properties.property('product.fields.supplier', item.supplier) }}
+{{ properties.property('product.fields.price', item.price|amount) }}
+{{ properties.property('product.fields.unit', item.unit) }}
+{% endblock %}

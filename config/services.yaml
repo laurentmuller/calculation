@@ -1,0 +1,114 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+    asset_base: '%env(asset_base)%'
+    asset_locale: '%env(asset_locale)%'
+
+    locale:             fr_CH
+    app_name:           Calculation
+    app_version:        0.0.3
+    app_owner:          bibi.nu
+    app_owner_url:      http://www.bibi.nu
+    app_description:    Programme de calculation.
+    app_environment:    '%env(app_environment)%'
+    
+    bing_translator_key:   '%env(bing_translator_key)%'
+    google_translator_key: '%env(google_translator_key)%'
+    yandex_translator_key: '%env(yandex_translator_key)%'
+
+    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
+    google_recaptcha_secret: '%env(GOOGLE_RECAPTCHA_SECRET)%'
+    
+    openweather_key: '%env(openweather_key)%'
+    
+    mailer_user_name: Calculation
+    mailer_user_email: calculation@bibi.nu
+    
+    cookie_path: '%env(cookie_path)%'
+    cookie_secure: '%env(bool:cookie_secure)%'
+    cookie_same_site: '%env(cookie_same_site)%'
+    
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+        # bind default arguments
+        bind:
+            $app_name: '%app_name%'
+            $app_version: '%app_version%'
+            
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # make public
+    App\Service\UserNamer:
+        public: true
+    App\Service\ApplicationService:
+        public: true
+    App\Service\UrlGeneratorService:
+        public: true        
+        
+    # passwords blacklist
+    App\Service\BlacklistProvider:
+        arguments: ['%kernel.project_dir%/resources/data/passwords.txt']
+    
+    # validators
+    App\Validator\RecaptchaValidator:
+        arguments: ['%env(GOOGLE_RECAPTCHA_SECRET)%']
+        
+    # datatables
+    App\DataTables\:
+        resource: '../src/DataTables/'
+        exclude:  '../src/DataTables/{Columns, Tables}'
+        tags: [datatable]
+
+    # used to update calculation when groups or items change
+    App\Listener\CalculationListener:
+        tags:
+            - { name: doctrine.event_listener, event: onFlush}
+                    
+   # login listener
+    App\Listener\UserLoginListener:
+        tags:
+        - name: 'doctrine.orm.entity_listener'
+          entity: 'App\Entity\User'
+          event: 'postUpdate'
+            
+    # logout listener
+    user_logout_handler:
+        class: App\Listener\UserLogoutListener
+       
+    # replace FOS\UserBundle\Controller\SecurityController
+    fos_user.security.controller:
+        class: App\Controller\SecurityController
+        
+    # custom line formatter
+    monolog.custom_formatter: 
+        class: Monolog\Formatter\LineFormatter
+        arguments: ["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", "d.m.Y H:i:s"]
+    
+    # type extensions
+    App\Form\Extension\UrlTypeExtension:
+         tags:
+            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\UrlType }
+    App\Form\Extension\FileTypeExtension:
+         tags:
+            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FileType }
+    App\Form\Extension\VichImageTypeExtension:
+         tags:
+            - { name: form.type_extension, extended_type: Vich\UploaderBundle\Form\Type\VichImageType }

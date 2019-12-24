@@ -1,0 +1,20 @@
+{# macros #}
+{% macro addFlashbag(key, message) -%}
+{%- set values  = message|split('|') -%}
+{%- set title   = (values|length == 2) ? values[0] : ('flashbag.' ~ key)|trans -%}
+{%- set content = (values|length == 2) ? values[1] : message -%}
+<p class="flashbag d-none" data-type="{{ key }}" data-title="{{ title }}">{{ content }}</p>
+{%- endmacro %} 
+ 
+{# add flashbag messages #}
+<div id=flashbags class="d-none" 
+        data-position="{{ flashbagPosition() }}" 
+        data-timeout="{{ flashbagTimeout() }}" 
+        data-margin-top="85" 
+        data-margin-bottom="55" 
+        data-subtitle="{{ app_name_version }}" 
+        data-display-subtitle="{{ flashbagSubTitle() ? 'true' : 'false' }}">
+{% for key, messages in app.flashes %}
+    {% for message in messages %}{{ _self.addFlashbag(key, message) }}{% endfor %}
+{% endfor %}
+</div>

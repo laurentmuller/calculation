@@ -1,0 +1,48 @@
+@import 'datatables.css';
+
+/**! compression tag for ftp-deployment */
+
+/* th.date,*/ 
+td.date {
+    width: 170px;
+    border-left-width: 3px;
+    border-left-style: solid;
+    border-left-color: var(--primary);
+}
+ 
+th.channel, 
+td.channel {
+    width: 100px;
+    white-space: nowrap;
+}
+ 
+th.level, 
+td.level {
+    width: 90px;
+    white-space: nowrap;
+}
+ 
+td.message {
+    /*word-wrap: break-word;*/
+}
+ 
+td.debug {
+    border-left-color: var(--secondary);
+}
+ 
+td.info, 
+td.notice {
+    border-left-color: var(--info);
+}
+ 
+td.warning {
+    border-left-color: var(--warning);
+}
+ 
+td.error, 
+td.critical, 
+td.alert, 
+td.emergency {
+    border-left-color: var(--danger);
+}
+

@@ -1,0 +1,43 @@
+{# macros #}
+{% macro headerInfo(name) -%}
+<tr class="h"><th colspan="2">{{ name }}</th></tr>
+{%- endmacro %}
+
+{% macro headerLinkInfo(name, target, count, colspan) -%}
+{%- set colspan = colspan|default(2) -%}
+<tbody>
+    <th class="h font-weight-normal" colspan="{{ colspan }}">
+        <a data-toggle="collapse" href="#{{ target }}" class="card-link" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
+        <span>({{ count|integer }})</span>
+    </th>
+</tbody>
+{%- endmacro %}
+
+{% macro rowInfo(name, value, nameClass = '', valueClass = '') -%}
+{%- set nameClass = ('e ' ~ nameClass|default(''))|trim -%}
+{%- set valueClass = ('v ' ~ valueClass|default(''))|trim -%}
+<tr>
+    <td class="{{ nameClass }}">{{ name }}</td>
+    <td class="{{ valueClass }}">{{ value }}</td>
+</tr>
+{%- endmacro %}
+
+{% macro rowInfoLink(name, value, href) -%}
+<tr>
+    <td class="e">{{ name }}</td>    
+    <td class="v">
+        <a href="{{ href }}" class="card-link" target="_blank" rel="noopener noreferrer">{{ value }}</a>
+    </td>
+</tr>
+{%- endmacro %}
+
+{% macro rowPackage(package) -%}
+{% import 'macros/_icons.html.twig' as icons %}
+<tr{% if package.dev %} class="font-italic font-weight-light"{% endif -%}>
+    <td class="e pl-3">
+        {{ package.name }}{%- if package.homepage %}&nbsp;{{- icons.linkExternal(package.homepage, '', '', 'share', 'about.extern_link') -}}{% endif -%}
+    </td>
+    <td class="f">{{ package.version }}</td>
+    <td class="text">{{ package.description }}{%- if package.dev %} (Development mode only){%  endif -%}</td>
+</tr>
+{%- endmacro %}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale|replace({'_': '-'}) }}">
+{# parameters #}
+{%- set title_parameters = title_parameters|default({}) -%}
+{%- set title_domain     = title_domain|default(null) -%}
+{%- set page_title       = app_name ~ ' - ' ~ title|trans(title_parameters, title_domain) -%}
+{%- set page_icon        = asset('images/icons/icon-032x032.png') -%}
+{%- set apple_icon       = asset('images/icons/icon-180x180.png') -%}
+{# head #}
+<head>
+{% block head_meta %}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="{{ app_description }}">
+<meta property="og:title" content="{{ page_title }}" />
+<meta property="og:image" content="{{ page_icon }}" />
+<meta property="og:url" content="{{ app.request.uri }}" />
+<meta property="og:description" content="{{ app_description }}">
+<meta property="og:type" content="website" />
+{% endblock %}
+<title>{{ page_title }}</title>
+<link rel="icon" type="image/png" sizes="32x32" href="{{ page_icon }}" />
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="{{ apple_icon }}">
+<link rel="manifest" href="{{ asset('manifest.json', 'local') }}">
+{#  stylesheets  #}
+{{ asset_css(theme_css(app.request), {'title': theme_name(app.request)}) }}
+{% block stylesheets -%}
+{{ asset_css('css/style.css') }}
+{% endblock %}
+</head>
+<body>
+{# navigation #}
+{% block navigation -%}{% include 'navigation.html.twig' %}{%- endblock %}
+{# container #}
+<div class="{% block container_class 'container' %}">
+{% block body -%}{%- endblock %}
+</div>
+{# footer #}
+{% block footer -%}{% include 'footer.html.twig' %}{%- endblock %}
+{# messages #}
+{% block flashbag -%}{% include 'flashbag.html.twig' %}{%- endblock %}
+{# back to top #}
+{% block back_to_top -%}{% include 'back_to_top.html.twig' %}{%- endblock %}
+{# java scripts #}
+<noscript>Your browser does not support JavaScript!</noscript>
+{% block javascripts -%}
+{% if app.debug %}
+{{ asset_js('js/vendor/jquery/jquery.js') }}
+{{ asset_js('js/vendor/twitter-bootstrap/js/bootstrap.bundle.js') }}
+{{ asset_js('js/app/extensions/array-extensions.js') }}
+{{ asset_js('js/app/extensions/jquery-extensions.js') }}
+{{ asset_js('js/app/extensions/params-extensions.js') }}
+{{ asset_js('js/app/extensions/string-extensions.js') }}
+{{ asset_js('js/app/plugins/plugin-toast.js') }}
+{{ asset_js('js/app/common.js') }}
+{% else %}
+{{ asset_js('js/core_common.js') }}
+{%- endif %}
+{%- endblock %}
+</body>
+</html>

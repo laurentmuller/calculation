@@ -1,0 +1,111 @@
+{% extends 'cards/card_base.html.twig' %}
+
+{# macros #}
+{% macro card(key, value, border, type) %}
+<div class="card text-center {% if border %}{{ 'selection ' ~ border }}{% endif %}"
+    {% if border %}data-border="{{ border }}"{% endif %}     
+    {% if type %}data-type="{{ type }}"{% endif %}
+    data-key="{{ key }}">
+    <div class="card-body p-0 mt-1">
+        <h4 class="font-weight-normal">{{ value|integer }}</h4>
+    </div>
+    <div class="card-footer p-1">
+        <small class="card-text">{{ key|capitalize }}</small>
+    </div>
+</div>
+{% endmacro %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title      = 'logs.title' -%}
+{%- set title_icon = 'book' -%}
+
+{% block card_container_class '' %}
+{% block card_body_class 'p-2 pb-0' %}
+
+{% block card_header %}
+{{ parent() }} 
+<div class="row">
+    <div class="col-md-8">
+        <small>{{ 'logs.show.file'|trans({'%file%': file}) }}</small>
+    </div>
+    <div class="col-md-4 text-right">
+         <small id="overall_total" data-text="{{ 'common.count'|trans }}">                    
+            {% if lines %}{{ 'common.count'|trans({'%count%': lines|length|integer}) }}{% endif %}
+         </small>
+    </div>
+</div>
+{% endblock %}
+
+{% block card_body %}
+{% if lines %}
+{# counters #}
+<div id="cards" class="card-deck mb-2">
+    {# level #}
+    {% for key, value in levels %}
+        {{ _self.card(key, value, key, 'level') }}
+    {% endfor %}
+    <div style="background: #dee2e6; width: 1px;"></div>
+    {# channel #}
+    {% for key, value in channels %}
+        {{ _self.card(key, value, 'border-dark', 'channel') }}
+    {% endfor %}
+</div>
+{# logs #}
+<table id="logs" class="table table-hover table-sm mb-0">
+    <thead>
+        <tr>
+            <th class="date">{{ 'logs.fields.date'|trans }}</th>
+            <th class="level">{{ 'logs.fields.level'|trans }}</th>
+            <th class="channel">{{ 'logs.fields.channel'|trans }}</th>                            
+            <th>{{ 'logs.fields.message'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for line in lines %}
+        <tr class="{{ line.level ~ ' ' ~ line.channel }}">
+            <td class="date {{ line.level }}">{{ line.date }}</td>
+            <td class="level"> {{ line.level|capitalize }}</td>
+            <td class="channel">{{ line.channel|capitalize }}</td>
+            <td class="message">
+                {{ line.message|raw|nl2br }}
+                {% if line.context|length %}
+                    <pre class="text-break" style="white-space: pre-wrap;">{{ line.context|var_export }}</pre>
+                {% endif %}
+                {% if line.extra|length %}
+                    <pre class="text-break" style="white-space: pre-wrap;">{{ line.extra|var_export }}</pre>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="m-3 text-danger text-center">{{ 'logs.show.empty'|trans }}</p>                                
+{% endif %}   
+{% endblock %}
+
+{% block card_footer %}
+{{ icons.homepage() }}
+{% if lines %}
+    {{ icons.button_pdf('log_pdf') }}
+    {{ icons.link(path('log_delete'), 'common.button_delete', 'btn btn-form btn-danger') }}
+{% endif %}
+<div id="parameters" data-limit="{{ limit }}" data-href="{{ path('log_pdf') }}" />
+{% endblock %}
+
+{% block stylesheets %}
+{{ asset_css('css/logs.css') }}
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/log_list.js') }}
+{% else %}
+{{ asset_js('js/log_list.js') }}
+{% endif %}
+{% endblock %}
+      

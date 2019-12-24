@@ -1,0 +1,27 @@
+{% extends 'cards/card_base.html.twig' %}
+{% trans_default_domain 'chart' %}
+
+{# parameters #}
+{%- set title_domain = 'chart' -%}
+{%- set title_icon   = title_icon|default('area-chart') -%}
+
+{% block card_footer_class 'd-none' %}
+
+{% block card_body %}
+<div class="row">
+    <div class="col chart" id="{{ constant('App\\Chart\\Basechart::CONTAINER') }}"></div>
+</div>
+<div class="row" id="data">
+{% block data %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ asset_css('css/chart.css') }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ asset_js('js/vendor/highcharts/highcharts.js') }}
+<script nonce="{{ csp_nonce() }}">{{ chart(chart) }}</script>
+{% endblock %}

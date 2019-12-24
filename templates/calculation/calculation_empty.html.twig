@@ -1,0 +1,46 @@
+{% extends 'calculation/calculation_card.html.twig' %}
+
+{% macro printItem(item) -%}
+{% import 'macros/_properties.html.twig' as properties %}
+{%- set texts = {} -%}
+{% if item.price == 0 %}
+    {%- set texts = texts|merge(['calculationitem.fields.price'|trans]) -%}
+{% endif %}
+{% if item.quantity == 0 %}
+    {%- set texts = texts|merge(['calculationitem.fields.quantity'|trans]) -%}
+{% endif %}
+{{- properties.line(item.description ~ ' (' ~ texts|join(', ') ~ ')', 'text-danger') -}}
+{%- endmacro %}
+{% import 'macros/_properties.html.twig' as properties %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title        = 'empty.title' -%}
+{%- set title_icon   = 'file-code far' -%}
+{%- set empty_list   = 'empty.empty' -%}
+{%- set caller       = path(app.request.attributes.get('_route')) -%}
+
+{# actions #}
+{%- set add_page     = false -%}
+{%- set delete_page  = false -%}
+{%- set pdf_page     = false -%}
+{%- set state_page   = false -%}
+{%- set clone_page   = false -%}
+
+{% block search_action %}{% endblock %}
+
+{% block card_header -%}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ 'empty.description'|trans }}</p>
+{% if items|length %}<p class="ml-4 mb-0">{{ 'empty.count'|trans({'%calculations%': items|length, '%items%': items_count }) }}</p>{% endif %}
+{%- endblock %}
+
+{% block calculation_properties -%}
+{% for child in item.items %}{{ _self.printItem(child) }}{% endfor %}
+{%- endblock %}
+
+{%- block card_footer_class '' -%}
+{% block card_footer -%}
+{{ icons.homepage() }}
+{% if items|length %}{{ icons.button_pdf('calculation_empty_pdf')}}{% endif %}
+{%- endblock %}

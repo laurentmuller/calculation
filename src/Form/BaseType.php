@@ -1,0 +1,55 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * Copyright (c) 2019 bibi.nu. All rights reserved.
+ *
+ * This computer code is protected by copyright law and international
+ * treaties. Unauthorised reproduction or distribution of this code, or
+ * any portion of it, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ */
+
+declare(strict_types=1);
+
+namespace App\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+/**
+ * Base type to use with an entity class.
+ *
+ * @author Laurent Muller
+ */
+abstract class BaseType extends AbstractType
+{
+    /**
+     * The class name for the resolver.
+     *
+     * @var string
+     */
+    protected $className;
+
+    /**
+     * Constructor.
+     *
+     * @param string $className the entity class name
+     */
+    protected function __construct($className = null)
+    {
+        $this->className = $className;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        if (!empty($this->className)) {
+            $resolver->setDefaults([
+                'data_class' => $this->className,
+            ]);
+        }
+    }
+}

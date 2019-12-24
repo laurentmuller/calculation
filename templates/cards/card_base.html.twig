@@ -1,0 +1,33 @@
+{# contains skeleton to display a card. #}
+{% extends 'base.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+{# body #}
+{% block body -%}
+<div class="row no-gutters">
+    {% block start_card_container -%}
+    <div class="col {% block card_container_class %}col-xl-8 offset-xl-2{% endblock -%}">
+	{% endblock %}
+        {# card #}
+        <div class="card mb-3 {% block card_class %}{% endblock card_class %}">
+            {# card header #}
+            <div class="card-header {% block card_header_class %}{% endblock %}">
+                {% block card_header %}
+                <h1 class="card-title">
+                    {{- icons.icon(title_icon, title, title_domain|default(null), title_parameters|default({})) -}}
+                </h1>
+                {%- endblock %}
+            </div>
+            {# card body #}
+            <div class="card-body {% block card_body_class %}{% endblock %}">
+                {% block card_body -%}{%- endblock %}
+            </div>
+            {# card footer #}
+            <div class="card-footer d-print-none {% block card_footer_class %}{% endblock %}">
+                {% block card_footer -%}{%- endblock %}
+            </div>
+        </div>
+        {%- block end_card_container %}
+    </div>
+    {%- endblock %}
+</div>
+{%- endblock %}

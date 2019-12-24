@@ -1,0 +1,4 @@
+{# create a state entry - used by the calculation list #}
+{% macro stateEntry(value, text, selection) %}
+    <option value="{{ value }}"{% if value == selection %} selected{% endif %}>{{ text }}</option>
+{% endmacro %}

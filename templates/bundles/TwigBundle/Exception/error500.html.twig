@@ -1,0 +1,5 @@
+{% extends '@Twig/Exception/error_base.html.twig' %}
+
+{# parameters #}
+{% set description = 'http_error_500.description'|trans %}
+{% set suggestion  = 'http_error_500.suggestion'|trans({ '%url%': path('homepage') }) %}

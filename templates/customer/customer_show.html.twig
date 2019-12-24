@@ -1,0 +1,27 @@
+{% extends 'cards/card_show.html.twig' %}
+
+{# imports #}
+{% import 'macros/_properties.html.twig' as properties %}
+
+{# parameters #}
+{%- set id     = item.id -%}
+{%- set title  = 'customer.show.title' -%}
+{%- set params = routeParams(app.request, id) %}
+
+{# actions #}
+{%- set edit_path   = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   item) ? path('customer_edit',   params) : null -%}
+{%- set delete_path = is_granted(IEntityVoter.ATTRIBUTE_DELETE, item) ? path('customer_delete', params) : null -%}
+{%- set cancel_path = cancelUrl(app.request, id, 'customer_list') -%}
+
+{# properties #}
+{% block property_body %}
+{{ properties.property('customer.fields.title', item.title) }}
+{{ properties.property('customer.fields.firstName', item.firstName) }}
+{{ properties.property('customer.fields.lastName', item.lastName) }}
+{{ properties.property('customer.fields.company', item.company) }}
+{{ properties.property('customer.fields.address', item.address) }}
+{{ properties.property('customer.fields.zipCode', item.zipCode) }}
+{{ properties.property('customer.fields.city', item.city) }}
+{{ properties.email(item.email, null, 'customer.fields.email') }}
+{{ properties.externalLink(item.webSite, null, null, 'customer.fields.webSite') }}
+{% endblock %}

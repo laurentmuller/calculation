@@ -1,0 +1,196 @@
+/**! compression tag for ftp-deployment */
+
+/*
+ * ---------------------------------------
+ * Tooltips with custom background colors
+ * ---------------------------------------
+ */
+ 
+/* 
+ * danger
+ */
+.tooltip-danger.tooltip.show {
+    opacity: 1;
+}
+.tooltip-danger.tooltip.bs-tooltip-top .arrow::before, 
+.tooltip-danger.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+    border-top-color: var(--danger);
+}
+.tooltip-danger.tooltip.bs-tooltip-right .arrow::before,
+.tooltip-danger.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+    border-right-color: var(--danger);
+}
+.tooltip-danger.tooltip.bs-tooltip-bottom .arrow::before,
+.tooltip-danger.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+    border-bottom-color: var(--danger);
+}
+.tooltip-danger.tooltip.bs-tooltip-left .arrow::before,
+.tooltip-danger.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+    border-left-color: var(--danger);
+}
+.tooltip-danger .tooltip-inner {
+    color: var(--white);
+    background-color: var(--danger);
+}
+
+/* 
+ * warning
+ */
+.tooltip-warning.tooltip.show {
+    opacity: 1;
+}
+.tooltip-warning.tooltip.bs-tooltip-top .arrow::before, 
+.tooltip-warning.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+    border-top-color: var(--warning);
+}
+.tooltip-warning.tooltip.bs-tooltip-right .arrow::before,
+.tooltip-warning.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+    border-right-color: var(--warning);
+}
+.tooltip-warning.tooltip.bs-tooltip-bottom .arrow::before,
+.tooltip-warning.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+    border-bottom-color: var(--warning);
+}
+.tooltip-warning.tooltip.bs-tooltip-left .arrow::before,
+.tooltip-warning.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+    border-left-color: var(--warning);
+}
+.tooltip-warning .tooltip-inner {
+    background-color: var(--warning);
+    color: var(--dark);    
+}
+
+/* 
+ * success
+ */
+.tooltip-success.tooltip.show {
+    opacity: 1;
+}
+.tooltip-success.tooltip.bs-tooltip-top .arrow::before, 
+.tooltip-success.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+    border-top-color: var(--success);
+}
+.tooltip-success.tooltip.bs-tooltip-right .arrow::before,
+.tooltip-success.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+    border-right-color: var(--success);
+}
+.tooltip-success.tooltip.bs-tooltip-bottom .arrow::before,
+.tooltip-success.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+    border-bottom-color: var(--success);
+}
+.tooltip-success.tooltip.bs-tooltip-left .arrow::before,
+.tooltip-success.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+    border-left-color: var(--success);
+}
+.tooltip-success .tooltip-inner {
+    background-color: var(--success);
+    color: var(--white);    
+}
+
+/* 
+ * info
+ */
+.tooltip-info.tooltip.show {
+    opacity: 1;
+}
+.tooltip-info.tooltip.bs-tooltip-top .arrow::before, 
+.tooltip-info.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+    border-top-color: var(--info);
+}
+.tooltip-info.tooltip.bs-tooltip-right .arrow::before,
+.tooltip-info.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+    border-right-color: var(--info);
+}
+.tooltip-info.tooltip.bs-tooltip-bottom .arrow::before,
+.tooltip-info.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+    border-bottom-color: var(--info);
+}
+.tooltip-info.tooltip.bs-tooltip-left .arrow::before,
+.tooltip-info.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+    border-left-color: var(--info);
+}
+.tooltip-info .tooltip-inner {
+    background-color: var(--info);
+    color: var(--white);    
+}
+
+/*
+ * primary
+ */
+.tooltip-primary.tooltip.show {
+    opacity: 1;
+}
+.tooltip-primary.tooltip.bs-tooltip-top .arrow::before, 
+.tooltip-primary.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+    border-top-color: var(--primary);
+}
+.tooltip-primary.tooltip.bs-tooltip-right .arrow::before,
+.tooltip-primary.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+    border-right-color: var(--primary);
+}
+.tooltip-primary.tooltip.bs-tooltip-bottom .arrow::before,
+.tooltip-primary.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+    border-bottom-color: var(--primary);
+}
+.tooltip-primary.tooltip.bs-tooltip-left .arrow::before,
+.tooltip-primary.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+    border-left-color: var(--primary);
+}
+.tooltip-primary .tooltip-inner {
+    background-color: var(--primary);
+    color: var(--white);    
+}
+
+/*
+ * secondary
+ */
+.tooltip-secondary.tooltip.show {
+    opacity: 1;
+}
+.tooltip-secondary.tooltip.bs-tooltip-top .arrow::before, 
+.tooltip-secondary.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+    border-top-color: var(--secondary);
+}
+.tooltip-secondary.tooltip.bs-tooltip-right .arrow::before,
+.tooltip-secondary.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+    border-right-color: var(--secondary);
+}
+.tooltip-secondary.tooltip.bs-tooltip-bottom .arrow::before,
+.tooltip-secondary.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+    border-bottom-color: var(--secondary);
+}
+.tooltip-secondary.tooltip.bs-tooltip-left .arrow::before,
+.tooltip-secondary.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+    border-left-color: var(--secondary);
+}
+.tooltip-secondary .tooltip-inner {
+    background-color: var(--secondary);
+    color: var(--white);    
+}
+
+/*
+ * dark
+ */
+.tooltip-dark.tooltip.show {
+    opacity: 1;
+}
+.tooltip-dark.tooltip.bs-tooltip-top .arrow::before, 
+.tooltip-dark.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+    border-top-color: var(--dark);
+}
+.tooltip-dark.tooltip.bs-tooltip-right .arrow::before,
+.tooltip-dark.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+    border-right-color: var(--dark);
+}
+.tooltip-dark.tooltip.bs-tooltip-bottom .arrow::before,
+.tooltip-dark.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+    border-bottom-color: var(--dark);
+}
+.tooltip-dark.tooltip.bs-tooltip-left .arrow::before,
+.tooltip-dark.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+    border-left-color: var(--dark);
+}
+.tooltip-dark .tooltip-inner {
+    background-color: var(--dark);
+    color: var(--white);    
+}

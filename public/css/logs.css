@@ -1,0 +1,80 @@
+@import 'style.css';
+
+/**! compression tag for ftp-deployment */
+ 
+table#logs {
+    table-layout: fixed;
+    width: 100%;
+}
+ 
+table#logs > thead > tr:last-child > th {
+    border-bottom-width: 1px;
+}  
+ 
+th.date, 
+td.date {
+    width: 170px;
+    border-left-width: 5px;
+    border-left-style: solid;
+    border-left-color: var(--secondary);
+}
+ 
+th.channel, 
+td.channel {
+    width: 100px;
+    white-space: nowrap;
+}
+ 
+th.level, 
+td.level {
+    width: 90px;
+    white-space: nowrap;
+}
+ 
+td.message {
+    word-wrap: break-word;
+}
+ 
+td.debug {
+    border-left-color: var(--primary);
+}
+ 
+td.info, 
+td.notice {
+    border-left-color: var(--info);
+}
+ 
+td.warning {
+    border-left-color: var(--warning);
+}
+ 
+td.error, 
+td.critical, 
+td.alert, 
+td.emergency {
+    border-left-color: var(--danger);
+}
+ 
+.card.selection {
+    cursor: pointer;
+}
+ 
+.card.debug {
+    border-color: var(--primary);
+}
+ 
+.card.info, 
+.card.notice {
+    border-color: var(--info);
+}
+ 
+.card.warning {
+    border-color: var(--warning);
+}
+ 
+.card.error, 
+.card.critical, 
+.card.alert, 
+.card.emergency {
+    border-color: var(--danger);
+}

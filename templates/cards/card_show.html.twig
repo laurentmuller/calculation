@@ -1,0 +1,36 @@
+{# Template to show an entity. Extends base card template with a table containing entity properties. #}
+{% extends 'cards/card_base.html.twig' %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{% set title_icon = 'list-alt' %}
+
+{% block card_body %}
+<table class="table table-hover table-sm table-list mb-0">
+    {% block property_header %}
+    <thead>
+        <tr>
+            <th class="w-25">{{ 'show.name'|trans }}</th>
+            <th class="w-75">{{ 'show.value'|trans }}</th>
+        </tr>
+    </thead>
+    {% endblock %}
+    <tbody>
+        {% block property_body %}{% endblock %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block card_footer -%}
+{% if cancel_path|default(false) %}
+    {{ icons.button_ok(cancel_path) }}
+{% endif %}
+{% if edit_path|default(false) %}
+    {{ icons.link(edit_path, 'common.button_edit', 'btn btn-form btn-outline-success') }}
+{% endif %}
+{% if delete_path|default(false) %}
+    {{ icons.link(delete_path, 'common.button_delete', 'btn btn-form btn-outline-danger') }}
+{% endif %}
+{%- endblock %}

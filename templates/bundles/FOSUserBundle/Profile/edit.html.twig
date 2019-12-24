@@ -1,0 +1,43 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+{% form_theme form with _self %}
+
+{# custom user name input #}
+{% block _fos_user_profile_form_username_widget -%}
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text"><i class="far fa-fw fa-user" aria-hidden="true"></i></span>
+    </div>
+    {{ block('form_widget_simple') }}    
+</div>
+{%- endblock %}
+
+{# parameters #}
+{%- set title        = 'profile.edit.title' -%}
+{%- set title_domain = 'FOSUserBundle' -%}
+{%- set title_icon   = 'pencil-alt' -%}
+{%- set action       = path('fos_user_profile_edit') -%}
+{%- set cancel_path  = path('homepage') -%}
+{%- set form_attr    = form_attr|default({})|merge({ 
+					   		'class': 'fos_user_profile_edit', 
+					   		'data-check_name': url('ajax_check_name'), 
+					   		'data-check_email': url('ajax_check_email') }) -%}
+
+{% block card_body -%}
+{{ form_widget(form) }}
+{%- endblock %}
+
+{% block stylesheets %}
+{{ asset_css('css/fileinput.css') }}
+{% endblock %}
+
+{% block javascripts -%}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/plugins/plugin-fileinput.js') }}
+{{ asset_js('js/app/plugins/plugin-password.js') }}
+{{ asset_js('js/app/fos_user_profile.js') }}
+{% else %}
+{{ asset_js('js/fos_user_profile.js') }}
+{% endif %}
+{%- endblock %}

@@ -1,0 +1,40 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% import 'macros/_rights.html.twig' as rights %}
+
+{# parameters #}
+{%- set title       = 'user.rights.title' -%}
+{%- set title_icon  = 'unlock' -%}
+{%- set page_list   = 'user_list' -%}
+
+{% block card_container_class '' %}
+
+{% block card_body %}
+<div class="row">
+    <div class="col-md-7">
+        {{ form_row(form.username) }}
+    </div>
+    <div class="col-md-5">
+        {{ form_row(form.role) }}
+    </div>
+</div>
+{{ rights.table(form, default, form.overwrite.vars.checked) }}
+{{ form_row(form.overwrite, {label_attr: {class: 'switch-custom mt-3'}}) }}
+{% endblock %}
+
+{% block actions_form %}
+{{ parent() }}
+{{ rights.actions() }}
+{% endblock %}
+
+{% block card_footer %}
+{{ block('actions_form') }}
+{% endblock %}
+
+{% block javascripts -%}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/rights_edit.js') }}
+{% else %}
+{{ asset_js('js/rights_edit.js') }}
+{% endif %}
+{%- endblock %}

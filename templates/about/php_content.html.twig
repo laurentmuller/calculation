@@ -1,0 +1,14 @@
+{# imports #}
+{% import 'about/about_macro.html.twig' as tools %}
+
+<div class="phpversion">
+    {{ phpInfo|raw }}
+    <table id="data-table-extra" class="table table-hover table-sm mb-0">
+        <tbody>
+            {{ tools.headerInfo('Configuration') }}
+            {% if apache -%}{{ tools.rowInfo('Apache Version', apache) }}{%- endif %}
+            {{ tools.rowInfo('Cache Adapter', cache) }} 
+            {{ tools.rowInfo('Loaded Extensions', extensions) }}
+        </tbody>
+    </table>
+</div>

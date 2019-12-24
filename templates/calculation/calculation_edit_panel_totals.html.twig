@@ -1,0 +1,25 @@
+{# Totals panel #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+<div id="totals-panel" class="card mb-3">
+    <div class="card-header">
+    	<h1 class="card-title">{{ icons.icon('list-ul', 'calculation.edit.panel_resume') }}</h1>
+    </div>
+    <div class="card-body card-body-overview">
+        <table id="totals-table" class="table table-overview table-sm">
+            <tbody>
+                {% include 'calculation/calculation_ajax_totals.html.twig' %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer p-1">
+        <div class="row">
+            <div class="col small text-muted my-2 mx-1">
+	           <span>{{ 'calculation.fields.created'|trans }}</span>{{ form_widget(form.createdAt) }}<span> - </span>{{ form_widget(form.createdBy) }}
+            </div>
+            <div class="col small text-muted my-2 mx-1 text-right">
+                 <span>{{ 'calculation.fields.updated'|trans }}</span>{{ form_widget(form.updatedAt) }}<span> - </span>{{ form_widget(form.updatedBy) }}
+            </div>
+        </div>    
+    </div>
+</div>

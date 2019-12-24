@@ -1,0 +1,41 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# parameters #}
+{%- set title_icon   = 'envelope far' -%}
+{%- set title        = isMail ? 'user.message.title' : 'user.comment.title' -%}
+{%- set description  = isMail ? 'user.message.description'|trans : 'user.comment.description'|trans -%}
+{%- set page_list    = isMail ? 'user_list' : 'homepage' -%}
+{%- set form_attr    = form_attr|default({})|merge({ 'data-focus':  (not isMail)|json_encode}) -%}
+
+{% block card_header %}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ description }}</p>
+
+{% endblock %}
+
+{% block card_body %}
+{% if isMail %}
+    {{ form_row(form.to) }}
+{% else %}
+    {{ form_row(form.from) }}
+{% endif %}
+{{ form_row(form.subject) }}
+{{ form_row(form.message) }}
+{{ form_row(form.attachments, {add_delete: true}) }}
+{% endblock %}
+
+{% block stylesheets %}
+{{ asset_css('css/comment.css') }}
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/vendor/summernote/summernote-bs4.js') }}
+{{ asset_js('js/vendor/summernote/lang/summernote-fr-FR.js') }}
+{{ asset_js('js/app/plugins/plugin-fileinput.js') }}
+{{ asset_js('js/app/user_comment_edit.js') }}
+{% else %}
+{{ asset_js('js/user_comment_edit.js') }}
+{% endif %}
+{% endblock %}

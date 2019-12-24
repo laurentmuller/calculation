@@ -1,0 +1,42 @@
+{% extends 'cards/card_table.html.twig' %}
+
+{# parameters #}
+{%- set title       = 'user.list.title' -%}
+{%- set title_icon  = 'user far' -%}
+{%- set pdf_title   = 'user.list.pdf_title' -%}
+{%- set object_type = IEntityVoter.ENTITY_USER-%}
+
+{# actions #}
+{%- set params        = {'id' : 0} -%}
+{%- set add_path      = path('user_add') -%}
+{%- set show_path     = path('user_show', params) -%}
+{%- set edit_path     = path('user_edit', params) -%}
+{%- set delete_path   = path('user_delete', params) -%}
+{%- set password_path = path('user_password', params) -%}
+{%- set image_path    = path('user_image', params) -%}
+{%- set rights_path   = path('user_rights', params) -%}
+{%- set message_path  = path('user_message', params) -%}
+{%- set switch_path   = path('homepage') -%}
+{%- set pdf_path      = path('user_pdf') -%}
+{%- set pdf_right     = path('user_rights_pdf') -%}
+
+{# titles #}
+{%- set add_title    = 'user.add.title' %}
+{%- set show_title   = 'user.show.title' %}
+{%- set edit_title   = 'user.edit.title' %}
+{%- set delete_title = 'user.delete.title' %}
+
+{# other acions #}
+{% block table_actions %}
+{{ _self.item_data(password_path, 'index.change_password', 'unlock-alt') }}
+{{ _self.item_data(image_path, 'user.image.title', 'image far') }}
+{{ _self.item_data(rights_path, 'user.list.rights_title', 'unlock') }}
+{{ _self.item_data(message_path, 'user.message.title', 'envelope far', {'data-callback': 'user_message', 'data-id': app.user.id}) }}
+{%- if not is_granted('ROLE_PREVIOUS_ADMIN') and is_granted('ROLE_SUPER_ADMIN') -%}
+    <div class="dropdown-divider"></div>
+    {{ _self.item_data(switch_path, 'user.switch.take.title', 'user-plus', {'data-callback': 'user_switch', 'data-id': app.user.id}) }}
+{%- endif -%}
+<div class="dropdown-divider"></div>
+{{ parent() }}
+{{ _self.item_external(pdf_right, 'user.list.rights_export', 'dropdown-item', 'cloud-download-alt') }}
+{% endblock %}

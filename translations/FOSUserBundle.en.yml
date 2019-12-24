@@ -1,0 +1,25 @@
+profile:
+    edit:
+        title: Edit profile
+    flash:
+        updated: Your profile has been updated.
+security:
+    login:
+        error: The username or password is invalid.
+        success: Welcome <b>%username%</b> to the application site <b>%appname%</b>.
+        title: Login to the application
+        captcha: Control Code
+        image: Image Control
+        refresh: Generate a new image
+    logout:
+        success: Logout of the <b>%appname%</b> application is successful.
+password:
+    change:
+        success: The password of <b>%name%</b> has been successfully changed.
+resetting:
+    link: Forgot password?
+    request:
+        title: Reset password
+        submit: Reset
+login:
+    link: Already an account?

@@ -1,0 +1,21 @@
+{% extends 'cards/card_table.html.twig' %}
+
+{# parameters #}
+{%- set title       = 'category.list.title' -%}
+{%- set title_icon  = 'folder far' -%}
+{%- set pdf_title   = 'category.list.pdf_title' -%}
+{%- set object_type = IEntityVoter.ENTITY_CATEGORY -%}
+
+{# actions #}
+{%- set params      = {'id' : 0} -%}
+{%- set add_path    = path('category_add') -%}
+{%- set show_path   = path('category_show', params) -%}
+{%- set edit_path   = path('category_edit', params) -%}
+{%- set delete_path = path('category_delete', params) -%}
+{%- set pdf_path    = path('category_pdf') -%}
+
+{# titles #}
+{%- set add_title    = 'category.add.title' %}
+{%- set show_title   = 'category.show.title' %}
+{%- set edit_title   = 'category.edit.title' %}
+{%- set delete_title = 'category.delete.title' %}

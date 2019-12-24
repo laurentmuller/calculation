@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{# macros #}
+{% macro weekRow(month, week) %}
+{% import 'test/days_macro_html.twig' as tools %}
+{%- set class = 'border text-center font-weight-bold p-2 week' -%}
+{%- set week_title = 'test.week_title'|trans({'%week%': week.number}) -%}
+{% if week.current and month.number == month.today.month -%}{%- set class = class ~ ' bg-primary text-white' -%}{%- endif %}
+<tr>
+    <td class="{{ class }}" title="{{ week_title }}">{{ week.number }}</td>
+    {% for day in week.days -%}
+        {{ tools.dayCell(month, day, true) }}
+    {%- endfor %}
+</tr>
+{% endmacro %}
+
+{% macro monthTable(month) %}
+{%- set class = 'text-white text-center font-weight-normal' ~ (month.current ? ' bg-primary' : ' bg-secondary')  -%}
+<div class="col-lg-4 col-md-6 mb-4">
+	<table class="border w-100 calendar">
+		<thead>
+			<tr>
+				<th colspan="8" class="{{ class }}">
+					<a href="{{ path('test_month', {'year': month.year, 'month': month.number}) }}" class="text-white">{{ month.Name }}</a>
+				</th>
+			</tr>
+			<tr>
+                <th class="border font-weight-normal">&nbsp;</th>
+                {% for name in month.calendar.weekShortNames %}
+                    {%- set class = 'border text-center font-weight-normal' -%}
+                    {% if loop.index in [6,7] %}{%- set class = class ~ ' bg-light' -%}{% endif %}
+                    <th class="{{ class }}">{{ name }}</th>
+                {% endfor %}
+            </tr>
+		</thead>
+		<tbody>
+    	{% for week in month.weeks -%}
+            {{ _self.weekRow(month, week) }}            
+		{%- endfor %}
+		</tbody>
+	</table>
+</div>    	
+{% endmacro %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title            = 'test.calendar' -%}
+{%- set title_parameters = {'%year%': calendar.year} -%}    
+
+{% block body %}
+<div class="row">
+    <div class="col-4">        
+        <h2 class="">{{ 'test.calendar'|trans({'%year%': calendar.year}) }}</h2>
+    </div>
+    <div class="col-4 text-md-center">
+    	<h3>{{ 'test.calculations'|transchoice(calculations|length) }}</h3>
+    </div>
+    <div class="col-4 text-md-right">
+        {% set year = "now"|date('Y') %}
+        {% if year != calendar.year %}
+        {% set title = 'test.calendar'|trans({'%year%': year}) %}
+        <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar') }}">{{ icons.icon('arrows-alt') }}</a>
+        {% endif %}
+        
+        {% set year = calendar.year - 1 %}
+        {% set title = 'test.calendar'|trans({'%year%': year}) %}
+        <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar', {'year': year}) }}">{{ icons.icon('chevron-left') }}</a>
+        
+        {% set year = calendar.year + 1 %}
+        {% set title = 'test.calendar'|trans({'%year%': year}) %}
+        <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar', {'year': year}) }}">{{ icons.icon('chevron-right') }}</a>
+    </div>
+</div>
+
+<div class="row">
+{% for month in calendar.months %}
+    {{ _self.monthTable(month) }}
+{% endfor %}
+</div>
+{% endblock %}
+
+{% block stylesheets -%}
+{{ parent() }}
+{{ asset_css('css/calendar.css') }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ asset_js('js/app/test/calendar.js') }}
+{% endblock %}

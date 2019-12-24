@@ -1,0 +1,14 @@
+{% extends 'cards/card_delete.html.twig' %}
+
+{# parameters #}
+{%- set title = 'logs.delete.title' -%}
+
+{% block card_body %}
+<p>{{ 'logs.delete.message'|trans }}</p>
+<p class="mb-0">{{ 'logs.show.file'|trans({'%file%': file}) }}</p>
+{% endblock %}
+
+{% block actions_form %}
+    {% set cancel_path = path('homepage') %}  
+    {{ parent() }}
+{% endblock %}

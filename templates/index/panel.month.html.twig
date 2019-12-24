@@ -1,0 +1,38 @@
+{# macros #}
+{% macro cardEntry(count, total, date, enabled) -%}
+<div class="card card-index text-center border rounded m-1">
+    <div class="card-body px-1 pt-1 pb-0">
+        <h4 class="font-weight-normal mb-1">{{ count|integer }}</h4>
+        <p class="m-0 mb-1">{{ total|amount }}</p>
+    </div>
+    <div class="card-footer p-1">
+    {%- set text = date|strftime('%B %Y') -%}
+    {%- if enabled -%}
+        <a href="{{ path('calculation_list', {'query': date|strftime('%m.%Y')}) }}">{{ text }}</a>
+    {%- else -%}
+        <span>{{ text }}</span>
+    {%- endif -%}
+    </div>
+</div>
+{%- endmacro %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# actions #}
+{%- set enabled = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CALCULATION) -%}
+
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">{{ icons.icon('calendar far', 'index.panel_month') }}</h1>
+    </div>
+    <div class="card-body d-flex flex-row flex-wrap p-2">
+	{% for month in months %}
+        {{ _self.cardEntry(month.count, month.total, month.date, enabled) }}
+    {% else %}
+    	<div class="alert alert-warning flex-fill mb-0 py-4 text-center">
+            {{ 'calculation.list.empty'|trans }}
+        </div>
+	{% endfor %}    			
+    </div>
+</div>    

@@ -1,0 +1,60 @@
+Bing:
+    400000: Une des entrées de la demande n'est pas valide.
+    400001: Le paramètre "scope" n'est pas valide.
+    400002: Le paramètre "category" n'est pas valide.
+    400003: Un spécificateur de langue est manquant ou invalide.
+    400004: Un spécificateur de script cible ("toScript") est manquant ou invalide.
+    400005: Un texte d'entrée est manquant ou invalide.
+    400006: La combinaison de langage et script n'est pas valide.
+    400018: Un spécificateur de script source ("fromScript") est manquant ou invalide.
+    400019: L'une des langues spécifiées n'est pas prise en charge.
+    400020: L'un des éléments du tableau de texte saisi n'est pas valide.
+    400021: Le paramètre de version de l'API est manquant ou invalide.
+    400023: Une des paires de langues spécifiées n'est pas valide.
+    400035: La langue source (champ "From") n'est pas valide.
+    400036: La langue cible (champ "To") est manquante ou invalide.
+    400042: Une des options spécifiées (champ "Options") n'est pas valide.
+    400043: L''identifiant (ID) de trace du client (champ ClientTraceId ou en-tête X-ClientTranceId) est manquant ou invalide.
+    400050: Le texte saisi est trop long.
+    400064: Le paramètre "translation" est manquant ou invalide.
+    400070: Le nombre de scripts cible (paramètre "toScript") ne correspond pas au nombre de langages cible (paramètre "to").
+    400071: La valeur du type n'est pas valide (paramètre "textType").
+    400072: Le tableau de texte d'entrée contient trop d'éléments.
+    400073: Le paramètre de script n'est pas valide.
+    400074: Le corps de la demande n'est pas un JSON valide.
+    400075: La combinaison de langues et de catégories n'est pas valide.
+    400077: La taille maximale de la demande a été dépassée.
+    400079: Le système personnalisé demandé pour la traduction entre de et vers langue n'existe pas.
+    400080: La translittération n'est pas prise en charge pour la langue ou le script.
+    401000: La demande n'est pas autorisée car les informations d'identification sont manquantes ou invalides.
+    401015: Les informations d'identification fournies concernent l'API Speech. Cette demande nécessite des informations d'identification pour l'API Text. Veuillez utiliser un abonnement à l'API Translator Text.
+    403000: L'opération n'est pas autorisée.
+    403001: L'opération n'est pas autorisée car l'abonnement a dépassé son quota disponible.
+    405000: La méthode de demande n'est pas prise en charge pour la ressource demandée.
+    408001: Le système de traduction demandé est en préparation. S'il vous plaît réessayer dans quelques minutes.
+    408002: La demande a expiré en attente du flux entrant. Le client n'a pas généré de requête dans le délai d'attente du serveur. Le client peut répéter la demande sans modification à tout moment.
+    415000: L'en-tête Content-Type est manquant ou invalide.
+    429000: Le serveur a rejeté la demande car le client a dépassé les limites de la demande.
+    429001: Le serveur a rejeté la demande car le client a dépassé les limites de la demande.
+    429002: Le serveur a rejeté la demande car le client a dépassé les limites de la demande.
+    500000: Une erreur inattendue est apparue. Si l'erreur persiste, signalez-la avec la date / heure de l'erreur, identificateur de demande de l'en-tête de réponse X-RequestId et identificateur de client de l'en-tête de demande X-ClientTraceId.
+    503000: Le service est temporairement indisponible. Veuillez réessayer. Si l'erreur persiste, signalez-la avec la date et l'heure de l'erreur, l'identificateur de demande de l'en-tête de réponse X-RequestId et l'identificateur de client de l'en-tête de demande X-ClientTraceId.
+Google:
+    400: Le client a spécifié une plage non valide.
+    401: La requête n'a pas été authentifiée en raison d'un jeton d'autentification manquant, non valide ou ayant expiré.
+    403: Le client ne dispose pas d'une autorisation suffisante. Cela peut se produire lorsque le jeton autentification ne dispose pas des champs d'application appropriés, car le client n'a pas d'autorisation ou car l'API n'a pas été activée pour le projet du client.
+    404: Une ressource spécifiée est introuvable ou la requête est rejetée pour des raisons non divulguées, telles que l'ajout à une liste blanche.
+    409: La ressource qu'un client a essayé de créer existe déjà.
+    429: Le quota de ressources est dépassé ou la limite du débit est atteinte.
+    499: La demande a été annulée par le client.
+    500: Une erreur interne au serveur a été générée.
+    501: Méthode d'API non mise en oeuvre par le serveur.
+    503: Le service est indisponible (serveur inactif).
+    504: Délai de requête dépassé. Cela se produira uniquement si l'appelant définit un délai plus court que le délai par défaut de la méthode.
+Yandex:
+    401: La clé de l'application (API) est invalide.
+    402: La clé de l'application (API) est bloquée.
+    404: La limite quotidienne sur la quantité de texte traduit est dépassée.
+    413: La taille maximale du texte est dépassée.
+    422: Le texte ne peut pas être traduit.
+    501: La direction de traduction spécifiée n'est pas prise en charge.

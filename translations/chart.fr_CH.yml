@@ -1,0 +1,33 @@
+contextButtonTitle: Exporter le graphique
+downloadJPEG: Exporter au format JPEG
+downloadPDF: Exporter au format PDF
+downloadPNG: Exporter au format PNG
+downloadSVG: Exporter au format Vectoriel (SVG)
+drillUpText: Retour vers {series.name}
+exportButtonTitle: Exportation du graphique
+loading: Chargement en cours...
+menu_graphics: Statistiques
+noData: Aucune donnée à afficher
+printButtonTitle: Imprimer le graphique
+printChart: Imprimer le graphique
+rangeSelectorFrom: Du
+rangeSelectorTo: au
+rangeSelectorZoom: Période
+resetZoom: Réinitialiser le zoom
+resetZoomTitle: Réinitialiser le zoom au niveau 1:1
+title_by_month: Calculations par mois
+title_by_state: Calculations par statut
+row_by_month: Afficher les calculations pour %name%
+row_by_state: Afficher les calculations pour le statut %name%
+fields:
+    count: Calculations
+    date: Date
+    month: Mois
+    state: Statut
+    sum: Montant Total
+    percent: Pourcentage
+    total: Total
+    net: Montant
+    margin: Marge
+    margin_percent: Marge (%)
+    margin_amount: Marge (Fr.)

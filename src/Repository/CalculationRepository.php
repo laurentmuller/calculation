@@ -1,0 +1,451 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * Copyright (c) 2019 bibi.nu. All rights reserved.
+ *
+ * This computer code is protected by copyright law and international
+ * treaties. Unauthorised reproduction or distribution of this code, or
+ * any portion of it, may result in severe civil and criminal penalties,
+ * and will be prosecuted to the maximum extent possible under the law.
+ */
+
+declare(strict_types=1);
+
+namespace App\Repository;
+
+use App\Entity\Calculation;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\QueryBuilder;
+
+/**
+ * Repository for calculation entity.
+ *
+ * @author Laurent Muller
+ *
+ * @see \App\Entity\Calculation
+ */
+class CalculationRepository extends BaseRepository
+{
+    /**
+     * Constructor.
+     *
+     * @param ManagerRegistry $registry the connections and entity managers registry
+     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Calculation::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        return parent::createDefaultQueryBuilder($alias)
+            ->innerJoin("$alias.state", 's');
+    }
+
+    /**
+     * Gets calculations with the overall margin below the given value.
+     *
+     * @param float $minMargin the minimum margin in percent
+     *
+     * @return Calculation[] the below calculations
+     */
+    public function getBelowMargin(float $minMargin): array
+    {
+        // builder
+        $builder = $this->createQueryBuilder('c')
+            ->addOrderBy('c.id', Criteria::DESC)
+            ->where('c.itemsTotal != 0')
+            ->andWhere('(c.overallTotal / c.itemsTotal) - 1 < :minMargin ')
+            ->setParameter('minMargin', $minMargin, Types::FLOAT);
+
+        // execute
+        return $builder->getQuery()->getResult();
+    }
+
+    /**
+     * Gets calculations grouped by months.
+     *
+     * @param int $maxResults the maximum number of results to retrieve (the "limit")
+     *
+     * @return array an array with the year, the month, the number and the sum of calculations
+     */
+    public function getByMonth(int $maxResults = 6): array
+    {
+        // build
+        $builder = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)               as count')
+            ->addSelect('SUM(c.itemsTotal)      as items')
+            ->addSelect('SUM(c.overallTotal)    as total')
+            //->addSelect('SUM(c.overallTotal - c.itemsTotal) as margin')
+            ->addSelect('YEAR(c.date)           as year')
+            ->addSelect('MONTH(c.date)          as month')
+            ->addGroupBy('year')
+            ->addGroupBy('month')
+            ->orderBy('year', Criteria::DESC)
+            ->addOrderBy('month', Criteria::DESC)
+            ->setMaxResults($maxResults);
+
+        // execute
+        $result = $builder->getQuery()->getArrayResult();
+
+        // create dates
+        foreach ($result as &$item) {
+            $y = (int) ($item['year']);
+            $m = (int) ($item['month']);
+            $dt = new \DateTime();
+            $dt->setDate($y, $m, 1);
+            $item['date'] = $dt;
+        }
+
+        //reverse
+        return \array_reverse($result);
+    }
+
+    /**
+     * Find duplicate items in the calculations. Items are duplicate if the descriptions are equal.
+     *
+     * @param string $orderColumn    the order column
+     * @param string $orderDirection the order direction ('ASC' or 'DESC')
+     *
+     * @return array the array result
+     */
+    public function getDuplicateItems(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
+    {
+        // build
+        $builder = $this->createQueryBuilder('c')
+            // calculation
+            ->select('c.id              as calculation_id')
+            ->addSelect('c.date         as calculation_date')
+            ->addSelect('c.customer     as calculation_customer')
+            ->addSelect('c.description  as calculation_description')
+
+            // state
+            ->addSelect('s.code         as calculation_state')
+            ->addSelect('s.color        as calculation_color')
+
+            // item
+            ->addSelect('i.description  as item_description')
+            ->addSelect('count(i.id)    as item_count')
+
+            ->innerJoin('c.state', 's')
+            ->innerJoin('c.groups', 'g')
+            ->innerJoin('g.items', 'i')
+
+            ->groupBy('c.id')
+            ->addGroupBy('s.code')
+            ->addGroupBy('i.description')
+
+            ->having('item_count > 1');
+
+        // order column and direction
+        switch ($orderColumn) {
+            case 'id':
+            case 'date':
+            case 'customer':
+            case 'description':
+                $orderColumn = 'c.'.$orderColumn;
+                break;
+            case 'state':
+                $orderColumn = 's.code';
+                break;
+            default:
+                $orderColumn = 'c.id';
+                break;
+        }
+        $orderDirection = $this->getDirection($orderDirection, Criteria::DESC);
+        $builder->orderBy($orderColumn, $orderDirection);
+
+        // execute
+        $items = $builder->getQuery()->getArrayResult();
+
+        // map calculations => items
+        $result = [];
+        foreach ($items as $item) {
+            $key = $item['calculation_id'];
+            if (!\array_key_exists($key, $result)) {
+                $result[$key] = [
+                    'id' => $key,
+                    'date' => $item['calculation_date'],
+                    'customer' => $item['calculation_customer'],
+                    'description' => $item['calculation_description'],
+                    'stateCode' => $item['calculation_state'],
+                    'stateColor' => $item['calculation_color'],
+                    'items' => [],
+                ];
+            }
+            $result[$key]['items'][] = [
+                'description' => $item['item_description'],
+                'count' => $item['item_count'],
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Find empty items in the calculations. Items are empty if the price or the quantity is equal to 0.
+     *
+     * @param string $orderColumn    the order column
+     * @param string $orderDirection the order direction ('ASC' or 'DESC')
+     *
+     * @return array the array result
+     */
+    public function getEmptyItems(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
+    {
+        // build
+        $builder = $this->createQueryBuilder('c')
+            // calculation
+            ->select('c.id              as calculation_id')
+            ->addSelect('c.date         as calculation_date')
+            ->addSelect('c.customer     as calculation_customer')
+            ->addSelect('c.description  as calculation_description')
+
+            // state
+            ->addSelect('s.code         as calculation_state')
+            ->addSelect('s.color        as calculation_color')
+
+            // item
+            ->addSelect('i.description  as item_description')
+            ->addSelect('i.price        as item_price')
+            ->addSelect('i.quantity     as item_quantity')
+
+            ->innerJoin('c.state', 's')
+            ->innerJoin('c.groups', 'g')
+            ->innerJoin('g.items', 'i')
+
+            ->groupBy('c.id')
+            ->addGroupBy('s.code')
+            ->addGroupBy('i.description')
+
+            ->having('item_price = 0')
+            ->orHaving('item_quantity = 0');
+
+        // order column and direction
+        switch ($orderColumn) {
+            case 'id':
+            case 'date':
+            case 'customer':
+            case 'description':
+                $orderColumn = 'c.'.$orderColumn;
+                break;
+            case 'state':
+                $orderColumn = 's.code';
+                break;
+            default:
+                $orderColumn = 'c.id';
+                break;
+        }
+        $orderDirection = $this->getDirection($orderDirection, Criteria::DESC);
+        $builder->orderBy($orderColumn, $orderDirection);
+
+        // execute
+        $items = $builder->getQuery()->getArrayResult();
+
+        // map calculations => items
+        $result = [];
+        foreach ($items as $item) {
+            $key = $item['calculation_id'];
+            if (!\array_key_exists($key, $result)) {
+                $result[$key] = [
+                    'id' => $key,
+                    'date' => $item['calculation_date'],
+                    'customer' => $item['calculation_customer'],
+                    'description' => $item['calculation_description'],
+                    'stateCode' => $item['calculation_state'],
+                    'stateColor' => $item['calculation_color'],
+                    'items' => [],
+                ];
+            }
+            $result[$key]['items'][] = [
+                'description' => $item['item_description'],
+                'quantity' => $item['item_quantity'],
+                'price' => $item['item_price'],
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Gets calculations for the given year and month.
+     *
+     * @param int $year  the year
+     * @param int $month the month number (1 = January, 2 = February, ...)
+     *
+     * @return array the matching calculations
+     */
+    public function getForMonth(int $year, int $month): array
+    {
+        return $this->getCalendarBuilder($year)
+            ->andWhere('MONTH(c.date) = :month')
+            ->setParameter('month', $month, Types::INTEGER)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Gets calculations for the given year and week.
+     *
+     * @param int $year the year
+     * @param int $week the week number
+     *
+     * @return array the matching calculations
+     */
+    public function getForWeek(int $year, int $week): array
+    {
+        return $this->getCalendarBuilder($year)
+            ->andWhere('WEEK(c.date) = :week')
+            ->setParameter('week', $week, Types::INTEGER)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Gets calculations for the given year.
+     *
+     * @param int $year the year
+     *
+     * @return array the matching calculations
+     */
+    public function getForYear(int $year): array
+    {
+        return $this->getCalendarBuilder($year)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Gets the last calculations.
+     *
+     * @param int $maxResults the maximum number of results to retrieve (the "limit")
+     *
+     * @return Calculation[] the last calculations
+     */
+    public function getLastCalculations(int $maxResults = 12): array
+    {
+        // builder
+        $builder = $this->createQueryBuilder('c')
+            ->addOrderBy('c.updatedAt', Criteria::DESC)
+            ->addOrderBy('c.date', Criteria::DESC)
+            ->addOrderBy('c.id', Criteria::DESC)
+            ->setMaxResults($maxResults);
+
+        // execute
+        return $builder->getQuery()->getResult();
+    }
+
+    /**
+     * Gets data for the pivot table.
+     */
+    public function getPivot(): array
+    {
+        // build
+        $builder = $this->createQueryBuilder('c')
+            // calculation
+            ->select('c.id                                   AS calculation_id')
+            ->addSelect('c.date                              AS calculation_date')
+            ->addSelect('(c.overallTotal / c.itemsTotal) - 1 AS calculation_overall_margin')
+            ->addSelect('c.overallTotal                      AS calculation_overall_total')
+
+            // state
+            ->addSelect('s.code                              AS calculation_state')
+
+            // groups
+            ->addSelect('g.code                              AS item_group')
+
+            // items
+            ->addSelect('i.description                       AS item_description')
+            ->addSelect('i.price                             AS item_price')
+            ->addSelect('i.quantity                          AS item_quantity')
+            ->addSelect('i.price * i.quantity                AS item_total')
+
+            // tables
+            ->innerJoin('c.state', 's')
+            ->innerJoin('c.groups', 'g')
+            ->innerJoin('g.items', 'i')
+
+            // not empty
+            ->where('c.itemsTotal != 0');
+
+        // execute
+        $query = $builder->getQuery();
+
+        return $query->getArrayResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    {
+        switch ($field) {
+            case 'date':
+                return "DATE_FORMAT({$alias}.{$field}, '%d.%m.%Y')";
+            case 'state.code':
+                return 's.code';
+            case 'state.color':
+                return 's.color';
+            default:
+                return parent::getSearchFields($field, $alias);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSortFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    {
+        switch ($field) {
+            case 'overallMargin':
+                return "IFELSE({$alias}.itemsTotal != 0, ({$alias}.overallTotal / {$alias}.itemsTotal) - 1, 0)";
+            case 'state.code':
+                return 's.code';
+            case 'state.color':
+                return 's.color';
+            default:
+                return parent::getSortFields($field, $alias);
+        }
+    }
+
+    /**
+     * Gets the basic query builder to search calculations for a given year.
+     *
+     * @param int $year the year to select
+     *
+     * @return QueryBuilder the query builder
+     */
+    private function getCalendarBuilder(int $year): QueryBuilder
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.date')
+            ->addOrderBy('c.id', Criteria::DESC)
+            ->where('YEAR(c.date) = :year')
+            ->setParameter('year', $year, Types::INTEGER);
+    }
+
+    /**
+     * Gets the sort direction.
+     *
+     * @param string $direction the direction to validate
+     * @param string $default   the default direction
+     *
+     * @return string the sort direction
+     */
+    private function getDirection(string $direction, string $default): string
+    {
+        $direction = \strtoupper($direction);
+        switch ($direction) {
+            case Criteria::ASC:
+            case Criteria::DESC:
+                return $direction;
+            default:
+                return $default;
+        }
+    }
+}

@@ -1,0 +1,36 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# parameters #}
+{%- set title       = 'update.title' -%}
+{%- set title_icon  = 'pencil-alt' -%}
+{%- set cancel_path = path('homepage') -%}
+
+{% block card_header %}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ 'update.description'|trans }}
+{% endblock %}
+
+{% block card_body %}
+    {{ form_row(form.includeClosed) }}
+  	<em class="ml-4 mb-0">{{ 'update.detail'|trans }}</em>
+  	{% if lastUpdate %}
+  		<hr class="mt-3 mb-0">
+      	<p class="mt-2 mb-0 text-right small">{{ 'update.last_update'|trans({'%date%': lastUpdate|localedatetime}) }}</p>
+  	{% endif %}
+{% endblock %}
+
+{% block stylesheets -%}    
+    {{ parent() }}
+    <style>.form-group {margin-bottom: 0;}</style>
+{%- endblock %}
+
+{% block required_form %}{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/validation_edit.js') }}
+{% else %}
+{{ asset_js('js/validation_edit.js') }}
+{% endif %}
+{% endblock %}

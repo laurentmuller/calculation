@@ -1,0 +1,87 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+{# custom user name input #}
+{% block __username_widget -%}
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text"><i class="far fa-fw fa-user" aria-hidden="true"></i></span>
+    </div>
+    {{ block('form_widget_simple') }}    
+</div>
+{%- endblock %}
+
+{# imports #}
+{% import "macros/_icons.html.twig" as icons %}
+{% form_theme form with _self %}
+
+{# parameters #}
+{%- set title         = "security.login.title" -%}
+{%- set title_domain  = 'FOSUserBundle' -%}
+{%- set title_icon    = 'sign-in' -%}
+{%- set submit_text   = 'security.login.submit' -%}
+{%- set submit_domain = 'FOSUserBundle' -%}
+{%- set action        = path('fos_user_security_check') -%}
+{%- set cancel_path   = false -%}
+
+{# class styles #}
+{% block card_container_class 'col-xl-8 offset-xl-2 my-auto h-75' %}
+
+{% block card_header %}
+{{ parent() }}
+{% if error %}
+    <em class="text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</em>
+{% endif %}
+{% endblock %}
+
+{% block card_body %}
+{#
+{{ form_row(form._username) }}
+{{ form_row(form._password) }}
+{% if form._captcha is defined %}{{ form_row(form._captcha) }}{% endif %}
+{{ form_row(form._remember_me) }}
+#}
+{{ form_widget(form) }}
+{% endblock %}
+
+{% block card_footer -%}
+{{ parent() }}
+<hr class="mb-2">
+<div class="row">
+    <div class="col-md-6">
+        <small>{{ app_name_version }}</small>
+    </div>
+    <div class="col-md-6 text-md-right">
+        <small>{{ icons.copyright_link() }}</small>
+    </div>
+</div>   
+{% endblock %}
+
+{% block actions_form %}
+{{ parent() }}
+{{ icons.link(path("fos_user_resetting_request"), 'resetting.link', 'btn btn-form btn-link', null, null, 'FOSUserBundle') }}
+{% endblock %}
+
+{# hide navigation and footer #}
+{% block navigation %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block stylesheets -%}
+{{ asset_css('css/center.css') }}
+{% endblock %}
+
+{% block javascripts -%}
+{#
+{% if recaptcha_used|default(false) and recaptcha_site|default(false) %}
+{{ asset_js('https://www.google.com/recaptcha/api.js?render=' ~ recaptcha_site, {'recaptcha-site': recaptcha_site, 'recaptcha-action': 'login'}) }}
+{%- endif %}
+#}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/plugins/plugin-password.js') }}
+{{ asset_js('js/app/fos_user_recaptcha.js') }}
+{{ asset_js('js/app/fos_user_login.js') }}
+{% else %}
+{{ asset_js('js/fos_user_login.js') }}
+{%- endif %}
+{% endblock %}

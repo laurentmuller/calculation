@@ -1,0 +1,166 @@
+{% extends 'cards/card_show.html.twig' %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+{% import 'macros/_properties.html.twig' as properties %}
+
+{# parameters #}
+{%- set id     = item.id -%}
+{%- set title  = 'calculation.show.title' -%}
+{%- set params = routeParams(app.request, id) %}
+
+{# actions #}
+{%- set edit_path   = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   item) ? path('calculation_edit',   params) : null -%}
+{%- set delete_path = is_granted(IEntityVoter.ATTRIBUTE_DELETE, item) ? path('calculation_delete', params) : null -%}
+{%- set cancel_path = cancelUrl(app.request, id, 'calculation_list') -%}
+{%- set pdf_export  = is_granted(IEntityVoter.ATTRIBUTE_PDF, item) -%}
+
+{% block card_header_class 'd-print-none' %}
+{% block card_container_class '' %}
+{% block card_body_class '' %}
+
+{% block property_header %}{# no header #}{% endblock %}
+
+{% block card_body %}
+{{ parent() }}
+{% if not item.empty %}
+{# items #}
+<table class="table table-hover table-sm table-list mt-3" id="data-table-edit">
+    <tbody>
+	{% for group in item.groups %}
+		<tr>
+			<th colspan="5">{{ group.code }}</th>
+		</tr>
+		{% for product in group.items %}
+			<tr>
+    			<td class="pl-3">{{ product.description }}</td>
+    			<td class="text-unit">{{ product.unit }}</td>
+    			<td class="text-currency">{{ product.price|amount }}</td>
+            	<td class="text-currency">{{ product.quantity|amount }}</td>
+            	<td class="text-currency">{{ product.total|amount }}</td>
+    		</tr>
+		{% endfor %}
+	{% endfor %}
+    {# items total #}
+    <tr>
+        <th colspan="4">{{ 'calculation.fields.itemsTotal'|trans }}</th>
+        <th class="text-currency">{{ item.groupsAmount|amount }}</th>
+    </tr>
+    </tbody>
+</table>
+
+{# totals #}
+<table class="table table-hover table-sm table-list mt-3 mb-0">
+    <thead>
+        <tr>
+            <th>{{ 'calculation.edit.panel_resume'|trans }}</th>            
+            <th class="text-currency">{{ 'report.calculation.amount'|trans }}</th>
+            <th class="text-percent">{{ 'report.calculation.margin_percent'|trans }}</th>
+            <th class="text-currency">{{ 'report.calculation.margin_amount'|trans }}</th>
+            <th class="text-currency">{{ 'report.calculation.total'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {# total by group #}
+        {% for group in item.groups %}
+            <tr>
+                <td>{{ group.code }}</td>
+                <td class="text-currency">{{ group.amount|amount }}</td>
+                <td class="text-percent">{{ group.margin|percent }}</td>
+                <td class="text-currency">{{ group.marginAmount|amount }}</td>
+                <td class="text-currency">{{ group.total|amount}}</td>
+            </tr>
+        {% endfor %}
+        
+        {# groups total #}
+        <tr>
+            <th>{{ 'calculation.fields.marginTotal'|trans }}</th>
+            <th class="text-currency font-weight-normal">{{ item.groupsAmount|amount }}</th>
+            <th class="text-percent font-weight-normal">{{ item.groupsMargin|percent }}</th>
+            <th class="text-currency font-weight-normal">{{ item.groupsMarginAmount|amount }}</th>
+            <th class="text-currency">{{ item.groupsTotal|amount }}</th>
+        </tr>
+                 
+        {# global margin #}
+        <tr>
+            <td colspan="2">{{ 'calculation.fields.globalMargin'|trans }}</td>
+            <td class="text-percent">{{ item.globalMargin|percent }}</td>
+            <td colspan="2" class="text-currency">{{ item.globalMarginAmount|amount }}</td>
+        </tr>
+        
+        {# user margin #}
+        {% if item.userMargin != 0 %}
+            <tr>
+                <th colspan="4">{{ 'calculation.fields.totalNet'|trans }}</th>
+                <th class="text-currency">{{ item.totalNet|amount }}</th>
+            </tr>
+            <tr>
+                <td colspan="2">{{ 'calculation.fields.userMargin'|trans }}</td>
+                <td class="text-percent">{{ item.userMargin|percent }}</td>
+                <td colspan="2" class="text-currency">{{ item.userMarginAmount|amount }}</td>
+            </tr>
+        {% endif %}
+        
+        {# overall total #}
+        <tr>            
+            <th>{{ 'calculation.fields.overallTotal'|trans }}</th>
+            <th class="text-currency">{{ item.groupsAmount|amount }}</th>
+            {%- if marginBelow(item.overallMargin) -%}
+                {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent }) -%}
+                <th class="text-currency text-danger below-cell has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallMargin|percent }}</th>
+            {%- else -%}
+                <th class="text-currency">{{ item.overallMargin|percent }}</th>
+            {%- endif -%}
+            <th class="text-currency">{{ item.overallMarginAmount|amount }}</th>
+            <th class="text-currency">{{ item.overallTotal|amount }}</th>
+        </tr>
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}
+
+{# properties #}
+{% block property_body %}
+{{ properties.property('calculation.fields.id', id|identifier, 'font-weight-bold') }}
+{{ properties.property('calculation.fields.customer', item.customer) }}
+{{ properties.property('calculation.fields.description', item.description) }}
+{{ properties.property('calculation.fields.date', item.date|localedate) }}
+{{ properties.property('calculation.fields.state', item.stateCode|default('')) }}
+{% if item.createdAt %}
+    {% set created = item.createdAt|localedatetime ~ ' - ' ~ item.createdBy|default('calculation.edit.empty_user'|trans) -%}
+    {{ properties.property('calculation.show.created', created) }}
+{% endif %}
+{% if item.updatedAt %}
+    {% set updated = item.updatedAt|localedatetime ~ ' - ' ~ item.createdBy|default('calculation.edit.empty_user'|trans) -%}
+    {{ properties.property('calculation.show.updated', updated) }}
+{% endif %}
+{% if item.empty %}
+    {{ properties.property('calculation.edit.panel_items', 'calculation.edit.empty'|trans ) }}
+{% endif %}
+{% endblock %}
+
+{% block card_footer %}
+<div class="row">
+    <div class="col-md-8">
+	{{ parent() }}
+	{%- if pdf_export -%}
+	    {{ icons.button_pdf('calculation_pdf_id', {'id': id}) }}
+    {%- endif -%}
+    </div>
+    <div class="col-md-4 text-md-right">
+        <p id="error-all" class="mb-0" class="d-none">
+            <span id="error-duplicate" class="d-none"><span class="duplicate-cell"></span>{{ 'duplicate.title'|trans }}</span>
+            <span id="error-empty" class="d-none ml-1"><span class="empty-cell"></span>{{ 'empty.title'|trans }}</span>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/calculation_error.js') }}
+{% else %}
+{{ asset_js('js/calculation_error.js') }}
+{% endif %}
+{% endblock %}

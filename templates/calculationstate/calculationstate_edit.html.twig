@@ -1,0 +1,31 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# parameters #}
+{%- set title      = new ? 'calculationstate.add.title' : 'calculationstate.edit.title' -%}
+{%- set title_icon = 'flag far' -%}
+{%- set page_list  = 'calculationstate_list' -%}
+
+{% block card_body %}
+<div class="form-row">
+    <div class="col-md-5">
+	    {{ form_row(form.code) }}
+    </div>
+    <div class="col-md-3">
+	    {{ form_row(form.editable) }}
+    </div>
+    <div class="col-md-4">
+	    {{ form_row(form.color) }}
+    </div>
+</div>
+{{ form_row(form.description) }}
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/plugins/color-picker.js') }}
+{{ asset_js('js/app/calculationstate_edit.js') }}
+{% else %}
+{{ asset_js('js/calculationstate_edit.js') }}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,155 @@
+/**! compression tag for ftp-deployment */
+
+/*
+ * -------------------------------------------------
+ * Switch radio and checkbox with custom colors
+ * -------------------------------------------------
+ */
+
+.custom-switch label.custom-control-label.required:after {
+    content: ""
+} 
+
+/*
+ * Custom control checked 
+ */
+.custom-control-primary:checked ~ .custom-control-label::before {
+    border-color: var(--primary);
+    background-color: var(--primary);
+}
+.custom-control-secondary:checked ~ .custom-control-label::before {
+    border-color: var(--secondary);
+    background-color: var(--secondary);
+}
+.custom-control-success:checked ~ .custom-control-label::before {
+    border-color: var(--success);
+    background-color: var(--success);
+} 
+.custom-control-info:checked ~ .custom-control-label::before {
+    border-color: var(--info);
+    background-color: var(--info);
+}
+.custom-control-warning:checked ~ .custom-control-label::before {
+    border-color: var(--warning);
+    background-color: var(--warning);
+}
+.custom-control-danger:checked ~ .custom-control-label::before {
+    border-color: var(--danger);
+    background-color: var(--danger);
+}
+.custom-control-light:checked ~ .custom-control-label::before {
+    border-color: var(--light);
+    background-color: var(--light);
+}
+.custom-control-dark:checked ~ .custom-control-label::before {
+    border-color: var(--dark);
+    background-color: var(--dark);
+}
+
+/*
+ * Switch checked and disabled 
+ */
+.custom-switch .custom-control-input.custom-control-primary:disabled:checked~.custom-control-label::before {
+	background-color: var(--primary);
+	opacity: 0.5;
+}  
+.custom-switch .custom-control-input.custom-control-secondary:disabled:checked~.custom-control-label::before {
+	background-color: var(--secondary);
+	opacity: 0.5;  
+}
+.custom-switch .custom-control-input.custom-control-success:disabled:checked~.custom-control-label::before {
+	background-color: var(--success);
+	opacity: 0.5;  
+}
+.custom-switch .custom-control-input.custom-control-info:disabled:checked~.custom-control-label::before {
+	background-color: var(--info);
+	opacity: 0.5;  
+}
+.custom-switch .custom-control-input.custom-control-warning:disabled:checked~.custom-control-label::before {
+	background-color: var(--warning);
+	opacity: 0.5;  
+}
+.custom-switch .custom-control-input.custom-control-danger:disabled:checked~.custom-control-label::before {
+	background-color: var(--danger);
+	opacity: 0.5;  
+}
+.custom-switch .custom-control-input.custom-control-light:disabled:checked~.custom-control-label::before {
+	background-color: var(--light);
+	opacity: 0.5;  
+}
+.custom-switch .custom-control-input.custom-control-dark:disabled:checked~.custom-control-label::before {
+	background-color: var(--dark);
+	opacity: 0.5;  
+}
+
+/*
+ * Checkbox checked and disabled 
+ */
+.custom-checkbox .custom-control-input.custom-control-primary:disabled:checked~.custom-control-label::before {
+	background-color: var(--primary);
+	opacity: 0.5;  
+}  
+.custom-checkbox .custom-control-input.custom-control-secondary:disabled:checked~.custom-control-label::before {
+	background-color: var(--secondary);
+	opacity: 0.5;  
+}
+.custom-checkbox .custom-control-input.custom-control-success:disabled:checked~.custom-control-label::before {
+	background-color: var(--success);
+	opacity: 0.5;  
+}
+.custom-checkbox .custom-control-input.custom-control-info:disabled:checked~.custom-control-label::before {
+	background-color: var(--info);
+	opacity: 0.5;  
+}
+.custom-checkbox .custom-control-input.custom-control-warning:disabled:checked~.custom-control-label::before {
+	background-color: var(--warning);
+	opacity: 0.5;  
+}
+.custom-checkbox .custom-control-input.custom-control-danger:disabled:checked~.custom-control-label::before {
+	background-color: var(--danger);
+	opacity: 0.5;  
+}
+.custom-checkbox .custom-control-input.custom-control-light:disabled:checked~.custom-control-label::before {
+	background-color: var(--light);
+	opacity: 0.5;  
+}
+.custom-checkbox .custom-control-input.custom-control-dark:disabled:checked~.custom-control-label::before {
+	background-color: var(--dark);
+	opacity: 0.5;  
+}
+
+/*
+ * Radio checked and disabled 
+ */
+.custom-radio .custom-control-input.custom-control-primary:disabled:checked~.custom-control-label::before {
+	background-color: var(--primary);
+	opacity: 0.5;  
+}  
+.custom-radio .custom-control-input.custom-control-secondary:disabled:checked~.custom-control-label::before {
+	background-color: var(--secondary);
+	opacity: 0.5;  
+}
+.custom-radio .custom-control-input.custom-control-success:disabled:checked~.custom-control-label::before {
+	background-color: var(--success);
+	opacity: 0.5;  
+}
+.custom-radio .custom-control-input.custom-control-info:disabled:checked~.custom-control-label::before {
+	background-color: var(--info);
+	opacity: 0.5;  
+}
+.custom-radio .custom-control-input.custom-control-warning:disabled:checked~.custom-control-label::before {
+	background-color: var(--warning);
+	opacity: 0.5;  
+}
+.custom-radio .custom-control-input.custom-control-danger:disabled:checked~.custom-control-label::before {
+	background-color: var(--danger);
+	opacity: 0.5;  
+}
+.custom-radio .custom-control-input.custom-control-light:disabled:checked~.custom-control-label::before {
+	background-color: var(--light);
+	opacity: 0.5;  
+}
+.custom-radio .custom-control-input.custom-control-dark:disabled:checked~.custom-control-label::before {
+	background-color: var(--dark);
+	opacity: 0.5;  
+}

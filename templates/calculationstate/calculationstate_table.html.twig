@@ -1,0 +1,21 @@
+{% extends 'cards/card_table.html.twig' %}
+
+{# parameters #}
+{%- set title       = 'calculationstate.list.title' -%}
+{%- set title_icon  = 'flag far' -%}
+{%- set pdf_title   = 'calculationstate.list.pdf_title' -%}
+{%- set object_type = IEntityVoter.ENTITY_CALCULATION_STATE -%}
+
+{# actions #}
+{%- set params      = {'id' : 0} -%}
+{%- set add_path    = path('calculationstate_add') -%}
+{%- set show_path   = path('calculationstate_show', params) -%}
+{%- set edit_path   = path('calculationstate_edit', params) -%}
+{%- set delete_path = path('calculationstate_delete', params) -%}
+{%- set pdf_path    = path('calculationstate_pdf') -%}
+
+{# titles #}
+{%- set add_title    = 'calculationstate.add.title' %}
+{%- set show_title   = 'calculationstate.show.title' %}
+{%- set edit_title   = 'calculationstate.edit.title' %}
+{%- set delete_title = 'calculationstate.delete.title' %}

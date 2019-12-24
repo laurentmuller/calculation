@@ -1,0 +1,31 @@
+profile:
+    edit:
+        title: Modifier le profil
+    flash:
+        updated: Votre profil a bien été mis à jour.
+security:
+    login:
+        error: Le nom de l'utilisateur ou le mot de passe est invalide.
+        success: Bienvenue <b>%username%</b> sur le site de l'application <b>%appname%</b>.
+        title: Connexion à l'application
+        captcha: Code de contrôle
+        image: Image de contrôle
+        refresh: Générer une nouvelle image
+    logout:
+        success: La déconnexion du site de l'application <b>%appname%</b> est réussie.
+password:
+    change:
+        success: Le mot de passe de l'utilisateur <b>%name%</b> a été modifié avec succès.
+resetting:
+    link: Mot de passe oublié ?
+    request:
+        title: Réinitialiser le mot de passe
+        submit: Réinitialiser
+    check_email: |
+        Un e-mail vous a été envoyé. Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.
+
+        Si vous ne recevez pas un email, vérifiez votre dossier spam ou essayez à nouveau.
+
+        <b>Remarque :</b> Vous ne pouvez demander un nouveau mot de passe que toutes les %tokenLifetime% heures.
+login:
+    link: Déjà un compte ?

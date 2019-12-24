@@ -1,0 +1,32 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% import 'macros/_rights.html.twig' as rights %}
+
+{# parameters #}
+{%- set title       = 'admin.rights.title' -%}
+{%- set title_icon  = 'unlock' -%}
+{%- set cancel_path = path('homepage') -%}
+
+{% block card_container_class '' %}
+
+{% block card_body %}
+{{ form_row(form.name) }}
+{{ rights.table(form, default) }}
+{% endblock %}
+
+{% block actions_form %}
+{{ parent() }}
+{{ rights.actions() }}
+{% endblock %}
+
+{% block card_footer %}
+{{ block('actions_form') }}
+{% endblock %}
+
+{% block javascripts -%}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/rights_edit.js') }}
+{% else %}
+{{ asset_js('js/rights_edit.js') }}
+{% endif %}
+{%- endblock %}

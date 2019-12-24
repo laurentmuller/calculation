@@ -1,0 +1,28 @@
+{% extends 'cards/card_show.html.twig' %}
+
+{# imports #}
+{% import 'macros/_properties.html.twig' as properties %}
+
+{# parameters #}
+{%- set id     = item.id -%}
+{%- set title  = 'calculationstate.show.title' -%}
+{%- set params = routeParams(app.request, id) %}
+
+{# actions #}
+{%- set edit_path   = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   item) ? path('calculationstate_edit',   params) : null -%}
+{%- set delete_path = is_granted(IEntityVoter.ATTRIBUTE_DELETE, item) ? path('calculationstate_delete', params) : null -%}
+{%- set cancel_path = cancelUrl(app.request, id, 'calculationstate_list') -%}
+
+{# properties #}
+{% block property_body %}
+{{ properties.property('calculationstate.fields.code', item.code) }}
+{{ properties.property('calculationstate.fields.description', item.description) }}
+{{ properties.property('calculationstate.fields.editable', item.editable|boolean) }}
+{{ properties.property('calculationstate.fields.calculations', item.countCalculations|integer) }}
+<tr>
+    <td>{{ 'calculationstate.fields.color'|trans }}</td>
+    <td>
+        <span class="state-color border border-secondary" style="background-color: {{ item.color|default('transparent') }};"></span>
+    </td>
+</tr>
+{% endblock %}

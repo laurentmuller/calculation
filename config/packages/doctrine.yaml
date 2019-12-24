@@ -1,0 +1,27 @@
+doctrine:
+    dbal:
+        driver: 'mysql'
+        server_version: '5.7'
+        url: '%env(DATABASE_URL)%'
+        
+        # only needed for MySQL
+        #charset: utf8mb4
+        #default_table_options:
+        #    charset: utf8mb4
+        #    collate: utf8mb4_unicode_ci
+
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            App:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Entity'
+                prefix: 'App\Entity'
+                alias: App
+                
+        # hydrators
+        hydrators:
+             ColumnHydrator: \AppBundle\Doctrine\ColumnHydrator

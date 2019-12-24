@@ -1,0 +1,53 @@
+{# macros #}
+{% macro dataContent(calculations) -%}
+{% import 'macros/_properties.html.twig' as properties %}
+<table class="table table-popover table-sm mb-0"><tbody>
+{% for calculation in calculations -%}
+<tr>
+    <td><span class="mr-1" style="{{ properties.stateCss(calculation.stateColor) }}"></span>{{ calculation.id|identifier }}</td>
+    <td>{{ calculation.state.code }}</td>
+    <td>{{ calculation.customer }}</td>
+    <td>{{ calculation.description }}</td>
+    <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
+</tr>
+{%- endfor %}
+</tbody></table>
+{%- endmacro %}
+
+{% macro dayCell(month, day, small) %}
+{%- set text  = day.number -%}
+{%- set title = '' -%}
+{%- set class = 'text-center align-middle' ~ (small ? ' border' : '') -%}
+{%- set link  = false -%}
+
+{% if day.inMonth(month) -%}    
+    {%- set title = day.date|localedate('long') -%}
+    {%- set calculations = day.calculations -%} 
+    {% if calculations %}
+        {%- set link = true -%}
+        {%- set count = calculations|length -%}        
+        {%- set class = class ~ (small ? ' small' : '') ~ ' text-white' ~ (day.current ? ' bg-primary' : ' bg-success') -%}
+        {%- set href = path('calculation_table', {'query': day.date|localedate('short')}) -%}
+        {%- set content = _self.dataContent(calculations) -%}        
+    {%- elseif day.current -%}
+        {%- set class = class ~ ' bg-primary text-white' -%}
+    {% elseif day.weekEnd %}
+        {%- set class = class ~ ' bg-light' -%}   
+    {%- endif %}
+{% elseif day.weekEnd %}    
+    {%- set class = class ~ ' bg-light' -%}
+    {%- set text = '&nbsp;' -%}
+{% else %}
+    {%- set text = '&nbsp;' -%}
+{%- endif %}
+{% if link %}
+<td class="{{ class }}"{% if title %} title="{{ title }}"{% endif %}>
+    <a href="{{ href }}" class="text-white">
+    	<span>{{ text }}</span>
+    	<span class="badge badge-light" data-toggle="popover" data-html="{{ content|e }}"{% if title %} title="{{ title }}"{% endif %}>{{ count }}</span>
+    </a>
+</td>
+{% else %}
+<td class="{{ class }}"{% if title %} title="{{ title }}"{% endif %}>{{ text|raw }}</td>
+{% endif %}
+{% endmacro %}

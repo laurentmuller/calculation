@@ -1,0 +1,61 @@
+{% extends 'chart/base_chart.html.twig' %}
+{% trans_default_domain 'chart' %}
+
+{# parameters #}
+{%- set title      = 'title_by_month' -%}
+{%- set title_icon = 'calendar-alt far' -%}
+
+{% block card_container_class '' -%}
+
+{% block data %}
+<div class="col my-2">
+    <table class="table table-bordered table-hover table-list table-sm">
+        <thead>
+            <tr>
+                <th>{{ 'fields.month'|trans }}</th>                
+                <th class="text-currency">{{ 'fields.count'|trans }}</th>
+                <th class="text-currency" style="border: 2px solid darkgreen;">{{ 'fields.net'|trans }}</th>
+                <th class="text-percent">{{ 'fields.margin_percent'|trans }}</th>
+                <th class="text-currency" style="border: 2px solid darkred;">{{ 'fields.margin_amount'|trans }}</th>
+                <th class="text-currency">{{ 'fields.total'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody data-link="row" class="rowlink">
+            {% for item in data -%}
+            {%- set month = item.date|strftime('%B %Y') -%}
+        	<tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
+                <td>
+                	<a href="{{ path('calculation_list', {'query': item.date|strftime('%m.%Y')}) }}">{{ month }}</a>
+                </td>
+                <td class="text-currency">{{ item.count|integer }}</td>
+                <td class="text-currency">{{ item.items|number_format(0) }}</td>
+                {%- set className = marginBelow(item.marginPercent) ? 'text-percent text-danger' : 'text-percent' -%}
+                <td class="{{ className }}">{{ item.marginPercent|percent(false) }}</td>                
+                <td class="text-currency">{{ item.marginAmount|number_format(0) }}</td>
+                <td class="text-currency">{{ item.sum|number_format(0) }}</td>
+            </tr>
+            {% endfor -%}
+        </tbody>
+        <tfoot>
+            <tr>
+            	<th>{{ 'fields.total'|trans }}</th>
+            	<th class="text-currency">{{ count|integer }}</th>
+                <th class="text-currency">{{ items|number_format(0) }}</th>
+            	<th class="text-percent">{{ marginPercent|percent(false) }}</th>
+                <th class="text-currency">{{ marginAmount|number_format(0) }}</th>
+                <th class="text-currency">{{ total|number_format(0) }}</th>                
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/plugins/plugin-rowlink.js') }}
+{% else %}
+{{ asset_js('js/chart.js') }}
+<script nonce="{{ csp_nonce() }}">{{ chart(chart) }}</script>
+{% endif %}
+{% endblock %}

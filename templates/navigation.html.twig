@@ -1,0 +1,171 @@
+{# Navigation toolbar #}
+{% import 'macros/_icons.html.twig' as icons %}
+{# parameters #}
+{%- set isEnvDev     = app_environment == 'dev' -%}
+{%- set isEnvProd    = app_environment == 'prod' -%}
+{%- set isDev        = app.debug or isEnvDev -%}
+{%- set isAdmin      = is_granted('ROLE_ADMIN') -%}
+{%- set isSuperAdmin = is_granted('ROLE_SUPER_ADMIN') -%}
+{%- set isPrevAdmin  = is_granted('ROLE_PREVIOUS_ADMIN') -%}
+{%- set isRemembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
+{# rights #}
+{%- set calculs      = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CALCULATION) -%}
+{%- set products     = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_PRODUCT) -%}  
+{%- set categories   = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CATEGORY) -%}
+{%- set states       = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CALCULATION_STATE) -%}
+{%- set margins      = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_GLOBAL_MARGIN) -%}
+{%- set customers    = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CUSTOMER) and isDev -%}
+{%- set isBibi       = isDev and isRemembered and app.user.username == 'Bibi' -%}
+{# navigation #}
+<nav id="navigation" class="navbar navbar-expand-md {{ theme_background(app.request) }}">
+    <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title'|trans }}">
+         {{- icons.icon('home') -}}
+    </a>
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="{{ 'index.toggle_navigation'|trans }}">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav mr-auto">
+            {%- if calculs -%}
+            {{- icons.navItem(path('calculation_list'), 'calculation.list.title', 'calculator') -}}
+            {%- endif -%}
+            {%- if products or categories or states or margins or customers -%}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dataDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{- icons.icon('database', 'index.menu_data') -}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dataDropdown">
+                {%- if products -%}
+                    {{- icons.dropdownItem(path('product_list'), 'product.list.title', 'file-alt far') -}}
+                {%- endif -%}
+                {%- if categories -%}
+                    {{- icons.dropdownItem(path('category_list'), 'category.list.title', 'folder far') -}}
+                {%- endif -%}
+                {%- if states -%}
+                    {{- icons.dropdownItem(path('calculationstate_list'), 'calculationstate.list.title', 'flag far') -}}
+	            {%- endif -%} 
+                {%- if margins -%}
+                    {{- icons.dropdownItem(path('globalmargin_list'), 'globalmargin.list.title', 'percent') -}}
+                {%- endif -%}                     
+                {%- if customers %}
+                    {{- icons.dropdownItem(path('customer_list'), 'customer.list.title', 'address-card far') -}}
+                {%- endif -%}
+                </div>
+           	</li>
+            {%- endif -%}
+           	
+            <li class="nav-item dropdown">
+       			<a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{- icons.icon('tools', 'index.menu_tools') -}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="toolsDropdown">
+                    {{- icons.dropdownItem(path('search'), 'search.title', 'search') -}}
+                    {% if isAdmin %}
+                    {{- icons.dropdownSeparator -}}
+                	{{- icons.dropdownItem(path('calculation_update'), 'update.title', 'pencil-alt') -}}
+                    {{- icons.dropdownSeparator -}}
+                    {{- icons.dropdownItem(path('calculation_below'), 'below.title', 'percent') -}}
+                    {{- icons.dropdownItem(path('calculation_duplicate'), 'duplicate.title', 'copy far') -}}
+                    {{- icons.dropdownItem(path('calculation_empty'), 'empty.title', 'file-code far') -}}
+                    {% endif -%}
+                </div>
+    		</li>
+    		
+            {%- if calculs -%}
+            <li class="nav-item dropdown">
+           	    <a class="nav-link dropdown-toggle" href="#" id="chartDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{- icons.icon('chart-area', 'menu_graphics', 'chart') -}}</a>
+                <div class="dropdown-menu" aria-labelledby="chartDropdown">
+                    {{- icons.dropdownItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') -}}
+                    {{- icons.dropdownItem(path('chart_by_state'), 'title_by_state', 'flag far', 'chart') -}}
+                    {% if isBibi -%}
+                    {{- icons.dropdownSeparator -}}
+                    {{- icons.dropdownItem(path('calculation_pivot'), 'pivot.title', 'table') -}}
+                    {% endif -%}
+                </div>
+            </li>
+            {% endif -%}
+            {% if isBibi -%}
+            <li class="nav-item dropdown">
+            	<a class="nav-link dropdown-toggle" href="#" id="testDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{- icons.icon('bug', 'index.menu_test') -}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="testDropdown">
+                    {{- icons.dropdownItem(path('test_notifications'), 'test.notification', 'bell far') -}}
+                    {{- icons.dropdownItem(path('test_summernote'), 'test.summernote', 'quote-right') -}}
+                    {{- icons.dropdownItem(path('test_calendar'), 'test.calendar', 'calendar far', null, {'%year%': 'now'|date('Y')}) -}}
+                    {{- icons.dropdownItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') -}}
+                    {{- icons.dropdownItem(path('test_translate'), 'translator.title', 'globe') -}}
+                    {{- icons.dropdownItemExternal(path('test_html'), 'test.html', 'code') -}}
+                    {{- icons.dropdownItem(path('test_password'), 'password.title', 'lock') -}}
+                    {{- icons.dropdownSeparator -}}
+                    {{- icons.dropdownItem(path('admin_import'), 'import.title', 'download') -}}
+                </div>
+            </li>
+    		{% endif -%}
+        </ul>
+        <ul class="navbar-nav">
+            {# search #}
+            {% if show_navigation|default(false) -%}            	         
+                <li class="nav-item mx-2 my-auto">              
+                    <a href="#" id="navigation-search-button" class="nav-link" title="{{ 'search.title'|trans }}">
+                        {{- icons.icon('search fa-fw') -}}
+                    </a>                
+                    <form id="navigation-search-form" name="navigation-search-form" class="form-inline my-auto mx-2" role="search" action="{{ path('search') }}" style="display: none; width: 0">
+                        <input id="query" name="query" type="text" required="required" minlength="2" autocomplete="off" class="form-control form-control-sm w-100" placeholder="{{ 'search.placeholder'|trans }}">
+                    </form>
+                </li>
+            {% endif -%}
+        {% if isRemembered %}
+            <li class="nav-item dropdown">
+        		<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        		    {%- set image = vich_uploader_asset(app.user, 'imageFile')|replace({'192': '032'}) -%}
+                    {% if asset_exists(image) %}
+                        <img alt="{{ 'user.image.title'|trans }}" src="{{ asset(image) }}?{{ 'now'|date('c') }}" class="avatar rounded-circle" title="{{ app.user.username }}" width="{{ image_width(image) }}" height="{{ image_height(image) }}">
+                    {% else %}
+                        {{- icons.icon('user fa-lg far') -}}{{- ' ' ~ app.user.username -}}
+                    {% endif %}
+				</a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                {{- icons.dropdownItem(path('fos_user_security_logout'), 'index.logout', 'sign-out-alt') -}}
+                {{- icons.dropdownItem(path('fos_user_profile_edit'), 'profile.edit.title', 'pencil-alt', 'FOSUserBundle') -}}
+                {{- icons.dropdownItem(path('fos_user_change_password'), 'index.change_password', 'unlock-alt') -}}
+                {#
+                	{{- icons.dropdownItem(path('fos_user_resetting_request'), 'resetting.request.title', 'eraser', 'FOSUserBundle') -}}
+                #}
+                {{- icons.dropdownItem(path('user_theme'), 'index.menu_theme', 'file-image far', null, {'%name%': theme_name(app.request)}) -}}
+                {% if isAdmin %}
+                    {{- icons.dropdownSeparator -}}
+	                {{- icons.dropdownItem(path('admin_parameters'), 'parameters.title', 'cogs') -}}
+                    {{- icons.dropdownItem(path('log_show'), 'logs.title', 'book') -}}
+                    {{- icons.dropdownItem(path('admin_clear'), 'clear_cache.title', 'times') -}}               
+                    {{- icons.dropdownSeparator -}}     
+                    {{- icons.dropdownItem(path('user_list'), 'user.list.title', 'user far') -}}
+                    {{- icons.dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'unlock-alt') -}}
+                {% endif %}                                
+                {% if isSuperAdmin %}
+                    {{- icons.dropdownItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'unlock-alt') -}}
+                {% endif %}
+                {% if isPrevAdmin %}
+                    {{- icons.dropdownSeparator -}}
+                    {{- icons.dropdownItem(path('user_list', {'_switch_user': '_exit'}), 'user.switch.exit.title', 'user-times') -}}
+                {% endif %}
+                {# switch environment #}
+                {% if isEnvDev %}
+                    {{- icons.dropdownSeparator -}}                
+                    {{- icons.dropdownItem('https://calcul.bibi.nu', 'environment.switch', 'location-arrow', null, {'%name%' : 'environment.prod'|trans}) -}}
+                {% elseif isEnvProd %}
+                    {{- icons.dropdownSeparator -}}
+                    {{- icons.dropdownItem('https://dev.bibi.nu', 'environment.switch', 'location-arrow', null, {'%name%' : 'environment.dev'|trans}) -}}
+                {% endif %}                        
+                {{- icons.dropdownSeparator -}}
+                {{- icons.dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') -}}
+                {{- icons.dropdownSeparator -}}
+                {{- icons.dropdownItem(path('about'), 'index.menu_info', 'info-circle', null, {'%app_name%': app_name}) -}}
+                </div>     
+            </li>
+        {% else %}
+	        {{- icons.navItem(path('fos_user_security_login'), 'index.login', 'sign-in') -}}
+        {% endif -%}
+        </ul>
+    </div>
+</nav>

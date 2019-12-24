@@ -1,0 +1,45 @@
+{% extends 'calculation/calculation_card.html.twig' %}
+
+{# macros #}
+{% macro printItem(item) -%}
+{% import 'macros/_properties.html.twig' as properties %}
+{%- set texts = {} -%}
+{% if item.price == 0 %}
+    {%- set texts = texts|merge(['calculationitem.fields.price'|trans]) -%}
+{% endif %}
+{% if item.quantity == 0 %}
+    {%- set texts = texts|merge(['calculationitem.fields.quantity'|trans]) -%}
+{% endif %}
+{{- properties.line(item.description ~ ' (' ~ texts|join(', ') ~ ')', 'text-danger') -}}
+{%- endmacro %}
+
+{# imports #}
+{% import 'macros/_properties.html.twig' as properties %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title        = 'below.title' -%}
+{%- set title_icon   = 'percent' -%}
+{%- set empty_list   = 'below.empty' -%}
+{%- set caller       = path(app.request.attributes.get('_route')) -%}
+
+{# actions #}
+{%- set add_page     = false -%}
+{%- set delete_page  = false -%}
+{%- set pdf_page     = false -%}
+{%- set state_page   = false -%}
+{%- set clone_page   = false -%}
+
+{% block search_action %}{% endblock %}
+
+{% block card_header -%}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ 'below.description'|trans({'%margin%': min_margin|percent}) }}</p>
+{% if items|length %}<p class="ml-4 mb-0">{{ 'below.count'|trans({'%calculations%': items|length }) }}</p>{% endif %}
+{%- endblock %}
+
+{%- block card_footer_class '' -%}
+{% block card_footer -%}
+{{ icons.homepage() }}
+{% if items|length %}{{ icons.button_pdf('calculation_below_pdf')}}{% endif %}
+{%- endblock %}

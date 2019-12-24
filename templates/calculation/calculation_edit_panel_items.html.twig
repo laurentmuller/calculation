@@ -1,0 +1,48 @@
+{# Items panel #}
+{% import 'macros/_icons.html.twig' as icons %}
+{% import 'calculation/calculation_macro_group.html.twig' as groupsMacro %}
+
+<div id='items-panel' class="card mb-3">
+	<div class="card-header">
+	{% if editable %}
+        <div class="row">
+            <div class="col">
+                <h1 class="card-title">{{ icons.icon('file-alt far', 'calculation.edit.panel_items') }}</h1>
+            </div>
+            <div class="col text-right d-print-none mb-0">
+            	<a class="btn-add-item" href="#">{{ 'calculation.edit.add_item'|trans }}</a>
+            </div>
+        </div>
+    {% else %}
+        <h1 class="card-title">{{ icons.icon('file-alt far', 'calculation.edit.panel_items') }}</h1>
+    {% endif %}
+	</div>
+	<div class="card-body p-2">
+		<div class="form-row">
+			<div class="col">
+				<table id="data-table-edit" class="table table-edit table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ groupIndex }}" data-item-index="{{ itemIndex }}" data-prototype="{{ groupsMacro.printGroupRow(form.groups.vars.prototype, editable)|e('html_attr') }}"{% endif -%}>
+				{# groups and items #}
+                {% for group in form.groups %}
+                    {{ groupsMacro.printGroupRow(group, editable) }}
+                {% endfor %}
+				</table>
+                {{ form_errors(form.groups) }}
+			</div>
+		</div>	
+		<div id="empty-items" class="row{% if item.groups|length > 0 %} d-none{% endif %}">
+			<div class="col">
+				<p class="mb-0">{{ 'calculation.edit.empty_items'|trans }}</p>
+			</div>
+		</div>	
+	</div>
+    {# errors #}
+    {%- set class_duplicate = duplicate_items  ? '' : ' d-none'  -%}
+    {%- set class_empty     = emty_items  ? '' : ' d-none'  -%}
+    {%- set class_error     = (emty_items or duplicate_items) ? '' : ' d-none'  -%}
+	<div id="error-all" class="card-footer{{ class_error }}">
+		<p class="mb-0 text-right">
+            <span id="error-duplicate" class="ml-1{{ class_duplicate }}"><span class="duplicate-footer"></span>{{ 'duplicate.title'|trans }}</span>
+            <span id="error-empty" class="ml-1{{ class_empty }}"><span class="empty-footer"></span>{{ 'empty.title'|trans }}</span>
+        </p>
+	</div>
+</div>

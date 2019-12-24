@@ -1,0 +1,26 @@
+Invalid credentials.: Le nom de l'utilisateur ou le mot de passe est invalide.
+Not privileged to request the resource.: Les privilèges sont insuffisants pour accéder à la ressource.
+Invalid CSRF token.: Le jeton de falsification de requête inter-sites (CSRF) est invalide.
+"No session available, it either timed out or cookies are not enabled.": Aucune session n'est disponible. Celle-ci a expiré ou les cookies ne sont pas activés.
+Username could not be found.: Le nom de l'utilisateur n'a pas pu être trouvé.
+
+# reCAPTCHA
+recaptcha.missing-input-secret: Le paramètre secret reCAPTCHA est manquant. Essayez de recharger cette page.
+recaptcha.invalid-input-secret: Le paramètre secret reCAPTCHA est invalide ou malformé. Essayez de recharger cette page.
+recaptcha.missing-input-response: Le paramètre de réponse reCAPTCHA est manquant. Essayez de recharger cette page.
+recaptcha.invalid-input-response: Le paramètre de réponse reCAPTCHA est invalide ou malformé. Essayez de recharger cette page.
+recaptcha.bad-request: La demande reCAPTCHA est invalide ou malformée. Essayez de recharger cette page.
+recaptcha.invalid-json: La réponse reCAPTCHA a un format JSON invalide.
+recaptcha.connection-failed: Impossible de se connecter au service reCAPTCHA. Essayez de recharger cette page.
+recaptcha.bad-response: Le service reCAPTCHA n'a pas retourné le code 200. Essayez de recharger cette page.
+recaptcha.unknown-error: Une erreur inconnue s'est produite durant de la validation reCAPTCHA. Essayez de recharger cette page.
+recaptcha.hostname-mismatch: Le nom d'hôte reCAPTCHA ne correspond pas. Essayez de recharger cette page.
+recaptcha.action-mismatch: L'action reCAPTCHA ne correspond pas. Essayez de recharger cette page.
+recaptcha.score-threshold-not-met: Le seuil de points reCAPTCHA n'est pas atteint. Essayez de recharger cette page.
+recaptcha.challenge-timeout: Le délai d'attente du défi reCAPTCHA est atteint. Essayez de recharger cette page.
+recaptcha.timeout-or-duplicate: Le délai d'attente reCAPTCHA est atteint ou la validation a été appelée deux fois. Essayez de recharger cette page.
+
+# captcha image
+captcha:
+    invalid: Le code de contrôle est invalide.
+    timeout: Le délai d'attente est atteint. Essayez de recharger la page ou l'image.

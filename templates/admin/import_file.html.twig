@@ -1,0 +1,35 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# parameters #}
+{%- set title       = 'import.title' -%}
+{%- set title_icon  = 'download' -%}
+{%- set cancel_path = path('homepage') -%}
+
+
+{% block card_header %}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ 'import.description'|trans }}
+{% endblock %}
+
+{% block card_body %}
+{{ form_row(form.file) }}
+{% if last_import -%}
+{%- set date = last_import|localedate('long') -%}
+<p class="mb-0 text-right">{{ 'import.last_import'|trans({'%date%' : date}) }}</p>
+{%- endif %}
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset_css('css/fileinput.css') }}
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/plugins/plugin-fileinput.js') }}
+{{ asset_js('js/app/file_import.js') }}
+{% else %}
+{{ asset_js('js/file_import.js') }}
+{% endif %}
+{% endblock %}

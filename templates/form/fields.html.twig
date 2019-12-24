@@ -1,0 +1,207 @@
+{# vendor/symfony/twig-bridge/Resources/views/Form #}
+{% extends 'bootstrap_4_layout.html.twig' %}
+
+{# override form_row to display help and errors after input #}
+{% block form_row -%}
+    {%- if compound is defined and compound -%}
+        {%- set element = 'fieldset' -%}
+    {%- endif -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <{{ element|default('div') }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group')|trim})} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_label(form) -}}
+        {{- form_widget(form, widget_attr) -}}
+        {{- form_help(form) -}}
+        {{- form_errors(form) }}
+    </{{ element|default('div') }}>
+{%- endblock form_row %}
+ 
+{# empty block because errors are displayed after input #} 
+{% block form_label_errors -%}{%- endblock %}
+
+{# 
+override form errors. Rendered example: 
+<small id="form_message-error" class="is-invalid invalid-feedback">Ce champ est obligatoire.</small>
+#}
+{% block form_errors -%}
+{%- if errors|length > 0 -%}
+    {%- set messages = [] -%}
+    <span class="invalid-feedback d-block">
+        {%- for error in errors -%}
+            {%- if error.message not in messages -%}
+                <span class="mb-0 d-block">{{ error.message }}</span>               
+            {%- endif -%}
+            {%- set messages = messages|merge([error.message]) -%}
+        {%- endfor -%}
+    </span>
+{%- endif -%}
+{%- endblock %}
+
+{# extends percent widget with number type #}
+{% block percent_widget -%}
+{%- set type = type|default('number') -%}
+{{ parent() }}
+{%- endblock %}
+
+{# override password widget with an addon to show or hide the password within jQuery #}
+{% block password_widget -%}
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fas fa-fw fa-lock" aria-hidden="true"></i></span>
+    </div>
+    {{ parent() }}    
+    <div class="input-group-append">
+        <button class="btn btn-password btn-outline-secondary" type="button" title="{{ 'common.toggle_password'|trans }}">
+            <i class="fas fa-eye" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+{% if ('password-strength' in attr.class|default('')|split(' ')) %}
+    <div id="{{ form.vars.id }}_passwordstrength" class="d-print-none password-strength"></div>
+{%- endif %}
+{%- endblock %}
+
+{# plain text #}
+{% block plain_widget -%}
+{% apply spaceless %}
+{%- if expanded is defined and expanded -%}
+    {%- set class = (attr.class|default('') ~ ' plain-text border rounded bg-light text-muted')|trim -%}
+    <div class="{{ class }}">
+        <span>{{ value|escape }}</span>
+    </div>
+{%- else -%}
+    <span>{{ value|escape }}</span>
+{%- endif -%}
+{%- if hidden_input is defined and hidden_input -%}{{- block('hidden_widget') -}}{%- endif -%}
+{% endapply %}
+{%- endblock %}
+
+{# color widget #}
+{% block color_widget -%}
+{%- if 'color-picker' in attr.class|default('') -%}
+    {%- set type = type|default('color') -%}
+    {%- set attr = attr|merge({'class': 'd-none' ~ (required ? ' must-validate' : ''), 'data-custom_text': 'color_picker.custom_text'|trans, 'data-advanced_text': 'color_picker.advanced_text'|trans}) -%}
+    <div class="color-picker dropdown form-control">
+        {# <input type="color" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
+        {{ block('form_widget_simple') }}
+    	<button type="button" class="dropdown-toggle btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    		<span class="drowpdown-color border border-secondary" style="background-color: {{ value|default('#000000')  }};"></span>
+    		<span class="drowpdown-text"></span>
+    	</button>
+    	<div class="dropdown-menu d-print-none"></div>
+    </div>
+{%- else -%}
+    {{- parent() -}}
+{%- endif -%}
+{%- endblock %}
+
+{# prepend icon #}
+{%- block url_widget -%}
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fas fa-fw fa-globe" aria-hidden="true"></i></span>
+    </div>
+    {{- parent() -}}
+</div>
+{%- endblock -%}
+
+
+{# prepend icon #}
+{%- block email_widget %}
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fas fa-fw fa-at" aria-hidden="true"></i></span>
+    </div>
+    {{- parent() -}}  
+</div>
+{%- endblock -%}
+
+{# use fileinput style #}
+{% block file_widget -%}
+{%- if thumbnail|default(false) -%}
+    {%- set empty_image   = empty_image|default(false) -%}
+    {%- set thumbnail_src = thumbnail_src|default(false) -%}
+    {%- set thumbnail_alt = thumbnail_alt|default('filetype.image') -%}
+    {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
+    <div class="fileinput {{ thumbnail_src ? 'fileinput-exists' : 'fileinput-new' }}" data-provides="fileinput">
+        <div class="text-center">
+            <div class="fileinput-preview img-thumbnail" data-trigger="fileinput">
+                {% if thumbnail_src or empty_image  -%}
+                    <img alt="{{ thumbnail_alt|trans }}" src="{{ thumbnail_src|default(empty_image) }}">
+                {%- endif %}                	
+            </div> 
+            <div>
+                <span class="btn btn-file btn-form btn-outline-secondary">
+                    <span class="fileinput-new">{{ 'common.button_browse'|trans }}</span>
+                    <span class="fileinput-exists">{{ 'common.button_edit'|trans }}</span>
+                    {{- block('form_widget_simple') -}}
+                </span>
+                <a href="#" class="btn btn-form btn-outline-danger fileinput-exists" data-dismiss="fileinput">{{ 'common.button_delete'|trans }}</a>
+            </div>
+        </div>
+    </div>    
+{%- else -%}
+    {%- set placeholder = attr.placeholder is defined ? (translation_domain is same as(false) ? attr.placeholder : attr.placeholder|trans({}, translation_domain)) : false -%}
+    <div class="fileinput fileinput-new input-group rounded border" data-provides="fileinput">
+        <div class="form-control" data-trigger="fileinput">
+            <span class="fileinput-filename">{%- if placeholder -%}{{ placeholder }}{%- endif -%}</span>
+        </div>
+        <span class="input-group-append">
+            <span class="input-group-text btn-file rounded-right" style="border-right: 0px;">
+                <span class="fileinput-new">{{ 'common.button_browse'|trans }}</span>
+                <span class="fileinput-exists">{{ 'common.button_edit'|trans }}</span>
+                {{- block('form_widget_simple') -}}
+            </span>
+            <span class="input-group-text fileinput-exists" data-dismiss="fileinput" title="{{ 'common.button_delete'|trans }}">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </span>
+        </span>
+    </div>
+{%- endif -%}
+{%- endblock -%}
+
+{# vich_image #} 
+{% block vich_image_widget -%}
+{# file #}
+{%- set uri = asset_exists(image_uri) ? image_uri : false -%}
+{%- set src = uri ?  asset(uri) ~ '?' ~ 'now'|date('c') : false -%}
+{%- set alt = 'user.image.title' -%}
+{%- set empty_image = asset('/images/avatar.png') -%}
+{{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt, empty_image: empty_image}) -}}
+{# delete #}
+{% if form.delete is defined -%}
+<div class="d-none">
+    {{- form_widget(form.delete, {hidden: true}) -}}
+</div>
+{%- endif %}
+{%- endblock %}
+ 
+{# captcha_image #}
+{% block captcha_image_widget -%}
+{%- set type        = type|default('text') -%}
+{%- set image_title = 'security.login.image'|trans([], 'FOSUserBundle') -%}
+{%- set image_style = theme_dark(app.request) ? ' style="margin-top: 1px; margin-bottom: 1px;"' : '' -%}
+{%- if remote|default(false) -%}
+    {%- set attr = attr|merge({'remote': remote}) -%}
+{%- endif -%}
+{%- if refresh|default(false) -%}
+    {%- set attr = attr|merge({'data-refresh': refresh}) -%}
+{%- endif -%}
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text py-0 px-1 bg-white"{{ image_style }}>
+            <img id="image{{ id }}" alt="{{ image_title }}" title="{{ image_title }}" src="{{ image }}" width="150" height="30">
+        </span>
+    </div>
+    {{- block('form_widget_simple') -}}
+    {% if refresh|default(false) %}
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" id="refresh{{ id }}" title="{{ 'security.login.refresh'|trans([], 'FOSUserBundle') }}">
+            <i class="fas fa-sync" aria-hidden="true"></i>
+        </button>
+    </div>
+    {% endif %}    
+</div>
+{%- endblock %}

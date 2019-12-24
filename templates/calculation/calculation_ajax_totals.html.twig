@@ -1,0 +1,50 @@
+{# groups #}
+{% for group in groups %}
+<tr>
+    {% switch group.id %}
+    {% case CalculationService.ROW_EMPTY %}
+    	{# empty #}
+    	<td class="text-muted">{{ group.description }}</td>
+	{% case CalculationService.ROW_GROUP %}
+    	{# group #}
+    	<td class="nowrap">{{ group.description }}</td>
+    	<td class="text-currency">{{ group.amount|amount }}</td>
+    	<td class="text-percent">{{ group.margin|percent }}</td>
+    	<td class="text-currency">{{ group.margin_amount|amount }}</td>
+    	<td class="text-currency">{{ group.total|amount }}</td>
+	{% case CalculationService.ROW_TOTAL_GROUP %}
+    	{# total group #}
+    	<th class="nowrap">{{ group.description }}</th>
+    	<th class="text-currency font-weight-normal">{{ group.amount|amount }}</th>
+    	<th class="text-percent font-weight-normal">{{ group.margin|percent }}</th>
+    	<th class="text-currency font-weight-normal">{{ group.margin_amount|amount }}</th>
+    	<th class="text-currency">{{ group.total|amount }}</th>
+	{% case CalculationService.ROW_GLOBAL_MARGIN %}
+    	{# global margin #}
+    	<td class="nowrap" colspan="2">{{ group.description }}</td>
+    	<td class="text-percent">{{ group.margin|percent }}</td>
+    	<td colspan="2" class="text-currency">{{ group.total|amount }}</td>
+	{% case CalculationService.ROW_TOTAL_NET %}
+    	{# total net #}
+    	<th class="nowrap" colspan="4">{{ group.description }}</th>
+    	<th class="text-currency">{{ group.total|amount }}</th>
+	{% case CalculationService.ROW_USER_MARGIN %}
+    	{# user margin #}
+    	<td class="nowrap" colspan="2">{{ group.description }}</td>
+    	<td class="text-percent">{{ group.margin|percent }}</td>
+    	<td colspan="2" class="text-currency">{{ group.total|amount }}</td>
+	{% case CalculationService.ROW_OVERALL_TOTAL %}
+    	{# overall total #}
+        <th class="nowrap">{{ group.description }}</th>
+        <th class="text-currency">{{ group.amount|amount }}</th>
+        {%- if marginBelow(group.margin) -%}
+            {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': group.margin|percent, '%minimum%': min_margin|percent }) -%}
+            <th class="text-currency text-danger below-cell has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ group.margin|percent }}</th>
+        {%- else -%}
+            <th class="text-currency">{{ group.margin|percent }}</th>
+        {%- endif -%}        
+        <th class="text-currency">{{ group.margin_amount|amount }}</th>
+        <th class="text-currency">{{ group.total|amount }}</th>
+    {% endswitch %}
+</tr>
+{% endfor %}

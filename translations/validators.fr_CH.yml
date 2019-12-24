@@ -1,0 +1,56 @@
+abstract_margin:
+    maximum_geather_minimum: La valeur maximale doit être supérieure à la valeur minimale.
+    maximum_numeric: La valeur maximale doit être un nombre.
+    minimum_overlap: La valeur minimale chevauche une marge existante.
+    maximum_overlap: La valeur maximale chevauche une marge existante.
+    type_numeric: La valeur doit être un nombre.
+category:
+    unique_code: Ce nom est déjà utilisé par une autre catégorie.
+product:
+    unique_description: Cette description est déjà utilisée par autre article.
+customer:
+    unique_email: Cette adresse e-mail est déjà utilisée.
+    zip_code: Le code postal doit contenir 4 chiffres.
+    empty: Veuillez fournir au moins un nom ou un prénom ou une société.
+fos_user:
+    username:
+        not_found: Le nom de l'utilisateur ou l'adresse e-mail est introuvable.
+state:
+    unique_code: Ce nom est déjà utilisé par un autre statut.
+property:
+    unique_name: Ce nom est déjà utilisé par une autre propriété.
+recaptcha:
+    missing-input-secret: Le paramètre secret est manquant.
+    invalid-input-secret: Le paramètre secret est invalide ou malformé.
+    missing-input-response: Le paramètre de réponse est manquant.
+    invalid-input-response: Le paramètre de réponse est invalide ou malformé.
+    bad-request: La demande est invalide ou malformée.
+    invalid-json: La réponse a un format JSON invalide.
+    connection-failed: Impossible de se connecter au service.
+    bad-response: Le service n'a pas retourné le code 200.
+    unknown-error: Une erreur inconnue s'est produite durant de la validation.
+    hostname-mismatch: Le nom d'hôte ne correspond pas.
+    action-mismatch: L'action ne correspond pas.
+    score-threshold-not-met: Le seuil de points n'est pas atteint.
+    challenge-timeout: Le délai d'attente du défi est atteint.
+    timeout-or-duplicate: Le délai d'attente est atteint ou la validation a été appelée deux fois.
+    required: Vous devez cocher la case "Je ne suis pas un robot".
+password:
+    blacklist: Le mot de passe fait partie de la liste de mots interdits.
+    email: Le mot de passe ne peut être une adresse e-mail.
+    minLength: Le mot de passe doit faire au moins {{length}} caractères.
+    minStrength: Le mot de passe doit avoir une force "{{strength_min}}", la force actuelle est "{{strength_current}}".
+    caseDiff: Le mot de passe doit contenir des majuscules et des minuscules.
+    letters: Le mot de passe doit contenir au moins une lettre.
+    numbers: Le mot de passe doit contenir au moins un chiffre.
+    specialCharacter: Le mot de passe doit contenir au moins un caractère spécial.
+    pwned: Le mot de passe a été trouvé {{count}} fois dans une base de données de mots de passe compromis.
+    strength_level:
+        very_weak: Très faible
+        weak: Faible
+        medium: Moyenne
+        strong: Forte
+        very_strong: Très forte
+captcha:
+    invalid: Le code de contrôle est invalide.
+    timeout: Le délai d'attente est atteint. Essayez de recharger la page ou l'image.

@@ -1,0 +1,173 @@
+# Use the front controller as index file. It serves as a fallback solution when
+# every other rewrite/redirect fails (e.g. in an aliased environment without
+# mod_rewrite). Additionally, this reduces the matching process for the
+# start page (path "/") because otherwise Apache will apply the rewriting rules
+# to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
+DirectoryIndex index.php
+
+# ----------------------------------------------------------------------
+# | Character encodings                                                |
+# ----------------------------------------------------------------------
+AddDefaultCharset utf-8
+
+# By default, Apache does not evaluate symbolic links if you did not enable this
+# feature in your server configuration. Uncomment the following line if you
+# install assets as symlinks or if you experience problems related to symlinks
+# when compiling LESS/Sass/CoffeScript assets.
+# Options FollowSymlinks
+
+# Disabling MultiViews prevents unwanted negotiation, e.g. "/app" should not resolve
+# to the front controller "/index.php" but be rewritten to "/index.php/app".
+<IfModule mod_negotiation.c>
+    Options -MultiViews
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Determine the RewriteBase automatically and set it as environment variable.
+    # If you are using Apache aliases to do mass virtual hosting or installed the
+    # project in a subdirectory, the base path will be prepended to allow proper
+    # resolution of the index.php file and to redirect to the correct URI. It will
+    # work in environments without path prefix as well, providing a safe, one-size
+    # fits all solution. But as you do not need it in this case, you can comment
+    # the following 2 lines to eliminate the overhead.
+    RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
+    RewriteRule ^(.*) - [E=BASE:%1]
+
+    # Sets the HTTP_AUTHORIZATION header removed by Apache
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect to URI without front controller to prevent duplicate content
+    # (with and without `/app.php`). Only do this redirect on the initial
+    # rewrite by Apache and not on subsequent cycles. Otherwise we would get an
+    # endless redirect loop (request -> rewrite to front controller ->
+    # redirect -> request -> ...).
+    # So in case you get a "too many redirects" error or you always get redirected
+    # to the start page because your Apache does not expose the REDIRECT_STATUS
+    # environment variable, you have 2 choices:
+    # - disable this feature by commenting the following 2 lines or
+    # - use Apache >= 2.3.9 and replace all L flags by END flags and remove the
+    #   following RewriteCond (best solution)
+    RewriteCond %{ENV:REDIRECT_STATUS} ^$
+    RewriteRule ^app\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
+
+    # If the requested filename exists, simply serve it.
+    # We only want to let Apache serve files and not directories.
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Rewrite all other queries to the front controller.
+    RewriteRule ^ %{ENV:BASE}/index.php [L]
+    
+    # RewriteCond %{REQUEST_URI} !^/favicon.ico$
+    # RewriteRule ^favicon.ico sites/%{SERVER_NAME}/favicon.ico [NC,L]
+    
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    <IfModule mod_alias.c>
+        # When mod_rewrite is not available, we instruct a temporary redirect of
+        # the start page to the front controller explicitly so that the website
+        # and the generated links can still be used.
+        RedirectMatch 302 ^/$ /index.php/
+        # RedirectTemp cannot be used instead
+    </IfModule>
+</IfModule>
+
+<IfModule mod_mime.c>
+	AddType font/woff               woff
+    AddType font/woff2				woff2
+</IfModule>
+
+<ifmodule mod_expires.c="">
+	  # Turn on Expires and set default to now
+	 ExpiresActive On
+	 ExpiresDefault "now"
+	 	 
+	 # Set up caching on media files for 1 month
+	 <filesmatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav|swf|woff|woff2)$"="">
+	 	ExpiresDefault "access plus 1 month"
+	 </filesmatch>
+	 
+	 # Set up caching on images, CSS and JS files for 1 week
+	 <filesmatch "\.(gif|jpg|jpeg|png|js|css)$"="">
+	 	ExpiresDefault "access plus 1 week"
+	 </filesmatch>
+	
+	 # Set up 1 hour caching on commonly updated files
+	 <filesmatch "\.(xml|xsl|html|htm|txt)$"="">
+	 	ExpiresDefault "access plus 1 hour"
+	 </filesmatch>
+	 
+	 # Force no caching for dynamic files
+	 <filesmatch "\.(php|cgi|pl)$"="">
+	 	ExpiresActive Off
+	 </filesmatch>
+</ifmodule>
+
+# Source: https://github.com/h5bp/server-configs-apache/blob/master/dist/.htaccess
+
+<IfModule mod_headers.c>
+	# ----------------------------------------------------------------------
+	# | Cross-origin web fonts                                             |
+	# ----------------------------------------------------------------------
+	# Allow cross-origin access to web fonts.
+	# https://developers.google.com/fonts/docs/troubleshooting
+    <FilesMatch "\.(eot|otf|tt[cf]|svg|woff|woff2?)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+    
+    # see https://kinsta.com/fr/base-de-connaissances/entete-specify-vary-accept-encoding/
+    <FilesMatch ".(js|css|xml|gz|html|json)$">
+    	Header append Vary: Accept-Encoding
+  	</FilesMatch>
+</IfModule>
+
+<ifmodule mod_headers.c=""> 
+	 # Remote ETag from headers
+	 Header unset ETag
+	 
+	 # Disable ETag for files
+	 FileETag None
+
+	 # Header set Access-Control-Allow-Origin "*"	 
+	 # Header always set X-Content-Type-Options "nosniff"
+	 
+	 # mod_headers can't match by content-type
+     Header set X-UA-Compatible "IE=Edge,chrome=1"   
+  	 <FilesMatch "\.(appcache|crx|css|eot|gif|htc|ico|jpe?g|js|m4a|m4v|manifest|mp4|oex|oga|ogg|ogv|otf|pdf|png|safariextz|svg|svgz|ttf|vcf|webm|webp|woff|xml|xpi)$">
+	     Header unset X-UA-Compatible
+  	 </FilesMatch>
+     
+     # `mod_headers` cannot match based on the content-type
+     Header always set X-Frame-Options "DENY"
+     Header always set X-XSS-Protection "1; mode=block"
+     <FilesMatch "\.(appcache|atom|bbaw|bmp|br|crx|css|cur|eot|f4[abpv]|flv|geojson|gif|gz|htc|ic[os]|jpe?g|m?js|json(ld)?|m4[av]|manifest|map|markdown|md|mp4|oex|og[agv]|opus|otf|pdf|png|rdf|rss|safariextz|svgz?|swf|topojson|tt[cf]|txt|vcard|vcf|vtt|wasm|webapp|web[mp]|webmanifest|woff|woff2?|xloc|xml|xpi)$">
+         Header unset X-Frame-Options
+         Header unset X-XSS-Protection
+     </FilesMatch>
+	 
+	 # Media files are catchable
+	 <filesmatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav|swf)$"="">
+	 	Header append Cache-Control "public"
+	 </filesmatch>
+	 
+	 # Images, css and javascript files are catchable
+	 <filesmatch "\.(gif|jpg|jpeg|png|js|css)$"="">
+	 	Header append Cache-Control "public"		
+	 </filesmatch>
+	 
+	 # Commonly updated files are catchable
+	 <filesmatch "\.(xml|html|htm|txt)$"="">
+	 	Header append Cache-Control "public"	 	
+	 </filesmatch>
+	 
+	 # Force no caching for dynamic files
+	 <filesmatch "\.(php|cgi|pl|htm)$"="">
+		 Header set Cache-Control "private, no-cache, no-store, proxy-revalidate, no-transform"
+		 Header set Pragma "no-cache"
+	 </filesmatch> 
+	 
+</ifmodule>

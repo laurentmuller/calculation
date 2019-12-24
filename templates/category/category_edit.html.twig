@@ -1,0 +1,91 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title        = new ? 'category.add.title' : 'category.edit.title' -%}
+{%- set title_icon   = 'folder far' -%}
+{%- set page_list    = 'category_list' -%}
+{%- set marginsLengh = form.margins|length %}
+{%- set tableClass   = 'table table-borderless table-edit' ~ (marginsLengh == 0 ? ' d-none' : '') -%}
+
+{# macros #}
+{% macro printMarginRow(margin) %}
+{% import 'macros/_icons.html.twig' as icons %}
+<tr>
+    <td style="width: 35%;">
+        <div class="form-group">
+            {{ form_widget(margin.minimum) }}
+            <em>{{ form_errors(margin.minimum) }}</em>
+        </div>
+    </td style="width: 35%;">
+    <td>
+        <div class="form-group">
+            {{ form_widget(margin.maximum) }}
+            <em>{{ form_errors(margin.maximum) }}</em>
+        </div>
+    </td style="width: 30%;">
+    <td>
+        <div class="form-group">
+            {{ form_widget(margin.margin) }}
+            <em>{{ form_errors(margin.margin) }}</em>
+        </div>
+    </td>
+    <td class="actions text-center align-top d-print-none ">
+        <a href="#" class="btn btn-sm btn-danger btn-input btn-edit btn-delete mt-1 d-print-none" title="{{ 'category.edit.delete_margin'|trans }}">
+            {{ icons.icon("times") }}
+        </a>
+    </td>
+</tr>
+{% endmacro %}
+
+{% block card_body %}
+<div class="form-row">
+    <div class="col-md-4">
+	    {{ form_row(form.code) }}
+    </div>
+</div>
+{{ form_row(form.description) }}
+<div class="form-row">
+    <div class="col-md-12">
+    	<div class="row">
+    		<div class="col">
+    			<label class="control-label" for="data-table-edit">{{ 'category.fields.margins'|trans }}</label>
+    		</div>
+    		<div class="col text-right mr-1">
+    			<a href="#" class="btn-add">{{ 'category.edit.add_margin'|trans }}</a>
+    		</div>
+    	</div>
+        <hr class="mt-0 mb-2">
+        <table id="data-table-edit" class="{{ tableClass }}" data-index="{{ marginsLengh }}" data-prototype="{{ _self.printMarginRow(form.margins.vars.prototype)|e('html_attr') }}">
+            <thead>
+                <tr>
+                    <th class="vertical-middle text-right font-weight-normal required">{{ 'categorymargin.fields.minimum'|trans }}</th>
+                    <th class="vertical-middle text-right font-weight-normal required">{{ 'categorymargin.fields.maximum'|trans }}</th>
+                    <th class="vertical-middle text-right font-weight-normal required">{{ 'categorymargin.fields.margin'|trans }}</th>
+                    <th class="actions d-print-none">
+                    	&nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for margin in form.margins %}
+                    {{ _self.printMarginRow(margin) }}
+                {% endfor %}
+            </tbody>
+        </table>        
+        {{ form_errors(form.margins) }}
+    </div>
+</div>
+<div class="d-none">{{ form_widget(form.margins) }}</div>
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/app/category_edit.js') }}
+{% else %}
+{{ asset_js('js/category_edit.js') }}
+{% endif %}
+{% endblock %}

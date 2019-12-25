@@ -1,5 +1,5 @@
 # Accord de licence
-**bibi.nu** (désigné ci-après par "Fournisseur") détient l’ensemble des droits afférents au site web **http://www.bibi.nu/calculation**
+**bibi.nu** (désigné ci-après par "Fournisseur") détient l’ensemble des droits afférents au site web **[http://www.bibi.nu/calculation](https://www.bibi.nu/calculation/web/?target=_blank)**
 (ci-après désigné par le terme "Application"). 
 
 L'utilisation de l'application entraîne l'établissement d'un contrat de licence de logiciel entre vous-même (désigné ci-après par preneur de licence) et le 
@@ -53,7 +53,7 @@ avec ce contrat. Le fournisseur est autorisé à interpeller le tribunal au domi
 
 # Politique de confidentialité
 
-**bibi.nu** (désigné ci-après par "Fournisseur") exploite le site web **https://www.bibi.nu/calculation** (ci-après désigné par le terme "Application").
+**bibi.nu** (désigné ci-après par "Fournisseur") exploite le site web **[http://www.bibi.nu/calculation](https://www.bibi.nu/calculation/web/?target=_blank)** (ci-après désigné par le terme "Application").
 
 Cette page vous explique nos politiques en matière de collecte, d'utilisation et de communication des données à caractère personnel 
 lorsque vous utilisez notre application ainsi que les choix qui s'offrent à vous en ce qui concerne ces données.
@@ -66,7 +66,7 @@ confidentialité, les termes utilisés dans la présente politique de confidenti
 ## Définitions
 
 *   **Application** :
-    Par application, nous entendons le site web **https://www.bibi.nu/calculation** exploité par **bibi.nu**.
+    Par application, nous entendons le site web **[http://www.bibi.nu/calculation](https://www.bibi.nu/calculation/web/?target=_blank)** exploité par **bibi.nu**.
 *   **Données à caractère personnel** : 
     Les données à caractère personnel désignent des données concernant un individu vivant qui peut être identifié à partir de ces données (ou à partir de ces 
     données et d'autres informations en notre possession ou susceptibles d'entrer en notre possession).

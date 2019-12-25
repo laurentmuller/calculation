@@ -64,7 +64,7 @@ abstract class BaseRepository extends ServiceEntityRepository
     public function getDistinctValues(string $field, ?string $value = null, int $limit = -1): array
     {
         // name
-        $name = self::DEFAULT_ALIAS.'.'.$field;
+        $name = self::DEFAULT_ALIAS . '.' . $field;
 
         // select and order
         $builder = $this->createQueryBuilder(self::DEFAULT_ALIAS)
@@ -76,7 +76,7 @@ abstract class BaseRepository extends ServiceEntityRepository
         $expr = $builder->expr();
         if (Utils::isString($value)) {
             $param = 'search';
-            $like = $expr->like($name, ':'.$param);
+            $like = $expr->like($name, ':' . $param);
             $builder->where($like)
                 ->setParameter($param, "%{$value}%");
         } else {

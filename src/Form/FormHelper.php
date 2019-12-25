@@ -91,18 +91,18 @@ class FormHelper
     private $labelAttributes = [];
 
     /**
-     * The row attributes.
-     *
-     * @var array
-     */
-    private $rowAttributes = [];
-
-    /**
      * The options.
      *
      * @var array
      */
     private $options = [];
+
+    /**
+     * The row attributes.
+     *
+     * @var array
+     */
+    private $rowAttributes = [];
 
     /**
      * Constructor.
@@ -429,7 +429,7 @@ class FormHelper
         if (!empty($name)) {
             $names = $this->attributes['class'] ?? '';
             if (false === \stripos($names, $name)) {
-                $names = \trim($names.' '.$name, ' ');
+                $names = \trim($names . ' ' . $name, ' ');
 
                 return $this->updateAttribute('class', $names);
             }
@@ -651,18 +651,6 @@ class FormHelper
     }
 
     /**
-     * Updates a row attribute.
-     *
-     * @param string $name  the attribute name
-     * @param mixed  $value the attribute value or null to remove
-     * @param bool   $force true to put the attribute, even if the value is null
-     */
-    public function updateRowAttribute(string $name, $value, bool $force = false): self
-    {
-        return $this->updateEntry($this->rowAttributes, $name, $value, $force);
-    }
-
-    /**
      * Updates an option.
      *
      * @param string $name  the option name
@@ -672,6 +660,18 @@ class FormHelper
     public function updateOption(string $name, $value, bool $force = false): self
     {
         return $this->updateEntry($this->options, $name, $value, $force);
+    }
+
+    /**
+     * Updates a row attribute.
+     *
+     * @param string $name  the attribute name
+     * @param mixed  $value the attribute value or null to remove
+     * @param bool   $force true to put the attribute, even if the value is null
+     */
+    public function updateRowAttribute(string $name, $value, bool $force = false): self
+    {
+        return $this->updateEntry($this->rowAttributes, $name, $value, $force);
     }
 
     /**

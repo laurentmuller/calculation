@@ -370,7 +370,7 @@ class PivotNode extends PivotAggregator implements \JsonSerializable, \Countable
     {
         $sep = self::PATH_SEPARATOR;
         if (!$this->isRoot()) {
-            return $sep.\implode($sep, $this->getKeys());
+            return $sep . \implode($sep, $this->getKeys());
         }
 
         return $sep;

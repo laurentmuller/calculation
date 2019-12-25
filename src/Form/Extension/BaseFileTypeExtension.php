@@ -82,7 +82,7 @@ abstract class BaseFileTypeExtension extends AbstractTypeExtension
         if (\ctype_digit((string) $size)) {
             return (int) $size;
         }
-        if (\preg_match('/^(\d++)('.\implode('|', \array_keys($factors)).')$/i', $size, $matches)) {
+        if (\preg_match('/^(\d++)(' . \implode('|', \array_keys($factors)) . ')$/i', $size, $matches)) {
             return $matches[1] * $factors[\strtolower($matches[2])];
         }
         throw new InvalidOptionsException("\"{$size}\" is not a valid size.");

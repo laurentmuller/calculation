@@ -3,7 +3,7 @@
 	"license" : "proprietary",
 	"type" : "project",
 	"homepage" : "http://www.bibi.nu",
-	"description" : "Implementation of the calculation with Symfony 4.4.x.",
+	"description" : "Implementation of the calculation with Symfony 4.x.",
 	"authors" : [{
 			"name" : "Laurent Muller",
 			"email" : "bibi@bibi.nu",

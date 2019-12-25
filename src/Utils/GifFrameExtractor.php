@@ -156,7 +156,7 @@ class GifFrameExtractor implements \Countable
             $this->frames[$i]['height'] = $this->frameSources[$i]['height'];
             $this->frames[$i]['duration'] = $this->frameSources[$i]['duration'];
 
-            $img = \imagecreatefromstring($this->fileHeader['gifheader'].$this->frameSources[$i]['graphicsextension'].$this->frameSources[$i]['imagedata'].\chr(0x3b));
+            $img = \imagecreatefromstring($this->fileHeader['gifheader'] . $this->frameSources[$i]['graphicsextension'] . $this->frameSources[$i]['imagedata'] . \chr(0x3b));
 
             if (!$originalFrames) {
                 if ($i > 0) {
@@ -362,7 +362,7 @@ class GifFrameExtractor implements \Countable
     {
         $startdata = $this->readByte(2);
 
-        if ($startdata === \chr(0x21).\chr(0xff)) {
+        if ($startdata === \chr(0x21) . \chr(0xff)) {
             $start = $this->pointer - 2;
             $this->forward($this->readByteInt());
             $this->readDataStream($this->readByteInt());
@@ -379,7 +379,7 @@ class GifFrameExtractor implements \Countable
     {
         $startdata = $this->readByte(2);
 
-        if ($startdata === \chr(0x21).\chr(0xfe)) {
+        if ($startdata === \chr(0x21) . \chr(0xfe)) {
             $start = $this->pointer - 2;
             $this->readDataStream($this->readByteInt());
             $this->fileHeader['commentdata'] = $this->dataPart($start, $this->pointer - $start);
@@ -535,7 +535,7 @@ class GifFrameExtractor implements \Countable
     {
         $startdata = $this->readByte(2);
 
-        if ($startdata === \chr(0x21).\chr(0xf9)) {
+        if ($startdata === \chr(0x21) . \chr(0xf9)) {
             $start = $this->pointer - 2;
             $this->forward($this->readByteInt());
             $this->forward(1);

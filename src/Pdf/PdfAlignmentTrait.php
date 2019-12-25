@@ -102,7 +102,7 @@ trait PdfAlignmentTrait
                 break;
         }
 
-        return 'PdfAlignment('.$result.')';
+        return 'PdfAlignment(' . $result . ')';
     }
 
     /**

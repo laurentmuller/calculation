@@ -308,7 +308,7 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
             $names = \explode(' ', \strtolower($className));
             $className = \array_reduce($names, function (string $carry, string $name) {
                 if (!empty($name = \trim($name)) && false === \strpos($carry, $name)) {
-                    return \trim($carry.' '.$name);
+                    return \trim($carry . ' ' . $name);
                 }
 
                 return $carry;

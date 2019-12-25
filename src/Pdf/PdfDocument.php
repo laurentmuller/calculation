@@ -272,7 +272,7 @@ class PdfDocument extends Fpdf implements IPdfConstants
         $cellWidth = $this->getPrintableWidth() / 3;
 
         // pages
-        $text = 'Page '.$this->PageNo().' / {nb}';
+        $text = 'Page ' . $this->PageNo() . ' / {nb}';
         $this->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
 
         // program and version and owner link (if any)
@@ -521,10 +521,10 @@ class PdfDocument extends Fpdf implements IPdfConstants
 
         if ($inline) {
             $type = 'application/pdf';
-            $disposition = 'inline; '.$encoded;
+            $disposition = 'inline; ' . $encoded;
         } else {
             $type = 'application/x-download';
-            $disposition = 'attachment; '.$encoded;
+            $disposition = 'attachment; ' . $encoded;
         }
 
         return ['Pragma' => 'public',

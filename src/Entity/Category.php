@@ -320,17 +320,17 @@ class Category extends BaseEntity
                 $lastMax = $max;
             } elseif ($min <= $lastMin) {
                 $context->buildViolation('abstract_margin.minimum_overlap')
-                    ->atPath('margins['.$key.'].minimum')
+                    ->atPath('margins[' . $key . '].minimum')
                     ->addViolation();
                 break;
             } elseif ($min >= $lastMin && $min < $lastMax) {
                 $context->buildViolation('abstract_margin.minimum_overlap')
-                    ->atPath('margins['.$key.'].minimum')
+                    ->atPath('margins[' . $key . '].minimum')
                     ->addViolation();
                 break;
             } elseif ($max > $lastMin && $max < $lastMax) {
                 $context->buildViolation('abstract_margin.maximum_overlap')
-                    ->atPath('margins['.$key.'].maximum')
+                    ->atPath('margins[' . $key . '].maximum')
                     ->addViolation();
                 break;
             } else {

@@ -153,7 +153,7 @@ abstract class AbstractTranslatorService extends HttpClientService implements IT
     protected function getCacheKey(): string
     {
         if (!$this->cacheKey) {
-            $this->cacheKey = Utils::getShortName($this).'Languages';
+            $this->cacheKey = Utils::getShortName($this) . 'Languages';
         }
 
         return $this->cacheKey;

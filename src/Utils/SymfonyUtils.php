@@ -133,7 +133,7 @@ final class SymfonyUtils
         if ($baseDir) {
             $baseDir = \str_replace('\\', '/', $baseDir);
 
-            return \preg_replace('~^'.\preg_quote($baseDir, '~').'~', '.', $path);
+            return \preg_replace('~^' . \preg_quote($baseDir, '~') . '~', '.', $path);
         }
 
         return  $path;
@@ -149,7 +149,7 @@ final class SymfonyUtils
     public static function getBundles(KernelInterface $kernel)
     {
         $bundles = [];
-        $rootDir = \realpath($kernel->getProjectDir().'/..').\DIRECTORY_SEPARATOR;
+        $rootDir = \realpath($kernel->getProjectDir() . '/..') . \DIRECTORY_SEPARATOR;
         foreach ($kernel->getBundles() as $key => $bundleObject) {
             $bundle = [
                 'name' => $key,
@@ -191,7 +191,7 @@ final class SymfonyUtils
     public static function getPackages(KernelInterface $kernel)
     {
         // get file
-        $path = $kernel->getProjectDir().'/composer.lock';
+        $path = $kernel->getProjectDir() . '/composer.lock';
         if (!\file_exists($path)) {
             return [];
         }

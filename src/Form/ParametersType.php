@@ -194,7 +194,7 @@ class ParametersType extends AbstractType implements IApplicationService
         ];
         $result = [];
         foreach ($entries as $entry) {
-            $key = 'parameters.messagePosition.'.\str_replace('-', '_', $entry);
+            $key = 'parameters.messagePosition.' . \str_replace('-', '_', $entry);
             $result[$key] = $entry;
         }
 

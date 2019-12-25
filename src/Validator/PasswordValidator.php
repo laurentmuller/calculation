@@ -80,7 +80,7 @@ class PasswordValidator extends ConstraintValidator
             $level = 4;
         }
         if ($translator) {
-            $id = 'password.strength_level.'.self::$LEVEL_TO_LABEL[$level];
+            $id = 'password.strength_level.' . self::$LEVEL_TO_LABEL[$level];
 
             return $translator->trans($id, [], 'validators');
         }
@@ -350,7 +350,7 @@ class PasswordValidator extends ConstraintValidator
         // search
         foreach ($lines as $line) {
             list($hashSuffix, $count) = \explode(':', $line);
-            if ($hashPrefix.$hashSuffix === $hash) {
+            if ($hashPrefix . $hashSuffix === $hash) {
                 return (int) $count;
             }
         }

@@ -84,7 +84,7 @@ final class Utils
         $first = \mb_strtoupper(\mb_substr($string, 0, 1, $encoding), $encoding);
         $other = \mb_strtolower(\mb_substr($string, 1, null, $encoding), $encoding);
 
-        return $first.$other;
+        return $first . $other;
     }
 
     /**

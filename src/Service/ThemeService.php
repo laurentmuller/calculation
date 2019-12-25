@@ -282,6 +282,6 @@ class ThemeService
     {
         $rootDir = $this->kernel->getProjectDir();
 
-        return $rootDir.self::JSON_FILE_PATH.self::JSON_FILE_NAME;
+        return $rootDir . self::JSON_FILE_PATH . self::JSON_FILE_NAME;
     }
 }

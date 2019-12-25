@@ -102,7 +102,7 @@ class OpenWeatherService extends HttpClientService
             throw new \InvalidArgumentException('The OpenWeather key is not defined.');
         }
         $this->key = $container->getParameter(self::PARAM_KEY);
-        $this->dataDirectory = $kernel->getProjectDir().self::DATA_PATH;
+        $this->dataDirectory = $kernel->getProjectDir() . self::DATA_PATH;
     }
 
     /**
@@ -170,7 +170,7 @@ class OpenWeatherService extends HttpClientService
      */
     public function getDatabaseName(): string
     {
-        return $this->dataDirectory.self::DATABASE_NAME;
+        return $this->dataDirectory . self::DATABASE_NAME;
     }
 
     /**

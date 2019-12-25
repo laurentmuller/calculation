@@ -124,8 +124,8 @@ class AjaxController extends BaseController
 
         $projectDir = \str_replace('\\', '/', $kernel->getProjectDir());
         $rootDir = SymfonyUtils::formatPath($kernel->getProjectDir(), $projectDir);
-        $cacheDir = SymfonyUtils::formatPath($kernel->getCacheDir(), $projectDir).' ('.SymfonyUtils::formatFileSize($kernel->getCacheDir()).')';
-        $logDir = SymfonyUtils::formatPath($kernel->getLogDir(), $projectDir).' ('.SymfonyUtils::formatFileSize($kernel->getLogDir()).')';
+        $cacheDir = SymfonyUtils::formatPath($kernel->getCacheDir(), $projectDir) . ' (' . SymfonyUtils::formatFileSize($kernel->getCacheDir()) . ')';
+        $logDir = SymfonyUtils::formatPath($kernel->getLogDir(), $projectDir) . ' (' . SymfonyUtils::formatFileSize($kernel->getLogDir()) . ')';
         $endOfMaintenance = $this->formatExpired(Kernel::END_OF_MAINTENANCE);
         $endOfLife = $this->formatExpired(Kernel::END_OF_LIFE);
 
@@ -760,7 +760,7 @@ class AjaxController extends BaseController
             if ($error = $service->getLastError()) {
                 $errorCode = $error['code'];
                 $errorMessage = $error['message'];
-                $key = $service->getName().'.'.$errorCode;
+                $key = $service->getName() . '.' . $errorCode;
                 if ($this->transDefined($key, 'translator')) {
                     $errorMessage = $this->trans($key, [], 'translator');
                 }

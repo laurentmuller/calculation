@@ -84,7 +84,7 @@ class CompileAssetsCommand extends AssetsCommand
         if (!$publicDir = $this->getPublicDir()) {
             return 0;
         }
-        $assetFile = $publicDir.'/'.self::ASSETS_FILE_NAME;
+        $assetFile = $publicDir . '/' . self::ASSETS_FILE_NAME;
 
         // check file
         if (!$this->exists($publicDir) || !$this->exists($assetFile)) {
@@ -101,7 +101,7 @@ class CompileAssetsCommand extends AssetsCommand
         // source
         $source = $publicDir;
         if ($this->propertyExists($configuration, 'source')) {
-            $source .= '/'.$configuration->source;
+            $source .= '/' . $configuration->source;
         }
         if (!$this->exists($source)) {
             $this->writeError("The source directory '{$source}' does not exist.");
@@ -113,8 +113,8 @@ class CompileAssetsCommand extends AssetsCommand
         if (!$this->propertyExists($configuration, 'target')) {
             return 0;
         }
-        $target = $publicDir.'/'.$configuration->target;
-        $targetTemp = $this->tempDir($publicDir).'/';
+        $target = $publicDir . '/' . $configuration->target;
+        $targetTemp = $this->tempDir($publicDir) . '/';
 
         $countJs = 0;
         $countCss = 0;
@@ -204,9 +204,9 @@ class CompileAssetsCommand extends AssetsCommand
      */
     private function checkCssClean(): ?string
     {
-        [$ok, $output] = $this->executeCommand(\escapeshellarg($this->cleanCssBinary).' --version', '', false);
+        [$ok, $output] = $this->executeCommand(\escapeshellarg($this->cleanCssBinary) . ' --version', '', false);
         if (!$ok) {
-            return 'Error while executing '.$this->cleanCssBinary.', install Node.js and clean-css.';
+            return 'Error while executing ' . $this->cleanCssBinary . ', install Node.js and clean-css.';
         }
         if (\version_compare($output, '4.2') < 0) {
             return "Update to clean-css 4.2 or newer. Actual version: {$output}.";
@@ -220,9 +220,9 @@ class CompileAssetsCommand extends AssetsCommand
      */
     private function checkUglifyJs(): ?string
     {
-        [$ok, $output] = $this->executeCommand(\escapeshellarg($this->uglifyJsBinary).' --version', '', false);
+        [$ok, $output] = $this->executeCommand(\escapeshellarg($this->uglifyJsBinary) . ' --version', '', false);
         if (!$ok) {
-            return 'Error while executing '.$this->uglifyJsBinary.', install Node.js and uglify-es.';
+            return 'Error while executing ' . $this->uglifyJsBinary . ', install Node.js and uglify-es.';
         }
 
         // version is set as 'uglify-es 3.3.9'
@@ -251,7 +251,7 @@ class CompileAssetsCommand extends AssetsCommand
         }
 
         $this->writeVeryVerbose("Compressing {$origFile}");
-        $cmd = \escapeshellarg($this->cleanCssBinary).' '.$this->cleanCssArgs;
+        $cmd = \escapeshellarg($this->cleanCssBinary) . ' ' . $this->cleanCssArgs;
         [$ok, $output] = $this->executeCommand($cmd, $content, false);
         if (!$ok) {
             $this->writeError("Error while executing {$cmd}");
@@ -278,7 +278,7 @@ class CompileAssetsCommand extends AssetsCommand
         }
 
         $this->writeVeryVerbose("Compressing {$origFile}");
-        $cmd = \escapeshellarg($this->uglifyJsBinary).' '.$this->uglifyJsArgs;
+        $cmd = \escapeshellarg($this->uglifyJsBinary) . ' ' . $this->uglifyJsArgs;
         [$ok, $output] = $this->executeCommand($cmd, $content, false);
         if (!$ok) {
             $this->writeError("Error while executing {$cmd}");
@@ -337,7 +337,7 @@ class CompileAssetsCommand extends AssetsCommand
         $dir = \dirname($origFile);
 
         return \preg_replace_callback('#@import\s+(?:url)?[(\'"]+(.+)[)\'"]+;#U', function ($m) use ($dir) {
-            $file = $dir.'/'.$m[1];
+            $file = $dir . '/' . $m[1];
             if (!\is_file($file)) {
                 $this->writeError("Expanding file {$file} not found!");
 
@@ -349,9 +349,9 @@ class CompileAssetsCommand extends AssetsCommand
             $newDir = \dirname($file);
             $s = $this->expandCssImports($s, $file);
             if ($newDir !== $dir) {
-                $tmp = $dir.'/';
+                $tmp = $dir . '/';
                 if (\substr($newDir, 0, \strlen($tmp)) === $tmp) {
-                    $s = \preg_replace('#\burl\(["\']?(?=[.\w])(?!\w+:)#', '$0'.\substr($newDir, \strlen($tmp)).'/', $s);
+                    $s = \preg_replace('#\burl\(["\']?(?=[.\w])(?!\w+:)#', '$0' . \substr($newDir, \strlen($tmp)) . '/', $s);
                 } elseif (false !== \strpos($s, 'url(')) {
                     return $m[0];
                 }
@@ -374,7 +374,7 @@ class CompileAssetsCommand extends AssetsCommand
         $dir = \dirname($origFile);
 
         return \preg_replace_callback('~<!--#include\s+file="(.+)"\s+-->~U', function ($m) use ($dir) {
-            $file = $dir.'/'.$m[1];
+            $file = $dir . '/' . $m[1];
             if (!\is_file($file)) {
                 $this->writeError("Expanding file {$file} not found!");
 
@@ -402,7 +402,7 @@ class CompileAssetsCommand extends AssetsCommand
         $content = $this->compressCss($content, $path);
 
         // save
-        $targetFile = $target.$this->makePathRelative($file->getPathname(), $source);
+        $targetFile = $target . $this->makePathRelative($file->getPathname(), $source);
         $this->writeFile($targetFile, $content);
     }
 
@@ -422,7 +422,7 @@ class CompileAssetsCommand extends AssetsCommand
         $content = $this->compressJs($content, $path);
 
         // save
-        $targetFile = $target.$this->makePathRelative($file->getPathname(), $source);
+        $targetFile = $target . $this->makePathRelative($file->getPathname(), $source);
         $this->writeFile($targetFile, $content);
     }
 }

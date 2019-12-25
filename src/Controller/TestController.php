@@ -496,7 +496,7 @@ class TestController extends BaseController
                     }
                 }
                 $html .= '</table>';
-                $this->succes('reCAPTCHA|'.$html);
+                $this->succes('reCAPTCHA|' . $html);
 
                 return $this->redirectToHomePage();
             }
@@ -552,9 +552,9 @@ class TestController extends BaseController
         $form = $builder->getForm()->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $message = 'Message :<br>'.(string) $data['message']; // . '<br>';
+            $message = 'Message :<br>' . (string) $data['message']; // . '<br>';
             //$message .= 'Couleur :<br><span style="background-color:' . $data['color'] . ';">&nbsp;&nbsp;' . $data['color'] . '&nbsp;</span>';
-            $message .= 'Couleur :<br>'.$data['color'];
+            $message .= 'Couleur :<br>' . $data['color'];
             $this->succes($message);
 
             // home page

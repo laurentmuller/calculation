@@ -153,7 +153,7 @@ abstract class AbstractColumn
             if ($this->orderable) {
                 $className .= ' cursor-pointer sorting';
                 if ($this->default) {
-                    $className .= '_'.$this->direction;
+                    $className .= '_' . $this->direction;
                 }
             } else {
                 $className .= ' sorting_disabled';

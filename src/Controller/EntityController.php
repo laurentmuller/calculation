@@ -252,7 +252,7 @@ abstract class EntityController extends BaseController
         if (null === $item) {
             $message = $this->trans('errors.item_not_found', [
                 '%class%' => $this->getTranslatedClassName(),
-                '%id%' => '#'.$id,
+                '%id%' => '#' . $id,
             ]);
 
             throw $this->createNotFoundException($message);
@@ -322,7 +322,7 @@ abstract class EntityController extends BaseController
     {
         $className = $this->getShortClassName();
 
-        return $this->trans(\strtolower($className).'.name');
+        return $this->trans(\strtolower($className) . '.name');
     }
 
     /**
@@ -344,8 +344,8 @@ abstract class EntityController extends BaseController
 
         // get session values
         $key = $this->getShortClassName();
-        $field = $this->getSessionString($key.'.sortField', $sortField);
-        $mode = $this->getSessionString($key.'.sortMode', $sortMode);
+        $field = $this->getSessionString($key . '.sortField', $sortField);
+        $mode = $this->getSessionString($key . '.sortMode', $sortMode);
 
         // get request values
         $field = $request->get('sortField', $field);
@@ -355,11 +355,11 @@ abstract class EntityController extends BaseController
 
         // update session values
         if ($sortField === $field && $sortMode === $mode) {
-            $this->removeSessionValue($key.'.sortField');
-            $this->removeSessionValue($key.'.sortMode');
+            $this->removeSessionValue($key . '.sortField');
+            $this->removeSessionValue($key . '.sortMode');
         } else {
-            $this->setSessionValue($key.'.sortField', $field);
-            $this->setSessionValue($key.'.sortMode', $mode);
+            $this->setSessionValue($key . '.sortField', $field);
+            $this->setSessionValue($key . '.sortMode', $mode);
         }
 
         // get items

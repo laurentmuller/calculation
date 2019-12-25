@@ -118,7 +118,7 @@ class YandexTranslatorService extends AbstractTranslatorService
         $query = [
             'options' => 1,
             'text' => $text,
-            'lang' => $from ? $from.'-'.$to : $to,
+            'lang' => $from ? $from . '-' . $to : $to,
             'format' => $html ? 'html' : 'plain',
         ];
         if (!$response = $this->get(self::URI_TRANSLATE, $query)) {

@@ -77,14 +77,14 @@ class VichListener implements EventSubscriberInterface, IImageExtension
         // get values
         $source = $file->getRealPath();
         $extension = $file->getExtension();
-        $path = $file->getPath().\DIRECTORY_SEPARATOR;
+        $path = $file->getPath() . \DIRECTORY_SEPARATOR;
 
         // create medium image
-        $target = $path.UserNamer::getBaseName($obj, self::SIZE_MEDIUM, $extension);
+        $target = $path . UserNamer::getBaseName($obj, self::SIZE_MEDIUM, $extension);
         $this->resize($source, $target, self::SIZE_MEDIUM);
 
         // create small image
-        $target = $path.UserNamer::getBaseName($obj, self::SIZE_SMALL, $extension);
+        $target = $path . UserNamer::getBaseName($obj, self::SIZE_SMALL, $extension);
         $this->resize($source, $target, self::SIZE_SMALL);
     }
 
@@ -101,7 +101,7 @@ class VichListener implements EventSubscriberInterface, IImageExtension
         $mapping = $event->getMapping();
 
         // directory
-        $path = $mapping->getUploadDestination().\DIRECTORY_SEPARATOR;
+        $path = $mapping->getUploadDestination() . \DIRECTORY_SEPARATOR;
 
         // get file extension
         $fileName = $mapping->getFileName($obj);
@@ -109,13 +109,13 @@ class VichListener implements EventSubscriberInterface, IImageExtension
         $ext = $file->getExtension();
 
         // delete medium image
-        $fileName = $path.UserNamer::getBaseName($obj, self::SIZE_MEDIUM, $ext);
+        $fileName = $path . UserNamer::getBaseName($obj, self::SIZE_MEDIUM, $ext);
         if (\file_exists($fileName)) {
             \unlink($fileName);
         }
 
         // delete small image
-        $fileName = $path.UserNamer::getBaseName($obj, self::SIZE_SMALL, $ext);
+        $fileName = $path . UserNamer::getBaseName($obj, self::SIZE_SMALL, $ext);
         if (\file_exists($fileName)) {
             \unlink($fileName);
         }

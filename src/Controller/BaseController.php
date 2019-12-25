@@ -244,7 +244,7 @@ abstract class BaseController extends AbstractController implements IFlashMessag
 
         // title
         if (empty($name) && !empty($doc->getTitle())) {
-            $name = $doc->getTitle().'.pdf';
+            $name = $doc->getTitle() . '.pdf';
         }
 
         // create response

@@ -81,7 +81,7 @@ class CaptchaImageService
     public function __construct(SessionInterface $session, KernelInterface $kernel)
     {
         $this->session = $session;
-        $this->font = $kernel->getProjectDir().self::FONT_PATH;
+        $this->font = $kernel->getProjectDir() . self::FONT_PATH;
     }
 
     /**
@@ -123,7 +123,7 @@ class CaptchaImageService
         $image = $this->createImage($text, $width, $height);
 
         // convert image
-        $data = self::IMAGE_PREFIX.$this->encodeImage($image);
+        $data = self::IMAGE_PREFIX . $this->encodeImage($image);
 
         // save
         $this->setSessionValue(self::KEY_TEXT, $text);

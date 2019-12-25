@@ -214,7 +214,7 @@ class PersistenceListener implements IFlashMessageInterface, EventSubscriber
             // $this->session->remove(self::LAST_MESSAGE);
             $message = $this->session->remove(self::LAST_MESSAGE);
         } else {
-            $message = \strtolower(Utils::getShortName($entity)).$suffix;
+            $message = \strtolower(Utils::getShortName($entity)) . $suffix;
         }
 
         return $message;

@@ -122,7 +122,7 @@ class UsersRightsReport extends BaseReport implements IPdfGroupListener
 
             // role
             PdfStyle::getDefaultStyle()->setFontItalic()->apply($this);
-            $this->Cell(0, self::LINE_HEIGHT, ' - '.$role, self::BORDER_NONE, self::MOVE_TO_NEW_LINE);
+            $this->Cell(0, self::LINE_HEIGHT, ' - ' . $role, self::BORDER_NONE, self::MOVE_TO_NEW_LINE);
 
             return true;
         }

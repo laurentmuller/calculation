@@ -89,7 +89,7 @@ abstract class AbstractMargin extends BaseEntity
      */
     public function getDisplay(): string
     {
-        return $this->localeAmount($this->getMinimum()).' - '.$this->localeAmount($this->getMaximum());
+        return $this->localeAmount($this->getMinimum()) . ' - ' . $this->localeAmount($this->getMaximum());
     }
 
     /**

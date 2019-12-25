@@ -47,7 +47,7 @@ trait LoggerTrait
      */
     protected function concat(string $message): string
     {
-        return $this->getInstallerName().': '.$message;
+        return $this->getInstallerName() . ': ' . $message;
     }
 
     /**

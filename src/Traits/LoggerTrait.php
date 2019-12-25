@@ -40,7 +40,7 @@ trait LoggerTrait
     public function log($level, string $message, array $context = []): void
     {
         if ($this->logger) {
-            $this->log($level, $message.$context);
+            $this->log($level, $message . $context);
         }
     }
 

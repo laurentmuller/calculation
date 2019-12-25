@@ -52,9 +52,9 @@ class LogController extends BaseController
             });
             $title = 'CSP Violation';
             if (isset($context['document-uri'])) {
-                $title .= ': '.$context['document-uri'];
+                $title .= ': ' . $context['document-uri'];
             } elseif (isset($context['source-file'])) {
-                $title .= ': '.$context['source-file'];
+                $title .= ': ' . $context['source-file'];
             }
             $logger->error($title, $context);
         }
@@ -242,7 +242,7 @@ class LogController extends BaseController
         $dir = $this->getParameter('kernel.logs_dir');
         $env = $this->getParameter('kernel.environment');
 
-        return $dir.\DIRECTORY_SEPARATOR.$env.'.log';
+        return $dir . \DIRECTORY_SEPARATOR . $env . '.log';
 
         // copy if applicable
 //         if (!$original && $userName = $this->getUserName()) {

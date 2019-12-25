@@ -87,7 +87,7 @@ final class FunctionExtension extends AbstractExtension
      */
     public function __construct(KernelInterface $kernel, TranslatorInterface $translator, ApplicationService $service, UrlGeneratorService $generator)
     {
-        $this->webDir = \realpath($kernel->getProjectDir().'/public');
+        $this->webDir = \realpath($kernel->getProjectDir() . '/public');
 
         $this->service = $service;
         $this->translator = $translator;
@@ -114,7 +114,7 @@ final class FunctionExtension extends AbstractExtension
         }
 
         // real path?
-        if (!$file = \realpath($this->webDir.$path)) {
+        if (!$file = \realpath($this->webDir . $path)) {
             return false;
         }
 
@@ -328,7 +328,7 @@ final class FunctionExtension extends AbstractExtension
      */
     public function getImageHeight(string $path): int
     {
-        $fullPath = \realpath($this->webDir.$path);
+        $fullPath = \realpath($this->webDir . $path);
 
         return \getimagesize($fullPath)[1];
     }
@@ -342,7 +342,7 @@ final class FunctionExtension extends AbstractExtension
      */
     public function getImageWidth(string $path): int
     {
-        $fullPath = \realpath($this->webDir.$path);
+        $fullPath = \realpath($this->webDir . $path);
 
         return \getimagesize($fullPath)[0];
     }
@@ -477,7 +477,7 @@ final class FunctionExtension extends AbstractExtension
     {
         if (!empty($parameters)) {
             $callback = function (string $carry, $key, $value) {
-                return $carry.' '.$key.'="'.\htmlspecialchars((string) $value).'"';
+                return $carry . ' ' . $key . '="' . \htmlspecialchars((string) $value) . '"';
             };
 
             return Utils::arrayReduceKey($callback, $parameters, '');

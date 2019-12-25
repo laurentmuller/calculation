@@ -28,6 +28,6 @@ class CustomCompany extends \Faker\Provider\fr_CH\Company
      */
     public function companyAndSuffix()
     {
-        return $this->company().' '.$this->companySuffix();
+        return $this->company() . ' ' . $this->companySuffix();
     }
 }

@@ -101,7 +101,7 @@ class ThemeType extends AbstractType
         $choices = [];
         foreach (self::$BACKGROUND_CHOICES as $keyBackground => $valueBackground) {
             foreach (self::$FOREGROUND_CHOICES as $keyForeground => $valueForeground) {
-                $key = $this->trans($keyBackground).' - '.$this->trans($keyForeground);
+                $key = $this->trans($keyBackground) . ' - ' . $this->trans($keyForeground);
                 $value = "{$valueForeground} {$valueBackground}";
                 $choices[$key] = $value;
             }

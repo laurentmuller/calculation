@@ -136,7 +136,7 @@ trait PdfBorderTrait
             $result[] = 'None';
         }
 
-        return 'PdfBorder('.\implode(' ', $result).')';
+        return 'PdfBorder(' . \implode(' ', $result) . ')';
     }
 
     /**

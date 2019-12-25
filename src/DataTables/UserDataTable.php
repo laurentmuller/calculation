@@ -175,7 +175,7 @@ class UserDataTable extends EntityDataTable
         // filter
         if (!$this->superAdmin) {
             $field = 'roles';
-            $value = '%'.User::ROLE_SUPER_ADMIN.'%';
+            $value = '%' . User::ROLE_SUPER_ADMIN . '%';
             $builder->where("{$alias}.{$field} NOT LIKE :{$field}")
                 ->setParameter($field, $value);
         }

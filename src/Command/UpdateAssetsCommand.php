@@ -61,7 +61,7 @@ class UpdateAssetsCommand extends AssetsCommand
         if (!$publicDir = $this->getPublicDir()) {
             return 0;
         }
-        $vendorFile = $publicDir.'/'.self::VENDOR_FILE_NAME;
+        $vendorFile = $publicDir . '/' . self::VENDOR_FILE_NAME;
 
         // check file
         if (!$this->exists($publicDir) || !$this->exists($vendorFile)) {
@@ -82,8 +82,8 @@ class UpdateAssetsCommand extends AssetsCommand
 
         // get values
         $source = $configuration->source;
-        $target = $publicDir.'/'.$configuration->target;
-        $targetTemp = $this->tempDir($publicDir).'/';
+        $target = $publicDir . '/' . $configuration->target;
+        $targetTemp = $this->tempDir($publicDir) . '/';
 
         $plugins = $configuration->plugins;
         $prefixes = $this->getConfigArray($configuration, 'prefixes');
@@ -110,17 +110,17 @@ class UpdateAssetsCommand extends AssetsCommand
 
                     // source file
                     if (isset($plugin->passthrough) && (bool) ($plugin->passthrough)) {
-                        $sourceFile = $src.'/'.$file;
+                        $sourceFile = $src . '/' . $file;
                     } else {
-                        $sourceFile = $src.$name.'/'.$version.'/'.$file;
+                        $sourceFile = $src . $name . '/' . $version . '/' . $file;
                     }
 
                     // target file
                     $dst = $targetTemp;
                     if (isset($plugin->target)) {
-                        $targetFile = $dst.$plugin->target.'/'.$file;
+                        $targetFile = $dst . $plugin->target . '/' . $file;
                     } else {
-                        $targetFile = $dst.$name.'/'.$file;
+                        $targetFile = $dst . $name . '/' . $file;
                     }
 
                     // copy
@@ -218,12 +218,12 @@ class UpdateAssetsCommand extends AssetsCommand
     private function copyStyle(string $content, string $searchStyle, string $newStyle): string
     {
         $matches = [];
-        $pattern = '/'.\preg_quote($searchStyle).'\s+\{([^}]+)\}/m';
+        $pattern = '/' . \preg_quote($searchStyle) . '\s+\{([^}]+)\}/m';
         $found = \preg_match_all($pattern, $content, $matches, PREG_SET_ORDER, 0);
         if (!empty($found)) {
             $result = '';
             foreach ($matches as $matche) {
-                $result .= "\n".\str_replace($searchStyle, $newStyle, $matche[0])."\n";
+                $result .= "\n" . \str_replace($searchStyle, $newStyle, $matche[0]) . "\n";
             }
 
             return $result;
@@ -250,12 +250,12 @@ class UpdateAssetsCommand extends AssetsCommand
 
         // add prefix
         if (isset($prefixes[$ext])) {
-            $content = $prefixes[$ext].$content;
+            $content = $prefixes[$ext] . $content;
         }
 
         // add suffix
         if (isset($suffixes[$ext])) {
-            $content = $content.$suffixes[$ext];
+            $content = $content . $suffixes[$ext];
         }
 
         // rename
@@ -313,8 +313,8 @@ class UpdateAssetsCommand extends AssetsCommand
     {
         // check if the default boostrap theme is present
         $target = $configuration->target;
-        $relative = \rtrim($this->makePathRelative('/'.ThemeService::DEFAULT_CSS, '/'.$target), '/');
-        $targetFile = $targetDir.$relative;
+        $relative = \rtrim($this->makePathRelative('/' . ThemeService::DEFAULT_CSS, '/' . $target), '/');
+        $targetFile = $targetDir . $relative;
         if (!$this->exists($targetFile)) {
             $this->writeError("The file '{$targetFile}' for default theme does not exist.");
 
@@ -336,16 +336,16 @@ class UpdateAssetsCommand extends AssetsCommand
                 // themes
                 foreach ($source->themes as $theme) {
                     $name = $theme->name;
-                    $description = $theme->description.'.';
-                    $relativePath = $themesDir.\strtolower($name).'/'.self::BOOTSTRAP_FILE_NAME;
+                    $description = $theme->description . '.';
+                    $relativePath = $themesDir . \strtolower($name) . '/' . self::BOOTSTRAP_FILE_NAME;
 
                     // copy file
-                    $targetFile = $targetDir.$relativePath;
+                    $targetFile = $targetDir . $relativePath;
                     if ($this->copyFile($theme->css, $targetFile, $prefixes, $suffixes, $renames)) {
                         $result[] = new Theme([
                             'name' => $name,
                             'description' => $description,
-                            'css' => $target.$relativePath,
+                            'css' => $target . $relativePath,
                         ]);
                         ++$count;
                     }
@@ -354,7 +354,7 @@ class UpdateAssetsCommand extends AssetsCommand
         }
 
         // save
-        $targetFile = $targetDir.$themesDir.ThemeService::getFileName();
+        $targetFile = $targetDir . $themesDir . ThemeService::getFileName();
         $content = \json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         if ($this->dumpFile($content, $targetFile, $prefixes, $suffixes, $renames)) {
             ++$count;
@@ -399,7 +399,7 @@ class UpdateAssetsCommand extends AssetsCommand
         // add !important to border color style
         $pattern = '/border-color\s*\:\s*(.*);/m';
         $toAppend = \preg_replace_callback($pattern, function ($matches) {
-            return \trim($matches[0], ';').' !important;';
+            return \trim($matches[0], ';') . ' !important;';
         }, $toAppend);
 
         $comments = <<<'EOT'
@@ -412,6 +412,6 @@ class UpdateAssetsCommand extends AssetsCommand
  
 EOT;
 
-        return $content.$comments.$toAppend;
+        return $content . $comments . $toAppend;
     }
 }

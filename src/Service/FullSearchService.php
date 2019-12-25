@@ -159,7 +159,7 @@ class FullSearchService
         }
 
         // sort, limit and offset
-        $extra = ' ORDER BY '.self::COLUMN_CONTENT;
+        $extra = ' ORDER BY ' . self::COLUMN_CONTENT;
         $extra .= " LIMIT {$limit} OFFSET {$offset}";
 
         // return result
@@ -262,7 +262,7 @@ class FullSearchService
     {
         $name = Utils::getShortName($class);
         $content = $content ?: "e.{$field}";
-        $where = "{$content} LIKE :".self::SEARCH_PARAM;
+        $where = "{$content} LIKE :" . self::SEARCH_PARAM;
 
         return $this->manager->createQueryBuilder()
             ->select('e.id')
@@ -285,7 +285,7 @@ class FullSearchService
         $queries = $this->getQueries();
 
         // SQL
-        $sql = \implode(' UNION ', $queries).$extra;
+        $sql = \implode(' UNION ', $queries) . $extra;
 
         // create query
         $query = $this->manager->createNativeQuery($sql, $this->getResultSetMapping());
@@ -323,7 +323,7 @@ class FullSearchService
             }
 
             // update SQL
-            $param = ':'.self::SEARCH_PARAM;
+            $param = ':' . self::SEARCH_PARAM;
             $columns = \array_keys(self::$COLUMNS);
             foreach ($this->queries as &$query) {
                 // replace parameter

@@ -1,0 +1,56 @@
+<?php
+$comment = <<<COMMENT
+This file is part of the Calculation package.
+
+Copyright (c) 2019 bibi.nu. All rights reserved.
+
+This computer code is protected by copyright law and international
+treaties. Unauthorised reproduction or distribution of this code, or
+any portion of it, may result in severe civil and criminal penalties,
+and will be prosecuted to the maximum extent possible under the law.
+COMMENT;
+
+$rules = [
+    '@Symfony' => true,
+    '@Symfony:risky' => true,
+    '@PHP71Migration:risky' => true,
+    '@DoctrineAnnotation' => true,
+    'method_chaining_indentation' => true,
+    'native_function_invocation' => true,
+    'final_internal_class' => true,
+    'header_comment' => [
+        'header' => $comment,
+        'location' => 'after_open',
+        'separate' => 'bottom',
+    ],
+    'blank_line_before_statement' => [
+        'statements' => ['declare', 'try', 'return'], //'return', 'break', 'continue', 'throw',
+    ],
+    
+    'nullable_type_declaration_for_default_null_value' => [
+    	'use_nullable_type_declaration' => true
+	],
+    
+    'no_unused_imports' => true,    
+    'strict_comparison' => true,
+    'strict_param' => true,
+    'ordered_imports' => true,
+    'ordered_class_elements' => [
+        'sortAlgorithm' => 'alpha'
+    ],
+    'concat_space' => [
+        'spacing' => 'one'
+    ],
+    'array_syntax' => [
+        'syntax' => 'short'
+    ],
+];
+
+$finder = PhpCsFixer\Finder::create()
+      ->in(__DIR__ . '/src');
+
+return PhpCsFixer\Config::create()
+    ->setUsingCache(false)
+    ->setRiskyAllowed(true)
+    ->setFinder($finder)
+    ->setRules($rules);

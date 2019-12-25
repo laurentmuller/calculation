@@ -244,11 +244,11 @@ class LogReport extends BaseReport implements IPdfCellListener
     {
         $message = $line['message'];
         if (!empty($line['context'])) {
-            $message .= "\n".Utils::exportVar($line['context']);
+            $message .= "\n" . Utils::exportVar($line['context']);
         }
 
         if (!empty($line['extra'])) {
-            $message .= "\n".Utils::exportVar($line['extra']);
+            $message .= "\n" . Utils::exportVar($line['extra']);
         }
 
         return $message;

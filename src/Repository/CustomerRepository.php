@@ -105,6 +105,6 @@ class CustomerRepository extends BaseRepository
             $field = "COALESCE($alias.$field, '')";
         }
 
-        return 'CONCAT('.\implode(', ', $fields).')';
+        return 'CONCAT(' . \implode(', ', $fields) . ')';
     }
 }

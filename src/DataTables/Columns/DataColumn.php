@@ -186,7 +186,7 @@ class DataColumn
     {
         $names = $this->className ?: '';
         if (false === \stripos($names, $className)) {
-            $names = \trim($names.' '.$className);
+            $names = \trim($names . ' ' . $className);
         }
 
         return $this->setClassName($names);
@@ -305,7 +305,7 @@ class DataColumn
     {
         $className = $this->className ?: '';
         if ($this->visible) {
-            return \trim($className.' cursor-pointer');
+            return \trim($className . ' cursor-pointer');
         }
 
         return $className;
@@ -325,7 +325,7 @@ class DataColumn
     {
         $property = $this->name;
         if (\is_array($data)) {
-            $property = '['.$property.']';
+            $property = '[' . $property . ']';
             $property = \str_replace('.', '].[', $property);
         }
 
@@ -387,7 +387,7 @@ class DataColumn
             if ($this->orderable) {
                 $className .= ' cursor-pointer sorting';
                 if ($this->default) {
-                    $className .= '_'.$this->direction;
+                    $className .= '_' . $this->direction;
                 }
             } else {
                 $className .= ' sorting_disabled';

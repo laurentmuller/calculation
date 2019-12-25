@@ -2,6 +2,9 @@
 /.env.local
 /.env.local.php
 /.env.*.local
+/.php_cs.cache
+/symfony.lock
+/composer.lock
 /public/bundles/
 /public/images/users/
 /public/js/vendor
@@ -18,3 +21,4 @@
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
+

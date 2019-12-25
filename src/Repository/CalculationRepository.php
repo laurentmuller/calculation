@@ -149,7 +149,7 @@ class CalculationRepository extends BaseRepository
             case 'date':
             case 'customer':
             case 'description':
-                $orderColumn = 'c.'.$orderColumn;
+                $orderColumn = 'c.' . $orderColumn;
                 break;
             case 'state':
                 $orderColumn = 's.code';
@@ -232,7 +232,7 @@ class CalculationRepository extends BaseRepository
             case 'date':
             case 'customer':
             case 'description':
-                $orderColumn = 'c.'.$orderColumn;
+                $orderColumn = 'c.' . $orderColumn;
                 break;
             case 'state':
                 $orderColumn = 's.code';

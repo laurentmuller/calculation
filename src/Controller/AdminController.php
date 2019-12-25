@@ -232,7 +232,7 @@ class AdminController extends BaseController
     {
         // name
         $pos = \strpos($roleName, '_');
-        $name = 'user.roles.'.\strtolower(\substr($roleName, $pos + 1));
+        $name = 'user.roles.' . \strtolower(\substr($roleName, $pos + 1));
 
         // role
         $role = new Role($roleName);

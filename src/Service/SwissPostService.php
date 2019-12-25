@@ -101,7 +101,7 @@ class SwissPostService
     {
         $this->translator = $tranlator;
         $this->application = $application;
-        $this->dataDirectory = $kernel->getProjectDir().self::DATA_PATH;
+        $this->dataDirectory = $kernel->getProjectDir() . self::DATA_PATH;
     }
 
     /**
@@ -172,7 +172,7 @@ class SwissPostService
      */
     public function getDatabaseName(): string
     {
-        return $this->dataDirectory.self::DATABASE_NAME;
+        return $this->dataDirectory . self::DATABASE_NAME;
     }
 
     /**
@@ -476,7 +476,7 @@ class SwissPostService
     {
         $valid = 0;
         $error = 0;
-        $filename = $this->dataDirectory.self::STATE_FILE;
+        $filename = $this->dataDirectory . self::STATE_FILE;
         if (\file_exists($filename)) {
             if (false !== ($handle = \fopen($filename, 'r'))) {
                 while (false !== ($data = \fgetcsv($handle, 0, ';'))) {

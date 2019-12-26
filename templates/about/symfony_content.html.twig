@@ -16,11 +16,11 @@
             {{ tools.rowInfo('Name', kernel.name) }}
             {{ tools.rowInfo('Environment', kernel.environment) }}
             {{ tools.rowInfo('Debug', kernel.debug|json_encode) }}
-            {{ tools.rowInfo('Locale', app.request.locale) }}
+            {{ tools.rowInfo('Locale', locale) }}
             {{ tools.rowInfo('Timezone', timezone) }}
             {{ tools.rowInfo('Charset', kernel.charset) }}
-            {{ tools.rowInfo('Fin de la maintenance', endOfMaintenance) }}
-            {{ tools.rowInfo('Fin de vie du produit', endOfLife) }}
+            {{ tools.rowInfo('End of maintenance', endOfMaintenance) }}
+            {{ tools.rowInfo('End of product life', endOfLife) }}
             {{ tools.headerInfo('Directories') }}
             {{ tools.rowInfo('Project', projectDir) }}
             {{ tools.rowInfo('Root', rootDir) }}

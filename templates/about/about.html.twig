@@ -38,6 +38,7 @@
 
 {% block body %}
 {{ parent() }}
+<div class="accordion" id="accordionAbout">
 {% include 'about/about_licence.html.twig' %}
 {% include 'about/about_policy.html.twig' %}
 {% if is_granted('ROLE_ADMIN') %}
@@ -45,7 +46,8 @@
     {% include 'about/about_php.html.twig' %}
     {% include 'about/about_mysql.html.twig' %}
 {% endif %}
-<div class="row no-gutters">
+</div>
+<div class="row no-gutters mt-2">
     <div class="col d-print-none">
         {{ icons.homepage() }}    
         {% if app.debug  or app_environment == 'dev' -%}{{ icons.button_pdf('about_pdf') }}{%- endif %}

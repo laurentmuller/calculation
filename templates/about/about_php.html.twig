@@ -1,18 +1,11 @@
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-
-<div class="row no-gutters">
-    <div class="col">
-        <div class="card mb-2">
-            <div class="card-header card-collapse">
-                <a data-toggle="collapse" href="#php" class="card-link" aria-expanded="false" aria-controls="php">{{ 'about.php'|trans }}</a>
-            </div>
-            <div id="php" class="card-body collapse" aria-expanded="false" data-url="{{ path('ajax_php') }}">
-                <div class="alert mb-0">
-                    <span class="spinner-border spinner-border-sm text-secondary" role="status" aria-hidden="true"></span>
-                    <span>{{ 'about.loading'|trans }}</span>
-                </div>
-            </div>
+<div class="card">
+    <div class="card-header card-collapse" id="php-header">
+        <a data-toggle="collapse" role="button" href="#php" class="card-link" aria-expanded="false" aria-controls="php">{{ 'about.php'|trans }}</a>
+    </div>
+    <div id="php" class="card-body collapse" aria-labelledby="php-header" aria-expanded="false" data-parent="#accordionAbout" data-url="{{ path('ajax_php') }}">
+        <div class="alert mb-0">
+            <span class="spinner-border spinner-border-sm text-secondary" role="status" aria-hidden="true"></span>
+            <span>{{ 'about.loading'|trans }}</span>
         </div>
     </div>
 </div>

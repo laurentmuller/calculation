@@ -41,6 +41,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\ContainerConstraintValidatorFactory;
@@ -129,6 +130,9 @@ class AjaxController extends BaseController
         $endOfMaintenance = $this->formatExpired(Kernel::END_OF_MAINTENANCE);
         $endOfLife = $this->formatExpired(Kernel::END_OF_LIFE);
 
+        $locale = \Locale::getDefault();
+        $localeName = Locales::getName($locale, 'en');
+
         $parameters = [
             'kernel' => $kernel,
             'version' => Kernel::VERSION,
@@ -142,6 +146,7 @@ class AjaxController extends BaseController
             'logDir' => $logDir,
             'endOfMaintenance' => $endOfMaintenance,
             'endOfLife' => $endOfLife,
+            'locale' => $localeName . ' - ' . $locale,
         ];
         $content = $this->renderView('about/symfony_content.html.twig', $parameters);
 
@@ -906,7 +911,7 @@ class AjaxController extends BaseController
             return $this->localeDate($date->modify('last day of this month 23:59:59'));
         }
 
-        return 'Inconnue';
+        return 'Unknown';
     }
 
     /**

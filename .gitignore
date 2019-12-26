@@ -3,8 +3,8 @@
 /.env.local.php
 /.env.*.local
 /.php_cs.cache
-/symfony.lock
-/composer.lock
+composer.lock
+symfony.lock
 /public/bundles/
 /public/images/users/
 /public/js/vendor

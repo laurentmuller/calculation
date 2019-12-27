@@ -1,24 +1,4 @@
-/**! compression tag for ftp-deployment */
-
-/**
- * Add link to PHP image
- */
-function updatePhp($element) {
-    'use strict';
-
-    // find cell
-    const $cell = $element.find('table tbody tr td:first');
-    if ($cell.length) {
-        const $link = $('<a/>', {
-            'href': 'https://www.php.net/',
-            'rel': 'noopener noreferrer',
-            'target': '_blank'
-        });
-        $link.appendTo($cell);
-        $cell.children().appendTo($link);
-        $link.find('h1').addClass('text-body');
-    }
-}
+/** ! compression tag for ftp-deployment */
 
 /**
  * Ready function
@@ -26,43 +6,52 @@ function updatePhp($element) {
 $(function () {
     'use strict';
 
-    // extensions
+    // JQuery extensions
     $.fn.extend({
         loadContent: function () {
             const $this = $(this);
             const url = $this.data('url');
-            $.getJSON(url).done(function (data) {
-                if (data.result) {
-                    $this.html(data.content);
-                    if ($this.is('#php')) {
-                        updatePhp($this);
+            if (url) {
+                $.getJSON(url).done(function (data) {
+                    if (data.result) {
+                        $this.html(data.content);
+                        if ($this.is('#php')) {
+                            $this.updatePhp();
+                        }
+                    } else {
+                        $this.showError();
                     }
-                } else {
+                }).fail(function () {
                     $this.showError();
-                }
-            }).fail(function () {
+                });
+            } else {
                 $this.showError();
-            });
+            }
         },
 
         showError: function () {
             const content = $("#configuration").data("error");
             const html = "<i class='fas fa-lg fa-exclamation-triangle mr-2'></i>" + content;
             $(this).find(".alert:first").addClass("alert-danger").html(html);
+        },
+
+        updatePhp: function () {
+            const $cell = $(this).findExists('table:first tbody:first tr:first td:first');
+            if ($cell) {
+                const $link = $('<a/>', {
+                    'href': 'https://www.php.net/',
+                    'rel': 'noopener noreferrer',
+                    'target': '_blank'
+                });
+                $link.appendTo($cell);
+                $cell.children().appendTo($link);
+                $link.find('h1').addClass('text-body');
+            }
         }
     });
 
-    // load content asynchrone
-    const handler = function () {
-        $(this).off('show.bs.collapse', handler).loadContent();
-    };
-    $('#symfony, #php, #mysql').on('show.bs.collapse', handler);
-
-    // update style
-    $('.collapse').on('show.bs.collapse', function () {
-        $(this).parents(".card").find(".card-header").removeClass("card-collapse");
-    }).on('hidden.bs.collapse', function () {
-        $(this).parents(".card").find(".card-header").addClass("card-collapse");
+    // load content on show
+    $('.card-body.collapse').one('show.bs.collapse', function () {
+        $(this).loadContent();
     });
-
 });

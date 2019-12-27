@@ -2,7 +2,7 @@
 web <strong>{{ app_name }}</strong> (ci-après désigné par le terme "Application").</p>
 <p> 
 Sauf définition contraire, les termes utilisés  dans le présent accord de licence ont la même signification que dans 
-notre {% if link %}<a href="{{ path('about_policy') }}">Politique de confidentialité</a>{% else %}politique de confidentialité{% endif %}.
+notre {% if link|default(false) %}<a href="{{ path('about_policy') }}">Politique de confidentialité</a>{% else %}politique de confidentialité{% endif %}.
 </p>
 <p class="text-justify">L'utilisation de l'application entraîne l'établissement d'un contrat de licence de logiciel entre vous-même (désigné ci-après par 
 preneur de licence) et le fournisseur. Ce faisant, vous approuvez les conditions générales explicitées ci-après.

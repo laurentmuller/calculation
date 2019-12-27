@@ -66,11 +66,8 @@ class AdminController extends BaseController
      */
     public function clearCache(Request $request, KernelInterface $kernel, LoggerInterface $logger): Response
     {
-        $builder = $this->createFormBuilder();
-        $form = $builder->getForm()
-            ->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createFormBuilder()->getForm();
+        if ($this->handleFormRequest($form, $request)) {
             // first clear application service cache
             $this->application->clearCache();
 
@@ -147,10 +144,8 @@ class AdminController extends BaseController
             ->addFileType();
 
         // handle request
-        $form = $builder->getForm()->handleRequest($request);
-
-        // valid?
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $builder->getForm();
+        if ($this->handleFormRequest($form, $request)) {
             // import
             $file = $form->getData()['file'];
             $data = $service->setSourceFile($file)->import();
@@ -185,9 +180,7 @@ class AdminController extends BaseController
 
         // form
         $form = $this->createForm(ParametersType::class, $data);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->handleFormRequest($form, $request)) {
             //save properties
             $data = $form->getData();
             $service->setProperties($data);
@@ -241,10 +234,7 @@ class AdminController extends BaseController
 
         // form
         $form = $this->createForm(RoleRightsType::class, $role);
-        $form->handleRequest($request);
-
-        // valid?
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->handleFormRequest($form, $request)) {
             $this->application->setProperties([
                 $property => $role->getRights(),
             ]);

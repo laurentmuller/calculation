@@ -41,3 +41,19 @@
     <td class="text">{{ package.description }}{%- if package.dev %} (Development mode only){%  endif -%}</td>
 </tr>
 {%- endmacro %}
+
+{% macro aboutCard(id) -%}
+{%- set route = path('ajax_' ~ id) -%}
+{%- set title = ('about.' ~ id)|trans -%}
+<div class="card">
+    <div class="card-header" id="{{ id }}-header">
+        <a data-toggle="collapse" role="button" href="#{{ id }}" class="card-link" aria-expanded="false" aria-controls="{{ id }}">{{ title }}</a>
+    </div>
+    <div id="{{ id }}" class="card-body collapse" aria-labelledby="{{ id }}-header" aria-expanded="false" data-parent="#accordionAbout" data-url="{{ route }}">
+        <div class="alert mb-0">
+            <span class="spinner-border spinner-border-sm text-secondary" role="status" aria-hidden="true"></span>
+            <span>{{ 'about.loading'|trans }}</span>
+        </div>
+    </div>
+</div>
+{%- endmacro %}

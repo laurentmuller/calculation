@@ -17,7 +17,6 @@ namespace App\Entity;
 use FOS\UserBundle\Mailer\MailerInterface;
 use SimpleHtmlToText\Parser;
 use Swift_Attachment;
-use Swift_Message;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -235,7 +234,7 @@ class Comment
     public function send(\Swift_Mailer $mailer): bool
     {
         // create message
-        $msg = new Swift_Message();
+        $msg = new \Swift_Message();
         $msg->setFrom($this->getFromEmailAndName())
             ->setTo($this->getToEmailAndName())
             ->setSubject($this->getSubject())

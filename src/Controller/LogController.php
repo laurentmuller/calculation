@@ -79,10 +79,8 @@ class LogController extends BaseController
         }
 
         // handle request
-        $builder = $this->createFormBuilder();
-        $form = $builder->getForm()->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createFormBuilder()->getForm();
+        if ($this->handleFormRequest($form, $request)) {
             if (\file_exists($file)) {
                 try {
                     // empty file

@@ -39,16 +39,16 @@
 {% block body %}
 {{ parent() }}
 <div class="accordion" id="accordionAbout">
-{% include 'about/about_licence.html.twig' %}
-{% include 'about/about_policy.html.twig' %}
+{{ tools.aboutCard('licence') }}
+{{ tools.aboutCard('policy') }}
 {% if is_granted('ROLE_ADMIN') %}
-    {% include 'about/about_symfony.html.twig' %}
-    {% include 'about/about_php.html.twig' %}
-    {% include 'about/about_mysql.html.twig' %}
+    {{ tools.aboutCard('symfony') }}
+    {{ tools.aboutCard('php') }}
+    {{ tools.aboutCard('mysql') }}
 {% endif %}
 </div>
-<div class="row no-gutters mt-2">
-    <div class="col d-print-none">
+<div class="row no-gutters mt-2 d-print-none">
+    <div class="col">
         {{ icons.homepage() }}    
         {% if app.debug  or app_environment == 'dev' -%}{{ icons.button_pdf('about_pdf') }}{%- endif %}
     </div>

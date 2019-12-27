@@ -114,12 +114,8 @@ abstract class EntityController extends BaseController
         $display = $item->getDisplay();
 
         // create form and handle request
-        $form = $this->createFormBuilder()
-            ->getForm()
-            ->handleRequest($request);
-
-        // validate
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createFormBuilder()->getForm();
+        if ($this->handleFormRequest($form, $request)) {
             try {
                 // remove
                 if ($this->canDelete($item)) {
@@ -181,11 +177,8 @@ abstract class EntityController extends BaseController
 
         // form
         $type = $parameters['type'];
-        $form = $this->createForm($type, $item)
-            ->handleRequest($request);
-
-        // submitted and valid?
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm($type, $item);
+        if ($this->handleFormRequest($form, $request)) {
             // update
             if ($this->updateItem($item)) {
                 // save

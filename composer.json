@@ -97,6 +97,10 @@
 		}
 	},
 	"scripts" : {
-		"app-cs-fixer" : "php-cs-fixer fix --diff"
+		"app-cs-fixer" : "php-cs-fixer fix --diff",
+		"auto-scripts": {
+			"cache:clear": "symfony-cmd",
+			"assets:install %PUBLIC_DIR%": "symfony-cmd"
+		}
 	}
 }

@@ -412,14 +412,12 @@ index:
     menu_data: Données
     menu_info: A propos de %app_name%
     menu_tools: Outils
-    menu_policy: Politique de confidentialité
     menu_test: Tests
     menu_rights_user: Droits d'accès de l'utilisateur
     menu_rights_admin: Droits d'accès de l'administrateur
     menu_theme: Thème (%name%)
     panel_last: Dernières calculations
     panel_month: Résumé par mois
-    panel_product: Articles par catégories
     panel_resume: Calculations par statut
     toggle_navigation: Basculer la navigation
 about:
@@ -429,8 +427,9 @@ about:
     app_version: Version
     app_environment: Environnement
     licence: Accord de licence
+    policy: Politique de confidentialité
     php: Configuration PHP
-    sql: Configuration MySQL
+    mysql: Configuration MySQL
     symfony: Configuration Symfony
     version: Version %version%
     extern_link: Lien externe
@@ -729,7 +728,7 @@ import:
     objects: Objets
     states: Cantons
     cities: Localités
-    streets: Rues    
+    streets: Rues
     valids: Valides
     errors: Erreurs
     total: Total

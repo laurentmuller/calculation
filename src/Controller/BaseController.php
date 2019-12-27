@@ -26,7 +26,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Model\UserInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -196,6 +198,31 @@ abstract class BaseController extends AbstractController implements IFlashMessag
     protected function getManager(): EntityManagerInterface
     {
         return $this->getDoctrine()->getManager();
+    }
+
+    /**
+     * Handle the given request within the form and test if the form is submitted and valid.
+     *
+     * @param FormInterface $form    the form to check
+     * @param Request       $request the optional request to handle
+     *
+     * @return bool true if the form is submitted and valid
+     *
+     * @see FormInterface::handleRequest()
+     * @see FormInterface::isSubmitted()
+     * @see FormInterface::isValid()
+     */
+    protected function handleFormRequest(FormInterface $form, ?Request $request): bool
+    {
+        if ($request) {
+            $form->handleRequest($request);
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

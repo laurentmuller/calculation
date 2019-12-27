@@ -7,7 +7,7 @@
 {%- set isException = exception is defined -%}
 {%- set title_icon  = 'exclamation-circle' -%}
 {% if not title is defined %}
-    {% if status_code is defined %}
+    {% if status_code is defined and status_code is not same as (0) %}
         {%- set title = 'error_page.title' -%}
         {%- set title_parameters = {'%status_code%': status_code} -%}        
     {% else %}
@@ -84,7 +84,7 @@
                         {%- if trace.file|default(false) -%}
                             <span>{{ trace.file}}({{ trace.line|default(0)}})</span>
                         {%- endif -%}
-                        {%- if trace.function|default(false) -%}
+                        {%- if trace.function|default(false) and trace.class|default(false) -%}
                             <span>: {{ trace.class|abbr_class|striptags ~ trace.type|default('->') ~ trace.function }}()</span>
 	                    {%- endif -%}
                     </samp>      

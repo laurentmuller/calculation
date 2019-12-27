@@ -423,8 +423,8 @@ class TestController extends BaseController
             ->domain('FOSUserBundle')
             ->add(CaptchaImage::class);
 
-        $form = $builder->getForm()->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $builder->getForm();
+        if ($this->handleFormRequest($form, $request)) {
             return $this->succes($this->trans('password.success'))
                 ->redirectToHomePage();
         }
@@ -463,8 +463,8 @@ class TestController extends BaseController
             ->addHiddenType();
 
         // render
-        $form = $builder->getForm()->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $builder->getForm();
+        if ($this->handleFormRequest($form, $request)) {
             // get values
             $data = $form->getData();
             $response = $data['recaptcha'];
@@ -549,8 +549,8 @@ class TestController extends BaseController
             ->addColorType();
 
         // render
-        $form = $builder->getForm()->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $builder->getForm();
+        if ($this->handleFormRequest($form, $request)) {
             $data = $form->getData();
             $message = 'Message :<br>' . (string) $data['message']; // . '<br>';
             //$message .= 'Couleur :<br><span style="background-color:' . $data['color'] . ';">&nbsp;&nbsp;' . $data['color'] . '&nbsp;</span>';

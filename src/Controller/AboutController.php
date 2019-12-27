@@ -140,7 +140,7 @@ class AboutController extends BaseController
 
         // create report
         $report = new HtmlReport($this);
-        $report->SetTitleTrans('index.menu_policy', [], true)
+        $report->SetTitleTrans('about.policy', [], true)
             ->setContent($content);
 
         // render

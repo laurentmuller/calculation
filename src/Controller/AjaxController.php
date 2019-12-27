@@ -69,6 +69,22 @@ class AjaxController extends BaseController
     private const KEY_LANGUAGE = 'LanguageService';
 
     /**
+     * Render the licence informations content.
+     *
+     * @Route("/licence", name="ajax_licence")
+     * @IsGranted("ROLE_USER")
+     */
+    public function aboutLicence(): JsonResponse
+    {
+        $content = $this->renderView('about/licence_content.html.twig');
+
+        return $this->json([
+            'result' => true,
+            'content' => $content,
+        ]);
+    }
+
+    /**
      * Render the MySql informations content.
      *
      * @Route("/mysql", name="ajax_mysql")
@@ -104,6 +120,22 @@ class AjaxController extends BaseController
             'apache' => $this->getApacheVersion(),
         ];
         $content = $this->renderView('about/php_content.html.twig', $parameters);
+
+        return $this->json([
+            'result' => true,
+            'content' => $content,
+        ]);
+    }
+
+    /**
+     * Render the policy informations content.
+     *
+     * @Route("/policy", name="ajax_policy")
+     * @IsGranted("ROLE_USER")
+     */
+    public function aboutPolicy(): JsonResponse
+    {
+        $content = $this->renderView('about/policy_content.html.twig');
 
         return $this->json([
             'result' => true,

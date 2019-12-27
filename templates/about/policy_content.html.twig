@@ -6,7 +6,7 @@ personnel lorsque vous utilisez notre application ainsi que les choix qui s'offr
 </p>
 <p>
 Sauf définition contraire, les termes utilisés dans la présente politique de confidentialité ont la même signification que dans 
-notre {% if link %}<a href="{{ path('about_licence') }}">Accord de licence</a>{% else %}accord de licence{% endif %}.
+notre {% if link|default(false) %}<a href="{{ path('about_licence') }}">Accord de licence</a>{% else %}accord de licence{% endif %}.
 </p>
 
 <h4>Définitions</h4>
@@ -142,4 +142,4 @@ modification. Les modifications apportées à la présente politique de confiden
 <h4>Nous contacter</h4>
 <p class="text-justify">Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par courrier éléctronique.</p>
 
-{% if display_date %}<p class="mb-0 text-right">Décembre 2019</p>{% endif %}
+{% if display_date|default(true) %}<p class="mb-0 text-right">Décembre 2019</p>{% endif %}

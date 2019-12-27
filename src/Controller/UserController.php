@@ -28,8 +28,10 @@ use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
 use App\Security\EntityVoter;
 use App\Service\ThemeService;
+use App\Utils\Utils;
 use Doctrine\Common\Collections\Criteria;
 use FOS\UserBundle\Model\UserManagerInterface;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,7 +114,7 @@ class UserController extends EntityController
      * @Route("/comment", name="user_comment", methods={"GET", "POST"})
      * @IsGranted("ROLE_USER")
      */
-    public function comment(Request $request, \Swift_Mailer $mailer)
+    public function comment(Request $request, \Swift_Mailer $mailer, LoggerInterface $logger)
     {
         $comment = new Comment(false);
         $comment->setSubject($this->getApplicationName())
@@ -121,22 +123,31 @@ class UserController extends EntityController
 
         // create and handle request
         $form = $this->createForm(UserCommentType::class, $comment);
-        $form->handleRequest($request);
+        if ($this->handleFormRequest($form, $request)) {
+            try {
+                // send
+                if ($comment->send($mailer)) {
+                    $this->succesTrans('user.comment.success');
+                } else {
+                    $this->errorTrans('user.comment.error');
+                }
 
-        // valid?
-        if ($form->isSubmitted() && $form->isValid()) {
-            // $mbox = \imap_open("{mail.infomaniak.com:587/imap/tls}", 'calculation@bibi.nu', 'bibi.1962.calculation');
-            // \imap_close($mbox);
+                // home page
+                return  $this->redirectToHomePage();
+            } catch (\Swift_SwiftException $e) {
+                $message = $this->trans('user.comment.error');
+                $logger->error($message, [
+                        'class' => Utils::getShortName($e),
+                        'message' => $e->getMessage(),
+                        'code' => (int) $e->getCode(),
+                        'file' => $e->getFile() . ':' . $e->getLine(),
+                ]);
 
-            // send
-            if ($comment->send($mailer)) {
-                $this->succesTrans('user.comment.success');
-            } else {
-                $this->errorTrans('user.comment.error');
+                return $this->render('@Twig/Exception/exception.html.twig', [
+                    'message' => $message,
+                    'exception' => $e,
+                ]);
             }
-
-            // home page
-            return  $this->redirectToHomePage();
         }
 
         // render
@@ -205,10 +216,7 @@ class UserController extends EntityController
     {
         // form
         $form = $this->createForm(UserImageType::class, $item);
-        $form->handleRequest($request);
-
-        // valid?
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->handleFormRequest($form, $request)) {
             // update
             $this->updateItem($item);
 
@@ -236,7 +244,7 @@ class UserController extends EntityController
      * @Route("/message/{id}", name="user_message", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function message(Request $request, User $user, \Swift_Mailer $mailer): Response
+    public function message(Request $request, User $user, \Swift_Mailer $mailer, LoggerInterface $logger): Response
     {
         // same user?
         if ($this->isConnectedUser($user)) {
@@ -253,19 +261,31 @@ class UserController extends EntityController
 
         // create and handle request
         $form = $this->createForm(UserCommentType::class, $comment);
-        $form->handleRequest($request);
+        if ($this->handleFormRequest($form, $request)) {
+            try {
+                // send
+                if ($comment->send($mailer)) {
+                    $this->succesTrans('user.message.success', ['%name%' => $user->getDisplay()]);
+                } else {
+                    $this->errorTrans('user.message.error');
+                }
 
-        // valid?
-        if ($form->isSubmitted() && $form->isValid()) {
-            // send
-            if ($comment->send($mailer)) {
-                $this->succesTrans('user.message.success', ['%name%' => $user->getDisplay()]);
-            } else {
-                $this->errorTrans('user.message.error');
+                // list
+                return $this->generator->redirect($request, $user->getId(), self::ROUTE_LIST);
+            } catch (\Swift_SwiftException $e) {
+                $message = $this->trans('user.message.error');
+                $logger->error($message, [
+                        'class' => Utils::getShortName($e),
+                        'message' => $e->getMessage(),
+                        'code' => (int) $e->getCode(),
+                        'file' => $e->getFile() . ':' . $e->getLine(),
+                ]);
+
+                return $this->render('@Twig/Exception/exception.html.twig', [
+                    'message' => $message,
+                    'exception' => $e,
+                ]);
             }
-
-            // list
-            return $this->generator->redirect($request, $user->getId(), self::ROUTE_LIST);
         }
 
         // render
@@ -289,10 +309,7 @@ class UserController extends EntityController
     {
         // form
         $form = $this->createForm(UserChangePasswordType::class, $item);
-        $form->handleRequest($request);
-
-        // valid?
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->handleFormRequest($form, $request)) {
             // update
             $this->updateItem($item);
 
@@ -359,10 +376,7 @@ class UserController extends EntityController
 
         // form
         $form = $this->createForm(UserRightsType::class, $item);
-        $form->handleRequest($request);
-
-        // valid?
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->handleFormRequest($form, $request)) {
             // update
             $this->updateItem($item);
 
@@ -450,11 +464,9 @@ class UserController extends EntityController
             'theme' => $theme,
             'background' => $background,
         ];
-        $form = $this->createForm(ThemeType::class, $data);
-        $form->handleRequest($request);
 
-        // OK?
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(ThemeType::class, $data);
+        if ($this->handleFormRequest($form, $request)) {
             // get values
             $data = $form->getData();
             $theme = $data['theme'];

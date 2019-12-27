@@ -583,11 +583,8 @@ class CalculationController extends EntityController
      */
     public function state(Request $request, Calculation $item): Response
     {
-        $form = $this->createForm(CalculationEditStateType::class, $item)
-            ->handleRequest($request);
-
-        // submitted and valid?
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(CalculationEditStateType::class, $item);
+        if ($this->handleFormRequest($form, $request)) {
             // update
             $this->getManager()->flush();
 
@@ -598,25 +595,6 @@ class CalculationController extends EntityController
             $id = $item->getId();
 
             return $this->generator->redirect($request, $id, self::ROUTE_LIST);
-
-            // caller?
-//             $caller = $request->query->get('caller');
-//             if ($caller) {
-//                 $caller .= (false === \strpos($caller, '?')) ? '?' : '&';
-//                 $caller .= 'selection=' . $item->getId();
-
-//                 $query = $request->get('query');
-//                 if ($query) {
-//                     $caller .= '&query=' . $query;
-//                 }
-
-//                 return $this->redirect($caller);
-//             }
-
-//             // selection
-//             $parameters = ['selection' => $item->getId()];
-//
-            //return $this->redirectToRoute(self::ROUTE_LIST, $parameters);
         }
 
         // display
@@ -668,10 +646,8 @@ class CalculationController extends EntityController
             ->addCheckboxType();
 
         // handle request
-        $form = $builder->getForm()
-            ->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form = $builder->getForm();
+        if ($this->handleFormRequest($form, $request)) {
             $data = $form->getData();
             $includeClosed = (bool) $data['includeClosed'];
 

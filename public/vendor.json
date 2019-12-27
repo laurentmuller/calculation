@@ -150,7 +150,11 @@
 			"target": "contextmenu",
 			"files": [
 				"jquery.contextMenu.css",
-				"jquery.contextMenu.js"
+				"jquery.contextMenu.js",
+				"font/context-menu-icons.eot",
+				"font/context-menu-icons.ttf",
+				"font/context-menu-icons.woff",
+				"font/context-menu-icons.woff2"
 			]
 		},
 		{

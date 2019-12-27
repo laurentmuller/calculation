@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use Symfony\Component\Translation\TranslatorBagInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Trait for translations.
@@ -24,9 +25,9 @@ use Symfony\Component\Translation\TranslatorBagInterface;
 trait TranslatorTrait
 {
     /**
-     * The translator service.
+     * The translator instance.
      *
-     * @var \Symfony\Contracts\Translation\TranslatorInterface
+     * @var TranslatorInterface
      */
     protected $translator;
 
@@ -44,8 +45,8 @@ trait TranslatorTrait
      */
     public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
-        if ($this->translator) {
-            return $this->translator->trans($id, $parameters, $domain, $locale);
+        if ($translator = $this->doGetTranslator()) {
+            return $translator->trans($id, $parameters, $domain, $locale);
         }
 
         return $id;
@@ -62,13 +63,29 @@ trait TranslatorTrait
      */
     public function transDefined(string $id, ?string $domain = null, ?string $locale = null): bool
     {
-        if ($this->translator instanceof TranslatorBagInterface) {
-            /** @var \Symfony\Component\Translation\MessageCatalogueInterface $catalogue */
-            $catalogue = $this->translator->getCatalogue($locale);
+        if ($translator = $this->doGetTranslator()) {
+            if ($translator instanceof TranslatorBagInterface) {
+                /** @var \Symfony\Component\Translation\MessageCatalogueInterface $catalogue */
+                $catalogue = $this->translator->getCatalogue($locale);
 
-            return $catalogue->defines($id, $domain);
+                return $catalogue->defines($id, $domain);
+            }
         }
 
         return $id !== $this->trans($id, [], $domain, $locale);
+    }
+
+    /**
+     * Gets the translator.
+     *
+     * @return TranslatorInterface|null the translator if found; null otherwise
+     */
+    private function doGetTranslator(): ?TranslatorInterface
+    {
+        if (!$this->translator && \method_exists($this, 'getTranslator')) {
+            return $this->translator = $this->getTranslator();
+        }
+
+        return $this->translator;
     }
 }

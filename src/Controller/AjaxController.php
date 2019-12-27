@@ -1005,7 +1005,7 @@ class AjaxController extends BaseController
      */
     private function getCacheClass(): string
     {
-        return $this->application->getCacheClass();
+        return $this->getApplication()->getCacheClass();
     }
 
     /**

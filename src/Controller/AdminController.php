@@ -51,7 +51,7 @@ class AdminController extends BaseController
     {
         // get values
         $roleName = User::ROLE_ADMIN;
-        $rights = $this->application->getAdminRights();
+        $rights = $this->getApplication()->getAdminRights();
         $default = EntityVoter::getRoleAdmin();
         $property = IApplicationService::ADMIN_RIGHTS;
 
@@ -69,7 +69,7 @@ class AdminController extends BaseController
         $form = $this->createFormBuilder()->getForm();
         if ($this->handleFormRequest($form, $request)) {
             // first clear application service cache
-            $this->application->clearCache();
+            $this->getApplication()->clearCache();
 
             try {
                 $options = [
@@ -121,8 +121,8 @@ class AdminController extends BaseController
     public function import(Request $request, SwissPostService $service): Response
     {
         // clear
-        if ($this->application->isDebug()) {
-            $this->application->clearCache();
+        if ($this->getApplication()->isDebug()) {
+            $this->getApplication()->clearCache();
         }
 
         // create form
@@ -158,7 +158,7 @@ class AdminController extends BaseController
 
         // display
         return $this->render('admin/import_file.html.twig', [
-            'last_import' => $this->application->getLastImport(),
+            'last_import' => $this->getApplication()->getLastImport(),
             'form' => $form->createView(),
         ]);
     }
@@ -172,7 +172,7 @@ class AdminController extends BaseController
     public function parameters(Request $request): Response
     {
         // properties
-        $service = $this->application;
+        $service = $this->getApplication();
         $data = $service->getProperties();
 
         // remove last update
@@ -205,7 +205,7 @@ class AdminController extends BaseController
     {
         // get values
         $roleName = User::ROLE_DEFAULT;
-        $rights = $this->application->getUserRights();
+        $rights = $this->getApplication()->getUserRights();
         $default = EntityVoter::getRoleUser();
         $property = IApplicationService::USER_RIGHTS;
 
@@ -235,7 +235,7 @@ class AdminController extends BaseController
         // form
         $form = $this->createForm(RoleRightsType::class, $role);
         if ($this->handleFormRequest($form, $request)) {
-            $this->application->setProperties([
+            $this->getApplication()->setProperties([
                 $property => $role->getRights(),
             ]);
             $this->succesTrans('admin.rights.success', ['%name%' => $role->getName()]);

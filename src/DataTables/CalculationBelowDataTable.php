@@ -38,7 +38,7 @@ class CalculationBelowDataTable extends CalculationDataTable
         $param = 'minMargin';
         $itemsField = "{$alias}.itemsTotal";
         $overallField = "{$alias}.overallTotal";
-        $minMargin = $this->application->getMinMargin();
+        $minMargin = $this->getApplication()->getMinMargin();
 
         return parent::createQueryBuilder($alias)
             ->andWhere("{$itemsField} != 0")

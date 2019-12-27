@@ -359,7 +359,7 @@ abstract class EntityController extends BaseController
         $items = $this->getItems($field, $mode);
 
         // default action
-        $edit = $this->application->isEditAction();
+        $edit = $this->getApplication()->isEditAction();
 
         // parameters
         $parameters = \array_merge($parameters, [
@@ -426,7 +426,7 @@ abstract class EntityController extends BaseController
 
         // merge attributes
         $attributes = \array_merge($attributes, [
-            'edit-action' => \json_encode($this->application->isEditAction()),
+            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
         ]);
 
         // parameters

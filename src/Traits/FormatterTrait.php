@@ -39,8 +39,8 @@ trait FormatterTrait
      */
     protected function getDefaultCurrency(): string
     {
-        if ($this->application) {
-            return $this->application->getCurrency();
+        if ($application = $this->doGetApplication()) {
+            return $application->getCurrency();
         }
 
         return FormatUtils::getCurrency();
@@ -53,8 +53,8 @@ trait FormatterTrait
      */
     protected function getDefaultDateType(): int
     {
-        if ($this->application) {
-            return $this->application->getDateFormat();
+        if ($application = $this->doGetApplication()) {
+            return $application->getDateFormat();
         }
 
         return FormatUtils::getDateType();
@@ -67,8 +67,8 @@ trait FormatterTrait
      */
     protected function getDefaultDecimal(): string
     {
-        if ($this->application) {
-            return $this->application->getDecimal();
+        if ($application = $this->doGetApplication()) {
+            return $application->getDecimal();
         }
 
         return FormatUtils::getDecimal();
@@ -81,8 +81,8 @@ trait FormatterTrait
      */
     protected function getDefaultGrouping(): string
     {
-        if ($this->application) {
-            return $this->application->getGrouping();
+        if ($application = $this->doGetApplication()) {
+            return $application->getGrouping();
         }
 
         return FormatUtils::getGrouping();
@@ -95,10 +95,24 @@ trait FormatterTrait
      */
     protected function getDefaultTimeType(): int
     {
-        if ($this->application) {
-            return $this->application->getTimeFormat();
+        if ($application = $this->doGetApplication()) {
+            return $application->getTimeFormat();
         }
 
         return FormatUtils::getTimeType();
+    }
+
+    /**
+     * Gets the application.
+     *
+     * @return ApplicationService|null the application if found; null otherwise
+     */
+    private function doGetApplication(): ?ApplicationService
+    {
+        if (!$this->application && \method_exists($this, 'getApplication')) {
+            return $this->application = $this->getApplication();
+        }
+
+        return $this->application;
     }
 }

@@ -72,7 +72,7 @@ class CustomerRepository extends BaseRepository
             case 'zipCity':
                 return $this->concat($alias, self::$ZIP_CITY_FIELDS);
             default:
-                return parent::getSortFields($alias, $field);
+                return parent::getSortFields($field, $alias);
         }
     }
 

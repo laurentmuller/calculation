@@ -165,9 +165,9 @@ class CalculationStateController extends EntityController
     protected function canDelete($item): bool
     {
         // remove from properties if this state is the default
-        $id = $this->application->getDefaultStateId();
+        $id = $this->getApplication()->getDefaultStateId();
         if ($id === $item->getId()) {
-            $this->application->setProperties([IApplicationService::DEFAULT_STATE => null]);
+            $this->getApplication()->setProperties([IApplicationService::DEFAULT_STATE => null]);
         }
 
         return parent::canDelete($item);

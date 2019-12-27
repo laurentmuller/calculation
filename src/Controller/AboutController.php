@@ -39,8 +39,8 @@ class AboutController extends BaseController
     public function about(): Response
     {
         return $this->render('about/about.html.twig', [
-            'app_customer' => $this->application->getCustomerName(),
-            'app_customer_url' => $this->application->getCustomerUrl(),
+            'app_customer' => $this->getApplication()->getCustomerName(),
+            'app_customer_url' => $this->getApplication()->getCustomerUrl(),
             'app_home_url' => $this->getHomeUrl(),
             'display_date' => true,
             'link' => false,

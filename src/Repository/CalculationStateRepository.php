@@ -65,30 +65,6 @@ class CalculationStateRepository extends BaseRepository
         }
     }
 
-//     /**
-//      * Gets the the list of states sorted by code.
-//      */
-//     public function getList(): array
-//     {
-//         return $this->getSortedBuilder()
-//             ->getQuery()
-//             ->getArrayResult();
-//     }
-
-//     /**
-//      * Gets the the list of states sorted by code and containing calculations.
-//      *
-//      * @return array
-//      */
-//     public function getNotEmptyList()
-//     {
-//         return $this->getSortedBuilder()
-//             ->innerJoin('s.calculations', 'c')
-//             ->distinct()
-//             ->getQuery()
-//             ->getArrayResult();
-//     }
-
     /**
      * Gets the query builder for the list of states sorted by code.
      */

@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
 trait LoggerTrait
 {
     /**
-     * The logger service.
+     * The logger instance.
      *
      * @var LoggerInterface
      */

@@ -338,8 +338,8 @@ class TestController extends BaseController
     public function notifications(Request $request): Response
     {
         $data = [
-            'position' => $this->application->getMessagePosition(),
-            'timeout' => $this->application->getMessageTimeout(),
+            'position' => $this->getApplication()->getMessagePosition(),
+            'timeout' => $this->getApplication()->getMessageTimeout(),
         ];
 
         return $this->render('test/notification.html.twig', $data);

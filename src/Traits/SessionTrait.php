@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 trait SessionTrait
 {
     /**
-     * The session.
+     * The session instance.
      *
      * @var SessionInterface
      */
@@ -79,10 +79,10 @@ trait SessionTrait
      */
     protected function getSessionValue(string $key, $default = null)
     {
-        if ($this->session) {
+        if ($session = $this->doGetSession()) {
             $sessionKey = $this->getSessionKey($key);
 
-            return $this->session->get($sessionKey, $default);
+            return $session->get($sessionKey, $default);
         }
 
         return $default;
@@ -97,10 +97,10 @@ trait SessionTrait
      */
     protected function hasSessionValue(string $key): bool
     {
-        if ($this->session) {
+        if ($session = $this->doGetSession()) {
             $sessionKey = $this->getSessionKey($key);
 
-            return $this->session->has($sessionKey);
+            return $session->has($sessionKey);
         }
 
         return false;
@@ -115,10 +115,10 @@ trait SessionTrait
      */
     protected function removeSessionValue(string $key)
     {
-        if ($this->session) {
+        if ($session = $this->doGetSession()) {
             $sessionKey = $this->getSessionKey($key);
 
-            return $this->session->remove($sessionKey);
+            return $session->remove($sessionKey);
         }
 
         return null;
@@ -132,11 +132,25 @@ trait SessionTrait
      */
     protected function setSessionValue(string $key, $value): self
     {
-        if ($this->session) {
+        if ($session = $this->doGetSession()) {
             $sessionKey = $this->getSessionKey($key);
-            $this->session->set($sessionKey, $value);
+            $session->set($sessionKey, $value);
         }
 
         return $this;
+    }
+
+    /**
+     * Gets the session.
+     *
+     * @return SessionInterface|null the session if found; null otherwise
+     */
+    private function doGetSession(): ?SessionInterface
+    {
+        if (!$this->session && \method_exists($this, 'getSession')) {
+            return $this->session = $this->getSession();
+        }
+
+        return $this->session;
     }
 }

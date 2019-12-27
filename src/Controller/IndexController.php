@@ -43,7 +43,7 @@ class IndexController extends BaseController
         $states = $stateRepository->getByState();
         $months = $calculationRepository->getByMonth();
         $calculations = $calculationRepository->getLastCalculations(6);
-        $edit = $this->application->isEditAction();
+        $edit = $this->getApplication()->isEditAction();
 
         // get states count and total
         $count = 0;
@@ -55,7 +55,7 @@ class IndexController extends BaseController
 
         // render view
         return $this->render('index/index.html.twig', [
-            'min_margin' => $this->application->getMinMargin(),
+            'min_margin' => $this->getApplication()->getMinMargin(),
             'calculations' => $calculations,
             'states' => $states,
             'months' => $months,
@@ -81,7 +81,7 @@ class IndexController extends BaseController
         }
 
         // get parameters
-        $edit_action = \json_encode($this->application->isEditAction());
+        $edit_action = \json_encode($this->getApplication()->isEditAction());
 
         // authorizations
         $show_granted = $table->isActionGranted(IEntityVoter::ATTRIBUTE_SHOW);

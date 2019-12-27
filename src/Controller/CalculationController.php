@@ -103,7 +103,7 @@ class CalculationController extends EntityController
         }
 
         // default state
-        $state = $this->application->getDefaultState();
+        $state = $this->getApplication()->getDefaultState();
         if ($state) {
             $item->setState($state);
         }
@@ -124,10 +124,10 @@ class CalculationController extends EntityController
     public function below(Request $request): Response
     {
         // get values
-        $minMargin = $this->application->getMinMargin();
+        $minMargin = $this->getApplication()->getMinMargin();
         $calculations = $this->getBelowMargin($minMargin);
         $selection = $request->get('selection', 0);
-        $edit = $this->application->isEditAction();
+        $edit = $this->getApplication()->isEditAction();
 
         // parameters
         $parameters = [
@@ -153,7 +153,7 @@ class CalculationController extends EntityController
      */
     public function belowPdf(Request $request): Response
     {
-        $minMargin = $this->application->getMinMargin();
+        $minMargin = $this->getApplication()->getMinMargin();
         $calculations = $this->getBelowMargin($minMargin);
         if (empty($calculations)) {
             $this->warningTrans('below.empty');
@@ -184,7 +184,7 @@ class CalculationController extends EntityController
 
         // callback?
         if (!$request->isXmlHttpRequest()) {
-            $margin = $this->application->getMinMargin();
+            $margin = $this->getApplication()->getMinMargin();
             $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => $this->localePercent($margin)]);
             $attributes = [
                 'min_margin' => $margin,
@@ -210,7 +210,7 @@ class CalculationController extends EntityController
             ['name' => 'overallTotal', 'label' => 'calculation.fields.total', 'numeric' => true],
         ];
         $parameters = [
-            'min_margin' => $this->application->getMinMargin(),
+            'min_margin' => $this->getApplication()->getMinMargin(),
         ];
 
         return $this->renderCard($request, 'calculation/calculation_card.html.twig', 'id', Criteria::DESC, $sortedFields, $parameters);
@@ -224,7 +224,7 @@ class CalculationController extends EntityController
     public function clone(Request $request, Calculation $item): Response
     {
         // clone
-        $state = $this->application->getDefaultState();
+        $state = $this->getApplication()->getDefaultState();
         $userName = $this->getUserName();
         $clone = $item->clone($state, $userName);
 
@@ -267,7 +267,7 @@ class CalculationController extends EntityController
     {
         $calculations = $this->getDuplicateItems();
         $selection = $request->get('selection', 0);
-        $edit = $this->application->isEditAction();
+        $edit = $this->getApplication()->isEditAction();
 
         // number of items
         $items_count = \array_reduce($calculations, function (float $carry, array $calculation) {
@@ -331,7 +331,7 @@ class CalculationController extends EntityController
 
         // attributes
         $attributes = [
-            'edit-action' => \json_encode($this->application->isEditAction()),
+            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
             'itemsCount' => $table->getItemCounts(),
         ];
 
@@ -368,7 +368,7 @@ class CalculationController extends EntityController
     {
         $calculations = $this->getEmptyItems();
         $selection = $request->get('selection', 0);
-        $edit = $this->application->isEditAction();
+        $edit = $this->getApplication()->isEditAction();
 
         // number of items
         $items_count = \array_reduce($calculations, function (float $carry, array $calculation) {
@@ -427,7 +427,7 @@ class CalculationController extends EntityController
 
         // attributes
         $attributes = [
-            'edit-action' => \json_encode($this->application->isEditAction()),
+            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
             'itemsCount' => $table->getItemCounts(),
         ];
 
@@ -568,7 +568,7 @@ class CalculationController extends EntityController
     public function show(Calculation $item): Response
     {
         $parameters = [
-            'min_margin' => $this->application->getMinMargin(),
+            'min_margin' => $this->getApplication()->getMinMargin(),
             'duplicate_items' => $item->hasDuplicateItems(),
             'emty_items' => $item->hasEmptyItems(),
         ];
@@ -616,7 +616,7 @@ class CalculationController extends EntityController
         // callback?
         if (!$request->isXmlHttpRequest()) {
             // attributes
-            $margin = $this->application->getMinMargin();
+            $margin = $this->getApplication()->getMinMargin();
             $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => $this->localePercent($margin)]);
             $attributes = [
                 'min_margin' => $margin,
@@ -678,7 +678,7 @@ class CalculationController extends EntityController
             $total = \count($calculations);
 
             // update last update
-            $this->application->setProperties([IApplicationService::LAST_UPDATE => new \DateTime()]);
+            $this->getApplication()->setProperties([IApplicationService::LAST_UPDATE => new \DateTime()]);
 
             // log results
             if (null !== $logger) {
@@ -705,7 +705,7 @@ class CalculationController extends EntityController
 
         // display
         return $this->render('calculation/calculation_update.html.twig', [
-            'lastUpdate' => $this->application->getLastUpdate(),
+            'lastUpdate' => $this->getApplication()->getLastUpdate(),
             'form' => $form->createView(),
         ]);
     }
@@ -724,7 +724,7 @@ class CalculationController extends EntityController
         $parameters['route'] = self::ROUTE_LIST;
         $parameters['success'] = $item->isNew() ? 'calculation.add.success' : 'calculation.edit.success';
         $parameters['groups'] = $this->calculationService->createGroupsFromCalculation($item);
-        $parameters['min_margin'] = $this->application->getMinMargin();
+        $parameters['min_margin'] = $this->getApplication()->getMinMargin();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
         $parameters['emty_items'] = $item->hasEmptyItems();
 
@@ -732,8 +732,8 @@ class CalculationController extends EntityController
             $parameters['groupIndex'] = $item->getGroupsCount();
             $parameters['itemIndex'] = $item->getLinesCount();
             $parameters['categories'] = $this->getCategories();
-            $parameters['grouping'] = $this->application->getGrouping();
-            $parameters['decimal'] = $this->application->getDecimal();
+            $parameters['grouping'] = $this->getApplication()->getGrouping();
+            $parameters['decimal'] = $this->getApplication()->getDecimal();
         }
 
         return parent::editItem($request, $parameters);
@@ -933,6 +933,6 @@ class CalculationController extends EntityController
      */
     private function isMarginBelow(Calculation $calculation): bool
     {
-        return  $this->application->isMarginBelow($calculation->getOverallMargin());
+        return  $this->getApplication()->isMarginBelow($calculation->getOverallMargin());
     }
 }

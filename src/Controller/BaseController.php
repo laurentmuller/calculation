@@ -24,7 +24,6 @@ use App\Traits\FormatterTrait;
 use App\Traits\TranslatorFlashMessageTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Model\UserInterface;
-use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -173,21 +172,6 @@ abstract class BaseController extends AbstractController implements IFlashMessag
     public function redirectToHomePage(): Response
     {
         return  $this->redirectToRoute(IndexController::HOME_PAGE);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container): ?ContainerInterface
-    {
-        $previous = parent::setContainer($container);
-
-        // set values
-        $this->session = $this->getSession();
-        $this->translator = $this->getTranslator();
-        $this->application = $this->getApplication();
-
-        return $previous;
     }
 
     /**

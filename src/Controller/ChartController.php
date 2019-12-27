@@ -394,7 +394,7 @@ class ChartController extends BaseController
      */
     private function createChart($init_options = true): Basechart
     {
-        $chart = new Basechart($this->application);
+        $chart = new Basechart($this->getApplication());
         if ($init_options) {
             $chart->initLangOptions($this->getTranslator());
         }

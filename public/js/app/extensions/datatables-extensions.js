@@ -131,8 +131,7 @@ $.fn.getDefaultOrder = function (columns) {
 };
 
 /**
- * Merge the default options within the given options and initialize the data
- * table.
+ * Merge the default options within the given options and initialize the data table.
  * 
  * @param {Object}
  *            options - the options to merge with default values.
@@ -239,11 +238,14 @@ $.fn.initSearchInput = function (callback, table, $clearButton) {
         });
     }
 
-    return $this.on('input', function () {
+    return $this.on('focus', function () {
+        table.keys.disable();
+    }).on('blur', function () {
+        table.keys.enable();
+    }).on('input', function () {
         $this.updateTimer(callback, 250, table);
     });
 };
-
 
 /**
  * Initialize the table length input.

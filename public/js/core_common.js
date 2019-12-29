@@ -16,7 +16,6 @@
 
 /**
  * Plugin files
- * <--#include file="app/plugins/plugin-notify.js" -->
  */
 <!--#include file="app/plugins/plugin-toast.js" -->
 

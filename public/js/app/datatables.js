@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals URLSearchParams, triggerClick */
+/* globals URLSearchParams, triggerClick, MenuBuilder */
 
 /**
  * -------------- JQuery extensions --------------
@@ -338,6 +338,88 @@ function editOrShow(e) {
 }
 
 /**
+ * Creates the context menu items.
+ * 
+ * @returns {Object} the menu items.
+ */
+function getContextMenuItems() {
+    'use strict';
+
+    // buttons
+    const builder = new MenuBuilder();
+    $('.card-header a.btn[data-path]').each(function () {
+        const $this = $(this);
+        if ($this.isSelectable()) {
+            builder.addEntry($this, $this.data('icon'));
+        }
+    });
+
+    builder.addSeparator();
+
+    // drop-down menu
+    $('.card-header .dropdown .dropdown-menu').children().each(function () {
+        const $this = $(this);
+        if ($this.hasClass('dropdown-divider')) {
+            builder.addSeparator();
+        } else if ($this.data('path') && $this.isSelectable()) {
+            builder.addEntry($this, $this.data('icon'));
+        }
+    });
+
+    return builder.getEntries();
+}
+
+/**
+ * Initialize the context menu for the table rows.
+ */
+function initContextMenu() {
+    'use strict';
+
+    const callback = function () { // $triggerElement, e
+        return {
+            autoHide: true,
+            classNames: {
+                hover: 'bg-primary text-white',
+            },
+            callback: function (key, options, e) {
+                const item = options.items[key];
+                const $link = item.link;
+                if ($link) {
+                    e.stopPropagation();
+                    $link.get(0).click();
+                    return true;
+                }
+            },
+            events: {
+                show: function () {
+                    // disable keys
+                    const table = $('#data-table').DataTable();
+                    if (table) {
+                        table.keys.disable();
+                    }
+
+                    // hide drop-down menus
+                    $('.dropdown-menu.show').removeClass('show');
+                },
+                hide: function () {
+                    // enable keys
+                    const table = $('#data-table').DataTable();
+                    if (table) {
+                        table.keys.enable();
+                    }
+                }
+            },
+            items: getContextMenuItems()
+        };
+    };
+
+    $.contextMenu({
+        selector: '.dataTable .selection',
+        build: callback
+    });
+}
+
+/**
  * Ready function
  */
 $(function () {
@@ -426,4 +508,7 @@ $(function () {
     // update
     $('#table_search').val(query);
     $('#table_length').val(pagelength);
+
+    // context menu
+    initContextMenu();
 });

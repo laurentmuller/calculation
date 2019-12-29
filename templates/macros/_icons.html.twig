@@ -1,15 +1,17 @@
 {# macros for icons, links and navigation entries #}
 
 {% macro icon(icon, text, domain = null, parameters = []) -%}
-{%- if icon -%}
-    {%- if 'fab' in icon or 'far' in icon -%}
-        {% set class = 'fa-' ~ icon %}
+{% if icon -%}
+    {%- if 'fab' in icon -%}
+        {% set class = 'fab fa-' ~ icon|replace({'fab': ''}) %}
+    {%- elseif 'far' in icon -%}
+        {% set class = 'far fa-' ~ icon|replace({'far': ''}) %}
     {%- else -%}
         {% set class = 'fas fa-' ~ icon %}
     {%- endif -%}
     <i class="{{ class }}" aria-hidden="true"></i>
-{%- endif -%}
-{% if text %} {{ text|trans(parameters, domain) }}{% endif %}
+{%- endif %}
+{%- if text %} {{ text|trans(parameters, domain) -}}{%- endif -%}
 {%- endmacro %} 
 
 {% macro link(href, text, class, icon, title = null, domain = null, parameters = []) -%}

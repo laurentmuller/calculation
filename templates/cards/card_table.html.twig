@@ -5,16 +5,18 @@
 {% import 'macros/_datatables.html.twig' as helper %}
 
 {# macros #}
-{% macro button(path, text, class, title) %}
+{% macro button(path, text, class, title, icon) %}
 {% if path %}
-    <a href="#" class="btn btn-sm btn-form-sm {{ class }}" data-path="{{ path }}"{% if title %} title="{{ title|trans }}"{% endif %}>{{ text|trans }}</a>
+    <a href="#" class="btn btn-sm btn-form-sm {{ class }}" data-path="{{ path }}"{% if title %} title="{{ title|trans }}"{% endif %}{% if icon %} data-icon="{{ icon }}"{% endif %}>
+        {{- text|trans -}}
+    </a>
 {% endif %}
 {% endmacro %}
 
 {% macro item_data(path, text, icon, attributes = {}) %}
 {% if path %}
     <a href="#" data-path="{{ path }}" class="dropdown-item"{{ helper.attribs(attributes) }}>
-        {{ icons.icon('fa-fw fa-' ~ icon, text) }}    	
+        {{ icons.icon(icon ~ ' fa-fw', text) }}    	
     </a>
 {% endif %}
 {% endmacro %}
@@ -22,7 +24,7 @@
 {% macro item_data_external(path, text, icon) %}
 {% if path %}
     <a href="#" data-path="{{ path }}" class="dropdown-item" target="_blank" rel="noopener noreferrer">
-        {{ icons.icon('fa-fw fa-' ~ icon, text) }}    	
+        {{ icons.icon(icon ~ ' fa-fw', text) }}    	
     </a>
 {% endif %}
 {% endmacro %}
@@ -30,7 +32,7 @@
 {% macro item_external(path, text, class, icon) %}
 {% if path %}
     <a href="{{ path }}" target="_blank" rel="noopener noreferrer" class="{{ class }}">
-        {{ icons.icon('fa-fw fa-' ~ icon, text) }}
+        {{ icons.icon(icon ~ ' fa-fw', text) }}
 	</a>
 {% endif %}
 {% endmacro %}
@@ -62,16 +64,16 @@
         {# actions toolbar #}
 		<div class="btn-group" role="group" aria-label="{{ 'common.actions'|trans }}">
             {% if add_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) %}
-                {{ _self.button(add_path|default(false), 'common.button_add', 'btn-table-add btn-primary', add_title|default(false)) }}
+                {{ _self.button(add_path|default(false), 'common.button_add', 'btn-table-add btn-primary', add_title|default(false), 'far fa-fw fa-file') }}
             {% endif %}
             {% if show_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) %}
-                {{ _self.button(show_path|default(false), 'common.button_show', 'btn-table-show btn-info disabled', show_title|default(false)) }}
+                {{ _self.button(show_path|default(false), 'common.button_show', 'btn-table-show btn-info disabled', show_title|default(false), 'far fa-fw fa-list-alt') }}
             {% endif %}
     		{% if edit_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) %}
-                {{ _self.button(edit_path|default(false), 'common.button_edit', 'btn-table-edit btn-success disabled', edit_title|default(false)) }}
+                {{ _self.button(edit_path|default(false), 'common.button_edit', 'btn-table-edit btn-success disabled', edit_title|default(false), 'fas fa-fw fa-pencil-alt') }}
             {% endif %}
             {% if delete_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) %}
-                {{ _self.button(delete_path|default(false),'common.button_delete', 'btn-table-delete btn-danger disabled', delete_title|default(false)) }}
+                {{ _self.button(delete_path|default(false),'common.button_delete', 'btn-table-delete btn-danger disabled', delete_title|default(false), 'fas fa-fw fa-times') }}
             {% endif %}
             {% block other_actions -%}
 			{%- if other_actions -%}	   
@@ -79,7 +81,7 @@
                 <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'common.other_actions'|trans }}">
                     <i class="fas fa-bars" aria-hidden="true"></i>
                 </button>
-    	    	<div class="dropdown">
+    	    	<div class="dropdown drop-down-actions">
     	    		<div class="dropdown-menu dropdown-menu-right">
     	    			{% block table_actions -%}
                         {% if is_pdf_action %}
@@ -178,6 +180,8 @@
 {{ asset_js('js/vendor/datatables/js/dataTables.conditionalPaging.js') }}
 {{ asset_js('js/vendor/datatables/js/jquery.highlight.js') }}
 {{ asset_js('js/vendor/datatables/js/dataTables.searchHighlight.js') }}
+{{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
+{{ asset_js('js/app/extensions/contextmenu-extensions.js') }}
 {{ asset_js('js/app/extensions/datatables-extensions.js') }}
 {{ asset_js('js/app/datatables.js') }}
 {% else %}

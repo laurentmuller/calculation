@@ -1,5 +1,6 @@
 @import 'style.css';
 @import '../js/vendor/datatables/css/dataTables.bootstrap4.css';
+@import '../js/vendor/contextmenu/jquery.contextMenu.css';
 
 /**! compression tag for ftp-deployment */
 
@@ -115,4 +116,15 @@ div.dataTables_wrapper div.dataTables_info {
 .was-validated .custom-select:valid, .custom-select.is-valid {	
 	background-image: none;
 	padding-right: 1.75rem;
+}
+
+/**
+ * Context menu
+ */
+.context-menu-list {
+	/*border-radius: inherit !important;*/		
+}
+.context-menu-icon--fa5 i {
+	color: inherit !important;
+	margin-top: 2px;
 }

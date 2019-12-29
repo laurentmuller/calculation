@@ -24,14 +24,3 @@
 {%- set attributes = attributes|default({})|merge ({
     'data-search-highlight': true
 }) -%}
-
-{% block stylesheets %}
-{{ parent() }}
-{{ asset_css('js/vendor/contextmenu/jquery.contextMenu.css') }}
-{%- endblock -%}
-
-{% block javascripts -%}
-{{ parent() }}
-{{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
-{{ asset_js('js/app/customer_table.js') }}
-{%- endblock -%}

@@ -264,6 +264,7 @@ class ApplicationService implements IApplicationService
 
             self::MESSAGE_POSITION => $this->getMessagePosition(),
             self::MESSAGE_TIMEOUT => $this->getMessageTimeout(),
+            self::MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
 
             self::DATE_FORMAT => $this->getDateFormat(),
             self::TIME_FORMAT => $this->getTimeFormat(),
@@ -272,6 +273,7 @@ class ApplicationService implements IApplicationService
             self::DECIMAL_SEPARATOR => $this->getDecimal(),
 
             self::LAST_UPDATE => $this->getLastUpdate(),
+            self::LAST_IMPORT => $this->getLastImport(),
 
             self::MIN_MARGIN => $this->getMinMargin(),
 

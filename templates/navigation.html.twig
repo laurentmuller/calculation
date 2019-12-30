@@ -73,7 +73,9 @@
     		
             {%- if calculs -%}
             <li class="nav-item dropdown">
-           	    <a class="nav-link dropdown-toggle" href="#" id="chartDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{- icons.icon('chart-area', 'menu_graphics', 'chart') -}}</a>
+           	    <a class="nav-link dropdown-toggle" href="#" id="chartDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           	        {{- icons.icon('chart-area', 'menu_graphics', 'chart') -}}
+                </a>
                 <div class="dropdown-menu" aria-labelledby="chartDropdown">
                     {{- icons.dropdownItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') -}}
                     {{- icons.dropdownItem(path('chart_by_state'), 'title_by_state', 'flag far', 'chart') -}}

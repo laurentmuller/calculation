@@ -12,11 +12,11 @@
 {%- set descActive = name == currentField and currentMode == 'DESC' -%}
 <a class="dropdown-item{% if ascActive %} active{% endif %}" href="{{ ascPath }}">
     {%- set icon = numeric ? 'sort-numeric-down': 'sort-alpha-down' -%}    
-    {{ icons.icon(icon, 'list.sort_ascending_title', null, {'%name%': label}) }}
+    {{- icons.icon(icon, 'list.sort_ascending_title', null, {'%name%': label}) -}}
 </a>
 <a class="dropdown-item{% if descActive %} active{% endif %}" href="{{ descPath }}">
     {%- set icon = numeric ? 'sort-numeric-up' : 'sort-alpha-up' -%}
-    {{ icons.icon(icon, 'list.sort_desscending_title', null, {'%name%': label}) }}
+    {{- icons.icon(icon, 'list.sort_desscending_title', null, {'%name%': label}) -}}
 </a>
 {% if separator %}{{ icons.dropdownSeparator() }}{% endif %}
 {% endmacro %}

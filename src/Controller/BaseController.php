@@ -43,16 +43,15 @@ abstract class BaseController extends AbstractController implements IFlashMessag
     /**
      * Gets the application service.
      */
-    public function getApplication(): ?ApplicationService
+    public function getApplication(): ApplicationService
     {
+        // already set?
         if ($this->application) {
             return $this->application;
         }
-        if ($this->has(ApplicationService::class)) {
-            return $this->application = $this->get(ApplicationService::class);
-        }
 
-        return null;
+        // get service
+        return $this->application = $this->get(ApplicationService::class);
     }
 
     /**
@@ -85,16 +84,15 @@ abstract class BaseController extends AbstractController implements IFlashMessag
     /**
      * Gets the session.
      */
-    public function getSession(): ?SessionInterface
+    public function getSession(): SessionInterface
     {
+        // already set?
         if ($this->session) {
             return $this->session;
         }
-        if ($this->has('session')) {
-            return $this->session = $this->get('session');
-        }
 
-        return null;
+        // get service
+        return $this->session = $this->get('session');
     }
 
     /**

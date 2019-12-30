@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals updateErrors, sortable, Toaster  */
+/* globals updateErrors, sortable, Toaster, MenuBuilder  */
 
 /**
  * -------------- The type ahead search helper --------------
@@ -122,7 +122,8 @@ var MoveRowHandler = {
      * @param $target
      *            {JQuery} - the target row.
      * @param up
-     *            {boolean} - true to move before the target (up); false to move after (down).
+     *            {boolean} - true to move before the target (up); false to move
+     *            after (down).
      * 
      * @return {JQuery} - The moved row.
      */
@@ -313,9 +314,11 @@ var Application = {
                 } else {
                     $('#item_quantity').selectFocus();
                 }
+                that.$editingRow.addClass('table-primary');
             } else {
                 $('#item_search_input').selectFocus();
             }
+
         }).on('hide.bs.modal', function () {
             $('#data-table-edit tbody tr').removeClass('table-primary');
         });
@@ -577,7 +580,8 @@ var Application = {
         }
         return null;
 
-        // const $input = $("#data-table-edit tbody input[name*='categoryId'][value=" + id + "]");
+        // const $input = $("#data-table-edit tbody
+        // input[name*='categoryId'][value=" + id + "]");
         // if ($input.length) {
         // const $body = $input.parents('tbody');
         // if ($body.length) {
@@ -945,7 +949,8 @@ $.fn.extend({
     },
 
     /**
-     * Finds an input element that have the name attribute within a given substring.
+     * Finds an input element that have the name attribute within a given
+     * substring.
      * 
      * @param name
      *            {string} - the partial attribute name.
@@ -964,7 +969,8 @@ $.fn.extend({
      * Fade out and remove the selected element.
      * 
      * @param callback
-     *            {Function} - the function to call after the element is removed.
+     *            {Function} - the function to call after the element is
+     *            removed.
      * @return null
      */
     removeFadeOut: function (callback) {
@@ -1125,8 +1131,77 @@ $.fn.extend({
         'use strict';
 
         return $(this).parents('tr:first');
+    },
+
+    /**
+     * Creates the context menu items.
+     * 
+     * @returns {Object} the context menu items.
+     */
+    getContextMenuItems: function () {
+        'use strict';
+
+        const builder = new MenuBuilder();
+        $(this).getParentRow().find('.dropdown-menu').children().each(function () {
+            const $this = $(this);
+            if ($this.hasClass('dropdown-divider')) {
+                builder.addSeparator();
+            } else if ($this.isSelectable()) {// dropdown-item
+                builder.addItem($this);
+            }
+        });
+
+        return builder.getItems();
     }
 });
+
+/**
+ * Initialize the context menu for the table items.
+ */
+function initContextMenu() {
+    'use strict';
+
+    // build callback
+    const callback = function ($element) {
+        // get items
+        const items = $element.getContextMenuItems();
+        if ($.isEmptyObject(items)) {
+            return false;
+        }
+
+        return {
+            autoHide: true,
+            zIndex: 1000,
+            classNames: {
+                hover: 'bg-light'
+            },
+            callback: function (key, options, e) {
+                const item = options.items[key];
+                if (item.link) {
+                    e.stopPropagation();
+                    item.link.get(0).click();
+                    return true;
+                }
+            },
+            events: {
+                show: function () {
+                    $('.dropdown-menu.show').removeClass('show');
+                    $(this).parent().addClass('table-primary');
+                },
+                hide: function () {
+                    $(this).parent().removeClass('table-primary');
+                }
+            },
+            items: items
+        };
+    };
+
+    // create
+    $.contextMenu({
+        selector: '.table-edit th:not(.d-print-none), .table-edit td:not(.d-print-none)',
+        build: callback
+    });
+}
 
 /**
  * Ready function
@@ -1156,4 +1231,7 @@ $(function () {
 
     // main form validation
     $('#edit-form').initValidator();
+
+    // context menu
+    initContextMenu();
 });

@@ -340,7 +340,7 @@ function editOrShow(e) {
 /**
  * Creates the context menu items.
  * 
- * @returns {Object} the menu items.
+ * @returns {Object} the context menu items.
  */
 function getContextMenuItems() {
     'use strict';
@@ -350,7 +350,7 @@ function getContextMenuItems() {
     $('.card-header a.btn[data-path]').each(function () {
         const $this = $(this);
         if ($this.isSelectable()) {
-            builder.addEntry($this, $this.data('icon'));
+            builder.addItem($this, $this.data('icon'));
         }
     });
 
@@ -362,11 +362,11 @@ function getContextMenuItems() {
         if ($this.hasClass('dropdown-divider')) {
             builder.addSeparator();
         } else if ($this.data('path') && $this.isSelectable()) {
-            builder.addEntry($this, $this.data('icon'));
+            builder.addItem($this, $this.data('icon'));
         }
     });
 
-    return builder.getEntries();
+    return builder.getItems();
 }
 
 /**
@@ -375,18 +375,34 @@ function getContextMenuItems() {
 function initContextMenu() {
     'use strict';
 
-    const callback = function () { // $triggerElement, e
+    // select on right click
+    $('#data-table tbody').on('mousedown', 'tr', function (e) {
+        if (e.button === 2) {
+            const table = $('#data-table').DataTable();
+            const index = table.row(this).index();
+            table.cell(index, '0:visIdx').focus();
+        }
+    });
+
+    // build callback
+    const callback = function () {
+        // get items
+        const items = getContextMenuItems();
+        if ($.isEmptyObject(items)) {
+            return false;
+        }
+
         return {
             autoHide: true,
+            zIndex: 1000,
             classNames: {
-                hover: 'bg-primary text-white',
+                hover: 'bg-light'
             },
             callback: function (key, options, e) {
                 const item = options.items[key];
-                const $link = item.link;
-                if ($link) {
+                if (item.link) {
                     e.stopPropagation();
-                    $link.get(0).click();
+                    item.link.get(0).click();
                     return true;
                 }
             },
@@ -409,10 +425,11 @@ function initContextMenu() {
                     }
                 }
             },
-            items: getContextMenuItems()
+            items: items
         };
     };
 
+    // create
     $.contextMenu({
         selector: '.dataTable .selection',
         build: callback

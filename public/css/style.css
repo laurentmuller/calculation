@@ -711,3 +711,18 @@ span.color-value {
 .table-popover tr:first-child th {
 	border-top-style: hidden;
 }
+
+/**
+ * Context menu
+ */
+.context-menu-list {
+    -webkit-box-shadow: inherit !important;
+            box-shadow: inherit !important;
+}
+.context-menu-item {
+    cursor: pointer;
+}
+.context-menu-icon--fa5 i {
+	color: inherit !important;
+	margin-top: 2px;
+}

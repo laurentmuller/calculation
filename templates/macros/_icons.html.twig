@@ -3,13 +3,13 @@
 {% macro icon(icon, text, domain = null, parameters = []) -%}
 {% if icon -%}
     {%- if 'fab' in icon -%}
-        {% set class = 'fab fa-' ~ icon|replace({'fab': ''}) %}
+        {%- set class = 'fab fa-' ~ icon|split(' ')|filter(c => c != 'fab')|join(' ') -%}
     {%- elseif 'far' in icon -%}
-        {% set class = 'far fa-' ~ icon|replace({'far': ''}) %}
+        {%- set class = 'far fa-' ~ icon|split(' ')|filter(c => c != 'far')|join(' ') -%}
     {%- else -%}
-        {% set class = 'fas fa-' ~ icon %}
+        {%- set class = 'fas fa-' ~ icon -%}
     {%- endif -%}
-    <i class="{{ class }}" aria-hidden="true"></i>
+<i class="{{ class }}" aria-hidden="true"></i>
 {%- endif %}
 {%- if text %} {{ text|trans(parameters, domain) -}}{%- endif -%}
 {%- endmacro %} 
@@ -18,7 +18,9 @@
 {%- set role  = (class and 'btn' in class) ? ' role="button"' : '' -%}
 {%- set title = title ? ' title="' ~ title|trans(parameters, domain) ~ '"' : '' -%}
 {%- set class = class ? ' class="' ~ class ~ '"' : '' -%}
-<a href="{{ href }}"{{ class|raw }}{{ role|raw }}{{ title|raw }}>{{- _self.icon(icon, text, domain, parameters) -}}</a>
+<a href="{{ href }}"{{ class|raw }}{{ role|raw }}{{ title|raw }}>
+    {{- _self.icon(icon, text, domain, parameters) -}}
+</a>
 {%- endmacro %}   
 
 {% macro linkExternal(href, text, class, icon, title = null, domain = null, parameters = []) -%}
@@ -26,7 +28,7 @@
 {%- set title = title ? ' title="' ~ title|trans(parameters, domain) ~ '"' : '' -%}
 {%- set class = class ? ' class="' ~ class ~ '"' : '' -%}
 <a href="{{ href }}" target="_blank" rel="noopener noreferrer"{{ class|raw }}{{ title|raw }}{{ role|raw }}>
-{{- _self.icon(icon, text, domain, parameters) -}}
+    {{- _self.icon(icon, text, domain, parameters) -}}
 </a>
 {%- endmacro %}   
 
@@ -43,12 +45,16 @@
 {%- endmacro %}
 
 {% macro dropdownItemWithId(href, text, icon, id, disabled, domain = null, parameters = []) -%}
-<a href="{{ href }}" class="dropdown-item rowlink-skip{% if disabled %} disabled {% endif %}" id="{{ id }}">{{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}</a>
+<a href="{{ href }}" class="dropdown-item rowlink-skip{% if disabled %} disabled {% endif %}" id="{{ id }}">
+    {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}
+</a>
 {%- endmacro %}
 
 {% macro dropdownItemWithClass(href, text, icon, class, hidden, domain = null, parameters = []) -%}
 {%- set class = ('dropdown-item rowlink-skip ' ~ (hidden ? 'd-none ' : '' ) ~ class|default(''))|trim -%}
-<a href="{{ href }}" class="{{ class }}">{{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}</a>
+<a href="{{ href }}" class="{{ class }}">
+    {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}
+</a>
 {%- endmacro %}
 
 {% macro dropdownSeparator(hidden = false) -%}
@@ -65,7 +71,7 @@
     {# #}
 {% endif %}
 <button class="{{ class }}" type="button" id="{{ id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
-{{ _self.icon('bars') }} {# ellipsis-v #}    
+    {{- _self.icon('bars') -}}    
 </button>
 {% endapply %}
 {%- endmacro %}

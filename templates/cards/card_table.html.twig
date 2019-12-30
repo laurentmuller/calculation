@@ -6,35 +6,35 @@
 
 {# macros #}
 {% macro button(path, text, class, title, icon) %}
-{% if path %}
+{%- if path -%}
     <a href="#" class="btn btn-sm btn-form-sm {{ class }}" data-path="{{ path }}"{% if title %} title="{{ title|trans }}"{% endif %}{% if icon %} data-icon="{{ icon }}"{% endif %}>
         {{- text|trans -}}
     </a>
-{% endif %}
+{%- endif -%}
 {% endmacro %}
 
 {% macro item_data(path, text, icon, attributes = {}) %}
-{% if path %}
+{%- if path -%}
     <a href="#" data-path="{{ path }}" class="dropdown-item"{{ helper.attribs(attributes) }}>
-        {{ icons.icon(icon ~ ' fa-fw', text) }}    	
+        {{- icons.icon(icon ~ ' fa-fw', text) -}}    	
     </a>
-{% endif %}
+{%- endif -%}
 {% endmacro %}
 
 {% macro item_data_external(path, text, icon) %}
-{% if path %}
+{%- if path -%}
     <a href="#" data-path="{{ path }}" class="dropdown-item" target="_blank" rel="noopener noreferrer">
-        {{ icons.icon(icon ~ ' fa-fw', text) }}    	
+        {{- icons.icon(icon ~ ' fa-fw', text) -}}    	
     </a>
-{% endif %}
+{%- endif -%}
 {% endmacro %}
 
 {% macro item_external(path, text, class, icon) %}
-{% if path %}
+{%- if path -%}
     <a href="{{ path }}" target="_blank" rel="noopener noreferrer" class="{{ class }}">
-        {{ icons.icon(icon ~ ' fa-fw', text) }}
+        {{- icons.icon(icon ~ ' fa-fw', text) -}}
 	</a>
-{% endif %}
+{%- endif -%}
 {% endmacro %}
 
 {# parameters #}
@@ -63,9 +63,6 @@
 	<div class="col-lg-7 text-lg-right d-print-none">
         {# actions toolbar #}
 		<div class="btn-group" role="group" aria-label="{{ 'common.actions'|trans }}">
-            {% if add_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) %}
-                {{ _self.button(add_path|default(false), 'common.button_add', 'btn-table-add btn-primary', add_title|default(false), 'far fa-fw fa-file') }}
-            {% endif %}
             {% if show_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) %}
                 {{ _self.button(show_path|default(false), 'common.button_show', 'btn-table-show btn-info disabled', show_title|default(false), 'far fa-fw fa-list-alt') }}
             {% endif %}
@@ -74,6 +71,9 @@
             {% endif %}
             {% if delete_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) %}
                 {{ _self.button(delete_path|default(false),'common.button_delete', 'btn-table-delete btn-danger disabled', delete_title|default(false), 'fas fa-fw fa-times') }}
+            {% endif %}
+            {% if add_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) %}
+                {{ _self.button(add_path|default(false), 'common.button_add', 'btn-table-add btn-primary', add_title|default(false), 'far fa-fw fa-file') }}
             {% endif %}
             {% block other_actions -%}
 			{%- if other_actions -%}	   

@@ -27,7 +27,7 @@ $.fn.isSelectable = function () {
  */
 var MenuBuilder = function () {
     'use strict';
-    this.entries = {};
+    this.items = {};
     this.sepIndex = 0;
     this.entryIndex = 0;
 };
@@ -37,11 +37,20 @@ var MenuBuilder = function () {
 // ------------------------
 MenuBuilder.prototype = {
 
-    addEntry: function ($link, icon) {
+    /**
+     * Adds an item entry.
+     * 
+     * @param {JQuery}
+     *            $link - the element to add.
+     * @param {String}
+     *            icon - the item's icon.
+     * @return {MenuBuilder} This instance for chaining.
+     */
+    addItem: function ($link, icon) {
         'use strict';
 
         const key = 'entry_' + this.entryIndex++;
-        this.entries[key] = {
+        this.items[key] = {
             link: $link,
             name: $link.text().trim(),
             icon: icon || $link.findIcon()
@@ -49,51 +58,76 @@ MenuBuilder.prototype = {
         return this;
     },
 
+    /**
+     * Adds a separator. Do nothing if the last added item is already a
+     * separator.
+     * 
+     * @return {MenuBuilder} This instance for chaining.
+     */
     addSeparator: function () {
         'use strict';
 
-        // entries?
+        // items?
         if (this.isEmpty()) {
             return this;
         }
 
         // last is already a separator?
-        const keys = Object.keys(this.entries);
+        const keys = Object.keys(this.items);
         if (this.isSeparator(keys[keys.length - 1])) {
             return this;
         }
 
         // add
         const key = 'separator_' + this.sepIndex++;
-        this.entries[key] = {
+        this.items[key] = {
             'type': 'cm_separator'
         };
         return this;
     },
 
-    getEntries: function () {
+    /**
+     * Gets items.
+     * 
+     * @return {Object} The items.
+     */
+    getItems: function () {
         'use strict';
 
-        // entries?
+        // items?
         if (this.isEmpty()) {
             return {};
         }
 
+        let items = this.items;
+
         // remove last separator (if any)
-        const keys = Object.keys(this.entries);
+        const keys = Object.keys(items);
         const lastKey = keys[keys.length - 1];
         if (this.isSeparator(lastKey)) {
-            delete this.entries[lastKey];
+            delete items[lastKey];
         }
 
-        return this.entries;
+        return items;
     },
 
+    /**
+     * Returns a value indicating if this builder is empty.
+     * 
+     * @return {Boolean} true if empty.
+     */
     isEmpty: function () {
         'use strict';
-        return $.isEmptyObject(this.entries);
+        return $.isEmptyObject(this.items);
     },
 
+    /**
+     * Returns if the given key is a separator item.
+     * 
+     * @param {String}
+     *            key - the key to be tested.
+     * @return {Boolean} true if separator.
+     */
     isSeparator: function (key) {
         'use strict';
         return key.startsWith('separator_');

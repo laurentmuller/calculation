@@ -9,6 +9,12 @@
  * Vendor Files
  */
 <!--#include file="vendor/html5sortable/html5sortable.js" -->
+<!--#include file="vendor/contextmenu/jquery.contextMenu.js" -->
+
+/**
+ * Extensions files
+ */
+<!--#include file="app/extensions/contextmenu-extensions.js" -->
 
 /**
  * Plugin Files

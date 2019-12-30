@@ -24,7 +24,6 @@ use App\Service\UrlGeneratorService;
 use App\Utils\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Exception;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -48,7 +47,7 @@ abstract class EntityController extends BaseController
      *
      * @var UrlGeneratorService
      */
-    protected $generator;
+    protected $generatorService;
 
     /**
      * Constructor.
@@ -66,19 +65,6 @@ abstract class EntityController extends BaseController
     public function count(): int
     {
         return $this->getRepository()->count();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container): ?ContainerInterface
-    {
-        $previous = parent::setContainer($container);
-
-        // get values
-        $this->generator = $container->get(UrlGeneratorService::class);
-
-        return $previous;
     }
 
     /**
@@ -139,7 +125,7 @@ abstract class EntityController extends BaseController
             // redirect
             $route = Utils::getArrayValue($parameters, 'page_list', IndexController::HOME_PAGE);
 
-            return $this->generator->redirect($request, 0, $route);
+            return $this->getUrlGenerator()->redirect($request, 0, $route);
         }
 
         // update parameters
@@ -207,7 +193,7 @@ abstract class EntityController extends BaseController
             $id = $item->getId();
             $route = $parameters['route'];
 
-            return $this->generator->redirect($request, $id, $route);
+            return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
 
         // template
@@ -316,6 +302,20 @@ abstract class EntityController extends BaseController
         $className = $this->getShortClassName();
 
         return $this->trans(\strtolower($className) . '.name');
+    }
+
+    /**
+     * Gets the generator service.
+     */
+    protected function getUrlGenerator(): UrlGeneratorService
+    {
+        // already set?
+        if ($this->generatorService) {
+            return $this->generatorService;
+        }
+
+        // get service
+        return $this->generatorService = $this->get(UrlGeneratorService::class);
     }
 
     /**

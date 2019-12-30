@@ -52,7 +52,6 @@
 {%- block container_class 'container-fluid' -%}
 
 {% block body -%}
-{# start form #}
 {{ form_start(form, {attr: form_attr}) }}
 <div class="row">
 	<div class="col-xl-4 pr-lg-0">
@@ -63,13 +62,16 @@
         {% include 'calculation/calculation_edit_panel_items.html.twig' %}
 	</div>
 </div>
-
-{# end form #}
 {{ form_end(form) }}
 
 {# dialogs #}
 {% if editable -%}{% include 'dialogs/EditItemDialog.html.twig' %}{%- endif %}
 {%- endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset_css('js/vendor/contextmenu/jquery.contextMenu.css') }}
+{%- endblock -%}
 
 {% block javascripts -%}
 {% if app.debug %}
@@ -78,8 +80,10 @@
     {% if editable %}
         {{ asset_js('js/vendor/jquery-validate/jquery.validate.js') }}
         {{ asset_js('js/vendor/jquery-validate/additional-methods.js') }}
-        {{ asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}
+        {{ asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}        
         {{ asset_js('js/vendor/html5sortable/html5sortable.js') }}
+        {{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
+        {{ asset_js('js/app/extensions/contextmenu-extensions.js') }}
         {{ asset_js('js/app/plugins/plugin-typeahead.js') }}
         {{ asset_js('js/app/plugins/plugin-validator.js') }}
         {{ asset_js('js/app/plugins/plugin-validator_fr.js') }}

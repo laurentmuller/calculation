@@ -4,7 +4,7 @@
 
 {# parameters #}
 {%- set caller       = path('homepage') -%}
-{%- set selection    = app.request.get('selection')|default(0) -%}
+{%- set selection    = app.request.get('id', 0) -%}
 
 {# actions #}
 {%- set object_type  = IEntityVoter.ENTITY_CALCULATION -%}

@@ -164,13 +164,6 @@
 			"files": [
 				"clipboard.js"
 			]
-		},
-		{
-			"name": "jquery-contextify",
-			"version": "1.0.8",
-			"files": [
-				"jquery.contextify.js"
-			]
 		}
 	]
 }

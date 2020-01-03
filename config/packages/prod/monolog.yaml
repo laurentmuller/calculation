@@ -22,3 +22,4 @@ monolog:
             handler: deprecation
             max_level: info
             channels: ["php"]
+            formatter: monolog.custom_formatter

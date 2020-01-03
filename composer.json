@@ -18,6 +18,12 @@
 		"symfony",
 		"calculation"
 	],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laurentmuller/ObHighchartsBundle"
+        }
+    ],
 	"require" : {
 		"php" : "^7.2",
 		"ext-ctype" : "*",
@@ -28,7 +34,7 @@
 		"friendsofsymfony/user-bundle" : "dev-master#78edc37a555c83d73aaa5fdf22d8abece79c783e",
 		"fzaninotto/faker" : "~1.9",
 		"google/recaptcha" : "~1.2",
-		"ob/highcharts-bundle" : "~1.6",
+		"ob/highcharts-bundle" : "dev-master",
 		"robquistnl/simplehtmltotext" : "~1.1",
 		"sensio/framework-extra-bundle" : "^5.5",
 		"stof/doctrine-extensions-bundle" : "dev-master",
@@ -53,7 +59,8 @@
 		"symfony/web-link" : "4.4.*",
 		"symfony/yaml" : "4.4.*",
 		"vich/uploader-bundle" : "~1.12",
-		"webinarium/datatables-bundle" : "~2.4"
+		"webinarium/datatables-bundle" : "~2.4",
+		"laminas/laminas-json" : "~3.1"
 	},
 	"require-dev" : {
 		"symfony/debug-pack" : "*",
@@ -82,6 +89,7 @@
 		"paragonie/random_compat" : "2.*",
 		"symfony/polyfill-ctype" : "*",
 		"symfony/polyfill-iconv" : "*",
+        "symfony/polyfill-php73" : "*",
 		"symfony/polyfill-php72" : "*",
 		"symfony/polyfill-php71" : "*",
 		"symfony/polyfill-php70" : "*",
@@ -97,10 +105,6 @@
 		}
 	},
 	"scripts" : {
-		"app-cs-fixer" : "php-cs-fixer fix --diff",
-		"auto-scripts": {
-			"cache:clear": "symfony-cmd",
-			"assets:install %PUBLIC_DIR%": "symfony-cmd"
-		}
+		"app-cs-fixer" : "php-cs-fixer fix --diff"
 	}
 }

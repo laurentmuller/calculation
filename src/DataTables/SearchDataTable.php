@@ -67,11 +67,6 @@ class SearchDataTable extends AbstractDataTable
      */
     private const COLUMN_SHOW = 'show_granted';
 
-//     /**
-//      * The HTML highlight content template.
-//      */
-//     private const CONTENT_HTML = '<span class="highlight">%s</span>';
-
     /**
      * The authorization checker to get user rights.
      *
@@ -196,30 +191,6 @@ class SearchDataTable extends AbstractDataTable
         return $column->getName();
     }
 
-//     /**
-//      * Highlight the content.
-//      *
-//      * @param string $query   the unaccented query
-//      * @param int    $length  the query length
-//      * @param string $content the content to process
-//      *
-//      * @return string the highlighted content, if applicable; the unchanged content otherwise
-//      */
-//     private function highlight(string $query, int $length, string $content): string
-//     {
-//         $unaccent = Transliterator::unaccent($content);
-//         if (false !== $pos = \stripos($unaccent, $query)) {
-//             $left = \mb_substr($content, 0, $pos);
-//             $middle = \mb_substr($content, $pos, $length);
-//             $right = \mb_substr($content, $pos + $length);
-//             $middle = \sprintf(self::CONTENT_HTML, $middle);
-
-//             return $left . $middle . $right;
-//         } else {
-//             return $content;
-//         }
-//     }
-
     /**
      * Returns if the given action for the given subject is granted.
      *
@@ -232,7 +203,7 @@ class SearchDataTable extends AbstractDataTable
     {
         $key = "{$action}.{$subject}";
         if (!isset($this->rights[$key])) {
-            $this->rights[$key] = $this->checker->isGranted($action, $subject);
+            return $this->rights[$key] = $this->checker->isGranted($action, $subject);
         }
 
         return $this->rights[$key];
@@ -284,9 +255,6 @@ class SearchDataTable extends AbstractDataTable
      */
     private function processItems(string $search, array $items): array
     {
-//         $length = \mb_strlen($search);
-//         $query = Transliterator::unaccent($search);
-
         foreach ($items as &$item) {
             $type = $item[FullSearchService::COLUMN_TYPE];
             $field = $item[FullSearchService::COLUMN_FIELD];
@@ -308,6 +276,9 @@ class SearchDataTable extends AbstractDataTable
                     break;
             }
             $item[FullSearchService::COLUMN_CONTENT] = $content;
+
+            // id
+            //$item['id'] = $lowerType . '.' . $item['id'];
 
             // set authorizations
             $item[self::COLUMN_SHOW] = $this->isGrantedShow($type);

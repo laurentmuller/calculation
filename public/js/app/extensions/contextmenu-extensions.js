@@ -5,9 +5,14 @@
  */
 $.fn.findIcon = function () {
     'use strict';
-    const $icon = $(this).find('i');
-    if ($icon.length) {
-        return $icon.attr('class');
+    const $this = $(this);
+    const icon = $this.data('icon');
+    if (icon) {
+        return icon;
+    }
+    const $child = $this.find('i');
+    if ($child.length) {
+        return $child.attr('class');
     }
     return null;
 };
@@ -28,8 +33,7 @@ $.fn.isSelectable = function () {
 var MenuBuilder = function () {
     'use strict';
     this.items = {};
-    this.sepIndex = 0;
-    this.entryIndex = 0;
+    this.index = 0;
 };
 
 // ------------------------
@@ -49,7 +53,7 @@ MenuBuilder.prototype = {
     addItem: function ($link, icon) {
         'use strict';
 
-        const key = 'entry_' + this.entryIndex++;
+        const key = 'entry_' + this.index++;
         this.items[key] = {
             link: $link,
             name: $link.text().trim(),
@@ -79,7 +83,7 @@ MenuBuilder.prototype = {
         }
 
         // add
-        const key = 'separator_' + this.sepIndex++;
+        const key = 'separator_' + this.index++;
         this.items[key] = {
             'type': 'cm_separator'
         };

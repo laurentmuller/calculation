@@ -34,7 +34,7 @@ $.fn.dataTable.Api.register('updateTitles()', function () {
     this.columns().every(function () {
         const $header = $(this.header());
         const title = $header.attr('aria-label').split(':');
-        if (title[1]) {
+        if (title.length === 2) {
             $header.attr('title', title[1].trim());
         } else {
             $header.removeAttr('title');
@@ -131,7 +131,8 @@ $.fn.getDefaultOrder = function (columns) {
 };
 
 /**
- * Merge the default options within the given options and initialize the data table.
+ * Merge the default options within the given options and initialize the data
+ * table.
  * 
  * @param {Object}
  *            options - the options to merge with default values.
@@ -160,10 +161,11 @@ $.fn.initDataTable = function (options) {
 
         // keys
         keys: {
+            focus: ':eq(0)',
             blurable: false,
             clipboard: false,
             className: 'selection',
-            keys: [ //
+            keys: [//
             13, // enter
             33, // page up
             34, // page down
@@ -189,27 +191,6 @@ $.fn.initDataTable = function (options) {
     // init
     return $(this).DataTable(settings);
 };
-
-/**
- * Update the column titles.
- * 
- * @returns {DataTables.Api} this instance.
- */
-$.fn.dataTable.Api.register('updateTitles()', function () {
-    'use strict';
-
-    this.columns().every(function () {
-        const $header = $(this.header());
-        const title = $header.attr('aria-label').split(':');
-        if (title[1]) {
-            $header.attr('title', title[1].trim());
-        } else {
-            $header.removeAttr('title');
-        }
-    });
-
-    return this;
-});
 
 /**
  * -------------- JQuery extensions --------------

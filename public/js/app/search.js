@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals URLSearchParams, triggerClick */
+/* globals URLSearchParams, triggerClick, MenuBuilder */
 
 /**
  * -------------- JQuery extensions --------------
@@ -165,25 +165,21 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
 
     // bind table events
     table.one('init', function () {
-        let found = false;
-        if (id !== 0) {
+        if (id) {
             const row = table.row('[id=' + id + ']');
             if (row && row.length) {
                 table.cell(row.index(), '0:visIdx').focus();
-                found = true;
             }
         }
-        if (!found) {
-            $('#table_search').selectFocus();
-        }
+        
     }).on('draw', function () {
         // select row or input
         if (table.row(0).node()) {
             const selector = lastPageCalled ? ':last' : ':first';
             const row = table.row(selector);
             table.cell(row.index(), '0:visIdx').focus();
-        } else {
-            $('#table_search').selectFocus();
+            // } else {
+            // $('#table_search').selectFocus();
         }
         lastPageCalled = false;
         table.updateButtons();
@@ -256,6 +252,93 @@ function editOrShow(e) {
     } else {
         return triggerClick(e, '.btn-table-show') || triggerClick(e, '.btn-table-edit');
     }
+}
+
+/**
+ * Creates the context menu items.
+ * 
+ * @returns {Object} the context menu items.
+ */
+function getContextMenuItems() {
+    'use strict';
+
+    // buttons
+    const builder = new MenuBuilder();
+    $('.card-header a.btn[data-path]').each(function () {
+        const $this = $(this);
+        if ($this.isSelectable()) {
+            builder.addItem($this);
+        }
+    });
+
+    return builder.getItems();
+}
+
+/**
+ * Initialize the context menu for the table rows.
+ */
+function initContextMenu() {
+    'use strict';
+
+    // select on right click
+    $('#data-table tbody').on('mousedown', 'tr', function (e) {
+        if (e.button === 2) {
+            const table = $('#data-table').DataTable();
+            const index = table.row(this).index();
+            table.cell(index, '0:visIdx').focus();
+        }
+    });
+
+    // build callback
+    const callback = function () {
+        // get items
+        const items = getContextMenuItems();
+        if ($.isEmptyObject(items)) {
+            return false;
+        }
+
+        return {
+            autoHide: true,
+            zIndex: 1000,
+            classNames: {
+                hover: 'bg-light'
+            },
+            callback: function (key, options, e) {
+                const item = options.items[key];
+                if (item.link) {
+                    e.stopPropagation();
+                    item.link.get(0).click();
+                    return true;
+                }
+            },
+            events: {
+                show: function () {
+                    // disable keys
+                    const table = $('#data-table').DataTable();
+                    if (table) {
+                        table.keys.disable();
+                    }
+
+                    // hide drop-down menus
+                    $('.dropdown-menu.show').removeClass('show');
+                },
+                hide: function () {
+                    // enable keys
+                    const table = $('#data-table').DataTable();
+                    if (table) {
+                        table.keys.enable();
+                    }
+                }
+            },
+            items: items
+        };
+    };
+
+    // create
+    $.contextMenu({
+        selector: '.dataTable .selection',
+        build: callback
+    });
 }
 
 /**
@@ -345,6 +428,11 @@ $(function () {
         $('#minimum').removeClass('d-none');
     }
 
-    // content sorting
-    // $table.find("th:eq(3)").addClass('sorting_asc');
+    // context menu
+    initContextMenu();
+    
+    // focus
+    if (!$('#table_search').val().length) {
+        $('#table_search').focus();
+    }
 });

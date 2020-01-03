@@ -84,6 +84,7 @@
 {%- set delete_page = delete_page|default(false) -%}
 {%- set add_page    = add_page|default(false) -%}
 {%- set dropdown    = show_page or edit_page or delete_page or add_page -%}
+{%- set selection   = app.request.get('id', 0) -%}
 
 {# empty list #}
 {%- set empty_class = 'alert alert-warning flex-fill m-3' -%}
@@ -95,12 +96,11 @@
 {# items #}     
 {% for item in items %}
     {# links parameters #}
-    {%- set id = item.id -%}
-    {%- set params = routeParams(app.request, id) -%}
+    {%- set params = routeParams(app.request, item.id) -%}
     
     {# item class #}  
     {%- set item_class = 'card-flex rounded border p-2 m-1 flex-fill' -%}
-    {%- if id == selection -%}
+    {%- if item.id == selection -%}
         {%- set item_class = item_class ~ ' border-primary' -%}
     {%- endif -%}
     {%- if (query and not item.match(query)) -%}
@@ -115,7 +115,7 @@
             {%- if dropdown -%}
             <div class="col-2 d-print-none">
                 <div class="dropdown dropleft text-right">
-                	{%- set menu_id = 'dropdown_' ~ id -%}
+                	{%- set menu_id = 'dropdown_' ~ item.id -%}
                     {{ icons.dropdownEllipsis(menu_id) }}
                     <div class="dropdown-menu" aria-labelledby="{{ menu_id }}">
                         {%- if show_page -%}

@@ -1146,7 +1146,7 @@ $.fn.extend({
             const $this = $(this);
             if ($this.hasClass('dropdown-divider')) {
                 builder.addSeparator();
-            } else if ($this.isSelectable()) {// dropdown-item
+            } else if ($this.isSelectable()) { // dropdown-item
                 builder.addItem($this);
             }
         });

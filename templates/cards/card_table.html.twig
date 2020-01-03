@@ -1,13 +1,13 @@
 {% extends 'cards/card_base.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
 
 {# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
 {% import 'macros/_datatables.html.twig' as helper %}
 
 {# macros #}
 {% macro button(path, text, class, title, icon) %}
 {%- if path -%}
-    <a href="#" class="btn btn-sm btn-form-sm {{ class }}" data-path="{{ path }}"{% if title %} title="{{ title|trans }}"{% endif %}{% if icon %} data-icon="{{ icon }}"{% endif %}>
+    <a href="#" class="btn btn-sm btn-form-sm {{ class }}" data-path="{{ path }}"{% if title %} title="{{ title|trans }}"{% endif %} data-icon="{{ icon }}">
         {{- text|trans -}}
     </a>
 {%- endif -%}
@@ -64,7 +64,7 @@
         {# actions toolbar #}
 		<div class="btn-group" role="group" aria-label="{{ 'common.actions'|trans }}">
             {% if show_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) %}
-                {{ _self.button(show_path|default(false), 'common.button_show', 'btn-table-show btn-info disabled', show_title|default(false), 'far fa-fw fa-list-alt') }}
+                {{ _self.button(show_path|default(false), 'common.button_show', 'btn-table-show btn-info disabled', show_title|default(false), 'fas fa-fw fa-tv') }}
             {% endif %}
     		{% if edit_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) %}
                 {{ _self.button(edit_path|default(false), 'common.button_edit', 'btn-table-edit btn-success disabled', edit_title|default(false), 'fas fa-fw fa-pencil-alt') }}

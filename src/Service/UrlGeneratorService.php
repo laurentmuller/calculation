@@ -33,7 +33,7 @@ class UrlGeneratorService
      */
     public const PARAMETER_NAMES = [
         'id',
-        'selection',
+        // 'selection',
         'query',
         'page',
         'pagelength',
@@ -123,7 +123,7 @@ class UrlGeneratorService
         // identifier
         if (0 !== $id) {
             $params['id'] = $id;
-            $params['selection'] = $id;
+            //$params['selection'] = $id;
         }
 
         return $params;

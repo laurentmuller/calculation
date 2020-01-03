@@ -173,7 +173,7 @@ class UserController extends EntityController
             $this->warningTrans('user.delete.connected');
 
             //redirect
-            return $this->generator->redirect($request, $item->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), self::ROUTE_LIST);
         }
 
         $parameters = [
@@ -224,7 +224,7 @@ class UserController extends EntityController
             $this->succesTrans('user.image.success', ['%name%' => $item->getDisplay()]);
 
             // redirect
-            return $this->generator->redirect($request, $item->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), self::ROUTE_LIST);
         }
 
         // render
@@ -251,7 +251,7 @@ class UserController extends EntityController
             $this->warningTrans('user.message.connected');
 
             //redirect
-            return $this->generator->redirect($request, $user->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $user->getId(), self::ROUTE_LIST);
         }
 
         $comment = new Comment(true);
@@ -271,7 +271,7 @@ class UserController extends EntityController
                 }
 
                 // list
-                return $this->generator->redirect($request, $user->getId(), self::ROUTE_LIST);
+                return $this->getUrlGenerator()->redirect($request, $user->getId(), self::ROUTE_LIST);
             } catch (\Swift_SwiftException $e) {
                 $message = $this->trans('user.message.error');
                 $logger->error($message, [
@@ -317,7 +317,7 @@ class UserController extends EntityController
             $this->succesTrans('password.change.success', ['%name%' => $item->getDisplay()], 'FOSUserBundle');
 
             // redirect
-            return $this->generator->redirect($request, $item->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), self::ROUTE_LIST);
         }
 
         // show form
@@ -371,7 +371,7 @@ class UserController extends EntityController
             $this->warningTrans('user.rights.connected');
 
             // redirect
-            return $this->generator->redirect($request, $item->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), self::ROUTE_LIST);
         }
 
         // form
@@ -384,7 +384,7 @@ class UserController extends EntityController
             $this->succesTrans('user.rights.success', ['%name%' => $item->getDisplay()]);
 
             // redirect
-            return $this->generator->redirect($request, $item->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), self::ROUTE_LIST);
         }
 
         // show form

@@ -267,7 +267,6 @@
 
             // handler when a toast is hidden
             onHide: null
-        // $.noop
         },
 
         // ------------------------

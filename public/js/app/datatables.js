@@ -252,17 +252,11 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
 
     // bind table events
     table.one('init', function () {
-        // selection?
-        let found = false;
         if (id !== 0) {
             const row = table.row('[id=' + id + ']');
             if (row && row.length) {
                 table.cell(row.index(), '0:visIdx').focus();
-                found = true;
             }
-        }
-        if (!found) {
-            $('#table_search').selectFocus();
         }
     }).on('draw', function () {
         // select row
@@ -350,7 +344,7 @@ function getContextMenuItems() {
     $('.card-header a.btn[data-path]').each(function () {
         const $this = $(this);
         if ($this.isSelectable()) {
-            builder.addItem($this, $this.data('icon'));
+            builder.addItem($this);
         }
     });
 
@@ -362,7 +356,7 @@ function getContextMenuItems() {
         if ($this.hasClass('dropdown-divider')) {
             builder.addSeparator();
         } else if ($this.data('path') && $this.isSelectable()) {
-            builder.addItem($this, $this.data('icon'));
+            builder.addItem($this);
         }
     });
 

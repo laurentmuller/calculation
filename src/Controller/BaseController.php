@@ -41,6 +41,13 @@ abstract class BaseController extends AbstractController implements IFlashMessag
     use TranslatorFlashMessageTrait;
 
     /**
+     * The URL generator service.
+     *
+     * @var UrlGeneratorService
+     */
+    protected $generatorService;
+
+    /**
      * Gets the application service.
      */
     public function getApplication(): ApplicationService
@@ -183,6 +190,20 @@ abstract class BaseController extends AbstractController implements IFlashMessag
     }
 
     /**
+     * Gets the URL generator service.
+     */
+    protected function getUrlGenerator(): UrlGeneratorService
+    {
+        // already set?
+        if ($this->generatorService) {
+            return $this->generatorService;
+        }
+
+        // get service
+        return $this->generatorService = $this->get(UrlGeneratorService::class);
+    }
+
+    /**
      * Handle the given request within the form and test if the form is submitted and valid.
      *
      * @param FormInterface $form    the form to check
@@ -200,11 +221,7 @@ abstract class BaseController extends AbstractController implements IFlashMessag
             $form->handleRequest($request);
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            return true;
-        } else {
-            return false;
-        }
+        return $form->isSubmitted() && $form->isValid();
     }
 
     /**

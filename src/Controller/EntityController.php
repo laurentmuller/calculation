@@ -20,7 +20,6 @@ use App\Interfaces\IEntityVoter;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfResponse;
 use App\Repository\BaseRepository;
-use App\Service\UrlGeneratorService;
 use App\Utils\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Exception;
@@ -41,13 +40,6 @@ abstract class EntityController extends BaseController
      * @var string
      */
     protected $className;
-
-    /**
-     * The URL generator service.
-     *
-     * @var UrlGeneratorService
-     */
-    protected $generatorService;
 
     /**
      * Constructor.
@@ -302,20 +294,6 @@ abstract class EntityController extends BaseController
         $className = $this->getShortClassName();
 
         return $this->trans(\strtolower($className) . '.name');
-    }
-
-    /**
-     * Gets the generator service.
-     */
-    protected function getUrlGenerator(): UrlGeneratorService
-    {
-        // already set?
-        if ($this->generatorService) {
-            return $this->generatorService;
-        }
-
-        // get service
-        return $this->generatorService = $this->get(UrlGeneratorService::class);
     }
 
     /**

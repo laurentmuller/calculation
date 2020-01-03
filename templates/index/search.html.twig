@@ -4,9 +4,11 @@
 {% import 'macros/_datatables.html.twig' as helper %}
 
 {# macros #}
-{% macro button(class, text, action) %}
+{% macro button(class, text, action, icon) %}
 {%- set path = path('homepage') ~ '_type_/' ~ action ~ '/_id_' -%}
-<a href="#" class="disabled btn btn-sm btn-form-sm {{ class }}" data-path="{{ path }}">{{ text|trans }}</a>
+    <a href="#" class="disabled btn btn-sm btn-form-sm {{ class }}" data-path="{{ path }}" data-icon="{{ icon }}">
+        {{- text|trans -}}
+    </a>
 {% endmacro %}
 
 {# parameters #}
@@ -27,13 +29,13 @@
     <div class="col-lg-7 text-lg-right d-print-none">
         <div class="btn-group" role="group" aria-label="{{ 'common.actions'|trans }}">
         	{% if show_granted %}
-            {{ _self.button('btn-table-show btn-info', 'common.button_show', 'show') }}
+            {{ _self.button('btn-table-show btn-info', 'common.button_show', 'show', 'fas fa-fw fa-tv') }}
             {% endif %}
             {% if edit_granted %}
-            {{ _self.button('btn-table-edit btn-success', 'common.button_edit', 'edit') }}
+            {{ _self.button('btn-table-edit btn-success', 'common.button_edit', 'edit', 'fas fa-fw fa-pencil-alt') }}
             {% endif %}
             {% if delete_granted %}
-            {{ _self.button('btn-table-delete btn-danger', 'common.button_delete', 'delete') }}
+            {{ _self.button('btn-table-delete btn-danger', 'common.button_delete', 'delete', 'fas fa-fw fa-times') }}
             {% endif %}
         </div>
     </div>  
@@ -122,6 +124,8 @@
 {{ asset_js('js/vendor/datatables/js/dataTables.conditionalPaging.js') }}
 {{ asset_js('js/vendor/datatables/js/jquery.highlight.js') }}
 {{ asset_js('js/vendor/datatables/js/dataTables.searchHighlight.js') }}
+{{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
+{{ asset_js('js/app/extensions/contextmenu-extensions.js') }}
 {{ asset_js('js/app/extensions/datatables-extensions.js') }}
 {{ asset_js('js/app/search.js') }}
 {% else %}

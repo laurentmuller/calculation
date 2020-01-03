@@ -594,7 +594,7 @@ class CalculationController extends EntityController
             // redirect
             $id = $item->getId();
 
-            return $this->generator->redirect($request, $id, self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $id, self::ROUTE_LIST);
         }
 
         // display

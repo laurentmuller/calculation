@@ -64,13 +64,15 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="col-md-8 text-right">
-                    	<input type="submit" id="item_submit_button" class="btn btn-form btn-primary" value="{{ 'common.button_ok'|trans }}">
-                        <input type="button" id="item_reset_button"  class="btn btn-form btn-secondary" value="{{ 'common.button_cancel'|trans }}" data-dismiss="modal">
-                        <input type="button" id="item_delete_button" class="btn btn-form btn-outline-danger" value="{{ 'common.button_delete'|trans }}">
-                    </div>
-                    <div class="col-md-4 text-md-right">
-                        <small class="text-danger">{{ 'common.required'|trans }}</small>
+                    <div class="row no-gutters w-100">
+                        <div class="col-9 text-left">
+                            <input type="submit" id="item_submit_button" class="btn btn-form btn-primary" value="{{ 'common.button_ok'|trans }}">
+                            <input type="button" id="item_reset_button"  class="btn btn-form btn-secondary" value="{{ 'common.button_cancel'|trans }}" data-dismiss="modal">
+                            <input type="button" id="item_delete_button" class="btn btn-form btn-outline-danger" value="{{ 'common.button_delete'|trans }}">
+                        </div>
+                        <div class="col-3 text-right">
+                            <small class="text-danger">{{ 'common.required'|trans }}</small>
+                        </div>
                     </div>
                 </div>
             </div>

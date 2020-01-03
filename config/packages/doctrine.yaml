@@ -24,4 +24,4 @@ doctrine:
                 
         # hydrators
         hydrators:
-             ColumnHydrator: \AppBundle\Doctrine\ColumnHydrator
+             ColumnHydrator: \App\Doctrine\ColumnHydrator

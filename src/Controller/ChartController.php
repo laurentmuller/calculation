@@ -20,11 +20,11 @@ use App\Repository\CalculationStateRepository;
 use App\Service\ThemeService;
 use App\Traits\MathTrait;
 use App\Utils\DateUtils;
+use Laminas\Json\Expr;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Zend\Json\Expr;
 
 /**
  * The controller for charts.

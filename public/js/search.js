@@ -15,10 +15,12 @@
 <!--#include file="vendor/datatables/js/dataTables.conditionalPaging.js" -->
 <!--#include file="vendor/datatables/js/jquery.highlight.js" -->
 <!--#include file="vendor/datatables/js/dataTables.searchHighlight.js" -->
+<!--#include file="vendor/contextmenu/jquery.contextMenu.js" -->
 
 /**
  * Plugins and extensions files
  */
+<!--#include file="app/extensions/contextmenu-extensions.js" -->
 <!--#include file="app/extensions/datatables-extensions.js" -->
 
 /**

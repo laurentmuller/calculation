@@ -459,7 +459,7 @@
     // Plugin definition
     // -----------------------------
     const oldColorPicker = $.fn.colorpicker;
-    
+
     $.fn.colorpicker = function (option) {
         return this.each(function () {
             const $this = $(this);
@@ -472,7 +472,7 @@
     };
 
     // ------------------------------------
-    // Typeahead no conflict
+    // Colorpicker no conflict
     // ------------------------------------
     $.fn.colorpicker.noConflict = function () {
         $.fn.colorpicker = oldColorPicker;

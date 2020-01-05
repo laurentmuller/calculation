@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals URLSearchParams, triggerClick, MenuBuilder */
+/* globals URLSearchParams, triggerClick, MenuBuilder, disableKeys, enableKeys */
 
 /**
  * -------------- JQuery extensions --------------
@@ -171,7 +171,7 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
                 table.cell(row.index(), '0:visIdx').focus();
             }
         }
-        
+
     }).on('draw', function () {
         // select row or input
         if (table.row(0).node()) {
@@ -301,7 +301,8 @@ function initContextMenu() {
             autoHide: true,
             zIndex: 1000,
             classNames: {
-                hover: 'bg-light'
+                hover: 'bg-light',
+                notSelectable: 'dropdown-divider'
             },
             callback: function (key, options, e) {
                 const item = options.items[key];
@@ -313,21 +314,11 @@ function initContextMenu() {
             },
             events: {
                 show: function () {
-                    // disable keys
-                    const table = $('#data-table').DataTable();
-                    if (table) {
-                        table.keys.disable();
-                    }
-
-                    // hide drop-down menus
                     $('.dropdown-menu.show').removeClass('show');
+                    disableKeys();
                 },
                 hide: function () {
-                    // enable keys
-                    const table = $('#data-table').DataTable();
-                    if (table) {
-                        table.keys.enable();
-                    }
+                    enableKeys();
                 }
             },
             items: items
@@ -430,7 +421,7 @@ $(function () {
 
     // context menu
     initContextMenu();
-    
+
     // focus
     if (!$('#table_search').val().length) {
         $('#table_search').focus();

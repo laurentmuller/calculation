@@ -30,6 +30,9 @@
     // -----------------------------
     PasswordStrength.prototype = {
 
+        /**
+         * Constrcutor.
+         */
         constructor: PasswordStrength,
 
         /**
@@ -249,8 +252,8 @@
         return this.each(function () {
             const $this = $(this);
             let data = $this.data("passwordstrength");
-            const options = typeof option === "object" && option;
             if (!data) {
+                const options = typeof option === "object" && option;
                 $this.data("passwordstrength", data = new PasswordStrength(this, options));
             }
         });

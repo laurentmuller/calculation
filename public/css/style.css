@@ -719,10 +719,21 @@ span.color-value {
     -webkit-box-shadow: inherit !important;
             box-shadow: inherit !important;
 }
-.context-menu-item {
-    cursor: pointer;
+.context-menu-separator {
+	border-bottom-style: none !important;
 }
 .context-menu-icon--fa5 i {
 	color: inherit !important;
-	margin-top: 2px;
 }
+
+/*
+.context-menu-item {
+   cursor: pointer;
+   width: auto !important;
+   padding-top: 0 !important;
+   padding-bottom: .2em !important;
+   padding-left: 2.3em !important;
+}
+ */
+
+

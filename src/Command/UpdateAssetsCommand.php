@@ -223,7 +223,9 @@ class UpdateAssetsCommand extends AssetsCommand
         if (!empty($found)) {
             $result = '';
             foreach ($matches as $matche) {
-                $result .= "\n" . \str_replace($searchStyle, $newStyle, $matche[0]) . "\n";
+                //$this->writeVerbose($matche[0]);
+                $data = \str_replace(';', ' !important;', $matche[0]);
+                $result .= "\n" . \str_replace($searchStyle, $newStyle, $data) . "\n";
             }
 
             return $result;
@@ -377,7 +379,7 @@ class UpdateAssetsCommand extends AssetsCommand
             '.form-control:focus' => '.field-valid',
             '.was-validated .form-control:invalid:focus, .form-control.is-invalid:focus' => '.field-invalid',
 
-            // toastDatabaseLogService
+            // toast
             '.btn-success' => '.toast-header-success',
             '.btn-warning' => '.toast-header-warning',
             '.btn-danger' => '.toast-header-danger',
@@ -385,6 +387,16 @@ class UpdateAssetsCommand extends AssetsCommand
             '.btn-primary' => '.toast-header-primary',
             '.btn-secondary' => '.toast-header-secondary',
             '.btn-dark' => '.toast-header-dark',
+
+            // context menu
+            // '.dropdown-menu' => '.context-menu-list',
+//             '.dropdown-item' => '.context-menu-item',
+//             '.dropdown-divider' => '.context-menu-separator',
+//             '.dropdown-item:hover, .dropdown-item:focus' => '.context-menu-item.context-menu-hover',
+//             '.dropdown-item.disabled, .dropdown-item:disabled' => '.context-menu-item.context-menu-disabled',
+//             '.nav-tabs' => '.context-menu-list-extension-1',
+//             'kbd' => '.context-menu-list-extension-2',
+//             '.table-bordered' => '.context-menu-list-extension-3',
         ];
 
         // copy styles
@@ -397,10 +409,10 @@ class UpdateAssetsCommand extends AssetsCommand
         }
 
         // add !important to border color style
-        $pattern = '/border-color\s*\:\s*(.*);/m';
-        $toAppend = \preg_replace_callback($pattern, function ($matches) {
-            return \trim($matches[0], ';') . ' !important;';
-        }, $toAppend);
+//         $pattern = '/border-color\s*\:\s*(.*);/m';
+//         $toAppend = \preg_replace_callback($pattern, function ($matches) {
+//             return \trim($matches[0], ';') . ' !important;';
+//         }, $toAppend);
 
         $comments = <<<'EOT'
             

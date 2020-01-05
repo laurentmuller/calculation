@@ -131,8 +131,7 @@ $.fn.getDefaultOrder = function (columns) {
 };
 
 /**
- * Merge the default options within the given options and initialize the data
- * table.
+ * Merge the default options within the given options and initialize the data table.
  * 
  * @param {Object}
  *            options - the options to merge with default values.
@@ -282,5 +281,35 @@ function tableLengthCallback(table) {
     const length = $('#table_length').intVal();
     if (table.page.len() !== length) {
         table.page.len(length).draw();
+    }
+}
+
+/**
+ * Disable table keys plugin.
+ * 
+ * @param {string}
+ *            selector - the data table selector.
+ */
+function disableKeys(selector) { // jshint ignore:line
+    'use strict';
+    selector = selector || '#data-table';
+    const table = $(selector).DataTable();
+    if (table) {
+        table.keys.disable();
+    }
+}
+
+/**
+ * Enable table keys plugin.
+ * 
+ * @param {string}
+ *            selector - the data table selector.
+ */
+function enableKeys(selector) { // jshint ignore:line
+    'use strict';
+    selector = selector || '#data-table';
+    const table = $(selector).DataTable();
+    if (table) {
+        table.keys.enable();
     }
 }

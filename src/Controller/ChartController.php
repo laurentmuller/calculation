@@ -260,7 +260,7 @@ class ChartController extends BaseController
 
         // chart
         $chart = $this->createChart(true);
-        $chart->setType($chart::TYPE_COLUMN)
+        $chart->setType(Basechart::TYPE_COLUMN)
             ->hideTitle()
             ->hideLegend()
             ->xAxis($xAxis)

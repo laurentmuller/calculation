@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals URLSearchParams, triggerClick, MenuBuilder */
+/* globals URLSearchParams, triggerClick, MenuBuilder, disableKeys, enableKeys */
 
 /**
  * -------------- JQuery extensions --------------
@@ -346,6 +346,9 @@ function getContextMenuItems() {
         if ($this.isSelectable()) {
             builder.addItem($this);
         }
+        if ($this.data('separator')) {
+            builder.addSeparator();
+        }
     });
 
     builder.addSeparator();
@@ -389,8 +392,10 @@ function initContextMenu() {
         return {
             autoHide: true,
             zIndex: 1000,
+            // className: 'context-menu-list-extension-1 context-menu-list-extension-2 context-menu-list-extension-3',
             classNames: {
-                hover: 'bg-light'
+                hover: 'bg-light',
+                notSelectable: 'dropdown-divider'
             },
             callback: function (key, options, e) {
                 const item = options.items[key];
@@ -402,21 +407,11 @@ function initContextMenu() {
             },
             events: {
                 show: function () {
-                    // disable keys
-                    const table = $('#data-table').DataTable();
-                    if (table) {
-                        table.keys.disable();
-                    }
-
-                    // hide drop-down menus
                     $('.dropdown-menu.show').removeClass('show');
+                    disableKeys();
                 },
                 hide: function () {
-                    // enable keys
-                    const table = $('#data-table').DataTable();
-                    if (table) {
-                        table.keys.enable();
-                    }
+                    enableKeys();
                 }
             },
             items: items
@@ -522,4 +517,11 @@ $(function () {
 
     // context menu
     initContextMenu();
+
+    // menu
+    // $('#other_actions').on('show.bs.dropdown', function () {
+    // disableKeys();
+    // }).on('hide.bs.dropdown', function () {
+    // enableKeys();
+    // });
 });

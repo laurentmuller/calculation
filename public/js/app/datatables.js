@@ -218,8 +218,7 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
     let lastPageCalled = false;
 
     // bind search and page length
-    const $button = $('.btn-clear');
-    $('#table_search').initSearchInput(searchCallback, table, $button);
+    $('#table_search').initSearchInput(table, searchCallback, $('.btn-clear'));
     $('#table_length').initTableLength(table);
 
     // bind table body rows
@@ -231,7 +230,7 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
     $(document).on('keydown.keyTable', function (e) {
         if (e.ctrlKey) {
             switch (e.keyCode) {
-            case 35: // end => last page
+            case 35: // end => last page and last record
                 const endInfo = table.page.info();
                 if (endInfo.pages > 0 && endInfo.page < endInfo.pages - 1) {
                     e.stopPropagation();
@@ -243,6 +242,7 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
                 const homeInfo = table.page.info();
                 if (homeInfo.pages > 0 && homeInfo.page > 0) {
                     e.stopPropagation();
+                    lastPageCalled = false;
                     table.page('first').draw('page');
                 }
                 break;
@@ -252,7 +252,7 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
 
     // bind table events
     table.one('init', function () {
-        if (id !== 0) {
+        if (id) {
             const row = table.row('[id=' + id + ']');
             if (row && row.length) {
                 table.cell(row.index(), '0:visIdx').focus();
@@ -354,7 +354,7 @@ function getContextMenuItems() {
     builder.addSeparator();
 
     // drop-down menu
-    $('.card-header .dropdown .dropdown-menu').children().each(function () {
+    $('.card-header .dropdown-menu').children().each(function () {
         const $this = $(this);
         if ($this.hasClass('dropdown-divider')) {
             builder.addSeparator();
@@ -390,12 +390,17 @@ function initContextMenu() {
         }
 
         return {
-            autoHide: true,
             zIndex: 1000,
-            // className: 'context-menu-list-extension-1 context-menu-list-extension-2 context-menu-list-extension-3',
+            autoHide: true,
+            // className: 'context-menu',
             classNames: {
                 hover: 'bg-light',
-                notSelectable: 'dropdown-divider'
+            // notSelectable: 'dropdown-divider'
+            // icon: 'context-item',
+            // hover: 'kbd',
+            // visible: 'context-item',
+            // disabled: 'context-item',
+            // notSelectable: 'context-item-not-selectable'
             },
             callback: function (key, options, e) {
                 const item = options.items[key];
@@ -518,10 +523,8 @@ $(function () {
     // context menu
     initContextMenu();
 
-    // menu
-    // $('#other_actions').on('show.bs.dropdown', function () {
-    // disableKeys();
-    // }).on('hide.bs.dropdown', function () {
-    // enableKeys();
-    // });
+    // drop-down menu
+    $('#other_actions_button').handleKeys();
+    $('#other_actions').handleKeys('show.bs.dropdown', 'hide.bs.dropdown');
+
 });

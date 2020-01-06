@@ -212,19 +212,24 @@ class UpdateAssetsCommand extends AssetsCommand
      * @param string $content     the style sheet content
      * @param string $searchStyle the style name to copy
      * @param string $newStyle    the new style name
+     * @param bool   $important   true to add <code>!important</code> to each style entries
      *
      * @return string the new style
      */
-    private function copyStyle(string $content, string $searchStyle, string $newStyle): string
+    private function copyStyle(string $content, string $searchStyle, string $newStyle, bool $important = true): string
     {
         $matches = [];
-        $pattern = '/' . \preg_quote($searchStyle) . '\s+\{([^}]+)\}/m';
+        $pattern = '/^' . \preg_quote($searchStyle) . '\s+\{([^}]+)\}/m';
         $found = \preg_match_all($pattern, $content, $matches, PREG_SET_ORDER, 0);
         if (!empty($found)) {
-            $result = '';
+            $result = "\n/*\n * '$searchStyle' -> '$newStyle' \n */";
+            // $this->writeVerbose("---" . $searchStyle . "---");
             foreach ($matches as $matche) {
-                //$this->writeVerbose($matche[0]);
-                $data = \str_replace(';', ' !important;', $matche[0]);
+                // $this->writeVerbose($matche[0]);
+                $data = $matche[0];
+                if ($important) {
+                    $data = \str_replace(';', ' !important;', $data);
+                }
                 $result .= "\n" . \str_replace($searchStyle, $newStyle, $data) . "\n";
             }
 
@@ -389,39 +394,35 @@ class UpdateAssetsCommand extends AssetsCommand
             '.btn-dark' => '.toast-header-dark',
 
             // context menu
-            // '.dropdown-menu' => '.context-menu-list',
-//             '.dropdown-item' => '.context-menu-item',
-//             '.dropdown-divider' => '.context-menu-separator',
-//             '.dropdown-item:hover, .dropdown-item:focus' => '.context-menu-item.context-menu-hover',
-//             '.dropdown-item.disabled, .dropdown-item:disabled' => '.context-menu-item.context-menu-disabled',
-//             '.nav-tabs' => '.context-menu-list-extension-1',
-//             'kbd' => '.context-menu-list-extension-2',
-//             '.table-bordered' => '.context-menu-list-extension-3',
+            // '.dropdown-menu' => ['.context-menu', false],
+            // '.dropdown-item' => ['.context-item', false],
+            // '.dropdown-item:hover, .dropdown-item:focus' => ['.context-item-hover', false],
+            // '.dropdown-item.active, .dropdown-item:active' => ['.context-item:active, .context-item:active', false],
+            // '.dropdown-item.disabled, .dropdown-item:disabled' => ['.context-item.disabled, .context-item:disabled', false],
+            // '.dropdown-divider' => ['.context-item-not-selectable', false],
         ];
 
         // copy styles
         $toAppend = '';
         foreach ($styles as $searchStyle => $newStyle) {
-            $toAppend .= $this->copyStyle($content, $searchStyle, $newStyle);
+            if (\is_array($newStyle)) {
+                $toAppend .= $this->copyStyle($content, $searchStyle, $newStyle[0], $newStyle[1]);
+            } else {
+                $toAppend .= $this->copyStyle($content, $searchStyle, $newStyle);
+            }
         }
         if (empty($toAppend)) {
             return $content;
         }
 
-        // add !important to border color style
-//         $pattern = '/border-color\s*\:\s*(.*);/m';
-//         $toAppend = \preg_replace_callback($pattern, function ($matches) {
-//             return \trim($matches[0], ';') . ' !important;';
-//         }, $toAppend);
-
         $comments = <<<'EOT'
-            
+
 /*
  * -----------------------------
  *         Custom styles
  * -----------------------------
  */
- 
+
 EOT;
 
         return $content . $comments . $toAppend;

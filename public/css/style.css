@@ -715,25 +715,19 @@ span.color-value {
 /**
  * Context menu
  */
-.context-menu-list {
-    -webkit-box-shadow: inherit !important;
-            box-shadow: inherit !important;
-}
-.context-menu-separator {
-	border-bottom-style: none !important;
-}
-.context-menu-icon--fa5 i {
-	color: inherit !important;
-}
-
-/*
+ .context-menu-list {
+  -webkit-box-shadow: inherit !important;
+          box-shadow: inherit !important;    
+ }
 .context-menu-item {
-   cursor: pointer;
-   width: auto !important;
-   padding-top: 0 !important;
-   padding-bottom: .2em !important;
-   padding-left: 2.3em !important;
+    padding: 0.25rem 1.5rem !important;
 }
- */
-
+ .context-menu-icon.context-menu-icon--fa5 i, 
+ .context-menu-icon.context-menu-icon--fa5 svg {
+    position: inherit !important;
+    color: inherit !important;
+    top: inherit !important;
+    left: inherit !important;
+    margin-right: 5px;
+} 
 

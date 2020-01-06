@@ -18,16 +18,13 @@
 		"symfony",
 		"calculation"
 	],
-	"repositories" : [
-		{
+	"repositories" : [{
 			"type" : "vcs",
 			"url" : "https://github.com/laurentmuller/ObHighchartsBundle"
-		},
-		{
+		}, {
 			"type" : "vcs",
 			"url" : "https://github.com/laurentmuller/Faker"
 		}
-		
 	],
 	"require" : {
 		"php" : "^7.2",
@@ -110,10 +107,6 @@
 		}
 	},
 	"scripts" : {
-		"app-cs-fixer" : "php-cs-fixer fix --diff",
-		"auto-scripts": {
-			"cache:clear": "symfony-cmd",
-			"assets:install %PUBLIC_DIR%": "symfony-cmd"
-		}
+		"app-cs-fixer" : "php-cs-fixer fix --diff"
 	}
 }

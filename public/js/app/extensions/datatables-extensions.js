@@ -32,12 +32,15 @@ $.fn.dataTable.Api.register('updateTitles()', function () {
     'use strict';
 
     this.columns().every(function () {
-        const $header = $(this.header());
-        const title = $header.attr('aria-label').split(':');
-        if (title.length === 2) {
-            $header.attr('title', title[1].trim());
-        } else {
-            $header.removeAttr('title');
+        if (this.visible()) {
+            const $header = $(this.header());
+            const title = $header.attr('aria-label').split(':');
+            if (title.length === 2) {
+                const text = $header.text().trim();
+                $header.attr('title', title[1].trim().replace('{0}', text));
+            } else {
+                $header.removeAttr('title');
+            }
         }
     });
 
@@ -57,6 +60,8 @@ $.fn.getColumns = function (useName) {
 
     let columns = [];
     const $that = $(this);
+    const debug = $that.data('debug');
+
     $that.find('th').each(function () {
         const $element = $(this);
         const column = $element.data();
@@ -71,12 +76,12 @@ $.fn.getColumns = function (useName) {
             column.orderSequence = ["desc", "asc"];
         }
 
-        // created cell callback
+        // created callback
         if (column.createdCell) {
             column.createdCell = $.fn.dataTable[column.createdCell];
         }
 
-        // cell render callback
+        // render callback
         if (column.render) {
             column.render = $.fn.dataTable[column.render];
         }
@@ -84,7 +89,7 @@ $.fn.getColumns = function (useName) {
         columns.push(column);
 
         // remove
-        if (!$that.data('debug')) {
+        if (!debug) {
             $element.removeDataAttributes();
         }
     });
@@ -131,7 +136,8 @@ $.fn.getDefaultOrder = function (columns) {
 };
 
 /**
- * Merge the default options within the given options and initialize the data table.
+ * Merge the default options within the given options and initialize the data
+ * table.
  * 
  * @param {Object}
  *            options - the options to merge with default values.
@@ -198,16 +204,16 @@ $.fn.initDataTable = function (options) {
 /**
  * Initialise the search input.
  * 
- * @param {function}
- *            callback - the callback to call.
  * @param {DataTables.Api}
  *            table - the table to update.
+ * @param {function}
+ *            callback - the callback to call.
  * @param {JQuery}
- *            $clearButton - the clear button.
+ *            $clearButton - the clear button (optional).
  * 
  * @return {jQuery} The JQuery element for chaining.
  */
-$.fn.initSearchInput = function (callback, table, $clearButton) {
+$.fn.initSearchInput = function (table, callback, $clearButton) {
     'use strict';
 
     const $this = $(this);
@@ -218,11 +224,7 @@ $.fn.initSearchInput = function (callback, table, $clearButton) {
         });
     }
 
-    return $this.on('focus', function () {
-        table.keys.disable();
-    }).on('blur', function () {
-        table.keys.enable();
-    }).on('input', function () {
+    return $this.handleKeys().on('input', function () {
         $this.updateTimer(callback, 250, table);
     });
 };
@@ -232,14 +234,43 @@ $.fn.initSearchInput = function (callback, table, $clearButton) {
  * 
  * @param {DataTables.Api}
  *            table - the table to update.
+ * @param {function}
+ *            callback - the callback to call (default is
+ *            'tableLengthCallback').
+ * @return {jQuery} The JQuery element for chaining.
+ */
+$.fn.initTableLength = function (table, callback) {
+    'use strict';
+
+    callback = callback || tableLengthCallback;
+    return $(this).handleKeys().on('input', function () {
+        $(this).updateTimer(callback, 250, table);
+    });
+};
+
+/**
+ * Enabled/Disabled datatables keys.
+ * 
+ * @param {string}
+ *            disableEvent - the event name to disable keys (default is
+ *            'focus').
+ * @param {string}
+ *            enableEvent - the event name to enable keys (default is 'blur').
+ * @param {string}
+ *            selector - the data table selector (default is '#data-table').
  * 
  * @return {jQuery} The JQuery element for chaining.
  */
-$.fn.initTableLength = function (table) {
+$.fn.handleKeys = function (disableEvent, enableEvent, selector) {
     'use strict';
 
-    return $(this).on('input', function () {
-        $(this).updateTimer(tableLengthCallback, 250, table);
+    disableEvent = disableEvent || 'focus';
+    enableEvent = enableEvent || 'blur';
+
+    return $(this).on(disableEvent, function () {
+        disableKeys(selector);
+    }).on(enableEvent, function () {
+        enableKeys(selector);
     });
 };
 
@@ -288,28 +319,22 @@ function tableLengthCallback(table) {
  * Disable table keys plugin.
  * 
  * @param {string}
- *            selector - the data table selector.
+ *            selector - the data table selector (default is '#data-table').
  */
-function disableKeys(selector) { // jshint ignore:line
+function disableKeys(selector) {
     'use strict';
     selector = selector || '#data-table';
-    const table = $(selector).DataTable();
-    if (table) {
-        table.keys.disable();
-    }
+    $(selector).DataTable().keys.disable();
 }
 
 /**
  * Enable table keys plugin.
  * 
  * @param {string}
- *            selector - the data table selector.
+ *            selector - the data table selector (default is '#data-table').
  */
-function enableKeys(selector) { // jshint ignore:line
+function enableKeys(selector) {
     'use strict';
     selector = selector || '#data-table';
-    const table = $(selector).DataTable();
-    if (table) {
-        table.keys.enable();
-    }
+    $(selector).DataTable().keys.enable();
 }

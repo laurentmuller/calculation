@@ -1,11 +1,11 @@
 ###> symfony/framework-bundle ###
+/.env
 /.env.local
 /.env.local.php
 /.env.*.local
 /.php_cs.cache
 composer.lock
 symfony.lock
-/public/bundles/
 /public/images/users/
 /public/js/vendor
 /var/
@@ -21,4 +21,3 @@ symfony.lock
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
-

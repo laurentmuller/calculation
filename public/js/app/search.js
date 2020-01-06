@@ -131,8 +131,7 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
     let lastPageCalled = false;
 
     // bind search and page length
-    const $button = $('.btn-clear');
-    $('#table_search').initSearchInput(searchCallback, table, $button);
+    $('#table_search').initSearchInput(table, searchCallback, $('.btn-clear'));
     $('#table_length').initTableLength(table);
 
     // bind table body rows
@@ -144,7 +143,7 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
     $(document).on('keydown.keyTable', function (e) {
         if (e.ctrlKey) {
             switch (e.keyCode) {
-            case 35: // end => last page
+            case 35: // end => last page and last record
                 const endInfo = table.page.info();
                 if (endInfo.pages > 0 && endInfo.page < endInfo.pages - 1) {
                     e.stopPropagation();
@@ -156,6 +155,7 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
                 const homeInfo = table.page.info();
                 if (homeInfo.pages > 0 && homeInfo.page > 0) {
                     e.stopPropagation();
+                    lastPageCalled = false;
                     table.page('first').draw('page');
                 }
                 break;
@@ -269,6 +269,9 @@ function getContextMenuItems() {
         if ($this.isSelectable()) {
             builder.addItem($this);
         }
+        if ($this.data('separator')) {
+            builder.addSeparator();
+        }
     });
 
     return builder.getItems();
@@ -302,7 +305,7 @@ function initContextMenu() {
             zIndex: 1000,
             classNames: {
                 hover: 'bg-light',
-                notSelectable: 'dropdown-divider'
+                // notSelectable: 'dropdown-divider'
             },
             callback: function (key, options, e) {
                 const item = options.items[key];

@@ -14,8 +14,8 @@ paginate:
     next: <i class="fa fa-caret-right fa-lg" aria-hidden="true" title="Suivant"></i>
     last: <i class="fa fa-step-forward" aria-hidden="true" title="Dernier"></i>
 aria:
-    sortAscending: :Cliquez pour trier la colonne par ordre croissant
-    sortDescending: :Cliquez pour trier la colonne par ordre décroissant
+    sortAscending: :Trier la colonne "{0}" par ordre croissant
+    sortDescending: :Trier la colonne "{0}" par ordre décroissant
 select:
     rows:
         0: Aucune ligne sélectionnée

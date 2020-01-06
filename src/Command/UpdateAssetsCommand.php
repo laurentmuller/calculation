@@ -223,15 +223,45 @@ class UpdateAssetsCommand extends AssetsCommand
         $found = \preg_match_all($pattern, $content, $matches, PREG_SET_ORDER, 0);
         if (!empty($found)) {
             $result = "\n/*\n * '$searchStyle' -> '$newStyle' \n */";
-            // $this->writeVerbose("---" . $searchStyle . "---");
             foreach ($matches as $matche) {
-                // $this->writeVerbose($matche[0]);
                 $data = $matche[0];
                 if ($important) {
                     $data = \str_replace(';', ' !important;', $data);
                 }
                 $result .= "\n" . \str_replace($searchStyle, $newStyle, $data) . "\n";
             }
+
+            return $result;
+        }
+
+        return '';
+    }
+
+    private function copyStyleEntries(string $content, string $searchStyle, string $newStyle, array $entries): string
+    {
+        $matches = [];
+        $matcheEntries = [];
+
+        $pattern = '/^' . \preg_quote($searchStyle) . '\s+\{([^}]+)\}/m';
+        $found = \preg_match_all($pattern, $content, $matches, PREG_SET_ORDER, 0);
+        if (!empty($found)) {
+            $result = "\n/*\n * '$searchStyle' -> '$newStyle' \n */\n";
+            $result .= "$newStyle {\n";
+
+            foreach ($matches as $matche) {
+                $data = $matche[0];
+                foreach ($entries as $entry) {
+                    $pattern = "/\s{2}$entry\s*:.*;/";
+                    $foundEntry = \preg_match_all($pattern, $data, $matcheEntries, PREG_SET_ORDER, 0);
+                    if (!empty($foundEntry)) {
+                        foreach ($matcheEntries as $matcheEntry) {
+                            $dataEntry = \str_replace(';', ' !important;', $matcheEntry[0]);
+                            $result .= "  $dataEntry\n";
+                        }
+                    }
+                }
+            }
+            $result .= "}\n";
 
             return $result;
         }
@@ -392,14 +422,6 @@ class UpdateAssetsCommand extends AssetsCommand
             '.btn-primary' => '.toast-header-primary',
             '.btn-secondary' => '.toast-header-secondary',
             '.btn-dark' => '.toast-header-dark',
-
-            // context menu
-            // '.dropdown-menu' => ['.context-menu', false],
-            // '.dropdown-item' => ['.context-item', false],
-            // '.dropdown-item:hover, .dropdown-item:focus' => ['.context-item-hover', false],
-            // '.dropdown-item.active, .dropdown-item:active' => ['.context-item:active, .context-item:active', false],
-            // '.dropdown-item.disabled, .dropdown-item:disabled' => ['.context-item.disabled, .context-item:disabled', false],
-            // '.dropdown-divider' => ['.context-item-not-selectable', false],
         ];
 
         // copy styles
@@ -411,6 +433,20 @@ class UpdateAssetsCommand extends AssetsCommand
                 $toAppend .= $this->copyStyle($content, $searchStyle, $newStyle);
             }
         }
+
+        // context menu
+        $toAppend .= $this->copyStyleEntries($content, '.dropdown-menu', '.context-menu-list',
+            ['color', 'background-color', 'border', 'border-radius', 'font-size']);
+
+        $toAppend .= $this->copyStyleEntries($content, '.dropdown-item', '.context-menu-item',
+            ['color', 'background-color']);
+
+        $toAppend .= $this->copyStyleEntries($content, '.dropdown-item:hover, .dropdown-item:focus', '.context-menu-hover',
+            ['color', 'background-color', 'text-decoration', 'background']);
+
+        $toAppend .= $this->copyStyleEntries($content, '.dropdown-divider', '.context-menu-separator',
+            ['border-top']);
+
         if (empty($toAppend)) {
             return $content;
         }

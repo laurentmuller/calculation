@@ -393,15 +393,15 @@ function initContextMenu() {
             zIndex: 1000,
             autoHide: true,
             // className: 'context-menu',
-            classNames: {
-                hover: 'bg-light',
+            // classNames: {
+            // hover: 'bg-light',
             // notSelectable: 'dropdown-divider'
             // icon: 'context-item',
             // hover: 'kbd',
             // visible: 'context-item',
             // disabled: 'context-item',
             // notSelectable: 'context-item-not-selectable'
-            },
+            // },
             callback: function (key, options, e) {
                 const item = options.items[key];
                 if (item.link) {
@@ -526,5 +526,4 @@ $(function () {
     // drop-down menu
     $('#other_actions_button').handleKeys();
     $('#other_actions').handleKeys('show.bs.dropdown', 'hide.bs.dropdown');
-
 });

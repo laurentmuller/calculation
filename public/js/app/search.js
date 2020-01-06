@@ -303,10 +303,10 @@ function initContextMenu() {
         return {
             autoHide: true,
             zIndex: 1000,
-            classNames: {
-                hover: 'bg-light',
-                // notSelectable: 'dropdown-divider'
-            },
+            // classNames: {
+            // hover: 'bg-light',
+            // notSelectable: 'dropdown-divider'
+            // },
             callback: function (key, options, e) {
                 const item = options.items[key];
                 if (item.link) {

@@ -716,18 +716,22 @@ span.color-value {
  * Context menu
  */
  .context-menu-list {
-  -webkit-box-shadow: inherit !important;
-          box-shadow: inherit !important;    
- }
-.context-menu-item {
-    padding: 0.25rem 1.5rem !important;
+	-webkit-box-shadow: inherit !important;
+	        box-shadow: inherit !important;
 }
- .context-menu-icon.context-menu-icon--fa5 i, 
- .context-menu-icon.context-menu-icon--fa5 svg {
-    position: inherit !important;
-    color: inherit !important;
-    top: inherit !important;
-    left: inherit !important;
-    margin-right: 5px;
-} 
-
+.context-menu-item {
+	padding: 0.25rem 1.5rem !important;
+}
+.context-menu-separator {
+  	padding: 0 !important;
+  	/*border-bottom: 0 solid #222 !important;*/
+  	border-bottom-width: 0 !important;
+}
+.context-menu-icon.context-menu-icon--fa5 i,
+.context-menu-icon.context-menu-icon--fa5 svg {
+	position: inherit !important;
+	color: inherit !important;
+	top: inherit !important;
+	left: inherit !important;
+	margin-right: 0.3rem;
+}

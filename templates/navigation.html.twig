@@ -17,7 +17,7 @@
 {%- set customers    = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CUSTOMER) and isDev -%}
 {%- set isBibi       = isDev and isRemembered and app.user.username == 'Bibi' -%}
 {# navigation #}
-<nav id="navigation" class="navbar navbar-expand-md {{ theme_background(app.request) }}">
+<nav id="navigation" role="navigation" class="navbar navbar-expand-md {{ theme_background(app.request) }}">
     <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title'|trans }}">
          {{- icons.icon('home') -}}
     </a>

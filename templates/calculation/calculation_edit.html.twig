@@ -8,7 +8,7 @@
             <div class="input-group-prepend d-print-none">
             	{%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': min_margin|percent }) -%}
                 {%- set template = '<div class="tooltip tooltip-success" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' -%}
-                <button class="btn btn-adjust btn-outline-secondary has-tooltip" type="button" data-html="true" data-toggle="tooltip" data-template="{{ template }}" data-title="{{ title }}"{% if not below %} disabled="disabled"{% endif %}>
+                <button class="btn btn-adjust btn-outline-secondary has-tooltip" type="button"  aria-label="{{ title }}" data-html="true" data-toggle="tooltip" data-template="{{ template }}" data-title="{{ title }}"{% if not below %} disabled="disabled"{% endif %}>
                     <i class="fas fa-wrench" aria-hidden="true"></i>
                 </button>
             </div>
@@ -32,6 +32,7 @@
 {%- set form_attr        = form_attr|default({})|merge({'id': 'edit-form'}) -%}
 {%- if editable -%}
 {%- set form_attr        = form_attr|merge({
+                            'role'                 : 'form',
         				   	'data-title'           : title|trans(title_parameters),
         				   	'data-grouping'        : grouping,
         				   	'data-decimal'         : decimal,
@@ -69,8 +70,7 @@
 {%- endblock %}
 
 {% block stylesheets %}
-{{ parent() }}
-{{ asset_css('js/vendor/contextmenu/jquery.contextMenu.css') }}
+{{ asset_css('css/calculation.css') }}
 {%- endblock -%}
 
 {% block javascripts -%}

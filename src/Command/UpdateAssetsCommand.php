@@ -483,7 +483,7 @@ class UpdateAssetsCommand extends AssetsCommand
             ['background-color', 'border', 'border-radius', 'color', 'font-size']);
 
         $toAppend .= $this->copyStyleEntries($content, '.dropdown-item', '.context-menu-item',
-            ['background-color', 'color', 'font-size', 'font-weight', 'padding-top', 'padding-bottom']);
+            ['background-color', 'color', 'font-size', 'font-weight', 'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top']);
 
         $toAppend .= $this->copyStyleEntries($content, '.dropdown-item:hover, .dropdown-item:focus', '.context-menu-hover',
             ['background', 'background-color', 'color', 'text-decoration']);

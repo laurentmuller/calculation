@@ -1,7 +1,7 @@
 {# macros for icons, links and navigation entries #}
 
 {% macro icon(icon, text, domain = null, parameters = []) -%}
-{% if icon -%}
+{%- if icon -%}
     {%- if 'fab' in icon -%}
         {%- set class = 'fab fa-' ~ icon|split(' ')|filter(c => c != 'fab')|join(' ') -%}
     {%- elseif 'far' in icon -%}
@@ -11,7 +11,7 @@
     {%- endif -%}
 <i class="{{ class }}" aria-hidden="true"></i>
 {%- endif %}
-{%- if text %} {{ text|trans(parameters, domain) -}}{%- endif -%}
+{%- if text %}{% if icon %} {% endif %}{{ text|trans(parameters, domain) -}}{%- endif -%}
 {%- endmacro %} 
 
 {% macro link(href, text, class, icon, title = null, domain = null, parameters = []) -%}

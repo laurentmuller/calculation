@@ -721,7 +721,6 @@ span.color-value {
 }
 .context-menu-separator {
   	padding: 0 !important;
-  	/*border-bottom-width: 0 !important;*/
   	border-bottom-style: hidden !important;
 }
 .context-menu-icon.context-menu-icon--fa5 i,

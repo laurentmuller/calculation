@@ -160,6 +160,10 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
                 }
                 break;
             }
+        } else if (e.keyCode === 93) { // context-menu
+            e.stopPropagation();
+            $('.dropdown-menu.show').removeClass('show');
+            $('.dataTable .selection').first().trigger("contextmenu");
         }
     });
 
@@ -301,12 +305,8 @@ function initContextMenu() {
         }
 
         return {
-            autoHide: true,
             zIndex: 1000,
-            // classNames: {
-            // hover: 'bg-light',
-            // notSelectable: 'dropdown-divider'
-            // },
+            autoHide: true,
             callback: function (key, options, e) {
                 const item = options.items[key];
                 if (item.link) {
@@ -330,8 +330,8 @@ function initContextMenu() {
 
     // create
     $.contextMenu({
-        selector: '.dataTable .selection',
-        build: callback
+        build: callback,
+        selector: '.dataTable .selection'
     });
 }
 

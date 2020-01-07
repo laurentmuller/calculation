@@ -71,14 +71,8 @@ MenuBuilder.prototype = {
     addSeparator: function () {
         'use strict';
 
-        // items?
-        if (this.isEmpty()) {
-            return this;
-        }
-
         // last is already a separator?
-        const keys = Object.keys(this.items);
-        if (this.isSeparator(keys[keys.length - 1])) {
+        if (this.isSeparator(this.getLastKey())) {
             return this;
         }
 
@@ -91,6 +85,38 @@ MenuBuilder.prototype = {
     },
 
     /**
+     * Adds a title. Do nothing if the last added item is already a title.
+     * 
+     * @param {String}
+     *            title - the item's title.
+     * @param {String}
+     *            tag - the item's tag.
+     * @return {MenuBuilder} This instance for chaining.
+     */
+    addTitle: function (title, tag) {
+        'use strict';
+
+        // last is already a title?
+        if (this.isTitle(this.getLastKey())) {
+            return this;
+        }
+
+        // properties
+        tag = tag || 'h6';
+        const key = 'title_' + this.index++;
+        const html = '<tag class="context-menu-header">title</tag>'.replace(/tag/g, tag).replace(/title/g, title);
+
+        // add
+        this.items[key] = {
+            type: 'html',
+            icon: function (options, $element) {
+                $element.html(html);
+            }
+        };
+        return this;
+    },
+
+    /**
      * Gets items.
      * 
      * @return {Object} The items.
@@ -98,21 +124,13 @@ MenuBuilder.prototype = {
     getItems: function () {
         'use strict';
 
-        // items?
-        if (this.isEmpty()) {
-            return {};
-        }
-
-        let items = this.items;
-
         // remove last separator (if any)
-        const keys = Object.keys(items);
-        const lastKey = keys[keys.length - 1];
-        if (this.isSeparator(lastKey)) {
-            delete items[lastKey];
+        const key = this.getLastKey();
+        if (this.isSeparator(key)) {
+            delete this.items[key];
         }
 
-        return items;
+        return this.items;
     },
 
     /**
@@ -134,6 +152,32 @@ MenuBuilder.prototype = {
      */
     isSeparator: function (key) {
         'use strict';
-        return key.startsWith('separator_');
+        return key && key.startsWith('separator_');
+    },
+
+    /**
+     * Returns if the given key is a title item.
+     * 
+     * @param {String}
+     *            key - the key to be tested.
+     * @return {Boolean} true if title.
+     */
+    isTitle: function (key) {
+        'use strict';
+        return key && key.startsWith('title_');
+    },
+
+    /**
+     * Gets the last key.
+     * 
+     * @return {String} the last key, if any; null otherwise.
+     */
+    getLastKey: function () {
+        'use strict';
+        const keys = Object.keys(this.items);
+        if (keys.length) {
+            return keys[keys.length - 1];
+        }
+        return null;
     }
 };

@@ -178,7 +178,8 @@ $.fn.initDataTable = function (options) {
             36, // home
             38, // arrow up
             40, // arrow down
-            46 // delete
+            46, // delete
+            93 // context-menu
             ]
         },
 
@@ -291,7 +292,7 @@ function triggerClick(e, selector) { // jshint ignore:line
     'use strict';
 
     const $element = $(selector);
-    if ($element.length && !$element.hasClass('disabled')) {
+    if ($element.length && $element.isSelectable()) {
         e.stopPropagation();
         $element.get(0).click();
         return true;

@@ -180,14 +180,14 @@ class UpdateAssetsCommand extends AssetsCommand
             if (isset($content->version)) {
                 $lastVersion = $content->version;
                 if (\version_compare($version, $lastVersion, '<')) {
-                    $this->write("The plugin '{$name}' version '{$version}' can be replaced with the version '{$lastVersion}'.");
+                    $this->write("The plugin '{$name}' version '{$version}' can be updated to the version '{$lastVersion}'.");
                 }
             }
         }
     }
 
     /**
-     * Copy a file,.
+     * Copy a file.
      *
      * @param string $sourceFile the source file
      * @param string $targetFile the target file
@@ -207,28 +207,24 @@ class UpdateAssetsCommand extends AssetsCommand
     }
 
     /**
-     * Create a copy of the given style.
+     * Create a copy of a style.
      *
-     * @param string $content     the style sheet content
+     * @param string $content     the style sheet content to search in
      * @param string $searchStyle the style name to copy
      * @param string $newStyle    the new style name
      * @param bool   $important   true to add <code>!important</code> to each style entries
      *
-     * @return string the new style
+     * @return string the new style, if applicable; an empty string otherwise
      */
     private function copyStyle(string $content, string $searchStyle, string $newStyle, bool $important = true): string
     {
-        $matches = [];
-        $pattern = '/^' . \preg_quote($searchStyle) . '\s+\{([^}]+)\}/m';
-        $found = \preg_match_all($pattern, $content, $matches, PREG_SET_ORDER, 0);
-        if (!empty($found)) {
-            $result = "\n/*\n * '$searchStyle' -> '$newStyle' \n */";
-            foreach ($matches as $matche) {
-                $data = $matche[0];
+        if ($styles = $this->findStyles($content, $searchStyle)) {
+            $result = "\n/*\n * Copied from '$searchStyle'  \n */";
+            foreach ($styles as $style) {
                 if ($important) {
-                    $data = \str_replace(';', ' !important;', $data);
+                    $style = \str_replace(';', ' !important;', $style);
                 }
-                $result .= "\n" . \str_replace($searchStyle, $newStyle, $data) . "\n";
+                $result .= "\n" . \str_replace($searchStyle, $newStyle, $style) . "\n";
             }
 
             return $result;
@@ -237,33 +233,34 @@ class UpdateAssetsCommand extends AssetsCommand
         return '';
     }
 
+    /**
+     * Copy entries of a style.
+     *
+     * @param string   $content     the style sheet content to search in
+     * @param string   $searchStyle the style name to copy
+     * @param string   $newStyle    the new style name
+     * @param string[] $entries     the style entries to copy
+     *
+     * @return string the new style, if applicable; an empty string otherwise
+     */
     private function copyStyleEntries(string $content, string $searchStyle, string $newStyle, array $entries): string
     {
-        $matches = [];
-        $matcheEntries = [];
-
-        $pattern = '/^' . \preg_quote($searchStyle) . '\s+\{([^}]+)\}/m';
-        $found = \preg_match_all($pattern, $content, $matches, PREG_SET_ORDER, 0);
-        if (!empty($found)) {
-            $result = "\n/*\n * '$searchStyle' -> '$newStyle' \n */\n";
-            $result .= "$newStyle {\n";
-
-            foreach ($matches as $matche) {
-                $data = $matche[0];
-                foreach ($entries as $entry) {
-                    $pattern = "/\s{2}$entry\s*:.*;/";
-                    $foundEntry = \preg_match_all($pattern, $data, $matcheEntries, PREG_SET_ORDER, 0);
-                    if (!empty($foundEntry)) {
-                        foreach ($matcheEntries as $matcheEntry) {
-                            $dataEntry = \str_replace(';', ' !important;', $matcheEntry[0]);
-                            $result .= "  $dataEntry\n";
-                        }
+        if ($styles = $this->findStyles($content, $searchStyle)) {
+            $result = '';
+            foreach ($styles as $style) {
+                if ($styleEntries = $this->findStyleEntries($style, $entries)) {
+                    $result .= "$newStyle {\n";
+                    foreach ($styleEntries as $styleEntry) {
+                        $styleEntry = \str_replace(';', ' !important;', $styleEntry);
+                        $result .= "  $styleEntry\n";
                     }
+                    $result .= "}\n";
                 }
             }
-            $result .= "}\n";
 
-            return $result;
+            if (!empty($result)) {
+                return "\n/*\n * '$newStyle' (copied from '$searchStyle')  \n */\n" . $result;
+            }
         }
 
         return '';
@@ -316,6 +313,53 @@ class UpdateAssetsCommand extends AssetsCommand
         $this->writeFile($targetFile, $content);
 
         return true;
+    }
+
+    /**
+     * Find style entries.
+     *
+     * @param string   $style   the style to search in
+     * @param string[] $entries the style entries to search for
+     *
+     * @return string[]|bool the style entries, if found; false otherwise
+     */
+    private function findStyleEntries(string $style, array $entries)
+    {
+        $result = [];
+        $matches = [];
+        foreach ($entries as $entry) {
+            $pattern = '/^\s*' . \preg_quote($entry) . '\s*:\s*.*;/m';
+            if (!empty(\preg_match_all($pattern, $style, $matches, PREG_SET_ORDER, 0))) {
+                foreach ($matches as $matche) {
+                    $result[] = $matche[0];
+                }
+            }
+        }
+
+        return empty($result) ? false : $result;
+    }
+
+    /**
+     * Find styles.
+     *
+     * @param string $content the style sheet content to search in
+     * @param string $style   the style name to search for
+     *
+     * @return string[]|bool the styles, if found; false otherwise
+     */
+    private function findStyles(string $content, string $style)
+    {
+        $matches = [];
+        $pattern = '/^' . \preg_quote($style) . '\s+\{([^}]+)\}/m';
+        if (!empty(\preg_match_all($pattern, $content, $matches, PREG_SET_ORDER, 0))) {
+            foreach ($matches as $matche) {
+                $result[] = $matche[0];
+            }
+
+            return $result;
+        }
+
+        return false;
     }
 
     /**
@@ -436,16 +480,19 @@ class UpdateAssetsCommand extends AssetsCommand
 
         // context menu
         $toAppend .= $this->copyStyleEntries($content, '.dropdown-menu', '.context-menu-list',
-            ['color', 'background-color', 'border', 'border-radius', 'font-size']);
+            ['background-color', 'border', 'border-radius', 'color', 'font-size']);
 
         $toAppend .= $this->copyStyleEntries($content, '.dropdown-item', '.context-menu-item',
-            ['color', 'background-color']);
+            ['background-color', 'color', 'font-size', 'font-weight', 'padding-top', 'padding-bottom']);
 
         $toAppend .= $this->copyStyleEntries($content, '.dropdown-item:hover, .dropdown-item:focus', '.context-menu-hover',
-            ['color', 'background-color', 'text-decoration', 'background']);
+            ['background', 'background-color', 'color', 'text-decoration']);
 
         $toAppend .= $this->copyStyleEntries($content, '.dropdown-divider', '.context-menu-separator',
             ['border-top']);
+
+        $toAppend .= $this->copyStyleEntries($content, '.dropdown-header', '.context-menu-header',
+            ['color', 'display', 'font-size', 'margin-bottom', 'white-space']);
 
         if (empty($toAppend)) {
             return $content;

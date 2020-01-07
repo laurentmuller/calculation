@@ -719,13 +719,10 @@ span.color-value {
 	-webkit-box-shadow: inherit !important;
 	        box-shadow: inherit !important;
 }
-.context-menu-item {
-	padding: 0.25rem 1.5rem !important;
-}
 .context-menu-separator {
   	padding: 0 !important;
-  	/*border-bottom: 0 solid #222 !important;*/
-  	border-bottom-width: 0 !important;
+  	/*border-bottom-width: 0 !important;*/
+  	border-bottom-style: hidden !important;
 }
 .context-menu-icon.context-menu-icon--fa5 i,
 .context-menu-icon.context-menu-icon--fa5 svg {

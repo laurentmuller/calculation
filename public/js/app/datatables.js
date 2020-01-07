@@ -247,6 +247,10 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
                 }
                 break;
             }
+        } else if (e.keyCode === 93) { // context-menu
+            e.stopPropagation();
+            $('.dropdown-menu.show').removeClass('show');
+            $('.dataTable .selection').first().trigger("contextmenu");
         }
     });
 
@@ -339,8 +343,11 @@ function editOrShow(e) {
 function getContextMenuItems() {
     'use strict';
 
-    // buttons
     const builder = new MenuBuilder();
+
+    //builder.addTitle('Actions');
+
+    // buttons
     $('.card-header a.btn[data-path]').each(function () {
         const $this = $(this);
         if ($this.isSelectable()) {
@@ -362,7 +369,7 @@ function getContextMenuItems() {
             builder.addItem($this);
         }
     });
-
+    
     return builder.getItems();
 }
 
@@ -392,16 +399,6 @@ function initContextMenu() {
         return {
             zIndex: 1000,
             autoHide: true,
-            // className: 'context-menu',
-            // classNames: {
-            // hover: 'bg-light',
-            // notSelectable: 'dropdown-divider'
-            // icon: 'context-item',
-            // hover: 'kbd',
-            // visible: 'context-item',
-            // disabled: 'context-item',
-            // notSelectable: 'context-item-not-selectable'
-            // },
             callback: function (key, options, e) {
                 const item = options.items[key];
                 if (item.link) {
@@ -425,8 +422,8 @@ function initContextMenu() {
 
     // create
     $.contextMenu({
-        selector: '.dataTable .selection',
-        build: callback
+        build: callback,
+        selector: '.dataTable .selection'
     });
 }
 

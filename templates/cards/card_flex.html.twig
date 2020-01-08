@@ -42,7 +42,7 @@
         {% block search_action %}
         <small id="counter" class="text-muted mr-sm-2"></small>
         <div class="input-group input-group-sm mr-sm-1 bg-white">
-            <input type="text" class="form-control form-control-border-right-0 form-query-input" id="query" name="query" placeholder="{{ 'list.search_placeholder'|trans }}" autocomplete="off" value="{{ query }}">
+            <input type="text" class="form-control form-control-border-right-0 form-query-input" id="query" name="query" aria-label="{{ 'list.search_placeholder'|trans }}" placeholder="{{ 'list.search_placeholder'|trans }}" autocomplete="off" value="{{ query }}">
             <div class="input-group-append">
                 <button class="btn btn-query-clear btn-outline-secondary border border-left-0" type="button" title="{{ 'search.clear'|trans }}">
                     <i class="fas fa-eraser" aria-hidden="true"></i>

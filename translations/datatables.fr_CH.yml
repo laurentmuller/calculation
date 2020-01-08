@@ -6,7 +6,7 @@ infoEmpty: Aucun élément correspondant
 infoFiltered: (filtre de _MAX_ éléments)
 infoPostFix: ''
 loadingRecords: Chargement en cours...
-zeroRecords: Aucun donnée ne correspond à la recherche.
+zeroRecords: Aucune donnée ne correspond à la recherche.
 emptyTable: Aucune donnée disponible dans le tableau.
 paginate:
     first: <i class="fa fa-step-backward" aria-hidden="true" title="Premier"></i>
@@ -16,6 +16,11 @@ paginate:
 aria:
     sortAscending: :Trier la colonne "{0}" par ordre croissant
     sortDescending: :Trier la colonne "{0}" par ordre décroissant
+    paginate:
+        first: Premier
+        previous: Précédent
+        next: Suivant
+        last: Dernier
 select:
     rows:
         0: Aucune ligne sélectionnée

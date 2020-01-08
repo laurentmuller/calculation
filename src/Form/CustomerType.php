@@ -69,21 +69,21 @@ class CustomerType extends BaseType
 
         $helper->field('address')
             ->label('customer.fields.address')
-            ->autocomplete('nope')
+            ->autocomplete('off')
             ->maxLength(255)
             ->notRequired()
             ->addTextareaType();
 
         $helper->field('zipCode')
             ->label('customer.fields.zipCode')
-            ->autocomplete('nope')
+            ->autocomplete('off')
             ->maxLength(10)
             ->notRequired()
             ->addTextType();
 
         $helper->field('city')
             ->label('customer.fields.city')
-            ->autocomplete('nope')
+            ->autocomplete('off')
             ->maxLength(255)
             ->notRequired()
             ->addTextType();

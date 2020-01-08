@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals URLSearchParams, triggerClick, MenuBuilder, disableKeys, enableKeys */
+/* globals URLSearchParams, MenuBuilder, disableKeys, enableKeys */
 
 /**
  * -------------- JQuery extensions --------------
@@ -185,84 +185,22 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     // special case for the add button
     $('.btn-table-add').removeClass('disabled');
 
-    // special case for PDF list button
-    // const pdfList = $('.btn-pdf-list');
-    // if (pdfList.length) {
-    // let href = pdfList.attr('href').split('?')[0];
-    // const order = this.order();
-    // if (order && order.length) {
-    // const $params = new URLSearchParams('');
-    // $params.set('index', order[0][0]);
-    // $params.set('direction', order[0][1]);
-    // href += $params.toQuery();
-    // }
-    // pdfList.attr('href', href);
-    // console.log(href);
-    // }
-
     return this;
 });
 
 /**
  * Binds events.
  * 
- * @param {integer}
- *            id - the selected row identifier (if any).
- * 
  * @returns {DataTables.Api} this instance.
  */
-$.fn.dataTable.Api.register('bindEvents()', function (id) {
+$.fn.dataTable.Api.register('bindEvents()', function () {
     'use strict';
 
     const table = this;
     let lastPageCalled = false;
 
-    // bind search and page length
-    $('#table_search').initSearchInput(table, searchCallback, $('.btn-clear'));
-    $('#table_length').initTableLength(table);
-
-    // bind table body rows
-    $('#data-table tbody').on('dblclick', 'tr', function (e) {
-        return editOrShow(e);
-    });
-
-    // bind datatable key down
-    $(document).on('keydown.keyTable', function (e) {
-        if (e.ctrlKey) {
-            switch (e.keyCode) {
-            case 35: // end => last page and last record
-                const endInfo = table.page.info();
-                if (endInfo.pages > 0 && endInfo.page < endInfo.pages - 1) {
-                    e.stopPropagation();
-                    lastPageCalled = true;
-                    table.page('last').draw('page');
-                }
-                break;
-            case 36: // home => first page
-                const homeInfo = table.page.info();
-                if (homeInfo.pages > 0 && homeInfo.page > 0) {
-                    e.stopPropagation();
-                    lastPageCalled = false;
-                    table.page('first').draw('page');
-                }
-                break;
-            }
-        } else if (e.keyCode === 93) { // context-menu
-            e.stopPropagation();
-            $('.dropdown-menu.show').removeClass('show');
-            $('.dataTable .selection').first().trigger("contextmenu");
-        }
-    });
-
     // bind table events
-    table.one('init', function () {
-        if (id) {
-            const row = table.row('[id=' + id + ']');
-            if (row && row.length) {
-                table.cell(row.index(), '0:visIdx').focus();
-            }
-        }
-    }).on('draw', function () {
+    table.on('draw', function () {
         // select row
         if (table.rows().length) {
             const selector = lastPageCalled ? ':last' : ':first';
@@ -273,25 +211,6 @@ $.fn.dataTable.Api.register('bindEvents()', function (id) {
         lastPageCalled = false;
         $(table).focus();
 
-    }).on('key-focus', function (e, datatable, cell) {
-        // select row
-        const row = datatable.row(cell.index().row);
-        $(row.node()).addClass('selection').scrollInViewport(0, 60);
-        datatable.updateButtons();
-
-    }).on('key-blur', function (e, datatable, cell) {
-        // unselect row
-        const row = datatable.row(cell.index().row);
-        $(row.node()).removeClass('selection');
-        datatable.updateButtons();
-
-    }).on('key', function (e, datatable, key, cell, event) {
-        switch (key) {
-        case 13: // enter
-            return editOrShow(event);
-        case 46: // delete
-            return triggerClick(event, '.btn-table-delete');
-        }
     });
 
     return table;
@@ -318,24 +237,6 @@ function searchCallback(table) {
 }
 
 /**
- * Edit or show the selected item.
- * 
- * @param {Object}
- *            e - the source event.
- * @returns {boolean} true if handle.
- */
-function editOrShow(e) {
-    'use strict';
-
-    // edit by default?
-    if ($('#data-table').attr('edit-action').toBool()) {
-        return triggerClick(e, '.btn-table-edit') || triggerClick(e, '.btn-table-show');
-    } else {
-        return triggerClick(e, '.btn-table-show') || triggerClick(e, '.btn-table-edit');
-    }
-}
-
-/**
  * Creates the context menu items.
  * 
  * @returns {Object} the context menu items.
@@ -345,7 +246,7 @@ function getContextMenuItems() {
 
     const builder = new MenuBuilder();
 
-    //builder.addTitle('Actions');
+    // builder.addTitle('Actions');
 
     // buttons
     $('.card-header a.btn[data-path]').each(function () {
@@ -369,7 +270,7 @@ function getContextMenuItems() {
             builder.addItem($this);
         }
     });
-    
+
     return builder.getItems();
 }
 
@@ -511,7 +412,7 @@ $(function () {
     }
 
     // initialize
-    $table.initDataTable(options).bindEvents(id);
+    $table.initDataTable(options).initEvents(id, searchCallback).bindEvents();
 
     // update
     $('#table_search').val(query);

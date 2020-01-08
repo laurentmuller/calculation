@@ -48,6 +48,96 @@ $.fn.dataTable.Api.register('updateTitles()', function () {
 });
 
 /**
+ * Binds events.
+ * 
+ * @param {integer}
+ *            id - the selected row identifier (if any).
+ * @param {function}
+ *            callback - the search callback to call.
+ * 
+ * @returns {DataTables.Api} this instance.
+ */
+$.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
+    'use strict';
+
+    const table = this;
+    let lastPageCalled = false;
+
+    // bind search and page length
+    $('#table_search').initSearchInput(table, searchCallback, $('.btn-clear'));
+    $('#table_length').initTableLength(table);
+
+    // bind table body rows
+    $('#data-table tbody').on('dblclick', 'tr', function (e) {
+        return editOrShow(e);
+    });
+
+    // bind datatable key down
+    $(document).on('keydown.keyTable', function (e) {
+        if (e.ctrlKey) {
+            switch (e.keyCode) {
+            case 35: // end => last page and last record
+                const endInfo = table.page.info();
+                if (endInfo.pages > 0 && endInfo.page < endInfo.pages - 1) {
+                    e.stopPropagation();
+                    lastPageCalled = true;
+                    table.page('last').draw('page');
+                }
+                break;
+            case 36: // home => first page
+                const homeInfo = table.page.info();
+                if (homeInfo.pages > 0 && homeInfo.page > 0) {
+                    e.stopPropagation();
+                    lastPageCalled = false;
+                    table.page('first').draw('page');
+                }
+                break;
+            }
+        } else if (e.keyCode === 93) { // context-menu
+            e.stopPropagation();
+            $('.dropdown-menu.show').removeClass('show');
+            $('.dataTable .selection').first().trigger("contextmenu");
+        }
+    });
+
+    // bind table events
+    table.one('init', function () {
+        // select row (if any)
+        if (id) {
+            const row = table.row('[id=' + id + ']');
+            if (row && row.length) {
+                table.cell(row.index(), '0:visIdx').focus();
+            }
+        }
+
+        // remove hiden search text
+        $(":text[tabindex='0']").parent().remove();
+
+    }).on('key-focus', function (e, datatable, cell) {
+        // select row
+        const row = datatable.row(cell.index().row);
+        $(row.node()).addClass('selection').scrollInViewport(0, 60);
+        table.updateButtons();
+
+    }).on('key-blur', function (e, datatable, cell) {
+        // unselect row
+        const row = datatable.row(cell.index().row);
+        $(row.node()).removeClass('selection');
+        table.updateButtons();
+
+    }).on('key', function (e, datatable, key, cell, event) {
+        switch (key) {
+        case 13: // enter
+            return editOrShow(event);
+        case 46: // delete
+            return triggerClick(event, '.btn-table-delete');
+        }
+    });
+
+    return table;
+});
+
+/**
  * Creates the table column definitions.
  * 
  * @param {boolean}
@@ -218,7 +308,7 @@ $.fn.initSearchInput = function (table, callback, $clearButton) {
     'use strict';
 
     const $this = $(this);
-    if ($clearButton) {
+    if ($clearButton && $clearButton.length) {
         $clearButton.on('click', function () {
             $this.val('').focus();
             callback(table);
@@ -338,4 +428,22 @@ function enableKeys(selector) {
     'use strict';
     selector = selector || '#data-table';
     $(selector).DataTable().keys.enable();
+}
+
+/**
+ * Edit or show the selected item.
+ * 
+ * @param {Object}
+ *            e - the source event.
+ * @returns {boolean} true if handle.
+ */
+function editOrShow(e) {
+    'use strict';
+
+    // edit by default?
+    if ($('#data-table').attr('edit-action').toBool()) {
+        return triggerClick(e, '.btn-table-edit') || triggerClick(e, '.btn-table-show');
+    } else {
+        return triggerClick(e, '.btn-table-show') || triggerClick(e, '.btn-table-edit');
+    }
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\IRole;
 use App\Traits\DateFormatterTrait;
 use App\Traits\RightsTrait;
 use App\Traits\SearchTrait;
@@ -34,7 +35,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @UniqueEntity(fields={"username"}, message="fos_user.username.already_used")
  * @Vich\Uploadable
  */
-class User extends BaseUser implements IEntity
+class User extends BaseUser implements IEntity, IRole
 {
     use DateFormatterTrait;
     use RightsTrait;
@@ -113,8 +114,8 @@ class User extends BaseUser implements IEntity
      */
     public function checkRoles(): self
     {
-        if ($this->hasRole(self::ROLE_ADMIN) && $this->hasRole(self::ROLE_SUPER_ADMIN)) {
-            $this->removeRole(self::ROLE_ADMIN);
+        if ($this->hasRole(static::ROLE_ADMIN) && $this->hasRole(static::ROLE_SUPER_ADMIN)) {
+            $this->removeRole(static::ROLE_ADMIN);
         }
 
         return $this;
@@ -171,17 +172,15 @@ class User extends BaseUser implements IEntity
     {
         $roles = $this->getRoles();
 
-        return \count($roles) ? $roles[0] : self::ROLE_DEFAULT;
+        return \count($roles) ? $roles[0] : static::ROLE_DEFAULT;
     }
 
     /**
-     * Tells if this user has the admin role.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
-        return $this->hasRole(self::ROLE_ADMIN);
+        return $this->hasRole(static::ROLE_ADMIN);
     }
 
     /**
@@ -202,6 +201,14 @@ class User extends BaseUser implements IEntity
     public function isOverwrite(): bool
     {
         return $this->overwrite;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSuperAdmin(): bool
+    {
+        return (bool) parent::isSuperAdmin();
     }
 
     /**
@@ -257,7 +264,7 @@ class User extends BaseUser implements IEntity
      */
     public function setRole(?string $role): self
     {
-        $role = $role ?: self::ROLE_DEFAULT;
+        $role = $role ?: static::ROLE_DEFAULT;
 
         return $this->setRoles([$role]);
     }

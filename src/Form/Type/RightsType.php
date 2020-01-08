@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Entity\Role;
 use App\Entity\User;
 use App\Form\FormHelper;
 use App\Interfaces\IEntityVoter;
+use App\Interfaces\IRole;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -71,26 +71,14 @@ class RightsType extends AbstractType
      */
     public function onPreSetData(FormEvent $event): void
     {
-        /** @var Role[] $roles */
-        $roles = [];
         $data = $event->getData();
-
-        if ($data instanceof Role) {
-            $roles = $this->roleHierarchy->getReachableRoles([$data]);
-        } elseif ($data instanceof User) {
-            $role = new Role($data->getRole());
-            $roles = $this->roleHierarchy->getReachableRoles([$role]);
+        if ($data instanceof IRole) {
+            $roles = $this->roleHierarchy->getReachableRoleNames([$data->getRole()]);
+        } else {
+            $roles = [];
         }
 
-        $isAdmin = false;
-        foreach ($roles as $role) {
-            if (User::ROLE_ADMIN === $role->getRole()) {
-                $isAdmin = true;
-                break;
-            }
-        }
-
-        if (!$isAdmin) {
+        if (!\in_array(User::ROLE_ADMIN, $roles, true)) {
             $form = $event->getForm();
             $form->remove(IEntityVoter::ENTITY_USER);
         }

@@ -3,11 +3,32 @@
 <th><a href="#" class="data-col font-weight-normal text-body" data-action="{{ action }}" title="{{ 'user.rights.col_title'|trans }}">{{ label|trans }}</a></th>
 {%- endmacro %}
 
+{%- macro aria_label(index, action) -%}
+{%- switch index -%}
+{%- case 0 -%}
+    {%- set column = 'rights.list'|trans -%}
+{%- case 1 -%}
+    {%- set column = 'rights.show'|trans -%}
+{%- case 2 -%}
+    {%- set column = 'rights.add'|trans -%}
+{%- case 3 -%}
+    {%- set column = 'rights.edit'|trans -%}
+{%- case 4 -%}
+    {%- set column = 'rights.delete'|trans -%}
+{%- case 5 -%}
+    {%- set column = 'rights.pdf'|trans -%}                
+{%- endswitch -%}
+{%- set row = (action|lower ~ '.name')|trans -%}
+{{ column ~ ' - ' ~ row }}
+{%- endmacro %}
+
 {% macro row(data, action, default, overwrite) -%}
 <tr class="text-center">
     <td class="text-left"><a href="#" class="data-row text-body" data-action="{{ action }}" title="{{ 'user.rights.row_title'|trans }}">{{ form_label(data, null, {'label_attr': {'class': 'p-0'}}) }}</a></td>
-    {% for entry in data %}
-        {%- set attr = {'data-default': entry.vars.value in default ? 1 : 0 } -%}
+    {% for entry in data %}   
+        {%- set data_default = entry.vars.value in default ? 1 : 0 -%}
+        {%- set aria_label = _self.aria_label(loop.index0, action) -%}
+        {%- set attr = {'data-default': data_default, 'aria-label': aria_label } -%}
         {%- if not overwrite -%}
             {%- set attr = attr|merge({'disabled': 'disabled'}) -%}
 	    {%- endif -%}    

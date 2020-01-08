@@ -1,10 +1,10 @@
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
-<div role="contentinfo">
+<footer role="contentinfo">
     <ul class="footer d-print-none">
         <li><a id="app_name_version" href="{{ path('about') }}">{{ app_name_version }}</a></li>
         <li id="app_environment">{{ ('environment.' ~ app_environment)|trans }}</li>
         <li id="app_copyright">{{ icons.copyright_link() }}</li>
     </ul>
-</div>
+</footer>

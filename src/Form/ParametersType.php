@@ -14,19 +14,18 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\User;
 use App\Form\Type\DateTimeFormatType;
 use App\Form\Type\DecimalSeparatorType;
 use App\Form\Type\GroupingSeparatorType;
 use App\Interfaces\IApplicationService;
+use App\Interfaces\IRole;
 use App\Service\ApplicationService;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -40,20 +39,20 @@ class ParametersType extends AbstractType implements IApplicationService
     use TranslatorTrait;
 
     /**
-     * @var TokenStorageInterface
+     * @var Security
      */
-    private $token;
+    private $security;
 
     /**
      * Constructor.
      *
-     * @param TokenInterface      $token       the token service
+     * @param Security            $security    the ssecurity service
      * @param TranslatorInterface $translator  the translator service
      * @param ApplicationService  $application the application service
      */
-    public function __construct(TokenStorageInterface $token, TranslatorInterface $translator, ApplicationService $application)
+    public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $application)
     {
-        $this->token = $token;
+        $this->security = $security;
         $this->translator = $translator;
         $this->application = $application;
     }
@@ -219,9 +218,8 @@ class ParametersType extends AbstractType implements IApplicationService
      */
     private function isSuperAdmin(): bool
     {
-        if ($token = $this->token->getToken()) {
-            $user = $token->getUser();
-            if ($user instanceof User) {
+        if ($user = $this->security->getUser()) {
+            if ($user instanceof IRole) {
                 return $user->isSuperAdmin();
             }
         }

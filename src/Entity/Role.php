@@ -14,15 +14,15 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\IRole;
 use App\Traits\RightsTrait;
-use Symfony\Component\Security\Core\Role\Role as BaseRole;
 
 /**
  * Extends the role with access rights.
  *
  * @author Laurent Muller
  */
-class Role extends BaseRole
+class Role implements IRole
 {
     use RightsTrait;
 
@@ -34,18 +34,25 @@ class Role extends BaseRole
     protected $name;
 
     /**
+     * The role.
+     *
+     * @var string
+     */
+    protected $role;
+
+    /**
      * Constructor.
      *
-     * @param string $role the role name
+     * @param string $role the role
      */
     public function __construct(string $role)
     {
-        parent::__construct($role);
+        $this->role = $role;
     }
 
     public function __toString(): string
     {
-        return (string) $this->getRole();
+        return $this->role;
     }
 
     /**
@@ -54,6 +61,14 @@ class Role extends BaseRole
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRole(): string
+    {
+        return $this->role;
     }
 
     /**
@@ -69,7 +84,7 @@ class Role extends BaseRole
     }
 
     /**
-     * Tells if this has the admin role.
+     * {@inheritdoc}
      */
     public function isAdmin(): bool
     {
@@ -77,7 +92,7 @@ class Role extends BaseRole
     }
 
     /**
-     * Tells if this has the super admin role.
+     * {@inheritdoc}
      */
     public function isSuperAdmin(): bool
     {

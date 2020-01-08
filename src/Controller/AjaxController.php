@@ -502,9 +502,6 @@ class AjaxController extends BaseController
             }
         }
 
-        $lang = [];
-        $domain = 'datatables';
-
         $keys = [
             // common
             'search',
@@ -524,9 +521,13 @@ class AjaxController extends BaseController
             'paginate.next',
             'paginate.last',
 
-            // sort
+            // aria
             'aria.sortAscending',
             'aria.sortDescending',
+            'aria.paginate.first',
+            'aria.paginate.previous',
+            'aria.paginate.next',
+            'aria.paginate.last',
 
             //select
             'select.rows.0',
@@ -534,6 +535,8 @@ class AjaxController extends BaseController
             'select.rows._',
         ];
 
+        $lang = [];
+        $domain = 'datatables';
         foreach ($keys as $key) {
             $current = &$lang;
             $paths = \explode('.', $key);

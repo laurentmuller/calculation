@@ -20,12 +20,15 @@ security:
         main:
             pattern: ^/
             logout:
-                #handlers: [user_logout_handler]
+            #user_logout_handler
+                handlers: [App\Listener\UserEventListener]
             anonymous: true
             form_login:
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
+            # https://symfony.com/doc/current/security/impersonating_user.html
             switch_user: true
+            
             #logout_on_user_change: true
             
             remember_me:
@@ -35,9 +38,6 @@ security:
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

@@ -81,17 +81,6 @@ services:
     App\Listener\CalculationListener:
         tags:
             - { name: doctrine.event_listener, event: onFlush}
-                    
-   # login listener
-    App\Listener\UserLoginListener:
-        tags:
-        - name: 'doctrine.orm.entity_listener'
-          entity: 'App\Entity\User'
-          event: 'postUpdate'
-            
-    # logout listener
-    user_logout_handler:
-        class: App\Listener\UserLogoutListener
        
     # replace FOS\UserBundle\Controller\SecurityController
     fos_user.security.controller:

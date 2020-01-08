@@ -579,17 +579,6 @@ var Application = {
             return $body;
         }
         return null;
-
-        // const $input = $("#data-table-edit tbody
-        // input[name*='categoryId'][value=" + id + "]");
-        // if ($input.length) {
-        // const $body = $input.parents('tbody');
-        // if ($body.length) {
-        // console.log($directBody.html() === $body.html());
-        // return $body;
-        // }
-        // }
-        // return null;
     },
 
     /**

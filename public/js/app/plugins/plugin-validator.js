@@ -396,11 +396,6 @@
                     $group.find('.fileinput-filename,.fileinput-exists').on('click', function() {
                         $that.focus();
                     });
-                    $group.on('focus', function() {
-                       console.log('group-focus'); 
-                    }).on('blur', function() {
-                        console.log('group-blur'); 
-                    });
                 }
             });
         },

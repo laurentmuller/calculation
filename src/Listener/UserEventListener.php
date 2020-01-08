@@ -15,8 +15,10 @@ declare(strict_types=1);
 namespace App\Listener;
 
 use App\Controller\IndexController;
+use App\Interfaces\IFlashMessageInterface;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
+use App\Traits\TranslatorFlashMessageTrait;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseNullableUserEvent;
 use FOS\UserBundle\FOSUserEvents;
@@ -25,13 +27,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 use Symfony\Component\Security\Http\Firewall\SwitchUserListener;
+use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -40,20 +46,30 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @internal
  */
-final class UserEventListener extends AbstractListener implements EventSubscriberInterface
+final class UserEventListener implements EventSubscriberInterface, LogoutHandlerInterface, IFlashMessageInterface
 {
+    use TranslatorFlashMessageTrait;
+
     /**
      * The application.
      *
      * @var ApplicationService
      */
     private $application;
+
+    /**
+     * The container.
+     *
+     * @var ContainerInterface
+     */
+    private $container;
+
     /**
      * The URL generator.
      *
      * @var UrlGeneratorInterface
      */
-    private $router;
+    private $generator;
 
     /**
      * The captcha service.
@@ -75,16 +91,17 @@ final class UserEventListener extends AbstractListener implements EventSubscribe
      * @param ContainerInterface    $container           the container
      * @param SessionInterface      $session             the session
      * @param TranslatorInterface   $translator          the translator
-     * @param UrlGeneratorInterface $router              the router
+     * @param UrlGeneratorInterface $generator           the URL generator
      * @param CaptchaImageService   $service             the captcha image service
      * @param ApplicationService    $application         the application service
      * @param string                $switchParameterName the switch user parameter name in query
      */
-    public function __construct(ContainerInterface $container, SessionInterface $session, TranslatorInterface $translator, UrlGeneratorInterface $router, CaptchaImageService $service, ApplicationService $application, string $switchParameterName = '_switch_user')
+    public function __construct(ContainerInterface $container, SessionInterface $session, TranslatorInterface $translator, UrlGeneratorInterface $generator, CaptchaImageService $service, ApplicationService $application, string $switchParameterName = '_switch_user')
     {
-        parent::__construct($container, $session, $translator);
-
-        $this->router = $router;
+        $this->container = $container;
+        $this->session = $session;
+        $this->translator = $translator;
+        $this->generator = $generator;
         $this->service = $service;
         $this->application = $application;
         $this->switchParameterName = $switchParameterName;
@@ -99,29 +116,34 @@ final class UserEventListener extends AbstractListener implements EventSubscribe
             FOSUserEvents::CHANGE_PASSWORD_SUCCESS => 'onSuccess',
             FOSUserEvents::PROFILE_EDIT_SUCCESS => 'onSuccess',
             FOSUserEvents::RESETTING_RESET_SUCCESS => ['onResetSuccess', 10],
-            // FOSUserEvents::SECURITY_IMPLICIT_LOGIN => 'onImplicitLogin',
             FOSUserEvents::RESETTING_SEND_EMAIL_INITIALIZE => 'onSendEmailInitialize',
-            //FOSUserEvents::RESETTING_RESET_INITIALIZE => ['onResetInitialize', 10],
+
             SecurityEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin',
             SecurityEvents::SWITCH_USER => 'onSwitchUser',
+
+            //FOSUserEvents::SECURITY_IMPLICIT_LOGIN => 'onImplicitLogin',
+            // FOSUserEvents::RESETTING_RESET_INITIALIZE => ['onResetInitialize', 10],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function logout(Request $request, Response $response, TokenInterface $token): void
+    {
+        $appName = $this->getParameter('app_name');
+        $this->succesTrans('security.logout.success', ['%appname%' => $appName], 'FOSUserBundle');
     }
 
 //     /**
 //      * Handles the implicit login event.
-//      *
-//      * @param UserEvent $event
 //      */
 //     public function onImplicitLogin(UserEvent $event): void
 //     {
 //         $user = $event->getUser();
-//         $message = 'security.login.success';
-//         $params = [
-//             '%username%' => $user->getUsername(),
-//             '%appname%' => $this->appName,
-//         ];
-//         $this->succesTrans($message, $params, 'FOSUserBundle');
-//         //$this->setLogin($event->getUser());
+//         if ($user instanceof UserInterface) {
+//             $this->loginSuccess($user);
+//         }
 //     }
 
     /**
@@ -129,9 +151,6 @@ final class UserEventListener extends AbstractListener implements EventSubscribe
      */
     public function onInteractiveLogin(InteractiveLoginEvent $event): void
     {
-        // clear
-        //CaptchaImageService::clearSession($this->session);
-
         // check
         $request = $event->getRequest();
         $message = $this->validateCaptcha($request);
@@ -143,81 +162,22 @@ final class UserEventListener extends AbstractListener implements EventSubscribe
             }
             throw $error;
         }
+
+        // clear
         $this->service->clear();
+
+        // message
+        $user = $event->getAuthenticationToken()->getUser();
+        if ($user instanceof UserInterface) {
+            $this->loginSuccess($user);
+        }
     }
-
-    /**
-     * Handle the reset initialize event.
-     */
-//     public function onResetInitialize(GetResponseUserEvent $event): void
-//     {
-//         $user = $event->getUser();
-//         $request = $event->getRequest();
-
-//         $factory = $this->container->get('form.factory');
-//         $form = $factory->create(FosUserResettingFormType::class, $user);
-//         $form->handleRequest($request);
-//         if ($form->isSubmitted() && $form->isValid()) {
-//             if (!$message = $this->validateCaptcha($request)) {
-//                 return;
-//             }
-
-//             $error = new CustomUserMessageAuthenticationException($message);
-//             if ($this->session) {
-//                 $this->session->set(Security::AUTHENTICATION_ERROR, $error);
-//             }
-
-//             $parameters = [
-//                 'token' => $user->getConfirmationToken(),
-//                 'form' => $form->createView(),
-//                 'error' => $error,
-//             ];
-
-//             // render
-//             /** @var \Symfony\Component\Templating\EngineInterface $engine */
-//             $engine = $this->container->get('templating');
-//             $content = $engine->render('@FOSUser/Resetting/reset.html.twig', $parameters);
-//             $response = new Response($content);
-    // //             $event->setResponse($response);
-    // //             $event->stopPropagation();
-//         }
-//     }
 
     /**
      * Handle the reset success event.
      */
     public function onResetSuccess(FormEvent $event): void
     {
-//         $request = $event->getRequest();
-//         if ($message = $this->validateCaptcha($request)) {
-//             $error = new CustomUserMessageAuthenticationException($message);
-//             if ($this->session) {
-//                 $this->session->set(Security::AUTHENTICATION_ERROR, $error);
-//             }
-
-//             $form = $event->getForm();
-//             /** @var User $user */
-//             $user = $form->getData();
-//             $token = $user->getConfirmationToken();
-
-//             $parameters = [
-//                 'form' => $form->createView(),
-//                 'token' => $token,
-//                 'error' => $error,
-//             ];
-
-//             // render
-//             /** @var \Symfony\Component\Templating\EngineInterface $engine */
-//             $engine = $this->container->get('templating');
-//             $content = $engine->render('@FOSUser/Resetting/reset.html.twig', $parameters);
-//             $response = new Response($content);
-//             $event->setResponse($response);
-//             $event->stopPropagation();
-
-//             return;
-//         }
-
-        // home page
         $this->setHomePageResponse($event);
     }
 
@@ -288,7 +248,35 @@ final class UserEventListener extends AbstractListener implements EventSubscribe
      */
     private function generateURL(string $route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
-        return $this->router->generate($route, $parameters, $referenceType);
+        return $this->generator->generate($route, $parameters, $referenceType);
+    }
+
+    /**
+     * Gets a container parameter.
+     *
+     * @param string $name the parameter name
+     *
+     * @return mixed the parameter value
+     *
+     * @throws \InvalidArgumentException if the parameter is not defined
+     */
+    private function getParameter(string $name)
+    {
+        return $this->container->getParameter($name);
+    }
+
+    /**
+     * Notify login success.
+     *
+     * @param UserInterface $user the logged user
+     */
+    private function loginSuccess(UserInterface $user): void
+    {
+        $params = [
+            '%username%' => $user->getUsername(),
+            '%appname%' => $this->getParameter('app_name'),
+        ];
+        $this->succesTrans('security.login.success', $params, 'FOSUserBundle');
     }
 
     /**
@@ -340,14 +328,11 @@ final class UserEventListener extends AbstractListener implements EventSubscribe
             return null;
         }
 
-        // if (!$this->container->getParameter('recaptcha_used')) {
-        // }
-
         // get values
         $site_action = 'login';
         $token = $request->request->get('_recaptcha');
         $hostname = $request->server->get('HTTP_HOST');
-        $secret = $this->container->getParameter('recaptcha_secret');
+        $secret = $this->getParameter('recaptcha_secret');
 
         // initialize
         $recaptcha = new ReCaptcha($secret);

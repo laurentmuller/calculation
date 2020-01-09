@@ -122,8 +122,7 @@ var MoveRowHandler = {
      * @param $target
      *            {JQuery} - the target row.
      * @param up
-     *            {boolean} - true to move before the target (up); false to move
-     *            after (down).
+     *            {boolean} - true to move before the target (up); false to move after (down).
      * 
      * @return {JQuery} - The moved row.
      */
@@ -264,6 +263,9 @@ var Application = {
             forcePlaceholderSize: false,
             acceptFrom: 'tbody'
         });
+
+        // remove role attribute
+        $('#data-table-edit tbody tr[role="option"').removeAttr('role');
 
         // add handlers
         $bodies.on('sortstart', that.dragStartProxy).on('sortupdate', that.dragStopProxy);
@@ -938,8 +940,7 @@ $.fn.extend({
     },
 
     /**
-     * Finds an input element that have the name attribute within a given
-     * substring.
+     * Finds an input element that have the name attribute within a given substring.
      * 
      * @param name
      *            {string} - the partial attribute name.
@@ -958,8 +959,7 @@ $.fn.extend({
      * Fade out and remove the selected element.
      * 
      * @param callback
-     *            {Function} - the function to call after the element is
-     *            removed.
+     *            {Function} - the function to call after the element is removed.
      * @return null
      */
     removeFadeOut: function (callback) {

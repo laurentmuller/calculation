@@ -12,23 +12,22 @@
 
 {# macros #}
 {% macro printMarginRow(margin) %}
-{% import 'macros/_icons.html.twig' as icons %}
 <tr>
     <td style="width: 35%;">
         <div class="form-group">
-            {{ form_widget(margin.minimum) }}
+            {{ form_widget(margin.minimum, { 'attr': {'aria-label': 'categorymargin.fields.minimum'|trans} }) }}
             <em>{{ form_errors(margin.minimum) }}</em>
         </div>
     </td style="width: 35%;">
     <td>
         <div class="form-group">
-            {{ form_widget(margin.maximum) }}
+            {{ form_widget(margin.maximum, { 'attr': {'aria-label': 'categorymargin.fields.maximum'|trans} }) }}
             <em>{{ form_errors(margin.maximum) }}</em>
         </div>
     </td style="width: 30%;">
     <td>
         <div class="form-group">
-            {{ form_widget(margin.margin) }}
+            {{ form_widget(margin.margin, { 'attr': {'aria-label': 'categorymargin.fields.margin'|trans} }) }}
             <em>{{ form_errors(margin.margin) }}</em>
         </div>
     </td>
@@ -53,7 +52,7 @@
     		<div class="col">
     			<label class="control-label" for="data-table-edit">{{ 'category.fields.margins'|trans }}</label>
     		</div>
-    		<div class="col text-right mr-1">
+    		<div class="col text-right">
     			<a href="#" class="btn-add">{{ 'category.edit.add_margin'|trans }}</a>
     		</div>
     	</div>

@@ -63,6 +63,7 @@ abstract class AbstractMarginType extends BaseType
 
     /**
      * Returns if the curreny symbol for the minimum and maximum is displayed.
+     *
      * The default value is false.
      *
      * @return bool true to display; false to hide
@@ -74,6 +75,7 @@ abstract class AbstractMarginType extends BaseType
 
     /**
      * Returns if the percent symbol for the margin is displayed.
+     *
      * The default value is false.
      *
      * @return bool true to display; false to hide

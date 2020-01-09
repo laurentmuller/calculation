@@ -29,7 +29,7 @@
     <tbody>
 	{% for group in item.groups %}
 		<tr>
-			<th colspan="5">{{ group.code }}</th>
+			<td class="font-weight-bold" colspan="5">{{ group.code }}</td>
 		</tr>
 		{% for product in group.items %}
 			<tr>
@@ -43,8 +43,8 @@
 	{% endfor %}
     {# items total #}
     <tr>
-        <th colspan="4">{{ 'calculation.fields.itemsTotal'|trans }}</th>
-        <th class="text-currency">{{ item.groupsAmount|amount }}</th>
+        <td class="font-weight-bold" colspan="4">{{ 'calculation.fields.itemsTotal'|trans }}</td>
+        <td class="font-weight-bold text-currency">{{ item.groupsAmount|amount }}</td>
     </tr>
     </tbody>
 </table>
@@ -74,11 +74,11 @@
         
         {# groups total #}
         <tr>
-            <th>{{ 'calculation.fields.marginTotal'|trans }}</th>
-            <th class="text-currency font-weight-normal">{{ item.groupsAmount|amount }}</th>
-            <th class="text-percent font-weight-normal">{{ item.groupsMargin|percent }}</th>
-            <th class="text-currency font-weight-normal">{{ item.groupsMarginAmount|amount }}</th>
-            <th class="text-currency">{{ item.groupsTotal|amount }}</th>
+            <td class="font-weight-bold">{{ 'calculation.fields.marginTotal'|trans }}</td>
+            <td class="text-currency">{{ item.groupsAmount|amount }}</td>
+            <td class="text-percent">{{ item.groupsMargin|percent }}</td>
+            <td class="text-currency">{{ item.groupsMarginAmount|amount }}</td>
+            <td class="font-weight-bold text-currency">{{ item.groupsTotal|amount }}</td>
         </tr>
                  
         {# global margin #}
@@ -91,8 +91,8 @@
         {# user margin #}
         {% if item.userMargin != 0 %}
             <tr>
-                <th colspan="4">{{ 'calculation.fields.totalNet'|trans }}</th>
-                <th class="text-currency">{{ item.totalNet|amount }}</th>
+                <td class="font-weight-bold" colspan="4">{{ 'calculation.fields.totalNet'|trans }}</td>
+                <td class="font-weight-bold text-currency">{{ item.totalNet|amount }}</td>
             </tr>
             <tr>
                 <td colspan="2">{{ 'calculation.fields.userMargin'|trans }}</td>
@@ -103,16 +103,16 @@
         
         {# overall total #}
         <tr>            
-            <th>{{ 'calculation.fields.overallTotal'|trans }}</th>
-            <th class="text-currency">{{ item.groupsAmount|amount }}</th>
+            <td class="font-weight-bold">{{ 'calculation.fields.overallTotal'|trans }}</td>
+            <td class="font-weight-bold text-currency">{{ item.groupsAmount|amount }}</td>
             {%- if marginBelow(item.overallMargin) -%}
                 {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent }) -%}
-                <th class="text-currency text-danger below-cell has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallMargin|percent }}</th>
+                <td class="font-weight-bold text-currency text-danger below-cell has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallMargin|percent }}</td>
             {%- else -%}
-                <th class="text-currency">{{ item.overallMargin|percent }}</th>
+                <td class="font-weight-bold text-currency">{{ item.overallMargin|percent }}</td>
             {%- endif -%}
-            <th class="text-currency">{{ item.overallMarginAmount|amount }}</th>
-            <th class="text-currency">{{ item.overallTotal|amount }}</th>
+            <td class="font-weight-bold text-currency">{{ item.overallMarginAmount|amount }}</td>
+            <td class="text-currency">{{ item.overallTotal|amount }}</td>
         </tr>
     </tbody>
 </table>

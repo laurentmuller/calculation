@@ -7,7 +7,7 @@
     {% if type %}data-type="{{ type }}"{% endif %}
     data-key="{{ key }}">
     <div class="card-body p-0 mt-1">
-        <h4 class="font-weight-normal">{{ value|integer }}</h4>
+        <div class="h4 font-weight-normal">{{ value|integer }}</div>
     </div>
     <div class="card-footer p-1">
         <small class="card-text">{{ key|capitalize }}</small>

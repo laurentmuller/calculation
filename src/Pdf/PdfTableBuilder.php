@@ -216,6 +216,7 @@ class PdfTableBuilder implements IPdfConstants
 
     /**
      * Output the current row.
+     *
      * After this call, no more cell is defined.
      *
      * @return self this instance

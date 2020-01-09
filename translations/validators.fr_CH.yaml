@@ -45,12 +45,7 @@ password:
     numbers: Le mot de passe doit contenir au moins un chiffre.
     specialCharacter: Le mot de passe doit contenir au moins un caractère spécial.
     pwned: Le mot de passe a été trouvé {{count}} fois dans une base de données de mots de passe compromis.
-    strength_level:
-        very_weak: Très faible
-        weak: Faible
-        medium: Moyenne
-        strong: Forte
-        very_strong: Très forte
 captcha:
     invalid: Le code de contrôle est invalide.
     timeout: Le délai d'attente est atteint. Essayez de recharger la page ou l'image.
+    generate: Impossible de générer une nouvelle image. 

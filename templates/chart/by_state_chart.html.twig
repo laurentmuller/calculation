@@ -32,10 +32,10 @@
         </tbody>
         <tfoot>
             <tr>
-            	<th>{{ 'fields.total'|trans }}</th>
-            	<th class="text-currency">{{ count|integer }}</th>
-            	<th class="text-currency">{{ 1|percent(true, 1)}}</th>
-            	<th class="text-currency">{{ total|amount }}</th>
+            	<td class="font-weight-bold">{{ 'fields.total'|trans }}</td>
+            	<td class="font-weight-bold text-currency">{{ count|integer }}</td>
+            	<td class="font-weight-bold text-currency">{{ 1|percent(true, 1)}}</td>
+            	<td class="font-weight-bold text-currency">{{ total|amount }}</td>
             </tr>
         </tfoot>
     </table>

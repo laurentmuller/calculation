@@ -101,11 +101,10 @@ trait MathTrait
     {
         if ($value < $min) {
             return $min;
-        }
-        if ($value > $max) {
+        } elseif ($value > $max) {
             return $max;
+        } else {
+            return  $value;
         }
-
-        return  $value;
     }
 }

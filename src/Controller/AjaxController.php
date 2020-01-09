@@ -29,8 +29,6 @@ use App\Translator\ITranslatorService;
 use App\Translator\TranslatorFactory;
 use App\Utils\SymfonyUtils;
 use App\Utils\Utils;
-use App\Validator\Password;
-use App\Validator\PasswordValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use ReCaptcha\ReCaptcha;
@@ -44,10 +42,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Validator\ContainerConstraintValidatorFactory;
-use Symfony\Component\Validator\Validation;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use ZxcvbnPhp\Zxcvbn;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
@@ -156,7 +151,6 @@ class AjaxController extends BaseController
         $routes = SymfonyUtils::getRoutes($router);
 
         $projectDir = \str_replace('\\', '/', $kernel->getProjectDir());
-        $rootDir = SymfonyUtils::formatPath($kernel->getProjectDir(), $projectDir);
         $cacheDir = SymfonyUtils::formatPath($kernel->getCacheDir(), $projectDir) . ' (' . SymfonyUtils::formatFileSize($kernel->getCacheDir()) . ')';
         $logDir = SymfonyUtils::formatPath($kernel->getLogDir(), $projectDir) . ' (' . SymfonyUtils::formatFileSize($kernel->getLogDir()) . ')';
         $endOfMaintenance = $this->formatExpired(Kernel::END_OF_MAINTENANCE);
@@ -173,7 +167,6 @@ class AjaxController extends BaseController
             'routes' => $routes,
             'timezone' => \date_default_timezone_get(),
             'projectDir' => $projectDir,
-            'rootDir' => $rootDir,
             'cacheDir' => $cacheDir,
             'logDir' => $logDir,
             'endOfMaintenance' => $endOfMaintenance,
@@ -218,7 +211,7 @@ class AjaxController extends BaseController
 
         return $this->json([
             'result' => false,
-            'message' => 'Unable to get a new image.',
+            'message' => $this->trans('captcha.generate', 'validators'),
         ]);
     }
 
@@ -278,70 +271,75 @@ class AjaxController extends BaseController
         return $this->json($response);
     }
 
-    /**
-     * Check if a password is valid.
-     *
-     * @Route("/checkpassword", name="ajax_check_password", methods={"GET", "POST"})
-     * @IsGranted("ROLE_USER")
-     */
-    public function checkPassword(Request $request, TranslatorInterface $translator): JsonResponse
-    {
-        // get values
-        $password = (string) $request->get('password');
-        $allViolations = !$request->isXmlHttpRequest();
+//     /**
+//      * Check if a password is valid.
+//      *
+//      * @Route("/checkpassword", name="ajax_check_password", methods={"GET", "POST"})
+//      * @IsGranted("ROLE_USER")
+//      */
+//     public function checkPassword(Request $request, TranslatorInterface $translator): JsonResponse
+//     {
+//         // get values
+//         $password = (string) $request->get('password');
+//         $allViolations = !$request->isXmlHttpRequest();
 
-        // create constraint
-        $constraint = new Password([
-            'blackList' => true,
-            'email' => true,
-            'minLength' => 8,
-            'minStrength' => 2,
-            'pwned' => true,
-            'caseDiff' => true,
-            'letters' => true,
-            'numbers' => true,
-            'specialCharacter' => true,
-            'allViolations' => $allViolations,
-        ]);
+//         // create constraint
+//         $constraint = new Password([
+//             'blackList' => true,
+//             'email' => true,
+//             'minLength' => 8,
+//             'minStrength' => 2,
+//             'pwned' => true,
+//             'caseDiff' => true,
+//             'letters' => true,
+//             'numbers' => true,
+//             'specialCharacter' => true,
+//             'allViolations' => $allViolations,
+//         ]);
 
-        // create validator
-        $factory = new ContainerConstraintValidatorFactory($this->container);
-        $validator = Validation::createValidatorBuilder()
-            ->setConstraintValidatorFactory($factory)
-            ->setTranslationDomain('validators')
-            ->setTranslator($translator)
-            ->getValidator();
+//         // create validator
+//         $factory = new ContainerConstraintValidatorFactory($this->container);
 
-        // validate
-        /** @var \Symfony\Component\Validator\ConstraintViolationListInterface|\Symfony\Component\Validator\ConstraintViolationInterface $violations */
-        $violations = $validator->validate($password, $constraint);
+//         /** @var ValidatorInterface $validator */
+//         $validator = Validation::createValidatorBuilder()
+//             ->setConstraintValidatorFactory($factory)
+//             ->setTranslationDomain('validators')
+//             ->setTranslator($translator)
+//             ->getValidator();
 
-        // get score
-        $zx = new Zxcvbn();
-        $strength = $zx->passwordStrength($password);
-        $score = $strength['score'];
-        $verdict = PasswordValidator::translateLevel($translator, $score);
-        $result = [
-            'result' => true,
-            'score' => $score,
-            'verdict' => $verdict,
-        ];
+//         // validate
+//         try {
+//             /** @var ConstraintViolationListInterface $violations */
+//             $violations = $validator->validate($password, $constraint);
+//         } catch (\Exception $e) {
 
-        // check
-        if (0 !== \count($violations)) {
-            if ($allViolations) {
-                //$result = [];
-                foreach ($violations as $violation) {
-                    $result[] = $violation->getMessage();
-                }
-            } else {
-                $result['result'] = false;
-                $result['message'] = $violations[0]->getMessage();
-            }
-        }
+//         }
 
-        return $this->json($result);
-    }
+//         // get score
+//         $zx = new Zxcvbn();
+//         $strength = $zx->passwordStrength($password);
+//         $score = $strength['score'];
+//         $verdict = $score; //$passwordValidator->translateLevel($score);
+//         $result = [
+//             'result' => true,
+//             'score' => $score,
+//             'verdict' => $verdict,
+//         ];
+
+//         // check
+//         if (!empty($violations)) {
+//             if ($allViolations) {
+//                 foreach ($violations as $violation) {
+//                     $result[] = $violation->getMessage();
+//                 }
+//             } else {
+//                 $result['result'] = false;
+//                 $result['message'] = $violations[0]->getMessage();
+//             }
+//         }
+
+//         return $this->json($result);
+//     }
 
     /**
      * Check if the given reCaptcha response (if any) is valid.
@@ -434,7 +432,7 @@ class AjaxController extends BaseController
      * @Route("/detect", name="ajax_detect")
      * @IsGranted("ROLE_USER")
      */
-    public function detect(Request $request, BingTranslatorService $translator)
+    public function detect(Request $request, BingTranslatorService $translator): JsonResponse
     {
         $text = $request->get('text', '');
         if (!Utils::isString($text)) {
@@ -939,7 +937,14 @@ class AjaxController extends BaseController
         return $parameters;
     }
 
-    private function formatExpired($date)
+    /**
+     * Format the expired date.
+     *
+     * @param string $date the date to format
+     *
+     * @return string the formatted date, if applicable; 'Unknown' otherwise
+     */
+    private function formatExpired(string $date): string
     {
         $date = \DateTime::createFromFormat('m/Y', $date);
         if (false !== $date) {
@@ -1064,9 +1069,9 @@ class AjaxController extends BaseController
     }
 
     /**
-     * Returns if the given request is an Ajax call.
+     * Returns if the given request is a XMLHttpRequest (ajax) call.
      *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse|bool
+     * @return bool|JsonResponse true if a XMLHttpRequest call, a JSON error response otherwise
      */
     private function isAjaxCall(Request $request)
     {

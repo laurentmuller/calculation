@@ -120,9 +120,6 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
 
             SecurityEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin',
             SecurityEvents::SWITCH_USER => 'onSwitchUser',
-
-            //FOSUserEvents::SECURITY_IMPLICIT_LOGIN => 'onImplicitLogin',
-            // FOSUserEvents::RESETTING_RESET_INITIALIZE => ['onResetInitialize', 10],
         ];
     }
 
@@ -134,17 +131,6 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
         $appName = $this->getParameter('app_name');
         $this->succesTrans('security.logout.success', ['%appname%' => $appName], 'FOSUserBundle');
     }
-
-//     /**
-//      * Handles the implicit login event.
-//      */
-//     public function onImplicitLogin(UserEvent $event): void
-//     {
-//         $user = $event->getUser();
-//         if ($user instanceof UserInterface) {
-//             $this->loginSuccess($user);
-//         }
-//     }
 
     /**
      * Handle the intercative login event.
@@ -303,15 +289,13 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
         // captcha used?
         if (!$this->application->isDisplayCaptcha()) {
             return null;
-        }
-        if (!$this->service->validateTimeout()) {
+        } elseif (!$this->service->validateTimeout()) {
             return 'captcha.timeout';
-        }
-        if (!$this->service->validateToken($request->get('_captcha'))) {
+        } elseif (!$this->service->validateToken($request->get('_captcha'))) {
             return 'captcha.invalid';
+        } else {
+            return null;
         }
-
-        return null;
     }
 
     /**

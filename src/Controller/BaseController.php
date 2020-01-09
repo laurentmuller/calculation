@@ -52,13 +52,11 @@ abstract class BaseController extends AbstractController implements IFlashMessag
      */
     public function getApplication(): ApplicationService
     {
-        // already set?
         if ($this->application) {
             return $this->application;
+        } else {
+            return $this->application = $this->get(ApplicationService::class);
         }
-
-        // get service
-        return $this->application = $this->get(ApplicationService::class);
     }
 
     /**
@@ -93,13 +91,11 @@ abstract class BaseController extends AbstractController implements IFlashMessag
      */
     public function getSession(): SessionInterface
     {
-        // already set?
         if ($this->session) {
             return $this->session;
+        } else {
+            return $this->session = $this->get('session');
         }
-
-        // get service
-        return $this->session = $this->get('session');
     }
 
     /**
@@ -117,18 +113,25 @@ abstract class BaseController extends AbstractController implements IFlashMessag
     /**
      * Gets the translator service.
      */
-    public function getTranslator(): ?TranslatorInterface
+    public function getTranslator(): TranslatorInterface
     {
         if ($this->translator) {
             return $this->translator;
-        }
-        if ($this->has('translator')) {
-            return $this->translator = $this->get('translator');
-        } elseif ($this->has(TranslatorInterface::class)) {
+        } else {
             return $this->translator = $this->get(TranslatorInterface::class);
         }
+    }
 
-        return null;
+    /**
+     * Gets the URL generator service.
+     */
+    public function getUrlGenerator(): UrlGeneratorService
+    {
+        if ($this->generatorService) {
+            return $this->generatorService;
+        } else {
+            return $this->generatorService = $this->get(UrlGeneratorService::class);
+        }
     }
 
     /**
@@ -187,20 +190,6 @@ abstract class BaseController extends AbstractController implements IFlashMessag
     protected function getManager(): EntityManagerInterface
     {
         return $this->getDoctrine()->getManager();
-    }
-
-    /**
-     * Gets the URL generator service.
-     */
-    protected function getUrlGenerator(): UrlGeneratorService
-    {
-        // already set?
-        if ($this->generatorService) {
-            return $this->generatorService;
-        }
-
-        // get service
-        return $this->generatorService = $this->get(UrlGeneratorService::class);
     }
 
     /**

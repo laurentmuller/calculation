@@ -19,16 +19,14 @@ use App\Form\FosUserResetPasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
- * Security controller for displaying a custom login form and handle the reset password.
+ * Security controller for displaying the login form and the reset password form.
  *
  * @author Laurent Muller
  */
@@ -42,91 +40,98 @@ class SecurityController extends AbstractController
     /**
      * @var CsrfTokenManagerInterface
      */
-    private $tokenManager;
+    private $manager;
 
     /**
      * Constructor.
      *
-     * @param CsrfTokenManagerInterface $tokenManager the token manager
-     * @param KernelInterface           $kernel       the kernel
+     * @param CsrfTokenManagerInterface $manager the token manager
+     * @param KernelInterface           $kernel  the kernel
      */
-    public function __construct(?CsrfTokenManagerInterface $tokenManager = null, KernelInterface $kernel)
+    public function __construct(?CsrfTokenManagerInterface $manager = null, KernelInterface $kernel)
     {
-        $this->tokenManager = $tokenManager;
+        $this->manager = $manager;
         $this->debug = $kernel->isDebug();
     }
 
     /**
-     * Login action.
+     * Show the login form.
      */
-    public function loginAction(Request $request): Response
+    public function loginAction(Request $request, AuthenticationUtils $utils): Response
     {
-        /** @var Session $session */
-        $session = $request->getSession();
-
-        $authErrorKey = Security::AUTHENTICATION_ERROR;
-        $lastUsernameKey = Security::LAST_USERNAME;
-
-        // get the error if any (works with forward and redirect -- see below)
-        if ($request->attributes->has($authErrorKey)) {
-            $error = $request->attributes->get($authErrorKey);
-        } elseif (null !== $session && $session->has($authErrorKey)) {
-            $error = $session->get($authErrorKey);
-            $session->remove($authErrorKey);
-        } else {
-            $error = null;
-        }
-
-        if (!$error instanceof AuthenticationException) {
-            $error = null; // The value does not come from the security component.
-        }
-
-        // last username entered by the user
-        $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
-        $csrfToken = $this->tokenManager ? $this->tokenManager->getToken('authenticate')->getValue() : null;
-
-        $data = [
-            '_username' => $lastUsername,
+        // create form
+        $form = $this->createForm(FosUserLoginType::class, [
+            '_username' => $this->getUserName($request),
+            '_csrf_token' => $this->getCsrfToken(),
             '_remember_me' => $this->debug,
-            '_csrf_token' => $csrfToken,
-        ];
-
-        // create
-        $form = $this->createForm(FosUserLoginType::class, $data);
+        ]);
 
         // display form
         return $this->render('@FOSUser/Security/login.html.twig', [
             'form' => $form->createView(),
-            'error' => $error,
+            'error' => $this->getLastAuthenticationError($utils),
         ]);
     }
 
     /**
-     * Shows the reset password form.
+     * Show the reset password form.
      */
     public function requestAction(Request $request, AuthenticationUtils $utils): Response
     {
-        // get user name
-        $user = $this->getUser();
-        if ($user instanceof UserInterface) {
-            $username = $user->getUsername();
-        } else {
-            $username = $request->get('username');
-        }
+        // create form
+        $form = $this->createForm(FosUserResetPasswordType::class, [
+            'username' => $this->getUserName($request),
+        ]);
 
-        // parameters
-        $error = $utils->getLastAuthenticationError();
-        if (!$error instanceof AuthenticationException) {
-            $error = null;
-        }
-
-        // create and display form
-        $data = ['username' => $username];
-        $form = $this->createForm(FosUserResetPasswordType::class, $data);
-
+        // display form
         return $this->render('@FOSUser/Resetting/request.html.twig', [
             'form' => $form->createView(),
-            'error' => $error,
+            'error' => $this->getLastAuthenticationError($utils),
         ]);
+    }
+
+    /**
+     * Gets the authenticate Csrf token.
+     *
+     * @return string|null the Csrf token, if found; null otherwise
+     */
+    private function getCsrfToken(): ?string
+    {
+        return $this->manager->getToken('authenticate')->getValue();
+    }
+
+    /**
+     * Gets the last authentication error.
+     *
+     * @param AuthenticationUtils $utils the utility to get error
+     *
+     * @return AuthenticationException|null the error, if found; null otherwise
+     */
+    private function getLastAuthenticationError(AuthenticationUtils $utils): ?AuthenticationException
+    {
+        $error = $utils->getLastAuthenticationError();
+        if ($error instanceof AuthenticationException) {
+            return $error;
+        } else {
+            // The value does not come from the security component.
+            return null;
+        }
+    }
+
+    /**
+     * Gets the user name.
+     *
+     * @param Request the request
+     *
+     * @return string|null the user name, if found; null otherwise
+     */
+    private function getUserName(Request $request): ?string
+    {
+        $user = $this->getUser();
+        if ($user instanceof UserInterface) {
+            return $user->getUsername();
+        } else {
+            return $request->get('username');
+        }
     }
 }

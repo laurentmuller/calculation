@@ -58,6 +58,18 @@ class CategoriesReport extends BaseReport
             return false;
         }
 
+        // count values
+        $marginsCount = 0;
+        $productsCount = 0;
+        foreach ($categories as $category) {
+            $marginsCount += $category->countMargins();
+            $productsCount += $category->countProducts();
+        }
+
+        if (0 === $count) {
+            return false;
+        }
+
         // sort
         Utils::sortField($categories, 'code');
 
@@ -68,12 +80,13 @@ class CategoriesReport extends BaseReport
         $table = $this->createTable();
 
         // categories
-        $marginsCount = 0;
         $last = \end($categories);
+        $codeStyle = PdfStyle::getCellStyle()->setFontBold();
+        $emptyStyle = PdfStyle::getCellStyle()->setBorder('LR');
         foreach ($categories as $category) {
-            $marginsCount += $this->outputCategory($table, $category);
+            $this->outputCategory($table, $category, $codeStyle);
             if ($category !== $last) {
-                $table->singleLine();
+                $table->singleLine(null, $emptyStyle);
             }
         }
         $this->resetStyle();
@@ -82,19 +95,22 @@ class CategoriesReport extends BaseReport
         $txtCount = $this->trans('report.categories.count_category', [
             '%count%' => $count,
         ]);
+        $txtProduct = $this->trans('report.categories.count_product', [
+            '%count%' => $productsCount,
+        ]);
         $txtMargin = $this->trans('report.categories.count_margin', [
             '%count%' => $marginsCount,
         ]);
 
-        $this->SetY($this->GetY() + 1);
-
-        $margin = $this->setCellMargin(0);
-        $table->getColumns()[0]->setFixed(false);
-        $table->startRow(PdfStyle::getNoBorderStyle())
-            ->add($txtCount, 3)
-            ->add($txtMargin, 3)
+        $table = new PdfTableBuilder($this);
+        $table->addColumn(PdfColumn::left(null, 20))
+            ->addColumn(PdfColumn::center(null, 20))
+            ->addColumn(PdfColumn::right(null, 20))
+            ->startRow(PdfStyle::getNoBorderStyle())
+            ->add($txtCount)
+            ->add($txtProduct)
+            ->add($txtMargin)
             ->endRow();
-        $this->setCellMargin($margin);
 
         return true;
     }
@@ -121,10 +137,10 @@ class CategoriesReport extends BaseReport
         $table = new PdfTableBuilder($this);
         $table->addColumn(PdfColumn::left($this->trans('category.fields.code'), 40, true))
             ->addColumn(PdfColumn::left($this->trans('category.fields.description'), 50))
-            ->addColumn(PdfColumn::right($this->trans('category.fields.products'), 20, true))
-            ->addColumn(PdfColumn::right($this->trans('categorymargin.fields.minimum'), 25, true))
-            ->addColumn(PdfColumn::right($this->trans('categorymargin.fields.maximum'), 25, true))
-            ->addColumn(PdfColumn::right($this->trans('categorymargin.fields.margin'), 25, true))
+            ->addColumn(PdfColumn::right($this->trans('category.fields.products'), 15, true))
+            ->addColumn(PdfColumn::right($this->trans('categorymargin.fields.minimum'), 22, true))
+            ->addColumn(PdfColumn::right($this->trans('categorymargin.fields.maximum'), 22, true))
+            ->addColumn(PdfColumn::right($this->trans('categorymargin.fields.margin'), 18, true))
             ->outputHeaders();
 
         return $table;
@@ -133,15 +149,14 @@ class CategoriesReport extends BaseReport
     /**
      * Ouput a category.
      *
-     * @param PdfTableBuilder $table    the table to render to
-     * @param Category        $category the category to output
-     *
-     * @return int the number of margins
+     * @param PdfTableBuilder $table     the table to render to
+     * @param Category        $category  the category to output
+     * @param PdfStyle        $codeStyle the style for the category code
      */
-    private function outputCategory(PdfTableBuilder $table, Category $category): int
+    private function outputCategory(PdfTableBuilder $table, Category $category, PdfStyle $codeStyle): void
     {
         $table->startRow()
-            ->add($category->getCode())
+            ->add($category->getCode(), 1, $codeStyle)
             ->add($category->getDescription())
             ->add($this->localeInt($category->countProducts()));
 
@@ -160,12 +175,9 @@ class CategoriesReport extends BaseReport
                     ->add($this->localePercent($margin->getMargin(), false))
                     ->endRow();
             }
-
-            return $margins->count();
+        } else {
+            $empty = $this->trans('report.categories.empty_margins');
+            $table->add($empty, 3)->endRow();
         }
-        $empty = $this->trans('report.categories.empty_margins');
-        $table->add($empty, 3)->endRow();
-
-        return 0;
     }
 }

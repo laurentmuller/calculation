@@ -38,12 +38,12 @@
         </tbody>
         <tfoot>
             <tr>
-            	<th>{{ 'fields.total'|trans }}</th>
-            	<th class="text-currency">{{ count|integer }}</th>
-                <th class="text-currency">{{ items|number_format(0) }}</th>
-            	<th class="text-percent">{{ marginPercent|percent(false) }}</th>
-                <th class="text-currency">{{ marginAmount|number_format(0) }}</th>
-                <th class="text-currency">{{ total|number_format(0) }}</th>                
+            	<td class="font-weight-bold">{{ 'fields.total'|trans }}</td>
+            	<td class="font-weight-bold text-currency">{{ count|integer }}</td>
+                <td class="font-weight-bold text-currency">{{ items|number_format(0) }}</td>
+            	<td class="font-weight-bold text-percent">{{ marginPercent|percent(false) }}</td>
+                <td class="font-weight-bold text-currency">{{ marginAmount|number_format(0) }}</td>
+                <td class="font-weight-bold text-currency">{{ total|number_format(0) }}</td>                
             </tr>
         </tfoot>
     </table>

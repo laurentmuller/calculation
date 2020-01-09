@@ -8,6 +8,8 @@
 {%- set isSuperAdmin = is_granted('ROLE_SUPER_ADMIN') -%}
 {%- set isPrevAdmin  = is_granted('ROLE_PREVIOUS_ADMIN') -%}
 {%- set isRemembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
+{%- set isBibi       = isDev and isRemembered and app.user.username == 'Bibi' -%}
+
 {# rights #}
 {%- set calculs      = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CALCULATION) -%}
 {%- set products     = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_PRODUCT) -%}  
@@ -15,7 +17,7 @@
 {%- set states       = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CALCULATION_STATE) -%}
 {%- set margins      = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_GLOBAL_MARGIN) -%}
 {%- set customers    = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CUSTOMER) and isDev -%}
-{%- set isBibi       = isDev and isRemembered and app.user.username == 'Bibi' -%}
+
 {# navigation #}
 <nav id="navigation" role="navigation" class="navbar navbar-expand-md {{ theme_background(app.request) }}">
     <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title'|trans }}">
@@ -48,6 +50,7 @@
                     {{- icons.dropdownItem(path('globalmargin_list'), 'globalmargin.list.title', 'percent') -}}
                 {%- endif -%}                     
                 {%- if customers %}
+                    {{- icons.dropdownSeparator -}}
                     {{- icons.dropdownItem(path('customer_list'), 'customer.list.title', 'address-card far') -}}
                 {%- endif -%}
                 </div>

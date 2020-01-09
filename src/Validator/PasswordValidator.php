@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Validator;
 
 use App\Service\BlacklistProvider;
+use App\Traits\MathTrait;
 use App\Traits\NumberFormatterTrait;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -29,6 +30,7 @@ use ZxcvbnPhp\Zxcvbn;
  */
 class PasswordValidator extends ConstraintValidator
 {
+    use MathTrait;
     use NumberFormatterTrait;
 
     /**
@@ -64,28 +66,11 @@ class PasswordValidator extends ConstraintValidator
     }
 
     /**
-     * Translate the level.
-     *
-     * @param TranslatorInterface $translator the translator
-     * @param int                 $level      the level (0 -4)
-     *
-     * @return string the translated level
+     * Gets the translator.
      */
-    public static function translateLevel(TranslatorInterface $translator, int $level): string
+    public function getTranslator(): TranslatorInterface
     {
-        // check range
-        if ($level < 0) {
-            $level = 0;
-        } elseif ($level > 4) {
-            $level = 4;
-        }
-        if ($translator) {
-            $id = 'password.strength_level.' . self::$LEVEL_TO_LABEL[$level];
-
-            return $translator->trans($id, [], 'validators');
-        }
-
-        return (string) $level;
+        return $this->translator;
     }
 
     /**
@@ -313,8 +298,8 @@ class PasswordValidator extends ConstraintValidator
             $strength = $zx->passwordStrength($value);
             $score = $strength['score'];
             if ($score < $constraint->minStrength) {
-                $strength_min = self::translateLevel($this->translator, $constraint->minStrength);
-                $strength_current = self::translateLevel($this->translator, $score);
+                $strength_min = $this->translateLevel($constraint->minStrength);
+                $strength_current = $this->translateLevel($score);
                 $parameters = [
                     '{{strength_min}}' => $strength_min,
                     '{{strength_current}}' => $strength_current,
@@ -359,14 +344,17 @@ class PasswordValidator extends ConstraintValidator
     }
 
     /**
-     * Translate the strength level.
+     * Translate the level.
      *
-     * @param int $level the level
+     * @param int $level the level (0 - 4)
      *
      * @return string the translated level
      */
-    private function transLevel(int $level): string
+    private function translateLevel(int $level): string
     {
-        return self::translateLevel($this->translator, $level);
+        $level = $this->validateIntRange($level, 0, 4);
+        $id = 'password.strength_level.' . self::$LEVEL_TO_LABEL[$level];
+
+        return $this->translator->trans($id, []);
     }
 }

@@ -1,0 +1,51 @@
+abstract_margin:
+    maximum_geather_minimum: The maximum value must be greater than the minimum value.
+    maximum_numeric: The maximum value must be a number.
+    minimum_overlap: The minimum value overlaps an existing margin.
+    maximum_overlap: The maximum value overlaps an existing margin.
+    type_numeric: The value must be a number.
+category:
+    unique_code: This name is already used by another category.
+product:
+    unique_description: This description is already used by another item.
+customer:
+    unique_email: This e-mail address is already in use.
+    zip_code: The zip code must contain 4 digits.
+    empty: Please provide at least one first or last name or company.
+fos_user:
+    username:
+        not_found: The username or e-mail address cannot be found.
+state:
+    unique_code: This name is already used by another status.
+property:
+    unique_name: This name is already used by another property.
+recaptcha:
+    missing-input-secret: The secret parameter is missing.
+    invalid-input-secret: The secret parameter is invalid or malformed.
+    missing-input-response: The response parameter is missing.
+    invalid-input-response: The response parameter is invalid or malformed.
+    bad-request: The request is invalid or malformed.
+    invalid-json: The response has an invalid JSON format.
+    connection-failed: Unable to connect to the service.
+    bad-response: The service did not return the code 200.
+    unknown-error: An unknown error occurred during validation.
+    hostname-mismatch: The hostname does not match.
+    action-mismatch: The action does not match.
+    score-threshold-not-met: The score-threshold-not-met threshold is not met.
+    challenge-timeout: The challenge timeout has been reached.
+    timeout-or-duplicate: The timeout has been reached or the validation has been called twice.
+    required: You must check "I am not a robot".
+password:
+    blacklist: The password is part of the forbidden words list.
+    email: The password cannot be an email address.
+    minLength: The password must be at least {{length}} characters long.
+    minStrength: The password must have a strength of "{{strength_min}}", the current strength is "{{strength_current}}".
+    caseDiff: The password must be both upper and lower case.
+    letters: The password must contain at least one letter.
+    numbers: The password must contain at least one digit.
+    specialCharacter: The password must contain at least one special character.
+    pwned: The password has been found {{count}} times in a database of compromised passwords.
+captcha:
+    invalid: The control code is invalid.
+    timeout: The timeout has been reached. Try reloading the page or image.
+    generate: Unable to generate a new image. 

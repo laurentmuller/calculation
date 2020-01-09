@@ -39,7 +39,7 @@ class Password extends Constraint
      * @var bool
      */
     public $blackList = false;
-    public $blackListMessage = 'The password is part of a list of prohibited words.';
+    public $blackListMessage = 'The password is part of the forbidden words list.';
 
     /**
      * Checks if the password contains upper and lower characters.
@@ -47,7 +47,7 @@ class Password extends Constraint
      * @var bool
      */
     public $caseDiff = false;
-    public $caseDiffMessage = 'The password must include both upper and lower case letters.';
+    public $caseDiffMessage = 'The password must be both upper and lower case.';
 
     /**
      * Checks if the password is an e-mail.
@@ -63,7 +63,7 @@ class Password extends Constraint
      * @var bool
      */
     public $letters = true;
-    public $lettersMessage = 'The password must include at least one letter.';
+    public $lettersMessage = 'The password must contain at least one letter.';
 
     /**
      * Checks the minimum length of the password.
@@ -74,7 +74,7 @@ class Password extends Constraint
     public $minLengthMessage = 'The password must be at least {{length}} characters long.';
 
     /**
-     * Checks the password strength (Value from 0 to 4).
+     * Checks the password strength (Value from 0 to 4 or -1 to disable).
      *
      * @var int
      */

@@ -484,6 +484,7 @@ report:
         total: Total
     categories:
         count_category: 'Nombre de catégories : %count%'
+        count_product: 'Nombre d''articles : %count%'
         count_margin: 'Nombre de marges : %count%'
         empty_margins: Aucune marge définie.
     customer:
@@ -704,7 +705,7 @@ password:
     letters: Une lettre obligatoire
     numbers: Un chiffre obligatoire
     specialCharacter: Un caractère spécial obligatoire
-    caseDiff: Une lettre majuscule et une lettre minuscule obligatoire
+    caseDiff: Une lettre majuscule et minuscule obligatoire
     pwned: Le mot de passe n'est pas compromis
     email: Le mot de passe n'est pas une adresse e-mail
     blackList: Liste de mots interdits

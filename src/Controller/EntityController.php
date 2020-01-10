@@ -60,16 +60,21 @@ abstract class EntityController extends BaseController
     }
 
     /**
-     * This function is called before an entity is deleted from the database.
-     * Derived class can take actions before deletion occurs.
+     * Raised after the given entity is deleted.
+     *
+     * @param mixed $item the deleted entity
+     */
+    protected function afterDelete($item): void
+    {
+    }
+
+    /**
+     * Raised before the given entity is deleted.
      *
      * @param mixed $item the entity to delete
-     *
-     * @return bool true to delete; false to cancel deletion
      */
-    protected function canDelete($item): bool
+    protected function beforeDelete($item): void
     {
-        return true;
     }
 
     /**
@@ -96,11 +101,11 @@ abstract class EntityController extends BaseController
         if ($this->handleFormRequest($form, $request)) {
             try {
                 // remove
-                if ($this->canDelete($item)) {
-                    $em = $this->getManager();
-                    $em->remove($item);
-                    $em->flush();
-                }
+                $this->beforeDelete($item);
+                $em = $this->getManager();
+                $em->remove($item);
+                $em->flush();
+                $this->afterDelete($item);
 
                 // message
                 $message = Utils::getArrayValue($parameters, 'success', 'common.delete_success');
@@ -139,7 +144,7 @@ abstract class EntityController extends BaseController
      *                                <ul>
      *                                <li><code>item</code> : the item to edit.</li>
      *                                <li><code>type</code> : the form type.</li>
-     *                                <li><code>template</code> : the Twig template.</li>
+     *                                <li><code>template</code> : the Twig template to render.</li>
      *                                <li><code>route</code> : the route to redirect on success.</li>
      *                                </ul>
      */
@@ -391,7 +396,7 @@ abstract class EntityController extends BaseController
      * @param Request         $request    the request to get parameters
      * @param EntityDataTable $table      the datatable
      * @param string          $template   the template name to render
-     * @param array           $attributes the additional attributes to pass to the view
+     * @param array           $attributes the attributes to pass to the view
      *
      * @return Response a JSON response if a callback, the table view otherwise
      */
@@ -402,10 +407,8 @@ abstract class EntityController extends BaseController
             return $this->json($results);
         }
 
-        // merge attributes
-        $attributes = \array_merge($attributes, [
-            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
-        ]);
+        // update attributes
+        $attributes['edit-action'] = \json_encode($this->getApplication()->isEditAction());
 
         // parameters
         $parameters = [

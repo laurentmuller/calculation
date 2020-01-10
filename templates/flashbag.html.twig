@@ -14,7 +14,7 @@
         data-margin-bottom="55" 
         data-subtitle="{{ app_name_version }}" 
         data-display-subtitle="{{ flashbagSubTitle() ? 'true' : 'false' }}">
-{% for key, messages in app.flashes %}
-    {% for message in messages %}{{ _self.addFlashbag(key, message) }}{% endfor %}
-{% endfor %}
+{%- for key, messages in app.flashes -%}
+    {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
+{%- endfor -%}
 </div>

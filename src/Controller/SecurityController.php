@@ -33,37 +33,15 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * @var bool
-     */
-    private $debug;
-
-    /**
-     * @var CsrfTokenManagerInterface
-     */
-    private $manager;
-
-    /**
-     * Constructor.
-     *
-     * @param CsrfTokenManagerInterface $manager the token manager
-     * @param KernelInterface           $kernel  the kernel
-     */
-    public function __construct(?CsrfTokenManagerInterface $manager = null, KernelInterface $kernel)
-    {
-        $this->manager = $manager;
-        $this->debug = $kernel->isDebug();
-    }
-
-    /**
      * Show the login form.
      */
-    public function loginAction(Request $request, AuthenticationUtils $utils): Response
+    public function loginAction(Request $request, CsrfTokenManagerInterface $manager, KernelInterface $kernel, AuthenticationUtils $utils): Response
     {
         // create form
         $form = $this->createForm(FosUserLoginType::class, [
-            '_username' => $this->getUserName($request),
-            '_csrf_token' => $this->getCsrfToken(),
-            '_remember_me' => $this->debug,
+            '_username' => $this->getUserName($request, $utils),
+            '_csrf_token' => $this->getCsrfToken($manager),
+            '_remember_me' => $kernel->isDebug(),
         ]);
 
         // display form
@@ -80,7 +58,7 @@ class SecurityController extends AbstractController
     {
         // create form
         $form = $this->createForm(FosUserResetPasswordType::class, [
-            'username' => $this->getUserName($request),
+            'username' => $this->getUserName($request, $utils),
         ]);
 
         // display form
@@ -93,11 +71,13 @@ class SecurityController extends AbstractController
     /**
      * Gets the authenticate Csrf token.
      *
+     * @param CsrfTokenManagerInterface $manager the token manager
+     *
      * @return string|null the Csrf token, if found; null otherwise
      */
-    private function getCsrfToken(): ?string
+    private function getCsrfToken(CsrfTokenManagerInterface $manager): ?string
     {
-        return $this->manager->getToken('authenticate')->getValue();
+        return $manager->getToken('authenticate')->getValue();
     }
 
     /**
@@ -122,14 +102,16 @@ class SecurityController extends AbstractController
      * Gets the user name.
      *
      * @param Request the request
+     * @param AuthenticationUtils the utility
      *
      * @return string|null the user name, if found; null otherwise
      */
-    private function getUserName(Request $request): ?string
+    private function getUserName(Request $request, AuthenticationUtils $utils): ?string
     {
-        $user = $this->getUser();
-        if ($user instanceof UserInterface) {
+        if ($user = $this->getUser() instanceof UserInterface) {
             return $user->getUsername();
+        } elseif ($userName = $utils->getLastUsername()) {
+            return $userName;
         } else {
             return $request->get('username');
         }

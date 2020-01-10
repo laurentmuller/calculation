@@ -15,7 +15,9 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CalculationGroup;
+use App\Entity\Category;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * Repository for calculation group entity.
@@ -34,5 +36,25 @@ class CalculationGroupRepository extends BaseRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CalculationGroup::class);
+    }
+
+    /**
+     * Count the number of groups for the given category.
+     *
+     * @param Category $category the category to search for
+     *
+     * @return int the number of groups
+     */
+    public function countCategoryReferences(Category $category): int
+    {
+        $result = $this->createQueryBuilder('e')
+            ->select('COUNT(e.id)')
+            ->innerJoin('e.category', 'c')
+            ->where('c.id = :categoryId')
+            ->setParameter('categoryId', $category->getId(), Types::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return (int) $result;
     }
 }

@@ -20,6 +20,7 @@ use App\Form\CalculationStateType;
 use App\Interfaces\IApplicationService;
 use App\Pdf\PdfResponse;
 use App\Report\CalculationStatesReport;
+use App\Repository\CalculationRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,17 +37,17 @@ class CalculationStateController extends EntityController
     /**
      * The delete route.
      */
-    public const ROUTE_DELETE = 'calculationstate_delete';
+    private const ROUTE_DELETE = 'calculationstate_delete';
 
     /**
      * The list route.
      */
-    public const ROUTE_LIST = 'calculationstate_list';
+    private const ROUTE_LIST = 'calculationstate_list';
 
     /**
      * The edit template.
      */
-    public const TEMPLATE_EDIT = 'calculationstate/calculationstate_edit.html.twig';
+    private const TEMPLATE_EDIT = 'calculationstate/calculationstate_edit.html.twig';
 
     /**
      * Constructor.
@@ -81,8 +82,24 @@ class CalculationStateController extends EntityController
      *
      * @Route("/delete/{id}", name="calculationstate_delete", requirements={"id": "\d+" })
      */
-    public function delete(Request $request, CalculationState $item): Response
+    public function delete(Request $request, CalculationState $item, CalculationRepository $repository): Response
     {
+        // calculation?
+        if (0 !== $repository->countStateReferences($item)) {
+            $display = $item->getDisplay();
+            $description = $this->trans('calculationstate.delete.failure', ['%name%' => $display]);
+            $parameters = [
+                'id' => $item->getId(),
+                'display_email' => false,
+                'display_description' => false,
+                'page_list' => self::ROUTE_LIST,
+                'title' => 'calculationstate.delete.title',
+                'description' => $description,
+            ];
+
+            return $this->render('@Twig/Exception/exception.html.twig', $parameters);
+        }
+
         $parameters = [
             'item' => $item,
             'page_list' => self::ROUTE_LIST,
@@ -162,15 +179,13 @@ class CalculationStateController extends EntityController
      *
      * @param CalculationState $item
      */
-    protected function canDelete($item): bool
+    protected function afterDelete($item): void
     {
-        // remove from properties if this state is the default
+        // update default state (if applicable)
         $id = $this->getApplication()->getDefaultStateId();
         if ($id === $item->getId()) {
             $this->getApplication()->setProperties([IApplicationService::DEFAULT_STATE => null]);
         }
-
-        return parent::canDelete($item);
     }
 
     /**
@@ -181,7 +196,7 @@ class CalculationStateController extends EntityController
         /** @var CalculationState $item */
         $item = $parameters['item'];
 
-        // $parameters['title'] = $item->isNew() ? 'calculationstate.add.title' : 'calculationstate.edit.title';
+        // update parameters
         $parameters['type'] = CalculationStateType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['route'] = self::ROUTE_LIST;

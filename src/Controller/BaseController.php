@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Interfaces\IFlashMessageInterface;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfResponse;
 use App\Report\BaseReport;
@@ -35,7 +34,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Base controller.
  */
-abstract class BaseController extends AbstractController implements IFlashMessageInterface
+abstract class BaseController extends AbstractController
 {
     use FormatterTrait;
     use TranslatorFlashMessageTrait;

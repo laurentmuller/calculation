@@ -31,6 +31,20 @@ trait SessionTrait
     protected $session;
 
     /**
+     * Gets the session.
+     *
+     * @return SessionInterface|null the session, if found; null otherwise
+     */
+    protected function doGetSession(): ?SessionInterface
+    {
+        if (!$this->session && \method_exists($this, 'getSession')) {
+            return $this->session = $this->getSession();
+        }
+
+        return $this->session;
+    }
+
+    /**
      * Gets a session attribute, as integer value.
      *
      * @param string $key     the attribute name
@@ -138,19 +152,5 @@ trait SessionTrait
         }
 
         return $this;
-    }
-
-    /**
-     * Gets the session.
-     *
-     * @return SessionInterface|null the session if found; null otherwise
-     */
-    private function doGetSession(): ?SessionInterface
-    {
-        if (!$this->session && \method_exists($this, 'getSession')) {
-            return $this->session = $this->getSession();
-        }
-
-        return $this->session;
     }
 }

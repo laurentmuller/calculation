@@ -19,6 +19,8 @@ use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
+use App\Repository\CalculationGroupRepository;
+use App\Repository\ProductRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,17 +38,17 @@ class CategoryController extends EntityController
     /**
      * The delete route.
      */
-    public const ROUTE_DELETE = 'category_delete';
+    private const ROUTE_DELETE = 'category_delete';
 
     /**
      * The list route.
      */
-    public const ROUTE_LIST = 'category_list';
+    private const ROUTE_LIST = 'category_list';
 
     /**
      * The edit template.
      */
-    public const TEMPLATE_EDIT = 'category/category_edit.html.twig';
+    private const TEMPLATE_EDIT = 'category/category_edit.html.twig';
 
     /**
      * Constructor.
@@ -81,8 +83,24 @@ class CategoryController extends EntityController
      *
      * @Route("/delete/{id}", name="category_delete", requirements={"id": "\d+" })
      */
-    public function delete(Request $request, Category $item): Response
+    public function delete(Request $request, Category $item, ProductRepository $productRepository, CalculationGroupRepository $groupRepository): Response
     {
+        // external references?
+        if (0 !== $productRepository->countCategoryReferences($item) || 0 !== $groupRepository->countCategoryReferences($item)) {
+            $display = $item->getDisplay();
+            $description = $this->trans('category.delete.failure', ['%name%' => $display]);
+            $parameters = [
+                'id' => $item->getId(),
+                'display_email' => false,
+                'display_description' => false,
+                'page_list' => self::ROUTE_LIST,
+                'title' => 'category.delete.title',
+                'description' => $description,
+            ];
+
+            return $this->render('@Twig/Exception/exception.html.twig', $parameters);
+        }
+
         $parameters = [
             'item' => $item,
             'page_list' => self::ROUTE_LIST,
@@ -164,7 +182,7 @@ class CategoryController extends EntityController
         /** @var Category $item */
         $item = $parameters['item'];
 
-        // $parameters['title'] = $item->isNew() ? 'category.add.title' : 'category.edit.title';
+        // update parameters
         $parameters['type'] = CategoryType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['route'] = self::ROUTE_LIST;

@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Listener;
 
 use App\Controller\IndexController;
-use App\Interfaces\IFlashMessageInterface;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use App\Traits\TranslatorFlashMessageTrait;
@@ -46,7 +45,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @internal
  */
-final class UserEventListener implements EventSubscriberInterface, LogoutHandlerInterface, IFlashMessageInterface
+final class UserEventListener implements EventSubscriberInterface, LogoutHandlerInterface
 {
     use TranslatorFlashMessageTrait;
 

@@ -24,6 +24,26 @@ trait FlashMessageTrait
     use SessionTrait;
 
     /**
+     * The error flash message type.
+     */
+    private static $FLASH_TYPE_ERROR = 'danger';
+
+    /**
+     * The info flash message type.
+     */
+    private static $FLASH_TYPE_INFO = 'info';
+
+    /**
+     * The success flash message type.
+     */
+    private static $FLASH_TYPE_SUCCESS = 'success';
+
+    /**
+     * The warning flash message type.
+     */
+    private static $FLASH_TYPE_WARNING = 'warning';
+
+    /**
      * Adds a flash message with the given type to the current session.
      *
      * @param string $type    the message type
@@ -31,9 +51,9 @@ trait FlashMessageTrait
      */
     protected function addFlashMessage(string $type, string $message): self
     {
-        if ($this->session) {
+        if ($session = $this->doGetSession()) {
             /** @var \Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface $flashBag */
-            $flashBag = $this->session->getFlashBag();
+            $flashBag = $session->getFlashBag();
             $flashBag->add($type, $message);
         }
 
@@ -48,7 +68,7 @@ trait FlashMessageTrait
      */
     protected function error(string $message): self
     {
-        return $this->addFlashMessage(self::FLASH_TYPE_ERROR, $message);
+        return $this->addFlashMessage(self::$FLASH_TYPE_ERROR, $message);
     }
 
     /**
@@ -59,7 +79,7 @@ trait FlashMessageTrait
      */
     protected function info(string $message): self
     {
-        return $this->addFlashMessage(self::FLASH_TYPE_INFO, $message);
+        return $this->addFlashMessage(self::$FLASH_TYPE_INFO, $message);
     }
 
     /**
@@ -70,7 +90,7 @@ trait FlashMessageTrait
      */
     protected function succes(string $message): self
     {
-        return $this->addFlashMessage(self::FLASH_TYPE_SUCCESS, $message);
+        return $this->addFlashMessage(self::$FLASH_TYPE_SUCCESS, $message);
     }
 
     /**
@@ -81,6 +101,6 @@ trait FlashMessageTrait
      */
     protected function warning(string $message): self
     {
-        return $this->addFlashMessage(self::FLASH_TYPE_WARNING, $message);
+        return $this->addFlashMessage(self::$FLASH_TYPE_WARNING, $message);
     }
 }

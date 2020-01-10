@@ -54,6 +54,10 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    # App\Listener\PersistenceListener:
+    #     tags:
+    #         - { name: 'doctrine.event_subscriber' }
+            
     # make public to use with vich_uploader
     App\Service\UserNamer:
         public: true

@@ -35,6 +35,20 @@ trait FormatterTrait
     protected $application;
 
     /**
+     * Gets the application.
+     *
+     * @return ApplicationService|null the application if found; null otherwise
+     */
+    protected function doGetApplication(): ?ApplicationService
+    {
+        if (!$this->application && \method_exists($this, 'getApplication')) {
+            return $this->application = $this->getApplication();
+        }
+
+        return $this->application;
+    }
+
+    /**
      * Gets the default currency symbol. Override the NumberFormatterTrait function.
      */
     protected function getDefaultCurrency(): string
@@ -100,19 +114,5 @@ trait FormatterTrait
         }
 
         return FormatUtils::getTimeType();
-    }
-
-    /**
-     * Gets the application.
-     *
-     * @return ApplicationService|null the application if found; null otherwise
-     */
-    private function doGetApplication(): ?ApplicationService
-    {
-        if (!$this->application && \method_exists($this, 'getApplication')) {
-            return $this->application = $this->getApplication();
-        }
-
-        return $this->application;
     }
 }

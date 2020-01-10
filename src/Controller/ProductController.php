@@ -36,17 +36,17 @@ class ProductController extends EntityController
     /**
      * The delete route.
      */
-    public const ROUTE_DELETE = 'product_delete';
+    private const ROUTE_DELETE = 'product_delete';
 
     /**
      * The list route.
      */
-    public const ROUTE_LIST = 'product_list';
+    private const ROUTE_LIST = 'product_list';
 
     /**
      * The edit template.
      */
-    public const TEMPLATE_EDIT = 'product/product_edit.html.twig';
+    private const TEMPLATE_EDIT = 'product/product_edit.html.twig';
 
     /**
      * Constructor.
@@ -180,7 +180,7 @@ class ProductController extends EntityController
         /** @var Product $item */
         $item = $parameters['item'];
 
-        // $parameters['title'] = $item->isNew() ? 'product.add.title' : 'product.edit.title';
+        // update parameters
         $parameters['type'] = ProductType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['route'] = self::ROUTE_LIST;

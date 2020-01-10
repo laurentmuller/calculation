@@ -147,16 +147,10 @@ class ResponseSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // debug?
-        // if ($this->debug) {
-        //  return;
-        // }
-
-        // dev firewall
-        // $firewall = \array_slice(\explode('.', \trim($request->attributes->get('_firewall_context'))), -1)[0];
-        // if ('dev' === $firewall) {
-        //     return;
-        // }
+        // developement firewall?
+        if ($this->debug && $this->isDevFirewall($request)) {
+            return;
+        }
 
         // get response and headers
         $response = $event->getResponse();
@@ -247,6 +241,24 @@ class ResponseSubscriber implements EventSubscriberInterface
         $nonce = $this->extension->getNonce();
 
         return "'nonce-{$nonce}'";
+    }
+
+    /**
+     * Returns if the current firewall is the developement.
+     *
+     * @param Request $request the current request object
+     *
+     * @return bool true if developement firewall
+     */
+    private function isDevFirewall(Request $request): bool
+    {
+        if ($context = $request->attributes->get('_firewall_context')) {
+            $names = \explode('.', $context);
+
+            return 'dev' === \end($names);
+        }
+
+        return false;
     }
 
     /**

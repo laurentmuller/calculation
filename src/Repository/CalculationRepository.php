@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Calculation;
+use App\Entity\CalculationState;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Types\Types;
@@ -37,6 +38,26 @@ class CalculationRepository extends BaseRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Calculation::class);
+    }
+
+    /**
+     * Count the number of calculations for the given state.
+     *
+     * @param CalculationState $state the state to search for
+     *
+     * @return int the number of calculations
+     */
+    public function countStateReferences(CalculationState $state): int
+    {
+        $result = $this->createQueryBuilder('e')
+            ->select('COUNT(e.id)')
+            ->innerJoin('e.state', 's')
+            ->where('s.id = :stateId')
+            ->setParameter('stateId', $state->getId(), Types::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return (int) $result;
     }
 
     /**

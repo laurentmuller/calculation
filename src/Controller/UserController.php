@@ -51,17 +51,17 @@ class UserController extends EntityController
     /**
      * The delete route.
      */
-    public const ROUTE_DELETE = 'user_delete';
+    private const ROUTE_DELETE = 'user_delete';
 
     /**
      * The list route.
      */
-    public const ROUTE_LIST = 'user_list';
+    private const ROUTE_LIST = 'user_list';
 
     /**
      * The edit template.
      */
-    public const TEMPLATE_EDIT = 'user/user_edit.html.twig';
+    private const TEMPLATE_EDIT = 'user/user_edit.html.twig';
 
     /**
      * @var UserManagerInterface
@@ -512,7 +512,8 @@ class UserController extends EntityController
     {
         /** @var User $item */
         $item = $parameters['item'];
-        // $parameters['title'] = $item->isNew() ? 'user.add.title' : 'user.edit.title';
+
+        // update parameters
         $parameters['type'] = UserType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['route'] = self::ROUTE_LIST;
@@ -551,7 +552,7 @@ class UserController extends EntityController
     }
 
     /**
-     * Returns if the given user is the same as the logged user.
+     * Returns if the given user is the same as the logged-in user.
      *
      * @param User $user the user to verify
      *

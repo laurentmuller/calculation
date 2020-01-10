@@ -4,8 +4,10 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set isException = exception is defined -%}
-{%- set title_icon  = 'exclamation-circle' -%}
+{%- set title_icon    = 'exclamation-circle' -%}
+{%- set isException   = exception is defined -%}
+{%- set isEmail       = display_email is defined ? display_email : true -%}
+{%- set isDescription = display_description is defined ? display_description : true -%}
 {% if not title is defined %}
     {% if status_code is defined and status_code is not same as (0) %}
         {%- set title = 'error_page.title' -%}
@@ -15,31 +17,38 @@
     {%  endif %}
 {% endif %}
 
-{% block card_container_class '' %}
+{% block card_container_class isException ? '' : 'col-xl-8 offset-xl-2' %}
 {% block card_class 'border-danger' %}
 {% block card_header_class 'text-white bg-danger' %}
 
 {% block card_header %}
 {{ parent() }}
+{% if isDescription %}
 <p class="mb-0 ml-4">{{ 'error_page.description'|trans }}</p>
+{% endif %}
 {% endblock %}
 
 {% block card_body %}
-<p>
+<p class="{% if not (isException or isEmail) %}mb-0{% endif %}">
 {% block error_message -%}
 {{ description|default('')|raw }} {{ suggestion|default('')|raw }}
 {%- endblock %}
 </p>
 <div class="row d-print-none">
+{% if isException %}
     <div class="col-md-9"> 
         <p class="mb-0">{{ 'error_page.link'|trans({'%webmaster%':webmaster, '%application%':app_name_version })|raw }}</p>
     </div>
     <div class="col-md-3 text-right">
-        {% if isException %}
-            <a data-toggle="collapse" href="#exception-detail" class="collapsed" aria-expanded="false" aria-controls="exception-detail">{{ 'error_page.details'|trans }}</a>
-        {%  endif %}
+        <a data-toggle="collapse" href="#exception-detail" class="collapsed" aria-expanded="false" aria-controls="exception-detail">{{ 'error_page.details'|trans }}</a>
     </div>
+{% elseif isEmail %}
+    <div class="col"> 
+        <p class="mb-0">{{ 'error_page.link'|trans({'%webmaster%':webmaster, '%application%':app_name_version })|raw }}</p>
+    </div>
+{%  endif %}
 </div>
+
 {% if isException %}
 <div id="exception-detail" class="collapse mt-3" aria-expanded="false">
     <table id="exception-table" class="table table-bordered table-exception table-sm mb-0">

@@ -80,7 +80,7 @@ trait TranslatorTrait
      *
      * @return TranslatorInterface|null the translator if found; null otherwise
      */
-    private function doGetTranslator(): ?TranslatorInterface
+    protected function doGetTranslator(): ?TranslatorInterface
     {
         if (!$this->translator && \method_exists($this, 'getTranslator')) {
             return $this->translator = $this->getTranslator();

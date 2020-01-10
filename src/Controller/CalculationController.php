@@ -59,25 +59,29 @@ class CalculationController extends EntityController
     /**
      * The delete route.
      */
-    public const ROUTE_DELETE = 'calculation_delete';
+    private const ROUTE_DELETE = 'calculation_delete';
 
     /**
      * The list route.
      */
-    public const ROUTE_LIST = 'calculation_list';
+    private const ROUTE_LIST = 'calculation_list';
 
     /**
      * The edit template.
      */
-    public const TEMPLATE_EDIT = 'calculation/calculation_edit.html.twig';
+    private const TEMPLATE_EDIT = 'calculation/calculation_edit.html.twig';
 
     /**
+     * The service to compute calculations.
+     *
      * @var CalculationService
      */
     private $calculationService;
 
     /**
      * Constructor.
+     *
+     * @param CalculationService $calculationService the service to compute calculations
      */
     public function __construct(CalculationService $calculationService)
     {
@@ -86,7 +90,7 @@ class CalculationController extends EntityController
     }
 
     /**
-     * Edit a new calculation.
+     * Add a new calculation.
      *
      * @Route("/add", name="calculation_add", methods={"GET", "POST"})
      */
@@ -103,8 +107,7 @@ class CalculationController extends EntityController
         }
 
         // default state
-        $state = $this->getApplication()->getDefaultState();
-        if ($state) {
+        if ($state = $this->getApplication()->getDefaultState()) {
             $item->setState($state);
         }
 
@@ -654,43 +657,44 @@ class CalculationController extends EntityController
             $updated = 0;
             $skipped = 0;
             $unmodifiable = 0;
-
             $suspended = $this->disableListeners();
 
-            /** @var Calculation[] $calculations */
-            $calculations = $this->getRepository()->findAll();
-            foreach ($calculations as $calculation) {
-                if ($includeClosed || $calculation->isEditable()) {
-                    if ($this->calculationService->updateTotal($calculation)) {
-                        ++$updated;
+            try {
+                /** @var Calculation[] $calculations */
+                $calculations = $this->getRepository()->findAll();
+                foreach ($calculations as $calculation) {
+                    if ($includeClosed || $calculation->isEditable()) {
+                        if ($this->calculationService->updateTotal($calculation)) {
+                            ++$updated;
+                        } else {
+                            ++$skipped;
+                        }
                     } else {
-                        ++$skipped;
+                        ++$unmodifiable;
                     }
-                } else {
-                    ++$unmodifiable;
                 }
+
+                if ($updated > 0) {
+                    $this->getManager()->flush();
+                }
+            } finally {
+                $this->enableListeners($suspended);
             }
 
-            if ($updated > 0) {
-                $this->getManager()->flush();
-            }
-            $this->enableListeners($suspended);
             $total = \count($calculations);
 
             // update last update
             $this->getApplication()->setProperties([IApplicationService::LAST_UPDATE => new \DateTime()]);
 
             // log results
-            if (null !== $logger) {
-                $context = [
+            $context = [
                     $this->trans('update.updated') => $updated,
                     $this->trans('update.skipped') => $skipped,
                     $this->trans('update.unmodifiable') => $unmodifiable,
                     $this->trans('update.total') => $total,
                 ];
-                $message = $this->trans('update.title');
-                $logger->info($message, $context);
-            }
+            $message = $this->trans('update.title');
+            $logger->info($message, $context);
 
             // display results
             $data = [
@@ -718,11 +722,12 @@ class CalculationController extends EntityController
         /** @var Calculation $item */
         $item = $parameters['item'];
 
-        // $parameters['title'] = $item->isNew() ? 'calculation.add.title' : 'calculation.edit.title_short';
+        // update parameters
         $parameters['type'] = CalculationType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['route'] = self::ROUTE_LIST;
         $parameters['success'] = $item->isNew() ? 'calculation.add.success' : 'calculation.edit.success';
+
         $parameters['groups'] = $this->calculationService->createGroupsFromCalculation($item);
         $parameters['min_margin'] = $this->getApplication()->getMinMargin();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();

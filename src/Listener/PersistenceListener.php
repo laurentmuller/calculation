@@ -22,7 +22,6 @@ use App\Entity\GlobalMargin;
 use App\Entity\IEntity;
 use App\Entity\Product;
 use App\Entity\User;
-use App\Interfaces\IFlashMessageInterface;
 use App\Traits\TranslatorFlashMessageTrait;
 use App\Utils\Utils;
 use Doctrine\Common\EventSubscriber;
@@ -30,6 +29,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -37,12 +37,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class PersistenceListener implements IFlashMessageInterface, EventSubscriber
+class PersistenceListener implements EventSubscriber
 {
     use TranslatorFlashMessageTrait;
 
     /**
-     * The application name,.
+     * The message title.
+     */
+    private const TITLE = 'Debug';
+
+    /**
+     * The application name.
      *
      * @var string
      */
@@ -64,16 +69,20 @@ class PersistenceListener implements IFlashMessageInterface, EventSubscriber
     ];
 
     /**
-     * Constructor.
+     * The debug mode.
      *
-     * @param ContainerInterface  $container  the container
-     * @param SessionInterface    $session    the session
-     * @param TranslatorInterface $translator the translator
+     * @var bool
      */
-    public function __construct(ContainerInterface $container, SessionInterface $session, TranslatorInterface $translator)
+    private $debug;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(ContainerInterface $container, KernelInterface $kernel, SessionInterface $session, TranslatorInterface $translator)
     {
         $this->session = $session;
         $this->translator = $translator;
+        $this->debug = $kernel->isDebug();
         $this->appName = $container->getParameter('app_name');
     }
 
@@ -82,11 +91,15 @@ class PersistenceListener implements IFlashMessageInterface, EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return [
-            Events::postUpdate,
-            Events::postPersist,
-            Events::postRemove,
-        ];
+        if ($this->debug) {
+            return [
+                Events::postUpdate,
+                Events::postPersist,
+                Events::postRemove,
+            ];
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -95,9 +108,9 @@ class PersistenceListener implements IFlashMessageInterface, EventSubscriber
     public function postPersist(LifecycleEventArgs $args): void
     {
         if ($entity = $this->getEntity($args)) {
-            $message = $this->getMessage($entity, '.add.success');
+            $id = $this->getId($entity, '.add.success');
             $params = $this->getParameters($entity);
-            $this->succesTrans($message, $params);
+            $this->info($this->translateMessage($id, $params));
         }
     }
 
@@ -107,9 +120,9 @@ class PersistenceListener implements IFlashMessageInterface, EventSubscriber
     public function postRemove(LifecycleEventArgs $args): void
     {
         if ($entity = $this->getEntity($args)) {
-            $message = $this->getMessage($entity, '.delete.success');
+            $id = $this->getId($entity, '.delete.success');
             $params = $this->getParameters($entity);
-            $this->warningTrans($message, $params);
+            $this->info($this->translateMessage($id, $params));
         }
     }
 
@@ -121,34 +134,18 @@ class PersistenceListener implements IFlashMessageInterface, EventSubscriber
         if ($entity = $this->getEntity($args)) {
             // special case for user entity when last login change
             if ($entity instanceof User && $this->isLastLogin($args, $entity)) {
-                $message = 'security.login.success';
+                $id = 'security.login.success';
                 $params = [
                     '%username%' => $entity->getUsername(),
                     '%appname%' => $this->appName,
                 ];
                 $domain = 'FOSUserBundle';
             } else {
-                $message = $this->getMessage($entity, '.edit.success');
+                $id = $this->getId($entity, '.edit.success');
                 $params = $this->getParameters($entity);
                 $domain = null;
             }
-            $this->succesTrans($message, $params, $domain);
-        }
-    }
-
-    /**
-     * Gets the domain used to translate the message.
-     *
-     * @param string $domain the default domain (null = 'messages')
-     *
-     * @return string the domain
-     */
-    private function getDomain(?string $domain = null): ?string
-    {
-        if ($this->session->has(self::LAST_DOMAIN)) {
-            return $this->session->remove(self::LAST_DOMAIN);
-        } else {
-            return $domain;
+            $this->info($this->translateMessage($id, $params, $domain));
         }
     }
 
@@ -170,16 +167,18 @@ class PersistenceListener implements IFlashMessageInterface, EventSubscriber
     }
 
     /**
-     * Gets the message to translate.
+     * Gets the message identifier to translate.
      *
      * @param IEntity $entity the entity
      * @param string  $suffix the message suffix
      *
-     * @return string the message to translate
+     * @return string the message identifier to translate
      */
-    private function getMessage(IEntity $entity, string $suffix): string
+    private function getId(IEntity $entity, string $suffix): string
     {
-        return \strtolower(Utils::getShortName($entity)) . $suffix;
+        $name = \strtolower(Utils::getShortName($entity));
+
+        return $name . $suffix;
     }
 
     /**
@@ -192,6 +191,14 @@ class PersistenceListener implements IFlashMessageInterface, EventSubscriber
     private function getParameters(IEntity $entity): array
     {
         return ['%name%' => $entity->getDisplay()];
+    }
+
+    /**
+     * Gets the flashbag message title.
+     */
+    private function getTitle(): string
+    {
+        return self::TITLE . ' - ' . $this->appName . '|';
     }
 
     /**
@@ -209,5 +216,22 @@ class PersistenceListener implements IFlashMessageInterface, EventSubscriber
         $changeSet = $unitOfWork->getEntityChangeSet($user);
 
         return \array_key_exists('lastLogin', $changeSet);
+    }
+
+    /**
+     * Translates the given message and add the title as prefix.
+     *
+     * @param string      $id         the message id
+     * @param array       $parameters an array of parameters for the message
+     * @param string|null $domain     the domain for the message or null to use the default
+     *
+     * @return string the translated string
+     */
+    private function translateMessage(string $id, array $parameters = [], ?string $domain = null): string
+    {
+        //$title = $this->getTitle();
+        $message = $this->trans($id, $parameters, $domain);
+
+        return self::TITLE . '|' . $message;
     }
 }

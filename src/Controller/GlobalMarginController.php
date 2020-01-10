@@ -35,17 +35,17 @@ class GlobalMarginController extends EntityController
     /**
      * The delete route.
      */
-    public const ROUTE_DELETE = 'globalmargin_delete';
+    private const ROUTE_DELETE = 'globalmargin_delete';
 
     /**
      * The list route.
      */
-    public const ROUTE_LIST = 'globalmargin_list';
+    private const ROUTE_LIST = 'globalmargin_list';
 
     /**
      * The edit template.
      */
-    public const TEMPLATE_EDIT = 'globalmargin/globalmargin_edit.html.twig';
+    private const TEMPLATE_EDIT = 'globalmargin/globalmargin_edit.html.twig';
 
     /**
      * Constructor.
@@ -156,10 +156,9 @@ class GlobalMarginController extends EntityController
         $item = $parameters['item'];
 
         // update parameters
-        // $parameters['title'] = $item->isNew() ? 'globalmargin.add.title' : 'globalmargin.edit.title';
+        $parameters['type'] = GlobalMarginType::class;
         $parameters['route'] = self::ROUTE_LIST;
         $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['type'] = GlobalMarginType::class;
         $parameters['success'] = $item->isNew() ? 'globalmargin.add.success' : 'globalmargin.edit.success';
 
         return parent::editItem($request, $parameters);

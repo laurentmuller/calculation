@@ -113,7 +113,7 @@ class AdminController extends BaseController
     }
 
     /**
-     * Import streets and cities for Switerland.
+     * Import streets and cities for Switzerland.
      *
      * @Route("/import", name="admin_import")
      * @IsGranted("ROLE_ADMIN")

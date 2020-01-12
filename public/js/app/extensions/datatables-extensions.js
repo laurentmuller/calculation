@@ -24,6 +24,34 @@ $.fn.dataTable.Api.register('getSelectedRow()', function () {
 });
 
 /**
+ * Select the first row (if any).
+ * 
+ * @returns {DataTables.Api} the selected row, if any; null otherwise.
+ */
+$.fn.dataTable.Api.register('selectedFirstRow()', function () {
+    'use strict';
+
+    if (this.rows().count()) {
+        this.cell(0, '0:visIdx').focus();
+    }
+    return this;
+});
+
+/**
+ * Select the last row (if any).
+ * 
+ * @returns {DataTables.Api} the selected row, if any; null otherwise.
+ */
+$.fn.dataTable.Api.register('selectedLastRow()', function () {
+    'use strict';
+
+    if (this.rows().count()) {
+        this.cell(this.rows().count() - 1, '0:visIdx').focus();
+    }
+    return this;
+});
+
+/**
  * Update the column titles.
  * 
  * @returns {DataTables.Api} this instance.
@@ -61,6 +89,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
     'use strict';
 
     const table = this;
+    const $table = $(table.table().node());
     let lastPageCalled = false;
 
     // bind search and page length
@@ -68,8 +97,8 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
     $('#table_length').initTableLength(table);
 
     // bind table body rows
-    $('#data-table tbody').on('dblclick', 'tr', function (e) {
-        return editOrShow(e);
+    $table.on('dblclick', 'tbody > tr', function (e) {
+        return editOrShow($table, e);
     });
 
     // bind datatable key down
@@ -113,6 +142,21 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
         // remove hiden search text
         $(":text[tabindex='0']").parent().remove();
 
+    }).on('draw', function () {
+        if (lastPageCalled) {
+            table.selectedLastRow();
+            lastPageCalled = false;
+        } else {
+            table.selectedFirstRow();
+        }
+        table.updateButtons().updateTitles();
+
+    }).on('search.dt', function () {
+        enableKeys();
+
+    }).on('length.dt', function () {
+        enableKeys();
+
     }).on('key-focus', function (e, datatable, cell) {
         // select row
         const row = datatable.row(cell.index().row);
@@ -128,7 +172,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
     }).on('key', function (e, datatable, key, cell, event) {
         switch (key) {
         case 13: // enter
-            return editOrShow(event);
+            return editOrShow($table, event);
         case 46: // delete
             return triggerClick(event, '.btn-table-delete');
         }
@@ -226,8 +270,7 @@ $.fn.getDefaultOrder = function (columns) {
 };
 
 /**
- * Merge the default options within the given options and initialize the data
- * table.
+ * Merge the default options within the given options and initialize the data table.
  * 
  * @param {Object}
  *            options - the options to merge with default values.
@@ -325,17 +368,13 @@ $.fn.initSearchInput = function (table, callback, $clearButton) {
  * 
  * @param {DataTables.Api}
  *            table - the table to update.
- * @param {function}
- *            callback - the callback to call (default is
- *            'tableLengthCallback').
  * @return {jQuery} The JQuery element for chaining.
  */
-$.fn.initTableLength = function (table, callback) {
+$.fn.initTableLength = function (table) {
     'use strict';
 
-    callback = callback || tableLengthCallback;
     return $(this).handleKeys().on('input', function () {
-        $(this).updateTimer(callback, 250, table);
+        $(this).updateTimer(tableLengthCallback, 250, table);
     });
 };
 
@@ -343,8 +382,7 @@ $.fn.initTableLength = function (table, callback) {
  * Enabled/Disabled datatables keys.
  * 
  * @param {string}
- *            disableEvent - the event name to disable keys (default is
- *            'focus').
+ *            disableEvent - the event name to disable keys (default is 'focus').
  * @param {string}
  *            enableEvent - the event name to enable keys (default is 'blur').
  * @param {string}
@@ -437,11 +475,11 @@ function enableKeys(selector) {
  *            e - the source event.
  * @returns {boolean} true if handle.
  */
-function editOrShow(e) {
+function editOrShow($table, e) {
     'use strict';
 
     // edit by default?
-    if ($('#data-table').attr('edit-action').toBool()) {
+    if ($table.attr('edit-action').toBool()) {
         return triggerClick(e, '.btn-table-edit') || triggerClick(e, '.btn-table-show');
     } else {
         return triggerClick(e, '.btn-table-show') || triggerClick(e, '.btn-table-edit');

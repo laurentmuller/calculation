@@ -87,17 +87,16 @@ class CalculationStateController extends EntityController
         // calculation?
         if (0 !== $repository->countStateReferences($item)) {
             $display = $item->getDisplay();
-            $description = $this->trans('calculationstate.delete.failure', ['%name%' => $display]);
+            $message = $this->trans('calculationstate.delete.failure', ['%name%' => $display]);
             $parameters = [
                 'id' => $item->getId(),
-                'display_email' => false,
-                'display_description' => false,
-                'page_list' => self::ROUTE_LIST,
                 'title' => 'calculationstate.delete.title',
-                'description' => $description,
+                'message' => $message,
+                'back_page' => self::ROUTE_LIST,
+                'back_text' => 'common.button_back_list',
             ];
 
-            return $this->render('@Twig/Exception/exception.html.twig', $parameters);
+            return $this->render('cards/card_warning.html.twig', $parameters);
         }
 
         $parameters = [

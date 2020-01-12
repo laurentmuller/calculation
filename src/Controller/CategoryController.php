@@ -88,17 +88,16 @@ class CategoryController extends EntityController
         // external references?
         if (0 !== $productRepository->countCategoryReferences($item) || 0 !== $groupRepository->countCategoryReferences($item)) {
             $display = $item->getDisplay();
-            $description = $this->trans('category.delete.failure', ['%name%' => $display]);
+            $message = $this->trans('category.delete.failure', ['%name%' => $display]);
             $parameters = [
                 'id' => $item->getId(),
-                'display_email' => false,
-                'display_description' => false,
-                'page_list' => self::ROUTE_LIST,
                 'title' => 'category.delete.title',
-                'description' => $description,
+                'message' => $message,
+                'back_page' => self::ROUTE_LIST,
+                'back_text' => 'common.button_back_list',
             ];
 
-            return $this->render('@Twig/Exception/exception.html.twig', $parameters);
+            return $this->render('cards/card_warning.html.twig', $parameters);
         }
 
         $parameters = [

@@ -19,12 +19,14 @@ use App\DataTables\Tables\AbstractDataTable;
 use App\Interfaces\IEntityVoter;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
-use App\Service\FullSearchService;
+use App\Service\SearchService;
 use App\Traits\TranslatorTrait;
+use App\Utils\Utils;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
 use DataTables\DataTablesInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -84,7 +86,7 @@ class SearchDataTable extends AbstractDataTable
     /**
      * The service to search entities.
      *
-     * @var FullSearchService
+     * @var SearchService
      */
     private $service;
 
@@ -94,11 +96,11 @@ class SearchDataTable extends AbstractDataTable
      * @param ApplicationService            $application the application to get parameters
      * @param SessionInterface              $session     the session to save/retrieve user parameters
      * @param DataTablesInterface           $datatables  the datatables to handle request
-     * @param FullSearchService             $service     the service to search entities
+     * @param SearchService             $service     the service to search entities
      * @param AuthorizationCheckerInterface $checker     the authorization checker to get user rights
      * @param TranslatorInterface           $translator  the service to translate messages
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, FullSearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
     {
         parent::__construct($application, $session, $datatables);
         $this->service = $service;
@@ -130,26 +132,24 @@ class SearchDataTable extends AbstractDataTable
     protected function createColumns(): array
     {
         return [
-            DataColumn::hidden(FullSearchService::COLUMN_ID),
+            DataColumn::hidden(SearchService::COLUMN_ID),
             DataColumn::instance(self::COLUMN_ENTITY)
                 ->setTitle('search.fields.entity')
                 ->setRender('renderEntityName')
                 ->setClassName('cell w-20')
-                ->setSearchable(false)
-                ->setOrderable(false),
+                ->setSearchable(false),
             DataColumn::instance(self::COLUMN_FIELD)
                 ->setTitle('search.fields.field')
                 ->setClassName('cell w-20')
-                ->setSearchable(false)
-                ->setOrderable(false),
-            DataColumn::instance(FullSearchService::COLUMN_CONTENT)
+                ->setSearchable(false),
+            DataColumn::instance(SearchService::COLUMN_CONTENT)
                 ->setTitle('search.fields.content')
                 ->setClassName('cell w-auto')
                 ->setSearchable(false)
-                ->setOrderable(false)
+                ->setDefault(true)
                 ->setRawData(true),
-            DataColumn::hidden(FullSearchService::COLUMN_TYPE),
-            DataColumn::hidden(FullSearchService::COLUMN_FIELD),
+            DataColumn::hidden(SearchService::COLUMN_TYPE),
+            DataColumn::hidden(SearchService::COLUMN_FIELD),
             DataColumn::hidden(self::COLUMN_SHOW),
             DataColumn::hidden(self::COLUMN_EDIT),
             DataColumn::hidden(self::COLUMN_DELETE),
@@ -167,16 +167,24 @@ class SearchDataTable extends AbstractDataTable
         $search = $request->search->value;
         if ($search && \strlen($search) > 1) {
             // search
-            $limit = $request->length;
-            $offset = $request->start;
-            $items = $this->service->search($search, $limit, $offset);
+            //$items = $this->service->search($search, $limit, $offset);
+            $items = $this->service->search($search, SearchService::NO_LIMIT);
 
             // found?
             if (!empty($items)) {
-                $count = $this->service->count($search);
+                $limit = $request->length;
+                $offset = $request->start;
+                $orders = $this->getQueryOrders($request);
+
+                $count = \count($items);
                 $results->recordsTotal = $count;
                 $results->recordsFiltered = $count;
-                $results->data = $this->processItems($search, $items);
+
+                // process and sort
+                $this->processItems($items);
+                $this->sortItems($items, $orders);
+
+                $results->data = \array_slice($items, $offset, $limit);
             }
         }
 
@@ -189,6 +197,42 @@ class SearchDataTable extends AbstractDataTable
     protected function getColumnKey(int $key, DataColumn $column)
     {
         return $column->getName();
+    }
+
+    /**
+     * Gets the query order for the given query.
+     *
+     * @return array the query order
+     */
+    private function getQueryOrders(DataTableQuery $request): array
+    {
+        $index = -1;
+        $dir = DataColumn::SORT_ASC;
+        if (!empty($request->order)) {
+            $index = $request->order[0]->column - 1;
+            $dir = $request->order[0]->dir;
+        }
+
+        switch ($index) {
+            case 0: // entity
+                return [
+                    self::COLUMN_ENTITY => $dir,
+                    SearchService::COLUMN_CONTENT => DataColumn::SORT_ASC,
+                    self::COLUMN_FIELD => DataColumn::SORT_ASC,
+                ];
+            case 1: // field
+                return [
+                    self::COLUMN_FIELD => $dir,
+                    SearchService::COLUMN_CONTENT => DataColumn::SORT_ASC,
+                    self::COLUMN_ENTITY => DataColumn::SORT_ASC,
+                 ];
+            default: // content
+                return [
+                    SearchService::COLUMN_CONTENT => $dir,
+                    self::COLUMN_ENTITY => DataColumn::SORT_ASC,
+                    self::COLUMN_FIELD => DataColumn::SORT_ASC,
+                 ];
+        }
     }
 
     /**
@@ -248,16 +292,13 @@ class SearchDataTable extends AbstractDataTable
     /**
      * Update results.
      *
-     * @param string $search the search term
-     * @param array  $items  the items to update
-     *
-     * @return array the updated items
+     * @param array $items the items to update
      */
-    private function processItems(string $search, array $items): array
+    private function processItems(array &$items): void
     {
         foreach ($items as &$item) {
-            $type = $item[FullSearchService::COLUMN_TYPE];
-            $field = $item[FullSearchService::COLUMN_FIELD];
+            $type = $item[SearchService::COLUMN_TYPE];
+            $field = $item[SearchService::COLUMN_FIELD];
 
             // translate entity and field names
             $lowerType = \strtolower($type);
@@ -265,7 +306,7 @@ class SearchDataTable extends AbstractDataTable
             $item[self::COLUMN_FIELD] = $this->trans("{$lowerType}.fields.{$field}");
 
             // format content
-            $content = $item[FullSearchService::COLUMN_CONTENT];
+            $content = $item[SearchService::COLUMN_CONTENT];
             switch ("{$type}.{$field}") {
                 case 'Calculation.id':
                     $content = $this->localeId((int) $content);
@@ -275,7 +316,7 @@ class SearchDataTable extends AbstractDataTable
                     $content = \number_format((float) $content, 2, '.', '');
                     break;
             }
-            $item[FullSearchService::COLUMN_CONTENT] = $content;
+            $item[SearchService::COLUMN_CONTENT] = $content;
 
             // id
             //$item['id'] = $lowerType . '.' . $item['id'];
@@ -286,6 +327,28 @@ class SearchDataTable extends AbstractDataTable
             $item[self::COLUMN_DELETE] = $this->isGrantedDelete($type);
         }
 
-        return $items;
+        // sort
+    }
+
+    /**
+     * Sorts items.
+     *
+     * @param array $items  the items to sort
+     * @param array $orders the order definitions where key is the field and value is the order ('asc' or 'desc')
+     */
+    private function sortItems(array &$items, array $orders): void
+    {
+        $accessor = PropertyAccess::createPropertyAccessor();
+        \uasort($items, function (array $a, array $b) use ($orders, $accessor) {
+            foreach ($orders as $column => $direction) {
+                $ascending = DataColumn::SORT_ASC === $direction;
+                $result = Utils::compare($a, $b, "[$column]", $accessor, $ascending);
+                if (0 !== $result) {
+                    return $result;
+                }
+            }
+
+            return 0;
+        });
     }
 }

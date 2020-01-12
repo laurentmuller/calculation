@@ -117,33 +117,6 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
 });
 
 /**
- * Binds events.
- * 
- * @returns {DataTables.Api} this instance.
- */
-$.fn.dataTable.Api.register('bindEvents()', function () {
-    'use strict';
-
-    const table = this;
-    let lastPageCalled = false;
-
-    // bind table events
-    table.on('draw', function () {
-        // select row
-        if (table.row(0).node()) {
-            const selector = lastPageCalled ? ':last' : ':first';
-            const row = table.row(selector);
-            table.cell(row.index(), '0:visIdx').focus();
-        }
-        lastPageCalled = false;
-        table.updateButtons();
-
-    });
-
-    return table;
-});
-
-/**
  * -------------- Application specific --------------
  */
 
@@ -325,7 +298,7 @@ $(function () {
     }
 
     // initialize
-    $table.initDataTable(options).initEvents(id, searchCallback).bindEvents();
+    $table.initDataTable(options).initEvents(id, searchCallback);
 
     // update
     $('#table_search').val(query);

@@ -31,7 +31,7 @@ use App\Repository\CalculationStateRepository;
 use App\Service\CalculationService;
 use App\Service\CaptchaImageService;
 use App\Service\FakerService;
-use App\Service\FullSearchService;
+use App\Service\SearchService;
 use App\Service\HttpClientService;
 use App\Service\SwissPostService;
 use App\Translator\TranslatorFactory;
@@ -646,7 +646,7 @@ class TestController extends BaseController
     /**
      * @Route("/union", name="test_union")
      */
-    public function union(Request $request, FullSearchService $service)
+    public function union(Request $request, SearchService $service)
     {
         $query = $request->get('query');
         $limit = (int) $request->get('limit', 25);
@@ -656,12 +656,12 @@ class TestController extends BaseController
         $results = $service->search($query, $limit, $offset);
 
         foreach ($results as &$row) {
-            $type = \strtolower($row[FullSearchService::COLUMN_TYPE]);
-            $field = $row[FullSearchService::COLUMN_FIELD];
+            $type = \strtolower($row[SearchService::COLUMN_TYPE]);
+            $field = $row[SearchService::COLUMN_FIELD];
             $row['entityName'] = $this->trans("{$type}.name");
             $row['fieldName'] = $this->trans("{$type}.fields.{$field}");
 
-            $content = $row[FullSearchService::COLUMN_CONTENT];
+            $content = $row[SearchService::COLUMN_CONTENT];
             switch ("{$type}.{$field}") {
                 case 'calculation.id':
                     $content = $this->localeId((int) $content);
@@ -671,7 +671,7 @@ class TestController extends BaseController
                     $content = \number_format((float) $content, 2, '.', '');
                     break;
             }
-            $row[FullSearchService::COLUMN_CONTENT] = $content;
+            $row[SearchService::COLUMN_CONTENT] = $content;
         }
 
         $data = [

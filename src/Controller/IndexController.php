@@ -80,22 +80,24 @@ class IndexController extends BaseController
             return $this->json($results);
         }
 
-        // get parameters
-        $edit_action = \json_encode($this->getApplication()->isEditAction());
-
         // authorizations
         $show_granted = $table->isActionGranted(IEntityVoter::ATTRIBUTE_SHOW);
         $edit_granted = $table->isActionGranted(IEntityVoter::ATTRIBUTE_EDIT);
         $delete_granted = $table->isActionGranted(IEntityVoter::ATTRIBUTE_DELETE);
 
+        // attributes
+        $attributes = [
+            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
+        ];
+
         // render
         $parameters = [
             'results' => $results,
             'columns' => $table->getColumns(),
-            'edit_action' => $edit_action,
             'show_granted' => $show_granted,
             'edit_granted' => $edit_granted,
             'delete_granted' => $delete_granted,
+            'attributes' => $attributes,
         ];
 
         return $this->render('index/search.html.twig', $parameters);

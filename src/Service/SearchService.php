@@ -30,7 +30,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *
  * @author Laurent Muller
  */
-class FullSearchService
+class SearchService
 {
     /**
      * The content column name.
@@ -159,8 +159,8 @@ class FullSearchService
         }
 
         // sort, limit and offset
-        $extra = ' ORDER BY ' . self::COLUMN_CONTENT;
-        $extra .= " LIMIT {$limit} OFFSET {$offset}";
+        // $extra = ' ORDER BY ' . self::COLUMN_CONTENT;
+        $extra = " LIMIT {$limit} OFFSET {$offset}";
 
         // return result
         return $this->getArrayResult($search, $extra);

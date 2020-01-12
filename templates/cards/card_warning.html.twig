@@ -1,0 +1,30 @@
+{% extends 'cards/card_base.html.twig' %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title      = title|default('flashbag.warning') -%}
+{%- set title_icon = title_icon|default('exclamation-circle') -%}
+
+{# classes #}
+{% block card_class 'border-warning' %}
+{% block card_header_class 'bg-warning text-dark' %}
+
+{% block card_body %}
+<p class="mb-0">
+	{{- message|default('http_error_500.description'|trans)|raw -}}
+</p>
+{%- endblock %}
+
+{% block card_footer %}
+{% if back_page is defined %}
+    {%- set href       = cancelUrl(app.request, id|default(0), back_page) -%}
+    {%- set back_text  = back_text|default('common.button_back') -%}
+    {%- set back_icon  = back_icon|default('chevron-left') -%}
+    {%- set back_class = back_class|default('btn btn-form btn-primary') -%}
+    {{ icons.link(href, back_text, back_class, back_icon) }}
+{% else %}
+    {{ icons.homepage() }}
+{% endif %}
+{% endblock %}

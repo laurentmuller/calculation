@@ -345,6 +345,7 @@ common:
     button_add: Nouveau
     button_edit: Modifier
     button_delete: Supprimer
+    button_back: Retour
     button_back_list: Retour à la liste
     button_copy: Copier
     button_clone: Créer une copie

@@ -20,9 +20,6 @@
 	],
 	"repositories" : [{
 			"type" : "vcs",
-			"url" : "https://github.com/laurentmuller/ObHighchartsBundle"
-		}, {
-			"type" : "vcs",
 			"url" : "https://github.com/laurentmuller/Faker"
 		}
 	],
@@ -36,7 +33,7 @@
 		"friendsofsymfony/user-bundle" : "dev-master#beff7d3512835875578535cd59bc09f4923a1a94",
 		"fzaninotto/faker" : "dev-master",
 		"google/recaptcha" : "~1.2",
-		"ob/highcharts-bundle" : "dev-master",
+		"ob/highcharts-bundle" : "dev-master#5945174047ee6a70fe639634998188faed6571e2",
 		"robquistnl/simplehtmltotext" : "~1.1",
 		"sensio/framework-extra-bundle" : "^5.5",
 		"stof/doctrine-extensions-bundle" : "dev-master",

@@ -396,7 +396,7 @@ abstract class EntityController extends BaseController
      * @param Request         $request    the request to get parameters
      * @param EntityDataTable $table      the datatable
      * @param string          $template   the template name to render
-     * @param array           $attributes the attributes to pass to the view
+     * @param array           $attributes additional data table attributes
      *
      * @return Response a JSON response if a callback, the table view otherwise
      */

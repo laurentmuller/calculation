@@ -26,9 +26,9 @@ $.fn.dataTable.Api.register('getSelectedRow()', function () {
 /**
  * Select the first row (if any).
  * 
- * @returns {DataTables.Api} the selected row, if any; null otherwise.
+ * @returns {DataTables.Api} this instance.
  */
-$.fn.dataTable.Api.register('selectedFirstRow()', function () {
+$.fn.dataTable.Api.register('selectFirstRow()', function () {
     'use strict';
 
     if (this.rows().count()) {
@@ -40,9 +40,9 @@ $.fn.dataTable.Api.register('selectedFirstRow()', function () {
 /**
  * Select the last row (if any).
  * 
- * @returns {DataTables.Api} the selected row, if any; null otherwise.
+ * @returns {DataTables.Api} this instance.
  */
-$.fn.dataTable.Api.register('selectedLastRow()', function () {
+$.fn.dataTable.Api.register('selectLastRow()', function () {
     'use strict';
 
     if (this.rows().count()) {
@@ -144,10 +144,10 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
 
     }).on('draw', function () {
         if (lastPageCalled) {
-            table.selectedLastRow();
+            table.selectLastRow();
             lastPageCalled = false;
         } else {
-            table.selectedFirstRow();
+            table.selectFirstRow();
         }
         table.updateButtons().updateTitles();
 
@@ -299,7 +299,8 @@ $.fn.initDataTable = function (options) {
 
         // keys
         keys: {
-            focus: ':eq(0)',
+            // focus: ':eq(0)',
+            focus: ':eq(0:visIdx)',
             blurable: false,
             clipboard: false,
             className: 'selection',

@@ -11,7 +11,7 @@
 {%- set submit_text   = 'resetting.request.submit' -%}
 {%- set submit_domain = 'FOSUserBundle' -%}
 {%- set action        = path('fos_user_resetting_reset', {'token': token}) -%}
-{%- set cancel_path   = path('homepage') -%}
+{%- set cancel_path   = false -%}
 {%- set form_attr     = form_attr|default({})|merge({
 						'class': 'fos_user_resetting_reset',
 						'data-equal_to': 'fos_user.password.mismatch'|trans([], 'validators') }) -%}

@@ -27,9 +27,6 @@ class FosUserResettingFormType extends FosUserType
 {
     /**
      * Constructor.
-     *
-     * @param CaptchaImageService $service     the image service
-     * @param ApplicationService  $application the application service
      */
     public function __construct(CaptchaImageService $service, ApplicationService $application)
     {

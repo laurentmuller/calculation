@@ -6,13 +6,13 @@ profile:
 security:
     login:
         error: Le nom de l'utilisateur ou le mot de passe est invalide.
-        success: Bienvenue <b>%username%</b> sur le site de l'application <b>%appname%</b>.
+        success: Bienvenue <b>%username%</b> sur votre compte de l'application <b>%appname%</b>.
         title: Connexion à l'application
         captcha: Code de contrôle
         image: Image de contrôle
         refresh: Générer une nouvelle image
     logout:
-        success: La déconnexion du site de l'application <b>%appname%</b> est réussie.
+        success: La déconnexion de votre compte de l'application <b>%appname%</b> est réussie.
 password:
     change:
         success: Le mot de passe de l'utilisateur <b>%name%</b> a été modifié avec succès.

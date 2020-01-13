@@ -27,7 +27,6 @@
 .btn-form {
     min-width: 120px;
 }
-
 .btn-form-sm {
     min-width: 90px;
 }
@@ -457,7 +456,7 @@ textarea.fixed {
 .cursor-not-allowed {
     cursor: not-allowed !important;
 }
-
+/*
 .frame-theme {
     width: 1px;
     min-width: 100%;
@@ -467,14 +466,7 @@ textarea.fixed {
     overflow-x:hidden;
     overflow-Y:hidden;
 }
-
-/**
- * cookie-banner
- */
-#cookie-banner-link:hover {
-	color: var(--white) !important;
-}
-
+*/
 /**
  * Remove spin buttons for number type
  */

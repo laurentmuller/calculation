@@ -14,8 +14,9 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\User;
 use FOS\UserBundle\Form\Type\ProfileFormType;
-use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -23,8 +24,16 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @author Laurent Muller
  */
-class FosUserProfileFormType extends AbstractType
+class FosUserProfileFormType extends ProfileFormType
 {
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct(User::class);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,15 +43,15 @@ class FosUserProfileFormType extends AbstractType
 
         $helper = new FormHelper($builder);
 
-        // add id for ajax validation
-        $helper->field('id')
-            ->addHiddenType();
-
         // add image
         $helper->field('imageFile')
             ->updateOption('delete_label', 'user.edit.delete_image')
             ->label('user.fields.image')
             ->addVichImageType();
+
+        // add id for ajax validation
+        $helper->field('id')
+            ->addHiddenType();
     }
 
     /**
@@ -56,8 +65,16 @@ class FosUserProfileFormType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    protected function buildUserForm(FormBuilderInterface $builder, array $options): void
     {
-        return ProfileFormType::class;
+        $builder->add('username', UserNameType::class, [
+                'label' => 'form.username',
+                'translation_domain' => 'FOSUserBundle',
+            ]);
+
+        $builder->add('email', EmailType::class, [
+                'label' => 'form.email',
+                'translation_domain' => 'FOSUserBundle',
+            ]);
     }
 }

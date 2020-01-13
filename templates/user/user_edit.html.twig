@@ -1,18 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
 
-{# imports #}
-{% form_theme form _self %}
-
-{# custom user name input #}
-{% block _user_username_widget -%}
-<div class="input-group">
-    <div class="input-group-prepend">
-        <span class="input-group-text"><i class="far fa-fw fa-user" aria-hidden="true"></i></span>
-    </div>
-    {{ block('form_widget_simple') }}    
-</div>
-{%- endblock %}
-
 {# parameters #}
 {%- set title      = new ? 'user.add.title' : 'user.edit.title' -%}
 {%- set title_icon = 'user far' -%}

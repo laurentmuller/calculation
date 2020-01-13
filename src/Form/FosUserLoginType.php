@@ -26,9 +26,6 @@ class FosUserLoginType extends FosUserType
 {
     /**
      * Constructor.
-     *
-     * @param CaptchaImageService $service     the image service
-     * @param ApplicationService  $application the application service
      */
     public function __construct(CaptchaImageService $service, ApplicationService $application)
     {
@@ -40,14 +37,15 @@ class FosUserLoginType extends FosUserType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field('_username')
+        $helper->field('username')
             ->label('security.login.username')
             ->domain('FOSUserBundle')
+            ->className('user-name')
             ->autocomplete('username')
             ->maxLength(180)
-            ->addTextType();
+            ->add(UserNameType::class);
 
-        $helper->field('_password')
+        $helper->field('password')
             ->label('security.login.password')
             ->domain('FOSUserBundle')
             ->autocomplete('current-password')
@@ -56,13 +54,13 @@ class FosUserLoginType extends FosUserType
 
         parent::addFormFields($helper);
 
-        $helper->field('_remember_me')
+        $helper->field('remember_me')
             ->label('security.login.remember_me')
             ->updateRowAttribute('class', 'text-right')
             ->domain('FOSUserBundle')
             ->notRequired()
             ->addCheckboxType();
 
-        $helper->field('_csrf_token')->addHiddenType();
+        $helper->field('csrf_token')->addHiddenType();
     }
 }

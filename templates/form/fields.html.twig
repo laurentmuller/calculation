@@ -45,6 +45,16 @@ override form errors. Rendered example:
 {{ parent() }}
 {%- endblock %}
 
+{# extends text widget with with user icon #}
+{% block user_name_widget -%}
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text"><i class="far fa-fw fa-user" aria-hidden="true"></i></span>
+    </div>
+    {{- block('form_widget_simple') -}}    
+</div>
+{%- endblock %}
+
 {# override password widget with an addon to show or hide the password within jQuery #}
 {% block password_widget -%}
 <div class="input-group">
@@ -58,7 +68,7 @@ override form errors. Rendered example:
         </button>
     </div>
 </div>
-{% if ('password-strength' in attr.class|default('')|split(' ')) %}
+{% if ('password-strength' in attr.class|default('')) %}
     <div id="{{ form.vars.id }}_passwordstrength" class="d-print-none password-strength"></div>
 {%- endif %}
 {%- endblock %}

@@ -116,7 +116,6 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
             FOSUserEvents::PROFILE_EDIT_SUCCESS => 'onSuccess',
             FOSUserEvents::RESETTING_RESET_SUCCESS => ['onResetSuccess', 10],
             FOSUserEvents::RESETTING_SEND_EMAIL_INITIALIZE => 'onSendEmailInitialize',
-
             SecurityEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin',
             SecurityEvents::SWITCH_USER => 'onSwitchUser',
         ];

@@ -40,9 +40,6 @@ abstract class FosUserType extends AbstractType
 
     /**
      * Constructor.
-     *
-     * @param CaptchaImageService $service     the image service
-     * @param ApplicationService  $application the application service
      */
     public function __construct(CaptchaImageService $service, ApplicationService $application)
     {

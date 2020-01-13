@@ -39,9 +39,9 @@ class SecurityController extends AbstractController
     {
         // create form
         $form = $this->createForm(FosUserLoginType::class, [
-            '_username' => $this->getUserName($request, $utils),
-            '_csrf_token' => $this->getCsrfToken($manager),
-            '_remember_me' => $kernel->isDebug(),
+            'username' => $this->getUserName($request, $utils),
+            'csrf_token' => $this->getCsrfToken($manager),
+            'remember_me' => $kernel->isDebug(),
         ]);
 
         // display form

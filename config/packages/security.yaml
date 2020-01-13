@@ -20,22 +20,25 @@ security:
         main:
             pattern: ^/
             logout:
-            #user_logout_handler
                 handlers: [App\Listener\UserEventListener]
             anonymous: true
+            
             form_login:
+                username_parameter: username
+                password_parameter: password
+                csrf_parameter: csrf_token
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
+                
             # https://symfony.com/doc/current/security/impersonating_user.html
             switch_user: true
             
-            #logout_on_user_change: true
-            
             remember_me:
+                remember_me_parameter: remember_me 
                 secret: '%env(APP_SECRET)%'
                 path:   '%env(cookie_path)%'
                 secure: false
-
+                
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
@@ -51,6 +54,3 @@ security:
         - { path: ^/ajax/captcha/validate, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/,                role: ROLE_ADMIN }
         - { path: ^/,                      role: ROLE_USER }
-    
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }

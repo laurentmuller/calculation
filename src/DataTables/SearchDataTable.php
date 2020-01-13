@@ -96,7 +96,7 @@ class SearchDataTable extends AbstractDataTable
      * @param ApplicationService            $application the application to get parameters
      * @param SessionInterface              $session     the session to save/retrieve user parameters
      * @param DataTablesInterface           $datatables  the datatables to handle request
-     * @param SearchService             $service     the service to search entities
+     * @param SearchService                 $service     the service to search entities
      * @param AuthorizationCheckerInterface $checker     the authorization checker to get user rights
      * @param TranslatorInterface           $translator  the service to translate messages
      */

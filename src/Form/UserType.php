@@ -55,7 +55,7 @@ class UserType extends BaseType
             ->domain('FOSUserBundle')
             ->minLength(2)
             ->maxLength(180)
-            ->addTextType();
+            ->add(UserNameType::class);
 
         $helper->field('email')
             ->label('form.email')

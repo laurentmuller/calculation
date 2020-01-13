@@ -16,23 +16,27 @@ namespace App\Form;
 
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Extends FOS User bundle reset password type by adding the user name and the recaptcha.
+ * Extends FOS User bundle reset password type by adding the user name and the captcha.
  *
  * @author Laurent Muller
  */
 class FosUserResetPasswordType extends FosUserType
 {
     /**
-     * Constructor.
-     *
-     * @param CaptchaImageService $service     the image service
-     * @param ApplicationService  $application the application service
+     * @var string
      */
-    public function __construct(CaptchaImageService $service, ApplicationService $application)
+    private $remote;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(CaptchaImageService $service, ApplicationService $application, UrlGeneratorInterface $generator)
     {
         parent::__construct($service, $application);
+        $this->remote = $generator->generate('ajax_check_exist');
     }
 
     /**
@@ -42,8 +46,10 @@ class FosUserResetPasswordType extends FosUserType
     {
         $helper->field('username')
             ->label('resetting.request.username')
+            ->className('user-name')
             ->domain('FOSUserBundle')
-            ->addTextType();
+            ->updateAttribute('remote', $this->remote)
+            ->add(UserNameType::class);
 
         parent::addFormFields($helper);
     }

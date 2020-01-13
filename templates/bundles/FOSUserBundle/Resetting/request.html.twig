@@ -1,33 +1,20 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% trans_default_domain 'FOSUserBundle' %}
 
-{# custom user name input #}
-{% block _username_widget -%}
-<div class="input-group">
-    <div class="input-group-prepend">
-        <span class="input-group-text"><i class="far fa-fw fa-user" aria-hidden="true"></i></span>
-    </div>
-    {{ block('form_widget_simple') }}    
-</div>
-{%- endblock %}
-
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
-{% form_theme form with _self %}
-{% trans_default_domain 'FOSUserBundle' %}
 
 {# parameters #}
 {%- set title         = 'resetting.request.title' -%}
-{%- set title_domain  = 'FOSUserBundle' -%}
 {%- set title_icon    = 'eraser' -%}
+{%- set title_domain  = 'FOSUserBundle' -%}
 {%- set submit_text   = 'resetting.request.submit' -%}
 {%- set submit_domain = 'FOSUserBundle' -%}
 {%- set action        = path('fos_user_resetting_send_email') -%}
-{%- set form_attr     = form_attr|default({})|merge({'class': 'fos_user_resetting_request' }) -%}
 {%- set cancel_path   = false -%}
 
 {# class styles #}
-{% block card_container_class 'col-xl-8 offset-xl-2 my-auto h-75' %}
+{% block card_container_class 'col-xl-8 offset-xl-2 my-auto h-50' %}
 
 {% block card_header %}
 {{ parent() }}
@@ -37,7 +24,6 @@
 {% endblock %}
 
 {% block card_body -%}
-{{ form_row(form.username, { 'attr': {'remote': url('ajax_check_exist')} }) }}
 {{ form_widget(form) }}
 {%- endblock %}
 

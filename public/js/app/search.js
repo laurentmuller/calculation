@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals URLSearchParams, MenuBuilder, disableKeys, enableKeys */
+/* globals URLSearchParams, MenuBuilder, initContextMenu */
 
 /**
  * -------------- JQuery extensions --------------
@@ -151,7 +151,7 @@ function searchCallback(table) {
  * 
  * @returns {Object} the context menu items.
  */
-function getContextMenuItems() {
+function getContextMenuItems() { // jshint ignore:line
     'use strict';
 
     // buttons
@@ -167,60 +167,6 @@ function getContextMenuItems() {
     });
 
     return builder.getItems();
-}
-
-/**
- * Initialize the context menu for the table rows.
- */
-function initContextMenu() {
-    'use strict';
-
-    // select on right click
-    $('#data-table tbody').on('mousedown', 'tr', function (e) {
-        if (e.button === 2) {
-            const table = $('#data-table').DataTable();
-            const index = table.row(this).index();
-            table.cell(index, '0:visIdx').focus();
-        }
-    });
-
-    // build callback
-    const callback = function () {
-        // get items
-        const items = getContextMenuItems();
-        if ($.isEmptyObject(items)) {
-            return false;
-        }
-
-        return {
-            zIndex: 1000,
-            autoHide: true,
-            callback: function (key, options, e) {
-                const item = options.items[key];
-                if (item.link) {
-                    e.stopPropagation();
-                    item.link.get(0).click();
-                    return true;
-                }
-            },
-            events: {
-                show: function () {
-                    $('.dropdown-menu.show').removeClass('show');
-                    disableKeys();
-                },
-                hide: function () {
-                    enableKeys();
-                }
-            },
-            items: items
-        };
-    };
-
-    // create
-    $.contextMenu({
-        build: callback,
-        selector: '.dataTable .selection'
-    });
 }
 
 /**

@@ -106,15 +106,6 @@ table.dataTable span.highlight {
     color: var(--success); 
 }
 
-table.dataTable .selection {
-    background-color: var(--primary) !important;
-    color: var(--white) !important;
-}
-table.dataTable .selection * {
-    background-color: inherit !important;
-    color: inherit !important;
-    /*font-weight: inherit !important;*/
-}
 div.dataTables_wrapper div.dataTables_info {
     padding-top: 0.5em !important;
 }

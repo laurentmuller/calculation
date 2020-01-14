@@ -260,7 +260,7 @@ var Application = {
         // create
         sortable(selector, {
             items: 'tr:not(.drag-skip)',
-            placeholderClass: 'table-primary',
+            placeholderClass: 'selection',
             forcePlaceholderSize: false,
             acceptFrom: 'tbody'
         });
@@ -317,13 +317,13 @@ var Application = {
                 } else {
                     $('#item_quantity').selectFocus();
                 }
-                that.$editingRow.addClass('table-primary');
+                that.$editingRow.addClass('selection');
             } else {
                 $('#item_search_input').selectFocus();
             }
 
         }).on('hide.bs.modal', function () {
-            $('#data-table-edit tbody tr').removeClass('table-primary');
+            $('#data-table-edit tbody tr').removeClass('selection');
         });
 
         // buttons
@@ -704,7 +704,7 @@ var Application = {
         $('#item_price').floatVal($row.findNamedInput('price').val());
         $('#item_quantity').floatVal($row.findNamedInput('quantity').val());
         $('#item_total').floatVal($row.findNamedInput('total').val());
-        $row.addClass('table-primary');
+        $row.addClass('selection');
 
         // copy
         this.$editingRow = $row;
@@ -1181,10 +1181,10 @@ function initContextMenu() {
             events: {
                 show: function () {
                     $('.dropdown-menu.show').removeClass('show');
-                    $(this).parent().addClass('table-primary');
+                    $(this).parent().addClass('selection');
                 },
                 hide: function () {
-                    $(this).parent().removeClass('table-primary');
+                    $(this).parent().removeClass('selection');
                 }
             },
             items: items

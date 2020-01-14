@@ -110,10 +110,10 @@ abstract class EntityDataTable extends AbstractDataTable
     /**
      * {@inheritdoc}
      */
-    protected function createDataTableResults(DataTableQuery $request): DataTableResults
+    protected function createDataTableResults(DataTableQuery $query): DataTableResults
     {
         /** @var Column[] $columns */
-        $columns = $request->columns;
+        $columns = $query->columns;
 
         // map columns
         $definitions = [];
@@ -125,31 +125,31 @@ abstract class EntityDataTable extends AbstractDataTable
 
         // result and query
         $results = new DataTableResults();
-        $query = $this->createQueryBuilder();
+        $builder = $this->createQueryBuilder();
 
         // total count
         $results->recordsTotal = $this->countAll();
 
         // global search
-        $this->createSearchGlobal($query, $columns, $definitions, $request->search->value);
+        $this->createSearchGlobal($builder, $columns, $definitions, $query->search->value);
 
         // columns search
-        $this->createSearchColumns($query, $columns, $definitions);
+        $this->createSearchColumns($builder, $columns, $definitions);
 
         // filtered count.
-        $results->recordsFiltered = $this->countFiltered($query);
+        $results->recordsFiltered = $this->countFiltered($builder);
 
         // order by
-        $this->createOrderBy($query, $request->order, $columns, $definitions);
+        $this->createOrderBy($builder, $query->order, $columns, $definitions);
 
         // offset and limit.
-        $query->setFirstResult($request->start);
-        if (self::SHOW_ALL !== $request->length) {
-            $query->setMaxResults($request->length);
+        $builder->setFirstResult($query->start);
+        if (self::SHOW_ALL !== $query->length) {
+            $builder->setMaxResults($query->length);
         }
 
         // get items
-        $items = $query->getQuery()->getResult();
+        $items = $builder->getQuery()->getResult();
 
         // transform
         $results->data = \array_map([$this, 'toArray'], $items);
@@ -160,12 +160,12 @@ abstract class EntityDataTable extends AbstractDataTable
     /**
      * Creates the order by clause.
      *
-     * @param QueryBuilder $query       the query builder
+     * @param QueryBuilder $builder     the query builder
      * @param Order[]      $orders      the request orders
      * @param Column[]     $columns     the datatable columns
      * @param array        $definitions the database definitions
      */
-    protected function createOrderBy(QueryBuilder $query, array $orders, array $columns, array $definitions): self
+    protected function createOrderBy(QueryBuilder $builder, array $orders, array $columns, array $definitions): self
     {
         // default order
         $defaultOrder = $this->getDefaultOrder();
@@ -179,7 +179,7 @@ abstract class EntityDataTable extends AbstractDataTable
                 $direction = $order->dir;
                 $fields = $definitions[$name][self::KEY_SORT];
                 foreach ($fields as $field) {
-                    $query->addOrderBy($field, $direction);
+                    $builder->addOrderBy($field, $direction);
                 }
 
                 // remove
@@ -191,7 +191,7 @@ abstract class EntityDataTable extends AbstractDataTable
         foreach ($defaultOrder as $name => $direction) {
             $fields = $definitions[$name][self::KEY_SORT];
             foreach ($fields as $field) {
-                $query->addOrderBy($field, $direction);
+                $builder->addOrderBy($field, $direction);
             }
         }
 
@@ -213,11 +213,11 @@ abstract class EntityDataTable extends AbstractDataTable
     /**
      * Update the given query builder by adding the columns search (if any).
      *
-     * @param QueryBuilder $query       the query builder to update
+     * @param QueryBuilder $builder     the query builder to update
      * @param Column[]     $columns     the datatable columns
      * @param array        $definitions the database definitions
      */
-    protected function createSearchColumns(QueryBuilder $query, array $columns, array $definitions): self
+    protected function createSearchColumns(QueryBuilder $builder, array $columns, array $definitions): self
     {
         foreach ($columns as $column) {
             if ($column->searchable && $column->search->value) {
@@ -226,7 +226,7 @@ abstract class EntityDataTable extends AbstractDataTable
                 $fields = $definitions[$name][self::KEY_SEARCH];
                 foreach ($fields as $field) {
                     if ($expression = $this->createSearchExpression($field, $name)) {
-                        $query->andWhere($expression)->setParameter($name, "%{$value}%");
+                        $builder->andWhere($expression)->setParameter($name, "%{$value}%");
                     }
                 }
             }
@@ -251,12 +251,12 @@ abstract class EntityDataTable extends AbstractDataTable
     /**
      * Update the given query builder by adding the global search expression (if any).
      *
-     * @param QueryBuilder $query       the query builder to update
+     * @param QueryBuilder $builder     the query builder to update
      * @param Column[]     $columns     the datatable columns
      * @param array        $definitions the database definitions
      * @param string       $search      the search term (if any)
      */
-    protected function createSearchGlobal(QueryBuilder $query, array $columns, array $definitions, ?string $search): self
+    protected function createSearchGlobal(QueryBuilder $builder, array $columns, array $definitions, ?string $search): self
     {
         if ($search) {
             $expr = new Expr\Orx();
@@ -272,7 +272,7 @@ abstract class EntityDataTable extends AbstractDataTable
                 }
             }
             if (0 !== $expr->count()) {
-                $query->andWhere($expr)
+                $builder->andWhere($expr)
                     ->setParameter(self::SEARCH_PARAMETER, "%{$search}%");
             }
         }

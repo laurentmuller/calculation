@@ -45,6 +45,11 @@ class SearchDataTable extends AbstractDataTable
     public const ID = self::class;
 
     /**
+     * The content column name.
+     */
+    private const COLUMN_CONTENT = SearchService::COLUMN_CONTENT;
+
+    /**
      * The delete granted column name.
      */
     private const COLUMN_DELETE = 'delete_granted';
@@ -159,12 +164,12 @@ class SearchDataTable extends AbstractDataTable
     /**
      * {@inheritdoc}
      */
-    protected function createDataTableResults(DataTableQuery $request): DataTableResults
+    protected function createDataTableResults(DataTableQuery $query): DataTableResults
     {
         $results = new DataTableResults();
 
         // search?
-        $search = $request->search->value;
+        $search = $query->search->value;
         if ($search && \strlen($search) > 1) {
             // search
             //$items = $this->service->search($search, $limit, $offset);
@@ -172,9 +177,9 @@ class SearchDataTable extends AbstractDataTable
 
             // found?
             if (!empty($items)) {
-                $limit = $request->length;
-                $offset = $request->start;
-                $orders = $this->getQueryOrders($request);
+                $limit = $query->length;
+                $offset = $query->start;
+                $orders = $this->getQueryOrders($query);
 
                 $count = \count($items);
                 $results->recordsTotal = $count;
@@ -200,35 +205,49 @@ class SearchDataTable extends AbstractDataTable
     }
 
     /**
-     * Gets the query order for the given query.
+     * Gets the columns order for the given query.
      *
-     * @return array the query order
+     * @param DataTableQuery $query the query to get order
+     *
+     * @return array the columns order where key it the column name and value the order direction ('asc' or 'desc')
      */
-    private function getQueryOrders(DataTableQuery $request): array
+    private function getQueryOrders(DataTableQuery $query): array
     {
         $index = -1;
-        $dir = DataColumn::SORT_ASC;
-        if (!empty($request->order)) {
-            $index = $request->order[0]->column - 1;
-            $dir = $request->order[0]->dir;
+        $direction = DataColumn::SORT_ASC;
+        if (!empty($query->order)) {
+            $index = $query->order[0]->column - 1;
+            $direction = $query->order[0]->dir;
         }
+
+//         $defaults = [
+//             '[' . self::COLUMN_ENTITY . ']' => true,
+//             '[' . self::COLUMN_FIELD . ']' => true,
+//             '[' . self::COLUMN_CONTENT . ']' => true,
+//         ];
+//         if (!empty($query->order)) {
+//             $index = $query->order[0]->column - 1;
+//             $ascending = DataColumn::SORT_ASC === $query->order[0]->dir;
+//             $key = array_keys($defaults)[$index];
+//             $defaults =  [$key => $ascending] + $defaults;
+//         }
 
         switch ($index) {
             case 0: // entity
                 return [
-                    self::COLUMN_ENTITY => $dir,
-                    SearchService::COLUMN_CONTENT => DataColumn::SORT_ASC,
+                    self::COLUMN_ENTITY => $direction,
+                    self::COLUMN_CONTENT => DataColumn::SORT_ASC,
                     self::COLUMN_FIELD => DataColumn::SORT_ASC,
                 ];
             case 1: // field
                 return [
-                    self::COLUMN_FIELD => $dir,
-                    SearchService::COLUMN_CONTENT => DataColumn::SORT_ASC,
+                    self::COLUMN_FIELD => $direction,
+                    self::COLUMN_CONTENT => DataColumn::SORT_ASC,
                     self::COLUMN_ENTITY => DataColumn::SORT_ASC,
                  ];
             default: // content
                 return [
-                    SearchService::COLUMN_CONTENT => $dir,
+                    self::COLUMN_CONTENT => $direction,
                     self::COLUMN_ENTITY => DataColumn::SORT_ASC,
                     self::COLUMN_FIELD => DataColumn::SORT_ASC,
                  ];
@@ -318,8 +337,8 @@ class SearchDataTable extends AbstractDataTable
             }
             $item[SearchService::COLUMN_CONTENT] = $content;
 
-            // id
-            //$item['id'] = $lowerType . '.' . $item['id'];
+            // key
+            //$item['key'] = $lowerType . '.' . $item['id'];
 
             // set authorizations
             $item[self::COLUMN_SHOW] = $this->isGrantedShow($type);
@@ -338,11 +357,15 @@ class SearchDataTable extends AbstractDataTable
      */
     private function sortItems(array &$items, array $orders): void
     {
+        // convert orders
+        foreach ($orders as $column => $direction) {
+            $sorts["[$column]"] = DataColumn::SORT_ASC === $direction;
+        }
+
         $accessor = PropertyAccess::createPropertyAccessor();
-        \uasort($items, function (array $a, array $b) use ($orders, $accessor) {
-            foreach ($orders as $column => $direction) {
-                $ascending = DataColumn::SORT_ASC === $direction;
-                $result = Utils::compare($a, $b, "[$column]", $accessor, $ascending);
+        \uasort($items, function (array $a, array $b) use ($sorts, $accessor) {
+            foreach ($sorts as $field => $ascending) {
+                $result = Utils::compare($a, $b, $field, $accessor, $ascending);
                 if (0 !== $result) {
                     return $result;
                 }

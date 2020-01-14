@@ -130,12 +130,12 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
     /**
      * {@inheritdoc}
      */
-    protected function createDataTableResults(DataTableQuery $request): DataTableResults
+    protected function createDataTableResults(DataTableQuery $query): DataTableResults
     {
         // sort mode
         $orderColumn = 'id';
         $orderDirection = Criteria::DESC;
-        if ($order = $this->getFirstRequestOrder($request)) {
+        if ($order = $this->getFirstRequestOrder($query)) {
             $orderColumn = $order['column']->getName();
             $orderDirection = $order['direction'];
         }
@@ -149,8 +149,8 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
         $this->itemsCount = $this->computeItemsCount($items);
 
         // filter
-        $offset = $request->start;
-        $limit = $request->length;
+        $offset = $query->start;
+        $limit = $query->length;
         if (-1 === $limit) {
             $filtered = \array_slice($items, $offset);
         } else {

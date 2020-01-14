@@ -133,13 +133,13 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
     table.one('init', function () {
         // select row (if any)
         if (id) {
-            const row = table.row('[id=' + id + ']');
+            const row = table.row('#' + id);
             if (row && row.length) {
                 table.cell(row.index(), '0:visIdx').focus();
             }
         }
 
-        // remove hiden search text
+        // remove hiden search text (aria)
         $(":text[tabindex='0']").parent().remove();
 
     }).on('draw', function () {
@@ -161,13 +161,13 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
         // select row
         const row = datatable.row(cell.index().row);
         $(row.node()).addClass('selection').scrollInViewport(0, 60);
-        table.updateButtons();
+        datatable.updateButtons();
 
     }).on('key-blur', function (e, datatable, cell) {
         // unselect row
         const row = datatable.row(cell.index().row);
         $(row.node()).removeClass('selection');
-        table.updateButtons();
+        datatable.updateButtons();
 
     }).on('key', function (e, datatable, key, cell, event) {
         switch (key) {
@@ -270,7 +270,8 @@ $.fn.getDefaultOrder = function (columns) {
 };
 
 /**
- * Merge the default options within the given options and initialize the data table.
+ * Merge the default options within the given options and initialize the data
+ * table.
  * 
  * @param {Object}
  *            options - the options to merge with default values.
@@ -280,10 +281,20 @@ $.fn.getDefaultOrder = function (columns) {
 $.fn.initDataTable = function (options) {
     'use strict';
 
+    const $table = $(this);
+
+    // remote
+    const ajax = $table.data('ajax');
+    const language = $table.data('lang');
+
     const defaultSettings = {
         // ajax
         serverSide: true,
         processing: true,
+        ajax: ajax,
+        language: {
+            url: language
+        },
 
         // paging
         pagingType: 'full_numbers',
@@ -299,7 +310,6 @@ $.fn.initDataTable = function (options) {
 
         // keys
         keys: {
-            // focus: ':eq(0)',
             focus: ':eq(0:visIdx)',
             blurable: false,
             clipboard: false,
@@ -319,8 +329,7 @@ $.fn.initDataTable = function (options) {
 
         // row 0 : table in card body
         // row 1 : information + paging in card footer
-        // hide the drop-down length and search text because already
-        // created within the template
+        // drop-down length and search text are hidden
         dom: "<'row'<'col-sm-12'tr>>" + //
         "<'row card-footer px-0 d-print-none '<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     };
@@ -328,8 +337,15 @@ $.fn.initDataTable = function (options) {
     // merge
     const settings = $.extend(true, defaultSettings, options);
 
+    // debug?
+    if ($table.data('debug')) {
+        console.log(JSON.stringify(settings, '', '    '));
+    } else {
+        $table.removeDataAttributes();
+    }
+
     // init
-    return $(this).DataTable(settings);
+    return $table.DataTable(settings);
 };
 
 /**
@@ -383,7 +399,8 @@ $.fn.initTableLength = function (table) {
  * Enabled/Disabled datatables keys.
  * 
  * @param {string}
- *            disableEvent - the event name to disable keys (default is 'focus').
+ *            disableEvent - the event name to disable keys (default is
+ *            'focus').
  * @param {string}
  *            enableEvent - the event name to enable keys (default is 'blur').
  * @param {string}

@@ -68,8 +68,8 @@
 {% endmacro %}
 
 {% macro actions() %}
-<input type="button" id="all"     class="btn btn-form btn-outline-success" value="{{ 'user.rights.all_title'|trans }}" />
-<input type="button" id="none"    class="btn btn-form btn-outline-success" value="{{ 'user.rights.none_title'|trans }}" />
-<input type="button" id="toggle"  class="btn btn-form btn-outline-success" value="{{ 'user.rights.toggle_title'|trans }}" />
-<input type="button" id="default" class="btn btn-form btn-outline-success" value="{{ 'user.rights.default_title'|trans }}" />
+<button type="button" id="all" class="btn btn-form btn-outline-success">{{ 'user.rights.all_title'|trans }}</button> 
+<button type="button" id="none" class="btn btn-form btn-outline-success">{{ 'user.rights.none_title'|trans }}</button>
+<button type="button" id="toggle" class="btn btn-form btn-outline-success">{{ 'user.rights.toggle_title'|trans }}</button>
+<button type="button" id="default" class="btn btn-form btn-outline-success">{{ 'user.rights.default_title'|trans }}</button>
 {% endmacro %}

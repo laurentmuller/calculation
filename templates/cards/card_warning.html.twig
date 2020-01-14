@@ -6,6 +6,10 @@
 {# parameters #}
 {%- set title      = title|default('flashbag.warning') -%}
 {%- set title_icon = title_icon|default('exclamation-circle') -%}
+{%- set back_page  = back_page|default(false) -%}
+{%- set back_text  = back_text|default('common.button_back') -%}
+{%- set back_icon  = back_icon|default('chevron-left') -%}
+{%- set back_class = back_class|default('btn btn-form btn-primary') -%}
 
 {# classes #}
 {% block card_class 'border-warning' %}
@@ -18,11 +22,8 @@
 {%- endblock %}
 
 {% block card_footer %}
-{% if back_page is defined %}
-    {%- set href       = cancelUrl(app.request, id|default(0), back_page) -%}
-    {%- set back_text  = back_text|default('common.button_back') -%}
-    {%- set back_icon  = back_icon|default('chevron-left') -%}
-    {%- set back_class = back_class|default('btn btn-form btn-primary') -%}
+{% if back_page %}
+    {%- set href = cancelUrl(app.request, id|default(0), back_page) -%}
     {{ icons.link(href, back_text, back_class, back_icon) }}
 {% else %}
     {{ icons.homepage() }}

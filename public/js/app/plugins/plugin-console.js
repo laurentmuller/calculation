@@ -12,7 +12,7 @@
          * Output a message.
          */
         log: function (data) {
-            if (console && console.log) {
+            if (this.isConsole('log')) {
                 console.log(data);
             }
         },
@@ -28,7 +28,7 @@
          * Output an information message.
          */
         info: function (data) {
-            if (console && console.info) {
+            if (this.isConsole('info')) {
                 console.info(data);
             }
         },
@@ -44,7 +44,7 @@
          * Outputs a warning message.
          */
         warn: function (data) {
-            if (console && console.warn) {
+            if (this.isConsole('warn')) {
                 console.warn(data);
             }
         },
@@ -60,7 +60,7 @@
          * Outputs an error message.
          */
         error: function (data) {
-            if (console && console.error) {
+            if (this.isConsole('error')) {
                 console.error(data);
             }
         },
@@ -76,7 +76,7 @@
          * Clear.
          */
         clear: function () {
-            if (console && console.clear) {
+            if (this.isConsole('clear')) {
                 console.clear();
             }
         },
@@ -86,6 +86,13 @@
          */
         stringify: function (data) {
             return JSON.stringify(data, '', '    ');
+        },
+        
+        /**
+         * Check if console is present
+         */
+        isConsole(method) {
+            return console && console[method];
         }
     };
 })(window);

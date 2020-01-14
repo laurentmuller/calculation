@@ -30,7 +30,7 @@
     var Rowlink = function (element, options) {
         this.$element = $(element);
         this.options = $.extend({}, Rowlink.DEFAULTS, options);
-        this.$element.on('click.bs.rowlink mouseup.bs.rowlink', 'td:not(.rowlink-skip)', $.proxy(this.click, this));
+        this.$element.on('click.bs.rowlink'/* mouseup.bs.rowlink*/, 'td:not(.rowlink-skip)', $.proxy(this.click, this));
     };
 
     Rowlink.DEFAULTS = {
@@ -44,8 +44,7 @@
         }
 
         e.preventDefault();
-
-        ctrlKey = ctrlKey || e.ctrlKey || e.type === 'mouseup' && e.which === 2;
+        ctrlKey = ctrlKey || e.ctrlKey || e.type === 'mouseup' && e.which === 1;
         if (!ctrlKey && target.click) {
             target.click();
         } else if (document.createEvent) {
@@ -87,8 +86,8 @@
     // ------------------------------------
     // Rowlink data-api
     // ------------------------------------
-    $(document).on('click.bs.rowlink.data-api mouseup.bs.rowlink.data-api', '[data-link="row"]', function (e) {
-        if (e.type === 'mouseup' && e.which !== 2) {
+    $(document).on('click.bs.rowlink.data-api'/* mouseup.bs.rowlink.data-api'*/, '[data-link="row"]', function (e) {
+        if (e.type === 'mouseup' && e.which !== 1) {
             return;
         }
         if ($(e.target).closest('.rowlink-skip').length !== 0) {

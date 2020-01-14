@@ -33,7 +33,7 @@ class UrlGeneratorService
      */
     public const PARAMETER_NAMES = [
         'id',
-        // 'selection',
+        'type', // for seach page
         'query',
         'page',
         'pagelength',

@@ -122,7 +122,8 @@ var MoveRowHandler = {
      * @param $target
      *            {JQuery} - the target row.
      * @param up
-     *            {boolean} - true to move before the target (up); false to move after (down).
+     *            {boolean} - true to move before the target (up); false to move
+     *            after (down).
      * 
      * @return {JQuery} - The moved row.
      */
@@ -264,7 +265,7 @@ var Application = {
             acceptFrom: 'tbody'
         });
 
-        // remove role attribute
+        // remove role attribute (aria)
         $('#data-table-edit tbody tr[role="option"').removeAttr('role');
 
         // add handlers
@@ -918,29 +919,36 @@ $.fn.extend({
     swapIdAndNames: function ($target) {
         'use strict';
 
+        // get inputs
         const $source = $(this);
-        let sourceInputs = $source.find('input');
-        let targetInputs = $target.find('input');
+        const sourceInputs = $source.find('input');
+        const targetInputs = $target.find('input');
 
         for (let i = 0, len = sourceInputs.length; i < len; i++) {
+            // get source attributes
             const $sourceInput = $(sourceInputs[i]);
             const sourceId = $sourceInput.attr('id');
             const sourceName = $sourceInput.attr('name');
 
+            // get target attributes
             const $targetInput = $(targetInputs[i]);
             const targetId = $targetInput.attr('id');
             const targetName = $targetInput.attr('name');
 
+            // swap
             $targetInput.attr('id', sourceId).attr('name', sourceName);
             $sourceInput.attr('id', targetId).attr('name', targetName);
         }
+        
+        // update
         Application.updateUpDownButton();
 
         return $source;
     },
 
     /**
-     * Finds an input element that have the name attribute within a given substring.
+     * Finds an input element that have the name attribute within a given
+     * substring.
      * 
      * @param name
      *            {string} - the partial attribute name.
@@ -959,7 +967,8 @@ $.fn.extend({
      * Fade out and remove the selected element.
      * 
      * @param callback
-     *            {Function} - the function to call after the element is removed.
+     *            {Function} - the function to call after the element is
+     *            removed.
      * @return null
      */
     removeFadeOut: function (callback) {
@@ -1161,9 +1170,6 @@ function initContextMenu() {
         return {
             autoHide: true,
             zIndex: 1000,
-            classNames: {
-                hover: 'bg-light'
-            },
             callback: function (key, options, e) {
                 const item = options.items[key];
                 if (item.link) {
@@ -1187,8 +1193,8 @@ function initContextMenu() {
 
     // create
     $.contextMenu({
-        selector: '.table-edit th:not(.d-print-none), .table-edit td:not(.d-print-none)',
-        build: callback
+        build: callback,
+        selector: '.table-edit th:not(.d-print-none), .table-edit td:not(.d-print-none)'
     });
 }
 
@@ -1201,11 +1207,20 @@ $(function () {
     // searches
     SearchHelper.init();
 
-    // move
+    // move rows
     MoveRowHandler.init();
 
     // application
     Application.init();
+
+    // context menu
+    initContextMenu();
+
+    // errors
+    updateErrors();
+
+    // main form validation
+    $('#edit-form').initValidator();
 
     // user margin
     const $margin = $('#calculation_userMargin');
@@ -1214,13 +1229,4 @@ $(function () {
             Application.updateTotals();
         }, 250);
     });
-
-    // errors
-    updateErrors();
-
-    // main form validation
-    $('#edit-form').initValidator();
-
-    // context menu
-    initContextMenu();
 });

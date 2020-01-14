@@ -170,18 +170,18 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
     /**
      * {@inheritdoc}
      */
-    public function handle(DataTableQuery $request): DataTableResults
+    public function handle(DataTableQuery $query): DataTableResults
     {
         // create results
-        $results = $this->createDataTableResults($request);
+        $results = $this->createDataTableResults($query);
 
         // save parameters
-        $this->setSessionValue(self::PARAM_PAGE_LENGTH, $request->length);
-        if (empty($request->order)) {
+        $this->setSessionValue(self::PARAM_PAGE_LENGTH, $query->length);
+        if (empty($query->order)) {
             $this->removeSessionValue(self::PARAM_ORDER_COLUMN);
             $this->removeSessionValue(self::PARAM_ORDER_DIR);
         } else {
-            $order = $request->order[0];
+            $order = $query->order[0];
             $this->setSessionValue(self::PARAM_ORDER_COLUMN, $order->column);
             $this->setSessionValue(self::PARAM_ORDER_DIR, $order->dir);
         }
@@ -229,9 +229,9 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
     /**
      * Creates the data table results.
      *
-     * @param DataTableQuery $request the data table query
+     * @param DataTableQuery $query the data table query
      */
-    abstract protected function createDataTableResults(DataTableQuery $request): DataTableResults;
+    abstract protected function createDataTableResults(DataTableQuery $query): DataTableResults;
 
     /**
      * Creates a data table parameters.

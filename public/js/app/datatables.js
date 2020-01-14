@@ -319,21 +319,12 @@ $(function () {
     // columns
     const columns = $table.getColumns();
 
-    // remote
-    const ajax = $table.data('ajax');
-    const language = $table.data('lang');
-
     // loaded?
     let deferLoading = null;
     const total = $table.data('total');
     const filtered = $table.data('filtered');
     if (total !== 0) {
         deferLoading = [filtered, total];
-    }
-
-    // remove
-    if (!$table.data('debug')) {
-        $table.removeDataAttributes();
     }
 
     // parameters
@@ -355,7 +346,6 @@ $(function () {
 
     // options
     const options = {
-        ajax: ajax,
         deferLoading: deferLoading,
 
         paging: paging,
@@ -365,10 +355,6 @@ $(function () {
         order: order,
         columns: columns,
 
-        language: {
-            url: language
-        },
-
         rowId: function (data) {
             return parseInt(data[0], 10);
         },
@@ -377,11 +363,6 @@ $(function () {
             search: query
         }
     };
-
-    // debug
-    if ($table.data('debug')) {
-        console.log(JSON.stringify(options, '', '    '));
-    }
 
     // initialize
     $table.initDataTable(options).initEvents(id, searchCallback);

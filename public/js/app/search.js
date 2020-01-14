@@ -95,14 +95,16 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     if (row !== null) {
         const data = row.data();
         const info = this.page.info();
+        type = data.type.toLowerCase();
         params = {
             id: data.id,
+            type: type,
             page: info.page,
             pagelength: info.length,
             query: this.search(),
             caller: window.location.href.split('?')[0]
         };
-        type = data.type.toLowerCase();
+
         show_granted = data.show_granted;
         edit_granted = data.edit_granted;
         delete_granted = data.delete_granted;
@@ -230,12 +232,8 @@ $(function () {
     // table
     const $table = $('#data-table');
 
-    // columns and order
+    // columns
     const columns = $table.getColumns(true);
-
-    // remote
-    const ajax = $table.data('ajax');
-    const language = $table.data('lang');
 
     // loaded?
     let deferLoading = null;
@@ -245,16 +243,12 @@ $(function () {
         deferLoading = [filtered, total];
     }
 
-    // remove
-    if (!$table.data('debug')) {
-        $table.removeDataAttributes();
-    }
-
     // parameters
     const defaultLength = $table.data('pagelength') || 15;
     const params = new URLSearchParams(window.location.search);
     // const paging = total > 15;
     const id = params.getOrDefault('id', 0);
+    const type = params.getOrDefault('type', null);
     const page = params.getOrDefault('page', 0);
     const pagelength = params.getOrDefault('pagelength', defaultLength);
     const query = params.getOrDefault('query', null);
@@ -269,7 +263,6 @@ $(function () {
 
     // options
     const options = {
-        ajax: ajax,
         deferLoading: deferLoading,
 
         pageLength: pagelength,
@@ -279,12 +272,8 @@ $(function () {
         ordering: order.length > 0,
         columns: columns,
 
-        language: {
-            url: language
-        },
-
         rowId: function (data) {
-            return parseInt(data.id, 10);
+            return data.type.toLowerCase() + '.' + data.id;
         },
 
         search: {
@@ -292,13 +281,9 @@ $(function () {
         }
     };
 
-    // debug
-    if ($table.data('debug')) {
-        console.log(JSON.stringify(options, '', '    '));
-    }
-
     // initialize
-    $table.initDataTable(options).initEvents(id, searchCallback);
+    const key = type && id ? type + '.' + id : false;
+    $table.initDataTable(options).initEvents(key, searchCallback);
 
     // update
     $('#table_search').val(query);

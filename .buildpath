@@ -16,7 +16,7 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/behat/transliterator/src">
+	<buildpathentry kind="src" path="vendor/behat/transliterator/src/Behat/Transliterator">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

@@ -19,7 +19,7 @@ $.extend($.fn.dataTable.ext.classes, {
 $.fn.dataTable.Api.register('getSelectedRow()', function () {
     'use strict';
 
-    const row = this.row('.selection');
+    const row = this.row('.table-primary');
     return row.length ? row : null;
 });
 
@@ -125,7 +125,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
         } else if (e.keyCode === 93) { // context-menu
             e.stopPropagation();
             $('.dropdown-menu.show').removeClass('show');
-            $('.dataTable .selection').first().trigger("contextmenu");
+            $('.dataTable .table-primary').first().trigger("contextmenu");
         }
     });
 
@@ -160,13 +160,13 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
     }).on('key-focus', function (e, datatable, cell) {
         // select row
         const row = datatable.row(cell.index().row);
-        $(row.node()).addClass('selection').scrollInViewport(0, 60);
+        $(row.node()).addClass('table-primary').scrollInViewport(0, 60);
         datatable.updateButtons();
 
     }).on('key-blur', function (e, datatable, cell) {
         // unselect row
         const row = datatable.row(cell.index().row);
-        $(row.node()).removeClass('selection');
+        $(row.node()).removeClass('table-primary');
         datatable.updateButtons();
 
     }).on('key', function (e, datatable, key, cell, event) {
@@ -313,7 +313,7 @@ $.fn.initDataTable = function (options) {
             focus: ':eq(0:visIdx)',
             blurable: false,
             clipboard: false,
-            className: 'selection',
+            className: 'table-primary',
             keys: [//
             13, // enter
             33, // page up

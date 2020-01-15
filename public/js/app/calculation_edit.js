@@ -260,7 +260,7 @@ var Application = {
         // create
         sortable(selector, {
             items: 'tr:not(.drag-skip)',
-            placeholderClass: 'selection',
+            placeholderClass: 'table-primary',
             forcePlaceholderSize: false,
             acceptFrom: 'tbody'
         });
@@ -317,13 +317,12 @@ var Application = {
                 } else {
                     $('#item_quantity').selectFocus();
                 }
-                that.$editingRow.addClass('selection');
+                that.$editingRow.addClass('table-primary');
             } else {
                 $('#item_search_input').selectFocus();
             }
-
         }).on('hide.bs.modal', function () {
-            $('#data-table-edit tbody tr').removeClass('selection');
+            $('#data-table-edit tbody tr').removeClass('table-primary');
         });
 
         // buttons
@@ -704,7 +703,7 @@ var Application = {
         $('#item_price').floatVal($row.findNamedInput('price').val());
         $('#item_quantity').floatVal($row.findNamedInput('quantity').val());
         $('#item_total').floatVal($row.findNamedInput('total').val());
-        $row.addClass('selection');
+        $row.addClass('table-primary');
 
         // copy
         this.$editingRow = $row;
@@ -939,7 +938,7 @@ $.fn.extend({
             $targetInput.attr('id', sourceId).attr('name', sourceName);
             $sourceInput.attr('id', targetId).attr('name', targetName);
         }
-        
+
         // update
         Application.updateUpDownButton();
 
@@ -1181,10 +1180,10 @@ function initContextMenu() {
             events: {
                 show: function () {
                     $('.dropdown-menu.show').removeClass('show');
-                    $(this).parent().addClass('selection');
+                    $(this).parent().addClass('table-primary');
                 },
                 hide: function () {
-                    $(this).parent().removeClass('selection');
+                    $(this).parent().removeClass('table-primary');
                 }
             },
             items: items
@@ -1203,6 +1202,12 @@ function initContextMenu() {
  */
 $(function () {
     'use strict';
+
+    // for test
+    // $('#data-table-edit').on('mousedown.tableEdit', 'tr', function (e) {
+    // $(this).focus();
+    // console.log(e);
+    //    });
 
     // searches
     SearchHelper.init();

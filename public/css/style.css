@@ -727,11 +727,19 @@ span.color-value {
 /**
   * Table selection (datatables and calculation edit).
   */
-table .selection {
-    background-color: var(--primary) !important;
-    color: var(--white) !important;
-}
-table .selection * {
+.dataTable .table-primary th,
+.dataTable .table-primary td,
+.dataTable .table-primary thead th,
+.dataTable .table-primary tbody + tbody,
+.table-edit .table-primary th,
+.table-edit .table-primary td,
+.table-edit .table-primary thead th,
+.table-edit .table-primary tbody + tbody {
+    border-color: transparent !important
+}  
+
+.dataTable .table-primary *,
+.table-edit .table-primary * {
     background-color: inherit !important;
     color: inherit !important;
 }

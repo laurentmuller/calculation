@@ -79,7 +79,7 @@ function initContextMenu() { // jshint ignore:line
     // create
     $.contextMenu({
         build: callback,
-        selector: '.dataTable .selection'
+        selector: '.dataTable .table-primary'
     });
 }
 

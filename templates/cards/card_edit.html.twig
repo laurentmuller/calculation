@@ -8,7 +8,7 @@
 {%- set submit_domain = submit_domain|default(null) -%}
 {%- set submit_params = submit_params|default({}) -%}
 {%- set action        = action|default(app.request.requestUri) -%}
-{%- set form_attr     = form_attr|default({})|merge({ 'id': 'edit-form', 'role': 'form' }) -%}
+{%- set form_attr     = form_attr|default({})|merge({ 'id': 'edit-form'}) -%}
 {%- if cancel_path is not defined -%}
 {%- set cancel_path   = cancelUrl(app.request, item.id|default(0), page_list|default('homepage')) -%}
 {%- endif -%}

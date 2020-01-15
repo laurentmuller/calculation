@@ -2,13 +2,12 @@
 {% macro printItemRow(item, first, last, editable) -%}
 {% import 'macros/_icons.html.twig' as icons %}
 <tr>
-    {# hidden fields #}
+	{# hidden fields #}
     {{ form_widget(item.description) }}
     {{ form_widget(item.unit) }}
     {{ form_widget(item.price) }}
     {{ form_widget(item.quantity) }}
     {{ form_widget(item.total) }}
-    
 	{# values #}
 	<td class="pl-3">
         {% if editable %}
@@ -21,10 +20,10 @@
 	<td class="text-currency">{{ item.price.vars.value|amount }}</td>
 	<td class="text-currency">{{ item.quantity.vars.value|amount }}</td>
 	<td class="text-currency">{{ item.total.vars.value|amount }}</td>
-	
 	{# actions #}
     {% if editable %}  
 	<td class="actions d-print-none rowlink-skip">
+		
 		<div class="dropdown">
 			{%- set menu_id = 'dropdownMenuItem_' ~ item.vars.id -%}
             {{ icons.dropdownEllipsis(menu_id) }}

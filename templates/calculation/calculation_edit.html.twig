@@ -32,7 +32,6 @@
 {%- set form_attr        = form_attr|default({})|merge({'id': 'edit-form'}) -%}
 {%- if editable -%}
 {%- set form_attr        = form_attr|merge({
-                            'role'                 : 'form',
         				   	'data-title'           : title|trans(title_parameters),
         				   	'data-grouping'        : grouping,
         				   	'data-decimal'         : decimal,

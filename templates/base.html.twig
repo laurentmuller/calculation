@@ -31,16 +31,14 @@
 <body>
 {# navigation #}
 {% block navigation -%}{% include 'navigation.html.twig' %}{%- endblock %}
-<main role="main">
 {# container #}
-    <div class="{% block container_class 'container' %}">
-        {% block body -%}{%- endblock %}
-    </div>
+<div role="main" class="{% block container_class 'container' %}">
+    {% block body -%}{%- endblock %}
+</div>
 {# messages #}
 {% block flashbag -%}{% include 'flashbag.html.twig' %}{%- endblock %}    
 {# back to top #}
 {% block back_to_top -%}{% include 'back_to_top.html.twig' %}{%- endblock %}
-</main>
 {# footer #}
 {% block footer -%}{% include 'footer.html.twig' %}{%- endblock %}
 {# java scripts #}

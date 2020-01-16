@@ -9,7 +9,7 @@
 {% if item.quantity == 0 %}
     {%- set texts = texts|merge(['calculationitem.fields.quantity'|trans]) -%}
 {% endif %}
-{{- properties.line(item.description ~ ' (' ~ texts|join(', ') ~ ')', 'text-danger') -}}
+{{- properties.line(item.description ~ ' (' ~ texts|join(', ') ~ ')', 'text-danger', 1) -}}
 {%- endmacro %}
 {% import 'macros/_properties.html.twig' as properties %}
 {% import 'macros/_icons.html.twig' as icons %}
@@ -19,6 +19,7 @@
 {%- set title_icon   = 'file-code far' -%}
 {%- set empty_list   = 'empty.empty' -%}
 {%- set caller       = path(app.request.attributes.get('_route')) -%}
+{%- set colpsan      = 1 -%}
 
 {# actions #}
 {%- set add_page     = false -%}

@@ -22,7 +22,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class PivotTable extends PivotAggregator implements \JsonSerializable
+class PivotTable extends PivotAggregator
 {
     /**
      * The cell data.

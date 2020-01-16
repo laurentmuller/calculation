@@ -22,7 +22,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class PivotNode extends PivotAggregator implements \JsonSerializable, \Countable
+class PivotNode extends PivotAggregator implements \Countable
 {
     /**
      * The path separator.
@@ -227,8 +227,7 @@ class PivotNode extends PivotAggregator implements \JsonSerializable, \Countable
         foreach ($this->children as $child) {
             if ($child->equalsKey($key)) {
                 return $child;
-            }
-            if ($found = $child->findRecursive($key)) {
+            } else if ($found = $child->findRecursive($key)) {
                 return $found;
             }
         }

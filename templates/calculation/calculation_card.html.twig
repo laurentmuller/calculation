@@ -10,7 +10,7 @@
 {%- set add_title    = 'calculation.list.add_title' -%}
 {%- set pdf_title    = 'calculation.list.pdf_title' -%}
 {%- set empty_list   = empty_list|default('calculation.list.empty') -%}
-
+{%- set colpsan      = colpsan|default(2) -%}
 {# actions #}
 {%- set object_type  = IEntityVoter.ENTITY_CALCULATION -%}
 {%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculation_edit'   : null -%}
@@ -49,10 +49,10 @@
 {% endblock %}
 
 {% block item_property -%}
-{{ properties.line(item.customer) }}
-{{ properties.line(item.description) }}
-{{ properties.line(item.date|localedate ~ ' / ' ~ item.stateCode) }}
-{{ properties.separator() }}
+{{ properties.line(item.customer, false, colpsan) }}
+{{ properties.line(item.description, false, colpsan) }}
+{{ properties.line(item.date|localedate ~ ' / ' ~ item.stateCode, false, colpsan) }}
+{{ properties.separator(colpsan) }}
 {% block calculation_properties -%}
     {%- if marginBelow(item.overallMargin) -%}
         {%- set className = 'text-right pr-4 text-danger below-cell has-tooltip' -%}

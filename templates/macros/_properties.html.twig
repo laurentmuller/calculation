@@ -9,28 +9,28 @@
 {% endmacro %}
 
 {# create a property row with a single value #}
-{% macro line(value, class) %}
+{% macro line(value, class, colspan = 2) %}
 {%- set value = value|default('&nbsp;') -%}
 {%- set class = ('data-search d-table-cell ' ~ class|default('text-body'))|trim -%}
 <tr class="d-table-row">
-    <td colspan="2" class="{{ class }}">{{ value|raw }}</td>
+    <td{% if colspan > 1 %} colspan="{{ colspan }}"{% endif %} class="{{ class }}">{{ value|raw }}</td>
 </tr>
 {% endmacro %}
 
 {# create a property row with an e-mail value #}
-{% macro email(value, class, name = false) %}
+{% macro email(value, class, name = false, colspan = 2) %}
 {%- if value -%}
     {%- set value = '<a href="mailto:{0}">{0}</a>'|replace({'{0}': value}) -%}
 {%- endif -%}
 {%- if name -%}
     {{- _self.property(name, value, class) -}}    
 {%- else -%}
-    {{- _self.line(value, class) -}}
+    {{- _self.line(value, class, colspan) -}}
 {%- endif -%}
 {% endmacro %}
 
 {# create a property row with a link value #}
-{% macro link(href, text, class, name = false) %}
+{% macro link(href, text, class, name = false, colspan = 2) %}
 {%- set text = text|default(href) -%}
 {%- if href -%}
     {%- set href = '<a href="{0}">{1}</a>'|replace({'{0}': href, '{1}': text}) -%}
@@ -38,12 +38,12 @@
 {%- if name -%}
     {{- _self.property(name, href, class) -}}
 {%- else -%}
-    {{- _self.line(href, class) -}}
+    {{- _self.line(href, class, colspan) -}}
 {%- endif -%}
 {% endmacro %}
 
 {# create a property row with an external link #}
-{% macro externalLink(href, text, class, name = false) %}
+{% macro externalLink(href, text, class, name = false, colspan = 2) %}
 {%- set text = text|default(href) -%}
 {%- if href -%}
     {%- set href = '<a href="{0}" target="_blank" rel="noopener noreferrer">{1}</a>'|replace({'{0}': href, '{1}': text}) -%}    
@@ -51,14 +51,14 @@
 {%- if name -%}
     {{- _self.property(name, href, class) -}}    
 {%- else -%}
-    {{- _self.line(href, class) -}}
+    {{- _self.line(href, class, colspan) -}}
 {%- endif -%}
 {% endmacro %}
 
 {# create a property line separator #}
-{% macro separator() %}
+{% macro separator(colspan = 2) %}
 <tr>
-    <td colspan="2"><hr class="my-1 mr-3"></td>
+    <td{% if colspan > 1 %} colspan="{{ colspan }}"{% endif %}><hr class="my-1 mr-3"></td>
 </tr>
 {% endmacro %}
 

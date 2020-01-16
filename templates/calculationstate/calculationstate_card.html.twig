@@ -32,19 +32,19 @@
 {% endblock %}
 
 {% block item_property %}
-{{ properties.line(item.description) }}
-{{ properties.separator() }}
+{{ properties.line(item.description, false, 1) }}
+{{ properties.separator(1) }}
 {%- set text = 'calculationstate.list.calculations'|transchoice(item.countCalculations) -%}
 {%- if item.countCalculations -%}
     {% set href = path('calculation_list', { 'query': item.code}) %}
-    {{ properties.link(href, text) }}
+    {{ properties.link(href, text, false, false, 1) }}
 {%- else -%}
-    {{ properties.line(text) }}
+    {{ properties.line(text, false, 1) }}
 {%- endif -%}
 {% if item.editable %}
-{{ properties.line(icons.icon('check', 'calculationstate.list.editable'), 'text-success') }}
+{{ properties.line(icons.icon('check', 'calculationstate.list.editable'), 'text-success', 1) }}
 {% else %}
-{{ properties.line(icons.icon('times', 'calculationstate.list.not_editable'), 'text-danger') }}
+{{ properties.line(icons.icon('times', 'calculationstate.list.not_editable'), 'text-danger', 1) }}
 {% endif %}
 {% endblock %}
 

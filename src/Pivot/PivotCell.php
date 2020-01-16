@@ -21,7 +21,7 @@ use App\Pivot\Aggregator\Aggregator;
  *
  * @author Laurent Muller
  */
-class PivotCell extends PivotAggregator implements \JsonSerializable
+class PivotCell extends PivotAggregator
 {
     /**
      * The parent column.

@@ -3,7 +3,7 @@
 {# macros #}
 {% macro printItem(item) -%}
 {% import 'macros/_properties.html.twig' as properties %}
-{{- properties.line(item.description ~ ' (' ~ item.count|integer ~ ')', 'text-danger') -}}
+{{- properties.line(item.description ~ ' (' ~ item.count|integer ~ ')', 'text-danger', 1) -}}
 {%- endmacro %}
 
 {# imports #}
@@ -22,6 +22,7 @@
 {%- set pdf_page     = false -%}
 {%- set state_page   = false -%}
 {%- set clone_page   = false -%}
+{%- set colpsan      = 1 -%}
 
 {% block search_action %}{% endblock %}
 

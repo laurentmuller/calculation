@@ -109,6 +109,7 @@ override form errors. Rendered example:
 
 {# prepend icon #}
 {%- block url_widget -%}
+{%- set type = type|default('url') -%}
 <div class="input-group">
     <div class="input-group-prepend">
         <span class="input-group-text"><i class="fas fa-fw fa-globe" aria-hidden="true"></i></span>

@@ -22,7 +22,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class PivotAggregator
+abstract class PivotAggregator implements \JsonSerializable
 {
     /**
      * The aggregator function.

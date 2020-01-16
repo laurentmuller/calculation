@@ -18,23 +18,21 @@
             {{ form_widget(margin.minimum, { 'attr': {'aria-label': 'categorymargin.fields.minimum'|trans} }) }}
             <em>{{ form_errors(margin.minimum) }}</em>
         </div>
-    </td style="width: 35%;">
-    <td>
+    </td>
+    <td style="width: 35%;">
         <div class="form-group">
             {{ form_widget(margin.maximum, { 'attr': {'aria-label': 'categorymargin.fields.maximum'|trans} }) }}
             <em>{{ form_errors(margin.maximum) }}</em>
         </div>
-    </td style="width: 30%;">
-    <td>
+    </td>
+    <td style="width: 30%;">
         <div class="form-group">
             {{ form_widget(margin.margin, { 'attr': {'aria-label': 'categorymargin.fields.margin'|trans} }) }}
             <em>{{ form_errors(margin.margin) }}</em>
         </div>
     </td>
     <td class="actions text-center align-top d-print-none ">
-        <a href="#" class="btn btn-sm btn-danger btn-input btn-edit btn-delete mt-1 d-print-none" title="{{ 'category.edit.delete_margin'|trans }}">
-            {{- icons.icon("times") -}}
-        </a>
+        {{- icons.link('#', false, 'btn btn-sm btn-danger btn-input btn-edit btn-delete mt-1 d-print-none', 'times', 'category.edit.delete_margin') -}}            
     </td>
 </tr>
 {% endmacro %}

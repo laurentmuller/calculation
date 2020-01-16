@@ -699,6 +699,8 @@ datatable:
 pivot:
     title: Tableau croisé dynamique
     highlight: Sélection en surbrillance
+    column_title: Année \ Mois
+    row_title: Statut \ Catégory
 password:
     title: Vérifier un mot de passe
     input: Mot de passe

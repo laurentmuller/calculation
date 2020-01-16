@@ -351,9 +351,13 @@ class FormHelper
 
     /**
      * Add an Url type to the builder and reset all values to default.
+     *
+     * @param string $default_protocol If a value is submitted that doesn't begin with some protocol (e.g. http://, ftp://, etc), this protocol will be prepended to the string when the data is submitted to the form.
      */
-    public function addUrlType(): self
+    public function addUrlType(?string $default_protocol = 'https'): self
     {
+        $this->updateOption('default_protocol', $default_protocol, true);
+
         return $this->add(UrlType::class);
     }
 
@@ -558,8 +562,6 @@ class FormHelper
      */
     public function maxLength(int $maxLength): self
     {
-        $maxLength = (int) $maxLength;
-
         return $this->updateAttribute('maxLength', $maxLength > 0 ? $maxLength : null);
     }
 
@@ -570,8 +572,6 @@ class FormHelper
      */
     public function minLength(int $minLength): self
     {
-        $minLength = (int) $minLength;
-
         return $this->updateAttribute('minLength', $minLength > 0 ? $minLength : null);
     }
 

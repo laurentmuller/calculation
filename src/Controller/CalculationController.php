@@ -891,15 +891,14 @@ class CalculationController extends EntityController
             //->setAggregatorClass(AverageAggregator::class)
             //->setAggregatorClass(CountAggregator::class)
             ->setAggregatorClass(SumAggregator::class)
-
             ->setColumnFields($columns)
             ->setRowFields($rows)
             ->setDataField($data)
             ->setKeyField($key)
             ->create();
 
-        $table->getColumn()->setTitle('Année \ Mois');
-        $table->getRow()->setTitle('Statut \ Catégory');
+        $table->getColumn()->setTitle($this->trans('pivot.column_title'));
+        $table->getRow()->setTitle($this->trans('pivot.row_title'));
         //$table->setTotalTitle('Moyenne');
         //$table->setTotalTitle('Nombre');
 

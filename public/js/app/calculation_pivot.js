@@ -2,20 +2,25 @@
 
 /**
  * Toogle the wholly enablement.
+ * 
+ * @param {JQuery}
+ *            $source - The highlight checkbox.
+ * 
+ * @param {JQuery}
+ *            $pivot - The table to update.
  */
-function toggleHighlight() {
+function toggleHighlight($source, $pivot) {
     'use strict';
 
-    const $pivot = $('#pivot');
-    const enabled = $('#highlight').isChecked();
     const data = $pivot.data("wholly");
+    const enabled = $source.isChecked();
 
     if (enabled) {
         if (!data) {
             $pivot.wholly({
                 selection: 'td:not(".not-hover"), th:not(".not-hover")',
-                highlightHorizontal: 'text-hover',
-                highlightVertical: 'text-hover'
+                highlightHorizontal: 'table-primary',
+                highlightVertical: 'table-primary'
             });
         }
     } else {
@@ -31,7 +36,7 @@ function toggleHighlight() {
 $(function () {
     'use strict';
 
-    // initialize
+    // table
     const $pivot = $('#pivot');
 
     // bind events
@@ -58,6 +63,6 @@ $(function () {
 
     // wholly highlight
     $('#highlight').on('input', function () {
-        toggleHighlight();
+        toggleHighlight($(this), $pivot);
     });
 });

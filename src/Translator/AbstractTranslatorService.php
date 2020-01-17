@@ -80,7 +80,7 @@ abstract class AbstractTranslatorService extends HttpClientService implements IT
      * @param AdapterInterface $cache  the cache used to save or retrieve languages
      * @param string           $key    the API key
      *
-     * @throws \InvalidArgumentException if the key is empty
+     * @throws \InvalidArgumentException if the API key is null or empty
      */
     public function __construct(KernelInterface $kernel, AdapterInterface $cache, string $key)
     {

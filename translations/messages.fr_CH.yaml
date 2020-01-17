@@ -701,6 +701,9 @@ pivot:
     highlight: Sélection en surbrillance
     column_title: Année \ Mois
     row_title: Statut \ Catégory
+    value: Valeur
+    line: Ligne
+    column: Colonne
 password:
     title: Vérifier un mot de passe
     input: Mot de passe

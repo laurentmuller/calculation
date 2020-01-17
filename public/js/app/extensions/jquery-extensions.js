@@ -512,12 +512,12 @@
         /**
          * Creates a custom tooltip.
          * 
-         * The options must contains a "className" value used used to update the
-         * tooltip class.
+         * The options must contains a "type" value used to update the tooltip
+         * class. This value must placed at the start.<br>
+         * For example: options.type = 'danger my-other-class';
          * <p>
-         * The className can be: "tooltip-danger", "tooltip-warning",
-         * "tooltip-success", "tooltip-info", "tooltip-primary",
-         * "tooltip-secondary" or "tooltip-dark".
+         * The allowed type is: "danger", "warning", "success", "info",
+         * "primary", "secondary" or "dark".
          * </p>
          * 
          * @param {Object}
@@ -525,12 +525,12 @@
          * @return {jQuery} The JQuery element for chaining.
          */
         customTooltip: function (options) {
-            if (options.className) {
+            if (options && options.type) {
                 const oldClass = '"tooltip"';
-                const newClass = '"tooltip ' + options.className + '"';
+                const newClass = '"tooltip tooltip-' + options.type + '"';
                 const template = $.fn.tooltip.Constructor.Default.template;
                 options.template = template.replace(oldClass, newClass);
-                delete options.className;
+                delete options.type;
             }
             return $(this).tooltip(options);
         },
@@ -539,7 +539,8 @@
          * Creates a custom popover.
          * 
          * The options must contains a "type" value used to update the popoover
-         * class.
+         * class. This value must placed at the start.<br>
+         * For example: options.type = 'danger my-other-class';
          * <p>
          * The allowed type is: "danger", "warning", "success", "info",
          * "primary", "secondary" or "dark".
@@ -550,7 +551,7 @@
          * @return {jQuery} The JQuery element for chaining.
          */
         customPopover: function (options) {
-            if (options.type) {
+            if (options && options.type) {
                 let oldClass, newClass;
 
                 const type = options.type;

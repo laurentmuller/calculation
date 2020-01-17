@@ -227,12 +227,28 @@ class PivotNode extends PivotAggregator implements \Countable
         foreach ($this->children as $child) {
             if ($child->equalsKey($key)) {
                 return $child;
-            } else if ($found = $child->findRecursive($key)) {
+            } elseif ($found = $child->findRecursive($key)) {
                 return $found;
             }
         }
 
         return null;
+    }
+
+    /**
+     * Gets the child at the given index (position).
+     *
+     * @param int $index the index
+     *
+     * @return self|null the child, if index is valid; null otherwise
+     */
+    public function getChild(int $index): ?self
+    {
+        if ($index >= 0 && $index < $this->count()) {
+            return $this->children[\array_keys($this->children)[$index]];
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -246,20 +262,28 @@ class PivotNode extends PivotAggregator implements \Countable
     }
 
     /**
-     * Gets the maximum deep level.
+     * Gets all children for the given level.
      *
-     * @return int the deep level
+     * @param int $level the level
+     *
+     * @return PivotNode[]
      */
-    public function getDeepLevel(): int
+    public function getChildrenAtLevel(int $level): array
     {
-        $level = 0;
-        $node = $this;
-        while (!$node->isEmpty()) {
-            ++$level;
-            $node = $node->children[0];
+        if ($this->getLevel() === $level) {
+            return [$this];
         }
 
-        return $level;
+        $result = [];
+        foreach ($this->children as $child) {
+            if ($child->getLevel() === $level) {
+                $result[] = $child;
+            } else {
+                $result = \array_merge($result, $child->getChildrenAtLevel($level));
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -328,28 +352,20 @@ class PivotNode extends PivotAggregator implements \Countable
     }
 
     /**
-     * Gets all children for the given level.
+     * Gets the maximum deep level.
      *
-     * @param int $level the level
-     *
-     * @return PivotNode[]
+     * @return int the deep level
      */
-    public function getLevelChildren(int $level): array
+    public function getMaxLevel(): int
     {
-        if ($this->getLevel() === $level) {
-            return [$this];
+        $level = 0;
+        $node = $this;
+        while (!$node->isEmpty()) {
+            ++$level;
+            $node = $node->children[0];
         }
 
-        $result = [];
-        foreach ($this->children as $child) {
-            if ($child->getLevel() === $level) {
-                $result[] = $child;
-            } else {
-                $result = \array_merge($result, $child->getLevelChildren($level));
-            }
-        }
-
-        return $result;
+        return $level;
     }
 
     /**
@@ -415,6 +431,26 @@ class PivotNode extends PivotAggregator implements \Countable
         }
 
         return $result;
+    }
+
+    /**
+     * Gets the index (position) in the parent's children.
+     *
+     * @return int the index, if parent is set; -1 othwewise
+     */
+    public function index(): int
+    {
+        if ($this->parent) {
+            $index = 0;
+            foreach ($this->parent->getChildren() as $child) {
+                if ($child === $this) {
+                    return $index;
+                }
+                ++$index;
+            }
+        }
+
+        return  -1;
     }
 
     /**

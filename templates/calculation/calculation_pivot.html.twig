@@ -13,28 +13,27 @@
 {% if value > 1 %} rowspan="{{ value }}"{% endif %}
 {%- endmacro %}
 
-
 {% macro outputPopover(cell, value) -%}
 {%- set sep = ' <small><i class="fas fa-arrow-right" aria-hidden="true"></i></small> ' -%}
 <table class="table table-borderless table-sm mb-0">
     <tbody>
     	<tr>
-            <td class="font-weight-bold">Valeur</td>
+            <td class="font-weight-bold">{{ 'pivot.value'|trans }}</td>
             <td class="text-currency" colspan="2">{{ value }}</td>
         </tr>
         <tr>
-            <td class="border-top font-weight-bold">Ligne</td>
+            <td class="border-top font-weight-bold">{{ 'pivot.line'|trans }}</td>
             <td class="border-top">{{ cell.rowTitle(sep)|raw }}</td>
             <td class="border-top text-currency">{{ _self.format(cell.row.value) }}</td>
         </tr>
         <tr>
-            <td class="font-weight-bold">Colonne</td>
+            <td class="font-weight-bold">{{ 'pivot.column'|trans }}</td>
             <td>{{ cell.columnTitle(sep)|raw }}</td>
             <td class="text-currency">{{ _self.format(cell.column.value) }}</td>
         </tr>
     </tbody>
 </table>
-{% endmacro %}
+{%- endmacro %}
 
 {% macro outputHeaders(nodes) -%}
 {%- for node in nodes %}
@@ -44,46 +43,43 @@
         <td class="text-nowrap not-hover"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title }}</td>
     {%- endif -%}
 {%- endfor -%}
-{% endmacro %}
+{%- endmacro %}
 
-{% macro outputValue(data, class) -%}
+{% macro outputValue(cell, class) -%}
 {%- set class = ('text-currency ' ~  class|default(''))|trim -%}
-{% if data %}
+{% if cell %}
     {%- set popover = 'not-hover' not in class -%}
-    {%- set value   = _self.format(data.value) -%}    
-    <td class="{{ class }}"{% if popover %} data-toggle="popover" data-html="{{ _self.outputPopover(data, value)|e }}"{% endif %}>{{ value }}</td>
+    {%- set value   = _self.format(cell.value) -%}    
+    <td class="{{ class }}"{% if popover %} data-toggle="popover" data-html="{{ _self.outputPopover(cell, value)|e }}"{% endif %}>{{ value }}</td>
 {% else %}
     <td class="{{ class }} not-hover">&nbsp;</td>
 {% endif %}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro outputCell(table, column, row, class) -%}
 {%- set cell = table.findCellByNode(column, row) -%}
 {{ _self.outputValue(cell, class) }}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro outputCells(table, columns, row) -%}
 {%- for column in columns %}
     {{- _self.outputCell(table, column, row, 'hover') -}}
 {%- endfor -%} 
-{{ _self.outputValue(row, 'not-hover bg-success text-white') }}
-{% endmacro %}
+{{ _self.outputValue(row, 'not-hover bg-success') }}
+{%- endmacro %}
 
 {% macro outputRow(table, columns, row) -%}
-{% if row.leaf  %}
-    <tr>
-        <td class="text-nowrap not-hover">{{ row.title }}</td>
+{%- set new_line = row.index >= row.level - 1 -%}
+{% if new_line %}<tr>{% endif %}
+    <td class="text-nowrap not-hover"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>    
+    {% if row.leaf  %}
         {{ _self.outputCells(table, columns, row) }}
-    </tr>
-    {#% if _self.rowspan(row.lastChildren|length == 1 %#}
-{% else %}
-    <tr>
-        <td class="text-nowrap not-hover"{{ _self.rowspan(row.lastChildren|length + 1) }}>{{ row.title }}</td>
-    </tr>    
-    {%- for child in row.children %}
-        {{ _self.outputRow(table, columns, child) }}
-    {%- endfor -%} 
-{% endif %}
+        {%- if new_line -%}</tr>{% endif %}
+	{% else %}
+        {%- for child in row.children %}
+            {{ _self.outputRow(table, columns, child) }}
+        {%- endfor -%}
+    {% endif %}
 {% endmacro %}
 
 {% macro outputTitle(table) -%}
@@ -99,8 +95,8 @@
 {# parameters #}
 {%- set title       = 'pivot.title' -%}
 {%- set title_icon  = 'table' -%}
-{%- set col_level   = table.column.deepLevel -%}
-{%- set row_level   = table.row.deepLevel -%}
+{%- set row_level   = table.row.maxLevel -%}
+{%- set col_level   = table.column.maxLevel -%}
 {%- set total_title = table.totalTitle|default('calculation.fields.total'|trans) -%}
 
 {# classes #}
@@ -129,7 +125,7 @@
             {%- for i in 1 .. col_level -%}
             <tr>
                 {%- if i == 1 -%}<td  class="text-nowrap not-hover"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table) }}</td>{%- endif -%}
-                {{ _self.outputHeaders(table.column.levelChildren(i)) }}     
+                {{ _self.outputHeaders(table.column.childrenAtLevel(i)) }}
                 {%- if i == 1 -%}<td{{ _self.rowspan(col_level) }} class="text-currency bg-success text-white not-hover align-bottom">{{ total_title }}</td>{%- endif -%}
             </tr>
             {%- endfor -%} 
@@ -151,90 +147,6 @@
         </tfoot>
     </table>
 </div>
-{% if app.debug %}
-<table class="table table-bordered table-sm my-3">
-    <thead>
-        {%- for i in 1 .. col_level -%}
-        <tr>
-            {%- if i == 1 -%}<td  class="text-nowrap not-hover"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table) }}</td>{%- endif -%}
-            {{ _self.outputHeaders(table.column.levelChildren(i)) }}     
-            {%- if i == 1 -%}<td{{ _self.rowspan(col_level) }} class="text-currency bg-success text-white not-hover align-bottom">{{ total_title }}</td>{%- endif -%}
-        </tr>
-        {%- endfor -%} 
-    </thead>
-    <tbody>
-        {%- set columns = table.column.lastChildren -%}
-        {%- for i in 1 .. row_level -%}
-                    
-        {%- endfor -%}
-    </tbody>
-    <tfoot>
-        <tr>
-            <td class="text-nowrap not-hover bg-success text-white"{{ _self.colspan(row_level) }}>{{ total_title }}</td>
-            {%- for col in table.column.lastChildren %}
-                {{ _self.outputValue(col, 'not-hover bg-success text-white') }}
-            {%- endfor -%}
-            {{ _self.outputValue(table, 'not-hover bg-success text-white') }}
-        </tr>
-    </tfoot>
-    <!-- 
-    <thead>
-        <tr>
-            <td{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ table.title }}</td>
-            <td colspan="2">2019</td>
-            <td colspan="2">2020</td>
-            <td{{ _self.rowspan(col_level) }}class="text-currency bg-success text-white">Total</td>                
-        </tr>
-        <tr>
-            <td class="text-currency">Janvier</td>
-            <td class="text-currency">Février</td>
-            <td class="text-currency">Janvier</td>
-            <td class="text-currency">Février</td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Archiver</td>
-            <td>Print Roll Spéciaux</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency bg-success text-white">0.00</td>
-        </tr>
-        
-        <tr>
-            <td rowspan="2" >Offre</td>
-            <td>Laminage</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency bg-success text-white">0.00</td>
-        </tr>
-        
-        <tr>
-            <td>Print Rigide</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency">0.00</td>
-            <td class="text-currency bg-success text-white">0.00</td>
-        </tr>
-    </tbody>
-    <tfoot>
-        <tr>
-            <td{{ _self.colspan(row_level) }}class="bg-success text-white">Total</td>
-            <td class="text-currency bg-success text-white">0.00</td>
-            <td class="text-currency bg-success text-white">0.00</td>
-            <td class="text-currency bg-success text-white">0.00</td>
-            <td class="text-currency bg-success text-white">0.00</td>
-            <td class="text-currency bg-success text-white font-weight-bold">0.00</td>
-        </tr>
-    </tfoot>
-     -->
-</table>
-{% endif %}
 {% endblock %}
 
 {% block javascripts -%}

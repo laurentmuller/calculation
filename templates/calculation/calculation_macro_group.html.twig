@@ -3,7 +3,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'calculation/calculation_macro_item.html.twig' as itemsMacro %}
 
-<tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ itemsMacro.printItemRow(group.items.vars.prototype, false, false, editable)|e('html_attr') }}"{% endif -%}>
+<tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ itemsMacro.printItemRow(group.items.vars.prototype, false, false, editable)|e }}"{% endif -%}>
     {# group #}
 	<tr class="drag-skip">
 		{# hidden fields #}

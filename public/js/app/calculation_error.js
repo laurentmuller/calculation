@@ -93,7 +93,7 @@ $(function () {
     }
     $('body').customTooltip({
         selector: '.has-tooltip',
-        className: 'tooltip-danger overall-cell'
+        className: 'danger overall-cell'
     });
 
     // errors

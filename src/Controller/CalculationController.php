@@ -489,9 +489,10 @@ class CalculationController extends EntityController
      */
     public function pivot(Request $request): Response
     {
-        // table
+        // create table
         $table = $this->getPivotTable();
 
+        // render
         return $this->render('calculation/calculation_pivot.html.twig', ['table' => $table]);
     }
 

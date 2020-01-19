@@ -876,12 +876,14 @@ class CalculationController extends EntityController
         // $data = PivotFieldFactory::float('item_total');
         $data = PivotFieldFactory::float('calculation_overall_total');
         $rows = [
-            PivotFieldFactory::default('calculation_state'),
-            PivotFieldFactory::default('item_group'),
+            PivotFieldFactory::default('calculation_state')->setHeaderName($this->trans('calculationstate.name')),
+            PivotFieldFactory::default('item_group')->setHeaderName($this->trans('category.name')),
         ];
         $columns = [
-            PivotFieldFactory::year('calculation_date'),
-            PivotFieldFactory::month('calculation_date'),
+            PivotFieldFactory::year('calculation_date')->setHeaderName($this->trans('pivot.fields.year')),
+            PivotFieldFactory::semester('calculation_date')->setHeaderName($this->trans('pivot.fields.semester')),
+            PivotFieldFactory::quarter('calculation_date')->setHeaderName($this->trans('pivot.fields.quarter')),
+            PivotFieldFactory::month('calculation_date')->setHeaderName($this->trans('pivot.fields.month')),
         ];
 
         $dataset = $this->getPivotData();
@@ -898,8 +900,6 @@ class CalculationController extends EntityController
             ->setKeyField($key)
             ->create();
 
-        $table->getColumn()->setTitle($this->trans('pivot.column_title'));
-        $table->getRow()->setTitle($this->trans('pivot.row_title'));
         //$table->setTotalTitle('Moyenne');
         //$table->setTotalTitle('Nombre');
 

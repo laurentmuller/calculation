@@ -22,11 +22,11 @@ namespace App\Pivot\Field;
 class PivotFieldFactory
 {
     /**
-     * Creates a new instance with the METHOD_STRING.
+     * Creates a new instance.
      *
      * @param string $name   the field name
      * @param string $title  the field title
-     * @param int    $method the field method
+     * @param int    $method the field method (one of the PivotField::METHOD_XX)
      */
     public static function default(string $name, ?string $title = null, int $method = PivotField::METHOD_STRING): PivotField
     {
@@ -59,11 +59,34 @@ class PivotFieldFactory
      * Creates a new month instance.
      *
      * @param string $name  the field name
+     * @param string $title the field title
      * @param bool   $short true to display the short month name, false to display the full month name
      */
-    public static function month(string $name, bool $short = false): PivotMonthField
+    public static function month(string $name, ?string $title = null, bool $short = false): PivotMonthField
     {
         return new PivotMonthField($name, $short);
+    }
+
+    /**
+     * Creates a new date instance for quarter.
+     *
+     * @param string $name  the field name
+     * @param string $title the field title
+     */
+    public static function quarter(string $name, ?string $title = null): PivotQuarterField
+    {
+        return new PivotQuarterField($name, $title);
+    }
+
+    /**
+     * Creates a new date instance for semester.
+     *
+     * @param string $name  the field name
+     * @param string $title the field title
+     */
+    public static function semester(string $name, ?string $title = null): PivotSemesterField
+    {
+        return new PivotSemesterField($name, $title);
     }
 
     /**

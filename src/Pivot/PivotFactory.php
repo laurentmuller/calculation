@@ -167,6 +167,10 @@ class PivotFactory
             $table->addValue($value);
         }
 
+        // titles
+        $table->getColumn()->setTitle($this->buildFieldsTitle($colFields));
+        $table->getRow()->setTitle($this->buildFieldsTitle($rowFields));
+
         return $table;
     }
 
@@ -248,7 +252,7 @@ class PivotFactory
     }
 
     /**
-     * Returns a value indicating if this data are valid.
+     * Returns a value indicating if data are valid.
      *
      * @return bool true if valid
      */
@@ -333,6 +337,24 @@ class PivotFactory
         $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * Gets the title for the given fields.
+     *
+     * @param PivotField[] $fields the fields
+     *
+     * @return string the title
+     */
+    private function buildFieldsTitle(array $fields): string
+    {
+        return \array_reduce($fields, function (string $carry, PivotField $field) {
+            if (\strlen($carry)) {
+                return $carry . '\\' . $field->getHeaderName();
+            } else {
+                return $field->getHeaderName();
+            }
+        }, '');
     }
 
     /**

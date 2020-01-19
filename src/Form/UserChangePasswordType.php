@@ -62,4 +62,12 @@ class UserChangePasswordType extends BaseType
             ])
             ->add(RepeatPasswordType::class);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return '';
+    }
 }

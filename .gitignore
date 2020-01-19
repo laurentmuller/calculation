@@ -21,3 +21,7 @@ symfony.lock
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
+
+###> custom ###
+/resources/data/swiss.sqlite
+###< custom ###

@@ -50,9 +50,9 @@
 {% if cell %}
     {%- set popover = 'not-hover' not in class -%}
     {%- set value   = _self.format(cell.value) -%}    
-    <td class="{{ class }}"{% if popover %} data-toggle="popover" data-html="{{ _self.outputPopover(cell, value)|e }}"{% endif %}>{{ value }}</td>
+	<td class="{{ class }}"{% if popover %} data-toggle="popover" data-html="{{ _self.outputPopover(cell, value)|e }}"{% endif %}>{{ value }}</td>
 {% else %}
-    <td class="{{ class }} not-hover">&nbsp;</td>
+	<td class="{{ class }} not-hover">&nbsp;</td>
 {% endif %}
 {%- endmacro %}
 
@@ -63,23 +63,24 @@
 
 {% macro outputCells(table, columns, row) -%}
 {%- for column in columns %}
-    {{- _self.outputCell(table, column, row, 'hover') -}}
+    {{ _self.outputCell(table, column, row, 'hover') }}
 {%- endfor -%} 
-{{ _self.outputValue(row, 'not-hover bg-success') }}
+    {{ _self.outputValue(row, 'not-hover bg-success text-white') -}}
 {%- endmacro %}
 
-{% macro outputRow(table, columns, row) -%}
-{%- set new_line = row.index >= row.level - 1 -%}
-{% if new_line %}<tr>{% endif %}
-    <td class="text-nowrap not-hover"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>    
-    {% if row.leaf  %}
-        {{ _self.outputCells(table, columns, row) }}
-        {%- if new_line -%}</tr>{% endif %}
-	{% else %}
-        {%- for child in row.children %}
-            {{ _self.outputRow(table, columns, child) }}
-        {%- endfor -%}
-    {% endif %}
+{% macro outputRow(table, columns, row) %}
+{% if row.index >= row.level - 1 -%}
+<tr>
+{% endif -%}
+	<td class="text-nowrap not-hover"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>    
+{%- if row.leaf  -%}
+    {{ _self.outputCells(table, columns, row) -}}
+</tr>
+{% else -%}
+    {%- for child in row.children %}
+        {{- _self.outputRow(table, columns, child) -}}
+    {%- endfor -%}
+{%- endif -%}
 {% endmacro %}
 
 {% macro outputTitle(table) -%}
@@ -150,7 +151,11 @@
 {% endblock %}
 
 {% block javascripts -%}
+{% if app.debug %}
 {{ parent() }}
 {{ asset_js('js/app/plugins/plugin-wholly.js') }}
 {{ asset_js('js/app/calculation_pivot.js') }}
+{% else %}
+{{ asset_js('js/calculation_pivot.js') }}
+{%- endif %}
 {%- endblock %}

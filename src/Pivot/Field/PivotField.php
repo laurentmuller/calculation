@@ -37,6 +37,11 @@ class PivotField
     public const METHOD_STRING = 0;
 
     /**
+     * @var string
+     */
+    protected $headerName;
+
+    /**
      * @var int
      */
     protected $method = self::METHOD_STRING;
@@ -61,6 +66,16 @@ class PivotField
     {
         $this->name = $name;
         $this->title = $title;
+    }
+
+    /**
+     * Gets the header name.
+     *
+     * @return string|null the header name, if set; the title otherwise
+     */
+    public function getHeaderName(): ?string
+    {
+        return $this->headerName ?? $this->getTitle();
     }
 
     /**
@@ -115,6 +130,18 @@ class PivotField
         }
 
         return null;
+    }
+
+    /**
+     * Sets the header name.
+     *
+     * @param string $headerName the header name to set
+     */
+    public function setHeaderName(?string $headerName): self
+    {
+        $this->headerName = $headerName;
+
+        return $this;
     }
 
     /**

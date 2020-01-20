@@ -48,7 +48,7 @@ class PivotMonthField extends PivotDateField
      */
     public function getDisplayValue($value)
     {
-        if (\array_key_exists($value, $this->names)) { //(int)
+        if (\array_key_exists($value, $this->names)) {
             return $this->names[$value];
         } else {
             return parent::getDisplayValue($value);

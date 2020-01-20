@@ -14,10 +14,10 @@ function toggleHighlight($source, $pivot) {
 
     const data = $pivot.data("wholly");
     const enabled = $source.isChecked();
-
     if (enabled) {
         if (!data) {
             $pivot.wholly({
+                rowSelector: 'tr:not(.skip)',
                 selection: 'td:not(".not-hover"), th:not(".not-hover")',
                 highlightHorizontal: 'table-primary',
                 highlightVertical: 'table-primary'
@@ -27,6 +27,23 @@ function toggleHighlight($source, $pivot) {
         if (data) {
             data.destroy();
         }
+    }
+}
+
+/**
+ * Toogle the popover enablement.
+ * 
+ * @param {JQuery}
+ *            $selector - The popover elements.
+ */
+function toggleTooltip($source, $selector) {
+    'use strict';
+
+    const enabled = $source.isChecked();
+    if (enabled) {
+        $selector.popover('enable');
+    } else {
+        $selector.popover('disable');
     }
 }
 
@@ -48,7 +65,8 @@ $(function () {
     });
 
     // popover
-    $('[data-toggle="popover"]').customPopover({
+    const $selector = $('[data-toggle="popover"]');
+    $selector.customPopover({
         html: true,
         type: 'primary',
         trigger: 'hover',
@@ -56,12 +74,15 @@ $(function () {
         container: 'body',
         title: $('.card-title').html().replace(/<h1.*>.*?<\/h1>/ig, ''),
         content: function () {
-            const html = $(this).data("html");
-            return $(html);
+            const data = $(this).data("html");
+            return $(data);
         },
     });
+    $('#tooltip').on('input', function () {
+        toggleTooltip($(this), $selector);
+    });
 
-    // wholly highlight
+    // highlight
     $('#highlight').on('input', function () {
         toggleHighlight($(this), $pivot);
     });

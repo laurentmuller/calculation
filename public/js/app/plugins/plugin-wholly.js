@@ -32,10 +32,16 @@
         const selection = this.options.selection;
         this.$element.on('mouseenter', selection, $.proxy(this.mouseenter, this));
         this.$element.on('mouseleave', selection, $.proxy(this.mouseleave, this));
+        
+        if (this.options.debug) {
+            console.log(this.tableIndex);
+        }
     };
 
     
     Wholly.DEFAULTS = {
+        debug: false,
+        rowSelector: 'tr',
         highlightHorizontal: null,
         highlightVertical: null,
         selection: 'td, th'
@@ -150,7 +156,8 @@
             let i, j;
             let colspan, rowspan;
             
-            const rows = this.$element.find('tr');
+            const rowSelector = this.options.rowSelector;
+            const rows = this.$element.find(rowSelector);
             let tableIndex = this.generateTableMatrix();            
 
             // Iterate through each hypothetical table row.

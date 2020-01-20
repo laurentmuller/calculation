@@ -86,16 +86,16 @@
 {% macro outputTitle(table, col_level) -%}
 <table class="table table-borderless m-0">
     <tbody>
-        <tr>
+        <tr class="skip">
             <td class="not-hover font-weight-bold">{{ table.title|default('&nbsp;')|raw }}</td>
             <td class="not-hover text-right">{%if table.column.title%}{{ table.column.title}} <i class="fas fa-fw fa-arrow-right" aria-hidden="true"></i>{%else%}&nbsp;{%endif%}</td>
-        </tr>
+        </tr class="skip">
         {%- for i in 2 .. col_level - 1 -%}
-        <tr>
-            <td class="not-hover"colspan="2">&nbsp;</td>
+        <tr class="skip">
+            <td class="not-hover" colspan="2">&nbsp;</td>
         </tr>
         {%- endfor -%}
-        <tr>
+        <tr class="skip">
             <td class="not-hover" colspan="2">{% if table.row.title %}<i class="fas fa-fw fa-arrow-down" aria-hidden="true"></i> {{ table.row.title}}{% else %}&nbsp;{% endif %} </td>
         </tr>
     </tbody>
@@ -117,12 +117,18 @@
 {# header #}
 {% block card_header %}
 <div class="row">
-    <div class="col-lg-5">{{ parent() }}</div>
-    <div class="col-lg-7 text-lg-right d-print-none">
-        <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="highlight" name="highlight">
-            <label class="custom-control-label" for="highlight">{{ 'pivot.highlight'|trans }}</label>
-        </div>
+    <div class="col-auto mr-auto">{{ parent() }}</div>
+    <div class="col-auto d-print-none">
+    	<div class="form-inline">
+        	<div class="custom-control custom-switch mr-2">
+                <input type="checkbox" class="custom-control-input" id="tooltip" name="tooltip" checked="checked">
+                <label class="custom-control-label" for="tooltip">{{ 'pivot.tooltip'|trans }}</label>
+            </div>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="highlight" name="highlight">
+                <label class="custom-control-label" for="highlight">{{ 'pivot.highlight'|trans }}</label>
+            </div>
+       </div>
     </div>
 </div>
 {%- endblock %}

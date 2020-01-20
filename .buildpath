@@ -111,6 +111,11 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/easycorp/easy-log-handler/src">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/egulias/email-validator/EmailValidator">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -172,6 +177,11 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/monolog/monolog/src/Monolog">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/nikic/php-parser/lib/PhpParser">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
@@ -256,6 +266,11 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/browser-kit">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/symfony/cache">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -276,7 +291,17 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/css-selector">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/symfony/debug">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/debug-bundle">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
@@ -287,6 +312,11 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/symfony/doctrine-bridge">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/dom-crawler">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
@@ -376,6 +406,11 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/maker-bundle/src">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/symfony/mime">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -392,6 +427,11 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/symfony/options-resolver">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/phpunit-bridge">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
@@ -547,6 +587,16 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/symfony/web-link">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/web-profiler-bundle">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/web-server-bundle">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

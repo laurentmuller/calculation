@@ -707,6 +707,14 @@ pivot:
         month: Mois
         semester: Semestre
         quarter: Trimestre
+    semester:
+        1: 1<sup>er</sup> semestre
+        2: 2<sup>ème</sup> semestre
+    quarter:
+        1: 1<sup>er</sup> trimestre
+        2: 2<sup>ème</sup> trimestre
+        3: 3<sup>ème</sup> trimestre
+        4: 4<sup>ème</sup> trimestre
 password:
     title: Vérifier un mot de passe
     input: Mot de passe

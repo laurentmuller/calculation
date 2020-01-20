@@ -58,7 +58,6 @@ class PivotDateField extends PivotField
     public function __construct(string $name, string $format, ?string $title = null)
     {
         parent::__construct($name, $title);
-        $this->method = self::METHOD_INTEGER;
         $this->format = $format;
     }
 
@@ -67,12 +66,24 @@ class PivotDateField extends PivotField
      */
     public function getValue(array $row)
     {
-        if ($value = $row[$this->name]) {
+        if (isset($row[$this->name]) && $value = $row[$this->name]) {
             if ($value instanceof \DateTimeInterface) {
-                return (int) $value->format($this->format);
+                return $this->doGetValue($value);
             }
         }
 
-        return null;
+        return parent::getValue($row);
+    }
+
+    /**
+     * Gets the value for the given date.
+     *
+     * @param \DateTimeInterface $date the date
+     *
+     * @return mixed the value
+     */
+    protected function doGetValue(\DateTimeInterface $date)
+    {
+        return (int) $date->format($this->format);
     }
 }

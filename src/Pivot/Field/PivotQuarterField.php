@@ -38,6 +38,14 @@ class PivotQuarterField extends PivotDateField
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getDisplayValue($value)
+    {
+        return $this->formatQuarter($value);
+    }
+
+    /**
      * Gets the callback used to format a quarter.
      *
      * @return callable|null the callback, if set; null otherwise
@@ -45,31 +53,6 @@ class PivotQuarterField extends PivotDateField
     public function getFormatter(): ?callable
     {
         return $this->formatter;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTitle($value = null): ?string
-    {
-        if (\is_int($value)) {
-            return $this->formatQuarter($value);
-        } else {
-            return parent::getTitle($value);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getValue(array $row)
-    {
-        $value = parent::getValue($row);
-        if (\is_int($value)) {
-            return (int) \ceil($value / 3);
-        }
-
-        return $value;
     }
 
     /**
@@ -87,28 +70,38 @@ class PivotQuarterField extends PivotDateField
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function doGetValue(\DateTimeInterface $date)
+    {
+        $value = parent::doGetValue($date);
+
+        return (int) \ceil($value / 3);
+    }
+
+    /**
      * Formats the quarter.
      *
-     * @param int $quarter the quarter (normally 1 to 4) to format
+     * @param int $quarter the quarter (1 to 4) to format
      *
      * @return string|null the formatted quarter
      */
     private function formatQuarter(int $quarter): ?string
     {
-        if ($this->formatter) {
+        if (\is_callable($this->formatter)) {
             return \call_user_func($this->formatter, $quarter);
         } else {
             switch ($quarter) {
                 case 1:
-                    return '1er trimestre'; // 1st quarter
+                    return '1st quarter';
                 case 2:
-                    return '2ème trimestre'; //2nd quarter
+                    return '2nd quarter';
                 case 3:
-                    return '3ème trimestre'; // 3rd quarter
+                    return '3rd quarter';
                 case 4:
-                    return '4ème trimestre'; //4th quarter
+                    return '4th quarter';
                 default:
-                    return parent::getTitle();
+                    return (string) $quarter;
             }
         }
     }

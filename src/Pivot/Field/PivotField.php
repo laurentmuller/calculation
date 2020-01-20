@@ -19,7 +19,7 @@ namespace App\Pivot\Field;
  *
  * @author Laurent Muller
  */
-class PivotField
+class PivotField implements \JsonSerializable
 {
     /**
      * Parse value as float.
@@ -30,21 +30,15 @@ class PivotField
      * Parse value as integer.
      */
     public const METHOD_INTEGER = 1;
-
     /**
      * Parse value as string.
      */
     public const METHOD_STRING = 0;
 
     /**
-     * @var string
-     */
-    protected $headerName;
-
-    /**
      * @var int
      */
-    protected $method = self::METHOD_STRING;
+    protected $method;
 
     /**
      * @var string
@@ -66,16 +60,21 @@ class PivotField
     {
         $this->name = $name;
         $this->title = $title;
+        $this->method = self::METHOD_STRING;
     }
 
     /**
-     * Gets the header name.
+     * Gets the display value.
      *
-     * @return string|null the header name, if set; the title otherwise
+     * The default implementation returns the value as is. Subclass can override, for example to map the value.
+     *
+     * @param mixed $value the field value
+     *
+     * @return mixed the display value
      */
-    public function getHeaderName(): ?string
+    public function getDisplayValue($value)
     {
-        return $this->headerName ?? $this->getTitle();
+        return $value;
     }
 
     /**
@@ -89,7 +88,7 @@ class PivotField
     }
 
     /**
-     * Gets the name.
+     * Gets the field name.
      */
     public function getName(): string
     {
@@ -97,13 +96,9 @@ class PivotField
     }
 
     /**
-     * Gets the title.
-     *
-     * @param mixed $value the optional value
-     *
-     * @return string|null the title, if set
+     * Gets the field title.
      */
-    public function getTitle($value = null): ?string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -133,15 +128,19 @@ class PivotField
     }
 
     /**
-     * Sets the header name.
-     *
-     * @param string $headerName the header name to set
+     * {@inheritdoc}
      */
-    public function setHeaderName(?string $headerName): self
+    public function jsonSerialize()
     {
-        $this->headerName = $headerName;
+        $result = [
+            'name' => $this->name,
+        ];
 
-        return $this;
+        if ($this->title) {
+            $result['title'] = $this->title;
+        }
+
+        return $result;
     }
 
     /**
@@ -172,5 +171,21 @@ class PivotField
         $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * Gets a textual representation of this method.
+     */
+    private function getMethodName(): string
+    {
+        switch ($this->method) {
+            case self::METHOD_FLOAT:
+                   return 'float';
+            case self::METHOD_INTEGER:
+                return 'integer';
+            case self::METHOD_STRING:
+            default:
+                return 'string';
+        }
     }
 }

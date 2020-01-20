@@ -38,37 +38,47 @@ interface IComparable
     public function compare(self $other): int;
 
     /**
-     * Compare if equal to other.
+     * Returns if this instance is equal to the other object.
      *
-     * @param IComparable $other
+     * @param IComparable $other the other object to compare to
+     *
+     * @return bool true if equal
      */
     public function isEqual(self $other): bool;
 
     /**
-     * Compare if greather that other.
+     * Returns if this instance is greather than to the other object.
      *
-     * @param IComparable $other
+     * @param IComparable $other the other object to compare to
+     *
+     * @return bool true if greather than
      */
     public function isGreaterThan(self $other): bool;
 
     /**
-     * Compare if greather that or equal to other.
+     * Returns if this instance is greather than or equal to the other object.
      *
-     * @param IComparable $other
+     * @param IComparable $other the other object to compare to
+     *
+     * @return bool true if greather than or equal
      */
     public function isGreaterThanOrEqual(self $other): bool;
 
     /**
-     * Compare if less (smaller) than other.
+     * Returns if this instance is less (smaller) than to the other object.
      *
-     * @param IComparable $other
+     * @param IComparable $other the other object to compare to
+     *
+     * @return bool true if less than
      */
     public function isLessThan(self $other): bool;
 
     /**
-     * Compare if less (smaller) or equal to other.
+     * Returns if this instance is less (smaller) than or equal to the other object.
      *
-     * @param IComparable $other
+     * @param IComparable $other the other object to compare to
+     *
+     * @return bool true if less than or equal
      */
     public function isLessThanOrEqual(self $other): bool;
 }

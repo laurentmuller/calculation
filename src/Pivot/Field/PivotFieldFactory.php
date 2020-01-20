@@ -64,7 +64,7 @@ class PivotFieldFactory
      */
     public static function month(string $name, ?string $title = null, bool $short = false): PivotMonthField
     {
-        return new PivotMonthField($name, $short);
+        return new PivotMonthField($name, $title, $short);
     }
 
     /**
@@ -104,11 +104,12 @@ class PivotFieldFactory
      * Creates a new week day instance.
      *
      * @param string $name  the field name
+     * @param string $title the field title
      * @param bool   $short true to display the short day name, false to display the full day name
      */
-    public static function weekday(string $name, bool $short = false): PivotWeekdayField
+    public static function weekday(string $name, ?string $title = null, bool $short = false): PivotWeekdayField
     {
-        return new PivotWeekdayField($name, $short);
+        return new PivotWeekdayField($name, $title, $short);
     }
 
     /**

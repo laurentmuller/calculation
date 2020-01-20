@@ -24,7 +24,7 @@ use Symfony\Component\Intl\Exception\UnexpectedTypeException;
  *
  * @author Laurent Muller
  */
-class PivotFactory
+class PivotTableFactory
 {
     /**
      * The aggregator class name.
@@ -107,6 +107,7 @@ class PivotFactory
         $colFields = $this->columnFields;
         $table = new PivotTable($this->createAggregator(), $this->title);
 
+        // build
         foreach ($this->dataset as $row) {
             // key
             if ($keyField) {
@@ -125,8 +126,8 @@ class PivotFactory
             foreach ($colFields as $field) {
                 $key = $field->getValue($row);
                 if (!$child = $currentCol->find($key)) {
-                    $title = $field->getTitle($key);
                     $aggregator = $this->createAggregator();
+                    $title = (string) $field->getDisplayValue($key);
                     $currentCol = $currentCol
                         ->add($aggregator, $key)
                         ->setTitle($title);
@@ -143,8 +144,8 @@ class PivotFactory
             foreach ($rowFields as $field) {
                 $key = $field->getValue($row);
                 if (!$child = $currentRow->find($key)) {
-                    $title = $field->getTitle($key);
                     $aggregator = $this->createAggregator();
+                    $title = (string) $field->getDisplayValue($key);
                     $currentRow = $currentRow
                         ->add($aggregator, $key)
                         ->setTitle($title);
@@ -166,6 +167,12 @@ class PivotFactory
 
             $table->addValue($value);
         }
+
+        // fields
+        $table->setKeyField($keyField)
+            ->setDataField($dataField)
+            ->setColumnFields($colFields)
+            ->setRowFields($rowFields);
 
         // titles
         $table->getColumn()->setTitle($this->buildFieldsTitle($colFields));
@@ -350,9 +357,9 @@ class PivotFactory
     {
         return \array_reduce($fields, function (string $carry, PivotField $field) {
             if (\strlen($carry)) {
-                return $carry . '\\' . $field->getHeaderName();
+                return $carry . '\\' . $field->getTitle();
             } else {
-                return $field->getHeaderName();
+                return $field->getTitle();
             }
         }, '');
     }

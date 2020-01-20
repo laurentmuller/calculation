@@ -38,9 +38,9 @@
 {% macro outputHeaders(nodes) -%}
 {%- for node in nodes %}
     {%- if node.leaf -%}
-        <td class="text-currency not-hover">{{ node.title }}</td>
+        <td class="text-currency not-hover">{{ node.title|raw }}</td>
     {%- else -%}
-        <td class="text-nowrap not-hover"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title }}</td>
+        <td class="text-nowrap not-hover"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
     {%- endif -%}
 {%- endfor -%}
 {%- endmacro %}
@@ -83,14 +83,23 @@
 {%- endif -%}
 {% endmacro %}
 
-{% macro outputTitle(table) -%}
-<div class="row">
-    <div class="col-auto font-weight-bold mr-auto">{{ table.title }}</div>
-    <div class="col-auto">{{ table.column.title }}<i class="fas fa-fw fa-arrow-right" aria-hidden="true"></i></div>
-</div>
-<div class="row">
-    <div class="col"><i class="fas fa-fw fa-arrow-down" aria-hidden="true"></i> {{ table.row.title }}</div>
-</div>
+{% macro outputTitle(table, col_level) -%}
+<table class="table table-borderless m-0">
+    <tbody>
+        <tr>
+            <td class="not-hover font-weight-bold">{{ table.title|default('&nbsp;')|raw }}</td>
+            <td class="not-hover text-right">{%if table.column.title%}{{ table.column.title}} <i class="fas fa-fw fa-arrow-right" aria-hidden="true"></i>{%else%}&nbsp;{%endif%}</td>
+        </tr>
+        {%- for i in 2 .. col_level - 1 -%}
+        <tr>
+            <td class="not-hover"colspan="2">&nbsp;</td>
+        </tr>
+        {%- endfor -%}
+        <tr>
+            <td class="not-hover" colspan="2">{% if table.row.title %}<i class="fas fa-fw fa-arrow-down" aria-hidden="true"></i> {{ table.row.title}}{% else %}&nbsp;{% endif %} </td>
+        </tr>
+    </tbody>
+</table>
 {%- endmacro %}
 
 {# parameters #}
@@ -125,7 +134,7 @@
         <thead>
             {%- for i in 1 .. col_level -%}
             <tr>
-                {%- if i == 1 -%}<td  class="text-nowrap not-hover"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table) }}</td>{%- endif -%}
+                {%- if i == 1 -%}<td  class="text-nowrap not-hover p-0"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table, col_level) }}</td>{%- endif -%}
                 {{ _self.outputHeaders(table.column.childrenAtLevel(i)) }}
                 {%- if i == 1 -%}<td{{ _self.rowspan(col_level) }} class="text-currency bg-success text-white not-hover align-bottom">{{ total_title }}</td>{%- endif -%}
             </tr>

@@ -38,6 +38,14 @@ class PivotSemesterField extends PivotDateField
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getDisplayValue($value)
+    {
+        return $this->formatSemester($value);
+    }
+
+    /**
      * Gets the callback used to format a semestre.
      *
      * @return callable|null the callback, if set; null otherwise
@@ -45,31 +53,6 @@ class PivotSemesterField extends PivotDateField
     public function getFormatter(): ?callable
     {
         return $this->formatter;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTitle($value = null): ?string
-    {
-        if (\is_int($value)) {
-            return $this->formatSemester($value);
-        } else {
-            return parent::getTitle($value);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getValue(array $row)
-    {
-        $value = parent::getValue($row);
-        if (\is_int($value)) {
-            return (int) \ceil($value / 6);
-        }
-
-        return $value;
     }
 
     /**
@@ -87,24 +70,34 @@ class PivotSemesterField extends PivotDateField
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function doGetValue(\DateTimeInterface $date)
+    {
+        $value = parent::doGetValue($date);
+
+        return (int) \ceil($value / 6);
+    }
+
+    /**
      * Formats the semester.
      *
-     * @param int $semestre the semester (normally 1 or 2) to format
+     * @param int $semester the semester (1 or 2) to format
      *
      * @return string|null the formatted semester
      */
-    private function formatSemester(int $semestre): ?string
+    private function formatSemester(int $semester): ?string
     {
-        if ($this->formatter) {
-            return \call_user_func($this->formatter, $semestre);
+        if (\is_callable($this->formatter)) {
+            return \call_user_func($this->formatter, $semester);
         } else {
-            switch ($semestre) {
+            switch ($semester) {
                 case 1:
-                    return '1er semestre'; // 1st semester
+                    return '1st semester';
                 case 2:
-                    return '2ème semestre'; // 2nd semester
+                    return '2nd semester';
                 default:
-                    return parent::getTitle();
+                    return (string) $semester;
             }
         }
     }

@@ -28,8 +28,8 @@ use App\Listener\CalculationListener;
 use App\Pdf\PdfResponse;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotFieldFactory;
-use App\Pivot\PivotFactory;
 use App\Pivot\PivotTable;
+use App\Pivot\PivotTableFactory;
 use App\Report\CalculationDuplicateTableReport;
 use App\Report\CalculationEmptyTableReport;
 use App\Report\CalculationReport;
@@ -871,26 +871,35 @@ class CalculationController extends EntityController
      */
     private function getPivotTable(): PivotTable
     {
+        // callbacks
+        $semesterFormatter = function (int $semestre) {
+            return $this->trans("pivot.semester.$semestre");
+        };
+        $quarterFormatter = function (int $quarter) {
+            return $this->trans("pivot.quarter.$quarter");
+        };
+
         // fields
-        $key = PivotFieldFactory::integer('calculation_id');
-        // $data = PivotFieldFactory::float('item_total');
-        $data = PivotFieldFactory::float('calculation_overall_total');
+        $key = PivotFieldFactory::integer('calculation_id', $this->trans('calculation.fields.id'));
+        $data = PivotFieldFactory::float('calculation_overall_total', $this->trans('calculation.fields.overallTotal'));
         $rows = [
-            PivotFieldFactory::default('calculation_state')->setHeaderName($this->trans('calculationstate.name')),
-            PivotFieldFactory::default('item_group')->setHeaderName($this->trans('category.name')),
+            PivotFieldFactory::default('calculation_state', $this->trans('calculationstate.name')),
+            PivotFieldFactory::default('item_group', $this->trans('category.name')),
         ];
         $columns = [
-            PivotFieldFactory::year('calculation_date')->setHeaderName($this->trans('pivot.fields.year')),
-            PivotFieldFactory::semester('calculation_date')->setHeaderName($this->trans('pivot.fields.semester')),
-            PivotFieldFactory::quarter('calculation_date')->setHeaderName($this->trans('pivot.fields.quarter')),
-            PivotFieldFactory::month('calculation_date')->setHeaderName($this->trans('pivot.fields.month')),
+            PivotFieldFactory::year('calculation_date', $this->trans('pivot.fields.year')),
+            PivotFieldFactory::semester('calculation_date', $this->trans('pivot.fields.semester'))
+                ->setFormatter($semesterFormatter),
+            PivotFieldFactory::quarter('calculation_date', $this->trans('pivot.fields.quarter'))
+                ->setFormatter($quarterFormatter),
+            PivotFieldFactory::month('calculation_date', $this->trans('pivot.fields.month')),
         ];
 
         $dataset = $this->getPivotData();
         $title = $this->trans('calculation.list.title');
 
         // create pivot table
-        $table = PivotFactory::instance($dataset, $title)
+        $table = PivotTableFactory::instance($dataset, $title)
             //->setAggregatorClass(AverageAggregator::class)
             //->setAggregatorClass(CountAggregator::class)
             ->setAggregatorClass(SumAggregator::class)
@@ -900,34 +909,8 @@ class CalculationController extends EntityController
             ->setKeyField($key)
             ->create();
 
-        //$table->setTotalTitle('Moyenne');
-        //$table->setTotalTitle('Nombre');
-
         return $table;
     }
-
-//     /**
-//      * Gets the search calculation states.
-//      *
-//      * @return array
-//      */
-//     private function getSearchStates()
-//     {
-//         // get states containing calculations
-//         $states = $this->getDoctrine()
-//             ->getRepository(CalculationState::class)
-//             ->getNotEmptyList();
-
-//         // add "ALL" state at the first place
-//         $all = [
-//             'id' => 0,
-//             'code' => $this->trans('calculation.list.state_all_text'),
-//             'description' => $this->trans('calculation.list.state_all_description'),
-//         ];
-//         \array_unshift($states, $all);
-
-//         return $states;
-//     }
 
     /**
      * Returns if the given calculation has an overall margin below the minimum.

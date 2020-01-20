@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Pivot;
 
 use App\Pivot\Aggregator\Aggregator;
+use App\Pivot\Field\PivotField;
 use App\Utils\Utils;
 
 /**
@@ -32,6 +33,27 @@ class PivotTable extends PivotAggregator
     private $cells = [];
 
     /**
+     * The column fields.
+     *
+     * @var PivotField[]
+     */
+    private $columnFields = [];
+
+    /**
+     * The data field.
+     *
+     * @var PivotField
+     */
+    private $dataField;
+
+    /**
+     * The key field.
+     *
+     * @var PivotField
+     */
+    private $keyField;
+
+    /**
      * The root column.
      *
      * @var PivotNode
@@ -44,6 +66,13 @@ class PivotTable extends PivotAggregator
      * @var PivotNode
      */
     private $rootRow;
+
+    /**
+     * The row fields.
+     *
+     * @var PivotField[]
+     */
+    private $rowFields = [];
 
     /**
      * The title.
@@ -180,11 +209,51 @@ class PivotTable extends PivotAggregator
     }
 
     /**
+     * Gets the column fields.
+     *
+     * @return PivotField[]
+     */
+    public function getColumnFields(): ?array
+    {
+        return $this->columnFields;
+    }
+
+    /**
+     * Gets the data field.
+     *
+     * @return PivotField
+     */
+    public function getDataField(): ?PivotField
+    {
+        return $this->dataField;
+    }
+
+    /**
+     * Gets the key field.
+     *
+     * @return PivotField
+     */
+    public function getKeyField(): ?PivotField
+    {
+        return $this->keyField;
+    }
+
+    /**
      * Gets the root row.
      */
     public function getRow(): PivotNode
     {
         return $this->rootRow;
+    }
+
+    /**
+     * Gets the row fields.
+     *
+     * @return PivotField[]
+     */
+    public function getRowFields(): ?array
+    {
+        return $this->rowFields;
     }
 
     /**
@@ -213,19 +282,65 @@ class PivotTable extends PivotAggregator
     public function jsonSerialize()
     {
         $result = [];
-        if ($this->title) {
-            $result['title'] = $this->title;
-        }
-        $result['aggregator'] = Utils::getShortName($this->aggregator);
-        if (!empty($this->getValue())) {
-            $result['value'] = $this->aggregator->getFormattedResult();
-        }
+        $this->serialize($result, 'title', $this->title)
 
-        return \array_merge($result, [
-            'column' => $this->rootCol,
-            'row' => $this->rootRow,
-            'cells' => $this->cells,
-        ]);
+            ->serialize($result, 'aggregator', Utils::getShortName($this->aggregator))
+            ->serialize($result, 'value', $this->aggregator->getFormattedResult())
+            ->serialize($result, 'keyField', $this->keyField)
+
+            ->serialize($result, 'dataField', $this->dataField)
+            ->serialize($result, 'columnFields', $this->columnFields)
+            ->serialize($result, 'rowFields', $this->rowFields)
+
+            ->serialize($result, 'column', $this->rootCol)
+            ->serialize($result, 'row', $this->rootRow)
+            ->serialize($result, 'cells', $this->cells);
+
+        return $result;
+    }
+
+    /**
+     * Sets the column fields.
+     *
+     * @param PivotField[] $columnFields
+     */
+    public function setColumnFields(array $columnFields): self
+    {
+        $this->columnFields = $columnFields;
+
+        return $this;
+    }
+
+    /**
+     * Sets the data field.
+     */
+    public function setDataField(PivotField $dataField): self
+    {
+        $this->dataField = $dataField;
+
+        return $this;
+    }
+
+    /**
+     * Sets the  key field.
+     */
+    public function setKeyField(PivotField $keyField): self
+    {
+        $this->keyField = $keyField;
+
+        return $this;
+    }
+
+    /**
+     * Sets the row fields.
+     *
+     * @param PivotField[] $rowFields
+     */
+    public function setRowFields(array $rowFields): self
+    {
+        $this->rowFields = $rowFields;
+
+        return $this;
     }
 
     /**
@@ -248,6 +363,22 @@ class PivotTable extends PivotAggregator
     public function setTotalTitle(?string $totalTitle): self
     {
         $this->totalTitle = $totalTitle;
+
+        return $this;
+    }
+
+    /**
+     * Serialize a value. Do nothing if the value is null.
+     *
+     * @param array  $result the array to update
+     * @param string $name   the variable name
+     * @param mixed  $value  the value to put
+     */
+    private function serialize(array &$result, string $name, $value): self
+    {
+        if ($value) {
+            $result[$name] = $value;
+        }
 
         return $this;
     }

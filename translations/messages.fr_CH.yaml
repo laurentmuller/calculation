@@ -698,7 +698,7 @@ datatable:
     all: Tous
 pivot:
     title: Tableau croisé dynamique
-    tooltip: Info-bulle
+    popover: Info-bulle
     highlight: Sélection en surbrillance
     value: Valeur
     line: Ligne

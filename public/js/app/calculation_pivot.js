@@ -12,20 +12,22 @@
 function toggleHighlight($source, $pivot) {
     'use strict';
 
-    const data = $pivot.data("wholly");
+    const data = $pivot.data('wholly');
     const enabled = $source.isChecked();
     if (enabled) {
         if (!data) {
             $pivot.wholly({
                 rowSelector: 'tr:not(.skip)',
-                selection: 'td:not(".not-hover"), th:not(".not-hover")',
+                cellSelector: 'td:not(.not-hover), th:not(.not-hover)',
                 highlightHorizontal: 'table-primary',
                 highlightVertical: 'table-primary'
             });
+        } else {
+            data.enable();
         }
     } else {
         if (data) {
-            data.destroy();
+            data.disable();
         }
     }
 }
@@ -34,16 +36,37 @@ function toggleHighlight($source, $pivot) {
  * Toogle the popover enablement.
  * 
  * @param {JQuery}
+ *            $source - The popover checkbox.
+ * 
+ * @param {JQuery}
  *            $selector - The popover elements.
  */
-function toggleTooltip($source, $selector) {
+function togglePopover($source, $selector) {
     'use strict';
 
     const enabled = $source.isChecked();
+    const data = $selector.data('bs.popover');
     if (enabled) {
-        $selector.popover('enable');
+        if (data) {
+            $selector.popover('enable');
+        } else {
+            $selector.customPopover({
+                html: true,
+                type: 'primary',
+                trigger: 'hover',
+                placement: 'top',
+                container: 'body',
+                title: $('.card-title').html().replace(/<h1.*>.*?<\/h1>/ig, ''),
+                content: function () {
+                    const data = $(this).data('html');
+                    return $(data);
+                },
+            });
+        }
     } else {
-        $selector.popover('disable');
+        if (data) {
+            $selector.popover('disable');
+        }
     }
 }
 
@@ -53,37 +76,33 @@ function toggleTooltip($source, $selector) {
 $(function () {
     'use strict';
 
-    // table
+    // get elements
     const $pivot = $('#pivot');
+    const $popover = $('#popover');
+    const $highlight = $('#highlight');
+    const $selector = $('[data-toggle="popover"]');
 
-    // bind events
-    const selection = 'td:not(".not-hover"), th:not(".not-hover")';
+    // popover
+    if ($popover.isChecked()) {
+        togglePopover($popover, $selector);
+    }
+    $popover.on('input', function () {
+        togglePopover($(this), $selector);
+    });
+
+    // highlight
+    if ($highlight.isChecked()) {
+        toggleHighlight($highlight, $pivot);
+    }
+    $highlight.on('input', function () {
+        toggleHighlight($(this), $pivot);
+    });
+
+    // selection
+    const selection = 'td:not(.not-hover), th:not(.not-hover)';
     $pivot.on('mouseenter', selection, function () {
         $(this).addClass('text-hover');
     }).on('mouseleave', selection, function () {
         $(this).removeClass('text-hover');
-    });
-
-    // popover
-    const $selector = $('[data-toggle="popover"]');
-    $selector.customPopover({
-        html: true,
-        type: 'primary',
-        trigger: 'hover',
-        placement: 'top',
-        container: 'body',
-        title: $('.card-title').html().replace(/<h1.*>.*?<\/h1>/ig, ''),
-        content: function () {
-            const data = $(this).data("html");
-            return $(data);
-        },
-    });
-    $('#tooltip').on('input', function () {
-        toggleTooltip($(this), $selector);
-    });
-
-    // highlight
-    $('#highlight').on('input', function () {
-        toggleHighlight($(this), $pivot);
     });
 });

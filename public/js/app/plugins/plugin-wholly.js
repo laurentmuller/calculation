@@ -3,7 +3,6 @@
 /**
  * @version 2.0.0
  * @link https://github.com/gajus/wholly for the canonical source repository
- * @license https://github.com/gajus/wholly/blob/master/LICENSE BSD 3-Clause
  */
 (function ($) {
     'use strict';
@@ -27,29 +26,55 @@
         this.$element = $(element);
         this.options = $.extend(true, {}, Wholly.DEFAULTS, options);
         this.tableIndex = this.indexTable();
-
-        // bind events
-        const selection = this.options.selection;
-        this.$element.on('mouseenter', selection, $.proxy(this.mouseenter, this));
-        this.$element.on('mouseleave', selection, $.proxy(this.mouseleave, this));
+        this.enabled = false;
         
-        if (this.options.debug) {
-            console.log(this.tableIndex);
+        // bind events
+        const enabled = this.options.enabled === undefined ? true : this.options.enabled;
+        if (enabled ) {
+            this.enable();    
         }
     };
 
     
     Wholly.DEFAULTS = {
-        debug: false,
         rowSelector: 'tr',
-        highlightHorizontal: null,
+        cellSelector: 'td, th',
         highlightVertical: null,
-        selection: 'td, th'
+        highlightHorizontal: null        
     };
     
     Wholly.prototype = {
+        // -----------------------------
+        // public functions
+        // -----------------------------
         constructor: Wholly,
+            
+        enable: function () {
+            if (!this.enabled) {
+                const selector = this.options.cellSelector;
+                this.$element.on('mouseenter', selector, $.proxy(this.mouseenter, this));
+                this.$element.on('mouseleave', selector, $.proxy(this.mouseleave, this));
+                this.enabled = true;
+            }
+        },
+        
+        disable: function () {
+            if (this.enabled) {
+                const selector = this.options.cellSelector;
+                this.$element.off('mouseenter', selector, $.proxy(this.mouseenter, this));
+                this.$element.off('mouseleave', selector, $.proxy(this.mouseleave, this));
+                this.enabled = false;
+            }
+        },
+        
+        destroy: function () {
+            this.disable();
+            this.$element.removeData("wholly");
+        },
 
+        // -----------------------------
+        // private functions
+        // -----------------------------
         mouseenter: function (e) {
             const that = this;
             const $target = $(e.currentTarget);
@@ -118,11 +143,16 @@
             that.horizontal = that.vertical = false;
         },
 
-        calcTableMaxCellLength: function () {
+        getTableRows: function() {
+            const selector = this.options.rowSelector;
+            return this.$element.find(selector);
+        },
+        
+        getTableMaxCellLength: function () {
             let maxWidth = 0;
             const that  = this;            
-            that.$element.find('tr').each(function () {
-                var rowWidth = that.calcRowCellLength($(this));
+            that.getTableRows().each(function () {
+                const rowWidth = that.getRowCellLength($(this));
                 if (rowWidth > maxWidth) {
                     maxWidth = rowWidth;
                 }
@@ -130,17 +160,17 @@
             return maxWidth;
         },
 
-        calcRowCellLength: function ($row) {
+        getRowCellLength: function ($row) {
             let width = 0;
-            $row.find('td, th').each(function () {
+            $row.children('td, th').each(function () {
                 width += $(this).colspan();
             });
             return width;
         },
 
         generateTableMatrix: function () {
-            const width = this.calcTableMaxCellLength(this.$element);
-            const height = this.$element.find('tr').length;
+            const width = this.getTableMaxCellLength();
+            const height = this.getTableRows().length;
             return this.generateMatrix(width, height);
         },
 
@@ -156,8 +186,7 @@
             let i, j;
             let colspan, rowspan;
             
-            const rowSelector = this.options.rowSelector;
-            const rows = this.$element.find(rowSelector);
+            const rows = this.getTableRows();
             let tableIndex = this.generateTableMatrix();            
 
             // Iterate through each hypothetical table row.
@@ -195,13 +224,6 @@
             });
 
             return tableIndex;
-        },
-
-        destroy: function () {
-            const selection = this.options.selection;
-            this.$element.off('mouseenter', selection, $.proxy(this.mouseenter, this));
-            this.$element.off('mouseleave', selection, $.proxy(this.mouseleave, this));
-            this.$element.removeData("wholly");
         }
     };
 

@@ -483,7 +483,7 @@ class CalculationController extends EntityController
     }
 
     /**
-     * Export pivot data to JSON.
+     * Show the pivot data table.
      *
      * @Route("/pivot", name="calculation_pivot", methods={"GET", "POST"})
      */
@@ -493,7 +493,11 @@ class CalculationController extends EntityController
         $table = $this->getPivotTable();
 
         // render
-        return $this->render('calculation/calculation_pivot.html.twig', ['table' => $table]);
+        return $this->render('calculation/calculation_pivot.html.twig', [
+            'table' => $table,
+            'popover' => true,
+            'highlight' => false,
+        ]);
     }
 
     /**

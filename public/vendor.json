@@ -62,8 +62,10 @@
 			]
 		},
 		{
+			"source": "https://cdn.jsdelivr.net/npm/summernote@0.8.15/dist",
+			"passthrough": true,
 			"name": "summernote",
-			"version": "0.8.12",
+			"version": "0.8.15",
 			"files": [
 				"summernote-bs4.css",
 				"summernote-bs4.js",

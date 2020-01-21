@@ -121,11 +121,11 @@
     <div class="col-auto d-print-none">
     	<div class="form-inline">
         	<div class="custom-control custom-switch mr-2">
-                <input type="checkbox" class="custom-control-input" id="tooltip" name="tooltip" checked="checked">
-                <label class="custom-control-label" for="tooltip">{{ 'pivot.tooltip'|trans }}</label>
+                <input type="checkbox" class="custom-control-input" id="popover" name="popover"{% if popover %} checked="checked"{% endif %}>
+                <label class="custom-control-label" for="popover">{{ 'pivot.popover'|trans }}</label>
             </div>
             <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="highlight" name="highlight">
+                <input type="checkbox" class="custom-control-input" id="highlight" name="highlight"{% if highlight %} checked="checked"{% endif %}>
                 <label class="custom-control-label" for="highlight">{{ 'pivot.highlight'|trans }}</label>
             </div>
        </div>

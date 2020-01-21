@@ -34,8 +34,8 @@ class PivotWeekdayField extends PivotDateField
      * Constructor.
      *
      * @param string $name  the field name
-     * @param bool   $short true to display the short day name, false to display the day name
      * @param string $title the field title
+     * @param bool   $short true to display the short day name, false to display the day name
      */
     public function __construct(string $name, ?string $title = null, bool $short = false)
     {

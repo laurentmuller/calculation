@@ -62,9 +62,9 @@
 {% if app.debug %}
 {{ parent() }}
 {{ asset_js('js/app/plugins/plugin-password.js') }}
-{{ asset_js('js/app/fos_user_recaptcha.js') }}
-{{ asset_js('js/app/fos_user_login.js') }}
+{{ asset_js('js/app/user_recaptcha.js') }}
+{{ asset_js('js/app/user_login.js') }}
 {% else %}
-{{ asset_js('js/fos_user_login.js') }}
+{{ asset_js('js/user_login.js') }}
 {%- endif %}
 {% endblock %}

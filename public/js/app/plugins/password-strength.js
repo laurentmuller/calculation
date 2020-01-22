@@ -246,20 +246,6 @@
     };
 
     // -----------------------------
-    // Plugin definition
-    // -----------------------------
-    $.fn.passwordstrength = function (option) {
-        return this.each(function () {
-            const $this = $(this);
-            let data = $this.data("passwordstrength");
-            if (!data) {
-                const options = typeof option === "object" && option;
-                $this.data("passwordstrength", data = new PasswordStrength(this, options));
-            }
-        });
-    };
-
-    // -----------------------------
     // Default options
     // -----------------------------
     $.fn.passwordstrength.defaults = {
@@ -296,9 +282,30 @@
         progressClasses: ["bg-danger", "bg-danger", "bg-warning", "bg-success", "bg-primary"],
     };
 
-    /**
-     * Constructor
-     */
+    // -----------------------------------
+    // PasswordStrength plugin definition
+    // -----------------------------------
+    const oldPasswordStrength = $.fn.passwordstrength;
+
+    $.fn.passwordstrength = function (option) {
+        return this.each(function () {
+            const $this = $(this);
+            let data = $this.data("passwordstrength");
+            if (!data) {
+                const options = typeof option === "object" && option;
+                $this.data("passwordstrength", data = new PasswordStrength(this, options));
+            }
+        });
+    };
+
     $.fn.passwordstrength.Constructor = PasswordStrength;
+
+    // ------------------------------------
+    // PasswordStrength no conflict
+    // ------------------------------------
+    $.fn.passwordstrength.noConflict = function () {
+        $.fn.passwordstrength = oldPasswordStrength;
+        return this;
+    };
 
 }(jQuery));

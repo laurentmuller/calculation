@@ -13,5 +13,5 @@
 /**
  * Specific Files
  */
-<!--#include file="app/fos_user_recaptcha.js" -->
-<!--#include file="app/fos_user_request.js" -->
+<!--#include file="app/user_recaptcha.js" -->
+<!--#include file="app/user_login.js" -->

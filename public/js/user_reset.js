@@ -19,4 +19,5 @@
 /**
  * Specific Files
  */
-<!--#include file="app/fos_user_change_password.js" -->
+<!--#include file="app/user_recaptcha.js" -->
+<!--#include file="app/user_reset.js" -->

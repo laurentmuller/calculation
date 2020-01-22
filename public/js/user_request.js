@@ -8,10 +8,10 @@
 /**
  * Plugin and Common Files
  */
-<!--#include file="app/plugins/plugin-fileinput.js" -->
 <!--#include file="app/plugins/plugin-password.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/fos_user_profile.js" -->
+<!--#include file="app/user_recaptcha.js" -->
+<!--#include file="app/user_request.js" -->

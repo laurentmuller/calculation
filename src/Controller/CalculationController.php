@@ -496,7 +496,7 @@ class CalculationController extends EntityController
         return $this->render('calculation/calculation_pivot.html.twig', [
             'table' => $table,
             'popover' => true,
-            'highlight' => false,
+            'highlight' => true,
         ]);
     }
 

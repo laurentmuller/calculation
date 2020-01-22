@@ -1,8 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * @version 2.0.0
- * @link https://github.com/gajus/wholly for the canonical source repository
+ * Cell highlight.
  */
 (function ($) {
     'use strict';
@@ -20,11 +19,11 @@
     });
 
     // ------------------------------------
-    // Wholly public class definition
+    // CellHighlight public class definition
     // ------------------------------------
-    var Wholly = function (element, options) {
+    var CellHighlight = function (element, options) {
         this.$element = $(element);
-        this.options = $.extend(true, {}, Wholly.DEFAULTS, options);
+        this.options = $.extend(true, {}, CellHighlight.DEFAULTS, options);
         this.tableIndex = this.indexTable();
         this.enabled = false;
         
@@ -36,18 +35,18 @@
     };
 
     
-    Wholly.DEFAULTS = {
+    CellHighlight.DEFAULTS = {
         rowSelector: 'tr',
         cellSelector: 'td, th',
         highlightVertical: null,
         highlightHorizontal: null        
     };
     
-    Wholly.prototype = {
+    CellHighlight.prototype = {
         // -----------------------------
         // public functions
         // -----------------------------
-        constructor: Wholly,
+        constructor: CellHighlight,
             
         enable: function () {
             if (!this.enabled) {
@@ -69,7 +68,7 @@
         
         destroy: function () {
             this.disable();
-            this.$element.removeData("wholly");
+            this.$element.removeData("cellhighlight");
         },
 
         // -----------------------------
@@ -80,7 +79,7 @@
             const $target = $(e.currentTarget);
             const rowspan = $target.rowspan();
             const colspan = $target.colspan();
-            const offsetInMatrix = $target.data('wholly.offsetInMatrix');
+            const offsetInMatrix = $target.data('cellhighlight.offsetInMatrix');
             const tableIndex = that.tableIndex;
             const options = that.options;
 
@@ -106,10 +105,10 @@
             }
 
             // trigger events
-            that.horizontal.trigger('wholly.mouseenter-horizontal');
-            that.vertical.trigger('wholly.mouseenter-vertical');
+            that.horizontal.trigger('cellhighlight.mouseenter-horizontal');
+            that.vertical.trigger('cellhighlight.mouseenter-vertical');
             
-            that.$element.trigger('wholly.mouseenter', {
+            that.$element.trigger('cellhighlight.mouseenter', {
                 horizontal: that.horizontal,
                 vertical: that.vertical
             });
@@ -131,10 +130,10 @@
             }
 
             // trigger events
-            that.horizontal.trigger('wholly.mouseleave-horizontal');
-            that.vertical.trigger('wholly.mouseleave-vertical');
+            that.horizontal.trigger('cellhighlight.mouseleave-horizontal');
+            that.vertical.trigger('cellhighlight.mouseleave-vertical');
             
-            that.$element.trigger('wholly.mouseleave', {
+            that.$element.trigger('cellhighlight.mouseleave', {
                 horizontal: that.horizontal,
                 vertical: that.vertical
             });
@@ -217,8 +216,8 @@
                         }
                     }
 
-                    if (cell.data && cell.data('wholly.offsetInMatrix') === undefined) {
-                        cell.data('wholly.offsetInMatrix', [x, y]);
+                    if (cell.data && cell.data('cellhighlight.offsetInMatrix') === undefined) {
+                        cell.data('cellhighlight.offsetInMatrix', [x, y]);
                     }
                 });
             });
@@ -228,28 +227,28 @@
     };
 
     // -----------------------------
-    // Wholly plugin definition
+    // CellHighlight plugin definition
     // -----------------------------
-    const oldWholly = $.fn.wholly;
+    const oldCellHighlight = $.fn.cellhighlight;
     
-    $.fn.wholly = function (option) {
+    $.fn.cellhighlight = function (option) {
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data("wholly");
+            let data = $this.data("cellhighlight");
             const options = typeof option === "object" && option;
             if (!data) {
-                $this.data("wholly", data = new Wholly(this, options));
+                $this.data("cellhighlight", data = new CellHighlight(this, options));
             }
         });
     };
     
-    $.fn.wholly.Constructor = Wholly;
+    $.fn.cellhighlight.Constructor = CellHighlight;
 
     // ------------------------------------
-    // Wholly no conflict
+    // CellHighlight no conflict
     // ------------------------------------
-    $.fn.wholly.noConflict = function () {
-        $.fn.wholly = oldWholly;
+    $.fn.cellhighlight.noConflict = function () {
+        $.fn.cellhighlight = oldCellHighlight;
         return this;
     };
     

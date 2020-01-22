@@ -16,7 +16,6 @@ namespace App\Form;
 
 use App\Entity\User;
 use FOS\UserBundle\Form\Type\ProfileFormType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -67,14 +66,18 @@ class FosUserProfileFormType extends ProfileFormType
      */
     protected function buildUserForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('username', UserNameType::class, [
-                'label' => 'form.username',
-                'translation_domain' => 'FOSUserBundle',
-            ]);
+        $helper = new FormHelper($builder);
 
-        $builder->add('email', EmailType::class, [
-                'label' => 'form.email',
-                'translation_domain' => 'FOSUserBundle',
-            ]);
+        $helper->field('username')
+            ->label('form.username')
+            ->domain('FOSUserBundle')
+            ->autocomplete('username')
+            ->add(UserNameType::class);
+
+        $helper->field('email')
+            ->label('form.email')
+            ->domain('FOSUserBundle')
+            ->autocomplete('email')
+            ->addEmailType();
     }
 }

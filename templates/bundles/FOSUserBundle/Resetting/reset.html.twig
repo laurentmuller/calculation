@@ -66,9 +66,9 @@
 {{ asset_js('js/vendor/zxcvbn/zxcvbn.js') }}
 {{ asset_js('js/app/plugins/password-strength.js') }}
 {{ asset_js('js/app/plugins/plugin-password.js') }}
-{{ asset_js('js/app/fos_user_recaptcha.js') }}
-{{ asset_js('js/app/fos_user_reset.js') }}
+{{ asset_js('js/app/user_recaptcha.js') }}
+{{ asset_js('js/app/user_reset.js') }}
 {% else %}
-{{ asset_js('js/fos_user_reset.js') }}
+{{ asset_js('js/user_reset.js') }}
 {% endif %}
 {%- endblock %}

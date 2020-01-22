@@ -1,6 +1,7 @@
 {
 	"source": "https://cdnjs.cloudflare.com/ajax/libs/",
 	"target": "js/vendor/",
+	"format": "{source}{name}/{version}/{file}",
 	"bootswatch": "https://bootswatch.com/api/4.json",
 	"prefixes": {
 		"js": "/**! compression tag for ftp-deployment */\n\n",
@@ -32,19 +33,16 @@
 			"version": "5.12.0-1",
 			"files": [
 				"css/all.css",
-				
 				"webfonts/fa-brands-400.eot",
 				"webfonts/fa-brands-400.svg",
 				"webfonts/fa-brands-400.ttf",
 				"webfonts/fa-brands-400.woff",
 				"webfonts/fa-brands-400.woff2",
-				
 				"webfonts/fa-regular-400.eot",
 				"webfonts/fa-regular-400.svg",
 				"webfonts/fa-regular-400.ttf",
 				"webfonts/fa-regular-400.woff",
 				"webfonts/fa-regular-400.woff2",
-				
 				"webfonts/fa-solid-900.eot",
 				"webfonts/fa-solid-900.svg",
 				"webfonts/fa-solid-900.ttf",
@@ -62,10 +60,10 @@
 			]
 		},
 		{
-			"source": "https://cdn.jsdelivr.net/npm/summernote@0.8.15/dist",
-			"passthrough": true,
 			"name": "summernote",
 			"version": "0.8.15",
+			"source": "https://cdn.jsdelivr.net/npm/",
+			"format": "{source}{name}@{version}/dist/{file}",
 			"files": [
 				"summernote-bs4.css",
 				"summernote-bs4.js",
@@ -92,7 +90,9 @@
 		},
 		{
 			"name": "datatables",
-			"version": "1.10.19",
+			"version": "1.10.20",
+			"source": "https://cdn.datatables.net/",
+			"format": "{source}{version}/{file}",
 			"files": [
 				"js/jquery.dataTables.js",
 				"js/dataTables.bootstrap4.js",
@@ -100,40 +100,40 @@
 			]
 		},
 		{
-			"source": "http://cdn.datatables.net/",
 			"name": "keytable",
+			"version": "2.5.1",
+			"source": "http://cdn.datatables.net/",
 			"target": "datatables",
-			"version": "2.5.0",
 			"files": [
 				"js/dataTables.keyTable.js"
 			]
 		},
 		{
-			"source": "https://raw.githubusercontent.com/bartaz/sandbox.js/master",
-			"passthrough": true,
 			"name": "jquery.highlight",
-			"target": "datatables/js",
 			"version": "5",
+			"source": "https://raw.githubusercontent.com/bartaz/sandbox.js/master",
+			"format": "{source}/{file}",
+			"target": "datatables/js",
 			"files": [
 				"jquery.highlight.js"
 			]
 		},
 		{
-			"source": "https://cdn.datatables.net/plug-ins/1.10.20/features/searchHighlight",
-			"passthrough": true,
-			"name": "dataTables.searchHighlight",
-			"target": "datatables/js",
+			"name": "searchHighlight",
 			"version": "1.10.20",
+			"source": "https://cdn.datatables.net/plug-ins/",
+			"format": "{source}{version}/features/{name}/{file}",
+			"target": "datatables/js",
 			"files": [
 				"dataTables.searchHighlight.js"
 			]
 		},
 		{
-			"source": "https://cdn.datatables.net/plug-ins/1.10.20/features/conditionalPaging",
-			"passthrough": true,
-			"name": "dataTables.conditionalPaging",
-			"target": "datatables/js",
+			"name": "conditionalPaging",
 			"version": "1.10.20",
+			"source": "https://cdn.datatables.net/plug-ins/",
+			"format": "{source}{version}/features/{name}/{file}",
+			"target": "datatables/js",
 			"files": [
 				"dataTables.conditionalPaging.js"
 			]
@@ -175,6 +175,6 @@
 				"js/i18n/defaults-fr_FR.js",
 				"css/bootstrap-select.css"
 			]
-		}		
+		}
 	]
 }

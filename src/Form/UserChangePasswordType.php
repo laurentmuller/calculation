@@ -55,6 +55,7 @@ class UserChangePasswordType extends BaseType
                     'minLength' => 6,
                     'maxLength' => 255,
                     'class' => 'password-strength',
+                    'autocomplete' => 'new-password',
                 ],
             ])
             ->updateOption('second_options', [

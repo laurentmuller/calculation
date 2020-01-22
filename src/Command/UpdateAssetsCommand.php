@@ -76,7 +76,7 @@ class UpdateAssetsCommand extends AssetsCommand
         }
 
         // check values
-        if (!$this->propertyExists($configuration, ['source', 'target', 'plugins'], true)) {
+        if (!$this->propertyExists($configuration, ['source', 'target', 'format', 'plugins'], true)) {
             return 0;
         }
 
@@ -84,7 +84,7 @@ class UpdateAssetsCommand extends AssetsCommand
         $source = $configuration->source;
         $target = $publicDir . '/' . $configuration->target;
         $targetTemp = $this->tempDir($publicDir) . '/';
-
+        $format = $configuration->format;
         $plugins = $configuration->plugins;
         $prefixes = $this->getConfigArray($configuration, 'prefixes');
         $suffixes = $this->getConfigArray($configuration, 'suffixes');
@@ -103,25 +103,10 @@ class UpdateAssetsCommand extends AssetsCommand
                 // copy files
                 foreach ($plugin->files as $file) {
                     // get source
-                    $src = $source;
-                    if (isset($plugin->source)) {
-                        $src = $plugin->source;
-                    }
+                    $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
 
-                    // source file
-                    if (isset($plugin->passthrough) && (bool) ($plugin->passthrough)) {
-                        $sourceFile = $src . '/' . $file;
-                    } else {
-                        $sourceFile = $src . $name . '/' . $version . '/' . $file;
-                    }
-
-                    // target file
-                    $dst = $targetTemp;
-                    if (isset($plugin->target)) {
-                        $targetFile = $dst . $plugin->target . '/' . $file;
-                    } else {
-                        $targetFile = $dst . $name . '/' . $file;
-                    }
+                    // get target
+                    $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
 
                     // copy
                     if ($this->copyFile($sourceFile, $targetFile, $prefixes, $suffixes, $renames)) {
@@ -131,8 +116,11 @@ class UpdateAssetsCommand extends AssetsCommand
                 ++$countPlugins;
 
                 // check version
-                if (!isset($plugin->passthrough)) {
-                    $this->checkLastVersion($name, $version);
+                $versionSource = $plugin->source ?? $source;
+                if (false !== \stripos($versionSource, 'api.cdnjs.com')) {
+                    $this->checkApiCdnjsLastVersion($name, $version);
+                } elseif (false !== \stripos($versionSource, 'cdn.jsdelivr')) {
+                    $this->checkJsDelivrLastVersion($name, $version);
                 }
             }
 
@@ -171,7 +159,7 @@ class UpdateAssetsCommand extends AssetsCommand
      * @param string $name    the plugin name
      * @param string $version the actual version
      */
-    private function checkLastVersion(string $name, string $version): void
+    private function checkApiCdnjsLastVersion(string $name, string $version): void
     {
         // get content
         $url = "https://api.cdnjs.com/libraries/{$name}?fields=version";
@@ -179,6 +167,27 @@ class UpdateAssetsCommand extends AssetsCommand
             // compare version
             if (isset($content->version)) {
                 $lastVersion = $content->version;
+                if (\version_compare($version, $lastVersion, '<')) {
+                    $this->write("The plugin '{$name}' version '{$version}' can be updated to the version '{$lastVersion}'.");
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks if the plugin installed is the last version.
+     *
+     * This works only for 'https://data.jsdelivr.com' server.
+     *
+     * @param string $name    the plugin name
+     * @param string $version the actual version
+     */
+    private function checkJsDelivrLastVersion(string $name, string $version): void
+    {
+        $url = "https://data.jsdelivr.com/v1/package/npm/{$name}";
+        if (false !== $content = $this->loadJson($url)) {
+            if (isset($content->tags) && isset($content->tags->latest)) {
+                $lastVersion = $content->tags->latest;
                 if (\version_compare($version, $lastVersion, '<')) {
                     $this->write("The plugin '{$name}' version '{$version}' can be updated to the version '{$lastVersion}'.");
                 }
@@ -377,6 +386,56 @@ class UpdateAssetsCommand extends AssetsCommand
         }
 
         return [];
+    }
+
+    /**
+     * Gets the plugin source file to copy.
+     *
+     * @param string    $source the base URL
+     * @param string    $format the URL format
+     * @param \stdClass $plugin the plugin definition
+     * @param string    $file   the file name
+     *
+     * @return string the source file
+     */
+    private function getSourceFile(string $source, string $format, \stdClass $plugin, string $file): string
+    {
+        $name = $plugin->name;
+        $version = $plugin->version;
+
+        // source
+        if (isset($plugin->source)) {
+            $source = $plugin->source;
+        }
+
+        // format
+        if (isset($plugin->format)) {
+            $format = $plugin->format;
+        }
+
+        // build
+        $format = \str_ireplace('{source}', $source, $format);
+        $format = \str_ireplace('{name}', $name, $format);
+        $format = \str_ireplace('{version}', $version, $format);
+        $format = \str_ireplace('{file}', $file, $format);
+
+        return $format;
+    }
+
+    /**
+     * Gets the plugin target file to write to.
+     *
+     * @param string    $target the target directory
+     * @param \stdClass $plugin the plugin definition
+     * @param string    $file   the file name
+     *
+     * @return string the target file
+     */
+    private function getTargetFile(string $target, \stdClass $plugin, string $file): string
+    {
+        $name = $plugin->target ?? $plugin->name;
+
+        return $target . $name . '/' . $file;
     }
 
     /**

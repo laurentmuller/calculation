@@ -17,6 +17,7 @@ $.fn.extend({
         if ($that.hasClass(firstClass)) {
             $that.toggleClass(oldClass + ' ' + newClass);
         }
+        return $that;
     }
 });
     

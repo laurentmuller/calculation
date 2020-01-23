@@ -122,8 +122,7 @@ var MoveRowHandler = {
      * @param $target
      *            {JQuery} - the target row.
      * @param up
-     *            {boolean} - true to move before the target (up); false to move
-     *            after (down).
+     *            {boolean} - true to move before the target (up); false to move after (down).
      * 
      * @return {JQuery} - The moved row.
      */
@@ -238,7 +237,7 @@ var Application = {
      * Initialize the drag and drop.
      * 
      * @param destroy
-     *            true to destroy the existing sortable.
+     *            {boolean} - true to destroy the existing sortable.
      */
     initDragDrop: function (destroy) {
         'use strict';
@@ -530,12 +529,19 @@ var Application = {
         that.jqXHR = $.post(url, data, function (response) {
             const $totalPanel = $('#totals-panel');
 
-            // OK?
+            // error?
             if (!response.result) {
-                // hide
+                // hide or remove
                 $totalPanel.fadeOut();
                 $(':submit').fadeOut();
-                $('.btn-adjust').attr('disabled', true);
+                $('.btn-adjust').fadeOut();
+                $('.btn-add-item').fadeOut();
+
+                // $('#item_form')
+                // #items-panel.btn-add-item
+                $.contextMenu('destroy');
+                $('#item_delete_button').remove();
+                $('#data-table-edit div.dropdown').fadeOut();
 
                 // display error message
                 const title = $('#edit-form').data('title');
@@ -946,8 +952,7 @@ $.fn.extend({
     },
 
     /**
-     * Finds an input element that have the name attribute within a given
-     * substring.
+     * Finds an input element that have the name attribute within a given substring.
      * 
      * @param name
      *            {string} - the partial attribute name.
@@ -966,8 +971,7 @@ $.fn.extend({
      * Fade out and remove the selected element.
      * 
      * @param callback
-     *            {Function} - the function to call after the element is
-     *            removed.
+     *            {Function} - the function to call after the element is removed.
      * @return null
      */
     removeFadeOut: function (callback) {
@@ -1022,7 +1026,7 @@ $.fn.extend({
             description: $row.findNamedInput('description').val(),
             unit: $row.findNamedInput('unit').val(),
             price: $row.findNamedInput('price').val(),
-            quantity: $row.findNamedInput('price').val(),
+            quantity: $row.findNamedInput('quantity').val(),
         };
     },
 
@@ -1207,7 +1211,7 @@ $(function () {
     // $('#data-table-edit').on('mousedown.tableEdit', 'tr', function (e) {
     // $(this).focus();
     // console.log(e);
-    //    });
+    // });
 
     // searches
     SearchHelper.init();

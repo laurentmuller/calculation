@@ -14,7 +14,7 @@
 {%- endmacro %}
 
 {% macro outputPopover(cell, value) -%}
-{%- set sep = ' <small><i class="fas fa-arrow-right" aria-hidden="true"></i></small> ' -%}
+{%- set sep = ' <i class="fas fa-caret-right" aria-hidden="true"></i> ' -%}
 <table class="table table-borderless table-sm mb-0">
     <tbody>
     	<tr>
@@ -35,12 +35,17 @@
 </table>
 {%- endmacro %}
 
+{% macro outputPopoverTitle(cell, row = false) -%}
+{%- set sep = ' <i class="fas fa-caret-right" aria-hidden="true"></i> ' -%}
+<p class="mb-0">{{ cell.titles|join(sep)|raw }}{{ sep|raw }}{{ _self.format(cell.value) }}</p>
+{%- endmacro %}
+
 {% macro outputHeaders(nodes) -%}
 {%- for node in nodes %}
     {%- if node.leaf -%}
-        <td class="text-currency not-hover">{{ node.title|raw }}</td>
+        <td class="text-currency not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node)|e }}">{{ node.title|raw }}</td>
     {%- else -%}
-        <td class="text-nowrap not-hover"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
+        <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node)|e }}"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
     {%- endif -%}
 {%- endfor -%}
 {%- endmacro %}
@@ -50,7 +55,7 @@
 {% if cell %}
     {%- set popover = 'not-hover' not in class -%}
     {%- set value   = _self.format(cell.value) -%}    
-	<td class="{{ class }}"{% if popover %} data-toggle="popover" data-html="{{ _self.outputPopover(cell, value)|e }}"{% endif %}>{{ value }}</td>
+	<td class="{{ class }}"{% if popover %} data-toggle="popover" data-body="{{ _self.outputPopover(cell, value)|e }}"{% endif %}>{{ value }}</td>
 {% else %}
 	<td class="{{ class }} not-hover">&nbsp;</td>
 {% endif %}
@@ -72,7 +77,7 @@
 {% if row.index >= row.level - 1 -%}
 <tr>
 {% endif -%}
-	<td class="text-nowrap not-hover"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>    
+	<td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(row, true)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>    
 {%- if row.leaf  -%}
     {{ _self.outputCells(table, columns, row) -}}
 </tr>
@@ -89,7 +94,7 @@
         <tr class="skip">
             <td class="not-hover font-weight-bold">{{ table.title|default('&nbsp;')|raw }}</td>
             <td class="not-hover text-right">{%if table.column.title%}{{ table.column.title}} <i class="fas fa-fw fa-arrow-right" aria-hidden="true"></i>{%else%}&nbsp;{%endif%}</td>
-        </tr class="skip">
+        </tr>
         {%- for i in 2 .. col_level - 1 -%}
         <tr class="skip">
             <td class="not-hover" colspan="2">&nbsp;</td>
@@ -136,7 +141,7 @@
 {# body #}
 {% block card_body %}
 <div class="table-responsive">
-    <table id="pivot" class="table table-bordered table-sm mb-0">
+    <table id="pivot" class="table table-bordered table-sm mb-0" data-session="{{ url('ajax_session_set') }}">
         <thead>
             {%- for i in 1 .. col_level -%}
             <tr>

@@ -593,6 +593,27 @@ class AjaxController extends BaseController
     }
 
     /**
+     * Sets a session attribute.
+     *
+     * The request must contains 'name' and 'value' parameters.
+     *
+     * @Route("/session/set", name="ajax_session_set")
+     * @IsGranted("ROLE_USER")
+     */
+    public function saveSession(Request $request): JsonResponse
+    {
+        $result = false;
+        $name = $request->get('name');
+        $value = $request->get('value');
+        if (null !== $name && null !== $value) {
+            $this->setSessionValue($name, \json_decode($value));
+            $result = true;
+        }
+
+        return JsonResponse::create($result);
+    }
+
+    /**
      * Search streets, zip codes or cities.
      *
      * @Route("/search/address", name="ajax_search_address")

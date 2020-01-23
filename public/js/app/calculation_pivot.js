@@ -15,7 +15,7 @@ $.fn.extend({
         const $that = $(this);
         const firstClass = oldClass.split(' ')[0];
         if ($that.hasClass(firstClass)) {
-            $that.removeClass(oldClass).addClass(newClass);
+            $that.toggleClass(oldClass + ' ' + newClass);
         }
     }
 });
@@ -27,14 +27,17 @@ $.fn.extend({
  *            $source - The highlight checkbox.
  * 
  * @param {JQuery}
- *            $$table - The table to update.
+ *            $table - The table to update.
+ * @param {boolean}
+ *            $save - true to save value to the session.
  */
-function toggleHighlight($source, $table) {
+function toggleHighlight($source, $table, save) {
     'use strict';
 
-    const data = $table.data('cellhighlight');
-    if ($source.isChecked()) {
-        if (!data) {
+    const checked = $source.isChecked();
+    const highlight = $table.data('cellhighlight');
+    if (checked) {
+        if (!highlight) {
             $table.cellhighlight({
                 rowSelector: 'tr:not(.skip)',
                 cellSelector: 'td:not(.not-hover), th:not(.not-hover)',
@@ -51,12 +54,22 @@ function toggleHighlight($source, $table) {
                 });
             });
         } else {
-            data.enable();
+            highlight.enable();
         }
     } else {
-        if (data) {
-            data.disable();
+        if (highlight) {
+            highlight.disable();
         }
+    }
+
+    // save to session
+    if (save) {
+        const url = $('#pivot').data('session');
+        const data =  { 
+            name: 'highlight', 
+            value: checked
+        };
+        $.post(url, data);
     }
 }
 
@@ -68,33 +81,48 @@ function toggleHighlight($source, $table) {
  * 
  * @param {JQuery}
  *            $selector - The popover elements.
+ * @param {boolean}
+ *            $save - true to save value to the session.
  */
-function togglePopover($source, $selector) {
+function togglePopover($source, $selector, save) {
     'use strict';
 
-    const data = $selector.data('bs.popover');
-    if ($source.isChecked()) {
-        if (data) {
+    const checked = $source.isChecked();
+    const popover = $selector.data('bs.popover');
+    if (checked) {
+        if (popover) {
             $selector.popover('enable');
         } else {
+            // const title =
+            // $('.card-title').html().replace(/<h1.*>.*?<\/h1>/ig, '');
             $selector.customPopover({
                 html: true,
+                // title: title,
                 type: 'primary',
                 trigger: 'hover',
                 placement: 'top',
                 container: 'body',
-                title: $('.card-title').html().replace(/<h1.*>.*?<\/h1>/ig, ''),
                 content: function () {
-                    const data = $(this).data('html');
-                    return $(data);
-                },
+                    const body = $(this).data('body');
+                    return $(body);
+                }
             });
         }
     } else {
-        if (data) {
+        if (popover) {
             $selector.popover('disable');
         }
     }
+    
+    // save to session
+    if (save) {
+        const url = $('#pivot').data('session');
+        const data =  { 
+            name: 'popover', 
+            value: checked
+        };
+        $.post(url, data);
+    }   
 }
 
 /**
@@ -112,25 +140,24 @@ $(function () {
 
     // popover
     if ($popover.isChecked()) {
-        togglePopover($popover, $selector);
+        togglePopover($popover, $selector, false);
     }
     $popover.on('input', function () {
-        togglePopover($(this), $selector);
+        togglePopover($(this), $selector, true);
     });
 
     // highlight
     if ($highlight.isChecked()) {
-        toggleHighlight($highlight, $table);
+        toggleHighlight($highlight, $table, false);
     }
     $highlight.on('input', function () {
-        toggleHighlight($(this), $table);
+        toggleHighlight($(this), $table, true);
     });
 
-    // selection
-    const selection = 'td:not(.not-hover), th:not(.not-hover)';
-    $table.on('mouseenter', selection, function () {
+    // hover
+    $selector.on('mouseenter', function () {
         $(this).addClass('text-hover');
-    }).on('mouseleave', selection, function () {
+    }).on('mouseleave', function () {
         $(this).removeClass('text-hover');
     });
 });

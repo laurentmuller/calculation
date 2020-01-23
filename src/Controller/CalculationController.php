@@ -492,11 +492,15 @@ class CalculationController extends EntityController
         // create table
         $table = $this->getPivotTable();
 
+        // options
+        $popover = $this->getSessionBool('popover', true);
+        $highlight = $this->getSessionBool('highlight', false);
+
         // render
         return $this->render('calculation/calculation_pivot.html.twig', [
             'table' => $table,
-            'popover' => true,
-            'highlight' => true,
+            'popover' => $popover,
+            'highlight' => $highlight,
         ]);
     }
 

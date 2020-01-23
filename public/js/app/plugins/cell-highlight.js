@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Cell highlight.
+ * Plugin to highlight cells.
  */
 (function ($) {
     'use strict';

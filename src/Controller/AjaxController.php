@@ -863,8 +863,15 @@ class AjaxController extends BaseController
 
         // get values
         $groupAmount = $groupRow['amount'];
-        $netTotal = $netRow['total'];
         $userMargin = $userRow['margin'];
+        $netTotal = $netRow['total'];
+
+        // net total?
+        if (0.0 === $netTotal) {
+            $parameters['overall_below'] = false;
+
+            return $parameters;
+        }
 
         // compute user margin to reach minimum
         while ((($netTotal * (1 + $userMargin) / $groupAmount) - 1) < $minMargin) {

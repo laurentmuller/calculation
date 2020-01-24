@@ -925,10 +925,14 @@ class CalculationController extends EntityController
      *
      * @param Calculation $calculation the calculation to verify
      *
-     * @return bool true if below
+     * @return bool true if not empty and margin is below
      */
     private function isMarginBelow(Calculation $calculation): bool
     {
-        return  $this->getApplication()->isMarginBelow($calculation->getOverallMargin());
+        if ($calculation->isEmpty() || 0.0 === $calculation->getOverallTotal()) {
+            return false;
+        } else {
+            return  $this->getApplication()->isMarginBelow($calculation->getOverallMargin());
+        }
     }
 }

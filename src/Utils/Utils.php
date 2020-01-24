@@ -268,26 +268,6 @@ final class Utils
         return $grouped;
     }
 
-//     /**
-//      * Returns if the given strings are equal.
-//      *
-//      * @param string $str1       the first string
-//      * @param string $str2       the second string
-//      * @param bool   $ignorecase true for case-insensitive; false for case-sensitive
-//      *
-//      * @return bool true if equal
-//      */
-//     public static function isEqual(string $str1, string $str2, bool $ignorecase = false): bool
-//     {
-//         if ($str1 === $str2) {
-//             return true;
-//         } elseif ($ignorecase) {
-//             return 0 === \strcasecmp($str1, $str2);
-//         } else {
-//             return 0 === \strcmp($str1, $str2);
-//         }
-//     }
-
     /**
      * Returns if the given variable is a string and not empty.
      *

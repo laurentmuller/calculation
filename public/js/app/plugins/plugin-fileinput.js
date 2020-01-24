@@ -9,9 +9,9 @@
 
     const isIE = window.navigator.appName === 'Microsoft Internet Explorer';
 
-    // FILEUPLOAD PUBLIC CLASS DEFINITION
-    // =================================
-
+    // ------------------------------------
+    // Fileinput public class definition
+    // ------------------------------------
     let Fileinput = function(element, options) {
         this.$element = $(element);
         this.options = $.extend({}, Fileinput.DEFAULTS, options);
@@ -308,38 +308,35 @@
     };
 
 
-    // FILEUPLOAD PLUGIN DEFINITION
-    // ===========================
-
-    const old = $.fn.fileinput;
+    // ------------------------------------
+    // FileInput plugin definition
+    // ------------------------------------
+    const oldFileInput = $.fn.fileinput;
 
     $.fn.fileinput = function(options) {
         return this.each(function() {
             const $this = $(this);
             let data = $this.data('bs.fileinput');
             if (!data) {
-                $this.data('bs.fileinput', data = new Fileinput(this, options));
-            }
-            if (typeof options === 'string') {
-                data[options]();
+                const settings = typeof options === "object" && options;
+                $this.data('bs.fileinput', data = new Fileinput(this, settings));
             }
         });
     };
 
     $.fn.fileinput.Constructor = Fileinput;
 
-    // FILEINPUT NO CONFLICT
-    // ====================
-
+    // ------------------------------------
+    // FileInput no conflict
+    // ------------------------------------
     $.fn.fileinput.noConflict = function() {
-        $.fn.fileinput = old;
+        $.fn.fileinput = oldFileInput;
         return this;
     };
 
-
-    // FILEUPLOAD DATA-API
-    // ==================
-
+    // ------------------------------------
+    // FileInput data-api
+    // ------------------------------------
     $(document).on('click.fileinput.data-api', '[data-provides="fileinput"]', function(e) {
         const $this = $(this);
         if ($this.data('bs.fileinput')) {

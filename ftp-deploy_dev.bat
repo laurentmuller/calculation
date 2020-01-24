@@ -1,4 +1,4 @@
-REM if exist D:\Prod\Temp del /Q D:\Prod\Temp\*.*
+if exist D:\Prod\deploy_dev.log del D:\Prod\deploy_dev.log
 SET SYMFONY_ENV=prod
 php ftp-deployment.phar ftp-deploy_dev.ini
 SET SYMFONY_ENV=

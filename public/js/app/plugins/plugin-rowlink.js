@@ -30,31 +30,62 @@
     var Rowlink = function (element, options) {
         this.$element = $(element);
         this.options = $.extend({}, Rowlink.DEFAULTS, options);
-        this.$element.on('click.bs.rowlink'/* mouseup.bs.rowlink*/, 'td:not(.rowlink-skip)', $.proxy(this.click, this));
+        this.proxy = $.proxy(this.click, this);
+        this.enabled = false;
+        this.enable();
     };
 
     Rowlink.DEFAULTS = {
         target: "a"
     };
 
-    Rowlink.prototype.click = function (e, ctrlKey) {
-        const target = $(e.currentTarget).closest('tr').find(this.options.target)[0];
-        if (typeof target === 'undefined' || $(e.target)[0] === target) {
-            return;
-        }
+    Rowlink.prototype = {
+        // -----------------------------
+        // public functions
+        // -----------------------------
+        constructor: Rowlink,
 
-        e.preventDefault();
-        ctrlKey = ctrlKey || e.ctrlKey || e.type === 'mouseup' && e.which === 1;
-        if (!ctrlKey && target.click) {
-            target.click();
-        } else if (document.createEvent) {
-            const evt = new MouseEvent("click", {
-                view: window,
-                bubbles: true,
-                cancelable: true,
-                ctrlKey: ctrlKey
-            });
-            target.dispatchEvent(evt);
+        enable: function () {
+            if (!this.enabled) {
+                this.$element.on('click.bs.rowlink', 'td:not(.rowlink-skip)', this.proxy);
+                this.enabled = true;
+            }
+        },
+
+        disable: function () {
+            if (this.enabled) {
+                this.$element.off('click.bs.rowlink', 'td:not(.rowlink-skip)', this.proxy);
+                this.enabled = false;
+            }
+        },
+
+        destroy: function () {
+            this.disable();
+            this.$element.removeData("bs.rowlink");
+        },
+
+        // -----------------------------
+        // private functions
+        // -----------------------------
+        click: function (e, ctrlKey) {
+            const target = $(e.currentTarget).closest('tr').find(this.options.target)[0];
+            if (typeof target === 'undefined' || $(e.target)[0] === target) {
+                return;
+            }
+
+            e.preventDefault();
+            ctrlKey = ctrlKey || e.ctrlKey || e.type === 'mouseup' && e.which === 1;
+            if (!ctrlKey && target.click) {
+                target.click();
+            } else if (document.createEvent) {
+                const evt = new MouseEvent("click", {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true,
+                    ctrlKey: ctrlKey
+                });
+                target.dispatchEvent(evt);
+            }
         }
     };
 
@@ -68,7 +99,8 @@
             const $this = $(this);
             let data = $this.data('bs.rowlink');
             if (!data) {
-                $this.data('bs.rowlink', data = new Rowlink(this, options));
+                const settings = typeof options === "object" && options;
+                $this.data('bs.rowlink', data = new Rowlink(this, settings));
             }
         });
     };
@@ -86,7 +118,7 @@
     // ------------------------------------
     // Rowlink data-api
     // ------------------------------------
-    $(document).on('click.bs.rowlink.data-api'/* mouseup.bs.rowlink.data-api'*/, '[data-link="row"]', function (e) {
+    $(document).on('click.bs.rowlink.data-api', '[data-link="row"]', function (e) {
         if (e.type === 'mouseup' && e.which !== 1) {
             return;
         }
@@ -98,6 +130,7 @@
         if ($this.data('bs.rowlink')) {
             return;
         }
+
         $this.rowlink($this.data());
         const ctrlKey = e.ctrlKey || e.which === 2;
         $(e.target).trigger('click.bs.rowlink', [ctrlKey]);

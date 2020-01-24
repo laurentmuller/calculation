@@ -122,7 +122,8 @@ var MoveRowHandler = {
      * @param $target
      *            {JQuery} - the target row.
      * @param up
-     *            {boolean} - true to move before the target (up); false to move after (down).
+     *            {boolean} - true to move before the target (up); false to move
+     *            after (down).
      * 
      * @return {JQuery} - The moved row.
      */
@@ -281,7 +282,7 @@ var Application = {
 
         // already initialized?
         const that = this;
-        if (that.dialog) {
+        if (that.dialogInitialized) {
             return;
         }
 
@@ -310,7 +311,9 @@ var Application = {
                 $('#item_delete_button').hide();
             }
         }).on('shown.bs.modal', function () {
-            if (that.$editingRow) {
+            if ($('#item_price').attr('readonly')) {
+                $('#item_reset_button').focus();
+            } else if (that.$editingRow) {
                 if ($('#item_price').isEmptyValue()) {
                     $('#item_price').selectFocus();
                 } else {
@@ -344,7 +347,7 @@ var Application = {
         $('#item_price, #item_quantity').on('input', proxy);
 
         // ok
-        this.dialog = true;
+        this.dialogInitialized = true;
         return that;
     },
 
@@ -385,15 +388,6 @@ var Application = {
         });
 
         return that;
-    },
-
-    /**
-     * Reset the drag and drop handler.
-     */
-    resetHandler: function () {
-        'use strict';
-
-        return this.initDragDrop(true);
     },
 
     /**
@@ -504,7 +498,7 @@ var Application = {
             } else {
                 $('#user-margin-row').removeClass('d-none');
             }
-            $('.btn-adjust').attr('disabled', true);
+            $('.btn-adjust').attr('disabled', 'disabled');
             return that;
         }
 
@@ -527,30 +521,13 @@ var Application = {
         // call
         const url = $('#edit-form').data('update');
         that.jqXHR = $.post(url, data, function (response) {
-            const $totalPanel = $('#totals-panel');
-
             // error?
             if (!response.result) {
-                // hide or remove
-                $totalPanel.fadeOut();
-                $(':submit').fadeOut();
-                $('.btn-adjust').fadeOut();
-                $('.btn-add-item').fadeOut();
-
-                // $('#item_form')
-                // #items-panel.btn-add-item
-                $.contextMenu('destroy');
-                $('#item_delete_button').remove();
-                $('#data-table-edit div.dropdown').fadeOut();
-
-                // display error message
-                const title = $('#edit-form').data('title');
-                const message = $('#edit-form').data('error-update');
-                Toaster.danger(message, title, $('#flashbags').data());
-                return that;
+                return that.disable();
             }
 
             // update content
+            const $totalPanel = $('#totals-panel');
             if (response.body) {
                 $('#totals-table > tbody').html(response.body);
                 $totalPanel.fadeIn();
@@ -561,15 +538,57 @@ var Application = {
                 $('#calculation_userMargin').intVal(response.margin).selectFocus();
             }
             if (response.below) {
-                $('.btn-adjust').attr('disabled', false);
+                $('.btn-adjust').removeAttr('disabled');
             } else {
-                $('.btn-adjust').attr('disabled', true);
+                $('.btn-adjust').attr('disabled', 'disabled');
             }
             updateErrors();
             return that;
         });
 
         return that;
+    },
+
+    /**
+     * Disable edition.
+     * 
+     * @return {Object} this instance.
+     */
+    disable: function () {
+        'use strict';
+
+        $(':submit').fadeOut();
+        $('.btn-adjust').fadeOut();
+        $('.btn-add-item').fadeOut();
+        $('#totals-panel').fadeOut();
+        $('#edit-form :input').attr('readonly', 'readonly');
+        $('#item_form :input').attr('readonly', 'readonly');
+
+        $('#data-table-edit *').css('cursor', 'auto');
+        $('#data-table-edit a.btn-add-item').removeClass('btn-add-item');
+        $('#data-table-edit a.btn-edit-item').removeClass('btn-edit-item');
+        $('#data-table-edit a.btn-delete-item').removeClass('btn-delete-item');
+        $('#data-table-edit a.btn-delete-group').removeClass('btn-delete-group');
+
+        // $('#item_delete_button').remove();
+        $('#data-table-edit div.dropdown').fadeOut();
+        $('#error-all > p').html('<br>').addClass('small').removeClass('text-right');
+
+        $.contextMenu('destroy');
+        sortable('#data-table-edit tbody', 'destroy');
+
+        // display error message
+        const title = $('#edit-form').data('title');
+        const message = $('#edit-form').data('error-update');
+        const options = $.extend({}, $('#flashbags').data(), {
+            onHide: function () {
+                const html = message.replace('<br><br>', ' ');
+                $('#error-all > p').addClass('text-danger text-center').html(html);
+            }
+        });
+        Toaster.danger(message, title, options);
+
+        return this;
     },
 
     /**
@@ -658,7 +677,7 @@ var Application = {
         this.sortGroups();
 
         // reset the drag and drop handler.
-        this.resetHandler();
+        this.initDragDrop(true);
 
         return $newGroup;
     },
@@ -728,7 +747,7 @@ var Application = {
 
         const that = this;
         $element.closest('tbody').removeFadeOut(function () {
-            that.updateUpDownButton().updateTotals().resetHandler();
+            that.updateUpDownButton().updateTotals().initDragDrop(true);
         });
     },
 
@@ -751,7 +770,7 @@ var Application = {
             $row = $body;
         }
         $row.removeFadeOut(function () {
-            that.updateUpDownButton().updateTotals().resetHandler();
+            that.updateUpDownButton().updateTotals().initDragDrop(true);
         });
     },
 
@@ -880,7 +899,7 @@ var Application = {
 
             // update callback
             const callback = function () {
-                that.updateUpDownButton().updateTotals().resetHandler();
+                that.updateUpDownButton().updateTotals().initDragDrop(true);
                 $newRow.timeoutToggle('table-success');
             };
 
@@ -952,7 +971,8 @@ $.fn.extend({
     },
 
     /**
-     * Finds an input element that have the name attribute within a given substring.
+     * Finds an input element that have the name attribute within a given
+     * substring.
      * 
      * @param name
      *            {string} - the partial attribute name.
@@ -971,7 +991,8 @@ $.fn.extend({
      * Fade out and remove the selected element.
      * 
      * @param callback
-     *            {Function} - the function to call after the element is removed.
+     *            {Function} - the function to call after the element is
+     *            removed.
      * @return null
      */
     removeFadeOut: function (callback) {

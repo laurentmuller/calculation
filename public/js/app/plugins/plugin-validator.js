@@ -362,6 +362,10 @@
 
         /**
          * Intitialize an input type file.
+         * 
+         * @param {function}
+         *            callback - the optional callback function to use after
+         *            change.
          */
         initFileType: function(callback) {
             return this.each(function() {
@@ -402,6 +406,9 @@
 
         /**
          * Intitialize an input type color within the color-picker plugin.
+         * 
+         * @param {Object}
+         *            options - the options
          */
         initColorPicker: function(options) {            
             return this.each(function() {

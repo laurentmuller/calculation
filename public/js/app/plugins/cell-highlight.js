@@ -29,12 +29,11 @@
         
         // bind events
         const enabled = this.options.enabled === undefined ? true : this.options.enabled;
-        if (enabled ) {
+        if (enabled) {
             this.enable();    
         }
     };
 
-    
     CellHighlight.DEFAULTS = {
         rowSelector: 'tr',
         cellSelector: 'td, th',
@@ -231,13 +230,13 @@
     // -----------------------------
     const oldCellHighlight = $.fn.cellhighlight;
     
-    $.fn.cellhighlight = function (option) {
+    $.fn.cellhighlight = function (options) {
         return this.each(function () {
             const $this = $(this);
             let data = $this.data("cellhighlight");
-            const options = typeof option === "object" && option;
             if (!data) {
-                $this.data("cellhighlight", data = new CellHighlight(this, options));
+                const settings = typeof options === "object" && options;
+                $this.data("cellhighlight", data = new CellHighlight(this, settings));
             }
         });
     };

@@ -439,7 +439,7 @@ class PdfDocument extends Fpdf implements IPdfConstants
     public function getLinesCount(?string $text, float $width): int
     {
         // check width
-        if (0 === $width) {
+        if (0.0 === $width) {
             $width = $this->w - $this->rMargin - $this->x;
         }
         $maxWidth = ($width - 2 * $this->cMargin) * 1000 / $this->FontSize;

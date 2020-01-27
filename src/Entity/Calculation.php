@@ -545,6 +545,31 @@ class Calculation extends BaseEntity
     }
 
     /**
+     * Returns if this overall margin is below the given minimum margin.
+     *
+     * To be below, the calculation must have:
+     * <ul>
+     * <li>One or more items.</li>
+     * <li>An overall total different from 0.</li>
+     * <li>An overall margin below the given margin.</li>
+     * </ul>
+     *
+     * @param float $margin the minimum margin to be tested
+     *
+     * @return bool true if below
+     */
+    public function isMarginBelow(float $margin): bool
+    {
+        if ($this->isEmpty()) {
+            return false;
+        } elseif (0.0 === $this->getOverallTotal()) {
+            return false;
+        } else {
+            return $this->getOverallMargin() < $margin;
+        }
+    }
+
+    /**
      * Remove a group.
      *
      * @param \App\Entity\CalculationGroup $group

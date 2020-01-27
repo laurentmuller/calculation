@@ -114,7 +114,7 @@ class CalculationController extends EntityController
         // edit
         return $this->editItem($request, [
             'item' => $item,
-            'below' => false,
+            'overall_below' => false,
         ]);
     }
 
@@ -234,7 +234,7 @@ class CalculationController extends EntityController
         // edit
         return $this->editItem($request, [
             'item' => $clone,
-            'below' => $this->isMarginBelow($clone),
+            'overall_below' => $this->isMarginBelow($clone),
         ]);
     }
 
@@ -357,7 +357,7 @@ class CalculationController extends EntityController
     {
         return $this->editItem($request, [
             'item' => $item,
-            'below' => $this->isMarginBelow($item),
+            'overall_below' => $this->isMarginBelow($item),
         ]);
     }
 
@@ -925,14 +925,12 @@ class CalculationController extends EntityController
      *
      * @param Calculation $calculation the calculation to verify
      *
-     * @return bool true if not empty and margin is below
+     * @return bool true if margin is below
      */
     private function isMarginBelow(Calculation $calculation): bool
     {
-        if ($calculation->isEmpty() || 0.0 === $calculation->getOverallTotal()) {
-            return false;
-        } else {
-            return  $this->getApplication()->isMarginBelow($calculation->getOverallMargin());
-        }
+        $margin = $this->getApplication()->getMinMargin();
+
+        return $calculation->isMarginBelow($margin);
     }
 }

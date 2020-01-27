@@ -27,6 +27,7 @@ use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use App\Entity\Calculation;
 
 /**
  * Twig extension for the application service.
@@ -310,12 +311,10 @@ final class FunctionExtension extends AbstractExtension
             new TwigFunction('routeParams', [$this, 'routeParams']),
 
             new TwigFunction('is_int', 'is_int'),
-            new TwigFunction('className', [$this, 'getClassName']),
+            // new TwigFunction('className', [$this, 'getClassName']),
 
             // application
             new TwigFunction('marginBelow', [$this, 'isMarginBelow']),
-
-            //new TwigFunction('userSource', [$this, 'getUserSource']),
         ];
     }
 
@@ -348,6 +347,16 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
+     * Returns if the minimum margin allowed.
+     *
+     * @return float the minimum margin allowed
+     */
+    public function getMinMargin(): float
+    {
+        return $this->service->getMinMargin();
+    }
+
+    /**
      * Gets a value indicating if the sub-title of the flashbag messages is displayed.
      *
      * @return bool true if displayed
@@ -358,15 +367,21 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Returns if the given margin is below the minimum margin allowed.
+     * Returns if the given calculation or margin is below the minimum margin allowed.
      *
-     * @param float $value the margin to be tested
+     * @param Calculation|float $value the calculation or the margin to be tested
      *
      * @return bool true if below the minimum margin allowed
      */
-    public function isMarginBelow(float $value): bool
+    public function isMarginBelow($value): bool
     {
-        return $this->service->isMarginBelow($value);
+        if (is_float($value)) {
+            return $this->service->isMarginBelow($value);
+        } elseif ($value instanceof Calculation) {
+            return $value->isMarginBelow($this->service->getMinMargin());
+        } else {
+            return false;
+        }
     }
 
     /**

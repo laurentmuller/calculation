@@ -173,15 +173,15 @@ class CalculationsReport extends BaseReport
     }
 
     /**
-     * Gets the style for a margin.
+     * Gets the style for the margin below.
      *
-     * @param float $margin the margin to get style for
+     * @param Calculation $calculation the calculation to get style for
      *
      * @return PdfStyle|null the margin style, if applicable, null otherwise
      */
-    private function getMarginStyle(float $margin): ?PdfStyle
+    private function getMarginStyle(Calculation $calculation): ?PdfStyle
     {
-        if ($margin < $this->minMargin) {
+        if ($calculation->isMarginBelow($this->minMargin)) {
             if (!$this->marginStyle) {
                 $this->marginStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
             }
@@ -247,9 +247,8 @@ class CalculationsReport extends BaseReport
      */
     private function outputItem(PdfGroupTableBuilder $table, Calculation $c, bool $groupByState): void
     {
-        // margin
-        $margin = $c->getOverallMargin();
-        $style = $this->getMarginStyle($margin);
+        // margin below style
+        $style = $this->getMarginStyle($c);
 
         $table->startRow()
             ->add($this->localeId($c->getId()))
@@ -262,7 +261,7 @@ class CalculationsReport extends BaseReport
         $table->add($c->getCustomer())
             ->add($c->getDescription())
             ->add($this->localeAmount($c->getItemsTotal()))
-            ->add($this->localePercent($margin), 1, $style)
+            ->add($this->localePercent($c->getOverallMargin()), 1, $style)
             ->add($this->localeAmount($c->getOverallTotal()))
             ->endRow();
     }

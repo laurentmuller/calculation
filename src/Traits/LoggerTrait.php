@@ -39,8 +39,8 @@ trait LoggerTrait
      */
     public function log($level, string $message, array $context = []): void
     {
-        if ($this->logger) {
-            $this->log($level, $message . $context);
+        if ($logger = $this->doGetLogger()) {
+            $logger->log($level, $message . $context);
         }
     }
 
@@ -52,8 +52,8 @@ trait LoggerTrait
      */
     public function logAlert(string $message, array $context = []): void
     {
-        if ($this->logger) {
-            $this->logger->alert($message, $context);
+        if ($logger = $this->doGetLogger()) {
+            $logger->alert($message, $context);
         }
     }
 
@@ -65,8 +65,8 @@ trait LoggerTrait
      */
     public function logCritical(string $message, array $context = []): void
     {
-        if ($this->logger) {
-            $this->logger->critical($message, $context);
+        if ($logger = $this->doGetLogger()) {
+            $logger->critical($message, $context);
         }
     }
 
@@ -78,8 +78,8 @@ trait LoggerTrait
      */
     public function logEmergency(string $message, array $context = []): void
     {
-        if ($this->logger) {
-            $this->logger->emergency($message, $context);
+        if ($logger = $this->doGetLogger()) {
+            $logger->emergency($message, $context);
         }
     }
 
@@ -91,8 +91,8 @@ trait LoggerTrait
      */
     public function logError(string $message, array $context = []): void
     {
-        if ($this->logger) {
-            $this->logger->error($message, $context);
+        if ($logger = $this->doGetLogger()) {
+            $logger->error($message, $context);
         }
     }
 
@@ -104,8 +104,8 @@ trait LoggerTrait
      */
     public function logInfo(string $message, array $context = []): void
     {
-        if ($this->logger) {
-            $this->logger->info($message, $context);
+        if ($logger = $this->doGetLogger()) {
+            $logger->info($message, $context);
         }
     }
 
@@ -117,8 +117,8 @@ trait LoggerTrait
      */
     public function logWarning(string $message, array $context = []): void
     {
-        if ($this->logger) {
-            $this->logger->warning($message, $context);
+        if ($logger = $this->doGetLogger()) {
+            $logger->warning($message, $context);
         }
     }
 
@@ -130,8 +130,23 @@ trait LoggerTrait
      */
     public function notice(string $message, array $context = []): void
     {
-        if ($this->logger) {
-            $this->logger->notice($message, $context);
+        if ($logger = $this->doGetLogger()) {
+            $logger->notice($message, $context);
         }
+    }
+
+    /**
+     * Gets the logger.
+     *
+     * @return LoggerInterface|null the logger, if found; null otherwise
+     */
+    protected function doGetLogger(): ?LoggerInterface
+    {
+        if (!$this->logger && \method_exists($this, 'getLogger')) {
+            // call_user_func([$this, 'getLogger']);
+            return $this->logger = $this->getLogger();
+        }
+
+        return $this->logger;
     }
 }

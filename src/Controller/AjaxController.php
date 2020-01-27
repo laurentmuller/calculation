@@ -31,6 +31,7 @@ use App\Utils\SymfonyUtils;
 use App\Utils\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
+use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -779,7 +780,7 @@ class AjaxController extends BaseController
      * @Route("/update", name="ajax_update")
      * @IsGranted("ROLE_USER")
      */
-    public function updateCalculation(Request $request, CalculationService $service): JsonResponse
+    public function updateCalculation(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
     {
         // ajax call ?
         if (!$response = $this->isAjaxCall($request)) {
@@ -791,7 +792,7 @@ class AjaxController extends BaseController
         if (null === $source) {
             return $this->json([
                 'result' => false,
-                'message' => 'The calculation is null.',
+                'message' => $this->trans('calculation.edit.error.update_total'),
             ]);
         }
 
@@ -818,14 +819,15 @@ class AjaxController extends BaseController
             $result = [
                 'result' => true,
                 'body' => $body,
-                'margin' => $parameters['overall_margin'],
-                'overall' => $parameters['overall_total'],
-                'below' => $parameters['overall_below'],
+                'overall_margin' => $parameters['overall_margin'],
+                'overall_total' => $parameters['overall_total'],
+                'overall_below' => $parameters['overall_below'],
             ];
 
             return $this->json($result);
         } catch (\Exception $e) {
             $message = $this->trans('calculation.edit.error.update_total');
+            $logger->error($message, ['exception' => $e]);
 
             return $this->jsonException($e, $message);
         }
@@ -868,7 +870,7 @@ class AjaxController extends BaseController
 
         // net total?
         if (0.0 === $netTotal) {
-            $parameters['overall_below'] = false;
+            $parameters['below'] = false;
 
             return $parameters;
         }
@@ -891,6 +893,7 @@ class AjaxController extends BaseController
         $parameters['groups'][$overallIndex] = $overallRow;
         $parameters['overall_margin'] = (int) (100 * $userMargin);
         $parameters['overall_below'] = false;
+
 
         return $parameters;
     }

@@ -95,7 +95,7 @@
                 {{ properties.line(item.description) }}                
                 {{ properties.line(item.date|localedate ~ ' / ' ~ item.stateCode) }}
                 {{ properties.separator() }}
-                {%- if not item.isEmpty and marginBelow(item.overallMargin) -%}
+                {%- if marginBelow(item) -%}
                     {%- set className = 'text-right pr-4 text-danger below-cell has-tooltip' -%}
                     {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent }) -%}
                     <tr>

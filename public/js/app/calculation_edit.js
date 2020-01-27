@@ -534,10 +534,10 @@ var Application = {
             } else {
                 $totalPanel.fadeOut();
             }
-            if (adjust && response.margin) {
-                $('#calculation_userMargin').intVal(response.margin).selectFocus();
+            if (adjust && response.overall_margin) {
+                $('#calculation_userMargin').intVal(response.overall_margin).selectFocus();
             }
-            if (response.below) {
+            if (response.overall_below) {
                 $('.btn-adjust').removeAttr('disabled');
             } else {
                 $('.btn-adjust').attr('disabled', 'disabled');

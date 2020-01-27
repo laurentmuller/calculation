@@ -207,8 +207,7 @@ class CalculationReport extends BaseReport
 
         // style for margin
         $style = null;
-        $overallMargin = $c->getOverallMargin();
-        if ($overallMargin < $this->minMargin) {
+        if ($c->isMarginBelow($this->minMargin)) {
             $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         }
 
@@ -216,7 +215,7 @@ class CalculationReport extends BaseReport
         $table->startHeaderRow()
             ->add($this->trans('calculation.fields.overallTotal'))
             ->add($this->localeAmount($totalItems))
-            ->add($this->localePercent($overallMargin), 1, $style)
+            ->add($this->localePercent($c->getOverallMargin()), 1, $style)
             ->add($this->localeAmount($c->getOverallMarginAmount()))
             ->add($this->localeAmount($c->getOverallTotal()))
             ->endRow();

@@ -334,7 +334,7 @@ class ApplicationService implements IApplicationService
     /**
      * Returns if the given margin is below the minimum.
      *
-     * @param float $margin the overall margin to be tested
+     * @param float $margin the margin to be tested
      *
      * @return bool true if below
      */

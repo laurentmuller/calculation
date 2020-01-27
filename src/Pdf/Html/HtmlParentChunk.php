@@ -70,7 +70,7 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
     /**
      * Finds the first child for the given the tag names.
      *
-     * @param string[] $names the tag names to search for
+     * @param string[] ...$names the tag names to search for
      *
      * @return HtmlChunk|null the child, if found; <code>null</code> otherwise
      */

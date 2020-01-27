@@ -29,7 +29,7 @@ class PdfFillColor extends PdfColor
      * @param int $green the green component
      * @param int $blue  the blue component
      */
-    public function __construct(int $red = 0, int $green = 0, int $blue = 0)
+    final public function __construct(int $red = 0, int $green = 0, int $blue = 0)
     {
         parent::__construct($red, $green, $blue);
     }

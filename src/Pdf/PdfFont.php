@@ -197,8 +197,6 @@ class PdfFont implements IPdfDocumentUpdater
 
     /**
      * Gets the font size.
-     *
-     * @return number
      */
     public function getSize(): float
     {
@@ -207,20 +205,16 @@ class PdfFont implements IPdfDocumentUpdater
 
     /**
      * Gets the font style.
-     *
-     * @return string
      */
-    public function getStyle()
+    public function getStyle(): string
     {
         return $this->style;
     }
 
     /**
      * Returns if this font use the default size.
-     *
-     * @return bool true if default size
      */
-    public function isDefaultSize()
+    public function isDefaultSize(): bool
     {
         return self::DEFAULT_SIZE === $this->size;
     }
@@ -319,10 +313,8 @@ class PdfFont implements IPdfDocumentUpdater
 
     /**
      * Gets the textual representation of this style.
-     *
-     * @return string this style
      */
-    private function getTextStyle()
+    private function getTextStyle(): string
     {
         $result = [];
         $style = $this->style;

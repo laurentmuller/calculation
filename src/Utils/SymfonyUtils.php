@@ -103,15 +103,15 @@ final class SymfonyUtils
         }
 
         $sizes = [
-            1073741824.0 => '%.1f GB',
-            1048576.0 => '%.1f MB',
-            1024.0 => '%.0f KB',
-            0.0 => '%.0f B',
+            1073741824 => '%.1f GB',
+            1048576 => '%.1f MB',
+            1024 => '%.0f KB',
+            0 => '%.0f B',
         ];
 
         foreach ($sizes as $minSize => $format) {
             if ($size >= $minSize) {
-                return \sprintf($format, $size / $minSize);
+                return \sprintf($format, $size / (float) $minSize);
             }
         }
 

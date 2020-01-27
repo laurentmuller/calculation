@@ -20,6 +20,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Data column for render cell within a twig template.
  *
+ * @property string $template the template name.
+ *
  * @author Laurent Muller
  */
 class TwigColumn extends AbstractColumn

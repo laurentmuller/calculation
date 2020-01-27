@@ -156,8 +156,9 @@ final class Utils
             $export = \preg_replace('/^([ ]*)(.*)/m', '$1$1$2', $export);
             $array = \preg_split("/\r\n|\n|\r/", $export);
             $array = \preg_replace(['/\\s*array\\s\\($/', '/\\)(,)?$/', '/\\s=>\\s$/'], [null, ']$1', ' => ['], $array);
+            $result = \implode(PHP_EOL, \array_filter(['['] + $array));
 
-            return \implode(PHP_EOL, \array_filter(['['] + $array));
+            return $result;
         } catch (\Exception $e) {
             return '';
         }

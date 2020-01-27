@@ -65,7 +65,7 @@ class TestController extends BaseController
      *
      * @Route("/calendar/{year}", name="test_calendar", requirements={"year": "\d+" })
      *
-     * @param Request the request   $request    the get parameters
+     * @param Request               $request    the request
      * @param CalendarService       $service    the service to generate calendar model
      * @param CalculationRepository $repository the repository to query
      * @param int|null              $year       the year to search for or <code>null</code> for the current year

@@ -22,6 +22,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Basic chart with properties shortcut.
+ *
+ * @method style(array $options) set the style options.
+ * @method xAxis(array $options) set the x axis options.
+ * @method yAxis(array $options) set the y axis options.
+ *
+ * @property mixed $xAxis the x axis options.
+ * @property mixed $yAxis the y axis options.
  */
 class Basechart extends Highchart
 {

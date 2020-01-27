@@ -88,6 +88,9 @@ class ImageResizer implements IImageExtension
                 case self::EXTENSION_XBM:
                     $image_src = \imagecreatefromxbm($imagePath);
                     break;
+                default:
+                    $image_src = null;
+                    break;
             }
             if ($image_src) {
                 if ($resolutions = \imageresolution($image_src)) {
@@ -131,14 +134,14 @@ class ImageResizer implements IImageExtension
         }
 
         // set sizes
+        $dest_height = $height;
+        $dest_width = $width;
         if ($height > 0) {
             $width = (int) \round($height * $info->ratio);
             $dest_width = $square ? $height : $width;
-            $dest_height = $height;
         } elseif ($width > 0) {
             $height = (int) \round($width / $info->ratio);
             $dest_height = $square ? $width : $height;
-            $dest_width = $width;
         }
 
         // offsets
@@ -150,7 +153,7 @@ class ImageResizer implements IImageExtension
             return false;
         }
 
-        // load image source
+        // load image sourceTwigColumn
         $sourceExt = $sourceExt ?: $info->extension;
         if (!$image_src = $this->loadImage($source, $sourceExt)) {
             return false;

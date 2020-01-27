@@ -94,7 +94,7 @@ class DateTimeFormatType extends AbstractType
      *
      * @param Options $options the form options
      *
-     * @return bool <code>true</code> if date format must be used; <code>false</code> if time format
+     * @return bool true if date format must be used; false if time format
      */
     private function isUseDate(Options $options): bool
     {
@@ -104,7 +104,7 @@ class DateTimeFormatType extends AbstractType
     /**
      * Loads choice values.
      *
-     * @param bool $useDate <code>true</code> to get date formats; <code>false</code> to get time formats
+     * @param bool $useDate true to get date formats; false to get time formats
      *
      * @return array the choice values
      */

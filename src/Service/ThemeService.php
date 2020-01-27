@@ -242,9 +242,9 @@ class ThemeService
         }
 
         // cache themes
-        if (!$this->kernel->isDebug()) {
-            $item->set($themes);
-            $item->expiresAfter(10 * 60); // 10 minutes
+        if (isset($item)) {
+            $item->set($themes)
+                ->expiresAfter(10 * 60); // 10 minutes
             $this->cache->save($item);
         }
 

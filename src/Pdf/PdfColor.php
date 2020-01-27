@@ -113,6 +113,7 @@ abstract class PdfColor implements IPdfDocumentUpdater
 
     /**
      * Gets the black color.
+     *
      * Value is RGB(0, 0, 0).
      *
      * @return self the black color
@@ -124,6 +125,7 @@ abstract class PdfColor implements IPdfDocumentUpdater
 
     /**
      * Gets the blue color.
+     *
      * Value is RGB(255, 0, 0).
      *
      * @return self the blue color
@@ -135,6 +137,7 @@ abstract class PdfColor implements IPdfDocumentUpdater
 
     /**
      * Gets the border cell color.
+     *
      * Value is RGB(221, 221, 221).
      *
      * @return self The border cell color
@@ -167,6 +170,7 @@ abstract class PdfColor implements IPdfDocumentUpdater
 
     /**
      * Gets the dark-green color.
+     *
      * Value is RGB(0, 128, 0).
      *
      * @return self the dark-green color
@@ -212,6 +216,7 @@ abstract class PdfColor implements IPdfDocumentUpdater
 
     /**
      * Gets the green color.
+     *
      * Value is RGB(0, 255, 0).
      *
      * @return self the green color
@@ -223,6 +228,7 @@ abstract class PdfColor implements IPdfDocumentUpdater
 
     /**
      * Gets the header fill color.
+     *
      * Value is RGB(245, 245, 245).
      *
      * @return self the header color
@@ -234,6 +240,7 @@ abstract class PdfColor implements IPdfDocumentUpdater
 
     /**
      * Gets the link color (blue).
+     *
      * Value is RGB(0, 0, 255).
      *
      * @return self the link color
@@ -286,6 +293,7 @@ abstract class PdfColor implements IPdfDocumentUpdater
 
     /**
      * Gets the red color.
+     *
      * Value is RGB(255, 0, 0).
      *
      * @return self the red color
@@ -356,6 +364,7 @@ abstract class PdfColor implements IPdfDocumentUpdater
 
     /**
      * Gets the white color.
+     *
      * Value is RGB(255, 255, 255).
      *
      * @return self the white color

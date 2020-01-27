@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -134,7 +134,7 @@ class ResponseSubscriber implements EventSubscriberInterface
     /**
      * Handle kernel response event.
      */
-    public function updateResponse(FilterResponseEvent $event): void
+    public function updateResponse(ResponseEvent $event): void
     {
         // master request?
         if (!$event->isMasterRequest()) {

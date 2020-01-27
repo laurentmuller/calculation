@@ -485,7 +485,8 @@ class AjaxController extends BaseController
         $json = \json_encode($lang);
 
         // save
-        if (!$kernel->isDebug()) {
+        //if (!$kernel->isDebug()) {
+        if (isset($item)) {
             $item->set($json)
                 ->expiresAfter(self::CACHE_TIMEOUT);
             $cache->save($item);

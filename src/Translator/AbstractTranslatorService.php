@@ -129,12 +129,10 @@ abstract class AbstractTranslatorService extends HttpClientService implements IT
         $languages = $this->doGetLanguages();
 
         // cache result
-        if (!$this->debug) {
-            if (!empty($languages) && empty($this->lastError)) {
-                $item->set($languages);
-                $item->expiresAfter(self::CACHE_TIMEOUT);
-                $this->cache->save($item);
-            }
+        if (isset($item) && !empty($languages) && empty($this->lastError)) {
+            $item->set($languages)
+                ->expiresAfter(self::CACHE_TIMEOUT);
+            $this->cache->save($item);
         }
 
         return $languages;

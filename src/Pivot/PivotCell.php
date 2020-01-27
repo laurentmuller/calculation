@@ -94,8 +94,6 @@ class PivotCell extends PivotAggregator
 
     /**
      * Gets the parent column.
-     *
-     * @return PivotNode|null
      */
     public function getColumn(): PivotNode
     {
@@ -146,8 +144,6 @@ class PivotCell extends PivotAggregator
 
     /**
      * Gets the parent row.
-     *
-     * @return PivotNode|null
      */
     public function getRow(): PivotNode
     {

@@ -164,7 +164,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @return string the formatted date
      */
-    public function localeTimeFilter(Environment $env, $date, ?string $timeFormat = null, $timezone = null, string $calendar = 'gregorian'): string
+    public function localeTimeFilter(Environment $env, $date, ?string $timeFormat = null, $timezone = null, ?string $calendar = 'gregorian'): string
     {
         return $this->localeDateTimeFilter($env, $date, 'none', $timeFormat, $timezone, $calendar);
     }

@@ -147,7 +147,7 @@ class ThemeService
     /**
      * Gets the current theme.
      *
-     * @param Request the request
+     * @param Request $request the request
      *
      * @return Theme the current theme, if any; the default theme otherwise
      */
@@ -189,7 +189,7 @@ class ThemeService
     /**
      * Gets the theme background.
      *
-     * @param Request the request
+     * @param Request $request the request
      */
     public function getThemeBackground(?Request $request = null): string
     {

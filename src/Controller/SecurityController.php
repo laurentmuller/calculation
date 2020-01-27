@@ -101,14 +101,15 @@ class SecurityController extends AbstractController
     /**
      * Gets the user name.
      *
-     * @param Request the request
-     * @param AuthenticationUtils the utility
+     * @param Request             $request the request
+     * @param AuthenticationUtils $utils   the authentication utility
      *
      * @return string|null the user name, if found; null otherwise
      */
     private function getUserName(Request $request, AuthenticationUtils $utils): ?string
     {
-        if ($user = $this->getUser() instanceof UserInterface) {
+        $user = $this->getUser();
+        if ($user instanceof UserInterface) {
             return $user->getUsername();
         } elseif ($userName = $utils->getLastUsername()) {
             return $userName;

@@ -129,7 +129,6 @@ class Calendar extends CalendarItem implements IMonthsOfYear, IDaysOfWeek
         parent::__construct($this);
 
         // today
-        /** @var \DateTime $td */
         $date = new \DateTime();
         $date = $date->setTime(0, 0, 0, 0);
         $this->today = new Day($this, $date);

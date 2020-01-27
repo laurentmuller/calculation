@@ -92,7 +92,7 @@ class CalculationGroup extends BaseEntity
      *
      * @Assert\Valid
      *
-     * @var Collection|CalculationItem
+     * @var Collection|CalculationItem[]
      */
     protected $items;
 
@@ -131,9 +131,9 @@ class CalculationGroup extends BaseEntity
     }
 
     /**
-     * Add item.
+     * Add an item.
      *
-     * @return CalculationGroup
+     * @param CalculationItem $item the item to add
      */
     public function addItem(CalculationItem $item): self
     {
@@ -220,9 +220,9 @@ class CalculationGroup extends BaseEntity
     }
 
     /**
-     * Get items.
+     * Get calculation items.
      *
-     * @return Collection|CalculationItem
+     * @return Collection|CalculationItem[]
      */
     public function getItems(): Collection
     {
@@ -265,7 +265,9 @@ class CalculationGroup extends BaseEntity
     }
 
     /**
-     * Remove item.
+     * Remove an item.
+     *
+     * @param CalculationItem $item the item to remove
      */
     public function removeItem(CalculationItem $item): self
     {

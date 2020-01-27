@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\IndexController;
+use App\Entity\Calculation;
 use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Utils\Utils;
@@ -27,7 +28,6 @@ use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use App\Entity\Calculation;
 
 /**
  * Twig extension for the application service.
@@ -375,7 +375,7 @@ final class FunctionExtension extends AbstractExtension
      */
     public function isMarginBelow($value): bool
     {
-        if (is_float($value)) {
+        if (\is_float($value)) {
             return $this->service->isMarginBelow($value);
         } elseif ($value instanceof Calculation) {
             return $value->isMarginBelow($this->service->getMinMargin());

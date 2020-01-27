@@ -258,7 +258,7 @@ $(function () {
     $table.customTooltip({
         trigger: 'hover',
         selector: '.has-tooltip',
-        className: 'danger overall-datatable'
+        type: 'danger overall-datatable'
     });
 
     // columns

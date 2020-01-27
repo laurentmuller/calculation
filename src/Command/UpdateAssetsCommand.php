@@ -361,6 +361,7 @@ class UpdateAssetsCommand extends AssetsCommand
         $matches = [];
         $pattern = '/^' . \preg_quote($style) . '\s+\{([^}]+)\}/m';
         if (!empty(\preg_match_all($pattern, $content, $matches, PREG_SET_ORDER, 0))) {
+            $result = [];
             foreach ($matches as $matche) {
                 $result[] = $matche[0];
             }

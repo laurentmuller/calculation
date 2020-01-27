@@ -709,7 +709,7 @@ class DataColumn
     /**
      * Sets the function name used to render the cell.
      *
-     * @param string
+     * @param string|null $render the render or null if none
      */
     public function setRender(?string $render): self
     {

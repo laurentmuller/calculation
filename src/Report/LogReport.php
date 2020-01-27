@@ -219,7 +219,7 @@ class LogReport extends BaseReport implements IPdfCellListener
                 case 'critical':
                 case 'alert':
                 case 'emergency':
-                    return $this->colors[$level] = PdfDrawColor::red('#dc3545');
+                    return $this->colors[$level] = PdfDrawColor::create('#dc3545');
                 case 'debug':
                     return $this->colors[$level] = PdfDrawColor::create('#007bff');
                 case 'info':

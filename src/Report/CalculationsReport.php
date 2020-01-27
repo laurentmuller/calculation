@@ -195,7 +195,7 @@ class CalculationsReport extends BaseReport
     /**
      * Outputs the calculations grouped by state.
      *
-     * @return int the number of calculations
+     * @return PdfGroupTableBuilder the table builder
      */
     private function outputByGroup(): PdfGroupTableBuilder
     {
@@ -223,7 +223,7 @@ class CalculationsReport extends BaseReport
     /**
      * Ouput the calculations as list.
      *
-     * @return int the number of calculations
+     * @return PdfGroupTableBuilder the table builder
      */
     private function outputByList(): PdfGroupTableBuilder
     {

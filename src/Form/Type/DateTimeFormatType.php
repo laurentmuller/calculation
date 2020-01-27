@@ -96,7 +96,7 @@ class DateTimeFormatType extends AbstractType
      *
      * @return bool <code>true</code> if date format must be used; <code>false</code> if time format
      */
-    private function isUseDate(Options $options)
+    private function isUseDate(Options $options): bool
     {
         return 'date' === ($options['format'] ?? 'date');
     }

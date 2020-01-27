@@ -108,9 +108,9 @@ class UserController extends EntityController
     /**
      * Send comment to the web master.
      *
-     * @param Request $request the request
-     * @param \Swift_Mailer the mailer to send message with
-     * @param LoggerInterface $logger the logger to log error
+     * @param Request         $request the request
+     * @param \Swift_Mailer   $mailer  the mailer to send message with
+     * @param LoggerInterface $logger  the logger to log error
      *
      * @Route("/comment", name="user_comment", methods={"GET", "POST"})
      * @IsGranted("ROLE_USER")
@@ -238,10 +238,10 @@ class UserController extends EntityController
     /**
      * Send an email from the current user to an other user.
      *
-     * @param Request $request the request
-     * @param User    $user    the user to send mail to
-     * @param \Swift_Mailer the mailer to send message with
-     * @param LoggerInterface $logger the logger to log error
+     * @param Request         $request the request
+     * @param User            $user    the user to send mail to
+     * @param \Swift_Mailer   $mailer  the mailer to send message with
+     * @param LoggerInterface $logger  the logger to log error
      *
      * @Route("/message/{id}", name="user_message", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
@@ -437,8 +437,8 @@ class UserController extends EntityController
     /**
      * Display the users as a table view.
      *
-     * @param Request $request the request
-     * @param UserDataTable the data table to render
+     * @param Request       $request the request
+     * @param UserDataTable $table   the data table to render
      *
      * @Route("/table", name="user_table", methods={"GET", "POST"})
      */

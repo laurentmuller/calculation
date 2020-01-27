@@ -155,9 +155,9 @@ class CustomersReport extends BaseReport
     /**
      * Groups customers by a the first character of the name or company.
      *
-     * @param \App\Entity\Customer[] $customers the customers to group
+     * @param Customer[] $customers the customers to group
      *
-     * @return \App\Entity\Customer|array|string
+     * @return array<string, Customer[]> an array with first character as key, and corresponding customers as value
      */
     private function groupCustomers(array $customers): array
     {

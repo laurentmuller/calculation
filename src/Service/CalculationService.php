@@ -241,7 +241,7 @@ final class CalculationService
      * Creates calculation's total groups.
      *
      * @param array    $groups       the calculation groups
-     * @param callback $callback     the function to create a group lines
+     * @param callable $callback     the function to create a group lines
      * @param float    $userMargin   the user margin
      * @param float    $globalMargin the global margin or null to compute new global margin
      *
@@ -311,7 +311,7 @@ final class CalculationService
             'margin_amount' => $overall_amount,
             'total' => $overall_total,
             'description' => $this->trans('calculation.fields.overallTotal'),
-            'below' => $overall_below,
+            'overall_below' => $overall_below,
         ];
 
         return $result;
@@ -339,6 +339,7 @@ final class CalculationService
     private function getCategoryMargin(int $id, float $amount): float
     {
         if ($amount) {
+            /** @var \App\Repository\CategoryMarginRepository $repository */
             $repository = $this->manager->getRepository(CategoryMargin::class);
 
             return (float) ($repository->getMargin($id, $amount));
@@ -357,6 +358,7 @@ final class CalculationService
     private function getGlobalMargin(float $amount): float
     {
         if ($amount) {
+            /**  var \App\Repository\GlobalMarginRepository $repository */
             $repository = $this->manager->getRepository(GlobalMargin::class);
 
             return (float) $repository->getMargin($amount);

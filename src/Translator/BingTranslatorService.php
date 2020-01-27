@@ -210,6 +210,7 @@ class BingTranslatorService extends AbstractTranslatorService
         }
 
         // build
+        $result = [];
         foreach ($translation as $key => $value) {
             $result[$value['name']] = $key;
         }

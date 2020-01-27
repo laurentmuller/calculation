@@ -122,7 +122,7 @@ class PivotNode extends PivotAggregator implements \Countable
      *
      * <b>NB:</b> The children are sorted after insertion.
      *
-     * @param PivotNode the child to add
+     * @param PivotNode $child the child to add
      */
     public function addNode(self $child): self
     {
@@ -166,7 +166,7 @@ class PivotNode extends PivotAggregator implements \Countable
     /**
      * Returns if the given keys are the same as this keys.
      *
-     * @param mixed $keys the keys to compare to
+     * @param array $keys the keys to compare to
      *
      * @return bool true if equal
      *
@@ -468,7 +468,7 @@ class PivotNode extends PivotAggregator implements \Countable
      *
      * A leaf node is a node without children.
      *
-     * @return bool <code>true</code> if leaf
+     * @return bool true if leaf
      */
     public function isLeaf(): bool
     {
@@ -480,7 +480,7 @@ class PivotNode extends PivotAggregator implements \Countable
      *
      * A root node is a node without a parent.
      *
-     * @return bool <code>true</code> if root
+     * @return bool true if root
      */
     public function isRoot(): bool
     {
@@ -519,19 +519,6 @@ class PivotNode extends PivotAggregator implements \Countable
         }
 
         return empty($result) ? null : $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAggregator(Aggregator $aggregator)
-    {
-        parent::setAggregator($aggregator);
-        foreach ($this->children as $child) {
-            $child->setAggregator($aggregator);
-        }
-
-        return $this;
     }
 
     /**
@@ -591,6 +578,7 @@ class PivotNode extends PivotAggregator implements \Countable
             case self::SORT_DESC:
                 return $this->sortDescending();
             case self::SORT_NONE:
+            default:
                 // nothing to do
                 return $this;
         }

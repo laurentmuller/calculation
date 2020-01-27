@@ -202,6 +202,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
         }
 
         // build
+        $result = [];
         foreach ($languages as $language) {
             $result[$language['name']] = $language['language'];
         }

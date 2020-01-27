@@ -4,12 +4,8 @@
 {% import 'calculation/calculation_macro_item.html.twig' as itemsMacro %}
 
 <tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ itemsMacro.printItemRow(group.items.vars.prototype, false, false, editable)|e }}"{% endif -%}>
-    {# group #}
 	<tr class="drag-skip">
-		{# hidden fields #}
-        {{ form_widget(group.categoryId) }}
-        {{ form_widget(group.code) }}  
-		<th class="rowlink-skip" colspan="5">{{ group.code.vars.value }}</th>
+		<th class="rowlink-skip" colspan="5">{{ form_widget(group.categoryId) }}{{ form_widget(group.code) }}{{ group.code.vars.value }}</th>
         {% if editable -%}        
 		<th class="rowlink-skip actions d-print-none">
             {# menu #}
@@ -25,7 +21,6 @@
 		</th> 
         {%- endif %}
     </tr>    
-	{# items #}
 	{% for item in group.items %}
 	    {{ itemsMacro.printItemRow(item, loop.first, loop.last, editable) }}
 	{% endfor %}

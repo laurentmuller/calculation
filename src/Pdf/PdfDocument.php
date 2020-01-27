@@ -194,7 +194,7 @@ class PdfDocument extends Fpdf implements IPdfConstants
      * @param mixed  $size        the document size. One of the SIZE_XX contants or an array containing
      *                            the width and height of the document.
      */
-    public function __construct(string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, string $size = self::SIZE_A4)
+    public function __construct(string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, $size = self::SIZE_A4)
     {
         parent::__construct($orientation, $unit, $size);
         $this->SetDisplayMode(self::ZOOM_FULL_PAGE, self::LAYOUT_SINGLE);
@@ -249,7 +249,7 @@ class PdfDocument extends Fpdf implements IPdfConstants
      * @param bool       $fill   indicates if the cell background must be painted (true) or transparent (false). Default value is false.
      * @param string|int $link   an URL or an identifier returned by AddLink()
      */
-    public function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = ''): void
+    public function Cell($w, $h = 0.0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = ''): void
     {
         $txt = $this->cleanText($txt);
         parent::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
@@ -361,7 +361,7 @@ class PdfDocument extends Fpdf implements IPdfConstants
     /**
      * Gets the current rotation.
      *
-     * @return string the current rotation
+     * @return int the current rotation
      */
     public function getCurrentRotation(): int
     {
@@ -371,8 +371,8 @@ class PdfDocument extends Fpdf implements IPdfConstants
     /**
      * Gets the default orientation.
      *
-     * @return string the current orientation. Is one of the of the ORIENTATION_XX
-     *                contants.
+     * @return int the current orientation. Is one of the of the ORIENTATION_XX
+     *             contants.
      */
     public function getDefaultOrientation(): int
     {
@@ -661,7 +661,7 @@ class PdfDocument extends Fpdf implements IPdfConstants
      * @param float $beforeSpace the verticale space before the line
      * @param float $afterSpace  the verticale space after the line
      */
-    public function horizontalLine(float $beforeSpace = 1, float $afterSpace = 1): self
+    public function horizontalLine(float $beforeSpace = 1.0, float $afterSpace = 1.0): self
     {
         $x = $this->x;
         $y = $this->y + $beforeSpace;
@@ -902,7 +902,7 @@ class PdfDocument extends Fpdf implements IPdfConstants
      * @param float      $offset   the offset of text in points (positive means superscript, negative subscript; 0 by default)
      * @param string|int $link     an URL or an identifier returned by AddLink()
      */
-    public function subWrite(float $h, string $text, float $fontSize = PdfFont::DEFAULT_SIZE, float $offset = 0, $link = ''): self
+    public function subWrite(float $h, string $text, float $fontSize = PdfFont::DEFAULT_SIZE, float $offset = 0.0, $link = ''): self
     {
         // resize font
         $oldFontSize = $this->FontSizePt;

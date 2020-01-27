@@ -585,7 +585,7 @@ class PdfTableBuilder implements IPdfConstants
      * @param float       $height    the cell height
      * @param string      $text      the cell text
      * @param string      $alignment the cell alignment
-     * @param pdfStyle    $style     the cell style
+     * @param PdfStyle    $style     the cell style
      * @param PdfCell     $cell      the cell
      */
     protected function drawCell(PdfDocument $parent, int $index, float $width, float $height, ?string $text, string $alignment, PdfStyle $style, PdfCell $cell): void

@@ -103,10 +103,10 @@ final class SymfonyUtils
         }
 
         $sizes = [
-            1073741824 => '%.1f GB',
-            1048576 => '%.1f MB',
-            1024 => '%d KB',
-            0 => '%d B',
+            1073741824.0 => '%.1f GB',
+            1048576.0 => '%.1f MB',
+            1024.0 => '%.0f KB',
+            0.0 => '%.0f B',
         ];
 
         foreach ($sizes as $minSize => $format) {
@@ -335,7 +335,7 @@ final class SymfonyUtils
     /**
      * Gets MySQL server version.
      *
-     * @return string|null the server version or "<code>Unknown</code>" if an error occurs
+     * @return string the server version or "<code>Unknown</code>" if an error occurs
      */
     public static function getSqlVersion(EntityManagerInterface $manager): string
     {

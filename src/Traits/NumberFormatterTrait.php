@@ -105,16 +105,6 @@ trait NumberFormatterTrait
     }
 
     /**
-     * Gets the default currency symbol.
-     *
-     * @return string the currency symbol
-     */
-    protected function getDefaultCurrency(): string
-    {
-        return FormatUtils::getCurrency();
-    }
-
-    /**
      * Gets the default decimal separator.
      *
      * @return string the decimal separator

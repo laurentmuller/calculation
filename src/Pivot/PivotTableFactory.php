@@ -275,7 +275,7 @@ class PivotTableFactory
     /**
      * Sets the aggregator class name.
      *
-     * @param string
+     * @param string $aggregatorClass the aggregator class name to set
      */
     public function setAggregatorClass(string $aggregatorClass): self
     {

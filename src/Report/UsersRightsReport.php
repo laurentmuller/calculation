@@ -243,8 +243,8 @@ class UsersRightsReport extends BaseReport implements IPdfGroupListener
      * Output rights for a role.
      *
      * @param PdfGroupTableBuilder $builder the buider to output to
-     * @param Role the role to output
-     * @param string the group name
+     * @param Role                 $role    the role to output
+     * @param string               $title   the group name
      */
     private function outputRole(PdfGroupTableBuilder $builder, Role $role, string $title): void
     {

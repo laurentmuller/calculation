@@ -58,7 +58,7 @@ trait MathTrait
      */
     protected function isFloatZero(float $val, int $precision = 2): bool
     {
-        return $this->isFloatEquals($val, 0, $precision);
+        return $this->isFloatEquals($val, 0.0, $precision);
     }
 
     /**
@@ -71,7 +71,7 @@ trait MathTrait
      */
     protected function round(?float $val, int $precision = 2): float
     {
-        return empty($val) ? 0 : \round($val, $precision);
+        return empty($val) ? 0.0 : \round($val, $precision);
     }
 
     /**
@@ -83,7 +83,7 @@ trait MathTrait
      *
      * @return float the divison result
      */
-    protected function safeDivide(float $dividend, float $divisor, float $default = 0): float
+    protected function safeDivide(float $dividend, float $divisor, float $default = 0.0): float
     {
         return empty($divisor) ? $default : $dividend / $divisor;
     }

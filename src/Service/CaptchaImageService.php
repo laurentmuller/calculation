@@ -284,7 +284,7 @@ class CaptchaImageService
 
         // get layout
         $size = (int) ($height * 0.7);
-        $items = $this->computeText($image, $size, $font, $text, $height);
+        $items = $this->computeText($image, $size, $font, $text);
 
         // get position
         $textHeight = 0;

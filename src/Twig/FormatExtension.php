@@ -18,7 +18,6 @@ use App\Service\ApplicationService;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
 use IntlDateFormatter;
-use IntlTimeZone;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Error\SyntaxError;
@@ -87,40 +86,38 @@ final class FormatExtension extends AbstractExtension
     }
 
     /**
-     * Formats a date. The time part is ignored.
+     * Formats a date for the current locale; ignoring the time part.
      *
-     * @param Environment $env        the Twig environment
-     * @param mixed       $date       the date
-     * @param string      $dateFormat the date format
-     * @param string      $locale     the locale
-     * @param mixed       $timezone   the time zone name
-     * @param string      $calendar   the calendar type
+     * @param Environment                             $env        the Twig environment
+     * @param \DateTime|int                           $date       the date
+     * @param string|null                             $dateFormat the date format
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone   the time zone
+     * @param string|null                             $calendar   the calendar type
      *
      * @throws SyntaxError if the date format or the time format is unknown
      *
      * @return string the formatted date
      */
-    public function localeDateFilter(Environment $env, $date, ?string $dateFormat = null, ?string $locale = null, $timezone = null, ?string $calendar = 'gregorian'): string
+    public function localeDateFilter(Environment $env, $date, ?string $dateFormat = null, $timezone = null, ?string $calendar = 'gregorian'): string
     {
-        return $this->localeDateTimeFilter($env, $date, $dateFormat, 'none', $locale, $timezone, $calendar);
+        return $this->localeDateTimeFilter($env, $date, $dateFormat, 'none', $timezone, $calendar);
     }
 
     /**
-     * Formats a date and time.
+     * Formats a date and time for the current locale.
      *
-     * @param Environment $env        the Twig environment
-     * @param mixed       $date       the date
-     * @param string      $dateFormat the date format
-     * @param string      $timeFormat the time format
-     * @param string      $locale     the locale
-     * @param mixed       $timezone   the time zone name
-     * @param string      $calendar   the calendar type
+     * @param Environment                             $env        the Twig environment
+     * @param \DateTime|int                           $date       the date
+     * @param string|null                             $dateFormat the date format
+     * @param string|null                             $timeFormat the time format
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone   the time zone
+     * @param string|null                             $calendar   the calendar type
      *
      * @throws SyntaxError if the date format or the time format is unknown
      *
      * @return string the formatted date
      */
-    public function localeDateTimeFilter(Environment $env, $date, ?string $dateFormat = null, ?string $timeFormat = null, ?string $locale = null, $timezone = null, ?string $calendar = 'gregorian'): string
+    public function localeDateTimeFilter(Environment $env, $date, ?string $dateFormat = null, ?string $timeFormat = null, $timezone = null, ?string $calendar = 'gregorian'): string
     {
         static $formats = [
             'none' => IntlDateFormatter::NONE,
@@ -139,6 +136,7 @@ final class FormatExtension extends AbstractExtension
         }
 
         // get types
+
         $datetype = $dateFormat ? $formats[$dateFormat] : null;
         $timetype = $timeFormat ? $formats[$timeFormat] : null;
         if (IntlDateFormatter::NONE === $datetype && IntlDateFormatter::NONE === $timetype) {
@@ -147,29 +145,27 @@ final class FormatExtension extends AbstractExtension
 
         // convert
         $date = twig_date_converter($env, $date, $timezone);
-        $tz = IntlTimeZone::createTimeZone($date->getTimezone()->getName());
         $calendar = 'gregorian' === $calendar ? IntlDateFormatter::GREGORIAN : IntlDateFormatter::TRADITIONAL;
 
         // format
-        return $this->localeDateTime($date, $datetype, $timetype, $locale, $tz, $calendar);
+        return $this->localeDateTime($date, $datetype, $timetype, $timezone, $calendar);
     }
 
     /**
-     * Formats a time. The date part is ignored.
+     * Formats a time for the current locale; ignoring the date part.
      *
-     * @param Environment $env        the Twig environment
-     * @param mixed       $date       the date
-     * @param string      $timeFormat the time format
-     * @param string      $locale     the locale
-     * @param mixed       $timezone   the time zone name
-     * @param string      $calendar   the calendar type
+     * @param Environment                             $env        the Twig environment
+     * @param \DateTime|int                           $date       the date
+     * @param string|null                             $timeFormat the time format
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone   the time zone
+     * @param string|null                             $calendar   the calendar type
      *
      * @throws SyntaxError if the date format or the time format is unknown
      *
      * @return string the formatted date
      */
-    public function localeTimeFilter(Environment $env, $date, ?string $timeFormat = null, ?string $locale = null, $timezone = null, string $calendar = 'gregorian'): string
+    public function localeTimeFilter(Environment $env, $date, ?string $timeFormat = null, $timezone = null, string $calendar = 'gregorian'): string
     {
-        return $this->localeDateTimeFilter($env, $date, 'none', $timeFormat, $locale, $timezone, $calendar);
+        return $this->localeDateTimeFilter($env, $date, 'none', $timeFormat, $timezone, $calendar);
     }
 }

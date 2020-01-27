@@ -128,7 +128,7 @@ class HtmlParser
      *
      * @return string|null the type attribute, if found; number type ('1') otherwise
      */
-    private function getTypeAttribute(\DOMNode $node): string
+    private function getTypeAttribute(\DOMNode $node): ?string
     {
         return $this->getAttribute($node, 'type', HtmlOlChunk::TYPE_NUMBER);
     }

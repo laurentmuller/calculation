@@ -283,9 +283,9 @@ final class Utils
     /**
      * Sorts an array for the given fields.
      *
-     * @param array|mixed $array     the array to sort
-     * @param string      $field     the field name to get values for
-     * @param bool        $ascending true to sort ascending, false to sort descending
+     * @param array  $array     the array to sort
+     * @param string $field     the field name to get values for
+     * @param bool   $ascending true to sort ascending, false to sort descending
      */
     public static function sortField(array &$array, string $field, bool $ascending = true): void
     {
@@ -298,9 +298,9 @@ final class Utils
     /**
      * Sorts an array for the given fields.
      *
-     * @param array|mixed $array     the array to sort
-     * @param string[]    $fields    the array of field names to get values for
-     * @param bool        $ascending true to sort ascending, false to sort descending
+     * @param array    $array     the array to sort
+     * @param string[] $fields    the array of field names to get values for
+     * @param bool     $ascending true to sort ascending, false to sort descending
      */
     public static function sortFields(array &$array, array $fields, bool $ascending = true): void
     {
@@ -344,11 +344,11 @@ final class Utils
     /**
      * Ensure that the given variable is a float.
      *
-     * @param string $var the variable to cast
+     * @param mixed $var the variable to cast
      *
-     * @return string the variable as float
+     * @return float the variable as float
      */
-    public static function toFloat(?float $var): float
+    public static function toFloat($var): float
     {
         return \is_float($var) ? $var : (float) $var;
     }
@@ -356,11 +356,11 @@ final class Utils
     /**
      * Ensure that the given variable is an integer.
      *
-     * @param string $var the variable to cast
+     * @param mixed $var the variable to cast
      *
-     * @return string the variable as integer
+     * @return int the variable as integer
      */
-    public static function toInt(?int $var): int
+    public static function toInt($var): int
     {
         return \is_int($var) ? $var : (int) $var;
     }
@@ -368,11 +368,11 @@ final class Utils
     /**
      * Ensure that the given variable is a string.
      *
-     * @param string $var the variable to cast
+     * @param mixed $var the variable to cast
      *
      * @return string the variable as string
      */
-    public static function toString(?string $var): string
+    public static function toString($var): string
     {
         return \is_string($var) ? $var : (string) $var;
     }

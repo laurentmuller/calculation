@@ -9,6 +9,6 @@ $(function () {
     // tooltip
     $('body').customTooltip({
         selector: '.has-tooltip',
-        className: 'danger overall-card'
+        type: 'danger overall-card'
     });
 });

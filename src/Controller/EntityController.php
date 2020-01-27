@@ -56,7 +56,7 @@ abstract class EntityController extends BaseController
      */
     public function count(): int
     {
-        return $this->getRepository()->count();
+        return $this->getRepository()->count([]);
     }
 
     /**
@@ -80,12 +80,12 @@ abstract class EntityController extends BaseController
     /**
      * Delete an entity.
      *
-     * @param request     $request    the request
-     * @param array|mixed $parameters the delete parameters. The following keys must be set:
-     *                                <ul>
-     *                                <li><code>item</code> : the item to delete.</li>
-     *                                <li><code>page_list</code> : the route to redirect on success.</li>
-     *                                </ul>
+     * @param request $request    the request
+     * @param array   $parameters the delete parameters. The following keys must be set:
+     *                            <ul>
+     *                            <li><code>item</code> : the item to delete.</li>
+     *                            <li><code>page_list</code> : the route to redirect on success.</li>
+     *                            </ul>
      */
     protected function deletItem(Request $request, array $parameters): Response
     {
@@ -139,14 +139,14 @@ abstract class EntityController extends BaseController
     /**
      * Edit an entity.
      *
-     * @param request     $request    the request
-     * @param array|mixed $parameters the edit parameters. The following keys must be set:
-     *                                <ul>
-     *                                <li><code>item</code> : the item to edit.</li>
-     *                                <li><code>type</code> : the form type.</li>
-     *                                <li><code>template</code> : the Twig template to render.</li>
-     *                                <li><code>route</code> : the route to redirect on success.</li>
-     *                                </ul>
+     * @param request $request    the request
+     * @param array   $parameters the edit parameters. The following keys must be set:
+     *                            <ul>
+     *                            <li><code>item</code> : the item to edit.</li>
+     *                            <li><code>type</code> : the form type.</li>
+     *                            <li><code>template</code> : the Twig template to render.</li>
+     *                            <li><code>route</code> : the route to redirect on success.</li>
+     *                            </ul>
      */
     protected function editItem(Request $request, array $parameters): Response
     {

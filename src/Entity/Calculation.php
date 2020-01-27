@@ -90,7 +90,7 @@ class Calculation extends BaseEntity
      * @ORM\OrderBy({"code": "ASC"})
      * @Assert\Valid
      *
-     * @var Collection|CalculationGroup
+     * @var Collection|CalculationGroup[]
      */
     protected $groups;
 
@@ -168,7 +168,7 @@ class Calculation extends BaseEntity
     /**
      * Add a group.
      *
-     * @param \App\Entity\CalculationGroup $group
+     * @param CalculationGroup $group to group to add
      */
     public function addGroup(CalculationGroup $group): self
     {
@@ -182,8 +182,8 @@ class Calculation extends BaseEntity
     /**
      * Clone this calculation.
      *
-     * @param CalculationState the default state
-     * @param string $userName the user name
+     * @param CalculationState $state    the default state
+     * @param string           $userName the user name
      */
     public function clone(?CalculationState $state, ?string $userName): self
     {
@@ -325,7 +325,7 @@ class Calculation extends BaseEntity
     /**
      * Get groups.
      *
-     * @return Collection|\App\Entity\CalculationGroup[]
+     * @return Collection|CalculationGroup[]
      */
     public function getGroups(): Collection
     {
@@ -572,7 +572,7 @@ class Calculation extends BaseEntity
     /**
      * Remove a group.
      *
-     * @param \App\Entity\CalculationGroup $group
+     * @param CalculationGroup $group the group to remove
      */
     public function removeGroup(CalculationGroup $group): self
     {

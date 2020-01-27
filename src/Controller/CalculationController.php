@@ -168,9 +168,9 @@ class CalculationController extends EntityController
         $description = $this->trans('below.description', ['%margin%' => $percent]);
 
         $report = new CalculationsReport($this);
-        $report->SetTitleTrans('below.title')
-            ->setDescription($description)
-            ->setCalculations($calculations);
+        $report->setCalculations($calculations)
+            ->SetTitleTrans('below.title')
+            ->setDescription($description);
 
         return $this->renderDocument($report);
     }
@@ -557,7 +557,6 @@ class CalculationController extends EntityController
     /**
      * Export pivot data to JSON.
      *
-     * @return Response
      * @Route("/pivot/json", name="calculation_pivot_json", methods={"GET", "POST"})
      */
     public function pivotJson(Request $request): JsonResponse
@@ -822,13 +821,14 @@ class CalculationController extends EntityController
     /**
      * Gets the categories.
      *
-     * @return array
+     * @return Category[]
      */
     private function getCategories()
     {
-        return $this->getManager()
-            ->getRepository(Category::class)
-            ->getList();
+        /** var App\Repository\CategoryRepository $repository */
+        $repository = $this->getManager()->getRepository(Category::class);
+
+        return $repository->getList();
     }
 
     /**

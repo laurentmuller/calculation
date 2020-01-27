@@ -23,15 +23,13 @@ use App\Pdf\PdfTableBuilder;
  * Table to render a list of calculation totals.
  *
  * @author Laurent Muller
- *
- * @see \entities\CalculationTotal
  */
 class CalculationTotalTable extends PdfTableBuilder
 {
     /**
      * Constructor.
      *
-     * @param calculationReport $parent the parent document to print in
+     * @param CalculationReport $parent the parent document to print in
      */
     public function __construct(CalculationReport $parent)
     {
@@ -95,7 +93,7 @@ class CalculationTotalTable extends PdfTableBuilder
     /**
      * Render the table for the given groups.
      *
-     * @param calculationReport $parent the parent document to print in
+     * @param CalculationReport $parent the parent document to print in
      */
     public static function render(CalculationReport $parent): void
     {

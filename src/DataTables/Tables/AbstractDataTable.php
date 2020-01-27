@@ -332,7 +332,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
      *
      * @return array|null an array with the column index ('index'), the data column ('column') and the sort direction ('direction') or null if no order is set
      */
-    protected function getFirstRequestOrder(DataTableQuery $request): array
+    protected function getFirstRequestOrder(DataTableQuery $request): ?array
     {
         if (!empty($request->order)) {
             /** @var Order $order */

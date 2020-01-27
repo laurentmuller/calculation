@@ -358,6 +358,7 @@ class SearchDataTable extends AbstractDataTable
     private function sortItems(array &$items, array $orders): void
     {
         // convert orders
+        $sorts = [];
         foreach ($orders as $column => $direction) {
             $sorts["[$column]"] = DataColumn::SORT_ASC === $direction;
         }

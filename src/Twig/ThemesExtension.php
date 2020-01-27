@@ -61,7 +61,7 @@ final class ThemesExtension extends AbstractExtension
     /**
      * Gets the theme background.
      *
-     * @param Request the request
+     * @param Request $request the request
      */
     public function getThemeBackground(Request $request): string
     {
@@ -83,7 +83,7 @@ final class ThemesExtension extends AbstractExtension
     /**
      * Gets the theme CSS.
      *
-     * @param Request the request
+     * @param Request $request the request
      */
     public function getThemeCss(Request $request): string
     {
@@ -99,7 +99,7 @@ final class ThemesExtension extends AbstractExtension
     /**
      * Gets the theme name.
      *
-     * @param Request the request
+     * @param Request $request the request
      */
     public function getThemeName(Request $request): string
     {
@@ -112,7 +112,7 @@ final class ThemesExtension extends AbstractExtension
     /**
      * Returns if the selected theme is the default theme (Boostrap).
      *
-     * @param Request the request
+     * @param Request $request the request
      */
     public function isDefaultTheme(Request $request): bool
     {
@@ -125,7 +125,7 @@ final class ThemesExtension extends AbstractExtension
     /**
      * Returns if the selected theme is dark.
      *
-     * @param Request the request
+     * @param Request $request the request
      */
     public function isThemeDark(Request $request): bool
     {

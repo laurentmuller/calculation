@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use FOS\UserBundle\Mailer\MailerInterface;
 use SimpleHtmlToText\Parser;
 use Swift_Attachment;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -227,7 +226,7 @@ class Comment
     /**
      * Sends this message using the given mailer.
      *
-     * @param MailerInterface $mailer the mailer service
+     * @param \Swift_Mailer $mailer the mailer service
      *
      * @return bool true if send successfully
      */

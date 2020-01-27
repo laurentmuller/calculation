@@ -31,7 +31,7 @@ class PdfFont implements IPdfDocumentUpdater
     /**
      * The default font size (9pt).
      */
-    public const DEFAULT_SIZE = 9;
+    public const DEFAULT_SIZE = 9.0;
 
     /**
      * The default font style (Regular).
@@ -278,7 +278,7 @@ class PdfFont implements IPdfDocumentUpdater
     /**
      * Sets the font size.
      *
-     * @param number $size
+     * @param float $size the size to set
      *
      * @return self this instance
      */

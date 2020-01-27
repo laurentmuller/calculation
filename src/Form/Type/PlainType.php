@@ -195,14 +195,13 @@ class PlainType extends AbstractType
      */
     private function formatDate($value, array $options): ?string
     {
-        $locale = \Locale::getDefault();
         $calendar = $this->getCalendarFormat($options);
         $timezone = $this->getOptionString($options, 'time_zone');
         $pattern = $this->getOptionString($options, 'date_pattern');
         $datetype = $this->getOptionInt($options, 'date_format', $this->getDefaultDateType());
         $timetype = $this->getOptionInt($options, 'time_format', $this->getDefaultTimeType());
 
-        return  $this->localeDateTime($value, $datetype, $timetype, $locale, $timezone, $calendar, $pattern);
+        return  $this->localeDateTime($value, $datetype, $timetype, $timezone, $calendar, $pattern);
     }
 
     /**

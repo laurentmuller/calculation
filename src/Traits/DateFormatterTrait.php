@@ -28,31 +28,37 @@ use Locale;
 trait DateFormatterTrait
 {
     /**
-     * Format a date; ignoring the time part.
+     * Format a date for the current locale; ignoring the time part.
      *
-     * @param \DateTime|int $date     the date to format
-     * @param int|null      $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param \DateTime|int                           $date     the date to format
+     * @param int|null                                $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                                     $calendar the calendar to use for formatting or parsing; default is Gregorian
+     * @param string|null                             $pattern  Optional pattern to use when formatting
      *
      * @return string|bool the formatted date or false if formatting failed
      */
-    public function localeDate($date, ?int $datetype = null)
+    public function localeDate($date, ?int $datetype = null, $timezone = null, ?int $calendar = IntlDateFormatter::GREGORIAN, ?string $pattern = null)
     {
-        return $this->localeDateTime($date, $datetype, IntlDateFormatter::NONE);
+        return $this->localeDateTime($date, $datetype, IntlDateFormatter::NONE, $timezone, $calendar, $pattern);
     }
 
     /**
-     * Format a date and time.
+     * Format a date and time for the current locale.
      *
-     * @param \DateTime|int $date     the date and time to format
-     * @param int|null      $datetype the type of date formatting, one of the format type constants or null to use default
-     * @param int|null      $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param \DateTime|int                           $date     the date and time to format
+     * @param int|null                                $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param int|null                                $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                                     $calendar the calendar to use for formatting or parsing; default is Gregorian
+     * @param string|null                             $pattern  Optional pattern to use when formatting
      *
      * @return string|null the formatted date and time or null if formatting failed or if the date is null
      */
-    public function localeDateTime($date, ?int $datetype = null, ?int $timetype = null)
+    public function localeDateTime($date, ?int $datetype = null, ?int $timetype = null, $timezone = null, ?int $calendar = IntlDateFormatter::GREGORIAN, ?string $pattern = null)
     {
         if ($date) {
-            $formatter = $this->getDateFormatter($datetype, $timetype);
+            $formatter = $this->getDateFormatter($datetype, $timetype, $timezone, $calendar, $pattern);
             $result = $formatter->format($date);
             if (false !== $result) {
                 return $result;
@@ -63,34 +69,41 @@ trait DateFormatterTrait
     }
 
     /**
-     * Format a time; ignoring the date part.
+     * Format a time for the current locale; ignoring the date part.
      *
-     * @param \DateTime|int $date     the time to format
-     * @param int|null      $timetype the type of date formatting, one of the format type constants or null to use default
+     * @param \DateTime|int                           $date     the time to format
+     * @param int|null                                $timetype the type of date formatting, one of the format type constants or null to use default
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                                     $calendar the calendar to use for formatting or parsing; default is Gregorian
+     * @param string|null                             $pattern  Optional pattern to use when formatting
      *
      * @return string|bool the formatted time or false if formatting failed
      */
-    public function localeTime($date, ?int $timetype = null)
+    public function localeTime($date, ?int $timetype = null, $timezone = null, ?int $calendar = IntlDateFormatter::GREGORIAN, ?string $pattern = null)
     {
-        return $this->localeDateTime($date, IntlDateFormatter::NONE, $timetype); //, $timezone, $calendar, $pattern);
+        return $this->localeDateTime($date, IntlDateFormatter::NONE, $timetype, $timezone, $calendar, $pattern);
     }
 
     /**
      * Creates a date formatter.
      *
-     * @param int|null $datetype the type of date formatting, one of the format type constants or null to use default
-     * @param int|null $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param int|null                                $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param int|null                                $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                                     $calendar the calendar to use for formatting or parsing; default is Gregorian
+     * @param string|null                             $pattern  Optional pattern to use when formatting
      *
      * @return IntlDateFormatter the date formatter
      */
-    protected function getDateFormatter(?int $datetype = null, ?int $timetype = null)
+    protected function getDateFormatter(?int $datetype = null, ?int $timetype = null, $timezone = null, ?int $calendar = IntlDateFormatter::GREGORIAN, ?string $pattern = null)
     {
         // check values
+        $pattern = $pattern ?: '';
         $datetype = $datetype ?: $this->getDefaultDateType();
         $timetype = $timetype ?: $this->getDefaultTimeType();
 
         // create formatter
-        $formatter = IntlDateFormatter::create(Locale::getDefault(), $datetype, $timetype);
+        $formatter = IntlDateFormatter::create(Locale::getDefault(), $datetype, $timetype, $timezone, $calendar, $pattern);
         $formatter->setLenient(true);
 
         // check if year pattern is present within 4 digits

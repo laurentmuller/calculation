@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\CategoryMargin;
 use App\Repository\BaseRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\ProductRepository;
@@ -387,8 +386,8 @@ class AjaxController extends BaseController
                     'result' => false,
                     'message' => $this->trans('translator.detect_error'),
                     'exception' => [
-                        'code' => $error->code,
-                        'message' => $error->message,
+                        'code' => $error['code'],
+                        'message' => $error['message'],
                     ],
                 ]);
             }
@@ -637,14 +636,6 @@ class AjaxController extends BaseController
             $rows = [];
         }
 
-//         $data = [
-//             'result' => !empty($rows),
-//             'query' => $zip ?? $city ?? $street ?? '',
-//             'limit' => $limit,
-//             'count' => \count($rows),
-//             'rows' => $rows,
-//         ];
-
         return $this->json($rows);
     }
 
@@ -808,7 +799,7 @@ class AjaxController extends BaseController
             // adjust user margin?
             $minMargin = $service->getMinMargin();
             if ($request->get('adjust', false) && $parameters['overall_below']) {
-                $parameters = $this->adjustUserMargin($parameters, $minMargin);
+                $this->adjustUserMargin($parameters, $minMargin);
             }
             $parameters['min_margin'] = $minMargin;
 
@@ -847,55 +838,84 @@ class AjaxController extends BaseController
     }
 
     /**
+     * Finds a groups for the given identifier.
+     *
+     * @param array $groups the groups to search in
+     * @param int   $id     the identifier to search for
+     *
+     * @return array the group, if found, a new group otherwise
+     */
+    private function &findGroup(array &$groups, int $id): array
+    {
+        foreach ($groups as &$group) {
+            if ($group['id'] === $id) {
+                return $group;
+            }
+        }
+
+        $group = [
+            'id' => $id,
+            'amount' => 0.0,
+            'margin' => 0.0,
+            'margin_amount' => 0.0,
+            'total' => 0.0,
+            'description' => 'Unknown',
+        ];
+        $groups[] = $group;
+
+        return $group;
+    }
+
+    /**
      * Adjust the user margin to have the desired overall minimum margin.
      *
      * @param array $parameters the parameters (rows) to update
      * @param float $minMargin  the desired minimum margin
-     *
-     * @return array the updated parameters
      */
-    private function adjustUserMargin(array $parameters, float $minMargin): array
+    private function adjustUserMargin(array &$parameters, float $minMargin): void
     {
+        // no more below
+        $parameters['overall_below'] = false;
+
         // get rows
-        $groups = $parameters['groups'];
-        [$groupRow] = $this->getGroup($groups, CalculationService::ROW_TOTAL_GROUP);
-        [$netRow] = $this->getGroup($groups, CalculationService::ROW_TOTAL_NET);
-        [$userRow, $userIndex] = $this->getGroup($groups, CalculationService::ROW_USER_MARGIN);
-        [$overallRow, $overallIndex] = $this->getGroup($groups, CalculationService::ROW_OVERALL_TOTAL);
+        $groups = &$parameters['groups'];
+        $totalGroup = &$this->findGroup($groups, CalculationService::ROW_TOTAL_GROUP);
+        $netGroup = &$this->findGroup($groups, CalculationService::ROW_TOTAL_NET);
+        $userGroup = &$this->findGroup($groups, CalculationService::ROW_USER_MARGIN);
+        $overallGroup = &$this->findGroup($groups, CalculationService::ROW_OVERALL_TOTAL);
 
         // get values
-        $groupAmount = $groupRow['amount'];
-        $userMargin = $userRow['margin'];
-        $netTotal = $netRow['total'];
+        $groupAmount = $totalGroup['amount'];
+        $userMargin = $userGroup['margin'];
+        $netTotal = $netGroup['total'];
 
         // net total?
         if (0.0 === $netTotal) {
-            $parameters['below'] = false;
-
-            return $parameters;
+            return;
         }
 
         // compute user margin to reach minimum
-        while ((($netTotal * (1 + $userMargin) / $groupAmount) - 1) < $minMargin) {
-            $userMargin += 0.01;
-        }
+        $userMargin = (($minMargin + 1) * $groupAmount / $netTotal) - 1;
 
-        // update
-        $userRow['margin'] = $userMargin;
-        $userRow['total'] = $netTotal * $userMargin;
+        // round up
+        $userMargin = \ceil($userMargin * 100.0) / 100.0;
 
-        $overallRow['total'] = $netTotal + $userRow['total'];
-        $overallRow['margin'] = ($overallRow['total'] / $groupAmount) - 1;
-        $overallRow['margin_amount'] = $overallRow['total'] - $groupAmount;
+        // old method
+        // while ((($netTotal * (1 + $userMargin) / $groupAmount) - 1) < $minMargin) {
+        //  $userMargin += 0.01;
+        // }
 
-        // set
-        $parameters['groups'][$userIndex] = $userRow;
-        $parameters['groups'][$overallIndex] = $overallRow;
+        // update user margin
+        $userGroup['margin'] = $userMargin;
+        $userGroup['total'] = $netTotal * $userMargin;
+
+        // update overall total
+        $overallGroup['total'] = $netTotal + $userGroup['total'];
+        $overallGroup['margin'] = ($overallGroup['total'] / $groupAmount) - 1;
+        $overallGroup['margin_amount'] = $overallGroup['total'] - $groupAmount;
+
+        // update parameters
         $parameters['overall_margin'] = (int) (100 * $userMargin);
-        $parameters['overall_below'] = false;
-
-
-        return $parameters;
     }
 
     /**
@@ -937,35 +957,6 @@ class AjaxController extends BaseController
             }
         }
 
-        // if (!\function_exists('shell_exec') || \ini_get('open_basedir')) {
-        //     // not possible.
-        //     return false;
-        // }
-        // if (!($httpd_v = \shell_exec('/usr/bin/env httpd -v')) && !($httpd_v = \shell_exec('/usr/bin/env apachectl -v'))) {
-        //     $locations = [
-        //         '/usr/sbin/httpd',
-        //         '/usr/bin/httpd',
-        //         '/usr/sbin/apache2',
-        //         '/usr/bin/apache2',
-        //         '/usr/local/sbin/httpd',
-        //         '/usr/local/bin/httpd',
-        //         '/usr/local/apache/sbin/httpd',
-        //         '/usr/local/apache/bin/httpd',
-        //     ];
-        //     foreach ($locations as $location) {
-        //         if (\is_file($location)) {
-        //             if (($httpd_v = \shell_exec(\escapeshellarg($location) . ' -v'))) {
-        //                 break;
-        //             }
-        //         }
-        //     }
-        //     // all done here.
-        //     unset($locations, $location);
-        // }
-        // if ($httpd_v && \preg_match($regex, $httpd_v, $matches)) {
-        //     return $matches['version'];
-        // }
-
         return false; // unable to determine.
     }
 
@@ -975,45 +966,6 @@ class AjaxController extends BaseController
     private function getCacheClass(): string
     {
         return $this->getApplication()->getCacheClass();
-    }
-
-    /**
-     * Gets the margin, in percent, for the given category and amount.
-     *
-     * @param EntityManagerInterface $manager
-     *                                        the entity manager
-     * @param int                    $id
-     *                                        the category identifier
-     * @param float                  $amount
-     *                                        the amount to get percent for
-     *
-     * @return float the margin, in percent, if found; 0 otherwise
-     */
-    private function getCategoryMargin(EntityManagerInterface $manager, int $id, float $amount): float
-    {
-        /** @var \App\Repository\CategoryMarginRepository $repository */
-        $repository = $manager->getRepository(CategoryMargin::class);
-
-        return $repository->getMargin($id, $amount);
-    }
-
-    /**
-     * Finds a groups for the given identifier.
-     *
-     * @param array $groups the groups to search in
-     * @param int   $id     the indentifier to search for,
-     *
-     * @return array an array where the first element is the group and the second element is the group index (key)
-     */
-    private function getGroup(array $groups, int $id): array
-    {
-        for ($i = 0, $len = \count($groups); $i < $len; ++$i) {
-            if ($groups[$i]['id'] === $id) {
-                return [$groups[$i], $i];
-            }
-        }
-
-        return [[], -1];
     }
 
     /**

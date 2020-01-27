@@ -314,7 +314,7 @@ class ApplicationService implements IApplicationService
     /**
      * Gets a value indicating the image captcha is displayed when login.
      *
-     * @return bool <code>true</code> to display the image; <code>false</code> to hide
+     * @return bool true to display the image; false to hide
      */
     public function isDisplayCaptcha(): bool
     {
@@ -324,7 +324,7 @@ class ApplicationService implements IApplicationService
     /**
      * Gets the default action.
      *
-     * @return bool <code>false</code> to display the entity properties; <code>true</code> to edit the entity
+     * @return bool false to display the entity properties; true to edit the entity
      */
     public function isEditAction(): bool
     {
@@ -431,7 +431,7 @@ class ApplicationService implements IApplicationService
      *
      * @return float the float value, if found; the default value otherwise
      */
-    private function getFloat(string $name, float $default = 0): float
+    private function getFloat(string $name, float $default = 0.0): float
     {
         return (float) $this->getItemValue($name, $default);
     }

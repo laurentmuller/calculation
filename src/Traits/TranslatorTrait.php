@@ -66,7 +66,7 @@ trait TranslatorTrait
         if ($translator = $this->doGetTranslator()) {
             if ($translator instanceof TranslatorBagInterface) {
                 /** @var \Symfony\Component\Translation\MessageCatalogueInterface $catalogue */
-                $catalogue = $this->translator->getCatalogue($locale);
+                $catalogue = $translator->getCatalogue($locale);
 
                 return $catalogue->defines($id, $domain);
             }

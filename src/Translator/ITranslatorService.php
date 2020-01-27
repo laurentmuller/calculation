@@ -48,6 +48,13 @@ interface ITranslatorService
     public function getLanguages();
 
     /**
+     * Gets the last error.
+     *
+     * @return array|null the last error with the 'code' and the 'message' entries; null if none
+     */
+    public function getLastError(): ?array;
+
+    /**
      * Gets the service name.
      */
     public static function getName(): string;
@@ -80,6 +87,4 @@ interface ITranslatorService
      *                    Returns false if an error occurs.
      */
     public function translate(string $text, string $to, ?string $from = null, bool $html = false);
-
-    //textType
 }

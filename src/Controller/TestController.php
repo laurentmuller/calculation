@@ -65,7 +65,7 @@ class TestController extends BaseController
      *
      * @Route("/calendar/{year}", name="test_calendar", requirements={"year": "\d+" })
      *
-     * @param Request the request the get parameters
+     * @param Request the request   $request    the get parameters
      * @param CalendarService       $service    the service to generate calendar model
      * @param CalculationRepository $repository the repository to query
      * @param int|null              $year       the year to search for or <code>null</code> for the current year
@@ -235,28 +235,6 @@ class TestController extends BaseController
         ];
 
         return $this->json($data);
-    }
-
-    /**
-     * Display the error (for test purpose).
-     *
-     * @Route("/error", name="test_error")
-     */
-    public function errorTest(): Response
-    {
-        try {
-            $value = 0;
-            $result = 10 / $value;
-            if ($result) {
-                return $this->redirectToHomePage();
-            }
-        } catch (\Exception $e) {
-            // render view
-            return $this->render('@Twig/Exception/exception.html.twig', [
-                'message' => 'Simulation d\'une <b>erreur</b> pour tester cette page.',
-                'exception' => $e,
-            ]);
-        }
     }
 
     /**
@@ -728,7 +706,7 @@ class TestController extends BaseController
         $manager->flush();
 
         $count = \count($calculations);
-        $this->addFlashMessage(self::FLASH_TYPE_INFO, "La mise à jour de {$count} calculations a été effectuée avec succès.");
+        $this->info("La mise à jour de {$count} calculations a été effectuée avec succès.");
 
         return $this->redirectToHomePage();
     }
@@ -767,7 +745,7 @@ class TestController extends BaseController
         $manager->flush();
 
         $count = \count($customers);
-        $this->addFlashMessage(self::FLASH_TYPE_INFO, "La mise à jour de {$count} clients a été effectuée avec succès.");
+        $this->info("La mise à jour de {$count} clients a été effectuée avec succès.");
 
         return $this->redirectToRoute('customer_list');
     }

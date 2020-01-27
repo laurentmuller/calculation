@@ -104,7 +104,7 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
     /**
      * Finds the parent for the given the tag names.
      *
-     * @param string|array $names the tag names to search for
+     * @param string[] $names the tag names to search for
      *
      * @return HtmlParentChunk|null the parent, if found; <code>null</code> otherwise
      */
@@ -253,7 +253,7 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
     /**
      * Returns if this tag name match the given one of the lis of names.
      *
-     * @param string|array $names the tag names to check
+     * @param string[] $names the tag names to check
      *
      * @return bool true if match
      */

@@ -131,6 +131,7 @@ abstract class CalculationItemsReports extends BaseReport
         $maxY = 0;
         $index = 0;
         $x = $this->x;
+        $y = $this->y;
         $idStyle = PdfStyle::getHeaderStyle();
         $itemStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
 

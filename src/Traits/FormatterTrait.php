@@ -49,18 +49,6 @@ trait FormatterTrait
     }
 
     /**
-     * Gets the default currency symbol. Override the NumberFormatterTrait function.
-     */
-    protected function getDefaultCurrency(): string
-    {
-        if ($application = $this->doGetApplication()) {
-            return $application->getCurrency();
-        }
-
-        return FormatUtils::getCurrency();
-    }
-
-    /**
      * Gets the default date type format. Override the DateFormatterTrait function.
      *
      * @return int type of date formatting, one of the format type constants

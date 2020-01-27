@@ -421,7 +421,7 @@ class Customer extends BaseEntity
     {
         $webSite = $this->trim($webSite);
         if ($webSite && 'http' !== \substr($webSite, 0, 4)) {
-            $webSite = 'http://' + $webSite;
+            $webSite = 'http://' . $webSite;
         }
         $this->webSite = $webSite;
 

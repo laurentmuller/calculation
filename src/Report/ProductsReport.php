@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\BaseController;
+use App\Entity\Product;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Utils\Utils;
@@ -126,9 +127,9 @@ class ProductsReport extends BaseReport
     /**
      * Groups the given products by category.
      *
-     * @param \App\Entity\Product[] $products the products to group
+     * @param Product[] $products the products to group
      *
-     * @return \App\Entity\Product[]|string
+     * @return array<string, Product[]> an array with category code as key, and corresponding products as value
      */
     private function groupProducts(array $products): array
     {

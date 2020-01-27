@@ -440,7 +440,7 @@ class SwissPostService
     /**
      * Sets the source file to import.
      *
-     * @param string|UploadedFile the source file to import
+     * @param string|UploadedFile $sourceFile the source file to import
      */
     public function setSourceFile($sourceFile): self
     {

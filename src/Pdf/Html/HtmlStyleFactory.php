@@ -119,7 +119,7 @@ final class HtmlStyleFactory
      * @param float $bottomMargin the bottom margin
      * @param float $leftMargin   the left margin
      */
-    private static function doCreate(bool $bold = false, float $size = PdfFont::DEFAULT_SIZE, float $bottomMargin = 0, float $leftMargin = 0): HtmlStyle
+    private static function doCreate(bool $bold = false, float $size = PdfFont::DEFAULT_SIZE, float $bottomMargin = 0.0, float $leftMargin = 0.0): HtmlStyle
     {
         $font = PdfFont::default()
             ->setStyle($bold ? PdfFont::STYLE_BOLD : PdfFont::STYLE_REGULAR)

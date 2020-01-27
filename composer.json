@@ -30,7 +30,7 @@
 		"beberlei/doctrineextensions" : "~1.2",
 		"bjeavons/zxcvbn-php" : "~0.4",
 		"fpdf/fpdf" : "~1.81",
-		"friendsofsymfony/user-bundle" : "dev-master#beff7d3512835875578535cd59bc09f4923a1a94",
+		"friendsofsymfony/user-bundle" : "dev-master#a18e2c11013b955726f8d65e08d551f3840d4e2f",
 		"fzaninotto/faker" : "dev-master",
 		"google/recaptcha" : "~1.2",
 		"ob/highcharts-bundle" : "dev-master#5945174047ee6a70fe639634998188faed6571e2",
@@ -65,7 +65,12 @@
 		"symfony/maker-bundle" : "^1.0",
 		"symfony/profiler-pack" : "*",
 		"symfony/test-pack" : "*",
-		"symfony/web-server-bundle" : "4.4.*"
+		"symfony/web-server-bundle" : "4.4.*",
+		"phpstan/extension-installer" : "~1.0",
+        "phpstan/phpstan" : "^0.12",
+		"phpstan/phpstan-symfony" : "^0.12",
+		"phpstan/phpstan-doctrine" : "^0.12",
+		"phpstan/phpstan-deprecation-rules" : "^0.12"		
 	},
 	"config" : {
 		"preferred-install" : {

@@ -42,12 +42,12 @@ class TwigColumn extends AbstractColumn
     public function formatValue($value): string
     {
         if (null === $value || null === $this->template) {
-            return parent::formatValue();
+            return parent::formatValue($value);
         }
 
         // $this->table->
 
-        return parent::formatValue();
+        return parent::formatValue($value);
     }
 
     /**

@@ -65,7 +65,8 @@ abstract class AssetsCommand extends Command
     protected function getProjectDir(): ?string
     {
         /** @var Application $application */
-        if (!$application = $this->getApplication()) {
+        $application = $this->getApplication();
+        if (null === $application) {
             $this->writeError('The Application is not defined.');
 
             return null;

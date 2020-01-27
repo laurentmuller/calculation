@@ -56,7 +56,7 @@ class BooleanColumn extends AbstractColumn
     public function formatValue($value): string
     {
         if (null === $value) {
-            return parent::formatValue();
+            return parent::formatValue($value);
         }
 
         return (bool) $value ? $this->trueValue : $this->falseValue;

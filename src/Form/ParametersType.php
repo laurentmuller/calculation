@@ -164,7 +164,7 @@ class ParametersType extends AbstractType implements IApplicationService
      * Formats a a date as time.
      *
      * @param string    $key      the translation id
-     * @param int       $datetype the tyme type
+     * @param int       $timeType the time type
      * @param \DateTime $date     the date to format
      *
      * @return string the formatted date

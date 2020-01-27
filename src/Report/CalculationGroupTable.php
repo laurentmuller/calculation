@@ -34,7 +34,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
     /**
      * Constructor.
      *
-     * @param calculationReport $parent the parent document to print in
+     * @param CalculationReport $parent the parent document to print in
      */
     public function __construct(CalculationReport $parent)
     {

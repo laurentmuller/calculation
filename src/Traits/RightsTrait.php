@@ -64,9 +64,7 @@ trait RightsTrait
     }
 
     /**
-     * Gets the rights mask.
-     *
-     * @return int
+     * Gets the rights.
      */
     public function getRights(): ?string
     {
@@ -75,8 +73,6 @@ trait RightsTrait
 
     /**
      * Sets the rights.
-     *
-     * @param int $rights
      */
     public function setRights(?string $rights): self
     {

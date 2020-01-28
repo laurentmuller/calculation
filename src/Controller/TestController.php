@@ -193,7 +193,7 @@ class TestController extends BaseController
             $customer = new Customer();
             switch ($style) {
                 case 0:
-                    $customer->setCompany($faker->companyAndSuffix())
+                    $customer->setCompany($faker->companyAndSuffix)
                         ->setEmail($faker->companyEmail);
                     break;
 
@@ -205,7 +205,7 @@ class TestController extends BaseController
                     break;
 
                 default: // both
-                    $customer->setCompany($faker->companyAndSuffix())
+                    $customer->setCompany($faker->companyAndSuffix)
                         ->setFirstName($faker->firstName($gender))
                         ->setTitle($faker->title($gender))
                         ->setLastName($faker->lastName)
@@ -687,7 +687,7 @@ class TestController extends BaseController
             $style = $faker->randomElement($styles);
             switch ($style) {
                 case 0:
-                    $calculation->setCustomer($faker->companyAndSuffix());
+                    $calculation->setCustomer($faker->companyAndSuffix);
                     break;
 
                 case 1:
@@ -735,7 +735,7 @@ class TestController extends BaseController
             $this->replace($accessor, $customer, 'title', $faker->title($gender))
                 ->replace($accessor, $customer, 'firstName', $faker->firstName($gender))
                 ->replace($accessor, $customer, 'lastName', $faker->lastName)
-                ->replace($accessor, $customer, 'company', $faker->companyAndSuffix())
+                ->replace($accessor, $customer, 'company', $faker->companyAndSuffix)
                 ->replace($accessor, $customer, 'address', $faker->streetAddress)
                 ->replace($accessor, $customer, 'zipCode', $faker->postcode)
                 ->replace($accessor, $customer, 'city', $faker->city)
@@ -758,7 +758,7 @@ class TestController extends BaseController
     private function merge(Calendar $calendar, array $calculations): void
     {
         foreach ($calculations as $calculation) {
-            /** @var \App\Calendar\CalculationsDay $day */
+            /** @var \App\Calendar\CalculationsDay|null $day */
             $day = $calendar->getDay($calculation->getDate());
             if ($day) {
                 $day->addCalculation($calculation);

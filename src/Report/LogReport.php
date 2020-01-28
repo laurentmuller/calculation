@@ -325,6 +325,6 @@ class LogReport extends BaseReport implements IPdfCellListener
                 ->endRow();
         }
 
-        return $this->resetStyle()->renderCount($lines);
+        return $this->renderCount($lines);
     }
 }

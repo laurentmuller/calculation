@@ -74,7 +74,7 @@ class CalculationState extends BaseEntity
      *
      * @ORM\OneToMany(targetEntity="Calculation", mappedBy="state")
      *
-     * @var Collection|Calculation
+     * @var Collection<Calculation>
      */
     private $calculations;
 
@@ -97,7 +97,7 @@ class CalculationState extends BaseEntity
     /**
      * Gets the calculations.
      *
-     * @return Collection|Calculation[]
+     * @return Collection<Calculation>
      */
     public function getCalculations(): Collection
     {

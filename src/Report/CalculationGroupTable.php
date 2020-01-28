@@ -145,6 +145,9 @@ class CalculationGroupTable extends PdfGroupTableBuilder
      */
     private function trans(string $key): string
     {
-        return $this->parent->trans($key);
+        /** @var BaseReport $parent */
+        $parent = $this->parent;
+
+        return $parent->trans($key);
     }
 }

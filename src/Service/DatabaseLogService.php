@@ -95,9 +95,8 @@ class DatabaseLogService extends AbstractProcessingHandler
             // save
             $this->insertData($data);
         } catch (\Exception $e) {
-            if ($e) {
-                // ignore
-            }
+            // ignore
+            //if ($e) {}
         } finally {
         }
     }

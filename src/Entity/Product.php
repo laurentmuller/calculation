@@ -36,7 +36,7 @@ class Product extends BaseEntity
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
      *
-     * @var Category
+     * @var ?Category
      */
     protected $category;
 

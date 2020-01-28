@@ -95,7 +95,7 @@ class ThemeService
     /**
      * The default theme.
      *
-     * @var Theme
+     * @var Theme|null
      */
     private static $defaultTheme;
 

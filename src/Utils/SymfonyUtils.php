@@ -111,7 +111,9 @@ final class SymfonyUtils
 
         foreach ($sizes as $minSize => $format) {
             if ($size >= $minSize) {
-                return \sprintf($format, $size / (float) $minSize);
+                $value = 0 !== $minSize ? $size / $minSize : $size;
+
+                return \sprintf($format, $value);
             }
         }
 
@@ -305,7 +307,7 @@ final class SymfonyUtils
     }
 
     /**
-     * Gets MySQL database configuration.
+     * Gets the database configuration.
      *
      * @return array the database server informations
      */
@@ -314,13 +316,10 @@ final class SymfonyUtils
         $result = [];
 
         try {
-            /** @var \Doctrine\DBAL\Connection $connection */
-            $connection = $manager->getConnection();
-
-            $result['name'] = $connection->getDatabase();
-            $result['host'] = $connection->getHost();
-            $result['port'] = $connection->getPort();
-            $result['driver'] = $connection->getDriver()->getName();
+            $params = $manager->getConnection()->getParams();
+            foreach (['dbname', 'host', 'port', 'driver'] as $key) {
+                $result[$key] = $params[$key] ?? null;
+            }
 
             return \array_filter($result, function ($value) {
                 return Utils::isString($value);

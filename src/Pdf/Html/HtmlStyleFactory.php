@@ -91,7 +91,6 @@ final class HtmlStyleFactory
 
 //             case 'kbd':
 //                 $style = self::default();
-
 //                 return $style->setFontName(PdfFont::NAME_COURIER)
 //                     ->setFillColor(PdfFillColor::black())
 //                     ->setTextColor(PdfTextColor::white());

@@ -61,7 +61,7 @@ class PivotNode extends PivotAggregator implements \Countable
     /**
      * The parent node.
      *
-     * @var PivotNode
+     * @var PivotNode|null
      */
     private $parent;
 

@@ -283,7 +283,7 @@ class SwissPostService
                 ];
             }
 
-            /** @var \DateTime $validity */
+            /** @var \DateTime|null $validity */
             $validity = null;
 
             /** @var \DateTime $lastImport */

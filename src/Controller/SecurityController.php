@@ -73,9 +73,9 @@ class SecurityController extends AbstractController
      *
      * @param CsrfTokenManagerInterface $manager the token manager
      *
-     * @return string|null the Csrf token, if found; null otherwise
+     * @return string the Csrf token
      */
-    private function getCsrfToken(CsrfTokenManagerInterface $manager): ?string
+    private function getCsrfToken(CsrfTokenManagerInterface $manager): string
     {
         return $manager->getToken('authenticate')->getValue();
     }

@@ -26,7 +26,7 @@ trait SessionTrait
     /**
      * The session instance.
      *
-     * @var SessionInterface
+     * @var SessionInterface|null
      */
     protected $session;
 

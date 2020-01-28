@@ -34,7 +34,7 @@ class ReverseReader
     /**
      * The file handler.
      *
-     * @var resource
+     * @var resource|bool
      */
     private $handle;
 

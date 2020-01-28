@@ -20,6 +20,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Abstract data column.
  *
+ * @property string $className       the class name.
+ * @property string $direction       the sorting direction ('asc' or 'desc') .
+ * @property bool   $visible         the visibility behavior.
+ * @property bool   $orderable       the orderable behavior.
+ * @property bool   $default         a value indicating if this column is the default sorted column.
+ * @property string $headerClassName the header class name.
+ * @property bool   $searchable      the searchable behavior.
+ *
  * @author Laurent Muller
  */
 abstract class AbstractColumn

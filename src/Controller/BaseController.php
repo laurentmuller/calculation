@@ -51,7 +51,7 @@ abstract class BaseController extends AbstractController
      */
     public function getApplication(): ApplicationService
     {
-        if ($this->application) {
+        if (isset($this->application)) {
             return $this->application;
         } else {
             return $this->application = $this->get(ApplicationService::class);
@@ -90,7 +90,7 @@ abstract class BaseController extends AbstractController
      */
     public function getSession(): SessionInterface
     {
-        if ($this->session) {
+        if (isset($this->session)) {
             return $this->session;
         } else {
             return $this->session = $this->get('session');
@@ -114,7 +114,7 @@ abstract class BaseController extends AbstractController
      */
     public function getTranslator(): TranslatorInterface
     {
-        if ($this->translator) {
+        if (isset($this->translator)) {
             return $this->translator;
         } else {
             return $this->translator = $this->get(TranslatorInterface::class);
@@ -126,7 +126,7 @@ abstract class BaseController extends AbstractController
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
-        if ($this->generatorService) {
+        if (isset($this->generatorService)) {
             return $this->generatorService;
         } else {
             return $this->generatorService = $this->get(UrlGeneratorService::class);

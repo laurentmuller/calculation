@@ -41,7 +41,7 @@ abstract class AbstractTranslatorService extends HttpClientService implements IT
     /**
      * The property accessor.
      *
-     * @var PropertyAccessor
+     * @var PropertyAccessor|null
      */
     protected $accessor;
 

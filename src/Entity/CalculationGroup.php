@@ -137,7 +137,8 @@ class CalculationGroup extends BaseEntity
      */
     public function addItem(CalculationItem $item): self
     {
-        if (!$this->items->contains($item) && $this->items->add($item)) {
+        if (!$this->items->contains($item)) {
+            $this->items->add($item);
             $item->setGroup($this);
         }
 

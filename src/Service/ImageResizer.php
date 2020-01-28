@@ -226,7 +226,7 @@ class ImageResizer implements IImageExtension
      *
      * @param string $fileName the path to the GIF image
      *
-     * @return resource|bool an image resource identifier on success, false on errors
+     * @return ImageHandler|bool an image resource identifier on success, false on errors
      */
     private function imagecreatefromgif(string $fileName)
     {

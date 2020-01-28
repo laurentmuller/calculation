@@ -122,7 +122,7 @@ class Calculation extends BaseEntity
      *
      * @ORM\JoinColumn(nullable=false)
      *
-     * @var CalculationState
+     * @var ?CalculationState
      */
     protected $state;
 
@@ -172,7 +172,8 @@ class Calculation extends BaseEntity
      */
     public function addGroup(CalculationGroup $group): self
     {
-        if (!$this->groups->contains($group) && $this->groups->add($group)) {
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
             $group->setCalculation($this);
         }
 

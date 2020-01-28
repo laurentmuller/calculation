@@ -53,7 +53,7 @@ class CalculationItem extends BaseEntity
      *     nullable=false
      * )
      *
-     * @var \App\Entity\CalculationGroup
+     * @var ?CalculationGroup
      */
     protected $group;
 
@@ -140,9 +140,9 @@ class CalculationItem extends BaseEntity
     }
 
     /**
-     * Get group.
+     * Get the parent's group.
      *
-     * @return \App\Entity\CalculationGroup
+     * @return CalculationGroup
      */
     public function getGroup(): ?CalculationGroup
     {
@@ -227,9 +227,9 @@ class CalculationItem extends BaseEntity
     }
 
     /**
-     * Set group.
+     * Set the  parent's group.
      *
-     * @param \App\Entity\CalculationGroup $group
+     * @param CalculationGroup $group
      */
     public function setGroup(?CalculationGroup $group): self
     {

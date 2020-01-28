@@ -329,7 +329,7 @@ class Calendar extends CalendarItem implements IMonthsOfYear, IDaysOfWeek
      */
     public function isCurrent(): bool
     {
-        return $this->year === \date('Y');
+        return $this->year === (int) \date('Y');
     }
 
     /**

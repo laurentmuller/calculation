@@ -129,7 +129,7 @@ class CalculationStatesReport extends BaseReport implements IPdfCellListener
         }
 
         // count
-        return $this->resetStyle()->renderCount($count);
+        return $this->renderCount($count);
     }
 
     /**

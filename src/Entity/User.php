@@ -227,7 +227,7 @@ class User extends BaseUser implements IEntity, IRole
     {
         $this->imageFile = $imageFile;
         if ($update) {
-            $this->updatedAt = new \DateTimeImmutable();
+            $this->updatedAt = new \DateTime();
         }
 
         return $this;

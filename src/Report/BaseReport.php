@@ -93,20 +93,27 @@ abstract class BaseReport extends PdfDocument
     /**
      * Render this document.
      *
-     * @return true if rendered successfully
+     * @return bool true if rendered successfully
      */
     abstract public function render(): bool;
 
     /**
      * Renders a line with the given number of elements.
      *
-     * @param int|array|\Countable $count the number of elements, an array or a \Countable object
-     * @param string               $align the text alignment
+     * @param int|array|\Countable $count      the number of elements, an array or a \Countable object
+     * @param string               $align      the text alignment
+     * @param bool                 $resetStyle true to reset style before output the line
      *
      * @return bool true if the number of elements is greather than 0
      */
-    public function renderCount($count, string $align = self::ALIGN_LEFT): bool
+    public function renderCount($count, string $align = self::ALIGN_LEFT, bool $resetStyle = true): bool
     {
+        // reset
+        if ($resetStyle) {
+            $this->resetStyle();
+        }
+
+        // count and translate
         if (\is_array($count) || $count instanceof \Countable) {
             $count = \count($count);
         }

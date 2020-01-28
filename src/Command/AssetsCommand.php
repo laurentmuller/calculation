@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -64,15 +63,17 @@ abstract class AssetsCommand extends Command
      */
     protected function getProjectDir(): ?string
     {
-        /** @var Application $application */
+        /** @var \Symfony\Bundle\FrameworkBundle\Console\Application|null $application */
         $application = $this->getApplication();
-        if (null === $application) {
+        if (!$application) {
             $this->writeError('The Application is not defined.');
 
             return null;
         }
 
-        if (!$kernel = $application->getKernel()) {
+        /** @var \Symfony\Component\HttpKernel\KernelInterface|null $kernel */
+        $kernel = $application->getKernel();
+        if (!$kernel) {
             $this->writeError('The Kernel is not defined.');
 
             return null;

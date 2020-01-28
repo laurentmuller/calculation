@@ -36,7 +36,7 @@ abstract class BaseEntity implements IEntity
      * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @var int
+     * @var int|null
      */
     protected $id;
 

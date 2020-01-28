@@ -50,7 +50,7 @@ class UsersReport extends BaseReport
     /**
      * The configured file property name.
      *
-     * @var string
+     * @var string|null
      */
     private $fieldName;
 
@@ -137,7 +137,7 @@ class UsersReport extends BaseReport
         }
 
         // count
-        return $this->resetStyle()->renderCount($count);
+        return $this->renderCount($count);
     }
 
     /**

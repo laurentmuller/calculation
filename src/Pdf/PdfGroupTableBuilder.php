@@ -32,7 +32,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     /**
      * The group render listener.
      *
-     * @var IPdfGroupListener
+     * @var IPdfGroupListener|null
      */
     protected $groupListener;
 

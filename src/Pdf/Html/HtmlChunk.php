@@ -29,7 +29,7 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
     /**
      * The class name.
      *
-     * @var string
+     * @var string|null
      */
     protected $className;
 
@@ -43,7 +43,7 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
     /**
      * The parent chunk.
      *
-     * @var HtmlParentChunk
+     * @var ?HtmlParentChunk
      */
     protected $parent;
 

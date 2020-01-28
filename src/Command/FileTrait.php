@@ -28,7 +28,7 @@ trait FileTrait
     /**
      * The file system instance.
      *
-     * @var Filesystem
+     * @var ?Filesystem
      */
     private $fs;
 

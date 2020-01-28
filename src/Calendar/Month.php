@@ -79,7 +79,7 @@ class Month extends CalendarItem
     /**
      * Gets the weeks that this month is contained in.
      *
-     * @return Month[]
+     * @return Week[]
      */
     public function getWeeks(): array
     {

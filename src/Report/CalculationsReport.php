@@ -49,7 +49,7 @@ class CalculationsReport extends BaseReport
     /**
      * The minimum margin style.
      *
-     * @var PdfStyle
+     * @var PdfStyle|null
      */
     protected $marginStyle;
 
@@ -94,13 +94,13 @@ class CalculationsReport extends BaseReport
         }
 
         // totals
-        $items = 0;
-        $overall = 0;
+        $items = 0.0;
+        $overall = 0.0;
         foreach ($this->calculations as $c) {
             $items += $c->getItemsTotal();
             $overall += $c->getOverallTotal();
         }
-        $margins = 0 !== $items ? $this->safeDivide($overall, $items) - 1 : 0;
+        $margins = 0.0 !== $items ? $this->safeDivide($overall, $items) - 1 : 0;
 
         $text = $this->trans('common.count', [
             '%count%' => \count($this->calculations),

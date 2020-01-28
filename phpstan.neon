@@ -1,4 +1,11 @@
 parameters:
-    level: 2
+    level: 4
     paths:
     - src
+    autoload_files:
+    - vendor/twig/twig/src/Extension/CoreExtension.php
+    doctrine:
+        repositoryClass: App\Repository\BaseRepository
+    ignoreErrors:
+    - '#Call to function method_exists()#'
+    - '#HtmlStyleFactory::create()#'

@@ -775,7 +775,7 @@ class AjaxController extends BaseController
     public function updateCalculation(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
     {
         // ajax call ?
-        if (!$response = $this->isAjaxCall($request)) {
+        if ($response = $this->checkAjaxCall($request)) {
             return $response;
         }
 
@@ -920,6 +920,24 @@ class AjaxController extends BaseController
     }
 
     /**
+     * Checks if the given request is a XMLHttpRequest (ajax) call.
+     *
+     * @return JsonResponse null if is a XMLHttpRequest call, a JSON error response otherwise
+     */
+    private function checkAjaxCall(Request $request): ?JsonResponse
+    {
+        // ajax call ?
+        if ($request->isXmlHttpRequest()) {
+            return null;
+        }
+
+        return $this->json([
+            'result' => false,
+            'message' => 'Invalid Http Request.',
+        ]);
+    }
+
+    /**
      * Format the expired date.
      *
      * @param string $date the date to format
@@ -980,24 +998,6 @@ class AjaxController extends BaseController
         \sort($extensions);
 
         return \implode(', ', $extensions);
-    }
-
-    /**
-     * Returns if the given request is a XMLHttpRequest (ajax) call.
-     *
-     * @return bool|JsonResponse true if a XMLHttpRequest call, a JSON error response otherwise
-     */
-    private function isAjaxCall(Request $request)
-    {
-        // ajax call ?
-        if (!$request->isXmlHttpRequest()) {
-            return $this->json([
-                'result' => false,
-                'message' => 'Invalid Http Request.',
-            ]);
-        }
-
-        return true;
     }
 
     /**

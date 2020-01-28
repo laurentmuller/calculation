@@ -18,7 +18,7 @@ use App\Service\ApplicationService;
 use App\Utils\FormatUtils;
 
 /**
- * Combined the date and the number formatter traits.
+ * A combination of the date formatter trait and the number formatter trait.
  *
  * @author Laurent Muller
  */
@@ -30,7 +30,7 @@ trait FormatterTrait
     /**
      * The application service.
      *
-     * @var ApplicationService
+     * @var ApplicationService|null
      */
     protected $application;
 

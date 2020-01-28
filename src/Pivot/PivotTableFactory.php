@@ -57,7 +57,7 @@ class PivotTableFactory
     /**
      * The key field.
      *
-     * @var PivotField
+     * @var PivotField|null
      */
     private $keyField;
 

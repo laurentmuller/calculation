@@ -71,7 +71,7 @@ trait LoggerTrait
      */
     protected function isVerbose(): bool
     {
-        return $this->output && $this->output->isVerbose();
+        return $this->isOutput() && $this->output->isVerbose();
     }
 
     /**
@@ -81,7 +81,7 @@ trait LoggerTrait
      */
     protected function isVeryVerbose(): bool
     {
-        return $this->output && $this->output->isVeryVerbose();
+        return $this->isOutput() && $this->output->isVeryVerbose();
     }
 
     /**
@@ -102,7 +102,7 @@ trait LoggerTrait
      */
     protected function write(string $message, string $tag = 'info'): void
     {
-        if ($this->output) {
+        if ($this->isOutput()) {
             $concat = $this->concat($message);
             $this->output->writeln("<$tag>$concat</$tag>");
         }
@@ -140,5 +140,15 @@ trait LoggerTrait
         if ($this->isVeryVerbose()) {
             $this->write($message);
         }
+    }
+
+    /**
+     * Returns if this output is not null.
+     *
+     * @return bool true if not null
+     */
+    private function isOutput(): bool
+    {
+        return null !== $this->output;
     }
 }

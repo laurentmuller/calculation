@@ -74,7 +74,7 @@ class ProductsReport extends BaseReport
         }
 
         // count
-        return $this->resetStyle()->renderCount($count);
+        return $this->renderCount($count);
     }
 
     /**

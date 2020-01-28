@@ -531,11 +531,11 @@ class UpdateAssetsCommand extends AssetsCommand
         // copy styles
         $toAppend = '';
         foreach ($styles as $searchStyle => $newStyle) {
-            if (\is_array($newStyle)) {
-                $toAppend .= $this->copyStyle($content, $searchStyle, $newStyle[0], $newStyle[1]);
-            } else {
-                $toAppend .= $this->copyStyle($content, $searchStyle, $newStyle);
-            }
+//             if (\is_array($newStyle)) {
+//                 $toAppend .= $this->copyStyle($content, $searchStyle, $newStyle[0], $newStyle[1]);
+//             } else {
+            $toAppend .= $this->copyStyle($content, $searchStyle, $newStyle);
+//             }
         }
 
         // context menu

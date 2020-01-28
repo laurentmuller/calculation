@@ -181,10 +181,13 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
             }
 
             // get user name
-            $parameters = ['error' => $e];
-            if ($user = $event->getUser()) {
-                $parameters['username'] = $user->getUsername();
-            }
+            $parameters = [
+                'error' => $e,
+                'username' => $event->getUser()->getUsername(),
+            ];
+            // if ($user = $event->getUser()) {
+            // $parameters['username'] = $event->getUser()->getUsername();
+            // }
 
             // redirect
             $response = new RedirectResponse($this->generateUrl('fos_user_resetting_request', $parameters));

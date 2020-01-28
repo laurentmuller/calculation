@@ -55,14 +55,14 @@ class PdfTableBuilder implements IPdfConstants
     /**
      * The heder style.
      *
-     * @var PdfStyle
+     * @var PdfStyle|null
      */
     protected $headerStyle;
 
     /**
      * The cell listener.
      *
-     * @var IPdfCellListener
+     * @var IPdfCellListener|null
      */
     protected $listener;
 
@@ -83,7 +83,7 @@ class PdfTableBuilder implements IPdfConstants
     /**
      * The current row style.
      *
-     * @var PdfStyle
+     * @var PdfStyle|null
      */
     protected $rowStyle;
 

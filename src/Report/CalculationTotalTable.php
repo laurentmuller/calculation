@@ -113,8 +113,11 @@ class CalculationTotalTable extends PdfTableBuilder
      *
      * @throws \InvalidArgumentException if the locale contains invalid characters
      */
-    private function trans($id, array $parameters = [], ?string $domain = null, ?string $locale = null)
+    private function trans($id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
-        return $this->parent->trans($id, $parameters, $domain, $locale);
+        /** @var BaseReport $parent */
+        $parent = $this->parent;
+
+        return $parent->trans($id, $parameters, $domain, $locale);
     }
 }

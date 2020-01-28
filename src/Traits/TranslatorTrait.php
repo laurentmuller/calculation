@@ -27,7 +27,7 @@ trait TranslatorTrait
     /**
      * The translator instance.
      *
-     * @var TranslatorInterface
+     * @var TranslatorInterface|null
      */
     protected $translator;
 

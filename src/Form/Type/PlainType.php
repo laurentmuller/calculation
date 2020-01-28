@@ -210,9 +210,9 @@ class PlainType extends AbstractType
      * @param mixed $value   the value to transform
      * @param array $options the options
      *
-     * @return string|null the formatted number
+     * @return string the formatted number
      */
-    private function formatNumber($value, array $options): ?string
+    private function formatNumber($value, array $options): string
     {
         $type = $this->getOptionString($options, 'number_pattern', '');
         switch ($type) {

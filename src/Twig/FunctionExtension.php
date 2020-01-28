@@ -39,7 +39,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * The asset extension.
      *
-     * @var AssetExtension
+     * @var AssetExtension|null
      */
     private $asset;
 

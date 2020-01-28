@@ -66,10 +66,6 @@ class CategoriesReport extends BaseReport
             $productsCount += $category->countProducts();
         }
 
-        if (0 === $count) {
-            return false;
-        }
-
         // sort
         Utils::sortField($categories, 'code');
 

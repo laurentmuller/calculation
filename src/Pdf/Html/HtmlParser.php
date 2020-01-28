@@ -85,7 +85,8 @@ class HtmlParser
      */
     private function getAttribute(\DOMNode $node, string $name, ?string $default = null): ?string
     {
-        if ($attributes = $node->attributes) {
+        if ($node->hasAttributes()) {
+            $attributes = $node->attributes;
             if ($attribute = $attributes->getNamedItem($name)) {
                 $value = \trim($attribute->nodeValue);
                 if (Utils::isString($value)) {
@@ -167,6 +168,9 @@ class HtmlParser
                 break;
 
             case XML_TEXT_NODE:
+                /** @var \DOMText $nodeText */
+                $nodeText = $node;
+                $value = $nodeText->wholeText;
                 $value = $node->wholeText; //nodeValue;
                 if (\strlen(\trim($value))) {
                     $name = $node->nodeName;

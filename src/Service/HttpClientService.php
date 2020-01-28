@@ -52,14 +52,14 @@ abstract class HttpClientService
     /**
      * The HTTP client.
      *
-     * @var HttpClientInterface
+     * @var HttpClientInterface|null
      */
     protected $client;
 
     /**
      * The last error.
      *
-     * @var array
+     * @var array|null
      */
     protected $lastError;
 

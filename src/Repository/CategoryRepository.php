@@ -41,28 +41,14 @@ class CategoryRepository extends BaseRepository
     /**
      * Gets the the list of categories sorted by code.
      *
-     * @return array
+     * @return Category[] the categories
      */
-    public function getList()
+    public function getList(): array
     {
         return $this->getSortedBuilder()
             ->getQuery()
             ->getArrayResult();
     }
-
-//     /**
-//      * Gets the the list of categories sorted by code and containing products.
-//      *
-//      * @return array
-//      */
-//     public function getNotEmptyList()
-//     {
-//         return $this->getSortedBuilder()
-//             ->innerJoin('c.products', 'p')
-//             ->distinct()
-//             ->getQuery()
-//             ->getArrayResult();
-//     }
 
     /**
      * Gets the query builder for the list of categories sorted by code.

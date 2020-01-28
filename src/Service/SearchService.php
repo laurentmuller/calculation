@@ -91,14 +91,14 @@ class SearchService
     /**
      * The result set mapping.
      *
-     * @var ResultSetMapping
+     * @var ResultSetMapping|null
      */
     private $mapping;
 
     /**
      * The SQL queries.
      *
-     * @var string[]
+     * @var string[]|null
      */
     private $queries;
 

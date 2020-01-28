@@ -22,7 +22,7 @@ namespace App\Pivot\Field;
 class PivotQuarterField extends PivotDateField
 {
     /**
-     * @var callable
+     * @var callable|null
      */
     private $formatter;
 

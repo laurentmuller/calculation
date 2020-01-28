@@ -86,7 +86,7 @@ class ApplicationService implements IApplicationService
     /**
      * Clear this cache.
      *
-     * @return true if the cache was successfully cleared; false if there was an error
+     * @return bool true if the cache was successfully cleared; false if there was an error
      */
     public function clearCache(): bool
     {

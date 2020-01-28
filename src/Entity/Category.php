@@ -63,7 +63,7 @@ class Category extends BaseEntity
      * @ORM\OrderBy({"minimum": "ASC"})
      * @Assert\Valid
      *
-     * @var Collection|CategoryMargin
+     * @var Collection<CategoryMargin>
      */
     protected $margins;
 
@@ -72,7 +72,7 @@ class Category extends BaseEntity
      *
      * @ORM\OneToMany(targetEntity="Product", mappedBy="category", cascade={"persist"}, orphanRemoval=true)
      *
-     * @var Collection|Product[]
+     * @var Collection<Product>
      */
     protected $products;
 
@@ -95,7 +95,8 @@ class Category extends BaseEntity
      */
     public function addMargin(CategoryMargin $margin): self
     {
-        if (!$this->margins->contains($margin) && $this->margins->add($margin)) {
+        if (!$this->margins->contains($margin)) {
+            $this->margins->add($margin);
             $margin->setCategory($this);
         }
 
@@ -111,7 +112,8 @@ class Category extends BaseEntity
      */
     public function addProduct(Product $product): self
     {
-        if (!$this->products->contains($product) && $this->products->add($product)) {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
             $product->setCategory($this);
         }
 
@@ -203,7 +205,7 @@ class Category extends BaseEntity
     /**
      * Get margins.
      *
-     * @return Collection|CategoryMargin[]
+     * @return Collection<CategoryMargin>
      */
     public function getMargins(): Collection
     {
@@ -213,7 +215,7 @@ class Category extends BaseEntity
     /**
      * Get products.
      *
-     * @return Collection|Product[]
+     * @return Collection<Product>
      */
     public function getProducts(): Collection
     {

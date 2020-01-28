@@ -156,9 +156,13 @@ final class Utils
             $export = \preg_replace('/^([ ]*)(.*)/m', '$1$1$2', $export);
             $array = \preg_split("/\r\n|\n|\r/", $export);
             $array = \preg_replace(['/\\s*array\\s\\($/', '/\\)(,)?$/', '/\\s=>\\s$/'], [null, ']$1', ' => ['], $array);
-            $result = \implode(PHP_EOL, \array_filter(['['] + $array));
+            if (!empty($array) && '' === $array[0]) {
+                $array[0] = '[';
+            } else {
+                \array_unshift($array, '[');
+            }
 
-            return $result;
+            return \implode(PHP_EOL, \array_filter($array));
         } catch (\Exception $e) {
             return '';
         }
@@ -230,13 +234,13 @@ final class Utils
      *
      * Any additional keys (if any) will be used for grouping the next set of sub-arrays.
      *
-     * @param array               $array the array to be grouped
-     * @param string|int|callable $key   a set of keys to group by
+     * @param array                    $array the array to be grouped
+     * @param string|int|callable|null $key   a set of keys to group by
      */
     public static function groupBy(array $array, $key): array
     {
         // check key
-        if (!\is_string($key) && !\is_int($key) && !\is_float($key) && !\is_callable($key)) {
+        if (!\is_string($key) && !\is_int($key) && !\is_callable($key)) { // && !\is_float($key)
             \trigger_error('groupBy(): The key should be a string, an integer, a float, or a function', E_USER_ERROR);
         }
         $isFunction = !\is_string($key) && \is_callable($key);

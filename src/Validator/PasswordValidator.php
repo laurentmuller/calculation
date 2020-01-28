@@ -149,7 +149,7 @@ class PasswordValidator extends ConstraintValidator
      */
     private function checkBlackList(Password $constraint, string $value): bool
     {
-        if ($constraint->blackList && $this->provider && true === $this->provider->isBlacklisted($value)) {
+        if ($constraint->blackList && null !== $this->provider && $this->provider->isBlacklisted($value)) {
             return $this->addViolation('blacklist', $value);
         }
 

@@ -56,14 +56,6 @@ class HtmlStyle extends PdfStyle
     protected $topMargin;
 
     /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function __toString(): string

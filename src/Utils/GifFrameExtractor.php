@@ -65,7 +65,7 @@ class GifFrameExtractor implements \Countable
     /**
      * The file handler.
      *
-     * @var int
+     * @var resource|bool
      */
     private $handle;
 
@@ -107,14 +107,14 @@ class GifFrameExtractor implements \Countable
     /**
      * Close the gif file.
      *
-     * @return true on success or false on failure
+     * @return bool true on success or false on failure
      */
     public function closeFile(): bool
     {
         $result = true;
         if ($this->handle) {
             $result = \fclose($this->handle);
-            $this->handle = 0;
+            $this->handle = false;
         }
 
         return $result;
@@ -298,10 +298,8 @@ class GifFrameExtractor implements \Countable
      * @param int    $byteIndex the byte index
      * @param int    $bitStart  the bit start
      * @param int    $bitLength the bit length
-     *
-     * @return number
      */
-    private function getImageDataBit(string $type, int $byteIndex, int $bitStart, int $bitLength)
+    private function getImageDataBit(string $type, int $byteIndex, int $bitStart, int $bitLength): int
     {
         if ('ext' === $type) {
             return $this->readBits(\ord(\substr($this->frameSources[$this->frameCount]['graphicsextension'], $byteIndex, 1)), $bitStart, $bitLength);
@@ -349,10 +347,6 @@ class GifFrameExtractor implements \Countable
     {
         $this->handle = \fopen($filename, 'r');
         $this->pointer = 0;
-
-//         $imageSize = \getimagesize($filename);
-//         $this->gifWidth = $imageSize[0];
-//         $this->gifHeight = $imageSize[1];
     }
 
     /**
@@ -564,10 +558,8 @@ class GifFrameExtractor implements \Countable
      * @param int $byte   the value to convert
      * @param int $start  the start offset
      * @param int $length the length
-     *
-     * @return number
      */
-    private function readBits(int $byte, int $start, int $length)
+    private function readBits(int $byte, int $start, int $length): int
     {
         $bin = \str_pad(\decbin($byte), 8, '0', STR_PAD_LEFT);
         $data = \substr($bin, $start, $length);
@@ -623,7 +615,7 @@ class GifFrameExtractor implements \Countable
     private function reset(): void
     {
         $this->closeFile();
-        $this->totalDuration = $this->maxHeight = $this->maxWidth = $this->handle = $this->pointer = $this->frameCount = 0;
+        $this->totalDuration = $this->maxHeight = $this->maxWidth = $this->pointer = $this->frameCount = 0;
         $this->globaldata = $this->orgvars = $this->frames = $this->fileHeader = $this->frameSources = [];
     }
 

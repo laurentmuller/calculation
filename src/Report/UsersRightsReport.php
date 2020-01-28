@@ -157,7 +157,7 @@ class UsersRightsReport extends BaseReport implements IPdfGroupListener
         $count += $this->outputUsers($this->users, $builder);
 
         // count
-        return $this->resetStyle()->renderCount($count);
+        return $this->renderCount($count);
     }
 
     /**
@@ -206,8 +206,7 @@ class UsersRightsReport extends BaseReport implements IPdfGroupListener
         return Utils::findFirst($this->users, function (User $user) use ($name) {
             return $name === $user->getUsername();
         });
-
-        return null;
+        // return null;
     }
 
     /**

@@ -299,7 +299,7 @@ class CalculationRepository extends BaseRepository
      * @param int $year  the year
      * @param int $month the month number (1 = January, 2 = February, ...)
      *
-     * @return array the matching calculations
+     * @return Calculation[] the matching calculations
      */
     public function getForMonth(int $year, int $month): array
     {
@@ -316,7 +316,7 @@ class CalculationRepository extends BaseRepository
      * @param int $year the year
      * @param int $week the week number
      *
-     * @return array the matching calculations
+     * @return Calculation[] the matching calculations
      */
     public function getForWeek(int $year, int $week): array
     {
@@ -332,7 +332,7 @@ class CalculationRepository extends BaseRepository
      *
      * @param int $year the year
      *
-     * @return array the matching calculations
+     * @return Calculation[] the matching calculations
      */
     public function getForYear(int $year): array
     {

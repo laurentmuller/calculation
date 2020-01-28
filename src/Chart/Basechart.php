@@ -21,11 +21,13 @@ use Ob\HighchartsBundle\Highcharts\Highchart;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Basic chart with properties shortcut.
+ * High chart with method shortcuts.
  *
- * @method style(array $options) set the style options.
- * @method xAxis(array $options) set the x axis options.
- * @method yAxis(array $options) set the y axis options.
+ * @author Laurent Muller
+ *
+ * @method Basechart style(array $styles) set the CSS style options.
+ * @method Basechart xAxis(array $xAxis)  set the x axis options.
+ * @method Basechart yAxis(array $yAxis)  set the y axis options.
  *
  * @property mixed $xAxis the x axis options.
  * @property mixed $yAxis the y axis options.
@@ -161,7 +163,7 @@ class Basechart extends Highchart
     /**
      * Sets the chart type.
      *
-     * @param string $type the chart type to set like 'pie' or 'column'
+     * @param string $type the chart type to set like 'pie' or 'column'. Can be on of this predefined 'TYPE_' constants.
      */
     public function setType(string $type): self
     {

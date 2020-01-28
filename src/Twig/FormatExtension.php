@@ -136,7 +136,6 @@ final class FormatExtension extends AbstractExtension
         }
 
         // get types
-
         $datetype = $dateFormat ? $formats[$dateFormat] : null;
         $timetype = $timeFormat ? $formats[$timeFormat] : null;
         if (IntlDateFormatter::NONE === $datetype && IntlDateFormatter::NONE === $timetype) {

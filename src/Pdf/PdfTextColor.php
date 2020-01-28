@@ -22,19 +22,6 @@ namespace App\Pdf;
 class PdfTextColor extends PdfColor
 {
     /**
-     * Constructor.
-     * All values must be bewtween 0 to 255 inclusive.
-     *
-     * @param int $red   the red component
-     * @param int $green the green component
-     * @param int $blue  the blue component
-     */
-    final public function __construct(int $red = 0, int $green = 0, int $blue = 0)
-    {
-        parent::__construct($red, $green, $blue);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function apply(PdfDocument $doc): void

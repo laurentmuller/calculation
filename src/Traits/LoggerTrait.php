@@ -26,7 +26,7 @@ trait LoggerTrait
     /**
      * The logger instance.
      *
-     * @var LoggerInterface
+     * @var LoggerInterface|null
      */
     protected $logger;
 
@@ -40,7 +40,7 @@ trait LoggerTrait
     public function log($level, string $message, array $context = []): void
     {
         if ($logger = $this->doGetLogger()) {
-            $logger->log($level, $message . $context);
+            $logger->log($level, $message, $context);
         }
     }
 
@@ -142,8 +142,7 @@ trait LoggerTrait
      */
     protected function doGetLogger(): ?LoggerInterface
     {
-        if (!$this->logger && \method_exists($this, 'getLogger')) {
-            // call_user_func([$this, 'getLogger']);
+        if (!isset($this->logger) && \method_exists($this, 'getLogger')) {
             return $this->logger = $this->getLogger();
         }
 

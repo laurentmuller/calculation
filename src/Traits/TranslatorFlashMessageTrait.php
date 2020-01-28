@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 /**
- * Combine the translator trait and the flash message trait to add tanslated flash messages.
+ * A combination of the translator trait and the flash message trait to add tanslated flash messages.
  *
  * @author Laurent Muller
  */

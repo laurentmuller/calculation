@@ -69,7 +69,7 @@ abstract class PdfColor implements IPdfDocumentUpdater
      * @param int $green the green component
      * @param int $blue  the blue component
      */
-    protected function __construct(int $red = 0, int $green = 0, int $blue = 0)
+    final public function __construct(int $red = 0, int $green = 0, int $blue = 0)
     {
         $this->setRGB($red, $green, $blue);
     }
@@ -81,42 +81,12 @@ abstract class PdfColor implements IPdfDocumentUpdater
         return \sprintf('%s(%d, %d, %d)', $name, $this->red, $this->green, $this->blue);
     }
 
-//     /**
-//      * Converts this color to a new draw color.
-//      *
-//      * @return PdfDrawColor
-//      */
-//     public function asDrawColor(): PdfDrawColor
-//     {
-//         return new PdfDrawColor($this->red, $this->green, $this->blue);
-//     }
-
-//     /**
-//      * Converts this color to a new fill color.
-//      *
-//      * @return PdfFillColor
-//      */
-//     public function asFillColor(): PdfFillColor
-//     {
-//         return new PdfFillColor($this->red, $this->green, $this->blue);
-//     }
-
-//     /**
-//      * Converts this color to a new text color.
-//      *
-//      * @return PdfTextColor
-//      */
-//     public function asTextColor(): PdfTextColor
-//     {
-//         return new PdfTextColor($this->red, $this->green, $this->blue);
-//     }
-
     /**
      * Gets the black color.
      *
      * Value is RGB(0, 0, 0).
      *
-     * @return self the black color
+     * @return static the black color
      */
     public static function black(): self
     {

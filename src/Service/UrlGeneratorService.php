@@ -121,9 +121,8 @@ class UrlGeneratorService
         }
 
         // identifier
-        if (0 !== $id) {
+        if (!empty($id)) {
             $params['id'] = $id;
-            //$params['selection'] = $id;
         }
 
         return $params;

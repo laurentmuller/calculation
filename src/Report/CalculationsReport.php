@@ -167,9 +167,10 @@ class CalculationsReport extends BaseReport
         ]);
 
         $table = new PdfGroupTableBuilder($this);
-
-        return $table->addColumns($columns)
+        $table->addColumns($columns)
             ->outputHeaders();
+
+        return $table;
     }
 
     /**

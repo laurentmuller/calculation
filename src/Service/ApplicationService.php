@@ -496,7 +496,12 @@ class ApplicationService implements IApplicationService
      */
     private function getString(string $name, ?string $default = null): ?string
     {
-        return (string) $this->getItemValue($name, $default);
+        $value = $this->getItemValue($name, $default);
+        if (\is_string($value)) {
+            return $value;
+        }
+
+        return $default;
     }
 
     /**

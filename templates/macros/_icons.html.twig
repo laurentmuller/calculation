@@ -78,7 +78,7 @@
 
 {% macro homepage(href = null, text = 'index.title', class = 'btn btn-form btn-primary', domain = 'messages') -%}
 {%- set href = href|default(path('homepage')) -%}
-{{- _self.link(href, text, class, 'chevron-left', null, domain) -}}
+{{- _self.link(href, text, class, 'fas fa-home', null, domain) -}}
 {%- endmacro %}
 
 {% macro button_submit(text = 'common.button_ok', class = 'btn btn-form btn-primary', domain = 'messages', parameters = {}) -%}

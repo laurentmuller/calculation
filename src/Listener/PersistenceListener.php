@@ -122,7 +122,7 @@ class PersistenceListener implements EventSubscriber
         if ($entity = $this->getEntity($args)) {
             $id = $this->getId($entity, '.delete.success');
             $params = $this->getParameters($entity);
-            $this->info($this->translateMessage($id, $params));
+            $this->warning($this->translateMessage($id, $params));
         }
     }
 

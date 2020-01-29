@@ -1228,12 +1228,6 @@ function initContextMenu() {
 $(function () {
     'use strict';
 
-    // for test
-    // $('#data-table-edit').on('mousedown.tableEdit', 'tr', function (e) {
-    // $(this).focus();
-    // console.log(e);
-    // });
-
     // searches
     SearchHelper.init();
 

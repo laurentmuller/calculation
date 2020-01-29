@@ -36,7 +36,7 @@ class PasswordValidator extends ConstraintValidator
     /**
      * The strength level.
      *
-     * @var array
+     * @var array<string>
      */
     public static $LEVEL_TO_LABEL = [
         0 => 'very_weak',

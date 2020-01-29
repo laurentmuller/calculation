@@ -138,7 +138,8 @@ abstract class BaseReport extends PdfDocument
     public function SetTitleTrans(string $id, array $parameters = [], $isUTF8 = false): self
     {
         $title = $this->trans($id, $parameters);
+        $this->SetTitle($title, $isUTF8);
 
-        return $this->SetTitle($title, $isUTF8);
+        return $this;
     }
 }

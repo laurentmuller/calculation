@@ -594,10 +594,14 @@ class CalculationController extends EntityController
      */
     public function state(Request $request, Calculation $item): Response
     {
+        $oldState = $item->getState();
         $form = $this->createForm(CalculationEditStateType::class, $item);
         if ($this->handleFormRequest($form, $request)) {
-            // update
-            $this->getManager()->flush();
+            //change?
+            if ($oldState !== $item->getState()) {
+                // update
+                $this->getManager()->flush();
+            }
 
             // message
             $this->succesTrans('calculation.state.success', ['%name%' => $item->getDisplay()]);

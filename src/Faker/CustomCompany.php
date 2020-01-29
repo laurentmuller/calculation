@@ -21,13 +21,8 @@ namespace App\Faker;
  */
 class CustomCompany extends \Faker\Provider\fr_CH\Company
 {
-    /**
-     * Returns the company name and company suffix.
-     *
-     * @return string
-     */
-    public function companyAndSuffix()
-    {
-        return $this->company() . ' ' . $this->companySuffix();
-    }
+    protected static $formats = [
+        '{{lastName}} {{companySuffix}}',
+        '{{lastName}} {{firstName}} {{companySuffix}}',
+    ];
 }

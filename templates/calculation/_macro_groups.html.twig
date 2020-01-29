@@ -1,11 +1,13 @@
 {# Macro for calculation groups #}
 {% macro printGroupRow(group, editable) -%}
 {% import 'macros/_icons.html.twig' as icons %}
-{% import 'calculation/calculation_macro_item.html.twig' as itemsMacro %}
+{% import 'calculation/_macro_items.html.twig' as macroItems %}
 
-<tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ itemsMacro.printItemRow(group.items.vars.prototype, false, false, editable)|e }}"{% endif -%}>
+<tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ macroItems.printItemRow(group.items.vars.prototype, false, false, editable)|e }}"{% endif -%}>
 	<tr class="drag-skip">
-		<th class="rowlink-skip" colspan="5">{{ form_widget(group.categoryId) }}{{ form_widget(group.code) }}{{ group.code.vars.value }}</th>
+        {{ form_widget(group.categoryId) }}
+        {{ form_widget(group.code) }}
+		<th class="rowlink-skip" colspan="5">{{ group.code.vars.value }}</th>
         {% if editable -%}        
 		<th class="rowlink-skip actions d-print-none">
             {# menu #}
@@ -22,7 +24,7 @@
         {%- endif %}
     </tr>    
 	{% for item in group.items %}
-	    {{ itemsMacro.printItemRow(item, loop.first, loop.last, editable) }}
+	    {{ macroItems.printItemRow(item, loop.first, loop.last, editable) }}
 	{% endfor %}
 </tbody>
 {%- endmacro %}

@@ -26,6 +26,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
+use Twig\Extension\ExtensionInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
@@ -39,7 +40,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * The asset extension.
      *
-     * @var AssetExtension|null
+     * @var ExtensionInterface|null
      */
     private $asset;
 
@@ -462,7 +463,10 @@ final class FunctionExtension extends AbstractExtension
             $this->asset = $env->getExtension(AssetExtension::class);
         }
 
-        return $this->asset->getAssetUrl($path, $packageName);
+        /** @var AssetExtension $asset */
+        $asset = $this->asset;
+
+        return $asset->getAssetUrl($path, $packageName);
     }
 
     /**

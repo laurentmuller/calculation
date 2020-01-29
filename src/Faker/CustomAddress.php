@@ -37,10 +37,8 @@ class CustomAddress extends \Faker\Provider\fr_CH\Address
 
     /**
      * Returns the postal code (zip) and the city name.
-     *
-     * @return string
      */
-    public function zipCity()
+    public function zipCity(): string
     {
         //return $this->postcode() . ' ' . $this->city();
         //$format = '{{postcode}} {{city}}';

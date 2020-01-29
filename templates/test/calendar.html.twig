@@ -2,7 +2,7 @@
 
 {# macros #}
 {% macro weekRow(month, week) %}
-{% import 'test/days_macro_html.twig' as tools %}
+{% import 'test/_days_macro_html.twig' as tools %}
 {%- set class = 'border text-center font-weight-bold p-2 week' -%}
 {%- set week_title = 'test.week_title'|trans({'%week%': week.number}) -%}
 {% if week.current and month.number == month.today.month -%}{%- set class = class ~ ' bg-primary text-white' -%}{%- endif %}

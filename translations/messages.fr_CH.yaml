@@ -21,13 +21,13 @@ calculation:
         updated: 'Mise à jour : '
     add:
         title: Nouvelle calculation
-        success: La calculation <b>%name%</b> a été créée avec succès.
+        success: La calculation Nº <b>%name%</b> a été créée avec succès.
     edit:
-        title: Calculation %id%
+        title: Calculation Nº %id%
         title_short: Edition d'une calculation
         empty: La calculation ne contient aucun article.
         empty_items: Aucun article.
-        success: La calculation <b>%name%</b> a été mise à jour avec succès.
+        success: La calculation Nº <b>%name%</b> a été mise à jour avec succès.
         panel_items: Articles
         panel_resume: Résumé
         delete_group: Supprimer le groupe
@@ -49,9 +49,9 @@ calculation:
             user_margin: La marge utilisateur doit être valide.
     delete:
         title: Supprimer une calculation
-        message: Êtes-vous sûr de vouloir supprimer la calculation <b>%name%</b> ?
-        success: La calculation <b>%name%</b> a été supprimée avec succès.
-        failure: Impossible de supprimer la calculation <b>%name%</b>.
+        message: Êtes-vous sûr de vouloir supprimer la calculation Nº <b>%name%</b> ?
+        success: La calculation Nº <b>%name%</b> a été supprimée avec succès.
+        failure: Impossible de supprimer la calculation Nº <b>%name%</b>.
     list:
         title: Calculations
         empty: Aucune calculation définie.
@@ -68,7 +68,7 @@ calculation:
         updated: Mise à jour
     state:
         newstate: Nouveau statut
-        success: Le statut de la calculation <b>%name%</b> a été mis à jour avec succès.
+        success: Le statut de la calculation Nº <b>%name%</b> a été mis à jour avec succès.
 calculationgroup:
     name: Groupe
     fields:

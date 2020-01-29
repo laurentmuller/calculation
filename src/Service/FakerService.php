@@ -36,24 +36,20 @@ class FakerService
     protected $faker;
 
     /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $locale = \Locale::getDefault();
-        $faker = \Faker\Factory::create($locale);
-        $faker->addProvider(new CustomPerson($faker));
-        $faker->addProvider(new CustomCompany($faker));
-        $faker->addProvider(new CustomAddress($faker));
-        $faker->addProvider(new CustomPhoneNumber($faker));
-        $this->faker = $faker;
-    }
-
-    /**
-     * Gets this faker.
+     * Gets the faker generator.
      */
     public function getFaker(): \Faker\Generator
     {
+        if (null === $this->faker) {
+            $locale = \Locale::getDefault();
+            $faker = \Faker\Factory::create($locale);
+            $faker->addProvider(new CustomPerson($faker));
+            $faker->addProvider(new CustomCompany($faker));
+            $faker->addProvider(new CustomAddress($faker));
+            $faker->addProvider(new CustomPhoneNumber($faker));
+            $this->faker = $faker;
+        }
+
         return $this->faker;
     }
 }

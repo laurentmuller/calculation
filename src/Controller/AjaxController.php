@@ -583,9 +583,13 @@ class AjaxController extends BaseController
      */
     public function randomText(Request $request, FakerService $service): JsonResponse
     {
+        // get parameters
+        $maxNbChars = (int) $request->get('maxNbChars', 145);
+        $indexSize = (int) $request->get('indexSize', 2);
+
         /** @var \Faker\Generator $faker */
         $faker = $service->getFaker();
-        $text = $faker->realText(145);
+        $text = $faker->realText($maxNbChars, $indexSize);
 
         return $this->json([
             'result' => true,

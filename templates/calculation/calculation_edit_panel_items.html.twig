@@ -1,6 +1,6 @@
 {# Items panel #}
 {% import 'macros/_icons.html.twig' as icons %}
-{% import 'calculation/calculation_macro_group.html.twig' as groupsMacro %}
+{% import 'calculation/_macro_groups.html.twig' as macroGroups %}
 
 <div id='items-panel' class="card mb-3">
 	<div class="card-header">
@@ -20,10 +20,10 @@
 	<div class="card-body p-2">
 		<div class="form-row">
 			<div class="col">
-				<table id="data-table-edit" class="table table-edit table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ groupIndex }}" data-item-index="{{ itemIndex }}" data-prototype="{{ groupsMacro.printGroupRow(form.groups.vars.prototype, editable)|e }}"{% endif -%}>
+				<table id="data-table-edit" class="table table-edit table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ groupIndex }}" data-item-index="{{ itemIndex }}" data-prototype="{{ macroGroups.printGroupRow(form.groups.vars.prototype, editable)|e }}"{% endif -%}>
 				{# groups and items #}
                 {% for group in form.groups %}
-                    {{ groupsMacro.printGroupRow(group, editable) }}
+                    {{ macroGroups.printGroupRow(group, editable) }}
                 {% endfor %}
 				</table>
                 {{ form_errors(form.groups) }}

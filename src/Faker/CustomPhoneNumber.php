@@ -21,14 +21,19 @@ namespace App\Faker;
  */
 class CustomPhoneNumber extends \Faker\Provider\fr_CH\PhoneNumber
 {
+    /**
+     * Swiss phone number formats.
+     *
+     * @var string[]
+     */
     protected static $formats = [
         '0## ### ## ##',
     ];
 
     /**
-     * An array of Swiss mobile (cell) phone number formats.
+     * Swiss mobile (cell) phone number formats.
      *
-     * @var array
+     * @var string[]
      */
     protected static $mobileFormats = [
         // Local

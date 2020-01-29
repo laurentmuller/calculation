@@ -2,6 +2,10 @@
 {% macro printItemRow(item, first, last, editable) -%}
 {% import 'macros/_icons.html.twig' as icons %}
 <tr>
+    {{ form_widget(item.unit) }}
+    {{ form_widget(item.price) }}
+    {{ form_widget(item.quantity) }}
+    {{ form_widget(item.total) }}
 	<td class="pl-3">{{ form_widget(item.description) -}}
         {%- if editable -%}
             <a href='#' class="btn-edit-item">{{ item.description.vars.value }}</a>  
@@ -9,10 +13,10 @@
             {{ item.description.vars.value }}
         {%- endif -%}
 	</td>
-	<td class="text-unit">{{ form_widget(item.unit) }}{{ item.unit.vars.value }}</td>
-	<td class="text-currency">{{ form_widget(item.price) }}{{ item.price.vars.value|amount }}</td>
-	<td class="text-currency">{{ form_widget(item.quantity) }}{{ item.quantity.vars.value|amount }}</td>
-	<td class="text-currency">{{ form_widget(item.total) }}{{ item.total.vars.value|amount }}</td>
+	<td class="text-unit">{{ item.unit.vars.value }}</td>
+	<td class="text-currency">{{ item.price.vars.value|amount }}</td>
+	<td class="text-currency">{{ item.quantity.vars.value|amount }}</td>
+	<td class="text-currency">{{ item.total.vars.value|amount }}</td>
     {% if editable %}  
 	<td class="actions d-print-none rowlink-skip">
 		

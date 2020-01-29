@@ -39,6 +39,7 @@ use App\Utils\DateUtils;
 use App\Validator\Captcha;
 use App\Validator\Password;
 use Doctrine\ORM\EntityManagerInterface;
+use Faker\Provider\Person;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormError;
@@ -87,7 +88,7 @@ class TestController extends BaseController
     }
 
     /**
-     * Create calculations with random data.
+     * Create one or more calculations with random data.
      *
      * @Route("/create/calculations/{count}", name="test_create_calculations", requirements={"count": "\d+" })
      */
@@ -144,17 +145,25 @@ class TestController extends BaseController
 
             // save
             $manager->persist($calculation);
-            $manager->flush();
 
-            $calculations[] = [
-                'id' => $this->localeId($calculation->getId()),
-                'description' => $calculation->getDescription(),
-                'customer' => $calculation->getCustomer(),
-                'state' => $calculation->getState()->getCode(),
-                'date' => $this->localeDate($calculation->getDate()),
-                'total' => $this->localeAmount($calculation->getOverallTotal()),
-            ];
+            // add
+            $calculations[] = $calculation;
         }
+
+        // commit
+        $manager->flush();
+
+        // serialize
+        $calculations = \array_map(function (Calculation $c) {
+            return [
+                'id' => $this->localeId($c->getId()),
+                'description' => $c->getDescription(),
+                'customer' => $c->getCustomer(),
+                'state' => $c->getState()->getCode(),
+                'date' => $this->localeDate($c->getDate()),
+                'total' => $this->localeAmount($c->getOverallTotal()),
+            ];
+        }, $calculations);
 
         $data = [
             'result' => true,
@@ -166,7 +175,7 @@ class TestController extends BaseController
     }
 
     /**
-     * Create customers with random data.
+     * Create one or more customers with random data.
      *
      * @Route("/create/customers/{count}", name="test_create_customers", requirements={"count": "\d+" })
      */
@@ -175,29 +184,22 @@ class TestController extends BaseController
         /** @var \Faker\Generator $faker */
         $faker = $fakerService->getFaker();
 
-        $genders = [
-            \Faker\Provider\Person::GENDER_MALE,
-            \Faker\Provider\Person::GENDER_FEMALE,
-        ];
-        $styles = [
-            0,
-            1,
-            2,
-        ];
-
         $customers = [];
+        $styles = [0, 1, 2];
+        $genders = [Person::GENDER_MALE, Person::GENDER_FEMALE];
+
         for ($i = 0; $i < $count; ++$i) {
+            $customer = new Customer();
             $style = $faker->randomElement($styles);
             $gender = $faker->randomElement($genders);
 
-            $customer = new Customer();
             switch ($style) {
-                case 0:
-                    $customer->setCompany($faker->companyAndSuffix)
+                case 0: // company
+                    $customer->setCompany($faker->company)
                         ->setEmail($faker->companyEmail);
                     break;
 
-                case 1:
+                case 1: // contact
                     $customer->setTitle($faker->title($gender))
                         ->setFirstName($faker->firstName($gender))
                         ->setLastName($faker->lastName)
@@ -205,7 +207,7 @@ class TestController extends BaseController
                     break;
 
                 default: // both
-                    $customer->setCompany($faker->companyAndSuffix)
+                    $customer->setCompany($faker->company)
                         ->setFirstName($faker->firstName($gender))
                         ->setTitle($faker->title($gender))
                         ->setLastName($faker->lastName)
@@ -218,15 +220,23 @@ class TestController extends BaseController
 
             // save
             $manager->persist($customer);
-            $manager->flush();
 
-            $customers[] = [
-                'id' => $customer->getId(),
-                'company' => $customer->getCompany(),
-                'firstName' => $customer->getFirstName(),
-                'lastName' => $customer->getLastName(),
-            ];
+            // add
+            $customers[] = $customer;
         }
+
+        // commit
+        $manager->flush();
+
+        // serialize
+        $customers = \array_map(function (Customer $c) {
+            return [
+                'id' => $c->getId(),
+                'company' => $c->getCompany(),
+                'firstName' => $c->getFirstName(),
+                'lastName' => $c->getLastName(),
+            ];
+        }, $customers);
 
         $data = [
             'result' => true,
@@ -669,11 +679,11 @@ class TestController extends BaseController
      *
      * @Route("/update/calculations", name="test_update_calculations")
      */
-    public function updateCalculations(EntityManagerInterface $manager, FakerService $ervice): Response
+    public function updateCalculations(EntityManagerInterface $manager, FakerService $service): Response
     {
         // TODO: Disabled in the doctrine.yml and CalculationListener
         /** @var \Faker\Generator $faker */
-        $faker = $ervice->getFaker();
+        $faker = $service->getFaker();
 
         /** @var \App\Entity\Calculation[] $calculations */
         $calculations = $manager->getRepository(Calculation::class)->findAll();
@@ -687,7 +697,7 @@ class TestController extends BaseController
             $style = $faker->randomElement($styles);
             switch ($style) {
                 case 0:
-                    $calculation->setCustomer($faker->companyAndSuffix);
+                    $calculation->setCustomer($faker->companySuffix);
                     break;
 
                 case 1:
@@ -716,13 +726,13 @@ class TestController extends BaseController
      *
      * @Route("/update/customers", name="test_update_customers")
      */
-    public function updateCustomers(EntityManagerInterface $manager, FakerService $ervice)
+    public function updateCustomers(EntityManagerInterface $manager, FakerService $service)
     {
         /** @var \App\Entity\Customer[] $customers */
         $customers = $manager->getRepository(Customer::class)->findAll();
 
         /** @var \Faker\Generator $faker */
-        $faker = $ervice->getFaker();
+        $faker = $service->getFaker();
 
         $genders = [
             \Faker\Provider\Person::GENDER_MALE,
@@ -735,7 +745,7 @@ class TestController extends BaseController
             $this->replace($accessor, $customer, 'title', $faker->title($gender))
                 ->replace($accessor, $customer, 'firstName', $faker->firstName($gender))
                 ->replace($accessor, $customer, 'lastName', $faker->lastName)
-                ->replace($accessor, $customer, 'company', $faker->companyAndSuffix)
+                ->replace($accessor, $customer, 'company', $faker->companySuffix)
                 ->replace($accessor, $customer, 'address', $faker->streetAddress)
                 ->replace($accessor, $customer, 'zipCode', $faker->postcode)
                 ->replace($accessor, $customer, 'city', $faker->city)

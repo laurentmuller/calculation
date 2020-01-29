@@ -9,3 +9,4 @@ parameters:
     ignoreErrors:
     - '#Call to function method_exists()#'
     - '#HtmlStyleFactory::create()#'
+    - '#catchPhrase#'

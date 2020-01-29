@@ -272,8 +272,6 @@ class Calculation extends BaseEntity
      */
     public function getDisplay(): string
     {
-        //return $this->localeId($this->id) . ' du ' . $this->localeDate($this->date);
-
         return $this->localeId($this->id);
     }
 

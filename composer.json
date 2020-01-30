@@ -30,7 +30,7 @@
 		"beberlei/doctrineextensions" : "~1.2",
 		"bjeavons/zxcvbn-php" : "~0.4",
 		"fpdf/fpdf" : "~1.81",
-		"friendsofsymfony/user-bundle" : "dev-master#a18e2c11013b955726f8d65e08d551f3840d4e2f",
+		"friendsofsymfony/user-bundle" : "dev-master#beff7d3512835875578535cd59bc09f4923a1a94",
 		"fzaninotto/faker" : "dev-master",
 		"google/recaptcha" : "~1.2",
 		"ob/highcharts-bundle" : "dev-master#5945174047ee6a70fe639634998188faed6571e2",

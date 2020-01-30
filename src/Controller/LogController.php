@@ -144,9 +144,9 @@ class LogController extends BaseController
      */
     public function show(Request $request): Response
     {
-        $data = LogUtils::readAll($this->getLogFile());
-        if ($data) {
-        }
+//         $data = LogUtils::readAll($this->getLogFile());
+//         if ($data) {
+//         }
 
         $maxLines = (int) $request->get('limit', 50);
         $entries = $this->getLogEntries($maxLines);

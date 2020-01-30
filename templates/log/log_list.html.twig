@@ -15,6 +15,15 @@
 </div>
 {% endmacro %}
 
+{% macro format_var(value) -%}
+{{ value|var_export|replace({
+	'[':  '<samp class="text-danger">[</samp>',
+	']':  '<samp class="text-danger">]</samp>',
+	'\'': '<samp class="text-danger">"</samp>',
+	'=>': '<samp class="text-danger">=></samp>'
+    }) |raw }}
+{%- endmacro %}
+
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
@@ -70,13 +79,13 @@
             <td class="level"> {{ line.level|capitalize }}</td>
             <td class="channel">{{ line.channel|capitalize }}</td>
             <td class="message">
-                {{ line.message|raw|nl2br }}
-                {% if line.context|length %}
-                    <pre class="text-break" style="white-space: pre-wrap;">{{ line.context|var_export }}</pre>
-                {% endif %}
-                {% if line.extra|length %}
-                    <pre class="text-break" style="white-space: pre-wrap;">{{ line.extra|var_export }}</pre>
-                {% endif %}
+                {{- line.message|raw|nl2br -}}
+                {%- if line.context|length -%}
+                    <pre class="text-break text-success mb-0" style="white-space: pre-wrap;">{{- _self.format_var(line.context) -}}</pre>
+                {%- endif -%}
+                {%- if line.extra|length -%}
+                    <pre class="text-break text-success mb-0" style="white-space: pre-wrap;">{{ _self.format_var(line.extra) }}</pre>
+                {%- endif -%}
             </td>
         </tr>
     {% endfor %}

@@ -36,13 +36,13 @@
 		</div>	
 	</div>
     {# errors #}
-    {%- set class_duplicate = duplicate_items  ? '' : ' d-none'  -%}
-    {%- set class_empty     = emty_items  ? '' : ' d-none'  -%}
-    {%- set class_error     = (emty_items or duplicate_items) ? '' : ' d-none'  -%}
-	<div id="error-all" class="card-footer{{ class_error }}">
+    {%- set class_error     = (emty_items or duplicate_items) ? 'card-footer' : 'card-footer d-none'  -%}
+    {%- set class_duplicate = duplicate_items ? 'ml-1' : 'ml-1 d-none'  -%}
+    {%- set class_empty     = emty_items ? 'ml-1' : 'ml-1 d-none'  -%}
+	<div id="error-all" class="{{ class_error }}">
 		<p class="mb-0 text-right">
-            <span id="error-duplicate" class="ml-1{{ class_duplicate }}"><span class="duplicate-footer"></span>{{ 'duplicate.title'|trans }}</span>
-            <span id="error-empty" class="ml-1{{ class_empty }}"><span class="empty-footer"></span>{{ 'empty.title'|trans }}</span>
+            <span id="error-duplicate" class="{{ class_duplicate }}"><span class="duplicate-footer"></span>{{ 'duplicate.title'|trans }}</span>
+            <span id="error-empty" class="{{ class_empty }}"><span class="empty-footer"></span>{{ 'empty.title'|trans }}</span>
         </p>
 	</div>
 </div>

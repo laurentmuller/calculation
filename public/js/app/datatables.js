@@ -244,7 +244,6 @@ function getContextMenuItems() { // jshint ignore:line
     return builder.getItems();
 }
 
-
 /**
  * Ready function
  */

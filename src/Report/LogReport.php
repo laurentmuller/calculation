@@ -48,7 +48,7 @@ class LogReport extends BaseReport implements IPdfCellListener
     /**
      * The border colors.
      *
-     * @var array|string|PdfDrawColor
+     * @var array
      */
     private $colors;
 

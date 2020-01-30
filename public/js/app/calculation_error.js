@@ -3,7 +3,7 @@
 /**
  * Returns this trimmed text content.
  * 
- * @returns the trimmed text content.
+ * @returns {string} the trimmed text content.
  */
 $.fn.trimmedText = function () {
     'use strict';
@@ -17,7 +17,7 @@ $.fn.trimmedText = function () {
 /**
  * Returns if this cell content is equal to 0.
  * 
- * @returns true if empty.
+ * @returns {boolean} true if empty.
  */
 $.fn.isEmptyValue = function () {
     'use strict';
@@ -29,13 +29,12 @@ $.fn.isEmptyValue = function () {
 /**
  * Updates the rows and cells errors.
  * 
- * @returns true if any error found.
+ * @returns {boolean} true if any error found.
  */
 function updateErrors() {
     'use strict';
 
     let existing = [];
-    let selection = [];
     let emptyFound = false;
     let duplicateFound = false;
 
@@ -53,8 +52,6 @@ function updateErrors() {
             if (key in existing) {
                 $cell.addClass(duplicateClass);
                 existing[key].addClass(duplicateClass);
-                selection.push($cell);
-                selection.push(existing[key]);
                 duplicateFound = true;
             } else {
                 existing[key] = $cell;
@@ -74,9 +71,13 @@ function updateErrors() {
     });
 
     // show or hide
-    $("#error-empty").updateClass("d-none", !emptyFound);
-    $("#error-duplicate").updateClass("d-none", !duplicateFound);
-    $("#error-all").updateClass("d-none", !(emptyFound || duplicateFound));
+    if (emptyFound || duplicateFound) {
+        $("#error-empty").updateClass("d-none", !emptyFound);
+        $("#error-duplicate").updateClass("d-none", !duplicateFound);
+        $("#error-all").removeClass("d-none").fadeIn();
+    } else {
+        $("#error-all").fadeOut();
+    }
 
     return emptyFound || duplicateFound;
 }

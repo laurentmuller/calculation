@@ -117,13 +117,13 @@ var MoveRowHandler = {
     /**
      * Move a source row before or after the target row.
      * 
-     * @param $source
-     *            {JQuery} - the row to move.
-     * @param $target
-     *            {JQuery} - the target row.
-     * @param up
-     *            {boolean} - true to move before the target (up); false to move
-     *            after (down).
+     * @param {JQuery}
+     *            $source - the row to move.
+     * @param {JQuery}
+     *            $target - the target row.
+     * @param {boolean}
+     *            up - true to move before the target (up); false to move after
+     *            (down).
      * 
      * @return {JQuery} - The moved row.
      */
@@ -144,8 +144,8 @@ var MoveRowHandler = {
     /**
      * Move a calculation item to the first position.
      * 
-     * @param $row
-     *            {JQuery} - the row to move.
+     * @param {JQuery}
+     *            $row - the row to move.
      * 
      * @return {JQuery} - The parent row.
      */
@@ -163,8 +163,8 @@ var MoveRowHandler = {
     /**
      * Move a calculation item to the last position.
      * 
-     * @param $row
-     *            {JQuery} - the row to move.
+     * @param {JQuery}
+     *            $row - the row to move.
      * 
      * @return {JQuery} - The parent row.
      */
@@ -183,8 +183,8 @@ var MoveRowHandler = {
     /**
      * Move up a calculation item.
      * 
-     * @param $row
-     *            {JQuery} - the row to move.
+     * @param {JQuery}
+     *            $row - the row to move.
      * 
      * @return {JQuery} - The parent row.
      */
@@ -202,8 +202,8 @@ var MoveRowHandler = {
     /**
      * Move down a calculation item.
      * 
-     * @param $row
-     *            {JQuery} - the row to move.
+     * @param {JQuery}
+     *            $row - the row to move.
      * 
      * @return {JQuery} - The parent row.
      */
@@ -237,8 +237,8 @@ var Application = {
     /**
      * Initialize the drag and drop.
      * 
-     * @param destroy
-     *            {boolean} - true to destroy the existing sortable.
+     * @param {boolean}
+     *            destroy - true to destroy the existing sortable.
      */
     initDragDrop: function (destroy) {
         'use strict';
@@ -367,15 +367,15 @@ var Application = {
         });
 
         // add item button
-        $('#items-panel .btn-add-item').on('click', function (e) {
+        $('#items-panel .card-header .btn-add-item').on('click', function (e) {
             e.preventDefault();
-            that.showAddDialog();
+            that.showAddDialog($(this));
         });
 
         // data table buttons
         $('#data-table-edit').on('click', '.btn-add-item', function (e) {
             e.preventDefault();
-            that.showAddDialog();
+            that.showAddDialog($(this));
         }).on('click', '.btn-edit-item', function (e) {
             e.preventDefault();
             that.showEditDialog($(this));
@@ -393,8 +393,8 @@ var Application = {
     /**
      * Format a value with 2 fixed decimals and grouping separator.
      * 
-     * @param value
-     *            {Number} - the value to format.
+     * @param {Number}
+     *            value - the value to format.
      * @returns {String} - the formatted value.
      */
     toLocaleString: function (value) {
@@ -469,8 +469,8 @@ var Application = {
     /**
      * Update the totals.
      * 
-     * @param adjust
-     *            {bool} - true to adjust the user margin.
+     * @param {boolean}
+     *            adjust - true to adjust the user margin.
      * 
      * @return {Object} this instance.
      */
@@ -594,8 +594,8 @@ var Application = {
     /**
      * Finds the table body for the given category.
      * 
-     * @param id
-     *            {int} - the category identifier.
+     * @param {int}
+     *            id - the category identifier.
      * @returns {JQuery} - the table body, if found; null otherwise.
      */
     findGroup: function (id) {
@@ -656,8 +656,8 @@ var Application = {
     /**
      * Appends the given group to the table.
      * 
-     * @param group
-     *            {Object} - the group data used to update row.
+     * @param {Object}
+     *            group - the group data used to update row.
      * @returns {JQuery} - the appended goup.
      */
     appendGroup: function (group) {
@@ -684,22 +684,31 @@ var Application = {
 
     /**
      * Display the add item dialog.
+     * 
+     * @param {JQuery}
+     *            $source - the object that triggered the event.
      */
-    showAddDialog: function () {
+    showAddDialog: function ($source) {
         'use strict';
 
         // initialize
         this.initItemDialog();
+        this.$editingRow = null;
 
         // reset
+        $('tr.table-success').removeClass('table-success');
         $('#item_form').resetValidator();
 
-        // show
-        this.$editingRow = null;
-        $('tr.table-success').removeClass('table-success');
+        // update values
+        const $input = $source.parents('tbody').find("tr:first input[name*='categoryId']");
+        if ($input.length) {
+            $('#item_category').val($input.val());
+        }
         $('#item_price').floatVal(1);
         $('#item_quantity').floatVal(1);
         $('#item_total').floatVal(1);
+
+        // show
         $('#item_modal').modal('show');
     },
 
@@ -708,39 +717,40 @@ var Application = {
      * 
      * This function copy the element to the dialog and display it.
      * 
-     * @param $element
-     *            {JQuery} - the caller element (button).
+     * @param {JQuery}
+     *            $element - the caller element (button).
      */
     showEditDialog: function ($element) {
         'use strict';
 
+        // row
+        const $row = $element.getParentRow();
+        
         // initialize
         this.initItemDialog();
-
+        this.$editingRow = $row;
+        
         // reset
+        $row.addClass('table-primary');
         $('#item_form').resetValidator();
 
-        // copy
-        const $row = $element.getParentRow();
+        // update values
         $('#item_description').val($row.findNamedInput('description').val());
         $('#item_unit').val($row.findNamedInput('unit').val());
         $('#item_category').val($row.parent().findNamedInput('categoryId').val());
         $('#item_price').floatVal($row.findNamedInput('price').val());
         $('#item_quantity').floatVal($row.findNamedInput('quantity').val());
         $('#item_total').floatVal($row.findNamedInput('total').val());
-        $row.addClass('table-primary');
 
-        // copy
-        this.$editingRow = $row;
-
+        // show
         $('#item_modal').modal('show');
     },
 
     /**
      * Remove a calculation group.
      * 
-     * @param $element
-     *            {JQuery} - the caller element (button).
+     * @param {JQuery}
+     *            $element - the caller element (button).
      */
     removeGroup: function ($element) {
         'use strict';
@@ -754,8 +764,8 @@ var Application = {
     /**
      * Remove a calculation item.
      * 
-     * @param $element
-     *            {JQuery} - the caller element (button).
+     * @param {JQuery}
+     *            $element - the caller element (button).
      */
     removeItem: function ($element) {
         'use strict';
@@ -867,8 +877,8 @@ var Application = {
     /**
      * Handles the row drag stop event.
      * 
-     * @param e
-     *            {Event} - the source event.
+     * @param {Event}
+     *            e - the source event.
      */
     onDragStop: function (e) {
         'use strict';
@@ -935,8 +945,8 @@ $.fn.extend({
     /**
      * Swap id and name input attributes.
      * 
-     * @param $target
-     *            {JQuery} - the target row.
+     * @param {JQuery}
+     *            $target - the target row.
      * 
      * @return {JQuery} - The JQuery source row.
      */
@@ -974,8 +984,8 @@ $.fn.extend({
      * Finds an input element that have the name attribute within a given
      * substring.
      * 
-     * @param name
-     *            {string} - the partial attribute name.
+     * @param {string}
+     *            name - the partial attribute name.
      * 
      * @return {JQuery} - The input, if found; null otherwise.
      */
@@ -990,9 +1000,8 @@ $.fn.extend({
     /**
      * Fade out and remove the selected element.
      * 
-     * @param callback
-     *            {Function} - the function to call after the element is
-     *            removed.
+     * @param {Function}
+     *            callback - the function to call after the element is removed.
      * @return null
      */
     removeFadeOut: function (callback) {
@@ -1011,10 +1020,10 @@ $.fn.extend({
     /**
      * Gets the template prototype from the current element.
      * 
-     * @param pattern
-     *            {String} - the regex pattern used to replace the index.
-     * @param key
-     *            {String} - the data key used to retrieve and update the index.
+     * @param {String}
+     *            pattern - the regex pattern used to replace the index.
+     * @param {String}
+     *            key - the data key used to retrieve and update the index.
      * @returns {String} - the template.
      */
     getPrototype: function (pattern, key) {
@@ -1054,8 +1063,8 @@ $.fn.extend({
     /**
      * Create a new row and appends to this current parent group (tbody).
      * 
-     * @param item
-     *            {Object} - the row data used to update the row
+     * @param {Object}
+     *            item - the row data used to update the row
      * @returns {JQuery} - the created row.
      */
     appendRow: function (item) {
@@ -1074,10 +1083,10 @@ $.fn.extend({
     /**
      * Copy the values of the item to the current row.
      * 
-     * @param row
-     *            {JQuery} - the row to update.
-     * @param item
-     *            {Object} - the item to get values from.
+     * @param {JQuery}
+     *            row - the row to update.
+     * @param {Object}
+     *            item - the item to get values from.
      * @returns {JQuery} - The row.
      */
     updateRow: function (item) {
@@ -1105,8 +1114,8 @@ $.fn.extend({
     /**
      * Initialize a type ahead search.
      * 
-     * @param options
-     *            {Object} - the options to override.
+     * @param {Object}
+     *            options - the options to override.
      * 
      * @return {Object} The type ahead instance.
      */

@@ -47,12 +47,12 @@
 {% if app.debug %}
 {{ asset_js('js/vendor/jquery/jquery.js') }}
 {{ asset_js('js/vendor/twitter-bootstrap/js/bootstrap.bundle.js') }}
-{{ asset_js('js/app/extensions/array-extensions.js') }}
-{{ asset_js('js/app/extensions/jquery-extensions.js') }}
-{{ asset_js('js/app/extensions/params-extensions.js') }}
-{{ asset_js('js/app/extensions/string-extensions.js') }}
-{{ asset_js('js/app/plugins/plugin-toast.js') }}
-{{ asset_js('js/app/common.js') }}
+{{ asset_js('js/extensions/array-extensions.js') }}
+{{ asset_js('js/extensions/jquery-extensions.js') }}
+{{ asset_js('js/extensions/params-extensions.js') }}
+{{ asset_js('js/extensions/string-extensions.js') }}
+{{ asset_js('js/plugins/plugin-toast.js') }}
+{{ asset_js('js/application/common.js') }}
 {% else %}
 {{ asset_js('js/core_common.js') }}
 {%- endif %}

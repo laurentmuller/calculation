@@ -14,4 +14,4 @@
 /**
  * Plugin Files
  */
-<!--#include file="app/plugins/plugin-rowlink.js" -->
+<!--#include file="plugins/plugin-rowlink.js" -->

@@ -14,17 +14,17 @@
 /**
  * Extensions files
  */
-<!--#include file="app/extensions/contextmenu-extensions.js" -->
+<!--#include file="extensions/contextmenu-extensions.js" -->
 
 /**
  * Plugin Files
  */
-<!--#include file="app/plugins/plugin-rowlink.js" -->
-<!--#include file="app/plugins/plugin-input.js" -->
-<!--#include file="app/plugins/plugin-typeahead.js" -->
+<!--#include file="plugins/plugin-rowlink.js" -->
+<!--#include file="plugins/plugin-input.js" -->
+<!--#include file="plugins/plugin-typeahead.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/calculation_error.js" -->
-<!--#include file="app/calculation_edit.js" -->
+<!--#include file="application/calculation_error.js" -->
+<!--#include file="application/calculation_edit.js" -->

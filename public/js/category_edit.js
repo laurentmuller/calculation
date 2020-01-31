@@ -8,5 +8,5 @@
 /**
  * Specific Files
  */
-<!--#include file="app/category_edit.js" -->
+<!--#include file="application/category_edit.js" -->
  

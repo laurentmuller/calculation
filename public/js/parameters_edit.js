@@ -8,4 +8,4 @@
 /**
  * Specific Files
  */
-<!--#include file="app/parameters_edit.js" -->
+<!--#include file="application/parameters_edit.js" -->

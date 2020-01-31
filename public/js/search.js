@@ -20,10 +20,10 @@
 /**
  * Plugins and extensions files
  */
-<!--#include file="app/extensions/contextmenu-extensions.js" -->
-<!--#include file="app/extensions/datatables-extensions.js" -->
+<!--#include file="extensions/contextmenu-extensions.js" -->
+<!--#include file="extensions/datatables-extensions.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/search.js" -->
+<!--#include file="application/search.js" -->

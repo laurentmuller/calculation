@@ -6,12 +6,12 @@
 <!--#include file="core_edit.js" -->
 
 /**
- * Plugin and Common Files
+ * Extensions
  */
-<!--#include file="app/plugins/plugin-password.js" -->
+<!--#include file="extensions/password-extensions.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/user_recaptcha.js" -->
-<!--#include file="app/user_request.js" -->
+<!--#include file="application/user_recaptcha.js" -->
+<!--#include file="application/user_request.js" -->

@@ -8,10 +8,10 @@
 /**
  * Plugin Files
  */
-<!--#include file="app/plugins/plugin-fileinput.js" -->
+<!--#include file="plugins/plugin-fileinput.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/user_image.js" -->
+<!--#include file="application/user_image.js" -->
  

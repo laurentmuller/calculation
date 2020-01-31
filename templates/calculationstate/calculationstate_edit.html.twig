@@ -23,8 +23,8 @@
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/app/plugins/color-picker.js') }}
-{{ asset_js('js/app/calculationstate_edit.js') }}
+{{ asset_js('js/plugins/color-picker.js') }}
+{{ asset_js('js/application/calculationstate_edit.js') }}
 {% else %}
 {{ asset_js('js/calculationstate_edit.js') }}
 {% endif %}

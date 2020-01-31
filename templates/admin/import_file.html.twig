@@ -27,8 +27,8 @@
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/app/plugins/plugin-fileinput.js') }}
-{{ asset_js('js/app/file_import.js') }}
+{{ asset_js('js/plugins/plugin-fileinput.js') }}
+{{ asset_js('js/application/file_import.js') }}
 {% else %}
 {{ asset_js('js/file_import.js') }}
 {% endif %}

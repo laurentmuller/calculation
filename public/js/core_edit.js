@@ -16,5 +16,5 @@
 /**
  * Plugin Files
  */
-<!--#include file="app/plugins/plugin-validator.js" -->
-<!--#include file="app/plugins/plugin-validator_fr.js" -->
+<!--#include file="plugins/plugin-validator.js" -->
+<!--#include file="plugins/plugin-validator_fr.js" -->

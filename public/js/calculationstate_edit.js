@@ -4,10 +4,10 @@
  * Dependencies
  */
 <!--#include file="core_edit.js" -->
-<!--#include file="app/plugins/color-picker.js" -->
+<!--#include file="plugins/color-picker.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/calculationstate_edit.js" -->
+<!--#include file="application/calculationstate_edit.js" -->
  

@@ -501,8 +501,8 @@
         return this.each(function () {
             const $this = $(this);
             let data = $this.data("typeahead");
-            const options = typeof option === "object" && option;
             if (!data) {
+                const options = typeof option === "object" && option;
                 $this.data("typeahead", data = new Typeahead(this, options));
             }
             if (data.isString(option)) {

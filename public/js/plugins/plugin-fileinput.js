@@ -12,7 +12,7 @@
     // ------------------------------------
     // Fileinput public class definition
     // ------------------------------------
-    let Fileinput = function(element, options) {
+    var Fileinput = function(element, options) {
         this.$element = $(element);
         this.options = $.extend({}, Fileinput.DEFAULTS, options);
         
@@ -41,6 +41,9 @@
         this.reset();
     };
 
+    // -----------------------------
+    // Default options
+    // -----------------------------
     Fileinput.DEFAULTS = {
         clearName: true
     };

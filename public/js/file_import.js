@@ -8,9 +8,9 @@
 /**
  * Plugin Files
  */
-<!--#include file="app/plugins/plugin-fileinput.js" -->
+<!--#include file="plugins/plugin-fileinput.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/file_import.js" -->
+<!--#include file="application/file_import.js" -->

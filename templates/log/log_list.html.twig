@@ -16,12 +16,12 @@
 {% endmacro %}
 
 {% macro format_var(value) -%}
-{{ value|var_export|replace({
+{{- value|var_export|replace({
 	'[':  '<samp class="text-danger">[</samp>',
 	']':  '<samp class="text-danger">]</samp>',
-	'\'': '<samp class="text-danger">"</samp>',
+	'"':  '<samp class="text-danger">"</samp>',
 	'=>': '<samp class="text-danger">=></samp>'
-    }) |raw }}
+    })|raw -}}
 {%- endmacro %}
 
 {# imports #}
@@ -112,7 +112,7 @@
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/app/log_list.js') }}
+{{ asset_js('js/application/log_list.js') }}
 {% else %}
 {{ asset_js('js/log_list.js') }}
 {% endif %}

@@ -11,7 +11,7 @@
     // -----------------------------
     var ColorPicker = function (element, options) {
         this.$element = $(element);
-        this.options = $.extend(true, {}, $.fn.colorpicker.defaults, this.$element.data(), options);
+        this.options = $.extend(true, {}, ColorPicker.DEFAULTS, this.$element.data(), options);
         this.$element.removeDataAttributes();
         this.init();
     };
@@ -399,7 +399,8 @@
          * Sets the selected (focus) color button.
          * 
          * @param selection
-         *            the selection to set (must contains a 'row' and a 'col' field).
+         *            the selection to set (must contains a 'row' and a 'col'
+         *            field).
          * @returns the button, if found; null otherwise.
          */
         setSelection: function (selection) {
@@ -455,36 +456,10 @@
         },
     };
 
-    // -----------------------------
-    // Plugin definition
-    // -----------------------------
-    const oldColorPicker = $.fn.colorpicker;
-
-    $.fn.colorpicker = function (option) {
-        return this.each(function () {
-            const $this = $(this);
-            let data = $this.data('colorpicker');
-            if (!data) {
-                const options = typeof option === 'object' && option;
-                $this.data('colorpicker', data = new ColorPicker(this, options));
-            }
-        });
-    };
-
-    // ------------------------------------
-    // Colorpicker no conflict
-    // ------------------------------------
-    $.fn.colorpicker.noConflict = function () {
-        $.fn.colorpicker = oldColorPicker;
-        return this;
-    };
-
-    $.fn.colorpicker.Constructor = ColorPicker;
-
-    // -----------------------------
+    // -----------------------------------
     // Default options
-    // -----------------------------
-    $.fn.colorpicker.defaults = {
+    // -----------------------------------
+    ColorPicker.DEFAULTS = {
         focus: false, // set focus to the control
 
         // classes
@@ -547,6 +522,32 @@
         // ['Rosewood', 'Cinnamon', 'Olive', 'Parsley', 'Tiber', 'Midnight
         // Blue', 'Valentino', 'Loulou'], //
         ],
+    };
+
+    // -----------------------------------
+    // ColorPicker plugin definition
+    // -----------------------------------
+    const oldColorPicker = $.fn.colorpicker;
+
+    $.fn.colorpicker = function (option) {
+        return this.each(function () {
+            const $this = $(this);
+            let data = $this.data('colorpicker');
+            if (!data) {
+                const options = typeof option === 'object' && option;
+                $this.data('colorpicker', data = new ColorPicker(this, options));
+            }
+        });
+    };
+
+    $.fn.colorpicker.Constructor = ColorPicker;
+
+    // -----------------------------------
+    // Colorpicker no conflict
+    // -----------------------------------
+    $.fn.colorpicker.noConflict = function () {
+        $.fn.colorpicker = oldColorPicker;
+        return this;
     };
 
 }(jQuery));

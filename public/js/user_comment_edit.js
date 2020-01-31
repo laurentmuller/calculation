@@ -14,9 +14,9 @@
 /**
  * Plugin Files
  */
-<!--#include file="app/plugins/plugin-fileinput.js" -->
+<!--#include file="plugins/plugin-fileinput.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/user_comment_edit.js" -->
+<!--#include file="application/user_comment_edit.js" -->

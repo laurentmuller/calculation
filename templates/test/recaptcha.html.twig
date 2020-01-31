@@ -17,5 +17,5 @@
 {% block javascripts -%}
 {{ parent() }}
 {{ asset_js('https://www.google.com/recaptcha/api.js?render=' ~ google_recaptcha_site_key, {'recaptcha-site': google_recaptcha_site_key, 'recaptcha-action': recaptcha_action}) }}
-{{ asset_js('js/app/test/recaptcha.js') }}
+{{ asset_js('js/test/recaptcha.js') }}
 {%- endblock %}

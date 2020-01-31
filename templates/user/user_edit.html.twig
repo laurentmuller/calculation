@@ -46,10 +46,10 @@
 {% if app.debug %}
 {{ parent() }}
 {{ asset_js('js/vendor/zxcvbn/zxcvbn.js') }}
-{{ asset_js('js/app/plugins/password-strength.js') }}
-{{ asset_js('js/app/plugins/plugin-fileinput.js') }}
-{{ asset_js('js/app/plugins/plugin-password.js') }}
-{{ asset_js('js/app/user_edit.js') }}
+{{ asset_js('js/plugins/password-strength.js') }}
+{{ asset_js('js/plugins/plugin-fileinput.js') }}
+{{ asset_js('js/extensions/password-extensions.js') }}
+{{ asset_js('js/application/user_edit.js') }}
 {% else %}
 {{ asset_js('js/user_edit.js') }}
 {% endif %}

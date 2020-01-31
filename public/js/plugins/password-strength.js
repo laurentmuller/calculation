@@ -8,13 +8,13 @@
 (function ($) {
     'use strict';
 
-    // -----------------------------
-    // Initialization
-    // -----------------------------
+    // ----------------------------------------------
+    // PasswordStrength public class definition
+    // ----------------------------------------------
     var PasswordStrength = function (element, options) {
         const that = this;
         that.$element = $(element);
-        that.options = $.extend(true, {}, $.fn.passwordstrength.defaults, options);
+        that.options = $.extend(true, {}, PasswordStrength.DEFAULTS, options);
 
         // add handler
         that.$element.on('keyup', function () {
@@ -248,7 +248,7 @@
     // -----------------------------
     // Default options
     // -----------------------------
-    $.fn.passwordstrength.defaults = {
+    PasswordStrength.DEFAULTS = {
         // true to debug zxcvbn result
         debug: false,
         // user field selector

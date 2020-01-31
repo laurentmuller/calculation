@@ -9,5 +9,5 @@
 /**
  * Specific Files
  */
-<!--#include file="app/card_flex.js" -->
-<!--#include file="app/calculation_card.js" -->
+<!--#include file="application/card_flex.js" -->
+<!--#include file="application/calculation_card.js" -->

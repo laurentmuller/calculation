@@ -8,10 +8,14 @@
 /**
  * Plugin and Common Files
  */
-<!--#include file="app/plugins/password-strength.js" -->
-<!--#include file="app/plugins/plugin-password.js" -->
+<!--#include file="plugins/password-strength.js" -->
+
+/**
+ * Extensions
+ */
+<!--#include file="extensions/password-extensions.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/validation_edit.js" -->
+<!--#include file="application/validation_edit.js" -->

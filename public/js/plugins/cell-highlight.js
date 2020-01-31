@@ -105,7 +105,7 @@
 
             // trigger events
             that.horizontal.trigger('cellhighlight.mouseenter-horizontal');
-            that.vertical.trigger('cellhighlight.mouseenter-vertical');
+            that.vertical.trigger('cellhighlight.mouseenter-vertical');            
             
             that.$element.trigger('cellhighlight.mouseenter', {
                 horizontal: that.horizontal,

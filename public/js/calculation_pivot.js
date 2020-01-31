@@ -8,9 +8,9 @@
 /**
  * Plugin Files
  */
-<!--#include file="app/plugins/cell-highlight.js" -->
+<!--#include file="plugins/cell-highlight.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/calculation_pivot.js" -->
+<!--#include file="application/calculation_pivot.js" -->

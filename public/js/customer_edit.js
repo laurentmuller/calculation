@@ -8,10 +8,10 @@
 /**
  * Plugin Files
  */
-<!--#include file="app/plugins/plugin-typeahead.js" -->
+<!--#include file="plugins/plugin-typeahead.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/customer_edit.js" -->
+<!--#include file="application/customer_edit.js" -->
  

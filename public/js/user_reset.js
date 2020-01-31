@@ -13,11 +13,15 @@
 /**
  * Plugin Files
  */
-<!--#include file="app/plugins/password-strength.js" -->
-<!--#include file="app/plugins/plugin-password.js" -->
+<!--#include file="plugins/password-strength.js" -->
+
+/**
+ * Extensions
+ */
+<!--#include file="extensions/password-extensions.js" -->
 
 /**
  * Specific Files
  */
-<!--#include file="app/user_recaptcha.js" -->
-<!--#include file="app/user_reset.js" -->
+<!--#include file="application/user_recaptcha.js" -->
+<!--#include file="application/user_reset.js" -->

@@ -8,5 +8,5 @@
 /**
  * Specific Files
  */
-<!--#include file="app/rights_edit.js" -->
+<!--#include file="application/rights_edit.js" -->
  

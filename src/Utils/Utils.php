@@ -153,11 +153,12 @@ final class Utils
         try {
             $export = \var_export($expression, true);
 
-            $replaces = [
+            $searches = [
                 '\\\\' => '\\',
+                '\'' => '"',
                 ',' => '',
             ];
-            $export = \str_replace(\array_keys($replaces), \array_values($replaces), $export);
+            $export = \str_replace(\array_keys($searches), \array_values($searches), $export);
 
             $patterns = [
                 "/array \(/" => '[',

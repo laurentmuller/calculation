@@ -173,8 +173,8 @@
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/app/plugins/cell-highlight.js') }}
-{{ asset_js('js/app/calculation_pivot.js') }}
+{{ asset_js('js/plugins/cell-highlight.js') }}
+{{ asset_js('js/application/calculation_pivot.js') }}
 {% else %}
 {{ asset_js('js/calculation_pivot.js') }}
 {%- endif %}

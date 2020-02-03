@@ -6,7 +6,7 @@
     <div class="input-group">
         {%- if not disabled -%}
             <div class="input-group-prepend d-print-none">
-            	{%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': min_margin|percent }) -%}
+            	{%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': min_margin|percent}) -%}
                 {%- set template = '<div class="tooltip tooltip-success" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' -%}
                 <button class="btn btn-adjust btn-outline-secondary has-tooltip" type="button" aria-label="{{ title }}" data-html="true" data-toggle="tooltip" data-template="{{ template }}" data-title="{{ title }}"{% if not overall_below %} disabled="disabled"{% endif %}>
                     <i class="fas fa-wrench" aria-hidden="true"></i>
@@ -43,7 +43,7 @@
         				   	'data-error-customer': 'calculation.edit.error.search_customer'|trans,
         				   	'data-error-product': 'calculation.edit.error.search_product'|trans,
         				   	'data-error-unit': 'calculation.edit.error.search_unit'|trans,
-        				   	'data-error-margin': 'calculation.edit.error.user_margin'|trans }) -%}
+        				   	'data-error-margin': 'calculation.edit.error.user_margin'|trans}) -%}
 {%- endif -%}
 
 {# cancel path #}
@@ -79,7 +79,7 @@
     {% if editable %}
         {{ asset_js('js/vendor/jquery-validate/jquery.validate.js') }}
         {{ asset_js('js/vendor/jquery-validate/additional-methods.js') }}
-        {{ asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}        
+        {{ asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}
         {{ asset_js('js/vendor/html5sortable/html5sortable.js') }}
         {{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
         {{ asset_js('js/extensions/contextmenu-extensions.js') }}
@@ -93,7 +93,7 @@
 {% else %}
     {% if editable %}
         {{ asset_js('js/calculation_edit.js') }}
-    {% else %}    
+    {% else %}
         {{ asset_js('js/calculation_error.js') }}
     {% endif %}
 {% endif %}

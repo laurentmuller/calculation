@@ -11,7 +11,7 @@
 <i class="{{ class }}" aria-hidden="true"></i>
 {%- endif %}
 {%- if text %}{% if icon %} {% endif %}{{ text|trans(parameters, domain) -}}{%- endif -%}
-{%- endmacro %} 
+{%- endmacro %}
 
 {% macro link(href, text, class, icon, title = null, domain = null, parameters = []) -%}
 {%- set role  = (class and 'btn' in class) ? ' role="button"' : '' -%}
@@ -20,7 +20,7 @@
 <a href="{{ href }}"{{ class|raw }}{{ role|raw }}{{ title|raw }}>
     {{- _self.icon(icon, text, domain, parameters) -}}
 </a>
-{%- endmacro %}   
+{%- endmacro %}
 
 {% macro linkExternal(href, text, class, icon, title = null, domain = null, parameters = []) -%}
 {%- set role  = (class and 'btn' in class) ? ' role="button"' : '' -%}
@@ -29,7 +29,7 @@
 <a href="{{ href }}" target="_blank" rel="noopener noreferrer"{{ class|raw }}{{ title|raw }}{{ role|raw }}>
     {{- _self.icon(icon, text, domain, parameters) -}}
 </a>
-{%- endmacro %}   
+{%- endmacro %}
 
 {% macro navItem(href, text, icon, domain = null, parameters = []) -%}
 <li class="nav-item">{{ _self.link(href, text, 'nav-link', icon, null, domain, parameters) }}</li>

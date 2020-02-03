@@ -22,7 +22,7 @@
   			</div>
 		</th> 
         {%- endif %}
-    </tr>    
+    </tr>
 	{% for item in group.items %}
 	    {{ macroItems.printItemRow(item, loop.first, loop.last, editable) }}
 	{% endfor %}

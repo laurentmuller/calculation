@@ -28,7 +28,7 @@
     {% for entry in data %}   
         {%- set data_default = entry.vars.value in default ? 1 : 0 -%}
         {%- set aria_label = _self.aria_label(loop.index0, action) -%}
-        {%- set attr = {'data-default': data_default, 'aria-label': aria_label } -%}
+        {%- set attr = {'data-default': data_default, 'aria-label': aria_label} -%}
         {%- if not overwrite -%}
             {%- set attr = attr|merge({'disabled': 'disabled'}) -%}
 	    {%- endif -%}    
@@ -43,12 +43,12 @@
     <thead>
 	   <tr class="text-center">
             <th class="text-left font-weight-normal">{{ icons.icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icons.icon('arrow-right') }}</th>
-            {{ _self.header('rights.list',   IEntityVoter.ATTRIBUTE_LIST) }}
-            {{ _self.header('rights.show',   IEntityVoter.ATTRIBUTE_SHOW) }}
-            {{ _self.header('rights.add',    IEntityVoter.ATTRIBUTE_ADD) }}
-            {{ _self.header('rights.edit',   IEntityVoter.ATTRIBUTE_EDIT) }}
+            {{ _self.header('rights.list', IEntityVoter.ATTRIBUTE_LIST) }}
+            {{ _self.header('rights.show', IEntityVoter.ATTRIBUTE_SHOW) }}
+            {{ _self.header('rights.add', IEntityVoter.ATTRIBUTE_ADD) }}
+            {{ _self.header('rights.edit', IEntityVoter.ATTRIBUTE_EDIT) }}
             {{ _self.header('rights.delete', IEntityVoter.ATTRIBUTE_DELETE) }}
-            {{ _self.header('rights.pdf',    IEntityVoter.ATTRIBUTE_PDF) }}
+            {{ _self.header('rights.pdf', IEntityVoter.ATTRIBUTE_PDF) }}
        </tr>
     </thead>
     <tbody>

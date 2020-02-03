@@ -7,7 +7,7 @@
 {# macros #}
 {% macro card(key, value, border, type) %}
 <div class="card text-center {% if border %}{{ 'selection ' ~ border }}{% endif %}"
-    {% if border %}data-border="{{ border }}"{% endif %}     
+    {% if border %}data-border="{{ border }}"{% endif %}
     {% if type %}data-type="{{ type }}"{% endif %}
     data-key="{{ key }}">
     <div class="card-body p-0 mt-1">
@@ -33,7 +33,7 @@
         <small>{{ 'logs.show.file'|trans({'%file%': file}) }}</small>
     </div>
     <div class="col-md-4 text-right">
-         <small id="overall_total" data-text="{{ 'common.count'|trans }}">                    
+         <small id="overall_total" data-text="{{ 'common.count'|trans }}">
             {% if lines %}{{ 'common.count'|trans({'%count%': lines|length|integer}) }}{% endif %}
          </small>
     </div>
@@ -84,8 +84,8 @@
     </tbody>
 </table>
 {% else %}
-<p class="m-3 text-danger text-center">{{ 'logs.show.empty'|trans }}</p>                                
-{% endif %}   
+<p class="m-3 text-danger text-center">{{ 'logs.show.empty'|trans }}</p>
+{% endif %}
 {% endblock %}
 
 {% block card_footer %}

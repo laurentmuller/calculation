@@ -72,7 +72,7 @@
                 {{ _self.button(edit_path|default(false), 'common.button_edit', 'btn-table-edit btn-success disabled', edit_title|default(false), 'fas fa-fw fa-pencil-alt') }}
             {% endif %}
             {% if delete_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) %}
-                {{ _self.button(delete_path|default(false),'common.button_delete', 'btn-table-delete btn-danger disabled', delete_title|default(false), 'fas fa-fw fa-times', true) }}
+                {{ _self.button(delete_path|default(false), 'common.button_delete', 'btn-table-delete btn-danger disabled', delete_title|default(false), 'fas fa-fw fa-times', true) }}
             {% endif %}
             {% if add_path|default(false) and is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) %}
                 {{ _self.button(add_path|default(false), 'common.button_add', 'btn-table-add btn-primary', add_title|default(false), 'far fa-fw fa-file') }}

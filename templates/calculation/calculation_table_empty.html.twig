@@ -22,7 +22,7 @@
 {{ parent() }}
 <p class="ml-4 mb-0">{{ 'empty.description'|trans }}</p>
 {% if attributes.itemsCount > 0 and results.data|length > 0 -%}
-<p class="ml-4 mb-0">{{ 'empty.count'|trans({'%calculations%': results.recordsTotal, '%items%': attributes.itemsCount }) }}</p>
+<p class="ml-4 mb-0">{{ 'empty.count'|trans({'%calculations%': results.recordsTotal, '%items%': attributes.itemsCount}) }}</p>
 {%- endif %}
 {%- endblock %}
 

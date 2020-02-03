@@ -8,7 +8,7 @@
 
 {# actions #}
 {%- set object_type  = IEntityVoter.ENTITY_CALCULATION -%}
-{%- set add_path     = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? path('calculation_add', { 'caller': caller}) : null -%}
+{%- set add_path     = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? path('calculation_add', {'caller': caller}) : null -%}
 {%- set clone_page   = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
 {%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
 {%- set state_page   = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}

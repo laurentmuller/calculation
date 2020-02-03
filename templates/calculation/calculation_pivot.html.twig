@@ -95,7 +95,7 @@
             <td class="not-hover font-weight-bold">{{ table.title|default('&nbsp;')|raw }}</td>
             <td class="not-hover text-right">{% if table.column.title %}{{ table.column.title }} <i class="fas fa-fw fa-arrow-right" aria-hidden="true"></i>{% else %}&nbsp;{% endif %}</td>
         </tr>
-        {%- for i in 2 .. col_level - 1 -%}
+        {%- for i in 2..col_level - 1 -%}
         <tr class="skip">
             <td class="not-hover" colspan="2">&nbsp;</td>
         </tr>
@@ -143,7 +143,7 @@
 <div class="table-responsive">
     <table id="pivot" class="table table-bordered table-sm mb-0" data-session="{{ url('ajax_session_set') }}">
         <thead>
-            {%- for i in 1 .. col_level -%}
+            {%- for i in 1..col_level -%}
             <tr>
                 {%- if i == 1 -%}<td  class="text-nowrap not-hover p-0"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table, col_level) }}</td>{%- endif -%}
                 {{ _self.outputHeaders(table.column.childrenAtLevel(i)) }}

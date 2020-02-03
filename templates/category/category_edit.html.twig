@@ -12,19 +12,19 @@
 <tr>
     <td style="width: 35%;">
         <div class="form-group">
-            {{ form_widget(margin.minimum, { 'attr': {'aria-label': 'categorymargin.fields.minimum'|trans} }) }}
+            {{ form_widget(margin.minimum, {'attr': {'aria-label': 'categorymargin.fields.minimum'|trans}}) }}
             <em>{{ form_errors(margin.minimum) }}</em>
         </div>
     </td>
     <td style="width: 35%;">
         <div class="form-group">
-            {{ form_widget(margin.maximum, { 'attr': {'aria-label': 'categorymargin.fields.maximum'|trans} }) }}
+            {{ form_widget(margin.maximum, {'attr': {'aria-label': 'categorymargin.fields.maximum'|trans}}) }}
             <em>{{ form_errors(margin.maximum) }}</em>
         </div>
     </td>
     <td style="width: 30%;">
         <div class="form-group">
-            {{ form_widget(margin.margin, { 'attr': {'aria-label': 'categorymargin.fields.margin'|trans} }) }}
+            {{ form_widget(margin.margin, {'attr': {'aria-label': 'categorymargin.fields.margin'|trans}}) }}
             <em>{{ form_errors(margin.margin) }}</em>
         </div>
     </td>
@@ -68,7 +68,7 @@
                     {{ _self.printMarginRow(margin) }}
                 {% endfor %}
             </tbody>
-        </table>        
+        </table>
         {{ form_errors(form.margins) }}
     </div>
 </div>

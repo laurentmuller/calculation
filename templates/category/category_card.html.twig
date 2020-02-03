@@ -13,11 +13,11 @@
 
 {# actions #}
 {%- set object_type  = IEntityVoter.ENTITY_CATEGORY -%}
-{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD,    object_type) ? 'category_add' : null -%}
-{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'category_edit' : null -%}
+{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'category_add' : null -%}
+{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'category_edit' : null -%}
 {%- set delete_page  = is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) ? 'category_delete' : null -%}
-{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW,   object_type) ? 'category_show' : null -%}
-{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF,    object_type) ? 'category_pdf' : null -%}
+{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) ? 'category_show' : null -%}
+{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF, object_type) ? 'category_pdf' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 {%- set product_list = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_PRODUCT) %}
 
@@ -36,7 +36,7 @@
 {{ properties.line(text, false, 1) }}
 {%- set text = 'category.list.products'|transchoice(item.countProducts) -%}
 {% if item.countProducts and product_list %}
-    {% set href = path('product_list', { 'query': item.code}) %}
+    {% set href = path('product_list', {'query': item.code}) %}
     {{ properties.link(href, text, false, false, 1) }}
 {% else %}
     {{ properties.line(text, false, 1) }}
@@ -46,9 +46,9 @@
 {% block actions %}
 {% if item.countProducts and product_list %}
     {{ icons.dropdownSeparator }}
-    {% set href = path('product_list', { 'query': item.code}) %}
+    {% set href = path('product_list', {'query': item.code}) %}
     {{ icons.dropdownItem(href, 'category.list.product_title', 'external-link-alt') }}
-{% endif %} 
+{% endif %}
 {% endblock %}
 
 {% block search_action -%}{%- endblock %}

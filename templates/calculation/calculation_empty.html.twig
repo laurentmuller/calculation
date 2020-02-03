@@ -33,7 +33,7 @@
 {% block card_header -%}
 {{ parent() }}
 <p class="ml-4 mb-0">{{ 'empty.description'|trans }}</p>
-{% if items|length %}<p class="ml-4 mb-0">{{ 'empty.count'|trans({'%calculations%': items|length, '%items%': items_count }) }}</p>{% endif %}
+{% if items|length %}<p class="ml-4 mb-0">{{ 'empty.count'|trans({'%calculations%': items|length, '%items%': items_count}) }}</p>{% endif %}
 {%- endblock %}
 
 {% block calculation_properties -%}

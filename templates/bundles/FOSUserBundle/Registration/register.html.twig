@@ -6,7 +6,7 @@
 {%- set title_domain = 'FOSUserBundle' -%}
 {%- set title_icon   = 'user-plus' -%}
 {%- set action       =  path('fos_user_registration_register') -%}
-{%- set form_attr    = form_attr|default({})|merge({ 'class': 'fos_user_registration_register' }) -%}
+{%- set form_attr    = form_attr|default({})|merge({'class': 'fos_user_registration_register'}) -%}
 {%- set cancel_path  = path("homepage") -%}
 
 {% block card_body -%}
@@ -18,7 +18,7 @@
 {{ parent() }}
 {{ asset_js('js/plugins/password-strength.js') }}
 {{ asset_js('js/extensions/password-extensions.js') }}
-{{ asset_js('js/application/validation_edit.js') }}    
+{{ asset_js('js/application/validation_edit.js') }}
 {% else %}
 {{ asset_js('js/user_register.js') }}
 {% endif %}

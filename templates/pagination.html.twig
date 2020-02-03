@@ -10,7 +10,7 @@
 {% elseif end_page > pages %}
     {% set end_page = pages %}
     {% set start_page = max(end_page - 2 * delta, 1) %}
-{% endif %}    
+{% endif %}
 
 {# check if first/last pages are displayed #}
 {% if pages <= 9 %}
@@ -27,7 +27,7 @@
                 <span aria-hidden='true'>{{ icons.icon("step-backward") }}</span>
             </a>
         </li>
-        
+
         {#  previous page #}
         <li class="page-item {% if page == 1 %} disabled{% endif %}">
             <a class="page-link" href="#" data-page="{{ page - 1 }}" title="{{ 'pagination.page_previous'|trans({'%page%': page - 1}) }}">
@@ -35,14 +35,14 @@
             </a>
         </li>
     {% endif %}
-    
+
     {#  pages #}
     {% for p in range(start_page, end_page) %}
         <li class="page-item {% if p == page %} active{% endif %}">
             <a class="page-link" href="#" data-page="{{ p }}" title="{{ 'pagination.page'|trans({'%page%': p}) }}">{{ p }}</a>
         </li>
     {% endfor %}
-    
+
     {% if pages > 9 %}
         {#  next page #}
         <li class="page-item {% if page == pages %} disabled{% endif %}">

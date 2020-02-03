@@ -42,13 +42,12 @@ class AboutController extends BaseController
             'app_customer' => $this->getApplication()->getCustomerName(),
             'app_customer_url' => $this->getApplication()->getCustomerUrl(),
             'app_home_url' => $this->getHomeUrl(),
-            'display_date' => true,
             'link' => false,
         ]);
     }
 
     /**
-     * Export the policy and licence pages to PDF.
+     * Export the licence and policy pages to PDF.
      *
      * @Route("/pdf", name="about_pdf")
      */
@@ -57,7 +56,9 @@ class AboutController extends BaseController
         // content
         $content = $this->renderView('about/about_content.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
-            'display_date' => false,
+            'display_date' => true,
+            'licence_date' => false,
+            'policy_date' => true,
             'link' => false,
         ]);
 
@@ -81,7 +82,7 @@ class AboutController extends BaseController
     {
         return $this->render('about/licence.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
-            'display_date' => true,
+            'licence_date' => true,
             'link' => true,
         ]);
     }
@@ -96,7 +97,7 @@ class AboutController extends BaseController
         // get content
         $ontent = $this->renderView('about/licence_content.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
-            'display_date' => true,
+            'licence_date' => true,
             'link' => false,
         ]);
 
@@ -117,7 +118,7 @@ class AboutController extends BaseController
     {
         return $this->render('about/policy.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
-            'display_date' => true,
+            'policy_date' => true,
             'link' => true,
         ]);
     }
@@ -132,7 +133,7 @@ class AboutController extends BaseController
         // get content
         $content = $this->renderView('about/policy_content.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
-            'display_date' => true,
+            'policy_date' => true,
             'link' => false,
         ]);
 

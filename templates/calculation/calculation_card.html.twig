@@ -15,7 +15,7 @@
 {%- set object_type  = IEntityVoter.ENTITY_CALCULATION -%}
 {%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
 {%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
-{%- set single_page  = is_granted(IEntityVoter.ATTRIBUTE_PDF,  object_type) ? 'calculation_pdf_id' : null -%}
+{%- set single_page  = is_granted(IEntityVoter.ATTRIBUTE_PDF, object_type) ? 'calculation_pdf_id' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 
 {%- if add_page is not defined -%}
@@ -55,7 +55,7 @@
 {{ properties.separator(col_span) }}
 {% block calculation_properties -%}
     {%- if marginBelow(item) -%}
-        {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent }) -%}
+        {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
         <tr>
         	<td>{{ 'calculation.fields.total'|trans }}</td>
         	<td class="text-right pr-4 text-danger below-cell has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallTotal|amount }}</td>

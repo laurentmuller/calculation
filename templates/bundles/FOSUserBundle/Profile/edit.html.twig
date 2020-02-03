@@ -10,7 +10,7 @@
 {%- set form_attr    = form_attr|default({})|merge({
 					   		'class': 'fos_user_profile_edit', 
 					   		'data-check_name': url('ajax_check_name'), 
-					   		'data-check_email': url('ajax_check_email') }) -%}
+					   		'data-check_email': url('ajax_check_email')}) -%}
 
 {% block card_body -%}
 {{ form_widget(form) }}

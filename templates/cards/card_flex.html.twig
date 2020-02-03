@@ -53,12 +53,12 @@
         <div class="input-group input-group-sm">
             <div class="input-group-prepend">
                 {%- if add_page|default(false) -%}
-                    {{ icons.link(path(add_page),'' , 'btn btn-success rowlink-skip', 'file far', add_title|default('common.button_add')) }}
+                    {{ icons.link(path(add_page), '' , 'btn btn-success rowlink-skip', 'file far', add_title|default('common.button_add')) }}
                 {%- endif -%}
             </div>
             <div class="input-group-append">
                 {%- if pdf_page|default(false) -%}
-                    {{ icons.linkExternal(path(pdf_page),'', 'btn btn-outline-secondary', 'download', pdf_title|default('common.button_pdf')) }}
+                    {{ icons.linkExternal(path(pdf_page), '', 'btn btn-outline-secondary', 'download', pdf_title|default('common.button_pdf')) }}
                 {%- endif -%}
             	{# sortable fields #}
                 {% if sortFields is defined and sortFields|length %}
@@ -76,7 +76,7 @@
     </div>
 </div>
 {% endblock %}
- 
+
 {% block card_body %}
 {# pages #}
 {%- set show_page   = show_page|default(false) -%}
@@ -106,7 +106,7 @@
     {%- if (query and not item.match(query)) -%}
         {%- set item_class = item_class ~ ' d-none' -%}
     {%- endif -%}
-    
+
     <div class="{{ item_class }}">
         <div class="row">
             <div class="col-10 data-search mb-0 {% block item_title_class %}h5 card-title{% endblock %}">
@@ -130,7 +130,7 @@
                         {% endblock %}
                         {%- block delete_action -%}
                         {%- if delete_page -%}
-                            {% set delete_path = path(delete_page, params) %}   
+                            {% set delete_path = path(delete_page, params) %}
                             {{ icons.dropdownItem(delete_path, 'common.button_delete', 'times') }}
                         {%- endif -%}
                         {% endblock %}

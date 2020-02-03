@@ -12,11 +12,11 @@
 
 {# actions #}
 {%- set object_type  = IEntityVoter.ENTITY_CUSTOMER -%}
-{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD,    object_type) ? 'customer_add' : null -%}
-{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'customer_edit' : null -%}
+{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'customer_add' : null -%}
+{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'customer_edit' : null -%}
 {%- set delete_page  = is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) ? 'customer_delete' : null -%}
-{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW,   object_type) ? 'customer_show' : null -%}
-{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF,    object_type) ? 'customer_pdf' : null -%}
+{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) ? 'customer_show' : null -%}
+{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF, object_type) ? 'customer_pdf' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 
 {% block item_title %}

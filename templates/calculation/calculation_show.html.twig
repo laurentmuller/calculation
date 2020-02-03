@@ -10,7 +10,7 @@
 {%- set params = routeParams(app.request, id) %}
 
 {# actions #}
-{%- set edit_path   = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   item) ? path('calculation_edit',   params) : null -%}
+{%- set edit_path   = is_granted(IEntityVoter.ATTRIBUTE_EDIT, item) ? path('calculation_edit', params) : null -%}
 {%- set delete_path = is_granted(IEntityVoter.ATTRIBUTE_DELETE, item) ? path('calculation_delete', params) : null -%}
 {%- set cancel_path = cancelUrl(app.request, id, 'calculation_list') -%}
 {%- set pdf_export  = is_granted(IEntityVoter.ATTRIBUTE_PDF, item) -%}
@@ -71,7 +71,7 @@
                 <td class="text-currency">{{ group.total|amount }}</td>
             </tr>
         {% endfor %}
-        
+
         {# groups total #}
         <tr>
             <td class="font-weight-bold">{{ 'calculation.fields.marginTotal'|trans }}</td>
@@ -80,14 +80,14 @@
             <td class="text-currency">{{ item.groupsMarginAmount|amount }}</td>
             <td class="font-weight-bold text-currency">{{ item.groupsTotal|amount }}</td>
         </tr>
-                 
+
         {# global margin #}
         <tr>
             <td colspan="2">{{ 'calculation.fields.globalMargin'|trans }}</td>
             <td class="text-percent">{{ item.globalMargin|percent }}</td>
             <td colspan="2" class="text-currency">{{ item.globalMarginAmount|amount }}</td>
         </tr>
-        
+
         {# user margin #}
         {% if item.userMargin != 0 %}
             <tr>
@@ -100,13 +100,13 @@
                 <td colspan="2" class="text-currency">{{ item.userMarginAmount|amount }}</td>
             </tr>
         {% endif %}
-        
+
         {# overall total #}
         <tr>
             <td class="font-weight-bold">{{ 'calculation.fields.overallTotal'|trans }}</td>
             <td class="font-weight-bold text-currency">{{ item.groupsAmount|amount }}</td>
             {%- if marginBelow(item) -%}
-                {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent }) -%}
+                {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
                 <td class="font-weight-bold text-currency text-danger below-cell has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallMargin|percent }}</td>
             {%- else -%}
                 <td class="font-weight-bold text-currency">{{ item.overallMargin|percent }}</td>

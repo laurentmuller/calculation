@@ -13,11 +13,11 @@
 
 {# actions #}
 {%- set object_type  = IEntityVoter.ENTITY_CALCULATION_STATE -%}
-{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD,    object_type) ? 'calculationstate_add' : null -%}
-{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'calculationstate_edit' : null -%}
+{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'calculationstate_add' : null -%}
+{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculationstate_edit' : null -%}
 {%- set delete_page  = is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) ? 'calculationstate_delete' : null -%}
-{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW,   object_type) ? 'calculationstate_show' : null -%}
-{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF,    object_type) ? 'calculationstate_pdf' : null -%}
+{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) ? 'calculationstate_show' : null -%}
+{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF, object_type) ? 'calculationstate_pdf' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 
 {% block item_title %}
@@ -36,7 +36,7 @@
 {{ properties.separator(1) }}
 {%- set text = 'calculationstate.list.calculations'|transchoice(item.countCalculations) -%}
 {%- if item.countCalculations -%}
-    {% set href = path('calculation_list', { 'query': item.code}) %}
+    {% set href = path('calculation_list', {'query': item.code}) %}
     {{ properties.link(href, text, false, false, 1) }}
 {%- else -%}
     {{ properties.line(text, false, 1) }}
@@ -51,7 +51,7 @@
 {% block actions %}
 {% if item.countCalculations and is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CALCULATION) %}
     {{ icons.dropdownSeparator }}
-    {% set href = path('calculation_list', { 'query': item.code}) %}
+    {% set href = path('calculation_list', {'query': item.code}) %}
     {{ icons.dropdownItem(href, 'calculationstate.list.calculation_title', 'external-link-alt') }}
 {% endif %}
 {% endblock -%}

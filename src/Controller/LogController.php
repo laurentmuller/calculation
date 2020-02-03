@@ -144,10 +144,6 @@ class LogController extends BaseController
      */
     public function show(Request $request): Response
     {
-//         $data = LogUtils::readAll($this->getLogFile());
-//         if ($data) {
-//         }
-
         $maxLines = (int) $request->get('limit', 50);
         $entries = $this->getLogEntries($maxLines);
 
@@ -177,6 +173,18 @@ class LogController extends BaseController
      */
     public function table(Request $request, LogDataTable $table, LogRepository $repository): Response
     {
+//         $refresh = (bool)$request->get('refresh', true);
+//         $session = $this->getSession();
+//         if ($session && !$refresh) {
+//             if ($logs =  $session->get('logs')) {
+//                 return $logs;
+//             }
+//         }
+
+//         if ($session) {
+
+//         }
+
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
             return $this->json($results);

@@ -1,13 +1,46 @@
 {% extends 'cards/card_show.html.twig' %}
 
+{# imports #}
+{% import 'log/_macro_log.html.twig' as tools %}
+
+{# macros #}
 {% macro formatArray(name, value) %}
 {%- if value|length -%}
 <tr>
     <td class="w-25">{{ name|trans }}</td>
-    <td class="w-75 text-break" style="white-space: pre-wrap;">{{ value|var_export }}</td>
+    <td class="w-75 text-break text-success mb-0" style="white-space: pre-wrap;">{{- tools.format_var(value) -}}</td>
 </tr>
 {%- endif -%}
 {% endmacro %}
+
+{% macro level_class(level, background) -%}
+{% switch level -%}
+{%- case 'error' %}
+	{%- set class = 'danger' -%}
+{%- case 'critical' -%}
+	{%- set class = 'danger' -%}
+{%- case 'alert' -%}
+	{%- set class = 'danger' -%}
+{%- case 'emergency' -%}
+	{%- set class = 'danger' -%}
+{%- case 'warning' -%}	
+	{%- set class = 'warning' -%}
+{%- case 'info' -%}
+	{%- set class = 'info' -%}
+{%- case 'notice' -%}
+	{%- set class = 'info' -%}
+{%- case 'debug' -%}
+    {%- set class = 'secondary' -%}
+{%- default -%}
+	{%- set class = 'secondary' -%}
+{%- endswitch %}
+{% if background %}
+	{%- set class = 'border-' ~ class ~ ' text-white bg-' ~ class -%}
+{%- else -%}
+	{%- set class = 'border-' ~ class -%}
+{% endif %}
+{{- class -}}
+{%- endmacro %}
 
 {# imports #}
 {% import 'macros/_properties.html.twig' as properties %}
@@ -23,25 +56,16 @@
 {# classes #}
 {% block card_container_class '' %}
 {% block card_class -%}
-{% switch item.level -%}
-{%- case 'error' %}
-	border-danger
-{%- case 'critical' -%}
-	border-danger
-{%- case 'alert' -%}
-	border-danger
-{%- case 'emergency' -%}
-	border-danger
-{%- case 'warning' -%}
-    border-warning
-{%- case 'info' -%}
-    border-info
-{%- case 'notice' -%}
-    border-info
-{%- case 'debug' -%}
-    border-secondary
-{%- endswitch %} 
+{{ _self.level_class(item.level, false) }}
 {%- endblock %}
+{% block card_header_class -%}
+{{ _self.level_class(item.level, true) }}
+{%- endblock %}
+{#
+{% block card_footer_class -%}
+{{ _self.level_class(item.level, false) }}
+{%- endblock %}
+#}
 
 {# properties #}
 {% block property_body %}

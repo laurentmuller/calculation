@@ -353,6 +353,7 @@ common:
     button_pdf_list: Télécharger la liste
     button_show: Afficher
     button_browse: Parcourir
+    button_refresh: Actualiser
     count: 'Nombre d''éléments : %count%'
     show_password: Afficher le mot de passe
     hide_password: Masquer le mot de passe

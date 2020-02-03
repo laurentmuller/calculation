@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Doctrine\OpenWeatherDatabase;
+use App\Database\OpenWeatherDatabase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;

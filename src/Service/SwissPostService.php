@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Doctrine\SwissDatabase;
+use App\Database\SwissDatabase;
 use App\Interfaces\IApplicationService;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;

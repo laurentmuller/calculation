@@ -1,5 +1,9 @@
 {% extends 'cards/card_base.html.twig' %}
 
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+{% import 'log/_macro_log.html.twig' as tools %}
+
 {# macros #}
 {% macro card(key, value, border, type) %}
 <div class="card text-center {% if border %}{{ 'selection ' ~ border }}{% endif %}"
@@ -14,18 +18,6 @@
     </div>
 </div>
 {% endmacro %}
-
-{% macro format_var(value) -%}
-{{- value|var_export|replace({
-	'[':  '<samp class="text-danger">[</samp>',
-	']':  '<samp class="text-danger">]</samp>',
-	'"':  '<samp class="text-danger">"</samp>',
-	'=>': '<samp class="text-danger">=></samp>'
-    })|raw -}}
-{%- endmacro %}
-
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title      = 'logs.title' -%}
@@ -81,10 +73,10 @@
             <td class="message">
                 {{- line.message|raw|nl2br -}}
                 {%- if line.context|length -%}
-                    <pre class="text-break text-success mb-0" style="white-space: pre-wrap;">{{- _self.format_var(line.context) -}}</pre>
+                    <pre class="text-break text-success mb-0" style="white-space: pre-wrap;">{{- tools.format_var(line.context) -}}</pre>
                 {%- endif -%}
                 {%- if line.extra|length -%}
-                    <pre class="text-break text-success mb-0" style="white-space: pre-wrap;">{{ _self.format_var(line.extra) }}</pre>
+                    <pre class="text-break text-success mb-0" style="white-space: pre-wrap;">{{- tools.format_var(line.extra) -}}</pre>
                 {%- endif -%}
             </td>
         </tr>

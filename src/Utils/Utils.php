@@ -116,6 +116,28 @@ final class Utils
     }
 
     /**
+     * Tests if a substring is contained within a string.
+     *
+     * <b>NB:</b> If the needle is empty, this function return false.
+     *
+     * @param string $haystack   the string to search in
+     * @param string $needle     the string to search for
+     * @param bool   $ignorecase true for case-insensitive; false for case-sensitive
+     *
+     * @return bool true if substring is contained within a string
+     */
+    public static function contains(string $haystack, string $needle, bool $ignorecase = false): bool
+    {
+        if (empty($needle)) {
+            return false;
+        } elseif ($ignorecase) {
+            return false !== \stripos($haystack, $needle);
+        } else {
+            return false !== \strpos($haystack, $needle);
+        }
+    }
+
+    /**
      * Tests if a string ends within a substring.
      *
      * <b>NB:</b> If the needle is empty, this function return false.
@@ -136,9 +158,9 @@ final class Utils
         $pos = \strlen($haystack) - $len;
         if ($ignorecase) {
             return \stripos($haystack, $needle, -$len) === $pos;
+        } else {
+            return \strpos($haystack, $needle, -$len) === $pos;
         }
-
-        return \strpos($haystack, $needle, -$len) === $pos;
     }
 
     /**
@@ -361,12 +383,11 @@ final class Utils
     {
         if (empty($needle)) {
             return false;
-        }
-        if ($ignorecase) {
+        } elseif ($ignorecase) {
             return 0 === \stripos($haystack, $needle);
+        } else {
+            return 0 === \strpos($haystack, $needle);
         }
-
-        return 0 === \strpos($haystack, $needle);
     }
 
     /**

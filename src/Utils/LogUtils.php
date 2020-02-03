@@ -97,6 +97,7 @@ final class LogUtils
         }
 
         try {
+            $id = 1;
             $logs = [];
             $levels = [];
             $channels = [];
@@ -112,12 +113,13 @@ final class LogUtils
 
                 // add
                 $log = new Log();
-                $log->setChannel($channel);
-                $log->setLevel($level);
-                $log->setCreatedAt(self::parseDate($values[0]));
-                $log->setMessage(self::getMessage($values[3]));
-                $log->setContext(self::getContext($values[4]));
-                $log->setExtra(self::getExtra($values[5]));
+                $log->setId($id++)
+                    ->setChannel($channel)
+                    ->setLevel($level)
+                    ->setCreatedAt(self::parseDate($values[0]))
+                    ->setMessage(self::getMessage($values[3]))
+                    ->setContext(self::getContext($values[4]))
+                    ->setExtra(self::getExtra($values[5]));
                 $logs[] = $log;
 
                 // update

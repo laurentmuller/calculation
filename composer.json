@@ -3,7 +3,7 @@
 	"license" : "proprietary",
 	"type" : "project",
 	"homepage" : "http://www.bibi.nu",
-	"description" : "Implementation of the calculation with Symfony 4.x.",
+	"description" : "Implementation of the calculation with Symfony 4.4.x.",
 	"authors" : [{
 			"name" : "Laurent Muller",
 			"email" : "bibi@bibi.nu",
@@ -18,22 +18,17 @@
 		"symfony",
 		"calculation"
 	],
-	"repositories" : [{
-			"type" : "vcs",
-			"url" : "https://github.com/laurentmuller/Faker"
-		}
-	],
 	"require" : {
 		"php" : "^7.4",
 		"ext-ctype" : "*",
 		"ext-iconv" : "*",
 		"beberlei/doctrineextensions" : "~1.2",
-		"bjeavons/zxcvbn-php" : "~0.4",
+		"bjeavons/zxcvbn-php" : "~1.0",
 		"fpdf/fpdf" : "~1.81",
 		"friendsofsymfony/user-bundle" : "dev-master#beff7d3512835875578535cd59bc09f4923a1a94",
-		"fzaninotto/faker" : "dev-master",
+		"fzaninotto/faker" : "~1.9",
 		"google/recaptcha" : "~1.2",
-		"ob/highcharts-bundle" : "dev-master#5945174047ee6a70fe639634998188faed6571e2",
+		"ob/highcharts-bundle" : "~1.7",
 		"robquistnl/simplehtmltotext" : "~1.1",
 		"sensio/framework-extra-bundle" : "^5.5",
 		"stof/doctrine-extensions-bundle" : "dev-master",

@@ -201,6 +201,20 @@ class Log extends BaseEntity
     }
 
     /**
+     * Sets the primary key identifier.
+     *
+     * User only when create a log from a file.
+     *
+     * @param int $id the key identifier to set
+     */
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Sets the level.
      *
      * @param string $level

@@ -15,6 +15,11 @@
 {%- set object_type = IEntityVoter.ENTITY_CUSTOMER -%}
 {%- set show_path   = path('log_show_entry', params) -%}
 
+{% block other_actions -%}
+{{ parent() }}
+<a href="#" class="btn btn-sm btn-secondary disabled">{{ 'common.button_refresh'|trans }}</a>
+{% endblock %}
+
 {#
 {%- set pdf_title   = 'log.list.pdf_title' -%}
 #}

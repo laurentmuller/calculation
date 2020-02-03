@@ -11,7 +11,7 @@
     {% for day in week.days -%}
         {{ tools.dayCell(month, day, false) }}
     {%- endfor %}
-</tr>   
+</tr>
 {% endmacro %}
 
 {# imports #}
@@ -19,49 +19,49 @@
 
 {# parameters #}
 {%- set title            = 'test.month' -%}
-{%- set title_parameters = {'%year%': calendar.year, '%month%': month.Name} -%}    
-{%- set monthIndex       = month.number -%}
+{%- set title_parameters = {'%year%': calendar.year, '%month%': month.Name} -%}
+{%- set month_index      = month.number -%}
 {%- set month_text       = 'test.month'|trans({'%year%': calendar.year, '%month%': month.Name}) -%}
 {%- set calendat_text    = 'test.calendar'|trans({'%year%': calendar.year}) -%}
 
 {% block body %}
 <div class="row">
-    <div class="col-4"> 
-        <h2>{{ month_text }}</h2>       
+    <div class="col-4">
+        <h2>{{ month_text }}</h2>
     </div>
     <div class="col-4 text-md-center">
     	<h3>{{ 'test.calculations'|transchoice(calculations|length) }}</h3>
     </div>
     <div class="col-4 text-md-right">
         {% set year = 'now'|date('Y') %}
-        {% set monthParam = 'now'|date('n') %}
-        {% if year != calendar.year or monthParam != month.number %}
-        	 {% set text = calendar.monthNames[monthParam] ~ ' ' ~ year %}
-        	<a class="btn btn-primary" href="{{ path('test_month') }}" title="{{ text }}">{{ icons.icon('arrows-alt') }}</a>
+        {% set month_param = 'now'|date('n') %}
+        {% if year != calendar.year or month_param != month.number %}
+            {% set text = calendar.monthNames[month_param] ~ ' ' ~ year %}
+            <a class="btn btn-primary" href="{{ path('test_month') }}" title="{{ text }}">{{ icons.icon('arrows-alt') }}</a>
         {% endif %}
-        
+
         {% set year = calendar.year %}
-        {% set monthParam = monthIndex - 1 %}        
-        {% if (monthParam < 1) %}
-            {% set monthParam = 12 %}
+        {% set month_param = month_index - 1 %}
+        {% if (month_param < 1) %}
+            {% set month_param = 12 %}
             {% set year = year - 1 %}
         {% endif %}
-        {% set text = calendar.monthNames[monthParam] ~ ' ' ~ year %}
-        <a class="btn btn-primary" title="{{ text }}" href="{{ path('test_month', {'year': year, 'month': monthParam}) }}">{{ icons.icon('chevron-left') }}</a>
-       
+        {% set text = calendar.monthNames[month_param] ~ ' ' ~ year %}
+        <a class="btn btn-primary" title="{{ text }}" href="{{ path('test_month', {'year': year, 'month': month_param}) }}">{{ icons.icon('chevron-left') }}</a>
+
         {% set year = calendar.year %}
-        {% set monthParam = monthIndex + 1 %}        
-        {% if (monthParam > 12) %}
-            {% set monthParam = 1 %}
+        {% set month_param = month_index + 1 %}
+        {% if (month_param > 12) %}
+            {% set month_param = 1 %}
             {% set year = year + 1 %}
         {% endif %}
-        {% set text = calendar.monthNames[monthParam] ~ ' ' ~ year %}
-        <a class="btn btn-primary" title="{{ text }}" href="{{ path('test_month', {'year': year, 'month': monthParam}) }}">{{ icons.icon('chevron-right') }}</a>
+        {% set text = calendar.monthNames[month_param] ~ ' ' ~ year %}
+        <a class="btn btn-primary" title="{{ text }}" href="{{ path('test_month', {'year': year, 'month': month_param}) }}">{{ icons.icon('chevron-right') }}</a>
         <a class="btn btn-primary" title="{{ calendat_text }}" href="{{ path('test_calendar', {'year': calendar.year}) }}">{{ icons.icon('calendar') }}</a>
     </div>
 </div>
 <div class="row">
-    <div class="col">        
+    <div class="col">
         <table class="table table-bordered w-100 month">
             <tr>
                 <th class="border bg-secondary text-white text-center week font-weight-normal">{{ 'test.week'|trans }}</th>

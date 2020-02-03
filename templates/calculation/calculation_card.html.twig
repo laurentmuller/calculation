@@ -10,11 +10,11 @@
 {%- set add_title    = 'calculation.list.add_title' -%}
 {%- set pdf_title    = 'calculation.list.pdf_title' -%}
 {%- set empty_list   = empty_list|default('calculation.list.empty') -%}
-{%- set colpsan      = colpsan|default(2) -%}
+{%- set col_span     = col_span|default(2) -%}
 {# actions #}
 {%- set object_type  = IEntityVoter.ENTITY_CALCULATION -%}
-{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculation_edit'   : null -%}
-{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) ? 'calculation_show'   : null -%}
+{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
+{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
 {%- set single_page  = is_granted(IEntityVoter.ATTRIBUTE_PDF,  object_type) ? 'calculation_pdf_id' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 
@@ -22,7 +22,7 @@
     {%- set add_page = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'calculation_add' : null -%}
 {%- endif -%}
 {%- if clone_page is not defined -%}
-    {%- set clone_page = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'calculation_clone'  : null -%}
+    {%- set clone_page = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
 {%- endif -%}
 {%- if state_page is not defined -%}
     {%- set state_page = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
@@ -35,7 +35,7 @@
 {%- endif -%}
 
 {% block item_title %}
-{%- set item_title = item.id|identifier  -%}
+{%- set item_title = item.id|identifier -%}
 <div style="{{ properties.stateCss(item.stateColor) }}">
     {%- if default_page -%}       
         {%- set params = routeParams(app.request, item.id) -%}
@@ -49,13 +49,12 @@
 {% endblock %}
 
 {% block item_property -%}
-{{ properties.line(item.customer, false, colpsan) }}
-{{ properties.line(item.description, false, colpsan) }}
-{{ properties.line(item.date|localedate ~ ' / ' ~ item.stateCode, false, colpsan) }}
-{{ properties.separator(colpsan) }}
+{{ properties.line(item.customer, false, col_span) }}
+{{ properties.line(item.description, false, col_span) }}
+{{ properties.line(item.date|localedate ~ ' / ' ~ item.stateCode, false, col_span) }}
+{{ properties.separator(col_span) }}
 {% block calculation_properties -%}
     {%- if marginBelow(item) -%}
-        {%- set className = 'text-right pr-4 text-danger below-cell has-tooltip' -%}
         {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent }) -%}
         <tr>
         	<td>{{ 'calculation.fields.total'|trans }}</td>

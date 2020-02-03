@@ -38,7 +38,7 @@
         <td class="font-weight-bold nowrap">{{ group.description }}</td>
         <td class="font-weight-bold text-currency">{{ group.amount|amount }}</td>
         {%- if overall_below -%}
-            {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': group.margin|percent, '%minimum%': min_margin|percent }) -%}
+            {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': group.margin|percent, '%minimum%': min_margin|percent}) -%}
             <td class="font-weight-bold text-currency text-danger below-cell has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ group.margin|percent }}</td>
         {%- else -%}
             <td class="font-weight-bold text-currency">{{ group.margin|percent }}</td>

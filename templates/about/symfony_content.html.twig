@@ -23,27 +23,27 @@
             {{ tools.rowInfo('End of product life', endOfLife) }}
             {{ tools.headerInfo('Directories') }}
             {{ tools.rowInfo('Project', projectDir) }}
-            {{ tools.rowInfo('Logs', logDir) }}    
+            {{ tools.rowInfo('Logs', logDir) }}
             {{ tools.rowInfo('Cache', cacheDir) }}
-        </tbody>                
+        </tbody>
     </table>
-    
+
     <table id="data-table-bundles" class="table table-hover table-sm mb-0">
         {{ tools.headerInfo("Configuration") }}
     </table>
-    
+
     {# bundles #}
     {% if bundles|length %}
         <table id="data-table-bundles" class="table table-hover table-sm mb-0">
             {{ tools.headerLinkInfo('Bundles', 'bundles', bundles|length) }}
-            <tbody class="collapse" id="bundles">                       
+            <tbody class="collapse" id="bundles">
                 {% for bundle in bundles %}
                     {{ tools.rowInfo(bundle.name, bundle.path, 'pl-3') }}
                 {% endfor %}
             </tbody>
         </table>
     {% endif %}
-    
+
     {# packages #}
     {% if packages|length %}
         <table id="data-table-packages" class="table table-hover table-sm mb-0">
@@ -55,7 +55,7 @@
             </tbody>
         </table>
     {% endif %}
-    
+
     {# routes #}
     {% if routes|length %}
         {# application routes #}

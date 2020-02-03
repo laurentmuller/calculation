@@ -2,7 +2,6 @@
 
 {# imports #}
 {% import 'macros/_properties.html.twig' as properties %}
-{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title        = 'globalmargin.list.title' -%}
@@ -13,15 +12,15 @@
 
 {# actions #}
 {%- set object_type  = IEntityVoter.ENTITY_GLOBAL_MARGIN -%}
-{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD,    object_type) ? 'globalmargin_add'    : null -%}
-{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'globalmargin_edit'   : null -%}
+{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'globalmargin_add' : null -%}
+{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'globalmargin_edit' : null -%}
 {%- set delete_page  = is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) ? 'globalmargin_delete' : null -%}
-{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW,   object_type) ? 'globalmargin_show'   : null -%}
-{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF,    object_type) ? 'globalmargin_pdf'    : null -%}
+{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) ? 'globalmargin_show' : null -%}
+{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF, object_type) ? 'globalmargin_pdf' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 
 {% block item_title %}
-{%- set item_title = 'globalmargin.list.id'|trans({'%id%': loop.index})  -%}
+{%- set item_title = 'globalmargin.list.id'|trans({'%id%': loop.index}) -%}
 {%- if default_page -%}
     <a href="{{ path(default_page, {'id': item.id}) }}" class="text-body">{{ item_title }}</a>
 {%- else -%} 

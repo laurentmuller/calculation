@@ -4,15 +4,15 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set isException = exception is defined -%}
+{%- set is_exception = exception is defined -%}
 {%- set title_icon  = 'exclamation-circle' -%}
 {% if not title is defined %}
-    {% if status_code is defined and status_code is not same as (0) %}
+    {% if status_code is defined and status_code != 0 %}
         {%- set title = 'error_page.title' -%}
-        {%- set title_parameters = {'%status_code%': status_code} -%}        
+        {%- set title_parameters = {'%status_code%': status_code} -%}
     {% else %}
         {%- set title = 'error_page.default_title' -%}
-    {%  endif %}
+    {% endif %}
 {% endif %}
 
 {% block card_container_class '' %}
@@ -31,16 +31,16 @@
 {%- endblock %}
 </p>
 <div class="row d-print-none">
-    <div class="col-md-9"> 
-        <p class="mb-0">{{ 'error_page.link'|trans({'%webmaster%':webmaster, '%application%':app_name_version })|raw }}</p>
+    <div class="col-md-9">
+        <p class="mb-0">{{ 'error_page.link'|trans({'%webmaster%': webmaster, '%application%': app_name_version})|raw }}</p>
     </div>
     <div class="col-md-3 text-right">
-        {% if isException %}
+        {% if is_exception %}
             <a data-toggle="collapse" href="#exception-detail" class="collapsed" aria-expanded="false" aria-controls="exception-detail">{{ 'error_page.details'|trans }}</a>
-        {%  endif %}
+        {% endif %}
     </div>
 </div>
-{% if isException %}
+{% if is_exception %}
 <div id="exception-detail" class="collapse mt-3" aria-expanded="false">
     <table id="exception-table" class="table table-bordered table-exception table-sm mb-0">
         <thead class="d-print-none">
@@ -54,7 +54,7 @@
                 <td class="property">{{ 'error_page.fields.message'|trans }}</td>
                 <td class="value">{{ exception.message }}</td>
             </tr>
-            {% if exception.code is defined and exception.code is not same as (0) %}
+            {% if exception.code is defined and exception.code != 0 %}
                 <tr>
                     <td class="property">{{ 'error_page.fields.code'|trans }}</td>
                     <td class="value">{{ exception.code }}</td>
@@ -76,21 +76,21 @@
             {% for trace in traces %}
             <tr>
                 {% if loop.index0 == 0 %}
-                    <td class="property" rowspan="{{ traces|length }}">{{ 'error_page.fields.trace'|trans }}</td> 
+                    <td class="property" rowspan="{{ traces|length }}">{{ 'error_page.fields.trace'|trans }}</td>
                 {% endif %}
                 <td class="value">
                 	<samp>
                     	<span><strong>#{{ loop.index0 }}.</strong></span>
                         {%- if trace.file|default(false) -%}
-                            <span>{{ trace.file}}({{ trace.line|default(0)}})</span>
+                            <span>{{ trace.file }}({{ trace.line|default(0) }})</span>
                         {%- endif -%}
                         {%- if trace.function|default(false) and trace.class|default(false) -%}
                             <span>: {{ trace.class|abbr_class|striptags ~ trace.type|default('->') ~ trace.function }}()</span>
 	                    {%- endif -%}
-                    </samp>      
+                    </samp>
                 </td>
-            </tr> 
-            {% endfor %}                                                             
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
@@ -100,7 +100,7 @@
 {% block card_footer %}
 {% if page_list is defined %}
     {%- set id = id|default(0) -%}
-    {%- set href  = cancelUrl(app.request, id, page_list) -%}    
+    {%- set href  = cancelUrl(app.request, id, page_list) -%}
     {{ icons.link(href, 'common.button_back_list', 'btn btn-form btn-primary', 'chevron-left') }}
 {% else %}
     {{ icons.homepage() }}

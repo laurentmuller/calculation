@@ -13,16 +13,16 @@
 
 {# actions #}
 {%- set object_type  = IEntityVoter.ENTITY_CATEGORY -%}
-{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD,    object_type) ? 'category_add'    : null -%}
-{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'category_edit'   : null -%}
+{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD,    object_type) ? 'category_add' : null -%}
+{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'category_edit' : null -%}
 {%- set delete_page  = is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) ? 'category_delete' : null -%}
-{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW,   object_type) ? 'category_show'   : null -%}
-{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF,    object_type) ? 'category_pdf'    : null -%}
+{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW,   object_type) ? 'category_show' : null -%}
+{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF,    object_type) ? 'category_pdf' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 {%- set product_list = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_PRODUCT) %}
 
 {% block item_title %}
-{%- set item_title = item.code  -%}
+{%- set item_title = item.code -%}
 {%- if default_page -%}
     <a href="{{ path(default_page, {'id': item.id}) }}" class="text-body">{{ item_title }}</a>
 {%- else -%} 

@@ -3,7 +3,7 @@
 {# macros #}
 {% macro user_image(item, image) -%}
 <img src="{{ asset(image) }}?{{ 'now'|date('c') }}" alt="{{ item.username }}" title="{{ 'user.image.title'|trans }}" class="avatar-lg img-thumbnail"  width="{{ image_width(image) }}" height="{{ image_height(image) }}">
-{%- endmacro %} 
+{%- endmacro %}
 
 {# imports #}
 {% import 'macros/_properties.html.twig' as properties %}
@@ -16,27 +16,26 @@
 {%- set pdf_title    = 'user.list.pdf_title' -%}
 {%- set empty_list   = 'user.list.empty' -%}
 {# actions #}
-{%- set isDev        = app.debug or app_environment == 'dev' -%}
-{%- set object_type  = IEntityVoter.ENTITY_USER -%}
-{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD,    object_type) ? 'user_add'      : null -%}
-{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'user_edit'     : null -%}
-{%- set image_page   = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'user_image'    : null -%}
-{%- set rights_page  = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'user_rights'   : null -%}
-{%- set password_page= is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'user_password' : null -%}
-{%- set delete_page  = is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) ? 'user_delete'   : null -%}
-{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW,   object_type) ? 'user_show'     : null -%}
-{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF,    object_type) ? 'user_pdf'      : null -%}
-{%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+{%- set object_type   = IEntityVoter.ENTITY_USER -%}
+{%- set add_page      = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'user_add' : null -%}
+{%- set edit_page     = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'user_edit' : null -%}
+{%- set image_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'user_image' : null -%}
+{%- set rights_page   = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'user_rights' : null -%}
+{%- set password_page = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'user_password' : null -%}
+{%- set delete_page   = is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) ? 'user_delete' : null -%}
+{%- set show_page     = is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) ? 'user_show' : null -%}
+{%- set pdf_page      = is_granted(IEntityVoter.ATTRIBUTE_PDF, object_type) ? 'user_pdf' : null -%}
+{%- set default_page  = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 
 {% block item_title %}
 {% apply spaceless %}
-{%- set item_title = item.username  -%}
+{%- set item_title = item.username -%}
 {%- set image = asset_if(vich_uploader_asset(item, 'imageFile')|replace({'192': '096'}), '/images/avatar.png') -%}
 {# image #}
 {%- if image -%}
 <span class="mr-1">
     {% if image_page %}
-        <a href="{{ path(image_page, { 'id': item.id}) }}">{{ _self.user_image(item, image) }}</a>    
+        <a href="{{ path(image_page, {'id': item.id}) }}">{{ _self.user_image(item, image) }}</a>
     {% else %}
         {{ _self.user_image(item, image) }}
     {% endif %}
@@ -67,27 +66,27 @@
 {{ icons.dropdownSeparator }}
 {% endif %}
 {% if image_page %}
-    {%- set image_path = path(image_page, { 'id': item.id}) -%}
+    {%- set image_path = path(image_page, {'id': item.id}) -%}
     {{ icons.dropdownItem(image_path, 'user.image.title', 'image far') }}
 {% endif %}
 {% if password_page %}
-    {% set password_path = path('user_password', { 'id': item.id}) %}
+    {% set password_path = path('user_password', {'id': item.id}) %}
     {{ icons.dropdownItem(password_path, 'index.change_password', 'unlock-alt') }}
 {% endif %}
 {%- if rights_page -%}
-    {% set rights_path = path(rights_page, { 'id': item.id}) %}
+    {% set rights_path = path(rights_page, {'id': item.id}) %}
     {{ icons.dropdownItem(rights_path, 'user.list.rights_title', 'unlock') }}
 {% endif %}
 {%- if item.username != app.user.username -%}
-	{%- set message_path = path('user_message', { 'id': item.id}) -%}
+	{%- set message_path = path('user_message', {'id': item.id}) -%}
     {{ icons.dropdownItem(message_path, 'user.message.title', 'envelope far') }}
 {%- endif -%}
 {%- if not is_granted('ROLE_PREVIOUS_ADMIN') and is_granted('ROLE_SUPER_ADMIN') and item.username != app.user.username -%}
     {{ icons.dropdownSeparator }}
     {%- if item.hasRole('ROLE_ADMIN') or item.hasRole('ROLE_SUPER_ADMIN') -%}
-    {%- set switch_path = path('user_list', { '_switch_user': item.username}) -%}
+    {%- set switch_path = path('user_list', {'_switch_user': item.username}) -%}
     {%- else -%}
-    {%- set switch_path = path('homepage', { '_switch_user': item.username}) -%}
+    {%- set switch_path = path('homepage', {'_switch_user': item.username}) -%}
     {%- endif -%}    
     {{ icons.dropdownItem(switch_path, 'user.switch.take.title', 'user-plus') }}
 {%- endif -%}

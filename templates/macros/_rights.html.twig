@@ -42,7 +42,7 @@
 <table class="table table-bordered table-list" id="table-edit">
     <thead>
 	   <tr class="text-center">
-            <th class="text-left font-weight-normal">{{ icons.icon('arrow-down')}} {{ 'user.rights.table_title'|trans }} {{ icons.icon('arrow-right')}}</th>        
+            <th class="text-left font-weight-normal">{{ icons.icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icons.icon('arrow-right') }}</th>
             {{ _self.header('rights.list',   IEntityVoter.ATTRIBUTE_LIST) }}
             {{ _self.header('rights.show',   IEntityVoter.ATTRIBUTE_SHOW) }}
             {{ _self.header('rights.add',    IEntityVoter.ATTRIBUTE_ADD) }}
@@ -68,7 +68,7 @@
 {% endmacro %}
 
 {% macro actions() %}
-<button type="button" id="all" class="btn btn-form btn-outline-success">{{ 'user.rights.all_title'|trans }}</button> 
+<button type="button" id="all" class="btn btn-form btn-outline-success">{{ 'user.rights.all_title'|trans }}</button>
 <button type="button" id="none" class="btn btn-form btn-outline-success">{{ 'user.rights.none_title'|trans }}</button>
 <button type="button" id="toggle" class="btn btn-form btn-outline-success">{{ 'user.rights.toggle_title'|trans }}</button>
 <button type="button" id="default" class="btn btn-form btn-outline-success">{{ 'user.rights.default_title'|trans }}</button>

@@ -38,12 +38,12 @@
     <tbody>
     {% for margin in item.margins -%}
     	<tr>
-            <td>&nbsp;</td>   
+            <td>&nbsp;</td>
     		<td class="text-right">{{ margin.minimum|amount }}</td>
     		<td class="text-right">{{ margin.maximum|amount }}</td>
     		<td class="text-right">{{ margin.margin|percent(false) }}</td>
     	</tr>
-    {% endfor %}		
+    {% endfor %}
     </tbody>
  </table>
 {%- endif -%}

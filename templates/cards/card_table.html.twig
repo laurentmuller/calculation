@@ -1,7 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
 
 {# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
 {% import 'macros/_datatables.html.twig' as helper %}
 
 {# macros #}
@@ -14,6 +13,7 @@
 {% endmacro %}
 
 {% macro item_data(path, text, icon, attributes = {}) %}
+{% import 'macros/_icons.html.twig' as icons %}
 {%- if path -%}
     <a href="#" data-path="{{ path }}" class="dropdown-item"{{ helper.attribs(attributes) }}>
         {{- icons.icon(icon ~ ' fa-fw', text) -}}    	
@@ -22,6 +22,7 @@
 {% endmacro %}
 
 {% macro item_data_external(path, text, icon) %}
+{% import 'macros/_icons.html.twig' as icons %}
 {%- if path -%}
     <a href="#" data-path="{{ path }}" class="dropdown-item" target="_blank" rel="noopener noreferrer">
         {{- icons.icon(icon ~ ' fa-fw', text) -}}    	
@@ -30,6 +31,7 @@
 {% endmacro %}
 
 {% macro item_external(path, text, class, icon) %}
+{% import 'macros/_icons.html.twig' as icons %}
 {%- if path -%}
     <a href="{{ path }}" target="_blank" rel="noopener noreferrer" class="{{ class }}">
         {{- icons.icon(icon ~ ' fa-fw', text) -}}
@@ -128,23 +130,23 @@
                 {% if results.recordsTotal > 20 %}{{ helper.page(25, pagelength) }}{% endif %}
                 {% if results.recordsTotal > 25 %}{{ helper.page(30, pagelength) }}{% endif %}
                 {% if results.recordsTotal > 30 %}{{ helper.page(50, pagelength) }}{% endif %}
-                {% if results.recordsTotal > 50 %}{{ helper.page(-1, pagelength, 'datatable.all') }}{% endif %}
+                {% if results.recordsTotal > 50 %}{{ helper.page((-1), pagelength, 'datatable.all') }}{% endif %}
             </select>
             <label class="ml-2">{{ 'datatable.elements'|trans }}</label>
-        </div>    
+        </div>
     </div>
     {%- endif %}
 </div>
 {%- endif %}
 
-{%- set attributes = attributes|default({})|merge ({
+{%- set attributes = attributes|default({})|merge({
         'id': 'data-table',
         'class': 'table table-list table-hover table-sm dataTable border-bottom w-100',
         'data-ajax': ajax_path,
         'data-lang': ajax_lang,
         'data-total': results.recordsTotal,
         'data-filtered': results.recordsFiltered,
-        'data-pagelength': pagelength,        
+        'data-pagelength': pagelength,
         'data-ordercolumn': ordercolumn,
       	'data-orderdir': orderdir,
         'data-debug': app.debug

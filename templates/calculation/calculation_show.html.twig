@@ -53,7 +53,7 @@
 <table class="table table-hover table-sm table-list mt-3 mb-0">
     <thead>
         <tr>
-            <th>{{ 'calculation.edit.panel_resume'|trans }}</th>            
+            <th>{{ 'calculation.edit.panel_resume'|trans }}</th>
             <th class="text-currency">{{ 'report.calculation.amount'|trans }}</th>
             <th class="text-percent">{{ 'report.calculation.margin_percent'|trans }}</th>
             <th class="text-currency">{{ 'report.calculation.margin_amount'|trans }}</th>
@@ -68,7 +68,7 @@
                 <td class="text-currency">{{ group.amount|amount }}</td>
                 <td class="text-percent">{{ group.margin|percent }}</td>
                 <td class="text-currency">{{ group.marginAmount|amount }}</td>
-                <td class="text-currency">{{ group.total|amount}}</td>
+                <td class="text-currency">{{ group.total|amount }}</td>
             </tr>
         {% endfor %}
         
@@ -102,7 +102,7 @@
         {% endif %}
         
         {# overall total #}
-        <tr>            
+        <tr>
             <td class="font-weight-bold">{{ 'calculation.fields.overallTotal'|trans }}</td>
             <td class="font-weight-bold text-currency">{{ item.groupsAmount|amount }}</td>
             {%- if marginBelow(item) -%}
@@ -135,7 +135,7 @@
     {{ properties.property('calculation.show.updated', updated) }}
 {% endif %}
 {% if item.empty %}
-    {{ properties.property('calculation.edit.panel_items', 'calculation.edit.empty'|trans ) }}
+    {{ properties.property('calculation.edit.panel_items', 'calculation.edit.empty'|trans) }}
 {% endif %}
 {% endblock %}
 

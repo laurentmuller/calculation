@@ -38,7 +38,7 @@
             {{ _self.button('btn-table-delete btn-danger', 'common.button_delete', 'delete', 'fas fa-fw fa-times') }}
             {% endif %}
         </div>
-    </div>  
+    </div>
 </div>
 {% endblock %}
 
@@ -71,17 +71,17 @@
                 {{ helper.page(50, pagelength) }}
             </select>
             <label class="ml-2">{{ 'datatable.elements'|trans }}</label>
-        </div>    
+        </div>
     </div>
 </div>
-{%- set attributes = attributes|default({})|merge ({
+{%- set attributes = attributes|default({})|merge({
         'id': 'data-table',
         'class': 'table table-list table-hover table-sm dataTable border-bottom w-100',
         'data-ajax': ajax_path,
         'data-lang': ajax_lang,
         'data-total': results.recordsTotal,
         'data-filtered': results.recordsFiltered,
-        'data-pagelength': pagelength,        
+        'data-pagelength': pagelength,
         'data-ordercolumn': ordercolumn,
       	'data-orderdir': orderdir,
         'data-debug': app.debug,
@@ -95,7 +95,7 @@
     	 	{% for column in columns -%}
     	 		{%- set value = row[column.name] -%}
     	 		<td class="{{ column.cellClassName }}">
-    	 			{{- column.rawData ? value|raw : value -}}	
+    	 			{{- column.rawData ? value|raw : value -}}
     	 		</td>
     	 	{%- endfor %}
 			</tr>

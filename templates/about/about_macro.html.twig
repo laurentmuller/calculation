@@ -13,18 +13,18 @@
 </tbody>
 {%- endmacro %}
 
-{% macro rowInfo(name, value, nameClass = '', valueClass = '') -%}
-{%- set nameClass = ('e ' ~ nameClass|default(''))|trim -%}
-{%- set valueClass = ('v ' ~ valueClass|default(''))|trim -%}
+{% macro rowInfo(name, value, name_class = '', value_class = '') -%}
+{%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
+{%- set value_class = ('v ' ~ value_class|default(''))|trim -%}
 <tr>
-    <td class="{{ nameClass }}">{{ name }}</td>
-    <td class="{{ valueClass }}">{{ value }}</td>
+    <td class="{{ name_class }}">{{ name }}</td>
+    <td class="{{ value_class }}">{{ value }}</td>
 </tr>
 {%- endmacro %}
 
 {% macro rowInfoLink(name, value, href) -%}
 <tr>
-    <td class="e">{{ name }}</td>    
+    <td class="e">{{ name }}</td>
     <td class="v">
         <a href="{{ href }}" class="card-link" target="_blank" rel="noopener noreferrer">{{ value }}</a>
     </td>
@@ -38,7 +38,7 @@
         {{ package.name }}{%- if package.homepage %}&nbsp;{{- icons.linkExternal(package.homepage, '', '', 'share', 'about.extern_link') -}}{% endif -%}
     </td>
     <td class="f">{{ package.version }}</td>
-    <td class="text">{{ package.description }}{%- if package.dev %} (Development mode only){%  endif -%}</td>
+    <td class="text">{{ package.description }}{%- if package.dev %} (Development mode only){% endif -%}</td>
 </tr>
 {%- endmacro %}
 

@@ -1,5 +1,3 @@
-{% import 'macros/_icons.html.twig' as icons %}
-
 <div id="item_modal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
     <form id="item_form" autocomplete="off" data-add="{{ 'calculationitem.add.title'|trans }}" data-edit="{{ 'calculationitem.edit.title'|trans }}">
         <div class="modal-dialog modal-lg" role="document">
@@ -12,7 +10,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-row" id="item_search_row">
-                        <div class="col-md-4 form-group">                            
+                        <div class="col-md-4 form-group">
                             <input type="search" class="form-control" id="item_search_input" name="item_search_input" placeholder="{{ 'list.search_placeholder'|trans }}">
                         </div>
                     </div>
@@ -33,10 +31,10 @@
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
-                                <label class="required" for="item_category">{{ 'calculationitem.fields.category'|trans }}</label> 
+                                <label class="required" for="item_category">{{ 'calculationitem.fields.category'|trans }}</label>
                                 <select id="item_category" name="item_category" class="form-control">
                              	{% for category in categories %}
-                                    <option value="{{ category.id  }}">{{ category.code }}</option>
+                                    <option value="{{ category.id }}">{{ category.code }}</option>
                                 {% endfor %}
                                 </select>
                             </div>

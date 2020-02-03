@@ -5,9 +5,9 @@
 {%- set title_icon = 'address-card far' -%}
 {%- set page_list  = 'customer_list' -%}
 {%- set form_attr  = form_attr|default({})|merge({
-                     'data-title'  : title|trans,
-                     'data-search' : url('ajax_search_address'),
-                     'data-error'  : 'customer.edit.error_search'|trans }) -%}
+                     'data-title': title|trans,
+                     'data-search': url('ajax_search_address'),
+                     'data-error': 'customer.edit.error_search'|trans }) -%}
 {% block card_body %}
 <div class="form-row">
     <div class="col-md-6">

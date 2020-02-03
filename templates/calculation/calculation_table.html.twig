@@ -7,7 +7,7 @@
 {%- set object_type = IEntityVoter.ENTITY_CALCULATION -%}
 
 {# actions #}
-{%- set params      = {'id' : 0} -%}
+{%- set params      = {'id': 0} -%}
 {%- set add_path    = path('calculation_add') -%}
 {%- set show_path   = path('calculation_show', params) -%}
 {%- set edit_path   = path('calculation_edit', params) -%}
@@ -24,9 +24,7 @@
 {%- set delete_title = 'calculation.delete.title' %}
 
 {# highlight search #}
-{%- set attributes = attributes|default({})|merge ({
-    'data-search-highlight': true
-}) -%}
+{%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
 
 {# other actions #}
 {% block table_actions %}

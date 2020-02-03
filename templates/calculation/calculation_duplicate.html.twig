@@ -7,7 +7,6 @@
 {%- endmacro %}
 
 {# imports #}
-{% import 'macros/_properties.html.twig' as properties %}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
@@ -22,7 +21,7 @@
 {%- set pdf_page     = false -%}
 {%- set state_page   = false -%}
 {%- set clone_page   = false -%}
-{%- set colpsan      = 1 -%}
+{%- set col_span     = 1 -%}
 
 {% block search_action %}{% endblock %}
 
@@ -39,5 +38,5 @@
 {%- block card_footer_class '' -%}
 {% block card_footer -%}
 {{ icons.homepage() }}
-{% if items|length %}{{- icons.button_pdf('calculation_duplicate_pdf')}}{% endif %}
+{% if items|length %}{{- icons.button_pdf('calculation_duplicate_pdf') }}{% endif %}
 {%- endblock %}

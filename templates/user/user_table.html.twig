@@ -4,10 +4,10 @@
 {%- set title       = 'user.list.title' -%}
 {%- set title_icon  = 'user far' -%}
 {%- set pdf_title   = 'user.list.pdf_title' -%}
-{%- set object_type = IEntityVoter.ENTITY_USER-%}
+{%- set object_type = IEntityVoter.ENTITY_USER -%}
 
 {# actions #}
-{%- set params        = {'id' : 0} -%}
+{%- set params        = {'id': 0} -%}
 {%- set add_path      = path('user_add') -%}
 {%- set show_path     = path('user_show', params) -%}
 {%- set edit_path     = path('user_edit', params) -%}

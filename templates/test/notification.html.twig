@@ -5,7 +5,7 @@
 <button type="button" data-type="{{ type }}" class="mb-2 btn btn-notify btn-form btn-{{ type }}">
     {{- ('theme.background.' ~ type)|trans -}}
 </button>
-{%- endmacro %} 
+{%- endmacro %}
 
 {% macro position(value, selection) -%}
 {%- set text = 'parameters.messagePosition.' ~ value|replace({'-': '_'}) -%}
@@ -56,12 +56,12 @@
         <div class="form-group">
             <label for="position">{{ 'parameters.fields.messagePosition'|trans }}</label>
             <select id="position" name="position" class="form-control" data-position="{{ position }}" data-random="{{ url('ajax_random_text') }}">
-                {{ _self.position('top-left',      position) }}
-                {{ _self.position('top-center',    position) }}
-                {{ _self.position('top-right',     position) }}
-                {{ _self.position('bottom-left',   position) }}
+                {{ _self.position('top-left', position) }}
+                {{ _self.position('top-center', position) }}
+                {{ _self.position('top-right', position) }}
+                {{ _self.position('bottom-left', position) }}
                 {{ _self.position('bottom-center', position) }}
-                {{ _self.position('bottom-right',  position) }}
+                {{ _self.position('bottom-right', position) }}
             </select>
         </div>
     </div>
@@ -75,8 +75,8 @@
                 {{ _self.timeout(4000, timeout) }}
                 {{ _self.timeout(5000, timeout) }}
             </select>
-        </div>        
-    </div>    
+        </div>
+    </div>
 </div>
 <div class="form-row">
     <div class="col">
@@ -86,14 +86,14 @@
 <div class="form-row">
     <div class="col">
         <div class="form-group">
-            {{ _self.checkbox('title',    'Titre') }}
-            {{ _self.checkbox('icon',     'Icône') }}
+            {{ _self.checkbox('title', 'Titre') }}
+            {{ _self.checkbox('icon', 'Icône') }}
             {{ _self.checkbox('subtitle', 'Sous-titre') }}
-            {{ _self.checkbox('close',    'Fermer') }}
+            {{ _self.checkbox('close', 'Fermer') }}
             {{ _self.checkbox('autohide', 'Masquer automatiquement') }}
         </div>
     </div>
-</div> 
+</div>
 {% endblock %}
 
 {% block card_footer_class 'd-none' %}

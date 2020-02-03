@@ -1,5 +1,5 @@
 {% extends '@Twig/Exception/error_base.html.twig' %}
 
 {# parameters #}
-{% set description = 'http_error.description'|trans({ '%status_code%': status_code, '%status_text%': status_text|default('Undefined') }) %}
-{% set suggestion  = 'http_error.suggestion'|trans({ '%url%': path('homepage') }) %}
+{% set description = 'http_error.description'|trans({'%status_code%': status_code, '%status_text%': status_text|default('Undefined')}) %}
+{% set suggestion  = 'http_error.suggestion'|trans({'%url%': path('homepage')}) %}

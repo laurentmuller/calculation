@@ -28,17 +28,17 @@
 				</table>
                 {{ form_errors(form.groups) }}
 			</div>
-		</div>	
+		</div>
 		<div id="empty-items" class="row{% if item.groups|length > 0 %} d-none{% endif %}">
 			<div class="col">
 				<p class="mb-0">{{ 'calculation.edit.empty_items'|trans }}</p>
 			</div>
-		</div>	
+		</div>
 	</div>
     {# errors #}
-    {%- set class_error     = (emty_items or duplicate_items) ? 'card-footer' : 'card-footer d-none'  -%}
-    {%- set class_duplicate = duplicate_items ? 'ml-1' : 'ml-1 d-none'  -%}
-    {%- set class_empty     = emty_items ? 'ml-1' : 'ml-1 d-none'  -%}
+    {%- set class_error     = (emty_items or duplicate_items) ? 'card-footer' : 'card-footer d-none' -%}
+    {%- set class_duplicate = duplicate_items ? 'ml-1' : 'ml-1 d-none' -%}
+    {%- set class_empty     = emty_items ? 'ml-1' : 'ml-1 d-none' -%}
 	<div id="error-all" class="{{ class_error }}">
 		<p class="mb-0 text-right">
             <span id="error-duplicate" class="{{ class_duplicate }}"><span class="duplicate-footer"></span>{{ 'duplicate.title'|trans }}</span>

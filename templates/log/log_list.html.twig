@@ -27,7 +27,7 @@
 {% block card_body_class 'p-2 pb-0' %}
 
 {% block card_header %}
-{{ parent() }} 
+{{ parent() }}
 <div class="row">
     <div class="col-md-8">
         <small>{{ 'logs.show.file'|trans({'%file%': file}) }}</small>
@@ -60,7 +60,7 @@
         <tr>
             <th class="date">{{ 'logs.fields.date'|trans }}</th>
             <th class="level">{{ 'logs.fields.level'|trans }}</th>
-            <th class="channel">{{ 'logs.fields.channel'|trans }}</th>                            
+            <th class="channel">{{ 'logs.fields.channel'|trans }}</th>
             <th>{{ 'logs.fields.message'|trans }}</th>
         </tr>
     </thead>

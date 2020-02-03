@@ -8,24 +8,24 @@
         </h1>
     	<div>{{ form_errors(form) }}</div>
 	</div>
-	
+
 	<div class="card-body">
 		{{ form_row(form.customer, {disabled: not editable}) }}
 		{{ form_row(form.description, {disabled: not editable}) }}
 		<div class="form-row">
 			<div class="col-md-4">
-				{{ form_row(form.date, {disabled: not editable}) }}                                
+				{{ form_row(form.date, {disabled: not editable}) }}
 			</div>
 			<div class="col-md-4">
-				{{ form_row(form.state, {disabled: not editable}) }}                                
+				{{ form_row(form.state, {disabled: not editable}) }}
 			</div>
 			<div class="col-md-4">
-				{{ form_row(form.userMargin, {disabled: not editable, overall_below: overall_below|default(false), min_margin: min_margin|default(0) }) }}                                
+				{{ form_row(form.userMargin, {disabled: not editable, overall_below: overall_below|default(false), min_margin: min_margin|default(0) }) }}
 			</div>
 		</div>
 	</div>
-	
-	<div class="card-footer d-print-none">    
+
+	<div class="card-footer d-print-none">
         {%- if editable -%}
         	<div class="row">
 				<div class="col-md-8">
@@ -42,7 +42,7 @@
                     {{ icons.button_ok(cancel_path) }}
         		</div>
         		<div class="col-md-9 text-md-right">
-        			<small class="text-danger">{{ 'calculation.edit.read_only'|trans({'%name%' : item.stateCode}) }}</small>
+        			<small class="text-danger">{{ 'calculation.edit.read_only'|trans({'%name%': item.stateCode}) }}</small>
         		</div>
         	</div>
         {%- endif -%}

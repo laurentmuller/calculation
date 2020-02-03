@@ -1,14 +1,11 @@
 {% extends 'cards/card_edit.html.twig' %}
 
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
-{%- set title        = new ? 'category.add.title' : 'category.edit.title' -%}
-{%- set title_icon   = 'folder far' -%}
-{%- set page_list    = 'category_list' -%}
-{%- set marginsLengh = form.margins|length %}
-{%- set tableClass   = 'table table-borderless table-edit' ~ (marginsLengh == 0 ? ' d-none' : '') -%}
+{%- set title         = new ? 'category.add.title' : 'category.edit.title' -%}
+{%- set title_icon    = 'folder far' -%}
+{%- set page_list     = 'category_list' -%}
+{%- set margins_lengh = form.margins|length %}
+{%- set table_class   = 'table table-borderless table-edit' ~ (margins_lengh == 0 ? ' d-none' : '') -%}
 
 {# macros #}
 {% macro printMarginRow(margin) %}
@@ -55,7 +52,7 @@
     		</div>
     	</div>
         <hr class="mt-0 mb-2">
-        <table id="data-table-edit" class="{{ tableClass }}" data-index="{{ marginsLengh }}" data-prototype="{{ _self.printMarginRow(form.margins.vars.prototype)|e('html_attr') }}">
+        <table id="data-table-edit" class="{{ table_class }}" data-index="{{ margins_lengh }}" data-prototype="{{ _self.printMarginRow(form.margins.vars.prototype)|e('html_attr') }}">
             <thead>
                 <tr>
                     <th class="vertical-middle text-right font-weight-normal required">{{ 'categorymargin.fields.minimum'|trans }}</th>

@@ -5,7 +5,7 @@
 {%- set title        = isMail ? 'user.message.title' : 'user.comment.title' -%}
 {%- set description  = isMail ? 'user.message.description'|trans : 'user.comment.description'|trans -%}
 {%- set page_list    = isMail ? 'user_list' : 'homepage' -%}
-{%- set form_attr    = form_attr|default({})|merge({ 'data-focus':  (not isMail)|json_encode}) -%}
+{%- set form_attr    = form_attr|default({})|merge({'data-focus': (not isMail)|json_encode}) -%}
 
 {% block card_header %}
 {{ parent() }}

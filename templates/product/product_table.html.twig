@@ -7,7 +7,7 @@
 {%- set object_type = IEntityVoter.ENTITY_PRODUCT -%}
 
 {# actions #}
-{%- set params      = {'id' : 0} -%}
+{%- set params      = {'id': 0} -%}
 {%- set add_path    = path('product_add') -%}
 {%- set show_path   = path('product_show', params) -%}
 {%- set edit_path   = path('product_edit', params) -%}
@@ -21,6 +21,4 @@
 {%- set delete_title = 'product.delete.title' %}
 
 {# highlight search #}
-{%- set attributes = attributes|default({})|merge ({
-    'data-search-highlight': true
-}) -%}
+{%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}

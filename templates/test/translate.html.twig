@@ -1,6 +1,4 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% import 'macros/_icons.html.twig' as icons %}
-
 
 {# parameters #}
 {%- set title       = 'translator.title' -%}
@@ -9,12 +7,12 @@
 {%- set submit_text = 'translator.submit_text' -%}
 {%- set cancel_path = false -%}
 {%- set form_attr   = form_attr|default({})|merge({
-                     'data-title'        : 'translator.title'|trans,
-                     'data-success'      : 'translator.translate_sucess'|trans,
-                     'data-copy-success' : 'translator.copy_sucess'|trans,
-                     'data-copy-error'   : 'translator.copy_error'|trans,
-                     'data-detected'     : 'translator.detect_label'|trans, 
-                     'data-locale'       :  app.request.locale }) -%}
+                     'data-title': 'translator.title'|trans,
+                     'data-success': 'translator.translate_sucess'|trans,
+                     'data-copy-success': 'translator.copy_sucess'|trans,
+                     'data-copy-error': 'translator.copy_error'|trans,
+                     'data-detected': 'translator.detect_label'|trans, 
+                     'data-locale': app.request.locale}) -%}
 
 {% block card_container_class '' %}
 
@@ -41,20 +39,20 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            <label for="to" class="required">{{ 'translator.to_label'|trans }}</label> 
+            <label for="to" class="required">{{ 'translator.to_label'|trans }}</label>
             <select id="to" name="to" class="form-control" required="required" notEqualTo="#from">
             {% for key, value in languages %}
-                <option value="{{ value }}"{%if value == language%} selected="selected" {%endif%}>{{ key }}</option>
+                <option value="{{ value }}"{% if value == language %} selected="selected" {% endif %}>{{ key }}</option>
             {% endfor %}
             </select>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label for="service" class="required">{{ 'translator.service_label'|trans }}</label> 
+            <label for="service" class="required">{{ 'translator.service_label'|trans }}</label>
             <select id="service" name="service" class="form-control" data-languages="{{ path('ajax_languages') }}">
             {% for entry in services %}
-                <option value="{{ entry.class }}" data-api="{{ entry.api }}" {%if entry.name == service%} selected="selected" {%endif%}>{{ entry.name }}</option>
+                <option value="{{ entry.class }}" data-api="{{ entry.api }}" {% if entry.name == service %} selected="selected" {% endif %}>{{ entry.name }}</option>
             {% endfor %}
             </select>
         </div>
@@ -72,7 +70,7 @@
             <label for="result">{{ 'translator.result_label'|trans }}</label>
             <textarea id="result" name="result" class="form-control fixed bg-white" rows="12" readonly="readonly" dir="auto"></textarea>
         </div>
-    </div>    
+    </div>
 </div>
 <div class="form-row">
     <div class="col-md-6">

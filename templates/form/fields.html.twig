@@ -8,7 +8,7 @@
     {%- endif -%}
     {%- set widget_attr = {} -%}
     {%- if help is not empty -%}
-        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~ "_help"}} -%}
     {%- endif -%}
     <{{ element|default('div') }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group')|trim})} %}{{ block('attributes') }}{% endwith %}>
         {{- form_label(form) -}}
@@ -17,8 +17,8 @@
         {{- form_errors(form) }}
     </{{ element|default('div') }}>
 {%- endblock form_row %}
- 
-{# empty block because errors are displayed after input #} 
+
+{# empty block because errors are displayed after input #}
 {% block form_label_errors -%}{%- endblock %}
 
 {# 
@@ -61,7 +61,7 @@ override form errors. Rendered example:
     <div class="input-group-prepend">
         <span class="input-group-text"><i class="fas fa-fw fa-lock" aria-hidden="true"></i></span>
     </div>
-    {{ parent() }}    
+    {{ parent() }}
     <div class="input-group-append">
         <button class="btn btn-password btn-outline-secondary" type="button" title="{{ 'common.toggle_password'|trans }}">
             <i class="far fa-eye" aria-hidden="true"></i>
@@ -97,7 +97,7 @@ override form errors. Rendered example:
         {# <input type="color" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
         {{ block('form_widget_simple') }}
     	<button type="button" class="dropdown-toggle btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    		<span class="drowpdown-color border border-secondary" style="background-color: {{ value|default('#000000')  }};"></span>
+    		<span class="drowpdown-color border border-secondary" style="background-color: {{ value|default('#000000') }};"></span>
     		<span class="drowpdown-text"></span>
     	</button>
     	<div class="dropdown-menu d-print-none"></div>
@@ -132,17 +132,17 @@ override form errors. Rendered example:
 {# use fileinput style #}
 {% block file_widget -%}
 {%- if thumbnail|default(false) -%}
-    {%- set empty_image   = empty_image|default(false) -%}
+    {%- set empty_image = empty_image|default(false) -%}
     {%- set thumbnail_src = thumbnail_src|default(false) -%}
     {%- set thumbnail_alt = thumbnail_alt|default('filetype.image') -%}
     {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
     <div class="fileinput {{ thumbnail_src ? 'fileinput-exists' : 'fileinput-new' }}" data-provides="fileinput">
         <div class="text-center">
             <div class="fileinput-preview img-thumbnail" data-trigger="fileinput">
-                {% if thumbnail_src or empty_image  -%}
+                {% if thumbnail_src or empty_image -%}
                     <img alt="{{ thumbnail_alt|trans }}" src="{{ thumbnail_src|default(empty_image) }}">
-                {%- endif %}                	
-            </div> 
+                {%- endif %}
+            </div>
             <div>
                 <span class="btn btn-file btn-form btn-outline-secondary">
                     <span class="fileinput-new">{{ 'common.button_browse'|trans }}</span>
@@ -174,11 +174,11 @@ override form errors. Rendered example:
 {%- endif -%}
 {%- endblock -%}
 
-{# vich_image #} 
+{# vich_image #}
 {% block vich_image_widget -%}
 {# file #}
 {%- set uri = asset_exists(image_uri) ? image_uri : false -%}
-{%- set src = uri ?  asset(uri) ~ '?' ~ 'now'|date('c') : false -%}
+{%- set src = uri ? asset(uri) ~ '?' ~ 'now'|date('c') : false -%}
 {%- set alt = 'user.image.title' -%}
 {%- set empty_image = asset('/images/avatar.png') -%}
 {{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt, empty_image: empty_image}) -}}
@@ -189,10 +189,10 @@ override form errors. Rendered example:
 </div>
 {%- endif %}
 {%- endblock %}
- 
+
 {# captcha_image #}
 {% block captcha_image_widget -%}
-{%- set type        = type|default('text') -%}
+{%- set type = type|default('text') -%}
 {%- set image_title = 'security.login.image'|trans([], 'FOSUserBundle') -%}
 {%- set image_style = theme_dark(app.request) ? ' style="margin-top: 1px; margin-bottom: 1px;"' : '' -%}
 {%- if remote|default(false) -%}
@@ -214,6 +214,6 @@ override form errors. Rendered example:
             <i class="fas fa-sync" aria-hidden="true"></i>
         </button>
     </div>
-    {% endif %}    
+    {% endif %}
 </div>
 {%- endblock %}

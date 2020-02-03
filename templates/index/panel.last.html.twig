@@ -8,13 +8,13 @@
 
 {# actions #}
 {%- set object_type  = IEntityVoter.ENTITY_CALCULATION -%}
-{%- set add_path     = is_granted(IEntityVoter.ATTRIBUTE_ADD,    object_type) ? path('calculation_add', { 'caller': caller}) : null -%}
-{%- set clone_page   = is_granted(IEntityVoter.ATTRIBUTE_ADD,    object_type) ? 'calculation_clone'  : null -%}
-{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'calculation_edit'   : null -%}
-{%- set state_page   = is_granted(IEntityVoter.ATTRIBUTE_EDIT,   object_type) ? 'calculation_state'  : null -%}
+{%- set add_path     = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? path('calculation_add', { 'caller': caller}) : null -%}
+{%- set clone_page   = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
+{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
+{%- set state_page   = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
 {%- set delete_page  = is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
-{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW,   object_type) ? 'calculation_show'   : null -%}
-{%- set single_page  = is_granted(IEntityVoter.ATTRIBUTE_PDF,    object_type) ? 'calculation_pdf_id' : null -%}
+{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
+{%- set single_page  = is_granted(IEntityVoter.ATTRIBUTE_PDF, object_type) ? 'calculation_pdf_id' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 
 <div class="card mb-2">
@@ -33,10 +33,9 @@
     <div class="card-body d-flex flex-row flex-wrap p-2">
 	{% for item in calculations %}
         {# item parameters #}
-        {%- set id = item.id -%}        
-        {%- set item_title = item.id|identifier  -%}
+        {%- set id = item.id -%}
+        {%- set item_title = item.id|identifier -%}
         {%- set params = routeParams(app.request, id)|merge({'caller': caller}) -%}
-        
 		<div class="card-last border rounded p-2 m-1{% if id == selection %} border-primary{%- endif %}">
 			<div class="row">
 				<div class="col-10 card-title mb-1 h5">
@@ -45,7 +44,7 @@
                             {%- set default_path = path(default_page, params) -%}
                             <a href="{{ default_path }}" class="text-body ml-1">{{ item_title }}</a>
                         {%- else -%}
-                            <span class="ml-1">{{ item_title }}</span>                             
+                            <span class="ml-1">{{ item_title }}</span>
                         {%- endif -%}   
                     </div>
                 </div>
@@ -57,7 +56,7 @@
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
                             {%- if show_page -%}
                                 {%- set show_path = path(show_page, params) -%}
-                                {{ icons.dropdownItem(show_path, 'common.button_show', 'tv') }}    
+                                {{ icons.dropdownItem(show_path, 'common.button_show', 'tv') }}
                             {%- endif -%}
                             {%- if edit_page -%}
                                 {%- set edit_path = path(edit_page, params) -%}
@@ -69,7 +68,7 @@
                             {%- endif -%}
                             {%- if delete_page -%}
                                 {%- set delete_path = path(delete_page, params) -%}
-                                {{ icons.dropdownItem(delete_path, 'common.button_delete', 'times') }}    
+                                {{ icons.dropdownItem(delete_path, 'common.button_delete', 'times') }}
                             {%- endif -%}                            
                             {%- if state_page -%}
                                 {{ icons.dropdownSeparator }}
@@ -85,19 +84,18 @@
                             	{{ icons.dropdownSeparator }}
                             	{{ icons.dropdownItem(add_path, 'calculation.add.title', 'file far') }}
                             {%- endif -%}
-                        </div>   
-                	</div>                      	
+                        </div>
+                	</div>
                 </div>
-                {%- endif -%}  
+                {%- endif -%}
 			</div>
             <table class="table table-borderless table-sm ml-2 mr-0 my-0">
                 {{ properties.line(item.customer) }}
-                {{ properties.line(item.description) }}                
+                {{ properties.line(item.description) }}
                 {{ properties.line(item.date|localedate ~ ' / ' ~ item.stateCode) }}
                 {{ properties.separator() }}
                 {%- if marginBelow(item) -%}
-                    {%- set className = 'text-right pr-4 text-danger below-cell has-tooltip' -%}
-                    {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent }) -%}
+                    {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
                     <tr>
                     	<td>{{ 'calculation.fields.total'|trans }}</td>
                     	<td class="text-right pr-4 text-danger below-cell has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallTotal|amount }}</td>
@@ -110,7 +108,7 @@
     {%- else -%}
         <div class="alert alert-warning flex-fill mb-0 py-4 text-center">
             {{ 'calculation.list.empty'|trans }}
-        </div>   
-	{%- endfor -%}  
+        </div>
+	{%- endfor -%}
     </div>
 </div>

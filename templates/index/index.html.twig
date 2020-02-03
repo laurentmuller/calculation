@@ -1,8 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
-
 {# parameters #}
 {%- set title = 'index.title' -%}
 
@@ -15,9 +12,9 @@
 {% block body -%}
 <div class="row no-gutters">
 	<div class="col">
-        {%- include 'index/panel.last.html.twig'   -%}
-        {%- include 'index/panel.state.html.twig'  -%}
-        {%- include 'index/panel.month.html.twig'  -%}
+        {%- include 'index/panel.last.html.twig' -%}
+        {%- include 'index/panel.state.html.twig' -%}
+        {%- include 'index/panel.month.html.twig' -%}
 	</div>
 </div>
 {# switch user #}

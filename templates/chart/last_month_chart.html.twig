@@ -12,7 +12,7 @@
     <table class="table table-bordered table-hover table-list table-sm">
         <thead>
             <tr>
-                <th>{{ 'fields.month'|trans }}</th>                
+                <th>{{ 'fields.month'|trans }}</th>
                 <th class="text-currency">{{ 'fields.count'|trans }}</th>
                 <th class="text-currency" style="border: 2px solid darkgreen;">{{ 'fields.net'|trans }}</th>
                 <th class="text-percent">{{ 'fields.margin_percent'|trans }}</th>
@@ -29,8 +29,8 @@
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
                 <td class="text-currency">{{ item.items|number_format(0) }}</td>
-                {%- set className = marginBelow(item.marginPercent) ? 'text-percent text-danger' : 'text-percent' -%}
-                <td class="{{ className }}">{{ item.marginPercent|percent(false) }}</td>                
+                {%- set class_name = marginBelow(item.marginPercent) ? 'text-percent text-danger' : 'text-percent' -%}
+                <td class="{{ class_name }}">{{ item.marginPercent|percent(false) }}</td>
                 <td class="text-currency">{{ item.marginAmount|number_format(0) }}</td>
                 <td class="text-currency">{{ item.sum|number_format(0) }}</td>
             </tr>
@@ -43,7 +43,7 @@
                 <td class="font-weight-bold text-currency">{{ items|number_format(0) }}</td>
             	<td class="font-weight-bold text-percent">{{ marginPercent|percent(false) }}</td>
                 <td class="font-weight-bold text-currency">{{ marginAmount|number_format(0) }}</td>
-                <td class="font-weight-bold text-currency">{{ total|number_format(0) }}</td>                
+                <td class="font-weight-bold text-currency">{{ total|number_format(0) }}</td>
             </tr>
         </tfoot>
     </table>

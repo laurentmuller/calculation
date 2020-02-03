@@ -30,8 +30,8 @@
             {{ tools.rowInfo('about.app_version'|trans, app_version) }}
             {{ tools.rowInfo('about.app_environment'|trans, ('environment.' ~ app_environment)|trans) }}
             {{ tools.rowInfoLink('about.app_customer'|trans, app_customer, app_customer_url) }}
-            {{ tools.rowInfoLink('about.app_owner'|trans, app_owner, app_owner_url) }}            
-        </tbody>                
+            {{ tools.rowInfoLink('about.app_owner'|trans, app_owner, app_owner_url) }}
+        </tbody>
     </table>
 </div>
 {% endblock %}
@@ -49,10 +49,10 @@
 </div>
 <div class="row no-gutters mt-2 d-print-none">
     <div class="col">
-        {{ icons.homepage() }}    
-        {% if app.debug  or app_environment == 'dev' -%}{{ icons.button_pdf('about_pdf') }}{%- endif %}
+        {{ icons.homepage() }}
+        {% if app.debug or app_environment == 'dev' -%}{{ icons.button_pdf('about_pdf') }}{%- endif %}
     </div>
-</div>    
+</div>
 {% endblock %}
 
 {% block stylesheets %}

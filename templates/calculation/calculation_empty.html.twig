@@ -19,7 +19,7 @@
 {%- set title_icon   = 'file-code far' -%}
 {%- set empty_list   = 'empty.empty' -%}
 {%- set caller       = path(app.request.attributes.get('_route')) -%}
-{%- set colpsan      = 1 -%}
+{%- set col_span      = 1 -%}
 
 {# actions #}
 {%- set add_page     = false -%}
@@ -43,5 +43,5 @@
 {%- block card_footer_class '' -%}
 {% block card_footer -%}
 {{ icons.homepage() }}
-{% if items|length %}{{ icons.button_pdf('calculation_empty_pdf')}}{% endif %}
+{% if items|length %}{{ icons.button_pdf('calculation_empty_pdf') }}{% endif %}
 {%- endblock %}

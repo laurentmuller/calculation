@@ -11,21 +11,21 @@
 {% endblock %}
 
 {% block card_class -%}
-{% if data.valid %}{{parent()}}{% else %}border-danger{% endif %}
+{% if data.valid %}{{ parent() }}{% else %}border-danger{% endif %}
 {%- endblock %}
 {% block card_header_class -%}
-{% if data.valid %}{{parent()}}{% else %}text-white bg-danger{% endif %}
+{% if data.valid %}{{ parent() }}{% else %}text-white bg-danger{% endif %}
 {%- endblock %}
 
 {% block card_body %}
-{%- if data.valid  %}
+{%- if data.valid %}
 <p>{{ 'import.success'|trans({'%date%': data.validity|localedate('long')}) }}</p>
 <table class="table table-bordered table-sm mb-0">
     <thead>
         <tr>
             <th>{{ 'import.objects'|trans }}</th>
             <th class="text-currency">{{ 'import.errors'|trans }}</th>
-            <th class="text-currency">{{ 'import.valids'|trans }}</th>        
+            <th class="text-currency">{{ 'import.valids'|trans }}</th>
         </tr>
     </thead>
     <tbody>

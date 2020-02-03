@@ -5,11 +5,11 @@
 {%- set title_icon = 'file-alt far' -%}
 {%- set page_list  = 'product_list' -%}
 {%- set form_attr  = form_attr|default({})|merge({
-                     'data-title'           : title|trans,
-                     'data-search-unit'     : url('ajax_search_unit'),
-                     'data-search-supplier' : url('ajax_search_supplier'),
-                     'data-error-unit'      : 'product.edit.error_search_unit'|trans,
-                     'data-error-supplier'  : 'product.edit.error_search_supplier'|trans }) -%}
+                     'data-title': title|trans,
+                     'data-search-unit': url('ajax_search_unit'),
+                     'data-search-supplier': url('ajax_search_supplier'),
+                     'data-error-unit': 'product.edit.error_search_unit'|trans,
+                     'data-error-supplier': 'product.edit.error_search_supplier'|trans}) -%}
                       
 {% block card_body %}
 {{ form_row(form.description) }}

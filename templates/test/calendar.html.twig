@@ -15,7 +15,7 @@
 {% endmacro %}
 
 {% macro monthTable(month) %}
-{%- set class = 'text-white text-center font-weight-normal' ~ (month.current ? ' bg-primary' : ' bg-secondary')  -%}
+{%- set class = 'text-white text-center font-weight-normal' ~ (month.current ? ' bg-primary' : ' bg-secondary') -%}
 <div class="col-lg-4 col-md-6 mb-4">
 	<table class="border w-100 calendar">
 		<thead>
@@ -28,28 +28,28 @@
                 <th class="border font-weight-normal">&nbsp;</th>
                 {% for name in month.calendar.weekShortNames %}
                     {%- set class = 'border text-center font-weight-normal' -%}
-                    {% if loop.index in [6,7] %}{%- set class = class ~ ' bg-light' -%}{% endif %}
+                    {% if loop.index in [6, 7] %}{%- set class = class ~ ' bg-light' -%}{% endif %}
                     <th class="{{ class }}">{{ name }}</th>
                 {% endfor %}
             </tr>
 		</thead>
 		<tbody>
     	{% for week in month.weeks -%}
-            {{ _self.weekRow(month, week) }}            
+            {{ _self.weekRow(month, week) }}
 		{%- endfor %}
 		</tbody>
 	</table>
-</div>    	
+</div>
 {% endmacro %}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title            = 'test.calendar' -%}
-{%- set title_parameters = {'%year%': calendar.year} -%}    
+{%- set title_parameters = {'%year%': calendar.year} -%}
 
 {% block body %}
 <div class="row">
-    <div class="col-4">        
+    <div class="col-4">
         <h2 class="">{{ 'test.calendar'|trans({'%year%': calendar.year}) }}</h2>
     </div>
     <div class="col-4 text-md-center">
@@ -61,11 +61,11 @@
         {% set title = 'test.calendar'|trans({'%year%': year}) %}
         <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar') }}">{{ icons.icon('arrows-alt') }}</a>
         {% endif %}
-        
+
         {% set year = calendar.year - 1 %}
         {% set title = 'test.calendar'|trans({'%year%': year}) %}
         <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar', {'year': year}) }}">{{ icons.icon('chevron-left') }}</a>
-        
+
         {% set year = calendar.year + 1 %}
         {% set title = 'test.calendar'|trans({'%year%': year}) %}
         <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar', {'year': year}) }}">{{ icons.icon('chevron-right') }}</a>

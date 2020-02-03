@@ -1,15 +1,15 @@
 {%- if not app.request.cookies.has('POLICY-ACCEPTED') -%}
 {{ asset_js('js/plugins/cookie-banner.js', {
-    'id'                    : "cookiebanner",
-    'data-cookie-path'      : cookie_path,
-    'data-cookie-secure'    : cookie_secure ? '1' : '0',
-    'data-cookie-same-site' : cookie_same_site,
-    'data-cookie-expire'    : 'now'|date_modify('+1 year')|date('r'),
-    'data-message'          : 'cookiebanner.message'|trans,
-    'data-link-message'     : 'cookiebanner.link'|trans,
-    'data-close-message'    : 'cookiebanner.close'|trans,        
-    'data-link-url'         : path('about_policy'),
-    'data-link-target'      : '_self',
-    'data-link-rel'         : 'license'    
+    'id': "cookiebanner",
+    'data-cookie-path': cookie_path,
+    'data-cookie-secure': cookie_secure ? '1' : '0',
+    'data-cookie-same-site': cookie_same_site,
+    'data-cookie-expire': 'now'|date_modify('+1 year')|date('r'),
+    'data-message': 'cookiebanner.message'|trans,
+    'data-link-message': 'cookiebanner.link'|trans,
+    'data-close-message': 'cookiebanner.close'|trans,
+    'data-link-url': path('about_policy'),
+    'data-link-target': '_self',
+    'data-link-rel': 'license'
     }) }}
 {%- endif -%}

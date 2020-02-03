@@ -1,5 +1,4 @@
 {# macros for icons, links and navigation entries #}
-
 {% macro icon(icon, text, domain = null, parameters = []) -%}
 {%- if icon -%}
     {%- if 'fab' in icon -%}
@@ -37,7 +36,7 @@
 {%- endmacro %}
 
 {% macro dropdownItem(href, text, icon, domain = null, parameters = []) -%}
-{{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw': null), null, domain, parameters) -}}
+{{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, domain, parameters) -}}
 {%- endmacro %}
 
 {% macro dropdownItemExternal(href, text, icon, domain = null, parameters = []) -%}
@@ -51,7 +50,7 @@
 {%- endmacro %}
 
 {% macro dropdownItemWithClass(href, text, icon, class, hidden, domain = null, parameters = []) -%}
-{%- set class = ('dropdown-item rowlink-skip ' ~ (hidden ? 'd-none ' : '' ) ~ class|default(''))|trim -%}
+{%- set class = ('dropdown-item rowlink-skip ' ~ (hidden ? 'd-none ' : '') ~ class|default(''))|trim -%}
 <a href="{{ href }}" class="{{ class }}">
     {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}
 </a>
@@ -101,5 +100,5 @@
 {%- endmacro %}
 
 {% macro copyright_link() -%}
-{{ 'index.copyright'|trans({'%year%':'now'|date('Y'), '%owner_url%':app_owner_url, '%owner%':app_owner}, 'messages')|raw }}
+{{ 'index.copyright'|trans({'%year%': 'now'|date('Y'), '%owner_url%': app_owner_url, '%owner%': app_owner}, 'messages')|raw }}
 {%- endmacro %}

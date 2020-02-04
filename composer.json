@@ -60,7 +60,6 @@
 		"symfony/maker-bundle" : "^1.0",
 		"symfony/profiler-pack" : "*",
 		"symfony/test-pack" : "*",
-		"symfony/web-server-bundle" : "4.4.*",
 		"phpstan/phpstan" : "^0.12",
 		"phpstan/phpstan-symfony" : "~0.12",
 		"phpstan/phpstan-doctrine" : "~0.12",

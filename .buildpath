@@ -621,11 +621,6 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/symfony/web-server-bundle">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/symfony/yaml">
 		<attributes>
 			<attribute name="composer" value="vendor"/>

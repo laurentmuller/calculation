@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Doctrine;
 
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
 /**
  * Class implementing this interface extends the doctrine collection.
@@ -23,6 +24,20 @@ use Doctrine\Common\Collections\Collection;
  */
 interface ExtendedCollection extends Collection
 {
+    /**
+     * Return a new collection with sorted result.
+     *
+     * @param string|PropertyPathInterface $field the field name or the property path to sort by
+     */
+    public function getSortedCollection($field): self;
+
+    /**
+     * Gets the sorted iterator.
+     *
+     * @param string|PropertyPathInterface $field the field name or the property path to sort by
+     */
+    public function getSortedIterator($field): \ArrayIterator;
+
     /**
      * Iteratively reduce the underlaying array to a single value using a callback function.
      *

@@ -19,8 +19,8 @@ use App\Traits\MathTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Blameable\Traits\BlameableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Blameable\Traits\BlameableEntity as BlameableTrait;
+use Gedmo\Timestampable\Traits\TimestampableEntity as TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -31,10 +31,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Calculation extends BaseEntity
 {
-    use BlameableEntity;
+    use BlameableTrait;
     use FormatterTrait;
     use MathTrait;
-    use TimestampableEntity;
+    use TimestampableTrait;
 
     /**
      * The customer name.

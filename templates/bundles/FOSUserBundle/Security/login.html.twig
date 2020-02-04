@@ -55,7 +55,7 @@
 
 {% block javascripts -%}
 {#
-{% if recaptcha_used|default(false) and recaptcha_site|default(false) %}
+{% if recaptcha_used ?? false and recaptcha_site ?? false %}
 {{ asset_js('https://www.google.com/recaptcha/api.js?render=' ~ recaptcha_site, {'recaptcha-site': recaptcha_site, 'recaptcha-action': 'login'}) }}
 {%- endif %}
 #}

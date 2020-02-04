@@ -37,6 +37,19 @@
 {{ form_row(form.email) }}
 {{ form_row(form.webSite) }}
 {% endblock %}
+{#
+{% block card_footer -%}
+{{ parent() }}
+<div class="row mt-1">
+    <div class="col-md-6 small text-muted">
+       <span>Création : </span><span>29.01.2020 08:21</span><span> - </span><span>Bibi</span>
+    </div>
+    <div class="col-md-6 small text-muted text-md-right">
+         <span>Mise à jour : </span><span>04.02.2020 07:42</span><span> - </span><span>Bibi</span>
+    </div>
+</div>
+{% endblock %}
+#}
 
 {% block javascripts %}
 {% if app.debug %}

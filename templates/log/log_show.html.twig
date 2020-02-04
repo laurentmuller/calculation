@@ -1,10 +1,8 @@
 {% extends 'cards/card_show.html.twig' %}
 
-{# imports #}
-{% import 'log/_macro_log.html.twig' as tools %}
-
 {# macros #}
 {% macro formatArray(name, value) %}
+{% import 'log/_macro_log.html.twig' as tools %}
 {%- if value|length -%}
 <tr>
     <td class="w-25">{{ name|trans }}</td>

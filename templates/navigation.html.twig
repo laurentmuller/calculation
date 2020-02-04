@@ -110,7 +110,7 @@
         </ul>
         <ul class="navbar-nav">
             {# search #}
-            {% if show_navigation|default(false) -%}
+            {% if show_navigation ?? false -%}
                 <li class="nav-item mx-2 my-auto">
                     <a href="#" id="navigation-search-button" class="nav-link" title="{{ 'search.title'|trans }}">
                         {{- icons.icon('search fa-fw') -}}

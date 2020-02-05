@@ -296,10 +296,10 @@ user:
         connected: Vous êtes connecté comme utilisateur <b>%name%</b>.
         take:
             title: Prendre l'identité de l'utilisateur
-            sucess: L'identité de l'utilisateur <b>%name%</b> a été prise avec succès.
+            sucess: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
         exit:
             title: Reprendre son identité
-            sucess: Votre identité a été reprise avec succès.
+            sucess: <b>%name%</b>, vous avez repris votre identité avec succès.
     show:
         title: Propriétés de l'utilisateur
     login:

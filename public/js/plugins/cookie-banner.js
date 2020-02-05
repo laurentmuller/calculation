@@ -7,38 +7,6 @@
     'use strict';
 
     /**
-     * Utility functions
-     */
-    var Utils = {
-
-        /**
-         * Find a script.
-         */
-        getScriptById: function (id) {
-            const scripts = document.getElementsByTagName('script');
-            for (var i = 0, len = scripts.length; i < len; i++) {
-                if (id === scripts[i].id) {
-                    return scripts[i];
-                }
-            }
-            return null;
-        },
-
-        /**
-         * Gets the data attribute.
-         */
-        getDataAttributes: function (script) {
-            // dataset?
-            if (script.hasOwnProperty('dataset')) {
-                return script.dataset;
-            }
-
-            // data
-            return $(script).data();
-        }
-    };
-
-    /**
      * Cookies functions
      */
     var Cookies = {
@@ -74,7 +42,7 @@
                 cookie += '; samesite=' + samesite;
             }
             if (httponly) {
-                //cookie += '; httponly';
+                // cookie += '; httponly';
             }
             if (end) {
                 switch (end.constructor) {
@@ -247,12 +215,20 @@
         }
     };
 
-    // find cookiebanner script
-    const script = Utils.getScriptById('cookiebanner');
-    if (script && !$.cookiebanner) {
-        const options = $(script).data();
-        $.cookiebanner = new Cookiebanner();
-        $.cookiebanner.init(options);
+    // initialized?
+    if (!$.cookiebanner) {
+        // find script
+        const scripts = document.getElementsByTagName('script');
+        for (var i = 0, len = scripts.length; i < len; i++) {
+            if ('cookiebanner' === scripts[i].id) {
+                // initialize
+                const script = scripts[i];
+                const options = $(script).data();
+                $.cookiebanner = new Cookiebanner();
+                $.cookiebanner.init(options);
+                break;
+            }
+        }
     }
 
 })(jQuery);

@@ -117,15 +117,15 @@ class UpdateAssetsCommand extends AssetsCommand
 
                 // check version
                 $versionSource = $plugin->source ?? $source;
-                if (false !== \stripos($versionSource, 'api.cdnjs.com')) {
+                if (false !== \stripos($versionSource, 'cdnjs')) {
                     $this->checkApiCdnjsLastVersion($name, $version);
-                } elseif (false !== \stripos($versionSource, 'cdn.jsdelivr')) {
+                } elseif (false !== \stripos($versionSource, 'jsdelivr')) {
                     $this->checkJsDelivrLastVersion($name, $version);
                 }
             }
 
             //check loaded files
-            $expected = \array_reduce($plugins, function (int $carry, $plugin) {
+            $expected = \array_reduce($plugins, function (int $carry, \stdClass $plugin) {
                 return $carry + \count($plugin->files);
             }, 0);
             if ($expected !== $countFiles) {
@@ -161,17 +161,9 @@ class UpdateAssetsCommand extends AssetsCommand
      */
     private function checkApiCdnjsLastVersion(string $name, string $version): void
     {
-        // get content
+        // src: https://cdnjs.cloudflare.com/ajax/libs/
         $url = "https://api.cdnjs.com/libraries/{$name}?fields=version";
-        if (false !== $content = $this->loadJson($url)) {
-            // compare version
-            if (isset($content->version)) {
-                $lastVersion = $content->version;
-                if (\version_compare($version, $lastVersion, '<')) {
-                    $this->write("The plugin '{$name}' version '{$version}' can be updated to the version '{$lastVersion}'.");
-                }
-            }
-        }
+        $this->checkVersion($url, $name, $version, ['version']);
     }
 
     /**
@@ -184,14 +176,38 @@ class UpdateAssetsCommand extends AssetsCommand
      */
     private function checkJsDelivrLastVersion(string $name, string $version): void
     {
+        // src: https://cdn.jsdelivr.net/npm/
         $url = "https://data.jsdelivr.com/v1/package/npm/{$name}";
-        if (false !== $content = $this->loadJson($url)) {
-            if (isset($content->tags) && isset($content->tags->latest)) {
-                $lastVersion = $content->tags->latest;
-                if (\version_compare($version, $lastVersion, '<')) {
-                    $this->write("The plugin '{$name}' version '{$version}' can be updated to the version '{$lastVersion}'.");
-                }
+        $this->checkVersion($url, $name, $version, ['tags', 'latest']);
+    }
+
+    /**
+     * Checks the plugin version.
+     *
+     * @param string   $url     the URL content to download
+     * @param string   $name    the plugin name
+     * @param string   $version the actual version
+     * @param string[] $paths   the paths to the version
+     */
+    private function checkVersion(string $url, string $name, string $version, array $paths): void
+    {
+        if (false === $content = $this->loadJson($url)) {
+            $this->write("$url not found.");
+            return;
+        }
+
+        foreach ($paths as $path) {
+            if (!isset($content->$path)) {
+                $this->write("$path not found.");
+                return;
             }
+            $content = $content->$path;
+        }
+
+
+
+        if (\version_compare($version, $content, '<')) {
+            $this->write("The plugin '{$name}' version '{$version}' can be updated to the version '{$content}'.");
         }
     }
 

@@ -208,19 +208,27 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
      */
     public function onSwitchUser(SwitchUserEvent $event): void
     {
-        // get user name parameter
+        // get switch parameter
         $request = $event->getRequest();
         $key = $this->switchParameterName;
-        $username = $request->get($key, $request->headers->get($key));
-        if (!$username) {
+        if (!$switchValue = $request->get($key, $request->headers->get($key))) {
             return;
         }
 
+        // current user
+        $token = $event->getToken();
+        $userName = \ucfirst($token->getUsername());
+
         // exit?
-        if (SwitchUserListener::EXIT_VALUE === $username) {
-            $this->succesTrans('user.switch.exit.sucess');
+        if (SwitchUserListener::EXIT_VALUE === $switchValue) {
+            $this->succesTrans('user.switch.exit.sucess', ['%name%' => $userName]);
         } else {
-            $this->succesTrans('user.switch.take.sucess', ['%name%' => $username]);
+            $originalToken = $token->getOriginalToken();
+            $originalUserName = \ucfirst($originalToken->getUserName());
+            $this->succesTrans('user.switch.take.sucess', [
+                '%orignal%' => $originalUserName,
+                '%name%' => $userName,
+            ]);
         }
     }
 

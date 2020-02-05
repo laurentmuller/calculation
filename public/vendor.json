@@ -169,15 +169,6 @@
 			"files": [
 				"clipboard.js"
 			]
-		},
-		{
-			"name": "bootstrap-select",
-			"version": "1.13.12",
-			"files": [
-				"js/bootstrap-select.js",
-				"js/i18n/defaults-fr_FR.js",
-				"css/bootstrap-select.css"
-			]
 		}
 	]
 }

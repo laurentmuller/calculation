@@ -17,7 +17,7 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Repository for user entity.

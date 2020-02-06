@@ -75,6 +75,109 @@ class HtmlParser
     }
 
     /**
+     * Creates a HTML list item  chunk.
+     *
+     * @param string          $name   the tag name
+     * @param HtmlParentChunk $parent the parent chunk
+     * @param string          $class  the optional class name
+     * @param \DOMNode        $node   the current node
+     */
+    private function createLiChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlLiChunk
+    {
+        $chunk = new HtmlLiChunk($name, $parent);
+        $chunk->setClassName($class);
+
+        return $chunk;
+    }
+
+    /**
+     * Creates a HTML ordered list chunk.
+     *
+     * @param string          $name   the tag name
+     * @param HtmlParentChunk $parent the parent chunk
+     * @param string          $class  the optional class name
+     * @param \DOMNode        $node   the current node
+     */
+    private function createOlChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlOlChunk
+    {
+        $chunk = new HtmlOlChunk($name, $parent);
+        $chunk->setClassName($class);
+        $chunk->setType($this->getTypeAttribute($node));
+        $chunk->setStart($this->getStartAttribute($node));
+
+        return $chunk;
+    }
+
+    /**
+     * Creates a HTML page break chunk.
+     *
+     * @param string          $name   the tag name
+     * @param HtmlParentChunk $parent the parent chunk
+     * @param string          $class  the optional class name
+     * @param \DOMNode        $node   the current node
+     */
+    private function createPageBreakChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlPageBreakChunk
+    {
+        return new HtmlPageBreakChunk($name, $parent);
+    }
+
+    /**
+     * Creates a HTML parent chunk.
+     *
+     * @param string          $name   the tag name
+     * @param HtmlParentChunk $parent the parent chunk
+     * @param string          $class  the optional class name
+     * @param \DOMNode        $node   the current node
+     */
+    private function createParentChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlParentChunk
+    {
+        $chunk = new HtmlParentChunk($name, $parent);
+        $chunk->setClassName($class);
+
+        return $chunk;
+    }
+
+    /**
+     * Creates a HTML text chunk.
+     *
+     * @param string          $name   the tag name
+     * @param HtmlParentChunk $parent the parent chunk
+     * @param string          $class  the optional class name
+     * @param \DOMNode        $node   the current node
+     */
+    private function createTextChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): ?HtmlTextChunk
+    {
+        /** @var \DOMText $nodeText */
+        $nodeText = $node;
+        $value = $nodeText->wholeText;
+        if (\strlen(\trim($value))) {
+            $chunk = new HtmlTextChunk($name, $parent);
+            $chunk->setClassName($class);
+            $chunk->setText($value);
+
+            return $chunk;
+        }
+
+        return null;
+    }
+
+    /**
+     * Creates a HTML unordered list chunk.
+     *
+     * @param string          $name   the tag name
+     * @param HtmlParentChunk $parent the parent chunk
+     * @param string          $class  the optional class name
+     * @param \DOMNode        $node   the current node
+     */
+    private function createUlChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlUlChunk
+    {
+        $chunk = new HtmlUlChunk($name, $parent);
+        $chunk->setClassName($class);
+
+        return $chunk;
+    }
+
+    /**
      * Gets a attribute value for the given node.
      *
      * @param \DOMNode $node    the node to get attribute for
@@ -147,37 +250,29 @@ class HtmlParser
             case XML_ELEMENT_NODE:
                 $name = $node->nodeName;
                 $class = $this->getClassAttribute($node);
-
-                if (HtmlChunk::PAGE_BREAK === $class) {
-                    new HtmlPageBreakChunk($name, $parent);
-                } elseif (HtmlChunk::LIST_ITEM === $name) {
-                    $parent = new HtmlLiChunk($name, $parent);
-                    $parent->setClassName($class);
-                } elseif (HtmlChunk::LIST_ORDERED === $name) {
-                    $parent = new HtmlOlChunk($name, $parent);
-                    $parent->setClassName($class)
-                        ->setType($this->getTypeAttribute($node))
-                        ->setStart($this->getStartAttribute($node));
-                } elseif (HtmlChunk::LIST_UNORDERED === $name) {
-                    $parent = new HtmlUlChunk($name, $parent);
-                    $parent->setClassName($class);
-                } else {
-                    $parent = new HtmlParentChunk($name, $parent);
-                    $parent->setClassName($class);
+                switch ($class) {
+                    case HtmlChunk::PAGE_BREAK:
+                        $this->createPageBreakChunk($name, $parent, $class, $node);
+                        break;
+                    case HtmlChunk::LIST_ITEM:
+                        $parent = $this->createLiChunk($name, $parent, $class, $node);
+                        break;
+                    case HtmlChunk::LIST_ORDERED:
+                        $parent = $this->createOlChunk($name, $parent, $class, $node);
+                        break;
+                    case HtmlChunk::LIST_UNORDERED:
+                        $parent = $this->createUlChunk($name, $parent, $class, $node);
+                        break;
+                    default:
+                        $parent = $this->createParentChunk($name, $parent, $class, $node);
+                        break;
                 }
                 break;
 
             case XML_TEXT_NODE:
-                /** @var \DOMText $nodeText */
-                $nodeText = $node;
-                $value = $nodeText->wholeText;
-                $value = $node->wholeText; //nodeValue;
-                if (\strlen(\trim($value))) {
-                    $name = $node->nodeName;
-                    $textChunk = new HtmlTextChunk($name, $parent);
-                    $textChunk->setClassName($this->getClassAttribute($node))
-                        ->setText($value);
-                }
+                $name = $node->nodeName;
+                $class = $this->getClassAttribute($node);
+                $this->createTextChunk($name, $parent, $class, $node);
                 break;
         }
 

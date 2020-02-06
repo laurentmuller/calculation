@@ -52,12 +52,10 @@ class HtmlLiChunk extends HtmlParentChunk
     protected function getOutputText(): ?string
     {
         if ($parent = $this->getParentList()) {
-            switch ($parent->getName()) {
-                case self::LIST_UNORDERED:
-                    return \chr(149);
-
-                case self::LIST_ORDERED:
-                    return $parent->getBulletChunk($this);
+            if ($parent instanceof HtmlUlChunk) {
+                return \chr(149);
+            } elseif ($parent instanceof HtmlOlChunk) {
+                return $parent->getBulletChunk($this);
             }
         }
 
@@ -106,14 +104,10 @@ class HtmlLiChunk extends HtmlParentChunk
         $width = 0;
         $text = null;
         if ($parent = $this->getParentList()) {
-            switch ($parent->getName()) {
-                case self::LIST_UNORDERED:
-                    $text = \chr(149);
-                    break;
-
-                case self::LIST_ORDERED:
-                    $text = $parent->getBulletMaximum();
-                    break;
+            if ($parent instanceof HtmlUlChunk) {
+                $text = \chr(149);
+            } elseif ($parent instanceof HtmlOlChunk) {
+                $text = $parent->getBulletMaximum();
             }
         }
 

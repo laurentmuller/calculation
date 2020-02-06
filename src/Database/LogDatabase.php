@@ -112,7 +112,7 @@ sql;
      */
     private function dateToInt(?\DateTime $date): int
     {
-        $date ??= new \DateTime();
+        $date = $date ?? new \DateTime();
 
         return $date->getTimestamp();
     }

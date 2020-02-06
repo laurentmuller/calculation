@@ -145,10 +145,8 @@ final class SymfonyUtils
      * Gets bundles informations.
      *
      * @param kernel $kernel the kernel to get bundles for
-     *
-     * @return array
      */
-    public static function getBundles(KernelInterface $kernel)
+    public static function getBundles(KernelInterface $kernel): array
     {
         $bundles = [];
         $rootDir = \realpath($kernel->getProjectDir() . '/..') . \DIRECTORY_SEPARATOR;
@@ -187,10 +185,8 @@ final class SymfonyUtils
      * Gets packages informations.
      *
      * @param kernel $kernel the kernel to get packages for
-     *
-     * @return array
      */
-    public static function getPackages(KernelInterface $kernel)
+    public static function getPackages(KernelInterface $kernel): array
     {
         // get file
         $path = $kernel->getProjectDir() . '/composer.lock';
@@ -240,10 +236,8 @@ final class SymfonyUtils
      * Gets all routes.
      *
      * @param routerInterface $router the router
-     *
-     * @return array
      */
-    public static function getRoutes(RouterInterface $router)
+    public static function getRoutes(RouterInterface $router): array
     {
         $result = [];
         $collection = $router->getRouteCollection();
@@ -370,7 +364,7 @@ final class SymfonyUtils
      *
      * @return string[][]
      */
-    private static function processPackages(array $packages, $isDev = false)
+    private static function processPackages(array $packages, $isDev = false): array
     {
         $result = [];
         foreach ($packages as $entry) {

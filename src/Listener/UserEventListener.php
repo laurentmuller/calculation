@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Security;
@@ -222,11 +223,15 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
         // exit?
         if (SwitchUserListener::EXIT_VALUE === $switchValue) {
             $this->succesTrans('user.switch.exit.sucess', ['%name%' => $userName]);
-        } else {
+        } elseif ($token instanceof SwitchUserToken) {
             $originalToken = $token->getOriginalToken();
             $originalUserName = \ucfirst($originalToken->getUserName());
             $this->succesTrans('user.switch.take.sucess', [
                 '%orignal%' => $originalUserName,
+                '%name%' => $userName,
+            ]);
+        } else {
+            $this->succesTrans('user.switch.take.default', [
                 '%name%' => $userName,
             ]);
         }

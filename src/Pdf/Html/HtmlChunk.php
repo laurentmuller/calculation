@@ -170,10 +170,8 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
 
     /**
      * Gets the tag name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

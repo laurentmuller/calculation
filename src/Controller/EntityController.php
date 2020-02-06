@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\Tables\EntityDataTable;
-use App\Entity\BaseEntity;
+use App\Entity\IEntity;
 use App\Interfaces\IEntityVoter;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfResponse;
@@ -62,18 +62,18 @@ abstract class EntityController extends BaseController
     /**
      * Raised after the given entity is deleted.
      *
-     * @param mixed $item the deleted entity
+     * @param IEntity $item the deleted entity
      */
-    protected function afterDelete($item): void
+    protected function afterDelete(IEntity $item): void
     {
     }
 
     /**
      * Raised before the given entity is deleted.
      *
-     * @param mixed $item the entity to delete
+     * @param IEntity $item the entity to delete
      */
-    protected function beforeDelete($item): void
+    protected function beforeDelete(IEntity $item): void
     {
     }
 
@@ -92,7 +92,7 @@ abstract class EntityController extends BaseController
         // check permission
         $this->denyAccessUnlessGranted(IEntityVoter::ATTRIBUTE_DELETE, $this->className);
 
-        /** @var \App\Entity\IEntity $item */
+        /** @var IEntity $item */
         $item = $parameters['item'];
         $display = $item->getDisplay();
 
@@ -218,7 +218,7 @@ abstract class EntityController extends BaseController
      *
      * @param int $id the entity identifier
      *
-     * @return BaseEntity The entity
+     * @return IEntity The entity
      *
      * @throws NotFoundHttpException if the entity is not found
      */

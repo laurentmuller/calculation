@@ -82,10 +82,8 @@ class PdfLine implements IPdfDocumentUpdater
 
     /**
      * Gets the width.
-     *
-     * @return float
      */
-    public function getWidth()
+    public function getWidth(): float
     {
         return $this->width;
     }

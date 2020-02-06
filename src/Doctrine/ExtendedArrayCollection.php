@@ -43,7 +43,7 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
      */
     public static function fromArray(array $elements = []): self
     {
-        return new static($elements);
+        return new self($elements);
     }
 
     /**
@@ -53,7 +53,7 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
      */
     public static function fromCollection(Collection $collection): self
     {
-        return new static($collection->toArray());
+        return new self($collection->toArray());
     }
 
     /**
@@ -63,7 +63,7 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
     {
         $elements = $this->getSortedIterator($field)->getArrayCopy();
 
-        return new static($elements);
+        return new self($elements);
     }
 
     /**
@@ -71,6 +71,7 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
      */
     public function getSortedIterator($field): \ArrayIterator
     {
+        /** @var \ArrayIterator $iterator */
         $iterator = $this->getIterator();
         $accessor = $this->getPropertyAccessor();
 

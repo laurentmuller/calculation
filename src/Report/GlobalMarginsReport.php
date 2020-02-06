@@ -89,10 +89,8 @@ class GlobalMarginsReport extends BaseReport
      * Sets the global margins to render.
      *
      * @param \App\Entity\GlobalMargin[] $globalMargins
-     *
-     * @return self
      */
-    public function setGlobalMargins(array $globalMargins)
+    public function setGlobalMargins(array $globalMargins): self
     {
         $this->globalMargins = $globalMargins;
 

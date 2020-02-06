@@ -477,7 +477,7 @@ class PdfTableBuilder implements IPdfConstants
      *
      * @return self this instance
      */
-    public function setListener(?IPdfCellListener $listener)
+    public function setListener(?IPdfCellListener $listener): self
     {
         $this->listener = $listener;
 

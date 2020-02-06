@@ -42,7 +42,7 @@ final class Utils
      *
      * @return array an array containing the results of applying the callback function
      */
-    public static function arrayMapKey(callable $callback, array $array)
+    public static function arrayMapKey(callable $callback, array $array): array
     {
         return \array_map($callback, \array_keys($array), $array);
     }

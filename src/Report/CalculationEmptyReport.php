@@ -62,7 +62,7 @@ class CalculationEmptyReport extends CalculationItemsReports
     /**
      * {@inheritdoc}
      */
-    protected function transCount(array $parameters)
+    protected function transCount(array $parameters): string
     {
         return $this->trans('empty.count', $parameters);
     }

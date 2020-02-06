@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use App\DataTables\CalculationStateDataTable;
 use App\Entity\CalculationState;
+use App\Entity\IEntity;
 use App\Form\CalculationStateType;
 use App\Interfaces\IApplicationService;
 use App\Pdf\PdfResponse;
@@ -178,7 +179,7 @@ class CalculationStateController extends EntityController
      *
      * @param CalculationState $item
      */
-    protected function afterDelete($item): void
+    protected function afterDelete(IEntity $item): void
     {
         // update default state (if applicable)
         $id = $this->getApplication()->getDefaultStateId();

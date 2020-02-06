@@ -39,7 +39,7 @@ class TextColumn extends AbstractColumn
     /**
      * {@inheritdoc}
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): self
     {
         parent::configureOptions($resolver);
 

@@ -177,8 +177,10 @@ class OpenWeatherService extends HttpClientService
      * Import cities from the given file name.
      *
      * @param string $filename the file to read
+     *
+     * @return bool true on success
      */
-    public function import(string $filename)
+    public function import(string $filename): bool
     {
         // open
         if (false === $data = \file_get_contents($filename)) {
@@ -219,6 +221,8 @@ class OpenWeatherService extends HttpClientService
         $db->commitTransaction();
         $db->compact();
         $db->close();
+
+        return true;
     }
 
     /**

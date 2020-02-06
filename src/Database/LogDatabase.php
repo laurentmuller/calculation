@@ -54,23 +54,6 @@ INSERT INTO sy_Log(id, created_at, channel, level, message, context, extra)
 sql;
 
     /**
-     * Instantiates and opens the database.
-     *
-     * @param string $filename       Path to the SQLite database, or <code>:memory:</code> to use in-memory database.
-     *                               If filename is an empty string, then a private, temporary on-disk database will be created.
-     *                               This private database will be automatically deleted as soon as the database connection is closed.
-     * @param bool   $readonly       true open the database for reading only. Note that if the file name
-     *                               does not exist, the database is opened with the
-     *                               <code>SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE</code> flags.
-     * @param string $encryption_key An optional encryption key used when encrypting and decrypting an SQLite database. If the
-     *                               SQLite encryption module is not installed, this parameter will have no effect.
-     */
-    public function __construct(string $filename, bool $readonly = false, string $encryption_key = '')
-    {
-        parent::__construct($filename, $readonly, $encryption_key);
-    }
-
-    /**
      * Insert a log to the database.
      *
      * @param Log $log the log to insert

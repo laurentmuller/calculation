@@ -51,7 +51,7 @@ final class NonceExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('csp_nonce', [$this, 'getNonce']),

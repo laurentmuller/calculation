@@ -227,10 +227,8 @@ class Day extends CalendarItem implements IDaysOfWeek
 
     /**
      * Returns if this day is in the week-end (saturday or sunnday).
-     *
-     * @return bool
      */
-    public function isWeekend()
+    public function isWeekend(): bool
     {
         return \in_array($this->getWeekDay(), [self::SATURDAY, self::SUNNDAY], true);
     }

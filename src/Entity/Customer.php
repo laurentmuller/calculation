@@ -123,7 +123,7 @@ class Customer extends BaseEntity
      *
      * @return string
      */
-    public function getAddress()
+    public function getAddress(): ?string
     {
         return $this->address;
     }
@@ -288,10 +288,8 @@ class Customer extends BaseEntity
      * Set address.
      *
      * @param string $address
-     *
-     * @return self
      */
-    public function setAddress(?string $address)
+    public function setAddress(?string $address): self
     {
         $this->address = $this->trim($address);
 
@@ -302,10 +300,8 @@ class Customer extends BaseEntity
      * Set birthday.
      *
      * @param \DateTime $birthday
-     *
-     * @return self
      */
-    public function setBirthday(?\DateTime $birthday)
+    public function setBirthday(?\DateTime $birthday): self
     {
         $this->birthday = $birthday;
 
@@ -316,10 +312,8 @@ class Customer extends BaseEntity
      * Set city.
      *
      * @param string $city
-     *
-     * @return self
      */
-    public function setCity(?string $city)
+    public function setCity(?string $city): self
     {
         $this->city = $this->trim($city);
 
@@ -330,10 +324,8 @@ class Customer extends BaseEntity
      * Set company.
      *
      * @param string $company
-     *
-     * @return self
      */
-    public function setCompany(?string $company)
+    public function setCompany(?string $company): self
     {
         $this->company = $this->trim($company);
 
@@ -344,10 +336,8 @@ class Customer extends BaseEntity
      * Set country.
      *
      * @param string $country
-     *
-     * @return self
      */
-    public function setCountry(?string $country)
+    public function setCountry(?string $country): self
     {
         $this->country = $this->trim($country);
 
@@ -358,10 +348,8 @@ class Customer extends BaseEntity
      * Set email.
      *
      * @param string $email
-     *
-     * @return self
      */
-    public function setEmail(?string $email)
+    public function setEmail(?string $email): self
     {
         $this->email = $this->trim($email);
 
@@ -372,10 +360,8 @@ class Customer extends BaseEntity
      * Set firstName.
      *
      * @param string $firstName
-     *
-     * @return self
      */
-    public function setFirstName(?string $firstName)
+    public function setFirstName(?string $firstName): self
     {
         $this->firstName = $this->trim($firstName);
 
@@ -386,10 +372,8 @@ class Customer extends BaseEntity
      * Set lastName.
      *
      * @param string $lastName
-     *
-     * @return self
      */
-    public function setLastName(?string $lastName)
+    public function setLastName(?string $lastName): self
     {
         $this->lastName = $this->trim($lastName);
 
@@ -400,10 +384,8 @@ class Customer extends BaseEntity
      * Set title.
      *
      * @param string $title
-     *
-     * @return self
      */
-    public function setTitle(?string $title)
+    public function setTitle(?string $title): self
     {
         $this->title = $this->trim($title);
 
@@ -414,10 +396,8 @@ class Customer extends BaseEntity
      * Set web site.
      *
      * @param string $webSite
-     *
-     * @return self
      */
-    public function setWebSite(?string $webSite)
+    public function setWebSite(?string $webSite): self
     {
         $webSite = $this->trim($webSite);
         if ($webSite && 'http' !== \substr($webSite, 0, 4)) {
@@ -432,10 +412,8 @@ class Customer extends BaseEntity
      * Set zip code.
      *
      * @param string $zipCode
-     *
-     * @return self
      */
-    public function setZipCode(?string $zipCode)
+    public function setZipCode(?string $zipCode): self
     {
         $this->zipCode = $this->trim($zipCode);
 

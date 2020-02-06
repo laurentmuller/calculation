@@ -306,7 +306,7 @@ class ApplicationService implements IApplicationService
      *
      * @return bool true if the debug mode is enabled, false otherwise
      */
-    public function isDebug()
+    public function isDebug(): bool
     {
         return $this->debug;
     }

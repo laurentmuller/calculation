@@ -42,7 +42,7 @@ class FosUserChangePasswordType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return '';
     }
@@ -50,7 +50,7 @@ class FosUserChangePasswordType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): string
     {
         return ChangePasswordFormType::class;
     }

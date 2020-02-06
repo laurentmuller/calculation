@@ -88,7 +88,7 @@ trait PdfBorderTrait
      *
      * @return self this instance
      */
-    public function setBorder($border)
+    public function setBorder($border): self
     {
         $this->border = $this->validateBorder($border);
 

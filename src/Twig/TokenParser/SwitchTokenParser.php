@@ -40,13 +40,10 @@ final class SwitchTokenParser extends AbstractTokenParser
         return $token->test(['case', 'default', 'endswitch']);
     }
 
-    // Public Methods
-    // =========================================================================
-
     /**
      * {@inheritdoc}
      */
-    public function getTag()
+    public function getTag(): string
     {
         return 'switch';
     }
@@ -54,7 +51,7 @@ final class SwitchTokenParser extends AbstractTokenParser
     /**
      * {@inheritdoc}
      */
-    public function parse(Token $token)
+    public function parse(Token $token): Node
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();

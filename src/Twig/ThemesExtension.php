@@ -47,7 +47,7 @@ final class ThemesExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('theme_css', [$this, 'getThemeCss']),

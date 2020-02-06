@@ -163,7 +163,7 @@ class CalculationState extends BaseEntity
      *
      * @return \App\Entity\CalculationState
      */
-    public static function instance(?int $id, string $code, ?string $description)
+    public static function instance(?int $id, string $code, ?string $description): self
     {
         $state = new self();
         $state->id = $id;

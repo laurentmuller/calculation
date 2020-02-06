@@ -100,10 +100,8 @@ class PdfRectangle
 
     /**
      * Gets the height.
-     *
-     * @return float
      */
-    public function height()
+    public function height(): float
     {
         return $this->height;
     }

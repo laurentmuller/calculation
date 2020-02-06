@@ -46,10 +46,8 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
      * Adds a child to the collection of children. Do nothing if the child is already in this collection.
      *
      * @param HtmlChunk $child the child to add
-     *
-     * @return self
      */
-    public function add(HtmlChunk $child)
+    public function add(HtmlChunk $child): self
     {
         if (!\in_array($child, $this->children, true)) {
             $child->setParent($this);
@@ -62,7 +60,7 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
     /**
      * {@inheritdoc}
      */
-    public function count()
+    public function count(): int
     {
         return \count($this->children);
     }
@@ -96,7 +94,7 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
      *
      * @return HtmlChunk[]
      */
-    public function getChildren()
+    public function getChildren(): array
     {
         return $this->children;
     }
@@ -195,10 +193,8 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
      * Remove a child from the collection of children. Do nothing if the child is not in this collection.
      *
      * @param HtmlChunk $child the child to remove
-     *
-     * @return self
      */
-    public function remove(HtmlChunk $child)
+    public function remove(HtmlChunk $child): self
     {
         if (\in_array($child, $this->children, true)) {
             $child->setParent(null);

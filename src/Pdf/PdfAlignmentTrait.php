@@ -50,7 +50,7 @@ trait PdfAlignmentTrait
      *
      * @return bool true if inherited
      */
-    public function isAlignmentInherited()
+    public function isAlignmentInherited(): bool
     {
         return empty($this->alignment);
     }

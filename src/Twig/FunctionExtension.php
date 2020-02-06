@@ -206,7 +206,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @return string the style sheet tag
      */
-    public function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null)
+    public function getAssetCss(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
         $nonce = $this->getNonce($env);
         $url = $this->getAssetUrl($env, $path, $packageName);
@@ -226,7 +226,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @return string the java script tag
      */
-    public function getAssetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null)
+    public function getAssetJs(Environment $env, string $path, array $parameters = [], ?string $packageName = null): string
     {
         $nonce = $this->getNonce($env);
         $url = $this->getAssetUrl($env, $path, $packageName);
@@ -250,7 +250,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('trans_role', [$this, 'translateRole']),
@@ -282,7 +282,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         $assetOptions = [
             'needs_environment' => true,

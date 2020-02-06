@@ -139,10 +139,8 @@ abstract class CalendarItem implements \JsonSerializable, \ArrayAccess
 
     /**
      * Gets the year.
-     *
-     * @return int
      */
-    public function getYear()
+    public function getYear(): int
     {
         return $this->calendar->getYear();
     }
@@ -157,7 +155,7 @@ abstract class CalendarItem implements \JsonSerializable, \ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->parameters[$offset]);
     }

@@ -40,7 +40,7 @@ class ColumnHydrator extends ArrayHydrator
      *
      * @see \Doctrine\ORM\Internal\Hydration\AbstractHydrator::hydrateAllData()
      */
-    protected function hydrateAllData()
+    protected function hydrateAllData(): array
     {
         if (!isset($this->_rsm->indexByMap['scalars'])) {
             return $this->_stmt->fetchAll(PDO::FETCH_COLUMN);

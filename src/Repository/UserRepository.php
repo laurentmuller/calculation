@@ -17,6 +17,7 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * Repository for user entity.
@@ -39,10 +40,8 @@ class UserRepository extends BaseRepository
 
     /**
      * Gets the query builder for the list of users sorted by name.
-     *
-     * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getSortedBuilder()
+    public function getSortedBuilder(): QueryBuilder
     {
         $field = (string) $this->getSortFields(self::DEFAULT_ALIAS, 'username');
 

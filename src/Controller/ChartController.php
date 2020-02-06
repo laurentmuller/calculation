@@ -96,7 +96,7 @@ class ChartController extends BaseController
     /**
      * @Route("/history", name="chart_history")
      */
-    public function sellsHistory(Request $request)
+    public function sellsHistory(Request $request): Response
     {
         return $this->render('chart/base_chart.html.twig', [
             'title' => 'Historique',

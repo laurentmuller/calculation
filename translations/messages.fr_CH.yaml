@@ -297,6 +297,7 @@ user:
         take:
             title: Prendre l'identité de l'utilisateur
             sucess: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
+            default: Vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
         exit:
             title: Reprendre son identité
             sucess: <b>%name%</b>, vous avez repris votre identité avec succès.

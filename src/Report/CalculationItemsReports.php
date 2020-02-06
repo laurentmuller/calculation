@@ -114,7 +114,7 @@ abstract class CalculationItemsReports extends BaseReport
      *
      * @return string the translated counters
      */
-    abstract protected function transCount(array $parameters);
+    abstract protected function transCount(array $parameters): string;
 
     /**
      * Render the calculations.

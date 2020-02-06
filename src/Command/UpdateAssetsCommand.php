@@ -193,18 +193,18 @@ class UpdateAssetsCommand extends AssetsCommand
     {
         if (false === $content = $this->loadJson($url)) {
             $this->write("$url not found.");
+
             return;
         }
 
         foreach ($paths as $path) {
             if (!isset($content->$path)) {
                 $this->write("$path not found.");
+
                 return;
             }
             $content = $content->$path;
         }
-
-
 
         if (\version_compare($version, $content, '<')) {
             $this->write("The plugin '{$name}' version '{$version}' can be updated to the version '{$content}'.");

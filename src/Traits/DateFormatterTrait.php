@@ -95,7 +95,7 @@ trait DateFormatterTrait
      *
      * @return IntlDateFormatter the date formatter
      */
-    protected function getDateFormatter(?int $datetype = null, ?int $timetype = null, $timezone = null, ?int $calendar = IntlDateFormatter::GREGORIAN, ?string $pattern = null)
+    protected function getDateFormatter(?int $datetype = null, ?int $timetype = null, $timezone = null, ?int $calendar = IntlDateFormatter::GREGORIAN, ?string $pattern = null): IntlDateFormatter
     {
         // check values
         $pattern = $pattern ?: '';

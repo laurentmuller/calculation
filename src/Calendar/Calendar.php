@@ -319,7 +319,7 @@ class Calendar extends CalendarItem implements IMonthsOfYear, IDaysOfWeek
     /**
      * {@inheritdoc}
      */
-    public function getYear()
+    public function getYear(): int
     {
         return (int) $this->year;
     }

@@ -47,7 +47,7 @@ abstract class AssetsCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // to output messages
         $this->output = $output;

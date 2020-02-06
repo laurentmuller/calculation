@@ -212,10 +212,8 @@ class LogController extends BaseController
      * @param int   $maxLines       the number of lines to returns
      * @param array $channelFilters the channels to skip
      * @param array $levelFilters   the levels to skip
-     *
-     * @return array
      */
-    private function getLogEntries(int $maxLines = 50, array $channelFilters = [], array $levelFilters = [])
+    private function getLogEntries(int $maxLines = 50, array $channelFilters = [], array $levelFilters = []): array
     {
         // get file name
         $file = $this->getLogFile();

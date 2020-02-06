@@ -26,7 +26,7 @@ class OpenWeatherDatabase extends AbstractDatabase
      *
      * @var string
      */
-    private static $SQL_CREATE_CITY = <<<'sql'
+    private static $CREATE_CITY = <<<'sql'
 CREATE TABLE city (
 	id	      INTEGER NOT NULL,
 	name	  TEXT NOT NULL,
@@ -42,7 +42,7 @@ sql;
      *
      * @var string
      */
-    private static $SQL_INSERT_CITY = <<<'sql'
+    private static $INSERT_CITY = <<<'sql'
 INSERT INTO city(id, name, country, latitude, longitude)
     VALUES(:id, :name, :country, :latitude, :longitude)
 sql;
@@ -52,16 +52,16 @@ sql;
      *
      * @var string
      */
-    private static $SQL_SEARCH_CITY = <<<'sql'
+    private static $SEARCH_CITY = <<<'sql'
 SELECT
     id,
     name,
     country
 FROM city
-WHERE name LIKE :query
+WHERE name LIKE :value
 ORDER BY
     name
-LIMIT %LIMIT%
+LIMIT :limit
 sql;
 
     /**
@@ -74,7 +74,7 @@ sql;
      */
     public function findCity(string $name, int $limit = 25): array
     {
-        return $this->search(self::$SQL_SEARCH_CITY, $name, $limit);
+        return $this->search(self::$SEARCH_CITY, $name, $limit);
     }
 
     /**
@@ -107,7 +107,7 @@ sql;
     public function insertCity(array $data): bool
     {
         /** @var \SQLite3Stmt $stmt */
-        $stmt = $this->getStatement(self::$SQL_INSERT_CITY);
+        $stmt = $this->getStatement(self::$INSERT_CITY);
 
         // parameters
         $stmt->bindParam(':id', $data[0], SQLITE3_INTEGER);
@@ -126,41 +126,9 @@ sql;
     protected function createSchema(): void
     {
         // table
-        $this->exec(self::$SQL_CREATE_CITY);
+        $this->exec(self::$CREATE_CITY);
 
         // index
         $this->createIndex('city', 'name');
-    }
-
-    /**
-     * Search data.
-     *
-     * @param string $sql   the SQL query
-     * @param string $value the value to search for
-     * @param int    $limit the maximum number of rows to return
-     *
-     * @return array the search result
-     */
-    private function search(string $sql, string $value, int $limit): array
-    {
-        // query
-        $param = "%{$value}%";
-        $query = \str_replace('%LIMIT%', $limit, $sql);
-
-        // statement
-        $stmt = $this->prepare($query);
-        $stmt->bindParam(':query', $param);
-
-        // execute
-        $rows = [];
-        if (false !== $result = $stmt->execute()) {
-            //fetch
-            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-                $rows[] = $row;
-            }
-        }
-        $stmt->close();
-
-        return $rows;
     }
 }

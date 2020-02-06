@@ -92,7 +92,7 @@ class PdfCellBorder implements IPdfDocumentUpdater
      *
      * @return \App\Pdf\PdfLine
      */
-    public function getLine()
+    public function getLine(): PdfLine
     {
         return $this->line;
     }

@@ -67,7 +67,7 @@ class UserChangePasswordType extends BaseType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return '';
     }

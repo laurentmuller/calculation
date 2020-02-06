@@ -266,7 +266,7 @@ class PdfStyle implements IPdfDocumentUpdater
      *
      * @return PdfStyle the link style
      */
-    public static function getLinkStyle()
+    public static function getLinkStyle(): self
     {
         return self::getDefaultStyle()
             ->setTextColor(PdfTextColor::link());

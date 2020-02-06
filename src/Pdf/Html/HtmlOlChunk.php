@@ -229,7 +229,7 @@ class HtmlOlChunk extends HtmlParentChunk
      *
      * @return string the roman number
      */
-    public static function toRoman(int $value)
+    public static function toRoman(int $value): string
     {
         if ($value <= 0) {
             return '';

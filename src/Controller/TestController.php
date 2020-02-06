@@ -294,7 +294,7 @@ class TestController extends BaseController
      * @param int|null              $year       the year to search for or <code>null</code> for the current year
      * @param int|null              $month      the month to search for or <code>null</code> for the current month
      */
-    public function month(Request $request, CalendarService $service, CalculationRepository $repository, $year = null, $month = null)
+    public function month(Request $request, CalendarService $service, CalculationRepository $repository, $year = null, $month = null): Response
     {
         // check month
         $month = (int) ($month ?: \date('n'));
@@ -634,7 +634,7 @@ class TestController extends BaseController
     /**
      * @Route("/union", name="test_union")
      */
-    public function union(Request $request, SearchService $service)
+    public function union(Request $request, SearchService $service): JsonResponse
     {
         $query = $request->get('query');
         $limit = (int) $request->get('limit', 25);
@@ -726,7 +726,7 @@ class TestController extends BaseController
      *
      * @Route("/update/customers", name="test_update_customers")
      */
-    public function updateCustomers(EntityManagerInterface $manager, FakerService $service)
+    public function updateCustomers(EntityManagerInterface $manager, FakerService $service): Response
     {
         /** @var \App\Entity\Customer[] $customers */
         $customers = $manager->getRepository(Customer::class)->findAll();

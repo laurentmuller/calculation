@@ -22,6 +22,11 @@ namespace App\Database;
 abstract class AbstractDatabase extends \SQLite3
 {
     /**
+     * The in-memory database file name.
+     */
+    public const IN_MEMORY = ':memory:';
+
+    /**
      * The file name.
      *
      * @var string
@@ -56,8 +61,11 @@ abstract class AbstractDatabase extends \SQLite3
      */
     public function __construct(string $filename, bool $readonly = false, string $encryption_key = '')
     {
+        // copy
         $this->filename = $filename;
-        $create = !\file_exists($filename) || 0 === \filesize($filename);
+
+        // check creation state
+        $create = '' === $filename || self::IN_MEMORY === $filename || !\file_exists($filename) || 0 === \filesize($filename);
 
         if ($create) {
             $flags = SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE;
@@ -102,7 +110,7 @@ abstract class AbstractDatabase extends \SQLite3
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close(): bool
     {
         // close statements
         foreach ($this->statements as $statement) {
@@ -123,7 +131,7 @@ abstract class AbstractDatabase extends \SQLite3
      *
      * @return bool true if success, false on failure
      */
-    public function commitTransaction()
+    public function commitTransaction(): bool
     {
         if ($this->isTransaction() && $this->exec('COMMIT TRANSACTION;')) {
             $this->transaction = false;
@@ -151,7 +159,7 @@ abstract class AbstractDatabase extends \SQLite3
      *
      * @return string the file name
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
@@ -171,7 +179,7 @@ abstract class AbstractDatabase extends \SQLite3
      *
      * @return bool true if success, false on failure
      */
-    public function rollbackTransaction()
+    public function rollbackTransaction(): bool
     {
         if ($this->isTransaction() && $this->exec('ROLLBACK TRANSACTION;')) {
             $this->transaction = false;
@@ -206,6 +214,10 @@ abstract class AbstractDatabase extends \SQLite3
     /**
      * Gets a statement for the given query.
      *
+     * <p>
+     * NB: The statement is created only once and is cached for future use.
+     * </p>
+     *
      * @param string $query the SQL query to prepare
      *
      * @return \SQLite3Stmt the statement
@@ -217,5 +229,45 @@ abstract class AbstractDatabase extends \SQLite3
         }
 
         return $this->statements[$query];
+    }
+
+    /**
+     * Search data.
+     * <p>
+     * NB: The SQL query must contain 2 parameters:
+     * <ul>
+     * <li>"<code>:value</code>" - The seach parameter.</li>
+     * <li>"<code>:limit</code>" - The limit parameter.</li>
+     * </ul>
+     * </p>.
+     *
+     * @param string $query the SQL query to prepare
+     * @param string $value the value to search for
+     * @param int    $limit the maximum number of rows to return
+     *
+     * @return array the search result
+     */
+    protected function search(string $query, string $value, int $limit): array
+    {
+        // parameter
+        $value = "%{$value}%";
+
+        // create statement
+        $stmt = $this->prepare($query);
+        $stmt->bindParam(':value', $value, SQLITE3_TEXT);
+        $stmt->bindParam(':limit', $limit, SQLITE3_INTEGER);
+
+        // execute
+        $rows = [];
+        if (false !== $result = $stmt->execute()) {
+            //fetch
+            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                $rows[] = $row;
+            }
+            $result->finalize();
+        }
+        $stmt->close();
+
+        return $rows;
     }
 }

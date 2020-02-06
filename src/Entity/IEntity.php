@@ -21,10 +21,8 @@ interface IEntity
 {
     /**
      * Gets a string used to display in the user interface (UI).
-     *
-     * @return string
      */
-    public function getDisplay();
+    public function getDisplay(): string;
 
     /**
      * Get the primary key identifier value.

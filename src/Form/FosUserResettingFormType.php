@@ -36,7 +36,7 @@ class FosUserResettingFormType extends FosUserType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): string
     {
         return ResettingFormType::class;
     }

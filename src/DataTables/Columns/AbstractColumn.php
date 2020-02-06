@@ -294,10 +294,7 @@ abstract class AbstractColumn
         return $this;
     }
 
-    /**
-     * @return self
-     */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): self
     {
         $resolver
             ->setDefaults([

@@ -115,7 +115,7 @@ class UserController extends EntityController
      * @Route("/comment", name="user_comment", methods={"GET", "POST"})
      * @IsGranted("ROLE_USER")
      */
-    public function comment(Request $request, \Swift_Mailer $mailer, LoggerInterface $logger)
+    public function comment(Request $request, \Swift_Mailer $mailer, LoggerInterface $logger): Response
     {
         $comment = new Comment(false);
         $comment->setSubject($this->getApplicationName())

@@ -27,9 +27,6 @@ use Twig\Node\Node;
  */
 final class SwitchNode extends Node
 {
-    // Public Methods
-    // =========================================================================
-
     /**
      * {@inheritdoc}
      */

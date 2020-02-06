@@ -60,7 +60,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      *
      * @return \App\Pdf\PdfGroup
      */
-    public function getGroup()
+    public function getGroup(): PdfGroup
     {
         return $this->group;
     }

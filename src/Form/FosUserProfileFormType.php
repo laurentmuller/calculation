@@ -56,7 +56,7 @@ class FosUserProfileFormType extends ProfileFormType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return '';
     }

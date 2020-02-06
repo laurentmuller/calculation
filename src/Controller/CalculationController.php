@@ -827,7 +827,7 @@ class CalculationController extends EntityController
      *
      * @return Category[]
      */
-    private function getCategories()
+    private function getCategories(): array
     {
         /** var App\Repository\CategoryRepository $repository */
         $repository = $this->getManager()->getRepository(Category::class);

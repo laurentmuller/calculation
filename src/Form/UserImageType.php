@@ -54,7 +54,7 @@ class UserImageType extends BaseType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'user';
     }

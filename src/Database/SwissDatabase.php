@@ -26,7 +26,7 @@ class SwissDatabase extends AbstractDatabase
      *
      * @var string
      */
-    private static $SQL_CREATE_CITY = <<<'sql'
+    private static $CREATE_CITY = <<<'sql'
 CREATE TABLE IF NOT EXISTS city (
 	id    INTEGER NOT NULL,
 	zip	  INTEGER NOT NULL,
@@ -41,7 +41,7 @@ sql;
      *
      * @var string
      */
-    private static $SQL_CREATE_STATE = <<<'sql'
+    private static $CREATE_STATE = <<<'sql'
 CREATE TABLE "state" (
 	id	    TEXT NOT NULL,
 	name	TEXT NOT NULL,
@@ -54,7 +54,7 @@ sql;
      *
      * @var string
      */
-    private static $SQL_CREATE_STREET = <<<'sql'
+    private static $CREATE_STREET = <<<'sql'
 CREATE TABLE IF NOT EXISTS street (
 	city_id INTEGER NOT NULL,
 	name    TEXT NOT NULL,
@@ -67,7 +67,7 @@ sql;
      *
      * @var string
      */
-    private static $SQL_INSERT_CITY = <<<'sql'
+    private static $INSERT_CITY = <<<'sql'
 INSERT INTO city(id, zip, name, state)
     VALUES(:id, :zip, :name, :state)
 sql;
@@ -77,7 +77,7 @@ sql;
      *
      * @var string
      */
-    private static $SQL_INSERT_STATE = <<<'sql'
+    private static $INSERT_STATE = <<<'sql'
 INSERT INTO state(id, name)
     VALUES(:id, :name)
 sql;
@@ -87,7 +87,7 @@ sql;
      *
      * @var string
      */
-    private static $SQL_INSERT_STREET = <<<'sql'
+    private static $INSERT_STREET = <<<'sql'
 INSERT INTO street(city_id, name)
     VALUES(:city_id, :name)
 sql;
@@ -97,18 +97,18 @@ sql;
      *
      * @var string
      */
-    private static $SQL_SEARCH_CITY = <<<'sql'
+    private static $SEARCH_CITY = <<<'sql'
 SELECT
-    name, 
+    name,
 	zip,
     state,
-    name || ' (' || zip || ')' as display
+    printf('%s (%s)', name, zip) as display
 FROM city
-WHERE name LIKE :query
+WHERE name LIKE :value
 ORDER BY 
     name,
     zip
-LIMIT %LIMIT%
+LIMIT :limit
 sql;
 
     /**
@@ -116,21 +116,21 @@ sql;
      *
      * @var string
      */
-    private static $SQL_SEARCH_STREET = <<<'sql'
+    private static $SEARCH_STREET = <<<'sql'
 SELECT
     street.name as street,
     city.zip,
     city.name   as city,
     city.state,
-    street.name || ' - ' || city.zip || ' ' || city.name as display
+    printf('%s - %s %s', street.name, city.zip, city.name) as display
 FROM street
 INNER JOIN city on street.city_id = city.id
-WHERE street.name LIKE :query
+WHERE street.name LIKE :value
 ORDER BY 
     street.name,
     city.zip,
     city.name    
-LIMIT %LIMIT%
+LIMIT :limit
 sql;
 
     /**
@@ -138,48 +138,48 @@ sql;
      *
      * @var string
      */
-    private static $SQL_SEARCH_ZIP = <<<'sql'
+    private static $SEARCH_ZIP = <<<'sql'
 SELECT
     zip,
     name,
     state,
-    zip || ' ' || name as display
+    printf('%s %s', zip, name) as display
 FROM city
-WHERE zip LIKE :query
+WHERE zip LIKE :value
 ORDER BY 
     zip,
     name    
-LIMIT %LIMIT%
+LIMIT :limit
 sql;
 
     /**
-     * Finds cities by name.
+     * Finds cities.
      *
-     * @param string $name  the name to search for
+     * @param string $city  the name of the city to search for
      * @param int    $limit the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching cities
      */
-    public function findCity(string $name, int $limit = 25): array
+    public function findCity(string $city, int $limit = 25): array
     {
-        return $this->search(self::$SQL_SEARCH_CITY, $name, $limit);
+        return $this->search(self::$SEARCH_CITY, $city, $limit);
     }
 
     /**
-     * Finds streets by name.
+     * Finds streets.
      *
-     * @param string $name  the name to search for
-     * @param int    $limit the maximum number of rows to return
+     * @param string $street the name of the street to search for
+     * @param int    $limit  the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching cities
      */
-    public function findStreet(string $name, int $limit = 25): array
+    public function findStreet(string $street, int $limit = 25): array
     {
-        return $this->search(self::$SQL_SEARCH_STREET, $name, $limit);
+        return $this->search(self::$SEARCH_STREET, $street, $limit);
     }
 
     /**
-     * Finds cities by zip code.
+     * Finds zip codes.
      *
      * @param string $zip   the zip code to search for
      * @param int    $limit the maximum number of rows to return
@@ -188,7 +188,7 @@ sql;
      */
     public function findZip(string $zip, int $limit = 25): array
     {
-        return $this->search(self::$SQL_SEARCH_ZIP, $zip, $limit);
+        return $this->search(self::$SEARCH_ZIP, $zip, $limit);
     }
 
     /**
@@ -218,7 +218,7 @@ sql;
     public function insertCity(array $data): bool
     {
         /** @var \SQLite3Stmt $stmt */
-        $stmt = $this->getStatement(self::$SQL_INSERT_CITY);
+        $stmt = $this->getStatement(self::$INSERT_CITY);
 
         // parameters
         $stmt->bindParam(':id', $data[0], SQLITE3_INTEGER);
@@ -251,7 +251,7 @@ sql;
     public function insertState(array $data): bool
     {
         /** @var \SQLite3Stmt $stmt */
-        $stmt = $this->getStatement(self::$SQL_INSERT_STATE);
+        $stmt = $this->getStatement(self::$INSERT_STATE);
 
         // parameters
         $stmt->bindParam(':id', $data[0], SQLITE3_TEXT);
@@ -282,7 +282,7 @@ sql;
     public function insertStreet(array $data): bool
     {
         /** @var \SQLite3Stmt $stmt */
-        $stmt = $this->getStatement(self::$SQL_INSERT_STREET);
+        $stmt = $this->getStatement(self::$INSERT_STREET);
 
         // parameters
         $stmt->bindParam(':city_id', $data[0], SQLITE3_INTEGER);
@@ -298,45 +298,13 @@ sql;
     protected function createSchema(): void
     {
         // tables
-        $this->exec(self::$SQL_CREATE_STATE);
-        $this->exec(self::$SQL_CREATE_CITY);
-        $this->exec(self::$SQL_CREATE_STREET);
+        $this->exec(self::$CREATE_STATE);
+        $this->exec(self::$CREATE_CITY);
+        $this->exec(self::$CREATE_STREET);
 
         // indexes
         $this->createIndex('city', 'name');
         $this->createIndex('city', 'zip');
         $this->createIndex('street', 'name');
-    }
-
-    /**
-     * Search data.
-     *
-     * @param string $sql   the SQL query
-     * @param string $value the value to search for
-     * @param int    $limit the maximum number of rows to return
-     *
-     * @return array the search result
-     */
-    private function search(string $sql, string $value, int $limit): array
-    {
-        // query
-        $param = "%{$value}%";
-        $query = \str_replace('%LIMIT%', $limit, $sql);
-
-        // statement
-        $stmt = $this->prepare($query);
-        $stmt->bindParam(':query', $param);
-
-        // execute
-        $rows = [];
-        if (false !== $result = $stmt->execute()) {
-            //fetch
-            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-                $rows[] = $row;
-            }
-        }
-        $stmt->close();
-
-        return $rows;
     }
 }

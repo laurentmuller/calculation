@@ -29,7 +29,7 @@ final class StrftimeExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('strftime', [$this, 'strftimeFilter'], ['needs_environment' => true]),
@@ -48,7 +48,7 @@ final class StrftimeExtension extends AbstractExtension
      *
      * @see http://www.php.net/manual/en/function.strftime.php
      */
-    public function strftimeFilter(Environment $env, $date, $format = '%c', $timezone = null)
+    public function strftimeFilter(Environment $env, $date, $format = '%c', $timezone = null): string
     {
         // convert
         $date = twig_date_converter($env, $date, $timezone);

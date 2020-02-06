@@ -159,10 +159,8 @@ class CalculationGroup extends BaseEntity
 
     /**
      * Get amount.
-     *
-     * @return float
      */
-    public function getAmount()
+    public function getAmount(): float
     {
         return $this->amount;
     }

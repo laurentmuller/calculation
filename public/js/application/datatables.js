@@ -62,11 +62,12 @@ $.fn.dataTable.renderTooltip = function (td, cellData) {
 $.fn.dataTable.renderStateColor = function (td, cellData, rowData) {
     'use strict';
 
-    const color = rowData[rowData.length - 1];
-    if (color) {
-        const style = 'inset 5px 0 ' + color;
-        $(td).css('box-shadow', style);
-    }
+    const color = rowData[rowData.length - 1] || 'transparent';
+    const style = 'inset 5px 0 ' + color;
+    $(td).css('-webkit-box-shadow', style);
+    $(td).css('-moz-box-shadow', style);
+    $(td).css('-o-box-shadow', style);
+    $(td).css('box-shadow', style);
 };
 
 /**

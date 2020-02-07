@@ -708,8 +708,10 @@ span.color-value {
  * Context menu
  */
  .context-menu-list {
-	-webkit-box-shadow: inherit !important;
-	        box-shadow: inherit !important;
+    -webkit-box-shadow: inherit !important;
+       -moz-box-shadow: inset !important;
+         -o-box-shadow: inset !important;
+            box-shadow: inset !important;
 }
 .context-menu-separator {
   	padding: 0 !important;

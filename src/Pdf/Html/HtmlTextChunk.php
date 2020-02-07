@@ -130,6 +130,7 @@ class HtmlTextChunk extends HtmlChunk
      */
     protected function outputText(HtmlReport $report, string $text): void
     {
+        /** @var HtmlParentChunk $parent */
         $parent = $this->parent;
 
         // special case when parent contains only this text

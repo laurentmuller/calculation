@@ -47,7 +47,7 @@
     {{ tools.aboutCard('mysql') }}
 {% endif %}
 </div>
-<div class="row no-gutters mt-2 d-print-none">
+<div class="row no-gutters mt-2 pb-3 d-print-none">
     <div class="col">
         {{ icons.homepage() }}
         {% if app.debug or app_environment == 'dev' -%}{{ icons.button_pdf('about_pdf') }}{%- endif %}

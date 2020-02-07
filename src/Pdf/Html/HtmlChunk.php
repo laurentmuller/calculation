@@ -110,6 +110,7 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
      */
     public function findParent(string ...$names): ?HtmlParentChunk
     {
+        /** @var HtmlParentChunk $parent */
         $parent = $this->parent;
         while (null !== $parent && !$parent->is(...$names)) {
             $parent = $parent->getParent();
@@ -484,6 +485,7 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
                         break;
 
                     default:
+                        // $this->parseBorders($style, $class);
                         $this->parseMargins($style, $class);
                         break;
                 }
@@ -494,14 +496,57 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
     }
 
     /**
+     * Parses the border class.
+     *
+     * @param HtmlStyle $style the style to update
+     * @param string    $class the border class name
+     */
+    private function parseBorders(HtmlStyle &$style, string $class): void
+    {
+        switch ($class) {
+            case 'border':
+                $style->setBorder(self::BORDER_ALL);
+                break;
+
+            case 'border-top':
+                $style->setBorder(self::BORDER_TOP);
+                break;
+
+            case 'border-right':
+                $style->setBorder(self::BORDER_RIGHT);
+                break;
+
+            case 'border-bottom':
+                $style->setBorder(self::BORDER_BOTTOM);
+                break;
+
+            case 'border-left':
+                $style->setBorder(self::BORDER_LEFT);
+                break;
+
+            case 'border-0':
+                $style->setBorder(self::BORDER_NONE);
+                break;
+
+            case 'border-top-0':
+
+                break;
+            case 'border-right-0':
+                break;
+            case 'border-bottom-0':
+                break;
+            case 'border-left-0':
+                break;
+        }
+    }
+
+    /**
      * Parses the margins class.
      *
      * @param HtmlStyle $style the style to update
      * @param string    $class the margins class name
-     *
-     * @return HtmlStyle the style
      */
-    private function parseMargins(HtmlStyle $style, string $class): HtmlStyle
+    private function parseMargins(HtmlStyle &$style, string $class): void
     {
         $pattern = '/m[tblrxy]{0,1}-[012345]/';
         if (\preg_match($pattern, $class)) {
@@ -530,7 +575,5 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
                     break;
             }
         }
-
-        return $style;
     }
 }

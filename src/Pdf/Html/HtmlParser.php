@@ -43,7 +43,7 @@ class HtmlParser
     /**
      * Parses this HTML content and return the root parent.
      *
-     * @return HtmlParentChunk|null the root parent, if success, <code>null</code> otherwise
+     * @return HtmlParentChunk|null the root parent, if success; <code>null</code> otherwise
      */
     public function parse(): ?HtmlParentChunk
     {
@@ -58,13 +58,11 @@ class HtmlParser
         }
 
         // find body
-        $bodies = $dom->getElementsByTagName('body');
-        if (!$bodies->length) {
+        if (!$body = $this->findBody($dom)) {
             return null;
         }
 
         // parse
-        $body = $bodies->item(0);
         $root = new HtmlParentChunk($body->nodeName);
         $this->parseNodes($root, $body);
         if ($root->isEmpty()) {
@@ -75,7 +73,7 @@ class HtmlParser
     }
 
     /**
-     * Creates a HTML list item  chunk.
+     * Creates a HTML list item chunk.
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
@@ -178,6 +176,23 @@ class HtmlParser
     }
 
     /**
+     * Finds the body element.
+     *
+     * @param \DOMDocument $dom the document to search in
+     *
+     * @return \DOMNode|null the body, if found; null otherwise
+     */
+    private function findBody(\DOMDocument $dom): ? \DOMNode
+    {
+        $bodies = $dom->getElementsByTagName('body');
+        if ($bodies->length) {
+            return $bodies->item(0);
+        }
+
+        return null;
+    }
+
+    /**
      * Gets a attribute value for the given node.
      *
      * @param \DOMNode $node    the node to get attribute for
@@ -250,22 +265,16 @@ class HtmlParser
             case XML_ELEMENT_NODE:
                 $name = $node->nodeName;
                 $class = $this->getClassAttribute($node);
-                switch ($class) {
-                    case HtmlChunk::PAGE_BREAK:
-                        $this->createPageBreakChunk($name, $parent, $class, $node);
-                        break;
-                    case HtmlChunk::LIST_ITEM:
-                        $parent = $this->createLiChunk($name, $parent, $class, $node);
-                        break;
-                    case HtmlChunk::LIST_ORDERED:
-                        $parent = $this->createOlChunk($name, $parent, $class, $node);
-                        break;
-                    case HtmlChunk::LIST_UNORDERED:
-                        $parent = $this->createUlChunk($name, $parent, $class, $node);
-                        break;
-                    default:
-                        $parent = $this->createParentChunk($name, $parent, $class, $node);
-                        break;
+                if (HtmlChunk::PAGE_BREAK === $class) {
+                    $this->createPageBreakChunk($name, $parent, $class, $node);
+                } elseif (HtmlChunk::LIST_ITEM === $name) {
+                    $parent = $this->createLiChunk($name, $parent, $class, $node);
+                } elseif (HtmlChunk::LIST_ORDERED === $name) {
+                    $parent = $this->createOlChunk($name, $parent, $class, $node);
+                } elseif (HtmlChunk::LIST_UNORDERED === $name) {
+                    $parent = $this->createUlChunk($name, $parent, $class, $node);
+                } else {
+                    $parent = $this->createParentChunk($name, $parent, $class, $node);
                 }
                 break;
 
@@ -307,12 +316,11 @@ class HtmlParser
             return null;
         }
 
-        // trim new line
+        // trim new line and spaces
         $content = \trim(\preg_replace('/\r\n|\n|\r/m', '', $content));
-
-        // trim spaces
         $content = \trim(\preg_replace('/\s\s+/m', ' ', $content));
 
+        // string?
         if (!Utils::isString($content)) {
             return null;
         }

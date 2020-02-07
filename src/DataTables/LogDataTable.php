@@ -106,7 +106,7 @@ class LogDataTable extends EntityDataTable
             DataColumn::hidden('id'),
             DataColumn::date('createdAt')
                 ->setTitle('logs.fields.date')
-                ->setClassName('date')
+                ->setClassName('pl-3 date')
                 ->setCallback('renderLog')
                 ->setDescending()
                 ->setDefault(true)

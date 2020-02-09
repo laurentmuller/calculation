@@ -46,17 +46,6 @@ class HtmlTextChunk extends HtmlChunk
     protected $text;
 
     /**
-     * Constructor.
-     *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
-     */
-    public function __construct(string $name, ?HtmlParentChunk $parent = null)
-    {
-        parent::__construct($name, $parent);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function __toString(): string

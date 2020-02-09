@@ -52,6 +52,11 @@ interface IHtmlConstants
     const H6 = 'h6';
 
     /**
+     * The line break tag name.
+     */
+    const LINE_BREAK = 'br';
+
+    /**
      * The list item tag name.
      */
     const LIST_ITEM = 'li';

@@ -14,20 +14,18 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Report\HtmlReport;
-
 /**
- * Special chunk to add a page break to report.
+ * Specialized chunk for HTML line break (br).
  *
  * @author Laurent Muller
  */
-class HtmlPageBreakChunk extends HtmlChunk
+class HtmlBrChunk extends HtmlChunk
 {
     /**
      * {@inheritdoc}
      */
-    public function output(HtmlReport $report): void
+    public function isNewLine(): bool
     {
-        $report->AddPage();
+        return true;
     }
 }

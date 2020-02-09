@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Utils\Utils;
+use App\Traits\MathTrait;
 
 /**
  * Define a RGB color.
@@ -23,6 +24,8 @@ use App\Utils\Utils;
  */
 abstract class PdfColor implements IPdfDocumentUpdater
 {
+    use MathTrait;
+
     /**
      * The maximum value allowed for a component (inclusive).
      */
@@ -63,6 +66,7 @@ abstract class PdfColor implements IPdfDocumentUpdater
 
     /**
      * Constructor.
+     *
      * All values must be bewtween 0 to 255 inclusive.
      *
      * @param int $red   the red component
@@ -351,16 +355,8 @@ abstract class PdfColor implements IPdfDocumentUpdater
      *
      * @return int the validate value
      */
-    private static function checkColor(int $value): int
+    private function checkColor(int $value): int
     {
-        // return max(min($value, self::MAX_VALUE), self::MIN_VALUE);
-        if ($value < self::MIN_VALUE) {
-            return self::MIN_VALUE;
-        }
-        if ($value > self::MAX_VALUE) {
-            return self::MAX_VALUE;
-        }
-
-        return $value;
+        return $this->validateIntRange($value, self::MIN_VALUE, self::MAX_VALUE);
     }
 }

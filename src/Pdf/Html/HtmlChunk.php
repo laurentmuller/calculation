@@ -15,7 +15,10 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Pdf\IPdfConstants;
+use App\Pdf\PdfColor;
+use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
+use App\Pdf\PdfTextColor;
 use App\Report\HtmlReport;
 use App\Utils\Utils;
 
@@ -32,6 +35,13 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
      * @var string|null
      */
     protected $className;
+
+    /**
+     * The css style.
+     *
+     * @var string|null
+     */
+    protected $css;
 
     /**
      * The tag name.
@@ -153,6 +163,14 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
     public function getClassName(): ?string
     {
         return $this->className;
+    }
+
+    /**
+     * Gets the CSS style.
+     */
+    public function getCss(): ?string
+    {
+        return $this->css;
     }
 
     /**
@@ -322,6 +340,16 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
     }
 
     /**
+     * Sets the CSS style.
+     */
+    public function setCss(?string $css): self
+    {
+        $this->css = $css;
+
+        return $this;
+    }
+
+    /**
      * Sets the style.
      *
      * @param \App\Pdf\Html\HtmlStyle|null $style
@@ -437,6 +465,47 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
     }
 
     /**
+     * Update this style, depending of the CSS.
+     */
+    protected function updateCss(): self
+    {
+        if ($this->css) {
+            $matches = [];
+            if (\preg_match_all("/([\w-]+)\s*:\s*([^;]+)\s*;?/", $this->css, $matches, PREG_SET_ORDER)) {
+                $update = false;
+                $style = $this->getStyle() ?? new HtmlStyle();
+
+                foreach ($matches as $match) {
+                    $name = \strtolower($match[1]);
+                    $value = \trim($match[2]);
+
+                    switch ($name) {
+                        case 'color':
+                            $color = PdfColor::parse($value);
+                            if (false !== $color) {
+                                $style->setTextColor(new PdfTextColor($color));
+                                $update = true;
+                            }
+                            break;
+
+                        case 'background-color':
+                            $color = PdfColor::parse($value);
+                            if (false !== $color) {
+                                $style->setFillColor(new PdfFillColor($color));
+                                $update = true;
+                            }
+                            break;
+                    }
+                }
+
+                if ($update) {
+                    $this->setStyle($style);
+                }
+            }
+        }
+    }
+
+    /**
      * Update this style, depending of the tag name and class.
      */
     protected function updateStyle(): self
@@ -449,7 +518,8 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
 
         // class
         if ($this->className) {
-            $classNames = \explode(' ', $this->className);
+            $classNames = \preg_split('/\s+/m', $this->className);
+            // $classNames = \explode(' ', $this->className);
             foreach ($classNames as $class) {
                 switch ($class) {
                     case 'text-left':
@@ -482,6 +552,14 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
 
                     case 'text-monospace':
                         $style->regular()->getFont()->setName(PdfFont::NAME_COURIER);
+                        break;
+
+                    case 'text-success':
+                        $style->setTextColor(new PdfTextColor(40, 167, 69));
+                        break;
+
+                    case 'text-danger':
+                        $style->setTextColor(PdfTextColor::red());
                         break;
 
                     default:

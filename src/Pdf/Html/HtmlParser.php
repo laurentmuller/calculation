@@ -73,6 +73,22 @@ class HtmlParser
     }
 
     /**
+     * Creates a HTML line break chunk.
+     *
+     * @param string          $name   the tag name
+     * @param HtmlParentChunk $parent the parent chunk
+     * @param string          $class  the optional class name
+     * @param \DOMNode        $node   the current node
+     */
+    private function createBrChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlBrChunk
+    {
+        $chunk = new HtmlBrChunk($name, $parent);
+        $chunk->setClassName($class);
+
+        return $chunk;
+    }
+
+    /**
      * Creates a HTML list item chunk.
      *
      * @param string          $name   the tag name
@@ -260,13 +276,17 @@ class HtmlParser
      */
     private function parseNode(HtmlParentChunk $parent, \DOMNode $node): void
     {
+        // get values
+        $name = $node->nodeName;
+        $class = $this->getClassAttribute($node);
+
         // create chunk
         switch ($node->nodeType) {
             case XML_ELEMENT_NODE:
-                $name = $node->nodeName;
-                $class = $this->getClassAttribute($node);
                 if (HtmlChunk::PAGE_BREAK === $class) {
                     $this->createPageBreakChunk($name, $parent, $class, $node);
+                } elseif (HtmlChunk::LINE_BREAK === $name) {
+                    $this->createBrChunk($name, $parent, $class, $node);
                 } elseif (HtmlChunk::LIST_ITEM === $name) {
                     $parent = $this->createLiChunk($name, $parent, $class, $node);
                 } elseif (HtmlChunk::LIST_ORDERED === $name) {
@@ -279,8 +299,6 @@ class HtmlParser
                 break;
 
             case XML_TEXT_NODE:
-                $name = $node->nodeName;
-                $class = $this->getClassAttribute($node);
                 $this->createTextChunk($name, $parent, $class, $node);
                 break;
         }

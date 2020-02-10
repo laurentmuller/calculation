@@ -100,7 +100,7 @@ class CalculationsReport extends BaseReport
             $items += $c->getItemsTotal();
             $overall += $c->getOverallTotal();
         }
-        $margins = 0.0 !== $items ? $this->safeDivide($overall, $items) - 1 : 0;
+        $margins = $this->isFloatZero($items) ? 0 : $this->safeDivide($overall, $items) - 1;
 
         $text = $this->trans('common.count', [
             '%count%' => \count($this->calculations),

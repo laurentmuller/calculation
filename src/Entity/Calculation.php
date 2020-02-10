@@ -561,7 +561,7 @@ class Calculation extends BaseEntity
     {
         if ($this->isEmpty()) {
             return false;
-        } elseif (0.0 === $this->getOverallTotal()) {
+        } elseif ($this->isFloatZero($this->getOverallTotal())) {
             return false;
         } else {
             return $this->getOverallMargin() < $margin;

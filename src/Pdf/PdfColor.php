@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Utils\Utils;
 use App\Traits\MathTrait;
+use App\Utils\Utils;
 
 /**
  * Define a RGB color.
@@ -56,13 +56,6 @@ abstract class PdfColor implements IPdfDocumentUpdater
      * @var int
      */
     protected $red;
-
-    /**
-     * The bootsrap colors.
-     *
-     * @var array
-     */
-    private static $bootstrapColors;
 
     /**
      * Constructor.
@@ -124,19 +117,20 @@ abstract class PdfColor implements IPdfDocumentUpdater
     /**
      * Creates a new instance.
      *
-     * @param array|string $rgb an array containing the red, green and blue values, a constant color name or a hexadecimal string
+     * @param array|string $rgb an array containing the red, green and blue values or a hexadecimal string
      *
      * @return self|null the color or null if the RGB value can not be parsed
      *
-     * @see \App\Pdf\PdfColor::parse()
+     * @see PdfColor::parse()
      */
     public static function create($rgb): ?self
     {
         if (\is_string($rgb)) {
             $rgb = self::parse($rgb);
-            if (false !== $rgb) {
-                return new static($rgb[0], $rgb[1], $rgb[2]);
-            }
+        }
+
+        if (\is_array($rgb) && 3 === \count($rgb)) {
+            return new static($rgb[0], $rgb[1], $rgb[2]);
         }
 
         return null;
@@ -226,10 +220,10 @@ abstract class PdfColor implements IPdfDocumentUpdater
 
     /**
      * Converts the value to the RGB array.
-     * The value must be one of this Boostrap color constants like <code>'BLUE'</code> or <code>'YELLOW'</code>
-     * or a hexdecimal string like <code>'#FF8040'</code> or <code>'FFF'</code>.
      *
-     * @param string $value a constant name or a hexadecimal string
+     * The value must be a hexadecimal string like <code>'#FF8040'</code> or <code>'FFF'</code>.
+     *
+     * @param string $value a hexadecimal string
      *
      * @return array|bool the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
      */

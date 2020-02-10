@@ -170,7 +170,7 @@ final class CalculationService
         $groups = $this->computeGroups($source['groups'], $mapper, $userMargin);
         $overall_margin = \end($groups)['margin'];
         $overall_total = \end($groups)['total'];
-        $overall_below = !empty($groups) && 0.0 !== $overall_total && $this->service->isMarginBelow($overall_margin);
+        $overall_below = !empty($groups) && !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
         // OK
         return [
@@ -302,7 +302,7 @@ final class CalculationService
         $overall_total = $total_net + $usermargin_amount;
         $overall_amount = $overall_total - $groups_amount;
         $overall_margin = $this->round($this->safeDivide($overall_amount, $groups_amount));
-        $overall_below = !empty($groups) && 0.0 !== $overall_total && $this->service->isMarginBelow($overall_margin);
+        $overall_below = !empty($groups) && !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
         $result[] = [
             'id' => self::ROW_OVERALL_TOTAL,

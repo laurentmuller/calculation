@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\BaseController;
+use App\Traits\MathTrait;
 
 /**
  * Report for calculations with empty items.
@@ -23,6 +24,8 @@ use App\Controller\BaseController;
  */
 class CalculationEmptyTableReport extends CalculationItemsTableReport
 {
+    use MathTrait;
+
     /**
      * The price label.
      *
@@ -66,10 +69,10 @@ class CalculationEmptyTableReport extends CalculationItemsTableReport
     {
         $result = \array_map(function (array $item) {
             $founds = [];
-            if (0.0 === $item['price']) {
+            if ($this->isFloatZero($item['price'])) {
                 $founds[] = $this->priceLabel;
             }
-            if (0.0 === $item['quantity']) {
+            if ($this->isFloatZero($item['quantity'])) {
                 $founds[] = $this->quantityLabel;
             }
 

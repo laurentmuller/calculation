@@ -1,16 +1,7 @@
-<h6>code</h6>
-<p class="text-monospace text-success">
-<samp class="text-danger">[</samp><br>
-  <samp class="text-danger">"</samp>route<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>_wdt<samp class="text-danger">"</samp><br>
-  <samp class="text-danger">"</samp>route_parameters<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">[</samp><br>
-    <samp class="text-danger">"</samp>_controller<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>web_profiler.controller.profiler:toolbarAction<samp class="text-danger">"</samp><br>
-    <samp class="text-danger">"</samp>token<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>0236e6<samp class="text-danger">"</samp><br>
-    <samp class="text-danger">"</samp>_route<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>_wdt<samp class="text-danger">"</samp><br>
-  <samp class="text-danger">]</samp><br>
-  <samp class="text-danger">"</samp>request_uri<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>http://development/app_dev.php/_wdt/0236e6<samp class="text-danger">"</samp><br>
-  <samp class="text-danger">"</samp>method<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>GET<samp class="text-danger">"</samp><br>
-<samp class="text-danger">]</samp>
-</p>
+{% macro spaces(count) -%}
+<samp>{% for i in 1..(count * 4)%}&nbsp;{% endfor %}</samp>
+{%- endmacro %}
+
 <h6>Liste ordonnée (Numbers)</h6>
 <ol>
     <li>Par application, nous entendons le site web https://www.calculation.bibi.nu exploité par {{ app_owner }}.</li>
@@ -21,7 +12,7 @@
             <li>Deuxième ligne</li>
         </ol>
     </li>
-    <li>Les cookies sont de petits fichiers enregistrés sur votre dispositif (ordinateur, tablette ou mobile).</li>
+    <li>Les cookies sont de petits <b>fichiers enregistrés</b> sur votre dispositif (ordinateur, tablette ou mobile).</li>
 </ol>
 <h6>Liste ordonnée (Numbers, start at 10)</h6>
 <ol start="10">
@@ -136,3 +127,17 @@
 <p><code>This line of text will be render as code</code></p>
 <p><var>This line of text will be render as var</var></p>
 <p><kbd>This line of text will be render as kbd</kbd></p>
+
+<h6>Code example</h6>
+<p class="text-monospace text-success">
+{{ _self.spaces(1) }}<samp class="text-danger">[</samp><br>
+{{ _self.spaces(2) }}<samp class="text-danger">"</samp>route<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>_wdt<samp class="text-danger">"</samp><br>
+{{ _self.spaces(2) }}<samp class="text-danger">"</samp>route_parameters<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">[</samp><br>
+{{ _self.spaces(3) }}<samp class="text-danger">"</samp>_controller<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>web_profiler.controller.profiler:toolbarAction<samp class="text-danger">"</samp><br>
+{{ _self.spaces(3) }}<samp class="text-danger">"</samp>token<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>0236e6<samp class="text-danger">"</samp><br>
+{{ _self.spaces(3) }}<samp class="text-danger">"</samp>_route<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>_wdt<samp class="text-danger">"</samp><br>
+{{ _self.spaces(2) }}<samp class="text-danger">]</samp><br>
+{{ _self.spaces(2) }}<samp class="text-danger">"</samp>request_uri<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>http://development/app_dev.php/_wdt/0236e6<samp class="text-danger">"</samp><br>
+{{ _self.spaces(2) }}<samp class="text-danger">"</samp>method<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>GET<samp class="text-danger">"</samp><br>
+{{ _self.spaces(1) }}<samp class="text-danger">]</samp>
+</p>

@@ -36,6 +36,7 @@ class HtmlTextChunk extends HtmlChunk
         self::H6,
         self::PARAGRAPH,
         self::LIST_ITEM,
+        // self::SAMP,
     ];
 
     /**

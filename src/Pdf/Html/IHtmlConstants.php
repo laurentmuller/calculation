@@ -82,6 +82,11 @@ interface IHtmlConstants
     const PARAGRAPH = 'p';
 
     /**
+     * The samp tag name.
+     */
+    const SAMP = 'samp';
+
+    /**
      * The text chunk.
      */
     const TEXT = '#text';

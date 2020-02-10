@@ -16,6 +16,7 @@ namespace App\DataTables;
 
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
+use App\Traits\MathTrait;
 use DataTables\DataTablesInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -27,6 +28,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationEmptyDataTable extends CalculationItemsDataTable
 {
+    use MathTrait;
+
     /**
      * The datatable identifier.
      */
@@ -69,10 +72,10 @@ class CalculationEmptyDataTable extends CalculationItemsDataTable
     {
         $result = \array_map(function (array $item) {
             $founds = [];
-            if (0.0 === $item['price']) {
+            if ($this->isFloatZero($item['price'])) {
                 $founds[] = $this->priceLabel;
             }
-            if (0.0 === $item['quantity']) {
+            if ($this->isFloatZero($item['quantity'])) {
                 $founds[] = $this->quantityLabel;
             }
 

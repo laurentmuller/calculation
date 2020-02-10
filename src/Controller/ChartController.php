@@ -291,8 +291,8 @@ class ChartController extends BaseController
         $total = \array_sum($sumData);
         $marginAmount = $total - $items;
         $marginPercent = $this->safeDivide($total, $items);
-        if (0 !== $marginPercent) {
-            --$marginPercent;
+        if (!$this->isFloatZero($marginPercent)) {
+            $marginPercent = -1;
         }
 
         return [

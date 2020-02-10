@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Traits\MathTrait;
 use Fpdf\Fpdf;
 
 /**
@@ -23,6 +24,8 @@ use Fpdf\Fpdf;
  */
 class PdfDocument extends Fpdf implements IPdfConstants
 {
+    use MathTrait;
+
     /**
      * The footer offset.
      */
@@ -239,7 +242,14 @@ class PdfDocument extends Fpdf implements IPdfConstants
      *                           </ul>
      *                           </li>
      *                           </ul>
-     * @param int        $ln     indicates where the current position should go after the call
+     * @param int        $ln     indicates where the current position should go after the call.
+     *                           Putting 1 is equivalent to putting <code>0</code> and calling <code>Ln()</code> just after. The default value is <code>0</code>.
+     *                           Possible values are:
+     *                           <ul>
+     *                           <li><b>0</b>: To the right</li>
+     *                           <li><b>1</b>: To the beginning of the next line</li>
+     *                           <li><b>2</b>: Below</li>
+     *                           </ul>
      * @param string     $align  the text alignment. The value can be:
      *                           <ul>
      *                           <li>'<b>L</b>' or en empty string: left align (default value).</li>
@@ -439,7 +449,7 @@ class PdfDocument extends Fpdf implements IPdfConstants
     public function getLinesCount(?string $text, float $width): int
     {
         // check width
-        if (0.0 === $width) {
+        if ($this->isFloatZero($width)) {
             $width = $this->w - $this->rMargin - $this->x;
         }
         $maxWidth = ($width - 2 * $this->cMargin) * 1000 / $this->FontSize;

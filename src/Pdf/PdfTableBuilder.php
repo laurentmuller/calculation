@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Traits\MathTrait;
 use App\Utils\Utils;
 use InvalidArgumentException;
 use LengthException;
@@ -28,6 +29,7 @@ use OutOfRangeException;
  */
 class PdfTableBuilder implements IPdfConstants
 {
+    use MathTrait;
     use PdfAlignmentTrait;
     use PdfBorderTrait;
 
@@ -279,7 +281,7 @@ class PdfTableBuilder implements IPdfConstants
 
                 // update resizable widths
                 $remainingWidth = $parent->getPrintableWidth() - $fixedWidth;
-                if (0 !== $resizableWidth && 0 !== $remainingWidth && $resizableWidth !== $remainingWidth) {
+                if (!$this->isFloatZero($resizableWidth) && !$this->isFloatZero($remainingWidth) && $resizableWidth !== $remainingWidth) {
                     $factor = $remainingWidth / $resizableWidth;
                     for ($i = 0; $i < $count; ++$i) {
                         if (!$fixeds[$i]) {

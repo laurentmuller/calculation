@@ -80,7 +80,7 @@ final class SymfonyUtils
     /**
      * Formats the size of the given path.
      *
-     * @param string $path the path
+     * @param string $path the file or directory path
      *
      * @return string the formatted size
      */

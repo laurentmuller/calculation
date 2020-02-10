@@ -250,7 +250,7 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
      */
     public function hasStyle(): bool
     {
-        return null !== $this->getStyle();
+        return null !== $this->style;
     }
 
     /**
@@ -554,12 +554,28 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
                         $style->regular()->getFont()->setName(PdfFont::NAME_COURIER);
                         break;
 
+                    case 'text-primary':
+                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::PRIMARY));
+                        break;
+
+                    case 'text-secondary':
+                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::SECONDARY));
+                        break;
+
                     case 'text-success':
-                        $style->setTextColor(new PdfTextColor(40, 167, 69));
+                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::SUCCESS));
                         break;
 
                     case 'text-danger':
-                        $style->setTextColor(PdfTextColor::red());
+                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::DANGER));
+                        break;
+
+                    case 'text-warning':
+                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::WARNING));
+                        break;
+
+                    case 'text-info':
+                        $style->setTextColor(PdfTextColor::fromArray(HtmlBootstrapColors::INFO));
                         break;
 
                     default:

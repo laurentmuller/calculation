@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Report\HtmlReport;
+use App\Traits\MathTrait;
 
 /**
  * Represents a chunk container.
@@ -23,6 +24,8 @@ use App\Report\HtmlReport;
  */
 class HtmlParentChunk extends HtmlChunk implements \Countable
 {
+    use MathTrait;
+
     /**
      * The children chunks.
      *
@@ -152,7 +155,7 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
         // update margins
         $this->applyMargins($report, $this->getLeftMargin(), $this->getRightMargin(), function (HtmlReport $report): void {
             // save font
-            $oldFont = $report->getCurrentFont();
+            // $oldFont = $report->getCurrentFont();
 
             // top margin
             $this->moveY($report, $this->getTopMargin());
@@ -166,8 +169,11 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
             // bottom margin
             $this->moveY($report, $this->getBottomMargin());
 
-            // restore font
-            $oldFont->apply($report);
+            // restore style
+            if ($this->getParent()) {
+                $this->getParent()->applyStyle($report);
+            }
+            //$oldFont->apply($report);
         });
     }
 
@@ -236,7 +242,7 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
      */
     private function moveY(HtmlReport $report, float $delta): void
     {
-        if (0 !== $delta) {
+        if (!$this->isFloatZero($delta)) {
             $report->SetY($report->GetY() + $delta, false);
         }
     }

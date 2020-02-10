@@ -895,7 +895,7 @@ class AjaxController extends BaseController
         $netTotal = $netGroup['total'];
 
         // net total?
-        if (0.0 === $netTotal) {
+        if ($this->isFloatZero($netTotal)) {
             return;
         }
 

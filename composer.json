@@ -22,6 +22,7 @@
 		"php" : "^7.4",
 		"ext-ctype" : "*",
 		"ext-iconv" : "*",
+		"antishov/doctrine-extensions-bundle" : "~1.4",
 		"beberlei/doctrineextensions" : "~1.2",
 		"bjeavons/zxcvbn-php" : "~1.0",
 		"fpdf/fpdf" : "~1.81",
@@ -52,8 +53,7 @@
 		"symfony/web-link" : "4.4.*",
 		"symfony/yaml" : "4.4.*",
 		"vich/uploader-bundle" : "~1.12",
-		"webinarium/datatables-bundle" : "~2.4",
-		"antishov/doctrine-extensions-bundle" : "~1.4"
+		"webinarium/datatables-bundle" : "~2.4"
 	},
 	"require-dev" : {
 		"symfony/debug-pack" : "*",

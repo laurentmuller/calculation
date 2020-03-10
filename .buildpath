@@ -11,6 +11,11 @@
 			<attribute name="composer" value="source"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/antishov/doctrine-extensions-bundle">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/beberlei/doctrineextensions/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -272,11 +277,6 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/sensio/framework-extra-bundle/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/stof/doctrine-extensions-bundle">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

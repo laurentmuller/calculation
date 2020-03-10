@@ -616,16 +616,15 @@ class TestController extends BaseController
         // get service
         $service = $factory->getSessionService();
 
-        $form = $this->createFormBuilder()
-            ->getForm();
-
+        // form and parameters
+        $form = $this->createFormBuilder()->getForm();
         $parameters = [
             'form' => $form->createView(),
             'language' => HttpClientService::getAcceptLanguage(true),
             'languages' => $service->getLanguages(),
-            'service' => $service::getName(),
-            'services' => $factory->getServices(),
+            'service_name' => $service::getName(),
             'service_url' => $service::getApiUrl(),
+            'services' => $factory->getServices(),
         ];
 
         return $this->render('test/translate.html.twig', $parameters);

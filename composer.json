@@ -31,7 +31,6 @@
 		"ob/highcharts-bundle" : "~1.7",
 		"robquistnl/simplehtmltotext" : "~1.1",
 		"sensio/framework-extra-bundle" : "^5.5",
-		"stof/doctrine-extensions-bundle" : "dev-master",
 		"symfony/asset" : "4.4.*",
 		"symfony/console" : "4.4.*",
 		"symfony/dotenv" : "4.4.*",
@@ -53,7 +52,8 @@
 		"symfony/web-link" : "4.4.*",
 		"symfony/yaml" : "4.4.*",
 		"vich/uploader-bundle" : "~1.12",
-		"webinarium/datatables-bundle" : "~2.4"
+		"webinarium/datatables-bundle" : "~2.4",
+		"antishov/doctrine-extensions-bundle" : "~1.4"
 	},
 	"require-dev" : {
 		"symfony/debug-pack" : "*",

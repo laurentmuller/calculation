@@ -30,19 +30,9 @@ class TranslatorFactory
     use SessionTrait;
 
     /**
-     * The Bing translator service name.
+     * The default translator service class name (Bing).
      */
-    public const BING_SERVICE = BingTranslatorService::class;
-
-    /**
-     * The Google translator service name.
-     */
-    public const GOOGLE_SERVICE = GoogleTranslatorService::class;
-
-    /**
-     * The Yandex translator service name.
-     */
-    public const YANDEX_SERVICE = YandexTranslatorService::class;
+    public const DEFAULT_SERVICE = BingTranslatorService::class;
 
     /**
      * The name of the key to save/retrieve the last translation service used.
@@ -124,25 +114,30 @@ class TranslatorFactory
     /**
      * Gets the defined services.
      *
-     * Each entry contains the service name, the class name and the API url.
+     * Each entry contains the following values:
+     * <ul>
+     * <li><code>'name'</code>: The service name.</li>
+     * <li><code>'class'</code>: The class name.</li>
+     * <li><code>'api'</code>: The URL for the API documentation.</li>
+     * </ul>
      */
     public function getServices(): array
     {
         return [
             [
                 'name' => BingTranslatorService::getName(),
+                'class' => BingTranslatorService::getClassName(),
                 'api' => BingTranslatorService::getApiUrl(),
-                'class' => BingTranslatorService::class,
             ],
             [
                 'name' => GoogleTranslatorService::getName(),
+                'class' => GoogleTranslatorService::getClassName(),
                 'api' => GoogleTranslatorService::getApiUrl(),
-                'class' => GoogleTranslatorService::class,
             ],
             [
                 'name' => YandexTranslatorService::getName(),
+                'class' => YandexTranslatorService::getClassName(),
                 'api' => YandexTranslatorService::getApiUrl(),
-                'class' => YandexTranslatorService::class,
             ],
         ];
     }
@@ -154,9 +149,9 @@ class TranslatorFactory
      */
     public function getSessionService(): ITranslatorService
     {
-        $class = $this->getSessionValue(self::KEY_LAST_SERVICE, self::BING_SERVICE);
+        $class = $this->getSessionValue(self::KEY_LAST_SERVICE, self::DEFAULT_SERVICE);
         if (!$this->exists($class)) {
-            $class = self::BING_SERVICE;
+            $class = self::DEFAULT_SERVICE;
         }
 
         return $this->getService($class);

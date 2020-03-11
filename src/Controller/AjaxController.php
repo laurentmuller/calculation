@@ -23,8 +23,6 @@ use App\Service\FakerService;
 use App\Service\OpenWeatherService;
 use App\Service\SwissPostService;
 use App\Traits\MathTrait;
-use App\Translator\BingTranslatorService;
-use App\Translator\ITranslatorService;
 use App\Translator\TranslatorFactory;
 use App\Utils\SymfonyUtils;
 use App\Utils\Utils;
@@ -179,19 +177,6 @@ class AjaxController extends BaseController
             'result' => true,
             'content' => $content,
         ]);
-    }
-
-    /**
-     * Translate a text with the Bing service.
-     *
-     * @Route("/bing", name="ajax_bing")
-     * @IsGranted("ROLE_USER")
-     */
-    public function bing(Request $request, TranslatorFactory $factory): JsonResponse
-    {
-        $service = $factory->getService(TranslatorFactory::BING_SERVICE);
-
-        return $this->translator($request, $service);
     }
 
     /**
@@ -357,64 +342,6 @@ class AjaxController extends BaseController
     }
 
     /**
-     * Identifies the language of a piece of text.
-     *
-     * @Route("/detect", name="ajax_detect")
-     * @IsGranted("ROLE_USER")
-     */
-    public function detect(Request $request, BingTranslatorService $translator): JsonResponse
-    {
-        $text = $request->get('text', '');
-        if (!Utils::isString($text)) {
-            return $this->json([
-                'result' => false,
-                'message' => $this->trans('translator.text_error'),
-            ]);
-        }
-
-        try {
-            // detect
-            if ($result = $translator->detect($text)) {
-                return $this->json([
-                    'result' => true,
-                    'data' => $result,
-                ]);
-            }
-            $error = $translator->getLastError();
-            if ($error) {
-                return $this->json([
-                    'result' => false,
-                    'message' => $this->trans('translator.detect_error'),
-                    'exception' => [
-                        'code' => $error['code'],
-                        'message' => $error['message'],
-                    ],
-                ]);
-            }
-
-            return $this->json([
-                'result' => false,
-                'message' => $this->trans('translator.translate_error'),
-            ]);
-        } catch (\Exception $e) {
-            return $this->jsonException($e, $this->trans('translator.detect_error'));
-        }
-    }
-
-    /**
-     * Translate a text with the Google service.
-     *
-     * @Route("/google", name="ajax_google")
-     * @IsGranted("ROLE_USER")
-     */
-    public function google(Request $request, TranslatorFactory $factory): JsonResponse
-    {
-        $service = $factory->getService(TranslatorFactory::GOOGLE_SERVICE);
-
-        return $this->translator($request, $service);
-    }
-
-    /**
      * Gets the datatables translations.
      *
      * @Route("/language", name="ajax_language")
@@ -503,7 +430,7 @@ class AjaxController extends BaseController
      */
     public function languages(Request $request, TranslatorFactory $factory, SessionInterface $session): JsonResponse
     {
-        $class = $request->get('service', TranslatorFactory::BING_SERVICE);
+        $class = $request->get('service', TranslatorFactory::DEFAULT_SERVICE);
         $service = $factory->getService($class);
         $languages = $service->getLanguages();
 
@@ -717,7 +644,7 @@ class AjaxController extends BaseController
         $to = $request->get('to', '');
         $from = $request->get('from');
         $text = $request->get('text', '');
-        $class = $request->get('service', TranslatorFactory::BING_SERVICE);
+        $class = $request->get('service', TranslatorFactory::DEFAULT_SERVICE);
         $service = $factory->getService($class);
 
         // check parameters
@@ -827,19 +754,6 @@ class AjaxController extends BaseController
 
             return $this->jsonException($e, $message);
         }
-    }
-
-    /**
-     * Translate a text with the Yandex service.
-     *
-     * @Route("/yandex", name="ajax_yandex")
-     * @IsGranted("ROLE_USER")
-     */
-    public function yandex(Request $request, TranslatorFactory $factory): JsonResponse
-    {
-        $service = $factory->getService(TranslatorFactory::YANDEX_SERVICE);
-
-        return $this->translator($request, $service);
     }
 
     /**
@@ -1033,30 +947,5 @@ class AjaxController extends BaseController
         } catch (\Exception $e) {
             return $this->jsonException($e);
         }
-    }
-
-    private function translator(Request $request, ITranslatorService $service): JsonResponse
-    {
-        $locale = \Locale::getDefault();
-        $locale = \explode('_', $locale)[0];
-
-        $to = $request->get('to', $locale);
-        $from = $request->get('from');
-        $text = $request->get('text', 'Edit the translated document.');
-
-        if (false === $response = $service->translate($text, $to, $from)) {
-            return $this->json($service->getLastError());
-        }
-
-        $result = [
-            'name' => $service->getName(),
-            'class' => Utils::getShortName($service),
-            'api' => $service->getApiUrl(),
-            'response' => $response,
-            'detect' => $service->detect($text),
-            'languages' => $service->getLanguages(),
-        ];
-
-        return $this->json($result);
     }
 }

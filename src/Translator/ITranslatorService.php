@@ -41,6 +41,11 @@ interface ITranslatorService
     public static function getApiUrl(): string;
 
     /**
+     * Gets the class name.
+     */
+    public static function getClassName(): string;
+
+    /**
      * Gets the set of languages currently supported by other operations of the service.
      *
      * @return array|bool an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs

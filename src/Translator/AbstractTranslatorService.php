@@ -115,6 +115,14 @@ abstract class AbstractTranslatorService extends HttpClientService implements IT
     /**
      * {@inheritdoc}
      */
+    public static function getClassName(): string
+    {
+        return static::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getLanguages()
     {
         // already cached?

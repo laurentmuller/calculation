@@ -503,6 +503,8 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
                 }
             }
         }
+
+        return $this;
     }
 
     /**
@@ -575,7 +577,7 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
                         break;
 
                     case 'text-info':
-                        $style->setTextColor(PdfTextColor::fromArray(HtmlBootstrapColors::INFO));
+                        $style->setTextColor(PdfTextColor::create(HtmlBootstrapColors::INFO));
                         break;
 
                     default:

@@ -124,7 +124,7 @@ class HtmlTextChunk extends HtmlChunk
         $parent = $this->parent;
 
         // special case when parent contains only this text
-        if ($parent && 1 === $parent->count() && $parent->is(...self::PARENT_MULTI_CELL)) {
+        if (null !== $parent && 1 === $parent->count() && $parent->is(...self::PARENT_MULTI_CELL)) {
             $align = $parent->getAlignment();
             switch ($align) {
                 case self::ALIGN_RIGHT:

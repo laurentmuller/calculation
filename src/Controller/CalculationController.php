@@ -911,7 +911,7 @@ class CalculationController extends EntityController
         $title = $this->trans('calculation.list.title');
 
         // create pivot table
-        $table = PivotTableFactory::instance($dataset, $title)
+        return PivotTableFactory::instance($dataset, $title)
             //->setAggregatorClass(AverageAggregator::class)
             //->setAggregatorClass(CountAggregator::class)
             ->setAggregatorClass(SumAggregator::class)
@@ -920,8 +920,6 @@ class CalculationController extends EntityController
             ->setDataField($data)
             ->setKeyField($key)
             ->create();
-
-        return $table;
     }
 
     /**

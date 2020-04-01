@@ -63,7 +63,7 @@ class CalendarService
      *
      * @return Calendar the generated calendar
      *
-     * @throws \Exception if the month, the week or the day class model are set and does not exist
+     * @throws CalendarException if the month, the week or the day class model are set and does not exist
      */
     public function generate(?int $year = null): Calendar
     {
@@ -89,7 +89,7 @@ class CalendarService
      * @param string $weekModel     the week model class or null for default
      * @param string $dayModel      the day model class or null for default
      *
-     * @throws \Exception if the calendar, the month, the week or the day class model does not exist
+     * @throws CalendarException if the calendar, the month, the week or the day class model does not exist
      */
     public function setModels(?string $calendarModel = null, ?string $monthModel = null, ?string $weekModel = null, ?string $dayModel = null): self
     {

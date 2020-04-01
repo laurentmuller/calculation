@@ -50,7 +50,10 @@
 <div class="row no-gutters mt-2 pb-3 d-print-none">
     <div class="col">
         {{ icons.homepage() }}
-        {% if app.debug or app_environment == 'dev' -%}{{ icons.button_pdf('about_pdf') }}{%- endif %}
+        {% if app.debug or app_environment == 'dev' -%}
+            {{ icons.button_pdf('about_pdf') }}
+            {{ icons.link(path('about_php_ini'), 'about.php_ini', 'btn btn-form btn-outline-info') }}
+        {%- endif %}
     </div>
 </div>
 {% endblock %}

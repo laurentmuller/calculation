@@ -516,7 +516,7 @@ class PdfDocument extends Fpdf implements IPdfConstants
      *
      * @param bool   $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if available.
      *                       <code>false</code> to send to the browser and force a file download with the name given.
-     * @param string $name   the name of the file
+     * @param string $name   the name of the file or null to use default ('document.pdf')
      * @param bool   $isUTF8 indicates if name is encoded in ISO-8859-1 (false) or UTF-8 (true)
      *
      * @return array the output headers
@@ -537,7 +537,8 @@ class PdfDocument extends Fpdf implements IPdfConstants
             $disposition = 'attachment; ' . $encoded;
         }
 
-        return ['Pragma' => 'public',
+        return [
+            'Pragma' => 'public',
             'Content-Type' => $type,
             'Content-Disposition' => $disposition,
             'Cache-Control' => 'private, max-age=0, must-revalidate',

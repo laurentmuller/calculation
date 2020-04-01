@@ -209,15 +209,73 @@ final class SymfonyUtils
     }
 
     /**
-     * Gets PHP informations.
+     * Gets PHP informations as array.
+     * Note:
+     * <ul>
+     * <li>'yes', 'enabled' and 'on' values are converted to boolean true.</li>
+     * <li>'no', 'disabled' and'off' values are converted to boolean false.</li>
+     * <li>if applicable values are converted to integer or float.</li>
+     * </ul>
      */
-    public static function getPhpInfo(): string
+    public static function getPhpInfoArray(): array
+    {
+        $content = self::getPhpInfoText(INFO_MODULES);
+
+        $content = \strip_tags($content, '<h2><th><td>');
+        $content = \preg_replace('/<th[^>]*>([^<]+)<\/th>/', '<info>\1</info>', $content);
+        $content = \preg_replace('/<td[^>]*>([^<]+)<\/td>/', '<info>\1</info>', $content);
+        $array = \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $content, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+        $result = [];
+        $count = \count($array);
+
+        $regexInfo = '<info>([^<]+)<\/info>';
+        $regex3cols = '/' . $regexInfo . '\s*' . $regexInfo . '\s*' . $regexInfo . '/';
+        $regex2cols = '/' . $regexInfo . '\s*' . $regexInfo . '/';
+
+        $matchs = null;
+        for ($i = 1; $i < $count; ++$i) {
+            if (\preg_match('/<h2[^>]*>([^<]+)<\/h2>/', $array[$i], $matchs)) {
+                $name = \trim($matchs[1]);
+                $vals = \explode("\n", $array[$i + 1]);
+                foreach ($vals as $val) {
+                    if (\preg_match($regex3cols, $val, $matchs)) { // 3 columns
+                        $match1 = \trim($matchs[1]);
+                        $match2 = self::convert(\trim($matchs[2]));
+                        $match3 = self::convert(\trim($matchs[3]));
+
+                        // special case for 'Directive'
+                        if (0 === \strcasecmp('directive', $match1)) {
+                            $directive1 = $match2;
+                            $directive2 = $match3;
+                        } elseif ($directive1 && $directive2) {
+                            $result[$name][$match1] = [
+                                $directive1 => $match2,
+                                $directive2 => $match3,
+                            ];
+                        } else {
+                            $result[$name][$match1] = [$match2,  $match3];
+                        }
+                    } elseif (\preg_match($regex2cols, $val, $matchs)) { // 2 columns
+                        $match1 = \trim($matchs[1]);
+                        $match2 = self::convert(\trim($matchs[2]));
+                        $result[$name][$match1] = $match2;
+                        $directive1 = $directive2 = null;
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Gets PHP informations as HTML.
+     */
+    public static function getPhpInfoHtml(): string
     {
         // get info
-        \ob_start();
-        \phpinfo();
-        $info = \ob_get_contents();
-        \ob_end_clean();
+        $info = self::getPhpInfoText();
 
         // extract body
         $info = \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
@@ -230,6 +288,24 @@ final class SymfonyUtils
 
         // update table class
         return \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
+    }
+
+    /**
+     * Gets PHP informations as text (raw data).
+     *
+     * @param int $what The output may be customized by passing one or more of the following constants bitwise values summed
+     *                  together in the optional what parameter.
+     *                  One can also combine the respective constants or bitwise values
+     *                  together with the bitwise or operator.
+     */
+    public static function getPhpInfoText(int $what = INFO_ALL): string
+    {
+        \ob_start();
+        \phpinfo($what);
+        $content = \ob_get_contents();
+        \ob_end_clean();
+
+        return $content;
     }
 
     /**
@@ -354,6 +430,22 @@ final class SymfonyUtils
         }
 
         return 'Unknown';
+    }
+
+    private static function convert($var)
+    {
+        $value = \strtolower((string) $var);
+        if (\in_array($value, ['yes', 'enabled', 'on'], true)) {
+            return true;
+        } elseif (\in_array($value, ['no', 'disabled', 'off'], true)) {
+            return false;
+        } elseif (\is_int($var) || \preg_match('/^-?\d+$/', (string) $var)) {
+            return (int) $var;
+        } elseif (\is_float($var) || \preg_match('/^-?\d+\.\d+$/', (string) $var)) {
+            return (float) $var;
+        } else {
+            return $var;
+        }
     }
 
     /**

@@ -17,7 +17,6 @@ namespace App\Repository;
 use App\Doctrine\ColumnHydrator;
 use App\Utils\Utils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
@@ -32,17 +31,6 @@ abstract class BaseRepository extends ServiceEntityRepository
      * The default entity alias used to create query builder (value = 'e') .
      */
     public const DEFAULT_ALIAS = 'e';
-
-    /**
-     * Constructor.
-     *
-     * @param ManagerRegistry $registry  the connections and entity managers registry
-     * @param string          $className the class name of the entity this repository manages
-     */
-    protected function __construct(ManagerRegistry $registry, string $className)
-    {
-        parent::__construct($registry, $className);
-    }
 
     /**
      * Creates a default query builder.

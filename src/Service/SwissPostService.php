@@ -545,10 +545,8 @@ class SwissPostService
      */
     private function processValidity(array $data, $handle): ?\DateTime
     {
-        if (\count($data) > 1) {
-            if (false !== $date = \DateTime::createFromFormat(self::DATE_PATTERN, $data[1])) {
-                return $date->setTime(0, 0, 0, 0);
-            }
+        if (\count($data) > 1 && false !== $date = \DateTime::createFromFormat(self::DATE_PATTERN, $data[1])) {
+            return $date->setTime(0, 0, 0, 0);
         }
 
         return null;

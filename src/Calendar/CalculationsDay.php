@@ -24,17 +24,6 @@ use App\Entity\Calculation;
 class CalculationsDay extends Day
 {
     /**
-     * Constructor.
-     *
-     * @param Calendar           $calendar the parent calendar
-     * @param \DateTimeInterface $date     the date
-     */
-    public function __construct(Calendar $calendar, \DateTimeInterface $date)
-    {
-        parent::__construct($calendar, $date);
-    }
-
-    /**
      * Add a calculation.
      *
      * @param Calculation $calculation the calculation to add

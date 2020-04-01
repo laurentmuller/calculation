@@ -136,7 +136,7 @@ class CalculationItem extends BaseEntity
      */
     public function getDisplay(): string
     {
-        return $this->description;
+        return $this->getDescription();
     }
 
     /**

@@ -25,17 +25,17 @@ trait ModelTrait
      * Checks if the given class name exist.
      *
      * @param string|null $className    the class name to verify
-     * @param string      $defaultClass the defaukt class name
+     * @param string      $defaultClass the default class name to use if the class name si null
      *
      * @return string the class name if no exception
      *
-     * @throws \InvalidArgumentException if the given class name does not exist
+     * @throws CalendarException if the given class name does not exist
      */
-    protected function checkClass(?string $className = null, string $defaultClass): string
+    protected function checkClass(?string $className, string $defaultClass): string
     {
         $name = $className ?: $defaultClass;
         if (!\class_exists($name)) {
-            throw new \InvalidArgumentException("Class '{$name}' not found.");
+            throw new CalendarException("Class '{$name}' not found.");
         }
 
         return $name;

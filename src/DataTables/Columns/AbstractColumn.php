@@ -240,11 +240,8 @@ abstract class AbstractColumn
     public function setDirection(string $direction): self
     {
         $direction = \strtolower($direction);
-        switch ($direction) {
-            case self::SORT_ASC:
-            case self::SORT_DESC:
-                $this->direction = $direction;
-                break;
+        if (self::SORT_ASC === $direction || self::SORT_DESC === $direction) {
+            $this->direction = $direction;
         }
 
         return $this;
@@ -288,8 +285,6 @@ abstract class AbstractColumn
     public function setVisible(bool $visible): self
     {
         $this->visible = $visible;
-        if (!$visible) {
-        }
 
         return $this;
     }

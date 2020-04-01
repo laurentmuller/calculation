@@ -18,20 +18,25 @@
 		"symfony",
 		"calculation"
 	],
+	"repositories" : [{
+			"type" : "vcs",
+			"url" : "https://github.com/jethrohicks/FOSUserBundle.git"
+		}
+	],
 	"require" : {
 		"php" : "^7.4",
 		"ext-ctype" : "*",
 		"ext-iconv" : "*",
-		"antishov/doctrine-extensions-bundle" : "~1.4",
-		"beberlei/doctrineextensions" : "~1.2",
-		"bjeavons/zxcvbn-php" : "~1.0",
-		"fpdf/fpdf" : "~1.81",
-		"friendsofsymfony/user-bundle" : "dev-master#beff7d3512835875578535cd59bc09f4923a1a94",
-		"fzaninotto/faker" : "~1.9",
-		"google/recaptcha" : "~1.2",
-		"ob/highcharts-bundle" : "~1.7",
-		"robquistnl/simplehtmltotext" : "~1.1",
-		"sensio/framework-extra-bundle" : "^5.5",
+		"antishov/doctrine-extensions-bundle" : "^1.4",
+		"beberlei/doctrineextensions" : "^1.2",
+		"bjeavons/zxcvbn-php" : "^1.0",
+		"fpdf/fpdf" : "^1.82",
+		"friendsofsymfony/user-bundle" : "dev-bugfix#58767f8e584b452e2cc5f4c6e185e75d5c27ea2f",
+		"fzaninotto/faker" : "^1.9",
+		"google/recaptcha" : "^1.2",
+		"ob/highcharts-bundle" : "^1.7",
+		"robquistnl/simplehtmltotext" : "^1.1",
+		"sensio/framework-extra-bundle" : "^5.1",
 		"symfony/asset" : "4.4.*",
 		"symfony/console" : "4.4.*",
 		"symfony/dotenv" : "4.4.*",
@@ -52,8 +57,8 @@
 		"symfony/validator" : "4.4.*",
 		"symfony/web-link" : "4.4.*",
 		"symfony/yaml" : "4.4.*",
-		"vich/uploader-bundle" : "~1.12",
-		"webinarium/datatables-bundle" : "~2.4"
+		"vich/uploader-bundle" : "^1.13",
+		"webinarium/datatables-bundle" : "^2.4"
 	},
 	"require-dev" : {
 		"symfony/debug-pack" : "*",

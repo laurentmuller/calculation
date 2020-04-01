@@ -28,11 +28,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class GoogleTranslatorService extends AbstractTranslatorService
 {
     /**
-     * The API version parameter.
-     */
-    private const API_VERSION = 'v2';
-
-    /**
      * The host name.
      */
     private const HOST_NAME = 'https://translation.googleapis.com/language/translate/v2/';
@@ -146,10 +141,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
             return false;
         }
 
-//         $accessor = $this->getPropertyAccessor();
-//         $value1 = $accessor->getValue($response, '[translations][0][translatedText]');
-//         $value2 = $accessor->getValue($response, '[translations][0][detectedSourceLanguage]');
-
         // translations
         if (!$translations = $this->getPropertyArray($response, 'translations')) {
             return false;
@@ -189,12 +180,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
         if (!$response = $this->get(self::URI_LANGUAGE, $query)) {
             return false;
         }
-
-//         $accessor = $this->getPropertyAccessor();
-//         if ($accessor->isReadable($response, 'languages')) {
-//             $value = $accessor->getValue($response, 'languages');
-//         }
-//         $value = $accessor->getValue($response, '[languages]');
 
         // languages
         if (!$languages = $this->getPropertyArray($response, 'languages')) {

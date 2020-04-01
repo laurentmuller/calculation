@@ -107,7 +107,7 @@ class AjaxController extends BaseController
     public function aboutPhp(): JsonResponse
     {
         $parameters = [
-            'phpInfo' => SymfonyUtils::getPhpInfo(),
+            'phpInfo' => SymfonyUtils::getPhpInfoHtml(),
             'cache' => $this->getCacheClass(),
             'extensions' => $this->getLoadedExtensions(),
             'apache' => $this->getApacheVersion(),

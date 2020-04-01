@@ -170,8 +170,6 @@ class Calendar extends CalendarItem implements IMonthsOfYear, IDaysOfWeek
         $this->reset();
 
         // calculate first and last days of year
-        // $timestamp = \gmmktime(0,0,0,1,1,$year);
-        // $date = new \DateTime("@{$timestamp}");
         $oneDayInterval = new \DateInterval('P1D');
         $firstYearDate = \DateTime::createFromFormat('d.m.Y H:i:s', \sprintf('01.01.%s 00:00:00', $year));
         $lastYearDate = (clone $firstYearDate)
@@ -351,7 +349,7 @@ class Calendar extends CalendarItem implements IMonthsOfYear, IDaysOfWeek
      * @param string|null $weekModel  the week model class or null for default
      * @param string|null $dayModel   the day model class or null for default
      *
-     * @throws \Exception if the month, the week or the day class model does not exist
+     * @throws CalendarException if the month, the week or the day class model does not exist
      */
     public function setModels(?string $monthModel = null, ?string $weekModel = null, ?string $dayModel = null): self
     {
@@ -367,7 +365,7 @@ class Calendar extends CalendarItem implements IMonthsOfYear, IDaysOfWeek
      *
      * @param string[] $monthNames the month names to set
      *
-     * @throws \Exception if the array does not contains 12 values, if a key is missing or if one of the values is not a string
+     * @throws CalendarException if the array does not contains 12 values, if a key is missing or if one of the values is not a string
      */
     public function setMonthNames(array $monthNames): self
     {
@@ -381,7 +379,7 @@ class Calendar extends CalendarItem implements IMonthsOfYear, IDaysOfWeek
      *
      * @param string[] $monthShortNames the month short names to set
      *
-     * @throws \Exception if the array does not contains 12 values, if a key is missing or if one of the values is not a string
+     * @throws CalendarException if the array does not contains 12 values, if a key is missing or if one of the values is not a string
      */
     public function setMonthShortNames(array $monthShortNames): self
     {
@@ -395,7 +393,7 @@ class Calendar extends CalendarItem implements IMonthsOfYear, IDaysOfWeek
      *
      * @param string[] $weekNames the week names to set
      *
-     * @throws \Exception if the array does not contains 7 values, if a key is missing or if one of the values is not a string
+     * @throws CalendarException if the array does not contains 7 values, if a key is missing or if one of the values is not a string
      */
     public function setWeekNames(array $weekNames): self
     {
@@ -409,7 +407,7 @@ class Calendar extends CalendarItem implements IMonthsOfYear, IDaysOfWeek
      *
      * @param string[] $weekShortNames the week short names to set
      *
-     * @throws \Exception if the array does not contains 7 values, if a key is missing or if one of the values is not a string
+     * @throws CalendarException if the array does not contains 7 values, if a key is missing or if one of the values is not a string
      */
     public function setWeekShortNames(array $weekShortNames): self
     {
@@ -457,19 +455,19 @@ class Calendar extends CalendarItem implements IMonthsOfYear, IDaysOfWeek
      *
      * @return array the given array
      *
-     * @throws \Exception if the array has the wrong length or if a key is missing or if one of the values is not a string
+     * @throws CalendarException if the array has the wrong length or if a key is missing or if one of the values is not a string
      */
     private function checkArray(array $array, int $length): array
     {
         if ($length !== \count($array)) {
-            throw new \Exception("The array must contains {$length} values.");
+            throw new CalendarException("The array must contains {$length} values.");
         }
         for ($i = 1; $i <= $length; ++$i) {
             if (!\array_key_exists($i, $array)) {
-                throw new \Exception("The array must contains the key {$i}.");
+                throw new CalendarException("The array must contains the key {$i}.");
             }
             if (!\is_string($array[$i])) {
-                throw new \Exception("The value {$array[$i]} for the key {$i} must be a string.");
+                throw new CalendarException("The value {$array[$i]} for the key {$i} must be a string.");
             }
         }
 

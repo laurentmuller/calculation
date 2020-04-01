@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\DataTables\Columns;
 
-use App\DataTables\Tables\AbstractDataTable;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -26,18 +25,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class TwigColumn extends AbstractColumn
 {
-    /**
-     * Constructor.
-     *
-     * @param AbstractDataTable $table   the parent table
-     * @param string            $name    the field name
-     * @param array             $options the additional options
-     */
-    public function __construct(AbstractDataTable $table, string $name, array $options = [])
-    {
-        parent::__construct($table, $name, $options);
-    }
-
     /**
      * {@inheritdoc}
      */

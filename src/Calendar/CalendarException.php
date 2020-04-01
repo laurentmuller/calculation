@@ -12,27 +12,13 @@
 
 declare(strict_types=1);
 
-namespace App\DataTables\Columns;
-
-use Symfony\Component\OptionsResolver\OptionsResolver;
+namespace App\Calendar;
 
 /**
- * Data column for text values.
+ * Calendar exception.
  *
  * @author Laurent Muller
  */
-class TextColumn extends AbstractColumn
+class CalendarException extends \Exception
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function configureOptions(OptionsResolver $resolver): self
-    {
-        parent::configureOptions($resolver);
-
-        $resolver->setDefault('raw', false)
-            ->setAllowedTypes('raw', 'bool');
-
-        return $this;
-    }
 }

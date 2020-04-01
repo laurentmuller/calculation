@@ -215,7 +215,7 @@ class CalculationGroup extends BaseEntity
      */
     public function getDisplay(): string
     {
-        return $this->code;
+        return $this->getCode();
     }
 
     /**

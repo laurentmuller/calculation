@@ -16,8 +16,12 @@ namespace App\Controller;
 
 use App\Pdf\PdfResponse;
 use App\Report\HtmlReport;
+use App\Utils\SymfonyUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -107,6 +111,33 @@ class AboutController extends BaseController
 
         // render
         return $this->renderDocument($report);
+    }
+
+    /**
+     * Download the PHP ini.
+     *
+     * @Route("/php/ini", name="about_php_ini")
+     */
+    public function phpIni(): Response
+    {
+        // get content
+        $array = SymfonyUtils::getPhpInfoArray();
+
+        // create headers
+        $disposition = HeaderUtils::makeDisposition(
+            ResponseHeaderBag::DISPOSITION_INLINE, 'php_info.json'
+        );
+        $headers = [
+            'Content-Disposition' => $disposition,
+            //'Content-Type' => 'application/x-download',
+            'Cache-Control' => 'private, max-age=0, must-revalidate',
+        ];
+
+        // create response
+        $response = JsonResponse::create($array, JsonResponse::HTTP_OK, $headers);
+        $response->setEncodingOptions(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+        return $response;
     }
 
     /**

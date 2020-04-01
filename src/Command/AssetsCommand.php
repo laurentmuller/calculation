@@ -28,16 +28,6 @@ abstract class AssetsCommand extends Command
     use FileTrait;
 
     /**
-     * Constructor.
-     *
-     * @param string $name the command name
-     */
-    public function __construct(string $name)
-    {
-        parent::__construct($name);
-    }
-
-    /**
      * Executes the command.
      *
      * @return int 0 if everything went fine, or an exit code

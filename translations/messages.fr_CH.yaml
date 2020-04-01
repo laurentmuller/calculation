@@ -438,6 +438,7 @@ about:
     extern_link: Lien externe
     loading: Recherche des informations...
     error: Erreur lors du chargement des informations.
+    php_ini: PHP.ini
 list:
     limit_title: Nombre de lignes affichées par page
     pdf_title: Télécharger la liste

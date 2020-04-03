@@ -125,7 +125,7 @@ class AboutController extends BaseController
 
         // create headers
         $disposition = HeaderUtils::makeDisposition(
-            ResponseHeaderBag::DISPOSITION_INLINE, 'php_info.json'
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'php_info.json'
         );
         $headers = [
             'Content-Disposition' => $disposition,

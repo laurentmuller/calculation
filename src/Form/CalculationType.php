@@ -44,33 +44,28 @@ class CalculationType extends BaseType
     {
         parent::buildForm($builder, $options);
 
-        $helper = new FormHelper($builder);
+        $helper = new FormHelper($builder, 'calculation.fields.');
 
         $helper->field('id')
             ->addHiddenType();
 
         $helper->field('date')
-            ->label('calculation.fields.date')
             ->addDateType();
 
         $helper->field('customer')
-            ->label('calculation.fields.customer')
             ->maxLength(255)
             ->autocomplete('off')
             ->addTextType();
 
         $helper->field('description')
-            ->label('calculation.fields.description')
             ->maxLength(255)
             ->addTextType();
 
         $helper->field('userMargin')
-            ->label('calculation.fields.userMargin')
             ->percent(true)
             ->addPercentType(-100, 300);
 
         $helper->field('state')
-            ->label('calculation.fields.state')
             ->addStateType();
 
         $helper->field('createdAt')

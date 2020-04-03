@@ -91,6 +91,13 @@ class FormHelper
     private $labelAttributes = [];
 
     /**
+     * The labels prefix.
+     *
+     * @var string
+     */
+    private $labelPrefix;
+
+    /**
      * The options.
      *
      * @var array
@@ -107,11 +114,15 @@ class FormHelper
     /**
      * Constructor.
      *
-     * @param formBuilderInterface $builder the parent builder
+     * @param formBuilderInterface $builder     the parent builder
+     * @param string               $labelPrefix the label prefix. If the prefix is not null,
+     *                                          the label is automatically added when the field property is
+     *                                          set.
      */
-    public function __construct(FormBuilderInterface $builder)
+    public function __construct(FormBuilderInterface $builder, ?string $labelPrefix = null)
     {
         $this->builder = $builder;
+        $this->labelPrefix = empty($labelPrefix) ? null : $labelPrefix;
     }
 
     /**
@@ -485,11 +496,18 @@ class FormHelper
     /**
      * Sets the field name property.
      *
+     * If the label prefix is defined, the label is added automatically.
+     *
      * @param string $field the field name
      */
     public function field(string $field): self
     {
         $this->field = $field;
+
+        // add label if applicable
+        if (null !== $this->labelPrefix && !\in_array('label_format', $this->options, true)) {
+            return $this->label($this->labelPrefix . $field);
+        }
 
         return $this;
     }

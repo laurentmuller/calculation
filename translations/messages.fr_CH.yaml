@@ -117,7 +117,6 @@ calculationstate:
         calculation_title: Afficher les calculations
         editable: Modifiable
         not_editable: Non-Modifiable
-        calculations: '{0} Aucune calculation|{1} 1 calculation|]1,Inf] %count% calculations'
     show:
         title: Propriétés du statut
 category:
@@ -146,8 +145,6 @@ category:
         add_title: Créer une nouvelle catégorie
         pdf_title: Télécharger la liste des catégories
         product_title: Afficher les articles
-        margins: '{0} Aucune marge|{1} 1 marge|]1,Inf] %count% marges'
-        products: '{0} Aucun article|{1} 1 article|]1,Inf] %count% articles'
     show:
         title: Propriétés de la catégorie
 categorymargin:
@@ -556,7 +553,6 @@ test:
     invalid_month: Le mois doit être compris entre 1 et 12.
     week: Sem.
     week_title: Semaine %week%
-    calculations: '{0} Aucune calculation|{1} 1 calculation|]1,Inf] %count% calculations'
     drag_drop: Drag & drop
     html: Exportation HTML
     recaptcha: reCAPTCHA
@@ -587,20 +583,20 @@ parameters:
         4: 4 secondes
         5: 5 secondes
     fields:
-        defaultState: Statut par défaut
-        editAction: Action par défaut
-        dateFormat: Format des dates
-        timeFormat: Format des heures
-        grouping: Séparateur de milliers
-        decimal: Séparateur de décimals
+        default_state: Statut par défaut
+        edit_action: Action par défaut
+        date_format: Format des dates
+        time_format: Format des heures
+        grouping_separator: Séparateur de milliers
+        decimal_separator: Séparateur de décimals
         currency: Devise
-        customerName: Nom du client
-        customerUrl: Site internet du client
-        messagePosition: Position des messages
-        messageTimeout: Durée des messages
-        messageSubTitle: Sous-titre
-        min_margin: Marge minimum
-        displayCaptcha: Code de contrôle
+        customer_name: Nom du client
+        customer_url: Site internet du client
+        message_position: Position des messages
+        message_timeout: Durée des messages
+        message_sub_title: Sous-titre
+        minimum_margin: Marge minimum
+        display_captcha: Code de contrôle
 separator:
     period: 'Point : [ . ]'
     comma: 'Virgule : [ , ]'

@@ -1,7 +1,7 @@
 ![Logo](public/images/icons/icon-032x032.png) Calculation Bundle
 =======
 
-This bundle was created for calculations within <a href="https://symfony.com" target="_blank">Symfony</a> version 4.
+This bundle was created for calculations within <a href="https://symfony.com" target="_blank">Symfony</a> version 5.
 
 License
 -------

@@ -34,7 +34,7 @@
 {% block item_property %}
 {{ properties.line(item.description, false, 1) }}
 {{ properties.separator(1) }}
-{%- set text = 'calculationstate.list.calculations'|transchoice(item.countCalculations) -%}
+{%- set text = 'calculationstate.list.calculations'|trans({count: item.countCalculations}) -%}
 {%- if item.countCalculations -%}
     {% set href = path('calculation_list', {'query': item.code}) %}
     {{ properties.link(href, text, false, false, 1) }}

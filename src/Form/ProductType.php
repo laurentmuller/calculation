@@ -39,31 +39,26 @@ class ProductType extends BaseType
     {
         parent::buildForm($builder, $options);
 
-        $helper = new FormHelper($builder);
+        $helper = new FormHelper($builder, 'product.fields.');
 
         $helper->field('description')
-            ->label('product.fields.description')
             ->maxLength(255)
             ->addTextType();
 
         $helper->field('unit')
-            ->label('product.fields.unit')
             ->autocomplete('off')
             ->maxLength(15)
             ->notRequired()
             ->addTextType();
 
         $helper->field('price')
-            ->label('product.fields.price')
             ->currency(false)
             ->addMoneyType();
 
         $helper->field('category')
-            ->label('product.fields.category')
             ->addCategoryType();
 
         $helper->field('supplier')
-            ->label('product.fields.supplier')
             ->autocomplete('off')
             ->maxLength(255)
             ->notRequired()

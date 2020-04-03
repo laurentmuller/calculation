@@ -215,7 +215,7 @@ final class SymfonyUtils
      * <li>'yes', 'enabled' and 'on' values are converted to boolean true.</li>
      * <li>'no', 'disabled' and'off' values are converted to boolean false.</li>
      * <li>if applicable values are converted to integer or float.</li>
-     * </ul>
+     * </ul>.
      */
     public static function getPhpInfoArray(): array
     {

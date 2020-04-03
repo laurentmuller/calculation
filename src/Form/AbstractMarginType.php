@@ -42,21 +42,18 @@ abstract class AbstractMarginType extends BaseType
     {
         parent::buildForm($builder, $options);
 
-        $helper = new FormHelper($builder);
+        $helper = new FormHelper($builder, 'categorymargin.fields.');
         $currency = $this->currency() ? $helper->getCurrencySymbol() : false;
 
         $helper->field('minimum')
-            ->label('categorymargin.fields.minimum')
             ->currency($currency)
             ->addMoneyType();
 
         $helper->field('maximum')
-            ->label('categorymargin.fields.maximum')
             ->currency($currency)
             ->addMoneyType();
 
         $helper->field('margin')
-            ->label('categorymargin.fields.margin')
             ->percent($this->percent())
             ->addPercentType(0);
     }

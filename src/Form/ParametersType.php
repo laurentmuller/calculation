@@ -64,22 +64,18 @@ class ParametersType extends AbstractType implements IApplicationService
     {
         parent::buildForm($builder, $options);
 
-        $helper = new FormHelper($builder);
+        $helper = new FormHelper($builder, 'parameters.fields.');
 
         $helper->field(self::CUSTOMER_NAME)
-            ->label('parameters.fields.customerName')
             ->addTextType();
 
         $helper->field(self::CUSTOMER_URL)
-            ->label('parameters.fields.customerUrl')
             ->addUrlType();
 
         $helper->field(self::DEFAULT_STATE)
-            ->label('parameters.fields.defaultState')
             ->addStateType();
 
         $helper->field(self::EDIT_ACTION)
-            ->label('parameters.fields.editAction')
             ->updateAttribute('data-default', (int) self::DEFAULT_EDIT_ACTION)
             ->addChoiceType([
                 'parameters.editAction.show' => false,
@@ -87,22 +83,18 @@ class ParametersType extends AbstractType implements IApplicationService
             ]);
 
         $helper->field(self::MESSAGE_POSITION)
-            ->label('parameters.fields.messagePosition')
             ->updateAttribute('data-default', self::DEFAULT_POSITION)
             ->addChoiceType($this->getPositions());
 
         $helper->field(self::MESSAGE_TIMEOUT)
-            ->label('parameters.fields.messageTimeout')
             ->updateAttribute('data-default', self::DEFAULT_TIMEOUT)
             ->addChoiceType($this->getTimeouts());
 
         $helper->field(self::MESSAGE_SUB_TITLE)
-            ->label('parameters.fields.messageSubTitle')
             ->updateAttribute('data-default', (int) self::DEFAULT_SUB_TITLE)
             ->addYesNoType();
 
         $helper->field(self::MIN_MARGIN)
-            ->label('parameters.fields.min_margin')
             ->updateAttribute('data-default', self::DEFAULT_MIN_MARGIN * 100)
             ->percent(true)
             ->addPercentType(0);
@@ -110,30 +102,25 @@ class ParametersType extends AbstractType implements IApplicationService
         // super admin fields
         if ($this->isSuperAdmin()) {
             $helper->field(self::DATE_FORMAT)
-                ->label('parameters.fields.dateFormat')
                 ->updateOption('format', 'date')
                 ->updateAttribute('data-default', FormatUtils::getDateType())
                 ->add(DateTimeFormatType::class);
 
             $helper->field(self::TIME_FORMAT)
-                ->label('parameters.fields.timeFormat')
                 ->updateOption('format', 'time')
                 ->updateAttribute('data-default', FormatUtils::getTimeType())
                 ->add(DateTimeFormatType::class);
 
             $helper->field(self::GROUPING_SEPARATOR)
-                ->label('parameters.fields.grouping')
                 ->updateAttribute('data-default', FormatUtils::getGrouping())
                 ->add(GroupingSeparatorType::class);
 
             $helper->field(self::DECIMAL_SEPARATOR)
-                ->label('parameters.fields.decimal')
                 ->updateAttribute('data-default', FormatUtils::getDecimal())
                 ->add(DecimalSeparatorType::class);
 
             $captcha = (int) !$this->application->isDebug();
             $helper->field(self::DISPLAY_CAPTCHA)
-                ->label('parameters.fields.displayCaptcha')
                 ->updateAttribute('data-default', $captcha)
                 ->addChoiceType([
                     'parameters.displayCaptcha.show' => true,

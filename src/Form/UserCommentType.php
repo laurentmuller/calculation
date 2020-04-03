@@ -32,34 +32,27 @@ class UserCommentType extends AbstractType
         parent::buildForm($builder, $options);
 
         $isMail = $options['data']->isMail();
-        $helper = new FormHelper($builder);
-        //$helper->field('mail')->addHiddenType();
+        $helper = new FormHelper($builder, 'user.fields.');
 
         if ($isMail) {
             $helper->field('to')
-                ->label('user.fields.to')
                 ->addPlainType(true);
 
             $helper->field('subject')
-                ->label('user.fields.subject')
                 ->addTextType();
         } else {
             $helper->field('from')
-                ->label('user.fields.from')
                 ->addPlainType(true);
 
             $helper->field('subject')
-                ->label('user.fields.subject')
                 ->addPlainType(true);
         }
 
         $helper->field('message')
-            ->label('user.fields.message')
             ->minLength(10)
             ->addEditorType();
 
         $helper->field('attachments')
-            ->label('user.fields.attachments')
             ->updateOption('multiple', true)
             ->updateOption('maxfiles', 3)
             ->updateOption('maxsize', '10mi')

@@ -184,4 +184,4 @@ apportées à la présente politique de confidentialité prennent effet lorsqu'e
 ## Nous contacter
 Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par courrier électronique.
 
-Décembre 2019
+Avril 2020

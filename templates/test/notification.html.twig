@@ -54,7 +54,7 @@
 <div class="form-row">
     <div class="col-7">
         <div class="form-group">
-            <label for="position">{{ 'parameters.fields.messagePosition'|trans }}</label>
+            <label for="position">{{ 'parameters.fields.message_position'|trans }}</label>
             <select id="position" name="position" class="form-control" data-position="{{ position }}" data-random="{{ url('ajax_random_text') }}">
                 {{ _self.position('top-left', position) }}
                 {{ _self.position('top-center', position) }}
@@ -67,7 +67,7 @@
     </div>
     <div class="col-5">
         <div class="form-group">
-            <label for="timeout">{{ 'parameters.fields.messageTimeout'|trans }}</label>
+            <label for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
             <select id="timeout" name="timeout" class="form-control">
                 {{ _self.timeout(1000, timeout) }}
                 {{ _self.timeout(2000, timeout) }}

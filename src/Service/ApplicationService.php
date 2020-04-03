@@ -80,7 +80,7 @@ class ApplicationService implements IApplicationService
         $this->debug = $kernel->isDebug();
 
         $dir = $kernel->getCacheDir();
-        $this->adapter = AbstractAdapter::createSystemCache(self::CACHE_NAME_SPACE, self::CACHE_TIMEOUT, null, $dir, $logger);
+        $this->adapter = AbstractAdapter::createSystemCache(self::CACHE_NAME_SPACE, self::CACHE_TIMEOUT, '', $dir, $logger);
     }
 
     /**

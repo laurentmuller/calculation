@@ -51,7 +51,6 @@ class Calculation extends BaseEntity
      * The calculation date.
      *
      * @ORM\Column(name="date", type="date")
-     * @Assert\Date
      * @Assert\NotNull
      *
      * @var \DateTime

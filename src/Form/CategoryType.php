@@ -39,14 +39,12 @@ class CategoryType extends BaseType
     {
         parent::buildForm($builder, $options);
 
-        $helper = new FormHelper($builder);
+        $helper = new FormHelper($builder, 'category.fields.');
         $helper->field('code')
-            ->label('category.fields.code')
             ->maxLength(30)
             ->addTextType();
 
         $helper->field('description')
-            ->label('category.fields.description')
             ->notRequired()
             ->maxLength(255)
             ->addTextareaType();

@@ -39,63 +39,54 @@ class CustomerType extends BaseType
     {
         parent::buildForm($builder, $options);
 
-        $helper = new FormHelper($builder);
+        $helper = new FormHelper($builder, 'customer.fields.');
         $helper->field('title')
-            ->label('customer.fields.title')
             ->maxLength(50)
             ->notRequired()
             ->addTextType();
 
         $helper->field('lastName')
-            ->label('customer.fields.lastName')
             ->className('customer-group')
             ->maxLength(50)
             ->notRequired()
             ->addTextType();
 
         $helper->field('firstName')
-            ->label('customer.fields.firstName')
             ->className('customer-group')
             ->maxLength(50)
             ->notRequired()
             ->addTextType();
 
         $helper->field('company')
-            ->label('customer.fields.company')
             ->className('customer-group')
             ->maxLength(255)
             ->notRequired()
             ->addTextType();
 
         $helper->field('address')
-            ->label('customer.fields.address')
             ->autocomplete('off')
             ->maxLength(255)
             ->notRequired()
             ->addTextareaType();
 
         $helper->field('zipCode')
-            ->label('customer.fields.zipCode')
             ->autocomplete('off')
             ->maxLength(10)
             ->notRequired()
             ->addTextType();
 
         $helper->field('city')
-            ->label('customer.fields.city')
             ->autocomplete('off')
             ->maxLength(255)
             ->notRequired()
             ->addTextType();
 
         $helper->field('email')
-            ->label('customer.fields.email')
             ->maxLength(100)
             ->notRequired()
             ->addEmailType();
 
         $helper->field('webSite')
-            ->label('customer.fields.webSite')
             ->maxLength(100)
             ->notRequired()
             ->addUrlType();

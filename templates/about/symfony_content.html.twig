@@ -13,7 +13,7 @@
                 </td>
             </tr>
             {{ tools.headerInfo('Kernel') }}
-            {{ tools.rowInfo('Name', kernel.name) }}
+            {# { tools.rowInfo('Name', kernel.name) } #}
             {{ tools.rowInfo('Environment', kernel.environment) }}
             {{ tools.rowInfo('Debug', kernel.debug|json_encode) }}
             {{ tools.rowInfo('Locale', locale) }}

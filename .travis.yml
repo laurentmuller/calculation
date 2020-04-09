@@ -1,5 +1,16 @@
 language: php
+
 php:
   - 7.4
-install:
-  - composer --prefer-source -n install
+  
+env:
+  - SYMFONY_VERSION=5.0.*
+  
+before_install:
+  - composer self-update
+  - composer validate
+    
+install:    
+  - flags="--prefer-dist --optimize-autoloader --no-dev --no-progress --no-interaction"
+  - composer install $flags
+  - bin/composer install $flags  

@@ -14,4 +14,3 @@ before_install:
 install:    
   - flags="--prefer-dist --no-dev --no-progress --no-interaction"
   - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install $flags
-  - bin/composer install $flags  

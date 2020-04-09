@@ -12,5 +12,5 @@ before_install:
   - composer validate
     
 install:    
-  - flags="--prefer-dist --no-dev --no-progress --no-interaction"
+  - flags="--prefer-dist --no-progress --no-interaction"
   - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install $flags

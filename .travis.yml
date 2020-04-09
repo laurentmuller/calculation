@@ -7,10 +7,11 @@ env:
   - SYMFONY_VERSION=5.0.*
   
 before_install:
+  - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - composer self-update
   - composer validate
     
 install:    
-  - flags="--prefer-dist --optimize-autoloader --no-dev --no-progress --no-interaction"
-  - composer install $flags
+  - flags="--prefer-dist --no-dev --no-progress --no-interaction"
+  - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install $flags
   - bin/composer install $flags  

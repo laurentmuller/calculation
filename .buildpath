@@ -6,11 +6,6 @@
 			<attribute name="composer" value="source"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="tests">
-		<attributes>
-			<attribute name="composer" value="source"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/antishov/doctrine-extensions-bundle">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -112,11 +107,6 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/doctrine/reflection/lib/Doctrine/Common">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/easycorp/easy-log-handler/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

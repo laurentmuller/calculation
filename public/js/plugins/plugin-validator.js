@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* globals tinymce */
+
 /**
  * jQuery Validation Plugin extensions.
  */
@@ -37,6 +39,20 @@
             return null;
         },
 
+        /**
+         * Finds the TinyMCE editor container within the current element.
+         */
+        findTinyEditor: function() {
+            if (tinymce) {                
+                const id = $(this).attr('id');
+                const editor = tinymce.get(id);
+                if (editor) {
+                    return $(editor.getContainer());     
+                }
+            }
+            return null;
+        },
+        
         /**
          * Finds the reCaptcha frame within the current element.
          */
@@ -77,7 +93,8 @@
             const recaptcha = options && options.recaptcha;
             const fileInput = options && options.fileInput;
             const colorpicker = options && options.colorpicker;
-
+            const tinyeditor = options && options.tinyeditor;
+            
             if (editor) {
                 // override elementValue function
                 $.validator.prototype.elementValue = (function(parent) {
@@ -94,6 +111,25 @@
 
                 })($.validator.prototype.elementValue);
             }
+            
+            if (tinyeditor) {
+                // override elementValue function
+                $.validator.prototype.elementValue = (function(parent) {
+                    return function(element) {
+                        // get editor content
+                        const id = $(element).attr('id');
+                        const editor = tinymce.get(id);
+                        if (editor) {
+                            return  editor.getContent({format: 'text'}).trim();
+                        }
+
+                        // call the original function
+                        return parent.apply(this, arguments);
+                    };
+
+                })($.validator.prototype.elementValue);
+            }
+            
 
             // override focusInvalid function
             $.validator.prototype.focusInvalid = (function(parent) {
@@ -111,6 +147,17 @@
                             }
                         }
 
+                        // tinyeditor
+                        if (tinyeditor) {
+                            const $editor = $elements.findTinyEditor();
+                            if ($editor) {
+                                const id = $elements.attr('id');
+                                const editor = tinymce.get(id);
+                                editor.focus();
+                                return;
+                            }
+                        }
+                        
                         // reCaptcha
                         if (recaptcha) {
                             const $recaptcha = $elements.findReCaptcha();
@@ -168,6 +215,9 @@
                     if (editor && !$toUpdate) {
                         $toUpdate = $element.findEditor();
                     }
+                    if (tinyeditor && !$toUpdate) {
+                        $toUpdate = $element.findTinyEditor();
+                    }                    
                     if (recaptcha && !$toUpdate) {
                         $toUpdate = $element.findReCaptcha();
                     }
@@ -195,6 +245,9 @@
                     if (editor && !$toUpdate) {
                         $toUpdate = $element.findEditor();
                     }
+                    if (tinyeditor && !$toUpdate) {
+                        $toUpdate = $element.findTinyEditor();
+                    }                    
                     if (recaptcha && !$toUpdate) {
                         $toUpdate = $element.findReCaptcha();
                     }
@@ -281,18 +334,89 @@
         /**
          * Initialize a Summernote editor.
          */
+        initTinyEditor: function(options) {
+            // concat values
+            // var plugins = ['autolink', 'lists', 'image', 'table', 'paste', 'help']
+            // var c = plugins.concat(b.filter((item) => plugins.indexOf(item) === -1))
+            // plugins.join(' ');
+            // [].concat(array1, array2);
+            const plugins = 'autolink lists link image table paste help ' + (options.plugins || '');
+            const toolbar = 'styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | help ' + (options.toolbar || '');
+            const help_tabs = ['shortcuts'].concat(options.help_tabs || []);
+            
+            // remove
+            if (options) {
+                delete options.plugins;
+                delete options.toolbar;
+                delete options.help_tabs;
+            }
+            
+            const defaults = {
+                menubar: false,
+                statusbar: true,
+                contextmenu: false,
+                elementpath: false,
+                branding: false,                
+                language: 'fr_FR',
+                min_height: 150,
+                max_height: 500,
+                height: 250,
+                plugins: plugins.trim(),
+                toolbar: toolbar.trim(),
+                help_tabs: help_tabs,                
+                setup: function(editor) {
+                    editor.on('init', function() {
+                        const $container = $(editor.getContainer());
+                        $container.addClass('rounded');
+                    });
+                    editor.on('change', function() {
+                        editor.save();
+                        $(editor.getElement()).valid();
+                    });
+                    editor.on('focus', function() {
+                        const $element = $(editor.getElement());
+                        const validator = $element.parents('form').data('validator');
+                        if (validator) {
+                            validator.lastActive = $element;
+                        }
+                        const $container = $(editor.getContainer());
+                        if ($container.hasClass('border-danger')) {
+                            $container.addClass('field-invalid');
+                        } else {
+                            $container.addClass('field-valid');
+                        }
+                    });
+                    editor.on('blur', function() {
+                        const $container = $(editor.getContainer());
+                        $container.removeClass('field-valid field-invalid');
+                    });
+                }
+            };
+
+            // merge
+            const settings = $.extend(true, defaults, options, $(this).data());
+
+            // initialize
+            return $(this).tinymce(settings);
+        },
+        
+        /**
+         * Initialize a Summernote editor.
+         */
         initEditor: function(options) {
             // merge toolbar
             const toolbar = [
                 ['startButtons', [].concat(options.startButtons)],
                 ['styleButtons', ['style'].concat(options.styleButtons)], //
-                ['fontButtons', ['bold', 'underline', 'clear'].concat(options.fontButtons)], //
+                ['fontButtons', ['bold', 'underline'].concat(options.fontButtons)], // ,
+                                                                                    // 'clear'
                 ['fontnameButtons', ['fontname'].concat(options.fontnameButtons)], //
                 ['paraButtons', ['ul', 'ol', 'paragraph'].concat(options.paraButtons)], //
-                ['colorButtons', ['color'].concat(options.colorButtons)], //
+                ['colorButtons', [].concat(options.colorButtons)], // 'color'
                 ['tableButtons', ['table', 'hr'].concat(options.tableButtons)], //
                 ['insertButtons', ['link'].concat(options.insertButtons)], //
-                ['editButtons', ['undo', 'redo'].concat(options.editButtons)], //
+                ['editButtons', [].concat(options.editButtons)], // 'undo',
+                                                                    // 'redo'
                 ['endButtons', [].concat(options.endButtons)] //
             ];
 
@@ -308,10 +432,10 @@
                 callbacks: {
                     onFocus: function() {
                         const $that = $(this).trigger('focus');
-                         const validator = $that.parents('form').data('validator');
-                         if (validator) {
-                             validator.lastActive = $that;
-                         }
+                        const validator = $that.parents('form').data('validator');
+                        if (validator) {
+                            validator.lastActive = $that;
+                        }
                         const $editor = $that.findEditor();
                         if ($editor) {
                             if ($editor.hasClass('border-danger')) {
@@ -335,12 +459,15 @@
                             $that.data('text', newText);
                             $that.valid();
                         }
+                    },
+                    onInit: function() {
+                        // update UI
+                        $(".card.note-editor.note-editor").addClass("border");
+                        // $('.link-dialog
+                        // span.custom-control-description').removeClass('custom-control-description').addClass('custom-control-label');
                     }
                 }
             };
-
-            // merge
-            const settings = $.extend(true, defaults, options);
 
             // remove tab keys
             // if ($.summernote.options.keyMap.pc.TAB) {
@@ -350,14 +477,14 @@
             // delete $.summernote.options.keyMap.mac['SHIFT+TAB'];
             // }
 
+            // missing translation
+            $.summernote.lang['fr-FR'].link.useProtocol = 'Utiliser le protocole par défaut';
+            
+            // merge
+            const settings = $.extend(true, defaults, options, $(this).data());
+            
             // initialize
-            const summernote = $(this).summernote(settings);
-
-            // update UI
-            $('.link-dialog .modal-dialog').addClass('modal-dialog-centered');
-            $('.link-dialog span.custom-control-description').removeClass('custom-control-description').addClass('custom-control-label');
-
-            return summernote;
+            return $(this).summernote(settings);
         },
 
         /**

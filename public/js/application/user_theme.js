@@ -51,6 +51,9 @@ function setDefaultValues() {
 
     // update
     applyTheme();
+
+    // submit
+    // $('#edit-form').submit();
 }
 
 /**

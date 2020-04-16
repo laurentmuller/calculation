@@ -6,14 +6,10 @@
 {%- set cancel_path  = path('homepage') -%}
 
 {% block card_body %}
-<div class="form-row">
-    <div class="col-md-4">
-        {{ form_row(form.color) }}
-    </div>
-</div>
+{{ form_row(form.email) }}
 {{ form_row(form.message) }}
 <div class="form-group text-right mb-0">
-    <a href="https://summernote.org/deep-dive/" target="_blank" rel="noopener noreferrer">Summernote API</a>
+    <a href="https://summernote.org/deep-dive/" target="_blank" rel="noopener noreferrer">Documentation <i class="fas fa-share" aria-hidden="true"></i></a>
 </div>
 {% endblock %}
 
@@ -26,6 +22,5 @@
 {{ parent() }}
 {{ asset_js('js/vendor/summernote/summernote-bs4.js') }}
 {{ asset_js('js/vendor/summernote/lang/summernote-fr-FR.js') }}
-{{ asset_js('js/plugins/color-picker.js') }}
 {{ asset_js('js/test/summernote.js') }}
 {%- endblock %}

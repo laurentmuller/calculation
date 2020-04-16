@@ -2,9 +2,9 @@
 {{ asset_js('js/plugins/cookie-banner.js', {
     'id': "cookiebanner",
     'data-cookie-path': cookie_path,
-    'data-cookie-secure': cookie_secure ? '1' : '0',
+    'data-cookie-secure': cookie_secure|json_encode(),
     'data-cookie-same-site': cookie_same_site,
-    'data-cookie-expire': 'now'|date_modify('+1 year')|date('r'),
+    'data-cookie-expire': 'now'|date_modify('+1 month')|date('r'),
     'data-message': 'cookiebanner.message'|trans,
     'data-link-message': 'cookiebanner.link'|trans,
     'data-close-message': 'cookiebanner.close'|trans,

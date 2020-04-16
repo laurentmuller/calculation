@@ -9,7 +9,7 @@
     /**
      * Cookies functions
      */
-    var Cookies = {
+    const Cookies = {
 
         /**
          * Gets the cookie value.
@@ -21,9 +21,9 @@
         /**
          * Sets the cookie value.
          */
-        set: function (key, val, end, path, domain, secure, samesite, httponly) {
+        set: function (key, val, end, path, domain, secure, samesite) {
             // check key
-            if (!key || /^(?:expires|max-age|path|domain|secure|samesite|httponly)$/i.test(key)) {
+            if (!key || /^(?:expires|max-age|path|domain|secure|samesite)$/i.test(key)) {
                 return false;
             }
 
@@ -40,9 +40,6 @@
             }
             if (samesite) {
                 cookie += '; samesite=' + samesite;
-            }
-            if (httponly) {
-                // cookie += '; httponly';
             }
             if (end) {
                 switch (end.constructor) {
@@ -109,7 +106,7 @@
          * Create the banner div.
          */
         createBanner: function (settings) {
-            const $div = $('<div/>', {
+            const $banner = $('<div/>', {
                 'id': 'cookie-banner-div',
                 'class': settings.bannerClass,
                 'css': {
@@ -143,8 +140,9 @@
                 'text': settings.closeMessage,
                 'href': '#'
             });
-            $div.append($message).append($close);
-            $(settings.appendTo).append($div);
+            $banner.append($message, $close);
+
+            $(settings.appendTo).append($banner);
         },
 
         /**
@@ -167,20 +165,19 @@
                 cookieSecure: false,
                 cookieExpire: Infinity,
                 cookieSamesite: 'lax',
-                cookieHttpOnly: true,
 
-                messageClass: 'flex-fill',
                 message: 'This website uses cookies to provide you a better navigation experience. By closing this banner you agree to the use of cookies.',
-                bannerClass: 'd-flex fixed-bottom p-1 bg-dark text-white',
-
-                linkClass: 'ml-1 text-white-50',
                 linkMessage: 'Learn more',
+                closeMessage: 'Close',
+
+                bannerClass: 'd-flex fixed-bottom p-1 bg-dark text-white',
+                messageClass: 'flex-fill',
+                linkClass: 'ml-1 text-white-50',
+                closeClass: 'text-white align-self-center ml-2',
+
                 linkTarget: '_blank',
                 linkUrl: 'http://aboutcookies.org',
                 linkRel: 'noopener noreferrer',
-
-                closeClass: 'text-white align-self-center ml-2',
-                closeMessage: 'Close',
 
                 fontSize: '0.8rem',
                 fontFamily: 'var(--font-family-sans-serif)',
@@ -207,7 +204,7 @@
                 $('#cookie-banner-close').on('click', function (e) {
                     e.preventDefault();
                     if (!Cookies.has(settings.cookieName)) {
-                        Cookies.set(settings.cookieName, 1, settings.cookieExpire, settings.cookiePath, settings.cookieDomain, settings.cookieSecure, settings.cookieSamesite, settings.cookieHttpOnly);
+                        Cookies.set(settings.cookieName, 1, settings.cookieExpire, settings.cookiePath, settings.cookieDomain, settings.cookieSecure, settings.cookieSamesite);
                     }
                     that.removeBanner();
                 });

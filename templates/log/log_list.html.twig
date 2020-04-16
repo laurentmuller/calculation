@@ -73,10 +73,10 @@
             <td class="message">
                 {{- line.message|raw|nl2br -}}
                 {%- if line.context|length -%}
-                    <pre class="text-break text-success mb-0" style="white-space: pre-wrap;">{{- tools.format_var(line.context) -}}</pre>
+                    <pre class="text-break text-success white-space-pre-wrap mb-0">{{- tools.format_var(line.context) -}}</pre>
                 {%- endif -%}
                 {%- if line.extra|length -%}
-                    <pre class="text-break text-success mb-0" style="white-space: pre-wrap;">{{- tools.format_var(line.extra) -}}</pre>
+                    <pre class="text-break text-success white-space-pre-wrap mb-0">{{- tools.format_var(line.extra) -}}</pre>
                 {%- endif -%}
             </td>
         </tr>

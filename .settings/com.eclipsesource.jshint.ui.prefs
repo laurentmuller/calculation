@@ -1,3 +1,2 @@
 eclipse.preferences.version=1
-excluded=public/js/vendor/*.js
-included=public/js/app//*.js
+included=public/js/application/*.js\:public/js/extensions/*.js\:public/js/plugins/*.js\:public/js/test/*.js

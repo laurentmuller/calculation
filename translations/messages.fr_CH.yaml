@@ -546,7 +546,7 @@ theme:
         secondary: Refuser
 test:
     notification: Notifications
-    summernote: Summernote Editor
+    summernote: Editeur Summernote
     minify: Minify
     calendar: Calendrier %year%
     month: '%month% %year%'
@@ -556,6 +556,7 @@ test:
     drag_drop: Drag & drop
     html: Exportation HTML
     recaptcha: reCAPTCHA
+    tinymce: Editeur TinyMCE
 parameters:
     title: Paramètres
     description: Définition des paramètres par défaut de l'application.

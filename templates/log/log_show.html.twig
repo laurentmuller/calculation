@@ -6,7 +6,7 @@
 {%- if value|length -%}
 <tr>
     <td class="w-25">{{ name|trans }}</td>
-    <td class="w-75 text-break text-success small mb-0" style="white-space: pre-wrap;">{{- tools.format_var(value) -}}</td>
+    <td class="w-75 text-break text-success white-space-pre-wrap small mb-0">{{- tools.format_var(value) -}}</td>
 </tr>
 {%- endif -%}
 {% endmacro %}

@@ -47,7 +47,11 @@ td.notice {
 td.warning {
     border-left-color: var(--warning);
 }
- 
+
+.white-space-pre-wrap {
+    white-space: pre-wrap;
+}
+    
 td.error, 
 td.critical, 
 td.alert, 

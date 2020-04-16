@@ -38,17 +38,22 @@ class ResponseSubscriber implements EventSubscriberInterface
     private const CDNJS_URL = 'https://cdnjs.cloudflare.com';
 
     /**
-     * The data CSP directive.
+     * The CSP blob directive.
+     */
+    private const CSP_BLOB = 'blob:';
+
+    /**
+     * The CSP data directive.
      */
     private const CSP_DATA = 'data:';
 
     /**
-     * The none CSP directive.
+     * The CSP none directive.
      */
     private const CSP_NONE = "'none'";
 
     /**
-     * The self CSP directive.
+     * The CSP self directive.
      */
     private const CSP_SELF = "'self'";
 
@@ -141,20 +146,15 @@ class ResponseSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // Edge browser?
+        // get values
         $request = $event->getRequest();
-        if ($this->isEdgeBrowser($request)) {
-            return;
-        }
+        $response = $event->getResponse();
+        $headers = $response->headers;
 
         // developement firewall?
         if ($this->debug && $this->isDevFirewall($request)) {
             return;
         }
-
-        // get response and headers
-        $response = $event->getResponse();
-        $headers = $response->headers;
 
         // CSP
         $csp = $this->getCSP($request, $response);
@@ -187,28 +187,27 @@ class ResponseSubscriber implements EventSubscriberInterface
         $asset = $this->asset;
         $nonce = $this->getNonce();
 
-        // default
-        $csp = [];
-
         // none
-        $csp['default-src'] = self::CSP_NONE;
-        $csp['object-src'] = self::CSP_NONE;
-        $csp['media-src'] = self::CSP_NONE;
         $csp['base-uri'] = self::CSP_NONE;
+        $csp['media-src'] = self::CSP_NONE;
+        $csp['object-src'] = self::CSP_NONE;
+        $csp['default-src'] = self::CSP_NONE;
 
         // self
-        $csp['frame-ancestors'] = self::CSP_SELF;
-        $csp['manifest-src'] = self::CSP_SELF;
         $csp['form-action'] = self::CSP_SELF;
+        $csp['frame-ancestors'] = self::CSP_SELF;
+        if (!$this->isEdgeBrowser($request)) {
+            $csp['manifest-src'] = self::CSP_SELF;
+        }
 
-        // nonce
-        $csp['script-src'] = $nonce;
+        // nonce + asset
+        $csp['script-src'] = [$nonce, $asset];
 
         // self + asset
-        $csp['connect-src'] = [self::CSP_SELF, $asset];
-        $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, $asset];
         $csp['frame-src'] = [self::CSP_SELF, self::GOOGLE_FRAME_URL];
+        $csp['connect-src'] = [self::CSP_SELF, $asset]; //, self::CSP_BLOB
         $csp['font-src'] = [self::CSP_SELF, self::GOOGLE_FONT_STATIC_URL, $asset];
+        $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, $asset]; //, self::CSP_BLOB
         $csp['style-src'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
 
         // PDF response
@@ -220,11 +219,11 @@ class ResponseSubscriber implements EventSubscriberInterface
         // reporting
         // see: https://mathiasbynens.be/notes/csp-reports
         // if ($this->debug) {
-        //$csp['report-uri'] = $this->reportUrl;
+        // $csp['report-uri'] = $this->reportUrl;
         // }
 
         // build
-        $result = ''; // "block-all-mixed-content;";
+        $result = '';
         foreach ($csp as $key => $entries) {
             $value = \is_array($entries) ? \implode(' ', $entries) : $entries;
             $result .= "{$key} {$value};";
@@ -253,9 +252,7 @@ class ResponseSubscriber implements EventSubscriberInterface
     private function isDevFirewall(Request $request): bool
     {
         if ($context = $request->attributes->get('_firewall_context')) {
-            $names = \explode('.', $context);
-
-            return 'dev' === \end($names);
+            return false !== \stripos($context, 'dev');
         }
 
         return false;

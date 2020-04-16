@@ -70,7 +70,7 @@ final class CalculationListener
         }
 
         $date = new \DateTime();
-        $user = $this->getUser();
+        $user = $this->getUserName();
         $metadata = $em->getClassMetadata(Calculation::class);
         foreach ($calculations as $calculation) {
             // update
@@ -119,7 +119,7 @@ final class CalculationListener
     /**
      * Gets the user name.
      */
-    private function getUser(): string
+    private function getUserName(): string
     {
         if ($token = $this->tokenStorage->getToken()) {
             $user = $token->getUser();

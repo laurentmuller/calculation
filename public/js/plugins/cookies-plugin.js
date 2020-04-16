@@ -3,13 +3,14 @@
 /**
  * Ready function
  */
-(function ($) {
+(function () {
+
     'use strict';
 
     /**
      * Cookies functions
      */
-    var Cookies = {
+    const Cookies = { // jshint ignore:line
 
         /**
          * Gets the cookie value.
@@ -21,9 +22,9 @@
         /**
          * Sets the cookie value.
          */
-        set: function (key, val, end, path, domain, secure, samesite, httponly) {
+        set: function (key, val, end, path, domain, secure, samesite) {
             // check key
-            if (!key || /^(?:expires|max-age|path|domain|secure|samesite|httponly)$/i.test(key)) {
+            if (!key || /^(?:expires|max-age|path|domain|secure|samesite)$/i.test(key)) {
                 return false;
             }
 
@@ -40,9 +41,6 @@
             }
             if (samesite) {
                 cookie += '; samesite=' + samesite;
-            }
-            if (httponly) {
-                // cookie += '; httponly';
             }
             if (end) {
                 switch (end.constructor) {
@@ -94,4 +92,4 @@
         }
     };
 
-})(jQuery);
+})();

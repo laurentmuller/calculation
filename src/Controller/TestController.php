@@ -34,6 +34,7 @@ use App\Service\FakerService;
 use App\Service\HttpClientService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
+use App\Service\ThemeService;
 use App\Translator\TranslatorFactory;
 use App\Utils\DateUtils;
 use App\Validator\Captcha;
@@ -42,6 +43,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Person;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -519,30 +521,25 @@ class TestController extends BaseController
     public function summernote(Request $request): Response
     {
         $data = [
-            'subject' => 'Mon object',
-            'color' => '#73A5AD',
+            'email' => 'bibi@bibi.nu',
+            'message' => '',
         ];
 
         $builder = $this->createFormBuilder($data);
-        $helper = new FormHelper($builder);
+        $helper = new FormHelper($builder, 'user.fields.');
+
+        $helper->field('email')
+            ->addEmailType();
 
         $helper->field('message')
-            ->label('user.fields.message')
             ->minLength(10)
             ->addEditorType();
-
-        $helper->field('color')
-            ->label('calculationstate.fields.color')
-            ->updateAttribute('data-focus', 1)
-            ->addColorType();
 
         // render
         $form = $builder->getForm();
         if ($this->handleFormRequest($form, $request)) {
             $data = $form->getData();
-            $message = 'Message :<br>' . (string) $data['message']; // . '<br>';
-            //$message .= 'Couleur :<br><span style="background-color:' . $data['color'] . ';">&nbsp;&nbsp;' . $data['color'] . '&nbsp;</span>';
-            $message .= 'Couleur :<br>' . $data['color'];
+            $message = 'Message :<br>' . (string) $data['message'];
             $this->succes($message);
 
             // home page
@@ -604,6 +601,46 @@ class TestController extends BaseController
         }
 
         return $this->json($data);
+    }
+
+    /**
+     * Display Tinymce editor.
+     *
+     * @Route("/tinymce", name="test_tinymce")
+     */
+    public function tinymce(Request $request, ThemeService $service): Response
+    {
+        $data = [
+            'email' => 'bibi@bibi.nu',
+            'message' => '',
+        ];
+
+        $builder = $this->createFormBuilder($data);
+        $helper = new FormHelper($builder, 'user.fields.');
+
+        $helper->field('email')
+            ->addEmailType();
+
+        $dark = $service->getCurrentTheme()->isDark();
+        $helper->field('message')
+            ->updateAttribute('minlength', 10)
+            ->updateAttribute('data-skin', $dark ? 'oxide-dark' : 'oxide')
+            ->className('must-validate')
+            ->add(TextareaType::class);
+
+        $form = $builder->getForm();
+
+        if ($this->handleFormRequest($form, $request)) {
+            $data = $form->getData();
+            $message = 'Message :<br>' . (string) $data['message'];
+            $this->succes($message);
+
+            return $this->redirectToHomePage();
+        }
+
+        return $this->render('test/tinymce.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**

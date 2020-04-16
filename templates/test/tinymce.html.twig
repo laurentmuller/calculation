@@ -1,0 +1,22 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+
+{# parameters #}
+{%- set title        = 'test.tinymce' -%}
+{%- set title_icon   = 'edit' -%}
+{%- set cancel_path  = path('homepage') -%}
+
+{% block card_body %}
+{{ form_row(form.email) }}
+{{ form_row(form.message) }}
+<p class="text-md-right mb-0">
+    <a href="https://www.tiny.cloud/docs" target="_blank" rel="noopener noreferrer">Documentation <i class="fas fa-share" aria-hidden="true"></i></a>
+</p>
+{% endblock %}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('js/tinymce/tinymce.min.js') }}
+{{ asset_js('js/tinymce/jquery.tinymce.min.js') }}
+{{ asset_js('js/test/tinymce.js') }}
+{%- endblock %}

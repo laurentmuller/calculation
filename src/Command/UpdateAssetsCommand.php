@@ -542,6 +542,9 @@ class UpdateAssetsCommand extends AssetsCommand
             '.btn-primary' => '.toast-header-primary',
             '.btn-secondary' => '.toast-header-secondary',
             '.btn-dark' => '.toast-header-dark',
+
+
+
         ];
 
         // copy styles
@@ -565,6 +568,42 @@ class UpdateAssetsCommand extends AssetsCommand
 
         $toAppend .= $this->copyStyleEntries($content, '.dropdown-header', '.context-menu-header',
             ['color', 'display', 'font-size', 'margin-bottom', 'white-space']);
+
+        // tinyMCE
+        $toAppend .= $this->copyStyleEntries($content, '.modal-content', '.tox-toolbar__primary',
+            ['background-color']);
+        $toAppend .= $this->copyStyleEntries($content, '.modal-content', '.tox-statusbar',
+            ['background-color']);
+        $toAppend .= $this->copyStyleEntries($content, '.modal-content', '.tox .tox-menu',
+            ['background-color']);
+
+        $toAppend .= $this->copyStyleEntries($content, '.modal-content', '.tox-dialog',
+            ['background-color']);
+        $toAppend .= $this->copyStyleEntries($content, '.modal-content', '.tox .tox-dialog__header',
+            ['background-color']);
+        $toAppend .= $this->copyStyleEntries($content, '.modal-content', '.tox .tox-dialog__footer',
+            ['background-color']);
+
+        $toAppend .= $this->copyStyleEntries($content, '.modal-header', '.tox .tox-dialog__header',
+            ['background-color', 'color']);
+        $toAppend .= $this->copyStyleEntries($content, '.modal-body', '.tox .tox-dialog__body',
+            ['color']);
+        $toAppend .= $this->copyStyleEntries($content, '.modal-footer', '.tox .tox-dialog__footer',
+            ['background-color', 'color']);
+
+//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox-toolbar__primary',
+//             ['background-color']);
+//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox-statusbar',
+//             ['background-color']);
+//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox .tox-menu',
+//             ['background-color']);
+
+//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox-dialog',
+//             ['background-color']);
+//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox .tox-dialog__header',
+//             ['background-color']);
+//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox .tox-dialog__footer',
+//             ['background-color']);
 
         if (empty($toAppend)) {
             return $content;

@@ -16,40 +16,55 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Form\Type\RepeatPasswordType;
-use Symfony\Component\Form\FormBuilderInterface;
+use App\Service\ApplicationService;
+use App\Service\CaptchaImageService;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Change user password type.
+ * Replace the FOS User bundle registration type.
  *
  * @author Laurent Muller
  */
-class UserChangePasswordType extends BaseType
+class FosUserRegistrationType extends FosUserType
 {
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(CaptchaImageService $service, ApplicationService $application)
     {
-        parent::__construct(User::class);
+        parent::__construct($service, $application);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        parent::buildForm($builder, $options);
+        $resolver->setDefaults([
+            'data_class' => User::class,
+            'csrf_token_id' => 'registration',
+        ]);
+    }
 
-        $helper = new FormHelper($builder);
+    /**
+     * {@inheritdoc}
+     */
+    protected function addFormFields(FormHelper $helper): void
+    {
+        $helper->field('email')
+            ->label('form.email')
+            ->domain('FOSUserBundle')
+            ->addEmailType();
 
         $helper->field('username')
             ->label('form.username')
+            ->autocomplete('username')
+            ->maxLength(180)
             ->domain('FOSUserBundle')
-            ->updateOption('hidden_input', true)
-            ->addPlainType(true);
+            ->add(UserNameType::class);
 
         $firstOptions = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
-            ['label' => 'form.new_password']);
+            ['label' => 'form.password']);
 
         $secondOptions = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
             ['label' => 'form.new_password_confirmation']);
@@ -58,13 +73,7 @@ class UserChangePasswordType extends BaseType
             ->updateOption('first_options', $firstOptions)
             ->updateOption('second_options', $secondOptions)
             ->add(RepeatPasswordType::class);
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix(): string
-    {
-        return '';
+        parent::addFormFields($helper);
     }
 }

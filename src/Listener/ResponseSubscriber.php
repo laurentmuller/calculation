@@ -145,6 +145,9 @@ class ResponseSubscriber implements EventSubscriberInterface
         if (!$event->isMasterRequest()) {
             return;
         }
+        if ($this->debug) {
+            //return;
+        }
 
         // get values
         $request = $event->getRequest();
@@ -191,9 +194,10 @@ class ResponseSubscriber implements EventSubscriberInterface
         $csp['base-uri'] = self::CSP_NONE;
         $csp['media-src'] = self::CSP_NONE;
         $csp['object-src'] = self::CSP_NONE;
-        $csp['default-src'] = self::CSP_NONE;
+        // $csp['default-src'] = self::CSP_NONE;
 
         // self
+        $csp['default-src'] = self::CSP_SELF;
         $csp['form-action'] = self::CSP_SELF;
         $csp['frame-ancestors'] = self::CSP_SELF;
         if (!$this->isEdgeBrowser($request)) {

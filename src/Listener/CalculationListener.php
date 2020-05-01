@@ -19,8 +19,8 @@ use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
 use App\Traits\TranslatorTrait;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

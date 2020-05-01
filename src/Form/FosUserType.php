@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * Abstract form type for user.
+ * Abstract form type for user. This class add a captcha if applicable.
  *
  * @author Laurent Muller
  */

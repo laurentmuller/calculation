@@ -159,10 +159,10 @@
                 {# switch environment #}
                 {% if is_env_dev %}
                     {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem('https://calcul.bibi.nu', 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) -}}
+                    {{- icons.dropdownItem('https://www.bibi.nu/calculation/public/index.php', 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) -}}
                 {% elseif is_env_prod %}
                     {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem('https://dev.bibi.nu', 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) -}}
+                    {{- icons.dropdownItem('https://www.bibi.nu/development/public/index.php', 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) -}}
                 {% endif %}                        
                 {{- icons.dropdownSeparator -}}
                 {{- icons.dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') -}}

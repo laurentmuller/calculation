@@ -5,12 +5,9 @@ fos_user:
     from_email:
         address: '%mailer_user_email%'
         sender_name: '%mailer_user_name%'
-    registration:
-        confirmation:
-            enabled: true
     profile:
         form:
-            type: App\Form\FosUserProfileFormType
+            type: App\Form\FosUserProfileType
             name: ''
     change_password:
         form:
@@ -18,5 +15,9 @@ fos_user:
             name: ''
     resetting:
         form:
-            type: App\Form\FosUserResettingFormType
+            type: App\Form\FosUserResettingType
             name: ''
+#    registration:
+#        form:
+#            type: App\Form\FosUserRegistrationType
+#            name: ''

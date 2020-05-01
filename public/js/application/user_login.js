@@ -6,12 +6,7 @@
 $(function () {
     'use strict';
 
-    // validation
-    $('#edit-form').initValidator({
-        focus: false
-    });
-
-    // image
+    // initialize captcha
     if ($('#_captcha').length) {
         const url = $('#_captcha').data('refresh');
         $('#refresh_captcha').on('click', function () {
@@ -23,6 +18,11 @@ $(function () {
             });
         });
     }
+
+    // initialize validator
+    $('#edit-form').initValidator({
+        focus: false
+    });
 
     // focus
     $('#_username').createTimer(function () {

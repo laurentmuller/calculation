@@ -336,8 +336,10 @@
          */
         initTinyEditor: function(options) {
             // concat values
-            // var plugins = ['autolink', 'lists', 'image', 'table', 'paste', 'help']
-            // var c = plugins.concat(b.filter((item) => plugins.indexOf(item) === -1))
+            // var plugins = ['autolink', 'lists', 'image', 'table', 'paste',
+            // 'help']
+            // var c = plugins.concat(b.filter((item) => plugins.indexOf(item)
+            // === -1))
             // plugins.join(' ');
             // [].concat(array1, array2);
             const plugins = 'autolink lists link image table paste help ' + (options.plugins || '');
@@ -627,7 +629,8 @@
                 $(element).valid();
             });
         }
-        return value.indexOfIgnoreCase($target.val()) === -1;
+        const target = $target.val().trim();
+        return target.length === 0 || value.indexOfIgnoreCase(target) === -1;    
     }, $.validator.format("The field can not contain the user name."));
 
     /*

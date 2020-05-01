@@ -23,7 +23,7 @@ use FOS\UserBundle\Form\Type\ResettingFormType;
  *
  * @author Laurent Muller
  */
-class FosUserResettingFormType extends FosUserType
+class FosUserResettingType extends FosUserType
 {
     /**
      * Constructor.
@@ -31,6 +31,14 @@ class FosUserResettingFormType extends FosUserType
     public function __construct(CaptchaImageService $service, ApplicationService $application)
     {
         parent::__construct($service, $application);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix(): string
+    {
+        return '';
     }
 
     /**

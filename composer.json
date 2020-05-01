@@ -12,7 +12,8 @@
 		}
 	],
 	"support" : {
-		"email" : "calculation@bibi.nu"
+		"email" : "calculation@bibi.nu",
+		"source" : "https://github.com/laurentmuller/calculation"
 	},
 	"keywords" : [
 		"symfony",

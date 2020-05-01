@@ -53,6 +53,7 @@
         {% if app.debug or app_environment == 'dev' -%}
             {{ icons.button_pdf('about_pdf') }}
             {{ icons.link(path('about_php_ini'), 'about.php_ini', 'btn btn-form btn-outline-info') }}
+            {{ icons.linkExternal(path('about_php_ini_pdf'), 'about.php_ini', 'btn btn-form btn-outline-secondary', 'file-pdf far') }}
         {%- endif %}
     </div>
 </div>

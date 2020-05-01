@@ -6,7 +6,7 @@
 $(function () {
     'use strict';
 
-    // image
+    // initialize captcha
     if ($('#_captcha').length) {
         const url = $('#_captcha').data('refresh');
         $('#refresh_captcha').on('click', function () {

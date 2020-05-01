@@ -23,7 +23,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @author Laurent Muller
  */
-class FosUserProfileFormType extends ProfileFormType
+class FosUserProfileType extends ProfileFormType
 {
     /**
      * Constructor.

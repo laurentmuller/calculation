@@ -39,18 +39,25 @@ class RepeatPasswordType extends AbstractType
                     'autocomplete' => 'new-password',
                 ],
             ],
-            'first_options' => [
-                'label' => 'form.password',
-                'attr' => [
-                    'minLength' => 6,
-                    'maxLength' => 255,
-                ],
-            ],
-            'second_options' => [
-                'label' => 'form.password_confirmation',
-            ],
+            'first_options' => self::getFirstOptions(),
+            'second_options' => self::getSecondOptions(),
             'invalid_message' => 'fos_user.password.mismatch',
         ]);
+    }
+
+    /**
+     * Gets the default first options.
+     */
+    public static function getFirstOptions(): array
+    {
+        return [
+            'label' => 'form.password',
+            'attr' => [
+                'minlength' => 6,
+                'maxlength' => 255,
+                'class' => 'password-strength',
+            ],
+        ];
     }
 
     /**
@@ -59,5 +66,15 @@ class RepeatPasswordType extends AbstractType
     public function getParent(): string
     {
         return RepeatedType::class;
+    }
+
+    /**
+     * Gets the default second options.
+     */
+    public static function getSecondOptions(): array
+    {
+        return [
+            'label' => 'form.password_confirmation',
+        ];
     }
 }

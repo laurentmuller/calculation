@@ -5,5 +5,5 @@ This bundle was created for calculations within <a href="https://symfony.com" ta
 
 License
 -------
-This bundle is under its own license. See the [complete license](LICENSE.md) in the bundle-
+This bundle is under its own license. See the [complete license](LICENSE.md).
 

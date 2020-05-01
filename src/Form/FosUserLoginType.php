@@ -40,7 +40,6 @@ class FosUserLoginType extends FosUserType
         $helper->field('username')
             ->label('security.login.username')
             ->domain('FOSUserBundle')
-            ->className('user-name')
             ->autocomplete('username')
             ->maxLength(180)
             ->add(UserNameType::class);

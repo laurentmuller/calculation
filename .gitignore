@@ -17,6 +17,8 @@ symfony.lock
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
-###> custom ###
+
+###> application ###
+/deploy/
 /resources/data/swiss.sqlite
-###< custom ###
+###< application ###

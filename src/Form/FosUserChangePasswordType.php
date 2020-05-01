@@ -16,6 +16,7 @@ namespace App\Form;
 
 use FOS\UserBundle\Form\Type\ChangePasswordFormType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -33,10 +34,10 @@ class FosUserChangePasswordType extends AbstractType
     {
         parent::buildForm($builder, $options);
 
-        // add username
-        $helper = new FormHelper($builder);
-        $helper->field('username')
-            ->addHiddenType();
+        // add hidden username
+        $builder->add('username', HiddenType::class);
+        // $helper = new FormHelper($builder);
+        // $helper->field('username')->addHiddenType();
     }
 
     /**

@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use App\Pdf\PdfResponse;
 use App\Report\HtmlReport;
+use App\Report\PhpIniReport;
 use App\Utils\SymfonyUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\HeaderUtils;
@@ -114,7 +115,7 @@ class AboutController extends BaseController
     }
 
     /**
-     * Download the PHP ini.
+     * Download the php.ini as JSON.
      *
      * @Route("/php/ini", name="about_php_ini")
      */
@@ -138,6 +139,24 @@ class AboutController extends BaseController
         $response->setEncodingOptions(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         return $response;
+    }
+
+    /**
+     * Exports the php.ini as PDF.
+     *
+     * @Route("/php/ini/pdf", name="about_php_ini_pdf")
+     */
+    public function phpIniPdf(): PdfResponse
+    {
+        // get content
+        $content = SymfonyUtils::getPhpInfoArray();
+
+        // create report
+        $report = new PhpIniReport($this);
+        $report->setContent($content);
+
+        // render
+        return $this->renderDocument($report);
     }
 
     /**

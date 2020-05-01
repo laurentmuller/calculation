@@ -435,16 +435,23 @@ final class SymfonyUtils
     private static function convert($var)
     {
         $value = \strtolower((string) $var);
-        if (\in_array($value, ['yes', 'enabled', 'on'], true)) {
+        if (\in_array($value, ['yes', 'enabled', 'on', '1'], true)) {
             return true;
-        } elseif (\in_array($value, ['no', 'disabled', 'off'], true)) {
+        } elseif (\in_array($value, ['no', 'disabled', 'off', '0'], true)) {
             return false;
-        } elseif (\is_int($var) || \preg_match('/^-?\d+$/', (string) $var)) {
-            return (int) $var;
-        } elseif (\is_float($var) || \preg_match('/^-?\d+\.\d+$/', (string) $var)) {
+        } elseif (\is_int($var) || \preg_match('/^-?\d+$/', $value)) {
+            return (int) $value;
+        } elseif (\is_float($var)) {
             return (float) $var;
+        } elseif (\preg_match('/^-?\d+\.\d+$/', $value)) {
+            $pos = \strrpos($value, '.');
+            $decimals = \strlen($value) - $pos - 1;
+
+            return \round((float) $value, $decimals);
+        } elseif ('no value' === $value) {
+            return 'No value';
         } else {
-            return $var;
+            return \str_replace('\\', '/', $var);
         }
     }
 

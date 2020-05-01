@@ -542,9 +542,6 @@ class UpdateAssetsCommand extends AssetsCommand
             '.btn-primary' => '.toast-header-primary',
             '.btn-secondary' => '.toast-header-secondary',
             '.btn-dark' => '.toast-header-dark',
-
-
-
         ];
 
         // copy styles

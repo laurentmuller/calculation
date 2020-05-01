@@ -195,7 +195,7 @@ final class CalculationService
      *
      * @param calculation $calculation the calculation to update
      *
-     * @return bool true if updated
+     * @return bool true if updated; false otherwise
      */
     public function updateTotal(Calculation $calculation): bool
     {
@@ -224,9 +224,7 @@ final class CalculationService
         $itemsTotal = $this->round($itemsTotal);
 
         // update if needed
-        if ($oldItemsTotal !== $itemsTotal
-            || $oldGlobalMargin !== $globalMargin
-            || $oldOverallTotal !== $overallTotal) {
+        if ($oldItemsTotal !== $itemsTotal || $oldGlobalMargin !== $globalMargin || $oldOverallTotal !== $overallTotal) {
             $calculation->setItemsTotal($itemsTotal)
                 ->setGlobalMargin($globalMargin)
                 ->setOverallTotal($overallTotal);

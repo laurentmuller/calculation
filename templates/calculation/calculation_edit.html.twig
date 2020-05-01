@@ -52,6 +52,7 @@
 {%- block container_class 'container-fluid' -%}
 
 {% block body -%}
+{# form #}
 {{ form_start(form, {attr: form_attr}) }}
 <div class="row">
 	<div class="col-xl-4 pr-xl-0">
@@ -64,7 +65,7 @@
 </div>
 {{ form_end(form) }}
 
-{# dialogs #}
+{# dialog #}
 {% if editable -%}{% include 'dialogs/EditItemDialog.html.twig' %}{%- endif %}
 {%- endblock %}
 

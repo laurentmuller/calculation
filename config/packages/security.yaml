@@ -47,6 +47,7 @@ security:
     access_control:
         - { path: ^/login$,                role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting,             role: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/register,              role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/about/policy,          role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/about/licence,         role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/ajax/checkexist,       role: IS_AUTHENTICATED_ANONYMOUSLY }

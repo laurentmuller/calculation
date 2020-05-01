@@ -22,13 +22,13 @@ use App\Service\UrlGeneratorService;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorFlashMessageTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use FOS\UserBundle\Model\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -131,21 +131,6 @@ abstract class BaseController extends AbstractController
         } else {
             return $this->generatorService = $this->get(UrlGeneratorService::class);
         }
-    }
-
-    /**
-     * Gets the connected user e-mail.
-     *
-     * @return string|null The user e-mail or NULL if not connected
-     */
-    public function getUserEmail(): ?string
-    {
-        $user = $this->getUser();
-        if ($user instanceof UserInterface) {
-            return $user->getEmail();
-        }
-
-        return null;
     }
 
     /**

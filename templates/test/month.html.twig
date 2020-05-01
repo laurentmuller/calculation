@@ -26,13 +26,13 @@
 
 {% block body %}
 <div class="row">
-    <div class="col-4">
+    <div class="col-md-4">
         <h2>{{ month_text }}</h2>
     </div>
-    <div class="col-4 text-md-center">
+    <div class="col-md-4 text-md-center">
     	<h3>{{ 'test.calculations'|trans({count: calculations|length}) }}</h3>
     </div>
-    <div class="col-4 text-md-right">
+    <div class="col-md-4 text-md-right">
         {% set year = 'now'|date('Y') %}
         {% set month_param = 'now'|date('n') %}
         {% if year != calendar.year or month_param != month.number %}

@@ -14,3 +14,6 @@ fos_user_resetting_request:
     path: /resetting/request
     defaults:
         _controller: App\Controller\SecurityController:requestAction
+#fos_user_register:
+#    resource: '@FOSUserBundle/Resources/config/routing/registration.xml'
+#    prefix: /register

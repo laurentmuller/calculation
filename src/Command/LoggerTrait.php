@@ -58,7 +58,7 @@ trait LoggerTrait
     protected function getInstallerName(): string
     {
         if (!$this->installerName) {
-            $this->installerName = Utils::getShortName(\get_called_class());
+            $this->installerName = Utils::getShortName(static::class);
         }
 
         return $this->installerName;

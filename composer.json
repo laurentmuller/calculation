@@ -2,8 +2,8 @@
 	"name" : "bibi/calculation",
 	"license" : "proprietary",
 	"type" : "project",
-	"homepage" : "http://www.bibi.nu",
-	"description" : "Implementation of the calculation with Symfony 4.4.x.",
+	"homepage" : "https://www.bibi.nu",
+	"description" : "Implementation of the calculation with Symfony 5.0.",
 	"authors" : [{
 			"name" : "Laurent Muller",
 			"email" : "bibi@bibi.nu",

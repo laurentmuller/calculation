@@ -15,6 +15,8 @@ declare(strict_types=1);
 namespace App\Command;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Trait to deals with files.
@@ -135,7 +137,20 @@ trait FileTrait
     protected function readFile(string $filename)
     {
         $this->writeVeryVerbose("Load '{$filename}'");
-        $content = \file_get_contents($filename);
+        if (is_file($filename)) {
+            $content = \file_get_contents($filename);
+        } else {
+            $client = HttpClient::create();
+            $response = $client->request('GET', $filename);
+            $code = $response->getStatusCode();
+            if ($code !== Response::HTTP_OK) {
+                $this->writeError("Unable to get content of '{$filename}'.");
+
+                return false;
+            }
+            $content = $response->getContent();
+        }
+
         if (false === $content) {
             $this->writeError("Unable to get content of '{$filename}'.");
 

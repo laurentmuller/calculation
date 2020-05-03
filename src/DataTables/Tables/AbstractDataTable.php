@@ -278,7 +278,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
      */
     protected function createSessionPrefix(): string
     {
-        return Utils::getShortName(\get_called_class());
+        return Utils::getShortName(static::class);
     }
 
     /**

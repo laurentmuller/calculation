@@ -3,6 +3,7 @@
 {# parameters #}
 {%- set is_env_dev        = app_environment == 'dev' -%}
 {%- set is_env_prod       = app_environment == 'prod' -%}
+{%- set is_env_local      = app_environment == 'local' -%}
 {%- set is_dev            = app.debug or is_env_dev -%}
 {%- set is_admin          = is_granted('ROLE_ADMIN') -%}
 {%- set is_super_admin    = is_granted('ROLE_SUPER_ADMIN') -%}
@@ -159,10 +160,10 @@
                 {# switch environment #}
                 {% if is_env_dev %}
                     {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem('https://www.bibi.nu/calculation/public/index.php', 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) -}}
-                {% elseif is_env_prod %}
+                    {{- icons.dropdownItem(prod_link, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) -}}
+                {% elseif is_env_prod or is_env_local %}
                     {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem('https://www.bibi.nu/development/public/index.php', 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) -}}
+                    {{- icons.dropdownItem(dev_link, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) -}}
                 {% endif %}                        
                 {{- icons.dropdownSeparator -}}
                 {{- icons.dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') -}}

@@ -21,7 +21,10 @@ twig:
         
         google_recaptcha_site_key: '%google_recaptcha_site_key%'
         google_recaptcha_secret:   '%google_recaptcha_secret%'
-            
+
+        dev_link:  '%dev_link%'
+        prod_link: '%prod_link%'
+        
     date:
         format: d.m.Y H:i:s
         interval_format: '%%d jours'

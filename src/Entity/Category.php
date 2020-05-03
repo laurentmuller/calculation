@@ -63,7 +63,7 @@ class Category extends BaseEntity
      * @ORM\OrderBy({"minimum": "ASC"})
      * @Assert\Valid
      *
-     * @var Collection<CategoryMargin>
+     * @var Collection|CategoryMargin[]
      */
     protected $margins;
 
@@ -72,7 +72,7 @@ class Category extends BaseEntity
      *
      * @ORM\OneToMany(targetEntity="Product", mappedBy="category", cascade={"persist"}, orphanRemoval=true)
      *
-     * @var Collection<Product>
+     * @var Collection|Product[]
      */
     protected $products;
 

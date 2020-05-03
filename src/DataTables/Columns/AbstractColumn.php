@@ -81,7 +81,7 @@ abstract class AbstractColumn
         $this->name = $name;
         $this->options = $options;
 
-        $class = \get_class($this);
+        $class = static::class;
         if (!isset(self::$resolversByClass[$class])) {
             self::$resolversByClass[$class] = new OptionsResolver();
             $this->configureOptions(self::$resolversByClass[$class]);

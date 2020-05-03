@@ -530,6 +530,8 @@ class UserController extends EntityController
     protected function getItems(?string $field = null, string $mode = Criteria::ASC): array
     {
         $result = parent::getItems($field, $mode);
+
+        // remove super admin users if not in role
         if (!$this->isGranted(User::ROLE_SUPER_ADMIN)) {
             return \array_filter($result, function (User $user) {
                 return !$user->isSuperAdmin();

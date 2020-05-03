@@ -18,11 +18,17 @@ use App\Controller\BaseController;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
+use App\Pdf\PdfTextColor;
 
+/**
+ * Report for php.ini.
+ *
+ * @author Laurent Muller
+ */
 class PhpIniReport extends BaseReport
 {
     /**
-     * The data to export.
+     * The content to export.
      *
      * @var array
      */
@@ -50,13 +56,13 @@ class PhpIniReport extends BaseReport
             return false;
         }
 
-        // sort
+        // sort keys
         \ksort($content, SORT_STRING | SORT_FLAG_CASE);
 
         // new page
         $this->AddPage();
 
-        // table
+        // create table
         $table = new PdfGroupTableBuilder($this);
         $table->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumn(PdfColumn::left('Directive', 40))
@@ -64,7 +70,7 @@ class PhpIniReport extends BaseReport
             ->addColumn(PdfColumn::left('Master Value', 30))
             ->outputHeaders();
 
-        // output
+        // output content
         foreach ($content as $key => $value) {
             $table->setGroupName($key);
             $this->outputEntries($table, $value);
@@ -93,14 +99,30 @@ class PhpIniReport extends BaseReport
     private function convert($var): string
     {
         if (\is_bool($var)) {
-            return \json_encode($var);
+            return \ucfirst(\json_encode($var));
         } else {
             return \htmlspecialchars_decode((string) $var);
         }
     }
 
     /**
-     * Output the given entries to the table.
+     * Gets the cell style for the given value.
+     *
+     * @param string $var the value to get style for
+     *
+     * @return PdfStyle|null the style, if applicable; null otherwise
+     */
+    private function getCellStyle(string $var): ?PdfStyle
+    {
+        if (\preg_match('/#[0-9A-F]{6}/i', $var) && $color = PdfTextColor::create($var)) {
+            return PdfStyle::getCellStyle()->setTextColor($color);
+        }
+
+        return null;
+    }
+
+    /**
+     * Output the given entries to the given table.
      *
      * @param PdfGroupTableBuilder $table   the table to update
      * @param array                $entries the entries to output
@@ -108,12 +130,15 @@ class PhpIniReport extends BaseReport
     private function outputEntries(PdfGroupTableBuilder $table, array $entries): void
     {
         $this->sortEntries($entries);
+
         foreach ($entries as $key => $entry) {
             if (\is_array($entry)) {
+                $local = $this->convert(\reset($entry));
+                $master = $this->convert(\end($entry));
                 $table->startRow()
                     ->add($this->convert($key))
-                    ->add($this->convert(\reset($entry)))
-                    ->add($this->convert(\end($entry)))
+                    ->add($local, 1, $this->getCellStyle($local))
+                    ->add($master, 1, $this->getCellStyle($master))
                     ->endRow();
             } else {
                 $table->startRow()
@@ -131,9 +156,9 @@ class PhpIniReport extends BaseReport
      */
     private function sortEntries(array &$entries): void
     {
-        \uksort($entries, function ($a, $b) use ($entries) {
-            $isArrayA = \is_array($entries[$a]) ? 1 : 0;
-            $isArrayB = \is_array($entries[$b]) ? 1 : 0;
+        \uksort($entries, function (string $a, string $b) use ($entries) {
+            $isArrayA = \is_array($entries[$a]);
+            $isArrayB = \is_array($entries[$b]);
             if ($isArrayA !== $isArrayB) {
                 return $isArrayA <=> $isArrayB;
             } else {

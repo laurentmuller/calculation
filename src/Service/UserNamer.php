@@ -32,7 +32,7 @@ class UserNamer implements NamerInterface, IImageExtension
      *
      * @param User        $user the user
      * @param int         $size the image size to use
-     * @param string|null $ext  the file extension
+     * @param string|null $ext  the optional file extension
      *
      * @return string the file name
      */

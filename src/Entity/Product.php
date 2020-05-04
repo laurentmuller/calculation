@@ -86,7 +86,7 @@ class Product extends BaseEntity
     public function __construct()
     {
         // default values
-        $this->price = 0;
+        $this->price = 0.0;
     }
 
     /**

@@ -67,7 +67,7 @@ abstract class AbstractMargin extends BaseEntity
     public function __construct()
     {
         // default values
-        $this->minimum = $this->maximum = $this->margin = 0;
+        $this->minimum = $this->maximum = $this->margin = 0.0;
     }
 
     /**
@@ -154,5 +154,15 @@ abstract class AbstractMargin extends BaseEntity
         $this->minimum = $this->round($minimum);
 
         return $this;
+    }
+
+    /**
+     * Set values.
+     */
+    public function setValues(float $minimum, float $maximum, float $margin): self
+    {
+        return $this->setMinimum($minimum)
+            ->setMaximum($maximum)
+            ->setMargin($margin);
     }
 }

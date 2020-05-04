@@ -136,7 +136,7 @@ class TestController extends BaseController
 
                 // find group
                 $category = $product->getCategory();
-                $group = $calculation->findGroupOrCreate($category);
+                $group = $calculation->findGroup($category, true);
 
                 // add
                 $group->addItem($item);

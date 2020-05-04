@@ -114,7 +114,7 @@ class CalculationGroup extends BaseEntity
         $this->items = new ArrayCollection();
 
         // default values
-        $this->amount = $this->margin = 0;
+        $this->amount = $this->margin = 0.0;
     }
 
     /**

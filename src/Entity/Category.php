@@ -205,7 +205,7 @@ class Category extends BaseEntity
     /**
      * Get margins.
      *
-     * @return Collection<CategoryMargin>
+     * @return Collection|CategoryMargin[]
      */
     public function getMargins(): Collection
     {
@@ -215,7 +215,7 @@ class Category extends BaseEntity
     /**
      * Get products.
      *
-     * @return Collection<Product>
+     * @return Collection|Product[]
      */
     public function getProducts(): Collection
     {

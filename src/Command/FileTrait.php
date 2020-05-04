@@ -17,6 +17,7 @@ namespace App\Command;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Trait to deals with files.
@@ -26,6 +27,13 @@ use Symfony\Component\HttpFoundation\Response;
 trait FileTrait
 {
     use LoggerTrait;
+
+    /**
+     * The HTTP client.
+     *
+     * @var ?HttpClientInterface
+     */
+    private $client;
 
     /**
      * The file system instance.
@@ -56,6 +64,18 @@ trait FileTrait
         }
 
         return $this->fs;
+    }
+
+    /**
+     * Gets the shared HTTP client instance.
+     */
+    protected function getHttpClient(): HttpClientInterface
+    {
+        if (!$this->client) {
+            $this->client = HttpClient::create();
+        }
+
+        return $this->client;
     }
 
     /**
@@ -140,7 +160,7 @@ trait FileTrait
         if (\is_file($filename)) {
             $content = \file_get_contents($filename);
         } else {
-            $client = HttpClient::create();
+            $client = $this->getHttpClient();
             $response = $client->request('GET', $filename);
             $code = $response->getStatusCode();
             if (Response::HTTP_OK !== $code) {

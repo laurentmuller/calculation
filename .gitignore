@@ -22,3 +22,8 @@ symfony.lock
 /deploy/
 /resources/data/swiss.sqlite
 ###< application ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###

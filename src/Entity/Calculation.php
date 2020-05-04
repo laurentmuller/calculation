@@ -144,8 +144,8 @@ class Calculation extends BaseEntity
 
         // default values
         $this->date = $this->createdAt = $this->updatedAt = new \DateTime();
-        $this->globalMargin = $this->userMargin = 0;
-        $this->itemsTotal = $this->overallTotal = 0;
+        $this->globalMargin = $this->userMargin = 0.0;
+        $this->itemsTotal = $this->overallTotal = 0.0;
     }
 
     /**
@@ -206,10 +206,11 @@ class Calculation extends BaseEntity
      * Finds a group for the given category.
      *
      * @param Category $category the category to find
+     * @param bool     $create   true to create a group if not found
      *
      * @return CalculationGroup|null the group, if found; null otherwise
      */
-    public function findGroup(Category $category): ?CalculationGroup
+    public function findGroup(Category $category, bool $create = false): ?CalculationGroup
     {
         $code = $category->getCode();
         foreach ($this->groups as $group) {
@@ -218,24 +219,14 @@ class Calculation extends BaseEntity
             }
         }
 
-        return null;
-    }
-
-    /**
-     * Finds a group for the given category, if not exist create a new one.
-     *
-     * @param Category $category the category to find
-     *
-     * @return CalculationGroup the group
-     */
-    public function findGroupOrCreate(Category $category): CalculationGroup
-    {
-        if (!$group = $this->findGroup($category)) {
+        if ($create) {
             $group = CalculationGroup::create($category);
             $this->addGroup($group);
+
+            return $group;
         }
 
-        return $group;
+        return null;
     }
 
     /**

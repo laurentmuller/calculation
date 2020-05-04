@@ -1,7 +1,9 @@
 ![Logo](public/images/icons/icon-032x032.png) Calculation Bundle
 =======
 
-This bundle was created for calculations within <a href="https://symfony.com" target="_blank">Symfony</a> version 5.
+[![Build Status](https://travis-ci.com/laurentmuller/calculation.svg?token=TvrwhqA9Dqxs5ubjbLxj&branch=master)](https://travis-ci.com/laurentmuller/calculation)
+
+This bundle supports calculations with <a href="https://symfony.com" target="_blank">Symfony</a> version 5.0.
 
 License
 -------

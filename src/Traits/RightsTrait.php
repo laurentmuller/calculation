@@ -143,6 +143,11 @@ trait RightsTrait
         // get offset
         $offset = EntityVoter::getEntityOffset($entity);
         if (EntityVoter::INVALID_VALUE !== $offset) {
+            // filter
+            $rights = \array_filter($rights, function (int $var) {
+                return \in_array($var, EntityVoter::MASK_ATTRIBUTES, true);
+            });
+
             // update
             $value = \array_sum($rights);
             $oldRights = $this->rights;

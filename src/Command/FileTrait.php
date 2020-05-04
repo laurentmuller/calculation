@@ -137,13 +137,13 @@ trait FileTrait
     protected function readFile(string $filename)
     {
         $this->writeVeryVerbose("Load '{$filename}'");
-        if (is_file($filename)) {
+        if (\is_file($filename)) {
             $content = \file_get_contents($filename);
         } else {
             $client = HttpClient::create();
             $response = $client->request('GET', $filename);
             $code = $response->getStatusCode();
-            if ($code !== Response::HTTP_OK) {
+            if (Response::HTTP_OK !== $code) {
                 $this->writeError("Unable to get content of '{$filename}'.");
 
                 return false;

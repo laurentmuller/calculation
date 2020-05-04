@@ -114,8 +114,16 @@ class PhpIniReport extends BaseReport
      */
     private function getCellStyle(string $var): ?PdfStyle
     {
-        if (\preg_match('/#[0-9A-F]{6}/i', $var) && $color = PdfTextColor::create($var)) {
+        if (\preg_match('/#[0-9A-Fa-f]{6}/i', $var) && $color = PdfTextColor::create($var)) {
             return PdfStyle::getCellStyle()->setTextColor($color);
+//         } elseif ('True' === $var) {
+//             return PdfStyle::getCellStyle()->setTextColor(PdfTextColor::create([34,177,76]));
+//         } elseif ('False' === $var) {
+//             return PdfStyle::getCellStyle()->setTextColor(PdfTextColor::create([255,127,39]));
+        } elseif ('No value' === $var) {
+            return PdfStyle::getCellStyle()
+                ->setTextColor(PdfTextColor::create('#7F7F7F'))
+                ->setFontItalic(true);
         }
 
         return null;
@@ -141,9 +149,10 @@ class PhpIniReport extends BaseReport
                     ->add($master, 1, $this->getCellStyle($master))
                     ->endRow();
             } else {
+                $value = $this->convert($entry);
                 $table->startRow()
                     ->add($this->convert($key))
-                    ->add($this->convert($entry), 2)
+                    ->add($value, 2, $this->getCellStyle($value))
                     ->endRow();
             }
         }

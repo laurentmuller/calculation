@@ -234,6 +234,8 @@ final class SymfonyUtils
         $regex2cols = '/' . $regexInfo . '\s*' . $regexInfo . '/';
 
         $matchs = null;
+        $directive1 = null;
+        $directive2 = null;
         for ($i = 1; $i < $count; ++$i) {
             if (\preg_match('/<h2[^>]*>([^<]+)<\/h2>/', $array[$i], $matchs)) {
                 $name = \trim($matchs[1]);

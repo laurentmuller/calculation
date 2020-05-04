@@ -136,12 +136,12 @@ class GifFrameExtractor implements \Countable
      *
      * @return array the frames (image, x, y, width, height and duration)
      *
-     * @throws \Exception:: if the GIF file name is not animated (contains only 1 frame)
+     * @throws \InvalidArgumentException if the GIF file name is not animated (contains only 1 frame)
      */
     public function extract($filename, $originalFrames = false): array
     {
         if (!self::isAnimatedGif($filename)) {
-            throw new \Exception('The GIF image you are trying to explode is not animated !');
+            throw new \InvalidArgumentException('The GIF image you are trying to explode is not animated !');
         }
 
         $this->reset();

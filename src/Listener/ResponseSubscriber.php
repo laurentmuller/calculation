@@ -16,7 +16,7 @@ namespace App\Listener;
 
 use App\Pdf\PdfResponse;
 use App\Twig\NonceExtension;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -108,16 +108,16 @@ class ResponseSubscriber implements EventSubscriberInterface
     /**
      * Constructor.
      *
-     * @param KernelInterface    $kernel    the kernel to get the debug mode
-     * @param RouterInterface    $router    the router to get reporting URL
-     * @param ContainerInterface $container the container to get asset parameter
-     * @param NonceExtension     $extension the extension to generate nonce
+     * @param KernelInterface       $kernel    the kernel to get the debug mode
+     * @param RouterInterface       $router    the router to get reporting URL
+     * @param ParameterBagInterface $params    the bag to get asset parameter
+     * @param NonceExtension        $extension the extension to generate nonce
      */
-    public function __construct(KernelInterface $kernel, RouterInterface $router, ContainerInterface $container, NonceExtension $extension)
+    public function __construct(KernelInterface $kernel, RouterInterface $router, ParameterBagInterface $params, NonceExtension $extension)
     {
         $this->debug = $kernel->isDebug();
         $this->reportUrl = $router->generate('log_csp');
-        $this->asset = $container->getParameter('asset_base');
+        $this->asset = $params->get('asset_base');
         $this->extension = $extension;
     }
 

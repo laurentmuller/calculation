@@ -234,11 +234,6 @@ class CalculationRepository extends BaseRepository
             ->having('item_price = 0')
             ->orHaving('item_quantity = 0');
 
-        // order column and direction
-        $orderColumn = $this->getOrder($orderColumn);
-        $orderDirection = $this->getDirection($orderDirection, Criteria::DESC);
-        $builder->orderBy($orderColumn, $orderDirection);
-
         // execute
         $items = $builder->getQuery()->getArrayResult();
 
@@ -248,20 +243,20 @@ class CalculationRepository extends BaseRepository
             $key = $item['calculation_id'];
             if (!\array_key_exists($key, $result)) {
                 $result[$key] = [
-                    'id' => $key,
-                    'date' => $item['calculation_date'],
-                    'customer' => $item['calculation_customer'],
-                    'description' => $item['calculation_description'],
-                    'stateCode' => $item['calculation_state'],
-                    'stateColor' => $item['calculation_color'],
-                    'items' => [],
-                ];
+                        'id' => $key,
+                        'date' => $item['calculation_date'],
+                        'customer' => $item['calculation_customer'],
+                        'description' => $item['calculation_description'],
+                        'stateCode' => $item['calculation_state'],
+                        'stateColor' => $item['calculation_color'],
+                        'items' => [],
+                    ];
             }
             $result[$key]['items'][] = [
-                'description' => $item['item_description'],
-                'quantity' => $item['item_quantity'],
-                'price' => $item['item_price'],
-            ];
+                    'description' => $item['item_description'],
+                    'quantity' => $item['item_quantity'],
+                    'price' => $item['item_price'],
+                ];
         }
 
         return $result;

@@ -717,7 +717,6 @@ class TestController extends BaseController
      */
     public function updateCalculations(EntityManagerInterface $manager, FakerService $service): Response
     {
-        // TODO: Disabled in the doctrine.yml and CalculationListener
         /** @var \Faker\Generator $faker */
         $faker = $service->getFaker();
 

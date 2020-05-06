@@ -27,7 +27,7 @@ use App\Utils\Utils;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -78,12 +78,12 @@ class PersistenceListener implements EventSubscriber
     /**
      * Constructor.
      */
-    public function __construct(ContainerInterface $container, KernelInterface $kernel, SessionInterface $session, TranslatorInterface $translator)
+    public function __construct(SessionInterface $session, TranslatorInterface $translator, KernelInterface $kernel, ParameterBagInterface $params)
     {
         $this->session = $session;
         $this->translator = $translator;
         $this->debug = $kernel->isDebug();
-        $this->appName = $container->getParameter('app_name');
+        $this->appName = $params->getParameter('app_name');
     }
 
     /**

@@ -15,7 +15,8 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Intl\Locales;
@@ -57,20 +58,11 @@ class YandexTranslatorService extends AbstractTranslatorService
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container the container to get the API key
-     * @param KernelInterface    $kernel    the kernel to get the debug mode
-     * @param AdapterInterface   $cache     the cache used to save or retrieve languages
-     *
-     * @throws \InvalidArgumentException if the Yandex key parameter is not defined
+     * @throws ParameterNotFoundException if the Yandex key parameter is not defined
      */
-    public function __construct(ContainerInterface $container, KernelInterface $kernel, AdapterInterface $cache)
+    public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $cache)
     {
-        // check key
-        if (!$container->hasParameter(self::PARAM_KEY)) {
-            throw new \InvalidArgumentException('The Yandex translator key is not defined.');
-        }
-
-        $key = $container->getParameter(self::PARAM_KEY);
+        $key = $params->get(self::PARAM_KEY);
         parent::__construct($kernel, $cache, $key);
     }
 

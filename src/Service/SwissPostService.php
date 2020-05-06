@@ -538,7 +538,7 @@ class SwissPostService
     /**
      * Process the validity record.
      *
-     * @param array    $data   the data to process
+     * @param array $data the data to process
      *
      * @return \DateTime|null the validity date or null on failure
      */

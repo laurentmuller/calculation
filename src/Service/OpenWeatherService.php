@@ -15,7 +15,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -90,18 +91,11 @@ class OpenWeatherService extends HttpClientService
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container the container to get the API key
-     * @param KernelInterface    $kernel    the kernel to get the data path
-     *
-     * @throws \InvalidArgumentException if the OpenWeather key parameter is not defined
+     * @throws ParameterNotFoundException if the OpenWeather key parameter is not defined
      */
-    public function __construct(ContainerInterface $container, KernelInterface $kernel)
+    public function __construct(ParameterBagInterface $params, KernelInterface $kernel)
     {
-        // check key
-        if (!$container->hasParameter(self::PARAM_KEY)) {
-            throw new \InvalidArgumentException('The OpenWeather key is not defined.');
-        }
-        $this->key = $container->getParameter(self::PARAM_KEY);
+        $this->key = $params->get(self::PARAM_KEY);
         $this->dataDirectory = $kernel->getProjectDir() . self::DATA_PATH;
     }
 

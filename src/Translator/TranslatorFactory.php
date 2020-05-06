@@ -16,7 +16,8 @@ namespace App\Translator;
 
 use App\Traits\SessionTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -45,26 +46,21 @@ class TranslatorFactory
     private $cache;
 
     /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
      * @var KernelInterface
      */
     private $kernel;
 
     /**
-     * Constructor.
-     *
-     * @param ContainerInterface $container the container to get the API key
-     * @param KernelInterface    $kernel    the kernel to get the debug mode
-     * @param AdapterInterface   $cache     the cache used to save or retrieve languages
-     * @param SessionInterface   $session   the session to save or retrieve the last used service
+     * @var ParameterBagInterface
      */
-    public function __construct(ContainerInterface $container, KernelInterface $kernel, AdapterInterface $cache, SessionInterface $session)
+    private $params;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $cache, SessionInterface $session)
     {
-        $this->container = $container;
+        $this->params = $params;
         $this->kernel = $kernel;
         $this->cache = $cache;
         $this->session = $session;
@@ -96,16 +92,16 @@ class TranslatorFactory
      *
      * @return ITranslatorService the translator service
      *
-     * @throws \InvalidArgumentException if the service can not be found or if the API key parameter is not defined
+     * @throws ParameterNotFoundException if the service can not be found or if the API key parameter is not defined
      */
     public function getService(string $class): ITranslatorService
     {
         if (!$this->exists($class)) {
-            throw new \InvalidArgumentException("The translator service '{$class}' can not be found.");
+            throw new ParameterNotFoundException("The translator service '{$class}' can not be found.");
         }
 
         // create and save service
-        $service = new $class($this->container, $this->kernel, $this->cache);
+        $service = new $class($this->params, $this->kernel, $this->cache);
         $this->setSessionValue(self::KEY_LAST_SERVICE, $class);
 
         return $service;

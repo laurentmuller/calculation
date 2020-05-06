@@ -88,7 +88,6 @@ class CustomersReport extends BaseReport
             ->outputHeaders();
 
         // sort
-        //ComparableUtils::sort($customers);
         Utils::sortField($customers, 'nameAndCompany');
 
         // grouped?
@@ -141,10 +140,6 @@ class CustomersReport extends BaseReport
      */
     private function getFirstChar(string $text): string
     {
-//         if (0 !== \mb_strlen($text)) {
-//             $char = \mb_substr($text, 0, 1);
-//             return \mb_convert_case($char, MB_CASE_UPPER);
-//         }
         if (0 !== \strlen($text)) {
             return (string) \strtoupper($text[0]);
         }
@@ -179,8 +174,6 @@ class CustomersReport extends BaseReport
 
             return \strcmp($str1, $str2);
         });
-
-        //\ksort($result, SORT_LOCALE_STRING);
 
         return $result;
     }

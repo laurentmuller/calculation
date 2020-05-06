@@ -36,7 +36,7 @@ class DatabaseInfo
     /**
      * Gets database variables.
      *
-     * @return array an array of variables with name as key and value.
+     * @return array an array of variables with name as key and value
      */
     public function getConfiguration(): array
     {

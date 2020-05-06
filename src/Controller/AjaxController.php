@@ -819,11 +819,6 @@ class AjaxController extends BaseController
         // round up
         $userMargin = \ceil($userMargin * 100.0) / 100.0;
 
-        // old method
-        // while ((($netTotal * (1 + $userMargin) / $groupAmount) - 1) < $minMargin) {
-        //  $userMargin += 0.01;
-        // }
-
         // update user margin
         $userGroup['margin'] = $userMargin;
         $userGroup['total'] = $netTotal * $userMargin;

@@ -18,7 +18,6 @@ use App\Service\ApplicationService;
 use App\Traits\FormatterTrait;
 use App\Utils\DateUtils;
 use Ob\HighchartsBundle\Highcharts\Highchart;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * High chart with method shortcuts.
@@ -103,10 +102,8 @@ class Basechart extends Highchart
 
     /**
      * Initialize the language options for this chart.
-     *
-     * @param translatorInterface $translator the translator used for messages
      */
-    public function initLangOptions(TranslatorInterface $translator): self
+    public function initLangOptions(): self
     {
         // array options
         $this->setLangOption('months', \array_values(DateUtils::getMonths()))
@@ -117,33 +114,6 @@ class Basechart extends Highchart
         // format options
         $this->setLangOption('thousandsSep', $this->getDefaultGrouping())
             ->setLangOption('decimalPoint', $this->getDefaultDecimal());
-
-        // translated options
-//         $options = [
-//             'downloadPNG',
-//             'downloadJPEG',
-//             'downloadPDF',
-//             'downloadSVG',
-
-//             'exportButtonTitle',
-//             'printButtonTitle',
-//             'resetZoomTitle',
-//             'contextButtonTitle',
-
-//             'noData',
-//             'loading',
-//             'resetZoom',
-
-//             'rangeSelectorFrom',
-//             'rangeSelectorTo',
-//             'rangeSelectorZoom',
-//             'printChart',
-//             'drillUpText',
-//         ];
-//         foreach ($options as $option) {
-//             $value = $translator->trans($option, [], 'chart');
-//             $this->setLangOption($option, $value);
-//         }
 
         return $this;
     }

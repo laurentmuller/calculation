@@ -117,9 +117,4 @@ class ThemeType extends AbstractType
 
         return $this;
     }
-
-    private function trans(string $id): string
-    {
-        return $this->translator->trans($id);
-    }
 }

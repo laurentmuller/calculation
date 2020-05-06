@@ -95,7 +95,6 @@ class PivotNode extends PivotAggregator implements \Countable
     public function __toString(): string
     {
         $className = Utils::getShortName($this);
-        //$value = $this->getFormattedResult();
 
         return \sprintf('%s(%s)', $className, 0);
     }

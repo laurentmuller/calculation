@@ -45,7 +45,6 @@ trait MathTrait
      */
     protected function isFloatEquals(float $val1, float $val2, int $precision = 2): bool
     {
-        //0 === bccomp($a, $b, $precision);
         return \round($val1, $precision) === \round($val2, $precision);
     }
 

@@ -36,8 +36,6 @@ class FosUserChangePasswordType extends AbstractType
 
         // add hidden username
         $builder->add('username', HiddenType::class);
-        // $helper = new FormHelper($builder);
-        // $helper->field('username')->addHiddenType();
     }
 
     /**

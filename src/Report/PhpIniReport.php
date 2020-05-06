@@ -116,10 +116,6 @@ class PhpIniReport extends BaseReport
     {
         if (\preg_match('/#[0-9A-Fa-f]{6}/i', $var) && $color = PdfTextColor::create($var)) {
             return PdfStyle::getCellStyle()->setTextColor($color);
-//         } elseif ('True' === $var) {
-//             return PdfStyle::getCellStyle()->setTextColor(PdfTextColor::create([34,177,76]));
-//         } elseif ('False' === $var) {
-//             return PdfStyle::getCellStyle()->setTextColor(PdfTextColor::create([255,127,39]));
         } elseif ('No value' === $var) {
             return PdfStyle::getCellStyle()
                 ->setTextColor(PdfTextColor::create('#7F7F7F'))

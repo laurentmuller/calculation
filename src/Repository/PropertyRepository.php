@@ -45,7 +45,6 @@ class PropertyRepository extends BaseRepository
      */
     public function findOneByName(string $name): ?Property
     {
-        //return parent::findOneByName($name);
         return $this->findOneBy(['name' => $name]);
     }
 }

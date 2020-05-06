@@ -39,13 +39,6 @@ class CalculationStateEntityType extends AbstractType
             'query_builder' => function (CalculationStateRepository $r) {
                 return $r->getSortedBuilder();
             },
-            // 'choice_attr' => function (CalculationState $choice, $key, $value) {
-            // $text = $choice->getCode();
-            // $color = $choice->getColor();
-            // return [
-            // 'data-content' => "<span class='drowpdown-state-color' style='background-color:$color;'></span class='drowpdown-state-text'><span>$text</span>",
-            // ];
-            // },
         ]);
     }
 

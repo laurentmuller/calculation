@@ -172,7 +172,6 @@ class SearchDataTable extends AbstractDataTable
         $search = $query->search->value;
         if ($search && \strlen($search) > 1) {
             // search
-            //$items = $this->service->search($search, $limit, $offset);
             $items = $this->service->search($search, SearchService::NO_LIMIT);
 
             // found?
@@ -219,18 +218,6 @@ class SearchDataTable extends AbstractDataTable
             $index = $query->order[0]->column - 1;
             $direction = $query->order[0]->dir;
         }
-
-//         $defaults = [
-//             '[' . self::COLUMN_ENTITY . ']' => true,
-//             '[' . self::COLUMN_FIELD . ']' => true,
-//             '[' . self::COLUMN_CONTENT . ']' => true,
-//         ];
-//         if (!empty($query->order)) {
-//             $index = $query->order[0]->column - 1;
-//             $ascending = DataColumn::SORT_ASC === $query->order[0]->dir;
-//             $key = array_keys($defaults)[$index];
-//             $defaults =  [$key => $ascending] + $defaults;
-//         }
 
         switch ($index) {
             case 0: // entity
@@ -336,9 +323,6 @@ class SearchDataTable extends AbstractDataTable
                     break;
             }
             $item[SearchService::COLUMN_CONTENT] = $content;
-
-            // key
-            //$item['key'] = $lowerType . '.' . $item['id'];
 
             // set authorizations
             $item[self::COLUMN_SHOW] = $this->isGrantedShow($type);

@@ -173,18 +173,6 @@ class LogController extends BaseController
      */
     public function table(Request $request, LogDataTable $table, LogRepository $repository): Response
     {
-//         $refresh = (bool)$request->get('refresh', true);
-//         $session = $this->getSession();
-//         if ($session && !$refresh) {
-//             if ($logs =  $session->get('logs')) {
-//                 return $logs;
-//             }
-//         }
-
-//         if ($session) {
-
-//         }
-
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
             return $this->json($results);
@@ -247,30 +235,5 @@ class LogController extends BaseController
         $env = $this->getParameter('kernel.environment');
 
         return $dir . \DIRECTORY_SEPARATOR . $env . '.log';
-
-        // copy if applicable
-//         if (!$original && $userName = $this->getUserName()) {
-//             $copy = false;
-//             //$userName = preg_replace('/[^A-Za-z0-9\-]/', '', \strtolower($userName));
-//             $target = $dir . \DIRECTORY_SEPARATOR . $env . '.' . \strtolower($userName) . '.log';
-
-//             if (\file_exists($source)) {
-//                 if (\file_exists($target)) {
-//                     $sourceAccess = \filemtime($source);
-//                     $targetAccess = \filemtime($target);
-//                     $minutes = ($sourceAccess - $targetAccess) / 60;
-//                     $copy = $minutes >= 2;
-//                 } else {
-//                     $copy = true;
-//                 }
-//             }
-//             if (\file_exists($source)) {
-//                 if ($copy) {
-//                     \copy($source, $target);
-//                 }
-
-//                 return $target;
-//             }
-//         }
     }
 }

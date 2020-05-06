@@ -109,56 +109,6 @@ class ChartController extends BaseController
         // get values
         $data = $repository->getByMonth(12);
 
-        // add missing values
-//         $lastYear = -1;
-//         $lastMonth = -1;
-//         $fullData = [];
-//         foreach ($data as $item) {
-//             // first?
-//             if (-1 !== $lastYear) {
-//                 $newYear = $item['year'];
-//                 $newMonth = $item['month'];
-
-//                 // complete years
-//                 for ($year = $lastYear + 1; $year < $newYear; ++$year) {
-//                     for ($month = 1; $month <= 12; ++$month) {
-//                         $dt = new \DateTime();
-//                         $dt->setDate($year, $month, 1);
-
-//                         $fullData[] = [
-//                             'year' => $year,
-//                             'month' => $month,
-//                             'count' => 0,
-//                             'items' => 0,
-//                             'total' => 0,
-//                             'date' => $dt,
-//                         ];
-//                     }
-//                 }
-
-//                 // complete months
-//                 for ($month = $lastMonth + 1; $month < $newMonth; ++$month) {
-//                     $dt = new \DateTime();
-//                     $dt->setDate($year, $month, 1);
-
-//                     $fullData[] = [
-//                         'year' => $newYear,
-//                         'month' => $month,
-//                         'count' => 0,
-//                         'items' => 0,
-//                         'total' => 0,
-//                         'date' => $dt,
-//                     ];
-//                 }
-//             }
-
-//             $lastYear = $item['year'];
-//             $lastMonth = $item['month'];
-//             $fullData[] = $item;
-//         }
-
-//         $data = \array_slice($fullData, -12); //\count($fullData));
-
         // dates (x values)
         $dates = \array_map(function (array $item) {
             return $item['date']->getTimestamp() * 1000;
@@ -376,7 +326,6 @@ class ChartController extends BaseController
 
         // tooltip
         $chart->tooltip->headerFormat('');
-        // $chart->tooltip->headerFormat('<span style="font-size:14px">{series.name}</span><br>');
         $chart->tooltip->pointFormat('<span><b>{point.name} : {point.y:,.2f}</b> ({point.percentage:.1f}%)</span>');
 
         return [
@@ -646,7 +595,6 @@ class ChartController extends BaseController
             ],
         ];
 
-        // $days = DateUtils::getWeekdays();
         $categories = \array_values(DateUtils::getMonths());
 
         $chart = $this->createChart();

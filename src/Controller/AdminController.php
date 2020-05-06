@@ -89,7 +89,6 @@ class AdminController extends BaseController
                     'result' => $result,
                     'options' => $options,
                 ];
-                // $this->trans('clear_cache.success');
                 $message = $this->succesTrans('clear_cache.success');
                 $logger->info($message, $context);
 

@@ -55,10 +55,6 @@ class UserNamer implements NamerInterface, IImageExtension
             throw new NameGenerationException('The name could not be generated. The object must be an instance of User.');
         }
 
-        // use FileExtensionTrait;
-        // $file = $mapping->getFile($object);
-        // $ext = $this->getExtension($file);
-
         return self::getBaseName($object, self::SIZE_DEFAULT, self::EXTENSION_PNG);
     }
 }

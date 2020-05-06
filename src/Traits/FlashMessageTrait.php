@@ -58,11 +58,6 @@ trait FlashMessageTrait
             $flashBag = $session->getFlashBag();
             $flashBag->add($type, $message);
         }
-//         if ($session = $this->doGetSession()) {
-//             /** @var \Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface $flashBag */
-//             $flashBag = $session->getFlashBag();
-//             $flashBag->add($type, $message);
-//         }
 
         return $this;
     }

@@ -424,7 +424,6 @@ class Calculation extends BaseEntity
         }
 
         return 0;
-        // return $this->getOverallTotal() - $this->getGroupsAmount();
     }
 
     /**

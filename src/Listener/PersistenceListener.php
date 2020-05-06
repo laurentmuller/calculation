@@ -194,14 +194,6 @@ class PersistenceListener implements EventSubscriber
     }
 
     /**
-     * Gets the flashbag message title.
-     */
-    private function getTitle(): string
-    {
-        return self::TITLE . ' - ' . $this->appName . '|';
-    }
-
-    /**
      * Checks if the last login field is updated.
      *
      * @param LifecycleEventArgs $args the post update arguments
@@ -229,7 +221,6 @@ class PersistenceListener implements EventSubscriber
      */
     private function translateMessage(string $id, array $parameters = [], ?string $domain = null): string
     {
-        //$title = $this->getTitle();
         $message = $this->trans($id, $parameters, $domain);
 
         return self::TITLE . '|' . $message;

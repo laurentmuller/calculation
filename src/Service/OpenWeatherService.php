@@ -298,12 +298,6 @@ class OpenWeatherService extends HttpClientService
             'query' => $query,
         ]);
 
-        // check error
-//         $status = $response->getStatusCode();
-//         if (Response::HTTP_OK !== $status) {
-//             // return $this->setLastError($status, $response->getReasonPhrase());
-//         }
-
         // decode
         $result = $response->toArray(false);
 

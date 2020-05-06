@@ -154,9 +154,6 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
     {
         // update margins
         $this->applyMargins($report, $this->getLeftMargin(), $this->getRightMargin(), function (HtmlReport $report): void {
-            // save font
-            // $oldFont = $report->getCurrentFont();
-
             // top margin
             $this->moveY($report, $this->getTopMargin());
 
@@ -173,7 +170,6 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
             if ($this->getParent()) {
                 $this->getParent()->applyStyle($report);
             }
-            //$oldFont->apply($report);
         });
     }
 

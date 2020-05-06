@@ -77,35 +77,6 @@ final class DateUtils
         return $year;
     }
 
-//     /**
-//      * Gets the first day of the month.
-//      *
-//      * @param int|null $year  the desired year or null for the current year
-//      * @param int|null $month the desired month or null for the current month
-//      *
-//      * @return \DateTime
-//      */
-//     public static function firstDayOfMonth(?int $year = null, ?int $month = null): \DateTime
-//     {
-//         $year = $year ?: \gmdate('Y');
-//         $month = $month ?: \gmdate('n');
-//         $timestamp = \gmmktime(0, 0, 0, $month, 1, $year);
-//         return new \DateTime("@{$timestamp}");
-//     }
-//     /**
-//      * Gets the first day of the year.
-//      *
-//      * @param int|null $year the desired year or null for the current year
-//      *
-//      * @return \DateTime
-//      */
-//     public static function firstDayOfYear(?int $year = null): \DateTime
-//     {
-//         $year = $year ?: \gmdate('Y');
-//         $timestamp = \gmmktime(0, 0, 0, 1, 1, $year);
-//         return new \DateTime("@{$timestamp}");
-//     }
-
     /**
      * Gets the localized month names.
      * For example with 'fr' as locale, return
@@ -199,40 +170,6 @@ final class DateUtils
 
         return self::$weekNames;
     }
-
-//     /**
-//      * Gets the last day of the year.
-//      *
-//      * @param int|null $year the desired year or null for the current year
-//      *  @param int|null $month the desired month or null for the current month
-//      *
-//      * @return \DateTime
-//      */
-//     public static function lastDayOfMonth(?int $year = null, ?int $month = null): \DateTime
-//     {
-//         $year = $year ?: \gmdate('Y');
-//         $month = $month ?: \gmdate('n');
-//         $timestamp = \gmmktime(0, 0, 0, $month, 1, $year);
-//         $date = new \DateTime("@{$timestamp}");
-
-//         return $date->modify('+1 month')->modify('-1 day');
-//     }
-//     //
-
-//     /**
-//      * Gets the last day of the month.
-//      *
-//      * @param int|null $year the desired year or null for the current year
-//      *
-//      * @return \DateTime
-//      */
-//     public static function lastDayOfYear(?int $year = null): \DateTime
-//     {
-//         $year = $year ?: \gmdate('Y');
-//         $timestamp = \gmmktime(0, 0, 0, 12, 31, $year);
-
-//         return new \DateTime("@{$timestamp}");
-//     }
 
     /**
      * Formats the given time.

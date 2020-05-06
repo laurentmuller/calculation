@@ -214,12 +214,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
             self::QUERY => $query,
         ]);
 
-        // check status code
-//         $status = $response->getStatusCode();
-//         if (Response::HTTP_OK !== $status) {
-//             //return $this->setLastError($status, $response->getReasonPhrase());
-//         }
-
         // decode
         $response = $response->toArray(false);
 

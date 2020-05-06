@@ -218,7 +218,6 @@ class HtmlReport extends BaseReport
         // current
         $this->SetX($this->x + $indent);
         $this->Cell(0, self::LINE_HEIGHT, $chunk->__toString(), 0, 1);
-        //$this->Ln();
 
         // children
         if ($chunk instanceof HtmlParentChunk) {

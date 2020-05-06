@@ -52,15 +52,6 @@ trait NumberFormatterTrait
     public function localeId($number): string
     {
         return \sprintf('%06d', (int) $number);
-//         static $idFormatter;
-//         if (!$idFormatter) {
-//             $idFormatter = $this->getNumberFormatter(NumberFormatter::DECIMAL, 0);
-//             $idFormatter->setSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL, '-');
-//             $idFormatter->setAttribute(NumberFormatter::PADDING_CHARACTER, '0');
-//             $idFormatter->setAttribute(NumberFormatter::MIN_INTEGER_DIGITS, 6);
-//         }
-
-//         return $idFormatter->format((int) $number);
     }
 
     /**

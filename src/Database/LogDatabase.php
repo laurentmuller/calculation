@@ -84,11 +84,6 @@ sql;
     protected function createSchema(): void
     {
         $this->exec(self::$SQL_CREATE);
-
-        // indexes
-        // $this->createIndex('sy_Log', 'channel');
-        // $this->createIndex('sy_Log', 'level');
-        // $this->createIndex('sy_Log', 'message');
     }
 
     /**

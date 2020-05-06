@@ -325,7 +325,6 @@ final class SymfonyUtils
                 'php_class' => \get_class($routeObject),
             ];
 
-            //if (strpos('_', $name) === 0) {}
             if (\in_array($name, self::$BUILT_IN_ROUTES, true)) {
                 $result['symfony'][$name] = $route;
             } else {

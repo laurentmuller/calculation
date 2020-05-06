@@ -40,9 +40,6 @@ class CustomAddress extends \Faker\Provider\fr_CH\Address
      */
     public function zipCity(): string
     {
-        //return $this->postcode() . ' ' . $this->city();
-        //$format = '{{postcode}} {{city}}';
-
         return $this->generator->parse(static::$postcodeCity);
     }
 }

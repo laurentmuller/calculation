@@ -165,7 +165,6 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
     public function onSendEmailInitialize(GetResponseNullableUserEvent $event): void
     {
         $request = $event->getRequest();
-        //$message = $this->validateRecaptcha($request);
         $message = $this->validateCaptcha($request);
         if ($message) {
             // save exception
@@ -179,9 +178,6 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
                 'error' => $e,
                 'username' => $event->getUser()->getUsername(),
             ];
-            // if ($user = $event->getUser()) {
-            // $parameters['username'] = $event->getUser()->getUsername();
-            // }
 
             // redirect
             $response = new RedirectResponse($this->generateUrl('fos_user_resetting_request', $parameters));

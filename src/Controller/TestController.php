@@ -114,7 +114,6 @@ class TestController extends BaseController
         $service->setModels(null, null, null, CalculationsDay::class);
         $calendar = $service->generate($year);
 
-        // $repository = $this->getDoctrine()->getRepository(Calculation::class);
         $calculations = $repository->getForYear($year);
         $this->merge($calendar, $calculations);
 
@@ -458,7 +457,6 @@ class TestController extends BaseController
             // get values
             $data = $form->getData();
             $response = $data['recaptcha'];
-            // $remoteIp = $request->getClientIp();
             $hostname = $request->server->get('HTTP_HOST');
             $secret = $this->getParameter('google_recaptcha_secret');
 
@@ -498,11 +496,8 @@ class TestController extends BaseController
             if (empty($errorCodes)) {
                 $errorCodes[] = $translator->trans('recaptcha.unknown-error', [], 'validators');
             }
-            // $message = \implode('<br>', $errorCodes);
-            // $this->error($message);
 
             foreach ($errorCodes as $code) {
-                //$form->get('subject')->addError(new FormError($code));
                 $form->addError(new FormError($code));
             }
         }

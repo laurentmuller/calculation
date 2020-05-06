@@ -191,23 +191,6 @@ final class Utils
             $export = \preg_replace(\array_keys($patterns), \array_values($patterns), $export);
 
             return $export;
-
-//             $export = var_export($expression, TRUE);
-//             $export = preg_replace("/^([ ]*)(.*)/m", '$1$1$2', $export);
-//             $array = preg_split("/\r\n|\n|\r/", $export);
-//             $array = preg_replace(["/\s*array\s\($/", "/\)(,)?$/", "/\s=>\s$/"], [NULL, ']$1', ' => ['], $array);
-//             $array = array_merge(['['], $array);
-//             $export = join(PHP_EOL, array_filter($array));
-//             return $export;
-
-//             $export = \var_export($expression, true);
-//             $export = \str_replace('\\\\', '\\', $export);
-//             $export = \preg_replace('/^([ ]*)(.*)/m', '$1$1$2', $export);
-//             $array = \preg_split("/\r\n|\n|\r/", $export);
-//             $array = \preg_replace(['/\\s*array\\s\\($/', '/\\)(,)?$/', '/\\s=>\\s$/'], [null, ']$1', ' => ['], $array);
-//             $array = array_merge(['['], $array);
-
-//             return \implode(PHP_EOL, \array_filter($array));
         } catch (\Exception $e) {
             return '';
         }

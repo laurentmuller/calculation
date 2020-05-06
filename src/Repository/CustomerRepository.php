@@ -86,8 +86,6 @@ class CustomerRepository extends BaseRepository
      */
     private function addPrefixes(string $alias, array $names): array
     {
-        // \array_map(fn ($name) => "{$alias}.{$name}", $names);
-
         return \array_map(function (string $name) use ($alias) {
             return "{$alias}.{$name}";
         }, $names);

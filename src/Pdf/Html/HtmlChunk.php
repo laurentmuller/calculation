@@ -521,7 +521,6 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
         // class
         if ($this->className) {
             $classNames = \preg_split('/\s+/m', $this->className);
-            // $classNames = \explode(' ', $this->className);
             foreach ($classNames as $class) {
                 switch ($class) {
                     case 'text-left':
@@ -581,7 +580,6 @@ abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
                         break;
 
                     default:
-                        // $this->parseBorders($style, $class);
                         $this->parseMargins($style, $class);
                         break;
                 }

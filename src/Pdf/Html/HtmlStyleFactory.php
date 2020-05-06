@@ -67,9 +67,6 @@ final class HtmlStyleFactory
                 return self::default()->italic(true);
             case 'u':
                 return self::default()->underline(true);
-            //case 'pre':
-                //self::default()->setFontName(PdfFont::NAME_COURIER);
-            // case 'em':
             case 'code':
                 return self::default()
                     ->setTextColor(PdfTextColor::red())
@@ -82,12 +79,6 @@ final class HtmlStyleFactory
             case 'kbd':
                 return self::default()
                     ->setFontName(PdfFont::NAME_COURIER);
-//             case 'kbd':
-//                 $style = self::default();
-//                 return $style->setFontName(PdfFont::NAME_COURIER)
-//                     ->setFillColor(PdfFillColor::black())
-//                     ->setTextColor(PdfTextColor::white());
-
             default:
                 return null;
         }

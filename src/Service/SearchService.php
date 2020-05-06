@@ -159,7 +159,6 @@ class SearchService
         }
 
         // sort, limit and offset
-        // $extra = ' ORDER BY ' . self::COLUMN_CONTENT;
         $extra = " LIMIT {$limit} OFFSET {$offset}";
 
         // return result

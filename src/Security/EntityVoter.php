@@ -124,8 +124,6 @@ class EntityVoter extends Voter implements IEntityVoter
      */
     public static function getOffsetValue(?string $source, int $offset): int
     {
-        //  return $source >> ($offset * 8);
-        //https://github.com/chdemko/php-bitarray
         $source = Utils::toString($source);
         if (isset($source[$offset])) {
             return \ord($source[$offset]);

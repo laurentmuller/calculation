@@ -408,7 +408,6 @@ class CalculationController extends EntityController
             return  $this->redirectToHomePage();
         }
 
-        //$report = new CalculationEmptyReport($this);
         $report = new CalculationEmptyTableReport($this);
         $report->setItems($items);
 

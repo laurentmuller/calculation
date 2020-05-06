@@ -6,4 +6,3 @@ stof_doctrine_extensions:
         default:
             timestampable: true
             blameable: true
-    

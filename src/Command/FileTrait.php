@@ -123,13 +123,13 @@ trait FileTrait
     /**
      * Checks if the object or class has the given property.
      *
-     * @param mixed           $var        the object of the class to test for
+     * @param \stdClass       $var        the object to test for
      * @param string[]|string $properties the properties names to check
      * @param bool            $log        true to output error
      *
      * @return bool true if the property exists, false if it doesn't exist
      */
-    protected function propertyExists($var, $properties, bool $log = false): bool
+    protected function propertyExists(\stdClass $var, $properties, bool $log = false): bool
     {
         if (!\is_array($properties)) {
             $properties = [$properties];

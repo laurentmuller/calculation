@@ -318,7 +318,14 @@ span.state-color {
 .card-header.note-toolbar {
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
-    background-color: var(--light) !important;    
+    /*
+    background-color: var(--light) !important;
+    */    
+}
+.note-toolbar .note-btn {
+    background: inherit !important;
+    /*color: : inherit !important;*/
+    /* border-color: #dae0e5;*/
 }
 
 /*

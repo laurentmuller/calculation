@@ -64,6 +64,41 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TestController extends BaseController
 {
     /**
+     * Display a month of a calendar.
+     *
+     * @Route("/month/{year}/{month}", name="test_month", requirements={"year": "\d+", "month": "\d+"})
+     *
+     * @param Request               $request    the request the get parameters
+     * @param CalendarService       $service    the service to generate calendar model
+     * @param CalculationRepository $repository the repository to query
+     * @param int|null              $year       the year to search for or <code>null</code> for the current year
+     * @param int|null              $month      the month to search for or <code>null</code> for the current month
+     */
+    public function calendarMonth(Request $request, CalendarService $service, CalculationRepository $repository, $year = null, $month = null): Response
+    {
+        // check month
+        $month = (int) ($month ?: \date('n'));
+        if ($month < 1 || $month > 12) {
+            throw $this->createNotFoundException($this->trans('calendar.invalid_month'));
+        }
+        $year = DateUtils::completYear((int) ($year ?: \date('Y')));
+        $service->setModels(null, null, null, CalculationsDay::class);
+
+        /** @var Calendar $calendar */
+        $calendar = $service->generate($year);
+        $currentMonth = $calendar->getMonths()[$month - 1];
+
+        $calculations = $repository->getForMonth($year, $month);
+        $this->merge($calendar, $calculations);
+
+        return $this->render('calendar/calendar_month.html.twig', [
+            'calendar' => $calendar,
+            'month' => $currentMonth,
+            'calculations' => $calculations,
+        ]);
+    }
+
+    /**
      * Display a calendar.
      *
      * @Route("/calendar/{year}", name="test_calendar", requirements={"year": "\d+" })
@@ -73,7 +108,7 @@ class TestController extends BaseController
      * @param CalculationRepository $repository the repository to query
      * @param int|null              $year       the year to search for or <code>null</code> for the current year
      */
-    public function calendar(Request $request, CalendarService $service, CalculationRepository $repository, $year = null): Response
+    public function calendarYear(Request $request, CalendarService $service, CalculationRepository $repository, $year = null): Response
     {
         $year = DateUtils::completYear((int) ($year ?: \date('Y')));
         $service->setModels(null, null, null, CalculationsDay::class);
@@ -83,7 +118,7 @@ class TestController extends BaseController
         $calculations = $repository->getForYear($year);
         $this->merge($calendar, $calculations);
 
-        return $this->render('test/calendar.html.twig', [
+        return $this->render('calendar/calendar_year.html.twig', [
             'calendar' => $calendar,
             'calculations' => $calculations,
         ]);
@@ -283,41 +318,6 @@ class TestController extends BaseController
 
         // render
         return $this->renderDocument($report);
-    }
-
-    /**
-     * Display a month of a calendar.
-     *
-     * @Route("/month/{year}/{month}", name="test_month", requirements={"year": "\d+", "month": "\d+"})
-     *
-     * @param Request               $request    the request the get parameters
-     * @param CalendarService       $service    the service to generate calendar model
-     * @param CalculationRepository $repository the repository to query
-     * @param int|null              $year       the year to search for or <code>null</code> for the current year
-     * @param int|null              $month      the month to search for or <code>null</code> for the current month
-     */
-    public function month(Request $request, CalendarService $service, CalculationRepository $repository, $year = null, $month = null): Response
-    {
-        // check month
-        $month = (int) ($month ?: \date('n'));
-        if ($month < 1 || $month > 12) {
-            throw $this->createNotFoundException($this->trans('test.invalid_month'));
-        }
-        $year = DateUtils::completYear((int) ($year ?: \date('Y')));
-        $service->setModels(null, null, null, CalculationsDay::class);
-
-        /** @var Calendar $calendar */
-        $calendar = $service->generate($year);
-        $currentMonth = $calendar->getMonths()[$month - 1];
-
-        $calculations = $repository->getForMonth($year, $month);
-        $this->merge($calendar, $calculations);
-
-        return $this->render('test/month.html.twig', [
-            'calendar' => $calendar,
-            'month' => $currentMonth,
-            'calculations' => $calculations,
-        ]);
     }
 
     /**
@@ -799,7 +799,8 @@ class TestController extends BaseController
     /**
      * Merges calculation to the calendar.
      *
-     * @param Calculation[] $calculations
+     * @param Calendar      $calendar     the calendar to update
+     * @param Calculation[] $calculations the calculations to merge
      */
     private function merge(Calendar $calendar, array $calculations): void
     {

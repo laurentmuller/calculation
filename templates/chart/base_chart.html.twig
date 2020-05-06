@@ -20,8 +20,14 @@
 {{ asset_css('css/chart.css') }}
 {% endblock %}
 
+
 {% block javascripts %}
-{{ parent() }}
-{{ asset_js('js/vendor/highcharts/highcharts.js') }}
+{% if app.debug %}
+    {{ parent() }}
+    {{ asset_js('js/vendor/highcharts/highcharts.js') }}
+    {{ asset_js('js/plugins/plugin-rowlink.js') }}
+{% else %}
+    {{ asset_js('js/chart.js') }}
+{% endif %}
 <script nonce="{{ csp_nonce() }}">{{ chart(chart) }}</script>
 {% endblock %}

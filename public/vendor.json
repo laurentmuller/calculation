@@ -13,7 +13,7 @@
 	"plugins": [
 		{
 			"name": "jquery",
-			"version": "3.4.1",
+			"version": "3.5.1",
 			"files": [
 				"jquery.js"
 			]
@@ -77,7 +77,7 @@
 		},
 		{
 			"name": "highcharts",
-			"version": "8.0.4",
+			"version": "8.1.0",
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/{file}",
 			"files": [

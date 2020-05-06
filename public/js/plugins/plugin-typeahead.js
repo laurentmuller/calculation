@@ -150,7 +150,7 @@
             return this;
         },
         ajaxLookup: function () {
-            const query = $.trim(this.$element.val());
+            const query = this.$element.val().trim();
             if (query === this.query) {
                 return this;
             }

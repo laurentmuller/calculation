@@ -56,7 +56,6 @@ class MathTraitTest extends TestCase
         $this->assertEquals(1.5, $this->round(1.5));
         $this->assertEquals(1.55, $this->round(1.55));
         $this->assertEquals(1.55, $this->round(1.5545));
-
         $this->assertEquals(1.50, $this->round(1.52, 1));
     }
 
@@ -64,7 +63,6 @@ class MathTraitTest extends TestCase
     {
         $this->assertEquals(0, $this->safeDivide(100, 0));
         $this->assertEquals(10, $this->safeDivide(100, 10));
-
         $this->assertEquals(11, $this->safeDivide(100, 0, 11));
     }
 

@@ -112,7 +112,7 @@ trait PdfBorderTrait
         } elseif (IPdfConstants::BORDER_INHERITED === $border) {
             $result[] = 'Inherited';
         } else {
-            for ($i = 0; $i < \strlen($border); ++$i) {
+            for ($i = 0, $count = \strlen($border); $i < $count; ++$i) {
                 switch ($border[$i]) {
                     case IPdfConstants::BORDER_LEFT:
                         $result[] = 'Left';
@@ -160,7 +160,7 @@ trait PdfBorderTrait
 
         $result = '';
         $border = \strtoupper((string) $border);
-        for ($i = 0; $i < \strlen($border); ++$i) {
+        for ($i = 0, $count = \strlen($border); $i < $count; ++$i) {
             switch ($border[$i]) {
                 case IPdfConstants::BORDER_LEFT:
                 case IPdfConstants::BORDER_RIGHT:

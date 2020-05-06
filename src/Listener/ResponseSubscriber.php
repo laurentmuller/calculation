@@ -33,11 +33,6 @@ use Symfony\Component\Routing\RouterInterface;
 class ResponseSubscriber implements EventSubscriberInterface
 {
     /**
-     * The CDN content delivery URL.
-     */
-    private const CDNJS_URL = 'https://cdnjs.cloudflare.com';
-
-    /**
      * The CSP blob directive.
      */
     private const CSP_BLOB = 'blob:';
@@ -205,7 +200,8 @@ class ResponseSubscriber implements EventSubscriberInterface
         }
 
         // nonce + asset
-        $csp['script-src'] = [$nonce, $asset];
+        $csp['script-src'] = [$nonce]; //, $asset];
+        $csp['script-src-elem'] = [$nonce, $asset, self::CSP_UNSAFE_INLINE];
 
         // self + asset
         $csp['frame-src'] = [self::CSP_SELF, self::GOOGLE_FRAME_URL];

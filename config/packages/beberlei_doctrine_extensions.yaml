@@ -60,7 +60,7 @@ doctrine:
 #                 power: DoctrineExtensions\Query\Mysql\Power
 #                 quarter: DoctrineExtensions\Query\Mysql\Quarter
 #                 radians: DoctrineExtensions\Query\Mysql\Radians
-#                 rand: DoctrineExtensions\Query\Mysql\Rand                 
+#                 rand: DoctrineExtensions\Query\Mysql\Rand
 #                 stddev: DoctrineExtensions\Query\Mysql\StdDev
 #                 sin: DoctrineExtensions\Query\Mysql\Sin
 #                 std: DoctrineExtensions\Query\Mysql\Std
@@ -112,4 +112,4 @@ doctrine:
 #                 str_to_date: DoctrineExtensions\Query\Mysql\StrToDate
 #                 substring_index: DoctrineExtensions\Query\Mysql\SubstringIndex
 #                 unhex: DoctrineExtensions\Query\Mysql\Unhex
-#                 uuid_short: DoctrineExtensions\Query\Mysql\UuidShort    
+#                 uuid_short: DoctrineExtensions\Query\Mysql\UuidShort

@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{# _self #}
+{# macros #}
 {% macro weekRow(month, week) %}
-{% import 'test/_days_macro_html.twig' as tools %}
-{%- set week_title = 'test.week_title'|trans({'%week%': week.number}) -%}
+{% import 'calendar/_calendar.html.twig' as helper %}
+{%- set week_title = 'calendar.week_title'|trans({'%week%': week.number}) -%}
 {%- set class = 'bg-secondary text-white text-center align-middle week' -%}
 {% if week.current and month.number == month.today.month -%}{%- set class = 'bg-primary text-center align-middle text-white week' -%}{%- endif %}
 <tr>
     <td class="{{ class }}" title="{{ week_title }}">{{ week.number }}</td>
     {% for day in week.days -%}
-        {{ tools.dayCell(month, day, false) }}
+        {{ helper.dayCell(month, day, false) }}
     {%- endfor %}
 </tr>
 {% endmacro %}
@@ -18,11 +18,11 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title            = 'test.month' -%}
+{%- set title            = 'calendar.month_title' -%}
 {%- set title_parameters = {'%year%': calendar.year, '%month%': month.Name} -%}
 {%- set month_index      = month.number -%}
-{%- set month_text       = 'test.month'|trans({'%year%': calendar.year, '%month%': month.Name}) -%}
-{%- set calendat_text    = 'test.calendar'|trans({'%year%': calendar.year}) -%}
+{%- set month_text       = 'calendar.month_title'|trans({'%year%': calendar.year, '%month%': month.Name}) -%}
+{%- set calendat_text    = 'calendar.year_title'|trans({'%year%': calendar.year}) -%}
 
 {% block body %}
 <div class="row">
@@ -30,7 +30,7 @@
         <h2>{{ month_text }}</h2>
     </div>
     <div class="col-md-4 text-md-center">
-    	<h3>{{ 'test.calculations'|trans({count: calculations|length}) }}</h3>
+    	<h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
     </div>
     <div class="col-md-4 text-md-right">
         {% set year = 'now'|date('Y') %}
@@ -64,7 +64,7 @@
     <div class="col">
         <table class="table table-bordered w-100 month">
             <tr>
-                <th class="border bg-secondary text-white text-center week font-weight-normal">{{ 'test.week'|trans }}</th>
+                <th class="border bg-secondary text-white text-center week font-weight-normal">{{ 'calendar.week'|trans }}</th>
                 {% for name in calendar.weekShortNames %}
                     <th class="border bg-secondary text-white text-center font-weight-normal">{{ name }}</th>
                 {% endfor %}

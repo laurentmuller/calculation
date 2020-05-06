@@ -59,7 +59,8 @@
 		"symfony/web-link" : "5.0.*",
 		"symfony/yaml" : "5.0.*",
 		"vich/uploader-bundle" : "^1.13",
-		"webinarium/datatables-bundle" : "^2.4"
+		"webinarium/datatables-bundle" : "^2.4",
+		"imagine/imagine" : "~1.2"
 	},
 	"require-dev" : {
 		"phpstan/extension-installer" : "~1.0",

@@ -148,7 +148,7 @@ class GifFrameExtractor implements \Countable
         $this->parseFramesInfo($filename);
         $prevImg = null;
 
-        for ($i = 0; $i < \count($this->frameSources); ++$i) {
+        for ($i = 0, $count = \count($this->frameSources); $i < $count; ++$i) {
             $this->frames[$i] = [];
             $this->frames[$i]['x'] = $this->frameSources[$i]['x'];
             $this->frames[$i]['y'] = $this->frameSources[$i]['y'];

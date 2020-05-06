@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\Theme;
 use App\Service\ThemeService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -119,12 +120,12 @@ class ThemeType extends AbstractType
     }
 
     /**
-     * Adds the Css field.
+     * Adds the CSS field.
      */
     private function addThemeField(FormHelper $helper): self
     {
         $themes = $this->service->getThemes();
-        $choice_attr = function ($choice, $key, $value) {
+        $choice_attr = function (Theme $choice, $key, $value) {
             return [
                 'data-description' => $choice->getDescription(),
             ];

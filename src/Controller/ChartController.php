@@ -275,7 +275,7 @@ class ChartController extends BaseController
 
         // data
         $data = [];
-        for ($i = 0; $i < \count($dates); ++$i) {
+        for ($i = 0, $count = \count($dates); $i < $count; ++$i) {
             $data[] = [
                 'date' => ($dates[$i] / 1000),
                 'count' => $countData[$i],

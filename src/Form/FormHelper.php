@@ -48,24 +48,9 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 class FormHelper
 {
     /**
-     * Constant to add the percent symbol after the input (default).
-     */
-    const PercentDefault = 'default';
-
-    /**
-     * Constant to hide the percent sybmol.
-     */
-    const PercentHide = 'hide';
-
-    /**
-     * Constant to add the percent symbol before the input.
-     */
-    const PercentPrepend = 'prepend';
-
-    /**
      * The attributes.
      *
-     * @var array|mixed|string
+     * @var array
      */
     private $attributes = [];
 

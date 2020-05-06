@@ -22,8 +22,8 @@ twig:
         google_recaptcha_site_key: '%google_recaptcha_site_key%'
         google_recaptcha_secret:   '%google_recaptcha_secret%'
 
-        dev_link:  '%dev_link%'
-        prod_link: '%prod_link%'
+        link_dev:  '%link_dev%'
+        link_prod: '%link_prod%'
         
     date:
         format: d.m.Y H:i:s

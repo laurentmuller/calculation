@@ -71,7 +71,14 @@
          */
         isUndefined: function (data) {
             return $.type(data) === "undefined"; // || data === null
-        }
+        },
+
+        /**
+         * Re-implant this function for backwards compatibility.
+         */
+        trim: function (text) {
+            return text === null ? "" : (text + "").replace($.rtrim, "");
+        },
     });
 
     /**
@@ -436,8 +443,7 @@
          * Returns the label text of the given input element. Return false if
          * not found.
          * 
-         * @return {JQuery|boolean} the label element, if found; false
-         *         otherwise.
+         * @return {JQuery|boolean} the label text, if found; false otherwise.
          */
         getLabelText: function () {
             const $element = $(this);

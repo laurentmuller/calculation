@@ -437,8 +437,6 @@ class Calculation extends BaseEntity
 
     /**
      * Get state.
-     *
-     * @return \App\Entity\CalculationState
      */
     public function getState(): ?CalculationState
     {

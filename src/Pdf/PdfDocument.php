@@ -266,7 +266,7 @@ class PdfDocument extends Fpdf implements IPdfConstants
     }
 
     /**
-     * This method is used to render the page footer. It is automatically called by AddPage() and Close() and should not be called directly by the application. The implementation in FPDF is empty, so you have to subclass it and override the method if you want a specific processing.
+     * {@inheritdoc}
      */
     public function Footer(): void
     {
@@ -616,7 +616,7 @@ class PdfDocument extends Fpdf implements IPdfConstants
     }
 
     /**
-     * This method is used to render the page header. It is automatically called by AddPage() and should not be called directly by the application. The implementation in FPDF is empty, so you have to subclass it and override the method if you want a specific processing.
+     * {@inheritdoc}
      */
     public function Header(): void
     {

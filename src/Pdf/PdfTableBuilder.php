@@ -255,7 +255,7 @@ class PdfTableBuilder implements IPdfConstants
             $aligns[] = $cell->getAlignment() ?: $columns[$index]->getAlignment();
 
             $w = 0;
-            for ($i = 0; $i < $cell->getCols(); ++$i) {
+            for ($i = 0, $count = $cell->getCols(); $i < $count; ++$i) {
                 $w += $columns[$index++]->getWidth();
             }
             $widths[] = $w;

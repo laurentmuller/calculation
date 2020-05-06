@@ -26,9 +26,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RightsTraitTest extends TestCase implements IEntityVoter
 {
-
     use RightsTrait;
-
 
     /**
      * {@inheritdoc}
@@ -59,16 +57,17 @@ class RightsTraitTest extends TestCase implements IEntityVoter
     /**
      * @dataProvider getEntities
      */
-    public function testGetEdit(string $entity): void
-    {
-        $this->checkAttribute($entity, self::ATTRIBUTE_EDIT);
-    }
-    /**
-     * @dataProvider getEntities
-     */
     public function testGetDelete(string $entity): void
     {
         $this->checkAttribute($entity, self::ATTRIBUTE_DELETE);
+    }
+
+    /**
+     * @dataProvider getEntities
+     */
+    public function testGetEdit(string $entity): void
+    {
+        $this->checkAttribute($entity, self::ATTRIBUTE_EDIT);
     }
 
     /**
@@ -79,17 +78,17 @@ class RightsTraitTest extends TestCase implements IEntityVoter
         $this->assertEmpty($this->__get($entity));
     }
 
+    public function testIsNotSet(): void
+    {
+        $this->assertFalse($this->__isset('UnknowClass'));
+    }
+
     /**
      * @dataProvider getEntities
      */
     public function testIsSet(string $entity): void
     {
         $this->assertTrue($this->__isset($entity));
-    }
-
-    public function testIsNotSet(): void
-    {
-        $this->assertFalse($this->__isset('UnknowClass'));
     }
 
     private function checkAttribute(string $entity, string $key): void

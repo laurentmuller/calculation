@@ -100,7 +100,7 @@
                     {{- icons.dropdownItem(path('test_summernote'), 'test.summernote', 'quote-right') -}}
                     {{- icons.dropdownItem(path('test_tinymce'), 'test.tinymce', 'edit') -}}
                     
-                    {{- icons.dropdownItem(path('test_calendar'), 'test.calendar', 'calendar far', null, {'%year%': 'now'|date('Y')}) -}}
+                    {{- icons.dropdownItem(path('test_calendar'), 'calendar.year_title', 'calendar far', null, {'%year%': 'now'|date('Y')}) -}}
                     {{- icons.dropdownItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') -}}
                     {{- icons.dropdownItem(path('test_translate'), 'translator.title', 'globe') -}}
                     {{- icons.dropdownItemExternal(path('test_html'), 'test.html', 'code') -}}
@@ -160,10 +160,10 @@
                 {# switch environment #}
                 {% if is_env_dev %}
                     {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(prod_link, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) -}}
+                    {{- icons.dropdownItem(link_prod, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) -}}
                 {% elseif is_env_prod or is_env_local %}
                     {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(dev_link, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) -}}
+                    {{- icons.dropdownItem(link_dev, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) -}}
                 {% endif %}                        
                 {{- icons.dropdownSeparator -}}
                 {{- icons.dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') -}}

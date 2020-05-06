@@ -544,15 +544,16 @@ theme:
         danger: Danger
         primary: Accepter
         secondary: Refuser
+calendar:
+    year_title: Calendrier %year%
+    month_title: '%month% %year%'
+    week_title: Semaine %week%
+    week: Sem.
+    invalid_month: Le mois doit être compris entre 1 et 12.
 test:
     notification: Notifications
     summernote: Editeur Summernote
     minify: Minify
-    calendar: Calendrier %year%
-    month: '%month% %year%'
-    invalid_month: Le mois doit être compris entre 1 et 12.
-    week: Sem.
-    week_title: Semaine %week%
     drag_drop: Drag & drop
     html: Exportation HTML
     recaptcha: reCAPTCHA

@@ -2,14 +2,14 @@
 
 {# macros #}
 {% macro weekRow(month, week) %}
-{% import 'test/_days_macro_html.twig' as tools %}
+{% import 'calendar/_calendar.html.twig' as helper %}
 {%- set class = 'border text-center font-weight-bold p-2 week' -%}
-{%- set week_title = 'test.week_title'|trans({'%week%': week.number}) -%}
+{%- set week_title = 'calendar.week_title'|trans({'%week%': week.number}) -%}
 {% if week.current and month.number == month.today.month -%}{%- set class = class ~ ' bg-primary text-white' -%}{%- endif %}
 <tr>
     <td class="{{ class }}" title="{{ week_title }}">{{ week.number }}</td>
     {% for day in week.days -%}
-        {{ tools.dayCell(month, day, true) }}
+        {{ helper.dayCell(month, day, true) }}
     {%- endfor %}
 </tr>
 {% endmacro %}
@@ -44,30 +44,30 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title            = 'test.calendar' -%}
+{%- set title            = 'calendar.year_title' -%}
 {%- set title_parameters = {'%year%': calendar.year} -%}
 
 {% block body %}
 <div class="row">
     <div class="col-md-4">
-        <h2 class="">{{ 'test.calendar'|trans({'%year%': calendar.year}) }}</h2>
+        <h2 class="">{{ 'calendar.year_title'|trans({'%year%': calendar.year}) }}</h2>
     </div>
     <div class="col-md-4 text-md-center">
-    	<h3>{{ 'test.calculations'|trans({count: calculations|length}) }}</h3>
+    	<h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
     </div>
     <div class="col-md-4 text-md-right">
         {% set year = "now"|date('Y') %}
         {% if year != calendar.year %}
-        {% set title = 'test.calendar'|trans({'%year%': year}) %}
+        {% set title = 'calendar.year_title'|trans({'%year%': year}) %}
         <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar') }}">{{ icons.icon('arrows-alt') }}</a>
         {% endif %}
 
         {% set year = calendar.year - 1 %}
-        {% set title = 'test.calendar'|trans({'%year%': year}) %}
+        {% set title = 'calendar.year_title'|trans({'%year%': year}) %}
         <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar', {'year': year}) }}">{{ icons.icon('chevron-left') }}</a>
 
         {% set year = calendar.year + 1 %}
-        {% set title = 'test.calendar'|trans({'%year%': year}) %}
+        {% set title = 'calendar.year_title'|trans({'%year%': year}) %}
         <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar', {'year': year}) }}">{{ icons.icon('chevron-right') }}</a>
     </div>
 </div>

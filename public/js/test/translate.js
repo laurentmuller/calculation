@@ -21,7 +21,8 @@ function translate() {
     $buttonCopy.attr('disabled', 'disabled');
 
     // build parameters
-    $('#text').val($.trim($('#text').val()));
+    $('#text').val($('#text').val().trim());
+    
     const data = {
         'from': $('#from').val(),
         'to': $('#to').val(),
@@ -282,7 +283,7 @@ $(function () {
         rules: {
             text: {
                 normalizer: function (value) {
-                    return $.trim(value);
+                    return value.trim();
                 }
             }
         }

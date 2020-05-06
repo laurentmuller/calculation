@@ -165,20 +165,7 @@ class CalculationRepository extends BaseRepository
             ->having('item_count > 1');
 
         // order column and direction
-        switch ($orderColumn) {
-            case 'id':
-            case 'date':
-            case 'customer':
-            case 'description':
-                $orderColumn = 'c.' . $orderColumn;
-                break;
-            case 'state':
-                $orderColumn = 's.code';
-                break;
-            default:
-                $orderColumn = 'c.id';
-                break;
-        }
+        $orderColumn = $this->getOrder($orderColumn);
         $orderDirection = $this->getDirection($orderDirection, Criteria::DESC);
         $builder->orderBy($orderColumn, $orderDirection);
 
@@ -248,20 +235,7 @@ class CalculationRepository extends BaseRepository
             ->orHaving('item_quantity = 0');
 
         // order column and direction
-        switch ($orderColumn) {
-            case 'id':
-            case 'date':
-            case 'customer':
-            case 'description':
-                $orderColumn = 'c.' . $orderColumn;
-                break;
-            case 'state':
-                $orderColumn = 's.code';
-                break;
-            default:
-                $orderColumn = 'c.id';
-                break;
-        }
+        $orderColumn = $this->getOrder($orderColumn);
         $orderDirection = $this->getDirection($orderDirection, Criteria::DESC);
         $builder->orderBy($orderColumn, $orderDirection);
 
@@ -467,6 +441,29 @@ class CalculationRepository extends BaseRepository
                 return $direction;
             default:
                 return $default;
+        }
+    }
+
+    /**
+     * Gets the full order column name.
+     *
+     * @param string $orderColumn the order column to validate
+     *
+     * @return string the full order column name
+     */
+    private function getOrder(string $column): string
+    {
+        switch ($column) {
+            case 'id':
+            case 'date':
+            case 'customer':
+            case 'description':
+                return 'c.' . $column;
+            case 'state':
+                return 's.code';
+                break;
+            default:
+                return 'c.id';
         }
     }
 }

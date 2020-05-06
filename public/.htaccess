@@ -25,6 +25,10 @@ AddDefaultCharset utf-8
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # redirect all to HTTPS
+    # RewriteCond %{HTTPS} !=on
+    # RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+
     # Determine the RewriteBase automatically and set it as environment variable.
     # If you are using Apache aliases to do mass virtual hosting or installed the
     # project in a subdirectory, the base path will be prepended to allow proper
@@ -60,10 +64,9 @@ AddDefaultCharset utf-8
 
     # Rewrite all other queries to the front controller.
     RewriteRule ^ %{ENV:BASE}/index.php [L]
-    
+
     # RewriteCond %{REQUEST_URI} !^/favicon.ico$
     # RewriteRule ^favicon.ico sites/%{SERVER_NAME}/favicon.ico [NC,L]
-    
 </IfModule>
 
 <IfModule !mod_rewrite.c>
@@ -77,70 +80,70 @@ AddDefaultCharset utf-8
 </IfModule>
 
 <IfModule mod_mime.c>
-	AddType font/woff               woff
-    AddType font/woff2				woff2
+    AddType font/woff               woff
+    AddType font/woff2              woff2
 </IfModule>
 
 <ifmodule mod_expires.c="">
-	  # Turn on Expires and set default to now
-	 ExpiresActive On
-	 ExpiresDefault "now"
-	 	 
-	 # Set up caching on media files for 1 month
-	 <filesmatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav|swf|woff|woff2)$"="">
-	 	ExpiresDefault "access plus 1 month"
-	 </filesmatch>
-	 
-	 # Set up caching on images, CSS and JS files for 1 week
-	 <filesmatch "\.(gif|jpg|jpeg|png|js|css)$"="">
-	 	ExpiresDefault "access plus 1 week"
-	 </filesmatch>
-	
-	 # Set up 1 hour caching on commonly updated files
-	 <filesmatch "\.(xml|xsl|html|htm|txt)$"="">
-	 	ExpiresDefault "access plus 1 hour"
-	 </filesmatch>
-	 
-	 # Force no caching for dynamic files
-	 <filesmatch "\.(php|cgi|pl)$"="">
-	 	ExpiresActive Off
-	 </filesmatch>
+      # Turn on Expires and set default to now
+     ExpiresActive On
+     ExpiresDefault "now"
+
+     # Set up caching on media files for 1 month
+     <filesmatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav|swf|woff|woff2)$"="">
+        ExpiresDefault "access plus 1 month"
+     </filesmatch>
+
+     # Set up caching on images, CSS and JS files for 1 week
+     <filesmatch "\.(gif|jpg|jpeg|png|js|css)$"="">
+        ExpiresDefault "access plus 1 week"
+     </filesmatch>
+
+     # Set up 1 hour caching on commonly updated files
+     <filesmatch "\.(xml|xsl|html|htm|txt)$"="">
+        ExpiresDefault "access plus 1 hour"
+     </filesmatch>
+
+     # Force no caching for dynamic files
+     <filesmatch "\.(php|cgi|pl)$"="">
+        ExpiresActive Off
+     </filesmatch>
 </ifmodule>
 
 # Source: https://github.com/h5bp/server-configs-apache/blob/master/dist/.htaccess
 
 <IfModule mod_headers.c>
-	# ----------------------------------------------------------------------
-	# | Cross-origin web fonts                                             |
-	# ----------------------------------------------------------------------
-	# Allow cross-origin access to web fonts.
-	# https://developers.google.com/fonts/docs/troubleshooting
+    # ----------------------------------------------------------------------
+    # | Cross-origin web fonts                                             |
+    # ----------------------------------------------------------------------
+    # Allow cross-origin access to web fonts.
+    # https://developers.google.com/fonts/docs/troubleshooting
     <FilesMatch "\.(eot|otf|tt[cf]|svg|woff|woff2?)$">
         Header set Access-Control-Allow-Origin "*"
     </FilesMatch>
-    
+
     # see https://kinsta.com/fr/base-de-connaissances/entete-specify-vary-accept-encoding/
     <FilesMatch ".(js|css|xml|gz|html|json)$">
-    	Header append Vary: Accept-Encoding
-  	</FilesMatch>
+        Header append Vary: Accept-Encoding
+    </FilesMatch>
 </IfModule>
 
-<ifmodule mod_headers.c=""> 
-	 # Remote ETag from headers
-	 Header unset ETag
-	 
-	 # Disable ETag for files
-	 FileETag None
+<ifmodule mod_headers.c="">
+     # Remote ETag from headers
+     Header unset ETag
 
-	 # Header set Access-Control-Allow-Origin "*"	 
-	 # Header always set X-Content-Type-Options "nosniff"
-	 
-	 # mod_headers can't match by content-type
-     Header set X-UA-Compatible "IE=Edge,chrome=1"   
-  	 <FilesMatch "\.(appcache|crx|css|eot|gif|htc|ico|jpe?g|js|m4a|m4v|manifest|mp4|oex|oga|ogg|ogv|otf|pdf|png|safariextz|svg|svgz|ttf|vcf|webm|webp|woff|xml|xpi)$">
-	     Header unset X-UA-Compatible
-  	 </FilesMatch>
-     
+     # Disable ETag for files
+     FileETag None
+
+     # Header set Access-Control-Allow-Origin "*"
+     # Header always set X-Content-Type-Options "nosniff"
+
+     # mod_headers can't match by content-type
+     Header set X-UA-Compatible "IE=Edge,chrome=1"
+     <FilesMatch "\.(appcache|crx|css|eot|gif|htc|ico|jpe?g|js|m4a|m4v|manifest|mp4|oex|oga|ogg|ogv|otf|pdf|png|safariextz|svg|svgz|ttf|vcf|webm|webp|woff|xml|xpi)$">
+         Header unset X-UA-Compatible
+     </FilesMatch>
+
      # `mod_headers` cannot match based on the content-type
      Header always set X-Frame-Options "DENY"
      Header always set X-XSS-Protection "1; mode=block"
@@ -148,26 +151,25 @@ AddDefaultCharset utf-8
          Header unset X-Frame-Options
          Header unset X-XSS-Protection
      </FilesMatch>
-	 
-	 # Media files are catchable
-	 <filesmatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav|swf)$"="">
-	 	Header append Cache-Control "public"
-	 </filesmatch>
-	 
-	 # Images, css and javascript files are catchable
-	 <filesmatch "\.(gif|jpg|jpeg|png|js|css)$"="">
-	 	Header append Cache-Control "public"		
-	 </filesmatch>
-	 
-	 # Commonly updated files are catchable
-	 <filesmatch "\.(xml|html|htm|txt)$"="">
-	 	Header append Cache-Control "public"	 	
-	 </filesmatch>
-	 
-	 # Force no caching for dynamic files
-	 <filesmatch "\.(php|cgi|pl|htm)$"="">
-		 Header set Cache-Control "private, no-cache, no-store, proxy-revalidate, no-transform"
-		 Header set Pragma "no-cache"
-	 </filesmatch> 
-	 
+
+     # Media files are catchable
+     <filesmatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav|swf)$"="">
+        Header append Cache-Control "public"
+     </filesmatch>
+
+     # Images, css and javascript files are catchable
+     <filesmatch "\.(gif|jpg|jpeg|png|js|css)$"="">
+        Header append Cache-Control "public"
+     </filesmatch>
+
+     # Commonly updated files are catchable
+     <filesmatch "\.(xml|html|htm|txt)$"="">
+        Header append Cache-Control "public"
+     </filesmatch>
+
+     # Force no caching for dynamic files
+     <filesmatch "\.(php|cgi|pl|htm)$"="">
+         Header set Cache-Control "private, no-cache, no-store, proxy-revalidate, no-transform"
+         Header set Pragma "no-cache"
+     </filesmatch>
 </ifmodule>

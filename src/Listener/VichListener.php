@@ -81,11 +81,11 @@ class VichListener implements EventSubscriberInterface, IImageExtension
 
         // create medium image
         $target = $path . UserNamer::getBaseName($obj, self::SIZE_MEDIUM, $extension);
-        $this->resize($source, $target, self::SIZE_MEDIUM);
+        $this->resizer->resizeMedium($source, $target);
 
         // create small image
         $target = $path . UserNamer::getBaseName($obj, self::SIZE_SMALL, $extension);
-        $this->resize($source, $target, self::SIZE_SMALL);
+        $this->resizer->resizeSmall($source, $target);
     }
 
     /**
@@ -150,40 +150,12 @@ class VichListener implements EventSubscriberInterface, IImageExtension
         $sourceExt = empty($sourceExt) ? self::EXTENSION_PNG : \strtolower($sourceExt);
 
         // resize
-        if ($this->resize($source, $source, self::SIZE_DEFAULT, $sourceExt, self::EXTENSION_PNG)) {
-            // rename if not same extension
-            if (self::EXTENSION_PNG !== $sourceExt) {
-                $newName = \substr_replace($name, self::EXTENSION_PNG, \strrpos($name, '.') + 1);
-                $mapping->setFileName($obj, $newName);
-            }
-        }
-    }
+        $this->resizer->resizeDefault($source, $source);
 
-    /**
-     * Resize the given image.
-     *
-     * @param string $source    the source file
-     * @param string $target    the target file
-     * @param int    $size      the image size
-     * @param string $sourceExt the source file extension or null to use the source file extension
-     * @param string $targetExt the target file extension or null to use the source extension
-     *
-     * @return bool true if the image is resized is successull; false if fail
-     */
-    private function resize(string $source, string $target, int $size = self::SIZE_DEFAULT, ?string $sourceExt = null, ?string $targetExt = null): bool
-    {
-        // get image size
-        list($width, $height) = \getimagesize($source);
-        if ($height > $width) {
-            $height = $size;
-            $width = 0;
-        } elseif ($height < $width) {
-            $height = 0;
-            $width = $size;
-        } else {
-            $height = $width = $size;
+        // rename if not same extension
+        if (self::EXTENSION_PNG !== $sourceExt) {
+            $newName = \substr_replace($name, self::EXTENSION_PNG, \strrpos($name, '.') + 1);
+            $mapping->setFileName($obj, $newName);
         }
-
-        return $this->resizer->resize($source, $target, $height, $width, $sourceExt, $targetExt, false);
     }
 }

@@ -8,19 +8,19 @@ framework:
     session:
         handler_id: 'session.handler.native_file'
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
-        
+
         cookie_path: '%cookie_path%'
-        cookie_samesite: lax        
-        cookie_secure: 'auto'         
+        cookie_samesite: lax
+        cookie_secure: 'auto'
 
     #esi: true
     #fragments: true
     php_errors:
         log: true
-    
+
     # assets
-    assets:   
+    assets:
         base_urls: '%env(asset_base)%'
         packages:
-            local: 
-                base_urls: '%env(asset_locale)%'            
+            local:
+                base_urls: '%env(asset_locale)%'

@@ -15,324 +15,154 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Interfaces\IImageExtension;
-use App\Traits\MathTrait;
-use App\Utils\GifFrameExtractor;
-use App\Utils\ImageHandler;
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\ImagineInterface;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class to resize an image.
+ * Service to resize images.
  *
  * @author Laurent Muller
  */
 class ImageResizer implements IImageExtension
 {
-    use MathTrait;
+    /**
+     * The default options.
+     *
+     * @var array
+     */
+    private const DEFAULT_OPTIONS = [
+        'format' => self::EXTENSION_PNG,
+//         'png_compression_level' => 0,
+//         'resolution-units' => ImageInterface::RESOLUTION_PIXELSPERINCH,
+//         'resolution-x' => 200,
+//         'resolution-y' => 200,
+    ];
 
     /**
-     * Gets image informations.
-     *
-     * Returns a standard class with the following properties:
-     * <ul>
-     * <li><code>width</code>: The image width.</li>
-     * <li><code>height</code>: The image height.</li>
-     * <li><code>ratio</code>: The image ratio (<code>width / height</code>) or <code>false</code> if image height or the image width are equal to 0.</li>
-     * <li><code>dirname</code>: The directory name.</li>
-     * <li><code>basename</code>: The base name.</li>
-     * <li><code>filename</code>: The file name.</li>
-     * <li><code>extension</code>: The file extension.</li>
-     * </ul>
-     *
-     * @param string $imagePath the full image path
+     * @var ImagineInterface
      */
-    public static function getImageInfo(string $imagePath): \stdClass
+    private $imagine;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(LoggerInterface $logger)
     {
-        // file parts
-        $result = (object) \pathinfo($imagePath);
+        $this->logger = $logger;
 
-        // size
-        list($result->width, $result->height) = \getimagesize($imagePath);
-
-        // ratio
-        $result->ratio = (empty($result->height) || empty($result->width)) ? false : $result->width / $result->height;
-
-        return $result;
+        try {
+            $this->imagine = new Imagine();
+        } catch (\Exception $e) {
+            $this->logError($e);
+        }
     }
 
     /**
-     * Gets image resolution.
+     * Resize an image with the given size.
      *
-     * @param string $imagePath the full image path
-     * @param int    $default   the default resolution
+     * @param string $source  the source image path
+     * @param string $target  the target image path
+     * @param int    $size    the image size
+     * @param array  $options the options to use when saving image
      *
-     * @return int the image resolution, if applicable, the default resolution otherwise
+     * @return bool true on success, false on error or if the size is not positive
      */
-    public static function getImageResolution(string $imagePath, int $default = self::DEFAULT_RESOLUTION): int
+    public function resize(string $source, string $target, int $size, array $options = []): bool
     {
-        $result = $default;
-        if (\function_exists('imageresolution')) {
-            $ext = \strtolower(\pathinfo($imagePath, PATHINFO_EXTENSION));
-            switch ($ext) {
-                case self::EXTENSION_BMP:
-                    $image_src = \imagecreatefrombmp($imagePath);
-                    break;
-                case self::EXTENSION_GIF:
-                    $image_src = \imagecreatefromgif($imagePath);
-                    break;
-                case self::EXTENSION_JPEG:
-                case self::EXTENSION_JPG:
-                    $image_src = \imagecreatefromjpeg($imagePath);
-                    break;
-                case self::EXTENSION_PNG:
-                    $image_src = \imagecreatefrompng($imagePath);
-                    break;
-                case self::EXTENSION_XBM:
-                    $image_src = \imagecreatefromxbm($imagePath);
-                    break;
-                default:
-                    $image_src = null;
-                    break;
+        // check values?
+        if (!$this->imagine || $size <= 0) {
+            return  false;
+        }
+
+        try {
+            list($imageWidth, $imageHeight) = \getimagesize($source);
+            $ratio = $imageWidth / $imageHeight;
+
+            $width = $size;
+            $height = $size;
+            if ($width / $height > $ratio) {
+                $width = $height * $ratio;
+            } else {
+                $height = $width / $ratio;
             }
-            if ($image_src) {
-                if ($resolutions = \imageresolution($image_src)) {
-                    $result = $resolutions[0];
-                }
-                \imagedestroy($image_src);
-            }
-        }
 
-        return $result;
-    }
+            // load and resize
+            $image_size = new Box($width, $height);
+            $image = $this->imagine->open($source);
+            $image->resize($image_size);
 
-    /**
-     * Resize an image.
-     *
-     * @param string $source    the source file
-     * @param string $target    the target file
-     * @param int    $height    the new height to resize the image to
-     * @param int    $width     the new width to resize the image to
-     * @param string $sourceExt the source file extension or null to use the source file extension
-     * @param string $targetExt the target file extension or null to use the source extension
-     * @param bool   $square    true to create a square image, false to keep the ratio
-     *
-     * @return bool true if the image is resized is successull; false if fail
-     */
-    public function resize(string $source, string $target, int $height = 0, int $width = 0, ?string $sourceExt = null, ?string $targetExt = null, bool $square = false): bool
-    {
-        // get image informations
-        $info = self::getImageInfo($source);
+            // save
+            $options = \array_merge(self::DEFAULT_OPTIONS, $options);
+            $image->save($target, $options);
 
-        // check ratio
-        if (false === $info->ratio) {
+            return true;
+        } catch (\Exception $e) {
+            $this->logError($e);
+
             return false;
-        }
-
-        // resize dimensions are bigger than original image, stop processing
-        $src_width = $info->width;
-        $src_height = $info->height;
-        if ($width > $src_width && $height > $src_height) {
-            return false;
-        }
-
-        // set sizes
-        $dest_height = $height;
-        $dest_width = $width;
-        if ($height > 0) {
-            $width = (int) \round($height * $info->ratio);
-            $dest_width = $square ? $height : $width;
-        } elseif ($width > 0) {
-            $height = (int) \round($width / $info->ratio);
-            $dest_height = $square ? $width : $height;
-        }
-
-        // offsets
-        $dest_x = (int) \round(($dest_width - $width) / 2);
-        $dest_y = (int) \round(($dest_height - $height) / 2);
-
-        // create image destination
-        if (!$image_dest = ImageHandler::fromTrueColor($dest_width, $dest_height)) {
-            return false;
-        }
-
-        // load image sourceTwigColumn
-        $sourceExt = $sourceExt ?: $info->extension;
-        if (!$image_src = $this->loadImage($source, $sourceExt)) {
-            return false;
-        }
-
-        //if ($square || $this->mustFillImage($sourceExt)) {
-        $color = $image_dest->allocateAlpha();
-        $image_dest->transparent($color);
-        $image_dest->fill($color);
-        $image_dest->alphaBlending(false);
-        $image_dest->saveAlpha(true);
-        //}
-
-        // copy and resize
-        if (!$image_src->copyResampled($image_dest, $dest_x, $dest_y, 0, 0, $width, $height, $src_width, $src_height)) {
-            return false;
-        }
-//         if (!\imagecopyresampled($image_dest, $image_src, $dest_x, $dest_y, 0, 0, $width, $height, $src_width, $src_height)) {
-//             return false;
-//         }
-
-        // save
-        $targetExt = $targetExt ?: $sourceExt;
-
-        return $this->saveImage($image_dest, $target, $targetExt);
-    }
-
-//     /**
-//      * Finds the first unused color.
-//      *
-//      * @param array $colors the image colors
-//      *
-//      * @return int an unused color or -1 if none
-//      */
-//     private function findUnusedColor(array $colors): int
-//     {
-//         for ($i = 0; $i < 0xFFFFFF; ++$i) {
-//             if (!\in_array($i, $colors, true)) {
-//                 return $i;
-//             }
-//         }
-
-//         return -1;
-//     }
-
-//     /**
-//      * Gets all used colors of the given image.
-//      *
-//      * @param resource $image  the image resource
-//      * @param int      $width  the image width
-//      * @param int      $height the image height
-//      *
-//      * @return array the used colors
-//      */
-//     private function getImageColors($image, $width, $height): array
-//     {
-//         $result = [];
-//         for ($i = 0; $i < $width; ++$i) {
-//             for ($j = 0; $j < $height; ++$j) {
-//                 $rgb = \imagecolorat($image, $i, $j);
-//                 $result[$rgb] = $rgb;
-//             }
-//         }
-
-//         return $result;
-//     }
-
-    /**
-     * Gets the GIF image.
-     *
-     * @param string $fileName the path to the GIF image
-     *
-     * @return ImageHandler|bool an image resource identifier on success, false on errors
-     */
-    private function imagecreatefromgif(string $fileName)
-    {
-        // see https://blog.lifetimecode.com/2015/12/06/how-to-resize-animated-gif-withou/
-        if (GifFrameExtractor::isAnimatedGif($fileName)) {
-            // replace image with the first frame
-            $extractor = new GifFrameExtractor();
-            $frames = $extractor->extract($fileName);
-            $image = $frames[0]['image'];
-            $result = \imagegif($image, $fileName);
-            $extractor->closeFile();
-
-            if (!$result) {
-                return false;
-            }
-        }
-
-        return ImageHandler::fromGif($fileName);
-    }
-
-    /**
-     * Loads an image.
-     *
-     * @param string $file the path to load the image from
-     * @param string $ext  the file extension or null to take the extension from the file
-     *
-     * @return ImageHandler|null an image handler on success; null on errors
-     */
-    private function loadImage(string $file, ?string $ext)
-    {
-        $ext = empty($ext) ? self::getImageInfo($file)->extension : $ext;
-        switch (\strtolower($ext)) {
-            case self::EXTENSION_BMP:
-                return ImageHandler::fromBmp($file);
-
-            case self::EXTENSION_GIF:
-                return $this->imagecreatefromgif($file);
-
-            case self::EXTENSION_JPEG:
-            case self::EXTENSION_JPG:
-                return ImageHandler::fromJpeg($file);
-
-            case self::EXTENSION_PNG:
-                return ImageHandler::fromPng($file);
-
-            case self::EXTENSION_XBM:
-                return ImageHandler::fromXbm($file);
-
-            default:
-                // format not supported
-                return null;
         }
     }
 
     /**
-     * Returns if the given image must filled.
+     * Resize the given image with the default size (192 pixels).
      *
-     * @param string $ext the file extension
+     * @param string $source  the source image path
+     * @param string $target  the target image path
+     * @param array  $options the options to use when saving image
      *
-     * @return bool true if must filled
+     * @return bool true on success, false on error
      */
-    private function mustFillImage(string $ext): bool
+    public function resizeDefault(string $source, string $target, array $options = []): bool
     {
-        switch (\strtolower($ext)) {
-            case self::EXTENSION_GIF:
-            case self::EXTENSION_PNG:
-            // case self::EXTENSION_JPG:
-            // case self::EXTENSION_JPEG:
-                return true;
-            default:
-                return false;
-        }
+        return $this->resize($source, $target, self::SIZE_DEFAULT, $options);
     }
 
     /**
-     * Saves an image.
+     * Resize the given image with the medium size (96 pixels).
      *
-     * @param ImageHandler $image the image to save
-     * @param string       $file  the path to save the image to
-     * @param string       $ext   the file extension or null to take the extension from the file
+     * @param string $source  the source image path
+     * @param string $target  the target image path
+     * @param array  $options the options to use when saving image
      *
-     * @return bool true on success; false on failure
+     * @return bool true on success, false on error
      */
-    private function saveImage(ImageHandler $image, string $file, ?string $ext): bool
+    public function resizeMedium(string $source, string $target, array $options = []): bool
     {
-        $ext = empty($ext) ? self::getImageInfo($file)->extension : $ext;
-        switch (\strtolower($ext)) {
-            case self::EXTENSION_BMP:
-                return $image->toBmp($file);
+        return $this->resize($source, $target, self::SIZE_MEDIUM, $options);
+    }
 
-            case self::EXTENSION_GIF:
-                return $image->toGif($file);
+    /**
+     * Resize the given image with the small size (32 pixels).
+     *
+     * @param string $source  the source image path
+     * @param string $target  the target image path
+     * @param array  $options the options to use when saving image
+     *
+     * @return bool true on success, false on error
+     */
+    public function resizeSmall(string $source, string $target, array $options = []): bool
+    {
+        return $this->resize($source, $target, self::SIZE_SMALL, $options);
+    }
 
-            case self::EXTENSION_JPEG:
-            case self::EXTENSION_JPG:
-                return $image->toJpeg($file, 100);
-
-            case self::EXTENSION_PNG:
-                return $image->toPng($file);
-
-            case self::EXTENSION_XBM:
-                return $image->toXbm($file);
-
-            default:
-                // format not supported
-                return false;
-        }
+    /**
+     * Logs the given exception.
+     *
+     * @param \Exception $e the exception to log
+     */
+    private function logError(\Exception $e): void
+    {
+        $context = [
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ];
+        $this->logger->error($e->getMessage(), $context);
     }
 }

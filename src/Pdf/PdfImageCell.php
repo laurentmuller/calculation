@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Interfaces\IImageExtension;
-use App\Service\ImageResizer;
 use App\Traits\MathTrait;
 
 /**
@@ -55,12 +54,12 @@ class PdfImageCell extends PdfCell implements IImageExtension
      */
     protected $path;
 
-    /**
-     * The resolution in dot per each (DPI).
-     *
-     * @var int
-     */
-    protected $resolution;
+//     /**
+//      * The resolution in dot per each (DPI).
+//      *
+//      * @var int
+//      */
+//     protected $resolution;
 
     /**
      * The image width.
@@ -91,7 +90,6 @@ class PdfImageCell extends PdfCell implements IImageExtension
         list($this->width, $this->height) = \getimagesize($path);
         $this->originalWidth = $this->width;
         $this->originalHeight = $this->height;
-        $this->resolution = ImageResizer::getImageResolution($path);
     }
 
     /**
@@ -168,7 +166,7 @@ class PdfImageCell extends PdfCell implements IImageExtension
     }
 
     /**
-     * Gets the full image path.
+     * Gets the image path.
      */
     public function getPath(): string
     {
@@ -181,14 +179,6 @@ class PdfImageCell extends PdfCell implements IImageExtension
     public function getRatio(): float
     {
         return $this->safeDivide($this->width, $this->height, 1);
-    }
-
-    /**
-     * Gets the resolution in dot per each (DPI).
-     */
-    public function getResolution(): int
-    {
-        return $this->resolution;
     }
 
     /**
@@ -214,8 +204,8 @@ class PdfImageCell extends PdfCell implements IImageExtension
      *
      * If both height and width arguments are equal to 0, the new width and height are equals to original size.
      *
-     * @param int $height the new height or 0 to take the width as reference
-     * @param int $width  the new width or 0 to take the height as reference
+     * @param int $height the new height or 0 to take the original width as reference
+     * @param int $width  the new width or 0 to take the original height as reference
      */
     public function resize(int $height = 0, int $width = 0): self
     {

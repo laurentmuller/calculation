@@ -37,8 +37,8 @@ parameters:
     mailer_user_email: calculation@bibi.nu
     
     #links
-    dev_link: '%env(dev_link)%'
-    prod_link: '%env(prod_link)%'
+    link_dev: '%env(link_dev)%'
+    link_prod: '%env(link_prod)%'
     
 services:
     # default configuration for services in *this* file

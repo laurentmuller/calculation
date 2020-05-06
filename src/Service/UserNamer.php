@@ -38,7 +38,7 @@ class UserNamer implements NamerInterface, IImageExtension
      */
     public static function getBaseName(User $user, int $size, ?string $ext = null): string
     {
-        $name = \sprintf('USER_%06d_%03d', $user->getId(), $size);
+        $name = \sprintf('USER_%06d_%03d', (int) $user->getId(), $size);
         if ($ext) {
             return "{$name}.{$ext}";
         }

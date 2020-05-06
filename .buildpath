@@ -146,6 +146,11 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/imagine/imagine/src">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/jdorn/sql-formatter/lib">
 		<attributes>
 			<attribute name="composer" value="vendor"/>

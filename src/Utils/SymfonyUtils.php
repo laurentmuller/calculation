@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -343,95 +342,6 @@ final class SymfonyUtils
         }
 
         return $result;
-    }
-
-    /**
-     * Gets MySQL configuration.
-     *
-     * @return array an array with each row containing 2 columns ('Variable_name' and 'Value)
-     */
-    public static function getSqlConfiguration(EntityManagerInterface $manager): array
-    {
-        $result = [];
-
-        try {
-            $sql = 'SHOW VARIABLES';
-
-            /** @var \Doctrine\DBAL\Connection $connection */
-            $connection = $manager->getConnection();
-
-            /** @var \PDOStatement $statement */
-            $statement = $connection->prepare($sql);
-
-            if ($statement->execute()) {
-                $values = $statement->fetchAll();
-                $statement->closeCursor();
-
-                return \array_filter($values, function ($key) {
-                    return 0 !== \strlen($key['Value']);
-                });
-            }
-        } catch (\Exception $e) {
-            // ignore
-        }
-
-        return $result;
-    }
-
-    /**
-     * Gets the database configuration.
-     *
-     * @return array the database server informations
-     */
-    public static function getSqlDatabase(EntityManagerInterface $manager): array
-    {
-        $result = [];
-
-        try {
-            $params = $manager->getConnection()->getParams();
-            foreach (['dbname', 'host', 'port', 'driver'] as $key) {
-                $result[$key] = $params[$key] ?? null;
-            }
-
-            return \array_filter($result, function ($value) {
-                return Utils::isString($value);
-            });
-        } catch (\Exception $e) {
-            // ignore
-        }
-
-        return $result;
-    }
-
-    /**
-     * Gets MySQL server version.
-     *
-     * @return string the server version or "<code>Unknown</code>" if an error occurs
-     */
-    public static function getSqlVersion(EntityManagerInterface $manager): string
-    {
-        try {
-            $sql = 'SHOW VARIABLES LIKE "version"';
-
-            /** @var \Doctrine\DBAL\Connection $connection */
-            $connection = $manager->getConnection();
-
-            /** @var \PDOStatement $statement */
-            $statement = $connection->prepare($sql);
-
-            if ($statement->execute()) {
-                $result = $statement->fetch();
-                $statement->closeCursor();
-
-                if (false !== $result) {
-                    return $result['Value'];
-                }
-            }
-        } catch (\Exception $e) {
-            // ignore
-        }
-
-        return 'Unknown';
     }
 
     private static function convert($var)

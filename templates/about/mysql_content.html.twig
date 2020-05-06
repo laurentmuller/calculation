@@ -21,8 +21,8 @@
 
         {# configuration #}
         {{ tools.headerInfo('Configuration') }}
-        {% for entry in configuration %}
-	        {{ tools.rowInfo(entry.Variable_name, entry.Value) }}
+         {% for key, value in configuration %}
+            {{ tools.rowInfo(key, value) }}
         {% endfor %}
         </tbody>
     </table>

@@ -22,7 +22,8 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseNullableUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use ReCaptcha\ReCaptcha;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,29 +52,21 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
     use TranslatorFlashMessageTrait;
 
     /**
-     * The application.
-     *
      * @var ApplicationService
      */
     private $application;
 
     /**
-     * The container.
-     *
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * The URL generator.
-     *
      * @var UrlGeneratorInterface
      */
     private $generator;
 
     /**
-     * The captcha service.
-     *
+     * @var ParameterBagInterface
+     */
+    private $params;
+
+    /**
      * @var CaptchaImageService
      */
     private $service;
@@ -88,7 +81,7 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
     /**
      * Constructor.
      *
-     * @param ContainerInterface    $container           the container
+     * @param ParameterBagInterface $params              the parameters bag
      * @param SessionInterface      $session             the session
      * @param TranslatorInterface   $translator          the translator
      * @param UrlGeneratorInterface $generator           the URL generator
@@ -96,9 +89,9 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
      * @param ApplicationService    $application         the application service
      * @param string                $switchParameterName the switch user parameter name in query
      */
-    public function __construct(ContainerInterface $container, SessionInterface $session, TranslatorInterface $translator, UrlGeneratorInterface $generator, CaptchaImageService $service, ApplicationService $application, string $switchParameterName = '_switch_user')
+    public function __construct(ParameterBagInterface $params, SessionInterface $session, TranslatorInterface $translator, UrlGeneratorInterface $generator, CaptchaImageService $service, ApplicationService $application, string $switchParameterName = '_switch_user')
     {
-        $this->container = $container;
+        $this->params = $params;
         $this->session = $session;
         $this->translator = $translator;
         $this->generator = $generator;
@@ -258,11 +251,11 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
      *
      * @return mixed the parameter value
      *
-     * @throws \InvalidArgumentException if the parameter is not defined
+     * @throws ParameterNotFoundException if the parameter is not defined
      */
     private function getParameter(string $name)
     {
-        return $this->container->getParameter($name);
+        return $this->params->get($name);
     }
 
     /**

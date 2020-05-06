@@ -24,9 +24,9 @@ use App\Service\OpenWeatherService;
 use App\Service\SwissPostService;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
+use App\Utils\DatabaseInfo;
 use App\Utils\SymfonyUtils;
 use App\Utils\Utils;
-use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
@@ -83,12 +83,12 @@ class AjaxController extends BaseController
      * @Route("/mysql", name="ajax_mysql")
      * @IsGranted("ROLE_USER")
      */
-    public function aboutMySql(EntityManagerInterface $manager): JsonResponse
+    public function aboutMySql(DatabaseInfo $info): JsonResponse
     {
         $parameters = [
-            'version' => SymfonyUtils::getSqlVersion($manager),
-            'database' => SymfonyUtils::getSqlDatabase($manager),
-            'configuration' => SymfonyUtils::getSqlConfiguration($manager),
+            'version' => $info->getVersion(),
+            'database' => $info->getDatabase(),
+            'configuration' => $info->getConfiguration(),
         ];
         $content = $this->renderView('about/mysql_content.html.twig', $parameters);
 

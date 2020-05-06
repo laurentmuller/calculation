@@ -21,7 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
  *
  * @author Laurent Muller
  */
-class DatabaseUtils
+class DatabaseInfo
 {
     private EntityManagerInterface $manager;
 
@@ -36,7 +36,7 @@ class DatabaseUtils
     /**
      * Gets database variables.
      *
-     * @return array an array with each row containing 2 columns ('Variable_name' and 'Value)
+     * @return array an array of variables with name as key and value.
      */
     public function getConfiguration(): array
     {
@@ -44,19 +44,20 @@ class DatabaseUtils
 
         try {
             $sql = 'SHOW VARIABLES';
-
             $connection = $this->getConnection();
-
-            /** @var \Doctrine\DBAL\Driver\Statement $statement */
             $statement = $connection->prepare($sql);
 
             if ($statement->execute()) {
-                $values = $statement->fetchAll();
+                $entries = $statement->fetchAll();
                 $statement->closeCursor();
 
-                return \array_filter($values, function ($key) {
-                    return 0 !== \strlen($key['Value']);
-                });
+                // convert
+                foreach ($entries as $entry) {
+                    if (0 !== \strlen($entry['Value'])) {
+                        $key = $entry['Variable_name'];
+                        $result[$key] = $entry['Value'];
+                    }
+                }
             }
         } catch (\Exception $e) {
             // ignore
@@ -66,9 +67,7 @@ class DatabaseUtils
     }
 
     /**
-     * Gets the database configuration.
-     *
-     * @return array the database server informations
+     * Gets the database server informations.
      */
     public function getDatabase(): array
     {
@@ -92,17 +91,12 @@ class DatabaseUtils
 
     /**
      * Gets database version.
-     *
-     * @return string the server version or "<code>Unknown</code>" if an error occurs
      */
     public function getVersion(): string
     {
         try {
             $sql = 'SHOW VARIABLES LIKE "version"';
-
             $connection = $this->getConnection();
-
-            /** @var \Doctrine\DBAL\Driver\Statement $statement */
             $statement = $connection->prepare($sql);
 
             if ($statement->execute()) {

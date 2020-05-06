@@ -34,7 +34,6 @@ trait NumberFormatterTrait
      */
     public function localeAmount($number): string
     {
-        // sprintf("%0.2f", (float) $number);
         static $priceFormatter;
         if (!$priceFormatter) {
             $priceFormatter = $this->getNumberFormatter(NumberFormatter::DECIMAL, 2);

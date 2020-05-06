@@ -140,9 +140,6 @@ class ResponseSubscriber implements EventSubscriberInterface
         if (!$event->isMasterRequest()) {
             return;
         }
-        if ($this->debug) {
-            //return;
-        }
 
         // get values
         $request = $event->getRequest();
@@ -218,9 +215,9 @@ class ResponseSubscriber implements EventSubscriberInterface
 
         // reporting
         // see: https://mathiasbynens.be/notes/csp-reports
-        // if ($this->debug) {
-        // $csp['report-uri'] = $this->reportUrl;
-        // }
+        if ($this->debug) {
+            $csp['report-uri'] = $this->reportUrl;
+        }
 
         // build
         $result = '';

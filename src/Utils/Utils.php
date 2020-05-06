@@ -80,7 +80,6 @@ final class Utils
      */
     public static function capitalize(string $string, string $encoding = 'UTF-8'): string
     {
-        // ucfirst(strtolower($bar));
         $first = \mb_strtoupper(\mb_substr($string, 0, 1, $encoding), $encoding);
         $other = \mb_strtolower(\mb_substr($string, 1, null, $encoding), $encoding);
 

@@ -172,20 +172,4 @@ class PivotField implements \JsonSerializable
 
         return $this;
     }
-
-    /**
-     * Gets a textual representation of this method.
-     */
-    private function getMethodName(): string
-    {
-        switch ($this->method) {
-            case self::METHOD_FLOAT:
-                   return 'float';
-            case self::METHOD_INTEGER:
-                return 'integer';
-            case self::METHOD_STRING:
-            default:
-                return 'string';
-        }
-    }
 }

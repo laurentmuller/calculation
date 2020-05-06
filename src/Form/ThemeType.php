@@ -18,7 +18,6 @@ use App\Entity\Theme;
 use App\Service\ThemeService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to select a theme.
@@ -60,20 +59,13 @@ class ThemeType extends AbstractType
     private $service;
 
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * Constructor.
      *
-     * @param ThemeService        $service    the service to get themes
-     * @param TranslatorInterface $translator the translator service
+     * @param ThemeService $service the service to get themes
      */
-    public function __construct(ThemeService $service, TranslatorInterface $translator)
+    public function __construct(ThemeService $service)
     {
         $this->service = $service;
-        $this->translator = $translator;
     }
 
     /**

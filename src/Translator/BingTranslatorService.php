@@ -164,11 +164,6 @@ class BingTranslatorService extends AbstractTranslatorService
             }
         }
 
-        // to
-        // if (!$to = $this->getProperty($translation, 'to')) {
-        //     return false;
-        // }
-
         return [
             'source' => $text,
             'target' => $target,

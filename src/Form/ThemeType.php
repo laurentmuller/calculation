@@ -96,29 +96,6 @@ class ThemeType extends AbstractType
         return '';
     }
 
-    private function addBackgroundField(FormHelper $helper): self
-    {
-        // concat
-        $choices = [];
-        foreach (self::$BACKGROUND_CHOICES as $keyBackground => $valueBackground) {
-            foreach (self::$FOREGROUND_CHOICES as $keyForeground => $valueForeground) {
-                $key = $this->trans($keyBackground) . ' - ' . $this->trans($keyForeground);
-                $value = "{$valueForeground} {$valueBackground}";
-                $choices[$key] = $value;
-            }
-        }
-
-        // remove uncontrasted values
-        $choices = \array_diff($choices, ['navbar-light bg-dark', 'navbar-dark bg-light', 'navbar-dark bg-white']);
-
-        $helper->field('background')
-            ->label('theme.fields.background')
-            ->updateOption('choice_translation_domain', false)
-            ->addChoiceType($choices);
-
-        return $this;
-    }
-
     /**
      * Adds the CSS field.
      */

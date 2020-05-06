@@ -78,9 +78,8 @@ class HtmlParser
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
      * @param string          $class  the optional class name
-     * @param \DOMNode        $node   the current node
      */
-    private function createBrChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlBrChunk
+    private function createBrChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlBrChunk
     {
         $chunk = new HtmlBrChunk($name, $parent);
         $chunk->setClassName($class);
@@ -94,9 +93,8 @@ class HtmlParser
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
      * @param string          $class  the optional class name
-     * @param \DOMNode        $node   the current node
      */
-    private function createLiChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlLiChunk
+    private function createLiChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlLiChunk
     {
         $chunk = new HtmlLiChunk($name, $parent);
         $chunk->setClassName($class);
@@ -141,9 +139,8 @@ class HtmlParser
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
      * @param string          $class  the optional class name
-     * @param \DOMNode        $node   the current node
      */
-    private function createParentChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlParentChunk
+    private function createParentChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlParentChunk
     {
         $chunk = new HtmlParentChunk($name, $parent);
         $chunk->setClassName($class);
@@ -181,9 +178,8 @@ class HtmlParser
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
      * @param string          $class  the optional class name
-     * @param \DOMNode        $node   the current node
      */
-    private function createUlChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlUlChunk
+    private function createUlChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlUlChunk
     {
         $chunk = new HtmlUlChunk($name, $parent);
         $chunk->setClassName($class);
@@ -286,15 +282,15 @@ class HtmlParser
                 if (HtmlChunk::PAGE_BREAK === $class) {
                     $this->createPageBreakChunk($name, $parent, $class, $node);
                 } elseif (HtmlChunk::LINE_BREAK === $name) {
-                    $this->createBrChunk($name, $parent, $class, $node);
+                    $this->createBrChunk($name, $parent, $class);
                 } elseif (HtmlChunk::LIST_ITEM === $name) {
-                    $parent = $this->createLiChunk($name, $parent, $class, $node);
+                    $parent = $this->createLiChunk($name, $parent, $class);
                 } elseif (HtmlChunk::LIST_ORDERED === $name) {
                     $parent = $this->createOlChunk($name, $parent, $class, $node);
                 } elseif (HtmlChunk::LIST_UNORDERED === $name) {
-                    $parent = $this->createUlChunk($name, $parent, $class, $node);
+                    $parent = $this->createUlChunk($name, $parent, $class);
                 } else {
-                    $parent = $this->createParentChunk($name, $parent, $class, $node);
+                    $parent = $this->createParentChunk($name, $parent, $class);
                 }
                 break;
 

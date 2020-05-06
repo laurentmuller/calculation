@@ -34,16 +34,6 @@ class CustomerDataTable extends EntityDataTable
      */
     public const ID = Customer::class;
 
-    /*
-     * the name and company fields
-     */
-    private static $NAME_COMPANY_FIELDS = ['lastName', 'firstName', 'company'];
-
-    /*
-     * the zip code and city fields
-     */
-    private static $ZIP_CITY_FIELDS = ['zipCode', 'city'];
-
     /**
      * Constructor.
      *

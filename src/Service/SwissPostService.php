@@ -308,7 +308,7 @@ class SwissPostService
             while ($process && false !== ($data = \fgetcsv($stream, 0, ';'))) {
                 switch ((int) $data[0]) {
                     case self::REC_VALIDITY:
-                        if (!$validity = $this->processValidity($data, null)) {
+                        if (!$validity = $this->processValidity($data)) {
                             return [
                                 'valid' => false,
                                 'message' => $this->trans('import.error.no_validity', ['%name%' => $name]),
@@ -539,11 +539,10 @@ class SwissPostService
      * Process the validity record.
      *
      * @param array    $data   the data to process
-     * @param resource $handle the file handle to write to
      *
      * @return \DateTime|null the validity date or null on failure
      */
-    private function processValidity(array $data, $handle): ?\DateTime
+    private function processValidity(array $data): ?\DateTime
     {
         if (\count($data) > 1 && false !== $date = \DateTime::createFromFormat(self::DATE_PATTERN, $data[1])) {
             return $date->setTime(0, 0, 0, 0);

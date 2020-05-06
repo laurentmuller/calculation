@@ -22,7 +22,6 @@ use App\Service\ApplicationService;
 use DataTables\DataTablesInterface;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -43,11 +42,6 @@ class CategoryDataTable extends EntityDataTable
     private $environment;
 
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * Constructor.
      *
      * @param ApplicationService  $application the application to get parameters
@@ -55,13 +49,11 @@ class CategoryDataTable extends EntityDataTable
      * @param DataTablesInterface $datatables  the datatables to handle request
      * @param CategoryRepository  $repository  the repository to get entities
      * @param Environment         $environment the Twig environment to render cells
-     * @param TranslatorInterface $translator  the service to translate messages
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CategoryRepository $repository, Environment $environment, TranslatorInterface $translator)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CategoryRepository $repository, Environment $environment)
     {
         parent::__construct($application, $session, $datatables, $repository);
         $this->environment = $environment;
-        $this->translator = $translator;
     }
 
     /**

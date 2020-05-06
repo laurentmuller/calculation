@@ -130,42 +130,6 @@ class ParametersType extends AbstractType implements IApplicationService
     }
 
     /**
-     * Formats a date.
-     *
-     * @param string    $key      the translation id
-     * @param int       $datetype the date type
-     * @param \DateTime $date     the date to format
-     *
-     * @return string the formatted date
-     */
-    private function formatDate(string $key, int $datetype, \DateTime $date): string
-    {
-        $date = $this->localeDate($date, $datetype);
-
-        return $this->trans($key, [
-            '%date%' => $date,
-        ]);
-    }
-
-    /**
-     * Formats a a date as time.
-     *
-     * @param string    $key      the translation id
-     * @param int       $timeType the time type
-     * @param \DateTime $date     the date to format
-     *
-     * @return string the formatted date
-     */
-    private function formatTime(string $key, int $timeType, \DateTime $date): string
-    {
-        $date = $this->localeTime($date, $timeType);
-
-        return $this->trans($key, [
-            '%date%' => $date,
-        ]);
-    }
-
-    /**
      * Gets the message position choices.
      */
     private function getPositions(): array

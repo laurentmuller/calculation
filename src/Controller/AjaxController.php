@@ -104,13 +104,13 @@ class AjaxController extends BaseController
      * @Route("/php", name="ajax_php")
      * @IsGranted("ROLE_USER")
      */
-    public function aboutPhp(): JsonResponse
+    public function aboutPhp(Request $request): JsonResponse
     {
         $parameters = [
             'phpInfo' => SymfonyUtils::getPhpInfoHtml(),
             'cache' => $this->getCacheClass(),
             'extensions' => $this->getLoadedExtensions(),
-            'apache' => $this->getApacheVersion(),
+            'apache' => $this->getApacheVersion($request),
         ];
         $content = $this->renderView('about/php_content.html.twig', $parameters);
 
@@ -877,8 +877,9 @@ class AjaxController extends BaseController
      *
      * @return string|bool the Apache version on success or <code>false</code> on failure
      */
-    private function getApacheVersion()
+    private function getApacheVersion(Request $request)
     {
+        //$request->server
         $matches = [];
         $regex = '/Apache\/(?P<version>[1-9][0-9]*\.[0-9][^\s]*)/i';
 
@@ -888,13 +889,15 @@ class AjaxController extends BaseController
             }
         }
 
-        if (!empty($_SERVER['SERVER_SOFTWARE']) && false !== \stripos($_SERVER['SERVER_SOFTWARE'], 'apache')) {
-            if (\preg_match($regex, $_SERVER['SERVER_SOFTWARE'], $matches)) {
+        $server = $request->server;
+        $software = $server->get('SERVER_SOFTWARE', false);
+        if ($software && false !== \stripos($software, 'apache')) {
+            if (\preg_match($regex, $software, $matches)) {
                 return $matches['version'];
             }
         }
 
-        return false; // unable to determine.
+        return false;
     }
 
     /**

@@ -84,29 +84,13 @@ class DatabaseLogService extends AbstractProcessingHandler
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function write(array $record): void
-    {
-        try {
-            // create
-            $data = $this->createData($record);
-
-            // save
-            $this->insertData($data);
-        } catch (\Exception $e) {
-            // ignore
-        }
-    }
-
-    /**
      * Convert a record to a log entries.
      *
      * @param array $record the record to convert
      *
      * @return array an associative array containing column-value pairs
      */
-    private function createData(array $record): array
+    protected function createData(array $record): array
     {
         $extra = null;
         if (\is_array($record['extra'])) {
@@ -136,7 +120,7 @@ class DatabaseLogService extends AbstractProcessingHandler
      *
      * @return Log the log entry
      */
-    private function createLog(array $record): Log
+    protected function createLog(array $record): Log
     {
         $log = new Log();
 
@@ -159,8 +143,24 @@ class DatabaseLogService extends AbstractProcessingHandler
      *
      * @return int the number of affected rows
      */
-    private function insertData(array $data): int
+    protected function insertData(array $data): int
     {
         return $this->connection->insert($this->tableName, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function write(array $record): void
+    {
+        try {
+            // create
+            $data = $this->createData($record);
+
+            // save
+            $this->insertData($data);
+        } catch (\Exception $e) {
+            // ignore
+        }
     }
 }

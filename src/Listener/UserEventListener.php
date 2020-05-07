@@ -227,6 +227,46 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
     }
 
     /**
+     * Validate the reCaptcha token.
+     *
+     * @param Request $request the request
+     *
+     * @return string|null the error message if fail, null if valid
+     */
+    protected function validateRecaptcha(Request $request): ?string
+    {
+        // captcha used?
+        if (!$this->application->isDisplayCaptcha()) {
+            return null;
+        }
+
+        // get values
+        $site_action = 'login';
+        $token = $request->request->get('_recaptcha');
+        $hostname = $request->server->get('HTTP_HOST');
+        $secret = $this->getParameter('recaptcha_secret');
+
+        // initialize
+        $recaptcha = new ReCaptcha($secret);
+        $recaptcha->setExpectedAction($site_action)
+            ->setExpectedHostname($hostname)
+            ->setChallengeTimeout(60)
+            ->setScoreThreshold(0.5);
+
+        // verify
+        $result = $recaptcha->verify($token);
+        if ($result->isSuccess()) {
+            return null;
+        }
+
+        // build error
+        $errors = $result->getErrorCodes();
+        $error = empty($errors) ? 'unknown-error' : $errors[0];
+
+        return "recaptcha.{$error}";
+    }
+
+    /**
      * Generates a URL or path for a specific route.
      *
      * @param string $route         the name of the route
@@ -299,45 +339,5 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
         } else {
             return null;
         }
-    }
-
-    /**
-     * Validate the reCaptcha token.
-     *
-     * @param Request $request the request
-     *
-     * @return string|null the error message if fail, null if valid
-     */
-    protected function validateRecaptcha(Request $request): ?string
-    {
-        // captcha used?
-        if (!$this->application->isDisplayCaptcha()) {
-            return null;
-        }
-
-        // get values
-        $site_action = 'login';
-        $token = $request->request->get('_recaptcha');
-        $hostname = $request->server->get('HTTP_HOST');
-        $secret = $this->getParameter('recaptcha_secret');
-
-        // initialize
-        $recaptcha = new ReCaptcha($secret);
-        $recaptcha->setExpectedAction($site_action)
-            ->setExpectedHostname($hostname)
-            ->setChallengeTimeout(60)
-            ->setScoreThreshold(0.5);
-
-        // verify
-        $result = $recaptcha->verify($token);
-        if ($result->isSuccess()) {
-            return null;
-        }
-
-        // build error
-        $errors = $result->getErrorCodes();
-        $error = empty($errors) ? 'unknown-error' : $errors[0];
-
-        return "recaptcha.{$error}";
     }
 }

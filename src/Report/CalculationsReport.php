@@ -16,8 +16,8 @@ namespace App\Report;
 
 use App\Controller\BaseController;
 use App\Entity\Calculation;
-use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;

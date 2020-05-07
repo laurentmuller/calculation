@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfColor;
+use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfTextColor;
@@ -453,6 +453,88 @@ abstract class HtmlChunk implements HtmlConstantsInterface, PdfConstantsInterfac
     }
 
     /**
+     * Parses the border class.
+     *
+     * @param HtmlStyle $style the style to update
+     * @param string    $class the border class name
+     */
+    protected function parseBorders(HtmlStyle &$style, string $class): void
+    {
+        switch ($class) {
+            case 'border':
+                $style->setBorder(self::BORDER_ALL);
+                break;
+
+            case 'border-top':
+                $style->setBorder(self::BORDER_TOP);
+                break;
+
+            case 'border-right':
+                $style->setBorder(self::BORDER_RIGHT);
+                break;
+
+            case 'border-bottom':
+                $style->setBorder(self::BORDER_BOTTOM);
+                break;
+
+            case 'border-left':
+                $style->setBorder(self::BORDER_LEFT);
+                break;
+
+            case 'border-0':
+                $style->setBorder(self::BORDER_NONE);
+                break;
+
+            case 'border-top-0':
+
+                break;
+            case 'border-right-0':
+                break;
+            case 'border-bottom-0':
+                break;
+            case 'border-left-0':
+                break;
+        }
+    }
+
+    /**
+     * Parses the margins class.
+     *
+     * @param HtmlStyle $style the style to update
+     * @param string    $class the margins class name
+     */
+    protected function parseMargins(HtmlStyle &$style, string $class): void
+    {
+        $pattern = '/m[tblrxy]{0,1}-[012345]/';
+        if (\preg_match($pattern, $class)) {
+            $value = (float) $class[-1];
+            switch ($class[1]) {
+                case 't':
+                    $style->setTopMargin($value);
+                    break;
+                case 'b':
+                    $style->setBottomMargin($value);
+                    break;
+                case 'l':
+                    $style->setLeftMargin($value);
+                    break;
+                case 'r':
+                    $style->setRightMargin($value);
+                    break;
+                case 'x':
+                    $style->setXMargins($value);
+                    break;
+                case 'y':
+                    $style->setYMargins($value);
+                    break;
+                default: // '-' = all
+                    $style->setMargins($value);
+                    break;
+            }
+        }
+    }
+
+    /**
      * Sets the parent.
      *
      * @param \App\Pdf\Html\HtmlParentChunk|null $parent
@@ -587,87 +669,5 @@ abstract class HtmlChunk implements HtmlConstantsInterface, PdfConstantsInterfac
         }
 
         return $this->setStyle($style);
-    }
-
-    /**
-     * Parses the border class.
-     *
-     * @param HtmlStyle $style the style to update
-     * @param string    $class the border class name
-     */
-    private function parseBorders(HtmlStyle &$style, string $class): void
-    {
-        switch ($class) {
-            case 'border':
-                $style->setBorder(self::BORDER_ALL);
-                break;
-
-            case 'border-top':
-                $style->setBorder(self::BORDER_TOP);
-                break;
-
-            case 'border-right':
-                $style->setBorder(self::BORDER_RIGHT);
-                break;
-
-            case 'border-bottom':
-                $style->setBorder(self::BORDER_BOTTOM);
-                break;
-
-            case 'border-left':
-                $style->setBorder(self::BORDER_LEFT);
-                break;
-
-            case 'border-0':
-                $style->setBorder(self::BORDER_NONE);
-                break;
-
-            case 'border-top-0':
-
-                break;
-            case 'border-right-0':
-                break;
-            case 'border-bottom-0':
-                break;
-            case 'border-left-0':
-                break;
-        }
-    }
-
-    /**
-     * Parses the margins class.
-     *
-     * @param HtmlStyle $style the style to update
-     * @param string    $class the margins class name
-     */
-    private function parseMargins(HtmlStyle &$style, string $class): void
-    {
-        $pattern = '/m[tblrxy]{0,1}-[012345]/';
-        if (\preg_match($pattern, $class)) {
-            $value = (float) $class[-1];
-            switch ($class[1]) {
-                case 't':
-                    $style->setTopMargin($value);
-                    break;
-                case 'b':
-                    $style->setBottomMargin($value);
-                    break;
-                case 'l':
-                    $style->setLeftMargin($value);
-                    break;
-                case 'r':
-                    $style->setRightMargin($value);
-                    break;
-                case 'x':
-                    $style->setXMargins($value);
-                    break;
-                case 'y':
-                    $style->setYMargins($value);
-                    break;
-                default: // '-' = all
-                    $style->setMargins($value);
-                    break;
-            }
-        }
     }
 }

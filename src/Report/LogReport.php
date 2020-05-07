@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\BaseController;
-use App\Pdf\PdfCellListenerInterface;
 use App\Pdf\PdfCell;
+use App\Pdf\PdfCellListenerInterface;
 use App\Pdf\PdfCellListenerTrait;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDrawColor;

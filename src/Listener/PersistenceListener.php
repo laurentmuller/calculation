@@ -18,8 +18,8 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Customer;
-use App\Entity\GlobalMargin;
 use App\Entity\EntityInterface;
+use App\Entity\GlobalMargin;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Traits\TranslatorFlashMessageTrait;
@@ -170,7 +170,7 @@ class PersistenceListener implements EventSubscriber
      * Gets the message identifier to translate.
      *
      * @param EntityInterface $entity the entity
-     * @param string  $suffix the message suffix
+     * @param string          $suffix the message suffix
      *
      * @return string the message identifier to translate
      */

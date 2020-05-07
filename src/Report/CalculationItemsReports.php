@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\BaseController;
-use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;

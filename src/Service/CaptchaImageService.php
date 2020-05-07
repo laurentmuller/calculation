@@ -169,7 +169,7 @@ class CaptchaImageService
      *
      * @return array the text layout
      */
-    private function computeText(ImageHandler $image, float $size, string $font, string $text): array
+    protected function computeText(ImageHandler $image, float $size, string $font, string $text): array
     {
         $result = [];
         for ($i = 0,  $length = \mb_strlen($text); $i < $length; ++$i) {
@@ -197,7 +197,7 @@ class CaptchaImageService
      *
      * @return ImageHandler|bool the image resource identifier on success, false on errors
      */
-    private function createImage(string $text, int $width, int $height)
+    protected function createImage(string $text, int $width, int $height)
     {
         // create image
         if (!$image = ImageHandler::fromTrueColor($width, $height)) {
@@ -205,10 +205,10 @@ class CaptchaImageService
         }
 
         // draw
-        $this->drawBackground($image);
-        $this->drawPoints($image, $width, $height);
-        $this->drawLines($image, $width, $height);
-        $this->drawText($image, $width, $height, $text);
+        $this->drawBackground($image)
+            ->drawPoints($image, $width, $height)
+            ->drawLines($image, $width, $height)
+            ->drawText($image, $width, $height, $text);
 
         return $image;
     }
@@ -218,7 +218,7 @@ class CaptchaImageService
      *
      * @param ImageHandler $image the image to draw to
      */
-    private function drawBackground(ImageHandler $image): self
+    protected function drawBackground(ImageHandler $image): self
     {
         $color = $image->allocateWhite();
         $image->fill($color);
@@ -233,7 +233,7 @@ class CaptchaImageService
      * @param int          $width  the image width
      * @param int          $height the image height
      */
-    private function drawLines(ImageHandler $image, int $width, int $height): self
+    protected function drawLines(ImageHandler $image, int $width, int $height): self
     {
         $lines = \random_int(3, 7);
         $color = $image->allocate(195, 195, 195);
@@ -253,7 +253,7 @@ class CaptchaImageService
      * @param int          $width  the image width
      * @param int          $height the image height
      */
-    private function drawPoints(ImageHandler $image, int $width, int $height): self
+    protected function drawPoints(ImageHandler $image, int $width, int $height): self
     {
         $points = \random_int(300, 400);
         $color = $image->allocate(0, 0, 255);
@@ -274,7 +274,7 @@ class CaptchaImageService
      * @param int          $height the image height
      * @param string       $text   the text to draw
      */
-    private function drawText(ImageHandler $image, int $width, int $height, string $text): self
+    protected function drawText(ImageHandler $image, int $width, int $height, string $text): self
     {
         // font and color
         $font = $this->font;
@@ -312,7 +312,7 @@ class CaptchaImageService
      *
      * @return string the encoded image
      */
-    private function encodeImage(ImageHandler $image): string
+    protected function encodeImage(ImageHandler $image): string
     {
         // save
         \ob_start();
@@ -331,7 +331,7 @@ class CaptchaImageService
      *
      * @return string the random string
      */
-    private function generateRandomString($length): string
+    protected function generateRandomString($length): string
     {
         $length = \max($length, 2);
         $result = \str_shuffle(self::ALLOWED_VALUES);

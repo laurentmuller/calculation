@@ -78,13 +78,13 @@ class CalculationGroupTable extends PdfGroupTableBuilder
         foreach ($groups as $group) {
             $this->setGroupName($group->getCode());
             foreach ($group->getItems() as $item) {
-                $this->startRow();
-                $this->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle);
-                $this->add($item->getUnit());
-                $this->addAmount($item->getPrice(), $errorStyle);
-                $this->addAmount($item->getQuantity(), $errorStyle);
-                $this->addAmount($item->getTotal(), null);
-                $this->endRow();
+                $this->startRow()
+                    ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
+                    ->add($item->getUnit())
+                    ->addAmount($item->getPrice(), $errorStyle)
+                    ->addAmount($item->getQuantity(), $errorStyle)
+                    ->addAmount($item->getTotal(), null)
+                    ->endRow();
             }
         }
 
@@ -113,7 +113,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
      * @param float    $amount     the amount to output
      * @param PdfStyle $errorStyle the error style to use when amount is equal to 0
      */
-    private function addAmount(float $amount, ?PdfStyle $errorStyle): self
+    protected function addAmount(float $amount, ?PdfStyle $errorStyle): self
     {
         $style = empty($amount) ? $errorStyle : null;
         $text = $this->parent->localeAmount($amount);
@@ -129,7 +129,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
      * @param PdfStyle        $defaultStyle   the style to use if item is not duplicate
      * @param PdfStyle        $errorStyle     the style to use when item is duplicate
      */
-    private function addDescription(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): self
+    protected function addDescription(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): self
     {
         $style = \in_array($item, $duplicateItems, true) ? $errorStyle : $defaultStyle;
 
@@ -143,7 +143,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
      *
      * @return string The translated key
      */
-    private function trans(string $key): string
+    protected function trans(string $key): string
     {
         /** @var BaseReport $parent */
         $parent = $this->parent;

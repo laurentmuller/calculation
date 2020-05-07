@@ -61,7 +61,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
         // already in the cache?
         $item = $this->cache->getItem(self::CACHE_KEY);
         if ($item->isHit()) {
-           return $item->get();
+            return $item->get();
         }
 
         // create array

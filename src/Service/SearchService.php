@@ -168,7 +168,7 @@ class SearchService
     /**
      * Create the SQL query for the calculation date.
      */
-    private function createCalculationDateQuery(): self
+    protected function createCalculationDateQuery(): self
     {
         $class = Calculation::class;
         $field = 'date';
@@ -184,7 +184,7 @@ class SearchService
     /**
      * Create the SQL query for the calculation groups.
      */
-    private function createCalculationGroupQuery(): self
+    protected function createCalculationGroupQuery(): self
     {
         $class = Calculation::class;
         $field = 'group';
@@ -201,7 +201,7 @@ class SearchService
     /**
      * Create the SQL query for the calculation items.
      */
-    private function createCalculationItemQuery(): self
+    protected function createCalculationItemQuery(): self
     {
         $class = Calculation::class;
         $field = 'item';
@@ -219,7 +219,7 @@ class SearchService
     /**
      * Create the SQL query for the calculation state.
      */
-    private function createCalculationStateQuery(): self
+    protected function createCalculationStateQuery(): self
     {
         $class = Calculation::class;
         $field = 'state';
@@ -239,7 +239,7 @@ class SearchService
      * @param string   $class  the entity class
      * @param string[] $fields the entity fields to search in
      */
-    private function createEntityQueries(string $class, array $fields): self
+    protected function createEntityQueries(string $class, array $fields): self
     {
         foreach ($fields as $field) {
             $this->queries[] = $this->createQueryBuilder($class, $field)
@@ -257,7 +257,7 @@ class SearchService
      * @param string $field   the field name
      * @param string $content the field content to search in or null to use the field name
      */
-    private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
+    protected function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
         $name = Utils::getShortName($class);
         $content = $content ?: "e.{$field}";
@@ -278,7 +278,7 @@ class SearchService
      * @param string $search the term to search
      * @param string $extra  a SQL statement to add to the default native SELECT SQL statement
      */
-    private function getArrayResult(string $search, string $extra = ''): array
+    protected function getArrayResult(string $search, string $extra = ''): array
     {
         // queries:
         $queries = $this->getQueries();
@@ -300,25 +300,25 @@ class SearchService
      *
      * @return string[] the SQL queries
      */
-    private function getQueries(): array
+    protected function getQueries(): array
     {
         // build?
         if (empty($this->queries)) {
             // entities queries
-            $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal']);
-            $this->createEntityQueries(CalculationState::class, ['code', 'description']);
-            $this->createEntityQueries(Product::class, ['description', 'supplier', 'price']);
-            $this->createEntityQueries(Category::class, ['code', 'description']);
+            $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal'])
+                ->createEntityQueries(CalculationState::class, ['code', 'description'])
+                ->createEntityQueries(Product::class, ['description', 'supplier', 'price'])
+                ->createEntityQueries(Category::class, ['code', 'description']);
 
             // calculation queries
-            $this->createCalculationDateQuery();
-            $this->createCalculationStateQuery();
-            $this->createCalculationItemQuery();
+            $this->createCalculationDateQuery()
+                ->createCalculationStateQuery()
+                ->createCalculationItemQuery();
 
             // debug queries
             if ($this->debug) {
-                $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company']);
-                $this->createCalculationGroupQuery();
+                $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company'])
+                    ->createCalculationGroupQuery();
             }
 
             // update SQL
@@ -341,7 +341,7 @@ class SearchService
     /**
      * Gets the result set mapping.
      */
-    private function getResultSetMapping(): ResultSetMapping
+    protected function getResultSetMapping(): ResultSetMapping
     {
         if (!$this->mapping) {
             $this->mapping = new ResultSetMapping();

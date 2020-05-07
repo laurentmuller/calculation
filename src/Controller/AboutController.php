@@ -72,7 +72,7 @@ class AboutController extends BaseController
 
         // create report
         $report = new HtmlReport($this);
-        $report->setContent($content)->SetTitleTrans('index.menu_info', $parameters, true);
+        $report->setContent($content)->setTitleTrans('index.menu_info', $parameters, true);
 
         // render
         return $this->renderDocument($report);
@@ -108,7 +108,7 @@ class AboutController extends BaseController
 
         // create report
         $report = new HtmlReport($this);
-        $report->setContent($ontent)->SetTitleTrans('about.licence');
+        $report->setContent($ontent)->setTitleTrans('about.licence');
 
         // render
         return $this->renderDocument($report);
@@ -189,7 +189,7 @@ class AboutController extends BaseController
 
         // create report
         $report = new HtmlReport($this);
-        $report->setContent($content)->SetTitleTrans('about.policy', [], true);
+        $report->setContent($content)->setTitleTrans('about.policy', [], true);
 
         // render
         return $this->renderDocument($report);

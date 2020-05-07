@@ -41,7 +41,7 @@ class GlobalMarginsReport extends BaseReport
     public function __construct(BaseController $controller)
     {
         parent::__construct($controller);
-        $this->SetTitleTrans('globalmargin.list.title');
+        $this->setTitleTrans('globalmargin.list.title');
     }
 
     /**

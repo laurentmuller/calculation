@@ -654,7 +654,7 @@ class PdfTableBuilder implements PdfConstantsInterface
         }
 
         // default
-        $parent->Rectangle($bounds, self::RECT_FILL);
+        $parent->rectangle($bounds, self::RECT_FILL);
     }
 
     /**
@@ -678,7 +678,7 @@ class PdfTableBuilder implements PdfConstantsInterface
 
         if (self::BORDER_ALL === $border) {
             // draw all
-            $parent->Rectangle($bounds, self::RECT_BORDER);
+            $parent->rectangle($bounds, self::RECT_BORDER);
         } else {
             // draw each applicable border side
             $right = $bounds->right();

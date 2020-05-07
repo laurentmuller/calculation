@@ -119,10 +119,10 @@ class CalculationReport extends BaseReport
 
         // update title
         if ($calculation->isNew()) {
-            $this->SetTitleTrans('calculation.add.title');
+            $this->setTitleTrans('calculation.add.title');
         } else {
             $id = $this->localeId($calculation->getId());
-            $this->SetTitleTrans('calculation.edit.title', ['%id%' => $id], true);
+            $this->setTitleTrans('calculation.edit.title', ['%id%' => $id], true);
         }
 
         return $this;

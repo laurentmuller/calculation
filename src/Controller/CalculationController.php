@@ -169,7 +169,7 @@ class CalculationController extends EntityController
 
         $report = new CalculationsReport($this);
         $report->setCalculations($calculations)
-            ->SetTitleTrans('below.title')
+            ->setTitleTrans('below.title')
             ->setDescription($description);
 
         return $this->renderDocument($report);

@@ -49,7 +49,7 @@ class ProductsReport extends BaseReport
     public function __construct(BaseController $controller)
     {
         parent::__construct($controller);
-        $this->SetTitleTrans('product.list.title');
+        $this->setTitleTrans('product.list.title');
     }
 
     /**

@@ -135,7 +135,7 @@ abstract class BaseReport extends PdfDocument
      * @param array  $parameters an array of parameters for the title
      * @param bool   $isUTF8     true to encode to UTF-8
      */
-    public function SetTitleTrans(string $id, array $parameters = [], $isUTF8 = false): self
+    public function setTitleTrans(string $id, array $parameters = [], $isUTF8 = false): self
     {
         $title = $this->trans($id, $parameters);
         $this->SetTitle($title, $isUTF8);

@@ -88,7 +88,7 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
     public function __construct(BaseController $controller)
     {
         parent::__construct($controller);
-        $this->SetTitleTrans('logs.title');
+        $this->setTitleTrans('logs.title');
     }
 
     /**
@@ -185,7 +185,7 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
             $doc = $builder->getParent();
 
             // default
-            $doc->Rectangle($bounds, $border);
+            $doc->rectangle($bounds, $border);
 
             // left border
             $color->apply($doc);

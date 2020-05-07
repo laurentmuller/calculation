@@ -45,7 +45,7 @@ abstract class CalculationItemsReports extends BaseReport
     protected function __construct(BaseController $controller, string $title, ?string $description = null)
     {
         parent::__construct($controller);
-        $this->SetTitleTrans($title);
+        $this->setTitleTrans($title);
         if ($description) {
             $this->setDescription($this->trans($description));
         }

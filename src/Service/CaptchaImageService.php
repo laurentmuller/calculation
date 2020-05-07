@@ -205,10 +205,10 @@ class CaptchaImageService
         }
 
         // draw
-        $this->drawBackground($image)
-            ->drawPoints($image, $width, $height)
-            ->drawLines($image, $width, $height)
-            ->drawText($image, $width, $height, $text);
+        $this->drawBackground($image);
+        $this->drawPoints($image, $width, $height);
+        $this->drawLines($image, $width, $height);
+        $this->drawText($image, $width, $height, $text);
 
         return $image;
     }

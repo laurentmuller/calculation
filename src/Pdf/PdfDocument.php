@@ -793,7 +793,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
      *                             <li>'<b>DF</b> or '<b>FD</b>': Draw and Fill</li>
      *                             </ul>
      */
-    public function Rectangle(PdfRectangle $bounds, $style = ''): self
+    public function rectangle(PdfRectangle $bounds, $style = ''): self
     {
         $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $style);
 

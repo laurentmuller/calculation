@@ -43,7 +43,7 @@ class CategoriesReport extends BaseReport
     public function __construct(BaseController $controller)
     {
         parent::__construct($controller);
-        $this->SetTitleTrans('category.list.title', [], true);
+        $this->setTitleTrans('category.list.title', [], true);
     }
 
     /**

@@ -69,7 +69,7 @@ class CalculationsReport extends BaseReport
     {
         parent::__construct($controller, self::ORIENTATION_LANDSCAPE);
 
-        $this->SetTitleTrans('calculation.list.title');
+        $this->setTitleTrans('calculation.list.title');
         $this->minMargin = $controller->getApplication()->getMinMargin();
     }
 

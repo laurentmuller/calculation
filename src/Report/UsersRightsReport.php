@@ -93,7 +93,7 @@ class UsersRightsReport extends BaseReport implements PdfGroupListenerInterface
     public function __construct(BaseController $controller)
     {
         parent::__construct($controller);
-        $this->SetTitleTrans('user.rights.title', [], true);
+        $this->setTitleTrans('user.rights.title', [], true);
     }
 
     /**

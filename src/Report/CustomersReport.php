@@ -57,7 +57,7 @@ class CustomersReport extends BaseReport
     public function __construct(BaseController $controller)
     {
         parent::__construct($controller, self::ORIENTATION_LANDSCAPE);
-        $this->SetTitleTrans('customer.list.title');
+        $this->setTitleTrans('customer.list.title');
         $this->other = $controller->getTranslator()->trans('report.customer.other');
     }
 

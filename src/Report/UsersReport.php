@@ -80,7 +80,7 @@ class UsersReport extends BaseReport
     {
         parent::__construct($controller);
 
-        $this->SetTitleTrans('user.list.title');
+        $this->setTitleTrans('user.list.title');
         $this->defaultImagePath = $kernel->getProjectDir() . '/public/images/avatar.png';
         $this->factory = $factory;
         $this->storage = $storage;

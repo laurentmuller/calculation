@@ -57,7 +57,7 @@ class CalculationStatesReport extends BaseReport implements PdfCellListenerInter
     public function __construct(BaseController $controller)
     {
         parent::__construct($controller);
-        $this->SetTitleTrans('calculationstate.list.title');
+        $this->setTitleTrans('calculationstate.list.title');
     }
 
     /**
@@ -81,7 +81,7 @@ class CalculationStatesReport extends BaseReport implements PdfCellListenerInter
                 $margin = $doc->getCellMargin();
                 $bounds->inflateXY(-3 * $margin, -$margin)
                     ->setHeight(PdfConstantsInterface::LINE_HEIGHT - 2 * $margin);
-                $doc->Rectangle($bounds, self::RECT_BOTH);
+                $doc->rectangle($bounds, self::RECT_BOTH);
 
                 return true;
             }

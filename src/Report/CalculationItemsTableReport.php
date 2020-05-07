@@ -44,7 +44,7 @@ abstract class CalculationItemsTableReport extends BaseReport
     protected function __construct(BaseController $controller, string $title, string $description)
     {
         parent::__construct($controller, self::ORIENTATION_LANDSCAPE);
-        $this->SetTitleTrans($title, [], true);
+        $this->setTitleTrans($title, [], true);
         $this->setDescription($this->trans($description));
     }
 

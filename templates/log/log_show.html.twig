@@ -6,7 +6,9 @@
 {%- if value|length -%}
 <tr>
     <td class="w-25">{{ name|trans }}</td>
-    <td class="w-75 text-break text-success white-space-pre-wrap small mb-0">{{- tools.format_var(value) -}}</td>
+    <td class="w-75">
+        <pre class="text-break text-success white-space-pre-wrap mb-0">{{- tools.format_var(value) -}}</pre>
+    </td>
 </tr>
 {%- endif -%}
 {% endmacro %}
@@ -59,11 +61,6 @@
 {% block card_header_class -%}
 {{ _self.level_class(item.level, true) }}
 {%- endblock %}
-{#
-{% block card_footer_class -%}
-{{ _self.level_class(item.level, false) }}
-{%- endblock %}
-#}
 
 {# properties #}
 {% block property_body %}

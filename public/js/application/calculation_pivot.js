@@ -1,6 +1,5 @@
 /** ! compression tag for ftp-deployment */
 
-
 /**
  * JQuery extensions
  */
@@ -26,11 +25,10 @@ $.fn.extend({
  * 
  * @param {JQuery}
  *            $source - The highlight checkbox.
- * 
  * @param {JQuery}
  *            $table - The table to update.
  * @param {boolean}
- *            $save - true to save value to the session.
+ *            save - true to save value to the session.
  */
 function toggleHighlight($source, $table, save) {
     'use strict';
@@ -79,11 +77,10 @@ function toggleHighlight($source, $table, save) {
  * 
  * @param {JQuery}
  *            $source - The popover checkbox.
- * 
  * @param {JQuery}
  *            $selector - The popover elements.
  * @param {boolean}
- *            $save - true to save value to the session.
+ *            save - true to save value to the session.
  */
 function togglePopover($source, $selector, save) {
     'use strict';
@@ -94,11 +91,8 @@ function togglePopover($source, $selector, save) {
         if (popover) {
             $selector.popover('enable');
         } else {
-            // const title =
-            // $('.card-title').html().replace(/<h1.*>.*?<\/h1>/ig, '');
             $selector.customPopover({
                 html: true,
-                // title: title,
                 type: 'primary',
                 trigger: 'hover',
                 placement: 'top',

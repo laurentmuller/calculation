@@ -76,8 +76,6 @@ class EntityVoter extends Voter implements IEntityVoter
     ];
 
     /**
-     * Service to get rights.
-     *
      * @var ApplicationService
      */
     private $service;
@@ -245,7 +243,7 @@ class EntityVoter extends Voter implements IEntityVoter
         }
 
         // check class name
-        $name = $this->getEntityName($subject);
+        $name = Utils::getShortName($subject);
         if (!\array_key_exists($name, self::OFFSETS)) {
             return false;
         }
@@ -265,9 +263,9 @@ class EntityVoter extends Voter implements IEntityVoter
         }
 
         // enabled?
-        //if (!$user->isEnabled()) {
-        //return false;
-        //}
+        if (!$user->isEnabled()) {
+            return false;
+        }
 
         // super admin can access all
         if ($user->hasRole(User::ROLE_SUPER_ADMIN)) {
@@ -275,7 +273,7 @@ class EntityVoter extends Voter implements IEntityVoter
         }
 
         // get offset
-        $name = $this->getEntityName($subject);
+        $name = Utils::getShortName($subject);
         $offset = self::getEntityOffset($name);
         if (self::INVALID_VALUE === $offset) {
             return false;
@@ -301,39 +299,5 @@ class EntityVoter extends Voter implements IEntityVoter
 
         // check rights
         return $this->isBitSet($value, $mask);
-    }
-
-    /**
-     * Ensure that the given mask is between 0 and 255 inclusive.
-     *
-     * @param int $mask the mask to verify
-     *
-     * @return int the updated mask
-     */
-    private function checkMask(int $mask): int
-    {
-        $limit = 2 ** PHP_INT_SIZE;
-        while ($mask < 0) {
-            $mask += $limit;
-        }
-
-        return $mask % $limit;
-    }
-
-    /**
-     * Gets the entity name for the given subject.
-     *
-     * @param mixed $subject the subject. Can be an object or a string (class name).
-     *
-     * @return string the entity name
-     */
-    private function getEntityName($subject): string
-    {
-        $name = \is_string($subject) ? (string) $subject : \get_class($subject);
-        if (false !== ($pos = \strrpos($name, '\\'))) {
-            return \substr($name, $pos + 1);
-        }
-
-        return $name;
     }
 }

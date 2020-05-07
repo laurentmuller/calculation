@@ -246,6 +246,8 @@ final class Utils
      * @param mixed $var either a string containing the name of the class to reflect, or an object
      *
      * @return string|null the short name or null if the variable is null
+     *
+     * @throws \ReflectionException if the class to reflect does not exist
      */
     public static function getShortName($var): ?string
     {

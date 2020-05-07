@@ -48,16 +48,15 @@ class DatabaseLogService extends AbstractProcessingHandler
     /**
      * Constructor.
      *
-     * @param EntityManagerInterface $manager    the manager to get log table name
-     * @param Connection             $connection the database connection
-     * @param TokenStorageInterface  $storage    the token storage the get the user name
-     * @param int                    $level      The minimum logging level at which this handler will be triggered
-     * @param bool                   $bubble     Whether the messages that are handled can bubble up the stack or not
+     * @param EntityManagerInterface $manager the manager to get log table name
+     * @param TokenStorageInterface  $storage the token storage the get the user name
+     * @param int                    $level   The minimum logging level at which this handler will be triggered
+     * @param bool                   $bubble  Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct(EntityManagerInterface $manager, Connection $connection, TokenStorageInterface $storage, int $level = Logger::ERROR, bool $bubble = true)
+    public function __construct(EntityManagerInterface $manager, TokenStorageInterface $storage, int $level = Logger::ERROR, bool $bubble = true)
     {
+        $this->connection = $manager->getConnection();
         $this->tableName = $manager->getClassMetadata(Log::class)->getTableName();
-        $this->connection = $connection;
 
         if ($token = $storage->getToken()) {
             $user = $token->getUser();
@@ -76,6 +75,7 @@ class DatabaseLogService extends AbstractProcessingHandler
      */
     public function isHandling(array $record): bool
     {
+        // skip log for this table name
         if (false === \strpos($record['message'], $this->tableName)) {
             return parent::isHandling($record);
         }
@@ -142,11 +142,10 @@ class DatabaseLogService extends AbstractProcessingHandler
 
         // copy
         $log->setUserName($this->userName)
-            ->setLevel($record['level'])
             ->setMessage($record['message'])
             ->setCreatedAt($record['datetime'])
-            ->setChannel(LogUtils::getChannel($record['channel']))
             ->setLevel(LogUtils::getLevel($record['level_name']))
+            ->setChannel(LogUtils::getChannel($record['channel']))
             ->setExtra(\is_array($record['extra']) ? $record['extra'] : [])
             ->setContext(\is_array($record['context']) ? $record['context'] : []);
 

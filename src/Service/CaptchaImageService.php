@@ -205,7 +205,7 @@ class CaptchaImageService
         }
 
         // draw
-        $this->drawBackground($image, $width, $height)
+        $this->drawBackground($image)
             ->drawPoints($image, $width, $height)
             ->drawLines($image, $width, $height)
             ->drawText($image, $width, $height, $text);
@@ -216,11 +216,9 @@ class CaptchaImageService
     /**
      * Draws the white background image.
      *
-     * @param ImageHandler $image  the image to draw to
-     * @param int          $width  the image width
-     * @param int          $height the image height
+     * @param ImageHandler $image the image to draw to
      */
-    private function drawBackground(ImageHandler $image, int $width, int $height): self
+    private function drawBackground(ImageHandler $image): self
     {
         $color = $image->allocateWhite();
         $image->fill($color);

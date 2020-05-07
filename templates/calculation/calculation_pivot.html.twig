@@ -14,7 +14,7 @@
 {%- endmacro %}
 
 {% macro outputPopover(cell, value) -%}
-{%- set sep = ' <i class="fas fa-caret-right" aria-hidden="true"></i> ' -%}
+{%- set sep = '&nbsp;&nbsp;<i class="fas fa-caret-right" aria-hidden="true"></i>&nbsp;&nbsp;' -%}
 <table class="table table-borderless table-sm mb-0">
     <tbody>
     	<tr>
@@ -36,7 +36,7 @@
 {%- endmacro %}
 
 {% macro outputPopoverTitle(cell, row = false) -%}
-{%- set sep = ' <i class="fas fa-caret-right" aria-hidden="true"></i> ' -%}
+{%- set sep = '&nbsp;&nbsp;<i class="fas fa-caret-right" aria-hidden="true"></i>&nbsp;&nbsp;' -%}
 <p class="mb-0">{{ cell.titles|join(sep)|raw }}{{ sep|raw }}{{ _self.format(cell.value) }}</p>
 {%- endmacro %}
 

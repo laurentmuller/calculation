@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Interfaces\IImageExtension;
+use App\Interfaces\ImageExtensionInterface;
 use App\Traits\MathTrait;
 
 /**
@@ -22,7 +22,7 @@ use App\Traits\MathTrait;
  *
  * @author Laurent Muller
  */
-class PdfImageCell extends PdfCell implements IImageExtension
+class PdfImageCell extends PdfCell implements ImageExtensionInterface
 {
     use MathTrait;
 
@@ -78,7 +78,7 @@ class PdfImageCell extends PdfCell implements IImageExtension
      *
      * @throws \InvalidArgumentException if the path file does not exist
      */
-    public function __construct(string $path, $cols = 1, ?PdfStyle $style = null, string $alignment = IPdfConstants::ALIGN_INHERITED)
+    public function __construct(string $path, $cols = 1, ?PdfStyle $style = null, string $alignment = PdfConstantsInterface::ALIGN_INHERITED)
     {
         if (!\file_exists($path)) {
             throw new \InvalidArgumentException("The image '{$path}' does not exist.");
@@ -110,11 +110,11 @@ class PdfImageCell extends PdfCell implements IImageExtension
         $y = $bounds->y() + ($bounds->height() - $height) / 2;
 
         switch ($alignment) {
-            case IPdfConstants::ALIGN_RIGHT:
+            case PdfConstantsInterface::ALIGN_RIGHT:
                 $x += $bounds->width() - $width;
                 break;
-            case IPdfConstants::ALIGN_CENTER:
-            case IPdfConstants::ALIGN_JUSTIFIED:
+            case PdfConstantsInterface::ALIGN_CENTER:
+            case PdfConstantsInterface::ALIGN_JUSTIFIED:
                 $x += ($bounds->width() - $width) / 2;
                 break;
         }

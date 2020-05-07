@@ -17,8 +17,8 @@ namespace App\Report;
 use App\Controller\BaseController;
 use App\Entity\Role;
 use App\Entity\User;
-use App\Interfaces\IEntityVoter;
-use App\Pdf\IPdfGroupListener;
+use App\Interfaces\EntityVoterInterface;
+use App\Pdf\PdfGroupListenerInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfGroup;
@@ -32,7 +32,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class UsersRightsReport extends BaseReport implements IPdfGroupListener
+class UsersRightsReport extends BaseReport implements PdfGroupListenerInterface
 {
     /**
      * The ASCII bullet character.
@@ -43,25 +43,25 @@ class UsersRightsReport extends BaseReport implements IPdfGroupListener
      * The attribute names.
      */
     private const ATTRIBUTES = [
-        IEntityVoter::ATTRIBUTE_LIST,
-        IEntityVoter::ATTRIBUTE_SHOW,
-        IEntityVoter::ATTRIBUTE_ADD,
-        IEntityVoter::ATTRIBUTE_EDIT,
-        IEntityVoter::ATTRIBUTE_DELETE,
-        IEntityVoter::ATTRIBUTE_PDF,
+        EntityVoterInterface::ATTRIBUTE_LIST,
+        EntityVoterInterface::ATTRIBUTE_SHOW,
+        EntityVoterInterface::ATTRIBUTE_ADD,
+        EntityVoterInterface::ATTRIBUTE_EDIT,
+        EntityVoterInterface::ATTRIBUTE_DELETE,
+        EntityVoterInterface::ATTRIBUTE_PDF,
     ];
 
     /**
      * The title and rights.
      */
     private const RIGHTS = [
-        'calculation.name' => IEntityVoter::ENTITY_CALCULATION,
-        'product.name' => IEntityVoter::ENTITY_PRODUCT,
-        'category.name' => IEntityVoter::ENTITY_CATEGORY,
-        'calculationstate.name' => IEntityVoter::ENTITY_CALCULATION_STATE,
-        'globalmargin.name' => IEntityVoter::ENTITY_GLOBAL_MARGIN,
-        'customer.name' => IEntityVoter::ENTITY_CUSTOMER,
-        'user.name' => IEntityVoter::ENTITY_USER,
+        'calculation.name' => EntityVoterInterface::ENTITY_CALCULATION,
+        'product.name' => EntityVoterInterface::ENTITY_PRODUCT,
+        'category.name' => EntityVoterInterface::ENTITY_CATEGORY,
+        'calculationstate.name' => EntityVoterInterface::ENTITY_CALCULATION_STATE,
+        'globalmargin.name' => EntityVoterInterface::ENTITY_GLOBAL_MARGIN,
+        'customer.name' => EntityVoterInterface::ENTITY_CUSTOMER,
+        'user.name' => EntityVoterInterface::ENTITY_USER,
     ];
 
     /**
@@ -263,7 +263,7 @@ class UsersRightsReport extends BaseReport implements IPdfGroupListener
 
         // rights
         foreach (self::RIGHTS as $key => $value) {
-            if ($outputUsers || IEntityVoter::ENTITY_USER !== $value) {
+            if ($outputUsers || EntityVoterInterface::ENTITY_USER !== $value) {
                 $this->outputRights($builder, $key, $role->{$value});
             }
         }
@@ -345,7 +345,7 @@ class UsersRightsReport extends BaseReport implements IPdfGroupListener
 
             // output rights
             foreach (self::RIGHTS as $key => $value) {
-                if ($outputUsers || IEntityVoter::ENTITY_USER !== $value) {
+                if ($outputUsers || EntityVoterInterface::ENTITY_USER !== $value) {
                     $this->outputRights($builder, $key, $user->{$value});
                 }
             }

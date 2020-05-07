@@ -17,8 +17,8 @@ namespace App\Form;
 use App\Form\Type\DateTimeFormatType;
 use App\Form\Type\DecimalSeparatorType;
 use App\Form\Type\GroupingSeparatorType;
-use App\Interfaces\IApplicationService;
-use App\Interfaces\IRole;
+use App\Interfaces\ApplicationServiceInterface;
+use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
@@ -33,7 +33,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class ParametersType extends AbstractType implements IApplicationService
+class ParametersType extends AbstractType implements ApplicationServiceInterface
 {
     use FormatterTrait;
     use TranslatorTrait;
@@ -170,7 +170,7 @@ class ParametersType extends AbstractType implements IApplicationService
     private function isSuperAdmin(): bool
     {
         if ($user = $this->security->getUser()) {
-            if ($user instanceof IRole) {
+            if ($user instanceof RoleInterface) {
                 return $user->isSuperAdmin();
             }
         }

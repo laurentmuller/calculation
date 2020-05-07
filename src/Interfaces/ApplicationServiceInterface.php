@@ -21,7 +21,7 @@ namespace App\Interfaces;
  *
  * @see \App\Service\ApplicationService
  */
-interface IApplicationService
+interface ApplicationServiceInterface
 {
     /**
      * The property name for the administrator role rights (string).

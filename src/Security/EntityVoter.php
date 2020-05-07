@@ -16,7 +16,7 @@ namespace App\Security;
 
 use App\Entity\Role;
 use App\Entity\User;
-use App\Interfaces\IEntityVoter;
+use App\Interfaces\EntityVoterInterface;
 use App\Service\ApplicationService;
 use App\Traits\MathTrait;
 use App\Utils\Utils;
@@ -28,7 +28,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  *
  * @author Laurent Muller
  */
-class EntityVoter extends Voter implements IEntityVoter
+class EntityVoter extends Voter implements EntityVoterInterface
 {
     use MathTrait;
 
@@ -93,7 +93,7 @@ class EntityVoter extends Voter implements IEntityVoter
      *
      * @param string $name the attribute name
      *
-     * @return int the attribute mask, if found; -1 (IEntityVoter::INVALID_VALUE) otherwise
+     * @return int the attribute mask, if found; -1 (EntityVoterInterface::INVALID_VALUE) otherwise
      */
     public static function getAttributeMask(string $name): int
     {
@@ -105,7 +105,7 @@ class EntityVoter extends Voter implements IEntityVoter
      *
      * @param string $name the entity name
      *
-     * @return int the entity offset, if found; -1 (IEntityVoter::INVALID_VALUE) otherwise
+     * @return int the entity offset, if found; -1 (EntityVoterInterface::INVALID_VALUE) otherwise
      */
     public static function getEntityOffset(string $name): int
     {
@@ -243,7 +243,7 @@ class EntityVoter extends Voter implements IEntityVoter
         }
 
         // check class name
-        $name = Utils::getShortName($subject);
+        $name = $this->getEntityName($subject);
         if (!\array_key_exists($name, self::OFFSETS)) {
             return false;
         }
@@ -273,7 +273,7 @@ class EntityVoter extends Voter implements IEntityVoter
         }
 
         // get offset
-        $name = Utils::getShortName($subject);
+        $name = $this->getEntityName($subject);
         $offset = self::getEntityOffset($name);
         if (self::INVALID_VALUE === $offset) {
             return false;
@@ -299,5 +299,22 @@ class EntityVoter extends Voter implements IEntityVoter
 
         // check rights
         return $this->isBitSet($value, $mask);
+    }
+
+    /**
+     * Gets the entity name for the given subject.
+     *
+     * @param mixed $subject the subject. Can be an object or a string (class name).
+     *
+     * @return string the entity name
+     */
+    private function getEntityName($subject): string
+    {
+        $name = \is_string($subject) ? (string) $subject : \get_class($subject);
+        if (false !== ($pos = \strrpos($name, '\\'))) {
+            return \substr($name, $pos + 1);
+        }
+
+        return $name;
     }
 }

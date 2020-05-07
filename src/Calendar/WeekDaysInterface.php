@@ -19,7 +19,7 @@ namespace App\Calendar;
  *
  * @author Laurent Muller
  */
-interface IDaysOfWeek
+interface WeekDaysInterface
 {
     /**
      * The number of week days.

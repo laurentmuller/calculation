@@ -22,7 +22,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class Calendar extends CalendarItem implements IMonthsOfYear, IDaysOfWeek
+class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterface
 {
     use DaysTrait;
     use ModelTrait;

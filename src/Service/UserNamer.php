@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
-use App\Interfaces\IImageExtension;
+use App\Interfaces\ImageExtensionInterface;
 use Vich\UploaderBundle\Exception\NameGenerationException;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\NamerInterface;
@@ -25,7 +25,7 @@ use Vich\UploaderBundle\Naming\NamerInterface;
  *
  * @author Laurent Muller
  */
-class UserNamer implements NamerInterface, IImageExtension
+class UserNamer implements NamerInterface, ImageExtensionInterface
 {
     /**
      * Gets the base file name.

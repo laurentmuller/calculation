@@ -19,7 +19,7 @@ namespace App\Pdf;
  *
  * @author Laurent Muller
  */
-interface IPdfConstants
+interface PdfConstantsInterface
 {
     /**
      * Center alignment.

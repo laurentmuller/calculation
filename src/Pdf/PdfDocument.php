@@ -22,7 +22,7 @@ use Fpdf\Fpdf;
  *
  * @author Laurent Muller
  */
-class PdfDocument extends Fpdf implements IPdfConstants
+class PdfDocument extends Fpdf implements PdfConstantsInterface
 {
     use MathTrait;
 

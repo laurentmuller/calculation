@@ -12,12 +12,12 @@
 {%- set is_bibi           = is_dev and is_remembered and app.user.username == 'Bibi' -%}
 
 {# rights #}
-{%- set calculs      = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CALCULATION) -%}
-{%- set products     = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_PRODUCT) -%}  
-{%- set categories   = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CATEGORY) -%}
-{%- set states       = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CALCULATION_STATE) -%}
-{%- set margins      = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_GLOBAL_MARGIN) -%}
-{%- set customers    = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CUSTOMER) and is_dev -%}
+{%- set calculs      = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
+{%- set products     = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_PRODUCT) -%}  
+{%- set categories   = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CATEGORY) -%}
+{%- set states       = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
+{%- set margins      = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
+{%- set customers    = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev -%}
 
 {# navigation #}
 <nav id="navigation" class="navbar navbar-expand-md {{ theme_background(app.request) }}">

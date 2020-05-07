@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Interfaces\IEntityVoter;
+use App\Interfaces\EntityVoterInterface;
 use App\Security\EntityVoter;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -48,12 +48,12 @@ class AttributeRightType extends AbstractChoiceType
     protected function getChoices(): array
     {
         return [
-            'rights.list' => EntityVoter::getAttributeMask(IEntityVoter::ATTRIBUTE_LIST),
-            'rights.show' => EntityVoter::getAttributeMask(IEntityVoter::ATTRIBUTE_SHOW),
-            'rights.add' => EntityVoter::getAttributeMask(IEntityVoter::ATTRIBUTE_ADD),
-            'rights.edit' => EntityVoter::getAttributeMask(IEntityVoter::ATTRIBUTE_EDIT),
-            'rights.delete' => EntityVoter::getAttributeMask(IEntityVoter::ATTRIBUTE_DELETE),
-            'rights.pdf' => EntityVoter::getAttributeMask(IEntityVoter::ATTRIBUTE_PDF),
+            'rights.list' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_LIST),
+            'rights.show' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_SHOW),
+            'rights.add' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_ADD),
+            'rights.edit' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_EDIT),
+            'rights.delete' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_DELETE),
+            'rights.pdf' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_PDF),
         ];
     }
 }

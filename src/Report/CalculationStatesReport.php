@@ -16,8 +16,8 @@ namespace App\Report;
 
 use App\Controller\BaseController;
 use App\Entity\CalculationState;
-use App\Pdf\IPdfCellListener;
-use App\Pdf\IPdfConstants;
+use App\Pdf\PdfCellListenerInterface;
+use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfCellListenerTrait;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFillColor;
@@ -31,7 +31,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class CalculationStatesReport extends BaseReport implements IPdfCellListener
+class CalculationStatesReport extends BaseReport implements PdfCellListenerInterface
 {
     use PdfCellListenerTrait;
 
@@ -80,7 +80,7 @@ class CalculationStatesReport extends BaseReport implements IPdfCellListener
                 $doc = $builder->getParent();
                 $margin = $doc->getCellMargin();
                 $bounds->inflateXY(-3 * $margin, -$margin)
-                    ->setHeight(IPdfConstants::LINE_HEIGHT - 2 * $margin);
+                    ->setHeight(PdfConstantsInterface::LINE_HEIGHT - 2 * $margin);
                 $doc->Rectangle($bounds, self::RECT_BOTH);
 
                 return true;

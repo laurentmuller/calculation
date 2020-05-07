@@ -32,7 +32,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     /**
      * The group render listener.
      *
-     * @var IPdfGroupListener|null
+     * @var PdfGroupListenerInterface|null
      */
     protected $groupListener;
 
@@ -68,9 +68,9 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     /**
      * Gets the group listener.
      *
-     * @return \App\Pdf\IPdfGroupListener
+     * @return \App\Pdf\PdfGroupListenerInterface
      */
-    public function getGroupListener(): ?IPdfGroupListener
+    public function getGroupListener(): ?PdfGroupListenerInterface
     {
         return $this->groupListener;
     }
@@ -114,11 +114,11 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     /**
      * Sets the group listener.
      *
-     * @param \App\Pdf\IPdfGroupListener $groupListener the listener to set
+     * @param \App\Pdf\PdfGroupListenerInterface $groupListener the listener to set
      *
      * @return self this instance
      */
-    public function setGroupListener(?IPdfGroupListener $groupListener): self
+    public function setGroupListener(?PdfGroupListenerInterface $groupListener): self
     {
         $this->groupListener = $groupListener;
 

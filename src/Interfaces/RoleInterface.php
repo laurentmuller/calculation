@@ -19,7 +19,7 @@ namespace App\Interfaces;
  *
  * @author Laurent Muller
  */
-interface IRole
+interface RoleInterface
 {
     /**
      * Gets the role.

@@ -19,7 +19,7 @@ namespace App\Pdf;
  *
  * @author Laurent Muller
  */
-interface IPdfGroupListener
+interface PdfGroupListenerInterface
 {
     /**
      * Called when a group must be rendered.

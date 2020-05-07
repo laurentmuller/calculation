@@ -16,7 +16,7 @@ namespace App\Tests;
 
 use App\Entity\Calculation;
 use App\Entity\User;
-use App\Interfaces\IEntityVoter;
+use App\Interfaces\EntityVoterInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  *
  * @author Laurent Muller
  */
-class EntityVoterTest extends TestCase implements IEntityVoter
+class EntityVoterTest extends TestCase implements EntityVoterInterface
 {
     /**
      * @var EntityVoter

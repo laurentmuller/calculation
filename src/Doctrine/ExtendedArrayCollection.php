@@ -24,7 +24,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  *
  * @author Laurent Muller
  */
-class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollection
+class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollectionInterface
 {
     /**
      * Initializes a new collection.

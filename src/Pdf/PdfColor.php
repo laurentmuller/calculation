@@ -22,7 +22,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-abstract class PdfColor implements IPdfDocumentUpdater
+abstract class PdfColor implements PdfDocumentUpdaterInterface
 {
     use MathTrait;
 

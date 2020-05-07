@@ -19,7 +19,7 @@ namespace App\Calendar;
  *
  * @author Laurent Muller
  */
-interface IMonthsOfYear
+interface MonthsInterface
 {
     /**
      * Numeric representation of of April.

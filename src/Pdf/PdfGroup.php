@@ -23,7 +23,7 @@ use App\Utils\Utils;
  *
  * @see \App\Pdf\PdfGroupTableBuilder
  */
-class PdfGroup implements IPdfDocumentUpdater, IPdfConstants
+class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
 {
     use PdfAlignmentTrait;
     use PdfBorderTrait;

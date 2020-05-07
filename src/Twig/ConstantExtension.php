@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Interfaces\IEntityVoter;
+use App\Interfaces\EntityVoterInterface;
 use App\Service\CalculationService;
 use App\Service\ThemeService;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -61,14 +61,14 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
         // already in the cache?
         $item = $this->cache->getItem(self::CACHE_KEY);
         if ($item->isHit()) {
-            return $item->get();
+           return $item->get();
         }
 
         // create array
         $values = [
             $this->getShortName(CalculationService::class) => $this->getConstants(CalculationService::class),
             $this->getShortName(ThemeService::class) => $this->getConstants(ThemeService::class),
-            $this->getShortName(IEntityVoter::class) => $this->getConstants(IEntityVoter::class),
+            $this->getShortName(EntityVoterInterface::class) => $this->getConstants(EntityVoterInterface::class),
         ];
 
         // put to the cache

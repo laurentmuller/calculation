@@ -10,9 +10,9 @@
 {%- set params = routeParams(app.request, id) %}
 
 {# actions #}
-{%- set edit_path   = is_granted(IEntityVoter.ATTRIBUTE_EDIT, item) ? path('user_edit', params) : null -%}
-{%- set delete_path = is_granted(IEntityVoter.ATTRIBUTE_DELETE, item) ? path('user_delete', params) : null -%}
-{%- set rights_path = is_granted(IEntityVoter.ATTRIBUTE_EDIT, item) ? path('user_rights', params) : null -%}
+{%- set edit_path   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, item) ? path('user_edit', params) : null -%}
+{%- set delete_path = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, item) ? path('user_delete', params) : null -%}
+{%- set rights_path = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, item) ? path('user_rights', params) : null -%}
 {%- set cancel_path = cancelUrl(app.request, id, 'user_list') -%}
 {%- if item.username == app.user.username -%}
     {%- set delete_path = null -%}

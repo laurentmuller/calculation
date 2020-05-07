@@ -12,14 +12,14 @@
 {%- set empty_list   = 'category.list.empty' -%}
 
 {# actions #}
-{%- set object_type  = IEntityVoter.ENTITY_CATEGORY -%}
-{%- set add_page     = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'category_add' : null -%}
-{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'category_edit' : null -%}
-{%- set delete_page  = is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) ? 'category_delete' : null -%}
-{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) ? 'category_show' : null -%}
-{%- set pdf_page     = is_granted(IEntityVoter.ATTRIBUTE_PDF, object_type) ? 'category_pdf' : null -%}
+{%- set object_type  = EntityVoterInterface.ENTITY_CATEGORY -%}
+{%- set add_page     = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) ? 'category_add' : null -%}
+{%- set edit_page    = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'category_edit' : null -%}
+{%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'category_delete' : null -%}
+{%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'category_show' : null -%}
+{%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, object_type) ? 'category_pdf' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
-{%- set product_list = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_PRODUCT) %}
+{%- set product_list = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_PRODUCT) %}
 
 {% block item_title %}
 {%- set item_title = item.code -%}

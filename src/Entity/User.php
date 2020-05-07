@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\IRole;
+use App\Interfaces\RoleInterface;
 use App\Traits\DateFormatterTrait;
 use App\Traits\RightsTrait;
 use App\Traits\SearchTrait;
@@ -35,7 +35,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @UniqueEntity(fields={"username"}, message="fos_user.username.already_used")
  * @Vich\Uploadable
  */
-class User extends BaseUser implements IEntity, IRole
+class User extends BaseUser implements EntityInterface, RoleInterface
 {
     use DateFormatterTrait;
     use RightsTrait;

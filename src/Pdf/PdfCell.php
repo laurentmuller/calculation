@@ -80,7 +80,7 @@ class PdfCell
      * @param PdfStyle $style     the cell style
      * @param string   $alignment the cell alignment
      */
-    public function __construct(?string $text = null, $cols = 1, ?PdfStyle $style = null, ?string $alignment = IPdfConstants::ALIGN_INHERITED)
+    public function __construct(?string $text = null, $cols = 1, ?PdfStyle $style = null, ?string $alignment = PdfConstantsInterface::ALIGN_INHERITED)
     {
         $this->setText($text)
             ->setCols($cols)

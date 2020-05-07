@@ -206,7 +206,7 @@ class Property extends BaseEntity
         if ($value instanceof \DateTimeInterface) {
             return $this->setDate($value);
         }
-        if ($value instanceof IEntity) {
+        if ($value instanceof EntityInterface) {
             return $this->setInteger($value->getId());
         }
 

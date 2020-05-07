@@ -9,8 +9,8 @@
 {%- set params = routeParams(app.request, id) %}
 
 {# actions #}
-{%- set edit_path   = is_granted(IEntityVoter.ATTRIBUTE_EDIT, item) ? path('globalmargin_edit', params) : null -%}
-{%- set delete_path = is_granted(IEntityVoter.ATTRIBUTE_DELETE, item) ? path('globalmargin_delete', params) : null -%}
+{%- set edit_path   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, item) ? path('globalmargin_edit', params) : null -%}
+{%- set delete_path = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, item) ? path('globalmargin_delete', params) : null -%}
 {%- set cancel_path = cancelUrl(app.request, id, 'globalmargin_list') -%}
 
 {# properties #}

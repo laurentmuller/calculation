@@ -22,7 +22,7 @@ use Symfony\Component\PropertyAccess\PropertyPathInterface;
  *
  * @author Laurent Muller
  */
-interface ExtendedCollection extends Collection
+interface ExtendedCollectionInterface extends Collection
 {
     /**
      * Return a new collection with sorted result.

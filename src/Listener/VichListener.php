@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
-use App\Interfaces\IImageExtension;
+use App\Interfaces\ImageExtensionInterface;
 use App\Service\ImageResizer;
 use App\Service\UserNamer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -28,7 +28,7 @@ use Vich\UploaderBundle\Naming\Polyfill\FileExtensionTrait;
  *
  * @author Laurent Muller
  */
-class VichListener implements EventSubscriberInterface, IImageExtension
+class VichListener implements EventSubscriberInterface, ImageExtensionInterface
 {
     use FileExtensionTrait;
 

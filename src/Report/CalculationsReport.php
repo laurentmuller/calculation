@@ -16,7 +16,7 @@ namespace App\Report;
 
 use App\Controller\BaseController;
 use App\Entity\Calculation;
-use App\Pdf\IPdfConstants;
+use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
@@ -107,7 +107,7 @@ class CalculationsReport extends BaseReport
         ]);
 
         $columns = $table->getColumnsCount() - 3;
-        $table->getColumns()[0]->setAlignment(IPdfConstants::ALIGN_LEFT)
+        $table->getColumns()[0]->setAlignment(PdfConstantsInterface::ALIGN_LEFT)
             ->setFixed(false);
         $table->startHeaderRow()
             ->add($text, $columns)

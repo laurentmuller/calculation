@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\MappedSuperclass
  */
-abstract class BaseEntity implements IEntity
+abstract class BaseEntity implements EntityInterface
 {
     use MathTrait;
     use SearchTrait;

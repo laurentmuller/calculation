@@ -23,7 +23,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class PdfCellBorder implements IPdfDocumentUpdater
+class PdfCellBorder implements PdfDocumentUpdaterInterface
 {
     /**
      * The border color.

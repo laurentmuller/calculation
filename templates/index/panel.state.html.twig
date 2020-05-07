@@ -20,7 +20,7 @@
 {% import "macros/_icons.html.twig" as icons %}
 
 {# actions #}
-{%- set enabled = is_granted(IEntityVoter.ATTRIBUTE_LIST, IEntityVoter.ENTITY_CALCULATION) -%}
+{%- set enabled = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
 
 <div class="card mb-2">
     <div class="card-header">

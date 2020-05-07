@@ -19,7 +19,7 @@ use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Customer;
 use App\Entity\GlobalMargin;
-use App\Entity\IEntity;
+use App\Entity\EntityInterface;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Traits\TranslatorFlashMessageTrait;
@@ -154,9 +154,9 @@ class PersistenceListener implements EventSubscriber
      *
      * @param LifecycleEventArgs $args the arguments to get entity for
      *
-     * @return IEntity|null the entity, if found; null otherwise
+     * @return EntityInterface|null the entity, if found; null otherwise
      */
-    private function getEntity(LifecycleEventArgs $args): ?IEntity
+    private function getEntity(LifecycleEventArgs $args): ?EntityInterface
     {
         $entity = $args->getObject();
         if (\in_array(\get_class($entity), self::$CLASS_NAMES, true)) {
@@ -169,12 +169,12 @@ class PersistenceListener implements EventSubscriber
     /**
      * Gets the message identifier to translate.
      *
-     * @param IEntity $entity the entity
+     * @param EntityInterface $entity the entity
      * @param string  $suffix the message suffix
      *
      * @return string the message identifier to translate
      */
-    private function getId(IEntity $entity, string $suffix): string
+    private function getId(EntityInterface $entity, string $suffix): string
     {
         $name = \strtolower(Utils::getShortName($entity));
 
@@ -184,11 +184,11 @@ class PersistenceListener implements EventSubscriber
     /**
      * Gets the message parameters.
      *
-     * @param IEntity $entity the entity
+     * @param EntityInterface $entity the entity
      *
      * @return array the message parameters
      */
-    private function getParameters(IEntity $entity): array
+    private function getParameters(EntityInterface $entity): array
     {
         return ['%name%' => $entity->getDisplay()];
     }

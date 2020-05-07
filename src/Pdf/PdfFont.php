@@ -21,7 +21,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class PdfFont implements IPdfDocumentUpdater
+class PdfFont implements PdfDocumentUpdaterInterface
 {
     /**
      * The default font name (Arial).

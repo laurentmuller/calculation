@@ -16,7 +16,7 @@ namespace App\Service;
 
 use App\Entity\CalculationState;
 use App\Entity\Property;
-use App\Interfaces\IApplicationService;
+use App\Interfaces\ApplicationServiceInterface;
 use App\Repository\PropertyRepository;
 use App\Traits\LoggerTrait;
 use App\Utils\FormatUtils;
@@ -32,7 +32,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *
  * @author Laurent Muller
  */
-class ApplicationService implements IApplicationService
+class ApplicationService implements ApplicationServiceInterface
 {
     use LoggerTrait;
 

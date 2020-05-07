@@ -90,11 +90,11 @@ class TranslatorFactory
      *
      * @param string $class the service class. Can be one of this defined constants.
      *
-     * @return ITranslatorService the translator service
+     * @return TranslatorServiceInterface the translator service
      *
      * @throws ParameterNotFoundException if the service can not be found or if the API key parameter is not defined
      */
-    public function getService(string $class): ITranslatorService
+    public function getService(string $class): TranslatorServiceInterface
     {
         if (!$this->exists($class)) {
             throw new ParameterNotFoundException("The translator service '{$class}' can not be found.");
@@ -141,9 +141,9 @@ class TranslatorFactory
     /**
      * Gets the last used translator service from the session.
      *
-     * @return ITranslatorService the translator service or the default (Bing) if not found
+     * @return TranslatorServiceInterface the translator service or the default (Bing) if not found
      */
-    public function getSessionService(): ITranslatorService
+    public function getSessionService(): TranslatorServiceInterface
     {
         $class = $this->getSessionValue(self::KEY_LAST_SERVICE, self::DEFAULT_SERVICE);
         if (!$this->exists($class)) {

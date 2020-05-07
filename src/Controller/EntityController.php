@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\Tables\EntityDataTable;
-use App\Entity\IEntity;
-use App\Interfaces\IEntityVoter;
+use App\Entity\EntityInterface;
+use App\Interfaces\EntityVoterInterface;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfResponse;
 use App\Repository\BaseRepository;
@@ -62,18 +62,18 @@ abstract class EntityController extends BaseController
     /**
      * Raised after the given entity is deleted.
      *
-     * @param IEntity $item the deleted entity
+     * @param EntityInterface $item the deleted entity
      */
-    protected function afterDelete(IEntity $item): void
+    protected function afterDelete(EntityInterface $item): void
     {
     }
 
     /**
      * Raised before the given entity is deleted.
      *
-     * @param IEntity $item the entity to delete
+     * @param EntityInterface $item the entity to delete
      */
-    protected function beforeDelete(IEntity $item): void
+    protected function beforeDelete(EntityInterface $item): void
     {
     }
 
@@ -90,9 +90,9 @@ abstract class EntityController extends BaseController
     protected function deletItem(Request $request, array $parameters): Response
     {
         // check permission
-        $this->denyAccessUnlessGranted(IEntityVoter::ATTRIBUTE_DELETE, $this->className);
+        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_DELETE, $this->className);
 
-        /** @var IEntity $item */
+        /** @var EntityInterface $item */
         $item = $parameters['item'];
         $display = $item->getDisplay();
 
@@ -150,12 +150,12 @@ abstract class EntityController extends BaseController
      */
     protected function editItem(Request $request, array $parameters): Response
     {
-        /** @var \App\Entity\IEntity $item */
+        /** @var \App\Entity\EntityInterface $item */
         $item = $parameters['item'];
         $isNew = $item->isNew();
 
         // check permission
-        $attribute = $isNew ? IEntityVoter::ATTRIBUTE_ADD : IEntityVoter::ATTRIBUTE_EDIT;
+        $attribute = $isNew ? EntityVoterInterface::ATTRIBUTE_ADD : EntityVoterInterface::ATTRIBUTE_EDIT;
         $this->denyAccessUnlessGranted($attribute, $item);
 
         // form
@@ -218,7 +218,7 @@ abstract class EntityController extends BaseController
      *
      * @param int $id the entity identifier
      *
-     * @return IEntity The entity
+     * @return EntityInterface The entity
      *
      * @throws NotFoundHttpException if the entity is not found
      */
@@ -316,7 +316,7 @@ abstract class EntityController extends BaseController
     protected function renderCard(Request $request, string $template, string $sortField, string $sortMode = Criteria::ASC, array $sortFields = [], array $parameters = []): Response
     {
         // check permission
-        $this->denyAccessUnlessGranted(IEntityVoter::ATTRIBUTE_LIST, $this->className);
+        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $this->className);
 
         // get session values
         $key = $this->getShortClassName();
@@ -364,7 +364,7 @@ abstract class EntityController extends BaseController
     protected function renderDocument(PdfDocument $doc, bool $inline = true, string $name = '', bool $isUTF8 = false): PdfResponse
     {
         // check permission
-        $this->denyAccessUnlessGranted(IEntityVoter::ATTRIBUTE_PDF, $this->className);
+        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_PDF, $this->className);
 
         return parent::renderDocument($doc, $inline, $name, $isUTF8);
     }
@@ -381,7 +381,7 @@ abstract class EntityController extends BaseController
     protected function showItem(string $template, $item, array $parameters = []): Response
     {
         // check permission
-        $this->denyAccessUnlessGranted(IEntityVoter::ATTRIBUTE_SHOW, $item);
+        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_SHOW, $item);
 
         // add item parameter
         $parameters['item'] = $item;

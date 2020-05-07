@@ -19,7 +19,7 @@ use App\Entity\User;
 use App\Form\FormHelper;
 use App\Form\ParametersType;
 use App\Form\RoleRightsType;
-use App\Interfaces\IApplicationService;
+use App\Interfaces\ApplicationServiceInterface;
 use App\Security\EntityVoter;
 use App\Service\SwissPostService;
 use App\Utils\SymfonyUtils;
@@ -53,7 +53,7 @@ class AdminController extends BaseController
         $roleName = User::ROLE_ADMIN;
         $rights = $this->getApplication()->getAdminRights();
         $default = EntityVoter::getRoleAdmin();
-        $property = IApplicationService::ADMIN_RIGHTS;
+        $property = ApplicationServiceInterface::ADMIN_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);
     }
@@ -175,7 +175,7 @@ class AdminController extends BaseController
         $data = $service->getProperties();
 
         // remove last update
-        unset($data[IApplicationService::LAST_UPDATE], $data[IApplicationService::LAST_IMPORT]);
+        unset($data[ApplicationServiceInterface::LAST_UPDATE], $data[ApplicationServiceInterface::LAST_IMPORT]);
 
         // form
         $form = $this->createForm(ParametersType::class, $data);
@@ -206,7 +206,7 @@ class AdminController extends BaseController
         $roleName = User::ROLE_DEFAULT;
         $rights = $this->getApplication()->getUserRights();
         $default = EntityVoter::getRoleUser();
-        $property = IApplicationService::USER_RIGHTS;
+        $property = ApplicationServiceInterface::USER_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);
     }

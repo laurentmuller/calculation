@@ -17,7 +17,7 @@ namespace App\Entity;
 /**
  * Class implementing this interface provide entity informations.
  */
-interface IEntity
+interface EntityInterface
 {
     /**
      * Gets a string used to display in the user interface (UI).

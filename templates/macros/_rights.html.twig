@@ -43,25 +43,25 @@
     <thead>
 	   <tr class="text-center">
             <th class="text-left font-weight-normal">{{ icons.icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icons.icon('arrow-right') }}</th>
-            {{ _self.header('rights.list', IEntityVoter.ATTRIBUTE_LIST) }}
-            {{ _self.header('rights.show', IEntityVoter.ATTRIBUTE_SHOW) }}
-            {{ _self.header('rights.add', IEntityVoter.ATTRIBUTE_ADD) }}
-            {{ _self.header('rights.edit', IEntityVoter.ATTRIBUTE_EDIT) }}
-            {{ _self.header('rights.delete', IEntityVoter.ATTRIBUTE_DELETE) }}
-            {{ _self.header('rights.pdf', IEntityVoter.ATTRIBUTE_PDF) }}
+            {{ _self.header('rights.list', EntityVoterInterface.ATTRIBUTE_LIST) }}
+            {{ _self.header('rights.show', EntityVoterInterface.ATTRIBUTE_SHOW) }}
+            {{ _self.header('rights.add', EntityVoterInterface.ATTRIBUTE_ADD) }}
+            {{ _self.header('rights.edit', EntityVoterInterface.ATTRIBUTE_EDIT) }}
+            {{ _self.header('rights.delete', EntityVoterInterface.ATTRIBUTE_DELETE) }}
+            {{ _self.header('rights.pdf', EntityVoterInterface.ATTRIBUTE_PDF) }}
        </tr>
     </thead>
     <tbody>
-        {{ _self.row(form.Calculation, IEntityVoter.ENTITY_CALCULATION, default.Calculation, overwrite) }}
-        {{ _self.row(form.Product, IEntityVoter.ENTITY_PRODUCT, default.Product, overwrite) }}
-        {{ _self.row(form.Category, IEntityVoter.ENTITY_CATEGORY, default.Category, overwrite) }}
-        {{ _self.row(form.CalculationState, IEntityVoter.ENTITY_CALCULATION_STATE, default.CalculationState, overwrite) }}
-        {{ _self.row(form.GlobalMargin, IEntityVoter.ENTITY_GLOBAL_MARGIN, default.GlobalMargin, overwrite) }}
+        {{ _self.row(form.Calculation, EntityVoterInterface.ENTITY_CALCULATION, default.Calculation, overwrite) }}
+        {{ _self.row(form.Product, EntityVoterInterface.ENTITY_PRODUCT, default.Product, overwrite) }}
+        {{ _self.row(form.Category, EntityVoterInterface.ENTITY_CATEGORY, default.Category, overwrite) }}
+        {{ _self.row(form.CalculationState, EntityVoterInterface.ENTITY_CALCULATION_STATE, default.CalculationState, overwrite) }}
+        {{ _self.row(form.GlobalMargin, EntityVoterInterface.ENTITY_GLOBAL_MARGIN, default.GlobalMargin, overwrite) }}
         {%- if form.Customer|default(false) -%}
-            {{ _self.row(form.Customer, IEntityVoter.ENTITY_CUSTOMER, default.Customer, overwrite) }}
+            {{ _self.row(form.Customer, EntityVoterInterface.ENTITY_CUSTOMER, default.Customer, overwrite) }}
         {%- endif -%}
         {%- if form.User|default(false) -%}
-            {{ _self.row(form.User, IEntityVoter.ENTITY_USER, default.User, overwrite) }}
+            {{ _self.row(form.User, EntityVoterInterface.ENTITY_USER, default.User, overwrite) }}
         {%- endif -%}
     </tbody>
 </table>

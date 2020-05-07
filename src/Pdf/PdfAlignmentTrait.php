@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 /**
- * This trait allows class to have an alignment property. The default value is <code>IPdfConstants::ALIGN_LEFT</code>.
+ * This trait allows class to have an alignment property. The default value is <code>PdfConstantsInterface::ALIGN_LEFT</code>.
  *
  * @author Laurent Muller
  */
@@ -26,7 +26,7 @@ trait PdfAlignmentTrait
      *
      * @var string
      */
-    protected $alignment = IPdfConstants::ALIGN_LEFT;
+    protected $alignment = PdfConstantsInterface::ALIGN_LEFT;
 
     /**
      * Gets the alignment.
@@ -85,19 +85,19 @@ trait PdfAlignmentTrait
     {
         $result = 'Left';
         switch ($this->alignment) {
-            case IPdfConstants::ALIGN_RIGHT:
+            case PdfConstantsInterface::ALIGN_RIGHT:
                 $result = 'Right';
                 break;
 
-            case IPdfConstants::ALIGN_CENTER:
+            case PdfConstantsInterface::ALIGN_CENTER:
                 $result = 'Center';
                 break;
 
-            case IPdfConstants::ALIGN_INHERITED:
+            case PdfConstantsInterface::ALIGN_INHERITED:
                 $result = 'Inherited';
                 break;
 
-            case IPdfConstants::ALIGN_JUSTIFIED:
+            case PdfConstantsInterface::ALIGN_JUSTIFIED:
                 $result = 'Justified';
                 break;
         }
@@ -115,14 +115,14 @@ trait PdfAlignmentTrait
     protected function validateAlignment(?string $alignment): string
     {
         switch ($alignment) {
-            case IPdfConstants::ALIGN_LEFT:
-            case IPdfConstants::ALIGN_RIGHT:
-            case IPdfConstants::ALIGN_CENTER:
-            case IPdfConstants::ALIGN_INHERITED:
-            case IPdfConstants::ALIGN_JUSTIFIED:
+            case PdfConstantsInterface::ALIGN_LEFT:
+            case PdfConstantsInterface::ALIGN_RIGHT:
+            case PdfConstantsInterface::ALIGN_CENTER:
+            case PdfConstantsInterface::ALIGN_INHERITED:
+            case PdfConstantsInterface::ALIGN_JUSTIFIED:
                 return $alignment;
             default:
-                return IPdfConstants::ALIGN_LEFT;
+                return PdfConstantsInterface::ALIGN_LEFT;
         }
     }
 }

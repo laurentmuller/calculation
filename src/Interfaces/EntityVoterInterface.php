@@ -19,7 +19,7 @@ namespace App\Interfaces;
  *
  * @author Laurent Muller
  */
-interface IEntityVoter
+interface EntityVoterInterface
 {
     /**
      * The add attribute name.

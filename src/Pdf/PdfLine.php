@@ -21,7 +21,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class PdfLine implements IPdfDocumentUpdater
+class PdfLine implements PdfDocumentUpdaterInterface
 {
     /**
      * The default line width (0.2mm).

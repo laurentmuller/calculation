@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\SwissDatabase;
-use App\Interfaces\IApplicationService;
+use App\Interfaces\ApplicationServiceInterface;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
 use IntlDateFormatter;
@@ -379,7 +379,7 @@ class SwissPostService
 
             // save date
             $valid = true;
-            $this->application->setProperties([IApplicationService::LAST_IMPORT => $validity]);
+            $this->application->setProperties([ApplicationServiceInterface::LAST_IMPORT => $validity]);
 
             // OK
             return [

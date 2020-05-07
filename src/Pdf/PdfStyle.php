@@ -21,7 +21,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class PdfStyle implements IPdfDocumentUpdater
+class PdfStyle implements PdfDocumentUpdaterInterface
 {
     use PdfBorderTrait;
 
@@ -288,7 +288,7 @@ class PdfStyle implements IPdfDocumentUpdater
     public static function getNoBorderStyle(): self
     {
         return self::getDefaultStyle()
-            ->setBorder(IPdfConstants::BORDER_NONE);
+            ->setBorder(PdfConstantsInterface::BORDER_NONE);
     }
 
     /**

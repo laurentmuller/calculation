@@ -19,7 +19,7 @@ namespace App\Pdf;
  *
  * @author Laurent Muller
  */
-interface IPdfCellListener
+interface PdfCellListenerInterface
 {
     /**
      * Called when a cell must be filled.

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
-use App\Interfaces\IImageExtension;
+use App\Interfaces\ImageExtensionInterface;
 
 /**
  * Handler for images.
@@ -24,7 +24,7 @@ use App\Interfaces\IImageExtension;
  *
  * @author Laurent Muller
  */
-class ImageHandler implements IImageExtension
+class ImageHandler implements ImageExtensionInterface
 {
     /**
      * The allocate colors.
@@ -405,7 +405,7 @@ class ImageHandler implements IImageExtension
      *
      * @return int the resolution
      *
-     * @see IImageExtension::DEFAULT_RESOLUTION
+     * @see ImageExtensionInterface::DEFAULT_RESOLUTION
      */
     public function resolution(int $default = self::DEFAULT_RESOLUTION): int
     {

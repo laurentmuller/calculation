@@ -19,7 +19,7 @@ namespace App\Pdf;
  *
  * @author Laurent Muller
  */
-interface IPdfDocumentUpdater
+interface PdfDocumentUpdaterInterface
 {
     /**
      * Apply changes to the given document.

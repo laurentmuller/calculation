@@ -53,7 +53,7 @@ class HtmlParser
 
         // load content
         $dom = new \DOMDocument();
-        if (!$dom->loadHTML($html)) { //, LIBXML_NOERROR | LIBXML_NOBLANKS
+        if (!$dom->loadHTML($html, LIBXML_NOERROR | LIBXML_NOBLANKS)) {
             return null;
         }
 

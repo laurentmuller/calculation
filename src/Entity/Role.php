@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\IRole;
+use App\Interfaces\RoleInterface;
 use App\Traits\RightsTrait;
 
 /**
@@ -22,7 +22,7 @@ use App\Traits\RightsTrait;
  *
  * @author Laurent Muller
  */
-class Role implements IRole
+class Role implements RoleInterface
 {
     use RightsTrait;
 

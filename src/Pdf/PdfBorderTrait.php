@@ -16,7 +16,7 @@ namespace App\Pdf;
 
 /**
  * This trait allows class to have a border property.
- * The default value is <code>IPdfConstants::BORDER_ALL</code>.
+ * The default value is <code>PdfConstantsInterface::BORDER_ALL</code>.
  *
  * @author Laurent Muller
  */
@@ -27,7 +27,7 @@ trait PdfBorderTrait
      *
      * @var mixed
      */
-    protected $border = IPdfConstants::BORDER_ALL;
+    protected $border = PdfConstantsInterface::BORDER_ALL;
 
     /**
      * Gets the border style.
@@ -62,7 +62,7 @@ trait PdfBorderTrait
      */
     public function isBorderInherited(): bool
     {
-        return IPdfConstants::BORDER_INHERITED === $this->border;
+        return PdfConstantsInterface::BORDER_INHERITED === $this->border;
     }
 
     /**
@@ -107,26 +107,26 @@ trait PdfBorderTrait
         $result = [];
         if (empty($border)) {
             $result[] = 'None';
-        } elseif (IPdfConstants::BORDER_ALL === $border) {
+        } elseif (PdfConstantsInterface::BORDER_ALL === $border) {
             $result[] = 'All';
-        } elseif (IPdfConstants::BORDER_INHERITED === $border) {
+        } elseif (PdfConstantsInterface::BORDER_INHERITED === $border) {
             $result[] = 'Inherited';
         } else {
             for ($i = 0, $count = \strlen($border); $i < $count; ++$i) {
                 switch ($border[$i]) {
-                    case IPdfConstants::BORDER_LEFT:
+                    case PdfConstantsInterface::BORDER_LEFT:
                         $result[] = 'Left';
                         break;
 
-                    case IPdfConstants::BORDER_RIGHT:
+                    case PdfConstantsInterface::BORDER_RIGHT:
                         $result[] = 'Right';
                         break;
 
-                    case IPdfConstants::BORDER_TOP:
+                    case PdfConstantsInterface::BORDER_TOP:
                         $result[] = 'Top';
                         break;
 
-                    case IPdfConstants::BORDER_BOTTOM:
+                    case PdfConstantsInterface::BORDER_BOTTOM:
                         $result[] = 'Bottom';
                         break;
                 }
@@ -149,23 +149,23 @@ trait PdfBorderTrait
     protected function validateBorder($border)
     {
         if (empty($border)) {
-            return IPdfConstants::BORDER_NONE;
+            return PdfConstantsInterface::BORDER_NONE;
         }
-        if (IPdfConstants::BORDER_ALL === $border) {
-            return IPdfConstants::BORDER_ALL;
+        if (PdfConstantsInterface::BORDER_ALL === $border) {
+            return PdfConstantsInterface::BORDER_ALL;
         }
-        if (IPdfConstants::BORDER_INHERITED === $border) {
-            return IPdfConstants::BORDER_INHERITED;
+        if (PdfConstantsInterface::BORDER_INHERITED === $border) {
+            return PdfConstantsInterface::BORDER_INHERITED;
         }
 
         $result = '';
         $border = \strtoupper((string) $border);
         for ($i = 0, $count = \strlen($border); $i < $count; ++$i) {
             switch ($border[$i]) {
-                case IPdfConstants::BORDER_LEFT:
-                case IPdfConstants::BORDER_RIGHT:
-                case IPdfConstants::BORDER_TOP:
-                case IPdfConstants::BORDER_BOTTOM:
+                case PdfConstantsInterface::BORDER_LEFT:
+                case PdfConstantsInterface::BORDER_RIGHT:
+                case PdfConstantsInterface::BORDER_TOP:
+                case PdfConstantsInterface::BORDER_BOTTOM:
                     if (false === \strpos($result, $border[$i])) {
                         $result .= $border[$i];
                     }
@@ -173,6 +173,6 @@ trait PdfBorderTrait
             }
         }
 
-        return $result ?: IPdfConstants::BORDER_NONE;
+        return $result ?: PdfConstantsInterface::BORDER_NONE;
     }
 }

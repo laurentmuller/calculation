@@ -26,7 +26,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  *
  * @author Laurent Muller
  */
-abstract class AbstractTranslatorService extends HttpClientService implements ITranslatorService
+abstract class AbstractTranslatorService extends HttpClientService implements TranslatorServiceInterface
 {
     /**
      * The cache timeout (60 minutes).

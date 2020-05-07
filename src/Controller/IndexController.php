@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\SearchDataTable;
-use App\Interfaces\IEntityVoter;
+use App\Interfaces\EntityVoterInterface;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,9 +81,9 @@ class IndexController extends BaseController
         }
 
         // authorizations
-        $show_granted = $table->isActionGranted(IEntityVoter::ATTRIBUTE_SHOW);
-        $edit_granted = $table->isActionGranted(IEntityVoter::ATTRIBUTE_EDIT);
-        $delete_granted = $table->isActionGranted(IEntityVoter::ATTRIBUTE_DELETE);
+        $show_granted = $table->isActionGranted(EntityVoterInterface::ATTRIBUTE_SHOW);
+        $edit_granted = $table->isActionGranted(EntityVoterInterface::ATTRIBUTE_EDIT);
+        $delete_granted = $table->isActionGranted(EntityVoterInterface::ATTRIBUTE_DELETE);
 
         // attributes
         $attributes = [

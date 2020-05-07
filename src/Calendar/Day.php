@@ -21,7 +21,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class Day extends CalendarItem implements IDaysOfWeek
+class Day extends CalendarItem implements WeekDaysInterface
 {
     /**
      * The date.

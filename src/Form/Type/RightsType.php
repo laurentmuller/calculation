@@ -16,8 +16,8 @@ namespace App\Form\Type;
 
 use App\Entity\User;
 use App\Form\FormHelper;
-use App\Interfaces\IEntityVoter;
-use App\Interfaces\IRole;
+use App\Interfaces\EntityVoterInterface;
+use App\Interfaces\RoleInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -72,7 +72,7 @@ class RightsType extends AbstractType
     public function onPreSetData(FormEvent $event): void
     {
         $data = $event->getData();
-        if ($data instanceof IRole) {
+        if ($data instanceof RoleInterface) {
             $roles = $this->roleHierarchy->getReachableRoleNames([$data->getRole()]);
         } else {
             $roles = [];
@@ -80,21 +80,21 @@ class RightsType extends AbstractType
 
         if (!\in_array(User::ROLE_ADMIN, $roles, true)) {
             $form = $event->getForm();
-            $form->remove(IEntityVoter::ENTITY_USER);
+            $form->remove(EntityVoterInterface::ENTITY_USER);
         }
     }
 
     protected function addFields(FormHelper $helper): void
     {
-        $this->addRightType($helper, IEntityVoter::ENTITY_CALCULATION, 'calculation.list.title')
-            ->addRightType($helper, IEntityVoter::ENTITY_PRODUCT, 'product.list.title')
-            ->addRightType($helper, IEntityVoter::ENTITY_CATEGORY, 'category.list.title')
-            ->addRightType($helper, IEntityVoter::ENTITY_CALCULATION_STATE, 'calculationstate.list.title')
-            ->addRightType($helper, IEntityVoter::ENTITY_GLOBAL_MARGIN, 'globalmargin.list.title')
-            ->addRightType($helper, IEntityVoter::ENTITY_USER, 'user.list.title');
+        $this->addRightType($helper, EntityVoterInterface::ENTITY_CALCULATION, 'calculation.list.title')
+            ->addRightType($helper, EntityVoterInterface::ENTITY_PRODUCT, 'product.list.title')
+            ->addRightType($helper, EntityVoterInterface::ENTITY_CATEGORY, 'category.list.title')
+            ->addRightType($helper, EntityVoterInterface::ENTITY_CALCULATION_STATE, 'calculationstate.list.title')
+            ->addRightType($helper, EntityVoterInterface::ENTITY_GLOBAL_MARGIN, 'globalmargin.list.title')
+            ->addRightType($helper, EntityVoterInterface::ENTITY_USER, 'user.list.title');
 
         if ($this->debug) {
-            $this->addRightType($helper, IEntityVoter::ENTITY_CUSTOMER, 'customer.list.title');
+            $this->addRightType($helper, EntityVoterInterface::ENTITY_CUSTOMER, 'customer.list.title');
         }
     }
 

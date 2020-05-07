@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Interfaces\IImageExtension;
+use App\Interfaces\ImageExtensionInterface;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
@@ -25,7 +25,7 @@ use Psr\Log\LoggerInterface;
  *
  * @author Laurent Muller
  */
-class ImageResizer implements IImageExtension
+class ImageResizer implements ImageExtensionInterface
 {
     /**
      * The default options.

@@ -19,7 +19,7 @@ namespace App\Pdf\Html;
  *
  * @author Laurent Muller
  */
-interface IHtmlConstants
+interface HtmlConstantsInterface
 {
     /**
      * The H1 tag name.

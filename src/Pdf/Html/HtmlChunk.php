@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\IPdfConstants;
+use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfColor;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
@@ -27,7 +27,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-abstract class HtmlChunk implements IHtmlConstants, IPdfConstants
+abstract class HtmlChunk implements HtmlConstantsInterface, PdfConstantsInterface
 {
     /**
      * The class name.

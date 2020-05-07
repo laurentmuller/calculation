@@ -7,14 +7,14 @@
 {%- set selection    = app.request.get('id', 0) -%}
 
 {# actions #}
-{%- set object_type  = IEntityVoter.ENTITY_CALCULATION -%}
-{%- set add_path     = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? path('calculation_add', {'caller': caller}) : null -%}
-{%- set clone_page   = is_granted(IEntityVoter.ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
-{%- set edit_page    = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
-{%- set state_page   = is_granted(IEntityVoter.ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
-{%- set delete_page  = is_granted(IEntityVoter.ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
-{%- set show_page    = is_granted(IEntityVoter.ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
-{%- set single_page  = is_granted(IEntityVoter.ATTRIBUTE_PDF, object_type) ? 'calculation_pdf_id' : null -%}
+{%- set object_type  = EntityVoterInterface.ENTITY_CALCULATION -%}
+{%- set add_path     = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) ? path('calculation_add', {'caller': caller}) : null -%}
+{%- set clone_page   = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
+{%- set edit_page    = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
+{%- set state_page   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
+{%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
+{%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
+{%- set single_page  = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, object_type) ? 'calculation_pdf_id' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 
 <div class="card mb-2">

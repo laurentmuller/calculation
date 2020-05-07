@@ -19,7 +19,7 @@ namespace App\Translator;
  *
  * @author Laurent Muller
  */
-interface ITranslatorService
+interface TranslatorServiceInterface
 {
     /**
      * Identifies the language of a piece of text.

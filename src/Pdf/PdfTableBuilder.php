@@ -27,7 +27,7 @@ use OutOfRangeException;
  *
  * @see \App\Pdf\PdfColumn
  */
-class PdfTableBuilder implements IPdfConstants
+class PdfTableBuilder implements PdfConstantsInterface
 {
     use MathTrait;
     use PdfAlignmentTrait;
@@ -64,7 +64,7 @@ class PdfTableBuilder implements IPdfConstants
     /**
      * The cell listener.
      *
-     * @var IPdfCellListener|null
+     * @var PdfCellListenerInterface|null
      */
     protected $listener;
 
@@ -361,9 +361,9 @@ class PdfTableBuilder implements IPdfConstants
     /**
      * Gets the cell listener.
      *
-     * @return \App\Pdf\IPdfCellListener
+     * @return \App\Pdf\PdfCellListenerInterface
      */
-    public function getListener(): ?IPdfCellListener
+    public function getListener(): ?PdfCellListenerInterface
     {
         return $this->listener;
     }
@@ -475,11 +475,11 @@ class PdfTableBuilder implements IPdfConstants
     /**
      * Sets the cell listener.
      *
-     * @param \App\Pdf\IPdfCellListener $listener
+     * @param \App\Pdf\PdfCellListenerInterface $listener
      *
      * @return self this instance
      */
-    public function setListener(?IPdfCellListener $listener): self
+    public function setListener(?PdfCellListenerInterface $listener): self
     {
         $this->listener = $listener;
 

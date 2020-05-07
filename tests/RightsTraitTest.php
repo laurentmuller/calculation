@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Interfaces\IEntityVoter;
+use App\Interfaces\EntityVoterInterface;
 use App\Security\EntityVoter;
 use App\Traits\RightsTrait;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Laurent Muller
  */
-class RightsTraitTest extends TestCase implements IEntityVoter
+class RightsTraitTest extends TestCase implements EntityVoterInterface
 {
     use RightsTrait;
 

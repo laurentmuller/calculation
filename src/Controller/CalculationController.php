@@ -23,7 +23,7 @@ use App\Entity\Category;
 use App\Form\CalculationEditStateType;
 use App\Form\CalculationType;
 use App\Form\FormHelper;
-use App\Interfaces\IApplicationService;
+use App\Interfaces\ApplicationServiceInterface;
 use App\Listener\CalculationListener;
 use App\Pdf\PdfResponse;
 use App\Pivot\Aggregator\SumAggregator;
@@ -695,7 +695,7 @@ class CalculationController extends EntityController
             $total = \count($calculations);
 
             // update last update
-            $this->getApplication()->setProperties([IApplicationService::LAST_UPDATE => new \DateTime()]);
+            $this->getApplication()->setProperties([ApplicationServiceInterface::LAST_UPDATE => new \DateTime()]);
 
             // log results
             $context = [

@@ -21,7 +21,7 @@ namespace App\Pdf;
  *
  * @see \App\Pdf\PdfTable
  */
-class PdfColumn implements IPdfConstants
+class PdfColumn implements PdfConstantsInterface
 {
     use PdfAlignmentTrait;
 

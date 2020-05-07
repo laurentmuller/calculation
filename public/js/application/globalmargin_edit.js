@@ -6,14 +6,14 @@
 $(function () {
     'use strict';
 
-    const options = {
-        rules: {
-            'global_margin[maximum]': {
-                greaterThan: '#global_margin_minimum'
-            }
-        }
-    };
+    // const options = {
+    // rules: {
+    // 'global_margin[maximum]': {
+    // greaterThan: '#global_margin_minimum'
+    // }
+    // }
+    // };
 
     // initialize validator
-    $('#edit-form').initValidator(options);
+    $('#edit-form').initValidator();
 });

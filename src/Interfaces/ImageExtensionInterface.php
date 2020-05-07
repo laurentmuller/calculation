@@ -19,7 +19,7 @@ namespace App\Interfaces;
  *
  * @author Laurent Muller
  */
-interface IImageExtension
+interface ImageExtensionInterface
 {
     /**
      * The default image resolution (96) in dot per each (DPI).

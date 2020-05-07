@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\BaseController;
-use App\Pdf\IPdfConstants;
+use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -156,18 +156,18 @@ abstract class CalculationItemsReports extends BaseReport
             $text = $this->localeId($calculation['id']);
             $this->singleLine($table, $currentX, $text, $idStyle);
 
-            $text = $calculation['customer'] . IPdfConstants::NEW_LINE;
-            $text .= $calculation['description'] . IPdfConstants::NEW_LINE;
+            $text = $calculation['customer'] . PdfConstantsInterface::NEW_LINE;
+            $text .= $calculation['description'] . PdfConstantsInterface::NEW_LINE;
             $text .= $this->localeDate($calculation['date']) . ' / ' . $calculation['stateCode'];
             $this->singleLine($table, $currentX, $text);
 
             // items
             $text = \array_reduce($calculation['items'], function (string $carry, array $item) {
-                return $carry . $this->formatItem($item) . IPdfConstants::NEW_LINE;
+                return $carry . $this->formatItem($item) . PdfConstantsInterface::NEW_LINE;
             }, '');
             $reminder = $maxLines - \count($calculation['items']);
             for ($i = 0; $i < $reminder; ++$i) {
-                $text .= ' ' . IPdfConstants::NEW_LINE;
+                $text .= ' ' . PdfConstantsInterface::NEW_LINE;
             }
             $this->singleLine($table, $currentX, $text, $itemStyle);
 

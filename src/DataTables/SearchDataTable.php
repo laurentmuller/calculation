@@ -16,7 +16,7 @@ namespace App\DataTables;
 
 use App\DataTables\Columns\DataColumn;
 use App\DataTables\Tables\AbstractDataTable;
-use App\Interfaces\IEntityVoter;
+use App\Interfaces\EntityVoterInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use App\Service\SearchService;
@@ -268,7 +268,7 @@ class SearchDataTable extends AbstractDataTable
      */
     private function isGrantedDelete(string $subject): bool
     {
-        return $this->isGranted(IEntityVoter::ATTRIBUTE_DELETE, $subject);
+        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_DELETE, $subject);
     }
 
     /**
@@ -280,7 +280,7 @@ class SearchDataTable extends AbstractDataTable
      */
     private function isGrantedEdit(string $subject): bool
     {
-        return $this->isGranted(IEntityVoter::ATTRIBUTE_EDIT, $subject);
+        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_EDIT, $subject);
     }
 
     /**
@@ -292,7 +292,7 @@ class SearchDataTable extends AbstractDataTable
      */
     private function isGrantedShow(string $subject): bool
     {
-        return $this->isGranted(IEntityVoter::ATTRIBUTE_SHOW, $subject);
+        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_SHOW, $subject);
     }
 
     /**

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\DataTables\Tables;
 
-use App\Entity\IEntity;
+use App\Entity\EntityInterface;
 use App\Repository\BaseRepository;
 use App\Service\ApplicationService;
 use App\Utils\Utils;
@@ -307,7 +307,7 @@ abstract class EntityDataTable extends AbstractDataTable
      *
      * The default implementation use the <code>getCellValues</code> function.
      *
-     * @param IEntity $item the entity to convert
+     * @param EntityInterface $item the entity to convert
      *
      * @see AbstractDataTable::getCellValues()
      */

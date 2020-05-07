@@ -305,20 +305,20 @@ class SearchService
         // build?
         if (empty($this->queries)) {
             // entities queries
-            $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal'])
-                ->createEntityQueries(CalculationState::class, ['code', 'description'])
-                ->createEntityQueries(Product::class, ['description', 'supplier', 'price'])
-                ->createEntityQueries(Category::class, ['code', 'description']);
+            $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal']);
+            $this->createEntityQueries(CalculationState::class, ['code', 'description']);
+            $this->createEntityQueries(Product::class, ['description', 'supplier', 'price']);
+            $this->createEntityQueries(Category::class, ['code', 'description']);
 
             // calculation queries
-            $this->createCalculationDateQuery()
-                ->createCalculationStateQuery()
-                ->createCalculationItemQuery();
+            $this->createCalculationDateQuery();
+            $this->createCalculationStateQuery();
+            $this->createCalculationItemQuery();
 
             // debug queries
             if ($this->debug) {
-                $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company'])
-                    ->createCalculationGroupQuery();
+                $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company']);
+                $this->createCalculationGroupQuery();
             }
 
             // update SQL

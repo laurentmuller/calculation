@@ -308,7 +308,7 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
      *
      * @return string|null the error message if fail, null if valid
      */
-    private function validateRecaptcha(Request $request): ?string
+    protected function validateRecaptcha(Request $request): ?string
     {
         // captcha used?
         if (!$this->application->isDisplayCaptcha()) {

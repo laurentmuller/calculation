@@ -78,13 +78,13 @@ class CalculationGroupTable extends PdfGroupTableBuilder
         foreach ($groups as $group) {
             $this->setGroupName($group->getCode());
             foreach ($group->getItems() as $item) {
-                $this->startRow()
-                    ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
-                    ->add($item->getUnit())
-                    ->addAmount($item->getPrice(), $errorStyle)
-                    ->addAmount($item->getQuantity(), $errorStyle)
-                    ->addAmount($item->getTotal(), null)
-                    ->endRow();
+                $this->startRow();
+                $this->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle);
+                $this->add($item->getUnit());
+                $this->addAmount($item->getPrice(), $errorStyle);
+                $this->addAmount($item->getQuantity(), $errorStyle);
+                $this->addAmount($item->getTotal(), null);
+                $this->endRow();
             }
         }
 

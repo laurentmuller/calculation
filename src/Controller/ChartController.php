@@ -39,11 +39,11 @@ class ChartController extends BaseController
     /**
      * Gets the calculations by month.
      *
-     * @Route("/month", name="chart_by_month")
+     * @Route("/month/{count}", name="chart_by_month", requirements={"count": "\d+" })
      */
-    public function byMonth(Request $request, CalculationRepository $repository, ThemeService $service): Response
+    public function byMonth(int $count = 12, CalculationRepository $repository, ThemeService $service): Response
     {
-        $data = $this->chartByMonth($request, $repository, $service);
+        $data = $this->getChartMonthData($count, $repository, $service);
 
         return $this->render('chart/last_month_chart.html.twig', $data);
     }
@@ -53,9 +53,9 @@ class ChartController extends BaseController
      *
      * @Route("/state", name="chart_by_state")
      */
-    public function byState(Request $request, CalculationStateRepository $repository, ThemeService $service): Response
+    public function byState(CalculationStateRepository $repository, ThemeService $service): Response
     {
-        $data = $this->chartByState($request, $repository, $service);
+        $data = $this->getChartStateData($repository, $service);
 
         return $this->render('chart/by_state_chart.html.twig', $data);
     }
@@ -83,31 +83,20 @@ class ChartController extends BaseController
     }
 
     /**
-     * @Route("/multiaxes", name="chart_multiaxes")
+     * Gets data used by the chart for the calculations by month.
+     *
+     * @param int                   $count      the number of months to display
+     * @param CalculationRepository $repository the repository to get data
+     * @param ThemeService          $service    the service to get theme style
+     *
+     * @return array the data
      */
-    public function multiAxes(Request $request): Response
+    public function getChartMonthData(int $count, CalculationRepository $repository, ThemeService $service): array
     {
-        return $this->render('chart/base_chart.html.twig', [
-            'title' => 'Multi-Axes',
-            'chart' => $this->multiAxesChart(),
-        ]);
-    }
+        $months = \max(1, $count);
 
-    /**
-     * @Route("/history", name="chart_history")
-     */
-    public function sellsHistory(Request $request): Response
-    {
-        return $this->render('chart/base_chart.html.twig', [
-            'title' => 'Historique',
-            'chart' => $this->sellsHistoryChart(),
-        ]);
-    }
-
-    private function chartByMonth(Request $request, CalculationRepository $repository, ThemeService $service): array
-    {
         // get values
-        $data = $repository->getByMonth(12);
+        $data = $repository->getByMonth($months);
 
         // dates (x values)
         $dates = \array_map(function (array $item) {
@@ -169,7 +158,7 @@ class ChartController extends BaseController
         ];
 
         // y axis
-        $color = $this->getForeground($request, $service);
+        $color = $this->getForeground($service);
         $yAxis = [
             [
                 'labels' => [
@@ -198,15 +187,18 @@ class ChartController extends BaseController
             ],
         ];
 
-        // tootltip
-        $formatter = new Expr('function () {
-                var html = "<table>";
-                html += "<tr><th colspan=\"3\">" +  Highcharts.dateFormat("%B %Y", this.x) + "</th></tr>";
-                html += "<tr><td>" +  this.series.name + "</td><td>:</td><td class=\"text-currency\">" + Highcharts.numberFormat(this.y, 0) + "</td></tr>";
-                html += "<tr><td>Total</td><td>:</td><td class=\"text-currency\">" + Highcharts.numberFormat(this.total, 0) + "</td></tr>";
-                html += "</table>";
-                return html;
-        }');
+        // tootltip formatter
+        $function = <<<EOF
+        function () {
+            var html = "<table>";
+            html += "<tr><th colspan=\"3\">" +  Highcharts.dateFormat("%B %Y", this.x) + "</th></tr>";
+            html += "<tr><td>" +  this.series.name + "</td><td>:</td><td class=\"text-currency\">" + Highcharts.numberFormat(this.y, 0) + "</td></tr>";
+            html += "<tr><td>Total</td><td>:</td><td class=\"text-currency\">" + Highcharts.numberFormat(this.total, 0) + "</td></tr>";
+            html += "</table>";
+            return html;
+        }
+        EOF;
+        $formatter = new Expr($function);
 
         // chart
         $chart = $this->createChart(true);
@@ -220,8 +212,6 @@ class ChartController extends BaseController
         $chart->plotOptions->series(['stacking' => 'normal']);
         $chart->tooltip->useHTML(true)
             ->formatter($formatter);
-
-        // https://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/demo/column-stacked/
 
         // data
         $data = [];
@@ -250,13 +240,22 @@ class ChartController extends BaseController
             'data' => $data,
             'count' => $count,
             'items' => $items,
+            'months' => $months,
             'marginPercent' => $marginPercent,
             'marginAmount' => $marginAmount,
             'total' => $total,
         ];
     }
 
-    private function chartByState(Request $request, CalculationStateRepository $repository, ThemeService $service): array
+    /**
+     * Gets data used by the chart for the calculations by state.
+     *
+     * @param CalculationRepository $repository the repository to get data
+     * @param ThemeService          $service    the service to get theme style
+     *
+     * @return array the data
+     */
+    public function getChartStateData(CalculationStateRepository $repository, ThemeService $service): array
     {
         // get values
         $states = $repository->getByState();
@@ -298,7 +297,7 @@ class ChartController extends BaseController
         ];
 
         // legend styles
-        $color = $this->getForeground($request, $service);
+        $color = $this->getForeground($service);
         $style = [
             'color' => $color,
             'fontWeight' => 'normal',
@@ -334,6 +333,28 @@ class ChartController extends BaseController
             'count' => $count,
             'total' => $total,
         ];
+    }
+
+    /**
+     * @Route("/multiaxes", name="chart_multiaxes")
+     */
+    public function multiAxes(Request $request): Response
+    {
+        return $this->render('chart/base_chart.html.twig', [
+            'title' => 'Multi-Axes',
+            'chart' => $this->multiAxesChart(),
+        ]);
+    }
+
+    /**
+     * @Route("/history", name="chart_history")
+     */
+    public function sellsHistory(Request $request): Response
+    {
+        return $this->render('chart/base_chart.html.twig', [
+            'title' => 'Historique',
+            'chart' => $this->sellsHistoryChart(),
+        ]);
     }
 
     /**
@@ -509,14 +530,13 @@ class ChartController extends BaseController
     /**
      * Gets the chart's label foreground.
      *
-     * @param Request      $request the request
-     * @param ThemeService $service the service
+     * @param ThemeService $service the service to get theme style
      *
      * @return string the foreground
      */
-    private function getForeground(Request $request, ThemeService $service): string
+    private function getForeground(ThemeService $service): string
     {
-        return $service->getCurrentTheme($request)->isDark() ? 'white' : 'black';
+        return $service->getCurrentTheme()->isDark() ? 'white' : 'black';
     }
 
     private function multiAxesChart(): Basechart

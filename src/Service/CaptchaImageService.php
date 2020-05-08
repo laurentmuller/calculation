@@ -167,7 +167,29 @@ class CaptchaImageService
      * @param string       $font  the font file
      * @param string       $text  the text to compute
      *
-     * @return array the text layout
+     * @return array the text layout. Each entry is an array of 4 elements with the following values:<br><br>
+     *               <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
+     *               <tr>
+     *               <th>Key</th>
+     *               <th>Content</th>
+     *               </tr>
+     *               <tr>
+     *               <td>'char'</td>
+     *               <td>The character to output.</td>
+     *               </tr>
+     *               <tr>
+     *               <td>'angle'</td>
+     *               <td>The angle in degrees.</td>
+     *               </tr>
+     *               <tr>
+     *               <td>'width'</td>
+     *               <td>The character width.</td>
+     *               </tr>
+     *               <tr>
+     *               <td>'height'</td>
+     *               <td>The character height.</td>
+     *               </tr>
+     *               </table>
      */
     protected function computeText(ImageHandler $image, float $size, string $font, string $text): array
     {

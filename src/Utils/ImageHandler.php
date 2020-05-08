@@ -611,7 +611,7 @@ class ImageHandler implements ImageExtensionInterface
      * @return array|bool an array with 8 elements representing four points making the bounding box of the
      *                    text on success and false on error.<br>
      *                    The points are relative to the text regardless of the angle, so "upper left" means in the top left-hand
-     *                    corner seeing the text horizontally.<br>
+     *                    corner seeing the text horizontally.<br><br>
      *                    <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
      *                    <tr>
      *                    <th>Key</th>

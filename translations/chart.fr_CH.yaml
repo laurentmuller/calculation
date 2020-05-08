@@ -31,3 +31,7 @@ fields:
     margin: Marge
     margin_percent: Marge (%)
     margin_amount: Marge (Fr.)
+    
+last_month:
+    period: Période
+    months: mois

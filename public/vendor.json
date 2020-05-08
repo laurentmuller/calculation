@@ -151,7 +151,7 @@
 		},
 		{
 			"name": "jquery-contextmenu",
-			"version": "2.9.1",
+			"version": "2.9.0",
 			"target": "contextmenu",
 			"files": [
 				"jquery.contextMenu.css",

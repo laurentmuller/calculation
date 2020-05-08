@@ -22,7 +22,6 @@ use App\Entity\CalculationItem;
 use App\Entity\CalculationState;
 use App\Entity\Customer;
 use App\Entity\Product;
-use App\Entity\User;
 use App\Form\CaptchaImage;
 use App\Form\FormHelper;
 use App\Pdf\PdfResponse;
@@ -151,12 +150,6 @@ class TestController extends BaseController
         $states = $manager->getRepository(CalculationState::class)->findBy([
             'editable' => true,
         ]);
-        $users = $manager->getRepository(User::class)->findBy([
-            'enabled' => true,
-        ]);
-        $users = \array_map(function (User $user) {
-            return $user->getUsername();
-        }, $users);
 
         $calculations = [];
         for ($i = 0; $i < $count; ++$i) {
@@ -166,7 +159,6 @@ class TestController extends BaseController
                 ->setDescription($faker->catchPhrase())
                 ->setUserMargin($faker->randomFloat(2, 0, 0.1))
                 ->setState($faker->randomElement($states))
-                ->setCreatedBy($faker->randomElement($users))
                 ->setCustomer($faker->name);
 
             // items

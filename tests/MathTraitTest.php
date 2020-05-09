@@ -18,9 +18,11 @@ use App\Traits\MathTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for MathTrait class.
+ * Unit test for MathTrait.
  *
  * @author Laurent Muller
+ *
+ * @see MathTrait
  */
 class MathTraitTest extends TestCase
 {

@@ -1,6 +1,23 @@
 /**! compression tag for ftp-deployment */
 
 /**
+ * Handles the months input change.
+ * 
+ * @param {jQuery}
+ *            $months - the months element to get value from.
+ */
+function onMonthsChange($months) {
+    'use strict';
+
+    const oldMonths = $months.data('months');
+    const newMonths = $months.val();
+    if (newMonths !== oldMonths) {
+        const url = $months.data('url') + "/" + newMonths;
+        window.location.assign(url);
+    }
+}
+
+/**
  * Ready function.
  */
 $(function () {
@@ -14,17 +31,11 @@ $(function () {
     if (Number.isNaN(value)) {
         value = 12;
     }
-    $months.data('months', value);
-    $months.val(value);
+    $months.data('months', value).val(value);
 
     // handle input change
     $months.on('input', function () {
-        const $this = $(this);
-        const oldMonths = $this.data('months');
-        const newMonths = $this.val();
-        if (newMonths !== oldMonths) {
-            const url = $this.data('url') + "/" + newMonths;
-            window.location.assign(url);
-        }
+        $months.updateTimer(onMonthsChange, 500, $months);
     });
+    $months.focus();
 });

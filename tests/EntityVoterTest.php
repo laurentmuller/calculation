@@ -26,6 +26,8 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  * Unit test for EntityVoter class.
  *
  * @author Laurent Muller
+ *
+ * @see EntityVoter
  */
 class EntityVoterTest extends TestCase implements EntityVoterInterface
 {

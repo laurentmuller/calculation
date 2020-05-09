@@ -34,3 +34,4 @@ fields:
     
 last_month:
     period: Période
+    months: mois

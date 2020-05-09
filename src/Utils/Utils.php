@@ -270,9 +270,9 @@ final class Utils
     {
         // check key
         if (!\is_string($key) && !\is_int($key) && !\is_callable($key)) { // && !\is_float($key)
-            \trigger_error('groupBy(): The key should be a string, an integer, a float, or a function', E_USER_ERROR);
+            \trigger_error('groupBy(): The key should be a string, an integer or a function', E_USER_ERROR);
         }
-        $isFunction = !\is_string($key) && \is_callable($key);
+        $isFunction = \is_callable($key);
 
         // load the new array, splitting by the target key
         $grouped = [];

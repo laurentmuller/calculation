@@ -23,6 +23,8 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
  * Unit test for Category entity.
  *
  * @author Laurent Muller
+ *
+ * @see Category
  */
 class CategoryTest extends ConstraintValidatorTestCase
 {

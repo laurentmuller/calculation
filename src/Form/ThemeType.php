@@ -99,7 +99,7 @@ class ThemeType extends AbstractType
     /**
      * Adds the CSS field.
      */
-    private function addThemeField(FormHelper $helper): self
+    protected function addThemeField(FormHelper $helper): self
     {
         $themes = $this->service->getThemes();
         $choice_attr = function (Theme $choice, $key, $value) {
@@ -118,7 +118,10 @@ class ThemeType extends AbstractType
         return $this;
     }
 
-    private function addBackgroundField(FormHelper $helper): self
+    /**
+     * Adds the background field.
+     */
+    protected function addBackgroundField(FormHelper $helper): self
     {
         // concat
         $choices = [];

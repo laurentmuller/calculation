@@ -261,8 +261,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
      */
     public function Cell($w, $h = 0.0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = ''): void
     {
-        $txt = $this->cleanText($txt);
-        parent::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
+        parent::Cell($w, $h, $this->cleanText($txt), $border, $ln, $align, $fill, $link);
     }
 
     /**
@@ -440,7 +439,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
      * Computes the number of lines a MultiCell of the given width will take.
      *
      * @param string $text
-     *                      the text to print
+     *                      the text to compute
      * @param float  $width
      *                      the desired width. If 0, the width extends up to the right margin.
      *
@@ -449,15 +448,15 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
     public function getLinesCount(?string $text, float $width): int
     {
         // check width
-        if ($this->isFloatZero($width)) {
+        if ($width <= 0) {
             $width = $this->w - $this->rMargin - $this->x;
         }
         $maxWidth = ($width - 2 * $this->cMargin) * 1000 / $this->FontSize;
 
         // clean text
-        $cleanText = \str_replace("\r", '', (string) $text);
-        $lenText = \strlen($cleanText);
-        while ($lenText > 0 and self::NEW_LINE === $cleanText[$lenText - 1]) {
+        $text = \str_replace("\r", '', (string) $text);
+        $lenText = \strlen($text);
+        while ($lenText > 0 and self::NEW_LINE === $text[$lenText - 1]) {
             --$lenText;
         }
 
@@ -470,7 +469,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
 
         // reun over text
         while ($index < $lenText) {
-            $ch = $cleanText[$index];
+            $ch = $text[$index];
 
             // new line?
             if (self::NEW_LINE === $ch) {
@@ -754,8 +753,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
      */
     public function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false): void
     {
-        $txt = $this->cleanText($txt);
-        parent::MultiCell($w, $h, $txt, $border, $align, $fill);
+        parent::MultiCell($w, $h, $this->cleanText($txt), $border, $align, $fill);
     }
 
     /**
@@ -793,7 +791,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
      *                             <li>'<b>DF</b> or '<b>FD</b>': Draw and Fill</li>
      *                             </ul>
      */
-    public function rectangle(PdfRectangle $bounds, $style = ''): self
+    public function rectangle(PdfRectangle $bounds, string $style = ''): self
     {
         $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $style);
 
@@ -948,8 +946,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
      */
     public function Text($x, $y, $txt): void
     {
-        $txt = $this->cleanText($txt);
-        parent::Text($x, $y, $txt);
+        parent::Text($x, $y, $this->cleanText($txt));
     }
 
     /**
@@ -962,8 +959,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
      */
     public function Write($h, $txt, $link = ''): void
     {
-        $txt = $this->cleanText($txt);
-        parent::Write($h, $txt, $link);
+        parent::Write($h, $this->cleanText($txt), $link);
     }
 
     /**
@@ -977,7 +973,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
     {
         try {
             if ($str && \mb_detect_encoding($str, 'UTF-8', true)) {
-                $result = \iconv('UTF-8', 'windows-1252', $str); //  // cp1252//ignore
+                $result = \iconv('UTF-8', 'windows-1252', $str);
                 if (false !== $result) {
                     return $result;
                 }

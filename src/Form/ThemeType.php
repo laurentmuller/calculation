@@ -18,6 +18,7 @@ use App\Entity\Theme;
 use App\Service\ThemeService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to select a theme.
@@ -31,7 +32,7 @@ class ThemeType extends AbstractType
      *
      * @var array
      */
-    public static $BACKGROUND_CHOICES = [
+    public const BACKGROUND_CHOICES = [
         'theme.background.dark' => 'bg-dark',
         'theme.background.light' => 'bg-light',
         'theme.background.white' => 'bg-white',
@@ -48,7 +49,7 @@ class ThemeType extends AbstractType
      *
      * @var array
      */
-    public static $FOREGROUND_CHOICES = [
+    public const FOREGROUND_CHOICES = [
         'theme.foreground.dark' => 'navbar-dark',
         'theme.foreground.light' => 'navbar-light',
     ];
@@ -59,13 +60,20 @@ class ThemeType extends AbstractType
     private $service;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * Constructor.
      *
-     * @param ThemeService $service the service to get themes
+     * @param ThemeService        $service    the service to get themes
+     * @param TranslatorInterface $translator the translator service
      */
-    public function __construct(ThemeService $service)
+    public function __construct(ThemeService $service, TranslatorInterface $translator)
     {
         $this->service = $service;
+        $this->translator = $translator;
     }
 
     /**
@@ -108,5 +116,33 @@ class ThemeType extends AbstractType
             ->addChoiceType($themes);
 
         return $this;
+    }
+
+    private function addBackgroundField(FormHelper $helper): self
+    {
+        // concat
+        $choices = [];
+        foreach (self::BACKGROUND_CHOICES as $keyBackground => $valueBackground) {
+            foreach (self::FOREGROUND_CHOICES as $keyForeground => $valueForeground) {
+                $key = $this->trans($keyBackground) . ' - ' . $this->trans($keyForeground);
+                $value = "{$valueForeground} {$valueBackground}";
+                $choices[$key] = $value;
+            }
+        }
+
+        // remove uncontrasted values
+        $choices = \array_diff($choices, ['navbar-light bg-dark', 'navbar-dark bg-light', 'navbar-dark bg-white']);
+
+        $helper->field('background')
+            ->label('theme.fields.background')
+            ->updateOption('choice_translation_domain', false)
+            ->addChoiceType($choices);
+
+        return $this;
+    }
+
+    private function trans(string $id): string
+    {
+        return $this->translator->trans($id);
     }
 }

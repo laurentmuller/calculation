@@ -498,7 +498,7 @@ var Application = {
             } else {
                 $('#user-margin-row').removeClass('d-none');
             }
-            $('.btn-adjust').attr('disabled', 'disabled');
+            $('.btn-adjust').attr('disabled', 'disabled').addClass('cursor-default');
             return that;
         }
 
@@ -538,9 +538,9 @@ var Application = {
                 $('#calculation_userMargin').intVal(response.overall_margin).selectFocus();
             }
             if (response.overall_below) {
-                $('.btn-adjust').removeAttr('disabled');
+                $('.btn-adjust').removeAttr('disabled').removeClass('cursor-default');
             } else {
-                $('.btn-adjust').attr('disabled', 'disabled');
+                $('.btn-adjust').attr('disabled', 'disabled').addClass('cursor-default');
             }
             updateErrors();
             return that;
@@ -725,11 +725,11 @@ var Application = {
 
         // row
         const $row = $element.getParentRow();
-        
+
         // initialize
         this.initItemDialog();
         this.$editingRow = $row;
-        
+
         // reset
         $row.addClass('table-primary');
         $('#item_form').resetValidator();

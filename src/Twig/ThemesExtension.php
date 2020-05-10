@@ -70,10 +70,10 @@ final class ThemesExtension extends AbstractExtension
         list($nav_foreground, $nav_background) = \explode(' ', $background);
 
         // check if exists
-        if (!\in_array($nav_foreground, ThemeType::$FOREGROUND_CHOICES, true)) {
+        if (!\in_array($nav_foreground, ThemeType::FOREGROUND_CHOICES, true)) {
             return ThemeService::DEFAULT_BACKGROUND;
         }
-        if (!\in_array($nav_background, ThemeType::$BACKGROUND_CHOICES, true)) {
+        if (!\in_array($nav_background, ThemeType::BACKGROUND_CHOICES, true)) {
             return ThemeService::DEFAULT_BACKGROUND;
         }
 

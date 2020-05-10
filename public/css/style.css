@@ -19,6 +19,7 @@
  */
 .btn-example.disabled {
     opacity: 1;
+    pointer-events: none;
 }
 
 /*
@@ -472,7 +473,7 @@ textarea.fixed {
 	cursor: default !important;
 } 
 .cursor-wait {
-    cursor: wait;
+    cursor: wait !important;
 }
 .cursor-pointer {
     cursor: pointer !important;

@@ -19,9 +19,9 @@ security:
 
         main:
             pattern: ^/
+            anonymous: true
             logout:
                 handlers: [App\Listener\UserEventListener]
-            anonymous: true
 
             form_login:
                 username_parameter: username
@@ -55,4 +55,3 @@ security:
         - { path: ^/ajax/captcha/validate, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/,                role: ROLE_ADMIN }
         - { path: ^/,                      role: ROLE_USER }
-

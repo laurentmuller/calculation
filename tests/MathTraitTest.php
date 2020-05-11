@@ -54,24 +54,24 @@ class MathTraitTest extends TestCase
 
     public function testRound(): void
     {
-        $this->assertEquals(0, $this->round(0));
-        $this->assertEquals(1.5, $this->round(1.5));
-        $this->assertEquals(1.55, $this->round(1.55));
-        $this->assertEquals(1.55, $this->round(1.5545));
-        $this->assertEquals(1.50, $this->round(1.52, 1));
+        $this->assertSame(0.0, $this->round(0));
+        $this->assertSame(1.5, $this->round(1.5));
+        $this->assertSame(1.55, $this->round(1.55));
+        $this->assertSame(1.55, $this->round(1.5545));
+        $this->assertSame(1.50, $this->round(1.52, 1));
     }
 
     public function testSafeDivide(): void
     {
-        $this->assertEquals(0, $this->safeDivide(100, 0));
-        $this->assertEquals(10, $this->safeDivide(100, 10));
-        $this->assertEquals(11, $this->safeDivide(100, 0, 11));
+        $this->assertSame(0.0, $this->safeDivide(100, 0));
+        $this->assertSame(10.0, $this->safeDivide(100, 10));
+        $this->assertSame(11.0, $this->safeDivide(100, 0, 11));
     }
 
     public function testValidateIntRange(): void
     {
-        $this->assertEquals(0, $this->validateIntRange(0, 0, 100));
-        $this->assertEquals(0, $this->validateIntRange(-1, 0, 100));
-        $this->assertEquals(100, $this->validateIntRange(101, 0, 100));
+        $this->assertSame(0, $this->validateIntRange(0, 0, 100));
+        $this->assertSame(0, $this->validateIntRange(-1, 0, 100));
+        $this->assertSame(100, $this->validateIntRange(101, 0, 100));
     }
 }

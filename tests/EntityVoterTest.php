@@ -103,7 +103,7 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
         $token = $this->getUserToken($user);
         $result = $this->voter->vote($token, $subject, [$attribute]);
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     private function getAdminUser(): User

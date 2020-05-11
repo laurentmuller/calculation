@@ -97,28 +97,6 @@ class ThemeType extends AbstractType
     }
 
     /**
-     * Adds the CSS field.
-     */
-    protected function addThemeField(FormHelper $helper): self
-    {
-        $themes = $this->service->getThemes();
-        $choice_attr = function (Theme $choice, $key, $value) {
-            return [
-                'data-description' => $choice->getDescription(),
-            ];
-        };
-        $helper->field('theme')
-            ->label('theme.fields.theme')
-            ->updateOption('choice_label', 'name')
-            ->updateOption('choice_value', 'name')
-            ->updateOption('choice_attr', $choice_attr)
-            ->updateOption('choice_translation_domain', false)
-            ->addChoiceType($themes);
-
-        return $this;
-    }
-
-    /**
      * Adds the background field.
      */
     protected function addBackgroundField(FormHelper $helper): self
@@ -140,6 +118,28 @@ class ThemeType extends AbstractType
             ->label('theme.fields.background')
             ->updateOption('choice_translation_domain', false)
             ->addChoiceType($choices);
+
+        return $this;
+    }
+
+    /**
+     * Adds the CSS field.
+     */
+    protected function addThemeField(FormHelper $helper): self
+    {
+        $themes = $this->service->getThemes();
+        $choice_attr = function (Theme $choice, $key, $value) {
+            return [
+                'data-description' => $choice->getDescription(),
+            ];
+        };
+        $helper->field('theme')
+            ->label('theme.fields.theme')
+            ->updateOption('choice_label', 'name')
+            ->updateOption('choice_value', 'name')
+            ->updateOption('choice_attr', $choice_attr)
+            ->updateOption('choice_translation_domain', false)
+            ->addChoiceType($themes);
 
         return $this;
     }

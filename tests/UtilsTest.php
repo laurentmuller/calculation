@@ -29,8 +29,8 @@ class UtilsTest extends TestCase
 {
     public function testCapitalize(): void
     {
-        $this->assertEquals('Home', Utils::capitalize('hOMe'));
-        $this->assertEquals('My home', Utils::capitalize('my hOMe'));
+        $this->assertSame('Home', Utils::capitalize('hOMe'));
+        $this->assertSame('My home', Utils::capitalize('my hOMe'));
     }
 
     public function testCompare(): void
@@ -46,27 +46,27 @@ class UtilsTest extends TestCase
         $b->value = 0;
         $b->str = 'd';
 
-        $this->assertEquals(0, Utils::compare($a, $b, 'value', $accessor));
-        $this->assertEquals(0, Utils::compare($a, $b, 'str', $accessor));
-        //$this->assertEquals(0, Utils::compare($a, $b, 'fake', $accessor));
+        $this->assertSame(0, Utils::compare($a, $b, 'value', $accessor));
+        $this->assertSame(0, Utils::compare($a, $b, 'str', $accessor));
+        //$this->assertSame(0, Utils::compare($a, $b, 'fake', $accessor));
 
         $b->value = 10;
         $b->str = 'z';
-        $this->assertEquals(-1, Utils::compare($a, $b, 'value', $accessor));
-        $this->assertEquals(1, Utils::compare($a, $b, 'value', $accessor, false));
-        $this->assertEquals(-1, Utils::compare($a, $b, 'str', $accessor));
-        $this->assertEquals(1, Utils::compare($a, $b, 'str', $accessor, false));
+        $this->assertSame(-1, Utils::compare($a, $b, 'value', $accessor));
+        $this->assertSame(1, Utils::compare($a, $b, 'value', $accessor, false));
+        $this->assertSame(-1, Utils::compare($a, $b, 'str', $accessor));
+        $this->assertSame(1, Utils::compare($a, $b, 'str', $accessor, false));
 
         $b->value = -10;
         $b->str = 'a';
-        $this->assertEquals(1, Utils::compare($a, $b, 'value', $accessor));
-        $this->assertEquals(-1, Utils::compare($a, $b, 'value', $accessor, false));
-        $this->assertEquals(1, Utils::compare($a, $b, 'str', $accessor));
-        $this->assertEquals(-1, Utils::compare($a, $b, 'str', $accessor, false));
+        $this->assertSame(1, Utils::compare($a, $b, 'value', $accessor));
+        $this->assertSame(-1, Utils::compare($a, $b, 'value', $accessor, false));
+        $this->assertSame(1, Utils::compare($a, $b, 'str', $accessor));
+        $this->assertSame(-1, Utils::compare($a, $b, 'str', $accessor, false));
 
         $a->str = 'fake';
         $b->str = 'FAKE';
-        $this->assertEquals(0, Utils::compare($a, $b, 'str', $accessor));
+        $this->assertSame(0, Utils::compare($a, $b, 'str', $accessor));
     }
 
     public function testContains(): void
@@ -102,16 +102,16 @@ class UtilsTest extends TestCase
 
     public function testExportVar(): void
     {
-        $this->assertEquals('true', Utils::exportVar(true));
-        $this->assertEquals('false', Utils::exportVar(false));
+        $this->assertSame('true', Utils::exportVar(true));
+        $this->assertSame('false', Utils::exportVar(false));
 
-        $this->assertEquals('0', Utils::exportVar(0));
-        $this->assertEquals('1000', Utils::exportVar(1000));
+        $this->assertSame('0', Utils::exportVar(0));
+        $this->assertSame('1000', Utils::exportVar(1000));
 
-        $this->assertEquals('0.0', Utils::exportVar(0.0));
-        $this->assertEquals('0.01', Utils::exportVar(0.01));
+        $this->assertSame('0.0', Utils::exportVar(0.0));
+        $this->assertSame('0.01', Utils::exportVar(0.01));
 
-        $this->assertEquals('"fake"', Utils::exportVar('fake'));
+        $this->assertSame('"fake"', Utils::exportVar('fake'));
     }
 
     public function testGetArrayValue(): void
@@ -122,8 +122,8 @@ class UtilsTest extends TestCase
         $this->assertNull(Utils::getArrayValue(['a'], 'fake'));
         $this->assertNull(Utils::getArrayValue(['a'], null));
 
-        $this->assertEquals('a', Utils::getArrayValue(['k' => 'a'], 'k'));
-        $this->assertEquals('b', Utils::getArrayValue(['k' => 'a'], 'f', 'b'));
+        $this->assertSame('a', Utils::getArrayValue(['k' => 'a'], 'k'));
+        $this->assertSame('b', Utils::getArrayValue(['k' => 'a'], 'f', 'b'));
     }
 
     public function testGetShortName(): void
@@ -132,8 +132,8 @@ class UtilsTest extends TestCase
         $this->assertNull(Utils::getShortName('aasassa'));
 
         $this->assertNull(Utils::getShortName(null));
-        $this->assertEquals('UtilsTest', Utils::getShortName($this));
-        $this->assertEquals('Calculation', Utils::getShortName(Calculation::class));
+        $this->assertSame('UtilsTest', Utils::getShortName($this));
+        $this->assertSame('Calculation', Utils::getShortName(Calculation::class));
     }
 
     public function testIsString(): void
@@ -161,28 +161,28 @@ class UtilsTest extends TestCase
 
     public function testToFloat(): void
     {
-        $this->assertEquals(0, Utils::toFloat(null));
-        $this->assertEquals(0, Utils::toFloat(0));
+        $this->assertSame(0.0, Utils::toFloat(null));
+        $this->assertSame(0.0, Utils::toFloat(0));
 
-        $this->assertNotEquals(0, Utils::toFloat(1.0));
-        $this->assertNotEquals(1, Utils::toFloat('a'));
+        $this->assertNotSame(0, Utils::toFloat(1.0));
+        $this->assertNotSame(1, Utils::toFloat('a'));
     }
 
     public function testToInt(): void
     {
-        $this->assertEquals(0, Utils::toInt(null));
-        $this->assertEquals(0, Utils::toInt(0));
+        $this->assertSame(0, Utils::toInt(null));
+        $this->assertSame(0, Utils::toInt(0));
 
-        $this->assertNotEquals(0, Utils::toInt(1.0));
-        $this->assertNotEquals(1, Utils::toInt('a'));
+        $this->assertNotSame(0, Utils::toInt(1.0));
+        $this->assertNotSame(1, Utils::toInt('a'));
     }
 
     public function testToString(): void
     {
-        $this->assertEquals('', Utils::toString(null));
-        $this->assertEquals('0', Utils::toString(0));
+        $this->assertSame('', Utils::toString(null));
+        $this->assertSame('0', Utils::toString(0));
 
-        $this->assertNotEquals(0, Utils::toString(1.0));
-        $this->assertNotEquals(1, Utils::toString('a'));
+        $this->assertNotSame(0, Utils::toString(1.0));
+        $this->assertNotSame(1, Utils::toString('a'));
     }
 }

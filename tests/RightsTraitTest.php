@@ -98,7 +98,7 @@ class RightsTraitTest extends TestCase implements EntityVoterInterface
         $rights = [$key => $attribute];
         $this->__set($entity, $rights);
         $value = $this->__get($entity);
-        $this->assertEquals($rights, $value);
+        $this->assertSame($rights, $value);
     }
 
     private function getAttribute(string $key): int

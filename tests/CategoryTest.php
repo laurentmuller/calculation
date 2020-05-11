@@ -49,10 +49,10 @@ class CategoryTest extends ConstraintValidatorTestCase
         $context = $this->context;
         $category->validate($context, null);
         $violations = $context->getViolations();
-        $this->assertEquals(1, $violations->count());
+        $this->assertSame(1, $violations->count());
 
         $violation = $violations->get(0);
-        $this->assertEquals('property.path.margins[1].maximum', $violation->getPropertyPath());
+        $this->assertSame('property.path.margins[1].maximum', $violation->getPropertyPath());
     }
 
     public function testCategoryInvalidMinimum(): void
@@ -64,10 +64,10 @@ class CategoryTest extends ConstraintValidatorTestCase
         $context = $this->context;
         $category->validate($context, null);
         $violations = $context->getViolations();
-        $this->assertEquals(1, $violations->count());
+        $this->assertSame(1, $violations->count());
 
         $violation = $violations->get(0);
-        $this->assertEquals('property.path.margins[1].minimum', $violation->getPropertyPath());
+        $this->assertSame('property.path.margins[1].minimum', $violation->getPropertyPath());
     }
 
     public function testCategoryValid(): void
@@ -79,7 +79,7 @@ class CategoryTest extends ConstraintValidatorTestCase
         $context = $this->context;
         $category->validate($context, null);
         $violations = $context->getViolations();
-        $this->assertEquals(0, $violations->count());
+        $this->assertSame(0, $violations->count());
     }
 
     //private $container;

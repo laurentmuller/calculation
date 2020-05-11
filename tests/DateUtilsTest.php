@@ -28,13 +28,13 @@ class DateUtilsTest extends TestCase
 {
     public function testCompletYear(): void
     {
-        $this->assertEquals(2002, DateUtils::completYear(2));
-        $this->assertEquals(2002, DateUtils::completYear(2002));
+        $this->assertSame(2002, DateUtils::completYear(2));
+        $this->assertSame(2002, DateUtils::completYear(2002));
     }
 
     public function testGetTimeZone(): void
     {
         \date_default_timezone_set('Europe/Zurich');
-        $this->assertEquals('Europe/Zurich', DateUtils::getTimeZone());
+        $this->assertSame('Europe/Zurich', DateUtils::getTimeZone());
     }
 }

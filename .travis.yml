@@ -20,4 +20,4 @@ install:
   - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install $flags
 
 notifications:  
-  slack: $slack_key
+  slack: "$SLACK_KEY"

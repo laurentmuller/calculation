@@ -1,5 +1,9 @@
+dist: xenial
 language: php
 
+os: 
+  - linux
+    
 php:
   - 7.4
   

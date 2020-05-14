@@ -19,5 +19,5 @@ install:
   - flags="--prefer-dist --no-progress --no-interaction"
   - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install $flags
 
-notifications:
-  slack: haslerrail:bmYUu3l0jnDbU5DZVrbmvivZ
+notifications:  
+  slack: slack_key

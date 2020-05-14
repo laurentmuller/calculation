@@ -1,7 +1,7 @@
 {% extends 'cards/card_table.html.twig' %}
 
 {# parameters #}
-{%- set title       = 'duplicate.title' -%}
+{%- set title       = 'calculation.duplicate.title' -%}
 {%- set title_icon  = 'copy far' -%}
 
 {%- set pdf_title   = 'calculation.list.pdf_title' -%}
@@ -19,9 +19,9 @@
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'duplicate.description'|trans }}</p>
+<p class="ml-4 mb-0">{{ 'calculation.duplicate.description'|trans }}</p>
 {% if attributes.itemsCount > 0 and results.data|length > 0 -%}
-<p class="ml-4 mb-0">{{ 'duplicate.count'|trans({'%calculations%': results.data|length, '%items%': attributes.itemsCount}) }}</p>
+<p class="ml-4 mb-0">{{ 'calculation.duplicate.count'|trans({'%calculations%': results.data|length, '%items%': attributes.itemsCount}) }}</p>
 {%- endif %}
 {%- endblock %}
 

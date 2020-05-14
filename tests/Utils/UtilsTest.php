@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Tests\Utils;
 
 use App\Entity\Calculation;
 use App\Utils\Utils;

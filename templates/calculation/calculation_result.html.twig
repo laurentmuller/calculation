@@ -2,32 +2,32 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title      = 'update.title' -%}
+{%- set title      = 'calculation.update.title' -%}
 {%- set title_icon = 'pencil-alt' -%}
 
 {% block card_header %}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'update.results'|trans }}
+<p class="ml-4 mb-0">{{ 'calculation.update.results'|trans }}
 {% endblock %}
 
 {% block card_body %}
 <table class="table table-hover table-bordered table-sm mb-0">
 	<tr>
-		<td>{{ 'update.updated'|trans }}</td>
+		<td>{{ 'calculation.update.updated'|trans }}</td>
 		<td class="text-right">{{ updated|integer }}</td>
 	</tr>
 	<tr>
-		<td>{{ 'update.skipped'|trans }}</td>
+		<td>{{ 'calculation.update.skipped'|trans }}</td>
 		<td class="text-right">{{ skipped|integer }}</td>
 	</tr>
 	{% if unmodifiable > 0 %}
     	<tr>
-    		<td>{{ 'update.unmodifiable'|trans }}</td>
+    		<td>{{ 'calculation.update.unmodifiable'|trans }}</td>
     		<td class="text-right">{{ unmodifiable|integer }}</td>
     	</tr>
 	{% endif %}
 	<tr>
-    	<td class="font-weight-bold">{{ 'update.total'|trans }}</<td>
+    	<td class="font-weight-bold">{{ 'calculation.update.total'|trans }}</<td>
     	<td class="font-weight-bold text-right">{{ total|integer }}</td>
 	</tr>
 </table>

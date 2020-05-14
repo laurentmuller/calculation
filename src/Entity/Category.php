@@ -81,7 +81,6 @@ class Category extends BaseEntity
      */
     public function __construct()
     {
-        // collections
         $this->margins = new ArrayCollection();
         $this->products = new ArrayCollection();
     }

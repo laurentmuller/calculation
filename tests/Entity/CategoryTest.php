@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Tests\Entity;
 
 use App\Entity\Category;
 use App\Entity\CategoryMargin;

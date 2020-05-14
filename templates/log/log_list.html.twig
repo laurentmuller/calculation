@@ -23,21 +23,27 @@
 {%- set title      = 'logs.title' -%}
 {%- set title_icon = 'book' -%}
 
-{% block card_container_class '' %}
+{% block card_container_class %}
+{% if lines is empty %}{{ parent() }}{% endif %}
+{% endblock %}
 {% block card_body_class 'p-2 pb-0' %}
 
 {% block card_header %}
 {{ parent() }}
-<div class="row">
-    <div class="col-md-8">
-        <small>{{ 'logs.show.file'|trans({'%file%': file}) }}</small>
+{% if lines is empty %}
+    <small>{{ 'logs.show.file'|trans({'%file%': file}) }}</small>
+{% else %}
+    <div class="row">
+        <div class="col-md-8">
+            <small>{{ 'logs.show.file'|trans({'%file%': file}) }}</small>
+        </div>
+        <div class="col-md-4 text-md-right">
+             <small id="overall_total" data-text="{{ 'common.count'|trans }}">
+                {% if lines %}{{ 'common.count'|trans({'%count%': lines|length|integer}) }}{% endif %}
+             </small>
+        </div>
     </div>
-    <div class="col-md-4 text-right">
-         <small id="overall_total" data-text="{{ 'common.count'|trans }}">
-            {% if lines %}{{ 'common.count'|trans({'%count%': lines|length|integer}) }}{% endif %}
-         </small>
-    </div>
-</div>
+{% endif %}
 {% endblock %}
 
 {% block card_body %}

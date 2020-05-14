@@ -14,7 +14,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title        = 'empty.title' -%}
+{%- set title        = 'calculation.empty.title' -%}
 {%- set title_icon   = 'file-code far' -%}
 {%- set empty_list   = 'empty.empty' -%}
 {%- set caller       = path(app.request.attributes.get('_route')) -%}
@@ -31,8 +31,8 @@
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'empty.description'|trans }}</p>
-{% if items|length %}<p class="ml-4 mb-0">{{ 'empty.count'|trans({'%calculations%': items|length, '%items%': items_count}) }}</p>{% endif %}
+<p class="ml-4 mb-0">{{ 'calculation.empty.description'|trans }}</p>
+{% if items|length %}<p class="ml-4 mb-0">{{ 'calculation.empty.count'|trans({'%calculations%': items|length, '%items%': items_count}) }}</p>{% endif %}
 {%- endblock %}
 
 {% block calculation_properties -%}

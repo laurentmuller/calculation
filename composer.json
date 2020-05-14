@@ -63,17 +63,17 @@
 		"imagine/imagine" : "~1.2"
 	},
 	"require-dev" : {
-		"phpstan/extension-installer": "~1.0",
-		"phpstan/phpstan": "^0.12",
-		"phpstan/phpstan-deprecation-rules": "~0.12",
-		"phpstan/phpstan-doctrine": "~0.12",
-		"phpstan/phpstan-symfony": "~0.12",
-		"phpunit/phpunit": "~9.1",
-		"symfony/debug-pack": "*",
-		"symfony/maker-bundle": "^1.0",
-		"symfony/phpunit-bridge": "^5.0",
-		"symfony/profiler-pack": "*",
-		"symfony/test-pack": "*"
+		"phpstan/extension-installer" : "~1.0",
+		"phpstan/phpstan" : "^0.12",
+		"phpstan/phpstan-deprecation-rules" : "~0.12",
+		"phpstan/phpstan-doctrine" : "~0.12",
+		"phpstan/phpstan-symfony" : "~0.12",
+		"phpunit/phpunit" : "~9.1",
+		"symfony/debug-pack" : "*",
+		"symfony/maker-bundle" : "^1.0",
+		"symfony/phpunit-bridge" : "^5.0",
+		"symfony/profiler-pack" : "*",
+		"symfony/test-pack" : "*"
 	},
 	"config" : {
 		"preferred-install" : {

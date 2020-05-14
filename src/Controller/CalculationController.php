@@ -159,17 +159,17 @@ class CalculationController extends EntityController
         $minMargin = $this->getApplication()->getMinMargin();
         $calculations = $this->getBelowMargin($minMargin);
         if (empty($calculations)) {
-            $this->warningTrans('below.empty');
+            $this->warningTrans('calculation.below.empty');
 
             return  $this->redirectToHomePage();
         }
 
         $percent = $this->localePercent($minMargin);
-        $description = $this->trans('below.description', ['%margin%' => $percent]);
+        $description = $this->trans('calculation.below.description', ['%margin%' => $percent]);
 
         $report = new CalculationsReport($this);
         $report->setCalculations($calculations)
-            ->setTitleTrans('below.title')
+            ->setTitleTrans('calculation.below.title')
             ->setDescription($description);
 
         return $this->renderDocument($report);
@@ -308,7 +308,7 @@ class CalculationController extends EntityController
 
         $items = $this->getDuplicateItems();
         if (empty($items)) {
-            $this->warningTrans('duplicate.empty');
+            $this->warningTrans('calculation.duplicate.empty');
 
             return  $this->redirectToHomePage();
         }
@@ -403,7 +403,7 @@ class CalculationController extends EntityController
     {
         $items = $this->getEmptyItems();
         if (empty($items)) {
-            $this->warningTrans('empty.empty');
+            $this->warningTrans('calculation.empty.empty');
 
             return  $this->redirectToHomePage();
         }
@@ -655,7 +655,7 @@ class CalculationController extends EntityController
         // fields
         $helper = new FormHelper($builder);
         $helper->field('includeClosed')
-            ->label('update.includeClosed')
+            ->label('calculation.update.includeClosed')
             ->notRequired()
             ->addCheckboxType();
 
@@ -704,7 +704,7 @@ class CalculationController extends EntityController
                     $this->trans('update.unmodifiable') => $unmodifiable,
                     $this->trans('update.total') => $total,
                 ];
-            $message = $this->trans('update.title');
+            $message = $this->trans('calculation.update.title');
             $logger->info($message, $context);
 
             // display results

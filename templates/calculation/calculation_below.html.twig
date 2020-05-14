@@ -17,7 +17,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title        = 'below.title' -%}
+{%- set title        = 'calculation.below.title' -%}
 {%- set title_icon   = 'percent' -%}
 {%- set empty_list   = 'below.empty' -%}
 {%- set caller       = path(app.request.attributes.get('_route')) -%}
@@ -33,8 +33,8 @@
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'below.description'|trans({'%margin%': min_margin|percent}) }}</p>
-{% if items|length %}<p class="ml-4 mb-0">{{ 'below.count'|trans({'%calculations%': items|length}) }}</p>{% endif %}
+<p class="ml-4 mb-0">{{ 'calculation.below.description'|trans({'%margin%': min_margin|percent}) }}</p>
+{% if items|length %}<p class="ml-4 mb-0">{{ 'calculation.below.count'|trans({'%calculations%': items|length}) }}</p>{% endif %}
 {%- endblock %}
 
 {%- block card_footer_class '' -%}

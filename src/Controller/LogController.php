@@ -71,7 +71,7 @@ class LogController extends BaseController
     public function delete(Request $request, LoggerInterface $logger): Response
     {
         // check if file exists
-        $file = $this->getLogFile(true);
+        $file = $this->getLogFile();
         if (!\file_exists($file) || 0 === \filesize($file)) {
             $this->infoTrans('logs.show.empty');
 
@@ -217,19 +217,15 @@ class LogController extends BaseController
                 'limit' => 0,
             ];
         }
-        $values['file'] = $this->getLogFile(true);
+        $values['file'] = $this->getLogFile();
 
         return $values;
     }
 
     /**
      * Gets the log file.
-     *
-     * @param bool $original true to get the original file, false to get a copy
-     *
-     * @return string the log file
      */
-    private function getLogFile(bool $original = false): string
+    private function getLogFile(): string
     {
         $dir = $this->getParameter('kernel.logs_dir');
         $env = $this->getParameter('kernel.environment');

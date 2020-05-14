@@ -784,16 +784,23 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
      * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
      *
      * @param PdfRectangle $bounds the rectangle to output
-     * @param string       $style  The style of rendering. Possible values are:
+     * @param string|int   $style  the style of rendering. Possible values are:
      *                             <ul>
-     *                             <li>'<b>D</b>' or an empty string: Draw. This is the default value.</li>
+     *                             <li>'<b>D</b>' or an empty string (''): Draw. This is the default value.</li>
      *                             <li>'<b>F</b>': Fill</li>
-     *                             <li>'<b>DF</b> or '<b>FD</b>': Draw and Fill</li>
+     *                             <li>'<b>DF</b> or '<b>FD</b>': Draw and Fill.</li>
+     *                             <li><b>PdfConstantsInterface.BORDER_ALL</b>: Draw.</li>
+     *                             <li><b>PdfConstantsInterface.BORDER_NONE</b>: Do nothing.</li>
      *                             </ul>
      */
-    public function rectangle(PdfRectangle $bounds, string $style = ''): self
+    public function rectangle(PdfRectangle $bounds, $style = self::RECT_BORDER): self
     {
-        $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $style);
+        if (self::BORDER_NONE !== $style) {
+            if (self::BORDER_ALL === $style) {
+                $style = self::RECT_BORDER;
+            }
+            $this->Rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), (string) $style);
+        }
 
         return $this;
     }

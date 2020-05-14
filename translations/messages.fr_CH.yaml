@@ -69,6 +69,32 @@ calculation:
     state:
         newstate: Nouveau statut
         success: Le statut de la calculation Nº <b>%name%</b> a été mis à jour avec succès.
+    duplicate:
+        title: Articles à double
+        description: Calculations contenant le même article plus d'une fois.
+        empty: Aucune calculation ne contient des articles en double.
+        count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
+    empty:
+        title: Articles vides
+        description: Calculations contenant un article avec une quantité ou un prix égale à 0.
+        empty: Aucune calculation ne contient des articles sans quantité ou sans prix.
+        count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
+    below:
+        title: Marges insuffisantes
+        description: Calculations contenant une marge globale inférieure à %margin%.
+        empty: Aucune calculation ne contient une marge globale insuffisante.
+        count: 'Nombre de calculations : %calculations%'
+    update:
+        title: Mise à jour des calculations
+        description: Permet de mettre à jour le total des calculations.
+        detail: Inclus les calculations avec le statut non-modifiables.
+        includeClosed: Mettre à jour toutes les calculations
+        results: Résultats de la mise à jour.
+        skipped: Calculations inchangées
+        total: Total
+        unmodifiable: Calculations non-modifiables
+        updated: Calculations mises à jour
+        last_update: 'Dernière mise à jour : %date%'
 calculationgroup:
     name: Groupe
     fields:
@@ -490,17 +516,6 @@ report:
         empty_margins: Aucune marge définie.
     customer:
         other: Autre
-update:
-    title: Mise à jour des calculations
-    description: Permet de mettre à jour le total des calculations.
-    detail: Inclus les calculations avec le statut non-modifiables.
-    includeClosed: Mettre à jour toutes les calculations
-    results: Résultats de la mise à jour.
-    skipped: Calculations inchangées
-    total: Total
-    unmodifiable: Calculations non-modifiables
-    updated: Calculations mises à jour
-    last_update: 'Dernière mise à jour : %date%'
 show:
     name: Nom
     value: Valeur
@@ -616,36 +631,6 @@ clear_cache:
     success: Le cache de l'application a été vidé avec succés.
     failure: Impossible de vider le cache de l'application.
     submit: Vider
-duplicate:
-    title: Articles à double
-    description: Calculations contenant le même article plus d'une fois.
-    empty: Aucune calculation ne contient des articles en double.
-    count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
-empty:
-    title: Articles vides
-    description: Calculations contenant un article avec une quantité ou un prix égale à 0.
-    empty: Aucune calculation ne contient des articles sans quantité ou sans prix.
-    count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
-below:
-    title: Marges insuffisantes
-    description: Calculations contenant une marge globale inférieure à %margin%.
-    empty: Aucune calculation ne contient une marge globale insuffisante.
-    count: 'Nombre de calculations : %calculations%'
-color:
-    blue: Bleu
-    cyan: Cyan
-    gray: Gris
-    gray-dark: Gris foncé
-    green: Vert
-    indigo: Indigo
-    light: Gris clair
-    orange: Orange
-    pink: Rose
-    purple: Violet
-    red: Rouge
-    teal: Vert canard
-    yellow: Jaune
-    white: Blanc
 filetype:
     placeholder: Aucun fichier choisi
     maxfiles: Le nombre maximal de fichiers sélectionnés ne doit pas dépasser {0}.

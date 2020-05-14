@@ -65,7 +65,7 @@ services:
     # make public to use with vich_uploader
     App\Service\UserNamer:
         public: true
-        
+
     # passwords blacklist
     App\Service\BlacklistProvider:
         arguments: ['%kernel.project_dir%/resources/data/passwords.txt']

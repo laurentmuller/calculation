@@ -1,21 +1,10 @@
 security:
-    encoders:
-        Symfony\Component\Security\Core\User\User:
-            algorithm: auto
-
-    providers:
-        in_memory:
-            memory:
-                # clear password: 123456
-                users: 
-                    user_default: { password: '$argon2id$v=19$m=65536,t=4,p=1$irkR5OMDx5ss9UNYB7VlVw$TjlcRD0DgPOt5a8sE1u0YAVn+e5Evg4/SidFYc6Srcw', roles: ['ROLE_USER'] }
-                    user_admin: { password: '$argon2id$v=19$m=65536,t=4,p=1$irkR5OMDx5ss9UNYB7VlVw$TjlcRD0DgPOt5a8sE1u0YAVn+e5Evg4/SidFYc6Srcw', roles: ['ROLE_ADMIN'] }
-                    user_super_admin: { password: '$argon2id$v=19$m=65536,t=4,p=1$irkR5OMDx5ss9UNYB7VlVw$TjlcRD0DgPOt5a8sE1u0YAVn+e5Evg4/SidFYc6Srcw', roles: ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'] }
-    
+    erase_credentials: false
     firewalls:
         main:
-            security: false
-            #pattern:  ^/            
-            provider: in_memory
-            form_login:
-                provider: in_memory
+            #security: false
+            #user_checker: ~
+            #form_login: ~    
+    encoders:
+        Symfony\Component\Security\Core\User\User:
+            algorithm: plaintext

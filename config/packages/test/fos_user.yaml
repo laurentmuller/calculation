@@ -1,0 +1,8 @@
+fos_user:
+    use_listener: false
+    use_username_form_type: false
+    use_flash_notifications: false
+    use_authentication_listener: false
+    user_class: Symfony\Component\Security\Core\User\User
+    service:
+        user_manager: App\Tests\Web\TestUserManager

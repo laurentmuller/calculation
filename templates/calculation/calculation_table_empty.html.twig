@@ -1,7 +1,7 @@
 {% extends 'cards/card_table.html.twig' %}
 
 {# parameters #}
-{%- set title       = 'empty.title' -%}
+{%- set title       = 'calculation.empty.title' -%}
 {%- set title_icon  = 'file-code far' -%}
 
 {%- set pdf_title   = 'calculation.list.pdf_title' -%}
@@ -20,9 +20,9 @@
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'empty.description'|trans }}</p>
+<p class="ml-4 mb-0">{{ 'calculation.empty.description'|trans }}</p>
 {% if attributes.itemsCount > 0 and results.data|length > 0 -%}
-<p class="ml-4 mb-0">{{ 'empty.count'|trans({'%calculations%': results.recordsTotal, '%items%': attributes.itemsCount}) }}</p>
+<p class="ml-4 mb-0">{{ 'calculation.empty.count'|trans({'%calculations%': results.recordsTotal, '%items%': attributes.itemsCount}) }}</p>
 {%- endif %}
 {%- endblock %}
 

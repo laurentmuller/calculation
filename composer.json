@@ -32,7 +32,7 @@
 		"beberlei/doctrineextensions" : "^1.2",
 		"bjeavons/zxcvbn-php" : "^1.0",
 		"fpdf/fpdf" : "^1.82",
-		"friendsofsymfony/user-bundle" : "dev-bugfix#58767f8e584b452e2cc5f4c6e185e75d5c27ea2f",
+		"friendsofsymfony/user-bundle" : "dev-bugfix",
 		"fzaninotto/faker" : "^1.9",
 		"google/recaptcha" : "^1.2",
 		"ob/highcharts-bundle" : "^1.7",
@@ -69,11 +69,11 @@
 		"phpstan/phpstan-doctrine" : "~0.12",
 		"phpstan/phpstan-symfony" : "~0.12",
 		"phpunit/phpunit" : "~9.1",
-		"symfony/debug-pack" : "~1.0",
+		"symfony/debug-pack" : "*",
 		"symfony/maker-bundle" : "^1.0",
 		"symfony/phpunit-bridge" : "^5.0",
-		"symfony/profiler-pack" : "~1.0",
-		"symfony/test-pack" : "~1.0"
+		"symfony/profiler-pack" : "*",
+		"symfony/test-pack" : "*"
 	},
 	"config" : {
 		"preferred-install" : {

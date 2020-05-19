@@ -14,16 +14,15 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
+use ReCaptcha\ReCaptcha;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
- * Google reCaptcha validator.
+ * Google reCaptcha constraint validator.
  *
  * @author Laurent Muller
  */
-class RecaptchaValidator extends ConstraintValidator
+class RecaptchaValidator extends AbstractConstraintValidator
 {
     /**
      * The reCaptcha secret key.
@@ -40,23 +39,16 @@ class RecaptchaValidator extends ConstraintValidator
     public function __construct(string $secret)
     {
         $this->secret = $secret;
+        parent::__construct(Recaptcha::class);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function validate($value, Constraint $constraint): void
+    protected function doValidate($value, Constraint $constraint): void
     {
-        // check constraint type
-        if (!$constraint instanceof Recaptcha) {
-            throw new UnexpectedTypeException($constraint, Recaptcha::class);
-        }
-
-        // verify
-        $recaptcha = new \ReCaptcha\ReCaptcha($this->secret);
-        $result = $recaptcha->verify((string) $value);
-
-        // ok?
+        $recaptcha = new ReCaptcha($this->secret);
+        $result = $recaptcha->verify($value);
         if (!$result->isSuccess()) {
             foreach ($result->getErrorCodes() as $code) {
                 $this->context->addViolation("recaptcha.{$code}");

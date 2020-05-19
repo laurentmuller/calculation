@@ -35,9 +35,9 @@
 	{%- set class = 'secondary' -%}
 {%- endswitch %}
 {% if background %}
-	{%- set class = 'border-' ~ class ~ ' text-white bg-' ~ class -%}
+	{%- set class = ' border-' ~ class ~ ' text-white bg-' ~ class -%}
 {%- else -%}
-	{%- set class = 'border-' ~ class -%}
+	{%- set class = ' border-' ~ class -%}
 {% endif %}
 {{- class -}}
 {%- endmacro %}
@@ -55,12 +55,8 @@
 
 {# classes #}
 {% block card_container_class '' %}
-{% block card_class -%}
-{{ _self.level_class(item.level, false) }}
-{%- endblock %}
-{% block card_header_class -%}
-{{ _self.level_class(item.level, true) }}
-{%- endblock %}
+{% block card_class -%}{{ _self.level_class(item.level, false) }}{%- endblock %}
+{% block card_header_class -%}{{ _self.level_class(item.level, true) }}{%- endblock %}
 
 {# properties #}
 {% block property_body %}

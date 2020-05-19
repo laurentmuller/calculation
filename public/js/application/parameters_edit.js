@@ -15,6 +15,13 @@ function setDefaultValues() {
             $that.val(value);
         }
     });
+    $('.custom-control-input').each(function () {
+        const $that = $(this);
+        const value = $that.data('default');
+        if (!$.isUndefined(value) && value !== '') {
+            $that.prop('checked', value);
+        }
+    });
 }
 
 /**
@@ -50,7 +57,7 @@ function displayNotification() {
 
             // display sub-title
             const displaySubtitle = $('#parameters_message_sub_title').intVal();
-    
+
             // options
             const options = $.extend({}, $("#flashbags").data(), {
                 timeout: timeout,

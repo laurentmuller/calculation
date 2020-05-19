@@ -7,7 +7,7 @@
 {%- set cancel_path  = cancelUrl(app.request, item.id|default(0), page_list|default('homepage')) -%}
          
 {% block card_class ' border-danger' %}
-{% block card_header_class 'text-white bg-danger' %}
+{% block card_header_class ' text-white bg-danger' %}
 {% block required_form %}{% endblock %}
 
 {% block card_body -%}

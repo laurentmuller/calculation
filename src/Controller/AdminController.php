@@ -67,6 +67,7 @@ class AdminController extends BaseController
     public function clearCache(Request $request, KernelInterface $kernel, LoggerInterface $logger): Response
     {
         $form = $this->createFormBuilder()->getForm();
+
         if ($this->handleFormRequest($form, $request)) {
             // first clear application service cache
             $this->getApplication()->clearCache();
@@ -174,7 +175,12 @@ class AdminController extends BaseController
         $service = $this->getApplication();
         $data = $service->getProperties();
 
-        // remove last update
+        // password options
+        foreach (ParametersType::PASSWORD_OPTIONS as $option) {
+            $data[$option] = $service->getPropertyBoolean($option);
+        }
+
+        // remove unused properties
         unset($data[ApplicationServiceInterface::LAST_UPDATE], $data[ApplicationServiceInterface::LAST_IMPORT]);
 
         // form

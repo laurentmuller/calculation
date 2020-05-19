@@ -11,10 +11,10 @@
 {% endblock %}
 
 {% block card_class -%}
-{% if data.valid %}{{ parent() }}{% else %}border-danger{% endif %}
+{% if data.valid %}{{ parent() }}{% else %} border-danger{% endif %}
 {%- endblock %}
 {% block card_header_class -%}
-{% if data.valid %}{{ parent() }}{% else %}text-white bg-danger{% endif %}
+{% if data.valid %}{{ parent() }}{% else %} text-white bg-danger{% endif %}
 {%- endblock %}
 
 {% block card_body %}

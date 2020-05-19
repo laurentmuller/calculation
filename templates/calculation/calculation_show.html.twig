@@ -15,7 +15,7 @@
 {%- set cancel_path = cancelUrl(app.request, id, 'calculation_list') -%}
 {%- set pdf_export  = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, item) -%}
 
-{% block card_header_class 'd-print-none' %}
+{% block card_header_class ' d-print-none' %}
 {% block card_container_class '' %}
 {% block card_body_class '' %}
 

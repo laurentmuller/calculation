@@ -16,15 +16,13 @@ namespace App\Validator;
 
 use App\Service\CaptchaImageService;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
- * Captcha validator.
+ * Captcha constraint validator.
  *
  * @author Laurent Muller
  */
-class CaptchaValidator extends ConstraintValidator
+class CaptchaValidator extends AbstractConstraintValidator
 {
     /**
      * @var CaptchaImageService
@@ -33,28 +31,21 @@ class CaptchaValidator extends ConstraintValidator
 
     /**
      * Constructor.
-     *
-     * @param CaptchaImageService $service the service to validate input
      */
     public function __construct(CaptchaImageService $service)
     {
         $this->service = $service;
+        parent::__construct(Captcha::class);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function validate($value, Constraint $constraint): void
+    protected function doValidate($value, Constraint $constraint): void
     {
-        // check constraint type
-        if (!$constraint instanceof Captcha) {
-            throw new UnexpectedTypeException($constraint, Captcha::class);
-        }
-
-        // verify
         if (!$this->service->validateTimeout()) {
             $this->context->addViolation('captcha.timeout');
-        } elseif (!$this->service->validateToken((string) $value)) {
+        } elseif (!$this->service->validateToken($value)) {
             $this->context->addViolation('captcha.invalid');
         }
     }

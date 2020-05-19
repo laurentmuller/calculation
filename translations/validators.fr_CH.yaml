@@ -36,7 +36,7 @@ recaptcha:
     timeout-or-duplicate: Le délai d'attente est atteint ou la validation a été appelée deux fois.
     required: Vous devez cocher la case "Je ne suis pas un robot".
 password:
-    blacklist: Le mot de passe fait partie de la liste de mots interdits.
+    blacklist: Le mot de passe fait partie de la liste des mots interdits.
     email: Le mot de passe ne peut être une adresse e-mail.
     minLength: Le mot de passe doit faire au moins {{length}} caractères.
     minStrength: Le mot de passe doit avoir une force "{{strength_min}}", la force actuelle est "{{strength_current}}".

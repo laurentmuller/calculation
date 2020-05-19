@@ -77,7 +77,7 @@ interface ApplicationServiceInterface
     /**
      * The default display message sub-title (boolean).
      */
-    public const DEFAULT_SUB_TITLE = true;
+    public const DEFAULT_SUB_TITLE = false;
 
     /**
      * The default timeout of the flashbag messages (integer).
@@ -137,6 +137,11 @@ interface ApplicationServiceInterface
      * The property name for the minimum margin, in percent, for a calculation (float).
      */
     public const MIN_MARGIN = 'minimum_margin';
+
+    /**
+     * The property name for the minimum password strength (int).
+     */
+    public const MIN_STRENGTH = 'min_strength';
 
     /**
      * The property name for the time format (integer).

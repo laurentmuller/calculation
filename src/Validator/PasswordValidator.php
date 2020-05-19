@@ -18,27 +18,23 @@ use App\Service\BlacklistProvider;
 use App\Traits\MathTrait;
 use App\Traits\NumberFormatterTrait;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
 
 /**
- * Password validator.
+ * Password constraint validator.
  *
  * @author Laurent Muller
  */
-class PasswordValidator extends ConstraintValidator
+class PasswordValidator extends AbstractConstraintValidator
 {
     use MathTrait;
     use NumberFormatterTrait;
 
     /**
-     * The strength level.
-     *
-     * @var array<string>
+     * The strength levels.
      */
-    public static $LEVEL_TO_LABEL = [
+    public const LEVEL_TO_LABEL = [
         0 => 'very_weak',
         1 => 'weak',
         2 => 'medium',
@@ -63,6 +59,7 @@ class PasswordValidator extends ConstraintValidator
     {
         $this->translator = $translator;
         $this->provider = $provider;
+        parent::__construct(Password::class);
     }
 
     /**
@@ -76,26 +73,8 @@ class PasswordValidator extends ConstraintValidator
     /**
      * {@inheritdoc}
      */
-    public function validate($value, Constraint $constraint): void
+    protected function doValidate($value, Constraint $constraint): void
     {
-        // check constraint type
-        if (!$constraint instanceof Password) {
-            throw new UnexpectedTypeException($constraint, Password::class);
-        }
-
-        // value?
-        if (null === $value || '' === $value) {
-            return;
-        }
-
-        // check value type
-        if (!\is_scalar($value) && !(\is_object($value) && \method_exists($value, '__toString'))) {
-            throw new UnexpectedTypeException($value, 'string');
-        }
-
-        // convert
-        $value = (string) $value;
-
         // validate
         if ($constraint->allViolations) {
             $this->checkMinLength($constraint, $value);
@@ -353,7 +332,7 @@ class PasswordValidator extends ConstraintValidator
     private function translateLevel(int $level): string
     {
         $level = $this->validateIntRange($level, 0, 4);
-        $id = 'password.strength_level.' . self::$LEVEL_TO_LABEL[$level];
+        $id = 'password.strength_level.' . self::LEVEL_TO_LABEL[$level];
 
         return $this->translator->trans($id, []);
     }

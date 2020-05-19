@@ -21,6 +21,7 @@ use App\Repository\PropertyRepository;
 use App\Traits\LoggerTrait;
 use App\Utils\FormatUtils;
 use App\Utils\Utils;
+use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
@@ -107,7 +108,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getAdminRights(): ?string
     {
-        return $this->getString(self::ADMIN_RIGHTS);
+        return $this->getPropertyString(self::ADMIN_RIGHTS);
     }
 
     /**
@@ -127,7 +128,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getCustomerName(): ?string
     {
-        return $this->getString(self::CUSTOMER_NAME);
+        return $this->getPropertyString(self::CUSTOMER_NAME);
     }
 
     /**
@@ -137,7 +138,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getCustomerUrl(): ?string
     {
-        return $this->getString(self::CUSTOMER_URL);
+        return $this->getPropertyString(self::CUSTOMER_URL);
     }
 
     /**
@@ -147,7 +148,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getDateFormat(): int
     {
-        return $this->getInteger(self::DATE_FORMAT, FormatUtils::getDateType());
+        return $this->getPropertyInteger(self::DATE_FORMAT, FormatUtils::getDateType());
     }
 
     /**
@@ -157,7 +158,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getDecimal(): string
     {
-        return $this->getString(self::DECIMAL_SEPARATOR, FormatUtils::getDecimal());
+        return $this->getPropertyString(self::DECIMAL_SEPARATOR, FormatUtils::getDecimal());
     }
 
     /**
@@ -184,7 +185,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getDefaultStateId(): int
     {
-        return $this->getInteger(self::DEFAULT_STATE);
+        return $this->getPropertyInteger(self::DEFAULT_STATE);
     }
 
     /**
@@ -194,7 +195,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getGrouping(): string
     {
-        return $this->getString(self::GROUPING_SEPARATOR, FormatUtils::getGrouping());
+        return $this->getPropertyString(self::GROUPING_SEPARATOR, FormatUtils::getGrouping());
     }
 
     /**
@@ -204,7 +205,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getLastImport(): ?\DateTime
     {
-        return $this->getDate(self::LAST_IMPORT);
+        return $this->getPropertyDate(self::LAST_IMPORT);
     }
 
     /**
@@ -214,7 +215,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getLastUpdate(): ?\DateTime
     {
-        return $this->getDate(self::LAST_UPDATE);
+        return $this->getPropertyDate(self::LAST_UPDATE);
     }
 
     /**
@@ -224,7 +225,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getMessagePosition(): string
     {
-        return $this->getString(self::MESSAGE_POSITION, self::DEFAULT_POSITION);
+        return $this->getPropertyString(self::MESSAGE_POSITION, self::DEFAULT_POSITION);
     }
 
     /**
@@ -234,7 +235,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getMessageTimeout(): int
     {
-        return $this->getInteger(self::MESSAGE_TIMEOUT, self::DEFAULT_TIMEOUT);
+        return $this->getPropertyInteger(self::MESSAGE_TIMEOUT, self::DEFAULT_TIMEOUT);
     }
 
     /**
@@ -242,7 +243,15 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getMinMargin(): float
     {
-        return $this->getFloat(self::MIN_MARGIN, self::DEFAULT_MIN_MARGIN);
+        return $this->getPropertyFloat(self::MIN_MARGIN, self::DEFAULT_MIN_MARGIN);
+    }
+
+    /**
+     * Gets the minimum password strength.
+     */
+    public function getMinStrength(): int
+    {
+        return $this->getPropertyInteger(self::MIN_STRENGTH, Strength::LEVEL_DISABLE);
     }
 
     /**
@@ -282,13 +291,88 @@ class ApplicationService implements ApplicationServiceInterface
     }
 
     /**
+     * Gets a boolean property.
+     *
+     * @param string $name    the property name to search for
+     * @param bool   $default the default value if the property is not found
+     *
+     * @return bool the boolean value, if found; the default value otherwise
+     */
+    public function getPropertyBoolean(string $name, bool $default = false): bool
+    {
+        return (bool) $this->getItemValue($name, $default);
+    }
+
+    /**
+     * Gets a date property.
+     *
+     * @param string         $name    the property name to search for
+     * @param \DateTime|null $default the default value if the property is not found
+     *
+     * @return \DateTime|null the date value, if found; the default value otherwise
+     */
+    public function getPropertyDate(string $name, ?\DateTime $default = null): ?\DateTime
+    {
+        $timestamp = $this->getPropertyInteger($name);
+        if (Property::FALSE_VALUE !== $timestamp) {
+            return \DateTime::createFromFormat('U', (string) $timestamp);
+        }
+
+        return $default;
+    }
+
+    /**
+     * Gets a float property.
+     *
+     * @param string $name    the property name to search for
+     * @param float  $default the default value if the property is not found
+     *
+     * @return float the float value, if found; the default value otherwise
+     */
+    public function getPropertyFloat(string $name, float $default = 0.0): float
+    {
+        return (float) $this->getItemValue($name, $default);
+    }
+
+    /**
+     * Gets a integer property.
+     *
+     * @param string $name    the property name to search for
+     * @param int    $default the default value if the property is not found
+     *
+     * @return int the integer value, if found; the default value otherwise
+     */
+    public function getPropertyInteger(string $name, int $default = 0): int
+    {
+        return (int) $this->getItemValue($name, $default);
+    }
+
+    /**
+     * Gets a string property.
+     *
+     * @param string      $name    the property name to search for
+     * @param string|null $default the default value if the property is not found
+     *
+     * @return string|null the string value, if found; the default value otherwise
+     */
+    public function getPropertyString(string $name, ?string $default = null): ?string
+    {
+        $value = $this->getItemValue($name, $default);
+        if (\is_string($value)) {
+            return $value;
+        }
+
+        return $default;
+    }
+
+    /**
      * Gets the time format.
      *
      * @return int one of the date formatter constants (SHORT or MEDIUM)
      */
     public function getTimeFormat(): int
     {
-        return $this->getInteger(self::TIME_FORMAT, FormatUtils::getTimeType());
+        return $this->getPropertyInteger(self::TIME_FORMAT, FormatUtils::getTimeType());
     }
 
     /**
@@ -298,7 +382,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getUserRights(): ?string
     {
-        return $this->getString(self::USER_RIGHTS);
+        return $this->getPropertyString(self::USER_RIGHTS);
     }
 
     /**
@@ -318,7 +402,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function isDisplayCaptcha(): bool
     {
-        return $this->getBoolean(self::DISPLAY_CAPTCHA, !$this->debug);
+        return $this->getPropertyBoolean(self::DISPLAY_CAPTCHA, !$this->debug);
     }
 
     /**
@@ -328,7 +412,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function isEditAction(): bool
     {
-        return $this->getBoolean(self::EDIT_ACTION, self::DEFAULT_EDIT_ACTION);
+        return $this->getPropertyBoolean(self::EDIT_ACTION, self::DEFAULT_EDIT_ACTION);
     }
 
     /**
@@ -350,7 +434,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function isMessageSubTitle(): bool
     {
-        return $this->getBoolean(self::MESSAGE_SUB_TITLE, self::DEFAULT_SUB_TITLE);
+        return $this->getPropertyBoolean(self::MESSAGE_SUB_TITLE, self::DEFAULT_SUB_TITLE);
     }
 
     /**
@@ -393,63 +477,6 @@ class ApplicationService implements ApplicationServiceInterface
     }
 
     /**
-     * Gets a boolean property.
-     *
-     * @param string $name    the property name to search for
-     * @param bool   $default the default value if the property is not found
-     *
-     * @return bool the boolean value, if found; the default value otherwise
-     */
-    private function getBoolean(string $name, bool $default = false): bool
-    {
-        return (bool) $this->getItemValue($name, $default);
-    }
-
-    /**
-     * Gets a date property.
-     *
-     * @param string         $name    the property name to search for
-     * @param \DateTime|null $default the default value if the property is not found
-     *
-     * @return \DateTime|null the date value, if found; the default value otherwise
-     */
-    private function getDate(string $name, ?\DateTime $default = null): ?\DateTime
-    {
-        $timestamp = $this->getInteger($name);
-        if (Property::FALSE_VALUE !== $timestamp) {
-            return \DateTime::createFromFormat('U', (string) $timestamp);
-        }
-
-        return $default;
-    }
-
-    /**
-     * Gets a float property.
-     *
-     * @param string $name    the property name to search for
-     * @param float  $default the default value if the property is not found
-     *
-     * @return float the float value, if found; the default value otherwise
-     */
-    private function getFloat(string $name, float $default = 0.0): float
-    {
-        return (float) $this->getItemValue($name, $default);
-    }
-
-    /**
-     * Gets a integer property.
-     *
-     * @param string $name    the property name to search for
-     * @param int    $default the default value if the property is not found
-     *
-     * @return int the integer value, if found; the default value otherwise
-     */
-    private function getInteger(string $name, int $default = 0): int
-    {
-        return (int) $this->getItemValue($name, $default);
-    }
-
-    /**
      * Gets an item value.
      *
      * @param string $name    the item name
@@ -484,24 +511,6 @@ class ApplicationService implements ApplicationServiceInterface
     private function getRepository(): PropertyRepository
     {
         return $this->manager->getRepository(Property::class);
-    }
-
-    /**
-     * Gets a string property.
-     *
-     * @param string      $name    the property name to search for
-     * @param string|null $default the default value if the property is not found
-     *
-     * @return string|null the string value, if found; the default value otherwise
-     */
-    private function getString(string $name, ?string $default = null): ?string
-    {
-        $value = $this->getItemValue($name, $default);
-        if (\is_string($value)) {
-            return $value;
-        }
-
-        return $default;
     }
 
     /**

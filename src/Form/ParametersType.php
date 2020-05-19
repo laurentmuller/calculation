@@ -39,16 +39,25 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     use TranslatorTrait;
 
     /**
+     * The password options.
+     */
+    const PASSWORD_OPTIONS = [
+        'password_letters',
+        'password_numbers',
+        'password_special_character',
+        'password_case_diff',
+        'password_email',
+        'password_black_list',
+        'password_pwned',
+    ];
+
+    /**
      * @var Security
      */
     private $security;
 
     /**
      * Constructor.
-     *
-     * @param Security            $security    the ssecurity service
-     * @param TranslatorInterface $translator  the translator service
-     * @param ApplicationService  $application the application service
      */
     public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $application)
     {
@@ -66,12 +75,16 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
 
         $helper = new FormHelper($builder, 'parameters.fields.');
 
+        // customer
         $helper->field(self::CUSTOMER_NAME)
+            ->updateRowAttribute('class', 'ml-2')
             ->addTextType();
 
         $helper->field(self::CUSTOMER_URL)
+        ->updateRowAttribute('class', 'ml-2')
             ->addUrlType();
 
+        // default
         $helper->field(self::DEFAULT_STATE)
             ->addStateType();
 
@@ -82,6 +95,12 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
                 'parameters.editAction.edit' => true,
             ]);
 
+        $helper->field(self::MIN_MARGIN)
+            ->updateAttribute('data-default', self::DEFAULT_MIN_MARGIN * 100)
+            ->percent(true)
+            ->addPercentType(0);
+
+        // flashbag
         $helper->field(self::MESSAGE_POSITION)
             ->updateAttribute('data-default', self::DEFAULT_POSITION)
             ->addChoiceType($this->getPositions());
@@ -92,15 +111,14 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
 
         $helper->field(self::MESSAGE_SUB_TITLE)
             ->updateAttribute('data-default', (int) self::DEFAULT_SUB_TITLE)
-            ->addYesNoType();
-
-        $helper->field(self::MIN_MARGIN)
-            ->updateAttribute('data-default', self::DEFAULT_MIN_MARGIN * 100)
-            ->percent(true)
-            ->addPercentType(0);
+            ->addChoiceType([
+                'parameters.display.show' => true,
+                'parameters.display.hide' => false,
+            ]);
 
         // super admin fields
         if ($this->isSuperAdmin()) {
+            // display
             $helper->field(self::DATE_FORMAT)
                 ->updateOption('format', 'date')
                 ->updateAttribute('data-default', FormatUtils::getDateType())
@@ -119,13 +137,34 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
                 ->updateAttribute('data-default', FormatUtils::getDecimal())
                 ->add(DecimalSeparatorType::class);
 
+            // security
             $captcha = (int) !$this->application->isDebug();
             $helper->field(self::DISPLAY_CAPTCHA)
                 ->updateAttribute('data-default', $captcha)
                 ->addChoiceType([
-                    'parameters.displayCaptcha.show' => true,
-                    'parameters.displayCaptcha.hide' => false,
+                    'parameters.display.show' => true,
+                    'parameters.display.hide' => false,
                 ]);
+
+            $helper->field(self::MIN_STRENGTH)
+                ->updateAttribute('data-default', -1)
+                ->addChoiceType([
+                    'password.strength_level.none' => -1,
+                    'password.strength_level.very_weak' => 0,
+                    'password.strength_level.weak' => 1,
+                    'password.strength_level.medium' => 2,
+                    'password.strength_level.very_strong' => 3,
+                ]);
+
+            // password options
+            foreach (self::PASSWORD_OPTIONS as $option) {
+                $helper->field($option)
+                    ->label("parameters.password.{$option}")
+                    ->updateAttribute('data-default', 0)
+                    ->updateRowAttribute('class', 'mb-1 ml-1')
+                    ->notRequired()
+                    ->addCheckboxType();
+            }
         }
     }
 

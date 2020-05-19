@@ -575,15 +575,21 @@ test:
     tinymce: Editeur TinyMCE
 parameters:
     title: Paramètres
-    description: Définition des paramètres par défaut de l'application.
+    description: Définition des paramètres de l'application.
     success: Les paramètres de l'application ont été mis à jour avec succès.
     failure: Impossible d'afficher une notification.
-    test: Tester
-    url: Afficher
+    group_customer: Client
+    group_default: Valeurs par défaut
+    group_message: Messages
+    group_display: Affichage
+    group_security: Sécurité
+    group_password: Options du mot de passe
+    action_display: Afficher
+    action_test: Tester    
     editAction:
         show: Afficher l'objet
         edit: Modifier l'objet
-    displayCaptcha:
+    display:
         show: Afficher
         hide: Masquer
     messagePosition:
@@ -599,21 +605,31 @@ parameters:
         3: 3 secondes
         4: 4 secondes
         5: 5 secondes
+    password:
+        password_letters: Une lettre est obligatoire
+        password_numbers: Un chiffre est obligatoire
+        password_special_character: Un caractère spécial est obligatoire
+        password_case_diff: Une lettre majuscule et minuscule est obligatoire
+        password_pwned: Le mot de passe ne doit pas être compromis
+        password_email: Le mot de passe ne doit pas être une adresse e-mail
+        password_black_list: Le mot de passe ne doit pas faire partie de la liste des mots interdits
+        password_min_strength: Force minimum        
     fields:
-        default_state: Statut par défaut
-        edit_action: Action par défaut
+        default_state: Statut
+        edit_action: Action
         date_format: Format des dates
         time_format: Format des heures
         grouping_separator: Séparateur de milliers
         decimal_separator: Séparateur de décimals
         currency: Devise
-        customer_name: Nom du client
-        customer_url: Site internet du client
-        message_position: Position des messages
-        message_timeout: Durée des messages
+        customer_name: Nom
+        customer_url: Site internet
+        message_position: Position
+        message_timeout: Durée
         message_sub_title: Sous-titre
         minimum_margin: Marge minimum
         display_captcha: Code de contrôle
+        min_strength: Force minimum du mot de passe
 separator:
     period: 'Point : [ . ]'
     comma: 'Virgule : [ , ]'
@@ -706,13 +722,13 @@ password:
     title: Vérifier un mot de passe
     input: Mot de passe
     options: Options
-    letters: Une lettre obligatoire
-    numbers: Un chiffre obligatoire
-    specialCharacter: Un caractère spécial obligatoire
-    caseDiff: Une lettre majuscule et minuscule obligatoire
-    pwned: Le mot de passe n'est pas compromis
-    email: Le mot de passe n'est pas une adresse e-mail
-    blackList: Liste de mots interdits
+    letters: Une lettre est obligatoire
+    numbers: Un chiffre est obligatoire
+    specialCharacter: Un caractère spécial est obligatoire
+    caseDiff: Une lettre majuscule et minuscule est obligatoire
+    pwned: Le mot de passe ne doit pas être compromis
+    email: Le mot de passe ne doit pas être une adresse e-mail
+    blackList: Le mot de passe ne doit pas faire partie de la liste des mots interdits
     minStrength: Force minimum
     strength_level:
         none: Aucune

@@ -205,6 +205,7 @@ class ResponseSubscriber implements EventSubscriberInterface
         $csp['font-src'] = [self::CSP_SELF, self::GOOGLE_FONT_STATIC_URL, $asset];
         $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, $asset]; //, self::CSP_BLOB
         $csp['style-src'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
+        $csp['style-src-elem'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
 
         // PDF response
         if ($response instanceof PdfResponse) {

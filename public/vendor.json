@@ -20,7 +20,7 @@
 		},
 		{
 			"name": "twitter-bootstrap",
-			"version": "4.4.1",
+			"version": "4.5.0",
 			"files": [
 				"js/bootstrap.bundle.js",
 				"js/bootstrap.bundle.js.map",
@@ -61,7 +61,7 @@
 		},
 		{
 			"name": "summernote",
-			"version": "0.8.16",
+			"version": "0.8.17",
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/dist/{file}",
 			"files": [
@@ -151,7 +151,7 @@
 		},
 		{
 			"name": "jquery-contextmenu",
-			"version": "2.9.1",
+			"version": "2.9.2",
 			"target": "contextmenu",
 			"files": [
 				"jquery.contextMenu.css",

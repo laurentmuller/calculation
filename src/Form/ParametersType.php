@@ -81,7 +81,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ->addTextType();
 
         $helper->field(self::CUSTOMER_URL)
-        ->updateRowAttribute('class', 'ml-2')
+            ->updateRowAttribute('class', 'ml-2')
             ->addUrlType();
 
         // default
@@ -181,6 +181,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             'bottom-center',
             'bottom-right',
         ];
+
         $result = [];
         foreach ($entries as $entry) {
             $key = 'parameters.messagePosition.' . \str_replace('-', '_', $entry);

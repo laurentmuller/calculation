@@ -50,7 +50,9 @@ abstract class AuthenticateWebTestCase extends WebTestCase
         $this->assertNotNull($repository, 'The user respository is null.');
 
         /** @var User $user */
-        $user = $repository->findOneByUsername(\strtolower($username));
+        $user = $repository->findOneBy([
+            'username' => \strtolower($username)]
+        );
         if ($verify) {
             $this->assertNotNull($user, "The user '$username' is null.");
             $this->doEcho('UserName', $user->getUsername());

@@ -1,0 +1,13 @@
+doctrine:
+    orm:
+        dql:
+            datetime_functions:
+                date_format: DoctrineExtensions\Query\Sqlite\DateFormat
+                year: DoctrineExtensions\Query\Sqlite\Year
+                month: DoctrineExtensions\Query\Sqlite\Month
+                week: DoctrineExtensions\Query\Sqlite\Week
+                day: DoctrineExtensions\Query\Sqlite\Day
+            numeric_functions:
+                round: DoctrineExtensions\Query\Sqlite\Round
+            string_functions:
+                ifelse: DoctrineExtensions\Query\Sqlite\IfElse

@@ -24,11 +24,11 @@ security:
                 handlers: [App\Listener\UserEventListener]
 
             form_login:
+                csrf_token_generator: security.csrf.token_manager
                 username_parameter: username
                 password_parameter: password
                 csrf_parameter: csrf_token
                 provider: fos_userbundle
-                csrf_token_generator: security.csrf.token_manager
 
             # https://symfony.com/doc/current/security/impersonating_user.html
             switch_user: true

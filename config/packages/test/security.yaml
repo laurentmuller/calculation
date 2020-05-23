@@ -1,10 +1,4 @@
 security:
-    erase_credentials: false
-    firewalls:
-        main:
-            #security: false
-            #user_checker: ~
-            #form_login: ~    
     encoders:
-        Symfony\Component\Security\Core\User\User:
+        App\Entity\User:
             algorithm: plaintext

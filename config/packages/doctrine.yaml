@@ -3,19 +3,9 @@ doctrine:
         default_connection: default
         connections:
             default:
-                driver: 'mysql'
-                server_version: '5.7'
-                url: '%env(DATABASE_URL)%'
-                # only needed for MySQL
-                #charset: utf8mb4
-                #default_table_options:
-                #    charset: utf8mb4
-                #    collate: utf8mb4_unicode_ci
-                
+                url: '%env(resolve:DATABASE_URL)%'
             edit:
-                driver: 'mysql'
-                server_version: '5.7'
-                url: '%env(DATABASE_EDIT)%'
+                url: '%env(resolve:DATABASE_EDIT)%'
 
     orm:
         auto_generate_proxy_classes: true

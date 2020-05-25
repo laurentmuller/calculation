@@ -28,6 +28,15 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  */
 abstract class AuthenticateWebTestCase extends WebTestCase
 {
+    public const ROLE_ADMIN = User::ROLE_ADMIN;
+
+    public const ROLE_DISABLED = 'ROLE_DISABLED';
+
+    public const ROLE_FAKE = 'ROLE_FAKE';
+
+    public const ROLE_SUPER_ADMIN = User::ROLE_SUPER_ADMIN;
+    public const ROLE_USER = User::ROLE_DEFAULT;
+
     /**
      * @var KernelBrowser
      */
@@ -51,8 +60,9 @@ abstract class AuthenticateWebTestCase extends WebTestCase
 
         /** @var User $user */
         $user = $repository->findOneBy([
-            'username' => \strtolower($username)]
-        );
+            'username' => \strtolower($username),
+        ]);
+
         if ($verify) {
             $this->assertNotNull($user, "The user '$username' is null.");
             $this->doEcho('UserName', $user->getUsername());

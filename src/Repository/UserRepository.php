@@ -22,8 +22,6 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * Repository for user entity.
  *
- * @method App\Entity\User|null findOneByUsername(string $username)
- *
  * @author Laurent Muller
  *
  * @see \App\Entity\User

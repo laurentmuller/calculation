@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Web;
 
-use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -24,12 +23,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RoutesTest extends AuthenticateWebTestCase
 {
-    private const ROLE_ADMIN = User::ROLE_ADMIN;
-    private const ROLE_USER = User::ROLE_DEFAULT;
-    private const ROLE_DISABLED = 'ROLE_DISABLED';
-    private const ROLE_FAKE = 'ROLE_FAKE';
-    private const ROLE_SUPER_ADMIN = User::ROLE_SUPER_ADMIN;
-
     public function getRoutes(): array
     {
         return [
@@ -37,14 +30,25 @@ class RoutesTest extends AuthenticateWebTestCase
             ['/', self::ROLE_ADMIN, Response::HTTP_OK],
             ['/', self::ROLE_SUPER_ADMIN, Response::HTTP_OK],
 
+            // about controller
             ['/about', self::ROLE_USER, Response::HTTP_OK],
             ['/about', self::ROLE_ADMIN, Response::HTTP_OK],
             ['/about', self::ROLE_SUPER_ADMIN, Response::HTTP_OK],
+
+            // admin controller
+            ['/admin/rights/admin', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/admin/rights/admin', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/admin/rights/admin', self::ROLE_SUPER_ADMIN, Response::HTTP_OK],
+
+            ['/admin/rights/user', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/admin/rights/user', self::ROLE_ADMIN, Response::HTTP_OK],
+            ['/admin/rights/user', self::ROLE_SUPER_ADMIN, Response::HTTP_OK],
 
             ['/admin/parameters', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/admin/parameters', self::ROLE_ADMIN, Response::HTTP_OK],
             ['/admin/parameters', self::ROLE_SUPER_ADMIN, Response::HTTP_OK],
 
+            // not exist
             ['/not_exist', self::ROLE_USER, Response::HTTP_NOT_FOUND],
         ];
     }
@@ -74,7 +78,6 @@ class RoutesTest extends AuthenticateWebTestCase
         $response = $this->client->getResponse();
         $statusCode = $response->getStatusCode();
         $this->doEcho('StatusCode', "$expected => $statusCode");
-        // echo "\n";
 
         $this->assertSame($expected, $statusCode, "Invalid status code for '{$url}' with the user '{$user}'.");
     }

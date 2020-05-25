@@ -9,47 +9,35 @@ $(function () {
     'use strict';
 
     tinymce.PluginManager.add('clearContent', function (editor) {
-        const clearContent = function () {
+        const onAction = function () {
             if (editor.getContent() !== '') {
                 editor.setContent('');
                 editor.focus();
                 editor.fire('change');
             }
         };
-
+        const onSetup = function (button) {
+            const callback = function () {
+                button.setDisabled(editor.getContent() === '');
+            };
+            editor.on('change', callback);
+            return function () {
+                editor.off('change', callback);
+            };
+        };
         editor.ui.registry.addButton('clearContent', {
             icon: 'remove',
             disabled: true,
-            tooltip: 'Supprimer le contenu',
-            onAction: function () {
-                clearContent();
-            },
-            onSetup: function (button) {
-                const callback = function () {
-                    button.setDisabled(editor.getContent() === '');
-                };
-                editor.on('change', callback);
-                return function () {
-                    editor.off('change', callback);
-                };
-            }
+            tooltip: 'Clear content',
+            onAction: onAction,
+            onSetup: onSetup
         });
-
         editor.ui.registry.addMenuItem('clearContent', {
             icon: 'remove',
-            text: 'Supprimer le contenu',
-            onAction: function () {
-                clearContent();
-            },
-            onSetup: function (button) {
-                const callback = function () {
-                    button.setDisabled(editor.getContent() === '');
-                };
-                editor.on('change', callback);
-                return function () {
-                    editor.off('change', callback);
-                };
-            }
+            disabled: true,
+            text: 'Clear content',
+            onAction: onAction,
+            onSetup: onSetup
         });
 
         return {

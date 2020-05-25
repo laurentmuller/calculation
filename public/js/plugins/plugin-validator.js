@@ -336,14 +336,8 @@
          */
         initTinyEditor: function(options) {
             // concat values
-            // var plugins = ['autolink', 'lists', 'image', 'table', 'paste',
-            // 'help']
-            // var c = plugins.concat(b.filter((item) => plugins.indexOf(item)
-            // === -1))
-            // plugins.join(' ');
-            // [].concat(array1, array2);
-            const plugins = 'autolink lists link image table paste help ' + (options.plugins || '');
-            const toolbar = 'styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | help ' + (options.toolbar || '');
+            const plugins = 'autolink lists link image table paste ' + (options.plugins || '');
+            const toolbar = 'styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent |' + (options.toolbar || '');
             const help_tabs = ['shortcuts'].concat(options.help_tabs || []);
             
             // remove

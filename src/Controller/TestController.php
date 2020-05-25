@@ -613,6 +613,7 @@ class TestController extends BaseController
      */
     public function tinymce(Request $request, ThemeService $service): Response
     {
+        // https://cdn.tiny.cloud/1/10l4vrqclj2t1a8ncd9d5b5hohfgkdj896ip6zd1q9asf9go/tinymce/5/tinymce.min.js
         $data = [
             'email' => 'bibi@bibi.nu',
             'message' => '',

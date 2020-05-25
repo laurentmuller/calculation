@@ -46,33 +46,44 @@ class CalculationServiceTest extends WebTestCase
 
         $product = $this->initDatabase();
         $calculation = new Calculation();
-        $calculation->addProduct($product, self::QUANTITY);
+        $calculation->addProduct($product, self::QUANTITY)
+            ->setUserMargin(self::MARGIN_PERCENT);
 
         $manager = $this->getManager();
         $service = $this->getService($manager);
         $service->updateTotal($calculation);
 
         $this->assertCount(1, $calculation->getGroups());
+        $this->assertCount(1, $calculation->getGroups()[0]->getItems());
 
         /** @var CalculationGroup $group */
         $group = $calculation->getGroups()[0];
-        $total = self::PRODUCT_PRICE * self::QUANTITY * (1 + self::MARGIN_PERCENT);
-        $this->assertSame(self::PRODUCT_PRICE * self::QUANTITY, $group->getAmount());
-        $this->assertSame(self::MARGIN_PERCENT, $group->getMargin());
-        $this->assertSame($total, $group->getTotal());
-
-        $this->assertCount(1, $group->getItems());
 
         /** @var CalculationItem $item */
         $item = $group->getItems()[0];
+
+        $totalItem = self::PRODUCT_PRICE * self::QUANTITY;
+        $totalGroup = $totalItem * (1 + self::MARGIN_PERCENT);
+        $totalUser = $totalGroup * (1 + self::MARGIN_PERCENT);
+        $totalOverall = $totalUser * (1 + self::MARGIN_PERCENT);
+
+        // item
         $this->assertSame(self::PRODUCT_PRICE, $item->getPrice());
         $this->assertSame(self::QUANTITY, $item->getQuantity());
-        $this->assertSame(self::PRODUCT_PRICE * self::QUANTITY, $item->getTotal());
+        $this->assertSame($totalItem, $item->getTotal());
 
-        $total *= (1 + self::MARGIN_PERCENT);
-        $this->assertSame(self::PRODUCT_PRICE * self::QUANTITY, $calculation->getItemsTotal());
+        // group
+        $this->assertSame($totalItem, $group->getAmount());
+        $this->assertSame(self::MARGIN_PERCENT, $group->getMargin());
+        $this->assertSame($totalGroup, $group->getTotal());
+        $this->assertSame($group->getAmount(), $item->getTotal());
+
+        // calculation
+        $this->assertSame($totalItem, $calculation->getItemsTotal());
+        $this->assertSame($totalGroup, $calculation->getGroupsTotal());
         $this->assertSame(self::MARGIN_PERCENT, $calculation->getGlobalMargin());
-        $this->assertSame($total, $calculation->getOverallTotal());
+        $this->assertSame(self::MARGIN_PERCENT, $calculation->getUserMargin());
+        $this->assertSame($totalOverall, $calculation->getOverallTotal());
     }
 
     protected function echo(string $name, $value): void
@@ -160,6 +171,7 @@ class CalculationServiceTest extends WebTestCase
         foreach ($items as $item) {
             $manager->remove($item);
         }
+        $manager->flush();
 
         return $repository;
     }

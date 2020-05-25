@@ -182,14 +182,12 @@ class Calculation extends BaseEntity
     /**
      * Adds a product; creating a group if needed.
      *
-     * @param Product $product  the producut to add
-     * @param float   $quantity the producut quantity
+     * @param Product $product  the product to add
+     * @param float   $quantity the product quantity
      */
     public function addProduct(Product $product, float $quantity = 1.0): self
     {
-        $item = CalculationItem::create($product);
-        $item->setQuantity($quantity);
-
+        $item = CalculationItem::create($product)->setQuantity($quantity);
         $group = $this->findGroup($product->getCategory(), true);
         $group->addItem($item);
 

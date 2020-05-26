@@ -388,12 +388,19 @@
                     });
                 }
             };
-
+            const $this = $(this);
+            
             // merge
-            const settings = $.extend(true, defaults, options, $(this).data());
+            const settings = $.extend(true, defaults, options, $this.data());
+            
+            // focus
+            if (settings.focus) {
+                delete settings.focus;
+                settings.auto_focus = $this.attr('id');
+            }
 
             // initialize
-            return $(this).tinymce(settings);
+            return $this.tinymce(settings);
         },
         
         /**
@@ -402,17 +409,15 @@
         initEditor: function(options) {
             // merge toolbar
             const toolbar = [
-                ['startButtons', [].concat(options.startButtons)],
+                ['startButtons', [].concat(options.startButtons)], //
                 ['styleButtons', ['style'].concat(options.styleButtons)], //
-                ['fontButtons', ['bold', 'underline'].concat(options.fontButtons)], // ,
-                                                                                    // 'clear'
+                ['fontButtons', ['bold', 'underline'].concat(options.fontButtons)], //
                 ['fontnameButtons', ['fontname'].concat(options.fontnameButtons)], //
                 ['paraButtons', ['ul', 'ol', 'paragraph'].concat(options.paraButtons)], //
-                ['colorButtons', [].concat(options.colorButtons)], // 'color'
+                ['colorButtons', [].concat(options.colorButtons)], //
                 ['tableButtons', ['table', 'hr'].concat(options.tableButtons)], //
                 ['insertButtons', ['link'].concat(options.insertButtons)], //
-                ['editButtons', [].concat(options.editButtons)], // 'undo',
-                                                                    // 'redo'
+                ['editButtons', [].concat(options.editButtons)], // 
                 ['endButtons', [].concat(options.endButtons)] //
             ];
 

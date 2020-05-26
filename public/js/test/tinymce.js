@@ -53,7 +53,8 @@ $(function () {
     // initialize editor
     $('#form_message').initTinyEditor({
         plugins: 'clearContent',
-        toolbar: 'clearContent'
+        toolbar: 'clearContent',
+        focus: true
     });
 
     // initialize validator

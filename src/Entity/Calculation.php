@@ -578,7 +578,9 @@ class Calculation extends BaseEntity
     public function removeGroup(CalculationGroup $group): self
     {
         if ($this->groups->contains($group) && $this->groups->removeElement($group)) {
-            $group->setCalculation(null);
+            if ($group->getCalculation() === $this) {
+                $group->setCalculation(null);
+            }
         }
 
         return $this;

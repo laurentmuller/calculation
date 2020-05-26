@@ -250,8 +250,8 @@ class ChartController extends BaseController
     /**
      * Gets data used by the chart for the calculations by state.
      *
-     * @param CalculationRepository $repository the repository to get data
-     * @param ThemeService          $service    the service to get theme style
+     * @param CalculationStateRepository $repository the repository to get data
+     * @param ThemeService               $service    the service to get theme style
      *
      * @return array the data
      */
@@ -366,7 +366,7 @@ class ChartController extends BaseController
     {
         $chart = new Basechart($this->getApplication());
         if ($init_options) {
-            $chart->initLangOptions($this->getTranslator());
+            $chart->initLangOptions();
         }
         $chart->chart->backgroundColor('transparent');
 

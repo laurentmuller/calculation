@@ -442,7 +442,7 @@ class CalculationRepository extends BaseRepository
     /**
      * Gets the full order column name.
      *
-     * @param string $orderColumn the order column to validate
+     * @param string $column the order column to validate
      *
      * @return string the full order column name
      */
@@ -456,7 +456,6 @@ class CalculationRepository extends BaseRepository
                 return 'c.' . $column;
             case 'state':
                 return 's.code';
-                break;
             default:
                 return 'c.id';
         }

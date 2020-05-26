@@ -82,8 +82,6 @@ class UserController extends EntityController
     /**
      * Add an user.
      *
-     * @param Request $request the request
-     *
      * @Route("/add", name="user_add", methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
@@ -95,8 +93,6 @@ class UserController extends EntityController
     /**
      * Display the users as cards.
      *
-     * @param Request $request the request
-     *
      * @Route("", name="user_list", methods={"GET"})
      * @IsGranted("ROLE_ADMIN")
      */
@@ -107,10 +103,6 @@ class UserController extends EntityController
 
     /**
      * Send comment to the web master.
-     *
-     * @param Request         $request the request
-     * @param \Swift_Mailer   $mailer  the mailer to send message with
-     * @param LoggerInterface $logger  the logger to log error
      *
      * @Route("/comment", name="user_comment", methods={"GET", "POST"})
      * @IsGranted("ROLE_USER")
@@ -161,9 +153,6 @@ class UserController extends EntityController
     /**
      * Delete an user.
      *
-     * @param Request $request the request
-     * @param User    $item    the user to delete
-     *
      * @Route("/delete/{id}", name="user_delete", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
@@ -193,9 +182,6 @@ class UserController extends EntityController
     /**
      * Edit an user.
      *
-     * @param Request $request the request
-     * @param User    $item    the user to edit
-     *
      * @Route("/edit/{id}", name="user_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
@@ -206,9 +192,6 @@ class UserController extends EntityController
 
     /**
      * Edit an user's image.
-     *
-     * @param Request $request the request
-     * @param User    $item    the user to edit
      *
      * @Route("/image/{id}", name="user_image", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
@@ -237,11 +220,6 @@ class UserController extends EntityController
 
     /**
      * Send an email from the current user to an other user.
-     *
-     * @param Request         $request the request
-     * @param User            $user    the user to send mail to
-     * @param \Swift_Mailer   $mailer  the mailer to send message with
-     * @param LoggerInterface $logger  the logger to log error
      *
      * @Route("/message/{id}", name="user_message", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
@@ -301,9 +279,6 @@ class UserController extends EntityController
     /**
      * Change password for an existing user.
      *
-     * @param Request $request the request
-     * @param User    $item    the user to edit
-     *
      * @Route("/password/{id}", name="user_password", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
@@ -332,11 +307,6 @@ class UserController extends EntityController
     /**
      * Export the users to a PDF document.
      *
-     * @param Request                $request the request
-     * @param PropertyMappingFactory $factory the factory to get mapping informations
-     * @param StorageInterface       $storage the storage to get images path
-     * @param KernelInterface        $kernel  the kernel to get the default image path
-     *
      * @Route("/pdf", name="user_pdf", methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
@@ -359,9 +329,6 @@ class UserController extends EntityController
 
     /**
      * Edit user access rights.
-     *
-     * @param Request $request the request
-     * @param User    $item    the user to edit
      *
      * @Route("/rights/{id}", name="user_rights", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
@@ -400,8 +367,6 @@ class UserController extends EntityController
     /**
      * Export user access rights to a PDF document.
      *
-     * @param Request $request the request
-     *
      * @Route("/rights/pdf", name="user_rights_pdf", methods={"GET"})
      * @IsGranted("ROLE_ADMIN")
      */
@@ -424,8 +389,6 @@ class UserController extends EntityController
     /**
      * Show the properties of a user.
      *
-     * @param User $item the user to display properties for
-     *
      * @Route("/show/{id}", name="user_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
@@ -437,9 +400,6 @@ class UserController extends EntityController
     /**
      * Display the users as a table view.
      *
-     * @param Request       $request the request
-     * @param UserDataTable $table   the data table to render
-     *
      * @Route("/table", name="user_table", methods={"GET", "POST"})
      */
     public function table(Request $request, UserDataTable $table): Response
@@ -449,9 +409,6 @@ class UserController extends EntityController
 
     /**
      * Display the page to select the web site theme.
-     *
-     * @param Request      $request the request
-     * @param ThemeService $service the service to select theme
      *
      * @Route("/theme", name="user_theme")
      * @IsGranted("ROLE_USER")

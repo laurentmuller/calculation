@@ -249,7 +249,9 @@ class Category extends BaseEntity
     public function removeMargin(CategoryMargin $margin): self
     {
         if ($this->margins->contains($margin) && $this->margins->removeElement($margin)) {
-            $margin->setCategory(null);
+            if ($margin->getCategory() === $this) {
+                $margin->setCategory(null);
+            }
         }
 
         return $this;
@@ -263,7 +265,9 @@ class Category extends BaseEntity
     public function removeProduct(Product $product): self
     {
         if ($this->products->contains($product) && $this->products->removeElement($product)) {
-            $product->setCategory(null);
+            if ($product->getCategory() === $this) {
+                $product->setCategory(null);
+            }
         }
 
         return $this;

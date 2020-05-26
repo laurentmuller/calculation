@@ -77,7 +77,7 @@ class ImageResizer implements ImageExtensionInterface
     public function resize(string $source, string $target, int $size, array $options = []): bool
     {
         // check values?
-        if (!$this->imagine || $size <= 0) {
+        if (null === $this->imagine || $size <= 0) {
             return  false;
         }
 

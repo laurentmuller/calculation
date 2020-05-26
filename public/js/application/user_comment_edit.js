@@ -8,16 +8,16 @@ $(function () {
 
     // initialize editor
     const focus = $("form").data('focus');
-    $("#user_comment_message").initEditor({
+    $("#user_comment_message").initTinyEditor({
         focus: focus
     });
 
     // initialize attachements
     $("#user_comment_attachments").initFileType();
-    
+
     // initialize validator
     $("form").initValidator({
-        editor: true,
+        tinyeditor: true,
         fileInput: true,
         focus: !focus
     });

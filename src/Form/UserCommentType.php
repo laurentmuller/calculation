@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Service\ThemeService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -24,6 +25,21 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class UserCommentType extends AbstractType
 {
+    /**
+     * The dark theme state.
+     *
+     * @var bool
+     */
+    protected $dark;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(ThemeService $service)
+    {
+        $this->dark = $service->getCurrentTheme()->isDark();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -50,6 +66,7 @@ class UserCommentType extends AbstractType
 
         $helper->field('message')
             ->minLength(10)
+            ->updateAttribute('data-skin', $this->dark ? 'oxide-dark' : 'oxide')
             ->addEditorType();
 
         $helper->field('attachments')

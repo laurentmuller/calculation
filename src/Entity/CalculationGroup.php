@@ -271,7 +271,9 @@ class CalculationGroup extends BaseEntity
     public function removeItem(CalculationItem $item): self
     {
         if ($this->items->contains($item) && $this->items->removeElement($item)) {
-            $item->setGroup(null);
+            if ($item->getGroup() === $this) {
+                $item->setGroup(null);
+            }
         }
 
         return $this;

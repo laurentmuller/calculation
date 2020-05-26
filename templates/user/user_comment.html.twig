@@ -21,21 +21,27 @@
 {% endif %}
 {{ form_row(form.subject) }}
 {{ form_row(form.message) }}
-{{ form_row(form.attachments, {add_delete: true}) }}
+{{ form_row(form.attachments) }}
 {% endblock %}
 
 {% block stylesheets %}
-{{ asset_css('css/comment.css') }}
+{{ asset_css('css/fileinput.css') }}
 {% endblock %}
 
 {% block javascripts %}
 {% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/vendor/summernote/summernote-bs4.js') }}
-{{ asset_js('js/vendor/summernote/lang/summernote-fr-FR.js') }}
-{{ asset_js('js/plugins/plugin-fileinput.js') }}
-{{ asset_js('js/application/user_comment_edit.js') }}
+    {{ parent() }}
+    {{ asset_js('js/plugins/plugin-fileinput.js') }}
+    {{ asset_js('js/vendor/tinymce/tinymce.min.js') }}
+    {{ asset_js('js/vendor/tinymce/jquery.tinymce.min.js') }}
+    {{ asset_js('js/extensions/tinymce_fr_FR.js') }}        
+    {{ asset_js('js/application/user_comment_edit.js') }}
 {% else %}
-{{ asset_js('js/user_comment_edit.js') }}
+    {{ asset_js('js/core_edit.js') }}
+    {{ asset_js('js/plugins/plugin-fileinput.js') }}
+    {{ asset_js('js/vendor/tinymce/tinymce.min.js') }}
+    {{ asset_js('js/vendor/tinymce/jquery.tinymce.min.js') }}
+    {{ asset_js('js/extensions/tinymce_fr_FR.js') }}    
+    {{ asset_js('js/application/user_comment_edit.js') }}
 {% endif %}
 {% endblock %}

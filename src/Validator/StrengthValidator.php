@@ -58,26 +58,28 @@ class StrengthValidator extends AbstractConstraintValidator
      */
     protected function doValidate($value, Constraint $constraint): void
     {
-        $minStrength = $this->validateIntRange($constraint->minStrength, Strength::LEVEL_DISABLE, Strength::LEVEL_MAX);
-        if (Strength::LEVEL_DISABLE === $minStrength) {
-            return;
-        }
+        if ($constraint instanceof Strength) {
+            $minStrength = $this->validateIntRange($constraint->minStrength, Strength::LEVEL_DISABLE, Strength::LEVEL_MAX);
+            if (Strength::LEVEL_DISABLE === $minStrength) {
+                return;
+            }
 
-        $zx = new Zxcvbn();
-        $strength = $zx->passwordStrength($value);
-        $score = $strength['score'];
-        if ($score < $minStrength) {
-            $strength_min = $this->translateLevel($constraint->minStrength);
-            $strength_current = $this->translateLevel($score);
-            $parameters = [
+            $zx = new Zxcvbn();
+            $strength = $zx->passwordStrength($value);
+            $score = $strength['score'];
+            if ($score < $minStrength) {
+                $strength_min = $this->translateLevel($minStrength);
+                $strength_current = $this->translateLevel($score);
+                $parameters = [
                     '{{strength_min}}' => $strength_min,
                     '{{strength_current}}' => $strength_current,
                 ];
 
-            $this->context->buildViolation('password.minStrength')
-                ->setParameters($parameters)
-                ->setInvalidValue($value)
-                ->addViolation();
+                $this->context->buildViolation('password.minStrength')
+                    ->setParameters($parameters)
+                    ->setInvalidValue($value)
+                    ->addViolation();
+            }
         }
     }
 
@@ -93,6 +95,6 @@ class StrengthValidator extends AbstractConstraintValidator
         $level = $this->validateIntRange($level, Strength::LEVEL_MIN, Strength::LEVEL_MAX);
         $id = 'password.strength_level.' . self::LEVEL_TO_LABEL[$level];
 
-        return $this->translator->trans($id, []);
+        return $this->translator->trans($id);
     }
 }

@@ -37,8 +37,6 @@
 	padding-bottom: 5px;
 	margin-bottom: 0;
 	vertical-align: middle;
-	cursor: text;
-	
 	cursor: pointer;
 	border: 0;
 }
@@ -134,7 +132,7 @@
 
 .fileinput .input-group-append .input-group-text:hover {
 	cursor: pointer;
-	background: var(--light);
+	/*background: var(--light);*/
 }
 
 .fileinput .fileinput-preview {

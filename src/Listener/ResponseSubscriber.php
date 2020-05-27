@@ -183,7 +183,6 @@ class ResponseSubscriber implements EventSubscriberInterface
         // get values
         $asset = $this->asset;
         $nonce = $this->getNonce();
-        $isEdge = $this->isEdgeBrowser($request);
 
         // none
         $csp['base-uri'] = self::CSP_NONE;
@@ -194,15 +193,11 @@ class ResponseSubscriber implements EventSubscriberInterface
         $csp['default-src'] = self::CSP_SELF;
         $csp['form-action'] = self::CSP_SELF;
         $csp['frame-ancestors'] = self::CSP_SELF;
-        if (!$isEdge) {
-            $csp['manifest-src'] = self::CSP_SELF;
-        }
+        $csp['manifest-src'] = self::CSP_SELF;
 
         // nonce + asset
         $csp['script-src'] = [$nonce]; //, $asset];
-        if (!$isEdge) {
             $csp['script-src-elem'] = [$nonce, $asset, self::CSP_UNSAFE_INLINE];
-        }
 
         // self + asset
         $csp['frame-src'] = [self::CSP_SELF, self::GOOGLE_FRAME_URL];
@@ -210,9 +205,7 @@ class ResponseSubscriber implements EventSubscriberInterface
         $csp['font-src'] = [self::CSP_SELF, self::GOOGLE_FONT_STATIC_URL, $asset];
         $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, $asset]; //, self::CSP_BLOB
         $csp['style-src'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
-        if (!$isEdge) {
-            $csp['style-src-elem'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
-        }
+        $csp['style-src-elem'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
 
         // PDF response
         if ($response instanceof PdfResponse) {

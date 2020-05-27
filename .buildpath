@@ -121,6 +121,11 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/doctrine/sql-formatter/src">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/egulias/email-validator/EmailValidator">
 		<attributes>
 			<attribute name="composer" value="vendor"/>

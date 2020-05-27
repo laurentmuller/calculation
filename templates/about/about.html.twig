@@ -48,14 +48,17 @@
 {% endif %}
 </div>
 <div class="row no-gutters mt-2 pb-3 d-print-none">
-    <div class="col">
+    <div class="col mr-auto">
         {{ icons.homepage() }}
-        {% if app.debug or app_environment == 'dev' -%}
-            {{ icons.button_pdf('about_pdf') }}
-            {{ icons.link(path('about_php_ini'), 'about.php_ini', 'btn btn-form btn-outline-info') }}
-            {{ icons.linkExternal(path('about_php_ini_pdf'), 'about.php_ini', 'btn btn-form btn-outline-secondary', 'file-pdf far') }}
-        {%- endif %}
+        {{ icons.link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far') }}        
     </div>
+    {% if app.debug or app_environment == 'dev' -%}
+    <div class="col text-right">
+        {{ icons.button_pdf('about_pdf') }}
+        {{ icons.link(path('about_php_ini'), 'about.php_ini', 'btn btn-form btn-outline-info') }}            
+        {{ icons.linkExternal(path('about_php_ini_pdf'), 'about.php_ini', 'btn btn-form btn-outline-secondary', 'file-pdf far') }}
+    </div>        
+    {%- endif %}    
 </div>
 {% endblock %}
 
@@ -65,9 +68,9 @@
 
 {% block javascripts %}
 {% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/application/about.js') }}
+    {{ parent() }}
+    {{ asset_js('js/application/about.js') }}
 {% else %}
-{{ asset_js('js/about.js') }}
+    {{ asset_js('js/about.js') }}
 {% endif %}
 {% endblock %}

@@ -48,7 +48,7 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint): void
     {
-        if (!is_a($constraint, $this->class)) {
+        if (!\is_a($constraint, $this->class)) {
             throw new UnexpectedTypeException($constraint, $this->class);
         }
 

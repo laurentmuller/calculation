@@ -105,8 +105,6 @@ class Product extends BaseEntity
 
     /**
      * Get category.
-     *
-     * @return \App\Entity\Category
      */
     public function getCategory(): ?Category
     {
@@ -123,8 +121,6 @@ class Product extends BaseEntity
 
     /**
      * Get description.
-     *
-     * @return string
      */
     public function getDescription(): ?string
     {
@@ -149,8 +145,6 @@ class Product extends BaseEntity
 
     /**
      * Gets the supplier.
-     *
-     * @return string
      */
     public function getSupplier(): ?string
     {
@@ -159,8 +153,6 @@ class Product extends BaseEntity
 
     /**
      * Get unit.
-     *
-     * @return string
      */
     public function getUnit(): ?string
     {
@@ -170,7 +162,7 @@ class Product extends BaseEntity
     /**
      * Set category.
      *
-     * @param \App\Entity\Category $category
+     * @param \App\Entity\Category|null $category
      */
     public function setCategory(?Category $category): self
     {
@@ -180,7 +172,7 @@ class Product extends BaseEntity
     }
 
     /**
-     * Set description.
+     * Set the description.
      *
      * @param string $description
      */
@@ -192,7 +184,7 @@ class Product extends BaseEntity
     }
 
     /**
-     * Set price.
+     * Set the price.
      */
     public function setPrice(float $price): self
     {
@@ -203,8 +195,6 @@ class Product extends BaseEntity
 
     /**
      * Sets the supplier.
-     *
-     * @param string $supplier
      */
     public function setSupplier(?string $supplier): self
     {
@@ -215,8 +205,6 @@ class Product extends BaseEntity
 
     /**
      * Set unit.
-     *
-     * @param string $unit
      */
     public function setUnit(?string $unit): self
     {

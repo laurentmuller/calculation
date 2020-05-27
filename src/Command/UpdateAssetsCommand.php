@@ -588,20 +588,6 @@ class UpdateAssetsCommand extends AssetsCommand
         $toAppend .= $this->copyStyleEntries($content, '.modal-footer', '.tox .tox-dialog__footer',
             ['background-color', 'color']);
 
-//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox-toolbar__primary',
-//             ['background-color']);
-//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox-statusbar',
-//             ['background-color']);
-//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox .tox-menu',
-//             ['background-color']);
-
-//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox-dialog',
-//             ['background-color']);
-//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox .tox-dialog__header',
-//             ['background-color']);
-//         $toAppend .= $this->copyStyleEntries($content, '.input-group-text', '.tox .tox-dialog__footer',
-//             ['background-color']);
-
         if (empty($toAppend)) {
             return $content;
         }

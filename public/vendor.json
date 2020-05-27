@@ -60,22 +60,6 @@
 			]
 		},
 		{
-			"name": "summernote",
-			"version": "0.8.18",
-			"source": "https://cdn.jsdelivr.net/npm/",
-			"format": "{source}{name}@{version}/dist/{file}",
-			"files": [
-				"summernote-bs4.css",
-				"summernote-bs4.js",
-				"summernote-bs4.js.map",
-				"font/summernote.eot",
-				"font/summernote.ttf",
-				"font/summernote.woff",
-				"font/summernote.woff2",
-				"lang/summernote-fr-FR.js"
-			]
-		},
-		{
 			"name": "highcharts",
 			"version": "8.1.0",
 			"source": "https://cdn.jsdelivr.net/npm/",
@@ -175,7 +159,9 @@
 			"version": "5.3.0",
 			"files": [
 				"icons/default/icons.min.js",
+				
 				"jquery.tinymce.min.js",
+				
 				"plugins/advlist/plugin.min.js",
 				"plugins/anchor/plugin.min.js",
 				"plugins/autolink/plugin.min.js",
@@ -240,10 +226,7 @@
 				"skins/ui/oxide-dark/content.min.css",
 				"skins/ui/oxide-dark/content.mobile.min.css",
 				"skins/ui/oxide-dark/skin.min.css",
-				"skins/ui/oxide-dark/skin.mobile.min.css",
-				
-				
-				"icons/default/icons.min.js"
+				"skins/ui/oxide-dark/skin.mobile.min.css"
 			]
 		}
 	]

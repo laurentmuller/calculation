@@ -52,8 +52,8 @@ $(function () {
 
     // initialize editor
     $('#form_message').initTinyEditor({
-        plugins: 'clearContent',
-        toolbar: 'clearContent',
+        plugins: 'clearContent help',
+        toolbar: 'clearContent | help',
         focus: true
     });
 

@@ -517,44 +517,6 @@ class TestController extends BaseController
     }
 
     /**
-     * Display Summernote editor and file attachments.
-     *
-     * @Route("/summernote", name="test_summernote")
-     */
-    public function summernote(Request $request): Response
-    {
-        $data = [
-            'email' => 'bibi@bibi.nu',
-            'message' => '',
-        ];
-
-        $builder = $this->createFormBuilder($data);
-        $helper = new FormHelper($builder, 'user.fields.');
-
-        $helper->field('email')
-            ->addEmailType();
-
-        $helper->field('message')
-            ->minLength(10)
-            ->addEditorType();
-
-        // render
-        $form = $builder->getForm();
-        if ($this->handleFormRequest($form, $request)) {
-            $data = $form->getData();
-            $message = 'Message :<br>' . (string) $data['message'];
-            $this->succes($message);
-
-            // home page
-            return $this->redirectToHomePage();
-        }
-
-        return $this->render('test/summernote.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * Test service.
      *
      * @Route("/swiss", name="test_swiss")

@@ -26,20 +26,6 @@
         },
 
         /**
-         * Finds the Summernote editor container within the current element.
-         */
-        findEditor: function() {
-            const data = $(this).data("summernote");
-            if (data) {
-                const $editor = $(data.layoutInfo.editor);
-                if ($editor.length) {
-                    return $editor;
-                }
-            }
-            return null;
-        },
-
-        /**
          * Finds the TinyMCE editor container within the current element.
          */
         findTinyEditor: function() {
@@ -88,29 +74,11 @@
          */
         initValidator: function(options) {
             // get options
-            const editor = options && options.editor;
             const inline = options && options.inline;
             const recaptcha = options && options.recaptcha;
             const fileInput = options && options.fileInput;
             const colorpicker = options && options.colorpicker;
             const tinyeditor = options && options.tinyeditor;
-            
-            if (editor) {
-                // override elementValue function
-                $.validator.prototype.elementValue = (function(parent) {
-                    return function(element) {
-                        // check editor text if applicable
-                        if ($(element).data('summernote')) {
-                            const code = $(element).summernote('code');
-                            return $(code).text().trim();
-                        }
-
-                        // call the original function
-                        return parent.apply(this, arguments);
-                    };
-
-                })($.validator.prototype.elementValue);
-            }
             
             if (tinyeditor) {
                 // override elementValue function
@@ -137,15 +105,6 @@
                     if (this.settings.focusInvalid) {
                         // get invalid elements
                         const $elements = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
-
-                        // editor
-                        if (editor) {
-                            if ($elements.data('summernote')) {
-                                $elements.summernote('focus');
-                                $elements.trigger("focusin");
-                                return;
-                            }
-                        }
 
                         // tinyeditor
                         if (tinyeditor) {
@@ -195,7 +154,7 @@
                 focus: true,
                 errorElement: 'small',
                 errorClass: 'is-invalid',
-                ignore: ':hidden:not(.must-validate),.note-editable.card-block',
+                ignore: ':hidden:not(.must-validate)',
 
                 errorPlacement: function(error, element) {
                     error.addClass('invalid-feedback');
@@ -212,9 +171,6 @@
 
                     // find custom element
                     let $toUpdate = null;
-                    if (editor && !$toUpdate) {
-                        $toUpdate = $element.findEditor();
-                    }
                     if (tinyeditor && !$toUpdate) {
                         $toUpdate = $element.findTinyEditor();
                     }                    
@@ -242,9 +198,6 @@
 
                     // find custom element
                     let $toUpdate = null;
-                    if (editor && !$toUpdate) {
-                        $toUpdate = $element.findEditor();
-                    }
                     if (tinyeditor && !$toUpdate) {
                         $toUpdate = $element.findTinyEditor();
                     }                    
@@ -337,7 +290,7 @@
         initTinyEditor: function(options) {
             // concat values
             const plugins = 'autolink lists link image table paste ' + (options.plugins || '');
-            const toolbar = 'styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent |' + (options.toolbar || '');
+            const toolbar = 'styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent |' + (options.toolbar || '');
             const help_tabs = ['shortcuts'].concat(options.help_tabs || []);
             
             // remove
@@ -403,91 +356,6 @@
             return $this.tinymce(settings);
         },
         
-        /**
-         * Initialize a Summernote editor.
-         */
-        initEditor: function(options) {
-            // merge toolbar
-            const toolbar = [
-                ['startButtons', [].concat(options.startButtons)], //
-                ['styleButtons', ['style'].concat(options.styleButtons)], //
-                ['fontButtons', ['bold', 'underline'].concat(options.fontButtons)], //
-                ['fontnameButtons', ['fontname'].concat(options.fontnameButtons)], //
-                ['paraButtons', ['ul', 'ol', 'paragraph'].concat(options.paraButtons)], //
-                ['colorButtons', [].concat(options.colorButtons)], //
-                ['tableButtons', ['table', 'hr'].concat(options.tableButtons)], //
-                ['insertButtons', ['link'].concat(options.insertButtons)], //
-                ['editButtons', [].concat(options.editButtons)], // 
-                ['endButtons', [].concat(options.endButtons)] //
-            ];
-
-            const defaults = {
-                lang: 'fr-FR',
-                minHeight: 200,
-                maxHeight: 500,
-                shortcuts: false,
-                // tooltip: false,
-                dialogsFade: true,
-                toolbar: toolbar,
-
-                callbacks: {
-                    onFocus: function() {
-                        const $that = $(this).trigger('focus');
-                        const validator = $that.parents('form').data('validator');
-                        if (validator) {
-                            validator.lastActive = $that;
-                        }
-                        const $editor = $that.findEditor();
-                        if ($editor) {
-                            if ($editor.hasClass('border-danger')) {
-                                $editor.addClass('field-invalid');
-                            } else {
-                                $editor.addClass('field-valid');
-                            }
-                        }
-                    },
-                    onBlur: function() {
-                        const $editor = $(this).findEditor();
-                        if ($editor) {
-                            $editor.removeClass('field-valid field-invalid');
-                        }
-                    },
-                    onChange: function(contents) {
-                        const $that = $(this);
-                        const oldText = $that.data('text') || '';
-                        const newText = $(contents).text().trim();
-                        if (oldText !== newText) {
-                            $that.data('text', newText);
-                            $that.valid();
-                        }
-                    },
-                    onInit: function() {
-                        // update UI
-                        $(".card.note-editor.note-editor").addClass("border");
-                        // $('.link-dialog
-                        // span.custom-control-description').removeClass('custom-control-description').addClass('custom-control-label');
-                    }
-                }
-            };
-
-            // remove tab keys
-            // if ($.summernote.options.keyMap.pc.TAB) {
-            // delete $.summernote.options.keyMap.pc.TAB;
-            // delete $.summernote.options.keyMap.mac.TAB;
-            // delete $.summernote.options.keyMap.pc['SHIFT+TAB'];
-            // delete $.summernote.options.keyMap.mac['SHIFT+TAB'];
-            // }
-
-            // missing translation
-            $.summernote.lang['fr-FR'].link.useProtocol = 'Utiliser le protocole par défaut';
-            
-            // merge
-            const settings = $.extend(true, defaults, options, $(this).data());
-            
-            // initialize
-            return $(this).summernote(settings);
-        },
-
         /**
          * Intitialize an input type file.
          * 

@@ -165,9 +165,7 @@ class CalculationRepository extends BaseRepository
             ->having('item_count > 1');
 
         // order column and direction
-        $orderColumn = $this->getOrder($orderColumn);
-        $orderDirection = $this->getDirection($orderDirection, Criteria::DESC);
-        $builder->orderBy($orderColumn, $orderDirection);
+        $this->updateOrder($builder, $orderColumn, $orderDirection);
 
         // execute
         $items = $builder->getQuery()->getArrayResult();
@@ -235,9 +233,7 @@ class CalculationRepository extends BaseRepository
             ->orHaving('item_quantity = 0');
 
         // order column and direction
-        $orderColumn = $this->getOrder($orderColumn);
-        $orderDirection = $this->getDirection($orderDirection, Criteria::DESC);
-        $builder->orderBy($orderColumn, $orderDirection);
+        $this->updateOrder($builder, $orderColumn, $orderDirection);
 
         // execute
         $items = $builder->getQuery()->getArrayResult();
@@ -464,5 +460,19 @@ class CalculationRepository extends BaseRepository
             default:
                 return 'c.id';
         }
+    }
+
+    /**
+     * Update the order by of the given query builder.
+     *
+     * @param QueryBuilder $builder        the query builder to update
+     * @param string       $orderColumn    the order column
+     * @param string       $orderDirection the order direction ('ASC' or 'DESC')
+     */
+    private function updateOrder(QueryBuilder $builder, string $orderColumn, string $orderDirection): void
+    {
+        $orderColumn = $this->getOrder($orderColumn);
+        $orderDirection = $this->getDirection($orderDirection, Criteria::DESC);
+        $builder->orderBy($orderColumn, $orderDirection);
     }
 }

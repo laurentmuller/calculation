@@ -1,5 +1,8 @@
 {% extends 'cards/card_table.html.twig' %}
 
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
 {# parameters #}
 {%- set title       = 'globalmargin.list.title' -%}
 {%- set title_icon  = 'percent' -%}
@@ -21,3 +24,9 @@
 {%- set show_title   = 'globalmargin.show.title' %}
 {%- set edit_title   = 'globalmargin.edit.title' %}
 {%- set delete_title = 'globalmargin.delete.title' %}
+
+{% block table_actions -%}
+{{ parent() }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItem(path('globalmargin_list'), 'common.button_flex', 'columns') }}
+{%- endblock %}

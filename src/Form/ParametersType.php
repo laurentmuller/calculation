@@ -100,6 +100,13 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ->percent(true)
             ->addPercentType(0);
 
+        $helper->field(self::DISPLAY_TABULAR)
+            ->updateAttribute('data-default', (int) self::DEFAULT_TABULAR)
+            ->addChoiceType([
+                'parameters.tabular.table' => true,
+                'parameters.tabular.flex' => false,
+            ]);
+
         // flashbag
         $helper->field(self::MESSAGE_POSITION)
             ->updateAttribute('data-default', self::DEFAULT_POSITION)

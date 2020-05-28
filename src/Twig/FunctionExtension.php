@@ -311,11 +311,12 @@ final class FunctionExtension extends AbstractExtension
             new TwigFunction('cancelUrl', [$this, 'cancelUrl']),
             new TwigFunction('routeParams', [$this, 'routeParams']),
 
+            // php
             new TwigFunction('is_int', 'is_int'),
-            // new TwigFunction('className', [$this, 'getClassName']),
 
             // application
             new TwigFunction('marginBelow', [$this, 'isMarginBelow']),
+            new TwigFunction('displayTabular', [$this, 'isDisplayTabular']),
         ];
     }
 
@@ -355,6 +356,16 @@ final class FunctionExtension extends AbstractExtension
     public function getMinMargin(): float
     {
         return $this->service->getMinMargin();
+    }
+
+    /**
+     * Gets a value indicating how entities are displayed.
+     *
+     * @return bool <code>true</code>, displays the entities in tabular mode; <code>false</code>, displays entities as cards
+     */
+    public function isDisplayTabular(): bool
+    {
+        return $this->service->isDisplayTabular();
     }
 
     /**

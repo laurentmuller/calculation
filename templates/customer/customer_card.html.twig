@@ -2,6 +2,7 @@
 
 {# imports #}
 {% import 'macros/_properties.html.twig' as properties %}
+{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title        = 'customer.list.title' -%}
@@ -35,3 +36,9 @@
 {{ properties.line(item.zipCity) }}
 {{ properties.email(item.email) }}
 {% endblock %}
+
+{%- block sort_actions -%}
+{{ parent() }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItem(path('customer_table'), 'common.button_table', 'table fas') }}
+{%- endblock -%}

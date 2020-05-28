@@ -68,6 +68,7 @@
                     {% for field in sortFields %}
                         {{ _self.sortMenu(route, field, sortField, sortMode, not loop.last) }}
                     {% endfor %}
+                    {%- block sort_actions -%}{%- endblock -%}
                     </div>
                 {% endif %}
                 {%- block toolbar_actions -%}{%- endblock -%}

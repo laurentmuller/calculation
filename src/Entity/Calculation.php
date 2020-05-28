@@ -190,6 +190,7 @@ class Calculation extends BaseEntity
         $item = CalculationItem::create($product)->setQuantity($quantity);
         $group = $this->findGroup($product->getCategory(), true);
         $group->addItem($item);
+        $group->update();
 
         return $this;
     }

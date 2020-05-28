@@ -1,5 +1,8 @@
 {% extends 'cards/card_table.html.twig' %}
 
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
 {# parameters #}
 {%- set title       = 'user.list.title' -%}
 {%- set title_icon  = 'user far' -%}
@@ -33,10 +36,12 @@
 {{ _self.item_data(rights_path, 'user.list.rights_title', 'unlock') }}
 {{ _self.item_data(message_path, 'user.message.title', 'envelope far', {'data-callback': 'user_message', 'data-id': app.user.id}) }}
 {%- if not is_granted('ROLE_PREVIOUS_ADMIN') and is_granted('ROLE_SUPER_ADMIN') -%}
-    <div class="dropdown-divider"></div>
+    {{ icons.dropdownSeparator() }}
     {{ _self.item_data(switch_path, 'user.switch.take.title', 'user-plus', {'data-callback': 'user_switch', 'data-id': app.user.id}) }}
 {%- endif -%}
-<div class="dropdown-divider"></div>
+{{ icons.dropdownSeparator() }}
 {{ parent() }}
 {{ _self.item_external(pdf_right, 'user.list.rights_export', 'dropdown-item', 'cloud-download-alt') }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItem(path('user_list'), 'common.button_flex', 'columns') }}
 {% endblock %}

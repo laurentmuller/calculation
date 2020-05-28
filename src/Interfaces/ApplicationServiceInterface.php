@@ -80,6 +80,11 @@ interface ApplicationServiceInterface
     public const DEFAULT_SUB_TITLE = false;
 
     /**
+     * The default display mode (boolean).
+     */
+    public const DEFAULT_TABULAR = true;
+
+    /**
      * The default timeout of the flashbag messages (integer).
      */
     public const DEFAULT_TIMEOUT = 4000;
@@ -90,6 +95,13 @@ interface ApplicationServiceInterface
      * When <code>true</code>, display the image; when <code>false</code>, hide.
      */
     public const DISPLAY_CAPTCHA = 'display_captcha';
+
+    /**
+     * The property name for the display mode (boolean).
+     *
+     * When <code>true</code>, displays the entities in tabular mode; when <code>false</code>, displays entities as cards.
+     */
+    public const DISPLAY_TABULAR = 'display_tabular';
 
     /**
      * The property name for the edit action when displaying entities (boolean).

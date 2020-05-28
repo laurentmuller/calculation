@@ -46,3 +46,9 @@
     {{ icons.dropdownItem(clone_path, 'common.button_clone', 'copy') }}
 {%- endif -%}
 {% endblock %}
+
+{%- block sort_actions -%}
+{{ parent() }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItem(path('product_table'), 'common.button_table', 'table fas') }}
+{%- endblock -%}

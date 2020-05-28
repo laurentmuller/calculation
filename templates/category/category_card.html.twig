@@ -52,3 +52,8 @@
 {% endblock %}
 
 {% block search_action -%}{%- endblock %}
+
+{%- block toolbar_actions -%}
+{{ parent() }}
+{{ icons.link(path('category_table'), '' , 'btn btn-outline-secondary', 'table fas', 'common.button_table') }}
+{%- endblock -%}

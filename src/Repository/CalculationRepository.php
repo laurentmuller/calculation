@@ -234,6 +234,11 @@ class CalculationRepository extends BaseRepository
             ->having('item_price = 0')
             ->orHaving('item_quantity = 0');
 
+        // order column and direction
+        $orderColumn = $this->getOrder($orderColumn);
+        $orderDirection = $this->getDirection($orderDirection, Criteria::DESC);
+        $builder->orderBy($orderColumn, $orderDirection);
+
         // execute
         $items = $builder->getQuery()->getArrayResult();
 

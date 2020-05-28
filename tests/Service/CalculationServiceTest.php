@@ -44,7 +44,7 @@ class CalculationServiceTest extends WebTestCase
     {
         self::bootKernel();
 
-        $product = $this->initDatabase();
+        $product = $this->init();
         $calculation = new Calculation();
         $calculation->addProduct($product, self::QUANTITY)
             ->setUserMargin(self::MARGIN_PERCENT);
@@ -108,8 +108,19 @@ class CalculationServiceTest extends WebTestCase
         return $service;
     }
 
+    protected function init(): Product
+    {
+        $manager = $this->getManager();
+        $this->initGlobalMargins($manager);
+        $category = $this->initCategories($manager);
+        $product = $this->initProducts($manager, $category);
+
+        return $product;
+    }
+
     protected function initCategories(EntityManager $manager): Category
     {
+        $this->initRepository($manager, CategoryMargin::class);
         $this->initRepository($manager, Category::class);
 
         $category = new Category();
@@ -124,16 +135,6 @@ class CalculationServiceTest extends WebTestCase
         $manager->flush();
 
         return $category;
-    }
-
-    protected function initDatabase(): Product
-    {
-        $manager = $this->getManager();
-        $this->initGlobalMargins($manager);
-        $category = $this->initCategories($manager);
-        $product = $this->initProducts($manager, $category);
-
-        return $product;
     }
 
     protected function initGlobalMargins(EntityManager $manager): void

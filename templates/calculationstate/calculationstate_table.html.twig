@@ -1,5 +1,8 @@
 {% extends 'cards/card_table.html.twig' %}
 
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
 {# parameters #}
 {%- set title       = 'calculationstate.list.title' -%}
 {%- set title_icon  = 'flag far' -%}
@@ -19,3 +22,9 @@
 {%- set show_title   = 'calculationstate.show.title' %}
 {%- set edit_title   = 'calculationstate.edit.title' %}
 {%- set delete_title = 'calculationstate.delete.title' %}
+
+{% block table_actions -%}
+{{ parent() }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItem(path('calculationstate_list'), 'common.button_flex', 'columns') }}
+{%- endblock %}

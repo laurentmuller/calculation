@@ -88,6 +88,12 @@
 {%- endif -%}
 {% endblock %}
 
+{%- block sort_actions -%}
+{{ parent() }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItem(path('calculation_table'), 'common.button_table', 'table fas') }}
+{%- endblock -%}
+
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() }}

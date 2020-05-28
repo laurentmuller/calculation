@@ -1,5 +1,8 @@
 {% extends 'cards/card_table.html.twig' %}
 
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
 {# parameters #}
 {%- set title       = 'product.list.title' -%}
 {%- set title_icon  = 'file-alt far' -%}
@@ -22,3 +25,9 @@
 
 {# highlight search #}
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
+
+{% block table_actions -%}
+{{ parent() }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItem(path('product_list'), 'common.button_flex', 'columns') }}
+{%- endblock %}

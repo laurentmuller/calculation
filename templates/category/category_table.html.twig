@@ -1,5 +1,8 @@
 {% extends 'cards/card_table.html.twig' %}
 
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
 {# parameters #}
 {%- set title       = 'category.list.title' -%}
 {%- set title_icon  = 'folder far' -%}
@@ -19,3 +22,9 @@
 {%- set show_title   = 'category.show.title' %}
 {%- set edit_title   = 'category.edit.title' %}
 {%- set delete_title = 'category.delete.title' %}
+
+{% block table_actions -%}
+{{ parent() }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItem(path('category_list'), 'common.button_flex', 'columns') }}
+{%- endblock %}

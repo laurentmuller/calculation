@@ -10,6 +10,7 @@
 {%- set is_previous_admin = is_granted('ROLE_PREVIOUS_ADMIN') -%}
 {%- set is_remembered     = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
 {%- set is_bibi           = is_dev and is_remembered and app.user.username == 'Bibi' -%}
+{%- set is_tabular        = displayTabular() -%}
 
 {# rights #}
 {%- set calculs      = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
@@ -30,7 +31,8 @@
     <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav mr-auto">
             {%- if calculs -%}
-            {{- icons.navItem(path('calculation_list'), 'calculation.list.title', 'calculator') -}}
+            {%- set href = is_tabular ? path('calculation_table') : path('calculation_list')  -%}
+            {{- icons.navItem(href, 'calculation.list.title', 'calculator') -}}
             {%- endif -%}
             {%- if products or categories or states or margins or customers -%}
             <li class="nav-item dropdown">
@@ -39,20 +41,25 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dataDropdown">
                 {%- if products -%}
-                    {{- icons.dropdownItem(path('product_list'), 'product.list.title', 'file-alt far') -}}
+                    {%- set href = is_tabular ? path('product_table') : path('product_list')  -%}
+                    {{- icons.dropdownItem(href, 'product.list.title', 'file-alt far') -}}
                 {%- endif -%}
                 {%- if categories -%}
-                    {{- icons.dropdownItem(path('category_list'), 'category.list.title', 'folder far') -}}
+                    {%- set href = is_tabular ? path('category_table') : path('category_list')  -%}
+                    {{- icons.dropdownItem(href, 'category.list.title', 'folder far') -}}
                 {%- endif -%}
                 {%- if states -%}
-                    {{- icons.dropdownItem(path('calculationstate_list'), 'calculationstate.list.title', 'flag far') -}}
+                    {%- set href = is_tabular ? path('calculationstate_table') : path('calculationstate_list')  -%}
+                    {{- icons.dropdownItem(href, 'calculationstate.list.title', 'flag far') -}}
 	            {%- endif -%} 
                 {%- if margins -%}
-                    {{- icons.dropdownItem(path('globalmargin_list'), 'globalmargin.list.title', 'percent') -}}
+                    {%- set href = is_tabular ? path('globalmargin_table') : path('globalmargin_list')  -%}
+                    {{- icons.dropdownItem(href, 'globalmargin.list.title', 'percent') -}}
                 {%- endif -%}                     
                 {%- if customers %}
+                    {%- set href = is_tabular ? path('customer_table') : path('customer_list')  -%}
                     {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(path('customer_list'), 'customer.list.title', 'address-card far') -}}
+                    {{- icons.dropdownItem(href, 'customer.list.title', 'address-card far') -}}
                 {%- endif -%}
                 </div>
            	</li>
@@ -68,9 +75,12 @@
                     {{- icons.dropdownSeparator -}}
                 	{{- icons.dropdownItem(path('calculation_update'), 'calculation.update.title', 'pencil-alt') -}}
                     {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(path('calculation_below'), 'calculation.below.title', 'percent') -}}
-                    {{- icons.dropdownItem(path('calculation_duplicate'), 'calculation.duplicate.title', 'copy far') -}}
-                    {{- icons.dropdownItem(path('calculation_empty'), 'calculation.empty.title', 'file-code far') -}}
+                    {%- set href = is_tabular ? path('calculation_below_table') : path('calculation_below')  -%}
+                    {{- icons.dropdownItem(href, 'calculation.below.title', 'percent') -}}
+                    {%- set href = is_tabular ? path('calculation_duplicate_table') : path('calculation_duplicate')  -%}
+                    {{- icons.dropdownItem(href, 'calculation.duplicate.title', 'copy far') -}}
+                    {%- set href = is_tabular ? path('calculation_empty_table') : path('calculation_empty')  -%}
+                    {{- icons.dropdownItem(href, 'calculation.empty.title', 'file-code far') -}}
                     {% endif -%}
                 </div>
     		</li>
@@ -98,7 +108,6 @@
                 <div class="dropdown-menu" aria-labelledby="testDropdown">
                     {{- icons.dropdownItem(path('test_notifications'), 'test.notification', 'bell far') -}}
                     {{- icons.dropdownItem(path('test_tinymce'), 'test.tinymce', 'edit') -}}
-                    
                     {{- icons.dropdownItem(path('test_calendar'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) -}}
                     {{- icons.dropdownItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') -}}
                     {{- icons.dropdownItem(path('test_translate'), 'translator.title', 'globe') -}}
@@ -146,7 +155,8 @@
                     {{- icons.dropdownItem(path('log_show'), 'logs.title', 'book') -}}
                     {{- icons.dropdownItem(path('admin_clear'), 'clear_cache.title', 'times') -}}
                     {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(path('user_list'), 'user.list.title', 'user far') -}}
+                    {%- set href = is_tabular ? path('user_table') : path('user_list')  -%}
+                    {{- icons.dropdownItem(href, 'user.list.title', 'user far') -}}
                     {{- icons.dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'unlock-alt') -}}
                 {% endif %}
                 {% if is_super_admin %}

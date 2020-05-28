@@ -2,6 +2,7 @@
 
 {# imports #}
 {% import 'macros/_properties.html.twig' as properties %}
+{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title        = 'globalmargin.list.title' -%}
@@ -35,3 +36,8 @@
 {% endblock %}
 
 {% block search_action -%}{%- endblock %}
+
+{%- block toolbar_actions -%}
+{{ parent() }}
+{{ icons.link(path('globalmargin_table'), '' , 'btn btn-outline-secondary', 'table fas', 'common.button_table') }}
+{%- endblock -%}

@@ -28,7 +28,7 @@ use NumberFormatter;
 trait NumberFormatterTrait
 {
     /**
-     * Filter to format a number with 2 decimals.
+     * Filter to format a number with 2 decimals (Ex: 12.5 -> 12.50).
      *
      * @param float|int $number the value to format
      */
@@ -43,8 +43,7 @@ trait NumberFormatterTrait
     }
 
     /**
-     * Filter to format a number with 0 as left padding and '-' character as
-     * grouping separator (Ex: 123 -> 000-123).
+     * Filter to format an integer identifier with 0 left padding  (Ex: 123 -> 000123).
      *
      * @param int $number the value to format
      */
@@ -54,7 +53,7 @@ trait NumberFormatterTrait
     }
 
     /**
-     * Filter to format a number with 0 decimals.
+     * Filter to format a number with 0 decimals (Ex: 12.2 -> 12).
      *
      * @param float|int $number the value to format
      */

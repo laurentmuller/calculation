@@ -66,8 +66,13 @@
         {{ form_row(form.message_sub_title) }}
     </div>
 </div>
-{% if super_admin %}
 <label class="horizontal-line font-weight-bold">{{ 'parameters.group_display'|trans }}</label>
+<div class="form-row ml-2">
+    <div class="col">
+        {{ form_row(form.display_tabular) }}
+    </div>
+</div>
+{% if super_admin %}
 <div class="form-row ml-2">
 	<div class="col-md-6">
 		{{ form_row(form.date_format) }}
@@ -97,7 +102,6 @@
 <div class="ml-2">
     {{ form_rest(form) }}
 </div>
-
 {% endif %}
 {%- endblock %}
 

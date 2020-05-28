@@ -378,6 +378,8 @@ common:
     button_show: Afficher
     button_browse: Parcourir
     button_refresh: Actualiser
+    button_table: Mode tabulaire
+    button_flex: Mode mosaïque
     count: 'Nombre d''éléments : %count%'
     show_password: Afficher le mot de passe
     hide_password: Masquer le mot de passe
@@ -585,13 +587,16 @@ parameters:
     group_security: Sécurité
     group_password: Options du mot de passe
     action_display: Afficher
-    action_test: Tester    
+    action_test: Tester
     editAction:
         show: Afficher l'objet
         edit: Modifier l'objet
     display:
         show: Afficher
         hide: Masquer
+    tabular:
+        table: Tabulaire
+        flex: Mosaïque
     messagePosition:
         top_left: En haut - A gauche
         top_center: En haut - Centrer
@@ -613,7 +618,7 @@ parameters:
         password_pwned: Le mot de passe ne doit pas être compromis
         password_email: Le mot de passe ne doit pas être une adresse e-mail
         password_black_list: Le mot de passe ne doit pas faire partie de la liste des mots interdits
-        password_min_strength: Force minimum        
+        password_min_strength: Force minimum
     fields:
         default_state: Statut
         edit_action: Action
@@ -629,6 +634,7 @@ parameters:
         message_sub_title: Sous-titre
         minimum_margin: Marge minimum
         display_captcha: Code de contrôle
+        display_tabular: Mode d'affichage
         min_strength: Force minimum du mot de passe
 separator:
     period: 'Point : [ . ]'

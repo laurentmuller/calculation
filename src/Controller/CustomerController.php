@@ -73,7 +73,7 @@ class CustomerController extends EntityController
     /**
      * List the customers.
      *
-     * @Route("/card", name="customer_card", methods={"GET"})
+     * @Route("", name="customer_list", methods={"GET"})
      */
     public function card(Request $request): Response
     {
@@ -152,7 +152,7 @@ class CustomerController extends EntityController
     /**
      * Render the table view.
      *
-     * @Route("", name="customer_list", methods={"GET", "POST"})
+     * @Route("/table", name="customer_table", methods={"GET", "POST"})
      */
     public function table(Request $request, CustomerDataTable $table): Response
     {

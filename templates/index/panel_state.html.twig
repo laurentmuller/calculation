@@ -1,5 +1,5 @@
 {# macros #}
-{% macro cardEntry(count, total, text, color, enabled, parameters = []) -%}
+{% macro cardEntry(count, total, text, color, list_path, parameters = []) -%}
 {% import 'macros/_properties.html.twig' as properties %}
 <div class="card card-index text-center border rounded m-1">
     <div class="card-body px-1 pt-1 pb-0">
@@ -7,8 +7,8 @@
         <p class="m-0 mb-1">{{ total|amount }}</p>
     </div>
     <div class="card-footer p-1">
-    {%- if enabled -%}
-        <a href="{{ path('calculation_list', parameters) }}">{{ text }}</a>
+    {%- if list_path -%}
+        <a href="{{ path(list_path, parameters) }}">{{ text }}</a>
     {%- else -%}
         <span>{{ text }}</span>
     {%- endif -%}        
@@ -19,19 +19,22 @@
 {# imports #}
 {% import "macros/_icons.html.twig" as icons %}
 
-{# actions #}
-{%- set enabled = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
+{# parameters #}
+{%- set list_path = false -%}
+{%- if is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
+    {%- set list_path = tabular ? 'calculation_table' : 'calculation_list' -%}
+{%- endif -%}
 
 <div class="card mb-2">
     <div class="card-header">
-        <h1 class="card-title">{{ icons.icon("flag far", "index.panel_resume") }}</h1>
+        <h1 class="card-title">{{ icons.icon("flag far", "index.panel_state") }}</h1>
     </div>
     <div class="card-body d-flex flex-row flex-wrap p-2">
     {% if states|length %}
         {% for state in states %}
-            {{ _self.cardEntry(state.count, state.total, state.code, state.color, enabled, {'query': state.code}) }}
+            {{ _self.cardEntry(state.count, state.total, state.code, state.color, list_path, {'query': state.code}) }}
         {% endfor %}
-        {{ _self.cardEntry(count, total, 'calculation.fields.total'|trans, 'secondary', enabled) }}
+        {{ _self.cardEntry(count, total, 'calculation.fields.total'|trans, 'secondary', list_path) }}
     {% else %}
         <div class="alert alert-warning flex-fill mb-0 py-4 text-center">
             {{ 'calculation.list.empty'|trans }}

@@ -446,7 +446,7 @@ index:
     menu_theme: Thème (%name%)
     panel_last: Dernières calculations
     panel_month: Résumé par mois
-    panel_resume: Calculations par statut
+    panel_state: Calculations par statut
     toggle_navigation: Basculer la navigation
 about:
     app_customer: Client

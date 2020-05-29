@@ -1,7 +1,6 @@
 {% extends 'chart/base_chart.html.twig' %}
 {% trans_default_domain 'chart' %}
 
-
 {# add a month option #}
 {% macro month(value, default) -%}
 <option value="{{ value }}" {% if value == default %} selected="selected" {% endif %}>{{ value }} {{ 'last_month.months'|trans }}</option>
@@ -10,7 +9,9 @@
 {# parameters #}
 {%- set title      = 'title_by_month' -%}
 {%- set title_icon = 'calendar-alt far' -%}
+{%- set list_path  =  tabular ? 'calculation_table' : 'calculation_list' -%}
 
+{# class #}
 {% block card_container_class '' -%}
 
 {% block card_header %}
@@ -49,7 +50,7 @@
             {%- set month = item.date|strftime('%B %Y') -%}
         	<tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
                 <td>
-                	<a href="{{ path('calculation_list', {'query': item.date|strftime('%m.%Y')}) }}">{{ month }}</a>
+                	<a href="{{ path(list_path, {'query': item.date|strftime('%m.%Y')}) }}">{{ month }}</a>
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
                 <td class="text-currency">{{ item.items|number_format(0) }}</td>

@@ -64,10 +64,20 @@
 {% macro dropdownEllipsis(id, title = 'common.actions', class = 'btn btn-sm border-0 py-0') -%}
 {% apply spaceless %}
 {% if not ('btn-outline' in class) %}
-{# btn-outline-light btn-light  #}
     {% set outline = theme_dark(app.request) ? ' btn-light' : ' btn-outline-secondary' %}
     {% set class = class ~ outline %}
-    {# #}
+{% endif %}
+<button class="{{ class }}" type="button" id="{{ id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
+    {{- _self.icon('ellipsis-v') -}}    
+</button>
+{% endapply %}
+{%- endmacro %}
+
+{% macro dropdownBars(id, title = 'common.actions', class = 'btn btn-sm border-0 py-0') -%}
+{% apply spaceless %}
+{% if not ('btn-outline' in class) %}
+    {% set outline = theme_dark(app.request) ? ' btn-light' : ' btn-outline-secondary' %}
+    {% set class = class ~ outline %}
 {% endif %}
 <button class="{{ class }}" type="button" id="{{ id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
     {{- _self.icon('bars') -}}    

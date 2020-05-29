@@ -39,10 +39,12 @@ class IndexController extends BaseController
      */
     public function index(CalculationRepository $calculationRepository, CalculationStateRepository $stateRepository): Response
     {
+        $tabular = $this->getApplication()->isDisplayTabular();
+
         // get values to display
         $states = $stateRepository->getByState();
         $months = $calculationRepository->getByMonth();
-        $calculations = $calculationRepository->getLastCalculations(6);
+        $calculations = $calculationRepository->getLastCalculations($tabular ? 10 : 6);
         $edit = $this->getApplication()->isEditAction();
 
         // get states count and total
@@ -57,6 +59,7 @@ class IndexController extends BaseController
         return $this->render('index/index.html.twig', [
             'min_margin' => $this->getApplication()->getMinMargin(),
             'calculations' => $calculations,
+            'tabular' => $tabular,
             'states' => $states,
             'months' => $months,
             'count' => $count,

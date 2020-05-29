@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals URLSearchParams, MenuBuilder, initContextMenu */
+/* globals URLSearchParams, MenuBuilder, enableKeys, disableKeys */
 
 /**
  * -------------- JQuery extensions --------------
@@ -32,6 +32,29 @@ $.fn.updateHref = function (type, granted, params) {
 
     // update
     return $that.attr('href', href).removeClass('disabled');
+};
+
+/**
+ * Creates the context menu items.
+ * 
+ * @returns {Object} the context menu items.
+ */
+$.fn.getContextMenuItems = function () { // jshint ignore:line
+    'use strict';
+
+    // buttons
+    const builder = new MenuBuilder();
+    $('.card-header a.btn[data-path]').each(function () {
+        const $this = $(this);
+        if ($this.isSelectable()) {
+            builder.addItem($this);
+        }
+        if ($this.data('separator')) {
+            builder.addSeparator();
+        }
+    });
+
+    return builder.getItems();
 };
 
 /**
@@ -147,29 +170,6 @@ function searchCallback(table) {
 }
 
 /**
- * Creates the context menu items.
- * 
- * @returns {Object} the context menu items.
- */
-function getContextMenuItems() { // jshint ignore:line
-    'use strict';
-
-    // buttons
-    const builder = new MenuBuilder();
-    $('.card-header a.btn[data-path]').each(function () {
-        const $this = $(this);
-        if ($this.isSelectable()) {
-            builder.addItem($this);
-        }
-        if ($this.data('separator')) {
-            builder.addSeparator();
-        }
-    });
-
-    return builder.getItems();
-}
-
-/**
  * Document ready function
  */
 $(function () {
@@ -239,8 +239,25 @@ $(function () {
         $('#minimum').removeClass('d-none');
     }
 
+    // select on right click
+    $('#data-table tbody').on('mousedown', 'tr', function (e) {
+        if (e.button === 2) {
+            const table = $('#data-table').DataTable();
+            const index = table.row(this).index();
+            table.cell(index, '0:visIdx').focus();
+        }
+    });
+
     // context menu
-    initContextMenu();
+    const selector = '.dataTable .table-primary';
+    const show = function () {
+        $('.dropdown-menu.show').removeClass('show');
+        disableKeys();
+    };
+    const hide = function () {
+        enableKeys();
+    };    
+    $('#data-table').initContextMenu(selector, show, hide);
 
     // focus
     if (!$('#table_search').val().length) {

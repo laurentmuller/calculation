@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals URLSearchParams, MenuBuilder, initContextMenu */
+/* globals URLSearchParams, MenuBuilder, enableKeys, disableKeys */
 
 /**
  * -------------- JQuery extensions --------------
@@ -24,6 +24,42 @@ $.fn.updateHref = function (params) {
 
     // replace
     return $this.attr('href', href);
+};
+
+/**
+ * Creates the context menu items.
+ * 
+ * @returns {Object} the context menu items.
+ */
+$.fn.getContextMenuItems = function () {
+    'use strict';
+
+    const builder = new MenuBuilder();
+
+    // buttons
+    $('.card-header a.btn[data-path]').each(function () {
+        const $this = $(this);
+        if ($this.isSelectable()) {
+            builder.addItem($this);
+        }
+        if ($this.data('separator')) {
+            builder.addSeparator();
+        }
+    });
+
+    builder.addSeparator();
+
+    // drop-down menu
+    $('.card-header .dropdown-menu').children().each(function () {
+        const $this = $(this);
+        if ($this.hasClass('dropdown-divider')) {
+            builder.addSeparator();
+        } else if ($this.data('path') && $this.isSelectable()) {
+            builder.addItem($this);
+        }
+    });
+
+    return builder.getItems();
 };
 
 /**
@@ -210,42 +246,6 @@ function searchCallback(table) {
 }
 
 /**
- * Creates the context menu items.
- * 
- * @returns {Object} the context menu items.
- */
-function getContextMenuItems() { // jshint ignore:line
-    'use strict';
-
-    const builder = new MenuBuilder();
-
-    // buttons
-    $('.card-header a.btn[data-path]').each(function () {
-        const $this = $(this);
-        if ($this.isSelectable()) {
-            builder.addItem($this);
-        }
-        if ($this.data('separator')) {
-            builder.addSeparator();
-        }
-    });
-
-    builder.addSeparator();
-
-    // drop-down menu
-    $('.card-header .dropdown-menu').children().each(function () {
-        const $this = $(this);
-        if ($this.hasClass('dropdown-divider')) {
-            builder.addSeparator();
-        } else if ($this.data('path') && $this.isSelectable()) {
-            builder.addItem($this);
-        }
-    });
-
-    return builder.getItems();
-}
-
-/**
  * Ready function
  */
 $(function () {
@@ -316,8 +316,25 @@ $(function () {
     $('#table_search').val(query);
     $('#table_length').val(pagelength);
 
+    // select on right click
+    $('#data-table tbody').on('mousedown', 'tr', function (e) {
+        if (e.button === 2) {
+            const table = $('#data-table').DataTable();
+            const index = table.row(this).index();
+            table.cell(index, '0:visIdx').focus();
+        }
+    });
+
     // context menu
-    initContextMenu();
+    const selector = '.dataTable .table-primary';
+    const show = function () {
+        $('.dropdown-menu.show').removeClass('show');
+        disableKeys();
+    };
+    const hide = function () {
+        enableKeys();
+    };
+    $('#data-table').initContextMenu(selector, show, hide);
 
     // drop-down menu
     $('#other_actions_button').handleKeys();

@@ -44,6 +44,7 @@ class ChartController extends BaseController
     public function byMonth(int $count = 12, CalculationRepository $repository, ThemeService $service): Response
     {
         $data = $this->getChartMonthData($count, $repository, $service);
+        $data['tabular'] = json_encode($this->getApplication()->isDisplayTabular());
 
         return $this->render('chart/last_month_chart.html.twig', $data);
     }
@@ -56,6 +57,7 @@ class ChartController extends BaseController
     public function byState(CalculationStateRepository $repository, ThemeService $service): Response
     {
         $data = $this->getChartStateData($repository, $service);
+        $data['tabular'] = $this->getApplication()->isDisplayTabular();
 
         return $this->render('chart/by_state_chart.html.twig', $data);
     }

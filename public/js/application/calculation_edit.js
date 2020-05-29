@@ -1187,51 +1187,6 @@ $.fn.extend({
 });
 
 /**
- * Initialize the context menu for the table items.
- */
-function initContextMenu() {
-    'use strict';
-
-    // build callback
-    const callback = function ($element) {
-        // get items
-        const items = $element.getContextMenuItems();
-        if ($.isEmptyObject(items)) {
-            return false;
-        }
-
-        return {
-            autoHide: true,
-            zIndex: 1000,
-            callback: function (key, options, e) {
-                const item = options.items[key];
-                if (item.link) {
-                    e.stopPropagation();
-                    item.link.get(0).click();
-                    return true;
-                }
-            },
-            events: {
-                show: function () {
-                    $('.dropdown-menu.show').removeClass('show');
-                    $(this).parent().addClass('table-primary');
-                },
-                hide: function () {
-                    $(this).parent().removeClass('table-primary');
-                }
-            },
-            items: items
-        };
-    };
-
-    // create
-    $.contextMenu({
-        build: callback,
-        selector: '.table-edit th:not(.d-print-none), .table-edit td:not(.d-print-none)'
-    });
-}
-
-/**
  * Ready function
  */
 $(function () {
@@ -1247,7 +1202,15 @@ $(function () {
     Application.init();
 
     // context menu
-    initContextMenu();
+    const selector = '.table-edit th:not(.d-print-none), .table-edit td:not(.d-print-none)';
+    const show = function () {
+        $('.dropdown-menu.show').removeClass('show');
+        $(this).parent().addClass('table-primary');
+    };
+    const hide = function () {
+        $(this).parent().removeClass('table-primary');
+    };
+    $('.table-edit').initContextMenu(selector, show, hide);
 
     // errors
     updateErrors();

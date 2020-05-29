@@ -63,7 +63,7 @@
             	{# sortable fields #}
                 {% if sortFields is defined and sortFields|length %}
                     {% set route = app.request.get('_route') %}
-                    {{ icons.dropdownEllipsis('sortButton', 'list.sort_title', 'btn btn-outline-secondary dropdown-toggle') }}
+                    {{ icons.dropdownBars('sortButton', 'list.sort_title', 'btn btn-outline-secondary dropdown-toggle') }}
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sortButton">
                     {% for field in sortFields %}
                         {{ _self.sortMenu(route, field, sortField, sortMode, not loop.last) }}

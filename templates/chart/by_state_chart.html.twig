@@ -3,8 +3,9 @@
 {% trans_default_domain 'chart' %}
 
 {# parameters #}
-{%- set title        = 'title_by_state' -%}
-{%- set title_icon   = 'flag far' -%}
+{%- set title      = 'title_by_state' -%}
+{%- set title_icon = 'flag far' -%}
+{%- set list_path  =  tabular ? 'calculation_table' : 'calculation_list' -%}
 
 {% block data %}
 <div class="col my-2">
@@ -22,7 +23,7 @@
             <tr title="{{ 'row_by_state'|trans({'%name%': item.code}) }}">
                 <td>
                    <span class="mr-1" style="{{ properties.stateCss(item.color) }}"></span>
-	               <a href="{{ path('calculation_list', {'query': item.code}) }}">{{ item.code }}</a>
+	               <a href="{{ path(list_path, {'query': item.code}) }}">{{ item.code }}</a>
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
                 <td class="text-currency">{{ item.percent|percent(true, 1) }}</td>

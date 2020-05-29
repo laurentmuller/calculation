@@ -12,7 +12,11 @@
 {% block body -%}
 <div class="row no-gutters">
 	<div class="col">
-        {%- include 'index/panel.last.html.twig' -%}
+        {% if tabular %}
+            {%- include 'index/panel_table.html.twig' -%}
+        {% else %}
+            {%- include 'index/panel.last.html.twig' -%}
+        {% endif %}        
         {%- include 'index/panel.state.html.twig' -%}
         {%- include 'index/panel.month.html.twig' -%}
 	</div>
@@ -21,9 +25,16 @@
 {%- include 'user/user_switch.html.twig' -%}
 {%- endblock %}
 
+{% block stylesheets %}
+{{ asset_css('css/calculation.css') }}
+{%- endblock -%}
+
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() -}}
+{{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
+{{ asset_js('js/plugins/plugin-rowlink.js') }}
+{{ asset_js('js/extensions/contextmenu-extensions.js') }}
 {{ asset_js('js/application/index.js') }}
 {% else -%}
 {{ asset_js('js/index.js') }}

@@ -659,11 +659,11 @@ span.color-value {
 .overall-card.tooltip .arrow {
     left: 150px !important;
 }
-.overall-cell.tooltip .arrow {
-    left: 110px !important;
-}
 .overall-datatable.tooltip .arrow {
     left: 120px !important;
+}
+.overall-cell.tooltip .arrow {
+    left: 110px !important;
 }
 
 /**

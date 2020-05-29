@@ -1,7 +1,5 @@
 /**! compression tag for ftp-deployment */
 
-/* globals getContextMenuItems, enableKeys, disableKeys */
-
 /**
  * -------------- JQuery extensions --------------
  */
@@ -26,28 +24,23 @@ $.fn.isSelectable = function () {
 };
 
 /**
- * --------- Context menu extensions -------------
+ * Initialize the context menu.
+ * 
+ * @param {string}
+ *            selector - the selector matching the elements to trigger on.
+ * @param {function}
+ *            fnShow - called on show of the context menu.
+ * @param {function}
+ *            fnHide - the called before hide of the context menu.
+ * @return {jQuery} The JQuery element for chaining.
  */
-
-/**
- * Initialize the context menu for the table rows.
- */
-function initContextMenu() { // jshint ignore:line
+$.fn.initContextMenu = function (selector, fnShow, fnHide) {
     'use strict';
 
-    // select on right click
-    $('#data-table tbody').on('mousedown', 'tr', function (e) {
-        if (e.button === 2) {
-            const table = $('#data-table').DataTable();
-            const index = table.row(this).index();
-            table.cell(index, '0:visIdx').focus();
-        }
-    });
-
     // build callback
-    const callback = function () {
+    const callback = function ($element) {
         // get items
-        const items = getContextMenuItems();
+        const items = $element.getContextMenuItems();
         if ($.isEmptyObject(items)) {
             return false;
         }
@@ -64,13 +57,8 @@ function initContextMenu() { // jshint ignore:line
                 }
             },
             events: {
-                show: function () {
-                    $('.dropdown-menu.show').removeClass('show');
-                    disableKeys();
-                },
-                hide: function () {
-                    enableKeys();
-                }
+                show: fnShow,
+                hide: fnHide
             },
             items: items
         };
@@ -79,9 +67,11 @@ function initContextMenu() { // jshint ignore:line
     // create
     $.contextMenu({
         build: callback,
-        selector: '.dataTable .table-primary'
+        selector: selector
     });
-}
+
+    return $(this);
+};
 
 /**
  * Class to build context-menu items.

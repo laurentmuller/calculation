@@ -16,7 +16,7 @@
 <!--#include file="plugins/password-strength.js" -->
 
 /**
- * Extensions
+ * Extensions files
  */
 <!--#include file="extensions/password-extensions.js" -->
 

@@ -238,6 +238,11 @@ abstract class EntityController extends BaseController
     }
 
     /**
+     * Gets the default route name used to display the list of entities.
+     */
+    abstract protected function getDefaultRoute(): string;
+
+    /**
      * Gets sorted distinct and not null values of the given column.
      *
      * @param string $field  the column name to get values for

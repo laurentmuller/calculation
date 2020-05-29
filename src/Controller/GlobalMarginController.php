@@ -43,6 +43,11 @@ class GlobalMarginController extends EntityController
     private const ROUTE_LIST = 'globalmargin_list';
 
     /**
+     * The table route.
+     */
+    private const ROUTE_TABLE = 'globalmargin_table';
+
+    /**
      * The edit template.
      */
     private const TEMPLATE_EDIT = 'globalmargin/globalmargin_edit.html.twig';
@@ -84,7 +89,7 @@ class GlobalMarginController extends EntityController
     {
         $parameters = [
             'item' => $item,
-            'page_list' => self::ROUTE_LIST,
+            'page_list' => $this->getDefaultRoute(),
             'page_delete' => self::ROUTE_DELETE,
             'title' => 'globalmargin.delete.title',
             'message' => 'globalmargin.delete.message',
@@ -157,10 +162,22 @@ class GlobalMarginController extends EntityController
 
         // update parameters
         $parameters['type'] = GlobalMarginType::class;
-        $parameters['route'] = self::ROUTE_LIST;
+        $parameters['route'] = $this->getDefaultRoute();
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['success'] = $item->isNew() ? 'globalmargin.add.success' : 'globalmargin.edit.success';
 
         return parent::editItem($request, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultRoute(): string
+    {
+        if ($this->getApplication()->isDisplayTabular()) {
+            return self::ROUTE_TABLE;
+        } else {
+            return self::ROUTE_LIST;
+        }
     }
 }

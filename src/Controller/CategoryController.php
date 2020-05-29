@@ -46,6 +46,11 @@ class CategoryController extends EntityController
     private const ROUTE_LIST = 'category_list';
 
     /**
+     * The table route.
+     */
+    private const ROUTE_TABLE = 'category_table';
+
+    /**
      * The edit template.
      */
     private const TEMPLATE_EDIT = 'category/category_edit.html.twig';
@@ -93,7 +98,7 @@ class CategoryController extends EntityController
                 'id' => $item->getId(),
                 'title' => 'category.delete.title',
                 'message' => $message,
-                'back_page' => self::ROUTE_LIST,
+                'back_page' => $this->getDefaultRoute(),
                 'back_text' => 'common.button_back_list',
             ];
 
@@ -102,7 +107,7 @@ class CategoryController extends EntityController
 
         $parameters = [
             'item' => $item,
-            'page_list' => self::ROUTE_LIST,
+            'page_list' => $this->getDefaultRoute(),
             'page_delete' => self::ROUTE_DELETE,
             'title' => 'category.delete.title',
             'message' => 'category.delete.message',
@@ -184,9 +189,21 @@ class CategoryController extends EntityController
         // update parameters
         $parameters['type'] = CategoryType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = self::ROUTE_LIST;
+        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'category.add.success' : 'category.edit.success';
 
         return parent::editItem($request, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultRoute(): string
+    {
+        if ($this->getApplication()->isDisplayTabular()) {
+            return self::ROUTE_TABLE;
+        } else {
+            return self::ROUTE_LIST;
+        }
     }
 }

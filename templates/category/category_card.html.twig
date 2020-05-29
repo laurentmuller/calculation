@@ -36,7 +36,8 @@
 {{ properties.line(text, false, 1) }}
 {%- set text = 'counters.products'|trans({count: item.countProducts}) -%}
 {% if item.countProducts and product_list %}
-    {% set href = path('product_list', {'query': item.code}) %}
+    {%- set list_path   = displayTabular() ? 'product_table' : 'product_list' -%}
+    {%- set href = path(list_path, {'query': item.code}) -%}
     {{ properties.link(href, text, false, false, 1) }}
 {% else %}
     {{ properties.line(text, false, 1) }}

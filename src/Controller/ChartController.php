@@ -44,7 +44,7 @@ class ChartController extends BaseController
     public function byMonth(int $count = 12, CalculationRepository $repository, ThemeService $service): Response
     {
         $data = $this->getChartMonthData($count, $repository, $service);
-        $data['tabular'] = json_encode($this->getApplication()->isDisplayTabular());
+        $data['tabular'] = \json_encode($this->getApplication()->isDisplayTabular());
 
         return $this->render('chart/last_month_chart.html.twig', $data);
     }

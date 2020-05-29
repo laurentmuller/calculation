@@ -44,6 +44,11 @@ class ProductController extends EntityController
     private const ROUTE_LIST = 'product_list';
 
     /**
+     * The table route.
+     */
+    private const ROUTE_TABLE = 'product_table';
+
+    /**
      * The edit template.
      */
     private const TEMPLATE_EDIT = 'product/product_edit.html.twig';
@@ -104,7 +109,7 @@ class ProductController extends EntityController
     {
         $parameters = [
             'item' => $item,
-            'page_list' => self::ROUTE_LIST,
+            'page_list' => $this->getDefaultRoute(),
             'page_delete' => self::ROUTE_DELETE,
             'title' => 'product.delete.title',
             'message' => 'product.delete.message',
@@ -183,9 +188,21 @@ class ProductController extends EntityController
         // update parameters
         $parameters['type'] = ProductType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = self::ROUTE_LIST;
+        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'product.add.success' : 'product.edit.success';
 
         return parent::editItem($request, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultRoute(): string
+    {
+        if ($this->getApplication()->isDisplayTabular()) {
+            return self::ROUTE_TABLE;
+        } else {
+            return self::ROUTE_LIST;
+        }
     }
 }

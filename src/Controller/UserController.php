@@ -59,6 +59,11 @@ class UserController extends EntityController
     private const ROUTE_LIST = 'user_list';
 
     /**
+     * The table route.
+     */
+    private const ROUTE_TABLE = 'user_table';
+
+    /**
      * The edit template.
      */
     private const TEMPLATE_EDIT = 'user/user_edit.html.twig';
@@ -163,12 +168,12 @@ class UserController extends EntityController
             $this->warningTrans('user.delete.connected');
 
             //redirect
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
         $parameters = [
             'item' => $item,
-            'page_list' => self::ROUTE_LIST,
+            'page_list' => $this->getDefaultRoute(),
             'page_delete' => self::ROUTE_DELETE,
             'title' => 'user.delete.title',
             'message' => 'user.delete.message',
@@ -208,7 +213,7 @@ class UserController extends EntityController
             $this->succesTrans('user.image.success', ['%name%' => $item->getDisplay()]);
 
             // redirect
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
         // render
@@ -231,7 +236,7 @@ class UserController extends EntityController
             $this->warningTrans('user.message.connected');
 
             //redirect
-            return $this->getUrlGenerator()->redirect($request, $user->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
         }
 
         $comment = new Comment(true);
@@ -251,7 +256,7 @@ class UserController extends EntityController
                 }
 
                 // list
-                return $this->getUrlGenerator()->redirect($request, $user->getId(), self::ROUTE_LIST);
+                return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
             } catch (\Swift_SwiftException $e) {
                 $message = $this->trans('user.message.error');
                 $logger->error($message, [
@@ -294,7 +299,7 @@ class UserController extends EntityController
             $this->succesTrans('password.change.success', ['%name%' => $item->getDisplay()], 'FOSUserBundle');
 
             // redirect
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
         // show form
@@ -340,7 +345,7 @@ class UserController extends EntityController
             $this->warningTrans('user.rights.connected');
 
             // redirect
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
         // form
@@ -353,7 +358,7 @@ class UserController extends EntityController
             $this->succesTrans('user.rights.success', ['%name%' => $item->getDisplay()]);
 
             // redirect
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
         // show form
@@ -475,10 +480,22 @@ class UserController extends EntityController
         // update parameters
         $parameters['type'] = UserType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = self::ROUTE_LIST;
+        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'user.add.success' : 'user.edit.success';
 
         return parent::editItem($request, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultRoute(): string
+    {
+        if ($this->getApplication()->isDisplayTabular()) {
+            return self::ROUTE_TABLE;
+        } else {
+            return self::ROUTE_LIST;
+        }
     }
 
     /**

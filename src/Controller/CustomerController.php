@@ -46,6 +46,11 @@ class CustomerController extends EntityController
     private const ROUTE_LIST = 'customer_list';
 
     /**
+     * The table route.
+     */
+    private const ROUTE_TABLE = 'customer_table';
+
+    /**
      * The edit template.
      */
     private const TEMPLATE_EDIT = 'customer/customer_edit.html.twig';
@@ -94,7 +99,7 @@ class CustomerController extends EntityController
     {
         $parameters = [
             'item' => $item,
-            'page_list' => self::ROUTE_LIST,
+            'page_list' => $this->getDefaultRoute(),
             'page_delete' => self::ROUTE_DELETE,
             'title' => 'customer.delete.title',
             'message' => 'customer.delete.message',
@@ -170,9 +175,21 @@ class CustomerController extends EntityController
         // update parameters
         $parameters['type'] = CustomerType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = self::ROUTE_LIST;
+        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'customer.add.success' : 'customer.edit.success';
 
         return parent::editItem($request, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultRoute(): string
+    {
+        if ($this->getApplication()->isDisplayTabular()) {
+            return self::ROUTE_TABLE;
+        } else {
+            return self::ROUTE_LIST;
+        }
     }
 }

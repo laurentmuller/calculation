@@ -67,6 +67,11 @@ class CalculationController extends EntityController
     private const ROUTE_LIST = 'calculation_list';
 
     /**
+     * The table route.
+     */
+    private const ROUTE_TABLE = 'calculation_table';
+
+    /**
      * The edit template.
      */
     private const TEMPLATE_EDIT = 'calculation/calculation_edit.html.twig';
@@ -248,7 +253,7 @@ class CalculationController extends EntityController
         // parameters
         $parameters = [
             'item' => $item,
-            'page_list' => self::ROUTE_LIST,
+            'page_list' => $this->getDefaultRoute(),
             'page_delete' => self::ROUTE_DELETE,
             'title' => 'calculation.delete.title',
             'message' => 'calculation.delete.message',
@@ -605,10 +610,7 @@ class CalculationController extends EntityController
             // message
             $this->succesTrans('calculation.state.success', ['%name%' => $item->getDisplay()]);
 
-            // redirect
-            $id = $item->getId();
-
-            return $this->getUrlGenerator()->redirect($request, $id, self::ROUTE_LIST);
+            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
         // display
@@ -736,7 +738,7 @@ class CalculationController extends EntityController
         // update parameters
         $parameters['type'] = CalculationType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = self::ROUTE_LIST;
+        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'calculation.add.success' : 'calculation.edit.success';
 
         $parameters['groups'] = $this->calculationService->createGroupsFromCalculation($item);
@@ -753,6 +755,18 @@ class CalculationController extends EntityController
         }
 
         return parent::editItem($request, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultRoute(): string
+    {
+        if ($this->getApplication()->isDisplayTabular()) {
+            return self::ROUTE_TABLE;
+        } else {
+            return self::ROUTE_LIST;
+        }
     }
 
     /**

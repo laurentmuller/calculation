@@ -19,6 +19,7 @@
 {%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'calculationstate_show' : null -%}
 {%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, object_type) ? 'calculationstate_pdf' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+{%- set list_path    = displayTabular() ? 'calculation_table' : 'calculation_list' -%}
 
 {% block item_title %}
 {%- set item_title = item.code -%}
@@ -36,7 +37,7 @@
 {{ properties.separator(1) }}
 {%- set text = 'counters.calculations'|trans({count: item.countCalculations}) -%}
 {%- if item.countCalculations -%}
-    {% set href = path('calculation_list', {'query': item.code}) %}
+    {% set href = path(list_path, {'query': item.code}) %}
     {{ properties.link(href, text, false, false, 1) }}
 {%- else -%}
     {{ properties.line(text, false, 1) }}
@@ -51,7 +52,7 @@
 {% block actions %}
 {% if item.countCalculations and is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) %}
     {{ icons.dropdownSeparator }}
-    {% set href = path('calculation_list', {'query': item.code}) %}
+    {% set href = path(list_path, {'query': item.code}) %}
     {{ icons.dropdownItem(href, 'calculationstate.list.calculation_title', 'external-link-alt') }}
 {% endif %}
 {% endblock -%}

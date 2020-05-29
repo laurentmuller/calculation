@@ -46,6 +46,11 @@ class CalculationStateController extends EntityController
     private const ROUTE_LIST = 'calculationstate_list';
 
     /**
+     * The table route.
+     */
+    private const ROUTE_TABLE = 'calculationstate_table';
+
+    /**
      * The edit template.
      */
     private const TEMPLATE_EDIT = 'calculationstate/calculationstate_edit.html.twig';
@@ -93,7 +98,7 @@ class CalculationStateController extends EntityController
                 'id' => $item->getId(),
                 'title' => 'calculationstate.delete.title',
                 'message' => $message,
-                'back_page' => self::ROUTE_LIST,
+                'back_page' => $this->getDefaultRoute(),
                 'back_text' => 'common.button_back_list',
             ];
 
@@ -102,7 +107,7 @@ class CalculationStateController extends EntityController
 
         $parameters = [
             'item' => $item,
-            'page_list' => self::ROUTE_LIST,
+            'page_list' => $this->getDefaultRoute(),
             'page_delete' => self::ROUTE_DELETE,
             'title' => 'calculationstate.delete.title',
             'message' => 'calculationstate.delete.message',
@@ -199,9 +204,21 @@ class CalculationStateController extends EntityController
         // update parameters
         $parameters['type'] = CalculationStateType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = self::ROUTE_LIST;
+        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'calculationstate.add.success' : 'calculationstate.edit.success';
 
         return parent::editItem($request, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultRoute(): string
+    {
+        if ($this->getApplication()->isDisplayTabular()) {
+            return self::ROUTE_TABLE;
+        } else {
+            return self::ROUTE_LIST;
+        }
     }
 }

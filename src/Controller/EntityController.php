@@ -25,7 +25,6 @@ use Doctrine\Common\Collections\Criteria;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Abstract controller for entites management.
@@ -80,21 +79,26 @@ abstract class EntityController extends BaseController
     /**
      * Delete an entity.
      *
-     * @param request $request    the request
-     * @param array   $parameters the delete parameters. The following keys must be set:
-     *                            <ul>
-     *                            <li><code>item</code> : the item to delete.</li>
-     *                            <li><code>page_list</code> : the route to redirect on success.</li>
-     *                            </ul>
+     * @param request         $request    the request
+     * @param EntityInterface $item       the entity to delete
+     * @param array           $parameters the delete parameters. The following keys must or may be fixed:
+     *                                    <ul>
+     *                                    <li><code>title</code> : the dialog title (optional).</li>
+     *                                    <li><code>message</code> : the dialog message (optional).</li>
+     *                                    <li><code>success</code> : the message to display on success (optional).</li>
+     *                                    <li><code>failure</code> : the message to display on failure (optional).</li>
+     *                                    </ul>
      */
-    protected function deletItem(Request $request, array $parameters): Response
+    protected function deletItem(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         // check permission
-        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_DELETE, $this->className);
+        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_DELETE, $item);
 
-        /** @var EntityInterface $item */
-        $item = $parameters['item'];
+        // save display
         $display = $item->getDisplay();
+
+        //add item as parameter
+        $parameters['item'] = $parameters;
 
         // create form and handle request
         $form = $this->createFormBuilder()->getForm();
@@ -120,7 +124,8 @@ abstract class EntityController extends BaseController
             }
 
             // redirect
-            $route = Utils::getArrayValue($parameters, 'page_list', IndexController::HOME_PAGE);
+            $route = $this->getDefaultRoute();
+            $parameters['caller'] = $request->get('caller');
 
             return $this->getUrlGenerator()->redirect($request, 0, $route);
         }
@@ -139,24 +144,25 @@ abstract class EntityController extends BaseController
     /**
      * Edit an entity.
      *
-     * @param request $request    the request
-     * @param array   $parameters the edit parameters. The following keys must be set:
-     *                            <ul>
-     *                            <li><code>item</code> : the item to edit.</li>
-     *                            <li><code>type</code> : the form type.</li>
-     *                            <li><code>template</code> : the Twig template to render.</li>
-     *                            <li><code>route</code> : the route to redirect on success.</li>
-     *                            </ul>
+     * @param request         $request    the request
+     * @param EntityInterface $item       the entity to edit
+     * @param array           $parameters the edit parameters. The following keys must or may be fixed:
+     *                                    <ul>
+     *                                    <li><code>type</code> : the form type (required).</li>
+     *                                    <li><code>template</code> : the template to render (required).</li>
+     *                                    <li><code>success</code> : the message to display on success (optional).</li>
+     *                                    <li><code>route</code> : the default route (optional).</li>
+     *                                    </ul>
      */
-    protected function editItem(Request $request, array $parameters): Response
+    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
     {
-        /** @var \App\Entity\EntityInterface $item */
-        $item = $parameters['item'];
-        $isNew = $item->isNew();
-
         // check permission
+        $isNew = $item->isNew();
         $attribute = $isNew ? EntityVoterInterface::ATTRIBUTE_ADD : EntityVoterInterface::ATTRIBUTE_EDIT;
         $this->denyAccessUnlessGranted($attribute, $item);
+
+        // add item parameter
+        $parameters['item'] = $item;
 
         // form
         $type = $parameters['type'];
@@ -188,7 +194,8 @@ abstract class EntityController extends BaseController
 
             // redirect
             $id = $item->getId();
-            $route = $parameters['route'];
+            $parameters['caller'] = $request->get('caller');
+            $route = Utils::getArrayValue($parameters, 'route', $this->getDefaultRoute());
 
             return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
@@ -211,30 +218,6 @@ abstract class EntityController extends BaseController
 
         // show form
         return $this->render($template, $parameters);
-    }
-
-    /**
-     * Finds an entity by it's identifier.
-     *
-     * @param int $id the entity identifier
-     *
-     * @return EntityInterface The entity
-     *
-     * @throws NotFoundHttpException if the entity is not found
-     */
-    protected function find($id)
-    {
-        $item = $this->getRepository()->find($id);
-        if (null === $item) {
-            $message = $this->trans('errors.item_not_found', [
-                '%class%' => $this->getTranslatedClassName(),
-                '%id%' => '#' . $id,
-            ]);
-
-            throw $this->createNotFoundException($message);
-        }
-
-        return $item;
     }
 
     /**
@@ -377,19 +360,31 @@ abstract class EntityController extends BaseController
     /**
      * Show properties of an entity.
      *
-     * @param string $template   the Twig template to render
-     * @param mixed  $item       the entity to display
-     * @param array  $parameters an array of parameters to pass to the view
+     * @param request         $request    the request
+     * @param EntityInterface $item       the entity to show
+     * @param string          $template   the template to render
+     * @param array           $parameters the show parameters. The following keys must or may be fixed:
+     *                                    <ul>
+     *                                    <li><code>template</code> : the template to render (required).</li>
+     *                                    <li><code>title</code> : the dialog title (optional).</li>
+     *                                    <li><code>message</code> : the dialog message (optional).</li>
+     *                                    <li><code>success</code> : the message to display on success (optional).</li>
+     *                                    <li><code>failure</code> : the message to display on failure (optional).</li>
+     *                                    </ul>
      *
      * @throws \Symfony\Component\Finder\Exception\AccessDeniedException if the access is denied
      */
-    protected function showItem(string $template, $item, array $parameters = []): Response
+    protected function showItem(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         // check permission
         $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_SHOW, $item);
 
         // add item parameter
         $parameters['item'] = $item;
+
+        // get template
+        $template = $parameters['template'];
+        unset($parameters['template']);
 
         // render
         return $this->render($template, $parameters);

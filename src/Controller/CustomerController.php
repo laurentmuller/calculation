@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use App\DataTables\CustomerDataTable;
 use App\Entity\Customer;
+use App\Entity\EntityInterface;
 use App\Form\CustomerType;
 use App\Pdf\PdfResponse;
 use App\Report\CustomersReport;
@@ -35,11 +36,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CustomerController extends EntityController
 {
-    /**
-     * The delete route.
-     */
-    private const ROUTE_DELETE = 'customer_delete';
-
     /**
      * The list route.
      */
@@ -70,9 +66,7 @@ class CustomerController extends EntityController
      */
     public function add(Request $request): Response
     {
-        $item = new Customer();
-
-        return $this->editItem($request, ['item' => $item]);
+        return $this->editItem($request, new Customer());
     }
 
     /**
@@ -98,16 +92,13 @@ class CustomerController extends EntityController
     public function delete(Request $request, Customer $item): Response
     {
         $parameters = [
-            'item' => $item,
-            'page_list' => $this->getDefaultRoute(),
-            'page_delete' => self::ROUTE_DELETE,
             'title' => 'customer.delete.title',
             'message' => 'customer.delete.message',
             'success' => 'customer.delete.success',
             'failure' => 'customer.delete.failure',
         ];
 
-        return $this->deletItem($request, $parameters);
+        return $this->deletItem($request, $item, $parameters);
     }
 
     /**
@@ -117,7 +108,7 @@ class CustomerController extends EntityController
      */
     public function edit(Request $request, Customer $item): Response
     {
-        return $this->editItem($request, ['item' => $item]);
+        return $this->editItem($request, $item);
     }
 
     /**
@@ -149,9 +140,13 @@ class CustomerController extends EntityController
      *
      * @Route("/show/{id}", name="customer_show", requirements={"id": "\d+" }, methods={"GET"})
      */
-    public function show(Customer $item): Response
+    public function show(Request $request, Customer $item): Response
     {
-        return $this->showItem('customer/customer_show.html.twig', $item);
+        $parameters = [
+            'template' =>'customer/customer_show.html.twig'
+        ];
+
+        return $this->showItem($request, $item, $parameters);
     }
 
     /**
@@ -166,19 +161,18 @@ class CustomerController extends EntityController
 
     /**
      * {@inheritdoc}
+     *
+     * @param Customer $item
      */
-    protected function editItem(Request $request, array $parameters): Response
+    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
     {
-        /** @var Customer $item */
-        $item = $parameters['item'];
-
         // update parameters
         $parameters['type'] = CustomerType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'customer.add.success' : 'customer.edit.success';
 
-        return parent::editItem($request, $parameters);
+        return parent::editItem($request, $item, $parameters);
     }
 
     /**

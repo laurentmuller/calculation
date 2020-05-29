@@ -24,7 +24,8 @@
 {% block item_title %}
 {%- set item_title = item.code -%}
 {%- if default_page -%}
-    <a href="{{ path(default_page, {'id': item.id}) }}" class="text-body">{{ item_title }}</a>
+    {%- set default_path = path(default_page, params) -%}
+    <a href="{{ default_path }}" class="text-body">{{ item_title }}</a>
 {%- else -%} 
     {{ item_title }}
 {%- endif -%}

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\ProductDataTable;
+use App\Entity\EntityInterface;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Pdf\PdfResponse;
@@ -33,11 +34,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ProductController extends EntityController
 {
-    /**
-     * The delete route.
-     */
-    private const ROUTE_DELETE = 'product_delete';
-
     /**
      * The list route.
      */
@@ -68,7 +64,7 @@ class ProductController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editItem($request, ['item' => new Product()]);
+        return $this->editItem($request, Product());
     }
 
     /**
@@ -97,7 +93,7 @@ class ProductController extends EntityController
         $description = $this->trans('product.add.clone', ['%description%' => $item->getDescription()]);
         $item = $item->clone($description);
 
-        return $this->editItem($request, ['item' => $item]);
+        return $this->editItem($request, $item);
     }
 
     /**
@@ -108,16 +104,13 @@ class ProductController extends EntityController
     public function delete(Request $request, Product $item): Response
     {
         $parameters = [
-            'item' => $item,
-            'page_list' => $this->getDefaultRoute(),
-            'page_delete' => self::ROUTE_DELETE,
             'title' => 'product.delete.title',
             'message' => 'product.delete.message',
             'success' => 'product.delete.success',
             'failure' => 'product.delete.failure',
         ];
 
-        return $this->deletItem($request, $parameters);
+        return $this->deletItem($request, $item, $parameters);
     }
 
     /**
@@ -127,7 +120,7 @@ class ProductController extends EntityController
      */
     public function edit(Request $request, Product $item): Response
     {
-        return $this->editItem($request, ['item' => $item]);
+        return $this->editItem($request, $item);
     }
 
     /**
@@ -162,9 +155,13 @@ class ProductController extends EntityController
      *
      * @Route("/show/{id}", name="product_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
-    public function show(Product $item): Response
+    public function show(Request $request, Product $item): Response
     {
-        return $this->showItem('product/product_show.html.twig', $item);
+        $parameters = [
+            'template' =>'product/product_show.html.twig'
+        ];
+
+        return $this->showItem($request, $item, $parameters);
     }
 
     /**
@@ -179,19 +176,18 @@ class ProductController extends EntityController
 
     /**
      * {@inheritdoc}
+     *
+     * @param Product $item
      */
-    protected function editItem(Request $request, array $parameters): Response
+    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
     {
-        /** @var Product $item */
-        $item = $parameters['item'];
-
         // update parameters
         $parameters['type'] = ProductType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'product.add.success' : 'product.edit.success';
 
-        return parent::editItem($request, $parameters);
+        return parent::editItem($request, $item, $parameters);
     }
 
     /**

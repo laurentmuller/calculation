@@ -24,7 +24,7 @@
 
 {# parameters #}
 {%- set selection = selection|default(0) -%}
-{%- set caller    = caller|default('') %}
+{%- set caller    = caller|default(path(app.request.attributes.get('_route'))) -%}
 
 {# class #}
 {% block card_container_class '' %}
@@ -98,7 +98,9 @@
 {% for item in items %}
     {# links parameters #}
     {%- set params = routeParams(app.request, item.id) -%}
-    
+    {% if caller|default(false) %}
+        {%- set params = params|merge({'caller': caller}) -%}
+    {% endif %}
     {# item class #}  
     {%- set item_class = 'card-flex rounded border p-2 m-1 flex-fill' -%}
     {%- if item.id == selection -%}

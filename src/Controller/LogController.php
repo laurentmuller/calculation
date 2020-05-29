@@ -155,12 +155,12 @@ class LogController extends BaseController
      *
      * @Route("/show/{id}", name="log_show_entry", requirements={"id": "\d+" }, methods={"GET"})
      */
-    public function showItem(Log $item): Response
+    public function showItem(Request $request, Log $item): Response
     {
         // parameters
-        $parameters = ['item' => $item];
-
-        //json_encode($value)
+        $parameters = [
+            'item' => $item,
+        ];
 
         // render
         return $this->render('log/log_show.html.twig', $parameters);

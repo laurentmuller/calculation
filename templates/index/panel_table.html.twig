@@ -2,7 +2,6 @@
 {% import 'macros/_properties.html.twig' as properties %}
 {% import 'macros/_icons.html.twig' as icons %}
 
-
 {# parameters #}
 {%- set caller       = path('homepage') -%}
 {%- set selection    = app.request.get('id', 0) -%}
@@ -32,7 +31,7 @@
         </div>
     </div>
     <div class="card-body p-3">
-        <table id="calculations" class="table table-hover table-sm table-list m-0">
+        <table id="calculations" class="table table-hover table-sm m-0">
             <tbody{% if edit_page or show_page %} data-link="row" class="rowlink"{% endif %}>
             {% for calculation in calculations %}
                 {%- set id = calculation.id -%}

@@ -23,7 +23,8 @@
 {% block item_title %}
 {%- set item_title = item.fullName ? item.fullName : item.company -%}
 {%- if default_page -%}
-    <a href="{{ path(default_page, {'id': item.id}) }}" class="text-body rowlink-skip">{{ item_title }}</a>
+    {%- set default_path = path(default_page, params) -%}
+    <a href="{{ default_path }}" class="text-body rowlink-skip">{{ item_title }}</a>
 {%- else -%} 
     {{ item_title }}
 {%- endif -%}

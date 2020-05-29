@@ -156,11 +156,12 @@
 		},
 		{
 			"name": "tinymce",
-			"version": "5.3.0",
+			"version": "5.3.1",
 			"files": [
-				"icons/default/icons.min.js",
-				
+				"tinymce.min.js",
 				"jquery.tinymce.min.js",
+				
+				"icons/default/icons.min.js",
 				
 				"plugins/advlist/plugin.min.js",
 				"plugins/anchor/plugin.min.js",
@@ -207,9 +208,9 @@
 				"plugins/visualblocks/plugin.min.js",
 				"plugins/visualchars/plugin.min.js",
 				"plugins/wordcount/plugin.min.js",
+				
 				"themes/mobile/theme.min.js",
 				"themes/silver/theme.min.js",
-				"tinymce.min.js",
 				
 				"skins/content/dark/content.min.css",
 				"skins/content/default/content.min.css",

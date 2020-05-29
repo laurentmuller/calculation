@@ -61,7 +61,7 @@
 <div role="separator" class="{{ class }}"></div>
 {%- endmacro %}
 
-{% macro dropdownEllipsis(id, title = 'common.actions', class = 'btn btn-sm border-0 py-0') -%}
+{% macro dropdownEllipsis(id, title = 'common.actions', class = 'btn btn-sm border-0 pt-0') -%}
 {% apply spaceless %}
 {% if not ('btn-outline' in class) %}
     {% set outline = theme_dark(app.request) ? ' btn-light' : ' btn-outline-secondary' %}

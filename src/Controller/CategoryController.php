@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use App\DataTables\CategoryDataTable;
 use App\Entity\Category;
+use App\Entity\EntityInterface;
 use App\Form\CategoryType;
 use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
@@ -35,11 +36,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CategoryController extends EntityController
 {
-    /**
-     * The delete route.
-     */
-    private const ROUTE_DELETE = 'category_delete';
-
     /**
      * The list route.
      */
@@ -70,7 +66,7 @@ class CategoryController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editItem($request, ['item' => new Category()]);
+        return $this->editItem($request, new Category());
     }
 
     /**
@@ -106,16 +102,13 @@ class CategoryController extends EntityController
         }
 
         $parameters = [
-            'item' => $item,
-            'page_list' => $this->getDefaultRoute(),
-            'page_delete' => self::ROUTE_DELETE,
             'title' => 'category.delete.title',
             'message' => 'category.delete.message',
             'success' => 'category.delete.success',
             'failure' => 'category.delete.failure',
         ];
 
-        return $this->deletItem($request, $parameters);
+        return $this->deletItem($request, $item, $parameters);
     }
 
     /**
@@ -125,7 +118,7 @@ class CategoryController extends EntityController
      */
     public function edit(Request $request, Category $item): Response
     {
-        return $this->editItem($request, ['item' => $item]);
+        return $this->editItem($request, $item);
     }
 
     /**
@@ -154,9 +147,13 @@ class CategoryController extends EntityController
      *
      * @Route("/show/{id}", name="category_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
-    public function show(Category $item): Response
+    public function show(Request $request, Category $item): Response
     {
-        return $this->showItem('category/category_show.html.twig', $item);
+        $parameters = [
+            'template' =>'category/category_show.html.twig'
+        ];
+
+        return $this->showItem($request, $item, $parameters);
     }
 
     /**
@@ -180,19 +177,18 @@ class CategoryController extends EntityController
 
     /**
      * {@inheritdoc}
+     *
+     * @param Category $item
      */
-    protected function editItem(Request $request, array $parameters): Response
+    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
     {
-        /** @var Category $item */
-        $item = $parameters['item'];
-
         // update parameters
         $parameters['type'] = CategoryType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'category.add.success' : 'category.edit.success';
 
-        return parent::editItem($request, $parameters);
+        return parent::editItem($request, $item, $parameters);
     }
 
     /**

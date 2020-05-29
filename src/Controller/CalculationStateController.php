@@ -36,11 +36,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class CalculationStateController extends EntityController
 {
     /**
-     * The delete route.
-     */
-    private const ROUTE_DELETE = 'calculationstate_delete';
-
-    /**
      * The list route.
      */
     private const ROUTE_LIST = 'calculationstate_list';
@@ -70,7 +65,7 @@ class CalculationStateController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editItem($request, ['item' => new CalculationState()]);
+        return $this->editItem($request, new CalculationState());
     }
 
     /**
@@ -106,16 +101,13 @@ class CalculationStateController extends EntityController
         }
 
         $parameters = [
-            'item' => $item,
-            'page_list' => $this->getDefaultRoute(),
-            'page_delete' => self::ROUTE_DELETE,
             'title' => 'calculationstate.delete.title',
             'message' => 'calculationstate.delete.message',
             'success' => 'calculationstate.delete.success',
             'failure' => 'calculationstate.delete.failure',
         ];
 
-        return $this->deletItem($request, $parameters);
+        return $this->deletItem($request, $item, $parameters);
     }
 
     /**
@@ -125,7 +117,7 @@ class CalculationStateController extends EntityController
      */
     public function edit(Request $request, CalculationState $item): Response
     {
-        return $this->editItem($request, ['item' => $item]);
+        return $this->editItem($request, $item);
     }
 
     /**
@@ -155,9 +147,13 @@ class CalculationStateController extends EntityController
      *
      * @Route("/show/{id}", name="calculationstate_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
-    public function show(CalculationState $item): Response
+    public function show(Request $request, CalculationState $item): Response
     {
-        return $this->showItem('calculationstate/calculationstate_show.html.twig', $item);
+        $parameters = [
+            'template' =>'calculationstate/calculationstate_show.html.twig'
+        ];
+
+        return $this->showItem($request, $item, $parameters);
     }
 
     /**
@@ -195,19 +191,18 @@ class CalculationStateController extends EntityController
 
     /**
      * {@inheritdoc}
+     *
+     * @param CalculationState $item
      */
-    protected function editItem(Request $request, array $parameters): Response
+    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
     {
-        /** @var CalculationState $item */
-        $item = $parameters['item'];
-
         // update parameters
         $parameters['type'] = CalculationStateType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'calculationstate.add.success' : 'calculationstate.edit.success';
 
-        return parent::editItem($request, $parameters);
+        return parent::editItem($request, $item, $parameters);
     }
 
     /**

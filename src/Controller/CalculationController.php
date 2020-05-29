@@ -20,6 +20,7 @@ use App\DataTables\CalculationDuplicateDataTable;
 use App\DataTables\CalculationEmptyDataTable;
 use App\Entity\Calculation;
 use App\Entity\Category;
+use App\Entity\EntityInterface;
 use App\Form\CalculationEditStateType;
 use App\Form\CalculationType;
 use App\Form\FormHelper;
@@ -56,11 +57,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CalculationController extends EntityController
 {
-    /**
-     * The delete route.
-     */
-    private const ROUTE_DELETE = 'calculation_delete';
-
     /**
      * The list route.
      */
@@ -116,11 +112,11 @@ class CalculationController extends EntityController
             $item->setState($state);
         }
 
-        // edit
-        return $this->editItem($request, [
-            'item' => $item,
-            'overall_below' => false,
-        ]);
+        $parameters = [
+            'overall_below' => false
+        ];
+
+        return $this->editItem($request, $item, $parameters);
     }
 
     /**
@@ -236,11 +232,11 @@ class CalculationController extends EntityController
         $userName = $this->getUserName();
         $clone = $item->clone($state, $userName);
 
-        // edit
-        return $this->editItem($request, [
-            'item' => $clone,
-            'overall_below' => $this->isMarginBelow($clone),
-        ]);
+        $parameters = [
+            'overall_below' => $this->isMarginBelow($clone)
+        ];
+
+        return $this->editItem($request, $clone, $parameters);
     }
 
     /**
@@ -252,9 +248,6 @@ class CalculationController extends EntityController
     {
         // parameters
         $parameters = [
-            'item' => $item,
-            'page_list' => $this->getDefaultRoute(),
-            'page_delete' => self::ROUTE_DELETE,
             'title' => 'calculation.delete.title',
             'message' => 'calculation.delete.message',
             'success' => 'calculation.delete.success',
@@ -262,7 +255,7 @@ class CalculationController extends EntityController
         ];
 
         // delete
-        return $this->deletItem($request, $parameters);
+        return $this->deletItem($request, $item, $parameters);
     }
 
     /**
@@ -360,8 +353,7 @@ class CalculationController extends EntityController
      */
     public function edit(Request $request, Calculation $item): Response
     {
-        return $this->editItem($request, [
-            'item' => $item,
+        return $this->editItem($request, $item,[
             'overall_below' => $this->isMarginBelow($item),
         ]);
     }
@@ -580,15 +572,16 @@ class CalculationController extends EntityController
      *
      * @Route("/show/{id}", name="calculation_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
-    public function show(Calculation $item): Response
+    public function show(Request $request, Calculation $item): Response
     {
         $parameters = [
+            'template' => 'calculation/calculation_show.html.twig',
             'min_margin' => $this->getApplication()->getMinMargin(),
             'duplicate_items' => $item->hasDuplicateItems(),
             'emty_items' => $item->hasEmptyItems(),
         ];
 
-        return $this->showItem('calculation/calculation_show.html.twig', $item, $parameters);
+        return $this->showItem($request, $item, $parameters);
     }
 
     /**
@@ -729,12 +722,11 @@ class CalculationController extends EntityController
 
     /**
      * {@inheritdoc}
+     *
+     * @param Calculation $item
      */
-    protected function editItem(Request $request, array $parameters): Response
+    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
     {
-        /** @var Calculation $item */
-        $item = $parameters['item'];
-
         // update parameters
         $parameters['type'] = CalculationType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
@@ -754,7 +746,7 @@ class CalculationController extends EntityController
             $parameters['decimal'] = $this->getApplication()->getDecimal();
         }
 
-        return parent::editItem($request, $parameters);
+        return parent::editItem($request, $item, $parameters);
     }
 
     /**

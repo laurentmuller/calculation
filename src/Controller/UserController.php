@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use App\DataTables\UserDataTable;
 use App\Entity\Comment;
+use App\Entity\EntityInterface;
 use App\Entity\User;
 use App\Form\ThemeType;
 use App\Form\UserChangePasswordType;
@@ -48,11 +49,6 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  */
 class UserController extends EntityController
 {
-    /**
-     * The delete route.
-     */
-    private const ROUTE_DELETE = 'user_delete';
-
     /**
      * The list route.
      */
@@ -92,7 +88,7 @@ class UserController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editItem($request, ['item' => new User()]);
+        return $this->editItem($request, new User());
     }
 
     /**
@@ -172,16 +168,13 @@ class UserController extends EntityController
         }
 
         $parameters = [
-            'item' => $item,
-            'page_list' => $this->getDefaultRoute(),
-            'page_delete' => self::ROUTE_DELETE,
             'title' => 'user.delete.title',
             'message' => 'user.delete.message',
             'success' => 'user.delete.success',
             'failure' => 'user.delete.failure',
         ];
 
-        return $this->deletItem($request, $parameters);
+        return $this->deletItem($request, $item, $parameters);
     }
 
     /**
@@ -192,7 +185,7 @@ class UserController extends EntityController
      */
     public function edit(Request $request, User $item): Response
     {
-        return $this->editItem($request, ['item' => $item]);
+        return $this->editItem($request, $item);
     }
 
     /**
@@ -397,9 +390,13 @@ class UserController extends EntityController
      * @Route("/show/{id}", name="user_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function show(User $item): Response
+    public function show(Request $request, User $item): Response
     {
-        return $this->showItem('user/user_show.html.twig', $item);
+        $parameters = [
+            'template' =>'user/user_show.html.twig'
+        ];
+
+        return $this->showItem($request, $item, $parameters);
     }
 
     /**
@@ -471,19 +468,18 @@ class UserController extends EntityController
 
     /**
      * {@inheritdoc}
+     *
+     * @param User $item
      */
-    protected function editItem(Request $request, array $parameters): Response
+    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
     {
-        /** @var User $item */
-        $item = $parameters['item'];
-
         // update parameters
         $parameters['type'] = UserType::class;
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'user.add.success' : 'user.edit.success';
 
-        return parent::editItem($request, $parameters);
+        return parent::editItem($request, $item, $parameters);
     }
 
     /**

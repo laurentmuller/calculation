@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\GlobalMarginDataTable;
+use App\Entity\EntityInterface;
 use App\Entity\GlobalMargin;
 use App\Form\GlobalMarginType;
 use App\Pdf\PdfResponse;
@@ -32,11 +33,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class GlobalMarginController extends EntityController
 {
-    /**
-     * The delete route.
-     */
-    private const ROUTE_DELETE = 'globalmargin_delete';
-
     /**
      * The list route.
      */
@@ -67,7 +63,7 @@ class GlobalMarginController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editItem($request, ['item' => new GlobalMargin()]);
+        return $this->editItem($request, new GlobalMargin());
     }
 
     /**
@@ -88,16 +84,13 @@ class GlobalMarginController extends EntityController
     public function delete(Request $request, GlobalMargin $item): Response
     {
         $parameters = [
-            'item' => $item,
-            'page_list' => $this->getDefaultRoute(),
-            'page_delete' => self::ROUTE_DELETE,
             'title' => 'globalmargin.delete.title',
             'message' => 'globalmargin.delete.message',
             'success' => 'globalmargin.delete.success',
             'failure' => 'globalmargin.delete.failure',
         ];
 
-        return $this->deletItem($request, $parameters);
+        return $this->deletItem($request, $item, $parameters);
     }
 
     /**
@@ -107,7 +100,7 @@ class GlobalMarginController extends EntityController
      */
     public function edit(Request $request, GlobalMargin $item): Response
     {
-        return $this->editItem($request, ['item' => $item]);
+        return $this->editItem($request, $item);
     }
 
     /**
@@ -137,9 +130,13 @@ class GlobalMarginController extends EntityController
      *
      * @Route("/show/{id}", name="globalmargin_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
-    public function show(GlobalMargin $item): Response
+    public function show(Request $request, GlobalMargin $item): Response
     {
-        return $this->showItem('globalmargin/globalmargin_show.html.twig', $item);
+        $parameters = [
+            'template' =>'globalmargin/globalmargin_show.html.twig'
+        ];
+
+        return $this->showItem($request, $item, $parameters);
     }
 
     /**
@@ -154,19 +151,18 @@ class GlobalMarginController extends EntityController
 
     /**
      * {@inheritdoc}
+     *
+     * @param GlobalMargin $item
      */
-    protected function editItem(Request $request, array $parameters): Response
+    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
     {
-        /** @var GlobalMargin $item */
-        $item = $parameters['item'];
-
         // update parameters
         $parameters['type'] = GlobalMarginType::class;
         $parameters['route'] = $this->getDefaultRoute();
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['success'] = $item->isNew() ? 'globalmargin.add.success' : 'globalmargin.edit.success';
 
-        return parent::editItem($request, $parameters);
+        return parent::editItem($request, $item, $parameters);
     }
 
     /**

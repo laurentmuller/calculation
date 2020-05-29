@@ -29,7 +29,9 @@
 {%- set state_page   = false -%}
 {%- set clone_page   = false -%}
 
-{% block search_action %}{% endblock %}
+{% block search_action %}
+{{ icons.link(path('calculation_below_table'), '' , 'btn btn-sm btn-outline-secondary', 'table fas', 'common.button_table') }}
+{% endblock %}
 
 {% block card_header -%}
 {{ parent() }}

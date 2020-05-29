@@ -25,7 +25,8 @@
 {%- set item_title = item.code -%}
 <div style="{{ properties.stateCss(item.color) }}">
 {%- if default_page -%}
-    <a href="{{ path(default_page, {'id': item.id}) }}" class="text-body ml-1">{{ item.code }}</a>
+    {%- set default_path = path(default_page, params) -%}
+    <a href="{{ default_path }}" class="text-body ml-1">{{ item.code }}</a>
 {%- else -%} 
     {{ item_title }}{{ item.default }}
 {%- endif -%}

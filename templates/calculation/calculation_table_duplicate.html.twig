@@ -1,5 +1,8 @@
 {% extends 'cards/card_table.html.twig' %}
 
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
 {# parameters #}
 {%- set title       = 'calculation.duplicate.title' -%}
 {%- set title_icon  = 'copy far' -%}
@@ -28,6 +31,8 @@
 {# other actions #}
 {% block table_actions %}
 {{ _self.item_data_external(single_path, 'common.button_pdf', 'file-pdf far') }}
-<div class="dropdown-divider"></div>
+{{ icons.dropdownSeparator() }}
 {{ parent() }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItem(path('calculation_duplicate'), 'common.button_flex', 'columns') }}
 {% endblock %}

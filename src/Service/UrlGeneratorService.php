@@ -73,7 +73,7 @@ class UrlGeneratorService
         $params = $this->routeParams($request, $id);
 
         // caller?
-        if (isset($params['caller'])) {
+        if (isset($params['caller']) && !empty($params['caller'])) {
             $caller = $params['caller'];
             unset($params['caller']);
 

@@ -1,4 +1,7 @@
 counters:
     calculations: '{count, plural, =0 {Aucune calculation} one {1 calculation} other {# calculations}}'
+    calculations_lower: '{count, plural, =0 {aucune calculation} one {1 calculation} other {# calculations}}'
     products: '{count, plural, =0 {Aucun article} one {1 article} other {# articles}}'
+    products_lower: '{count, plural, =0 {aucun article} one {1 article} other {# articles}}'
     margins: '{count, plural, =0 {Aucune marge} one {1 marge} other {# marges}}'
+    margins_lower: '{count, plural, =0 {aucune marge} one {1 marge} other {# marges}}'

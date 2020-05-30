@@ -52,7 +52,7 @@
 		},
 		{
 			"name": "jquery-validate",
-			"version": "1.19.1",
+			"version": "1.19.2",
 			"files": [
 				"jquery.validate.js",
 				"additional-methods.js",
@@ -76,8 +76,9 @@
 			]
 		},
 		{
+			"info": "https://datatables.net/download/packages",
 			"name": "datatables",
-			"version": "1.10.20",
+			"version": "1.10.21",
 			"source": "https://cdn.datatables.net/",
 			"format": "{source}{version}/{file}",
 			"files": [
@@ -86,9 +87,30 @@
 				"css/dataTables.bootstrap4.css"
 			]
 		},
+		{			
+			"name": "searchHighlight",
+			"version": "1.10.21",
+			"source": "https://cdn.datatables.net/plug-ins/",
+			"format": "{source}{version}/features/{name}/{file}",
+			"target": "datatables/js",
+			"files": [
+				"dataTables.searchHighlight.js"
+			]
+		},
 		{
+			"name": "conditionalPaging",
+			"version": "1.10.21",
+			"source": "https://cdn.datatables.net/plug-ins/",
+			"format": "{source}{version}/features/{name}/{file}",
+			"target": "datatables/js",
+			"files": [
+				"dataTables.conditionalPaging.js"
+			]
+		},		
+		{
+			"info": "https://datatables.net/download/packages",
 			"name": "keytable",
-			"version": "2.5.1",
+			"version": "2.5.2",
 			"source": "http://cdn.datatables.net/",
 			"target": "datatables",
 			"files": [
@@ -103,26 +125,6 @@
 			"target": "datatables/js",
 			"files": [
 				"jquery.highlight.js"
-			]
-		},
-		{
-			"name": "searchHighlight",
-			"version": "1.10.20",
-			"source": "https://cdn.datatables.net/plug-ins/",
-			"format": "{source}{version}/features/{name}/{file}",
-			"target": "datatables/js",
-			"files": [
-				"dataTables.searchHighlight.js"
-			]
-		},
-		{
-			"name": "conditionalPaging",
-			"version": "1.10.20",
-			"source": "https://cdn.datatables.net/plug-ins/",
-			"format": "{source}{version}/features/{name}/{file}",
-			"target": "datatables/js",
-			"files": [
-				"dataTables.conditionalPaging.js"
 			]
 		},
 		{

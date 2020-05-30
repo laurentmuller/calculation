@@ -134,7 +134,7 @@ calculationstate:
         title: Supprimer un statut
         message: Êtes-vous sûr de vouloir supprimer le statut <b>%name%</b> ?
         success: Le statut <b>%name%</b> a été supprimé avec succès.
-        failure: Impossible de supprimer le statut <b>%name%</b>. Il est référencé dans une ou plusieurs calculations.
+        failure: Impossible de supprimer le statut <b>%name%</b>. Il est référencé dans %calculations%.
     list:
         title: Status
         empty: Aucun statut défini.
@@ -164,7 +164,7 @@ category:
         title: Supprimer une catégorie
         message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
         success: La catégorie <b>%name%</b> a été supprimée avec succès.
-        failure: Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans une ou plusieurs calculations ou dans un ou plusieurs articles.
+        failure: Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans %calculations% et dans %products%.
     list:
         title: Catégories
         empty: Aucune catégorie définie.

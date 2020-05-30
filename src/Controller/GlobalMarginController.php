@@ -133,7 +133,7 @@ class GlobalMarginController extends EntityController
     public function show(Request $request, GlobalMargin $item): Response
     {
         $parameters = [
-            'template' =>'globalmargin/globalmargin_show.html.twig'
+            'template' => 'globalmargin/globalmargin_show.html.twig',
         ];
 
         return $this->showItem($request, $item, $parameters);

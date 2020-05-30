@@ -39,21 +39,21 @@ class CalculationGroupRepository extends BaseRepository
     }
 
     /**
-     * Count the number of groups for the given category.
+     * Count the number of calculations for the given category.
      *
      * @param Category $category the category to search for
      *
-     * @return int the number of groups
+     * @return int the number of calculations
      */
     public function countCategoryReferences(Category $category): int
     {
         $result = $this->createQueryBuilder('e')
-            ->select('COUNT(e.id)')
+            ->select('COUNT(DISTINCT(e.calculation))')
             ->innerJoin('e.category', 'c')
             ->where('c.id = :categoryId')
             ->setParameter('categoryId', $category->getId(), Types::INTEGER)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleResult();
 
         return (int) $result;
     }

@@ -113,7 +113,7 @@ class CalculationController extends EntityController
         }
 
         $parameters = [
-            'overall_below' => false
+            'overall_below' => false,
         ];
 
         return $this->editItem($request, $item, $parameters);
@@ -233,7 +233,7 @@ class CalculationController extends EntityController
         $clone = $item->clone($state, $userName);
 
         $parameters = [
-            'overall_below' => $this->isMarginBelow($clone)
+            'overall_below' => $this->isMarginBelow($clone),
         ];
 
         return $this->editItem($request, $clone, $parameters);
@@ -353,7 +353,7 @@ class CalculationController extends EntityController
      */
     public function edit(Request $request, Calculation $item): Response
     {
-        return $this->editItem($request, $item,[
+        return $this->editItem($request, $item, [
             'overall_below' => $this->isMarginBelow($item),
         ]);
     }

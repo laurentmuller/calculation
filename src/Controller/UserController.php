@@ -393,7 +393,7 @@ class UserController extends EntityController
     public function show(Request $request, User $item): Response
     {
         $parameters = [
-            'template' =>'user/user_show.html.twig'
+            'template' => 'user/user_show.html.twig',
         ];
 
         return $this->showItem($request, $item, $parameters);

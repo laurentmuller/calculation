@@ -87,9 +87,17 @@ class CategoryController extends EntityController
     public function delete(Request $request, Category $item, ProductRepository $productRepository, CalculationGroupRepository $groupRepository): Response
     {
         // external references?
-        if (0 !== $productRepository->countCategoryReferences($item) || 0 !== $groupRepository->countCategoryReferences($item)) {
+        $products = $productRepository->countCategoryReferences($item);
+        $calculations = $groupRepository->countCategoryReferences($item);
+        if (0 !== $products || 0 !== $calculations) {
             $display = $item->getDisplay();
-            $message = $this->trans('category.delete.failure', ['%name%' => $display]);
+            $productsText = $this->trans('counters.products_lower', ['count' => $products]);
+            $calculationsText = $this->trans('counters.calculations_lower', ['count' => $calculations]);
+            $message = $this->trans('category.delete.failure', [
+                '%name%' => $display,
+                '%products%' => $productsText,
+                '%calculations%' => $calculationsText,
+            ]);
             $parameters = [
                 'id' => $item->getId(),
                 'title' => 'category.delete.title',
@@ -150,7 +158,7 @@ class CategoryController extends EntityController
     public function show(Request $request, Category $item): Response
     {
         $parameters = [
-            'template' =>'category/category_show.html.twig'
+            'template' => 'category/category_show.html.twig',
         ];
 
         return $this->showItem($request, $item, $parameters);

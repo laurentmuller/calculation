@@ -362,7 +362,6 @@ abstract class EntityController extends BaseController
      *
      * @param request         $request    the request
      * @param EntityInterface $item       the entity to show
-     * @param string          $template   the template to render
      * @param array           $parameters the show parameters. The following keys must or may be fixed:
      *                                    <ul>
      *                                    <li><code>template</code> : the template to render (required).</li>

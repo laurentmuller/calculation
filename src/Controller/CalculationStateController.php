@@ -86,9 +86,14 @@ class CalculationStateController extends EntityController
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository): Response
     {
         // calculation?
-        if (0 !== $repository->countStateReferences($item)) {
+        $calculations = $repository->countStateReferences($item);
+        if (0 !== $calculations) {
             $display = $item->getDisplay();
-            $message = $this->trans('calculationstate.delete.failure', ['%name%' => $display]);
+            $calculationsText = $this->trans('counters.calculations_lower', ['count' => $calculations]);
+            $message = $this->trans('calculationstate.delete.failure', [
+                '%name%' => $display,
+                '%calculations%' => $calculationsText,
+                ]);
             $parameters = [
                 'id' => $item->getId(),
                 'title' => 'calculationstate.delete.title',
@@ -150,7 +155,7 @@ class CalculationStateController extends EntityController
     public function show(Request $request, CalculationState $item): Response
     {
         $parameters = [
-            'template' =>'calculationstate/calculationstate_show.html.twig'
+            'template' => 'calculationstate/calculationstate_show.html.twig',
         ];
 
         return $this->showItem($request, $item, $parameters);

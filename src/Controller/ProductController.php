@@ -158,7 +158,7 @@ class ProductController extends EntityController
     public function show(Request $request, Product $item): Response
     {
         $parameters = [
-            'template' =>'product/product_show.html.twig'
+            'template' => 'product/product_show.html.twig',
         ];
 
         return $this->showItem($request, $item, $parameters);

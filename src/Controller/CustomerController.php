@@ -143,7 +143,7 @@ class CustomerController extends EntityController
     public function show(Request $request, Customer $item): Response
     {
         $parameters = [
-            'template' =>'customer/customer_show.html.twig'
+            'template' => 'customer/customer_show.html.twig',
         ];
 
         return $this->showItem($request, $item, $parameters);

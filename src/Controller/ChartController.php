@@ -43,7 +43,10 @@ class ChartController extends BaseController
      */
     public function byMonth(int $count = 12, CalculationRepository $repository, ThemeService $service): Response
     {
-        $data = $this->getChartMonthData($count, $repository, $service);
+        $tabular = $this->getApplication()->isDisplayTabular();
+        $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_list');
+
+        $data = $this->getChartMonthData($count, $repository, $service, $url);
         $data['tabular'] = \json_encode($this->getApplication()->isDisplayTabular());
 
         return $this->render('chart/last_month_chart.html.twig', $data);
@@ -56,7 +59,10 @@ class ChartController extends BaseController
      */
     public function byState(CalculationStateRepository $repository, ThemeService $service): Response
     {
-        $data = $this->getChartStateData($repository, $service);
+        $tabular = $this->getApplication()->isDisplayTabular();
+        $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_list');
+
+        $data = $this->getChartStateData($repository, $service, $url);
         $data['tabular'] = $this->getApplication()->isDisplayTabular();
 
         return $this->render('chart/by_state_chart.html.twig', $data);
@@ -87,13 +93,9 @@ class ChartController extends BaseController
     /**
      * Gets data used by the chart for the calculations by month.
      *
-     * @param int                   $count      the number of months to display
-     * @param CalculationRepository $repository the repository to get data
-     * @param ThemeService          $service    the service to get theme style
-     *
      * @return array the data
      */
-    public function getChartMonthData(int $count, CalculationRepository $repository, ThemeService $service): array
+    public function getChartMonthData(int $count, CalculationRepository $repository, ThemeService $service, string $url): array
     {
         $months = \max(1, $count);
 
@@ -171,7 +173,7 @@ class ChartController extends BaseController
                     ],
                 ],
                 'title' => [
-                    'text' => null, //$this->trans('fields.total', [], 'chart'),
+                    'text' => null,
                 ],
             ],
         ];
@@ -192,15 +194,28 @@ class ChartController extends BaseController
         // tootltip formatter
         $function = <<<EOF
         function () {
+            var date = Highcharts.dateFormat("%B %Y", this.x);
+            var name = this.series.name;
+            var yValue = Highcharts.numberFormat(this.y, 0);
+            var totalValue = Highcharts.numberFormat(this.total, 0);
             var html = "<table>";
-            html += "<tr><th colspan=\"3\">" +  Highcharts.dateFormat("%B %Y", this.x) + "</th></tr>";
-            html += "<tr><td>" +  this.series.name + "</td><td>:</td><td class=\"text-currency\">" + Highcharts.numberFormat(this.y, 0) + "</td></tr>";
-            html += "<tr><td>Total</td><td>:</td><td class=\"text-currency\">" + Highcharts.numberFormat(this.total, 0) + "</td></tr>";
+            html += "<tr><th colspan=\"3\">" + date + "</th></tr>";
+            html += "<tr><td>" +  name + "</td><td>:</td><td class=\"text-currency\">" + yValue + "</td></tr>";
+            html += "<tr><td>Total</td><td>:</td><td class=\"text-currency\">" + totalValue + "</td></tr>";
             html += "</table>";
             return html;
         }
         EOF;
         $formatter = new Expr($function);
+
+        // click event
+        $function = <<<EOF
+        function() { 
+            const href = "{$url}?query=" + Highcharts.dateFormat("%m.%Y", this.category);
+            location.href = href;
+        }
+        EOF;
+        $click = new Expr($function);
 
         // chart
         $chart = $this->createChart(true);
@@ -211,7 +226,16 @@ class ChartController extends BaseController
             ->yAxis($yAxis)
             ->series($series);
 
-        $chart->plotOptions->series(['stacking' => 'normal']);
+        $chart->plotOptions->series([
+            'stacking' => 'normal',
+            'cursor' => 'pointer',
+            'point' => [
+                'events' => [
+                    'click' => $click,
+                ],
+            ],
+        ]);
+
         $chart->tooltip->useHTML(true)
             ->formatter($formatter);
 
@@ -257,7 +281,7 @@ class ChartController extends BaseController
      *
      * @return array the data
      */
-    public function getChartStateData(CalculationStateRepository $repository, ThemeService $service): array
+    public function getChartStateData(CalculationStateRepository $repository, ThemeService $service, string $url): array
     {
         // get values
         $states = $repository->getByState();
@@ -306,6 +330,15 @@ class ChartController extends BaseController
             'fontSize' => '14px',
         ];
 
+        // click event
+        $function = <<<EOF
+        function() {
+            const href = "{$url}?query=" + this.name;
+            location.href = href;
+        }
+        EOF;
+        $click = new Expr($function);
+
         // pie options
         $pie = [
             'allowPointSelect' => true,
@@ -313,6 +346,11 @@ class ChartController extends BaseController
             'showInLegend' => true,
             'dataLabels' => [
                 'enabled' => false,
+            ],
+            'point' => [
+                'events' => [
+                    'click' => $click,
+                ],
             ],
         ];
 

@@ -66,7 +66,7 @@ class CategoryController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editItem($request, new Category());
+        return $this->editEntity($request, new Category());
     }
 
     /**
@@ -116,7 +116,7 @@ class CategoryController extends EntityController
             'failure' => 'category.delete.failure',
         ];
 
-        return $this->deletItem($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $parameters);
     }
 
     /**
@@ -126,7 +126,7 @@ class CategoryController extends EntityController
      */
     public function edit(Request $request, Category $item): Response
     {
-        return $this->editItem($request, $item);
+        return $this->editEntity($request, $item);
     }
 
     /**
@@ -161,7 +161,7 @@ class CategoryController extends EntityController
             'template' => 'category/category_show.html.twig',
         ];
 
-        return $this->showItem($request, $item, $parameters);
+        return $this->showEntity($request, $item, $parameters);
     }
 
     /**
@@ -180,7 +180,7 @@ class CategoryController extends EntityController
             ];
         }
 
-        return $this->showTable($request, $table, 'category/category_table.html.twig', $attributes);
+        return $this->renderTable($request, $table, 'category/category_table.html.twig', $attributes);
     }
 
     /**
@@ -188,7 +188,7 @@ class CategoryController extends EntityController
      *
      * @param Category $item
      */
-    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = CategoryType::class;
@@ -196,7 +196,7 @@ class CategoryController extends EntityController
         $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'category.add.success' : 'category.edit.success';
 
-        return parent::editItem($request, $item, $parameters);
+        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

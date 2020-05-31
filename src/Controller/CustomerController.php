@@ -66,7 +66,7 @@ class CustomerController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editItem($request, new Customer());
+        return $this->editEntity($request, new Customer());
     }
 
     /**
@@ -98,7 +98,7 @@ class CustomerController extends EntityController
             'failure' => 'customer.delete.failure',
         ];
 
-        return $this->deletItem($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $parameters);
     }
 
     /**
@@ -108,7 +108,7 @@ class CustomerController extends EntityController
      */
     public function edit(Request $request, Customer $item): Response
     {
-        return $this->editItem($request, $item);
+        return $this->editEntity($request, $item);
     }
 
     /**
@@ -146,7 +146,7 @@ class CustomerController extends EntityController
             'template' => 'customer/customer_show.html.twig',
         ];
 
-        return $this->showItem($request, $item, $parameters);
+        return $this->showEntity($request, $item, $parameters);
     }
 
     /**
@@ -156,7 +156,7 @@ class CustomerController extends EntityController
      */
     public function table(Request $request, CustomerDataTable $table): Response
     {
-        return $this->showTable($request, $table, 'customer/customer_table.html.twig');
+        return $this->renderTable($request, $table, 'customer/customer_table.html.twig');
     }
 
     /**
@@ -164,7 +164,7 @@ class CustomerController extends EntityController
      *
      * @param Customer $item
      */
-    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = CustomerType::class;
@@ -172,7 +172,7 @@ class CustomerController extends EntityController
         $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'customer.add.success' : 'customer.edit.success';
 
-        return parent::editItem($request, $item, $parameters);
+        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

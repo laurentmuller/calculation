@@ -177,10 +177,11 @@ abstract class BaseController extends AbstractController
     }
 
     /**
-     * Handle the given request within the form and test if the form is submitted and valid.
+     * Inspects the given request and calls submit() if the form was submitted, checks whether the given
+     * form is submitted and if the form and all children are valid.
      *
-     * @param FormInterface $form    the form to check
-     * @param Request       $request the optional request to handle
+     * @param Request       $request the request to handle
+     * @param FormInterface $form    the form to validate
      *
      * @return bool true if the form is submitted and valid
      *
@@ -188,17 +189,15 @@ abstract class BaseController extends AbstractController
      * @see FormInterface::isSubmitted()
      * @see FormInterface::isValid()
      */
-    protected function handleFormRequest(FormInterface $form, ?Request $request): bool
+    protected function handleRequestForm(Request $request, FormInterface $form): bool
     {
-        if ($request) {
-            $form->handleRequest($request);
-        }
+        $form->handleRequest($request);
 
         return $form->isSubmitted() && $form->isValid();
     }
 
     /**
-     * Returns the given exception as JsonResponse.
+     * Returns the given exception as a JsonResponse.
      *
      * @param \Exception  $e       the exception to serialize
      * @param string|null $message an additionnal error message

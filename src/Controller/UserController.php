@@ -88,7 +88,7 @@ class UserController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editItem($request, new User());
+        return $this->editEntity($request, new User());
     }
 
     /**
@@ -117,7 +117,7 @@ class UserController extends EntityController
 
         // create and handle request
         $form = $this->createForm(UserCommentType::class, $comment);
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             try {
                 // send
                 if ($comment->send($mailer)) {
@@ -174,7 +174,7 @@ class UserController extends EntityController
             'failure' => 'user.delete.failure',
         ];
 
-        return $this->deletItem($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $parameters);
     }
 
     /**
@@ -185,7 +185,7 @@ class UserController extends EntityController
      */
     public function edit(Request $request, User $item): Response
     {
-        return $this->editItem($request, $item);
+        return $this->editEntity($request, $item);
     }
 
     /**
@@ -198,9 +198,9 @@ class UserController extends EntityController
     {
         // form
         $form = $this->createForm(UserImageType::class, $item);
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             // update
-            $this->updateItem($item);
+            $this->updateEntity($item);
 
             // message
             $this->succesTrans('user.image.success', ['%name%' => $item->getDisplay()]);
@@ -239,7 +239,7 @@ class UserController extends EntityController
 
         // create and handle request
         $form = $this->createForm(UserCommentType::class, $comment);
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             try {
                 // send
                 if ($comment->send($mailer)) {
@@ -284,9 +284,9 @@ class UserController extends EntityController
     {
         // form
         $form = $this->createForm(UserChangePasswordType::class, $item);
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             // update
-            $this->updateItem($item);
+            $this->updateEntity($item);
 
             // message
             $this->succesTrans('password.change.success', ['%name%' => $item->getDisplay()], 'FOSUserBundle');
@@ -311,7 +311,7 @@ class UserController extends EntityController
     public function pdf(Request $request, PropertyMappingFactory $factory, StorageInterface $storage, KernelInterface $kernel): PdfResponse
     {
         // get users
-        $users = $this->getItems();
+        $users = $this->getEntities();
         if (empty($users)) {
             $message = $this->trans('user.list.empty');
 
@@ -343,9 +343,9 @@ class UserController extends EntityController
 
         // form
         $form = $this->createForm(UserRightsType::class, $item);
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             // update
-            $this->updateItem($item);
+            $this->updateEntity($item);
 
             // message
             $this->succesTrans('user.rights.success', ['%name%' => $item->getDisplay()]);
@@ -370,7 +370,7 @@ class UserController extends EntityController
      */
     public function rightsPdf(Request $request): PdfResponse
     {
-        $users = $this->getItems();
+        $users = $this->getEntities();
         if (empty($users)) {
             $message = $this->trans('user.list.empty');
 
@@ -396,7 +396,7 @@ class UserController extends EntityController
             'template' => 'user/user_show.html.twig',
         ];
 
-        return $this->showItem($request, $item, $parameters);
+        return $this->showEntity($request, $item, $parameters);
     }
 
     /**
@@ -406,7 +406,7 @@ class UserController extends EntityController
      */
     public function table(Request $request, UserDataTable $table): Response
     {
-        return $this->showTable($request, $table, 'user/user_table.html.twig');
+        return $this->renderTable($request, $table, 'user/user_table.html.twig');
     }
 
     /**
@@ -427,7 +427,7 @@ class UserController extends EntityController
         ];
 
         $form = $this->createForm(ThemeType::class, $data);
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             // get values
             $data = $form->getData();
             $theme = $data['theme'];
@@ -471,7 +471,7 @@ class UserController extends EntityController
      *
      * @param User $item
      */
-    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = UserType::class;
@@ -479,7 +479,7 @@ class UserController extends EntityController
         $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'user.add.success' : 'user.edit.success';
 
-        return parent::editItem($request, $item, $parameters);
+        return parent::editEntity($request, $item, $parameters);
     }
 
     /**
@@ -497,9 +497,9 @@ class UserController extends EntityController
     /**
      * {@inheritdoc}
      */
-    protected function getItems(?string $field = null, string $mode = Criteria::ASC): array
+    protected function getEntities(?string $field = null, string $mode = Criteria::ASC): array
     {
-        $result = parent::getItems($field, $mode);
+        $result = parent::getEntities($field, $mode);
 
         // remove super admin users if not in role
         if (!$this->isGranted(User::ROLE_SUPER_ADMIN)) {
@@ -516,7 +516,7 @@ class UserController extends EntityController
      *
      * @param User $item
      */
-    protected function updateItem($item): bool
+    protected function updateEntity(EntityInterface $item): bool
     {
         // update
         $item->checkRoles();

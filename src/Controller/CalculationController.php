@@ -116,7 +116,7 @@ class CalculationController extends EntityController
             'overall_below' => false,
         ];
 
-        return $this->editItem($request, $item, $parameters);
+        return $this->editEntity($request, $item, $parameters);
     }
 
     /**
@@ -196,7 +196,7 @@ class CalculationController extends EntityController
             ];
         }
 
-        return $this->showTable($request, $table, 'calculation/calculation_table_below.html.twig', $attributes);
+        return $this->renderTable($request, $table, 'calculation/calculation_table_below.html.twig', $attributes);
     }
 
     /**
@@ -236,7 +236,7 @@ class CalculationController extends EntityController
             'overall_below' => $this->isMarginBelow($clone),
         ];
 
-        return $this->editItem($request, $clone, $parameters);
+        return $this->editEntity($request, $clone, $parameters);
     }
 
     /**
@@ -255,7 +255,7 @@ class CalculationController extends EntityController
         ];
 
         // delete
-        return $this->deletItem($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $parameters);
     }
 
     /**
@@ -353,7 +353,7 @@ class CalculationController extends EntityController
      */
     public function edit(Request $request, Calculation $item): Response
     {
-        return $this->editItem($request, $item, [
+        return $this->editEntity($request, $item, [
             'overall_below' => $this->isMarginBelow($item),
         ]);
     }
@@ -581,7 +581,7 @@ class CalculationController extends EntityController
             'emty_items' => $item->hasEmptyItems(),
         ];
 
-        return $this->showItem($request, $item, $parameters);
+        return $this->showEntity($request, $item, $parameters);
     }
 
     /**
@@ -593,7 +593,7 @@ class CalculationController extends EntityController
     {
         $oldState = $item->getState();
         $form = $this->createForm(CalculationEditStateType::class, $item);
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             //change?
             if ($oldState !== $item->getState()) {
                 // update
@@ -633,7 +633,7 @@ class CalculationController extends EntityController
             ];
         }
 
-        return $this->showTable($request, $table, 'calculation/calculation_table.html.twig', $attributes);
+        return $this->renderTable($request, $table, 'calculation/calculation_table.html.twig', $attributes);
     }
 
     /**
@@ -656,7 +656,7 @@ class CalculationController extends EntityController
 
         // handle request
         $form = $builder->getForm();
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
             $includeClosed = (bool) $data['includeClosed'];
 
@@ -725,7 +725,7 @@ class CalculationController extends EntityController
      *
      * @param Calculation $item
      */
-    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = CalculationType::class;
@@ -746,7 +746,7 @@ class CalculationController extends EntityController
             $parameters['decimal'] = $this->getApplication()->getDecimal();
         }
 
-        return parent::editItem($request, $item, $parameters);
+        return parent::editEntity($request, $item, $parameters);
     }
 
     /**
@@ -766,12 +766,12 @@ class CalculationController extends EntityController
      *
      * @param Calculation $item
      */
-    protected function updateItem($item): bool
+    protected function updateEntity(EntityInterface $item): bool
     {
         // compute total
         $this->calculationService->updateTotal($item);
 
-        return parent::updateItem($item);
+        return parent::updateEntity($item);
     }
 
     /**

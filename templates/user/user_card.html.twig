@@ -101,7 +101,7 @@
 
 {%- block toolbar_actions -%}
 {{ icons.linkExternal(path('user_rights_pdf'), '', 'btn btn-outline-secondary', 'cloud-download-alt', 'user.list.rights_export') }}
-{{ icons.link(path('user_table'), '' , 'btn btn-outline-secondary', 'table fas', 'common.button_table') }}
+{{ icons.linkTable('user_table') }}
 {%- endblock -%}
 
 {% block body -%}

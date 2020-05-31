@@ -65,7 +65,7 @@ class CalculationStateController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editItem($request, new CalculationState());
+        return $this->editEntity($request, new CalculationState());
     }
 
     /**
@@ -112,7 +112,7 @@ class CalculationStateController extends EntityController
             'failure' => 'calculationstate.delete.failure',
         ];
 
-        return $this->deletItem($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $parameters);
     }
 
     /**
@@ -122,7 +122,7 @@ class CalculationStateController extends EntityController
      */
     public function edit(Request $request, CalculationState $item): Response
     {
-        return $this->editItem($request, $item);
+        return $this->editEntity($request, $item);
     }
 
     /**
@@ -158,7 +158,7 @@ class CalculationStateController extends EntityController
             'template' => 'calculationstate/calculationstate_show.html.twig',
         ];
 
-        return $this->showItem($request, $item, $parameters);
+        return $this->showEntity($request, $item, $parameters);
     }
 
     /**
@@ -177,7 +177,7 @@ class CalculationStateController extends EntityController
             ];
         }
 
-        return $this->showTable($request, $table, 'calculationstate/calculationstate_table.html.twig', $attributes);
+        return $this->renderTable($request, $table, 'calculationstate/calculationstate_table.html.twig', $attributes);
     }
 
     /**
@@ -185,7 +185,7 @@ class CalculationStateController extends EntityController
      *
      * @param CalculationState $item
      */
-    protected function afterDelete(EntityInterface $item): void
+    protected function afterDeleteEntity(EntityInterface $item): void
     {
         // update default state (if applicable)
         $id = $this->getApplication()->getDefaultStateId();
@@ -199,7 +199,7 @@ class CalculationStateController extends EntityController
      *
      * @param CalculationState $item
      */
-    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = CalculationStateType::class;
@@ -207,7 +207,7 @@ class CalculationStateController extends EntityController
         $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'calculationstate.add.success' : 'calculationstate.edit.success';
 
-        return parent::editItem($request, $item, $parameters);
+        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

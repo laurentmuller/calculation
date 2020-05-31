@@ -95,7 +95,7 @@
 {%- block sort_actions -%}
 {{ parent() }}
 {{ icons.dropdownSeparator() }}
-{{ icons.dropdownItem(path('calculation_table'), 'common.button_table', 'table fas') }}
+{{ icons.dropdownItemTable('calculation_table') }}
 {%- endblock -%}
 
 {% block javascripts -%}

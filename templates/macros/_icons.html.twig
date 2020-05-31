@@ -112,3 +112,15 @@
 {% macro copyright_link() -%}
 {{ 'index.copyright'|trans({'%year%': 'now'|date('Y'), '%owner_url%': app_owner_url, '%owner%': app_owner}, 'messages')|raw }}
 {%- endmacro %}
+
+{% macro dropdownItemCard(route_name, parameters = []) -%}
+{% if route_name %}{{ _self.dropdownItem(path(route_name, parameters), 'common.button_flex', 'grip-horizontal') }}{% endif %}
+{%- endmacro %}
+
+{% macro dropdownItemTable(route_name, parameters = []) -%}
+{% if route_name %}{{ _self.dropdownItem(path(route_name, parameters), 'common.button_table', 'table') }}{% endif %}
+{%- endmacro %}
+
+{% macro linkTable(route_name, parameters = []) -%}
+{% if route_name %}{{ _self.link(path(route_name, parameters), '' , 'btn btn-sm btn-outline-secondary', 'table', 'common.button_table') }}{% endif %}
+{%- endmacro %}

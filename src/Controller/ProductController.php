@@ -64,7 +64,7 @@ class ProductController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editItem($request, Product());
+        return $this->editEntity($request, Product());
     }
 
     /**
@@ -93,7 +93,7 @@ class ProductController extends EntityController
         $description = $this->trans('product.add.clone', ['%description%' => $item->getDescription()]);
         $item = $item->clone($description);
 
-        return $this->editItem($request, $item);
+        return $this->editEntity($request, $item);
     }
 
     /**
@@ -110,7 +110,7 @@ class ProductController extends EntityController
             'failure' => 'product.delete.failure',
         ];
 
-        return $this->deletItem($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $parameters);
     }
 
     /**
@@ -120,7 +120,7 @@ class ProductController extends EntityController
      */
     public function edit(Request $request, Product $item): Response
     {
-        return $this->editItem($request, $item);
+        return $this->editEntity($request, $item);
     }
 
     /**
@@ -161,7 +161,7 @@ class ProductController extends EntityController
             'template' => 'product/product_show.html.twig',
         ];
 
-        return $this->showItem($request, $item, $parameters);
+        return $this->showEntity($request, $item, $parameters);
     }
 
     /**
@@ -171,7 +171,7 @@ class ProductController extends EntityController
      */
     public function table(Request $request, ProductDataTable $table): Response
     {
-        return $this->showTable($request, $table, 'product/product_table.html.twig');
+        return $this->renderTable($request, $table, 'product/product_table.html.twig');
     }
 
     /**
@@ -179,7 +179,7 @@ class ProductController extends EntityController
      *
      * @param Product $item
      */
-    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = ProductType::class;
@@ -187,7 +187,7 @@ class ProductController extends EntityController
         $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'product.add.success' : 'product.edit.success';
 
-        return parent::editItem($request, $item, $parameters);
+        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

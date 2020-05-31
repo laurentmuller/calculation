@@ -19,7 +19,7 @@
 {%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'calculationstate_show' : null -%}
 {%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, object_type) ? 'calculationstate_pdf' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
-{%- set list_path    = displayTabular() ? 'calculation_table' : 'calculation_list' -%}
+{%- set list_path    = 'calculation_list' -%}
 
 {% block item_title %}
 {%- set item_title = item.code -%}
@@ -62,5 +62,5 @@
 
 {%- block toolbar_actions -%}
 {{ parent() }}
-{{ icons.link(path('calculationstate_table'), '' , 'btn btn-outline-secondary', 'table fas', 'common.button_table') }}
+{{ icons.linkTable('calculationstate_table') }}
 {%- endblock -%}

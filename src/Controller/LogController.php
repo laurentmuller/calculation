@@ -80,7 +80,7 @@ class LogController extends BaseController
 
         // handle request
         $form = $this->createFormBuilder()->getForm();
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             if (\file_exists($file)) {
                 try {
                     // empty file
@@ -155,7 +155,7 @@ class LogController extends BaseController
      *
      * @Route("/show/{id}", name="log_show_entry", requirements={"id": "\d+" }, methods={"GET"})
      */
-    public function showItem(Request $request, Log $item): Response
+    public function showEntity(Request $request, Log $item): Response
     {
         // parameters
         $parameters = [

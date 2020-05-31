@@ -51,29 +51,25 @@ abstract class EntityController extends BaseController
     }
 
     /**
-     * Count the number of entities.
-     */
-    public function count(): int
-    {
-        return $this->getRepository()->count([]);
-    }
-
-    /**
      * Raised after the given entity is deleted.
      *
      * @param EntityInterface $item the deleted entity
      */
-    protected function afterDelete(EntityInterface $item): void
+    protected function afterDeleteEntity(EntityInterface $item): void
     {
     }
 
     /**
-     * Raised before the given entity is deleted.
+     * Throws an exception unless the given attribute is granted against
+     * the current authentication token and this entity class name.
      *
-     * @param EntityInterface $item the entity to delete
+     * @param string $attribute the attribute to check permission for
+     *
+     *  @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
      */
-    protected function beforeDelete(EntityInterface $item): void
+    protected function checkPermission(string $attribute): void
     {
+        $this->denyAccessUnlessGranted($attribute, $this->className);
     }
 
     /**
@@ -89,10 +85,10 @@ abstract class EntityController extends BaseController
      *                                    <li><code>failure</code> : the message to display on failure (optional).</li>
      *                                    </ul>
      */
-    protected function deletItem(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function deleteEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         // check permission
-        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_DELETE, $item);
+        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_DELETE);
 
         // save display
         $display = $item->getDisplay();
@@ -102,14 +98,13 @@ abstract class EntityController extends BaseController
 
         // create form and handle request
         $form = $this->createFormBuilder()->getForm();
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             try {
                 // remove
-                $this->beforeDelete($item);
                 $em = $this->getManager();
                 $em->remove($item);
                 $em->flush();
-                $this->afterDelete($item);
+                $this->afterDeleteEntity($item);
 
                 // message
                 $message = Utils::getArrayValue($parameters, 'success', 'common.delete_success');
@@ -154,12 +149,12 @@ abstract class EntityController extends BaseController
      *                                    <li><code>route</code> : the default route (optional).</li>
      *                                    </ul>
      */
-    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         // check permission
         $isNew = $item->isNew();
         $attribute = $isNew ? EntityVoterInterface::ATTRIBUTE_ADD : EntityVoterInterface::ATTRIBUTE_EDIT;
-        $this->denyAccessUnlessGranted($attribute, $item);
+        $this->checkPermission($attribute);
 
         // add item parameter
         $parameters['item'] = $item;
@@ -167,9 +162,9 @@ abstract class EntityController extends BaseController
         // form
         $type = $parameters['type'];
         $form = $this->createForm($type, $item);
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             // update
-            if ($this->updateItem($item)) {
+            if ($this->updateEntity($item)) {
                 // save
                 $em = $this->getManager();
                 if ($isNew) {
@@ -243,9 +238,9 @@ abstract class EntityController extends BaseController
      * @param string $field the sorted field
      * @param string $mode  the sort mode ("ASC" or "DESC")
      *
-     * @return array the entities
+     * @return EntityInterface[] the entities
      */
-    protected function getItems(?string $field = null, string $mode = Criteria::ASC): array
+    protected function getEntities(?string $field = null, string $mode = Criteria::ASC): array
     {
         $sortedFields = $field ? [$field => $mode] : [];
 
@@ -266,25 +261,13 @@ abstract class EntityController extends BaseController
     }
 
     /**
-     * Gets the entity short class name.
-     *
-     * @return string the entity short class name
-     */
-    protected function getShortClassName(): string
-    {
-        $reflection = new \ReflectionClass($this->className);
-
-        return $reflection->getShortName();
-    }
-
-    /**
      * Gets the translated class name.
      *
      * @return string the translated class name
      */
     protected function getTranslatedClassName(): ?string
     {
-        $className = $this->getShortClassName();
+        $className = Utils::getShortName($this->className);
 
         return $this->trans(\strtolower($className) . '.name');
     }
@@ -297,17 +280,17 @@ abstract class EntityController extends BaseController
      * @param string  $sortField  the default sorted field
      * @param string  $sortMode   the default sorted direction
      * @param array   $sortFields the allowed sorted fields
-     * @param array   $parameters an array of parameters to pass to the view
+     * @param array   $parameters the parameters to pass to the view
      *
      * @return Response the rendered template
      */
     protected function renderCard(Request $request, string $template, string $sortField, string $sortMode = Criteria::ASC, array $sortFields = [], array $parameters = []): Response
     {
         // check permission
-        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $this->className);
+        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_LIST);
 
         // get session values
-        $key = $this->getShortClassName();
+        $key = Utils::getShortName($this->className);
         $field = $this->getSessionString($key . '.sortField', $sortField);
         $mode = $this->getSessionString($key . '.sortMode', $sortMode);
 
@@ -327,13 +310,13 @@ abstract class EntityController extends BaseController
         }
 
         // get items
-        $items = $this->getItems($field, $mode);
+        $items = $this->getEntities($field, $mode);
 
         // default action
         $edit = $this->getApplication()->isEditAction();
 
         // parameters
-        $parameters = \array_merge($parameters, [
+        $parameters = \array_merge([
             'items' => $items,
             'query' => $query,
             'selection' => $selection,
@@ -341,7 +324,7 @@ abstract class EntityController extends BaseController
             'sortMode' => $mode,
             'sortFields' => $sortFields,
             'edit' => $edit,
-        ]);
+        ], $parameters);
 
         return $this->render($template, $parameters);
     }
@@ -352,54 +335,22 @@ abstract class EntityController extends BaseController
     protected function renderDocument(PdfDocument $doc, bool $inline = true, string $name = '', bool $isUTF8 = false): PdfResponse
     {
         // check permission
-        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_PDF, $this->className);
+        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_PDF);
 
         return parent::renderDocument($doc, $inline, $name, $isUTF8);
     }
 
     /**
-     * Show properties of an entity.
-     *
-     * @param request         $request    the request
-     * @param EntityInterface $item       the entity to show
-     * @param array           $parameters the show parameters. The following keys must or may be fixed:
-     *                                    <ul>
-     *                                    <li><code>template</code> : the template to render (required).</li>
-     *                                    <li><code>title</code> : the dialog title (optional).</li>
-     *                                    <li><code>message</code> : the dialog message (optional).</li>
-     *                                    <li><code>success</code> : the message to display on success (optional).</li>
-     *                                    <li><code>failure</code> : the message to display on failure (optional).</li>
-     *                                    </ul>
-     *
-     * @throws \Symfony\Component\Finder\Exception\AccessDeniedException if the access is denied
-     */
-    protected function showItem(Request $request, EntityInterface $item, array $parameters = []): Response
-    {
-        // check permission
-        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_SHOW, $item);
-
-        // add item parameter
-        $parameters['item'] = $item;
-
-        // get template
-        $template = $parameters['template'];
-        unset($parameters['template']);
-
-        // render
-        return $this->render($template, $parameters);
-    }
-
-    /**
-     * Show the data table view.
+     * Render the entities as data table.
      *
      * @param Request         $request    the request to get parameters
-     * @param EntityDataTable $table      the datatable
+     * @param EntityDataTable $table      the data table
      * @param string          $template   the template name to render
      * @param array           $attributes additional data table attributes
      *
-     * @return Response a JSON response if a callback, the table view otherwise
+     * @return Response a JSON response if is a callback, the data table view otherwise
      */
-    protected function showTable(Request $request, EntityDataTable $table, string $template, array $attributes = []): Response
+    protected function renderTable(Request $request, EntityDataTable $table, string $template, array $attributes = []): Response
     {
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
@@ -420,15 +371,47 @@ abstract class EntityController extends BaseController
     }
 
     /**
+     * Show properties of an entity.
+     *
+     * @param request         $request    the request
+     * @param EntityInterface $item       the entity to show
+     * @param array           $parameters the show parameters. The following keys must or may be fixed:
+     *                                    <ul>
+     *                                    <li><code>template</code> : the template to render (required).</li>
+     *                                    <li><code>title</code> : the dialog title (optional).</li>
+     *                                    <li><code>message</code> : the dialog message (optional).</li>
+     *                                    <li><code>success</code> : the message to display on success (optional).</li>
+     *                                    <li><code>failure</code> : the message to display on failure (optional).</li>
+     *                                    </ul>
+     *
+     * @throws \Symfony\Component\Finder\Exception\AccessDeniedException if the access is denied
+     */
+    protected function showEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    {
+        // check permission
+        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_SHOW);
+
+        // add item parameter
+        $parameters['item'] = $item;
+
+        // get template
+        $template = $parameters['template'];
+        unset($parameters['template']);
+
+        // render
+        return $this->render($template, $parameters);
+    }
+
+    /**
      * This function is called before an entity is saved to the database.
      *
      * Derived class can compute values and update entity.
      *
-     * @param mixed $item the entity to be saved
+     * @param EntityInterface $item the entity to be saved
      *
      * @return bool true if updated successfully; false to not save entity to the database
      */
-    protected function updateItem($item): bool
+    protected function updateEntity(EntityInterface $item): bool
     {
         return true;
     }

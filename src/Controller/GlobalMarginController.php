@@ -63,7 +63,7 @@ class GlobalMarginController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editItem($request, new GlobalMargin());
+        return $this->editEntity($request, new GlobalMargin());
     }
 
     /**
@@ -90,7 +90,7 @@ class GlobalMarginController extends EntityController
             'failure' => 'globalmargin.delete.failure',
         ];
 
-        return $this->deletItem($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $parameters);
     }
 
     /**
@@ -100,7 +100,7 @@ class GlobalMarginController extends EntityController
      */
     public function edit(Request $request, GlobalMargin $item): Response
     {
-        return $this->editItem($request, $item);
+        return $this->editEntity($request, $item);
     }
 
     /**
@@ -136,7 +136,7 @@ class GlobalMarginController extends EntityController
             'template' => 'globalmargin/globalmargin_show.html.twig',
         ];
 
-        return $this->showItem($request, $item, $parameters);
+        return $this->showEntity($request, $item, $parameters);
     }
 
     /**
@@ -146,7 +146,7 @@ class GlobalMarginController extends EntityController
      */
     public function table(Request $request, GlobalMarginDataTable $table): Response
     {
-        return $this->showTable($request, $table, 'globalmargin/globalmargin_table.html.twig');
+        return $this->renderTable($request, $table, 'globalmargin/globalmargin_table.html.twig');
     }
 
     /**
@@ -154,7 +154,7 @@ class GlobalMarginController extends EntityController
      *
      * @param GlobalMargin $item
      */
-    protected function editItem(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = GlobalMarginType::class;
@@ -162,7 +162,7 @@ class GlobalMarginController extends EntityController
         $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['success'] = $item->isNew() ? 'globalmargin.add.success' : 'globalmargin.edit.success';
 
-        return parent::editItem($request, $item, $parameters);
+        return parent::editEntity($request, $item, $parameters);
     }
 
     /**

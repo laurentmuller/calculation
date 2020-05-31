@@ -68,7 +68,7 @@ class AdminController extends BaseController
     {
         $form = $this->createFormBuilder()->getForm();
 
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             // first clear application service cache
             $this->getApplication()->clearCache();
 
@@ -145,7 +145,7 @@ class AdminController extends BaseController
 
         // handle request
         $form = $builder->getForm();
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             // import
             $file = $form->getData()['file'];
             $data = $service->setSourceFile($file)->import();
@@ -185,7 +185,7 @@ class AdminController extends BaseController
 
         // form
         $form = $this->createForm(ParametersType::class, $data);
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             //save properties
             $data = $form->getData();
             $service->setProperties($data);
@@ -239,7 +239,7 @@ class AdminController extends BaseController
 
         // form
         $form = $this->createForm(RoleRightsType::class, $role);
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             $this->getApplication()->setProperties([
                 $property => $role->getRights(),
             ]);

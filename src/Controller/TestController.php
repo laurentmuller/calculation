@@ -421,7 +421,7 @@ class TestController extends BaseController
             ->add(CaptchaImage::class);
 
         $form = $builder->getForm();
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             return $this->succes($this->trans('password.success'))
                 ->redirectToHomePage();
         }
@@ -461,7 +461,7 @@ class TestController extends BaseController
 
         // render
         $form = $builder->getForm();
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             // get values
             $data = $form->getData();
             $response = $data['recaptcha'];
@@ -596,7 +596,7 @@ class TestController extends BaseController
 
         $form = $builder->getForm();
 
-        if ($this->handleFormRequest($form, $request)) {
+        if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
             $message = 'Message :<br>' . (string) $data['message'];
             $this->succes($message);

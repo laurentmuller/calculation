@@ -28,14 +28,14 @@ $(function () {
         editor.ui.registry.addButton('clearContent', {
             icon: 'remove',
             disabled: true,
-            tooltip: 'Clear content',
+            tooltip: 'Effacer le contenu',
             onAction: onAction,
             onSetup: onSetup
         });
         editor.ui.registry.addMenuItem('clearContent', {
             icon: 'remove',
             disabled: true,
-            text: 'Clear content',
+            text: 'Effacer le contenu',
             onAction: onAction,
             onSetup: onSetup
         });

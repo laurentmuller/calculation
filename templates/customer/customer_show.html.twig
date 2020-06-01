@@ -6,12 +6,12 @@
 {# parameters #}
 {%- set id     = item.id -%}
 {%- set title  = 'customer.show.title' -%}
-{%- set params = routeParams(app.request, id) %}
+{%- set params = route_params(app.request, id) %}
 
 {# actions #}
 {%- set edit_path   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, item) ? path('customer_edit', params) : null -%}
 {%- set delete_path = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, item) ? path('customer_delete', params) : null -%}
-{%- set cancel_path = cancelUrl(app.request, id, 'customer_list') -%}
+{%- set cancel_path = cancel_url(app.request, id, 'customer_list') -%}
 
 {# properties #}
 {% block property_body %}

@@ -48,10 +48,10 @@
 {# parameters #}
 {%- set id     = item.id -%}
 {%- set title  = 'logs.show.title' -%}
-{%- set params = routeParams(app.request, id) %}
+{%- set params = route_params(app.request, id) %}
 
 {# actions #}
-{%- set cancel_path = cancelUrl(app.request, id, 'log_table') -%}
+{%- set cancel_path = cancel_url(app.request, id, 'log_table') -%}
 
 {# classes #}
 {% block card_container_class '' %}

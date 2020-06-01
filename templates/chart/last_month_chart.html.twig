@@ -54,7 +54,7 @@
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
                 <td class="text-currency">{{ item.items|number_format(0) }}</td>
-                {%- set class_name = marginBelow(item.marginPercent) ? 'text-percent text-danger' : 'text-percent' -%}
+                {%- set class_name = margin_below(item.marginPercent) ? 'text-percent text-danger' : 'text-percent' -%}
                 <td class="{{ class_name }}">{{ item.marginPercent|percent(false) }}</td>
                 <td class="text-currency">{{ item.marginAmount|number_format(0) }}</td>
                 <td class="text-currency">{{ item.sum|number_format(0) }}</td>

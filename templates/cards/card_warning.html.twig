@@ -23,7 +23,7 @@
 
 {% block card_footer %}
 {% if back_page %}
-    {%- set href = cancelUrl(app.request, id|default(0), back_page) -%}
+    {%- set href = cancel_url(app.request, id|default(0), back_page) -%}
     {{ icons.link(href, back_text, back_class, back_icon) }}
 {% else %}
     {{ icons.homepage() }}

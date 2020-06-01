@@ -97,7 +97,7 @@
 {# items #}
 {% for item in items %}
     {# links parameters #}
-    {%- set params = routeParams(app.request, item.id) -%}
+    {%- set params = route_params(app.request, item.id) -%}
     {% if caller|default(false) %}
         {%- set params = params|merge({'caller': caller}) -%}
     {% endif %}

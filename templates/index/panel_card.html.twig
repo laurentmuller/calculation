@@ -35,7 +35,7 @@
         {# item parameters #}
         {%- set id = item.id -%}
         {%- set item_title = item.id|identifier -%}
-        {%- set params = routeParams(app.request, id)|merge({'caller': caller}) -%}
+        {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
 		<div class="card-last border rounded p-2 m-1{% if id == selection %} border-primary{%- endif %}">
 			<div class="row">
 				<div class="col-10 card-title mb-1 h5">
@@ -94,7 +94,7 @@
                 {{ properties.line(item.description) }}
                 {{ properties.line(item.date|localedate ~ ' / ' ~ item.stateCode) }}
                 {{ properties.separator() }}
-                {%- if marginBelow(item) -%}
+                {%- if margin_below(item) -%}
                     {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
                     <tr>
                     	<td>{{ 'calculation.fields.total'|trans }}</td>

@@ -100,7 +100,7 @@
 {% block card_footer %}
 {% if page_list is defined %}
     {%- set id = id|default(0) -%}
-    {%- set href  = cancelUrl(app.request, id, page_list) -%}
+    {%- set href  = cancel_url(app.request, id, page_list) -%}
     {{ icons.link(href, 'common.button_back_list', 'btn btn-form btn-primary', 'chevron-left') }}
 {% else %}
     {{ icons.homepage() }}

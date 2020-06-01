@@ -36,7 +36,7 @@
             {% for calculation in calculations %}
                 {%- set id = calculation.id -%}
                 {%- set menu_id = 'dropdownMenuLast_' ~ id -%}
-                {%- set params = routeParams(app.request, id)|merge({'caller': caller}) -%}
+                {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
                 <tr>
                     <td class="text-id" style="{{ properties.stateCss(calculation.stateColor) }}">
                     {% if edit_page or show_page %}
@@ -49,7 +49,7 @@
                     <td class="text-state">{{ calculation.stateCode }}</td>
                     <td class="w-20 cell">{{ calculation.customer }}</td>
                     <td class="w-25 cell">{{ calculation.description }}</td>                    
-                    {%- if marginBelow(calculation) -%}
+                    {%- if margin_below(calculation) -%}
                         {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
                         <td class="text-percent text-danger below-cell has-tooltip" data-html="true" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
                     {%- else -%}

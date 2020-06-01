@@ -169,18 +169,6 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Returns a parsable string representation of a variable.
-     *
-     * @param mixed $expression the variable to export
-     *
-     * @return string the variable representation
-     */
-    public function exportVar($expression): ?string
-    {
-        return Utils::exportVar($expression);
-    }
-
-    /**
      * Checks the existence of file or directory.
      *
      * @param string $filename the path to the file or directory
@@ -236,18 +224,6 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Gets the short class name of the given variable.
-     *
-     * @param mixed $var either a string containing the name of the class to reflect, or an object
-     *
-     * @return string|null the short name or null if the variable is null
-     */
-    public function getClassName($var): ?string
-    {
-        return Utils::getShortName($var);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getFilters(): array
@@ -255,7 +231,7 @@ final class FunctionExtension extends AbstractExtension
         return [
             new TwigFilter('trans_role', [$this, 'translateRole']),
             new TwigFilter('normalize_whitespace', [$this, 'normalizeWhitespace'], ['preserves_safety' => ['html']]),
-            new TwigFilter('var_export', [$this, 'exportVar']),
+            new TwigFilter('var_export', [Utils::class, 'exportVar']),
         ];
     }
 
@@ -291,9 +267,9 @@ final class FunctionExtension extends AbstractExtension
 
         return [
             // flash bag messages
-            new TwigFunction('flashbagPosition', [$this, 'getFlashbagPosition']),
-            new TwigFunction('flashbagTimeout', [$this, 'getFlashbagTimeout']),
-            new TwigFunction('flashbagSubTitle', [$this, 'isFlashbagSubTitle']),
+            new TwigFunction('flashbag_position', [$this, 'getFlashbagPosition']),
+            new TwigFunction('flashbag_timeout', [$this, 'getFlashbagTimeout']),
+            new TwigFunction('flashbag_subtitle', [$this, 'isFlashbagSubTitle']),
 
             // asssets
             new TwigFunction('asset_exists', [$this, 'assetExists']),
@@ -308,15 +284,15 @@ final class FunctionExtension extends AbstractExtension
             new TwigFunction('image_width', [$this, 'getImageWidth']),
 
             // routes
-            new TwigFunction('cancelUrl', [$this, 'cancelUrl']),
-            new TwigFunction('routeParams', [$this, 'routeParams']),
+            new TwigFunction('cancel_url', [$this, 'cancelUrl']),
+            new TwigFunction('route_params', [$this, 'routeParams']),
 
             // php
             new TwigFunction('is_int', 'is_int'),
 
             // application
-            new TwigFunction('marginBelow', [$this, 'isMarginBelow']),
-            new TwigFunction('displayTabular', [$this, 'isDisplayTabular']),
+            new TwigFunction('margin_below', [$this, 'isMarginBelow']),
+            new TwigFunction('display_tabular', [$this, 'isDisplayTabular']),
         ];
     }
 

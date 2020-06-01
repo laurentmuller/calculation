@@ -3,7 +3,7 @@
 {% import 'macros/_properties.html.twig' as properties %}
 <table class="table table-popover table-sm mb-0"><tbody>
 {% for calculation in calculations -%}
-{% set margin_class = marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
+{% set margin_class = margin_below(calculation) ? 'text-percent text-danger' : 'text-percent' %}
 <tr>
     <td><span class="mr-1" style="{{ properties.stateCss(calculation.stateColor) }}"></span>{{ calculation.id|identifier }}</td>
     <td>{{ calculation.state.code }}</td>

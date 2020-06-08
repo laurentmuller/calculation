@@ -48,7 +48,7 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
     /**
      * The border colors.
      *
-     * @var array
+     * @var ?PdfDrawColor[]
      */
     private $colors;
 
@@ -207,26 +207,31 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
      *
      * @param string $level the level
      *
-     * @return PdfDrawColor|null the border draw color or null if none
+     * @return PdfDrawColor|null the color or null if none
      */
     private function getColor(string $level): ?PdfDrawColor
     {
-        if (!isset($this->colors[$level])) {
+        if (!\array_key_exists($level, $this->colors)) {
             switch ($level) {
                 case 'warning':
-                    return $this->colors[$level] = PdfDrawColor::create('#ffc107');
+                    $this->colors[$level] = PdfDrawColor::create('#ffc107');
+                    break;
                 case 'error':
                 case 'critical':
                 case 'alert':
                 case 'emergency':
-                    return $this->colors[$level] = PdfDrawColor::create('#dc3545');
+                    $this->colors[$level] = PdfDrawColor::create('#dc3545');
+                    break;
                 case 'debug':
-                    return $this->colors[$level] = PdfDrawColor::create('#007bff');
+                    $this->colors[$level] = PdfDrawColor::create('#007bff');
+                    break;
                 case 'info':
                 case 'notice':
-                    return $this->colors[$level] = PdfDrawColor::create('#17a2b8');
+                    $this->colors[$level] = PdfDrawColor::create('#17a2b8');
+                    break;
                 default:
-                    return null;
+                    $this->colors[$level] = null;
+                    break;
             }
         }
 

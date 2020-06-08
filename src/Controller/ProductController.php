@@ -64,7 +64,7 @@ class ProductController extends EntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editEntity($request, Product());
+        return $this->editEntity($request, new Product());
     }
 
     /**

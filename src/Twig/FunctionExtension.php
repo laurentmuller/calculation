@@ -337,7 +337,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Gets a value indicating how entities are displayed.
      *
-     * @return bool <code>true</code>, displays the entities in tabular mode; <code>false</code>, displays entities as cards
+     * @return bool true, displays the entities in tabular mode; false, displays entities as cards
      */
     public function isDisplayTabular(): bool
     {

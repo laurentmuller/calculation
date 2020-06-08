@@ -56,14 +56,25 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
             return;
         }
 
-        if ($this->toString()) {
-            if (!\is_scalar($value) && !(\is_object($value) && \method_exists($value, '__toString'))) {
-                throw new UnexpectedValueException($value, 'string');
-            }
-            $this->doValidate((string) $value, $constraint);
-        } else {
-            $this->doValidate($value, $constraint);
+        $this->doValidate($this->convert($value), $constraint);
+    }
+
+    /**
+     * Checks and converts the given value.
+     *
+     * @param mixed $value the value to checks
+     *
+     * @throws UnexpectedValueException if the value can not be converted
+     *
+     * @return mixed the converted value
+     */
+    protected function convert($value)
+    {
+        if (!\is_scalar($value) && !(\is_object($value) && \method_exists($value, '__toString'))) {
+            throw new UnexpectedValueException($value, 'string');
         }
+
+        return (string) $value;
     }
 
     /**
@@ -80,16 +91,6 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
      * If true and the value to validate is null or empty, no validation is performed.
      */
     protected function isAllowEmpty(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Returns a value indicating if the value must converted to a string before validation.
-     *
-     * @return true to convert to a string, false to perform the validation with the value "as is"
-     */
-    protected function toString(): bool
     {
         return true;
     }

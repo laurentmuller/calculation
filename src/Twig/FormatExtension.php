@@ -47,9 +47,9 @@ final class FormatExtension extends AbstractExtension
      * Filter to format a boolean value.
      *
      * @param bool   $value     the value to format
-     * @param string $true      the text to use when the value is <code>TRUE</code> or <code>null</code> to use default
-     * @param string $false     the text to use when the value is <code>FALSE</code> or <code>null</code> to use default
-     * @param bool   $translate <code>TRUE</code> to translate texts
+     * @param string $true      the text to use when the value is <code>true</code> or <code>null</code> to use default
+     * @param string $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
+     * @param bool   $translate <code>true</code> to translate texts
      */
     public function booleanFilter($value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {

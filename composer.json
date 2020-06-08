@@ -21,7 +21,7 @@
 	],
 	"repositories" : [{
 			"type" : "vcs",
-			"url" : "https://github.com/jethrohicks/FOSUserBundle.git"
+			"url" : "https://github.com/D-P-IT/FOSUserBundle.git"
 		}
 	],
 	"require" : {

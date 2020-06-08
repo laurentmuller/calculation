@@ -87,7 +87,7 @@ class ApplicationService implements ApplicationServiceInterface
     /**
      * Clear this cache.
      *
-     * @return bool <code>true</code> if the cache was successfully cleared; <code>false</code> if there was an error
+     * @return bool true if the cache was successfully cleared; false if there was an error
      */
     public function clearCache(): bool
     {
@@ -389,7 +389,7 @@ class ApplicationService implements ApplicationServiceInterface
     /**
      * Returns if the debug mode is enabled.
      *
-     * @return bool <code>true</code> if the debug mode is enabled, <code>false</code> otherwise
+     * @return bool true if the debug mode is enabled, false otherwise
      */
     public function isDebug(): bool
     {
@@ -399,7 +399,7 @@ class ApplicationService implements ApplicationServiceInterface
     /**
      * Gets a value indicating the image captcha is displayed when login.
      *
-     * @return bool <code>true</code> to display the image; <code>false</code> to hide
+     * @return bool true to display the image; false to hide
      */
     public function isDisplayCaptcha(): bool
     {
@@ -409,7 +409,7 @@ class ApplicationService implements ApplicationServiceInterface
     /**
      * Gets a value indicating how entities are displayed.
      *
-     * @return bool <code>true</code>, displays the entities in tabular mode; <code>false</code>, displays entities as cards
+     * @return bool true, displays the entities in tabular mode; false, displays entities as cards
      */
     public function isDisplayTabular(): bool
     {
@@ -419,7 +419,7 @@ class ApplicationService implements ApplicationServiceInterface
     /**
      * Gets the default action.
      *
-     * @return bool <code>false</code> to display the entity properties; <code>true</code> to edit the entity
+     * @return bool false to display the entity properties; true to edit the entity
      */
     public function isEditAction(): bool
     {
@@ -431,7 +431,7 @@ class ApplicationService implements ApplicationServiceInterface
      *
      * @param float $margin the margin to be tested
      *
-     * @return bool <code>true</code> if below
+     * @return bool true if below the minimum
      */
     public function isMarginBelow(float $margin): bool
     {
@@ -439,9 +439,9 @@ class ApplicationService implements ApplicationServiceInterface
     }
 
     /**
-     * Returns if the flashbag message sub-title is displayed (default: <code>true</code>).
+     * Returns if the flashbag message sub-title is displayed (default: true).
      *
-     * @return bool <code>true</code> if displayed
+     * @return bool true if displayed
      */
     public function isMessageSubTitle(): bool
     {
@@ -531,7 +531,7 @@ class ApplicationService implements ApplicationServiceInterface
      * @param string           $key     the key for which to return the corresponding cache item
      * @param mixed            $value   the value to set
      *
-     * @return bool <code>false</code> if the item could not be queued or if a commit was attempted and failed; <code>true</code> otherwise
+     * @return bool false if the item could not be queued or if a commit was attempted and failed; true otherwise
      */
     private function saveDeferredItem(AdapterInterface $adapter, string $key, $value): bool
     {

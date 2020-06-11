@@ -651,6 +651,7 @@ class CalculationController extends EntityController
         $helper = new FormHelper($builder);
         $helper->field('includeClosed')
             ->label('calculation.update.includeClosed')
+            ->updateRowAttribute('class', 'mb-0')
             ->notRequired()
             ->addCheckboxType();
 
@@ -694,10 +695,10 @@ class CalculationController extends EntityController
 
             // log results
             $context = [
-                    $this->trans('update.updated') => $updated,
-                    $this->trans('update.skipped') => $skipped,
-                    $this->trans('update.unmodifiable') => $unmodifiable,
-                    $this->trans('update.total') => $total,
+                    $this->trans('calculation.update.updated') => $updated,
+                    $this->trans('calculation.update.skipped') => $skipped,
+                    $this->trans('calculation.update.unmodifiable') => $unmodifiable,
+                    $this->trans('calculation.update.total') => $total,
                 ];
             $message = $this->trans('calculation.update.title');
             $logger->info($message, $context);

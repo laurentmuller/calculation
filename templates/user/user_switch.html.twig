@@ -1,7 +1,7 @@
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
-{% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+{% if is_granted('IS_IMPERSONATOR') %}
 <div class="row no-gutters">
     <div class="col">
         <div class="alert alert-warning mt-2 mb-0">

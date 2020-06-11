@@ -69,6 +69,13 @@ class FormHelper
     private $field;
 
     /**
+     * The help attributes.
+     *
+     * @var array
+     */
+    private $helpAttributes = [];
+
+    /**
      * The label attributes.
      *
      * @var array
@@ -115,14 +122,17 @@ class FormHelper
      *
      * @param string $type the child type to add
      */
-    public function add($type): self
+    public function add(string $type): self
     {
-        // merge
+        // merge options and attributes
         if (!empty($this->attributes)) {
             $this->options['attr'] = $this->attributes;
         }
         if (!empty($this->rowAttributes)) {
             $this->options['row_attr'] = $this->rowAttributes;
+        }
+        if (!empty($this->helpAttributes)) {
+            $this->options['help_attr'] = $this->helpAttributes;
         }
         if (!empty($this->labelAttributes)) {
             $this->options['label_attr'] = $this->labelAttributes;
@@ -297,6 +307,9 @@ class FormHelper
         if (-1 !== $step) {
             $this->updateAttribute('step', $step);
         }
+
+        // needed for Symfony v5.1
+        $this->updateOption('rounding_mode', \NumberFormatter::ROUND_HALFUP);
 
         return $this->add(PercentType::class);
     }
@@ -605,13 +618,14 @@ class FormHelper
     }
 
     /**
-     * Reset all properties to the default values.
+     * Reset all options and attributes to the default values.
      */
     public function reset(): self
     {
         $this->options = [];
         $this->attributes = [];
         $this->rowAttributes = [];
+        $this->helpAttributes = [];
         $this->labelAttributes = [];
 
         return $this;
@@ -639,6 +653,18 @@ class FormHelper
     public function updateAttribute(string $name, $value, bool $force = false): self
     {
         return $this->updateEntry($this->attributes, $name, $value, $force);
+    }
+
+    /**
+     * Updates a help attribute.
+     *
+     * @param string $name  the attribute name
+     * @param mixed  $value the attribute value or null to remove
+     * @param bool   $force true to put the attribute, even if the value is null
+     */
+    public function updateHelpAttribute(string $name, $value, bool $force = false): self
+    {
+        return $this->updateEntry($this->helpAttributes, $name, $value, $force);
     }
 
     /**

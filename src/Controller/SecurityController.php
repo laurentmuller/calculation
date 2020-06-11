@@ -16,10 +16,10 @@ namespace App\Controller;
 
 use App\Form\FosUserLoginType;
 use App\Form\FosUserResetPasswordType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -30,7 +30,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  *
  * @author Laurent Muller
  */
-class SecurityController extends AbstractController
+class SecurityController extends BaseController
 {
     /**
      * Show the login form.
@@ -39,7 +39,7 @@ class SecurityController extends AbstractController
     {
         // create form
         $form = $this->createForm(FosUserLoginType::class, [
-            'username' => $this->getUserName($request, $utils),
+            'username' => $this->findUsername($request, $utils),
             'csrf_token' => $this->getCsrfToken($manager),
             'remember_me' => $kernel->isDebug(),
         ]);
@@ -52,13 +52,24 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/logout", name="app_logout", methods={"GET"})
+     */
+    public function logout()
+    {
+        $appName = $this->getParameter('app_name');
+        $this->succesTrans('security.logout.success', ['%appname%' => $appName], 'FOSUserBundle');
+
+        return $this->redirectToRoute('fos_user_security_login');
+    }
+
+    /**
      * Show the reset password form.
      */
     public function requestAction(Request $request, AuthenticationUtils $utils): Response
     {
         // create form
         $form = $this->createForm(FosUserResetPasswordType::class, [
-            'username' => $this->getUserName($request, $utils),
+            'username' => $this->findUsername($request, $utils),
         ]);
 
         // display form
@@ -66,6 +77,26 @@ class SecurityController extends AbstractController
             'form' => $form->createView(),
             'error' => $this->getLastAuthenticationError($utils),
         ]);
+    }
+
+    /**
+     * Gets the user name.
+     *
+     * @param Request             $request the request
+     * @param AuthenticationUtils $utils   the authentication utility
+     *
+     * @return string|null the user name, if found; null otherwise
+     */
+    private function findUsername(Request $request, AuthenticationUtils $utils): ?string
+    {
+        $user = $this->getUser();
+        if ($user instanceof UserInterface) {
+            return $user->getUsername();
+        } elseif ($userName = $utils->getLastUsername()) {
+            return $userName;
+        } else {
+            return $request->get('username');
+        }
     }
 
     /**
@@ -95,26 +126,6 @@ class SecurityController extends AbstractController
         } else {
             // The value does not come from the security component.
             return null;
-        }
-    }
-
-    /**
-     * Gets the user name.
-     *
-     * @param Request             $request the request
-     * @param AuthenticationUtils $utils   the authentication utility
-     *
-     * @return string|null the user name, if found; null otherwise
-     */
-    private function getUserName(Request $request, AuthenticationUtils $utils): ?string
-    {
-        $user = $this->getUser();
-        if ($user instanceof UserInterface) {
-            return $user->getUsername();
-        } elseif ($userName = $utils->getLastUsername()) {
-            return $userName;
-        } else {
-            return $request->get('username');
         }
     }
 }

@@ -82,7 +82,7 @@
 	{%- set message_path = path('user_message', {'id': item.id}) -%}
     {{ icons.dropdownItem(message_path, 'user.message.title', 'envelope far') }}
 {%- endif -%}
-{%- if not is_granted('ROLE_PREVIOUS_ADMIN') and is_granted('ROLE_SUPER_ADMIN') and item.username != app.user.username -%}
+{%- if not is_granted('IS_IMPERSONATOR') and is_granted('ROLE_SUPER_ADMIN') and item.username != app.user.username -%}
     {{ icons.dropdownSeparator }}
     {%- if item.hasRole('ROLE_ADMIN') or item.hasRole('ROLE_SUPER_ADMIN') -%}
     {%- set switch_path = path('user_list', {'_switch_user': item.username}) -%}

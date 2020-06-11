@@ -80,7 +80,7 @@ abstract class AssetsCommand extends Command
     protected function getPublicDir(): ?string
     {
         if ($projectDir = $this->getProjectDir()) {
-            return $projectDir . '/public';
+            return str_replace('\\', '/', $projectDir) . '/public';
         }
 
         return null;

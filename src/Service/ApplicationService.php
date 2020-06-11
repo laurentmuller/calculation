@@ -211,7 +211,7 @@ class ApplicationService implements ApplicationServiceInterface
     /**
      * Gets the last calculations update.
      *
-     * @return \DateTime|null the last update or NULL if none
+     * @return \DateTime|null the last update or null if none
      */
     public function getLastUpdate(): ?\DateTime
     {

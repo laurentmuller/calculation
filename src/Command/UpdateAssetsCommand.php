@@ -16,6 +16,7 @@ namespace App\Command;
 
 use App\Entity\Theme;
 use App\Service\ThemeService;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -59,7 +60,7 @@ class UpdateAssetsCommand extends AssetsCommand
     {
         // get file
         if (!$publicDir = $this->getPublicDir()) {
-            return 0;
+            return Command::SUCCESS;
         }
         $vendorFile = $publicDir . '/' . self::VENDOR_FILE_NAME;
 
@@ -67,17 +68,17 @@ class UpdateAssetsCommand extends AssetsCommand
         if (!$this->exists($publicDir) || !$this->exists($vendorFile)) {
             $this->writeVerbose("The file '{$vendorFile}' does not exist.");
 
-            return 0;
+            return Command::SUCCESS;
         }
 
         // decode
         if (false === ($configuration = $this->loadJson($vendorFile))) {
-            return 0;
+            return Command::SUCCESS;
         }
 
         // check values
         if (!$this->propertyExists($configuration, ['source', 'target', 'format', 'plugins'], true)) {
-            return 0;
+            return Command::SUCCESS;
         }
 
         // get values
@@ -142,13 +143,13 @@ class UpdateAssetsCommand extends AssetsCommand
             $this->rename($targetTemp, $target);
 
             // result
-            $this->writeVerbose("Installed {$countPlugins} plugins, {$countFiles} files to '{$target}' directory.");
+            $this->writeVerbose("Installed {$countPlugins} plugins and {$countFiles} files to the directory '{$target}'.");
         } finally {
             // remove temp directory
             $this->remove($targetTemp);
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**
@@ -161,7 +162,6 @@ class UpdateAssetsCommand extends AssetsCommand
      */
     private function checkApiCdnjsLastVersion(string $name, string $version): void
     {
-        // src: https://cdnjs.cloudflare.com/ajax/libs/
         $url = "https://api.cdnjs.com/libraries/{$name}?fields=version";
         $this->checkVersion($url, $name, $version, ['version']);
     }
@@ -176,7 +176,6 @@ class UpdateAssetsCommand extends AssetsCommand
      */
     private function checkJsDelivrLastVersion(string $name, string $version): void
     {
-        // src: https://cdn.jsdelivr.net/npm/
         $url = "https://data.jsdelivr.com/v1/package/npm/{$name}";
         $this->checkVersion($url, $name, $version, ['tags', 'latest']);
     }
@@ -192,14 +191,14 @@ class UpdateAssetsCommand extends AssetsCommand
     private function checkVersion(string $url, string $name, string $version, array $paths): void
     {
         if (false === $content = $this->loadJson($url)) {
-            $this->write("$url not found.");
+            $this->write("Unable to find the URL '$url' for the plugin '$name'.");
 
             return;
         }
 
         foreach ($paths as $path) {
             if (!isset($content->$path)) {
-                $this->write("$path not found.");
+                $this->write("Unable to find the path '$path' for the plugin '$name'.");
 
                 return;
             }

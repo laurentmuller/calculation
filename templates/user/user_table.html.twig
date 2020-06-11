@@ -35,7 +35,7 @@
 {{ _self.item_data(image_path, 'user.image.title', 'image far') }}
 {{ _self.item_data(rights_path, 'user.list.rights_title', 'unlock') }}
 {{ _self.item_data(message_path, 'user.message.title', 'envelope far', {'data-callback': 'user_message', 'data-id': app.user.id}) }}
-{%- if not is_granted('ROLE_PREVIOUS_ADMIN') and is_granted('ROLE_SUPER_ADMIN') -%}
+{%- if not is_granted('IS_IMPERSONATOR') and is_granted('ROLE_SUPER_ADMIN') -%}
     {{ icons.dropdownSeparator() }}
     {{ _self.item_data(switch_path, 'user.switch.take.title', 'user-plus', {'data-callback': 'user_switch', 'data-id': app.user.id}) }}
 {%- endif -%}

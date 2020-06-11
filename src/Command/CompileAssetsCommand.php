@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
@@ -82,7 +83,7 @@ class CompileAssetsCommand extends AssetsCommand
     {
         // get file
         if (!$publicDir = $this->getPublicDir()) {
-            return 0;
+            return Command::SUCCESS;
         }
         $assetFile = $publicDir . '/' . self::ASSETS_FILE_NAME;
 
@@ -90,12 +91,12 @@ class CompileAssetsCommand extends AssetsCommand
         if (!$this->exists($publicDir) || !$this->exists($assetFile)) {
             $this->writeVerbose("The file '{$assetFile}' does not exist.");
 
-            return 0;
+            return Command::SUCCESS;
         }
 
         // decode
         if (false === ($configuration = $this->loadJson($assetFile))) {
-            return 0;
+            return Command::SUCCESS;
         }
 
         // source
@@ -106,12 +107,12 @@ class CompileAssetsCommand extends AssetsCommand
         if (!$this->exists($source)) {
             $this->writeError("The source directory '{$source}' does not exist.");
 
-            return 0;
+            return Command::SUCCESS;
         }
 
         // target
         if (!$this->propertyExists($configuration, 'target')) {
-            return 0;
+            return Command::SUCCESS;
         }
         $target = $publicDir . '/' . $configuration->target;
         $targetTemp = $this->tempDir($publicDir) . '/';
@@ -156,7 +157,7 @@ class CompileAssetsCommand extends AssetsCommand
             if (0 === $finder->count()) {
                 $this->writeVerbose("No file to process in '{$source}' directory.");
 
-                return 0;
+                return Command::SUCCESS;
             }
 
             // run over files
@@ -184,7 +185,7 @@ class CompileAssetsCommand extends AssetsCommand
             $this->remove($targetTemp);
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**

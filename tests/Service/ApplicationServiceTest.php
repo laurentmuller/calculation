@@ -49,4 +49,9 @@ class ApplicationServiceTest extends WebTestCase implements ApplicationServiceIn
         $this->assertEquals(-1, $service->getMinStrength());
         $this->assertEquals(4000, $service->getMessageTimeout());
     }
+
+    protected function echo(string $name, $value): void
+    {
+        echo \sprintf("\n%-15s: %s", $name, $value);
+    }
 }

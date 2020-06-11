@@ -20,8 +20,9 @@ security:
         main:
             pattern: ^/
             anonymous: true
-            logout:
-                handlers: [App\Listener\UserEventListener]
+            #logout:
+                #path: app_logout
+                #handlers: [App\Listener\UserEventListener]
 
             form_login:
                 csrf_token_generator: security.csrf.token_manager

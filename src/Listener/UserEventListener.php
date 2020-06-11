@@ -27,18 +27,15 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 use Symfony\Component\Security\Http\Firewall\SwitchUserListener;
-use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -47,7 +44,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @internal
  */
-final class UserEventListener implements EventSubscriberInterface, LogoutHandlerInterface
+final class UserEventListener implements EventSubscriberInterface
 {
     use TranslatorFlashMessageTrait;
 
@@ -113,15 +110,6 @@ final class UserEventListener implements EventSubscriberInterface, LogoutHandler
             SecurityEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin',
             SecurityEvents::SWITCH_USER => 'onSwitchUser',
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function logout(Request $request, Response $response, TokenInterface $token): void
-    {
-        $appName = $this->getParameter('app_name');
-        $this->succesTrans('security.logout.success', ['%appname%' => $appName], 'FOSUserBundle');
     }
 
     /**

@@ -18,8 +18,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Abstract class for authenticate user.
@@ -29,11 +27,8 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 abstract class AuthenticateWebTestCase extends WebTestCase
 {
     public const ROLE_ADMIN = User::ROLE_ADMIN;
-
     public const ROLE_DISABLED = 'ROLE_DISABLED';
-
     public const ROLE_FAKE = 'ROLE_FAKE';
-
     public const ROLE_SUPER_ADMIN = User::ROLE_SUPER_ADMIN;
     public const ROLE_USER = User::ROLE_DEFAULT;
 
@@ -49,7 +44,7 @@ abstract class AuthenticateWebTestCase extends WebTestCase
 
     protected function doEcho(string $name, $value): void
     {
-        // echo \sprintf("\n%-15s: %s", $name, $value);
+        echo \sprintf("\n%-15s: %s", $name, $value);
     }
 
     protected function loadUser(string $username, bool $verify = true): ?User
@@ -74,13 +69,6 @@ abstract class AuthenticateWebTestCase extends WebTestCase
 
     protected function loginUser(User $user, string $firewall = 'main'): void
     {
-        $token = new UsernamePasswordToken($user, null, $firewall, $user->getRoles());
-
-        $session = self::$container->get('session');
-        $session->set('_security_' . $firewall, \serialize($token));
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
+        $this->client->loginUser($user, $firewall);
     }
 }

@@ -537,7 +537,7 @@ class CalculationController extends EntityController
             };
 
             // create response
-            $response = StreamedResponse::create($callback);
+            $response = new StreamedResponse($callback);
 
             // headers
             $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, 'data.csv');
@@ -561,7 +561,7 @@ class CalculationController extends EntityController
             // create table
             $table = $this->getPivotTable();
 
-            return JsonResponse::create($table);
+            return new JsonResponse($table);
         } catch (\Exception $e) {
             return $this->jsonException($e);
         }

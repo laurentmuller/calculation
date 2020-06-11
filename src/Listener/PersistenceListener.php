@@ -83,7 +83,7 @@ class PersistenceListener implements EventSubscriber
         $this->session = $session;
         $this->translator = $translator;
         $this->debug = $kernel->isDebug();
-        $this->appName = $params->getParameter('app_name');
+        $this->appName = $params->get('app_name');
     }
 
     /**

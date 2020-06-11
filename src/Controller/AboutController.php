@@ -135,7 +135,7 @@ class AboutController extends BaseController
         ];
 
         // create response
-        $response = JsonResponse::create($array, JsonResponse::HTTP_OK, $headers);
+        $response = new JsonResponse($array, JsonResponse::HTTP_OK, $headers);
         $response->setEncodingOptions(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         return $response;

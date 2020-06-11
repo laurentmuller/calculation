@@ -304,7 +304,7 @@ final class UserEventListener implements EventSubscriberInterface
     private function setHomePageResponse(FormEvent $event): void
     {
         $url = $this->generateURL(IndexController::HOME_PAGE);
-        $response = RedirectResponse::create($url);
+        $response = new RedirectResponse($url);
         $event->setResponse($response);
     }
 

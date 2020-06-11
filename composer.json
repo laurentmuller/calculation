@@ -52,7 +52,6 @@
 		"symfony/mime" : "5.1.*",
 		"symfony/monolog-bundle" : "^3.1",
 		"symfony/orm-pack" : "*",
-		"symfony/process" : "5.1.*",
 		"symfony/security-bundle" : "5.1.*",
 		"symfony/serializer-pack" : "*",
 		"symfony/swiftmailer-bundle" : "^3.1",
@@ -64,7 +63,7 @@
 		"twig/cssinliner-extra" : "^3.0",
 		"twig/inky-extra" : "^3.0",
 		"twig/markdown-extra" : "^3.0",
-		"vich/uploader-bundle" : "^1.13",
+		"vich/uploader-bundle" : "dev-master",
 		"webinarium/datatables-bundle" : "^2.4"
 	},
 	"require-dev" : {
@@ -73,10 +72,8 @@
 		"phpstan/phpstan-deprecation-rules" : "~0.12",
 		"phpstan/phpstan-doctrine" : "~0.12",
 		"phpstan/phpstan-symfony" : "~0.12",
-		"phpunit/phpunit" : "^9.2",
 		"symfony/debug-pack" : "*",
 		"symfony/maker-bundle" : "^1.0",
-		"symfony/phpunit-bridge" : "^5.0",
 		"symfony/profiler-pack" : "*",
 		"symfony/test-pack" : "*"
 	},
@@ -99,7 +96,6 @@
 	},
 	"replace" : {
 		"paragonie/random_compat" : "2.*",
-		"symfony/polyfill-intl-idn" : "*",
 		"symfony/polyfill-ctype" : "*",
 		"symfony/polyfill-iconv" : "*",
 		"symfony/polyfill-php73" : "*",

@@ -36,15 +36,19 @@ abstract class AuthenticateWebTestCase extends WebTestCase
      * @var KernelBrowser
      */
     protected $client = null;
+    protected $debug = false;
 
     public function setUp(): void
     {
         $this->client = static::createClient();
+        $this->debug = \in_array('--debug', $_SERVER['argv'], true);
     }
 
-    protected function doEcho(string $name, $value): void
+    protected function doEcho(string $name, $value, bool $newLine = false): void
     {
-        echo \sprintf("\n%-15s: %s", $name, $value);
+        if ($this->debug) {
+            echo \sprintf("\n%-15s: %s" . ($newLine ? "\n" : '') , $name, $value);
+        }
     }
 
     protected function loadUser(string $username, bool $verify = true): ?User

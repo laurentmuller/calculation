@@ -77,7 +77,7 @@ class RoutesTest extends AuthenticateWebTestCase
         $this->client->request('GET', $url);
         $response = $this->client->getResponse();
         $statusCode = $response->getStatusCode();
-        $this->doEcho('StatusCode', "$expected => $statusCode");
+        $this->doEcho('StatusCode', "$expected => $statusCode", true);
 
         $this->assertSame($expected, $statusCode, "Invalid status code for '{$url}' with the user '{$user}'.");
     }

@@ -542,7 +542,7 @@ class AjaxController extends BaseController
             $result = true;
         }
 
-        return JsonResponse::create($result);
+        return new JsonResponse($result);
     }
 
     /**

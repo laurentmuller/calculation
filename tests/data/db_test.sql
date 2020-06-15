@@ -99,6 +99,12 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
 	"updated_at"	        datetime DEFAULT NULL
 );
 
+CREATE TABLE IF NOT EXISTS "sy_Migration" (
+  "version" varchar(14) PRIMARY KEY,
+  "executed_at" datetime COMMENT '(DC2Type:datetime_immutable)'
+);
+
+
 INSERT INTO "sy_User" VALUES (1,'role_super_admin@test.com','role_super_admin','role_super_admin','role_super_admin@test.com',1,NULL,'role_super_admin',NULL,NULL,NULL,'a:1:{i:0;s:16:"ROLE_SUPER_ADMIN";}',NULL,0,NULL,NULL);
 INSERT INTO "sy_User" VALUES (2,'role_admin@test.com','role_admin','role_admin','role_admin@test.com',1,NULL,'role_admin',NULL,NULL,NULL,'a:1:{i:0;s:10:"ROLE_ADMIN";}',NULL,0,NULL,NULL);
 INSERT INTO "sy_User" VALUES (3,'role_user@test.com','role_user','role_user','role_user@test.com',1,NULL,'role_user',NULL,NULL,NULL,'a:0:{}',NULL,0,NULL,NULL);

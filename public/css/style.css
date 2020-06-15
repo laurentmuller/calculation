@@ -381,8 +381,8 @@ span.state-color {
 }
 
 /**
- * Calculation errors (duplicate and empty) 
- */ 
+ * Calculation errors (duplicate and empty)
+ */
 .duplicate-cell:after{
     content: " (D) ";
     color: var(--danger);
@@ -394,39 +394,39 @@ span.state-color {
     color: var(--danger);
     font-size: smaller;
     vertical-align: super;
-}  
+}
 .empty-cell:before {
     content: " (V) ";
-    color: var(--danger);    
+    color: var(--danger);
     font-size: x-small;
     vertical-align: super;
 }
 .empty-footer:before {
     content: " (V) ";
-    color: var(--danger);    
+    color: var(--danger);
     font-size: smaller;
     vertical-align: super;
 }
 .below-cell:before {
     content: "*";
-    color: var(--danger);    
+    color: var(--danger);
 }
 
-textarea.resizable {    
-	min-height: 4rem;
-	max-height: 10rem;
+textarea.resizable {
+    min-height: 4rem;
+    max-height: 10rem;
 }
 
 textarea.fixed {
     resize: none;
-}  
+}
 
 /**
- * Cursors 
+ * Cursors
  */
 .cursor-default {
-	cursor: default !important;
-} 
+    cursor: default !important;
+}
 .cursor-wait {
     cursor: wait !important;
 }
@@ -434,7 +434,7 @@ textarea.fixed {
     cursor: pointer !important;
 }
 .cursor-move {
-	cursor: move !important;
+    cursor: move !important;
 }
 .cursor-not-allowed {
     cursor: not-allowed !important;
@@ -445,7 +445,7 @@ textarea.fixed {
     min-width: 100%;
     border: none;
     pointer-events: none;
-    display: block;    
+    display: block;
     overflow-x:hidden;
     overflow-Y:hidden;
 }
@@ -455,7 +455,7 @@ textarea.fixed {
  */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
-	-webkit-appearance: none;
+    -webkit-appearance: none;
     margin: 0;
 }
 input[type="number"] {
@@ -465,34 +465,34 @@ input[type="number"] {
 /**
  * Remove clear cross for IE/Edge
  */
-::-ms-clear { 
-	display: none;
+::-ms-clear {
+    display: none;
 }
 
 /**
  * Remove red cross for invalid field
  */
 .was-validated .form-control:invalid, .form-control.is-invalid {
-	background-image: none;
-	padding-right: 0.75rem;
+    background-image: none;
+    padding-right: 0.75rem;
 }
 /**
  * Remove green cross for valid field
  */
-.was-validated .custom-select:valid, .custom-select.is-valid {	
-	background-image: none;
-	padding-right: 1.75rem;
+.was-validated .custom-select:valid, .custom-select.is-valid {
+    background-image: none;
+    padding-right: 1.75rem;
 }
 
- 
+
 /**
  * Custom file input
  */
 .custom-file-input:lang(fr) ~ .custom-file-label::after {
-  	content: "Parcourir";
+    content: "Parcourir";
 }
 .custom-file-input {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 /**
@@ -500,7 +500,7 @@ input[type="number"] {
  */
 body {
     margin-bottom: 20px;
-} 
+}
 .footer {
     left: 0;
     bottom: 0;
@@ -509,21 +509,21 @@ body {
     margin-bottom: 0;
     position: fixed;
     z-index: 501;
-       
+
     color: var(--white);
     background-color: var(--gray);
-    
+
     font-size: 0.8rem;
     text-align: right;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;    
+    text-overflow: ellipsis;
 }
 .footer a {
     color: var(--white);
 }
 .footer ul {
-    list-style: none;   
+    list-style: none;
 }
 .footer li {
     display: inline;
@@ -554,7 +554,7 @@ body {
  * bootstrap-select (color picker)
  */
 span.color-value {
-    width: 1.5rem; 
+    width: 1.5rem;
     height: 1rem;
     display: inline-block;
     vertical-align: middle;
@@ -565,12 +565,12 @@ span.color-value {
     color: initial !important;
 }
 .bootstrap-select .dropdown-menu li a {
-    padding-left: 0.5rem;    
+    padding-left: 0.5rem;
 }
 
 /**
  * color-picker
- */ 
+ */
 .color-picker .color-palette {
     display: table;
     white-space: nowrap;
@@ -600,10 +600,10 @@ span.color-value {
     padding-bottom: 0.3rem;
     padding-top: 0.3rem;
     text-align: left;
-    color: inherit;    
+    color: inherit;
 }
-.color-picker.dropdown.form-control .dropdown-toggle::after {    
-    margin-top: 0.5rem;    
+.color-picker.dropdown.form-control .dropdown-toggle::after {
+    margin-top: 0.5rem;
 }
 .color-picker .drowpdown-color {
     height: 1rem;
@@ -651,7 +651,7 @@ span.color-value {
 }
 .form-control-border-right-0:focus {
     border-right-width: 1px !important;
-} 
+}
 
 /**
  * Calculation overall margin tooltip
@@ -687,11 +687,11 @@ span.color-value {
  * popover for calendar and cross-table
  */
 .popover {
-	max-width: 100%;
+    max-width: 100%;
 }
 .table-popover tr:first-child td,
 .table-popover tr:first-child th {
-	border-top-style: hidden;
+    border-top-style: hidden;
 }
 
 /**
@@ -704,16 +704,16 @@ span.color-value {
             box-shadow: inset !important;
 }
 .context-menu-separator {
-  	padding: 0 !important;
-  	border-bottom-style: hidden !important;
+    padding: 0 !important;
+    border-bottom-style: hidden !important;
 }
 .context-menu-icon.context-menu-icon--fa5 i,
 .context-menu-icon.context-menu-icon--fa5 svg {
-	position: inherit !important;
-	color: inherit !important;
-	top: inherit !important;
-	left: inherit !important;
-	margin-right: 0.3rem;
+    position: inherit !important;
+    color: inherit !important;
+    top: inherit !important;
+    left: inherit !important;
+    margin-right: 0.3rem;
 }
 
 /**
@@ -728,7 +728,7 @@ span.color-value {
 .table-edit .table-primary thead th,
 .table-edit .table-primary tbody + tbody {
     border-color: transparent !important
-}  
+}
 
 .dataTable .table-primary *,
 .table-edit .table-primary * {

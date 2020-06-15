@@ -2,53 +2,53 @@
 
 /**! compression tag for ftp-deployment */
 
-/* th.date,*/ 
+/* th.date,*/
 td.date {
     width: 170px;
    /* padding-left: 0.5rem !important;*/
 }
- 
-th.channel, 
+
+th.channel,
 td.channel {
     width: 100px;
     white-space: nowrap;
 }
- 
-th.level, 
+
+th.level,
 td.level {
     width: 90px;
     white-space: nowrap;
 }
- 
+
 td.message {
     /*word-wrap: break-word;*/
 }
- 
+
 td.debug {
     -webkit-box-shadow: inset 5px 0 var(--secondary);
        -moz-box-shadow: inset 5px 0 var(--secondary);
          -o-box-shadow: inset 5px 0 var(--secondary);
             box-shadow: inset 5px 0 var(--secondary);
 }
- 
-td.info, 
+
+td.info,
 td.notice {
     -webkit-box-shadow: inset 5px 0 var(--info);
        -moz-box-shadow: inset 5px 0 var(--info);
          -o-box-shadow: inset 5px 0 var(--info);
             box-shadow: inset 5px 0 var(--info);
 }
- 
+
 td.warning {
     -webkit-box-shadow: inset 5px 0 var(--warning);
        -moz-box-shadow: inset 5px 0 var(--warning);
          -o-box-shadow: inset 5px 0 var(--warning);
             box-shadow: inset 5px 0 var(--warning);
 }
- 
-td.error, 
-td.critical, 
-td.alert, 
+
+td.error,
+td.critical,
+td.alert,
 td.emergency {
     -webkit-box-shadow: inset 5px 0 var(--danger);
        -moz-box-shadow: inset 5px 0 var(--danger);

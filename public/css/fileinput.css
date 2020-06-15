@@ -3,42 +3,42 @@
 /**! compression tag for ftp-deployment */
 
 .btn-file {
-	position: relative;
-	overflow: hidden;
-	vertical-align: middle;
+    position: relative;
+    overflow: hidden;
+    vertical-align: middle;
 }
 
 .btn-file>input {
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	font-size: 23px;
-	cursor: pointer;
-	filter: alpha(opacity = 0);
-	opacity: 0;
-	direction: ltr;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font-size: 23px;
+    cursor: pointer;
+    filter: alpha(opacity = 0);
+    opacity: 0;
+    direction: ltr;
 }
 
 .btn-file>input::-webkit-file-upload-button {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .fileinput {
-	display: inline-block;
-	max-width: 100vw;
+    display: inline-block;
+    max-width: 100vw;
 }
 
 .fileinput .form-control {
-	display: inline-block;
-	padding-top: 7px;
-	padding-bottom: 5px;
-	margin-bottom: 0;
-	vertical-align: middle;
-	cursor: pointer;
-	border: 0;
+    display: inline-block;
+    padding-top: 7px;
+    padding-bottom: 5px;
+    margin-bottom: 0;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 0;
 }
 .fileinput .img-thumbnail {
     display: inline-block;
@@ -54,73 +54,73 @@
     display: inline-block;
     max-width: 100%;
     max-height: 100%;
-    line-height: 1.5;        
+    line-height: 1.5;
     margin-right: auto;
     margin-left: auto;
     vertical-align: middle;
 }
 
 .fileinput .btn {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 .fileinput .form-group {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 .fileinput .form-group .fileinput-filename {
-	width: 90%;
-	width: calc(100% - 20px);
+    width: 90%;
+    width: calc(100% - 20px);
 }
 
 .fileinput-exists .fileinput-new,
 .fileinput-new .fileinput-exists {
-	display: none;
+    display: none;
 }
 
 .fileinput-exists.close {
-	float: none;
+    float: none;
 }
 
 .fileinput-inline .fileinput-controls {
-	display: inline;
+    display: inline;
 }
 
 .fileinput-filename {
-	display: inline-block;
-	max-width: 65%;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	vertical-align: middle;
+    display: inline-block;
+    max-width: 65%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
 }
 
 .form-control .fileinput-filename {
-	position: absolute;
-	left: 0;
-	width: 100%;
-	max-width: 100%;
-	padding-left: 10px;
-	white-space: nowrap;
-	vertical-align: bottom;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    padding-left: 10px;
+    white-space: nowrap;
+    vertical-align: bottom;
 }
 
 .form-control .fileinput-filename.with-icon {
-	padding-left: 30px;
+    padding-left: 30px;
 }
 
 .fileinput.input-group {
-	display: flex;
+    display: flex;
 }
 
 .fileinput.input-group>* {
-	position: relative;
-	z-index: 2;
+    position: relative;
+    z-index: 2;
 }
 
 .fileinput.input-group>.btn-file {
-	z-index: 1;
-} 
+    z-index: 1;
+}
 
 .fileinput .input-group-append span {
     border-top: inherit;
@@ -131,8 +131,8 @@
 }
 
 .fileinput .input-group-append .input-group-text:hover {
-	cursor: pointer;
-	/*background: var(--light);*/
+    cursor: pointer;
+    /*background: var(--light);*/
 }
 
 .fileinput .fileinput-preview {
@@ -140,29 +140,29 @@
 }
 
 .form-group.has-warning .fileinput .fileinput-preview {
-	color: var(--warning);
+    color: var(--warning);
 }
 
 .form-group.has-warning .fileinput .img-thumbnail {
-	border-color: var(--warning);
+    border-color: var(--warning);
 }
 
 .form-group.has-error .fileinput .fileinput-preview {
-	color: var(--danger);
+    color: var(--danger);
 }
 
 .form-group.has-error .fileinput .img-thumbnail {
-	border-color: var(--danger);
+    border-color: var(--danger);
 }
 
 .form-group.has-success .fileinput .fileinput-preview {
-	color: var(--success);
+    color: var(--success);
 }
 
 .form-group.has-success .fileinput .img-thumbnail {
-	border-color: var(--success);
+    border-color: var(--success);
 }
 
-.input-group-addon:not (:first-child ) {
-	border-left: 0;
+.input-group-addon:not(:first-child ) {
+    border-left: 0;
 }

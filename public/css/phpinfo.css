@@ -5,7 +5,7 @@
 .phpversion table {
     margin-bottom: 0;
 }
- 
+
 .phpversion td {
     -ms-word-break: break-word;
         word-break: break-word;
@@ -14,31 +14,31 @@
             hyphens: auto;
     font-size: 14px;
 }
- 
+
 .phpversion td.e {
     width: 30%;
 }
- 
+
 .phpversion td.f {
     width: 10%;
 }
- 
-.phpversion td>p {
+
+.phpversion td > p {
     margin-bottom: 5px;
 }
- 
+
 .phpversion h1 {
     font-weight: bold;
     font-size: 22px;
     margin-bottom: 0;
 }
- 
+
 .phpversion h2 {
     font-weight: bold;
     font-size: 18px;
     margin-bottom: 0;
 }
- 
+
 @media print {
     a {
         font: inherit;

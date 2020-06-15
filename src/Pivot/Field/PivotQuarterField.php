@@ -90,19 +90,18 @@ class PivotQuarterField extends PivotDateField
     {
         if (\is_callable($this->formatter)) {
             return \call_user_func($this->formatter, $quarter);
-        } else {
-            switch ($quarter) {
-                case 1:
-                    return '1st quarter';
-                case 2:
-                    return '2nd quarter';
-                case 3:
-                    return '3rd quarter';
-                case 4:
-                    return '4th quarter';
-                default:
-                    return (string) $quarter;
-            }
+        }
+        switch ($quarter) {
+            case 1:
+                return '1st quarter';
+            case 2:
+                return '2nd quarter';
+            case 3:
+                return '3rd quarter';
+            case 4:
+                return '4th quarter';
+            default:
+                return (string) $quarter;
         }
     }
 }

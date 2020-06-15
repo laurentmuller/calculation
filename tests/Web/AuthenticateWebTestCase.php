@@ -47,7 +47,8 @@ abstract class AuthenticateWebTestCase extends WebTestCase
     protected function doEcho(string $name, $value, bool $newLine = false): void
     {
         if ($this->debug) {
-            echo \sprintf("\n%-15s: %s" . ($newLine ? "\n" : '') , $name, $value);
+            $format = "\n%-15s: %s" . ($newLine ? "\n" : '');
+            echo \sprintf($format, $name, $value);
         }
     }
 

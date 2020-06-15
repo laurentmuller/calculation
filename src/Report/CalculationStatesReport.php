@@ -36,18 +36,18 @@ class CalculationStatesReport extends BaseReport implements PdfCellListenerInter
     use PdfCellListenerTrait;
 
     /**
-     * The calculation states to render.
-     *
-     * @var \App\Entity\CalculationState[]
-     */
-    protected $states;
-
-    /**
      * The started page.
      *
      * @var bool
      */
-    private $started;
+    private $started = false;
+
+    /**
+     * The calculation states to render.
+     *
+     * @var CalculationState[]
+     */
+    private $states;
 
     /**
      * Constructor.

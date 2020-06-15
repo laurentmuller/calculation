@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Utils\Utils;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Trait to write output messages.
@@ -32,11 +32,11 @@ trait LoggerTrait
     protected $installerName;
 
     /**
-     * The output to write messages.
+     * The symfony style.
      *
-     * @var OutputInterface
+     * @var SymfonyStyle
      */
-    protected $output;
+    protected $io;
 
     /**
      * Concat this installer name and the message.
@@ -65,23 +65,23 @@ trait LoggerTrait
     }
 
     /**
-     * Returns if the verbose is enabled.
+     * Returns whether verbosity is verbose (-v).
      *
-     * @return bool true if verbose
+     * @return bool true if verbosity is set to VERBOSITY_VERBOSE, false otherwise
      */
     protected function isVerbose(): bool
     {
-        return $this->isOutput() && $this->output->isVerbose();
+        return $this->io && $this->io->isVerbose();
     }
 
     /**
-     * Returns if the very verbose is enabled.
+     * Returns whether verbosity is very verbose (-vv).
      *
-     * @return bool true if very verbose
+     * @return bool true if verbosity is set to VERBOSITY_VERY_VERBOSE, false otherwise
      */
     protected function isVeryVerbose(): bool
     {
-        return $this->isOutput() && $this->output->isVeryVerbose();
+        return $this->io && $this->io->isVeryVerbose();
     }
 
     /**
@@ -102,9 +102,9 @@ trait LoggerTrait
      */
     protected function write(string $message, string $tag = 'info'): void
     {
-        if ($this->isOutput()) {
+        if ($this->io) {
             $concat = $this->concat($message);
-            $this->output->writeln("<$tag>$concat</$tag>");
+            $this->io->writeln("<$tag>$concat</$tag>");
         }
     }
 
@@ -115,18 +115,48 @@ trait LoggerTrait
      */
     protected function writeError(string $message): void
     {
-        $this->write($message, 'error');
+        if ($this->io) {
+            $concat = $this->concat($message);
+            $this->io->error($concat);
+        }
+    }
+
+    /**
+     * Writes the given error message.
+     *
+     * @param string $message the message to write
+     */
+    protected function writeNote(string $message): void
+    {
+        if ($this->io) {
+            $concat = $this->concat($message);
+            $this->io->note($concat);
+        }
+    }
+
+    /**
+     * Writes the given success message.
+     *
+     * @param string $message the message to write
+     */
+    protected function writeSuccess(string $message): void
+    {
+        if ($this->io) {
+            $concat = $this->concat($message);
+            $this->io->success($concat);
+        }
     }
 
     /**
      * Writes the given message.
      *
      * @param string $message the message to write
+     * @param string $tag     the external tag (info, error, etc)
      */
-    protected function writeVerbose(string $message): void
+    protected function writeVerbose(string $message, string $tag = 'info'): void
     {
         if ($this->isVerbose()) {
-            $this->write($message);
+            $this->write($message, $tag);
         }
     }
 
@@ -134,21 +164,12 @@ trait LoggerTrait
      * Writes the given message.
      *
      * @param string $message the message to write
+     * @param string $tag     the external tag (info, error, etc)
      */
-    protected function writeVeryVerbose(string $message): void
+    protected function writeVeryVerbose(string $message, string $tag = 'info'): void
     {
         if ($this->isVeryVerbose()) {
-            $this->write($message);
+            $this->write($message, $tag);
         }
-    }
-
-    /**
-     * Returns if this output is not null.
-     *
-     * @return bool true if not null
-     */
-    private function isOutput(): bool
-    {
-        return null !== $this->output;
     }
 }

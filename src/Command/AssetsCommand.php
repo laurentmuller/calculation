@@ -17,6 +17,7 @@ namespace App\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Abstrac command for assets.
@@ -40,7 +41,7 @@ abstract class AssetsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // to output messages
-        $this->output = $output;
+        $this->io = new SymfonyStyle($input, $output);
 
         // delegate to subclass
         return $this->doExecute($input, $output);

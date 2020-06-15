@@ -31,6 +31,8 @@ calculation:
         panel_items: Articles
         panel_resume: Résumé
         delete_group: Supprimer le groupe
+        sort_group: Trier les articles
+        sort_items: Trier tous les articles
         add_item: Ajouter un article
         edit_item: Modifier l'article
         delete_item: Supprimer l'article

@@ -351,11 +351,7 @@ class PdfTableBuilder implements PdfConstantsInterface
      */
     public function getHeaderStyle(): PdfStyle
     {
-        if ($this->headerStyle) {
-            return $this->headerStyle;
-        }
-
-        return PdfStyle::getHeaderStyle();
+        return $this->headerStyle ?? PdfStyle::getHeaderStyle();
     }
 
     /**

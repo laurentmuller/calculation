@@ -1,5 +1,5 @@
 {# Macro for a calculation items #}
-{% macro printItemRow(item, first, last, editable) -%}
+{% macro printItemRow(item, editable, first, last) -%}
 {% import 'macros/_icons.html.twig' as icons %}
 <tr>
     {{ form_widget(item.unit) }}
@@ -19,7 +19,6 @@
 	<td class="text-currency">{{ item.total.vars.value|amount }}</td>
     {% if editable %}
 	<td class="actions d-print-none rowlink-skip">
-
 		<div class="dropdown">
 			{%- set menu_id = 'dropdownMenuItem_' ~ item.vars.id -%}
             {{ icons.dropdownEllipsis(menu_id) }}

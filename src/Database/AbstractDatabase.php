@@ -208,7 +208,9 @@ abstract class AbstractDatabase extends \SQLite3
     }
 
     /**
-     * Creates the database schema. This function is called when the database is opened with the <code>SQLITE3_OPEN_CREATE</code> flag.
+     * Creates the database schema.
+     *
+     * This function is called when the database is opened with the <code>SQLITE3_OPEN_CREATE</code> flag.
      */
     abstract protected function createSchema(): void;
 
@@ -235,7 +237,7 @@ abstract class AbstractDatabase extends \SQLite3
     /**
      * Search data.
      * <p>
-     * NB: The SQL query must contain 2 parameters:
+     * <b>NB</b>: The SQL query must contain 2 parameters:
      * <ul>
      * <li>"<code>:value</code>" - The seach parameter.</li>
      * <li>"<code>:limit</code>" - The limit parameter.</li>
@@ -254,13 +256,15 @@ abstract class AbstractDatabase extends \SQLite3
         $value = "%{$value}%";
 
         // create statement
+        /** @var \SQLite3Stmt $stmt */
+        //$stmt = $this->getStatement($query);
         $stmt = $this->prepare($query);
         $stmt->bindParam(':value', $value, SQLITE3_TEXT);
         $stmt->bindParam(':limit', $limit, SQLITE3_INTEGER);
 
         // execute
         $rows = [];
-        if (false !== $result = $stmt->execute()) {
+        if ($result = $stmt->execute()) {
             //fetch
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
                 $rows[] = $row;

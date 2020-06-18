@@ -64,19 +64,19 @@ class CustomerType extends BaseType
             ->addTextType();
 
         $helper->field('address')
-            ->autocomplete('off')
+            ->autocomplete('disabled')
             ->maxLength(255)
             ->notRequired()
             ->addTextareaType();
 
         $helper->field('zipCode')
-            ->autocomplete('off')
+            ->autocomplete('disabled')
             ->maxLength(10)
             ->notRequired()
             ->addTextType();
 
         $helper->field('city')
-            ->autocomplete('off')
+            ->autocomplete('disabled')
             ->maxLength(255)
             ->notRequired()
             ->addTextType();

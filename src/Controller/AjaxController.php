@@ -20,7 +20,6 @@ use App\Repository\ProductRepository;
 use App\Service\CalculationService;
 use App\Service\CaptchaImageService;
 use App\Service\FakerService;
-use App\Service\OpenWeatherService;
 use App\Service\SwissPostService;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
@@ -435,71 +434,6 @@ class AjaxController extends BaseController
         $languages = $service->getLanguages();
 
         return $this->json($languages);
-    }
-
-    /**
-     * Returns current conditions data for a specific location.
-     *
-     * @Route("/openweather/current", name="ajax_openweather_current")
-     * @IsGranted("ROLE_USER")
-     */
-    public function openweatherCurrent(Request $request, OpenWeatherService $service): JsonResponse
-    {
-        try {
-            //Fribourg: 2660718
-            $cityId = (int) $request->get('cityId', 0);
-            $units = $request->get('units', OpenWeatherService::UNIT_METRIC);
-            if (false === $response = $service->current($cityId, $units)) {
-                $response = $service->getLastError();
-            }
-
-            return $this->json($response);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
-    }
-
-    /**
-     * Forecaste conditions data for a specific location.
-     *
-     * @Route("/openweather/forecast", name="ajax_openweather_forecast")
-     * @IsGranted("ROLE_USER")
-     */
-    public function openweatherForecast(Request $request, OpenWeatherService $service): JsonResponse
-    {
-        try {
-            $cityId = (int) $request->get('cityId', 0);
-            $count = (int) $request->get('count', -1);
-            $units = $request->get('units', OpenWeatherService::UNIT_METRIC);
-            if (false === $response = $service->forecast($cityId, $count, $units)) {
-                $response = $service->getLastError();
-            }
-
-            return $this->json($response);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
-    }
-
-    /**
-     * Returns information for an array of cities that match the search text.
-     *
-     * @Route("/openweather/search", name="ajax_openweather_search")
-     * @IsGranted("ROLE_USER")
-     */
-    public function openweatherSearch(Request $request, OpenWeatherService $service): JsonResponse
-    {
-        try {
-            $query = (string) $request->get('query');
-            $units = $request->get('units', OpenWeatherService::UNIT_METRIC);
-            if (false === $response = $service->search($query, $units)) {
-                return $this->json($service->getLastError());
-            }
-
-            return $this->json($response);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
     }
 
     /**

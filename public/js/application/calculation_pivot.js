@@ -126,7 +126,6 @@ function togglePopover($source, $selector, save) {
 $(function () {
     'use strict';
     
-    
     // get elements
     const $table = $('#pivot');
     const $popover = $('#popover');

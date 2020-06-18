@@ -15,10 +15,13 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
+use App\Traits\DateFormatterTrait;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Exception\MissingResourceException;
 
 /**
  * Service to get weather from OpenWeatherMap.
@@ -29,20 +32,47 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class OpenWeatherService extends HttpClientService
 {
+    use DateFormatterTrait;
+
     /**
      * The database name.
      */
     public const DATABASE_NAME = 'openweather.sqlite';
 
     /**
-     * The imperial units.
+     * The imperial degree.
+     */
+    public const DEGREE_IMPERIAL = '°F';
+
+    /**
+     * The metric degree.
+     */
+    public const DEGREE_METRIC = '°C';
+
+    /**
+     * The imperial speed.
+     */
+    public const SPEED_IMPERIAL = 'mph';
+
+    /**
+     * The metric speed.
+     */
+    public const SPEED_METRIC = 'm/s';
+
+    /**
+     * The imperial units parameter value.
      */
     public const UNIT_IMPERIAL = 'imperial';
 
     /**
-     * The metric units.
+     * The metric units parameter value.
      */
     public const UNIT_METRIC = 'metric';
+
+    /**
+     * The country flag URL.
+     */
+    private const COUNTRY_FLAG_URL = 'http://openweathermap.org/images/flags/{0}.png';
 
     /**
      * The relative path to data.
@@ -118,6 +148,44 @@ class OpenWeatherService extends HttpClientService
             return false;
         }
 
+        // update country name and flag
+        if (isset($result['sys']['country'])) {
+            $country = $result['sys']['country'];
+            if ($name = $this->getCountryName($country)) {
+                $result['sys']['country_name'] = $name;
+            }
+            $result['sys']['country_flag'] = $this->getCountryFlag($country);
+        }
+
+        // update dates
+        if (isset($result['dt'])) {
+            $result['dt_formatted'] = $this->localeDateTime($result['dt']);
+        }
+        if (isset($result['sys']['sunrise'])) {
+            $result['sys']['sunrise_formatted'] = $this->localeTime($result['sys']['sunrise']);
+        }
+        if (isset($result['sys']['sunset'])) {
+            $result['sys']['sunset_formatted'] = $this->localeTime($result['sys']['sunset']);
+        }
+
+        // units
+        $result['sys']['degree_unit'] = $this->getDegreeUnit($units);
+        $result['sys']['speed_unit'] = $this->getSpeedUnit($units);
+
+        return $result;
+    }
+
+    /**
+     * Delete all cities.
+     *
+     * @return bool true on success
+     */
+    public function deletCities(): bool
+    {
+        $db = $this->getDatabase();
+        $result = $db->deletCities();
+        $db->close();
+
         return $result;
     }
 
@@ -144,7 +212,42 @@ class OpenWeatherService extends HttpClientService
             return false;
         }
 
+        // update country name
+        if (isset($result['city']['country'])) {
+            $country = $result['city']['country'];
+            if ($name = $this->getCountryName($country)) {
+                $result['city']['country_name'] = $name;
+            }
+            $result['city']['country_flag'] = $this->getCountryFlag($country);
+        }
+
+        // update dates
+        if (isset($result['city']['sunrise'])) {
+            $result['city']['sunrise_formatted'] = $this->localeTime($result['city']['sunrise']);
+        }
+        if (isset($result['city']['sunset'])) {
+            $result['city']['sunset_formatted'] = $this->localeTime($result['city']['sunset']);
+        }
+
+        // units
+        $result['city']['degree_unit'] = $this->getDegreeUnit($units);
+        $result['city']['speed_unit'] = $this->getSpeedUnit($units);
+
+        foreach ($result['list'] as &$data) {
+            if (isset($data['dt'])) {
+                $data['dt_formatted'] = $this->localeDateTime($data['dt']);
+            }
+        }
+
         return $result;
+    }
+
+    /**
+     * Gets the API key.
+     */
+    public function getApiKey(): string
+    {
+        return $this->key;
     }
 
     /**
@@ -168,19 +271,24 @@ class OpenWeatherService extends HttpClientService
     }
 
     /**
-     * Import cities from the given file name.
+     * Import cities from the given source.
      *
-     * @param string $filename the file to read
+     * @param resource|string $source the JSON source to read
      *
      * @return bool true on success
      */
-    public function import(string $filename): bool
+    public function import($source): bool
     {
-        // open
-        if (false === $data = \file_get_contents($filename)) {
-            return false;
+        // get content
+        if (\is_resource($source) && false === $data = \stream_get_contents($source)) {
+            return $this->setLastError(204, 'Unable to read the content.');
+        } elseif (\is_string($source) && false === $data = \file_get_contents($source)) {
+            return $this->setLastError(204, 'Unable to read the content.');
+        } else {
+            return $this->setLastError(204, 'The source must be a resource or a string.');
         }
 
+        // decode
         if (!$decoded = $this->decodeJson($data)) {
             return false;
         }
@@ -232,6 +340,14 @@ class OpenWeatherService extends HttpClientService
         $db = $this->getDatabase(true);
         $result = $db->findCity($query);
         $db->close();
+
+        foreach ($result as &$city) {
+            $country = $city['country'];
+            if ($name = $this->getCountryName($country)) {
+                $city['country_name'] = $name;
+            }
+            $city['country_flag'] = $this->getCountryFlag($country);
+        }
 
         return $result;
     }
@@ -288,7 +404,6 @@ class OpenWeatherService extends HttpClientService
      */
     private function get(string $uri, array $query = [])
     {
-        //try {
         //add key and lang
         $query['appid'] = $this->key;
         $query['lang'] = self::getAcceptLanguage(true);
@@ -310,6 +425,42 @@ class OpenWeatherService extends HttpClientService
         $this->updateIconUrl($result);
 
         return $result;
+    }
+
+    /**
+     * Gets the country flag url.
+     */
+    private function getCountryFlag(string $country): string
+    {
+        return \str_replace('{0}', \strtolower($country), self::COUNTRY_FLAG_URL);
+    }
+
+    /**
+     * Gets the country name from the alpha2 code.
+     */
+    private function getCountryName(string $country): ?string
+    {
+        try {
+            return Countries::getName($country);
+        } catch (MissingResourceException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Gets the degree units.
+     */
+    private function getDegreeUnit(string $units): string
+    {
+        return self::UNIT_METRIC === $units ? self::DEGREE_METRIC : self::DEGREE_IMPERIAL;
+    }
+
+    /**
+     * Gets the speed units.
+     */
+    private function getSpeedUnit(string $units): string
+    {
+        return self::UNIT_METRIC === $units ? self::SPEED_METRIC : self::SPEED_IMPERIAL;
     }
 
     /**

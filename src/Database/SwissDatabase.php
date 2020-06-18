@@ -26,7 +26,7 @@ class SwissDatabase extends AbstractDatabase
      *
      * @var string
      */
-    private static $CREATE_CITY = <<<'sql'
+    private const CREATE_CITY = <<<'sql'
 CREATE TABLE IF NOT EXISTS city (
 	id    INTEGER NOT NULL,
 	zip	  INTEGER NOT NULL,
@@ -41,7 +41,7 @@ sql;
      *
      * @var string
      */
-    private static $CREATE_STATE = <<<'sql'
+    private const CREATE_STATE = <<<'sql'
 CREATE TABLE "state" (
 	id	    TEXT NOT NULL,
 	name	TEXT NOT NULL,
@@ -54,7 +54,7 @@ sql;
      *
      * @var string
      */
-    private static $CREATE_STREET = <<<'sql'
+    private const CREATE_STREET = <<<'sql'
 CREATE TABLE IF NOT EXISTS street (
 	city_id INTEGER NOT NULL,
 	name    TEXT NOT NULL,
@@ -67,7 +67,7 @@ sql;
      *
      * @var string
      */
-    private static $INSERT_CITY = <<<'sql'
+    private const INSERT_CITY = <<<'sql'
 INSERT INTO city(id, zip, name, state)
     VALUES(:id, :zip, :name, :state)
 sql;
@@ -77,7 +77,7 @@ sql;
      *
      * @var string
      */
-    private static $INSERT_STATE = <<<'sql'
+    private const INSERT_STATE = <<<'sql'
 INSERT INTO state(id, name)
     VALUES(:id, :name)
 sql;
@@ -87,7 +87,7 @@ sql;
      *
      * @var string
      */
-    private static $INSERT_STREET = <<<'sql'
+    private const INSERT_STREET = <<<'sql'
 INSERT INTO street(city_id, name)
     VALUES(:city_id, :name)
 sql;
@@ -97,7 +97,7 @@ sql;
      *
      * @var string
      */
-    private static $SEARCH_CITY = <<<'sql'
+    private const SEARCH_CITY = <<<'sql'
 SELECT
     name,
 	zip,
@@ -116,7 +116,7 @@ sql;
      *
      * @var string
      */
-    private static $SEARCH_STREET = <<<'sql'
+    private const SEARCH_STREET = <<<'sql'
 SELECT
     street.name as street,
     city.zip,
@@ -138,7 +138,7 @@ sql;
      *
      * @var string
      */
-    private static $SEARCH_ZIP = <<<'sql'
+    private const SEARCH_ZIP = <<<'sql'
 SELECT
     zip,
     name,
@@ -162,7 +162,7 @@ sql;
      */
     public function findCity(string $city, int $limit = 25): array
     {
-        return $this->search(self::$SEARCH_CITY, $city, $limit);
+        return $this->search(self::SEARCH_CITY, $city, $limit);
     }
 
     /**
@@ -175,7 +175,7 @@ sql;
      */
     public function findStreet(string $street, int $limit = 25): array
     {
-        return $this->search(self::$SEARCH_STREET, $street, $limit);
+        return $this->search(self::SEARCH_STREET, $street, $limit);
     }
 
     /**
@@ -188,7 +188,7 @@ sql;
      */
     public function findZip(string $zip, int $limit = 25): array
     {
-        return $this->search(self::$SEARCH_ZIP, $zip, $limit);
+        return $this->search(self::SEARCH_ZIP, $zip, $limit);
     }
 
     /**
@@ -218,7 +218,7 @@ sql;
     public function insertCity(array $data): bool
     {
         /** @var \SQLite3Stmt $stmt */
-        $stmt = $this->getStatement(self::$INSERT_CITY);
+        $stmt = $this->getStatement(self::INSERT_CITY);
 
         // parameters
         $stmt->bindParam(':id', $data[0], SQLITE3_INTEGER);
@@ -251,7 +251,7 @@ sql;
     public function insertState(array $data): bool
     {
         /** @var \SQLite3Stmt $stmt */
-        $stmt = $this->getStatement(self::$INSERT_STATE);
+        $stmt = $this->getStatement(self::INSERT_STATE);
 
         // parameters
         $stmt->bindParam(':id', $data[0], SQLITE3_TEXT);
@@ -282,7 +282,7 @@ sql;
     public function insertStreet(array $data): bool
     {
         /** @var \SQLite3Stmt $stmt */
-        $stmt = $this->getStatement(self::$INSERT_STREET);
+        $stmt = $this->getStatement(self::INSERT_STREET);
 
         // parameters
         $stmt->bindParam(':city_id', $data[0], SQLITE3_INTEGER);
@@ -298,9 +298,9 @@ sql;
     protected function createSchema(): void
     {
         // tables
-        $this->exec(self::$CREATE_STATE);
-        $this->exec(self::$CREATE_CITY);
-        $this->exec(self::$CREATE_STREET);
+        $this->exec(self::CREATE_STATE);
+        $this->exec(self::CREATE_CITY);
+        $this->exec(self::CREATE_STREET);
 
         // indexes
         $this->createIndex('city', 'name');

@@ -53,17 +53,6 @@ class RoutesTest extends AuthenticateWebTestCase
         ];
     }
 
-    public function getUsers(): array
-    {
-        return [
-            [self::ROLE_USER, true],
-            [self::ROLE_ADMIN, true],
-            [self::ROLE_SUPER_ADMIN, true],
-            [self::ROLE_DISABLED, true],
-            [self::ROLE_FAKE, false],
-        ];
-    }
-
     /**
      * @dataProvider getRoutes
      */
@@ -80,18 +69,5 @@ class RoutesTest extends AuthenticateWebTestCase
         $this->doEcho('StatusCode', "$expected => $statusCode", true);
 
         $this->assertSame($expected, $statusCode, "Invalid status code for '{$url}' with the user '{$user}'.");
-    }
-
-    /**
-     * @dataProvider getUsers
-     */
-    public function testUsers(string $username, bool $exist): void
-    {
-        $user = $this->loadUser($username, false);
-        if ($exist) {
-            $this->assertNotNull($user, "The user '$username' is null.");
-        } else {
-            $this->assertNull($user, "The user '$username' is not null.");
-        }
     }
 }

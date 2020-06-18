@@ -38,6 +38,9 @@ abstract class AuthenticateWebTestCase extends WebTestCase
     protected $client = null;
     protected $debug = false;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->client = static::createClient();

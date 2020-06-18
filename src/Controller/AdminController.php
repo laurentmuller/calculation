@@ -133,8 +133,7 @@ class AdminController extends BaseController
         $constraints = new File([
             'mimeTypes' => ['application/zip', 'application/x-zip-compressed'],
             'mimeTypesMessage' => $this->trans('import.error.mime_type'),
-        ]
-        );
+        ]);
 
         // fields
         $helper->field('file')

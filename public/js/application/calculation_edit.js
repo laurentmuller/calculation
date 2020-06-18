@@ -171,8 +171,8 @@ var MoveRowHandler = {
     moveLast: function ($row) {
         'use strict';
 
-        const count = $row.siblings().length;
         const index = $row.index();
+        const count = $row.siblings().length;
         if (index < count && $row.next()) {
             const $target = $row.siblings(':last');
             return this.move($row, $target, false);
@@ -210,8 +210,8 @@ var MoveRowHandler = {
     moveDown: function ($row) {
         'use strict';
 
-        const count = $row.siblings().length;
         const index = $row.index();
+        const count = $row.siblings().length;        
         if (index < count && $row.next()) {
             const $target = $row.next();
             return this.move($row, $target, false);
@@ -372,6 +372,12 @@ var Application = {
             that.showAddDialog($(this));
         });
 
+        // sort items button
+        $('.btn-sort-items').on('click', function (e) {
+            e.preventDefault();
+            that.sortItems();
+        });
+
         // data table buttons
         $('#data-table-edit').on('click', '.btn-add-item', function (e) {
             e.preventDefault();
@@ -385,6 +391,9 @@ var Application = {
         }).on('click', '.btn-delete-group', function (e) {
             e.preventDefault();
             that.removeGroup($(this));
+        }).on('click', '.btn-sort-group', function (e) {
+            e.preventDefault();
+            that.sortGroupItems($(this));
         });
 
         return that;
@@ -461,6 +470,9 @@ var Application = {
                 $row.find('.btn-last-item').updateClass('d-none', hideDown);
                 $row.find('.dropdown-divider:first').updateClass('d-none', hideUp && hideDown);
             });
+
+            const $sortGroup = $body.find('.btn-sort-group');
+            $sortGroup.updateClass('d-none', $rows.length === 1);
         });
 
         return this;
@@ -569,6 +581,7 @@ var Application = {
         $('#data-table-edit a.btn-edit-item').removeClass('btn-edit-item');
         $('#data-table-edit a.btn-delete-item').removeClass('btn-delete-item');
         $('#data-table-edit a.btn-delete-group').removeClass('btn-delete-group');
+        $('#data-table-edit a.btn-sort-group').removeClass('btn-sort-group');
 
         // $('#item_delete_button').remove();
         $('#data-table-edit div.dropdown').fadeOut();
@@ -640,7 +653,69 @@ var Application = {
     },
 
     /**
-     * Sort groups by category name.
+     * Sort all items.
+     */
+    sortItems: function () {
+        'use strict';
+
+        const that = this;
+        $('#data-table-edit tbody').each(function () {
+            that.sortGroupItems($(this));
+        });
+
+        return that;
+    },
+
+    /**
+     * Sort items of a group.
+     * 
+     * @param {JQuery}
+     *            $element - the caller element (button or tbody).
+     */
+    sortGroupItems: function ($element) {
+        'use strict';
+
+        // get rows
+        const that = this;
+        const $tbody = $element.closest('tbody');
+        const $rows = $tbody.find('tr:not(:first)');
+        if ($rows.length < 2) {
+            return that;
+        }
+
+        // save identifiers
+        const identifiers = $rows.map(function() {
+            return $(this).getInputIndex();
+        });
+        
+        // sort
+        $rows.sort(function (a, b) {
+            const textA = $('td:first', a).text();
+            const textB = $('td:first', b).text();
+            return textA.localeCompare(textB);
+        }).appendTo($tbody);
+        
+        // update identifiers
+        for(let i =0, len = $rows.length; i < len; i++) {
+            const $row = $($rows[i]);
+            const oldId = $row.getInputIndex();
+            const newId = identifiers[i];
+            if (oldId !== newId) {
+                const $previousRow = $rows.filter(function() {
+                    return newId === $(this).getInputIndex();
+                });
+                if ($previousRow.length) {
+                    $previousRow.swapIdAndNames($row);
+                }
+            }
+        }
+        
+        // update UI
+        return that.updateUpDownButton().initDragDrop(true);
+    },
+
+    /**
+     * Sort groups by name.
      */
     sortGroups: function () {
         'use strict';
@@ -943,6 +1018,29 @@ var Application = {
 $.fn.extend({
 
     /**
+     * Gets the index of the item input.
+     * 
+     * @returns {int} - the index, if found; -1 otherwise.
+     */
+    getInputIndex() {
+        'use strict';
+        const $input = $(this).find('input:first');
+        if ($input.length) {
+            // Example: calculation_groups_0_items_0_unit
+            const attr = $input.attr('id');
+            const regex = /([\d+])(?!.*\d+)/g;
+            const found = attr.match(regex);
+            if (found && found.length) {
+                const id = Number.parseInt(found[0], 10);
+                if (!Number.isNaN(id)) {
+                    return id;    
+                }
+            }
+        }
+        return -1;
+    },
+    
+    /**
      * Swap id and name input attributes.
      * 
      * @param {JQuery}
@@ -979,7 +1077,7 @@ $.fn.extend({
 
         return $source;
     },
-
+    
     /**
      * Finds an input element that have the name attribute within a given
      * substring.
@@ -1008,7 +1106,7 @@ $.fn.extend({
         'use strict';
 
         const $element = $(this);
-        $element.fadeOut(400, function () { // 400
+        $element.fadeOut(400, function () {
             $element.remove();
             if ($.isFunction(callback)) {
                 callback();

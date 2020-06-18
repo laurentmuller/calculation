@@ -2,8 +2,7 @@
 {% macro printGroupRow(group, editable) -%}
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'calculation/_macro_items.html.twig' as macroItems %}
-
-<tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ macroItems.printItemRow(group.items.vars.prototype, false, false, editable)|e }}"{% endif -%}>
+<tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ macroItems.printItemRow(group.items.vars.prototype, editable, false, false)|e }}"{% endif -%}>
 	<tr class="drag-skip">
         {{ form_widget(group.categoryId) }}
         {{ form_widget(group.code) }}
@@ -16,6 +15,7 @@
                 {{ icons.dropdownEllipsis(menu_id) }}
       			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
                     {{ icons.dropdownItemWithClass('#', 'calculation.edit.delete_group', 'times', 'btn-delete-group') }}
+                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.sort_group', 'sort-alpha-up', 'btn-sort-group', group.items.count <= 1) }}
                     {{ icons.dropdownSeparator() }}
                     {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_item', 'file far', 'btn-add-item') }}
       			</div>
@@ -24,7 +24,7 @@
         {%- endif %}
     </tr>
 	{% for item in group.items %}
-	    {{ macroItems.printItemRow(item, loop.first, loop.last, editable) }}
+	    {{ macroItems.printItemRow(item, editable, loop.first, loop.last) }}
 	{% endfor %}
 </tbody>
 {%- endmacro %}

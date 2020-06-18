@@ -677,10 +677,7 @@ span.color-value {
     content: "";
     flex: 1 1;
     border-bottom: 1px solid #ced4da;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-right: auto;
-    margin-left: 0.5rem;
+    margin: auto auto auto 0.5rem;
 }
 
 /**

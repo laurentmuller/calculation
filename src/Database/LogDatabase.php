@@ -30,7 +30,7 @@ class LogDatabase extends AbstractDatabase
      *
      * @var string
      */
-    private static $SQL_CREATE = <<<'sql'
+    private const SQL_CREATE = <<<'sql'
 CREATE TABLE "sy_Log" (
 	id	       INTEGER NOT NULL,
     created_at INTEGER NOT NULL,
@@ -48,7 +48,7 @@ sql;
      *
      * @var string
      */
-    private static $SQL_INSERT = <<<'sql'
+    private const SQL_INSERT = <<<'sql'
 INSERT INTO sy_Log(id, created_at, channel, level, message, context, extra)
     VALUES(:id, :created_at, :channel, :level, :message, :context, :extra)
 sql;
@@ -63,7 +63,7 @@ sql;
     public function insertLog(Log $log): bool
     {
         /** @var \SQLite3Stmt $stmt */
-        $stmt = $this->getStatement(self::$SQL_INSERT);
+        $stmt = $this->getStatement(self::SQL_INSERT);
 
         // parameters
         $stmt->bindParam(':id', $log->getId(), SQLITE3_INTEGER);
@@ -83,7 +83,7 @@ sql;
      */
     protected function createSchema(): void
     {
-        $this->exec(self::$SQL_CREATE);
+        $this->exec(self::SQL_CREATE);
     }
 
     /**
@@ -107,7 +107,7 @@ sql;
      */
     private function dateToInt(?\DateTime $date): int
     {
-        $date = $date ?? new \DateTime();
+        $date ??= new \DateTime();
 
         return $date->getTimestamp();
     }

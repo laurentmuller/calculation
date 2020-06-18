@@ -26,7 +26,7 @@ class OpenWeatherDatabase extends AbstractDatabase
      *
      * @var string
      */
-    private static $CREATE_CITY = <<<'sql'
+    private const CREATE_CITY = <<<'sql'
 CREATE TABLE city (
 	id	      INTEGER NOT NULL,
 	name	  TEXT NOT NULL,
@@ -38,11 +38,18 @@ CREATE TABLE city (
 sql;
 
     /**
+     * SQL statement to delete cities.
+     *
+     * @var string
+     */
+    private const DELETE_CITIES = 'DELETE FROM city';
+
+    /**
      * SQL statement to add a city into the table.
      *
      * @var string
      */
-    private static $INSERT_CITY = <<<'sql'
+    private const INSERT_CITY = <<<'sql'
 INSERT INTO city(id, name, country, latitude, longitude)
     VALUES(:id, :name, :country, :latitude, :longitude)
 sql;
@@ -52,7 +59,7 @@ sql;
      *
      * @var string
      */
-    private static $SEARCH_CITY = <<<'sql'
+    private const SEARCH_CITY = <<<'sql'
 SELECT
     id,
     name,
@@ -65,6 +72,16 @@ LIMIT :limit
 sql;
 
     /**
+     * Delete all cities.
+     *
+     * @return bool true on success
+     */
+    public function deletCities(): bool
+    {
+        return $this->exec(self::DELETE_CITIES);
+    }
+
+    /**
      * Finds cities by name.
      *
      * @param string $name  the name to search for
@@ -74,7 +91,7 @@ sql;
      */
     public function findCity(string $name, int $limit = 25): array
     {
-        return $this->search(self::$SEARCH_CITY, $name, $limit);
+        return $this->search(self::SEARCH_CITY, $name, $limit);
     }
 
     /**
@@ -107,7 +124,7 @@ sql;
     public function insertCity(array $data): bool
     {
         /** @var \SQLite3Stmt $stmt */
-        $stmt = $this->getStatement(self::$INSERT_CITY);
+        $stmt = $this->getStatement(self::INSERT_CITY);
 
         // parameters
         $stmt->bindParam(':id', $data[0], SQLITE3_INTEGER);
@@ -126,7 +143,7 @@ sql;
     protected function createSchema(): void
     {
         // table
-        $this->exec(self::$CREATE_CITY);
+        $this->exec(self::CREATE_CITY);
 
         // index
         $this->createIndex('city', 'name');

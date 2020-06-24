@@ -48,11 +48,6 @@ class OpenWeatherController extends BaseController
     private const KEY_CITY_ID = 'openweather.cityId';
 
     /**
-     * The key to save/load the count within the session.
-     */
-    private const KEY_COUNT = 'openweather.count';
-
-    /**
      * The key to save/load the limit within the session.
      */
     private const KEY_LIMIT = 'openweather.limit';
@@ -504,14 +499,6 @@ class OpenWeatherController extends BaseController
     {
         $session = $request->getSession();
         $value = (int) $session->get(self::KEY_CITY_ID, $this->getRequestCityId($request));
-
-        return $value;
-    }
-
-    private function getSessionCount(Request $request, int $default = -1): int
-    {
-        $session = $request->getSession();
-        $value = (int) $session->get(self::KEY_COUNT, $this->getRequestCount($request, $default));
 
         return $value;
     }

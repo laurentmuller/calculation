@@ -427,24 +427,6 @@ class OpenWeatherService extends HttpClientService
     }
 
     /**
-     * Decodes a JSON string.
-     *
-     * @param string $data  the data to decode
-     * @param bool   $assoc when true, returned objects will be converted into associative arrays
-     *
-     * @return mixed the decoded data if success; false on error
-     */
-    private function decodeJson(?string $data, bool $assoc = true)
-    {
-        $result = \json_decode($data, $assoc);
-        if (JSON_ERROR_NONE !== $error = \json_last_error()) {
-            return $this->setLastError($error, \json_last_error_msg());
-        }
-
-        return $result;
-    }
-
-    /**
      * Finds the time zone (shift in seconds from UTC).
      *
      * @param array $data the data search in
@@ -503,7 +485,6 @@ class OpenWeatherService extends HttpClientService
         // update
         $offset = $this->findTimezone($result);
         $timezone = $this->offsetToTimZone($offset);
-        //\timezone_name_from_abbr('', $offset, 0);
         $this->updateResult($result, $timezone);
         $this->addUnits($result, $query['units']);
 
@@ -522,7 +503,6 @@ class OpenWeatherService extends HttpClientService
      */
     private function getCacheKey(string $uri, array $query): string
     {
-        // unset($query['appid']);
         $key = $uri . '?' . \http_build_query($query);
         $key = \str_replace($this->invalidChars, '_', $key);
 

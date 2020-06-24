@@ -24,70 +24,70 @@ interface HtmlConstantsInterface
     /**
      * The H1 tag name.
      */
-    const H1 = 'h1';
+    public const H1 = 'h1';
 
     /**
      * The H2 tag name.
      */
-    const H2 = 'h2';
+    public const H2 = 'h2';
 
     /**
      * The H3 tag name.
      */
-    const H3 = 'h3';
+    public const H3 = 'h3';
 
     /**
      * The H4 tag name.
      */
-    const H4 = 'h4';
+    public const H4 = 'h4';
 
     /**
      * The H5 tag name.
      */
-    const H5 = 'h5';
+    public const H5 = 'h5';
 
     /**
      * The H6 tag name.
      */
-    const H6 = 'h6';
+    public const H6 = 'h6';
 
     /**
      * The line break tag name.
      */
-    const LINE_BREAK = 'br';
+    public const LINE_BREAK = 'br';
 
     /**
      * The list item tag name.
      */
-    const LIST_ITEM = 'li';
+    public const LIST_ITEM = 'li';
 
     /**
      * The ordered list tag name.
      */
-    const LIST_ORDERED = 'ol';
+    public const LIST_ORDERED = 'ol';
 
     /**
      * The unordered list tag name.
      */
-    const LIST_UNORDERED = 'ul';
+    public const LIST_UNORDERED = 'ul';
 
     /**
      * The page break class name.
      */
-    const PAGE_BREAK = 'page-break';
+    public const PAGE_BREAK = 'page-break';
 
     /**
      * The paragraph tag name.
      */
-    const PARAGRAPH = 'p';
+    public const PARAGRAPH = 'p';
 
     /**
      * The samp tag name.
      */
-    const SAMP = 'samp';
+    public const SAMP = 'samp';
 
     /**
      * The text chunk.
      */
-    const TEXT = '#text';
+    public const TEXT = '#text';
 }

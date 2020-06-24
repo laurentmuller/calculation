@@ -36,9 +36,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationServiceTest extends WebTestCase
 {
-    const MARGIN_PERCENT = 0.1;
-    const PRODUCT_PRICE = 100.0;
-    const QUANTITY = 10.0;
+    public const MARGIN_PERCENT = 0.1;
+    public const PRODUCT_PRICE = 100.0;
+    public const QUANTITY = 10.0;
 
     public function testService(): void
     {

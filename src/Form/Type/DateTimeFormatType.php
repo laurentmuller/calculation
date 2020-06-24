@@ -16,7 +16,6 @@ namespace App\Form\Type;
 
 use App\Traits\DateFormatterTrait;
 use App\Traits\TranslatorTrait;
-use IntlDateFormatter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -112,11 +111,11 @@ class DateTimeFormatType extends AbstractType
     {
         $date = new \DateTime();
         $values = [
-            $this->format('date_format.short', IntlDateFormatter::SHORT, $useDate, $date) => IntlDateFormatter::SHORT,
-            $this->format('date_format.medium', IntlDateFormatter::MEDIUM, $useDate, $date) => IntlDateFormatter::MEDIUM,
+            $this->format('date_format.short', \IntlDateFormatter::SHORT, $useDate, $date) => \IntlDateFormatter::SHORT,
+            $this->format('date_format.medium', \IntlDateFormatter::MEDIUM, $useDate, $date) => \IntlDateFormatter::MEDIUM,
         ];
         if ($useDate) {
-            $values[$this->format('date_format.long', IntlDateFormatter::LONG, $useDate, $date)] = IntlDateFormatter::LONG;
+            $values[$this->format('date_format.long', \IntlDateFormatter::LONG, $useDate, $date)] = \IntlDateFormatter::LONG;
         }
 
         return $values;

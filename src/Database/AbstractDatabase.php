@@ -215,6 +215,24 @@ abstract class AbstractDatabase extends \SQLite3
     abstract protected function createSchema(): void;
 
     /**
+     * Execute the given statement and fetch result to an associative array.
+     *
+     * @param \SQLite3Stmt $stmt the statement to execute
+     */
+    protected function executeAndfetch(\SQLite3Stmt $stmt): array
+    {
+        $rows = [];
+        if ($result = $stmt->execute()) {
+            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                $rows[] = $row;
+            }
+            $result->finalize();
+        }
+
+        return $rows;
+    }
+
+    /**
      * Gets a statement for the given query.
      *
      * <p>
@@ -227,11 +245,19 @@ abstract class AbstractDatabase extends \SQLite3
      */
     protected function getStatement(string $query): \SQLite3Stmt
     {
-        if (!isset($this->statements[$query])) {
-            return $this->statements[$query] = $this->prepare($query);
-        }
+        return $this->statements[$query] ??= $this->prepare($query);
+    }
 
-        return $this->statements[$query];
+    /**
+     * Build a like value parameter.
+     *
+     * @param string $value the value parameter
+     *
+     * @return string the like value parameter
+     */
+    protected function likeValue(string $value): string
+    {
+        return '%' . \trim($value) . '%';
     }
 
     /**
@@ -253,26 +279,15 @@ abstract class AbstractDatabase extends \SQLite3
     protected function search(string $query, string $value, int $limit): array
     {
         // parameter
-        $value = "%{$value}%";
+        $value = $this->likeValue($value);
 
         // create statement
         /** @var \SQLite3Stmt $stmt */
-        //$stmt = $this->getStatement($query);
-        $stmt = $this->prepare($query);
+        $stmt = $this->getStatement($query);
         $stmt->bindParam(':value', $value, SQLITE3_TEXT);
         $stmt->bindParam(':limit', $limit, SQLITE3_INTEGER);
 
         // execute
-        $rows = [];
-        if ($result = $stmt->execute()) {
-            //fetch
-            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-                $rows[] = $row;
-            }
-            $result->finalize();
-        }
-        $stmt->close();
-
-        return $rows;
+        return $this->executeAndfetch($stmt);
     }
 }

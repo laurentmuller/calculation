@@ -19,8 +19,6 @@ use App\Form\Type\CategoryEntityType;
 use App\Form\Type\PlainType;
 use App\Form\Type\UserEntityType;
 use App\Form\Type\YesNoType;
-use Locale;
-use NumberFormatter;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -517,9 +515,9 @@ class FormHelper
     {
         static $symbol;
         if (!$symbol) {
-            $locale = Locale::getDefault();
-            $formatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
-            $symbol = $formatter->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
+            $locale = \Locale::getDefault();
+            $formatter = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
+            $symbol = $formatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL);
         }
 
         return $symbol;

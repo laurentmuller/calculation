@@ -27,14 +27,14 @@ class SwissDatabase extends AbstractDatabase
      * @var string
      */
     private const CREATE_CITY = <<<'sql'
-CREATE TABLE IF NOT EXISTS city (
-	id    INTEGER NOT NULL,
-	zip	  INTEGER NOT NULL,
-	name  TEXT NOT NULL,
-	state TEXT NOT NULL,
-	PRIMARY KEY(id)
-) WITHOUT ROWID
-sql;
+        CREATE TABLE IF NOT EXISTS city (
+        	id    INTEGER NOT NULL,
+        	zip	  INTEGER NOT NULL,
+        	name  TEXT NOT NULL,
+        	state TEXT NOT NULL,
+        	PRIMARY KEY(id)
+        ) WITHOUT ROWID
+        sql;
 
     /**
      * SQL statement to create the state (canton) table.
@@ -42,12 +42,12 @@ sql;
      * @var string
      */
     private const CREATE_STATE = <<<'sql'
-CREATE TABLE "state" (
-	id	    TEXT NOT NULL,
-	name	TEXT NOT NULL,
-	PRIMARY KEY(id)
-) WITHOUT ROWID
-sql;
+        CREATE TABLE "state" (
+        	id	    TEXT NOT NULL,
+        	name	TEXT NOT NULL,
+        	PRIMARY KEY(id)
+        ) WITHOUT ROWID
+        sql;
 
     /**
      * SQL statement to create the street table.
@@ -55,12 +55,12 @@ sql;
      * @var string
      */
     private const CREATE_STREET = <<<'sql'
-CREATE TABLE IF NOT EXISTS street (
-	city_id INTEGER NOT NULL,
-	name    TEXT NOT NULL,
-	FOREIGN KEY(city_id) REFERENCES city(id)
-)
-sql;
+        CREATE TABLE IF NOT EXISTS street (
+        	city_id INTEGER NOT NULL,
+        	name    TEXT NOT NULL,
+        	FOREIGN KEY(city_id) REFERENCES city(id)
+        )
+        sql;
 
     /**
      * SQL statement to add a city into the table.
@@ -68,9 +68,9 @@ sql;
      * @var string
      */
     private const INSERT_CITY = <<<'sql'
-INSERT INTO city(id, zip, name, state)
-    VALUES(:id, :zip, :name, :state)
-sql;
+        INSERT INTO city(id, zip, name, state)
+            VALUES(:id, :zip, :name, :state)
+        sql;
 
     /**
      * SQL statement to add a state into the table.
@@ -78,9 +78,9 @@ sql;
      * @var string
      */
     private const INSERT_STATE = <<<'sql'
-INSERT INTO state(id, name)
-    VALUES(:id, :name)
-sql;
+        INSERT INTO state(id, name)
+            VALUES(:id, :name)
+        sql;
 
     /**
      * SQL statement to add a street into the table.
@@ -88,9 +88,9 @@ sql;
      * @var string
      */
     private const INSERT_STREET = <<<'sql'
-INSERT INTO street(city_id, name)
-    VALUES(:city_id, :name)
-sql;
+        INSERT INTO street(city_id, name)
+            VALUES(:city_id, :name)
+        sql;
 
     /**
      * SQL statement to find a city.
@@ -98,18 +98,18 @@ sql;
      * @var string
      */
     private const SEARCH_CITY = <<<'sql'
-SELECT
-    name,
-	zip,
-    state,
-    printf('%s (%s)', name, zip) as display
-FROM city
-WHERE name LIKE :value
-ORDER BY 
-    name,
-    zip
-LIMIT :limit
-sql;
+        SELECT
+            name,
+        	zip,
+            state,
+            printf('%s (%s)', name, zip) as display
+        FROM city
+        WHERE name LIKE :value
+        ORDER BY 
+            name,
+            zip
+        LIMIT :limit
+        sql;
 
     /**
      * SQL statement to find a street.
@@ -117,21 +117,21 @@ sql;
      * @var string
      */
     private const SEARCH_STREET = <<<'sql'
-SELECT
-    street.name as street,
-    city.zip,
-    city.name   as city,
-    city.state,
-    printf('%s - %s %s', street.name, city.zip, city.name) as display
-FROM street
-INNER JOIN city on street.city_id = city.id
-WHERE street.name LIKE :value
-ORDER BY 
-    street.name,
-    city.zip,
-    city.name    
-LIMIT :limit
-sql;
+        SELECT
+            street.name as street,
+            city.zip,
+            city.name   as city,
+            city.state,
+            printf('%s - %s %s', street.name, city.zip, city.name) as display
+        FROM street
+        INNER JOIN city on street.city_id = city.id
+        WHERE street.name LIKE :value
+        ORDER BY 
+            street.name,
+            city.zip,
+            city.name    
+        LIMIT :limit
+        sql;
 
     /**
      * SQL statement to find a zip code.
@@ -139,18 +139,18 @@ sql;
      * @var string
      */
     private const SEARCH_ZIP = <<<'sql'
-SELECT
-    zip,
-    name,
-    state,
-    printf('%s %s', zip, name) as display
-FROM city
-WHERE zip LIKE :value
-ORDER BY 
-    zip,
-    name    
-LIMIT :limit
-sql;
+        SELECT
+            zip,
+            name,
+            state,
+            printf('%s %s', zip, name) as display
+        FROM city
+        WHERE zip LIKE :value
+        ORDER BY 
+            zip,
+            name    
+        LIMIT :limit
+        sql;
 
     /**
      * Finds cities.

@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
-use Locale;
-
 /**
  * Utility class for dates.
  *
@@ -231,11 +229,9 @@ final class DateUtils
      */
     private static function setDefaultLocale(): bool
     {
-        $locale = Locale::getDefault();
+        $locale = \Locale::getDefault();
         if (false === \setlocale(LC_TIME, $locale)) {
-            $locale = \explode('_', $locale)[0];
-
-            return false !== \setlocale(LC_TIME, $locale);
+            return false !== \setlocale(LC_TIME, \Locale::getPrimaryLanguage($locale));
         }
 
         return true;

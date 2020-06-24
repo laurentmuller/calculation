@@ -1,0 +1,53 @@
+{% extends 'cards/card_base.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title      = 'openweather.import.title' -%}
+{%- set title_icon = 'download' -%}
+
+{% block card_header %}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ 'import.results'|trans }}
+{% endblock %}
+
+{% block card_class -%}
+{% if data.result %}{{ parent() }}{% else %} border-danger{% endif %}
+{%- endblock %}
+{% block card_header_class -%}
+{% if data.result %}{{ parent() }}{% else %} text-white bg-danger{% endif %}
+{%- endblock %}
+
+{% block card_body %}
+{%- if data.result %}
+<p>{{ 'openweather.result.success'|trans }}</p>
+<table class="table table-bordered table-sm mb-0">
+    <thead>
+        <tr>
+            <th>{{ 'import.objects'|trans }}</th>
+            <th class="text-currency">{{ 'import.errors'|trans }}</th>
+            <th class="text-currency">{{ 'import.valids'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ 'import.cities'|trans }}</td>
+            <td class="text-currency">{{ data.errors|integer }}</td>
+            <td class="text-currency">{{ data.valids|integer }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'import.total'|trans }}</<th>
+            <th class="text-currency">{{ data.errors|integer }}</th>
+            <th class="text-currency">{{ data.valids|integer }}</th>
+        </tr>
+    </tbody>
+</table>
+{%- else -%}
+<p>{{ 'openweather.import.failure'|trans }}</p>
+{% if data.message is defined and data.message -%}<p class="mb-0">{{ data.message }}</p>{%- endif %}
+{%- endif %}
+{% endblock %}
+
+{% block card_footer %}
+{{ icons.homepage() }}
+{{ icons.link(path('openweather_search_view'), 'common.button_search', 'btn btn-form btn-secondary') }}
+{% endblock %}

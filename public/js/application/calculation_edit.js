@@ -696,7 +696,7 @@ var Application = {
         }).appendTo($tbody);
         
         // update identifiers
-        for(let i =0, len = $rows.length; i < len; i++) {
+        for(let i = 0, len = $rows.length; i < len; i++) {
             const $row = $($rows[i]);
             const oldId = $row.getInputIndex();
             const newId = identifiers[i];

@@ -27,15 +27,15 @@ class OpenWeatherDatabase extends AbstractDatabase
      * @var string
      */
     private const CREATE_CITY = <<<'sql'
-CREATE TABLE city (
-	id	      INTEGER NOT NULL,
-	name	  TEXT NOT NULL,
-	country   TEXT NOT NULL,
-	latitude  REAL NOT NULL,
-	longitude REAL NOT NULL,
-	PRIMARY KEY("id")
-) WITHOUT ROWID
-sql;
+        CREATE TABLE city (
+        	id	      INTEGER NOT NULL,
+        	name	  TEXT NOT NULL,
+        	country   TEXT NOT NULL,
+        	latitude  REAL NOT NULL,
+        	longitude REAL NOT NULL,
+        	PRIMARY KEY("id")
+        ) WITHOUT ROWID
+        sql;
 
     /**
      * SQL statement to delete cities.
@@ -50,9 +50,9 @@ sql;
      * @var string
      */
     private const INSERT_CITY = <<<'sql'
-INSERT INTO city(id, name, country, latitude, longitude)
-    VALUES(:id, :name, :country, :latitude, :longitude)
-sql;
+        INSERT INTO city(id, name, country, latitude, longitude)
+            VALUES(:id, :name, :country, :latitude, :longitude)
+        sql;
 
     /**
      * SQL statement to find a city.
@@ -60,16 +60,36 @@ sql;
      * @var string
      */
     private const SEARCH_CITY = <<<'sql'
-SELECT
-    id,
-    name,
-    country
-FROM city
-WHERE name LIKE :value
-ORDER BY
-    name
-LIMIT :limit
-sql;
+        SELECT
+            id,
+            name,
+            country,
+            latitude,
+            longitude
+        FROM city
+        WHERE name LIKE :value
+        ORDER BY
+            name
+        LIMIT :limit
+        sql;
+    /**
+     * SQL statement to find a city.
+     *
+     * @var string
+     */
+    private const SEARCH_CITY_COUNTRY = <<<'sql'
+        SELECT
+            id,
+            name,
+            country,
+            latitude,
+            longitude
+        FROM city
+        WHERE name LIKE :name AND country LIKE :country
+        ORDER BY
+            name
+        LIMIT :limit
+        sql;
 
     /**
      * Delete all cities.
@@ -91,47 +111,55 @@ sql;
      */
     public function findCity(string $name, int $limit = 25): array
     {
+        $values = \explode(',', $name);
+        if (2 === \count($values)) {
+            return $this->findCityCountry($values[0], $values[1]);
+        }
+
         return $this->search(self::SEARCH_CITY, $name, $limit);
+    }
+
+    /**
+     * Finds cities by name and country.
+     *
+     * @param string $name  the city to search for
+     * @param string $name  the country to search for
+     * @param int    $limit the maximum number of rows to return
+     *
+     * @return array an array, maybe empty, of matching cities
+     */
+    public function findCityCountry(string $city, string $country, int $limit = 25): array
+    {
+        $city = $this->likeValue($city);
+        $country = $this->likeValue($country);
+
+        $stmt = $this->getStatement(self::SEARCH_CITY_COUNTRY);
+        $stmt->bindParam(':name', $city, SQLITE3_TEXT);
+        $stmt->bindParam(':country', $country, SQLITE3_TEXT);
+        $stmt->bindParam(':limit', $limit, SQLITE3_INTEGER);
+
+        return $this->executeAndfetch($stmt);
     }
 
     /**
      * Insert a city.
      *
-     * @param array $data the data to insert with the following values:
-     *                    <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
-     *                    <tr>
-     *                    <th>Index</th><th>Type</th><th>Description</th>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>0</td><td>integer</td><td>The city identifier (primary key).</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>1</td><td>string</td><td>The city name.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>2</td><td>string</td><td>The country abreviation.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>3</td><td>double</td><td>The latitude.</td>
-     *                    </tr>
-     *                    <tr>
-     *                    <td>4</td><td>double</td><td>The longitude.</td>
-     *                    </tr>
-     *                    </table>
+     * @param int    $id        the city identifier
+     * @param string $name      the city name
+     * @param string $country   the 2 letters ISO code of the country
+     * @param float  $latitude  the city latitude
+     * @param float  $longitude the city longitude
      *
      * @return bool true if success
      */
-    public function insertCity(array $data): bool
+    public function insertCity(int $id, string $name, string $country, float $latitude, float $longitude): bool
     {
-        /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement(self::INSERT_CITY);
-
-        // parameters
-        $stmt->bindParam(':id', $data[0], SQLITE3_INTEGER);
-        $stmt->bindParam(':name', $data[1], SQLITE3_TEXT);
-        $stmt->bindParam(':country', $data[2], SQLITE3_TEXT);
-        $stmt->bindParam(':latitude', $data[3], SQLITE3_FLOAT);
-        $stmt->bindParam(':longitude', $data[4], SQLITE3_FLOAT);
+        $stmt->bindParam(':id', $id, SQLITE3_INTEGER);
+        $stmt->bindParam(':name', $name, SQLITE3_TEXT);
+        $stmt->bindParam(':country', $country, SQLITE3_TEXT);
+        $stmt->bindParam(':latitude', $latitude, SQLITE3_FLOAT);
+        $stmt->bindParam(':longitude', $longitude, SQLITE3_FLOAT);
 
         // execute
         return false !== $stmt->execute();

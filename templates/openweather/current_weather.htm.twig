@@ -1,0 +1,109 @@
+{% extends 'cards/card_base.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# macros #}
+{% macro title(name) %}
+<tr>
+    <td colspan="2"><b>{{ name }}</b></td>
+</tr>
+{% endmacro %}
+
+{% macro row(name, value, unit = '') %}
+<tr>
+    <td class="pl-4 w-30">{{ name }}</td>
+    <td>{{ (value ~ ' ' ~ unit)|trim }}</td>
+</tr>
+{% endmacro %}
+
+{% macro system(system, route, cityId) -%}
+{% set text  = system == 'metric' ? '°C' : '°F' %}
+{% set title = ('openweather.current.'~ system)|trans %}  
+{% if route %}
+    {% set href = path(route, {'cityId': cityId, 'units': system})  %}
+    <a href="{{ href }}" class="small" title="{{ title }}">{{ text }}</a>
+{% else %}
+    <span class="small" title="{{ title }}">{{ text }}</span>
+{% endif %}
+{%- endmacro %}
+
+{# parameters #}
+{%- set title      = 'openweather.current.title' -%}
+{%- set title_icon = 'cloud-sun' -%}
+{%- set route      = app.request.attributes.get('_route') -%}
+{%- set cityId     = current.id -%}
+{%- set system     = current.units.system -%}
+
+{% block card_header %}
+<div class="row">
+    <div class="col-md-6">
+        {{ parent() }}
+    </div>
+    <div class="col-md-6 text-md-right">
+        {% if system == 'metric' %}
+            {{ _self.system(system) }}<span class"small"> / </span>{{ _self.system('imperial', route, cityId) }}
+        {% else %}
+            {{ _self.system('metric', route, cityId) }}<span class"small"> / </span>{{ _self.system(system) }}
+        {% endif %}
+        {{ icons.link(path('openweather_search_view'), 'common.button_search', 'btn btn-link btn-sm') }}
+    </div>
+</div>
+{% endblock %}
+{% block card_body %}
+<h2>
+    {{ current.name }}, {{ current.sys.country_name }}
+</h2>
+<h3 class="font-weight-normal mb-0">
+    <img src="{{ current.weather.icon_small }}" alt="image" width="50" height="50">{{ current.main.temp|round(1) }} {{ current.units.temperature }}, {{ current.weather.description }}
+</h3>
+<table class="table table-hover table-sm mb-0">
+    <tbody>
+        {{ _self.title('Températures') }}
+        {{ _self.row('Actuelle', current.main.temp|round(1), current.units.temperature) }}
+        {{ _self.row('Ressentie', current.main.feels_like|round(1), current.units.temperature) }}
+        {{ _self.row('Minimum', current.main.temp_min|round(1), current.units.temperature) }}
+        {{ _self.row('Maximum', current.main.temp_max|round(1), current.units.temperature) }}
+        
+        {{ _self.title('Vent') }}
+        {{ _self.row('Vitesse', current.wind.speed, current.units.speed) }}
+        {{ _self.row('Direction', current.wind.deg, current.units.degree) }}
+        
+        {{ _self.title('Soleil') }}
+        {{ _self.row('Levé', current.sys.sunrise_formatted) }}
+        {{ _self.row('Couché', current.sys.sunset_formatted) }}
+        
+        {{ _self.title('Position') }}
+        {{ _self.row('Latitude', current.coord.lat, current.units.degree) }}
+        {{ _self.row('Longitude', current.coord.lon, current.units.degree) }}
+        
+        {{ _self.title('Divers') }}
+        {{ _self.row('Pression', current.main.pressure, current.units.pressure) }}
+        {{ _self.row('Humidité', current.main.humidity, current.units.percent) }}
+        {{ _self.row('Heure locale', current.dt_locale) }}
+    </tbody>        
+</table>
+{% if daily is defined and daily.list|length %}
+<h5 class="border-top pt-1">Prévisions météorologiques à {{ daily.list|length }} jours</h5>
+<table class="table table-hover table-sm mb-0">
+    <tbody>
+        {% for data in daily.list %}
+        <tr>
+            <td class="text-date">{{ data.dt_date_formatted }}</td>
+            <td class="text-date text-center align-top"><img alt="Icon" src="{{ data.weather.icon_small }}" width="40" height="40">
+            <td class="text-date-time">
+                <span class="small bg-danger text-white px-2 py-1 rounded-pill" title="Température de jour">{{ data.temp.day|round(1) }} {{ daily.units.temperature }}</span>
+                <span class="small bg-secondary text-white px-2 py-1 rounded-pill" title="Température de nuit">{{ data.temp.night|round(1) }} {{ daily.units.temperature }}</span>
+                <br>
+                <span title="Vent">{{ data.speed }} {{ daily.units.speed }}</span>
+            </td>
+            <td>{{ data.weather.description }}</td>
+        </tr>  
+        {% endfor %}
+    </tbody>
+</table>
+    
+{% endif %}
+{% endblock %}
+
+{% block card_footer -%}
+<p class="text-right mb-0 small">Valeurs obtenue le {{ current.dt_formatted }}</p>
+{%- endblock %}

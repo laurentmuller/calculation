@@ -72,12 +72,12 @@ abstract class HttpClientService
      */
     public static function getAcceptLanguage(bool $languageOnly = false): string
     {
-        $locale = \str_replace('_', '-', \Locale::getDefault());
+        $locale = \Locale::getDefault();
         if ($languageOnly) {
-            return \explode('-', $locale)[0];
+            return \Locale::getPrimaryLanguage($locale);
         }
 
-        return $locale;
+        return \Locale::canonicalize($locale);
     }
 
     /**

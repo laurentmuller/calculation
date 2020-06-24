@@ -9,6 +9,7 @@
 {%- set submit_params = submit_params|default({}) -%}
 {%- set action        = action|default(app.request.requestUri) -%}
 {%- set form_attr     = form_attr|default({})|merge({'id': 'edit-form'}) -%}
+{%- set cancel_text   = cancel_text|default('common.button_cancel') -%}
 {%- if cancel_path is not defined -%}
 {%- set cancel_path   = cancel_url(app.request, item.id|default(0), page_list|default('homepage')) -%}
 {%- endif -%}
@@ -32,7 +33,7 @@
 	{% block actions_form -%} 
         {{ icons.button_submit(submit_text, submit_class, submit_domain, submit_params) }}
         {% if cancel_path|default(false) %}
-            {{ icons.button_cancel(cancel_path) }}
+            {{ icons.button_cancel(cancel_path, cancel_text) }}
         {% endif %}
 	{%- endblock %}
     </div>

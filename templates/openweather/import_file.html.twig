@@ -1,0 +1,37 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title       = 'openweather.import.title' -%}
+{%- set title_icon  = 'download' -%}
+{%- set cancel_path = path('openweather_search_view') -%}
+{%- set cancel_text = 'common.button_search' -%}
+
+{% block card_header %}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ 'openweather.import.description'|trans }}</p>
+{% endblock %}
+
+{% block card_body %}
+{{ form_row(form.file) }}
+<p>{{ 'openweather.import.link'|trans|format(sample, openweathermap)|raw }}</p>
+{% if last_import is defined -%}
+{%- set date = last_import|localedate('long') -%}
+<p class="mb-0 text-right">{{ 'openweather.import.last_import'|trans({'%date%': date}) }}</p>
+{%- endif %}
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset_css('css/fileinput.css') }}
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/plugins/plugin-fileinput.js') }}
+{{ asset_js('js/application/file_import.js') }}
+{% else %}
+{{ asset_js('js/file_import.js') }}
+{% endif %}
+{% endblock %}

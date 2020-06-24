@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Utils\FormatUtils;
-use Locale;
 use NumberFormatter;
 
 /**
@@ -122,7 +121,7 @@ trait NumberFormatterTrait
     protected function getNumberFormatter(int $style, int $digits): NumberFormatter
     {
         // create
-        $locale = Locale::getDefault();
+        $locale = \Locale::getDefault();
         $formatter = NumberFormatter::create($locale, $style);
         $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $digits);
         $formatter->setSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL, $this->getDefaultGrouping());

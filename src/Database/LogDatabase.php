@@ -31,17 +31,17 @@ class LogDatabase extends AbstractDatabase
      * @var string
      */
     private const SQL_CREATE = <<<'sql'
-CREATE TABLE "sy_Log" (
-	id	       INTEGER NOT NULL,
-    created_at INTEGER NOT NULL,
-	channel	   TEXT NOT NULL,
-	level	   TEXT NOT NULL,
-	message	   TEXT NOT NULL,
-    context	   TEXT,
-    extra	   TEXT,
-	PRIMARY KEY(id)
-) WITHOUT ROWID
-sql;
+        CREATE TABLE "sy_Log" (
+        	id	       INTEGER NOT NULL,
+            created_at INTEGER NOT NULL,
+        	channel	   TEXT NOT NULL,
+        	level	   TEXT NOT NULL,
+        	message	   TEXT NOT NULL,
+            context	   TEXT,
+            extra	   TEXT,
+        	PRIMARY KEY(id)
+        ) WITHOUT ROWID
+        sql;
 
     /**
      * SQL statement to add a log into the table.
@@ -49,9 +49,9 @@ sql;
      * @var string
      */
     private const SQL_INSERT = <<<'sql'
-INSERT INTO sy_Log(id, created_at, channel, level, message, context, extra)
-    VALUES(:id, :created_at, :channel, :level, :message, :context, :extra)
-sql;
+        INSERT INTO sy_Log(id, created_at, channel, level, message, context, extra)
+            VALUES(:id, :created_at, :channel, :level, :message, :context, :extra)
+        sql;
 
     /**
      * Insert a log to the database.

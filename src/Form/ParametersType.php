@@ -41,7 +41,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     /**
      * The password options.
      */
-    const PASSWORD_OPTIONS = [
+    public const PASSWORD_OPTIONS = [
         'password_letters',
         'password_numbers',
         'password_special_character',

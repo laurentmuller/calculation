@@ -24,65 +24,65 @@ interface EntityVoterInterface
     /**
      * The add attribute name.
      */
-    const ATTRIBUTE_ADD = 'add';
+    public const ATTRIBUTE_ADD = 'add';
 
     /**
      * The delete attribute name.
      */
-    const ATTRIBUTE_DELETE = 'delete';
+    public const ATTRIBUTE_DELETE = 'delete';
 
     /**
      * The edit attribute name.
      */
-    const ATTRIBUTE_EDIT = 'edit';
+    public const ATTRIBUTE_EDIT = 'edit';
 
     /**
      * The list attribute name.
      */
-    const ATTRIBUTE_LIST = 'list';
+    public const ATTRIBUTE_LIST = 'list';
 
     /**
      * The Pdf attribute name.
      */
-    const ATTRIBUTE_PDF = 'pdf';
+    public const ATTRIBUTE_PDF = 'pdf';
 
     /**
      * The show attribute name.
      */
-    const ATTRIBUTE_SHOW = 'show';
+    public const ATTRIBUTE_SHOW = 'show';
 
     /**
      * The calculation rights.
      */
-    const ENTITY_CALCULATION = 'Calculation';
+    public const ENTITY_CALCULATION = 'Calculation';
 
     /**
      * The calculation state rights.
      */
-    const ENTITY_CALCULATION_STATE = 'CalculationState';
+    public const ENTITY_CALCULATION_STATE = 'CalculationState';
 
     /**
      * The category rights.
      */
-    const ENTITY_CATEGORY = 'Category';
+    public const ENTITY_CATEGORY = 'Category';
 
     /**
      * The customer rights.
      */
-    const ENTITY_CUSTOMER = 'Customer';
+    public const ENTITY_CUSTOMER = 'Customer';
 
     /**
      * The global margin rights.
      */
-    const ENTITY_GLOBAL_MARGIN = 'GlobalMargin';
+    public const ENTITY_GLOBAL_MARGIN = 'GlobalMargin';
 
     /**
      * The product rights.
      */
-    const ENTITY_PRODUCT = 'Product';
+    public const ENTITY_PRODUCT = 'Product';
 
     /**
      * The user rights.
      */
-    const ENTITY_USER = 'User';
+    public const ENTITY_USER = 'User';
 }

@@ -24,20 +24,20 @@ abstract class SeparatorType extends AbstractChoiceType
     /**
      * The comma character separator.
      */
-    const COMMA_CHAR = ',';
+    public const COMMA_CHAR = ',';
 
     /**
      * The period character separator.
      */
-    const PERIOD_CHAR = '.';
+    public const PERIOD_CHAR = '.';
 
     /**
      * The quote character separator.
      */
-    const QUOTE_CHAR = "'";
+    public const QUOTE_CHAR = "'";
 
     /**
      * The space character separator.
      */
-    const SPACE_CHAR = ' ';
+    public const SPACE_CHAR = ' ';
 }

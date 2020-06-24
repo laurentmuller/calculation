@@ -15,9 +15,6 @@ declare(strict_types=1);
 namespace App\Utils;
 
 use App\Form\Type\SeparatorType;
-use IntlDateFormatter;
-use Locale;
-use NumberFormatter;
 
 /**
  * Utility class for default formats.
@@ -33,7 +30,7 @@ final class FormatUtils
      */
     public static function getDateType(): int
     {
-        return IntlDateFormatter::SHORT;
+        return \IntlDateFormatter::SHORT;
     }
 
     /**
@@ -43,16 +40,16 @@ final class FormatUtils
      */
     public static function getDecimal(): string
     {
-        $locale = Locale::getDefault();
+        $locale = \Locale::getDefault();
 
         // special case for Swiss French
         if ('fr_CH' === $locale) {
             return SeparatorType::PERIOD_CHAR;
         }
 
-        $formatter = \NumberFormatter::create($locale, NumberFormatter::DECIMAL);
+        $formatter = \NumberFormatter::create($locale, \NumberFormatter::DECIMAL);
 
-        return $formatter->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
+        return $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
     }
 
     /**
@@ -62,15 +59,15 @@ final class FormatUtils
      */
     public static function getGrouping(): string
     {
-        $locale = Locale::getDefault();
+        $locale = \Locale::getDefault();
 
         // special case for Swiss French
         if ('fr_CH' === $locale) {
             return SeparatorType::QUOTE_CHAR;
         }
 
-        $formatter = \NumberFormatter::create($locale, NumberFormatter::DECIMAL);
-        $symbol = $formatter->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
+        $formatter = \NumberFormatter::create($locale, \NumberFormatter::DECIMAL);
+        $symbol = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
 
         // special case when space is in 2 characters
         if (2 === \strlen($symbol) && 194 === \ord($symbol[0]) && 160 === \ord($symbol[1])) {
@@ -87,6 +84,6 @@ final class FormatUtils
      */
     public static function getTimeType(): int
     {
-        return IntlDateFormatter::SHORT;
+        return \IntlDateFormatter::SHORT;
     }
 }

@@ -193,28 +193,28 @@ class ChartController extends BaseController
 
         // tootltip formatter
         $function = <<<EOF
-        function () {
-            var date = Highcharts.dateFormat("%B %Y", this.x);
-            var name = this.series.name;
-            var yValue = Highcharts.numberFormat(this.y, 0);
-            var totalValue = Highcharts.numberFormat(this.total, 0);
-            var html = "<table>";
-            html += "<tr><th colspan=\"3\">" + date + "</th></tr>";
-            html += "<tr><td>" +  name + "</td><td>:</td><td class=\"text-currency\">" + yValue + "</td></tr>";
-            html += "<tr><td>Total</td><td>:</td><td class=\"text-currency\">" + totalValue + "</td></tr>";
-            html += "</table>";
-            return html;
-        }
-        EOF;
+            function () {
+                var date = Highcharts.dateFormat("%B %Y", this.x);
+                var name = this.series.name;
+                var yValue = Highcharts.numberFormat(this.y, 0);
+                var totalValue = Highcharts.numberFormat(this.total, 0);
+                var html = "<table>";
+                html += "<tr><th colspan=\"3\">" + date + "</th></tr>";
+                html += "<tr><td>" +  name + "</td><td>:</td><td class=\"text-currency\">" + yValue + "</td></tr>";
+                html += "<tr><td>Total</td><td>:</td><td class=\"text-currency\">" + totalValue + "</td></tr>";
+                html += "</table>";
+                return html;
+            }
+            EOF;
         $formatter = new Expr($function);
 
         // click event
         $function = <<<EOF
-        function() { 
-            const href = "{$url}?query=" + Highcharts.dateFormat("%m.%Y", this.category);
-            location.href = href;
-        }
-        EOF;
+            function() { 
+                const href = "{$url}?query=" + Highcharts.dateFormat("%m.%Y", this.category);
+                location.href = href;
+            }
+            EOF;
         $click = new Expr($function);
 
         // chart
@@ -332,11 +332,11 @@ class ChartController extends BaseController
 
         // click event
         $function = <<<EOF
-        function() {
-            const href = "{$url}?query=" + this.name;
-            location.href = href;
-        }
-        EOF;
+            function() {
+                const href = "{$url}?query=" + this.name;
+                location.href = href;
+            }
+            EOF;
         $click = new Expr($function);
 
         // pie options

@@ -1,0 +1,59 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title       = 'openweather.search.title' -%}
+{%- set title_icon  = 'search' -%}
+{%- set submit_text = submit_text|default('common.button_search') -%}
+
+{% block card_body %}
+<div class="form-row">
+    <div class="col-md-8">
+        {{ form_row(form.query) }}
+    </div>
+    <div class="col-md-2">
+        {{ form_row(form.units) }}
+    </div>
+    <div class="col-md-2">
+        {{ form_row(form.limit) }}
+    </div>
+</div>
+{% if cities is defined %}
+    {% if cities|length %}
+    <table class="table table-hover table-sm mb-0">
+        <tbody data-link="row" class="rowlink">
+        {% for city in cities %}
+            {%- set current = city.current -%}
+            <tr>
+                <td class="text-unit align-top">
+                    <img src="{{ current.weather.icon_small }}" alt="image" width="36" height="36">
+                </td>
+                <td class="w-75">
+                    <a href="{{ path('openweather_current_view', {'cityId': city.id, 'units': units}) }}"><b>{{ city.name }}</b></a><br>
+                    <span class="small">{{ current.main.temp|round(1) }} {{ current.units.temperature }}, {{ current.weather.description }}</span>
+                </td>
+                <td class="w-25">
+                    <img class="align-baseline" alt="Flag" src="{{ city.country_flag }}"> {{ city.country_name }}
+                </td>
+            <td>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="mb-0 text-danger">{{ 'openweather.search.empty'|trans }}</p>
+    {% endif %}
+{% endif %}
+{% endblock %}
+
+{% block actions_form -%}
+{{ parent() }}
+{% if is_granted('ROLE_ADMIN') %}
+{{ icons.link(path('openweather_import'), 'common.button_import', 'btn btn-form btn-outline-secondary') }}
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ asset_js('js/application/validation_edit.js') }}
+{{ asset_js('js/plugins/plugin-rowlink.js') }}
+{% endblock %}

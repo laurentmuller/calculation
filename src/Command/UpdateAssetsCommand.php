@@ -33,6 +33,19 @@ class UpdateAssetsCommand extends AssetsCommand
     private const BOOTSTRAP_FILE_NAME = 'bootstrap.css';
 
     /**
+     * The CSS custom style comments.
+     */
+    private const CSS_COMMENTS = <<<'TEXT'
+        
+        /*
+         * -----------------------------
+         *         Custom styles
+         * -----------------------------
+         */
+            
+        TEXT;
+
+    /**
      * The vendor configuration file name.
      */
     private const VENDOR_FILE_NAME = 'vendor.json';
@@ -591,16 +604,6 @@ class UpdateAssetsCommand extends AssetsCommand
             return $content;
         }
 
-        $comments = <<<'EOT'
-
-/*
- * -----------------------------
- *         Custom styles
- * -----------------------------
- */
-
-EOT;
-
-        return $content . $comments . $toAppend;
+        return $content . self::CSS_COMMENTS . $toAppend;
     }
 }

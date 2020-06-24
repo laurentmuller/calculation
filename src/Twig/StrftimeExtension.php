@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use Locale;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -54,8 +53,9 @@ final class StrftimeExtension extends AbstractExtension
         $date = twig_date_converter($env, $date, $timezone);
 
         // locale
-        if (false === \setlocale(LC_TIME, Locale::getDefault())) {
-            \setlocale(LC_TIME, \explode('_', Locale::getDefault())[0]);
+        $locale = \Locale::getDefault();
+        if (false === \setlocale(LC_TIME, $locale)) {
+            \setlocale(LC_TIME, \Locale::getPrimaryLanguage($locale));
         }
 
         // windows?

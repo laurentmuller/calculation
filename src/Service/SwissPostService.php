@@ -18,7 +18,7 @@ use App\Database\SwissDatabase;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
-use IntlDateFormatter;
+use App\Utils\Utils;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -221,7 +221,7 @@ class SwissPostService
         }
 
         // create a temporary file
-        if (false === $tempName = \tempnam(\sys_get_temp_dir(), 'sql')) {
+        if (!$tempName = Utils::tempfile('sql')) {
             return [
                 'valid' => false,
                 'message' => $this->trans('import.error.temp_file'),
@@ -318,8 +318,8 @@ class SwissPostService
                         // check
                         if ($lastImport && $validity <= $lastImport) {
                             $params = [
-                                '%validity%' => $this->localeDate($validity, IntlDateFormatter::LONG),
-                                '%import%' => $this->localeDate($lastImport, IntlDateFormatter::LONG),
+                                '%validity%' => $this->localeDate($validity, \IntlDateFormatter::LONG),
+                                '%import%' => $this->localeDate($lastImport, \IntlDateFormatter::LONG),
                                 '%name%' => $name,
                             ];
 
@@ -421,9 +421,7 @@ class SwissPostService
             }
 
             // delete temp file (if any)
-            if (\file_exists($tempName)) {
-                \unlink($tempName);
-            }
+            Utils::unlink($tempName);
         }
     }
 

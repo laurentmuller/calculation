@@ -16,12 +16,14 @@ namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
 use App\Traits\DateFormatterTrait;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Exception\MissingResourceException;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Service to get weather from OpenWeatherMap.
@@ -50,6 +52,26 @@ class OpenWeatherService extends HttpClientService
     public const DEGREE_METRIC = '°C';
 
     /**
+     * The parameter value to exclude the current data.
+     */
+    public const EXCLUDE_CURRENT = 'current';
+
+    /**
+     * The parameter value to exclude the daily data.
+     */
+    public const EXCLUDE_DAILY = 'daily';
+
+    /**
+     * The parameter value to exclude the hourly data.
+     */
+    public const EXCLUDE_HOURLY = 'hourly';
+
+    /**
+     * The parameter value to exclude the minutely data.
+     */
+    public const EXCLUDE_MINUTELY = 'minutely';
+
+    /**
      * The imperial speed.
      */
     public const SPEED_IMPERIAL = 'mph';
@@ -70,9 +92,14 @@ class OpenWeatherService extends HttpClientService
     public const UNIT_METRIC = 'metric';
 
     /**
+     * The cache timeout (15 minutes).
+     */
+    private const CACHE_TIMEOUT = 60 * 15;
+
+    /**
      * The country flag URL.
      */
-    private const COUNTRY_FLAG_URL = 'http://openweathermap.org/images/flags/{0}.png';
+    private const COUNTRY_URL = 'https://openweathermap.org/images/flags/{0}.png';
 
     /**
      * The relative path to data.
@@ -82,12 +109,17 @@ class OpenWeatherService extends HttpClientService
     /**
      * The host name.
      */
-    private const HOST_NAME = 'http://api.openweathermap.org/data/2.5/';
+    private const HOST_NAME = 'https://api.openweathermap.org/data/2.5/';
 
     /**
-     * The icon URL.
+     * The big icon URL.
      */
-    private const ICON_URL = 'http://openweathermap.org/img/wn/{0}@2x.png';
+    private const ICON_BIG_URL = 'https://openweathermap.org/img/wn/{0}@4x.png';
+
+    /**
+     * The small icon URL.
+     */
+    private const ICON_SMALL_URL = 'https://openweathermap.org/img/wn/{0}@2x.png';
 
     /**
      * The parameter name for the API key.
@@ -97,12 +129,29 @@ class OpenWeatherService extends HttpClientService
     /**
      * Current condition URI.
      */
-    private const URI_CURRENT_CONDITION = 'weather';
+    private const URI_CURRENT = 'weather';
 
     /**
-     * 5 days / 3 hours of Daily Forecasts URI.
+     * 16 day / daily forecast URI.
      */
-    private const URI_FORECASTS_5_DAYS = 'forecast';
+    private const URI_DAILY = 'forecast/daily';
+
+    /**
+     * 5 day / 3 hour forecast URI.
+     */
+    private const URI_FORECAST = 'forecast';
+
+    /**
+     * One call condition URI.
+     */
+    private const URI_ONECALL = 'onecall';
+
+    /**
+     * The cache adapter.
+     *
+     * @var AdapterInterface
+     */
+    private $adapter;
 
     /**
      * The data directory.
@@ -110,6 +159,20 @@ class OpenWeatherService extends HttpClientService
      * @var string
      */
     private $dataDirectory;
+
+    /**
+     * The debug mode.
+     *
+     * @var bool
+     */
+    private $debug;
+
+    /**
+     * The invalid characters for the cache key.
+     *
+     * @var string[]
+     */
+    private $invalidChars;
 
     /**
      * The API key.
@@ -123,10 +186,13 @@ class OpenWeatherService extends HttpClientService
      *
      * @throws ParameterNotFoundException if the OpenWeather key parameter is not defined
      */
-    public function __construct(ParameterBagInterface $params, KernelInterface $kernel)
+    public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter)
     {
         $this->key = $params->get(self::PARAM_KEY);
         $this->dataDirectory = $kernel->getProjectDir() . self::DATA_PATH;
+        $this->debug = $kernel->isDebug();
+        $this->adapter = $adapter;
+        $this->invalidChars = \str_split(ItemInterface::RESERVED_CHARACTERS);
     }
 
     /**
@@ -143,54 +209,40 @@ class OpenWeatherService extends HttpClientService
             'id' => $cityId,
             'units' => $units,
         ];
-
-        if (!$result = $this->get(self::URI_CURRENT_CONDITION, $query)) {
+        if (!$result = $this->get(self::URI_CURRENT, $query)) {
             return false;
         }
 
-        // update country name and flag
-        if (isset($result['sys']['country'])) {
-            $country = $result['sys']['country'];
-            if ($name = $this->getCountryName($country)) {
-                $result['sys']['country_name'] = $name;
-            }
-            $result['sys']['country_flag'] = $this->getCountryFlag($country);
-        }
-
-        // update dates
-        if (isset($result['dt'])) {
-            $result['dt_formatted'] = $this->localeDateTime($result['dt']);
-        }
-        if (isset($result['sys']['sunrise'])) {
-            $result['sys']['sunrise_formatted'] = $this->localeTime($result['sys']['sunrise']);
-        }
-        if (isset($result['sys']['sunset'])) {
-            $result['sys']['sunset_formatted'] = $this->localeTime($result['sys']['sunset']);
-        }
-
-        // units
-        $result['sys']['degree_unit'] = $this->getDegreeUnit($units);
-        $result['sys']['speed_unit'] = $this->getSpeedUnit($units);
-
         return $result;
     }
 
     /**
-     * Delete all cities.
+     * Returns 16 day / daily forecat conditions data for a specific location.
      *
-     * @return bool true on success
+     * @param int    $cityId the city identifier
+     * @param int    $count  the number of result to return or -1 for all
+     * @param string $units  the units to use
+     *
+     * @return array|bool the current conditions if success; false on error
      */
-    public function deletCities(): bool
+    public function daily(int $cityId, int $count = -1, string $units = self::UNIT_METRIC)
     {
-        $db = $this->getDatabase();
-        $result = $db->deletCities();
-        $db->close();
+        $query = [
+            'id' => $cityId,
+            'units' => $units,
+        ];
+        if ($count > 0) {
+            $query['cnt'] = $count;
+        }
+        if (!$result = $this->get(self::URI_DAILY, $query)) {
+            return false;
+        }
 
         return $result;
     }
 
     /**
-     * Returns forecats conditions data for a specific location.
+     * Returns 5 day / 3 hour forecat conditions data for a specific location.
      *
      * @param int    $cityId the city identifier
      * @param int    $count  the number of result to return or -1 for all
@@ -207,36 +259,8 @@ class OpenWeatherService extends HttpClientService
         if ($count > 0) {
             $query['cnt'] = $count;
         }
-
-        if (!$result = $this->get(self::URI_FORECASTS_5_DAYS, $query)) {
+        if (!$result = $this->get(self::URI_FORECAST, $query)) {
             return false;
-        }
-
-        // update country name
-        if (isset($result['city']['country'])) {
-            $country = $result['city']['country'];
-            if ($name = $this->getCountryName($country)) {
-                $result['city']['country_name'] = $name;
-            }
-            $result['city']['country_flag'] = $this->getCountryFlag($country);
-        }
-
-        // update dates
-        if (isset($result['city']['sunrise'])) {
-            $result['city']['sunrise_formatted'] = $this->localeTime($result['city']['sunrise']);
-        }
-        if (isset($result['city']['sunset'])) {
-            $result['city']['sunset_formatted'] = $this->localeTime($result['city']['sunset']);
-        }
-
-        // units
-        $result['city']['degree_unit'] = $this->getDegreeUnit($units);
-        $result['city']['speed_unit'] = $this->getSpeedUnit($units);
-
-        foreach ($result['list'] as &$data) {
-            if (isset($data['dt'])) {
-                $data['dt_formatted'] = $this->localeDateTime($data['dt']);
-            }
         }
 
         return $result;
@@ -271,60 +295,52 @@ class OpenWeatherService extends HttpClientService
     }
 
     /**
-     * Import cities from the given source.
-     *
-     * @param resource|string $source the JSON source to read
-     *
-     * @return bool true on success
+     * Gets the degree units.
      */
-    public function import($source): bool
+    public function getDegreeUnit(string $units): string
     {
-        // get content
-        if (\is_resource($source) && false === $data = \stream_get_contents($source)) {
-            return $this->setLastError(204, 'Unable to read the content.');
-        } elseif (\is_string($source) && false === $data = \file_get_contents($source)) {
-            return $this->setLastError(204, 'Unable to read the content.');
-        } else {
-            return $this->setLastError(204, 'The source must be a resource or a string.');
-        }
+        return self::UNIT_METRIC === $units ? self::DEGREE_METRIC : self::DEGREE_IMPERIAL;
+    }
 
-        // decode
-        if (!$decoded = $this->decodeJson($data)) {
+    /**
+     * Gets the speed units.
+     */
+    public function getSpeedUnit(string $units): string
+    {
+        return self::UNIT_METRIC === $units ? self::SPEED_METRIC : self::SPEED_IMPERIAL;
+    }
+
+    /**
+     * Returns all essential weather data for a specific location.
+     *
+     * @param float    $latitude  the latitude
+     * @param float    $longitude the longitude
+     * @param string[] $exclude   the parts to exclude from the response. Available values:
+     *                            <ul>
+     *                            <li>'current'</li>
+     *                            <li>'minutely'</li>
+     *                            <li>'hourly'</li>
+     *                            <li>'daily'</li>
+     *                            </ul>
+     * @param string   $units     the units to use
+     *
+     * @return array|bool the essential conditions if success; false on error
+     */
+    public function onecall(float $latitude, float $longitude, string $units = self::UNIT_METRIC, array $exclude = [])
+    {
+        $query = [
+            'lat' => $latitude,
+            'lon' => $longitude,
+            'units' => $units,
+        ];
+        if (!empty($exclude)) {
+            $query['exclude'] = \implode(',', $exclude);
+        }
+        if (!$result = $this->get(self::URI_ONECALL, $query)) {
             return false;
         }
 
-        $total = 1;
-        $insert = 0;
-        $errors = 0;
-        $db = $this->getDatabase();
-        $db->beginTransaction();
-        foreach ($decoded as $city) {
-            // insert
-            $fields = [
-                $city['id'],
-                $city['name'],
-                $city['country'],
-                $city['coord']['lat'],
-                $city['coord']['lon'],
-            ];
-            if ($db->insertCity($fields)) {
-                ++$insert;
-            } else {
-                ++$errors;
-            }
-
-            // commit
-            if (0 === ++$total % 50000) {
-                $db->commitTransaction();
-                $db->beginTransaction();
-            }
-        }
-
-        $db->commitTransaction();
-        $db->compact();
-        $db->close();
-
-        return true;
+        return $result;
     }
 
     /**
@@ -332,21 +348,36 @@ class OpenWeatherService extends HttpClientService
      *
      * @param string $query the city to search for
      * @param string $units the units to use
+     * @param int    $limit the maximum number of cities to return
      *
      * @return array|bool the search result if success; false on error
      */
-    public function search(string $query, string $units = self::UNIT_METRIC)
+    public function search(string $query, string $units = self::UNIT_METRIC, int $limit = 25)
     {
+        // find from cache
+        if (!$this->debug) {
+            $key = $this->getCacheKey('search', ['city' => $query]);
+            $item = $this->adapter->getItem($key);
+            if ($item->isHit()) {
+                return $item->get();
+            }
+        }
+
+        // search
         $db = $this->getDatabase(true);
-        $result = $db->findCity($query);
+        $result = $db->findCity($query, $limit);
         $db->close();
 
-        foreach ($result as &$city) {
-            $country = $city['country'];
-            if ($name = $this->getCountryName($country)) {
-                $city['country_name'] = $name;
+        if (!empty($result)) {
+            // update
+            $this->updateResult($result);
+
+            // save to cache
+            if (!$this->debug) {
+                $item->expiresAfter(self::CACHE_TIMEOUT)
+                    ->set($result);
+                $this->adapter->save($item);
             }
-            $city['country_flag'] = $this->getCountryFlag($country);
         }
 
         return $result;
@@ -358,6 +389,25 @@ class OpenWeatherService extends HttpClientService
     protected function getDefaultOptions(): array
     {
         return [self::BASE_URI => self::HOST_NAME];
+    }
+
+    /**
+     * Adds units to the given array.
+     *
+     * @param array  $data  the data to update
+     * @param string $units the query units
+     */
+    private function addUnits(array &$data, string $units): void
+    {
+        $data['units'] = [
+            'system' => $units,
+            'temperature' => $this->getDegreeUnit($units),
+            'speed' => $this->getSpeedUnit($units),
+            'pressure' => 'hPa',
+            'degree' => '°',
+            'percent' => '%',
+            'volume' => 'mm',
+        ];
     }
 
     /**
@@ -395,18 +445,47 @@ class OpenWeatherService extends HttpClientService
     }
 
     /**
+     * Finds the time zone (shift in seconds from UTC).
+     *
+     * @param array $data the data search in
+     *
+     * @return int the offset, if found; 0 otherwise
+     */
+    private function findTimezone(array $data): int
+    {
+        foreach ($data as $key => $value) {
+            if ('timezone' === $key) {
+                return (int) $value;
+            } elseif (\is_array($value) && $timeZone = $this->findTimeZone($value)) {
+                return $timeZone;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
      * Make a HTTP-GET call.
      *
      * @param string $uri   the uri to append to the host name
      * @param array  $query an associative array of query string values to add to the request
      *
-     * @return mixed|bool the HTTP response body on success, false on failure
+     * @return array|bool the JSON response on success, false on failure
      */
     private function get(string $uri, array $query = [])
     {
-        //add key and lang
+        //add API key and language
         $query['appid'] = $this->key;
         $query['lang'] = self::getAcceptLanguage(true);
+
+        // find from cache
+        if (!$this->debug) {
+            $key = $this->getCacheKey($uri, $query);
+            $item = $this->adapter->getItem($key);
+            if ($item->isHit()) {
+                return $item->get();
+            }
+        }
 
         // call
         $response = $this->requestGet($uri, [
@@ -416,23 +495,38 @@ class OpenWeatherService extends HttpClientService
         // decode
         $result = $response->toArray(false);
 
-        // check result
+        // check
         if (!$result = $this->checkErrorCode($result)) {
             return false;
         }
 
-        // icons
-        $this->updateIconUrl($result);
+        // update
+        $offset = $this->findTimezone($result);
+        $timezone = $this->offsetToTimZone($offset);
+        //\timezone_name_from_abbr('', $offset, 0);
+        $this->updateResult($result, $timezone);
+        $this->addUnits($result, $query['units']);
+
+        // save to cache
+        if (!$this->debug) {
+            $item->expiresAfter(self::CACHE_TIMEOUT)
+                ->set($result);
+            $this->adapter->save($item);
+        }
 
         return $result;
     }
 
     /**
-     * Gets the country flag url.
+     * Gets the cache key for the given uri and query.
      */
-    private function getCountryFlag(string $country): string
+    private function getCacheKey(string $uri, array $query): string
     {
-        return \str_replace('{0}', \strtolower($country), self::COUNTRY_FLAG_URL);
+        // unset($query['appid']);
+        $key = $uri . '?' . \http_build_query($query);
+        $key = \str_replace($this->invalidChars, '_', $key);
+
+        return $key;
     }
 
     /**
@@ -448,32 +542,81 @@ class OpenWeatherService extends HttpClientService
     }
 
     /**
-     * Gets the degree units.
-     */
-    private function getDegreeUnit(string $units): string
-    {
-        return self::UNIT_METRIC === $units ? self::DEGREE_METRIC : self::DEGREE_IMPERIAL;
-    }
-
-    /**
-     * Gets the speed units.
-     */
-    private function getSpeedUnit(string $units): string
-    {
-        return self::UNIT_METRIC === $units ? self::SPEED_METRIC : self::SPEED_IMPERIAL;
-    }
-
-    /**
-     * Update icon's URL.
+     * Converts the given offset to a time zone.
      *
-     * @param array $data the data to process
+     * @param int $offset the timezone offset in seconds from UTC
+     *
+     * @return string the timezone offset in +/-HH:MM form
      */
-    private function updateIconUrl(array &$data): void
+    private function offsetToTimZone(int $offset): \DateTimeZone
     {
-        \array_walk_recursive($data, function (&$item, $key): void {
-            if ('icon' === $key) {
-                $item = \str_replace('{0}', $item, self::ICON_URL);
+        $sign = $offset < 0 ? '-' : '+';
+        $minutes = \floor(\abs($offset) / 60) % 60;
+        $hours = \floor(\abs($offset) / 3600);
+        $id = \sprintf('%s%02d%02d', $sign, $hours, $minutes);
+
+        return new \DateTimeZone($id);
+    }
+
+    private function replaceUrl(string $url, string $value): string
+    {
+        return \str_replace('{0}', $value, $url);
+    }
+
+    /**
+     * Update result.
+     *
+     * @param array $result   the result to process
+     * @param mixed $timezone the timezone identifier
+     */
+    private function updateResult(array &$result, $timezone = null): void
+    {
+        foreach ($result as $key => &$value) {
+            switch ((string) $key) {
+                case 'icon':
+                    $result['icon_big'] = $this->replaceUrl(self::ICON_BIG_URL, $value);
+                    $result['icon_small'] = $this->replaceUrl(self::ICON_SMALL_URL, $value);
+                    break;
+
+                case 'description':
+                    $result[$key] = \ucfirst($value);
+                    break;
+
+                case 'country':
+                    if ($name = $this->getCountryName($value)) {
+                        $result['country_name'] = $name;
+                    }
+                    $result['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower($value));
+                    break;
+
+                case 'dt':
+                    $result['dt_formatted'] = $this->localeDateTime($value, \IntlDateFormatter::MEDIUM);
+                    $result['dt_date_formatted'] = $this->localeDate($value, \IntlDateFormatter::SHORT);
+                    $result['dt_locale'] = $this->localeDateTime($value, null, null, $timezone);
+                    unset($result['dt_txt']);
+                    break;
+
+                case 'sunrise':
+                    $result['sunrise_formatted'] = $this->localeTime($value, null, $timezone);
+                    break;
+
+                case 'sunset':
+                    $result['sunset_formatted'] = $this->localeTime($value, null, $timezone);
+                    break;
+
+                case 'weather':
+                    if (\is_array($value) && !empty($value)) {
+                        $this->updateResult($value, $timezone);
+                        $value = $value[0];
+                    }
+                    break;
+
+                default:
+                    if (\is_array($value)) {
+                        $this->updateResult($value, $timezone);
+                    }
+                    break;
             }
-        });
+        }
     }
 }

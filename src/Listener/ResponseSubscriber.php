@@ -73,6 +73,11 @@ class ResponseSubscriber implements EventSubscriberInterface
     private const GOOGLE_FRAME_URL = 'https://www.google.com';
 
     /**
+     * The Open weather image url.
+     */
+    private const OPEN_WEATHER_URL = 'http://openweathermap.org';
+
+    /**
      * The PDF plugin type.
      */
     private const PDF_TYPE = 'application/pdf';
@@ -197,13 +202,13 @@ class ResponseSubscriber implements EventSubscriberInterface
 
         // nonce + asset
         $csp['script-src'] = [$nonce]; //, $asset];
-            $csp['script-src-elem'] = [$nonce, $asset, self::CSP_UNSAFE_INLINE];
+        $csp['script-src-elem'] = [$nonce, $asset, self::CSP_UNSAFE_INLINE];
 
         // self + asset
         $csp['frame-src'] = [self::CSP_SELF, self::GOOGLE_FRAME_URL];
         $csp['connect-src'] = [self::CSP_SELF, $asset]; //, self::CSP_BLOB
         $csp['font-src'] = [self::CSP_SELF, self::GOOGLE_FONT_STATIC_URL, $asset];
-        $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, $asset]; //, self::CSP_BLOB
+        $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, self::OPEN_WEATHER_URL, $asset];
         $csp['style-src'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
         $csp['style-src-elem'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
 

@@ -17,7 +17,6 @@ namespace App\Twig;
 use App\Service\ApplicationService;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
-use IntlDateFormatter;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Error\SyntaxError;
@@ -120,11 +119,11 @@ final class FormatExtension extends AbstractExtension
     public function localeDateTimeFilter(Environment $env, $date, ?string $dateFormat = null, ?string $timeFormat = null, $timezone = null, ?string $calendar = 'gregorian'): string
     {
         static $formats = [
-            'none' => IntlDateFormatter::NONE,
-            'short' => IntlDateFormatter::SHORT,
-            'medium' => IntlDateFormatter::MEDIUM,
-            'long' => IntlDateFormatter::LONG,
-            'full' => IntlDateFormatter::FULL,
+            'none' => \IntlDateFormatter::NONE,
+            'short' => \IntlDateFormatter::SHORT,
+            'medium' => \IntlDateFormatter::MEDIUM,
+            'long' => \IntlDateFormatter::LONG,
+            'full' => \IntlDateFormatter::FULL,
         ];
 
         // check formats
@@ -138,13 +137,13 @@ final class FormatExtension extends AbstractExtension
         // get types
         $datetype = $dateFormat ? $formats[$dateFormat] : null;
         $timetype = $timeFormat ? $formats[$timeFormat] : null;
-        if (IntlDateFormatter::NONE === $datetype && IntlDateFormatter::NONE === $timetype) {
+        if (\IntlDateFormatter::NONE === $datetype && \IntlDateFormatter::NONE === $timetype) {
             return '';
         }
 
         // convert
         $date = twig_date_converter($env, $date, $timezone);
-        $calendar = 'gregorian' === $calendar ? IntlDateFormatter::GREGORIAN : IntlDateFormatter::TRADITIONAL;
+        $calendar = 'gregorian' === $calendar ? \IntlDateFormatter::GREGORIAN : \IntlDateFormatter::TRADITIONAL;
 
         // format
         return $this->localeDateTime($date, $datetype, $timetype, $timezone, $calendar);

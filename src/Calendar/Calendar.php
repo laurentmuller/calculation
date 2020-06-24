@@ -30,17 +30,17 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     /**
      * The default day model class.
      */
-    const DEFAULT_DAY_MODEL = Day::class;
+    public const DEFAULT_DAY_MODEL = Day::class;
 
     /**
      * The default month model class.
      */
-    const DEFAULT_MONTH_MODEL = Month::class;
+    public const DEFAULT_MONTH_MODEL = Month::class;
 
     /**
      * The default week model class.
      */
-    const DEFAULT_WEEK_MODEL = Week::class;
+    public const DEFAULT_WEEK_MODEL = Week::class;
 
     /**
      * The day model class.

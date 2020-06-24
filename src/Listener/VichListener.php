@@ -17,6 +17,7 @@ namespace App\Listener;
 use App\Interfaces\ImageExtensionInterface;
 use App\Service\ImageResizer;
 use App\Service\UserNamer;
+use App\Utils\Utils;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Event\Event;
@@ -104,21 +105,17 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         $path = $mapping->getUploadDestination() . \DIRECTORY_SEPARATOR;
 
         // get file extension
-        $fileName = $mapping->getFileName($obj);
-        $file = new File($fileName, false);
+        $filename = $mapping->getFileName($obj);
+        $file = new File($filename, false);
         $ext = $file->getExtension();
 
         // delete medium image
-        $fileName = $path . UserNamer::getBaseName($obj, self::SIZE_MEDIUM, $ext);
-        if (\file_exists($fileName)) {
-            \unlink($fileName);
-        }
+        $filename = $path . UserNamer::getBaseName($obj, self::SIZE_MEDIUM, $ext);
+        Utils::unlink($filename);
 
         // delete small image
-        $fileName = $path . UserNamer::getBaseName($obj, self::SIZE_SMALL, $ext);
-        if (\file_exists($fileName)) {
-            \unlink($fileName);
-        }
+        $filename = $path . UserNamer::getBaseName($obj, self::SIZE_SMALL, $ext);
+        Utils::unlink($filename);
     }
 
     /**

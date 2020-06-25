@@ -127,6 +127,16 @@ class OpenWeatherService extends HttpClientService
     private const PARAM_KEY = 'openweather_key';
 
     /**
+     * The medium format used for dates.
+     */
+    private const TYPE_MEDIUM = \IntlDateFormatter::MEDIUM;
+
+    /**
+     * The short format used for dates.
+     */
+    private const TYPE_SHORT = \IntlDateFormatter::SHORT;
+
+    /**
      * Current condition URI.
      */
     private const URI_CURRENT = 'weather';
@@ -570,18 +580,25 @@ class OpenWeatherService extends HttpClientService
                     break;
 
                 case 'dt':
-                    $result['dt_formatted'] = $this->localeDateTime($value, \IntlDateFormatter::MEDIUM);
-                    $result['dt_date_formatted'] = $this->localeDate($value, \IntlDateFormatter::SHORT);
-                    $result['dt_locale'] = $this->localeDateTime($value, null, null, $timezone);
+                    $result['dt_date'] = $this->localeDate($value, self::TYPE_SHORT);
+                    $result['dt_date_locale'] = $this->localeDate($value, self::TYPE_SHORT, $timezone);
+
+                    $result['dt_time'] = $this->localeTime($value, self::TYPE_SHORT);
+                    $result['dt_time_locale'] = $this->localeTime($value, self::TYPE_SHORT, $timezone);
+
+                    $result['dt_date_time'] = $this->localeDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT);
+                    $result['dt_date_time_locale'] = $this->localeDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
+
+                    $result['dt_date_time_medium'] = $this->localeDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT);
                     unset($result['dt_txt']);
                     break;
 
                 case 'sunrise':
-                    $result['sunrise_formatted'] = $this->localeTime($value, null, $timezone);
+                    $result['sunrise_formatted'] = $this->localeTime($value, self::TYPE_SHORT, $timezone);
                     break;
 
                 case 'sunset':
-                    $result['sunset_formatted'] = $this->localeTime($value, null, $timezone);
+                    $result['sunset_formatted'] = $this->localeTime($value, self::TYPE_SHORT, $timezone);
                     break;
 
                 case 'weather':

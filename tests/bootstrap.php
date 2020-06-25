@@ -12,6 +12,8 @@
 
 declare(strict_types=1);
 
+namespace App\Tests;
+
 use Symfony\Component\Dotenv\Dotenv;
 
 require \dirname(__DIR__) . '/vendor/autoload.php';

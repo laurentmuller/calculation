@@ -1,0 +1,20 @@
+{# title #}
+<h6 class="border-top pt-1">{{ 'counters.weather_forecast'|trans({count: forecast.cnt * 3}) }}</h6>
+{# table #}
+<table class="table table-hover table-sm mb-0">
+    <tbody>
+        {% for data in forecast.list %}
+            <tr>
+                <td class="ow-date">{{ data.dt_time_locale }}</td>
+                <td class="ow-icon"><img alt="Icon" src="{{ data.weather.icon_small }}" width="40" height="40">
+                <td class="ow-temperature">
+                    <span class="ow-temperature-pills ow-temperature-forecast" title="{{ 'openweather.fields.temp'|trans }}">{{ data.main.temp|round(1) }} {{ forecast.units.temperature }}</span></br>
+                    <span title="{{ 'openweather.fields.wind'|trans }}">{{ data.wind.speed }} {{ daily.units.speed }}</span></td>
+                <td>
+                    <span>{{ data.weather.description }}</span><br>
+                    <span title="{{ 'openweather.fields.pressure'|trans }}">{{ data.main.pressure }} {{ forecast.units.pressure }}</span>, <span title="{{ 'openweather.fields.humidity'|trans }}">{{ data.main.humidity }} {{ daily.units.percent }}</span>
+	           </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -43,24 +43,34 @@ use Symfony\Component\Validator\Constraints\Length;
 class OpenWeatherController extends BaseController
 {
     /**
-     * The key to save/load the city identifier within the session.
+     * The city identifier key name.
      */
-    private const KEY_CITY_ID = 'openweather.cityId';
+    private const KEY_CITY_ID = 'cityId';
 
     /**
-     * The key to save/load the limit within the session.
+     * The count key name.
      */
-    private const KEY_LIMIT = 'openweather.limit';
+    private const KEY_COUNT = 'count';
 
     /**
-     * The key to save/load the search  query within the session.
+     * The limit key name.
      */
-    private const KEY_QUERY = 'openweather.query';
+    private const KEY_LIMIT = 'limit';
 
     /**
-     * The key to save/load the units within the session.
+     * The query key name.
      */
-    private const KEY_UNITS = 'openweather.units';
+    private const KEY_QUERY = 'query';
+
+    /**
+     * The units key name.
+     */
+    private const KEY_UNITS = 'units';
+
+    /**
+     * the prefix key for sessions.
+     */
+    private const PREFIX_KEY = 'openweather.';
 
     /*
      * the service
@@ -85,6 +95,7 @@ class OpenWeatherController extends BaseController
         try {
             $cityId = $this->getRequestCityId($request);
             $units = $this->getRequestUnits($request);
+
             if (false === $response = $this->service->current($cityId, $units)) {
                 $response = $this->service->getLastError();
             }
@@ -106,16 +117,13 @@ class OpenWeatherController extends BaseController
         $units = $this->getRequestUnits($request);
         $count = $this->getRequestCount($request, 5);
 
-        // load
         $current = $this->service->current($cityId, $units);
         $forecast = $this->service->forecast($cityId, $count, $units);
         $daily = $this->service->daily($cityId, $count, $units);
 
-        //save
         if (false !== $current) {
-            $session = $request->getSession();
-            $session->set(self::KEY_CITY_ID, $cityId);
-            $session->set(self::KEY_UNITS, $units);
+            $this->setSessionValue(self::KEY_CITY_ID, $cityId);
+            $this->setSessionValue(self::KEY_UNITS, $units);
         }
 
         return $this->render('openweather/current_weather.htm.twig', [
@@ -274,7 +282,6 @@ class OpenWeatherController extends BaseController
 
         // display
         return $this->render('openweather/import_file.html.twig', [
-            //'last_import' => $this->getApplication()->getLastImport(),
             'sample' => 'http://bulk.openweathermap.org/sample/',
             'openweathermap' => 'https://openweathermap.org/',
             'form' => $form->createView(),
@@ -289,10 +296,11 @@ class OpenWeatherController extends BaseController
     public function onecall(Request $request): JsonResponse
     {
         try {
+            $units = $this->getRequestUnits($request);
             $latitude = (float) $request->get('latitude', 0.0);
             $longitude = (float) $request->get('longitude', 0.0);
             $exclude = (array) $request->get('exclude', []);
-            $units = $this->getRequestUnits($request);
+
             if (false === $response = $this->service->onecall($latitude, $longitude, $units, $exclude)) {
                 $response = $this->service->getLastError();
             }
@@ -311,7 +319,7 @@ class OpenWeatherController extends BaseController
     public function search(Request $request, UrlGeneratorInterface $generator): JsonResponse
     {
         try {
-            $query = (string) $request->get('query');
+            $query = $this->getRequestQuery($request);
             $units = $this->getRequestUnits($request);
             if (false === $response = $this->service->search($query, $units)) {
                 return $this->json($this->service->getLastError());
@@ -348,33 +356,35 @@ class OpenWeatherController extends BaseController
      */
     public function searchView(Request $request): Response
     {
+        // get session data
+        $data = [
+            'query' => $this->getSessionQuery($request),
+            'units' => $this->getSessionUnits($request),
+            'limits' => $this->getSessionLimit($request),
+        ];
+
         // create form
-        $builder = $this->createFormBuilder();
+        $builder = $this->createFormBuilder($data);
         $helper = new FormHelper($builder, 'openweather.search.');
 
-        $query = $this->getSessionQuery($request);
-        $helper->field('query')
-            ->updateOption('data', $query)
+        $helper->field(self::KEY_QUERY)
             ->updateOption('constraints', new Length(['min' => 2]))
             ->updateAttribute('placeholder', 'openweather.search.place_holder')
             ->updateAttribute('minlength', 2)
             ->add(SearchType::class);
 
-        $units = $this->getSessionUnits($request);
-        $helper->field('units')
-            ->updateOption('data', $units)
+        $helper->field(self::KEY_UNITS)
             ->updateOption('choice_translation_domain', false)
             ->addChoiceType([
                 OpenWeatherService::DEGREE_METRIC => OpenWeatherService::UNIT_METRIC,
                 OpenWeatherService::DEGREE_IMPERIAL => OpenWeatherService::UNIT_IMPERIAL,
             ]);
 
-        $limit = $this->getSessionLimit($request);
-        $helper->field('limit')
-            ->updateOption('data', $limit)
+        $helper->field(self::KEY_LIMIT)
             ->updateOption('choice_translation_domain', false)
             ->addChoiceType([
                 10 => 10,
+                15 => 15,
                 25 => 25,
                 50 => 50,
                 100 => 100,
@@ -384,9 +394,9 @@ class OpenWeatherController extends BaseController
         $form = $builder->getForm();
         if ($this->handleRequestForm($request, $form)) {
             // get values
-            $query = (string)$form->get('query')->getData();
-            $units = (string)$form->get('units')->getData();
-            $limit = (int)$form->get('limit')->getData();
+            $query = (string) $form->get('query')->getData();
+            $units = (string) $form->get('units')->getData();
+            $limit = (int) $form->get('limit')->getData();
 
             // search
             $cities = $this->service->search($query, $units, $limit);
@@ -400,10 +410,9 @@ class OpenWeatherController extends BaseController
             }
 
             // save
-            $session = $request->getSession();
-            $session->set(self::KEY_QUERY, $query);
-            $session->set(self::KEY_UNITS, $units);
-            $session->set(self::KEY_LIMIT, $limit);
+            $this->setSessionValue(self::KEY_QUERY, $query);
+            $this->setSessionValue(self::KEY_UNITS, $units);
+            $this->setSessionValue(self::KEY_LIMIT, $limit);
 
             // display
             return $this->render('openweather/search_city.html.twig', [
@@ -434,6 +443,11 @@ class OpenWeatherController extends BaseController
         }
 
         return $this->redirectToRoute('openweather_search_view', ['units' => $units]);
+    }
+
+    protected function getSessionKey(string $key): string
+    {
+        return self::PREFIX_KEY . $key;
     }
 
     private function getGzContent(UploadedFile $file): ?string
@@ -472,58 +486,46 @@ class OpenWeatherController extends BaseController
 
     private function getRequestCityId(Request $request): int
     {
-        return (int) $request->get('cityId', 0);
+        return (int) $request->get(self::KEY_CITY_ID, 0);
     }
 
     private function getRequestCount(Request $request, int $default = -1): int
     {
-        return (int) $request->get('count', $default);
+        return (int) $request->get(self::KEY_COUNT, $default);
     }
 
     private function getRequestLimit(Request $request, int $default = 25): int
     {
-        return (int) $request->get('limit', $default);
+        return (int) $request->get(self::KEY_LIMIT, $default);
     }
 
     private function getRequestQuery(Request $request): ?string
     {
-        return \trim((string) $request->get('query', ''));
+        return \trim((string) $request->get(self::KEY_QUERY, ''));
     }
 
     private function getRequestUnits(Request $request): string
     {
-        return (string) $request->get('units', OpenWeatherService::UNIT_METRIC);
+        return (string) $request->get(self::KEY_UNITS, OpenWeatherService::UNIT_METRIC);
     }
 
     private function getSessionCityId(Request $request): int
     {
-        $session = $request->getSession();
-        $value = (int) $session->get(self::KEY_CITY_ID, $this->getRequestCityId($request));
-
-        return $value;
+        return (int) $this->getSessionInt(self::KEY_CITY_ID, $this->getRequestCityId($request));
     }
 
     private function getSessionLimit(Request $request, int $default = 25): int
     {
-        $session = $request->getSession();
-        $value = (int) $session->get(self::KEY_LIMIT, $this->getRequestLimit($request, $default));
-
-        return $value;
+        return (int) $this->getSessionInt(self::KEY_LIMIT, $this->getRequestLimit($request, $default));
     }
 
     private function getSessionQuery(Request $request): string
     {
-        $session = $request->getSession();
-        $value = (string) $session->get(self::KEY_QUERY, $this->getRequestQuery($request));
-
-        return $value;
+        return (string) $this->getSessionString(self::KEY_QUERY, $this->getRequestQuery($request));
     }
 
     private function getSessionUnits(Request $request): string
     {
-        $session = $request->getSession();
-        $value = (string) $session->get(self::KEY_UNITS, $this->getRequestUnits($request));
-
-        return $value;
+        return (string) $this->getSessionString(self::KEY_UNITS, $this->getRequestUnits($request));
     }
 }

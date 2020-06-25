@@ -1,0 +1,42 @@
+{# macros #}
+{% macro title(name) %}
+<tr>
+    <td colspan="2">{{ name }}</td>
+</tr>
+{% endmacro %}
+{% macro row(name, value, unit = '') %}
+<tr>
+    <td class="pl-4 w-30">{{ name }}</td>
+    <td>{{ (value ~ ' ' ~ unit)|trim }}</td>
+</tr>
+{% endmacro %}
+
+{# title #}
+<h6 class="border-top pt-1">{{ 'openweather.fields.current'|trans }}</h6>
+{# table #}
+<table class="table table-hover table-sm mb-0">
+    <tbody>
+        {{ _self.title('openweather.fields.temp'|trans) }}
+        {{ _self.row('openweather.fields.temp_current'|trans, current.main.temp|round(1), current.units.temperature) }}
+        {{ _self.row('openweather.fields.temp_feels_like'|trans, current.main.feels_like|round(1), current.units.temperature) }}
+        {{ _self.row('openweather.fields.temp_min'|trans, current.main.temp_min|round(1), current.units.temperature) }}
+        {{ _self.row('openweather.fields.temp_max'|trans, current.main.temp_max|round(1), current.units.temperature) }}
+
+        {{ _self.title('openweather.fields.wind'|trans) }}
+        {{ _self.row('openweather.fields.wind_speed'|trans, current.wind.speed, current.units.speed) }}
+        {{ _self.row('openweather.fields.wind_deg'|trans, current.wind.deg, current.units.degree) }}
+
+        {{ _self.title('openweather.fields.sun'|trans) }}
+        {{ _self.row('openweather.fields.sunrise'|trans, current.sys.sunrise_formatted) }}  
+        {{ _self.row('openweather.fields.sunset'|trans, current.sys.sunset_formatted) }}
+
+        {{ _self.title('openweather.fields.position'|trans) }}
+        {{ _self.row('openweather.fields.position_lat'|trans, current.coord.lat, current.units.degree) }}
+        {{ _self.row('openweather.fields.position_lon'|trans, current.coord.lon, current.units.degree) }}
+
+        {{ _self.title('openweather.fields.miscellaneous'|trans) }}
+        {{ _self.row('openweather.fields.pressure'|trans, current.main.pressure, current.units.pressure) }}
+        {{ _self.row('openweather.fields.humidity'|trans, current.main.humidity, current.units.percent) }}
+        {{ _self.row('openweather.fields.locale_date'|trans, current.dt_date_time_locale) }}
+    </tbody>
+</table>

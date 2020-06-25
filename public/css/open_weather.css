@@ -1,0 +1,39 @@
+@import 'style.css';
+
+/**! compression tag for ftp-deployment */
+
+.ow-date {
+    width: 100px;
+    white-space: nowrap;
+}
+
+.ow-icon {
+    width: 100px;
+    text-align: center;
+    vertical-align: top;    
+}
+
+.ow-temperature {
+    width: 150px;   
+}
+
+.ow-temperature-pills {
+    font-size: 80%;
+    border-radius: 50rem;
+    padding: 0.2rem 0.5rem;
+}
+
+.ow-temperature-forecast {
+    color: var(--white);
+    background-color: var(--primary);
+} 
+
+.ow-temperature-day {
+    color: var(--white);
+    background-color: var(--danger);
+} 
+
+.ow-temperature-night {
+    color: var(--white);
+    background-color: var(--secondary);
+} 

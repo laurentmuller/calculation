@@ -786,6 +786,30 @@ openweather:
         title: Météo actuelle
         metric: Système métrique
         imperial: Système impériale
+        date_calculation: Valeurs obtenue le %date%
+    fields:
+        current: Valeurs actuelles
+        temp: Température
+        temp_current: Actuelle
+        temp_feels_like: Ressentie
+        temp_min: Minimum
+        temp_max: Maximum
+        temp_day: Température de jour
+        temp_night: Température de nuit
+        wind: Vent
+        wind_speed: Vitesse
+        wind_deg: Direction
+        sun: Soleil
+        sunrise: Levé
+        sunset: Couché
+        position: Position
+        position_lat: Latitude
+        position_lon: Longitude
+        miscellaneous: Divers
+        pressure: Pression
+        humidity: Humidité
+        locale_date: Heure locale
+        
     search:
         title: Rechercher une localité
         query: Localité

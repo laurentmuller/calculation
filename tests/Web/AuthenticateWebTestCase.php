@@ -42,7 +42,6 @@ abstract class AuthenticateWebTestCase extends WebTestCase
      */
     protected $debug = false;
 
-
     /**
      * {@inheritdoc}
      */

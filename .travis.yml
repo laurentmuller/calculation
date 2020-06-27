@@ -9,7 +9,6 @@ php:
   
 env:
   - SYMFONY_VERSION=5.1.*
-  - APP_DEBUG=0
   
 before_install:
   - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini

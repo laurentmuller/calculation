@@ -787,6 +787,13 @@ openweather:
         metric: Système métrique
         imperial: Système impériale
         date_calculation: Valeurs obtenue le %date%
+        today: Aujourd'hui
+        empty: Aucune localité ne correspond aux <a href="#">critères de recherche</a>.
+    direction:
+        N: Nord
+        S: Sud
+        E: Est
+        W: Ouest
     fields:
         current: Valeurs actuelles
         temp: Température
@@ -809,11 +816,9 @@ openweather:
         pressure: Pression
         humidity: Humidité
         locale_date: Heure locale
-        
     search:
         title: Rechercher une localité
         query: Localité
         limit: Limite
         units: Unités
         place_holder: Veuillez saisir une localité
-        empty: Aucune localité ne correspond aux critères de recherche.

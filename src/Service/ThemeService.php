@@ -266,13 +266,9 @@ class ThemeService
      *
      * @return Request|null the request, if any; null otherwise
      */
-    protected function getRequest(?Request $request = null): ?Request
+    private function getRequest(?Request $request = null): ?Request
     {
-        if (!$request) {
-            return $this->stack->getCurrentRequest();
-        }
-
-        return $request;
+        return $request ?? $this->stack->getCurrentRequest();
     }
 
     /**

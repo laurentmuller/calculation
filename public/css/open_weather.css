@@ -37,3 +37,9 @@
     color: var(--white);
     background-color: var(--secondary);
 } 
+
+.ow-table-responsive {
+    max-height: 285px;
+    overflow-y: auto;
+    margin: 0;
+}

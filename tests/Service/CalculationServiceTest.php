@@ -26,7 +26,7 @@ use App\Service\CalculationService;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -34,7 +34,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class CalculationServiceTest extends WebTestCase
+class CalculationServiceTest extends KernelTestCase
 {
     public const MARGIN_PERCENT = 0.1;
     public const PRODUCT_PRICE = 100.0;

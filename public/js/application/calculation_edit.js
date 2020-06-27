@@ -1026,12 +1026,12 @@ $.fn.extend({
         'use strict';
         const $input = $(this).find('input:first');
         if ($input.length) {
-            // Example: calculation_groups_0_items_0_unit
+            // Example: calculation_groups_4_items_12_total
             const attr = $input.attr('id');
-            const regex = /([\d+])(?!.*\d+)/g;
-            const found = attr.match(regex);
-            if (found && found.length) {
-                const id = Number.parseInt(found[0], 10);
+            const lastIndex =  attr.lastIndexOf('_');
+            const prevIndex =  attr.lastIndexOf('_', lastIndex - 1);
+            if (lastIndex !== -1 && prevIndex !== -1) {
+                const id = Number.parseInt(attr.substring(prevIndex + 1, lastIndex), 10);
                 if (!Number.isNaN(id)) {
                     return id;    
                 }

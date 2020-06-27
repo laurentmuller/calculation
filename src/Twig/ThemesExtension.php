@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
+use App\Entity\Theme;
 use App\Form\ThemeType;
 use App\Service\ThemeService;
 use Symfony\Component\HttpFoundation\Request;
@@ -88,7 +89,7 @@ final class ThemesExtension extends AbstractExtension
     public function getThemeCss(Request $request): string
     {
         // get CSS
-        $theme = $this->service->getCurrentTheme($request);
+        $theme = $this->getCurrentTheme($request);
         if ($theme->exists()) {
             return $theme->getCss();
         }
@@ -103,10 +104,7 @@ final class ThemesExtension extends AbstractExtension
      */
     public function getThemeName(Request $request): string
     {
-        // get theme
-        $theme = $this->service->getCurrentTheme($request);
-
-        return $theme->getName();
+        return $this->getCurrentTheme($request)->getName();
     }
 
     /**
@@ -116,10 +114,7 @@ final class ThemesExtension extends AbstractExtension
      */
     public function isDefaultTheme(Request $request): bool
     {
-        // get theme
-        $theme = $this->service->getCurrentTheme($request);
-
-        return $theme->isDefault();
+        return $this->getCurrentTheme($request)->isDefault();
     }
 
     /**
@@ -129,9 +124,18 @@ final class ThemesExtension extends AbstractExtension
      */
     public function isThemeDark(Request $request): bool
     {
-        // get theme
-        $theme = $this->service->getCurrentTheme($request);
+        return $this->getCurrentTheme($request)->isDark();
+    }
 
-        return $theme->isDark();
+    /**
+     * Gets the current theme.
+     *
+     * @param Request $request the request
+     *
+     * @return Theme the current theme, if any; the default theme otherwise
+     */
+    private function getCurrentTheme(?Request $request = null): Theme
+    {
+        return $this->service->getCurrentTheme($request);
     }
 }

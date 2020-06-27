@@ -88,9 +88,9 @@ class OpenWeatherController extends BaseController
     /**
      * Returns current conditions data for a specific location.
      *
-     * @Route("/current", name="openweather_current")
+     * @Route("/api/current", name="openweather_api_current")
      */
-    public function current(Request $request): JsonResponse
+    public function apiCurrent(Request $request): JsonResponse
     {
         try {
             $cityId = $this->getRequestCityId($request);
@@ -107,38 +107,11 @@ class OpenWeatherController extends BaseController
     }
 
     /**
-     * Returns current conditions data for a specific location.
-     *
-     * @Route("/current/view", name="openweather_current_view")
-     */
-    public function currentView(Request $request): Response
-    {
-        $cityId = $this->getRequestCityId($request);
-        $units = $this->getRequestUnits($request);
-        $count = $this->getRequestCount($request, 5);
-
-        $current = $this->service->current($cityId, $units);
-        $forecast = $this->service->forecast($cityId, $count, $units);
-        $daily = $this->service->daily($cityId, $count, $units);
-
-        if (false !== $current) {
-            $this->setSessionValue(self::KEY_CITY_ID, $cityId);
-            $this->setSessionValue(self::KEY_UNITS, $units);
-        }
-
-        return $this->render('openweather/current_weather.htm.twig', [
-            'current' => $current,
-            'forecast' => $forecast,
-            'daily' => $daily,
-        ]);
-    }
-
-    /**
      * Returns 16 day / daily forecast conditions data for a specific location.
      *
-     * @Route("/daily", name="openweather_daily")
+     * @Route("/api/daily", name="openweather_api_daily")
      */
-    public function daily(Request $request): JsonResponse
+    public function apiDaily(Request $request): JsonResponse
     {
         try {
             $cityId = $this->getRequestCityId($request);
@@ -158,9 +131,9 @@ class OpenWeatherController extends BaseController
     /**
      * Returns 5 day / 3 hour forecast conditions data for a specific location.
      *
-     * @Route("/forecast", name="openweather_forecast")
+     * @Route("/api/forecast", name="openweather_api_forecast")
      */
-    public function forecast(Request $request): JsonResponse
+    public function apiForecast(Request $request): JsonResponse
     {
         try {
             $cityId = $this->getRequestCityId($request);
@@ -175,6 +148,94 @@ class OpenWeatherController extends BaseController
         } catch (\Exception $e) {
             return $this->jsonException($e);
         }
+    }
+
+    /**
+     * Returns all essential weather data for a specific location.
+     *
+     * @Route("/api/onecall", name="openweather_api_onecall")
+     */
+    public function apiOnecall(Request $request): JsonResponse
+    {
+        try {
+            $units = $this->getRequestUnits($request);
+            $latitude = (float) $request->get('latitude', 0.0);
+            $longitude = (float) $request->get('longitude', 0.0);
+            $exclude = (array) $request->get('exclude', []);
+
+            if (false === $response = $this->service->onecall($latitude, $longitude, $units, $exclude)) {
+                $response = $this->service->getLastError();
+            }
+
+            return $this->json($response);
+        } catch (\Exception $e) {
+            return $this->jsonException($e);
+        }
+    }
+
+    /**
+     * Returns an array of cities that match the query text.
+     *
+     * @Route("/api/search", name="openweather_api_search")
+     */
+    public function apiSearch(Request $request, UrlGeneratorInterface $generator): JsonResponse
+    {
+        try {
+            $query = $this->getRequestQuery($request);
+            $units = $this->getRequestUnits($request);
+            if (false === $response = $this->service->search($query, $units)) {
+                return $this->json($this->service->getLastError());
+            }
+
+            // add urls
+            $parameters = ['units' => $units];
+            foreach ($response as &$city) {
+                $parameters['latitude'] = $city['latitude'];
+                $parameters['longitude'] = $city['longitude'];
+                $city['onecall_url'] = $generator->generate('openweather_api_onecall', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+                unset($parameters['latitude'], $parameters['longitude']);
+
+                $parameters['cityId'] = $city['id'];
+                $city['current_url'] = $generator->generate('openweather_api_current', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+                $city['forecast_url'] = $generator->generate('openweather_api_forecast', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+                $city['daily_url'] = $generator->generate('openweather_api_daily', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+
+                unset($parameters['cityId']);
+            }
+
+            return $this->json($response);
+        } catch (\Exception $e) {
+            return $this->jsonException($e);
+        }
+    }
+
+    /**
+     * Returns current conditions data for a specific location.
+     *
+     * @Route("/current", name="openweather_current")
+     */
+    public function current(Request $request): Response
+    {
+        $cityId = $this->getRequestCityId($request);
+        $units = $this->getRequestUnits($request);
+        $count = $this->getRequestCount($request);
+
+        $current = $this->service->current($cityId, $units);
+        $forecast = $this->service->forecast($cityId, $count, $units);
+        $daily = $this->service->daily($cityId, $count, $units);
+
+        if (false !== $current) {
+            $this->setSessionValue(self::KEY_CITY_ID, $cityId);
+            $this->setSessionValue(self::KEY_UNITS, $units);
+            $this->setSessionValue(self::KEY_COUNT, $count);
+        }
+
+        return $this->render('openweather/current_weather.htm.twig', [
+            'current' => $current,
+            'forecast' => $forecast,
+            'daily' => $daily,
+            'count' => $count,
+        ]);
     }
 
     /**
@@ -280,7 +341,7 @@ class OpenWeatherController extends BaseController
             ]);
         }
 
-        // display
+        // display form
         return $this->render('openweather/import_file.html.twig', [
             'sample' => 'http://bulk.openweathermap.org/sample/',
             'openweathermap' => 'https://openweathermap.org/',
@@ -289,78 +350,18 @@ class OpenWeatherController extends BaseController
     }
 
     /**
-     * Returns all essential weather data for a specific location.
-     *
-     * @Route("/onecall", name="openweather_onecall")
-     */
-    public function onecall(Request $request): JsonResponse
-    {
-        try {
-            $units = $this->getRequestUnits($request);
-            $latitude = (float) $request->get('latitude', 0.0);
-            $longitude = (float) $request->get('longitude', 0.0);
-            $exclude = (array) $request->get('exclude', []);
-
-            if (false === $response = $this->service->onecall($latitude, $longitude, $units, $exclude)) {
-                $response = $this->service->getLastError();
-            }
-
-            return $this->json($response);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
-    }
-
-    /**
-     * Returns an array of cities that match the query text.
+     * Shows the search city view.
      *
      * @Route("/search", name="openweather_search")
      */
-    public function search(Request $request, UrlGeneratorInterface $generator): JsonResponse
-    {
-        try {
-            $query = $this->getRequestQuery($request);
-            $units = $this->getRequestUnits($request);
-            if (false === $response = $this->service->search($query, $units)) {
-                return $this->json($this->service->getLastError());
-            }
-
-            // add urls
-            $parameters = ['units' => $units];
-            foreach ($response as &$city) {
-                $parameters['latitude'] = $city['latitude'];
-                $parameters['longitude'] = $city['longitude'];
-                $city['onecall_url'] = $generator->generate('openweather_onecall', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-                unset($parameters['latitude'], $parameters['longitude']);
-
-                $parameters['cityId'] = $city['id'];
-                $city['current_url'] = $generator->generate('openweather_current', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-                $city['forecast_url'] = $generator->generate('openweather_forecast', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-                $city['daily_url'] = $generator->generate('openweather_daily', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-
-                $city['current_view_url'] = $generator->generate('openweather_current_view', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-
-                unset($parameters['cityId']);
-            }
-
-            return $this->json($response);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
-    }
-
-    /**
-     * Shows the search city view.
-     *
-     * @Route("/search/view", name="openweather_search_view")
-     */
-    public function searchView(Request $request): Response
+    public function search(Request $request): Response
     {
         // get session data
         $data = [
-            'query' => $this->getSessionQuery($request),
-            'units' => $this->getSessionUnits($request),
-            'limits' => $this->getSessionLimit($request),
+            self::KEY_QUERY => $this->getSessionQuery($request),
+            self::KEY_UNITS => $this->getSessionUnits($request),
+            self::KEY_LIMIT => $this->getSessionLimit($request),
+            self::KEY_COUNT => $this->getSessionCount($request),
         ];
 
         // create form
@@ -390,6 +391,9 @@ class OpenWeatherController extends BaseController
                 100 => 100,
             ]);
 
+        $helper->field(self::KEY_COUNT)
+            ->addHiddenType();
+
         // handle request
         $form = $builder->getForm();
         if ($this->handleRequestForm($request, $form)) {
@@ -397,52 +401,66 @@ class OpenWeatherController extends BaseController
             $query = (string) $form->get('query')->getData();
             $units = (string) $form->get('units')->getData();
             $limit = (int) $form->get('limit')->getData();
+            $count = (int) $form->get('count')->getData();
 
             // search
             $cities = $this->service->search($query, $units, $limit);
 
-            // update
-            foreach ($cities as &$city) {
-                if (false !== $current = $this->service->current($city['id'], $units)) {
-                    $city['name'] = $current['name'];
-                    $city['current'] = $current;
+            // get identifers
+            $cityIds = \array_map(function (array $city) {
+                return $city['id'];
+            }, $cities);
+
+            // load current weather by chunk of 20 items
+            for ($i = 0, $len = \count($cities); $i < $len; ++$i) {
+                if (0 === $i % OpenWeatherService::MAX_GROUP) {
+                    $ids = \array_splice($cityIds, 0, OpenWeatherService::MAX_GROUP);
+                    $group = $this->service->group($ids, $units);
                 }
+                $cities[$i]['name'] = $group['list'][$i % 20]['name'];
+                $cities[$i]['current'] = $group['list'][$i % 20];
+                $cities[$i]['units'] = $group['units'];
             }
 
             // save
             $this->setSessionValue(self::KEY_QUERY, $query);
             $this->setSessionValue(self::KEY_UNITS, $units);
             $this->setSessionValue(self::KEY_LIMIT, $limit);
+            $this->setSessionValue(self::KEY_COUNT, $count);
 
             // display
             return $this->render('openweather/search_city.html.twig', [
                 'form' => $form->createView(),
                 'cities' => $cities,
                 'units' => $units,
+                'count' => $count,
             ]);
         }
 
         // display
         return $this->render('openweather/search_city.html.twig', [
             'form' => $form->createView(),
+            'count' => $data[self::KEY_COUNT],
         ]);
     }
 
     /**
-     * Shows the current weather, if applicable, the search city view otherwise.
+     * Shows the current weather, if applicable, the search cities otherwise.
      *
-     * @Route("/wather/view", name="openweather_weather_view")
+     * @Route("/wather", name="openweather_weather")
      */
-    public function weatherView(Request $request): Response
+    public function weather(Request $request): Response
     {
         $cityId = $this->getSessionCityId($request);
-        $units = $this->getSessionUnits($request);
-
         if (0 !== $cityId) {
-            return $this->redirectToRoute('openweather_current_view', ['cityId' => $cityId, 'units' => $units]);
+            return $this->redirectToRoute('openweather_current', [
+                self::KEY_CITY_ID => $cityId,
+                self::KEY_UNITS => $this->getSessionUnits($request),
+                self::KEY_COUNT => $this->getSessionCount($request),
+            ]);
         }
 
-        return $this->redirectToRoute('openweather_search_view', ['units' => $units]);
+        return $this->redirectToRoute('openweather_search');
     }
 
     protected function getSessionKey(string $key): string
@@ -489,7 +507,7 @@ class OpenWeatherController extends BaseController
         return (int) $request->get(self::KEY_CITY_ID, 0);
     }
 
-    private function getRequestCount(Request $request, int $default = -1): int
+    private function getRequestCount(Request $request, int $default = 5): int
     {
         return (int) $request->get(self::KEY_COUNT, $default);
     }
@@ -512,6 +530,11 @@ class OpenWeatherController extends BaseController
     private function getSessionCityId(Request $request): int
     {
         return (int) $this->getSessionInt(self::KEY_CITY_ID, $this->getRequestCityId($request));
+    }
+
+    private function getSessionCount(Request $request, int $default = 5): int
+    {
+        return (int) $this->getSessionInt(self::KEY_COUNT, $this->getRequestCount($request, $default));
     }
 
     private function getSessionLimit(Request $request, int $default = 25): int

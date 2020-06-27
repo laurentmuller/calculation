@@ -2,9 +2,9 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title       = 'openweather.search.title' -%}
-{%- set title_icon  = 'search' -%}
-{%- set submit_text = submit_text|default('common.button_search') -%}
+{%- set title         = 'openweather.search.title' -%}
+{%- set title_icon    = 'search' -%}
+{%- set submit_text   = submit_text|default('common.button_search') -%}
 
 {% block card_body %}
 <div class="form-row">
@@ -19,7 +19,9 @@
     </div>
 </div>
 {% if cities is defined %}
-    {% if cities|length %}
+    {%- set cities_length = cities|length -%}
+    <p class="{{ cities_length ? 'text-muted' : 'mb-0 text-danger' }}">{{ 'counters.weather_cities'|trans({count: cities_length}) }}</p>
+    {% if cities_length %}
     <table class="table table-hover table-sm mb-0">
         <tbody data-link="row" class="rowlink">
         {% for city in cities %}
@@ -29,8 +31,8 @@
                     <img src="{{ current.weather.icon_small }}" alt="image" width="36" height="36">
                 </td>
                 <td class="w-75">
-                    <a href="{{ path('openweather_current_view', {'cityId': city.id, 'units': units}) }}"><b>{{ city.name }}</b></a><br>
-                    <span class="small">{{ current.main.temp|round(1) }} {{ current.units.temperature }}, {{ current.weather.description }}</span>
+                    <a href="{{ path('openweather_current', {'cityId': city.id, 'units': units, 'count': count}) }}"><b>{{ city.name }}</b></a><br>
+                    <span class="small">{{ current.main.temp|round(1) }} {{ city.units.temperature }}, {{ current.weather.description }}</span>
                 </td>
                 <td class="w-25">
                     <img class="align-baseline" alt="Flag" src="{{ city.country_flag }}"> {{ city.country_name }}
@@ -39,8 +41,6 @@
         {% endfor %}
         </tbody>
     </table>
-    {% else %}
-        <p class="mb-0 text-danger">{{ 'openweather.search.empty'|trans }}</p>
     {% endif %}
 {% endif %}
 {% endblock %}

@@ -16,14 +16,14 @@ namespace App\Tests\Service;
 
 use App\Interfaces\ApplicationServiceInterface;
 use App\Service\ApplicationService;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Test for the application service.
  *
  * @author Laurent Muller
  */
-class ApplicationServiceTest extends WebTestCase implements ApplicationServiceInterface
+class ApplicationServiceTest extends KernelTestCase implements ApplicationServiceInterface
 {
     public function testService(): void
     {

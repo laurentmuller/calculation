@@ -72,6 +72,11 @@ class OpenWeatherService extends HttpClientService
     public const EXCLUDE_MINUTELY = 'minutely';
 
     /**
+     * The maximim number of city identifiers to retrieve.
+     */
+    public const MAX_GROUP = 20;
+
+    /**
      * The imperial speed.
      */
     public const SPEED_IMPERIAL = 'mph';
@@ -152,9 +157,37 @@ class OpenWeatherService extends HttpClientService
     private const URI_FORECAST = 'forecast';
 
     /**
+     * Current condition URI for a group (mutliple cities).
+     */
+    private const URI_GROUP = 'group';
+
+    /**
      * One call condition URI.
      */
     private const URI_ONECALL = 'onecall';
+
+    /**
+     * The wind directions.
+     */
+    private const WIND_DIRECTIONS = [
+        'N',
+        'N-Ne',
+        'Ne',
+        'E-Ne',
+        'E',
+        'E-Se',
+        'Se',
+        'S-Se',
+        'S',
+        'S-Sw',
+        'Sw',
+        'W-Sw',
+        'W',
+        'W-Nw',
+        'Nw',
+        'N-Nw',
+        'N',
+    ];
 
     /**
      * The cache adapter.
@@ -318,6 +351,33 @@ class OpenWeatherService extends HttpClientService
     public function getSpeedUnit(string $units): string
     {
         return self::UNIT_METRIC === $units ? self::SPEED_METRIC : self::SPEED_IMPERIAL;
+    }
+
+    /**
+     * Returns current conditions data for a group of cities.
+     *
+     * @param int[]  $cityIds the city identifiers. The maximim number of city identifiers are 20.
+     * @param string $units   the units to use
+     *
+     * @return array|bool the current conditions if success; false on error
+     *
+     * @throws \InvalidArgumentException if the number of city identifiers is greater than 20
+     */
+    public function group(array $cityIds, string $units = self::UNIT_METRIC)
+    {
+        if (\count($cityIds) > self::MAX_GROUP) {
+            throw new \InvalidArgumentException('The number of city identifiers is greater than 20.');
+        }
+
+        $query = [
+            'id' => \implode(',', $cityIds),
+            'units' => $units,
+        ];
+        if (!$result = $this->get(self::URI_GROUP, $query)) {
+            return false;
+        }
+
+        return $result;
     }
 
     /**
@@ -532,6 +592,17 @@ class OpenWeatherService extends HttpClientService
     }
 
     /**
+     * Gets the wind direction for the given degrees.
+     */
+    private function getWindDirection(int $deg): string
+    {
+        $deg %= 360;
+        $index = \floor(($deg / 22.5 + 0.5));
+
+        return self::WIND_DIRECTIONS[$index];
+    }
+
+    /**
      * Converts the given offset to a time zone.
      *
      * @param int $offset the timezone offset in seconds from UTC
@@ -606,6 +677,10 @@ class OpenWeatherService extends HttpClientService
                         $this->updateResult($value, $timezone);
                         $value = $value[0];
                     }
+                    break;
+
+                case 'deg':
+                    $result['deg_text'] = $this->getWindDirection($value);
                     break;
 
                 default:

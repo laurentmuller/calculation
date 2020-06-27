@@ -1,22 +1,24 @@
 {# title #}
 <h6 class="border-top pt-1">{{ 'counters.weather_daily'|trans({count: daily.cnt}) }}</h6>
 {# table #}
-<table class="table table-hover table-sm mb-0">
-    <tbody>
-        {% for data in daily.list %}
-        <tr>
-            <td class="ow-date">{{ data.dt_date }}</td>
-            <td class="ow-icon"><img alt="Icon" src="{{ data.weather.icon_small }}" width="40" height="40">
-            <td class="ow-temperature">
-                <span class="ow-temperature-pills ow-temperature-day" title="{{ 'openweather.fields.temp_day'|trans }}">{{ data.temp.day|round(1) }} {{ daily.units.temperature }}</span> 
-                <span class="ow-temperature-pills ow-temperature-night" title="{{ 'openweather.fields.temp_night'|trans }}">{{ data.temp.night|round(1) }} {{ daily.units.temperature }}</span><br> 
-                <span title={{ 'openweather.fields.wind'|trans }}>{{ data.speed }} {{ daily.units.speed }}</span>
-            </td>
-            <td>
-                <span>{{ data.weather.description }}</span><br>
-                <span title="{{ 'openweather.fields.pressure'|trans }}">{{ data.pressure }} {{ daily.units.pressure }}</span>, <span title="{{ 'openweather.fields.humidity'|trans }}">{{ data.humidity }} {{ daily.units.percent }}</span>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="ow-table-responsive">
+    <table class="table table-sm mb-0">
+        <tbody>
+            {% for data in daily.list %}
+            <tr>
+                <td class="ow-date">{{ data.dt_date }}{% if loop.index0 == 0 %}<br><span class="small text-muted">{{ 'openweather.current.today'|trans }}</span>{% endif %}</td>           
+                <td class="ow-icon"><img alt="Icon" src="{{ data.weather.icon_small }}" width="40" height="40">
+                <td class="ow-temperature">
+                    <span class="ow-temperature-pills ow-temperature-day" title="{{ 'openweather.fields.temp_day'|trans }}">{{ data.temp.day|round(1) }} {{ units_temp }}</span> 
+                    <span class="ow-temperature-pills ow-temperature-night" title="{{ 'openweather.fields.temp_night'|trans }}">{{ data.temp.night|round(1) }} {{ units_temp }}</span><br> 
+                    <span title={{ 'openweather.fields.wind'|trans }}>{{ data.speed }} {{ units_speed }}</span>
+                </td>
+                <td>
+                    <span>{{ data.weather.description }}</span><br>
+                    <span title="{{ 'openweather.fields.pressure'|trans }}">{{ data.pressure }} {{ units_pressure }}</span>, <span title="{{ 'openweather.fields.humidity'|trans }}">{{ data.humidity }} {{ units_percent }}</span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -32,13 +32,17 @@ class OpenWeatherServiceTest extends KernelTestCase
      * @var OpenWeatherService
      */
     private $service;
+
+    /*
+     * the debug mode
+     */
     private $debug = false;
 
     protected function setUp(): void
     {
         self::bootKernel();
         $this->service = self::$container->get(OpenWeatherService::class);
-        $this->debug = \in_array('--debug', $_SERVER['argv'], true);
+        $this->debug = self::$kernel->isDebug();
     }
 
     public function testCurrent(): void

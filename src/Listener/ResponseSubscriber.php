@@ -75,7 +75,7 @@ class ResponseSubscriber implements EventSubscriberInterface
     /**
      * The Open weather image url.
      */
-    private const OPEN_WEATHER_URL = 'http://openweathermap.org';
+    private const OPEN_WEATHER_URL = 'https://openweathermap.org';
 
     /**
      * The PDF plugin type.

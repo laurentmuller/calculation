@@ -125,7 +125,7 @@ class CalculationController extends EntityController
      * @Route("/below", name="calculation_below")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function below(Request $request): Response
+    public function belowCard(Request $request): Response
     {
         // get values
         $minMargin = $this->getApplication()->getMinMargin();
@@ -146,7 +146,7 @@ class CalculationController extends EntityController
             'edit' => $edit,
         ];
 
-        return $this->render('calculation/calculation_below.html.twig', $parameters);
+        return $this->render('calculation/calculation_card_below.html.twig', $parameters);
     }
 
     /**
@@ -264,7 +264,7 @@ class CalculationController extends EntityController
      * @Route("/duplicate", name="calculation_duplicate")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function duplicate(Request $request): Response
+    public function duplicateCard(Request $request): Response
     {
         $calculations = $this->getDuplicateItems();
         $selection = $request->get('selection', 0);
@@ -291,7 +291,7 @@ class CalculationController extends EntityController
             'edit' => $edit,
         ];
 
-        return $this->render('calculation/calculation_duplicate.html.twig', $parameters);
+        return $this->render('calculation/calculation_card_duplicate.html.twig', $parameters);
     }
 
     /**
@@ -364,7 +364,7 @@ class CalculationController extends EntityController
      * @Route("/empty", name="calculation_empty")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function empty(Request $request): Response
+    public function emptyCard(Request $request): Response
     {
         $calculations = $this->getEmptyItems();
         $selection = $request->get('selection', 0);
@@ -387,7 +387,7 @@ class CalculationController extends EntityController
             'edit' => $edit,
         ];
 
-        return $this->render('calculation/calculation_empty.html.twig', $parameters);
+        return $this->render('calculation/calculation_card_empty.html.twig', $parameters);
     }
 
     /**
@@ -649,8 +649,10 @@ class CalculationController extends EntityController
 
         // fields
         $helper = new FormHelper($builder);
-        $helper->field('includeClosed')
-            ->label('calculation.update.includeClosed')
+        $helper->field('closed')
+            ->label('calculation.update.closed_label')
+            ->updateOption('help', 'calculation.update.closed_description')
+            ->updateHelpAttribute('class', 'ml-4 mb-2')
             ->updateRowAttribute('class', 'mb-0')
             ->notRequired()
             ->addCheckboxType();
@@ -659,7 +661,7 @@ class CalculationController extends EntityController
         $form = $builder->getForm();
         if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
-            $includeClosed = (bool) $data['includeClosed'];
+            $closed = (bool) $data['closed'];
 
             $updated = 0;
             $skipped = 0;
@@ -670,7 +672,7 @@ class CalculationController extends EntityController
                 /** @var Calculation[] $calculations */
                 $calculations = $this->getRepository()->findAll();
                 foreach ($calculations as $calculation) {
-                    if ($includeClosed || $calculation->isEditable()) {
+                    if ($closed || $calculation->isEditable()) {
                         if ($this->calculationService->updateTotal($calculation)) {
                             ++$updated;
                         } else {
@@ -736,6 +738,7 @@ class CalculationController extends EntityController
 
         $parameters['groups'] = $this->calculationService->createGroupsFromCalculation($item);
         $parameters['min_margin'] = $this->getApplication()->getMinMargin();
+
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
         $parameters['emty_items'] = $item->hasEmptyItems();
 
@@ -784,7 +787,8 @@ class CalculationController extends EntityController
     {
         $suspended = [];
         $manager = $this->getEventManager();
-        foreach ($manager->getListeners() as $event => $listeners) {
+        $allListeners = $manager->getListeners();
+        foreach ($allListeners as $event => $listeners) {
             foreach ($listeners as $listener) {
                 if ($listener instanceof TimestampableListener
                     || $listener instanceof BlameableListener
@@ -799,7 +803,7 @@ class CalculationController extends EntityController
     }
 
     /**
-     *  Enabled doctrine event listeners.
+     * Enabled doctrine event listeners.
      *
      * @param array $suspended the event names and listeners to activate
      */

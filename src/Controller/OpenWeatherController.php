@@ -321,7 +321,7 @@ class OpenWeatherController extends BaseController
                 end:
             } finally {
                 // clean
-                if ($db) {
+                if (null !== $db) {
                     $db->close();
                 }
                 Utils::unlink($temp_name);
@@ -412,14 +412,17 @@ class OpenWeatherController extends BaseController
             }, $cities);
 
             // load current weather by chunk of 20 items
+            $group = false;
             for ($i = 0, $len = \count($cities); $i < $len; ++$i) {
                 if (0 === $i % OpenWeatherService::MAX_GROUP) {
                     $ids = \array_splice($cityIds, 0, OpenWeatherService::MAX_GROUP);
                     $group = $this->service->group($ids, $units);
                 }
-                $cities[$i]['name'] = $group['list'][$i % 20]['name'];
-                $cities[$i]['current'] = $group['list'][$i % 20];
-                $cities[$i]['units'] = $group['units'];
+                if ($group) {
+                    $cities[$i]['name'] = $group['list'][$i % 20]['name'];
+                    $cities[$i]['current'] = $group['list'][$i % 20];
+                    $cities[$i]['units'] = $group['units'];
+                }
             }
 
             // save
@@ -517,7 +520,7 @@ class OpenWeatherController extends BaseController
         return (int) $request->get(self::KEY_LIMIT, $default);
     }
 
-    private function getRequestQuery(Request $request): ?string
+    private function getRequestQuery(Request $request): string
     {
         return \trim((string) $request->get(self::KEY_QUERY, ''));
     }

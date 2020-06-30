@@ -122,9 +122,9 @@ class OpenWeatherDatabase extends AbstractDatabase
     /**
      * Finds cities by name and country.
      *
-     * @param string $name  the city to search for
-     * @param string $name  the country to search for
-     * @param int    $limit the maximum number of rows to return
+     * @param string $city    the city to search for
+     * @param string $country the country to search for
+     * @param int    $limit   the maximum number of rows to return
      *
      * @return array an array, maybe empty, of matching cities
      */

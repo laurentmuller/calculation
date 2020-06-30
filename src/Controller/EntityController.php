@@ -363,8 +363,8 @@ abstract class EntityController extends BaseController
         // parameters
         $parameters = [
             'results' => $results,
-            'columns' => $table->getColumns(),
             'attributes' => $attributes,
+            'columns' => $table->getColumns(),
         ];
 
         return $this->render($template, $parameters);

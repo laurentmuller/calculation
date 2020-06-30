@@ -8,7 +8,7 @@
 <tbody>
     <th class="h font-weight-normal" colspan="{{ colspan }}">
         <a data-toggle="collapse" href="#{{ target }}" class="card-link" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
-        <span>({{ count|integer }})</span>
+        <span class="text-muted small align-text-top"> ({{ count|integer }})</span>        
     </th>
 </tbody>
 {%- endmacro %}
@@ -33,7 +33,7 @@
 
 {% macro rowPackage(package) -%}
 {% import 'macros/_icons.html.twig' as icons %}
-<tr{% if package.dev %} class="font-italic font-weight-light"{% endif -%}>
+<tr{% if package.dev %} class="font-italic text-muted"{% endif -%}>
     <td class="e pl-3">
         {{ package.name }}{%- if package.homepage %}&nbsp;{{- icons.linkExternal(package.homepage, '', '', 'share', 'about.extern_link') -}}{% endif -%}
     </td>

@@ -1,0 +1,36 @@
+{% macro value_unit(value, unit = '', separator = ' ') -%}
+    {{ (value ~ separator ~ unit)|trim }}
+{%- endmacro %}
+
+{% macro value_temp(value, unit) -%}
+    {{ _self.value_unit(value|number_format(1), unit, '') }}
+{%- endmacro %}
+
+{% macro value_humidity(value, unit) -%}
+    {{ _self.value_unit(value, unit, '') }}
+{%- endmacro %}
+
+{% macro value_pressure(value, unit) -%}
+    {{ _self.value_unit(value, unit) }}
+{%- endmacro %}
+
+{% macro value_speed(value, unit) -%}
+    {{ _self.value_unit(value, unit) }}
+{%- endmacro %}
+
+{% macro value_no_sep(value, unit) -%}
+    {{ _self.value_unit(value, unit, '') }}
+{%- endmacro %}
+
+{% macro direction(text) -%}
+{{ text|replace({        
+        'N': 'openweather.direction.N'|trans, 
+        'S': 'openweather.direction.S'|trans,
+        'E': 'openweather.direction.E'|trans,
+        'W': 'openweather.direction.W'|trans,
+        'n': 'openweather.direction.N'|trans|lower, 
+        's': 'openweather.direction.S'|trans|lower,
+        'e': 'openweather.direction.E'|trans|lower,
+        'w': 'openweather.direction.W'|trans|lower          
+    })}}
+{%- endmacro %}

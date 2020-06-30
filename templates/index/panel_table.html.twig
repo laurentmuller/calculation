@@ -37,7 +37,7 @@
                 {%- set id = calculation.id -%}
                 {%- set menu_id = 'dropdownMenuLast_' ~ id -%}
                 {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
-                <tr>
+                <tr{% if id == selection %} class="table-primary"{% endif %}>
                     <td class="text-id" style="{{ properties.stateCss(calculation.stateColor) }}">
                     {% if edit_page or show_page %}
                     	<a href="{{ path(default_page, params) }}">{{ calculation.id|identifier }}</a>

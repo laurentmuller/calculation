@@ -10,6 +10,7 @@ twig:
         app_name_version: '%app_name% v%app_version%'
         app_owner:        '%app_owner%'
         app_owner_url:    '%app_owner_url%'
+        app_owner_city:   '%app_owner_city%'
         app_description:  '%app_description%'
         app_environment:  '%app_environment%'
         

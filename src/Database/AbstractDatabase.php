@@ -218,12 +218,17 @@ abstract class AbstractDatabase extends \SQLite3
      * Execute the given statement and fetch result to an associative array.
      *
      * @param \SQLite3Stmt $stmt the statement to execute
+     * @param int          $mode controls how the next row will be returned to the caller. This value
+     *                           must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      */
-    protected function executeAndfetch(\SQLite3Stmt $stmt): array
+    protected function executeAndfetch(\SQLite3Stmt $stmt, int $mode = SQLITE3_ASSOC): array
     {
         $rows = [];
-        if ($result = $stmt->execute()) {
-            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+
+        /** @var \SQLite3Result $result */
+        $result = $stmt->execute();
+        if (false !== $result) {
+            while ($row = $result->fetchArray($mode)) {
                 $rows[] = $row;
             }
             $result->finalize();
@@ -273,10 +278,12 @@ abstract class AbstractDatabase extends \SQLite3
      * @param string $query the SQL query to prepare
      * @param string $value the value to search for
      * @param int    $limit the maximum number of rows to return
+     * @param int    $mode  controls how the next row will be returned to the caller. This value
+     *                      must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      *
      * @return array the search result
      */
-    protected function search(string $query, string $value, int $limit): array
+    protected function search(string $query, string $value, int $limit, int $mode = SQLITE3_ASSOC): array
     {
         // parameter
         $value = $this->likeValue($value);
@@ -288,6 +295,6 @@ abstract class AbstractDatabase extends \SQLite3
         $stmt->bindParam(':limit', $limit, SQLITE3_INTEGER);
 
         // execute
-        return $this->executeAndfetch($stmt);
+        return $this->executeAndfetch($stmt, $mode);
     }
 }

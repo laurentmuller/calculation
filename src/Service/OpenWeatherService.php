@@ -416,26 +416,24 @@ class OpenWeatherService extends HttpClientService
     /**
      * Returns information for an array of cities that match the search text.
      *
-     * @param string $query the city to search for
+     * @param string $name  the name of the city to search for
      * @param string $units the units to use
      * @param int    $limit the maximum number of cities to return
      *
      * @return array|bool the search result if success; false on error
      */
-    public function search(string $query, string $units = self::UNIT_METRIC, int $limit = 25)
+    public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25)
     {
         // find from cache
-        if (!$this->debug) {
-            $key = $this->getCacheKey('search', ['city' => $query]);
-            $item = $this->adapter->getItem($key);
-            if ($item->isHit()) {
-                return $item->get();
-            }
+        $key = $this->getCacheKey('search', ['name' => $name]);
+        $item = $this->debug ? false : $this->adapter->getItem($key);
+        if ($item && $item->isHit()) {
+            return $item->get();
         }
 
         // search
         $db = $this->getDatabase(true);
-        $result = $db->findCity($query, $limit);
+        $result = $db->findCity($name, $limit);
         $db->close();
 
         if (!empty($result)) {
@@ -443,7 +441,7 @@ class OpenWeatherService extends HttpClientService
             $this->updateResult($result);
 
             // save to cache
-            if (!$this->debug) {
+            if ($item) {
                 $item->expiresAfter(self::CACHE_TIMEOUT)
                     ->set($result);
                 $this->adapter->save($item);
@@ -531,12 +529,10 @@ class OpenWeatherService extends HttpClientService
         $query['lang'] = self::getAcceptLanguage(true);
 
         // find from cache
-        if (!$this->debug) {
-            $key = $this->getCacheKey($uri, $query);
-            $item = $this->adapter->getItem($key);
-            if ($item->isHit()) {
-                return $item->get();
-            }
+        $key = $this->getCacheKey($uri, $query);
+        $item = $this->debug ? false : $this->adapter->getItem($key);
+        if ($item && $item->isHit()) {
+            return $item->get();
         }
 
         // call
@@ -559,7 +555,7 @@ class OpenWeatherService extends HttpClientService
         $this->addUnits($result, $query['units']);
 
         // save to cache
-        if (!$this->debug) {
+        if ($item) {
             $item->expiresAfter(self::CACHE_TIMEOUT)
                 ->set($result);
             $this->adapter->save($item);
@@ -607,7 +603,7 @@ class OpenWeatherService extends HttpClientService
      *
      * @param int $offset the timezone offset in seconds from UTC
      *
-     * @return string the timezone offset in +/-HH:MM form
+     * @return \DateTimeZone the timezone offset in +/-HH:MM form
      */
     private function offsetToTimZone(int $offset): \DateTimeZone
     {

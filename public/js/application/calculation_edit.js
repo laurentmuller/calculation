@@ -685,30 +685,27 @@ var Application = {
 
         // save identifiers
         const identifiers = $rows.map(function() {
-            return $(this).getInputIndex();
+            return $(this).inputIndex();
         });
         
         // sort
-        $rows.sort(function (a, b) {
-            const textA = $('td:first', a).text();
-            const textB = $('td:first', b).text();
+        $rows.sort(function (rowA, rowB) {
+            const textA = $('td:first', rowA).text();
+            const textB = $('td:first', rowB).text();
             return textA.localeCompare(textB);
         }).appendTo($tbody);
         
         // update identifiers
-        for(let i = 0, len = $rows.length; i < len; i++) {
-            const $row = $($rows[i]);
-            const oldId = $row.getInputIndex();
-            const newId = identifiers[i];
+        $rows.each(function(index) {
+            const $row = $(this);
+            const oldId = $row.inputIndex(); 
+            const newId = identifiers[index];
             if (oldId !== newId) {
-                const $previousRow = $rows.filter(function() {
-                    return newId === $(this).getInputIndex();
-                });
-                if ($previousRow.length) {
-                    $previousRow.swapIdAndNames($row);
-                }
+                $rows.filter(function() {
+                    return newId === $(this).inputIndex();
+                }).swapIdAndNames($row);                
             }
-        }
+        });
         
         // update UI
         return that.updateUpDownButton().initDragDrop(true);
@@ -721,8 +718,10 @@ var Application = {
         'use strict';
 
         let $table = $('#data-table-edit');
-        $table.find('tbody').sort(function (a, b) {
-            return $('th:first', a).text().localeCompare($('th:first', b).text());
+        $table.find('tbody').sort(function (bodyA, bodyB) {
+            const textA = $('th:first', bodyA).text();
+            const textB = $('th:first', bodyB).text();
+            return textA.localeCompare(textB);            
         }).appendTo($table);
 
         return this;
@@ -1018,26 +1017,17 @@ var Application = {
 $.fn.extend({
 
     /**
-     * Gets the index of the item input.
-     * 
+     * Gets the index, for a row, of the first item input.
+     *
+     * For example: calculation_groups_4_items_12_total will return 12.
+     *
      * @returns {int} - the index, if found; -1 otherwise.
      */
-    getInputIndex() {
+    inputIndex() {
         'use strict';
         const $input = $(this).find('input:first');
-        if ($input.length) {
-            // Example: calculation_groups_4_items_12_total
-            const attr = $input.attr('id');
-            const lastIndex =  attr.lastIndexOf('_');
-            const prevIndex =  attr.lastIndexOf('_', lastIndex - 1);
-            if (lastIndex !== -1 && prevIndex !== -1) {
-                const id = Number.parseInt(attr.substring(prevIndex + 1, lastIndex), 10);
-                if (!Number.isNaN(id)) {
-                    return id;    
-                }
-            }
-        }
-        return -1;
+        const values = $input.attr('id').split('_');
+        return Number.parseInt(values[values.length - 2], 10);
     },
     
     /**

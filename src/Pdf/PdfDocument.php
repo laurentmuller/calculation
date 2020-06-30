@@ -976,7 +976,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
      *
      * @return string|null the converted text
      */
-    private function cleanText(?string $str): ?string
+    protected function cleanText(?string $str): ?string
     {
         try {
             if ($str && \mb_detect_encoding($str, 'UTF-8', true)) {

@@ -312,6 +312,31 @@ class Calculation extends BaseEntity
     }
 
     /**
+     * Gets the empty items.
+     *
+     * Items are empty if the price or the quantity is equal to 0.
+     *
+     * @return \App\Entity\CalculationItem[] an array, maybe empty of empty  items
+     */
+    public function getEmptyItems(): array
+    {
+        if ($this->isEmpty()) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($this->groups as $group) {
+            foreach ($group->getItems() as $item) {
+                if ($item->isEmpty()) {
+                    $result[] = $item;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get global margin.
      */
     public function getGlobalMargin(): float
@@ -501,15 +526,32 @@ class Calculation extends BaseEntity
     /**
      * Returns a value indicating if one or more items are duplicate.
      *
+     * Items are duplicate when two or more item descriptions are equal.
+     *
      * @return bool true if duplicates items
      */
     public function hasDuplicateItems(): bool
     {
-        return !empty($this->getDuplicateItems());
+        if (!$this->isEmpty()) {
+            $existings = [];
+            foreach ($this->groups as $group) {
+                foreach ($group->getItems() as $item) {
+                    $key = $item->getDescription();
+                    if (\in_array($key, $existings, true)) {
+                        return true;
+                    }
+                    $existings[] = $key;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
-     * Returns a value indicating if one or more items have a price or a quantity equal to zero.
+     * Returns a value indicating if one or more items are empty.
+     *
+     * Items are empty if the price or the quantity is equal to zero.
      *
      * @return bool true if empty items
      */
@@ -517,7 +559,7 @@ class Calculation extends BaseEntity
     {
         if (!$this->isEmpty()) {
             foreach ($this->groups as $group) {
-                foreach ($group->getItems()  as $item) {
+                foreach ($group->getItems() as $item) {
                     if ($item->isEmpty()) {
                         return true;
                     }

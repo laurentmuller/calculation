@@ -89,14 +89,14 @@ calculation:
     update:
         title: Mise à jour des calculations
         description: Permet de mettre à jour le total des calculations.
-        detail: Inclus les calculations avec le statut non-modifiables.
-        includeClosed: Mettre à jour toutes les calculations
-        results: Résultats de la mise à jour.
-        skipped: Calculations inchangées
-        total: Total
-        unmodifiable: Calculations non-modifiables
-        updated: Calculations mises à jour
+        closed_label: Mettre à jour toutes les calculations
+        closed_description: Inclus les calculations avec le statut non-modifiables.
         last_update: 'Dernière mise à jour : %date%'
+        results: Résultats de la mise à jour.
+        updated: Calculations mises à jour
+        skipped: Calculations inchangées        
+        unmodifiable: Calculations non-modifiables
+        total: Total
 calculationgroup:
     name: Groupe
     fields:
@@ -806,6 +806,7 @@ openweather:
         wind: Vent
         wind_speed: Vitesse
         wind_deg: Direction
+        wind_gust: Rafales
         sun: Soleil
         sunrise: Levé
         sunset: Couché
@@ -815,7 +816,13 @@ openweather:
         miscellaneous: Divers
         pressure: Pression
         humidity: Humidité
+        clouds: Nébulosité
         locale_date: Heure locale
+        rain: Pluie
+        snow: Neige
+        last_hour: Dernière heure
+        last_3_hours: 3 dernières heures
+        
     search:
         title: Rechercher une localité
         query: Localité

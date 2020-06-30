@@ -71,14 +71,7 @@
          */
         isUndefined: function (data) {
             return $.type(data) === "undefined"; // || data === null
-        },
-
-        /**
-         * Re-implant this function for backwards compatibility.
-         */
-        trim: function (text) {
-            return text === null ? "" : (text + "").replace($.rtrim, "");
-        },
+        }
     });
 
     /**

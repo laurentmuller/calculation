@@ -10,8 +10,9 @@
                 <h1 class="card-title">{{ icons.icon('file-alt far', 'calculation.edit.panel_items') }}</h1>
             </div>
             <div class="col text-right d-print-none mb-0">
-            	<a class="btn-add-item" href="#">{{ 'calculation.edit.add_item'|trans }}</a>
-                {{ icons.link('#', null, "btn btn-sm btn-outline-success btn-sort-items", "sort-alpha-up fa-fw", 'calculation.edit.sort_items') }}                
+                {{ icons.link('#', 'calculation.edit.add_item', "btn-add-item mr-1") }}
+                {{ icons.link('#', null, "text-success btn-sort-items", "sort-alpha-up fa-fw", 'calculation.edit.sort_items') }}
+                {#{ icons.link('#', null, "btn btn-sm btn-outline-success btn-sort-items", "sort-alpha-up fa-fw", 'calculation.edit.sort_items') }#}                
             </div>
         </div>
     {% else %}
@@ -45,5 +46,5 @@
             <span id="error-duplicate" class="{{ class_duplicate }}"><span class="duplicate-footer"></span>{{ 'calculation.duplicate.title'|trans }}</span>
             <span id="error-empty" class="{{ class_empty }}"><span class="empty-footer"></span>{{ 'calculation.empty.title'|trans }}</span>
         </p>
-	</div>
+    </div>
 </div>

@@ -16,9 +16,8 @@
 {%- set show_path   = path('calculation_show', params) -%}
 {%- set edit_path   = path('calculation_edit', params) -%}
 {%- set delete_path = path('calculation_delete', params) -%}
-{%- set pdf_path    = path('calculation_duplicate_pdf') -%}
 {%- set single_path = path('calculation_pdf_id', params) -%}
-
+{%- set pdf_path    = path('calculation_duplicate_pdf') -%}
 
 {% block card_header -%}
 {{ parent() }}

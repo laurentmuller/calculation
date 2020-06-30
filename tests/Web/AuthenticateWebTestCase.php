@@ -48,7 +48,7 @@ abstract class AuthenticateWebTestCase extends WebTestCase
     public function setUp(): void
     {
         $this->client = static::createClient();
-        $this->debug = self::$kernel->isDebug();
+        $this->debug = self::$kernel->getEnvironment() == 'test';
     }
 
     protected function doEcho(string $name, $value, bool $newLine = false): void

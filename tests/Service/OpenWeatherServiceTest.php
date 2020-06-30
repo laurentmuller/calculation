@@ -42,7 +42,7 @@ class OpenWeatherServiceTest extends KernelTestCase
     {
         self::bootKernel();
         $this->service = self::$container->get(OpenWeatherService::class);
-        $this->debug = self::$kernel->isDebug();
+        $this->debug = self::$kernel->getEnvironment() == 'test';
     }
 
     public function testCurrent(): void
@@ -53,7 +53,7 @@ class OpenWeatherServiceTest extends KernelTestCase
         $this->assertEquals(self::CITY_VALID, $result['id']);
 
         $this->assertIsArray($result['units']);
-        $this->validateResult($result);
+        $this->validateResult($result, true);
     }
 
     public function testCurrentInvalid(): void
@@ -102,7 +102,7 @@ class OpenWeatherServiceTest extends KernelTestCase
 
         $result = $result['list'][0];
         $this->assertIsArray($result);
-        $this->validateResult($result);
+        $this->validateResult($result, false);
     }
 
     public function testGroupInvalidCount(): void
@@ -134,7 +134,7 @@ class OpenWeatherServiceTest extends KernelTestCase
         $this->assertIsNumeric($data['humidity']);
     }
 
-    private function validateResult(array $result): void
+    private function validateResult(array $result, bool $includeDeg): void
     {
         $this->assertIsArray($result['coord']);
         $this->validateCoord($result['coord']);
@@ -146,7 +146,7 @@ class OpenWeatherServiceTest extends KernelTestCase
         $this->validateMain($result['main']);
 
         $this->assertIsArray($result['wind']);
-        $this->validateWind($result['wind']);
+        $this->validateWind($result['wind'], $includeDeg);
 
         $this->assertIsArray($result['sys']);
         $this->validateSys($result['sys']);
@@ -170,9 +170,11 @@ class OpenWeatherServiceTest extends KernelTestCase
         $this->assertIsString($data['icon_small']);
     }
 
-    private function validateWind(array $data): void
+    private function validateWind(array $data, bool $includeDeg): void
     {
         $this->assertIsNumeric($data['speed']);
-        $this->assertIsNumeric($data['deg']);
+        if ($includeDeg) {
+            $this->assertIsNumeric($data['deg']);
+        }
     }
 }

@@ -42,7 +42,7 @@ class OpenWeatherServiceTest extends KernelTestCase
     {
         self::bootKernel();
         $this->service = self::$container->get(OpenWeatherService::class);
-        $this->debug = self::$kernel->getEnvironment() == 'test';
+        $this->debug = self::$kernel->isDebug();
     }
 
     public function testCurrent(): void

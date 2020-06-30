@@ -47,11 +47,11 @@ $(function () {
     'use strict';
 
     // remove selection
-    const $selection = $(".card-last.border-primary");
+    const $selection = $('.card-last.border-primary');
     if ($selection.length) {
         $selection.scrollInViewport().timeoutToggle('border-primary');
     }
-    const $row = $("tr.table-primary");
+    const $row = $('tr.table-primary');
     if ($row.length) {
         $row.scrollInViewport().timeoutToggle('table-primary');
     }

@@ -2,32 +2,30 @@
 
 <!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="bin/.phpunit/phpunit.xsd"
-         bootstrap="tests/bootstrap.php"
-         backupGlobals="false"
-         cacheResult ="false"
-         colors="true">
-    <php>
-        <ini name="error_reporting" value="-1" />
-        <server name="APP_ENV" value="test" force="true" />
-        <server name="SHELL_VERBOSITY" value="-1" />
-        <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
-        <server name="SYMFONY_PHPUNIT_VERSION" value="7.5" />
-    </php>
+	xsi:noNamespaceSchemaLocation="bin/.phpunit/phpunit.xsd"
+	bootstrap="tests/bootstrap.php" backupGlobals="false"
+	cacheResult="false" colors="true">
+	<php>
+		<ini name="error_reporting" value="-1" />
+		<server name="APP_ENV" value="test" force="true" />
+		<server name="SHELL_VERBOSITY" value="-1" />
+		<server name="SYMFONY_PHPUNIT_REMOVE" value="" />
+		<server name="SYMFONY_PHPUNIT_VERSION" value="9" />
+	</php>
 
-    <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
+	<testsuites>
+		<testsuite name="Project Test Suite">
+			<directory>tests</directory>
+		</testsuite>
+	</testsuites>
 
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">src</directory>
+		</whitelist>
+	</filter>
 
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-    </listeners>
+	<listeners>
+		<listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+	</listeners>
 </phpunit>

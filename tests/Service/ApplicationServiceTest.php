@@ -69,7 +69,7 @@ class ApplicationServiceTest extends KernelTestCase implements ApplicationServic
     {
         if ($this->debug) {
             $format = "\n%-15s: %s" . ($newLine ? "\n" : '');
-            echo \sprintf($format, $name, $value);
+            echo \sprintf($format, htmlspecialchars($name), $value);
         }
     }
 }

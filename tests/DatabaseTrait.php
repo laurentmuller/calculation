@@ -24,11 +24,18 @@ use App\Tests\data\Database;
 trait DatabaseTrait
 {
     /**
+     * The database.
+     *
+     * @var Database
+     */
+    protected static $database;
+
+    /**
      * {@inheritdoc}
      */
     public static function setUpBeforeClass(): void
     {
-        Database::createDatabase();
+        self::$database = Database::createDatabase();
     }
 
     /**
@@ -36,6 +43,8 @@ trait DatabaseTrait
      */
     public static function tearDownAfterClass(): void
     {
+        self::$database->close();
         Database::deleteDatabase();
+        self::$database = null;
     }
 }

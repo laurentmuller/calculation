@@ -23,6 +23,7 @@ use App\Entity\GlobalMargin;
 use App\Entity\Product;
 use App\Service\ApplicationService;
 use App\Service\CalculationService;
+use App\Tests\DatabaseTrait;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -36,6 +37,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationServiceTest extends KernelTestCase
 {
+    use DatabaseTrait;
+
     public const MARGIN_PERCENT = 0.1;
     public const PRODUCT_PRICE = 100.0;
     public const QUANTITY = 10.0;

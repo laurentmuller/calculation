@@ -16,6 +16,7 @@ namespace App\Tests\Web;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -26,6 +27,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 abstract class AuthenticateWebTestCase extends WebTestCase
 {
+    use DatabaseTrait;
+
     public const ROLE_ADMIN = User::ROLE_ADMIN;
     public const ROLE_DISABLED = 'ROLE_DISABLED';
     public const ROLE_FAKE = 'ROLE_FAKE';

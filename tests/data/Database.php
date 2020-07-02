@@ -29,13 +29,32 @@ class Database extends AbstractDatabase
     public static function createDatabase(): self
     {
         // remove existing file
-        $filename = __DIR__ . '/db_test.sqlite';
+        $filename = self::getDatabaseFilename();
         if (\file_exists($filename)) {
             \unlink($filename);
         }
 
         // create
         return new self($filename);
+    }
+
+    /**
+     * Delete the database.
+     */
+    public static function deleteDatabase(): void
+    {
+        $filename = self::getDatabaseFilename();
+        if (\file_exists($filename)) {
+            \unlink($filename);
+        }
+    }
+
+    /**
+     * Gets the database file name.
+     */
+    public static function getDatabaseFilename(): string
+    {
+        return  __DIR__ . '/db_test.sqlite';
     }
 
     /**

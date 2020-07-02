@@ -16,6 +16,7 @@ namespace App\Tests\Service;
 
 use App\Interfaces\ApplicationServiceInterface;
 use App\Service\ApplicationService;
+use App\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -25,10 +26,24 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class ApplicationServiceTest extends KernelTestCase implements ApplicationServiceInterface
 {
-    public function testService(): void
+    use DatabaseTrait;
+
+    /*
+     * the debug mode
+     */
+    protected $debug = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp(): void
     {
         self::bootKernel();
+        $this->debug = self::$kernel->isDebug();
+    }
 
+    public function testService(): void
+    {
         /** @var ApplicationService $service */
         $service = self::$container->get(ApplicationService::class);
 
@@ -50,8 +65,11 @@ class ApplicationServiceTest extends KernelTestCase implements ApplicationServic
         $this->assertEquals(4000, $service->getMessageTimeout());
     }
 
-    protected function echo(string $name, $value): void
+    protected function echo(string $name, $value, bool $newLine = false): void
     {
-        echo \sprintf("\n%-15s: %s", $name, $value);
+        if ($this->debug) {
+            $format = "\n%-15s: %s" . ($newLine ? "\n" : '');
+            echo \sprintf($format, $name, $value);
+        }
     }
 }

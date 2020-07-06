@@ -25,6 +25,8 @@ use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Utils\Utils;
+use Doctrine\SqlFormatter\NullHighlighter;
+use Doctrine\SqlFormatter\SqlFormatter;
 
 /**
  * Report for the log.
@@ -58,6 +60,13 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
      * @var bool
      */
     private $drawCards;
+
+    /**
+     * The SQL formatter for doctrine message.
+     *
+     * @var SqlFormatter
+     */
+    private $formatter;
 
     /**
      * The current level.
@@ -203,6 +212,22 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
     }
 
     /**
+     * Format the given Sql query.
+     *
+     * @param string $sql the query to format
+     *
+     * @return string the formatted query
+     */
+    private function formatSql(string $sql): string
+    {
+        if (null === $this->formatter) {
+            $this->formatter = new SqlFormatter(new NullHighlighter());
+        }
+
+        return $this->formatter->format($sql);
+    }
+
+    /**
      * Gets the border draw color for the given level.
      *
      * @param string $level the level
@@ -211,7 +236,7 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
      */
     private function getColor(string $level): ?PdfDrawColor
     {
-        if (!\array_key_exists($level, $this->colors)) {
+        if (null === $this->colors || !\array_key_exists($level, $this->colors)) {
             switch ($level) {
                 case 'warning':
                     $this->colors[$level] = PdfDrawColor::create('#ffc107');
@@ -247,7 +272,11 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
      */
     private function getMessage(array $line): string
     {
-        $message = $line['message'];
+        if ('doctrine' === $line['channel']) {
+            $message = $this->formatSql($line['message']);
+        } else {
+            $message = $line['message'];
+        }
         if (!empty($line['context'])) {
             $message .= "\n" . Utils::exportVar($line['context']);
         }

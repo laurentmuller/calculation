@@ -3,7 +3,7 @@
 
 {# parameters #}
 {% set title      = 'Flex-Demo' %}
-{% set title_icon = 'bandcamp' %}
+{% set title_icon = 'table' %}
 
 {% block card_container_class '' %}
 {% block card_footer_class ' d-none' %}
@@ -12,9 +12,7 @@
 {% block card_body %}
 {% for item in items %}
     <div class="card-flex rounded border p-2 m-1 flex-fill">
-        <h5 class="mb-1">
-            {{ item.code }}
-        </h5>
+        <h5 class="mb-1">{{ loop.index }}. {{ item.code }}</h5>
         <table class="table table-borderless table-sm ml-1 mr-0 my-0">
             {{ properties.line(item.description) }}
             {{ properties.separator() }}

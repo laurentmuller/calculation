@@ -82,3 +82,50 @@ td.emergency {
 .card.emergency {
     border-color: var(--danger);
 }
+
+/**
+ * SQL highlight 
+ */
+pre.highlight  {
+    margin: 0;
+    margin-bottom: 0;
+    white-space: pre-wrap;    
+}
+
+.highlight .keyword {
+    color: blue; /*#8959A8*/
+    font-weight: bold;
+}
+
+.highlight .word {
+    color: #222222;
+}
+
+.highlight .variable {
+    color: #916319;
+}
+
+.highlight .symbol {
+    color: #222222;
+}
+
+.highlight .comment {
+    color: #999999;
+}
+
+.highlight .backtick {
+    color: #718C00;
+}
+
+.highlight .string {
+    color: #718C00;
+}
+
+.highlight .number {
+    color: #F5871F;
+    font-weight: bold;
+}
+
+.highlight .error {
+    color: #C82829;
+}

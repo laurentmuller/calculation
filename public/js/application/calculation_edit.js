@@ -1018,9 +1018,9 @@ $.fn.extend({
 
     /**
      * Gets the index, for a row, of the first item input.
-     *
+     * 
      * For example: calculation_groups_4_items_12_total will return 12.
-     *
+     * 
      * @returns {int} - the index, if found; -1 otherwise.
      */
     inputIndex() {
@@ -1259,18 +1259,9 @@ $.fn.extend({
      */
     getContextMenuItems: function () {
         'use strict';
-
-        const builder = new MenuBuilder();
-        $(this).getParentRow().find('.dropdown-menu').children().each(function () {
-            const $this = $(this);
-            if ($this.hasClass('dropdown-divider')) {
-                builder.addSeparator();
-            } else if ($this.isSelectable()) { // dropdown-item
-                builder.addItem($this);
-            }
-        });
-
-        return builder.getItems();
+        
+        const $elements = $(this).getParentRow().find('.dropdown-menu').children();
+        return (new MenuBuilder()).fill($elements).getItems();
     }
 });
 

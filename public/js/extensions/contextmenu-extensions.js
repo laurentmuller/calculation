@@ -3,6 +3,11 @@
 /**
  * -------------- JQuery extensions --------------
  */
+/**
+ * Finds an icon within in this element.
+ * 
+ * @returns {string} the icon class, if found, null otherwise.
+ */
 $.fn.findIcon = function () {
     'use strict';
     const $this = $(this);
@@ -17,6 +22,11 @@ $.fn.findIcon = function () {
     return null;
 };
 
+/**
+ * Returns if this element is selectable.
+ * 
+ * @returns {boolean} true if selectable.
+ */
 $.fn.isSelectable = function () {
     'use strict';
     const $this = $(this);
@@ -29,9 +39,9 @@ $.fn.isSelectable = function () {
  * @param {string}
  *            selector - the selector matching the elements to trigger on.
  * @param {function}
- *            fnShow - called on show of the context menu.
+ *            fnShow - the function called when the context menu is shown.
  * @param {function}
- *            fnHide - the called before hide of the context menu.
+ *            fnHide - the function called when the context menu is hidden.
  * @return {jQuery} The JQuery element for chaining.
  */
 $.fn.initContextMenu = function (selector, fnShow, fnHide) {
@@ -57,8 +67,8 @@ $.fn.initContextMenu = function (selector, fnShow, fnHide) {
                 }
             },
             events: {
-                show: fnShow,
-                hide: fnHide
+                show: fnShow || $.noop,
+                hide: fnHide || $.noop
             },
             items: items
         };
@@ -225,5 +235,26 @@ MenuBuilder.prototype = {
             return keys[keys.length - 1];
         }
         return null;
+    },
+
+    /**
+     * Fills the given elements.
+     * 
+     * @param {Jquery}
+     *            $elements the elements to add.
+     * @return {MenuBuilder} This instance for chaining.
+     */
+    fill: function ($elements) {
+        'use strict';
+        const that = this;
+        $elements.each(function () {
+            const $this = $(this);
+            if ($this.hasClass('dropdown-divider')) {
+                that.addSeparator();
+            } else if ($this.isSelectable()) { // .dropdown-item
+                that.addItem($this);
+            }
+        });
+        return that;
     }
 };

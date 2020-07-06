@@ -11,13 +11,13 @@
 {%- set title       = 'logs.title' -%}
 {%- set title_icon  = 'book' -%}
 
-{%- set params      = {'id': 0} -%}
+{%- set params      = {'id': 0, 'route': 'log_file'} -%}
 {%- set object_type = EntityVoterInterface.ENTITY_USER -%}
-{%- set show_path   = path('log_show_entry', params) -%}
+{%- set show_path   = path('log_file_show', params) -%}
 
 {% block other_actions -%}
 {{ parent() }}
-<a href="#" class="btn btn-sm btn-secondary disabled">{{ 'common.button_refresh'|trans }}</a>
+<a href="{{ path('log_file_refresh') }}" class="btn btn-sm btn-secondary">{{ 'common.button_refresh'|trans }}</a>
 {% endblock %}
 
 {#

@@ -66,6 +66,16 @@ class CalculationReport extends BaseReport
     /**
      * {@inheritdoc}
      */
+    public function Header(): void
+    {
+        parent::Header();
+        $this->renderCalculation();
+        $this->Ln(3);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function render(): bool
     {
         // calculation?
@@ -75,10 +85,6 @@ class CalculationReport extends BaseReport
 
         // new page
         $this->AddPage();
-
-        // calculation
-        $this->renderCalculation();
-        $this->Ln(3);
 
         // groups
         $groups = $this->calculation->getGroups();

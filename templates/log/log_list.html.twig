@@ -77,7 +77,11 @@
             <td class="level"> {{ line.level|capitalize }}</td>
             <td class="channel">{{ line.channel|capitalize }}</td>
             <td class="message">
-                {{- line.message|raw|nl2br -}}
+                {%- if line.channel == 'doctrine' -%}
+                    {{- line.message|doctrine_format_sql(true) -}}
+                {%- else -%}
+                    {{- line.message|raw|nl2br -}}
+                {%- endif -%}                
                 {%- if line.context|length -%}
                     <pre class="text-break text-success white-space-pre-wrap mb-0">{{- tools.format_var(line.context) -}}</pre>
                 {%- endif -%}

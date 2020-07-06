@@ -25,6 +25,10 @@ use App\Entity\Log;
  */
 final class LogUtils
 {
+    public const KEY_CHANNELS = 'channels';
+    public const KEY_FILE = 'file';
+    public const KEY_LEVELS = 'levels';
+    public const KEY_LOGS = 'logs';
     /**
      * The application channel.
      */
@@ -83,11 +87,23 @@ final class LogUtils
     }
 
     /**
+     * Checks if the given file name exist and is not empty.
+     *
+     * @param string $filename the file to verify
+     *
+     * @return bool true if valid
+     */
+    public static function isFileValid(string $filename): bool
+    {
+        return \file_exists($filename) && 0 !== \filesize($filename);
+    }
+
+    /**
      * Gets all lines of the given log file.
      *
      * @param string $filename the file name to open
      *
-     * @return array|bool an array with the log entries, the levels and the channels or <code>false</code> if an error occurs or if the file is empty
+     * @return Log[]|bool an array with the logs, the levels and the channels or <code>false</code> if an error occurs or if the file is empty
      */
     public static function readAll(string $filename)
     {
@@ -118,8 +134,8 @@ final class LogUtils
                     ->setLevel($level)
                     ->setCreatedAt(self::parseDate($values[0]))
                     ->setMessage(self::getMessage($values[3]))
-                    ->setContext(self::getContext($values[4]))
-                    ->setExtra(self::getExtra($values[5]));
+                    ->setContext(self::decodeJson($values[4]))
+                    ->setExtra(self::decodeJson($values[5]));
                 $logs[] = $log;
 
                 // update
@@ -136,10 +152,10 @@ final class LogUtils
 
         // result
         return [
-            'file' => $filename,
-            'levels' => $levels,
-            'channels' => $channels,
-            'logs' => $logs,
+            self::KEY_FILE => $filename,
+            self::KEY_LEVELS => $levels,
+            self::KEY_CHANNELS => $channels,
+            self::KEY_LOGS => $logs,
         ];
     }
 
@@ -182,7 +198,7 @@ final class LogUtils
             $channel = self::getChannel($values[1]);
             $level = self::getLevel($values[2]);
 
-            // filter
+            // skip if filtered
             if (\in_array($channel, $channelFilters, true) || \in_array($level, $levelFilters, true)) {
                 continue;
             }
@@ -193,8 +209,8 @@ final class LogUtils
                 'channel' => $channel,
                 'date' => $values[0],
                 'message' => self::getMessage($values[3]),
-                'context' => self::getContext($values[4]),
-                'extra' => self::getExtra($values[5]),
+                'context' => self::decodeJson($values[4]),
+                'extra' => self::decodeJson($values[5]),
             ];
 
             // update
@@ -210,7 +226,6 @@ final class LogUtils
 
             // result
             return [
-                'file' => $filename,
                 'limit' => $limit,
                 'channels' => $channels,
                 'levels' => $levels,
@@ -222,35 +237,23 @@ final class LogUtils
     }
 
     /**
-     * Gets the context informations.
+     * Decode the given JSON string.
      *
-     * @param string $value the source
+     * @param string $value the value to decode
      *
-     * @return array|null the context informations
+     * @return array the decoded value
      */
-    private static function getContext(string $value): ?array
+    private static function decodeJson(string $value): array
     {
         try {
-            return \json_decode($value, true);
+            $result = \json_decode($value, true);
+            if ($result && JSON_ERROR_NONE === \json_last_error()) {
+                return $result;
+            }
         } catch (\Exception $e) {
-            return [];
         }
-    }
 
-    /**
-     * Gets the extra informations.
-     *
-     * @param string $value the source
-     *
-     * @return array|null the extra informations
-     */
-    private static function getExtra(string $value): ?array
-    {
-        try {
-            return \json_decode($value, true);
-        } catch (\Exception $e) {
-            return [];
-        }
+        return [];
     }
 
     /**
@@ -262,18 +265,6 @@ final class LogUtils
     private static function increment(array &$array, string $key): void
     {
         $array[$key] = ($array[$key] ?? 0) + 1;
-    }
-
-    /**
-     * Checks if the given file name exist and is not empty.
-     *
-     * @param string $filename the file to verify
-     *
-     * @return bool true if valid
-     */
-    private static function isFileValid(string $filename): bool
-    {
-        return \file_exists($filename) && 0 !== \filesize($filename);
     }
 
     /**

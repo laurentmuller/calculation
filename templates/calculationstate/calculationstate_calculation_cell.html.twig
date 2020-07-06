@@ -1,6 +1,8 @@
-{%- if item.countCalculations > 0 -%}
-{%- set href = path('calculation_table', {'query': item.code}) -%}
-<a href="{{ href }}" title="{{ 'calculationstate.list.calculation_title'|trans }}">{{ item.countCalculations|integer }}</a>
+{%- set count = item.countCalculations -%}
+{%- set text  = count|integer -%}
+{%- if count -%}
+    {%- set href = path('calculation_table', {'query': item.code}) -%}
+    <a href="{{ href }}" title="{{ 'calculationstate.list.calculation_title'|trans }}">{{ text }}</a>
 {%- else -%}
-{{ item.countCalculations|integer }}
+    {{ text }}
 {%- endif -%}

@@ -39,22 +39,11 @@ $.fn.updateHref = function (type, granted, params) {
  * 
  * @returns {Object} the context menu items.
  */
-$.fn.getContextMenuItems = function () { // jshint ignore:line
+$.fn.getContextMenuItems = function () {
     'use strict';
 
-    // buttons
-    const builder = new MenuBuilder();
-    $('.card-header a.btn[data-path]').each(function () {
-        const $this = $(this);
-        if ($this.isSelectable()) {
-            builder.addItem($this);
-        }
-        if ($this.data('separator')) {
-            builder.addSeparator();
-        }
-    });
-
-    return builder.getItems();
+    const $elements = $('.card-header a.btn[data-path]');
+    return (new MenuBuilder()).fill($elements).getItems();
 };
 
 /**

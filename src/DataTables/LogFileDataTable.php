@@ -24,9 +24,12 @@ use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
 use DataTables\DataTablesInterface;
 use DataTables\Order;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
+ * Log data table for a file name.
+ *
  * @author Laurent Muller
  */
 class LogFileDataTable extends AbstractDataTable
@@ -37,9 +40,26 @@ class LogFileDataTable extends AbstractDataTable
     public const ID = 'LogFile';
 
     /**
+     * The cache validity in seconds (2 minutes).
+     */
+    private const CACHE_TIMEOUT = 60 * 2;
+
+    /**
      * The created at column name.
      */
     private const COLUMN_DATE = 'createdAt';
+
+    /**
+     * The cache adapter.
+     */
+    private AdapterInterface $adapter;
+
+    /**
+     * The channels.
+     *
+     * @var string[]
+     */
+    private $channels;
 
     /**
      * The log file name.
@@ -49,15 +69,37 @@ class LogFileDataTable extends AbstractDataTable
     private $fileName;
 
     /**
+     * The levels.
+     *
+     * @var string[]
+     */
+    private $levels;
+
+    /**
      * Constructor.
      *
      * @param ApplicationService  $application the application to get parameters
      * @param SessionInterface    $session     the session to save/retrieve user parameters
      * @param DataTablesInterface $datatables  the datatables to handle request
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, AdapterInterface $adapter)
     {
+        $this->adapter = $adapter;
         parent::__construct($application, $session, $datatables);
+    }
+
+    /**
+     * Clear the cached values.
+     */
+    public function clearCachedValues(): self
+    {
+        $this->adapter->deleteItems([
+            LogUtils::KEY_LOGS,
+            LogUtils::KEY_LEVELS,
+            LogUtils::KEY_CHANNELS,
+        ]);
+
+        return $this;
     }
 
     /**
@@ -73,6 +115,16 @@ class LogFileDataTable extends AbstractDataTable
     }
 
     /**
+     * Gets the channels.
+     *
+     * @return string[]
+     */
+    public function getChannels(): array
+    {
+        return $this->channels ?? [];
+    }
+
+    /**
      * Gets the formatted log date.
      *
      * @param \DateTime $value the source
@@ -85,7 +137,17 @@ class LogFileDataTable extends AbstractDataTable
     }
 
     /**
-     * Gets the file name.
+     * Gets the cached entries.
+     *
+     * @return array|bool the entries, if cached; false otherwise
+     */
+    public function getEntries()
+    {
+        return $this->getCachedValues();
+    }
+
+    /**
+     * Gets the file name to parse.
      */
     public function getFileName(): ?string
     {
@@ -105,9 +167,37 @@ class LogFileDataTable extends AbstractDataTable
     }
 
     /**
-     * Sets the file name.
+     * Gets the levels.
      *
-     * @param string $fileName the file name to parse
+     * @return string[]
+     */
+    public function getLevels(): array
+    {
+        return $this->levels ?? [];
+    }
+
+    /**
+     * Gets the log for the given identifier.
+     *
+     * @param int $id the log identifier to find
+     *
+     * @return Log|null the log, if founs; null otherwise
+     */
+    public function getLog(int $id): ?Log
+    {
+        if ($entries = $this->getEntries()) {
+            if ($logs = $entries[LogUtils::KEY_LOGS]) {
+                if (\array_key_exists($id, $logs)) {
+                    return $logs[$id];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Sets the file name to parse.
      */
     public function setFileName(string $fileName): self
     {
@@ -125,7 +215,7 @@ class LogFileDataTable extends AbstractDataTable
             DataColumn::hidden('id'),
             DataColumn::date('createdAt')
                 ->setTitle('logs.fields.date')
-                ->setClassName('date')
+                ->setClassName('pl-3 date')
                 ->setCallback('renderLog')
                 ->setDescending()
                 ->setDefault(true)
@@ -152,31 +242,48 @@ class LogFileDataTable extends AbstractDataTable
     {
         // default
         $results = new DataTableResults();
-        $results->recordsFiltered = 0;
-        $results->recordsTotal = 0;
-        $results->data = [];
 
-        // file?
-        if ($this->fileName && $entries = LogUtils::readAll($this->fileName)) {
-            $logs = $entries['logs'];
-            $results->recordsTotal = \count($logs);
+        //clear
+        $this->levels = [];
+        $this->channels = [];
 
-            // filter
-            $logs = $this->filter($logs, $query->search->value);
-
-            // sort
-            if (!empty($query->order)) {
-                /** @var Order $order */
-                $order = $query->order[0];
-                $field = $this->getColumns()[$order->column]->getName();
-                $logs = $this->sort($logs, $field, $order->dir);
-            }
-
-            // restrict
-            $logs = \array_slice($logs, $query->start, $query->length);
-            $results->recordsFiltered = \count($logs);
-            $results->data = $logs;
+        if ($entries = $this->getCachedValues()) {
+            // get values from cache
+            $logs = $entries[LogUtils::KEY_LOGS];
+        } elseif ($this->fileName && $entries = LogUtils::readAll($this->fileName)) {
+            // get values from file
+            $this->setCachedValues($entries);
+            $logs = $entries[LogUtils::KEY_LOGS];
+        } else {
+            // empty
+            return $results;
         }
+
+        $results->recordsTotal = \count($logs);
+
+        // filter
+        if ($value = $query->search->value) {
+            $logs = $this->filter($logs, $value);
+            $results->recordsFiltered = \count($logs);
+        } else {
+            $results->recordsFiltered = $results->recordsTotal;
+        }
+
+        // sort
+        if (!empty($query->order)) {
+            /** @var Order $order */
+            $order = $query->order[0];
+            $field = $this->getColumns()[$order->column]->getName();
+            $this->sort($logs, $field, $order->dir);
+        }
+
+        // restrict
+        $logs = \array_slice($logs, $query->start, $query->length);
+        $results->data = \array_map([$this, 'getCellValues'], $logs);
+
+        // copy
+        $this->levels = $entries[LogUtils::KEY_LEVELS];
+        $this->channels = $entries[LogUtils::KEY_CHANNELS];
 
         return $results;
     }
@@ -189,27 +296,27 @@ class LogFileDataTable extends AbstractDataTable
      *
      * @return Log[] the filtered logs
      */
-    private function filter(array $logs, string $value): array
+    private function filter(array $logs, ?string $value): array
     {
-        if (0 !== \strlen($value)) {
+        if (Utils::isString($value)) {
             $filter = function (Log $log) use ($value) {
                 $level = $this->getLevel($log->getLevel());
-                if (Utils::contains($level, $value)) {
+                if (Utils::contains($level, $value, true)) {
                     return true;
                 }
 
                 $channel = $this->getChannel($log->getChannel());
-                if (Utils::contains($channel, $value)) {
+                if (Utils::contains($channel, $value, true)) {
                     return true;
                 }
 
                 $date = $this->getDate($log->getCreatedAt());
-                if (Utils::contains($date, $value)) {
+                if (Utils::contains($date, $value, true)) {
                     return true;
                 }
 
                 $message = LogUtils::getMessage($log->getMessage());
-                if (Utils::contains($message, $value)) {
+                if (Utils::contains($message, $value, true)) {
                     return true;
                 }
 
@@ -223,22 +330,60 @@ class LogFileDataTable extends AbstractDataTable
     }
 
     /**
+     * Gets the cached values.
+     *
+     * @return array|bool the values, if cached; false otherwise
+     */
+    private function getCachedValues()
+    {
+        $items = $this->adapter->getItems([
+            LogUtils::KEY_LOGS,
+            LogUtils::KEY_LEVELS,
+            LogUtils::KEY_CHANNELS,
+        ]);
+
+        foreach ($items as $item) {
+            if ($item->isHit()) {
+                $entries[$item->getKey()] = $item->get();
+            } else {
+                return false;
+            }
+        }
+
+        return $entries;
+    }
+
+    private function setCachedValue(string $key, array $entries): self
+    {
+        $value = $entries[$key];
+        $item = $this->adapter->getItem($key)
+            ->expiresAfter(self::CACHE_TIMEOUT)
+            ->set($value);
+        $this->adapter->save($item);
+
+        return $this;
+    }
+
+    private function setCachedValues(array $entries): void
+    {
+        $this->setCachedValue(LogUtils::KEY_LOGS, $entries)
+            ->setCachedValue(LogUtils::KEY_LEVELS, $entries)
+            ->setCachedValue(LogUtils::KEY_CHANNELS, $entries);
+    }
+
+    /**
      * Sorts logs.
      *
      * @param Log[]  $logs      the logs to sort
      * @param string $field     the sorted field
      * @param string $direction the sorted direction ('asc' or 'desc')
-     *
-     * @return Log[] the sorted logs
      */
-    private function sort(array $logs, string $field, string $direction): array
+    private function sort(array &$logs, string $field, string $direction): void
     {
         // sort only if no default order
         if (self::COLUMN_DATE !== $field || DataColumn::SORT_DESC !== $direction) {
             $ascending = DataColumn::SORT_ASC === $direction;
             Utils::sortField($logs, $field, $ascending);
         }
-
-        return $logs;
     }
 }

@@ -4,15 +4,20 @@
 {% macro formatArray(name, value) %}
 {% import 'log/_macro_log.html.twig' as tools %}
 {%- if value|length -%}
-<tr>
-    <td class="w-25">{{ name|trans }}</td>
-    <td class="w-75">
-        <pre class="text-break text-success white-space-pre-wrap mb-0">{{- tools.format_var(value) -}}</pre>
-    </td>
-</tr>
+    <tr>
+        <td class="w-25">{{ name|trans }}</td>
+        <td class="w-75">
+            <pre class="text-break text-success white-space-pre-wrap mb-0">{{- tools.format_var(value) -}}</pre>
+        </td>
+    </tr>
 {%- endif -%}
 {% endmacro %}
-
+{% macro formatSql(name, value) %}
+<tr>
+    <td class="w-25">{{ name|trans }}</td>
+    <td class="w-75">{{ value|doctrine_format_sql(true)  }}</td>
+</tr>
+{% endmacro %}
 {% macro level_class(level, background) -%}
 {% switch level -%}
 {%- case 'error' %}
@@ -48,10 +53,11 @@
 {# parameters #}
 {%- set id     = item.id -%}
 {%- set title  = 'logs.show.title' -%}
-{%- set params = route_params(app.request, id) %}
+{%- set route  = route|default('log_table') -%}
+{%- set params = route_params(app.request, id) -%}
 
 {# actions #}
-{%- set cancel_path = cancel_url(app.request, id, 'log_table') -%}
+{%- set cancel_path = cancel_url(app.request, id, route) -%}
 
 {# classes #}
 {% block card_container_class '' %}
@@ -63,7 +69,15 @@
 {{ properties.property('logs.fields.date', item.createdAt|localedatetime(null, 'medium')) }}
 {{ properties.property('logs.fields.channel', item.channel|humanize) }}
 {{ properties.property('logs.fields.level', item.level|humanize) }}
+{%- if item.channel == 'doctrine' -%}
+{{ _self.formatSql('logs.fields.message', item.message) }}
+{%- else -%}
 {{ properties.property('logs.fields.message', item.message, 'text-break') }}
+{%- endif -%}
 {{ _self.formatArray('logs.fields.context', item.context) }}
 {{ _self.formatArray('logs.fields.extra', item.extra) }}
+{% endblock %}
+
+{% block stylesheets %}
+{{ asset_css('css/logs.css') }}
 {% endblock %}

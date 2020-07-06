@@ -78,12 +78,11 @@ class Log extends BaseEntity
      */
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
     }
 
     /**
      * Gets the channel.
-     *
-     * @return string
      */
     public function getChannel(): ?string
     {
@@ -92,8 +91,6 @@ class Log extends BaseEntity
 
     /**
      * Gets the context.
-     *
-     * @return array
      */
     public function getContext(): ?array
     {
@@ -102,8 +99,6 @@ class Log extends BaseEntity
 
     /**
      * Gets the creation date.
-     *
-     * @return \DateTime
      */
     public function getCreatedAt(): ?\DateTime
     {
@@ -120,8 +115,6 @@ class Log extends BaseEntity
 
     /**
      * Gets the extra informations.
-     *
-     * @return array
      */
     public function getExtra(): ?array
     {
@@ -130,8 +123,6 @@ class Log extends BaseEntity
 
     /**
      * Gets the level.
-     *
-     * @return string
      */
     public function getLevel(): ?string
     {
@@ -140,8 +131,6 @@ class Log extends BaseEntity
 
     /**
      * Gets the message.
-     *
-     * @return string
      */
     public function getMessage(): ?string
     {
@@ -150,8 +139,6 @@ class Log extends BaseEntity
 
     /**
      * Gets the user name.
-     *
-     * @return string
      */
     public function getUserName(): ?string
     {
@@ -160,8 +147,6 @@ class Log extends BaseEntity
 
     /**
      * Sets the channel.
-     *
-     * @param string $channel
      */
     public function setChannel($channel): self
     {
@@ -173,7 +158,7 @@ class Log extends BaseEntity
     /**
      * Sets the context.
      */
-    public function setContext(array $context): self
+    public function setContext(?array $context): self
     {
         $this->context = $context;
 
@@ -193,7 +178,7 @@ class Log extends BaseEntity
     /**
      * Sets the extra informations.
      */
-    public function setExtra(array $extra): self
+    public function setExtra(?array $extra): self
     {
         $this->extra = $extra;
 
@@ -203,7 +188,7 @@ class Log extends BaseEntity
     /**
      * Sets the primary key identifier.
      *
-     * User only when create a log from a file.
+     * Used only when create a log from a file.
      *
      * @param int $id the key identifier to set
      */
@@ -216,10 +201,8 @@ class Log extends BaseEntity
 
     /**
      * Sets the level.
-     *
-     * @param string $level
      */
-    public function setLevel(?string $level): self
+    public function setLevel(string $level): self
     {
         $this->level = $level;
 
@@ -228,10 +211,8 @@ class Log extends BaseEntity
 
     /**
      * Sets the message.
-     *
-     * @param string $message
      */
-    public function setMessage(?string $message): self
+    public function setMessage(string $message): self
     {
         $this->message = $message;
 

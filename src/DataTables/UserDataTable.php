@@ -76,9 +76,7 @@ class UserDataTable extends EntityDataTable
         // check if current user has the super admin role
         if ($token = $tokenStorage->getToken()) {
             if ($user = $token->getUser()) {
-                if ($user instanceof User && $user->isSuperAdmin()) {
-                    $this->superAdmin = true;
-                }
+                $this->superAdmin = $user instanceof User && $user->isSuperAdmin();
             }
         }
     }

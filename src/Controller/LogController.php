@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\LogDataTable;
+use App\DataTables\LogFileDataTable;
 use App\Entity\Log;
 use App\Pdf\PdfResponse;
 use App\Report\LogReport;
@@ -25,6 +26,7 @@ use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -37,6 +39,27 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LogController extends BaseController
 {
+    /**
+     * The log file name.
+     */
+    private string $logFile;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(KernelInterface $kernel)
+    {
+        $dir = $kernel->getLogDir();
+        $env = $kernel->getEnvironment();
+        $sep = \DIRECTORY_SEPARATOR;
+        $file = $dir . $sep . $env . '.log';
+        if ('/' === $sep) {
+            $this->logFile = \str_replace('\\', \DIRECTORY_SEPARATOR, $file);
+        } else {
+            $this->logFile = \str_replace('/', \DIRECTORY_SEPARATOR, $file);
+        }
+    }
+
     /**
      * Logs a Content Security Policy report.
      *
@@ -70,9 +93,8 @@ class LogController extends BaseController
      */
     public function delete(Request $request, LoggerInterface $logger): Response
     {
-        // check if file exists
-        $file = $this->getLogFile();
-        if (!\file_exists($file) || 0 === \filesize($file)) {
+        // check file
+        if (!LogUtils::isFileValid($this->logFile)) {
             $this->infoTrans('logs.show.empty');
 
             return  $this->redirectToHomePage();
@@ -81,19 +103,17 @@ class LogController extends BaseController
         // handle request
         $form = $this->createFormBuilder()->getForm();
         if ($this->handleRequestForm($request, $form)) {
-            if (\file_exists($file)) {
-                try {
-                    // empty file
-                    \file_put_contents($file, '');
-                } catch (\Exception $e) {
-                    $message = $this->trans('logs.delete.error');
-                    $logger->error($message, ['file' => $file]);
+            try {
+                // empty file
+                \file_put_contents($this->logFile, '');
+            } catch (\Exception $e) {
+                $message = $this->trans('logs.delete.error');
+                $logger->error($message, ['file' => $this->logFile]);
 
-                    return $this->render('@Twig/Exception/exception.html.twig', [
+                return $this->render('@Twig/Exception/exception.html.twig', [
                         'message' => $message,
                         'exception' => $e,
                     ]);
-                }
             }
 
             // OK
@@ -105,8 +125,65 @@ class LogController extends BaseController
         // display
         return $this->render('log/log_delete.html.twig', [
             'form' => $form->createView(),
-            'file' => $file,
+            'file' => $this->logFile,
         ]);
+    }
+
+    /**
+     * Display the content of the log file as table.
+     *
+     * @Route("/file", name="log_file", methods={"GET", "POST"})
+     */
+    public function logFile(Request $request, LogFileDataTable $table): Response
+    {
+        $table->setFileName($this->logFile);
+        $results = $table->handleRequest($request);
+        if ($table->isCallback()) {
+            return $this->json($results);
+        }
+
+        // parameters
+        $parameters = [
+            'results' => $results,
+            'columns' => $table->getColumns(),
+            'channels' => $table->getChannels(),
+            'levels' => $table->getLevels(),
+        ];
+
+        return $this->render('log/log_file.html.twig', $parameters);
+    }
+
+    /**
+     * Clear the log file cache.
+     *
+     * @Route("/file/refresh", name="log_file_refresh", methods={"GET", "POST"})
+     */
+    public function logFileRefresh(LogFileDataTable $table): Response
+    {
+        $table->clearCachedValues();
+
+        return $this->redirectToRoute('log_file');
+    }
+
+    /**
+     * Show properties of a log entry.
+     *
+     * @Route("/file/show/{id}", name="log_file_show", requirements={"id": "\d+" }, methods={"GET"})
+     */
+    public function logFileShow(int $id, LogFileDataTable $table): Response
+    {
+        if (null === $item = $table->getLog($id)) {
+            $this->warningTrans('logs.show.not_found');
+
+            return $this->redirectToRoute('log_file');
+        }
+
+        $parameters = [
+            'item' => $item,
+            'route' => 'log_file',
+        ];
+
+        return $this->render('log/log_show.html.twig', $parameters);
     }
 
     /**
@@ -157,13 +234,7 @@ class LogController extends BaseController
      */
     public function showEntity(Request $request, Log $item): Response
     {
-        // parameters
-        $parameters = [
-            'item' => $item,
-        ];
-
-        // render
-        return $this->render('log/log_show.html.twig', $parameters);
+        return $this->render('log/log_show.html.twig', ['item' => $item]);
     }
 
     /**
@@ -203,33 +274,16 @@ class LogController extends BaseController
      */
     private function getLogEntries(int $maxLines = 50, array $channelFilters = [], array $levelFilters = []): array
     {
-        // get file name
-        $file = $this->getLogFile();
-
         // load file
-        $values = false;
-        if (\file_exists($file)) {
-            $values = LogUtils::readLog($file, $maxLines, $channelFilters, $levelFilters);
-        }
+        $values = LogUtils::readLog($this->logFile, $maxLines, $channelFilters, $levelFilters);
         if (false === $values) {
             $values = [
                 'lines' => false,
                 'limit' => 0,
             ];
         }
-        $values['file'] = $this->getLogFile();
+        $values['file'] = $this->logFile;
 
         return $values;
-    }
-
-    /**
-     * Gets the log file.
-     */
-    private function getLogFile(): string
-    {
-        $dir = $this->getParameter('kernel.logs_dir');
-        $env = $this->getParameter('kernel.environment');
-
-        return $dir . \DIRECTORY_SEPARATOR . $env . '.log';
     }
 }

@@ -36,7 +36,6 @@ $.fn.getContextMenuItems = function () {
 
     const builder = new MenuBuilder();
 
-    // buttons
     $('.card-header a.btn[data-path]').each(function () {
         const $this = $(this);
         if ($this.isSelectable()) {

@@ -6,7 +6,7 @@ os:
     
 php:
   - 7.4
-  
+      
 env:
   - SYMFONY_VERSION=5.1.*
   
@@ -20,5 +20,6 @@ install:
   - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install $flags
 
 notifications:  
-  slack: haslerrail:bmYUu3l0jnDbU5DZVrbmvivZ
+  # slack: haslerrail:bmYUu3l0jnDbU5DZVrbmvivZ
+  slack: "[SLACK_KEY]"
 

@@ -14,11 +14,7 @@
 
 {% block card_body %}
 {{ form_row(form.file) }}
-<p>{{ 'openweather.import.link'|trans|format(sample, openweathermap)|raw }}</p>
-{% if last_import is defined -%}
-{%- set date = last_import|localedate('long') -%}
-<p class="mb-0 text-right">{{ 'openweather.import.last_import'|trans({'%date%': date}) }}</p>
-{%- endif %}
+<p class="mb-0">{{ 'openweather.import.link'|trans|format(sample, openweathermap)|raw }}</p>
 {% endblock %}
 
 {% block stylesheets %}

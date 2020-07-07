@@ -784,6 +784,9 @@ openweather:
         title: Importer les localités
         description: Permet de mettre à jour la liste des localités.
         link: Les données peuvent être téléchargées depuis le <a href="%s" target="_blank" rel="noopener noreferrer">répertoire de données</a> de <a href="%s" target="_blank" rel="noopener noreferrer">OpenWeather</a>.
+    error:
+        empty_city: Aucune localité n'a été importée.
+        move_database: Impossible de renommer la base de données.    
     result:
         success: L'importation des localités a été réalisée avec succès.
         failure: Une erreur s'est produite lors de l'importation des localités.

@@ -269,15 +269,12 @@ class OpenWeatherController extends BaseController
         $form = $builder->getForm();
         if ($this->handleRequestForm($request, $form)) {
             try {
-                $valids = 0;
-                $errors = 0;
-                $result = false;
-                $message = null;
-
                 // get temp file
                 if (!$temp_name = Utils::tempfile('sql')) {
-                    $message = $this->trans('import.error.temp_file');
-                    goto end;
+                    return $this->render('openweather/import_result.html.twig', [
+                        'message' => $this->trans('import.error.temp_file'),
+                        'result' => false,
+                    ]);
                 }
 
                 /** @var UploadedFile $file */
@@ -286,14 +283,18 @@ class OpenWeatherController extends BaseController
 
                 // get content
                 if (!$content = $this->getGzContent($file)) {
-                    $message = $this->trans('import.error.open_archive', ['name' => $name]);
-                    goto end;
+                    return $this->render('openweather/import_result.html.twig', [
+                        'message' => $this->trans('import.error.open_archive', ['name' => $name]),
+                        'result' => false,
+                    ]);
                 }
 
                 // decode content
                 if (!$cities = $this->getJsonContent($content)) {
-                    $message = $this->trans('import.error.empty_archive', ['name' => $name]);
-                    goto end;
+                    return $this->render('openweather/import_result.html.twig', [
+                        'message' => $this->trans('import.error.empty_archive', ['name' => $name]),
+                        'result' => false,
+                    ]);
                 }
 
                 // create database
@@ -301,6 +302,8 @@ class OpenWeatherController extends BaseController
                 $db->beginTransaction();
 
                 // insert cities
+                $valids = 0;
+                $errors = 0;
                 foreach ($cities as $city) {
                     if (!$db->insertCity($city['id'], $city['name'], $city['country'], $city['coord']['lat'], $city['coord']['lon'])) {
                         ++$errors;
@@ -315,30 +318,36 @@ class OpenWeatherController extends BaseController
                 $db->compact();
                 $db->close();
 
+                // cities?
+                if (0 === $valids) {
+                    return $this->render('openweather/import_result.html.twig', [
+                        'message' => $this->trans('openweather.error.empty_city'),
+                        'result' => false,
+                    ]);
+                }
+
                 // move
                 $target = $service->getDatabaseName();
-                $result = \rename($temp_name, $target);
-                end:
+                if (!\rename($temp_name, $target)) {
+                    return $this->render('openweather/import_result.html.twig', [
+                        'message' => $this->trans('openweather.error.move_database'),
+                        'result' => false,
+                    ]);
+                }
+
+                // ok
+                return $this->render('openweather/import_result.html.twig', [
+                    'valids' => $valids,
+                    'errors' => $errors,
+                    'result' => true,
+                ]);
             } finally {
-                // clean
                 if (null !== $db) {
                     $db->close();
                 }
                 Utils::unlink($temp_name);
                 Utils::unlink($file);
             }
-
-            $data = [
-                'result' => $result,
-                'valids' => $valids,
-                'errors' => $errors,
-                'message' => $message,
-            ];
-
-            // display result
-            return $this->render('openweather/import_result.html.twig', [
-                'data' => $data,
-            ]);
         }
 
         // display form

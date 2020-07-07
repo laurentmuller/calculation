@@ -11,14 +11,14 @@
 {% endblock %}
 
 {% block card_class -%}
-{% if data.result %}{{ parent() }}{% else %} border-danger{% endif %}
+{% if result %}{{ parent() }}{% else %} border-danger{% endif %}
 {%- endblock %}
 {% block card_header_class -%}
-{% if data.result %}{{ parent() }}{% else %} text-white bg-danger{% endif %}
+{% if result %}{{ parent() }}{% else %} text-white bg-danger{% endif %}
 {%- endblock %}
 
 {% block card_body %}
-{%- if data.result %}
+{%- if result %}
 <p>{{ 'openweather.result.success'|trans }}</p>
 <table class="table table-bordered table-sm mb-0">
     <thead>
@@ -31,19 +31,20 @@
     <tbody>
         <tr>
             <td>{{ 'import.cities'|trans }}</td>
-            <td class="text-currency">{{ data.errors|integer }}</td>
-            <td class="text-currency">{{ data.valids|integer }}</td>
+            <td class="text-currency">{{ errors|integer }}</td>
+            <td class="text-currency">{{ valids|integer }}</td>
         </tr>
         <tr>
             <th>{{ 'import.total'|trans }}</<th>
-            <th class="text-currency">{{ data.errors|integer }}</th>
-            <th class="text-currency">{{ data.valids|integer }}</th>
+            <th class="text-currency">{{ errors|integer }}</th>
+            <th class="text-currency">{{ valids|integer }}</th>
         </tr>
     </tbody>
 </table>
 {%- else -%}
-<p>{{ 'openweather.import.failure'|trans }}</p>
-{% if data.message is defined and data.message -%}<p class="mb-0">{{ data.message }}</p>{%- endif %}
+<p class="mb-0">
+    {{- 'openweather.result.failure'|trans }}{% if message is defined %} {{ message }}{% endif -%}
+</p>
 {%- endif %}
 {% endblock %}
 

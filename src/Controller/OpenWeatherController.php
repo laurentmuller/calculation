@@ -20,6 +20,7 @@ use App\Service\OpenWeatherService;
 use App\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -248,32 +249,14 @@ class OpenWeatherController extends BaseController
     public function import(Request $request, OpenWeatherService $service): Response
     {
         // create form
-        $builder = $this->createFormBuilder();
-        $helper = new FormHelper($builder);
-
-        // constraints
-        $constraints = new File([
-            'mimeTypes' => 'application/gzip',
-            'mimeTypesMessage' => $this->trans('import.error.mime_type'),
-        ]);
-
-        // file input
-        $helper->field('file')
-            ->label('import.file')
-            ->updateOption('constraints', $constraints)
-            ->updateAttribute('accept', 'application/x-gzip')
-            ->addFileType();
+        $form = $this->createImportForm();
 
         // handle request
-        $form = $builder->getForm();
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // get temp file
                 if (!$temp_name = Utils::tempfile('sql')) {
-                    return $this->render('openweather/import_result.html.twig', [
-                        'message' => $this->trans('import.error.temp_file'),
-                        'result' => false,
-                    ]);
+                    return $this->renderMessageResult('import.error.temp_file');
                 }
 
                 /** @var UploadedFile $file */
@@ -282,18 +265,12 @@ class OpenWeatherController extends BaseController
 
                 // get content
                 if (!$content = $this->getGzContent($file)) {
-                    return $this->render('openweather/import_result.html.twig', [
-                        'message' => $this->trans('import.error.open_archive', ['name' => $name]),
-                        'result' => false,
-                    ]);
+                    return $this->renderMessageResult('import.error.open_archive', ['name' => $name]);
                 }
 
                 // decode content
                 if (!$cities = $this->getJsonContent($content)) {
-                    return $this->render('openweather/import_result.html.twig', [
-                        'message' => $this->trans('import.error.empty_archive', ['name' => $name]),
-                        'result' => false,
-                    ]);
+                    return $this->renderMessageResult('import.error.empty_archive', ['name' => $name]);
                 }
 
                 // create database
@@ -319,19 +296,13 @@ class OpenWeatherController extends BaseController
 
                 // cities?
                 if (0 === $valids) {
-                    return $this->render('openweather/import_result.html.twig', [
-                        'message' => $this->trans('openweather.error.empty_city'),
-                        'result' => false,
-                    ]);
+                    return $this->renderMessageResult('openweather.error.empty_city');
                 }
 
                 // move
                 $target = $service->getDatabaseName();
                 if (!\rename($temp_name, $target)) {
-                    return $this->render('openweather/import_result.html.twig', [
-                        'message' => $this->trans('openweather.error.move_database'),
-                        'result' => false,
-                    ]);
+                    return $this->renderMessageResult('openweather.error.move_database');
                 }
 
                 // ok
@@ -479,6 +450,28 @@ class OpenWeatherController extends BaseController
         return self::PREFIX_KEY . $key;
     }
 
+    private function createImportForm(): FormInterface
+    {
+        // create form
+        $builder = $this->createFormBuilder();
+        $helper = new FormHelper($builder);
+
+        // constraints
+        $constraints = new File([
+            'mimeTypes' => 'application/gzip',
+            'mimeTypesMessage' => $this->trans('import.error.mime_type'),
+        ]);
+
+        // file input
+        $helper->field('file')
+            ->label('import.file')
+            ->updateOption('constraints', $constraints)
+            ->updateAttribute('accept', 'application/x-gzip')
+            ->addFileType();
+
+        return $builder->getForm();
+    }
+
     private function getGzContent(UploadedFile $file): ?string
     {
         $filename = $file->getRealPath();
@@ -561,5 +554,13 @@ class OpenWeatherController extends BaseController
     private function getSessionUnits(Request $request): string
     {
         return (string) $this->getSessionString(self::KEY_UNITS, $this->getRequestUnits($request));
+    }
+
+    private function renderMessageResult(string $message, array $parameters = []): Response
+    {
+        return $this->render('openweather/import_result.html.twig', [
+            'message' => $this->trans($message, $parameters),
+            'result' => false,
+        ]);
     }
 }

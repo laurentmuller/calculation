@@ -18,9 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Represents an application log entry.
- *
- * @ORM\Entity(repositoryClass="App\Repository\LogRepository")
- * @ORM\Table(name="sy_Log")
  */
 class Log extends BaseEntity
 {
@@ -65,13 +62,6 @@ class Log extends BaseEntity
      * @var string
      */
     private $message;
-
-    /**
-     * @ORM\Column(name="user_name", type="string", length=180, nullable=true)
-     *
-     * @var string
-     */
-    private $userName;
 
     /**
      * Constructor.
@@ -138,17 +128,9 @@ class Log extends BaseEntity
     }
 
     /**
-     * Gets the user name.
-     */
-    public function getUserName(): ?string
-    {
-        return $this->userName;
-    }
-
-    /**
      * Sets the channel.
      */
-    public function setChannel($channel): self
+    public function setChannel(string $channel): self
     {
         $this->channel = $channel;
 
@@ -215,16 +197,6 @@ class Log extends BaseEntity
     public function setMessage(string $message): self
     {
         $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * Sets the user name.
-     */
-    public function setUserName(string $userName): self
-    {
-        $this->userName = $userName;
 
         return $this;
     }

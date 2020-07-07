@@ -1,53 +1,33 @@
 {% extends 'cards/card_table.html.twig' %}
 
-{# macros
-{% macro entry(entry, class) %}
-{%- set text = entry.name|humanize ~ ' (' ~ entry.count|integer ~ ')' -%}
-<a class="dropdown-item {{ class }}" href="#" data-name="{{ entry.name }}">{{ text }}</a>
-{% endmacro %}
- #}
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title       = 'logs.title' -%}
+{%- set title       = 'log.title' -%}
 {%- set title_icon  = 'book' -%}
-
-{%- set params      = {'id': 0} -%}
 {%- set object_type = EntityVoterInterface.ENTITY_USER -%}
-{%- set show_path   = path('log_show_entry', params) -%}
 
-{% block other_actions -%}
+{# actions #}
+{%- set params        = {'id': 0} -%}
+{%- set show_path     = path('log_show', params) -%}
+{%- set show_title    = 'log.show.title' %}
+{%- set pdf_path      = path('log_pdf') -%}
+{%- set pdf_title     = 'log.show.pdf_title' %}
+
+{% block card_header %}
 {{ parent() }}
-<a href="#" class="btn btn-sm btn-secondary disabled">{{ 'common.button_refresh'|trans }}</a>
+<small class="ml-3">{{ 'log.show.file'|trans({'%file%': file}) }}</small>
 {% endblock %}
 
-{#
-{%- set pdf_title   = 'log.list.pdf_title' -%}
-#}
-{# actions
-{% block show_length_actions -%}
+{% block table_actions %}
 {{ parent() }}
-<div class="btn-group ml-2">
-    <div class="btn-group" role="group">
-        <button id="levelGroup" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ 'logs.fields.level'|trans }}
-        </button>
-        <div class="dropdown-menu" aria-labelledby="levelGroup">
-        <a class="dropdown-item active level" href="#" data-name="all">{{ 'logs.level_all'|trans }}</a>
-        {% for entry in levels %}{{ _self.entry(entry, 'level') }}{% endfor %}
-        </div>
-    </div>
-    <div class="btn-group" role="group">
-        <button id="channelGroup" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ 'logs.fields.channel'|trans }}
-        </button>
-        <div class="dropdown-menu" aria-labelledby="channelGroup">
-        <a class="dropdown-item active channel" href="#" data-name="all">{{ 'logs.channel_all'|trans }}</a>
-        {% for entry in channels %}{{ _self.entry(entry, 'channel') }}{% endfor %}
-        </div>
-    </div>
-</div>
+{{ icons.dropdownItem(path('log_delete', {'route' : app.request.get('_route')}), 'log.delete.title', 'times') }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItem(path('log_refresh'), 'common.button_refresh', 'sync-alt') }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItemCard('log_list') }}
 {% endblock %}
-#}
 
 {% block stylesheets %}
 {{ asset_css('css/logs_table.css') }}

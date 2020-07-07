@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\BaseController;
+use App\Entity\Log;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfCellListenerInterface;
 use App\Pdf\PdfCellListenerTrait;
@@ -97,7 +98,7 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
     public function __construct(BaseController $controller)
     {
         parent::__construct($controller);
-        $this->setTitleTrans('logs.title');
+        $this->setTitleTrans('log.title');
     }
 
     /**
@@ -144,7 +145,7 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
         }
 
         // file
-        $file = $this->trans('logs.show.file', [
+        $file = $this->trans('log.show.file', [
             '%file%' => $values['file'],
         ]);
         $this->setDescription($file);
@@ -153,9 +154,9 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
         $this->AddPage();
 
         // lines
-        $lines = $values['lines'];
-        if (!$lines) {
-            $this->Cell(0, self::LINE_HEIGHT, $this->trans('logs.show.empty'));
+        $logs = $values['logs'];
+        if (empty($logs)) {
+            $this->Cell(0, self::LINE_HEIGHT, $this->trans('log.show.empty'));
 
             return true;
         }
@@ -165,7 +166,7 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
         $this->outputCards($cards);
 
         // lines
-        return $this->outputLines($lines);
+        return $this->outputLines($logs);
     }
 
     /**
@@ -264,25 +265,20 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
     }
 
     /**
-     * Gets the message.
-     *
-     * @param array $line the log line
-     *
-     * @return string the message
+     * Gets the message for the given log.
      */
-    private function getMessage(array $line): string
+    private function getMessage(Log $log): string
     {
-        if ('doctrine' === $line['channel']) {
-            $message = $this->formatSql($line['message']);
+        if ('doctrine' === $log->getChannel()) {
+            $message = $this->formatSql($log->getMessage());
         } else {
-            $message = $line['message'];
+            $message = $log->getMessage();
         }
-        if (!empty($line['context'])) {
-            $message .= "\n" . Utils::exportVar($line['context']);
+        if (!empty($log->getContext())) {
+            $message .= "\n" . Utils::exportVar($log->getContext());
         }
-
-        if (!empty($line['extra'])) {
-            $message .= "\n" . Utils::exportVar($line['extra']);
+        if (!empty($log->getExtra())) {
+            $message .= "\n" . Utils::exportVar($log->getExtra());
         }
 
         return $message;
@@ -333,32 +329,32 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
     /**
      * Output log lines.
      *
-     * @param array $lines the log lines
+     * @param Log[] $logs the logs
      *
      * @return bool true on success
      */
-    private function outputLines(array $lines): bool
+    private function outputLines(array $logs): bool
     {
         $this->drawCards = false;
 
         $table = new PdfTableBuilder($this);
         $table->setListener($this)
-            ->addColumn(PdfColumn::left($this->trans('logs.fields.date'), 45))
-            ->addColumn(PdfColumn::left($this->trans('logs.fields.level'), 30))
-            ->addColumn(PdfColumn::left($this->trans('logs.fields.channel'), 30))
-            ->addColumn(PdfColumn::left($this->trans('logs.fields.message'), 150))
+            ->addColumn(PdfColumn::left($this->trans('log.fields.createdAt'), 45))
+            ->addColumn(PdfColumn::left($this->trans('log.fields.level'), 30))
+            ->addColumn(PdfColumn::left($this->trans('log.fields.channel'), 30))
+            ->addColumn(PdfColumn::left($this->trans('log.fields.message'), 150))
             ->outputHeaders();
 
-        foreach ($lines as $line) {
-            $this->level = $line['level'];
+        foreach ($logs as $log) {
+            $this->level = $log->getLevel();
             $table->startRow()
-                ->add($line['date'])
-                ->add(Utils::capitalize($line['level']))
-                ->add(Utils::capitalize($line['channel']))
-                ->add($this->getMessage($line))
+                ->add($this->localeDateTime($log->getCreatedAt(), null, \IntlDateFormatter::MEDIUM))
+                ->add(Utils::capitalize($log->getLevel()))
+                ->add(Utils::capitalize($log->getChannel()))
+                ->add($this->getMessage($log))
                 ->endRow();
         }
 
-        return $this->renderCount($lines);
+        return $this->renderCount($logs);
     }
 }

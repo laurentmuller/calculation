@@ -15,28 +15,28 @@ declare(strict_types=1);
 namespace App\DataTables;
 
 use App\DataTables\Columns\DataColumn;
-use App\DataTables\Tables\EntityDataTable;
+use App\DataTables\Tables\AbstractDataTable;
 use App\Entity\Log;
-use App\Repository\LogRepository;
 use App\Service\ApplicationService;
-use App\Utils\LogUtils;
+use App\Service\LogService;
 use App\Utils\Utils;
+use DataTables\DataTableQuery;
+use DataTables\DataTableResults;
 use DataTables\DataTablesInterface;
+use DataTables\Order;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Log data table handler.
+ * Log data table for a file name.
  *
  * @author Laurent Muller
- *
- * @see App\Entity\Log
  */
-class LogDataTable extends EntityDataTable
+class LogDataTable extends AbstractDataTable
 {
     /**
      * The datatable identifier.
      */
-    public const ID = Log::class;
+    public const ID = 'LogFile';
 
     /**
      * The created at column name.
@@ -44,9 +44,23 @@ class LogDataTable extends EntityDataTable
     private const COLUMN_DATE = 'createdAt';
 
     /**
-     * The formatted date to search.
+     * The channels.
+     *
+     * @var string[]
      */
-    private const DATE_FORMAT = '%d.%m.%Y %H:%i:%s';
+    private $channels;
+
+    /**
+     * The levels.
+     *
+     * @var string[]
+     */
+    private $levels;
+
+    /**
+     * The log service.
+     */
+    private LogService $service;
 
     /**
      * Constructor.
@@ -54,15 +68,15 @@ class LogDataTable extends EntityDataTable
      * @param ApplicationService  $application the application to get parameters
      * @param SessionInterface    $session     the session to save/retrieve user parameters
      * @param DataTablesInterface $datatables  the datatables to handle request
-     * @param LogRepository       $repository  the repository to get entities
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, LogRepository $repository)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, LogService $service)
     {
-        parent::__construct($application, $session, $datatables, $repository);
+        $this->service = $service;
+        parent::__construct($application, $session, $datatables);
     }
 
     /**
-     * Gets the log channel.
+     * Gets the formatted channel.
      *
      * @param string $value the source
      *
@@ -70,7 +84,17 @@ class LogDataTable extends EntityDataTable
      */
     public function getChannel(string $value): string
     {
-        return Utils::capitalize(LogUtils::getChannel($value));
+        return LogService::getChannel($value, true);
+    }
+
+    /**
+     * Gets the channels.
+     *
+     * @return string[]
+     */
+    public function getChannels(): array
+    {
+        return $this->channels ?? [];
     }
 
     /**
@@ -86,6 +110,14 @@ class LogDataTable extends EntityDataTable
     }
 
     /**
+     * Gets the file name to parse.
+     */
+    public function getFileName(): ?string
+    {
+        return $this->service->getFileName();
+    }
+
+    /**
      * Gets the log level.
      *
      * @param string $value the source
@@ -94,7 +126,17 @@ class LogDataTable extends EntityDataTable
      */
     public function getLevel(string $value): string
     {
-        return Utils::capitalize($value);
+        return LogService::getLevel($value, true);
+    }
+
+    /**
+     * Gets the levels.
+     *
+     * @return string[]
+     */
+    public function getLevels(): array
+    {
+        return $this->levels ?? [];
     }
 
     /**
@@ -105,32 +147,126 @@ class LogDataTable extends EntityDataTable
         return [
             DataColumn::hidden('id'),
             DataColumn::date('createdAt')
-                ->setTitle('logs.fields.date')
+                ->setTitle('log.fields.createdAt')
                 ->setClassName('pl-3 date')
                 ->setCallback('renderLog')
                 ->setDescending()
                 ->setDefault(true)
                 ->setFormatter([$this, 'getDate']),
             DataColumn::instance('channel')
-                ->setTitle('logs.fields.channel')
+                ->setTitle('log.fields.channel')
                 ->setClassName('channel')
                 ->setFormatter([$this, 'getChannel']),
             DataColumn::instance('level')
-                ->setTitle('logs.fields.level')
+                ->setTitle('log.fields.level')
                 ->setClassName('level')
                 ->setFormatter([$this, 'getLevel']),
             DataColumn::instance('message')
-                ->setTitle('logs.fields.message')
-                ->setClassName('cell')
-                ->setFormatter([LogUtils::class, 'getMessage']),
+                ->setTitle('log.fields.message')
+                ->setClassName('cell'),
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultOrder(): array
+    protected function createDataTableResults(DataTableQuery $query): DataTableResults
     {
-        return [self::COLUMN_DATE => DataColumn::SORT_DESC];
+        //clear
+        $this->channels = [];
+        $this->levels = [];
+
+        // default
+        $results = new DataTableResults();
+
+        // get entries
+        if (!$entries = $this->service->getEntries()) {
+            return $results;
+        }
+
+        $logs = $entries[LogService::KEY_LOGS];
+        $results->recordsTotal = \count($logs);
+
+        // filter
+        if ($value = $query->search->value) {
+            $logs = $this->filter($logs, $value);
+            $results->recordsFiltered = \count($logs);
+        } else {
+            $results->recordsFiltered = $results->recordsTotal;
+        }
+
+        // sort
+        if (!empty($query->order)) {
+            /** @var Order $order */
+            $order = $query->order[0];
+            $field = $this->getColumns()[$order->column]->getName();
+            $this->sort($logs, $field, $order->dir);
+        }
+
+        // restrict
+        $logs = \array_slice($logs, $query->start, $query->length);
+        $results->data = \array_map([$this, 'getCellValues'], $logs);
+
+        // copy
+        $this->channels = $entries[LogService::KEY_CHANNELS];
+        $this->levels = $entries[LogService::KEY_LEVELS];
+
+        return $results;
+    }
+
+    /**
+     * Filters the log.
+     *
+     * @param Log[]  $logs  the logs to search in
+     * @param string $value the value to search for
+     *
+     * @return Log[] the filtered logs
+     */
+    private function filter(array $logs, ?string $value): array
+    {
+        if (Utils::isString($value)) {
+            $filter = function (Log $log) use ($value) {
+                $level = $this->getLevel($log->getLevel());
+                if (Utils::contains($level, $value, true)) {
+                    return true;
+                }
+
+                $channel = $this->getChannel($log->getChannel());
+                if (Utils::contains($channel, $value, true)) {
+                    return true;
+                }
+
+                $date = $this->getDate($log->getCreatedAt());
+                if (Utils::contains($date, $value, true)) {
+                    return true;
+                }
+
+                if (Utils::contains($log->getMessage(), $value, true)) {
+                    return true;
+                }
+
+                return false;
+            };
+
+            return \array_filter($logs, $filter);
+        }
+
+        return $logs;
+    }
+
+    /**
+     * Sorts log.
+     *
+     * @param Log[]  $logs      the logs to sort
+     * @param string $field     the sorted field
+     * @param string $direction the sorted direction ('asc' or 'desc')
+     */
+    private function sort(array &$logs, string $field, string $direction): void
+    {
+        // sort only if no default order
+        if (self::COLUMN_DATE !== $field || DataColumn::SORT_DESC !== $direction) {
+            $ascending = DataColumn::SORT_ASC === $direction;
+            Utils::sortField($logs, $field, $ascending);
+        }
     }
 }

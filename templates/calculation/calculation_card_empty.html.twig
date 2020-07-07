@@ -17,7 +17,7 @@
 {%- set title        = 'calculation.empty.title' -%}
 {%- set title_icon   = 'file-code far' -%}
 {%- set empty_list   = 'empty.empty' -%}
-{%- set caller       = path(app.request.attributes.get('_route')) -%}
+{%- set caller       = path(app.request.get('_route')) -%}
 {%- set col_span      = 1 -%}
 
 {# actions #}

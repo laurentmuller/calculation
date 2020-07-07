@@ -8,4 +8,4 @@
 /**
  * Specific Files
  */
-<!--#include file="application/log_list.js" -->
+<!--#include file="application/log_card.js" -->

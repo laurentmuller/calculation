@@ -20,7 +20,7 @@
 {%- set title        = 'calculation.below.title' -%}
 {%- set title_icon   = 'percent' -%}
 {%- set empty_list   = 'below.empty' -%}
-{%- set caller       = path(app.request.attributes.get('_route')) -%}
+{%- set caller       = path(app.request.get('_route')) -%}
 
 {# actions #}
 {%- set add_page     = false -%}

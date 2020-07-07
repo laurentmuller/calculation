@@ -13,7 +13,7 @@
 {%- set title        = 'calculation.duplicate.title' -%}
 {%- set title_icon   = 'copy far' -%}
 {%- set empty_list   = 'duplicate.empty' -%}
-{%- set caller       = path(app.request.attributes.get('_route')) -%}
+{%- set caller       = path(app.request.get('_route')) -%}
 
 {# actions #}
 {%- set add_page     = false -%}

@@ -52,7 +52,7 @@
 
 {# parameters #}
 {%- set id     = item.id -%}
-{%- set title  = 'logs.show.title' -%}
+{%- set title  = 'log.show.title' -%}
 {%- set route  = route|default('log_table') -%}
 {%- set params = route_params(app.request, id) -%}
 
@@ -66,18 +66,18 @@
 
 {# properties #}
 {% block property_body %}
-{{ properties.property('logs.fields.date', item.createdAt|localedatetime(null, 'medium')) }}
-{{ properties.property('logs.fields.channel', item.channel|humanize) }}
-{{ properties.property('logs.fields.level', item.level|humanize) }}
+{{ properties.property('log.fields.createdAt', item.createdAt|localedatetime(null, 'medium')) }}
+{{ properties.property('log.fields.channel', item.channel|humanize) }}
+{{ properties.property('log.fields.level', item.level|humanize) }}
 {%- if item.channel == 'doctrine' -%}
-{{ _self.formatSql('logs.fields.message', item.message) }}
+{{ _self.formatSql('log.fields.message', item.message) }}
 {%- else -%}
-{{ properties.property('logs.fields.message', item.message, 'text-break') }}
+{{ properties.property('log.fields.message', item.message, 'text-break') }}
 {%- endif -%}
-{{ _self.formatArray('logs.fields.context', item.context) }}
-{{ _self.formatArray('logs.fields.extra', item.extra) }}
+{{ _self.formatArray('log.fields.context', item.context) }}
+{{ _self.formatArray('log.fields.extra', item.extra) }}
 {% endblock %}
 
 {% block stylesheets %}
-{{ asset_css('css/logs.css') }}
+{{ asset_css('css/log.css') }}
 {% endblock %}

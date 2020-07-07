@@ -20,26 +20,26 @@
 {% endmacro %}
 
 {# parameters #}
-{%- set title      = 'logs.title' -%}
+{%- set title      = 'log.title' -%}
 {%- set title_icon = 'book' -%}
 
 {% block card_container_class %}
-{% if lines is empty %}{{ parent() }}{% endif %}
+{% if logs is empty %}{{ parent() }}{% endif %}
 {% endblock %}
 {% block card_body_class ' p-2 pb-0' %}
 
 {% block card_header %}
 {{ parent() }}
-{% if lines is empty %}
-    <small>{{ 'logs.show.file'|trans({'%file%': file}) }}</small>
+{% if logs is empty %}
+    <small class="ml-3">{{ 'log.show.file'|trans({'%file%': file}) }}</small>
 {% else %}
     <div class="row">
         <div class="col-md-8">
-            <small>{{ 'logs.show.file'|trans({'%file%': file}) }}</small>
+            <small class="ml-3">{{ 'log.show.file'|trans({'%file%': file}) }}</small>
         </div>
         <div class="col-md-4 text-md-right">
              <small id="overall_total" data-text="{{ 'common.count'|trans }}">
-                {% if lines %}{{ 'common.count'|trans({'%count%': lines|length|integer}) }}{% endif %}
+                {% if logs %}{{ 'common.count'|trans({'%count%': logs|length|integer}) }}{% endif %}
              </small>
         </div>
     </div>
@@ -47,7 +47,7 @@
 {% endblock %}
 
 {% block card_body %}
-{% if lines %}
+{% if logs %}
 {# counters #}
 <div id="cards" class="card-deck mb-2">
     {# level #}
@@ -64,16 +64,16 @@
 <table id="logs" class="table table-hover table-sm mb-0">
     <thead>
         <tr>
-            <th class="date">{{ 'logs.fields.date'|trans }}</th>
-            <th class="level">{{ 'logs.fields.level'|trans }}</th>
-            <th class="channel">{{ 'logs.fields.channel'|trans }}</th>
-            <th>{{ 'logs.fields.message'|trans }}</th>
+            <th class="date">{{ 'log.fields.createdAt'|trans }}</th>
+            <th class="level">{{ 'log.fields.level'|trans }}</th>
+            <th class="channel">{{ 'log.fields.channel'|trans }}</th>
+            <th>{{ 'log.fields.message'|trans }}</th>
         </tr>
     </thead>
     <tbody>
-    {% for line in lines %}
+    {% for line in logs %}
         <tr class="{{ line.level ~ ' ' ~ line.channel }}">
-            <td class="date {{ line.level }}">{{ line.date }}</td>
+            <td class="date {{ line.level }}">{{ line.createdAt|localedatetime(null, 'medium') }}</td>
             <td class="level"> {{ line.level|capitalize }}</td>
             <td class="channel">{{ line.channel|capitalize }}</td>
             <td class="message">
@@ -94,28 +94,27 @@
     </tbody>
 </table>
 {% else %}
-<p class="m-3 text-danger text-center">{{ 'logs.show.empty'|trans }}</p>
+<p class="m-3 text-danger text-center">{{ 'log.show.empty'|trans }}</p>
 {% endif %}
 {% endblock %}
 
 {% block card_footer %}
 {{ icons.homepage() }}
-{% if lines %}
+{% if logs %}
     {{ icons.button_pdf('log_pdf') }}
-    {{ icons.link(path('log_delete'), 'common.button_delete', 'btn btn-form btn-danger') }}
+    {{ icons.link(path('log_delete', {'route' : app.request.get('_route')}), 'common.button_delete', 'btn btn-form btn-danger') }}
 {% endif %}
-<div id="parameters" data-limit="{{ limit }}" data-href="{{ path('log_pdf') }}" />
 {% endblock %}
 
 {% block stylesheets %}
-{{ asset_css('css/logs.css') }}
+{{ asset_css('css/log.css') }}
 {% endblock %}
 
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/application/log_list.js') }}
+{{ asset_js('js/application/log_card.js') }}
 {% else %}
-{{ asset_js('js/log_list.js') }}
+{{ asset_js('js/log_card.js') }}
 {% endif %}
 {% endblock %}

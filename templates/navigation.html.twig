@@ -154,7 +154,8 @@
                 {% if is_admin %}
                     {{- icons.dropdownSeparator -}}
 	                {{- icons.dropdownItem(path('admin_parameters'), 'parameters.title', 'cogs') -}}
-                    {{- icons.dropdownItem(path('log_show'), 'logs.title', 'book') -}}
+                    {%- set href = is_tabular ? path('log_table') : path('log_list') -%}
+                    {{- icons.dropdownItem(href, 'log.title', 'book') -}}
                     {{- icons.dropdownItem(path('admin_clear'), 'clear_cache.title', 'times') -}}
                     {{- icons.dropdownSeparator -}}
                     {%- set href = is_tabular ? path('user_table') : path('user_list')  -%}

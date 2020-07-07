@@ -121,7 +121,7 @@ final class SymfonyUtils
     }
 
     /**
-     * Formats the given path within the give base path.
+     * Formats the given path within the given base path.
      *
      * @param string      $path    the path
      * @param string|null $baseDir the root path
@@ -178,6 +178,39 @@ final class SymfonyUtils
         $dir = $kernel->getCacheDir();
 
         return self::formatFileSize($dir);
+    }
+
+    /**
+     * Gets the number of lines for the given file name.
+     *
+     * @param string $filename  the file name to get count for
+     * @param bool   $skipEmpty true to skip empty lines
+     *
+     * @return int the number of lines; 0 if an error occurs
+     */
+    public static function getLines(string $filename, bool $skipEmpty = true): int
+    {
+        if (!\is_file($filename)) {
+            return 0;
+        }
+
+        $flags = \SplFileObject::DROP_NEW_LINE;
+        if ($skipEmpty) {
+            $flags |= \SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY;
+        }
+
+        try {
+            $file = new \SplFileObject($filename, 'r');
+            $file->setFlags($flags);
+            $file->seek(PHP_INT_MAX);
+            $lines = $file->key() + 1;
+
+            return $lines;
+        } catch (\Exception $e) {
+            return 0;
+        } finally {
+            $file = null;
+        }
     }
 
     /**

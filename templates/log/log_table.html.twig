@@ -24,7 +24,7 @@
 {{ parent() }}
 {{ icons.dropdownItem(path('log_delete', {'route' : app.request.get('_route')}), 'log.delete.title', 'times') }}
 {{ icons.dropdownSeparator() }}
-{{ icons.dropdownItem(path('log_refresh'), 'common.button_refresh', 'sync-alt') }}
+{{ icons.dropdownItem(path('log_refresh', {'route' : app.request.get('_route')}), 'common.button_refresh', 'sync-alt') }}
 {{ icons.dropdownSeparator() }}
 {{ icons.dropdownItemCard('log_list') }}
 {% endblock %}

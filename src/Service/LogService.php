@@ -62,6 +62,16 @@ class LogService
     private const DATE_FORMAT = 'd.m.Y H:i:s';
 
     /**
+     * The cache keys.
+     */
+    private const KEYS = [
+        self::KEY_FILE,
+        self::KEY_LOGS,
+        self::KEY_CHANNELS,
+        self::KEY_LEVELS,
+    ];
+
+    /**
      * The values separator.
      */
     private const VALUES_SEP = '|';
@@ -93,11 +103,7 @@ class LogService
      */
     public function clearCache(): self
     {
-        $this->adapter->deleteItems([
-            self::KEY_LOGS,
-            self::KEY_LEVELS,
-            self::KEY_CHANNELS,
-        ]);
+        $this->adapter->deleteItems(self::KEYS);
 
         return $this;
     }
@@ -200,30 +206,9 @@ class LogService
         $dir = $kernel->getLogDir();
         $env = $kernel->getEnvironment();
         $sep = \DIRECTORY_SEPARATOR;
-        $file = $dir . $sep . $env . '.log';
-        $search = '/' === $sep ? '\\' : '/';
+        $file = "$dir$sep$env.log";
 
-        return \str_replace($search, \DIRECTORY_SEPARATOR, $file);
-    }
-
-    /**
-     * Decode the given JSON string.
-     *
-     * @param string $value the value to decode
-     *
-     * @return array the decoded value
-     */
-    private function decodeJson(string $value): array
-    {
-        try {
-            $result = \json_decode($value, true);
-            if ($result && JSON_ERROR_NONE === \json_last_error()) {
-                return $result;
-            }
-        } catch (\Exception $e) {
-        }
-
-        return [];
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $file);
     }
 
     /**
@@ -233,13 +218,8 @@ class LogService
      */
     private function getCachedValues()
     {
-        $items = $this->adapter->getItems([
-            self::KEY_LOGS,
-            self::KEY_LEVELS,
-            self::KEY_CHANNELS,
-        ]);
-
-        $entries = [self::KEY_FILE => $this->fileName];
+        $entries = [];
+        $items = $this->adapter->getItems(self::KEYS);
         foreach ($items as $item) {
             if ($item->isHit()) {
                 $entries[$item->getKey()] = $item->get();
@@ -249,18 +229,6 @@ class LogService
         }
 
         return $entries;
-    }
-
-    /**
-     * Gets the log message.
-     *
-     * @param string $value the source
-     *
-     * @return string the message
-     */
-    private function getMessage(string $value): string
-    {
-        return \trim($value);
     }
 
     /**
@@ -279,13 +247,45 @@ class LogService
      *
      * @param string $value the source
      *
-     * @return \DateTime a new DateTime instance or false on failure
+     * @return \DateTime|null a new DateTime instance or null on failure
      */
-    private function parseDate(string $value): \DateTime
+    private function parseDate(string $value): ?\DateTime
     {
         $date = \DateTime::createFromFormat(self::DATE_FORMAT, $value);
 
-        return false === $date ? new \DateTime() : $date;
+        return false === $date ? null : $date;
+    }
+
+    /**
+     * Decode the given JSON string.
+     *
+     * @param string $value the value to decode
+     *
+     * @return array the decoded value
+     */
+    private function parseJson(string $value): array
+    {
+        try {
+            $result = \json_decode($value, true);
+            if ($result && JSON_ERROR_NONE === \json_last_error()) {
+                return $result;
+            }
+        } catch (\Exception $e) {
+        }
+
+        return [];
+    }
+
+    /**
+     * Gets the log message.
+     *
+     * @param string $value the source
+     *
+     * @return string the message
+     */
+    private function parseMessage(string $value): string
+    {
+        return \trim($value);
     }
 
     /**
@@ -315,8 +315,7 @@ class LogService
                 if (6 !== \count($values)) {
                     continue;
                 }
-                $date = self::parseDate($values[0]);
-                if (false === $date) {
+                if (!$date = self::parseDate($values[0])) {
                     continue;
                 }
 
@@ -329,9 +328,9 @@ class LogService
                     ->setCreatedAt($date)
                     ->setChannel($channel)
                     ->setLevel($level)
-                    ->setMessage($this->getMessage($values[3]))
-                    ->setContext($this->decodeJson($values[4]))
-                    ->setExtra($this->decodeJson($values[5]));
+                    ->setMessage($this->parseMessage($values[3]))
+                    ->setContext($this->parseJson($values[4]))
+                    ->setExtra($this->parseJson($values[5]));
                 $logs[$id++] = $log;
 
                 // update
@@ -350,31 +349,14 @@ class LogService
 
             // result
             return [
+                self::KEY_FILE => $this->fileName,
                 self::KEY_LOGS => $logs,
                 self::KEY_LEVELS => $levels,
                 self::KEY_CHANNELS => $channels,
-                self::KEY_FILE => $this->fileName,
             ];
         }
 
         return false;
-    }
-
-    /**
-     * Save a value to cache.
-     *
-     * @param string $key     the cache key
-     * @param array  $entries the entries
-     */
-    private function setCachedValue(string $key, array $entries): self
-    {
-        $value = $entries[$key];
-        $item = $this->adapter->getItem($key)
-            ->expiresAfter(self::CACHE_TIMEOUT)
-            ->set($value);
-        $this->adapter->save($item);
-
-        return $this;
     }
 
     /**
@@ -384,8 +366,11 @@ class LogService
      */
     private function setCachedValues(array $entries): void
     {
-        $this->setCachedValue(self::KEY_LOGS, $entries)
-            ->setCachedValue(self::KEY_LEVELS, $entries)
-            ->setCachedValue(self::KEY_CHANNELS, $entries);
+        foreach ($entries as $key => $value) {
+            $item = $this->adapter->getItem($key)
+                ->expiresAfter(self::CACHE_TIMEOUT)
+                ->set($value);
+            $this->adapter->save($item);
+        }
     }
 }

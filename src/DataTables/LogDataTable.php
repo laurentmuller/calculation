@@ -140,6 +140,14 @@ class LogDataTable extends AbstractDataTable
     }
 
     /**
+     * Gets the log service.
+     */
+    public function getService(): LogService
+    {
+        return $this->service;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function createColumns(): array

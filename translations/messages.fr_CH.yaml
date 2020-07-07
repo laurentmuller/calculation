@@ -493,7 +493,7 @@ log:
         extra: Extra
     show:
         title: Entrée du journal de l'application
-        empty: Le journal de l'application est vide.
+        empty: Le journal de l'application ne contient aucune entrée.
         file: 'Fichier : %file%'
         pdf_title: Télécharger le journal de l'application
         not_found: Impossible d'afficher l'entrée du journal.
@@ -502,6 +502,9 @@ log:
         message: Êtes-vous sûr de vouloir supprimer le journal de l'application ?
         success: Le journal de l'application a été supprimé avec succès.
         error: Impossible de supprimer le journal de l'application.
+        file: 'Fichier'
+        size: 'Taille'
+        entries: 'Nombre d''entrées'
 pagination:
     counter: Entrées %start% à %end% sur %count%
     page: Page %page%

@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\LogDataTable;
-use App\Pdf\PdfResponse;
 use App\Report\LogReport;
 use App\Service\LogService;
+use App\Utils\SymfonyUtils;
 use App\Utils\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -116,12 +116,16 @@ class LogController extends BaseController
             return  $this->redirectToHomePage();
         }
 
-        // display
-        return $this->render('log/log_delete.html.twig', [
+        $parameters = [
             'route' => $request->get('route'),
             'form' => $form->createView(),
             'file' => $file,
-        ]);
+            'size' => SymfonyUtils::formatFileSize($file),
+            'entries' => SymfonyUtils::getLines($file),
+        ];
+
+        // display
+        return $this->render('log/log_delete.html.twig', $parameters);
     }
 
     /**
@@ -129,7 +133,7 @@ class LogController extends BaseController
      *
      * @Route("/pdf", name="log_pdf")
      */
-    public function pdf(LogService $service): PdfResponse
+    public function pdf(LogService $service): Response
     {
         // get entries
         if (!$entries = $service->getEntries()) {
@@ -150,14 +154,12 @@ class LogController extends BaseController
      *
      * @Route("/refresh", name="log_refresh", methods={"GET", "POST"})
      */
-    public function refresh(LogService $service): Response
+    public function refresh(Request $request, LogService $service): Response
     {
         $service->clearCache();
-        if ($this->getApplication()->isDisplayTabular()) {
-            return $this->redirectToRoute('log_table');
-        }
+        $route = $request->get('route', 'log_table');
 
-        return $this->redirectToRoute('log_card');
+        return $this->redirectToRoute($route);
     }
 
     /**
@@ -183,6 +185,13 @@ class LogController extends BaseController
      */
     public function table(Request $request, LogDataTable $table): Response
     {
+        $service = $table->getService();
+        if (!$service->getEntries()) {
+            $this->infoTrans('log.show.empty');
+
+            return $this->redirectToHomePage();
+        }
+
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
             return $this->json($results);

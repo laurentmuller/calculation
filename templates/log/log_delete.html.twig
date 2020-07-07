@@ -4,11 +4,28 @@
 {%- set title = 'log.delete.title' -%}
 
 {% block card_body %}
-<p>{{ 'log.delete.message'|trans }}</p>
-<p class="mb-0">{{ 'log.show.file'|trans({'%file%': file}) }}</p>
+<p>{{- 'log.delete.message'|trans -}}</p>
+<hr>
+<table class="table table-sm table-borderless mb-0">
+    <tr>
+        <td class="w-25">{{ 'log.delete.file'|trans }}</td>
+        <td>:</td>
+        <td class="w-75">{{ file }}</td>
+    </tr>
+    <tr>
+        <td class="w-25">{{ 'log.delete.size'|trans }}</td>
+        <td>:</td>
+        <td class="w-75">{{ size }}</td>
+    </tr>
+    <tr>
+        <td class="w-25">{{ 'log.delete.entries'|trans }}</td>
+        <td>:</td>
+        <td class="w-75">{{ entries|integer }}</td>
+    </tr>
+</table>
 {% endblock %}
 
 {% block actions_form %}
-    {% set cancel_path = path(route|default('homepage')) %}
-    {{ parent() }}
+{% set cancel_path = path(route|default('homepage')) %}
+{{ parent() }}
 {% endblock %}

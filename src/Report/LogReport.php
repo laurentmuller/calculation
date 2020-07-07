@@ -153,7 +153,7 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
         // new page
         $this->AddPage();
 
-        // lines
+        // logs
         $logs = $values['logs'];
         if (empty($logs)) {
             $this->Cell(0, self::LINE_HEIGHT, $this->trans('log.show.empty'));
@@ -166,7 +166,7 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
         $this->outputCards($cards);
 
         // lines
-        return $this->outputLines($logs);
+        return $this->outputLogs($logs);
     }
 
     /**
@@ -287,9 +287,9 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
     /**
      * Output header cards.
      *
-     * @param array $data the cards to output
+     * @param array $cards the cards to output
      */
-    private function outputCards(array $data): void
+    private function outputCards(array $cards): void
     {
         $this->started = true;
         $this->drawCards = true;
@@ -302,8 +302,8 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
         $emptyCell = new PdfCell(null, 1, PdfStyle::getNoBorderStyle());
 
         // build columns and cells
-        $index = \count($data) - 1;
-        foreach ($data as $key => $value) {
+        $index = \count($cards) - 1;
+        foreach ($cards as $key => $value) {
             $columns[] = PdfColumn::center($key, 25);
             $valCells[] = new PdfCell($this->localeInt($value));
             $textCells[] = new PdfCell(Utils::capitalize($key));
@@ -327,13 +327,13 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
     }
 
     /**
-     * Output log lines.
+     * Output logs.
      *
      * @param Log[] $logs the logs
      *
      * @return bool true on success
      */
-    private function outputLines(array $logs): bool
+    private function outputLogs(array $logs): bool
     {
         $this->drawCards = false;
 

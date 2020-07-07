@@ -158,7 +158,7 @@ class ResponseSubscriber implements EventSubscriberInterface
 
         // CSP
         if (!$this->isEdgeBrowser($request)) {
-            $csp = $this->getCSP($request, $response);
+            $csp = $this->getCSP($response);
             $headers->set('Content-Security-Policy', $csp);
             $headers->set('X-Content-Security-Policy', $csp);
             $headers->set('X-WebKit-CSP', $csp);
@@ -178,12 +178,11 @@ class ResponseSubscriber implements EventSubscriberInterface
     /**
      * Build the content security policy.
      *
-     * @param Request  $request  the current request object
      * @param Response $response the current response object
      *
      * @return string the CSP directives
      */
-    private function getCSP(Request $request, Response $response): string
+    private function getCSP(Response $response): string
     {
         // get values
         $asset = $this->asset;

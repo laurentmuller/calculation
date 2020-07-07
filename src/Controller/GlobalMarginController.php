@@ -130,13 +130,13 @@ class GlobalMarginController extends EntityController
      *
      * @Route("/show/{id}", name="globalmargin_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
-    public function show(Request $request, GlobalMargin $item): Response
+    public function show(GlobalMargin $item): Response
     {
         $parameters = [
             'template' => 'globalmargin/globalmargin_show.html.twig',
         ];
 
-        return $this->showEntity($request, $item, $parameters);
+        return $this->showEntity($item, $parameters);
     }
 
     /**

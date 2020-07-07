@@ -128,7 +128,7 @@ class ThemeType extends AbstractType
     protected function addThemeField(FormHelper $helper): self
     {
         $themes = $this->service->getThemes();
-        $choice_attr = function (Theme $choice, $key, $value) {
+        $choice_attr = function (Theme $choice) {
             return [
                 'data-description' => $choice->getDescription(),
             ];

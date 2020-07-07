@@ -301,9 +301,8 @@ class Category extends BaseEntity
      * @Assert\Callback
      *
      * @param ExecutionContextInterface $context the execution context
-     * @param mixed                     $payload the payload to attach arbitrary domain-specific data
      */
-    public function validate(ExecutionContextInterface $context, $payload): void
+    public function validate(ExecutionContextInterface $context): void
     {
         // get margins
         $margins = $this->getMargins();

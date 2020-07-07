@@ -128,7 +128,7 @@ class ProductController extends EntityController
      *
      * @Route("/pdf/{limit}/{offset}", name="product_pdf", requirements={"limit": "\d+", "offset": "\d+"})
      */
-    public function pdf(Request $request, int $limit = -1, int $offset = 0): PdfResponse
+    public function pdf(int $limit = -1, int $offset = 0): PdfResponse
     {
         // get products
         if (-1 === $limit) {
@@ -155,13 +155,13 @@ class ProductController extends EntityController
      *
      * @Route("/show/{id}", name="product_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
-    public function show(Request $request, Product $item): Response
+    public function show(Product $item): Response
     {
         $parameters = [
             'template' => 'product/product_show.html.twig',
         ];
 
-        return $this->showEntity($request, $item, $parameters);
+        return $this->showEntity($item, $parameters);
     }
 
     /**

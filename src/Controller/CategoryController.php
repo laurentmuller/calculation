@@ -155,13 +155,13 @@ class CategoryController extends EntityController
      *
      * @Route("/show/{id}", name="category_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
-    public function show(Request $request, Category $item): Response
+    public function show(Category $item): Response
     {
         $parameters = [
             'template' => 'category/category_show.html.twig',
         ];
 
-        return $this->showEntity($request, $item, $parameters);
+        return $this->showEntity($item, $parameters);
     }
 
     /**

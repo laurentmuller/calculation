@@ -155,7 +155,7 @@ class CalculationController extends EntityController
      * @Route("/below/pdf", name="calculation_below_pdf")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function belowPdf(Request $request): Response
+    public function belowPdf(): Response
     {
         $minMargin = $this->getApplication()->getMinMargin();
         $calculations = $this->getBelowMargin($minMargin);
@@ -300,10 +300,8 @@ class CalculationController extends EntityController
      * @Route("/duplicate/pdf", name="calculation_duplicate_pdf")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function duplicatePdf(Request $request): Response
+    public function duplicatePdf(): Response
     {
-        // $request->
-
         $items = $this->getDuplicateItems();
         if (empty($items)) {
             $this->warningTrans('calculation.duplicate.empty');
@@ -396,7 +394,7 @@ class CalculationController extends EntityController
      * @Route("/empty/pdf", name="calculation_empty_pdf")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function emptyPdf(Request $request): Response
+    public function emptyPdf(): Response
     {
         $items = $this->getEmptyItems();
         if (empty($items)) {
@@ -469,7 +467,7 @@ class CalculationController extends EntityController
      *
      * @Route("/pdf/{id}", name="calculation_pdf_id", requirements={"id": "\d+" })
      */
-    public function pdfById(Request $request, Calculation $calculation): PdfResponse
+    public function pdfById(Calculation $calculation): PdfResponse
     {
         // create and render report
         $report = new CalculationReport($this);
@@ -483,7 +481,7 @@ class CalculationController extends EntityController
      *
      * @Route("/pivot", name="calculation_pivot", methods={"GET", "POST"})
      */
-    public function pivot(Request $request): Response
+    public function pivot(): Response
     {
         // create table
         $table = $this->getPivotTable();
@@ -505,7 +503,7 @@ class CalculationController extends EntityController
      *
      * @Route("/pivot/export", name="calculation_pivot_export", methods={"GET", "POST"})
      */
-    public function pivotExport(Request $request): Response
+    public function pivotExport(): Response
     {
         try {
             // load data
@@ -555,7 +553,7 @@ class CalculationController extends EntityController
      *
      * @Route("/pivot/json", name="calculation_pivot_json", methods={"GET", "POST"})
      */
-    public function pivotJson(Request $request): JsonResponse
+    public function pivotJson(): JsonResponse
     {
         try {
             // create table
@@ -572,7 +570,7 @@ class CalculationController extends EntityController
      *
      * @Route("/show/{id}", name="calculation_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
-    public function show(Request $request, Calculation $item): Response
+    public function show(Calculation $item): Response
     {
         $parameters = [
             'template' => 'calculation/calculation_show.html.twig',
@@ -581,7 +579,7 @@ class CalculationController extends EntityController
             'emty_items' => $item->hasEmptyItems(),
         ];
 
-        return $this->showEntity($request, $item, $parameters);
+        return $this->showEntity($item, $parameters);
     }
 
     /**

@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\File;
@@ -246,7 +245,7 @@ class OpenWeatherController extends BaseController
      * @Route("/import", name="openweather_import")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function import(Request $request, KernelInterface $kernel, OpenWeatherService $service): Response
+    public function import(Request $request, OpenWeatherService $service): Response
     {
         // create form
         $builder = $this->createFormBuilder();

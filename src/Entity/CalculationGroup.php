@@ -321,17 +321,6 @@ class CalculationGroup extends BaseEntity
     }
 
     /**
-     * Set category id.
-     * This property is created only for the form builder.
-     *
-     * @param int $categoryId
-     */
-    public function setCategoryId($categoryId): self
-    {
-        return $this;
-    }
-
-    /**
      * Set code.
      *
      * @param string $code

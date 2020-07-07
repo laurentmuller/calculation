@@ -415,7 +415,7 @@ class ImageHandler implements ImageExtensionInterface
             }
         }
 
-        return self::DEFAULT_RESOLUTION;
+        return $default;
     }
 
     /**

@@ -125,10 +125,8 @@ class HtmlParser
      *
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
-     * @param string          $class  the optional class name
-     * @param \DOMNode        $node   the current node
      */
-    private function createPageBreakChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlPageBreakChunk
+    private function createPageBreakChunk(string $name, HtmlParentChunk $parent): HtmlPageBreakChunk
     {
         return new HtmlPageBreakChunk($name, $parent);
     }
@@ -280,7 +278,7 @@ class HtmlParser
         switch ($node->nodeType) {
             case XML_ELEMENT_NODE:
                 if (HtmlChunk::PAGE_BREAK === $class) {
-                    $this->createPageBreakChunk($name, $parent, $class, $node);
+                    $this->createPageBreakChunk($name, $parent);
                 } elseif (HtmlChunk::LINE_BREAK === $name) {
                     $this->createBrChunk($name, $parent, $class);
                 } elseif (HtmlChunk::LIST_ITEM === $name) {

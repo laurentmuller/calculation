@@ -425,7 +425,7 @@ class OpenWeatherService extends HttpClientService
     public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25)
     {
         // find from cache
-        $key = $this->getCacheKey('search', ['name' => $name]);
+        $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units]);
         $item = $this->debug ? false : $this->adapter->getItem($key);
         if ($item && $item->isHit()) {
             return $item->get();

@@ -152,13 +152,13 @@ class CalculationStateController extends EntityController
      *
      * @Route("/show/{id}", name="calculationstate_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
-    public function show(Request $request, CalculationState $item): Response
+    public function show(CalculationState $item): Response
     {
         $parameters = [
             'template' => 'calculationstate/calculationstate_show.html.twig',
         ];
 
-        return $this->showEntity($request, $item, $parameters);
+        return $this->showEntity($item, $parameters);
     }
 
     /**

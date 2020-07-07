@@ -40,7 +40,7 @@ class LogController extends BaseController
      *
      * @Route("", name="log_list")
      */
-    public function card(Request $request, LogService $service): Response
+    public function card(LogService $service): Response
     {
         if (!$entries = $service->getEntries()) {
             $this->infoTrans('log.show.empty');
@@ -57,7 +57,7 @@ class LogController extends BaseController
      * @IsGranted("ROLE_USER")
      * @Route("/csp", name="log_csp")
      */
-    public function cspViolation(Request $request, LoggerInterface $logger): Response
+    public function cspViolation(LoggerInterface $logger): Response
     {
         $data = \file_get_contents('php://input');
         if ($data = \json_decode($data, true)) {

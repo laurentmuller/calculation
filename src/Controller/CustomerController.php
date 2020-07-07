@@ -140,13 +140,13 @@ class CustomerController extends EntityController
      *
      * @Route("/show/{id}", name="customer_show", requirements={"id": "\d+" }, methods={"GET"})
      */
-    public function show(Request $request, Customer $item): Response
+    public function show(Customer $item): Response
     {
         $parameters = [
             'template' => 'customer/customer_show.html.twig',
         ];
 
-        return $this->showEntity($request, $item, $parameters);
+        return $this->showEntity($item, $parameters);
     }
 
     /**

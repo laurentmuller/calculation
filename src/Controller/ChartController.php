@@ -22,7 +22,6 @@ use App\Traits\MathTrait;
 use App\Utils\DateUtils;
 use Laminas\Json\Expr;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -71,7 +70,7 @@ class ChartController extends BaseController
     /**
      * @Route("/default", name="chart_default")
      */
-    public function default(Request $request): Response
+    public function default(): Response
     {
         return $this->render('chart/base_chart.html.twig', [
             'title' => 'Graphique par défaut',
@@ -82,7 +81,7 @@ class ChartController extends BaseController
     /**
      * @Route("/drilldown", name="chart_drilldown")
      */
-    public function drillDown(Request $request): Response
+    public function drillDown(): Response
     {
         return $this->render('chart/base_chart.html.twig', [
             'title' => 'Drill-Down',
@@ -378,7 +377,7 @@ class ChartController extends BaseController
     /**
      * @Route("/multiaxes", name="chart_multiaxes")
      */
-    public function multiAxes(Request $request): Response
+    public function multiAxes(): Response
     {
         return $this->render('chart/base_chart.html.twig', [
             'title' => 'Multi-Axes',
@@ -389,7 +388,7 @@ class ChartController extends BaseController
     /**
      * @Route("/history", name="chart_history")
      */
-    public function sellsHistory(Request $request): Response
+    public function sellsHistory(): Response
     {
         return $this->render('chart/base_chart.html.twig', [
             'title' => 'Historique',

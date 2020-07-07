@@ -373,7 +373,6 @@ abstract class EntityController extends BaseController
     /**
      * Show properties of an entity.
      *
-     * @param request         $request    the request
      * @param EntityInterface $item       the entity to show
      * @param array           $parameters the show parameters. The following keys must or may be fixed:
      *                                    <ul>
@@ -386,7 +385,7 @@ abstract class EntityController extends BaseController
      *
      * @throws \Symfony\Component\Finder\Exception\AccessDeniedException if the access is denied
      */
-    protected function showEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function showEntity(EntityInterface $item, array $parameters = []): Response
     {
         // check permission
         $this->checkPermission(EntityVoterInterface::ATTRIBUTE_SHOW);

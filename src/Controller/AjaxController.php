@@ -33,7 +33,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Intl\Locales;
@@ -427,7 +426,7 @@ class AjaxController extends BaseController
      * @Route("/languages", name="ajax_languages")
      * @IsGranted("ROLE_USER")
      */
-    public function languages(Request $request, TranslatorFactory $factory, SessionInterface $session): JsonResponse
+    public function languages(Request $request, TranslatorFactory $factory): JsonResponse
     {
         $class = $request->get('service', TranslatorFactory::DEFAULT_SERVICE);
         $service = $factory->getService($class);
@@ -572,7 +571,7 @@ class AjaxController extends BaseController
      * @Route("/translate", name="ajax_translate")
      * @IsGranted("ROLE_USER")
      */
-    public function translate(Request $request, TranslatorFactory $factory, SessionInterface $session): JsonResponse
+    public function translate(Request $request, TranslatorFactory $factory): JsonResponse
     {
         // get parameters
         $to = $request->get('to', '');

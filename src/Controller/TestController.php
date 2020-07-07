@@ -69,13 +69,12 @@ class TestController extends BaseController
      *
      * @Route("/month/{year}/{month}", name="test_month", requirements={"year": "\d+", "month": "\d+"})
      *
-     * @param Request               $request    the request the get parameters
      * @param CalendarService       $service    the service to generate calendar model
      * @param CalculationRepository $repository the repository to query
      * @param int|null              $year       the year to search for or <code>null</code> for the current year
      * @param int|null              $month      the month to search for or <code>null</code> for the current month
      */
-    public function calendarMonth(Request $request, CalendarService $service, CalculationRepository $repository, $year = null, $month = null): Response
+    public function calendarMonth(CalendarService $service, CalculationRepository $repository, $year = null, $month = null): Response
     {
         // check month
         $month = (int) ($month ?: \date('n'));
@@ -104,12 +103,11 @@ class TestController extends BaseController
      *
      * @Route("/calendar/{year}", name="test_calendar", requirements={"year": "\d+" })
      *
-     * @param Request               $request    the request
      * @param CalendarService       $service    the service to generate calendar model
      * @param CalculationRepository $repository the repository to query
      * @param int|null              $year       the year to search for or <code>null</code> for the current year
      */
-    public function calendarYear(Request $request, CalendarService $service, CalculationRepository $repository, $year = null): Response
+    public function calendarYear(CalendarService $service, CalculationRepository $repository, $year = null): Response
     {
         $year = DateUtils::completYear((int) ($year ?: \date('Y')));
         $service->setModels(null, null, null, CalculationsDay::class);
@@ -332,7 +330,7 @@ class TestController extends BaseController
      *
      * @Route("/notifications", name="test_notifications")
      */
-    public function notifications(Request $request): Response
+    public function notifications(): Response
     {
         $data = [
             'position' => $this->getApplication()->getMessagePosition(),

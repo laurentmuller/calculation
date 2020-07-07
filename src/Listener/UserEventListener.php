@@ -176,7 +176,7 @@ final class UserEventListener implements EventSubscriberInterface
     /**
      * Handle the change succes event.
      */
-    public function onSuccess(FormEvent $event, string $eventName): void
+    public function onSuccess(FormEvent $event): void
     {
         $this->setHomePageResponse($event);
     }

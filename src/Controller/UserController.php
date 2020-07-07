@@ -308,7 +308,7 @@ class UserController extends EntityController
      * @Route("/pdf", name="user_pdf", methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function pdf(Request $request, PropertyMappingFactory $factory, StorageInterface $storage, KernelInterface $kernel): PdfResponse
+    public function pdf(PropertyMappingFactory $factory, StorageInterface $storage, KernelInterface $kernel): PdfResponse
     {
         // get users
         $users = $this->getEntities();
@@ -368,7 +368,7 @@ class UserController extends EntityController
      * @Route("/rights/pdf", name="user_rights_pdf", methods={"GET"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function rightsPdf(Request $request): PdfResponse
+    public function rightsPdf(): PdfResponse
     {
         $users = $this->getEntities();
         if (empty($users)) {
@@ -390,13 +390,13 @@ class UserController extends EntityController
      * @Route("/show/{id}", name="user_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function show(Request $request, User $item): Response
+    public function show(User $item): Response
     {
         $parameters = [
             'template' => 'user/user_show.html.twig',
         ];
 
-        return $this->showEntity($request, $item, $parameters);
+        return $this->showEntity($item, $parameters);
     }
 
     /**
@@ -448,9 +448,9 @@ class UserController extends EntityController
 
             // create response and update cookies
             $response = $this->redirectToHomePage();
-            $this->updateCookie($request, $response, ThemeService::KEY_CSS, $css)
-                ->updateCookie($request, $response, ThemeService::KEY_BACKGROUND, $background)
-                ->updateCookie($request, $response, ThemeService::KEY_DARK, (string) $dark);
+            $this->updateCookie($response, ThemeService::KEY_CSS, $css)
+                ->updateCookie($response, ThemeService::KEY_BACKGROUND, $background)
+                ->updateCookie($response, ThemeService::KEY_DARK, (string) $dark);
 
             $this->succesTrans('theme.success', ['%name%' => $theme->getName()]);
 
@@ -542,13 +542,12 @@ class UserController extends EntityController
     /**
      * Update a response by adding or removing a cookie.
      *
-     * @param Request  $request  the request to get base URL
      * @param Response $response the response to update
      * @param string   $name     the cookie name
      * @param string   $value    the cookie value or null to remove
      * @param int      $days     the number of days the cookie expires after
      */
-    private function updateCookie(Request $request, Response $response, string $name, ?string $value, ?int $days = 30): self
+    private function updateCookie(Response $response, string $name, ?string $value, ?int $days = 30): self
     {
         $headers = $response->headers;
         $path = $this->getParameter('cookie_path');

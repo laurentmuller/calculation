@@ -32,7 +32,7 @@
 		"beberlei/doctrineextensions" : "^1.2",
 		"bjeavons/zxcvbn-php" : "^1.1",
 		"fpdf/fpdf" : "^1.82",
-		"friendsofsymfony/user-bundle" : "dev-bugfix",
+		"friendsofsymfony/user-bundle" : "dev-bugfix#58767f8e584b452e2cc5f4c6e185e75d5c27ea2f",
 		"fzaninotto/faker" : "^1.9",
 		"google/recaptcha" : "^1.2",
 		"imagine/imagine" : "^1.2",

@@ -97,7 +97,7 @@ abstract class EntityController extends BaseController
         $parameters['item'] = $parameters;
 
         // create form and handle request
-        $form = $this->createFormBuilder()->getForm();
+        $form = $this->getForm();
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // remove

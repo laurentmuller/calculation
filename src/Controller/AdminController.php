@@ -16,7 +16,6 @@ namespace App\Controller;
 
 use App\Entity\Role;
 use App\Entity\User;
-use App\Form\FormHelper;
 use App\Form\ParametersType;
 use App\Form\RoleRightsType;
 use App\Interfaces\ApplicationServiceInterface;
@@ -66,8 +65,8 @@ class AdminController extends BaseController
      */
     public function clearCache(Request $request, KernelInterface $kernel, LoggerInterface $logger): Response
     {
-        $form = $this->createFormBuilder()->getForm();
-
+        // handle request
+        $form = $this->getForm();
         if ($this->handleRequestForm($request, $form)) {
             // first clear application service cache
             $this->getApplication()->clearCache();
@@ -126,8 +125,7 @@ class AdminController extends BaseController
         }
 
         // create form
-        $builder = $this->createFormBuilder();
-        $helper = new FormHelper($builder);
+        $helper = $this->createFormHelper();
 
         // constraints
         $constraints = new File([
@@ -143,7 +141,7 @@ class AdminController extends BaseController
             ->addFileType();
 
         // handle request
-        $form = $builder->getForm();
+        $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             // import
             $file = $form->getData()['file'];

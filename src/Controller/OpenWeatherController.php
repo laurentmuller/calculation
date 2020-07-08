@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Database\OpenWeatherDatabase;
-use App\Form\FormHelper;
 use App\Service\OpenWeatherService;
 use App\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -253,10 +252,15 @@ class OpenWeatherController extends BaseController
 
         // handle request
         if ($this->handleRequestForm($request, $form)) {
+
+            $db = null;
+            $file = null;
+            $temp_name = null;
+
             try {
                 // get temp file
                 if (!$temp_name = Utils::tempfile('sql')) {
-                    return $this->renderMessageResult('import.error.temp_file');
+                    return $this->renderErrorResult('import.error.temp_file');
                 }
 
                 /** @var UploadedFile $file */
@@ -265,12 +269,12 @@ class OpenWeatherController extends BaseController
 
                 // get content
                 if (!$content = $this->getGzContent($file)) {
-                    return $this->renderMessageResult('import.error.open_archive', ['name' => $name]);
+                    return $this->renderErrorResult('import.error.open_archive', ['name' => $name]);
                 }
 
                 // decode content
                 if (!$cities = $this->getJsonContent($content)) {
-                    return $this->renderMessageResult('import.error.empty_archive', ['name' => $name]);
+                    return $this->renderErrorResult('import.error.empty_archive', ['name' => $name]);
                 }
 
                 // create database
@@ -296,13 +300,13 @@ class OpenWeatherController extends BaseController
 
                 // cities?
                 if (0 === $valids) {
-                    return $this->renderMessageResult('openweather.error.empty_city');
+                    return $this->renderErrorResult('openweather.error.empty_city');
                 }
 
                 // move
                 $target = $service->getDatabaseName();
                 if (!\rename($temp_name, $target)) {
-                    return $this->renderMessageResult('openweather.error.move_database');
+                    return $this->renderErrorResult('openweather.error.move_database');
                 }
 
                 // ok
@@ -344,8 +348,7 @@ class OpenWeatherController extends BaseController
         ];
 
         // create form
-        $builder = $this->createFormBuilder($data);
-        $helper = new FormHelper($builder, 'openweather.search.');
+        $helper = $this->createFormHelper('openweather.search.', $data);
 
         $helper->field(self::KEY_QUERY)
             ->updateOption('constraints', new Length(['min' => 2]))
@@ -374,7 +377,7 @@ class OpenWeatherController extends BaseController
             ->addHiddenType();
 
         // handle request
-        $form = $builder->getForm();
+        $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             // get values
             $query = (string) $form->get('query')->getData();
@@ -453,8 +456,7 @@ class OpenWeatherController extends BaseController
     private function createImportForm(): FormInterface
     {
         // create form
-        $builder = $this->createFormBuilder();
-        $helper = new FormHelper($builder);
+        $helper = $this->createFormHelper();
 
         // constraints
         $constraints = new File([
@@ -469,7 +471,7 @@ class OpenWeatherController extends BaseController
             ->updateAttribute('accept', 'application/x-gzip')
             ->addFileType();
 
-        return $builder->getForm();
+        return $helper->createForm();
     }
 
     private function getGzContent(UploadedFile $file): ?string
@@ -556,7 +558,7 @@ class OpenWeatherController extends BaseController
         return (string) $this->getSessionString(self::KEY_UNITS, $this->getRequestUnits($request));
     }
 
-    private function renderMessageResult(string $message, array $parameters = []): Response
+    private function renderErrorResult(string $message, array $parameters = []): Response
     {
         return $this->render('openweather/import_result.html.twig', [
             'message' => $this->trans($message, $parameters),

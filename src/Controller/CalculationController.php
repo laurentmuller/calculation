@@ -23,7 +23,6 @@ use App\Entity\Category;
 use App\Entity\EntityInterface;
 use App\Form\CalculationEditStateType;
 use App\Form\CalculationType;
-use App\Form\FormHelper;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Listener\CalculationListener;
 use App\Pdf\PdfResponse;
@@ -643,10 +642,9 @@ class CalculationController extends EntityController
     public function update(Request $request, LoggerInterface $logger): Response
     {
         // create form
-        $builder = $this->createFormBuilder();
+        $helper = $this->createFormHelper();
 
         // fields
-        $helper = new FormHelper($builder);
         $helper->field('closed')
             ->label('calculation.update.closed_label')
             ->updateOption('help', 'calculation.update.closed_description')
@@ -656,7 +654,7 @@ class CalculationController extends EntityController
             ->addCheckboxType();
 
         // handle request
-        $form = $builder->getForm();
+        $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
             $closed = (bool) $data['closed'];
@@ -716,7 +714,7 @@ class CalculationController extends EntityController
 
         // display
         return $this->render('calculation/calculation_update.html.twig', [
-            'lastUpdate' => $this->getApplication()->getLastUpdate(),
+            'last_update' => $this->getApplication()->getLastUpdate(),
             'form' => $form->createView(),
         ]);
     }

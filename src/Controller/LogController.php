@@ -93,7 +93,7 @@ class LogController extends BaseController
 
         // handle request
         $file = $service->getFileName();
-        $form = $this->createFormBuilder()->getForm();
+        $form = $this->getForm();
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // empty file
@@ -204,6 +204,7 @@ class LogController extends BaseController
             'columns' => $table->getColumns(),
             'channels' => $table->getChannels(),
             'levels' => $table->getLevels(),
+
         ];
 
         return $this->render('log/log_table.html.twig', $parameters);

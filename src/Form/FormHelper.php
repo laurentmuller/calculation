@@ -36,6 +36,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 /**
@@ -240,6 +241,22 @@ class FormHelper
     public function addEmailType(): self
     {
         return $this->add(EmailType::class);
+    }
+
+    /**
+     * Adds an event listener to an event on this form builder.
+     *
+     * @param string   $eventName the event name
+     * @param callable $listener  the event listener
+     * @param int      $priority  The priority of the listener. Listeners
+     *                            with a higher priority are called before
+     *                            listeners with a lower priority.
+     */
+    public function addEventListener(string $eventName, callable $listener, int $priority = 0): self
+    {
+        $this->builder->addEventListener($eventName, $listener, $priority);
+
+        return $this;
     }
 
     /**
@@ -450,6 +467,18 @@ class FormHelper
     }
 
     /**
+     * Creates the form within the underlaying form builder.
+     *
+     * @return FormInterface the form
+     *
+     * @see FormBuilderInterface::getForm()
+     */
+    public function createForm(): FormInterface
+    {
+        return $this->builder->getForm();
+    }
+
+    /**
      * Sets the currency symbol.
      *
      * @param string|bool $currency the currency symbol or false to hide symbol
@@ -506,6 +535,14 @@ class FormHelper
         }
 
         return $this;
+    }
+
+    /**
+     * Gets the form builder.
+     */
+    public function getBuilder(): FormBuilderInterface
+    {
+        return $this->builder;
     }
 
     /**

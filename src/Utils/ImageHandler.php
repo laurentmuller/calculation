@@ -399,7 +399,7 @@ class ImageHandler implements ImageExtensionInterface
     }
 
     /**
-     * Get the horizontal resolution of this image in dot per each (DPI).
+     * Get the horizontal resolution of this image in dot per inch (DPI).
      *
      * @param int $default the default resolution to use on failure
      *
@@ -707,7 +707,7 @@ class ImageHandler implements ImageExtensionInterface
      * @param float  $angle    The angle in degrees, with 0 degrees being left-to-right reading text.
      *                         Higher values represent a counter-clockwise rotation. For example, a
      *                         value of 90 would result in bottom-to-top reading text.
-     * @param int    $x        the coordinates given by x and y will define the basepoint of the first
+     * @param int    $x        The coordinates given by x and y will define the basepoint of the first
      *                         character (roughly the lower-left corner of the character)
      * @param int    $y        The y-coordinate. This sets the position of the fonts baseline, not the
      *                         very bottom of the character.

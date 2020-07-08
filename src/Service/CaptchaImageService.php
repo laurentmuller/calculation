@@ -29,7 +29,7 @@ class CaptchaImageService
     use SessionTrait;
 
     /**
-     * the allowed characters.
+     * The allowed characters.
      */
     private const ALLOWED_VALUES = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -349,11 +349,11 @@ class CaptchaImageService
     /**
      * Generate a random string.
      *
-     * @param number $length the number of characters to output
+     * @param int $length the number of characters to output
      *
      * @return string the random string
      */
-    protected function generateRandomString($length): string
+    protected function generateRandomString(int $length): string
     {
         $length = \max($length, 2);
         $result = \str_shuffle(self::ALLOWED_VALUES);

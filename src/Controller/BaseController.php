@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Form\FormHelper;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfResponse;
 use App\Report\BaseReport;
@@ -23,6 +24,7 @@ use App\Traits\FormatterTrait;
 use App\Traits\TranslatorFlashMessageTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -164,6 +166,35 @@ abstract class BaseController extends AbstractController
     public function redirectToHomePage(): Response
     {
         return  $this->redirectToRoute(IndexController::HOME_PAGE);
+    }
+
+    /**
+     * Creates and returns a form helper instance.
+     *
+     * @param string $labelPrefix the label prefix. If the prefix is not null,
+     *                            the label is automatically added when the field property is
+     *                            set.
+     * @param mixed  $data        the initial data
+     * @param array  $options     the initial options
+     */
+    protected function createFormHelper(string $labelPrefix = null, $data = null, array $options = []): FormHelper
+    {
+        $builder = $this->createFormBuilder($data, $options);
+
+        return new FormHelper($builder, $labelPrefix);
+    }
+
+    /**
+     * Creates and returns a form instance.
+     *
+     * @param mixed $data    the initial data
+     * @param array $options the initial options
+     *
+     * @see FormBuilderInterface::getForm()
+     */
+    protected function getForm($data = null, array $options = []): FormInterface
+    {
+        return $this->createFormBuilder($data, $options)->getForm();
     }
 
     /**

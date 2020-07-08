@@ -1,6 +1,28 @@
 /** ! compression tag for ftp-deployment */
 
 /**
+ * -------------- JQuery Extensions --------------
+ */
+
+$.fn.extend({
+    /**
+     * Edit or show the selected item.
+     * 
+     * @param {Object}
+     *            e - the source event.
+     * @returns {boolean} true if handle.
+     */
+    editOrShow: function (e) {
+        'use strict';
+        if (($(this).attr('edit-action') || 'false').toBool()) {
+            return triggerClick(e, '.btn-table-edit') || triggerClick(e, '.btn-table-show');
+        } else {
+            return triggerClick(e, '.btn-table-show') || triggerClick(e, '.btn-table-edit');
+        }
+    }
+});
+
+/**
  * -------------- DataTables Extensions --------------
  */
 
@@ -98,7 +120,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
 
     // bind table body rows
     $table.on('dblclick', 'tbody > tr', function (e) {
-        return editOrShow($table, e);
+        return $table.editOrShow(e);
     });
 
     // bind datatable key down
@@ -172,7 +194,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
     }).on('key', function (e, datatable, key, cell, event) {
         switch (key) {
         case 13: // enter
-            return editOrShow($table, event);
+            return $table.editOrShow(event);
         case 46: // delete
             return triggerClick(event, '.btn-table-delete');
         }
@@ -484,22 +506,4 @@ function enableKeys(selector) {
     'use strict';
     selector = selector || '#data-table';
     $(selector).DataTable().keys.enable();
-}
-
-/**
- * Edit or show the selected item.
- * 
- * @param {Object}
- *            e - the source event.
- * @returns {boolean} true if handle.
- */
-function editOrShow($table, e) {
-    'use strict';
-
-    // edit by default?
-    if ($table.attr('edit-action').toBool()) {
-        return triggerClick(e, '.btn-table-edit') || triggerClick(e, '.btn-table-show');
-    } else {
-        return triggerClick(e, '.btn-table-show') || triggerClick(e, '.btn-table-edit');
-    }
 }

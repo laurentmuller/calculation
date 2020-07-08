@@ -381,10 +381,8 @@ class TestController extends BaseController
         };
 
         // form
-        $builder = $this->createFormBuilder($data);
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, $listener);
-
-        $helper = new FormHelper($builder);
+        $helper = $this->createFormHelper(null, $data);
+        $helper->addEventListener(FormEvents::PRE_SUBMIT, $listener);
         $helper->field('password')
             ->label('password.input')
             ->className('password-strength')
@@ -418,7 +416,7 @@ class TestController extends BaseController
             ->domain('FOSUserBundle')
             ->add(CaptchaImage::class);
 
-        $form = $builder->getForm();
+        $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             return $this->succes($this->trans('password.success'))
                 ->redirectToHomePage();
@@ -573,14 +571,13 @@ class TestController extends BaseController
      */
     public function tinymce(Request $request, ThemeService $service): Response
     {
-        // https://cdn.tiny.cloud/1/10l4vrqclj2t1a8ncd9d5b5hohfgkdj896ip6zd1q9asf9go/tinymce/5/tinymce.min.js
         $data = [
             'email' => 'bibi@bibi.nu',
             'message' => '',
         ];
 
-        $builder = $this->createFormBuilder($data);
-        $helper = new FormHelper($builder, 'user.fields.');
+        // create form
+        $helper = $this->createFormHelper('user.fields.', $data);
 
         $helper->field('email')
             ->addEmailType();
@@ -592,8 +589,8 @@ class TestController extends BaseController
             ->className('must-validate')
             ->add(TextareaType::class);
 
-        $form = $builder->getForm();
-
+        // handle request
+        $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
             $message = 'Message :<br>' . (string) $data['message'];
@@ -618,7 +615,7 @@ class TestController extends BaseController
         $service = $factory->getSessionService();
 
         // form and parameters
-        $form = $this->createFormBuilder()->getForm();
+        $form = $this->getForm();
         $parameters = [
             'form' => $form->createView(),
             'language' => HttpClientService::getAcceptLanguage(true),

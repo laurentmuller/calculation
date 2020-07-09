@@ -204,7 +204,6 @@ class LogController extends BaseController
             'columns' => $table->getColumns(),
             'channels' => $table->getChannels(),
             'levels' => $table->getLevels(),
-
         ];
 
         return $this->render('log/log_table.html.twig', $parameters);

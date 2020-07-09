@@ -122,6 +122,38 @@ class User extends BaseUser implements EntityInterface, RoleInterface
     }
 
     /**
+     * Gets the URL for the avatar image.
+     *
+     * @param int $size       the image size
+     * @param int $set        the image set
+     * @param int $background the background set
+     *
+     * @return string the avatar url
+     *
+     * @see https://robohash.org/
+     */
+    public function getAvatar(int $size = 32, int $set = 0, int $background = 0): string
+    {
+        $query = [];
+        if ($size > 0) {
+            $query['size'] = \sprintf('%dx%d', $size, $size);
+        }
+        if ($set >= 2 && $set <= 5) {
+            $query['set'] = \sprintf('set%d', $set);
+        }
+        if ($background >= 1 && $background <= 2) {
+            $query['bgset'] = \sprintf('bg%d', $background);
+        }
+
+        $url = 'https://robohash.org/' . $this->getUsername();
+        if (!empty($query)) {
+            return $url . '?' . \http_build_query($query);
+        }
+
+        return $url;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getDisplay(): string

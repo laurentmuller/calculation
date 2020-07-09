@@ -83,6 +83,11 @@ class ResponseSubscriber implements EventSubscriberInterface
     private const PDF_TYPE = 'application/pdf';
 
     /**
+     * The Robohash image url.
+     */
+    private const ROBOHASH_URL = 'https://robohash.org';
+
+    /**
      * The asset URL.
      *
      * @var string
@@ -207,7 +212,7 @@ class ResponseSubscriber implements EventSubscriberInterface
         $csp['frame-src'] = [self::CSP_SELF, self::GOOGLE_FRAME_URL];
         $csp['connect-src'] = [self::CSP_SELF, $asset]; //, self::CSP_BLOB
         $csp['font-src'] = [self::CSP_SELF, self::GOOGLE_FONT_STATIC_URL, $asset];
-        $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, self::OPEN_WEATHER_URL, $asset];
+        $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, self::OPEN_WEATHER_URL, self::ROBOHASH_URL, $asset];
         $csp['style-src'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
         $csp['style-src-elem'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
 

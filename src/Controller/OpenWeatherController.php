@@ -252,7 +252,6 @@ class OpenWeatherController extends BaseController
 
         // handle request
         if ($this->handleRequestForm($request, $form)) {
-
             $db = null;
             $file = null;
             $temp_name = null;

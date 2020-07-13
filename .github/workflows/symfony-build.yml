@@ -1,4 +1,4 @@
-name: Testing Symfony
+name: Run Unit Tests
 
 on: [push, pull_request]
 

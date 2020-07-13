@@ -1,0 +1,19 @@
+{% extends 'cards/card_base.html.twig' %}
+
+{# parameters #}
+{%- set title         = "resetting.request.title" -%}
+{%- set title_icon    = 'sign-in' -%}
+{%- set cancel_path   = false -%}
+
+{% block body %}
+    <h1 class="h3 mb-3">Mot de passe oublié</h1>
+    {{ form_start(form) }}
+        {{ form_row(form.plainPassword) }}
+        <button class="btn btn-form btn-primary"><i class="fas fa-key"></i> Réinitialiser</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+
+{% block stylesheets -%}
+{{ asset_css('css/center.css') }}
+{% endblock %}

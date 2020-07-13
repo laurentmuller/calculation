@@ -10,7 +10,6 @@
 {%- set title_domain  = 'FOSUserBundle' -%}
 {%- set submit_text   = 'security.login.submit' -%}
 {%- set submit_domain = 'FOSUserBundle' -%}
-{%- set action        = path('fos_user_security_check') -%}
 {%- set cancel_path   = false -%}
 
 {# class styles #}
@@ -38,11 +37,12 @@
         <small>{{ icons.copyright_link() }}</small>
     </div>
 </div>
+<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 {% endblock %}
 
 {% block actions_form %}
 {{ parent() }}
-{{ icons.link(path("fos_user_resetting_request"), 'resetting.link', 'btn btn-form btn-link', null, null, 'FOSUserBundle') }}
+{{ icons.link(path("app_forgot_password_request"), 'resetting.link', 'btn btn-form btn-link', null, null, 'FOSUserBundle') }}
 {% endblock %}
 
 {# hide navigation and footer #}

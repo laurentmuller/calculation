@@ -199,7 +199,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
             self::MASK_ATTRIBUTES[self::ATTRIBUTE_SHOW],
         ];
 
-        $role = new Role(User::ROLE_DEFAULT);
+        $role = new Role(User::ROLE_USER);
         $role->{self::ENTITY_CALCULATION} = self::MASK_ATTRIBUTES;
         $role->{self::ENTITY_CALCULATION_STATE} = $default;
         $role->{self::ENTITY_CATEGORY} = $default;

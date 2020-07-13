@@ -16,14 +16,13 @@ namespace App\Form;
 
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
-use FOS\UserBundle\Form\Type\ResettingFormType;
 
 /**
- * Extends FOS User bundle resettting type by adding the recaptcha.
+ * User login type.
  *
  * @author Laurent Muller
  */
-class FosUserResettingType extends FosUserType
+class UserLoginType extends FosUserType
 {
     /**
      * Constructor.
@@ -36,29 +35,31 @@ class FosUserResettingType extends FosUserType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix(): string
-    {
-        return '';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent(): string
-    {
-        return ResettingFormType::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')
             ->label('security.login.username')
             ->domain('FOSUserBundle')
-            ->addPlainType(true);
+            ->autocomplete('username')
+            ->maxLength(180)
+            ->add(UserNameType::class);
+
+        $helper->field('password')
+            ->label('security.login.password')
+            ->domain('FOSUserBundle')
+            ->autocomplete('current-password')
+            ->maxLength(255)
+            ->addPassordType();
 
         parent::addFormFields($helper);
+
+        $helper->field('remember_me')
+            ->label('security.login.remember_me')
+            ->updateRowAttribute('class', 'text-right')
+            ->domain('FOSUserBundle')
+            ->notRequired()
+            ->addCheckboxType();
+
+        // $helper->field('csrf_token')->addHiddenType();
     }
 }

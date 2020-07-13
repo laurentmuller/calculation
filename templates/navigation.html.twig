@@ -144,9 +144,9 @@
                     {% endif %}
 				</a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                {{- icons.dropdownItem(path('fos_user_security_logout'), 'index.logout', 'sign-out-alt') -}}
-                {{- icons.dropdownItem(path('fos_user_profile_edit'), 'profile.edit.title', 'pencil-alt', 'FOSUserBundle') -}}
-                {{- icons.dropdownItem(path('fos_user_change_password'), 'index.change_password', 'unlock-alt') -}}
+                {{- icons.dropdownItem(path('app_logout'), 'index.logout', 'sign-out-alt') -}}
+                {{- icons.dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'pencil-alt', 'FOSUserBundle') -}}
+                {{- icons.dropdownItem(path('user_profile_change_password'), 'index.change_password', 'unlock-alt') -}}
                 {#
                 	{{- icons.dropdownItem(path('fos_user_resetting_request'), 'resetting.request.title', 'eraser', 'FOSUserBundle') -}}
                 #}
@@ -185,7 +185,7 @@
                 </div>
             </li>
         {% else %}
-	        {{- icons.navItem(path('fos_user_security_login'), 'index.login', 'sign-in') -}}
+	        {{- icons.navItem(path('app_login'), 'index.login', 'sign-in') -}}
         {% endif -%}
         </ul>
     </div>

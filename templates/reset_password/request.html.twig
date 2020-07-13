@@ -6,19 +6,14 @@
 
 {# parameters #}
 {%- set title         = 'resetting.request.title' -%}
-{%- set title_domain  = 'FOSUserBundle' -%}
 {%- set title_icon    = 'eraser' -%}
+{%- set title_domain  = 'FOSUserBundle' -%}
 {%- set submit_text   = 'resetting.request.submit' -%}
 {%- set submit_domain = 'FOSUserBundle' -%}
-{%- set action        = path('fos_user_resetting_reset', {'token': token}) -%}
 {%- set cancel_path   = false -%}
-{%- set form_attr     = form_attr|default({})|merge({
-						'class': 'fos_user_resetting_reset',
-						'data-equal_to': 'fos_user.password.mismatch'|trans([], 'validators')}) -%}
-
 
 {# class styles #}
-{% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-75' %}
+{% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-50' %}
 
 {% block card_header %}
 {{ parent() }}
@@ -28,9 +23,6 @@
 {% endblock %}
 
 {% block card_body -%}
-{{ form_row(form.username) }}
-{{ form_row(form.plainPassword.first, {attr: {minlength: 6, maxlength: 255}}) }}
-{{ form_row(form.plainPassword.second, {attr: {equalTo: '#plainPassword_first'}}) }}
 {{ form_widget(form) }}
 {%- endblock %}
 
@@ -45,6 +37,11 @@
         <small>{{ icons.copyright_link() }}</small>
     </div>
 </div>
+{% endblock %}
+
+{% block actions_form %}
+{{ parent() }}
+{{ icons.link(path('app_login'), 'login.link', 'btn btn-form btn-link', null, null, 'FOSUserBundle') }}
 {% endblock %}
 
 {# hide navigation and footer #}
@@ -63,12 +60,10 @@
 #}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/vendor/zxcvbn/zxcvbn.js') }}
-{{ asset_js('js/plugins/password-strength.js') }}
 {{ asset_js('js/extensions/password-extensions.js') }}
 {{ asset_js('js/application/user_recaptcha.js') }}
-{{ asset_js('js/application/user_reset.js') }}
+{{ asset_js('js/application/user_request.js') }}
 {% else %}
-{{ asset_js('js/user_reset.js') }}
+{{ asset_js('js/user_request.js') }}
 {% endif %}
 {%- endblock %}

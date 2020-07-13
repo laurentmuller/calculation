@@ -1,0 +1,19 @@
+{% apply inline_css %}
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-size: 14px; 
+    }
+</style>
+<p><b>Bonjour {{ username }}</b></p>
+<p>
+    Vous pouvez réinitialiser votre mot de passe en cliquant sur le lien suivant : <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">Réinitialiser le mot de passe</a>.
+</p>
+<p>
+    <b>Remarque :</b> Ce lien expirera dans {{ 'counters.email_hours'|trans({'count': tokenLifetime|date('g')}) }}.
+<p/>
+<p>
+    Cordialement,<br>
+    L'équipe de {{ app_name }}
+</p>
+{% endapply %}

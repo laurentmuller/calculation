@@ -20,12 +20,5 @@ $(function () {
     }
 
     // initialize validator
-    $('#edit-form').initValidator({
-        focus: false
-    });
-
-    // focus
-    $('#_username').createTimer(function () {
-        $('#_username').selectFocus().removeTimer();
-    }, 250);
+    $('#edit-form').initValidator();
 });

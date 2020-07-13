@@ -29,7 +29,7 @@ class RoleChoiceType extends AbstractChoiceType
     protected function getChoices(): array
     {
         return [
-            'user.roles.user' => User::ROLE_DEFAULT,
+            'user.roles.user' => User::ROLE_USER,
             'user.roles.admin' => User::ROLE_ADMIN,
             'user.roles.super_admin' => User::ROLE_SUPER_ADMIN,
         ];

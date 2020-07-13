@@ -14,48 +14,72 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\RoleInterface;
 use App\Traits\DateFormatterTrait;
 use App\Traits\RightsTrait;
-use App\Traits\SearchTrait;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\User as BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * Represents an user.
- *
  * @ORM\Table(name="sy_User")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="fos_user.email.already_used")
  * @UniqueEntity(fields={"username"}, message="fos_user.username.already_used")
  * @Vich\Uploadable
  */
-class User extends BaseUser implements EntityInterface, RoleInterface
+class User extends BaseEntity implements UserInterface, ResetPasswordRequestInterface
 {
     use DateFormatterTrait;
     use RightsTrait;
-    use SearchTrait;
 
     /**
-     * The administrator role.
+     * The administrator role name.
      */
     public const ROLE_ADMIN = 'ROLE_ADMIN';
 
     /**
-     * The primary key identifier.
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var int
+     * The super administrator role name.
      */
-    protected $id;
+    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+
+    /**
+     * The user role name.
+     */
+    public const ROLE_USER = 'ROLE_USER';
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\Email
+     *
+     * @var ?string
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": 1})
+     *
+     * @var bool
+     */
+    private $enabled;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     *
+     * @var ?\DateTimeInterface
+     */
+    private $expiresAt;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     *
+     * @var ?string
+     */
+    private $hashedToken;
 
     /**
      * The image file.
@@ -69,7 +93,7 @@ class User extends BaseUser implements EntityInterface, RoleInterface
      *
      * @var File
      */
-    protected $imageFile;
+    private $imageFile;
 
     /**
      * The image file name.
@@ -79,7 +103,14 @@ class User extends BaseUser implements EntityInterface, RoleInterface
      *
      * @var string
      */
-    protected $imageName;
+    private $imageName;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     *
+     * @var ?\DateTimeInterface
+     */
+    private $lastLogin;
 
     /**
      * The overwrite rights flag.
@@ -88,7 +119,37 @@ class User extends BaseUser implements EntityInterface, RoleInterface
      *
      * @var bool
      */
-    protected $overwrite;
+    private $overwrite;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    private $password;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     *
+     * @var ?\DateTimeInterface
+     */
+    private $requestedAt;
+
+    /**
+     * TODO: Replace array by json.
+     *
+     * @ORM\Column(type="array")
+     *
+     * @var string[]
+     */
+    private $roles = [];
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     *
+     * @var ?string
+     */
+    private $selector;
 
     /**
      * The last updated date.
@@ -97,16 +158,34 @@ class User extends BaseUser implements EntityInterface, RoleInterface
      *
      * @var \DateTime
      */
-    protected $updatedAt;
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     *
+     * @var string
+     */
+    private $username;
+
+    /**
+     * @ORM\Column(type="boolean")
+     *
+     * @var bool
+     */
+    private $verified = false;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        parent::__construct();
         $this->setEnabled(true)
             ->setOverwrite(false);
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getUsername();
     }
 
     /**
@@ -122,7 +201,29 @@ class User extends BaseUser implements EntityInterface, RoleInterface
     }
 
     /**
-     * Gets the URL for the avatar image.
+     * {@inheritdoc}
+     *
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+    }
+
+    /**
+     * Removes the reset password request values.
+     */
+    public function eraseResetPasswordRequest(): self
+    {
+        $this->requestedAt = null;
+        $this->expiresAt = null;
+        $this->selector = null;
+        $this->hashedToken = null;
+
+        return $this;
+    }
+
+    /**
+     * Gets the URL of the avatar image.
      *
      * @param int $size       the image size
      * @param int $set        the image set
@@ -161,12 +262,29 @@ class User extends BaseUser implements EntityInterface, RoleInterface
         return $this->__toString();
     }
 
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
     /**
      * {@inheritdoc}
+     *
+     * @see ResetPasswordRequestInterface
      */
-    public function getId(): ?int
+    public function getExpiresAt(): \DateTimeInterface
     {
-        return $this->id ? (int) $this->id : null;
+        return $this->expiresAt ?? new \DateTimeImmutable('now');
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see ResetPasswordRequestInterface
+     */
+    public function getHashedToken(): string
+    {
+        return (string) $this->hashedToken;
     }
 
     /**
@@ -190,6 +308,14 @@ class User extends BaseUser implements EntityInterface, RoleInterface
     }
 
     /**
+     * Gets the date of the last login.
+     */
+    public function getLastLogin(): ?\DateTimeInterface
+    {
+        return $this->lastLogin;
+    }
+
+    /**
      * Gets the user name and e-mail.
      */
     public function getNameAndEmail(): string
@@ -198,49 +324,136 @@ class User extends BaseUser implements EntityInterface, RoleInterface
     }
 
     /**
-     * Gets the role. This function is used to select the first role.
+     * {@inheritdoc}
+     *
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see ResetPasswordRequestInterface
+     */
+    public function getRequestedAt(): \DateTimeInterface
+    {
+        return $this->requestedAt ?? new \DateTimeImmutable('now');
+    }
+
+    /**
+     * Gets the role.
      */
     public function getRole(): string
     {
         $roles = $this->getRoles();
 
-        return \count($roles) ? $roles[0] : static::ROLE_DEFAULT;
+        return \count($roles) ? $roles[0] : static::ROLE_USER;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @see UserInterface
      */
+    public function getRoles(): array
+    {
+        // ensure that the 'ROLE_USER' is set
+        $roles = $this->roles;
+        $roles[] = self::ROLE_USER;
+
+        return \array_unique($roles);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see ResetPasswordRequestInterface
+     */
+    public function getUser(): object
+    {
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->username;
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return \in_array($role, $this->getRoles(), true);
+    }
+
     public function isAdmin(): bool
     {
-        return $this->hasRole(static::ROLE_ADMIN);
+        return $this->hasRole(self::ROLE_ADMIN);
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @see ResetPasswordRequestInterface
      */
-    public function isNew(): bool
+    public function isExpired(): bool
     {
-        return empty($this->id);
+        return null === $this->expiresAt || $this->expiresAt->getTimestamp() <= \time();
     }
 
     /**
      * Gets a value indicating if this righs overwrite the default rights.
      *
      * @return bool true if overwrite, false to use the default rights
-     *
-     * @see User::getRights()
      */
     public function isOverwrite(): bool
     {
         return $this->overwrite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isSuperAdmin(): bool
     {
-        return (bool) parent::isSuperAdmin();
+        return $this->hasRole(self::ROLE_SUPER_ADMIN);
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->verified;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function setEnabled(bool $boolean): self
+    {
+        $this->enabled = (bool) $boolean;
+
+        return $this;
     }
 
     /**
@@ -278,6 +491,16 @@ class User extends BaseUser implements EntityInterface, RoleInterface
     }
 
     /**
+     * Sets the date of the last login.
+     */
+    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    {
+        $this->lastLogin = $lastLogin;
+
+        return $this;
+    }
+
+    /**
      * Sets a value indicating if this righs overwrite the default rights.
      *
      * @param bool $overwrite true if overwrite, false to use the default rights
@@ -289,16 +512,66 @@ class User extends BaseUser implements EntityInterface, RoleInterface
         return $this;
     }
 
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
     /**
-     * Sets this role. This function is used to set a single role.
+     * Sets the reset password request values.
      *
-     * @param string $role
+     * @param \DateTimeInterface $expiresAt   the expiration date
+     * @param string             $selector    a non-hashed random string used to fetch a request from persistence
+     * @param string             $hashedToken the hashed token used to verify a reset request
+     */
+    public function setResetPasswordRequest(\DateTimeInterface $expiresAt, string $selector, string $hashedToken): self
+    {
+        $this->requestedAt = new \DateTimeImmutable('now');
+        $this->expiresAt = $expiresAt;
+        $this->selector = $selector;
+        $this->hashedToken = $hashedToken;
+
+        return $this;
+    }
+
+    /**
+     * Sets role.
+     *
+     * @param string $role the role to set
      */
     public function setRole(?string $role): self
     {
-        $role = $role ?: static::ROLE_DEFAULT;
+        $role = $role ?: static::ROLE_USER;
 
         return $this->setRoles([$role]);
+    }
+
+    /**
+     * Sets roles.
+     *
+     * @param string[] $roles the roles to set
+     */
+    public function setRoles(array $roles): self
+    {
+        $this->roles = \array_unique($roles);
+
+        return $this;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function setVerified(bool $verified): self
+    {
+        $this->verified = $verified;
+
+        return $this;
     }
 
     /**

@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author Laurent Muller
  */
-class FosUserResetPasswordType extends FosUserType
+class UserResetPasswordType extends FosUserType
 {
     /**
      * @var string

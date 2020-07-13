@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -47,6 +48,17 @@ abstract class BaseController extends AbstractController
      * @var UrlGeneratorService
      */
     protected $generatorService;
+
+    /**
+     * Gets the address from (email and name) used to send email.
+     */
+    public function getAddressFrom(): Address
+    {
+        $name = $this->getParameter('mailer_user_name');
+        $email = $this->getParameter('mailer_user_email');
+
+        return new Address($email, $name);
+    }
 
     /**
      * Gets the application service.

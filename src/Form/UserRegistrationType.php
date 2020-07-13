@@ -25,7 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Laurent Muller
  */
-class FosUserRegistrationType extends FosUserType
+class UserRegistrationType extends FosUserType
 {
     /**
      * Constructor.
@@ -40,10 +40,7 @@ class FosUserRegistrationType extends FosUserType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => User::class,
-            'csrf_token_id' => 'registration',
-        ]);
+        $resolver->setDefaults(['data_class' => User::class]);
     }
 
     /**
@@ -65,10 +62,8 @@ class FosUserRegistrationType extends FosUserType
 
         $firstOptions = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
             ['label' => 'form.password']);
-
         $secondOptions = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
             ['label' => 'form.new_password_confirmation']);
-
         $helper->field('plainPassword')
             ->updateOption('first_options', $firstOptions)
             ->updateOption('second_options', $secondOptions)

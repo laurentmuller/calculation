@@ -28,15 +28,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 abstract class FosUserType extends AbstractType
 {
-    /**
-     * @var bool
-     */
-    protected $displayCaptcha;
+    protected bool $displayCaptcha;
 
-    /**
-     * @var CaptchaImageService
-     */
-    protected $service;
+    protected CaptchaImageService $service;
 
     /**
      * Constructor.
@@ -52,9 +46,6 @@ abstract class FosUserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
-
-        // fields
         $helper = new FormHelper($builder);
         $this->addFormFields($helper);
     }

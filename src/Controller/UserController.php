@@ -31,7 +31,6 @@ use App\Security\EntityVoter;
 use App\Service\ThemeService;
 use App\Utils\Utils;
 use Doctrine\Common\Collections\Criteria;
-use FOS\UserBundle\Model\UserManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -65,19 +64,11 @@ class UserController extends EntityController
     private const TEMPLATE_EDIT = 'user/user_edit.html.twig';
 
     /**
-     * @var UserManagerInterface
-     */
-    private $manager;
-
-    /**
      * Constructor.
-     *
-     * @param UserManagerInterface $manager the user manager
      */
-    public function __construct(UserManagerInterface $manager)
+    public function __construct()
     {
         parent::__construct(User::class);
-        $this->manager = $manager;
     }
 
     /**
@@ -201,6 +192,7 @@ class UserController extends EntityController
         if ($this->handleRequestForm($request, $form)) {
             // update
             $this->updateEntity($item);
+            $this->getManager()->flush();
 
             // message
             $this->succesTrans('user.image.success', ['%name%' => $item->getDisplay()]);
@@ -287,6 +279,7 @@ class UserController extends EntityController
         if ($this->handleRequestForm($request, $form)) {
             // update
             $this->updateEntity($item);
+            $this->getManager()->flush();
 
             // message
             $this->succesTrans('password.change.success', ['%name%' => $item->getDisplay()], 'FOSUserBundle');
@@ -344,8 +337,8 @@ class UserController extends EntityController
         // form
         $form = $this->createForm(UserRightsType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            // update
-            $this->updateEntity($item);
+            // save
+            $this->getManager()->flush();
 
             // message
             $this->succesTrans('user.rights.success', ['%name%' => $item->getDisplay()]);
@@ -518,11 +511,10 @@ class UserController extends EntityController
      */
     protected function updateEntity(EntityInterface $item): bool
     {
-        // update
+        // update roles
         $item->checkRoles();
-        $this->manager->updateUser($item);
 
-        return false;
+        return parent::updateEntity($item);
     }
 
     /**

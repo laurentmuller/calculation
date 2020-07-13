@@ -20,7 +20,7 @@ jobs:
         uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
         with:
           php-version: '7.4'
-          extensions: ext-xsl
+          extensions: ext-xsl,xsl
           
       #- name: Get Composer cache directory
       #  id: composercache

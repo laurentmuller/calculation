@@ -35,7 +35,9 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: COMPOSER_MEMORY_LIMIT=-1 composer install --prefer-dist --no-progress --no-suggest --memory=1G
+        run: composer install --prefer-dist --no-progress --no-suggest
+        env: 
+          COMPOSER_MEMORY_LIMIT: -1
 
       - name: Run Tests
         run: php bin/phpunit --coverage-text

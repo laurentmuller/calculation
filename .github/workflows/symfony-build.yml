@@ -1,6 +1,7 @@
-# GitHub Action for Symfony
 name: Testing Symfony
+
 on: [push, pull_request]
+
 jobs:
   symfony:
     name: Symfony on ${{ matrix.operating-system }}
@@ -34,7 +35,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest --memory=1G
+        run: COMPOSER_MEMORY_LIMIT=-1 composer install --prefer-dist --no-progress --no-suggest --memory=1G
 
       - name: Run Tests
         run: php bin/phpunit --coverage-text

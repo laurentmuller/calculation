@@ -113,7 +113,7 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
 
     private function getDefaultUser(): User
     {
-        return $this->getUser(User::ROLE_DEFAULT);
+        return $this->getUser(User::ROLE_USER);
     }
 
     private function getDisableUser(): User
@@ -134,7 +134,7 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
     private function getUser(string $role): User
     {
         $user = new User();
-        $user->addRole($role);
+        $user->setRole($role);
 
         return $user;
     }

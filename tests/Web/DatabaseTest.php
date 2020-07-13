@@ -81,10 +81,10 @@ class DatabaseTest extends KernelTestCase
     public function getUsers(): array
     {
         return [
-            [AuthenticateWebTestCase::ROLE_USER, User::ROLE_DEFAULT],
+            [AuthenticateWebTestCase::ROLE_USER, User::ROLE_USER],
             [AuthenticateWebTestCase::ROLE_ADMIN, User::ROLE_ADMIN],
             [AuthenticateWebTestCase::ROLE_SUPER_ADMIN, User::ROLE_SUPER_ADMIN],
-            [AuthenticateWebTestCase::ROLE_DISABLED, User::ROLE_DEFAULT],
+            [AuthenticateWebTestCase::ROLE_DISABLED, User::ROLE_USER],
         ];
     }
 
@@ -127,7 +127,6 @@ class DatabaseTest extends KernelTestCase
         $this->assertInstanceOf(User::class, $user);
 
         $this->assertEquals($username, $user->getUsername());
-        $this->assertEquals($username, $user->getUsernameCanonical());
         $this->assertTrue($user->hasRole($role));
     }
 }

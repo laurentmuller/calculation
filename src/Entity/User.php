@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\RoleInterface;
 use App\Traits\DateFormatterTrait;
 use App\Traits\RightsTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,7 +33,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @UniqueEntity(fields={"username"}, message="fos_user.username.already_used")
  * @Vich\Uploadable
  */
-class User extends BaseEntity implements UserInterface, ResetPasswordRequestInterface
+class User extends BaseEntity implements UserInterface, RoleInterface, ResetPasswordRequestInterface
 {
     use DateFormatterTrait;
     use RightsTrait;
@@ -344,7 +345,9 @@ class User extends BaseEntity implements UserInterface, ResetPasswordRequestInte
     }
 
     /**
-     * Gets the role.
+     * {@inheritdoc}
+     *
+     * @see RoleInterface
      */
     public function getRole(): string
     {
@@ -402,6 +405,11 @@ class User extends BaseEntity implements UserInterface, ResetPasswordRequestInte
         return \in_array($role, $this->getRoles(), true);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @see RoleInterface
+     */
     public function isAdmin(): bool
     {
         return $this->hasRole(self::ROLE_ADMIN);
@@ -432,6 +440,11 @@ class User extends BaseEntity implements UserInterface, ResetPasswordRequestInte
         return $this->overwrite;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @see RoleInterface
+     */
     public function isSuperAdmin(): bool
     {
         return $this->hasRole(self::ROLE_SUPER_ADMIN);

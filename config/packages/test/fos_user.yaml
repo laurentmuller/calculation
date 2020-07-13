@@ -1,4 +1,0 @@
-fos_user:
-    use_listener: false
-    use_flash_notifications: false
-    use_authentication_listener: false

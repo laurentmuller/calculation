@@ -41,7 +41,7 @@ class ProfileController extends BaseController
         // get user
         $user = $this->getUser();
         if (!$user instanceof User) {
-            $this->errorTrans('change_password.flash.failure', [], 'FOSUserBundle');
+            $this->errorTrans('profile.change_password.failure');
 
             return $this->redirectToHomePage();
         }
@@ -55,7 +55,7 @@ class ProfileController extends BaseController
             $user->setPassword($encodedPassword);
             $this->getManager()->flush();
 
-            $this->succesTrans('change_password.flash.success', ['%username%' => $user->getUsername()], 'FOSUserBundle');
+            $this->succesTrans('profile.change_password.success', ['%username%' => $user->getUsername()]);
 
             return $this->redirectToHomePage();
         }
@@ -76,7 +76,7 @@ class ProfileController extends BaseController
         // get user
         $user = $this->getUser();
         if (!$user instanceof User) {
-            $this->errorTrans('profile.flash.failure', [], 'FOSUserBundle');
+            $this->errorTrans('profile.edit.failure');
 
             return $this->redirectToHomePage();
         }
@@ -85,7 +85,7 @@ class ProfileController extends BaseController
         $form = $this->createForm(ProfileEditType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
             $this->getManager()->flush();
-            $this->succesTrans('profile.flash.success', ['%username%' => $user->getUsername()], 'FOSUserBundle');
+            $this->succesTrans('profile.edit.success', ['%username%' => $user->getUsername()]);
 
             return $this->redirectToHomePage();
         }

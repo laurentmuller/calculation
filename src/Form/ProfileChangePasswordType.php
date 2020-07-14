@@ -23,8 +23,7 @@ use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * Extends FOS User bundle change password type by adding the user name field as
- * hidden for password strength.
+ * Type to change the proilfe of the current (logged) user.
  *
  * @author Laurent Muller
  */
@@ -47,22 +46,19 @@ class ProfileChangePasswordType extends BaseType
 
         // current password
         $helper->field('current_password')
-            ->label('form.current_password')
-            ->domain('FOSUserBundle')
+            ->label('user.password.current')
             ->updateOption('constraints', [
                 new NotBlank(),
-                new UserPassword(['message' => 'fos_user.current_password.invalid']),
+                new UserPassword(['message' => 'current_password.invalid']),
             ])
             ->updateOption('mapped', false)
             ->updateAttribute('autocomplete', 'current-password')
             ->add(PasswordType::class);
 
         $firstOptions = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
-                ['label' => 'form.new_password']);
-
+                ['label' => 'user.password.new']);
         $secondOptions = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
-                ['label' => 'form.new_password_confirmation']);
-
+                ['label' => 'user.password.new_confirmation']);
         $helper->field('plainPassword')
             ->updateOption('first_options', $firstOptions)
             ->updateOption('second_options', $secondOptions)

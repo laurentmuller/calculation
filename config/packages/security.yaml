@@ -38,7 +38,6 @@ security:
                 # username_parameter: username
                 # password_parameter: password
                 # csrf_parameter: csrf_token
-                # provider: fos_userbundle
 
             remember_me:
                 remember_me_parameter: remember_me

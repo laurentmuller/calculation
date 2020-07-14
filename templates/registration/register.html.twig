@@ -1,14 +1,10 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% trans_default_domain 'FOSUserBundle' %}
 
 {# parameters #}
-{%- set title        = "registration.submit" -%}
-{%- set title_domain = 'FOSUserBundle' -%}
+{%- set title        = "registration.register.title" -%}
 {%- set title_icon   = 'user-plus' -%}
 {%- set cancel_path  = path("homepage") -%}
-{%- set form_attr    = form_attr|default({})|merge({
-						'data-equal_to': 'fos_user.password.mismatch'|trans([], 'validators'),
-						'class': 'fos_user_registration_register'}) -%}
+{%- set form_attr    = form_attr|default({})|merge({ 'data-equal_to': 'password.mismatch'|trans([], 'validators') }) -%}
 
 {# class styles #}
 {% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-50' %}

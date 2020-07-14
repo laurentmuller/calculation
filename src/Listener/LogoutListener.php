@@ -50,7 +50,7 @@ class LogoutListener implements EventSubscriberInterface
     public function onLogout(LogoutEvent $event): void
     {
         $params = ['%appname%' => $this->getParameter('app_name')];
-        $this->succesTrans('security.logout.success', $params, 'FOSUserBundle');
+        $this->succesTrans('security.logout.success', $params);
     }
 
     /**

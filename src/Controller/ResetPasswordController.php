@@ -36,7 +36,7 @@ use SymfonyCasts\Bundle\ResetPassword\Exception\TooManyPasswordRequestsException
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 /**
- * Controller to reset a user password.
+ * Controller to reset the user password.
  *
  * @Route("/reset-password")
  */
@@ -145,6 +145,9 @@ class ResetPasswordController extends BaseController
         ]);
     }
 
+    /**
+     * Translate the given exception.
+     */
     private function handleResetException(ResetPasswordExceptionInterface $e): CustomUserMessageAuthenticationException
     {
         if ($e instanceof ExpiredResetPasswordTokenException) {
@@ -189,7 +192,7 @@ class ResetPasswordController extends BaseController
             return $this->redirectToRoute('app_forgot_password_request');
         }
 
-        $subject = $this->trans('resetting.request.title', [], 'FOSUserBundle');
+        $subject = $this->trans('resetting.request.title');
         $email = (new TemplatedEmail())
             ->from($this->getAddressFrom())
             ->to($user->getEmail())

@@ -22,7 +22,7 @@ use App\Service\CaptchaImageService;
  *
  * @author Laurent Muller
  */
-class UserLoginType extends FosUserType
+class UserLoginType extends UserCaptchaType
 {
     /**
      * Constructor.
@@ -39,14 +39,12 @@ class UserLoginType extends FosUserType
     {
         $helper->field('username')
             ->label('security.login.username')
-            ->domain('FOSUserBundle')
             ->autocomplete('username')
             ->maxLength(180)
             ->add(UserNameType::class);
 
         $helper->field('password')
             ->label('security.login.password')
-            ->domain('FOSUserBundle')
             ->autocomplete('current-password')
             ->maxLength(255)
             ->addPassordType();
@@ -56,10 +54,7 @@ class UserLoginType extends FosUserType
         $helper->field('remember_me')
             ->label('security.login.remember_me')
             ->updateRowAttribute('class', 'text-right')
-            ->domain('FOSUserBundle')
             ->notRequired()
             ->addCheckboxType();
-
-        // $helper->field('csrf_token')->addHiddenType();
     }
 }

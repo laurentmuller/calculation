@@ -7,7 +7,7 @@
 {%- set form_attr  = form_attr|default({})|merge({
 				 	'data-check_name': url('ajax_check_name'), 
 				 	'data-check_email': url('ajax_check_email'),
-				 	'data-equal_to': 'fos_user.password.mismatch'|trans([], 'validators')}) -%}
+				 	'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
 
 {% block card_body %}
 {{ form_row(form.username) }}

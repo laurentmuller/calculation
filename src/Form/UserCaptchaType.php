@@ -22,14 +22,20 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * Abstract form type for user. This class add a captcha if applicable.
+ * Abstract form type for user with a captcha field (if applicable).
  *
  * @author Laurent Muller
  */
-abstract class FosUserType extends AbstractType
+abstract class UserCaptchaType extends AbstractType
 {
+    /**
+     * The display captcha image flag.
+     */
     protected bool $displayCaptcha;
 
+    /**
+     * The service.
+     */
     protected CaptchaImageService $service;
 
     /**
@@ -76,8 +82,7 @@ abstract class FosUserType extends AbstractType
                     new NotBlank(),
                     new Captcha(),
                 ])
-                ->label('security.login.captcha')
-                ->domain('FOSUserBundle')
+                ->label('captcha.label')
                 ->add(CaptchaImage::class);
         }
     }

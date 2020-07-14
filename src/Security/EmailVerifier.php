@@ -24,7 +24,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 /**
- * Email verifier.
+ * Email verifier used for register new user.
  *
  * @author Laurent Muller
  */
@@ -42,6 +42,8 @@ class EmailVerifier
     }
 
     /**
+     * Handle email confirmation.
+     *
      * @throws VerifyEmailExceptionInterface
      */
     public function handleEmailConfirmation(Request $request, UserInterface $user): void
@@ -55,6 +57,8 @@ class EmailVerifier
     }
 
     /**
+     * Sends an amil confirmation.
+     *
      * @throws TransportExceptionInterface
      */
     public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user, TemplatedEmail $email): void

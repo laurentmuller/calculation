@@ -33,8 +33,8 @@ class SecurityController extends BaseController
     public function login(AuthenticationUtils $utils, KernelInterface $kernel): Response
     {
         $form = $this->createForm(UserLoginType::class, [
-            'remember_me' => $kernel->isDebug(),
             'username' => $utils->getLastUsername(),
+            'remember_me' => $kernel->isDebug(),
         ]);
 
         // display form

@@ -1,5 +1,4 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% trans_default_domain 'FOSUserBundle' %}
 
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
@@ -7,9 +6,7 @@
 {# parameters #}
 {%- set title         = 'resetting.request.title' -%}
 {%- set title_icon    = 'eraser' -%}
-{%- set title_domain  = 'FOSUserBundle' -%}
 {%- set submit_text   = 'resetting.request.submit' -%}
-{%- set submit_domain = 'FOSUserBundle' -%}
 {%- set cancel_path   = false -%}
 
 {# class styles #}
@@ -41,7 +38,7 @@
 
 {% block actions_form %}
 {{ parent() }}
-{{ icons.link(path('app_login'), 'login.link', 'btn btn-form btn-link', null, null, 'FOSUserBundle') }}
+{{ icons.link(path('app_login'), 'security.link', 'btn btn-form btn-link') }}
 {% endblock %}
 
 {# hide navigation and footer #}

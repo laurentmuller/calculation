@@ -194,7 +194,7 @@ class AjaxController extends BaseController
 
         return $this->json([
             'result' => false,
-            'message' => $this->trans('captcha.generate', 'validators'),
+            'message' => $this->trans('captcha.generate', [], 'validators'),
         ]);
     }
 
@@ -232,16 +232,16 @@ class AjaxController extends BaseController
         // check length
         $message = null;
         if (null === $email) {
-            $message = 'fos_user.email.blank';
+            $message = 'email.blank';
         } elseif (\strlen($email) < 2) {
-            $message = 'fos_user.email.short';
+            $message = 'email.short';
         } elseif (\strlen($email) > 180) {
-            $message = 'fos_user.email.long';
+            $message = 'email.long';
         } else {
             // find user and check if same
             $user = $repository->findByEmail($email);
             if (null !== $user && $id !== $user->getId()) {
-                $message = 'fos_user.email.already_used';
+                $message = 'email.already_used';
             }
         }
 
@@ -302,16 +302,16 @@ class AjaxController extends BaseController
 
         // check length
         if (null === $username) {
-            $response = $this->trans('fos_user.username.blank', [], 'validators');
+            $response = $this->trans('username.blank', [], 'validators');
         } elseif (\strlen($username) < 2) {
-            $response = $this->trans('fos_user.username.short', [], 'validators');
+            $response = $this->trans('username.short', [], 'validators');
         } elseif (\strlen($username) > 180) {
-            $response = $this->trans('fos_user.username.long', [], 'validators');
+            $response = $this->trans('username.long', [], 'validators');
         } else {
             // find user and check if same
             $user = $repository->findByUsername($username);
             if (null !== $user && $id !== $user->getId()) {
-                $response = $this->trans('fos_user.username.already_used', [], 'validators');
+                $response = $this->trans('username.already_used', [], 'validators');
             } else {
                 $response = true;
             }
@@ -333,7 +333,7 @@ class AjaxController extends BaseController
         if (null !== $usernameOrEmail && null !== $repository->findByUsernameOrEmail($usernameOrEmail)) {
             $response = true;
         } else {
-            $response = $this->trans('fos_user.username.not_found', [], 'validators');
+            $response = $this->trans('username.not_found', [], 'validators');
         }
 
         return $this->json($response);

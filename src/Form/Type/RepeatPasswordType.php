@@ -34,14 +34,13 @@ class RepeatPasswordType extends AbstractType
         $resolver->setDefaults([
             'type' => PasswordType::class,
             'options' => [
-                'translation_domain' => 'FOSUserBundle',
                 'attr' => [
                     'autocomplete' => 'new-password',
                 ],
             ],
             'first_options' => self::getFirstOptions(),
             'second_options' => self::getSecondOptions(),
-            'invalid_message' => 'fos_user.password.mismatch',
+            'invalid_message' => 'password.mismatch',
         ]);
     }
 
@@ -51,7 +50,7 @@ class RepeatPasswordType extends AbstractType
     public static function getFirstOptions(): array
     {
         return [
-            'label' => 'form.password',
+            'label' => 'user.password.label',
             'attr' => [
                 'minlength' => 6,
                 'maxlength' => 255,
@@ -74,7 +73,7 @@ class RepeatPasswordType extends AbstractType
     public static function getSecondOptions(): array
     {
         return [
-            'label' => 'form.password_confirmation',
+            'label' => 'user.password.confirmation',
         ];
     }
 }

@@ -1,19 +1,14 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% trans_default_domain 'FOSUserBundle' %}
 
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title         = 'resetting.request.title' -%}
-{%- set title_domain  = 'FOSUserBundle' -%}
 {%- set title_icon    = 'eraser' -%}
 {%- set submit_text   = 'resetting.request.submit' -%}
-{%- set submit_domain = 'FOSUserBundle' -%}
 {%- set cancel_path   = false -%}
-{%- set form_attr     = form_attr|default({})|merge({
-						'class': 'fos_user_resetting_reset',
-						'data-equal_to': 'fos_user.password.mismatch'|trans([], 'validators')}) -%}
+{%- set form_attr     = form_attr|default({})|merge({ 'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
 
 {# class styles #}
 {% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-50' %}

@@ -43,16 +43,15 @@ class UserChangePasswordType extends BaseType
         $helper = new FormHelper($builder);
 
         $helper->field('username')
-            ->label('form.username')
-            ->domain('FOSUserBundle')
+            ->label('user.fields.username')
             ->updateOption('hidden_input', true)
             ->addPlainType(true);
 
         $firstOptions = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
-            ['label' => 'form.new_password']);
+            ['label' => 'user.password.new']);
 
         $secondOptions = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
-            ['label' => 'form.new_password_confirmation']);
+            ['label' => 'user.password.new_confirmation']);
 
         $helper->field('plainPassword')
             ->updateOption('first_options', $firstOptions)

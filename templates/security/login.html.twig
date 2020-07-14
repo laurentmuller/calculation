@@ -1,5 +1,4 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% trans_default_domain 'FOSUserBundle' %}
 
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
@@ -7,9 +6,7 @@
 {# parameters #}
 {%- set title         = "security.login.title" -%}
 {%- set title_icon    = 'sign-in' -%}
-{%- set title_domain  = 'FOSUserBundle' -%}
 {%- set submit_text   = 'security.login.submit' -%}
-{%- set submit_domain = 'FOSUserBundle' -%}
 {%- set cancel_path   = false -%}
 
 {# class styles #}
@@ -42,7 +39,7 @@
 
 {% block actions_form %}
 {{ parent() }}
-{{ icons.link(path("app_forgot_password_request"), 'resetting.link', 'btn btn-form btn-link', null, null, 'FOSUserBundle') }}
+{{ icons.link(path("app_forgot_password_request"), 'resetting.link', 'btn btn-form btn-link') }}
 {% endblock %}
 
 {# hide navigation and footer #}

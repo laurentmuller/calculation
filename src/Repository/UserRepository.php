@@ -176,7 +176,7 @@ class UserRepository extends BaseRepository implements PasswordUpgraderInterface
     public function updateLastLogin(User $user): void
     {
         $user->setLastLogin(new \DateTimeImmutable());
-        $this->_em->flush($user);
+        $this->_em->flush();
     }
 
     /**
@@ -193,7 +193,6 @@ class UserRepository extends BaseRepository implements PasswordUpgraderInterface
         }
 
         $user->setPassword($newEncodedPassword);
-        //$this->_em->persist($user);
-        $this->_em->flush($user);
+        $this->_em->flush();
     }
 }

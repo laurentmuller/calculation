@@ -64,7 +64,7 @@ class InteractiveLoginListener implements EventSubscriberInterface
                 '%username%' => $token->getUsername(),
                 '%appname%' => $this->getParameter('app_name'),
             ];
-            $this->succesTrans('security.login.success', $params, 'FOSUserBundle');
+            $this->succesTrans('security.login.success', $params);
         }
     }
 

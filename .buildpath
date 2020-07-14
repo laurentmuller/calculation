@@ -292,11 +292,6 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/swiftmailer/swiftmailer/lib">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/symfony/asset">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -578,11 +573,6 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/symfony/string/Resources">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/symfony/swiftmailer-bundle">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

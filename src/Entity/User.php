@@ -29,8 +29,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @ORM\Table(name="sy_User")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(fields={"email"}, message="fos_user.email.already_used")
- * @UniqueEntity(fields={"username"}, message="fos_user.username.already_used")
+ * @UniqueEntity(fields={"email"}, message="email.already_used")
+ * @UniqueEntity(fields={"username"}, message="username.already_used")
  * @Vich\Uploadable
  */
 class User extends BaseEntity implements UserInterface, RoleInterface, ResetPasswordRequestInterface
@@ -184,6 +184,19 @@ class User extends BaseEntity implements UserInterface, RoleInterface, ResetPass
             ->setOverwrite(false);
     }
 
+    /**
+     * Used because the $imageFile property can not be serialized.
+     *
+     * @return string[]
+     */
+    public function __sleep(): array
+    {
+        $vars = \get_object_vars($this);
+        unset($vars['imageFile']);
+
+        return \array_keys($vars);
+    }
+
     public function __toString(): string
     {
         return (string) $this->getUsername();
@@ -195,7 +208,7 @@ class User extends BaseEntity implements UserInterface, RoleInterface, ResetPass
     public function checkRoles(): self
     {
         if ($this->hasRole(static::ROLE_ADMIN) && $this->hasRole(static::ROLE_SUPER_ADMIN)) {
-            $this->removeRole(static::ROLE_ADMIN);
+            return $this->removeRole(static::ROLE_ADMIN);
         }
 
         return $this;
@@ -400,6 +413,13 @@ class User extends BaseEntity implements UserInterface, RoleInterface, ResetPass
         return (string) $this->username;
     }
 
+    /**
+     * Returns if the given role is set.
+     *
+     * @param string $role the role to be tested
+     *
+     * @return bool true if set
+     */
     public function hasRole(string $role): bool
     {
         return \in_array($role, $this->getRoles(), true);
@@ -453,6 +473,21 @@ class User extends BaseEntity implements UserInterface, RoleInterface, ResetPass
     public function isVerified(): bool
     {
         return $this->verified;
+    }
+
+    /**
+     * Remove the given role.
+     *
+     * @param string $role the role to remove
+     */
+    public function removeRole(string $role): self
+    {
+        $roles = $this->getRoles();
+        if (\in_array($role, $roles, true)) {
+            unset($roles[$role]);
+        }
+
+        return $this->setRoles($roles);
     }
 
     public function setEmail(string $email): self

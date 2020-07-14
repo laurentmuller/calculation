@@ -40,31 +40,26 @@ class ProfileEditType extends BaseType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
-
         $helper = new FormHelper($builder);
 
         // user name
         $helper->field('username')
-            ->label('form.username')
-            ->domain('FOSUserBundle')
+            ->label('user.fields.username')
             ->autocomplete('username')
             ->add(UserNameType::class);
 
         // email
         $helper->field('email')
-            ->label('form.email')
-            ->domain('FOSUserBundle')
+            ->label('user.fields.email')
             ->autocomplete('email')
             ->addEmailType();
 
         // current password
         $helper->field('current_password')
-            ->label('form.current_password')
-            ->domain('FOSUserBundle')
+            ->label('user.password.current')
             ->updateOption('constraints', [
                 new NotBlank(),
-                new UserPassword(['message' => 'fos_user.current_password.invalid']),
+                new UserPassword(['message' => 'current_password.invalid']),
             ])
             ->updateOption('mapped', false)
             ->updateAttribute('autocomplete', 'current-password')

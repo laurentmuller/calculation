@@ -66,7 +66,7 @@ class RegistrationController extends BaseController
             $manager->flush();
 
             // generate a signed url and email it to the user
-            $subject = $this->trans('registration.email.subject', ['%username%' => $user->getUsername()], 'FOSUserBundle');
+            $subject = $this->trans('registration.email.subject', ['%username%' => $user->getUsername()]);
             $email = (new TemplatedEmail())
                 ->from($this->getAddressFrom())
                 ->to($user->getEmail())
@@ -103,8 +103,10 @@ class RegistrationController extends BaseController
         try {
             $this->verifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $e) {
-            $exception = $this->handleResetException($e);
-            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+            if ($request->hasSession()) {
+                $exception = $this->handleResetException($e);
+                $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+            }
 
             return $this->redirectToRoute('user_register');
         }
@@ -114,6 +116,9 @@ class RegistrationController extends BaseController
         return $this->redirectToHomePage();
     }
 
+    /**
+     * Translate the given exception.
+     */
     private function handleResetException(VerifyEmailExceptionInterface $e): CustomUserMessageAuthenticationException
     {
         if ($e instanceof ExpiredSignatureException) {

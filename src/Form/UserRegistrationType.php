@@ -21,11 +21,11 @@ use App\Service\CaptchaImageService;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Replace the FOS User bundle registration type.
+ * Type to register a new user.
  *
  * @author Laurent Muller
  */
-class UserRegistrationType extends FosUserType
+class UserRegistrationType extends UserCaptchaType
 {
     /**
      * Constructor.
@@ -49,24 +49,16 @@ class UserRegistrationType extends FosUserType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('email')
-            ->label('form.email')
-            ->domain('FOSUserBundle')
+            ->label('user.fields.email')
             ->addEmailType();
 
         $helper->field('username')
-            ->label('form.username')
+            ->label('user.fields.username')
             ->autocomplete('username')
             ->maxLength(180)
-            ->domain('FOSUserBundle')
             ->add(UserNameType::class);
 
-        $firstOptions = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
-            ['label' => 'form.password']);
-        $secondOptions = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
-            ['label' => 'form.new_password_confirmation']);
         $helper->field('plainPassword')
-            ->updateOption('first_options', $firstOptions)
-            ->updateOption('second_options', $secondOptions)
             ->add(RepeatPasswordType::class);
 
         parent::addFormFields($helper);

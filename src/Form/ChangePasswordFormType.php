@@ -17,7 +17,6 @@ namespace App\Form;
 use App\Form\Type\RepeatPasswordType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Type to change the user password.
@@ -34,22 +33,14 @@ class ChangePasswordFormType extends AbstractType
         $helper = new FormHelper($builder);
 
         $firstOptions = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
-            ['label' => 'form.new_password']);
+            ['label' => 'user.password.new']);
         $secondOptions = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
-            ['label' => 'form.new_password_confirmation']);
+            ['label' => 'user.password.new_confirmation']);
         $helper->field('plainPassword')
             ->updateOption('first_options', $firstOptions)
             ->updateOption('second_options', $secondOptions)
             ->updateOption('mapped', false)
             ->add(RepeatPasswordType::class);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        //$resolver->setDefaults([]);
     }
 
     /**

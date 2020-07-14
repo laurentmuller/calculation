@@ -139,13 +139,11 @@ class PersistenceListener implements EventSubscriber
                     '%username%' => $entity->getUsername(),
                     '%appname%' => $this->appName,
                 ];
-                $domain = 'FOSUserBundle';
             } else {
                 $id = $this->getId($entity, '.edit.success');
                 $params = $this->getParameters($entity);
-                $domain = null;
             }
-            $this->info($this->translateMessage($id, $params, $domain));
+            $this->info($this->translateMessage($id, $params));
         }
     }
 

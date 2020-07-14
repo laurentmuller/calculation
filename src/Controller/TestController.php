@@ -412,8 +412,7 @@ class TestController extends BaseController
                 new NotBlank(),
                 new Captcha(),
             ])
-            ->label('security.login.captcha')
-            ->domain('FOSUserBundle')
+            ->label('captcha.label')
             ->add(CaptchaImage::class);
 
         $form = $helper->createForm();

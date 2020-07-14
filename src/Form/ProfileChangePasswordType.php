@@ -16,14 +16,18 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Form\Type\RepeatPasswordType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * Change user password type.
+ * Type to change the proilfe of the current (logged) user.
  *
  * @author Laurent Muller
  */
-class UserChangePasswordType extends BaseType
+class ProfileChangePasswordType extends BaseType
 {
     /**
      * Constructor.
@@ -38,25 +42,30 @@ class UserChangePasswordType extends BaseType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
-
         $helper = new FormHelper($builder);
 
-        $helper->field('username')
-            ->label('user.fields.username')
-            ->updateOption('hidden_input', true)
-            ->addPlainType(true);
+        // current password
+        $helper->field('current_password')
+            ->label('user.password.current')
+            ->updateOption('constraints', [
+                new NotBlank(),
+                new UserPassword(['message' => 'current_password.invalid']),
+            ])
+            ->updateOption('mapped', false)
+            ->updateAttribute('autocomplete', 'current-password')
+            ->add(PasswordType::class);
 
         $firstOptions = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
-            ['label' => 'user.password.new']);
-
+                ['label' => 'user.password.new']);
         $secondOptions = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
-            ['label' => 'user.password.new_confirmation']);
-
+                ['label' => 'user.password.new_confirmation']);
         $helper->field('plainPassword')
             ->updateOption('first_options', $firstOptions)
             ->updateOption('second_options', $secondOptions)
             ->add(RepeatPasswordType::class);
+
+        // username for ajax validation
+        $builder->add('username', HiddenType::class);
     }
 
     /**

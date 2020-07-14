@@ -206,7 +206,7 @@ class AdminController extends BaseController
     public function userRights(Request $request): Response
     {
         // get values
-        $roleName = User::ROLE_DEFAULT;
+        $roleName = User::ROLE_USER;
         $rights = $this->getApplication()->getUserRights();
         $default = EntityVoter::getRoleUser();
         $property = ApplicationServiceInterface::USER_RIGHTS;

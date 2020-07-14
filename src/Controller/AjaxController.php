@@ -17,6 +17,7 @@ namespace App\Controller;
 use App\Repository\BaseRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\ProductRepository;
+use App\Repository\UserRepository;
 use App\Service\CalculationService;
 use App\Service\CaptchaImageService;
 use App\Service\FakerService;
@@ -26,7 +27,6 @@ use App\Translator\TranslatorFactory;
 use App\Utils\DatabaseInfo;
 use App\Utils\SymfonyUtils;
 use App\Utils\Utils;
-use FOS\UserBundle\Model\UserManagerInterface;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -194,7 +194,7 @@ class AjaxController extends BaseController
 
         return $this->json([
             'result' => false,
-            'message' => $this->trans('captcha.generate', 'validators'),
+            'message' => $this->trans('captcha.generate', [], 'validators'),
         ]);
     }
 
@@ -223,7 +223,7 @@ class AjaxController extends BaseController
      * @Route("/checkemail", name="ajax_check_email", methods={"GET", "POST"})
      * @IsGranted("ROLE_USER")
      */
-    public function checkEmail(Request $request, UserManagerInterface $manager): JsonResponse
+    public function checkEmail(Request $request, UserRepository $repository): JsonResponse
     {
         // get values
         $id = (int) $request->get('id', 0);
@@ -232,16 +232,16 @@ class AjaxController extends BaseController
         // check length
         $message = null;
         if (null === $email) {
-            $message = 'fos_user.email.blank';
+            $message = 'email.blank';
         } elseif (\strlen($email) < 2) {
-            $message = 'fos_user.email.short';
+            $message = 'email.short';
         } elseif (\strlen($email) > 180) {
-            $message = 'fos_user.email.long';
+            $message = 'email.long';
         } else {
             // find user and check if same
-            $user = $manager->findUserByEmail($email);
+            $user = $repository->findByEmail($email);
             if (null !== $user && $id !== $user->getId()) {
-                $message = 'fos_user.email.already_used';
+                $message = 'email.already_used';
             }
         }
 
@@ -294,7 +294,7 @@ class AjaxController extends BaseController
      * @Route("/checkname", name="ajax_check_name", methods={"GET", "POST"})
      * @IsGranted("ROLE_USER")
      */
-    public function checkUsername(Request $request, UserManagerInterface $manager): JsonResponse
+    public function checkUsername(Request $request, UserRepository $repository): JsonResponse
     {
         // get values
         $id = (int) $request->get('id', 0);
@@ -302,16 +302,16 @@ class AjaxController extends BaseController
 
         // check length
         if (null === $username) {
-            $response = $this->trans('fos_user.username.blank', [], 'validators');
+            $response = $this->trans('username.blank', [], 'validators');
         } elseif (\strlen($username) < 2) {
-            $response = $this->trans('fos_user.username.short', [], 'validators');
+            $response = $this->trans('username.short', [], 'validators');
         } elseif (\strlen($username) > 180) {
-            $response = $this->trans('fos_user.username.long', [], 'validators');
+            $response = $this->trans('username.long', [], 'validators');
         } else {
             // find user and check if same
-            $user = $manager->findUserByUsername($username);
+            $user = $repository->findByUsername($username);
             if (null !== $user && $id !== $user->getId()) {
-                $response = $this->trans('fos_user.username.already_used', [], 'validators');
+                $response = $this->trans('username.already_used', [], 'validators');
             } else {
                 $response = true;
             }
@@ -326,14 +326,14 @@ class AjaxController extends BaseController
      * @Route("/checkexist", name="ajax_check_exist", methods={"GET", "POST"})
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
-    public function checkUsernameOrEmail(Request $request, UserManagerInterface $manager): JsonResponse
+    public function checkUsernameOrEmail(Request $request, UserRepository $repository): JsonResponse
     {
         // find user name
         $usernameOrEmail = $request->get('username');
-        if (null !== $usernameOrEmail && null !== $manager->findUserByUsernameOrEmail($usernameOrEmail)) {
+        if (null !== $usernameOrEmail && null !== $repository->findByUsernameOrEmail($usernameOrEmail)) {
             $response = true;
         } else {
-            $response = $this->trans('fos_user.username.not_found', [], 'validators');
+            $response = $this->trans('username.not_found', [], 'validators');
         }
 
         return $this->json($response);

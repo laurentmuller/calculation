@@ -14,28 +14,33 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use FOS\UserBundle\Form\Type\ChangePasswordFormType;
+use App\Form\Type\RepeatPasswordType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Extends FOS User bundle change password type by adding the user name field as
- * hidden for password strength.
+ * Type to change the user password.
  *
  * @author Laurent Muller
  */
-class FosUserChangePasswordType extends AbstractType
+class ChangePasswordFormType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
+        $helper = new FormHelper($builder);
 
-        // add hidden username
-        $builder->add('username', HiddenType::class);
+        $firstOptions = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
+            ['label' => 'user.password.new']);
+        $secondOptions = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
+            ['label' => 'user.password.new_confirmation']);
+        $helper->field('plainPassword')
+            ->updateOption('first_options', $firstOptions)
+            ->updateOption('second_options', $secondOptions)
+            ->updateOption('mapped', false)
+            ->add(RepeatPasswordType::class);
     }
 
     /**
@@ -44,13 +49,5 @@ class FosUserChangePasswordType extends AbstractType
     public function getBlockPrefix(): string
     {
         return '';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent(): string
-    {
-        return ChangePasswordFormType::class;
     }
 }

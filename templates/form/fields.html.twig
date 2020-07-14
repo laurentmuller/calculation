@@ -194,7 +194,7 @@ override form errors. Rendered example:
 {# captcha_image #}
 {% block captcha_image_widget -%}
 {%- set type = type|default('text') -%}
-{%- set image_title = 'security.login.image'|trans([], 'FOSUserBundle') -%}
+{%- set image_title = 'captcha.title'|trans -%}
 {%- set image_style = theme_dark(app.request) ? ' style="margin-top: 1px; margin-bottom: 1px;"' : '' -%}
 {%- if remote|default(false) -%}
     {%- set attr = attr|merge({'remote': remote}) -%}
@@ -211,7 +211,7 @@ override form errors. Rendered example:
     {{- block('form_widget_simple') -}}
     {% if refresh|default(false) %}
     <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" id="refresh{{ id }}" title="{{ 'security.login.refresh'|trans([], 'FOSUserBundle') }}">
+        <button class="btn btn-outline-secondary" type="button" id="refresh{{ id }}" title="{{ 'captcha.refresh'|trans }}">
             <i class="fas fa-sync" aria-hidden="true"></i>
         </button>
     </div>

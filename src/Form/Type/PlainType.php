@@ -324,7 +324,7 @@ class PlainType extends AbstractType
         if ($value instanceof EntityInterface) {
             return $value->getDisplay();
         }
-        if ($value instanceof \DateTime) {
+        if ($value instanceof \DateTimeInterface) {
             return $this->formatDate($value, $options);
         }
         if (\is_numeric($value)) {

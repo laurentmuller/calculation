@@ -217,9 +217,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     private function isSuperAdmin(): bool
     {
         if ($user = $this->security->getUser()) {
-            if ($user instanceof RoleInterface) {
-                return $user->isSuperAdmin();
-            }
+            return $user instanceof RoleInterface && $user->isSuperAdmin();
         }
 
         return false;

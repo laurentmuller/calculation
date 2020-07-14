@@ -88,8 +88,6 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
 	"id"	                integer PRIMARY KEY AUTOINCREMENT,
 	"email"	                varchar(180) NOT NULL,
 	"username"	            varchar(180) NOT NULL,
-	"username_canonical"    varchar(180) NOT NULL,
-	"email_canonical"	    varchar(180) NOT NULL,
 	"enabled"	            tinyint(1) DEFAULT '1',
 	"salt"	                varchar(255) DEFAULT NULL,
 	"password"	            varchar(255) DEFAULT NULL,
@@ -100,12 +98,80 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
 	"rights"	            varchar(20) DEFAULT NULL,
 	"overwrite"	            tinyint(1) DEFAULT '0',
 	"image_name"	        varchar(255) DEFAULT NULL,
-	"updated_at"	        datetime DEFAULT NULL
+	"updated_at"	        datetime DEFAULT NULL,
+	"selector" 			    varchar(20) DEFAULT NULL,
+  	"hashed_token"          varchar(100) DEFAULT NULL,
+  	"requested_at" 			datetime COMMENT '(DC2Type:datetime_immutable)',
+  	"expires_at" 			datetime COMMENT '(DC2Type:datetime_immutable)',
+  	"verified" 				tinyint(1) DEFAULT '0'
 );
 
-INSERT INTO "sy_User" VALUES (NULL,'role_super_admin@test.com','role_super_admin','role_super_admin','role_super_admin@test.com',1,NULL,'role_super_admin',NULL,NULL,NULL,'a:1:{i:0;s:16:"ROLE_SUPER_ADMIN";}',NULL,0,NULL,NULL);
-INSERT INTO "sy_User" VALUES (NULL,'role_admin@test.com','role_admin','role_admin','role_admin@test.com',1,NULL,'role_admin',NULL,NULL,NULL,'a:1:{i:0;s:10:"ROLE_ADMIN";}',NULL,0,NULL,NULL);
-INSERT INTO "sy_User" VALUES (NULL,'role_user@test.com','role_user','role_user','role_user@test.com',1,NULL,'role_user',NULL,NULL,NULL,'a:0:{}',NULL,0,NULL,NULL);
-INSERT INTO "sy_User" VALUES (NULL,'role_disabled@test.com','role_disabled','role_disabled','role_disabled',0,NULL,'role_disabled',NULL,NULL,NULL,'a:0:{}',NULL,0,NULL,NULL);
+INSERT INTO "sy_User" 
+(
+	'email',
+	'username',
+	'enabled',
+	'password',
+	'roles'
+)			
+VALUES
+(
+	'role_super_admin@test.com',
+	'role_super_admin',
+	1,
+	'role_super_admin',
+	'a:1:{i:0;s:16:"ROLE_SUPER_ADMIN";}'
+);
+
+INSERT INTO "sy_User" 
+(
+	'email',
+	'username',
+	'enabled',
+	'password',
+	'roles'
+)			
+VALUES
+(
+	'role_admin@test.com',
+	'role_admin',
+	1,
+	'role_admin',
+	'a:1:{i:0;s:10:"ROLE_ADMIN";}'
+);
+
+INSERT INTO "sy_User" 
+(
+	'email',
+	'username',
+	'enabled',
+	'password',
+	'roles'
+)			
+VALUES
+(
+	'role_user@test.com',
+	'role_user',
+	1,
+	'role_user',
+	'a:0:{}'
+);
+
+INSERT INTO "sy_User" 
+(
+	'email',
+	'username',
+	'enabled',
+	'password',
+	'roles'
+)			
+VALUES
+(
+	'role_disabled@test.com',
+	'role_disabled',
+	0,
+	'role_disabled',
+	'a:0:{}'
+);
 
 COMMIT;

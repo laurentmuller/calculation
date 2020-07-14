@@ -85,16 +85,8 @@ services:
     App\Listener\CalculationListener:
         tags:
             - { name: doctrine.event_listener, event: onFlush}
-       
-    # replace FOS\UserBundle\Controller\SecurityController
-    fos_user.security.controller:
-        class: App\Controller\SecurityController
          
     # custom line formatter for monolog
     monolog.custom_formatter: 
         class: Monolog\Formatter\LineFormatter
         arguments: ["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", "d.m.Y H:i:s"]
-
-#    FOS\UserBundle\EventListener\EmailConfirmationListener:
-#        arguments:
-#            $mailer: '@fos_user.mailer.default'

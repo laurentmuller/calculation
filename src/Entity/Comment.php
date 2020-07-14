@@ -15,8 +15,11 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use SimpleHtmlToText\Parser;
-use Swift_Attachment;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -226,29 +229,26 @@ class Comment
     /**
      * Sends this message using the given mailer.
      *
-     * @param \Swift_Mailer $mailer the mailer service
+     * @param MailerInterface $mailer the mailer service
      *
-     * @return bool true if send successfully
+     * @throws TransportExceptionInterface if the email can not be send
      */
-    public function send(\Swift_Mailer $mailer): bool
+    public function send(MailerInterface $mailer): void
     {
-        // create message
-        $msg = new \Swift_Message();
-        $msg->setFrom($this->getFromEmailAndName())
-            ->setTo($this->getToEmailAndName())
-            ->setSubject($this->getSubject())
-            ->addPart($this->getTextMessage(), self::TEXT_CONTENT_TYPE)
-            ->addPart($this->getHtmlMessage(), self::HTML_CONTENT_TYPE);
+        $email = new Email();
+        $email->addFrom($this->getFromAddress())
+            ->addTo($this->getToAddress())
+            ->subject($this->getSubject())
+            ->text($this->getTextMessage())
+            ->html($this->getHtmlMessage());
 
-        // create attachments
+        // add attachments
         foreach ($this->getAttachments() as $attachment) {
-            if ($file = $this->createAttachment($attachment)) {
-                $msg->attach($file);
-            }
+            $this->addAttachment($email, $attachment);
         }
 
         // send
-        return 0 !== $mailer->send($msg);
+        $mailer->send($email);
     }
 
     /**
@@ -344,35 +344,32 @@ class Comment
     }
 
     /**
-     * Creates an attachment for the given uploaded file.
+     * Adds the given uploaded file as attachment to the given email.
      *
-     * @return Swift_Attachment|null the mailer attachment or null if the uploaded file is not valid
+     * @param Email        $email the email to attach file for
+     * @param UploadedFile $file  the file to attach
+     *
+     * @return Email the email parameter
      */
-    private function createAttachment(?UploadedFile $file): ?Swift_Attachment
+    private function addAttachment(Email $email, ?UploadedFile $file): Email
     {
         if ($file && $file->isValid()) {
             $path = $file->getPathname();
-            $type = $file->getClientMimeType();
             $name = $file->getClientOriginalName();
+            $type = $file->getClientMimeType();
 
-            return Swift_Attachment::fromPath($path, $type)->setFilename($name);
+            return $email->attachFromPath($path, $name, $type);
         }
 
-        return null;
+        return $email;
     }
 
     /**
-     * Gets the "from" e-mail and name (if any).
-     *
-     * @return string[]|string
+     * Gets the "from" address.
      */
-    private function getFromEmailAndName()
+    private function getFromAddress(): Address
     {
-        if ($this->fromName) {
-            return [$this->from => $this->fromName];
-        }
-
-        return $this->from;
+        return new Address($this->from, (string) $this->fromName);
     }
 
     /**
@@ -405,16 +402,10 @@ class Comment
     }
 
     /**
-     * Gets the "to" e-mail and name (if any).
-     *
-     * @return string[]|string
+     * Gets the "to" address.
      */
-    private function getToEmailAndName()
+    private function getToAddress(): Address
     {
-        if ($this->toName) {
-            return [$this->to => $this->toName];
-        }
-
-        return $this->to;
+        return new Address($this->to, (string) $this->toName);
     }
 }

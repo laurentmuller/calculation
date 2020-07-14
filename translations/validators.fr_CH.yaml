@@ -12,9 +12,36 @@ customer:
     unique_email: Cette adresse e-mail est déjà utilisée.
     zip_code: Le code postal doit contenir 4 chiffres.
     empty: Veuillez fournir au moins un nom ou un prénom ou une société.
-fos_user:
-    username:
-        not_found: Le nom de l'utilisateur ou l'adresse e-mail est introuvable.
+username:
+    not_found: Le nom de l'utilisateur ou l'adresse e-mail est introuvable.
+    already_used: Le nom d'utilisateur est déjà utilisé.
+    blank: Entrez un nom d'utilisateur s'il vous plait.
+    short: Le nom d'utilisateur est trop court.
+    long: Le nom d'utilisateur est trop long.
+email:
+    already_used: L'adresse e-mail est déjà utilisée.
+    blank: Entrez une adresse e-mail s'il vous plait.
+    short: L'adresse e-mail est trop courte.
+    long: L'adresse e-mail est trop longue.
+    invalid: L'adresse e-mail est invalide.
+password:
+    blank: Entrez un mot de passe s'il vous plait.
+    short: Le mot de passe est trop court.
+    mismatch: Les deux mots de passe ne sont pas identiques.
+    blacklist: Le mot de passe fait partie de la liste des mots interdits.
+    email: Le mot de passe ne peut être une adresse e-mail.
+    minLength: Le mot de passe doit faire au moins {{length}} caractères.
+    minStrength: Le mot de passe doit avoir une force "{{strength_min}}", la force actuelle est "{{strength_current}}".
+    caseDiff: Le mot de passe doit contenir des majuscules et des minuscules.
+    letters: Le mot de passe doit contenir au moins une lettre.
+    numbers: Le mot de passe doit contenir au moins un chiffre.
+    specialCharacter: Le mot de passe doit contenir au moins un caractère spécial.
+    pwned: Le mot de passe a été trouvé {{count}} fois dans une base de données de mots de passe compromis.
+new_password:
+    blank: Entrez un nouveau mot de passe s'il vous plait.
+    short: Le nouveau mot de passe est trop court.
+current_password:
+    invalid: Le mot de passe est invalide.
 state:
     unique_code: Ce nom est déjà utilisé par un autre statut.
 property:
@@ -35,17 +62,7 @@ recaptcha:
     challenge-timeout: Le délai d'attente du défi est atteint.
     timeout-or-duplicate: Le délai d'attente est atteint ou la validation a été appelée deux fois.
     required: Vous devez cocher la case "Je ne suis pas un robot".
-password:
-    blacklist: Le mot de passe fait partie de la liste des mots interdits.
-    email: Le mot de passe ne peut être une adresse e-mail.
-    minLength: Le mot de passe doit faire au moins {{length}} caractères.
-    minStrength: Le mot de passe doit avoir une force "{{strength_min}}", la force actuelle est "{{strength_current}}".
-    caseDiff: Le mot de passe doit contenir des majuscules et des minuscules.
-    letters: Le mot de passe doit contenir au moins une lettre.
-    numbers: Le mot de passe doit contenir au moins un chiffre.
-    specialCharacter: Le mot de passe doit contenir au moins un caractère spécial.
-    pwned: Le mot de passe a été trouvé {{count}} fois dans une base de données de mots de passe compromis.
 captcha:
     invalid: Le code de contrôle est invalide.
     timeout: Le délai d'attente est atteint. Essayez de recharger la page ou l'image.
-    generate: Impossible de générer une nouvelle image. 
+    generate: Impossible de générer une nouvelle image.

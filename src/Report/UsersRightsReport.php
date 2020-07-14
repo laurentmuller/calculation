@@ -295,7 +295,7 @@ class UsersRightsReport extends BaseReport implements PdfGroupListenerInterface
     private function outputRoleUser(PdfGroupTableBuilder $builder): int
     {
         $role = EntityVoter::getRoleUser();
-        $title = Utils::translateRole($this->translator, User::ROLE_DEFAULT);
+        $title = Utils::translateRole($this->translator, User::ROLE_USER);
         $this->outputRole($builder, $role, $title);
 
         return 1;

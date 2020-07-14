@@ -1,0 +1,37 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# parameters #}
+{%- set title        = "registration.register.title" -%}
+{%- set title_icon   = 'user-plus' -%}
+{%- set cancel_path  = path("homepage") -%}
+{%- set form_attr    = form_attr|default({})|merge({ 'data-equal_to': 'password.mismatch'|trans([], 'validators') }) -%}
+
+{# class styles #}
+{% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-50' %}
+
+{% block card_header %}
+{{ parent() }}
+{% if error|default(false) %}
+    <em class="text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</em>
+{% endif %}
+{% endblock %}
+
+{% block card_body -%}
+{{ form_row(form.email) }}
+{{ form_row(form.username) }}
+{{ form_row(form.plainPassword.first) }}
+{{ form_row(form.plainPassword.second, {attr: {equalTo: '#plainPassword_first'}}) }}
+{{ form_widget(form) }}
+{%- endblock %}
+
+{% block javascripts -%}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/vendor/zxcvbn/zxcvbn.js') }}
+{{ asset_js('js/plugins/password-strength.js') }}
+{{ asset_js('js/extensions/password-extensions.js') }}
+{{ asset_js('js/application/user_register.js') }}
+{% else %}
+{{ asset_js('js/user_register.js') }}
+{% endif %}
+{%- endblock %}

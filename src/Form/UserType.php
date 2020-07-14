@@ -45,21 +45,17 @@ class UserType extends BaseType
     {
         parent::buildForm($builder, $options);
 
-        $helper = new FormHelper($builder);
+        $helper = new FormHelper($builder, 'user.fields.');
 
         $helper->field('id')
             ->addHiddenType();
 
         $helper->field('username')
-            ->label('form.username')
-            ->domain('FOSUserBundle')
             ->minLength(2)
             ->maxLength(180)
             ->add(UserNameType::class);
 
         $helper->field('email')
-            ->label('form.email')
-            ->domain('FOSUserBundle')
             ->maxLength(180)
             ->addEmailType();
 
@@ -71,12 +67,10 @@ class UserType extends BaseType
             ->add(RoleChoiceType::class);
 
         $helper->field('enabled')
-            ->label('user.fields.enabled')
             ->add(EnabledDisabledType::class);
 
         $helper->field('lastLogin')
             ->className('text-center')
-            ->label('user.fields.lastLogin')
             ->updateOption('date_format', PlainType::FORMAT_SHORT)
             ->updateOption('time_format', PlainType::FORMAT_SHORT)
             ->addPlainType(true);
@@ -87,7 +81,7 @@ class UserType extends BaseType
             ->addVichImageType();
 
         // add listener
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
+        $helper->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
     }
 
     /**

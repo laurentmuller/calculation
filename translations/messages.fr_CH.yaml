@@ -352,6 +352,15 @@ user:
         connected: Le nom de l'expéditeur et du destinataire sont les mêmes.
         success: Votre message ont été envoyé avec succès à l'utilisateur <b>%name%</b>.
         error: Une erreur s'est produite lors de l'envoi de votre message. Veuillez de nouveau tenter cette action plus tard.
+    change_password:
+        title: Modifier le mot de passe
+        change_success: Le mot de passe de l'utilisateur <b>%name%</b> a été modifié avec succès.
+    password:
+        label: Mot de passe
+        current: Mot de passe actuel
+        confirmation: Répéter le mot de passe
+        new: Nouveau mot de passe
+        new_confirmation: Répéter le nouveau mot de passe
 common:
     actions: Actions
     other_actions: Autre actions
@@ -502,9 +511,9 @@ log:
         message: Êtes-vous sûr de vouloir supprimer le journal de l'application ?
         success: Le journal de l'application a été supprimé avec succès.
         error: Impossible de supprimer le journal de l'application.
-        file: 'Fichier'
-        size: 'Taille'
-        entries: 'Nombre d''entrées'
+        file: Fichier
+        size: Taille
+        entries: Nombre d'entrées
 pagination:
     counter: Entrées %start% à %end% sur %count%
     page: Page %page%
@@ -786,7 +795,7 @@ openweather:
         link: Les données peuvent être téléchargées depuis le <a href="%s" target="_blank" rel="noopener noreferrer">répertoire de données</a> de <a href="%s" target="_blank" rel="noopener noreferrer">OpenWeather</a>.
     error:
         empty_city: Aucune localité n'a été importée.
-        move_database: Impossible de renommer la base de données.    
+        move_database: Impossible de renommer la base de données.
     result:
         success: L'importation des localités a été réalisée avec succès.
         failure: Une erreur s'est produite lors de l'importation des localités.
@@ -836,3 +845,56 @@ openweather:
         limit: Limite
         units: Unités
         place_holder: Veuillez saisir une localité
+captcha:
+    label: Code de contrôle
+    title: Image de contrôle
+    refresh: Générer une nouvelle image
+security:
+    link: Déjà un compte ?
+    login:
+        title: Connexion à l'application
+        success: Bienvenue <b>%username%</b> sur votre compte de l'application <b>%appname%</b>.
+        error: Le nom de l'utilisateur ou le mot de passe est invalide.
+        username: Nom d'utilisateur
+        password: Mot de passe
+        remember_me: Se souvenir de moi
+        submit: Connexion
+    logout:
+        success: La déconnexion de votre compte de l'application <b>%appname%</b> est réussie.
+profile:
+    change_password:
+        title: Modifier le mot de passe
+        success: <b>%username%</b>, votre mot de passe a été modifié avec succès.
+        failure: Impossible de trouver l'utilisateur actuel.
+    edit:
+        title: Modifier le profil
+        submit: Mettre à jour
+        success: <b>%username%</b>, votre profil a bien été mis à jour.
+        failure: Impossible de trouver l'utilisateur actuel.
+resetting:
+    link: Mot de passe oublié ?
+    request:
+        title: Réinitialiser le mot de passe
+        username: Nom d'utilisateur ou adresse e-mail
+        submit: Réinitialiser
+    check_email: |
+        Un e-mail vous a été envoyé. Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.
+
+        Si vous ne recevez pas de courrier électronique, veuillez vérifier votre dossier de courrier indésirable ou <a href="%request%">essayer à nouveau</a>.
+
+        <b>Remarque :</b> Vous ne pouvez demander un nouveau mot de passe que toutes les %tokenLifetime% heures.
+registration:
+    register:
+        title: Créer un compte
+    email:
+        subject: Bienvenue %username% !
+        message: |
+            Bonjour %username% !
+
+            Pour valider votre compte utilisateur, merci de vous rendre sur %confirmationUrl%
+
+            Ce lien ne peut être utilisé qu'une seule fois pour valider votre compte.
+
+            Cordialement,
+            L'équipe
+    confirmed: Félicitations %username%, votre compte est maintenant activé.

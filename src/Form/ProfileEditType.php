@@ -15,15 +15,17 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\User;
-use FOS\UserBundle\Form\Type\ProfileFormType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * Extends FOS User bundle profile type by adding the image.
+ * Type to update the user profile.
  *
  * @author Laurent Muller
  */
-class FosUserProfileType extends ProfileFormType
+class ProfileEditType extends BaseType
 {
     /**
      * Constructor.
@@ -38,17 +40,38 @@ class FosUserProfileType extends ProfileFormType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
-
         $helper = new FormHelper($builder);
 
-        // add image
+        // user name
+        $helper->field('username')
+            ->label('user.fields.username')
+            ->autocomplete('username')
+            ->add(UserNameType::class);
+
+        // email
+        $helper->field('email')
+            ->label('user.fields.email')
+            ->autocomplete('email')
+            ->addEmailType();
+
+        // current password
+        $helper->field('current_password')
+            ->label('user.password.current')
+            ->updateOption('constraints', [
+                new NotBlank(),
+                new UserPassword(['message' => 'current_password.invalid']),
+            ])
+            ->updateOption('mapped', false)
+            ->updateAttribute('autocomplete', 'current-password')
+            ->add(PasswordType::class);
+
+        // image
         $helper->field('imageFile')
             ->updateOption('delete_label', 'user.edit.delete_image')
             ->label('user.fields.image')
             ->addVichImageType();
 
-        // add id for ajax validation
+        // id for ajax validation
         $helper->field('id')
             ->addHiddenType();
     }
@@ -59,25 +82,5 @@ class FosUserProfileType extends ProfileFormType
     public function getBlockPrefix(): string
     {
         return '';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function buildUserForm(FormBuilderInterface $builder, array $options): void
-    {
-        $helper = new FormHelper($builder);
-
-        $helper->field('username')
-            ->label('form.username')
-            ->domain('FOSUserBundle')
-            ->autocomplete('username')
-            ->add(UserNameType::class);
-
-        $helper->field('email')
-            ->label('form.email')
-            ->domain('FOSUserBundle')
-            ->autocomplete('email')
-            ->addEmailType();
     }
 }

@@ -19,11 +19,6 @@
 		"symfony",
 		"calculation"
 	],
-	"repositories" : [{
-			"type" : "vcs",
-			"url" : "https://github.com/D-P-IT/FOSUserBundle.git"
-		}
-	],
 	"require" : {
 		"php" : "^7.4",
 		"ext-ctype" : "*",
@@ -31,12 +26,13 @@
 		"antishov/doctrine-extensions-bundle" : "^1.4",
 		"beberlei/doctrineextensions" : "^1.2",
 		"bjeavons/zxcvbn-php" : "^1.1",
+		"doctrine/annotations" : "^1.0",
 		"fpdf/fpdf" : "^1.82",
-		"friendsofsymfony/user-bundle" : "dev-bugfix",
 		"fzaninotto/faker" : "^1.9",
 		"google/recaptcha" : "^1.2",
 		"imagine/imagine" : "^1.2",
 		"ob/highcharts-bundle" : "^1.7",
+		"phpdocumentor/reflection-docblock" : "^5.1",
 		"robquistnl/simplehtmltotext" : "^1.1",
 		"sensio/framework-extra-bundle" : "^5.1",
 		"symfony/asset" : "5.1.*",
@@ -52,17 +48,22 @@
 		"symfony/mime" : "5.1.*",
 		"symfony/monolog-bundle" : "^3.1",
 		"symfony/orm-pack" : "1.0.*",
+		"symfony/property-access" : "5.1.*",
+		"symfony/property-info" : "5.1.*",
 		"symfony/security-bundle" : "5.1.*",
-		"symfony/serializer-pack" : "*",
-		"symfony/swiftmailer-bundle" : "^3.1",
+		"symfony/serializer" : "5.1.*",
 		"symfony/translation" : "5.1.*",
-		"symfony/twig-pack" : "*",
+		"symfony/twig-bundle" : "5.1.*",
 		"symfony/validator" : "5.1.*",
 		"symfony/web-link" : "5.1.*",
 		"symfony/yaml" : "5.1.*",
+		"symfonycasts/reset-password-bundle" : "^1.1",
+		"symfonycasts/verify-email-bundle" : "^1.0",
 		"twig/cssinliner-extra" : "^3.0",
+		"twig/extra-bundle" : "^2.12|^3.0",
 		"twig/inky-extra" : "^3.0",
 		"twig/markdown-extra" : "^3.0",
+		"twig/twig" : "^2.12|^3.0",
 		"vich/uploader-bundle" : "1.*",
 		"webinarium/datatables-bundle" : "^2.4"
 	},
@@ -109,7 +110,7 @@
 	},
 	"extra" : {
 		"symfony" : {
-			"allow-contrib" : false,
+			"allow-contrib" : true,
 			"require" : "5.1.*"
 		}
 	},

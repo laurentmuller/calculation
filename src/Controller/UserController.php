@@ -31,13 +31,14 @@ use App\Security\EntityVoter;
 use App\Service\ThemeService;
 use App\Utils\Utils;
 use Doctrine\Common\Collections\Criteria;
-use FOS\UserBundle\Model\UserManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -65,19 +66,11 @@ class UserController extends EntityController
     private const TEMPLATE_EDIT = 'user/user_edit.html.twig';
 
     /**
-     * @var UserManagerInterface
-     */
-    private $manager;
-
-    /**
      * Constructor.
-     *
-     * @param UserManagerInterface $manager the user manager
      */
-    public function __construct(UserManagerInterface $manager)
+    public function __construct()
     {
         parent::__construct(User::class);
-        $this->manager = $manager;
     }
 
     /**
@@ -108,7 +101,7 @@ class UserController extends EntityController
      * @Route("/comment", name="user_comment", methods={"GET", "POST"})
      * @IsGranted("ROLE_USER")
      */
-    public function comment(Request $request, \Swift_Mailer $mailer, LoggerInterface $logger): Response
+    public function comment(Request $request, MailerInterface $mailer, LoggerInterface $logger): Response
     {
         $comment = new Comment(false);
         $comment->setSubject($this->getApplicationName())
@@ -120,15 +113,12 @@ class UserController extends EntityController
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // send
-                if ($comment->send($mailer)) {
-                    $this->succesTrans('user.comment.success');
-                } else {
-                    $this->errorTrans('user.comment.error');
-                }
+                $comment->send($mailer);
+                $this->succesTrans('user.comment.success');
 
                 // home page
                 return  $this->redirectToHomePage();
-            } catch (\Swift_SwiftException $e) {
+            } catch (TransportExceptionInterface $e) {
                 $message = $this->trans('user.comment.error');
                 $logger->error($message, [
                         'class' => Utils::getShortName($e),
@@ -201,6 +191,7 @@ class UserController extends EntityController
         if ($this->handleRequestForm($request, $form)) {
             // update
             $this->updateEntity($item);
+            $this->getManager()->flush();
 
             // message
             $this->succesTrans('user.image.success', ['%name%' => $item->getDisplay()]);
@@ -222,7 +213,7 @@ class UserController extends EntityController
      * @Route("/message/{id}", name="user_message", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function message(Request $request, User $user, \Swift_Mailer $mailer, LoggerInterface $logger): Response
+    public function message(Request $request, User $user, MailerInterface $mailer, LoggerInterface $logger): Response
     {
         // same user?
         if ($this->isConnectedUser($user)) {
@@ -242,15 +233,12 @@ class UserController extends EntityController
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // send
-                if ($comment->send($mailer)) {
-                    $this->succesTrans('user.message.success', ['%name%' => $user->getDisplay()]);
-                } else {
-                    $this->errorTrans('user.message.error');
-                }
+                $comment->send($mailer);
+                $this->succesTrans('user.message.success', ['%name%' => $user->getDisplay()]);
 
                 // list
                 return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
-            } catch (\Swift_SwiftException $e) {
+            } catch (TransportExceptionInterface $e) {
                 $message = $this->trans('user.message.error');
                 $logger->error($message, [
                         'class' => Utils::getShortName($e),
@@ -287,9 +275,10 @@ class UserController extends EntityController
         if ($this->handleRequestForm($request, $form)) {
             // update
             $this->updateEntity($item);
+            $this->getManager()->flush();
 
             // message
-            $this->succesTrans('password.change.success', ['%name%' => $item->getDisplay()], 'FOSUserBundle');
+            $this->succesTrans('user.change_password.success', ['%name%' => $item->getDisplay()]);
 
             // redirect
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
@@ -344,8 +333,8 @@ class UserController extends EntityController
         // form
         $form = $this->createForm(UserRightsType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            // update
-            $this->updateEntity($item);
+            // save
+            $this->getManager()->flush();
 
             // message
             $this->succesTrans('user.rights.success', ['%name%' => $item->getDisplay()]);
@@ -518,11 +507,10 @@ class UserController extends EntityController
      */
     protected function updateEntity(EntityInterface $item): bool
     {
-        // update
+        // update roles
         $item->checkRoles();
-        $this->manager->updateUser($item);
 
-        return false;
+        return parent::updateEntity($item);
     }
 
     /**

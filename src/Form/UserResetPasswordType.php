@@ -19,11 +19,11 @@ use App\Service\CaptchaImageService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Extends FOS User bundle reset password type by adding the user name and the captcha.
+ * Type to reset password of the current (logged) user.
  *
  * @author Laurent Muller
  */
-class FosUserResetPasswordType extends FosUserType
+class UserResetPasswordType extends UserCaptchaType
 {
     /**
      * @var string
@@ -35,8 +35,8 @@ class FosUserResetPasswordType extends FosUserType
      */
     public function __construct(CaptchaImageService $service, ApplicationService $application, UrlGeneratorInterface $generator)
     {
-        parent::__construct($service, $application);
         $this->remote = $generator->generate('ajax_check_exist');
+        parent::__construct($service, $application);
     }
 
     /**
@@ -47,7 +47,6 @@ class FosUserResetPasswordType extends FosUserType
         $helper->field('username')
             ->label('resetting.request.username')
             ->className('user-name')
-            ->domain('FOSUserBundle')
             ->updateAttribute('remote', $this->remote)
             ->add(UserNameType::class);
 

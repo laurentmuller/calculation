@@ -82,6 +82,13 @@ class InteractiveLoginListener implements EventSubscriberInterface
         return $this->parameters->get($name);
     }
 
+    /**
+     * Update the last login date, if applicable, of the user.
+     *
+     * @param TokenInterface $token the token to get user from
+     *
+     * @return bool true if updated
+     */
     private function updateUser(TokenInterface $token): bool
     {
         if ($token instanceof RememberMeToken || $token instanceof PostAuthenticationGuardToken) {

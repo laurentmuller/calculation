@@ -137,8 +137,6 @@ class User extends BaseEntity implements UserInterface, RoleInterface, ResetPass
     private $requestedAt;
 
     /**
-     * TODO: Replace array by json.
-     *
      * @ORM\Column(type="array")
      *
      * @var string[]

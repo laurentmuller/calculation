@@ -859,8 +859,6 @@ security:
         password: Mot de passe
         remember_me: Se souvenir de moi
         submit: Connexion
-    logout:
-        success: La déconnexion de votre compte de l'application <b>%appname%</b> est réussie.
 profile:
     change_password:
         title: Modifier le mot de passe

@@ -1,8 +1,5 @@
 Invalid credentials.: Le nom de l'utilisateur ou le mot de passe est invalide.
-Not privileged to request the resource.: Les privilèges sont insuffisants pour accéder à la ressource.
 Invalid CSRF token.: Le jeton de falsification de requête inter-sites (CSRF) est invalide.
-"No session available, it either timed out or cookies are not enabled.": Aucune session n'est disponible. Celle-ci a expiré ou les cookies ne sont pas activés.
-Username could not be found.: Le nom de l'utilisateur n'a pas pu être trouvé.
 
 # reCAPTCHA
 recaptcha.missing-input-secret: Le paramètre secret reCAPTCHA est manquant. Essayez de recharger cette page.

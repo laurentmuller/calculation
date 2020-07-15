@@ -7,9 +7,7 @@ security:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\User
@@ -30,10 +28,9 @@ security:
             logout:
                 path: app_logout
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
             switch_user: true
 
-            form_login:
+            # form_login:
                 # csrf_token_generator: security.csrf.token_manager
                 # username_parameter: username
                 # password_parameter: password
@@ -44,9 +41,6 @@ security:
                 secret: '%env(APP_SECRET)%'
                 path:   '%env(cookie_path)%'
                 secure: false
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

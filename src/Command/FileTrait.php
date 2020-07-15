@@ -43,6 +43,18 @@ trait FileTrait
     private $fs;
 
     /**
+     * Change mode for a of file or a directory.
+     *
+     * @param string $filename  A file name to change mode
+     * @param int    $mode      The new mode (octal)
+     * @param bool   $recursive whether change the mod recursively or not
+     */
+    protected function chmod(string $filename, int $mode, bool $recursive = true): void
+    {
+        $this->getFilesystem()->chmod($filename, $mode, 0000, $recursive);
+    }
+
+    /**
      * Checks the existence of a file or directory.
      *
      * @param string $file a filename to check

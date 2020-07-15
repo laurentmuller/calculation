@@ -46,7 +46,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     /**
      * The login route name.
      */
-    public const LOGIN_ROUTE = 'app_login';
+    private const LOGIN_ROUTE = 'app_login';
 
     private $encoder;
     private $generator;
@@ -111,10 +111,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->repository->findOneBy(['username' => $credentials['username']]);
-
+        $user = $this->repository->findByUsername($credentials['username']);
         if (!$user) {
             throw new CustomUserMessageAuthenticationException('Username could not be found.');
+        }
+        if (!$user->isEnabled()) {
+            throw new CustomUserMessageAuthenticationException('Account is disabled.');
         }
 
         return $user;

@@ -411,7 +411,8 @@
                 type = type.replace(/\/\*/g, '/.*');
 
                 const pattern = '.?(' + type + ')$';
-                const regex = new RegExp(pattern, 'i');
+                const flags = 'i';
+                const regex = new RegExp(pattern, flags);
                 for (let i = 0; i < files.length; i++) {
                     if (!files[i].type.match(regex)) {
                         return false;

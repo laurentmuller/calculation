@@ -100,7 +100,8 @@ String.prototype.format = function () {
     var formatted = this;
     for (var i = 0; i < arguments.length; i++) {
         const pattern = '\\{' + i + '\\}';
-        const regexp = new RegExp(pattern, 'gi');
+        const flags = 'gi';
+        const regexp = new RegExp(pattern, flags);
         formatted = formatted.replace(regexp, arguments[i]);
     }
     return formatted;

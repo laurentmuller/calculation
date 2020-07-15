@@ -256,7 +256,8 @@
         highlighter: function (item) {
             const query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
             const pattern = '(' + query + ')';
-            const regex = new RegExp(pattern, "ig");
+            const flags = 'gi';
+            const regex = new RegExp(pattern, flags);
             return item.replace(regex, function ($1, match) {
                 return "<strong>" + match + "</strong>";
             });

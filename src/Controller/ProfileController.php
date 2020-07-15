@@ -29,7 +29,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  *
  * @Route("/profile")
  */
-class ProfileController extends BaseController
+class ProfileController extends AbstractController
 {
     /**
      * Change password of the current user (if any).

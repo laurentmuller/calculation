@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\User;
-use App\Form\Type\RepeatPasswordType;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -59,7 +58,7 @@ class UserRegistrationType extends UserCaptchaType
             ->add(UserNameType::class);
 
         $helper->field('plainPassword')
-            ->add(RepeatPasswordType::class);
+            ->addRepeatPasswordType();
 
         parent::addFormFields($helper);
     }

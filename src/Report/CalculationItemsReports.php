@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfStyle;
@@ -26,7 +26,7 @@ use App\Pdf\PdfTextColor;
  *
  * @author Laurent Muller
  */
-abstract class CalculationItemsReports extends BaseReport
+abstract class CalculationItemsReports extends AbstractReport
 {
     /**
      * The calculations and items to render.
@@ -38,11 +38,11 @@ abstract class CalculationItemsReports extends BaseReport
     /**
      * Constructor.
      *
-     * @param BaseController $controller  the parent controller
-     * @param string         $title       the report title to translate
-     * @param string|null    $description the report description to translate
+     * @param AbstractController $controller  the parent controller
+     * @param string             $title       the report title to translate
+     * @param string|null        $description the report description to translate
      */
-    protected function __construct(BaseController $controller, string $title, ?string $description = null)
+    protected function __construct(AbstractController $controller, string $title, ?string $description = null)
     {
         parent::__construct($controller);
         $this->setTitleTrans($title);

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Entity\CalculationState;
 use App\Pdf\PdfCellListenerInterface;
 use App\Pdf\PdfCellListenerTrait;
@@ -31,7 +31,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class CalculationStatesReport extends BaseReport implements PdfCellListenerInterface
+class CalculationStatesReport extends AbstractReport implements PdfCellListenerInterface
 {
     use PdfCellListenerTrait;
 
@@ -52,9 +52,9 @@ class CalculationStatesReport extends BaseReport implements PdfCellListenerInter
     /**
      * Constructor.
      *
-     * @param BaseController $controller the parent controller
+     * @param AbstractController $controller the parent controller
      */
-    public function __construct(BaseController $controller)
+    public function __construct(AbstractController $controller)
     {
         parent::__construct($controller);
         $this->setTitleTrans('calculationstate.list.title');

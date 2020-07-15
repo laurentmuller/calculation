@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\DataTables;
 
 use App\DataTables\Columns\DataColumn;
-use App\DataTables\Tables\EntityDataTable;
+use App\DataTables\Tables\AbstractEntityDataTable;
 use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  *
  * @author Laurent Muller
  */
-class CalculationDataTable extends EntityDataTable
+class CalculationDataTable extends AbstractEntityDataTable
 {
     /**
      * The datatable identifier.

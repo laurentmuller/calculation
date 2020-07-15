@@ -33,7 +33,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/log")
  * @IsGranted("ROLE_ADMIN")
  */
-class LogController extends BaseController
+class LogController extends AbstractController
 {
     /**
      * Display the content of the log file as card.

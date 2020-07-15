@@ -24,7 +24,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class CalculationType extends BaseType
+class CalculationType extends AbstractEntityType
 {
     use TranslatorTrait;
 

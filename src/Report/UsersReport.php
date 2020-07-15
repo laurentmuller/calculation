@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
@@ -32,7 +32,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  *
  * @author Laurent Muller
  */
-class UsersReport extends BaseReport
+class UsersReport extends AbstractReport
 {
     /**
      * The default image path.
@@ -71,12 +71,12 @@ class UsersReport extends BaseReport
     /**
      * Constructor.
      *
-     * @param BaseController         $controller the parent controller
+     * @param AbstractController     $controller the parent controller
      * @param PropertyMappingFactory $factory    the factory to get mapping informations
      * @param StorageInterface       $storage    the storage to get images path
      * @param KernelInterface        $kernel     the kernel to get the default image path
      */
-    public function __construct(BaseController $controller, PropertyMappingFactory $factory, StorageInterface $storage, KernelInterface $kernel)
+    public function __construct(AbstractController $controller, PropertyMappingFactory $factory, StorageInterface $storage, KernelInterface $kernel)
     {
         parent::__construct($controller);
 

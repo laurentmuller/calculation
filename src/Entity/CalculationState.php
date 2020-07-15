@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="sy_CalculationState")
  * @UniqueEntity(fields="code", message="state.unique_code")
  */
-class CalculationState extends BaseEntity
+class CalculationState extends AbstractEntity
 {
     /**
      * The code (unique).
@@ -137,7 +137,7 @@ class CalculationState extends BaseEntity
     /**
      * {@inheritdoc}
      *
-     * @see \App\Entity\BaseEntity::getDisplay()
+     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {

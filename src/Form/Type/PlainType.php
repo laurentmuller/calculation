@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Entity\EntityInterface;
+use App\Entity\AbstractEntity;
 use App\Service\ApplicationService;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
@@ -321,7 +321,7 @@ class PlainType extends AbstractType
 
             return  \implode($separator, $values);
         }
-        if ($value instanceof EntityInterface) {
+        if ($value instanceof AbstractEntity) {
             return $value->getDisplay();
         }
         if ($value instanceof \DateTimeInterface) {

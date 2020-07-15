@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The index controler (home page).
  */
-class IndexController extends BaseController
+class IndexController extends AbstractController
 {
     /**
      * The home page route.

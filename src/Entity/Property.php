@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\PropertyRepository")
  * @UniqueEntity(fields="name", message="property.unique_name")
  */
-class Property extends BaseEntity
+class Property extends AbstractEntity
 {
     /**
      * The value used for FALSE or 0 value.
@@ -206,8 +206,8 @@ class Property extends BaseEntity
         if ($value instanceof \DateTimeInterface) {
             return $this->setDate($value);
         }
-        if ($value instanceof EntityInterface) {
-            return $this->setInteger($value->getId());
+        if ($value instanceof AbstractEntity) {
+            return $this->setInteger((int) $value->getId());
         }
 
         return $this->setString((string) $value);

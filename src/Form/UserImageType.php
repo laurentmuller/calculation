@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @author Laurent Muller
  */
-class UserImageType extends BaseType
+class UserImageType extends AbstractEntityType
 {
     /**
      * Constructor.

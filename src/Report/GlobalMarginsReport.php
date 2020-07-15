@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfTableBuilder;
 use App\Utils\Utils;
@@ -24,7 +24,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class GlobalMarginsReport extends BaseReport
+class GlobalMarginsReport extends AbstractReport
 {
     /**
      * The global margins to render.
@@ -36,9 +36,9 @@ class GlobalMarginsReport extends BaseReport
     /**
      * Constructor.
      *
-     * @param BaseController $controller the parent controller
+     * @param AbstractController $controller the parent controller
      */
-    public function __construct(BaseController $controller)
+    public function __construct(AbstractController $controller)
     {
         parent::__construct($controller);
         $this->setTitleTrans('globalmargin.list.title');

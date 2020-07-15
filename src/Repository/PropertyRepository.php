@@ -24,7 +24,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  *
  * @see \App\Entity\Property
  */
-class PropertyRepository extends BaseRepository
+class PropertyRepository extends AbstractRepository
 {
     /**
      * Constructor.

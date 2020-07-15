@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  * @UniqueEntity(fields="description", message="product.unique_description")
  */
-class Product extends BaseEntity
+class Product extends AbstractEntity
 {
     use NumberFormatterTrait;
 

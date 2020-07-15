@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
@@ -26,7 +26,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class CategoriesReport extends BaseReport
+class CategoriesReport extends AbstractReport
 {
     /**
      * The categories to render.
@@ -38,9 +38,9 @@ class CategoriesReport extends BaseReport
     /**
      * Constructor.
      *
-     * @param BaseController $controller the parent controller
+     * @param AbstractController $controller the parent controller
      */
-    public function __construct(BaseController $controller)
+    public function __construct(AbstractController $controller)
     {
         parent::__construct($controller);
         $this->setTitleTrans('category.list.title', [], true);

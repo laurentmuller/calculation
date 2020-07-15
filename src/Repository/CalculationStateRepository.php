@@ -26,7 +26,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @see \App\Entity\CalculationState
  */
-class CalculationStateRepository extends BaseRepository
+class CalculationStateRepository extends AbstractRepository
 {
     /**
      * Constructor.

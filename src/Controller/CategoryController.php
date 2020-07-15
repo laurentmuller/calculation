@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\CategoryDataTable;
+use App\Entity\AbstractEntity;
 use App\Entity\Category;
-use App\Entity\EntityInterface;
 use App\Form\CategoryType;
 use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
@@ -188,7 +188,7 @@ class CategoryController extends EntityController
      *
      * @param Category $item
      */
-    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = CategoryType::class;

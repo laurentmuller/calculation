@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Entity\Log;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfCellListenerInterface;
@@ -34,7 +34,7 @@ use Doctrine\SqlFormatter\SqlFormatter;
  *
  * @author Laurent Muller
  */
-class LogReport extends BaseReport implements PdfCellListenerInterface
+class LogReport extends AbstractReport implements PdfCellListenerInterface
 {
     use PdfCellListenerTrait;
 
@@ -93,9 +93,9 @@ class LogReport extends BaseReport implements PdfCellListenerInterface
     /**
      * Constructor.
      *
-     * @param BaseController $controller the parent controller
+     * @param AbstractController $controller the parent controller
      */
-    public function __construct(BaseController $controller)
+    public function __construct(AbstractController $controller)
     {
         parent::__construct($controller);
         $this->setTitleTrans('log.title');

@@ -115,7 +115,7 @@ class CalculationTotalTable extends PdfTableBuilder
      */
     private function trans($id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
-        /** @var BaseReport $parent */
+        /** @var AbstractReport $parent */
         $parent = $this->parent;
 
         return $parent->trans($id, $parameters, $domain, $locale);

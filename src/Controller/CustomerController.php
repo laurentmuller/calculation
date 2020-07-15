@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\CustomerDataTable;
+use App\Entity\AbstractEntity;
 use App\Entity\Customer;
-use App\Entity\EntityInterface;
 use App\Form\CustomerType;
 use App\Pdf\PdfResponse;
 use App\Report\CustomersReport;
@@ -164,7 +164,7 @@ class CustomerController extends EntityController
      *
      * @param Customer $item
      */
-    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = CustomerType::class;

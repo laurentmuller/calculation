@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\CalculationItemRepository")
  * @ORM\Table(name="sy_CalculationItem")
  */
-class CalculationItem extends BaseEntity
+class CalculationItem extends AbstractEntity
 {
     use MathTrait;
 
@@ -132,7 +132,7 @@ class CalculationItem extends BaseEntity
     /**
      * {@inheritdoc}
      *
-     * @see \App\Entity\BaseEntity::getDisplay()
+     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {

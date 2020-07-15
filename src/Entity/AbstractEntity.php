@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\MappedSuperclass
  */
-abstract class BaseEntity implements EntityInterface
+abstract class AbstractEntity
 {
     use MathTrait;
     use SearchTrait;
@@ -54,7 +54,7 @@ abstract class BaseEntity implements EntityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets a string used to display in the user interface (UI).
      */
     public function getDisplay(): string
     {
@@ -62,7 +62,9 @@ abstract class BaseEntity implements EntityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get the primary key identifier value.
+     *
+     * @return int|null the key identifier value or null if is a new entity
      */
     public function getId(): ?int
     {
@@ -70,7 +72,9 @@ abstract class BaseEntity implements EntityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns if this entity is new.
+     *
+     * @return bool true if this entity has never been saved to the database
      */
     public function isNew(): bool
     {
@@ -78,7 +82,32 @@ abstract class BaseEntity implements EntityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns if this entity match the given search term.
+     *
+     * @param string $query the search term
+     *
+     * @return bool true if match
+     *
+     * @see AbstractEntity::getSearchTerms()
+     */
+    public function match(string $query): bool
+    {
+        $terms = $this->getSearchTerms();
+        foreach ($terms as $term) {
+            if (false !== \stripos((string) $term, $query)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets the terms to search in.
+     *
+     * @return string[]
+     *
+     * @see AbstractEntity::match()
      */
     protected function getSearchTerms(): array
     {

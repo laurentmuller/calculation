@@ -38,7 +38,7 @@ use Symfony\Component\Validator\Constraints\File;
  *
  * @Route("/admin")
  */
-class AdminController extends BaseController
+class AdminController extends AbstractController
 {
     /**
      * Edit rights for the administrator role ('ROLE_ADMIN').

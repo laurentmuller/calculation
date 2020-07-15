@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace App\DataTables\Tables;
 
-use App\Entity\EntityInterface;
-use App\Repository\BaseRepository;
+use App\Entity\AbstractEntity;
+use App\Repository\AbstractRepository;
 use App\Service\ApplicationService;
 use App\Utils\Utils;
 use DataTables\Column;
@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  *
  * @author Laurent Muller
  */
-abstract class EntityDataTable extends AbstractDataTable
+abstract class AbstractEntityDataTable extends AbstractDataTable
 {
     /**
      * The name of key for the definition of search fields.
@@ -52,7 +52,7 @@ abstract class EntityDataTable extends AbstractDataTable
     /**
      * The repository to get entities.
      *
-     * @var BaseRepository
+     * @var AbstractRepository
      */
     protected $repository;
 
@@ -62,9 +62,9 @@ abstract class EntityDataTable extends AbstractDataTable
      * @param ApplicationService  $application the application to get parameters
      * @param SessionInterface    $session     the session to save/retrieve user parameters
      * @param DataTablesInterface $datatables  the datatables to handle request
-     * @param BaseRepository      $repository  the repository to get entities
+     * @param AbstractRepository  $repository  the repository to get entities
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, BaseRepository $repository)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, AbstractRepository $repository)
     {
         parent::__construct($application, $session, $datatables);
         $this->repository = $repository;
@@ -78,7 +78,7 @@ abstract class EntityDataTable extends AbstractDataTable
      *
      * @return int the number of entities
      */
-    protected function count(QueryBuilder $builder, string $prefix = BaseRepository::DEFAULT_ALIAS): int
+    protected function count(QueryBuilder $builder, string $prefix = AbstractRepository::DEFAULT_ALIAS): int
     {
         $builder->select("COUNT($prefix.id)");
 
@@ -205,7 +205,7 @@ abstract class EntityDataTable extends AbstractDataTable
      *
      * @return QueryBuilder the query builder
      */
-    protected function createQueryBuilder($alias = BaseRepository::DEFAULT_ALIAS): QueryBuilder
+    protected function createQueryBuilder($alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->repository->createDefaultQueryBuilder($alias);
     }
@@ -307,7 +307,7 @@ abstract class EntityDataTable extends AbstractDataTable
      *
      * The default implementation use the <code>getCellValues</code> function.
      *
-     * @param EntityInterface $item the entity to convert
+     * @param AbstractEntity $item the entity to convert
      *
      * @see AbstractDataTable::getCellValues()
      */

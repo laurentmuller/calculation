@@ -23,7 +23,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @author Laurent Muller
  */
-class CalculationEditStateType extends BaseType
+class CalculationEditStateType extends AbstractEntityType
 {
     /**
      * Constructor.

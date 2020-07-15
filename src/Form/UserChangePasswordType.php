@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\User;
-use App\Form\Type\RepeatPasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -23,7 +22,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @author Laurent Muller
  */
-class UserChangePasswordType extends BaseType
+class UserChangePasswordType extends AbstractEntityType
 {
     /**
      * Constructor.
@@ -41,22 +40,12 @@ class UserChangePasswordType extends BaseType
         parent::buildForm($builder, $options);
 
         $helper = new FormHelper($builder);
-
         $helper->field('username')
             ->label('user.fields.username')
             ->updateOption('hidden_input', true)
             ->addPlainType(true);
-
-        $firstOptions = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
-            ['label' => 'user.password.new']);
-
-        $secondOptions = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
-            ['label' => 'user.password.new_confirmation']);
-
         $helper->field('plainPassword')
-            ->updateOption('first_options', $firstOptions)
-            ->updateOption('second_options', $secondOptions)
-            ->add(RepeatPasswordType::class);
+            ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
     }
 
     /**

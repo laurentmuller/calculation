@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Represents an application log entry.
  */
-class Log extends BaseEntity
+class Log extends AbstractEntity
 {
     /**
      * @ORM\Column(name="channel", type="string", length=50)

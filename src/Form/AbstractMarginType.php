@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @author Laurent Muller
  */
-abstract class AbstractMarginType extends BaseType
+abstract class AbstractMarginType extends AbstractEntityType
 {
     /**
      * Constructor.

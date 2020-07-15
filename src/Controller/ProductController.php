@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\ProductDataTable;
-use App\Entity\EntityInterface;
+use App\Entity\AbstractEntity;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Pdf\PdfResponse;
@@ -179,7 +179,7 @@ class ProductController extends EntityController
      *
      * @param Product $item
      */
-    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = ProductType::class;

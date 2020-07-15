@@ -26,7 +26,7 @@ use Doctrine\ORM\Query;
  *
  * @see \App\Entity\CategoryMargin
  */
-class CategoryMarginRepository extends BaseRepository
+class CategoryMarginRepository extends AbstractRepository
 {
     /**
      * Constructor.

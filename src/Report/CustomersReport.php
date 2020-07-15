@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Entity\Customer;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
@@ -26,7 +26,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class CustomersReport extends BaseReport
+class CustomersReport extends AbstractReport
 {
     /**
      * The customers to render.
@@ -52,9 +52,9 @@ class CustomersReport extends BaseReport
     /**
      * Constructor.
      *
-     * @param BaseController $controller the parent controller
+     * @param AbstractController $controller the parent controller
      */
-    public function __construct(BaseController $controller)
+    public function __construct(AbstractController $controller)
     {
         parent::__construct($controller, self::ORIENTATION_LANDSCAPE);
         $this->setTitleTrans('customer.list.title');

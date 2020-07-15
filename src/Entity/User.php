@@ -33,7 +33,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @UniqueEntity(fields={"username"}, message="username.already_used")
  * @Vich\Uploadable
  */
-class User extends BaseEntity implements UserInterface, RoleInterface, ResetPasswordRequestInterface
+class User extends AbstractEntity implements UserInterface, RoleInterface, ResetPasswordRequestInterface
 {
     use DateFormatterTrait;
     use RightsTrait;
@@ -54,7 +54,7 @@ class User extends BaseEntity implements UserInterface, RoleInterface, ResetPass
     public const ROLE_USER = 'ROLE_USER';
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\Email
      *
      * @var ?string

@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\User;
-use App\Form\Type\RepeatPasswordType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,7 +26,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  *
  * @author Laurent Muller
  */
-class ProfileChangePasswordType extends BaseType
+class ProfileChangePasswordType extends AbstractEntityType
 {
     /**
      * Constructor.
@@ -55,14 +54,9 @@ class ProfileChangePasswordType extends BaseType
             ->updateAttribute('autocomplete', 'current-password')
             ->add(PasswordType::class);
 
-        $firstOptions = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
-                ['label' => 'user.password.new']);
-        $secondOptions = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
-                ['label' => 'user.password.new_confirmation']);
+        // new password
         $helper->field('plainPassword')
-            ->updateOption('first_options', $firstOptions)
-            ->updateOption('second_options', $secondOptions)
-            ->add(RepeatPasswordType::class);
+            ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
 
         // username for ajax validation
         $builder->add('username', HiddenType::class);

@@ -38,7 +38,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
  *
  * @author Laurent Muller
  */
-class RegistrationController extends BaseController
+class RegistrationController extends AbstractController
 {
     private EmailVerifier $verifier;
 

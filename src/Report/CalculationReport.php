@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
@@ -26,7 +26,7 @@ use App\Pdf\PdfTextColor;
  *
  * @author Laurent Muller
  */
-class CalculationReport extends BaseReport
+class CalculationReport extends AbstractReport
 {
     /**
      * The calculation.
@@ -45,9 +45,9 @@ class CalculationReport extends BaseReport
     /**
      * Constructor.
      *
-     * @param BaseController $controller the parent controller
+     * @param AbstractController $controller the parent controller
      */
-    public function __construct(BaseController $controller)
+    public function __construct(AbstractController $controller)
     {
         parent::__construct($controller);
         $this->minMargin = $controller->getApplication()->getMinMargin();

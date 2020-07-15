@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\MappedSuperclass
  */
-abstract class AbstractMargin extends BaseEntity
+abstract class AbstractMargin extends AbstractEntity
 {
     use NumberFormatterTrait;
 
@@ -85,7 +85,7 @@ abstract class AbstractMargin extends BaseEntity
     /**
      * {@inheritdoc}
      *
-     * @see \App\Entity\BaseEntity::getDisplay()
+     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {

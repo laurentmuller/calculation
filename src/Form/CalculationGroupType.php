@@ -25,7 +25,7 @@ use Symfony\Component\Form\FormEvents;
  *
  * @author Laurent Muller
  */
-class CalculationGroupType extends BaseType
+class CalculationGroupType extends AbstractEntityType
 {
     /**
      * @var CategoryRepository

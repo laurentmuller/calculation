@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  *
  * @author Laurent Muller
  */
-class ProfileEditType extends BaseType
+class ProfileEditType extends AbstractEntityType
 {
     /**
      * Constructor.

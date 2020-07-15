@@ -202,6 +202,11 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/ocramius/package-versions/src/PackageVersions">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/ocramius/proxy-manager/src/ProxyManager">
 		<attributes>
 			<attribute name="composer" value="vendor"/>

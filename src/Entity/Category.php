@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * @ORM\Table(name="sy_Category")
  * @UniqueEntity(fields="code", message="category.unique_code")
  */
-class Category extends BaseEntity
+class Category extends AbstractEntity
 {
     /**
      * The unique code.
@@ -194,7 +194,7 @@ class Category extends BaseEntity
     /**
      * {@inheritdoc}
      *
-     * @see \App\Entity\BaseEntity::getDisplay()
+     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {

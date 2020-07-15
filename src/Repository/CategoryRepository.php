@@ -26,7 +26,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @see \App\Entity\Category
  */
-class CategoryRepository extends BaseRepository
+class CategoryRepository extends AbstractRepository
 {
     /**
      * Constructor.

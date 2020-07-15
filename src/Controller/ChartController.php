@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/chart")
  * @IsGranted("ROLE_USER")
  */
-class ChartController extends BaseController
+class ChartController extends AbstractController
 {
     use MathTrait;
 

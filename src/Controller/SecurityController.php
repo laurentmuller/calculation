@@ -25,7 +25,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  *
  * @author Laurent Muller
  */
-class SecurityController extends BaseController
+class SecurityController extends AbstractController
 {
     /**
      * @Route("/login", name="app_login")

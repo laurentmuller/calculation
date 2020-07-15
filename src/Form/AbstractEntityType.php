@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Laurent Muller
  */
-abstract class BaseType extends AbstractType
+abstract class AbstractEntityType extends AbstractType
 {
     /**
      * The class name for the resolver.
@@ -36,7 +36,7 @@ abstract class BaseType extends AbstractType
      *
      * @param string $className the entity class name
      */
-    protected function __construct($className = null)
+    protected function __construct(string $className)
     {
         $this->className = $className;
     }
@@ -46,10 +46,8 @@ abstract class BaseType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        if (!empty($this->className)) {
-            $resolver->setDefaults([
-                'data_class' => $this->className,
-            ]);
-        }
+        $resolver->setDefaults([
+            'data_class' => $this->className,
+        ]);
     }
 }

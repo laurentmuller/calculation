@@ -14,11 +14,11 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
+use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Customer;
-use App\Entity\EntityInterface;
 use App\Entity\GlobalMargin;
 use App\Entity\Product;
 use App\Entity\User;
@@ -152,9 +152,9 @@ class PersistenceListener implements EventSubscriber
      *
      * @param LifecycleEventArgs $args the arguments to get entity for
      *
-     * @return EntityInterface|null the entity, if found; null otherwise
+     * @return AbstractEntity|null the entity, if found; null otherwise
      */
-    private function getEntity(LifecycleEventArgs $args): ?EntityInterface
+    private function getEntity(LifecycleEventArgs $args): ?AbstractEntity
     {
         $entity = $args->getObject();
         if (\in_array(\get_class($entity), self::$CLASS_NAMES, true)) {
@@ -167,12 +167,12 @@ class PersistenceListener implements EventSubscriber
     /**
      * Gets the message identifier to translate.
      *
-     * @param EntityInterface $entity the entity
-     * @param string          $suffix the message suffix
+     * @param AbstractEntity $entity the entity
+     * @param string         $suffix the message suffix
      *
      * @return string the message identifier to translate
      */
-    private function getId(EntityInterface $entity, string $suffix): string
+    private function getId(AbstractEntity $entity, string $suffix): string
     {
         $name = \strtolower(Utils::getShortName($entity));
 
@@ -182,11 +182,11 @@ class PersistenceListener implements EventSubscriber
     /**
      * Gets the message parameters.
      *
-     * @param EntityInterface $entity the entity
+     * @param AbstractEntity $entity the entity
      *
      * @return array the message parameters
      */
-    private function getParameters(EntityInterface $entity): array
+    private function getParameters(AbstractEntity $entity): array
     {
         return ['%name%' => $entity->getDisplay()];
     }

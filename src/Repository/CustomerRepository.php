@@ -24,7 +24,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  *
  * @see \App\Entity\Customer
  */
-class CustomerRepository extends BaseRepository
+class CustomerRepository extends AbstractRepository
 {
     /**
      * The name and company fields.

@@ -14,16 +14,15 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Form\Type\RepeatPasswordType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Type to change the user password.
+ * Type to reset the user password.
  *
  * @author Laurent Muller
  */
-class ChangePasswordFormType extends AbstractType
+class ResetChangePasswordType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -31,16 +30,9 @@ class ChangePasswordFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $helper = new FormHelper($builder);
-
-        $firstOptions = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
-            ['label' => 'user.password.new']);
-        $secondOptions = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
-            ['label' => 'user.password.new_confirmation']);
         $helper->field('plainPassword')
-            ->updateOption('first_options', $firstOptions)
-            ->updateOption('second_options', $secondOptions)
             ->updateOption('mapped', false)
-            ->add(RepeatPasswordType::class);
+            ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
     }
 
     /**

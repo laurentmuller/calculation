@@ -18,9 +18,9 @@ use App\DataTables\CalculationBelowDataTable;
 use App\DataTables\CalculationDataTable;
 use App\DataTables\CalculationDuplicateDataTable;
 use App\DataTables\CalculationEmptyDataTable;
+use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\Category;
-use App\Entity\EntityInterface;
 use App\Form\CalculationEditStateType;
 use App\Form\CalculationType;
 use App\Interfaces\ApplicationServiceInterface;
@@ -724,7 +724,7 @@ class CalculationController extends EntityController
      *
      * @param Calculation $item
      */
-    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = CalculationType::class;
@@ -766,7 +766,7 @@ class CalculationController extends EntityController
      *
      * @param Calculation $item
      */
-    protected function updateEntity(EntityInterface $item): bool
+    protected function updateEntity(AbstractEntity $item): bool
     {
         // compute total
         $this->calculationService->updateTotal($item);

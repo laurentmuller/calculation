@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
  * @UniqueEntity(fields="email", message="customer.unique_email")
  */
-class Customer extends BaseEntity
+class Customer extends AbstractEntity
 {
     /**
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
@@ -171,7 +171,7 @@ class Customer extends BaseEntity
     /**
      * {@inheritdoc}
      *
-     * @see \App\Entity\BaseEntity::getDisplay()
+     * @see \App\Entity\AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
     {

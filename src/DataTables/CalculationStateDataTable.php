@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\DataTables;
 
 use App\DataTables\Columns\DataColumn;
-use App\DataTables\Tables\EntityDataTable;
+use App\DataTables\Tables\AbstractEntityDataTable;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
@@ -30,7 +30,7 @@ use Twig\Environment;
  *
  * @author Laurent Muller
  */
-class CalculationStateDataTable extends EntityDataTable
+class CalculationStateDataTable extends AbstractEntityDataTable
 {
     /**
      * The datatable identifier.

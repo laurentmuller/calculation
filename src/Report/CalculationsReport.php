@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfConstantsInterface;
@@ -28,7 +28,7 @@ use App\Traits\MathTrait;
  *
  * @author Laurent Muller
  */
-class CalculationsReport extends BaseReport
+class CalculationsReport extends AbstractReport
 {
     use MathTrait;
 
@@ -63,9 +63,9 @@ class CalculationsReport extends BaseReport
     /**
      * Constructor.
      *
-     * @param BaseController $controller the parent controller
+     * @param AbstractController $controller the parent controller
      */
-    public function __construct(BaseController $controller)
+    public function __construct(AbstractController $controller)
     {
         parent::__construct($controller, self::ORIENTATION_LANDSCAPE);
 

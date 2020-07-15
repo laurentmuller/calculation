@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
@@ -32,7 +32,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class UsersRightsReport extends BaseReport implements PdfGroupListenerInterface
+class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterface
 {
     /**
      * The ASCII bullet character.
@@ -88,9 +88,9 @@ class UsersRightsReport extends BaseReport implements PdfGroupListenerInterface
     /**
      * Constructor.
      *
-     * @param BaseController $controller the parent controller
+     * @param AbstractController $controller the parent controller
      */
-    public function __construct(BaseController $controller)
+    public function __construct(AbstractController $controller)
     {
         parent::__construct($controller);
         $this->setTitleTrans('user.rights.title', [], true);

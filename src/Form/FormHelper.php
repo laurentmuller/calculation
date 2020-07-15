@@ -17,6 +17,7 @@ namespace App\Form;
 use App\Form\Type\CalculationStateEntityType;
 use App\Form\Type\CategoryEntityType;
 use App\Form\Type\PlainType;
+use App\Form\Type\RepeatPasswordType;
 use App\Form\Type\UserEntityType;
 use App\Form\Type\YesNoType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
@@ -343,6 +344,25 @@ class FormHelper
         }
 
         return $this->notRequired()->add(PlainType::class);
+    }
+
+    /**
+     * Add an repeat password type to the builder and reset all values to default.
+     *
+     * @param string $passwordLabel the label used for the password
+     * @param string $confirmLabel  the label used for the confim password
+     */
+    public function addRepeatPasswordType(string $passwordLabel = 'user.password.label', string $confirmLabel = 'user.password.confirmation'): self
+    {
+        $first_options = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
+            ['label' => $passwordLabel]);
+        $second_options = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
+            ['label' => $confirmLabel]);
+
+        $this->updateOption('first_options', $first_options)
+            ->updateOption('second_options', $second_options);
+
+        return $this->add(RepeatPasswordType::class);
     }
 
     /**

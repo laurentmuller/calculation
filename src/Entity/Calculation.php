@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\CalculationRepository")
  * @ORM\Table(name="sy_Calculation")
  */
-class Calculation extends BaseEntity
+class Calculation extends AbstractEntity
 {
     use BlameableTrait;
     use FormatterTrait;
@@ -206,7 +206,7 @@ class Calculation extends BaseEntity
         /** @var Calculation $copy */
         $copy = clone $this;
 
-        // copy defautl values
+        // copy default values
         if ($state) {
             $copy->setState($state);
         }

@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\CalculationStateDataTable;
+use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
-use App\Entity\EntityInterface;
 use App\Form\CalculationStateType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Pdf\PdfResponse;
@@ -185,7 +185,7 @@ class CalculationStateController extends EntityController
      *
      * @param CalculationState $item
      */
-    protected function afterDeleteEntity(EntityInterface $item): void
+    protected function afterDeleteEntity(AbstractEntity $item): void
     {
         // update default state (if applicable)
         $id = $this->getApplication()->getDefaultStateId();
@@ -199,7 +199,7 @@ class CalculationStateController extends EntityController
      *
      * @param CalculationState $item
      */
-    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = CalculationStateType::class;

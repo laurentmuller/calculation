@@ -39,7 +39,7 @@ use Symfony\Component\Validator\Constraints\Length;
  * @Route("/openweather")
  * @IsGranted("ROLE_USER")
  */
-class OpenWeatherController extends BaseController
+class OpenWeatherController extends AbstractController
 {
     /**
      * The city identifier key name.

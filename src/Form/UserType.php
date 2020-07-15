@@ -17,7 +17,6 @@ namespace App\Form;
 use App\Entity\User;
 use App\Form\Type\EnabledDisabledType;
 use App\Form\Type\PlainType;
-use App\Form\Type\RepeatPasswordType;
 use App\Form\Type\RoleChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -28,7 +27,7 @@ use Symfony\Component\Form\FormEvents;
  *
  * @author Laurent Muller
  */
-class UserType extends BaseType
+class UserType extends AbstractEntityType
 {
     /**
      * Constructor.
@@ -60,7 +59,7 @@ class UserType extends BaseType
             ->addEmailType();
 
         $helper->field('plainPassword')
-            ->add(RepeatPasswordType::class);
+            ->addRepeatPasswordType();
 
         $helper->field('role')
             ->label('user.fields.role')

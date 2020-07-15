@@ -14,9 +14,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Form\ChangePasswordFormType;
-use App\Form\UserResetPasswordType;
+use App\Form\RequestChangePasswordType;
+use App\Form\ResetChangePasswordType;
 use App\Repository\UserRepository;
+use App\Security\LoginFormAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ExpiredResetPasswordTokenException;
@@ -40,7 +42,7 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
  *
  * @Route("/reset-password")
  */
-class ResetPasswordController extends BaseController
+class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
@@ -78,7 +80,7 @@ class ResetPasswordController extends BaseController
      */
     public function request(Request $request, MailerInterface $mailer, AuthenticationUtils $utils): Response
     {
-        $form = $this->createForm(UserResetPasswordType::class);
+        $form = $this->createForm(RequestChangePasswordType::class);
         if ($this->handleRequestForm($request, $form)) {
             $usernameOrEmail = $form->get('username')->getData();
 
@@ -96,7 +98,7 @@ class ResetPasswordController extends BaseController
      *
      * @Route("/reset/{token}", name="app_reset_password")
      */
-    public function reset(Request $request, UserPasswordEncoderInterface $encoder, ?string $token = null): Response
+    public function reset(Request $request, UserPasswordEncoderInterface $encoder, GuardAuthenticatorHandler $handler, LoginFormAuthenticator $authenticator, ?string $token = null): Response
     {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -108,7 +110,7 @@ class ResetPasswordController extends BaseController
 
         $token = $this->getTokenFromSession();
         if (null === $token) {
-            throw $this->createNotFoundException($this->trans('reset.not_found_password_token'));
+            throw $this->createNotFoundException($this->trans('resetting.not_found_password_token'));
         }
 
         try {
@@ -123,7 +125,7 @@ class ResetPasswordController extends BaseController
         }
 
         // The token is valid; allow the user to change their password.
-        $form = $this->createForm(ChangePasswordFormType::class, $user);
+        $form = $this->createForm(ResetChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
             // A password reset token should be used only once, remove it.
             $this->helper->removeResetRequest($token);
@@ -137,7 +139,8 @@ class ResetPasswordController extends BaseController
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
 
-            return $this->redirectToHomePage();
+            // authenticate
+            return $handler->authenticateUserAndHandleSuccess($user, $request, $authenticator, 'main');
         }
 
         return $this->render('reset_password/reset.html.twig', [

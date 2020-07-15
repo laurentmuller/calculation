@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @author Laurent Muller
  */
-class CategoryType extends BaseType
+class CategoryType extends AbstractEntityType
 {
     /**
      * Constructor.

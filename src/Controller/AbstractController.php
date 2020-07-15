@@ -17,13 +17,13 @@ namespace App\Controller;
 use App\Form\FormHelper;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfResponse;
-use App\Report\BaseReport;
+use App\Report\AbstractReport;
 use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorFlashMessageTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,9 +35,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Base controller.
+ * Abstract base controller.
  */
-abstract class BaseController extends AbstractController
+abstract class AbstractController extends BaseController
 {
     use FormatterTrait;
     use TranslatorFlashMessageTrait;
@@ -279,7 +279,7 @@ abstract class BaseController extends AbstractController
     protected function renderDocument(PdfDocument $doc, bool $inline = true, string $name = '', bool $isUTF8 = false): PdfResponse
     {
         // render
-        if ($doc instanceof BaseReport && !$doc->render()) {
+        if ($doc instanceof AbstractReport && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
 

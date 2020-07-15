@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\DataTables;
 
 use App\DataTables\Columns\DataColumn;
-use App\DataTables\Tables\EntityDataTable;
+use App\DataTables\Tables\AbstractEntityDataTable;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use App\Service\ApplicationService;
@@ -29,7 +29,7 @@ use Twig\Environment;
  *
  * @author Laurent Muller
  */
-class CategoryDataTable extends EntityDataTable
+class CategoryDataTable extends AbstractEntityDataTable
 {
     /**
      * The datatable identifier.

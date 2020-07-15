@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Repository\BaseRepository;
+use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
@@ -45,7 +45,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @Route("/ajax")
  */
-class AjaxController extends BaseController
+class AjaxController extends AbstractController
 {
     use MathTrait;
 
@@ -230,25 +230,20 @@ class AjaxController extends BaseController
         $email = $request->get('email', null);
 
         // check length
-        $message = null;
         if (null === $email) {
-            $message = 'email.blank';
+            $response = $this->trans('email.blank', [], 'validators');
         } elseif (\strlen($email) < 2) {
-            $message = 'email.short';
+            $response = $this->trans('email.short', [], 'validators');
         } elseif (\strlen($email) > 180) {
-            $message = 'email.long';
+            $response = $this->trans('email.long', [], 'validators');
         } else {
             // find user and check if same
             $user = $repository->findByEmail($email);
             if (null !== $user && $id !== $user->getId()) {
-                $message = 'email.already_used';
+                $response = $this->trans('email.already_used', [], 'validators');
+            } else {
+                $response = true;
             }
-        }
-
-        if ($message) {
-            $response = $this->trans($message, [], 'validators');
-        } else {
-            $response = true;
         }
 
         return $this->json($response);
@@ -852,13 +847,13 @@ class AjaxController extends BaseController
     /**
      * Search distinct values.
      *
-     * @param Request        $request    the request to get search parameters
-     * @param BaseRepository $repository the respository to search in
-     * @param string         $field      the field name to search for
+     * @param Request            $request    the request to get search parameters
+     * @param AbstractRepository $repository the respository to search in
+     * @param string             $field      the field name to search for
      *
      * @return JsonResponse the found values
      */
-    private function searchDistinct(Request $request, BaseRepository $repository, string $field): JsonResponse
+    private function searchDistinct(Request $request, AbstractRepository $repository, string $field): JsonResponse
     {
         try {
             $search = (string) $request->get('query', '');

@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\UserDataTable;
+use App\Entity\AbstractEntity;
 use App\Entity\Comment;
-use App\Entity\EntityInterface;
 use App\Entity\User;
 use App\Form\ThemeType;
 use App\Form\UserChangePasswordType;
@@ -460,7 +460,7 @@ class UserController extends EntityController
      *
      * @param User $item
      */
-    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = UserType::class;
@@ -505,7 +505,7 @@ class UserController extends EntityController
      *
      * @param User $item
      */
-    protected function updateEntity(EntityInterface $item): bool
+    protected function updateEntity(AbstractEntity $item): bool
     {
         // update roles
         $item->checkRoles();

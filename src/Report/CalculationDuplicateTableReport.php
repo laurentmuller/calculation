@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 
 /**
  * Report for calculations with duplicate items.
@@ -26,9 +26,9 @@ class CalculationDuplicateTableReport extends CalculationItemsTableReport
     /**
      * Constructor.
      *
-     * @param BaseController $controller the parent controller
+     * @param AbstractController $controller the parent controller
      */
-    public function __construct(BaseController $controller)
+    public function __construct(AbstractController $controller)
     {
         parent::__construct($controller, 'calculation.duplicate.title', 'calculation.duplicate.description');
     }

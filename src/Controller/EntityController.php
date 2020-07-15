@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTables\Tables\EntityDataTable;
-use App\Entity\EntityInterface;
+use App\DataTables\Tables\AbstractEntityDataTable;
+use App\Entity\AbstractEntity;
 use App\Interfaces\EntityVoterInterface;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfResponse;
-use App\Repository\BaseRepository;
+use App\Repository\AbstractRepository;
 use App\Utils\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Exception;
@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Laurent Muller
  */
-abstract class EntityController extends BaseController
+abstract class EntityController extends AbstractController
 {
     /**
      * The entity class name.
@@ -53,9 +53,9 @@ abstract class EntityController extends BaseController
     /**
      * Raised after the given entity is deleted.
      *
-     * @param EntityInterface $item the deleted entity
+     * @param AbstractEntity $item the deleted entity
      */
-    protected function afterDeleteEntity(EntityInterface $item): void
+    protected function afterDeleteEntity(AbstractEntity $item): void
     {
     }
 
@@ -75,17 +75,17 @@ abstract class EntityController extends BaseController
     /**
      * Delete an entity.
      *
-     * @param request         $request    the request
-     * @param EntityInterface $item       the entity to delete
-     * @param array           $parameters the delete parameters. The following keys must or may be fixed:
-     *                                    <ul>
-     *                                    <li><code>title</code> : the dialog title (optional).</li>
-     *                                    <li><code>message</code> : the dialog message (optional).</li>
-     *                                    <li><code>success</code> : the message to display on success (optional).</li>
-     *                                    <li><code>failure</code> : the message to display on failure (optional).</li>
-     *                                    </ul>
+     * @param request        $request    the request
+     * @param AbstractEntity $item       the entity to delete
+     * @param array          $parameters the delete parameters. The following keys must or may be fixed:
+     *                                   <ul>
+     *                                   <li><code>title</code> : the dialog title (optional).</li>
+     *                                   <li><code>message</code> : the dialog message (optional).</li>
+     *                                   <li><code>success</code> : the message to display on success (optional).</li>
+     *                                   <li><code>failure</code> : the message to display on failure (optional).</li>
+     *                                   </ul>
      */
-    protected function deleteEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function deleteEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // check permission
         $this->checkPermission(EntityVoterInterface::ATTRIBUTE_DELETE);
@@ -139,17 +139,17 @@ abstract class EntityController extends BaseController
     /**
      * Edit an entity.
      *
-     * @param request         $request    the request
-     * @param EntityInterface $item       the entity to edit
-     * @param array           $parameters the edit parameters. The following keys must or may be fixed:
-     *                                    <ul>
-     *                                    <li><code>type</code> : the form type (required).</li>
-     *                                    <li><code>template</code> : the template to render (required).</li>
-     *                                    <li><code>success</code> : the message to display on success (optional).</li>
-     *                                    <li><code>route</code> : the default route (optional).</li>
-     *                                    </ul>
+     * @param request        $request    the request
+     * @param AbstractEntity $item       the entity to edit
+     * @param array          $parameters the edit parameters. The following keys must or may be fixed:
+     *                                   <ul>
+     *                                   <li><code>type</code> : the form type (required).</li>
+     *                                   <li><code>template</code> : the template to render (required).</li>
+     *                                   <li><code>success</code> : the message to display on success (optional).</li>
+     *                                   <li><code>route</code> : the default route (optional).</li>
+     *                                   </ul>
      */
-    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // check permission
         $isNew = $item->isNew();
@@ -238,7 +238,7 @@ abstract class EntityController extends BaseController
      * @param string $field the sorted field
      * @param string $mode  the sort mode ("ASC" or "DESC")
      *
-     * @return EntityInterface[] the entities
+     * @return AbstractEntity[] the entities
      */
     protected function getEntities(?string $field = null, string $mode = Criteria::ASC): array
     {
@@ -253,9 +253,9 @@ abstract class EntityController extends BaseController
      * Gets the repository for the given manager.
      * This function use the class name given at the constructor.
      *
-     * @return \App\Repository\BaseRepository the repository
+     * @return \App\Repository\AbstractRepository the repository
      */
-    protected function getRepository(): BaseRepository
+    protected function getRepository(): AbstractRepository
     {
         return $this->getManager()->getRepository($this->className);
     }
@@ -343,14 +343,14 @@ abstract class EntityController extends BaseController
     /**
      * Render the entities as data table.
      *
-     * @param Request         $request    the request to get parameters
-     * @param EntityDataTable $table      the data table
-     * @param string          $template   the template name to render
-     * @param array           $attributes additional data table attributes
+     * @param Request                 $request    the request to get parameters
+     * @param AbstractEntityDataTable $table      the data table
+     * @param string                  $template   the template name to render
+     * @param array                   $attributes additional data table attributes
      *
      * @return Response a JSON response if is a callback, the data table view otherwise
      */
-    protected function renderTable(Request $request, EntityDataTable $table, string $template, array $attributes = []): Response
+    protected function renderTable(Request $request, AbstractEntityDataTable $table, string $template, array $attributes = []): Response
     {
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
@@ -373,19 +373,19 @@ abstract class EntityController extends BaseController
     /**
      * Show properties of an entity.
      *
-     * @param EntityInterface $item       the entity to show
-     * @param array           $parameters the show parameters. The following keys must or may be fixed:
-     *                                    <ul>
-     *                                    <li><code>template</code> : the template to render (required).</li>
-     *                                    <li><code>title</code> : the dialog title (optional).</li>
-     *                                    <li><code>message</code> : the dialog message (optional).</li>
-     *                                    <li><code>success</code> : the message to display on success (optional).</li>
-     *                                    <li><code>failure</code> : the message to display on failure (optional).</li>
-     *                                    </ul>
+     * @param AbstractEntity $item       the entity to show
+     * @param array          $parameters the show parameters. The following keys must or may be fixed:
+     *                                   <ul>
+     *                                   <li><code>template</code> : the template to render (required).</li>
+     *                                   <li><code>title</code> : the dialog title (optional).</li>
+     *                                   <li><code>message</code> : the dialog message (optional).</li>
+     *                                   <li><code>success</code> : the message to display on success (optional).</li>
+     *                                   <li><code>failure</code> : the message to display on failure (optional).</li>
+     *                                   </ul>
      *
      * @throws \Symfony\Component\Finder\Exception\AccessDeniedException if the access is denied
      */
-    protected function showEntity(EntityInterface $item, array $parameters = []): Response
+    protected function showEntity(AbstractEntity $item, array $parameters = []): Response
     {
         // check permission
         $this->checkPermission(EntityVoterInterface::ATTRIBUTE_SHOW);
@@ -406,11 +406,11 @@ abstract class EntityController extends BaseController
      *
      * Derived class can compute values and update entity.
      *
-     * @param EntityInterface $item the entity to be saved
+     * @param AbstractEntity $item the entity to be saved
      *
      * @return bool true if updated successfully; false to not save entity to the database
      */
-    protected function updateEntity(EntityInterface $item): bool
+    protected function updateEntity(AbstractEntity $item): bool
     {
         return true;
     }

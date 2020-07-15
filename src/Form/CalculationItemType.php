@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @author Laurent Muller
  */
-class CalculationItemType extends BaseType
+class CalculationItemType extends AbstractEntityType
 {
     /**
      * Constructor.

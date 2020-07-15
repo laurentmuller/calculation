@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTables\GlobalMarginDataTable;
-use App\Entity\EntityInterface;
+use App\Entity\AbstractEntity;
 use App\Entity\GlobalMargin;
 use App\Form\GlobalMarginType;
 use App\Pdf\PdfResponse;
@@ -154,7 +154,7 @@ class GlobalMarginController extends EntityController
      *
      * @param GlobalMargin $item
      */
-    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
+    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
         $parameters['type'] = GlobalMarginType::class;

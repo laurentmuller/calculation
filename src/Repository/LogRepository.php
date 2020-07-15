@@ -24,7 +24,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  *
  * @see \App\Entity\Log
  */
-class LogRepository extends BaseRepository
+class LogRepository extends AbstractRepository
 {
     /**
      * Constructor.

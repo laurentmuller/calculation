@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @author Laurent Muller
  */
-class CustomerType extends BaseType
+class CustomerType extends AbstractEntityType
 {
     /**
      * Constructor.

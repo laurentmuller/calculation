@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\DataTables;
 
-use App\Repository\BaseRepository;
+use App\Repository\AbstractRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 
@@ -33,7 +33,7 @@ class CalculationBelowDataTable extends CalculationDataTable
     /**
      * {@inheritdoc}
      */
-    protected function createQueryBuilder($alias = BaseRepository::DEFAULT_ALIAS): QueryBuilder
+    protected function createQueryBuilder($alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         $param = 'minMargin';
         $itemsField = "{$alias}.itemsTotal";

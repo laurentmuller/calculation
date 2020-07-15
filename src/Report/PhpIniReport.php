@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
@@ -25,7 +25,7 @@ use App\Pdf\PdfTextColor;
  *
  * @author Laurent Muller
  */
-class PhpIniReport extends BaseReport
+class PhpIniReport extends AbstractReport
 {
     /**
      * The content to export.
@@ -37,9 +37,9 @@ class PhpIniReport extends BaseReport
     /**
      * Constructor.
      *
-     * @param BaseController $controller the parent controller
+     * @param AbstractController $controller the parent controller
      */
-    public function __construct(BaseController $controller)
+    public function __construct(AbstractController $controller)
     {
         parent::__construct($controller);
         $this->SetTitle(\php_ini_loaded_file() ?? 'php.ini');

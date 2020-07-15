@@ -24,7 +24,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  *
  * @see \App\Entity\CalculationItem
  */
-class CalculationItemRepository extends BaseRepository
+class CalculationItemRepository extends AbstractRepository
 {
     /**
      * Constructor.

@@ -19,11 +19,11 @@ use App\Service\CaptchaImageService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Type to reset password of the current (logged) user.
+ * Type to request change password of a user.
  *
  * @author Laurent Muller
  */
-class UserResetPasswordType extends UserCaptchaType
+class RequestChangePasswordType extends UserCaptchaType
 {
     /**
      * @var string

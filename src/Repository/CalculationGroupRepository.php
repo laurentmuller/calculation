@@ -26,7 +26,7 @@ use Doctrine\DBAL\Types\Types;
  *
  * @see \App\Entity\CalculationGroup
  */
-class CalculationGroupRepository extends BaseRepository
+class CalculationGroupRepository extends AbstractRepository
 {
     /**
      * Constructor.

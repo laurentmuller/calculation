@@ -25,7 +25,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Laurent Muller
  */
-abstract class BaseRepository extends ServiceEntityRepository
+abstract class AbstractRepository extends ServiceEntityRepository
 {
     /**
      * The default entity alias used to create query builder (value = 'e') .
@@ -102,7 +102,7 @@ abstract class BaseRepository extends ServiceEntityRepository
      *
      * @param array $sortedFields the sorted fields where key is the field name and value is the sort mode ("ASC" or "DESC")
      *
-     * @see BaseRepository::createDefaultQueryBuilder()
+     * @see AbstractRepository::createDefaultQueryBuilder()
      */
     public function getSearchQuery(array $sortedFields = []): Query
     {

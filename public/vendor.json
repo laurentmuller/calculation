@@ -87,7 +87,7 @@
 				"css/dataTables.bootstrap4.css"
 			]
 		},
-		{			
+		{
 			"name": "searchHighlight",
 			"version": "1.10.21",
 			"source": "https://cdn.datatables.net/plug-ins/",
@@ -106,7 +106,7 @@
 			"files": [
 				"dataTables.conditionalPaging.js"
 			]
-		},		
+		},
 		{
 			"info": "https://datatables.net/download/packages",
 			"name": "keytable",
@@ -162,9 +162,7 @@
 			"files": [
 				"tinymce.min.js",
 				"jquery.tinymce.min.js",
-				
 				"icons/default/icons.min.js",
-				
 				"plugins/advlist/plugin.min.js",
 				"plugins/anchor/plugin.min.js",
 				"plugins/autolink/plugin.min.js",
@@ -210,21 +208,17 @@
 				"plugins/visualblocks/plugin.min.js",
 				"plugins/visualchars/plugin.min.js",
 				"plugins/wordcount/plugin.min.js",
-				
 				"themes/mobile/theme.min.js",
 				"themes/silver/theme.min.js",
-				
 				"skins/content/dark/content.min.css",
 				"skins/content/default/content.min.css",
 				"skins/content/document/content.min.css",
 				"skins/content/writer/content.min.css",
-
 				"skins/ui/oxide/content.inline.min.css",
 				"skins/ui/oxide/content.min.css",
 				"skins/ui/oxide/content.mobile.min.css",
-				"skins/ui/oxide/skin.min.css",				
+				"skins/ui/oxide/skin.min.css",
 				"skins/ui/oxide/skin.mobile.min.css",
-				
 				"skins/ui/oxide-dark/content.inline.min.css",
 				"skins/ui/oxide-dark/content.min.css",
 				"skins/ui/oxide-dark/content.mobile.min.css",
@@ -241,6 +235,6 @@
 			"files": [
 				"fr_FR.js"
 			]
-		}		
+		}
 	]
 }

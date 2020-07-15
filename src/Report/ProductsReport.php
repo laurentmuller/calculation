@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Entity\Product;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
@@ -25,7 +25,7 @@ use App\Utils\Utils;
  *
  * @author Laurent Muller
  */
-class ProductsReport extends BaseReport
+class ProductsReport extends AbstractReport
 {
     /**
      * Set if the products are grouped by category.
@@ -44,9 +44,9 @@ class ProductsReport extends BaseReport
     /**
      * Constructor.
      *
-     * @param BaseController $controller the parent controller
+     * @param AbstractController $controller the parent controller
      */
-    public function __construct(BaseController $controller)
+    public function __construct(AbstractController $controller)
     {
         parent::__construct($controller);
         $this->setTitleTrans('product.list.title');

@@ -26,7 +26,7 @@ use Doctrine\ORM\Query;
  *
  * @see \App\Entity\GlobalMargin
  */
-class GlobalMarginRepository extends BaseRepository
+class GlobalMarginRepository extends AbstractRepository
 {
     /**
      * Constructor.

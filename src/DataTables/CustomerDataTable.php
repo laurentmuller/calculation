@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\DataTables;
 
 use App\DataTables\Columns\DataColumn;
-use App\DataTables\Tables\EntityDataTable;
+use App\DataTables\Tables\AbstractEntityDataTable;
 use App\Entity\Customer;
 use App\Repository\CustomerRepository;
 use App\Service\ApplicationService;
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  *
  * @author Laurent Muller
  */
-class CustomerDataTable extends EntityDataTable
+class CustomerDataTable extends AbstractEntityDataTable
 {
     /**
      * The datatable identifier.

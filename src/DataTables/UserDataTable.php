@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace App\DataTables;
 
 use App\DataTables\Columns\DataColumn;
-use App\DataTables\Tables\EntityDataTable;
+use App\DataTables\Tables\AbstractEntityDataTable;
 use App\Entity\User;
-use App\Repository\BaseRepository;
+use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
 use App\Service\ApplicationService;
 use App\Utils\Utils;
@@ -33,7 +33,7 @@ use Twig\Environment;
  *
  * @author Laurent Muller
  */
-class UserDataTable extends EntityDataTable
+class UserDataTable extends AbstractEntityDataTable
 {
     /**
      * The datatable identifier.
@@ -165,7 +165,7 @@ class UserDataTable extends EntityDataTable
     /**
      * {@inheritdoc}
      */
-    protected function createQueryBuilder($alias = BaseRepository::DEFAULT_ALIAS): QueryBuilder
+    protected function createQueryBuilder($alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         // default
         $builder = parent::createQueryBuilder($alias);

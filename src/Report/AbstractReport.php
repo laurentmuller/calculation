@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\BaseController;
+use App\Controller\AbstractController;
 use App\Pdf\PdfDocument;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
@@ -25,7 +25,7 @@ use App\Twig\FormatExtension;
  *
  * @author Laurent Muller
  */
-abstract class BaseReport extends PdfDocument
+abstract class AbstractReport extends PdfDocument
 {
     use FormatterTrait;
     use TranslatorTrait;
@@ -40,12 +40,12 @@ abstract class BaseReport extends PdfDocument
     /**
      * Constructor.
      *
-     * @param BaseController $controller  the parent controller
-     * @param string         $orientation the page orientation. One of the ORIENTATION_XX contants.
-     * @param string         $unit        the measure unit. One of the UNIT_XX contants.
-     * @param mixed          $size        the document size. One of the SIZE_XX contants or an array containing the width and height of the document.
+     * @param AbstractController $controller  the parent controller
+     * @param string             $orientation the page orientation. One of the ORIENTATION_XX contants.
+     * @param string             $unit        the measure unit. One of the UNIT_XX contants.
+     * @param mixed              $size        the document size. One of the SIZE_XX contants or an array containing the width and height of the document.
      */
-    public function __construct(BaseController $controller, string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, $size = self::SIZE_A4)
+    public function __construct(AbstractController $controller, string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, $size = self::SIZE_A4)
     {
         parent::__construct($orientation, $unit, $size);
 

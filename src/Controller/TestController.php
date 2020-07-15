@@ -62,7 +62,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @Route("/test")
  * @IsGranted("ROLE_SUPER_ADMIN")
  */
-class TestController extends BaseController
+class TestController extends AbstractController
 {
     /**
      * Display a month of a calendar.

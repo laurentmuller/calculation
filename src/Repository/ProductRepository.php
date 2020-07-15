@@ -27,7 +27,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @see \App\Entity\Product
  */
-class ProductRepository extends BaseRepository
+class ProductRepository extends AbstractRepository
 {
     /**
      * Constructor.

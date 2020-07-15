@@ -33,7 +33,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @Route("/about")
  */
-class AboutController extends BaseController
+class AboutController extends AbstractController
 {
     /**
      * Display informations about the application.

@@ -873,6 +873,7 @@ profile:
         failure: Impossible de trouver l'utilisateur actuel.
 resetting:
     link: Mot de passe oublié ?
+    not_found_password_token: Aucun jeton de réinitialisation du mot de passe n'a été trouvé dans l'URL ou dans la session.
     request:
         title: Réinitialiser le mot de passe
         username: Nom d'utilisateur ou adresse e-mail

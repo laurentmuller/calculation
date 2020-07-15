@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\CalculationGroupRepository")
  * @ORM\Table(name="sy_CalculationGroup")
  */
-class CalculationGroup extends BaseEntity
+class CalculationGroup extends AbstractEntity
 {
     /**
      * The total amount.

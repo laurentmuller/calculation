@@ -410,7 +410,8 @@
                 type = type.replace(/,/g, '|');
                 type = type.replace(/\/\*/g, '/.*');
 
-                const regex = new RegExp('.?(' + type + ')$', 'i');
+                const pattern = '.?(' + type + ')$';
+                const regex = new RegExp(pattern, 'i');
                 for (let i = 0; i < files.length; i++) {
                     if (!files[i].type.match(regex)) {
                         return false;

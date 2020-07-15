@@ -22,8 +22,9 @@
                 if (options.decimal) {
                     pattern += "[" + options.separatorAuthorized.join("") + "]?[0-9]{0," + options.decimal + "}";
                 }
-                pattern = new RegExp(pattern + "$");
-                return value.match(pattern);
+                pattern += "$";
+                const regex = new RegExp(pattern);
+                return value.match(regex);
             };
 
             var formatValue = function (value, options) {

@@ -99,7 +99,8 @@ String.prototype.format = function () {
     'use strict';
     var formatted = this;
     for (var i = 0; i < arguments.length; i++) {
-        var regexp = new RegExp('\\{' + i + '\\}', 'gi');
+        const pattern = '\\{' + i + '\\}';
+        const regexp = new RegExp(pattern, 'gi');
         formatted = formatted.replace(regexp, arguments[i]);
     }
     return formatted;

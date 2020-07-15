@@ -15,7 +15,10 @@
          * Gets the cookie value.
          */
         get: function (key) {
-            return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(key).replace(/[-.+*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
+            const encodedKey = encodeURIComponent(key).replace(/[-.+*]/g, '\\$&');
+            const pattern = '(?:(?:^|.*;)\\s*' + encodedKey + '\\s*\\=\\s*([^;]*).*$)|^.*$';
+            const regex = new RegExp(pattern);
+            return decodeURIComponent(document.cookie.replace(regex, '$1')) || null;
         },
 
         /**
@@ -65,8 +68,12 @@
         /**
          * Checks if a cookie exists.
          */
+
         has: function (key) {
-            return (new RegExp('(?:^|;\\s*)' + encodeURIComponent(key).replace(/[-.+*]/g, '\\$&') + '\\s*\\=')).test(document.cookie);
+            const encodedKey = encodeURIComponent(key).replace(/[-.+*]/g, '\\$&');
+            const pattern = '(?:(?:^|.*;)\\s*' + encodedKey + '\\s*\\=\\s*([^;]*).*$)|^.*$';
+            const regex = new RegExp(pattern);
+            return regex.test(document.cookie);
         },
 
         /**

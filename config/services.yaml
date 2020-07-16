@@ -12,34 +12,36 @@ parameters:
     app_owner_url:      https://www.bibi.nu
     app_owner_city:     Montévraz
     app_description:    Programme de calculation.
-    app_environment:    '%env(app_environment)%'
-
-    # assets
-    asset_base: '%env(asset_base)%'
-    asset_locale: '%env(asset_locale)%'
     
-    # cookies
-    cookie_path: '%env(cookie_path)%'
-    cookie_secure: '%env(bool:cookie_secure)%'
-    cookie_same_site: '%env(cookie_same_site)%'
-    
-    # keys
-    bing_translator_key:   '%env(bing_translator_key)%'
-    google_translator_key: '%env(google_translator_key)%'
-    yandex_translator_key: '%env(yandex_translator_key)%'
-
-    google_recaptcha_secret: '%env(GOOGLE_RECAPTCHA_SECRET)%'
-    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'    
-    
-    openweather_key: '%env(openweather_key)%'
+    app_secret:         '%env(APP_SECRET)%'
+    app_environment:    '%env(APP_ENVIRONMENT)%'    
 
     # mailer
     mailer_user_name: Calculation
     mailer_user_email: calculation@bibi.nu
+
+    
+    # assets
+    asset_base: '%env(ASSET_BASE)%'
+    asset_locale: '%env(ASSET_LOCALE)%'
+    
+    # cookies
+    cookie_path: '%env(COOKIE_PATH)%'
+    cookie_secure: '%env(bool:COOKIE_SECURE)%'
+    cookie_same_site: '%env(COOKIE_SAME_SITE)%'
+    
+    # keys
+    openweather_key: '%env(OPENWEATHER_KEY)%'
+    bing_translator_key:   '%env(BING_TRANSLATOR_KEY)%'
+    google_translator_key: '%env(GOOGLE_TRANSLATOR_KEY)%'
+    yandex_translator_key: '%env(YANDEX_TRANSLATOR_KEY)%'
+
+    google_recaptcha_secret: '%env(GOOGLE_RECAPTCHA_SECRET)%'
+    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'    
     
     #links
-    link_dev: '%env(link_dev)%'
-    link_prod: '%env(link_prod)%'
+    link_dev: '%env(LINK_DEV)%'
+    link_prod: '%env(LINK_PROD)%'
     
 services:
     # default configuration for services in *this* file
@@ -73,7 +75,7 @@ services:
     
     # validators
     App\Validator\RecaptchaValidator:
-        arguments: ['%env(GOOGLE_RECAPTCHA_SECRET)%']
+        arguments: ['%google_recaptcha_secret%']
         
     # datatables
     App\DataTables\:

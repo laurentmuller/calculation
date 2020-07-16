@@ -38,8 +38,8 @@ security:
 
             remember_me:
                 remember_me_parameter: remember_me
-                secret: '%env(APP_SECRET)%'
-                path:   '%env(cookie_path)%'
+                secret: '%app_secret%'
+                path:   '%cookie_path%'
                 secure: false
 
     # Easy way to control access for large sections of your site

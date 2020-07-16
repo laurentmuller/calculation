@@ -1,5 +1,5 @@
 framework:
-    secret: '%env(APP_SECRET)%'
+    secret: '%app_secret%'
     #csrf_protection: ~
     http_method_override: true
 
@@ -20,7 +20,7 @@ framework:
 
     # assets
     assets:
-        base_urls: '%env(asset_base)%'
+        base_urls: '%asset_base%'
         packages:
             local:
-                base_urls: '%env(asset_locale)%'
+                base_urls: '%asset_locale%'

@@ -442,13 +442,11 @@ class TestController extends AbstractController
         $builder = $this->createFormBuilder($data);
         $builder->setAttribute('block_name', '');
 
-        $helper = new FormHelper($builder);
+        $helper = new FormHelper($builder, 'user.fields.');
         $helper->field('subject')
-            ->label('user.fields.subject')
             ->addTextType();
 
         $helper->field('message')
-            ->label('user.fields.message')
             ->addTextType();
 
         $helper->field('recaptcha')

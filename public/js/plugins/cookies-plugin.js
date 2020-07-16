@@ -25,14 +25,14 @@
         /**
          * Sets the cookie value.
          */
-        set: function (key, val, end, path, domain, secure, samesite) {
+        set: function (key, value, end, path, domain, secure, samesite) {
             // check key
             if (!key || /^(?:expires|max-age|path|domain|secure|samesite)$/i.test(key)) {
                 return false;
             }
 
             // build
-            let cookie = encodeURIComponent(key) + '=' + encodeURIComponent(val);
+            let cookie = encodeURIComponent(key) + '=' + encodeURIComponent(value);
             if (domain) {
                 cookie += '; domain=' + domain;
             }
@@ -71,7 +71,7 @@
          */
         has: function (key) {
             const encodedKey = encodeURIComponent(key).replace(/[-.+*]/g, '\\$&');
-            const pattern = '(?:(?:^|.*;)\\s*' + encodedKey + '\\s*\\=\\s*([^;]*).*$)|^.*$';
+            const pattern = '(?:^|;\\s*)' + encodedKey  + '\\s*\\=';
             const regex = new RegExp(pattern);
             return regex.test(document.cookie);
         },

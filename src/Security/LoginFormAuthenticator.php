@@ -153,7 +153,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
      */
     protected function getHomeUrl(): string
     {
-        return $this->generator->generate(IndexController::INDEX_ROUTE);
+        return $this->generator->generate(IndexController::HOME_PAGE);
     }
 
     /**

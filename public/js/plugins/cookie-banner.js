@@ -24,14 +24,14 @@
         /**
          * Sets the cookie value.
          */
-        set: function (key, val, end, path, domain, secure, samesite) {
+        set: function (key, value, end, path, domain, secure, samesite) {
             // check key
             if (!key || /^(?:expires|max-age|path|domain|secure|samesite)$/i.test(key)) {
                 return false;
             }
 
             // build
-            let cookie = encodeURIComponent(key) + '=' + encodeURIComponent(val);
+            let cookie = encodeURIComponent(key) + '=' + encodeURIComponent(value);
             if (domain) {
                 cookie += '; domain=' + domain;
             }
@@ -68,10 +68,9 @@
         /**
          * Checks if a cookie exists.
          */
-
         has: function (key) {
             const encodedKey = encodeURIComponent(key).replace(/[-.+*]/g, '\\$&');
-            const pattern = '(?:(?:^|.*;)\\s*' + encodedKey + '\\s*\\=\\s*([^;]*).*$)|^.*$';
+            const pattern = '(?:^|;\\s*)' + encodedKey + '\\s*\\=';
             const regex = new RegExp(pattern);
             return regex.test(document.cookie);
         },
@@ -177,7 +176,7 @@
                 linkMessage: 'Learn more',
                 closeMessage: 'Close',
 
-                bannerClass: 'd-flex fixed-bottom p-1 bg-dark text-white',
+                bannerClass: 'd-flex d-print-none fixed-bottom bg-secondary text-white p-1',
                 messageClass: 'flex-fill',
                 linkClass: 'ml-1 text-white-50',
                 closeClass: 'text-white align-self-center ml-2',
@@ -187,7 +186,7 @@
                 linkRel: 'noopener noreferrer',
 
                 fontSize: '0.8rem',
-                fontFamily: 'var(--font-family-sans-serif)',
+                //fontFamily: 'var(--font-family-sans-serif)',
                 textAlign: 'center',
                 appendTo: 'body',
                 zindex: 1000
@@ -199,7 +198,7 @@
          */
         init: function (options) {
             // merge settings
-            var settings = $.extend({}, this.defaults(), options);
+            const settings = $.extend({}, this.defaults(), options);
 
             // check cookie
             if (!Cookies.has(settings.cookieName)) {

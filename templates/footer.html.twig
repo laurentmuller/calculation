@@ -3,9 +3,9 @@
 
 <footer>
     <ul class="footer d-print-none">
-        {%  if is_granted('ROLE_SUPER_ADMIN') %}
-            <li>{{ icons.link(path('test_slickmap'), 'index.menu_site_map', '', 'sitemap') }}</li>
-        {% endif %}
+        {%  if is_granted('ROLE_SUPER_ADMIN') -%}
+        <li>{{ icons.link(path('site_map'), 'index.menu_site_map', '', 'sitemap') }}</li>
+        {%- endif %}
         <li><a id="app_name_version" href="{{ path('about') }}">{{ app_name_version }}</a></li>
         <li id="app_environment">{{ ('environment.' ~ app_environment)|trans }}</li>
         <li id="app_copyright">{{ icons.copyright_link() }}</li>

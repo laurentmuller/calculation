@@ -27,6 +27,9 @@
 <div class="sitemap">
     <nav class="utilityNav">
         <ul>
+            {% if is_admin %}
+            <li>{{ _self.link('admin_parameters', 'parameters.title', 'cogs') }}</li>
+            {% endif %}
             {% if is_remembered %}
             <li>{{ _self.link('app_logout', 'index.logout', 'sign-out-alt') }}</li>
             {% else %}
@@ -51,7 +54,7 @@
                 </ul>
             </li>
             <li>
-                <span>{{- icons.icon('database', 'index.menu_data') -}}</span>
+                <span class="rounded">{{- icons.icon('database', 'index.menu_data') -}}</span>
                 <ul>
                     <li>{{ _self.link('product_table', 'product.list.title', 'file-alt far') }}
                         <ul>
@@ -117,5 +120,5 @@
 
 {% block stylesheets %}
 {{ parent() }}
-{{ asset_css('css/slickmap.css') }}
+{{ asset_css('css/sitemap.css') }}
 {% endblock %}

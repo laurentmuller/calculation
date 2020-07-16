@@ -85,14 +85,14 @@
 {% endapply %}
 {%- endmacro %}
 
-{% macro homepage(href = null, text = 'index.title', class = 'btn btn-form btn-primary', domain = 'messages') -%}
+{% macro homepage(href = null, text = 'index.title', class = 'btn btn-form btn-primary', domain = null) -%}
 {%- set href = href|default(path('homepage')) -%}
 {{- _self.link(href, text, class, 'fas fa-home', null, domain) -}}
 {%- endmacro %}
 
-{% macro button_submit(text = 'common.button_ok', class = 'btn btn-form btn-primary', domain = 'messages', parameters = {}) -%}
+{% macro button_submit(text = 'common.button_ok', class = 'btn btn-form btn-primary', parameters = {}) -%}
 {%- set parameters = parameters|merge({'class': class}) -%}
-<button type="submit"{% for attrname, attrvalue in parameters %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ text|trans([], domain) }}</button>
+<button type="submit"{% for attrname, attrvalue in parameters %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ text|trans }}</button>
 {%- endmacro %}
 
 {% macro button_ok(href = '#', text = 'common.button_ok', class = 'btn btn-form btn-primary') -%}
@@ -110,7 +110,7 @@
 {%- endmacro %}
 
 {% macro copyright_link() -%}
-{{ 'index.copyright'|trans({'%year%': 'now'|date('Y'), '%owner_url%': app_owner_url, '%owner%': app_owner}, 'messages')|raw }}
+{{ 'index.copyright'|trans({'%year%': 'now'|date('Y'), '%owner_url%': app_owner_url, '%owner%': app_owner})|raw }}
 {%- endmacro %}
 
 {% macro dropdownItemCard(route_name, parameters = []) -%}

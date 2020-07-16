@@ -3,10 +3,10 @@
 {# parameters #}
 {%- set title       = 'translator.title' -%}
 {%- set title_icon  = 'globe' -%}
-{%- set action      = url('ajax_translate') -%}
 {%- set submit_text = 'translator.submit_text' -%}
 {%- set cancel_path = false -%}
 {%- set form_attr   = form_attr|default({})|merge({
+                     'data-ajax': url('ajax_translate'),
                      'data-title': 'translator.title'|trans,
                      'data-success': 'translator.translate_sucess'|trans,
                      'data-copy-success': 'translator.copy_sucess'|trans,

@@ -5,9 +5,7 @@
 {# parameters #}
 {%- set submit_text   = submit_text|default('common.button_ok') -%}
 {%- set submit_class  = submit_class|default('btn btn-form btn-primary') -%}
-{%- set submit_domain = submit_domain|default(null) -%}
 {%- set submit_params = submit_params|default({}) -%}
-{%- set action        = action|default(app.request.requestUri) -%}
 {%- set form_attr     = form_attr|default({})|merge({'id': 'edit-form'}) -%}
 {%- set cancel_text   = cancel_text|default('common.button_cancel') -%}
 {%- if cancel_path is not defined -%}
@@ -17,7 +15,7 @@
 {% block start_card_container %}
 {{ parent() -}}
 {% block start_form %}
-{{ form_start(form, {'action': action, 'attr': form_attr}) }}
+{{ form_start(form, {'attr': form_attr}) }}
 {% endblock %}
 {% endblock %}
 
@@ -31,7 +29,7 @@
 <div class="row">
     <div class="col-md-9">
 	{% block actions_form -%} 
-        {{ icons.button_submit(submit_text, submit_class, submit_domain, submit_params) }}
+        {{ icons.button_submit(submit_text, submit_class, submit_params) }}
         {% if cancel_path|default(false) %}
             {{ icons.button_cancel(cancel_path, cancel_text) }}
         {% endif %}

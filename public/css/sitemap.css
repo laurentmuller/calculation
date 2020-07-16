@@ -18,6 +18,14 @@
 }
 
 /* ------------------------------------------------------------
+	Rounded Styles
+------------------------------------------------------------ */
+.sitemap li a,
+.sitemap span {
+    border-radius: .25rem;
+}
+
+/* ------------------------------------------------------------
 	Root Styles
 ------------------------------------------------------------ */
 .sitemap ul, 
@@ -60,7 +68,7 @@
 	flex: 1;
 	flex-basis: 11.5em;
 	padding-right: 1.25em;
-	position: relative;
+	position: relative;    
 }
 .primaryNav > ul > li {
 	margin-top: 3em;
@@ -74,7 +82,7 @@
 	color: white;
 	background: #0090ff;
 	border: 1px solid  rgba(0,0,0,.025);
-	text-decoration: none;
+	text-decoration: none;	
 }
 .primaryNav li a:hover {
 	background-color: #0070f9;
@@ -101,7 +109,7 @@
 	color: white;
 	background: #0090ff;
 	border: 1px solid  rgba(0,0,0,.025);
-	text-decoration: none;
+	text-decoration: none;	
 }
 
 /* -------- Second Level --------- */
@@ -225,7 +233,7 @@
 	border-bottom-width: 0;
 }
 .primaryNav ul ul ul li:before {
-	width: calc(50% - 5px) !important;
+	width: calc(50% - 5px);
 	height: calc(100% - 2px);
 	top: -50%;
 	left: 0;

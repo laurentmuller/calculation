@@ -105,4 +105,14 @@ class IndexController extends AbstractController
 
         return $this->render('index/search.html.twig', $parameters);
     }
+
+    /**
+     * Display the Site Map.
+     *
+     * @Route("/sitemap", name="site_map"): Response
+     */
+    public function siteMap()
+    {
+        return $this->render('index/sitemap.html.twig');
+    }
 }

@@ -31,7 +31,7 @@ function translate() {
     };
 
     // call
-    const url = $form.attr('action');
+    const url = $form.data('ajax');
     $.post(url, data, function (response) {
         // restore
         $buttonSubmit.removeClass('disabled').html(html);
@@ -210,35 +210,6 @@ function getLocale() {
     return locale.split('_')[0];
 }
 
-// /**
-// * Update size of the text area height depending of it's content.
-// *
-// * @param {jQuery}
-// * source - the text area source to update.
-// * @param {jQuery}
-// * target - the text area where height must synchonized with the
-// * source.
-// */
-// function updateSizes(source, target) {
-// 'use strict';
-//
-// // inner function
-// function doResize(source, target) {
-// const $source = $(source);
-// $source.css({
-// 'height': 'auto',
-// 'overflow-y': 'hidden'
-// }).height(source.scrollHeight);
-// $(target).outerHeight($source.outerHeight());
-// return $source;
-// }
-//
-// // init
-// doResize(source, target).on('input', function () {
-// doResize(this, target);
-// });
-// }
-
 /**
  * Ready function
  */
@@ -271,8 +242,6 @@ $(function () {
     $('#service').on('input', function () {
         onService();
     });
-
-    // updateSizes($('#text'), $('#result'));
 
     // validate
     const options = {

@@ -212,7 +212,7 @@ class BingTranslatorService extends AbstractTranslatorService
     protected function getDefaultOptions(): array
     {
         $headers = [
-            'Accept-language' => self::getAcceptLanguage(),
+            'Accept-language' => self::getAcceptLanguage(true),
             'Ocp-Apim-Subscription-Key' => $this->key,
             'X-ClientTraceId' => $this->createGUID(),
         ];

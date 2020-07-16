@@ -123,15 +123,6 @@ class TestController extends AbstractController
     }
 
     /**
-     * Display the Slick Map (map site).
-     *
-     * @Route("/slickmap", name="test_slickmap"): Response
-     */
-    public function slickmap() {
-        return $this->render('test/slickmap.html.twig');
-    }
-
-    /**
      * Create one or more calculations with random data.
      *
      * @Route("/create/calculations/{count}", name="test_create_calculations", requirements={"count": "\d+" })

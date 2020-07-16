@@ -457,18 +457,22 @@ index:
     menu_rights_user: Droits d'accès de l'utilisateur
     menu_rights_admin: Droits d'accès de l'administrateur
     menu_theme: Thème (%name%)
+    menu_site_map: Plan du site
     panel_last: Dernières calculations
     panel_month: Résumé par mois
     panel_state: Calculations par statut
     toggle_navigation: Basculer la navigation
 about:
+    title: A propos de    
     app_customer: Client
     app_name: Application
     app_owner: Concepteur
     app_version: Version
     app_environment: Environnement
     licence: Accord de licence
+    licence_short: Licence
     policy: Politique de confidentialité
+    policy_short: Confidentialité
     php: Configuration PHP
     mysql: Configuration MySQL
     symfony: Configuration Symfony

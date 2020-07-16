@@ -13,12 +13,12 @@
 {%- set is_tabular        = display_tabular() -%}
 
 {# rights #}
-{%- set calculs      = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
-{%- set products     = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_PRODUCT) -%}  
-{%- set categories   = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CATEGORY) -%}
-{%- set states       = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
-{%- set margins      = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
-{%- set customers    = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev -%}
+{%- set calculs    = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
+{%- set products   = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_PRODUCT) -%}  
+{%- set categories = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CATEGORY) -%}
+{%- set states     = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
+{%- set margins    = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
+{%- set customers  = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev -%}
 
 {# navigation #}
 <nav id="navigation" class="navbar navbar-expand-md {{ theme_background(app.request) }}">
@@ -112,6 +112,7 @@
                     {{- icons.dropdownItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') -}}
                     {{- icons.dropdownItem(path('test_translate'), 'translator.title', 'globe') -}}
                     {{- icons.dropdownItemExternal(path('test_html'), 'test.html', 'code') -}}
+                    {{- icons.dropdownItem(path('test_slickmap'), 'index.menu_site_map', 'sitemap') -}}
                     {{- icons.dropdownItem(path('test_password'), 'password.title', 'lock') -}}
                     {{- icons.dropdownSeparator -}}
                     {{- icons.dropdownItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') -}}

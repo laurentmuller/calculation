@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# macros #}
+{% macro link(route, text, icon, domain = null) -%}
+{{ icons.link(path(route), text, '', icon ~ '  fa-fw', null, domain) }}
+{%- endmacro %}
+
+{% macro linkExternal(route, text, icon, domain = null) -%}
+{{ icons.linkExternal(path(route), text, '', icon ~ '  fa-fw', null, domain) }}
+{%- endmacro %}
+
+{# parameters #}
+{%- set title          = 'index.menu_site_map' -%}
+{%- set title_icon     = 'sitemap' -%}
+{%- set is_dev         = app.debug or is_env_dev -%}
+{%- set is_remembered  = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
+{%- set is_admin       = is_granted('ROLE_ADMIN') -%}
+{%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
+{%- set is_bibi        = is_dev and is_remembered and app.user.username == 'Bibi' -%}
+
+{# class #}
+{% block container_class 'container-fluid' %}
+{#% block navigation -%}{%- endblock %#}
+
+{% block body -%}
+<div class="sitemap">
+    <nav class="utilityNav">
+        <ul>
+            {% if is_remembered %}
+            <li>{{ _self.link('app_logout', 'index.logout', 'sign-out-alt') }}</li>
+            {% else %}
+            <li>{{ _self.link('app_login', 'index.login', 'sign-in-alt') }}</li>
+            {% endif %}
+            {% if is_super_admin %}
+            <li>{{ _self.link('user_register', 'registration.register.title',  'user-plus') }}</li>
+            {% endif %}
+        </ul>
+    </nav>
+    <nav class="primaryNav">
+        <ul>
+            <li id="home">{{ _self.link('homepage', 'index.title', 'home') }}</li>
+            <li>
+                <ul>{{ _self.link('calculation_table', 'calculation.list.title', 'calculator') }}
+                    <li>
+                        <ul>
+                            <li>{{ _self.link('calculation_add', 'calculation.add.title', 'file far') }}</li>
+                            <li>{{ _self.linkExternal('calculation_pdf', 'calculation.list.pdf_title', 'file-pdf far') }}</li>
+                        </ul>
+                    </li>                
+                </ul>
+            </li>
+            <li>
+                <span>{{- icons.icon('database', 'index.menu_data') -}}</span>
+                <ul>
+                    <li>{{ _self.link('product_table', 'product.list.title', 'file-alt far') }}
+                        <ul>
+                            <li>{{ _self.link('product_add', 'product.add.title', 'file far') }}</li>
+                            <li>{{ _self.linkExternal('product_pdf', 'product.list.pdf_title', 'file-pdf far') }}</li>
+                        </ul>
+                    </li>
+                    <li>{{ _self.link('category_table', 'category.list.title', 'folder far') }}
+                        <ul>
+                            <li>{{ _self.link('category_add', 'category.add.title', 'file far') }}</li>
+                            <li>{{ _self.linkExternal('category_pdf', 'category.list.pdf_title', 'file-pdf far') }}</li>
+                        </ul>
+                    </li>
+                    <li>{{ _self.link('calculationstate_table', 'calculationstate.list.title', 'flag far') }}
+                        <ul>
+                            <li>{{ _self.link('calculationstate_add', 'calculationstate.add.title', 'file far') }}</li>
+                            <li>{{ _self.linkExternal('calculationstate_pdf', 'calculationstate.list.pdf_title', 'file-pdf far') }}</li>
+                        </ul>
+                    </li>
+                    <li>{{ _self.link('globalmargin_table', 'globalmargin.list.title', 'percent') }}
+                        <ul>
+                            <li>{{ _self.link('globalmargin_add', 'globalmargin.add.title', 'file far') }}</li>
+                            <li>{{ _self.linkExternal('globalmargin_pdf', 'globalmargin.list.pdf_title', 'file-pdf far') }}</li>
+                        </ul>
+                    </li>
+                    <li>{{ _self.link('customer_table', 'customer.list.title', 'address-card far') }}
+                        <ul>
+                            <li>{{ _self.link('customer_add', 'customer.add.title', 'file far') }}</li>
+                            <li>{{ _self.linkExternal('customer_pdf', 'customer.list.pdf_title', 'file-pdf far') }}</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <span>{{- icons.icon('tools', 'index.menu_tools') -}}</span>
+                <ul>
+                    <li>{{ _self.link('search', 'search.title', 'search') }}</li>
+                    <li>{{ _self.link('calculation_update', 'calculation.update.title', 'pencil-alt') }}</li>
+                    <li>{{ _self.link('calculation_below_table', 'calculation.below.title', 'percent') }}</li>
+                    <li>{{ _self.link('calculation_duplicate_table', 'calculation.duplicate.title', 'copy far') }}</li>
+                    <li>{{ _self.link('calculation_empty_table', 'calculation.empty.title', 'file-code far') }}</li>
+                </ul>
+            </li>
+            <li>
+                <span>{{- icons.icon('chart-area', 'menu_graphics', 'chart') -}}</span>
+                <ul>
+                    <li>{{ _self.link('chart_by_month', 'title_by_month', 'calendar-alt far', 'chart') }}</li>
+                    <li>{{ _self.link('chart_by_state', 'title_by_state', 'flag far', 'chart') }}</li>
+                    <li>{{ _self.link('calculation_pivot', 'pivot.title', 'table') }}</li>
+                </ul>
+            <li>
+                {{ _self.link('about', 'about.title',  'info-circle') }}
+                <ul>
+                    <li>{{ _self.link('about_licence', 'about.licence_short',  'info-circle') }}</li>
+                    <li>{{ _self.link('about_policy', 'about.policy_short',  'info-circle') }}</li>                    
+                    <li>{{ _self.link('user_comment', 'user.comment.title',  'envelope far') }}</li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>
+{%- endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset_css('css/slickmap.css') }}
+{% endblock %}

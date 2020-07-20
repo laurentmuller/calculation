@@ -75,19 +75,18 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     protected function doValidate($value, Constraint $constraint): void
     {
-        if ($constraint instanceof Password) {
-            if ($constraint->allViolations) {
-                $this->checkMinLength($constraint, $value);
-                $this->checkLetters($constraint, $value);
-                $this->checkCaseDiff($constraint, $value);
-                $this->checkNumber($constraint, $value);
-                $this->checkSpecialCharacter($constraint, $value);
-                $this->checkEmail($constraint, $value);
-                $this->checkStrength($constraint, $value);
-                $this->checkBlackList($constraint, $value);
-                $this->checkPwned($constraint, $value);
-            } else {
-                $this->checkMinLength($constraint, $value)
+        if ($constraint->allViolations) {
+            $this->checkMinLength($constraint, $value);
+            $this->checkLetters($constraint, $value);
+            $this->checkCaseDiff($constraint, $value);
+            $this->checkNumber($constraint, $value);
+            $this->checkSpecialCharacter($constraint, $value);
+            $this->checkEmail($constraint, $value);
+            $this->checkStrength($constraint, $value);
+            $this->checkBlackList($constraint, $value);
+            $this->checkPwned($constraint, $value);
+        } else {
+            $this->checkMinLength($constraint, $value)
                     || $this->checkLetters($constraint, $value)
                     || $this->checkCaseDiff($constraint, $value)
                     || $this->checkNumber($constraint, $value)
@@ -96,7 +95,6 @@ class PasswordValidator extends AbstractConstraintValidator
                     || $this->checkStrength($constraint, $value)
                     || $this->checkBlackList($constraint, $value)
                     || $this->checkPwned($constraint, $value);
-            }
         }
     }
 

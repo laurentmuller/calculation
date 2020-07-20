@@ -91,7 +91,12 @@ class UserDataTable extends AbstractEntityDataTable
      */
     public function renderImage(?string $image, User $item): string
     {
-        return $this->environment->render('user/user_image_cell.html.twig', ['item' => $item]);
+        $parameters = [
+            'image' > $image,
+            'item' => $item,
+        ];
+
+        return $this->environment->render('user/user_image_cell.html.twig', $parameters);
     }
 
     /**
@@ -112,13 +117,12 @@ class UserDataTable extends AbstractEntityDataTable
      * Translate the user's role.
      *
      * @param string[] $roles the user's roles
-     * @param User     $user  the user to get enabled state for
      *
      * @return string the translated role
      */
-    public function translateRole(array $roles, User $user): string
+    public function translateRole(array $roles): string
     {
-        return Utils::translateRole($this->translator, $user->getRole());
+        return Utils::translateRole($this->translator, $roles[0]);
     }
 
     /**

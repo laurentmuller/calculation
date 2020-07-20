@@ -56,7 +56,12 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
             return;
         }
 
-        $this->doValidate($this->convert($value), $constraint);
+        $value = $this->convert($value);
+        if ($this->isAllowEmpty() && '' === $value) {
+            return;
+        }
+
+        $this->doValidate($value, $constraint);
     }
 
     /**

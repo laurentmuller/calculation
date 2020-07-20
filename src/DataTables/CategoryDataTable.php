@@ -64,9 +64,14 @@ class CategoryDataTable extends AbstractEntityDataTable
      *
      * @return string the link, if applicable, the value otherwise
      */
-    public function linkProducts(?Collection $products, Category $item): string
+    public function linkProducts(Collection $products, Category $item): string
     {
-        return $this->environment->render('category/category_product_cell.html.twig', ['item' => $item]);
+        $parameters = [
+            'code' => $item->getCode(),
+            'count' => \count($products),
+        ];
+
+        return $this->environment->render('category/category_product_cell.html.twig', $parameters);
     }
 
     /**
@@ -75,8 +80,8 @@ class CategoryDataTable extends AbstractEntityDataTable
     protected function createColumns(): array
     {
         // callbacks
-        $intFormatter = function (Collection $margins, Category $data): string {
-            return $this->localeInt($data->countMargins());
+        $intFormatter = function (Collection $margins): string {
+            return $this->localeInt(\count($margins));
         };
 
         return [

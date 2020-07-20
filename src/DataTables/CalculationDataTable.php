@@ -56,8 +56,8 @@ class CalculationDataTable extends AbstractEntityDataTable
         $dateFormatter = function (\DateTimeInterface $date) {
             return $this->localeDate($date);
         };
-        $percentFormatter = function (float $value, Calculation $item) {
-            return $this->localePercent($item->getOverallMargin());
+        $percentFormatter = function (float $value) {
+            return $this->localePercent($value);
         };
 
         return [

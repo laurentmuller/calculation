@@ -47,7 +47,7 @@ class CategoryTest extends ConstraintValidatorTestCase
         $category->addMargin($this->createMargin(100, 99, 0.2));
 
         $context = $this->context;
-        $category->validate($context, null);
+        $category->validate($context);
         $violations = $context->getViolations();
         $this->assertSame(1, $violations->count());
 
@@ -62,7 +62,7 @@ class CategoryTest extends ConstraintValidatorTestCase
         $category->addMargin($this->createMargin(99, 200, 0.2));
 
         $context = $this->context;
-        $category->validate($context, null);
+        $category->validate($context);
         $violations = $context->getViolations();
         $this->assertSame(1, $violations->count());
 
@@ -77,12 +77,10 @@ class CategoryTest extends ConstraintValidatorTestCase
         $category->addMargin($this->createMargin(100, 200, 0.2));
 
         $context = $this->context;
-        $category->validate($context, null);
+        $category->validate($context);
         $violations = $context->getViolations();
         $this->assertSame(0, $violations->count());
     }
-
-    //private $container;
 
     public function testMargins(): void
     {

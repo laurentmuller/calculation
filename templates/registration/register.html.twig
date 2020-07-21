@@ -1,13 +1,19 @@
 {% extends 'cards/card_edit.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title        = "registration.register.title" -%}
 {%- set title_icon   = 'user-plus' -%}
-{%- set cancel_path  = path("homepage") -%}
+{%- set submit_text  = 'registration.register.submit' -%}
+{%- set cancel_path   = false -%}
 {%- set form_attr    = form_attr|default({})|merge({ 'data-equal_to': 'password.mismatch'|trans([], 'validators') }) -%}
 
 {# class styles #}
 {% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-50' %}
+
+{# hide navigation and footer #}
+{% block navigation %}{% endblock %}
+{% block footer %}{% endblock %}
 
 {% block card_header %}
 {{ parent() }}
@@ -23,6 +29,24 @@
 {{ form_row(form.plainPassword.second, {attr: {equalTo: '#plainPassword_first'}}) }}
 {{ form_widget(form) }}
 {%- endblock %}
+
+
+{% block card_footer -%}
+{{ parent() }}
+<hr class="mb-2">
+<div class="row">
+    <div class="col-md-6">
+        <small>{{ app_name_version }}</small>
+    </div>
+    <div class="col-md-6 text-md-right">
+        <small>{{ icons.copyright_link() }}</small>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets -%}
+{{ asset_css('css/center.css') }}
+{% endblock %}
 
 {% block javascripts -%}
 {% if app.debug %}

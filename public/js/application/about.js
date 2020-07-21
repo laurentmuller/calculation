@@ -1,4 +1,4 @@
-/** ! compression tag for ftp-deployment */
+/**! compression tag for ftp-deployment */
 
 /**
  * Ready function

@@ -111,7 +111,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('user_register');
         }
 
-        $this->succesTrans('registration.confirmed' . [' %username%' => $this->getUserName()]);
+        $this->succesTrans('registration.confirmed', [' %username%' => $this->getUserName()]);
 
         return $this->redirectToHomePage();
     }

@@ -138,9 +138,7 @@ class LogService
         }
 
         if ($entries = $this->readFile()) {
-            $this->setCachedValues($entries);
-
-            return $entries;
+            return $this->setCachedValues($entries);
         }
 
         return false;
@@ -363,14 +361,20 @@ class LogService
      * Save entries to cache.
      *
      * @param array $entries the entries to save
+     *
+     * @return array the entries argument
      */
-    private function setCachedValues(array $entries): void
+    private function setCachedValues(array $entries): array
     {
+        $adapter = $this->adapter;
         foreach ($entries as $key => $value) {
-            $item = $this->adapter->getItem($key)
+            $item = $adapter->getItem($key)
                 ->expiresAfter(self::CACHE_TIMEOUT)
                 ->set($value);
-            $this->adapter->save($item);
+            $adapter->saveDeferred($item);
         }
+        $adapter->commit();
+
+        return $entries;
     }
 }

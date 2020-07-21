@@ -74,6 +74,11 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
     private const PARAM_PAGE_LENGTH = 'pagelength';
 
     /**
+     * The columns search parameter name.
+     */
+    private const PARAM_SEARCH_COLUMNS = 'search';
+
+    /**
      * The JSON (XMLHttpRequest) callback state.
      *
      * @var bool
@@ -248,6 +253,14 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
         $pagelength = (int) $this->getRequestValue($request, self::PARAM_PAGE_LENGTH, self::PAGE_LENGTH);
         $ordercolumn = $this->getRequestValue($request, self::PARAM_ORDER_COLUMN);
         $orderdir = $this->getRequestValue($request, self::PARAM_ORDER_DIR);
+        $searchColumns = $this->getRequestValue($request, self::PARAM_SEARCH_COLUMNS, []);
+
+        // convert search columns
+        $searchColumns = \array_reduce($searchColumns, function (array $carry, array $entry) {
+            $carry[$entry['index']] = $entry['value'];
+
+            return $carry;
+        }, []);
 
         // parameters
         $params = new Parameters();
@@ -257,10 +270,11 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
 
         // columns
         $columns = $this->getColumns();
-        $params->columns = Utils::arrayMapKey(function (int $key, DataColumn $column) {
+        $params->columns = Utils::arrayMapKey(function (int $key, DataColumn $column) use ($searchColumns) {
+            $search = $searchColumns[$key] ?? null;
             $key = $this->getColumnKey($key, $column);
 
-            return $column->toArray($key);
+            return $column->toArray($key, $search);
         }, $columns);
 
         // order

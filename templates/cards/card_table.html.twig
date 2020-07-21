@@ -102,6 +102,7 @@
 {% block card_body %}
 {% if show_length or show_search -%}
 <div class="row mb-2 d-print-none">
+    {% block row_input %}{% endblock %}
     {# search #}
     {% if show_search -%}
     <div class="col-auto mr-auto">
@@ -119,6 +120,7 @@
         </div>
     </div>
     {%- endif %}
+    
     {% if show_length -%}
     <div class="col-auto{% if not show_search %} ml-auto{% endif %}">
         <div class="form-inline">

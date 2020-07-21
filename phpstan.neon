@@ -1,12 +1,17 @@
 parameters:
-    level: 4
+    level: 3
     paths:
     - src
     doctrine:
-        repositoryClass: App\Repository\BaseRepository
+        repositoryClass: App\Repository\AbstractRepository
     ignoreErrors:
-    - '#catchPhrase#'
-    - '#twig_date_converter#'
-    - '#Call to function method_exists()#'
-    - '#HtmlStyleFactory::create#'
-    - '#HtmlStyleFactory::doCreate#'
+    - '#Function twig_date_converter#'
+    - '#Call to an undefined method#'
+    - '#Access to an undefined property#'
+    - '/Method.*should return.*but returns.*/'
+    
+    #- '#catchPhrase#'
+    #- '#twig_date_converter#'
+    #- '#Call to function method_exists#'
+    #- '#HtmlStyleFactory::create#'
+    #- '#HtmlStyleFactory::doCreate#'

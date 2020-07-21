@@ -196,12 +196,22 @@ class LogDataTable extends AbstractDataTable
         $results->recordsTotal = \count($logs);
 
         // filter
-        if ($value = $query->search->value) {
-            $logs = $this->filter($logs, $value);
-            $results->recordsFiltered = \count($logs);
-        } else {
-            $results->recordsFiltered = $results->recordsTotal;
+        $skipChannel = false;
+        if ($value = $query->columns[2]->search->value) {
+            $logs = $this->filterChannel($logs, $value);
+            $skipChannel = true;
         }
+
+        $skipLevel = false;
+        if ($value = $query->columns[3]->search->value) {
+            $logs = $this->filterLevel($logs, $value);
+            $skipLevel = true;
+        }
+
+        if ($value = $query->search->value) {
+            $logs = $this->filter($logs, $value, $skipChannel, $skipLevel);
+        }
+        $results->recordsFiltered = \count($logs);
 
         // sort
         if (!empty($query->order)) {
@@ -225,23 +235,29 @@ class LogDataTable extends AbstractDataTable
     /**
      * Filters the log.
      *
-     * @param Log[]  $logs  the logs to search in
-     * @param string $value the value to search for
+     * @param Log[]  $logs        the logs to search in
+     * @param string $value       the value to search for
+     * @param bool   $skipChannel true to skip search in channel
+     * @param bool   $skipLevel   true to skip search in level
      *
      * @return Log[] the filtered logs
      */
-    private function filter(array $logs, ?string $value): array
+    private function filter(array $logs, ?string $value, bool $skipChannel, bool $skipLevel): array
     {
         if (Utils::isString($value)) {
-            $filter = function (Log $log) use ($value) {
-                $level = $this->getLevel($log->getLevel());
-                if (Utils::contains($level, $value, true)) {
-                    return true;
+            $filter = function (Log $log) use ($value, $skipChannel, $skipLevel) {
+                if (!$skipChannel) {
+                    $channel = $this->getChannel($log->getChannel());
+                    if (Utils::contains($channel, $value, true)) {
+                        return true;
+                    }
                 }
 
-                $channel = $this->getChannel($log->getChannel());
-                if (Utils::contains($channel, $value, true)) {
-                    return true;
+                if (!$skipLevel) {
+                    $level = $this->getLevel($log->getLevel());
+                    if (Utils::contains($level, $value, true)) {
+                        return true;
+                    }
                 }
 
                 $date = $this->getDate($log->getCreatedAt());
@@ -257,6 +273,44 @@ class LogDataTable extends AbstractDataTable
             };
 
             return \array_filter($logs, $filter);
+        }
+
+        return $logs;
+    }
+
+    /**
+     * Filters the log for the given channel.
+     *
+     * @param Log[]  $logs  the logs to search in
+     * @param string $value the channel value to search for
+     *
+     * @return Log[] the filtered logs
+     */
+    private function filterChannel(array $logs, ?string $value): array
+    {
+        if (Utils::isString($value)) {
+            return \array_filter($logs, function (Log $log) use ($value) {
+                return $value === $log->getChannel();
+            });
+        }
+
+        return $logs;
+    }
+
+    /**
+     * Filters the log for the given level.
+     *
+     * @param Log[]  $logs  the logs to search in
+     * @param string $value the level value to search for
+     *
+     * @return Log[] the filtered logs
+     */
+    private function filterLevel(array $logs, ?string $value): array
+    {
+        if (Utils::isString($value)) {
+            return \array_filter($logs, function (Log $log) use ($value) {
+                return $value === $log->getLevel();
+            });
         }
 
         return $logs;

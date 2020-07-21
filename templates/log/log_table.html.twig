@@ -3,6 +3,14 @@
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
+{# macros #}
+{% macro add_options(values) %}
+<option value="">{{ 'datatable.all'|trans }}</option>
+{% for key in values|keys %}
+    <option value="{{ key }}">{{ key|humanize }}</option>
+{% endfor %}
+{% endmacro %}
+
 {# parameters #}
 {%- set title       = 'log.title' -%}
 {%- set title_icon  = 'book' -%}
@@ -20,6 +28,25 @@
 <small class="ml-3">{{ 'log.show.file'|trans({'%file%': file}) }}</small>
 {% endblock %}
 
+{% block row_input %}
+<div class="col-auto">
+    <div class="form-inline">
+        <label class="mr-2" for="channel">{{ 'log.fields.channel'|trans }}</label>
+        <select id="channel" name="channel" class="form-control form-control-sm custom-select custom-select-sm">
+        {{ _self.add_options(channels) -}}
+        </select>
+    </div>
+</div>
+<div class="col-auto">
+    <div class="form-inline">
+        <label class="mr-2" for="level">{{ 'log.fields.level'|trans }}</label>
+        <select id="level" name="level" class="form-control form-control-sm custom-select custom-select-sm">
+        {{ _self.add_options(levels) -}}
+        </select>
+    </div>
+</div>
+{% endblock %}
+
 {% block table_actions %}
 {{ parent() }}
 {{ icons.dropdownItem(path('log_delete', {'route' : app.request.get('_route')}), 'log.delete.title', 'times') }}
@@ -31,4 +58,9 @@
 
 {% block stylesheets %}
 {{ asset_css('css/logs_table.css') }}
+{% endblock %}
+
+{% block javascripts -%}
+{{- parent() }}
+{{- asset_js('js/application/log_table.js') }}
 {% endblock %}

@@ -201,6 +201,19 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
         if (query && query.length) {
             params.query = query;
         }
+
+        const searches = this.columns().search();
+        searches.each(function (value, index) {
+            if (value && value.length) {
+                if (!params.search) {
+                    params.search = [];
+                }
+                params.search.push({
+                    index: index,
+                    value: value
+                });
+            }
+        });
     }
 
     // update buttons
@@ -288,6 +301,20 @@ $(function () {
         order = [[ordercolumn, orderdir]];
     }
 
+    // columns search
+    let searchCols = (new Array(columns.length)).fill(null);    
+    for (var i = 0, len = columns.length; i < len; i++) {
+        const indexKey = 'search[' + i + '][index]';
+        const valueKey = 'search[' + i + '][value]';
+        const index = params.getOrDefault(indexKey, null);
+        const value = params.getOrDefault(valueKey, null);
+        if (index && value) {
+            searchCols[index] = {
+                "search": value
+            };
+        }
+    }
+
     // options
     const options = {
         deferLoading: deferLoading,
@@ -298,6 +325,7 @@ $(function () {
 
         order: order,
         columns: columns,
+        searchCols: searchCols,
 
         rowId: function (data) {
             return parseInt(data[0], 10);

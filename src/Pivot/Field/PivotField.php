@@ -30,6 +30,7 @@ class PivotField implements \JsonSerializable
      * Parse value as integer.
      */
     public const METHOD_INTEGER = 1;
+
     /**
      * Parse value as string.
      */

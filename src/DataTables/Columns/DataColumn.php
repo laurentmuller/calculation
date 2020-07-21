@@ -762,14 +762,15 @@ class DataColumn
     /**
      * Convert this column to an array.
      *
-     * @param mixed $key the data column key
+     * @param mixed  $key    the data column key
+     * @param string $search the optional value to search for
      */
-    public function toArray($key): array
+    public function toArray($key, ?string $search = null): array
     {
         return  [
             'data' => $key,
             'name' => $this->name,
-            'search' => self::createSearch(),
+            'search' => self::createSearch($search),
             'orderable' => \json_encode($this->orderable),
             'searchable' => \json_encode($this->searchable),
         ];

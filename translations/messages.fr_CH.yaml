@@ -463,7 +463,7 @@ index:
     panel_state: Calculations par statut
     toggle_navigation: Basculer la navigation
 about:
-    title: A propos de    
+    title: A propos de
     app_customer: Client
     app_name: Application
     app_owner: Concepteur
@@ -889,6 +889,7 @@ resetting:
 registration:
     register:
         title: Créer un compte
+        submit: Créer
     email:
         subject: Bienvenue %username% !
         message: |

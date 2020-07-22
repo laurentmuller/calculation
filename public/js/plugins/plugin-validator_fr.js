@@ -11,127 +11,127 @@ $(function () {
         /*
          * required (all)
          */
-        required_fallback: "Ce champ est requis.",
-        required_label: 'Le champ \"{0}\" est requis.',
+        requiredFallback: "Ce champ est requis.",
+        requiredLabel: 'Le champ \"{0}\" est requis.',
         required: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.required_label, $.validator.messages.required_fallback);
+            return $.validator.formatLabel(element, $.validator.messages.requiredLabel, $.validator.messages.requiredFallback);
         },
 
         /*
          * accept (file type)
          */
-        accept_fallback: 'Ce champ doit contenir un type de fichier valide.',
-        accept_label: 'Le champ \"{0}\" doit contenir un type de fichier valide.',
+        acceptFallback: 'Ce champ doit contenir un type de fichier valide.',
+        acceptLabel: 'Le champ \"{0}\" doit contenir un type de fichier valide.',
         accept: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.accept_label, $.validator.messages.accept_fallback);
+            return $.validator.formatLabel(element, $.validator.messages.acceptLabel, $.validator.messages.acceptFallback);
         },
 
         /*
          * password
          */
-        password_levels: ["Très faible", "Faible", "Moyen", "Fort", "Très fort"],
-        password_fallback: "Ce champ doit être \"{0}\" (valeur actuelle : \"{2}\").",
-        password_label: "Le champ \"{0}\" doit être \"{1}\" (valeur actuelle : \"{2}\").",
+        passwordLevels: ["Très faible", "Faible", "Moyen", "Fort", "Très fort"],
+        passwordFallback: "Ce champ doit être \"{0}\" (valeur actuelle : \"{2}\").",
+        passwordLabel: "Le champ \"{0}\" doit être \"{1}\" (valeur actuelle : \"{2}\").",
         password: function (parameter, element) {
             let current = $(element).findPasswordScore();
-            current = $.validator.messages.password_levels[current];
-            const level = $.validator.messages.password_levels[parameter];
-            return $.validator.formatLabel(element, $.validator.messages.password_label, $.validator.messages.password_fallback, level, current);
+            current = $.validator.messages.passwordLevels[current];
+            const level = $.validator.messages.passwordLevels[parameter];
+            return $.validator.formatLabel(element, $.validator.messages.passwordLabel, $.validator.messages.passwordFallback, level, current);
         },
 
         /*
          * notUsername
          */
-        notUsername_fallback: "Ce champ ne peut pas contenir le nom de l'utilisateur.",
-        notUsername_label: "Le champ \"{0}\" ne peut pas contenir le nom de l'utilisateur.",
+        notUsernameFallback: "Ce champ ne peut pas contenir le nom de l'utilisateur.",
+        notUsernameLabel: "Le champ \"{0}\" ne peut pas contenir le nom de l'utilisateur.",
         notUsername: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.notUsername_label, $.validator.messages.notUsername_fallback);
+            return $.validator.formatLabel(element, $.validator.messages.notUsernameLabel, $.validator.messages.notUsernameFallback);
         },
 
         /*
          * notEmail
          */
-        notEmail_fallback: "Ce champ ne peut pas être une adresse e-mail.",
-        notEmail_label: "Le champ \"{0}\" ne peut pas être une adresse e-mail.",
+        notEmailFallback: "Ce champ ne peut pas être une adresse e-mail.",
+        notEmailLabel: "Le champ \"{0}\" ne peut pas être une adresse e-mail.",
         notEmail: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.notEmail_label, $.validator.messages.notEmail_fallback);
+            return $.validator.formatLabel(element, $.validator.messages.notEmailLabel, $.validator.messages.notEmailFallback);
         },
 
         /*
          * lowercase
          */
-        lowercase_fallback: "Ce champ doit contenir un caractère minuscule.",
-        lowercase_label: "Le champ \"{0}\" doit contenir un caractère minuscule.",
+        lowercaseFallback: "Ce champ doit contenir un caractère minuscule.",
+        lowercaseLabel: "Le champ \"{0}\" doit contenir un caractère minuscule.",
         lowercase: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.lowercase_label, $.validator.messages.lowercase_fallback);
+            return $.validator.formatLabel(element, $.validator.messages.lowercaseLabel, $.validator.messages.lowercaseFallback);
         },
 
         /*
          * uppercase
          */
-        uppercase_fallback: "Ce champ doit contenir un caractère majuscule.",
-        uppercase_label: "Le champ \"{0}\" doit contenir un caractère majuscule.",
+        uppercaseFallback: "Ce champ doit contenir un caractère majuscule.",
+        uppercaseLabel: "Le champ \"{0}\" doit contenir un caractère majuscule.",
         uppercase: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.uppercase_label, $.validator.messages.uppercase_fallback);
+            return $.validator.formatLabel(element, $.validator.messages.uppercaseLabel, $.validator.messages.uppercaseFallback);
         },
 
         /*
          * mixedcase
          */
-        mixedcase_fallback: "Ce champ doit contenir des caractères minuscule et majuscule.",
-        mixedcase_label: "Le champ \"{0}\" doit contenir des caractères minuscule et majuscule.",
+        mixedcaseFallback: "Ce champ doit contenir des caractères minuscule et majuscule.",
+        mixedcaseLabel: "Le champ \"{0}\" doit contenir des caractères minuscule et majuscule.",
         mixedcase: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.mixedcase_label, $.validator.messages.mixedcase_fallback);
+            return $.validator.formatLabel(element, $.validator.messages.mixedcaseLabel, $.validator.messages.mixedcaseFallback);
         },
 
         /*
          * digit
          */
-        digit_fallback: "Ce champ doit contenir un chiffre.",
-        digit_label: "Le champ \"{0}\" doit contenir un chiffre.",
+        digitFallback: "Ce champ doit contenir un chiffre.",
+        digitLabel: "Le champ \"{0}\" doit contenir un chiffre.",
         digit: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.digit_label, $.validator.messages.digit_fallback);
+            return $.validator.formatLabel(element, $.validator.messages.digitLabel, $.validator.messages.digitFallback);
         },
 
         /*
          * specialchar
          */
-        specialchar_fallback: "Ce champ doit contenir un caractère spécial.",
-        specialchar_label: "Le champ \"{0}\" doit contenir un caractère spécial.",
+        specialcharFallback: "Ce champ doit contenir un caractère spécial.",
+        specialcharLabel: "Le champ \"{0}\" doit contenir un caractère spécial.",
         specialchar: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.specialchar_label, $.validator.messages.specialchar_fallback);
+            return $.validator.formatLabel(element, $.validator.messages.specialcharLabel, $.validator.messages.specialcharFallback);
         },
 
         /*
          * letter
          */
-        letter_fallback: "Ce champ doit contenir un caractère alphabétique.",
-        letter_label: "Le champ \"{0}\" doit contenir un caractère alphabétique.",
+        letterFallback: "Ce champ doit contenir un caractère alphabétique.",
+        letterLabel: "Le champ \"{0}\" doit contenir un caractère alphabétique.",
         letter: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.letter_label, $.validator.messages.letter_fallback);
+            return $.validator.formatLabel(element, $.validator.messages.letterLabel, $.validator.messages.letterFallback);
         },
 
         /*
          * maximumfiles (file type)
          */
         maxfiles: "Le nombre de fichiers ne doit pas être supérieur à {0}.",
-        // maxfiles_fallback: "Le nombre de fichiers sélectionnés ne doit pas
+        // maxfilesFallback: "Le nombre de fichiers sélectionnés ne doit pas
         // être supérieur à {0}.",
-        // maxfiles_label: "Le champ \"{0}\" ne doit pas être supérieur à {1}.",
+        // maxfilesLabel: "Le champ \"{0}\" ne doit pas être supérieur à {1}.",
         // maxfiles: function (parameter, element) {
         // return $.validator.formatLabel(element,
-        // $.validator.messages.maxfiles_label,
-        // $.validator.messages.maxfiles_fallback, parameter);
+        // $.validator.messages.maxfilesLabel,
+        // $.validator.messages.maxfilesFallback, parameter);
         // },
 
         /*
          * maxsize (file type)
          */
-        maxsize_message: "La taille de chaque fichier ne doit pas dépasser {0} {1}.",
-        maxsize_units: ["Bytes", "Kb", "Mb", "Gb", "Tb"],
+        maxsizeMessage: "La taille de chaque fichier ne doit pas dépasser {0} {1}.",
+        maxsizeUnits: ["Bytes", "Kb", "Mb", "Gb", "Tb"],
         maxsize: function (bytes) { // parameter
-            const units = $.validator.messages.maxsize_units;
-            const message = $.validator.messages.maxsize_message;
+            const units = $.validator.messages.maxsizeUnits;
+            const message = $.validator.messages.maxsizeMessage;
             const index = Math.floor(Math.log(bytes) / Math.log(1024));
             const text = (bytes / Math.pow(1024, index)).toFixed(2) * 1;
             return $.validator.format(message, text, units[index]);
@@ -140,90 +140,90 @@ $(function () {
         /*
          * notEqualTo
          */
-        notEqualTo_fallback: "Veuillez fournir une valeur différente, les valeurs ne doivent pas être identiques.",
-        notEqualTo_label: "Le champ \"{0}\" doit être différent.",
-        notEqualTo_both: "Le champ \"{0}\" doit être différent du champ \"{1}\".",
+        notEqualToFallback: "Veuillez fournir une valeur différente, les valeurs ne doivent pas être identiques.",
+        notEqualToLabel: "Le champ \"{0}\" doit être différent.",
+        notEqualToBoth: "Le champ \"{0}\" doit être différent du champ \"{1}\".",
         notEqualTo: function (parameters, element) {
             const target = $(element).getLabelText();
             const source = $(parameters).getLabelText();
             if (target && source) {
-                return $.validator.format($.validator.messages.notEqualTo_both, target, source);
+                return $.validator.format($.validator.messages.notEqualToBoth, target, source);
             } else if (target) {
-                return $.validator.format($.validator.messages.notEqualTo_label, target);
+                return $.validator.format($.validator.messages.notEqualToLabel, target);
             } else {
-                return $.validator.messages.notEqualTo_fallback;
+                return $.validator.messages.notEqualToFallback;
             }
         },
 
         /*
          * greaterThan
          */
-        greaterThan_fallback: "Veuillez fournir une valeur supérieure.",
-        greaterThan_label: "Le champ \"{0}\" doit avoir une valeur supérieure.",
-        greaterThan_both: "Le champ \"{0}\" doit avoir une valeur supérieure au champ \"{1}\".",
+        greaterThanFallback: "Veuillez fournir une valeur supérieure.",
+        greaterThanLabel: "Le champ \"{0}\" doit avoir une valeur supérieure.",
+        greaterThanBoth: "Le champ \"{0}\" doit avoir une valeur supérieure au champ \"{1}\".",
         greaterThan: function (parameters, element) {
             const target = $(element).getLabelText();
             const source = $(parameters).getLabelText();
             if (target && source) {
-                return $.validator.format($.validator.messages.greaterThan_both, target, source);
+                return $.validator.format($.validator.messages.greaterThanBoth, target, source);
             } else if (target) {
-                return $.validator.format($.validator.messages.greaterThan_label, target);
+                return $.validator.format($.validator.messages.greaterThanLabel, target);
             } else {
-                return $.validator.messages.greaterThan_fallback;
+                return $.validator.messages.greaterThanFallback;
             }
         },
 
         /*
          * greaterThanEqual
          */
-        greaterThanEqual_fallback: "Veuillez fournir une valeur égale ou supérieure.",
-        greaterThanEqual_label: "Le champ \"{0}\" doit avoir une valeur égale ou supérieure.",
-        greaterThanEqual_both: "Le champ \"{0}\" doit avoir une valeur égale ou supérieure au champ \"{1}\".",
+        greaterThanEqualFallback: "Veuillez fournir une valeur égale ou supérieure.",
+        greaterThanEqualLabel: "Le champ \"{0}\" doit avoir une valeur égale ou supérieure.",
+        greaterThanEqualBoth: "Le champ \"{0}\" doit avoir une valeur égale ou supérieure au champ \"{1}\".",
         greaterThanEqual: function (parameters, element) {
             const target = $(element).getLabelText();
             const source = $(parameters).getLabelText();
             if (target && source) {
-                return $.validator.format($.validator.messages.greaterThanEqual_both, target, source);
+                return $.validator.format($.validator.messages.greaterThanEqualBoth, target, source);
             } else if (target) {
-                return $.validator.format($.validator.messages.greaterThanEqual_label, target);
+                return $.validator.format($.validator.messages.greaterThanEqualLabel, target);
             } else {
-                return $.validator.messages.greaterThanEqual_fallback;
+                return $.validator.messages.greaterThanEqualFallback;
             }
         },
 
         /*
          * lessThan
          */
-        lessThan_fallback: "Veuillez fournir une valeur inférieure.",
-        lessThan_label: "Le champ \"{0}\" doit avoir une valeur inférieure au champ \"{1}\".",
-        lessThan_both: "Le champ \"{0}\" doit avoir une valeur inférieure au champ \"{1}\".",
+        lessThanFallback: "Veuillez fournir une valeur inférieure.",
+        lessThanLabel: "Le champ \"{0}\" doit avoir une valeur inférieure au champ \"{1}\".",
+        lessThanBoth: "Le champ \"{0}\" doit avoir une valeur inférieure au champ \"{1}\".",
         lessThan: function (parameters, element) {
             const target = $(element).getLabelText();
             const source = $(parameters).getLabelText();
             if (target && source) {
-                return $.validator.format($.validator.messages.lessThan_both, target, source);
+                return $.validator.format($.validator.messages.lessThanBoth, target, source);
             } else if (target) {
-                return $.validator.format($.validator.messages.lessThan_label, target);
+                return $.validator.format($.validator.messages.lessThanLabel, target);
             } else {
-                return $.validator.messages.lessThan_fallback;
+                return $.validator.messages.lessThanFallback;
             }
         },
 
         /*
          * lessThanEqual
          */
-        lessThanEqual_fallback: "Veuillez fournir une valeur égale ou inférieure.",
-        lessThanEqual_label: "Le champ \"{0}\" doit avoir une valeur égale ou inférieure.",
-        lessThanEqual_both: "Le champ \"{0}\" doit avoir une valeur égale ou inférieure au champ \"{1}\".",
+        lessThanEqualFallback: "Veuillez fournir une valeur égale ou inférieure.",
+        lessThanEqualLabel: "Le champ \"{0}\" doit avoir une valeur égale ou inférieure.",
+        lessThanEqualBoth: "Le champ \"{0}\" doit avoir une valeur égale ou inférieure au champ \"{1}\".",
         lessThanEqual: function (parameters, element) {
             const target = $(element).getLabelText();
             const source = $(parameters).getLabelText();
             if (target && source) {
-                return $.validator.format($.validator.messages.lessThanEqual_both, target, source);
+                return $.validator.format($.validator.messages.lessThanEqualBoth, target, source);
             } else if (target) {
-                return $.validator.format($.validator.messages.lessThanEqual_label, target);
+                return $.validator.format($.validator.messages.lessThanEqualLabel, target);
             } else {
-                return $.validator.messages.lessThanEqual_fallback;
+                return $.validator.messages.lessThanEqualFallback;
             }
         }
     });

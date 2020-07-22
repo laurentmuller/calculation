@@ -62,7 +62,6 @@ class UserType extends AbstractEntityType
             ->addRepeatPasswordType();
 
         $helper->field('role')
-            ->label('user.fields.role')
             ->add(RoleChoiceType::class);
 
         $helper->field('enabled')

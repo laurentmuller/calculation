@@ -17,6 +17,7 @@ namespace App\DataTables;
 use App\DataTables\Columns\DataColumn;
 use App\DataTables\Tables\AbstractEntityDataTable;
 use App\Entity\User;
+use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
 use App\Service\ApplicationService;
@@ -177,7 +178,7 @@ class UserDataTable extends AbstractEntityDataTable
         // filter
         if (!$this->superAdmin) {
             $field = 'roles';
-            $value = '%' . User::ROLE_SUPER_ADMIN . '%';
+            $value = '%' . RoleInterface::ROLE_SUPER_ADMIN . '%';
             $builder->where("{$alias}.{$field} NOT LIKE :{$field}")
                 ->setParameter($field, $value);
         }

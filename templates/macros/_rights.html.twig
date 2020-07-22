@@ -52,16 +52,16 @@
        </tr>
     </thead>
     <tbody>
-        {{ _self.row(form.Calculation, EntityVoterInterface.ENTITY_CALCULATION, default.Calculation, overwrite) }}
-        {{ _self.row(form.Product, EntityVoterInterface.ENTITY_PRODUCT, default.Product, overwrite) }}
-        {{ _self.row(form.Category, EntityVoterInterface.ENTITY_CATEGORY, default.Category, overwrite) }}
-        {{ _self.row(form.CalculationState, EntityVoterInterface.ENTITY_CALCULATION_STATE, default.CalculationState, overwrite) }}
-        {{ _self.row(form.GlobalMargin, EntityVoterInterface.ENTITY_GLOBAL_MARGIN, default.GlobalMargin, overwrite) }}
-        {%- if form.Customer|default(false) -%}
-            {{ _self.row(form.Customer, EntityVoterInterface.ENTITY_CUSTOMER, default.Customer, overwrite) }}
+        {{ _self.row(form.EntityCalculation, EntityVoterInterface.ENTITY_CALCULATION, default.EntityCalculation, overwrite) }}
+        {{ _self.row(form.EntityProduct, EntityVoterInterface.ENTITY_PRODUCT, default.EntityProduct, overwrite) }}
+        {{ _self.row(form.EntityCategory, EntityVoterInterface.ENTITY_CATEGORY, default.EntityCategory, overwrite) }}
+        {{ _self.row(form.EntityCalculationState, EntityVoterInterface.ENTITY_CALCULATION_STATE, default.EntityCalculationState, overwrite) }}
+        {{ _self.row(form.EntityGlobalMargin, EntityVoterInterface.ENTITY_GLOBAL_MARGIN, default.EntityGlobalMargin, overwrite) }}
+        {%- if form.EntityCustomer|default(false) -%}
+            {{ _self.row(form.EntityCustomer, EntityVoterInterface.ENTITY_CUSTOMER, default.EntityCustomer, overwrite) }}
         {%- endif -%}
-        {%- if form.User|default(false) -%}
-            {{ _self.row(form.User, EntityVoterInterface.ENTITY_USER, default.User, overwrite) }}
+        {%- if form.EntityUser|default(false) -%}
+            {{ _self.row(form.EntityUser, EntityVoterInterface.ENTITY_USER, default.EntityUser, overwrite) }}
         {%- endif -%}
     </tbody>
 </table>

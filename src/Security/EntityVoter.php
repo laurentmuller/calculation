@@ -17,6 +17,7 @@ namespace App\Security;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
+use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
 use App\Traits\MathTrait;
 use App\Utils\Utils;
@@ -157,7 +158,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
     public static function getRoleAdmin(): Role
     {
         $attributes = self::MASK_ATTRIBUTES;
-        $role = new Role(User::ROLE_ADMIN);
+        $role = new Role(RoleInterface::ROLE_ADMIN);
         $role->{self::ENTITY_CALCULATION} = $attributes;
         $role->{self::ENTITY_CALCULATION_STATE} = $attributes;
         $role->{self::ENTITY_CATEGORY} = $attributes;
@@ -177,7 +178,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
     public static function getRoleSuperAdmin(): Role
     {
         $attributes = self::MASK_ATTRIBUTES;
-        $role = new Role(User::ROLE_SUPER_ADMIN);
+        $role = new Role(RoleInterface::ROLE_SUPER_ADMIN);
         foreach (self::ENTITIES as $entity) {
             $role->{$entity} = $attributes;
         }
@@ -199,7 +200,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
             self::MASK_ATTRIBUTES[self::ATTRIBUTE_SHOW],
         ];
 
-        $role = new Role(User::ROLE_USER);
+        $role = new Role(RoleInterface::ROLE_USER);
         $role->{self::ENTITY_CALCULATION} = self::MASK_ATTRIBUTES;
         $role->{self::ENTITY_CALCULATION_STATE} = $default;
         $role->{self::ENTITY_CATEGORY} = $default;
@@ -268,7 +269,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         }
 
         // super admin can access all
-        if ($user->hasRole(User::ROLE_SUPER_ADMIN)) {
+        if ($user->hasRole(RoleInterface::ROLE_SUPER_ADMIN)) {
             return  true;
         }
 
@@ -288,7 +289,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         // get rights
         if ($user->isOverwrite()) {
             $rights = $user->getRights();
-        } elseif ($user->hasRole(User::ROLE_ADMIN)) {
+        } elseif ($user->hasRole(RoleInterface::ROLE_ADMIN)) {
             $rights = $this->service->getAdminRights();
         } else {
             $rights = $this->service->getUserRights();
@@ -312,7 +313,11 @@ class EntityVoter extends Voter implements EntityVoterInterface
     {
         $name = \is_string($subject) ? (string) $subject : \get_class($subject);
         if (false !== ($pos = \strrpos($name, '\\'))) {
-            return \substr($name, $pos + 1);
+            $name = \substr($name, $pos + 1);
+        }
+
+        if (!Utils::startwith($name, EntityVoterInterface::ENTITY)) {
+            return EntityVoterInterface::ENTITY . $name;
         }
 
         return $name;

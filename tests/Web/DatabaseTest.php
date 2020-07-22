@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Tests\Web;
 
 use App\Entity\User;
+use App\Interfaces\RoleInterface;
 use App\Repository\CalculationGroupRepository;
 use App\Repository\CalculationItemRepository;
 use App\Repository\CalculationRepository;
@@ -81,10 +82,10 @@ class DatabaseTest extends KernelTestCase
     public function getUsers(): array
     {
         return [
-            [AuthenticateWebTestCase::ROLE_USER, User::ROLE_USER],
-            [AuthenticateWebTestCase::ROLE_ADMIN, User::ROLE_ADMIN],
-            [AuthenticateWebTestCase::ROLE_SUPER_ADMIN, User::ROLE_SUPER_ADMIN],
-            [AuthenticateWebTestCase::ROLE_DISABLED, User::ROLE_USER],
+            [AuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER],
+            [AuthenticateWebTestCase::ROLE_ADMIN, RoleInterface::ROLE_ADMIN],
+            [AuthenticateWebTestCase::ROLE_SUPER_ADMIN, RoleInterface::ROLE_SUPER_ADMIN],
+            [AuthenticateWebTestCase::ROLE_DISABLED, RoleInterface::ROLE_USER],
         ];
     }
 

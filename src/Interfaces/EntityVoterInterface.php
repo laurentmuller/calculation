@@ -52,37 +52,42 @@ interface EntityVoterInterface
     public const ATTRIBUTE_SHOW = 'show';
 
     /**
+     * The entity prefix.
+     */
+    public const ENTITY = 'Entity';
+
+    /**
      * The calculation rights.
      */
-    public const ENTITY_CALCULATION = 'Calculation';
+    public const ENTITY_CALCULATION = 'EntityCalculation';
 
     /**
      * The calculation state rights.
      */
-    public const ENTITY_CALCULATION_STATE = 'CalculationState';
+    public const ENTITY_CALCULATION_STATE = 'EntityCalculationState';
 
     /**
      * The category rights.
      */
-    public const ENTITY_CATEGORY = 'Category';
+    public const ENTITY_CATEGORY = 'EntityCategory';
 
     /**
      * The customer rights.
      */
-    public const ENTITY_CUSTOMER = 'Customer';
+    public const ENTITY_CUSTOMER = 'EntityCustomer';
 
     /**
      * The global margin rights.
      */
-    public const ENTITY_GLOBAL_MARGIN = 'GlobalMargin';
+    public const ENTITY_GLOBAL_MARGIN = 'EntityGlobalMargin';
 
     /**
      * The product rights.
      */
-    public const ENTITY_PRODUCT = 'Product';
+    public const ENTITY_PRODUCT = 'EntityProduct';
 
     /**
      * The user rights.
      */
-    public const ENTITY_USER = 'User';
+    public const ENTITY_USER = 'EntityUser';
 }

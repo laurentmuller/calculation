@@ -22,6 +22,21 @@ namespace App\Interfaces;
 interface RoleInterface
 {
     /**
+     * The administrator role name.
+     */
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
+
+    /**
+     * The super administrator role name.
+     */
+    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+
+    /**
+     * The user role name.
+     */
+    public const ROLE_USER = 'ROLE_USER';
+
+    /**
      * Gets the role.
      */
     public function getRole(): string;

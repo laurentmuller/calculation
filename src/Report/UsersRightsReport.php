@@ -18,6 +18,7 @@ use App\Controller\AbstractController;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
+use App\Interfaces\RoleInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfGroup;
@@ -279,7 +280,7 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
     private function outputRoleAdmin(PdfGroupTableBuilder $builder): int
     {
         $role = EntityVoter::getRoleAdmin();
-        $title = Utils::translateRole($this->translator, User::ROLE_ADMIN);
+        $title = Utils::translateRole($this->translator, RoleInterface::ROLE_ADMIN);
         $this->outputRole($builder, $role, $title);
 
         return 1;
@@ -295,7 +296,7 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
     private function outputRoleUser(PdfGroupTableBuilder $builder): int
     {
         $role = EntityVoter::getRoleUser();
-        $title = Utils::translateRole($this->translator, User::ROLE_USER);
+        $title = Utils::translateRole($this->translator, RoleInterface::ROLE_USER);
         $this->outputRole($builder, $role, $title);
 
         return 1;

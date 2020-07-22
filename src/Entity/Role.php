@@ -18,7 +18,7 @@ use App\Interfaces\RoleInterface;
 use App\Traits\RightsTrait;
 
 /**
- * Extends the role with access rights.
+ * Implementation of the role interface with access rights.
  *
  * @author Laurent Muller
  */
@@ -88,7 +88,7 @@ class Role implements RoleInterface
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole(User::ROLE_ADMIN);
+        return $this->hasRole(RoleInterface::ROLE_ADMIN);
     }
 
     /**
@@ -96,7 +96,7 @@ class Role implements RoleInterface
      */
     public function isSuperAdmin(): bool
     {
-        return $this->hasRole(User::ROLE_SUPER_ADMIN);
+        return $this->hasRole(RoleInterface::ROLE_SUPER_ADMIN);
     }
 
     /**

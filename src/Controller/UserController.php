@@ -24,6 +24,7 @@ use App\Form\UserCommentType;
 use App\Form\UserImageType;
 use App\Form\UserRightsType;
 use App\Form\UserType;
+use App\Interfaces\RoleInterface;
 use App\Pdf\PdfResponse;
 use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
@@ -323,7 +324,7 @@ class UserController extends EntityController
     public function rights(Request $request, User $item): Response
     {
         // same and not super admin?
-        if ($this->isConnectedUser($item) && !$item->hasRole(User::ROLE_SUPER_ADMIN)) {
+        if ($this->isConnectedUser($item) && !$item->hasRole(RoleInterface::ROLE_SUPER_ADMIN)) {
             $this->warningTrans('user.rights.connected');
 
             // redirect
@@ -491,7 +492,7 @@ class UserController extends EntityController
         $result = parent::getEntities($field, $mode);
 
         // remove super admin users if not in role
-        if (!$this->isGranted(User::ROLE_SUPER_ADMIN)) {
+        if (!$this->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
             return \array_filter($result, function (User $user) {
                 return !$user->isSuperAdmin();
             });

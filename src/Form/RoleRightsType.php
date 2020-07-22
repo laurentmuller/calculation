@@ -15,8 +15,6 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Form\Type\RightsType;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
  * Role rights type.
@@ -25,14 +23,6 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
  */
 class RoleRightsType extends RightsType
 {
-    /**
-     * Constructor.
-     */
-    public function __construct(KernelInterface $kernel, RoleHierarchyInterface $roleHierarchy)
-    {
-        parent::__construct($kernel, $roleHierarchy);
-    }
-
     /**
      * {@inheritdoc}
      */

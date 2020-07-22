@@ -69,7 +69,7 @@ abstract class EntityController extends AbstractController
      */
     protected function checkPermission(string $attribute): void
     {
-        $this->denyAccessUnlessGranted($attribute, $this->className);
+        $this->denyAccessUnlessGranted($attribute, EntityVoterInterface::ENTITY . $this->className);
     }
 
     /**
@@ -119,10 +119,10 @@ abstract class EntityController extends AbstractController
             }
 
             // redirect
-            $route = $this->getDefaultRoute();
-            $parameters['caller'] = $request->get('caller');
+            $id = 0;
+            $route = Utils::getArrayValue($parameters, 'route', $this->getDefaultRoute());
 
-            return $this->getUrlGenerator()->redirect($request, 0, $route);
+            return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
 
         // update parameters
@@ -189,7 +189,6 @@ abstract class EntityController extends AbstractController
 
             // redirect
             $id = $item->getId();
-            $parameters['caller'] = $request->get('caller');
             $route = Utils::getArrayValue($parameters, 'route', $this->getDefaultRoute());
 
             return $this->getUrlGenerator()->redirect($request, $id, $route);

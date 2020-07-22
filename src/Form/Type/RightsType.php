@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Entity\User;
 use App\Form\FormHelper;
 use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\RoleInterface;
@@ -78,12 +77,15 @@ class RightsType extends AbstractType
             $roles = [];
         }
 
-        if (!\in_array(User::ROLE_ADMIN, $roles, true)) {
+        if (!\in_array(RoleInterface::ROLE_ADMIN, $roles, true)) {
             $form = $event->getForm();
             $form->remove(EntityVoterInterface::ENTITY_USER);
         }
     }
 
+    /**
+     * Add fields to the given helper.
+     */
     protected function addFields(FormHelper $helper): void
     {
         $this->addRightType($helper, EntityVoterInterface::ENTITY_CALCULATION, 'calculation.list.title')

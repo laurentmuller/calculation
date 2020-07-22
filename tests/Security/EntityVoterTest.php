@@ -17,6 +17,7 @@ namespace App\Tests\Security;
 use App\Entity\Calculation;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
+use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use PHPUnit\Framework\TestCase;
@@ -108,12 +109,12 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
 
     private function getAdminUser(): User
     {
-        return $this->getUser(User::ROLE_ADMIN);
+        return $this->getUser(RoleInterface::ROLE_ADMIN);
     }
 
     private function getDefaultUser(): User
     {
-        return $this->getUser(User::ROLE_USER);
+        return $this->getUser(RoleInterface::ROLE_USER);
     }
 
     private function getDisableUser(): User
@@ -128,7 +129,7 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
 
     private function getSuperAdminUser(): User
     {
-        return $this->getUser(User::ROLE_SUPER_ADMIN);
+        return $this->getUser(RoleInterface::ROLE_SUPER_ADMIN);
     }
 
     private function getUser(string $role): User

@@ -15,10 +15,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Role;
-use App\Entity\User;
 use App\Form\ParametersType;
 use App\Form\RoleRightsType;
 use App\Interfaces\ApplicationServiceInterface;
+use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\SwissPostService;
 use App\Utils\SymfonyUtils;
@@ -49,7 +49,7 @@ class AdminController extends AbstractController
     public function adminRights(Request $request): Response
     {
         // get values
-        $roleName = User::ROLE_ADMIN;
+        $roleName = RoleInterface::ROLE_ADMIN;
         $rights = $this->getApplication()->getAdminRights();
         $default = EntityVoter::getRoleAdmin();
         $property = ApplicationServiceInterface::ADMIN_RIGHTS;
@@ -206,7 +206,7 @@ class AdminController extends AbstractController
     public function userRights(Request $request): Response
     {
         // get values
-        $roleName = User::ROLE_USER;
+        $roleName = RoleInterface::ROLE_USER;
         $rights = $this->getApplication()->getUserRights();
         $default = EntityVoter::getRoleUser();
         $property = ApplicationServiceInterface::USER_RIGHTS;

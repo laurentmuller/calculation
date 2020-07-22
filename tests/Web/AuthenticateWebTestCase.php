@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Tests\Web;
 
 use App\Entity\User;
+use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
 use App\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -32,8 +33,8 @@ abstract class AuthenticateWebTestCase extends WebTestCase
     public const ROLE_ADMIN = User::ROLE_ADMIN;
     public const ROLE_DISABLED = 'ROLE_DISABLED';
     public const ROLE_FAKE = 'ROLE_FAKE';
-    public const ROLE_SUPER_ADMIN = User::ROLE_SUPER_ADMIN;
-    public const ROLE_USER = User::ROLE_USER;
+    public const ROLE_SUPER_ADMIN = RoleInterface::ROLE_SUPER_ADMIN;
+    public const ROLE_USER = RoleInterface::ROLE_USER;
 
     /**
      * @var KernelBrowser

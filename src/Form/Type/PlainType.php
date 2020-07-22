@@ -181,7 +181,6 @@ class PlainType extends AbstractType
 
         $resolver->setAllowedTypes('empty_value', ['null', 'string']);
         $resolver->setAllowedTypes('separator', ['null', 'string']);
-
         $resolver->setAllowedTypes('transformer', ['null', 'callable']);
     }
 

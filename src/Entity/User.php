@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\RoleInterface;
-use App\Traits\DateFormatterTrait;
 use App\Traits\RightsTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -35,23 +34,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class User extends AbstractEntity implements UserInterface, RoleInterface, ResetPasswordRequestInterface
 {
-    use DateFormatterTrait;
     use RightsTrait;
-
-    /**
-     * The administrator role name.
-     */
-    public const ROLE_ADMIN = 'ROLE_ADMIN';
-
-    /**
-     * The super administrator role name.
-     */
-    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
-
-    /**
-     * The user role name.
-     */
-    public const ROLE_USER = 'ROLE_USER';
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -137,7 +120,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     private $requestedAt;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="json")
      *
      * @var string[]
      */
@@ -205,8 +188,8 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      */
     public function checkRoles(): self
     {
-        if ($this->hasRole(static::ROLE_ADMIN) && $this->hasRole(static::ROLE_SUPER_ADMIN)) {
-            return $this->removeRole(static::ROLE_ADMIN);
+        if ($this->hasRole(RoleInterface::ROLE_ADMIN) && $this->hasRole(RoleInterface::ROLE_SUPER_ADMIN)) {
+            return $this->removeRole(RoleInterface::ROLE_ADMIN);
         }
 
         return $this;
@@ -364,7 +347,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     {
         $roles = $this->getRoles();
 
-        return \count($roles) ? $roles[0] : static::ROLE_USER;
+        return \count($roles) ? $roles[0] : RoleInterface::ROLE_USER;
     }
 
     /**
@@ -376,7 +359,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     {
         // ensure that the 'ROLE_USER' is set
         $roles = $this->roles;
-        $roles[] = self::ROLE_USER;
+        $roles[] = RoleInterface::ROLE_USER;
 
         return \array_unique($roles);
     }
@@ -433,6 +416,9 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
         return $this->hasRole(self::ROLE_ADMIN);
     }
 
+    /**
+     * Returns a value indicating if this user is enabled.
+     */
     public function isEnabled(): bool
     {
         return $this->enabled;
@@ -465,9 +451,12 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      */
     public function isSuperAdmin(): bool
     {
-        return $this->hasRole(self::ROLE_SUPER_ADMIN);
+        return $this->hasRole(RoleInterface::ROLE_SUPER_ADMIN);
     }
 
+    /**
+     * Returns a value indicating if this user is verified.
+     */
     public function isVerified(): bool
     {
         return $this->verified;
@@ -488,6 +477,9 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
         return $this->setRoles($roles);
     }
 
+    /**
+     * Sets the e-mail.
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -495,6 +487,9 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
         return $this;
     }
 
+    /**
+     * Sets the enabled state.
+     */
     public function setEnabled(bool $boolean): self
     {
         $this->enabled = (bool) $boolean;
@@ -526,8 +521,6 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
 
     /**
      * Sets the image name.
-     *
-     * @param string $imageName
      */
     public function setImageName(?string $imageName): self
     {
@@ -548,8 +541,6 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
 
     /**
      * Sets a value indicating if this righs overwrite the default rights.
-     *
-     * @param bool $overwrite true if overwrite, false to use the default rights
      */
     public function setOverwrite(bool $overwrite): self
     {
@@ -558,6 +549,9 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
         return $this;
     }
 
+    /**
+     * Sets the password.
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -584,12 +578,10 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
 
     /**
      * Sets role.
-     *
-     * @param string $role the role to set
      */
     public function setRole(?string $role): self
     {
-        $role = $role ?: static::ROLE_USER;
+        $role = $role ?: RoleInterface::ROLE_USER;
 
         return $this->setRoles([$role]);
     }
@@ -603,9 +595,17 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     {
         $this->roles = \array_unique($roles);
 
+        // trim
+        if (1 === \count($this->roles) && RoleInterface::ROLE_USER === $this->roles[0]) {
+            $this->roles = [];
+        }
+
         return $this;
     }
 
+    /**
+     * Sets the user name.
+     */
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -613,6 +613,9 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
         return $this;
     }
 
+    /**
+     * Sets the verified state.
+     */
     public function setVerified(bool $verified): self
     {
         $this->verified = $verified;

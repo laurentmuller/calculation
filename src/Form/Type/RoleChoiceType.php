@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Entity\User;
+use App\Interfaces\RoleInterface;
 
 /**
  * A single role choice type.
@@ -29,9 +29,9 @@ class RoleChoiceType extends AbstractChoiceType
     protected function getChoices(): array
     {
         return [
-            'user.roles.user' => User::ROLE_USER,
-            'user.roles.admin' => User::ROLE_ADMIN,
-            'user.roles.super_admin' => User::ROLE_SUPER_ADMIN,
+            'user.roles.user' => RoleInterface::ROLE_USER,
+            'user.roles.admin' => RoleInterface::ROLE_ADMIN,
+            'user.roles.super_admin' => RoleInterface::ROLE_SUPER_ADMIN,
         ];
     }
 }

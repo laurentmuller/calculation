@@ -87,6 +87,8 @@
 .primaryNav li a:hover {
 	background-color: #0070f9;
 }
+
+/*
 .primaryNav a:link:after,
 .primaryNav a:visited:after,
 .utilityNav a:link:after,
@@ -100,9 +102,11 @@
 	word-wrap: break-word;
 	color: rgba(255,255,255,.75);
 }
+*/
+
 .primaryNav li span {
 	margin: 0;
-	padding: .875em .9375em 1.9375em .9375em;
+	padding: .875em .9375em .9375em .9375em;
 	display: block;
 	font-size: .9375em;
 	font-weight: bold;

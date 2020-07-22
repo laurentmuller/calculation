@@ -8,7 +8,7 @@
             <div class="input-group-prepend d-print-none">
             	{%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': min_margin|percent}) -%}
                 {%- set template = '<div class="tooltip tooltip-success" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' -%}
-                <button class="btn btn-adjust btn-outline-secondary has-tooltip{% if not overall_below %} cursor-default{% endif %}" type="button" aria-label="{{ title }}" data-html="true" data-toggle="tooltip" data-template="{{ template }}" data-title="{{ title }}"{% if not overall_below %} disabled="disabled"{% endif %}>
+                <button class="btn btn-adjust has-tooltip {% if theme_dark(app.request) %} btn-secondary{% else %} btn-outline-secondary{% endif %}{% if not overall_below %} cursor-default{% endif %}" type="button" aria-label="{{ title }}" data-html="true" data-toggle="tooltip" data-template="{{ template }}" data-title="{{ title }}"{% if not overall_below %} disabled="disabled"{% endif %}>
                     <i class="fas fa-wrench" aria-hidden="true"></i>
                 </button>
             </div>

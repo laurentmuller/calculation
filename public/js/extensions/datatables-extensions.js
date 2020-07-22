@@ -256,7 +256,7 @@ $.fn.getColumns = function (useName) {
 /**
  * Gets the default table order.
  * 
- * @param {Object}
+ * @param {array}
  *            columns - the column definitions.
  * @returns {array} the default table order, if any; an empty array otherwise.
  */
@@ -273,15 +273,23 @@ $.fn.getDefaultOrder = function (columns) {
         return [[index, direction]];
     }
 
+    // let column = columns.find(c => c.isDefault && c.orderable) ||
+    // columns.find(c => c.visible && c.orderable);
+    // if (column) {
+    // const index = columns.indexOf(column);
+    // const direction = column.direction;
+    // return [[index, direction]];
+    // }
+
     // find default colmun
-    for (let i = 0; i < columns.length; i++) {
+    for (let i = 0, len = columns.length; i < len; i++) {
         if (columns[i].isDefault && columns[i].orderable) {
             return [[i, columns[i].direction]];
         }
     }
 
-    // find first sortable colmun
-    for (let i = 0; i < columns.length; i++) {
+    // find first visible and sortable colmun
+    for (let i = 0, len = columns.length; i < len; i++) {
         if (columns[i].visible && columns[i].orderable) {
             return [[i, columns[i].direction]];
         }

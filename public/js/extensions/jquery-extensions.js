@@ -413,7 +413,7 @@
                 const pattern = '.?(' + type + ')$';
                 const flags = 'i';
                 const regex = new RegExp(pattern, flags);
-                for (let i = 0; i < files.length; i++) {
+                for (let i = 0, len = files.length; i < len; i++) {
                     if (!files[i].type.match(regex)) {
                         return false;
                     }

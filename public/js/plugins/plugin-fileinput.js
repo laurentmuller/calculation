@@ -66,7 +66,7 @@
             return true;
         }
 
-        for (let i = 0; i < files.length; i++) {
+        for (let i = 0, len = files.length; i < len; i++) {
             if ($.isUndefined(files[i].size)) {
                 continue;
             }

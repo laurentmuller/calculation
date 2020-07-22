@@ -30,7 +30,7 @@
 		},
 		{
 			"name": "font-awesome",
-			"version": "5.13.1",
+			"version": "5.14.0",
 			"files": [
 				"css/all.css",
 				"webfonts/fa-brands-400.eot",

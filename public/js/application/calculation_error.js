@@ -34,7 +34,7 @@ $.fn.isEmptyValue = function () {
 function updateErrors() {
     'use strict';
 
-    let existing = [];
+    let existing = new Map();// [];
     let emptyFound = false;
     let duplicateFound = false;
 
@@ -49,13 +49,20 @@ function updateErrors() {
         const key = $cell.trimmedText();
         $cell.removeClass(duplicateClass);
         if (key) {
-            if (key in existing) {
+            if (existing.has(key)) {
                 $cell.addClass(duplicateClass);
-                existing[key].addClass(duplicateClass);
+                existing.get(key).addClass(duplicateClass);
                 duplicateFound = true;
             } else {
-                existing[key] = $cell;
+                existing.set(key, $cell);
             }
+            // if (key in existing) {
+            // $cell.addClass(duplicateClass);
+            // existing[key].addClass(duplicateClass);
+            // duplicateFound = true;
+            // } else {
+            // existing[key] = $cell;
+            // }
         }
 
         // empty

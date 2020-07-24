@@ -252,23 +252,23 @@
         // true to debug zxcvbn result
         debug: false,
         // user field selector
-        userField: undefined,
+        userField: null,
         // email field selector
-        emailField: undefined,
+        emailField: null,
 
         // container
-        container: undefined,
+        container: null,
         // progress container
-        progressContainer: undefined,
+        progressContainer: null,
         // label container
-        labelContainer: undefined,
+        labelContainer: null,
 
         // score change callback function
-        onScore: undefined,
+        onScore: null,
         // update UI callback function
-        onUpdateUI: undefined,
+        onUpdateUI: null,
         // translation function
-        translate: undefined,
+        translate: null,
 
         // hide container on empty password
         hideOnEmpty: true,

@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\data;
+namespace App\Tests\Data;
 
 use App\Database\AbstractDatabase;
 

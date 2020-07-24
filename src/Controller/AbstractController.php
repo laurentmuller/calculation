@@ -173,6 +173,16 @@ abstract class AbstractController extends BaseController
     }
 
     /**
+     * Gets a value indicating how entities are displayed.
+     *
+     * @return bool true, displays the entities in tabular mode; false, displays entities as cards
+     */
+    public function isDisplayTabular(): bool
+    {
+        return $this->getApplication()->isDisplayTabular();
+    }
+
+    /**
      * Redirect to the home page.
      */
     public function redirectToHomePage(): Response

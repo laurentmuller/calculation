@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/globalmargin")
  * @IsGranted("ROLE_USER")
  */
-class GlobalMarginController extends EntityController
+class GlobalMarginController extends AbstractEntityController
 {
     /**
      * The list route.
@@ -42,11 +42,6 @@ class GlobalMarginController extends EntityController
      * The table route.
      */
     private const ROUTE_TABLE = 'globalmargin_table';
-
-    /**
-     * The edit template.
-     */
-    private const TEMPLATE_EDIT = 'globalmargin/globalmargin_edit.html.twig';
 
     /**
      * Constructor.
@@ -73,7 +68,7 @@ class GlobalMarginController extends EntityController
      */
     public function card(Request $request): Response
     {
-        return $this->renderCard($request, 'globalmargin/globalmargin_card.html.twig', 'minimum');
+        return $this->renderCard($request, 'minimum');
     }
 
     /**
@@ -132,11 +127,7 @@ class GlobalMarginController extends EntityController
      */
     public function show(GlobalMargin $item): Response
     {
-        $parameters = [
-            'template' => 'globalmargin/globalmargin_show.html.twig',
-        ];
-
-        return $this->showEntity($item, $parameters);
+        return $this->showEntity($item);
     }
 
     /**
@@ -146,7 +137,7 @@ class GlobalMarginController extends EntityController
      */
     public function table(Request $request, GlobalMarginDataTable $table): Response
     {
-        return $this->renderTable($request, $table, 'globalmargin/globalmargin_table.html.twig');
+        return $this->renderTable($request, $table);
     }
 
     /**
@@ -157,9 +148,6 @@ class GlobalMarginController extends EntityController
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
-        $parameters['type'] = GlobalMarginType::class;
-        $parameters['route'] = $this->getDefaultRoute();
-        $parameters['template'] = self::TEMPLATE_EDIT;
         $parameters['success'] = $item->isNew() ? 'globalmargin.add.success' : 'globalmargin.edit.success';
 
         return parent::editEntity($request, $item, $parameters);
@@ -168,12 +156,48 @@ class GlobalMarginController extends EntityController
     /**
      * {@inheritdoc}
      */
+    protected function getCardTemplate(): string
+    {
+        return 'globalmargin/globalmargin_card.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultRoute(): string
     {
-        if ($this->getApplication()->isDisplayTabular()) {
-            return self::ROUTE_TABLE;
-        } else {
-            return self::ROUTE_LIST;
-        }
+        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditFormType(): string
+    {
+        return GlobalMarginType::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditTemplate(): string
+    {
+        return 'globalmargin/globalmargin_edit.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getShowTemplate(): string
+    {
+        return 'globalmargin/globalmargin_show.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTableTemplate(): string
+    {
+        return 'globalmargin/globalmargin_table.html.twig';
     }
 }

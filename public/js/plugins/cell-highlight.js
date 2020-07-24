@@ -28,7 +28,7 @@
         this.enabled = false;
         
         // bind events
-        const enabled = this.options.enabled === undefined ? true : this.options.enabled;
+        const enabled = this.isUndefined(this.options.enabled) ? true : this.options.enabled;
         if (enabled) {
             this.enable();    
         }
@@ -215,13 +215,17 @@
                         }
                     }
 
-                    if (cell.data && cell.data('cellhighlight.offsetInMatrix') === undefined) {
+                    if (cell.data && this.isUndefined(cell.data('cellhighlight.offsetInMatrix'))) {
                         cell.data('cellhighlight.offsetInMatrix', [x, y]);
                     }
                 });
             });
 
             return tableIndex;
+        },
+        
+        isUndefined: function (value) {
+            return typeof value === "undefined";
         }
     };
 

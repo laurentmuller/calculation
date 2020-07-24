@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\Calculation;
-use App\Traits\TranslatorTrait;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -26,7 +25,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationType extends AbstractEntityType
 {
-    use TranslatorTrait;
+    /*
+     * the empty user name
+     */
+    private string $emptyUser;
 
     /**
      * Constructor.
@@ -34,7 +36,7 @@ class CalculationType extends AbstractEntityType
     public function __construct(TranslatorInterface $translator)
     {
         parent::__construct(Calculation::class);
-        $this->translator = $translator;
+        $this->emptyUser = $translator->trans('calculation.edit.empty_user');
     }
 
     /**
@@ -72,14 +74,14 @@ class CalculationType extends AbstractEntityType
             ->addPlainType();
 
         $helper->field('createdBy')
-            ->updateOption('empty_value', $this->trans('calculation.edit.empty_user'))
+            ->updateOption('empty_value', $this->emptyUser)
             ->addPlainType();
 
         $helper->field('updatedAt')
             ->addPlainType();
 
         $helper->field('updatedBy')
-            ->updateOption('empty_value', $this->trans('calculation.edit.empty_user'))
+            ->updateOption('empty_value', $this->emptyUser)
             ->addPlainType();
 
         // groups

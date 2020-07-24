@@ -78,8 +78,7 @@ class RightsType extends AbstractType
         }
 
         if (!\in_array(RoleInterface::ROLE_ADMIN, $roles, true)) {
-            $form = $event->getForm();
-            $form->remove(EntityVoterInterface::ENTITY_USER);
+            $event->getForm()->remove(EntityVoterInterface::ENTITY_USER);
         }
     }
 

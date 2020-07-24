@@ -184,7 +184,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     }
 
     /**
-     * Ensures that only the ROLE_ADMIN or ROLE_SUPER_ADMIN is selected.
+     * Ensures that only the ROLE_SUPER_ADMIN is selected if both ROLE_ADMIN and ROLE_SUPER_ADMIN are set.
      */
     public function checkRoles(): self
     {
@@ -257,6 +257,9 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
         return $this->__toString();
     }
 
+    /**
+     * Gets the e-mail.
+     */
     public function getEmail(): ?string
     {
         return $this->email;
@@ -294,8 +297,6 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
 
     /**
      * Gets the image name.
-     *
-     * @return string
      */
     public function getImageName(): ?string
     {

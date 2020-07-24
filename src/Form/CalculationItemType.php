@@ -40,12 +40,10 @@ class CalculationItemType extends AbstractEntityType
         parent::buildForm($builder, $options);
 
         $helper = new FormHelper($builder);
-        $helper->field('description')->addHiddenType();
-        $helper->field('unit')->addHiddenType();
-        $helper->field('price')->addHiddenType();
-        $helper->field('quantity')->addHiddenType();
-        $helper->field('total')
-            ->disabled()
-            ->addHiddenType();
+        $helper->field('description')->addHiddenType()
+            ->field('unit')->addHiddenType()
+            ->field('price')->addHiddenType()
+            ->field('quantity')->addHiddenType()
+            ->field('total')->disabled()->addHiddenType();
     }
 }

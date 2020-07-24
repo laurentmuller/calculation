@@ -33,7 +33,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/calculationstate")
  * @IsGranted("ROLE_USER")
  */
-class CalculationStateController extends EntityController
+class CalculationStateController extends AbstractEntityController
 {
     /**
      * The list route.
@@ -44,11 +44,6 @@ class CalculationStateController extends EntityController
      * The table route.
      */
     private const ROUTE_TABLE = 'calculationstate_table';
-
-    /**
-     * The edit template.
-     */
-    private const TEMPLATE_EDIT = 'calculationstate/calculationstate_edit.html.twig';
 
     /**
      * Constructor.
@@ -69,13 +64,13 @@ class CalculationStateController extends EntityController
     }
 
     /**
-     * List the calculation states.
+     * Render the card view.
      *
      * @Route("", name="calculationstate_list", methods={"GET"})
      */
     public function card(Request $request): Response
     {
-        return $this->renderCard($request, 'calculationstate/calculationstate_card.html.twig', 'code');
+        return $this->renderCard($request, 'code');
     }
 
     /**
@@ -154,11 +149,7 @@ class CalculationStateController extends EntityController
      */
     public function show(CalculationState $item): Response
     {
-        $parameters = [
-            'template' => 'calculationstate/calculationstate_show.html.twig',
-        ];
-
-        return $this->showEntity($item, $parameters);
+        return $this->showEntity($item);
     }
 
     /**
@@ -171,13 +162,14 @@ class CalculationStateController extends EntityController
         // callback?
         $attributes = [];
         if (!$request->isXmlHttpRequest()) {
+            $route = $this->isDisplayTabular() ? 'calculation_table' : 'calculationstate_list';
             $attributes = [
-                'link_href' => $this->generateUrl('calculation_table'),
+                'link_href' => $this->generateUrl($route),
                 'link_title' => $this->trans('calculationstate.list.calculation_title'),
             ];
         }
 
-        return $this->renderTable($request, $table, 'calculationstate/calculationstate_table.html.twig', $attributes);
+        return $this->renderTable($request, $table, $attributes);
     }
 
     /**
@@ -202,9 +194,6 @@ class CalculationStateController extends EntityController
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
-        $parameters['type'] = CalculationStateType::class;
-        $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'calculationstate.add.success' : 'calculationstate.edit.success';
 
         return parent::editEntity($request, $item, $parameters);
@@ -213,12 +202,48 @@ class CalculationStateController extends EntityController
     /**
      * {@inheritdoc}
      */
+    protected function getCardTemplate(): string
+    {
+        return 'calculationstate/calculationstate_card.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultRoute(): string
     {
-        if ($this->getApplication()->isDisplayTabular()) {
-            return self::ROUTE_TABLE;
-        } else {
-            return self::ROUTE_LIST;
-        }
+        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditFormType(): string
+    {
+        return CalculationStateType::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditTemplate(): string
+    {
+        return 'calculationstate/calculationstate_edit.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getShowTemplate(): string
+    {
+        return 'calculationstate/calculationstate_show.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTableTemplate(): string
+    {
+        return 'calculationstate/calculationstate_table.html.twig';
     }
 }

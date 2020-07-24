@@ -182,6 +182,12 @@ a.btn-list {
 .text-nowrap {
     white-space: nowrap;
 }
+.text-cell {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 0;
+}
 
 /**
  * Pivot selection

@@ -34,7 +34,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/category")
  * @IsGranted("ROLE_USER")
  */
-class CategoryController extends EntityController
+class CategoryController extends AbstractEntityController
 {
     /**
      * The list route.
@@ -45,11 +45,6 @@ class CategoryController extends EntityController
      * The table route.
      */
     private const ROUTE_TABLE = 'category_table';
-
-    /**
-     * The edit template.
-     */
-    private const TEMPLATE_EDIT = 'category/category_edit.html.twig';
 
     /**
      * Constructor.
@@ -76,7 +71,7 @@ class CategoryController extends EntityController
      */
     public function card(Request $request): Response
     {
-        return $this->renderCard($request, 'category/category_card.html.twig', 'code');
+        return $this->renderCard($request, 'code');
     }
 
     /**
@@ -134,7 +129,7 @@ class CategoryController extends EntityController
      *
      * @Route("/pdf", name="category_pdf")
      */
-    public function pdf(): PdfResponse
+    public function pdf(Request $request): PdfResponse
     {
         // get categories
         $categories = $this->getRepository()->findAll();
@@ -157,11 +152,7 @@ class CategoryController extends EntityController
      */
     public function show(Category $item): Response
     {
-        $parameters = [
-            'template' => 'category/category_show.html.twig',
-        ];
-
-        return $this->showEntity($item, $parameters);
+        return $this->showEntity($item);
     }
 
     /**
@@ -180,7 +171,7 @@ class CategoryController extends EntityController
             ];
         }
 
-        return $this->renderTable($request, $table, 'category/category_table.html.twig', $attributes);
+        return $this->renderTable($request, $table, $attributes);
     }
 
     /**
@@ -191,9 +182,6 @@ class CategoryController extends EntityController
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
-        $parameters['type'] = CategoryType::class;
-        $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'category.add.success' : 'category.edit.success';
 
         return parent::editEntity($request, $item, $parameters);
@@ -202,12 +190,48 @@ class CategoryController extends EntityController
     /**
      * {@inheritdoc}
      */
+    protected function getCardTemplate(): string
+    {
+        return 'category/category_card.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultRoute(): string
     {
-        if ($this->getApplication()->isDisplayTabular()) {
-            return self::ROUTE_TABLE;
-        } else {
-            return self::ROUTE_LIST;
-        }
+        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditFormType(): string
+    {
+        return CategoryType::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditTemplate(): string
+    {
+        return 'category/category_edit.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getShowTemplate(): string
+    {
+        return 'category/category_show.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTableTemplate(): string
+    {
+        return 'category/category_table.html.twig';
     }
 }

@@ -54,7 +54,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/calculation")
  * @IsGranted("ROLE_USER")
  */
-class CalculationController extends EntityController
+class CalculationController extends AbstractEntityController
 {
     /**
      * The list route.
@@ -65,11 +65,6 @@ class CalculationController extends EntityController
      * The table route.
      */
     private const ROUTE_TABLE = 'calculation_table';
-
-    /**
-     * The edit template.
-     */
-    private const TEMPLATE_EDIT = 'calculation/calculation_edit.html.twig';
 
     /**
      * The service to compute calculations.
@@ -111,9 +106,7 @@ class CalculationController extends EntityController
             $item->setState($state);
         }
 
-        $parameters = [
-            'overall_below' => false,
-        ];
+        $parameters = ['overall_below' => false];
 
         return $this->editEntity($request, $item, $parameters);
     }
@@ -195,7 +188,7 @@ class CalculationController extends EntityController
             ];
         }
 
-        return $this->renderTable($request, $table, 'calculation/calculation_table_below.html.twig', $attributes);
+        return $this->renderTable($request, $table, $attributes);
     }
 
     /**
@@ -216,7 +209,7 @@ class CalculationController extends EntityController
             'min_margin' => $this->getApplication()->getMinMargin(),
         ];
 
-        return $this->renderCard($request, 'calculation/calculation_card.html.twig', 'id', Criteria::DESC, $sortedFields, $parameters);
+        return $this->renderCard($request, 'id', Criteria::DESC, $sortedFields, $parameters);
     }
 
     /**
@@ -350,9 +343,9 @@ class CalculationController extends EntityController
      */
     public function edit(Request $request, Calculation $item): Response
     {
-        return $this->editEntity($request, $item, [
-            'overall_below' => $this->isMarginBelow($item),
-        ]);
+        $parameters = ['overall_below' => $this->isMarginBelow($item)];
+
+        return $this->editEntity($request, $item, $parameters);
     }
 
     /**
@@ -572,7 +565,6 @@ class CalculationController extends EntityController
     public function show(Calculation $item): Response
     {
         $parameters = [
-            'template' => 'calculation/calculation_show.html.twig',
             'min_margin' => $this->getApplication()->getMinMargin(),
             'duplicate_items' => $item->hasDuplicateItems(),
             'emty_items' => $item->hasEmptyItems(),
@@ -630,7 +622,7 @@ class CalculationController extends EntityController
             ];
         }
 
-        return $this->renderTable($request, $table, 'calculation/calculation_table.html.twig', $attributes);
+        return $this->renderTable($request, $table, $attributes);
     }
 
     /**
@@ -727,17 +719,13 @@ class CalculationController extends EntityController
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
-        $parameters['type'] = CalculationType::class;
-        $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'calculation.add.success' : 'calculation.edit.success';
-
         $parameters['groups'] = $this->calculationService->createGroupsFromCalculation($item);
         $parameters['min_margin'] = $this->getApplication()->getMinMargin();
-
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
         $parameters['emty_items'] = $item->hasEmptyItems();
 
+        // editable?
         if ($parameters['editable'] = $item->isEditable()) {
             $parameters['groupIndex'] = $item->getGroupsCount();
             $parameters['itemIndex'] = $item->getLinesCount();
@@ -752,13 +740,49 @@ class CalculationController extends EntityController
     /**
      * {@inheritdoc}
      */
+    protected function getCardTemplate(): string
+    {
+        return 'calculation/calculation_card.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultRoute(): string
     {
-        if ($this->getApplication()->isDisplayTabular()) {
-            return self::ROUTE_TABLE;
-        } else {
-            return self::ROUTE_LIST;
-        }
+        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditFormType(): string
+    {
+        return CalculationType::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditTemplate(): string
+    {
+        return 'calculation/calculation_edit.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getShowTemplate(): string
+    {
+        return 'calculation/calculation_show.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTableTemplate(): string
+    {
+        return 'calculation/calculation_table.html.twig';
     }
 
     /**

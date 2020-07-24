@@ -80,8 +80,6 @@ class OpenWeatherServiceTest extends KernelTestCase
         $result = $result['list'][0];
         $this->assertIsInt($result['sunrise']);
         $this->assertIsInt($result['sunset']);
-
-        $this->echo($result);
     }
 
     public function testDailyInvalid(): void
@@ -111,7 +109,7 @@ class OpenWeatherServiceTest extends KernelTestCase
         $this->service->group(\range(0, 25));
     }
 
-    private function echo(array $result): void
+    private function doEcho(array $result): void
     {
         if ($this->debug) {
             echo \json_encode($result, JSON_PRETTY_PRINT);

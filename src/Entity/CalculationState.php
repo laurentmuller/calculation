@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -28,6 +29,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CalculationState extends AbstractEntity
 {
+    /**
+     * The default color (black).
+     */
+    public const DEFAULT_COLOR = '#000000';
+
     /**
      * The code (unique).
      *
@@ -74,7 +80,7 @@ class CalculationState extends AbstractEntity
      *
      * @ORM\OneToMany(targetEntity="Calculation", mappedBy="state")
      *
-     * @var Collection<Calculation>
+     * @var Collection|Calculation[]
      */
     private $calculations;
 
@@ -83,7 +89,9 @@ class CalculationState extends AbstractEntity
      */
     public function __construct()
     {
-        $this->setEditable(true);
+        $this->calculations = new ArrayCollection();
+        $this->setEditable(true)
+            ->setColor(self::DEFAULT_COLOR);
     }
 
     /**
@@ -97,7 +105,7 @@ class CalculationState extends AbstractEntity
     /**
      * Gets the calculations.
      *
-     * @return Collection<Calculation>
+     * @return Collection|Calculation[]
      */
     public function getCalculations(): Collection
     {
@@ -115,11 +123,9 @@ class CalculationState extends AbstractEntity
     }
 
     /**
-     * Get color.
-     *
-     * @return string
+     * Get color as a hexadecimal value.
      */
-    public function getColor(): ?string
+    public function getColor(): string
     {
         return $this->color;
     }
@@ -155,24 +161,6 @@ class CalculationState extends AbstractEntity
     }
 
     /**
-     * Creates a calculation state.
-     *
-     * @param int    $id          the state identifier
-     * @param string $code        the state code
-     * @param string $description the state description
-     *
-     * @return \App\Entity\CalculationState
-     */
-    public static function instance(?int $id, string $code, ?string $description): self
-    {
-        $state = new self();
-        $state->id = $id;
-        $state->setCode($code)->setDescription($description);
-
-        return $state;
-    }
-
-    /**
      * Get editable.
      */
     public function isEditable(): bool
@@ -193,11 +181,9 @@ class CalculationState extends AbstractEntity
     }
 
     /**
-     * Set color.
-     *
-     * @param string $color
+     * Set color as a hexadecimal value.
      */
-    public function setColor(?string $color): self
+    public function setColor(string $color): self
     {
         $this->color = $this->trim($color);
 

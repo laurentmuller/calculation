@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Web;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -26,27 +27,28 @@ class RoutesTest extends AuthenticateWebTestCase
     public function getRoutes(): array
     {
         return [
-            ['/', self::ROLE_USER, Response::HTTP_OK],
-            ['/', self::ROLE_ADMIN, Response::HTTP_OK],
-            ['/', self::ROLE_SUPER_ADMIN, Response::HTTP_OK],
+            // index
+            ['/', self::ROLE_USER],
+            ['/', self::ROLE_ADMIN],
+            ['/', self::ROLE_SUPER_ADMIN],
 
             // about controller
-            ['/about', self::ROLE_USER, Response::HTTP_OK],
-            ['/about', self::ROLE_ADMIN, Response::HTTP_OK],
-            ['/about', self::ROLE_SUPER_ADMIN, Response::HTTP_OK],
+            ['/about', self::ROLE_USER],
+            ['/about', self::ROLE_ADMIN],
+            ['/about', self::ROLE_SUPER_ADMIN],
 
             // admin controller
             ['/admin/rights/admin', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/admin/rights/admin', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/admin/rights/admin', self::ROLE_SUPER_ADMIN, Response::HTTP_OK],
+            ['/admin/rights/admin', self::ROLE_SUPER_ADMIN],
 
             ['/admin/rights/user', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/rights/user', self::ROLE_ADMIN, Response::HTTP_OK],
-            ['/admin/rights/user', self::ROLE_SUPER_ADMIN, Response::HTTP_OK],
+            ['/admin/rights/user', self::ROLE_ADMIN],
+            ['/admin/rights/user', self::ROLE_SUPER_ADMIN],
 
             ['/admin/parameters', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/parameters', self::ROLE_ADMIN, Response::HTTP_OK],
-            ['/admin/parameters', self::ROLE_SUPER_ADMIN, Response::HTTP_OK],
+            ['/admin/parameters', self::ROLE_ADMIN],
+            ['/admin/parameters', self::ROLE_SUPER_ADMIN],
 
             // not exist
             ['/not_exist', self::ROLE_USER, Response::HTTP_NOT_FOUND],
@@ -56,18 +58,10 @@ class RoutesTest extends AuthenticateWebTestCase
     /**
      * @dataProvider getRoutes
      */
-    public function testRoutes(string $url, string $username, int $expected): void
+    public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
     {
-        $this->doEcho('URL', $url);
-
-        $user = $this->loadUser($username);
-        $this->loginUser($user);
-
-        $this->client->request('GET', $url);
-        $response = $this->client->getResponse();
-        $statusCode = $response->getStatusCode();
-        $this->doEcho('StatusCode', "$expected => $statusCode", true);
-
-        $this->assertSame($expected, $statusCode, "Invalid status code for '{$url}' with the user '{$user}'.");
+        $this->loginUserName($username);
+        $this->client->request(Request::METHOD_GET, $url);
+        $this->checkResponse($url, $username, $expected);
     }
 }

@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/product")
  * @IsGranted("ROLE_USER")
  */
-class ProductController extends EntityController
+class ProductController extends AbstractEntityController
 {
     /**
      * The list route.
@@ -43,11 +43,6 @@ class ProductController extends EntityController
      * The table route.
      */
     private const ROUTE_TABLE = 'product_table';
-
-    /**
-     * The edit template.
-     */
-    private const TEMPLATE_EDIT = 'product/product_edit.html.twig';
 
     /**
      * Constructor.
@@ -80,7 +75,7 @@ class ProductController extends EntityController
             ['name' => 'category.code', 'label' => 'product.fields.category'],
         ];
 
-        return $this->renderCard($request, 'product/product_card.html.twig', 'description', Criteria::ASC, $sortedFields);
+        return $this->renderCard($request, 'description', Criteria::ASC, $sortedFields);
     }
 
     /**
@@ -157,11 +152,7 @@ class ProductController extends EntityController
      */
     public function show(Product $item): Response
     {
-        $parameters = [
-            'template' => 'product/product_show.html.twig',
-        ];
-
-        return $this->showEntity($item, $parameters);
+        return $this->showEntity($item);
     }
 
     /**
@@ -171,7 +162,7 @@ class ProductController extends EntityController
      */
     public function table(Request $request, ProductDataTable $table): Response
     {
-        return $this->renderTable($request, $table, 'product/product_table.html.twig');
+        return $this->renderTable($request, $table);
     }
 
     /**
@@ -182,9 +173,6 @@ class ProductController extends EntityController
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
-        $parameters['type'] = ProductType::class;
-        $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'product.add.success' : 'product.edit.success';
 
         return parent::editEntity($request, $item, $parameters);
@@ -193,12 +181,48 @@ class ProductController extends EntityController
     /**
      * {@inheritdoc}
      */
+    protected function getCardTemplate(): string
+    {
+        return 'product/product_card.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultRoute(): string
     {
-        if ($this->getApplication()->isDisplayTabular()) {
-            return self::ROUTE_TABLE;
-        } else {
-            return self::ROUTE_LIST;
-        }
+        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditFormType(): string
+    {
+        return ProductType::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditTemplate(): string
+    {
+        return 'product/product_edit.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getShowTemplate(): string
+    {
+        return 'product/product_show.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTableTemplate(): string
+    {
+        return 'product/product_table.html.twig';
     }
 }

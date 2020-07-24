@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Tests\data\Database;
+use App\Tests\Data\Database;
 
 /**
  * Trait to manage database test.
@@ -44,7 +44,7 @@ trait DatabaseTrait
     public static function tearDownAfterClass(): void
     {
         self::$database->close();
-        Database::deleteDatabase();
         self::$database = null;
+        Database::deleteDatabase();
     }
 }

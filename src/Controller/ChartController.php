@@ -42,11 +42,11 @@ class ChartController extends AbstractController
      */
     public function byMonth(int $count = 12, CalculationRepository $repository, ThemeService $service): Response
     {
-        $tabular = $this->getApplication()->isDisplayTabular();
+        $tabular = $this->isDisplayTabular();
         $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_list');
 
         $data = $this->getChartMonthData($count, $repository, $service, $url);
-        $data['tabular'] = \json_encode($this->getApplication()->isDisplayTabular());
+        $data['tabular'] = \json_encode($tabular);
 
         return $this->render('chart/last_month_chart.html.twig', $data);
     }
@@ -58,11 +58,11 @@ class ChartController extends AbstractController
      */
     public function byState(CalculationStateRepository $repository, ThemeService $service): Response
     {
-        $tabular = $this->getApplication()->isDisplayTabular();
+        $tabular = $this->isDisplayTabular();
         $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_list');
 
         $data = $this->getChartStateData($repository, $service, $url);
-        $data['tabular'] = $this->getApplication()->isDisplayTabular();
+        $data['tabular'] = \json_encode($tabular);
 
         return $this->render('chart/by_state_chart.html.twig', $data);
     }

@@ -102,6 +102,27 @@ class EntityVoter extends Voter implements EntityVoterInterface
     }
 
     /**
+     * Gets the entity name for the given subject.
+     *
+     * @param mixed $subject the subject. Can be an object or a string (class name).
+     *
+     * @return string the entity name
+     */
+    public static function getEntityName($subject): string
+    {
+        $name = \is_string($subject) ? (string) $subject : \get_class($subject);
+        if (false !== ($pos = \strrpos($name, '\\'))) {
+            $name = \substr($name, $pos + 1);
+        }
+
+        if (!Utils::startwith($name, EntityVoterInterface::ENTITY)) {
+            return EntityVoterInterface::ENTITY . $name;
+        }
+
+        return $name;
+    }
+
+    /**
      * Gets an entity offset for the given name.
      *
      * @param string $name the entity name
@@ -157,15 +178,23 @@ class EntityVoter extends Voter implements EntityVoterInterface
      */
     public static function getRoleAdmin(): Role
     {
+//         $attributes = self::MASK_ATTRIBUTES;
+//         $role = new Role(RoleInterface::ROLE_ADMIN);
+//         $role->{self::ENTITY_CALCULATION} = $attributes;
+//         $role->{self::ENTITY_CALCULATION_STATE} = $attributes;
+//         $role->{self::ENTITY_CATEGORY} = $attributes;
+//         $role->{self::ENTITY_CUSTOMER} = $attributes;
+//         $role->{self::ENTITY_PRODUCT} = $attributes;
+//         $role->{self::ENTITY_GLOBAL_MARGIN} = $attributes;
+//         $role->{self::ENTITY_USER} = $attributes;
+
+//         return $role;
+
         $attributes = self::MASK_ATTRIBUTES;
         $role = new Role(RoleInterface::ROLE_ADMIN);
-        $role->{self::ENTITY_CALCULATION} = $attributes;
-        $role->{self::ENTITY_CALCULATION_STATE} = $attributes;
-        $role->{self::ENTITY_CATEGORY} = $attributes;
-        $role->{self::ENTITY_CUSTOMER} = $attributes;
-        $role->{self::ENTITY_PRODUCT} = $attributes;
-        $role->{self::ENTITY_GLOBAL_MARGIN} = $attributes;
-        $role->{self::ENTITY_USER} = $attributes;
+        foreach (self::ENTITIES as $entity) {
+            $role->{$entity} = $attributes;
+        }
 
         return $role;
     }
@@ -207,7 +236,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         $role->{self::ENTITY_CUSTOMER} = $default;
         $role->{self::ENTITY_PRODUCT} = $default;
         $role->{self::ENTITY_GLOBAL_MARGIN} = $default;
-        $role->{self::ENTITY_GLOBAL_MARGIN} = $default;
+        $role->{self::ENTITY_USER} = 0;
 
         return $role;
     }
@@ -244,7 +273,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         }
 
         // check class name
-        $name = $this->getEntityName($subject);
+        $name = self::getEntityName($subject);
         if (!\array_key_exists($name, self::OFFSETS)) {
             return false;
         }
@@ -269,12 +298,12 @@ class EntityVoter extends Voter implements EntityVoterInterface
         }
 
         // super admin can access all
-        if ($user->hasRole(RoleInterface::ROLE_SUPER_ADMIN)) {
+        if (\in_array(RoleInterface::ROLE_SUPER_ADMIN, $token->getRoleNames(), true)) {
             return  true;
         }
 
         // get offset
-        $name = $this->getEntityName($subject);
+        $name = self::getEntityName($subject);
         $offset = self::getEntityOffset($name);
         if (self::INVALID_VALUE === $offset) {
             return false;
@@ -289,7 +318,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         // get rights
         if ($user->isOverwrite()) {
             $rights = $user->getRights();
-        } elseif ($user->hasRole(RoleInterface::ROLE_ADMIN)) {
+        } elseif (\in_array(RoleInterface::ROLE_ADMIN, $token->getRoleNames(), true)) {
             $rights = $this->service->getAdminRights();
         } else {
             $rights = $this->service->getUserRights();
@@ -300,26 +329,5 @@ class EntityVoter extends Voter implements EntityVoterInterface
 
         // check rights
         return $this->isBitSet($value, $mask);
-    }
-
-    /**
-     * Gets the entity name for the given subject.
-     *
-     * @param mixed $subject the subject. Can be an object or a string (class name).
-     *
-     * @return string the entity name
-     */
-    private function getEntityName($subject): string
-    {
-        $name = \is_string($subject) ? (string) $subject : \get_class($subject);
-        if (false !== ($pos = \strrpos($name, '\\'))) {
-            $name = \substr($name, $pos + 1);
-        }
-
-        if (!Utils::startwith($name, EntityVoterInterface::ENTITY)) {
-            return EntityVoterInterface::ENTITY . $name;
-        }
-
-        return $name;
     }
 }

@@ -20,6 +20,7 @@ use App\Interfaces\EntityVoterInterface;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfResponse;
 use App\Repository\AbstractRepository;
+use App\Security\EntityVoter;
 use App\Utils\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Exception;
@@ -31,7 +32,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Laurent Muller
  */
-abstract class EntityController extends AbstractController
+abstract class AbstractEntityController extends AbstractController
 {
     /**
      * The entity class name.
@@ -69,7 +70,8 @@ abstract class EntityController extends AbstractController
      */
     protected function checkPermission(string $attribute): void
     {
-        $this->denyAccessUnlessGranted($attribute, EntityVoterInterface::ENTITY . $this->className);
+        $subject = EntityVoter::getEntityName($this->className);
+        $this->denyAccessUnlessGranted($attribute, $subject);
     }
 
     /**
@@ -77,7 +79,7 @@ abstract class EntityController extends AbstractController
      *
      * @param request        $request    the request
      * @param AbstractEntity $item       the entity to delete
-     * @param array          $parameters the delete parameters. The following keys must or may be fixed:
+     * @param array          $parameters the delete parameters. The following keys may be added:
      *                                   <ul>
      *                                   <li><code>title</code> : the dialog title (optional).</li>
      *                                   <li><code>message</code> : the dialog message (optional).</li>
@@ -125,10 +127,14 @@ abstract class EntityController extends AbstractController
             return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
 
-        // update parameters
-        $parameters['title'] = Utils::getArrayValue($parameters, 'title', 'common.delete_title');
+        // get parameters
+        $title = Utils::getArrayValue($parameters, 'title', 'common.delete_title');
         $message = Utils::getArrayValue($parameters, 'message', 'common.delete_message');
-        $parameters['message'] = $this->trans($message, ['%name%' => $display]);
+        $message = $this->trans($message, ['%name%' => $display]);
+
+        // update parameters
+        $parameters['title'] = $title;
+        $parameters['message'] = $message;
         $parameters['selection'] = $item->getId();
         $parameters['form'] = $form->createView();
 
@@ -141,12 +147,10 @@ abstract class EntityController extends AbstractController
      *
      * @param request        $request    the request
      * @param AbstractEntity $item       the entity to edit
-     * @param array          $parameters the edit parameters. The following keys must or may be fixed:
+     * @param array          $parameters the edit parameters. The following keys may be added:
      *                                   <ul>
-     *                                   <li><code>type</code> : the form type (required).</li>
-     *                                   <li><code>template</code> : the template to render (required).</li>
      *                                   <li><code>success</code> : the message to display on success (optional).</li>
-     *                                   <li><code>route</code> : the default route (optional).</li>
+     *                                   <li><code>route</code> : the route to display on success (optional).</li>
      *                                   </ul>
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
@@ -156,11 +160,8 @@ abstract class EntityController extends AbstractController
         $attribute = $isNew ? EntityVoterInterface::ATTRIBUTE_ADD : EntityVoterInterface::ATTRIBUTE_EDIT;
         $this->checkPermission($attribute);
 
-        // add item parameter
-        $parameters['item'] = $item;
-
         // form
-        $type = $parameters['type'];
+        $type = $this->getEditFormType();
         $form = $this->createForm($type, $item);
         if ($this->handleRequestForm($request, $form)) {
             // update
@@ -179,13 +180,12 @@ abstract class EntityController extends AbstractController
             } else {
                 $message = Utils::getArrayValue($parameters, 'success', 'common.edit_success');
             }
+            $message = $this->trans($message, ['%name%' => $item->getDisplay()]);
             if ($title = Utils::getArrayValue($parameters, 'title')) {
                 $title = $this->trans($title);
-                $message = $this->trans($message, ['%name%' => $item->getDisplay()]);
-                $this->succes("{$title}|{$message}");
-            } else {
-                $this->succesTrans($message, ['%name%' => $item->getDisplay()]);
+                $message = "{$title}|{$message}";
             }
+            $this->succes($message);
 
             // redirect
             $id = $item->getId();
@@ -194,25 +194,28 @@ abstract class EntityController extends AbstractController
             return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
 
-        // template
-        $template = $parameters['template'];
-
         // remove unused parameters
-        unset($parameters['type'],
-            $parameters['template'],
-            $parameters['success'],
-            $parameters['route']);
+        unset($parameters['success'], $parameters['route']);
 
         // update parameters
         $parameters['new'] = $isNew;
+        $parameters['item'] = $item;
         $parameters['form'] = $form->createView();
         if (!$isNew) {
             $parameters['selection'] = (int) $item->getId();
         }
 
+        // template
+        $template = $this->getEditTemplate();
+
         // show form
         return $this->render($template, $parameters);
     }
+
+    /**
+     * Gets the Twig template (path) name used to display entities as card.
+     */
+    abstract protected function getCardTemplate(): string;
 
     /**
      * Gets the default route name used to display the list of entities.
@@ -230,6 +233,16 @@ abstract class EntityController extends AbstractController
     {
         return $this->getRepository()->getDistinctValues($field, $search, $limit);
     }
+
+    /**
+     * Gets the form type (class name) used to edit an entity.
+     */
+    abstract protected function getEditFormType(): string;
+
+    /**
+     * Gets the Twig template (path) name used to edit an entity.
+     */
+    abstract protected function getEditTemplate(): string;
 
     /**
      * Gets the entities to display.
@@ -260,6 +273,16 @@ abstract class EntityController extends AbstractController
     }
 
     /**
+     * Gets the Twig template (path) name used to show an entity.
+     */
+    abstract protected function getShowTemplate(): string;
+
+    /**
+     * Gets the Twig template (path) name used to display entities as table.
+     */
+    abstract protected function getTableTemplate(): string;
+
+    /**
      * Gets the translated class name.
      *
      * @return string the translated class name
@@ -275,15 +298,14 @@ abstract class EntityController extends AbstractController
      * Render the entities as card.
      *
      * @param Request $request    the request
-     * @param string  $template   the template to render
      * @param string  $sortField  the default sorted field
      * @param string  $sortMode   the default sorted direction
      * @param array   $sortFields the allowed sorted fields
-     * @param array   $parameters the parameters to pass to the view
+     * @param array   $parameters the parameters to pass to the template
      *
      * @return Response the rendered template
      */
-    protected function renderCard(Request $request, string $template, string $sortField, string $sortMode = Criteria::ASC, array $sortFields = [], array $parameters = []): Response
+    protected function renderCard(Request $request, string $sortField, string $sortMode = Criteria::ASC, array $sortFields = [], array $parameters = []): Response
     {
         // check permission
         $this->checkPermission(EntityVoterInterface::ATTRIBUTE_LIST);
@@ -296,7 +318,7 @@ abstract class EntityController extends AbstractController
         // get request values
         $field = $request->get('sortField', $field);
         $mode = $request->get('sortMode', $mode);
-        $selection = $request->get('selection', 0);
+        $selection = (int) $request->get('selection', 0);
         $query = $request->get('query', '');
 
         // update session values
@@ -325,7 +347,7 @@ abstract class EntityController extends AbstractController
             'edit' => $edit,
         ], $parameters);
 
-        return $this->render($template, $parameters);
+        return $this->render($this->getCardTemplate(), $parameters);
     }
 
     /**
@@ -333,7 +355,6 @@ abstract class EntityController extends AbstractController
      */
     protected function renderDocument(PdfDocument $doc, bool $inline = true, string $name = '', bool $isUTF8 = false): PdfResponse
     {
-        // check permission
         $this->checkPermission(EntityVoterInterface::ATTRIBUTE_PDF);
 
         return parent::renderDocument($doc, $inline, $name, $isUTF8);
@@ -344,17 +365,19 @@ abstract class EntityController extends AbstractController
      *
      * @param Request                 $request    the request to get parameters
      * @param AbstractEntityDataTable $table      the data table
-     * @param string                  $template   the template name to render
      * @param array                   $attributes additional data table attributes
      *
      * @return Response a JSON response if is a callback, the data table view otherwise
      */
-    protected function renderTable(Request $request, AbstractEntityDataTable $table, string $template, array $attributes = []): Response
+    protected function renderTable(Request $request, AbstractEntityDataTable $table, array $attributes = []): Response
     {
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
             return $this->json($results);
         }
+
+        // check permission
+        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_LIST);
 
         // update attributes
         $attributes['edit-action'] = \json_encode($this->getApplication()->isEditAction());
@@ -366,21 +389,14 @@ abstract class EntityController extends AbstractController
             'columns' => $table->getColumns(),
         ];
 
-        return $this->render($template, $parameters);
+        return $this->render($this->getTableTemplate(), $parameters);
     }
 
     /**
      * Show properties of an entity.
      *
      * @param AbstractEntity $item       the entity to show
-     * @param array          $parameters the show parameters. The following keys must or may be fixed:
-     *                                   <ul>
-     *                                   <li><code>template</code> : the template to render (required).</li>
-     *                                   <li><code>title</code> : the dialog title (optional).</li>
-     *                                   <li><code>message</code> : the dialog message (optional).</li>
-     *                                   <li><code>success</code> : the message to display on success (optional).</li>
-     *                                   <li><code>failure</code> : the message to display on failure (optional).</li>
-     *                                   </ul>
+     * @param array          $parameters the additional parameters to pass to the template
      *
      * @throws \Symfony\Component\Finder\Exception\AccessDeniedException if the access is denied
      */
@@ -392,12 +408,8 @@ abstract class EntityController extends AbstractController
         // add item parameter
         $parameters['item'] = $item;
 
-        // get template
-        $template = $parameters['template'];
-        unset($parameters['template']);
-
         // render
-        return $this->render($template, $parameters);
+        return $this->render($this->getShowTemplate(), $parameters);
     }
 
     /**

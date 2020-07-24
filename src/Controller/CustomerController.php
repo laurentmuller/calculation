@@ -34,7 +34,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/customer")
  * @IsGranted("ROLE_USER")
  */
-class CustomerController extends EntityController
+class CustomerController extends AbstractEntityController
 {
     /**
      * The list route.
@@ -45,11 +45,6 @@ class CustomerController extends EntityController
      * The table route.
      */
     private const ROUTE_TABLE = 'customer_table';
-
-    /**
-     * The edit template.
-     */
-    private const TEMPLATE_EDIT = 'customer/customer_edit.html.twig';
 
     /**
      * Constructor.
@@ -81,7 +76,7 @@ class CustomerController extends EntityController
             ['name' => 'zipCity', 'label' => 'customer.fields.zipCity'],
         ];
 
-        return $this->renderCard($request, 'customer/customer_card.html.twig', 'nameAndCompany', Criteria::ASC, $sortedFields);
+        return $this->renderCard($request, 'nameAndCompany', Criteria::ASC, $sortedFields);
     }
 
     /**
@@ -142,11 +137,7 @@ class CustomerController extends EntityController
      */
     public function show(Customer $item): Response
     {
-        $parameters = [
-            'template' => 'customer/customer_show.html.twig',
-        ];
-
-        return $this->showEntity($item, $parameters);
+        return $this->showEntity($item);
     }
 
     /**
@@ -156,7 +147,7 @@ class CustomerController extends EntityController
      */
     public function table(Request $request, CustomerDataTable $table): Response
     {
-        return $this->renderTable($request, $table, 'customer/customer_table.html.twig');
+        return $this->renderTable($request, $table);
     }
 
     /**
@@ -167,9 +158,6 @@ class CustomerController extends EntityController
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
-        $parameters['type'] = CustomerType::class;
-        $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'customer.add.success' : 'customer.edit.success';
 
         return parent::editEntity($request, $item, $parameters);
@@ -178,12 +166,48 @@ class CustomerController extends EntityController
     /**
      * {@inheritdoc}
      */
+    protected function getCardTemplate(): string
+    {
+        return 'customer/customer_card.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultRoute(): string
     {
-        if ($this->getApplication()->isDisplayTabular()) {
-            return self::ROUTE_TABLE;
-        } else {
-            return self::ROUTE_LIST;
-        }
+        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditFormType(): string
+    {
+        return CustomerType::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditTemplate(): string
+    {
+        return 'customer/customer_edit.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getShowTemplate(): string
+    {
+        return 'customer/customer_show.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTableTemplate(): string
+    {
+        return 'customer/customer_table.html.twig';
     }
 }

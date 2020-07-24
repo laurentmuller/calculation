@@ -18,6 +18,7 @@ use App\Entity\CalculationState;
 use App\Entity\Property;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Repository\PropertyRepository;
+use App\Security\EntityVoter;
 use App\Traits\LoggerTrait;
 use App\Utils\FormatUtils;
 use App\Utils\Utils;
@@ -108,7 +109,9 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getAdminRights(): ?string
     {
-        return $this->getPropertyString(self::ADMIN_RIGHTS);
+        $default = EntityVoter::getRoleAdmin()->getRights();
+
+        return $this->getPropertyString(self::ADMIN_RIGHTS, $default);
     }
 
     /**
@@ -383,7 +386,9 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function getUserRights(): ?string
     {
-        return $this->getPropertyString(self::USER_RIGHTS);
+        $default = EntityVoter::getRoleUser()->getRights();
+
+        return $this->getPropertyString(self::USER_RIGHTS, $default);
     }
 
     /**

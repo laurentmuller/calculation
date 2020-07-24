@@ -41,6 +41,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -49,7 +50,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  *
  * @Route("/user")
  */
-class UserController extends EntityController
+class UserController extends AbstractEntityController
 {
     /**
      * The list route.
@@ -60,11 +61,6 @@ class UserController extends EntityController
      * The table route.
      */
     private const ROUTE_TABLE = 'user_table';
-
-    /**
-     * The edit template.
-     */
-    private const TEMPLATE_EDIT = 'user/user_edit.html.twig';
 
     /**
      * Constructor.
@@ -93,7 +89,7 @@ class UserController extends EntityController
      */
     public function card(Request $request): Response
     {
-        return $this->renderCard($request, 'user/user_card.html.twig', 'username');
+        return $this->renderCard($request, 'username');
     }
 
     /**
@@ -321,14 +317,18 @@ class UserController extends EntityController
      * @Route("/rights/{id}", name="user_rights", requirements={"id": "\d+" }, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function rights(Request $request, User $item): Response
+    public function rights(Request $request, User $item, RoleHierarchyInterface $hierarchy): Response
     {
-        // same and not super admin?
-        if ($this->isConnectedUser($item) && !$item->hasRole(RoleInterface::ROLE_SUPER_ADMIN)) {
-            $this->warningTrans('user.rights.connected');
+        // same user?
+        if ($this->isConnectedUser($item)) {
+            // super admin?
+            $roles = $hierarchy->getReachableRoleNames($item->getRoles());
+            if (!\in_array(RoleInterface::ROLE_SUPER_ADMIN, $roles, true)) {
+                $this->warningTrans('user.rights.connected');
 
-            // redirect
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
+                // redirect
+                return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
+            }
         }
 
         // form
@@ -382,11 +382,7 @@ class UserController extends EntityController
      */
     public function show(User $item): Response
     {
-        $parameters = [
-            'template' => 'user/user_show.html.twig',
-        ];
-
-        return $this->showEntity($item, $parameters);
+        return $this->showEntity($item);
     }
 
     /**
@@ -396,7 +392,7 @@ class UserController extends EntityController
      */
     public function table(Request $request, UserDataTable $table): Response
     {
-        return $this->renderTable($request, $table, 'user/user_table.html.twig');
+        return $this->renderTable($request, $table);
     }
 
     /**
@@ -464,9 +460,6 @@ class UserController extends EntityController
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         // update parameters
-        $parameters['type'] = UserType::class;
-        $parameters['template'] = self::TEMPLATE_EDIT;
-        $parameters['route'] = $this->getDefaultRoute();
         $parameters['success'] = $item->isNew() ? 'user.add.success' : 'user.edit.success';
 
         return parent::editEntity($request, $item, $parameters);
@@ -475,13 +468,33 @@ class UserController extends EntityController
     /**
      * {@inheritdoc}
      */
+    protected function getCardTemplate(): string
+    {
+        return 'user/user_card.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultRoute(): string
     {
-        if ($this->getApplication()->isDisplayTabular()) {
-            return self::ROUTE_TABLE;
-        } else {
-            return self::ROUTE_LIST;
-        }
+        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditFormType(): string
+    {
+        return UserType::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEditTemplate(): string
+    {
+        return 'user/user_edit.html.twig';
     }
 
     /**
@@ -499,6 +512,22 @@ class UserController extends EntityController
         }
 
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getShowTemplate(): string
+    {
+        return 'user/user_show.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTableTemplate(): string
+    {
+        return 'user/user_table.html.twig';
     }
 
     /**

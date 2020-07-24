@@ -18,7 +18,7 @@
 {%- case 5 -%}
     {%- set column = 'rights.pdf'|trans -%}                
 {%- endswitch -%}
-{%- set row = (action|lower ~ '.name')|trans -%}
+{%- set row = (action|lower|slice(6) ~ '.name')|trans -%}
 {{ column ~ ' - ' ~ row }}
 {%- endmacro %}
 

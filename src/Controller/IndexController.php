@@ -39,7 +39,7 @@ class IndexController extends AbstractController
      */
     public function index(CalculationRepository $calculationRepository, CalculationStateRepository $stateRepository): Response
     {
-        $tabular = $this->getApplication()->isDisplayTabular();
+        $tabular = $this->isDisplayTabular();
 
         // get values to display
         $states = $stateRepository->getByState();

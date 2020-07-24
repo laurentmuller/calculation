@@ -15,8 +15,11 @@ declare(strict_types=1);
 namespace App\Tests\Web;
 
 use App\Entity\User;
+use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
+use App\Security\EntityVoter;
+use App\Service\ApplicationService;
 use App\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -30,7 +33,12 @@ abstract class AuthenticateWebTestCase extends WebTestCase
 {
     use DatabaseTrait;
 
-    public const ROLE_ADMIN = User::ROLE_ADMIN;
+    public const ID_ADMIN = 2;
+    public const ID_DISABLE = 4;
+    public const ID_SUPER_ADMIN = 1;
+    public const ID_USER = 3;
+
+    public const ROLE_ADMIN = RoleInterface::ROLE_ADMIN;
     public const ROLE_DISABLED = 'ROLE_DISABLED';
     public const ROLE_FAKE = 'ROLE_FAKE';
     public const ROLE_SUPER_ADMIN = RoleInterface::ROLE_SUPER_ADMIN;
@@ -41,26 +49,38 @@ abstract class AuthenticateWebTestCase extends WebTestCase
      */
     protected $client = null;
 
-    /*
-     * the debug mode
-     */
-    protected $debug = false;
-
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $this->client = static::createClient();
-        $this->debug = self::$kernel->isDebug();
+
+        // get rights
+        $userRight = EntityVoter::getRoleUser()->getRights();
+        $adminRight = EntityVoter::getRoleAdmin()->getRights();
+
+        /** @var ApplicationService $application */
+        $application = self::$container->get(ApplicationService::class);
+        $application->setProperties([
+            ApplicationServiceInterface::USER_RIGHTS => $userRight,
+            ApplicationServiceInterface::ADMIN_RIGHTS => $adminRight,
+        ]);
+    }
+
+    protected function checkResponse(string $url, string $username, int $expected): void
+    {
+        $response = $this->client->getResponse();
+        $statusCode = $response->getStatusCode();
+        $this->assertSame($expected, $statusCode, "Invalid status code for '{$url}' and '{$username}'.");
     }
 
     protected function doEcho(string $name, $value, bool $newLine = false): void
     {
-        if ($this->debug) {
-            $format = "\n%-15s: %s" . ($newLine ? "\n" : '');
-            \printf($format, \htmlspecialchars($name), $value);
-        }
+        $format = "\n%-15s: %s" . ($newLine ? "\n" : '');
+        \printf($format, \htmlspecialchars($name), $value);
     }
 
     protected function loadUser(string $username, bool $verify = true): ?User
@@ -74,8 +94,6 @@ abstract class AuthenticateWebTestCase extends WebTestCase
 
         if ($verify) {
             $this->assertNotNull($user, "The user '$username' is null.");
-            $this->doEcho('UserName', $user->getUsername());
-            $this->doEcho('Role', \json_encode($user->getRoles()));
         }
 
         return $user;
@@ -84,5 +102,13 @@ abstract class AuthenticateWebTestCase extends WebTestCase
     protected function loginUser(User $user, string $firewall = 'main'): void
     {
         $this->client->loginUser($user, $firewall);
+    }
+
+    protected function loginUserName(string $username, bool $verify = true, string $firewall = 'main'): User
+    {
+        $user = $this->loadUser($username, $verify);
+        $this->loginUser($user, $firewall);
+
+        return $user;
     }
 }

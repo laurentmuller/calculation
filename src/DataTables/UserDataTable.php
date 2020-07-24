@@ -117,13 +117,13 @@ class UserDataTable extends AbstractEntityDataTable
     /**
      * Translate the user's role.
      *
-     * @param string[] $roles the user's roles
+     * @param string $role the user's role
      *
      * @return string the translated role
      */
-    public function translateRole(array $roles): string
+    public function translateRole(string $role): string
     {
-        return Utils::translateRole($this->translator, $roles[0]);
+        return Utils::translateRole($this->translator, $role);
     }
 
     /**
@@ -149,7 +149,7 @@ class UserDataTable extends AbstractEntityDataTable
                 ->setTitle('user.fields.username_short')
                 ->setClassName('w-15')
                 ->setDefault(true),
-            DataColumn::instance('roles')
+            DataColumn::instance('role')
                 ->setTitle('user.fields.role')
                 ->setClassName('w-25 cell')
                 ->setFormatter([$this, 'translateRole']),
@@ -177,9 +177,10 @@ class UserDataTable extends AbstractEntityDataTable
 
         // filter
         if (!$this->superAdmin) {
-            $field = 'roles';
-            $value = '%' . RoleInterface::ROLE_SUPER_ADMIN . '%';
-            $builder->where("{$alias}.{$field} NOT LIKE :{$field}")
+            $field = 'role';
+            $value = RoleInterface::ROLE_SUPER_ADMIN;
+            $builder->where("{$alias}.{$field} IS NULL");
+            $builder->orWhere("{$alias}.{$field} != :{$field}")
                 ->setParameter($field, $value);
         }
 

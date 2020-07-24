@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS "sy_Product" (
 );
 
 CREATE TABLE IF NOT EXISTS "sy_CalculationState" (
-	"id"	        integer AUTO_INCREMENT,
+	"id"	        integer PRIMARY KEY AUTOINCREMENT,
 	"code"	        varchar(30)  NOT NULL,
 	"description"	varchar(255) DEFAULT NULL,
 	"editable"	    tinyint(1)   DEFAULT '1',
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
 	"username"	    varchar(180) NOT NULL,
 	"password"	    varchar(255) DEFAULT NULL,
 	"image_name"	varchar(255) DEFAULT NULL,
-	"roles"	        longtext     DEFAULT NULL,
+	"role"	        longtext     DEFAULT NULL,
 	"rights"	    varchar(20)  DEFAULT NULL,
 	"overwrite"	    tinyint(1)   DEFAULT '0',
 	"enabled"	    tinyint(1)   DEFAULT '1',
@@ -118,80 +118,41 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
   	"verified" 		tinyint(1)   DEFAULT '0'
 );
 
-INSERT INTO "sy_User" 
+INSERT INTO "sy_User"
 (
-	'id',
-	'email',
-	'username',
-	'enabled',
-	'password',
-	'roles'
-)			
+	'id', 'email', 'username', 'enabled', 'password', 'role'
+)
 VALUES
 (
-	1,
-	'role_super_admin@test.com',
-	'role_super_admin',
-	1,
-	'role_super_admin',
-	'["ROLE_SUPER_ADMIN"]'
+	1, 'ROLE_SUPER_ADMIN@test.com', 'ROLE_SUPER_ADMIN', 1, 'ROLE_SUPER_ADMIN', 'ROLE_SUPER_ADMIN'
 );
 
-INSERT INTO "sy_User" 
+INSERT INTO "sy_User"
 (
-	'id',
-	'email',
-	'username',
-	'enabled',
-	'password',
-	'roles'
-)			
+	'id', 'email', 'username', 'enabled', 'password', 'role'
+)
 VALUES
 (
-	2,
-	'role_admin@test.com',
-	'role_admin',
-	1,
-	'role_admin',
-	'["ROLE_ADMIN"]'
+	2, 'ROLE_ADMIN@test.com', 'ROLE_ADMIN', 1, 'ROLE_ADMIN', 'ROLE_ADMIN'
 );
 
-INSERT INTO "sy_User" 
+INSERT INTO "sy_User"
 (
-	'id',
-	'email',
-	'username',
-	'enabled',
-	'password',
-	'roles'
-)			
+	'id', 'email', 'username', 'enabled', 'password'
+)
 VALUES
 (
-	3,
-	'role_user@test.com',
-	'role_user',
-	1,
-	'role_user',
-	'[]'
+	3, 'ROLE_USER@test.com', 'ROLE_USER', 1, 'ROLE_USER'
 );
 
-INSERT INTO "sy_User" 
+INSERT INTO "sy_User"
 (
-	'id',
-	'email',
-	'username',
-	'enabled',
-	'password',
-	'roles'
-)			
+	'id', 'email', 'username', 'enabled', 'password'
+)
 VALUES
 (
-	4,
-	'role_disabled@test.com',
-	'role_disabled',
-	0,
-	'role_disabled',
-	'[]'
+	4, 'ROLE_DISABLED@test.com', 'ROLE_DISABLED', 0, 'ROLE_DISABLED'
+
 );
 
 COMMIT;

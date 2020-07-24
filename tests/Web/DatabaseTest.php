@@ -117,8 +117,6 @@ class DatabaseTest extends KernelTestCase
      */
     public function testUser(string $username, string $role): void
     {
-        $username = \strtolower($username);
-
         /** @var UserRepository $repository */
         $repository = self::$container->get(UserRepository::class);
         $this->assertNotNull($repository);

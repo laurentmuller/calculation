@@ -42,6 +42,15 @@ interface RoleInterface
     public function getRole(): string;
 
     /**
+     * Checks if this has the given role.
+     *
+     * @param string $role the role name to be tested
+     *
+     * @return bool true if this has the given role
+     */
+    public function hasRole(string $role): bool;
+
+    /**
      * Tells if this has the admin role.
      */
     public function isAdmin(): bool;

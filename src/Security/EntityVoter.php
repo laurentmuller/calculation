@@ -178,18 +178,6 @@ class EntityVoter extends Voter implements EntityVoterInterface
      */
     public static function getRoleAdmin(): Role
     {
-//         $attributes = self::MASK_ATTRIBUTES;
-//         $role = new Role(RoleInterface::ROLE_ADMIN);
-//         $role->{self::ENTITY_CALCULATION} = $attributes;
-//         $role->{self::ENTITY_CALCULATION_STATE} = $attributes;
-//         $role->{self::ENTITY_CATEGORY} = $attributes;
-//         $role->{self::ENTITY_CUSTOMER} = $attributes;
-//         $role->{self::ENTITY_PRODUCT} = $attributes;
-//         $role->{self::ENTITY_GLOBAL_MARGIN} = $attributes;
-//         $role->{self::ENTITY_USER} = $attributes;
-
-//         return $role;
-
         $attributes = self::MASK_ATTRIBUTES;
         $role = new Role(RoleInterface::ROLE_ADMIN);
         foreach (self::ENTITIES as $entity) {
@@ -264,6 +252,8 @@ class EntityVoter extends Voter implements EntityVoterInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @see Voter
      */
     protected function supports($attribute, $subject): bool
     {
@@ -272,7 +262,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
             return false;
         }
 
-        // check class name
+        // check entity name
         $name = self::getEntityName($subject);
         if (!\array_key_exists($name, self::OFFSETS)) {
             return false;
@@ -283,6 +273,8 @@ class EntityVoter extends Voter implements EntityVoterInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @see Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {

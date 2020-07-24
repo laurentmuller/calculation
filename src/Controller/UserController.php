@@ -531,19 +531,6 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param User $item
-     */
-    protected function updateEntity(AbstractEntity $item): bool
-    {
-        // update roles
-        $item->checkRoles();
-
-        return parent::updateEntity($item);
-    }
-
-    /**
      * Returns if the given user is the same as the logged-in user.
      *
      * @param User $user the user to verify

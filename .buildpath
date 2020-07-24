@@ -422,11 +422,6 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/symfony/inflector">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry excluding="Resources/stubs/" kind="src" path="vendor/symfony/intl">
 		<attributes>
 			<attribute name="composer" value="vendor"/>

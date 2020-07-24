@@ -49,7 +49,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      *
      * @var bool
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
@@ -103,7 +103,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      *
      * @var bool
      */
-    private $overwrite;
+    private $overwrite = false;
 
     /**
      * @ORM\Column(type="string")
@@ -120,11 +120,11 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     private $requestedAt;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="string", length=25, nullable=true)
      *
-     * @var string[]
+     * @var ?string
      */
-    private $roles = [];
+    private $role;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -181,18 +181,6 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     public function __toString(): string
     {
         return (string) $this->getUsername();
-    }
-
-    /**
-     * Ensures that only the ROLE_SUPER_ADMIN is selected if both ROLE_ADMIN and ROLE_SUPER_ADMIN are set.
-     */
-    public function checkRoles(): self
-    {
-        if ($this->hasRole(RoleInterface::ROLE_ADMIN) && $this->hasRole(RoleInterface::ROLE_SUPER_ADMIN)) {
-            return $this->removeRole(RoleInterface::ROLE_ADMIN);
-        }
-
-        return $this;
     }
 
     /**
@@ -346,9 +334,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      */
     public function getRole(): string
     {
-        $roles = $this->getRoles();
-
-        return \count($roles) ? $roles[0] : RoleInterface::ROLE_USER;
+        return $this->role ?? RoleInterface::ROLE_USER;
     }
 
     /**
@@ -358,11 +344,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      */
     public function getRoles(): array
     {
-        // ensure that the 'ROLE_USER' is set
-        $roles = $this->roles;
-        $roles[] = RoleInterface::ROLE_USER;
-
-        return \array_unique($roles);
+        return [$this->getRole()];
     }
 
     /**
@@ -396,15 +378,13 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     }
 
     /**
-     * Returns if the given role is set.
+     * {@inheritdoc}
      *
-     * @param string $role the role to be tested
-     *
-     * @return bool true if set
+     * @see RoleInterface
      */
     public function hasRole(string $role): bool
     {
-        return \in_array($role, $this->getRoles(), true);
+        return 0 === \strcasecmp($role, $this->getRole());
     }
 
     /**
@@ -414,7 +394,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole(self::ROLE_ADMIN);
+        return $this->hasRole(RoleInterface::ROLE_ADMIN);
     }
 
     /**
@@ -461,21 +441,6 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     public function isVerified(): bool
     {
         return $this->verified;
-    }
-
-    /**
-     * Remove the given role.
-     *
-     * @param string $role the role to remove
-     */
-    public function removeRole(string $role): self
-    {
-        $roles = $this->getRoles();
-        if (\in_array($role, $roles, true)) {
-            unset($roles[$role]);
-        }
-
-        return $this->setRoles($roles);
     }
 
     /**
@@ -582,23 +547,10 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      */
     public function setRole(?string $role): self
     {
-        $role = $role ?: RoleInterface::ROLE_USER;
-
-        return $this->setRoles([$role]);
-    }
-
-    /**
-     * Sets roles.
-     *
-     * @param string[] $roles the roles to set
-     */
-    public function setRoles(array $roles): self
-    {
-        $this->roles = \array_unique($roles);
-
-        // trim
-        if (1 === \count($this->roles) && RoleInterface::ROLE_USER === $this->roles[0]) {
-            $this->roles = [];
+        if (RoleInterface::ROLE_USER === $role) {
+            $this->role = null;
+        } else {
+            $this->role = $role;
         }
 
         return $this;

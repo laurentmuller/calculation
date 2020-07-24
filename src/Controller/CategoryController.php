@@ -129,7 +129,7 @@ class CategoryController extends AbstractEntityController
      *
      * @Route("/pdf", name="category_pdf")
      */
-    public function pdf(Request $request): PdfResponse
+    public function pdf(): PdfResponse
     {
         // get categories
         $categories = $this->getRepository()->findAll();

@@ -27,7 +27,7 @@ class Role implements RoleInterface
     use RightsTrait;
 
     /**
-     * The role name.
+     * The name.
      *
      * @var string
      */
@@ -56,11 +56,11 @@ class Role implements RoleInterface
     }
 
     /**
-     * Gets the display name.
+     * Gets the display name or the role name if not defined.
      */
     public function getName(): string
     {
-        return $this->name;
+        return $this->name ?? $this->role;
     }
 
     /**
@@ -72,11 +72,9 @@ class Role implements RoleInterface
     }
 
     /**
-     * Checks if this has the given role.
+     * {@inheritdoc}
      *
-     * @param string $role the role name to be tested
-     *
-     * @return bool true if this has the given role
+     * @see RoleInterface
      */
     public function hasRole(string $role): bool
     {

@@ -280,13 +280,12 @@ abstract class AbstractController extends BaseController
      * @param PdfDocument $doc    the document to render
      * @param bool        $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if available.
      *                            <code>false</code> to send to the browser and force a file download with the name given.
-     * @param string      $name   the name of the PDF file
-     * @param bool        $isUTF8 indicates if name is encoded in ISO-8859-1 (false) or UTF-8 (true)
+     * @param string      $name   the name of the PDF file or null to use default ('document.pdf')
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report can not be rendered
      * @throws \Symfony\Component\Finder\Exception\AccessDeniedException     if the access is denied
      */
-    protected function renderDocument(PdfDocument $doc, bool $inline = true, string $name = '', bool $isUTF8 = false): PdfResponse
+    protected function renderDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
         // render
         if ($doc instanceof AbstractReport && !$doc->render()) {
@@ -299,6 +298,6 @@ abstract class AbstractController extends BaseController
         }
 
         // create response
-        return new PdfResponse($doc, $inline, $name, $isUTF8);
+        return new PdfResponse($doc, $inline, $name);
     }
 }

@@ -58,6 +58,10 @@ class ProductControllerTest extends AbstractControllerTest
             ['/product/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/product/clone/1', self::ROLE_ADMIN],
             ['/product/clone/1', self::ROLE_SUPER_ADMIN],
+
+            ['/product/pdf', self::ROLE_USER],
+            ['/product/pdf', self::ROLE_ADMIN],
+            ['/product/pdf', self::ROLE_SUPER_ADMIN],
         ];
     }
 

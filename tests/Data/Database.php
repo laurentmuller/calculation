@@ -47,6 +47,7 @@ class Database extends AbstractDatabase
         if (\file_exists($filename)) {
             \unlink($filename);
         }
+        \chmod(__DIR__, 0777);
     }
 
     /**

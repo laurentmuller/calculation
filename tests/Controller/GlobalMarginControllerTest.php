@@ -52,6 +52,10 @@ class GlobalMarginControllerTest extends AbstractControllerTest
             ['/globalmargin/show/1', self::ROLE_USER],
             ['/globalmargin/show/1', self::ROLE_ADMIN],
             ['/globalmargin/show/1', self::ROLE_SUPER_ADMIN],
+
+            ['/globalmargin/pdf', self::ROLE_USER],
+            ['/globalmargin/pdf', self::ROLE_ADMIN],
+            ['/globalmargin/pdf', self::ROLE_SUPER_ADMIN],
         ];
     }
 

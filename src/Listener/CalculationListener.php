@@ -57,7 +57,7 @@ final class CalculationListener
         // get inserted and updated entities
         $em = $args->getEntityManager();
         $unitOfWork = $em->getUnitOfWork();
-        $entities = \array_merge($unitOfWork->getScheduledEntityInsertions(), $unitOfWork->getScheduledEntityUpdates());
+        $entities = \array_merge($unitOfWork->getScheduledEntityInsertions(), $unitOfWork->getScheduledEntityUpdates(), $unitOfWork->getScheduledCollectionDeletions());
         if (empty($entities)) {
             return;
         }

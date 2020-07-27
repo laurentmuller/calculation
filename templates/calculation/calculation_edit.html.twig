@@ -22,13 +22,8 @@
 {% form_theme form _self %}
 
 {# parameters #}
-{%- if new -%}
-{%- set title            = 'calculation.add.title' -%}
-{%- set title_parameters = {} -%}
-{%- else -%}
-{%- set title            = 'calculation.edit.title' -%}
-{%- set title_parameters = {'%id%': item.id|identifier} -%}
-{%- endif -%}
+{%- set title            = new ? 'calculation.add.title' : 'calculation.edit.title' -%}
+{%- set title_parameters = new ? {} : {'%id%': item.id|identifier} -%}
 {%- set form_attr        = form_attr|default({})|merge({'id': 'edit-form'}) -%}
 {%- if editable -%}
 {%- set form_attr        = form_attr|merge({

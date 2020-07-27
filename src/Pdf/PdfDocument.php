@@ -16,6 +16,8 @@ namespace App\Pdf;
 
 use App\Traits\MathTrait;
 use Fpdf\Fpdf;
+use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\String\UnicodeString;
 
 /**
  * PDF document with default header and footer.
@@ -516,31 +518,30 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
      * @param bool   $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if available.
      *                       <code>false</code> to send to the browser and force a file download with the name given.
      * @param string $name   the name of the file or null to use default ('document.pdf')
-     * @param bool   $isUTF8 indicates if name is encoded in ISO-8859-1 (false) or UTF-8 (true)
      *
      * @return array the output headers
      */
-    public function getOutputHeaders(bool $inline = true, string $name = '', bool $isUTF8 = false): array
+    public function getOutputHeaders(bool $inline = true, string $name = ''): array
     {
         if (empty($name)) {
             $name = 'document.pdf';
         }
 
-        $encoded = $this->_httpencode('filename', $name, $isUTF8);
+        $encoded = (new UnicodeString($name))->ascii()->toString();
 
         if ($inline) {
             $type = 'application/pdf';
-            $disposition = 'inline; ' . $encoded;
+            $disposition = HeaderUtils::DISPOSITION_INLINE;
         } else {
             $type = 'application/x-download';
-            $disposition = 'attachment; ' . $encoded;
+            $disposition = HeaderUtils::DISPOSITION_ATTACHMENT;
         }
 
         return [
             'Pragma' => 'public',
             'Content-Type' => $type,
-            'Content-Disposition' => $disposition,
             'Cache-Control' => 'private, max-age=0, must-revalidate',
+            'Content-Disposition' => HeaderUtils::makeDisposition($disposition, $name, $encoded),
         ];
     }
 

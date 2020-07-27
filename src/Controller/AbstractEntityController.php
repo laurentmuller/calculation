@@ -353,11 +353,11 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * {@inheritdoc}
      */
-    protected function renderDocument(PdfDocument $doc, bool $inline = true, string $name = '', bool $isUTF8 = false): PdfResponse
+    protected function renderDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
         $this->checkPermission(EntityVoterInterface::ATTRIBUTE_PDF);
 
-        return parent::renderDocument($doc, $inline, $name, $isUTF8);
+        return parent::renderDocument($doc, $inline, $name);
     }
 
     /**

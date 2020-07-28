@@ -24,6 +24,17 @@ use App\Database\AbstractDatabase;
 class Database extends AbstractDatabase
 {
     /**
+     * {@inheritdoc}
+     */
+    public function __construct(string $filename, bool $readonly = false, string $encryption_key = '')
+    {
+        parent::__construct($filename, $readonly, $encryption_key);
+
+        // allow read/write
+        \chmod($filename, 0777);
+    }
+
+    /**
      * Creates the database.
      */
     public static function createDatabase(): self
@@ -36,9 +47,6 @@ class Database extends AbstractDatabase
 
         // allow read/write
         \chmod(__DIR__, 0777);
-        if (\file_exists($filename)) {
-            \chmod($filename, 0777);
-        }
 
         // create
         return new self($filename);

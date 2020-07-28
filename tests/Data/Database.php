@@ -36,7 +36,9 @@ class Database extends AbstractDatabase
 
         // allow read/write
         \chmod(__DIR__, 0777);
-        \chmod($filename, 0777);
+        if (\file_exists($filename)) {
+            \chmod($filename, 0777);
+        }
 
         // create
         return new self($filename);

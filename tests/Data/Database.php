@@ -34,6 +34,10 @@ class Database extends AbstractDatabase
             \unlink($filename);
         }
 
+        // allow read/write
+        \chmod(__DIR__, 0777);
+        \chmod($filename, 0777);
+
         // create
         return new self($filename);
     }
@@ -47,7 +51,6 @@ class Database extends AbstractDatabase
         if (\file_exists($filename)) {
             \unlink($filename);
         }
-        \chmod(__DIR__, 0777);
     }
 
     /**

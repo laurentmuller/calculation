@@ -171,7 +171,9 @@ class FormHelper
     public function addCheckboxType(bool $switchStyle = true): self
     {
         if ($switchStyle) {
-            $this->updateLabelAttribute('class', 'switch-custom');
+            $class = $this->labelAttributes['class'] ?? '';
+            $class .= ' switch-custom';
+            $this->updateLabelAttribute('class', \trim($class));
         }
 
         return $this->add(CheckboxType::class);

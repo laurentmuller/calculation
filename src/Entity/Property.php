@@ -137,6 +137,16 @@ class Property extends AbstractEntity
     }
 
     /**
+     * Sets the property value as an array of integer.
+     *
+     * @param int[] $value the value to set
+     */
+    public function setArray(array $value): self
+    {
+        return $this->setString(\json_encode($value));
+    }
+
+    /**
      * Sets the property value as boolean.
      *
      * @param bool $value the value to set
@@ -202,6 +212,9 @@ class Property extends AbstractEntity
         }
         if (\is_int($value)) {
             return $this->setInteger($value);
+        }
+        if (\is_array($value)) {
+            return $this->setArray($value);
         }
         if ($value instanceof \DateTimeInterface) {
             return $this->setDate($value);

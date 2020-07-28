@@ -105,13 +105,13 @@ class ApplicationService implements ApplicationServiceInterface
     /**
      * Gets the administrator role rights.
      *
-     * @return string|null the rights
+     * @return int[] the rights
      */
-    public function getAdminRights(): ?string
+    public function getAdminRights(): array
     {
         $default = EntityVoter::getRoleAdmin()->getRights();
 
-        return $this->getPropertyString(self::ADMIN_RIGHTS, $default);
+        return $this->getPropertyArray(self::ADMIN_RIGHTS, $default);
     }
 
     /**
@@ -295,6 +295,32 @@ class ApplicationService implements ApplicationServiceInterface
     }
 
     /**
+     * Gets a integer array property.
+     *
+     * @param string $name    the property name to search for
+     * @param int[]  $default the default value if the property is not found
+     *
+     * @return int[] the integer array values, if found; the default value otherwise
+     */
+    public function getPropertyArray(string $name, array $default): array
+    {
+        $value = $this->getItemValue($name, $default);
+
+        if (\is_array($value) && \count($value) === \count($default)) {
+            return $value;
+        }
+
+        if (\is_string($value)) {
+            $values = \json_decode($value);
+            if ($values && \count($values) === \count($default)) {
+                return $values;
+            }
+        }
+
+        return $default;
+    }
+
+    /**
      * Gets a boolean property.
      *
      * @param string $name    the property name to search for
@@ -382,13 +408,13 @@ class ApplicationService implements ApplicationServiceInterface
     /**
      * Gets the user role rights.
      *
-     * @return string|null the rights
+     * @return int[] the rights
      */
-    public function getUserRights(): ?string
+    public function getUserRights(): array
     {
         $default = EntityVoter::getRoleUser()->getRights();
 
-        return $this->getPropertyString(self::USER_RIGHTS, $default);
+        return $this->getPropertyArray(self::USER_RIGHTS, $default);
     }
 
     /**

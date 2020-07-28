@@ -34,25 +34,25 @@ class EntityVoter extends Voter implements EntityVoterInterface
     use MathTrait;
 
     /**
-     * The entities list.
+     * The entities offset. This offsets are used to read/write rights.
      */
-    public const ENTITIES = [
-        self::ENTITY_CALCULATION,
-        self::ENTITY_CALCULATION_STATE,
-        self::ENTITY_CATEGORY,
-        self::ENTITY_CUSTOMER,
-        self::ENTITY_PRODUCT,
-        self::ENTITY_GLOBAL_MARGIN,
-        self::ENTITY_USER,
+    public const ENTITY_OFFSETS = [
+        self::ENTITY_CALCULATION => 0,
+        self::ENTITY_CALCULATION_STATE => 1,
+        self::ENTITY_CATEGORY => 2,
+        self::ENTITY_CUSTOMER => 3,
+        self::ENTITY_PRODUCT => 4,
+        self::ENTITY_GLOBAL_MARGIN => 5,
+        self::ENTITY_USER => 6,
     ];
 
     /**
-     * The value returned when attribute mask or entity offset are not found.
+     * The value returned when attribute mask or entity offset is not found.
      */
     public const INVALID_VALUE = -1;
 
     /**
-     * The attributes bit masks. This attributes are used to read bit set permission.
+     * The attributes bit masks. This attributes are used to read or write bit set permissions.
      */
     public const MASK_ATTRIBUTES = [
         self::ATTRIBUTE_ADD => 1,
@@ -61,19 +61,6 @@ class EntityVoter extends Voter implements EntityVoterInterface
         self::ATTRIBUTE_LIST => 8,
         self::ATTRIBUTE_PDF => 16,
         self::ATTRIBUTE_SHOW => 32,
-    ];
-
-    /**
-     * The entities byte offset. This offsets are used to read/write rights.
-     */
-    public const OFFSETS = [
-        self::ENTITY_CALCULATION => 0,
-        self::ENTITY_CALCULATION_STATE => 1,
-        self::ENTITY_CATEGORY => 2,
-        self::ENTITY_CUSTOMER => 3,
-        self::ENTITY_PRODUCT => 4,
-        self::ENTITY_GLOBAL_MARGIN => 5,
-        self::ENTITY_USER => 6,
     ];
 
     /**
@@ -99,6 +86,16 @@ class EntityVoter extends Voter implements EntityVoterInterface
     public static function getAttributeMask(string $name): int
     {
         return self::MASK_ATTRIBUTES[$name] ?? self::INVALID_VALUE;
+    }
+
+    /**
+     * Gets the empty rights.
+     *
+     * @return int[]
+     */
+    public static function getEmptyRights(): array
+    {
+        return \array_fill(0, \count(self::ENTITY_OFFSETS), 0);
     }
 
     /**
@@ -131,25 +128,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
      */
     public static function getEntityOffset(string $name): int
     {
-        return self::OFFSETS[$name] ?? self::INVALID_VALUE;
-    }
-
-    /**
-     * Gets the value at the given offset.
-     *
-     * @param string $source the string to get value from
-     * @param int    $offset the offset to get value for
-     *
-     * @return int the value or 0 if not found
-     */
-    public static function getOffsetValue(?string $source, int $offset): int
-    {
-        $source = Utils::toString($source);
-        if (isset($source[$offset])) {
-            return \ord($source[$offset]);
-        }
-
-        return 0;
+        return self::ENTITY_OFFSETS[$name] ?? self::INVALID_VALUE;
     }
 
     /**
@@ -180,7 +159,8 @@ class EntityVoter extends Voter implements EntityVoterInterface
     {
         $attributes = self::MASK_ATTRIBUTES;
         $role = new Role(RoleInterface::ROLE_ADMIN);
-        foreach (self::ENTITIES as $entity) {
+        $entities = \array_keys(self::ENTITY_OFFSETS);
+        foreach ($entities as $entity) {
             $role->{$entity} = $attributes;
         }
 
@@ -196,7 +176,8 @@ class EntityVoter extends Voter implements EntityVoterInterface
     {
         $attributes = self::MASK_ATTRIBUTES;
         $role = new Role(RoleInterface::ROLE_SUPER_ADMIN);
-        foreach (self::ENTITIES as $entity) {
+        $entities = \array_keys(self::ENTITY_OFFSETS);
+        foreach ($entities as $entity) {
             $role->{$entity} = $attributes;
         }
 
@@ -230,27 +211,6 @@ class EntityVoter extends Voter implements EntityVoterInterface
     }
 
     /**
-     * Sets the value at the given offset.
-     *
-     * @param string $source the string to update
-     * @param int    $offset the offset
-     * @param int    $value  the value to set at the offset. Must be between 0 and 255 (inclusive).
-     *
-     * @return string the updated string
-     */
-    public static function setOffsetValue(?string $source, int $offset, int $value): string
-    {
-        // ensure length
-        $source = Utils::toString($source);
-        $source .= \str_repeat(\chr(0), \max(0, $offset + 1 - \strlen($source)));
-
-        //set value
-        $source[$offset] = \chr($value);
-
-        return $source;
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @see Voter
@@ -264,7 +224,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
 
         // check entity name
         $name = self::getEntityName($subject);
-        if (!\array_key_exists($name, self::OFFSETS)) {
+        if (!\array_key_exists($name, self::ENTITY_OFFSETS)) {
             return false;
         }
 
@@ -290,7 +250,8 @@ class EntityVoter extends Voter implements EntityVoterInterface
         }
 
         // super admin can access all
-        if (\in_array(RoleInterface::ROLE_SUPER_ADMIN, $token->getRoleNames(), true)) {
+        $roles = $token->getRoleNames();
+        if (\in_array(RoleInterface::ROLE_SUPER_ADMIN, $roles, true)) {
             return  true;
         }
 
@@ -310,14 +271,14 @@ class EntityVoter extends Voter implements EntityVoterInterface
         // get rights
         if ($user->isOverwrite()) {
             $rights = $user->getRights();
-        } elseif (\in_array(RoleInterface::ROLE_ADMIN, $token->getRoleNames(), true)) {
+        } elseif (\in_array(RoleInterface::ROLE_ADMIN, $roles, true)) {
             $rights = $this->service->getAdminRights();
         } else {
             $rights = $this->service->getUserRights();
         }
 
         // get value
-        $value = self::getOffsetValue($rights, $offset);
+        $value = $rights[$offset];
 
         // check rights
         return $this->isBitSet($value, $mask);

@@ -122,7 +122,8 @@ class SearchDataTable extends AbstractDataTable
      */
     public function isActionGranted(string $action): bool
     {
-        foreach (EntityVoter::ENTITIES as $entity) {
+        $entities = \array_keys(EntityVoter::ENTITY_OFFSETS);
+        foreach ($entities as $entity) {
             if ($this->checker->isGranted($action, $entity)) {
                 return true;
             }

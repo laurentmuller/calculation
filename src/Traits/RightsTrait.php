@@ -24,12 +24,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 trait RightsTrait
 {
+    use MathTrait;
+
     /**
      * The rights.
      *
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="json", nullable=true)
      *
-     * @var string
+     * @var ?int[]
      */
     protected $rights;
 
@@ -65,27 +67,24 @@ trait RightsTrait
 
     /**
      * Gets the rights.
+     *
+     * @return int[]
      */
-    public function getRights(): ?string
+    public function getRights(): array
     {
-        return $this->rights;
+        return $this->rights ?? EntityVoter::getEmptyRights();
     }
 
     /**
      * Sets the rights.
      */
-    public function setRights(?string $rights): self
+    public function setRights(?array $rights): self
     {
-        // check if empty
-        $empty = true;
-        $len = \strlen((string) $rights);
-        for ($i = 0; $i < $len; ++$i) {
-            if (isset($rights[$i]) && 0 !== \ord($rights[$i])) {
-                $empty = false;
-                break;
-            }
+        if (empty($rights) || 0 === \array_sum($rights)) {
+            $this->rights = null;
+        } else {
+            $this->rights = $rights;
         }
-        $this->rights = $empty ? null : $rights;
 
         return $this;
     }
@@ -93,7 +92,7 @@ trait RightsTrait
     /**
      * Gets the rights for the given entity.
      *
-     * @param string $entity the entity class name
+     * @param string $entity the entity name
      *
      * @return int[] the rights
      */
@@ -106,18 +105,15 @@ trait RightsTrait
         }
 
         // get value
-        $value = EntityVoter::getOffsetValue($this->rights, $offset);
+        $value = $this->getRights()[$offset];
         if (0 === $value) {
             return [];
         }
 
         // filter
-        $attributes = EntityVoter::MASK_ATTRIBUTES;
-        $callback = function ($attribute) use ($value) {
-            return ($value & $attribute) === $attribute;
-        };
-
-        return \array_filter($attributes, $callback);
+        return \array_filter(EntityVoter::MASK_ATTRIBUTES, function (int $attribute) use ($value) {
+            return $this->isBitSet($value, $attribute);
+        });
     }
 
     /**
@@ -129,13 +125,15 @@ trait RightsTrait
      */
     private function nameExists(string $name): bool
     {
-        return \in_array($name, EntityVoter::ENTITIES, true);
+        $entities = \array_keys(EntityVoter::ENTITY_OFFSETS);
+
+        return \in_array($name, $entities, true);
     }
 
     /**
      * Sets the rights for the given entity.
      *
-     * @param string $entity the entity class name
+     * @param string $entity the entity name
      * @param int[]  $rights the rights to set
      */
     private function setEntityRights(string $entity, array $rights): self
@@ -143,15 +141,10 @@ trait RightsTrait
         // get offset
         $offset = EntityVoter::getEntityOffset($entity);
         if (EntityVoter::INVALID_VALUE !== $offset) {
-            // filter
-            $rights = \array_filter($rights, function (int $var) {
-                return \in_array($var, EntityVoter::MASK_ATTRIBUTES, true);
-            });
-
             // update
             $value = \array_sum($rights);
-            $oldRights = $this->rights;
-            $newRights = EntityVoter::setOffsetValue($oldRights, $offset, $value);
+            $newRights = $this->getRights();
+            $newRights[$offset] = $value;
 
             return $this->setRights($newRights);
         }

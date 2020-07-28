@@ -39,7 +39,7 @@ class RightsTraitTest extends TestCase implements EntityVoterInterface
 
     public function getEntities(): array
     {
-        return [EntityVoter::ENTITIES];
+        return [\array_keys(EntityVoter::ENTITY_OFFSETS)];
     }
 
     public function getMaskAttributes(): array
@@ -107,6 +107,6 @@ class RightsTraitTest extends TestCase implements EntityVoterInterface
             return EntityVoter::MASK_ATTRIBUTES[$key];
         }
 
-        return  EntityVoter::INVALID_VALUE;
+        return EntityVoter::INVALID_VALUE;
     }
 }

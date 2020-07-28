@@ -51,7 +51,6 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
         $attribute = 'FakeAttribute';
         $subject = Calculation::class;
         $expected = EntityVoter::ACCESS_ABSTAIN;
-
         $this->checkVote($user, $subject, $attribute, $expected);
     }
 
@@ -61,7 +60,6 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
         $attribute = self::ATTRIBUTE_ADD;
         $subject = static::class;
         $expected = EntityVoter::ACCESS_ABSTAIN;
-
         $this->checkVote($user, $subject, $attribute, $expected);
     }
 
@@ -75,7 +73,6 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
         $attribute = self::ATTRIBUTE_ADD;
         $subject = User::class;
         $expected = EntityVoter::ACCESS_GRANTED;
-
         $this->checkVote($user, $subject, $attribute, $expected);
     }
 
@@ -85,8 +82,29 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
         $attribute = self::ATTRIBUTE_ADD;
         $subject = Calculation::class;
         $expected = EntityVoter::ACCESS_DENIED;
-
         $this->checkVote($user, $subject, $attribute, $expected);
+    }
+
+    public function testEntities(): void
+    {
+        $entities = \array_keys(EntityVoter::ENTITY_OFFSETS);
+        for ($i = 0; $i < \count($entities); ++$i) {
+            $expected = $i;
+            $name = $entities[$i];
+            $actual = $this->voter->getEntityOffset($name);
+            $this->assertSame($expected, $actual);
+        }
+    }
+
+    public function testMaskAttributes(): void
+    {
+        $keys = \array_keys(EntityVoter::MASK_ATTRIBUTES);
+        for ($i = 0; $i < \count($keys); ++$i) {
+            $expected = 2 ** $i;
+            $name = $keys[$i];
+            $actual = $this->voter->getAttributeMask($name);
+            $this->assertSame($expected, $actual);
+        }
     }
 
     public function testSuperAdmin(): void
@@ -95,15 +113,19 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
         $attribute = self::ATTRIBUTE_ADD;
         $subject = Calculation::class;
         $expected = EntityVoter::ACCESS_GRANTED;
-
         $this->checkVote($user, $subject, $attribute, $expected);
+    }
+
+    protected function echo(string $name, $value, bool $newLine = false): void
+    {
+        $format = "\n%-15s: %s" . ($newLine ? "\n" : '');
+        \printf($format, \htmlspecialchars($name), $value);
     }
 
     private function checkVote(User $user, $subject, $attribute, $expected): void
     {
         $token = $this->getUserToken($user);
         $result = $this->voter->vote($token, $subject, [$attribute]);
-
         $this->assertSame($expected, $result);
     }
 

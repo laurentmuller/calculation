@@ -219,11 +219,11 @@ class AdminController extends AbstractController
      *
      * @param Request $request  the request
      * @param string  $roleName the role name
-     * @param string  $rights   the role rights
+     * @param int[]   $rights   the role rights
      * @param Role    $default  the role with default rights
      * @param string  $property the property name to update
      */
-    private function editRights(Request $request, string $roleName, ?string $rights, Role $default, string $property): Response
+    private function editRights(Request $request, string $roleName, ?array $rights, Role $default, string $property): Response
     {
         // name
         $pos = \strpos($roleName, '_');

@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Pivot;
 
 use App\Pivot\Aggregator\Aggregator;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Represents a pivot node.

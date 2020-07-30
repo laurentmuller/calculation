@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Represents a single day with a date.

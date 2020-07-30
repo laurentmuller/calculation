@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Service\ApplicationService;
-use App\Utils\FormatUtils;
+use App\Util\FormatUtils;
 
 /**
  * A combination of the date formatter trait and the number formatter trait.

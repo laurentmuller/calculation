@@ -3,6 +3,15 @@
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
+{# macros #}
+{% macro add_states(states) %}
+{%- set total = states|reduce((carry, state) => carry + state.count, 0) -%}
+<option value="">{{ 'datatable.all'|trans }} ({{ total|integer }})</option>
+{% for state in states %}
+    <option value="{{ state.id }}">{{ state.code }} ({{ state.count|integer }})</option>
+{% endfor %}
+{% endmacro %}
+
 {# parameters #}
 {%- set title       = 'calculation.list.title' -%}
 {%- set title_icon  = 'calculator' -%}
@@ -29,6 +38,19 @@
 {# highlight search #}
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
 
+{% block row_input -%}
+{% if states is defined %}
+<div class="col-auto">
+    <div class="form-inline">
+        <label class="mr-2" for="state">{{ 'calculation.fields.state'|trans }}</label>
+        <select id="state" name="state" class="form-control form-control-sm custom-select custom-select-sm">
+        {{ _self.add_states(states) -}}
+        </select>
+    </div>
+</div>
+{% endif %}
+{%- endblock %}
+
 {# other actions #}
 {% block table_actions %}
 {{ _self.item_data(clone_path, 'common.button_clone', 'copy far') }}
@@ -38,4 +60,9 @@
 {{ parent() }}
 {{ icons.dropdownSeparator() }}
 {{ icons.dropdownItemCard('calculation_list') }}
+{% endblock %}
+
+{% block javascripts -%}
+{{- parent() }}
+{% if states is defined %}{{- asset_js('js/application/calculation_table.js') }}{% endif %}
 {% endblock %}

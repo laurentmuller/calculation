@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Doctrine\ColumnHydrator;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;

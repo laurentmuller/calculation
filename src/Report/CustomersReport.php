@@ -19,7 +19,7 @@ use App\Entity\Customer;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Report for the list of customers.

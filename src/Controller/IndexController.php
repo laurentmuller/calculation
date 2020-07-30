@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTables\SearchDataTable;
+use App\DataTable\SearchDataTable;
 use App\Interfaces\EntityVoterInterface;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
@@ -42,7 +42,7 @@ class IndexController extends AbstractController
         $tabular = $this->isDisplayTabular();
 
         // get values to display
-        $states = $stateRepository->getByState();
+        $states = $stateRepository->getListCount();
         $months = $calculationRepository->getByMonth();
         $calculations = $calculationRepository->getLastCalculations($tabular ? 10 : 6);
         $edit = $this->getApplication()->isEditAction();

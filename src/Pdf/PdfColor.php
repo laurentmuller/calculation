@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Traits\MathTrait;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Define a RGB color.

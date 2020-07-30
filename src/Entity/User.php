@@ -150,7 +150,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     private $username;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default": 0})
      *
      * @var bool
      */

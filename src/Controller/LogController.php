@@ -14,11 +14,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTables\LogDataTable;
+use App\DataTable\LogDataTable;
 use App\Report\LogReport;
 use App\Service\LogService;
-use App\Utils\SymfonyUtils;
-use App\Utils\Utils;
+use App\Util\SymfonyUtils;
+use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;

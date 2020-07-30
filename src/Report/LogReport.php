@@ -25,7 +25,7 @@ use App\Pdf\PdfLine;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 

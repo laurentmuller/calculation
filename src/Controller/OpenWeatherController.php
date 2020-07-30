@@ -16,7 +16,7 @@ namespace App\Controller;
 
 use App\Database\OpenWeatherDatabase;
 use App\Service\OpenWeatherService;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormInterface;

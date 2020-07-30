@@ -323,18 +323,27 @@ class Category extends AbstractEntity
                 $lastMin = $min;
                 $lastMax = $max;
             } elseif ($min <= $lastMin) {
+                // the minimum is smaller than the previous maximum
                 $context->buildViolation('abstract_margin.minimum_overlap')
-                    ->atPath('margins[' . $key . '].minimum')
+                    ->atPath("margins[$key].minimum")
                     ->addViolation();
                 break;
             } elseif ($min >= $lastMin && $min < $lastMax) {
+                // the minimum is overlapping the previous margin
                 $context->buildViolation('abstract_margin.minimum_overlap')
-                    ->atPath('margins[' . $key . '].minimum')
+                    ->atPath("margins[$key].minimum")
                     ->addViolation();
                 break;
             } elseif ($max > $lastMin && $max < $lastMax) {
+                // the maximum is overlapping the previous margin
                 $context->buildViolation('abstract_margin.maximum_overlap')
-                    ->atPath('margins[' . $key . '].maximum')
+                    ->atPath("margins[$key].maximum")
+                    ->addViolation();
+                break;
+            } elseif ($min !== $lastMax) {
+                // the minimum is not equal to the previous maximum
+                $context->buildViolation('abstract_margin.minimum_discontinued')
+                    ->atPath("margins[$key].minimum")
                     ->addViolation();
                 break;
             } else {

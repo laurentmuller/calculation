@@ -12,24 +12,24 @@ parameters:
     app_owner_url:      https://www.bibi.nu
     app_owner_city:     Montévraz
     app_description:    Programme de calculation.
-    
+
     app_secret:         '%env(APP_SECRET)%'
-    app_environment:    '%env(APP_ENVIRONMENT)%'    
+    app_environment:    '%env(APP_ENVIRONMENT)%'
 
     # mailer
     mailer_user_name: Calculation
     mailer_user_email: calculation@bibi.nu
 
-    
+
     # assets
     asset_base: '%env(ASSET_BASE)%'
     asset_locale: '%env(ASSET_LOCALE)%'
-    
+
     # cookies
     cookie_path: '%env(COOKIE_PATH)%'
     cookie_secure: '%env(bool:COOKIE_SECURE)%'
     cookie_same_site: '%env(COOKIE_SAME_SITE)%'
-    
+
     # keys
     openweather_key: '%env(OPENWEATHER_KEY)%'
     bing_translator_key:   '%env(BING_TRANSLATOR_KEY)%'
@@ -37,18 +37,18 @@ parameters:
     yandex_translator_key: '%env(YANDEX_TRANSLATOR_KEY)%'
 
     google_recaptcha_secret: '%env(GOOGLE_RECAPTCHA_SECRET)%'
-    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'    
-    
+    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
+
     #links
     link_dev: '%env(LINK_DEV)%'
     link_prod: '%env(LINK_PROD)%'
-    
+
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-            
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -64,7 +64,7 @@ services:
     # App\Listener\PersistenceListener:
     #     tags:
     #         - { name: 'doctrine.event_subscriber' }
-            
+
     # make public to use with vich_uploader
     App\Service\UserNamer:
         public: true
@@ -72,23 +72,28 @@ services:
     # passwords blacklist
     App\Service\BlacklistProvider:
         arguments: ['%kernel.project_dir%/resources/data/passwords.txt']
-    
+
     # validators
     App\Validator\RecaptchaValidator:
         arguments: ['%google_recaptcha_secret%']
-        
+
     # datatables
-    App\DataTables\:
-        resource: '../src/DataTables/'
-        exclude:  '../src/DataTables/{Columns, Tables}'
+    App\DataTable\:
+        resource: '../src/DataTable/'
+        exclude:  '../src/DataTable/Model'
         tags: [datatable]
 
     # used to update calculation when groups or items change
     App\Listener\CalculationListener:
         tags:
             - { name: doctrine.event_listener, event: onFlush}
-         
+
+    # used to update TimestampableInterface
+    App\Listener\TimestampableListener:
+        tags:
+            - { name: doctrine.event_listener, event: onFlush}
+
     # custom line formatter for monolog
-    monolog.custom_formatter: 
+    monolog.custom_formatter:
         class: Monolog\Formatter\LineFormatter
         arguments: ["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", "d.m.Y H:i:s"]

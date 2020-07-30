@@ -19,7 +19,7 @@ use App\Entity\Category;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Report for the list of categories.

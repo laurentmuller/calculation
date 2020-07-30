@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Utils\Utils;
+use App\Util\Utils;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**

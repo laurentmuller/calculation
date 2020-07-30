@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTables\CalculationStateDataTable;
+use App\DataTable\CalculationStateDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
 use App\Form\CalculationStateType;

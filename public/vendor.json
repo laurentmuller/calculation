@@ -118,16 +118,6 @@
 			]
 		},
 		{
-			"name": "jquery.highlight",
-			"version": "5",
-			"source": "https://raw.githubusercontent.com/bartaz/sandbox.js/master",
-			"format": "{source}/{file}",
-			"target": "datatables/js",
-			"files": [
-				"jquery.highlight.js"
-			]
-		},
-		{
 			"name": "zxcvbn",
 			"version": "4.4.2",
 			"files": [

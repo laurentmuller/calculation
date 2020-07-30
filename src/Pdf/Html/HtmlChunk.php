@@ -20,7 +20,7 @@ use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfTextColor;
 use App\Report\HtmlReport;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Represents a HTML chunk.

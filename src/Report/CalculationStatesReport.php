@@ -24,7 +24,7 @@ use App\Pdf\PdfFillColor;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Report for the list of calculation states.

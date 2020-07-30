@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTables\CategoryDataTable;
+use App\DataTable\CategoryDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Form\CategoryType;

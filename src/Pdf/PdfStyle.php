@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * This class describe a style that can be apply to a PDF document.

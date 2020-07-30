@@ -16,7 +16,7 @@ namespace App\Pivot;
 
 use App\Pivot\Aggregator\Aggregator;
 use App\Pivot\Field\PivotField;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * The pivot table.

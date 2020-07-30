@@ -23,7 +23,7 @@ use App\Entity\GlobalMargin;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Traits\TranslatorFlashMessageTrait;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;

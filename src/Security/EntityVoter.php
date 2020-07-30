@@ -20,7 +20,7 @@ use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
 use App\Traits\MathTrait;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 

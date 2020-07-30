@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Entity\Calculation;
-use App\Utils\Utils;
+use App\Util\Utils;
 use PHPUnit\Framework\TestCase;
 
 /**

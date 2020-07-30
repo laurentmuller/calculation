@@ -39,11 +39,25 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
+     * Gets the the list of calculation states sorted by code.
+     *
+     * @return CalculationState[] the calculation states
+     */
+    public function getList(): array
+    {
+        return $this->getSortedBuilder()
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
      * Gets states with the number and the sum of calculations.
+     *
+     * <b>Note:</b> Only states with at least one calculation are returned.
      *
      * @return array a array with the state, the number and the sum of calculations
      */
-    public function getByState(): array
+    public function getListCount(): array
     {
         $builder = $this->createQueryBuilder('s')
             ->select('s.id')
@@ -54,15 +68,9 @@ class CalculationStateRepository extends AbstractRepository
             ->addSelect('SUM(c.overallTotal) as total')
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
-            ->orderBy('s.editable', Criteria::DESC)
-            ->addOrderBy('s.code');
+            ->orderBy('s.code', Criteria::ASC);
 
-        try {
-            // update percent
-            return $builder->getQuery()->getArrayResult();
-        } catch (\Exception $e) {
-            return [];
-        }
+        return $builder->getQuery()->getArrayResult();
     }
 
     /**

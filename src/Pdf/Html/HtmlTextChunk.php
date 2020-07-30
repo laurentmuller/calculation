@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Report\HtmlReport;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Represents a text chunk.

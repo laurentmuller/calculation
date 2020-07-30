@@ -14,13 +14,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\TimestampableInterface;
 use App\Traits\FormatterTrait;
-use App\Traits\MathTrait;
+use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Blameable\Traits\BlameableEntity as BlameableTrait;
-use Gedmo\Timestampable\Traits\TimestampableEntity as TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -29,11 +28,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\CalculationRepository")
  * @ORM\Table(name="sy_Calculation")
  */
-class Calculation extends AbstractEntity
+class Calculation extends AbstractEntity implements TimestampableInterface
 {
-    use BlameableTrait;
     use FormatterTrait;
-    use MathTrait;
     use TimestampableTrait;
 
     /**
@@ -143,7 +140,7 @@ class Calculation extends AbstractEntity
         $this->groups = new ArrayCollection();
 
         // default values
-        $this->date = $this->createdAt = $this->updatedAt = new \DateTime();
+        $this->date = new \DateTime();
         $this->globalMargin = $this->userMargin = 0.0;
         $this->itemsTotal = $this->overallTotal = 0.0;
     }
@@ -198,10 +195,9 @@ class Calculation extends AbstractEntity
     /**
      * Clone this calculation.
      *
-     * @param CalculationState $state    the default state
-     * @param string           $userName the user name
+     * @param CalculationState $state the default state
      */
-    public function clone(?CalculationState $state, ?string $userName): self
+    public function clone(?CalculationState $state): self
     {
         /** @var Calculation $copy */
         $copy = clone $this;
@@ -209,10 +205,6 @@ class Calculation extends AbstractEntity
         // copy default values
         if ($state) {
             $copy->setState($state);
-        }
-        if ($userName) {
-            $copy->setCreatedBy($userName)
-                ->setUpdatedBy($userName);
         }
 
         return $copy;

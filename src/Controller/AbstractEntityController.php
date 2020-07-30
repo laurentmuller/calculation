@@ -14,14 +14,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTables\Tables\AbstractEntityDataTable;
+use App\DataTable\Model\AbstractEntityDataTable;
 use App\Entity\AbstractEntity;
 use App\Interfaces\EntityVoterInterface;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfResponse;
 use App\Repository\AbstractRepository;
 use App\Security\EntityVoter;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -366,10 +366,11 @@ abstract class AbstractEntityController extends AbstractController
      * @param Request                 $request    the request to get parameters
      * @param AbstractEntityDataTable $table      the data table
      * @param array                   $attributes additional data table attributes
+     * @param array                   $parameters parameters to pass to the view
      *
      * @return Response a JSON response if is a callback, the data table view otherwise
      */
-    protected function renderTable(Request $request, AbstractEntityDataTable $table, array $attributes = []): Response
+    protected function renderTable(Request $request, AbstractEntityDataTable $table, array $attributes = [], array $parameters = []): Response
     {
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
@@ -383,7 +384,7 @@ abstract class AbstractEntityController extends AbstractController
         $attributes['edit-action'] = \json_encode($this->getApplication()->isEditAction());
 
         // parameters
-        $parameters = [
+        $parameters += [
             'results' => $results,
             'attributes' => $attributes,
             'columns' => $table->getColumns(),

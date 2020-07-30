@@ -16,7 +16,7 @@ namespace App\Chart;
 
 use App\Service\ApplicationService;
 use App\Traits\FormatterTrait;
-use App\Utils\DateUtils;
+use App\Util\DateUtils;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 
 /**

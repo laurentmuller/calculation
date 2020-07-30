@@ -3,6 +3,15 @@
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
+{# macros #}
+{% macro add_categories(categories) %}
+{%- set total = categories|reduce((carry, category) => carry + category.count, 0) -%}
+<option value="">{{ 'datatable.all'|trans }} ({{ total|integer }})</option>
+{% for category in categories %}
+    <option value="{{ category.id }}">{{ category.code }} ({{ category.count|integer }})</option>
+{% endfor %}
+{% endmacro %}
+
 {# parameters #}
 {%- set title       = 'product.list.title' -%}
 {%- set title_icon  = 'file-alt far' -%}
@@ -26,8 +35,24 @@
 {# highlight search #}
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
 
+{% block row_input -%}
+<div class="col-auto">
+    <div class="form-inline">
+        <label class="mr-2" for="category">{{ 'product.fields.category'|trans }}</label>
+        <select id="category" name="category" class="form-control form-control-sm custom-select custom-select-sm">
+        {{ _self.add_categories(categories) -}}
+        </select>
+    </div>
+</div>
+{%- endblock %}
+
 {% block table_actions -%}
 {{ parent() }}
 {{ icons.dropdownSeparator() }}
 {{ icons.dropdownItemCard('product_list') }}
 {%- endblock %}
+
+{% block javascripts -%}
+{{- parent() }}
+{{- asset_js('js/application/product_table.js') }}
+{% endblock %}

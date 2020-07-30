@@ -19,7 +19,7 @@ use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\ThemeService;
 use App\Traits\MathTrait;
-use App\Utils\DateUtils;
+use App\Util\DateUtils;
 use Laminas\Json\Expr;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
@@ -283,7 +283,7 @@ class ChartController extends AbstractController
     public function getChartStateData(CalculationStateRepository $repository, ThemeService $service, string $url): array
     {
         // get values
-        $states = $repository->getByState();
+        $states = $repository->getListCount();
 
         // update percents
         $count = \array_reduce($states, function (float $carry, array $state) {

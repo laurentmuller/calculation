@@ -16,7 +16,7 @@ namespace App\Entity;
 
 use App\Traits\MathTrait;
 use App\Traits\SearchTrait;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -79,27 +79,6 @@ abstract class AbstractEntity
     public function isNew(): bool
     {
         return empty($this->id);
-    }
-
-    /**
-     * Returns if this entity match the given search term.
-     *
-     * @param string $query the search term
-     *
-     * @return bool true if match
-     *
-     * @see AbstractEntity::getSearchTerms()
-     */
-    public function match(string $query): bool
-    {
-        $terms = $this->getSearchTerms();
-        foreach ($terms as $term) {
-            if (false !== \stripos((string) $term, $query)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Calendar;
 
 use App\Traits\DateFormatterTrait;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Base class for calendar objects.

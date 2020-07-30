@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use Behat\Transliterator\Transliterator;
+use Symfony\Component\String\UnicodeString;
 
 /**
  * Trait for search functionality.
@@ -32,11 +32,11 @@ trait SearchTrait
      */
     public function match(string $query): bool
     {
-        $query = Transliterator::unaccent($query);
+        $query = $this->ascii($query);
         $terms = $this->getSearchTerms();
         foreach ($terms as $term) {
-            if (null !== $term && false !== \stripos(Transliterator::unaccent($term), $query)) {
-                return true;
+            if (null !== $term && $this->ignoreCase($term)->containsAny($query)) {
+                return  true;
             }
         }
 
@@ -49,4 +49,20 @@ trait SearchTrait
      * @return string[]
      */
     abstract protected function getSearchTerms(): array;
+
+    /**
+     * Converts the given string to ASCII transliteration.
+     */
+    private function ascii(string $value): UnicodeString
+    {
+        return (new UnicodeString($value))->ascii();
+    }
+
+    /**
+     * Converts the given string to ASCII transliteration and ignore case.
+     */
+    private function ignoreCase(string $value): UnicodeString
+    {
+        return $this->ascii($value)->ignoreCase();
+    }
 }

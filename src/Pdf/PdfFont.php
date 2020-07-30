@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Define a font style.

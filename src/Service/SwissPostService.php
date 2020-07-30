@@ -18,7 +18,7 @@ use App\Database\SwissDatabase;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;

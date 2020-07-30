@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTables\GlobalMarginDataTable;
+use App\DataTable\GlobalMarginDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\GlobalMargin;
 use App\Form\GlobalMarginType;

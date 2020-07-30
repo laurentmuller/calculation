@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
-use App\Utils\DateUtils;
-use App\Utils\Utils;
+use App\Util\DateUtils;
+use App\Util\Utils;
 
 /**
  * Represents a calendar for a specified year.

@@ -16,7 +16,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Form\Type\RightsType;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;

@@ -18,7 +18,7 @@ use App\Controller\AbstractController;
 use App\Entity\Product;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Report for the list of products.

@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTables\CalculationBelowDataTable;
-use App\DataTables\CalculationDataTable;
-use App\DataTables\CalculationDuplicateDataTable;
-use App\DataTables\CalculationEmptyDataTable;
+use App\DataTable\CalculationBelowDataTable;
+use App\DataTable\CalculationDataTable;
+use App\DataTable\CalculationDuplicateDataTable;
+use App\DataTable\CalculationEmptyDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\Category;
@@ -25,6 +25,7 @@ use App\Form\CalculationEditStateType;
 use App\Form\CalculationType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Listener\CalculationListener;
+use App\Listener\TimestampableListener;
 use App\Pdf\PdfResponse;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotFieldFactory;
@@ -34,11 +35,10 @@ use App\Report\CalculationDuplicateTableReport;
 use App\Report\CalculationEmptyTableReport;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
+use App\Repository\CalculationStateRepository;
 use App\Service\CalculationService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\EventManager;
-use Gedmo\Blameable\BlameableListener;
-use Gedmo\Timestampable\TimestampableListener;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -93,15 +93,6 @@ class CalculationController extends AbstractEntityController
     {
         // create
         $item = new Calculation();
-
-        // default values
-        $userName = $this->getUserName();
-        if ($userName) {
-            $item->setCreatedBy($userName)
-                ->setUpdatedBy($userName);
-        }
-
-        // default state
         if ($state = $this->getApplication()->getDefaultState()) {
             $item->setState($state);
         }
@@ -174,21 +165,26 @@ class CalculationController extends AbstractEntityController
      * @Route("/below/table", name="calculation_below_table")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function belowTable(Request $request, CalculationBelowDataTable $table): Response
+    public function belowTable(Request $request, CalculationBelowDataTable $table, CalculationStateRepository $repository): Response
     {
         $attributes = [];
+        $parameters = [];
 
         // callback?
         if (!$request->isXmlHttpRequest()) {
+            // attributes
             $margin = $this->getApplication()->getMinMargin();
             $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => $this->localePercent($margin)]);
             $attributes = [
                 'min_margin' => $margin,
                 'min_margin_text' => $margin_text,
             ];
+
+            // parameters
+            $parameters['states'] = $repository->getListCount();
         }
 
-        return $this->renderTable($request, $table, $attributes);
+        return $this->renderTable($request, $table, $attributes, $parameters);
     }
 
     /**
@@ -221,8 +217,7 @@ class CalculationController extends AbstractEntityController
     {
         // clone
         $state = $this->getApplication()->getDefaultState();
-        $userName = $this->getUserName();
-        $clone = $item->clone($state, $userName);
+        $clone = $item->clone($state);
 
         $parameters = [
             'overall_below' => $this->isMarginBelow($clone),
@@ -607,9 +602,10 @@ class CalculationController extends AbstractEntityController
      *
      * @Route("/table", name="calculation_table", methods={"GET", "POST"})
      */
-    public function table(Request $request, CalculationDataTable $table): Response
+    public function table(Request $request, CalculationDataTable $table, CalculationStateRepository $repository): Response
     {
         $attributes = [];
+        $parameters = [];
 
         // callback?
         if (!$request->isXmlHttpRequest()) {
@@ -620,9 +616,12 @@ class CalculationController extends AbstractEntityController
                 'min_margin' => $margin,
                 'min_margin_text' => $margin_text,
             ];
+
+            // parameters
+            $parameters['states'] = $repository->getListCount();
         }
 
-        return $this->renderTable($request, $table, $attributes);
+        return $this->renderTable($request, $table, $attributes, $parameters);
     }
 
     /**
@@ -811,7 +810,6 @@ class CalculationController extends AbstractEntityController
         foreach ($allListeners as $event => $listeners) {
             foreach ($listeners as $listener) {
                 if ($listener instanceof TimestampableListener
-                    || $listener instanceof BlameableListener
                     || $listener instanceof CalculationListener) {
                     $suspended[$event][] = $listener;
                     $manager->removeEventListener($event, $listener);

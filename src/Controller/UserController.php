@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTables\UserDataTable;
+use App\DataTable\UserDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Comment;
 use App\Entity\User;
@@ -30,7 +30,7 @@ use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
 use App\Security\EntityVoter;
 use App\Service\ThemeService;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

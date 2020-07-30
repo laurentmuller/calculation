@@ -22,7 +22,7 @@ use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;

@@ -26,7 +26,7 @@ use App\Pdf\PdfGroupListenerInterface;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Security\EntityVoter;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * Report for the list of user rights.

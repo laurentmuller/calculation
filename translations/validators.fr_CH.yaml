@@ -3,7 +3,8 @@ abstract_margin:
     maximum_numeric: La valeur maximale doit être un nombre.
     minimum_overlap: La valeur minimale chevauche une marge existante.
     maximum_overlap: La valeur maximale chevauche une marge existante.
-    type_numeric: La valeur doit être un nombre.
+    minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximal précédente.
+    type_numeric: La valeur doit être un nombre.    
 category:
     unique_code: Ce nom est déjà utilisé par une autre catégorie.
 product:

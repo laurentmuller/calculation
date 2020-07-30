@@ -81,13 +81,41 @@ class CalculationControllerTest extends AbstractControllerTest
             ['/calculation/show/1', self::ROLE_ADMIN],
             ['/calculation/show/1', self::ROLE_SUPER_ADMIN],
 
+            ['/calculation/pdf/1', self::ROLE_USER],
+            ['/calculation/pdf/1', self::ROLE_ADMIN],
+            ['/calculation/pdf/1', self::ROLE_SUPER_ADMIN],
+
             ['/calculation/pdf', self::ROLE_USER],
             ['/calculation/pdf', self::ROLE_ADMIN],
             ['/calculation/pdf', self::ROLE_SUPER_ADMIN],
 
-//             ['/calculation/pdf/1', self::ROLE_USER],
-//             ['/calculation/pdf/1', self::ROLE_ADMIN],
-//             ['/calculation/pdf/1', self::ROLE_SUPER_ADMIN],
+            ['/calculation/below', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/below', self::ROLE_ADMIN],
+            ['/calculation/below', self::ROLE_SUPER_ADMIN],
+
+            ['/calculation/below/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/below/table', self::ROLE_ADMIN],
+            ['/calculation/below/table', self::ROLE_SUPER_ADMIN],
+
+            ['/calculation/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/duplicate', self::ROLE_ADMIN],
+            ['/calculation/duplicate', self::ROLE_SUPER_ADMIN],
+
+            ['/calculation/duplicate/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/duplicate/table', self::ROLE_ADMIN],
+            ['/calculation/duplicate/table', self::ROLE_SUPER_ADMIN],
+
+            ['/calculation/empty', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/empty', self::ROLE_ADMIN],
+            ['/calculation/empty', self::ROLE_SUPER_ADMIN],
+
+            ['/calculation/empty/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/empty/table', self::ROLE_ADMIN],
+            ['/calculation/empty/table', self::ROLE_SUPER_ADMIN],
+
+            ['/calculation/update', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/update', self::ROLE_ADMIN],
+            ['/calculation/update', self::ROLE_SUPER_ADMIN],
         ];
     }
 
@@ -96,7 +124,6 @@ class CalculationControllerTest extends AbstractControllerTest
      */
     public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
     {
-        // $this->markTestSkipped('Must find errors before to enable.');
         self::addEntities();
         $this->checkRoute($url, $username, $expected);
     }

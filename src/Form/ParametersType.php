@@ -22,7 +22,7 @@ use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
 use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
-use App\Utils\FormatUtils;
+use App\Util\FormatUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\Security;

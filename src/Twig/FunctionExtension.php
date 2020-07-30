@@ -18,7 +18,7 @@ use App\Controller\IndexController;
 use App\Entity\Calculation;
 use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;

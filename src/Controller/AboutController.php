@@ -17,7 +17,7 @@ namespace App\Controller;
 use App\Pdf\PdfResponse;
 use App\Report\HtmlReport;
 use App\Report\PhpIniReport;
-use App\Utils\SymfonyUtils;
+use App\Util\SymfonyUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;

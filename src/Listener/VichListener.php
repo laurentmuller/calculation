@@ -17,7 +17,7 @@ namespace App\Listener;
 use App\Interfaces\ImageExtensionInterface;
 use App\Service\ImageResizer;
 use App\Service\UserNamer;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Event\Event;

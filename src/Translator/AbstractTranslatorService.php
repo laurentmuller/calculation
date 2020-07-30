@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use App\Service\HttpClientService;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;

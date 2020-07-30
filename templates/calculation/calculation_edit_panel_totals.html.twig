@@ -12,7 +12,7 @@
             </tbody>
         </table>
     </div>
-    <div class="card-footer p-1">
+    <div class="card-footer p-1{% if new %} d-none{% endif %}">
         <div class="row">
             <div class="col small text-muted my-2 mx-1">
 	           <span>{{ 'calculation.fields.created'|trans }}</span>{{ form_widget(form.createdAt) }}<span> - </span>{{ form_widget(form.createdBy) }}

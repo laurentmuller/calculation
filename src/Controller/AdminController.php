@@ -21,7 +21,7 @@ use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\SwissPostService;
-use App\Utils\SymfonyUtils;
+use App\Util\SymfonyUtils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Console\Application;

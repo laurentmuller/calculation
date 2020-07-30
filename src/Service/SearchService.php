@@ -19,7 +19,7 @@ use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Customer;
 use App\Entity\Product;
-use App\Utils\Utils;
+use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;

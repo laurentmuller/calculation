@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\SessionTrait;
-use App\Utils\ImageHandler;
+use App\Util\ImageHandler;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTables\CustomerDataTable;
+use App\DataTable\CustomerDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Customer;
 use App\Form\CustomerType;

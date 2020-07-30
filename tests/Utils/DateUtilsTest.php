@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Utils;
 
-use App\Utils\DateUtils;
+use App\Util\DateUtils;
 use PHPUnit\Framework\TestCase;
 
 /**

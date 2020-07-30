@@ -37,7 +37,7 @@ use App\Service\SearchService;
 use App\Service\SwissPostService;
 use App\Service\ThemeService;
 use App\Translator\TranslatorFactory;
-use App\Utils\DateUtils;
+use App\Util\DateUtils;
 use App\Validator\Captcha;
 use App\Validator\Password;
 use Doctrine\ORM\EntityManagerInterface;

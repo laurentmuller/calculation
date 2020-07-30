@@ -17,10 +17,8 @@ namespace App\Listener;
 use App\Entity\Calculation;
 use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
-use App\Traits\TranslatorTrait;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -30,31 +28,31 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 final class CalculationListener
 {
-    use TranslatorTrait;
+    /**
+     * @var Security
+     */
+    private $security;
 
     /**
-     * @var TokenStorageInterface
+     * the default user name.
      */
-    private $tokenStorage;
+    private $username;
 
     /**
      * Constructor.
-     *
-     * @param TokenStorageInterface $tokenStorage the token storage to get the user name
-     * @param TranslatorInterface   $translator   the translator for messages
      */
-    public function __construct(TokenStorageInterface $tokenStorage, TranslatorInterface $translator)
+    public function __construct(Security $security, TranslatorInterface $translator)
     {
-        $this->tokenStorage = $tokenStorage;
-        $this->translator = $translator;
+        $this->security = $security;
+        $this->username = $translator->trans('calculation.edit.empty_user');
     }
 
     /**
-     * Handles the on flush event.
+     * Handles the flush event.
      */
     public function onFlush(OnFlushEventArgs $args): void
     {
-        // get inserted and updated entities
+        // get entities
         $em = $args->getEntityManager();
         $unitOfWork = $em->getUnitOfWork();
         $entities = \array_merge($unitOfWork->getScheduledEntityInsertions(), $unitOfWork->getScheduledEntityUpdates(), $unitOfWork->getScheduledCollectionDeletions());
@@ -62,16 +60,17 @@ final class CalculationListener
             return;
         }
 
-        // filter
+        // get calculations
         /** @var \App\Entity\Calculation[] $calculations */
         $calculations = $this->getCalculations($entities);
         if (empty($calculations)) {
             return;
         }
 
-        $date = new \DateTime();
         $user = $this->getUserName();
+        $date = new \DateTimeImmutable();
         $metadata = $em->getClassMetadata(Calculation::class);
+
         foreach ($calculations as $calculation) {
             // update
             $calculation->setUpdatedAt($date)
@@ -86,7 +85,7 @@ final class CalculationListener
     /**
      * Filters the entities and returns the calculations to update.
      *
-     * @param array $entities the created and updated entities
+     * @param array $entities the modified entities
      *
      * @return \App\Entity\Calculation[] the calculations to update (can be empty)
      */
@@ -96,7 +95,7 @@ final class CalculationListener
 
         // filter
         foreach ($entities as $entity) {
-            // calculation are already updated
+            // calculation is already updated
             if ($entity instanceof Calculation) {
                 continue;
             }
@@ -121,17 +120,11 @@ final class CalculationListener
      */
     private function getUserName(): string
     {
-        if ($token = $this->tokenStorage->getToken()) {
-            $user = $token->getUser();
-            if ($user instanceof UserInterface) {
-                return $user->getUsername();
-            }
-            if (\is_string($user)) {
-                return $user;
-            }
+        if ($user = $this->security->getUser()) {
+            return $user->getUsername();
         }
 
         // default user
-        return $this->trans('calculation.edit.empty_user');
+        return $this->username;
     }
 }

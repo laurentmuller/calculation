@@ -378,6 +378,8 @@ class CalculationRepository extends AbstractRepository
         switch ($field) {
             case 'date':
                 return "DATE_FORMAT({$alias}.{$field}, '%d.%m.%Y')";
+            case 'state.id':
+                return 's.id';
             case 'state.code':
                 return 's.code';
             case 'state.color':
@@ -395,6 +397,7 @@ class CalculationRepository extends AbstractRepository
         switch ($field) {
             case 'overallMargin':
                 return "IFELSE({$alias}.itemsTotal != 0, ({$alias}.overallTotal / {$alias}.itemsTotal) - 1, 0)";
+            case 'state.id':
             case 'state.code':
                 return 's.code';
             case 'state.color':

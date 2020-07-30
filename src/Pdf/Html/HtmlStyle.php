@@ -16,7 +16,7 @@ namespace App\Pdf\Html;
 
 use App\Pdf\PdfAlignmentTrait;
 use App\Pdf\PdfStyle;
-use App\Utils\Utils;
+use App\Util\Utils;
 
 /**
  * The HTML style.

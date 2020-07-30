@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Pivot\Field;
 
-use App\Utils\DateUtils;
+use App\Util\DateUtils;
 
 /**
  * Pivot field that map month values (1...12) to month names (january, february, etc...).

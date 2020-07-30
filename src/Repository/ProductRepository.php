@@ -74,6 +74,8 @@ class ProductRepository extends AbstractRepository
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
     {
         switch ($field) {
+            case 'category.id':
+                return 'c.id';
             case 'category.code':
                 return 'c.code';
             default:
@@ -87,8 +89,8 @@ class ProductRepository extends AbstractRepository
     public function getSortFields(string $field, string $alias = self::DEFAULT_ALIAS)
     {
         switch ($field) {
+            case 'category.id':
             case 'category.code':
-            //case "$alias.code":
                 return 'c.code';
             default:
                 return parent::getSortFields($field, $alias);

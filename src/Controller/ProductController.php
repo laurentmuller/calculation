@@ -14,12 +14,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTables\ProductDataTable;
+use App\DataTable\ProductDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Pdf\PdfResponse;
 use App\Report\ProductsReport;
+use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -160,9 +161,14 @@ class ProductController extends AbstractEntityController
      *
      * @Route("/table", name="product_table", methods={"GET", "POST"})
      */
-    public function table(Request $request, ProductDataTable $table): Response
+    public function table(Request $request, ProductDataTable $table, CategoryRepository $repository): Response
     {
-        return $this->renderTable($request, $table);
+        $parameters = [];
+        if (!$request->isXmlHttpRequest()) {
+            $parameters['categories'] = $repository->getListCount();
+        }
+
+        return $this->renderTable($request, $table, [], $parameters);
     }
 
     /**

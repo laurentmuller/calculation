@@ -12,17 +12,7 @@
 			<attribute name="composer" value="source"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/antishov/doctrine-extensions-bundle">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/beberlei/doctrineextensions/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/behat/transliterator/src/Behat/Transliterator">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
@@ -142,11 +132,6 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/gedmo/doctrine-extensions/lib/Gedmo">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/google/recaptcha/src/ReCaptcha">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -208,21 +193,6 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/ocramius/proxy-manager/src/ProxyManager">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/phpdocumentor/reflection-common/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/phpdocumentor/reflection-docblock/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/phpdocumentor/type-resolver/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
@@ -683,11 +653,6 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/webinarium/datatables-bundle/tests">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/webmozart/assert/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

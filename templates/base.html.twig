@@ -3,7 +3,7 @@
 {# parameters #}
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set title_domain     = title_domain|default(null) -%}
-{%- set page_title       = app_name ~ ' - ' ~ title|trans(title_parameters, title_domain) -%}
+{%- set page_title       = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
 {%- set page_icon        = asset('images/icons/icon-032x032.png') -%}
 {%- set apple_icon       = asset('images/icons/icon-180x180.png') -%}
 {# head #}

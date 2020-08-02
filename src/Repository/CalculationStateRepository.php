@@ -51,11 +51,11 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * Gets states with the number and the sum of calculations.
+     * Gets states with the number and the sum (overall total) of calculations.
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
      *
-     * @return array a array with the state, the number and the sum of calculations
+     * @return CalculationState[] the states with the number and the sum of calculations
      */
     public function getListCount(): array
     {
@@ -75,12 +75,14 @@ class CalculationStateRepository extends AbstractRepository
 
     /**
      * Gets the query builder for the list of states sorted by code.
+     *
+     * @param string $alias the default entity alias
      */
-    public function getSortedBuilder(): QueryBuilder
+    public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        $field = (string) $this->getSortFields('code');
+        $field = (string) $this->getSortFields('code', $alias);
 
-        return $this->createQueryBuilder(self::DEFAULT_ALIAS)
+        return $this->createQueryBuilder($alias)
             ->orderBy($field, Criteria::ASC);
     }
 }

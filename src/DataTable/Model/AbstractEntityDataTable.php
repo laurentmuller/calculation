@@ -16,8 +16,8 @@ namespace App\DataTable\Model;
 
 use App\Entity\AbstractEntity;
 use App\Repository\AbstractRepository;
+use App\Security\EntityVoter;
 use App\Service\ApplicationService;
-use App\Util\Utils;
 use DataTables\Column;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
@@ -291,7 +291,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     {
         $className = $this->repository->getClassName();
 
-        return Utils::getShortName($className);
+        return EntityVoter::getEntityName($className);
     }
 
     /**

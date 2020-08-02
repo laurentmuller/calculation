@@ -673,7 +673,7 @@ span.color-value {
 }
 
 /**
- * horizontal line on the right of a label
+ * horizontal line on the right of a label or a link
  */
 .horizontal-line {
     display: flex;
@@ -686,6 +686,11 @@ span.color-value {
     margin: auto auto auto 0.5rem;
 }
 
+.horizontal-line i {
+    font-size: inherit;
+    line-height: inherit;
+    /*margin-left: 0.25rem;*/
+}
 /**
  * popover for calendar and cross-table
  */

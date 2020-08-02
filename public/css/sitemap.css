@@ -36,7 +36,6 @@
 	/*margin: 0 0 2em 0;*/
 }
 
-
 /* ------------------------------------------------------------
 	Page Styles
 ------------------------------------------------------------ */
@@ -70,6 +69,10 @@
 	padding-right: 1.25em;
 	position: relative;    
 }
+.primaryNav li:last-child {
+    padding-right: 0;
+}
+
 .primaryNav > ul > li {
 	margin-top: 3em;
 }
@@ -283,7 +286,7 @@
 	float: right;
 	margin-top: 0;
 	margin-bottom: -.25em;
-	margin-right: 1.25em;
+	/*margin-right: 1.25em;*/
 	max-width: 48%;
 	list-style-type: none;
 }

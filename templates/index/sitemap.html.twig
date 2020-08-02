@@ -16,16 +16,40 @@
 {%- set title          = 'index.menu_site_map' -%}
 {%- set title_icon     = 'sitemap' -%}
 {%- set is_dev         = app.debug or is_env_dev -%}
-{%- set is_remembered  = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
 {%- set is_admin       = is_granted('ROLE_ADMIN') -%}
 {%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
+{%- set is_remembered  = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
 {%- set is_bibi        = is_dev and is_remembered and app.user.username == 'Bibi' -%}
 {%- set is_tabular     = display_tabular() -%}
 {%- set route_params   = {'caller': path('site_map')} -%}
 
+{# rights #}
+{%- set is_list_calculation = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
+{%- set is_add_calculation  = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_CALCULATION) -%}
+{%- set is_pdf_calculation  = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, EntityVoterInterface.ENTITY_CALCULATION) -%}
+
+{%- set is_list_product    = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_PRODUCT) -%}
+{%- set is_add_product     = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_PRODUCT) -%}
+{%- set is_pdf_product     = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, EntityVoterInterface.ENTITY_PRODUCT) -%}
+  
+{%- set is_list_category   = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CATEGORY) -%}
+{%- set is_add_category    = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_CATEGORY) -%}
+{%- set is_pdf_category    = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, EntityVoterInterface.ENTITY_CATEGORY) -%}
+
+{%- set is_list_state      = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
+{%- set is_add_state       = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
+{%- set is_pdf_state       = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
+
+{%- set is_list_margin     = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_add_margin      = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_pdf_margin      = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
+
+{%- set is_list_customer   = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev -%}
+{%- set is_add_customer    = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev  -%}
+{%- set is_pdf_customer    = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev  -%}
+
 {# class #}
 {% block container_class 'container-fluid' %}
-{#% block navigation -%}{%- endblock %#}
 
 {% block body -%}
 <div class="sitemap">
@@ -48,75 +72,131 @@
     </nav>
     <nav class="primaryNav">
         <ul>
+            {% if is_list_calculation %}
             <li id="home">{{ _self.link('homepage', 'index.title', 'home') }}</li>
             <li>
                 {%  set route = is_tabular ? 'calculation_table' : 'calculation_list' %}
                 <ul>{{ _self.link(route, 'calculation.list.title', 'calculator') }}
+                    {% if is_add_calculation or is_pdf_calculation %}
                     <li>
                         <ul>
+                            {% if is_add_calculation %}
                             <li>{{ _self.link('calculation_add', 'calculation.add.title', 'file far', null, route_params) }}</li>
+                            {% endif %}
+                            {% if is_pdf_calculation %}
                             <li>{{ _self.linkExternal('calculation_pdf', 'calculation.list.pdf_title', 'file-pdf far') }}</li>
+                            {% endif %}
                         </ul>
-                    </li>                
+                    </li>
+                    {% endif %}                
                 </ul>
             </li>
+            {% endif %}
+            {%- if is_list_product or is_list_category or is_list_state or is_list_margin or is_list_customer -%}
             <li>
                 <span class="rounded">{{- icons.icon('database', 'index.menu_data') -}}</span>
                 <ul>
+                    {% if is_list_product  %}
                     {%  set route = is_tabular ? 'product_table' : 'product_list' %}
                     <li>{{ _self.link(route, 'product.list.title', 'file-alt far') }}
+                        {% if is_add_product or is_pdf_product %}
                         <ul>
+                            {% if is_add_product %}
                             <li>{{ _self.link('product_add', 'product.add.title', 'file far', null, route_params) }}</li>
+                            {% endif %}
+                            {% if is_pdf_product %}
                             <li>{{ _self.linkExternal('product_pdf', 'product.list.pdf_title', 'file-pdf far') }}</li>
+                            {% endif %}
                         </ul>
+                        {% endif %}
                     </li>
+                    {% endif %}
+                    {% if is_list_category  %}
                     {%  set route = is_tabular ? 'category_table' : 'category_list' %}
                     <li>{{ _self.link(route, 'category.list.title', 'folder far') }}
+                        {% if is_add_category or is_pdf_category %}
                         <ul>
+                            {% if is_add_category %}
                             <li>{{ _self.link('category_add', 'category.add.title', 'file far', null, route_params) }}</li>
+                            {% endif %}
+                            {% if is_pdf_category %}
                             <li>{{ _self.linkExternal('category_pdf', 'category.list.pdf_title', 'file-pdf far') }}</li>
+                            {% endif %}
                         </ul>
+                        {% endif %}
                     </li>
+                    {% endif %}
+                    {% if is_list_state  %}
                     {%  set route = is_tabular ? 'calculationstate_table' : 'calculationstate_list' %}
                     <li>{{ _self.link(route, 'calculationstate.list.title', 'flag far') }}
+                        {% if is_add_state or is_pdf_state %}
                         <ul>
+                            {% if is_add_state %}
                             <li>{{ _self.link('calculationstate_add', 'calculationstate.add.title', 'file far', null, route_params) }}</li>
+                            {% endif %}
+                            {% if is_pdf_state %}
                             <li>{{ _self.linkExternal('calculationstate_pdf', 'calculationstate.list.pdf_title', 'file-pdf far') }}</li>
+                            {% endif %}
                         </ul>
+                        {% endif %}
                     </li>
+                    {% endif %}
+                    {% if is_list_margin %}
                     {%  set route = is_tabular ? 'globalmargin_table' : 'globalmargin_list' %}
                     <li>{{ _self.link(route, 'globalmargin.list.title', 'percent') }}
+                        {% if is_add_margin or is_pdf_margin %}
                         <ul>
+                            {% if is_add_margin %}
                             <li>{{ _self.link('globalmargin_add', 'globalmargin.add.title', 'file far', null, route_params) }}</li>
+                            {% endif %}
+                            {% if is_pdf_margin %}
                             <li>{{ _self.linkExternal('globalmargin_pdf', 'globalmargin.list.pdf_title', 'file-pdf far') }}</li>
+                            {% endif %}
                         </ul>
+                        {% endif %}
                     </li>
+                    {% endif %}
+                    {% if is_list_customer %}
                     {%  set route = is_tabular ? 'customer_table' : 'customer_list' %}
                     <li>{{ _self.link(route, 'customer.list.title', 'address-card far') }}
+                        {% if is_add_customer or is_pdf_customer %}
                         <ul>
+                            {% if is_add_customer %}
                             <li>{{ _self.link('customer_add', 'customer.add.title', 'file far', null, route_params) }}</li>
+                            {% endif %}
+                            {% if is_pdf_customer %}
                             <li>{{ _self.linkExternal('customer_pdf', 'customer.list.pdf_title', 'file-pdf far') }}</li>
+                            {% endif %}
                         </ul>
+                        {% endif %}
                     </li>
+                    {% endif %}
                 </ul>
             </li>
+            {% endif %}
             <li>
                 <span>{{- icons.icon('tools', 'index.menu_tools') -}}</span>
                 <ul>
                     <li>{{ _self.link('search', 'search.title', 'search') }}</li>
+                    {% if is_admin %}
                     <li>{{ _self.link('calculation_update', 'calculation.update.title', 'pencil-alt') }}</li>
                     <li>{{ _self.link('calculation_below_table', 'calculation.below.title', 'percent') }}</li>
                     <li>{{ _self.link('calculation_duplicate_table', 'calculation.duplicate.title', 'copy far') }}</li>
                     <li>{{ _self.link('calculation_empty_table', 'calculation.empty.title', 'file-code far') }}</li>
+                    {% endif %}
                 </ul>
             </li>
+            {%- if is_list_calculation -%}
             <li>
                 <span>{{- icons.icon('chart-area', 'menu_graphics', 'chart') -}}</span>
                 <ul>
                     <li>{{ _self.link('chart_by_month', 'title_by_month', 'calendar-alt far', 'chart') }}</li>
                     <li>{{ _self.link('chart_by_state', 'title_by_state', 'flag far', 'chart') }}</li>
+                    {% if is_bibi -%}
                     <li>{{ _self.link('calculation_pivot', 'pivot.title', 'table') }}</li>
+                    {% endif %}
                 </ul>
+            {% endif %}
             <li>
                 {{ _self.link('about', 'about.title', 'info-circle') }}
                 <ul>

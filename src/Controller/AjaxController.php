@@ -38,6 +38,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -350,62 +351,68 @@ class AjaxController extends AbstractController
             }
         }
 
-        $keys = [
-            // common
-            'search',
-            'processing',
-            'lengthMenu',
-            'info',
-            'infoEmpty',
-            'infoFiltered',
-            'infoPostFix',
-            'loadingRecords',
-            'zeroRecords',
-            'emptyTable',
+        if ($file = $this->getDatatablesLang($kernel)) {
+            // load localized file name
+            $lang = Yaml::parseFile($file);
+        } else {
+            // default behavior
+            $keys = [
+                // common
+                'search',
+                'processing',
+                'lengthMenu',
+                'info',
+                'infoEmpty',
+                'infoFiltered',
+                'infoPostFix',
+                'loadingRecords',
+                'zeroRecords',
+                'emptyTable',
 
-            // paginate
-            'paginate.first',
-            'paginate.previous',
-            'paginate.next',
-            'paginate.last',
+                // paginate
+                'paginate.first',
+                'paginate.previous',
+                'paginate.next',
+                'paginate.last',
 
-            // aria
-            'aria.sortAscending',
-            'aria.sortDescending',
-            'aria.paginate.first',
-            'aria.paginate.previous',
-            'aria.paginate.next',
-            'aria.paginate.last',
+                // aria
+                'aria.sortAscending',
+                'aria.sortDescending',
+                'aria.paginate.first',
+                'aria.paginate.previous',
+                'aria.paginate.next',
+                'aria.paginate.last',
 
-            //select
-            'select.rows.0',
-            'select.rows.1',
-            'select.rows._',
-        ];
+                //select
+                'select.rows.0',
+                'select.rows.1',
+                'select.rows._',
+            ];
 
-        $lang = [];
-        $domain = 'datatables';
-        foreach ($keys as $key) {
-            $current = &$lang;
-            $paths = \explode('.', $key);
-            foreach ($paths as $path) {
-                if (!isset($current[$path])) {
-                    $current[$path] = [];
+            $lang = [];
+            $domain = 'datatables';
+            foreach ($keys as $key) {
+                $current = &$lang;
+                $paths = \explode('.', $key);
+                foreach ($paths as $path) {
+                    if (!isset($current[$path])) {
+                        $current[$path] = [];
+                    }
+                    $current = &$current[$path];
                 }
-                $current = &$current[$path];
+                $current = $this->trans($key, [], $domain);
             }
-            $current = $this->trans($key, [], $domain);
         }
 
         // format
-        $lang['decimal'] = $this->getDefaultDecimal();
-        $lang['thousands'] = $this->getDefaultGrouping();
+        $service = $this->getApplication();
+        $lang['decimal'] = $service->getDecimal();
+        $lang['thousands'] = $service->getGrouping();
 
         // encode
         $json = \json_encode($lang);
 
         // save
-        //if (!$kernel->isDebug()) {
         if (isset($item)) {
             $item->set($json)
                 ->expiresAfter(self::CACHE_TIMEOUT);
@@ -829,6 +836,22 @@ class AjaxController extends AbstractController
     private function getCacheClass(): string
     {
         return $this->getApplication()->getCacheClass();
+    }
+
+    /**
+     * Gets the datatables translations file for the current locale.
+     *
+     * @param KernelInterface $kernel the kernel to get root directory
+     *
+     * @return string|null the language file, if exists; null otherwise
+     */
+    private function getDatatablesLang(KernelInterface $kernel): ?string
+    {
+        $dir = $kernel->getProjectDir();
+        $locale = \Locale::getDefault();
+        $file = "$dir/translations/datatables.$locale.yaml";
+
+        return \file_exists($file) ? $file : null;
     }
 
     /**

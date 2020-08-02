@@ -52,18 +52,20 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     ];
 
     /**
-     * @var Security
+     * @var bool
      */
-    private $security;
+    private $superAdmin = false;
 
     /**
      * Constructor.
      */
     public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $application)
     {
-        $this->security = $security;
         $this->translator = $translator;
         $this->application = $application;
+        if ($user = $security->getUser()) {
+            $this->superAdmin = $user instanceof RoleInterface && $user->isSuperAdmin();
+        }
     }
 
     /**
@@ -124,7 +126,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ]);
 
         // super admin fields
-        if ($this->isSuperAdmin()) {
+        if ($this->superAdmin) {
             // display
             $helper->field(self::DATE_FORMAT)
                 ->updateOption('format', 'date')
@@ -209,17 +211,5 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         }
 
         return  $result;
-    }
-
-    /**
-     * Returns if the current user has the super admin role (ROLE_SUPER_ADMIN).
-     */
-    private function isSuperAdmin(): bool
-    {
-        if ($user = $this->security->getUser()) {
-            return $user instanceof RoleInterface && $user->isSuperAdmin();
-        }
-
-        return false;
     }
 }

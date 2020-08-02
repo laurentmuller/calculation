@@ -113,7 +113,16 @@ $(function () {
         }
     });
 
-    // add events
+    // toogle icons
+    $('.toggle-icon').on('show.bs.collapse', function () {
+        const icon = $(this).prev().children('i');
+        icon.removeClass('fa-caret-right').addClass('fa-caret-down');
+    }).on('hide.bs.collapse', function () {
+        const icon = $(this).prev().children('i');
+        icon.removeClass('fa-caret-down').addClass('fa-caret-right');
+    });
+
+    // add handlers
     $('#default').on('click', function (e) {
         e.preventDefault();
         setDefaultValues();

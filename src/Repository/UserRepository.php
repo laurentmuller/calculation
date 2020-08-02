@@ -120,13 +120,15 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Gets the query builder for the list of users sorted by name.
+     * Gets the query builder for the list of users sorted by user name.
+     *
+     * @param string $alias the default entity alias
      */
-    public function getSortedBuilder(): QueryBuilder
+    public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        $field = (string) $this->getSortFields(self::DEFAULT_ALIAS, 'username');
+        $field = (string) $this->getSortFields('username', $alias);
 
-        return $this->createQueryBuilder(self::DEFAULT_ALIAS)
+        return $this->createQueryBuilder($alias)
             ->orderBy($field, Criteria::ASC);
     }
 

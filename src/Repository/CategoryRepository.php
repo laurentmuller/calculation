@@ -55,7 +55,7 @@ class CategoryRepository extends AbstractRepository
      *
      * <b>Note:</b> Only categories with at least one product are returned.
      *
-     * @return array a array with the category and the number of product
+     * @return array an array with the category and the number of product
      */
     public function getListCount(): array
     {
@@ -73,12 +73,14 @@ class CategoryRepository extends AbstractRepository
 
     /**
      * Gets the query builder for the list of categories sorted by code.
+     *
+     * @param string $alias the default entity alias
      */
-    public function getSortedBuilder(): QueryBuilder
+    public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        $field = (string) $this->getSortFields('code');
+        $field = (string) $this->getSortFields('code', $alias);
 
-        return $this->createQueryBuilder(self::DEFAULT_ALIAS)
+        return $this->createQueryBuilder($alias)
             ->orderBy($field, Criteria::ASC);
     }
 }

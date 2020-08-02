@@ -54,55 +54,66 @@
         {{ form_row(form.minimum_margin) }}
     </div>
 </div>
-<label class="horizontal-line font-weight-bold">{{ 'parameters.group_message'|trans }}</label>
-<div class="form-row ml-2">
-    <div class="col-md-4">
-        {{ form_row(form.message_position) }}
+<div class="accordion" id="parent_accordion">
+    <a class="horizontal-line" data-toggle="collapse" href="#message" role="button" aria-expanded="false" aria-controls="message"><i class="fas fa-caret-right"></i>&nbsp;{{ 'parameters.group_message'|trans }}</a>
+    <div class="toggle-icon collapse" id="message" data-parent="#parent_accordion">
+        <div class="form-row ml-2">
+            <div class="col-md-4">
+                {{ form_row(form.message_position) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.message_timeout) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_row(form.message_sub_title) }}
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        {{ form_row(form.message_timeout) }}
+    <a class="horizontal-line" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="display"><i class="fas fa-caret-right"></i>&nbsp;{{ 'parameters.group_display'|trans }}</a>
+    <div class="toggle-icon collapse" id="display" data-parent="#parent_accordion">
+        <div class="form-row ml-2">
+            <div class="col">
+                {{ form_row(form.display_tabular) }}
+            </div>
+        </div>
+        {% if super_admin %}
+        <div class="form-row ml-2">
+            <div class="col-md-6">
+                {{ form_row(form.date_format) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.time_format) }}
+            </div>
+        </div>
+        <div class="form-row ml-2">
+            <div class="col-md-6">
+                {{ form_row(form.grouping_separator) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.decimal_separator) }}
+            </div>
+        </div>
+        {% endif %}
     </div>
-    <div class="col-md-4">
-        {{ form_row(form.message_sub_title) }}
+    {% if super_admin %}
+    <a class="horizontal-line" data-toggle="collapse" href="#security" role="button" aria-expanded="false" aria-controls="security"><i class="fas fa-caret-right"></i>&nbsp;{{ 'parameters.group_security'|trans }}</a>
+    <div class="toggle-icon collapse" id="security" data-parent="#parent_accordion">
+        <div class="form-row ml-2">
+            <div class="col-md-6">
+                {{ form_row(form.display_captcha) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.min_strength) }}
+            </div>
+        </div>
+        <label class="horizontal-line font-weight-bold">{{ 'parameters.group_password'|trans }}</label>
+        <div class="ml-2">
+            {{ form_rest(form) }}
+        </div>    
     </div>
+    {% endif %}
 </div>
-<label class="horizontal-line font-weight-bold">{{ 'parameters.group_display'|trans }}</label>
-<div class="form-row ml-2">
-    <div class="col">
-        {{ form_row(form.display_tabular) }}
-    </div>
-</div>
-{% if super_admin %}
-<div class="form-row ml-2">
-	<div class="col-md-6">
-		{{ form_row(form.date_format) }}
-	</div>
-	<div class="col-md-6">
-		{{ form_row(form.time_format) }}
-	</div>
-</div>
-<div class="form-row ml-2">
-	<div class="col-md-6">
-		{{ form_row(form.grouping_separator) }}
-	</div>
-	<div class="col-md-6">
-		{{ form_row(form.decimal_separator) }}
-	</div>
-</div>
-<label class="horizontal-line font-weight-bold">{{ 'parameters.group_security'|trans }}</label>
-<div class="form-row ml-2">
-    <div class="col-md-6">
-        {{ form_row(form.display_captcha) }}
-    </div>
-    <div class="col-md-6">
-        {{ form_row(form.min_strength) }}
-    </div>
-</div>
-<label class="horizontal-line font-weight-bold">{{ 'parameters.group_password'|trans }}</label>
-<div class="ml-2">
-    {{ form_rest(form) }}
-</div>
-{% endif %}
+
 {%- endblock %}
 
 {% block actions_form -%}

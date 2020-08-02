@@ -205,11 +205,8 @@ abstract class AbstractEntityController extends AbstractController
             $parameters['selection'] = (int) $item->getId();
         }
 
-        // template
-        $template = $this->getEditTemplate();
-
         // show form
-        return $this->render($template, $parameters);
+        return $this->render($this->getEditTemplate(), $parameters);
     }
 
     /**

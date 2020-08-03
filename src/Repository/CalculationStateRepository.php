@@ -55,7 +55,7 @@ class CalculationStateRepository extends AbstractRepository
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
      *
-     * @return CalculationState[] the states with the number and the sum of calculations
+     * @return array the states with the number and the sum of calculations
      */
     public function getListCount(): array
     {

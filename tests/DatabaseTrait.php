@@ -44,7 +44,7 @@ trait DatabaseTrait
     public static function tearDownAfterClass(): void
     {
         self::$database->close();
-        self::$database = null;
         Database::deleteDatabase();
+        self::$database = null;
     }
 }

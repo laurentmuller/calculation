@@ -218,7 +218,7 @@ $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex
 
     // check column
     if (columnIndex < 0 || columnIndex >= this.columns().count()) {
-        return;
+        return this;
     }
     
     const column = this.column(columnIndex);

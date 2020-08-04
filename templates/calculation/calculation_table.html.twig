@@ -40,7 +40,7 @@
 
 {% block row_input -%}
 {% if states is defined %}
-<div class="col-auto">
+<div class="col-auto pr-0">
     <div class="form-inline">
         <label class="mr-2" for="state">{{ 'calculation.fields.state'|trans }}</label>
         <select id="state" name="state" class="form-control form-control-sm custom-select custom-select-sm">
@@ -56,7 +56,7 @@
 {{ _self.item_data(clone_path, 'common.button_clone', 'copy far') }}
 {{ _self.item_data(state_path, 'calculation.list.state_title', 'edit') }}
 {{ _self.item_data_external(single_path, 'common.button_pdf', 'file-pdf far') }}
-<div class="dropdown-divider"></div>
+{{ icons.dropdownSeparator() }}
 {{ parent() }}
 {{ icons.dropdownSeparator() }}
 {{ icons.dropdownItemCard('calculation_list') }}

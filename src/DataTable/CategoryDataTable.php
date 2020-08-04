@@ -67,6 +67,7 @@ class CategoryDataTable extends AbstractEntityDataTable
     public function linkProducts(Collection $products, Category $item): string
     {
         $parameters = [
+            'id' => $item->getId(),
             'code' => $item->getCode(),
             'count' => \count($products),
         ];

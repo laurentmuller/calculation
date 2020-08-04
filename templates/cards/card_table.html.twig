@@ -105,7 +105,7 @@
     {% block row_input %}{% endblock %}
     {# search #}
     {% if show_search -%}
-    <div class="col-auto mr-auto">
+    <div class="col-auto pr-0">
         <div class="form-inline">
              <label class="mr-2" for="table_search">{{ 'datatable.search'|trans }}</label>
              <div class="input-group input-group-sm bg-white">
@@ -122,7 +122,7 @@
     {%- endif %}
     
     {% if show_length -%}
-    <div class="col-auto{% if not show_search %} ml-auto{% endif %}">
+    <div class="col-auto ml-auto">
         <div class="form-inline">
             <label class="mr-2" for="table_length">{{ 'datatable.show'|trans }}</label>
             <select id="table_length" name="table_length" class="form-control form-control-sm custom-select custom-select-sm">

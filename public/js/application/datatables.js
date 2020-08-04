@@ -76,8 +76,8 @@ $.fn.getContextMenuItems = function () {
 $.fn.dataTable.renderTooltip = function (td, cellData) {
     'use strict';
 
-    var margin = parseFloat($('#data-table').attr('min_margin'));
-    var value = parseFloat(cellData) / 100.0;
+    const value = parseFloat(cellData) / 100.0;
+    const margin = parseFloat($('#data-table').attr('min_margin'));
     if (margin && value && value < margin) {
         const title = $('#data-table').attr('min_margin_text').replace('%margin%', cellData);
         $(td).addClass('text-danger has-tooltip').attr('data-title', title).attr('data-html', true);
@@ -97,12 +97,14 @@ $.fn.dataTable.renderTooltip = function (td, cellData) {
 $.fn.dataTable.renderStateColor = function (td, cellData, rowData) {
     'use strict';
 
-    const color = rowData[rowData.length - 1] || 'transparent';
-    const style = 'inset 5px 0 ' + color;
-    $(td).css('-webkit-box-shadow', style);
-    $(td).css('-moz-box-shadow', style);
-    $(td).css('-o-box-shadow', style);
-    $(td).css('box-shadow', style);
+    const color = rowData.find(value => value.match(/^#([0-9a-fA_F]{6}|[0-9a-fA-F]{3})$/i));
+    if (color !== undefined) {
+        const style = 'inset 5px 0 ' + color;
+        $(td).css('-webkit-box-shadow', style);
+        $(td).css('-moz-box-shadow', style);
+        $(td).css('-o-box-shadow', style);
+        $(td).css('box-shadow', style);
+    }
 };
 
 /**

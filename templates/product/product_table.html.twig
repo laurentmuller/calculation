@@ -36,7 +36,7 @@
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
 
 {% block row_input -%}
-<div class="col-auto">
+<div class="col-auto pr-0">
     <div class="form-inline">
         <label class="mr-2" for="category">{{ 'product.fields.category'|trans }}</label>
         <select id="category" name="category" class="form-control form-control-sm custom-select custom-select-sm">

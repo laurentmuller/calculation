@@ -41,12 +41,14 @@ class Database extends AbstractDatabase
     /**
      * Delete the database.
      */
-    public static function deleteDatabase(): void
+    public static function deleteDatabase(): ?self
     {
         $filename = self::getDatabaseFilename();
         if (\file_exists($filename)) {
             \unlink($filename);
         }
+
+        return null;
     }
 
     /**

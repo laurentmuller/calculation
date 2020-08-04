@@ -167,24 +167,28 @@ class CalculationController extends AbstractEntityController
      */
     public function belowTable(Request $request, CalculationBelowDataTable $table, CalculationStateRepository $repository): Response
     {
-        $attributes = [];
-        $parameters = [];
-
-        // callback?
-        if (!$request->isXmlHttpRequest()) {
-            // attributes
-            $margin = $this->getApplication()->getMinMargin();
-            $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => $this->localePercent($margin)]);
-            $attributes = [
-                'min_margin' => $margin,
-                'min_margin_text' => $margin_text,
-            ];
-
-            // parameters
-            $parameters['states'] = $repository->getListCount();
+        $results = $table->handleRequest($request);
+        if ($table->isCallback()) {
+            return $this->json($results);
         }
 
-        return $this->renderTable($request, $table, $attributes, $parameters);
+        // get values
+        $margin = $this->getApplication()->getMinMargin();
+        $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => $this->localePercent($margin)]);
+
+        $attributes = [
+            'min_margin' => $margin,
+            'min_margin_text' => $margin_text,
+        ];
+
+        // parameters
+        $parameters = [
+            'results' => $results,
+            'attributes' => $attributes,
+            'columns' => $table->getColumns(),
+        ];
+
+        return $this->render('calculation/calculation_table_below.html.twig', $parameters);
     }
 
     /**

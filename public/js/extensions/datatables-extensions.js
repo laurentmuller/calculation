@@ -172,6 +172,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
             table.selectFirstRow();
         }
         table.updateButtons().updateTitles();
+        $('#data-table .has-tooltip').tooltip('hide');
 
     }).on('search.dt', function () {
         enableKeys();
@@ -201,6 +202,41 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
     });
 
     return table;
+});
+
+/**
+ * Binds a column search.
+ * 
+ * @param $source
+ *            {Jquery} the search input (text or select)
+ * @param columnIndex
+ *            {integer} the column index to bind with.
+ * @returns {DataTables.Api} this instance.
+ */
+$.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex) {
+    'use strict';
+
+    // check column
+    if (columnIndex < 0 || columnIndex >= this.columns().count()) {
+        return;
+    }
+    
+    const column = this.column(columnIndex);
+    const callback = function () {
+        const value = $source.val();
+        if (column.search() !== value) {
+            column.search(value).draw();
+            $source.updateTimer(function () {
+                $source.focus();
+            }, 500);
+        }
+    };
+
+    $source.val(column.search()).on('input', function () {
+        $source.updateTimer(callback, 250);
+    }).handleKeys();
+
+    return this;
 });
 
 /**

@@ -75,8 +75,9 @@ class CalculationStateDataTable extends AbstractEntityDataTable
     public function linkCalculations($calculations, CalculationState $item): string
     {
         $parameters = [
-            'count' => \count($calculations),
+            'id' => $item->getId(),
             'code' => $item->getCode(),
+            'count' => \count($calculations),
         ];
 
         return $this->environment->render('calculationstate/calculationstate_calculation_cell.html.twig', $parameters);

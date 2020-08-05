@@ -158,6 +158,23 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
     }
 
     /**
+     * Gets the data column at the given index.
+     *
+     * @param int $index the index of the column
+     *
+     * @return DataColumn|null the data column, if index is valid; null otherwise
+     */
+    public function getColumn(int $index): ?DataColumn
+    {
+        $columns = $this->getColumns();
+        if ($index >= 0 && $index < \count($columns)) {
+            return $columns[$index];
+        }
+
+        return null;
+    }
+
+    /**
      * Gets the data columns.
      *
      * @return DataColumn[]
@@ -352,7 +369,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
             $order = $request->order[0];
             $index = $order->column;
             $dir = $order->dir;
-            $column = $this->getColumns()[$index];
+            $column = $this->getColumn($index);
 
             return [
                 'index' => $index,

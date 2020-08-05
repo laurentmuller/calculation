@@ -217,7 +217,7 @@ class LogDataTable extends AbstractDataTable
         if (!empty($query->order)) {
             /** @var Order $order */
             $order = $query->order[0];
-            $field = $this->getColumns()[$order->column]->getName();
+            $field = $this->getColumn($order->column)->getName();
             $this->sort($logs, $field, $order->dir);
         }
 

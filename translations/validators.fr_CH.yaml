@@ -36,7 +36,7 @@ password:
     caseDiff: Le mot de passe doit contenir des majuscules et des minuscules.
     letters: Le mot de passe doit contenir au moins une lettre.
     numbers: Le mot de passe doit contenir au moins un chiffre.
-    specialCharacter: Le mot de passe doit contenir au moins un caractère spécial.
+    specialChar: Le mot de passe doit contenir au moins un caractère spécial.
     pwned: Le mot de passe a été trouvé {{count}} fois dans une base de données de mots de passe compromis.
 new_password:
     blank: Entrez un nouveau mot de passe s'il vous plait.

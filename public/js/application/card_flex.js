@@ -3,6 +3,18 @@
 /* globals URLSearchParams */
 
 /**
+ * Gets the query input.
+ * 
+ * @returns the input element or null if none.
+ */
+function getQueryInput() {
+    'use strict';
+    
+    const $query = $('.form-query-input');
+    return $query.length ? $query: null; 
+}
+
+/**
  * Update hyperlink references within the search value
  */
 function updateLinks() {
@@ -32,18 +44,6 @@ function updateLinks() {
             $this.attr('href', parts[0] + params.toQuery());
         });
     }
-}
-
-/**
- * Gets the query input.
- * 
- * @returns the input element or null if none.
- */
-function getQueryInput() {
-    'use strict';
-    
-    const $query = $('.form-query-input');
-    return $query.length ? $query: null; 
 }
 
 /**

@@ -32,7 +32,8 @@
     <div class="card-body d-flex flex-row flex-wrap p-2">
     {% if states|length %}
         {% for state in states %}
-            {{ _self.cardEntry(state.count, state.total, state.code, state.color, list_path, {'query': state.code}) }}
+            {%- set parameters = tabular ? {'search[0][index]': 8, 'search[0][value]': state.id} : {'query': state.code} -%}
+            {{ _self.cardEntry(state.count, state.total, state.code, state.color, list_path, parameters) }}
         {% endfor %}
         {{ _self.cardEntry(count, total, 'calculation.fields.total'|trans, 'secondary', list_path) }}
     {% else %}

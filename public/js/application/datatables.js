@@ -244,22 +244,6 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
  */
 
 /**
- * Search callback.
- * 
- * @param {DataTables.Api}
- *            table - the table to update.
- */
-function searchCallback(table) {
-    'use strict';
-
-    const oldSearch = table.search() || '';
-    const newSearch = $('#table_search').val().trim();
-    if (oldSearch !== newSearch) {
-        table.search(newSearch).draw();
-    }
-}
-
-/**
  * Ready function
  */
 $(function () {
@@ -339,7 +323,7 @@ $(function () {
     };
 
     // initialize
-    $table.initDataTable(options).initEvents(id, searchCallback);
+    $table.initDataTable(options).initEvents(id);
 
     // update
     $('#table_search').val(query);

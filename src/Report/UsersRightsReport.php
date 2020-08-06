@@ -109,15 +109,14 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
             $role = Utils::translateRole($this->translator, $user->getRole());
 
             // save position
-            $x = $this->GetX();
-            $y = $this->GetY();
+            [$x, $y] = $this->GetXY();
 
             // border
             $group->apply($this);
             $this->Cell(0, self::LINE_HEIGHT, '', self::BORDER_ALL);
-            $this->SetXY($x, $y);
 
             // name
+            $this->SetXY($x, $y);
             $width = $this->GetStringWidth($name);
             $this->Cell($width, self::LINE_HEIGHT, $name);
 

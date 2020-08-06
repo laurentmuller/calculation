@@ -332,12 +332,16 @@ final class Utils
     /**
      * Sorts an array for the given fields.
      *
-     * @param array    $array     the array to sort
-     * @param string[] $fields    the array of field names to get values for
-     * @param bool     $ascending true to sort ascending, false to sort descending
+     * @param array           $array     the array to sort
+     * @param string|string[] $fields    the array of field names to get values for
+     * @param bool            $ascending true to sort ascending, false to sort descending
      */
-    public static function sortFields(array &$array, array $fields, bool $ascending = true): void
+    public static function sortFields(array &$array, $fields, bool $ascending = true): void
     {
+        if (!\is_array($fields)) {
+            $fields = [$fields];
+        }
+
         $accessor = self::getAccessor();
         \usort($array, function ($a, $b) use ($accessor, $fields, $ascending) {
             $result = 0;

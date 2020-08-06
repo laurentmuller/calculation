@@ -24,13 +24,13 @@ $(function () {
     $("#imageFile_file").initFileType(callback);
 
     // options
-    const url_name = $("form").data("check_name");
-    const url_email = $("form").data("check_email");
+    const urlName = $("form").data("check_name");
+    const urlEmail = $("form").data("check_email");
     const options = {
         rules: {
             "fos_user_profile_form[username]": {
                 remote: {
-                    url: url_name,
+                    url: urlName,
                     data: {
                         id: function () {
                             return $("#id").val();
@@ -43,7 +43,7 @@ $(function () {
             },
             "fos_user_profile_form[email]": {
                 remote: {
-                    url: url_email,
+                    url: urlEmail,
                     data: {
                         id: function () {
                             return $("#id").val();

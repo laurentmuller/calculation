@@ -117,9 +117,7 @@ abstract class AbstractReport extends PdfDocument
         if (\is_array($count) || $count instanceof \Countable) {
             $count = \count($count);
         }
-        $text = $this->trans('common.count', [
-            '%count%' => $count,
-        ]);
+        $text = $this->translateCount($count);
 
         $margins = $this->setCellMargin(0);
         $this->Cell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, $align);
@@ -141,5 +139,17 @@ abstract class AbstractReport extends PdfDocument
         $this->SetTitle($title, $isUTF8);
 
         return $this;
+    }
+
+    /**
+     * Gets the translated count label.
+     *
+     * @param int $count the number of elements
+     *
+     * @return string the label
+     */
+    protected function translateCount(int $count): string
+    {
+        return $this->trans('common.count', ['%count%' => $this->localeInt($count)]);
     }
 }

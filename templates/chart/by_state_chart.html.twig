@@ -20,10 +20,11 @@
         </thead>
         <tbody data-link="row" class="rowlink">
             {% for item in data -%}
+            {%- set parameters = tabular ? {'search[0][index]': 8, 'search[0][value]': item.id} : {'query': item.code} -%}
             <tr title="{{ 'row_by_state'|trans({'%name%': item.code}) }}">
                 <td>
                    <span class="mr-1" style="{{ properties.stateCss(item.color) }}"></span>
-	               <a href="{{ path(list_path, {'query': item.code}) }}">{{ item.code }}</a>
+	               <a href="{{ path(list_path, parameters) }}">{{ item.code }}</a>
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
                 <td class="text-currency">{{ item.percent|percent(true, 1) }}</td>

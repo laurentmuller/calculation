@@ -616,6 +616,19 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
     }
 
     /**
+     * Gets the current X and Y position.
+     *
+     * @return float[] the X and Y position
+     *
+     * @see Fpdf::GetX()
+     * @see Fpdf::GetY()
+     */
+    public function GetXY(): array
+    {
+        return [$this->GetX(), $this->GetY()];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function Header(): void

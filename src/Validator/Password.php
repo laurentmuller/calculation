@@ -102,6 +102,6 @@ class Password extends Constraint
      *
      * @var bool
      */
-    public $specialCharacter = false;
-    public $specialCharacterMessage = 'The password must contain at least one special character.';
+    public $specialChar = false;
+    public $specialCharMessage = 'The password must contain at least one special character.';
 }

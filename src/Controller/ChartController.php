@@ -19,7 +19,6 @@ use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\ThemeService;
 use App\Traits\MathTrait;
-use App\Util\DateUtils;
 use Laminas\Json\Expr;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,7 +43,6 @@ class ChartController extends AbstractController
     {
         $tabular = $this->isDisplayTabular();
         $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_list');
-
         $data = $this->getChartMonthData($count, $repository, $service, $url);
         $data['tabular'] = \json_encode($tabular);
 
@@ -59,34 +57,47 @@ class ChartController extends AbstractController
     public function byState(CalculationStateRepository $repository, ThemeService $service): Response
     {
         $tabular = $this->isDisplayTabular();
-        $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_list');
-
-        $data = $this->getChartStateData($repository, $service, $url);
+        $data = $this->getChartStateData($repository, $service, $tabular);
         $data['tabular'] = \json_encode($tabular);
 
         return $this->render('chart/by_state_chart.html.twig', $data);
     }
 
     /**
-     * @Route("/default", name="chart_default")
+     * Creates and initialize a chart.
+     *
+     * @param bool $init_options true to initialize language options
      */
-    public function default(): Response
+    private function createChart($init_options = true): Basechart
     {
-        return $this->render('chart/base_chart.html.twig', [
-            'title' => 'Graphique par défaut',
-            'chart' => $this->defaultChart(),
-        ]);
+        $chart = new Basechart($this->getApplication());
+        if ($init_options) {
+            $chart->initLangOptions();
+        }
+        $chart->chart->backgroundColor('transparent');
+
+        return $chart;
     }
 
     /**
-     * @Route("/drilldown", name="chart_drilldown")
+     * Generate the URL to display calculations when a state is clicked in pie chart.
      */
-    public function drillDown(): Response
+    private function generateStateUrl(array $state, bool $tabular): string
     {
-        return $this->render('chart/base_chart.html.twig', [
-            'title' => 'Drill-Down',
-            'chart' => $this->drillDownChart(),
-        ]);
+        if ($tabular) {
+            $route = 'calculation_table';
+            $parameters = [
+                'search[0][index]' => 8,
+                'search[0][value]' => $state['id'],
+            ];
+        } else {
+            $route = 'calculation_list';
+            $parameters = [
+                'query' => $state['code'],
+            ];
+        }
+
+        return $this->generateUrl($route, $parameters);
     }
 
     /**
@@ -94,7 +105,7 @@ class ChartController extends AbstractController
      *
      * @return array the data
      */
-    public function getChartMonthData(int $count, CalculationRepository $repository, ThemeService $service, string $url): array
+    private function getChartMonthData(int $count, CalculationRepository $repository, ThemeService $service, string $url): array
     {
         $months = \max(1, $count);
 
@@ -217,7 +228,7 @@ class ChartController extends AbstractController
         $click = new Expr($function);
 
         // chart
-        $chart = $this->createChart(true);
+        $chart = $this->createChart();
         $chart->setType(Basechart::TYPE_COLUMN)
             ->hideTitle()
             ->hideLegend()
@@ -257,7 +268,7 @@ class ChartController extends AbstractController
         $marginAmount = $total - $items;
         $marginPercent = $this->safeDivide($total, $items);
         if (!$this->isFloatZero($marginPercent)) {
-            $marginPercent = -1;
+            --$marginPercent;
         }
 
         return [
@@ -277,10 +288,11 @@ class ChartController extends AbstractController
      *
      * @param CalculationStateRepository $repository the repository to get data
      * @param ThemeService               $service    the service to get theme style
+     * @param bool                       $tabular    true to display link to table, false to link to card
      *
      * @return array the data
      */
-    public function getChartStateData(CalculationStateRepository $repository, ThemeService $service, string $url): array
+    private function getChartStateData(CalculationStateRepository $repository, ThemeService $service, bool $tabular): array
     {
         // get values
         $states = $repository->getListCount();
@@ -300,10 +312,11 @@ class ChartController extends AbstractController
         $title = $this->trans('title_by_state', [], 'chart');
 
         // data
-        $data = \array_map(function (array $state) {
+        $data = \array_map(function (array $state) use ($tabular) {
             return [
                 'name' => $state['code'],
                 'y' => (float) ($state['total']),
+                'url' => $this->generateStateUrl($state, $tabular),
             ];
         }, $states);
 
@@ -315,34 +328,32 @@ class ChartController extends AbstractController
         // series
         $series = [
             [
-                'type' => Basechart::TYPE_PIE,
-                'data' => $data,
                 'name' => $title,
+                'data' => $data,
+                'type' => Basechart::TYPE_PIE,
             ],
         ];
 
         // legend styles
-        $color = $this->getForeground($service);
         $style = [
-            'color' => $color,
-            'fontWeight' => 'normal',
             'fontSize' => '14px',
+            'fontWeight' => 'normal',
+            'color' => $this->getForeground($service),
         ];
 
         // click event
         $function = <<<EOF
             function() {
-                const href = "{$url}?query=" + this.name;
-                location.href = href;
+                location.href = this.url;
             }
             EOF;
         $click = new Expr($function);
 
         // pie options
         $pie = [
-            'allowPointSelect' => true,
             'cursor' => 'pointer',
             'showInLegend' => true,
+            'allowPointSelect' => true,
             'dataLabels' => [
                 'enabled' => false,
             ],
@@ -375,198 +386,6 @@ class ChartController extends AbstractController
     }
 
     /**
-     * @Route("/multiaxes", name="chart_multiaxes")
-     */
-    public function multiAxes(): Response
-    {
-        return $this->render('chart/base_chart.html.twig', [
-            'title' => 'Multi-Axes',
-            'chart' => $this->multiAxesChart(),
-        ]);
-    }
-
-    /**
-     * @Route("/history", name="chart_history")
-     */
-    public function sellsHistory(): Response
-    {
-        return $this->render('chart/base_chart.html.twig', [
-            'title' => 'Historique',
-            'chart' => $this->sellsHistoryChart(),
-        ]);
-    }
-
-    /**
-     * Creates and initialize a chart.
-     *
-     * @param bool $init_options true to initialize language options
-     */
-    private function createChart($init_options = true): Basechart
-    {
-        $chart = new Basechart($this->getApplication());
-        if ($init_options) {
-            $chart->initLangOptions();
-        }
-        $chart->chart->backgroundColor('transparent');
-
-        return $chart;
-    }
-
-    private function defaultChart(): Basechart
-    {
-        // Chart
-        $series = [
-            [
-                'name' => 'Data Serie Name',
-                'data' => [
-                    1,
-                    2,
-                    4,
-                    5,
-                    6,
-                    3,
-                    8,
-                ],
-            ],
-        ];
-
-        $chart = $this->createChart();
-        $chart->setTitle('Chart Title');
-        $chart->setXAxisTitle('Horizontal axis title');
-        $chart->setYAxisTitle('Vertical axis title');
-        $chart->series($series);
-
-        return $chart;
-    }
-
-    private function drillDownChart(): Basechart
-    {
-        $chart = $this->createChart(true);
-        $chart->setTitle('Browser market shares. November, 2013.');
-        $chart->setType(Basechart::TYPE_PIE);
-
-        $chart->plotOptions->series([
-            'dataLabels' => [
-                'enabled' => true,
-                'format' => '{point.name} : {point.y:.1f}%',
-            ],
-        ]);
-
-        $chart->tooltip->headerFormat('<span style="font-size:14px">{series.name}</span><br>');
-        $chart->tooltip->pointFormat('<span style="color:{point.color};">{point.name}</span>: <b>{point.y:.2f}%');
-
-        $data = [
-            [
-                'name' => 'Chrome',
-                'y' => 18.73,
-                'drilldown' => 'chrome',
-                'visible' => true,
-            ],
-            [
-                'name' => 'Microsoft Internet Explorer',
-                'y' => 53.61,
-                'drilldown' => 'explorer',
-                'visible' => true,
-            ],
-            [
-                'Firefox',
-                45.0,
-            ],
-            [
-                'Opera',
-                1.5,
-            ],
-        ];
-        $chart->series([
-            [
-                'name' => 'Browsers',
-                'colorByPoint' => true,
-                'data' => $data,
-            ],
-        ]);
-
-        $drillUpButton = [
-            'relativeTo' => 'spacingBox',
-            'position' => [
-                'align' => 'right',
-                'y' => 40,
-                'x' => 0,
-            ],
-            'theme' => [
-                'fill' => '#007bff',
-                'stroke' => '#007bff',
-                'stroke-width' => 1,
-                'r' => '4',
-                'states' => [
-                    'hover' => [
-                        'fill' => '#0069d9',
-                        'stroke' => '#0062cc',
-                    ],
-                    'select' => [
-                        'fill' => '#0069d9',
-                        'stroke' => '#0062cc',
-                    ],
-                ],
-            ],
-        ];
-
-        $drilldown = [
-            [
-                'name' => 'Microsoft Internet Explorer',
-                'id' => 'explorer',
-                'data' => [
-                    [
-                        'v8.0',
-                        26.61,
-                    ],
-                    [
-                        'v9.0',
-                        16.96,
-                    ],
-                    [
-                        'v6.0',
-                        6.4,
-                    ],
-                    [
-                        'v7.0',
-                        3.55,
-                    ],
-                    [
-                        'v8.0',
-                        0.09,
-                    ],
-                ],
-            ],
-            [
-                'name' => 'Chrome',
-                'id' => 'chrome',
-                'data' => [
-                    [
-                        'v19.0',
-                        7.73,
-                    ],
-                    [
-                        'v17.0',
-                        1.13,
-                    ],
-                    [
-                        'v16.0',
-                        0.45,
-                    ],
-                    [
-                        'v18.0',
-                        0.26,
-                    ],
-                ],
-            ],
-        ];
-        $chart->drilldown->drillUpButton($drillUpButton);
-        $chart->drilldown->series($drilldown);
-
-        return $chart;
-    }
-
-    /**
      * Gets the chart's label foreground.
      *
      * @param ThemeService $service the service to get theme style
@@ -576,152 +395,5 @@ class ChartController extends AbstractController
     private function getForeground(ThemeService $service): string
     {
         return $service->getCurrentTheme()->isDark() ? 'white' : 'black';
-    }
-
-    private function multiAxesChart(): Basechart
-    {
-        $series = [
-            [
-                'name' => 'Pluviométrie',
-                'type' => Basechart::TYPE_COLUMN,
-                'color' => '#4572A7',
-                'yAxis' => 1,
-                'data' => [
-                    49.9,
-                    71.5,
-                    106.4,
-                    129.2,
-                    144.0,
-                    176.0,
-                    135.6,
-                    148.5,
-                    216.4,
-                    194.1,
-                    95.6,
-                    54.4,
-                ],
-            ],
-            [
-                'name' => 'Température',
-                'type' => Basechart::TYPE_SP_LINE,
-                'color' => '#AA4643',
-                'data' => [
-                    7.0,
-                    6.9,
-                    9.5,
-                    14.5,
-                    18.2,
-                    21.5,
-                    25.2,
-                    26.5,
-                    23.3,
-                    18.3,
-                    13.9,
-                    9.6,
-                ],
-            ],
-        ];
-        $yAxis = [
-            [
-                'labels' => [
-                    'formatter' => new Expr('function () { return this.value + "°C" }'),
-                    'style' => [
-                        'color' => '#AA4643',
-                    ],
-                ],
-                'title' => [
-                    'text' => 'Température',
-                    'style' => [
-                        'color' => '#AA4643',
-                    ],
-                ],
-                'opposite' => true,
-            ],
-            [
-                'labels' => [
-                    'formatter' => new Expr('function () { return this.value + " mm" }'),
-                    'style' => [
-                        'color' => '#4572A7',
-                    ],
-                ],
-                'gridLineWidth' => 0,
-                'title' => [
-                    'text' => 'Pluviométrie',
-                    'style' => [
-                        'color' => '#4572A7',
-                    ],
-                ],
-            ],
-        ];
-
-        $categories = \array_values(DateUtils::getMonths());
-
-        $chart = $this->createChart();
-        $chart->setTitle('Données météorologiques mensuelles moyennes pour Tokyo');
-        $chart->setType(Basechart::TYPE_COLUMN);
-        $chart->setXAxisCategories($categories);
-
-        $chart->yAxis($yAxis);
-        $chart->legend->enabled(false);
-        $formatter = new Expr('function () {
-                 var unit = {
-                     "Pluviométrie": "mm",
-                     "Température": "°C"
-                 }[this.series.name];
-                 return this.x + ": <b>" + this.y + unit+ "</b>";
-             }');
-        $chart->tooltip->formatter($formatter);
-        $chart->series($series);
-
-        return $chart;
-    }
-
-    private function sellsHistoryChart(): Basechart
-    {
-        $sellsHistory = [
-            [
-                'name' => 'Total des ventes',
-                'data' => [
-                    683,
-                    756,
-                    543,
-                    1208,
-                    617,
-                    990,
-                    1001,
-                ],
-            ],
-            [
-                'name' => 'Ventes en France',
-                'data' => [
-                    467,
-                    321,
-                    56,
-                    698,
-                    134,
-                    344,
-                    452,
-                ],
-            ],
-        ];
-
-        $dates = [
-            '21/06',
-            '22/06',
-            '23/06',
-            '24/06',
-            '25/06',
-            '26/06',
-            '27/06',
-        ];
-
-        $chart = $this->createChart();
-        $chart->setTitle('Vente du 21/06/2013 au 27/06/2013');
-        $chart->setYAxisTitle("Ventes (milliers d'unité)");
-        $chart->setXAxisTitle('Date du jours');
-        $chart->setXAxisCategories($dates);
-        $chart->series($sellsHistory);
-
-        return $chart;
     }
 }

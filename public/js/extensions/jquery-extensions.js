@@ -287,13 +287,14 @@
          * @return {jQuery} The JQuery element for chaining.
          */
         removeInterval: function () {
-            const $element = $(this);
-            const interval = $element.data('interval');
-            if (interval) {
-                $element.removeData('interval');
-                clearInterval(interval);
-            }
-            return $element;
+            return $(this).each(function () {
+                const $element = $(this);
+                const interval = $element.data('interval');
+                if (interval) {
+                    clearInterval(interval);
+                    $element.removeData('interval');
+                }
+            });
         },
 
         /**
@@ -324,9 +325,11 @@
          */
         intVal: function (value) {
             if (!arguments.length) {
+                // get
                 const parsedValue = Number.parseInt($(this).val(), 10);
                 return Number.isNaN(parsedValue) ? 0 : parsedValue;
             } else {
+                // set
                 let parsedValue = Number.parseInt(value, 10);
                 if (Number.isNaN(parsedValue)) {
                     parsedValue = Number.parseInt(0, 10);
@@ -345,9 +348,11 @@
          */
         floatVal: function (value) {
             if (!arguments.length) {
-                const parsedValue = Number.parseFloat($(this).val());
+                // get
+				const parsedValue = Number.parseFloat($(this).val());
                 return Number.isNaN(parsedValue) ? 0 : parsedValue;
             } else {
+                // set
                 let parsedValue = Number.parseFloat(value);
                 if (Number.isNaN(parsedValue)) {
                     parsedValue = Number.parseFloat(0);

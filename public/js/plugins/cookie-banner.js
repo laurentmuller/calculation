@@ -186,7 +186,6 @@
                 linkRel: 'noopener noreferrer',
 
                 fontSize: '0.8rem',
-                //fontFamily: 'var(--font-family-sans-serif)',
                 textAlign: 'center',
                 appendTo: 'body',
                 zindex: 1000

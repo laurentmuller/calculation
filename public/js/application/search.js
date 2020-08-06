@@ -98,9 +98,9 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
 
     let type = null;
     let params = null;
-    let show_granted = false;
-    let edit_granted = false;
-    let delete_granted = false;
+    let showGranted = false;
+    let editGranted = false;
+    let deleteGranted = false;
     const row = this.getSelectedRow();
 
     // build parameters
@@ -117,15 +117,15 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
             caller: window.location.href.split('?')[0]
         };
 
-        show_granted = data.show_granted;
-        edit_granted = data.edit_granted;
-        delete_granted = data.delete_granted;
+        showGranted = data.show_granted;
+        editGranted = data.edit_granted;
+        deleteGranted = data.delete_granted;
     }
 
     // update buttons
-    $('.btn-table-show').updateHref(type, show_granted, params);
-    $('.btn-table-edit').updateHref(type, edit_granted, params);
-    $('.btn-table-delete').updateHref(type, delete_granted, params);
+    $('.btn-table-show').updateHref(type, showGranted, params);
+    $('.btn-table-edit').updateHref(type, editGranted, params);
+    $('.btn-table-delete').updateHref(type, deleteGranted, params);
 
     return this;
 });

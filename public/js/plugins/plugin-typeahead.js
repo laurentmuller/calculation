@@ -196,7 +196,7 @@
         },
         ajaxSuccess: function (data) {
             if (!this.ajax.xhr) {
-                return;
+                return this;
             }
             if (this.ajax.preProcess) {
                 data = this.ajax.preProcess(data);

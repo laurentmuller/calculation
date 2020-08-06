@@ -78,7 +78,7 @@ class ProductsReport extends AbstractReport
     }
 
     /**
-     * Sets if the products ar grouped by category.
+     * Sets if the products are grouped by category.
      *
      * @param bool $groupByCategory true to group by category
      */
@@ -106,7 +106,7 @@ class ProductsReport extends AbstractReport
      *
      * @param bool $groupByCategory true if products are grouped by category
      */
-    private function createTable($groupByCategory): PdfGroupTableBuilder
+    private function createTable(bool $groupByCategory): PdfGroupTableBuilder
     {
         $columns = [
             PdfColumn::left($this->trans('product.fields.description'), 90),
@@ -134,9 +134,9 @@ class ProductsReport extends AbstractReport
     private function groupProducts(array $products): array
     {
         $result = [];
-        foreach ($products as $p) {
-            $key = $p->getCategory()->getCode();
-            $result[$key][] = $p;
+        foreach ($products as $product) {
+            $key = $product->getCategory()->getCode();
+            $result[$key][] = $product;
         }
 
         // sort categories
@@ -144,9 +144,7 @@ class ProductsReport extends AbstractReport
 
         // sort products
         foreach ($result as $key => &$value) {
-            Utils::sortFields($value, [
-                'description',
-            ]);
+            Utils::sortFields($value, 'description');
         }
 
         return $result;
@@ -159,7 +157,7 @@ class ProductsReport extends AbstractReport
      */
     private function outputGroups(array $products): void
     {
-        // group
+        // group by category
         $groups = $this->groupProducts($products);
 
         // create table
@@ -168,12 +166,12 @@ class ProductsReport extends AbstractReport
         // output
         foreach ($groups as $group => $list) {
             $table->setGroupName($group);
-            foreach ($list as $p) {
+            foreach ($list as $product) {
                 $table->startRow()
-                    ->add($p->getDescription())
-                    ->add($p->getSupplier())
-                    ->add($p->getUnit())
-                    ->add($this->localeAmount($p->getPrice()))
+                    ->add($product->getDescription())
+                    ->add($product->getSupplier())
+                    ->add($product->getUnit())
+                    ->add($this->localeAmount($product->getPrice()))
                     ->endRow();
             }
         }
@@ -190,19 +188,16 @@ class ProductsReport extends AbstractReport
         $table = $this->createTable(false);
 
         // sort
-        Utils::sortFields($products, [
-            'description',
-        ]);
+        Utils::sortFields($products, 'description');
 
         // output
-        foreach ($products as $p) {
+        foreach ($products as $product) {
             $table->startRow()
-                ->add($p->getDescription())
-                ->add($p->getSupplier())
-                ->add($p->getCategory()
-                ->getDescription())
-                ->add($p->getUnit())
-                ->add($this->localeAmount($p->getPrice()))
+                ->add($product->getDescription())
+                ->add($product->getSupplier())
+                ->add($product->getCategory()->getDescription())
+                ->add($product->getUnit())
+                ->add($this->localeAmount($product->getPrice()))
                 ->endRow();
         }
     }

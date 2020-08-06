@@ -80,7 +80,7 @@ class PasswordValidator extends AbstractConstraintValidator
             $this->checkLetters($constraint, $value);
             $this->checkCaseDiff($constraint, $value);
             $this->checkNumber($constraint, $value);
-            $this->checkSpecialCharacter($constraint, $value);
+            $this->checkSpecialChar($constraint, $value);
             $this->checkEmail($constraint, $value);
             $this->checkStrength($constraint, $value);
             $this->checkBlackList($constraint, $value);
@@ -90,7 +90,7 @@ class PasswordValidator extends AbstractConstraintValidator
                     || $this->checkLetters($constraint, $value)
                     || $this->checkCaseDiff($constraint, $value)
                     || $this->checkNumber($constraint, $value)
-                    || $this->checkSpecialCharacter($constraint, $value)
+                    || $this->checkSpecialChar($constraint, $value)
                     || $this->checkEmail($constraint, $value)
                     || $this->checkStrength($constraint, $value)
                     || $this->checkBlackList($constraint, $value)
@@ -252,10 +252,10 @@ class PasswordValidator extends AbstractConstraintValidator
      *
      * @return bool true if a violation is added
      */
-    private function checkSpecialCharacter(Password $constraint, string $value): bool
+    private function checkSpecialChar(Password $constraint, string $value): bool
     {
-        if ($constraint->specialCharacter && !\preg_match('/[^p{Ll}\p{Lu}\pL\pN]/u', $value)) {
-            return $this->addViolation('specialCharacter', $value);
+        if ($constraint->specialChar && !\preg_match('/[^p{Ll}\p{Lu}\pL\pN]/u', $value)) {
+            return $this->addViolation('specialChar', $value);
         }
 
         return false;

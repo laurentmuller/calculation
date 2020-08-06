@@ -116,6 +116,7 @@ class CalculationStatesReport extends AbstractReport implements PdfCellListenerI
             ->addColumn(PdfColumn::left($this->trans('calculationstate.fields.description'), 80))
             ->addColumn(PdfColumn::center($this->trans('calculationstate.fields.editable'), 20, true))
             ->addColumn(PdfColumn::center($this->trans('calculationstate.fields.color'), 15, true))
+            ->addColumn(PdfColumn::right($this->trans('calculationstate.fields.calculations'), 22, true))
             ->outputHeaders();
 
         // states
@@ -125,6 +126,7 @@ class CalculationStatesReport extends AbstractReport implements PdfCellListenerI
                 ->add($state->getDescription())
                 ->add($this->booleanFilter($state->isEditable()))
                 ->add(null, 1, $this->getColorStyle($state))
+                ->add($this->localeInt($state->countCalculations()))
                 ->endRow();
         }
 

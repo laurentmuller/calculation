@@ -1,6 +1,111 @@
 /**! compression tag for ftp-deployment */
 
 /**
+ * -------------- Application specific --------------
+ */
+
+/**
+ * Trigger the click event.
+ * 
+ * @param {Object}
+ *            e - the source event.
+ * @param {string}
+ *            selector - the JQuery selector.
+ * @returns true if event is handled.
+ */
+function triggerClick(e, selector) { // jshint ignore:line
+    'use strict';
+
+    const $element = $(selector);
+    if ($element.length && $element.isSelectable()) {
+        e.stopPropagation();
+        $element.get(0).click();
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Clear the table search.
+ * 
+ * @param {JQuery}
+ *            $element the search input element.
+ * @param table
+ *            {DataTables.Api} the table to update.
+ * @param callback
+ *            the callback to invoke.
+ * @returns boolean true if success
+ */
+function clearSearch($element, table, callback) {
+    'use strict';
+    if ($element.val()) {
+        $element.val('').focus();
+        return callback(table);
+    } else {
+        $element.focus();
+        return false;
+    }
+}
+
+/**
+ * Table length callback.
+ * 
+ * @param {DataTables.Api}
+ *            table - the table to update.
+ */
+function tableLengthCallback(table) {
+    'use strict';
+
+    const length = $('#table_length').intVal();
+    if (table.page.len() !== length) {
+        table.page.len(length).draw();
+    }
+}
+
+/**
+ * Search callback.
+ * 
+ * @param {DataTables.Api}
+ *            table - the table to update.
+ */
+function searchCallback(table) {
+    'use strict';
+
+    const oldSearch = table.search() || '';
+    const newSearch = $('#table_search').val().trim();
+    if (oldSearch !== newSearch) {
+        table.search(newSearch).draw();
+        return true;
+    }
+    return false; 
+}
+
+/**
+ * Disable table keys plugin.
+ * 
+ * @param {string}
+ *            selector - the data table selector (default is '#data-table').
+ */
+function disableKeys(selector) {
+    'use strict';
+    selector = selector || '#data-table';
+    $(selector).DataTable().keys.disable();
+}
+
+/**
+ * Enable table keys plugin.
+ * 
+ * @param {string}
+ *            selector - the data table selector (default is '#data-table').
+ */
+function enableKeys(selector) {
+    'use strict';
+    selector = selector || '#data-table';
+    $(selector).DataTable().keys.enable();
+}
+
+/**
  * -------------- JQuery Extensions --------------
  */
 
@@ -107,7 +212,7 @@ $.fn.dataTable.Api.register('updateTitles()', function () {
  * 
  * @returns {DataTables.Api} this instance.
  */
-$.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
+$.fn.dataTable.Api.register('initEvents()', function (id) {
     'use strict';
 
     const table = this;
@@ -115,7 +220,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id, searchCallback) {
     let lastPageCalled = false;
 
     // bind search and page length
-    $('#table_search').initSearchInput(table, searchCallback, $('.btn-clear'));
+    $('#table_search').initSearchInput(table);
     $('#table_length').initTableLength(table);
 
     // bind table body rows
@@ -220,10 +325,10 @@ $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex
     if (columnIndex < 0 || columnIndex >= this.columns().count()) {
         return this;
     }
-    
+
     const column = this.column(columnIndex);
     const callback = function () {
-        const value = $source.val();
+        const value = $source.val().trim();
         if (column.search() !== value) {
             column.search(value).draw();
             $source.updateTimer(function () {
@@ -423,26 +528,22 @@ $.fn.initDataTable = function (options) {
  * 
  * @param {DataTables.Api}
  *            table - the table to update.
- * @param {function}
- *            callback - the callback to call.
- * @param {JQuery}
- *            $clearButton - the clear button (optional).
  * 
  * @return {jQuery} The JQuery element for chaining.
  */
-$.fn.initSearchInput = function (table, callback, $clearButton) {
+$.fn.initSearchInput = function (table) {
     'use strict';
 
     const $this = $(this);
-    if ($clearButton && $clearButton.length) {
+    const $clearButton = $('.btn-clear');
+    if ($clearButton.length) {
         $clearButton.on('click', function () {
-            $this.val('').focus();
-            callback(table);
+            clearSearch($this, table, searchCallback);
         });
     }
 
     return $this.handleKeys().on('input', function () {
-        $this.updateTimer(callback, 250, table);
+        $this.updateTimer(searchCallback, 250, table);
     });
 };
 
@@ -486,68 +587,3 @@ $.fn.handleKeys = function (disableEvent, enableEvent, selector) {
         enableKeys(selector);
     });
 };
-
-/**
- * -------------- Application specific --------------
- */
-
-/**
- * Trigger the click event.
- * 
- * @param {Object}
- *            e - the source event.
- * @param {string}
- *            selector - the JQuery selector.
- * @returns true if event is handled.
- */
-function triggerClick(e, selector) { // jshint ignore:line
-    'use strict';
-
-    const $element = $(selector);
-    if ($element.length && $element.isSelectable()) {
-        e.stopPropagation();
-        $element.get(0).click();
-        return true;
-    }
-
-    return false;
-}
-
-/**
- * Table length callback.
- * 
- * @param {DataTables.Api}
- *            table - the table to update.
- */
-function tableLengthCallback(table) {
-    'use strict';
-
-    const length = $('#table_length').intVal();
-    if (table.page.len() !== length) {
-        table.page.len(length).draw();
-    }
-}
-
-/**
- * Disable table keys plugin.
- * 
- * @param {string}
- *            selector - the data table selector (default is '#data-table').
- */
-function disableKeys(selector) {
-    'use strict';
-    selector = selector || '#data-table';
-    $(selector).DataTable().keys.disable();
-}
-
-/**
- * Enable table keys plugin.
- * 
- * @param {string}
- *            selector - the data table selector (default is '#data-table').
- */
-function enableKeys(selector) {
-    'use strict';
-    selector = selector || '#data-table';
-    $(selector).DataTable().keys.enable();
-}

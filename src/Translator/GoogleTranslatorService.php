@@ -145,8 +145,8 @@ class GoogleTranslatorService extends AbstractTranslatorService
         }
 
         // from
-        if ($detectedSourceLanguage = $this->getProperty($translation, 'detectedSourceLanguage', false)) {
-            $from = $detectedSourceLanguage;
+        if ($detectedLanguage = $this->getProperty($translation, 'detectedSourceLanguage', false)) {
+            $from = $detectedLanguage;
         }
 
         return [

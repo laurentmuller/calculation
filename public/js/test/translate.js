@@ -3,6 +3,21 @@
 /* globals Toaster, ClipboardJS */
 
 /**
+ * Display a notification.
+ * 
+ * @param {string}
+ *            type - the notification type.
+ * @param {string}
+ *            message - the notification message.
+ */
+function notify(type, message) {
+    'use strict';
+
+    const title = $('#edit-form').data('title');
+    Toaster.notify(type, message, title, $('#flashbags').data());
+}
+
+/**
  * Transalte
  */
 function translate() {
@@ -78,21 +93,6 @@ function translate() {
 }
 
 /**
- * Display a notification.
- * 
- * @param {string}
- *            type - the notification type.
- * @param {string}
- *            message - the notification message.
- */
-function notify(type, message) {
-    'use strict';
-
-    const title = $('#edit-form').data('title');
-    Toaster.notify(type, message, title, $('#flashbags').data());
-}
-
-/**
  * Handle success copy event.
  */
 function onCopySuccess(e) {
@@ -142,6 +142,18 @@ function onSelection() {
     } else {
         $('.btn-exchange').addClass('disabled');
     }
+}
+
+/**
+ * Gets the locale (language).
+ * 
+ * @returns the locale.
+ */
+function getLocale() {
+    'use strict';
+
+    const locale = $('#edit-form').data('locale');
+    return locale.split('_')[0];
 }
 
 /**
@@ -196,18 +208,6 @@ function onService() {
             }
         }
     });
-}
-
-/**
- * Gets the locale (language).
- * 
- * @returns the locale.
- */
-function getLocale() {
-    'use strict';
-
-    const locale = $('#edit-form').data('locale');
-    return locale.split('_')[0];
 }
 
 /**

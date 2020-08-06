@@ -1,5 +1,29 @@
 /**! compression tag for ftp-deployment */
 
+/* globals clearSearch */
+
+/**
+ * Override clear search
+ */
+const noConflict = clearSearch;
+clearSearch = function ($element, table, callback) { // jshint ignore:line
+    'use strict';
+
+    const $channel = $('#channel');
+    const $level = $('#level');
+    if ($channel.val() || $level.val()) {
+        table.column(2).search('');
+        table.column(3).search('');
+        $channel.val('');
+        $level.val('');
+        if (!noConflict($element, table, callback)) {
+            table.draw();
+        }
+    } else {
+        noConflict($element, table, callback);
+    }
+};
+
 /**
  * Ready function
  */

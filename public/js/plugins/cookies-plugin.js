@@ -4,7 +4,6 @@
  * Ready function
  */
 (function () {
-
     'use strict';
 
     /**

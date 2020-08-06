@@ -53,11 +53,11 @@
                 	<a href="{{ path(list_path, {'query': item.date|strftime('%m.%Y')}) }}">{{ month }}</a>
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
-                <td class="text-currency">{{ item.items|number_format(0) }}</td>
-                {%- set class_name = margin_below(item.marginPercent) ? 'text-percent text-danger' : 'text-percent' -%}
-                <td class="{{ class_name }}">{{ item.marginPercent|percent(false) }}</td>
-                <td class="text-currency">{{ item.marginAmount|number_format(0) }}</td>
-                <td class="text-currency">{{ item.sum|number_format(0) }}</td>
+                <td class="text-currency">{{ item.items|integer }}</td>
+                {%- set class_name = margin_below(item.marginPercent) ? 'text-danger' : '' -%}
+                <td class="text-percent {{ class_name }}">{{ item.marginPercent|percent(false) }}</td>
+                <td class="text-currency">{{ item.marginAmount|integer }}</td>
+                <td class="text-currency">{{ item.sum|integer }}</td>
             </tr>
             {% endfor -%}
         </tbody>
@@ -65,10 +65,11 @@
             <tr>
             	<td class="font-weight-bold">{{ 'fields.total'|trans }}</td>
             	<td class="font-weight-bold text-currency">{{ count|integer }}</td>
-                <td class="font-weight-bold text-currency">{{ items|number_format(0) }}</td>
-            	<td class="font-weight-bold text-percent">{{ marginPercent|percent(false) }}</td>
-                <td class="font-weight-bold text-currency">{{ marginAmount|number_format(0) }}</td>
-                <td class="font-weight-bold text-currency">{{ total|number_format(0) }}</td>
+                <td class="font-weight-bold text-currency">{{ items|integer }}</td>
+                {%- set class_name = margin_below(marginPercent) ? ' text-danger' : '' -%}
+            	<td class="font-weight-bold text-percent{{ class_name }}">{{ marginPercent|percent(false) }}</td>
+                <td class="font-weight-bold text-currency">{{ marginAmount|integer }}</td>
+                <td class="font-weight-bold text-currency">{{ total|integer }}</td>
             </tr>
         </tfoot>
     </table>

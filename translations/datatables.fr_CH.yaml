@@ -1,13 +1,13 @@
 search: 'Rechercher&nbsp;:'
 processing: Traitement en cours...
 lengthMenu: Afficher _MENU_ éléments
-info: Eléments _START_ - _END_ / _TOTAL_
-infoEmpty: Aucun élément correspondant
-infoFiltered: (filtre de _MAX_ éléments)
+info: Entrées _START_ - _END_ / _TOTAL_
+infoEmpty: Aucune entrée correspondante
+infoFiltered: (_MAX_ entrées au total)
 infoPostFix: ''
 loadingRecords: Chargement en cours...
-zeroRecords: Aucune donnée ne correspond à la recherche.
-emptyTable: Aucune donnée disponible dans le tableau.
+zeroRecords: Aucune entrée ne correspond à la recherche.
+emptyTable: Aucune entrée disponible dans le table.
 paginate:
     first: <i class="fa fa-step-backward" aria-hidden="true" title="Premier"></i>
     previous: <i class="fa fa-caret-left fa-lg" aria-hidden="true" title="Précédent"></i>

@@ -20,7 +20,7 @@ function onMonthsChange($months) {
 /**
  * Ready function.
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // update input value
@@ -38,4 +38,4 @@ $(function () {
         $months.updateTimer(onMonthsChange, 500, $months);
     });
     $months.focus();
-});
+}(jQuery));

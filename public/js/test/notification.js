@@ -42,7 +42,7 @@ function notify(type, title, options, clear) {
 /**
  * Document ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // default options
@@ -96,4 +96,4 @@ $(function () {
     // random notification
     const button = $('.btn-form').toArray().randomElement();
     $(button).trigger('click').focus();
-});
+}(jQuery));

@@ -85,7 +85,7 @@ function updateErrors() {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // tooltip
@@ -101,4 +101,4 @@ $(function () {
     if ($("#data-table-edit").length) {
         updateErrors();
     }
-});
+}(jQuery));

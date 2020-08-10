@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // delete checkbox handler
@@ -24,4 +24,4 @@ $(function () {
     $('#edit-form').initValidator({
         fileInput: true
     });
-});
+}(jQuery));

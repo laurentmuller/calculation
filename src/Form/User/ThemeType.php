@@ -90,8 +90,8 @@ class ThemeType extends AbstractHelperType
      */
     protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
     {
-        $this->addThemeField($helper)
-            ->addBackgroundField($helper);
+        $this->addThemeField($helper);
+        $this->addBackgroundField($helper);
     }
 
     /**

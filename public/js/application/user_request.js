@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // initialize captcha
@@ -21,4 +21,4 @@ $(function () {
 
     // initialize validator
     $("#edit-form").initValidator();
-});
+}(jQuery));

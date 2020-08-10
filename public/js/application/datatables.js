@@ -246,7 +246,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // table
@@ -351,4 +351,4 @@ $(function () {
     // drop-down menu
     $('#other_actions_button').handleKeys();
     $('#other_actions').handleKeys('show.bs.dropdown', 'hide.bs.dropdown');
-});
+}(jQuery));

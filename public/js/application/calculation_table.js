@@ -26,7 +26,7 @@ clearSearch = function ($element, table, callback) { // jshint ignore:line
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // initialize search columns
@@ -35,4 +35,4 @@ $(function () {
         const table = $('#data-table').dataTable().api();
         table.initSearchColumn($state, 8);
     }
-});
+}(jQuery));

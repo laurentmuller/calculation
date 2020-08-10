@@ -123,7 +123,7 @@ function togglePopover($source, $selector, save) {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
     
     // get elements
@@ -154,4 +154,4 @@ $(function () {
     }).on('mouseleave', function () {
         $(this).removeClass('text-hover');
     });
-});
+}(jQuery));

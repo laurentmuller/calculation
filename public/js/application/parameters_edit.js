@@ -101,7 +101,7 @@ function displayUrl() {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     $('form').initValidator({
@@ -135,4 +135,4 @@ $(function () {
         e.preventDefault();
         displayUrl();
     });
-});
+}(jQuery));

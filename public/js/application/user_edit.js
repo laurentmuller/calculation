@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // image
@@ -89,4 +89,4 @@ $(function () {
 
     // initialize validator
     $('#edit-form').initValidator(options);
-});
+}(jQuery));

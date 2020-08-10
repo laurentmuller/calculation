@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // remove pattern attribute
@@ -59,4 +59,4 @@ $(function () {
 
     // validation
     $("#edit-form").initValidator(options);
-});
+}(jQuery));

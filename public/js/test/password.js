@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // password strength
@@ -36,4 +36,4 @@ $(function () {
             }
         });
     });
-});
+}(jQuery));

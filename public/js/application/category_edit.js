@@ -85,7 +85,7 @@ function removeMarginForm($this) {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // validation
@@ -103,4 +103,4 @@ $(function () {
         e.preventDefault();
         removeMarginForm($(this));
     });
-});
+}(jQuery));

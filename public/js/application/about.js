@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // JQuery extensions
@@ -54,4 +54,4 @@ $(function () {
     $('.card-body.collapse').one('show.bs.collapse', function () {
         $(this).loadContent();
     });
-});
+}(jQuery));

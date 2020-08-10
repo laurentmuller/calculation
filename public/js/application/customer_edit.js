@@ -5,7 +5,7 @@
 /**
  * ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     const url = $("#edit-form").data("search");
@@ -155,4 +155,4 @@ $(function () {
 
     // initialize
     $("form").initValidator(options);
-});
+}(jQuery));

@@ -213,7 +213,7 @@ function onService() {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // clipboard
@@ -260,4 +260,4 @@ $(function () {
 
     $('#edit-form').initValidator(options);
     $('#text').focus();
-});
+}(jQuery));

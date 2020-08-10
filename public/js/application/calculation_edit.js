@@ -1268,7 +1268,7 @@ $.fn.extend({
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // searches
@@ -1304,4 +1304,4 @@ $(function () {
             Application.updateTotals();
         }, 250);
     });
-});
+}(jQuery));

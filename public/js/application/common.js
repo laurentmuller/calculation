@@ -111,9 +111,9 @@ function initBackToTop() {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
     showFlashbag();
     initBackToTop();
     initSearchToolbar();
-});
+}(jQuery));

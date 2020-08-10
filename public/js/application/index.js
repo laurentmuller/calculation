@@ -23,7 +23,7 @@ $.fn.extend({
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // remove selection
@@ -67,4 +67,4 @@ $(function () {
             type: 'danger overall-card'
         });
     }
-});
+}(jQuery));

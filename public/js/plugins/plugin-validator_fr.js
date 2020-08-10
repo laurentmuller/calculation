@@ -3,7 +3,7 @@
 /**
  * -------------- Validator messages --------------
  */
-$(function () {
+(function ($) {
     'use strict';
 
     $.extend($.validator.messages, {
@@ -227,4 +227,4 @@ $(function () {
             }
         }
     });
-});
+}(jQuery));

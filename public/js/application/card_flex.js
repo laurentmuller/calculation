@@ -110,7 +110,7 @@ function onQueryChange() {
 /**
  * Ready function.
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // bind query input
@@ -138,4 +138,4 @@ $(function () {
 
     // UI
     updateUI();
-});
+}(jQuery));

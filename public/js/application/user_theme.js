@@ -59,7 +59,7 @@ function setDefaultValues() {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     $('#edit-form').initValidator();
@@ -69,4 +69,4 @@ $(function () {
     $('#theme, #background').on('change', function () {
         $('#edit-form').updateTimer(applyTheme, 400);
     });
-});
+}(jQuery));

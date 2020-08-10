@@ -29,11 +29,11 @@ clearSearch = function ($element, table, callback) { // jshint ignore:line
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // initialize search columns
     const table = $('#data-table').dataTable().api();
     table.initSearchColumn($('#channel'), 2);
     table.initSearchColumn($('#level'), 3);
-});
+}(jQuery));

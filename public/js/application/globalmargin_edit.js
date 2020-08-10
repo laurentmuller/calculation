@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // const options = {
@@ -16,4 +16,4 @@ $(function () {
 
     // initialize validator
     $('#edit-form').initValidator();
-});
+}(jQuery));

@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // tooltip
@@ -11,4 +11,4 @@ $(function () {
         selector: '.has-tooltip',
         type: 'danger overall-card'
     });
-});
+}(jQuery));

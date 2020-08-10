@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // remove accept method
@@ -16,4 +16,4 @@ $(function () {
     $("form").initValidator({
         fileInput: true,
     });
-});
+}(jQuery));

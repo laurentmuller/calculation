@@ -185,7 +185,7 @@ function updateButton() {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     $("#cards").on("click", ".card", function () {
@@ -199,4 +199,4 @@ $(function () {
             updateCounters();
         }
     });
-});
+}(jQuery));

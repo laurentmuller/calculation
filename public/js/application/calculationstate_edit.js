@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // color
@@ -13,4 +13,4 @@ $(function () {
     $("form").initValidator({
         colorpicker: true
     });
-});
+}(jQuery));

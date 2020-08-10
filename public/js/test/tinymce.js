@@ -5,7 +5,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     tinymce.PluginManager.add('clearContent', function (editor) {
@@ -61,4 +61,4 @@ $(function () {
     $("form").initValidator({
         tinyeditor: true
     });
-});
+}(jQuery));

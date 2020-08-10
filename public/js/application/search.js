@@ -161,7 +161,7 @@ function searchCallback(table) {
 /**
  * Document ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // table
@@ -252,4 +252,4 @@ $(function () {
     if (!$('#table_search').val().length) {
         $('#table_search').focus();
     }
-});
+}(jQuery));

@@ -514,6 +514,8 @@
         });
     };
 
+    $.fn.typeahead.Constructor = Typeahead;
+
     // ------------------------------------
     // Typeahead no conflict
     // ------------------------------------
@@ -522,12 +524,10 @@
         return this;
     };
 
-    $.fn.typeahead.Constructor = Typeahead;
-
     // --------------------------------
     // Typeahead data-api
     // --------------------------------
-    $(function () {
+    (function ($) {
         $("body").on("focus.typeahead.data-api", "[data-provide='typeahead']", function (e) {
             const $this = $(this);
             if ($this.data("typeahead")) {
@@ -536,6 +536,6 @@
             e.preventDefault();
             $this.typeahead($this.data());
         });
-    });
+    }(jQuery));
 
 })(jQuery);

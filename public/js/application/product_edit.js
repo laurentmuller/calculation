@@ -72,11 +72,11 @@ function initSearchSuppliers() {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     initSearchUnits();
     initSearchSuppliers();
     $('#product_price').inputNumberFormat();
     $("#edit-form").initValidator();
-});
+}(jQuery));

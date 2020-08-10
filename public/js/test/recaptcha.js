@@ -25,7 +25,7 @@ grecaptcha.ready(function () {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
     $('#edit-form').initValidator();
-});
+}(jQuery));

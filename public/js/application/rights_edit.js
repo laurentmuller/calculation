@@ -156,7 +156,7 @@ function onOverwriteClick($element) {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // validation
@@ -192,4 +192,4 @@ $(function () {
             onOverwriteClick($(this));
         });
     }
-});
+}(jQuery));

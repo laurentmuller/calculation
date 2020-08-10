@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     // initialize editor
@@ -21,4 +21,4 @@ $(function () {
         fileInput: true,
         focus: !focus
     });
-});
+}(jQuery));

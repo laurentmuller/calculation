@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
 
     $('[data-toggle="popover"]').popover({
@@ -16,4 +16,4 @@ $(function () {
             return $(content);
         },
     });
-});
+}(jQuery));

@@ -30,16 +30,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Comment
 {
     /**
-     * The html content type.
-     */
-    private const HTML_CONTENT_TYPE = 'text/html';
-
-    /**
-     * The text content type.
-     */
-    private const TEXT_CONTENT_TYPE = 'text/plain';
-
-    /**
      * The attachments.
      *
      * @var UploadedFile[]
@@ -47,24 +37,23 @@ class Comment
      * @Assert\Count(max=3)
      * @Assert\All(@Assert\File(maxSize="10485760"))
      */
-    protected $attachments;
+    private $attachments;
 
     /**
-     * The sender e-mail.
+     * The from address.
      *
-     * @var string
+     * @var Address
      *
      * @Assert\NotNull
-     * @Assert\Email
      */
-    protected $from;
+    private $fromAddress;
 
     /**
-     * The sender name.
+     * The mail type.
      *
-     * @var string
+     * @var bool
      */
-    protected $fromName;
+    private $mail;
 
     /**
      * The message.
@@ -73,7 +62,7 @@ class Comment
      *
      * @Assert\NotNull
      */
-    protected $message;
+    private $message;
 
     /**
      * The subject.
@@ -82,31 +71,16 @@ class Comment
      *
      * @Assert\NotNull
      */
-    protected $subject;
+    private $subject;
 
     /**
-     * The receiver e-mail.
+     * The to address.
      *
-     * @var string
+     * @var Address
      *
      * @Assert\NotNull
-     * @Assert\Email
      */
-    protected $to;
-
-    /**
-     * The receiver name.
-     *
-     * @var string
-     */
-    protected $toName;
-
-    /**
-     * The mail type.
-     *
-     * @var bool
-     */
-    private $mail;
+    private $toAddress;
 
     /**
      * Constructor.
@@ -129,43 +103,23 @@ class Comment
     }
 
     /**
-     * Gets the "from" e-mail.
-     *
-     * @return string
+     * Gets the "from" e-mail and name (if any).
      */
     public function getFrom(): ?string
     {
-        return $this->from;
+        return $this->fromAddress ? $this->fromAddress->toString() : null;
     }
 
     /**
-     * Gets the "from" e-mail and name (if any).
-     *
-     * @return string
+     * Gets the "from" address.
      */
-    public function getFromFull(): ?string
+    public function getFromAddress(): ?Address
     {
-        if ($this->fromName) {
-            return \sprintf('%s (%s)', $this->from, $this->fromName);
-        }
-
-        return $this->from;
-    }
-
-    /**
-     * Gets the "from" name.
-     *
-     * @return string
-     */
-    public function getFromName(): ?string
-    {
-        return $this->fromName;
+        return $this->fromAddress;
     }
 
     /**
      * Gets the message.
-     *
-     * @return string
      */
     public function getMessage(): ?string
     {
@@ -174,8 +128,6 @@ class Comment
 
     /**
      * Gets the subject.
-     *
-     * @return string
      */
     public function getSubject(): ?string
     {
@@ -183,37 +135,19 @@ class Comment
     }
 
     /**
-     * Gets the "to" e-mail.
-     *
-     * @return string
+     * Gets the "to" e-mail and name (if any).
      */
     public function getTo(): ?string
     {
-        return $this->to;
+        return $this->toAddress ? $this->toAddress->toString() : null;
     }
 
     /**
-     * Gets the "to" e-mail and name (if any).
-     *
-     * @return string
+     * Gets the "to" address.
      */
-    public function getToFull(): ?string
+    public function getToAddress(): ?Address
     {
-        if ($this->toName) {
-            return \sprintf('%s (%s)', $this->to, $this->toName);
-        }
-
-        return $this->to;
-    }
-
-    /**
-     * Gets the "to" name.
-     *
-     * @return string
-     */
-    public function getToName(): ?string
-    {
-        return $this->toName;
+        return $this->toAddress;
     }
 
     /**
@@ -236,9 +170,9 @@ class Comment
     public function send(MailerInterface $mailer): void
     {
         $email = new Email();
-        $email->addFrom($this->getFromAddress())
-            ->addTo($this->getToAddress())
-            ->subject($this->getSubject())
+        $email->addFrom($this->fromAddress)
+            ->addTo($this->toAddress)
+            ->subject($this->subject)
             ->text($this->getTextMessage())
             ->html($this->getHtmlMessage());
 
@@ -264,39 +198,21 @@ class Comment
     }
 
     /**
-     * Sets the "from" e-mail and name.
-     *
-     * @param string $from the from user e-mail
-     * @param string $name the from user name
+     * Sets the "from" address.
      */
-    public function setFrom(string $from, ?string $name = null): self
+    public function setFromAddress(Address $fromAddress): self
     {
-        $this->from = $from;
-        $this->fromName = $name;
+        $this->fromAddress = $fromAddress;
 
         return $this;
     }
 
     /**
      * Sets the "from" user.
-     *
-     * @param User $user the from user
      */
     public function setFromUser(User $user): self
     {
-        return $this->setFrom($user->getEmail(), $user->getUsername());
-    }
-
-    /**
-     * Sets if this is a mail or a comment.
-     *
-     * @param bool $mail true if mail, false if comment
-     */
-    public function setMail(bool $mail): self
-    {
-        $this->mail = $mail;
-
-        return $this;
+        return $this->setFromAddress($user->getAddress());
     }
 
     /**
@@ -320,27 +236,21 @@ class Comment
     }
 
     /**
-     * Sets the "to" e-mail and name.
-     *
-     * @param string $to   the to user e-mail
-     * @param string $name the to user name
+     * Sets the "to" address.
      */
-    public function setTo(string $to, ?string $name = null): self
+    public function setToAddress(Address $toAddress): self
     {
-        $this->to = $to;
-        $this->toName = $name;
+        $this->toAddress = $toAddress;
 
         return $this;
     }
 
     /**
      * Sets the "to" user.
-     *
-     * @param User $user the to user
      */
     public function setToUser(User $user): self
     {
-        return $this->setTo($user->getEmail(), $user->getUsername());
+        return $this->setToAddress($user->getAddress());
     }
 
     /**
@@ -365,23 +275,14 @@ class Comment
     }
 
     /**
-     * Gets the "from" address.
-     */
-    private function getFromAddress(): Address
-    {
-        return new Address($this->from, (string) $this->fromName);
-    }
-
-    /**
      * Remove empty lines for the given message.
      *
      * @return string the cleaned message
      */
     private function getHtmlMessage(): string
     {
-        $message = $this->message;
-        $lines = \preg_split('/\r\n|\r|\n/', $message);
-        $result = \array_filter($lines, function ($line) {
+        $lines = \preg_split('/\r\n|\r|\n/', $this->message);
+        $result = \array_filter($lines, function (string $line) {
             return !empty($line) && 0 !== \strcasecmp('<p>&nbsp;</p>', $line);
         });
 
@@ -399,13 +300,5 @@ class Comment
         $message = $this->message;
 
         return $parser->parseString($message);
-    }
-
-    /**
-     * Gets the "to" address.
-     */
-    private function getToAddress(): Address
-    {
-        return new Address($this->to, (string) $this->toName);
     }
 }

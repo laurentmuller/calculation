@@ -17,7 +17,7 @@ namespace App\Controller;
 use App\DataTable\ProductDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Product;
-use App\Form\ProductType;
+use App\Form\Product\ProductType;
 use App\Pdf\PdfResponse;
 use App\Report\ProductsReport;
 use App\Repository\CategoryRepository;

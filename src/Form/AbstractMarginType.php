@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\AbstractMargin;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -25,24 +24,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 abstract class AbstractMarginType extends AbstractEntityType
 {
     /**
-     * Constructor.
-     *
-     * @param string $className the entity class name. Must be a subclass of AbstractMargin class.
-     */
-    protected function __construct($className)
-    {
-        $className = empty($className) ? AbstractMargin::class : $className;
-        parent::__construct($className);
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
-
-        $helper = new FormHelper($builder, 'categorymargin.fields.');
         $currency = $this->currency() ? $helper->getCurrencySymbol() : false;
 
         $helper->field('minimum')
@@ -68,6 +53,14 @@ abstract class AbstractMarginType extends AbstractEntityType
     protected function currency(): bool
     {
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getLabelPrefix(): string
+    {
+        return 'categorymargin.fields.';
     }
 
     /**

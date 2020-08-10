@@ -20,7 +20,7 @@
 		},
 		{
 			"name": "twitter-bootstrap",
-			"version": "4.5.1",
+			"version": "4.5.2",
 			"files": [
 				"js/bootstrap.bundle.js",				
 				"css/bootstrap.css"

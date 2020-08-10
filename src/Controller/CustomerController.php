@@ -17,7 +17,7 @@ namespace App\Controller;
 use App\DataTable\CustomerDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Customer;
-use App\Form\CustomerType;
+use App\Form\Customer\CustomerType;
 use App\Pdf\PdfResponse;
 use App\Report\CustomersReport;
 use Doctrine\Common\Collections\Criteria;

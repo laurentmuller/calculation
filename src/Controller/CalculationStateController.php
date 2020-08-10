@@ -17,7 +17,7 @@ namespace App\Controller;
 use App\DataTable\CalculationStateDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
-use App\Form\CalculationStateType;
+use App\Form\CalculationState\CalculationStateType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Pdf\PdfResponse;
 use App\Report\CalculationStatesReport;

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-use App\Form\Type\SeparatorType;
+use App\Form\Admin\SeparatorType;
 
 /**
  * Utility class for default formats.

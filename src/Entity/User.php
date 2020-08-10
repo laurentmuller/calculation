@@ -20,6 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
@@ -178,11 +179,6 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
         return \array_keys($vars);
     }
 
-    public function __toString(): string
-    {
-        return (string) $this->getUsername();
-    }
-
     /**
      * {@inheritdoc}
      *
@@ -203,6 +199,14 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
         $this->hashedToken = null;
 
         return $this;
+    }
+
+    /**
+     * Gets the address (email and name) used for send email.
+     */
+    public function getAddress(): Address
+    {
+        return new Address($this->email, $this->username);
     }
 
     /**
@@ -242,7 +246,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      */
     public function getDisplay(): string
     {
-        return $this->__toString();
+        return (string) $this->getUsername();
     }
 
     /**
@@ -534,7 +538,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      */
     public function setResetPasswordRequest(\DateTimeInterface $expiresAt, string $selector, string $hashedToken): self
     {
-        $this->requestedAt = new \DateTimeImmutable('now');
+        $this->requestedAt = new \DateTimeImmutable();
         $this->expiresAt = $expiresAt;
         $this->selector = $selector;
         $this->hashedToken = $hashedToken;

@@ -139,7 +139,7 @@ class UserDataTable extends AbstractEntityDataTable
         return [
             DataColumn::hidden('id'),
             DataColumn::instance('imageName')
-                ->setTitle('user.fields.image')
+                ->setTitle('user.fields.imageFile')
                 ->setClassName('text-image')
                 ->setSearchable(false)
                 ->setOrderable(false)

@@ -167,9 +167,10 @@
         },
 
         generateTableMatrix: function () {
-            const width = this.getTableMaxCellLength();
-            const height = this.getTableRows().length;
-            return this.generateMatrix(width, height);
+            const that = this;
+            const width = that.getTableMaxCellLength();
+            const height = that.getTableRows().length;
+            return that.generateMatrix(width, height);
         },
 
         generateMatrix: function (width, height) {
@@ -183,9 +184,9 @@
         indexTable: function () {
             let i, j;
             let colspan, rowspan;
-            
-            const rows = this.getTableRows();
-            let tableIndex = this.generateTableMatrix();            
+            const that = this;
+            const rows = that.getTableRows();
+            const tableIndex = that.generateTableMatrix();            
 
             // Iterate through each hypothetical table row.
             $.each(tableIndex, function (y) {
@@ -215,7 +216,7 @@
                         }
                     }
 
-                    if (cell.data && this.isUndefined(cell.data('cellhighlight.offsetInMatrix'))) {
+                    if (cell.data && that.isUndefined(cell.data('cellhighlight.offsetInMatrix'))) {
                         cell.data('cellhighlight.offsetInMatrix', [x, y]);
                     }
                 });

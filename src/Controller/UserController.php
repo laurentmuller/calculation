@@ -18,12 +18,12 @@ use App\DataTable\UserDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Comment;
 use App\Entity\User;
-use App\Form\ThemeType;
-use App\Form\UserChangePasswordType;
-use App\Form\UserCommentType;
-use App\Form\UserImageType;
-use App\Form\UserRightsType;
-use App\Form\UserType;
+use App\Form\User\ThemeType;
+use App\Form\User\UserChangePasswordType;
+use App\Form\User\UserCommentType;
+use App\Form\User\UserImageType;
+use App\Form\User\UserRightsType;
+use App\Form\User\UserType;
 use App\Interfaces\RoleInterface;
 use App\Pdf\PdfResponse;
 use App\Report\UsersReport;
@@ -103,7 +103,7 @@ class UserController extends AbstractEntityController
         $comment = new Comment(false);
         $comment->setSubject($this->getApplicationName())
             ->setFromUser($this->getUser())
-            ->setTo($this->getParameter('mailer_user_email'), $this->getParameter('mailer_user_name'));
+            ->setToAddress($this->getAddressFrom());
 
         // create and handle request
         $form = $this->createForm(UserCommentType::class, $comment);

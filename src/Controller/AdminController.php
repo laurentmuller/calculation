@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Role;
-use App\Form\ParametersType;
-use App\Form\RoleRightsType;
+use App\Form\Admin\ParametersType;
+use App\Form\User\RoleRightsType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;

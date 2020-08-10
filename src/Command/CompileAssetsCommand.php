@@ -117,9 +117,6 @@ class CompileAssetsCommand extends AssetsCommand
         $target = $publicDir . '/' . $configuration->target;
         $targetTemp = $this->tempDir($publicDir) . '/';
 
-        $countJs = 0;
-        $countCss = 0;
-
         // uglifyjs arguments
         if ($this->propertyExists($configuration, 'js_args') && !empty($uglifyJsArgs = \trim($configuration->js_args))) {
             $this->uglifyJsArgs = $uglifyJsArgs;
@@ -146,19 +143,14 @@ class CompileAssetsCommand extends AssetsCommand
 
         try {
             // create finder
-            $finder = new Finder();
-            $finder->in($source)
-                ->exclude($configuration->target)
-                ->name('*.css')
-                ->name('*.js')
-                ->files();
-
-            // files?
-            if (0 === $finder->count()) {
+            if (!$finder = $this->createFinder($source, $configuration)) {
                 $this->writeVerbose("No file to process in '{$source}' directory.");
 
                 return Command::SUCCESS;
             }
+
+            $countJs = 0;
+            $countCss = 0;
 
             // run over files
             foreach ($finder->getIterator() as $file) {
@@ -289,6 +281,31 @@ class CompileAssetsCommand extends AssetsCommand
         }
 
         return $output;
+    }
+
+    /**
+     * Creates the finder.
+     *
+     * @param string    $source        the source directory
+     * @param \stdClass $configuration the configuration
+     *
+     * @return Finder|null the finder, if any files to parse; null otherwise
+     */
+    private function createFinder(string $source, \stdClass $configuration): ?Finder
+    {
+        $finder = new Finder();
+        $finder->in($source)
+            ->exclude($configuration->target)
+            ->name('*.css')
+            ->name('*.js')
+            ->files();
+
+        // files?
+        if (0 === $finder->count()) {
+            return null;
+        }
+
+        return $finder;
     }
 
     /**

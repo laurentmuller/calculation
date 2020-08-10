@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Form\Type\CalculationStateEntityType;
-use App\Form\Type\CategoryEntityType;
+use App\Form\CalculationState\CalculationStateEntityType;
+use App\Form\Category\CategoryEntityType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
-use App\Form\Type\UserEntityType;
 use App\Form\Type\YesNoType;
+use App\Form\User\UserEntityType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -106,7 +106,7 @@ class FormHelper
     /**
      * Constructor.
      *
-     * @param formBuilderInterface $builder     the parent builder
+     * @param FormBuilderInterface $builder     the parent builder
      * @param string               $labelPrefix the label prefix. If the prefix is not null,
      *                                          the label is automatically added when the field property is
      *                                          set.

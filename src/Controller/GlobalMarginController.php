@@ -17,7 +17,7 @@ namespace App\Controller;
 use App\DataTable\GlobalMarginDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\GlobalMargin;
-use App\Form\GlobalMarginType;
+use App\Form\GlobalMargin\GlobalMarginType;
 use App\Pdf\PdfResponse;
 use App\Report\GlobalMarginsReport;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

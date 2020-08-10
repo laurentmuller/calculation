@@ -17,7 +17,7 @@ namespace App\Controller;
 use App\DataTable\CategoryDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
-use App\Form\CategoryType;
+use App\Form\Category\CategoryType;
 use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
 use App\Repository\CalculationGroupRepository;

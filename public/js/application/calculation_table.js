@@ -12,12 +12,14 @@ clearSearch = function ($element, table, callback) { // jshint ignore:line
     const $state = $('#state');
     if ($state.length && $state.val() !== '') {
         table.column(8).search('');
-        $state.val('');        
+        $state.val('');
         if (!noConflict($element, table, callback)) {
             table.draw();
+            return false;
         }
+        return true;
     } else {
-        noConflict($element, table, callback);
+        return noConflict($element, table, callback);
     }
 };
 

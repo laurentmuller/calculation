@@ -323,7 +323,7 @@ $(function () {
     };
 
     // initialize
-    $table.initDataTable(options).initEvents(id);
+    const table = $table.initDataTable(options).initEvents(id);
 
     // update
     $('#table_search').val(query);
@@ -332,7 +332,6 @@ $(function () {
     // select on right click
     $('#data-table tbody').on('mousedown', 'tr', function (e) {
         if (e.button === 2) {
-            const table = $('#data-table').DataTable();
             const index = table.row(this).index();
             table.cell(index, '0:visIdx').focus();
         }
@@ -347,7 +346,7 @@ $(function () {
     const hide = function () {
         enableKeys();
     };
-    $('#data-table').initContextMenu(selector, show, hide);
+    $table.initContextMenu(selector, show, hide);
 
     // drop-down menu
     $('#other_actions_button').handleKeys();

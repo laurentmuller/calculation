@@ -54,8 +54,8 @@ abstract class AbstractController extends BaseController
      */
     public function getAddressFrom(): Address
     {
-        $name = $this->getParameter('mailer_user_name');
         $email = $this->getParameter('mailer_user_email');
+        $name = $this->getParameter('mailer_user_name');
 
         return new Address($email, $name);
     }

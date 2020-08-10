@@ -15,9 +15,11 @@ clearSearch = function ($element, table, callback) { // jshint ignore:line
         $category.val('');
         if (!noConflict($element, table, callback)) {
             table.draw();
+            return false;
         }
+        return true;
     } else {
-        noConflict($element, table, callback);
+        return noConflict($element, table, callback);
     }
 };
 

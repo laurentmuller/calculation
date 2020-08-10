@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\ProfileChangePasswordType;
-use App\Form\ProfileEditType;
+use App\Form\User\ProfileChangePasswordType;
+use App\Form\User\ProfileEditType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

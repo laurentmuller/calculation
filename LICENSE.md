@@ -73,9 +73,9 @@ Nous recueillons plusieurs types de données à différentes fins en vue de vous
 
 #### Données à caractère personnel
 Lorsque vous utilisez notre application, il est possible que nous vous demandions de nous fournir certaines données personnelles nominatives qui peuvent servir à vous contacter ou à vous identifier ("Données à caractère personnel"). Les données personnelles nominatives peuvent comprendre, mais de manière non limitative:
-*  L'adresse e-mail
-*  Le nom de famille et le prénom
-*  Cookies et les données d'utilisation
+*   L'adresse e-mail
+*   Le nom de famille et le prénom
+*   Cookies et les données d'utilisation
 
 #### Données d'utilisation
 Nous pouvons également recueillir des informations relatives au mode d'accès et d'utilisation de l'application ("Données d'utilisation"). Ces données d'utilisation peuvent comprendre des informations telles que l'adresse de protocole Internet (c.-à-d. l'adresse IP) de votre ordinateur, le type de navigateur, la version du navigateur, les pages de notre application que vous consultez, la date et l'heure de votre visite, le temps passé sur ces pages, les identifiants uniques de dispositifs ainsi que d'autres données de diagnostic.

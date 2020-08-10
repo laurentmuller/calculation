@@ -318,7 +318,7 @@ class PlainType extends AbstractType
             $values = \array_map($callback, (array) $value);
             $separator = $this->getOptionString($options, 'separator', ', ');
 
-            return  \implode($separator, $values);
+            return \implode($separator, $values);
         }
         if ($value instanceof AbstractEntity) {
             return $value->getDisplay();

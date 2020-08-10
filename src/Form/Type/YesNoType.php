@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
+use App\Form\AbstractChoiceType;
+
 /**
  * A Yes/No (translated) choice type.
  *

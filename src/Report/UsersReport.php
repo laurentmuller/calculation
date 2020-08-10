@@ -110,7 +110,7 @@ class UsersReport extends AbstractReport
 
         // table
         $table = new PdfTableBuilder($this);
-        $table->addColumn(PdfColumn::center($this->trans('user.fields.image'), 18, true))
+        $table->addColumn(PdfColumn::center($this->trans('user.fields.imageFile'), 18, true))
             ->addColumn(PdfColumn::left($this->trans('user.fields.username'), 25))
             ->addColumn(PdfColumn::left($this->trans('user.fields.email'), 30))
             ->addColumn(PdfColumn::left($this->trans('user.fields.role'), 35, true))

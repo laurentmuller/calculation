@@ -282,7 +282,7 @@ user:
         enabled: Statut
         role: Rôle
         lastLogin: Connexion
-        image: Image
+        imageFile: Image
         from: Auteur
         to: Destinataire
         subject: Objet
@@ -318,7 +318,7 @@ user:
         rights_title: Droits d'accès
         rights_export: Télécharger la liste des droits d'accès
     switch:
-        connected: Vous êtes connecté comme utilisateur <b>%name%</b>.
+        connected: <b>%original%</b>, vous êtes connecté en tant qu'utilisateur <b>%current%</b>.
         take:
             title: Prendre l'identité de l'utilisateur
             sucess: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.

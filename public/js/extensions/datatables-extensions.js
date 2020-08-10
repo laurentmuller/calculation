@@ -78,7 +78,7 @@ function searchCallback(table) {
         table.search(newSearch).draw();
         return true;
     }
-    return false; 
+    return false;
 }
 
 /**
@@ -265,9 +265,11 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
                 table.cell(row.index(), '0:visIdx').focus();
             }
         }
-
         // remove hiden search text (aria)
         $(":text[tabindex='0']").parent().remove();
+        
+    }).on('preDraw', function () {
+        $('.has-tooltip').tooltip('hide');
 
     }).on('draw', function () {
         if (lastPageCalled) {
@@ -277,7 +279,6 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
             table.selectFirstRow();
         }
         table.updateButtons().updateTitles();
-        $('#data-table .has-tooltip').tooltip('hide');
 
     }).on('search.dt', function () {
         enableKeys();

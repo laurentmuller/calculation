@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Form\RequestChangePasswordType;
-use App\Form\ResetChangePasswordType;
+use App\Form\User\RequestChangePasswordType;
+use App\Form\User\ResetChangePasswordType;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;

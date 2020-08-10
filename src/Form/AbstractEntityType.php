@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use Symfony\Component\Form\AbstractType;
+use App\Util\Utils;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -22,10 +22,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Laurent Muller
  */
-abstract class AbstractEntityType extends AbstractType
+abstract class AbstractEntityType extends AbstractHelperType
 {
     /**
-     * The class name for the resolver.
+     * The entity class name.
      *
      * @var string
      */
@@ -49,5 +49,15 @@ abstract class AbstractEntityType extends AbstractType
         $resolver->setDefaults([
             'data_class' => $this->className,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getLabelPrefix(): ?string
+    {
+        $name = \strtolower(Utils::getShortName($this->className));
+
+        return "$name.fields.";
     }
 }

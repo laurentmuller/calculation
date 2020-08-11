@@ -25,7 +25,7 @@ use App\Util\Utils;
 use DataTables\DataTablesInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -42,11 +42,6 @@ class UserDataTable extends AbstractEntityDataTable
     public const ID = User::class;
 
     /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
      * @var bool
      */
     private $superAdmin = false;
@@ -59,15 +54,15 @@ class UserDataTable extends AbstractEntityDataTable
     /**
      * Constructor.
      *
-     * @param ApplicationService    $application  the application to get parameters
-     * @param SessionInterface      $session      the session to save/retrieve user parameters
-     * @param DataTablesInterface   $datatables   the datatables to handle request
-     * @param UserRepository        $repository   the repository to get entities
-     * @param Environment           $environment  the Twig environment to render cells
-     * @param TranslatorInterface   $translator   the service to translate messages
-     * @param TokenStorageInterface $tokenStorage the token service to get current user role
+     * @param ApplicationService  $application the application to get parameters
+     * @param SessionInterface    $session     the session to save/retrieve user parameters
+     * @param DataTablesInterface $datatables  the datatables to handle request
+     * @param UserRepository      $repository  the repository to get entities
+     * @param Environment         $environment the Twig environment to render cells
+     * @param TranslatorInterface $translator  the service to translate messages
+     * @param Security            $security    the service to get current user role
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, UserRepository $repository, Environment $environment, TranslatorInterface $translator, TokenStorageInterface $tokenStorage)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, UserRepository $repository, Environment $environment, TranslatorInterface $translator, Security $security)
     {
         parent::__construct($application, $session, $datatables, $repository);
 
@@ -75,10 +70,8 @@ class UserDataTable extends AbstractEntityDataTable
         $this->translator = $translator;
 
         // check if current user has the super admin role
-        if ($token = $tokenStorage->getToken()) {
-            if ($user = $token->getUser()) {
-                $this->superAdmin = $user instanceof User && $user->isSuperAdmin();
-            }
+        if ($user = $security->getUser()) {
+            $this->superAdmin = $user instanceof User && $user->isSuperAdmin();
         }
     }
 
@@ -164,6 +157,7 @@ class UserDataTable extends AbstractEntityDataTable
                 ->setTitle('user.fields.lastLogin')
                 ->setClassName('text-date-time')
                 ->setFormatter($localeDateTime),
+            DataColumn::actions([$this, 'renderActions']),
         ];
     }
 

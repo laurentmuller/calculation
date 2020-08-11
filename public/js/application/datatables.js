@@ -84,6 +84,7 @@ $.fn.dataTable.renderTooltip = function (td, cellData) {
     }
 };
 
+
 /**
  * Handler to render the state color.
  * 
@@ -125,12 +126,12 @@ $.fn.dataTable.renderLog = function (td, cellData, rowData) {
 };
 
 /**
- * User message button callback.
+ * User send message button callback.
  * 
  * @param {DataTables.Api}
  *            row - the selected row.
  */
-$.fn.user_message = function (row) {
+$.fn.userSendMessage = function (row) {
     'use strict';
 
     // check if selection are equals.
@@ -150,7 +151,7 @@ $.fn.user_message = function (row) {
  * @param {DataTables.Api}
  *            row - the selected row.
  */
-$.fn.user_switch = function (row) {
+$.fn.userSwitch= function (row) {
     'use strict';
 
     // check if selection are equals.
@@ -337,8 +338,15 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
         }
     });
 
+    // select on drop-down actions
+    $('#data-table tbody').on('mousedown', '.dropdown', function () {
+        const $row = $(this).closest('tr');
+        const index = table.row($row).index();
+        table.cell(index, '0:visIdx').focus();
+    });
+    
     // context menu
-    const selector = '.dataTable .table-primary';
+    const selector = '.dataTable .table-primary td:not(.skip-keys)';
     const show = function () {
         $('.dropdown-menu.show').removeClass('show');
         disableKeys();
@@ -347,8 +355,53 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
         enableKeys();
     };
     $table.initContextMenu(selector, show, hide);
-
+   
     // drop-down menu
     $('#other_actions_button').handleKeys();
     $('#other_actions').handleKeys('show.bs.dropdown', 'hide.bs.dropdown');
+
+    $('#data-table tbody').on('show.bs.dropdown', 'td.actions .dropdown', function () {
+        const $this = $(this);
+        $this.find('.dropdown-item, .dropdown-divider, .dropdown-header').remove();
+        const items = $this.closest('tr').getContextMenuItems();
+        const $menu = $this.find('.dropdown-menu');
+        
+        for (const [key, value] of Object.entries(items)) {
+            if (key.startsWith('separator_')) {
+                const $separator = $('<div></div>', {
+                    'class': 'dropdown-divider'
+                });                
+                $menu.append($separator);
+                
+            } else if (key.startsWith('title_')) {
+                const $title = $('<h6></h6>', {
+                    'class': 'dropdown-header',
+                    'text': value.text                        
+                });                
+                $menu.append($title);
+                
+            } else if (value.link){                
+                const $action = $('<a></a>', {
+                    'class': 'dropdown-item',
+                    'text': value.name,
+                    'href': '#'
+                });
+                $action.on('click', function(e) {
+                    e.stopPropagation();
+                    value.link.get(0).click();
+                });
+                
+                if (value.icon) {
+                    const $icon= $('<i></i>', {
+                        'class': value.icon + ' mr-1',
+                        'aria-hidden': 'true'
+                    });
+                    $icon.prependTo($action);
+                    
+                }
+                $menu.append($action);
+            }
+        }        
+    });
+    
 }(jQuery));

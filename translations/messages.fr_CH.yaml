@@ -400,6 +400,7 @@ common:
     required: '* = Valeur requise'
     top_of_page: Haut de la page
     id: Numéro
+    empty: ''
 environment:
     dev: Développement
     prod: Production

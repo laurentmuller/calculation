@@ -171,21 +171,21 @@ class OpenWeatherService extends HttpClientService
      */
     private const WIND_DIRECTIONS = [
         'N',
-        'N-Ne',
-        'Ne',
-        'E-Ne',
+        'N/N-E',
+        'N-E',
+        'E/N-E',
         'E',
-        'E-Se',
-        'Se',
-        'S-Se',
+        'E/S-E',
+        'S-E',
+        'S/S-E',
         'S',
-        'S-Sw',
-        'Sw',
-        'W-Sw',
+        'S/S-W',
+        'S-W',
+        'W/S-W',
         'W',
-        'W-Nw',
-        'Nw',
-        'N-Nw',
+        'W/N-W',
+        'N-W',
+        'N/N-W',
         'N',
     ];
 
@@ -524,7 +524,7 @@ class OpenWeatherService extends HttpClientService
      */
     private function get(string $uri, array $query = [])
     {
-        //add API key and language
+        // add API key and language
         $query['appid'] = $this->key;
         $query['lang'] = self::getAcceptLanguage(true);
 

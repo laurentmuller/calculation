@@ -26,6 +26,7 @@ use DataTables\Order;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Twig\Environment;
 
 /**
  * Abstract data table handler for entities.
@@ -50,6 +51,11 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     private const SEARCH_PARAMETER = 'search';
 
     /**
+     * @var Environment
+     */
+    protected $environment;
+
+    /**
      * The repository to get entities.
      *
      * @var AbstractRepository
@@ -68,6 +74,18 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     {
         parent::__construct($application, $session, $datatables);
         $this->repository = $repository;
+    }
+
+    /**
+     * Renders the actions column.
+     */
+    public function renderActions(int $id, AbstractEntity $item): string
+    {
+        if (isset($this->environment)) {
+            return $this->environment->render('macros/_datatables_actions.html.twig', ['id' => $id]);
+        }
+
+        return '';
     }
 
     /**

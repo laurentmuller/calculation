@@ -21,6 +21,7 @@ use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
 use DataTables\DataTablesInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Twig\Environment;
 
 /**
  * Calculation data table handler.
@@ -41,10 +42,12 @@ class CalculationDataTable extends AbstractEntityDataTable
      * @param SessionInterface      $session     the session to save/retrieve user parameters
      * @param DataTablesInterface   $datatables  the datatables to handle request
      * @param CalculationRepository $repository  the repository to get entities
+     * @param Environment           $environment the Twig environment to render actions cells
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment)
     {
         parent::__construct($application, $session, $datatables, $repository);
+        $this->environment = $environment;
     }
 
     /**
@@ -91,6 +94,7 @@ class CalculationDataTable extends AbstractEntityDataTable
             DataColumn::hidden('state.color'),
             DataColumn::hidden('state.id')
                 ->setSearchable(true),
+            DataColumn::actions([$this, 'renderActions']),
         ];
     }
 

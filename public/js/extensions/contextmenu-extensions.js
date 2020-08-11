@@ -165,6 +165,7 @@ MenuBuilder.prototype = {
         // add
         this.items[key] = {
             type: 'html',
+            title: title,
             icon: function (options, $element) {
                 $element.html(html);
             }

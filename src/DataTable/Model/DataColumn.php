@@ -178,6 +178,23 @@ class DataColumn
     }
 
     /**
+     * Creates a new instance for drop-down menu actions.
+     *
+     * @param string|callable|null $formatter the column formatter
+     * @param string               $name      the field name
+     */
+    public static function actions($formatter, string $name = 'id'): self
+    {
+        return self::instance($name)
+            ->setTitle('common.empty')
+            ->setSearchable(false)
+            ->setOrderable(false)
+            ->setRawData(true)
+            ->setClassName('actions skip-keys d-print-none')
+            ->setFormatter($formatter);
+    }
+
+    /**
      * Add a class name.
      *
      * @param string $className the class name to add

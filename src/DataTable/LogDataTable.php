@@ -71,8 +71,8 @@ class LogDataTable extends AbstractDataTable
      */
     public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, LogService $service)
     {
-        $this->service = $service;
         parent::__construct($application, $session, $datatables);
+        $this->service = $service;
     }
 
     /**

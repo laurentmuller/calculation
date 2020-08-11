@@ -20,6 +20,7 @@ use App\Traits\MathTrait;
 use DataTables\DataTablesInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 /**
  * Data table handler for calculations with empty items (price or quantity).
@@ -56,11 +57,12 @@ class CalculationEmptyDataTable extends CalculationItemsDataTable
      * @param SessionInterface      $session     the session to save/retrieve user parameters
      * @param DataTablesInterface   $datatables  the datatables to handle request
      * @param CalculationRepository $repository  the repository to get entities
+     * @param Environment           $environment the Twig environment to render actions cells
      * @param TranslatorInterface   $translator  the service to translate messages
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, TranslatorInterface $translator)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment, TranslatorInterface $translator)
     {
-        parent::__construct($application, $session, $datatables, $repository);
+        parent::__construct($application, $session, $datatables, $repository, $environment);
         $this->priceLabel = $translator->trans('calculationitem.fields.price');
         $this->quantityLabel = $translator->trans('calculationitem.fields.quantity');
     }

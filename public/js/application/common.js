@@ -111,7 +111,7 @@ function initBackToTop() {
 /**
  * Ready function
  */
-(function ($) {
+(function ($) { // jshint ignore:line
     'use strict';
     showFlashbag();
     initBackToTop();

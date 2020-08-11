@@ -22,15 +22,15 @@
     {{ _self.value_unit(value, unit, '') }}
 {%- endmacro %}
 
+{% macro value_rain(value, unit = '') %}
+{{ _self.value_unit(value|number_format(1), unit, ' ') }}
+{% endmacro %}
+
 {% macro direction(text) -%}
 {{ text|replace({        
         'N': 'openweather.direction.N'|trans, 
         'S': 'openweather.direction.S'|trans,
         'E': 'openweather.direction.E'|trans,
-        'W': 'openweather.direction.W'|trans,
-        'n': 'openweather.direction.N'|trans|lower, 
-        's': 'openweather.direction.S'|trans|lower,
-        'e': 'openweather.direction.E'|trans|lower,
-        'w': 'openweather.direction.W'|trans|lower          
+        'W': 'openweather.direction.W'|trans          
     })}}
 {%- endmacro %}

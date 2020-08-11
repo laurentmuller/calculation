@@ -23,6 +23,7 @@ use DataTables\DataTableResults;
 use DataTables\DataTablesInterface;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Twig\Environment;
 
 /**
  * Abstract data table handler for calculations with invalid items.
@@ -31,6 +32,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 abstract class CalculationItemsDataTable extends AbstractDataTable
 {
+    /**
+     * @var Environment
+     */
+    protected $environment;
+
     /**
      * The number of items.
      *
@@ -52,11 +58,13 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
      * @param SessionInterface      $session     the session to save/retrieve user parameters
      * @param DataTablesInterface   $datatables  the datatables to handle request
      * @param CalculationRepository $repository  the repository to get entities
+     * @param Environment           $environment the Twig environment to render actions cells
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment)
     {
         parent::__construct($application, $session, $datatables);
         $this->repository = $repository;
+        $this->environment = $environment;
     }
 
     /**
@@ -74,6 +82,18 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
     public function getItemCounts(): int
     {
         return $this->itemsCount;
+    }
+
+    /**
+     * Renders the actions column.
+     */
+    public function renderActions(int $id, $item): string
+    {
+        if (isset($this->environment)) {
+            return $this->environment->render('macros/_datatables_actions.html.twig', ['id' => $id]);
+        }
+
+        return '';
     }
 
     /**
@@ -124,6 +144,7 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
                 ->setHeaderClassName('text-body')
                 ->setFormatter([$this, 'formatInvalidItems']),
             DataColumn::hidden('stateColor'),
+            DataColumn::actions([$this, 'renderActions']),
         ];
     }
 

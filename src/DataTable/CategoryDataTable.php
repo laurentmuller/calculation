@@ -37,11 +37,6 @@ class CategoryDataTable extends AbstractEntityDataTable
     public const ID = Category::class;
 
     /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
      * Constructor.
      *
      * @param ApplicationService  $application the application to get parameters

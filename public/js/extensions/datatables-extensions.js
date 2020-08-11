@@ -267,7 +267,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
         }
         // remove hiden search text (aria)
         $(":text[tabindex='0']").parent().remove();
-        
+
     }).on('preDraw', function () {
         $('.has-tooltip').tooltip('hide');
 
@@ -486,6 +486,7 @@ $.fn.initDataTable = function (options) {
             blurable: false,
             clipboard: false,
             className: 'table-primary',
+            columns: ':not(.skip-keys)',
             keys: [//
             13, // enter
             33, // page up

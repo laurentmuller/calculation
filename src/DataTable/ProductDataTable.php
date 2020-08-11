@@ -21,6 +21,7 @@ use App\Repository\ProductRepository;
 use App\Service\ApplicationService;
 use DataTables\DataTablesInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Twig\Environment;
 
 /**
  * Product data table handler.
@@ -41,10 +42,12 @@ class ProductDataTable extends AbstractEntityDataTable
      * @param SessionInterface    $session     the session to save/retrieve user parameters
      * @param DataTablesInterface $datatables  the datatables to handle request
      * @param ProductRepository   $repository  the repository to get entities
+     * @param Environment         $environment the Twig environment to render actions cells
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, ProductRepository $repository)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, ProductRepository $repository, Environment $environment)
     {
         parent::__construct($application, $session, $datatables, $repository);
+        $this->environment = $environment;
     }
 
     /**
@@ -71,6 +74,7 @@ class ProductDataTable extends AbstractEntityDataTable
                 ->setFormatter([$this, 'localeAmount']),
             DataColumn::hidden('category.id')
                 ->setSearchable(true),
+            DataColumn::actions([$this, 'renderActions']),
         ];
     }
 

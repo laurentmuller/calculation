@@ -66,14 +66,6 @@ class Password extends Constraint
     public $lettersMessage = 'The password must contain at least one letter.';
 
     /**
-     * Checks the minimum length of the password.
-     *
-     * @var int
-     */
-    public $minLength = 6;
-    public $minLengthMessage = 'The password must be at least {{length}} characters long.';
-
-    /**
      * Checks the password strength (Value from 0 to 4 or -1 to disable).
      *
      * @var int
@@ -104,4 +96,12 @@ class Password extends Constraint
      */
     public $specialChar = false;
     public $specialCharMessage = 'The password must contain at least one special character.';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct($options = null)
+    {
+        parent::__construct($options);
+    }
 }

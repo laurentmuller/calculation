@@ -91,7 +91,8 @@ class CalculationItem extends AbstractEntity
     public function __construct()
     {
         // default values
-        $this->price = $this->quantity = 0;
+        $this->price = 0.0;
+        $this->quantity = 0.0;
     }
 
     /**

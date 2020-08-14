@@ -186,12 +186,12 @@ class DataColumn
     public static function actions($formatter, string $name = 'id'): self
     {
         return self::instance($name)
+            ->setClassName('actions d-print-none')
             ->setTitle('common.empty')
+            ->setFormatter($formatter)
             ->setSearchable(false)
             ->setOrderable(false)
-            ->setRawData(true)
-            ->setClassName('actions skip-keys d-print-none')
-            ->setFormatter($formatter);
+            ->setRawData(true);
     }
 
     /**

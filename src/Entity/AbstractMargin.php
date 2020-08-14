@@ -67,7 +67,9 @@ abstract class AbstractMargin extends AbstractEntity
     public function __construct()
     {
         // default values
-        $this->minimum = $this->maximum = $this->margin = 0.0;
+        $this->minimum = 0.0;
+        $this->maximum = 0.0;
+        $this->margin = 0.0;
     }
 
     /**

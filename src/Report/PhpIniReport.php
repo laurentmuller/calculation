@@ -72,7 +72,7 @@ class PhpIniReport extends AbstractReport
 
         // output content
         foreach ($content as $key => $value) {
-            $table->setGroupName($key);
+            $table->setGroupKey($key);
             $this->outputEntries($table, $value);
         }
 

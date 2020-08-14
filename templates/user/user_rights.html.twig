@@ -2,9 +2,10 @@
 {% import 'macros/_rights.html.twig' as rights %}
 
 {# parameters #}
-{%- set title       = 'user.rights.title' -%}
-{%- set title_icon  = 'unlock' -%}
-{%- set page_list   = 'user_list' -%}
+{%- set title      = 'user.rights.title' -%}
+{%- set title_icon = 'unlock' -%}
+{%- set page_list  = 'user_list' -%}
+{%- set overwrite  = form.overwrite.vars.checked -%}
 
 {% block card_container_class '' %}
 
@@ -17,13 +18,13 @@
         {{ form_row(form.role) }}
     </div>
 </div>
-{{ rights.table(form, default, form.overwrite.vars.checked) }}
-{{ form_row(form.overwrite, {label_attr: {class: 'switch-custom mt-3'}}) }}
+{{ rights.table(form, default, overwrite) }}
+{{ form_row(form.overwrite, {label_attr: {class: 'switch-custom mt-3'}, attr: {'data-default': default.overwrite|json_encode }}) }}
 {% endblock %}
 
 {% block actions_form %}
 {{ parent() }}
-{{ rights.actions() }}
+{{ rights.actions(overwrite) }}
 {% endblock %}
 
 {% block card_footer %}
@@ -33,8 +34,8 @@
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/application/rights_edit.js') }}
+{{ asset_js('js/application/user_rights.js') }}
 {% else %}
-{{ asset_js('js/rights_edit.js') }}
+{{ asset_js('js/user_rights.js') }}
 {% endif %}
 {%- endblock %}

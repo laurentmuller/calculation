@@ -24,6 +24,7 @@
 {%- set show_path   = path('product_show', params) -%}
 {%- set edit_path   = path('product_edit', params) -%}
 {%- set delete_path = path('product_delete', params) -%}
+{%- set clone_path  = path('product_clone', params) -%}
 {%- set pdf_path    = path('product_pdf') -%}
 
 {# titles #}
@@ -47,6 +48,8 @@
 {%- endblock %}
 
 {% block table_actions -%}
+{{ _self.item_data(clone_path, 'common.button_clone', 'copy far') }}
+{{ icons.dropdownSeparator() }}
 {{ parent() }}
 {{ icons.dropdownSeparator() }}
 {{ icons.dropdownItemCard('product_list') }}

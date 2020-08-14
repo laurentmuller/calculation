@@ -114,7 +114,8 @@ class CalculationGroup extends AbstractEntity
         $this->items = new ArrayCollection();
 
         // default values
-        $this->amount = $this->margin = 0.0;
+        $this->amount = 0.0;
+        $this->margin = 0.0;
     }
 
     /**

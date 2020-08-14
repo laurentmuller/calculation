@@ -47,8 +47,7 @@ class CategoryDataTable extends AbstractEntityDataTable
      */
     public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CategoryRepository $repository, Environment $environment)
     {
-        parent::__construct($application, $session, $datatables, $repository);
-        $this->environment = $environment;
+        parent::__construct($application, $session, $datatables, $repository, $environment);
     }
 
     /**
@@ -100,6 +99,7 @@ class CategoryDataTable extends AbstractEntityDataTable
                 ->setOrderable(false)
                 ->setRawData(true)
                 ->setFormatter([$this, 'linkProducts']),
+            DataColumn::actions([$this, 'renderActions']),
         ];
     }
 

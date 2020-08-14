@@ -362,23 +362,23 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
 
     $('#data-table tbody').on('show.bs.dropdown', 'td.actions .dropdown', function () {
         const $this = $(this);
-        $this.find('.dropdown-item, .dropdown-divider, .dropdown-header').remove();
         const items = $this.closest('tr').getContextMenuItems();
-        const $menu = $this.find('.dropdown-menu');
-        
+
+        // convert
+        const $menus = [];
         for (const [key, value] of Object.entries(items)) {
             if (key.startsWith('separator_')) {
                 const $separator = $('<div></div>', {
                     'class': 'dropdown-divider'
                 });                
-                $menu.append($separator);
+                $menus.push($separator);
                 
             } else if (key.startsWith('title_')) {
                 const $title = $('<h6></h6>', {
                     'class': 'dropdown-header',
                     'text': value.text                        
                 });                
-                $menu.append($title);
+                $menus.push($title);
                 
             } else if (value.link){                
                 const $action = $('<a></a>', {
@@ -399,9 +399,13 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
                     $icon.prependTo($action);
                     
                 }
-                $menu.append($action);
+                $menus.push($action);
             }
-        }        
+        }
+        
+        // replace
+        const $menu = $this.find('.dropdown-menu');
+        $menu.empty().append($menus);
     });
     
 }(jQuery));

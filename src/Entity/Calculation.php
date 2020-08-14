@@ -141,8 +141,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
         // default values
         $this->date = new \DateTime();
-        $this->globalMargin = $this->userMargin = 0.0;
-        $this->itemsTotal = $this->overallTotal = 0.0;
+        $this->globalMargin = 0.0;
+        $this->userMargin = 0.0;
+        $this->itemsTotal = 0.0;
+        $this->overallTotal = 0.0;
     }
 
     /**
@@ -153,7 +155,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         parent::__clone();
 
         // reset dates
-        $this->date = $this->createdAt = $this->updatedAt = new \DateTime();
+        $this->date = new \DateTime();
+        $this->createdAt = $this->updatedAt = new \DateTimeImmutable();
 
         // clone groups
         $this->groups = $this->groups->map(function (CalculationGroup $group) {

@@ -76,7 +76,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
 
         // render
         foreach ($groups as $group) {
-            $this->setGroupName($group->getCode());
+            $this->setGroupKey($group->getCode());
             foreach ($group->getItems() as $item) {
                 $this->startRow()
                     ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)

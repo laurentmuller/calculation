@@ -54,8 +54,7 @@ class CalculationStateDataTable extends AbstractEntityDataTable
      */
     public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CalculationStateRepository $repository, Environment $environment, TranslatorInterface $translator)
     {
-        parent::__construct($application, $session, $datatables, $repository);
-        $this->environment = $environment;
+        parent::__construct($application, $session, $datatables, $repository, $environment);
         $this->translator = $translator;
     }
 
@@ -120,6 +119,7 @@ class CalculationStateDataTable extends AbstractEntityDataTable
                 ->setRawData(true)
                 ->setFormatter([$this, 'linkCalculations']),
             DataColumn::hidden('color'),
+            DataColumn::actions([$this, 'renderActions']),
         ];
     }
 

@@ -29,11 +29,11 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     use PdfBorderTrait;
 
     /**
-     * The name.
+     * The key.
      *
-     * @var string
+     * @var mixed
      */
-    protected $name;
+    protected $key;
 
     /**
      * The style.
@@ -45,14 +45,14 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     /**
      * Constructor.
      *
-     * @param string   $name      the group name
+     * @param mixed    $key       the group key
      * @param string   $alignment the group alignment
      * @param mixed    $border    the group border
      * @param PdfStyle $style     the group style or null for default style
      */
-    public function __construct(?string $name = null, string $alignment = self::ALIGN_LEFT, $border = self::BORDER_ALL, ?PdfStyle $style = null)
+    public function __construct($key = null, string $alignment = self::ALIGN_LEFT, $border = self::BORDER_ALL, ?PdfStyle $style = null)
     {
-        $this->setName($name)
+        $this->setKey($key)
             ->setAlignment($alignment)
             ->setBorder($border)
             ->setStyle($style ?: PdfStyle::getCellStyle()->setFontBold());
@@ -63,17 +63,30 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
      */
     public function apply(PdfDocument $doc): void
     {
-        $this->style->apply($doc);
+        if ($this->style) {
+            $this->style->apply($doc);
+        }
+    }
+
+    /**
+     * Gets the key.
+     */
+    public function getKey()
+    {
+        return $this->key;
     }
 
     /**
      * Gets the name.
-     *
-     * @return string
      */
     public function getName(): ?string
     {
-        return $this->name;
+        $key = $this->key;
+        if (\is_scalar($key) || (\is_object($key) && \method_exists($key, '__toString'))) {
+            return (string) $key;
+        }
+
+        return null;
     }
 
     /**
@@ -87,13 +100,13 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     }
 
     /**
-     * Returns if the name is not empty.
+     * Returns if the key is not empty.
      *
      * @return bool true if not empty
      */
-    public function isName(): bool
+    public function isKey(): bool
     {
-        return Utils::isString($this->name);
+        return Utils::isString($this->getName());
     }
 
     /**
@@ -105,30 +118,22 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     {
         $oldBorder = $parent->getBorder();
         $parent->setBorder($this->border);
-        $parent->singleLine($this->name, $this->style, $this->alignment);
+        $parent->singleLine($this->getName(), $this->getStyle(), $this->getAlignment());
         $parent->setBorder($oldBorder);
     }
 
     /**
-     * Sets the name.
-     *
-     * @param string $name
-     *
-     * @return self this instance
+     * Sets the key.
      */
-    public function setName(?string $name): self
+    public function setKey($key): self
     {
-        $this->name = $name;
+        $this->key = $key;
 
         return $this;
     }
 
     /**
      * Sets the style.
-     *
-     * @param \App\Pdf\PdfStyle $style
-     *
-     * @return self this instance
      */
     public function setStyle(?PdfStyle $style): self
     {

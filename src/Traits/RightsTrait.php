@@ -27,6 +27,15 @@ trait RightsTrait
     use MathTrait;
 
     /**
+     * The overwrite rights flag.
+     *
+     * @ORM\Column(type="boolean", options={"default": 0})
+     *
+     * @var bool
+     */
+    protected $overwrite = false;
+
+    /**
      * The rights.
      *
      * @ORM\Column(type="json", nullable=true)
@@ -73,6 +82,26 @@ trait RightsTrait
     public function getRights(): array
     {
         return $this->rights ?? EntityVoter::getEmptyRights();
+    }
+
+    /**
+     * Gets a value indicating if this righs overwrite the default rights.
+     *
+     * @return bool true if overwrite, false to use the default rights
+     */
+    public function isOverwrite(): bool
+    {
+        return $this->overwrite;
+    }
+
+    /**
+     * Sets a value indicating if this righs overwrite the default rights.
+     */
+    public function setOverwrite(bool $overwrite): self
+    {
+        $this->overwrite = $overwrite;
+
+        return $this;
     }
 
     /**

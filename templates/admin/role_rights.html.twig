@@ -25,8 +25,8 @@
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/application/rights_edit.js') }}
+{{ asset_js('js/application/user_rights.js') }}
 {% else %}
-{{ asset_js('js/rights_edit.js') }}
+{{ asset_js('js/user_rights.js') }}
 {% endif %}
 {%- endblock %}

@@ -165,7 +165,7 @@ class ProductsReport extends AbstractReport
 
         // output
         foreach ($groups as $group => $list) {
-            $table->setGroupName($group);
+            $table->setGroupKey($group);
             foreach ($list as $product) {
                 $table->startRow()
                     ->add($product->getDescription())

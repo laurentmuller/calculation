@@ -252,7 +252,7 @@ product:
     add:
         title: Nouvel article
         success: L'article <b>%name%</b> a été créé avec succès.
-        clone: Copie de %description%
+        clone: '%description% - Copie'
     edit:
         title: Edition d'un article
         success: L'article <b>%name%</b> a été mis à jour avec succès.
@@ -753,7 +753,7 @@ password:
     options: Options
     letters: Une lettre est obligatoire
     numbers: Un chiffre est obligatoire
-    specialCharacter: Un caractère spécial est obligatoire
+    specialChar: Un caractère spécial est obligatoire
     caseDiff: Une lettre majuscule et minuscule est obligatoire
     pwned: Le mot de passe ne doit pas être compromis
     email: Le mot de passe ne doit pas être une adresse e-mail

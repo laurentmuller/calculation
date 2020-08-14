@@ -69,17 +69,19 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
      * @param SessionInterface    $session     the session to save/retrieve user parameters
      * @param DataTablesInterface $datatables  the datatables to handle request
      * @param AbstractRepository  $repository  the repository to get entities
+     * @param Environment         $environment the Twig environment to render actions cells
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, AbstractRepository $repository)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, AbstractRepository $repository, Environment $environment = null)
     {
         parent::__construct($application, $session, $datatables);
         $this->repository = $repository;
+        $this->environment = $environment;
     }
 
     /**
      * Renders the actions column.
      */
-    public function renderActions(int $id, AbstractEntity $item): string
+    public function renderActions(int $id): string
     {
         if (isset($this->environment)) {
             return $this->environment->render('macros/_datatables_actions.html.twig', ['id' => $id]);

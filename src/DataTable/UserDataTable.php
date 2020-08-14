@@ -64,9 +64,7 @@ class UserDataTable extends AbstractEntityDataTable
      */
     public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, UserRepository $repository, Environment $environment, TranslatorInterface $translator, Security $security)
     {
-        parent::__construct($application, $session, $datatables, $repository);
-
-        $this->environment = $environment;
+        parent::__construct($application, $session, $datatables, $repository, $environment);
         $this->translator = $translator;
 
         // check if current user has the super admin role

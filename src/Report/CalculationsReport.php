@@ -212,7 +212,7 @@ class CalculationsReport extends AbstractReport
 
         // output
         foreach ($groups as $group => $items) {
-            $table->setGroupName($group);
+            $table->setGroupKey($group);
             foreach ($items as $item) {
                 $this->outputItem($table, $item, true);
             }

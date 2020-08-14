@@ -33,11 +33,6 @@ class RepeatPasswordType extends AbstractType
     {
         $resolver->setDefaults([
             'type' => PasswordType::class,
-            'options' => [
-                'attr' => [
-                    'autocomplete' => 'new-password',
-                ],
-            ],
             'first_options' => self::getFirstOptions(),
             'second_options' => self::getSecondOptions(),
             'invalid_message' => 'password.mismatch',
@@ -55,6 +50,7 @@ class RepeatPasswordType extends AbstractType
                 'minlength' => 6,
                 'maxlength' => 255,
                 'class' => 'password-strength',
+                'autocomplete' => 'new-password',
             ],
         ];
     }
@@ -74,6 +70,9 @@ class RepeatPasswordType extends AbstractType
     {
         return [
             'label' => 'user.password.confirmation',
+            'attr' => [
+                'autocomplete' => 'new-password',
+            ],
         ];
     }
 }

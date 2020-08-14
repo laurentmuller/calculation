@@ -18,7 +18,6 @@ use App\Controller\AbstractController;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
-use App\Interfaces\RoleInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfGroup;
@@ -102,11 +101,23 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
      */
     public function onOutputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool
     {
-        // find user
-        $name = $group->getName();
-        if ($user = $this->findUser($name)) {
-            // role
-            $role = Utils::translateRole($this->translator, $user->getRole());
+        $key = $group->getKey();
+        $description = $this->translator->trans('user.fields.role') . ' ';
+
+        if ($key instanceof Role) {
+            $description .= Utils::translateRole($this->translator, $key->getRole());
+            $parent->singleLine($description, $group->getStyle());
+
+            return true;
+        }
+
+        if ($key instanceof User) {
+            $text = $key->getUsername();
+            if ($key->isEnabled()) {
+                $description .= Utils::translateRole($this->translator, $key->getRole());
+            } else {
+                $description .= $this->translator->trans('common.value_disabled');
+            }
 
             // save position
             [$x, $y] = $this->GetXY();
@@ -115,14 +126,14 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
             $group->apply($this);
             $this->Cell(0, self::LINE_HEIGHT, '', self::BORDER_ALL);
 
-            // name
+            // text
             $this->SetXY($x, $y);
-            $width = $this->GetStringWidth($name);
-            $this->Cell($width, self::LINE_HEIGHT, $name);
+            $width = $this->GetStringWidth($text);
+            $this->Cell($width, self::LINE_HEIGHT, $text);
 
-            // role
+            // description
             PdfStyle::getDefaultStyle()->setFontItalic()->apply($this);
-            $this->Cell(0, self::LINE_HEIGHT, ' - ' . $role, self::BORDER_NONE, self::MOVE_TO_NEW_LINE);
+            $this->Cell(0, self::LINE_HEIGHT, ' - ' . $description, self::BORDER_NONE, self::MOVE_TO_NEW_LINE);
 
             return true;
         }
@@ -242,9 +253,8 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
      *
      * @param PdfGroupTableBuilder $builder the buider to output to
      * @param Role                 $role    the role to output
-     * @param string               $title   the group name
      */
-    private function outputRole(PdfGroupTableBuilder $builder, Role $role, string $title): void
+    private function outputRole(PdfGroupTableBuilder $builder, Role $role): void
     {
         // allow to output user entity rights
         $outputUsers = $role->isAdmin() || $role->isSuperAdmin();
@@ -259,7 +269,7 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
         }
 
         // group
-        $builder->setGroupName($title);
+        $builder->setGroupKey($role);
 
         // rights
         foreach (self::RIGHTS as $key => $value) {
@@ -278,9 +288,7 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
      */
     private function outputRoleAdmin(PdfGroupTableBuilder $builder): int
     {
-        $role = EntityVoter::getRoleAdmin();
-        $title = Utils::translateRole($this->translator, RoleInterface::ROLE_ADMIN);
-        $this->outputRole($builder, $role, $title);
+        $this->outputRole($builder, EntityVoter::getRoleAdmin());
 
         return 1;
     }
@@ -294,9 +302,7 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
      */
     private function outputRoleUser(PdfGroupTableBuilder $builder): int
     {
-        $role = EntityVoter::getRoleUser();
-        $title = Utils::translateRole($this->translator, RoleInterface::ROLE_USER);
-        $this->outputRole($builder, $role, $title);
+        $this->outputRole($builder, EntityVoter::getRoleUser());
 
         return 1;
     }
@@ -334,10 +340,9 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
             }
 
             // group
-            $builder->setGroupName($user->getUsername());
+            $builder->setGroupKey($user);
 
             // update rights
-            $oldRights = $user->getRights();
             if (!$user->isOverwrite()) {
                 $rights = EntityVoter::getRole($user)->getRights();
                 $user->setRights($rights);
@@ -348,11 +353,6 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
                 if ($outputUsers || EntityVoterInterface::ENTITY_USER !== $value) {
                     $this->outputRights($builder, $key, $user->{$value});
                 }
-            }
-
-            // restore
-            if (!$user->isOverwrite()) {
-                $user->setRights($oldRights);
             }
         }
 

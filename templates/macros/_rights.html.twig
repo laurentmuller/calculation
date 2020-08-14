@@ -1,36 +1,20 @@
 {# macros #}
-{% macro header(label, action) %}
-<th><a href="#" class="data-col font-weight-normal text-body" data-action="{{ action }}" title="{{ 'user.rights.col_title'|trans }}">{{ label|trans }}</a></th>
+{% macro header(label, overwrite) %}
+<th>
+    <button type="button" class="btn btn-link btn-col p-0" title="{{ 'user.rights.col_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ label|trans }}</button>
+</th>
 {%- endmacro %}
 
-{%- macro aria_label(index, action) -%}
-{%- switch index -%}
-{%- case 0 -%}
-    {%- set column = 'rights.list'|trans -%}
-{%- case 1 -%}
-    {%- set column = 'rights.show'|trans -%}
-{%- case 2 -%}
-    {%- set column = 'rights.add'|trans -%}
-{%- case 3 -%}
-    {%- set column = 'rights.edit'|trans -%}
-{%- case 4 -%}
-    {%- set column = 'rights.delete'|trans -%}
-{%- case 5 -%}
-    {%- set column = 'rights.pdf'|trans -%}                
-{%- endswitch -%}
-{%- set row = (action|lower|slice(6) ~ '.name')|trans -%}
-{{ column ~ ' - ' ~ row }}
-{%- endmacro %}
-
-{% macro row(data, action, default, overwrite) -%}
+{% macro row(data, default, overwrite) -%}
 <tr class="text-center">
-    <td class="text-left"><a href="#" class="data-row text-body" data-action="{{ action }}" title="{{ 'user.rights.row_title'|trans }}">{{ form_label(data, null, {'label_attr': {'class': 'p-0'}}) }}</a></td>
+    <td class="text-left">
+        <button type="button" class="btn btn-link btn-row p-0" title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ data.vars.label_format|trans }}</button>
+    </td>
     {% for entry in data %}   
-        {%- set data_default = entry.vars.value in default ? 1 : 0 -%}
-        {%- set aria_label = _self.aria_label(loop.index0, action) -%}
-        {%- set attr = {'data-default': data_default, 'aria-label': aria_label} -%}
+        {%- set checked = entry.vars.value in default -%}
+        {%- set attr = {'data-default': checked|json_encode} -%}
         {%- if not overwrite -%}
-            {%- set attr = attr|merge({'disabled': 'disabled'}) -%}
+            {%- set attr = attr|merge({'disabled': 'disabled', 'checked': checked}) -%}
 	    {%- endif -%}    
         <td>{{ form_widget(entry, {label_attr: {class: 'switch-custom'}, attr: attr}) }}</td>
     {% endfor %}
@@ -43,33 +27,33 @@
     <thead>
 	   <tr class="text-center">
             <th class="text-left font-weight-normal">{{ icons.icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icons.icon('arrow-right') }}</th>
-            {{ _self.header('rights.list', EntityVoterInterface.ATTRIBUTE_LIST) }}
-            {{ _self.header('rights.show', EntityVoterInterface.ATTRIBUTE_SHOW) }}
-            {{ _self.header('rights.add', EntityVoterInterface.ATTRIBUTE_ADD) }}
-            {{ _self.header('rights.edit', EntityVoterInterface.ATTRIBUTE_EDIT) }}
-            {{ _self.header('rights.delete', EntityVoterInterface.ATTRIBUTE_DELETE) }}
-            {{ _self.header('rights.pdf', EntityVoterInterface.ATTRIBUTE_PDF) }}
+            {{ _self.header('rights.list', overwrite) }}
+            {{ _self.header('rights.show', overwrite) }}
+            {{ _self.header('rights.add', overwrite) }}
+            {{ _self.header('rights.edit', overwrite) }}
+            {{ _self.header('rights.delete', overwrite) }}
+            {{ _self.header('rights.pdf', overwrite) }}
        </tr>
     </thead>
     <tbody>
-        {{ _self.row(form.EntityCalculation, EntityVoterInterface.ENTITY_CALCULATION, default.EntityCalculation, overwrite) }}
-        {{ _self.row(form.EntityProduct, EntityVoterInterface.ENTITY_PRODUCT, default.EntityProduct, overwrite) }}
-        {{ _self.row(form.EntityCategory, EntityVoterInterface.ENTITY_CATEGORY, default.EntityCategory, overwrite) }}
-        {{ _self.row(form.EntityCalculationState, EntityVoterInterface.ENTITY_CALCULATION_STATE, default.EntityCalculationState, overwrite) }}
-        {{ _self.row(form.EntityGlobalMargin, EntityVoterInterface.ENTITY_GLOBAL_MARGIN, default.EntityGlobalMargin, overwrite) }}
+        {{ _self.row(form.EntityCalculation, default.EntityCalculation, overwrite) }}
+        {{ _self.row(form.EntityProduct, default.EntityProduct, overwrite) }}
+        {{ _self.row(form.EntityCategory, default.EntityCategory, overwrite) }}
+        {{ _self.row(form.EntityCalculationState, default.EntityCalculationState, overwrite) }}
+        {{ _self.row(form.EntityGlobalMargin, default.EntityGlobalMargin, overwrite) }}
         {%- if form.EntityCustomer|default(false) -%}
-            {{ _self.row(form.EntityCustomer, EntityVoterInterface.ENTITY_CUSTOMER, default.EntityCustomer, overwrite) }}
+            {{ _self.row(form.EntityCustomer, default.EntityCustomer, overwrite) }}
         {%- endif -%}
         {%- if form.EntityUser|default(false) -%}
-            {{ _self.row(form.EntityUser, EntityVoterInterface.ENTITY_USER, default.EntityUser, overwrite) }}
+            {{ _self.row(form.EntityUser, default.EntityUser, overwrite) }}
         {%- endif -%}
     </tbody>
 </table>
 {% endmacro %}
 
-{% macro actions() %}
-<button type="button" id="all" class="btn btn-form btn-outline-success">{{ 'user.rights.all_title'|trans }}</button>
-<button type="button" id="none" class="btn btn-form btn-outline-success">{{ 'user.rights.none_title'|trans }}</button>
-<button type="button" id="toggle" class="btn btn-form btn-outline-success">{{ 'user.rights.toggle_title'|trans }}</button>
+{% macro actions(overwrite = true) %}
+<button type="button" id="all" class="btn btn-form btn-outline-success"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ 'user.rights.all_title'|trans }}</button>
+<button type="button" id="none" class="btn btn-form btn-outline-success"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ 'user.rights.none_title'|trans }}</button>
+<button type="button" id="toggle" class="btn btn-form btn-outline-success"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ 'user.rights.toggle_title'|trans }}</button>
 <button type="button" id="default" class="btn btn-form btn-outline-success">{{ 'user.rights.default_title'|trans }}</button>
 {% endmacro %}

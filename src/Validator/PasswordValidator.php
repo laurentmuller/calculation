@@ -76,7 +76,6 @@ class PasswordValidator extends AbstractConstraintValidator
     protected function doValidate($value, Constraint $constraint): void
     {
         if ($constraint->allViolations) {
-            $this->checkMinLength($constraint, $value);
             $this->checkLetters($constraint, $value);
             $this->checkCaseDiff($constraint, $value);
             $this->checkNumber($constraint, $value);
@@ -86,8 +85,7 @@ class PasswordValidator extends AbstractConstraintValidator
             $this->checkBlackList($constraint, $value);
             $this->checkPwned($constraint, $value);
         } else {
-            $this->checkMinLength($constraint, $value)
-                    || $this->checkLetters($constraint, $value)
+            $this->checkLetters($constraint, $value)
                     || $this->checkCaseDiff($constraint, $value)
                     || $this->checkNumber($constraint, $value)
                     || $this->checkSpecialChar($constraint, $value)
@@ -186,28 +184,7 @@ class PasswordValidator extends AbstractConstraintValidator
     }
 
     /**
-     * Checks the minimum length.
-     *
-     * @param Password $constraint the password constraint
-     * @param string   $value      the value to validate
-     *
-     * @return bool true if a violation is added
-     */
-    private function checkMinLength(Password $constraint, string $value): bool
-    {
-        if ($constraint->minLength > 0 && (\mb_strlen($value) < $constraint->minLength)) {
-            $parameters = [
-                '{{length}}' => $constraint->minLength,
-            ];
-
-            return $this->addViolation('minLength', $value, $parameters);
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks the presence of on or more number characters.
+     * Checks the presence of one or more number characters.
      *
      * @param Password $constraint the password constraint
      * @param string   $value      the value to validate
@@ -291,11 +268,11 @@ class PasswordValidator extends AbstractConstraintValidator
     }
 
     /**
-     * Check if you have an account that has been compromised in a data breach.
+     * Check if the password has been compromised in a data breach.
      *
      * @param string $password the password to verify
      *
-     * @return int the number of compromised
+     * @return int the number of compromised passwords
      */
     private function getPasswordCount(string $password): int
     {

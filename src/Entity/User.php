@@ -98,15 +98,6 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     private $lastLogin;
 
     /**
-     * The overwrite rights flag.
-     *
-     * @ORM\Column(type="boolean", options={"default": 0})
-     *
-     * @var bool
-     */
-    private $overwrite = false;
-
-    /**
      * @ORM\Column(type="string")
      *
      * @var string
@@ -264,7 +255,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      */
     public function getExpiresAt(): \DateTimeInterface
     {
-        return $this->expiresAt ?? new \DateTimeImmutable('now');
+        return $this->expiresAt ?? new \DateTimeImmutable();
     }
 
     /**
@@ -328,7 +319,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      */
     public function getRequestedAt(): \DateTimeInterface
     {
-        return $this->requestedAt ?? new \DateTimeImmutable('now');
+        return $this->requestedAt ?? new \DateTimeImmutable();
     }
 
     /**
@@ -420,16 +411,6 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     }
 
     /**
-     * Gets a value indicating if this righs overwrite the default rights.
-     *
-     * @return bool true if overwrite, false to use the default rights
-     */
-    public function isOverwrite(): bool
-    {
-        return $this->overwrite;
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @see RoleInterface
@@ -502,19 +483,9 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     /**
      * Sets the date of the last login.
      */
-    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    public function setLastLogin(\DateTimeInterface $lastLogin): self
     {
         $this->lastLogin = $lastLogin;
-
-        return $this;
-    }
-
-    /**
-     * Sets a value indicating if this righs overwrite the default rights.
-     */
-    public function setOverwrite(bool $overwrite): self
-    {
-        $this->overwrite = $overwrite;
 
         return $this;
     }

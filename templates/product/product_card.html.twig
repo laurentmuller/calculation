@@ -44,7 +44,7 @@
 {{ parent() }}
 {%- if clone_page|default(false) -%}
     {% set clone_path = path(clone_page, {'id': item.id, 'selection': item.id}) %}
-    {{ icons.dropdownItem(clone_path, 'common.button_clone', 'copy') }}
+    {{ icons.dropdownItem(clone_path, 'common.button_clone', 'copy far') }}
 {%- endif -%}
 {% endblock %}
 

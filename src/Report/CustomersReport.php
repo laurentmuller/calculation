@@ -94,7 +94,7 @@ class CustomersReport extends AbstractReport
         if ($this->grouped) {
             $groups = $this->groupCustomers($customers);
             foreach ($groups as $name => $items) {
-                $table->setGroupName((string) $name);
+                $table->setGroupKey((string) $name);
                 foreach ($items as $customer) {
                     $this->outputCustomer($table, $customer);
                 }

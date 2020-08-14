@@ -140,6 +140,9 @@ class EntityVoter extends Voter implements EntityVoterInterface
      */
     public static function getRole(User $user): Role
     {
+        if (!$user->isEnabled()) {
+            return self::getRoleDisabled();
+        }
         if ($user->isSuperAdmin()) {
             return self::getRoleSuperAdmin();
         }
@@ -163,6 +166,19 @@ class EntityVoter extends Voter implements EntityVoterInterface
         foreach ($entities as $entity) {
             $role->{$entity} = $attributes;
         }
+
+        return $role;
+    }
+
+    /**
+     * Gets the default rights for a disabled user.
+     *
+     * @return Role the role with the default rights
+     */
+    public static function getRoleDisabled(): Role
+    {
+        $role = new Role(RoleInterface::ROLE_USER);
+        $role->setOverwrite(true);
 
         return $role;
     }

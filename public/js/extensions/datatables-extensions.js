@@ -486,17 +486,16 @@ $.fn.initDataTable = function (options) {
             blurable: false,
             clipboard: false,
             className: 'table-primary',
-            columns: ':not(.skip-keys)',
             keys: [//
-            13, // enter
-            33, // page up
-            34, // page down
-            35, // end
-            36, // home
-            38, // arrow up
-            40, // arrow down
-            46, // delete
-            93 // context-menu
+                13, // enter
+                33, // page up
+                34, // page down
+                35, // end
+                36, // home
+                38, // arrow up
+                40, // arrow down
+                46, // delete
+                93 // context-menu
             ]
         },
 

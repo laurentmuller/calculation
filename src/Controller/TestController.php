@@ -25,6 +25,7 @@ use App\Entity\Product;
 use App\Entity\User;
 use App\Form\FormHelper;
 use App\Form\Type\CaptchaImage;
+use App\Form\Type\MinStrengthType;
 use App\Pdf\PdfResponse;
 use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
@@ -55,6 +56,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Controller for tests.
@@ -351,7 +353,7 @@ class TestController extends AbstractController
         $options = [
             'letters',
             'numbers',
-            'specialCharacter',
+            'specialChar',
             'caseDiff',
             'email',
             'blackList',
@@ -359,17 +361,7 @@ class TestController extends AbstractController
         ];
 
         // constraint
-        $constraint = new Password();
-        $constraint->allViolations = true;
-
-        // default values
-        $data = [
-            'password' => '123456',
-            'minStrength' => 2,
-        ];
-        foreach ($options as $option) {
-            $data[$option] = true;
-        }
+        $constraint = new Password(['allViolations' => true]);
 
         // listener
         $listener = function (FormEvent $event) use ($options, $constraint): void {
@@ -380,13 +372,23 @@ class TestController extends AbstractController
             $constraint->minStrength = (int) ($data['minStrength'] ?? -1);
         };
 
+        // default values
+        $data = [
+            'password' => '123456',
+            'minStrength' => 2,
+        ];
+        foreach ($options as $option) {
+            $data[$option] = true;
+        }
+
         // form
         $helper = $this->createFormHelper(null, $data);
         $helper->addEventListener(FormEvents::PRE_SUBMIT, $listener);
+
         $helper->field('password')
             ->label('password.input')
             ->className('password-strength')
-            ->updateOption('constraints', [$constraint])
+            ->updateOption('constraints', [$constraint, new Length(['min' => 6])])
             ->addTextType();
 
         foreach ($options as $option) {
@@ -398,13 +400,7 @@ class TestController extends AbstractController
 
         $helper->field('minStrength')
             ->label('password.minStrength')
-            ->addChoiceType([
-                'password.strength_level.none' => -1,
-                'password.strength_level.very_weak' => 0,
-                'password.strength_level.weak' => 1,
-                'password.strength_level.medium' => 2,
-                'password.strength_level.very_strong' => 3,
-            ]);
+            ->add(MinStrengthType::class);
 
         $helper->field('captcha')
             ->updateOption('image', $service->generateImage(false))

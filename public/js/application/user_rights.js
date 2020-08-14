@@ -58,7 +58,7 @@ function updateCheckBoxes($parent, callback) {
     });
 
     // update
-    const newValue = checked === 0 || checked > 0 && unchecked > 0;
+    const newValue = checked === 0 || checked !== 0 && unchecked !== 0;
     $.each($inputs, function () {
         $(this).setChecked(newValue);
     });
@@ -72,7 +72,6 @@ function updateCheckBoxes($parent, callback) {
  */
 function updateAllCheckboxes(checked) {
     'use strict';
-
     getAllCheckboxes().setChecked(checked);
 }
 
@@ -96,11 +95,10 @@ function defaultValues() {
         $this.setChecked($this.data('default') || false);
     });
 
-    if ($('#user_rights_overwrite').length) {
-        $('#user_rights_overwrite').setChecked(false);
-        getAllCheckboxes().each(function () {
-            $(this).attr('disabled', true);
-        });
+    const $overwrite = $('#user_rights_overwrite');
+    if ($overwrite.length) {
+        $overwrite.setChecked($overwrite.data('default') || false);
+        onOverwriteClick($overwrite);
     }
 }
 
@@ -148,9 +146,9 @@ function onOverwriteClick($element) {
     'use strict';
 
     const disabled = !$element.isChecked();
-    getAllCheckboxes().each(function () {
-        $(this).attr('disabled', disabled);
-    });
+    getAllCheckboxes().attr('disabled', disabled);
+    $(".btn-col, .btn-row").attr('disabled', disabled);
+    $("#all, #none, #toggle").attr('disabled', disabled);
 }
 
 /**
@@ -162,34 +160,27 @@ function onOverwriteClick($element) {
     // validation
     $("form").initValidator();
 
-    // bind
-    $("#all").on("click", function (e) {
-        e.preventDefault();
+    // bind events
+    $("#all").on("click", function () {
         updateAllCheckboxes(true);
     });
-    $("#none").on("click", function (e) {
-        e.preventDefault();
+    $("#none").on("click", function () {
         updateAllCheckboxes(false);
     });
-    $("#toggle").on("click", function (e) {
-        e.preventDefault();
+    $("#toggle").on("click", function () {
         toggle();
     });
-    $("#default").on("click", function (e) {
-        e.preventDefault();
+    $("#default").on("click", function () {
         defaultValues();
     });
-    $("a.data-col").on("click", function (e) {
-        e.preventDefault();
+    $(".btn-col").on("click", function () {
         onColumnClick($(this));
     });
-    $("a.data-row").on("click", function (e) {
-        e.preventDefault();
+    $(".btn-row").on("click", function () {
         onRowClick($(this));
     });
-    if ($('#user_rights_overwrite').length) {
-        $("#user_rights_overwrite").on("click", function () {
-            onOverwriteClick($(this));
-        });
-    }
+    $('#user_rights_overwrite').on("click", function () {
+        onOverwriteClick($(this));
+    });
+
 }(jQuery));

@@ -87,7 +87,7 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
     /**
      * Renders the actions column.
      */
-    public function renderActions(int $id, $item): string
+    public function renderActions(int $id): string
     {
         if (isset($this->environment)) {
             return $this->environment->render('macros/_datatables_actions.html.twig', ['id' => $id]);

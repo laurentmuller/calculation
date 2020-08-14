@@ -82,7 +82,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function outputGroup(): self
     {
-        if ($this->group->isName() && !$this->inProgress) {
+        if ($this->group->isKey() && !$this->inProgress) {
             $this->inProgress = true;
             if (!$this->groupListener || !$this->groupListener->onOutputGroup($this, $this->group)) {
                 $this->group->output($this);
@@ -112,6 +112,24 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     }
 
     /**
+     * Sets the group key.
+     *
+     * @param mixed $key    the new group key
+     * @param bool  $output true to output the new group (if not empty)
+     *
+     * @return self this instance
+     */
+    public function setGroupKey($key, bool $output = true): self
+    {
+        $this->group->setKey($key);
+        if ($output) {
+            return $this->outputGroup();
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the group listener.
      *
      * @param \App\Pdf\PdfGroupListenerInterface $groupListener the listener to set
@@ -121,24 +139,6 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     public function setGroupListener(?PdfGroupListenerInterface $groupListener): self
     {
         $this->groupListener = $groupListener;
-
-        return $this;
-    }
-
-    /**
-     * Sets the group name.
-     *
-     * @param string $name   the new group name
-     * @param bool   $output true to output the new group (if not empty)
-     *
-     * @return self this instance
-     */
-    public function setGroupName(string $name, bool $output = true): self
-    {
-        $this->group->setName($name);
-        if ($output) {
-            return $this->outputGroup();
-        }
 
         return $this;
     }

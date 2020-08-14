@@ -46,8 +46,7 @@ class CalculationDataTable extends AbstractEntityDataTable
      */
     public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment)
     {
-        parent::__construct($application, $session, $datatables, $repository);
-        $this->environment = $environment;
+        parent::__construct($application, $session, $datatables, $repository, $environment);
     }
 
     /**

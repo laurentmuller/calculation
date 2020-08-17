@@ -45,7 +45,7 @@
             const options = that.options;
             if (text.length) {
                 // add inputs
-                let inputs = [];
+                const inputs = [];
                 const user = that.getInputValue(options.userField);
                 if (user) {
                     inputs.push(user);

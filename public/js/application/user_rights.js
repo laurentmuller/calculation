@@ -3,9 +3,9 @@
 /**
  * Finds a checkbox within the given parent.
  * 
- * @param $parent
- *            the parent element to search in.
- * @returns the checkbox, if found; null otherwise.
+ * @param {JQuery}
+ *            $parent - the parent element to search in.
+ * @returns {JQuery} the checkbox, if found; null otherwise.
  */
 function findCheckBox($parent) {
     'use strict';
@@ -19,7 +19,7 @@ function findCheckBox($parent) {
 /**
  * Gets all checkboxes of the edit table.
  * 
- * @returns the checkboxes.
+ * @returns {JQuery} the checkboxes.
  */
 function getAllCheckboxes() {
     'use strict';
@@ -30,19 +30,18 @@ function getAllCheckboxes() {
 /**
  * Updates the checkboxes.
  * 
- * @param $parent
- *            the parent element to iterate over.
- * @param callback
- *            the callback function used to find the check box within the
- *            current element.
- * @returns void
+ * @param {JQuery}
+ *            $parent - the parent element to iterate over.
+ * @param {function}
+ *            callback - the callback function used to find the check box within
+ *            the current element.
  */
 function updateCheckBoxes($parent, callback) {
     'use strict';
 
-    let $inputs = [];
     let checked = 0;
     let unchecked = 0;
+    const $inputs = [];
 
     // get values
     $parent.each(function () {
@@ -59,54 +58,16 @@ function updateCheckBoxes($parent, callback) {
 
     // update
     const newValue = checked === 0 || checked !== 0 && unchecked !== 0;
-    $.each($inputs, function () {
-        $(this).setChecked(newValue);
+    $inputs.forEach(function ($input) {
+        $input.setChecked(newValue);
     });
-}
-
-/**
- * Updates all checkbox values.
- * 
- * @param checked
- *            true if checked, false if unchecked.
- */
-function updateAllCheckboxes(checked) {
-    'use strict';
-    getAllCheckboxes().setChecked(checked);
-}
-
-/**
- * Toggle all checkbox values.
- */
-function toggle() {
-    'use strict';
-
-    getAllCheckboxes().toggleChecked();
-}
-
-/**
- * Sets default values.
- */
-function defaultValues() {
-    'use strict';
-
-    getAllCheckboxes().each(function () {
-        const $this = $(this);
-        $this.setChecked($this.data('default') || false);
-    });
-
-    const $overwrite = $('#user_rights_overwrite');
-    if ($overwrite.length) {
-        $overwrite.setChecked($overwrite.data('default') || false);
-        onOverwriteClick($overwrite);
-    }
 }
 
 /**
  * Handles the column header click event.
  * 
- * @param $element
- *            the column header.
+ * @param {JQuery}
+ *            $element - the column header.
  */
 function onColumnClick($element) {
     'use strict';
@@ -126,8 +87,8 @@ function onColumnClick($element) {
 /**
  * Handles the first cell row click event.
  * 
- * @param $element
- *            the first cell of the row.
+ * @param {JQuery}
+ *            $element - the first cell of the row.
  */
 function onRowClick($element) {
     'use strict';
@@ -141,6 +102,9 @@ function onRowClick($element) {
 
 /**
  * Handles the overwrite click event.
+ * 
+ * @param {JQuery}
+ *            $element - the overwrite checkbox.
  */
 function onOverwriteClick($element) {
     'use strict';
@@ -149,6 +113,43 @@ function onOverwriteClick($element) {
     getAllCheckboxes().attr('disabled', disabled);
     $(".btn-col, .btn-row").attr('disabled', disabled);
     $("#all, #none, #toggle").attr('disabled', disabled);
+}
+
+/**
+ * Updates all checkbox values.
+ * 
+ * @param {boolean}
+ *            checked - true if checked, false if unchecked.
+ */
+function updateAllCheckboxes(checked) {
+    'use strict';
+    getAllCheckboxes().setChecked(checked);
+}
+
+/**
+ * Toggle all checkbox values.
+ */
+function toggle() {
+    'use strict';
+    getAllCheckboxes().toggleChecked();
+}
+
+/**
+ * Resets the inputs to their default values.
+ */
+function defaultValues() {
+    'use strict';
+
+    getAllCheckboxes().each(function () {
+        const $this = $(this);
+        $this.setChecked($this.data('default') || false);
+    });
+
+    const $overwrite = $('#user_rights_overwrite');
+    if ($overwrite.length) {
+        $overwrite.setChecked($overwrite.data('default') || false);
+        onOverwriteClick($overwrite);
+    }
 }
 
 /**

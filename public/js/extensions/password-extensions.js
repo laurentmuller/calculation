@@ -19,25 +19,11 @@
                 const $element = $(this);
                 const $button = $element.parents('.input-group').findExists('.btn-password');
                 if ($button) {
-                    const show = function () {
-                        $element.prop('type', 'text');
-                        $button.children().removeClass('fa-eye').addClass('fa-eye-slash');
-                        $button.data('display', true);
-                    };
-                    const hide = function () {
-                        $element.prop('type', 'password');
-                        $button.children().removeClass('fa-eye-slash').addClass('fa-eye');
-                    };
-                    const toggle = function () {
-                        if ($button.data('display') || false) {
-                            $button.data('display', false);
-                        } else {
-                            show();
-                            $button.data('display', false);
-                            $button.updateTimer(hide, 250);
-                        }
-                    };
-                    $button.on('mousedown', show).on('mouseup', hide).on('click', toggle);
+                    $button.on('click', function () {
+                        const type = $element.is(':text') ? 'password' : 'text';
+                        $(this).find('i').toggleClass('fa-eye fa-eye-slash');
+                        $element.prop('type', type).select();
+                    });
                 }
             });
         },

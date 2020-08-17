@@ -34,7 +34,7 @@ $.fn.isEmptyValue = function () {
 function updateErrors() {
     'use strict';
 
-    let existing = [];
+    const existing = [];
     let emptyFound = false;
     let duplicateFound = false;
 
@@ -72,8 +72,8 @@ function updateErrors() {
 
     // show or hide
     if (emptyFound || duplicateFound) {
-        $("#error-empty").updateClass("d-none", !emptyFound);
-        $("#error-duplicate").updateClass("d-none", !duplicateFound);
+        $("#error-empty").toggleClass("d-none", !emptyFound);
+        $("#error-duplicate").toggleClass("d-none", !duplicateFound);
         $("#error-all").removeClass("d-none").fadeIn();
     } else {
         $("#error-all").fadeOut();

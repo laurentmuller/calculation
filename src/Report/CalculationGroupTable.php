@@ -60,7 +60,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
 
         // styles
         $color = PdfTextColor::red();
-        $defaultStyle = PdfStyle::getCellStyle()->setIndent(2);
+        $defaultStyle = PdfStyle::getCellStyle(); //->setIndent(2);
         $errorStyle = (clone $defaultStyle)->setTextColor($color);
 
         // headers

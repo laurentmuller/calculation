@@ -18,6 +18,7 @@ use App\DataTable\SearchDataTable;
 use App\Interfaces\EntityVoterInterface;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -75,6 +76,7 @@ class IndexController extends AbstractController
      * @param SearchDataTable $table   the datatable
      *
      * @Route("/search", name="search")
+     * @IsGranted("ROLE_USER")
      */
     public function search(Request $request, SearchDataTable $table): Response
     {
@@ -109,7 +111,8 @@ class IndexController extends AbstractController
     /**
      * Display the Site Map.
      *
-     * @Route("/sitemap", name="site_map"): Response
+     * @Route("/sitemap", name="site_map")
+     * @IsGranted("ROLE_USER")
      */
     public function siteMap()
     {

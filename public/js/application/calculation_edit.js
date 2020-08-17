@@ -464,15 +464,15 @@ var Application = {
                 const $row = $(element);
                 const hideUp = index === 0;
                 const hideDown = index === lastIndex;
-                $row.find('.btn-first-item').updateClass('d-none', hideUp);
-                $row.find('.btn-up-item').updateClass('d-none', hideUp);
-                $row.find('.btn-down-item').updateClass('d-none', hideDown);
-                $row.find('.btn-last-item').updateClass('d-none', hideDown);
-                $row.find('.dropdown-divider:first').updateClass('d-none', hideUp && hideDown);
+                $row.find('.btn-first-item').toggleClass('d-none', hideUp);
+                $row.find('.btn-up-item').toggleClass('d-none', hideUp);
+                $row.find('.btn-down-item').toggleClass('d-none', hideDown);
+                $row.find('.btn-last-item').toggleClass('d-none', hideDown);
+                $row.find('.dropdown-divider:first').toggleClass('d-none', hideUp && hideDown);
             });
 
             const $sortGroup = $body.find('.btn-sort-group');
-            $sortGroup.updateClass('d-none', $rows.length === 1);
+            $sortGroup.toggleClass('d-none', $rows.length === 1);
         });
 
         return this;
@@ -492,7 +492,7 @@ var Application = {
         const that = this;
 
         // show or hide empty items
-        $('#empty-items').updateClass('d-none', $('#data-table-edit tbody').length !== 0);
+        $('#empty-items').toggleClass('d-none', $('#data-table-edit tbody').length !== 0);
 
         // validate user margin
         if (!$('#calculation_userMargin').valid()) {

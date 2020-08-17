@@ -374,7 +374,7 @@
                     }
                     if (!isThumbnail) {
                         const isFiles = $that.getInputFiles().length !== 0;
-                        $that.parent().updateClass('rounded-right', !isFiles).css('border-right', isFiles  ? '' : '0');
+                        $that.parent().toggleClass('rounded-right', !isFiles).css('border-right', isFiles  ? '' : '0');
                     }
                 });
 

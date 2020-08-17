@@ -55,8 +55,8 @@ function updateCounter() {
     if ($('#counter').length) {
         const total = $('.card-flex').length;
         const visible = $('.card-flex:visible').length;
-        $('#nomatch').updateClass('d-none', visible !== 0);
-        $('#counter').updateClass('d-none', visible === 0);
+        $('#nomatch').toggleClass('d-none', visible !== 0);
+        $('#counter').toggleClass('d-none', visible === 0);
 
         if (visible > 0) {
             let text = $('#nomatch').data('filter');

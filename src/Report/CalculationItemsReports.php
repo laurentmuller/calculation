@@ -22,7 +22,7 @@ use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
 
 /**
- * Abstract report to render calculations and empty or duplicate items.
+ * Abstract report to render calculations with empty or duplicate items.
  *
  * @author Laurent Muller
  */

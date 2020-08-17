@@ -241,24 +241,24 @@ class PdfTableBuilder implements PdfConstantsInterface
         $parent = $this->parent;
         $columns = $this->columns;
 
-        $texts = [];
-        $styles = [];
-        $aligns = [];
-        $fixeds = [];
-        $widths = [];
-
         $index = 0;
         foreach ($cells as $cell) {
             $texts[] = $cell->getText();
             $styles[] = $cell->getStyle() ?: $this->rowStyle;
-            $fixeds[] = $columns[$index]->isFixed();
             $aligns[] = $cell->getAlignment() ?: $columns[$index]->getAlignment();
 
-            $w = 0;
+            $width = 0;
+            $fixed = $columns[$index]->isFixed();
             for ($i = 0, $count = $cell->getCols(); $i < $count; ++$i) {
-                $w += $columns[$index++]->getWidth();
+                // check if one of the columns is not fixed
+                if ($fixed && !$columns[$index]->isFixed()) {
+                    $fixed = false;
+                }
+                $width += $columns[$index]->getWidth();
+                ++$index;
             }
-            $widths[] = $w;
+            $widths[] = $width;
+            $fixeds[] = $fixed;
         }
 
         // update widths
@@ -589,8 +589,7 @@ class PdfTableBuilder implements PdfConstantsInterface
     protected function drawCell(PdfDocument $parent, int $index, float $width, float $height, ?string $text, string $alignment, PdfStyle $style, PdfCell $cell): void
     {
         // save the current position
-        $x = $parent->GetX();
-        $y = $parent->GetY();
+        [$x, $y] = $parent->GetXY();
 
         // style
         $style->apply($parent);

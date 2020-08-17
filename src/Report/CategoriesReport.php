@@ -157,10 +157,10 @@ class CategoriesReport extends AbstractReport
             ->add($this->localeInt($category->countProducts()));
 
         if ($category->hasMargins()) {
+            $skip = false;
             $margins = $category->getMargins();
-            $first = $margins->first();
             foreach ($margins as $margin) {
-                if ($first !== $margin) {
+                if ($skip) {
                     $table->startRow()
                         ->add('')
                         ->add('')
@@ -170,6 +170,7 @@ class CategoriesReport extends AbstractReport
                     ->add($this->localeAmount($margin->getMaximum()))
                     ->add($this->localePercent($margin->getMargin(), false))
                     ->endRow();
+                $skip = true;
             }
         } else {
             $empty = $this->trans('report.categories.empty_margins');

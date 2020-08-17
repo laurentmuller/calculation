@@ -234,9 +234,9 @@
         },
         sorter: function (items) {
             if (!this.options.ajax) {
-                let beginswith = [];
-                let caseSensitive = [];
-                let caseInsensitive = [];
+                const beginswith = [];
+                const caseSensitive = [];
+                const caseInsensitive = [];
                 let item;
 
                 while ((item = items.shift()) !== null) {
@@ -264,7 +264,7 @@
         },
         render: function (items) {
             let display;
-            let data = [];
+            const data = [];
             const that = this;
             const separator = that.options.separator;
             const isStr = that.isString(that.options.displayField);

@@ -174,7 +174,7 @@
         },
 
         generateMatrix: function (width, height) {
-            let matrix = [];
+            const matrix = [];
             while (height--) {
                 matrix.push(new Array(width));
             }

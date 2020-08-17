@@ -44,7 +44,7 @@ class PdfColumn implements PdfConstantsInterface
      *
      * @var float
      */
-    protected $width;
+    protected $width = 0.0;
 
     /**
      * Constructor.

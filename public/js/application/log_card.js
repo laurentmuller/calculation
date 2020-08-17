@@ -15,7 +15,7 @@ function getSelection(prefix, separator, filter) {
     'use strict';
 
     // run over cards
-    let result = [];
+    const result = [];
     $(".card").each(function () {
         const $this = $(this);
         const key = $this.data("key");

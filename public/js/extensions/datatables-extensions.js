@@ -11,7 +11,7 @@
  *            e - the source event.
  * @param {string}
  *            selector - the JQuery selector.
- * @returns true if event is handled.
+ * @returns {boolean} true if event is handled.
  */
 function triggerClick(e, selector) { // jshint ignore:line
     'use strict';
@@ -31,11 +31,11 @@ function triggerClick(e, selector) { // jshint ignore:line
  * 
  * @param {JQuery}
  *            $element the search input element.
- * @param table
- *            {DataTables.Api} the table to update.
- * @param callback
- *            the callback to invoke.
- * @returns boolean true if success
+ * @param {DataTables.Api}
+ *            table - the table to update.
+ * @param {function}
+ *            callback - the callback to invoke.
+ * @returns {boolean} true if success
  */
 function clearSearch($element, table, callback) {
     'use strict';
@@ -356,7 +356,7 @@ $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex
 $.fn.getColumns = function (useName) {
     'use strict';
 
-    let columns = [];
+    const columns = [];
     const $that = $(this);
     const debug = $that.data('debug');
 
@@ -487,15 +487,15 @@ $.fn.initDataTable = function (options) {
             clipboard: false,
             className: 'table-primary',
             keys: [//
-                13, // enter
-                33, // page up
-                34, // page down
-                35, // end
-                36, // home
-                38, // arrow up
-                40, // arrow down
-                46, // delete
-                93 // context-menu
+            13, // enter
+            33, // page up
+            34, // page down
+            35, // end
+            36, // home
+            38, // arrow up
+            40, // arrow down
+            46, // delete
+            93 // context-menu
             ]
         },
 

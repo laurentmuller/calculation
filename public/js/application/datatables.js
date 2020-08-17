@@ -223,7 +223,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     $('a[data-path]').each(function () {
         // update
         const $this = $(this);
-        $this.updateClass('disabled', disabled).updateHref(params);
+        $this.toggleClass('disabled', disabled).updateHref(params);
 
         // callback?
         if (!disabled) {

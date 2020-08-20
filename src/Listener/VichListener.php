@@ -20,6 +20,7 @@ use App\Service\UserNamer;
 use App\Util\Utils;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Event\Events;
 use Vich\UploaderBundle\Naming\Polyfill\FileExtensionTrait;
@@ -141,18 +142,25 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
             return;
         }
 
-        // source
-        $source = $file->getRealPath();
-        $sourceExt = $this->getExtension($file);
-        $sourceExt = empty($sourceExt) ? self::EXTENSION_PNG : \strtolower($sourceExt);
-
         // resize
+        $source = $file->getRealPath();
         $this->resizer->resizeDefault($source, $source);
 
         // rename if not same extension
-        if (self::EXTENSION_PNG !== $sourceExt) {
+        $extension = $this->getFileExtension($file);
+        if (self::EXTENSION_PNG !== $extension) {
             $newName = \substr_replace($name, self::EXTENSION_PNG, \strrpos($name, '.') + 1);
             $mapping->setFileName($obj, $newName);
         }
+    }
+
+    /**
+     * Gets the file extension.
+     */
+    private function getFileExtension(UploadedFile $file): string
+    {
+        $extension = $this->getExtension($file);
+
+        return empty($extension) ? self::EXTENSION_PNG : \strtolower($extension);
     }
 }

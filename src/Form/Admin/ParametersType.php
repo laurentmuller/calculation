@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Form\Admin;
 
 use App\Form\FormHelper;
+use App\Form\Type\MinStrengthType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
@@ -40,13 +41,12 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
      * The password options.
      */
     public const PASSWORD_OPTIONS = [
-        'password_letters',
-        'password_numbers',
-        'password_special_character',
-        'password_case_diff',
-        'password_email',
-        'password_black_list',
-        'password_pwned',
+        'letters',
+        'numbers',
+        'specialchar',
+        'casediff',
+        'email',
+        'pwned',
     ];
 
     /**
@@ -184,19 +184,14 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ]);
 
         $helper->field(self::MIN_STRENGTH)
+            ->label('password.minstrength')
             ->updateAttribute('data-default', -1)
-            ->addChoiceType([
-                'password.strength_level.none' => -1,
-                'password.strength_level.very_weak' => 0,
-                'password.strength_level.weak' => 1,
-                'password.strength_level.medium' => 2,
-                'password.strength_level.very_strong' => 3,
-            ]);
+            ->add(MinStrengthType::class);
 
         // password options
         foreach (self::PASSWORD_OPTIONS as $option) {
             $helper->field($option)
-                ->label("parameters.password.{$option}")
+                ->label("password.{$option}")
                 ->updateAttribute('data-default', 0)
                 ->updateRowAttribute('class', 'mb-1 ml-1')
                 ->notRequired()
@@ -220,8 +215,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
 
         $result = [];
         foreach ($entries as $entry) {
-            $key = 'parameters.messagePosition.' . \str_replace('-', '_', $entry);
-            $result[$key] = $entry;
+            $result['parameters.message_position.' . $entry] = $entry;
         }
 
         return $result;
@@ -234,7 +228,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     {
         $result = [];
         for ($i = 1; $i < 6; ++$i) {
-            $result["parameters.messageTimeout.{$i}"] = $i * 1000;
+            $result["parameters.message_timeout.{$i}"] = $i * 1000;
         }
 
         return  $result;

@@ -23,6 +23,7 @@ use App\Entity\CalculationState;
 use App\Entity\Customer;
 use App\Entity\Product;
 use App\Entity\User;
+use App\Form\Admin\ParametersType;
 use App\Form\FormHelper;
 use App\Form\Type\CaptchaImage;
 use App\Form\Type\MinStrengthType;
@@ -350,18 +351,10 @@ class TestController extends AbstractController
     public function password(Request $request, CaptchaImageService $service): Response
     {
         // options
-        $options = [
-            'letters',
-            'numbers',
-            'specialChar',
-            'caseDiff',
-            'email',
-            'blackList',
-            'pwned',
-        ];
+        $options = ParametersType::PASSWORD_OPTIONS;
 
         // constraint
-        $constraint = new Password(['allViolations' => true]);
+        $constraint = new Password(['all' => true]);
 
         // listener
         $listener = function (FormEvent $event) use ($options, $constraint): void {
@@ -369,37 +362,37 @@ class TestController extends AbstractController
             foreach ($options as $option) {
                 $constraint->{$option} = (bool) ($data[$option] ?? false);
             }
-            $constraint->minStrength = (int) ($data['minStrength'] ?? -1);
+            $constraint->minstrength = (int) ($data['minstrength'] ?? -1);
         };
 
         // default values
         $data = [
-            'password' => '123456',
-            'minStrength' => 2,
+            'input' => '123456',
+            'minstrength' => 2,
         ];
         foreach ($options as $option) {
             $data[$option] = true;
         }
 
         // form
-        $helper = $this->createFormHelper(null, $data);
+        $helper = $this->createFormHelper('password.', $data);
         $helper->addEventListener(FormEvents::PRE_SUBMIT, $listener);
 
-        $helper->field('password')
-            ->label('password.input')
+        $helper->field('input')
             ->className('password-strength')
-            ->updateOption('constraints', [$constraint, new Length(['min' => 6])])
+            ->updateOption('constraints', [
+                new Length(['min' => 6]),
+                $constraint,
+            ])
             ->addTextType();
 
         foreach ($options as $option) {
             $helper->field($option)
-                ->label("password.{$option}")
                 ->notRequired()
                 ->addCheckboxType();
         }
 
-        $helper->field('minStrength')
-            ->label('password.minStrength')
+        $helper->field('minstrength')
             ->add(MinStrengthType::class);
 
         $helper->field('captcha')

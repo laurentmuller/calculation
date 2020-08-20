@@ -26,17 +26,13 @@ email:
     long: L'adresse e-mail est trop longue.
     invalid: L'adresse e-mail est invalide.
 password:
-    blank: Entrez un mot de passe s'il vous plait.
-    short: Le mot de passe est trop court.
     mismatch: Les deux mots de passe ne sont pas identiques.
-    blacklist: Le mot de passe fait partie de la liste des mots interdits.
     email: Le mot de passe ne peut être une adresse e-mail.
-    minLength: Le mot de passe doit faire au moins {{length}} caractères.
-    minStrength: Le mot de passe doit avoir une force "{{strength_min}}", la force actuelle est "{{strength_current}}".
-    caseDiff: Le mot de passe doit contenir des majuscules et des minuscules.
-    letters: Le mot de passe doit contenir au moins une lettre.
-    numbers: Le mot de passe doit contenir au moins un chiffre.
-    specialChar: Le mot de passe doit contenir au moins un caractère spécial.
+    minstrength: Le mot de passe doit avoir une force "{{strength_min}}", la force actuelle est "{{strength_current}}".
+    casediff: Le mot de passe doit contenir une majuscule et une minuscule.
+    letters: Le mot de passe doit contenir une lettre.
+    numbers: Le mot de passe doit contenir un chiffre.
+    specialchar: Le mot de passe doit contenir un caractère spécial.
     pwned: Le mot de passe a été trouvé {{count}} fois dans une base de données de mots de passe compromis.
 new_password:
     blank: Entrez un nouveau mot de passe s'il vous plait.

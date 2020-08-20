@@ -21,6 +21,7 @@ use App\Repository\GlobalMarginRepository;
 use App\Service\ApplicationService;
 use DataTables\DataTablesInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Twig\Environment;
 
 /**
  * GlobalMargin data table handler.
@@ -41,10 +42,11 @@ class GlobalMarginDataTable extends AbstractEntityDataTable
      * @param SessionInterface       $session     the session to save/retrieve user parameters
      * @param DataTablesInterface    $datatables  the datatables to handle request
      * @param GlobalMarginRepository $repository  the repository to get entities
+     * @param Environment            $environment the Twig environment to render actions cells
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, GlobalMarginRepository $repository)
+    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, GlobalMarginRepository $repository, Environment $environment)
     {
-        parent::__construct($application, $session, $datatables, $repository);
+        parent::__construct($application, $session, $datatables, $repository, $environment);
     }
 
     /**
@@ -61,17 +63,21 @@ class GlobalMarginDataTable extends AbstractEntityDataTable
             DataColumn::hidden('id'),
             DataColumn::currency('minimum')
                 ->setTitle('categorymargin.fields.minimum')
+                ->addClassName('w-35')
                 ->setSearchable(false)
                 ->setDefault(true)
                 ->setFormatter([$this, 'localeAmount']),
             DataColumn::currency('maximum')
                 ->setTitle('categorymargin.fields.maximum')
+                ->addClassName('w-35')
                 ->setSearchable(false)
                 ->setFormatter([$this, 'localeAmount']),
             DataColumn::percent('margin')
                 ->setTitle('categorymargin.fields.margin')
+                ->addClassName('w-30')
                 ->setSearchable(false)
                 ->setFormatter($percentFormatter),
+            DataColumn::actions([$this, 'renderActions']),
         ];
     }
 

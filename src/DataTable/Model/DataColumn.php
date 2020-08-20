@@ -301,9 +301,9 @@ class DataColumn
             'orderable' => \json_encode($this->isOrderable()),
             'searchable' => \json_encode($this->isSearchable()),
             'is-default' => \json_encode($this->isDefault()),
-            'direction' => $this->direction,
-            'created-cell' => $this->callback ?: \json_encode(false),
             'render' => $this->render ?: \json_encode(false),
+            'created-cell' => $this->callback ?: \json_encode(false),
+            'direction' => $this->direction,
         ];
     }
 

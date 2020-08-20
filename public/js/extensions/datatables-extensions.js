@@ -280,6 +280,11 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
         }
         table.updateButtons().updateTitles();
 
+        // const $actions = $('.dataTable th.actions');
+        // if ($actions.length) {
+        // $actions.css('width', '30px');
+        // }
+
     }).on('search.dt', function () {
         enableKeys();
 

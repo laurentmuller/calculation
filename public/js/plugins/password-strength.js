@@ -72,8 +72,7 @@
             const $progress = that.getProgress(options);
             if ($progress) {
                 updateUI = true;
-                const $bars = $progress.find('.progress-bar');
-                $bars.each(function (index, element) {
+                $progress.find('.progress-bar').each(function (index, element) {
                     if (index <= verdict.score) {
                         $(element).removeClass('d-none');
                     } else {
@@ -251,27 +250,34 @@
     PasswordStrength.DEFAULTS = {
         // true to debug zxcvbn result
         debug: false,
+
         // user field selector
         userField: null,
+
         // email field selector
         emailField: null,
 
         // container
         container: null,
+
         // progress container
         progressContainer: null,
+
         // label container
         labelContainer: null,
 
         // score change callback function
         onScore: null,
+
         // update UI callback function
         onUpdateUI: null,
+
         // translation function
         translate: null,
 
         // hide container on empty password
         hideOnEmpty: true,
+
         // progress height
         height: 4,
 

@@ -78,8 +78,8 @@
         /*
          * mixedcase
          */
-        mixedcaseFallback: "Ce champ doit contenir des caractères minuscule et majuscule.",
-        mixedcaseLabel: "Le champ \"{0}\" doit contenir des caractères minuscule et majuscule.",
+        mixedcaseFallback: "Ce champ doit contenir un caractère minuscule et majuscule.",
+        mixedcaseLabel: "Le champ \"{0}\" doit contenir un caractère minuscule et majuscule.",
         mixedcase: function (parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.mixedcaseLabel, $.validator.messages.mixedcaseFallback);
         },

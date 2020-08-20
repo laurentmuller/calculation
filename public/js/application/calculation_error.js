@@ -23,7 +23,7 @@ $.fn.isEmptyValue = function () {
     'use strict';
     const text = $(this).trimmedText();
     const value = Number.parseFloat(text);
-    return Number.isNaN(value) || value === 0;
+    return isNaN(value) || value === 0;
 };
 
 /**

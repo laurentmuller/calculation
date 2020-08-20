@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use App\Service\BlacklistProvider;
 use App\Traits\MathTrait;
 use App\Traits\NumberFormatterTrait;
 use Symfony\Component\Validator\Constraint;
@@ -43,11 +42,6 @@ class PasswordValidator extends AbstractConstraintValidator
     ];
 
     /**
-     * @var BlacklistProvider
-     */
-    private $provider;
-
-    /**
      * @var TranslatorInterface
      */
     private $translator;
@@ -55,11 +49,10 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, BlacklistProvider $provider)
+    public function __construct(TranslatorInterface $translator)
     {
-        $this->translator = $translator;
-        $this->provider = $provider;
         parent::__construct(Password::class);
+        $this->translator = $translator;
     }
 
     /**
@@ -75,14 +68,13 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     protected function doValidate($value, Constraint $constraint): void
     {
-        if ($constraint->allViolations) {
+        if ($constraint->all) {
             $this->checkLetters($constraint, $value);
             $this->checkCaseDiff($constraint, $value);
             $this->checkNumber($constraint, $value);
             $this->checkSpecialChar($constraint, $value);
             $this->checkEmail($constraint, $value);
             $this->checkStrength($constraint, $value);
-            $this->checkBlackList($constraint, $value);
             $this->checkPwned($constraint, $value);
         } else {
             $this->checkLetters($constraint, $value)
@@ -91,7 +83,6 @@ class PasswordValidator extends AbstractConstraintValidator
                     || $this->checkSpecialChar($constraint, $value)
                     || $this->checkEmail($constraint, $value)
                     || $this->checkStrength($constraint, $value)
-                    || $this->checkBlackList($constraint, $value)
                     || $this->checkPwned($constraint, $value);
         }
     }
@@ -116,23 +107,6 @@ class PasswordValidator extends AbstractConstraintValidator
     }
 
     /**
-     * Checks if the value is within the passwords blacklist.
-     *
-     * @param Password $constraint the password constraint
-     * @param string   $value      the value to validate
-     *
-     * @return bool true if a violation is added
-     */
-    private function checkBlackList(Password $constraint, string $value): bool
-    {
-        if ($constraint->blackList && null !== $this->provider && $this->provider->isBlacklisted($value)) {
-            return $this->addViolation('blacklist', $value);
-        }
-
-        return false;
-    }
-
-    /**
      * Checks the presence of lower/upper character.
      *
      * @param Password $constraint the password constraint
@@ -142,8 +116,8 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkCaseDiff(Password $constraint, string $value): bool
     {
-        if ($constraint->caseDiff && !\preg_match('/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u', $value)) {
-            return $this->addViolation('caseDiff', $value);
+        if ($constraint->casediff && !\preg_match('/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u', $value)) {
+            return $this->addViolation('casediff', $value);
         }
 
         return false;
@@ -231,8 +205,8 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkSpecialChar(Password $constraint, string $value): bool
     {
-        if ($constraint->specialChar && !\preg_match('/[^p{Ll}\p{Lu}\pL\pN]/u', $value)) {
-            return $this->addViolation('specialChar', $value);
+        if ($constraint->specialchar && !\preg_match('/[^p{Ll}\p{Lu}\pL\pN]/u', $value)) {
+            return $this->addViolation('specialchar', $value);
         }
 
         return false;
@@ -248,19 +222,19 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkStrength(Password $constraint, string $value): bool
     {
-        if ($constraint->minStrength >= 0) {
+        if ($constraint->minstrength >= 0) {
             $zx = new Zxcvbn();
             $strength = $zx->passwordStrength($value);
             $score = $strength['score'];
-            if ($score < $constraint->minStrength) {
-                $strength_min = $this->translateLevel($constraint->minStrength);
+            if ($score < $constraint->minstrength) {
+                $strength_min = $this->translateLevel($constraint->minstrength);
                 $strength_current = $this->translateLevel($score);
                 $parameters = [
                     '{{strength_min}}' => $strength_min,
                     '{{strength_current}}' => $strength_current,
                 ];
 
-                return $this->addViolation('minStrength', $value, $parameters);
+                return $this->addViolation('minstrength', $value, $parameters);
             }
         }
 

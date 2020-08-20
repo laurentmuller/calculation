@@ -194,9 +194,9 @@ class CaptchaImageService
     protected function computeText(ImageHandler $image, float $size, string $font, string $text): array
     {
         $result = [];
-        for ($i = 0,  $length = \mb_strlen($text); $i < $length; ++$i) {
+        for ($i = 0,  $len = \strlen($text); $i < $len; ++$i) {
             $angle = \random_int(-8, 8);
-            $char = \mb_substr($text, $i, 1);
+            $char = \substr($text, $i, 1);
             [$width, $height] = $image->ttfSize($size, $angle, $font, $char);
 
             $result[] = [
@@ -355,7 +355,7 @@ class CaptchaImageService
      */
     protected function generateRandomString(int $length): string
     {
-        $length = \max($length, 2);
+        $length = \min(\max($length, 2), \strlen(self::ALLOWED_VALUES));
         $result = \str_shuffle(self::ALLOWED_VALUES);
 
         return \substr($result, 0, $length);

@@ -10,11 +10,6 @@
 	"start_url": ".",
 	"icons": [
 		{
-			"src": "images/icons/icon-016x016.png",
-			"sizes": "16x16",
-			"type": "image/png"
-		},
-		{
 			"src": "images/icons/icon-032x032.png",
 			"sizes": "32x32",
 			"type": "image/png"
@@ -25,23 +20,8 @@
 			"type": "image/png"
 		},
 		{
-			"src": "images/icons/icon-072x072.png",
-			"sizes": "72x72",
-			"type": "image/png"
-		},
-		{
-			"src": "images/icons/icon-096x096.png",
-			"sizes": "96x96",
-			"type": "image/png"
-		},
-		{
-			"src": "images/icons/icon-128x128.png",
-			"sizes": "128x128",
-			"type": "image/png"
-		},
-		{
-			"src": "images/icons/icon-192x192.png",
-			"sizes": "192x192",
+			"src": "images/icons/icon-064x064.png",
+			"sizes": "64x64",
 			"type": "image/png"
 		},
 		{

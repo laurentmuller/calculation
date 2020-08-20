@@ -27,10 +27,10 @@
     $.extend({
         /**
          * Returns if the given data is a string.
-         *
+         * 
          * @param {any}
          *            data - The data to evaluate.
-         *
+         * 
          * @return {boolean} true if a string.
          */
         isString: function (data) {
@@ -39,10 +39,10 @@
 
         /**
          * Returns if the given data is an object.
-         *
+         * 
          * @param {any}
          *            data - The data to evaluate.
-         *
+         * 
          * @return {boolean} true if an object.
          */
         isObject: function (data) {
@@ -51,10 +51,10 @@
 
         /**
          * Returns if the given data is a boolean.
-         *
+         * 
          * @param {any}
          *            data - The data to evaluate.
-         *
+         * 
          * @return {boolean} true if a boolean.
          */
         isBoolean: function (data) {
@@ -63,10 +63,10 @@
 
         /**
          * Returns if the given data is undefined.
-         *
+         * 
          * @param {any}
          *            data - The data to evaluate.
-         *
+         * 
          * @return {boolean} true if undefined.
          */
         isUndefined: function (data) {
@@ -81,10 +81,10 @@
 
         /**
          * Check if the element is visible into area of the browser window.
-         *
+         * 
          * @param {int}
          *            bottomMargin - The bottom margin.
-         *
+         * 
          * @return {boolean} true if visible, false if not.
          */
         isInViewport: function (bottomMargin) {
@@ -105,13 +105,13 @@
 
         /**
          * Scrolls the element into the visible area of the browser window.
-         *
+         * 
          * @param {int}
          *            delay - The scroll animation delay in milliseconds.
-         *
+         * 
          * @param {int}
          *            bottomMargin - The bottom margin.
-         *
+         * 
          * @return {jQuery} The JQuery element for chaining.
          */
         scrollInViewport: function (delay, bottomMargin) {
@@ -140,7 +140,7 @@
         /**
          * Add the given class to the element and remove it after a delay of
          * 1500 ms.
-         *
+         * 
          * @param {string}
          *            className - The class name to toggle.
          * @param {function}
@@ -163,7 +163,7 @@
 
         /**
          * Sets the given class to the element.
-         *
+         * 
          * @param {string}
          *            className - The class name to set.
          * @return {jQuery} The JQuery element for chaining.
@@ -177,7 +177,7 @@
         /**
          * Create a timer within the element. Callback function parameters can
          * be given after the callback and timeout values.
-         *
+         * 
          * @param {function}
          *            callback - The callback function that will be executed
          *            after the timer expires.
@@ -203,7 +203,7 @@
 
         /**
          * Clear the timer (if any) of the element.
-         *
+         * 
          * @return {jQuery} The JQuery element for chaining.
          */
         removeTimer: function () {
@@ -220,7 +220,7 @@
         /**
          * Clear the existing timer (if any) and create a new timer within the
          * element.
-         *
+         * 
          * @param {function}
          *            callback - The callback function that will be executed
          *            after the timer expires.
@@ -236,10 +236,10 @@
 
         /**
          * Create a timer interval within the element.
-         *
+         * 
          * Callback function parameters can be given after the callback and
          * timeout values.
-         *
+         * 
          * @param {function}
          *            callback - The callback function that will be executed.
          * @param {int}
@@ -264,7 +264,7 @@
 
         /**
          * Clear the timer interval (if any) of the element.
-         *
+         * 
          * @return {jQuery} The JQuery element for chaining.
          */
         removeInterval: function () {
@@ -282,13 +282,13 @@
          * Clear the timer interval (if any) and create a timer interval within
          * the element. Callback function parameters can be given after the
          * callback and timeout values.
-         *
+         * 
          * @param {function}
          *            callback - The callback function that will be executed.
          * @param {int}
          *            timeout - The intervals (in milliseconds) on how often to
          *            execute the callback.
-         *
+         * 
          * @return {jQuery} The JQuery element for chaining.
          */
         updateInterval: function (callback, timeout) { // jshint ignore:line
@@ -298,7 +298,7 @@
 
         /**
          * Sets or gets the value as integer.
-         *
+         * 
          * @param {int}
          *            value - if present the value to set; otherwise return the
          *            value.
@@ -308,11 +308,11 @@
             if (!arguments.length) {
                 // get
                 const parsedValue = Number.parseInt($(this).val(), 10);
-                return Number.isNaN(parsedValue) ? 0 : parsedValue;
+                return isNaN(parsedValue) ? 0 : parsedValue;
             } else {
                 // set
                 let parsedValue = Number.parseInt(value, 10);
-                if (Number.isNaN(parsedValue)) {
+                if (isNaN(parsedValue) || parsedValue === -0) {
                     parsedValue = Number.parseInt(0, 10);
                 }
                 return $(this).val(parsedValue.toString());
@@ -321,7 +321,7 @@
 
         /**
          * Sets or gets the value as float with 2 fixed decimals.
-         *
+         * 
          * @param {number}
          *            value - if present the value to set; otherwise return the
          *            value.
@@ -331,11 +331,11 @@
             if (!arguments.length) {
                 // get
                 const parsedValue = Number.parseFloat($(this).val());
-                return Number.isNaN(parsedValue) ? 0 : parsedValue;
+                return isNaN(parsedValue) ? 0 : parsedValue;
             } else {
                 // set
                 let parsedValue = Number.parseFloat(value);
-                if (Number.isNaN(parsedValue)) {
+                if (isNaN(parsedValue) || parsedValue === -0) {
                     parsedValue = Number.parseFloat(0);
                 }
                 return $(this).val(parsedValue.toFixed(2));
@@ -344,7 +344,7 @@
 
         /**
          * Returns if the checkbox is checked.
-         *
+         * 
          * @return {boolean} The checked value.
          */
         isChecked: function () {
@@ -353,7 +353,7 @@
 
         /**
          * Sets the checkbox checked value.
-         *
+         * 
          * @param {boolean}
          *            the checked value to set.
          * @return {jQuery} The JQuery element for chaining.
@@ -366,7 +366,7 @@
 
         /**
          * Toggle the checkbox checked value
-         *
+         * 
          * @return {jQuery} The JQuery element for chaining.
          */
         toggleChecked: function () {
@@ -378,7 +378,7 @@
 
         /**
          * Returns the first file (if any) from an input type file.
-         *
+         * 
          * @return {file|boolean} The first selected file, if any; false if none
          *         or if not valid.
          */
@@ -412,7 +412,7 @@
 
         /**
          * Returns the files (if any) from an input type file.
-         *
+         * 
          * @return {array} The selected files, if any; an empty array otherwise.
          */
         getInputFiles: function () {
@@ -423,7 +423,7 @@
         /**
          * Returns the label text of the given input element. Return false if
          * not found.
-         *
+         * 
          * @return {JQuery|boolean} the label text, if found; false otherwise.
          */
         getLabelText: function () {
@@ -444,7 +444,7 @@
 
         /**
          * Select content and set focus.
-         *
+         * 
          * @return {jQuery} The JQuery element for chaining.
          */
         selectFocus: function () {
@@ -453,7 +453,7 @@
 
         /**
          * Select the first option in the list.
-         *
+         * 
          * @return {jQuery} The JQuery element for chaining.
          */
         selectFirstOption: function () {
@@ -463,7 +463,7 @@
 
         /**
          * Gets select option in the list.
-         *
+         * 
          * @return {Object|null} the selected element, if any; null otherwise.
          */
         getSelectedOption: function () {
@@ -473,7 +473,7 @@
         /**
          * Get the descendants of each element in the current set of matched
          * elements, filtered by a selector, jQuery object, or element.
-         *
+         * 
          * Return {JQuery} the selected element or null if matching elements
          * length is equal to 0.
          */
@@ -484,7 +484,7 @@
 
         /**
          * Remove all 'data-xxx' attributes.
-         *
+         * 
          * @return {jQuery} The JQuery element for chaining.
          */
         removeDataAttributes: function () {
@@ -498,7 +498,7 @@
 
         /**
          * Creates a custom tooltip.
-         *
+         * 
          * The options must contains a "type" value used to update the tooltip
          * class. This value must placed at the start.<br>
          * For example: options.type = 'danger my-other-class';
@@ -506,7 +506,7 @@
          * The allowed type is: "danger", "warning", "success", "info",
          * "primary", "secondary" or "dark".
          * </p>
-         *
+         * 
          * @param {Object}
          *            options - the additional tooltip options.
          * @return {jQuery} The JQuery element for chaining.
@@ -524,7 +524,7 @@
 
         /**
          * Creates a custom popover.
-         *
+         * 
          * The options must contains a "type" value used to update the popoover
          * class. This value must placed at the start.<br>
          * For example: options.type = 'danger my-other-class';
@@ -532,7 +532,7 @@
          * The allowed type is: "danger", "warning", "success", "info",
          * "primary", "secondary" or "dark".
          * </p>
-         *
+         * 
          * @param {Object}
          *            options - the additional popover options.
          * @return {jQuery} The JQuery element for chaining.

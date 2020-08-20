@@ -27,27 +27,19 @@ use Symfony\Component\Validator\Constraint;
 class Password extends Constraint
 {
     /**
-     * Add all violation or stop of the first found.
+     * Add all violations or stop of the first violation found.
      *
      * @var bool
      */
-    public $allViolations = false;
-
-    /**
-     * Checks if the password is within a blacklist passwords.
-     *
-     * @var bool
-     */
-    public $blackList = false;
-    public $blackListMessage = 'The password is part of the forbidden words list.';
+    public $all = false;
 
     /**
      * Checks if the password contains upper and lower characters.
      *
      * @var bool
      */
-    public $caseDiff = false;
-    public $caseDiffMessage = 'The password must be both upper and lower case.';
+    public $casediff = false;
+    public $casediffMessage = 'The password must be both upper and lower case.';
 
     /**
      * Checks if the password is an e-mail.
@@ -70,8 +62,8 @@ class Password extends Constraint
      *
      * @var int
      */
-    public $minStrength = -1;
-    public $minStrengthMessage = 'The password is to weak.';
+    public $minstrength = -1;
+    public $minstrengthMessage = 'The password is to weak.';
 
     /**
      * Checks if the password contains numbers.
@@ -94,14 +86,6 @@ class Password extends Constraint
      *
      * @var bool
      */
-    public $specialChar = false;
-    public $specialCharMessage = 'The password must contain at least one special character.';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct($options = null)
-    {
-        parent::__construct($options);
-    }
+    public $specialchar = false;
+    public $specialcharMessage = 'The password must contain at least one special character.';
 }

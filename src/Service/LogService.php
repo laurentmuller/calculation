@@ -298,17 +298,21 @@ class LogService
             return false;
         }
 
+        $handle = false;
+
         try {
+            // open
+            if (false === $handle = \fopen($this->fileName, 'r')) {
+                return false;
+            }
+
             $id = 1;
             $logs = [];
             $levels = [];
             $channels = [];
 
-            // read all
-            $lines = \file($this->fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-            // parse lines
-            foreach ($lines as $line) {
+            // read line by line
+            while (false !== ($line = \fgets($handle))) {
                 $values = \explode(self::VALUES_SEP, $line);
                 if (6 !== \count($values)) {
                     continue;
@@ -337,6 +341,10 @@ class LogService
             }
         } catch (\Exception $e) {
             return false;
+        } finally {
+            if (\is_resource($handle)) {
+                \fclose($handle);
+            }
         }
 
         // logs?

@@ -684,10 +684,16 @@ class AjaxController extends AbstractController
 
             return $this->json($result);
         } catch (\Exception $e) {
-            $message = $this->trans('calculation.edit.error.update_total');
-            $logger->error($message, ['exception' => $e]);
+            // log
+            $context = [
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(), ];
+            $logger->error('An error occurred when updating the calculation totals.', $context);
 
-            return $this->jsonException($e, $message);
+            return $this->jsonException($e, $this->trans('calculation.edit.error.update_total'));
         }
     }
 
@@ -748,11 +754,12 @@ class AjaxController extends AbstractController
             return;
         }
 
-        // compute user margin to reach minimum
+        // compute user margin to reach minimum and round up
         $userMargin = (($minMargin + 1) * $groupAmount / $netTotal) - 1;
-
-        // round up
         $userMargin = \ceil($userMargin * 100.0) / 100.0;
+        if ($this->isFloatZero($userMargin)) {
+            $userMargin = 0;
+        }
 
         // update user margin
         $userGroup['margin'] = $userMargin;

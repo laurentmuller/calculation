@@ -7,7 +7,9 @@
     'use strict';
 
     // password strength
-    $("#form_password").initPasswordStrength();
+    $("#form_input").initPasswordStrength({
+        debug: true
+    });
 
     // validation
     const $captcha = $('#form_captcha');

@@ -153,7 +153,7 @@ interface ApplicationServiceInterface
     /**
      * The property name for the minimum password strength (int).
      */
-    public const MIN_STRENGTH = 'min_strength';
+    public const MIN_STRENGTH = 'minstrength';
 
     /**
      * The property name for the time format (integer).

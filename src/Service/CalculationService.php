@@ -146,7 +146,7 @@ final class CalculationService
             if (\array_key_exists('items', $group)) {
                 $amount = \array_reduce($group['items'], function (float $carry, array $item) {
                     return $carry + ($item['price'] * $item['quantity']);
-                }, 0.0);
+                }, $amount);
             }
 
             // compute margin

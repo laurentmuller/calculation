@@ -411,7 +411,7 @@ var Application = {
 
         // get value
         let parsedValue = Number.parseFloat(value);
-        if (Number.isNaN(parsedValue)) {
+        if (isNaN(parsedValue)) {
             parsedValue = Number.parseFloat(0);
         }
 
@@ -535,7 +535,7 @@ var Application = {
         that.jqXHR = $.post(url, data, function (response) {
             // error?
             if (!response.result) {
-                return that.disable();
+                return that.disable(response.message);
             }
 
             // update content
@@ -546,7 +546,7 @@ var Application = {
             } else {
                 $totalPanel.fadeOut();
             }
-            if (adjust && response.overall_margin) {
+            if (adjust && !isNaN(response.overall_margin)) {
                 $('#calculation_userMargin').intVal(response.overall_margin).selectFocus();
             }
             if (response.overall_below) {
@@ -564,9 +564,12 @@ var Application = {
     /**
      * Disable edition.
      * 
+     * @param {string}
+     *            message - the error message to display.
+     * 
      * @return {Object} this instance.
      */
-    disable: function () {
+    disable: function (message) {
         'use strict';
 
         $(':submit').fadeOut();
@@ -592,7 +595,7 @@ var Application = {
 
         // display error message
         const title = $('#edit-form').data('title');
-        const message = $('#edit-form').data('error-update');
+        message = message || $('#edit-form').data('error-update');
         const options = $.extend({}, $('#flashbags').data(), {
             onHide: function () {
                 const html = message.replace('<br><br>', ' ');

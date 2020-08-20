@@ -317,7 +317,9 @@ class LogDataTable extends AbstractDataTable
     }
 
     /**
-     * Sorts log.
+     * Sort logs.
+     *
+     * <b>NB:</b> Sorts only when not the default order (date ascending).
      *
      * @param Log[]  $logs      the logs to sort
      * @param string $field     the sorted field
@@ -325,8 +327,7 @@ class LogDataTable extends AbstractDataTable
      */
     private function sort(array &$logs, string $field, string $direction): void
     {
-        // sort only if no default order
-        if (self::COLUMN_DATE !== $field || DataColumn::SORT_DESC !== $direction) {
+        if (self::COLUMN_DATE !== $field || DataColumn::SORT_ASC !== $direction) {
             $ascending = DataColumn::SORT_ASC === $direction;
             Utils::sortField($logs, $field, $ascending);
         }

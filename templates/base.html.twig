@@ -4,8 +4,8 @@
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set title_domain     = title_domain|default(null) -%}
 {%- set page_title       = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
-{%- set page_icon        = asset('images/icons/icon-032x032.png') -%}
-{%- set apple_icon       = asset('images/icons/icon-180x180.png') -%}
+{%- set page_icon        = asset('images/icons/icon-064x064.png') -%}
+{%- set apple_icon       = asset('images/icons/icon-256x256.png') -%}
 {# head #}
 <head>
 {% block head_meta %}
@@ -19,8 +19,8 @@
 <meta property="og:type" content="website" />
 {% endblock %}
 <title>{{ page_title }}</title>
-<link rel="icon" type="image/png" sizes="32x32" href="{{ page_icon }}" />
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="{{ apple_icon }}">
+<link rel="icon" type="image/png" sizes="64x64" href="{{ page_icon }}" />
+<link rel="apple-touch-icon" type="image/png" sizes="256x256" href="{{ apple_icon }}">
 <link rel="manifest" href="{{ asset('manifest.json', 'local') }}">
 {#  stylesheets  #}
 {{ asset_css(theme_css(app.request), {'title': theme_name(app.request)}) }}

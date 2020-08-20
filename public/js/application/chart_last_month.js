@@ -28,7 +28,7 @@ function onMonthsChange($months) {
     const href = window.location.href;
     const index = href.lastIndexOf('/');
     let value = Number.parseInt(href.substr(index + 1), 10);
-    if (Number.isNaN(value)) {
+    if (isNaN(value)) {
         value = 12;
     }
     $months.data('months', value).val(value);

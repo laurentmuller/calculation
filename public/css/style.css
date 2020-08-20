@@ -737,9 +737,3 @@ span.color-value {
 .table-edit .table-primary tbody + tbody {
     border-color: transparent !important
 }
-
-.dataTable .table-primary * :not(.dropdown, .dropdown-item, .dropdown-divider),
-.table-edit .table-primary * :not(.dropdown, .dropdown-item, .dropdown-divider) {
-    background-color: inherit !important;
-    color: inherit !important;
-}

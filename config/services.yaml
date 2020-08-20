@@ -69,10 +69,6 @@ services:
     App\Service\UserNamer:
         public: true
 
-    # passwords blacklist
-    App\Service\BlacklistProvider:
-        arguments: ['%kernel.project_dir%/resources/data/passwords.txt']
-
     # validators
     App\Validator\RecaptchaValidator:
         arguments: ['%google_recaptcha_secret%']

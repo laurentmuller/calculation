@@ -541,7 +541,7 @@
     }, $.validator.format("The field must contain both upper and lower case characters."));
 
     /*
-     * check if contains a upper or lower case characters
+     * check if contains alphabetic characters
      */
     $.validator.addMethod("letter", function(value, element, param) {
         if (this.optional(element)) {

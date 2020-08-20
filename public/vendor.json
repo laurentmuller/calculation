@@ -68,7 +68,7 @@
 		},
 		{
 			"name": "html5sortable",
-			"version": "0.9.17",
+			"version": "0.9.18",
 			"files": [
 				"html5sortable.js"
 			]
@@ -146,7 +146,7 @@
 		},
 		{
 			"name": "tinymce",
-			"version": "5.4.1",
+			"version": "5.4.2",
 			"files": [
 				"tinymce.min.js",
 				"jquery.tinymce.min.js",

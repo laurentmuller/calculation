@@ -39,12 +39,19 @@ override form errors. Rendered example:
 {%- endif -%}
 {%- endblock %}
 
+{# extends form widget with password strength place holder #}
+{%- block form_widget -%}
+{{ parent() }}
+{% if ('password-strength' in attr.class|default('')) %}
+    <div id="{{ form.vars.id }}_passwordstrength" class="d-print-none password-strength"></div>
+{%- endif %}
+{%- endblock %}
+
 {# extends percent widget with number type #}
 {% block percent_widget -%}
 {%- set type = type|default('number') -%}
 {{ parent() }}
 {%- endblock %}
-
 
 {# extends text widget with with user icon #}
 {% block user_name_widget -%}
@@ -69,9 +76,6 @@ override form errors. Rendered example:
         </button>
     </div>
 </div>
-{% if ('password-strength' in attr.class|default('')) %}
-    <div id="{{ form.vars.id }}_passwordstrength" class="d-print-none password-strength"></div>
-{%- endif %}
 {%- endblock %}
 
 {# plain text #}

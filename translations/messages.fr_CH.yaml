@@ -620,28 +620,19 @@ parameters:
     tabular:
         table: Tabulaire
         flex: Mosaïque
-    messagePosition:
-        top_left: En haut - A gauche
-        top_center: En haut - Centrer
-        top_right: En haut - A droite
-        bottom_left: En bas - A gauche
-        bottom_center: En bas - Centrer
-        bottom_right: En bas - A droite
-    messageTimeout:
+    message_position:
+        top-left: En haut - A gauche
+        top-center: En haut - Centrer
+        top-right: En haut - A droite
+        bottom-left: En bas - A gauche
+        bottom-center: En bas - Centrer
+        bottom-right: En bas - A droite
+    message_timeout:
         1: 1 seconde
         2: 2 secondes
         3: 3 secondes
         4: 4 secondes
         5: 5 secondes
-    password:
-        password_letters: Une lettre est obligatoire
-        password_numbers: Un chiffre est obligatoire
-        password_special_character: Un caractère spécial est obligatoire
-        password_case_diff: Une lettre majuscule et minuscule est obligatoire
-        password_pwned: Le mot de passe ne doit pas être compromis
-        password_email: Le mot de passe ne doit pas être une adresse e-mail
-        password_black_list: Le mot de passe ne doit pas faire partie de la liste des mots interdits
-        password_min_strength: Force minimum
     fields:
         default_state: Statut
         edit_action: Action
@@ -649,7 +640,6 @@ parameters:
         time_format: Format des heures
         grouping_separator: Séparateur de milliers
         decimal_separator: Séparateur de décimals
-        currency: Devise
         customer_name: Nom
         customer_url: Site internet
         message_position: Position
@@ -658,7 +648,7 @@ parameters:
         minimum_margin: Marge minimum
         display_captcha: Code de contrôle
         display_tabular: Mode d'affichage
-        min_strength: Force minimum du mot de passe
+        mintrength: Force minimum
 separator:
     period: 'Point : [ . ]'
     comma: 'Virgule : [ , ]'
@@ -749,16 +739,13 @@ pivot:
         4: 4<sup>ème</sup> trimestre
 password:
     title: Vérifier un mot de passe
-    input: Mot de passe
-    options: Options
     letters: Une lettre est obligatoire
     numbers: Un chiffre est obligatoire
-    specialChar: Un caractère spécial est obligatoire
-    caseDiff: Une lettre majuscule et minuscule est obligatoire
+    specialchar: Un caractère spécial est obligatoire
+    casediff: Une majuscule et une minuscule est obligatoire
     pwned: Le mot de passe ne doit pas être compromis
     email: Le mot de passe ne doit pas être une adresse e-mail
-    blackList: Le mot de passe ne doit pas faire partie de la liste des mots interdits
-    minStrength: Force minimum
+    minstrength: Force minimum
     strength_level:
         none: Aucune
         very_weak: Très faible
@@ -766,6 +753,7 @@ password:
         medium: Moyenne
         strong: Forte
         very_strong: Très forte
+    input: Mot de passe
     success: Le mot de passe est valide.
 import:
     title: Importer les localités et les noms de rue

@@ -95,7 +95,7 @@
                         return parent.apply(this, arguments);
                     };
 
-                })($.validator.prototype.elementValue);
+                }($.validator.prototype.elementValue));
             }
             
 
@@ -147,7 +147,7 @@
                         parent.apply(this, arguments);
                     }
                 };
-            })($.validator.prototype.focusInvalid);
+            }($.validator.prototype.focusInvalid));
 
             // default options
             let defaults = {
@@ -586,7 +586,7 @@
             }
             return parent.call(this, value, element);
         };
-    })($.validator.methods.url);
+    }($.validator.methods.url));
 
     /*
      * replace email with a simple <string>@<string>.<string> value
@@ -595,4 +595,4 @@
         return this.optional(element) || /\S+@\S+\.\S{2,}/.test(value);
     };
 
-})(jQuery);
+}(jQuery));

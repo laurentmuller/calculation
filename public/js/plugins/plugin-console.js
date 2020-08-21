@@ -95,4 +95,5 @@
             return console && console[method];
         }
     };
-})(window);
+
+}(window));

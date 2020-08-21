@@ -136,4 +136,4 @@
         $(e.target).trigger('click.bs.rowlink', [ctrlKey]);
     });
 
-})(jQuery);
+}(jQuery));

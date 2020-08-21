@@ -14,7 +14,7 @@ var SearchHelper = {
      */
     init: function () {
         'use strict';
-        
+
         this.initSearchCustomer();
         this.initSearchProduct();
         this.initSearchUnits();

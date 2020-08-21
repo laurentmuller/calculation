@@ -235,9 +235,9 @@
                 const beginswith = [];
                 const caseSensitive = [];
                 const caseInsensitive = [];
-                let item;
+                let item = items.shift();
 
-                while ((item = items.shift()) !== null) {
+                while (item !== null) {
                     if (!item.toLowerCase().indexOf(this.query.toLowerCase())) {
                         beginswith.push(item);
                     } else if (item.indexOf(this.query) !== -1) {
@@ -245,6 +245,7 @@
                     } else {
                         caseInsensitive.push(item);
                     }
+                    item = items.shift();
                 }
                 return beginswith.concat(caseSensitive, caseInsensitive);
             } else {
@@ -541,4 +542,4 @@
         });
     }(jQuery));
 
-})(jQuery);
+}(jQuery));

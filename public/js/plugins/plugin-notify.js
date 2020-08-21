@@ -619,4 +619,4 @@
         messageClass: null, // the message class
     };
 
-})(window, jQuery);
+}(window, jQuery));

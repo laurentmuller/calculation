@@ -179,6 +179,7 @@ class CalculationController extends AbstractEntityController
         $attributes = [
             'min_margin' => $margin,
             'min_margin_text' => $margin_text,
+            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
         ];
 
         // parameters

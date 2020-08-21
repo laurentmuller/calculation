@@ -631,4 +631,4 @@
         }
     };
 
-})(window, jQuery);
+}(window, jQuery));

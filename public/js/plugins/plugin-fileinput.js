@@ -180,7 +180,8 @@
             const marker = view.getUint16(offset, false);
             offset += 2;
             if (marker === 0xFFE1) {
-                if (view.getUint32(offset += 2, false) !== 0x45786966) {
+                offset += 2;
+                if (view.getUint32(offset, false) !== 0x45786966) {
                     return -1;
                 }
                 const little = view.getUint16(offset += 6, false) === 0x4949;
@@ -360,4 +361,4 @@
         }
     });
 
-})(jQuery);
+}(jQuery));

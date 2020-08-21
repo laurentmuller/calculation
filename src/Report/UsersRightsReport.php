@@ -206,20 +206,6 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
     }
 
     /**
-     * Finds an user by name.
-     *
-     * @param string $name the user name to find
-     *
-     * @return User|null the user, if found; null otherwise
-     */
-    private function findUser(string $name): ?User
-    {
-        return Utils::findFirst($this->users, function (User $user) use ($name) {
-            return $name === $user->getUsername();
-        });
-    }
-
-    /**
      * Gets the cell text for the given rights and attribute.
      *
      * @param array  $rights    the user rights

@@ -1,22 +1,29 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * JQuery extensions
+ * -------------- JQuery extensions --------------
  */
 $.fn.extend({
     
     /**
      * Toogle total cells class.
+     * 
+     * @param {string}
+     *            oldClass the old class.
+     * @param {string}
+     *            newClass the new class.
+     * @return {jQuery} The JQuery element for chaining.
      */
     toggleCell(oldClass, newClass) {
         'use strict';
-                
-        const $that = $(this);
-        const firstClass = oldClass.split(' ')[0];
-        if ($that.hasClass(firstClass)) {
-            $that.toggleClass(oldClass + ' ' + newClass);
-        }
-        return $that;
+        
+         return $(this).each(function () {
+             const $that = $(this);
+             const firstClass = oldClass.split(' ')[0];
+             if ($that.hasClass(firstClass)) {
+                 $that.toggleClass(oldClass + ' ' + newClass);
+             }
+         });
     }
 });
     
@@ -29,6 +36,7 @@ $.fn.extend({
  *            $table - The table to update.
  * @param {boolean}
  *            save - true to save value to the session.
+ * @return {jQuery} The JQuery source element for chaining.
  */
 function toggleHighlight($source, $table, save) {
     'use strict';
@@ -70,6 +78,8 @@ function toggleHighlight($source, $table, save) {
         };
         $.post(url, data);
     }
+    
+    return $source;
 }
 
 /**
@@ -81,6 +91,7 @@ function toggleHighlight($source, $table, save) {
  *            $selector - The popover elements.
  * @param {boolean}
  *            save - true to save value to the session.
+ * @return {jQuery} The JQuery source element for chaining.
  */
 function togglePopover($source, $selector, save) {
     'use strict';
@@ -118,6 +129,8 @@ function togglePopover($source, $selector, save) {
         };
         $.post(url, data);
     }   
+    
+    return $source;
 }
 
 /**

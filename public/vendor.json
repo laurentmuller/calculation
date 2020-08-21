@@ -19,11 +19,17 @@
 			]
 		},
 		{
-			"name": "twitter-bootstrap",
+			"info": "https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.css",
+			"name": "bootstrap",
 			"version": "4.5.2",
+			"source": "https://cdn.jsdelivr.net/npm/",
+			"format": "{source}{name}@{version}/dist/{file}",
+			"target": "twitter-bootstrap",
 			"files": [
-				"js/bootstrap.bundle.js",				
-				"css/bootstrap.css"
+				"js/bootstrap.bundle.js",								
+				"js/bootstrap.bundle.js.map",
+				"css/bootstrap.css",
+				"css/bootstrap.css.map"
 			]
 		},
 		{
@@ -59,7 +65,7 @@
 		},
 		{
 			"name": "highcharts",
-			"version": "8.1.2",
+			"version": "8.2.0",
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/{file}",
 			"files": [

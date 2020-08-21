@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Ready function https://github.com/bassjobsen/Bootstrap-3-Typeahead
+ * Ready function
  */
 (function ($) {
     'use strict';
@@ -27,10 +27,8 @@
         that.sorter = that.options.sorter || that.sorter;
         that.select = that.options.select || that.select;
         that.source = that.options.source || that.source;
-        that.displayField = that.options.displayField || that.displayField;
-        that.valueField = that.options.valueField || that.valueField;
-        that.separator = that.options.separator || that.separator;
-        that.autoSelect = that.options.autoSelect || that.autoSelect;
+        that.displayField = that.options.displayField;
+        that.valueField = that.options.valueField;
 
         if (that.options.ajax) {
             const ajax = that.options.ajax;
@@ -111,12 +109,12 @@
             if ($selectedItem.length) {
                 var item = JSON.parse($selectedItem.data("value"));
                 var text = $selectedItem.text();
-                if (this.options.valueField) {
-                    text = item[this.options.valueField];
+                if (this.valueField) {
+                    text = item[this.valueField];
                 }
                 this.$element.val(text).change();
-                if (this.options.onSelect) {
-                    this.options.onSelect(item);
+                if ($.isFunction(this.onSelect)) {
+                    this.onSelect(item);
                 }
             }
             return this.hide();
@@ -182,7 +180,7 @@
                 this.ajax.xhr.abort();
             }
             const query = this.query;
-            const data = this.ajax.preDispatch ? this.ajax.preDispatch(query) : {
+            const data = $.isFunction(this.ajax.preDispatch) ? this.ajax.preDispatch(query) : {
                 query: query
             };
             this.ajax.xhr = $.getJSON({
@@ -198,7 +196,7 @@
             if (!this.ajax.xhr) {
                 return this;
             }
-            if (this.ajax.preProcess) {
+            if ($.isFunction(this.ajax.preProcess)) {
                 data = this.ajax.preProcess(data);
             }
             // save for selection retreival
@@ -213,8 +211,8 @@
             return this.render(items.slice(0, this.options.items)).show();
         },
         ajaxError: function (jqXHR, textStatus, errorThrown) {
-            if (textStatus !== "abort" && this.options.onError) {
-                this.options.onError(jqXHR, textStatus, errorThrown);
+            if (textStatus !== "abort" && $.isFunction(this.onError)) {
+                this.onError(jqXHR, textStatus, errorThrown);
             }
             return this;
         },
@@ -267,7 +265,7 @@
             const data = [];
             const that = this;
             const separator = that.options.separator;
-            const isStr = that.isString(that.options.displayField);
+            const isStr = that.isString(that.displayField);
 
             // run over items and add separators and categories if applicable
             $.each(items, function (key, value) {
@@ -302,7 +300,7 @@
                 }
                 // item
                 if (that.isObject(item)) {
-                    display = isStr ? item[that.options.displayField] : that.options.displayField(item);
+                    display = isStr ? item[that.displayField] : that.displayField(item);
                 } else {
                     display = item;
                 }
@@ -311,7 +309,7 @@
                 return $(that.options.item).data("value", value).html(html)[0];
             });
 
-            if (that.autoSelect) {
+            if (that.options.autoSelect) {
                 const selector = that.options.selector;
                 items.filter(selector).first().addClass("active");
             }
@@ -323,12 +321,12 @@
             let items;
             let display;
             const that = this;
-            const isStr = that.isString(that.options.displayField);
+            const isStr = that.isString(that.displayField);
 
             if (isStr && data && data.length) {
-                if (data[0].hasOwnProperty(that.options.displayField)) {
+                if (data[0].hasOwnProperty(that.displayField)) {
                     items = $.grep(data, function (item) {
-                        display = isStr ? item[that.options.displayField] : that.options.displayField(item);
+                        display = isStr ? item[that.displayField] : that.displayField(item);
                         return that.matcher(display);
                     });
                 } else if (that.isString(data[0])) {
@@ -366,22 +364,6 @@
             if (prev.length) {
                 prev.addClass("active");
             }
-        },
-        listen: function () {
-            // handle events
-            const that = this;
-            const selector = this.options.selector;
-            that.$element.on("focus", $.proxy(that.focus, that)) //
-            .on("blur", $.proxy(that.blur, that)) //
-            .on("keypress", $.proxy(that.keypress, that)) //
-            .on("keyup", $.proxy(that.keyup, that));
-
-            if (that.eventSupported("keydown")) {
-                that.$element.on("keydown", $.proxy(that.keydown, that));
-            }
-            that.$menu.on("click", $.proxy(that.click, that)) //
-            .on("mouseenter", selector, $.proxy(that.mouseenter, that)) // 
-            .on("mouseleave", selector, $.proxy(that.mouseleave, that));
         },
         move: function (e) {
             const that = this;
@@ -476,22 +458,44 @@
                 this.hide();
             }
         },
-        destroy: function () {
-            // remove handle events
-            const selector = this.options.selector;
-            this.$element.off("focus", $.proxy(this.focus, this))//
-            .off("blur", $.proxy(this.blur, this))//
-            .off("keypress", $.proxy(this.keypress, this))//
-            .off("keyup", $.proxy(this.keyup, this));
-
+        listen: function () {
+            // add element handlers
+            const $element = this.$element;
+            $element.on("focus", $.proxy(this.focus, this));
+            $element.on("blur", $.proxy(this.blur, this));
+            $element.on("keypress", $.proxy(this.keypress, this));
+            $element.on("keyup", $.proxy(this.keyup, this));
             if (this.eventSupported("keydown")) {
-                this.$element.off("keydown", $.proxy(this.keydown, this));
+                $element.on("keydown", $.proxy(this.keydown, this));
             }
-            this.$menu.off("click", $.proxy(this.click, this)) //
-            .off("mouseenter", selector, $.proxy(this.mouseenter, this)) //
-            .off("mouseleave", selector, $.proxy(this.mouseleave, this));
 
-            this.$element.removeData("typeahead");
+            // add menu handlers
+            const $menu = this.$menu;
+            const selector = this.options.selector;
+            $menu.on("click", $.proxy(this.click, this));
+            $menu.on("mouseenter", selector, $.proxy(this.mouseenter, this));
+            $menu.on("mouseleave", selector, $.proxy(this.mouseleave, this));
+        },
+        destroy: function () {
+            // remove element handlers
+            const $element = this.$element;
+            $element.off("focus", $.proxy(this.focus, this));
+            $element.off("blur", $.proxy(this.blur, this));
+            $element.off("keypress", $.proxy(this.keypress, this));
+            $element.off("keyup", $.proxy(this.keyup, this));
+            if (this.eventSupported("keydown")) {
+                $element.off("keydown", $.proxy(this.keydown, this));
+            }
+
+            // remove menu handlers
+            const $menu = this.$menu;
+            const selector = this.options.selector;
+            $menu.off("click", $.proxy(this.click, this));
+            $menu.off("mouseenter", selector, $.proxy(this.mouseenter, this));
+            $menu.off("mouseleave", selector, $.proxy(this.mouseleave, this));
+
+            // remove data
+            $element.removeData("typeahead");
         }
     };
 
@@ -530,11 +534,10 @@
     (function ($) {
         $("body").on("focus.typeahead.data-api", "[data-provide='typeahead']", function (e) {
             const $this = $(this);
-            if ($this.data("typeahead")) {
-                return;
+            if (!$this.data("typeahead")) {
+                $this.typeahead($this.data());
+                e.preventDefault();
             }
-            e.preventDefault();
-            $this.typeahead($this.data());
         });
     }(jQuery));
 

@@ -162,7 +162,7 @@
         },
 
         /**
-         * Sets the given class to the element.
+         * Sets the given attribute class name to the element.
          * 
          * @param {string}
          *            className - The class name to set.
@@ -305,18 +305,18 @@
          * @return {int} The value if the value parameter is not set.
          */
         intVal: function (value) {
+            // get?
             if (!arguments.length) {
-                // get
                 const parsedValue = Number.parseInt($(this).val(), 10);
                 return isNaN(parsedValue) ? 0 : parsedValue;
-            } else {
-                // set
-                let parsedValue = Number.parseInt(value, 10);
-                if (isNaN(parsedValue) || parsedValue === -0) {
-                    parsedValue = Number.parseInt(0, 10);
-                }
-                return $(this).val(parsedValue.toString());
             }
+
+            // set
+            let parsedValue = Number.parseInt(value, 10);
+            if (isNaN(parsedValue) || parsedValue === -0) {
+                parsedValue = Number.parseInt(0, 10);
+            }
+            return $(this).val(parsedValue.toString());
         },
 
         /**
@@ -328,18 +328,18 @@
          * @return {number} The value if the value parameter is not set.
          */
         floatVal: function (value) {
+            // get?
             if (!arguments.length) {
-                // get
                 const parsedValue = Number.parseFloat($(this).val());
                 return isNaN(parsedValue) ? 0 : parsedValue;
-            } else {
-                // set
-                let parsedValue = Number.parseFloat(value);
-                if (isNaN(parsedValue) || parsedValue === -0) {
-                    parsedValue = Number.parseFloat(0);
-                }
-                return $(this).val(parsedValue.toFixed(2));
             }
+
+            // set
+            let parsedValue = Number.parseFloat(value);
+            if (isNaN(parsedValue) || parsedValue === -0) {
+                parsedValue = Number.parseFloat(0);
+            }
+            return $(this).val(parsedValue.toFixed(2));
         },
 
         /**
@@ -474,8 +474,11 @@
          * Get the descendants of each element in the current set of matched
          * elements, filtered by a selector, jQuery object, or element.
          * 
-         * Return {JQuery} the selected element or null if matching elements
-         * length is equal to 0.
+         * @param {string}
+         *            selector - a string containing a selector expression to
+         *            match elements against.
+         * @return {JQuery} the selected element or null if matching elements
+         *         length is equal to 0.
          */
         findExists: function (selector) {
             const $elements = $(this).find(selector);
@@ -483,7 +486,7 @@
         },
 
         /**
-         * Remove all 'data-xxx' attributes.
+         * Remove all 'data' attributes.
          * 
          * @return {jQuery} The JQuery element for chaining.
          */

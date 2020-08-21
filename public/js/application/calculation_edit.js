@@ -9,19 +9,23 @@ var SearchHelper = {
 
     /**
      * Initialize type ahead searches.
+     * 
+     * @return {SearchHelper} this instance for chaining.
      */
     init: function () {
         'use strict';
-
+        
         this.initSearchCustomer();
         this.initSearchProduct();
         this.initSearchUnits();
+        
+        return this;
     },
 
     /**
      * Initialize the type ahead search customers.
      * 
-     * @return {Object} The type ahead instance.
+     * @return {Typeahead} The type ahead instance.
      */
     initSearchCustomer: function () {
         'use strict';
@@ -36,7 +40,7 @@ var SearchHelper = {
     /**
      * Initialize the type ahead search products.
      * 
-     * @return {Object} The type ahead instance.
+     * @return {Typeahead} The type ahead instance.
      */
     initSearchProduct: function () {
         'use strict';
@@ -74,7 +78,7 @@ var SearchHelper = {
     /**
      * Initialize the type ahead search product units.
      * 
-     * @return {Object} The type ahead instance.
+     * @return {Typeahead} The type ahead instance.
      */
     initSearchUnits: function () {
         'use strict';
@@ -226,12 +230,14 @@ var MoveRowHandler = {
 var Application = {
 
     /**
-     * Initialize.
+     * Initialize application.
+     * 
+     * @return {Application} This application instance for chaining.
      */
     init: function () {
         'use strict';
 
-        this.initDragDrop(false).initMenus();
+        return this.initDragDrop(false).initMenus();
     },
 
     /**
@@ -239,6 +245,7 @@ var Application = {
      * 
      * @param {boolean}
      *            destroy - true to destroy the existing sortable.
+     * @return {Application} This application instance for chaining.
      */
     initDragDrop: function (destroy) {
         'use strict';
@@ -276,6 +283,8 @@ var Application = {
 
     /**
      * Initialize the edit dialog.
+     * 
+     * @return {Application} This application instance for chaining.
      */
     initItemDialog: function () {
         'use strict';
@@ -353,6 +362,8 @@ var Application = {
 
     /**
      * Initialize group and item menus.
+     * 
+     * @return {Application} This application instance for chaining.
      */
     initMenus: function () {
         'use strict';
@@ -436,6 +447,8 @@ var Application = {
 
     /**
      * Update the total of the line in the item dialog.
+     * 
+     * @return {Application} This application instance for chaining.
      */
     updateItemLine: function () {
         'use strict';
@@ -445,10 +458,14 @@ var Application = {
         const quantity = $('#item_quantity').floatVal();
         const total = that.toLocaleString(price * quantity);
         $('#item_total').val(total);
+        
+        return that;
     },
 
     /**
      * Update the move up/down buttons.
+     * 
+     * @return {Application} This application instance for chaining.
      */
     updateUpDownButton: function () {
         'use strict';
@@ -484,7 +501,7 @@ var Application = {
      * @param {boolean}
      *            adjust - true to adjust the user margin.
      * 
-     * @return {Object} this instance.
+     * @return {Application} This application instance for chaining.
      */
     updateTotals: function (adjust) {
         'use strict';
@@ -567,7 +584,7 @@ var Application = {
      * @param {string}
      *            message - the error message to display.
      * 
-     * @return {Object} this instance.
+     * @return {Application} This application instance for chaining.
      */
     disable: function (message) {
         'use strict';
@@ -657,6 +674,8 @@ var Application = {
 
     /**
      * Sort all items.
+     * 
+     * @return {Application} This application instance for chaining.
      */
     sortItems: function () {
         'use strict';
@@ -674,6 +693,7 @@ var Application = {
      * 
      * @param {JQuery}
      *            $element - the caller element (button or tbody).
+     * @return {Application} This application instance for chaining.
      */
     sortGroupItems: function ($element) {
         'use strict';
@@ -716,6 +736,8 @@ var Application = {
 
     /**
      * Sort groups by name.
+     * 
+     * @return {Application} This application instance for chaining.
      */
     sortGroups: function () {
         'use strict';
@@ -735,7 +757,7 @@ var Application = {
      * 
      * @param {Object}
      *            group - the group data used to update row.
-     * @returns {JQuery} - the appended goup.
+     * @returns {JQuery} - the appended group.
      */
     appendGroup: function (group) {
         'use strict';
@@ -763,7 +785,7 @@ var Application = {
      * Display the add item dialog.
      * 
      * @param {JQuery}
-     *            $source - the object that triggered the event.
+     *            $source - the caller element (normally a button).
      */
     showAddDialog: function ($source) {
         'use strict';
@@ -790,18 +812,18 @@ var Application = {
     },
 
     /**
-     * Handles the edit item event.
+     * Display the edit item dialog.
      * 
      * This function copy the element to the dialog and display it.
      * 
      * @param {JQuery}
-     *            $element - the caller element (button).
+     *            $source - the caller element (normally a button).
      */
-    showEditDialog: function ($element) {
+    showEditDialog: function (source) {
         'use strict';
 
         // row
-        const $row = $element.getParentRow();
+        const $row = source.getParentRow();
 
         // initialize
         this.initItemDialog();
@@ -827,7 +849,8 @@ var Application = {
      * Remove a calculation group.
      * 
      * @param {JQuery}
-     *            $element - the caller element (button).
+     *            $element - the caller element (normally a button).
+     * @return {Application} This application instance for chaining.
      */
     removeGroup: function ($element) {
         'use strict';
@@ -836,6 +859,7 @@ var Application = {
         $element.closest('tbody').removeFadeOut(function () {
             that.updateUpDownButton().updateTotals().initDragDrop(true);
         });
+        return that;
     },
 
     /**
@@ -843,6 +867,7 @@ var Application = {
      * 
      * @param {JQuery}
      *            $element - the caller element (button).
+     * @return {Application} This application instance for chaining.
      */
     removeItem: function ($element) {
         'use strict';
@@ -859,6 +884,7 @@ var Application = {
         $row.removeFadeOut(function () {
             that.updateUpDownButton().updateTotals().initDragDrop(true);
         });
+        return that;
     },
 
     /**
@@ -1030,7 +1056,8 @@ $.fn.extend({
         'use strict';
         const $input = $(this).find('input:first');
         const values = $input.attr('id').split('_');
-        return Number.parseInt(values[values.length - 2], 10);
+        const value = Number.parseInt(values[values.length - 2], 10);
+        return isNaN(value) ? - 1 : value;
     },
     
     /**
@@ -1092,8 +1119,8 @@ $.fn.extend({
      * Fade out and remove the selected element.
      * 
      * @param {Function}
-     *            callback - the function to call after the element is removed.
-     * @return null
+     *            callback - the optional function to call after the element is
+     *            removed.
      */
     removeFadeOut: function (callback) {
         'use strict';
@@ -1105,7 +1132,6 @@ $.fn.extend({
                 callback();
             }
         });
-        return null;
     },
 
     /**
@@ -1174,11 +1200,9 @@ $.fn.extend({
     /**
      * Copy the values of the item to the current row.
      * 
-     * @param {JQuery}
-     *            row - the row to update.
      * @param {Object}
      *            item - the item to get values from.
-     * @returns {JQuery} - The row.
+     * @returns {JQuery} - The updated row.
      */
     updateRow: function (item) {
         'use strict';
@@ -1208,7 +1232,7 @@ $.fn.extend({
      * @param {Object}
      *            options - the options to override.
      * 
-     * @return {Object} The type ahead instance.
+     * @return {Typeahead} The type ahead instance.
      */
     initSearch: function (options) {
         'use strict';

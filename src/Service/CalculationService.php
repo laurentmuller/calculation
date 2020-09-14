@@ -356,7 +356,7 @@ final class CalculationService
     private function getGlobalMargin(float $amount): float
     {
         if ($amount) {
-            /** var App\Repository\GlobalMarginRepository $repository */
+            /** @var \App\Repository\GlobalMarginRepository $repository */
             $repository = $this->manager->getRepository(GlobalMargin::class);
 
             return (float) $repository->getMargin($amount);

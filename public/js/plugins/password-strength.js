@@ -209,7 +209,7 @@
                 return null;
             }
 
-            // get vedict container
+            // get label container
             const $labelContainer = $container.findExists(options.labelContainer) || options.labelContainer;
             if (!($labelContainer && $labelContainer.length === 1)) {
                 return null;

@@ -55,6 +55,8 @@ class StrengthValidator extends AbstractConstraintValidator
 
     /**
      * {@inheritdoc}
+     *
+     * @param Strength $constraint
      */
     protected function doValidate($value, Constraint $constraint): void
     {

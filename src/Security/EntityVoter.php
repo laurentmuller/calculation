@@ -240,6 +240,9 @@ class EntityVoter extends Voter implements EntityVoterInterface
 
         // check entity name
         $name = self::getEntityName($subject);
+        if (self::ENTITY_LOG === $name) {
+            return true;
+        }
         if (!\array_key_exists($name, self::ENTITY_OFFSETS)) {
             return false;
         }
@@ -271,8 +274,13 @@ class EntityVoter extends Voter implements EntityVoterInterface
             return  true;
         }
 
-        // get offset
+        // special case for Log entity
         $name = self::getEntityName($subject);
+        if (self::ENTITY_LOG === $name) {
+            return true;
+        }
+
+        // get offset
         $offset = self::getEntityOffset($name);
         if (self::INVALID_VALUE === $offset) {
             return false;

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\RoleInterface;
+use App\Traits\DateFormatterTrait;
 use App\Traits\RightsTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -35,6 +36,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class User extends AbstractEntity implements UserInterface, RoleInterface, ResetPasswordRequestInterface
 {
+    use DateFormatterTrait;
     use RightsTrait;
 
     /**

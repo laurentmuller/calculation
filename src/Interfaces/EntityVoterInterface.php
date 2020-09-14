@@ -82,6 +82,11 @@ interface EntityVoterInterface
     public const ENTITY_GLOBAL_MARGIN = 'EntityGlobalMargin';
 
     /**
+     * The log rights.
+     */
+    public const ENTITY_LOG = 'EntityLog';
+
+    /**
      * The product rights.
      */
     public const ENTITY_PRODUCT = 'EntityProduct';

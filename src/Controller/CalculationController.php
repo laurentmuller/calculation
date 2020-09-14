@@ -862,7 +862,7 @@ class CalculationController extends AbstractEntityController
      */
     private function getCategories(): array
     {
-        /** var App\Repository\CategoryRepository $repository */
+        /** @var \App\Repository\CategoryRepository $repository */
         $repository = $this->getManager()->getRepository(Category::class);
 
         return $repository->getList();

@@ -228,6 +228,17 @@ class SwissPostService
             ];
         }
 
+        // file name
+        $name = $this->sourceName ?? \basename($this->sourceFile);
+
+        // same as current database?
+        if (0 === \strcasecmp($this->sourceFile, $this->getDatabaseName())) {
+            return [
+                'valid' => false,
+                'message' => $this->trans('import.error.open_database'),
+            ];
+        }
+
         $db = null;
         $archive = null;
         $stream = null;
@@ -235,28 +246,13 @@ class SwissPostService
         $valid = false;
 
         try {
-            // file name
-            $name = $this->sourceName ?? \basename($this->sourceFile);
-
-            // same as current database?
-            if (0 === \strcasecmp($this->sourceFile, $this->getDatabaseName())) {
-                return [
-                    'valid' => $valid,
-                    'message' => $this->trans('import.error.open_database'),
-                ];
-            }
-
-            // open database
-            $db = new SwissDatabase($tempName);
-            $db->beginTransaction();
-
             // open archive
             $archive = new \ZipArchive();
             if (true !== $opened = $archive->open($this->sourceFile)) {
                 $opened = false;
 
                 return [
-                    'valid' => $valid,
+                    'valid' => false,
                     'message' => $this->trans('import.error.open_archive', ['%name%' => $name]),
                 ];
             }
@@ -264,7 +260,7 @@ class SwissPostService
             // check file
             if (1 !== $archive->count()) {
                 return [
-                    'valid' => $valid,
+                    'valid' => false,
                     'message' => $this->trans('import.error.entry_not_one', ['%name%' => $name]),
                 ];
             }
@@ -275,13 +271,17 @@ class SwissPostService
             // open entry
             if (false === $stream = $archive->getStream($streamName)) {
                 return [
-                    'valid' => $valid,
+                    'valid' => false,
                     'message' => $this->trans('import.error.open_stream', [
                         '%name%' => $name,
                         '%streamName%' => $streamName,
                     ]),
                 ];
             }
+
+            // open database
+            $db = new SwissDatabase($tempName);
+            $db->beginTransaction();
 
             /** @var \DateTime|null $validity */
             $validity = null;
@@ -364,7 +364,7 @@ class SwissPostService
             // validity?
             if (!$validity) {
                 return [
-                    'valid' => $valid,
+                    'valid' => false,
                     'message' => $this->trans('import.error.no_validity', ['%name%' => $name]),
                 ];
             }
@@ -372,7 +372,7 @@ class SwissPostService
             // imported data?
             if (0 === $validCities || 0 === $validStreets) {
                 return [
-                    'valid' => $valid,
+                    'valid' => false,
                     'message' => $this->trans('import.error.empty_archive', ['%name%' => $name]),
                 ];
             }

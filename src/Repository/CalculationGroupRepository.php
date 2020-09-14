@@ -16,8 +16,8 @@ namespace App\Repository;
 
 use App\Entity\CalculationGroup;
 use App\Entity\Category;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Repository for calculation group entity.

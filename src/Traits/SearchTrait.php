@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use Symfony\Component\String\AbstractUnicodeString;
 use Symfony\Component\String\UnicodeString;
 
 /**
@@ -53,7 +54,7 @@ trait SearchTrait
     /**
      * Converts the given string to ASCII transliteration.
      */
-    private function ascii(string $value): UnicodeString
+    private function ascii(string $value): AbstractUnicodeString
     {
         return (new UnicodeString($value))->ascii();
     }
@@ -61,7 +62,7 @@ trait SearchTrait
     /**
      * Converts the given string to ASCII transliteration and ignore case.
      */
-    private function ignoreCase(string $value): UnicodeString
+    private function ignoreCase(string $value): AbstractUnicodeString
     {
         return $this->ascii($value)->ignoreCase();
     }

@@ -233,6 +233,14 @@ class LogDataTable extends AbstractDataTable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function createSessionPrefix(): string
+    {
+        return Utils::getShortName(Log::class);
+    }
+
+    /**
      * Filters the log.
      *
      * @param Log[]  $logs        the logs to search in

@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CategoryMargin;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Repository for category margin entity.

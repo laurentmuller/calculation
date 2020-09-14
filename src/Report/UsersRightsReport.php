@@ -193,7 +193,7 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
         $builder = new PdfGroupTableBuilder($this);
         $style = PdfStyle::getCellStyle()->setFontBold();
 
-        return $builder->setGroupStyle($style)
+        $builder->setGroupStyle($style)
             ->setGroupListener($this)
             ->addColumn(PdfColumn::left($this->trans('user.rights.table_title'), 50))
             ->addColumn(PdfColumn::center($this->trans('rights.list'), 25, true))
@@ -203,6 +203,8 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
             ->addColumn(PdfColumn::center($this->trans('rights.delete'), 25, true))
             ->addColumn(PdfColumn::center($this->trans('rights.pdf'), 25, true))
             ->outputHeaders();
+
+        return $builder;
     }
 
     /**

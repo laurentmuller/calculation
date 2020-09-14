@@ -16,8 +16,8 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Repository for category entity.

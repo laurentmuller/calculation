@@ -181,9 +181,6 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
 
     /**
      * Draws the left border if applicable.
-     *
-     * @param string $level
-     * @param mixed  $border
      */
     private function drawBorder(PdfTableBuilder $builder, ?string $level, PdfRectangle $bounds, $border): bool
     {
@@ -261,7 +258,10 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
             }
         }
 
-        return $this->colors[$level];
+        /** @var ?PdfDrawColor $color */
+        $color = $this->colors[$level];
+
+        return $color;
     }
 
     /**

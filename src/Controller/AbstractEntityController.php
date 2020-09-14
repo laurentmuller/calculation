@@ -260,13 +260,17 @@ abstract class AbstractEntityController extends AbstractController
 
     /**
      * Gets the repository for the given manager.
+     *
      * This function use the class name given at the constructor.
      *
      * @return \App\Repository\AbstractRepository the repository
      */
     protected function getRepository(): AbstractRepository
     {
-        return $this->getManager()->getRepository($this->className);
+        /** @var AbstractRepository $repository */
+        $repository = $this->getManager()->getRepository($this->className);
+
+        return $repository;
     }
 
     /**

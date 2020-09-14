@@ -30,6 +30,9 @@
 
         /**
          * Initialize the password strength.
+         * 
+         * @param {Object}
+         *            options - The optional options.
          */
         initPasswordStrength: function (options) {
             return this.each(function () {
@@ -58,8 +61,9 @@
                 // default options
                 const defaults = {
                     container: $container,
+                    // labelContainer: $container,
                     progressContainer: $container,
-                    verdictKeys: $.validator.messages.password_levels,
+                    verdictKeys: $.validator.messages.passwordLevels,
                     onUpdateUI: function (verdict) {
                         // update style
                         let left = 0;

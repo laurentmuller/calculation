@@ -226,7 +226,10 @@ abstract class AbstractController extends BaseController
      */
     protected function getManager(): EntityManagerInterface
     {
-        return $this->getDoctrine()->getManager();
+        /** @var EntityManagerInterface $manager */
+        $manager = $this->getDoctrine()->getManager();
+
+        return $manager;
     }
 
     /**

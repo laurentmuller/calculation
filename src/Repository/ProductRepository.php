@@ -16,9 +16,9 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Repository for product entity.

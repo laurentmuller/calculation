@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CalculationItem;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Repository for calculation item entity.

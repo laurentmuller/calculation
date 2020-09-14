@@ -1,11 +1,13 @@
+includes:
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon    
 parameters:
     level: 3
     paths:
     - src
     doctrine:
         repositoryClass: App\Repository\AbstractRepository
+    scanFiles:
+    - vendor/twig/twig/src/Extension/CoreExtension.php
     ignoreErrors:
-    - '#Function twig_date_converter#'
-    - '#Call to an undefined method#'
-    - '#Access to an undefined property#'
-    - /Method.*should return.*but returns.*/
+    - '#PdfTableBuilder::addDescription#'
+    - '#catchPhrase#'

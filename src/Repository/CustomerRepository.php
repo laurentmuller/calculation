@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Customer;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Repository for customer entity.

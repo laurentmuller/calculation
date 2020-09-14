@@ -88,7 +88,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * The default implementation returns the alias and the field separated by a dot ('.') character.
      *
      * @param string $field the field name
-     * @param string $alias the default entity alias
+     * @param string $alias the entity alias
      *
      * @return string|string[] one on more database search fields
      */
@@ -100,19 +100,20 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Creates a search query.
      *
-     * @param array $sortedFields the sorted fields where key is the field name and value is the sort mode ("ASC" or "DESC")
+     * @param array  $sortedFields the sorted fields where key is the field name and value is the sort mode ("ASC" or "DESC")
+     * @param string $alias        the entity alias
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
      */
-    public function getSearchQuery(array $sortedFields = []): Query
+    public function getSearchQuery(array $sortedFields = [], string $alias = self::DEFAULT_ALIAS): Query
     {
         // builder
-        $builder = $this->createDefaultQueryBuilder();
+        $builder = $this->createDefaultQueryBuilder($alias);
 
         // order by clause
         if (!empty($sortedFields)) {
             foreach ($sortedFields as $name => $order) {
-                $fields = (array) $this->getSortFields($name);
+                $fields = (array) $this->getSortFields($name, $alias);
                 foreach ($fields as $field) {
                     $builder->addOrderBy($field, $order);
                 }
@@ -129,7 +130,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * The default implementation returns the alias and the field separated by a dot ('.') character.
      *
      * @param string $field the field name
-     * @param string $alias the default entity alias
+     * @param string $alias the entity alias
      *
      * @return string|string[] one on more database sort fields
      */

@@ -552,7 +552,10 @@ class ApplicationService implements ApplicationServiceInterface
      */
     private function getRepository(): PropertyRepository
     {
-        return $this->manager->getRepository(Property::class);
+        /** @var PropertyRepository $repository */
+        $repository = $this->manager->getRepository(Property::class);
+
+        return $repository;
     }
 
     /**

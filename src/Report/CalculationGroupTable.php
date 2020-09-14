@@ -115,10 +115,13 @@ class CalculationGroupTable extends PdfGroupTableBuilder
      */
     protected function addAmount(float $amount, ?PdfStyle $errorStyle): self
     {
+        /** @var CalculationReport $parent */
+        $parent = $this->parent;
+        $text = $parent->localeAmount($amount);
         $style = empty($amount) ? $errorStyle : null;
-        $text = $this->parent->localeAmount($amount);
+        $this->add($text, 1, $style);
 
-        return $this->add($text, 1, $style);
+        return $this;
     }
 
     /**
@@ -132,8 +135,9 @@ class CalculationGroupTable extends PdfGroupTableBuilder
     protected function addDescription(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): self
     {
         $style = \in_array($item, $duplicateItems, true) ? $errorStyle : $defaultStyle;
+        $this->add($item->getDescription(), 1, $style);
 
-        return $this->add($item->getDescription(), 1, $style);
+        return $this;
     }
 
     /**

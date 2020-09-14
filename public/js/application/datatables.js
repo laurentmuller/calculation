@@ -295,7 +295,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
         const valueKey = 'search[' + i + '][value]';
         const index = params.getOrDefault(indexKey, null);
         const value = params.getOrDefault(valueKey, null);
-        if (index && value) {
+        if (index !== null && value !== null) {
             searchCols[index] = {
                 "search": value
             };

@@ -24,9 +24,9 @@ use App\Entity\Product;
 use App\Service\ApplicationService;
 use App\Service\CalculationService;
 use App\Tests\DatabaseTrait;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 

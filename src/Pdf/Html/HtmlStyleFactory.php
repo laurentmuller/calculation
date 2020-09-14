@@ -68,17 +68,23 @@ final class HtmlStyleFactory
             case 'u':
                 return self::default()->underline(true);
             case 'code':
-                return self::default()
-                    ->setTextColor(PdfTextColor::red())
+                $result = self::default();
+                $result->setTextColor(PdfTextColor::red())
                     ->setFontName(PdfFont::NAME_COURIER);
+
+                return $result;
             case 'var':
-                return self::default()
-                    ->setFontName(PdfFont::NAME_COURIER)
+                $result = self::default();
+                $result->setFontName(PdfFont::NAME_COURIER)
                     ->setFontItalic();
+
+                return $result;
             case 'samp':
             case 'kbd':
-                return self::default()
-                    ->setFontName(PdfFont::NAME_COURIER);
+                $result = self::default();
+                $result->setFontName(PdfFont::NAME_COURIER);
+
+                return $result;
             default:
                 return null;
         }
@@ -108,9 +114,11 @@ final class HtmlStyleFactory
             ->setStyle($bold ? PdfFont::STYLE_BOLD : PdfFont::STYLE_REGULAR)
             ->setSize($size);
 
-        return self::default()
-            ->setBottomMargin($bottomMargin)
+        $result = self::default();
+        $result->setBottomMargin($bottomMargin)
             ->setLeftMargin($leftMargin)
             ->setFont($font);
+
+        return $result;
     }
 }

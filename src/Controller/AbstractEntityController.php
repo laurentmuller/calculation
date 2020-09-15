@@ -52,15 +52,6 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * Raised after the given entity is deleted.
-     *
-     * @param AbstractEntity $item the deleted entity
-     */
-    protected function afterDeleteEntity(AbstractEntity $item): void
-    {
-    }
-
-    /**
      * Throws an exception unless the given attribute is granted against
      * the current authentication token and this entity class name.
      *
@@ -79,12 +70,12 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @param request        $request    the request
      * @param AbstractEntity $item       the entity to delete
-     * @param array          $parameters the delete parameters. The following keys may be added:
+     * @param array          $parameters the delete parameters. The following optional keys may be added:
      *                                   <ul>
-     *                                   <li><code>title</code> : the dialog title (optional).</li>
-     *                                   <li><code>message</code> : the dialog message (optional).</li>
-     *                                   <li><code>success</code> : the message to display on success (optional).</li>
-     *                                   <li><code>failure</code> : the message to display on failure (optional).</li>
+     *                                   <li><code>title</code> : the dialog title.</li>
+     *                                   <li><code>message</code> : the dialog message.</li>
+     *                                   <li><code>success</code> : the message to display on success.</li>
+     *                                   <li><code>failure</code> : the message to display on failure.</li>
      *                                   </ul>
      */
     protected function deleteEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
@@ -103,10 +94,7 @@ abstract class AbstractEntityController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // remove
-                $em = $this->getManager();
-                $em->remove($item);
-                $em->flush();
-                $this->afterDeleteEntity($item);
+                $this->deleteFromDatabase($item);
 
                 // message
                 $message = Utils::getArrayValue($parameters, 'success', 'common.delete_success');
@@ -143,6 +131,18 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
+     * This function delete the given entity from the database.
+     *
+     * @param AbstractEntity $item the entity to delete
+     */
+    protected function deleteFromDatabase(AbstractEntity $item): void
+    {
+        $em = $this->getManager();
+        $em->remove($item);
+        $em->flush();
+    }
+
+    /**
      * Edit an entity.
      *
      * @param request        $request    the request
@@ -164,15 +164,8 @@ abstract class AbstractEntityController extends AbstractController
         $type = $this->getEditFormType();
         $form = $this->createForm($type, $item);
         if ($this->handleRequestForm($request, $form)) {
-            // update
-            if ($this->updateEntity($item)) {
-                // save
-                $em = $this->getManager();
-                if ($isNew) {
-                    $em->persist($item);
-                }
-                $em->flush();
-            }
+            // save
+            $this->saveToDatabase($item);
 
             // message
             if ($isNew) {
@@ -284,18 +277,6 @@ abstract class AbstractEntityController extends AbstractController
     abstract protected function getTableTemplate(): string;
 
     /**
-     * Gets the translated class name.
-     *
-     * @return string the translated class name
-     */
-    protected function getTranslatedClassName(): ?string
-    {
-        $className = Utils::getShortName($this->className);
-
-        return $this->trans(\strtolower($className) . '.name');
-    }
-
-    /**
      * Render the entities as card.
      *
      * @param Request $request    the request
@@ -395,6 +376,22 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
+     * This function save the given entity to the database.
+     *
+     * Derived class can compute values and update entity.
+     *
+     * @param AbstractEntity $item the entity to save
+     */
+    protected function saveToDatabase(AbstractEntity $item): void
+    {
+        $em = $this->getManager();
+        if ($item->isNew()) {
+            $em->persist($item);
+        }
+        $em->flush();
+    }
+
+    /**
      * Show properties of an entity.
      *
      * @param AbstractEntity $item       the entity to show
@@ -412,19 +409,5 @@ abstract class AbstractEntityController extends AbstractController
 
         // render
         return $this->render($this->getShowTemplate(), $parameters);
-    }
-
-    /**
-     * This function is called before an entity is saved to the database.
-     *
-     * Derived class can compute values and update entity.
-     *
-     * @param AbstractEntity $item the entity to be saved
-     *
-     * @return bool true if updated successfully; false to not save entity to the database
-     */
-    protected function updateEntity(AbstractEntity $item): bool
-    {
-        return true;
     }
 }

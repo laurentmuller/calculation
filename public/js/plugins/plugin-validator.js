@@ -291,7 +291,7 @@
             // concat values
             const plugins = 'autolink lists link image table paste ' + (options.plugins || '');
             const toolbar = 'styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent |' + (options.toolbar || '');
-            const help_tabs = ['shortcuts'].concat(options.help_tabs || []);
+            const help_tabs = ['shortcuts'].concat(options.help_tabs || []); // eslint-disable-line camelcase
             
             // remove
             if (options) {
@@ -307,12 +307,12 @@
                 elementpath: false,
                 branding: false,                
                 language: 'fr_FR',
-                min_height: 150,
-                max_height: 500,
+                min_height: 150, // eslint-disable-line camelcase
+                max_height: 500, // eslint-disable-line camelcase
                 height: 250,
                 plugins: plugins.trim(),
                 toolbar: toolbar.trim(),
-                help_tabs: help_tabs,                
+                help_tabs: help_tabs, // eslint-disable-line camelcase                
                 setup: function(editor) {
                     editor.on('init', function() {
                         const $container = $(editor.getContainer());
@@ -349,7 +349,7 @@
             // focus
             if (settings.focus) {
                 delete settings.focus;
-                settings.auto_focus = $this.attr('id');
+                settings.auto_focus = $this.attr('id'); // eslint-disable-line camelcase
             }
 
             // initialize

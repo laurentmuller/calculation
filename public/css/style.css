@@ -577,24 +577,23 @@ span.color-value {
 /**
  * color-picker
  */
+.color-picker .dropdown-menu {
+    padding-top: 0.25rem;
+}
 .color-picker .color-palette {
     display: table;
     white-space: nowrap;
     margin-left: 0.25rem;
     margin-right: 0.25rem;
 }
-.color-picker .color-row {
-    height: 22px;
-}
 .color-picker .color-button {
     width: 20px;
     height: 20px;
-    padding: 0;
-    margin: 1px;
-    border: 1px solid var(--white);
+    margin: 2px;
+    border-radius: 0;
 }
 .color-picker .color-button:hover {
-    border-color: var(--dark);
+    outline: solid var(--primary);
 }
 .color-picker.dropdown.form-control {
     height: auto;
@@ -624,6 +623,9 @@ span.color-value {
     flex: 1 1 auto;
 }
 
+/**
+ * widths
+ */
 .w-15 {
     width: 15% !important;
 }

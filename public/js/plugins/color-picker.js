@@ -123,18 +123,18 @@
             const options = that.options;
 
             // get tooltip options
-            const display = options.tooltip_display;
-            const content = options.tooltip_content;
+            const display = options.tooltipDisplay;
+            const content = options.tooltipContent;
 
             // default buttons options
             let buttonOptions = {
                 'type': 'button',
-                'class': 'color-button',
+                'class': 'btn color-button',
             };
             if (display) {
                 buttonOptions['data-toggle'] = 'tooltip';
-                buttonOptions['data-trigger'] = options.tooltip_trigger;
-                buttonOptions['data-placement'] = options.tooltip_placement;
+                buttonOptions['data-trigger'] = options.tooltipTrigger;
+                buttonOptions['data-placement'] = options.tooltipPlacement;
             }
 
             // palette
@@ -169,7 +169,7 @@
             // custom button
             that.$customButton = $('<button/>', {
                 'type': 'button',
-                'text': options.advanced_text,
+                'text': options.advancedText,
                 'class': 'btn btn-sm btn-outline-secondary mt-1 w-100'
             }).appendTo(that.$palette);
 
@@ -178,7 +178,7 @@
 
             // tooltip
             if (display) {
-                that.$palette.find('.color-button').tooltip();
+                that.findButton('.color-button').tooltip();
             }
 
             // add handlers
@@ -222,18 +222,10 @@
             const value = (this.$element.val() || '').toUpperCase();
 
             // find button
-            let found = false;
-            this.$palette.find('.color-button').each(function () {
-                const $button = $(this);
-                if ($button.data('value') === value) {
-                    $button.focus();
-                    found = true;
-                    return false;
-                }
-            });
-
-            // select first
-            if (!found) {
+            const $button = this.findButton('.color-button[data-value="' + value + '"]:first');
+            if ($button) {
+                $button.focus();
+            } else {
                 this.setSelection({
                     col: 0,
                     row: 0
@@ -266,9 +258,9 @@
          */
         onColorButtonClick: function ($button, e) {
             e.preventDefault();
-            const oldValue = this.$element.val().toLowerCase();
-            const newValue = $button.data('value').toLowerCase();
-            if (oldValue !== newValue) {
+            const oldValue = this.$element.val();
+            const newValue = $button.data('value');
+            if (!newValue.equalsIgnoreCase(oldValue)) {
                 this.$element.val(newValue);
                 this.$element.trigger('input');
             }
@@ -374,8 +366,8 @@
          */
         getSelection: function ($button) {
             // find focus
-            const $focused = this.$palette.find('.color-button:focus');
-            if ($focused.length) {
+            const $focused = this.findButton('.color-button:focus');
+            if ($focused) {
                 return {
                     col: $focused.index(),
                     row: $focused.parent().index()
@@ -396,6 +388,18 @@
         },
 
         /**
+         * Finds color buttons for the given selector.
+         * 
+         * @param {String}
+         *            selector - the buttons selector.
+         * @returns {JQuery} the buttons, if found; null otherwise.
+         */
+        findButton: function (selector) {
+            const $button = this.$palette.find(selector);
+            return $button.length ? $button : null;
+        },
+
+        /**
          * Sets the selected (focus) color button.
          * 
          * @param {Object}
@@ -405,7 +409,7 @@
          */
         setSelection: function (selection) {
             const selector = '.color-row:eq(' + selection.row + ') .color-button:eq(' + selection.col + ')';
-            const $button = this.$palette.find(selector);
+            const $button = this.findButton(selector);
             if ($button.length) {
                 return $button.focus();
             }
@@ -413,7 +417,7 @@
         },
 
         /**
-         * Find the color name.
+         * Find the name for the given hexadecimal color.
          * 
          * @param {String}
          *            color - the hexadecimal color to search for.
@@ -421,21 +425,24 @@
          *          otherwise.
          */
         getColorName: function (color) {
-            color = color ? color.toUpperCase() : '';
+            color = color || '';
+            const cols = this.cols;
             const colors = this.options.colors;
-            for (let row = 0; row < this.rows; row++) {
-                for (let col = 0; col < this.cols; col++) {
-                    if (colors[row][col].toUpperCase() === color) {
+
+            for (let row = 0, rows = this.rows; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    if (colors[row][col].equalsIgnoreCase(color)) {
                         return this.options.names[row][col];
                     }
                 }
             }
 
-            return this.options.custom_text;
+            // custom text
+            return this.options.customText;
         },
 
         /**
-         * Find the hexadecimal color.
+         * Find the hexadecimal color for the given name.
          * 
          * @param {String}
          *            name - the color name to search for.
@@ -443,11 +450,13 @@
          *          otherwise.
          */
         getColorHex: function (name) {
-            name = name.toUpperCase();
+            name = name || '';
+            const cols = this.cols;
             const names = this.options.names;
-            for (let row = 0; row < this.rows; row++) {
-                for (let col = 0; col < this.cols; col++) {
-                    if (names[row][col].toUpperCase() === name) {
+
+            for (let row = 0, rows = this.rows; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    if (names[row][col].equalsIgnoreCase(name)) {
                         return this.options.colors[row][col];
                     }
                 }
@@ -465,27 +474,30 @@
         focus: false, // set focus to the control
 
         // classes
-        // dropdown_class: 'color-picker dropdown form-control',
-        // dropdown_toggle_class: 'dropdown-toggle btn',
-        // dropdown_menu_class: 'dropdown-menu d-print-none',
+        // dropdownClass: 'color-picker dropdown form-control',
+        // dropdownToggleClass: 'dropdown-toggle btn',
+        // dropdownMenuClass: 'dropdown-menu d-print-none',
         //
-        // dropdown_color_class: 'drowpdown-color',
-        // dropdown_text_class: 'drowpdown-text',
+        // dropdownColorClass: 'drowpdown-color',
+        // dropdownTextClass: 'drowpdown-text',
         //
-        // palette_class: 'color-palette',
-        // palette_row_class: 'color-row',
-        // palette_button_class: 'color-button',
-        // palette_custom_class: 'btn btn-sm btn-outline-secondary mt-1 w-100',
+        // paletteClass: 'color-palette',
+        // paletteRrowClass: 'color-row',
+        // paletteButtonClass: 'color-button',
+        // paletteCustomClass: 'btn btn-sm btn-outline-secondary mt-1 w-100',
+
+        // layout
+        // columns: 8, // the number of columns
 
         // texts
-        custom_text: 'Custom', // the custom color text
-        advanced_text: 'Advanced...', // the advanced button's text
+        customText: 'Custom', // the custom color text
+        advancedText: 'Advanced...', // the advanced button's text
 
         // tooltip
-        tooltip_display: true, // display tooltip
-        tooltip_placement: 'top', // tooltip placement
-        tooltip_content: '{name} ({color})', // tooltip text
-        tooltip_trigger: 'hover', // tooltip trigger event
+        tooltipDisplay: true, // display
+        tooltipPlacement: 'top', // placement
+        tooltipContent: '{name} ({color})', // text
+        tooltipTrigger: 'hover', // trigger event
 
         colors: [// color values
         ['#000000', '#424242', '#636363', '#9C9C94', '#CEC6CE', '#EFEFEF', '#F7F7F7', '#FFFFFF'], //
@@ -497,33 +509,100 @@
         ['#9C0000', '#B56308', '#BD9400', '#397B21', '#104A5A', '#085294', '#311873', '#731842'], //
         ['#630000', '#7B3900', '#846300', '#295218', '#083139', '#003163', '#21104A', '#4A1031'], //
         ],
-        names: [ // color names
-        ['Noir', 'Tundora', 'Colombe grise', 'Poussière d\'étoile', 'Ardoise pâle', 'Galerie', 'Albâtre', 'Blanc'], // /
-        ['Rouge', 'Pelure d\'orange', 'Jaune', 'Vert', 'Cyan', 'Bleu', 'Violet électrique', 'Magenta'], // /
-        ['Azalée', 'Karry', 'Blanc d\'oeuf', 'Zanah', 'Botticelli', 'Bleu tropical', 'Mischka', 'Crépuscule'], // /
-        ['Rose Tonys', 'Orange pêche', 'Crème brulée', 'Germes', 'Casper', 'Perano', 'Violet froid', 'Rose Careys'], // /
-        ['Mandy', 'Rajah', 'Pissenlit', 'Olivine', 'Ruisseau du Golfe', 'Viking', 'Blue Marguerite', 'Puce'], // /
-        ['Gardien Rouge', 'Fire Bush', 'Rêve d\'or', 'Concombre de Chelsea', 'Bleu slim', 'Bleu Boston', 'Papillon du Bush', 'Cadillac'], // /
-        ['Sangria', 'Mai Tai', 'Bouddha d\'or', 'Vert forêt', 'Eden', 'Bleu Venise', 'Météorite', 'Bordeaux'], // /
-        ['Bois de rose', 'Cannelle', 'Olive', 'Persil', 'Tibre', 'Bleu Minuit', 'Valentino', 'Loulou'], // /
-
-        // ['Black', 'Tundora', 'Dove Gray', 'Star Dust', 'Pale Slate',
-        // 'Gallery', 'Alabaster', 'White'], //
-        // ['Red', 'Orange Peel', 'Yellow', 'Green', 'Cyan', 'Blue', 'Electric
-        // Violet', 'Magenta'], //
-        // ['Azalea', 'Karry', 'Egg White', 'Zanah', 'Botticelli', 'Tropical
-        // Blue', 'Mischka', 'Twilight'], //
-        // ['Tonys Pink', 'Peach Orange', 'Cream Brulee', 'Sprout', 'Casper',
-        // 'Perano', 'Cold Purple', 'Careys Pink'], //
-        // ['Mandy', 'Rajah', 'Dandelion', 'Olivine', 'Gulf Stream', 'Viking',
-        // 'Blue Marguerite', 'Puce'], //
-        // ['Guardsman Red', 'Fire Bush', 'Golden Dream', 'Chelsea Cucumber',
-        // 'Smalt Blue', 'Boston Blue', 'Butterfly Bush', 'Cadillac'], //
-        // ['Sangria', 'Mai Tai', 'Buddha Gold', 'Forest Green', 'Eden', 'Venice
-        // Blue', 'Meteorite', 'Claret'], //
-        // ['Rosewood', 'Cinnamon', 'Olive', 'Parsley', 'Tiber', 'Midnight
-        // Blue', 'Valentino', 'Loulou'], //
+        names: [ // color names (french)
+        ['Noir', 'Tundora', 'Colombe grise', 'Poussière d\'étoile', 'Ardoise pâle', 'Galerie', 'Albâtre', 'Blanc'], //
+        ['Rouge', 'Pelure d\'orange', 'Jaune', 'Vert', 'Cyan', 'Bleu', 'Violet électrique', 'Magenta'], //
+        ['Azalée', 'Karry', 'Blanc d\'oeuf', 'Zanah', 'Botticelli', 'Bleu tropical', 'Mischka', 'Crépuscule'], //
+        ['Rose Tonys', 'Orange pêche', 'Crème brulée', 'Germes', 'Casper', 'Perano', 'Violet froid', 'Rose Careys'], //
+        ['Mandy', 'Rajah', 'Pissenlit', 'Olivine', 'Ruisseau du Golfe', 'Viking', 'Blue Marguerite', 'Puce'], //
+        ['Gardien Rouge', 'Fire Bush', 'Rêve d\'or', 'Concombre de Chelsea', 'Bleu slim', 'Bleu Boston', 'Papillon du Bush', 'Cadillac'], //
+        ['Sangria', 'Mai Tai', 'Bouddha d\'or', 'Vert forêt', 'Eden', 'Bleu Venise', 'Météorite', 'Bordeaux'], //
+        ['Bois de rose', 'Cannelle', 'Olive', 'Persil', 'Tibre', 'Bleu Minuit', 'Valentino', 'Loulou'] //
         ],
+    // color names (english)
+    // ['Black', 'Tundora', 'Dove Gray', 'Star Dust', 'Pale Slate',
+    // 'Gallery', 'Alabaster', 'White'], //
+    // ['Red', 'Orange Peel', 'Yellow', 'Green', 'Cyan', 'Blue', 'Electric
+    // Violet', 'Magenta'], //
+    // ['Azalea', 'Karry', 'Egg White', 'Zanah', 'Botticelli', 'Tropical
+    // Blue', 'Mischka', 'Twilight'], //
+    // ['Tonys Pink', 'Peach Orange', 'Cream Brulee', 'Sprout', 'Casper',
+    // 'Perano', 'Cold Purple', 'Careys Pink'], //
+    // ['Mandy', 'Rajah', 'Dandelion', 'Olivine', 'Gulf Stream', 'Viking',
+    // 'Blue Marguerite', 'Puce'], //
+    // ['Guardsman Red', 'Fire Bush', 'Golden Dream', 'Chelsea Cucumber',
+    // 'Smalt Blue', 'Boston Blue', 'Butterfly Bush', 'Cadillac'], //
+    // ['Sangria', 'Mai Tai', 'Buddha Gold', 'Forest Green', 'Eden', 'Venice
+    // Blue', 'Meteorite', 'Claret'], //
+    // ['Rosewood', 'Cinnamon', 'Olive', 'Parsley', 'Tiber', 'Midnight
+    // Blue', 'Valentino', 'Loulou'], //
+
+    // array: {
+    // "Noir": "#000000",
+    // "Tundora": "#424242",
+    // "Colombe grise": "#636363",
+    // "Poussière d'étoile": "#9C9C94",
+    // "Ardoise pâle": "#CEC6CE",
+    // "Galerie": "#EFEFEF",
+    // "Albâtre": "#F7F7F7",
+    // "Blanc": "#FFFFFF",
+    // "Rouge": "#FF0000",
+    // "Pelure d'orange": "#FF9C00",
+    // "Jaune": "#FFFF00",
+    // "Vert": "#00FF00",
+    // "Cyan": "#00FFFF",
+    // "Bleu": "#0000FF",
+    // "Violet électrique": "#9C00FF",
+    // "Magenta": "#FF00FF",
+    // "Azalée": "#F7C6CE",
+    // "Karry": "#FFE7CE",
+    // "Blanc d'oeuf": "#FFEFC6",
+    // "Zanah": "#D6EFD6",
+    // "Botticelli": "#CEDEE7",
+    // "Bleu tropical": "#CEE7F7",
+    // "Mischka": "#D6D6E7",
+    // "Crépuscule": "#E7D6DE",
+    // "Rose Tonys": "#E79C9C",
+    // "Orange pêche": "#FFC69C",
+    // "Crème brulée": "#FFE79C",
+    // "Germes": "#B5D6A5",
+    // "Casper": "#A5C6CE",
+    // "Perano": "#9CC6EF",
+    // "Violet froid": "#B5A5D6",
+    // "Rose Careys": "#D6A5BD",
+    // "Mandy": "#E76363",
+    // "Rajah": "#F7AD6B",
+    // "Pissenlit": "#FFD663",
+    // "Olivine": "#94BD7B",
+    // "Ruisseau du Golfe": "#73A5AD",
+    // "Viking": "#6BADDE",
+    // "Blue Marguerite": "#8C7BC6",
+    // "Puce": "#C67BA5",
+    // "Gardien Rouge": "#CE0000",
+    // "Fire Bush": "#E79439",
+    // "Rêve d'or": "#EFC631",
+    // "Concombre de Chelsea": "#6BA54A",
+    // "Bleu slim": "#4A7B8C",
+    // "Bleu Boston": "#3984C6",
+    // "Papillon du Bush": "#634AA5",
+    // "Cadillac": "#A54A7B",
+    // "Sangria": "#9C0000",
+    // "Mai Tai": "#B56308",
+    // "Bouddha d'or": "#BD9400",
+    // "Vert forêt": "#397B21",
+    // "Eden": "#104A5A",
+    // "Bleu Venise": "#085294",
+    // "Météorite": "#311873",
+    // "Bordeaux": "#731842",
+    // "Bois de rose": "#630000",
+    // "Cannelle": "#7B3900",
+    // "Olive": "#846300",
+    // "Persil": "#295218",
+    // "Tibre": "#083139",
+    // "Bleu Minuit": "#003163",
+    // "Valentino": "#21104A",
+    // "Loulou": "#4A1031"
+    // }
     };
 
     // -----------------------------------

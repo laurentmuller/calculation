@@ -794,12 +794,10 @@ class CalculationController extends AbstractEntityController
      *
      * @param Calculation $item
      */
-    protected function updateEntity(AbstractEntity $item): bool
+    protected function saveToDatabase(AbstractEntity $item): void
     {
-        // compute total
         $this->calculationService->updateTotal($item);
-
-        return parent::updateEntity($item);
+        parent::saveToDatabase($item);
     }
 
     /**

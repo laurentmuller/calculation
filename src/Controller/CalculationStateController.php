@@ -177,13 +177,14 @@ class CalculationStateController extends AbstractEntityController
      *
      * @param CalculationState $item
      */
-    protected function afterDeleteEntity(AbstractEntity $item): void
+    protected function deleteFromDatabase(AbstractEntity $item): void
     {
         // update default state (if applicable)
         $id = $this->getApplication()->getDefaultStateId();
         if ($id === $item->getId()) {
             $this->getApplication()->setProperties([ApplicationServiceInterface::DEFAULT_STATE => null]);
         }
+        parent::deleteFromDatabase($item);
     }
 
     /**

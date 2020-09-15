@@ -97,7 +97,7 @@ override form errors. Rendered example:
 {% block color_widget -%}
 {%- if 'color-picker' in attr.class|default('') -%}
     {%- set type = type|default('color') -%}
-    {%- set attr = attr|merge({'class': 'd-none' ~ (required ? ' must-validate' : ''), 'data-custom_text': 'color_picker.custom_text'|trans, 'data-advanced_text': 'color_picker.advanced_text'|trans}) -%}
+    {%- set attr = attr|merge({'class': 'd-none' ~ (required ? ' must-validate' : ''), 'data-custom-text': 'color_picker.custom_text'|trans, 'data-advanced-text': 'color_picker.advanced_text'|trans}) -%}
     <div class="color-picker dropdown form-control">
         {# <input type="color" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
         {{ block('form_widget_simple') }}

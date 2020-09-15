@@ -186,9 +186,8 @@ class UserController extends AbstractEntityController
         // form
         $form = $this->createForm(UserImageType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            // update
-            $this->updateEntity($item);
-            $this->getManager()->flush();
+            // save
+            $this->saveToDatabase($item);
 
             // message
             $this->succesTrans('user.image.success', ['%name%' => $item->getDisplay()]);
@@ -270,9 +269,8 @@ class UserController extends AbstractEntityController
         // form
         $form = $this->createForm(UserChangePasswordType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            // update
-            $this->updateEntity($item);
-            $this->getManager()->flush();
+            // save
+            $this->saveToDatabase($item);
 
             // message
             $this->succesTrans('user.change_password.success', ['%name%' => $item->getDisplay()]);

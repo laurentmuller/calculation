@@ -125,10 +125,10 @@
         return this.optional(element) || /^[1-9]\d{3}$/.test(value);
     });
     $.extend($.validator.messages, {
-        zipcodeCH_default: "Ce champ doit contenir un numéro postal valide.",
-        zipcodeCH_label: "Le champ \"{0}\" doit contenir un numéro postal valide.",
+        zipcodeChFallback: "Ce champ doit contenir un numéro postal valide.",
+        zipcodeChLabel: "Le champ \"{0}\" doit contenir un numéro postal valide.",
         zipcodeCH: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.zipcodeCH_label, $.validator.messages.zipcodeCH_default);
+            return $.validator.formatLabel(element, $.validator.messages.zipcodeChLabel, $.validator.messages.zipcodeChFallback);
         },
     });
 
@@ -136,13 +136,13 @@
     const options = {
         rules: {
             "customer[firstName]": {
-                require_from_group: [1, ".customer-group"]
+                require_from_group: [1, ".customer-group"] // eslint-disable-line camelcase
             },
             "customer[lastName]": {
-                require_from_group: [1, ".customer-group"]
+                require_from_group: [1, ".customer-group"] // eslint-disable-line camelcase
             },
             "customer[company]": {
-                require_from_group: [1, ".customer-group"]
+                require_from_group: [1, ".customer-group"] // eslint-disable-line camelcase
             },
             "customer[zipCode]": {
                 zipcodeCH: true

@@ -78,9 +78,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $builder->setMaxResults($limit);
         }
 
-        // $result = $builder->getQuery()->getArrayResult();
-        // return array_column($result, $field);
-
         return $builder->getQuery()
             ->getResult(ColumnHydrator::NAME);
     }

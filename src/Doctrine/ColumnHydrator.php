@@ -42,8 +42,6 @@ class ColumnHydrator extends ArrayHydrator
     protected function hydrateAllData(): array
     {
         if (!isset($this->_rsm->indexByMap['scalars'])) {
-            //  && method_exists($this->_stmt, 'fetchFirstColumn')
-            // return $this->_stmt->fetchAll(FetchMode::COLUMN);
             return $this->_stmt->fetchFirstColumn();
         }
 

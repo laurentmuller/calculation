@@ -78,6 +78,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $builder->setMaxResults($limit);
         }
 
+        // $result = $builder->getQuery()->getArrayResult();
+        // return array_column($result, $field);
+
         return $builder->getQuery()
             ->getResult(ColumnHydrator::NAME);
     }
@@ -137,5 +140,38 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function getSortFields(string $field, string $alias = self::DEFAULT_ALIAS)
     {
         return "$alias.$field";
+    }
+
+    /**
+     * Add alias to the given fields.
+     *
+     * @param string   $alias the entity alias
+     * @param string[] $names the fields to add alias
+     *
+     * @return string[] the fields with alias
+     */
+    protected function addPrefixes(string $alias, array $names): array
+    {
+        return \array_map(function (string $name) use ($alias) {
+            return "{$alias}.{$name}";
+        }, $names);
+    }
+
+    /**
+     * Concat fields.
+     *
+     * @param string   $alias   the entity prefix
+     * @param string[] $fields  the fields to concat
+     * @param string   $default the default value to use when a field is null
+     *
+     * @return string the concatened fields
+     */
+    protected function concat(string $alias, array $fields, string $default = ''): string
+    {
+        foreach ($fields as &$field) {
+            $field = "COALESCE($alias.$field, '$default')";
+        }
+
+        return 'CONCAT(' . \implode(', ', $fields) . ')';
     }
 }

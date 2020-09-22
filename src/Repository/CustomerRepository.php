@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Customer;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -27,14 +28,24 @@ use Doctrine\Persistence\ManagerRegistry;
 class CustomerRepository extends AbstractRepository
 {
     /**
-     * The name and company fields.
+     * The first name, last name and company field name.
      */
-    private static $NAME_COMPANY_FIELDS = ['lastName', 'firstName', 'company'];
+    public const NAME_COMPANY_FIELD = 'nameAndCompany';
+
+    /**
+     * The zip and city field name.
+     */
+    public const ZIP_CITY_FIELD = 'zipCity';
+
+    /**
+     * The first name, last name and company fields.
+     */
+    private const NAME_COMPANY_FIELDS = ['lastName', 'firstName', 'company'];
 
     /**
      * The zip code and city fields.
      */
-    private static $ZIP_CITY_FIELDS = ['zipCode', 'city'];
+    private const ZIP_CITY_FIELDS = ['zipCode', 'city'];
 
     /**
      * Constructor.
@@ -47,15 +58,36 @@ class CustomerRepository extends AbstractRepository
     }
 
     /**
+     * Gets all customers order by name and company.
+     *
+     * @return Customer[]
+     */
+    public function findAllByNameAndCompany(): array
+    {
+        $fields = $this->concat(self::DEFAULT_ALIAS, self::NAME_COMPANY_FIELDS, 'ZZZ');
+
+        return $this->createQueryBuilder(self::DEFAULT_ALIAS)
+            ->orderBy($fields, Criteria::ASC)
+            ->getQuery()
+            ->getResult();
+
+//         return $this->findBy([], [
+//             'lastName' => Criteria::ASC,
+//             'firstName' => Criteria::ASC,
+//             'company' => Criteria::ASC,
+//         ]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
     {
         switch ($field) {
-            case 'nameAndCompany':
-                return $this->addPrefixes($alias, self::$NAME_COMPANY_FIELDS);
-            case 'zipCity':
-                return $this->addPrefixes($alias, self::$ZIP_CITY_FIELDS);
+            case self::NAME_COMPANY_FIELD:
+                return $this->addPrefixes($alias, self::NAME_COMPANY_FIELDS);
+            case self::ZIP_CITY_FIELD:
+                return $this->addPrefixes($alias, self::ZIP_CITY_FIELDS);
             default:
                 return parent::getSearchFields($field, $alias);
         }
@@ -67,44 +99,12 @@ class CustomerRepository extends AbstractRepository
     public function getSortFields(string $field, string $alias = self::DEFAULT_ALIAS)
     {
         switch ($field) {
-            case 'nameAndCompany':
-                return $this->concat($alias, self::$NAME_COMPANY_FIELDS);
-            case 'zipCity':
-                return $this->concat($alias, self::$ZIP_CITY_FIELDS);
+            case self::NAME_COMPANY_FIELD:
+                return $this->concat($alias, self::NAME_COMPANY_FIELDS);
+            case self::ZIP_CITY_FIELD:
+                return $this->concat($alias, self::ZIP_CITY_FIELDS);
             default:
                 return parent::getSortFields($field, $alias);
         }
-    }
-
-    /**
-     * Add alias to the given fields.
-     *
-     * @param string   $alias the entity alias
-     * @param string[] $names the fields to add alias
-     *
-     * @return string[] the fields with alias
-     */
-    private function addPrefixes(string $alias, array $names): array
-    {
-        return \array_map(function (string $name) use ($alias) {
-            return "{$alias}.{$name}";
-        }, $names);
-    }
-
-    /**
-     * Concat fields.
-     *
-     * @param string   $alias  the entity prefix
-     * @param string[] $fields the fields to concat
-     *
-     * @return string the concatened fields
-     */
-    private function concat(string $alias, array $fields): string
-    {
-        foreach ($fields as &$field) {
-            $field = "COALESCE($alias.$field, '')";
-        }
-
-        return 'CONCAT(' . \implode(', ', $fields) . ')';
     }
 }

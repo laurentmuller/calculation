@@ -63,6 +63,16 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
+     * Gets all users order by user name.
+     *
+     * @return User[]
+     */
+    public function findAllByUsername(): array
+    {
+        return $this->findBy([], ['username' => Criteria::ASC]);
+    }
+
+    /**
      * Finds a user by its email.
      *
      * @param string $email the email to search for

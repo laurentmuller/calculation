@@ -35,6 +35,7 @@ class Product extends AbstractEntity
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotNull
      *
      * @var ?Category
      */

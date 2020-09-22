@@ -22,10 +22,16 @@ use App\Interfaces\ApplicationServiceInterface;
 use App\Pdf\PdfResponse;
 use App\Report\CalculationStatesReport;
 use App\Repository\CalculationRepository;
+use App\Repository\CalculationStateRepository;
+use App\Service\SpreadsheetService;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller for calculation state entities.
@@ -118,6 +124,69 @@ class CalculationStateController extends AbstractEntityController
     public function edit(Request $request, CalculationState $item): Response
     {
         return $this->editEntity($request, $item);
+    }
+
+    /**
+     * Export the calculation states to an Excel document.
+     *
+     * @Route("/excel", name="calculationstate_excel")
+     */
+    public function excel(CalculationStateRepository $repository, SpreadsheetService $service, TranslatorInterface $translator): Response
+    {
+        /** @var CalculationState[] $states */
+        $states = $repository->findAllByCode();
+
+        $title = $translator->trans('calculationstate.list.title');
+
+        // properties
+        $properties = [
+            SpreadsheetService::P_TITLE => $title,
+            SpreadsheetService::P_ACTIVE_TITLE => $title,
+            SpreadsheetService::P_USER_NAME => $this->getUserName(),
+            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
+            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
+            SpreadsheetService::P_LANDSCAPE => true,
+            SpreadsheetService::P_GRIDLINE => true,
+        ];
+        $service->initialize($properties);
+
+        // headers
+        $service->setHeaderValues([
+            'calculationstate.fields.code' => Alignment::HORIZONTAL_GENERAL,
+            'calculationstate.fields.description' => Alignment::HORIZONTAL_GENERAL,
+            'calculationstate.fields.editable' => Alignment::HORIZONTAL_RIGHT,
+            'calculationstate.fields.calculations' => Alignment::HORIZONTAL_RIGHT,
+            'calculationstate.fields.color' => Alignment::HORIZONTAL_CENTER,
+        ]);
+
+        // formats
+        $service->setColumnFormatYesNo(3)
+            ->setColumnFormatInt(4);
+
+        // products
+        $row = 2;
+        foreach ($states as $state) {
+            $service->setRowValues($row, [
+                $state->getCode(),
+                $state->getDescription(),
+                $state->isEditable(),
+                $state->countCalculations(),
+            ]);
+
+            // color
+            $col = $service->stringFromColumnIndex(5);
+            $color = new Color(\substr($state->getColor(), 1));
+            $fill = $service->getActiveSheet()
+                ->getStyle("$col$row")
+                ->getFill();
+            $fill->setFillType(Fill::FILL_SOLID)
+                ->setStartColor($color);
+
+            ++$row;
+        }
+        $service->setSelectedCell('A2');
+
+        return $service->xlsxResponse();
     }
 
     /**

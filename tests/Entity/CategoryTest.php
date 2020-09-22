@@ -16,73 +16,15 @@ namespace App\Tests\Entity;
 
 use App\Entity\Category;
 use App\Entity\CategoryMargin;
-use Symfony\Component\Validator\Constraints\NotNullValidator;
-use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
- * Unit test for Category entity.
+ * Unit test for validate category constraints.
  *
  * @author Laurent Muller
- *
- * @see Category
  */
-class CategoryTest extends ConstraintValidatorTestCase
+class CategoryTest extends EntityValidatorTest
 {
-    public function testCategory(): void
-    {
-        $category = new Category();
-        $category->addMargin($this->createMargin(0, 100, 0.1));
-
-        $this->assertNotNull($category->findMargin(0));
-        $this->assertNull($category->findMargin(100));
-
-        $this->assertEqualsWithDelta(0.1, $category->findPercent(50), 0.01);
-        $this->assertEqualsWithDelta(0, $category->findPercent(100), 0.01);
-    }
-
-    public function testCategoryInvalidMaximum(): void
-    {
-        $category = new Category();
-        $category->addMargin($this->createMargin(0, 100, 0.1));
-        $category->addMargin($this->createMargin(100, 99, 0.2));
-
-        $context = $this->context;
-        $category->validate($context);
-        $violations = $context->getViolations();
-        $this->assertSame(1, $violations->count());
-
-        $violation = $violations->get(0);
-        $this->assertSame('property.path.margins[1].maximum', $violation->getPropertyPath());
-    }
-
-    public function testCategoryInvalidMinimum(): void
-    {
-        $category = new Category();
-        $category->addMargin($this->createMargin(0, 100, 0.1));
-        $category->addMargin($this->createMargin(99, 200, 0.2));
-
-        $context = $this->context;
-        $category->validate($context);
-        $violations = $context->getViolations();
-        $this->assertSame(1, $violations->count());
-
-        $violation = $violations->get(0);
-        $this->assertSame('property.path.margins[1].minimum', $violation->getPropertyPath());
-    }
-
-    public function testCategoryValid(): void
-    {
-        $category = new Category();
-        $category->addMargin($this->createMargin(0, 100, 0.1));
-        $category->addMargin($this->createMargin(100, 200, 0.2));
-
-        $context = $this->context;
-        $category->validate($context);
-        $violations = $context->getViolations();
-        $this->assertSame(0, $violations->count());
-    }
-
-    public function testMargins(): void
+    public function testCategoryMargin(): void
     {
         $margin = $this->createMargin(0, 100, 0.1);
         $this->assertTrue($margin->containsAmount(0));
@@ -90,10 +32,67 @@ class CategoryTest extends ConstraintValidatorTestCase
         $this->assertEqualsWithDelta(1.0, $margin->getMarginAmount(10), 0.1);
     }
 
-    protected function createValidator()
+    public function testDuplicate(): void
     {
-        // not used
-        return new NotNullValidator();
+        $first = new Category();
+        $first->setCode('code');
+
+        try {
+            $this->saveEntity($first);
+
+            $second = new Category();
+            $second->setCode('code');
+
+            $this->validate($second, 1);
+        } finally {
+            $this->deleteEntity($first);
+        }
+    }
+
+    public function testFindMargin(): void
+    {
+        $category = new Category();
+        $category->addMargin($this->createMargin(0, 100, 0.1));
+        $this->assertNotNull($category->findMargin(0));
+        $this->assertNull($category->findMargin(100));
+    }
+
+    public function testFindPercent(): void
+    {
+        $category = new Category();
+        $category->addMargin($this->createMargin(0, 100, 0.1));
+        $this->assertEqualsWithDelta(0.1, $category->findPercent(50), 0.01);
+        $this->assertEqualsWithDelta(0, $category->findPercent(100), 0.01);
+    }
+
+    public function testInvalidCode(): void
+    {
+        $object = new Category();
+        $this->validate($object, 1);
+    }
+
+    public function testNotDuplicate(): void
+    {
+        $first = new Category();
+        $first->setCode('code');
+
+        try {
+            $this->saveEntity($first);
+
+            $second = new Category();
+            $second->setCode('code2');
+
+            $this->validate($second, 0);
+        } finally {
+            $this->deleteEntity($first);
+        }
+    }
+
+    public function testValid(): void
+    {
+        $object = new Category();
+        $object->setCode('code');
+        $this->validate($object, 0);
     }
 
     private function createMargin(float $minimum, float $maximum, float $margin): CategoryMargin

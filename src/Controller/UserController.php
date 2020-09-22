@@ -28,10 +28,14 @@ use App\Interfaces\RoleInterface;
 use App\Pdf\PdfResponse;
 use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
+use App\Repository\UserRepository;
 use App\Security\EntityVoter;
+use App\Service\SpreadsheetService;
 use App\Service\ThemeService;
+use App\Service\UserNamer;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -42,6 +46,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -173,6 +178,71 @@ class UserController extends AbstractEntityController
     public function edit(Request $request, User $item): Response
     {
         return $this->editEntity($request, $item);
+    }
+
+    /**
+     * Export the customers to an Excel document.
+     *
+     * @Route("/excel", name="user_excel")
+     */
+    public function excel(UserRepository $repository, SpreadsheetService $service, TranslatorInterface $translator, KernelInterface $kernel): Response
+    {
+        /** @var User[] $users */
+        $users = $repository->findAllByUsername();
+
+        $title = $translator->trans('user.list.title');
+        $path = $kernel->getProjectDir() . '/public/images/users/';
+
+        // properties
+        $properties = [
+            SpreadsheetService::P_TITLE => $title,
+            SpreadsheetService::P_ACTIVE_TITLE => $title,
+            SpreadsheetService::P_USER_NAME => $this->getUserName(),
+            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
+            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
+            SpreadsheetService::P_GRIDLINE => true,
+        ];
+        $service->initialize($properties);
+
+        // headers
+        $service->setHeaderValues([
+            'user.fields.username' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
+            'user.fields.email' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
+            'user.fields.role' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
+            'user.fields.enabled' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
+            'user.fields.lastLogin' => [Alignment::HORIZONTAL_CENTER, Alignment::VERTICAL_TOP],
+            'user.fields.imageFile' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
+        ]);
+
+        // formats
+        $enabled = $translator->trans('common.value_enabled');
+        $disabled = $translator->trans('common.value_disabled');
+        $service->setColumnFormatBoolean(4, $enabled, $disabled)
+            ->setColumnFormatDateTime(5);
+
+        // rows
+        $row = 2;
+        foreach ($users as $user) {
+            $service->setRowValues($row, [
+                $user->getUsername(),
+                $user->getEmail(),
+                Utils::translateRole($translator, $user->getRole()),
+                $user->isEnabled(),
+                $user->getLastLogin(),
+            ]);
+
+            // image
+            $fileName = $path . UserNamer::getBaseName($user, 32, 'png');
+            if (\is_file($fileName)) {
+                [$width, $height] = \getimagesize($fileName);
+                $service->setCellImage($fileName, "F$row", $width, $height);
+            }
+
+            ++$row;
+        }
+        $service->setSelectedCell('A2');
+
+        return $service->xlsxResponse();
     }
 
     /**

@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Doctrine;
 
 use Doctrine\ORM\Internal\Hydration\ArrayHydrator;
-use PDO;
 
 /**
  * Returns one-dimensional scalar array from query: mixed[][] => mixed[].
@@ -43,7 +42,9 @@ class ColumnHydrator extends ArrayHydrator
     protected function hydrateAllData(): array
     {
         if (!isset($this->_rsm->indexByMap['scalars'])) {
-            return $this->_stmt->fetchAll(PDO::FETCH_COLUMN);
+            //  && method_exists($this->_stmt, 'fetchFirstColumn')
+            // return $this->_stmt->fetchAll(FetchMode::COLUMN);
+            return $this->_stmt->fetchFirstColumn();
         }
 
         if (!$result = parent::hydrateAllData()) {

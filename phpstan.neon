@@ -9,5 +9,6 @@ parameters:
     scanFiles:
     - vendor/twig/twig/src/Extension/CoreExtension.php
     ignoreErrors:
-    - '#PdfTableBuilder::addDescription#'
-    - '#catchPhrase#'
+    - '#PdfTableBuilder::addDescription#' # Report\CalculationGroupTable
+    - '#catchPhrase#'                     # Faker\Generator 
+    - '#fetchFirstColumn#'                # Doctrine\ColumnHydrator class

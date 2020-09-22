@@ -619,8 +619,10 @@ span.color-value {
     vertical-align: top;
 }
 .color-picker .drowpdown-text {
+    text-overflow: ellipsis;
+    white-space: nowrap;
     overflow: hidden;
-    flex: 1 1 auto;
+    flex: 1 1 auto;    
 }
 
 /**

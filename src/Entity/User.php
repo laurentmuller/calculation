@@ -41,6 +41,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
      * @Assert\Email
      *
      * @var ?string
@@ -101,6 +102,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank
      *
      * @var string
      */
@@ -138,6 +140,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
      *
      * @var string
      */

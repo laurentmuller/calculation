@@ -35,10 +35,13 @@ use App\Report\CalculationDuplicateTableReport;
 use App\Report\CalculationEmptyTableReport;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
+use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\CalculationService;
+use App\Service\SpreadsheetService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\EventManager;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -47,6 +50,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller for calculation entities.
@@ -165,7 +169,7 @@ class CalculationController extends AbstractEntityController
      * @Route("/below/table", name="calculation_below_table")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function belowTable(Request $request, CalculationBelowDataTable $table, CalculationStateRepository $repository): Response
+    public function belowTable(Request $request, CalculationBelowDataTable $table): Response
     {
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
@@ -428,6 +432,69 @@ class CalculationController extends AbstractEntityController
         ];
 
         return $this->render('calculation/calculation_table_empty.html.twig', $parameters);
+    }
+
+    /**
+     * Export the calculations to an Excel document.
+     *
+     * @Route("/excel", name="calculation_excel")
+     */
+    public function excel(CalculationRepository $repository, SpreadsheetService $service, TranslatorInterface $translator): Response
+    {
+        /** @var Calculation[] $calculations */
+        $calculations = $repository->findAllById();
+
+        $title = $translator->trans('calculation.list.title');
+
+        // properties
+        $properties = [
+            SpreadsheetService::P_TITLE => $title,
+            SpreadsheetService::P_ACTIVE_TITLE => $title,
+            SpreadsheetService::P_USER_NAME => $this->getUserName(),
+            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
+            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
+            SpreadsheetService::P_LANDSCAPE => true,
+            SpreadsheetService::P_GRIDLINE => true,
+        ];
+        $service->initialize($properties);
+
+        // headers
+        $service->setHeaderValues([
+            'calculation.fields.id' => Alignment::HORIZONTAL_CENTER,
+            'calculation.fields.date' => Alignment::HORIZONTAL_CENTER,
+            'calculation.fields.state' => Alignment::HORIZONTAL_GENERAL,
+            'calculation.fields.customer' => Alignment::HORIZONTAL_GENERAL,
+            'calculation.fields.description' => Alignment::HORIZONTAL_GENERAL,
+            'calculationgroup.fields.amount' => Alignment::HORIZONTAL_RIGHT,
+            'calculation.fields.margin' => Alignment::HORIZONTAL_RIGHT,
+            'calculation.fields.total' => Alignment::HORIZONTAL_RIGHT,
+        ]);
+
+        // formats
+        $service->setColumnFormatId(1)
+            ->setColumnFormatDate(2)
+            ->setColumnFormatAmount(6)
+            ->setColumnFormatPercent(7)
+            ->setColumnFormatAmount(8);
+
+        // calculations
+        $row = 2;
+        foreach ($calculations as $calculation) {
+            $service->setRowValues($row++, [
+                $calculation->getId(),
+                $calculation->getDate(),
+                $calculation->getStateCode(),
+                $calculation->getCustomer(),
+                $calculation->getDescription(),
+                $calculation->getItemsTotal(),
+                $calculation->getOverallMargin(),
+                $calculation->getOverallTotal(),
+                ]);
+        }
+
+        $service->setSelectedCell('A2');
+
+        return $service->xlsxResponse();
     }
 
     /**

@@ -56,7 +56,7 @@ class CustomerDataTable extends AbstractEntityDataTable
     {
         return [
             DataColumn::hidden('id'),
-            DataColumn::instance('nameAndCompany')
+            DataColumn::instance(CustomerRepository::NAME_COMPANY_FIELD)
                 ->setTitle('customer.fields.nameAndCompany')
                 ->setMap(['company', 'firstName', 'lastName'])
                 ->setDefault(true)
@@ -64,7 +64,7 @@ class CustomerDataTable extends AbstractEntityDataTable
             DataColumn::instance('address')
                 ->setTitle('customer.fields.address')
                 ->setClassName('w-auto cell'),
-            DataColumn::instance('zipCity')
+            DataColumn::instance(CustomerRepository::ZIP_CITY_FIELD)
                 ->setTitle('customer.fields.zipCity')
                 ->setMap(['zipCode', 'city'])
                 ->setClassName('w-25 cell'),
@@ -77,6 +77,6 @@ class CustomerDataTable extends AbstractEntityDataTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['nameAndCompany' => DataColumn::SORT_ASC];
+        return [CustomerRepository::NAME_COMPANY_FIELD => DataColumn::SORT_ASC];
     }
 }

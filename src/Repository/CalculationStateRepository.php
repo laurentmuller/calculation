@@ -40,6 +40,16 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
+     * Gets all calculation states order by code.
+     *
+     * @return CalculationState[]
+     */
+    public function findAllByCode(): array
+    {
+        return $this->findBy([], ['code' => Criteria::ASC]);
+    }
+
+    /**
      * Gets the the list of calculation states sorted by code.
      *
      * @return CalculationState[] the calculation states

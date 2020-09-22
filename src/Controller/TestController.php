@@ -44,6 +44,8 @@ use App\Validator\Captcha;
 use App\Validator\Password;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Person;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -775,5 +777,27 @@ class TestController extends AbstractController
         $accessor->setValue($element, $property, $value);
 
         return $this;
+    }
+
+    /**
+     * Sets the sheet headers with bold style and freezed row.
+     *
+     * @param Worksheet $sheet   the sheet to write to
+     * @param array     $headers the headers where key is the text and value is the horizontal alignment
+     */
+    private function setHeaderValues(Worksheet $sheet, array $headers): void
+    {
+        $col = 1;
+        foreach ($headers as $text => $alignment) {
+            $name = Coordinate::stringFromColumnIndex($col);
+            $sheet->setCellValue($name . '1', $text);
+            $sheet->getColumnDimension($name)->setAutoSize(true);
+            $sheet->getStyle($name . '1')->getAlignment()->setHorizontal($alignment);
+            ++$col;
+        }
+
+        $name = Coordinate::stringFromColumnIndex(\count($headers));
+        $sheet->getStyle('A1:' . $name . '1')->getFont()->setBold(true);
+        $sheet->freezePane('A2');
     }
 }

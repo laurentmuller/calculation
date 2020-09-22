@@ -41,8 +41,8 @@ class Property extends AbstractEntity
      * The property name (unique).
      *
      * @ORM\Column(name="name", type="string", length=50, unique=true)
-     * @Assert\NotBlank
      * @Assert\Length(max=50)
+     * @Assert\NotBlank
      *
      * @var string
      */
@@ -53,6 +53,7 @@ class Property extends AbstractEntity
      *
      * @ORM\Column(name="value", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
+     * @Assert\NotBlank
      *
      * @var string
      */

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\GlobalMargin;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
@@ -36,6 +37,16 @@ class GlobalMarginRepository extends AbstractRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, GlobalMargin::class);
+    }
+
+    /**
+     * Gets all global margins order by minimum.
+     *
+     * @return GlobalMargin[]
+     */
+    public function findAllByMinimum(): array
+    {
+        return $this->findBy([], ['minimum' => Criteria::ASC]);
     }
 
     /**

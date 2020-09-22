@@ -70,6 +70,16 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
+     * Gets all calculations order by identifier descending.
+     *
+     * @return Calculation[]
+     */
+    public function findAllById(): array
+    {
+        return $this->findBy([], ['id' => Criteria::DESC]);
+    }
+
+    /**
      * Gets calculations with the overall margin below the given value.
      *
      * @param float $minMargin the minimum margin in percent

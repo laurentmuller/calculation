@@ -20,11 +20,15 @@ use App\Entity\Customer;
 use App\Form\Customer\CustomerType;
 use App\Pdf\PdfResponse;
 use App\Report\CustomersReport;
+use App\Repository\CustomerRepository;
+use App\Service\SpreadsheetService;
 use Doctrine\Common\Collections\Criteria;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for customer entities.
@@ -72,11 +76,11 @@ class CustomerController extends AbstractEntityController
     public function card(Request $request): Response
     {
         $sortedFields = [
-            ['name' => 'nameAndCompany', 'label' => 'customer.fields.nameAndCompany'],
-            ['name' => 'zipCity', 'label' => 'customer.fields.zipCity'],
+            ['name' => CustomerRepository::NAME_COMPANY_FIELD, 'label' => 'customer.fields.nameAndCompany'],
+            ['name' => CustomerRepository::ZIP_CITY_FIELD, 'label' => 'customer.fields.zipCity'],
         ];
 
-        return $this->renderCard($request, 'nameAndCompany', Criteria::ASC, $sortedFields);
+        return $this->renderCard($request, CustomerRepository::NAME_COMPANY_FIELD, Criteria::ASC, $sortedFields);
     }
 
     /**
@@ -104,6 +108,56 @@ class CustomerController extends AbstractEntityController
     public function edit(Request $request, Customer $item): Response
     {
         return $this->editEntity($request, $item);
+    }
+
+    /**
+     * Export the customers to an Excel document.
+     *
+     * @Route("/excel", name="customer_excel")
+     */
+    public function excel(CustomerRepository $repository, SpreadsheetService $service, TranslatorInterface $translator): Response
+    {
+        /** @var Customer[] $customers */
+        $customers = $repository->findAllByNameAndCompany();
+
+        $title = $translator->trans('customer.list.title');
+
+        // properties
+        $properties = [
+            SpreadsheetService::P_TITLE => $title,
+            SpreadsheetService::P_ACTIVE_TITLE => $title,
+            SpreadsheetService::P_USER_NAME => $this->getUserName(),
+            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
+            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
+            SpreadsheetService::P_GRIDLINE => true,
+        ];
+        $service->initialize($properties);
+
+        // headers
+        $service->setHeaderValues([
+            'customer.fields.lastName' => Alignment::HORIZONTAL_GENERAL,
+            'customer.fields.firstName' => Alignment::HORIZONTAL_GENERAL,
+            'customer.fields.company' => Alignment::HORIZONTAL_GENERAL,
+            'customer.fields.address' => Alignment::HORIZONTAL_GENERAL,
+            'customer.fields.zipCode' => Alignment::HORIZONTAL_RIGHT,
+            'customer.fields.city' => Alignment::HORIZONTAL_GENERAL,
+        ]);
+
+        // customers
+        $row = 2;
+        foreach ($customers as $customer) {
+            $service->setRowValues($row++, [
+                $customer->getLastName(),
+                $customer->getFirstName(),
+                $customer->getCompany(),
+                $customer->getAddress(),
+                $customer->getZipCode(),
+                $customer->getCity(),
+            ]);
+        }
+        $service->setSelectedCell('A2');
+
+        return $service->xlsxResponse();
     }
 
     /**

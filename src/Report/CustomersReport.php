@@ -19,6 +19,7 @@ use App\Entity\Customer;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
+use App\Repository\CustomerRepository;
 use App\Util\Utils;
 
 /**
@@ -88,7 +89,7 @@ class CustomersReport extends AbstractReport
             ->outputHeaders();
 
         // sort
-        Utils::sortField($customers, 'nameAndCompany');
+        Utils::sortField($customers, CustomerRepository::NAME_COMPANY_FIELD);
 
         // grouped?
         if ($this->grouped) {

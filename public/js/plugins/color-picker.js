@@ -183,13 +183,13 @@
 
             // add handlers
             that.$customButton.on('click', function (e) {
-                that.onCustomButtonClick($(this), e);
+                that.onCustomButtonClick(e);
             });
             that.$palette.on('click', '.color-button', function (e) {
-                that.onColorButtonClick($(this), e);
+                that.onColorButtonClick(e);
             });
             that.$palette.on('keydown', '.color-button', function (e) {
-                that.onColorButtonKeyDown($(this), e);
+                that.onColorButtonKeyDown(e);
             });
         },
 
@@ -236,12 +236,10 @@
         /**
          * Handles the custom button click event.
          * 
-         * @param {JQuery}
-         *            $button - the clicked button element.
          * @param {Event}
          *            e - the event.
          */
-        onCustomButtonClick: function ($button, e) {
+        onCustomButtonClick: function (e) {
             e.preventDefault();
             this.$element.trigger('click');
             this.setFocus();
@@ -250,14 +248,12 @@
         /**
          * Handles the color button click event.
          * 
-         * @param {JQuery}
-         *            $button - the clicked button element.
          * @param {Event}
          *            e - the event.
-         * 
          */
-        onColorButtonClick: function ($button, e) {
+        onColorButtonClick: function (e) {
             e.preventDefault();
+            const $button = $(e.target);
             const oldValue = this.$element.val();
             const newValue = $button.data('value');
             if (!newValue.equalsIgnoreCase(oldValue)) {
@@ -269,23 +265,28 @@
         /**
          * Handles the color button key down event.
          * 
-         * @param {JQuery}
-         *            $button - the clicked button element.
          * @param {Event}
          *            e - the event.
          */
-        onColorButtonKeyDown: function ($button, e) {
+        onColorButtonKeyDown: function (e) {
             const lastCol = this.cols - 1;
             const lastRow = this.rows - 1;
+            const $button = $(e.target);
             const selection = this.getSelection($button);
+            
             switch (e.which || e.keyCode) {
             case 35: // end
                 selection.col = lastCol;
-                selection.row = lastRow;
+                if (e.ctrlKey) {
+                    selection.row = lastRow;
+                }
                 break;
 
             case 36: // home
-                selection.col = selection.row = 0;
+                selection.col = 0;
+                if (e.ctrlKey) {
+                    selection.row = 0;
+                }
                 break;
 
             case 37: // left arrow
@@ -486,7 +487,6 @@
         // paletteButtonClass: 'color-button',
         // paletteCustomClass: 'btn btn-sm btn-outline-secondary mt-1 w-100',
 
-        // layout
         // columns: 8, // the number of columns
 
         // texts
@@ -496,11 +496,11 @@
         // tooltip
         tooltipDisplay: true, // display
         tooltipPlacement: 'top', // placement
-        tooltipContent: '{name} ({color})', // text
+        tooltipContent: '{name} ({color})', // text format
         tooltipTrigger: 'hover', // trigger event
 
         colors: [// color values
-        ['#000000', '#424242', '#636363', '#9C9C94', '#CEC6CE', '#EFEFEF', '#F7F7F7', '#FFFFFF'], //
+        ['#000000', '#424242', '#636363', '#9C9C94', '#CEC6CE', '#EFEFEF', '#F7F7F7', '#FFFFFF'], // 
         ['#FF0000', '#FF9C00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#9C00FF', '#FF00FF'], //
         ['#F7C6CE', '#FFE7CE', '#FFEFC6', '#D6EFD6', '#CEDEE7', '#CEE7F7', '#D6D6E7', '#E7D6DE'], //
         ['#E79C9C', '#FFC69C', '#FFE79C', '#B5D6A5', '#A5C6CE', '#9CC6EF', '#B5A5D6', '#D6A5BD'], //
@@ -515,10 +515,11 @@
         ['Azalée', 'Karry', 'Blanc d\'oeuf', 'Zanah', 'Botticelli', 'Bleu tropical', 'Mischka', 'Crépuscule'], //
         ['Rose Tonys', 'Orange pêche', 'Crème brulée', 'Germes', 'Casper', 'Perano', 'Violet froid', 'Rose Careys'], //
         ['Mandy', 'Rajah', 'Pissenlit', 'Olivine', 'Ruisseau du Golfe', 'Viking', 'Blue Marguerite', 'Puce'], //
-        ['Gardien Rouge', 'Fire Bush', 'Rêve d\'or', 'Concombre de Chelsea', 'Bleu slim', 'Bleu Boston', 'Papillon du Bush', 'Cadillac'], //
+        ['Gardien Rouge', 'Fire Bush', 'Rêve d\'or', 'Concombre', 'Bleu slim', 'Bleu Boston', 'Papillon', 'Cadillac'], //
         ['Sangria', 'Mai Tai', 'Bouddha d\'or', 'Vert forêt', 'Eden', 'Bleu Venise', 'Météorite', 'Bordeaux'], //
         ['Bois de rose', 'Cannelle', 'Olive', 'Persil', 'Tibre', 'Bleu Minuit', 'Valentino', 'Loulou'] //
         ],
+
     // color names (english)
     // ['Black', 'Tundora', 'Dove Gray', 'Star Dust', 'Pale Slate',
     // 'Gallery', 'Alabaster', 'White'], //
@@ -537,7 +538,7 @@
     // ['Rosewood', 'Cinnamon', 'Olive', 'Parsley', 'Tiber', 'Midnight
     // Blue', 'Valentino', 'Loulou'], //
 
-    // array: {
+    // input: {
     // "Noir": "#000000",
     // "Tundora": "#424242",
     // "Colombe grise": "#636363",

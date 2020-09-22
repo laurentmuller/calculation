@@ -21,12 +21,16 @@ use App\Form\Category\CategoryType;
 use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
 use App\Repository\CalculationGroupRepository;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use App\Service\SpreadsheetService;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for category entities.
@@ -122,6 +126,57 @@ class CategoryController extends AbstractEntityController
     public function edit(Request $request, Category $item): Response
     {
         return $this->editEntity($request, $item);
+    }
+
+    /**
+     * Export the categories to an Excel document.
+     *
+     * @Route("/excel", name="category_excel")
+     */
+    public function excel(CategoryRepository $repository, SpreadsheetService $service, TranslatorInterface $translator): Response
+    {
+        /** @var Category[] $categories */
+        $categories = $repository->findAllByCode();
+
+        $title = $translator->trans('category.list.title');
+
+        // properties
+        $properties = [
+            SpreadsheetService::P_TITLE => $title,
+            SpreadsheetService::P_ACTIVE_TITLE => $title,
+            SpreadsheetService::P_USER_NAME => $this->getUserName(),
+            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
+            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
+            SpreadsheetService::P_LANDSCAPE => true,
+            SpreadsheetService::P_GRIDLINE => true,
+        ];
+        $service->initialize($properties);
+
+        // headers
+        $service->setHeaderValues([
+            'category.fields.code' => Alignment::HORIZONTAL_GENERAL,
+            'category.fields.description' => Alignment::HORIZONTAL_GENERAL,
+            'category.fields.margins' => Alignment::HORIZONTAL_RIGHT,
+            'category.fields.products' => Alignment::HORIZONTAL_RIGHT,
+        ]);
+
+        // formats
+        $service->setColumnFormatInt(3)
+            ->setColumnFormatInt(4);
+
+        // categories
+        $row = 2;
+        foreach ($categories as $category) {
+            $service->setRowValues($row++, [
+                $category->getCode(),
+                $category->getDescription(),
+                $category->countMargins(),
+                $category->countProducts(),
+            ]);
+        }
+        $service->setSelectedCell('A2');
+
+        return $service->xlsxResponse();
     }
 
     /**

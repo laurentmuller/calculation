@@ -48,8 +48,8 @@ class DatabaseInfo
             $statement = $connection->prepare($sql);
 
             if ($statement->execute()) {
-                $entries = $statement->fetchAll();
-                $statement->closeCursor();
+                $entries = $statement->fetchAllAssociative();
+                $statement->free();
 
                 // convert
                 foreach ($entries as $entry) {
@@ -100,8 +100,8 @@ class DatabaseInfo
             $statement = $connection->prepare($sql);
 
             if ($statement->execute()) {
-                $result = $statement->fetch();
-                $statement->closeCursor();
+                $result = $statement->fetchAssociative();
+                $statement->free();
 
                 if (false !== $result) {
                     return $result['Value'];

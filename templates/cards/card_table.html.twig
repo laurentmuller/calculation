@@ -2,6 +2,7 @@
 
 {# imports #}
 {% import 'macros/_datatables.html.twig' as helper %}
+{% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
 {% macro button(path, text, class, title, icon, separator = false) %}
@@ -51,8 +52,9 @@
 {%- set orderdir      = app.session.get(object_type ~ '.orderdir') -%}
 {%- set pagelength    = app.session.get(object_type ~ '.pagelength', 15) -%}
 
-{%- set is_pdf_action = pdf_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_PDF, object_type) -%}
-{%- set other_actions = is_pdf_action or (other_actions ?? false) -%}
+{%- set is_pdf_action   = pdf_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_PDF, object_type) -%}
+{%- set is_excel_action = excel_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_PDF, object_type) -%}
+{%- set other_actions   = is_pdf_action or is_excel_action or (other_actions ?? false) -%}
 
 {# classes #}
 {% block card_container_class '' %}
@@ -89,6 +91,11 @@
                         {% set pdf_title = pdf_title|default('common.button_pdf_list') %}
                         {{ _self.item_external(pdf_path|default(false), pdf_title, 'dropdown-item btn-pdf-list', 'file-pdf far') }}
                     {% endif %}
+                    {% if is_excel_action %}
+                        {% set excel_title = excel_title|default('common.button_excel_list') %}
+                        {{ icons.dropdownItem(excel_path, excel_title, 'file-excel far fa-fw') }}
+                    {% endif %}
+                    
                     {%- endblock %}
 	    		</div>
 			</div>            

@@ -21,11 +21,15 @@ use App\Form\Product\ProductType;
 use App\Pdf\PdfResponse;
 use App\Report\ProductsReport;
 use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
+use App\Service\SpreadsheetService;
 use Doctrine\Common\Collections\Criteria;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for product entities.
@@ -117,6 +121,58 @@ class ProductController extends AbstractEntityController
     public function edit(Request $request, Product $item): Response
     {
         return $this->editEntity($request, $item);
+    }
+
+    /**
+     * Export the products to an Excel document.
+     *
+     * @Route("/excel", name="product_excel")
+     */
+    public function excel(ProductRepository $repository, SpreadsheetService $service, TranslatorInterface $translator): Response
+    {
+        /** @var Product[] $products */
+        $products = $repository->findAllByDescription();
+
+        $title = $translator->trans('product.list.title');
+
+        // properties
+        $properties = [
+            SpreadsheetService::P_TITLE => $title,
+            SpreadsheetService::P_ACTIVE_TITLE => $title,
+            SpreadsheetService::P_USER_NAME => $this->getUserName(),
+            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
+            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
+            SpreadsheetService::P_LANDSCAPE => false,
+            SpreadsheetService::P_GRIDLINE => true,
+        ];
+        $service->initialize($properties);
+
+        // headers
+        $service->setHeaderValues([
+            'product.fields.description' => Alignment::HORIZONTAL_GENERAL,
+            'product.fields.category' => Alignment::HORIZONTAL_GENERAL,
+            'product.fields.price' => Alignment::HORIZONTAL_RIGHT,
+            'product.fields.unit' => Alignment::HORIZONTAL_GENERAL,
+            'product.fields.supplier' => Alignment::HORIZONTAL_GENERAL,
+        ]);
+
+        // formats
+        $service->setColumnFormatAmount(3);
+
+        // products
+        $row = 2;
+        foreach ($products as $product) {
+            $service->setRowValues($row++, [
+                $product->getDescription(),
+                $product->getCategoryCode(),
+                $product->getPrice(),
+                $product->getUnit(),
+                $product->getSupplier(),
+                ]);
+        }
+        $service->setSelectedCell('A2');
+
+        return $service->xlsxResponse();
     }
 
     /**

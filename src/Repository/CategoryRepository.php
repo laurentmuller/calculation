@@ -39,6 +39,16 @@ class CategoryRepository extends AbstractRepository
     }
 
     /**
+     * Gets all categories order by code.
+     *
+     * @return Category[]
+     */
+    public function findAllByCode(): array
+    {
+        return $this->findBy([], ['code' => Criteria::ASC]);
+    }
+
+    /**
      * Gets the the list of categories sorted by code.
      *
      * @return Category[] the categories

@@ -59,6 +59,7 @@ calculation:
         empty: Aucune calculation définie.
         add_title: Créer une nouvelle calculation
         pdf_title: Télécharger la liste des calculations
+        excel_title: Exporter la liste des calculations
         state_title: Modifier le statut
         state_all_text: Tous
         state_all_description: Toutes les calculations
@@ -142,6 +143,7 @@ calculationstate:
         empty: Aucun statut défini.
         add_title: Créer un nouveau statut
         pdf_title: Télécharger la liste des status
+        excel_title: Exporter la liste des status
         calculation_title: Afficher les calculations
         editable: Modifiable
         not_editable: Non-Modifiable
@@ -172,6 +174,7 @@ category:
         empty: Aucune catégorie définie.
         add_title: Créer une nouvelle catégorie
         pdf_title: Télécharger la liste des catégories
+        excel_title: Exporter la liste des catégories
         product_title: Afficher les articles
     show:
         title: Propriétés de la catégorie
@@ -214,6 +217,7 @@ customer:
         empty: Aucun client défini.
         add_title: Créer un nouveau client
         pdf_title: Télécharger la liste des clients
+        excel_title: Exporter la liste des clients
     show:
         title: Propriétés du client
 globalmargin:
@@ -239,6 +243,7 @@ globalmargin:
         empty: Aucune marge globale définie.
         add_title: Créer une nouvelle marge globale
         pdf_title: Télécharger la liste des marges globales
+        excel_title: Exporter la liste des marges globales
     show:
         title: Propriétés de la marge globale
 product:
@@ -268,6 +273,7 @@ product:
         empty: Aucun article défini.
         add_title: Créer un nouvel article
         pdf_title: Télécharger la liste des articles
+        excel_title: Exporter la liste des articles
         category_all_text: Toutes
         category_all_description: Toutes
         category_description: Catégorie d'articles
@@ -315,6 +321,7 @@ user:
         empty: Aucun utilisateur défini.
         add_title: Créer un nouvel utilisateur
         pdf_title: Télécharger la liste des utilisateurs
+        excel_title: Exporter la liste des utilisateurs
         rights_title: Droits d'accès
         rights_export: Télécharger la liste des droits d'accès
     switch:
@@ -387,6 +394,7 @@ common:
     button_import: Importer
     button_pdf: Télécharger
     button_pdf_list: Télécharger la liste
+    button_excel_list: Exporter la liste
     button_show: Afficher
     button_search: Rechercher
     button_browse: Parcourir

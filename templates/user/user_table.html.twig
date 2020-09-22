@@ -7,6 +7,7 @@
 {%- set title       = 'user.list.title' -%}
 {%- set title_icon  = 'user far' -%}
 {%- set pdf_title   = 'user.list.pdf_title' -%}
+{%- set excel_title = 'user.list.excel_title' -%}
 {%- set object_type = EntityVoterInterface.ENTITY_USER -%}
 
 {# actions #}
@@ -22,6 +23,7 @@
 {%- set switch_path   = path('homepage') -%}
 {%- set pdf_path      = path('user_pdf') -%}
 {%- set pdf_right     = path('user_rights_pdf') -%}
+{%- set excel_path    = path('user_excel') -%}
 
 {# titles #}
 {%- set add_title    = 'user.add.title' %}
@@ -40,8 +42,8 @@
     {{ _self.item_data(switch_path, 'user.switch.take.title', 'user-plus', {'data-callback': 'userSwitch', 'data-id': app.user.id}) }}
 {%- endif -%}
 {{ icons.dropdownSeparator() }}
-{{ parent() }}
 {{ _self.item_external(pdf_right, 'user.list.rights_export', 'dropdown-item', 'file-pdf far') }}
+{{ parent() }}
 {{ icons.dropdownSeparator() }}
 {{ icons.dropdownItemCard('user_list') }}
 {% endblock %}

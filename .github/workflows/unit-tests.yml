@@ -9,9 +9,8 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix:
-        operating-system: [ubuntu-latest, windows-latest, macos-latest]
-
+      matrix:        
+        operating-system: [ubuntu-latest, macos-latest]#, windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -20,9 +19,7 @@ jobs:
         uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
         with:
           php-version: '7.4'
-          extensions: ext-xsl,xsl,sqlite3,pdo_sqlite,intl,gd2
-          # full extensions for phpoffice/phpspreadsheet 
-          # ext-ctype,ext-dom,ext-gd,ext-iconv,ext-fileinfo,ext-libxml,ext-mbstring,ext-SimpleXML,ext-xml,ext-xmlreader,ext-xmlwriter,ext-zip,ext-zlib
+          extensions: ext-xsl,xsl,sqlite3,pdo_sqlite,intl
           
 #      - name: Get Composer cache directory
 #        id: composercache

@@ -3,14 +3,21 @@
 /* globals Toaster */
 
 /**
- * Initialize search units
+ * Initialize a search for an element.
+ * 
+ * @param {JQuery}
+ *            $element - The element to handle.
+ * @param {String]
+ *            url - The search URL.
+ * @param {String}
+ *            error - The message to display on search error.
+ * 
+ * @returns {JQuery} The element for chaining.
  */
-function initSearchUnits() {
+function initSearchElement($element, url, error) {
     'use strict';
 
     // search units url
-    const url = $("#edit-form").data("search-unit");
-    const $element = $("#product_unit");
     const options = {
         valueField: '',
         ajax: {
@@ -28,45 +35,13 @@ function initSearchUnits() {
         },
         onError: function () {
             const title = $("#edit-form").data("title");
-            const message = $("#edit-form").data("error-unit");
+            const message = $("#edit-form").data(error);
             Toaster.danger(message, title, $("#flashbags").data());
         }
     };
     $element.typeahead(options);
-}
 
-/**
- * Initialize search suppliers
- */
-
-function initSearchSuppliers() {
-    'use strict';
-
-    // search suppliers url
-    const url = $("#edit-form").data("search-supplier");
-    const $element = $("#product_supplier");
-    const options = {
-        valueField: '',
-        ajax: {
-            url: url
-        },
-        // overridden functions (all are set in the server side)
-        matcher: function () {
-            return true;
-        },
-        grepper: function (data) {
-            return data;
-        },
-        onSelect: function () {
-            $element.select();
-        },
-        onError: function () {
-            const title = $("#edit-form").data("title");
-            const message = $("#edit-form").data("error-supplier");
-            Toaster.danger(message, title, $("#flashbags").data());
-        }
-    };
-    $element.typeahead(options);
+    return $element;
 }
 
 /**
@@ -75,8 +50,10 @@ function initSearchSuppliers() {
 (function ($) {
     'use strict';
 
-    initSearchUnits();
-    initSearchSuppliers();
+    const $form = $("#edit-form");
+    initSearchElement($("#product_unit"), $form.data("search-unit"), $form.data("error-unit"));
+    initSearchElement($("#product_supplier"), $form.data("search-supplier"), $form.data("error-supplier"));
     $('#product_price').inputNumberFormat();
-    $("#edit-form").initValidator();
+    $form.initValidator();
+
 }(jQuery));

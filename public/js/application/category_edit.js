@@ -9,7 +9,7 @@ function getMaxValue() {
     'use strict';
 
     let maximum = 0;
-    $("input[name*='[maximum]']").each(function () {
+    $("input[name$='[maximum]']").each(function () {
         maximum = Math.max(maximum, $(this).floatVal());
     });
     return maximum;
@@ -24,7 +24,7 @@ function getMinMargin() {
     'use strict';
 
     let min = Number.MAX_VALUE;
-    $("input[name*='[margin]']").each(function () {
+    $("input[name$='[margin]']").each(function () {
         min = Math.min(min, $(this).intVal());
     });
     return min === Number.MAX_VALUE ? 0 : min;
@@ -56,10 +56,23 @@ function addMarginForm($collectionHolder) {
     $("#data-table-edit > tbody").append(newForm);
     $("#data-table-edit").removeClass('d-none');
 
-    // set default values
-    $("input[name*='minimum']").last().floatVal(minimum).selectFocus();
-    $("input[name*='maximum']").last().floatVal(maximum);
-    $("input[name*='margin']").last().intVal(margin);
+    // set default values and add validation
+    $("input[name$='[minimum]']:last").inputNumberFormat().floatVal(minimum).selectFocus();
+    $("input[name$='[maximum]']:last").inputNumberFormat().floatVal(maximum);
+    $("input[name$='[margin]']:last").inputNumberFormat({
+        'decimal': 0
+    }).intVal(margin);
+
+    // $("input[name*='minimum']").last().floatVal(minimum).selectFocus();
+    // $("input[name*='maximum']").last().floatVal(maximum);
+    // $("input[name*='margin']").last().intVal(margin);
+    //
+    // // add numbers validation
+    // $("input[name$='[minimum]']:last").inputNumberFormat();
+    // $("input[name$='[maximum]']:last").inputNumberFormat();
+    // $("input[name$='[margin]']:last").inputNumberFormat({
+    // 'decimal': 0
+    // });
 }
 
 /**
@@ -88,19 +101,26 @@ function removeMarginForm($this) {
 (function ($) {
     'use strict';
 
-    // validation
-    $("form").initValidator();
-
-    // handle add button
-    const $collectionHolder = $("#data-table-edit");
-    $(".btn-add").on("click", function (e) {
-        e.preventDefault();
-        addMarginForm($collectionHolder);
-    });
-
     // handle delete button
-    $("#data-table-edit").on("click", ".btn-delete", function (e) {
+    const $table = $("#data-table-edit");
+    $table.on("click", ".btn-delete", function (e) {
         e.preventDefault();
         removeMarginForm($(this));
     });
+
+    // handle add button
+    $(".btn-add").on("click", function (e) {
+        e.preventDefault();
+        addMarginForm($table);
+    });
+
+    // add numbers validation
+    $("input[name$='[minimum]']").inputNumberFormat();
+    $("input[name$='[maximum]']").inputNumberFormat();
+    $("input[name$='[margin]']").inputNumberFormat({
+        'decimal': 0
+    });
+
+    // validation
+    $("form").initValidator();
 }(jQuery));

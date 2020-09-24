@@ -6,13 +6,11 @@
 (function ($) {
     'use strict';
 
-    // const options = {
-    // rules: {
-    // 'global_margin[maximum]': {
-    // greaterThan: '#global_margin_minimum'
-    // }
-    // }
-    // };
+    $('#global_margin_minimum').inputNumberFormat();
+    $('#global_margin_maximum').inputNumberFormat();
+    $('#global_margin_margin').inputNumberFormat({
+        'decimal': 0
+    });
 
     // initialize validator
     $('#edit-form').initValidator();

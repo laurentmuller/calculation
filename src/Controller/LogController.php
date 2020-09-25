@@ -21,6 +21,7 @@ use App\Util\SymfonyUtils;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,12 +41,10 @@ class LogController extends AbstractController
      *
      * @Route("", name="log_list")
      */
-    public function card(LogService $service): Response
+    public function card(Request $request, LogService $service): Response
     {
         if (!$entries = $service->getEntries()) {
-            $this->infoTrans('log.show.empty');
-
-            return $this->redirectToHomePage();
+            return $this->handleEmptyEntries($request);
         }
 
         return $this->render('log/log_card.html.twig', $entries);
@@ -86,9 +85,7 @@ class LogController extends AbstractController
     {
         // get entries
         if (!$service->getEntries()) {
-            $this->infoTrans('log.show.empty');
-
-            return  $this->redirectToHomePage();
+            return $this->handleEmptyEntries($request);
         }
 
         // handle request
@@ -133,13 +130,11 @@ class LogController extends AbstractController
      *
      * @Route("/pdf", name="log_pdf")
      */
-    public function pdf(LogService $service): Response
+    public function pdf(Request $request, LogService $service): Response
     {
         // get entries
         if (!$entries = $service->getEntries()) {
-            $this->infoTrans('log.show.empty');
-
-            return $this->redirectToHomePage();
+            return $this->handleEmptyEntries($request);
         }
 
         // render report
@@ -187,9 +182,7 @@ class LogController extends AbstractController
     {
         $service = $table->getService();
         if (!$service->getEntries()) {
-            $this->infoTrans('log.show.empty');
-
-            return $this->redirectToHomePage();
+            return $this->handleEmptyEntries($request);
         }
 
         $results = $table->handleRequest($request);
@@ -207,5 +200,19 @@ class LogController extends AbstractController
         ];
 
         return $this->render('log/log_table.html.twig', $parameters);
+    }
+
+    /**
+     * Handles the empty log entries by redirecting to previous page, if applicable;
+     * to home page otherwise.
+     */
+    private function handleEmptyEntries(Request $request): RedirectResponse
+    {
+        $this->infoTrans('log.show.empty');
+        if ($referer = $request->headers->get('referer')) {
+            return $this->redirect($referer);
+        }
+
+        return $this->redirectToHomePage();
     }
 }

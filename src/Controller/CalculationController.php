@@ -42,6 +42,7 @@ use App\Service\SpreadsheetService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\EventManager;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -471,10 +472,14 @@ class CalculationController extends AbstractEntityController
         ]);
 
         // formats
+        $percentage = NumberFormat::FORMAT_PERCENTAGE;
+        $minMargin = $this->getApplication()->getMinMargin();
+        $format = "[Red][<$minMargin]$percentage;$percentage";
+
         $service->setColumnFormatId(1)
             ->setColumnFormatDate(2)
             ->setColumnFormatAmount(6)
-            ->setColumnFormatPercent(7)
+            ->setColumnFormat(7, $format)
             ->setColumnFormatAmount(8);
 
         // calculations

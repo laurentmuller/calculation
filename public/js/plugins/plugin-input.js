@@ -62,9 +62,9 @@
                 if (value.indexOf(options.separator) === -1) {
                     value += options.separator;
                 }
-                const decimalsToAdd = options.decimalAuto - value.split(options.separator)[1].length;
-                for (let i = 1; i <= decimalsToAdd; i++) {
-                    value += "0";
+                const decimals = options.decimalAuto - value.split(options.separator)[1].length;
+                if (decimals > 0) {
+                    value += "0".repeat(decimals);
                 }
             }
 

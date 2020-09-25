@@ -525,6 +525,8 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
     {
         if (empty($name)) {
             $name = 'document.pdf';
+        } else {
+            $name = \basename($name);
         }
 
         $encoded = (new UnicodeString($name))->ascii()->toString();

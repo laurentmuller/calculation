@@ -27,8 +27,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseControll
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -185,7 +185,7 @@ abstract class AbstractController extends BaseController
     /**
      * Redirect to the home page.
      */
-    public function redirectToHomePage(): Response
+    public function redirectToHomePage(): RedirectResponse
     {
         return  $this->redirectToRoute(IndexController::HOME_PAGE);
     }

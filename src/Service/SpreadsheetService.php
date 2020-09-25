@@ -18,13 +18,15 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Document\Properties;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\String\UnicodeString;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -35,9 +37,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class SpreadsheetService
 {
     /**
-     * The default margin (0.4 = 10 millimeters).
+     * The default margins (0.4" = 10 millimeters).
      */
     public const DEFAULT_MARGIN = 0.4;
+
+    /**
+     * The top and bottom margins when header and/or footer is present (0.51" = 13 millimeters).
+     */
+    public const HEADER_FOOTER_MARGIN = 0.51;
 
     /**
      * The active worksheet title property (type string).
@@ -90,6 +97,26 @@ class SpreadsheetService
     public const P_USER_NAME = 'userName';
 
     /**
+     * The  Excel 97 (.xls) content type.
+     */
+    public const XLS_CONTENT_TYPE = 'application/vnd.ms-excel';
+
+    /**
+     * The  Excel 97 (.xls) writer type.
+     */
+    public const XLS_WRITER_TYPE = 'Xls';
+
+    /**
+     * The Office Open XML Excel 2007 (.xlsx) content type.
+     */
+    public const XLSX_CONTENT_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+    /**
+     * The Office Open XML Excel 2007 (.xlsx) writer type.
+     */
+    public const XLSX_WRITER_TYPE = 'Xlsx';
+
+    /**
      * The boolean format.
      *
      * @var string[]
@@ -123,7 +150,27 @@ class SpreadsheetService
     }
 
     /**
-     * Get active sheet.
+     * Validate the spreed sheet title.
+     *
+     * @param string $title the title to validate
+     *
+     * @return string a valid title
+     */
+    public static function checkSheetTitle(string $title): string
+    {
+        // replace invalid characters
+        $title = \str_replace(Worksheet::getInvalidCharacters(), '', $title);
+
+        // check length
+        if (StringHelper::countCharacters($title) > Worksheet::SHEET_TITLE_MAXIMUM_LENGTH) {
+            $title = StringHelper::substring($title, 0, Worksheet::SHEET_TITLE_MAXIMUM_LENGTH);
+        }
+
+        return $title;
+    }
+
+    /**
+     * Get the active sheet.
      */
     public function getActiveSheet(): Worksheet
     {
@@ -157,7 +204,7 @@ class SpreadsheetService
     /**
      * Sets the properties for the spreedsheet and the active sheet.
      *
-     * @param array $properties the properties to set. Is one or more SpreadsheetService::P_*
+     * @param array $properties the properties to set. One or more SpreadsheetService::P_* values
      */
     public function initialize(array $properties): self
     {
@@ -173,6 +220,7 @@ class SpreadsheetService
         if (isset($properties[self::P_COMPANY])) {
             $this->setCompany($properties[self::P_COMPANY]);
         }
+        //->setKeywords("office 2007 openxml php")
         if (isset($properties[self::P_PAGE_SIZE])) {
             $this->setPageSize($properties[self::P_PAGE_SIZE]);
         } else {
@@ -191,30 +239,11 @@ class SpreadsheetService
         }
 
         // header and footer
-        $header = '';
-        if (isset($properties[self::P_ACTIVE_TITLE])) {
-            $header .= '&L&B' . $this->cleanHeaderFooter($properties[self::P_ACTIVE_TITLE]);
-        }
-        if (isset($properties[self::P_COMPANY])) {
-            $header .= '&R&B' . $this->cleanHeaderFooter($properties[self::P_COMPANY]);
-        }
-        $footer = '&LPage &P / &N'; // pages
-        if (isset($properties[self::P_APPLICATION])) {
-            $footer .= '&C' . $this->cleanHeaderFooter($properties[self::P_APPLICATION]);
-        }
-        $footer .= '&R&D - &T'; // date and time
+        $title = $properties[self::P_ACTIVE_TITLE] ?? null;
+        $company = $properties[self::P_COMPANY] ?? null;
+        $application = $properties[self::P_APPLICATION] ?? null;
 
-        $headerFooter = $this->getActiveSheet()->getHeaderFooter();
-        if (!empty($header)) {
-            $this->getActiveSheet()->getPageMargins()->setTop(0.59); // 15 mm
-            $headerFooter->setOddHeader($header);
-        }
-        if (!empty($footer)) {
-            $this->getActiveSheet()->getPageMargins()->setBottom(0.59); // 15 mm
-            $headerFooter->setOddFooter($footer);
-        }
-
-        return $this;
+        return $this->setHeaderFooter($title, $company, $application);
     }
 
     /**
@@ -222,6 +251,7 @@ class SpreadsheetService
      */
     public function setActiveTitle(string $title): self
     {
+        $title = self::checkSheetTitle($title);
         $this->getActiveSheet()->setTitle($title);
 
         return $this;
@@ -421,6 +451,55 @@ class SpreadsheetService
     }
 
     /**
+     * Sets the header and footer texts.
+     *
+     * The header contains:
+     * <ul>
+     * <li>The title on the left with bold style.</li>
+     * <li>The company name on the right with bold style.</li>
+     * </ul>
+     * The footer contains:
+     * <ul>
+     * <li>The current page and the total pages on the left.</li>
+     * <li>The application name on the center.</li>
+     * <li>The date and the time on the right.</li>
+     * </ul>
+     *
+     * @param string $title       the title
+     * @param string $company     the company name
+     * @param string $application the application name
+     */
+    public function setHeaderFooter(?string $title, ?string $company, ?string $application): self
+    {
+        $header = '';
+        if ($title) {
+            $header .= '&L&B' . $this->cleanHeaderFooter($title);
+        }
+        if ($company) {
+            $header .= '&R&B' . $this->cleanHeaderFooter($company);
+        }
+
+        $footer = '&LPage &P / &N'; // pages
+        if ($application) {
+            $footer .= '&C' . $this->cleanHeaderFooter($application);
+        }
+        $footer .= '&R&D - &T'; // date and time
+
+        $pageMargins = $this->getActiveSheet()->getPageMargins();
+        $headerFooter = $this->getActiveSheet()->getHeaderFooter();
+        if (!empty($header)) {
+            $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
+            $headerFooter->setOddHeader($header);
+        }
+        if (!empty($footer)) {
+            $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
+            $headerFooter->setOddFooter($footer);
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the headers of the active sheet with bold style and freezed first row.
      *
      * @param array $headers the headers where key is the text to translate and value is the
@@ -616,31 +695,23 @@ class SpreadsheetService
     /**
      * Gets the streamed response for this spread sheet with the Excel 97 (.xls) format.
      *
-     * @param string $disposition the content disposition
-     *
-     * @return StreamedResponse the response
+     * @param bool $inline <code>true</code> to send the file inline to the browser. The viewer is used if available.
+     *                     <code>false</code> to send to the browser and force a file download.
      */
-    public function xlsResponse(string $disposition = ResponseHeaderBag::DISPOSITION_ATTACHMENT): StreamedResponse
+    public function xlsResponse(bool $inline = true): StreamedResponse
     {
-        $writerType = 'Xls';
-        $contentType = 'application/vnd.ms-excel';
-
-        return $this->streamResponse($writerType, $contentType, $disposition);
+        return $this->streamResponse(self::XLS_WRITER_TYPE, self::XLS_CONTENT_TYPE, $inline);
     }
 
     /**
      * Gets the streamed response for this spread sheet with the Office Open XML Excel 2007 (.xlsx) format.
      *
-     * @param string $disposition the content disposition
-     *
-     * @return StreamedResponse the response
+     * @param bool $inline <code>true</code> to send the file inline to the browser. The viewer is used if available.
+     *                     <code>false</code> to send to the browser and force a file download.
      */
-    public function xlsxResponse(string $disposition = ResponseHeaderBag::DISPOSITION_ATTACHMENT): StreamedResponse
+    public function xlsxResponse(bool $inline = true): StreamedResponse
     {
-        $writerType = 'Xlsx';
-        $contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-
-        return $this->streamResponse($writerType, $contentType, $disposition);
+        return $this->streamResponse(self::XLSX_WRITER_TYPE, self::XLSX_CONTENT_TYPE, $inline);
     }
 
     /**
@@ -654,26 +725,30 @@ class SpreadsheetService
     }
 
     /**
-     * Creates a streamed response.
+     * Gets a streamed response.
      *
-     * @param string $writerType  the writer type ('Xls' or 'Xlsx')
+     * @param string $writerType  the writer type
      * @param string $contentType the content type
-     * @param string $disposition the content disposition
-     *
-     * @return StreamedResponse the response
+     * @param bool   $inline      <code>true</code> to send the file inline to the browser. The viewer is used if available.
+     *                            <code>false</code> to send to the browser and force a file download.
      */
-    private function streamResponse(string $writerType, string $contentType, string $disposition): StreamedResponse
+    private function streamResponse(string $writerType, string $contentType, bool $inline): StreamedResponse
     {
-        $title = empty($this->title) ? 'export' : $this->title;
-        $fileName = $title . '.' . \strtolower($writerType);
+        $title = $this->title ?? 'export';
+        $name = $title . '.' . \strtolower($writerType);
+        $encoded = (new UnicodeString($name))->ascii()->toString();
         $writer = IOFactory::createWriter($this->getSpreadsheet(), $writerType);
+        $disposition = $inline ? HeaderUtils::DISPOSITION_INLINE : HeaderUtils::DISPOSITION_ATTACHMENT;
 
         $callback = function () use ($writer): void {
             $writer->save('php://output');
         };
+
         $headers = [
+            'Pragma' => 'public',
             'Content-Type' => $contentType,
-            'Content-Disposition' => "$disposition; filename=\"$fileName\"",
+            'Cache-Control' => 'private, max-age=0, must-revalidate',
+            'Content-Disposition' => HeaderUtils::makeDisposition($disposition, $name, $encoded),
         ];
 
         return new StreamedResponse($callback, StreamedResponse::HTTP_OK, $headers);

@@ -56,23 +56,12 @@ function addMarginForm($collectionHolder) {
     $("#data-table-edit > tbody").append(newForm);
     $("#data-table-edit").removeClass('d-none');
 
-    // set default values and add validation
-    $("input[name$='[minimum]']:last").inputNumberFormat().floatVal(minimum).selectFocus();
-    $("input[name$='[maximum]']:last").inputNumberFormat().floatVal(maximum);
-    $("input[name$='[margin]']:last").inputNumberFormat({
+    // set values and add validation
+    $("input[name$='[minimum]']:last").floatVal(minimum).inputNumberFormat().selectFocus();
+    $("input[name$='[maximum]']:last").floatVal(maximum).inputNumberFormat();
+    $("input[name$='[margin]']:last").intVal(margin).inputNumberFormat({
         'decimal': 0
-    }).intVal(margin);
-
-    // $("input[name*='minimum']").last().floatVal(minimum).selectFocus();
-    // $("input[name*='maximum']").last().floatVal(maximum);
-    // $("input[name*='margin']").last().intVal(margin);
-    //
-    // // add numbers validation
-    // $("input[name$='[minimum]']:last").inputNumberFormat();
-    // $("input[name$='[maximum]']:last").inputNumberFormat();
-    // $("input[name$='[margin]']:last").inputNumberFormat({
-    // 'decimal': 0
-    // });
+    });
 }
 
 /**
@@ -85,13 +74,12 @@ function removeMarginForm($this) {
     'use strict';
 
     // remove row
-    let row = $this.closest("tr");
+    const row = $this.closest("tr");
     row.fadeOut(200, function () {
         row.remove();
         if ($("#data-table-edit > tbody > tr").length === 0) {
             $("#data-table-edit").addClass('d-none');
         }
-        // $(".btn-add").focus();
     });
 }
 

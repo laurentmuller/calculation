@@ -8,13 +8,13 @@
 {%- endmacro %}
 
 {% macro position(value, selection) -%}
-{%- set text = 'parameters.messagePosition.' ~ value|replace({'-': '_'}) -%}
+{%- set text = 'parameters.message_position.' ~ value -%}
 <option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
 {%- endmacro %}
 
 {% macro timeout(value, selection) -%}
 {%- set round = (value / 1000)|round(0, 'floor') -%}
-{%- set text  = 'parameters.messageTimeout.' ~ round -%}
+{%- set text  = 'parameters.message_timeout.' ~ round -%}
 <option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
 {%- endmacro %}
 

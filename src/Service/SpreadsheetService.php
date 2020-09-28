@@ -616,12 +616,15 @@ class SpreadsheetService
     {
         $sheet = $this->getActiveSheet();
         foreach ($values as $value) {
-            if ($value instanceof \DateTimeInterface) {
-                $value = Date::PHPToExcel($value);
-            } elseif (\is_bool($value)) {
-                $value = $value ? 1 : 0;
+            if (null !== $value) {
+                if ($value instanceof \DateTimeInterface) {
+                    $value = Date::PHPToExcel($value);
+                } elseif (\is_bool($value)) {
+                    $value = $value ? 1 : 0;
+                }
+                $sheet->setCellValueByColumnAndRow($col, $row, $value);
             }
-            $sheet->setCellValueByColumnAndRow($col++, $row, $value);
+            ++$col;
         }
 
         return $this;
@@ -678,7 +681,7 @@ class SpreadsheetService
     {
         $columnName = $this->stringFromColumnIndex($columnIndex);
 
-        return "$columnName$rowIndex";
+        return $columnName . $rowIndex;
     }
 
     /**

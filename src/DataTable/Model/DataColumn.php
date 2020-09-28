@@ -321,7 +321,7 @@ class DataColumn
     public function getCellClassName(): string
     {
         $className = $this->className ?: '';
-        if ($this->visible) {
+        if ($this->visible && false === \stripos($className, 'actions')) {
             return \trim($className . ' cursor-pointer');
         }
 

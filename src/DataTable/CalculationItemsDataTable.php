@@ -131,16 +131,16 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
                 ->setClassName('text-state'),
             DataColumn::instance('customer')
                 ->setTitle('calculation.fields.customer')
-                ->setClassName('w-20 cell'),
+                ->setClassName('cell'),
             DataColumn::instance('description')
                 ->setTitle('calculation.fields.description')
-                ->setClassName('w-30 cell'),
+                ->setClassName('cell'),
             DataColumn::instance('items')
                 ->setTitle('calculation.fields.items')
                 ->setRawData(true)
                 ->setOrderable(false)
                 ->setSearchable(false)
-                ->setClassName('w-30 cell text-danger')
+                ->setClassName('cell text-danger')
                 ->setHeaderClassName('text-body')
                 ->setFormatter([$this, 'formatInvalidItems']),
             DataColumn::hidden('stateColor'),

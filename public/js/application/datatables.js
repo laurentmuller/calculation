@@ -346,7 +346,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     });
     
     // context menu
-    const selector = '.dataTable .table-primary td:not(.skip-keys)';
+    const selector = '.dataTable .table-primary td:not(.d-print-none)';
     const show = function () {
         $('.dropdown-menu.show').removeClass('show');
         disableKeys();
@@ -359,7 +359,6 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     // drop-down menu
     $('#other_actions_button').handleKeys();
     $('#other_actions').handleKeys('show.bs.dropdown', 'hide.bs.dropdown');
-
     $('#data-table tbody').on('show.bs.dropdown', 'td.actions .dropdown', function () {
         const $this = $(this);
         const items = $this.closest('tr').getContextMenuItems();

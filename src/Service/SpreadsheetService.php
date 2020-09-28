@@ -503,7 +503,7 @@ class SpreadsheetService
      * Sets the headers of the active sheet with bold style and freezed first row.
      *
      * @param array $headers the headers where key is the text to translate and value is the
-     *                       horizontal alignment or an array with the horizontal and vertical
+     *                       horizontal alignment or if an array, the horizontal and vertical
      *                       alignments
      */
     public function setHeaderValues(array $headers): self
@@ -608,12 +608,12 @@ class SpreadsheetService
     /**
      * Sets the values of the given row.
      *
-     * @param int   $row    the row index (1 = first row)
+     * @param int   $row    the row index (first row  = 1)
      * @param array $values the values to set
+     * @param int   $col    the starting column index (A = 1)
      */
-    public function setRowValues(int $row, array $values): self
+    public function setRowValues(int $row, array $values, int $col = 1): self
     {
-        $col = 1;
         $sheet = $this->getActiveSheet();
         foreach ($values as $value) {
             if ($value instanceof \DateTimeInterface) {
@@ -621,7 +621,6 @@ class SpreadsheetService
             } elseif (\is_bool($value)) {
                 $value = $value ? 1 : 0;
             }
-
             $sheet->setCellValueByColumnAndRow($col++, $row, $value);
         }
 

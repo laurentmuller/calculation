@@ -78,10 +78,10 @@ class CalculationDataTable extends AbstractEntityDataTable
                 ->setClassName('text-state'),
             DataColumn::instance('customer')
                 ->setTitle('calculation.fields.customer')
-                ->setClassName('w-20 cell'),
+                ->setClassName('cell'),
             DataColumn::instance('description')
                 ->setTitle('calculation.fields.description')
-                ->setClassName('w-25 cell'),
+                ->setClassName('cell'),
             DataColumn::percent('overallMargin')
                 ->setTitle('calculation.fields.margin')
                 ->setCallback('renderTooltip')

@@ -192,6 +192,23 @@ abstract class AbstractDatabase extends \SQLite3
     }
 
     /**
+     * Binds a parameter to the given statement variable.
+     *
+     * @param \SQLite3Stmt $stmt  the statement to bind parameter with
+     * @param string       $name  a string identifying the statement variable to which the
+     *                            parameter should be bound
+     * @param mixed        $value the parameter to bind to a statement variable
+     * @param int          $type  the optional data type of the parameter to bind
+     *
+     * @return bool true if the parameter is bound to the statement variable, false
+     *              on failure
+     */
+    protected function bindParam(\SQLite3Stmt $stmt, string $name, $value, int $type = null): bool
+    {
+        return $stmt->bindParam($name, $value, $type);
+    }
+
+    /**
      * Creates an index.
      *
      * @param string $table  the table name

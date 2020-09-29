@@ -33,8 +33,8 @@ trait SearchTrait
      */
     public function match(string $query): bool
     {
-        $query = $this->ascii($query);
         $terms = $this->getSearchTerms();
+        $query = $this->ascii($query)->toString();
         foreach ($terms as $term) {
             if (null !== $term && $this->ignoreCase($term)->containsAny($query)) {
                 return  true;

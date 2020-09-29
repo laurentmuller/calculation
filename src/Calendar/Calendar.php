@@ -161,7 +161,7 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     {
         // check year
         if ($year < 100) {
-            $dt = \DateTime::createFromFormat('y', $year);
+            $dt = \DateTime::createFromFormat('y', (string) $year);
             $year = $dt->format('Y');
         }
         $this->year = $year;

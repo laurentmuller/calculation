@@ -111,7 +111,7 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
     protected function createColumns(): array
     {
         // callbacks
-        $dateFormatter = function (\DateTimeInterface $date): string {
+        $dateFormatter = function (\DateTimeInterface $date) {
             return $this->localeDate($date);
         };
 

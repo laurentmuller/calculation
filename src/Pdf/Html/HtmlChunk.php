@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\PdfColor;
 use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
@@ -563,17 +562,17 @@ abstract class HtmlChunk implements HtmlConstantsInterface, PdfConstantsInterfac
 
                     switch ($name) {
                         case 'color':
-                            $color = PdfColor::parse($value);
-                            if (false !== $color) {
-                                $style->setTextColor(new PdfTextColor($color));
+                            $color = PdfTextColor::create($value);
+                            if ($color) {
+                                $style->setTextColor($color);
                                 $update = true;
                             }
                             break;
 
                         case 'background-color':
-                            $color = PdfColor::parse($value);
-                            if (false !== $color) {
-                                $style->setFillColor(new PdfFillColor($color));
+                            $color = PdfFillColor::create($value);
+                            if ($color) {
+                                $style->setFillColor($color);
                                 $update = true;
                             }
                             break;

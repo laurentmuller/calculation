@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Doctrine;
 
+use Doctrine\DBAL\Driver\Result;
 use Doctrine\ORM\Internal\Hydration\ArrayHydrator;
 
 /**
@@ -41,15 +42,18 @@ class ColumnHydrator extends ArrayHydrator
      */
     protected function hydrateAllData(): array
     {
-        if (!isset($this->_rsm->indexByMap['scalars'])) {
-            return $this->_stmt->fetchFirstColumn();
+        $rsm = $this->_rsm;
+        $stmt = $this->_stmt;
+
+        if (!isset($rsm->indexByMap['scalars']) && $stmt instanceof Result) {
+            return $stmt->fetchFirstColumn();
         }
 
         if (!$result = parent::hydrateAllData()) {
             return $result;
         }
 
-        $indexColumn = $this->_rsm->scalarMappings[$this->_rsm->indexByMap['scalars']];
+        $indexColumn = $rsm->scalarMappings[$rsm->indexByMap['scalars']];
         $keys = \array_keys(\reset($result));
         $column = isset($keys[1]) && $keys[0] === $indexColumn ? $keys[1] : $keys[0];
 

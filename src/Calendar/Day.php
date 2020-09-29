@@ -33,13 +33,13 @@ class Day extends CalendarItem implements WeekDaysInterface
     /**
      * Constructor.
      *
-     * @param Calendar           $calendar the parent calendar
-     * @param \DateTimeInterface $date     the date
+     * @param Calendar  $calendar the parent calendar
+     * @param \DateTime $date     the date
      */
-    public function __construct(Calendar $calendar, \DateTimeInterface $date)
+    public function __construct(Calendar $calendar, \DateTime $date)
     {
         parent::__construct($calendar);
-        $this->date = $date instanceof \DateTimeImmutable ? $date : \DateTimeImmutable::createFromMutable($date);
+        $this->date = \DateTimeImmutable::createFromMutable($date);
     }
 
     /**

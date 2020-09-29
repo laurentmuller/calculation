@@ -364,7 +364,7 @@ class UserController extends AbstractEntityController
      */
     public function pdf(PropertyMappingFactory $factory, StorageInterface $storage, KernelInterface $kernel): PdfResponse
     {
-        // get users
+        /** @var User[] $users */
         $users = $this->getEntities();
         if (empty($users)) {
             $message = $this->trans('user.list.empty');
@@ -428,6 +428,7 @@ class UserController extends AbstractEntityController
      */
     public function rightsPdf(): PdfResponse
     {
+        /** @var User[] $users */
         $users = $this->getEntities();
         if (empty($users)) {
             $message = $this->trans('user.list.empty');

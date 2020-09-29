@@ -95,7 +95,7 @@ abstract class PdfColor implements PdfDocumentUpdaterInterface
      *
      * Value is RGB(255, 0, 0).
      *
-     * @return self the blue color
+     * @return static the blue color
      */
     public static function blue(): self
     {
@@ -107,7 +107,7 @@ abstract class PdfColor implements PdfDocumentUpdaterInterface
      *
      * Value is RGB(221, 221, 221).
      *
-     * @return self The border cell color
+     * @return static The border cell color
      */
     public static function cellBorder(): self
     {
@@ -119,7 +119,7 @@ abstract class PdfColor implements PdfDocumentUpdaterInterface
      *
      * @param array|string $rgb an array containing the red, green and blue values or a hexadecimal string
      *
-     * @return self|null the color or null if the RGB value can not be parsed
+     * @return static|null the color or null if the RGB value can not be parsed
      *
      * @see PdfColor::parse()
      */
@@ -141,7 +141,7 @@ abstract class PdfColor implements PdfDocumentUpdaterInterface
      *
      * Value is RGB(0, 128, 0).
      *
-     * @return self the dark-green color
+     * @return static the dark-green color
      */
     public static function darkGreen(): self
     {
@@ -187,7 +187,7 @@ abstract class PdfColor implements PdfDocumentUpdaterInterface
      *
      * Value is RGB(0, 255, 0).
      *
-     * @return self the green color
+     * @return static the green color
      */
     public static function green(): self
     {
@@ -199,7 +199,7 @@ abstract class PdfColor implements PdfDocumentUpdaterInterface
      *
      * Value is RGB(245, 245, 245).
      *
-     * @return self the header color
+     * @return static the header color
      */
     public static function header(): self
     {
@@ -211,7 +211,7 @@ abstract class PdfColor implements PdfDocumentUpdaterInterface
      *
      * Value is RGB(0, 0, 255).
      *
-     * @return self the link color
+     * @return static the link color
      */
     public static function link(): self
     {
@@ -225,7 +225,7 @@ abstract class PdfColor implements PdfDocumentUpdaterInterface
      *
      * @param string $value a hexadecimal string
      *
-     * @return array|bool the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
+     * @return int[]|bool the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
      */
     public static function parse(?string $value)
     {
@@ -264,7 +264,7 @@ abstract class PdfColor implements PdfDocumentUpdaterInterface
      *
      * Value is RGB(255, 0, 0).
      *
-     * @return self the red color
+     * @return static the red color
      */
     public static function red(): self
     {
@@ -335,7 +335,7 @@ abstract class PdfColor implements PdfDocumentUpdaterInterface
      *
      * Value is RGB(255, 255, 255).
      *
-     * @return self the white color
+     * @return static the white color
      */
     public static function white(): self
     {

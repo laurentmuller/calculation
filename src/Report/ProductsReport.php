@@ -153,7 +153,7 @@ class ProductsReport extends AbstractReport
     /**
      * Outputs the products grouped by category.
      *
-     * @param \App\Entity\Calculation[] $products
+     * @param Product[] $products
      */
     private function outputGroups(array $products): void
     {

@@ -28,11 +28,11 @@ trait DateFormatterTrait
     /**
      * Format a date for the current locale; ignoring the time part.
      *
-     * @param \DateTime|int             $date     the date to format
+     * @param \DateTimeInterface|int    $date     the date to format
      * @param int|null                  $datetype the type of date formatting, one of the format type constants or null to use default
      * @param \DateTimeZone|string|null $timezone the timezone identifier
-     * @param int                       $calendar the calendar to use for formatting or parsing; default is Gregorian
-     * @param string|null               $pattern  Optional pattern to use when formatting
+     * @param int                       $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null               $pattern  the optional pattern to use when formatting
      *
      * @return string|bool the formatted date or false if formatting failed
      */
@@ -44,12 +44,12 @@ trait DateFormatterTrait
     /**
      * Format a date and time for the current locale.
      *
-     * @param \DateTime|int             $date     the date and time to format
+     * @param \DateTimeInterface|int    $date     the date and time to format
      * @param int|null                  $datetype the type of date formatting, one of the format type constants or null to use default
      * @param int|null                  $timetype the type of time formatting, one of the format type constants or null to use default
      * @param \DateTimeZone|string|null $timezone the timezone identifier
-     * @param int                       $calendar the calendar to use for formatting or parsing; default is Gregorian
-     * @param string|null               $pattern  Optional pattern to use when formatting
+     * @param int                       $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null               $pattern  the optional pattern to use when formatting
      *
      * @return string|null the formatted date and time or null if formatting failed or if the date is null
      */
@@ -69,11 +69,11 @@ trait DateFormatterTrait
     /**
      * Format a time for the current locale; ignoring the date part.
      *
-     * @param \DateTime|int             $date     the time to format
+     * @param \DateTimeInterface|int    $date     the time to format
      * @param int|null                  $timetype the type of date formatting, one of the format type constants or null to use default
      * @param \DateTimeZone|string|null $timezone the timezone identifier
-     * @param int                       $calendar the calendar to use for formatting or parsing; default is Gregorian
-     * @param string|null               $pattern  Optional pattern to use when formatting
+     * @param int                       $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null               $pattern  the optional pattern to use when formatting
      *
      * @return string|bool the formatted time or false if formatting failed
      */
@@ -88,8 +88,8 @@ trait DateFormatterTrait
      * @param int|null                  $datetype the type of date formatting, one of the format type constants or null to use default
      * @param int|null                  $timetype the type of time formatting, one of the format type constants or null to use default
      * @param \DateTimeZone|string|null $timezone the timezone identifier
-     * @param int                       $calendar the calendar to use for formatting or parsing; default is Gregorian
-     * @param string|null               $pattern  Optional pattern to use when formatting
+     * @param int                       $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null               $pattern  the optional pattern to use when formatting
      *
      * @return \IntlDateFormatter the date formatter
      */

@@ -284,7 +284,7 @@ class SpreadsheetService
         if ($width > $columnDimension->getWidth()) {
             $columnDimension->setWidth($width);
         }
-        $rowDimension = $this->getActiveSheet()->getRowDimension($row);
+        $rowDimension = $this->getActiveSheet()->getRowDimension((int) $row);
         if ($height > $rowDimension->getRowHeight()) {
             $rowDimension->setRowHeight($height);
         }

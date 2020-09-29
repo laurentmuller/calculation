@@ -1,7 +1,7 @@
 includes:
     - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon    
 parameters:
-    level: 4
+    level: 5
     paths:
     - src
     doctrine:
@@ -11,4 +11,3 @@ parameters:
     ignoreErrors:
     - '#PdfTableBuilder::addDescription#' # Report\CalculationGroupTable
     - '#catchPhrase#'                     # Faker\Generator 
-    - '#fetchFirstColumn#'                # Doctrine\ColumnHydrator class

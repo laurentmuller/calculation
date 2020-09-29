@@ -18,6 +18,7 @@ use App\Faker\CustomAddress;
 use App\Faker\CustomCompany;
 use App\Faker\CustomPerson;
 use App\Faker\CustomPhoneNumber;
+use Faker\Generator;
 
 /**
  * Service for the Faker bundle.
@@ -31,14 +32,14 @@ class FakerService
     /**
      * The faker generator.
      *
-     * @var \Faker\Generator
+     * @var Generator
      */
     protected $faker;
 
     /**
      * Gets the faker generator.
      */
-    public function getFaker(): \Faker\Generator
+    public function getFaker(): Generator
     {
         if (null === $this->faker) {
             $locale = \Locale::getDefault();

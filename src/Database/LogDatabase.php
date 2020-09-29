@@ -66,13 +66,13 @@ class LogDatabase extends AbstractDatabase
         $stmt = $this->getStatement(self::SQL_INSERT);
 
         // parameters
-        $stmt->bindParam(':id', $log->getId(), SQLITE3_INTEGER);
-        $stmt->bindParam(':created_at', $this->dateToInt($log->getCreatedAt()), SQLITE3_INTEGER);
-        $stmt->bindParam(':channel', $log->getChannel(), SQLITE3_TEXT);
-        $stmt->bindParam(':level', $log->getLevel(), SQLITE3_TEXT);
-        $stmt->bindParam(':message', $log->getMessage(), SQLITE3_TEXT);
-        $stmt->bindParam(':context', $this->arrayToString($log->getContext()), SQLITE3_TEXT);
-        $stmt->bindParam(':extra', $this->arrayToString($log->getExtra()), SQLITE3_TEXT);
+        $this->bindParam($stmt, ':id', $log->getId(), SQLITE3_INTEGER);
+        $this->bindParam($stmt, ':created_at', $this->dateToInt($log->getCreatedAt()), SQLITE3_INTEGER);
+        $this->bindParam($stmt, ':channel', $log->getChannel(), SQLITE3_TEXT);
+        $this->bindParam($stmt, ':level', $log->getLevel(), SQLITE3_TEXT);
+        $this->bindParam($stmt, ':message', $log->getMessage(), SQLITE3_TEXT);
+        $this->bindParam($stmt, ':context', $this->arrayToString($log->getContext()), SQLITE3_TEXT);
+        $this->bindParam($stmt, ':extra', $this->arrayToString($log->getExtra()), SQLITE3_TEXT);
 
         // execute
         return false !== $stmt->execute();

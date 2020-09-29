@@ -237,8 +237,8 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the entities to display.
      *
-     * @param string $field the sorted field
-     * @param string $mode  the sort mode ("ASC" or "DESC")
+     * @param string $field the optional sorted field
+     * @param string $mode  the optional sort mode ("ASC" or "DESC")
      *
      * @return AbstractEntity[] the entities
      */

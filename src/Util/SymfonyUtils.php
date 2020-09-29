@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -143,7 +142,7 @@ final class SymfonyUtils
     /**
      * Gets bundles informations.
      *
-     * @param kernel $kernel the kernel to get bundles for
+     * @param KernelInterface $kernel the kernel to get bundles for
      */
     public static function getBundles(KernelInterface $kernel): array
     {
@@ -216,7 +215,7 @@ final class SymfonyUtils
     /**
      * Gets packages informations.
      *
-     * @param kernel $kernel the kernel to get packages for
+     * @param KernelInterface $kernel the kernel to get packages for
      */
     public static function getPackages(KernelInterface $kernel): array
     {

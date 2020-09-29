@@ -191,6 +191,14 @@ final class CalculationService
     }
 
     /**
+     * Gets the translator.
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
+    /**
      * Update the total of the given calculation.
      *
      * @param calculation $calculation the calculation to update

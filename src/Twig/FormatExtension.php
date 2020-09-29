@@ -68,6 +68,14 @@ final class FormatExtension extends AbstractExtension
     }
 
     /**
+     * Gets the application service.
+     */
+    public function getApplication(): ApplicationService
+    {
+        return $this->application;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getFilters(): array
@@ -82,6 +90,14 @@ final class FormatExtension extends AbstractExtension
             new TwigFilter('localetime', [$this, 'localeTimeFilter'], ['needs_environment' => true]),
             new TwigFilter('localedatetime', [$this, 'localeDateTimeFilter'], ['needs_environment' => true]),
         ];
+    }
+
+    /**
+     * Gets the translator.
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**

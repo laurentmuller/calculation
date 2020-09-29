@@ -107,7 +107,7 @@ class Comment
      */
     public function getFrom(): ?string
     {
-        return $this->fromAddress ? $this->fromAddress->toString() : null;
+        return null !== $this->fromAddress ? $this->fromAddress->toString() : null;
     }
 
     /**
@@ -139,7 +139,7 @@ class Comment
      */
     public function getTo(): ?string
     {
-        return $this->toAddress ? $this->toAddress->toString() : null;
+        return null !== $this->toAddress ? $this->toAddress->toString() : null;
     }
 
     /**

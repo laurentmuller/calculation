@@ -90,7 +90,7 @@ function searchCallback(table) {
 function disableKeys(selector) {
     'use strict';
     selector = selector || '#data-table';
-    $(selector).DataTable().keys.disable();
+    $(selector).DataTable().keys.disable(); // eslint-disable-line
 }
 
 /**
@@ -102,7 +102,7 @@ function disableKeys(selector) {
 function enableKeys(selector) {
     'use strict';
     selector = selector || '#data-table';
-    $(selector).DataTable().keys.enable();
+    $(selector).DataTable().keys.enable(); // eslint-disable-line
 }
 
 /**
@@ -522,7 +522,7 @@ $.fn.initDataTable = function (options) {
     }
 
     // init
-    return $table.DataTable(settings);
+    return $table.DataTable(settings); // eslint-disable-line
 };
 
 /**

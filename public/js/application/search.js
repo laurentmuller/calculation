@@ -231,7 +231,7 @@ function searchCallback(table) {
     // select on right click
     $('#data-table tbody').on('mousedown', 'tr', function (e) {
         if (e.button === 2) {
-            const table = $('#data-table').DataTable();
+            const table = $('#data-table').DataTable(); // eslint-disable-line
             const index = table.row(this).index();
             table.cell(index, '0:visIdx').focus();
         }

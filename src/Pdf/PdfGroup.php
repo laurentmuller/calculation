@@ -63,7 +63,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
      */
     public function apply(PdfDocument $doc): void
     {
-        if ($this->style) {
+        if (null !== $this->style) {
             $this->style->apply($doc);
         }
     }

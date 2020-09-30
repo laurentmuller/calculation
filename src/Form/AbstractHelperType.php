@@ -37,7 +37,7 @@ abstract class AbstractHelperType extends AbstractType
     /**
      * Adds the form fields within the given helper.
      */
-    abstract protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options);
+    abstract protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void;
 
     /**
      * Creates the form helper.

@@ -94,7 +94,8 @@ class PasswordValidator extends AbstractConstraintValidator
      *
      * @param string $message    the message
      * @param string $value      the value
-     * @param array  $parameters the parameters
+     * @param array  $parameters an optional array with the parameter names as keys and
+     *                           the values to be inserted in their place as values
      *
      * @return bool this function return always true
      */

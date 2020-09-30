@@ -164,7 +164,7 @@ class Day extends CalendarItem implements WeekDaysInterface
      */
     public function isCurrent(): bool
     {
-        $today = $this->calendar->getToday();
+        $today = $this->getToday();
 
         return $this->getYear() === $today->getYear()
             && $this->getMonth() === $today->getMonth()

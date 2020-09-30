@@ -21,6 +21,9 @@ namespace App\Faker;
  */
 class CustomAddress extends \Faker\Provider\fr_CH\Address
 {
+    /**
+     * @var string[]
+     */
     protected static $postcode = [
         '1###',
         '2###',
@@ -33,6 +36,9 @@ class CustomAddress extends \Faker\Provider\fr_CH\Address
         '9###',
     ];
 
+    /**
+     * @var string
+     */
     protected static $postcodeCity = '{{postcode}} {{city}}';
 
     /**

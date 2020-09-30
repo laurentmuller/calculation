@@ -110,7 +110,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      */
     private function getReflection(string $className): \ReflectionClass
     {
-        return  new \ReflectionClass($className);
+        return new \ReflectionClass($className);
     }
 
     /**

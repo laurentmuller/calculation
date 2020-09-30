@@ -253,9 +253,11 @@ class EntityVoter extends Voter implements EntityVoterInterface
     /**
      * {@inheritdoc}
      *
+     * @param mixed $subject
+     *
      * @see Voter
      */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         // check user
         $user = $token->getUser();

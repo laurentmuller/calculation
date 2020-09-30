@@ -97,7 +97,7 @@ class SqlBuilderService
         return $this->getClassMetadata($className)->getTableName();
     }
 
-    private function getAssociation(string $className, $fieldName): ?array
+    private function getAssociation(string $className, string $fieldName): ?array
     {
         $data = $this->getClassMetadata($className);
         if ($data->hasAssociation($fieldName)) {

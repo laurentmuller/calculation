@@ -497,7 +497,7 @@ class OpenWeatherController extends AbstractController
         return $content;
     }
 
-    private function getJsonContent($content): ?array
+    private function getJsonContent(string $content): ?array
     {
         $decoded = \json_decode($content, true);
         if (JSON_ERROR_NONE !== \json_last_error()) {

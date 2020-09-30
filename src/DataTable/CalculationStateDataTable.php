@@ -16,6 +16,7 @@ namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
+use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
@@ -61,12 +62,12 @@ class CalculationStateDataTable extends AbstractEntityDataTable
     /**
      * Creates the link to calculations.
      *
-     * @param Collection       $calculations the list of calculations that fall into the given state
-     * @param CalculationState $item         the calculation state
+     * @param Collection|Calculation[] $calculations the list of calculations that fall into the given state
+     * @param CalculationState         $item         the calculation state
      *
      * @return string the link, if applicable, the value otherwise
      */
-    public function linkCalculations($calculations, CalculationState $item): string
+    public function linkCalculations(Collection $calculations, CalculationState $item): string
     {
         $parameters = [
             'id' => $item->getId(),

@@ -216,7 +216,7 @@ final class CalculationService
         $itemsTotal = 0;
         $overallTotal = 0;
 
-        /** @var \Doctrine\Common\Collections\Collection|CalculationGroup $groups */
+        /** @var CalculationGroup[] $groups */
         $groups = $calculation->getGroups();
         foreach ($groups as $group) {
             $group->update();

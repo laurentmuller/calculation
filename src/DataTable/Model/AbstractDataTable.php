@@ -100,6 +100,8 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
 
     /**
      * The parameter prefix for session.
+     *
+     * @var ?string
      */
     protected $sessionPrefix;
 

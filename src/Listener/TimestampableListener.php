@@ -35,6 +35,8 @@ class TimestampableListener
 
     /**
      * the default user name.
+     *
+     * @var string
      */
     private $username;
 

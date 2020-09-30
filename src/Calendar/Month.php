@@ -107,7 +107,7 @@ class Month extends CalendarItem
      */
     public function isCurrent(): bool
     {
-        $today = $this->calendar->getToday();
+        $today = $this->getToday();
 
         return $this->getYear() === $today->getYear()
             && $this->getNumber() === $today->getMonth();

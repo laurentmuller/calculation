@@ -327,7 +327,9 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
      */
     public function isCurrent(): bool
     {
-        return $this->year === (int) \date('Y');
+        $today = $this->getToday();
+
+        return $this->getYear() === $today->getYear();
     }
 
     /**

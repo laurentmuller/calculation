@@ -191,7 +191,7 @@ final class DateUtils
      * @param string $format   the date format
      * @param string $firstday the first day of the week like 'sunday' or 'monday'
      *
-     * @return array the week day names
+     * @return string[] the week day names
      */
     private static function getDayNames(string $format, $firstday = 'sunday'): array
     {
@@ -209,7 +209,7 @@ final class DateUtils
      *
      * @param string $format the date format
      *
-     * @return array the month names
+     * @return string[] the month names
      */
     private static function getMonthNames(string $format): array
     {

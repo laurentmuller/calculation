@@ -173,7 +173,7 @@ trait LoggerTrait
         }
     }
 
-    private function isIO()
+    private function isIO(): bool
     {
         return null !== $this->io;
     }

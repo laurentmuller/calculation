@@ -375,6 +375,13 @@ final class SymfonyUtils
         return $result;
     }
 
+    /**
+     * Converts the given variable.
+     *
+     * @param mixed $var the variable to convert
+     *
+     * @return mixed the converted variable
+     */
     private static function convert($var)
     {
         $value = \strtolower((string) $var);

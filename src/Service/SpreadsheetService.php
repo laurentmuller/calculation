@@ -598,7 +598,7 @@ class SpreadsheetService
      *
      * @param bool $printGridlines true to print the gridlines
      */
-    public function setPrintGridlines(bool $printGridlines)
+    public function setPrintGridlines(bool $printGridlines): self
     {
         $this->getActiveSheet()->setPrintGridlines($printGridlines);
 
@@ -677,7 +677,7 @@ class SpreadsheetService
      * @param int $columnIndex the column index (A = 1)
      * @param int $rowIndex    the row index (First = 1)
      */
-    public function stringFromColumnAndRowIndex(int $columnIndex, int $rowIndex)
+    public function stringFromColumnAndRowIndex(int $columnIndex, int $rowIndex): string
     {
         $columnName = $this->stringFromColumnIndex($columnIndex);
 

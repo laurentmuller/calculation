@@ -70,6 +70,8 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
 
     /**
      * Gets the key.
+     *
+     * @return mixed
      */
     public function getKey()
     {
@@ -124,6 +126,8 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
 
     /**
      * Sets the key.
+     *
+     * @param mixed $key
      */
     public function setKey($key): self
     {

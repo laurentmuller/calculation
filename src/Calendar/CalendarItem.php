@@ -42,6 +42,8 @@ abstract class CalendarItem implements \JsonSerializable, \ArrayAccess
 
     /**
      * Constructor.
+     *
+     * @param Calendar $calendar the parent calendar
      */
     protected function __construct(Calendar $calendar)
     {
@@ -154,6 +156,8 @@ abstract class CalendarItem implements \JsonSerializable, \ArrayAccess
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $offset
      */
     public function offsetExists($offset): bool
     {
@@ -162,6 +166,10 @@ abstract class CalendarItem implements \JsonSerializable, \ArrayAccess
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $offset
+     *
+     * @return mixed
      */
     public function offsetGet($offset)
     {
@@ -170,6 +178,9 @@ abstract class CalendarItem implements \JsonSerializable, \ArrayAccess
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $offset
+     * @param mixed $value
      */
     public function offsetSet($offset, $value): void
     {
@@ -182,6 +193,8 @@ abstract class CalendarItem implements \JsonSerializable, \ArrayAccess
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $offset
      */
     public function offsetUnset($offset): void
     {

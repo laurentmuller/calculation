@@ -103,6 +103,10 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $orientation
+     * @param mixed  $size
+     * @param int    $rotation
      */
     public function AddPage($orientation = '', $size = '', $rotation = 0): void
     {
@@ -181,6 +185,8 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
 
     /**
      * Draws the left border if applicable.
+     *
+     * @param mixed $border
      */
     private function drawBorder(PdfTableBuilder $builder, ?string $level, PdfRectangle $bounds, $border): bool
     {

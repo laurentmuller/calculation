@@ -114,7 +114,7 @@ class IndexController extends AbstractController
      * @Route("/sitemap", name="site_map")
      * @IsGranted("ROLE_USER")
      */
-    public function siteMap()
+    public function siteMap(): Response
     {
         return $this->render('index/sitemap.html.twig');
     }

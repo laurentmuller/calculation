@@ -35,6 +35,8 @@ final class CalculationListener
 
     /**
      * the default user name.
+     *
+     * @var string
      */
     private $username;
 

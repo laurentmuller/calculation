@@ -39,6 +39,10 @@ class Password extends Constraint
      * @var bool
      */
     public $casediff = false;
+
+    /**
+     * @var string
+     */
     public $casediffMessage = 'The password must be both upper and lower case.';
 
     /**
@@ -47,6 +51,10 @@ class Password extends Constraint
      * @var bool
      */
     public $email = false;
+
+    /**
+     * @var string
+     */
     public $emailMessage = 'The password cannot be an email address.';
 
     /**
@@ -55,6 +63,10 @@ class Password extends Constraint
      * @var bool
      */
     public $letters = true;
+
+    /**
+     * @var string
+     */
     public $lettersMessage = 'The password must contain at least one letter.';
 
     /**
@@ -63,6 +75,10 @@ class Password extends Constraint
      * @var int
      */
     public $minstrength = -1;
+
+    /**
+     * @var string
+     */
     public $minstrengthMessage = 'The password is to weak.';
 
     /**
@@ -71,6 +87,10 @@ class Password extends Constraint
      * @var bool
      */
     public $numbers = false;
+
+    /**
+     * @var string
+     */
     public $numbersMessage = 'The password must include at least one digit.';
 
     /**
@@ -79,6 +99,10 @@ class Password extends Constraint
      * @var bool
      */
     public $pwned = false;
+
+    /**
+     * @var string
+     */
     public $pwnedMessage = 'The password was found in a compromised password database.';
 
     /**
@@ -87,5 +111,9 @@ class Password extends Constraint
      * @var bool
      */
     public $specialchar = false;
+
+    /**
+     * @var string
+     */
     public $specialcharMessage = 'The password must contain at least one special character.';
 }

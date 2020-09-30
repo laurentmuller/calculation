@@ -30,9 +30,9 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
  */
 class EmailVerifier
 {
-    private $helper;
-    private $mailer;
-    private $manager;
+    private VerifyEmailHelperInterface $helper;
+    private MailerInterface $mailer;
+    private EntityManagerInterface $manager;
 
     public function __construct(VerifyEmailHelperInterface $helper, MailerInterface $mailer, EntityManagerInterface $manager)
     {

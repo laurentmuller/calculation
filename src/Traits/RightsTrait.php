@@ -46,6 +46,8 @@ trait RightsTrait
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function __get(string $name)
     {
@@ -66,6 +68,8 @@ trait RightsTrait
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $value
      */
     public function __set(string $name, $value): void
     {

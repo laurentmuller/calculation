@@ -62,6 +62,10 @@ class CalculationStatesReport extends AbstractReport implements PdfCellListenerI
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $orientation
+     * @param mixed  $size
+     * @param int    $rotation
      */
     public function AddPage($orientation = '', $size = '', $rotation = 0): void
     {

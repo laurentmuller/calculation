@@ -17,6 +17,7 @@ namespace App\DataTable;
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
 use App\Entity\Category;
+use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Service\ApplicationService;
 use DataTables\DataTablesInterface;
@@ -53,8 +54,8 @@ class CategoryDataTable extends AbstractEntityDataTable
     /**
      * Creates the link to prodcuts.
      *
-     * @param Collection $products the list of products that fall into the given category
-     * @param Category   $item     the category
+     * @param Collection|Product[] $products the list of products that fall into the given category
+     * @param Category             $item     the category
      *
      * @return string the link, if applicable, the value otherwise
      */

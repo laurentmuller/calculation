@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
+use App\Util\Utils;
+
 /**
  * Represents a week with a calendar and an array of days.
  *
@@ -28,7 +30,7 @@ class Week extends CalendarItem
      */
     public function __toString(): string
     {
-        $name = (new \ReflectionClass($this))->getShortName();
+        $name = Utils::getShortName($this);
 
         return \sprintf('%s(%d-%d)', $name, $this->getNumber(), $this->getYear());
     }
@@ -85,7 +87,7 @@ class Week extends CalendarItem
      */
     public function isCurrent(): bool
     {
-        $today = $this->calendar->getToday();
+        $today = $this->getToday();
 
         return $this->getYear() === $today->getYear()
             && $this->getNumber() === $today->getWeek();

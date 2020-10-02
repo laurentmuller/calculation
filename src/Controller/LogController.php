@@ -204,7 +204,7 @@ class LogController extends AbstractController
 
     /**
      * Handles the empty log entries by redirecting to previous page, if applicable;
-     * to home page otherwise.
+     * to the home page otherwise.
      */
     private function handleEmptyEntries(Request $request): RedirectResponse
     {

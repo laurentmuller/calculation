@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
+use App\Util\DateUtils;
+
 /**
  * Creates an instance of calendar suitable for rendering in Twig template.
  *
@@ -67,11 +69,8 @@ class CalendarService
      */
     public function generate(?int $year = null): Calendar
     {
-        $year = $year ?: \date('Y');
-        if ($year < 100) {
-            $dt = \DateTime::createFromFormat('y', $year);
-            $year = $dt->format('Y');
-        }
+        // check year
+        $year = DateUtils::completYear($year ?? \date('Y'));
 
         /** @var Calendar $calendar */
         $calendar = new $this->calendarModel();
@@ -82,22 +81,118 @@ class CalendarService
     }
 
     /**
+     * Gets the calendar model class.
+     *
+     * @return string the calendar model
+     */
+    public function getCalendarModel(): string
+    {
+        return $this->calendarModel;
+    }
+
+    /**
+     * Gets the day model class.
+     *
+     * @return string|null the day model or null if default
+     */
+    public function getDayModel(): ?string
+    {
+        return $this->dayModel;
+    }
+
+    /**
+     * Gets the month model class.
+     *
+     * @return string|null the month model or null if default
+     */
+    public function getMonthModel(): ?string
+    {
+        return $this->monthModel;
+    }
+
+    /**
+     * Gets the week model class.
+     *
+     * @return string|null the week model or null if default
+     */
+    public function getWeekModel(): ?string
+    {
+        return $this->weekModel;
+    }
+
+    /**
+     * Sets the calendar model class.
+     *
+     * @param string|null $calendarModel the calendar model class or null for default
+     *
+     * @throws CalendarException if the calendar class model does not exist
+     */
+    public function setCalendarModel(?string $calendarModel): self
+    {
+        $this->calendarModel = $this->checkClass($calendarModel, self::DEFAULT_CALENDAR_MODEL);
+
+        return $this;
+    }
+
+    /**
+     * Sets the day model class.
+     *
+     * @param string|null $dayModel the day model class or null for default
+     *
+     * @throws CalendarException if the day class model does not exist
+     */
+    public function setDayModel(?string $dayModel): self
+    {
+        $this->checkClass($dayModel, Calendar::DEFAULT_DAY_MODEL);
+        $this->dayModel = $dayModel;
+
+        return $this;
+    }
+
+    /**
      * Sets the models.
      *
-     * @param string $calendarModel the calendar model class or null for default
-     * @param string $monthModel    the month model class or null for default
-     * @param string $weekModel     the week model class or null for default
-     * @param string $dayModel      the day model class or null for default
+     * @param string|null $calendarModel the calendar model class or null for default
+     * @param string|null $monthModel    the month model class or null for default
+     * @param string|null $weekModel     the week model class or null for default
+     * @param string|null $dayModel      the day model class or null for default
      *
      * @throws CalendarException if the calendar, the month, the week or the day class model does not exist
      */
     public function setModels(?string $calendarModel = null, ?string $monthModel = null, ?string $weekModel = null, ?string $dayModel = null): self
     {
-        $this->calendarModel = $this->checkClass($calendarModel, self::DEFAULT_CALENDAR_MODEL);
+        return $this->setCalendarModel($calendarModel)
+            ->setMonthModel($monthModel)
+            ->setWeekModel($weekModel)
+            ->setDayModel($dayModel);
+    }
 
+    /**
+     * Sets the month model class.
+     *
+     * @param string|null $monthModel the month model class or null for default
+     *
+     * @throws CalendarException if the month class model does not exist
+     */
+    public function setMonthModel(?string $monthModel): self
+    {
+        $this->checkClass($monthModel, Calendar::DEFAULT_MONTH_MODEL);
         $this->monthModel = $monthModel;
+
+        return $this;
+    }
+
+    /**
+     * Sets the week model class.
+     *
+     * @param string|null $weekModel the week model class or null for default
+     *
+     * @throws CalendarException if the week class model does not exist
+     */
+    public function setWeekModel(?string $weekModel): self
+    {
+        $this->checkClass($weekModel, Calendar::DEFAULT_WEEK_MODEL);
         $this->weekModel = $weekModel;
-        $this->dayModel = $dayModel;
 
         return $this;
     }

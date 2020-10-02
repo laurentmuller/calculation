@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Doctrine\ColumnHydrator;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use Doctrine\Common\Collections\Criteria;
@@ -136,6 +137,55 @@ class CalculationRepository extends AbstractRepository
 
         //reverse
         return \array_reverse($result);
+    }
+
+    /**
+     * Gets the distinct years of calculations.
+     *
+     * @return int[] the distinct years
+     */
+    public function getCalendarYears(): array
+    {
+        $field = 'year(e.date)';
+        $builder = $this->createQueryBuilder('e')
+            ->select($field)
+            ->distinct()
+            ->orderBy($field);
+
+        $result = $builder->getQuery()
+            ->getResult(ColumnHydrator::NAME);
+
+        return \array_map('intval', $result);
+    }
+
+    /**
+     * Gets the distinct years and months of calculations.
+     *
+     * @return int[] the distinct years
+     */
+    public function getCalendarYearsMonths(): array
+    {
+        $year = 'year(e.date)';
+        $month = 'month(e.date)';
+
+        $builder = $this->createQueryBuilder('e')
+            ->select('year(e.date) AS year')
+            ->addSelect('month(e.date) AS month')
+            ->addSelect('YEAR(e.date) * 1000 + MONTH(e.date) AS year_month')
+            ->distinct()
+            ->orderBy($year)
+            ->addOrderBy($month);
+
+        $result = $builder->getQuery()
+            ->getArrayResult();
+
+        foreach ($result as &$entry) {
+            $entry['year'] = (int) ($entry['year']);
+            $entry['month'] = (int) ($entry['month']);
+            $entry['year_month'] = (int) ($entry['year_month']);
+        }
+
+        return $result;
     }
 
     /**

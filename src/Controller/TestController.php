@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Calendar\CalculationsDay;
+use App\Calendar\CalculationsMonth;
 use App\Calendar\Calendar;
 use App\Calendar\CalendarService;
 use App\Entity\Calculation;
@@ -77,27 +78,58 @@ class TestController extends AbstractController
      * @param int|null              $year       the year to search for or <code>null</code> for the current year
      * @param int|null              $month      the month to search for or <code>null</code> for the current month
      */
-    public function calendarMonth(CalendarService $service, CalculationRepository $repository, $year = null, $month = null): Response
+    public function calendarMonth(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $month = null): Response
     {
         // check month
-        $month = (int) ($month ?: \date('n'));
+        $month = (int) ($month ?? \date('n'));
         if ($month < 1 || $month > 12) {
             throw $this->createNotFoundException($this->trans('calendar.invalid_month'));
         }
-        $year = DateUtils::completYear((int) ($year ?: \date('Y')));
-        $service->setModels(null, null, null, CalculationsDay::class);
+        $year = DateUtils::completYear((int) ($year ?? \date('Y')));
+        $service->setMonthModel(CalculationsMonth::class)
+            ->setDayModel(CalculationsDay::class);
 
         /** @var Calendar $calendar */
         $calendar = $service->generate($year);
-        $currentMonth = $calendar->getMonths()[$month - 1];
+        $currentMonth = $calendar->getMonth($month);
 
         $calculations = $repository->getForMonth($year, $month);
         $this->merge($calendar, $calculations);
+
+        $yearMonth = $year * 1000 + $month;
+        $yearsMonths = $repository->getCalendarYearsMonths();
+
+        // previous month
+        $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth) {
+            return $current['year_month'] < $yearMonth;
+        });
+        $previous = empty($filtered) ? false :\end($filtered);
+
+        // next month
+        $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth) {
+            return $current['year_month'] > $yearMonth;
+        });
+        $next = empty($filtered) ? false : \reset($filtered);
+
+        // today month
+        $today = false;
+        $todayYear = (int) \date('Y');
+        $todayMonth = (int) \date('n');
+        if ($year !== $todayYear || $month !== $todayMonth) {
+            $yearMonth = $todayYear * 1000 + $todayMonth;
+            $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth) {
+                return $current['year_month'] === $yearMonth;
+            });
+            $today = empty($filtered) ? false : \reset($filtered);
+        }
 
         return $this->render('calendar/calendar_month.html.twig', [
             'calendar' => $calendar,
             'month' => $currentMonth,
             'calculations' => $calculations,
+            'today' => $today,
+            'previous' => $previous,
+            'next' => $next,
         ]);
     }
 
@@ -110,18 +142,39 @@ class TestController extends AbstractController
      * @param CalculationRepository $repository the repository to query
      * @param int|null              $year       the year to search for or <code>null</code> for the current year
      */
-    public function calendarYear(CalendarService $service, CalculationRepository $repository, $year = null): Response
+    public function calendarYear(CalendarService $service, CalculationRepository $repository, ?int $year = null): Response
     {
-        $year = DateUtils::completYear((int) ($year ?: \date('Y')));
-        $service->setModels(null, null, null, CalculationsDay::class);
+        $year = DateUtils::completYear((int) ($year ?? \date('Y')));
+        $service->setMonthModel(CalculationsMonth::class)
+            ->setDayModel(CalculationsDay::class);
         $calendar = $service->generate($year);
 
         $calculations = $repository->getForYear($year);
         $this->merge($calendar, $calculations);
+        $years = $repository->getCalendarYears();
+
+        $previousYear = false;
+        $filteredYears = \array_filter($years, function (int $current) use ($year) {
+            return $current < $year;
+        });
+        if (\count($filteredYears)) {
+            $previousYear = \end($filteredYears);
+        }
+
+        $nextYear = false;
+        $filteredYears = \array_filter($years, function (int $current) use ($year) {
+            return $current > $year;
+        });
+        if (\count($filteredYears)) {
+            $nextYear = \reset($filteredYears);
+        }
 
         return $this->render('calendar/calendar_year.html.twig', [
             'calendar' => $calendar,
             'calculations' => $calculations,
+            'years' => $years,
+            'previousYear' => $previousYear,
+            'nextYear' => $nextYear,
         ]);
     }
 
@@ -135,10 +188,10 @@ class TestController extends AbstractController
         /** @var \Faker\Generator $faker */
         $faker = $fakerService->getFaker();
 
-        // 6 months before
+        // 3 months before
         $startDate = new \DateTime();
         $startDate->modify('first day of this month');
-        $interval = new \DateInterval('P6M');
+        $interval = new \DateInterval('P3M');
         $startDate = $startDate->sub($interval);
 
         // end of next month
@@ -751,10 +804,16 @@ class TestController extends AbstractController
     private function merge(Calendar $calendar, array $calculations): void
     {
         foreach ($calculations as $calculation) {
-            /** @var \App\Calendar\CalculationsDay|null $day */
-            $day = $calendar->getDay($calculation->getDate());
-            if ($day) {
+            $key = $calculation->getDate();
+
+            /** @var \App\Calendar\CalculationsDay $day */
+            if ($day = $calendar->getDay($key)) {
                 $day->addCalculation($calculation);
+            }
+
+            /** @var \App\Calendar\CalculationsMonth $month */
+            if ($month = $calendar->getMonth($key)) {
+                $month->addCalculation($calculation);
             }
         }
     }

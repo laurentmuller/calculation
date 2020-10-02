@@ -26,6 +26,30 @@ class Month extends CalendarItem
     use DaysTrait;
 
     /**
+     * The date format used to generate this key.
+     */
+    public const KEY_FORMAT = 'n.Y';
+
+    /**
+     * The month number (1 - 12).
+     *
+     * @var int
+     */
+    protected $number;
+
+    /**
+     * Constructor.
+     *
+     * @param Calendar $calendar the parent calendar
+     * @param int      $number   the month number (1 - 12)
+     */
+    public function __construct(Calendar $calendar, int $number)
+    {
+        parent::__construct($calendar);
+        $this->number = $number;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function __toString(): string
@@ -40,7 +64,7 @@ class Month extends CalendarItem
      */
     public function getKey(): string
     {
-        return CalendarItem::getMonthKey($this);
+        return $this->getNumber() . '.' . $this->getYear();
     }
 
     /**
@@ -60,10 +84,7 @@ class Month extends CalendarItem
      */
     public function getNumber(): int
     {
-        /** @var \DateTimeImmutable $firstDate */
-        $firstDate = $this->getFirstDate();
-
-        return (int) $firstDate->format('n');
+        return $this->number;
     }
 
     /**
@@ -124,9 +145,12 @@ class Month extends CalendarItem
     {
         /** @var Week[] $weeks */
         $weeks = $this->getWeeks();
+        $number = $week->getNumber();
+        $year = $week->getYear();
+
         foreach ($weeks as $current) {
-            if ($current->getNumber() === $week->getNumber()
-                && $current->getYear() === $week->getYear()) {
+            if ($year === $current->getYear()
+                && $number === $current->getNumber()) {
                 return true;
             }
         }

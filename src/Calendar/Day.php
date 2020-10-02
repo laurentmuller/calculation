@@ -24,6 +24,11 @@ use App\Util\Utils;
 class Day extends CalendarItem implements WeekDaysInterface
 {
     /**
+     * The date format used to generate this key.
+     */
+    public const KEY_FORMAT = 'd.m.Y';
+
+    /**
      * The date.
      *
      * @var \DateTimeImmutable
@@ -73,11 +78,19 @@ class Day extends CalendarItem implements WeekDaysInterface
     }
 
     /**
+     * Gets the day of the year (0 - 365).
+     */
+    public function getDayOfYear(): int
+    {
+        return (int) $this->format('z');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getKey(): string
     {
-        return CalendarItem::getDayKey($this);
+        return $this->format(self::KEY_FORMAT);
     }
 
     /**

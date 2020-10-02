@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Calendar;
 
 use App\Util\DateUtils;
-use App\Util\Utils;
 
 /**
  * Represents a calendar for a specified year.
@@ -66,7 +65,7 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     /**
      * Array with instances of Month objects.
      *
-     * @var array
+     * @var Month[]
      */
     protected $months;
 
@@ -101,7 +100,7 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     /**
      * Array with instances of Week objects.
      *
-     * @var array
+     * @var Week[]
      */
     protected $weeks;
 
@@ -143,16 +142,6 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function __toString(): string
-    {
-        $name = Utils::getShortName($this);
-
-        return \sprintf('%s(%d)', $name, $this->getYear());
-    }
-
-    /**
      * Generates months, weeks and days for the given year.
      *
      * @param int $year the year to generate
@@ -160,11 +149,7 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     public function generate(int $year): self
     {
         // check year
-        if ($year < 100) {
-            $dt = \DateTime::createFromFormat('y', (string) $year);
-            $year = $dt->format('Y');
-        }
-        $this->year = $year;
+        $this->year = DateUtils::completYear($year);
 
         // clean
         $this->reset();
@@ -211,19 +196,18 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
             if ($monthYear === $this->year) {
                 // create month if needed
                 if (null === $currentMonth || $monthNumber !== $currentMonth->getNumber()) {
-                    $currentMonth = new $this->monthModel($this);
-                    $this->addMonth($currentMonth);
+                    $currentMonth = $this->addMonth($monthNumber);
                 }
                 $currentMonth->addDay($day);
             }
 
             // create week if needed
             if (null === $currentWeek || $weekNumber !== $currentWeek->getNumber()) {
-                $currentWeek = new $this->weekModel($this);
-                $this->addWeek($currentWeek);
+                $currentWeek = $this->addWeek($weekNumber);
             }
             $currentWeek->addDay($day);
 
+            // next day
             $currentDate->add($oneDayInterval);
         }
 
@@ -235,7 +219,35 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
      */
     public function getKey(): string
     {
-        return CalendarItem::getCalendarKey($this);
+        return (string) $this->getYear();
+    }
+
+    /**
+     * Gets the month for the given key.
+     *
+     * @param int|\DateTimeInterface|string $key the month key. Can be an integer (1 - 12), a date time interface or a formatted date ('n.Y').
+     *
+     * @return Month|null the month, if found, null otherwise
+     */
+    public function getMonth($key): ?Month
+    {
+        if ($key instanceof \DateTimeInterface) {
+            $key = (int) $key->format('n');
+        }
+
+        if (\is_int($key)) {
+            return $this->months[$key] ?? null;
+        }
+
+        if (\is_string($key)) {
+            foreach ($this->months as $month) {
+                if ($key === $month->getKey()) {
+                    return $month;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -249,7 +261,7 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     }
 
     /**
-     * Gets months.
+     * Gets months where key is month number (1 - 12).
      *
      * @return Month[]
      */
@@ -282,6 +294,34 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     public function getToday(): Day
     {
         return $this->today;
+    }
+
+    /**
+     * Gets the week for the given key.
+     *
+     * @param int|\DateTimeInterface|string $key the week key. Can be an integer (1 - 53), a date time interface or a formatted date ('W.Y').
+     *
+     * @return Week|null the week, if found, null otherwise
+     */
+    public function getWeek($key): ?Week
+    {
+        if ($key instanceof \DateTimeInterface) {
+            $key = (int) $key->format('W');
+        }
+
+        if (\is_int($key)) {
+            return $this->weeks[$key] ?? null;
+        }
+
+        if (\is_string($key)) {
+            foreach ($this->weeks as $week) {
+                if ($key === $week->getKey()) {
+                    return $week;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -430,23 +470,29 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     }
 
     /**
-     * Adds a month.
+     * Create and add a month.
+     *
+     * @param int $index the month index (1 - 12)
      */
-    private function addMonth(Month $month): self
+    private function addMonth(int $index): Month
     {
-        $this->months[] = $month;
+        $month = new $this->monthModel($this, $index);
+        $this->months[$index] = $month;
 
-        return $this;
+        return $month;
     }
 
     /**
-     * Adds a week.
+     * Create and add a week.
+     *
+     * @param int $index the week index (1 - 53)
      */
-    private function addWeek(Week $week): self
+    private function addWeek(int $index): Week
     {
-        $this->weeks[] = $week;
+        $week = new $this->weekModel($this, $index);
+        $this->weeks[$index] = $week;
 
-        return $this;
+        return $week;
     }
 
     /**

@@ -175,6 +175,8 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
 
     /**
      * Sets the values to output.
+     *
+     * @param array $values an array with the file name, the logs, the levels and the channels
      */
     public function setValues(array $values): self
     {
@@ -186,7 +188,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     /**
      * Draws the left border if applicable.
      *
-     * @param mixed $border
+     * @param string|int $border the border style
      */
     private function drawBorder(PdfTableBuilder $builder, ?string $level, PdfRectangle $bounds, $border): bool
     {

@@ -21,7 +21,11 @@
 		<thead>
 			<tr>
 				<th colspan="8" class="{{ class }}">
-					<a href="{{ path('test_month', {'year': month.year, 'month': month.number}) }}" class="text-white">{{ month.Name }}</a>
+                {% if month.empty %}
+                    <span class="text-white">{{ month.Name }}</span>
+                {% else %}
+                    <a class="text-white" href="{{ path('test_month', {'year': month.year, 'month': month.number}) }}">{{ month.Name }}</a>
+                {% endif %}
 				</th>
 			</tr>
 			<tr>
@@ -41,11 +45,37 @@
 	</table>
 </div>
 {% endmacro %}
+
+{% macro previousLink(previousYear) %}
+{% import 'macros/_icons.html.twig' as icons %}
+{% set title = 'calendar.previous_title'|trans %}
+{% if previousYear %}
+    {% set href = path('test_calendar', {'year': previousYear}) %}
+    <li class="page-item"><a class="page-link" href="{{ href }}" title="{{ title }}">{{ icons.icon('chevron-left fa-fw') }}</a></li>
+{% else %}
+    <li class="page-item disabled"><span class="page-link" title="{{ title }}">{{ icons.icon('chevron-left fa-fw') }}</span></li>
+{% endif %}
+{% endmacro %}
+
+{% macro nextLink(nextYear) %}
+{% import 'macros/_icons.html.twig' as icons %}
+{% set title = 'calendar.next_title'|trans %}
+{% if nextYear %}
+    {% set href = path('test_calendar', {'year': nextYear}) %}
+    <li class="page-item"><a class="page-link" href="{{ href }}" title="{{ title }}">{{ icons.icon('chevron-right fa-fw') }}</a></li>
+{% else %}
+    <li class="page-item disabled"><span class="page-link" title="{{ title }}">{{ icons.icon('chevron-right fa-fw') }}</span></li>
+{% endif %}
+{% endmacro %}
+
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title            = 'calendar.year_title' -%}
 {%- set title_parameters = {'%year%': calendar.year} -%}
+
+{# class #}
+{% block container_class 'container-xl' %}
 
 {% block body %}
 <div class="row">
@@ -55,20 +85,22 @@
     <div class="col-md-4 text-md-center">
     	<h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
     </div>
-    <div class="col-md-4 text-md-right">
-        {% set year = "now"|date('Y') %}
-        {% if year != calendar.year %}
-        {% set title = 'calendar.year_title'|trans({'%year%': year}) %}
-        <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar') }}">{{ icons.icon('arrows-alt') }}</a>
-        {% endif %}
-
-        {% set year = calendar.year - 1 %}
-        {% set title = 'calendar.year_title'|trans({'%year%': year}) %}
-        <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar', {'year': year}) }}">{{ icons.icon('chevron-left') }}</a>
-
-        {% set year = calendar.year + 1 %}
-        {% set title = 'calendar.year_title'|trans({'%year%': year}) %}
-        <a class="btn btn-primary" title="{{ title }}" href="{{ path('test_calendar', {'year': year}) }}">{{ icons.icon('chevron-right') }}</a>
+    <div class="col-md-4 ">
+        <nav aria-label="Years">
+            <ul class="pagination justify-content-md-end">
+            {% for year in years %}                
+                {# % if loop.first %}{{ _self.previousLink(previousYear) }}{% endif % #}                
+                {% set title = 'calendar.year_title'|trans({'%year%': year}) %}
+                {% if year == calendar.year %}
+                    <li class="page-item active"><span class="page-link" title="{{ title }}">{{ year }}</span></li>
+                {% else %}
+                    {% set href = path('test_calendar', {'year': year}) %}
+                    <li class="page-item"><a class="page-link" href="{{ href }}" title="{{ title }}">{{ year }}</a></li>
+                {% endif %}
+                {# % if loop.last %}{{ _self.nextLink(nextYear) }}{% endif % #}
+            {% endfor %}
+            </ul>
+        </nav>
     </div>
 </div>
 

@@ -26,6 +26,30 @@ class Week extends CalendarItem
     use DaysTrait;
 
     /**
+     * The date format used to generate this key.
+     */
+    public const KEY_FORMAT = 'W.Y';
+
+    /**
+     * The week number (1 - 53).
+     *
+     * @var int
+     */
+    protected $number;
+
+    /**
+     * Constructor.
+     *
+     * @param Calendar $calendar the parent calendar
+     * @param int      $number   the week number  (1 - 53)
+     */
+    public function __construct(Calendar $calendar, int $number)
+    {
+        parent::__construct($calendar);
+        $this->number = $number;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function __toString(): string
@@ -40,7 +64,7 @@ class Week extends CalendarItem
      */
     public function getKey(): string
     {
-        return CalendarItem::getWeekKey($this);
+        return $this->getNumber() . '.' . $this->getYear();
     }
 
     /**
@@ -71,15 +95,13 @@ class Week extends CalendarItem
 
     /**
      * {@inheritdoc}
+     *
      * This implementation returns the ISO-8601 week number of year for the last day of this week.
      * The weeks start on Monday (1 to 53).
      */
     public function getNumber(): int
     {
-        /** @var \DateTimeImmutable $lastDate */
-        $lastDate = $this->getLastDate();
-
-        return (int) $lastDate->format('W');
+        return $this->number;
     }
 
     /**
@@ -104,9 +126,12 @@ class Week extends CalendarItem
     {
         /** @var Month[] $months */
         $months = $this->getMonths();
+        $number = $month->getNumber();
+        $year = $month->getYear();
+
         foreach ($months as $current) {
-            if ($current->getNumber() === $month->getNumber()
-                && $current->getYear() === $month->getYear()) {
+            if ($year === $current->getYear()
+                && $number === $current->getNumber()) {
                 return true;
             }
         }

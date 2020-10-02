@@ -129,7 +129,8 @@ class LogService
     /**
      * Gets the entries.
      *
-     * @return array|bool an array with the file name, the logs, the levels and the channels; <code>false</code> if an error occurs or if the file is empty
+     * @return array|bool an array with the file name, the logs, the levels and the channels;
+     *                    <code>false</code> if an error occurs or if the file is empty
      */
     public function getEntries()
     {

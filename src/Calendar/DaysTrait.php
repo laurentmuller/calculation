@@ -33,7 +33,7 @@ trait DaysTrait
      */
     public function addDay(Day $day): self
     {
-        $this->days[] = $day;
+        $this->days[$day->getDayOfYear()] = $day;
 
         return $this;
     }
@@ -41,18 +41,25 @@ trait DaysTrait
     /**
      * Gets the day for the given key.
      *
-     * @param int|\DateTimeInterface|string $key the day key. Can be an integer, a date interface or a formatted date ('d.m.Y').
+     * @param int|\DateTimeInterface|string $key the day key. Can be an integer, a date time interface or a formatted date ('d.m.Y').
      *
      * @return Day|null the day, if found, null otherwise
      */
     public function getDay($key): ?Day
     {
         if (\is_int($key)) {
-            return \array_key_exists($key, $this->days) ? $this->days[$key] : null;
+            return $this->days[$key] ?? null;
         }
 
         if ($key instanceof \DateTimeInterface) {
-            $key = CalendarItem::getDateKey($key);
+            // find within the day of year
+            $dayOfYear = (int) $key->format('z');
+            if (\array_key_exists($dayOfYear, $this->days)) {
+                return $this->days[$dayOfYear];
+            }
+
+            // formatted key
+            $key = $key->format(Day::KEY_FORMAT);
         }
 
         if (\is_string($key)) {
@@ -77,46 +84,42 @@ trait DaysTrait
     }
 
     /**
-     * Gets the first date.
+     * Gets the first date or null if empty.
      */
     public function getFirstDate(): ?\DateTimeImmutable
     {
-        $day = $this->getFirstDay();
+        if ($day = $this->getFirstDay()) {
+            return $day->getDate();
+        }
 
-        return $day ? $day->getDate() : null;
+        return null;
     }
 
     /**
-     * Gets first day.
+     * Gets first day or null if empty.
      */
     public function getFirstDay(): ?Day
     {
-        if (\count($this->days)) {
-            return \reset($this->days);
-        }
-
-        return null;
+        return empty($this->days) ? null : \reset($this->days);
     }
 
     /**
-     * Gets the last date.
+     * Gets the last date or null if empty.
      */
     public function getLastDate(): ?\DateTimeImmutable
     {
-        $day = $this->getLastDay();
-
-        return $day ? $day->getDate() : null;
-    }
-
-    /**
-     * Gets the last day.
-     */
-    public function getLastDay(): ?Day
-    {
-        if (\count($this->days)) {
-            return \end($this->days);
+        if ($day = $this->getLastDay()) {
+            return $day->getDate();
         }
 
         return null;
+    }
+
+    /**
+     * Gets the last day or null if empty.
+     */
+    public function getLastDay(): ?Day
+    {
+        return empty($this->days) ? null : \end($this->days);
     }
 }

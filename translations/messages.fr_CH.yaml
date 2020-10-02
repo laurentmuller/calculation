@@ -598,6 +598,8 @@ calendar:
     week_title: Semaine %week%
     week: Sem.
     invalid_month: Le mois doit être compris entre 1 et 12.
+    previous_title: Année précédente
+    next_title: Année suivante
 test:
     notification: Notifications
     summernote: Editeur Summernote

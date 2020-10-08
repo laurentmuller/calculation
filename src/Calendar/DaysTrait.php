@@ -33,7 +33,7 @@ trait DaysTrait
      */
     public function addDay(Day $day): self
     {
-        $this->days[$day->getDayOfYear()] = $day;
+        $this->days[$day->getKey()] = $day;
 
         return $this;
     }
@@ -41,36 +41,19 @@ trait DaysTrait
     /**
      * Gets the day for the given key.
      *
-     * @param int|\DateTimeInterface|string $key the day key. Can be an integer, a date time interface or a formatted date ('d.m.Y').
+     * @param \DateTimeInterface|string $key the day key. Can be an integer, a date time interface or a formatted date ('Y.m.d').
      *
      * @return Day|null the day, if found, null otherwise
+     *
+     * @see Day::KEY_FORMAT
      */
     public function getDay($key): ?Day
     {
-        if (\is_int($key)) {
-            return $this->days[$key] ?? null;
-        }
-
         if ($key instanceof \DateTimeInterface) {
-            // find within the day of year
-            $dayOfYear = (int) $key->format('z');
-            if (\array_key_exists($dayOfYear, $this->days)) {
-                return $this->days[$dayOfYear];
-            }
-
-            // formatted key
             $key = $key->format(Day::KEY_FORMAT);
         }
 
-        if (\is_string($key)) {
-            foreach ($this->days as $day) {
-                if ($day->getKey() === $key) {
-                    return $day;
-                }
-            }
-        }
-
-        return null;
+        return $this->days[(string) $key] ?? null;
     }
 
     /**

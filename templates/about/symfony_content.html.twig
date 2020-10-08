@@ -16,11 +16,16 @@
             {# { tools.rowInfo('Name', kernel.name) } #}
             {{ tools.rowInfo('Environment', kernel.environment) }}
             {{ tools.rowInfo('Debug', kernel.debug|json_encode) }}
-            {{ tools.rowInfo('Locale', locale) }}
+            {{ tools.rowInfo('Intl Locale', locale) }}
             {{ tools.rowInfo('Timezone', timezone) }}
             {{ tools.rowInfo('Charset', kernel.charset) }}
+            
+            {{ tools.rowInfo('OPcache', zend_opcache_enabled ? 'enabled' : 'disabled') }}
+            {{ tools.rowInfo('APCu', apcu_enabled ? 'enabled' : 'disabled') }}
+            {{ tools.rowInfo('Xdebug', xdebug_enabled ? 'enabled' : 'disabled') }}
+            
             {{ tools.rowInfo('End of maintenance', endOfMaintenance) }}
-            {{ tools.rowInfo('End of product life', endOfLife) }}
+            {{ tools.rowInfo('End of product life', endOfLife) }}            
             {{ tools.headerInfo('Directories') }}
             {{ tools.rowInfo('Project', projectDir) }}
             {{ tools.rowInfo('Logs', logDir) }}

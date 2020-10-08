@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Calendar;
 
 use App\Util\DateUtils;
+use App\Util\Utils;
 
 /**
  * Represents a calendar for a specified year.
@@ -125,20 +126,34 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
      */
     public function __construct(?int $year = null)
     {
-        parent::__construct($this);
-
         // today
-        $date = new \DateTime();
-        $date = $date->setTime(0, 0, 0, 0);
+        $date = new \DateTime('today');
         $this->today = new Day($this, $date);
 
         // names
         $this->initNames();
 
+        parent::__construct($this, (string) ($year ?? 0));
+
         // generate if applicable
         if ($year) {
             $this->generate($year);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString(): string
+    {
+        $name = Utils::getShortName($this);
+        $firstDate = new \DateTime('1 January ' . $this->year);
+        $lastDate = new \DateTime('31 December ' . $this->year);
+        $first = $this->localeDate($firstDate);
+        $last = $this->localeDate($lastDate);
+
+        return \sprintf('%s(%d, %s - %s)',
+            $name, $this->getNumber(), $first, $last);
     }
 
     /**
@@ -150,104 +165,94 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     {
         // check year
         $this->year = DateUtils::completYear($year);
+        $this->key = (string) $this->year;
 
         // clean
         $this->reset();
 
-        // calculate first and last days of year
-        $oneDayInterval = new \DateInterval('P1D');
-        $firstYearDate = \DateTime::createFromFormat('d.m.Y H:i:s', \sprintf('01.01.%s 00:00:00', $year));
-        $lastYearDate = (clone $firstYearDate)
-            ->add(new \DateInterval('P1Y'))
-            ->sub($oneDayInterval);
+        // get first and last days of the year
+        $firstYearDate = new \DateTime('1 January ' . $year);
+        $lastYearDate = new \DateTime('31 December ' . $year);
 
-        // calculate first and last days in calendar.
-        // It's monday on the 1st week and sunday on the last week
+        // get first day in calendar (monday of the 1st week)
         /** @var \DateTime $firstDate */
-        $firstDate = clone $firstYearDate;
-        while (self::MONDAY !== (int) $firstDate->format('N')) {
-            $firstDate = $firstDate->sub($oneDayInterval);
+        $firstDate = new \DateTime('first monday of January ' . $year);
+        if ($firstDate > $firstYearDate) {
+            $firstDate->sub(new \DateInterval('P1W'));
         }
 
+        // get the last days in calendar (sunday of the last week)
         /** @var \DateTime $lastDate */
-        $lastDate = clone $lastYearDate;
-        while (self::SUNNDAY !== (int) $lastDate->format('N')) {
-            $lastDate = $lastDate->add($oneDayInterval);
+        $lastDate = new \DateTime('last sunday of December ' . $year);
+        if ($lastDate < $lastYearDate) {
+            $lastDate->add(new \DateInterval('P1W'));
         }
 
-        /** @var Week $currentWeek */
+        /** @var ?Week $currentWeek */
         $currentWeek = null;
-        /** @var Month $currentMonth */
+
+        /** @var ?Month $currentMonth */
         $currentMonth = null;
+
         /** @var \DateTime $currentDate */
         $currentDate = clone $firstDate;
 
         // build calendar
+        $interval = new \DateInterval('P1D');
         while ($currentDate <= $lastDate) {
-            // create and add day
-            $day = new $this->dayModel($this, $currentDate);
-            $this->addDay($day);
+            // add day
+            $day = $this->createDay($currentDate);
 
-            // calculate month and week numbers
-            $monthNumber = (int) $currentDate->format('n');
+            // calculate numbers
             $monthYear = (int) $currentDate->format('Y');
+            $monthNumber = (int) $currentDate->format('n');
             $weekNumber = (int) $currentDate->format('W');
 
             if ($monthYear === $this->year) {
                 // create month if needed
-                if (null === $currentMonth || $monthNumber !== $currentMonth->getNumber()) {
-                    $currentMonth = $this->addMonth($monthNumber);
+                if (null === $currentMonth || $currentMonth->getNumber() !== $monthNumber) {
+                    $currentMonth = $this->createMonth($monthNumber);
                 }
                 $currentMonth->addDay($day);
             }
 
             // create week if needed
-            if (null === $currentWeek || $weekNumber !== $currentWeek->getNumber()) {
-                $currentWeek = $this->addWeek($weekNumber);
+            if (null === $currentWeek || $currentWeek->getNumber() !== $weekNumber) {
+                $currentWeek = $this->createWeek($weekNumber);
             }
             $currentWeek->addDay($day);
 
             // next day
-            $currentDate->add($oneDayInterval);
+            $currentDate->add($interval);
         }
 
         return $this;
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getKey(): string
-    {
-        return (string) $this->getYear();
-    }
-
-    /**
      * Gets the month for the given key.
      *
-     * @param int|\DateTimeInterface|string $key the month key. Can be an integer (1 - 12), a date time interface or a formatted date ('n.Y').
+     * @param int|\DateTimeInterface|string $key the month key. Can be an integer (1 - 12), a date time interface or a formatted date ('Y.m').
      *
      * @return Month|null the month, if found, null otherwise
+     *
+     * @see Month::KEY_FORMAT
      */
     public function getMonth($key): ?Month
     {
         if ($key instanceof \DateTimeInterface) {
-            $key = (int) $key->format('n');
+            $key = $key->format(Month::KEY_FORMAT);
         }
 
         if (\is_int($key)) {
-            return $this->months[$key] ?? null;
-        }
-
-        if (\is_string($key)) {
             foreach ($this->months as $month) {
-                if ($key === $month->getKey()) {
+                if ($key === $month->getNumber()) {
                     return $month;
                 }
             }
         }
 
-        return null;
+        return $this->months[(string) $key] ?? null;
     }
 
     /**
@@ -299,29 +304,25 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     /**
      * Gets the week for the given key.
      *
-     * @param int|\DateTimeInterface|string $key the week key. Can be an integer (1 - 53), a date time interface or a formatted date ('W.Y').
+     * @param int|\DateTimeInterface|string $key the week key. Can be an integer (1 - 53), a date time interface or a formatted date ('Y.W').
      *
      * @return Week|null the week, if found, null otherwise
+     *
+     * @see Week::KEY_FORMAT
      */
     public function getWeek($key): ?Week
     {
         if ($key instanceof \DateTimeInterface) {
-            $key = (int) $key->format('W');
+            $key = $key->format(Week::KEY_FORMAT);
         }
 
-        if (\is_int($key)) {
-            return $this->weeks[$key] ?? null;
-        }
-
-        if (\is_string($key)) {
-            foreach ($this->weeks as $week) {
-                if ($key === $week->getKey()) {
-                    return $week;
-                }
+        foreach ($this->weeks as $week) {
+            if ($key === $week->getKey()) {
+                return $week;
             }
         }
 
-        return null;
+        return $this->weeks[(string) $key] ?? null;
     }
 
     /**
@@ -470,32 +471,6 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     }
 
     /**
-     * Create and add a month.
-     *
-     * @param int $index the month index (1 - 12)
-     */
-    private function addMonth(int $index): Month
-    {
-        $month = new $this->monthModel($this, $index);
-        $this->months[$index] = $month;
-
-        return $month;
-    }
-
-    /**
-     * Create and add a week.
-     *
-     * @param int $index the week index (1 - 53)
-     */
-    private function addWeek(int $index): Week
-    {
-        $week = new $this->weekModel($this, $index);
-        $this->weeks[$index] = $week;
-
-        return $week;
-    }
-
-    /**
      * Checks if the given array has the given length and that all keys from 1 to length are present.
      *
      * @param array $array  the array to verify
@@ -520,6 +495,51 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
         }
 
         return $array;
+    }
+
+    /**
+     * Create and add a day.
+     *
+     * @param \DateTime $date the day date
+     */
+    private function createDay(\DateTime $date): Day
+    {
+        $day = new $this->dayModel($this, $date);
+        $this->addDay($day);
+
+        return $day;
+    }
+
+    /**
+     * Create and add a month.
+     *
+     * @param int $number the month number (1 - 12)
+     *
+     * @throws CalendarException if the number is not between 1 and 12 inclusive
+     */
+    private function createMonth(int $number): Month
+    {
+        /** @var Month $month */
+        $month = new $this->monthModel($this, $number);
+        $this->months[$month->getKey()] = $month;
+
+        return $month;
+    }
+
+    /**
+     * Create and add a week.
+     *
+     * @param int $number the week number (1 - 53)
+     *
+     * @throws CalendarException if the number is not between 1 and 53 inclusive
+     */
+    private function createWeek(int $number): Week
+    {
+        /** @var Week $week */
+        $week = new $this->weekModel($this, $number);
+        $this->weeks[] = $week;
+
+        return $week;
     }
 
     /**

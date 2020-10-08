@@ -1,4 +1,6 @@
 {% extends 'calculation/calculation_card.html.twig' %}
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
 {% macro printItem(item) -%}
@@ -12,9 +14,6 @@
 {% endif %}
 {{- properties.line(item.description ~ ' (' ~ texts|join(', ') ~ ')', 'text-danger') -}}
 {%- endmacro %}
-
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title        = 'calculation.below.title' -%}

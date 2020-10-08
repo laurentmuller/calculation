@@ -27,32 +27,41 @@ abstract class CalendarItem implements \JsonSerializable
     use DateFormatterTrait;
 
     /**
-     * The calendar.
+     * The parent's calendar.
      *
      * @var Calendar
      */
     protected $calendar;
 
     /**
+     * The item's key.
+     *
+     * @var string
+     */
+    protected $key;
+
+    /**
      * Constructor.
      *
-     * @param Calendar $calendar the parent calendar
+     * @param Calendar $calendar the parent's calendar
+     * @param string   $key      the unique key
      */
-    public function __construct(Calendar $calendar)
+    public function __construct(Calendar $calendar, string $key)
     {
         $this->calendar = $calendar;
+        $this->key = $key;
         $this->reset();
     }
 
     public function __toString(): string
     {
-        $name = $name = Utils::getShortName($this);
+        $name = Utils::getShortName($this);
 
         return \sprintf('%s(%d)', $name, $this->getNumber());
     }
 
     /**
-     * Gets the parent calendar.
+     * Gets the parent's calendar.
      */
     public function getCalendar(): Calendar
     {
@@ -62,7 +71,10 @@ abstract class CalendarItem implements \JsonSerializable
     /**
      * Gets the unique key.
      */
-    abstract public function getKey(): string;
+    public function getKey(): string
+    {
+        return $this->key;
+    }
 
     /**
      * Gets the item number.
@@ -80,7 +92,7 @@ abstract class CalendarItem implements \JsonSerializable
     }
 
     /**
-     * Gets the year.
+     * Gets the year as 4 digits (Examples: 1999 or 2003).
      */
     public function getYear(): int
     {
@@ -88,7 +100,7 @@ abstract class CalendarItem implements \JsonSerializable
     }
 
     /**
-     * Returns if this item is the current item (Curent month, current week or the current day).
+     * Returns if this item is the current item (for example curent month, current week or the current day).
      *
      * @return bool true if current
      */

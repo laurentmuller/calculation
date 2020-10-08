@@ -28,7 +28,7 @@ class Month extends CalendarItem
     /**
      * The date format used to generate this key.
      */
-    public const KEY_FORMAT = 'n.Y';
+    public const KEY_FORMAT = 'Y.m';
 
     /**
      * The month number (1 - 12).
@@ -42,10 +42,17 @@ class Month extends CalendarItem
      *
      * @param Calendar $calendar the parent calendar
      * @param int      $number   the month number (1 - 12)
+     *
+     * @throws CalendarException if the number is not between 1 and 12 inclusive
      */
     public function __construct(Calendar $calendar, int $number)
     {
-        parent::__construct($calendar);
+        if ($number < 1 || $number > 12) {
+            throw new CalendarException("The month number $number is not between 1 and 12 inclusive.");
+        }
+
+        $key = self::formatKey($calendar->getYear(), $number);
+        parent::__construct($calendar, $key);
         $this->number = $number;
     }
 
@@ -55,16 +62,22 @@ class Month extends CalendarItem
     public function __toString(): string
     {
         $name = Utils::getShortName($this);
+        $first = $this->localeDate($this->getFirstDate());
+        $last = $this->localeDate($this->getLastDate());
 
-        return \sprintf('%s(%d.%d)', $name, $this->getNumber(), $this->getYear());
+        return \sprintf('%s(%d.%d, %s - %s)',
+            $name, $this->getNumber(), $this->getYear(), $first, $last);
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the key for the given year and month.
+     *
+     * @param int $year  the year
+     * @param int $month the month (1 - 12)
      */
-    public function getKey(): string
+    public static function formatKey(int $year, int $month): string
     {
-        return $this->getNumber() . '.' . $this->getYear();
+        return \sprintf('%04d.%02d', $year, $month);
     }
 
     /**
@@ -78,8 +91,6 @@ class Month extends CalendarItem
     }
 
     /**
-     * {@inheritdoc}
-     *
      * This implementation returns the month number (1 to 12).
      */
     public function getNumber(): int
@@ -98,7 +109,7 @@ class Month extends CalendarItem
     }
 
     /**
-     * Gets the weeks that this month is contained in.
+     * Gets the calendar's weeks that this month is contained in.
      *
      * @return Week[]
      */
@@ -106,7 +117,9 @@ class Month extends CalendarItem
     {
         $firstDate = $this->getFirstDate();
         $lastDate = $this->getLastDate();
-        $callback = function (Week $week) use ($firstDate, $lastDate) {
+        $weeks = $this->calendar->getWeeks();
+
+        $result = \array_filter($weeks, function (Week $week) use ($firstDate, $lastDate) {
             $weekFirst = $week->getFirstDate();
             if ($firstDate < $weekFirst && $lastDate < $weekFirst) {
                 return false;
@@ -118,9 +131,9 @@ class Month extends CalendarItem
             }
 
             return true;
-        };
+        });
 
-        return \array_filter($this->calendar->getWeeks(), $callback);
+        return $result;
     }
 
     /**
@@ -169,7 +182,6 @@ class Month extends CalendarItem
             'shortName' => $this->getShortName(),
             'startDate' => $this->localeDate($this->getFirstDate()),
             'endDate' => $this->localeDate($this->getLastDate()),
-            'days' => $this->getDays(),
         ];
     }
 

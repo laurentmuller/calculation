@@ -14,10 +14,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Calendar\CalculationsDay;
-use App\Calendar\CalculationsMonth;
-use App\Calendar\Calendar;
-use App\Calendar\CalendarService;
 use App\Entity\Calculation;
 use App\Entity\CalculationItem;
 use App\Entity\CalculationState;
@@ -30,7 +26,6 @@ use App\Form\Type\CaptchaImage;
 use App\Form\Type\MinStrengthType;
 use App\Pdf\PdfResponse;
 use App\Report\HtmlReport;
-use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\CalculationService;
 use App\Service\CaptchaImageService;
@@ -40,7 +35,6 @@ use App\Service\SearchService;
 use App\Service\SwissPostService;
 use App\Service\ThemeService;
 use App\Translator\TranslatorFactory;
-use App\Util\DateUtils;
 use App\Validator\Captcha;
 use App\Validator\Password;
 use Doctrine\ORM\EntityManagerInterface;
@@ -68,116 +62,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TestController extends AbstractController
 {
-    /**
-     * Display a month of a calendar.
-     *
-     * @Route("/month/{year}/{month}", name="test_month", requirements={"year": "\d+", "month": "\d+"})
-     *
-     * @param CalendarService       $service    the service to generate calendar model
-     * @param CalculationRepository $repository the repository to query
-     * @param int|null              $year       the year to search for or <code>null</code> for the current year
-     * @param int|null              $month      the month to search for or <code>null</code> for the current month
-     */
-    public function calendarMonth(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $month = null): Response
-    {
-        // check month
-        $month = (int) ($month ?? \date('n'));
-        if ($month < 1 || $month > 12) {
-            throw $this->createNotFoundException($this->trans('calendar.invalid_month'));
-        }
-        $year = DateUtils::completYear((int) ($year ?? \date('Y')));
-        $service->setMonthModel(CalculationsMonth::class)
-            ->setDayModel(CalculationsDay::class);
-
-        /** @var Calendar $calendar */
-        $calendar = $service->generate($year);
-        $currentMonth = $calendar->getMonth($month);
-
-        $calculations = $repository->getForMonth($year, $month);
-        $this->merge($calendar, $calculations);
-
-        $yearMonth = $year * 1000 + $month;
-        $yearsMonths = $repository->getCalendarYearsMonths();
-
-        // previous month
-        $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth) {
-            return $current['year_month'] < $yearMonth;
-        });
-        $previous = empty($filtered) ? false :\end($filtered);
-
-        // next month
-        $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth) {
-            return $current['year_month'] > $yearMonth;
-        });
-        $next = empty($filtered) ? false : \reset($filtered);
-
-        // today month
-        $today = false;
-        $todayYear = (int) \date('Y');
-        $todayMonth = (int) \date('n');
-        if ($year !== $todayYear || $month !== $todayMonth) {
-            $yearMonth = $todayYear * 1000 + $todayMonth;
-            $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth) {
-                return $current['year_month'] === $yearMonth;
-            });
-            $today = empty($filtered) ? false : \reset($filtered);
-        }
-
-        return $this->render('calendar/calendar_month.html.twig', [
-            'calendar' => $calendar,
-            'month' => $currentMonth,
-            'calculations' => $calculations,
-            'today' => $today,
-            'previous' => $previous,
-            'next' => $next,
-        ]);
-    }
-
-    /**
-     * Display a calendar.
-     *
-     * @Route("/calendar/{year}", name="test_calendar", requirements={"year": "\d+" })
-     *
-     * @param CalendarService       $service    the service to generate calendar model
-     * @param CalculationRepository $repository the repository to query
-     * @param int|null              $year       the year to search for or <code>null</code> for the current year
-     */
-    public function calendarYear(CalendarService $service, CalculationRepository $repository, ?int $year = null): Response
-    {
-        $year = DateUtils::completYear((int) ($year ?? \date('Y')));
-        $service->setMonthModel(CalculationsMonth::class)
-            ->setDayModel(CalculationsDay::class);
-        $calendar = $service->generate($year);
-
-        $calculations = $repository->getForYear($year);
-        $this->merge($calendar, $calculations);
-        $years = $repository->getCalendarYears();
-
-        $previousYear = false;
-        $filteredYears = \array_filter($years, function (int $current) use ($year) {
-            return $current < $year;
-        });
-        if (\count($filteredYears)) {
-            $previousYear = \end($filteredYears);
-        }
-
-        $nextYear = false;
-        $filteredYears = \array_filter($years, function (int $current) use ($year) {
-            return $current > $year;
-        });
-        if (\count($filteredYears)) {
-            $nextYear = \reset($filteredYears);
-        }
-
-        return $this->render('calendar/calendar_year.html.twig', [
-            'calendar' => $calendar,
-            'calculations' => $calculations,
-            'years' => $years,
-            'previousYear' => $previousYear,
-            'nextYear' => $nextYear,
-        ]);
-    }
-
     /**
      * Create one or more calculations with random data.
      *
@@ -793,29 +677,6 @@ class TestController extends AbstractController
         $this->info("La mise à jour de {$count} clients a été effectuée avec succès.");
 
         return $this->redirectToRoute('customer_list');
-    }
-
-    /**
-     * Merges calculation to the calendar.
-     *
-     * @param Calendar      $calendar     the calendar to update
-     * @param Calculation[] $calculations the calculations to merge
-     */
-    private function merge(Calendar $calendar, array $calculations): void
-    {
-        foreach ($calculations as $calculation) {
-            $key = $calculation->getDate();
-
-            /** @var \App\Calendar\CalculationsDay $day */
-            if ($day = $calendar->getDay($key)) {
-                $day->addCalculation($calculation);
-            }
-
-            /** @var \App\Calendar\CalculationsMonth $month */
-            if ($month = $calendar->getMonth($key)) {
-                $month->addCalculation($calculation);
-            }
-        }
     }
 
     /**

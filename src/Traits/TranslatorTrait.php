@@ -32,6 +32,29 @@ trait TranslatorTrait
     protected $translator;
 
     /**
+     * Checks if a message has a translation (it does not take into account the fallback mechanism).
+     *
+     * @param string $id     the message id (may also be an object that can be cast to string)
+     * @param string $domain the domain for the message or null to use the default
+     * @param string $locale the locale or null to use the default
+     *
+     * @return bool true if the message has a translation, false otherwise
+     */
+    public function isTransDefined(string $id, ?string $domain = null, ?string $locale = null): bool
+    {
+        if ($translator = $this->doGetTranslator()) {
+            if ($translator instanceof TranslatorBagInterface) {
+                /** @var \Symfony\Component\Translation\MessageCatalogueInterface $catalogue */
+                $catalogue = $translator->getCatalogue($locale);
+
+                return $catalogue->defines($id, $domain);
+            }
+        }
+
+        return $id !== $this->trans($id, [], $domain, $locale);
+    }
+
+    /**
      * Translates the given message.
      *
      * @param string      $id         the message id (may also be an object that can be cast to string)
@@ -50,29 +73,6 @@ trait TranslatorTrait
         }
 
         return $id;
-    }
-
-    /**
-     * Checks if a message has a translation (it does not take into account the fallback mechanism).
-     *
-     * @param string $id     the message id (may also be an object that can be cast to string)
-     * @param string $domain the domain for the message or null to use the default
-     * @param string $locale the locale or null to use the default
-     *
-     * @return bool true if the message has a translation, false otherwise
-     */
-    public function transDefined(string $id, ?string $domain = null, ?string $locale = null): bool
-    {
-        if ($translator = $this->doGetTranslator()) {
-            if ($translator instanceof TranslatorBagInterface) {
-                /** @var \Symfony\Component\Translation\MessageCatalogueInterface $catalogue */
-                $catalogue = $translator->getCatalogue($locale);
-
-                return $catalogue->defines($id, $domain);
-            }
-        }
-
-        return $id !== $this->trans($id, [], $domain, $locale);
     }
 
     /**

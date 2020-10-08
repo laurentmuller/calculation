@@ -57,7 +57,7 @@
 <div class="accordion" id="parent_accordion">
     <a class="horizontal-line" data-toggle="collapse" href="#message" role="button" aria-expanded="false" aria-controls="message"><i class="fas fa-caret-right"></i>&nbsp;{{ 'parameters.group_message'|trans }}</a>
     <div class="toggle-icon collapse" id="message" data-parent="#parent_accordion">
-        <div class="form-row ml-2">
+        <div class="form-row ml-2 mt-1">
             <div class="col-md-4">
                 {{ form_row(form.message_position) }}
             </div>
@@ -71,7 +71,7 @@
     </div>
     <a class="horizontal-line" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="display"><i class="fas fa-caret-right"></i>&nbsp;{{ 'parameters.group_display'|trans }}</a>
     <div class="toggle-icon collapse" id="display" data-parent="#parent_accordion">
-        <div class="form-row ml-2">
+        <div class="form-row ml-2 mt-1">
             <div class="col">
                 {{ form_row(form.display_tabular) }}
             </div>
@@ -98,7 +98,7 @@
     {% if super_admin %}
     <a class="horizontal-line" data-toggle="collapse" href="#security" role="button" aria-expanded="false" aria-controls="security"><i class="fas fa-caret-right"></i>&nbsp;{{ 'parameters.group_security'|trans }}</a>
     <div class="toggle-icon collapse" id="security" data-parent="#parent_accordion">
-        <div class="form-row ml-2">
+        <div class="form-row ml-2 mt-1">
             <div class="col-md-6">
                 {{ form_row(form.display_captcha) }}
             </div>

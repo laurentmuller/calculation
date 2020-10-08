@@ -26,7 +26,7 @@ class Day extends CalendarItem implements WeekDaysInterface
     /**
      * The date format used to generate this key.
      */
-    public const KEY_FORMAT = 'd.m.Y';
+    public const KEY_FORMAT = 'Y.m.d';
 
     /**
      * The date.
@@ -43,8 +43,9 @@ class Day extends CalendarItem implements WeekDaysInterface
      */
     public function __construct(Calendar $calendar, \DateTime $date)
     {
-        parent::__construct($calendar);
         $this->date = \DateTimeImmutable::createFromMutable($date);
+        $key = $date->format(self::KEY_FORMAT);
+        parent::__construct($calendar, $key);
     }
 
     /**
@@ -83,14 +84,6 @@ class Day extends CalendarItem implements WeekDaysInterface
     public function getDayOfYear(): int
     {
         return (int) $this->format('z');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getKey(): string
-    {
-        return $this->format(self::KEY_FORMAT);
     }
 
     /**

@@ -155,6 +155,9 @@ class AjaxController extends AbstractController
 
         $locale = \Locale::getDefault();
         $localeName = Locales::getName($locale, 'en');
+        $xdebug_enabled = \extension_loaded('xdebug');
+        $apcu_enabled = \extension_loaded('apcu') && \filter_var(\ini_get('apc.enabled'), \FILTER_VALIDATE_BOOLEAN);
+        $zend_opcache_enabled = \extension_loaded('Zend OPcache') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN);
 
         $parameters = [
             'kernel' => $kernel,
@@ -169,6 +172,9 @@ class AjaxController extends AbstractController
             'endOfMaintenance' => $endOfMaintenance,
             'endOfLife' => $endOfLife,
             'locale' => $localeName . ' - ' . $locale,
+            'xdebug_enabled' => \json_encode($xdebug_enabled),
+            'apcu_enabled' => \json_encode($apcu_enabled),
+            'zend_opcache_enabled' => \json_encode($zend_opcache_enabled),
         ];
         $content = $this->renderView('about/symfony_content.html.twig', $parameters);
 
@@ -609,7 +615,7 @@ class AjaxController extends AbstractController
                 $errorCode = $error['code'];
                 $errorMessage = $error['message'];
                 $key = $service->getName() . '.' . $errorCode;
-                if ($this->transDefined($key, 'translator')) {
+                if ($this->isTransDefined($key, 'translator')) {
                     $errorMessage = $this->trans($key, [], 'translator');
                 }
 

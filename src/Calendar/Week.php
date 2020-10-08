@@ -28,10 +28,10 @@ class Week extends CalendarItem
     /**
      * The date format used to generate this key.
      */
-    public const KEY_FORMAT = 'W.Y';
+    public const KEY_FORMAT = 'Y.W';
 
     /**
-     * The week number (1 - 53).
+     * The week number (1 - 52 or 53).
      *
      * @var int
      */
@@ -41,11 +41,18 @@ class Week extends CalendarItem
      * Constructor.
      *
      * @param Calendar $calendar the parent calendar
-     * @param int      $number   the week number  (1 - 53)
+     * @param int      $number   the week number (1 - 53)
+     *
+     * @throws CalendarException if the number is not between 1 and 53 inclusive
      */
     public function __construct(Calendar $calendar, int $number)
     {
-        parent::__construct($calendar);
+        if ($number < 1 || $number > 53) {
+            throw new CalendarException("The week number $number is not between 1 and 53 inclusive.");
+        }
+
+        $key = self::formatKey($calendar->getYear(), $number);
+        parent::__construct($calendar, $key);
         $this->number = $number;
     }
 
@@ -55,16 +62,22 @@ class Week extends CalendarItem
     public function __toString(): string
     {
         $name = Utils::getShortName($this);
+        $first = $this->localeDate($this->getFirstDate());
+        $last = $this->localeDate($this->getLastDate());
 
-        return \sprintf('%s(%d-%d)', $name, $this->getNumber(), $this->getYear());
+        return \sprintf('%s(%d-%d, %s - %s)',
+            $name, $this->getNumber(), $this->getYear(), $first, $last);
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the key for the given year and week.
+     *
+     * @param int $year the year
+     * @param int $week the week (1 - 53)
      */
-    public function getKey(): string
+    public static function formatKey(int $year, int $week): string
     {
-        return $this->getNumber() . '.' . $this->getYear();
+        return \sprintf('%04d.%02d', $year, $week);
     }
 
     /**
@@ -76,7 +89,9 @@ class Week extends CalendarItem
     {
         $firstDate = $this->getFirstDate();
         $lastDate = $this->getLastDate();
-        $callback = function (Month $month) use ($firstDate, $lastDate) {
+        $months = $this->calendar->getMonths();
+
+        $result = \array_filter($months, function (Month $month) use ($firstDate, $lastDate) {
             $monthFirst = $month->getFirstDate();
             if ($firstDate < $monthFirst && $lastDate < $monthFirst) {
                 return false;
@@ -88,16 +103,16 @@ class Week extends CalendarItem
             }
 
             return true;
-        };
+        });
 
-        return \array_filter($this->calendar->getMonths(), $callback);
+        return $result;
     }
 
     /**
      * {@inheritdoc}
      *
-     * This implementation returns the ISO-8601 week number of year for the last day of this week.
-     * The weeks start on Monday (1 to 53).
+     * This implementation returns the ISO-8601 week number (1 to 53) of year for the last day of this week.
+     * The weeks start on Monday.
      */
     public function getNumber(): int
     {

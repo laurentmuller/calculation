@@ -1,15 +1,16 @@
 {% extends 'base.html.twig' %}
+{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
 {% macro link(route, text, icon, domain = null, parameters = []) -%}
-{% set url = path(route, parameters) %}
-{{ icons.link(url, text, url, icon ~ '  fa-fw', url, domain) }}
+{% set href = path(route, parameters) %}
+{{ icons.link(href, text, '', icon ~ ' fa-fw', '', domain, parameters) }}
 {%- endmacro %}
 
-{% macro linkExternal(route, text, icon, domain = null) -%}
-{% set url = path(route) %}
-{{ icons.linkExternal(url, text, '', icon ~ '  fa-fw', url, domain) }}
+{% macro linkExternal(route, text, icon, domain = null, parameters = []) -%}
+{% set href = path(route, parameters) %}
+{{ icons.linkExternal(href, text, '', icon ~ ' fa-fw', '', domain, parameters) }}
 {%- endmacro %}
 
 {# parameters #}

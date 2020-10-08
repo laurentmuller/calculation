@@ -1,19 +1,33 @@
 {# macros #}
+{% macro linkCalculations(query, date, count, class) -%}
+{% import 'macros/_icons.html.twig' as icons %}
+{%- set title = 'counters.calculations_calendar'|trans({date: date, count: count}) -%}
+{%- set route = display_tabular() ? 'calculation_table' : 'calculation_list' -%}    
+<a class="{{ class }}" href="{{ path(route, {'query': query}) }}" title="{{ title }}">{{ icons.icon('calculator') }}</a>
+{%- endmacro %}
+
 {% macro dataContent(calculations) -%}
 {% import 'macros/_properties.html.twig' as properties %}
-<table class="table table-popover table-sm mb-0"><tbody>
-{% for calculation in calculations -%}
+<table class="table table-popover table-sm mb-0">
+    <tbody>
+    {% for calculation in calculations -%}
+        {{ _self.dataRow(calculation) }}
+    {%- endfor %}
+    </tbody>
+</table>
+{%- endmacro %}
+
+{%  macro dataRow(calculation, class = '') %}
+{% import 'macros/_properties.html.twig' as properties %}
 {% set margin_class = margin_below(calculation) ? 'text-percent text-danger' : 'text-percent' %}
 <tr>
-    <td><span class="mr-1" style="{{ properties.stateCss(calculation.stateColor) }}"></span>{{ calculation.id|identifier }}</td>
-    <td>{{ calculation.state.code }}</td>
-    <td>{{ calculation.customer }}</td>
-    <td>{{ calculation.description }}</td>
+    <td class="text-id"><span class="mr-1" style="{{ properties.stateCss(calculation.stateColor) }}"></span>{{ calculation.id|identifier }}</td>
+    <td class="text-state">{{ calculation.state.code }}</td>
+    <td{% if class %} class="{{ class }}"{% endif %}>{{ calculation.customer }}</td>
+    <td{% if class %} class="{{ class }}"{% endif %}>{{ calculation.description }}</td>
     <td class="{{ margin_class }}">{{ calculation.overallMargin|percent }}</td>
     <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
 </tr>
-{%- endfor %}
-</tbody></table>
 {%- endmacro %}
 
 {% macro dayCell(month, day, small) %}

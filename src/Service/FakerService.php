@@ -18,6 +18,7 @@ use App\Faker\CustomAddress;
 use App\Faker\CustomCompany;
 use App\Faker\CustomPerson;
 use App\Faker\CustomPhoneNumber;
+use Faker\Factory;
 use Faker\Generator;
 
 /**
@@ -43,7 +44,7 @@ class FakerService
     {
         if (null === $this->faker) {
             $locale = \Locale::getDefault();
-            $faker = \Faker\Factory::create($locale);
+            $faker = Factory::create($locale);
             $faker->addProvider(new CustomPerson($faker));
             $faker->addProvider(new CustomCompany($faker));
             $faker->addProvider(new CustomAddress($faker));

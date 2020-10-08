@@ -1,8 +1,9 @@
 {% extends 'cards/card_base.html.twig' %}
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
 
 {# create a sort menu #}
 {% macro sortMenu(route, field, currentField, currentMode, separator) %}
-{% import 'macros/_icons.html.twig' as icons %}
 {%- set name        = field.name -%}
 {%- set label       = field.label|trans -%}
 {%- set numeric     = field.numeric is defined ? field.numeric : false -%}
@@ -20,7 +21,6 @@
 </a>
 {% if separator %}{{ icons.dropdownSeparator() }}{% endif %}
 {% endmacro %}
-{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set selection = selection|default(0) -%}

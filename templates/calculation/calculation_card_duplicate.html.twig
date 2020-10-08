@@ -1,13 +1,12 @@
 {% extends 'calculation/calculation_card.html.twig' %}
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+{% import 'macros/_properties.html.twig' as properties %}
 
 {# macros #}
 {% macro printItem(item) -%}
-{% import 'macros/_properties.html.twig' as properties %}
 {{- properties.line(item.description ~ ' (' ~ item.count|integer ~ ')', 'text-danger', 1) -}}
 {%- endmacro %}
-
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title        = 'calculation.duplicate.title' -%}

@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+{% import 'calendar/_calendar.html.twig' as helper %}
+
+{# parameters #}
+{%- set title            = 'calendar.week_title' -%}
+{%- set title_parameters = {'%year%': week.year, '%week%': week.number} -%}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-4">
+        <h2>{{ title|trans(title_parameters) }}</h2>
+    </div>
+    <div class="col-md-4 text-md-center">
+        <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
+    </div>
+    <div class="col-md-4 align-self-center text-md-right">
+        <div class="btn-group btn-group-sm" role="group">
+            {# today week #}
+            {% if today %}
+                {% set text = 'calendar.week_title'|trans({'%year%': today.year, '%week%': today.week}) %}
+                <a class="btn btn-primary" href="{{ path('calendar_week') }}" title="{{ text }}">{{ icons.icon('arrows-alt') }}</a>
+            {% endif %}
+            {# previous week #}
+            {% if previous %}
+                {% set text = 'calendar.week_title'|trans({'%year%': previous.year, '%week%': previous.week}) %}
+                <a class="btn btn-primary" title="{{ text }}" href="{{ path('calendar_week', {'year': previous.year, 'week': previous.week}) }}">{{ icons.icon('chevron-left') }}</a>
+            {% endif %}
+            {# next week #}
+            {% if next %}
+                {% set text = 'calendar.week_title'|trans({'%year%': next.year, '%week%': next.week}) %}
+                <a class="btn btn-primary" title="{{ text }}" href="{{ path('calendar_week', {'year': next.year, 'week': next.week}) }}">{{ icons.icon('chevron-right') }}</a>
+            {% endif %} 
+            {# current month calendar #}
+            {%- set first = week.days|filter(day => (day.inWeek(week) and not day.empty))|first -%}
+            {% if first -%}
+                {% set month = calendar.month(first.month) %}
+                {% set text = 'calendar.month_title'|trans({'%year%': month.year, '%month%': month.name}) %}
+                <a class="btn btn-primary" title="{{ text }}" href="{{ path('calendar_month', {'year': month.year, 'month': month.number}) }}">{{ icons.icon('calendar-week') }}</a>
+            {%- endif %}       
+            {# current year calendar #}
+            {%- set text = 'calendar.year_title'|trans({'%year%': week.year}) -%}
+            <a class="btn btn-primary" title="{{ text }}" href="{{ path('calendar_year', {'year': week.year}) }}">{{ icons.icon('calendar-alt far') }}</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+    {% for day in week.days|filter(day => day.inWeek(week)) -%}
+        <table class="table table-sm table-borderless ">
+            <thead>
+                <tr class="bg-secondary text-white">
+                    <td colspan="5"><span>{{ day.date|localedate('long') }}</span><span class="small align-text-bottom"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span> </td>
+                    <td class="text-right">
+                        {% if not day.empty -%}
+                            <span>{{ helper.linkCalculations(day.date|localedate('short'), day.name, day.count, 'text-white') }}</span>
+                        {%- endif %}
+                    </td>
+                </tr>
+            </thead>
+            {% if not day.empty %}
+            <tbody>
+                {% for calculation in day.calculations -%}
+                        {{ helper.dataRow(calculation,'text-cell') }}
+                {%- endfor %}
+            </tbody>
+            {% endif %}
+        </table>
+    {%- endfor %}
+    </div>    
+</div>
+
+{% endblock %}
+
+{% block stylesheets -%}
+{{ parent() }}
+{{ asset_css('css/calendar.css') }}
+{% endblock %}

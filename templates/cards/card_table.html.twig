@@ -1,5 +1,4 @@
 {% extends 'cards/card_base.html.twig' %}
-
 {# imports #}
 {% import 'macros/_datatables.html.twig' as helper %}
 {% import 'macros/_icons.html.twig' as icons %}
@@ -14,7 +13,6 @@
 {% endmacro %}
 
 {% macro item_data(path, text, icon, attributes = {}) %}
-{% import 'macros/_icons.html.twig' as icons %}
 {%- if path -%}
     <a href="#" data-path="{{ path }}" class="dropdown-item"{{ helper.attribs(attributes) }}>
         {{- icons.icon(icon ~ ' fa-fw', text) -}}    	
@@ -23,7 +21,6 @@
 {% endmacro %}
 
 {% macro item_data_external(path, text, icon) %}
-{% import 'macros/_icons.html.twig' as icons %}
 {%- if path -%}
     <a href="#" data-path="{{ path }}" class="dropdown-item" target="_blank" rel="noopener noreferrer">
         {{- icons.icon(icon ~ ' fa-fw', text) -}}    	
@@ -32,7 +29,6 @@
 {% endmacro %}
 
 {% macro item_external(path, text, class, icon) %}
-{% import 'macros/_icons.html.twig' as icons %}
 {%- if path -%}
     <a href="{{ path }}" target="_blank" rel="noopener noreferrer" class="{{ class }}">
         {{- icons.icon(icon ~ ' fa-fw', text) -}}

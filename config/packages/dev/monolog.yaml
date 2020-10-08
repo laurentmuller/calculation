@@ -24,10 +24,13 @@ monolog:
             formatter: monolog.custom_formatter
             channels:
             - php
-        #mailer_error:
-        #    type: native_mailer
-        #    from_email: calculation@bibi.nu
-        #    to_email: calculation@bibi.nu
-        #    subject: Exception %%message%%
-        #    channels:
-        #    - app
+        #symfony_mailer:
+            #type: symfony_mailer
+            #from_email: calculation@bibi.nu
+            #to_email: calculation@bibi.nu
+            #subject: An Error Occurred! %%message%%
+            #level: debug
+            #formatter: monolog.formatter.html
+            #content_type: text/html
+            #channels:
+            #- app

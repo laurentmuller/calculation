@@ -146,11 +146,11 @@ class CalculationRepository extends AbstractRepository
      */
     public function getCalendarYears(): array
     {
-        $field = 'year(e.date)';
+        $year = 'year(e.date)';
         $builder = $this->createQueryBuilder('e')
-            ->select($field)
+            ->select($year)
             ->distinct()
-            ->orderBy($field);
+            ->orderBy($year);
 
         $result = $builder->getQuery()
             ->getResult(ColumnHydrator::NAME);
@@ -161,7 +161,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets the distinct years and months of calculations.
      *
-     * @return int[] the distinct years
+     * @return int[] the distinct years and months
      */
     public function getCalendarYearsMonths(): array
     {
@@ -169,9 +169,8 @@ class CalculationRepository extends AbstractRepository
         $month = 'month(e.date)';
 
         $builder = $this->createQueryBuilder('e')
-            ->select('year(e.date) AS year')
-            ->addSelect('month(e.date) AS month')
-            ->addSelect('YEAR(e.date) * 1000 + MONTH(e.date) AS year_month')
+            ->select("$year as year")
+            ->addSelect("$month AS month")
             ->distinct()
             ->orderBy($year)
             ->addOrderBy($month);
@@ -182,7 +181,36 @@ class CalculationRepository extends AbstractRepository
         foreach ($result as &$entry) {
             $entry['year'] = (int) ($entry['year']);
             $entry['month'] = (int) ($entry['month']);
-            $entry['year_month'] = (int) ($entry['year_month']);
+            $entry['year_month'] = $entry['year'] * 1000 + $entry['month'];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Gets the distinct years and week of calculations.
+     *
+     * @return int[] the distinct years and weeks
+     */
+    public function getCalendarYearsWeeks(): array
+    {
+        $year = 'year(e.date)';
+        $week = 'week(e.date, 3)';
+
+        $builder = $this->createQueryBuilder('e')
+            ->select("$year as year")
+            ->addSelect("$week AS week")
+            ->distinct()
+            ->orderBy($year)
+            ->addOrderBy($week);
+
+        $result = $builder->getQuery()
+            ->getArrayResult();
+
+        foreach ($result as &$entry) {
+            $entry['year'] = (int) ($entry['year']);
+            $entry['week'] = (int) ($entry['week']);
+            $entry['year_week'] = $entry['year'] * 1000 + $entry['week'];
         }
 
         return $result;
@@ -344,14 +372,20 @@ class CalculationRepository extends AbstractRepository
      * Gets calculations for the given year and week.
      *
      * @param int $year the year
-     * @param int $week the week number
+     * @param int $week the week number (1 to 53)
      *
      * @return Calculation[] the matching calculations
      */
     public function getForWeek(int $year, int $week): array
     {
+        $today = new \DateTime('today');
+        $start = clone $today->setISODate($year, $week, 1);
+        $end = clone $today->setISODate($year, $week, 7);
+        if ($start < $end) {
+        }
+
         return $this->getCalendarBuilder($year)
-            ->andWhere('WEEK(c.date) = :week')
+            ->andWhere('WEEK(c.date, 3) = :week')
             ->setParameter('week', $week, Types::INTEGER)
             ->getQuery()
             ->getResult();
@@ -403,31 +437,25 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('c.date                              AS calculation_date')
             ->addSelect('(c.overallTotal / c.itemsTotal) - 1 AS calculation_overall_margin')
             ->addSelect('c.overallTotal                      AS calculation_overall_total')
-
             // state
             ->addSelect('s.code                              AS calculation_state')
-
             // groups
             ->addSelect('g.code                              AS item_group')
-
             // items
             ->addSelect('i.description                       AS item_description')
             ->addSelect('i.price                             AS item_price')
             ->addSelect('i.quantity                          AS item_quantity')
             ->addSelect('i.price * i.quantity                AS item_total')
-
             // tables
             ->innerJoin('c.state', 's')
             ->innerJoin('c.groups', 'g')
             ->innerJoin('g.items', 'i')
-
             // not empty
             ->where('c.itemsTotal != 0');
 
         // execute
-        $query = $builder->getQuery();
-
-        return $query->getArrayResult();
+        return $builder->getQuery()
+            ->getArrayResult();
     }
 
     /**

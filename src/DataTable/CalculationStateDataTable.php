@@ -102,7 +102,7 @@ class CalculationStateDataTable extends AbstractEntityDataTable
             DataColumn::instance('code')
                 ->setTitle('calculationstate.fields.code')
                 ->setCallback('renderStateColor')
-                ->addClassName('pl-3 text-code text-nowrap')
+                ->addClassName('text-code text-nowrap')
                 ->setDefault(true),
             DataColumn::instance('description')
                 ->setTitle('calculationstate.fields.description')

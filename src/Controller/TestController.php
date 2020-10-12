@@ -14,12 +14,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Calculation;
-use App\Entity\CalculationItem;
-use App\Entity\CalculationState;
-use App\Entity\Customer;
-use App\Entity\Product;
-use App\Entity\User;
 use App\Form\Admin\ParametersType;
 use App\Form\FormHelper;
 use App\Form\Type\CaptchaImage;
@@ -27,9 +21,7 @@ use App\Form\Type\MinStrengthType;
 use App\Pdf\PdfResponse;
 use App\Report\HtmlReport;
 use App\Repository\CalculationStateRepository;
-use App\Service\CalculationService;
 use App\Service\CaptchaImageService;
-use App\Service\FakerService;
 use App\Service\HttpClientService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
@@ -37,8 +29,6 @@ use App\Service\ThemeService;
 use App\Translator\TranslatorFactory;
 use App\Validator\Captcha;
 use App\Validator\Password;
-use Doctrine\ORM\EntityManagerInterface;
-use Faker\Provider\Person;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -48,7 +38,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -62,173 +51,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TestController extends AbstractController
 {
-    /**
-     * Create one or more calculations with random data.
-     *
-     * @Route("/create/calculations/{count}", name="test_create_calculations", requirements={"count": "\d+" })
-     */
-    public function createCalculations(EntityManagerInterface $manager, CalculationService $service, FakerService $fakerService, int $count = 1): JsonResponse
-    {
-        /** @var \Faker\Generator $faker */
-        $faker = $fakerService->getFaker();
-
-        // 3 months before
-        $startDate = new \DateTime();
-        $startDate->modify('first day of this month');
-        $interval = new \DateInterval('P3M');
-        $startDate = $startDate->sub($interval);
-
-        // end of next month
-        $endDate = new \DateTime();
-        $endDate->modify('last day of this month');
-        $interval = new \DateInterval('P1M');
-        $endDate = $endDate->add($interval);
-
-        // load data
-        $products = $manager->getRepository(Product::class)->findAll();
-        $states = $manager->getRepository(CalculationState::class)->findBy([
-            'editable' => true,
-        ]);
-        $users = $manager->getRepository(User::class)->findBy([
-            'enabled' => true,
-        ]);
-        $users = \array_map(function (User $user) {
-            return $user->getUsername();
-        }, $users);
-
-        $calculations = [];
-        for ($i = 0; $i < $count; ++$i) {
-            // calculation
-            $calculation = new Calculation();
-            $calculation->setDate($faker->dateTimeBetween($startDate, $endDate))
-                ->setDescription($faker->catchPhrase())
-                ->setUserMargin($faker->randomFloat(2, 0, 0.1))
-                ->setState($faker->randomElement($states))
-                ->setCreatedBy($faker->randomElement($users))
-                ->setCustomer($faker->name);
-
-            // items
-            /** @var Product[] $itemProducts */
-            $itemProducts = $faker->randomElements($products, $faker->numberBetween(5, 15));
-            foreach ($itemProducts as $product) {
-                // copy
-                $item = CalculationItem::create($product)->setQuantity($faker->numberBetween(1, 10));
-
-                // find group
-                $category = $product->getCategory();
-                $group = $calculation->findGroup($category, true);
-
-                // add
-                $group->addItem($item);
-            }
-
-            // update
-            $service->updateTotal($calculation);
-
-            // save
-            $manager->persist($calculation);
-
-            // add
-            $calculations[] = $calculation;
-        }
-
-        // commit
-        $manager->flush();
-
-        // serialize
-        $calculations = \array_map(function (Calculation $c) {
-            return [
-                'id' => $this->localeId($c->getId()),
-                'description' => $c->getDescription(),
-                'customer' => $c->getCustomer(),
-                'state' => $c->getState()->getCode(),
-                'date' => $this->localeDate($c->getDate()),
-                'total' => $this->localeAmount($c->getOverallTotal()),
-            ];
-        }, $calculations);
-
-        $data = [
-            'result' => true,
-            'count' => \count($calculations),
-            'calculations' => $calculations,
-        ];
-
-        return $this->json($data);
-    }
-
-    /**
-     * Create one or more customers with random data.
-     *
-     * @Route("/create/customers/{count}", name="test_create_customers", requirements={"count": "\d+" })
-     */
-    public function createCustomers(EntityManagerInterface $manager, FakerService $fakerService, int $count = 1): JsonResponse
-    {
-        /** @var \Faker\Generator $faker */
-        $faker = $fakerService->getFaker();
-
-        $customers = [];
-        $styles = [0, 1, 2];
-        $genders = [Person::GENDER_MALE, Person::GENDER_FEMALE];
-
-        for ($i = 0; $i < $count; ++$i) {
-            $customer = new Customer();
-            $style = $faker->randomElement($styles);
-            $gender = $faker->randomElement($genders);
-
-            switch ($style) {
-                case 0: // company
-                    $customer->setCompany($faker->company)
-                        ->setEmail($faker->companyEmail);
-                    break;
-
-                case 1: // contact
-                    $customer->setTitle($faker->title($gender))
-                        ->setFirstName($faker->firstName($gender))
-                        ->setLastName($faker->lastName)
-                        ->setEmail($faker->email);
-                    break;
-
-                default: // both
-                    $customer->setCompany($faker->company)
-                        ->setFirstName($faker->firstName($gender))
-                        ->setTitle($faker->title($gender))
-                        ->setLastName($faker->lastName)
-                        ->setEmail($faker->email);
-                    break;
-            }
-            $customer->setAddress($faker->streetAddress)
-                ->setZipCode($faker->postcode)
-                ->setCity($faker->city);
-
-            // save
-            $manager->persist($customer);
-
-            // add
-            $customers[] = $customer;
-        }
-
-        // commit
-        $manager->flush();
-
-        // serialize
-        $customers = \array_map(function (Customer $c) {
-            return [
-                'id' => $c->getId(),
-                'company' => $c->getCompany(),
-                'firstName' => $c->getFirstName(),
-                'lastName' => $c->getLastName(),
-            ];
-        }, $customers);
-
-        $data = [
-            'result' => true,
-            'count' => \count($customers),
-            'customers' => $customers,
-        ];
-
-        return $this->json($data);
-    }
-
     /**
      * Update calculations with random customers.
      *
@@ -592,108 +414,5 @@ class TestController extends AbstractController
         ];
 
         return $this->json($data);
-    }
-
-    /**
-     * Update calculations with random customers.
-     *
-     * @Route("/update/calculations", name="test_update_calculations")
-     */
-    public function updateCalculations(EntityManagerInterface $manager, FakerService $service): Response
-    {
-        /** @var \Faker\Generator $faker */
-        $faker = $service->getFaker();
-
-        /** @var \App\Entity\Calculation[] $calculations */
-        $calculations = $manager->getRepository(Calculation::class)->findAll();
-        $states = $manager->getRepository(CalculationState::class)->findBy([
-            'editable' => true,
-        ]);
-        $styles = [0, 1, 2];
-
-        // update
-        foreach ($calculations as $calculation) {
-            $style = $faker->randomElement($styles);
-            switch ($style) {
-                case 0:
-                    $calculation->setCustomer($faker->companySuffix);
-                    break;
-
-                case 1:
-                    $calculation->setCustomer($faker->name(\Faker\Provider\Person::GENDER_MALE));
-                    break;
-
-                default:
-                    $calculation->setCustomer($faker->name(\Faker\Provider\Person::GENDER_FEMALE));
-                    break;
-            }
-            $calculation->setDescription($faker->catchPhrase())
-                ->setState($faker->randomElement($states));
-        }
-
-        // save
-        $manager->flush();
-
-        $count = \count($calculations);
-        $this->info("La mise à jour de {$count} calculations a été effectuée avec succès.");
-
-        return $this->redirectToHomePage();
-    }
-
-    /**
-     * Update customers with random values.
-     *
-     * @Route("/update/customers", name="test_update_customers")
-     */
-    public function updateCustomers(EntityManagerInterface $manager, FakerService $service): Response
-    {
-        /** @var \App\Entity\Customer[] $customers */
-        $customers = $manager->getRepository(Customer::class)->findAll();
-
-        /** @var \Faker\Generator $faker */
-        $faker = $service->getFaker();
-
-        $genders = [
-            \Faker\Provider\Person::GENDER_MALE,
-            \Faker\Provider\Person::GENDER_FEMALE,
-        ];
-
-        $accessor = new PropertyAccessor();
-        foreach ($customers as $customer) {
-            $gender = $faker->randomElement($genders);
-            $this->replace($accessor, $customer, 'title', $faker->title($gender))
-                ->replace($accessor, $customer, 'firstName', $faker->firstName($gender))
-                ->replace($accessor, $customer, 'lastName', $faker->lastName)
-                ->replace($accessor, $customer, 'company', $faker->companySuffix)
-                ->replace($accessor, $customer, 'address', $faker->streetAddress)
-                ->replace($accessor, $customer, 'zipCode', $faker->postcode)
-                ->replace($accessor, $customer, 'city', $faker->city)
-                ->replace($accessor, $customer, 'email', $faker->email);
-        }
-
-        $manager->flush();
-
-        $count = \count($customers);
-        $this->info("La mise à jour de {$count} clients a été effectuée avec succès.");
-
-        return $this->redirectToRoute('customer_list');
-    }
-
-    /**
-     * Update an element property.
-     *
-     * @param PropertyAccessor $accessor the property accessor to get or set value
-     * @param mixed            $element  the element to update
-     * @param string           $property the property name
-     * @param mixed            $value    the new value to set
-     */
-    private function replace(PropertyAccessor $accessor, $element, string $property, $value): self
-    {
-        if (empty($accessor->getValue($element, $property))) {
-            $value = null;
-        }
-        $accessor->setValue($element, $property, $value);
-
-        return $this;
     }
 }

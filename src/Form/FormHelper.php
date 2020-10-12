@@ -38,6 +38,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 /**
@@ -289,11 +290,14 @@ class FormHelper
 
     /**
      * Add a number type to the builder and reset all values to default.
+     *
+     * @param int $scale the number of decimals to set
      */
-    public function addNumberType(): self
+    public function addNumberType(int $scale = 2): self
     {
         return $this->className('text-right')
-            ->updateAttribute('scale', 2)
+            ->updateOption('html5', true)
+            ->updateAttribute('scale', $scale)
             ->add(NumberType::class);
     }
 
@@ -497,10 +501,24 @@ class FormHelper
      * @return FormInterface the form
      *
      * @see FormBuilderInterface::getForm()
+     * @see FormHelper::createView()
      */
     public function createForm(): FormInterface
     {
         return $this->builder->getForm();
+    }
+
+    /**
+     * Create the form view.
+     *
+     * @return FormView the form view
+     *
+     * @see FormInterface::createView()
+     * @see FormHelper::createForm()
+     */
+    public function createView(FormView $parent = null): FormView
+    {
+        return $this->createForm()->createView($parent);
     }
 
     /**

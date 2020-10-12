@@ -22,7 +22,7 @@
 
 {% block item_title %}
 {%- set item_title = item.code -%}
-<div style="{{ properties.stateCss(item.color) }}">
+<div class="text-border" style="{{ properties.stateCss(item.color) }}">
 {%- if default_page -%}
     {%- set default_path = path(default_page, params) -%}
     <a href="{{ default_path }}" class="text-body ml-1">{{ item.code }}</a>

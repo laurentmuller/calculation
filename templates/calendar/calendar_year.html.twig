@@ -68,7 +68,7 @@
 {% endmacro %}
 
 {% macro previousLink(previousYear) %}
-{% set title = 'calendar.previous_title'|trans %}
+{% set title = 'calendar.previous_year'|trans %}
 {% if previousYear %}
     {% set href = path('calendar_year', {'year': previousYear}) %}
     <li class="page-item"><a class="page-link" href="{{ href }}" title="{{ title }}">{{ icons.icon('chevron-left fa-fw') }}</a></li>
@@ -78,7 +78,7 @@
 {% endmacro %}
 
 {% macro nextLink(nextYear) %}
-{% set title = 'calendar.next_title'|trans %}
+{% set title = 'calendar.next_year'|trans %}
 {% if nextYear %}
     {% set href = path('calendar_year', {'year': nextYear}) %}
     <li class="page-item"><a class="page-link" href="{{ href }}" title="{{ title }}">{{ icons.icon('chevron-right fa-fw') }}</a></li>

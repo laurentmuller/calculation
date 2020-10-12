@@ -1,0 +1,32 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# parameters #}
+{%- set title       = 'generate.title' -%}
+{%- set title_icon  = 'tools' -%}
+{%- set submit_text = 'generate.submit_text' -%}
+
+{% block card_header %}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ 'generate.description'|trans }}</p>
+{% endblock %}
+
+{% block card_body %}
+<div class="form-row">
+    <div class="col-md-8">
+        {{ form_row(form.entity) }}
+    </div>
+    <div class="col-md-4">
+        {{ form_row(form.count) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table table-sm" id="result" style="display: none"></table>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ asset_js('js/application/generate.js') }}
+{% endblock %}

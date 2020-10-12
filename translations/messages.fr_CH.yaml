@@ -599,8 +599,8 @@ calendar:
     week: Sem.
     invalid_month: Le mois doit être compris entre 1 et 12.
     invalid_week: La semaine doit être comprises entre 1 et 53.
-    previous_title: Année précédente
-    next_title: Année suivante
+    previous_year: Année précédente
+    next_year: Année suivante
 test:
     notification: Notifications
     summernote: Editeur Summernote
@@ -915,3 +915,10 @@ counters:
     weather_forecast: '{0} Aucune prévision horaire|{1} Prévisions à 1 heure|]1,Inf] Prévisions à %count% heures}}'
     weather_cities: '{0} Aucune localité ne correspond aux critères de recherche.|{1} 1 localité correspond aux critères de recherche.|]1,Inf] %count% localités correspond aux critères de recherche.'
     hours: '{0} 0 heure|{1} 1 heure|]1,Inf] %count% heures'
+generate:
+    title: Générateur
+    description: Cet outil permet de générer des données aléatoires.
+    submit_text: Générer
+    fields:
+        entity: Objet à générer
+        count: Nombre

@@ -98,13 +98,9 @@ $.fn.dataTable.renderTooltip = function (td, cellData) {
 $.fn.dataTable.renderStateColor = function (td, cellData, rowData) {
     'use strict';
 
-    const color = rowData.find((value) => value.match(/^#([0-9a-fA_F]{6}|[0-9a-fA-F]{3})$/i));
+    const color = rowData.find((value) => value.match(/^#([0-9a-f]{6}|[0-9a-f]{3})$/i));
     if (!$.isUndefined(color)) {
-        const style = 'inset 5px 0 ' + color;
-        $(td).css('-webkit-box-shadow', style);
-        $(td).css('-moz-box-shadow', style);
-        $(td).css('-o-box-shadow', style);
-        $(td).css('box-shadow', style);
+        $(td).attr('style', 'border-left-color: ' + color + ' !important;');
     }
 };
 

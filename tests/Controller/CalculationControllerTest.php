@@ -112,10 +112,6 @@ class CalculationControllerTest extends AbstractControllerTest
             ['/calculation/empty/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/calculation/empty/table', self::ROLE_ADMIN],
             ['/calculation/empty/table', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/update', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/update', self::ROLE_ADMIN],
-            ['/calculation/update', self::ROLE_SUPER_ADMIN],
         ];
     }
 

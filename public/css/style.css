@@ -133,6 +133,9 @@ a.btn-list {
     width: 30px;
     text-align: center;
 }
+.text-border {
+    border-left: 0.3rem solid transparent !important;
+}
 .text-currency {
     text-align: right;
     width: 90px;
@@ -159,7 +162,7 @@ a.btn-list {
     white-space: nowrap;
 }
 .text-id {
-    text-align: center;
+    border-left: 0.3rem solid transparent !important;
     width: 80px;
 }
 .text-color {
@@ -171,6 +174,7 @@ a.btn-list {
 }
 .text-code {
     width: 120px;
+    border-left: 0.3rem solid transparent !important;
 }
 .text-state {
     width: 100px;

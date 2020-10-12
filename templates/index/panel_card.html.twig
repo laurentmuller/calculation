@@ -39,7 +39,7 @@
 		<div class="card-last border rounded p-2 m-1{% if id == selection %} border-primary{%- endif %}">
 			<div class="row">
 				<div class="col-10 card-title mb-1 h5">
-                    <div style="{{ properties.stateCss(item.stateColor) }}">
+                    <div class="text-border" style="{{ properties.stateCss(item.stateColor) }}">
                         {%- if default_page -%}
                             {%- set default_path = path(default_page, params) -%}
                             <a href="{{ default_path }}" class="text-body ml-1">{{ item_title }}</a>

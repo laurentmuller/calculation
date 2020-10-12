@@ -169,7 +169,7 @@ class CalculationRepository extends AbstractRepository
         $month = 'month(e.date)';
 
         $builder = $this->createQueryBuilder('e')
-            ->select("$year as year")
+            ->select("$year AS year")
             ->addSelect("$month AS month")
             ->distinct()
             ->orderBy($year)
@@ -198,7 +198,7 @@ class CalculationRepository extends AbstractRepository
         $week = 'week(e.date, 3)';
 
         $builder = $this->createQueryBuilder('e')
-            ->select("$year as year")
+            ->select("$year AS year")
             ->addSelect("$week AS week")
             ->distinct()
             ->orderBy($year)

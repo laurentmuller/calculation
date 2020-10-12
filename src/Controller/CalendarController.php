@@ -199,7 +199,7 @@ class CalendarController extends AbstractController
      * @param int   $year        the current year
      * @param int   $month       the current month
      *
-     * @return int[]|bool the next year and month, if found; null otherwise
+     * @return int[]|bool the next year and month, if found; false otherwise
      */
     private function nextMonth(array $yearsMonths, int $year, int $month)
     {
@@ -208,7 +208,7 @@ class CalendarController extends AbstractController
             return $current['year_month'] > $yearMonth;
         });
 
-        return empty($filtered) ? false : \reset($filtered);
+        return \reset($filtered);
     }
 
     /**
@@ -218,7 +218,7 @@ class CalendarController extends AbstractController
      * @param int   $year       the current year
      * @param int   $week       the current week
      *
-     * @return int[]|bool the next year and month, if found; null otherwise
+     * @return int[]|bool the next year and month, if found; false otherwise
      */
     private function nextWeek(array $yearsWeeks, int $year, int $week)
     {
@@ -227,7 +227,7 @@ class CalendarController extends AbstractController
             return $current['year_week'] > $yearWeek;
         });
 
-        return empty($filtered) ? false : \reset($filtered);
+        return \reset($filtered);
     }
 
     /**
@@ -236,7 +236,7 @@ class CalendarController extends AbstractController
      * @param int[] $years the availaible years
      * @param int   $year  the current year
      *
-     * @return int|bool the next year, if found; null otherwise
+     * @return int|bool the next year, if found; false otherwise
      */
     private function nextYear(array $years, int $year)
     {
@@ -244,7 +244,7 @@ class CalendarController extends AbstractController
             return $current > $year;
         });
 
-        return empty($filtered) ? false : \reset($filtered);
+        return \reset($filtered);
     }
 
     /**
@@ -254,7 +254,7 @@ class CalendarController extends AbstractController
      * @param int   $year        the current year
      * @param int   $month       the current month
      *
-     * @return int[]|bool the previous year and month, if found; null otherwise
+     * @return int[]|bool the previous year and month, if found; false otherwise
      */
     private function previousMonth(array $yearsMonths, int $year, int $month)
     {
@@ -263,7 +263,7 @@ class CalendarController extends AbstractController
             return $current['year_month'] < $yearMonth;
         });
 
-        return empty($filtered) ? false : \end($filtered);
+        return \end($filtered);
     }
 
     /**
@@ -273,7 +273,7 @@ class CalendarController extends AbstractController
      * @param int   $year       the current year
      * @param int   $week       the current week
      *
-     * @return int[]|bool the previous year and month, if found; null otherwise
+     * @return int[]|bool the previous year and month, if found; false otherwise
      */
     private function previousWeek(array $yearsWeeks, int $year, int $week)
     {
@@ -282,7 +282,7 @@ class CalendarController extends AbstractController
             return $current['year_week'] < $yearWeek;
         });
 
-        return empty($filtered) ? false : \end($filtered);
+        return \end($filtered);
     }
 
     /**
@@ -291,7 +291,7 @@ class CalendarController extends AbstractController
      * @param int[] $years the availaible years
      * @param int   $year  the current year
      *
-     * @return int|bool the previous year, if found; null otherwise
+     * @return int|bool the previous year, if found; false otherwise
      */
     private function previousYear(array $years, int $year)
     {
@@ -299,7 +299,7 @@ class CalendarController extends AbstractController
             return $current < $year;
         });
 
-        return empty($filtered) ? false : \end($filtered);
+        return \end($filtered);
     }
 
     /**
@@ -321,7 +321,7 @@ class CalendarController extends AbstractController
                 return $current['year_month'] === $yearMonth;
             });
 
-            return empty($filtered) ? false : \reset($filtered);
+            return \reset($filtered);
         }
 
         return false;
@@ -346,7 +346,7 @@ class CalendarController extends AbstractController
                 return $current['year_week'] === $yearWeek;
             });
 
-            return empty($filtered) ? false : \reset($filtered);
+            return \reset($filtered);
         }
 
         return false;

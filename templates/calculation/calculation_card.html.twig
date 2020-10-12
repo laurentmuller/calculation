@@ -36,7 +36,7 @@
 
 {% block item_title %}
 {%- set item_title = item.id|identifier -%}
-<div style="{{ properties.stateCss(item.stateColor) }}">
+<div class="text-border" style="{{ properties.stateCss(item.stateColor) }}">
     {%- if default_page -%}       
         {%- set default_path = path(default_page, params) -%}
         {#

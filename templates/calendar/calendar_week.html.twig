@@ -48,7 +48,7 @@
 <div class="row">
     <div class="col">
     {% for day in week.days|filter(day => day.inWeek(week)) -%}
-        <table class="table table-sm table-borderless ">
+        <table class="table table-sm table-borderless">
             <thead>
                 <tr class="bg-secondary text-white">
                     <td colspan="5"><span>{{ day.date|localedate('long') }}</span><span class="small align-text-bottom"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span> </td>
@@ -62,7 +62,7 @@
             {% if not day.empty %}
             <tbody>
                 {% for calculation in day.calculations -%}
-                        {{ helper.dataRow(calculation,'text-cell') }}
+                     {{ helper.dataRow(calculation,'text-cell') -}}
                 {%- endfor %}
             </tbody>
             {% endif %}

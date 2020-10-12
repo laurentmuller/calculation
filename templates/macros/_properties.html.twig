@@ -64,5 +64,5 @@
 
 {# set the CSS left border style for the given state color #}
 {% macro stateCss(color) -%}
-{{ 'border-left:5px solid %s;'|format(color|default('transparent')) }}
+{{ 'border-left-color: %s !important;'|format(color|default('transparent')) }}
 {%- endmacro %}

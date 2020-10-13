@@ -3,38 +3,13 @@
 /* globals Toaster */
 
 /**
- * Generate values.
- */
-function generate() {
-    'use strict';
-
-    const entity = $('#form_entity').val();
-    const count = $('#form_count').val();
-    const url = entity.replace(/0/g, count);
-    const index = $('#form_entity').prop('selectedIndex');
-
-    $('#result').hide();
-    $.getJSON(url, function (response) {
-        if (response.result) {
-            if (index === 0) {
-                displayCalculations(response.calculations);
-            } else {
-                displayCustomers(response.customers);
-            }
-            const title = $(".card-title").text();
-            Toaster.success(response.message, title, $("#flashbags").data());
-        }
-    });
-}
-
-/**
  * Creates a row.
  * 
  * @param {array}
  *            values - the cell values.
  * @param {array}
- *            classes - the optional cell classes. This array mus have the same
- *            number of elements as the array of values.
+ *            classes - the optional cell classes. This array must have the same
+ *            length of elements as the array of values.
  * @returns {jQuery} the created row.
  */
 function createRow(values, classes) {
@@ -51,13 +26,14 @@ function createRow(values, classes) {
 
     return $row;
 }
+
 /**
- * Display the generate calculations
+ * Fill the table with the generated calculations
  * 
  * @param {array}
- *            calculations - the calculations to display.
+ *            calculations - the calculations to render.
  */
-function displayCalculations(calculations) {
+function renderCalculations(calculations) {
     'use strict';
 
     const $body = $('<tbody/>');
@@ -65,16 +41,16 @@ function displayCalculations(calculations) {
     calculations.forEach(function (c) {
         $body.append(createRow([c.id, c.date, c.state, c.description + "<br>" + c.customer, c.total], classes));
     });
-    $('#result').html($body).show();
+    $('#result').html($body);
 }
 
 /**
- * Display the generate customers
+ * Fill the table with the generated customers
  * 
  * @param {array}
- *            customers - the customers to display.
+ *            customers - the customers to render.
  */
-function displayCustomers(customers) {
+function renderCustomers(customers) {
     'use strict';
 
     const $body = $('<tbody/>');
@@ -82,7 +58,33 @@ function displayCustomers(customers) {
     customers.forEach(function (c) {
         $body.append(createRow([c.nameAndCompany, c.address, c.zipCity], classes));
     });
-    $('#result').html($body).show();
+    $('#result').html($body);
+}
+
+/**
+ * Generate values.
+ */
+function generate() {
+    'use strict';
+
+    const entity = $('#form_entity').val();
+    const count = $('#form_count').intVal();
+    const url = entity.replace(/0/g, count);
+
+    $('#content').slideUp('slow');
+    $.getJSON(url, function (response) {
+        if (response.result) {
+            const index = $('#form_entity').prop('selectedIndex');
+            if (index === 0) {
+                renderCalculations(response.calculations);
+            } else {
+                renderCustomers(response.customers);
+            }
+            $('#content').slideDown('slow');
+            const title = $(".card-title").text();
+            Toaster.success(response.message, title, $("#flashbags").data());
+        }
+    });
 }
 
 /**
@@ -93,7 +95,7 @@ function displayCustomers(customers) {
 
     // hide result on change
     $('#form_entity, #form_count').on('input', function () {
-        $('#result').hide();
+        $('#content').slideUp();
     });
 
     // init validation

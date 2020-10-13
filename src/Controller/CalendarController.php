@@ -42,14 +42,18 @@ class CalendarController extends AbstractController
     /**
      * Display a month of a calendar.
      *
-     * @Route("/month/{year}/{month}", name="calendar_month", requirements={"year": "\d+", "month": "\d+"})
+     * @Route("/month/{year}/{month}", name="calendar_month", requirements={"year": "\d+",
+     * "month": "\d+"})
      *
-     * @param CalendarService       $service    the service to generate calendar model
+     * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations
-     * @param int|null              $year       the year to search for or <code>null</code> for the current year
-     * @param int|null              $month      the month to search for or <code>null</code> for the current month
+     * @param int|null              $year       the year to search for or <code>null</code> for the current
+     *                                          year
+     * @param int|null              $month      the month to search for or <code>null</code> for the current
+     *                                          month
      */
-    public function month(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $month = null): Response
+    public function month(CalendarService $service, CalculationRepository $repository,
+        ?int $year = null, ?int $month = null): Response
     {
         // validate values
         $year = $this->validateYear($year);
@@ -67,27 +71,32 @@ class CalendarController extends AbstractController
         $next = $this->nextMonth($yearsMonths, $year, $month);
         $currentMonth = $calendar->getMonth(Month::formatKey($year, $month));
 
-        return $this->render('calendar/calendar_month.html.twig', [
-            'calendar' => $calendar,
-            'month' => $currentMonth,
-            'calculations' => $calculations,
-            'today' => $today,
-            'previous' => $previous,
-            'next' => $next,
-        ]);
+        return $this->render('calendar/calendar_month.html.twig',
+            [
+                'calendar' => $calendar,
+                'month' => $currentMonth,
+                'calculations' => $calculations,
+                'today' => $today,
+                'previous' => $previous,
+                'next' => $next,
+            ]);
     }
 
     /**
      * Display a week of a calendar.
      *
-     * @Route("/week/{year}/{week}", name="calendar_week", requirements={"year": "\d+", "week": "\d+"})
+     * @Route("/week/{year}/{week}", name="calendar_week", requirements={"year": "\d+",
+     * "week": "\d+"})
      *
-     * @param CalendarService       $service    the service to generate calendar model
+     * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations
-     * @param int|null              $year       the year to search for or <code>null</code> for the current year
-     * @param int|null              $week       the week to search for or <code>null</code> for the current week
+     * @param int|null              $year       the year to search for or <code>null</code> for the current
+     *                                          year
+     * @param int|null              $week       the week to search for or <code>null</code> for the current
+     *                                          week
      */
-    public function week(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $week = null): Response
+    public function week(CalendarService $service, CalculationRepository $repository,
+        ?int $year = null, ?int $week = null): Response
     {
         // validate values
         $year = $this->validateYear($year);
@@ -104,14 +113,15 @@ class CalendarController extends AbstractController
         $next = $this->nextWeek($yearsWeeks, $year, $week);
         $currentWeek = $calendar->getWeek(Week::formatKey($year, $week));
 
-        return $this->render('calendar/calendar_week.html.twig', [
-            'calendar' => $calendar,
-            'week' => $currentWeek,
-            'calculations' => $calculations,
-            'today' => $today,
-            'previous' => $previous,
-            'next' => $next,
-        ]);
+        return $this->render('calendar/calendar_week.html.twig',
+            [
+                'calendar' => $calendar,
+                'week' => $currentWeek,
+                'calculations' => $calculations,
+                'today' => $today,
+                'previous' => $previous,
+                'next' => $next,
+            ]);
     }
 
     /**
@@ -119,11 +129,13 @@ class CalendarController extends AbstractController
      *
      * @Route("/year/{year}", name="calendar_year", requirements={"year": "\d+" })
      *
-     * @param CalendarService       $service    the service to generate calendar model
+     * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations
-     * @param int|null              $year       the year to search for or <code>null</code> for the current year
+     * @param int|null              $year       the year to search for or <code>null</code> for the current
+     *                                          year
      */
-    public function year(CalendarService $service, CalculationRepository $repository, ?int $year = null): Response
+    public function year(CalendarService $service, CalculationRepository $repository,
+        ?int $year = null): Response
     {
         // validate year
         $year = $this->validateYear($year);
@@ -139,14 +151,15 @@ class CalendarController extends AbstractController
         $previous = $this->previousYear($years, $year);
         $next = $this->nextYear($years, $year);
 
-        return $this->render('calendar/calendar_year.html.twig', [
-            'calendar' => $calendar,
-            'calculations' => $calculations,
-            'years' => $years,
-            'today' => $today,
-            'previous' => $previous,
-            'next' => $next,
-        ]);
+        return $this->render('calendar/calendar_year.html.twig',
+            [
+                'calendar' => $calendar,
+                'calculations' => $calculations,
+                'years' => $years,
+                'today' => $today,
+                'previous' => $previous,
+                'next' => $next,
+            ]);
     }
 
     /**
@@ -204,9 +217,10 @@ class CalendarController extends AbstractController
     private function nextMonth(array $yearsMonths, int $year, int $month)
     {
         $yearMonth = $year * 1000 + $month;
-        $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth) {
-            return $current['year_month'] > $yearMonth;
-        });
+        $filtered = \array_filter($yearsMonths,
+            function (array $current) use ($yearMonth) {
+                return $current['year_month'] > $yearMonth;
+            });
 
         return \reset($filtered);
     }
@@ -223,9 +237,10 @@ class CalendarController extends AbstractController
     private function nextWeek(array $yearsWeeks, int $year, int $week)
     {
         $yearWeek = $year * 1000 + $week;
-        $filtered = \array_filter($yearsWeeks, function (array $current) use ($yearWeek) {
-            return $current['year_week'] > $yearWeek;
-        });
+        $filtered = \array_filter($yearsWeeks,
+            function (array $current) use ($yearWeek) {
+                return $current['year_week'] > $yearWeek;
+            });
 
         return \reset($filtered);
     }
@@ -240,9 +255,10 @@ class CalendarController extends AbstractController
      */
     private function nextYear(array $years, int $year)
     {
-        $filtered = \array_filter($years, function (int $current) use ($year) {
-            return $current > $year;
-        });
+        $filtered = \array_filter($years,
+            function (int $current) use ($year) {
+                return $current > $year;
+            });
 
         return \reset($filtered);
     }
@@ -259,9 +275,10 @@ class CalendarController extends AbstractController
     private function previousMonth(array $yearsMonths, int $year, int $month)
     {
         $yearMonth = $year * 1000 + $month;
-        $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth) {
-            return $current['year_month'] < $yearMonth;
-        });
+        $filtered = \array_filter($yearsMonths,
+            function (array $current) use ($yearMonth) {
+                return $current['year_month'] < $yearMonth;
+            });
 
         return \end($filtered);
     }
@@ -278,9 +295,10 @@ class CalendarController extends AbstractController
     private function previousWeek(array $yearsWeeks, int $year, int $week)
     {
         $yearWeek = $year * 1000 + $week;
-        $filtered = \array_filter($yearsWeeks, function (array $current) use ($yearWeek) {
-            return $current['year_week'] < $yearWeek;
-        });
+        $filtered = \array_filter($yearsWeeks,
+            function (array $current) use ($yearWeek) {
+                return $current['year_week'] < $yearWeek;
+            });
 
         return \end($filtered);
     }
@@ -295,9 +313,10 @@ class CalendarController extends AbstractController
      */
     private function previousYear(array $years, int $year)
     {
-        $filtered = \array_filter($years, function (int $current) use ($year) {
-            return $current < $year;
-        });
+        $filtered = \array_filter($years,
+            function (int $current) use ($year) {
+                return $current < $year;
+            });
 
         return \end($filtered);
     }
@@ -317,9 +336,10 @@ class CalendarController extends AbstractController
         $todayMonth = (int) \date('n');
         if ($year !== $todayYear || $month !== $todayMonth) {
             $yearMonth = $todayYear * 1000 + $todayMonth;
-            $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth) {
-                return $current['year_month'] === $yearMonth;
-            });
+            $filtered = \array_filter($yearsMonths,
+                function (array $current) use ($yearMonth) {
+                    return $current['year_month'] === $yearMonth;
+                });
 
             return \reset($filtered);
         }
@@ -342,9 +362,10 @@ class CalendarController extends AbstractController
         $todayWeek = (int) \date('W');
         if ($year !== $todayYear || $week !== $todayWeek) {
             $yearWeek = $year * 1000 + $week;
-            $filtered = \array_filter($yearsWeeks, function (array $current) use ($yearWeek) {
-                return $current['year_week'] === $yearWeek;
-            });
+            $filtered = \array_filter($yearsWeeks,
+                function (array $current) use ($yearWeek) {
+                    return $current['year_week'] === $yearWeek;
+                });
 
             return \reset($filtered);
         }
@@ -377,7 +398,8 @@ class CalendarController extends AbstractController
      *
      * @return int a valid month
      *
-     * @throws NotFoundHttpException if the month is not witin the range from 1 to 12 inclusive
+     * @throws NotFoundHttpException if the month is not witin the range from 1 to 12
+     *                               inclusive
      */
     private function validateMonth(?int $month = null): int
     {
@@ -396,7 +418,8 @@ class CalendarController extends AbstractController
      *
      * @return int a valid week
      *
-     * @throws NotFoundHttpException if the week is not witin the range from 1 to 53 inclusive
+     * @throws NotFoundHttpException if the week is not witin the range from 1 to 53
+     *                               inclusive
      */
     private function validateWeek(?int $week = null): int
     {

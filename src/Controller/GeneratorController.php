@@ -37,74 +37,29 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author Laurent Muller
  *
+ * @Route("/generate")
  * @IsGranted("ROLE_SUPER_ADMIN")
  */
 class GeneratorController extends AbstractController
 {
     /**
-     * @Route("/generate", name="generate")
-     */
-    public function generate(UrlGeneratorInterface $generator): Response
-    {
-        $params = ['count' => 0];
-        $type = UrlGeneratorInterface::ABSOLUTE_URL;
-
-        $data = [
-            'entity' => $this->generateUrl('calculation_generate', $params, $type),
-            'count' => 1,
-        ];
-
-        // fields
-        $helper = $this->createFormHelper('generate.fields.', $data);
-        $helper->field('entity')
-            ->addChoiceType([
-                'calculation.name' => $this->generateUrl('calculation_generate', $params, $type),
-                'customer.name' => $this->generateUrl('customer_generate', $params, $type),
-        ]);
-        $helper->field('count')
-            ->updateOption('html5', true)
-            ->updateAttribute('min', 1)
-            ->updateAttribute('max', 50)
-            ->addNumberType(0);
-
-        return $this->render('admin/generate.html.twig', [
-            'form' => $helper->createView(),
-        ]);
-    }
-
-    /**
      * Create one or more calculations with random data.
      *
-     * @Route("/calculation/generate/{count}", name="calculation_generate", requirements={"count": "\d+" })
+     * @Route("/calculation/{count}", name="generate_calculation", requirements={"count": "\d+" })
      */
     public function generateCalculation(EntityManagerInterface $manager, CalculationService $service, FakerService $fakerService, int $count = 1): JsonResponse
     {
         /** @var \Faker\Generator $faker */
         $faker = $fakerService->getFaker();
 
-        // 3 months before
-        $startDate = new \DateTime();
-        $startDate->modify('first day of this month');
-        $interval = new \DateInterval('P3M');
-        $startDate = $startDate->sub($interval);
-
-        // end of next month
-        $endDate = new \DateTime();
-        $endDate->modify('last day of this month');
-        $interval = new \DateInterval('P1M');
-        $endDate = $endDate->add($interval);
+        // dates
+        $startDate = $this->getStartDate();
+        $endDate = $this->getEndDate();
 
         // load data
-        $products = $manager->getRepository(Product::class)->findAll();
-        $states = $manager->getRepository(CalculationState::class)->findBy([
-            'editable' => true,
-        ]);
-        $users = $manager->getRepository(User::class)->findBy([
-            'enabled' => true,
-        ]);
-        $users = \array_map(function (User $user) {
-            return $user->getUsername();
-        }, $users);
+        $states = $this->getCalculationState($manager);
+        $products = $this->getProducts($manager);
+        $users = $this->getUsers($manager);
 
         $calculations = [];
         for ($i = 0; $i < $count; ++$i) {
@@ -117,7 +72,6 @@ class GeneratorController extends AbstractController
                 ->setCreatedBy($faker->randomElement($users))
                 ->setCustomer($faker->name);
 
-            // items
             /** @var Product[] $itemProducts */
             $itemProducts = $faker->randomElements($products, $faker->numberBetween(5, 15));
             foreach ($itemProducts as $product) {
@@ -171,7 +125,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more customers with random data.
      *
-     * @Route("/customer/generate/{count}", name="customer_generate", requirements={"count": "\d+" })
+     * @Route("/customer/{count}", name="generate_customer", requirements={"count": "\d+" })
      */
     public function generateCustomer(EntityManagerInterface $manager, FakerService $fakerService, int $count = 1): JsonResponse
     {
@@ -180,7 +134,7 @@ class GeneratorController extends AbstractController
 
         $customers = [];
         $styles = [0, 1, 2];
-        $genders = [Person::GENDER_MALE, Person::GENDER_FEMALE];
+        $genders = $this->getGenders();
 
         for ($i = 0; $i < $count; ++$i) {
             $customer = new Customer();
@@ -250,9 +204,35 @@ class GeneratorController extends AbstractController
     }
 
     /**
+     * @Route("", name="generate_index")
+     */
+    public function index(): Response
+    {
+        $params = ['count' => 0];
+        $type = UrlGeneratorInterface::ABSOLUTE_URL;
+
+        // fields
+        $helper = $this->createFormHelper('generate.fields.', ['count' => 1]);
+        $helper->field('entity')
+            ->addChoiceType([
+                'calculation.name' => $this->generateUrl('generate_calculation', $params, $type),
+                'customer.name' => $this->generateUrl('generate_customer', $params, $type),
+        ]);
+        $helper->field('count')
+            ->updateOption('html5', true)
+            ->updateAttribute('min', 1)
+            ->updateAttribute('max', 50)
+            ->addNumberType(0);
+
+        return $this->render('admin/generate.html.twig', [
+            'form' => $helper->createView(),
+        ]);
+    }
+
+    /**
      * Update calculations with random customers.
      *
-     * @Route("/calculation/update", name="calculation_update")
+     * @Route("/calculation/update", name="generate_calculation_update")
      */
     public function updateCalculation(EntityManagerInterface $manager, FakerService $service): RedirectResponse
     {
@@ -261,9 +241,7 @@ class GeneratorController extends AbstractController
 
         /** @var \App\Entity\Calculation[] $calculations */
         $calculations = $manager->getRepository(Calculation::class)->findAll();
-        $states = $manager->getRepository(CalculationState::class)->findBy([
-            'editable' => true,
-        ]);
+        $states = $this->getCalculationState($manager);
         $styles = [0, 1, 2];
 
         // update
@@ -298,20 +276,16 @@ class GeneratorController extends AbstractController
     /**
      * Update customers with random values.
      *
-     * @Route("/customer/update", name="customer_update")
+     * @Route("/customer/update", name="generate_customer_update")
      */
     public function updateCustomer(EntityManagerInterface $manager, FakerService $service): RedirectResponse
     {
-        /** @var \App\Entity\Customer[] $customers */
-        $customers = $manager->getRepository(Customer::class)->findAll();
-
         /** @var \Faker\Generator $faker */
         $faker = $service->getFaker();
 
-        $genders = [
-            Person::GENDER_MALE,
-            Person::GENDER_FEMALE,
-        ];
+        /** @var \App\Entity\Customer[] $customers */
+        $customers = $manager->getRepository(Customer::class)->findAll();
+        $genders = $this->getGenders();
 
         $accessor = new PropertyAccessor();
         foreach ($customers as $customer) {
@@ -332,6 +306,80 @@ class GeneratorController extends AbstractController
         $this->info("La mise à jour de {$count} clients a été effectuée avec succès.");
 
         return $this->redirectToHomePage();
+    }
+
+    /**
+     * Gets the calculation states.
+     *
+     * @return CalculationState[]
+     */
+    private function getCalculationState(EntityManagerInterface $manager): array
+    {
+        return $manager->getRepository(CalculationState::class)->findBy([
+            'editable' => true,
+        ]);
+    }
+
+    /**
+     * Gets the last day of the next month.
+     */
+    private function getEndDate(): \DateTime
+    {
+        $date = new \DateTime();
+        $date->modify('last day of this month');
+        $interval = new \DateInterval('P1M');
+        $date = $date->add($interval);
+
+        return $date;
+    }
+
+    /**
+     * Gets the genders.
+     *
+     * @return string[]
+     */
+    private function getGenders()
+    {
+        return [Person::GENDER_MALE, Person::GENDER_FEMALE];
+    }
+
+    /**
+     * Gets the products.
+     *
+     * @return Product[]
+     */
+    private function getProducts(EntityManagerInterface $manager): array
+    {
+        return $manager->getRepository(Product::class)->findAll();
+    }
+
+    /**
+     * Gets the first day of 3 months before.
+     */
+    private function getStartDate(): \DateTime
+    {
+        $date = new \DateTime();
+        $date->modify('first day of this month');
+        $interval = new \DateInterval('P3M');
+        $date = $date->sub($interval);
+
+        return $date;
+    }
+
+    /**
+     * Gets the user names.
+     *
+     * @return string[]
+     */
+    private function getUsers(EntityManagerInterface $manager): array
+    {
+        $users = $manager->getRepository(User::class)->findBy([
+            'enabled' => true,
+        ]);
+
+        return \array_map(function (User $user) {
+            return $user->getUsername();
+        }, $users);
     }
 
     /**

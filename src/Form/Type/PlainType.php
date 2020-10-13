@@ -109,11 +109,12 @@ class PlainType extends AbstractType
         parent::buildView($view, $form, $options);
 
         $data = $form->getViewData();
-        $view->vars = \array_replace($view->vars, [
-            'hidden_input' => $options['hidden_input'],
-            'expanded' => $options['expanded'],
-            'value' => $this->transformValue($data, $options),
-        ]);
+        $view->vars = \array_replace($view->vars,
+            [
+                'hidden_input' => $options['hidden_input'],
+                'expanded' => $options['expanded'],
+                'value' => $this->transformValue($data, $options),
+            ]);
     }
 
     /**
@@ -141,47 +142,69 @@ class PlainType extends AbstractType
             'transformer' => null,
         ]);
 
-        $resolver->setAllowedTypes('date_format', ['null', 'int'])
-            ->setAllowedValues('date_format', [
-                null,
-                self::FORMAT_FULL,
-                self::FORMAT_LONG,
-                self::FORMAT_MEDIUM,
-                self::FORMAT_SHORT,
-                self::FORMAT_NONE,
-            ]);
+        $resolver->setAllowedTypes('date_format', [
+            'null',
+            'int',
+        ])->setAllowedValues('date_format', [
+            null,
+            self::FORMAT_FULL,
+            self::FORMAT_LONG,
+            self::FORMAT_MEDIUM,
+            self::FORMAT_SHORT,
+            self::FORMAT_NONE,
+        ]);
 
-        $resolver->setAllowedTypes('time_format', ['null', 'int'])
-            ->setAllowedValues('time_format', [
-                null,
-                self::FORMAT_FULL,
-                self::FORMAT_LONG,
-                self::FORMAT_MEDIUM,
-                self::FORMAT_SHORT,
-                self::FORMAT_NONE,
-            ]);
+        $resolver->setAllowedTypes('time_format', [
+            'null',
+            'int',
+        ])->setAllowedValues('time_format', [
+            null,
+            self::FORMAT_FULL,
+            self::FORMAT_LONG,
+            self::FORMAT_MEDIUM,
+            self::FORMAT_SHORT,
+            self::FORMAT_NONE,
+        ]);
 
-        $resolver->setAllowedTypes('calendar', ['null', 'string'])
-            ->setAllowedValues('calendar', [
-                null,
-                self::CALENDAR_GREGORIAN,
-                self::CALENDAR_TRADITIONAL,
-            ]);
+        $resolver->setAllowedTypes('calendar', [
+            'null',
+            'string',
+        ])->setAllowedValues('calendar', [
+            null,
+            self::CALENDAR_GREGORIAN,
+            self::CALENDAR_TRADITIONAL,
+        ]);
 
-        $resolver->setAllowedTypes('date_pattern', ['null', 'string']);
+        $resolver->setAllowedTypes('date_pattern', [
+            'null',
+            'string',
+        ]);
 
-        $resolver->setAllowedTypes('number_pattern', ['null', 'string'])
-            ->setAllowedValues('number_pattern', [
-                null,
-                self::NUMBER_IDENTIFIER,
-                self::NUMBER_INTEGER,
-                self::NUMBER_PERCENT,
-                self::NUMBER_AMOUNT,
-            ]);
+        $resolver->setAllowedTypes('number_pattern', [
+            'null',
+            'string',
+        ])->setAllowedValues('number_pattern', [
+            null,
+            self::NUMBER_IDENTIFIER,
+            self::NUMBER_INTEGER,
+            self::NUMBER_PERCENT,
+            self::NUMBER_AMOUNT,
+        ]);
 
-        $resolver->setAllowedTypes('empty_value', ['null', 'string']);
-        $resolver->setAllowedTypes('separator', ['null', 'string']);
-        $resolver->setAllowedTypes('transformer', ['null', 'callable']);
+        $resolver->setAllowedTypes('empty_value', [
+            'null',
+            'string',
+        ]);
+
+        $resolver->setAllowedTypes('separator', [
+            'null',
+            'string',
+        ]);
+
+        $resolver->setAllowedTypes('transformer', [
+            'null',
+            'callable',
+        ]);
     }
 
     /**
@@ -200,7 +223,7 @@ class PlainType extends AbstractType
         $datetype = $this->getOptionInt($options, 'date_format', $this->getDefaultDateType());
         $timetype = $this->getOptionInt($options, 'time_format', $this->getDefaultTimeType());
 
-        return  $this->localeDateTime($value, $datetype, $timetype, $timezone, $calendar, $pattern);
+        return $this->localeDateTime($value, $datetype, $timetype, $timezone, $calendar, $pattern);
     }
 
     /**
@@ -258,7 +281,7 @@ class PlainType extends AbstractType
     private function getOptionInt(array $options, string $name, int $defaultValue): int
     {
         if (isset($options[$name]) && \is_int($options[$name])) {
-            return(int) $options[$name];
+            return (int) $options[$name];
         }
 
         return $defaultValue;
@@ -274,7 +297,8 @@ class PlainType extends AbstractType
      *
      * @return string the option value
      */
-    private function getOptionString(array $options, string $name, ?string $defaultValue = null, bool $translate = false): ?string
+    private function getOptionString(array $options, string $name, ?string $defaultValue = null,
+        bool $translate = false): ?string
     {
         if (isset($options[$name]) && \is_string($options[$name])) {
             return (string) $options[$name];
@@ -302,15 +326,20 @@ class PlainType extends AbstractType
             $value = \call_user_func($transformer, $value);
         }
 
+        // boolean?
         if (true === $value) {
             return $this->trans('common.value_true');
         }
         if (false === $value) {
             return $this->trans('common.value_false');
         }
+
+        // value?
         if (null === $value || (\is_string($value) && 0 === \strlen($value))) {
             return $this->getOptionString($options, 'empty_value', 'common.value_null', true);
         }
+
+        // array?
         if (\is_array($value)) {
             $callback = function ($item) use ($options) {
                 return $this->transformValue($item, $options);
@@ -320,23 +349,32 @@ class PlainType extends AbstractType
 
             return \implode($separator, $values);
         }
+
+        // entity?
         if ($value instanceof AbstractEntity) {
             return $value->getDisplay();
         }
+
+        // date?
         if ($value instanceof \DateTimeInterface) {
             return $this->formatDate($value, $options);
         }
+
+        // numeric?
         if (\is_numeric($value)) {
             return $this->formatNumber($value, $options);
         }
+
+        // object?
         if (\is_object($value)) {
             if (\method_exists($value, '__toString')) {
-                return  $value->__toString();
+                return $value->__toString();
             }
 
-            return  \get_class($value);
+            return \get_class($value);
         }
 
+        //default
         return (string) $value;
     }
 }

@@ -37,21 +37,21 @@ class GeneratorControllerTest extends AbstractControllerTest
             ['/generate', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
             ['/generate', self::ROLE_SUPER_ADMIN],
 
-            ['/calculation/generate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/generate', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/calculation/generate', self::ROLE_SUPER_ADMIN],
+            ['/generate/calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/generate/calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/generate/calculation', self::ROLE_SUPER_ADMIN],
 
-            ['/calculation/update', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/update', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/calculation/update', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
+            ['/generate/calculation/update', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/generate/calculation/update', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/generate/calculation/update', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
 
-            ['/customer/generate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/customer/generate', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/customer/generate', self::ROLE_SUPER_ADMIN],
+            ['/generate/customer', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/generate/customer', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/generate/customer', self::ROLE_SUPER_ADMIN],
 
-            ['/customer/update', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/customer/update', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/customer/update', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
+            ['/generate/customer/update', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/generate/customer/update', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/generate/customer/update', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
         ];
     }
 

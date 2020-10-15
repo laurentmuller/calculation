@@ -20,3 +20,9 @@
 .week {
     width: 35px;
 }
+
+.week-head {
+    border-left-style: solid !important;
+    border-left-width: 0.3rem !important; 
+    border-left-color: var(--secondary) !important;
+}

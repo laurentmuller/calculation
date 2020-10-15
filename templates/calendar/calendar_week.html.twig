@@ -51,7 +51,7 @@
         <table class="table table-sm table-borderless">
             <thead>
                 <tr class="bg-secondary text-white">
-                    <td colspan="5"><span>{{ day.date|localedate('long') }}</span><span class="small align-text-bottom"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span> </td>
+                    <td colspan="5" class="week-head"><span>{{ day.date|localedate('long') }}</span><span class="small"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span> </td>
                     <td class="text-right">
                         {% if not day.empty -%}
                             <span>{{ helper.linkCalculations(day.date|localedate('short'), day.name, day.count, 'text-white') }}</span>

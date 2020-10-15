@@ -433,8 +433,9 @@ errors:
     item_not_found: Impossible de retrouver l'objet '%class%' No %id% dans la base de données.
     page_not_found: La page %page% n'existe pas.
     render_document: Impossible de générer le document PDF ou le document ne contient aucune donnée.
+    invalid_request: La demande Http est invalide.
 flashbag:
-    error: Erreur
+    danger: Erreur
     info: Information
     success: Confirmation
     warning: Avertissement
@@ -709,6 +710,8 @@ translator:
     to_error: La langue de destination est absente ou vide.
     text_error: Le texte à traduire est absent ou vide.
     detect_error: Une erreur s'est produite lors de la détection du texte.
+    languages_error: Une erreur s'est produite lors de la recherche des langues disponibles.
+    last_error: '<hr>Erreur %code%. %message%'
     placeholder: Saisissez le texte à traduire
 search:
     title: Rechercher

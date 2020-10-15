@@ -281,9 +281,17 @@ class FormHelper
 
     /**
      * Add a money type to the builder and reset all values to default.
+     *
+     * @param bool         $symbol true to display the currency symbol; false to hide
+     * @param \Locale|null $locale the locale to use for the currency symbol or null to use the default locale
      */
-    public function addMoneyType(): self
+    public function addMoneyType(bool $symbol = false, ?\Locale $locale = null): self
     {
+        if ($symbol) {
+            $symbol = $this->getCurrencySymbol($locale);
+        }
+        $this->updateOption('currency', $symbol);
+
         return $this->className('text-right')
             ->add(MoneyType::class);
     }
@@ -522,26 +530,6 @@ class FormHelper
     }
 
     /**
-     * Sets the currency symbol.
-     *
-     * @param string|bool $currency the currency symbol or false to hide symbol
-     */
-    public function currency($currency): self
-    {
-        $currency = (false === $currency || !empty($currency)) ? $currency : null;
-
-        return $this->updateOption('currency', $currency);
-    }
-
-    /**
-     * Sets the currency symbol to the locale default.
-     */
-    public function defaultCurrency(): self
-    {
-        return $this->currency($this->getCurrencySymbol());
-    }
-
-    /**
      * Sets the disabled property to true.
      */
     public function disabled(): self
@@ -589,18 +577,33 @@ class FormHelper
     }
 
     /**
-     * Gets the currency sambol.
+     * Gets the currency symbol for the given locale.
+     *
+     * @param \Locale|null $locale the locale to use or null to use the default locale
      */
-    public function getCurrencySymbol(): string
+    public function getCurrencySymbol(?\Locale $locale = null): string
     {
-        static $symbol;
-        if (!$symbol) {
+        if (null === $locale) {
             $locale = \Locale::getDefault();
-            $formatter = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
-            $symbol = $formatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL);
         }
+        $formatter = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
 
-        return $symbol;
+        return $formatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL);
+    }
+
+    /**
+     * Gets the percent symbol for the given locale.
+     *
+     * @param \Locale|null $locale the locale to use or null to use the default locale
+     */
+    public function getPercentSymbol(?\Locale $locale = null): string
+    {
+        if (null === $locale) {
+            $locale = \Locale::getDefault();
+        }
+        $formatter = new \NumberFormatter($locale, \NumberFormatter::PERCENT);
+
+        return $formatter->getSymbol(\NumberFormatter::PERCENT_SYMBOL);
     }
 
     /**

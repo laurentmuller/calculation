@@ -28,15 +28,11 @@ abstract class AbstractMarginType extends AbstractEntityType
      */
     protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
     {
-        $currency = $this->currency() ? $helper->getCurrencySymbol() : false;
-
         $helper->field('minimum')
-            ->currency($currency)
-            ->addMoneyType();
+            ->addMoneyType($this->currency());
 
         $helper->field('maximum')
-            ->currency($currency)
-            ->addMoneyType();
+            ->addMoneyType($this->currency());
 
         $helper->field('margin')
             ->percent($this->percent())

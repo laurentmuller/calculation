@@ -359,15 +359,35 @@ class TestController extends AbstractController
         // get service
         $service = $factory->getSessionService();
 
+        // get languages
+        $languages = $service->getLanguages();
+
+        // check error
+        if ($error = $service->getLastError()) {
+            // translate message
+            $id = $service->getName() . '.' . $error['code'];
+            if ($this->isTransDefined($id, 'translator')) {
+                $error['message'] = $this->trans($id, [], 'translator');
+            }
+            $message = $this->trans('translator.title') . '|';
+            $message .= $this->trans('translator.languages_error');
+            $message .= $this->trans('translator.last_error', [
+                '%code%' => $error['code'],
+                '%message%' => $error['message'],
+                ]);
+            $this->error($message);
+            $error = true;
+        }
+
         // form and parameters
-        $form = $this->getForm();
         $parameters = [
-            'form' => $form->createView(),
+            'form' => $this->getForm()->createView(),
             'language' => HttpClientService::getAcceptLanguage(true),
-            'languages' => $service->getLanguages(),
+            'languages' => $languages,
+            'services' => $factory->getServices(),
             'service_name' => $service::getName(),
             'service_url' => $service::getApiUrl(),
-            'services' => $factory->getServices(),
+            'error' => $error,
         ];
 
         return $this->render('test/translate.html.twig', $parameters);

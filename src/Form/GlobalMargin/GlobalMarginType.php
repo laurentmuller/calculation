@@ -54,9 +54,7 @@ class GlobalMarginType extends AbstractMarginType
         // callback
         $resolver->setDefaults([
             'constraints' => [
-                new Callback([
-                    'callback' => [$this, 'validate'],
-                ]),
+                new Callback([$this, 'validate']),
             ],
         ]);
 
@@ -66,9 +64,6 @@ class GlobalMarginType extends AbstractMarginType
 
     /**
      * Validation callback.
-     *
-     * @param GlobalMargin              $data    the entity to validate
-     * @param ExecutionContextInterface $context the execution context
      */
     public function validate(GlobalMargin $data, ExecutionContextInterface $context): void
     {
@@ -97,13 +92,5 @@ class GlobalMarginType extends AbstractMarginType
                 break;
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function percent(): bool
-    {
-        return false;
     }
 }

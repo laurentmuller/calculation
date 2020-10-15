@@ -50,7 +50,6 @@ class ProductType extends AbstractEntityType
             ->addTextType();
 
         $helper->field('price')
-            ->currency(false)
             ->addMoneyType();
 
         $helper->field('category')

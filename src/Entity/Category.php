@@ -299,8 +299,6 @@ class Category extends AbstractEntity
 
     /**
      * @Assert\Callback
-     *
-     * @param ExecutionContextInterface $context the execution context
      */
     public function validate(ExecutionContextInterface $context): void
     {

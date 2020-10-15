@@ -1,25 +1,27 @@
 {
-	"name" : "bibi/calculation",
-	"license" : "proprietary",
-	"type" : "project",
-	"homepage" : "https://www.bibi.nu",
-	"description" : "Implementation of the calculation with Symfony 5.0.",
-	"authors" : [{
-			"name" : "Laurent Muller",
-			"email" : "bibi@bibi.nu",
-			"role" : "Administrator",
-			"homepage" : "http://www.bibi.nu"
-		}
-	],
-	"support" : {
-		"email" : "calculation@bibi.nu",
-		"source" : "https://github.com/laurentmuller/calculation"
-	},
-	"keywords" : [
+	"name": "bibi/calculation",
+	"type": "project",
+	"description": "Implementation of the calculation with Symfony 5.1.",
+	"keywords": [
 		"symfony",
 		"calculation"
 	],
-	"require" : {
+	"homepage": "https://github.com/laurentmuller/calculation",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Laurent Muller",
+			"email": "bibi@bibi.nu",
+			"homepage": "https://www.bibi.nu",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"email": "calculation@bibi.nu",
+		"issues": "https://github.com/laurentmuller/calculation/issues",
+		"source": "https://github.com/laurentmuller/calculation"
+	},    
+	"require": {
 		"php": "^7.4",
 		"ext-ctype": "*",
 		"ext-iconv": "*",
@@ -65,7 +67,7 @@
 		"vich/uploader-bundle": "1.*",
 		"webinarium/datatables-bundle": "^2.4"
 	},
-	"require-dev" : {
+	"require-dev": {
 		"phpstan/extension-installer": "~1.0",
 		"phpstan/phpstan": "^0.12",
 		"phpstan/phpstan-deprecation-rules": "~0.12",
@@ -77,43 +79,43 @@
 		"symfony/profiler-pack": "*",
 		"symfony/test-pack": "*"
 	},
-	"config" : {
-		"optimize-autoloader" : true,
-		"preferred-install" : {
-			"*" : "dist"
+	"replace": {
+		"paragonie/random_compat": "2.*",
+		"symfony/polyfill-ctype": "*",
+		"symfony/polyfill-iconv": "*",
+		"symfony/polyfill-php56": "*",
+		"symfony/polyfill-php70": "*",
+		"symfony/polyfill-php71": "*",
+		"symfony/polyfill-php72": "*",
+		"symfony/polyfill-php73": "*"
+	},
+	"conflict": {
+		"symfony/symfony": "*"
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"preferred-install": {
+			"*": "dist"
 		},
-		"sort-packages" : true
+		"sort-packages": true
 	},
-	"autoload" : {
-		"psr-4" : {
-			"App\\" : "src/"
+	"extra": {
+		"symfony": {
+			"allow-contrib": true,
+			"require": "5.1.*"
 		}
 	},
-	"autoload-dev" : {
-		"psr-4" : {
-			"App\\Tests\\" : "tests/"
+	"autoload": {
+		"psr-4": {
+			"App\\": "src/"
 		}
 	},
-	"replace" : {
-		"paragonie/random_compat" : "2.*",
-		"symfony/polyfill-ctype" : "*",
-		"symfony/polyfill-iconv" : "*",
-		"symfony/polyfill-php73" : "*",
-		"symfony/polyfill-php72" : "*",
-		"symfony/polyfill-php71" : "*",
-		"symfony/polyfill-php70" : "*",
-		"symfony/polyfill-php56" : "*"
-	},
-	"conflict" : {
-		"symfony/symfony" : "*"
-	},
-	"extra" : {
-		"symfony" : {
-			"allow-contrib" : true,
-			"require" : "5.1.*"
+	"autoload-dev": {
+		"psr-4": {
+			"App\\Tests\\": "tests/"
 		}
 	},
-	"scripts" : {
-		"app-cs-fixer" : "php-cs-fixer fix --diff"
+	"scripts": {
+		"app-cs-fixer": "php-cs-fixer fix --diff"
 	}
 }

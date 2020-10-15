@@ -37,7 +37,7 @@ function translate() {
 
     // build parameters
     $('#text').val($('#text').val().trim());
-    
+
     const data = {
         'from': $('#from').val(),
         'to': $('#to').val(),
@@ -66,13 +66,10 @@ function translate() {
             }
 
             // message
-            const from= data.from.name;
-            const to= data.to.name;
+            const from = data.from.name;
+            const to = data.to.name;
             const service = $('#service option:selected').text();
-            const message = $form.data('success')
-                .replace('%from%', from)
-                .replace('%to%', to)
-                .replace('%service%', service);
+            const message = $form.data('success').replace('%from%', from).replace('%to%', to).replace('%service%', service);
             notify(Toaster.NotificationTypes.PRIMARY, message);
 
         } else {
@@ -84,8 +81,7 @@ function translate() {
             // message
             let message = response.message;
             if (response.exception) {
-                message += '<hr>Code : ' + response.exception.code;
-                message += '<br>' + response.exception.message;
+                message += $form.data('last-error').replace('%code%', response.exception.code).replace('%message%', response.exception.message);
             }
             notify(Toaster.NotificationTypes.DANGER, message);
         }
@@ -179,21 +175,21 @@ function onService() {
         'service': $service.val()
     };
     $.post(url, data, function (response) {
-        if (response) {
-            const $to = $('#to');
-            const $from = $('#from');
+        const $to = $('#to');
+        const $from = $('#from');
 
-            // save values
-            const oldTo = $to.val();
-            const oldFrom = $from.val();
+        // save values
+        const oldTo = $to.val();
+        const oldFrom = $from.val();
 
-            // clear
-            $to.empty();
-            $from.find('option').not(':first').remove();
+        // clear
+        $to.empty();
+        $from.find('option').not(':first').remove();
 
+        if (response.result) {
             // add options
             let option;
-            $.each(response, function (text, value) {
+            $.each(response.languages, function (text, value) {
                 option = '<option value="{0}">{1}</option>'.format(value, text);
                 $to.append(option);
                 $from.append(option);
@@ -206,6 +202,13 @@ function onService() {
             if (oldFrom && !$from.val(oldFrom).val()) {
                 $from.selectFirstOption();
             }
+        } else {
+            let message = response.message;
+            if (response.exception) {
+                const $form = $('#edit-form');
+                message += $form.data('last-error').replace('%code%', response.exception.code).replace('%message%', response.exception.message);
+            }
+            notify(Toaster.NotificationTypes.DANGER, message);
         }
     });
 }

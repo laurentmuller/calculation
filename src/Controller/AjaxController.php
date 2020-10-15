@@ -438,9 +438,33 @@ class AjaxController extends AbstractController
     {
         $class = $request->get('service', TranslatorFactory::DEFAULT_SERVICE);
         $service = $factory->getService($class);
-        $languages = $service->getLanguages();
+        if ($languages = $service->getLanguages()) {
+            return $this->json([
+                'result' => true,
+                'languages' => $languages,
+            ]);
+        }
 
-        return $this->json($languages);
+        // error
+        $message = $this->trans('translator.languages_error');
+        if ($error = $service->getLastError()) {
+            // translate message
+            $id = $service->getName() . '.' . $error['code'];
+            if ($this->isTransDefined($id, 'translator')) {
+                $error['message'] = $this->trans($id, [], 'translator');
+            }
+
+            return $this->json([
+                'result' => false,
+                'message' => $message,
+                'exception' => $error,
+            ]);
+        }
+
+        return $this->json([
+            'result' => false,
+            'message' => $message,
+        ]);
     }
 
     /**
@@ -581,6 +605,11 @@ class AjaxController extends AbstractController
      */
     public function translate(Request $request, TranslatorFactory $factory): JsonResponse
     {
+        // ajax call ?
+        if ($response = $this->checkAjaxCall($request)) {
+            return $response;
+        }
+
         // get parameters
         $to = $request->get('to', '');
         $from = $request->get('from');
@@ -610,22 +639,20 @@ class AjaxController extends AbstractController
                     'data' => $result,
                 ]);
             }
+
+            // error
             $message = $this->trans('translator.translate_error');
             if ($error = $service->getLastError()) {
-                $errorCode = $error['code'];
-                $errorMessage = $error['message'];
-                $key = $service->getName() . '.' . $errorCode;
-                if ($this->isTransDefined($key, 'translator')) {
-                    $errorMessage = $this->trans($key, [], 'translator');
+                // translate message
+                $id = $service->getName() . '.' . $error['code'];
+                if ($this->isTransDefined($id, 'translator')) {
+                    $error['message'] = $this->trans($id, [], 'translator');
                 }
 
                 return $this->json([
                     'result' => false,
                     'message' => $message,
-                    'exception' => [
-                        'code' => $errorCode,
-                        'message' => $errorMessage,
-                    ],
+                    'exception' => $error,
                 ]);
             }
 
@@ -641,7 +668,7 @@ class AjaxController extends AbstractController
     /**
      * Update the calculation's totals.
      *
-     * @Route("/update", name="ajax_update")
+     * @Route("/update", name="ajax_update", methods={"POST"})
      * @IsGranted("ROLE_USER")
      */
     public function updateCalculation(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
@@ -783,19 +810,19 @@ class AjaxController extends AbstractController
     /**
      * Checks if the given request is a XMLHttpRequest (ajax) call.
      *
-     * @return JsonResponse null if is a XMLHttpRequest call, a JSON error response otherwise
+     * @return JsonResponse null if the request is a XMLHttpRequest call, a JSON error response otherwise
      */
     private function checkAjaxCall(Request $request): ?JsonResponse
     {
         // ajax call ?
-        if ($request->isXmlHttpRequest()) {
-            return null;
+        if (!$request->isXmlHttpRequest()) {
+            return $this->json([
+                'result' => false,
+                'message' => $this->trans('errors.invalid_request'),
+            ]);
         }
 
-        return $this->json([
-            'result' => false,
-            'message' => 'Invalid Http Request.',
-        ]);
+        return null;
     }
 
     /**

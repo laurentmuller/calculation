@@ -27,7 +27,7 @@ function notify(type, title, options, clear) {
             }
 
             // message
-            const message = '<p class="m-0 p-0">' + response.content + '</p>';
+            const message = '<p class="m-0 p-0">{0}</p>'.format(response.content);
 
             // display
             Toaster[type](message, title, options);
@@ -53,7 +53,7 @@ function notify(type, title, options, clear) {
 
     // sub-title
     $('#subtitle').setChecked(options.displaySubtitle);
-    
+
     $('.btn-notify').on('click', function () {
         // type
         const type = $(this).data('type');

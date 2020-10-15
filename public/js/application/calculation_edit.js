@@ -573,6 +573,8 @@ var Application = {
             }
             updateErrors();
             return that;
+        }).fail(function () {
+            return that.disable(null);
         });
 
         return that;

@@ -78,9 +78,9 @@ class CategoryContraintTest extends ConstraintValidatorTestCase
 
     private function createMargin(float $minimum, float $maximum, float $margin): CategoryMargin
     {
-        $cm = new CategoryMargin();
-        $cm->setValues($minimum, $maximum, $margin);
+        $entity = new CategoryMargin();
+        $entity->setValues($minimum, $maximum, $margin);
 
-        return $cm;
+        return $entity;
     }
 }

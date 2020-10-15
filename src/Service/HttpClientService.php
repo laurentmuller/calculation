@@ -87,7 +87,7 @@ abstract class HttpClientService
      */
     public function getLastError(): ?array
     {
-        return $this->lastError;
+        return \is_array($this->lastError) ? $this->lastError : null;
     }
 
     /**

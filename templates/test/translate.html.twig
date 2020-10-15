@@ -1,5 +1,12 @@
 {% extends 'cards/card_edit.html.twig' %}
 
+{# macros #}
+{% macro fillLanguages(languages, language = false) %}
+{% for key, value in languages -%}
+    <option value="{{ value }}"{% if value == language %} selected="selected"{% endif %}>{{ key }}</option>
+{% endfor -%}
+{% endmacro %}
+
 {# parameters #}
 {%- set title       = 'translator.title' -%}
 {%- set title_icon  = 'globe' -%}
@@ -11,6 +18,7 @@
                      'data-success': 'translator.translate_sucess'|trans,
                      'data-copy-success': 'translator.copy_sucess'|trans,
                      'data-copy-error': 'translator.copy_error'|trans,
+                     'data-last-error': 'translator.last_error'|trans,
                      'data-detected': 'translator.detect_label'|trans, 
                      'data-locale': app.request.locale}) -%}
 
@@ -23,9 +31,7 @@
             <label for="from" class="required">{{ 'translator.from_label'|trans }}</label>
             <select id="from" name="from" class="form-control">
                 <option value="">{{ 'translator.auto_detect'|trans }}</option>
-                {% for key, value in languages -%}
-                    <option value="{{ value }}">{{ key }}</option>
-                {% endfor -%}
+                {{ _self.fillLanguages(languages ) }}
             </select>
         </div>
     </div>
@@ -41,9 +47,7 @@
         <div class="form-group">
             <label for="to" class="required">{{ 'translator.to_label'|trans }}</label>
             <select id="to" name="to" class="form-control" required="required" notEqualTo="#from">
-                {% for key, value in languages -%}
-                    <option value="{{ value }}"{% if value == language %} selected="selected"{% endif %}>{{ key }}</option>
-                {% endfor -%}
+                {{ _self.fillLanguages(languages, language) }}
             </select>
         </div>
     </div>

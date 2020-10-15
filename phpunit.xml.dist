@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="bin/.phpunit/phpunit.xsd"
 	bootstrap="tests/bootstrap.php" 
 	backupGlobals="false"
-	cacheResult="false" colors="true">
+	cacheResult="false" 
+	colors="true">
+
 	<php>
 		<ini name="error_reporting" value="-1" />
 		<server name="APP_ENV" value="test" force="true" />
@@ -29,4 +29,5 @@
 	<listeners>
 		<listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
 	</listeners>
+
 </phpunit>

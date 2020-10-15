@@ -12,9 +12,9 @@
             const $this = $(this);
             const url = $this.data('url');
             if (url) {
-                $.getJSON(url).done(function (data) {
-                    if (data.result) {
-                        $this.html(data.content);
+                $.getJSON(url).done(function (response) {
+                    if (response.result) {
+                        $this.html(response.content);
                         if ($this.is('#php')) {
                             $this.updatePhp();
                         }

@@ -18,6 +18,23 @@ function notify(type, message) {
 }
 
 /**
+ * Handle the error response.
+ * 
+ * @param {Object}
+ *            response - the Ajax call response.
+ */
+function handleError(response) {
+    'use strict';
+
+    let message = response.message;
+    if (response.exception) {
+        const error = $('#edit-form').data('last-error');
+        message += error.replace('%code%', response.exception.code).replace('%message%', response.exception.message);
+    }
+    notify(Toaster.NotificationTypes.DANGER, message);
+}
+
+/**
  * Transalte
  */
 function translate() {
@@ -79,11 +96,7 @@ function translate() {
             $buttonCopy.attr('disabled', 'disabled');
 
             // message
-            let message = response.message;
-            if (response.exception) {
-                message += $form.data('last-error').replace('%code%', response.exception.code).replace('%message%', response.exception.message);
-            }
-            notify(Toaster.NotificationTypes.DANGER, message);
+            handleError(response);
         }
     });
 }
@@ -203,12 +216,7 @@ function onService() {
                 $from.selectFirstOption();
             }
         } else {
-            let message = response.message;
-            if (response.exception) {
-                const $form = $('#edit-form');
-                message += $form.data('last-error').replace('%code%', response.exception.code).replace('%message%', response.exception.message);
-            }
-            notify(Toaster.NotificationTypes.DANGER, message);
+            handleError(response);
         }
     });
 }

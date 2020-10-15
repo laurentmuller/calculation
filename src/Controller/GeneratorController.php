@@ -53,19 +53,23 @@ class GeneratorController extends AbstractController
         $faker = $fakerService->getFaker();
 
         // dates
-        $startDate = $this->getStartDate();
-        $endDate = $this->getEndDate();
+        $dateStart = $this->getDateStart();
+        $dateEnd = $this->getDateEnd();
 
         // load data
         $states = $this->getCalculationState($manager);
         $products = $this->getProducts($manager);
         $users = $this->getUsers($manager);
 
+        // product range
+        $min = \min(5, \count($products));
+        $max = \min(15, \count($products));
+
         $calculations = [];
         for ($i = 0; $i < $count; ++$i) {
             // calculation
             $calculation = new Calculation();
-            $calculation->setDate($faker->dateTimeBetween($startDate, $endDate))
+            $calculation->setDate($faker->dateTimeBetween($dateStart, $dateEnd))
                 ->setDescription($faker->catchPhrase())
                 ->setUserMargin($faker->randomFloat(2, 0, 0.1))
                 ->setState($faker->randomElement($states))
@@ -73,7 +77,10 @@ class GeneratorController extends AbstractController
                 ->setCustomer($faker->name);
 
             /** @var Product[] $itemProducts */
-            $itemProducts = $faker->randomElements($products, $faker->numberBetween(5, 15));
+            $itemProducts = $faker->randomElements($products, $faker->numberBetween($min, $max));
+            $this->sortProducts($itemProducts);
+
+            // add products
             foreach ($itemProducts as $product) {
                 // copy
                 $item = CalculationItem::create($product)->setQuantity($faker->numberBetween(1, 10));
@@ -111,7 +118,6 @@ class GeneratorController extends AbstractController
                 ];
         }, $calculations);
 
-        $count = \count($calculations);
         $data = [
             'result' => true,
             'count' => $count,
@@ -192,7 +198,6 @@ class GeneratorController extends AbstractController
             ];
         }, $customers);
 
-        $count = \count($customers);
         $data = [
             'result' => true,
             'count' => $count,
@@ -263,12 +268,10 @@ class GeneratorController extends AbstractController
             $calculation->setDescription($faker->catchPhrase())
                 ->setState($faker->randomElement($states));
         }
-
-        // save
         $manager->flush();
 
         $count = \count($calculations);
-        $this->info("La mise à jour de {$count} calculations a été effectuée avec succès.");
+        $this->infoTrans('counters.calculations_update', ['count' => $count]);
 
         return $this->redirectToHomePage();
     }
@@ -299,11 +302,10 @@ class GeneratorController extends AbstractController
                 ->replace($accessor, $customer, 'city', $faker->city)
                 ->replace($accessor, $customer, 'email', $faker->email);
         }
-
         $manager->flush();
 
         $count = \count($customers);
-        $this->info("La mise à jour de {$count} clients a été effectuée avec succès.");
+        $this->infoTrans('counters.customers_update', ['count' => $count]);
 
         return $this->redirectToHomePage();
     }
@@ -323,12 +325,25 @@ class GeneratorController extends AbstractController
     /**
      * Gets the last day of the next month.
      */
-    private function getEndDate(): \DateTime
+    private function getDateEnd(): \DateTime
     {
         $date = new \DateTime();
         $date->modify('last day of this month');
         $interval = new \DateInterval('P1M');
         $date = $date->add($interval);
+
+        return $date;
+    }
+
+    /**
+     * Gets the first day of 3 months before.
+     */
+    private function getDateStart(): \DateTime
+    {
+        $date = new \DateTime();
+        $date->modify('first day of this month');
+        $interval = new \DateInterval('P3M');
+        $date = $date->sub($interval);
 
         return $date;
     }
@@ -354,20 +369,7 @@ class GeneratorController extends AbstractController
     }
 
     /**
-     * Gets the first day of 3 months before.
-     */
-    private function getStartDate(): \DateTime
-    {
-        $date = new \DateTime();
-        $date->modify('first day of this month');
-        $interval = new \DateInterval('P3M');
-        $date = $date->sub($interval);
-
-        return $date;
-    }
-
-    /**
-     * Gets the user names.
+     * Gets the enabled user names.
      *
      * @return string[]
      */
@@ -398,5 +400,22 @@ class GeneratorController extends AbstractController
         $accessor->setValue($element, $property, $value);
 
         return $this;
+    }
+
+    /**
+     * Sort products by category code then by description.
+     *
+     * @param Product[] $products
+     */
+    private function sortProducts(array &$products): void
+    {
+        \usort($products, function (Product $a, Product $b) {
+            $result = \strcasecmp($a->getCategoryCode(), $b->getCategoryCode());
+            if (0 === $result) {
+                return \strcasecmp($a->getDescription(), $b->getDescription());
+            }
+
+            return $result;
+        });
     }
 }

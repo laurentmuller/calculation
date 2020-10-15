@@ -711,7 +711,7 @@ translator:
     text_error: Le texte à traduire est absent ou vide.
     detect_error: Une erreur s'est produite lors de la détection du texte.
     languages_error: Une erreur s'est produite lors de la recherche des langues disponibles.
-    last_error: '<hr>Erreur %code%. %message%'
+    last_error: <hr>Erreur %code%. %message%
     placeholder: Saisissez le texte à traduire
 search:
     title: Rechercher
@@ -905,21 +905,8 @@ registration:
             Cordialement,
             L'équipe
     confirmed: Félicitations %username%, votre compte est maintenant activé.
-counters:
-    calculations: '{0} Aucune calculation|{1} 1 calculation|]1,Inf] %count% calculations'
-    calculations_lower: '{0} aucune calculation|{1} 1 calculation|]1,Inf] %count% calculations'
-    products: '{0} Aucun article|{1} 1 article|]1,Inf] %count% articles'
-    products_lower: '{0} aucun article|{1} 1 article|]1,Inf] %count% articles'
-    categories: '{0} Aucune catégorie|{1} 1 catégorie|]1,Inf] %count% catégories'
-    categories_lower: '{0} aucune catégorie|{1} 1 catégorie|]1,Inf] %count% catégories'
-    margins: '{0} Aucune marge|{1} 1 marge|]1,Inf] %count% marges'
-    margins_lower: '{0} aucune marge|{1} 1 marge|]1,Inf] %count% marges'
-    weather_daily: '{0} Aucune prévision journalière|{1} Prévisions à 1 jour|]1,Inf] Prévisions à %count%  jours'
-    weather_forecast: '{0} Aucune prévision horaire|{1} Prévisions à 1 heure|]1,Inf] Prévisions à %count% heures}}'
-    weather_cities: '{0} Aucune localité ne correspond aux critères de recherche.|{1} 1 localité correspond aux critères de recherche.|]1,Inf] %count% localités correspond aux critères de recherche.'
-    hours: '{0} 0 heure|{1} 1 heure|]1,Inf] %count% heures'
 generate:
-    title: Générateur
+    title: Générateur de données
     description: Cet outil permet de générer des données aléatoires.
     submit_text: Générer
     fields:

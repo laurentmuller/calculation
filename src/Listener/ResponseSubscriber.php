@@ -73,6 +73,11 @@ class ResponseSubscriber implements EventSubscriberInterface
     private const GOOGLE_FRAME_URL = 'https://www.google.com';
 
     /**
+     * The Iconify icons url.
+     */
+    private const ICONIFY_URL = 'https://api.iconify.design';
+
+    /**
      * The Open weather image url.
      */
     private const OPEN_WEATHER_URL = 'https://openweathermap.org';
@@ -206,7 +211,7 @@ class ResponseSubscriber implements EventSubscriberInterface
 
         // nonce + asset
         $csp['script-src'] = [$nonce]; //, $asset];
-        $csp['script-src-elem'] = [$nonce, $asset, self::CSP_UNSAFE_INLINE];
+        $csp['script-src-elem'] = [$nonce, $asset, self::CSP_UNSAFE_INLINE, self::ICONIFY_URL];
 
         // self + asset
         $csp['frame-src'] = [self::CSP_SELF, self::GOOGLE_FRAME_URL];

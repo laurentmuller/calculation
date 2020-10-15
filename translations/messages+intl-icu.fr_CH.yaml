@@ -3,6 +3,7 @@ counters:
     calculations_lower: '{count, plural, =0 {aucune calculation} one {1 calculation} other {# calculations}}'
     calculations_calendar: '{count, plural, =0 {Afficher aucune calculation pour {date}} one {Afficher la calculation pour {date}} other {Afficher les # calculations pour {date}}}'
     calculations_generate: '{count, plural, =0 {Aucune calculation n''a été générée.} one {1 calculation a été générée avec succès.} other {# calculations ont été générées avec succès.}}'
+    calculations_update: '{count, plural, =0 {Aucune calculation n''a été mise à jour avec succès.} one {1 calculation a été mise à jour avec succès.} other {# calculations ont été mises à jour avec succès.}}'
     products: '{count, plural, =0 {Aucun article} one {1 article} other {# articles}}'
     products_lower: '{count, plural, =0 {aucun article} one {1 article} other {# articles}}'
     categories: '{count, plural, =0 {Aucune catégorie} one {1 catégorie} other {# catégories}}'
@@ -14,3 +15,4 @@ counters:
     weather_cities: '{count, plural, =0 {Aucune localité ne correspond aux critères de recherche.} one {1 localité correspond aux critères de recherche.} other {# localités correspond aux critères de recherche.}}'
     hours: '{count, plural, =0 {0 heure} one {1 heure} other {# heures}}'
     customers_generate: '{count, plural, =0 {Aucun client n''a été généré.} one {1 client a été généré avec succès.} other {# clients ont été générés avec succès.}}'
+    customers_update: '{count, plural, =0 {Aucun client n''a été mis à jour avec succès.} one {1 client a été mis à jour avec succès.} other {# clients ont été mis à jour avec succès.}}'

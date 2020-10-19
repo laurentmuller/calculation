@@ -26,14 +26,14 @@
 {% block card_body %}
 <p>
 {% block error_message -%}
-{{ description|default('')|raw }} {{ suggestion|default('')|raw }}
+    {{ description|default('')|raw }} {{ suggestion|default('')|raw }}
 {%- endblock %}
 </p>
 <div class="row d-print-none">
     <div class="col-md-9">
-        <p class="mb-0">{{ 'error_page.link'|trans({'%webmaster%': webmaster, '%application%': app_name_version})|raw }}</p>
+        <p class="mb-0">{{ 'error_page.link'|trans({'%mailto%': mailer_user_email, '%subject%': app_name_version|url_encode})|raw }}</p>
     </div>
-    <div class="col-md-3 text-right">
+    <div class="col-md-3 text-md-right">
         {% if is_exception %}
             <a data-toggle="collapse" href="#exception-detail" class="collapsed" aria-expanded="false" aria-controls="exception-detail">{{ 'error_page.details'|trans }}</a>
         {% endif %}

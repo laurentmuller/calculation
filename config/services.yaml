@@ -20,7 +20,6 @@ parameters:
     mailer_user_name: Calculation
     mailer_user_email: calculation@bibi.nu
 
-
     # assets
     asset_base: '%env(ASSET_BASE)%'
     asset_locale: '%env(ASSET_LOCALE)%'
@@ -48,6 +47,8 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $appName: '%app_name%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

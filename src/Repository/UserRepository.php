@@ -184,11 +184,15 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      * Update the date of last login for the given user.
      *
      * @param User $user the user to update
+     *
+     * @return bool this function returns always true
      */
-    public function updateLastLogin(User $user): void
+    public function updateLastLogin(User $user): bool
     {
         $user->setLastLogin(new \DateTimeImmutable());
         $this->_em->flush();
+
+        return true;
     }
 
     /**

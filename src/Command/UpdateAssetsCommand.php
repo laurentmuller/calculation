@@ -110,6 +110,11 @@ class UpdateAssetsCommand extends AssetsCommand
         try {
             // parse plugins
             foreach ($plugins as $plugin) {
+                // disabled?
+                if (isset($plugin->disabled) && $plugin->disabled) {
+                    continue;
+                }
+
                 $name = $plugin->name;
                 $version = $plugin->version;
                 $this->writeVerbose("Installing '{$name} v{$version}'.");
@@ -140,6 +145,10 @@ class UpdateAssetsCommand extends AssetsCommand
 
             //check loaded files
             $expected = \array_reduce($plugins, function (int $carry, \stdClass $plugin) {
+                if (isset($plugin->disabled) && $plugin->disabled) {
+                    return $carry;
+                }
+
                 return $carry + \count($plugin->files);
             }, 0);
             if ($expected !== $countFiles) {

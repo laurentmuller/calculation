@@ -17,10 +17,7 @@ namespace App\Listener;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Traits\TranslatorFlashMessageTrait;
-use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
@@ -37,16 +34,23 @@ class InteractiveLoginListener implements EventSubscriberInterface
 {
     use TranslatorFlashMessageTrait;
 
-    private ParameterBagInterface $parameters;
+    /**
+     * The application name.
+     *
+     * @var string
+     */
+    private $appName;
 
     private UserRepository $repository;
 
-    public function __construct(ParameterBagInterface $parameters, SessionInterface $session, UserRepository $repository, TranslatorInterface $translator)
+    /**
+     * Constructor.
+     */
+    public function __construct(UserRepository $repository, TranslatorInterface $translator, string $appName)
     {
-        $this->session = $session;
         $this->repository = $repository;
         $this->translator = $translator;
-        $this->parameters = $parameters;
+        $this->appName = $appName;
     }
 
     public static function getSubscribedEvents()
@@ -56,30 +60,20 @@ class InteractiveLoginListener implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * Handles the interactive login event.
+     */
     public function onInteractiveLogin(InteractiveLoginEvent $event): void
     {
         $token = $event->getAuthenticationToken();
-        if ($this->updateUser($token)) {
+        $this->session = $event->getRequest()->getSession();
+        if ($this->updateUser($token) && null !== $this->session) {
             $params = [
                 '%username%' => $token->getUsername(),
-                '%appname%' => $this->getParameter('app_name'),
+                '%appname%' => $this->appName,
             ];
             $this->succesTrans('security.login.success', $params);
         }
-    }
-
-    /**
-     * Gets a container parameter.
-     *
-     * @param string $name the parameter name
-     *
-     * @return mixed the parameter value
-     *
-     * @throws ParameterNotFoundException if the parameter is not defined
-     */
-    private function getParameter(string $name)
-    {
-        return $this->parameters->get($name);
     }
 
     /**
@@ -94,9 +88,7 @@ class InteractiveLoginListener implements EventSubscriberInterface
         if ($token instanceof RememberMeToken || $token instanceof PostAuthenticationGuardToken) {
             $user = $token->getUser();
             if ($user instanceof User) {
-                $this->repository->updateLastLogin($user);
-
-                return true;
+                return $this->repository->updateLastLogin($user);
             }
         }
 

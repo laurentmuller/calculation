@@ -26,7 +26,7 @@
 			"format": "{source}{name}@{version}/dist/{file}",
 			"target": "twitter-bootstrap",
 			"files": [
-				"js/bootstrap.bundle.js",								
+				"js/bootstrap.bundle.js",
 				"js/bootstrap.bundle.js.map",
 				"css/bootstrap.css",
 				"css/bootstrap.css.map"
@@ -237,6 +237,7 @@
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/dist/{file}",
 			"target": "iconify",
+			"disabled": true,
 			"files": [
 				"iconify.js"
 			]

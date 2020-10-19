@@ -419,7 +419,7 @@ error_page:
     title: Erreur %status_code%
     default_title: Erreur
     description: Une erreur est survenue dans l'exécution du programme.
-    link: N'hésitez pas à <a href="mailto:%webmaster%?subject=%application%">contacter le responsable</a> du site pour signaler cette erreur.
+    link: N'hésitez pas à <a href="mailto:%mailto%?subject=%subject%">contacter le responsable</a> du site pour signaler cette erreur.
     details: Détails de l'erreur
     proprety: Propriété
     value: Valeur
@@ -866,6 +866,8 @@ security:
         password: Mot de passe
         remember_me: Se souvenir de moi
         submit: Connexion
+    logout:
+        success: <b>%username%</b>, vous vous êtes bien déconnecté de l'application <b>%appname%</b>.
 profile:
     change_password:
         title: Modifier le mot de passe
@@ -874,7 +876,7 @@ profile:
     edit:
         title: Modifier le profil
         submit: Mettre à jour
-        success: <b>%username%</b>, votre profil a bien été mis à jour.
+        success: <b>%username%</b>, votre profil a été mis à jour avec succès.
         failure: Impossible de trouver l'utilisateur actuel.
 resetting:
     link: Mot de passe oublié ?

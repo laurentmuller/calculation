@@ -1,38 +1,39 @@
 twig:
-    default_path: '%kernel.project_dir%/templates'
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
-    exception_controller: null
+    default_path: '%kernel.project_dir%/templates'
     
     globals:
-        app_name:         '%app_name%'
-        app_version:      '%app_version%'
+        app_name: '%app_name%'
+        app_version: '%app_version%'
         app_name_version: '%app_name% v%app_version%'
-        app_owner:        '%app_owner%'
-        app_owner_url:    '%app_owner_url%'
-        app_owner_city:   '%app_owner_city%'
-        app_description:  '%app_description%'
-        app_environment:  '%app_environment%'
-        
-        webmaster:        '%mailer_user_name%'
-        
-        cookie_path:      '%cookie_path%'
-        cookie_secure:    '%cookie_secure%'
+        app_owner: '%app_owner%'
+        app_owner_url: '%app_owner_url%'
+        app_owner_city: '%app_owner_city%'
+        app_description: '%app_description%'
+        app_environment: '%app_environment%'
+    
+        mailer_user_name: '%mailer_user_email%'
+        mailer_user_email: '%mailer_user_email%'
+    
+        cookie_path: '%cookie_path%'
+        cookie_secure: '%cookie_secure%'
         cookie_same_site: '%cookie_same_site%'
-        
+    
         google_recaptcha_site_key: '%google_recaptcha_site_key%'
-        google_recaptcha_secret:   '%google_recaptcha_secret%'
-
-        link_dev:  '%link_dev%'
+        google_recaptcha_secret: '%google_recaptcha_secret%'
+    
+        link_dev: '%link_dev%'
         link_prod: '%link_prod%'
-        
+
     date:
         format: d.m.Y H:i:s
         interval_format: '%%d jours'
+
     number_format:
         decimals: 2
         decimal_point: .
         thousands_separator: ''''
 
     form_themes:
-        - form/fields.html.twig
+    - form/fields.html.twig

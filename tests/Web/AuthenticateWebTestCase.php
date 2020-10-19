@@ -57,6 +57,7 @@ abstract class AuthenticateWebTestCase extends WebTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->client = static::createClient();
 
         // get rights

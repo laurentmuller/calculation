@@ -27,6 +27,7 @@ security:
                     - App\Security\LoginFormAuthenticator
             logout:
                 path: app_logout
+                invalidate_session: false
 
             switch_user: true
 

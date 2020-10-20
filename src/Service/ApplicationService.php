@@ -321,19 +321,6 @@ class ApplicationService implements ApplicationServiceInterface
     }
 
     /**
-     * Gets a boolean property.
-     *
-     * @param string $name    the property name to search for
-     * @param bool   $default the default value if the property is not found
-     *
-     * @return bool the boolean value, if found; the default value otherwise
-     */
-    public function getPropertyBoolean(string $name, bool $default = false): bool
-    {
-        return (bool) $this->getItemValue($name, $default);
-    }
-
-    /**
      * Gets a date property.
      *
      * @param string         $name    the property name to search for
@@ -434,7 +421,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function isDisplayCaptcha(): bool
     {
-        return $this->getPropertyBoolean(self::DISPLAY_CAPTCHA, !$this->debug);
+        return $this->isPropertyBoolean(self::DISPLAY_CAPTCHA, !$this->debug);
     }
 
     /**
@@ -444,7 +431,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function isDisplayTabular(): bool
     {
-        return $this->getPropertyBoolean(self::DISPLAY_TABULAR, self::DEFAULT_TABULAR);
+        return $this->isPropertyBoolean(self::DISPLAY_TABULAR, self::DEFAULT_TABULAR);
     }
 
     /**
@@ -454,7 +441,7 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function isEditAction(): bool
     {
-        return $this->getPropertyBoolean(self::EDIT_ACTION, self::DEFAULT_EDIT_ACTION);
+        return $this->isPropertyBoolean(self::EDIT_ACTION, self::DEFAULT_EDIT_ACTION);
     }
 
     /**
@@ -476,7 +463,20 @@ class ApplicationService implements ApplicationServiceInterface
      */
     public function isMessageSubTitle(): bool
     {
-        return $this->getPropertyBoolean(self::MESSAGE_SUB_TITLE, self::DEFAULT_SUB_TITLE);
+        return $this->isPropertyBoolean(self::MESSAGE_SUB_TITLE, self::DEFAULT_SUB_TITLE);
+    }
+
+    /**
+     * Gets a boolean property.
+     *
+     * @param string $name    the property name to search for
+     * @param bool   $default the default value if the property is not found
+     *
+     * @return bool the boolean value, if found; the default value otherwise
+     */
+    public function isPropertyBoolean(string $name, bool $default = false): bool
+    {
+        return (bool) $this->getItemValue($name, $default);
     }
 
     /**

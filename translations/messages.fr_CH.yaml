@@ -595,13 +595,23 @@ theme:
         secondary: Refuser
 calendar:
     year_title: Calendrier %year%
+    year_current: Année courante (%year%)
+    year_previous: Année précédente (%year%)
+    year_next: Année suivante (%year%)
+    year_show: Afficher l'année (%year%)
     month_title: '%month% %year%'
+    month_current: Mois courant (%month% %year%)
+    month_previous: Mois précédent (%month% %year%)
+    month_next: Mois suivant (%month% %year%)
+    month_show: Afficher le mois (%month% %year%)
     week_title: Semaine %week% / %year%
-    week: Sem.
+    week_current: Semaine courante (%week% / %year%)
+    week_previous: Semaine précédente (%week% / %year%)
+    week_next: Semaine suivante (%week% / %year%)
+    week_show: Afficher la semaine (%week% / %year%)
+    week_short: Sem.
     invalid_month: Le mois doit être compris entre 1 et 12.
     invalid_week: La semaine doit être comprises entre 1 et 53.
-    previous_year: Année précédente
-    next_year: Année suivante
 test:
     notification: Notifications
     summernote: Editeur Summernote

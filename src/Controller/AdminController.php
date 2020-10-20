@@ -174,7 +174,7 @@ class AdminController extends AbstractController
 
         // password options
         foreach (ParametersType::PASSWORD_OPTIONS as $option) {
-            $data[$option] = $service->getPropertyBoolean($option);
+            $data[$option] = $service->isPropertyBoolean($option);
         }
 
         // remove unused properties

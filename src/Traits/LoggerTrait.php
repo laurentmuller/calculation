@@ -142,7 +142,7 @@ trait LoggerTrait
      */
     protected function doGetLogger(): ?LoggerInterface
     {
-        if (!isset($this->logger) && \method_exists($this, 'getLogger')) {
+        if (!$this->logger && \method_exists($this, 'getLogger')) {
             return $this->logger = $this->getLogger();
         }
 

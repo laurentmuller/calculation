@@ -5,7 +5,7 @@
 
 {# macros #}
 {% macro weekRow(month, week) %}
-{%- set week_title = 'calendar.week_title'|trans({'%week%': week.number, '%year%': week.year}) -%}
+{%- set week_title = 'calendar.week_show'|trans({'%week%': week.number, '%year%': week.year}) -%}
 {%- set class = 'bg-secondary text-white text-center align-middle week' -%}
 {% if week.current -%}{%- set class = 'bg-primary text-center align-middle text-white week' -%}{%- endif %}
 <tr>
@@ -39,22 +39,22 @@
         <div class="btn-group btn-group-sm" role="group">
             {# today month #}
             {% if today %}
-                {% set text = calendar.monthNames[today.month] ~ ' ' ~ today.year %}
-                <a class="btn btn-primary" href="{{ path('calendar_month') }}" title="{{ text }}">{{ icons.icon('arrows-alt') }}</a>
+                {% set href = path('calendar_month', {'year': today.year, 'month': today.month}) %}
+                {{ icons.link(href, null, 'btn btn-primary', 'arrows-alt', 'calendar.month_current', null, {'%year%': today.year, '%month%': calendar.monthNames[today.month]}) }}
             {% endif %}
             {# previous month #}
             {% if previous %}
-                {% set text = calendar.monthNames[previous.month] ~ ' ' ~ previous.year %}
-                <a class="btn btn-primary" title="{{ text }}" href="{{ path('calendar_month', {'year': previous.year, 'month': previous.month}) }}">{{ icons.icon('chevron-left') }}</a>
+                {% set href = path('calendar_month', {'year': previous.year, 'month': previous.month}) %}
+                {{ icons.link(href, null, 'btn btn-primary', 'chevron-left', 'calendar.month_previous', null, {'%year%': previous.year, '%month%': calendar.monthNames[previous.month]}) }}
             {% endif %}
             {# next month #}
             {% if next %}
-                {% set text = calendar.monthNames[next.month] ~ ' ' ~ next.year %}
-                <a class="btn btn-primary" title="{{ text }}" href="{{ path('calendar_month', {'year': next.year, 'month': next.month}) }}">{{ icons.icon('chevron-right') }}</a>
+                {% set href = path('calendar_month', {'year': next.year, 'month': next.month}) %}
+                {{ icons.link(href, null, 'btn btn-primary', 'chevron-right', 'calendar.month_next', null, {'%year%': next.year, '%month%': calendar.monthNames[next.month]}) }}
             {% endif %}
             {# current year calendar #}
-            {%- set text = 'calendar.year_title'|trans({'%year%': calendar.year}) -%}
-            <a class="btn btn-primary" title="{{ text }}" href="{{ path('calendar_year', {'year': calendar.year}) }}">{{ icons.icon('calendar-alt far') }}</a>
+            {% set href = path('calendar_year', {'year': calendar.year}) %}
+            {{ icons.link(href, null, 'btn btn-primary', 'calendar-alt far', 'calendar.year_show', null, {'%year%': calendar.year}) }}
             {# calculations #}
             {{ helper.linkCalculations('%02d.%d'|format(month.number, month.year), month.name ~ ' ' ~ month.year, calculations|length, 'btn btn-primary') }}
         </div>           
@@ -64,7 +64,7 @@
     <div class="col">
         <table class="table table-bordered w-100 month">
             <tr>
-                <th class="border bg-secondary text-white text-center week font-weight-normal">{{ 'calendar.week'|trans }}</th>
+                <th class="border bg-secondary text-white text-center week font-weight-normal">{{ 'calendar.week_short'|trans }}</th>
                 {% for name in calendar.weekShortNames %}
                     <th class="border bg-secondary text-white text-center font-weight-normal">{{ name }}</th>
                 {% endfor %}

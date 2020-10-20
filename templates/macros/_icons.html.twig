@@ -13,6 +13,26 @@
 {%- if text %}{% if icon %} {% endif %}{{ text|trans(parameters, domain) -}}{%- endif -%}
 {%- endmacro %}
 
+{# iconify version
+{% macro icon2(icon, text, domain = null, parameters = []) -%}
+{%- if icon -%}
+    {% if 'fa-fw' in icon -%}
+        {% set size = 'data-width="1.5rem" data-height="1rem"' %}
+    {%- endif %}    
+    {%- if 'fab' in icon -%}
+        {%- set prefix = 'fa-brands:' -%}
+    {%- elseif 'far' in icon -%}
+        {%- set prefix = 'fa-regular:' -%}
+    {%- else -%}
+        {%- set prefix = 'fa-solid:' -%}
+    {%- endif -%}
+    {%- set class = prefix ~ icon|split(' ')|filter(c => c != 'fab' and c != 'far' and c != 'fa-fw' )|join(' ') -%}
+    <span class="iconify" data-icon="{{ class }}"{% if size is defined %}{{ size|raw }}{% endif %}></span>
+{%- endif %}
+{%- if text %}{% if icon %} {% endif %}{{ text|trans(parameters, domain) -}}{%- endif -%}
+{%- endmacro %}
+#}
+ 
 {% macro link(href, text, class, icon, title = null, domain = null, parameters = []) -%}
 {%- set role  = (class and 'btn' in class) ? ' role="button"' : '' -%}
 {%- set title = title ? ' title="' ~ title|trans(parameters, domain) ~ '"' : '' -%}

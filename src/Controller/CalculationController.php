@@ -551,8 +551,8 @@ class CalculationController extends AbstractEntityController
         $table = $this->getPivotTable();
 
         // options
-        $popover = $this->getSessionBool('popover', true);
-        $highlight = $this->getSessionBool('highlight', false);
+        $popover = $this->isSessionBool('popover', true);
+        $highlight = $this->isSessionBool('highlight', false);
 
         // render
         return $this->render('calculation/calculation_pivot.html.twig', [

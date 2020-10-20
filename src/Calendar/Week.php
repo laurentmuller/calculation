@@ -31,7 +31,7 @@ class Week extends CalendarItem
     public const KEY_FORMAT = 'Y.W';
 
     /**
-     * The week number (1 - 52 or 53).
+     * The week number (1 - 53).
      *
      * @var int
      */

@@ -45,19 +45,6 @@ trait SessionTrait
     }
 
     /**
-     * Gets a session attribute, as boolean value.
-     *
-     * @param string $key     the attribute name
-     * @param bool   $default the default value if not found
-     *
-     * @return bool the session value, if found; the default value otherwise
-     */
-    protected function getSessionBool(string $key, bool $default = false): bool
-    {
-        return (bool) $this->getSessionValue($key, $default);
-    }
-
-    /**
      * Gets a session attribute, as integer value.
      *
      * @param string $key     the attribute name
@@ -131,6 +118,19 @@ trait SessionTrait
         }
 
         return false;
+    }
+
+    /**
+     * Gets a session attribute, as boolean value.
+     *
+     * @param string $key     the attribute name
+     * @param bool   $default the default value if not found
+     *
+     * @return bool the session value, if found; the default value otherwise
+     */
+    protected function isSessionBool(string $key, bool $default = false): bool
+    {
+        return (bool) $this->getSessionValue($key, $default);
     }
 
     /**

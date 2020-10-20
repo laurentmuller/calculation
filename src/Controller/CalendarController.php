@@ -134,8 +134,7 @@ class CalendarController extends AbstractController
      * @param int|null              $year       the year to search for or <code>null</code> for the current
      *                                          year
      */
-    public function year(CalendarService $service, CalculationRepository $repository,
-        ?int $year = null): Response
+    public function year(CalendarService $service, CalculationRepository $repository, ?int $year = null): Response
     {
         // validate year
         $year = $this->validateYear($year);

@@ -11,7 +11,7 @@
 {%- else -%}
     {%- set class = class ~ ' bg-secondary' -%}
 {%- endif %}
-{%- set week_title = 'calendar.week_title'|trans({'%week%': week.number, '%year%': week.year}) -%}
+{%- set week_title = 'calendar.week_show'|trans({'%week%': week.number, '%year%': week.year}) -%}
 <tr>
     <td class="{{ class }}" title="{{ week_title }}">
         {% if week.empty %}
@@ -42,7 +42,7 @@
                     <span>&nbsp;</span>
                 </th>                
                 <th colspan="6" class="{{ class }} text-center">
-                    <a class="text-white" href="{{ path('calendar_month', {'year': month.year, 'month': month.number}) }}">{{ month.Name }}</a>                    
+                    <a class="text-white" href="{{ path('calendar_month', {'year': month.year, 'month': month.number}) }}" title="{{ 'calendar.month_show'|trans({'%month%': month.name, '%year%': month.year}) }}">{{ month.Name }}</a>                    
                 </th>
                 <th class="{{ class }} text-right pr-2">
                     {{ helper.linkCalculations('%02d.%d'|format(month.number, month.year), month.name ~ ' ' ~ month.year, month.count, 'text-white') }}
@@ -67,26 +67,6 @@
 </div>
 {% endmacro %}
 
-{% macro previousLink(previousYear) %}
-{% set title = 'calendar.previous_year'|trans %}
-{% if previousYear %}
-    {% set href = path('calendar_year', {'year': previousYear}) %}
-    <li class="page-item"><a class="page-link" href="{{ href }}" title="{{ title }}">{{ icons.icon('chevron-left fa-fw') }}</a></li>
-{% else %}
-    <li class="page-item disabled"><span class="page-link" title="{{ title }}">{{ icons.icon('chevron-left fa-fw') }}</span></li>
-{% endif %}
-{% endmacro %}
-
-{% macro nextLink(nextYear) %}
-{% set title = 'calendar.next_year'|trans %}
-{% if nextYear %}
-    {% set href = path('calendar_year', {'year': nextYear}) %}
-    <li class="page-item"><a class="page-link" href="{{ href }}" title="{{ title }}">{{ icons.icon('chevron-right fa-fw') }}</a></li>
-{% else %}
-    <li class="page-item disabled"><span class="page-link" title="{{ title }}">{{ icons.icon('chevron-right fa-fw') }}</span></li>
-{% endif %}
-{% endmacro %}
-
 {# parameters #}
 {%- set title            = 'calendar.year_title' -%}
 {%- set title_parameters = {'%year%': calendar.year} -%}
@@ -106,18 +86,18 @@
         <div class="btn-group btn-group-sm" role="group">
             {# today year #}
             {% if today %}
-                {% set text = 'calendar.year_title'|trans({'%year%': today}) %}
-                <a class="btn btn-primary" href="{{ path('calendar_year') }}" title="{{ text }}">{{ icons.icon('arrows-alt') }}</a>
+                {% set href = path('calendar_year', {'year': today}) %}
+                {{ icons.link(href, null, 'btn btn-primary', 'arrows-alt', 'calendar.year_current', null, {'%year%': today}) }}
             {% endif %}
             {# previous year #}
             {% if previous %}
-                {% set text = 'calendar.year_title'|trans({'%year%': previous}) %}
-                <a class="btn btn-primary" title="{{ text }}" href="{{ path('calendar_year', {'year': previous}) }}">{{ icons.icon('chevron-left') }}</a>
+                {% set href = path('calendar_year', {'year': previous}) %}
+                {{ icons.link(href, null, 'btn btn-primary', 'chevron-left', 'calendar.year_previous', null, {'%year%': previous}) }}
             {% endif %}
             {# next year #}
             {% if next %}
-                {% set text = 'calendar.year_title'|trans({'%year%': next}) %}
-                <a class="btn btn-primary" title="{{ text }}" href="{{ path('calendar_year', {'year': next}) }}">{{ icons.icon('chevron-right') }}</a>
+                {% set href = path('calendar_year', {'year': next}) %}
+                {{ icons.link(href, null, 'btn btn-primary', 'chevron-right', 'calendar.year_next', null, {'%year%': next}) }}
             {% endif %}
             {# calculations #}
             {{ helper.linkCalculations(calendar.year, calendar.year, calculations|length, 'btn btn-primary') }}

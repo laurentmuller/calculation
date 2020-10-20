@@ -80,7 +80,7 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     /**
      * The today day.
      *
-     * @var Day
+     * @var ?Day
      */
     protected $today;
 
@@ -126,13 +126,6 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
      */
     public function __construct(?int $year = null)
     {
-        // today
-        $date = new \DateTime('today');
-        $this->today = new Day($this, $date);
-
-        // names
-        $this->initNames();
-
         parent::__construct($this, (string) ($year ?? 0));
 
         // generate if applicable
@@ -262,6 +255,10 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
      */
     public function getMonthNames(): array
     {
+        if (!$this->monthNames) {
+            $this->monthNames = DateUtils::getMonths();
+        }
+
         return $this->monthNames;
     }
 
@@ -282,6 +279,10 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
      */
     public function getMonthShortNames(): array
     {
+        if (!$this->monthShortNames) {
+            $this->monthShortNames = DateUtils::getShortMonths();
+        }
+
         return $this->monthShortNames;
     }
 
@@ -298,6 +299,11 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
      */
     public function getToday(): Day
     {
+        if (null === $this->today) {
+            $date = new \DateTime('today');
+            $this->today = new Day($this, $date);
+        }
+
         return $this->today;
     }
 
@@ -332,6 +338,10 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
      */
     public function getWeekNames(): array
     {
+        if (!$this->weekNames) {
+            $this->weekNames = DateUtils::getWeekdays('monday');
+        }
+
         return $this->weekNames;
     }
 
@@ -352,6 +362,10 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
      */
     public function getWeekShortNames(): array
     {
+        if (!$this->weekShortNames) {
+            $this->weekShortNames = DateUtils::getShortWeekdays('monday');
+        }
+
         return $this->weekShortNames;
     }
 
@@ -478,7 +492,7 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
      *
      * @return array the given array
      *
-     * @throws CalendarException if the array has the wrong length or if a key is missing or if one of the values is not a string
+     * @throws CalendarException if the array has the wrong length, if a key is missing or if one of the values is not a string
      */
     private function checkArray(array $array, int $length): array
     {
@@ -540,26 +554,5 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
         $this->weeks[] = $week;
 
         return $week;
-    }
-
-    /**
-     * Intialize the months and week days names.
-     */
-    private function initNames(): self
-    {
-        if (!$this->monthNames) {
-            $this->monthNames = DateUtils::getMonths();
-        }
-        if (!$this->monthShortNames) {
-            $this->monthShortNames = DateUtils::getShortMonths();
-        }
-        if (!$this->weekNames) {
-            $this->weekNames = DateUtils::getWeekdays('monday');
-        }
-        if (!$this->weekShortNames) {
-            $this->weekShortNames = DateUtils::getShortWeekdays('monday');
-        }
-
-        return $this;
     }
 }

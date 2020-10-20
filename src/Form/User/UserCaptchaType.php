@@ -62,6 +62,8 @@ abstract class UserCaptchaType extends AbstractHelperType
      *
      * Subclass must call <code>parent::addFormFields($helper);</code> to add
      * the image captcha field (if applicable).
+     *
+     * @suppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
     {

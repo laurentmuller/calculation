@@ -327,6 +327,8 @@ class CalculationGroup extends AbstractEntity
      * This property is present only for the form builder.
      *
      * @param int $categoryId
+     *
+     * @suppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCategoryId(?int $categoryId): self
     {

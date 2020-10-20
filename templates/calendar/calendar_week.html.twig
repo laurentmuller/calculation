@@ -33,9 +33,9 @@
                 {{ icons.link(href, null, 'btn btn-primary', 'chevron-right', 'calendar.week_next', null, {'%year%': next.year, '%week%': next.week}) }}
             {% endif %} 
             {# current month calendar #}
-            {%- set first = week.days|filter(day => (day.inWeek(week) and not day.empty))|first -%}
-            {% if first -%}
-                {% set month = calendar.month(first.month) %}      
+            {%- set first_day = week.days|filter(day => (day.inWeek(week) and not day.empty))|first -%}
+            {% if first_day -%}
+                {% set month = calendar.month(first_day.month) %}      
                 {% set href = path('calendar_month', {'year': month.year, 'month': month.number}) %}
                 {{ icons.link(href, null, 'btn btn-primary', 'calendar-week', 'calendar.month_show', null, {'%year%': month.year, '%month%': month.name}) }}
             {%- endif %}       

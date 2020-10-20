@@ -351,6 +351,8 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
      * @param DataColumn $column the column
      *
      * @return mixed the key
+     *
+     * @suppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function getColumnKey(int $key, DataColumn $column)
     {

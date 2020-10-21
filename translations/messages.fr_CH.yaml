@@ -898,7 +898,7 @@ resetting:
     check_email: |
         Un e-mail vous a été envoyé. Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.
 
-        Si vous ne recevez pas de courrier électronique, veuillez vérifier votre dossier de courrier indésirable ou <a href="%request%">essayer à nouveau</a>.
+        Si vous ne recevez pas de courrier électronique, veuillez vérifier votre dossier de courrier indésirable (spam) ou <a href="%request%">essayer à nouveau</a>.
 
         <b>Remarque :</b> Vous ne pouvez demander un nouveau mot de passe que toutes les %tokenLifetime% heures.
 registration:

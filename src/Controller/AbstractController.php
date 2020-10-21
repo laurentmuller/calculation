@@ -35,7 +35,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Abstract base controller.
+ * Provides common features needed in controllers.
+ *
+ * @author Laurent Muller
  */
 abstract class AbstractController extends BaseController
 {

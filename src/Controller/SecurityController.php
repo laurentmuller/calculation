@@ -34,7 +34,7 @@ class SecurityController extends AbstractController
     {
         $form = $this->createForm(UserLoginType::class, [
             'username' => $utils->getLastUsername(),
-            'remember_me' => $kernel->isDebug(),
+            'remember_me' => true,
         ]);
 
         // display form

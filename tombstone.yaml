@@ -1,7 +1,0 @@
-source_code:
-    root_directory: ./src
-logs:
-    directory: ./var/log
-report:
-    console: true
-    #html: ./var/log/report

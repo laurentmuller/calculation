@@ -261,19 +261,19 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
 
     // loaded?
     let deferLoading = null;
-    const total = $table.data('total');
-    const filtered = $table.data('filtered');
+    const total = parseInt($table.data('total'), 10);
+    const filtered = parseInt($table.data('filtered'), 10);
     if (total !== 0) {
         deferLoading = [filtered, total];
     }
 
     // parameters
-    const defaultLength = $table.data('pagelength') || 15;
+    const defaultLength = parseInt($table.data('pagelength')|| 15, 10);
     const params = new URLSearchParams(window.location.search);
     const paging = total > 15;
-    const id = params.getOrDefault('id', 0);
-    const page = params.getOrDefault('page', 0);
-    const pagelength = params.getOrDefault('pagelength', defaultLength);
+    const id = params.getIntOrDefault('id', 0);
+    const page = params.getIntOrDefault('page', 0);
+    const pagelength = params.getIntOrDefault('pagelength', defaultLength);
     const query = params.getOrDefault('query', null);
 
     // order

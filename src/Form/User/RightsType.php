@@ -71,8 +71,6 @@ class RightsType extends AbstractHelperType
 
     /**
      * Add fields to the given helper.
-     *
-     * @suppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
     {

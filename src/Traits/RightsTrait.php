@@ -20,6 +20,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Trait to set or get access rights.
  *
+ * @property int[] $EntityCalculation
+ * @property int[] $EntityCalculationState
+ * @property int[] $EntityCategory
+ * @property int[] $EntityCustomer
+ * @property int[] $EntityGlobalMargin
+ * @property int[] $EntityProduct
+ * @property int[] $EntityUser
+ *
  * @author Laurent Muller
  */
 trait RightsTrait

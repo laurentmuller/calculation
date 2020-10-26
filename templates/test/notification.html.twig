@@ -18,9 +18,9 @@
 <option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
 {%- endmacro %}
 
-{% macro checkbox(id, text) -%}
+{% macro checkbox(id, text, checked = true) -%}
 <div class="custom-control custom-switch custom-control-inline">
-  <input type="checkbox" class="custom-control-input" id="{{ id }}" checked="checked">
+  <input type="checkbox" class="custom-control-input" id="{{ id }}"{% if checked %} checked="checked"{% endif %}>
   <label class="custom-control-label" for="{{ id }}">{{ text }}</label>
 </div>
 {%- endmacro %}
@@ -88,7 +88,7 @@
         <div class="form-group mb-0">
             {{ _self.checkbox('title', 'Titre') }}
             {{ _self.checkbox('icon', 'Icône') }}
-            {{ _self.checkbox('subtitle', 'Sous-titre') }}
+            {{ _self.checkbox('subtitle', 'Sous-titre', subtitle) }}
             {{ _self.checkbox('close', 'Fermer') }}
             {{ _self.checkbox('autohide', 'Masquer automatiquement') }}
         </div>

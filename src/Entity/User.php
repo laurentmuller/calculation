@@ -89,7 +89,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      *
-     * @var string
+     * @var ?string
      */
     private $imageName;
 
@@ -134,7 +134,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      *
      * @ORM\Column(type="datetime", nullable=true)
      *
-     * @var \DateTime
+     * @var ?\DateTime
      */
     private $updatedAt;
 
@@ -208,11 +208,9 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     /**
      * Gets the URL of the avatar image.
      *
-     * @param int $size       the image size
-     * @param int $set        the image set
-     * @param int $background the background set
-     *
-     * @return string the avatar url
+     * @param int $size       the image size (only used if the value is greather than 0)
+     * @param int $set        the image set (only used if the value is between 2 to 5 inclusive)
+     * @param int $background the background set (only used if the value is between 1 to 2 inclusive)
      *
      * @see https://robohash.org/
      */
@@ -229,7 +227,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
             $query['bgset'] = \sprintf('bg%d', $background);
         }
 
-        $url = 'https://robohash.org/' . $this->getUsername();
+        $url = 'https://robohash.org/' . \urlencode($this->getUsername());
         if (!empty($query)) {
             return $url . '?' . \http_build_query($query);
         }

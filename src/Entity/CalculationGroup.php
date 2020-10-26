@@ -81,7 +81,7 @@ class CalculationGroup extends AbstractEntity
     protected $code;
 
     /**
-     * The product items.
+     * The calculation items.
      *
      * @ORM\OneToMany(
      *     targetEntity="CalculationItem",
@@ -271,7 +271,7 @@ class CalculationGroup extends AbstractEntity
      */
     public function removeItem(CalculationItem $item): self
     {
-        if ($this->items->contains($item) && $this->items->removeElement($item)) {
+        if ($this->items->removeElement($item)) {
             if ($item->getGroup() === $this) {
                 $item->setGroup(null);
             }
@@ -306,7 +306,7 @@ class CalculationGroup extends AbstractEntity
      * Set category.
      *
      * @param \App\Entity\Category $category the category to copy values from
-     * @param bool                 $update   true to copy the code, the description and update the amount and the margin
+     * @param bool                 $update   true to update the amount and the margin
      */
     public function setCategory(Category $category, $update = false): self
     {
@@ -356,6 +356,46 @@ class CalculationGroup extends AbstractEntity
     }
 
     /**
+     * Sorts this items by the alphabetical order of descriptions.
+     *
+     * @return bool true if the order has changed
+     */
+    public function sort(): bool
+    {
+        // items?
+        if ($this->items->count() < 2) {
+            return false;
+        }
+
+        /** @var \ArrayIterator $iterator */
+        $iterator = $this->items->getIterator();
+
+        // first sort
+        $changed = $this->sortItemsIterator($iterator);
+
+        // sort until no change found
+        if ($changed) {
+            do {
+                $dirty = $this->sortItemsIterator($iterator);
+            } while ($dirty);
+        }
+
+        return $changed;
+    }
+
+    /**
+     * Swaps the identifiers.
+     *
+     * @param CalculationGroup $other the other item to swap identifier for
+     */
+    public function swapIds(self $other): void
+    {
+        $oldId = $this->id;
+        $this->id = $other->id;
+        $other->id = $oldId;
+    }
+
+    /**
      * Update amount and margin for this group of items.
      */
     public function update(): self
@@ -371,5 +411,28 @@ class CalculationGroup extends AbstractEntity
         $margin = $this->category->findPercent($amount);
 
         return $this->setAmount($amount)->setMargin($margin);
+    }
+
+    /**
+     * Sorts items of the given iterator.
+     *
+     * @param mixed $iterator the iterator to sort
+     *
+     * @return bool true if sort changed the order
+     *
+     * @see \ArrayIterator::uasort
+     */
+    private function sortItemsIterator($iterator): bool
+    {
+        $changed = false;
+        $iterator->uasort(function (CalculationItem $a, CalculationItem $b) use (&$changed): void {
+            $result = \strcasecmp($a->getDescription(), $b->getDescription());
+            if ($result > 0) {
+                $b->swapValues($a);
+                $changed = true;
+            }
+        });
+
+        return $changed;
     }
 }

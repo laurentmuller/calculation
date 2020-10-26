@@ -7,8 +7,7 @@
 {%- set submit_params = {'disabled': 'disabled'} -%}
 
 {% block card_body %}
-{{ form_row(form.subject) }}
-{{ form_row(form.message) }}
+{{ parent() }}
 <div class="form-group text-right mb-0">
     <a href="https://developers.google.com/recaptcha/intro" target="_blank" rel="noopener noreferrer">reCAPTCHA API</a>
 </div>

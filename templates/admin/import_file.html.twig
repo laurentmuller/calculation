@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block card_body %}
-{{ form_row(form.file) }}
+{{ parent() }}
 {% if last_import -%}
     {%- set date = last_import|localedate('long') -%}
     <p class="mb-0 text-right text-muted small">{{ 'import.last_import'|trans({'%date%': date}) }}</p>

@@ -16,6 +16,7 @@ namespace App\Util;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use Symfony\Component\String\UnicodeString;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -73,17 +74,13 @@ final class Utils
      * 'my first Car' => 'My first car'
      * </pre>
      *
-     * @param string $string   the string to capitalize
-     * @param string $encoding the character encoding
+     * @param string $string the string to capitalize
      *
      * @return string the capitalized string
      */
-    public static function capitalize(string $string, string $encoding = 'UTF-8'): string
+    public static function capitalize(string $string): string
     {
-        $first = \mb_strtoupper(\mb_substr($string, 0, 1, $encoding), $encoding);
-        $other = \mb_strtolower(\mb_substr($string, 1, null, $encoding), $encoding);
-
-        return $first . $other;
+        return (new UnicodeString($string))->lower()->title()->toString();
     }
 
     /**
@@ -127,13 +124,7 @@ final class Utils
      */
     public static function contains(string $haystack, string $needle, bool $ignorecase = false): bool
     {
-        if (empty($needle)) {
-            return false;
-        } elseif ($ignorecase) {
-            return false !== \stripos($haystack, $needle);
-        } else {
-            return false !== \strpos($haystack, $needle);
-        }
+        return self::getString($haystack, $ignorecase)->containsAny($needle);
     }
 
     /**
@@ -149,17 +140,7 @@ final class Utils
      */
     public static function endwith(string $haystack, string $needle, bool $ignorecase = false): bool
     {
-        if (empty($needle)) {
-            return false;
-        }
-
-        $len = \strlen($needle);
-        $pos = \strlen($haystack) - $len;
-        if ($ignorecase) {
-            return \stripos($haystack, $needle, -$len) === $pos;
-        } else {
-            return \strpos($haystack, $needle, -$len) === $pos;
-        }
+        return self::getString($haystack, $ignorecase)->endsWith($needle);
     }
 
     /**
@@ -369,13 +350,7 @@ final class Utils
      */
     public static function startwith(string $haystack, string $needle, bool $ignorecase = false): bool
     {
-        if (empty($needle)) {
-            return false;
-        } elseif ($ignorecase) {
-            return 0 === \stripos($haystack, $needle);
-        } else {
-            return 0 === \strpos($haystack, $needle);
-        }
+        return self::getString($haystack, $ignorecase)->startsWith($needle);
     }
 
     /**
@@ -460,5 +435,23 @@ final class Utils
         }
 
         return false;
+    }
+
+    /**
+     * Creates an unicode string.
+     *
+     * @param string $haystack   the string content
+     * @param bool   $ignorecase true to ignore case considerations
+     *
+     * @return UnicodeString the unicode string
+     */
+    private static function getString(string $haystack, bool $ignorecase): UnicodeString
+    {
+        $string = new UnicodeString($haystack);
+        if ($ignorecase) {
+            return $string->ignoreCase();
+        }
+
+        return $string;
     }
 }

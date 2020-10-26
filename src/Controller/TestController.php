@@ -68,7 +68,7 @@ class TestController extends AbstractController
     }
 
     /**
-     * Export the a HTML page to PDF.
+     * Export a HTML page to PDF.
      *
      * @Route("/html", name="test_html")
      */
@@ -94,9 +94,11 @@ class TestController extends AbstractController
      */
     public function notifications(): Response
     {
+        $application = $this->getApplication();
         $data = [
-            'position' => $this->getApplication()->getMessagePosition(),
-            'timeout' => $this->getApplication()->getMessageTimeout(),
+            'position' => $application->getMessagePosition(),
+            'timeout' => $application->getMessageTimeout(),
+            'subtitle' => $application->isMessageSubTitle(),
         ];
 
         return $this->render('test/notification.html.twig', $data);

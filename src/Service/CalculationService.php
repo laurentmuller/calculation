@@ -145,7 +145,11 @@ final class CalculationService
             $amount = 0.0;
             if (\array_key_exists('items', $group)) {
                 $amount = \array_reduce($group['items'], function (float $carry, array $item) {
-                    return $carry + ($item['price'] * $item['quantity']);
+                    $price = $item['price']; //(float)
+                    $quantity = $item['quantity']; //(float)
+                    $total = $carry + ($price * $quantity);
+
+                    return $total;
                 }, $amount);
             }
 

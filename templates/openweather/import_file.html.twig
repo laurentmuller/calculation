@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block card_body %}
-{{ form_row(form.file) }}
+{{ parent() }}
 <p class="mb-0">{{ 'openweather.import.link'|trans|format(sample, openweathermap)|raw }}</p>
 {% endblock %}
 

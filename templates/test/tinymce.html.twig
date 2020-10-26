@@ -6,8 +6,7 @@
 {%- set cancel_path  = path('homepage') -%}
 
 {% block card_body %}
-{{ form_row(form.email) }}
-{{ form_row(form.message) }}
+{{ parent() }}
 <p class="text-md-right mb-0">
     <a href="https://www.tiny.cloud/docs" target="_blank" rel="noopener noreferrer">Documentation <i class="fas fa-share" aria-hidden="true"></i></a>
 </p>

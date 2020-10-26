@@ -91,11 +91,18 @@ calculation:
         title: Mise à jour des calculations
         description: Permet de mettre à jour le total des calculations.
         closed_label: Mettre à jour toutes les calculations
-        closed_description: Inclus les calculations avec le statut non-modifiables.
+        closed_help: Inclus les calculations avec le statut non-modifiables.
+        sorted_label: Trier les articles
+        sorted_help: Trie les articles par ordre alphabétique.
+        simulated_label: Simuler la mise à jour
+        simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
         last_update: 'Dernière mise à jour : %date%'
-        results: Résultats de la mise à jour.
+    result:
+        description: Résultats de la mise à jour.
+        simulated: La mise à jour a été simulée. Aucune donnée n'a été modifiée dans la base de données.
         updated: Calculations mises à jour
         skipped: Calculations inchangées
+        sorted: Calculations triées
         unmodifiable: Calculations non-modifiables
         total: Total
 calculationgroup:
@@ -625,12 +632,13 @@ parameters:
     description: Définition des paramètres de l'application.
     success: Les paramètres de l'application ont été mis à jour avec succès.
     failure: Impossible d'afficher une notification.
+    customize: Personnaliser
     group_customer: Client
     group_default: Valeurs par défaut
     group_message: Messages
     group_display: Affichage
     group_security: Sécurité
-    group_password: Options du mot de passe
+    group_password: Options du mot de passe    
     action_display: Afficher
     action_test: Tester
     editAction:

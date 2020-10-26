@@ -616,7 +616,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function removeGroup(CalculationGroup $group): self
     {
-        if ($this->groups->contains($group) && $this->groups->removeElement($group)) {
+        if ($this->groups->removeElement($group)) {
             if ($group->getCalculation() === $this) {
                 $group->setCalculation(null);
             }
@@ -724,6 +724,28 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
+     * Sorts groups and items in alphabetical order.
+     *
+     * @return bool true if the order has changed
+     */
+    public function sort(): bool
+    {
+        if ($this->isEmpty()) {
+            return false;
+        }
+
+        // sort items
+        $changed = false;
+        foreach ($this->groups as $group) {
+            if ($group->sort()) {
+                $changed = true;
+            }
+        }
+
+        return $changed;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getSearchTerms(): array
@@ -733,7 +755,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             $this->description,
             $this->localeId($this->id),
             $this->localeDate($this->date),
-            $this->state->getCode(),
+            $this->getStateCode(),
         ];
     }
 }

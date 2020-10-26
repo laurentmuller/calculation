@@ -697,8 +697,8 @@ span.color-value {
 .horizontal-line i {
     font-size: inherit;
     line-height: inherit;
-    /*margin-left: 0.25rem;*/
 }
+
 /**
  * popover for calendar and cross-table
  */

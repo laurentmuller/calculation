@@ -405,7 +405,7 @@ class GeneratorController extends AbstractController
     /**
      * Sort products by category code then by description.
      *
-     * @param Product[] $products
+     * @param Product[] $products the products to sort
      */
     private function sortProducts(array &$products): void
     {

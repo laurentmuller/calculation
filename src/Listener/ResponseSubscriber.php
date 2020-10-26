@@ -88,7 +88,7 @@ class ResponseSubscriber implements EventSubscriberInterface
     private const PDF_TYPE = 'application/pdf';
 
     /**
-     * The Robohash image url.
+     * The Robohash image url (used for user avatar).
      */
     private const ROBOHASH_URL = 'https://robohash.org';
 

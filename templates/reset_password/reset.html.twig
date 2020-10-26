@@ -20,12 +20,6 @@
 {% endif %}
 {% endblock %}
 
-{% block card_body -%}
-{{ form_row(form.plainPassword.first) }}
-{{ form_row(form.plainPassword.second, {attr: {equalTo: '#plainPassword_first'}}) }}
-{{ form_widget(form) }}
-{%- endblock %}
-
 {% block card_footer -%}
 {{ parent() }}
 <hr class="mb-2">

@@ -115,11 +115,11 @@ function displayUrl() {
 
     // toogle icons
     $('.toggle-icon').on('show.bs.collapse', function () {
-        const icon = $(this).prev().children('i');
-        icon.removeClass('fa-caret-right').addClass('fa-caret-down');
+        const icon = $(this).prev().find('i');
+        icon.removeClass('fa-angle-down').addClass('fa-angle-up');
     }).on('hide.bs.collapse', function () {
-        const icon = $(this).prev().children('i');
-        icon.removeClass('fa-caret-down').addClass('fa-caret-right');
+        const icon = $(this).prev().find('i');
+        icon.removeClass('fa-angle-up').addClass('fa-angle-down');
     });
 
     // add handlers

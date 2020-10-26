@@ -19,11 +19,14 @@
 {% endblock %}
 {% endblock %}
 
-
 {% block card_header %}
 {{ parent() -}}
 {{ form_errors(form) }}
 {%- endblock %}
+
+{% block card_body %}
+{{ form_widget(form) }}
+{% endblock %}
 
 {% block card_footer -%}
 <div class="row">

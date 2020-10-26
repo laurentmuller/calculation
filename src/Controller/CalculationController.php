@@ -710,12 +710,31 @@ class CalculationController extends AbstractEntityController
     public function update(Request $request, LoggerInterface $logger): Response
     {
         // create form
-        $helper = $this->createFormHelper();
+        $data = [
+            'closed' => $this->isSessionBool('closed', false),
+            'sorted' => $this->isSessionBool('sorted', true),
+            'simulated' => $this->isSessionBool('simulated', false),
+        ];
+        $helper = $this->createFormHelper(null, $data);
 
         // fields
         $helper->field('closed')
             ->label('calculation.update.closed_label')
-            ->updateOption('help', 'calculation.update.closed_description')
+            ->help('calculation.update.closed_help')
+            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field('sorted')
+            ->label('calculation.update.sorted_label')
+            ->help('calculation.update.sorted_help')
+            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field('simulated')
+            ->label('calculation.update.simulated_label')
+            ->help('calculation.update.simulated_help')
             ->updateHelpAttribute('class', 'ml-4 mb-2')
             ->updateRowAttribute('class', 'mb-0')
             ->notRequired()
@@ -725,10 +744,13 @@ class CalculationController extends AbstractEntityController
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
-            $closed = (bool) $data['closed'];
+            $includeClosed = (bool) $data['closed'];
+            $includeSorted = (bool) $data['sorted'];
+            $isSimulated = (bool) $data['simulated'];
 
             $updated = 0;
             $skipped = 0;
+            $sorted = 0;
             $unmodifiable = 0;
             $suspended = $this->disableListeners();
 
@@ -736,8 +758,15 @@ class CalculationController extends AbstractEntityController
                 /** @var Calculation[] $calculations */
                 $calculations = $this->getRepository()->findAll();
                 foreach ($calculations as $calculation) {
-                    if ($closed || $calculation->isEditable()) {
+                    if ($includeClosed || $calculation->isEditable()) {
+                        $changed = false;
+                        if ($includeSorted && $calculation->sort()) {
+                            $changed = true;
+                            ++$sorted;
+                        }
                         if ($this->calculationService->updateTotal($calculation)) {
+                            ++$updated;
+                        } elseif ($changed) {
                             ++$updated;
                         } else {
                             ++$skipped;
@@ -747,7 +776,7 @@ class CalculationController extends AbstractEntityController
                     }
                 }
 
-                if ($updated > 0) {
+                if ($updated > 0 && !$isSimulated) {
                     $this->getManager()->flush();
                 }
             } finally {
@@ -756,26 +785,36 @@ class CalculationController extends AbstractEntityController
 
             $total = \count($calculations);
 
-            // update last update
-            $this->getApplication()->setProperties([ApplicationServiceInterface::LAST_UPDATE => new \DateTime()]);
+            if (!$isSimulated) {
+                // update last update
+                $this->getApplication()->setProperties([ApplicationServiceInterface::LAST_UPDATE => new \DateTime()]);
 
-            // log results
-            $context = [
-                    $this->trans('calculation.update.updated') => $updated,
-                    $this->trans('calculation.update.skipped') => $skipped,
-                    $this->trans('calculation.update.unmodifiable') => $unmodifiable,
-                    $this->trans('calculation.update.total') => $total,
+                // log results
+                $context = [
+                    $this->trans('calculation.result.updated') => $updated,
+                    $this->trans('calculation.result.sorted') => $sorted,
+                    $this->trans('calculation.result.skipped') => $skipped,
+                    $this->trans('calculation.result.unmodifiable') => $unmodifiable,
+                    $this->trans('calculation.result.total') => $total,
                 ];
-            $message = $this->trans('calculation.update.title');
-            $logger->info($message, $context);
+                $message = $this->trans('calculation.update.title');
+                $logger->info($message, $context);
+            }
 
             // display results
             $data = [
                 'updated' => $updated,
+                'sorted' => $sorted,
                 'skipped' => $skipped,
                 'unmodifiable' => $unmodifiable,
+                'simulated' => $isSimulated,
                 'total' => $total,
             ];
+
+            // save values to session
+            $this->setSessionValue('closed', $includeClosed);
+            $this->setSessionValue('sorted', $includeSorted);
+            $this->setSessionValue('simulated', $isSimulated);
 
             return $this->render('calculation/calculation_result.html.twig', $data);
         }

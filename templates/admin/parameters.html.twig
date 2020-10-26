@@ -1,6 +1,14 @@
 {# See http://symfony.com/doc/current/cookbook/form/form_customization.html#how-to-customize-an-individual-field #}
 {% extends 'cards/card_edit.html.twig' %}
 
+{# macros #}
+{% macro collapseLine(href) %}
+<a class="horizontal-line mt-2" data-toggle="collapse" href="#{{ href }}" role="button" aria-expanded="false" aria-controls="{{ href }}">{{ ('parameters.group_' ~ href)|trans }}
+    <i class="fas fa-fw fa-angle-down"></i>
+</a>
+{% endmacro %}
+
+{# customized fields #}
 {% block _parameters_customer_url_widget -%}
 <div class="input-group">
     {%- set type = type|default('url') -%}
@@ -55,7 +63,7 @@
     </div>
 </div>
 <div class="accordion" id="parent_accordion">
-    <a class="horizontal-line" data-toggle="collapse" href="#message" role="button" aria-expanded="false" aria-controls="message"><i class="fas fa-caret-right"></i>&nbsp;{{ 'parameters.group_message'|trans }}</a>
+    {{ _self.collapseLine('message') }}
     <div class="toggle-icon collapse" id="message" data-parent="#parent_accordion">
         <div class="form-row ml-2 mt-1">
             <div class="col-md-4">
@@ -69,7 +77,7 @@
             </div>
         </div>
     </div>
-    <a class="horizontal-line" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="display"><i class="fas fa-caret-right"></i>&nbsp;{{ 'parameters.group_display'|trans }}</a>
+    {{ _self.collapseLine('display') }}
     <div class="toggle-icon collapse" id="display" data-parent="#parent_accordion">
         <div class="form-row ml-2 mt-1">
             <div class="col">
@@ -96,7 +104,7 @@
         {% endif %}
     </div>
     {% if super_admin %}
-    <a class="horizontal-line" data-toggle="collapse" href="#security" role="button" aria-expanded="false" aria-controls="security"><i class="fas fa-caret-right"></i>&nbsp;{{ 'parameters.group_security'|trans }}</a>
+    {{ _self.collapseLine('security') }}
     <div class="toggle-icon collapse" id="security" data-parent="#parent_accordion">
         <div class="form-row ml-2 mt-1">
             <div class="col-md-6">
@@ -113,7 +121,6 @@
     </div>
     {% endif %}
 </div>
-
 {%- endblock %}
 
 {% block actions_form -%}

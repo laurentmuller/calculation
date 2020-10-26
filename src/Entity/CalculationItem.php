@@ -270,4 +270,30 @@ class CalculationItem extends AbstractEntity
 
         return $this;
     }
+
+    /**
+     * Swaps this values with the given other item.
+     *
+     * @param CalculationItem $other the other item to swap values for
+     */
+    public function swapValues(self $other): void
+    {
+        $this->swapValue($other, 'description');
+        $this->swapValue($other, 'price');
+        $this->swapValue($other, 'quantity');
+        $this->swapValue($other, 'unit');
+    }
+
+    /**
+     * Swap the given property.
+     *
+     * @param self   $other    the other item to swap value for
+     * @param string $property the property name to swap
+     */
+    private function swapValue(self $other, string $property): void
+    {
+        $temp = $this->$property;
+        $this->$property = $other->$property;
+        $other->$property = $temp;
+    }
 }

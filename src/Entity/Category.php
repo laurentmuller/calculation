@@ -248,7 +248,7 @@ class Category extends AbstractEntity
      */
     public function removeMargin(CategoryMargin $margin): self
     {
-        if ($this->margins->contains($margin) && $this->margins->removeElement($margin)) {
+        if ($this->margins->removeElement($margin)) {
             if ($margin->getCategory() === $this) {
                 $margin->setCategory(null);
             }
@@ -264,7 +264,7 @@ class Category extends AbstractEntity
      */
     public function removeProduct(Product $product): self
     {
-        if ($this->products->contains($product) && $this->products->removeElement($product)) {
+        if ($this->products->removeElement($product)) {
             if ($product->getCategory() === $this) {
                 $product->setCategory(null);
             }

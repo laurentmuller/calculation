@@ -29,6 +29,9 @@
             "plainPassword[first]": {
                 password: 3,
                 notEmail: true
+            },
+            "plainPassword[second]": {
+                equalTo: '#plainPassword_first'
             }
         },
         messages: {

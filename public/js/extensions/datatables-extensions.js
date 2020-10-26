@@ -135,7 +135,7 @@ $.fn.extend({
  * Add alert class to processing message
  */
 $.extend($.fn.dataTable.ext.classes, {
-    sProcessing: "dataTables_processing alert alert-primary"
+    sProcessing: "dataTables_processing alert alert-info"
 });
 
 /**

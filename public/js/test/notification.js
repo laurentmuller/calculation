@@ -51,9 +51,6 @@ function notify(type, title, options, clear) {
         console.log(settings);
     };
 
-    // sub-title
-    $('#subtitle').setChecked(options.displaySubtitle);
-
     $('.btn-notify').on('click', function () {
         // type
         const type = $(this).data('type');
@@ -88,9 +85,7 @@ function notify(type, title, options, clear) {
 
         // update checkbox style
         const classname = 'custom-control-input custom-control-' + type;
-        $(":checkbox").each(function () {
-            $(this).attr('class', classname);
-        });
+        $(":checkbox.custom-control-input").attr('class', classname);
     });
 
     // random notification

@@ -27,162 +27,292 @@ use PHPUnit\Framework\TestCase;
  */
 class UtilsTest extends TestCase
 {
-    public function testCapitalize(): void
+    public function getArrayValue(): array
     {
-        $this->assertSame('Home', Utils::capitalize('hOMe'));
-        $this->assertSame('My home', Utils::capitalize('my hOMe'));
+        return [
+            [[], 'fake', null],
+            [[], null, null],
+            [['a'], 'fake', null],
+            [['a'], null, null],
+            [['k' => 'a'], 'k', 'a'],
+            [['k' => 'a'], 'f', 'b', 'b'],
+        ];
     }
 
-    public function testCompare(): void
+    public function getCapitalize(): array
+    {
+        return [
+            ['home', 'Home'],
+            ['hOmE', 'Home'],
+            ['my home', 'My home'],
+            ['my Home', 'My home'],
+            ['my HOME', 'My home'],
+        ];
+    }
+
+    public function getCompare(): array
+    {
+        return [
+            // equal
+            [$this->createData(0, 'd'), $this->createData(0, 'd'), 'value', 0],
+            [$this->createData(0, 'd'), $this->createData(0, 'd'), 'string', 0],
+
+            // equal reverse
+            [$this->createData(0, 'd'), $this->createData(0, 'd'), 'value', 0, false],
+            [$this->createData(0, 'd'), $this->createData(0, 'd'), 'string', 0, false],
+
+            // smaller
+            [$this->createData(0, 'd'), $this->createData(10, 'z'), 'value', -1],
+            [$this->createData(0, 'd'), $this->createData(10, 'z'), 'string', -1],
+
+            // smaller reverse
+            [$this->createData(0, 'd'), $this->createData(10, 'z'), 'value', 1, false],
+            [$this->createData(0, 'd'), $this->createData(10, 'z'), 'string', 1, false],
+
+            // greater
+            [$this->createData(0, 'd'), $this->createData(-10, 'a'), 'value', 1],
+            [$this->createData(0, 'd'), $this->createData(-10, 'a'), 'string', 1],
+
+            // greater reverse
+            [$this->createData(0, 'd'), $this->createData(-10, 'a'), 'value', -1, false],
+            [$this->createData(0, 'd'), $this->createData(-10, 'a'), 'string', -1, false],
+
+            // ignore case
+            [$this->createData(0, 'fake'), $this->createData(0, 'FAKE'), 'string', 0],
+            [$this->createData(0, 'FAKE'), $this->createData(0, 'fake'), 'string', 0],
+        ];
+    }
+
+    public function getContains(): array
+    {
+        return [
+            ['fake', '', false, false],
+            ['before ab after', 'ab', false, true],
+            ['before AB after', 'ab', false, false],
+            ['before AB after', 'ab', true, true],
+        ];
+    }
+
+    public function getEndwith(): array
+    {
+        return [
+            ['fake', '', false, false],
+            ['fake', 'ke', false, true],
+            ['fake', 'KE', false, false],
+            ['fake', 'KE', true, true],
+        ];
+    }
+
+    public function getExportVar(): array
+    {
+        return [
+            [true, 'true'],
+            [false, 'false'],
+            [0, '0'],
+            [0.0, '0.0'],
+            [0.01, '0.01'],
+            [1000, '1000'],
+            ['fake', '"fake"'],
+        ];
+    }
+
+    public function getIsString(): array
+    {
+        return [
+            [null, false],
+            ['', false],
+            ['my home', true],
+        ];
+    }
+
+    public function getShortName(): array
+    {
+        return [
+            [null, null],
+            [self::class, 'UtilsTest'],
+            [Calculation::class, 'Calculation'],
+            [new Calculation(), 'Calculation'],
+            ['invalid argument', null, true],
+        ];
+    }
+
+    public function getStartwith(): array
+    {
+        return [
+            ['fake', '', false, false],
+            ['fake', 'fa', false, true],
+            ['fake', 'FA', false, false],
+            ['fake', 'FA', true, true],
+        ];
+    }
+
+    public function getToFloat(): array
+    {
+        return [
+            [null, 0.0, true],
+            [0, 0.0, true],
+            [1.0, 0, false],
+            ['a', 1, false],
+            [1, 1.0, true],
+        ];
+    }
+
+    public function getToInt(): array
+    {
+        return [
+            [null, 0, true],
+            [0, 0, true],
+            [1.0, 0, false],
+            ['a', 1, false],
+            [1.0, 1, true],
+        ];
+    }
+
+    public function getToString(): array
+    {
+        return [
+            [null, '', true],
+            [0, '0', true],
+            [1.0, '0', false],
+            ['a', '1', false],
+        ];
+    }
+
+    public function testAccessor(): void
     {
         $accessor = Utils::getAccessor();
         $this->assertNotNull($accessor);
-
-        $a = new \stdClass();
-        $a->value = 0;
-        $a->str = 'd';
-
-        $b = new \stdClass();
-        $b->value = 0;
-        $b->str = 'd';
-
-        $this->assertSame(0, Utils::compare($a, $b, 'value', $accessor));
-        $this->assertSame(0, Utils::compare($a, $b, 'str', $accessor));
-        //$this->assertSame(0, Utils::compare($a, $b, 'fake', $accessor));
-
-        $b->value = 10;
-        $b->str = 'z';
-        $this->assertSame(-1, Utils::compare($a, $b, 'value', $accessor));
-        $this->assertSame(1, Utils::compare($a, $b, 'value', $accessor, false));
-        $this->assertSame(-1, Utils::compare($a, $b, 'str', $accessor));
-        $this->assertSame(1, Utils::compare($a, $b, 'str', $accessor, false));
-
-        $b->value = -10;
-        $b->str = 'a';
-        $this->assertSame(1, Utils::compare($a, $b, 'value', $accessor));
-        $this->assertSame(-1, Utils::compare($a, $b, 'value', $accessor, false));
-        $this->assertSame(1, Utils::compare($a, $b, 'str', $accessor));
-        $this->assertSame(-1, Utils::compare($a, $b, 'str', $accessor, false));
-
-        $a->str = 'fake';
-        $b->str = 'FAKE';
-        $this->assertSame(0, Utils::compare($a, $b, 'str', $accessor));
     }
 
-    public function testContains(): void
+    /**
+     * @dataProvider getCapitalize
+     */
+    public function testCapitalize(string $value, string $expected): void
     {
-        $haystack = 'fake';
-        $needle = '';
-        $this->assertFalse(Utils::contains($haystack, $needle));
-
-        $needle = 'ab';
-        $haystack = 'before ab after';
-        $this->assertTrue(Utils::contains($haystack, $needle));
-
-        $haystack = 'before AB after';
-        $this->assertFalse(Utils::contains($haystack, $needle));
-        $this->assertTrue(Utils::contains($haystack, $needle, true));
+        $actual = Utils::capitalize($value);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testEndwith(): void
+    /**
+     * @dataProvider getCompare
+     */
+    public function testCompare(\stdClass $a, \stdClass $b, string $field, int $expected, bool $ascending = true): void
     {
-        $haystack = 'fake';
-        $needle = '';
-        $this->assertFalse(Utils::endwith($haystack, $needle));
-
-        $needle = 'ke';
-        $this->assertTrue(Utils::endwith($haystack, $needle));
-
-        $needle = 'KE';
-        $this->assertTrue(Utils::endwith($haystack, $needle, true));
-
-        $haystack = 'faKe';
-        $this->assertTrue(Utils::endwith($haystack, $needle, true));
+        $accessor = Utils::getAccessor();
+        $actual = Utils::compare($a, $b, $field, $accessor, $ascending);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testExportVar(): void
+    /**
+     * @dataProvider getContains
+     */
+    public function testContains(string $haystack, string $needle, bool $ignorecase, bool $expected): void
     {
-        $this->assertSame('true', Utils::exportVar(true));
-        $this->assertSame('false', Utils::exportVar(false));
-
-        $this->assertSame('0', Utils::exportVar(0));
-        $this->assertSame('1000', Utils::exportVar(1000));
-
-        $this->assertSame('0.0', Utils::exportVar(0.0));
-        $this->assertSame('0.01', Utils::exportVar(0.01));
-
-        $this->assertSame('"fake"', Utils::exportVar('fake'));
+        $actual = Utils::contains($haystack, $needle, $ignorecase);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testGetArrayValue(): void
+    /**
+     * @dataProvider getEndwith
+     */
+    public function testEndwith(string $haystack, string $needle, bool $ignorecase, bool $expected): void
     {
-        $this->assertNull(Utils::getArrayValue([], 'fake'));
-        $this->assertNull(Utils::getArrayValue([], null));
-
-        $this->assertNull(Utils::getArrayValue(['a'], 'fake'));
-        $this->assertNull(Utils::getArrayValue(['a'], null));
-
-        $this->assertSame('a', Utils::getArrayValue(['k' => 'a'], 'k'));
-        $this->assertSame('b', Utils::getArrayValue(['k' => 'a'], 'f', 'b'));
+        $actual = Utils::endwith($haystack, $needle, $ignorecase);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testGetShortName(): void
+    /**
+     * @dataProvider getExportVar
+     */
+    public function testExportVar($var, string $expected): void
     {
-        $this->expectException(\ReflectionException::class);
-        $this->assertNull(Utils::getShortName('aasassa'));
-
-        $this->assertNull(Utils::getShortName(null));
-        $this->assertSame('UtilsTest', Utils::getShortName($this));
-        $this->assertSame('Calculation', Utils::getShortName(Calculation::class));
+        $actual = Utils::exportVar($var);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testIsString(): void
+    /**
+     * @dataProvider getArrayValue
+     */
+    public function testGetArrayValue(array $array, $key, $expected, $default = null): void
     {
-        $this->assertFalse(Utils::isString(null));
-        $this->assertFalse(Utils::isString(''));
-        $this->assertTrue(Utils::isString('a'));
+        $actual = Utils::getArrayValue($array, $key, $default);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testStartwith(): void
+    /**
+     * @dataProvider getShortName
+     */
+    public function testGetShortName($var, $expected, bool $exception = false): void
     {
-        $haystack = 'fake';
-        $needle = '';
-        $this->assertFalse(Utils::startwith($haystack, $needle));
-
-        $needle = 'fa';
-        $this->assertTrue(Utils::startwith($haystack, $needle));
-
-        $needle = 'FA';
-        $this->assertTrue(Utils::startwith($haystack, $needle, true));
-
-        $haystack = 'faKe';
-        $this->assertTrue(Utils::startwith($haystack, $needle, true));
+        if ($exception) {
+            $this->expectException(\ReflectionException::class);
+        }
+        $actual = Utils::getShortName($var);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testToFloat(): void
+    /**
+     * @dataProvider getIsString
+     */
+    public function testIsString(?string $var, bool $expected): void
     {
-        $this->assertSame(0.0, Utils::toFloat(null));
-        $this->assertSame(0.0, Utils::toFloat(0));
-
-        $this->assertNotSame(0, Utils::toFloat(1.0));
-        $this->assertNotSame(1, Utils::toFloat('a'));
+        $actual = Utils::isString($var);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testToInt(): void
+    /**
+     * @dataProvider getStartwith
+     */
+    public function testStartwith(string $haystack, string $needle, bool $ignorecase, bool $expected): void
     {
-        $this->assertSame(0, Utils::toInt(null));
-        $this->assertSame(0, Utils::toInt(0));
-
-        $this->assertNotSame(0, Utils::toInt(1.0));
-        $this->assertNotSame(1, Utils::toInt('a'));
+        $actual = Utils::startwith($haystack, $needle, $ignorecase);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testToString(): void
+    /**
+     * @dataProvider getToFloat
+     */
+    public function testToFloat($var, float $expected, bool $equal): void
     {
-        $this->assertSame('', Utils::toString(null));
-        $this->assertSame('0', Utils::toString(0));
+        $actual = Utils::toFloat($var);
+        if ($equal) {
+            $this->assertEquals($actual, $expected);
+        } else {
+            $this->assertNotEquals($actual, $expected);
+        }
+    }
 
-        $this->assertNotSame(0, Utils::toString(1.0));
-        $this->assertNotSame(1, Utils::toString('a'));
+    /**
+     * @dataProvider getToInt
+     */
+    public function testToInt($var, int $expected, bool $equal): void
+    {
+        $actual = Utils::toInt($var);
+        if ($equal) {
+            $this->assertEquals($actual, $expected);
+        } else {
+            $this->assertNotEquals($actual, $expected);
+        }
+    }
+
+    /**
+     * @dataProvider getToString
+     */
+    public function testToString($var, string $expected, bool $equal): void
+    {
+        $actual = Utils::toString($var);
+        if ($equal) {
+            $this->assertEquals($actual, $expected);
+        } else {
+            $this->assertNotEquals($actual, $expected);
+        }
+    }
+
+    private function createData(int $value, string $string): \stdClass
+    {
+        return (object) [
+            'value' => $value,
+            'string' => $string,
+        ];
     }
 }

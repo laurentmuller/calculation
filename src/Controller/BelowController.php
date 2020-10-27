@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTable\CalculationBelowDataTable;
-use App\Entity\Calculation;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -43,7 +42,7 @@ class BelowController extends AbstractController
     {
         // get values
         $minMargin = $this->getApplication()->getMinMargin();
-        $calculations = $this->getBelowMargin($repository, $minMargin);
+        $calculations = $repository->getBelowMargin($minMargin);
         $selection = $request->get('selection', 0);
         $edit = $this->getApplication()->isEditAction();
 
@@ -71,7 +70,7 @@ class BelowController extends AbstractController
     public function pdf(CalculationRepository $repository): Response
     {
         $minMargin = $this->getApplication()->getMinMargin();
-        $calculations = $this->getBelowMargin($repository, $minMargin);
+        $calculations = $repository->getBelowMargin($minMargin);
         if (empty($calculations)) {
             $this->warningTrans('below.empty');
 
@@ -119,18 +118,5 @@ class BelowController extends AbstractController
         ];
 
         return $this->render('calculation/calculation_table_below.html.twig', $parameters);
-    }
-
-    /**
-     * Gets calculations with the overall margin below the given value.
-     *
-     * @param CalculationRepository $repository the repository
-     * @param float                 $minMargin  the minimum margin
-     *
-     * @return Calculation[] the below calculations
-     */
-    private function getBelowMargin(CalculationRepository $repository, float $minMargin): array
-    {
-        return $repository->getBelowMargin($minMargin);
     }
 }

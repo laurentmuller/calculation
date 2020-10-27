@@ -14,6 +14,24 @@
     $.fn.extend({
 
         /**
+         * Initialize captcha.
+         */
+        initCaptcha() {
+            return this.each(function () {
+                const $that = $(this); 
+                const url = $that.data('refresh');
+                $('#refresh_captcha').on('click', function () {
+                    $.get(url, function (response) {
+                        if (response.result) {
+                            $('#image_captcha').attr('src', response.data);
+                            $that.val('').focus();
+                        }
+                    });
+                });
+            });
+        },
+        
+        /**
          * Gets password strength score or -1 if not found.
          */
         findPasswordScore: function() {

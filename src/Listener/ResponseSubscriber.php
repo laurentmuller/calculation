@@ -33,11 +33,6 @@ use Symfony\Component\Routing\RouterInterface;
 class ResponseSubscriber implements EventSubscriberInterface
 {
     /**
-     * The CSP blob directive.
-     */
-    private const CSP_BLOB = 'blob:';
-
-    /**
      * The CSP data directive.
      */
     private const CSP_DATA = 'data:';
@@ -214,12 +209,12 @@ class ResponseSubscriber implements EventSubscriberInterface
         $csp['script-src-elem'] = [$nonce, $asset, self::CSP_UNSAFE_INLINE, self::ICONIFY_URL];
 
         // self + asset
+        $csp['connect-src'] = [self::CSP_SELF, $asset];
         $csp['frame-src'] = [self::CSP_SELF, self::GOOGLE_FRAME_URL];
-        $csp['connect-src'] = [self::CSP_SELF, $asset]; //, self::CSP_BLOB
         $csp['font-src'] = [self::CSP_SELF, self::GOOGLE_FONT_STATIC_URL, $asset];
-        $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, self::OPEN_WEATHER_URL, self::ROBOHASH_URL, $asset];
         $csp['style-src'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
         $csp['style-src-elem'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
+        $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, self::OPEN_WEATHER_URL, self::ROBOHASH_URL, $asset];
 
         // PDF response
         if ($response instanceof PdfResponse) {

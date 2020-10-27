@@ -30,7 +30,7 @@ class CalculationEmptyReport extends CalculationItemsReports
      */
     public function __construct(AbstractController $controller)
     {
-        parent::__construct($controller, 'calculation.empty.title', 'calculation.empty.description');
+        parent::__construct($controller, 'empty.title', 'empty.description');
     }
 
     /**
@@ -64,6 +64,6 @@ class CalculationEmptyReport extends CalculationItemsReports
      */
     protected function transCount(array $parameters): string
     {
-        return $this->trans('calculation.empty.count', $parameters);
+        return $this->trans('empty.count', $parameters);
     }
 }

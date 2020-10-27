@@ -3,7 +3,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title       = 'calculation.below.title' -%}
+{%- set title       = 'below.title' -%}
 {%- set title_icon  = 'percent' -%}
 {%- set pdf_title   = 'calculation.list.pdf_title' -%}
 {%- set object_type = EntityVoterInterface.ENTITY_CALCULATION -%}
@@ -14,14 +14,14 @@
 {%- set edit_path   = path('calculation_edit', params) -%}
 {%- set delete_path = path('calculation_delete', params) -%}
 {%- set single_path = path('calculation_pdf_id', params) -%}
-{%- set pdf_path    = path('calculation_below_pdf') -%}
+{%- set pdf_path    = path('below_pdf') -%}
 
 {# highlight search #}
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'calculation.below.description'|trans({'%margin%': attributes.min_margin|percent}) }}</p>
+<p class="ml-4 mb-0">{{ 'below.description'|trans({'%margin%': attributes.min_margin|percent}) }}</p>
 {%- endblock %}
 
 {# other actions #}
@@ -30,5 +30,5 @@
 {{ icons.dropdownSeparator() }}
 {{ parent() }}
 {{ icons.dropdownSeparator() }}
-{{ icons.dropdownItemCard('calculation_below') }}
+{{ icons.dropdownItemCard('below_card') }}
 {% endblock %}

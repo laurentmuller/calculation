@@ -19,7 +19,7 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for product controller.
+ * Unit test for {@link App\Controller\ProductController} class.
  *
  * @author Laurent Muller
  */
@@ -65,34 +65,25 @@ class ProductControllerTest extends AbstractControllerTest
         ];
     }
 
-    /**
-     * @dataProvider getRoutes
-     */
-    public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
-    {
-        self::addEntities();
-        $this->checkRoute($url, $username, $expected);
-    }
-
-    private static function addEntities(): void
+    protected function addEntities(): void
     {
         if (null === self::$category) {
             self::$category = new Category();
             self::$category->setCode('Test Category');
-            self::addEntity(self::$category);
+            $this->addEntity(self::$category);
         }
 
         if (null === self::$product) {
             self::$product = new Product();
             self::$product->setDescription('Test Product')
                 ->setCategory(self::$category);
-            self::addEntity(self::$product);
+            $this->addEntity(self::$product);
         }
     }
 
-    private static function deleteEntities(): void
+    protected function deleteEntities(): void
     {
-        self::$product = self::deleteEntity(self::$product);
-        self::$category = self::deleteEntity(self::$category);
+        self::$product = $this->deleteEntity(self::$product);
+        self::$category = $this->deleteEntity(self::$category);
     }
 }

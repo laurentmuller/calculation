@@ -101,6 +101,27 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
+     * Gets calculation by the given date range.
+     *
+     * @param \DateTime $from the start date (inclusive)
+     * @param \DateTime $to   the end date (inclusive)
+     *
+     * @return Calculation[] an array, maybe empty, of calculations
+     */
+    public function getByInterval(\DateTime $from, \DateTime $to): array
+    {
+        $builder = $this->createQueryBuilder('c')
+            ->where('c.date >= :from')
+            ->andWhere('c.date <= :to')
+            ->setParameter('from', $from)
+            ->setParameter('to', $to)
+            ->orderBy('c.date', Criteria::DESC)
+            ->addOrderBy('c.id', Criteria::DESC);
+
+        return $builder->getQuery()->getResult();
+    }
+
+    /**
      * Gets calculations grouped by months.
      *
      * @param int $maxResults the maximum number of results to retrieve (the "limit")

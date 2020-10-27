@@ -14,12 +14,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Calculation;
 use App\Form\Admin\ParametersType;
 use App\Form\FormHelper;
 use App\Form\Type\CaptchaImage;
 use App\Form\Type\MinStrengthType;
 use App\Pdf\PdfResponse;
 use App\Report\HtmlReport;
+use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\CaptchaImageService;
 use App\Service\HttpClientService;
@@ -27,6 +29,8 @@ use App\Service\SearchService;
 use App\Service\SwissPostService;
 use App\Service\ThemeService;
 use App\Translator\TranslatorFactory;
+use App\Util\DateUtils;
+use App\Util\Utils;
 use App\Validator\Captcha;
 use App\Validator\Password;
 use ReCaptcha\ReCaptcha;
@@ -309,6 +313,39 @@ class TestController extends AbstractController
         }
 
         return $this->json($data);
+    }
+
+    /**
+     * Display calculations in a timeline.
+     *
+     * @Route("/timeline", name="test_timeline")
+     */
+    public function timeline(Request $request, CalculationRepository $repository): Response
+    {
+        $to = new \DateTime($request->get('date', 'today'));
+        $interval = $request->get('interval', 'P1W');
+        $from = DateUtils::sub($to, $interval);
+        $calculations = $repository->getByInterval($from, $to);
+
+        $grouped = Utils::groupBy($calculations, function (Calculation $c) {
+            return  $this->localeDate($c->getDate(), \IntlDateFormatter::LONG);
+        });
+
+        $today = new \DateTime('today');
+        $previous = DateUtils::sub($to, $interval);
+        $next = DateUtils::add($to, $interval);
+
+        $parameters = [
+            'date' => $to->format('Y-m-d'),
+            'interval' => $interval,
+            'today' => $today->format('Y-m-d'),
+            'previous' => $previous->format('Y-m-d'),
+            'next' => $next->format('Y-m-d'),
+            'count' => \count($calculations),
+            'data' => $grouped,
+        ];
+
+        return $this->render('test/timeline.html.twig', $parameters);
     }
 
     /**

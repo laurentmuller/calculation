@@ -47,7 +47,7 @@ class CalculationEmptyTableReport extends CalculationItemsTableReport
      */
     public function __construct(AbstractController $controller)
     {
-        parent::__construct($controller, 'calculation.empty.title', 'calculation.empty.description');
+        parent::__construct($controller, 'empty.title', 'empty.description');
         $this->priceLabel = $this->trans('calculationitem.fields.price');
         $this->quantityLabel = $this->trans('calculationitem.fields.quantity');
     }
@@ -87,6 +87,6 @@ class CalculationEmptyTableReport extends CalculationItemsTableReport
      */
     protected function transCount(array $parameters): string
     {
-        return $this->trans('calculation.empty.count', $parameters);
+        return $this->trans('empty.count', $parameters);
     }
 }

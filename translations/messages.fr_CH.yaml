@@ -72,29 +72,14 @@ calculation:
     state:
         newstate: Nouveau statut
         success: Le statut de la calculation Nº <b>%name%</b> a été mis à jour avec succès.
-    duplicate:
-        title: Articles à double
-        description: Calculations contenant le même article plus d'une fois.
-        empty: Aucune calculation ne contient des articles en double.
-        count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
-    empty:
-        title: Articles vides
-        description: Calculations contenant un article avec une quantité ou un prix égale à 0.
-        empty: Aucune calculation ne contient des articles sans quantité ou sans prix.
-        count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
-    below:
-        title: Marges insuffisantes
-        description: Calculations contenant une marge globale inférieure à %margin%.
-        empty: Aucune calculation ne contient une marge globale insuffisante.
-        count: 'Nombre de calculations : %calculations%'
     update:
         title: Mise à jour des calculations
         description: Permet de mettre à jour le total des calculations.
-        closed_label: Mettre à jour toutes les calculations
+        closed: Mettre à jour toutes les calculations
         closed_help: Inclus les calculations avec le statut non-modifiables.
-        sorted_label: Trier les articles
+        sorted: Trier les articles
         sorted_help: Trie les articles par ordre alphabétique.
-        simulated_label: Simuler la mise à jour
+        simulated: Simuler la mise à jour
         simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
         last_update: 'Dernière mise à jour : %date%'
     result:
@@ -638,7 +623,7 @@ parameters:
     group_message: Messages
     group_display: Affichage
     group_security: Sécurité
-    group_password: Options du mot de passe    
+    group_password: Options du mot de passe
     action_display: Afficher
     action_test: Tester
     editAction:
@@ -932,3 +917,25 @@ generate:
     fields:
         entity: Objet à générer
         count: Nombre
+timeline:
+    title: Chronologie
+    date: Date
+    period: Période
+    today: Période actuelle
+    previous: Période précédente
+    next: Période suivante
+duplicate:
+    title: Articles à double
+    description: Calculations contenant le même article plus d'une fois.
+    empty: Aucune calculation ne contient des articles en double.
+    count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
+below:
+    title: Marges insuffisantes
+    description: Calculations contenant une marge globale inférieure à %margin%.
+    empty: Aucune calculation ne contient une marge globale insuffisante.
+    count: 'Nombre de calculations : %calculations%'
+empty:
+    title: Articles vides
+    description: Calculations contenant un article avec une quantité ou un prix égale à 0.
+    empty: Aucune calculation ne contient des articles sans quantité ou sans prix.
+    count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'

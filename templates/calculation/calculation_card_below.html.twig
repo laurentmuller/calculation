@@ -16,9 +16,9 @@
 {%- endmacro %}
 
 {# parameters #}
-{%- set title        = 'calculation.below.title' -%}
+{%- set title        = 'below.title' -%}
 {%- set title_icon   = 'percent' -%}
-{%- set empty_list   = 'calculation.below.empty' -%}
+{%- set empty_list   = 'below.empty' -%}
 {%- set caller       = path(app.request.get('_route')) -%}
 
 {# actions #}
@@ -29,17 +29,17 @@
 {%- set clone_page   = false -%}
 
 {% block search_action %}
-{{ icons.linkTable('calculation_below_table') }}
+{{ icons.linkTable('below_table') }}
 {% endblock %}
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'calculation.below.description'|trans({'%margin%': min_margin|percent}) }}</p>
-{% if items|length %}<p class="ml-4 mb-0">{{ 'calculation.below.count'|trans({'%calculations%': items|length}) }}</p>{% endif %}
+<p class="ml-4 mb-0">{{ 'below.description'|trans({'%margin%': min_margin|percent}) }}</p>
+{% if items|length %}<p class="ml-4 mb-0">{{ 'below.count'|trans({'%calculations%': items|length}) }}</p>{% endif %}
 {%- endblock %}
 
 {%- block card_footer_class '' -%}
 {% block card_footer -%}
 {{ icons.homepage() }}
-{% if items|length %}{{ icons.button_pdf('calculation_below_pdf') }}{% endif %}
+{% if items|length %}{{ icons.button_pdf('below_pdf') }}{% endif %}
 {%- endblock %}

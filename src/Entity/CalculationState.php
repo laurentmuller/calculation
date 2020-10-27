@@ -170,10 +170,8 @@ class CalculationState extends AbstractEntity
 
     /**
      * Set code.
-     *
-     * @param string $code
      */
-    public function setCode(?string $code): self
+    public function setCode(string $code): self
     {
         $this->code = $this->trim($code);
 

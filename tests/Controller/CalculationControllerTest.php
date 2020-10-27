@@ -17,10 +17,9 @@ namespace App\Tests\Controller;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for calculation controller.
+ * Unit test for {@link App\Controller\CalculationController} class.
  *
  * @author Laurent Muller
  */
@@ -40,22 +39,6 @@ class CalculationControllerTest extends AbstractControllerTest
             ['/calculation/table', self::ROLE_USER],
             ['/calculation/table', self::ROLE_ADMIN],
             ['/calculation/table', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/duplicate', self::ROLE_ADMIN],
-            ['/calculation/duplicate', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/duplicate/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/duplicate/table', self::ROLE_ADMIN],
-            ['/calculation/duplicate/table', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/empty', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/empty', self::ROLE_ADMIN],
-            ['/calculation/empty', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/empty/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/empty/table', self::ROLE_ADMIN],
-            ['/calculation/empty/table', self::ROLE_SUPER_ADMIN],
 
             ['/calculation/add', self::ROLE_USER],
             ['/calculation/add', self::ROLE_ADMIN],
@@ -88,54 +71,21 @@ class CalculationControllerTest extends AbstractControllerTest
             ['/calculation/pdf', self::ROLE_USER],
             ['/calculation/pdf', self::ROLE_ADMIN],
             ['/calculation/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/below', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/below', self::ROLE_ADMIN],
-            ['/calculation/below', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/below/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/below/table', self::ROLE_ADMIN],
-            ['/calculation/below/table', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/duplicate', self::ROLE_ADMIN],
-            ['/calculation/duplicate', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/duplicate/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/duplicate/table', self::ROLE_ADMIN],
-            ['/calculation/duplicate/table', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/empty', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/empty', self::ROLE_ADMIN],
-            ['/calculation/empty', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/empty/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/empty/table', self::ROLE_ADMIN],
-            ['/calculation/empty/table', self::ROLE_SUPER_ADMIN],
         ];
     }
 
-    /**
-     * @dataProvider getRoutes
-     */
-    public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
-    {
-        self::addEntities();
-        $this->checkRoute($url, $username, $expected);
-    }
-
-    private static function addEntities(): void
+    protected function addEntities(): void
     {
         if (null === self::$state) {
             self::$state = new CalculationState();
             self::$state->setCode('Test State');
-            self::addEntity(self::$state);
+            $this->addEntity(self::$state);
         }
 
         if (null === self::$category) {
             self::$category = new Category();
             self::$category->setCode('Test Category');
-            self::addEntity(self::$category);
+            $this->addEntity(self::$category);
         }
 
         if (null === self::$calculation) {
@@ -143,14 +93,14 @@ class CalculationControllerTest extends AbstractControllerTest
             self::$calculation->setCustomer('Test Customer')
                 ->setDescription('Test Description')
                 ->setState(self::$state);
-            self::addEntity(self::$calculation);
+            $this->addEntity(self::$calculation);
         }
     }
 
-    private static function deleteEntities(): void
+    protected function deleteEntities(): void
     {
-        self::$calculation = self::deleteEntity(self::$calculation);
-        self::$category = self::deleteEntity(self::$category);
-        self::$state = self::deleteEntity(self::$state);
+        self::$calculation = $this->deleteEntity(self::$calculation);
+        self::$category = $this->deleteEntity(self::$category);
+        self::$state = $this->deleteEntity(self::$state);
     }
 }

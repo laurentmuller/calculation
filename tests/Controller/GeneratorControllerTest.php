@@ -20,7 +20,7 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for generator controller.
+ * Unit test for {@link App\Controller\GeneratorController} class.
  *
  * @author Laurent Muller
  */
@@ -55,27 +55,18 @@ class GeneratorControllerTest extends AbstractControllerTest
         ];
     }
 
-    /**
-     * @dataProvider getRoutes
-     */
-    public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
-    {
-        self::addEntities();
-        $this->checkRoute($url, $username, $expected);
-    }
-
-    private static function addEntities(): void
+    protected function addEntities(): void
     {
         if (null === self::$state) {
             self::$state = new CalculationState();
             self::$state->setCode('Test Code');
-            self::addEntity(self::$state);
+            $this->addEntity(self::$state);
         }
 
         if (null === self::$category) {
             self::$category = new Category();
             self::$category->setCode('Test Category');
-            self::addEntity(self::$category);
+            $this->addEntity(self::$category);
         }
 
         if (null === self::$products) {
@@ -83,20 +74,20 @@ class GeneratorControllerTest extends AbstractControllerTest
                 $product = new Product();
                 $product->setDescription("Test Product $i")
                     ->setCategory(self::$category);
-                self::addEntity($product);
+                $this->addEntity($product);
                 self::$products[] = $product;
             }
         }
     }
 
-    private static function deleteEntities(): void
+    protected function deleteEntities(): void
     {
         foreach (self::$products as $product) {
-            self::deleteEntity($product);
+            $this->deleteEntity($product);
         }
         self::$products = null;
 
-        self::$category = self::deleteEntity(self::$category);
-        self::$state = self::deleteEntity(self::$state);
+        self::$category = $this->deleteEntity(self::$category);
+        self::$state = $this->deleteEntity(self::$state);
     }
 }

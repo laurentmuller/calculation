@@ -75,14 +75,14 @@
                     {{- icons.dropdownItem(path('search'), 'search.title', 'search') -}}
                     {% if is_admin %}
                     {{- icons.dropdownSeparator -}}
-                	{{- icons.dropdownItem(path('calculation_update'), 'calculation.update.title', 'pencil-alt') -}}
+                	{{- icons.dropdownItem(path('admin_update'), 'calculation.update.title', 'pencil-alt') -}}
                     {{- icons.dropdownSeparator -}}
-                    {%- set href = is_tabular ? path('calculation_below_table') : path('calculation_below')  -%}
-                    {{- icons.dropdownItem(href, 'calculation.below.title', 'percent') -}}
-                    {%- set href = is_tabular ? path('calculation_duplicate_table') : path('calculation_duplicate')  -%}
-                    {{- icons.dropdownItem(href, 'calculation.duplicate.title', 'copy far') -}}
-                    {%- set href = is_tabular ? path('calculation_empty_table') : path('calculation_empty')  -%}
-                    {{- icons.dropdownItem(href, 'calculation.empty.title', 'file-code far') -}}
+                    {%- set href = is_tabular ? path('below_table') : path('below_card')  -%}
+                    {{- icons.dropdownItem(href, 'below.title', 'percent') -}}
+                    {%- set href = is_tabular ? path('duplicate_table') : path('duplicate_card')  -%}
+                    {{- icons.dropdownItem(href, 'duplicate.title', 'copy far') -}}
+                    {%- set href = is_tabular ? path('empty_table') : path('empty_card')  -%}
+                    {{- icons.dropdownItem(href, 'empty.title', 'file-code far') -}}
                     {% endif -%}
                 </div>
     		</li>
@@ -111,6 +111,7 @@
                     {{- icons.dropdownItem(path('test_notifications'), 'test.notification', 'bell far') -}}
                     {{- icons.dropdownItem(path('test_tinymce'), 'test.tinymce', 'edit') -}}
                     {{- icons.dropdownItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) -}}
+                    {{- icons.dropdownItem(path('test_timeline'), 'timeline.title', 'stream') -}}
                     {{- icons.dropdownItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') -}}
                     {{- icons.dropdownItem(path('test_translate'), 'translator.title', 'globe') -}}
                     {{- icons.dropdownItemExternal(path('test_html'), 'test.html', 'code') -}}

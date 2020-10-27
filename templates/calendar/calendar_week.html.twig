@@ -62,7 +62,7 @@
             {% if not day.empty %}
             <tbody>
                 {% for calculation in day.calculations -%}
-                     {{ helper.dataRow(calculation,'text-cell') -}}
+                     {{ helper.dataRow(calculation, 'text-cell') -}}
                 {%- endfor %}
             </tbody>
             {% endif %}
@@ -70,7 +70,6 @@
     {%- endfor %}
     </div>    
 </div>
-
 {% endblock %}
 
 {% block stylesheets -%}

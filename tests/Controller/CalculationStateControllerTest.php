@@ -18,7 +18,7 @@ use App\Entity\CalculationState;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for calculation state controller.
+ * Unit test for {@link App\Controller\CalculationStateController} class.
  *
  * @author Laurent Muller
  */
@@ -59,28 +59,17 @@ class CalculationStateControllerTest extends AbstractControllerTest
         ];
     }
 
-    /**
-     * @dataProvider getRoutes
-     */
-    public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
-    {
-        self::addEntities();
-        $this->assertNotNull(self::$entity);
-        $this->assertEquals(1, self::$entity->getId());
-        $this->checkRoute($url, $username, $expected);
-    }
-
-    private static function addEntities(): void
+    protected function addEntities(): void
     {
         if (null === self::$entity) {
             self::$entity = new CalculationState();
             self::$entity->setCode('Test Code');
-            self::addEntity(self::$entity);
+            $this->addEntity(self::$entity);
         }
     }
 
-    private static function deleteEntities(): void
+    protected function deleteEntities(): void
     {
-        self::$entity = self::deleteEntity(self::$entity);
+        self::$entity = $this->deleteEntity(self::$entity);
     }
 }

@@ -30,7 +30,7 @@ class CalculationDuplicateTableReport extends CalculationItemsTableReport
      */
     public function __construct(AbstractController $controller)
     {
-        parent::__construct($controller, 'calculation.duplicate.title', 'calculation.duplicate.description');
+        parent::__construct($controller, 'duplicate.title', 'duplicate.description');
     }
 
     /**
@@ -64,6 +64,6 @@ class CalculationDuplicateTableReport extends CalculationItemsTableReport
      */
     protected function transCount(array $parameters): string
     {
-        return $this->trans('calculation.duplicate.count', $parameters);
+        return $this->trans('duplicate.count', $parameters);
     }
 }

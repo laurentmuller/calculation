@@ -17,7 +17,7 @@
 {% macro icon2(icon, text, domain = null, parameters = []) -%}
 {%- if icon -%}
     {% if 'fa-fw' in icon -%}
-        {% set size = 'data-width="1.5rem" data-height="1rem"' %}
+        {% set size = 'data-width="1.5rem" data-height="1rem" hAlign="left"' %}
     {%- endif %}    
     {%- if 'fab' in icon -%}
         {%- set prefix = 'fa-brands:' -%}

@@ -72,6 +72,13 @@ abstract class AuthenticateWebTestCase extends WebTestCase
         ]);
     }
 
+    /**
+     * Checks the given URL.
+     *
+     * @param string $url      the URL to be tested
+     * @param string $username the user name to login
+     * @param int    $expected the expected result
+     */
     protected function checkResponse(string $url, string $username, int $expected): void
     {
         $response = $this->client->getResponse();
@@ -85,6 +92,14 @@ abstract class AuthenticateWebTestCase extends WebTestCase
         \printf($format, \htmlspecialchars($name), $value);
     }
 
+    /**
+     * Loads an user from the database.
+     *
+     * @param string $username the user name to search for
+     * @param bool   $verify   true to check if the user is not null
+     *
+     * @return User|null the user, if found; null otherwise
+     */
     protected function loadUser(string $username, bool $verify = true): ?User
     {
         /** @var UserRepository $repository */
@@ -101,11 +116,24 @@ abstract class AuthenticateWebTestCase extends WebTestCase
         return $user;
     }
 
+    /**
+     * Login the given user.
+     *
+     * @param User   $user     the user to login
+     * @param string $firewall the firewall name
+     */
     protected function loginUser(User $user, string $firewall = 'main'): void
     {
         $this->client->loginUser($user, $firewall);
     }
 
+    /**
+     * Login the given user name.
+     *
+     * @param string $username the user name to login
+     * @param bool   $verify   true to check if the user is not null
+     * @param string $firewall the firewall name
+     */
     protected function loginUserName(string $username, bool $verify = true, string $firewall = 'main'): User
     {
         $user = $this->loadUser($username, $verify);

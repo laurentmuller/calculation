@@ -3,7 +3,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title       = 'calculation.empty.title' -%}
+{%- set title       = 'empty.title' -%}
 {%- set title_icon  = 'file-code far' -%}
 {%- set pdf_title   = 'calculation.list.pdf_title' -%}
 {%- set object_type = EntityVoterInterface.ENTITY_CALCULATION -%}
@@ -15,15 +15,15 @@
 {%- set show_path   = path('calculation_show', params) -%}
 {%- set edit_path   = path('calculation_edit', params) -%}
 {%- set delete_path = path('calculation_delete', params) -%}
-{%- set pdf_path    = path('calculation_empty_pdf') -%}
+{%- set pdf_path    = path('empty_pdf') -%}
 {%- set single_path = path('calculation_pdf_id', params) -%}
 
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'calculation.empty.description'|trans }}</p>
+<p class="ml-4 mb-0">{{ 'empty.description'|trans }}</p>
 {% if attributes.itemsCount > 0 and results.data|length > 0 -%}
-<p class="ml-4 mb-0">{{ 'calculation.empty.count'|trans({'%calculations%': results.recordsTotal, '%items%': attributes.itemsCount}) }}</p>
+<p class="ml-4 mb-0">{{ 'empty.count'|trans({'%calculations%': results.recordsTotal, '%items%': attributes.itemsCount}) }}</p>
 {%- endif %}
 {%- endblock %}
 
@@ -33,5 +33,5 @@
 {{ icons.dropdownSeparator() }}
 {{ parent() }}
 {{ icons.dropdownSeparator() }}
-{{ icons.dropdownItemCard('calculation_empty') }}
+{{ icons.dropdownItemCard('empty_card') }}
 {% endblock %}

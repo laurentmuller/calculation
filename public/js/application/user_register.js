@@ -5,13 +5,7 @@
  */
 (function ($) {
     'use strict';
-
-    // initialize password strength meter
-    $("#plainPassword_first").initPasswordStrength({
-        userField: "#username"
-    });
-    
-    
+        
     // initialize captcha
     if ($('#_captcha').length) {
         const url = $('#_captcha').data('refresh');
@@ -24,6 +18,11 @@
             });
         });
     }
+
+    // initialize password strength meter
+    $("#plainPassword_first").initPasswordStrength({
+        userField: "#username"
+    });
 
     // initialize validator
     const message = $("#edit-form").data("equal_to");

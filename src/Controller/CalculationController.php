@@ -14,25 +14,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\CalculationBelowDataTable;
 use App\DataTable\CalculationDataTable;
-use App\DataTable\CalculationDuplicateDataTable;
-use App\DataTable\CalculationEmptyDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\Category;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
-use App\Interfaces\ApplicationServiceInterface;
-use App\Listener\CalculationListener;
-use App\Listener\TimestampableListener;
 use App\Pdf\PdfResponse;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotFieldFactory;
 use App\Pivot\PivotTable;
 use App\Pivot\PivotTableFactory;
-use App\Report\CalculationDuplicateTableReport;
-use App\Report\CalculationEmptyTableReport;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
@@ -40,10 +32,8 @@ use App\Repository\CalculationStateRepository;
 use App\Service\CalculationService;
 use App\Service\SpreadsheetService;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\EventManager;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -107,95 +97,95 @@ class CalculationController extends AbstractEntityController
         return $this->editEntity($request, $item, $parameters);
     }
 
-    /**
-     * Find calculations where margins is below the minimum.
-     *
-     * @Route("/below", name="calculation_below")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function belowCard(Request $request): Response
-    {
-        // get values
-        $minMargin = $this->getApplication()->getMinMargin();
-        $calculations = $this->getBelowMargin($minMargin);
-        $selection = $request->get('selection', 0);
-        $edit = $this->getApplication()->isEditAction();
+//     /**
+//      * Find calculations where margins is below the minimum.
+//      *
+//      * @Route("/below", name="calculation_below")
+//      * @IsGranted("ROLE_ADMIN")
+//      */
+//     public function belowCard(Request $request): Response
+//     {
+//         // get values
+//         $minMargin = $this->getApplication()->getMinMargin();
+//         $calculations = $this->getBelowMargin($minMargin);
+//         $selection = $request->get('selection', 0);
+//         $edit = $this->getApplication()->isEditAction();
 
-        // parameters
-        $parameters = [
-            'items' => $calculations,
-            'items_count' => \count($calculations),
-            'min_margin' => $minMargin,
-            'query' => false,
-            'selection' => $selection,
-            'sortField' => 'id',
-            'sortMode' => Criteria::DESC,
-            'sortFields' => [],
-            'edit' => $edit,
-        ];
+//         // parameters
+//         $parameters = [
+//             'items' => $calculations,
+//             'items_count' => \count($calculations),
+//             'min_margin' => $minMargin,
+//             'query' => false,
+//             'selection' => $selection,
+//             'sortField' => 'id',
+//             'sortMode' => Criteria::DESC,
+//             'sortFields' => [],
+//             'edit' => $edit,
+//         ];
 
-        return $this->render('calculation/calculation_card_below.html.twig', $parameters);
-    }
+//         return $this->render('calculation/calculation_card_below.html.twig', $parameters);
+//     }
 
-    /**
-     * Report calculations where margins is below the minimum.
-     *
-     * @Route("/below/pdf", name="calculation_below_pdf")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function belowPdf(): Response
-    {
-        $minMargin = $this->getApplication()->getMinMargin();
-        $calculations = $this->getBelowMargin($minMargin);
-        if (empty($calculations)) {
-            $this->warningTrans('calculation.below.empty');
+//     /**
+//      * Report calculations where margins is below the minimum.
+//      *
+//      * @Route("/below/pdf", name="calculation_below_pdf")
+//      * @IsGranted("ROLE_ADMIN")
+//      */
+//     public function belowPdf(): Response
+//     {
+//         $minMargin = $this->getApplication()->getMinMargin();
+//         $calculations = $this->getBelowMargin($minMargin);
+//         if (empty($calculations)) {
+//             $this->warningTrans('calculation.below.empty');
 
-            return  $this->redirectToHomePage();
-        }
+//             return  $this->redirectToHomePage();
+//         }
 
-        $percent = $this->localePercent($minMargin);
-        $description = $this->trans('calculation.below.description', ['%margin%' => $percent]);
+//         $percent = $this->localePercent($minMargin);
+//         $description = $this->trans('calculation.below.description', ['%margin%' => $percent]);
 
-        $report = new CalculationsReport($this);
-        $report->setCalculations($calculations)
-            ->setTitleTrans('calculation.below.title')
-            ->setDescription($description);
+//         $report = new CalculationsReport($this);
+//         $report->setCalculations($calculations)
+//             ->setTitleTrans('calculation.below.title')
+//             ->setDescription($description);
 
-        return $this->renderDocument($report);
-    }
+//         return $this->renderDocument($report);
+//     }
 
-    /**
-     * Find calculations where margins is below the minimum.
-     *
-     * @Route("/below/table", name="calculation_below_table")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function belowTable(Request $request, CalculationBelowDataTable $table): Response
-    {
-        $results = $table->handleRequest($request);
-        if ($table->isCallback()) {
-            return $this->json($results);
-        }
+//     /**
+//      * Find calculations where margins is below the minimum.
+//      *
+//      * @Route("/below/table", name="calculation_below_table")
+//      * @IsGranted("ROLE_ADMIN")
+//      */
+//     public function belowTable(Request $request, CalculationBelowDataTable $table): Response
+//     {
+//         $results = $table->handleRequest($request);
+//         if ($table->isCallback()) {
+//             return $this->json($results);
+//         }
 
-        // get values
-        $margin = $this->getApplication()->getMinMargin();
-        $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => $this->localePercent($margin)]);
+//         // get values
+//         $margin = $this->getApplication()->getMinMargin();
+//         $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => $this->localePercent($margin)]);
 
-        $attributes = [
-            'min_margin' => $margin,
-            'min_margin_text' => $margin_text,
-            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
-        ];
+//         $attributes = [
+//             'min_margin' => $margin,
+//             'min_margin_text' => $margin_text,
+//             'edit-action' => \json_encode($this->getApplication()->isEditAction()),
+//         ];
 
-        // parameters
-        $parameters = [
-            'results' => $results,
-            'attributes' => $attributes,
-            'columns' => $table->getColumns(),
-        ];
+//         // parameters
+//         $parameters = [
+//             'results' => $results,
+//             'attributes' => $attributes,
+//             'columns' => $table->getColumns(),
+//         ];
 
-        return $this->render('calculation/calculation_table_below.html.twig', $parameters);
-    }
+//         return $this->render('calculation/calculation_table_below.html.twig', $parameters);
+//     }
 
     /**
      * List the calculations.
@@ -256,92 +246,6 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Find duplicate items in the calculations.
-     *
-     * @Route("/duplicate", name="calculation_duplicate")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function duplicateCard(Request $request): Response
-    {
-        $calculations = $this->getDuplicateItems();
-        $selection = $request->get('selection', 0);
-        $edit = $this->getApplication()->isEditAction();
-
-        // number of items
-        $items_count = \array_reduce($calculations, function (float $carry, array $calculation) {
-            foreach ($calculation['items'] as $item) {
-                $carry += $item['count'];
-            }
-
-            return $carry;
-        }, 0);
-
-        // parameters
-        $parameters = [
-            'items' => $calculations,
-            'items_count' => $items_count,
-            'query' => false,
-            'selection' => $selection,
-            'sortField' => 'id',
-            'sortMode' => Criteria::DESC,
-            'sortFields' => [],
-            'edit' => $edit,
-        ];
-
-        return $this->render('calculation/calculation_card_duplicate.html.twig', $parameters);
-    }
-
-    /**
-     * Report for duplicate items in the calculations.
-     *
-     * @Route("/duplicate/pdf", name="calculation_duplicate_pdf")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function duplicatePdf(): Response
-    {
-        $items = $this->getDuplicateItems();
-        if (empty($items)) {
-            $this->warningTrans('calculation.duplicate.empty');
-
-            return  $this->redirectToHomePage();
-        }
-
-        $report = new CalculationDuplicateTableReport($this);
-        $report->setItems($items);
-
-        return $this->renderDocument($report);
-    }
-
-    /**
-     * Display the duplicate items in the calculations.
-     *
-     * @Route("/duplicate/table", name="calculation_duplicate_table")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function duplicateTable(Request $request, CalculationDuplicateDataTable $table): Response
-    {
-        $results = $table->handleRequest($request);
-        if ($table->isCallback()) {
-            return $this->json($results);
-        }
-
-        // attributes
-        $attributes = [
-            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
-            'itemsCount' => $table->getItemCounts(),
-        ];
-
-        // parameters
-        $parameters = [
-            'results' => $results,
-            'attributes' => $attributes,
-            'columns' => $table->getColumns(),
-        ];
-
-        return $this->render('calculation/calculation_table_duplicate.html.twig', $parameters);
-    }
-
-    /**
      * Edit a calculation.
      *
      * @Route("/edit/{id}", name="calculation_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
@@ -351,88 +255,6 @@ class CalculationController extends AbstractEntityController
         $parameters = ['overall_below' => $this->isMarginBelow($item)];
 
         return $this->editEntity($request, $item, $parameters);
-    }
-
-    /**
-     * Find empty items in the calculations. Items are empty if the price or the quantity is equal to 0.
-     *
-     * @Route("/empty", name="calculation_empty")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function emptyCard(Request $request): Response
-    {
-        $calculations = $this->getEmptyItems();
-        $selection = $request->get('selection', 0);
-        $edit = $this->getApplication()->isEditAction();
-
-        // number of items
-        $items_count = \array_reduce($calculations, function (float $carry, array $calculation) {
-            return $carry + \count($calculation['items']);
-        }, 0);
-
-        // parameters
-        $parameters = [
-            'items' => $calculations,
-            'items_count' => $items_count,
-            'query' => false,
-            'selection' => $selection,
-            'sortField' => 'id',
-            'sortMode' => Criteria::DESC,
-            'sortFields' => [],
-            'edit' => $edit,
-        ];
-
-        return $this->render('calculation/calculation_card_empty.html.twig', $parameters);
-    }
-
-    /**
-     * Report for empty items in the calculations.
-     *
-     * @Route("/empty/pdf", name="calculation_empty_pdf")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function emptyPdf(): Response
-    {
-        $items = $this->getEmptyItems();
-        if (empty($items)) {
-            $this->warningTrans('calculation.empty.empty');
-
-            return  $this->redirectToHomePage();
-        }
-
-        $report = new CalculationEmptyTableReport($this);
-        $report->setItems($items);
-
-        return $this->renderDocument($report);
-    }
-
-    /**
-     * Display the duplicate items in the calculations.
-     *
-     * @Route("/empty/table", name="calculation_empty_table")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function emptyTable(Request $request, CalculationEmptyDataTable $table): Response
-    {
-        $results = $table->handleRequest($request);
-        if ($table->isCallback()) {
-            return $this->json($results);
-        }
-
-        // attributes
-        $attributes = [
-            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
-            'itemsCount' => $table->getItemCounts(),
-        ];
-
-        // parameters
-        $parameters = [
-            'results' => $results,
-            'attributes' => $attributes,
-            'columns' => $table->getColumns(),
-        ];
-
-        return $this->render('calculation/calculation_table_empty.html.twig', $parameters);
     }
 
     /**
@@ -702,131 +524,6 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Update calculation totals.
-     *
-     * @Route("/update", name="calculation_update", methods={"GET", "POST"})
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function update(Request $request, LoggerInterface $logger): Response
-    {
-        // create form
-        $data = [
-            'closed' => $this->isSessionBool('closed', false),
-            'sorted' => $this->isSessionBool('sorted', true),
-            'simulated' => $this->isSessionBool('simulated', false),
-        ];
-        $helper = $this->createFormHelper(null, $data);
-
-        // fields
-        $helper->field('closed')
-            ->label('calculation.update.closed_label')
-            ->help('calculation.update.closed_help')
-            ->updateHelpAttribute('class', 'ml-4 mb-2')
-            ->notRequired()
-            ->addCheckboxType();
-
-        $helper->field('sorted')
-            ->label('calculation.update.sorted_label')
-            ->help('calculation.update.sorted_help')
-            ->updateHelpAttribute('class', 'ml-4 mb-2')
-            ->notRequired()
-            ->addCheckboxType();
-
-        $helper->field('simulated')
-            ->label('calculation.update.simulated_label')
-            ->help('calculation.update.simulated_help')
-            ->updateHelpAttribute('class', 'ml-4 mb-2')
-            ->updateRowAttribute('class', 'mb-0')
-            ->notRequired()
-            ->addCheckboxType();
-
-        // handle request
-        $form = $helper->createForm();
-        if ($this->handleRequestForm($request, $form)) {
-            $data = $form->getData();
-            $includeClosed = (bool) $data['closed'];
-            $includeSorted = (bool) $data['sorted'];
-            $isSimulated = (bool) $data['simulated'];
-
-            $updated = 0;
-            $skipped = 0;
-            $sorted = 0;
-            $unmodifiable = 0;
-            $suspended = $this->disableListeners();
-
-            try {
-                /** @var Calculation[] $calculations */
-                $calculations = $this->getRepository()->findAll();
-                foreach ($calculations as $calculation) {
-                    if ($includeClosed || $calculation->isEditable()) {
-                        $changed = false;
-                        if ($includeSorted && $calculation->sort()) {
-                            $changed = true;
-                            ++$sorted;
-                        }
-                        if ($this->calculationService->updateTotal($calculation)) {
-                            ++$updated;
-                        } elseif ($changed) {
-                            ++$updated;
-                        } else {
-                            ++$skipped;
-                        }
-                    } else {
-                        ++$unmodifiable;
-                    }
-                }
-
-                if ($updated > 0 && !$isSimulated) {
-                    $this->getManager()->flush();
-                }
-            } finally {
-                $this->enableListeners($suspended);
-            }
-
-            $total = \count($calculations);
-
-            if (!$isSimulated) {
-                // update last update
-                $this->getApplication()->setProperties([ApplicationServiceInterface::LAST_UPDATE => new \DateTime()]);
-
-                // log results
-                $context = [
-                    $this->trans('calculation.result.updated') => $updated,
-                    $this->trans('calculation.result.sorted') => $sorted,
-                    $this->trans('calculation.result.skipped') => $skipped,
-                    $this->trans('calculation.result.unmodifiable') => $unmodifiable,
-                    $this->trans('calculation.result.total') => $total,
-                ];
-                $message = $this->trans('calculation.update.title');
-                $logger->info($message, $context);
-            }
-
-            // display results
-            $data = [
-                'updated' => $updated,
-                'sorted' => $sorted,
-                'skipped' => $skipped,
-                'unmodifiable' => $unmodifiable,
-                'simulated' => $isSimulated,
-                'total' => $total,
-            ];
-
-            // save values to session
-            $this->setSessionValue('closed', $includeClosed);
-            $this->setSessionValue('sorted', $includeSorted);
-            $this->setSessionValue('simulated', $isSimulated);
-
-            return $this->render('calculation/calculation_result.html.twig', $data);
-        }
-
-        // display
-        return $this->render('calculation/calculation_update.html.twig', [
-            'last_update' => $this->getApplication()->getLastUpdate(),
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @param Calculation $item
@@ -912,59 +609,6 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Disabled doctrine event listeners.
-     *
-     * @return array an array containing the event names and listerners
-     */
-    private function disableListeners(): array
-    {
-        $suspended = [];
-        $manager = $this->getEventManager();
-        $allListeners = $manager->getListeners();
-        foreach ($allListeners as $event => $listeners) {
-            foreach ($listeners as $listener) {
-                if ($listener instanceof TimestampableListener
-                    || $listener instanceof CalculationListener) {
-                    $suspended[$event][] = $listener;
-                    $manager->removeEventListener($event, $listener);
-                }
-            }
-        }
-
-        return $suspended;
-    }
-
-    /**
-     * Enabled doctrine event listeners.
-     *
-     * @param array $suspended the event names and listeners to activate
-     */
-    private function enableListeners(array $suspended): void
-    {
-        $manager = $this->getEventManager();
-        foreach ($suspended as $event => $listeners) {
-            foreach ($listeners as $listener) {
-                $manager->addEventListener($event, $listener);
-            }
-        }
-    }
-
-    /**
-     * Gets calculations with the overall margin below the given value.
-     *
-     * @param float $minMargin the minimum margin
-     *
-     * @return Calculation[] the below calculations
-     */
-    private function getBelowMargin(float $minMargin): array
-    {
-        /** @var \App\Repository\CalculationRepository $repository */
-        $repository = $this->getRepository();
-
-        return $repository->getBelowMargin($minMargin);
-    }
-
-    /**
      * Gets the categories.
      *
      * @return Category[]
@@ -975,38 +619,6 @@ class CalculationController extends AbstractEntityController
         $repository = $this->getManager()->getRepository(Category::class);
 
         return $repository->getList();
-    }
-
-    /**
-     * Gets the duplicate items.
-     */
-    private function getDuplicateItems(): array
-    {
-        /** @var \App\Repository\CalculationRepository $repository */
-        $repository = $this->getRepository();
-
-        return $repository->getDuplicateItems();
-    }
-
-    /**
-     * Gets the empty items.
-     */
-    private function getEmptyItems(): array
-    {
-        /** @var \App\Repository\CalculationRepository $repository */
-        $repository = $this->getRepository();
-
-        return $repository->getEmptyItems();
-    }
-
-    /**
-     * Gets the doctrine event manager.
-     *
-     * @return EventManager the event manager
-     */
-    private function getEventManager(): EventManager
-    {
-        return $this->getManager()->getEventManager();
     }
 
     /**

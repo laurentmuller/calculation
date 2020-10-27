@@ -17,7 +17,7 @@ namespace App\Tests\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for user controller.
+ * Unit test for {@link App\Controller\UserController} class.
  *
  * @author Laurent Muller
  */
@@ -72,13 +72,5 @@ class UserControllerTest extends AbstractControllerTest
             ['/user/pdf', self::ROLE_ADMIN],
             ['/user/pdf', self::ROLE_SUPER_ADMIN],
         ];
-    }
-
-    /**
-     * @dataProvider getRoutes
-     */
-    public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
-    {
-        $this->checkRoute($url, $username, $expected);
     }
 }

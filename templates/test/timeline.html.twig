@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+{% import 'calendar/_calendar.html.twig' as helper %}
+
+{# macros #}
+{% macro addInterval(value, count, message, selection) -%}
+    {%- set text = message|trans({count: count}) -%}
+    <option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text }}</option>
+{%- endmacro %}
+
+{% macro navigate(date, interval, icon, title) -%}
+{% if date %}
+    {% set class = 'btn btn-secondary btn-' ~  title|split('.')[1] %}
+    {% set href = url('test_timeline', {'date': date, 'interval': interval}) %}
+    {{ icons.link(href, null, class, icon, title) }}
+ {% endif %}
+{%- endmacro %}
+
+{# parameters #}
+{%- set title = 'timeline.title' -%}
+{%- set route = display_tabular() ? 'calculation_table' : 'calculation_list' -%}    
+
+{# body #}
+{% block body -%}
+<form action="{{ path('test_timeline') }}">
+    <div class="row">
+        <div class="col">
+            <div class="form-inline">
+                <h4>{{ title|trans }}</h4>
+            </div>
+        </div>
+        <div class="col-auto pr-2">
+            <div class="form-inline">
+                <label for="date" class="mr-2">{{ 'timeline.date'|trans }}</label>
+                <input id="date" name="date" type="date" class="form-control form-control-sm" value="{{ date }}">
+            </div>
+        </div>
+        <div class="col-auto pr-2 pl-1">
+            <div class="form-inline">
+                <label for="interval" class="mr-2">{{ 'timeline.period'|trans }}</label>
+                <select id="interval" name="interval" class="form-control form-control-sm custom-select custom-select-sm">
+                    {{ _self.addInterval('P1W', 1, 'counters.weeks', interval) }}
+                    {{ _self.addInterval('P2W', 2, 'counters.weeks', interval) }}
+                    {{ _self.addInterval('P3W', 3, 'counters.weeks', interval) }}
+                    {{ _self.addInterval('P1M', 1, 'counters.months', interval) }}
+                    {{ _self.addInterval('P2M', 2, 'counters.months', interval) }}
+                    {{ _self.addInterval('P3M', 3, 'counters.months', interval) }}
+                </select>
+            </div>
+        </div>
+        <div class="col-auto pl-1">
+            <div class="form-inline">
+                <div class="btn-group btn-group-sm mr-2" role="group">
+                    <button class="btn btn-primary" type="submit" title="{{ 'common.button_refresh'|trans }}">
+                        {{ icons.icon('sync') }}
+                    </button>
+               </div>
+               <div class="btn-group btn-group-sm" role="group">
+                    {{ _self.navigate(previous, interval, 'chevron-left', 'timeline.previous') }}
+                    {{ _self.navigate(today, interval, 'arrows-alt', 'timeline.today') }}
+                    {{ _self.navigate(next, interval, 'chevron-right', 'timeline.next') }}
+                </div>
+            </div>
+        </div>        
+    </div>
+</form>
+<hr class="mb-0 mt-2">
+{% if data|length %}
+    <div class="row">
+        <div class="col">
+            <ul class="timeline">
+                {% for key, calculations in data %}
+                    <li class="success">
+                        {% set query = calculations[0].date|localedate('short')  %}
+                        <a href="{{ path(route, {'query': query}) }}">{{ key }}</a>
+                        <span class="float-right small">{{ 'counters.calculations'|trans({'count': calculations|length}) }}</span>
+                        <hr class="my-0">
+                        <table class="table table-sm table-borderless">
+                            <tbody>
+                            {% for calculation in calculations %}
+                                {{ helper.dataRow(calculation, 'text-cell') -}}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-warning mt-2" role="alert">{{ 'calculation.list.empty'|trans }}</div>
+{% endif %}
+{%- endblock %}
+
+{% block stylesheets -%}
+{{ asset_css('css/timeline.css') }}
+{% endblock %}
+
+{% block javascripts -%}
+{{- parent() }}
+{{ asset_js('js/test/timeline.js') }}
+{% endblock %}

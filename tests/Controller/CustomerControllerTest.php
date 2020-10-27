@@ -18,7 +18,7 @@ use App\Entity\Customer;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for customer controller.
+ * Unit test for {@link App\Controller\CustomerController} class.
  *
  * @author Laurent Muller
  */
@@ -59,26 +59,17 @@ class CustomerControllerTest extends AbstractControllerTest
         ];
     }
 
-    /**
-     * @dataProvider getRoutes
-     */
-    public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
-    {
-        self::addEntities();
-        $this->checkRoute($url, $username, $expected);
-    }
-
-    private static function addEntities(): void
+    protected function addEntities(): void
     {
         if (null === self::$entity) {
             self::$entity = new Customer();
             self::$entity->setCompany('Test Company');
-            self::addEntity(self::$entity);
+            $this->addEntity(self::$entity);
         }
     }
 
-    private static function deleteEntities(): void
+    protected function deleteEntities(): void
     {
-        self::$entity = self::deleteEntity(self::$entity);
+        self::$entity = $this->deleteEntity(self::$entity);
     }
 }

@@ -9,9 +9,9 @@
 {%- endmacro %}
 
 {# parameters #}
-{%- set title        = 'calculation.duplicate.title' -%}
+{%- set title        = 'duplicate.title' -%}
 {%- set title_icon   = 'copy far' -%}
-{%- set empty_list   = 'calculation.duplicate.empty' -%}
+{%- set empty_list   = 'duplicate.empty' -%}
 {%- set caller       = path(app.request.get('_route')) -%}
 
 {# actions #}
@@ -23,13 +23,13 @@
 {%- set col_span     = 1 -%}
 
 {% block search_action %}
-{{ icons.linkTable('calculation_duplicate_table') }}
+{{ icons.linkTable('duplicate_table') }}
 {% endblock %}
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'calculation.duplicate.description'|trans }}</p>
-{% if items|length %}<p class="ml-4 mb-0">{{ 'calculation.duplicate.count'|trans({'%calculations%': items|length, '%items%': items_count}) }}</p>{% endif %}
+<p class="ml-4 mb-0">{{ 'duplicate.description'|trans }}</p>
+{% if items|length %}<p class="ml-4 mb-0">{{ 'duplicate.count'|trans({'%calculations%': items|length, '%items%': items_count}) }}</p>{% endif %}
 {%- endblock %}
 
 {% block calculation_properties -%}
@@ -39,5 +39,5 @@
 {%- block card_footer_class '' -%}
 {% block card_footer -%}
 {{ icons.homepage() }}
-{% if items|length %}{{- icons.button_pdf('calculation_duplicate_pdf') }}{% endif %}
+{% if items|length %}{{- icons.button_pdf('duplicate_pdf') }}{% endif %}
 {%- endblock %}

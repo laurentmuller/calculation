@@ -220,7 +220,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @param Category $category the category to find
      * @param bool     $create   true to create a group if not found
      *
-     * @return CalculationGroup|null the group, if found; null otherwise
+     * @return CalculationGroup|null the group, if found or created; null otherwise
      */
     public function findGroup(Category $category, bool $create = false): ?CalculationGroup
     {

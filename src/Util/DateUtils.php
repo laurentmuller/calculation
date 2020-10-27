@@ -58,6 +58,23 @@ final class DateUtils
     }
 
     /**
+     * Retuns a new date with the given interval added.
+     *
+     * @param \DateTime            $date     the date
+     * @param \DateInterval|string $interval the interval to add
+     *
+     * @return \DateTime the new date
+     */
+    public static function add(\DateTime $date, $interval): \DateTime
+    {
+        if (\is_string($interval)) {
+            $interval = new \DateInterval($interval);
+        }
+
+        return (clone $date)->add($interval);
+    }
+
+    /**
      * Complete the give year with four digits.
      * For example, if year is set with 2 digits (10); the return value will be 2010.
      *
@@ -167,6 +184,23 @@ final class DateUtils
         }
 
         return self::$weekNames;
+    }
+
+    /**
+     * Retuns a new date with the given interval subtracted.
+     *
+     * @param \DateTime            $date     the date
+     * @param \DateInterval|string $interval the interval to subtract
+     *
+     * @return \DateTime the new date
+     */
+    public static function sub(\DateTime $date, $interval): \DateTime
+    {
+        if (\is_string($interval)) {
+            $interval = new \DateInterval($interval);
+        }
+
+        return (clone $date)->sub($interval);
     }
 
     /**

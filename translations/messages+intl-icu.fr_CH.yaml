@@ -14,5 +14,9 @@ counters:
     weather_forecast: '{count, plural, =0 {Aucune prévision horaire} one {Prévisions à 1 heure} other {Prévisions à # heures}}'
     weather_cities: '{count, plural, =0 {Aucune localité ne correspond aux critères de recherche.} one {1 localité correspond aux critères de recherche.} other {# localités correspond aux critères de recherche.}}'
     hours: '{count, plural, =0 {0 heure} one {1 heure} other {# heures}}'
+    weeks: '{count, plural, =0 {0 semaine} one {1 semaine} other {# semaines}}'
+    months: '{count, plural, =0 {0 mois} one {1 mois} other {# mois}}'
+    years: '{count, plural, =0 {0 année} one {1 année} other {# années}}'
     customers_generate: '{count, plural, =0 {Aucun client n''a été généré.} one {1 client a été généré avec succès.} other {# clients ont été générés avec succès.}}'
     customers_update: '{count, plural, =0 {Aucun client n''a été mis à jour avec succès.} one {1 client a été mis à jour avec succès.} other {# clients ont été mis à jour avec succès.}}'
+    

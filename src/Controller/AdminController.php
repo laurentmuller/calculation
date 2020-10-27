@@ -14,14 +14,21 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Calculation;
 use App\Entity\Role;
 use App\Form\Admin\ParametersType;
+use App\Form\FormHelper;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
+use App\Listener\CalculationListener;
+use App\Listener\TimestampableListener;
+use App\Repository\CalculationRepository;
 use App\Security\EntityVoter;
+use App\Service\CalculationService;
 use App\Service\SwissPostService;
 use App\Util\SymfonyUtils;
+use Doctrine\Common\EventManager;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -198,6 +205,103 @@ class AdminController extends AbstractController
     }
 
     /**
+     * Update calculation totals.
+     *
+     * @Route("/update", name="admin_update", methods={"GET", "POST"})
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function update(Request $request, CalculationRepository $repository, CalculationService $service, LoggerInterface $logger): Response
+    {
+        // create form helper
+        $helper = $this->createUpdateHelper();
+
+        // handle request
+        $form = $helper->createForm();
+        if ($this->handleRequestForm($request, $form)) {
+            $data = $form->getData();
+            $includeClosed = (bool) $data['closed'];
+            $includeSorted = (bool) $data['sorted'];
+            $isSimulated = (bool) $data['simulated'];
+
+            $updated = 0;
+            $skipped = 0;
+            $sorted = 0;
+            $unmodifiable = 0;
+            $suspended = $this->disableListeners();
+
+            try {
+                /** @var Calculation[] $calculations */
+                $calculations = $repository->findAll();
+                foreach ($calculations as $calculation) {
+                    if ($includeClosed || $calculation->isEditable()) {
+                        $changed = false;
+                        if ($includeSorted && $calculation->sort()) {
+                            $changed = true;
+                            ++$sorted;
+                        }
+                        if ($service->updateTotal($calculation)) {
+                            ++$updated;
+                        } elseif ($changed) {
+                            ++$updated;
+                        } else {
+                            ++$skipped;
+                        }
+                    } else {
+                        ++$unmodifiable;
+                    }
+                }
+
+                if ($updated > 0 && !$isSimulated) {
+                    $this->getManager()->flush();
+                }
+            } finally {
+                $this->enableListeners($suspended);
+            }
+
+            $total = \count($calculations);
+
+            if (!$isSimulated) {
+                // update last update
+                $this->getApplication()->setProperties([ApplicationServiceInterface::LAST_UPDATE => new \DateTime()]);
+
+                // log results
+                $context = [
+                    $this->trans('calculation.result.updated') => $updated,
+                    $this->trans('calculation.result.sorted') => $sorted,
+                    $this->trans('calculation.result.skipped') => $skipped,
+                    $this->trans('calculation.result.unmodifiable') => $unmodifiable,
+                    $this->trans('calculation.result.total') => $total,
+                ];
+                $message = $this->trans('calculation.update.title');
+                $logger->info($message, $context);
+            }
+
+            // display results
+            $data = [
+                'updated' => $updated,
+                'sorted' => $sorted,
+                'skipped' => $skipped,
+                'unmodifiable' => $unmodifiable,
+                'simulated' => $isSimulated,
+                'total' => $total,
+            ];
+
+            // save values to session
+            $this->setSessionValue('closed', $includeClosed);
+            $this->setSessionValue('sorted', $includeSorted);
+            $this->setSessionValue('simulated', $isSimulated);
+
+            return $this->render('calculation/calculation_result.html.twig', $data);
+        }
+
+        // display
+        return $this->render('calculation/calculation_update.html.twig', [
+            'last_update' => $this->getApplication()->getLastUpdate(),
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * Edit rights for the user role ('ROLE_USER').
      *
      * @Route("/rights/user", name="admin_rights_user")
@@ -212,6 +316,65 @@ class AdminController extends AbstractController
         $property = ApplicationServiceInterface::USER_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);
+    }
+
+    /**
+     * Creates the form helper and add fields for the update calculations.
+     */
+    private function createUpdateHelper(): FormHelper
+    {
+        // create form
+        $data = [
+            'closed' => $this->isSessionBool('closed', false),
+            'sorted' => $this->isSessionBool('sorted', true),
+            'simulated' => $this->isSessionBool('simulated', false),
+        ];
+        $helper = $this->createFormHelper('calculation.update.', $data);
+
+        // fields
+        $helper->field('closed')
+            ->help('calculation.update.closed_help')
+            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field('sorted')
+            ->help('calculation.update.sorted_help')
+            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field('simulated')
+            ->help('calculation.update.simulated_help')
+            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->updateRowAttribute('class', 'mb-0')
+            ->notRequired()
+            ->addCheckboxType();
+
+        return $helper;
+    }
+
+    /**
+     * Disabled doctrine event listeners.
+     *
+     * @return array an array containing the event names and listerners
+     */
+    private function disableListeners(): array
+    {
+        $suspended = [];
+        $manager = $this->getEventManager();
+        $allListeners = $manager->getListeners();
+        foreach ($allListeners as $event => $listeners) {
+            foreach ($listeners as $listener) {
+                if ($listener instanceof TimestampableListener
+                    || $listener instanceof CalculationListener) {
+                    $suspended[$event][] = $listener;
+                    $manager->removeEventListener($event, $listener);
+                }
+            }
+        }
+
+        return $suspended;
     }
 
     /**
@@ -250,5 +413,30 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
             'default' => $default,
         ]);
+    }
+
+    /**
+     * Enabled doctrine event listeners.
+     *
+     * @param array $suspended the event names and listeners to activate
+     */
+    private function enableListeners(array $suspended): void
+    {
+        $manager = $this->getEventManager();
+        foreach ($suspended as $event => $listeners) {
+            foreach ($listeners as $listener) {
+                $manager->addEventListener($event, $listener);
+            }
+        }
+    }
+
+    /**
+     * Gets the doctrine event manager.
+     *
+     * @return EventManager the event manager
+     */
+    private function getEventManager(): EventManager
+    {
+        return $this->getManager()->getEventManager();
     }
 }

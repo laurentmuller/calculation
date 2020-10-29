@@ -27,9 +27,7 @@
 {% block stylesheets -%}
 {{ asset_css('css/style.css') }}
 {% endblock %}
-{#  icons
-{{ asset_js('js/vendor/iconify/iconify.js') }}
-#}
+{#  {{ asset_js('js/vendor/iconify/iconify.js') }} #}
 </head>
 <body>
 {# navigation #}
@@ -45,7 +43,7 @@
 {# footer #}
 {% block footer -%}{% include 'footer.html.twig' %}{%- endblock %}
 {# java scripts #}
-<noscript>Your browser does not support JavaScript!</noscript>
+<noscript>{{ 'common.no_script_support'|trans }}</noscript>
 {% block javascripts -%}
 {% if app.debug %}
 {{ asset_js('js/vendor/jquery/jquery.js') }}

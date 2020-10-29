@@ -7,8 +7,8 @@
 {%- set colspan = colspan|default(2) -%}
 <tbody>
     <th class="h font-weight-normal" colspan="{{ colspan }}">
-        <a data-toggle="collapse" href="#{{ target }}" class="card-link" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
-        <span class="text-muted small align-text-top"> ({{ count|integer }})</span>        
+        <a data-toggle="collapse" href="#{{ target }}" class="card-link ml-1" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
+        <span class="text-muted small align-text-top"> ({{ count|integer }})</span>
     </th>
 </tbody>
 {%- endmacro %}
@@ -33,12 +33,12 @@
 
 {% macro rowPackage(package) -%}
 {% import 'macros/_icons.html.twig' as icons %}
-<tr{% if package.dev %} class="font-italic text-muted"{% endif -%}>
+<tr>
     <td class="e pl-3">
-        {{ package.name }}{%- if package.homepage %}&nbsp;{{- icons.linkExternal(package.homepage, '', '', 'share', 'about.extern_link') -}}{% endif -%}
+        {{ package.name }}{%- if package.homepage %}&nbsp;{{- icons.linkExternal(package.homepage, '', 'd-print-none', 'share', 'about.extern_link') -}}{% endif -%}
     </td>
     <td class="f">{{ package.version }}</td>
-    <td class="text">{{ package.description }}{%- if package.dev %} (Development mode only){% endif -%}</td>
+    <td class="text">{{ package.description }}</td>
 </tr>
 {%- endmacro %}
 

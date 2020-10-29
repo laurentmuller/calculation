@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Util\Utils;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Document\Properties;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -26,7 +27,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\String\UnicodeString;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -220,7 +220,6 @@ class SpreadsheetService
         if (isset($properties[self::P_COMPANY])) {
             $this->setCompany($properties[self::P_COMPANY]);
         }
-        //->setKeywords("office 2007 openxml php")
         if (isset($properties[self::P_PAGE_SIZE])) {
             $this->setPageSize($properties[self::P_PAGE_SIZE]);
         } else {
@@ -738,7 +737,7 @@ class SpreadsheetService
     {
         $title = $this->title ?? 'export';
         $name = $title . '.' . \strtolower($writerType);
-        $encoded = (new UnicodeString($name))->ascii()->toString();
+        $encoded = Utils::ascii($name);
         $writer = IOFactory::createWriter($this->getSpreadsheet(), $writerType);
         $disposition = $inline ? HeaderUtils::DISPOSITION_INLINE : HeaderUtils::DISPOSITION_ATTACHMENT;
 

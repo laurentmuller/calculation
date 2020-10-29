@@ -67,6 +67,14 @@ final class Utils
     }
 
     /**
+     * Converts the given string to ASCII transliteration.
+     */
+    public static function ascii(string $value): string
+    {
+        return (new UnicodeString($value))->ascii()->toString();
+    }
+
+    /**
      * Capitalizes a string.
      *
      * The first character will be uppercase, all others lowercase:

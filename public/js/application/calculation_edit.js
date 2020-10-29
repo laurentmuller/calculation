@@ -665,11 +665,16 @@ var Application = {
     getDialogItem: function () {
         'use strict';
 
+        const price = $('#item_price').floatVal();
+        const quantity = $('#item_quantity').floatVal();
+        const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
+
         return {
             description: $('#item_description').val(),
             unit: $('#item_unit').val(),
-            price: $('#item_price').val(),
-            quantity: $('#item_quantity').val()
+            price: price,
+            quantity: quantity,
+            total: total
         };
 
     },
@@ -717,7 +722,7 @@ var Application = {
         $rows.sort(function (rowA, rowB) {
             const textA = $('td:first', rowA).text();
             const textB = $('td:first', rowB).text();
-            return textA.localeCompare(textB);
+            return textA.localeCompare(textB, 'fr-ch');
         }).appendTo($tbody);
         
         // update identifiers
@@ -1214,16 +1219,16 @@ $.fn.extend({
         // update inputs
         $row.findNamedInput('description').val(item.description);
         $row.findNamedInput('unit').val(item.unit);
-        $row.findNamedInput('price').val(item.price);
-        $row.findNamedInput('quantity').val(item.quantity);
-        $row.findNamedInput('total').val(item.price * item.quantity);
+        $row.findNamedInput('price').floatVal(item.price);
+        $row.findNamedInput('quantity').floatVal(item.quantity);
+        $row.findNamedInput('total').floatVal(item.total);
 
         // update cells
         $row.find('td:eq(0) .btn-edit-item').text(item.description);
         $row.find('td:eq(1)').text(item.unit);
         $row.find('td:eq(2)').text(Application.toLocaleString(item.price));
         $row.find('td:eq(3)').text(Application.toLocaleString(item.quantity));
-        $row.find('td:eq(4)').text(Application.toLocaleString(item.price * item.quantity));
+        $row.find('td:eq(4)').text(Application.toLocaleString(item.total));
 
         return $row;
     },

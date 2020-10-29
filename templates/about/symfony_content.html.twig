@@ -37,53 +37,65 @@
         {{ tools.headerInfo("Configuration") }}
     </table>
 
-    {# bundles #}
-    {% if bundles|length %}
-    <table id="data-table-bundles" class="table table-hover table-sm mb-0">
-        {{ tools.headerLinkInfo('Bundles', 'bundles', bundles|length) }}
-        <tbody class="collapse" id="bundles">
-            {% for bundle in bundles %}
-                {{ tools.rowInfo(bundle.name, bundle.path, 'pl-3') }}
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
-
-    {# packages #}
-    {% if packages|length %}
-    <table id="data-table-packages" class="table table-hover table-sm mb-0">
-        {{ tools.headerLinkInfo('Packages', 'packages', packages|length, 3) }}
-        <tbody class="collapse" id="packages">
-            {% for package in packages %}
-                {{ tools.rowPackage(package) }}
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
-
-    {# routes #}
-    {% if routes|length or routes.symfony|length %}
-    {# application routes #}
-    {% if routes.application|length %}
-        <table id="data-table-routes" class="table table-hover table-sm mb-0">
-            {{ tools.headerLinkInfo('Routes', 'application_routes', routes.application|length) }}
-            <tbody class="collapse" id="application_routes">
-                {% for route in routes.application %}
-                    {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
+    <div class="accordion" id="symfonyAccordion">
+        {# bundles #}
+        {% if bundles|length %}
+        <table id="data-table-bundles" class="table table-hover table-sm mb-0">
+            {{ tools.headerLinkInfo('Bundles', 'bundles', bundles|length) }}
+            <tbody class="collapse" id="bundles" data-parent="#symfonyAccordion">
+                {% for bundle in bundles %}
+                    {{ tools.rowInfo(bundle.name, bundle.path, 'pl-3') }}
                 {% endfor %}
             </tbody>
         </table>
-    {% endif %}
-    {# symfony routes #}
-    {% if routes.symfony|length %}
-        <table id="data-table-routes-dev" class="table table-hover table-sm mb-0">
-            {{ tools.headerLinkInfo('Debug Routes', 'symfony_routes', routes.symfony|length) }}
-            <tbody class="collapse" id="symfony_routes">
-                {% for route in routes.symfony %}
-                    {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
+        {% endif %}
+        
+        {# rumtime packages #}
+        {% if runtimePackages|length %}
+        <table id="data-table-runtime-packages" class="table table-hover table-sm mb-0">
+            {{ tools.headerLinkInfo('Packages', 'runtime-packages', runtimePackages|length, 3) }}
+            <tbody class="collapse" id="runtime-packages" data-parent="#symfonyAccordion">
+                {% for package in runtimePackages %}
+                    {{ tools.rowPackage(package) }}
                 {% endfor %}
             </tbody>
         </table>
-    {% endif %}
-    {% endif %}
+        {% endif %}    
+             
+        {# debug packages #}
+        {% if debugPackages|length %}
+        <table id="data-table-development-packages" class="table table-hover table-sm mb-0">
+            {{ tools.headerLinkInfo('Debug Packages', 'development-packages', debugPackages|length, 3) }}
+            <tbody class="collapse" id="development-packages" data-parent="#symfonyAccordion">
+                {% for package in debugPackages %}
+                    {{ tools.rowPackage(package) }}
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        
+        {# runtime routes #}
+        {% if runtimeRoutes|length %}
+            <table id="data-table-routes" class="table table-hover table-sm mb-0">
+                {{ tools.headerLinkInfo('Routes', 'application-routes', runtimeRoutes|length) }}
+                <tbody class="collapse" id="application-routes" data-parent="#symfonyAccordion">
+                    {% for route in runtimeRoutes %}
+                        {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        
+        {# debug routes #}
+        {% if debugRoutes|length %}
+            <table id="data-table-routes-dev" class="table table-hover table-sm mb-0">
+                {{ tools.headerLinkInfo('Debug Routes', 'symfony-routes', debugRoutes|length) }}
+                <tbody class="collapse" id="symfony-routes" data-parent="#symfonyAccordion">
+                    {% for route in debugRoutes %}
+                        {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+     </div>   
 </div>

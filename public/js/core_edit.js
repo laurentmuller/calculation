@@ -12,9 +12,8 @@
 <!--#include file="vendor/jquery-validate/additional-methods.js" -->
 <!--#include file="vendor/jquery-validate/localization/messages_fr.js" -->
 
-
 /**
- * Plugin Files
+ * Extensions
  */
-<!--#include file="plugins/plugin-validator.js" -->
-<!--#include file="plugins/plugin-validator_fr.js" -->
+<!--#include file="extensions/validator-extensions.js" -->
+<!--#include file="extensions/validator-extensions-fr.js" -->

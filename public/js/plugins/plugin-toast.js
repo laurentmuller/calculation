@@ -480,7 +480,7 @@
             let clazz = 'mr-2 mt-1 fas fa-lg fa-';
             switch (options.type) {
             case this.NotificationTypes.INFO:
-                clazz += 'question-circle';
+                clazz += 'info-circle';
                 break;
             case this.NotificationTypes.SUCCESS:
                 clazz += 'check-circle';

@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Traits\MathTrait;
+use App\Util\Utils;
 use Fpdf\Fpdf;
 use Symfony\Component\HttpFoundation\HeaderUtils;
-use Symfony\Component\String\UnicodeString;
 
 /**
  * PDF document with default header and footer.
@@ -528,8 +528,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
         } else {
             $name = \basename($name);
         }
-
-        $encoded = (new UnicodeString($name))->ascii()->toString();
+        $encoded = Utils::ascii($name);
 
         if ($inline) {
             $type = 'application/pdf';

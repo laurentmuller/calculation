@@ -401,6 +401,7 @@ common:
     top_of_page: Haut de la page
     id: Numéro
     empty: ''
+    no_script_support: Votre navigateur ne supporte pas JavaScript !
 environment:
     dev: Développement
     prod: Production

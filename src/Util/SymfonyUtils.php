@@ -227,16 +227,18 @@ final class SymfonyUtils
 
         // parse
         $content = \json_decode(\file_get_contents($path), true);
-        $packages = self::processPackages($content['packages']);
+
+        // runtime packages
+        $result = [
+            'runtime' => self::processPackages($content['packages'], false),
+        ];
+
+        //development packages
         if ($kernel->isDebug()) {
-            $devPackages = self::processPackages($content['packages-dev'], true);
-            $packages = \array_merge($packages, $devPackages);
+            $result['debug'] = self::processPackages($content['packages-dev'], true);
         }
 
-        // sort
-        \ksort($packages);
-
-        return $packages;
+        return $result;
     }
 
     /**
@@ -358,18 +360,18 @@ final class SymfonyUtils
             ];
 
             if (\in_array($name, self::$BUILT_IN_ROUTES, true)) {
-                $result['symfony'][$name] = $route;
+                $result['debug'][$name] = $route;
             } else {
-                $result['application'][$name] = $route;
+                $result['runtime'][$name] = $route;
             }
         }
 
         // sort
-        if (!empty($result['symfony'])) {
-            \ksort($result['symfony']);
+        if (!empty($result['runtime'])) {
+            \ksort($result['runtime']);
         }
-        if (!empty($result['application'])) {
-            \ksort($result['application']);
+        if (!empty($result['debug'])) {
+            \ksort($result['debug']);
         }
 
         return $result;
@@ -409,11 +411,11 @@ final class SymfonyUtils
      * Process the given packages.
      *
      * @param array $packages the packages to process
-     * @param bool  $isDev    true if packahes are requiered onyl for development mode
+     * @param bool  $isDev    true if packages are requiered onyl for development mode
      *
      * @return string[][]
      */
-    private static function processPackages(array $packages, $isDev = false): array
+    private static function processPackages(array $packages, bool $isDev): array
     {
         $result = [];
         foreach ($packages as $entry) {
@@ -432,6 +434,9 @@ final class SymfonyUtils
             }
             $result[$package['name']] = $package;
         }
+
+        // sort
+        \ksort($result);
 
         return $result;
     }

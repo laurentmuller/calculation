@@ -297,8 +297,7 @@ class PlainType extends AbstractType
      *
      * @return string the option value
      */
-    private function getOptionString(array $options, string $name, ?string $defaultValue = null,
-        bool $translate = false): ?string
+    private function getOptionString(array $options, string $name, ?string $defaultValue = null, bool $translate = false): ?string
     {
         if (isset($options[$name]) && \is_string($options[$name])) {
             return (string) $options[$name];

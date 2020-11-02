@@ -69,7 +69,7 @@ class ResetPasswordController extends AbstractController
         }
 
         return $this->render('reset_password/check_email.html.twig', [
-            'tokenLifetime' => $this->helper->getTokenLifetime(),
+            'tokenLifetime' => $this->getTokenLifetime(),
         ]);
     }
 
@@ -149,23 +149,31 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
+     * Get the length of time in seconds a token is valid.
+     */
+    private function getTokenLifetime(): int
+    {
+        return $this->helper->getTokenLifetime();
+    }
+
+    /**
      * Translate the given exception.
      */
     private function handleResetException(ResetPasswordExceptionInterface $e): CustomUserMessageAuthenticationException
     {
         if ($e instanceof ExpiredResetPasswordTokenException) {
-            return new CustomUserMessageAuthenticationException('reset.expired_reset_password_token');
+            return new CustomUserMessageAuthenticationException('reset.expired_reset_password_token', [], 0, $e);
         }
         if ($e instanceof InvalidResetPasswordTokenException) {
-            return new CustomUserMessageAuthenticationException('reset.invalid_reset_password_token');
+            return new CustomUserMessageAuthenticationException('reset.invalid_reset_password_token', [], 0, $e);
         }
         if ($e instanceof TooManyPasswordRequestsException) {
-            $availableAt = $e->getAvailableAt()->format('H:i');
+            $data = ['%availableAt%' => $e->getAvailableAt()->format('H:i')];
 
-            return new CustomUserMessageAuthenticationException('reset.too_many_password_request', ['%availableAt%' => $availableAt]);
+            return new CustomUserMessageAuthenticationException('reset.too_many_password_request', $data, 0, $e);
         }
 
-        return new CustomUserMessageAuthenticationException($e->getReason());
+        return new CustomUserMessageAuthenticationException($e->getReason(), [], 0, $e);
     }
 
     /**
@@ -198,18 +206,19 @@ class ResetPasswordController extends AbstractController
         $subject = $this->trans('resetting.request.title');
         $email = (new TemplatedEmail())
             ->from($this->getAddressFrom())
-            ->to($user->getEmail())
+            ->to($user->getAddress())
             ->subject($subject)
             ->htmlTemplate('reset_password/email.html.twig')
             ->context([
                 'username' => $user->getUsername(),
                 'resetToken' => $resetToken,
-                'tokenLifetime' => $this->helper->getTokenLifetime(),
+                'tokenLifetime' => $this->getTokenLifetime(),
             ]);
 
         try {
             $mailer->send($email);
         } catch (TransportException $e) {
+            $this->helper->removeResetRequest($resetToken->getToken());
             if ($request->hasSession()) {
                 $exception = new CustomUserMessageAuthenticationException('reset.send_email_error');
                 $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);

@@ -56,6 +56,10 @@ class CategoryControllerTest extends AbstractControllerTest
             ['/category/pdf', self::ROLE_USER],
             ['/category/pdf', self::ROLE_ADMIN],
             ['/category/pdf', self::ROLE_SUPER_ADMIN],
+
+            ['/category/excel', self::ROLE_USER],
+            ['/category/excel', self::ROLE_ADMIN],
+            ['/category/excel', self::ROLE_SUPER_ADMIN],
         ];
     }
 

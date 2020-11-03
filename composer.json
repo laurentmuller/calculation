@@ -73,7 +73,7 @@
 		"phpstan/phpstan-deprecation-rules": "~0.12",
 		"phpstan/phpstan-doctrine": "~0.12",
 		"phpstan/phpstan-symfony": "~0.12",
-		"spaze/phpstan-disallowed-calls": "^0.12.5",
+		"spaze/phpstan-disallowed-calls": "^1.0",
 		"symfony/debug-pack": "*",
 		"symfony/maker-bundle": "^1.0",
 		"symfony/profiler-pack": "*",

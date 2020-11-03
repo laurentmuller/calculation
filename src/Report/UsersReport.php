@@ -187,7 +187,7 @@ class UsersReport extends AbstractReport
 
         $size = 64;
         $cell = new PdfImageCell($path);
-        list($width, $height) = $cell->getOriginalSize();
+        [$width, $height] = $cell->getOriginalSize();
         if ($width > $height) {
             $cell->resize(0, $size);
         } elseif ($width < $height) {

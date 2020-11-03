@@ -85,7 +85,7 @@ class BelowController extends AbstractController
             ->setTitleTrans('below.title')
             ->setDescription($description);
 
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**

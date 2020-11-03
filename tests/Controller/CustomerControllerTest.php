@@ -56,6 +56,10 @@ class CustomerControllerTest extends AbstractControllerTest
             ['/customer/pdf', self::ROLE_USER],
             ['/customer/pdf', self::ROLE_ADMIN],
             ['/customer/pdf', self::ROLE_SUPER_ADMIN],
+
+            ['/customer/excel', self::ROLE_USER],
+            ['/customer/excel', self::ROLE_ADMIN],
+            ['/customer/excel', self::ROLE_SUPER_ADMIN],
         ];
     }
 

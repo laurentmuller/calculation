@@ -15,7 +15,7 @@
 {%- set object_type  = EntityVoterInterface.ENTITY_CALCULATION -%}
 {%- set edit_page    = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
 {%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
-{%- set single_page  = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, object_type) ? 'calculation_pdf_id' : null -%}
+{%- set single_page  = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 
 {%- if add_page is not defined -%}
@@ -28,7 +28,7 @@
     {%- set state_page = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
 {%- endif -%}
 {%- if pdf_page is not defined -%}
-    {%- set pdf_page = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, object_type) ? 'calculation_pdf' : null -%}
+    {%- set pdf_page = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf' : null -%}
 {%- endif -%}
 {%- if delete_page is not defined -%}
     {%- set delete_page = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}

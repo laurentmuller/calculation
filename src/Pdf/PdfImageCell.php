@@ -54,13 +54,6 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
      */
     protected $path;
 
-//     /**
-//      * The resolution in dot per each (DPI).
-//      *
-//      * @var int
-//      */
-//     protected $resolution;
-
     /**
      * The image width.
      *
@@ -87,7 +80,7 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
         parent::__construct(null, $cols, $style, $alignment);
 
         $this->path = $path;
-        list($this->width, $this->height) = \getimagesize($path);
+        [$this->width, $this->height] = \getimagesize($path);
         $this->originalWidth = $this->width;
         $this->originalHeight = $this->height;
     }

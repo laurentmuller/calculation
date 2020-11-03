@@ -75,7 +75,7 @@ class AboutController extends AbstractController
         $report->setContent($content)->setTitleTrans('index.menu_info', $parameters, true);
 
         // render
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**
@@ -111,7 +111,7 @@ class AboutController extends AbstractController
         $report->setContent($ontent)->setTitleTrans('about.licence');
 
         // render
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**
@@ -156,7 +156,7 @@ class AboutController extends AbstractController
         $report->setContent($content);
 
         // render
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**
@@ -192,7 +192,7 @@ class AboutController extends AbstractController
         $report->setContent($content)->setTitleTrans('about.policy', [], true);
 
         // render
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**

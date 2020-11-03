@@ -81,7 +81,7 @@ class EmptyController extends AbstractController
         $report = new CalculationEmptyTableReport($this);
         $report->setItems($items);
 
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**

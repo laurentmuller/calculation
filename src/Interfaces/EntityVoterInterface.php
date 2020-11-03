@@ -37,14 +37,14 @@ interface EntityVoterInterface
     public const ATTRIBUTE_EDIT = 'edit';
 
     /**
+     * The export attribute name.
+     */
+    public const ATTRIBUTE_EXPORT = 'export';
+
+    /**
      * The list attribute name.
      */
     public const ATTRIBUTE_LIST = 'list';
-
-    /**
-     * The Pdf attribute name.
-     */
-    public const ATTRIBUTE_PDF = 'pdf';
 
     /**
      * The show attribute name.

@@ -88,7 +88,7 @@ class TestController extends AbstractController
             ->SetTitle($this->trans('test.html'), true);
 
         // render
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**

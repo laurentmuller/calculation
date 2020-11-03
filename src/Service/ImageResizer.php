@@ -82,7 +82,7 @@ class ImageResizer implements ImageExtensionInterface
         }
 
         try {
-            list($imageWidth, $imageHeight) = \getimagesize($source);
+            [$imageWidth, $imageHeight] = \getimagesize($source);
             $ratio = $imageWidth / $imageHeight;
 
             $width = $size;

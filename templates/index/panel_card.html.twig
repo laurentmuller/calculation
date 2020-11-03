@@ -14,7 +14,7 @@
 {%- set state_page   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
 {%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
 {%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
-{%- set single_page  = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, object_type) ? 'calculation_pdf_id' : null -%}
+{%- set single_page  = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 
 <div class="card mb-2">

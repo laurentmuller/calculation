@@ -18,6 +18,8 @@ use App\DataTable\CalculationDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\Category;
+use App\Excel\ExcelDocument;
+use App\Excel\ExcelResponse;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
 use App\Pdf\PdfResponse;
@@ -30,7 +32,6 @@ use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\CalculationService;
-use App\Service\SpreadsheetService;
 use Doctrine\Common\Collections\Criteria;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
@@ -41,7 +42,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Controller for calculation entities.
@@ -172,27 +172,13 @@ class CalculationController extends AbstractEntityController
      *
      * @Route("/excel", name="calculation_excel")
      */
-    public function excel(CalculationRepository $repository, SpreadsheetService $service, TranslatorInterface $translator): Response
+    public function excel(CalculationRepository $repository): ExcelResponse
     {
-        /** @var Calculation[] $calculations */
-        $calculations = $repository->findAllById();
-
-        $title = $translator->trans('calculation.list.title');
-
-        // properties
-        $properties = [
-            SpreadsheetService::P_TITLE => $title,
-            SpreadsheetService::P_ACTIVE_TITLE => $title,
-            SpreadsheetService::P_USER_NAME => $this->getUserName(),
-            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
-            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
-            SpreadsheetService::P_LANDSCAPE => true,
-            SpreadsheetService::P_GRIDLINE => true,
-        ];
-        $service->initialize($properties);
+        $doc = new ExcelDocument($this->getTranslator());
+        $doc->initialize($this, 'calculation.list.title', true);
 
         // headers
-        $service->setHeaderValues([
+        $doc->setHeaderValues([
             'calculation.fields.id' => Alignment::HORIZONTAL_CENTER,
             'calculation.fields.date' => Alignment::HORIZONTAL_CENTER,
             'calculation.fields.state' => Alignment::HORIZONTAL_GENERAL,
@@ -207,17 +193,19 @@ class CalculationController extends AbstractEntityController
         $percentage = NumberFormat::FORMAT_PERCENTAGE;
         $minMargin = $this->getApplication()->getMinMargin();
         $format = "[Red][<$minMargin]$percentage;$percentage";
-
-        $service->setColumnFormatId(1)
+        $doc->setColumnFormatId(1)
             ->setColumnFormatDate(2)
             ->setColumnFormatAmount(6)
             ->setColumnFormat(7, $format)
             ->setColumnFormatAmount(8);
 
-        // calculations
+        /** @var Calculation[] $calculations */
+        $calculations = $repository->findAllById();
+
+        // rows
         $row = 2;
         foreach ($calculations as $calculation) {
-            $service->setRowValues($row++, [
+            $doc->setRowValues($row++, [
                 $calculation->getId(),
                 $calculation->getDate(),
                 $calculation->getStateCode(),
@@ -229,9 +217,9 @@ class CalculationController extends AbstractEntityController
                 ]);
         }
 
-        $service->setSelectedCell('A2');
+        $doc->setSelectedCell('A2');
 
-        return $service->xlsxResponse();
+        return $this->renderExcelDocument($doc);
     }
 
     /**
@@ -255,7 +243,7 @@ class CalculationController extends AbstractEntityController
         $report->setCalculations($calculations)
             ->setGrouped($grouped);
 
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**
@@ -269,7 +257,7 @@ class CalculationController extends AbstractEntityController
         $report = new CalculationReport($this);
         $report->setCalculation($calculation);
 
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**
@@ -536,7 +524,7 @@ class CalculationController extends AbstractEntityController
      */
     private function getPivotData(): array
     {
-        /** @var \App\Repository\CalculationRepository $repository */
+        /** @var CalculationRepository $repository */
         $repository = $this->getRepository();
 
         return $repository->getPivot();

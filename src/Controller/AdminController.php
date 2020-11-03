@@ -48,23 +48,6 @@ use Symfony\Component\Validator\Constraints\File;
 class AdminController extends AbstractController
 {
     /**
-     * Edit rights for the administrator role ('ROLE_ADMIN').
-     *
-     * @Route("/rights/admin", name="admin_rights_admin")
-     * @IsGranted("ROLE_SUPER_ADMIN")
-     */
-    public function adminRights(Request $request): Response
-    {
-        // get values
-        $roleName = RoleInterface::ROLE_ADMIN;
-        $rights = $this->getApplication()->getAdminRights();
-        $default = EntityVoter::getRoleAdmin();
-        $property = ApplicationServiceInterface::ADMIN_RIGHTS;
-
-        return $this->editRights($request, $roleName, $rights, $default, $property);
-    }
-
-    /**
      * Clear the application cache.
      *
      * @Route("/clear", name="admin_clear")
@@ -205,6 +188,40 @@ class AdminController extends AbstractController
     }
 
     /**
+     * Edit rights for the administrator role ('ROLE_ADMIN').
+     *
+     * @Route("/rights/admin", name="admin_rights_admin")
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     */
+    public function rightsAdmin(Request $request): Response
+    {
+        // get values
+        $roleName = RoleInterface::ROLE_ADMIN;
+        $rights = $this->getApplication()->getAdminRights();
+        $default = EntityVoter::getRoleAdmin();
+        $property = ApplicationServiceInterface::ADMIN_RIGHTS;
+
+        return $this->editRights($request, $roleName, $rights, $default, $property);
+    }
+
+    /**
+     * Edit rights for the user role ('ROLE_USER').
+     *
+     * @Route("/rights/user", name="admin_rights_user")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function rightsUser(Request $request): Response
+    {
+        // get values
+        $roleName = RoleInterface::ROLE_USER;
+        $rights = $this->getApplication()->getUserRights();
+        $default = EntityVoter::getRoleUser();
+        $property = ApplicationServiceInterface::USER_RIGHTS;
+
+        return $this->editRights($request, $roleName, $rights, $default, $property);
+    }
+
+    /**
      * Update calculation totals.
      *
      * @Route("/update", name="admin_update", methods={"GET", "POST"})
@@ -299,23 +316,6 @@ class AdminController extends AbstractController
             'last_update' => $this->getApplication()->getLastUpdate(),
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * Edit rights for the user role ('ROLE_USER').
-     *
-     * @Route("/rights/user", name="admin_rights_user")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function userRights(Request $request): Response
-    {
-        // get values
-        $roleName = RoleInterface::ROLE_USER;
-        $rights = $this->getApplication()->getUserRights();
-        $default = EntityVoter::getRoleUser();
-        $property = ApplicationServiceInterface::USER_RIGHTS;
-
-        return $this->editRights($request, $roleName, $rights, $default, $property);
     }
 
     /**

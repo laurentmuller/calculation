@@ -68,7 +68,7 @@ final class ThemesExtension extends AbstractExtension
     {
         // get background
         $background = $this->service->getThemeBackground($request);
-        list($nav_foreground, $nav_background) = \explode(' ', $background);
+        [$nav_foreground, $nav_background] = \explode(' ', $background);
 
         // check if exists
         if (!\in_array($nav_foreground, ThemeType::FOREGROUND_CHOICES, true)) {

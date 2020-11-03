@@ -16,7 +16,7 @@
 {%- set edit_page    = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'globalmargin_edit' : null -%}
 {%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'globalmargin_delete' : null -%}
 {%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'globalmargin_show' : null -%}
-{%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_PDF, object_type) ? 'globalmargin_pdf' : null -%}
+{%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'globalmargin_pdf' : null -%}
 {%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 
 {% block item_title %}

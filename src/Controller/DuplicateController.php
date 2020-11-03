@@ -91,7 +91,7 @@ class DuplicateController extends AbstractController
         $report = new CalculationDuplicateTableReport($this);
         $report->setItems($items);
 
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**

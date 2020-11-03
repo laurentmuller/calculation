@@ -266,7 +266,7 @@ class PasswordValidator extends AbstractConstraintValidator
 
         // search
         foreach ($lines as $line) {
-            list($hashSuffix, $count) = \explode(':', $line);
+            [$hashSuffix, $count] = \explode(':', $line);
             if ($hashPrefix . $hashSuffix === $hash) {
                 return (int) $count;
             }

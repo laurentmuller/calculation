@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Excel\ExcelDocument;
+use App\Excel\ExcelResponse;
 use App\Form\FormHelper;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfResponse;
@@ -280,6 +282,24 @@ abstract class AbstractController extends BaseController
     }
 
     /**
+     * Render the given Excel document and ouput the response.
+     *
+     * @param ExcelDocument $doc    the document to render
+     * @param bool          $inline <code>true</code> to send the file inline to the browser. The Excel viewer is used if available.
+     *                              <code>false</code> to send to the browser and force a file download.
+     * @param string        $name   the name of the Excel file or null to use default ('document.xlsx')
+     */
+    protected function renderExcelDocument(ExcelDocument $doc, bool $inline = true, string $name = ''): ExcelResponse
+    {
+        // title
+        if (empty($name) && !empty($doc->getTitle())) {
+            $name = $doc->getTitle() . '.xlsx';
+        }
+
+        return new ExcelResponse($doc, $inline, $name);
+    }
+
+    /**
      * Render the given PDF document and ouput the response.
      *
      * @param PdfDocument $doc    the document to render
@@ -290,7 +310,7 @@ abstract class AbstractController extends BaseController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report can not be rendered
      * @throws \Symfony\Component\Finder\Exception\AccessDeniedException     if the access is denied
      */
-    protected function renderDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
+    protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
         // render
         if ($doc instanceof AbstractReport && !$doc->render()) {

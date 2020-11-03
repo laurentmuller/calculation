@@ -12,12 +12,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Excel;
 
+use App\Controller\AbstractController;
 use App\Util\Utils;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-use PhpOffice\PhpSpreadsheet\Document\Properties;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -26,15 +25,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Component\HttpFoundation\HeaderUtils;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Service to generate Spreadsheet.
+ * Extends the spreadsheet.
  *
  * @author Laurent Muller
  */
-class SpreadsheetService
+class ExcelDocument extends Spreadsheet
 {
     /**
      * The default margins (0.4" = 10 millimeters).
@@ -47,86 +45,11 @@ class SpreadsheetService
     public const HEADER_FOOTER_MARGIN = 0.51;
 
     /**
-     * The active worksheet title property (type string).
-     */
-    public const P_ACTIVE_TITLE = 'activeTitle';
-
-    /**
-     * The appication name property (type string).
-     */
-    public const P_APPLICATION = 'application';
-
-    /**
-     * The company property (type string).
-     */
-    public const P_COMPANY = 'company';
-
-    /**
-     * The date property (type string).
-     */
-    public const P_DATE = 'date';
-
-    /**
-     * The print gridlines property (type boolean).
-     */
-    public const P_GRIDLINE = 'gridline';
-
-    /**
-     * The landscape property (type boolean).
-     */
-    public const P_LANDSCAPE = 'landscape';
-
-    /**
-     * The margins property (type float).
-     */
-    public const P_MARGINS = 'margins';
-
-    /**
-     * The paper size property, one of PageSetup::PAPERSIZE_* (type int).
-     */
-    public const P_PAGE_SIZE = 'pageSize';
-
-    /**
-     * The spreadsheet title property (type string).
-     */
-    public const P_TITLE = 'title';
-
-    /**
-     * The user name property.
-     */
-    public const P_USER_NAME = 'userName';
-
-    /**
-     * The  Excel 97 (.xls) content type.
-     */
-    public const XLS_CONTENT_TYPE = 'application/vnd.ms-excel';
-
-    /**
-     * The  Excel 97 (.xls) writer type.
-     */
-    public const XLS_WRITER_TYPE = 'Xls';
-
-    /**
-     * The Office Open XML Excel 2007 (.xlsx) content type.
-     */
-    public const XLSX_CONTENT_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-
-    /**
-     * The Office Open XML Excel 2007 (.xlsx) writer type.
-     */
-    public const XLSX_WRITER_TYPE = 'Xlsx';
-
-    /**
      * The boolean format.
      *
      * @var string[]
      */
     private $booleanFormats = [];
-
-    /**
-     * The Spreadsheet.
-     */
-    private Spreadsheet $spreadsheet;
 
     /**
      * The file title.
@@ -142,11 +65,14 @@ class SpreadsheetService
 
     /**
      * Constructor.
+     *
+     * @param TranslatorInterface $translator the translator used for the title and the boolean formats
      */
     public function __construct(TranslatorInterface $translator)
     {
+        parent::__construct();
         $this->translator = $translator;
-        $this->spreadsheet = new Spreadsheet();
+        $this->setPageSize(PageSetup::PAPERSIZE_A4);
     }
 
     /**
@@ -163,18 +89,44 @@ class SpreadsheetService
 
         // check length
         if (StringHelper::countCharacters($title) > Worksheet::SHEET_TITLE_MAXIMUM_LENGTH) {
-            $title = StringHelper::substring($title, 0, Worksheet::SHEET_TITLE_MAXIMUM_LENGTH);
+            return StringHelper::substring($title, 0, Worksheet::SHEET_TITLE_MAXIMUM_LENGTH);
         }
 
         return $title;
     }
 
     /**
-     * Get the active sheet.
+     * Gets the output headers.
+     *
+     * @param bool   $inline <code>true</code> to send the file inline to the browser. The Spreasheet viewer is used if available.
+     *                       <code>false</code> to send to the browser and force a file download with the name given.
+     * @param string $name   the name of the ExcelDocument file or null to use default ('document.xlsx')
+     *
+     * @return array the output headers
      */
-    public function getActiveSheet(): Worksheet
+    public function getOutputHeaders(bool $inline = true, string $name = ''): array
     {
-        return $this->spreadsheet->getActiveSheet();
+        if (empty($name)) {
+            $name = 'document.xlsx';
+        } else {
+            $name = \basename($name);
+        }
+        $encoded = Utils::ascii($name);
+
+        if ($inline) {
+            $type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+            $disposition = HeaderUtils::DISPOSITION_INLINE;
+        } else {
+            $type = 'application/x-download';
+            $disposition = HeaderUtils::DISPOSITION_ATTACHMENT;
+        }
+
+        return [
+            'Pragma' => 'public',
+            'Content-Type' => $type,
+            'Cache-Control' => 'private, max-age=0, must-revalidate',
+            'Content-Disposition' => HeaderUtils::makeDisposition($disposition, $name, $encoded),
+        ];
     }
 
     /**
@@ -186,63 +138,40 @@ class SpreadsheetService
     }
 
     /**
-     * Get the spreadsheet properties.
+     * Gets the title.
      */
-    public function getProperties(): Properties
+    public function getTitle(): ?string
     {
-        return $this->getSpreadsheet()->getProperties();
+        return $this->title;
     }
 
     /**
-     * Gets the spreadsheet.
-     */
-    public function getSpreadsheet(): Spreadsheet
-    {
-        return $this->spreadsheet;
-    }
-
-    /**
-     * Sets the properties for the spreedsheet and the active sheet.
+     * Initialize this service.
      *
-     * @param array $properties the properties to set. One or more SpreadsheetService::P_* values
+     * @param AbstractController $controller the controller to get properties
+     * @param string             $title      the spread sheet title zo translate
+     * @param bool               $landscape  true to set landscape orientation, false for default (portrait)
      */
-    public function initialize(array $properties): self
+    public function initialize(AbstractController $controller, string $title, bool $landscape = false): self
     {
-        if (isset($properties[self::P_TITLE])) {
-            $this->setTitle($properties[self::P_TITLE]);
-        }
-        if (isset($properties[self::P_ACTIVE_TITLE])) {
-            $this->setActiveTitle($properties[self::P_ACTIVE_TITLE]);
-        }
-        if (isset($properties[self::P_USER_NAME])) {
-            $this->setUserName($properties[self::P_USER_NAME]);
-        }
-        if (isset($properties[self::P_COMPANY])) {
-            $this->setCompany($properties[self::P_COMPANY]);
-        }
-        if (isset($properties[self::P_PAGE_SIZE])) {
-            $this->setPageSize($properties[self::P_PAGE_SIZE]);
-        } else {
-            $this->setPageSizeA4();
-        }
-        if (isset($properties[self::P_MARGINS])) {
-            $this->setMargins($properties[self::P_MARGINS]);
-        } else {
-            $this->setDefaultMargins();
-        }
-        if (isset($properties[self::P_LANDSCAPE]) && (bool) $properties[self::P_LANDSCAPE]) {
-            $this->setPageLandscape();
-        }
-        if (isset($properties[self::P_GRIDLINE]) && (bool) $properties[self::P_GRIDLINE]) {
-            $this->setPrintGridlines(true);
+        $company = $controller->getApplication()->getCustomerName();
+        $application = $controller->getApplicationName();
+        $title = $this->translator->trans($title);
+        $username = $controller->getUserName();
+
+        $this->setHeaderFooter($title, $company, $application)
+            ->setTitle($title)
+            ->setActiveTitle($title)
+            ->setCompany($company)
+            ->setUserName($username)
+            ->setCategory($application)
+            ->setPrintGridlines(true);
+
+        if ($landscape) {
+            return $this->setPageLandscape();
         }
 
-        // header and footer
-        $title = $properties[self::P_ACTIVE_TITLE] ?? null;
-        $company = $properties[self::P_COMPANY] ?? null;
-        $application = $properties[self::P_APPLICATION] ?? null;
-
-        return $this->setHeaderFooter($title, $company, $application);
+        return $this;
     }
 
     /**
@@ -250,8 +179,21 @@ class SpreadsheetService
      */
     public function setActiveTitle(string $title): self
     {
-        $title = self::checkSheetTitle($title);
-        $this->getActiveSheet()->setTitle($title);
+        $this->getActiveSheet()->setTitle(self::checkSheetTitle($title));
+
+        return $this;
+    }
+
+    /**
+     * Sets the category property.
+     *
+     * @param string $category the category
+     */
+    public function setCategory(?string $category): self
+    {
+        if ($category) {
+            $this->getProperties()->setCategory($category);
+        }
 
         return $this;
     }
@@ -484,8 +426,9 @@ class SpreadsheetService
         }
         $footer .= '&R&D - &T'; // date and time
 
-        $pageMargins = $this->getActiveSheet()->getPageMargins();
-        $headerFooter = $this->getActiveSheet()->getHeaderFooter();
+        $sheet = $this->getActiveSheet();
+        $pageMargins = $sheet->getPageMargins();
+        $headerFooter = $sheet->getHeaderFooter();
         if (!empty($header)) {
             $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
             $headerFooter->setOddHeader($header);
@@ -502,8 +445,8 @@ class SpreadsheetService
      * Sets the headers of the active sheet with bold style and freezed first row.
      *
      * @param array $headers the headers where key is the text to translate and value is the
-     *                       horizontal alignment or if an array, the horizontal and vertical
-     *                       alignments
+     *                       horizontal alignment or if an array, the horizontal and the vertical
+     *                       alignments and
      */
     public function setHeaderValues(array $headers): self
     {
@@ -530,6 +473,7 @@ class SpreadsheetService
                     ->setHorizontal($alignment);
             }
 
+
             ++$col;
         }
 
@@ -542,6 +486,20 @@ class SpreadsheetService
             ->setFitToHeight(0)
             ->setHorizontalCentered(true)
             ->setRowsToRepeatAtTopByStartAndEnd(1, 1);
+
+        return $this;
+    }
+
+    /**
+     * Set the manager property.
+     *
+     * @param string $manager the manager
+     */
+    public function setManager(?string $manager): self
+    {
+        if ($manager) {
+            $this->getProperties()->setManager($manager);
+        }
 
         return $this;
     }
@@ -568,6 +526,16 @@ class SpreadsheetService
     public function setPageLandscape(): self
     {
         $this->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
+
+        return $this;
+    }
+
+    /**
+     * Sets the orientation of the active sheet to portrait.
+     */
+    public function setPagePortrait(): self
+    {
+        $this->getPageSetup()->setOrientation(PageSetup::ORIENTATION_PORTRAIT);
 
         return $this;
     }
@@ -642,16 +610,30 @@ class SpreadsheetService
     }
 
     /**
+     * Sets the subject property.
+     *
+     * @param string $subject the subject
+     */
+    public function setSubject(?string $subject): self
+    {
+        if ($subject) {
+            $this->getProperties()->setSubject($subject);
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the file title.
      */
     public function setTitle(?string $title): self
     {
         $this->title = $title;
-        if ($this->title) {
-            $this->getProperties()->setTitle($this->title);
+        if ($title) {
+            $this->getProperties()->setTitle($title);
         }
 
-        return $this;
+        return  $this;
     }
 
     /**
@@ -694,28 +676,6 @@ class SpreadsheetService
     }
 
     /**
-     * Gets the streamed response for this spread sheet with the Excel 97 (.xls) format.
-     *
-     * @param bool $inline <code>true</code> to send the file inline to the browser. The viewer is used if available.
-     *                     <code>false</code> to send to the browser and force a file download.
-     */
-    public function xlsResponse(bool $inline = true): StreamedResponse
-    {
-        return $this->streamResponse(self::XLS_WRITER_TYPE, self::XLS_CONTENT_TYPE, $inline);
-    }
-
-    /**
-     * Gets the streamed response for this spread sheet with the Office Open XML Excel 2007 (.xlsx) format.
-     *
-     * @param bool $inline <code>true</code> to send the file inline to the browser. The viewer is used if available.
-     *                     <code>false</code> to send to the browser and force a file download.
-     */
-    public function xlsxResponse(bool $inline = true): StreamedResponse
-    {
-        return $this->streamResponse(self::XLSX_WRITER_TYPE, self::XLSX_CONTENT_TYPE, $inline);
-    }
-
-    /**
      * Clean a header/footer property.
      *
      * @param string $value the property to clean
@@ -723,35 +683,5 @@ class SpreadsheetService
     private function cleanHeaderFooter(string $value): string
     {
         return \str_replace('&', '&&', $value);
-    }
-
-    /**
-     * Gets a streamed response.
-     *
-     * @param string $writerType  the writer type
-     * @param string $contentType the content type
-     * @param bool   $inline      <code>true</code> to send the file inline to the browser. The viewer is used if available.
-     *                            <code>false</code> to send to the browser and force a file download.
-     */
-    private function streamResponse(string $writerType, string $contentType, bool $inline): StreamedResponse
-    {
-        $title = $this->title ?? 'export';
-        $name = $title . '.' . \strtolower($writerType);
-        $encoded = Utils::ascii($name);
-        $writer = IOFactory::createWriter($this->getSpreadsheet(), $writerType);
-        $disposition = $inline ? HeaderUtils::DISPOSITION_INLINE : HeaderUtils::DISPOSITION_ATTACHMENT;
-
-        $callback = function () use ($writer): void {
-            $writer->save('php://output');
-        };
-
-        $headers = [
-            'Pragma' => 'public',
-            'Content-Type' => $contentType,
-            'Cache-Control' => 'private, max-age=0, must-revalidate',
-            'Content-Disposition' => HeaderUtils::makeDisposition($disposition, $name, $encoded),
-        ];
-
-        return new StreamedResponse($callback, StreamedResponse::HTTP_OK, $headers);
     }
 }

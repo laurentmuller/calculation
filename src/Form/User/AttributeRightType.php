@@ -54,7 +54,7 @@ class AttributeRightType extends AbstractChoiceType
             'rights.add' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_ADD),
             'rights.edit' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_EDIT),
             'rights.delete' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_DELETE),
-            'rights.pdf' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_PDF),
+            'rights.pdf' => EntityVoter::getAttributeMask(EntityVoterInterface::ATTRIBUTE_EXPORT),
         ];
     }
 }

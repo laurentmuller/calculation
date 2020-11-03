@@ -59,7 +59,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         self::ATTRIBUTE_DELETE => 2,
         self::ATTRIBUTE_EDIT => 4,
         self::ATTRIBUTE_LIST => 8,
-        self::ATTRIBUTE_PDF => 16,
+        self::ATTRIBUTE_EXPORT => 16,
         self::ATTRIBUTE_SHOW => 32,
     ];
 
@@ -210,7 +210,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         // default attributes for all except calculation
         $default = [
             self::MASK_ATTRIBUTES[self::ATTRIBUTE_LIST],
-            self::MASK_ATTRIBUTES[self::ATTRIBUTE_PDF],
+            self::MASK_ATTRIBUTES[self::ATTRIBUTE_EXPORT],
             self::MASK_ATTRIBUTES[self::ATTRIBUTE_SHOW],
         ];
 

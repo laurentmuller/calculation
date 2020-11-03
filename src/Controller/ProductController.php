@@ -17,19 +17,19 @@ namespace App\Controller;
 use App\DataTable\ProductDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Product;
+use App\Excel\ExcelDocument;
+use App\Excel\ExcelResponse;
 use App\Form\Product\ProductType;
 use App\Pdf\PdfResponse;
 use App\Report\ProductsReport;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
-use App\Service\SpreadsheetService;
 use Doctrine\Common\Collections\Criteria;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for product entities.
@@ -128,27 +128,13 @@ class ProductController extends AbstractEntityController
      *
      * @Route("/excel", name="product_excel")
      */
-    public function excel(ProductRepository $repository, SpreadsheetService $service, TranslatorInterface $translator): Response
+    public function excel(ProductRepository $repository): ExcelResponse
     {
-        /** @var Product[] $products */
-        $products = $repository->findAllByDescription();
-
-        $title = $translator->trans('product.list.title');
-
-        // properties
-        $properties = [
-            SpreadsheetService::P_TITLE => $title,
-            SpreadsheetService::P_ACTIVE_TITLE => $title,
-            SpreadsheetService::P_USER_NAME => $this->getUserName(),
-            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
-            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
-            SpreadsheetService::P_LANDSCAPE => false,
-            SpreadsheetService::P_GRIDLINE => true,
-        ];
-        $service->initialize($properties);
+        $doc = new ExcelDocument($this->getTranslator());
+        $doc->initialize($this, 'product.list.title');
 
         // headers
-        $service->setHeaderValues([
+        $doc->setHeaderValues([
             'product.fields.description' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.category' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.price' => Alignment::HORIZONTAL_RIGHT,
@@ -157,12 +143,15 @@ class ProductController extends AbstractEntityController
         ]);
 
         // formats
-        $service->setColumnFormatAmount(3);
+        $doc->setColumnFormatAmount(3);
 
-        // products
+        /** @var Product[] $products */
+        $products = $repository->findAllByDescription();
+
+        // rows
         $row = 2;
         foreach ($products as $product) {
-            $service->setRowValues($row++, [
+            $doc->setRowValues($row++, [
                 $product->getDescription(),
                 $product->getCategoryCode(),
                 $product->getPrice(),
@@ -170,9 +159,9 @@ class ProductController extends AbstractEntityController
                 $product->getSupplier(),
                 ]);
         }
-        $service->setSelectedCell('A2');
+        $doc->setSelectedCell('A2');
 
-        return $service->xlsxResponse();
+        return $this->renderExcelDocument($doc);
     }
 
     /**
@@ -199,7 +188,7 @@ class ProductController extends AbstractEntityController
         $report->setProducts($products);
         $report->setGroupByCategory(-1 === $limit);
 
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**

@@ -17,18 +17,18 @@ namespace App\Controller;
 use App\DataTable\CustomerDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Customer;
+use App\Excel\ExcelDocument;
+use App\Excel\ExcelResponse;
 use App\Form\Customer\CustomerType;
 use App\Pdf\PdfResponse;
 use App\Report\CustomersReport;
 use App\Repository\CustomerRepository;
-use App\Service\SpreadsheetService;
 use Doctrine\Common\Collections\Criteria;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for customer entities.
@@ -115,26 +115,13 @@ class CustomerController extends AbstractEntityController
      *
      * @Route("/excel", name="customer_excel")
      */
-    public function excel(CustomerRepository $repository, SpreadsheetService $service, TranslatorInterface $translator): Response
+    public function excel(CustomerRepository $repository): ExcelResponse
     {
-        /** @var Customer[] $customers */
-        $customers = $repository->findAllByNameAndCompany();
-
-        $title = $translator->trans('customer.list.title');
-
-        // properties
-        $properties = [
-            SpreadsheetService::P_TITLE => $title,
-            SpreadsheetService::P_ACTIVE_TITLE => $title,
-            SpreadsheetService::P_USER_NAME => $this->getUserName(),
-            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
-            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
-            SpreadsheetService::P_GRIDLINE => true,
-        ];
-        $service->initialize($properties);
+        $doc = new ExcelDocument($this->getTranslator());
+        $doc->initialize($this, 'customer.list.title');
 
         // headers
-        $service->setHeaderValues([
+        $doc->setHeaderValues([
             'customer.fields.lastName' => Alignment::HORIZONTAL_GENERAL,
             'customer.fields.firstName' => Alignment::HORIZONTAL_GENERAL,
             'customer.fields.company' => Alignment::HORIZONTAL_GENERAL,
@@ -143,10 +130,13 @@ class CustomerController extends AbstractEntityController
             'customer.fields.city' => Alignment::HORIZONTAL_GENERAL,
         ]);
 
-        // customers
+        /** @var Customer[] $customers */
+        $customers = $repository->findAllByNameAndCompany();
+
+        // rows
         $row = 2;
         foreach ($customers as $customer) {
-            $service->setRowValues($row++, [
+            $doc->setRowValues($row++, [
                 $customer->getLastName(),
                 $customer->getFirstName(),
                 $customer->getCompany(),
@@ -155,9 +145,9 @@ class CustomerController extends AbstractEntityController
                 $customer->getCity(),
             ]);
         }
-        $service->setSelectedCell('A2');
+        $doc->setSelectedCell('A2');
 
-        return $service->xlsxResponse();
+        return $this->renderExcelDocument($doc);
     }
 
     /**
@@ -181,7 +171,7 @@ class CustomerController extends AbstractEntityController
         $report->setCustomers($customers)
             ->setGrouped($grouped);
 
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**

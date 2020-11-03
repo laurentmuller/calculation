@@ -48,7 +48,7 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
         EntityVoterInterface::ATTRIBUTE_ADD,
         EntityVoterInterface::ATTRIBUTE_EDIT,
         EntityVoterInterface::ATTRIBUTE_DELETE,
-        EntityVoterInterface::ATTRIBUTE_PDF,
+        EntityVoterInterface::ATTRIBUTE_EXPORT,
     ];
 
     /**

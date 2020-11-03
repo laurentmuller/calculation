@@ -17,20 +17,20 @@ namespace App\Controller;
 use App\DataTable\CategoryDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
+use App\Excel\ExcelDocument;
+use App\Excel\ExcelResponse;
 use App\Form\Category\CategoryType;
 use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
 use App\Repository\CalculationGroupRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
-use App\Service\SpreadsheetService;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for category entities.
@@ -133,27 +133,13 @@ class CategoryController extends AbstractEntityController
      *
      * @Route("/excel", name="category_excel")
      */
-    public function excel(CategoryRepository $repository, SpreadsheetService $service, TranslatorInterface $translator): Response
+    public function excel(CategoryRepository $repository): ExcelResponse
     {
-        /** @var Category[] $categories */
-        $categories = $repository->findAllByCode();
-
-        $title = $translator->trans('category.list.title');
-
-        // properties
-        $properties = [
-            SpreadsheetService::P_TITLE => $title,
-            SpreadsheetService::P_ACTIVE_TITLE => $title,
-            SpreadsheetService::P_USER_NAME => $this->getUserName(),
-            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
-            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
-            SpreadsheetService::P_LANDSCAPE => true,
-            SpreadsheetService::P_GRIDLINE => true,
-        ];
-        $service->initialize($properties);
+        $doc = new ExcelDocument($this->getTranslator());
+        $doc->initialize($this, 'category.list.title');
 
         // headers
-        $service->setHeaderValues([
+        $doc->setHeaderValues([
             'category.fields.code' => Alignment::HORIZONTAL_GENERAL,
             'category.fields.description' => Alignment::HORIZONTAL_GENERAL,
             'category.fields.margins' => Alignment::HORIZONTAL_RIGHT,
@@ -161,22 +147,25 @@ class CategoryController extends AbstractEntityController
         ]);
 
         // formats
-        $service->setColumnFormatInt(3)
+        $doc->setColumnFormatInt(3)
             ->setColumnFormatInt(4);
 
-        // categories
+        /** @var Category[] $categories */
+        $categories = $repository->findAllByCode();
+
+        // rows
         $row = 2;
         foreach ($categories as $category) {
-            $service->setRowValues($row++, [
+            $doc->setRowValues($row++, [
                 $category->getCode(),
                 $category->getDescription(),
                 $category->countMargins(),
                 $category->countProducts(),
             ]);
         }
-        $service->setSelectedCell('A2');
+        $doc->setSelectedCell('A2');
 
-        return $service->xlsxResponse();
+        return $this->renderExcelDocument($doc);
     }
 
     /**
@@ -197,7 +186,7 @@ class CategoryController extends AbstractEntityController
         $report = new CategoriesReport($this);
         $report->setCategories($categories);
 
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**

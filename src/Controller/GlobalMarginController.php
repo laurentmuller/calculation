@@ -17,17 +17,17 @@ namespace App\Controller;
 use App\DataTable\GlobalMarginDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\GlobalMargin;
+use App\Excel\ExcelDocument;
+use App\Excel\ExcelResponse;
 use App\Form\GlobalMargin\GlobalMarginType;
 use App\Pdf\PdfResponse;
 use App\Report\GlobalMarginsReport;
 use App\Repository\GlobalMarginRepository;
-use App\Service\SpreadsheetService;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The controller for global margins entities.
@@ -107,55 +107,38 @@ class GlobalMarginController extends AbstractEntityController
      *
      * @Route("/excel", name="globalmargin_excel")
      */
-    public function excel(GlobalMarginRepository $repository, SpreadsheetService $service, TranslatorInterface $translator): Response
+    public function excel(GlobalMarginRepository $repository): ExcelResponse
     {
-        /** @var GlobalMargin[] $margins */
-        $margins = $repository->findAllByMinimum();
-
-        $title = $translator->trans('globalmargin.list.title');
-
-        // properties
-        $properties = [
-            SpreadsheetService::P_TITLE => $title,
-            SpreadsheetService::P_ACTIVE_TITLE => $title,
-            SpreadsheetService::P_USER_NAME => $this->getUserName(),
-            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
-            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
-            SpreadsheetService::P_LANDSCAPE => false,
-            SpreadsheetService::P_GRIDLINE => true,
-        ];
-        $service->initialize($properties);
-
-        // properties
-        $service->setTitle($title)
-            ->setActiveTitle($title)
-            ->setUserName($this->getUserName())
-            ->setCompany($this->getApplication()->getCustomerName());
+        $doc = new ExcelDocument($this->getTranslator());
+        $doc->initialize($this, 'globalmargin.list.title');
 
         // headers
-        $service->setHeaderValues([
+        $doc->setHeaderValues([
             'globalmargin.fields.minimum' => Alignment::HORIZONTAL_RIGHT,
             'globalmargin.fields.maximum' => Alignment::HORIZONTAL_RIGHT,
             'globalmargin.fields.margin' => Alignment::HORIZONTAL_RIGHT,
         ]);
 
         // formats
-        $service->setColumnFormatAmount(1)
+        $doc->setColumnFormatAmount(1)
             ->setColumnFormatAmount(2)
             ->setColumnFormatPercent(3);
 
-        // products
+        /** @var GlobalMargin[] $margins */
+        $margins = $repository->findAllByMinimum();
+
+        // rows
         $row = 2;
         foreach ($margins as $margin) {
-            $service->setRowValues($row++, [
+            $doc->setRowValues($row++, [
                     $margin->getMinimum(),
                     $margin->getMaximum(),
                     $margin->getMargin(),
                     ]);
         }
-        $service->setSelectedCell('A2');
+        $doc->setSelectedCell('A2');
 
-        return $service->xlsxResponse();
+        return $this->renderExcelDocument($doc);
     }
 
     /**
@@ -177,7 +160,7 @@ class GlobalMarginController extends AbstractEntityController
         $report = new GlobalMarginsReport($this);
         $report->setGlobalMargins($margins);
 
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**

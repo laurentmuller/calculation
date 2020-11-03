@@ -18,6 +18,8 @@ use App\DataTable\UserDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Comment;
 use App\Entity\User;
+use App\Excel\ExcelDocument;
+use App\Excel\ExcelResponse;
 use App\Form\User\ThemeType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
@@ -30,7 +32,6 @@ use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
 use App\Repository\UserRepository;
 use App\Security\EntityVoter;
-use App\Service\SpreadsheetService;
 use App\Service\ThemeService;
 use App\Service\UserNamer;
 use App\Util\Utils;
@@ -46,7 +47,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -185,27 +185,13 @@ class UserController extends AbstractEntityController
      *
      * @Route("/excel", name="user_excel")
      */
-    public function excel(UserRepository $repository, SpreadsheetService $service, TranslatorInterface $translator, KernelInterface $kernel): Response
+    public function excel(UserRepository $repository, KernelInterface $kernel): ExcelResponse
     {
-        /** @var User[] $users */
-        $users = $repository->findAllByUsername();
-
-        $title = $translator->trans('user.list.title');
-        $path = $kernel->getProjectDir() . '/public/images/users/';
-
-        // properties
-        $properties = [
-            SpreadsheetService::P_TITLE => $title,
-            SpreadsheetService::P_ACTIVE_TITLE => $title,
-            SpreadsheetService::P_USER_NAME => $this->getUserName(),
-            SpreadsheetService::P_APPLICATION => $this->getApplicationName(),
-            SpreadsheetService::P_COMPANY => $this->getApplication()->getCustomerName(),
-            SpreadsheetService::P_GRIDLINE => true,
-        ];
-        $service->initialize($properties);
+        $doc = new ExcelDocument($this->getTranslator());
+        $doc->initialize($this, 'user.list.title');
 
         // headers
-        $service->setHeaderValues([
+        $doc->setHeaderValues([
             'user.fields.username' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
             'user.fields.email' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
             'user.fields.role' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
@@ -215,18 +201,22 @@ class UserController extends AbstractEntityController
         ]);
 
         // formats
-        $enabled = $translator->trans('common.value_enabled');
-        $disabled = $translator->trans('common.value_disabled');
-        $service->setColumnFormatBoolean(4, $enabled, $disabled)
+        $enabled = $this->trans('common.value_enabled');
+        $disabled = $this->trans('common.value_disabled');
+        $doc->setColumnFormatBoolean(4, $enabled, $disabled)
             ->setColumnFormatDateTime(5);
+
+        /** @var User[] $users */
+        $users = $repository->findAllByUsername();
 
         // rows
         $row = 2;
+        $path = $kernel->getProjectDir() . '/public/images/users/';
         foreach ($users as $user) {
-            $service->setRowValues($row, [
+            $doc->setRowValues($row, [
                 $user->getUsername(),
                 $user->getEmail(),
-                Utils::translateRole($translator, $user->getRole()),
+                Utils::translateRole($this->getTranslator(), $user->getRole()),
                 $user->isEnabled(),
                 $user->getLastLogin(),
             ]);
@@ -235,14 +225,14 @@ class UserController extends AbstractEntityController
             $fileName = $path . UserNamer::getBaseName($user, 32, 'png');
             if (\is_file($fileName)) {
                 [$width, $height] = \getimagesize($fileName);
-                $service->setCellImage($fileName, "F$row", $width, $height);
+                $doc->setCellImage($fileName, "F$row", $width, $height);
             }
 
             ++$row;
         }
-        $service->setSelectedCell('A2');
+        $doc->setSelectedCell('A2');
 
-        return $service->xlsxResponse();
+        return $this->renderExcelDocument($doc);
     }
 
     /**
@@ -376,7 +366,7 @@ class UserController extends AbstractEntityController
         $report = new UsersReport($this, $factory, $storage, $kernel);
         $report->setUsers($users);
 
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**
@@ -440,7 +430,7 @@ class UserController extends AbstractEntityController
         $report = new UsersRightsReport($this);
         $report->setUsers($users);
 
-        return $this->renderDocument($report);
+        return $this->renderPdfDocument($report);
     }
 
     /**

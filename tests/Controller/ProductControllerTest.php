@@ -62,6 +62,10 @@ class ProductControllerTest extends AbstractControllerTest
             ['/product/pdf', self::ROLE_USER],
             ['/product/pdf', self::ROLE_ADMIN],
             ['/product/pdf', self::ROLE_SUPER_ADMIN],
+
+            ['/product/excel', self::ROLE_USER],
+            ['/product/excel', self::ROLE_ADMIN],
+            ['/product/excel', self::ROLE_SUPER_ADMIN],
         ];
     }
 

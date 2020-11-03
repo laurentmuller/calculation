@@ -17,7 +17,6 @@ namespace App\Form\User;
 use App\Form\FormHelper;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -44,7 +43,7 @@ class RequestChangePasswordType extends UserCaptchaType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')
             ->label('resetting.request.username')
@@ -52,6 +51,6 @@ class RequestChangePasswordType extends UserCaptchaType
             ->updateAttribute('remote', $this->remote)
             ->add(UserNameType::class);
 
-        parent::addFormFields($helper, $builder, $options);
+        parent::addFormFields($helper);
     }
 }

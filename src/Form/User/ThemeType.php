@@ -18,7 +18,6 @@ use App\Entity\Theme;
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
 use App\Service\ThemeService;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -88,7 +87,7 @@ class ThemeType extends AbstractHelperType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $this->addThemeField($helper);
         $this->addBackgroundField($helper);

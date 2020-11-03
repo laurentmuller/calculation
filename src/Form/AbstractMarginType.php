@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use Symfony\Component\Form\FormBuilderInterface;
-
 /**
  * Abstract margin edit type.
  *
@@ -26,7 +24,7 @@ abstract class AbstractMarginType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('minimum')
             ->addMoneyType($this->currency());

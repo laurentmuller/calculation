@@ -17,9 +17,7 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -49,7 +47,7 @@ class ProfileChangePasswordType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         // current password
         $helper->field('current_password')
@@ -67,6 +65,6 @@ class ProfileChangePasswordType extends AbstractEntityType
             ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
 
         // username for ajax validation
-        $builder->add('username', HiddenType::class);
+        $helper->field('username')->addHiddenType();
     }
 }

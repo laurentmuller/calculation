@@ -17,7 +17,6 @@ namespace App\Form\Product;
 use App\Entity\Product;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Product edit type.
@@ -37,7 +36,7 @@ class ProductType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('description')
             ->maxLength(255)

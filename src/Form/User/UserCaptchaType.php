@@ -20,7 +20,6 @@ use App\Form\Type\CaptchaImage;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use App\Validator\Captcha;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
@@ -63,7 +62,7 @@ abstract class UserCaptchaType extends AbstractHelperType
      * Subclass must call <code>parent::addFormFields($helper);</code> to add
      * the image captcha field (if applicable).
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         // captcha image
         if ($this->displayCaptcha) {

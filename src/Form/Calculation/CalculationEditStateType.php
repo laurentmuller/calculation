@@ -18,7 +18,6 @@ use App\Entity\Calculation;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Form\Type\PlainType;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Edit calculation state type.
@@ -38,7 +37,7 @@ class CalculationEditStateType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('id')
             ->updateOption('number_pattern', PlainType::NUMBER_IDENTIFIER)

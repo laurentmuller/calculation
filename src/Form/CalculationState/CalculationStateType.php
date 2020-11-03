@@ -17,7 +17,6 @@ namespace App\Form\CalculationState;
 use App\Entity\CalculationState;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Calculation state edit type.
@@ -37,7 +36,7 @@ class CalculationStateType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('code')
             ->maxLength(30)

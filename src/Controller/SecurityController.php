@@ -16,7 +16,6 @@ namespace App\Controller;
 
 use App\Form\User\UserLoginType;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -30,7 +29,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="app_login")
      */
-    public function login(AuthenticationUtils $utils, KernelInterface $kernel): Response
+    public function login(AuthenticationUtils $utils): Response
     {
         $form = $this->createForm(UserLoginType::class, [
             'username' => $utils->getLastUsername(),

@@ -17,7 +17,6 @@ namespace App\Form\Category;
 use App\Entity\Category;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Category edit type.
@@ -37,7 +36,7 @@ class CategoryType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('code')
             ->maxLength(30)

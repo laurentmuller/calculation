@@ -17,7 +17,6 @@ namespace App\Form\Customer;
 use App\Entity\Customer;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Customer edit type.
@@ -37,7 +36,7 @@ class CustomerType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('title')
             ->maxLength(50)

@@ -19,7 +19,6 @@ use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Form\Type\EnabledDisabledType;
 use App\Form\Type\PlainType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
@@ -57,7 +56,7 @@ class UserType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('id')
             ->addHiddenType();

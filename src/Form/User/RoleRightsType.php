@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\Form\User;
 
 use App\Form\FormHelper;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Role rights type.
@@ -27,9 +26,9 @@ class RoleRightsType extends RightsType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
-        parent::addFormFields($helper, $builder, $options);
+        parent::addFormFields($helper);
 
         $helper->field('name')
             ->label('user.fields.role')

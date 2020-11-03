@@ -18,7 +18,6 @@ use App\Entity\User;
 use App\Form\FormHelper;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -47,7 +46,7 @@ class UserRegistrationType extends UserCaptchaType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('email')
             ->label('user.fields.email')
@@ -62,7 +61,7 @@ class UserRegistrationType extends UserCaptchaType
         $helper->field('plainPassword')
             ->addRepeatPasswordType();
 
-        parent::addFormFields($helper, $builder, $options);
+        parent::addFormFields($helper);
     }
 
     /**

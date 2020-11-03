@@ -66,7 +66,7 @@ class ExcelDocument extends Spreadsheet
     /**
      * Constructor.
      *
-     * @param TranslatorInterface $translator the translator used for the title and the boolean formats
+     * @param TranslatorInterface $translator the translator used for the title, the headers and the boolean formats
      */
     public function __construct(TranslatorInterface $translator)
     {
@@ -472,7 +472,6 @@ class ExcelDocument extends Spreadsheet
                 $sheet->getStyle("{$name}1")->getAlignment()
                     ->setHorizontal($alignment);
             }
-
 
             ++$col;
         }

@@ -18,7 +18,6 @@ use App\Entity\CalculationGroup;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Repository\CategoryRepository;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
@@ -68,7 +67,7 @@ class CalculationGroupType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         // default
         $helper->field('categoryId')->addHiddenType();
@@ -80,6 +79,6 @@ class CalculationGroupType extends AbstractEntityType
             ->addCollectionType(CalculationItemType::class);
 
         // add event
-        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'onPostSubmit']);
+        $helper->addEventListener(FormEvents::POST_SUBMIT, [$this, 'onPostSubmit']);
     }
 }

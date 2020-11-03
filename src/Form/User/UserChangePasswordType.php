@@ -17,7 +17,6 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Change user password type.
@@ -45,7 +44,7 @@ class UserChangePasswordType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')
             ->updateOption('hidden_input', true)

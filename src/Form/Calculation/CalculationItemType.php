@@ -17,7 +17,6 @@ namespace App\Form\Calculation;
 use App\Entity\CalculationItem;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Calculation item edit type.
@@ -37,7 +36,7 @@ class CalculationItemType extends AbstractEntityType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('description')->addHiddenType()
             ->field('unit')->addHiddenType()

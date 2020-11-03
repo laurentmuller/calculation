@@ -17,7 +17,6 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\FormHelper;
 use App\Util\Utils;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
@@ -69,9 +68,9 @@ class UserRightsType extends RightsType
     /**
      * {@inheritdoc}
      */
-    protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void
+    protected function addFormFields(FormHelper $helper): void
     {
-        parent::addFormFields($helper, $builder, $options);
+        parent::addFormFields($helper);
 
         $helper->field('username')
             ->addPlainType(true);

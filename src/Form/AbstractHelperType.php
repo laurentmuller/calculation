@@ -31,13 +31,13 @@ abstract class AbstractHelperType extends AbstractType
     {
         parent::buildForm($builder, $options);
         $helper = $this->createFormHelper($builder);
-        $this->addFormFields($helper, $builder, $options);
+        $this->addFormFields($helper);
     }
 
     /**
      * Adds the form fields within the given helper.
      */
-    abstract protected function addFormFields(FormHelper $helper, FormBuilderInterface $builder, array $options): void;
+    abstract protected function addFormFields(FormHelper $helper): void;
 
     /**
      * Creates the form helper.

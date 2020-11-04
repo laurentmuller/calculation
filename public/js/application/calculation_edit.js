@@ -286,13 +286,13 @@ var Application = {
      * 
      * @return {Application} This application instance for chaining.
      */
-    initItemDialog: function () {
+    initEditDialog: function () {
         'use strict';
 
         // already initialized?
         const that = this;
         if (that.dialogInitialized) {
-            return;
+            return that;
         }
 
         // dialog validator
@@ -356,10 +356,79 @@ var Application = {
         $('#item_price, #item_quantity').on('input', proxy);
 
         // ok
-        this.dialogInitialized = true;
+        that.dialogInitialized = true;
         return that;
     },
 
+    /**
+     * Initialize the drag behavior of the edit dialog.
+     * 
+     * @return {Application} This application instance for chaining.
+     */
+    initDragDialog: function() {
+        'use strict';
+
+        // already initialized?
+        const that = this;
+        if (that.dragInitialized) {
+            return that;
+        }
+        
+        // draggable edit dialog
+        $('#item_modal .modal-header').on('mousedown', function(e) {
+            // save values
+            const $draggable = $(this);
+            const $focused = $(':focus');
+            const $dialog = $draggable.closest('.modal-dialog');
+            
+            const startX = e.pageX - $draggable.offset().left;
+            const startY = e.pageY - $draggable.offset().top;
+            const footerHeight = $('.footer').outerHeight();
+            const contentWidth = $('.modal-content').width();
+            const contentHeight = $('.modal-content').height();
+            const margin = parseInt($dialog.css('margin-top'), 10);
+            
+            $('body').on('mousemove.draggable', function(e) {
+                // compute
+                const windowWidth = window.innerWidth - margin;
+                const windowHeight= window.innerHeight - margin - footerHeight;
+                const left = checkRange(margin, windowWidth - contentWidth, e.pageX - startX);
+                const top =  checkRange(margin, windowHeight - contentHeight, e.pageY - startY);
+                
+                // move
+                $dialog.offset({
+                    'left': left,
+                    'top': top
+                });    
+                
+            }).one('mouseup', function() {
+                $('body').off('mousemove.draggable');
+                if ($focused.length) {
+                    $focused.focus();
+                }
+            });            
+            
+            $draggable.closest('.modal').one('hide.bs.modal', function() {
+                $('body').off('mousemove.draggable');
+            }).one('hidden.bs.modal', function() {
+                $dialog.removeAttr('style');
+            });
+            
+            function checkRange(min, max , value) {
+                if (value < min) {
+                    return min;
+                }else if (value > max) {
+                    return max;
+                }
+                return value;
+            }
+        });
+        
+        // ok
+        that.dragInitialized = true;
+        return that;        
+    },
+    
     /**
      * Initialize group and item menus.
      * 
@@ -680,6 +749,27 @@ var Application = {
     },
 
     /**
+     * Compare 2 strings with language sensitive.
+     * 
+     * @param {String}
+     *            string1 - the first string to compare.
+     * @param {String}
+     *            string2 - the second string to compare.
+     * @return {int} a negative value if string1 comes before string2; a
+     *         positive value if string1 comes after string2; 0 if they are
+     *         considered equal.
+     */
+    compareStrings: function (string1, string2) {
+        'use strict';
+        
+        if (this.collator === undefined) {
+            const lang = $('html').attr('lang');
+            this.collator = new Intl.Collator(lang, {sensitivity: 'variant', caseFirst: 'upper'});
+        }
+        return this.collator.compare(string1, string2);
+    },
+    
+    /**
      * Sort all items.
      * 
      * @return {Application} This application instance for chaining.
@@ -722,7 +812,7 @@ var Application = {
         $rows.sort(function (rowA, rowB) {
             const textA = $('td:first', rowA).text();
             const textB = $('td:first', rowB).text();
-            return textA.localeCompare(textB, 'fr-ch');
+            return that.compareStrings(textA, textB);
         }).appendTo($tbody);
         
         // update identifiers
@@ -749,11 +839,12 @@ var Application = {
     sortGroups: function () {
         'use strict';
 
+        const that = this;
         let $table = $('#data-table-edit');
         $table.find('tbody').sort(function (bodyA, bodyB) {
             const textA = $('th:first', bodyA).text();
             const textB = $('th:first', bodyB).text();
-            return textA.localeCompare(textB);            
+            return that.compareStrings(textA, textB);
         }).appendTo($table);
 
         return this;
@@ -798,7 +889,7 @@ var Application = {
         'use strict';
 
         // initialize
-        this.initItemDialog();
+        this.initEditDialog().initDragDialog();
         this.$editingRow = null;
 
         // reset
@@ -833,7 +924,7 @@ var Application = {
         const $row = source.getParentRow();
 
         // initialize
-        this.initItemDialog();
+        this.initEditDialog().initDragDialog();
         this.$editingRow = $row;
 
         // reset
@@ -1338,4 +1429,5 @@ $.fn.extend({
             Application.updateTotals();
         }, 250);
     });
+    
 }(jQuery));

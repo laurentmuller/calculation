@@ -709,7 +709,7 @@ class DataColumn
     }
 
     /**
-     * Sets a value indicating the cell data must be renderer as is (raw data).
+     * Sets a value indicating if the cell data must be renderer as is (raw data).
      *
      * @param bool $rawData true if raw data
      */

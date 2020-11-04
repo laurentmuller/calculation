@@ -38,14 +38,13 @@ class IndexController extends AbstractController
      *
      * @Route("/", name="homepage")
      */
-    public function index(CalculationRepository $calculationRepository, CalculationStateRepository $stateRepository): Response
+    public function index(CalculationRepository $calculRepository, CalculationStateRepository $stateRepository): Response
     {
-        $tabular = $this->isDisplayTabular();
-
         // get values to display
+        $tabular = $this->isDisplayTabular();
         $states = $stateRepository->getListCount();
-        $months = $calculationRepository->getByMonth();
-        $calculations = $calculationRepository->getLastCalculations($tabular ? 10 : 6);
+        $months = $calculRepository->getByMonth();
+        $calculations = $calculRepository->getLastCalculations($tabular ? 10 : 6);
         $edit = $this->getApplication()->isEditAction();
 
         // get states count and total

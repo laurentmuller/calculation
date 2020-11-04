@@ -376,6 +376,7 @@ common:
     value_disabled: Désactivé
     button_ok: OK
     button_cancel: Annuler
+    button_close: Fermer
     button_add: Nouveau
     button_edit: Modifier
     button_delete: Supprimer

@@ -1,10 +1,11 @@
+{# Modal dialog to edit a calculation item #}
 <div id="item_modal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
     <form id="item_form" autocomplete="off" data-add="{{ 'calculationitem.add.title'|trans }}" data-edit="{{ 'calculationitem.edit.title'|trans }}">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="dialog-title">{{ 'calculationitem.edit.title'|trans }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <div class="modal-header cursor-move">
+                    <h5 class="modal-title"><i class="fas fa-fw fa-edit" aria-hidden="true"></i><span id="dialog-title">{{ 'calculationitem.edit.title'|trans }}</span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'common.button_close'|trans }}" title="{{ 'common.button_close'|trans }}" >
           				<span aria-hidden="true">&times;</span>
         			</button>
                 </div>

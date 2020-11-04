@@ -75,21 +75,12 @@ trait NumberFormatterTrait
      */
     public function localePercent($number, bool $includeSign = true, int $decimals = 0): string
     {
-        if ($includeSign) {
-            static $signedFormatter;
-            if (!$signedFormatter) {
-                $signedFormatter = $this->getNumberFormatter(NumberFormatter::PERCENT, $decimals);
-            }
-
-            return $signedFormatter->format((float) $number);
-        }
-        static $unsignedFormatter;
-        if (!$unsignedFormatter) {
-            $unsignedFormatter = $this->getNumberFormatter(NumberFormatter::PERCENT, $decimals);
-            $unsignedFormatter->setSymbol(NumberFormatter::PERCENT_SYMBOL, '');
+        $formatter = $this->getNumberFormatter(NumberFormatter::PERCENT, $decimals);
+        if (!$includeSign) {
+            $formatter->setSymbol(NumberFormatter::PERCENT_SYMBOL, '');
         }
 
-        return $unsignedFormatter->format((float) $number);
+        return $formatter->format((float) $number);
     }
 
     /**

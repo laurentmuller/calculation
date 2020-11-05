@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function(window, $) {
+(function (window, $) {
 
     'use strict';
 
@@ -11,7 +11,7 @@
      * Shared Instance.
      */
     window.Notifier = {
-            
+
         /**
          * Display a notification.
          * 
@@ -25,7 +25,7 @@
          *            [options] - The custom options.
          * @returns {JQuery} this instance.
          */
-        notify: function(type, message, title, options) {
+        notify: function (type, message, title, options) {
             // merge options
             const settings = $.extend({}, this.DEFAULTS, options);
             settings.position = this.checkPosition(settings.position);
@@ -56,15 +56,15 @@
             } else {
                 $container.append($alert);
             }
-            
+
             // handle events
             const that = this;
-            $alert.on('click', function(e) {
+            $alert.on('click', function (e) {
                 e.preventDefault();
                 that.hideAlert($alert, settings);
             });
             if ($close) {
-                $close.on('click', function(e) {
+                $close.on('click', function (e) {
                     e.preventDefault();
                     that.hideAlert($alert, settings);
                 });
@@ -72,11 +72,11 @@
 
             // window resize
             switch (settings.position) {
-                case this.NotificationPositions.TOP_CENTER:
-                case this.NotificationPositions.BOTTOM_CENTER:
-                    const $target = $(settings.target);
-                    that.handleResize($target, $container);
-                    break;
+            case this.NotificationPositions.TOP_CENTER:
+            case this.NotificationPositions.BOTTOM_CENTER:
+                const $target = $(settings.target);
+                that.handleResize($target, $container);
+                break;
             }
 
             // show
@@ -94,7 +94,7 @@
          *            [options] - The custom options.
          * @returns {JQuery} this instance.
          */
-        info: function(message, title, options) {
+        info: function (message, title, options) {
             return this.notify(this.NotificationTypes.INFO, message, title, options);
         },
 
@@ -109,7 +109,7 @@
          *            [options] - The custom options.
          * @returns {JQuery} this instance.
          */
-        success: function(message, title, options) {
+        success: function (message, title, options) {
             return this.notify(this.NotificationTypes.SUCCESS, message, title, options);
         },
 
@@ -124,7 +124,7 @@
          *            [options] - The custom options.
          * @returns {JQuery} this instance.
          */
-        warning: function(message, title, options) {
+        warning: function (message, title, options) {
             return this.notify(this.NotificationTypes.WARNING, message, title, options);
         },
 
@@ -139,7 +139,7 @@
          *            [options] - The custom options.
          * @returns {JQuery} this instance.
          */
-        danger: function(message, title, options) {
+        danger: function (message, title, options) {
             return this.notify(this.NotificationTypes.DANGER, message, title, options);
         },
 
@@ -154,7 +154,7 @@
          *            [options] - The custom options.
          * @returns {JQuery} this instance.
          */
-        primary: function(message, title, options) {
+        primary: function (message, title, options) {
             return this.notify(this.NotificationTypes.PRIMARY, message, title, options);
         },
 
@@ -169,7 +169,7 @@
          *            [options] - The custom options.
          * @returns {JQuery} this instance.
          */
-        secondary: function(message, title, options) {
+        secondary: function (message, title, options) {
             return this.notify(this.NotificationTypes.SECONDARY, message, title, options);
         },
 
@@ -184,7 +184,7 @@
          *            [options] - The custom options.
          * @returns {JQuery} this instance.
          */
-        dark: function(message, title, options) {
+        dark: function (message, title, options) {
             return this.notify(this.NotificationTypes.DARK, message, title, options);
         },
 
@@ -193,7 +193,7 @@
          * 
          * @returns {JQuery} this instance.
          */
-        removeContainer: function() {
+        removeContainer: function () {
             if (this.containerId) {
                 $('#' + this.containerId).remove();
                 this.containerId = null;
@@ -209,19 +209,19 @@
          * 
          * @returns {string} A valid type.
          */
-        checkType: function(type) {
+        checkType: function (type) {
             const types = this.NotificationTypes;
             switch (type) {
-                case types.INFO:
-                case types.SUCCESS:
-                case types.WARNING:
-                case types.DANGER:
-                case types.PRIMARY:
-                case types.SECONDARY:
-                case types.DARK:
-                    return type;
-                default:
-                    return types.INFO;
+            case types.INFO:
+            case types.SUCCESS:
+            case types.WARNING:
+            case types.DANGER:
+            case types.PRIMARY:
+            case types.SECONDARY:
+            case types.DARK:
+                return type;
+            default:
+                return types.INFO;
             }
         },
 
@@ -233,20 +233,20 @@
          * 
          * @returns {string} A valid position.
          */
-        checkPosition: function(position) {
+        checkPosition: function (position) {
             const positions = this.NotificationPositions;
             switch (position) {
-                case positions.TOP_LEFT:
-                case positions.TOP_CENTER:
-                case positions.TOP_RIGHT:
-                case positions.BOTTOM_LEFT:
-                case positions.BOTTOM_CENTER:
-                    return position;
-                default:
-                    return positions.BOTTOM_RIGHT;
+            case positions.TOP_LEFT:
+            case positions.TOP_CENTER:
+            case positions.TOP_RIGHT:
+            case positions.BOTTOM_LEFT:
+            case positions.BOTTOM_CENTER:
+                return position;
+            default:
+                return positions.BOTTOM_RIGHT;
             }
         },
-        
+
         /**
          * Returns if alert must be prepend or append to the list; depending of
          * the position.
@@ -257,15 +257,15 @@
          * @returns {boolean} true to prepend (top positions), false to append
          *          (bottom positions).
          */
-        isPrepend: function(options) {
+        isPrepend: function (options) {
             const positions = this.NotificationPositions;
             switch (options.position) {
-                case positions.TOP_LEFT:
-                case positions.TOP_CENTER:
-                case positions.TOP_RIGHT:
-                    return false;
-                default: // bottom
-                    return true;
+            case positions.TOP_LEFT:
+            case positions.TOP_CENTER:
+            case positions.TOP_RIGHT:
+                return false;
+            default: // bottom
+                return true;
             }
         },
 
@@ -277,7 +277,7 @@
          * 
          * @returns {JQuery} The alerts container.
          */
-        getContainer: function(options) {
+        getContainer: function (options) {
             // check if div is already created
             const id = options.containerId;
             let $div = $('#' + id);
@@ -285,7 +285,7 @@
                 return $div;
             }
 
-            // style
+            // global style
             let css = {
                 'cursor': 'pointer',
                 'position': 'fixed',
@@ -297,52 +297,52 @@
             // position
             const positions = this.NotificationPositions;
             switch (options.position) {
-                case positions.TOP_LEFT:
-                    css.top = 0;
-                    css.left = 0;
-                    css['margin-top'] = this.toPixel(options.marginTop);
-                    css['margin-left'] = this.toPixel(options.marginLeft);
-                    break;
-                case positions.TOP_CENTER:
-                    css.top = 0;
-                    css.left = this.toPixel(($(options.target).width() - options.containerWidth) / 2); // '50%';
-                    css['margin-top'] = this.toPixel(options.marginTop);
-                    break;
-                case positions.TOP_RIGHT:
-                    css.top = 0;
-                    css.right = 0;
-                    css['margin-top'] = this.toPixel(options.marginTop);
-                    css['margin-right'] = this.toPixel(options.marginRight);
-                    break;
-                case positions.BOTTOM_LEFT:
-                    css.left = 0;
-                    css.bottom = 0;
-                    css['margin-left'] = this.toPixel(options.marginLeft);
-                    css['margin-bottom'] = this.toPixel(options.marginBottom);
-                    break;
-                case positions.BOTTOM_CENTER:
-                    css.bottom = 0;
-                    css.left = this.toPixel(($(options.target).width() - options.containerWidth) / 2);
-                    css.right = 0;
-                    css['margin-bottom'] = this.toPixel(options.marginBottom);
-                    break;
-                default: // positions.BOTTOM_RIGHT:
-                    css.bottom = 0;
-                    css.right = 0;
-                    css['margin-right'] = this.toPixel(options.marginRight);
-                    css['margin-bottom'] = this.toPixel(options.marginBottom);
-                    break;
+            case positions.TOP_LEFT:
+                css.top = 0;
+                css.left = 0;
+                css['margin-top'] = this.toPixel(options.marginTop);
+                css['margin-left'] = this.toPixel(options.marginLeft);
+                break;
+            case positions.TOP_CENTER:
+                css.top = 0;
+                css.left = '50%';
+                css['margin-top'] = this.toPixel(options.marginTop);
+                css['margin-left'] = this.toPixel(-options.containerWidth / 2);
+                break;
+            case positions.TOP_RIGHT:
+                css.top = 0;
+                css.right = 0;
+                css['margin-top'] = this.toPixel(options.marginTop);
+                css['margin-right'] = this.toPixel(options.marginRight);
+                break;
+            case positions.BOTTOM_LEFT:
+                css.bottom = 0;
+                css.left = 0;
+                css['margin-bottom'] = this.toPixel(options.marginBottom);
+                css['margin-left'] = this.toPixel(options.marginLeft);
+                break;
+            case positions.BOTTOM_CENTER:
+                css.bottom = 0;
+                css.left = '50%';
+                css['margin-bottom'] = this.toPixel(options.marginBottom);
+                css['margin-left'] = this.toPixel(-options.containerWidth / 2);
+                break;
+            default: // positions.BOTTOM_RIGHT:
+                css.bottom = 0;
+                css.right = 0;
+                css['margin-bottom'] = this.toPixel(options.marginBottom);
+                css['margin-right'] = this.toPixel(options.marginRight);
+                break;
             }
 
-            // create
-            $div = $('<div/>', {
+            // target
+            const $target = $(options.target);
+
+            // create and append
+            return $('<div/>', {
                 id: id,
                 css: css
-            });
-
-            // append
-            const $target = $(options.target);
-            return $div.appendTo($target);
+            }).appendTo($target);
         },
 
         /**
@@ -353,24 +353,24 @@
          * 
          * @returns {JQuery} The icon.
          */
-        createIcon: function(options) {
+        createIcon: function (options) {
             let clazz = 'mr-2 fas fa-lg fa-';
             switch (options.type) {
-                case this.NotificationTypes.INFO:
-                    clazz += 'question-circle';
-                    break;
-                case this.NotificationTypes.SUCCESS:
-                    clazz += 'check-circle';
-                    break;
-                case this.NotificationTypes.WARNING:
-                    clazz += 'exclamation-circle';
-                    break;
-                case this.NotificationTypes.DANGER:
-                    clazz += 'exclamation-triangle';
-                    break;
-                default:
-                    clazz += 'check-circle';
-                    break;
+            case this.NotificationTypes.INFO:
+                clazz += 'info-circle';
+                break;
+            case this.NotificationTypes.SUCCESS:
+                clazz += 'check-circle';
+                break;
+            case this.NotificationTypes.WARNING:
+                clazz += 'exclamation-circle';
+                break;
+            case this.NotificationTypes.DANGER:
+                clazz += 'exclamation-triangle';
+                break;
+            default:
+                clazz += 'check-circle';
+                break;
             }
 
             // create
@@ -388,7 +388,7 @@
          * 
          * @returns {JQuery} The div title or null if no title.
          */
-        createTitle: function(options) {
+        createTitle: function (options) {
             if (options.title) {
                 // div
                 const $div = $('<div/>', {
@@ -421,15 +421,18 @@
          * 
          * @returns {JQuery} The close button or null if no button.
          */
-        createCloseButton: function(options) {
+        createCloseButton: function (options) {
             if (options.closeButton) {
-                const $button = $('<button/>', {
-                    'type': 'button',
-                    'class': 'close py-2 px-3'
-                });
                 const $span = $('<span/>', {
                     'aria-hidden': 'true',
                     'html': '&times;'
+                });
+                const title = options.closeText || 'Close';
+                const $button = $('<button/>', {
+                    'class': 'close py-2 px-3',
+                    'aria-label': title,
+                    'title': title,
+                    'type': 'button'
                 });
                 return $button.append($span);
             }
@@ -443,7 +446,7 @@
          * 
          * @returns {JQuery} The div message.
          */
-        createMessage: function(options) {
+        createMessage: function (options) {
             const $div = $('<div/>', {
                 'html': options.message
             });
@@ -464,7 +467,7 @@
          * 
          * @returns {JQuery} The div alert.
          */
-        createAlert: function(options) {
+        createAlert: function (options) {
             let clazz = 'alert alert-dismissible alert-' + options.type;
             if (options.title) {
                 clazz += ' pr-1';
@@ -483,7 +486,7 @@
          * 
          * @return {string} The value within the pixel unit.
          */
-        toPixel: function(value) {
+        toPixel: function (value) {
             return value + 'px';
         },
 
@@ -496,18 +499,18 @@
          *            [$container] - The alerts container.
          * @return {Object} This instance.
          */
-        handleResize: function($parent, $container) {
+        handleResize: function ($parent, $container) {
             if (!$container.data('resize-handler')) {
                 const that = this;
                 $container.data('resize-handler', true);
-                $(window).on('resize', function() {
+                $(window).on('resize', function () {
                     const left = ($parent.width() - $container.width()) / 2;
-                    $container.css('left', that.toPixel(left)); 
+                    $container.css('left', that.toPixel(left));
                 });
             }
             return this;
         },
-        
+
         /**
          * Show the notification.
          * 
@@ -517,20 +520,20 @@
          *            [options] - The custom options.
          * @return {Object} This instance.
          */
-        showAlert: function($notification, options) {
+        showAlert: function ($notification, options) {
             const that = this;
-            const callback = function() {
+            const callback = function () {
                 that.hideAlert($notification, options);
             };
             $notification.hide()[options.showMethod]({
                 easing: options.showEasing,
                 duration: options.showDuration,
-                complete: function() {
+                complete: function () {
                     const timeout = options.timeout;
                     if (timeout > 0) {
-                        $notification.createTimer(callback, timeout).hover(function() {
+                        $notification.createTimer(callback, timeout).hover(function () {
                             $notification.removeTimer();
-                        }, function() {
+                        }, function () {
                             $notification.createTimer(callback, timeout);
                         });
                     }
@@ -538,7 +541,7 @@
             });
             return that;
         },
-        
+
         /**
          * Hide the notification.
          * 
@@ -548,19 +551,19 @@
          *            [options] - The custom options.
          * @return {Object} This instance.
          */
-        hideAlert: function($notification, options) {
+        hideAlert: function ($notification, options) {
             const that = this;
             $notification.stop()[options.hideMethod]({
                 duration: options.hideDuration,
                 easing: options.hideEasing,
-                complete: function() {
+                complete: function () {
                     $notification.removeTimer().remove();
                 }
             });
             return that;
         }
     };
-    
+
     /**
      * The allowed notification types.
      */
@@ -574,7 +577,6 @@
         DARK: 'dark'
     };
 
-    
     /**
      * The allowed position types.
      */
@@ -586,37 +588,55 @@
         BOTTOM_CENTER: 'bottom-center',
         BOTTOM_RIGHT: 'bottom-right'
     };
-    
+
     /**
      * The default options.
      */
     window.Notifier.DEFAULTS = {
-        target: 'body', // the target to append alerts container to
-        containerId: 'div_notify_alert_div', // the alerts container
-                                             // identifier
-        containerWidth: 400, // the alerts width
+        // the target to append notify container to
+        target: 'body',
 
-        position: 'bottom-right', // the alerts position
-        marginTop: 20, // the margin top
-        marginBottom: 10, // the margin bottom
-        marginLeft: 20, // the margin left
-        marginRight: 20, // the margin right
+        // the notify container identifier
+        containerId: 'div_notify_alert_div',
 
-        timeout: 4000, // the show duration in milliseconds
+        // the notify width
+        containerWidth: 400,
 
-        showMethod: 'fadeIn', // the show method
-        showDuration: 'slow', // the show duration
-        showEasing: 'swing', // the show easing
+        // the notify position
+        position: 'bottom-right',
 
-        hideMethod: 'fadeOut', // the hide method
-        hideDuration: 'slow', // the hide duration
-        hideEasing: 'swing', // the show easing
+        // the container margins
+        marginTop: 20,
+        marginBottom: 10,
+        marginLeft: 20,
+        marginRight: 20,
 
-        closeButton: true, // show close button
-        icon: null, // the alert icon
-        zindex: 3, // the alert z-index
-        titleClass: 'h6', // the title class
-        messageClass: null, // the message class
+        // the show duration in milliseconds
+        timeout: 4000,
+
+        // the show method
+        showMethod: 'fadeIn',
+        showDuration: 'slow',
+        showEasing: 'swing',
+
+        // the hide method
+        hideMethod: 'fadeOut',
+        hideDuration: 'slow',
+        hideEasing: 'swing',
+
+        // the close button
+        closeButton: true,
+        closeText: 'Close',
+
+        // the icon
+        icon: null,
+
+        // the notify z-index
+        zindex: 3,
+
+        // the classes
+        titleClass: 'h6',
+        messageClass: null,
     };
 
 }(window, jQuery));

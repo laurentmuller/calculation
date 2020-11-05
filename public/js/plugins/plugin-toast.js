@@ -526,7 +526,7 @@
                     'aria-hidden': 'true',
                     'html': '&times;'
                 });
-                const title = options.closeText || '';
+                const title = options.closeText || 'Close';
                 const $button = $('<button/>', {
                     'class': 'close ml-2 mb-1',
                     'data-dismiss': 'toast',

@@ -1,23 +1,18 @@
 dist: xenial
 language: php
-
-os: 
-  - linux
-    
+os:
+- linux
 php:
-  - 7.4
-      
+- 7.4
 env:
-  - SYMFONY_VERSION=5.1.*
-  
+- SYMFONY_VERSION=5.1.*
 before_install:
-  - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  - composer self-update
-  - composer validate
-    
-install:    
-  - flags="--prefer-dist --no-progress --no-interaction"
-  - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install $flags
-
-notifications:  
-  slack: haslerrail:bmYUu3l0jnDbU5DZVrbmvivZ
+- echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+- composer self-update
+- composer validate
+install:
+- flags="--prefer-dist --no-progress --no-interaction"
+- COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install $flags
+notifications:
+  slack:
+    secure: loLqqSP/suVYUxEvJRhgCCeGnjUu4sCaMTC0/jTPd9hbX8g8xXqihW/JCwDOeIGOS8yo2F1I+MVORd167RPCyBSP/6jvtrN1VXsPXrt5uJxCCvsvj/dlhBTpftuCxN+mT0BzlHca2bBMo1/sA6KNdJBoMubyaKRSBuLjQSTwIr1ZtRY54R4f9cFeTiphaotEMYzmbzvTN6OmEffq9a0MrTDABlibGoTNiluY21K5MYdHxJposKjj57Vzickq+XGGYMzCHYljs7OzxEEex8BnZ0DI3WrAd92mQQbUivCAmz051QSbzSJ+6IPzcaVqDxCFCijC4fgFUt+B3v3neQDJaGc+FUknB1LPHQLRq7By5nvFVVONaD66LSlf09haj5grtFuJagdjjscpr2zMHXfpx/1La4HTMrZbziVBKgr30GLnjRTM4aXAap/heBVpNSJG5op7pQ2Ep36t0MXj8Hw1c0Znb1EIgTCAEvqLxPZLO4QOA7/PdWXw4Y777aokpXFmFsObfcpCXw0DUlf30FEkQQ+lWUXOFGPzzt46ks/zUqJWn3mxOl0MGfWzhmWIPo4sTStRCahlIHwofF1UyUH+7G6thE9bYjRiWiAt5pxkWCVLb6v6ku1tVuQHUCIMeBlhKz7+DmZEi6bij/WrfniqXlt2wgWPpCm/eSj/O+/zNGw=

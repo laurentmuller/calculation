@@ -8,6 +8,7 @@
  * Returns a random element that is different from the given last index (if
  * any).
  */
+/* eslint no-extend-native: ["error", { "exceptions": ["Array"] }] */
 Array.prototype.randomElement = function (lastIndex) {
     'use strict';
 
@@ -30,6 +31,7 @@ Array.prototype.randomElement = function (lastIndex) {
 /**
  * Returns the last element or null if empty.
  */
+/* eslint no-extend-native: ["error", { "exceptions": ["Array"] }] */
 Array.prototype.last = function () {
     'use strict';
 

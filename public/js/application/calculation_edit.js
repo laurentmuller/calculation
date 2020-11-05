@@ -361,7 +361,7 @@ var Application = {
     },
 
     /**
-     * Initialize the drag behavior of the edit dialog.
+     * Initialize the draggable edit dialog.
      * 
      * @return {Application} This application instance for chaining.
      */
@@ -376,52 +376,57 @@ var Application = {
         
         // draggable edit dialog
         $('#item_modal .modal-header').on('mousedown', function(e) {
-            // save values
-            const $draggable = $(this);
-            const $focused = $(':focus');
-            const $dialog = $draggable.closest('.modal-dialog');
+            // left button?
+            if (event.which !== 1) {
+                return;
+            }
             
+            // get elements
+            const $draggable = $(this);            
+            const $dialog = $draggable.closest('.modal-dialog');
+            const $content = $draggable.closest('.modal-content');
+            const $close = $draggable.find('.close');
+            const $focused = $(':focus');
+            
+            // save values
             const startX = e.pageX - $draggable.offset().left;
             const startY = e.pageY - $draggable.offset().top;
             const footerHeight = $('.footer').outerHeight();
-            const contentWidth = $('.modal-content').width();
-            const contentHeight = $('.modal-content').height();
-            const margin = parseInt($dialog.css('margin-top'), 10);
+            const margin = Number.parseInt($dialog.css('margin-top'), 10);
+            const windowWidth = window.innerWidth - margin;
+            const windowHeight = window.innerHeight - margin - footerHeight;
+            const right = windowWidth - $content.width();
+            const bottom = windowHeight - $content.height();
+
+            // update style
+            $draggable.toggleClass('bg-primary text-white');
+            $close.toggleClass('bg-primary text-white');
             
             $('body').on('mousemove.draggable', function(e) {
                 // compute
-                const windowWidth = window.innerWidth - margin;
-                const windowHeight= window.innerHeight - margin - footerHeight;
-                const left = checkRange(margin, windowWidth - contentWidth, e.pageX - startX);
-                const top =  checkRange(margin, windowHeight - contentHeight, e.pageY - startY);
-                
+                const left = Math.max(margin, Math.min(right, e.pageX - startX));
+                const top = Math.max(margin, Math.min(bottom, e.pageY - startY));
+
                 // move
                 $dialog.offset({
-                    'left': left,
-                    'top': top
-                });    
-                
+                    left: left,
+                    top: top
+                });
+
             }).one('mouseup', function() {
                 $('body').off('mousemove.draggable');
+                $draggable.toggleClass('bg-primary text-white');
+                $close.toggleClass('bg-primary text-white');
                 if ($focused.length) {
                     $focused.focus();
                 }
-            });            
-            
+            });
+
             $draggable.closest('.modal').one('hide.bs.modal', function() {
                 $('body').off('mousemove.draggable');
             }).one('hidden.bs.modal', function() {
                 $dialog.removeAttr('style');
             });
-            
-            function checkRange(min, max , value) {
-                if (value < min) {
-                    return min;
-                }else if (value > max) {
-                    return max;
-                }
-                return value;
-            }
         });
         
         // ok
@@ -455,7 +460,7 @@ var Application = {
         // sort items button
         $('.btn-sort-items').on('click', function (e) {
             e.preventDefault();
-            that.sortItems();
+            that.sortCalculation();
         });
 
         // data table buttons
@@ -473,7 +478,7 @@ var Application = {
             that.removeGroup($(this));
         }).on('click', '.btn-sort-group', function (e) {
             e.preventDefault();
-            that.sortGroupItems($(this));
+            that.sortItems($(this));
         });
 
         return that;
@@ -762,37 +767,22 @@ var Application = {
     compareStrings: function (string1, string2) {
         'use strict';
         
-        if (this.collator === undefined) {
-            const lang = $('html').attr('lang');
+        if ($.isUndefined(this.collator)) {
+            const lang = $('html').attr('lang') || 'fr-CH';
             this.collator = new Intl.Collator(lang, {sensitivity: 'variant', caseFirst: 'upper'});
         }
         return this.collator.compare(string1, string2);
-    },
-    
-    /**
-     * Sort all items.
-     * 
-     * @return {Application} This application instance for chaining.
-     */
-    sortItems: function () {
-        'use strict';
-
-        const that = this;
-        $('#data-table-edit tbody').each(function () {
-            that.sortGroupItems($(this));
-        });
-
-        return that;
     },
 
     /**
      * Sort items of a group.
      * 
      * @param {JQuery}
-     *            $element - the caller element (button or tbody).
+     *            $element - the caller element (button or tbody) used to find
+     *            the group.
      * @return {Application} This application instance for chaining.
      */
-    sortGroupItems: function ($element) {
+    sortItems: function ($element) {
         'use strict';
 
         // get rows
@@ -832,7 +822,7 @@ var Application = {
     },
 
     /**
-     * Sort groups by name.
+     * Sort all groups by name.
      * 
      * @return {Application} This application instance for chaining.
      */
@@ -849,7 +839,23 @@ var Application = {
 
         return this;
     },
+    
+    /**
+     * Sort all items in all groups.
+     * 
+     * @return {Application} This application instance for chaining.
+     */
+    sortCalculation: function () {
+        'use strict';
 
+        const that = this;
+        $('#data-table-edit tbody').each(function () {
+            that.sortItems($(this));
+        });
+
+        return that;
+    },
+    
     /**
      * Appends the given group to the table.
      * 

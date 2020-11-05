@@ -9,6 +9,7 @@
  * 
  * @return {string} this clean string.
  */
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 String.prototype.clean = function () {
     'use strict';
     if (String.prototype.normalize) {
@@ -29,6 +30,7 @@ String.prototype.clean = function () {
  * @return {integer} the index of the first occurrence of searchValue, or -1 if
  *         not found.
  */
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 String.prototype.indexOfIgnoreCase = function (searchvalue, fromIndex) {
     'use strict';
     return this.toLowerCase().indexOf(searchvalue.toLowerCase(), fromIndex);
@@ -41,6 +43,7 @@ String.prototype.indexOfIgnoreCase = function (searchvalue, fromIndex) {
  *            value - the value to compare with.
  * @return {boolean} true if equal, ignoring case.
  */
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 String.prototype.equalsIgnoreCase = function (value) {
     'use strict';
     return this === value || this.toLowerCase() === value.toLowerCase();
@@ -51,6 +54,7 @@ String.prototype.equalsIgnoreCase = function (value) {
  * 
  * @return {string} this dashed string.
  */
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 String.prototype.dasherize = function () {
     'use strict';
     // first character is always in lower case
@@ -66,6 +70,7 @@ String.prototype.dasherize = function () {
  * 
  * @return {string} this camelized string.
  */
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 String.prototype.camelize = function () {
     'use strict';
     return this.trim().replace(/[-_\s]+(.)?/g, function (match, c) {
@@ -78,6 +83,7 @@ String.prototype.camelize = function () {
  * 
  * @return {boolean} the boolean value.
  */
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 String.prototype.toBool = function () {
     'use strict';
     try {
@@ -95,6 +101,7 @@ String.prototype.toBool = function () {
  * 
  * @return {string} this formatted string.
  */
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.format = function () {
     'use strict';
     var formatted = this;

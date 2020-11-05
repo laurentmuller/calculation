@@ -59,18 +59,10 @@
 
             // update close style
             if ($title && settings.closeButton) {
-                const color = $title.css('color');
-                const background = $title.css('background-color');
-                $title.children('.close').css('color', color).css('background-color', background);
-            }
-
-            // window resize
-            switch (settings.position) {
-            case this.NotificationPositions.TOP_CENTER:
-            case this.NotificationPositions.BOTTOM_CENTER:
-                const $target = $(settings.target);
-                this.handleResize(settings.containerWidth, $target, $container);
-                break;
+                $title.find('.close').css({
+                    'background-color': $title.css('background-color'),
+                    'color': $title.css('color')
+                });
             }
 
             // show
@@ -249,8 +241,9 @@
             // the show duration in milliseconds
             timeout: 4000,
 
-            // show close button
+            // the close button
             closeButton: true,
+            closeText: 'Close',
 
             // the toast icon.
             // Possible values:
@@ -352,16 +345,13 @@
         getContainer: function (options) {
             // check if div is already created
             const id = options.containerId;
-            let $div = $('#' + id);
+            const $div = $('#' + id);
             if ($div.length) {
                 return $div;
             }
 
-            // target
-            const $target = $(options.target);
-
             // global style
-            let css = {
+            const css = {
                 'position': 'fixed',
                 'z-index': options.zindex
             };
@@ -377,8 +367,9 @@
                 break;
             case positions.TOP_CENTER:
                 css.top = 0;
-                css.left = this.toPixel(($target.width() - options.containerWidth) / 2);
+                css.left = '50%';
                 css['margin-top'] = this.toPixel(options.marginTop);
+                css['margin-left'] = this.toPixel(-options.containerWidth / 2);
                 break;
             case positions.TOP_RIGHT:
                 css.top = 0;
@@ -387,33 +378,33 @@
                 css['margin-right'] = this.toPixel(options.marginRight);
                 break;
             case positions.BOTTOM_LEFT:
-                css.left = 0;
                 css.bottom = 0;
-                css['margin-left'] = this.toPixel(options.marginLeft);
+                css.left = 0;
                 css['margin-bottom'] = this.toPixel(options.marginBottom);
+                css['margin-left'] = this.toPixel(options.marginLeft);
                 break;
             case positions.BOTTOM_CENTER:
                 css.bottom = 0;
-                css.left = this.toPixel(($target.width() - options.containerWidth) / 2);
-                css.right = 0;
+                css.left = '50%';
                 css['margin-bottom'] = this.toPixel(options.marginBottom);
+                css['margin-left'] = this.toPixel(-options.containerWidth / 2);
                 break;
             default: // positions.BOTTOM_RIGHT:
                 css.bottom = 0;
                 css.right = 0;
-                css['margin-right'] = this.toPixel(options.marginRight);
                 css['margin-bottom'] = this.toPixel(options.marginBottom);
+                css['margin-right'] = this.toPixel(options.marginRight);
                 break;
             }
 
-            // create
-            $div = $('<div/>', {
+            // target
+            const $target = $(options.target);
+
+            // create and append
+            return $('<div/>', {
                 id: id,
                 css: css
-            });
-
-            // append
-            return $div.appendTo($target);
+            }).appendTo($target);
         },
 
         /**
@@ -535,11 +526,13 @@
                     'aria-hidden': 'true',
                     'html': '&times;'
                 });
-                const clazz = 'ml-2 mb-1 close';
+                const title = options.closeText || '';
                 const $button = $('<button/>', {
+                    'class': 'close ml-2 mb-1',
                     'data-dismiss': 'toast',
-                    'type': 'button',
-                    'class': clazz
+                    'aria-label': title,
+                    'title': title,
+                    'type': 'button'
                 });
                 return $button.append($span);
             }
@@ -555,7 +548,7 @@
          */
         createMessage: function (options) {
             return $('<div/>', {
-                'class': 'toast-body', // bg-light text-body
+                'class': 'toast-body',
                 'html': options.message
             });
         },
@@ -568,36 +561,13 @@
          * 
          * @returns {JQuery} The div toast.
          */
-        createToast: function (options) { // jshint ignore:line
+        createToast: function (options) {
             return $('<div/>', {
                 'role': 'alert',
-                'class': 'toast', // border-' + options.type,
+                'aria-atomic': 'true',
                 'aria-live': 'assertive',
-                'aria-atomic': 'true'
+                'class': 'toast border-' + options.type,
             });
-        },
-
-        /**
-         * Handle the window resize event.
-         * 
-         * @param {int}
-         *            [containerWidth] - The container width.
-         * @param {JQuery}
-         *            [$parent] - The parent container.
-         * @param {JQuery}
-         *            [$container] - The toasts container.
-         * @return {Object} This instance.
-         */
-        handleResize: function (containerWidth, $parent, $container) {
-            if (!$container.data('resize-handler')) {
-                const that = this;
-                $container.data('resize-handler', true);
-                $(window).on('resize', function () {
-                    const left = ($parent.width() - containerWidth) / 2;
-                    $container.css('left', that.toPixel(left));
-                });
-            }
-            return this;
         },
 
         /**

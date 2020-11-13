@@ -6,6 +6,7 @@
 /.php_cs.cache
 composer.lock
 symfony.lock
+/deploy
 /public/images/users/
 /public/js/vendor
 /var/

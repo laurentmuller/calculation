@@ -3,23 +3,46 @@
 /* globals clearSearch */
 
 /**
+ * -------------- Functions extensions --------------
+ */
+$.fn.extend({
+    /**
+     * Update the category selection.
+     * 
+     * @return {jQuery} The jQuery element for chaining.
+     */
+    updateCategory: function () {
+        'use strict';
+
+        const $this = $(this);
+        if ($this.length) {
+            $('#category').val($this.data('id'));
+            $('#button-category').text($this.text());
+            $('.dropdown-category').removeClass('active');
+            $this.addClass('active');
+        }
+        return $this;
+    }
+});
+
+/**
  * Override clear search
  */
-const noConflict = clearSearch;
+const noConflictSearch = clearSearch;
 clearSearch = function ($element, table, callback) { // jshint ignore:line
     'use strict';
 
     const $category = $('#category');
     if ($category.val() !== '') {
+        $('.dropdown-category:first').updateCategory();
         table.column(6).search('');
-        $category.val('');
-        if (!noConflict($element, table, callback)) {
+        if (!noConflictSearch($element, table, callback)) {
             table.draw();
             return false;
         }
         return true;
     } else {
-        return noConflict($element, table, callback);
+        return noConflictSearch($element, table, callback);
     }
 };
 
@@ -29,7 +52,20 @@ clearSearch = function ($element, table, callback) { // jshint ignore:line
 (function ($) {
     'use strict';
 
-    // initialize search columns
+    // initialize category search column
     const table = $('#data-table').dataTable().api();
-    table.initSearchColumn($('#category'), 6);
+    table.initSearchColumn($('#category'), 6, $('#button-category'));
+
+    // handle drop-down category
+    $('.dropdown-category').on('click', function () {
+        $(this).updateCategory();
+        $('#category').trigger('input');
+    }).handleKeys();
+
+    // select category
+    const category = $('#category').val();
+    if (category) {
+        const selector = '.dropdown-category[data-id="' + category + '"]';
+        $(selector).updateCategory();
+    }
 }(jQuery));

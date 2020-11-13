@@ -9,7 +9,7 @@
     'use strict';
 
     /**
-     * -------------- JQuery Extensions --------------
+     * -------------- jQuery Extensions --------------
      */
     $.fn.extend({
 
@@ -36,7 +36,7 @@
          */
         findPasswordScore: function() {
             const $that = $(this);
-            const data = $that.data("passwordstrength");
+            const data = $that.data('passwordstrength');
             if (data && data.verdict && !$.isUndefined(data.verdict.score)) {
                 return data.verdict.score;
             }
@@ -140,7 +140,7 @@
                             const $recaptcha = $elements.findReCaptcha();
                             if ($recaptcha) {
                                 $recaptcha.focus();
-                                $elements.trigger("focusin");
+                                $elements.trigger('focusin');
                                 return;
                             }
                         }
@@ -175,12 +175,15 @@
                 ignore: ':hidden:not(.must-validate)',
 
                 errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    if (inline) {
-                        error.appendTo($(element).closest('div'));
-                    } else {
-                        error.appendTo($(element).closest('.form-group'));
+                    let $parent = $(element).closest('.form-group').find('.passwordstrength');
+                    if (0 === $parent.length) {
+                        if (inline) {
+                            $parent = $(element).closest('div');
+                        } else {
+                            $parent = $(element).closest('.form-group');
+                        }
                     }
+                    error.addClass('invalid-feedback').appendTo($parent);
                 },
 
                 highlight: function(element, errorClass) {
@@ -309,7 +312,8 @@
             // concat values
             const plugins = 'autolink lists link image table paste ' + (options.plugins || '');
             const toolbar = 'styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent |' + (options.toolbar || '');
-            const help_tabs = ['shortcuts'].concat(options.help_tabs || []); // eslint-disable-line camelcase
+            const help_tabs = ['shortcuts'].concat(options.help_tabs || []); // eslint-disable-line
+                                                                                // camelcase
             
             // remove
             if (options) {
@@ -330,7 +334,7 @@
                 height: 250,
                 plugins: plugins.trim(),
                 toolbar: toolbar.trim(),
-                help_tabs: help_tabs, // eslint-disable-line camelcase                
+                help_tabs: help_tabs, // eslint-disable-line camelcase
                 setup: function(editor) {
                     editor.on('init', function() {
                         const $container = $(editor.getContainer());
@@ -367,7 +371,8 @@
             // focus
             if (settings.focus) {
                 delete settings.focus;
-                settings.auto_focus = $this.attr('id'); // eslint-disable-line camelcase
+                settings.auto_focus = $this.attr('id'); // eslint-disable-line
+                                                        // camelcase
             }
 
             // initialize
@@ -463,131 +468,104 @@
      * -------------- Additional and override methods --------------
      */
 
-    $.extend($.validator, {
-
-        /*
-         * format message within the label (if any)
-         */
-        formatLabel: function(element, message, fallback, params) {
-            // parameters
-            if ($.isUndefined(params)) {
-                params = [];
-            }
-            if (arguments.length > 3 && params.constructor !== Array) {
-                params = $.makeArray(arguments).slice(3);
-            }
-            if (params.constructor !== Array) {
-                params = [params];
-            }
-
-            // get text
-            const text = $(element).getLabelText();
-            if (text) {
-                params.unshift(text);
-                return $.validator.format(message, params);
-            }
-            return $.validator.format(fallback, params);
-        },
-    });
-
     /*
      * check password score
      */
-    $.validator.addMethod("password", function(value, element, param) {
+    $.validator.addMethod('password', function(value, element, param) {
         if (this.optional(element)) {
             return true;
         }
         const score = $(element).findPasswordScore();
         return score === -1 || score >= param;
-    }, $.validator.format("The password must have a minimum score of {0}."));
+    }, $.validator.format('The password must have a minimum score of {0}.'));
 
     /*
      * check if the value contains the user name
      */
-    $.validator.addMethod("notUsername", function(value, element, param) {
+    $.validator.addMethod('notUsername', function(value, element, param) {
         if (this.optional(element)) {
             return true;
         }
         const $target = $(param);
-        if (this.settings.onfocusout && $target.not(".validate-notUsername-blur").length) {
-            $target.addClass("validate-notUsername-blur").on("blur.validate-notUsername", function() {
+        if (this.settings.onfocusout && $target.not('.validate-notUsername-blur').length) {
+            $target.addClass('validate-notUsername-blur').on('blur.validate-notUsername', function() {
                 $(element).valid();
             });
         }
         const target = $target.val().trim();
         return target.length === 0 || value.indexOfIgnoreCase(target) === -1;    
-    }, $.validator.format("The field can not contain the user name."));
+    }, $.validator.format('The field can not contain the user name.'));
 
     /*
      * check if value is not an email
      */
-    $.validator.addMethod("notEmail", function(value, element) {
+    $.validator.addMethod('notEmail', function(value, element) {
         if (this.optional(element)) {
             return true;
         }
         return !$.validator.methods.email.call(this, value, element);
-    }, $.validator.format("The field can not be an email."));
+    }, $.validator.format('The field can not be an email.'));
 
     /*
      * check if contains a lower case character
      */
-    $.validator.addMethod("lowercase", function(value, element) {
+    $.validator.addMethod('lowercase', function(value, element) {
         if (this.optional(element)) {
             return true;
         }
         return /[a-z\u00E0-\u00FC]/g.test(value);
-    }, $.validator.format("The field must contain a lower case character."));
+    }, $.validator.format('The field must contain a lower case character.'));
 
     /*
      * check if contains a upper case character
      */
-    $.validator.addMethod("uppercase", function(value, element) {
+    $.validator.addMethod('uppercase', function(value, element) {
         if (this.optional(element)) {
             return true;
         }
         return /[A-Z\u00C0-\u00DC]/g.test(value);
-    }, $.validator.format("The field must contain an upper case character."));
+    }, $.validator.format('The field must contain an upper case character.'));
 
     /*
      * check if contains a upper and lower case characters
      */
-    $.validator.addMethod("mixedcase", function(value, element, param) {
+    $.validator.addMethod('mixedcase', function(value, element, param) {
         if (this.optional(element)) {
             return true;
         }
         return $.validator.methods.lowercase.call(this, value, element, param) && $.validator.methods.uppercase.call(this, value, element, param);
-    }, $.validator.format("The field must contain both upper and lower case characters."));
+    }, $.validator.format('The field must contain both upper and lower case characters.'));
 
     /*
      * check if contains alphabetic characters
      */
-    $.validator.addMethod("letter", function(value, element, param) {
+    $.validator.addMethod('letter', function(value, element, param) {
         if (this.optional(element)) {
             return true;
         }
         return $.validator.methods.lowercase.call(this, value, element, param) || $.validator.methods.uppercase.call(this, value, element, param);
-    }, $.validator.format("The field must contain a letter."));
+    }, $.validator.format('The field must contain a letter.'));
 
     /*
      * check if contains a digit character
      */
-    $.validator.addMethod("digit", function(value, element) {
+    $.validator.addMethod('digit', function(value, element) {
         if (this.optional(element)) {
             return true;
         }
         return /\d/g.test(value);
-    }, $.validator.format("The field must contain a digit character."));
+    }, $.validator.format('The field must contain a digit character.'));
 
     /*
      * check if contains a special character
      */
-    $.validator.addMethod("specialchar", function(value, element) {
+    $.validator.addMethod('specialchar', function(value, element) {
         if (this.optional(element)) {
             return true;
         }
         const regex = /[-!$%^&*()_+|~=`{}[:;<>?,.@#\]]/g;
         return regex.test(value);
-    }, $.validator.format("The field must contain a special character."));
+    }, $.validator.format('The field must contain a special character.'));
 
 
     /*

@@ -120,29 +120,20 @@
     };
     $city.typeahead(cityOptions);
 
-    // add method for the Switzerland zip code (1000 - 9999)
-    $.validator.addMethod("zipcodeCH", function (value, element) {
-        return this.optional(element) || /^[1-9]\d{3}$/.test(value);
-    });
-    $.extend($.validator.messages, {
-        zipcodeChFallback: "Ce champ doit contenir un numéro postal valide.",
-        zipcodeChLabel: "Le champ \"{0}\" doit contenir un numéro postal valide.",
-        zipcodeCH: function (parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.zipcodeChLabel, $.validator.messages.zipcodeChFallback);
-        },
-    });
-
     // options
     const options = {
         rules: {
             "customer[firstName]": {
-                require_from_group: [1, ".customer-group"] // eslint-disable-line camelcase
+                // eslint-disable-next-line camelcase
+                require_from_group: [1, ".customer-group"]
             },
             "customer[lastName]": {
-                require_from_group: [1, ".customer-group"] // eslint-disable-line camelcase
+                // eslint-disable-next-line camelcase
+                require_from_group: [1, ".customer-group"]
             },
             "customer[company]": {
-                require_from_group: [1, ".customer-group"] // eslint-disable-line camelcase
+                // eslint-disable-next-line camelcase
+                require_from_group: [1, ".customer-group"]
             },
             "customer[zipCode]": {
                 zipcodeCH: true

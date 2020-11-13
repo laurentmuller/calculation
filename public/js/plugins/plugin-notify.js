@@ -4,7 +4,6 @@
  * Ready function
  */
 (function (window, $) {
-
     'use strict';
 
     /**
@@ -12,18 +11,22 @@
      */
     window.Notifier = {
 
+        // ------------------------
+        // Public API
+        // ------------------------
+
         /**
          * Display a notification.
          * 
          * @param {string}
-         *            type - The notification type.
+         *            type - The type.
          * @param {string}
-         *            message - The notification message.
+         *            message - The message.
          * @param {string}
-         *            [title] - The notification title.
+         *            [title] - The title.
          * @param {Object}
-         *            [options] - The custom options.
-         * @returns {JQuery} this instance.
+         *            [options] - The options.
+         * @returns {jQuery} this instance.
          */
         notify: function (type, message, title, options) {
             // merge options
@@ -70,15 +73,6 @@
                 });
             }
 
-            // window resize
-            switch (settings.position) {
-            case this.NotificationPositions.TOP_CENTER:
-            case this.NotificationPositions.BOTTOM_CENTER:
-                const $target = $(settings.target);
-                that.handleResize($target, $container);
-                break;
-            }
-
             // show
             return that.showAlert($alert, settings);
         },
@@ -87,12 +81,12 @@
          * Display a notification with info style.
          * 
          * @param {string}
-         *            message - The notification message.
+         *            message - The message.
          * @param {string}
-         *            [title] - The notification title.
+         *            [title] - The title.
          * @param {Object}
-         *            [options] - The custom options.
-         * @returns {JQuery} this instance.
+         *            [options] - The options.
+         * @returns {jQuery} this instance.
          */
         info: function (message, title, options) {
             return this.notify(this.NotificationTypes.INFO, message, title, options);
@@ -102,12 +96,12 @@
          * Display a notification with success style.
          * 
          * @param {string}
-         *            message - The notification message.
+         *            message - The message.
          * @param {string}
-         *            [title] - The notification title.
+         *            [title] - The title.
          * @param {Object}
-         *            [options] - The custom options.
-         * @returns {JQuery} this instance.
+         *            [options] - The options.
+         * @returns {jQuery} this instance.
          */
         success: function (message, title, options) {
             return this.notify(this.NotificationTypes.SUCCESS, message, title, options);
@@ -117,12 +111,12 @@
          * Display a notification with warning style.
          * 
          * @param {string}
-         *            message - The notification message.
+         *            message - The message.
          * @param {string}
-         *            [title] - The notification title.
+         *            [title] - The title.
          * @param {Object}
-         *            [options] - The custom options.
-         * @returns {JQuery} this instance.
+         *            [options] - The options.
+         * @returns {jQuery} this instance.
          */
         warning: function (message, title, options) {
             return this.notify(this.NotificationTypes.WARNING, message, title, options);
@@ -132,12 +126,12 @@
          * Display a notification with danger style.
          * 
          * @param {string}
-         *            message - The notification message.
+         *            message - The message.
          * @param {string}
-         *            [title] - The notification title.
+         *            [title] - The title.
          * @param {Object}
-         *            [options] - The custom options.
-         * @returns {JQuery} this instance.
+         *            [options] - The options.
+         * @returns {jQuery} this instance.
          */
         danger: function (message, title, options) {
             return this.notify(this.NotificationTypes.DANGER, message, title, options);
@@ -147,12 +141,12 @@
          * Display a notification with primary style.
          * 
          * @param {string}
-         *            message - The notification message.
+         *            message - The message.
          * @param {string}
-         *            [title] - The notification title.
+         *            [title] - The title.
          * @param {Object}
-         *            [options] - The custom options.
-         * @returns {JQuery} this instance.
+         *            [options] - The options.
+         * @returns {jQuery} this instance.
          */
         primary: function (message, title, options) {
             return this.notify(this.NotificationTypes.PRIMARY, message, title, options);
@@ -162,12 +156,12 @@
          * Display a notification with secondary style.
          * 
          * @param {string}
-         *            message - The notification message.
+         *            message - The message.
          * @param {string}
-         *            [title] - The notification title.
+         *            [title] - The title.
          * @param {Object}
-         *            [options] - The custom options.
-         * @returns {JQuery} this instance.
+         *            [options] - The options.
+         * @returns {jQuery} this instance.
          */
         secondary: function (message, title, options) {
             return this.notify(this.NotificationTypes.SECONDARY, message, title, options);
@@ -177,12 +171,12 @@
          * Display a notification with dark style.
          * 
          * @param {string}
-         *            message - The notification message.
+         *            message - The message.
          * @param {string}
-         *            [title] - The notification title.
+         *            [title] - The title.
          * @param {Object}
-         *            [options] - The custom options.
-         * @returns {JQuery} this instance.
+         *            [options] - The options.
+         * @returns {jQuery} this instance.
          */
         dark: function (message, title, options) {
             return this.notify(this.NotificationTypes.DARK, message, title, options);
@@ -191,7 +185,7 @@
         /**
          * Remove this alerts DIV container.
          * 
-         * @returns {JQuery} this instance.
+         * @returns {jQuery} this instance.
          */
         removeContainer: function () {
             if (this.containerId) {
@@ -202,10 +196,90 @@
         },
 
         /**
-         * Check the notification type.
+         * The allowed message types.
+         */
+        NotificationTypes: {
+            INFO: 'info',
+            SUCCESS: 'success',
+            WARNING: 'warning',
+            DANGER: 'danger',
+            PRIMARY: 'primary',
+            SECONDARY: 'secondary',
+            DARK: 'dark'
+        },
+
+        /**
+         * The allowed positions.
+         */
+        NotificationPositions: {
+            TOP_LEFT: 'top-left',
+            TOP_CENTER: 'top-center',
+            TOP_RIGHT: 'top-right',
+            BOTTOM_LEFT: 'bottom-left',
+            BOTTOM_CENTER: 'bottom-center',
+            BOTTOM_RIGHT: 'bottom-right'
+        },
+
+
+        /**
+         * The default options.
+         */
+        DEFAULTS: {
+            // the target to append notify container to
+            target: 'body',
+
+            // the container identifier
+            containerId: 'div_notify_alert_div',
+
+            // the notify width
+            containerWidth: 400,
+
+            // the notify position
+            position: 'bottom-right',
+
+            // the container margins
+            marginTop: 20,
+            marginBottom: 10,
+            marginLeft: 20,
+            marginRight: 20,
+
+            // the show duration in milliseconds
+            timeout: 4000,
+
+            // the show method
+            showMethod: 'fadeIn',
+            showDuration: 'slow',
+            showEasing: 'swing',
+
+            // the hide method
+            hideMethod: 'fadeOut',
+            hideDuration: 'slow',
+            hideEasing: 'swing',
+
+            // the close button
+            closeButton: true,
+            closeText: 'Close',
+
+            // the icon
+            icon: null,
+
+            // the notify z-index
+            zindex: 3,
+
+            // the classes
+            titleClass: 'h6',
+            messageClass: null,
+        },
+
+        // ------------------------
+        // Private API
+        // ------------------------
+        
+        /**
+         * Check the type.
          * 
          * @param {string}
-         *            type - The notification type.
+         *            type - The type to valdiate.
          * 
          * @returns {string} A valid type.
          */
@@ -248,7 +322,7 @@
         },
 
         /**
-         * Returns if alert must be prepend or append to the list; depending of
+         * Returns if notification must be prepend or append to the list; depending of
          * the position.
          * 
          * @param {Object}
@@ -275,7 +349,7 @@
          * @param {Object}
          *            [options] - The custom options.
          * 
-         * @returns {JQuery} The alerts container.
+         * @returns {jQuery} The alerts container.
          */
         getContainer: function (options) {
             // check if div is already created
@@ -351,7 +425,7 @@
          * @param {Object}
          *            options - The custom options.
          * 
-         * @returns {JQuery} The icon.
+         * @returns {jQuery} The icon.
          */
         createIcon: function (options) {
             let clazz = 'mr-2 fas fa-lg fa-';
@@ -386,7 +460,7 @@
          * @param {Object}
          *            options - The custom options.
          * 
-         * @returns {JQuery} The div title or null if no title.
+         * @returns {jQuery} The div title or null if no title.
          */
         createTitle: function (options) {
             if (options.title) {
@@ -419,7 +493,7 @@
          * @param {Object}
          *            options - The custom options.
          * 
-         * @returns {JQuery} The close button or null if no button.
+         * @returns {jQuery} The close button or null if no button.
          */
         createCloseButton: function (options) {
             if (options.closeButton) {
@@ -444,7 +518,7 @@
          * 
          * options - The custom options.
          * 
-         * @returns {JQuery} The div message.
+         * @returns {jQuery} The div message.
          */
         createMessage: function (options) {
             const $div = $('<div/>', {
@@ -465,7 +539,7 @@
          * @param {Object}
          *            [options] - The custom options.
          * 
-         * @returns {JQuery} The div alert.
+         * @returns {jQuery} The div alert.
          */
         createAlert: function (options) {
             let clazz = 'alert alert-dismissible alert-' + options.type;
@@ -482,7 +556,7 @@
          * Returns the given value with the appended pixel (px) unit.
          * 
          * @param {int}
-         *            The value to append unit to.
+         *            value - The value to append unit to.
          * 
          * @return {string} The value within the pixel unit.
          */
@@ -491,30 +565,9 @@
         },
 
         /**
-         * Handle the window resize event.
-         * 
-         * @param {JQuery}
-         *            [$parent] - The parent container.
-         * @param {JQuery}
-         *            [$container] - The alerts container.
-         * @return {Object} This instance.
-         */
-        handleResize: function ($parent, $container) {
-            if (!$container.data('resize-handler')) {
-                const that = this;
-                $container.data('resize-handler', true);
-                $(window).on('resize', function () {
-                    const left = ($parent.width() - $container.width()) / 2;
-                    $container.css('left', that.toPixel(left));
-                });
-            }
-            return this;
-        },
-
-        /**
          * Show the notification.
          * 
-         * @param {JQuery}
+         * @param {jQuery}
          *            [$notification] - The notification.
          * @param {Object}
          *            [options] - The custom options.
@@ -545,7 +598,7 @@
         /**
          * Hide the notification.
          * 
-         * @param {JQuery}
+         * @param {jQuery}
          *            [$notification] - The notification.
          * @param {Object}
          *            [options] - The custom options.
@@ -564,79 +617,5 @@
         }
     };
 
-    /**
-     * The allowed notification types.
-     */
-    window.Notifier.NotificationTypes = {
-        INFO: 'info',
-        SUCCESS: 'success',
-        WARNING: 'warning',
-        DANGER: 'danger',
-        PRIMARY: 'primary',
-        SECONDARY: 'secondary',
-        DARK: 'dark'
-    };
-
-    /**
-     * The allowed position types.
-     */
-    window.Notifier.NotificationPositions = {
-        TOP_LEFT: 'top-left',
-        TOP_CENTER: 'top-center',
-        TOP_RIGHT: 'top-right',
-        BOTTOM_LEFT: 'bottom-left',
-        BOTTOM_CENTER: 'bottom-center',
-        BOTTOM_RIGHT: 'bottom-right'
-    };
-
-    /**
-     * The default options.
-     */
-    window.Notifier.DEFAULTS = {
-        // the target to append notify container to
-        target: 'body',
-
-        // the notify container identifier
-        containerId: 'div_notify_alert_div',
-
-        // the notify width
-        containerWidth: 400,
-
-        // the notify position
-        position: 'bottom-right',
-
-        // the container margins
-        marginTop: 20,
-        marginBottom: 10,
-        marginLeft: 20,
-        marginRight: 20,
-
-        // the show duration in milliseconds
-        timeout: 4000,
-
-        // the show method
-        showMethod: 'fadeIn',
-        showDuration: 'slow',
-        showEasing: 'swing',
-
-        // the hide method
-        hideMethod: 'fadeOut',
-        hideDuration: 'slow',
-        hideEasing: 'swing',
-
-        // the close button
-        closeButton: true,
-        closeText: 'Close',
-
-        // the icon
-        icon: null,
-
-        // the notify z-index
-        zindex: 3,
-
-        // the classes
-        titleClass: 'h6',
-        messageClass: null,
-    };
 
 }(window, jQuery));

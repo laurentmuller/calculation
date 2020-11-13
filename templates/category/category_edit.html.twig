@@ -31,7 +31,7 @@
         </div>
     </td>
     <td class="actions pt-2 px-0 d-print-none">
-        {{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete d-print-none', 'times', 'category.edit.delete_margin') -}}            
+        {{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete d-print-none', 'times', 'category.edit.delete_margin') -}}
     </td>
 </tr>
 {% endmacro %}
@@ -50,7 +50,8 @@
     			<label class="control-label" for="data-table-edit">{{ 'category.fields.margins'|trans }}</label>
     		</div>
     		<div class="col text-right">
-    			<a href="#" class="btn-add">{{ 'category.edit.add_margin'|trans }}</a>
+    			<a href="#" class="btn-add" role="button">{{ 'category.edit.add_margin'|trans }}</a>
+                <a href="#" class="btn btn-sort btn-link p-0{% if form.margins|length < 2 %} disabled{% endif %}" role="button" title="{{ 'category.edit.sort_margins'|trans }}"><i class="fas fa-sort-numeric-up fa-fw"></i></a>
     		</div>
     	</div>
         <hr class="mt-0 mb-2">
@@ -60,9 +61,7 @@
                     <th class="vertical-middle text-right font-weight-normal required">{{ 'categorymargin.fields.minimum'|trans }}</th>
                     <th class="vertical-middle text-right font-weight-normal required">{{ 'categorymargin.fields.maximum'|trans }}</th>
                     <th class="vertical-middle text-right font-weight-normal required">{{ 'categorymargin.fields.margin'|trans }}</th>
-                    <th class="actions d-print-none">
-                    	&nbsp;
-                    </th>
+                    <th class="actions d-print-none">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>

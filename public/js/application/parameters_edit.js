@@ -92,6 +92,7 @@ function displayUrl() {
     const $element = $('#parameters_customer_url');
     if ($element.valid()) {
         const $url = $element.val();
+        // eslint-disable-next-line
         window.open($url, '_blank');
     } else {
         $element.focus();

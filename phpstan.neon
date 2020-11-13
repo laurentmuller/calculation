@@ -1,13 +1,30 @@
 includes:
-    - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon    
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
+
 parameters:
-    level: 5
+    level: 6
     paths:
     - src
+
     doctrine:
         repositoryClass: App\Repository\AbstractRepository
+
+    symfony:
+        container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
+
+    # Level 6
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+
     scanFiles:
     - vendor/twig/twig/src/Extension/CoreExtension.php
+
     ignoreErrors:
-    - '#PdfTableBuilder::addDescription#' # Report\CalculationGroupTable
-    - '#catchPhrase#'                     # Faker\Generator 
+    - '#PdfTableBuilder::addDescription#'   # Report\CalculationGroupTable
+    - '#catchPhrase#'                       # Faker\Generator
+    # disallowed-execution-calls
+    - '#proc_open#'                         # Command\CompileAssetsCommand.php
+    # Level 6
+    - '#Unable to resolve the template#'    # Controller\AbstractEntityController
+

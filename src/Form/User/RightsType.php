@@ -19,7 +19,6 @@ use App\Form\FormHelper;
 use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\RoleInterface;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
@@ -74,7 +73,7 @@ class RightsType extends AbstractHelperType
     protected function addFormFields(FormHelper $helper): void
     {
         // add listener
-        $helper->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
+        $helper->addPreSetDataListener([$this, 'onPreSetData']);
 
         $this->addRightType($helper, EntityVoterInterface::ENTITY_CALCULATION, 'calculation.list.title')
             ->addRightType($helper, EntityVoterInterface::ENTITY_PRODUCT, 'product.list.title')

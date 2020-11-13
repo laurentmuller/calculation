@@ -48,6 +48,10 @@ abstract class BaseFileTypeExtension extends AbstractTypeExtension
         $resolver->setDefined('maxsize')
             ->setAllowedTypes('maxsize', ['integer', 'string']);
 
+        // the total size of all files
+        $resolver->setDefined('maxsizetotal')
+            ->setAllowedTypes('maxsizetotal', ['integer', 'string']);
+
         // the place holder
         $resolver->setDefined('placeholder')
             ->setAllowedTypes('placeholder', ['null', 'string'])
@@ -63,7 +67,7 @@ abstract class BaseFileTypeExtension extends AbstractTypeExtension
      *
      * @throws InvalidOptionsException if the $size can not be parsed
      *
-     * @see https://symfony.com/doc/3.4/reference/constraints/File.html#maxsize
+     * @see https://symfony.com/doc/current/reference/constraints/File.html#maxsize
      */
     protected function normalizeSize($size): ?int
     {
@@ -101,15 +105,21 @@ abstract class BaseFileTypeExtension extends AbstractTypeExtension
             $attributes['placeholder'] = $options['placeholder'];
         }
         if (isset($options['maxfiles'])) {
-            $maxfiles = (int) ($options['maxfiles']);
-            if ($maxfiles > 1) {
-                $attributes['maxfiles'] = $maxfiles;
+            $value = (int) ($options['maxfiles']);
+            if ($value > 1) {
+                $attributes['maxfiles'] = $value;
             }
         }
         if (isset($options['maxsize'])) {
-            $maxsize = self::normalizeSize($options['maxsize']);
-            if ($maxsize && $maxsize > 0) {
-                $attributes['maxsize'] = $maxsize;
+            $value = self::normalizeSize($options['maxsize']);
+            if ($value && $value > 0) {
+                $attributes['maxsize'] = $value;
+            }
+        }
+        if (isset($options['maxsizetotal'])) {
+            $value = self::normalizeSize($options['maxsizetotal']);
+            if ($value && $value > 0) {
+                $attributes['maxsizetotal'] = $value;
             }
         }
     }

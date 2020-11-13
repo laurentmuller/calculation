@@ -265,6 +265,16 @@ class CalculationGroup extends AbstractEntity
     }
 
     /**
+     * Returns if this group is sortable.
+     *
+     * @return bool true if sortable; false otherwise
+     */
+    public function isSortable(): bool
+    {
+        return $this->items->count() > 1;
+    }
+
+    /**
      * Remove an item.
      *
      * @param CalculationItem $item the item to remove
@@ -363,7 +373,7 @@ class CalculationGroup extends AbstractEntity
     public function sort(): bool
     {
         // items?
-        if ($this->items->count() < 2) {
+        if (!$this->isSortable()) {
             return false;
         }
 

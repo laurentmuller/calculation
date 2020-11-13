@@ -26,7 +26,7 @@
          *            [title] - The title.
          * @param {Object}
          *            [options] - The options.
-         * @returns {JQuery} this instance.
+         * @returns {jQuery} this instance.
          */
         notify: function (type, message, title, options) {
             // merge options
@@ -49,7 +49,6 @@
             if ($title) {
                 $toast.append($title);
             }
-
             $toast.append($message);
             if (this.isPrepend(settings)) {
                 $container.prepend($toast);
@@ -78,7 +77,7 @@
          *            [title] - The title.
          * @param {Object}
          *            [options] - The options.
-         * @returns {JQuery} this instance.
+         * @returns {jQuery} this instance.
          */
         info: function (message, title, options) {
             return this.notify(this.NotificationTypes.INFO, message, title, options);
@@ -93,7 +92,7 @@
          *            [title] - The title.
          * @param {Object}
          *            [options] - The options.
-         * @returns {JQuery} this instance.
+         * @returns {jQuery} this instance.
          */
         success: function (message, title, options) {
             return this.notify(this.NotificationTypes.SUCCESS, message, title, options);
@@ -108,7 +107,7 @@
          *            [title] - The title.
          * @param {Object}
          *            [options] - The options.
-         * @returns {JQuery} this instance.
+         * @returns {jQuery} this instance.
          */
         warning: function (message, title, options) {
             return this.notify(this.NotificationTypes.WARNING, message, title, options);
@@ -123,7 +122,7 @@
          *            [title] - The title.
          * @param {Object}
          *            [options] - The options.
-         * @returns {JQuery} this instance.
+         * @returns {jQuery} this instance.
          */
         danger: function (message, title, options) {
             return this.notify(this.NotificationTypes.DANGER, message, title, options);
@@ -138,7 +137,7 @@
          *            [title] - The title.
          * @param {Object}
          *            [options] - The options.
-         * @returns {JQuery} this instance.
+         * @returns {jQuery} this instance.
          */
         primary: function (message, title, options) {
             return this.notify(this.NotificationTypes.PRIMARY, message, title, options);
@@ -153,7 +152,7 @@
          *            [title] - The title.
          * @param {Object}
          *            [options] - The options.
-         * @returns {JQuery} this instance.
+         * @returns {jQuery} this instance.
          */
         secondary: function (message, title, options) {
             return this.notify(this.NotificationTypes.SECONDARY, message, title, options);
@@ -163,12 +162,12 @@
          * Display a toast with dark style.
          * 
          * @param {string}
-         *            message - The toast message.
+         *            message - The message.
          * @param {string}
-         *            [title] - The toast title.
+         *            [title] - The title.
          * @param {Object}
-         *            [options] - The custom options.
-         * @returns {JQuery} this instance.
+         *            [options] - The options.
+         * @returns {jQuery} this instance.
          */
         dark: function (message, title, options) {
             return this.notify(this.NotificationTypes.DARK, message, title, options);
@@ -177,7 +176,7 @@
         /**
          * Remove this toasts DIV container.
          * 
-         * @returns {JQuery} this instance.
+         * @returns {jQuery} this instance.
          */
         removeContainer: function () {
             if (this.containerId) {
@@ -188,7 +187,7 @@
         },
 
         /**
-         * The allowed types.
+         * The allowed message types.
          */
         NotificationTypes: {
             INFO: 'info',
@@ -219,7 +218,7 @@
             // the target to append toasts container to
             target: 'body',
 
-            // the toasts container identifier
+            // the container identifier
             containerId: 'div_toasts_div',
 
             // the sub-title
@@ -267,19 +266,26 @@
         // ------------------------
 
         /**
-         * Check the toast type.
+         * Check the type.
          * 
          * @param {string}
-         *            type - The toast type.
+         *            type - The type to valdiate.
          * 
          * @returns {string} A valid type.
          */
         checkType: function (type) {
-            const values = Object.values(this.NotificationTypes);
-            if (values.indexOf(type) === -1) {
-                return this.NotificationTypes.INFO;
-            } else {
+            const types = this.NotificationTypes;
+            switch (type) {
+            case types.INFO:
+            case types.SUCCESS:
+            case types.WARNING:
+            case types.DANGER:
+            case types.PRIMARY:
+            case types.SECONDARY:
+            case types.DARK:
                 return type;
+            default:
+                return types.INFO;
             }
         },
 
@@ -292,11 +298,16 @@
          * @returns {string} A valid position.
          */
         checkPosition: function (position) {
-            const values = Object.values(this.NotificationPositions);
-            if (values.indexOf(position) === -1) {
-                return this.NotificationPositions.BOTTOM_RIGHT;
-            } else {
+            const positions = this.NotificationPositions;
+            switch (position) {
+            case positions.TOP_LEFT:
+            case positions.TOP_CENTER:
+            case positions.TOP_RIGHT:
+            case positions.BOTTOM_LEFT:
+            case positions.BOTTOM_CENTER:
                 return position;
+            default:
+                return positions.BOTTOM_RIGHT;
             }
         },
 
@@ -326,7 +337,7 @@
          * Returns the given value with the appended pixel (px) unit.
          * 
          * @param {int}
-         *            The value to append unit to.
+         *            value - The value to append unit to.
          * 
          * @return {string} The value within the pixel unit.
          */
@@ -340,7 +351,7 @@
          * @param {Object}
          *            [options] - The custom options.
          * 
-         * @returns {JQuery} The toasts container.
+         * @returns {jQuery} The toasts container.
          */
         getContainer: function (options) {
             // check if div is already created
@@ -413,7 +424,7 @@
          * @param {Object}
          *            options - The custom options.
          * 
-         * @returns {JQuery} The div title or null if no title.
+         * @returns {jQuery} The div title or null if no title.
          */
         createTitle: function (options) {
             if (options.title || options.icon !== false || options.closeButton || options.subtitle && options.displaySubtitle) {
@@ -459,7 +470,7 @@
          * @param {Object}
          *            options - The options.
          * 
-         * @returns {JQuery} The icon or null if no icon.
+         * @returns {jQuery} The icon or null if no icon.
          */
         createIcon: function (options) {
             if (options.icon === false) {
@@ -500,7 +511,7 @@
          * @param {Object}
          *            options - The custom options.
          * 
-         * @returns {JQuery} The sub-title or null if no sub-title defined.
+         * @returns {jQuery} The sub-title or null if no sub-title defined.
          */
         createSubtitle: function (options) {
             if (options.displaySubtitle && options.subtitle) {
@@ -518,7 +529,7 @@
          * @param {Object}
          *            options - The custom options.
          * 
-         * @returns {JQuery} The close button or null if no button.
+         * @returns {jQuery} The close button or null if no button.
          */
         createCloseButton: function (options) {
             if (options.closeButton) {
@@ -544,7 +555,7 @@
          * 
          * options - The custom options.
          * 
-         * @returns {JQuery} The div message.
+         * @returns {jQuery} The div message.
          */
         createMessage: function (options) {
             return $('<div/>', {
@@ -559,7 +570,7 @@
          * @param {Object}
          *            options - The custom options.
          * 
-         * @returns {JQuery} The div toast.
+         * @returns {jQuery} The div toast.
          */
         createToast: function (options) {
             return $('<div/>', {
@@ -573,7 +584,7 @@
         /**
          * Show the toast.
          * 
-         * @param {JQuery}
+         * @param {jQuery}
          *            [$toast] - The toast to show.
          * @param {Object}
          *            [options] - The custom options.

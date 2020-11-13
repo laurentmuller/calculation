@@ -3,7 +3,7 @@
 /* globals URLSearchParams, MenuBuilder, enableKeys, disableKeys */
 
 /**
- * -------------- JQuery extensions --------------
+ * -------------- jQuery extensions --------------
  */
 
 /**
@@ -16,7 +16,7 @@
  * @param {object}
  *            params - the parameters.
  * 
- * @returns {JQuery} the button.
+ * @returns {jQuery} the button.
  */
 $.fn.updateHref = function (type, granted, params) {
     'use strict';

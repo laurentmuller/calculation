@@ -24,7 +24,7 @@
 
 {# body #}
 {% block body -%}
-<form action="{{ path('test_timeline') }}">
+<form name="search" id="search" action="{{ path('test_timeline') }}">
     <div class="row">
         <div class="col">
             <div class="form-inline">
@@ -39,8 +39,10 @@
         </div>
         <div class="col-auto pr-2 pl-1">
             <div class="form-inline">
-                <label for="interval" class="mr-2">{{ 'timeline.period'|trans }}</label>
+                <label for="interval" class="mr-2">{{ 'timeline.interval'|trans }}</label>
                 <select id="interval" name="interval" class="form-control form-control-sm custom-select custom-select-sm">
+                    {{ _self.addInterval('P3D', 3, 'counters.days', interval) }}
+                    {{ _self.addInterval('P5D', 5, 'counters.days', interval) }}
                     {{ _self.addInterval('P1W', 1, 'counters.weeks', interval) }}
                     {{ _self.addInterval('P2W', 2, 'counters.weeks', interval) }}
                     {{ _self.addInterval('P3W', 3, 'counters.weeks', interval) }}
@@ -53,7 +55,7 @@
         <div class="col-auto pl-1">
             <div class="form-inline">
                 <div class="btn-group btn-group-sm mr-2" role="group">
-                    <button class="btn btn-primary" type="submit" title="{{ 'common.button_refresh'|trans }}">
+                    <button class="btn btn-primary btn-submit" type="submit" title="{{ 'common.button_refresh'|trans }}">
                         {{ icons.icon('sync') }}
                     </button>
                </div>
@@ -73,9 +75,11 @@
             <ul class="timeline">
                 {% for key, calculations in data %}
                     <li class="success">
-                        {% set query = calculations[0].date|localedate('short')  %}
-                        <a href="{{ path(route, {'query': query}) }}">{{ key }}</a>
-                        <span class="float-right small">{{ 'counters.calculations'|trans({'count': calculations|length}) }}</span>
+                        {%- set count = calculations|length -%}
+                        {%- set query = calculations[0].date|localedate('short')  -%}
+                        {%- set title = 'counters.calculations_day'|trans({'count': count, 'date': key}) -%}
+                        <a href="{{ path(route, {'query': query}) }}" title="{{ title }}">{{ key }}</a>
+                        <span class="float-right small">{{ 'counters.calculations'|trans({'count': count}) }}</span>
                         <hr class="my-0">
                         <table class="table table-sm table-borderless">
                             <tbody>

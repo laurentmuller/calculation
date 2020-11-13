@@ -5,14 +5,14 @@
 /**
  * Initialize a search for an element.
  * 
- * @param {JQuery}
+ * @param {jQuery}
  *            $element - The element to handle.
  * @param {String]
  *            url - The search URL.
  * @param {String}
  *            error - The message to display on search error.
  * 
- * @returns {JQuery} The element for chaining.
+ * @returns {jQuery} The element for chaining.
  */
 function initSearchElement($element, url, error) {
     'use strict';
@@ -55,5 +55,4 @@ function initSearchElement($element, url, error) {
     initSearchElement($("#product_supplier"), $form.data("search-supplier"), $form.data("error-supplier"));
     $('#product_price').inputNumberFormat();
     $form.initValidator();
-
 }(jQuery));

@@ -3,11 +3,14 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
-{% macro add_states(states) %}
-{%- set total = states|reduce((carry, state) => carry + state.count, 0) -%}
-<option value="">{{ 'datatable.all'|trans }} ({{ total|integer }})</option>
+{% macro fill_text(text, count) -%}
+    {{ text ~ ' (' ~ count|integer ~ ')' }}
+{%- endmacro %}
+
+{% macro fill_states(states, total) %}
+<button class="dropdown-item dropdown-state active" type="button"  data-id="">{{ _self.fill_text('datatable.all'|trans, total) }}</button>
 {% for state in states %}
-    <option value="{{ state.id }}">{{ state.code }} ({{ state.count|integer }})</option>
+    <button class="dropdown-item dropdown-state" type="button" data-id="{{ state.id }}">{{ _self.fill_text(state.code, state.count) }}</button>
 {% endfor %}
 {% endmacro %}
 
@@ -39,16 +42,28 @@
 {# highlight search #}
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
 
-{% block row_input -%}
+{% block search_input -%}
 {% if states is defined %}
-<div class="col-auto pr-0">
-    <div class="form-inline">
-        <label class="mr-2" for="state">{{ 'calculation.fields.state'|trans }}</label>
-        <select id="state" name="state" class="form-control form-control-sm custom-select custom-select-sm">
-        {{ _self.add_states(states) -}}
-        </select>
+<div class="input-group input-group-sm">
+    <input type="text" id="table_search" name="table_search" class="form-control" autocomplete="off">
+    <div class="input-group-append">
+        <button id="button-state" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'calculation.fields.state'|trans }}">
+            {{- 'calculation.fields.state'|trans -}}
+        </button>
+        <div class="dropdown-menu">
+            {{ _self.fill_states(states, total) -}}
+        </div>
+        <input type="hidden" id="state" name="state">
+    </div>
+    <div class="input-group-append">
+        <button type="button" class="btn btn-clear btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
+            <i class="fas fa-eraser" aria-hidden="true"></i>
+        </button>
     </div>
 </div>
+
+{% else %}
+    {{ parent() }}
 {% endif %}
 {%- endblock %}
 

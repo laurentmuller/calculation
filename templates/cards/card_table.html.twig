@@ -110,6 +110,7 @@
     <div class="col-auto pr-0">
         <div class="form-inline">
              <label class="mr-2" for="table_search">{{ 'datatable.search'|trans }}</label>
+             {%  block search_input -%}
              <div class="input-group input-group-sm bg-white">
                 <input type="text" id="table_search" name="table_search" class="form-control form-control-sm form-control-border-right-0" autocomplete="off">
                 <div class="input-group-append">
@@ -118,6 +119,7 @@
                     </button>
                 </div>
              </div>
+             {%- endblock %}
              {% block show_length_actions -%}{%- endblock %}
         </div>
     </div>

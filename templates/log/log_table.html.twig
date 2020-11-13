@@ -11,6 +11,13 @@
 {% endfor %}
 {% endmacro %}
 
+{% macro fill_options(options, suffix, all_text) %}
+<button class="dropdown-item dropdown-{{ suffix }} active" type="button" data-id="">{{ 'datatable.all'|trans }}</button>
+{% for key in options|keys %}
+    <button class="dropdown-item dropdown-{{ suffix }}" type="button" data-id="{{ key }}">{{ key|humanize }}</button>
+{% endfor %}
+{% endmacro %}
+
 {# parameters #}
 {%- set title       = 'log.title' -%}
 {%- set title_icon  = 'book' -%}
@@ -28,24 +35,34 @@
 <small class="ml-3">{{ 'log.show.file'|trans({'%file%': file}) }}</small>
 {% endblock %}
 
-{% block row_input %}
-<div class="col-auto pr-0">
-    <div class="form-inline">
-        <label class="mr-2" for="channel">{{ 'log.fields.channel'|trans }}</label>
-        <select id="channel" name="channel" class="form-control form-control-sm custom-select custom-select-sm">
-        {{ _self.add_options(channels) -}}
-        </select>
+{% block search_input -%}
+<div class="input-group input-group-sm">
+    <input type="text" id="table_search" name="table_search" class="form-control" autocomplete="off">
+    <div class="input-group-append">
+        <button id="button-channel" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" reference="dropdown-channel" aria-haspopup="true" aria-expanded="false" title="{{ 'log.fields.channel'|trans }}">
+            {{- 'log.fields.channel'|trans -}}
+        </button>
+        <div class="dropdown-menu">
+            {{ _self.fill_options(channels, 'channel') -}}
+        </div>
+        <input type="hidden" id="channel" name="channel">
+    </div>
+    <div class="input-group-append">        
+        <button id="button-level" class="btn btn-outline-secondary dropdown-toggle rounded-0 border-right-0" type="button" data-toggle="dropdown" reference="dropdown-level" aria-haspopup="true" aria-expanded="false" title="{{ 'log.fields.level'|trans }}">
+            {{- 'log.fields.level'|trans -}}
+        </button>
+        <div class="dropdown-menu">
+            {{ _self.fill_options(levels, 'level') -}}
+        </div>
+        <input type="hidden" id="level" name="level">
+    </div>
+    <div class="input-group-append">
+        <button type="button" class="btn btn-clear btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
+            <i class="fas fa-eraser" aria-hidden="true"></i>
+        </button>                
     </div>
 </div>
-<div class="col-auto pr-0">
-    <div class="form-inline">
-        <label class="mr-2" for="level">{{ 'log.fields.level'|trans }}</label>
-        <select id="level" name="level" class="form-control form-control-sm custom-select custom-select-sm">
-        {{ _self.add_options(levels) -}}
-        </select>
-    </div>
-</div>
-{% endblock %}
+{%- endblock %}
 
 {% block table_actions %}
 {{ parent() }}

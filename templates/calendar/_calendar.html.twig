@@ -1,7 +1,7 @@
 {# macros #}
-{% macro linkCalculations(query, date, count, class) -%}
+{% macro linkCalculations(query, date, count, class, title_message = 'counters.calculations_calendar') -%}
 {% import 'macros/_icons.html.twig' as icons %}
-{%- set title = 'counters.calculations_calendar'|trans({date: date, count: count}) -%}
+{%- set title = title_message|trans({date: date, count: count}) -%}
 {%- set route = display_tabular() ? 'calculation_table' : 'calculation_list' -%}    
 <a class="{{ class }}" href="{{ path(route, {'query': query}) }}" title="{{ title }}">{{ icons.icon('calculator') }}</a>
 {%- endmacro %}

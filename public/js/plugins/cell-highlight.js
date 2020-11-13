@@ -7,7 +7,7 @@
     'use strict';
     
     // ------------------------------------
-    // JQuery extensions
+    // jQuery extensions
     // ------------------------------------
     $.fn.extend({
         rowspan() {

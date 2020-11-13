@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * -------------- JQuery extensions --------------
+ * -------------- jQuery extensions --------------
  */
 /**
  * Finds an icon within in this element.
@@ -42,7 +42,7 @@ $.fn.isSelectable = function () {
  *            fnShow - the function called when the context menu is shown.
  * @param {function}
  *            fnHide - the function called when the context menu is hidden.
- * @return {jQuery} The JQuery element for chaining.
+ * @return {jQuery} The jQuery element for chaining.
  */
 $.fn.initContextMenu = function (selector, fnShow, fnHide) {
     'use strict';
@@ -100,7 +100,7 @@ MenuBuilder.prototype = {
     /**
      * Adds an item entry.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $link - the element to add.
      * @param {String}
      *            icon - the item's icon.

@@ -19,7 +19,6 @@ use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Repository\CategoryRepository;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 
 /**
  * Calculation group edit type.
@@ -79,6 +78,6 @@ class CalculationGroupType extends AbstractEntityType
             ->addCollectionType(CalculationItemType::class);
 
         // add event
-        $helper->addEventListener(FormEvents::POST_SUBMIT, [$this, 'onPostSubmit']);
+        $helper->addPostSubmitListener([$this, 'onPostSubmit']);
     }
 }

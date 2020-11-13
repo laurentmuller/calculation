@@ -20,7 +20,6 @@ use App\Form\FormHelper;
 use App\Form\Type\EnabledDisabledType;
 use App\Form\Type\PlainType;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 
 /**
  * User edit type.
@@ -90,6 +89,6 @@ class UserType extends AbstractEntityType
             ->addVichImageType();
 
         // add listener
-        $helper->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
+        $helper->addPreSetDataListener([$this, 'onPreSetData']);
     }
 }

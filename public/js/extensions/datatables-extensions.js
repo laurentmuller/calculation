@@ -10,7 +10,7 @@
  * @param {Object}
  *            e - the source event.
  * @param {string}
- *            selector - the JQuery selector.
+ *            selector - the jQuery selector.
  * @returns {boolean} true if event is handled.
  */
 function triggerClick(e, selector) { // jshint ignore:line
@@ -29,7 +29,7 @@ function triggerClick(e, selector) { // jshint ignore:line
 /**
  * Clear the table search.
  * 
- * @param {JQuery}
+ * @param {jQuery}
  *            $element the search input element.
  * @param {DataTables.Api}
  *            table - the table to update.
@@ -106,7 +106,7 @@ function enableKeys(selector) {
 }
 
 /**
- * -------------- JQuery Extensions --------------
+ * -------------- jQuery Extensions --------------
  */
 
 $.fn.extend({
@@ -319,12 +319,15 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
  * Binds a column search.
  * 
  * @param $source
- *            {Jquery} the search input (text or select)
+ *            {jQuery} - the search input.
  * @param columnIndex
- *            {integer} the column index to bind with.
+ *            {integer} - the column index to bind with.
+ * @param $$focus
+ *            {jQuery} - the input to set focus after draw or null to use the
+ *            source.
  * @returns {DataTables.Api} this instance.
  */
-$.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex) {
+$.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex, $focus) {
     'use strict';
 
     // check column
@@ -332,20 +335,30 @@ $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex
         return this;
     }
 
+    $focus = $focus || $source;
     const column = this.column(columnIndex);
+    const display = $source.is(':not(:hidden)');
     const callback = function () {
         const value = $source.val().trim();
         if (column.search() !== value) {
             column.search(value).draw();
             $source.updateTimer(function () {
-                $source.focus();
+                $focus.focus();
             }, 500);
         }
     };
 
-    $source.val(column.search()).on('input', function () {
-        $source.updateTimer(callback, 250);
-    }).handleKeys();
+    // copy value
+    $source.val(column.search());
+
+    // handle event
+    if (display) {
+        $source.on('input', function () {
+            $source.updateTimer(callback, 250);
+        }).handleKeys();
+    } else {
+        $source.on('input', callback);
+    }
 
     return this;
 });
@@ -453,7 +466,7 @@ $.fn.getDefaultOrder = function (columns) {
  * @param {Object}
  *            options - the options to merge with default values.
  * 
- * @return {jQuery} The JQuery element for chaining.
+ * @return {jQuery} The jQuery element for chaining.
  */
 $.fn.initDataTable = function (options) {
     'use strict';
@@ -526,7 +539,7 @@ $.fn.initDataTable = function (options) {
 };
 
 /**
- * -------------- JQuery extensions --------------
+ * -------------- jQuery extensions --------------
  */
 
 /**
@@ -535,7 +548,7 @@ $.fn.initDataTable = function (options) {
  * @param {DataTables.Api}
  *            table - the table to update.
  * 
- * @return {jQuery} The JQuery element for chaining.
+ * @return {jQuery} The jQuery element for chaining.
  */
 $.fn.initSearchInput = function (table) {
     'use strict';
@@ -558,7 +571,7 @@ $.fn.initSearchInput = function (table) {
  * 
  * @param {DataTables.Api}
  *            table - the table to update.
- * @return {jQuery} The JQuery element for chaining.
+ * @return {jQuery} The jQuery element for chaining.
  */
 $.fn.initTableLength = function (table) {
     'use strict';
@@ -579,7 +592,7 @@ $.fn.initTableLength = function (table) {
  * @param {string}
  *            selector - the data table selector (default is '#data-table').
  * 
- * @return {jQuery} The JQuery element for chaining.
+ * @return {jQuery} The jQuery element for chaining.
  */
 $.fn.handleKeys = function (disableEvent, enableEvent, selector) {
     'use strict';

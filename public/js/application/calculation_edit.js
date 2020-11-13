@@ -121,15 +121,15 @@ var MoveRowHandler = {
     /**
      * Move a source row before or after the target row.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $source - the row to move.
-     * @param {JQuery}
+     * @param {jQuery}
      *            $target - the target row.
      * @param {boolean}
      *            up - true to move before the target (up); false to move after
      *            (down).
      * 
-     * @return {JQuery} - The moved row.
+     * @return {jQuery} - The moved row.
      */
     move: function ($source, $target, up) {
         'use strict';
@@ -148,10 +148,10 @@ var MoveRowHandler = {
     /**
      * Move a calculation item to the first position.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $row - the row to move.
      * 
-     * @return {JQuery} - The parent row.
+     * @return {jQuery} - The parent row.
      */
     moveFirst: function ($row) {
         'use strict';
@@ -167,10 +167,10 @@ var MoveRowHandler = {
     /**
      * Move a calculation item to the last position.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $row - the row to move.
      * 
-     * @return {JQuery} - The parent row.
+     * @return {jQuery} - The parent row.
      */
     moveLast: function ($row) {
         'use strict';
@@ -187,10 +187,10 @@ var MoveRowHandler = {
     /**
      * Move up a calculation item.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $row - the row to move.
      * 
-     * @return {JQuery} - The parent row.
+     * @return {jQuery} - The parent row.
      */
     moveUp: function ($row) {
         'use strict';
@@ -206,10 +206,10 @@ var MoveRowHandler = {
     /**
      * Move down a calculation item.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $row - the row to move.
      * 
-     * @return {JQuery} - The parent row.
+     * @return {jQuery} - The parent row.
      */
     moveDown: function ($row) {
         'use strict';
@@ -273,7 +273,7 @@ var Application = {
         });
 
         // remove role attribute (aria)
-        $('#data-table-edit tbody tr[role="option"').removeAttr('role');
+        $('#data-table-edit tbody tr').removeAttr('role');
 
         // add handlers
         $bodies.on('sortstart', that.dragStartProxy).on('sortupdate', that.dragStopProxy);
@@ -541,10 +541,11 @@ var Application = {
      * 
      * @return {Application} This application instance for chaining.
      */
-    updateUpDownButton: function () {
+    updateButtons: function () {
         'use strict';
 
         // run hover bodies
+        let disabled = true;
         $('#data-table-edit tbody').each(function (index, element) {
             const $body = $(element);
             const $rows = $body.find('tr:not(:first)');
@@ -562,9 +563,14 @@ var Application = {
                 $row.find('.dropdown-divider:first').toggleClass('d-none', hideUp && hideDown);
             });
 
-            const $sortGroup = $body.find('.btn-sort-group');
-            $sortGroup.toggleClass('d-none', $rows.length === 1);
+            $body.find('.btn-sort-group').toggleClass('d-none', $rows.length === 1);
+            if ($rows.length > 1) {
+                disabled = false;  
+            }
         });
+        
+        // update global sort
+        $('.btn-sort-items').toggleClass('disabled', disabled);
 
         return this;
     },
@@ -705,7 +711,7 @@ var Application = {
      * 
      * @param {int}
      *            id - the category identifier.
-     * @returns {JQuery} - the table body, if found; null otherwise.
+     * @returns {jQuery} - the table body, if found; null otherwise.
      */
     findGroup: function (id) {
         'use strict';
@@ -777,7 +783,7 @@ var Application = {
     /**
      * Sort items of a group.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $element - the caller element (button or tbody) used to find
      *            the group.
      * @return {Application} This application instance for chaining.
@@ -818,7 +824,7 @@ var Application = {
         });
         
         // update UI
-        return that.updateUpDownButton().initDragDrop(true);
+        return that.updateButtons().initDragDrop(true);
     },
 
     /**
@@ -837,7 +843,7 @@ var Application = {
             return that.compareStrings(textA, textB);
         }).appendTo($table);
 
-        return this;
+        return that;
     },
     
     /**
@@ -861,7 +867,7 @@ var Application = {
      * 
      * @param {Object}
      *            group - the group data used to update row.
-     * @returns {JQuery} - the appended group.
+     * @returns {jQuery} - the appended group.
      */
     appendGroup: function (group) {
         'use strict';
@@ -888,7 +894,7 @@ var Application = {
     /**
      * Display the add item dialog.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $source - the caller element (normally a button).
      */
     showAddDialog: function ($source) {
@@ -920,7 +926,7 @@ var Application = {
      * 
      * This function copy the element to the dialog and display it.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $source - the caller element (normally a button).
      */
     showEditDialog: function (source) {
@@ -952,7 +958,7 @@ var Application = {
     /**
      * Remove a calculation group.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $element - the caller element (normally a button).
      * @return {Application} This application instance for chaining.
      */
@@ -961,7 +967,7 @@ var Application = {
 
         const that = this;
         $element.closest('tbody').removeFadeOut(function () {
-            that.updateUpDownButton().updateTotals().initDragDrop(true);
+            that.updateButtons().updateTotals().initDragDrop(true);
         });
         return that;
     },
@@ -969,7 +975,7 @@ var Application = {
     /**
      * Remove a calculation item.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $element - the caller element (button).
      * @return {Application} This application instance for chaining.
      */
@@ -986,7 +992,7 @@ var Application = {
             $row = $body;
         }
         $row.removeFadeOut(function () {
-            that.updateUpDownButton().updateTotals().initDragDrop(true);
+            that.updateButtons().updateTotals().initDragDrop(true);
         });
         return that;
     },
@@ -1013,7 +1019,7 @@ var Application = {
         const $item = $group.appendRow(item);
 
         // update total and scroll
-        this.updateUpDownButton().updateTotals();
+        this.updateButtons().updateTotals();
         $item.scrollInViewport().timeoutToggle('table-success');
     },
 
@@ -1052,7 +1058,7 @@ var Application = {
             const callback = function () {
                 that.$editingRow.remove();
                 that.$editingRow = null;
-                that.updateUpDownButton().updateTotals();
+                that.updateButtons().updateTotals();
                 $row.scrollInViewport().timeoutToggle('table-success');
             };
 
@@ -1067,7 +1073,7 @@ var Application = {
         } else {
             // update
             that.$editingRow.updateRow(item);
-            that.updateUpDownButton().updateTotals();
+            that.updateButtons().updateTotals();
             that.$editingRow.timeoutToggle('table-success');
             that.$editingRow = null;
         }
@@ -1116,7 +1122,7 @@ var Application = {
 
             // update callback
             const callback = function () {
-                that.updateUpDownButton().updateTotals().initDragDrop(true);
+                that.updateButtons().updateTotals().initDragDrop(true);
                 $newRow.timeoutToggle('table-success');
             };
 
@@ -1145,7 +1151,7 @@ var Application = {
 };
 
 /**
- * -------------- JQuery extensions --------------
+ * -------------- jQuery extensions --------------
  */
 $.fn.extend({
 
@@ -1167,10 +1173,10 @@ $.fn.extend({
     /**
      * Swap id and name input attributes.
      * 
-     * @param {JQuery}
+     * @param {jQuery}
      *            $target - the target row.
      * 
-     * @return {JQuery} - The JQuery source row.
+     * @return {jQuery} - The jQuery source row.
      */
     swapIdAndNames: function ($target) {
         'use strict';
@@ -1197,7 +1203,7 @@ $.fn.extend({
         }
 
         // update
-        Application.updateUpDownButton();
+        Application.updateButtons();
 
         return $source;
     },
@@ -1209,7 +1215,7 @@ $.fn.extend({
      * @param {string}
      *            name - the partial attribute name.
      * 
-     * @return {JQuery} - The input, if found; null otherwise.
+     * @return {jQuery} - The input, if found; null otherwise.
      */
     findNamedInput: function (name) {
         'use strict';
@@ -1286,7 +1292,7 @@ $.fn.extend({
      * 
      * @param {Object}
      *            item - the row data used to update the row
-     * @returns {JQuery} - the created row.
+     * @returns {jQuery} - the created row.
      */
     appendRow: function (item) {
         'use strict';
@@ -1306,7 +1312,7 @@ $.fn.extend({
      * 
      * @param {Object}
      *            item - the item to get values from.
-     * @returns {JQuery} - The updated row.
+     * @returns {jQuery} - The updated row.
      */
     updateRow: function (item) {
         'use strict';
@@ -1375,7 +1381,7 @@ $.fn.extend({
     /**
      * Gets the parent row.
      * 
-     * @returns {JQuery} - The parent row.
+     * @returns {jQuery} - The parent row.
      */
     getParentRow: function () {
         'use strict';

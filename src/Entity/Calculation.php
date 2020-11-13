@@ -610,6 +610,24 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
+     * Returns if this calculation is sortable.
+     *
+     * @return bool true if sortable; false otherwise
+     */
+    public function isSortable(): bool
+    {
+        if (!$this->isEmpty()) {
+            foreach ($this->groups as $group) {
+                if ($group->isSortable()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Remove a group.
      *
      * @param CalculationGroup $group the group to remove
@@ -730,7 +748,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function sort(): bool
     {
-        if ($this->isEmpty()) {
+        if (!$this->isSortable()) {
             return false;
         }
 

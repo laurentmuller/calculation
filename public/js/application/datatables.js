@@ -3,7 +3,7 @@
 /* globals URLSearchParams, MenuBuilder, enableKeys, disableKeys */
 
 /**
- * -------------- JQuery extensions --------------
+ * -------------- jQuery extensions --------------
  */
 
 /**
@@ -76,8 +76,8 @@ $.fn.getContextMenuItems = function () {
 $.fn.dataTable.renderTooltip = function (td, cellData) {
     'use strict';
 
-    const value = parseFloat(cellData) / 100.0;
     const margin = parseFloat($('#data-table').attr('min_margin'));
+    const value = parseFloat(cellData.replace(/[^\d\.\-]/g, '')) / 100.0;
     if (margin && value && value < margin) {
         const title = $('#data-table').attr('min_margin_text').replace('%margin%', cellData);
         $(td).addClass('text-danger has-tooltip').attr('data-title', title).attr('data-html', true);
@@ -268,7 +268,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     }
 
     // parameters
-    const defaultLength = parseInt($table.data('pagelength')|| 15, 10);
+    const defaultLength = parseInt($table.data('pagelength') || 15, 10);
     const params = new URLSearchParams(window.location.search);
     const paging = total > 15;
     const id = params.getIntOrDefault('id', 0);
@@ -285,7 +285,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     }
 
     // columns search
-    let searchCols = (new Array(columns.length)).fill(null);    
+   	let searchCols = (new Array(columns.length)).fill(null);    
     for (var i = 0, len = columns.length; i < len; i++) {
         const indexKey = 'search[' + i + '][index]';
         const valueKey = 'search[' + i + '][value]';

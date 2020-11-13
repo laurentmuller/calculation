@@ -103,15 +103,15 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets calculation by the given date range.
      *
-     * @param \DateTime $from the start date (inclusive)
-     * @param \DateTime $to   the end date (inclusive)
+     * @param \DateTimeInterface $from the start date (exclusive)
+     * @param \DateTimeInterface $to   the end date (inclusive)
      *
      * @return Calculation[] an array, maybe empty, of calculations
      */
-    public function getByInterval(\DateTime $from, \DateTime $to): array
+    public function getByInterval(\DateTimeInterface $from, \DateTimeInterface $to): array
     {
         $builder = $this->createQueryBuilder('c')
-            ->where('c.date >= :from')
+            ->where('c.date > :from')
             ->andWhere('c.date <= :to')
             ->setParameter('from', $from)
             ->setParameter('to', $to)
@@ -487,6 +487,8 @@ class CalculationRepository extends AbstractRepository
         switch ($field) {
             case 'date':
                 return "DATE_FORMAT({$alias}.{$field}, '%d.%m.%Y')";
+            case 'overallMargin':
+                return "IFELSE({$alias}.itemsTotal != 0, CEIL(100 * (({$alias}.overallTotal / {$alias}.itemsTotal) - 1)), 0)";
             case 'state.id':
                 return 's.id';
             case 'state.code':
@@ -505,7 +507,7 @@ class CalculationRepository extends AbstractRepository
     {
         switch ($field) {
             case 'overallMargin':
-                return "IFELSE({$alias}.itemsTotal != 0, ({$alias}.overallTotal / {$alias}.itemsTotal) - 1, 0)";
+                return "IFELSE({$alias}.itemsTotal != 0, {$alias}.overallTotal / {$alias}.itemsTotal, 0)";
             case 'state.id':
             case 'state.code':
                 return 's.code';

@@ -85,7 +85,6 @@ class CalculationDataTable extends AbstractEntityDataTable
             DataColumn::percent('overallMargin')
                 ->setTitle('calculation.fields.margin')
                 ->setCallback('renderTooltip')
-                ->setSearchable(false)
                 ->setFormatter($percentFormatter),
             DataColumn::currency('overallTotal')
                 ->setTitle('calculation.fields.total')

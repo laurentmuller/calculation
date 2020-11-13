@@ -424,7 +424,7 @@ class DataColumn
      */
     public function getMap(): array
     {
-        if ($this->map && \count($this->map)) {
+        if (null !== $this->map && 0 !== \count($this->map)) {
             return $this->map;
         }
 

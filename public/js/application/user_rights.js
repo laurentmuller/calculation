@@ -3,9 +3,9 @@
 /**
  * Finds a checkbox within the given parent.
  * 
- * @param {JQuery}
+ * @param {jQuery}
  *            $parent - the parent element to search in.
- * @returns {JQuery} the checkbox, if found; null otherwise.
+ * @returns {jQuery} the checkbox, if found; null otherwise.
  */
 function findCheckBox($parent) {
     'use strict';
@@ -19,7 +19,7 @@ function findCheckBox($parent) {
 /**
  * Gets all checkboxes of the edit table.
  * 
- * @returns {JQuery} the checkboxes.
+ * @returns {jQuery} the checkboxes.
  */
 function getAllCheckboxes() {
     'use strict';
@@ -30,7 +30,7 @@ function getAllCheckboxes() {
 /**
  * Updates the checkboxes.
  * 
- * @param {JQuery}
+ * @param {jQuery}
  *            $parent - the parent element to iterate over.
  * @param {function}
  *            callback - the callback function used to find the check box within
@@ -66,7 +66,7 @@ function updateCheckBoxes($parent, callback) {
 /**
  * Handles the column header click event.
  * 
- * @param {JQuery}
+ * @param {jQuery}
  *            $element - the column header.
  */
 function onColumnClick($element) {
@@ -87,7 +87,7 @@ function onColumnClick($element) {
 /**
  * Handles the first cell row click event.
  * 
- * @param {JQuery}
+ * @param {jQuery}
  *            $element - the first cell of the row.
  */
 function onRowClick($element) {
@@ -103,7 +103,7 @@ function onRowClick($element) {
 /**
  * Handles the overwrite click event.
  * 
- * @param {JQuery}
+ * @param {jQuery}
  *            $element - the overwrite checkbox.
  */
 function onOverwriteClick($element) {

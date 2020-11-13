@@ -71,6 +71,7 @@ class UserCommentType extends AbstractType
             ->updateOption('multiple', true)
             ->updateOption('maxfiles', 3)
             ->updateOption('maxsize', '10mi')
+            ->updateOption('maxsizetotal', '30mi')
             ->notRequired()
             ->addFileType();
     }

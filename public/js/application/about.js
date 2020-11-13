@@ -6,7 +6,7 @@
 (function ($) {
     'use strict';
 
-    // JQuery extensions
+    // jQuery extensions
     $.fn.extend({
         loadContent: function () {
             const $this = $(this);

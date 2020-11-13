@@ -37,6 +37,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -358,6 +359,50 @@ class FormHelper
         }
 
         return $this->notRequired()->add(PlainType::class);
+    }
+
+    /**
+     * Adds a post-submit event listener.
+     * The FormEvents::POST_SUBMIT event is dispatched at the very end of the Form::submit().
+     *
+     * @param callable $listener the event listener
+     * @param int      $priority The priority of the listener. Listeners
+     *                           with a higher priority are called before
+     *                           listeners with a lower priority.
+     */
+    public function addPostSubmitListener(callable $listener, int $priority = 0): self
+    {
+        return $this->addEventListener(FormEvents::POST_SUBMIT, $listener, $priority);
+    }
+
+    /**
+     * Adds a pre-set-data event listener.
+     *
+     * The FormEvents::PRE_SET_DATA event is dispatched at the beginning of the Form::setData() method.
+     *
+     * @param callable $listener the event listener
+     * @param int      $priority The priority of the listener. Listeners
+     *                           with a higher priority are called before
+     *                           listeners with a lower priority.
+     */
+    public function addPreSetDataListener(callable $listener, int $priority = 0): self
+    {
+        return $this->addEventListener(FormEvents::PRE_SET_DATA, $listener, $priority);
+    }
+
+    /**
+     * Adds a pre-submit event listener.
+     *
+     * The PRE_SUBMIT event is dispatched at the beginning of the Form::submit() method.
+     *
+     * @param callable $listener the event listener
+     * @param int      $priority The priority of the listener. Listeners
+     *                           with a higher priority are called before
+     *                           listeners with a lower priority.
+     */
+    public function addPreSubmitListener(callable $listener, int $priority = 0): self
+    {
+        return $this->addEventListener(FormEvents::PRE_SUBMIT, $listener, $priority);
     }
 
     /**

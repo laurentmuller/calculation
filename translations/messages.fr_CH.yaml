@@ -156,6 +156,7 @@ category:
         success: La catégorie <b>%name%</b> a été mise à jour avec succès.
         add_margin: Ajouter une marge
         delete_margin: Supprimer la marge
+        sort_margins: Trier les marges 
     delete:
         title: Supprimer une catégorie
         message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
@@ -285,7 +286,7 @@ user:
         to: Destinataire
         subject: Objet
         message: Message
-        attachments: Fichier(s)
+        attachments: Fichier
         recaptcha: Vérification
         overwrite: Remplace les droits d'accès par défaut
     roles:
@@ -922,7 +923,7 @@ generate:
 timeline:
     title: Chronologie
     date: Date
-    period: Période
+    interval: Période
     today: Période actuelle
     previous: Période précédente
     next: Période suivante

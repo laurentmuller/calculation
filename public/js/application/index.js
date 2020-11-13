@@ -3,7 +3,7 @@
 /* globals MenuBuilder  */
 
 /**
- * -------------- JQuery extensions --------------
+ * -------------- jQuery extensions --------------
  */
 $.fn.extend({
 

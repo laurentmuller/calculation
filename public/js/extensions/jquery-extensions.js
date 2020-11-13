@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * -------------- JQuery Extensions --------------
+ * -------------- jQuery Extensions --------------
  */
 (function ($) {
     'use strict';
@@ -34,7 +34,7 @@
          * @return {boolean} true if a string.
          */
         isString: function (data) {
-            return $.type(data) === "string";
+            return $.type(data) === 'string';
         },
 
         /**
@@ -46,7 +46,7 @@
          * @return {boolean} true if an object.
          */
         isObject: function (data) {
-            return $.type(data) === "object";
+            return $.type(data) === 'object';
         },
 
         /**
@@ -58,7 +58,7 @@
          * @return {boolean} true if a boolean.
          */
         isBoolean: function (data) {
-            return $.type(data) === "boolean";
+            return $.type(data) === 'boolean';
         },
 
         /**
@@ -70,7 +70,7 @@
          * @return {boolean} true if undefined.
          */
         isUndefined: function (data) {
-            return $.type(data) === "undefined"; // || data === null
+            return $.type(data) === 'undefined'; // || data === null
         }
     });
 
@@ -112,7 +112,7 @@
          * @param {int}
          *            bottomMargin - The bottom margin.
          * 
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         scrollInViewport: function (delay, bottomMargin) {
             const $this = $(this);
@@ -146,7 +146,7 @@
          * @param {function}
          *            callback - The function to call after the class has been
          *            removed.
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         timeoutToggle: function (className, callback) {
             const $this = $(this);
@@ -166,7 +166,7 @@
          * 
          * @param {string}
          *            className - The class name to set.
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         setClass: function (className) {
             return $(this).each(function () {
@@ -184,7 +184,7 @@
          * @param {int}
          *            timeout - The number of milliseconds to wait before
          *            executing the callback.
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         createTimer: function (callback, timeout) {
             let id;
@@ -204,7 +204,7 @@
         /**
          * Clear the timer (if any) of the element.
          * 
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         removeTimer: function () {
             return $(this).each(function () {
@@ -227,7 +227,7 @@
          * @param {int}
          *            timeout - The number of milliseconds to wait before
          *            executing the callback.
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         updateTimer: function (callback, timeout) {// jshint ignore:line
             $(this).removeTimer();
@@ -245,7 +245,7 @@
          * @param {int}
          *            timeout - The intervals (in milliseconds) on how often to
          *            execute the callback.
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         createInterval: function (callback, timeout) {
             let id;
@@ -265,7 +265,7 @@
         /**
          * Clear the timer interval (if any) of the element.
          * 
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         removeInterval: function () {
             return $(this).each(function () {
@@ -289,7 +289,7 @@
          *            timeout - The intervals (in milliseconds) on how often to
          *            execute the callback.
          * 
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         updateInterval: function (callback, timeout) { // jshint ignore:line
             $(this).removeInterval();
@@ -348,15 +348,15 @@
          * @return {boolean} The checked value.
          */
         isChecked: function () {
-            return $(this).is(":checked"); // .prop('checked');
+            return $(this).is(':checked'); // .prop('checked');
         },
 
         /**
          * Sets the checkbox checked value.
          * 
          * @param {boolean}
-         *            the checked value to set.
-         * @return {jQuery} The JQuery element for chaining.
+         *            checked - the checked value to set.
+         * @return {jQuery} The jQuery element for chaining.
          */
         setChecked: function (checked) {
             return $(this).each(function () {
@@ -367,7 +367,7 @@
         /**
          * Toggle the checkbox checked value
          * 
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         toggleChecked: function () {
             return $(this).each(function () {
@@ -421,31 +421,9 @@
         },
 
         /**
-         * Returns the label text of the given input element. Return false if
-         * not found.
-         * 
-         * @return {JQuery|boolean} the label text, if found; false otherwise.
-         */
-        getLabelText: function () {
-            const $element = $(this);
-            const $parent = $element.parents('.form-group');
-            if ($parent.length) {
-                let $label = $parent.children('label:first');
-                if ($label.length) {
-                    return $label.text();
-                }
-                $label = $parent.children('legend:first');
-                if ($label.length) {
-                    return $label.text();
-                }
-            }
-            return false;
-        },
-
-        /**
          * Select content and set focus.
          * 
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         selectFocus: function () {
             return $(this).select().focus();
@@ -454,7 +432,7 @@
         /**
          * Select the first option in the list.
          * 
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         selectFirstOption: function () {
             const value = $(this).find(':first').val();
@@ -477,7 +455,7 @@
          * @param {string}
          *            selector - a string containing a selector expression to
          *            match elements against.
-         * @return {JQuery} the selected element or null if matching elements
+         * @return {jQuery} the selected element or null if matching elements
          *         length is equal to 0.
          */
         findExists: function (selector) {
@@ -488,7 +466,7 @@
         /**
          * Remove all 'data' attributes.
          * 
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         removeDataAttributes: function () {
             return $(this).each(function () {
@@ -512,7 +490,7 @@
          * 
          * @param {Object}
          *            options - the additional tooltip options.
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         customTooltip: function (options) {
             if (options && options.type) {
@@ -538,7 +516,7 @@
          * 
          * @param {Object}
          *            options - the additional popover options.
-         * @return {jQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         customPopover: function (options) {
             if (options && options.type) {

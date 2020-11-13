@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * -------------- JQuery extensions --------------
+ * -------------- jQuery extensions --------------
  */
 $.fn.extend({
     
@@ -12,7 +12,7 @@ $.fn.extend({
      *            oldClass the old class.
      * @param {string}
      *            newClass the new class.
-     * @return {jQuery} The JQuery element for chaining.
+     * @return {jQuery} The jQuery element for chaining.
      */
     toggleCell(oldClass, newClass) {
         'use strict';
@@ -30,13 +30,13 @@ $.fn.extend({
 /**
  * Toogle the cell highlight enablement.
  * 
- * @param {JQuery}
+ * @param {jQuery}
  *            $source - The highlight checkbox.
- * @param {JQuery}
+ * @param {jQuery}
  *            $table - The table to update.
  * @param {boolean}
  *            save - true to save value to the session.
- * @return {jQuery} The JQuery source element for chaining.
+ * @return {jQuery} The jQuery source element for chaining.
  */
 function toggleHighlight($source, $table, save) {
     'use strict';
@@ -85,13 +85,13 @@ function toggleHighlight($source, $table, save) {
 /**
  * Toogle the popover enablement.
  * 
- * @param {JQuery}
+ * @param {jQuery}
  *            $source - The popover checkbox.
- * @param {JQuery}
+ * @param {jQuery}
  *            $selector - The popover elements.
  * @param {boolean}
  *            save - true to save value to the session.
- * @return {jQuery} The JQuery source element for chaining.
+ * @return {jQuery} The jQuery source element for chaining.
  */
 function togglePopover($source, $selector, save) {
     'use strict';

@@ -38,7 +38,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -141,10 +140,11 @@ class TestController extends AbstractController
 
         // form
         $helper = $this->createFormHelper('password.', $data);
-        $helper->addEventListener(FormEvents::PRE_SUBMIT, $listener);
+        $helper->addPreSubmitListener($listener);
 
         $helper->field('input')
             ->className('password-strength')
+            ->minLength(6)
             ->updateOption('constraints', [
                 new Length(['min' => 6]),
                 $constraint,
@@ -322,13 +322,12 @@ class TestController extends AbstractController
      */
     public function timeline(Request $request, CalculationRepository $repository): Response
     {
-        $to = new \DateTime($request->get('date', 'today'));
         $interval = $request->get('interval', 'P1W');
+        $to = new \DateTime($request->get('date', 'today'));
         $from = DateUtils::sub($to, $interval);
         $calculations = $repository->getByInterval($from, $to);
-
-        $grouped = Utils::groupBy($calculations, function (Calculation $c) {
-            return  $this->localeDate($c->getDate(), \IntlDateFormatter::LONG);
+        $data = Utils::groupBy($calculations, function (Calculation $c) {
+            return $this->localeDate($c->getDate(), \IntlDateFormatter::LONG);
         });
 
         $today = new \DateTime('today');
@@ -342,7 +341,7 @@ class TestController extends AbstractController
             'previous' => $previous->format('Y-m-d'),
             'next' => $next->format('Y-m-d'),
             'count' => \count($calculations),
-            'data' => $grouped,
+            'data' => $data,
         ];
 
         return $this->render('test/timeline.html.twig', $parameters);

@@ -3,10 +3,10 @@
 ///**
 // * Update the URL of the given link.
 // * 
-// * @param {JQuery}
+// * @param {jQuery}
 // *            $link - the link to update.
 // * 
-// * @return {JQuery} the link for method chaining.
+// * @return {jQuery} the link for method chaining.
 // */
 //function updateUrl($link) {
 //    'use strict';
@@ -23,7 +23,6 @@
 //
 //    return $link;
 //}
-
 /**
  * Ready function
  */
@@ -31,9 +30,18 @@
     'use strict';
 
     $('#date').focus();
+    $('form#search .btn-submit').on('click', function () {
+        const spinner = '<span class="spinner-border spinner-border-sm"></span>';
+        $(this).addClass('disabled').html(spinner);
+    });
+
     // $('#date, #interval').on('input', function () {
-    // updateUrl($('.btn-previous'));
-    // updateUrl($('.btn-next'));
-    //
+    // const date = $('#date').val();
+    // const interval = $('#interval').val();
+    // if (date && interval) {
+    // const time = new Date(date);
+    // console.log(time.toLocaleDateString());
+    // }
     // });
+
 }(jQuery));

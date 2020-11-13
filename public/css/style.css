@@ -127,7 +127,7 @@ a.btn-list {
 }
 
 /*
- * column widths
+ * columns
  */
 .actions {
     width: 30px;
@@ -743,5 +743,5 @@ span.color-value {
 .table-edit .table-primary td,
 .table-edit .table-primary thead th,
 .table-edit .table-primary tbody + tbody {
-    border-color: transparent !important
+    border-color: transparent !important;
 }

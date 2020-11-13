@@ -415,7 +415,12 @@ class CalculationController extends AbstractEntityController
             ];
 
             // parameters
-            $parameters['states'] = $repository->getListCount();
+            $states = $repository->getListCount();
+            $total = \array_sum(\array_column($states, 'count'));
+            $parameters = [
+                'states' => $states,
+                'total' => $total,
+            ];
         }
 
         return $this->renderTable($request, $table, $attributes, $parameters);

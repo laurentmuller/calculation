@@ -4,11 +4,14 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
-{% macro add_categories(categories) %}
-{%- set total = categories|reduce((carry, category) => carry + category.count, 0) -%}
-<option value="">{{ 'datatable.all'|trans }} ({{ total|integer }})</option>
+{% macro fill_text(text, count) %}
+{{ text ~ ' (' ~ count|integer ~')' }}
+{% endmacro %}
+
+{% macro fill_categories(categories, total) %}
+<button class="dropdown-item dropdown-category active" type="button" data-id="">{{ _self.fill_text('datatable.all'|trans, total) }}</button>
 {% for category in categories %}
-    <option value="{{ category.id }}">{{ category.code }} ({{ category.count|integer }})</option>
+    <button class="dropdown-item dropdown-category" type="button" data-id="{{ category.id }}">{{ _self.fill_text(category.code, category.count) }}</button>
 {% endfor %}
 {% endmacro %}
 
@@ -38,14 +41,23 @@
 {# highlight search #}
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
 
-{% block row_input -%}
-<div class="col-auto pr-0">
-    <div class="form-inline">
-        <label class="mr-2" for="category">{{ 'product.fields.category'|trans }}</label>
-        <select id="category" name="category" class="form-control form-control-sm custom-select custom-select-sm">
-        {{ _self.add_categories(categories) -}}
-        </select>
+{% block search_input -%}
+<div class="input-group input-group-sm">
+    <input type="text" id="table_search" name="table_search" class="form-control" autocomplete="off">
+    <div class="input-group-append">
+        <button id="button-category" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'product.fields.category'|trans }}">
+            {{- 'product.fields.category'|trans -}}
+        </button>
+        <div class="dropdown-menu">
+            {{ _self.fill_categories(categories, total) -}}
+        </div>
+        <input type="hidden" id="category" name="category">                
     </div>
+    <div class="input-group-append">
+        <button type="button" class="btn btn-clear btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
+            <i class="fas fa-eraser" aria-hidden="true"></i>
+        </button>
+    </div>    
 </div>
 {%- endblock %}
 

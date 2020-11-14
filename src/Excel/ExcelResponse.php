@@ -18,7 +18,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * ExcelResponse represents an HTTP response within an Excel 2007 (.xlsx) document.
+ * The ExcelResponse represents an HTTP streamed response within an Excel 2007 (.xlsx) document.
  *
  * @author Laurent Muller
  *
@@ -30,18 +30,16 @@ class ExcelResponse extends StreamedResponse
      * Constructor.
      *
      * @param ExcelDocument $doc    the document to output
-     * @param bool          $inline <code>true</code> to send the file inline to the browser. The Excel viewer is used if available.
+     * @param bool          $inline <code>true</code> to send the file inline to the browser. The Spreasheet viewer is used if available.
      *                              <code>false</code> to send to the browser and force a file download with the name given.
-     * @param string        $name   the name of the Excel file or null to use default ('document.xlsx')
+     * @param string        $name   the name of the document file or <code>''</code> to use the default name ('document.xlsx')
      */
     public function __construct(ExcelDocument $doc, bool $inline = true, string $name = '')
     {
         $writer = IOFactory::createWriter($doc, 'Xlsx');
-
         $callback = function () use ($writer): void {
             $writer->save('php://output');
         };
-
         $headers = $doc->getOutputHeaders($inline, $name);
 
         parent::__construct($callback, self::HTTP_OK, $headers);

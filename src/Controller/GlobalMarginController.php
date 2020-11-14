@@ -120,9 +120,9 @@ class GlobalMarginController extends AbstractEntityController
         ]);
 
         // formats
-        $doc->setColumnFormatAmount(1)
-            ->setColumnFormatAmount(2)
-            ->setColumnFormatPercent(3);
+        $doc->setFormatAmount(1)
+            ->setFormatAmount(2)
+            ->setFormatPercent(3);
 
         /** @var GlobalMargin[] $margins */
         $margins = $repository->findAllByMinimum();

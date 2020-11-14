@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/duplicate")
  * @IsGranted("ROLE_ADMIN")
  */
-class DuplicateController extends AbstractController
+class DuplicateCalculationController extends AbstractController
 {
     /**
      * Shows duplicate items, as card, in the calculations.

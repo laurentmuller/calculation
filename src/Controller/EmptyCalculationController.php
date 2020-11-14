@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/empty")
  * @IsGranted("ROLE_ADMIN")
  */
-class EmptyController extends AbstractController
+class EmptyCalculationController extends AbstractController
 {
     /**
      * Shows calculations, as card, where items has the price or the quantity is equal to 0.

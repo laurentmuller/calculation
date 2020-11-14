@@ -147,8 +147,8 @@ class CategoryController extends AbstractEntityController
         ]);
 
         // formats
-        $doc->setColumnFormatInt(3)
-            ->setColumnFormatInt(4);
+        $doc->setFormatInt(3)
+            ->setFormatInt(4);
 
         /** @var Category[] $categories */
         $categories = $repository->findAllByCode();

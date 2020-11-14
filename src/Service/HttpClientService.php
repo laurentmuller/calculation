@@ -66,7 +66,7 @@ abstract class HttpClientService
     /**
      * Gets the language to use for user interface strings.
      *
-     * @param bool $languageOnly true to returns the language only, false to returns the language and the country
+     * @param bool $languageOnly <code>true</code> to returns the language only, <code>false</code> to returns the language and the country
      *
      * @return string the language
      */

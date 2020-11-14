@@ -146,8 +146,8 @@ class CalculationStateController extends AbstractEntityController
         ]);
 
         // formats
-        $doc->setColumnFormatYesNo(3)
-            ->setColumnFormatInt(4);
+        $doc->setFormatYesNo(3)
+            ->setFormatInt(4);
 
         /** @var CalculationState[] $states */
         $states = $repository->findAllByCode();

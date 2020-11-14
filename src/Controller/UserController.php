@@ -201,10 +201,8 @@ class UserController extends AbstractEntityController
         ]);
 
         // formats
-        $enabled = $this->trans('common.value_enabled');
-        $disabled = $this->trans('common.value_disabled');
-        $doc->setColumnFormatBoolean(4, $enabled, $disabled)
-            ->setColumnFormatDateTime(5);
+        $doc->setFormatBoolean(4, 'common.value_enabled', 'common.value_disabled', true)
+            ->setFormatDateTime(5);
 
         /** @var User[] $users */
         $users = $repository->findAllByUsername();

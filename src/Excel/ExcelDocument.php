@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Extends the spreadsheet.
+ * Extends the Spreadsheet class with shortcuts to set properties, formats and values.
  *
  * @author Laurent Muller
  */
@@ -100,17 +100,15 @@ class ExcelDocument extends Spreadsheet
      *
      * @param bool   $inline <code>true</code> to send the file inline to the browser. The Spreasheet viewer is used if available.
      *                       <code>false</code> to send to the browser and force a file download with the name given.
-     * @param string $name   the name of the ExcelDocument file or null to use default ('document.xlsx')
+     * @param string $name   the name of the document file or <code>''</code> to use the default name ('document.xlsx')
      *
-     * @return array the output headers
+     * @return string[] the output headers
+     *
+     * @see ExcelResponse
      */
     public function getOutputHeaders(bool $inline = true, string $name = ''): array
     {
-        if (empty($name)) {
-            $name = 'document.xlsx';
-        } else {
-            $name = \basename($name);
-        }
+        $name = empty($name) ? 'document.xlsx' : \basename($name);
         $encoded = Utils::ascii($name);
 
         if ($inline) {
@@ -138,6 +136,20 @@ class ExcelDocument extends Spreadsheet
     }
 
     /**
+     * Gets the percent format.
+     *
+     * @param bool $decimals true to display 2 decimals ('0.00%'), false if none ('0%').
+     */
+    public function getPercentFormat(bool $decimals = false): string
+    {
+        if ($decimals) {
+            return NumberFormat::FORMAT_PERCENTAGE_00;
+        }
+
+        return NumberFormat::FORMAT_PERCENTAGE;
+    }
+
+    /**
      * Gets the title.
      */
     public function getTitle(): ?string
@@ -149,7 +161,7 @@ class ExcelDocument extends Spreadsheet
      * Initialize this service.
      *
      * @param AbstractController $controller the controller to get properties
-     * @param string             $title      the spread sheet title zo translate
+     * @param string             $title      the spread sheet title to translate
      * @param bool               $landscape  true to set landscape orientation, false for default (portrait)
      */
     public function initialize(AbstractController $controller, string $title, bool $landscape = false): self
@@ -250,126 +262,6 @@ class ExcelDocument extends Spreadsheet
     }
 
     /**
-     * Sets the given format for the given column.
-     *
-     * @param int    $col    the column index (A = 1)
-     * @param string $format the format to set
-     */
-    public function setColumnFormat(int $col, string $format): self
-    {
-        $sheet = $this->getActiveSheet();
-        $name = $this->stringFromColumnIndex($col);
-        $sheet->getStyle($name)->getNumberFormat()->setFormatCode($format);
-
-        return $this;
-    }
-
-    /**
-     * Sets the amount format ('#,##0.00') for the given column.
-     *
-     * @param int $col the column index (A = 1)
-     */
-    public function setColumnFormatAmount(int $col): self
-    {
-        return $this->setColumnFormat($col, NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-    }
-
-    /**
-     * Sets the boolean format for the given column.
-     *
-     * @param int    $col        the column index (A = 1)
-     * @param string $trueValue  the value to display when true
-     * @param string $falseValue the value to display when false
-     */
-    public function setColumnFormatBoolean(int $col, string $trueValue, string $falseValue): self
-    {
-        $key = "$falseValue-$trueValue";
-        if (!\array_key_exists($key, $this->booleanFormats)) {
-            $trueValue = \str_replace('"', "''", $trueValue);
-            $falseValue = \str_replace('"', "''", $falseValue);
-            $format = "\"$trueValue\";;\"$falseValue\";";
-            $this->booleanFormats[$key] = $format;
-        } else {
-            $format = $this->booleanFormats[$key];
-        }
-
-        return $this->setColumnFormat($col, $format);
-    }
-
-    /**
-     * Sets the date format ('dd/mm/yyyy') for the given column.
-     *
-     * @param int $col the column index (A = 1)
-     */
-    public function setColumnFormatDate(int $col): self
-    {
-        return $this->setColumnFormat($col, NumberFormat::FORMAT_DATE_DDMMYYYY);
-    }
-
-    /**
-     * Sets the date time format ('dd/mm/yyyy hh:mm') for the given column.
-     *
-     * @param int $col the column index (A = 1)
-     */
-    public function setColumnFormatDateTime(int $col): self
-    {
-        return $this->setColumnFormat($col, 'dd/mm/yyyy hh:mm');
-    }
-
-    /**
-     * Sets the identifier format ('000000') for the given column.
-     *
-     * @param int $col the column index (A = 1)
-     */
-    public function setColumnFormatId(int $col): self
-    {
-        return $this->setColumnFormat($col, '000000');
-    }
-
-    /**
-     * Sets the integer format ('#,##0') for the given column.
-     *
-     * @param int $col the column index (A = 1)
-     */
-    public function setColumnFormatInt(int $col): self
-    {
-        return $this->setColumnFormat($col, '#,##0');
-    }
-
-    /**
-     * Sets the percent format ('0%')for the given column.
-     *
-     * @param int $col the column index (A = 1)
-     */
-    public function setColumnFormatPercent(int $col): self
-    {
-        return $this->setColumnFormat($col, NumberFormat::FORMAT_PERCENTAGE);
-    }
-
-    /**
-     * Sets the percent format ('0.00%') for the given column.
-     *
-     * @param int $col the column index (A = 1)
-     */
-    public function setColumnFormatPercent00(int $col): self
-    {
-        return $this->setColumnFormat($col, NumberFormat::FORMAT_PERCENTAGE_00);
-    }
-
-    /**
-     * Sets the 'Yes/No' boolean format ('"Yes";;"No";') for the given column.
-     *
-     * @param int $col the column index (A = 1)
-     */
-    public function setColumnFormatYesNo(int $col): self
-    {
-        $trueValue = $this->translator->trans('common.value_true');
-        $falseValue = $this->translator->trans('common.value_false');
-
-        return $this->setColumnFormatBoolean($col, $trueValue, $falseValue);
-    }
-
-    /**
      * Sets the company name property.
      *
      * @param string $company the company name
@@ -389,6 +281,121 @@ class ExcelDocument extends Spreadsheet
     public function setDefaultMargins(): self
     {
         return $this->setMargins(self::DEFAULT_MARGIN);
+    }
+
+    /**
+     * Sets the format for the given column.
+     *
+     * @param int    $col    the column index (A = 1)
+     * @param string $format the format to set
+     */
+    public function setFormat(int $col, string $format): self
+    {
+        $sheet = $this->getActiveSheet();
+        $name = $this->stringFromColumnIndex($col);
+        $sheet->getStyle($name)->getNumberFormat()->setFormatCode($format);
+
+        return $this;
+    }
+
+    /**
+     * Sets the amount format ('#,##0.00') for the given column.
+     *
+     * @param int $col the column index (A = 1)
+     */
+    public function setFormatAmount(int $col): self
+    {
+        return $this->setFormat($col, NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+    }
+
+    /**
+     * Sets the boolean format for the given column.
+     *
+     * @param int    $col       the column index (A = 1)
+     * @param string $true      the value to display when <code>true</code>
+     * @param string $false     the value to display when <code>false</code>
+     * @param bool   $translate <code>true</code> to translate values
+     */
+    public function setFormatBoolean(int $col, string $true, string $false, bool $translate = false): self
+    {
+        $key = "$false-$true";
+        if (!\array_key_exists($key, $this->booleanFormats)) {
+            if ($translate) {
+                $true = $this->translator->trans($true);
+                $false = $this->translator->trans($false);
+            }
+            $true = \str_replace('"', "''", $true);
+            $false = \str_replace('"', "''", $false);
+            $format = "\"$true\";;\"$false\";";
+            $this->booleanFormats[$key] = $format;
+        } else {
+            $format = $this->booleanFormats[$key];
+        }
+
+        return $this->setFormat($col, $format);
+    }
+
+    /**
+     * Sets the date format ('dd/mm/yyyy') for the given column.
+     *
+     * @param int $col the column index (A = 1)
+     */
+    public function setFormatDate(int $col): self
+    {
+        return $this->setFormat($col, NumberFormat::FORMAT_DATE_DDMMYYYY);
+    }
+
+    /**
+     * Sets the date time format ('dd/mm/yyyy hh:mm') for the given column.
+     *
+     * @param int $col the column index (A = 1)
+     */
+    public function setFormatDateTime(int $col): self
+    {
+        return $this->setFormat($col, 'dd/mm/yyyy hh:mm');
+    }
+
+    /**
+     * Sets the identifier format ('000000') for the given column.
+     *
+     * @param int $col the column index (A = 1)
+     */
+    public function setFormatId(int $col): self
+    {
+        return $this->setFormat($col, '000000');
+    }
+
+    /**
+     * Sets the integer format ('#,##0') for the given column.
+     *
+     * @param int $col the column index (A = 1)
+     */
+    public function setFormatInt(int $col): self
+    {
+        return $this->setFormat($col, '#,##0');
+    }
+
+    /**
+     * Sets the percent format for the given column.
+     *
+     * @param int  $col      the column index (A = 1)
+     * @param bool $decimals true to display 2 decimals ('0.00%'), false if none ('0%').
+     */
+    public function setFormatPercent(int $col, bool $decimals = false): self
+    {
+        $format = $this->getPercentFormat($decimals);
+
+        return $this->setFormat($col, $format);
+    }
+
+    /**
+     * Sets the translated 'Yes/No' boolean format for the given column.
+     *
+     * @param int $col the column index (A = 1)
+     */
+    public function setFormatYesNo(int $col): self
+    {
+        return $this->setFormatBoolean($col, 'common.value_true', 'common.value_false', true);
     }
 
     /**
@@ -599,13 +606,26 @@ class ExcelDocument extends Spreadsheet
     /**
      * Sets selected cell of the active sheet.
      *
-     * @param string $cell the cell coordinate (i.e. 'A1')
+     * @param string $coordinates the cell coordinate (i.e. 'A1')
      */
-    public function setSelectedCell(string $cell): self
+    public function setSelectedCell(string $coordinates): self
     {
-        $this->getActiveSheet()->setSelectedCell($cell);
+        $this->getActiveSheet()->setSelectedCell($coordinates);
 
         return $this;
+    }
+
+    /**
+     * Sets selected cell of the active sheet.
+     *
+     * @param int $col the column index (A = 1)
+     * @param int $row the row index (1 = first row)
+     */
+    public function setSelectedCellByColumnAndRow(int $col, int $row): self
+    {
+        $coordinates = $this->stringFromColumnAndRowIndex($col, $row);
+
+        return $this->setSelectedCell($coordinates);
     }
 
     /**
@@ -652,7 +672,7 @@ class ExcelDocument extends Spreadsheet
     }
 
     /**
-     * Get the string from the given column and row index (eg. 2,10 => 'B10').
+     * Get the string coordinate from the given column and row index (eg. 2,10 => 'B10').
      *
      * @param int $columnIndex the column index (A = 1)
      * @param int $rowIndex    the row index (First = 1)
@@ -667,7 +687,7 @@ class ExcelDocument extends Spreadsheet
     /**
      * Get the string from the given column index.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index (1 = A)
      */
     public function stringFromColumnIndex(int $columnIndex): string
     {

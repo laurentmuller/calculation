@@ -143,7 +143,7 @@ class ProductController extends AbstractEntityController
         ]);
 
         // formats
-        $doc->setColumnFormatAmount(3);
+        $doc->setFormatAmount(3);
 
         /** @var Product[] $products */
         $products = $repository->findAllByDescription();

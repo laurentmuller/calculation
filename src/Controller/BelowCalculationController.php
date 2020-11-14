@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/below")
  * @IsGranted("ROLE_ADMIN")
  */
-class BelowController extends AbstractController
+class BelowCalculationController extends AbstractController
 {
     /**
      * Shows calculations, as card, where margins is below the minimum.

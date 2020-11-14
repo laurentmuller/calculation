@@ -517,17 +517,15 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
      *
      * @param bool   $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if available.
      *                       <code>false</code> to send to the browser and force a file download with the name given.
-     * @param string $name   the name of the file or null to use default ('document.pdf')
+     * @param string $name   the name of the document file or <code>''</code> to use the default name ('document.pdf')
      *
-     * @return array the output headers
+     * @return string[] the output headers
+     *
+     * @see PdfResponse
      */
     public function getOutputHeaders(bool $inline = true, string $name = ''): array
     {
-        if (empty($name)) {
-            $name = 'document.pdf';
-        } else {
-            $name = \basename($name);
-        }
+        $name = empty($name) ? 'document.pdf' : \basename($name);
         $encoded = Utils::ascii($name);
 
         if ($inline) {

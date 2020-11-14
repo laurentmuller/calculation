@@ -34,7 +34,6 @@ use App\Repository\CalculationStateRepository;
 use App\Service\CalculationService;
 use Doctrine\Common\Collections\Criteria;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -190,14 +189,14 @@ class CalculationController extends AbstractEntityController
         ]);
 
         // formats
-        $percentage = NumberFormat::FORMAT_PERCENTAGE;
+        $percentage = $doc->getPercentFormat();
         $minMargin = $this->getApplication()->getMinMargin();
         $format = "[Red][<$minMargin]$percentage;$percentage";
-        $doc->setColumnFormatId(1)
-            ->setColumnFormatDate(2)
-            ->setColumnFormatAmount(6)
-            ->setColumnFormat(7, $format)
-            ->setColumnFormatAmount(8);
+        $doc->setFormatId(1)
+            ->setFormatDate(2)
+            ->setFormatAmount(6)
+            ->setFormat(7, $format)
+            ->setFormatAmount(8);
 
         /** @var Calculation[] $calculations */
         $calculations = $repository->findAllById();

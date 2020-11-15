@@ -138,12 +138,24 @@ class CalculationGroup extends AbstractEntity
      */
     public function addItem(CalculationItem $item): self
     {
-        if (!$this->items->contains($item)) {
+        if (!$this->contains($item)) {
             $this->items->add($item);
             $item->setGroup($this);
         }
 
         return $this;
+    }
+
+    /**
+     * Checks whether the given item is contained within this collection of items.
+     *
+     * @param CalculationItem $item the item to search for
+     *
+     * @return bool true if this collection contains the item, false otherwise
+     */
+    public function contains(CalculationItem $item): bool
+    {
+        return $this->items->contains($item);
     }
 
     /**

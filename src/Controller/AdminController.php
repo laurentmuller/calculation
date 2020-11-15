@@ -238,10 +238,14 @@ class AdminController extends AbstractController
             $data = $form->getData();
             $includeClosed = (bool) $data['closed'];
             $includeSorted = (bool) $data['sorted'];
+            $includeEmpty = (bool) $data['empty'];
+            $includeDuplicated = (bool) $data['duplicated'];
             $isSimulated = (bool) $data['simulated'];
 
             $updated = 0;
             $skipped = 0;
+            $empty = 0;
+            $duplicated = 0;
             $sorted = 0;
             $unmodifiable = 0;
             $suspended = $this->disableListeners();
@@ -252,13 +256,19 @@ class AdminController extends AbstractController
                 foreach ($calculations as $calculation) {
                     if ($includeClosed || $calculation->isEditable()) {
                         $changed = false;
-                        if ($includeSorted && $calculation->sort()) {
+                        if ($includeEmpty && $calculation->hasEmptyItems()) {
+                            $empty += $calculation->removeEmptyItems();
                             $changed = true;
-                            ++$sorted;
                         }
-                        if ($service->updateTotal($calculation)) {
-                            ++$updated;
-                        } elseif ($changed) {
+                        if ($includeDuplicated && $calculation->hasDuplicateItems()) {
+                            $duplicated += $calculation->removeDuplicateItems();
+                            $changed = true;
+                        }
+                        if ($includeSorted && $calculation->sort()) {
+                            ++$sorted;
+                            $changed = true;
+                        }
+                        if ($service->updateTotal($calculation) || $changed) {
                             ++$updated;
                         } else {
                             ++$skipped;
@@ -283,8 +293,10 @@ class AdminController extends AbstractController
 
                 // log results
                 $context = [
-                    $this->trans('calculation.result.updated') => $updated,
+                    $this->trans('calculation.result.empty') => $empty,
+                    $this->trans('calculation.result.duplicated') => $duplicated,
                     $this->trans('calculation.result.sorted') => $sorted,
+                    $this->trans('calculation.result.updated') => $updated,
                     $this->trans('calculation.result.skipped') => $skipped,
                     $this->trans('calculation.result.unmodifiable') => $unmodifiable,
                     $this->trans('calculation.result.total') => $total,
@@ -295,8 +307,10 @@ class AdminController extends AbstractController
 
             // display results
             $data = [
-                'updated' => $updated,
+                'empty' => $empty,
+                'duplicated' => $duplicated,
                 'sorted' => $sorted,
+                'updated' => $updated,
                 'skipped' => $skipped,
                 'unmodifiable' => $unmodifiable,
                 'simulated' => $isSimulated,
@@ -305,6 +319,8 @@ class AdminController extends AbstractController
 
             // save values to session
             $this->setSessionValue('closed', $includeClosed);
+            $this->setSessionValue('empty', $includeEmpty);
+            $this->setSessionValue('duplicated', $includeDuplicated);
             $this->setSessionValue('sorted', $includeSorted);
             $this->setSessionValue('simulated', $isSimulated);
 
@@ -327,6 +343,8 @@ class AdminController extends AbstractController
         $data = [
             'closed' => $this->isSessionBool('closed', false),
             'sorted' => $this->isSessionBool('sorted', true),
+            'empty' => $this->isSessionBool('empty', true),
+            'duplicated' => $this->isSessionBool('duplicated', false),
             'simulated' => $this->isSessionBool('simulated', false),
         ];
         $helper = $this->createFormHelper('calculation.update.', $data);
@@ -334,6 +352,18 @@ class AdminController extends AbstractController
         // fields
         $helper->field('closed')
             ->help('calculation.update.closed_help')
+            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field('empty')
+            ->help('calculation.update.empty_help')
+            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field('duplicated')
+            ->help('calculation.update.duplicated_help')
             ->updateHelpAttribute('class', 'ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();

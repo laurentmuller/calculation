@@ -33,19 +33,19 @@ class CustomerRepository extends AbstractRepository
     public const NAME_COMPANY_FIELD = 'nameAndCompany';
 
     /**
+     * The first name, last name and company fields.
+     */
+    public const NAME_COMPANY_FIELDS = ['lastName', 'firstName', 'company'];
+
+    /**
      * The zip and city field name.
      */
     public const ZIP_CITY_FIELD = 'zipCity';
 
     /**
-     * The first name, last name and company fields.
-     */
-    private const NAME_COMPANY_FIELDS = ['lastName', 'firstName', 'company'];
-
-    /**
      * The zip code and city fields.
      */
-    private const ZIP_CITY_FIELDS = ['zipCode', 'city'];
+    public const ZIP_CITY_FIELDS = ['zipCode', 'city'];
 
     /**
      * Constructor.
@@ -70,12 +70,6 @@ class CustomerRepository extends AbstractRepository
             ->orderBy($fields, Criteria::ASC)
             ->getQuery()
             ->getResult();
-
-//         return $this->findBy([], [
-//             'lastName' => Criteria::ASC,
-//             'firstName' => Criteria::ASC,
-//             'company' => Criteria::ASC,
-//         ]);
     }
 
     /**

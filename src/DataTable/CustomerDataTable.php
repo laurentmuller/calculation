@@ -57,16 +57,16 @@ class CustomerDataTable extends AbstractEntityDataTable
         return [
             DataColumn::hidden('id'),
             DataColumn::instance(CustomerRepository::NAME_COMPANY_FIELD)
+                ->setMap(CustomerRepository::NAME_COMPANY_FIELDS)
                 ->setTitle('customer.fields.nameAndCompany')
-                ->setMap(['company', 'firstName', 'lastName'])
                 ->setDefault(true)
                 ->setClassName('w-50 cell'),
             DataColumn::instance('address')
                 ->setTitle('customer.fields.address')
                 ->setClassName('w-auto cell'),
             DataColumn::instance(CustomerRepository::ZIP_CITY_FIELD)
+                ->setMap(CustomerRepository::ZIP_CITY_FIELDS)
                 ->setTitle('customer.fields.zipCity')
-                ->setMap(['zipCode', 'city'])
                 ->setClassName('w-25 cell'),
             DataColumn::actions([$this, 'renderActions']),
         ];

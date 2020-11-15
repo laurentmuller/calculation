@@ -69,13 +69,13 @@ class CalculationStateDataTable extends AbstractEntityDataTable
      */
     public function linkCalculations(Collection $calculations, CalculationState $item): string
     {
-        $parameters = [
+        $context = [
             'id' => $item->getId(),
             'code' => $item->getCode(),
             'count' => \count($calculations),
         ];
 
-        return $this->environment->render('calculationstate/calculationstate_calculation_cell.html.twig', $parameters);
+        return $this->renderTemplate('calculationstate/calculationstate_calculation_cell.html.twig', $context);
     }
 
     /**

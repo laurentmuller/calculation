@@ -330,14 +330,14 @@
         floatVal: function (value) {
             // get?
             if (!arguments.length) {
-                const parsedValue = Number.parseFloat($(this).val());
+                const parsedValue = parseFloat($(this).val());
                 return isNaN(parsedValue) ? 0 : parsedValue;
             }
 
             // set
-            let parsedValue = Number.parseFloat(value);
+            let parsedValue = parseFloat(value);
             if (isNaN(parsedValue) || parsedValue === -0) {
-                parsedValue = Number.parseFloat(0);
+                parsedValue = parseFloat(0);
             }
             return $(this).val(parsedValue.toFixed(2));
         },

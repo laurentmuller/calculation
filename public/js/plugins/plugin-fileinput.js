@@ -57,12 +57,12 @@
     };
 
     Fileinput.prototype.verifySizes = function(files) {
-        if ($.isUndefined( this.options.maxSize)) {
+        if ($.isUndefined(this.options.maxSize)) {
             return true;
         }
 
         const max = parseFloat(this.options.maxSize);
-        if (max !== this.options.maxSize) {
+        if (isNaN(max) || max !== this.options.maxSize) {
             return true;
         }
 

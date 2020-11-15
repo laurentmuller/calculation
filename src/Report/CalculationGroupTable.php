@@ -113,7 +113,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
      * @param float    $amount     the amount to output
      * @param PdfStyle $errorStyle the error style to use when amount is equal to 0
      */
-    private function addAmount(float $amount, ?PdfStyle $errorStyle): self
+    protected function addAmount(float $amount, ?PdfStyle $errorStyle): self
     {
         /** @var CalculationReport $parent */
         $parent = $this->parent;
@@ -132,7 +132,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
      * @param PdfStyle        $defaultStyle   the style to use if item is not duplicate
      * @param PdfStyle        $errorStyle     the style to use when item is duplicate
      */
-    private function addDescription(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): self
+    protected function addDescription(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): self
     {
         $style = \in_array($item, $duplicateItems, true) ? $errorStyle : $defaultStyle;
         $this->add($item->getDescription(), 1, $style);
@@ -147,7 +147,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
      *
      * @return string The translated key
      */
-    private function trans(string $key): string
+    protected function trans(string $key): string
     {
         /** @var AbstractReport $parent */
         $parent = $this->parent;

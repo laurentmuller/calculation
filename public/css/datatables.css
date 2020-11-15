@@ -102,7 +102,10 @@ table.dataTable .cell {
 }
 
 table.dataTable span.highlight {
-    /*font-weight: bold;*/
+    /*
+    font-weight: bold;
+    background: var(--warning);  
+    */
     color: var(--success);
 }
 

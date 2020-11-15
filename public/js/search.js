@@ -12,13 +12,13 @@
 <!--#include file="vendor/datatables/js/dataTables.bootstrap4.js" -->
 <!--#include file="vendor/datatables/js/dataTables.keyTable.js" -->
 <!--#include file="vendor/datatables/js/dataTables.conditionalPaging.js" -->
-<!--#include file="vendor/datatables/js/dataTables.searchHighlight.js" -->
+<!--#include file="vendor/datatables/js/jquery.mark.js" -->
+<!--#include file="vendor/datatables/js/datatables.mark.js" -->
 <!--#include file="vendor/contextmenu/jquery.contextMenu.js" -->
 
 /**
  * Extensions files
  */
-<!--#include file="extensions/jquery.highlight.js" -->
 <!--#include file="extensions/contextmenu-extensions.js" -->
 <!--#include file="extensions/datatables-extensions.js" -->
 

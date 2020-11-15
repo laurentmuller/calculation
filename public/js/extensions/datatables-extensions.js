@@ -498,6 +498,13 @@ $.fn.initDataTable = function (options) {
         // class
         "stripeClasses": [],
 
+        // mark
+        mark: {
+            element: 'span',
+            className: 'highlight',
+            ignorePunctuation: ["'", ","]
+        },
+
         // keys
         keys: {
             focus: ':eq(0:visIdx)',

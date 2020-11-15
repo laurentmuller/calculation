@@ -391,7 +391,7 @@ span.state-color {
 }
 
 /**
- * Calculation errors (duplicate and empty)
+ * Calculation (duplicate items, empty values and below margin)
  */
 .duplicate-cell:after{
     content: " (D) ";
@@ -422,6 +422,9 @@ span.state-color {
     color: var(--danger);
 }
 
+/**
+ * textarea
+ */
 textarea.resizable {
     min-height: 4rem;
     max-height: 10rem;
@@ -744,4 +747,12 @@ span.color-value {
 .table-edit .table-primary thead th,
 .table-edit .table-primary tbody + tbody {
     border-color: transparent !important;
+}
+
+/**
+ * Reset the table hover row.
+ */
+.table-hover tbody tr.not-hover:hover {
+  color: inherit !important;
+  background-color: inherit !important;
 }

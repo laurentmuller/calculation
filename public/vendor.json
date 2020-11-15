@@ -92,16 +92,6 @@
 			]
 		},
 		{
-			"name": "searchHighlight",
-			"version": "1.10.21",
-			"source": "https://cdn.datatables.net/plug-ins/",
-			"format": "{source}{version}/features/{name}/{file}",
-			"target": "datatables/js",
-			"files": [
-				"dataTables.searchHighlight.js"
-			]
-		},
-		{
 			"name": "conditionalPaging",
 			"version": "1.10.21",
 			"source": "https://cdn.datatables.net/plug-ins/",
@@ -120,6 +110,26 @@
 			"files": [
 				"js/dataTables.keyTable.js"
 			]
+		},
+		{	
+			"example": "//cdn.datatables.net/plug-ins/1.10.21/features/mark.js/datatables.mark.js",
+			"name": "mark.js",
+			"version": "1.10.21",
+			"source": "https://cdn.datatables.net/plug-ins/",
+			"format": "{source}{version}/features/{name}/{file}",
+			"target": "datatables/js",
+			"files": [
+				"datatables.mark.js"
+			]
+		},
+		{
+			"example": "https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.js",
+			"name": "mark.js",
+			"version": "8.11.1",
+			"target": "datatables/js",
+			"files": [
+				"jquery.mark.js"
+			]						
 		},
 		{
 			"name": "zxcvbn",

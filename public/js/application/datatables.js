@@ -78,9 +78,9 @@ $.fn.dataTable.renderTooltip = function (td, cellData) {
 
     const margin = parseFloat($('#data-table').attr('min_margin'));
     const value = parseFloat(cellData.replace(/[^\d\.\-]/g, '')) / 100.0;
-    if (margin && value && value < margin) {
+    if (!isNaN(margin) && !isNaN(value) && value < margin) {
         const title = $('#data-table').attr('min_margin_text').replace('%margin%', cellData);
-        $(td).addClass('text-danger has-tooltip').attr('data-title', title).attr('data-html', true);
+        $(td).addClass('text-danger below-cell has-tooltip').attr('data-title', title).attr('data-html', true);
     }
 };
 
@@ -169,6 +169,55 @@ $.fn.userSwitch= function (row) {
 };
 
 /**
+ * Gets the parameters for the given identifier.
+ * 
+ * @param {int}
+ *            id - the row identifier or 0 if none.
+ * @returns {Object} the parameters.
+ */
+$.fn.dataTable.Api.register('getParameters()', function (id) {
+    'use strict';
+    
+    // row?
+    if (id === 0) {
+        return {};
+    }
+
+    // parameters
+    const info = this.page.info();
+    const params = {
+        page: info.page,
+        pagelength: info.length,
+        caller: window.location.href.split('?')[0],
+        id: id
+    };
+    const order = this.order();
+    if (order.length) {
+        params.ordercolumn = order[0][0];
+        params.orderdir = order[0][1];
+    }
+    const query = this.search();
+    if (query && query.length) {
+        params.query = query;
+    }
+
+    const searches = this.columns().search();
+    searches.each(function (value, index) {
+        if (value && value.length) {
+            if (!params.search) {
+                params.search = [];
+            }
+            params.search.push({
+                index: index,
+                value: value
+            });
+        }
+    });
+    
+    return params;
+});
+
+/**
  * Update buttons link and enablement.
  * 
  * @returns {DataTables.Api} this instance.
@@ -179,41 +228,10 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     // get selection
     const row = this.getSelectedRow();
     const disabled = row === null;
-
-    // parameters
-    let params = {};
-    if (!disabled) {
-        // parameters
-        const info = this.page.info();
-        params = {
-            page: info.page,
-            pagelength: info.length,
-            caller: window.location.href.split('?')[0],
-            id: row.id()
-        };
-        const order = this.order();
-        if (order.length) {
-            params.ordercolumn = order[0][0];
-            params.orderdir = order[0][1];
-        }
-        const query = this.search();
-        if (query && query.length) {
-            params.query = query;
-        }
-
-        const searches = this.columns().search();
-        searches.each(function (value, index) {
-            if (value && value.length) {
-                if (!params.search) {
-                    params.search = [];
-                }
-                params.search.push({
-                    index: index,
-                    value: value
-                });
-            }
-        });
-    }
+    const id = disabled ? 0 : row.id;
+    
+    // get parameters
+    const params = this.getParameters(id);
 
     // update buttons
     $('a[data-path]').each(function () {
@@ -316,7 +334,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
 
         search: {
             search: query
-        }
+        },
     };
 
     // initialize
@@ -402,5 +420,33 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
         const $menu = $this.find('.dropdown-menu');
         $menu.empty().append($menus);
     });
+    
+    // add row link if applicable
+    if ($('#data-table tbody.rowlink').length) {
+        table.on('draw', function () {
+            // path
+            let path = $('.btn-table-show').data('path');
+            if (($table.attr('edit-action') || 'false').toBool()) {
+                path = $('.btn-table-edit').data('path');
+            }
+            
+            // run over rows
+            table.rows().every(function() {
+                // create href attribute
+                const $row = $(this.node());
+                const $cell = $row.find('td:first-child');                
+                const params = table.getParameters(this.id());
+                const href = path.replace('0', this.id()) + '?' + $.param(params);
+                const text = $cell.text().trim();
+                
+                // create link and replace content
+                const $a = $('<a/>', {
+                    'href': href,
+                    'text': text
+                });
+                $cell.html($a);
+            });
+        });
+    }
     
 }(jQuery));

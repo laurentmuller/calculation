@@ -61,13 +61,13 @@ class CategoryDataTable extends AbstractEntityDataTable
      */
     public function linkProducts(Collection $products, Category $item): string
     {
-        $parameters = [
+        $context = [
             'id' => $item->getId(),
             'code' => $item->getCode(),
             'count' => \count($products),
         ];
 
-        return $this->environment->render('category/category_product_cell.html.twig', $parameters);
+        return $this->renderTemplate('category/category_product_cell.html.twig', $context);
     }
 
     /**

@@ -83,11 +83,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
      */
     public function renderActions(int $id): string
     {
-        if (isset($this->environment)) {
-            return $this->environment->render('macros/_datatables_actions.html.twig', ['id' => $id]);
-        }
-
-        return '';
+        return $this->renderTemplate('macros/_datatables_actions.html.twig', ['id' => $id]);
     }
 
     /**
@@ -324,6 +320,23 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     protected function getDefaultOrder(): array
     {
         return [];
+    }
+
+    /**
+     * Render the given template name.
+     *
+     * @param string $template the template name to render
+     * @param array  $context  the template context (parameters)
+     *
+     * @return string the rendered template, an empty string ('') if this Twig environment is not set
+     */
+    protected function renderTemplate(string $template, array $context = []): string
+    {
+        if (isset($this->environment)) {
+            return $this->environment->render($template, $context);
+        }
+
+        return '';
     }
 
     /**

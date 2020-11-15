@@ -495,9 +495,9 @@ var Application = {
         'use strict';
 
         // get value
-        let parsedValue = Number.parseFloat(value);
+        let parsedValue = parseFloat(value);
         if (isNaN(parsedValue)) {
-            parsedValue = Number.parseFloat(0);
+            parsedValue = parseFloat(0);
         }
 
         // format

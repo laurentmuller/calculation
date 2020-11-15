@@ -168,11 +168,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Add a group.
      *
-     * @param CalculationGroup $group to group to add
+     * @param CalculationGroup $group the group to add
      */
     public function addGroup(CalculationGroup $group): self
     {
-        if (!$this->groups->contains($group)) {
+        if (!$this->contains($group)) {
             $this->groups->add($group);
             $group->setCalculation($this);
         }
@@ -212,6 +212,18 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         return $copy;
+    }
+
+    /**
+     * Checks whether the given group is contained within this collection of groups.
+     *
+     * @param CalculationGroup $group the group to search for
+     *
+     * @return bool true if this collection contains the group, false otherwise
+     */
+    public function contains(CalculationGroup $group): bool
+    {
+        return $this->groups->contains($group);
     }
 
     /**
@@ -280,9 +292,12 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Gets the duplicates items.
      *
-     * Items are duplicate when two or more item descriptions are equal.
+     * Items are duplicate when two or more item descriptions are equal, ignoring case considerations.
      *
-     * @return \App\Entity\CalculationItem[] an array, maybe empty of duplicate items
+     * @return CalculationItem[] an array, maybe empty of duplicate items
+     *
+     * @see Calculation::hasDuplicateItems()
+     * @see Calculation::removeDuplicateItems()
      */
     public function getDuplicateItems(): array
     {
@@ -290,21 +305,21 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             return [];
         }
 
-        $existings = [];
-        $duplicates = [];
-        foreach ($this->groups as $group) {
-            foreach ($group->getItems() as $item) {
-                $key = $item->getDescription();
-                if (\array_key_exists($key, $existings)) {
-                    $duplicates[] = $existings[$key];
-                    $duplicates[] = $item;
-                } else {
-                    $existings[$key] = $item;
-                }
-            }
+        // group by key
+        $array = [];
+        foreach ($this->getItems() as $item) {
+            $key = $this->getItemKey($item);
+            $array[$key][] = $item;
         }
 
-        return $duplicates;
+        // merge duplicated items
+        return \array_reduce($array, function (array $current, array $items): array {
+            if (\count($items) > 1) {
+                return \array_merge($current, \array_values($items));
+            }
+
+            return $current;
+        }, []);
     }
 
     /**
@@ -312,7 +327,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      *
      * Items are empty if the price or the quantity is equal to 0.
      *
-     * @return \App\Entity\CalculationItem[] an array, maybe empty of empty  items
+     * @return CalculationItem[] an array, maybe empty of empty  items
+     *
+     * @see Calculation::hasEmptyItems()
+     * @see Calculation::removeEmptyItems()
      */
     public function getEmptyItems(): array
     {
@@ -321,11 +339,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         $result = [];
-        foreach ($this->groups as $group) {
-            foreach ($group->getItems() as $item) {
-                if ($item->isEmpty()) {
-                    $result[] = $item;
-                }
+
+        /** @var CalculationItem $item */
+        foreach ($this->getItems() as $item) {
+            if ($item->isEmpty()) {
+                $result[] = $item;
             }
         }
 
@@ -415,6 +433,20 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         return $total;
+    }
+
+    /**
+     * Gets all calculation items.
+     *
+     * @return \Traversable|CalculationItem[]
+     */
+    public function getItems(): \Traversable
+    {
+        foreach ($this->groups as $group) {
+            foreach ($group->getItems() as $item) {
+                yield $item;
+            }
+        }
     }
 
     /**
@@ -525,19 +557,22 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Items are duplicate when two or more item descriptions are equal.
      *
      * @return bool true if duplicates items
+     *
+     * @see Calculation::getDuplicateItems()
+     * @see Calculation::removeDuplicateItems()
      */
     public function hasDuplicateItems(): bool
     {
         if (!$this->isEmpty()) {
-            $existings = [];
-            foreach ($this->groups as $group) {
-                foreach ($group->getItems() as $item) {
-                    $key = $item->getDescription();
-                    if (\in_array($key, $existings, true)) {
-                        return true;
-                    }
-                    $existings[] = $key;
+            $keys = [];
+
+            /** @var CalculationItem $item */
+            foreach ($this->getItems() as $item) {
+                $key = $this->getItemKey($item);
+                if (\in_array($key, $keys, true)) {
+                    return true;
                 }
+                $keys[] = $key;
             }
         }
 
@@ -550,15 +585,17 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Items are empty if the price or the quantity is equal to zero.
      *
      * @return bool true if empty items
+     *
+     * @see Calculation::getEmptyItems()
+     * @see Calculation::removeEmptyItems()
      */
     public function hasEmptyItems(): bool
     {
         if (!$this->isEmpty()) {
-            foreach ($this->groups as $group) {
-                foreach ($group->getItems() as $item) {
-                    if ($item->isEmpty()) {
-                        return true;
-                    }
+            /** @var CalculationItem $item */
+            foreach ($this->getItems() as $item) {
+                if ($item->isEmpty()) {
+                    return true;
                 }
             }
         }
@@ -625,6 +662,63 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         return false;
+    }
+
+    /**
+     * Remove the duplicate items.
+     *
+     * All empty groups after deletion of the items are also removed.
+     * The total of this calculation must be updated after this return call.
+     *
+     * @return int the number of items removed
+     *
+     * @see Calculation::getDuplicateItems()
+     * @see Calculation::hasDuplicateItems()
+     */
+    public function removeDuplicateItems(): int
+    {
+        /** @var CalculationItem[] $items */
+        $items = $this->getDuplicateItems();
+        if (empty($items)) {
+            return 0;
+        }
+
+        $keys = [];
+        foreach ($items as $item) {
+            $key = $this->getItemKey($item);
+            if (\in_array($key, $keys, true)) {
+                $this->removeItem($item);
+            }
+            $keys[] = $key;
+        }
+
+        return \count($items);
+    }
+
+    /**
+     * Remove the empty items.
+     *
+     * All empty groups after deletion of the items are also removed.
+     * The total of this calculation must be updated after this return call.
+     *
+     * @return int the number of items removed
+     *
+     * @see Calculation::getEmptyItems()
+     * @see Calculation::hasEmptyItems()
+     */
+    public function removeEmptyItems(): int
+    {
+        /** @var CalculationItem[] $items */
+        $items = $this->getEmptyItems();
+        if (empty($items)) {
+            return 0;
+        }
+
+        foreach ($items as $item) {
+            $this->removeItem($item);
+        }
+
+        return \count($items);
     }
 
     /**
@@ -775,5 +869,39 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             $this->localeDate($this->date),
             $this->getStateCode(),
         ];
+    }
+
+    /**
+     * Gets the key for the given item.
+     *
+     * @param CalculationItem $item the item to get key for
+     *
+     * @return string the key
+     */
+    private function getItemKey(CalculationItem $item): string
+    {
+        return \strtolower($item->getDescription());
+    }
+
+    /**
+     * Remove the given item.
+     *
+     * If the group is empty after deletion of the item, the group is also deleted.
+     *
+     * @param CalculationItem $item the item to remove
+     */
+    private function removeItem(CalculationItem $item): bool
+    {
+        $group = $item->getGroup();
+        if (null !== $group && $group->contains($item)) {
+            $group->removeItem($item);
+            if ($group->isEmpty()) {
+                $this->removeGroup($group);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

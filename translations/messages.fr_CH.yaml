@@ -79,6 +79,10 @@ calculation:
         closed_help: Inclus les calculations avec le statut non-modifiables.
         sorted: Trier les articles
         sorted_help: Trie les articles par ordre alphabétique.
+        empty: Supprimer les articles vides
+        empty_help: Supprime les articles avec une quantité ou un prix égale à 0.
+        duplicated: Supprimer les articles en double
+        duplicated_help: Supprime les articles contenu plus d'une fois dans une calculation.
         simulated: Simuler la mise à jour
         simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
         last_update: 'Dernière mise à jour : %date%'
@@ -88,6 +92,8 @@ calculation:
         updated: Calculations mises à jour
         skipped: Calculations inchangées
         sorted: Calculations triées
+        empty: Articles vides
+        duplicated: Articles en double
         unmodifiable: Calculations non-modifiables
         total: Total
 calculationgroup:

@@ -83,12 +83,12 @@ class UserDataTable extends AbstractEntityDataTable
      */
     public function renderImage(?string $image, User $item): string
     {
-        $parameters = [
+        $context = [
             'image' > $image,
             'item' => $item,
         ];
 
-        return $this->environment->render('user/user_image_cell.html.twig', $parameters);
+        return $this->renderTemplate('user/user_image_cell.html.twig', $context);
     }
 
     /**

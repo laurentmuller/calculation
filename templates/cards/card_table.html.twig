@@ -51,6 +51,7 @@
 {%- set is_pdf_action   = pdf_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 {%- set is_excel_action = excel_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 {%- set other_actions   = is_pdf_action or is_excel_action or (other_actions ?? false) -%}
+{%- set row_link        = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) or is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) -%}
 
 {# classes #}
 {% block card_container_class '' %}
@@ -159,7 +160,7 @@
 }) -%}
 <table{{ helper.attribs(attributes) }}>
     {{ helper.headers(columns) }}
-    <tbody>
+    <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
         {% for row in results.data -%}
 	        <tr{% if row[0] == id %} class="datatables-selection"{% endif %}>
     	    {% for cell in row -%}
@@ -182,14 +183,16 @@
     {{- asset_js('js/vendor/datatables/js/jquery.dataTables.js') }}
     {{- asset_js('js/vendor/datatables/js/dataTables.bootstrap4.js') }}
     {{- asset_js('js/vendor/datatables/js/dataTables.keyTable.js') }}
-    {{- asset_js('js/vendor/datatables/js/dataTables.conditionalPaging.js') }}    
-    {{- asset_js('js/vendor/datatables/js/dataTables.searchHighlight.js') }}
+    {{- asset_js('js/vendor/datatables/js/dataTables.conditionalPaging.js') }}
+    {{- asset_js('js/vendor/datatables/js/jquery.mark.js') }}
+    {{- asset_js('js/vendor/datatables/js/datatables.mark.js') }}
     {{- asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
-    {{- asset_js('js/extensions/jquery.highlight.js') }}
+    {{- asset_js('js/plugins/plugin-rowlink.js') }}
     {{- asset_js('js/extensions/contextmenu-extensions.js') }}
     {{- asset_js('js/extensions/datatables-extensions.js') }}
     {{- asset_js('js/application/datatables.js') }}
 {% else %}
     {{- asset_js('js/datatables.js') }}
 {% endif %}
+
 {%- endblock -%}

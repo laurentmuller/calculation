@@ -22,7 +22,7 @@ $.fn.trimmedText = function () {
 $.fn.isEmptyValue = function () {
     'use strict';
     const text = $(this).trimmedText();
-    const value = Number.parseFloat(text);
+    const value = parseFloat(text);
     return isNaN(value) || value === 0;
 };
 
@@ -46,7 +46,7 @@ function updateErrors() {
 
         // duplicate
         const $cell = $row.find("td:eq(0)");
-        const key = $cell.trimmedText();
+        const key = $cell.trimmedText().toLowerCase();
         $cell.removeClass(duplicateClass);
         if (key) {
             if (key in existing) {

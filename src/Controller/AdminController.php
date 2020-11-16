@@ -345,7 +345,7 @@ class AdminController extends AbstractController
             'sorted' => $this->isSessionBool('sorted', true),
             'empty' => $this->isSessionBool('empty', true),
             'duplicated' => $this->isSessionBool('duplicated', false),
-            'simulated' => $this->isSessionBool('simulated', false),
+            'simulated' => $this->isSessionBool('simulated', true),
         ];
         $helper = $this->createFormHelper('calculation.update.', $data);
 

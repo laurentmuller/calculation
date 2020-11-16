@@ -4,8 +4,8 @@
 /.env.local.php
 /.env.*.local
 /.php_cs.cache
+/deploy/
 symfony.lock
-/deploy
 /public/images/users/
 /public/js/vendor
 /var/
@@ -19,6 +19,5 @@ symfony.lock
 ###< symfony/phpunit-bridge ###
 
 ###> application ###
-/deploy/
 /resources/data/swiss.sqlite
 ###< application ###

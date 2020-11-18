@@ -486,7 +486,7 @@ final class FunctionExtension extends AbstractExtension
                 return $carry . ' ' . $key . '="' . \htmlspecialchars((string) $value) . '"';
             };
 
-            return Utils::arrayReduceKey($callback, $parameters, '');
+            return Utils::arrayReduceKey($parameters, $callback, '');
         }
 
         return '';

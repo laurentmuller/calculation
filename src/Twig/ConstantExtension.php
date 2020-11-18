@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
+use App\Interfaces\ActionInterface;
 use App\Interfaces\EntityVoterInterface;
 use App\Service\CalculationService;
 use App\Service\ThemeService;
@@ -66,8 +67,9 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
 
         // create array
         $values = [
-            $this->getShortName(CalculationService::class) => $this->getConstants(CalculationService::class),
             $this->getShortName(ThemeService::class) => $this->getConstants(ThemeService::class),
+            $this->getShortName(ActionInterface::class) => $this->getConstants(ActionInterface::class),
+            $this->getShortName(CalculationService::class) => $this->getConstants(CalculationService::class),
             $this->getShortName(EntityVoterInterface::class) => $this->getConstants(EntityVoterInterface::class),
         ];
 

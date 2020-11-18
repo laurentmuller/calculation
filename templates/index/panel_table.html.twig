@@ -39,11 +39,11 @@
                 {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
                 <tr{% if id == selection %} class="table-primary"{% endif %}>
                     <td class="text-id" style="{{ properties.stateCss(calculation.stateColor) }}">
-                    {% if edit_page or show_page %}
+                    {%- if edit_page or show_page -%}
                     	<a href="{{ path(default_page, params) }}">{{ calculation.id|identifier }}</a>
-                    {% else %}
-                        {{ calculation.id|identifier }}
- 	                {% endif %}
+                    {%- else -%}
+                        {{- calculation.id|identifier -}}
+ 	                {%- endif -%}
                     </td>
                     <td class="text-date">{{ calculation.date|localedate }}</td>
                     <td class="text-state">{{ calculation.stateCode }}</td>

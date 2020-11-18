@@ -53,13 +53,13 @@ final class Utils
      *
      * The callable function must by of type <code>function($carry, $key, $value)</code>.
      *
-     * @param callable $callback the callback function
      * @param array    $array    the input array
+     * @param callable $callback the callback function
      * @param mixed    $initial  the optional initial value. It will be used at the beginning of the process, or as a final result in case the array is empty
      *
      * @return mixed the resulting value
      */
-    public static function arrayReduceKey(callable $callback, array $array, $initial = null)
+    public static function arrayReduceKey(array $array, callable $callback, $initial = null)
     {
         return \array_reduce(\array_keys($array), function ($carry, $key) use ($callback, $array) {
             return $callback($carry, $key, $array[$key]);

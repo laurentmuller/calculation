@@ -37,7 +37,7 @@ $.fn.extend({
         }
 
         // enable tooltips
-        $('body').customTooltip({
+        $('#calculations tbody').customTooltip({
             selector: '.has-tooltip',
             type: 'danger overall-datatable'
         });

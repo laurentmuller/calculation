@@ -74,7 +74,7 @@
 		},
 		{
 			"name": "html5sortable",
-			"version": "0.9.18",
+			"version": "0.10.0",
 			"files": [
 				"html5sortable.js"
 			]
@@ -82,7 +82,7 @@
 		{
 			"example": "https://datatables.net/download/packages",
 			"name": "datatables",
-			"version": "1.10.21",
+			"version": "1.10.22",
 			"source": "https://cdn.datatables.net/",
 			"format": "{source}{version}/{file}",
 			"files": [
@@ -104,7 +104,7 @@
 		{
 			"example": "https://datatables.net/download/packages",
 			"name": "keytable",
-			"version": "2.5.2",
+			"version": "2.5.3",
 			"source": "http://cdn.datatables.net/",
 			"target": "datatables",
 			"files": [

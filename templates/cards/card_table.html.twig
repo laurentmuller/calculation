@@ -179,7 +179,6 @@
 {% block javascripts -%}
 {% if app.debug %}
     {{- parent() }}
-    {# DataTables #}
     {{- asset_js('js/vendor/datatables/js/jquery.dataTables.js') }}
     {{- asset_js('js/vendor/datatables/js/dataTables.bootstrap4.js') }}
     {{- asset_js('js/vendor/datatables/js/dataTables.keyTable.js') }}
@@ -194,5 +193,4 @@
 {% else %}
     {{- asset_js('js/datatables.js') }}
 {% endif %}
-
 {%- endblock -%}

@@ -159,7 +159,7 @@ $.fn.dataTable.Api.register('selectFirstRow()', function () {
     'use strict';
 
     if (this.rows().count()) {
-        this.cell(0, '0:visIdx').focus();
+        this.cell(':first-child', '0:visIdx').focus();
     }
     return this;
 });
@@ -173,7 +173,7 @@ $.fn.dataTable.Api.register('selectLastRow()', function () {
     'use strict';
 
     if (this.rows().count()) {
-        this.cell(this.rows().count() - 1, '0:visIdx').focus();
+        this.cell(':last-child', '0:visIdx').focus();
     }
     return this;
 });
@@ -199,6 +199,18 @@ $.fn.dataTable.Api.register('updateTitles()', function () {
         }
     });
 
+    return this;
+});
+
+/**
+ * Remove duplicate classes in all cells (header and body).
+ * 
+ * @returns {DataTables.Api} this instance.
+ */
+$.fn.dataTable.Api.register('removeDuplicateClasses()', function () {
+    'use strict';
+
+    this.cells().nodes().to$().removeDuplicateClasses();
     return this;
 });
 
@@ -280,11 +292,6 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
         }
         table.updateButtons().updateTitles();
 
-        // const $actions = $('.dataTable th.actions');
-        // if ($actions.length) {
-        // $actions.css('width', '30px');
-        // }
-
     }).on('search.dt', function () {
         enableKeys();
 
@@ -322,12 +329,12 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
  *            {jQuery} - the search input.
  * @param columnIndex
  *            {integer} - the column index to bind with.
- * @param $$focus
+ * @param $targetFocus
  *            {jQuery} - the input to set focus after draw or null to use the
  *            source.
  * @returns {DataTables.Api} this instance.
  */
-$.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex, $focus) {
+$.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex, $targetFocus) {
     'use strict';
 
     // check column
@@ -335,7 +342,7 @@ $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex
         return this;
     }
 
-    $focus = $focus || $source;
+    $targetFocus = $targetFocus || $source;
     const column = this.column(columnIndex);
     const display = $source.is(':not(:hidden)');
     const callback = function () {
@@ -343,7 +350,7 @@ $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex
         if (column.search() !== value) {
             column.search(value).draw();
             $source.updateTimer(function () {
-                $focus.focus();
+                $targetFocus.focus();
             }, 500);
         }
     };
@@ -497,6 +504,7 @@ $.fn.initDataTable = function (options) {
 
         // class
         "stripeClasses": [],
+        removeDuplicateClasses: true,
 
         // mark
         mark: {
@@ -524,9 +532,10 @@ $.fn.initDataTable = function (options) {
             ]
         },
 
+        // layout
         // row 0 : table in card body
         // row 1 : information + paging in card footer
-        // drop-down length and search text are hidden
+        // Note: drop-down length and search text are hidden
         dom: "<'row'<'col-sm-12'tr>>" + //
         "<'row card-footer px-0 d-print-none '<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     };
@@ -541,75 +550,84 @@ $.fn.initDataTable = function (options) {
         $table.removeDataAttributes();
     }
 
-    // init
-    return $table.DataTable(settings); // eslint-disable-line
+    // initialize
+    const table = $table.DataTable(settings); // eslint-disable-line
+
+    // duplicate classes?
+    if (settings.removeDuplicateClasses) {
+        table.removeDuplicateClasses();
+    }
+
+    return table;
 };
 
 /**
  * -------------- jQuery extensions --------------
  */
+$.fn.extend({
+    /**
+     * Initialise the search input.
+     * 
+     * @param {DataTables.Api}
+     *            table - the table to update.
+     * 
+     * @return {jQuery} The jQuery element for chaining.
+     */
+    initSearchInput: function (table) {
+        'use strict';
 
-/**
- * Initialise the search input.
- * 
- * @param {DataTables.Api}
- *            table - the table to update.
- * 
- * @return {jQuery} The jQuery element for chaining.
- */
-$.fn.initSearchInput = function (table) {
-    'use strict';
+        const $this = $(this);
+        const $clearButton = $('.btn-clear');
+        if ($clearButton.length) {
+            $clearButton.on('click', function () {
+                clearSearch($this, table, searchCallback);
+            });
+        }
 
-    const $this = $(this);
-    const $clearButton = $('.btn-clear');
-    if ($clearButton.length) {
-        $clearButton.on('click', function () {
-            clearSearch($this, table, searchCallback);
+        return $this.handleKeys().on('input', function () {
+            $this.updateTimer(searchCallback, 250, table);
+        });
+    },
+
+    /**
+     * Initialize the table length input.
+     * 
+     * @param {DataTables.Api}
+     *            table - the table to update.
+     * @return {jQuery} The jQuery element for chaining.
+     */
+    initTableLength: function (table) {
+        'use strict';
+
+        return $(this).handleKeys().on('input', function () {
+            $(this).updateTimer(tableLengthCallback, 250, table);
+        });
+    },
+
+    /**
+     * Enabled/Disabled datatables keys.
+     * 
+     * @param {string}
+     *            disableEvent - the event name to disable keys (default is
+     *            'focus').
+     * @param {string}
+     *            enableEvent - the event name to enable keys (default is
+     *            'blur').
+     * @param {string}
+     *            selector - the data table selector (default is '#data-table').
+     * 
+     * @return {jQuery} The jQuery element for chaining.
+     */
+    handleKeys: function (disableEvent, enableEvent, selector) {
+        'use strict';
+
+        disableEvent = disableEvent || 'focus';
+        enableEvent = enableEvent || 'blur';
+
+        return $(this).on(disableEvent, function () {
+            disableKeys(selector);
+        }).on(enableEvent, function () {
+            enableKeys(selector);
         });
     }
-
-    return $this.handleKeys().on('input', function () {
-        $this.updateTimer(searchCallback, 250, table);
-    });
-};
-
-/**
- * Initialize the table length input.
- * 
- * @param {DataTables.Api}
- *            table - the table to update.
- * @return {jQuery} The jQuery element for chaining.
- */
-$.fn.initTableLength = function (table) {
-    'use strict';
-
-    return $(this).handleKeys().on('input', function () {
-        $(this).updateTimer(tableLengthCallback, 250, table);
-    });
-};
-
-/**
- * Enabled/Disabled datatables keys.
- * 
- * @param {string}
- *            disableEvent - the event name to disable keys (default is
- *            'focus').
- * @param {string}
- *            enableEvent - the event name to enable keys (default is 'blur').
- * @param {string}
- *            selector - the data table selector (default is '#data-table').
- * 
- * @return {jQuery} The jQuery element for chaining.
- */
-$.fn.handleKeys = function (disableEvent, enableEvent, selector) {
-    'use strict';
-
-    disableEvent = disableEvent || 'focus';
-    enableEvent = enableEvent || 'blur';
-
-    return $(this).on(disableEvent, function () {
-        disableKeys(selector);
-    }).on(enableEvent, function () {
-        enableKeys(selector);
-    });
-};
+});

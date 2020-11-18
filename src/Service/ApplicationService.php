@@ -260,14 +260,16 @@ class ApplicationService implements ApplicationServiceInterface
     /**
      * Gets all properties.
      *
+     * @param string[] $exludes the property keys to exclude
+     *
      * @return array the properties with names and values
      */
-    public function getProperties(): array
+    public function getProperties(array $exludes = []): array
     {
         // reload data
         $this->updateAdapter();
 
-        return  [
+        $result = [
             self::CUSTOMER_NAME => $this->getCustomerName(),
             self::CUSTOMER_URL => $this->getCustomerUrl(),
 
@@ -292,6 +294,15 @@ class ApplicationService implements ApplicationServiceInterface
             self::DISPLAY_TABULAR => $this->isDisplayTabular(),
             self::DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
         ];
+
+        // exlude keys
+        if (!empty($exludes)) {
+            foreach ($exludes as $key) {
+                unset($result[$key]);
+            }
+        }
+
+        return $result;
     }
 
     /**

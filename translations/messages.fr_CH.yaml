@@ -17,8 +17,8 @@ calculation:
         group: Groupe
         item: Article
         items: Articles
-        created: 'Création : '
-        updated: 'Mise à jour : '
+        created: Création
+        updated: Mise à jour
     add:
         title: Nouvelle calculation
         success: La calculation Nº <b>%name%</b> a été créée avec succès.
@@ -67,8 +67,6 @@ calculation:
         margin_below: La marge globale de <b>%margin%</b> est en dessous du seuil minimal de <b>%minimum%</b>
     show:
         title: Propriétés de la calculation
-        created: Création
-        updated: Mise à jour
     state:
         newstate: Nouveau statut
         success: Le statut de la calculation Nº <b>%name%</b> a été mis à jour avec succès.
@@ -162,7 +160,7 @@ category:
         success: La catégorie <b>%name%</b> a été mise à jour avec succès.
         add_margin: Ajouter une marge
         delete_margin: Supprimer la marge
-        sort_margins: Trier les marges 
+        sort_margins: Trier les marges
     delete:
         title: Supprimer une catégorie
         message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
@@ -277,7 +275,7 @@ product:
         category_all_description: Toutes
         category_description: Catégorie d'articles
     show:
-        title: Propriétés de l'article
+        title: Propriétés de l'articleg
 user:
     name: Utilisateur
     fields:
@@ -410,6 +408,8 @@ common:
     id: Numéro
     empty: ''
     no_script_support: Votre navigateur ne supporte pas JavaScript !
+    entity_created: 'Création : %date% - %user%'
+    entity_updated: 'Mise à jour : %date% - %user%'
 environment:
     dev: Développement
     prod: Production
@@ -638,6 +638,7 @@ parameters:
     editAction:
         show: Afficher l'objet
         edit: Modifier l'objet
+        none: Aucune action
     display:
         show: Afficher
         hide: Masquer
@@ -919,13 +920,6 @@ registration:
             Cordialement,
             L'équipe
     confirmed: Félicitations %username%, votre compte est maintenant activé.
-generate:
-    title: Générateur de données
-    description: Cet outil permet de générer des données aléatoires.
-    submit_text: Générer
-    fields:
-        entity: Objet à générer
-        count: Nombre
 timeline:
     title: Chronologie
     date: Date
@@ -948,3 +942,25 @@ empty:
     description: Calculations contenant un article avec une quantité ou un prix égale à 0.
     empty: Aucune calculation ne contient des articles sans quantité ou sans prix.
     count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
+generate:
+    title: Générateur de données
+    description: Cet outil permet de générer des données aléatoires.
+    submit_text: Générer
+    fields:
+        entity: Objet à générer
+        count: Nombre
+        confirm: Confirmer la génération des données
+    error:
+        confirm: Vous devez cochez le message de confirmation.
+update:
+    title: Mise à jour des données
+    description: Cet outil permet de mettre à jour des données de façon aléatoire.
+    submit_text: Mettre à jour
+    fields:
+        entity: Objet à mettre à jour
+        confirm: Confirmer la mise à jour des données
+    error:
+        confirm: Vous devez cochez le message de confirmation.
+    help:
+        customer: Remplace le nom et le prénom du contact, le nom de la société et l'e-mail.
+        calculation: Remplace le nom du client, la description et le statut.

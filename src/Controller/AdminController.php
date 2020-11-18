@@ -21,14 +21,12 @@ use App\Form\FormHelper;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
-use App\Listener\CalculationListener;
-use App\Listener\TimestampableListener;
 use App\Repository\CalculationRepository;
 use App\Security\EntityVoter;
 use App\Service\CalculationService;
+use App\Service\SuspendEventListenerService;
 use App\Service\SwissPostService;
 use App\Util\SymfonyUtils;
-use Doctrine\Common\EventManager;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -160,15 +158,15 @@ class AdminController extends AbstractController
     {
         // properties
         $service = $this->getApplication();
-        $data = $service->getProperties();
+        $data = $service->getProperties([
+            ApplicationServiceInterface::LAST_UPDATE,
+            ApplicationServiceInterface::LAST_IMPORT,
+        ]);
 
         // password options
         foreach (ParametersType::PASSWORD_OPTIONS as $option) {
             $data[$option] = $service->isPropertyBoolean($option);
         }
-
-        // remove unused properties
-        unset($data[ApplicationServiceInterface::LAST_UPDATE], $data[ApplicationServiceInterface::LAST_IMPORT]);
 
         // form
         $form = $this->createForm(ParametersType::class, $data);
@@ -227,7 +225,7 @@ class AdminController extends AbstractController
      * @Route("/update", name="admin_update", methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function update(Request $request, CalculationRepository $repository, CalculationService $service, LoggerInterface $logger): Response
+    public function update(Request $request, CalculationRepository $repository, CalculationService $service, LoggerInterface $logger, SuspendEventListenerService $listener): Response
     {
         // create form helper
         $helper = $this->createUpdateHelper();
@@ -248,9 +246,10 @@ class AdminController extends AbstractController
             $duplicated = 0;
             $sorted = 0;
             $unmodifiable = 0;
-            $suspended = $this->disableListeners();
 
             try {
+                $listener->disableListeners();
+
                 /** @var Calculation[] $calculations */
                 $calculations = $repository->findAll();
                 foreach ($calculations as $calculation) {
@@ -282,7 +281,7 @@ class AdminController extends AbstractController
                     $this->getManager()->flush();
                 }
             } finally {
-                $this->enableListeners($suspended);
+                $listener->enableListeners();
             }
 
             $total = \count($calculations);
@@ -385,29 +384,6 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Disabled doctrine event listeners.
-     *
-     * @return array an array containing the event names and listerners
-     */
-    private function disableListeners(): array
-    {
-        $suspended = [];
-        $manager = $this->getEventManager();
-        $allListeners = $manager->getListeners();
-        foreach ($allListeners as $event => $listeners) {
-            foreach ($listeners as $listener) {
-                if ($listener instanceof TimestampableListener
-                    || $listener instanceof CalculationListener) {
-                    $suspended[$event][] = $listener;
-                    $manager->removeEventListener($event, $listener);
-                }
-            }
-        }
-
-        return $suspended;
-    }
-
-    /**
      * Edit rights.
      *
      * @param Request $request  the request
@@ -443,30 +419,5 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
             'default' => $default,
         ]);
-    }
-
-    /**
-     * Enabled doctrine event listeners.
-     *
-     * @param array $suspended the event names and listeners to activate
-     */
-    private function enableListeners(array $suspended): void
-    {
-        $manager = $this->getEventManager();
-        foreach ($suspended as $event => $listeners) {
-            foreach ($listeners as $listener) {
-                $manager->addEventListener($event, $listener);
-            }
-        }
-    }
-
-    /**
-     * Gets the doctrine event manager.
-     *
-     * @return EventManager the event manager
-     */
-    private function getEventManager(): EventManager
-    {
-        return $this->getManager()->getEventManager();
     }
 }

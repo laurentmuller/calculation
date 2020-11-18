@@ -17,6 +17,8 @@ namespace App\Listener;
 use App\Entity\Calculation;
 use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
+use App\Interfaces\DisableListenerInterface;
+use App\Traits\DisableListenerTrait;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -26,8 +28,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @internal
  */
-final class CalculationListener
+final class CalculationListener implements DisableListenerInterface
 {
+    use DisableListenerTrait;
+
     /**
      * @var Security
      */
@@ -54,6 +58,11 @@ final class CalculationListener
      */
     public function onFlush(OnFlushEventArgs $args): void
     {
+        // enabled?
+        if (!$this->enabled) {
+            return;
+        }
+
         // get entities
         $em = $args->getEntityManager();
         $unitOfWork = $em->getUnitOfWork();

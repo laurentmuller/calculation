@@ -110,6 +110,19 @@ trait LoggerTrait
     }
 
     /**
+     * Logs a notice message.
+     *
+     * @param string $message the message
+     * @param array  $context the context
+     */
+    public function logNotice(string $message, array $context = []): void
+    {
+        if ($logger = $this->doGetLogger()) {
+            $logger->notice($message, $context);
+        }
+    }
+
+    /**
      * Logs a warning message.
      *
      * @param string $message the message
@@ -119,19 +132,6 @@ trait LoggerTrait
     {
         if ($logger = $this->doGetLogger()) {
             $logger->warning($message, $context);
-        }
-    }
-
-    /**
-     * Logs a notice message.
-     *
-     * @param string $message the message
-     * @param array  $context the context
-     */
-    public function notice(string $message, array $context = []): void
-    {
-        if ($logger = $this->doGetLogger()) {
-            $logger->notice($message, $context);
         }
     }
 

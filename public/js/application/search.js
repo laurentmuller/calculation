@@ -9,25 +9,25 @@
 /**
  * Update a button link.
  * 
- * @param {string}
- *            type - the entity type.
  * @param {boolean}
- *            granted - the granted action (autorization).
+ *            granted - true if the action is granted (autorization).
  * @param {object}
  *            params - the parameters.
  * 
- * @returns {jQuery} the button.
+ * @returns {jQuery} the button for chaining.
  */
-$.fn.updateHref = function (type, granted, params) {
+$.fn.updateHref = function (granted, params) {
     'use strict';
 
     const $that = $(this);
-    if (type === null || !granted) {
+
+    // type and granted?
+    if (params === null || params.type === null || !granted) {
         return $that.attr('href', '#').addClass('disabled');
     }
 
     // build URL
-    const path = $that.data('path').replace('_type_', type).replace('_id_', params.id);
+    const path = $that.data('path').replace('_type_', params.type).replace('_id_', params.id);
     const href = path + '?' + $.param(params);
 
     // update
@@ -89,6 +89,35 @@ $.fn.dataTable.renderEntityName = function (data, type, row) {
 };
 
 /**
+ * Gets the parameters for the given row.
+ * 
+ * @param {row}
+ *            row - the selected row.
+ * @returns {Object} the parameters.
+ */
+$.fn.dataTable.Api.register('getParameters()', function (row) {
+    'use strict';
+
+    // row?
+    if (row === null) {
+        return {};
+    }
+
+    // build parameters
+    const data = row.data();
+    const info = this.page.info();
+    const type = data.type.toLowerCase();
+    return {
+        id: data.id,
+        type: type,
+        page: info.page,
+        pagelength: info.length,
+        query: this.search(),
+        caller: window.location.href.split('?')[0]
+    };
+});
+
+/**
  * Update buttons link and enablement.
  * 
  * @returns {DataTables.Api} this instance.
@@ -96,36 +125,25 @@ $.fn.dataTable.renderEntityName = function (data, type, row) {
 $.fn.dataTable.Api.register('updateButtons()', function () {
     'use strict';
 
-    let type = null;
-    let params = null;
+    // get rows and parameters
+    const row = this.getSelectedRow();
+    const params = this.getParameters(row);
+
+    // get rights
     let showGranted = false;
     let editGranted = false;
     let deleteGranted = false;
-    const row = this.getSelectedRow();
-
-    // build parameters
     if (row !== null) {
         const data = row.data();
-        const info = this.page.info();
-        type = data.type.toLowerCase();
-        params = {
-            id: data.id,
-            type: type,
-            page: info.page,
-            pagelength: info.length,
-            query: this.search(),
-            caller: window.location.href.split('?')[0]
-        };
-
         showGranted = data.show_granted;
         editGranted = data.edit_granted;
         deleteGranted = data.delete_granted;
     }
 
     // update buttons
-    $('.btn-table-show').updateHref(type, showGranted, params);
-    $('.btn-table-edit').updateHref(type, editGranted, params);
-    $('.btn-table-delete').updateHref(type, deleteGranted, params);
+    $('.btn-table-show').updateHref(showGranted, params);
+    $('.btn-table-edit').updateHref(editGranted, params);
+    $('.btn-table-delete').updateHref(deleteGranted, params);
 
     return this;
 });
@@ -218,7 +236,7 @@ function searchCallback(table) {
 
     // initialize
     const key = type && id ? type + '.' + id : false;
-    $table.initDataTable(options).initEvents(key, searchCallback);
+    const table = $table.initDataTable(options).initEvents(key, searchCallback);
 
     // update
     $('#table_search').val(query);
@@ -237,6 +255,49 @@ function searchCallback(table) {
         }
     });
 
+    // add row link if applicable
+    if ($('#data-table tbody.rowlink').length) {
+        // path
+        const showPath = $('.btn-table-show').data('path');
+        const editPath = $('.btn-table-edit').data('path');
+        const editAction = ($table.attr('edit-action') || 'false').toBool();
+
+        table.on('draw', function () {
+            // run over rows
+            table.rows().every(function () {
+                // get parameters
+                let path = false;
+                const row = this;
+                const data = row.data();
+                const params = table.getParameters(row);
+
+                // replace path
+                if (data.edit_granted && editAction) {
+                    path = editPath.replace('_type_', params.type).replace('_id_', params.id);
+                } else if (data.show_granted) {
+                    path = showPath.replace('_type_', params.type).replace('_id_', params.id);
+                }
+
+                // create link and replace content
+                if (path) {
+                    const href = path + '?' + $.param(params);
+                    const $row = $(this.node());
+                    const $cell = $row.find('td:first-child');
+                    const text = $cell.text().trim();
+                    const $image = $cell.find('i');                    
+                    const $a = $('<a/>', {
+                        'href': href,
+                        'text': text
+                    });
+                    if ($image.length) {
+                        $image.prependTo($a);
+                    }
+                    $cell.html($a);
+                }
+            });
+        });
+    }
+
     // context menu
     const selector = '.dataTable .table-primary';
     const show = function () {
@@ -245,8 +306,8 @@ function searchCallback(table) {
     };
     const hide = function () {
         enableKeys();
-    };    
-    $('#data-table').initContextMenu(selector, show, hide);
+    };
+    $table.initContextMenu(selector, show, hide);
 
     // focus
     if (!$('#table_search').val().length) {

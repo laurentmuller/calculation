@@ -339,7 +339,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
 
     // initialize
     const table = $table.initDataTable(options).initEvents(id);
-
+    
     // update
     $('#table_search').val(query);
     $('#table_length').val(pagelength);
@@ -367,9 +367,9 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     };
     const hide = function () {
         enableKeys();
-    };
+    };    
     $table.initContextMenu(selector, show, hide);
-   
+    
     // drop-down menu
     $('#other_actions_button').handleKeys();
     $('#other_actions').handleKeys('show.bs.dropdown', 'hide.bs.dropdown');
@@ -423,18 +423,17 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     
     // add row link if applicable
     if ($('#data-table tbody.rowlink').length) {
+        // path
+        let path = $('.btn-table-show').data('path');
+        if (($table.attr('edit-action') || 'false').toBool()) {
+            path = $('.btn-table-edit').data('path');
+        }
         table.on('draw', function () {
-            // path
-            let path = $('.btn-table-show').data('path');
-            if (($table.attr('edit-action') || 'false').toBool()) {
-                path = $('.btn-table-edit').data('path');
-            }
-            
             // run over rows
             table.rows().every(function() {
                 // create href attribute
-                const $row = $(this.node());
-                const $cell = $row.find('td:first-child');                
+                const $row =  $(this.node());
+                const $cell = $row.find('td:first-child');
                 const params = table.getParameters(this.id());
                 const href = path.replace('0', this.id()) + '?' + $.param(params);
                 const text = $cell.text().trim();

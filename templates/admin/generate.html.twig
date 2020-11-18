@@ -2,7 +2,7 @@
 
 {# parameters #}
 {%- set title       = 'generate.title' -%}
-{%- set title_icon  = 'tools' -%}
+{%- set title_icon  = 'random' -%}
 {%- set submit_text = 'generate.submit_text' -%}
 
 {% block card_header %}
@@ -19,11 +19,13 @@
         {{ form_row(form.count) }}
     </div>
 </div>
+{{ form_row(form.confirm) }}
 <div class="row" id="content" style="display: none;">
     <div class="col">
         <table class="table table-sm" id="result"></table>
     </div>
 </div>
+
 {% endblock %}
 
 {% block javascripts %}

@@ -45,6 +45,7 @@ class IndexController extends AbstractController
         $states = $stateRepository->getListCount();
         $months = $calculRepository->getByMonth();
         $calculations = $calculRepository->getLastCalculations($tabular ? 10 : 6);
+        $margin = $this->getApplication()->getMinMargin();
         $edit = $this->getApplication()->isEditAction();
 
         // get states count and total
@@ -57,8 +58,8 @@ class IndexController extends AbstractController
 
         // render view
         return $this->render('index/index.html.twig', [
-            'min_margin' => $this->getApplication()->getMinMargin(),
             'calculations' => $calculations,
+            'min_margin' => $margin,
             'tabular' => $tabular,
             'states' => $states,
             'months' => $months,

@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * The images constants.
+ * Images constants.
  *
  * @author Laurent Muller
  */

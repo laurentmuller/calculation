@@ -128,11 +128,11 @@
 {{ properties.property('calculation.fields.state', item.stateCode|default('')) }}
 {% if item.createdAt %}
     {% set created = item.createdAt|localedatetime ~ ' - ' ~ item.createdBy|default('calculation.edit.empty_user'|trans) -%}
-    {{ properties.property('calculation.show.created', created) }}
+    {{ properties.property('calculation.fields.created', created) }}
 {% endif %}
 {% if item.updatedAt %}
     {% set updated = item.updatedAt|localedatetime ~ ' - ' ~ item.createdBy|default('calculation.edit.empty_user'|trans) -%}
-    {{ properties.property('calculation.show.updated', updated) }}
+    {{ properties.property('calculation.fields.updated', updated) }}
 {% endif %}
 {% if item.empty %}
     {{ properties.property('calculation.edit.panel_items', 'calculation.edit.empty'|trans) }}

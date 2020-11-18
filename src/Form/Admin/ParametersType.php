@@ -16,6 +16,7 @@ namespace App\Form\Admin;
 
 use App\Form\FormHelper;
 use App\Form\Type\MinStrengthType;
+use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
@@ -137,8 +138,9 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         $helper->field(self::EDIT_ACTION)
             ->updateAttribute('data-default', (int) self::DEFAULT_EDIT_ACTION)
             ->addChoiceType([
-                'parameters.editAction.show' => false,
-                'parameters.editAction.edit' => true,
+                'parameters.editAction.show' => ActionInterface::ACTION_SHOW,
+                'parameters.editAction.edit' => ActionInterface::ACTION_EDIT,
+                // 'parameters.editAction.none' => ActionInterface::ACTION_NONE,
             ]);
 
         $helper->field(self::MIN_MARGIN)

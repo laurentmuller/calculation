@@ -183,7 +183,7 @@
                             $parent = $(element).closest('.form-group');
                         }
                     }
-                    error.addClass('invalid-feedback').appendTo($parent);
+                    error.addClass('invalid-feedback').appendTo($parent);    
                 },
 
                 highlight: function(element, errorClass) {

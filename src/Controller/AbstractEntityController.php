@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Abstract controller for entites management.
+ * Abstract controller for entities management.
  *
  * @author Laurent Muller
  */

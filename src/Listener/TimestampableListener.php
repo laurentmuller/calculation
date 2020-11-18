@@ -14,7 +14,9 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
+use App\Interfaces\DisableListenerInterface;
 use App\Interfaces\TimestampableInterface;
+use App\Traits\DisableListenerTrait;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -26,15 +28,19 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @see TimestampableInterface
  */
-class TimestampableListener
+class TimestampableListener implements DisableListenerInterface
 {
+    use DisableListenerTrait;
+
     /**
+     * The security to get current user name.
+     *
      * @var Security
      */
     private $security;
 
     /**
-     * the default user name.
+     * The default user name.
      *
      * @var string
      */
@@ -54,6 +60,11 @@ class TimestampableListener
      */
     public function onFlush(OnFlushEventArgs $args): void
     {
+        // enabled?
+        if (!$this->enabled) {
+            return;
+        }
+
         $em = $args->getEntityManager();
         $unitOfWork = $em->getUnitOfWork();
         $entities = \array_merge($unitOfWork->getScheduledEntityInsertions(), $unitOfWork->getScheduledEntityUpdates());

@@ -70,7 +70,7 @@
          * @return {boolean} true if undefined.
          */
         isUndefined: function (data) {
-            return $.type(data) === 'undefined'; // || data === null
+            return $.type(data) === 'undefined';
         }
     });
 
@@ -541,6 +541,20 @@
                 delete options.type;
             }
             return $(this).popover(options);
+        },
+
+        /**
+         * Remove duplicate classes.
+         * 
+         * @return {jQuery} The jQuery element for chaining.
+         */
+        removeDuplicateClasses: function () {
+            return this.each(function (i, element) {
+                const $this = $(element); 
+                const source = $this.attr('class');
+                const target = source.split(' ').unique();
+                $this.attr('class', target.join(' '));
+            });
         }
     });
 

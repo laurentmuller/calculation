@@ -26,14 +26,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Person;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Controller to generate or update entities.
+ * Controller to generate entities.
  *
  * @author Laurent Muller
  *
@@ -42,6 +40,38 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class GeneratorController extends AbstractController
 {
+    /**
+     * @Route("", name="generate")
+     */
+    public function generate(): Response
+    {
+        $params = ['count' => 0];
+        $type = UrlGeneratorInterface::ABSOLUTE_URL;
+
+        // fields
+        $helper = $this->createFormHelper('generate.fields.', ['count' => 1]);
+        $helper->field('entity')
+            ->addChoiceType([
+                'customer.name' => $this->generateUrl('generate_customer', $params, $type),
+                'calculation.name' => $this->generateUrl('generate_calculation', $params, $type),
+        ]);
+
+        $helper->field('count')
+            ->updateOption('html5', true)
+            ->updateAttribute('min', 1)
+            ->updateAttribute('max', 50)
+            ->addNumberType(0);
+
+        $helper->field('confirm')
+            ->updateOption('mapped', false)
+            ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
+            ->addCheckboxType();
+
+        return $this->render('admin/generate.html.twig', [
+            'form' => $helper->createView(),
+        ]);
+    }
+
     /**
      * Create one or more calculations with random data.
      *
@@ -67,7 +97,6 @@ class GeneratorController extends AbstractController
 
         $calculations = [];
         for ($i = 0; $i < $count; ++$i) {
-            // calculation
             $calculation = new Calculation();
             $calculation->setDate($faker->dateTimeBetween($dateStart, $dateEnd))
                 ->setDescription($faker->catchPhrase())
@@ -209,108 +238,6 @@ class GeneratorController extends AbstractController
     }
 
     /**
-     * @Route("", name="generate_index")
-     */
-    public function index(): Response
-    {
-        $params = ['count' => 0];
-        $type = UrlGeneratorInterface::ABSOLUTE_URL;
-
-        // fields
-        $helper = $this->createFormHelper('generate.fields.', ['count' => 1]);
-        $helper->field('entity')
-            ->addChoiceType([
-                'calculation.name' => $this->generateUrl('generate_calculation', $params, $type),
-                'customer.name' => $this->generateUrl('generate_customer', $params, $type),
-        ]);
-        $helper->field('count')
-            ->updateOption('html5', true)
-            ->updateAttribute('min', 1)
-            ->updateAttribute('max', 50)
-            ->addNumberType(0);
-
-        return $this->render('admin/generate.html.twig', [
-            'form' => $helper->createView(),
-        ]);
-    }
-
-    /**
-     * Update calculations with random customers.
-     *
-     * @Route("/calculation/update", name="generate_calculation_update")
-     */
-    public function updateCalculation(EntityManagerInterface $manager, FakerService $service): RedirectResponse
-    {
-        /** @var \Faker\Generator $faker */
-        $faker = $service->getFaker();
-
-        /** @var \App\Entity\Calculation[] $calculations */
-        $calculations = $manager->getRepository(Calculation::class)->findAll();
-        $states = $this->getCalculationState($manager);
-        $styles = [0, 1, 2];
-
-        // update
-        foreach ($calculations as $calculation) {
-            $style = $faker->randomElement($styles);
-            switch ($style) {
-                case 0:
-                    $calculation->setCustomer($faker->companySuffix);
-                    break;
-
-                case 1:
-                    $calculation->setCustomer($faker->name(Person::GENDER_MALE));
-                    break;
-
-                default:
-                    $calculation->setCustomer($faker->name(Person::GENDER_FEMALE));
-                    break;
-            }
-            $calculation->setDescription($faker->catchPhrase())
-                ->setState($faker->randomElement($states));
-        }
-        $manager->flush();
-
-        $count = \count($calculations);
-        $this->infoTrans('counters.calculations_update', ['count' => $count]);
-
-        return $this->redirectToHomePage();
-    }
-
-    /**
-     * Update customers with random values.
-     *
-     * @Route("/customer/update", name="generate_customer_update")
-     */
-    public function updateCustomer(EntityManagerInterface $manager, FakerService $service): RedirectResponse
-    {
-        /** @var \Faker\Generator $faker */
-        $faker = $service->getFaker();
-
-        /** @var \App\Entity\Customer[] $customers */
-        $customers = $manager->getRepository(Customer::class)->findAll();
-        $genders = $this->getGenders();
-
-        $accessor = new PropertyAccessor();
-        foreach ($customers as $customer) {
-            $gender = $faker->randomElement($genders);
-            $this->replace($accessor, $customer, 'title', $faker->title($gender))
-                ->replace($accessor, $customer, 'firstName', $faker->firstName($gender))
-                ->replace($accessor, $customer, 'lastName', $faker->lastName)
-                ->replace($accessor, $customer, 'company', $faker->companySuffix)
-                ->replace($accessor, $customer, 'address', $faker->streetAddress)
-                ->replace($accessor, $customer, 'zipCode', $faker->postcode)
-                ->replace($accessor, $customer, 'city', $faker->city)
-                ->replace($accessor, $customer, 'email', $faker->email);
-        }
-        $manager->flush();
-
-        $count = \count($customers);
-        $this->infoTrans('counters.customers_update', ['count' => $count]);
-
-        return $this->redirectToHomePage();
-    }
-
-    /**
      * Gets the calculation states.
      *
      * @return CalculationState[]
@@ -382,24 +309,6 @@ class GeneratorController extends AbstractController
         return \array_map(function (User $user) {
             return $user->getUsername();
         }, $users);
-    }
-
-    /**
-     * Update an element property.
-     *
-     * @param PropertyAccessor $accessor the property accessor to get or set value
-     * @param mixed            $element  the element to update
-     * @param string           $property the property name
-     * @param mixed            $value    the new value to set
-     */
-    private function replace(PropertyAccessor $accessor, $element, string $property, $value): self
-    {
-        if (empty($accessor->getValue($element, $property))) {
-            $value = null;
-        }
-        $accessor->setValue($element, $property, $value);
-
-        return $this;
     }
 
     /**

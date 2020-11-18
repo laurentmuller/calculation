@@ -45,10 +45,10 @@ final class FormatExtension extends AbstractExtension
     /**
      * Filter to format a boolean value.
      *
-     * @param bool   $value     the value to format
-     * @param string $true      the text to use when the value is <code>true</code> or <code>null</code> to use default
-     * @param string $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
-     * @param bool   $translate <code>true</code> to translate texts
+     * @param bool        $value     the value to format
+     * @param string|null $true      the text to use when the value is <code>true</code> or <code>null</code> to use default
+     * @param string|null $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
+     * @param bool        $translate <code>true</code> to translate texts
      */
     public function booleanFilter($value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {
@@ -103,11 +103,11 @@ final class FormatExtension extends AbstractExtension
     /**
      * Formats a date for the current locale; ignoring the time part.
      *
-     * @param Environment               $env        the Twig environment
-     * @param \DateTime|int             $date       the date
-     * @param string|null               $dateFormat the date format
-     * @param \DateTimeZone|string|null $timezone   the time zone
-     * @param string|null               $calendar   the calendar type
+     * @param Environment                        $env        the Twig environment
+     * @param \DateTimeInterface|int|string|null $date       the date
+     * @param string|null                        $dateFormat the date format
+     * @param \DateTimeZone|string|false|null    $timezone   the time zone
+     * @param string|null                        $calendar   the calendar type
      *
      * @throws SyntaxError if the date format or the time format is unknown
      *
@@ -121,12 +121,12 @@ final class FormatExtension extends AbstractExtension
     /**
      * Formats a date and time for the current locale.
      *
-     * @param Environment               $env        the Twig environment
-     * @param \DateTime|int             $date       the date
-     * @param string|null               $dateFormat the date format
-     * @param string|null               $timeFormat the time format
-     * @param \DateTimeZone|string|null $timezone   the time zone
-     * @param string|null               $calendar   the calendar type
+     * @param Environment                        $env        the Twig environment
+     * @param \DateTimeInterface|int|string|null $date       the date
+     * @param string|null                        $dateFormat the date format
+     * @param string|null                        $timeFormat the time format
+     * @param \DateTimeZone|string|false|null    $timezone   the time zone
+     * @param string|null                        $calendar   the calendar type
      *
      * @throws SyntaxError if the date format or the time format is unknown
      *
@@ -153,6 +153,8 @@ final class FormatExtension extends AbstractExtension
         // get types
         $datetype = $dateFormat ? $formats[$dateFormat] : null;
         $timetype = $timeFormat ? $formats[$timeFormat] : null;
+
+        // no date and time format?
         if (\IntlDateFormatter::NONE === $datetype && \IntlDateFormatter::NONE === $timetype) {
             return '';
         }
@@ -168,11 +170,11 @@ final class FormatExtension extends AbstractExtension
     /**
      * Formats a time for the current locale; ignoring the date part.
      *
-     * @param Environment               $env        the Twig environment
-     * @param \DateTime|int             $date       the date
-     * @param string|null               $timeFormat the time format
-     * @param \DateTimeZone|string|null $timezone   the time zone
-     * @param string|null               $calendar   the calendar type
+     * @param Environment                        $env        the Twig environment
+     * @param \DateTimeInterface|int|string|null $date       the date
+     * @param string|null                        $timeFormat the time format
+     * @param \DateTimeZone|string|false|null    $timezone   the time zone
+     * @param string|null                        $calendar   the calendar type
      *
      * @throws SyntaxError if the date format or the time format is unknown
      *

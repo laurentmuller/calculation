@@ -76,11 +76,12 @@ function generate() {
         if (response.result) {
             const index = $('#form_entity').prop('selectedIndex');
             if (index === 0) {
-                renderCalculations(response.calculations);
-            } else {
                 renderCustomers(response.customers);
+            } else {
+                renderCalculations(response.calculations);
             }
             $('#content').slideDown('slow');
+            $('#form_confirm').setChecked(false);
             const title = $(".card-title").text();
             Toaster.success(response.message, title, $("#flashbags").data());
         }
@@ -94,7 +95,7 @@ function generate() {
     'use strict';
 
     // hide result on change
-    $('#form_entity, #form_count').on('input', function () {
+    $('#form_entity, #form_count').on('input', function () {        
         $('#content').slideUp();
     });
 

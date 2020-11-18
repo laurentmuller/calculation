@@ -97,7 +97,39 @@
         requiredFallback: 'Ce champ est requis.',
         requiredLabel: 'Le champ \"{0}\" est requis.',
         required: function (parameters, element) {
+            // error message?
+            const error = $(element).data('error');
+            if (error) {
+                return error;
+            }
             return $.validator.formatLabel(element, $.validator.messages.requiredLabel, $.validator.messages.requiredFallback);
+        },
+
+        /*
+         * email
+         */
+        emailFallback: 'Veuillez fournir une adresse électronique valide.',
+        emailLabel: 'Le champ \"{0}\" doit contenir une adresse électronique valide.',
+        email: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.emailLabel, $.validator.messages.emailFallback);
+        },
+
+        /*
+         * url
+         */
+        urlFallback: 'Veuillez fournir une adresse URL valide.',
+        urlLabel: 'Le champ \"{0}\" doit contenir une adresse URL valide.',
+        url: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.urlLabel, $.validator.messages.urlFallback);
+        },
+
+        /*
+         * date
+         */
+        dateFallback: 'Veuillez fournir une date valide.',
+        dateLabel: 'Le champ \"{0}\" doit contenir une date valide.',
+        date: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.dateLabel, $.validator.messages.dateFallback);
         },
 
         /*
@@ -380,6 +412,24 @@
         zipcodeChLabel: "Le champ \"{0}\" doit contenir un numéro postal valide.",
         zipcodeCH: function (parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.zipcodeChLabel, $.validator.messages.zipcodeChFallback);
+        },
+
+        /*
+         * min
+         */
+        minFallback: 'Veuillez fournir une valeur supérieure ou égale à {0}.',
+        minLabel: 'Le champ \"{0}\" doit avoir une valeur supérieure ou égale à {1}.',
+        min: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.minLabel, $.validator.messages.minFallback, parameters);
+        },
+
+        /*
+         * max
+         */
+        maxFallback: 'Veuillez fournir une valeur inférieure ou égale à {0}.',
+        maxLabel: 'Le champ \"{0}\" doit avoir une valeur inférieure ou égale à {1}.',
+        max: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.maxLabel, $.validator.messages.maxFallback, parameters);
         },
 
     });

@@ -37,3 +37,15 @@ Array.prototype.last = function () {
 
     return this.length ? this[this.length - 1] : null;
 };
+
+/**
+ * Returns unique elements.
+ */
+/* eslint no-extend-native: ["error", { "exceptions": ["Array"] }] */
+Array.prototype.unique = function () {
+    'use strict';
+    
+    return this.filter(function (value, index, self) {
+        return self.indexOf(value) === index;
+    });
+};

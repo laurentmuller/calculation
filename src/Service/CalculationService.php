@@ -24,7 +24,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Service to compute calculations.
+ * Service to update calculation totals.
  *
  * @author Laurent Muller
  */

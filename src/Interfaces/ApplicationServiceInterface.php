@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * Defint constants for the application service.
+ * Application service constants.
  *
  * @author Laurent Muller
  *

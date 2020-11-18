@@ -20,11 +20,11 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\GeneratorController} class.
+ * Unit test for {@link App\Controller\UpdateController} class.
  *
  * @author Laurent Muller
  */
-class GeneratorControllerTest extends AbstractControllerTest
+class UpdateControllerTest extends AbstractControllerTest
 {
     private static ?Category $category = null;
     private static $products = null;
@@ -33,17 +33,18 @@ class GeneratorControllerTest extends AbstractControllerTest
     public function getRoutes(): array
     {
         return [
-            ['/generate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/generate', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/generate', self::ROLE_SUPER_ADMIN],
+            ['/update', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/update', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/update', self::ROLE_SUPER_ADMIN],
 
-            ['/generate/calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/generate/calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/generate/calculation', self::ROLE_SUPER_ADMIN],
+            ['/update/calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/update/calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/update/calculation', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
 
-            ['/generate/customer', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/generate/customer', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/generate/customer', self::ROLE_SUPER_ADMIN],
+
+            ['/update/customer', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/update/customer', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/update/customer', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
         ];
     }
 

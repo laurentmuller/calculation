@@ -186,7 +186,7 @@ class DataColumn
     public static function actions($formatter, string $name = 'id'): self
     {
         return self::instance($name)
-            ->setClassName('actions d-print-none')
+            ->setClassName('actions rowlink-skip d-print-none')
             ->setTitle('common.empty')
             ->setFormatter($formatter)
             ->setSearchable(false)
@@ -320,12 +320,7 @@ class DataColumn
      */
     public function getCellClassName(): string
     {
-        $className = $this->className ?: '';
-        if ($this->visible && false === \stripos($className, 'actions')) {
-            return \trim($className . ' cursor-pointer');
-        }
-
-        return $className;
+        return $this->className ?: '';
     }
 
     /**
@@ -402,7 +397,8 @@ class DataColumn
         $className = $this->headerClassName ?: $this->className ?: '';
         if ($this->visible) {
             if ($this->orderable) {
-                $className .= ' cursor-pointer sorting';
+                //$className .= ' cursor-pointer sorting';
+                $className .= ' sorting';
                 if ($this->default) {
                     $className .= '_' . $this->direction;
                 }

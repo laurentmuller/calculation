@@ -17,6 +17,11 @@
 <!--#include file="vendor/contextmenu/jquery.contextMenu.js" -->
 
 /**
+ * Plugins files
+ */
+<!--#include file="plugins/plugin-rowlink.js" -->
+
+/**
  * Extensions files
  */
 <!--#include file="extensions/contextmenu-extensions.js" -->

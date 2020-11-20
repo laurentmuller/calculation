@@ -3,13 +3,13 @@
 /**
  * Gets the selection filter.
  * 
- * @param prefix
- *            the selector prefix.
- * @param separator
- *            the filter separator.
- * @param filter
- *            the callback filter
- * @returns the filter.
+ * @param {string}
+ *            prefix - the selector prefix.
+ * @param {string}
+ *            separator - the filter separator.
+ * @param {function}
+ *            filter - the callback filter
+ * @returns {string} the filter.
  */
 function getSelection(prefix, separator, filter) {
     'use strict';
@@ -33,7 +33,7 @@ function getSelection(prefix, separator, filter) {
 /**
  * Gets the hidden card filter.
  * 
- * @returns the filter.
+ * @returns {string} the filter.
  */
 function getHiddenCards() {
     'use strict';
@@ -50,7 +50,7 @@ function getHiddenCards() {
 /**
  * Gets the hidden levels filter.
  * 
- * @returns the filter.
+ * @returns {string} the filter.
  */
 function getHiddenLevels() {
     'use strict';
@@ -67,7 +67,7 @@ function getHiddenLevels() {
 /**
  * Gets the hidden channels filter.
  * 
- * @returns the filter.
+ * @returns {string} the filter.
  */
 function getHiddenChannels() {
     'use strict';
@@ -84,7 +84,7 @@ function getHiddenChannels() {
 /**
  * Gets the PDF export button.
  * 
- * @returns the button.
+ * @returns {jQuery} the button.
  */
 function getPdfButton() {
     'use strict';

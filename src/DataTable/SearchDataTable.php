@@ -172,8 +172,12 @@ class SearchDataTable extends AbstractDataTable
         // search?
         $search = $query->search->value;
         if ($search && \strlen($search) > 1) {
+            /** @var \DataTables\Column $column */
+            $column = $query->columns[1];
+            $entity = $column->search->value;
+
             // search
-            $items = $this->service->search($search, SearchService::NO_LIMIT);
+            $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);
 
             // found?
             if (!empty($items)) {

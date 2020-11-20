@@ -5,7 +5,7 @@
 /**
  * Gets the query input.
  * 
- * @returns the input element or null if none.
+ * @returns {jQuery} the input element or null if none.
  */
 function getQueryInput() {
     'use strict';

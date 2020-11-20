@@ -41,7 +41,6 @@ class UpdateControllerTest extends AbstractControllerTest
             ['/update/calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
             ['/update/calculation', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
 
-
             ['/update/customer', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/update/customer', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
             ['/update/customer', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],

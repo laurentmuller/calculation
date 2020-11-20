@@ -9,7 +9,7 @@
  *            $element - The element to handle.
  * @param {String]
  *            url - The search URL.
- * @param {String}
+ * @param {string}
  *            error - The message to display on search error.
  * 
  * @returns {jQuery} The element for chaining.

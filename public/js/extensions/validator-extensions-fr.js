@@ -44,15 +44,15 @@
          * 
          * @param {HTMLElement}
          *            element - The element to search in.
-         * @param {String}
+         * @param {string}
          *            message - the message to use when label text is found.
-         * @param {String}
+         * @param {string}
          *            fallback - the default message to use when label text is
          *            not found.
          * @param {any}
          *            params - the optional parameters to use for formatting the
          *            message.
-         * @return {String} the formatted message.
+         * @return {string} the formatted message.
          */
         formatLabel: function (element, message, fallback, params) {
             // check parameters
@@ -80,7 +80,7 @@
          * 
          * @param {int}
          *            size - the size, in bytes, to translate.
-         * @return {String} the translated size.
+         * @return {string} the translated size.
          */
         translateFileSize: function (bytes) {
             const index = Math.floor(Math.log(bytes) / Math.log(1024));

@@ -15,30 +15,31 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTable\SearchDataTable;
+use App\Entity\Calculation;
+use App\Entity\CalculationState;
+use App\Entity\Category;
+use App\Entity\Customer;
+use App\Entity\Product;
 use App\Interfaces\EntityVoterInterface;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * The index controler (home page).
+ * The home controler (home page, search and site map).
  */
-class IndexController extends AbstractController
+class HomeController extends AbstractController
 {
-    /**
-     * The home page route.
-     */
-    public const HOME_PAGE = 'homepage';
-
     /**
      * Display the home page.
      *
      * @Route("/", name="homepage")
      */
-    public function index(CalculationRepository $calculRepository, CalculationStateRepository $stateRepository): Response
+    public function home(CalculationRepository $calculRepository, CalculationStateRepository $stateRepository): Response
     {
         // get values to display
         $tabular = $this->isDisplayTabular();
@@ -95,6 +96,17 @@ class IndexController extends AbstractController
             'edit-action' => \json_encode($this->getApplication()->isEditAction()),
         ];
 
+        // entity types
+        $entities = [
+            \strtolower(Utils::getShortName(Calculation::class)) => 'calculation.name',
+            \strtolower(Utils::getShortName(Product::class)) => 'product.name',
+            \strtolower(Utils::getShortName(Category::class)) => 'category.name',
+            \strtolower(Utils::getShortName(CalculationState::class)) => 'calculationstate.name',
+        ];
+        if ($this->isDebug()) {
+            $entities[\strtolower(Utils::getShortName(Customer::class))] = 'customer.name';
+        }
+
         // render
         $parameters = [
             'results' => $results,
@@ -103,6 +115,7 @@ class IndexController extends AbstractController
             'edit_granted' => $edit_granted,
             'delete_granted' => $delete_granted,
             'attributes' => $attributes,
+            'entities' => $entities,
         ];
 
         return $this->render('index/search.html.twig', $parameters);

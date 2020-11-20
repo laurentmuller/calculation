@@ -1,10 +1,53 @@
 /**! compression tag for ftp-deployment */
 
-/* globals URLSearchParams, MenuBuilder, enableKeys, disableKeys */
+/* globals URLSearchParams, MenuBuilder, enableKeys, disableKeys, clearSearch */
 
 /**
  * -------------- jQuery extensions --------------
  */
+$.fn.extend({
+    /**
+     * Update the entity selection.
+     * 
+     * @return {jQuery} The jQuery element for chaining.
+     */
+    updateEntity: function () {
+        'use strict';
+
+        const $this = $(this);
+        if ($this.length) {
+            $('#entity').val($this.data('id'));
+            $('#button-entity').text($this.text());
+            $('.dropdown-entity').removeClass('active');
+            $this.addClass('active');
+        }
+        return $this;
+    }
+});
+
+/**
+ * Override clear search
+ */
+const noConflictSearch = clearSearch;
+clearSearch = function ($element, table, callback) { // jshint ignore:line
+    'use strict';
+
+    const $entity = $('#entity');
+    if ($entity.val() !== '') {
+        table.search('');
+        table.column(1).search('');
+        $('#table_search').addClass('is-invalid');
+        $('#minimum').removeClass('d-none');
+        $('.dropdown-entity:first').updateEntity();
+        if (!noConflictSearch($element, table, callback)) {
+            table.draw();
+            return false;
+        }
+        return true;
+    } else {
+        return noConflictSearch($element, table, callback);
+    }
+};
 
 /**
  * Update a button link.
@@ -107,7 +150,7 @@ $.fn.dataTable.Api.register('getParameters()', function (row) {
     const data = row.data();
     const info = this.page.info();
     const type = data.type.toLowerCase();
-    return {
+    const params = {
         id: data.id,
         type: type,
         page: info.page,
@@ -115,6 +158,13 @@ $.fn.dataTable.Api.register('getParameters()', function (row) {
         query: this.search(),
         caller: window.location.href.split('?')[0]
     };
+    if ($('#entity').val()) {
+        params.search = [{
+            index: 1,
+            value: $('#entity').val()
+        }];
+    }
+    return params;
 });
 
 /**
@@ -199,7 +249,6 @@ function searchCallback(table) {
     // parameters
     const defaultLength = $table.data('pagelength') || 15;
     const params = new URLSearchParams(window.location.search);
-    // const paging = total > 15;
     const id = params.getOrDefault('id', 0);
     const type = params.getOrDefault('type', null);
     const page = params.getOrDefault('page', 0);
@@ -284,7 +333,7 @@ function searchCallback(table) {
                     const $row = $(this.node());
                     const $cell = $row.find('td:first-child');
                     const text = $cell.text().trim();
-                    const $image = $cell.find('i');                    
+                    const $image = $cell.find('i');
                     const $a = $('<a/>', {
                         'href': href,
                         'text': text
@@ -313,4 +362,32 @@ function searchCallback(table) {
     if (!$('#table_search').val().length) {
         $('#table_search').focus();
     }
+
+    // initialize entity search column
+    const $entity = $('#entity');
+    const $button = $('#button-entity');
+    table.initSearchColumn($entity, 1, $button);
+
+    // handle drop-down entity
+    $('.dropdown-entity').on('click', function () {
+        $(this).updateEntity();
+        // force update
+        if (table.column(1).search() === $entity.val()) {
+            table.column(1).search(' ');
+        }
+        $entity.trigger('input');
+    }).handleKeys();
+
+    // focus entity menu
+    $('#dropdown-menu-entity').on('shown.bs.dropdown', function () {
+        $('.dropdown-entity.active').focus();
+    });
+
+    // select entity
+    const entity = $entity.val() || params.get('search[0][value]');
+    if (entity) {
+        const selector = '.dropdown-entity[data-id="' + type + '"]';
+        $(selector).updateEntity();
+    }
+
 }(jQuery));

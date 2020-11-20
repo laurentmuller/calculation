@@ -9,7 +9,7 @@ $.fn.extend({
     /**
      * Update the channel selection.
      * 
-     * @param {String}
+     * @param {string}
      *            text - the text to use for the button or null to copy the
      *            selected drop-down item.
      * @return {jQuery} The jQuery element for chaining.
@@ -30,7 +30,7 @@ $.fn.extend({
     /**
      * Update the level selection.
      * 
-     * @param {String}
+     * @param {string}
      *            text - the text to use for the button or null to copy the
      *            selected drop-down item.
      * @return {jQuery} The jQuery element for chaining.
@@ -99,6 +99,16 @@ clearSearch = function ($element, table, callback) { // jshint ignore:line
         $(this).updateLevel();
         $('#level').trigger('input');
     }).handleKeys();
+
+    // focus channel
+    $('#dropdown-menu-channel').on('shown.bs.dropdown', function () {
+        $('.dropdown-channel.active').focus();
+    });
+
+    // focus level
+    $('#dropdown-menu-level').on('shown.bs.dropdown', function () {
+        $('.dropdown-level.active').focus();
+    });
 
     // select channel
     const channel = $('#channel').val();

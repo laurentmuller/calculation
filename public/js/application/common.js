@@ -39,24 +39,31 @@ function showFlashbag() {
 function initSearchToolbar() {
     'use strict';
 
-    // search?
+    // search form?
     const $form = $("#navigation-search-form");
     if ($form.length === 0) {
         return;
     }
+
     const $button = $("#navigation-search-button");
     const $query = $("#navigation-search-form #query");
 
+    $.fn.extend({
+        hideInvalid: function () {
+            return $(this).removeClass('is-invalid').tooltip('dispose');
+        }
+    });
+
     const hideForm = function () {
+        $query.val("").hideInvalid();
         $form.animate({
             width: 0
         }, function () {
             $form.hide();
-            $query.val("").removeClass('is-invalid');
             $button.show().focus();
         });
     };
-
+    
     $button.on("click", function () {
         $button.hide();
         $form.show().animate({
@@ -71,15 +78,22 @@ function initSearchToolbar() {
             hideForm();
         } else {
             // validate
-            const val = $query.val();
-            if (val.length < 2) {
-                $query.addClass('is-invalid');
+            if ($query.val().trim().length < 2) {
+                $query.addClass('is-invalid').customTooltip({
+                    type: 'danger'
+                }).tooltip('show');
             } else {
-                $query.removeClass('is-invalid');
+                $query.hideInvalid();
             }
         }
     }).on("blur", function () {
         hideForm();
+    });
+
+    $form.on('submit', function (e) {
+        if ($query.hasClass('is-invalid')) {
+            e.preventDefault();
+        }
     });
 }
 

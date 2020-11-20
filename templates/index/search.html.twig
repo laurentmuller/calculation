@@ -11,6 +11,13 @@
     </a>
 {% endmacro %}
 
+{% macro fill_entities(entities) %}
+<button class="dropdown-item dropdown-entity active" type="button" data-id="">{{ 'datatable.all'|trans }}</button>
+{% for key, entity in entities %}
+    <button class="dropdown-item dropdown-entity" type="button" data-id="{{ key }}">{{ entity|trans }}</button>
+{% endfor %}
+{% endmacro %}
+
 {# parameters #}
 {%- set title       = 'search.title' -%}
 {%- set title_icon  = 'search' -%}
@@ -47,14 +54,23 @@
 <div class="row mb-2 d-print-none">
     <div class="col-auto mr-auto">
         <div class="form-inline">
-             <label class="mr-2 required" for="table_search">{{ 'datatable.search'|trans }}</label>
-             <div class="input-group input-group-sm bg-white">
-                <input type="text" id="table_search" name="table_search" class="form-control form-control-sm form-control-border-right-0" autocomplete="off">
+            <label class="mr-2 required" for="table_search">{{ 'datatable.search'|trans }}</label>             
+            <div class="input-group input-group-sm bg-white">
+                <input type="text" id="table_search" name="table_search" class="form-control form-control-sm form-control-border-right-0" autocomplete="off">            
+                <div class="input-group-append dropdown" id="dropdown-menu-entity">
+                    <button id="button-entity" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'search.fields.type'|trans }}">
+                        {{- 'datatable.all'|trans -}}
+                    </button>
+                    <div class="dropdown-menu">
+                        {{ _self.fill_entities(entities) -}}
+                    </div>
+                    <input type="hidden" id="entity" name="entity">                
+                </div>
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-clear btn-outline-secondary border border-left-0" title="{{ 'datatable.clear'|trans }}">
+                    <button type="button" class="btn btn-clear btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
                         <i class="fas fa-eraser" aria-hidden="true"></i>
                     </button>
-                </div>
+                </div>    
              </div>
              <label id="minimum" class="ml-2 text-danger d-none">{{ 'search.minimum'|trans }}</label>
         </div>

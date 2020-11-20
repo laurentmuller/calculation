@@ -47,6 +47,11 @@ abstract class AbstractController extends BaseController
     use TranslatorFlashMessageTrait;
 
     /**
+     * The home page route.
+     */
+    public const HOME_PAGE = 'homepage';
+
+    /**
      * The URL generator service.
      *
      * @var UrlGeneratorService
@@ -191,7 +196,7 @@ abstract class AbstractController extends BaseController
      */
     public function redirectToHomePage(): RedirectResponse
     {
-        return  $this->redirectToRoute(IndexController::HOME_PAGE);
+        return  $this->redirectToRoute(self::HOME_PAGE);
     }
 
     /**

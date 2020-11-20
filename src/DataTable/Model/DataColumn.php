@@ -397,7 +397,6 @@ class DataColumn
         $className = $this->headerClassName ?: $this->className ?: '';
         if ($this->visible) {
             if ($this->orderable) {
-                //$className .= ' cursor-pointer sorting';
                 $className .= ' sorting';
                 if ($this->default) {
                     $className .= '_' . $this->direction;

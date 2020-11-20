@@ -8,14 +8,42 @@
 (function ($) {
     'use strict';
 
-    const url = $("#edit-form").data("search");
+    // error handler
     const errorHandler = function () {
         const title = $("#edit-form").data("title");
         const message = $("#edit-form").data("error");
         Toaster.danger(message, title, $("#flashbags").data());
     };
+    
+    // title
+    const $title = $('#customer_title');
+    const titleUrl = $("#edit-form").data("search-title");
+    const titleOptions = {
+        valueField: false,
+        alignWidth: false,
+        onError: errorHandler,
+
+        ajax: {
+            url: titleUrl,
+            triggerLength: 1
+        },
+
+        onSelect: function () {
+            $title.select();
+        },
+
+        // overridden functions (all are set in the server side)
+        matcher: function () {
+            return true;
+        },
+        grepper: function (data) {
+            return data;
+        }
+    };
+    $title.typeahead(titleOptions);
 
     // controls
+    const addressUrl = $("#edit-form").data("search-address");
     const $address = $('#customer_address');
     const $zip = $('#customer_zipCode');
     const $city = $('#customer_city');
@@ -28,7 +56,7 @@
         onError: errorHandler,
 
         ajax: {
-            url: url,
+            url: addressUrl,
             triggerLength: 2,
             preDispatch: function (query) {
                 return {
@@ -62,7 +90,7 @@
         onError: errorHandler,
 
         ajax: {
-            url: url,
+            url: addressUrl,
             triggerLength: 2,
             preDispatch: function (query) {
                 return {
@@ -95,7 +123,7 @@
         onError: errorHandler,
 
         ajax: {
-            url: url,
+            url: addressUrl,
             triggerLength: 2,
             preDispatch: function (query) {
                 return {

@@ -325,13 +325,13 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
 /**
  * Binds a column search.
  * 
- * @param $source
- *            {jQuery} - the search input.
- * @param columnIndex
- *            {integer} - the column index to bind with.
- * @param $targetFocus
- *            {jQuery} - the input to set focus after draw or null to use the
- *            source.
+ * @param {jQuery}
+ *            $source - the search input.
+ * @param {integer}
+ *            columnIndex - the column index to bind with.
+ * @param {jQuery}
+ *            $targetFocus - the input to set focus after draw or null to use
+ *            the source.
  * @returns {DataTables.Api} this instance.
  */
 $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex, $targetFocus) {
@@ -344,7 +344,7 @@ $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex
 
     $targetFocus = $targetFocus || $source;
     const column = this.column(columnIndex);
-    const display = $source.is(':not(:hidden)');
+    const display = $targetFocus.is(':not(:hidden)');
     const callback = function () {
         const value = $source.val().trim();
         if (column.search() !== value) {

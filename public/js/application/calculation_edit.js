@@ -489,7 +489,7 @@ var Application = {
      * 
      * @param {Number}
      *            value - the value to format.
-     * @returns {String} - the formatted value.
+     * @returns {string} - the formatted value.
      */
     toLocaleString: function (value) {
         'use strict';
@@ -762,9 +762,9 @@ var Application = {
     /**
      * Compare 2 strings with language sensitive.
      * 
-     * @param {String}
+     * @param {string}
      *            string1 - the first string to compare.
-     * @param {String}
+     * @param {string}
      *            string2 - the second string to compare.
      * @return {int} a negative value if string1 comes before string2; a
      *         positive value if string1 comes after string2; 0 if they are
@@ -1228,7 +1228,7 @@ $.fn.extend({
     /**
      * Fade out and remove the selected element.
      * 
-     * @param {Function}
+     * @param {function}
      *            callback - the optional function to call after the element is
      *            removed.
      */
@@ -1247,11 +1247,11 @@ $.fn.extend({
     /**
      * Gets the template prototype from the current element.
      * 
-     * @param {String}
+     * @param {string}
      *            pattern - the regex pattern used to replace the index.
-     * @param {String}
+     * @param {string}
      *            key - the data key used to retrieve and update the index.
-     * @returns {String} - the template.
+     * @returns {string} - the template.
      */
     getPrototype: function (pattern, key) {
         'use strict';

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Controller\IndexController;
+use App\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -67,7 +67,7 @@ class UrlGeneratorService
      *
      * @return string the cancel URL
      */
-    public function cancelUrl(Request $request, int $id = 0, string $defaultRoute = IndexController::HOME_PAGE): string
+    public function cancelUrl(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
     {
         // build parameters
         $params = $this->routeParams($request, $id);
@@ -94,7 +94,7 @@ class UrlGeneratorService
      * @param int     $id           the entity identifier
      * @param string  $defaultRoute the default route to use
      */
-    public function redirect(Request $request, int $id = 0, string $defaultRoute = IndexController::HOME_PAGE): RedirectResponse
+    public function redirect(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): RedirectResponse
     {
         $url = $this->cancelUrl($request, $id, $defaultRoute);
 

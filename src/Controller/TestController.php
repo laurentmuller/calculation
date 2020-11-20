@@ -437,11 +437,12 @@ class TestController extends AbstractController
     public function union(Request $request, SearchService $service): JsonResponse
     {
         $query = $request->get('query');
+        $entity = $request->get('entity');
         $limit = (int) $request->get('limit', 25);
         $offset = (int) $request->get('offset', 0);
 
-        $count = $service->count($query);
-        $results = $service->search($query, $limit, $offset);
+        $count = $service->count($query, $entity);
+        $results = $service->search($query, $entity, $limit, $offset);
 
         foreach ($results as &$row) {
             $type = \strtolower($row[SearchService::COLUMN_TYPE]);
@@ -464,6 +465,7 @@ class TestController extends AbstractController
 
         $data = [
             'query' => $query,
+            'entity' => $entity,
             'offset' => $offset,
             'limit' => $limit,
             'total' => $count,

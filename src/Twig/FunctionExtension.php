@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Controller\IndexController;
+use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
@@ -163,7 +163,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @return string the cancel URL
      */
-    public function cancelUrl(Request $request, int $id = 0, string $defaultRoute = IndexController::HOME_PAGE): string
+    public function cancelUrl(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
     {
         return $this->generator->cancelUrl($request, $id, $defaultRoute);
     }

@@ -152,7 +152,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
         // global search
         $this->createSearchGlobal($builder, $columns, $definitions, $query->search->value);
 
-        // filtered count.
+        // filtered count
         $results->recordsFiltered = $this->countFiltered($builder);
 
         // order by

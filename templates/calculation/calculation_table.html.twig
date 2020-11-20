@@ -46,7 +46,7 @@
 {% if states is defined %}
 <div class="input-group input-group-sm">
     <input type="text" id="table_search" name="table_search" class="form-control" autocomplete="off">
-    <div class="input-group-append">
+    <div class="input-group-append dropdown" id="dropdown-menu-state">
         <button id="button-state" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'calculation.fields.state'|trans }}">
             {{- 'calculation.fields.state'|trans -}}
         </button>

@@ -102,7 +102,7 @@ MenuBuilder.prototype = {
      * 
      * @param {jQuery}
      *            $link - the element to add.
-     * @param {String}
+     * @param {string}
      *            icon - the item's icon.
      * @return {MenuBuilder} This instance for chaining.
      */
@@ -143,9 +143,9 @@ MenuBuilder.prototype = {
     /**
      * Adds a title. Do nothing if the last added item is already a title.
      * 
-     * @param {String}
+     * @param {string}
      *            title - the item's title.
-     * @param {String}
+     * @param {string}
      *            tag - the item's tag.
      * @return {MenuBuilder} This instance for chaining.
      */
@@ -193,7 +193,7 @@ MenuBuilder.prototype = {
     /**
      * Returns a value indicating if this builder is empty.
      * 
-     * @return {Boolean} true if empty.
+     * @return {boolean} true if empty.
      */
     isEmpty: function () {
         'use strict';
@@ -203,9 +203,9 @@ MenuBuilder.prototype = {
     /**
      * Returns if the given key is a separator item.
      * 
-     * @param {String}
+     * @param {string}
      *            key - the key to be tested.
-     * @return {Boolean} true if separator.
+     * @return {boolean} true if separator.
      */
     isSeparator: function (key) {
         'use strict';
@@ -215,9 +215,9 @@ MenuBuilder.prototype = {
     /**
      * Returns if the given key is a title item.
      * 
-     * @param {String}
+     * @param {string}
      *            key - the key to be tested.
-     * @return {Boolean} true if title.
+     * @return {boolean} true if title.
      */
     isTitle: function (key) {
         'use strict';
@@ -227,7 +227,7 @@ MenuBuilder.prototype = {
     /**
      * Gets the last key.
      * 
-     * @return {String} the last key, if any; null otherwise.
+     * @return {string} the last key, if any; null otherwise.
      */
     getLastKey: function () {
         'use strict';

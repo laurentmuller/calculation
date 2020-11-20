@@ -8,7 +8,7 @@
 
 /**
  * Update the link href.
- * 
+ *
  * @param {Object}
  *            params - the parameters
  */
@@ -28,7 +28,7 @@ $.fn.updateHref = function (params) {
 
 /**
  * Creates the context menu items.
- * 
+ *
  * @returns {Object} the context menu items.
  */
 $.fn.getContextMenuItems = function () {
@@ -67,7 +67,7 @@ $.fn.getContextMenuItems = function () {
 
 /**
  * Handler to create margin tooltip for calculation.
- * 
+ *
  * @param {node}
  *            td - The TD node that has been created.
  * @param {any}
@@ -87,7 +87,7 @@ $.fn.dataTable.renderTooltip = function (td, cellData) {
 
 /**
  * Handler to render the state color.
- * 
+ *
  * @param {node}
  *            td - The TD node that has been created.
  * @param {any}
@@ -106,7 +106,7 @@ $.fn.dataTable.renderStateColor = function (td, cellData, rowData) {
 
 /**
  * Handler to create left border for log entry.
- * 
+ *
  * @param {node}
  *            td - The TD node that has been created.
  * @param {any}
@@ -123,7 +123,7 @@ $.fn.dataTable.renderLog = function (td, cellData, rowData) {
 
 /**
  * User send message button callback.
- * 
+ *
  * @param {DataTables.Api}
  *            row - the selected row.
  */
@@ -143,7 +143,7 @@ $.fn.userSendMessage = function (row) {
 
 /**
  * User switch button callback.
- * 
+ *
  * @param {DataTables.Api}
  *            row - the selected row.
  */
@@ -170,14 +170,14 @@ $.fn.userSwitch= function (row) {
 
 /**
  * Gets the parameters for the given identifier.
- * 
+ *
  * @param {int}
  *            id - the row identifier or 0 if none.
  * @returns {Object} the parameters.
  */
 $.fn.dataTable.Api.register('getParameters()', function (id) {
     'use strict';
-    
+
     // row?
     if (id === 0) {
         return {};
@@ -213,13 +213,13 @@ $.fn.dataTable.Api.register('getParameters()', function (id) {
             });
         }
     });
-    
+
     return params;
 });
 
 /**
  * Update buttons link and enablement.
- * 
+ *
  * @returns {DataTables.Api} this instance.
  */
 $.fn.dataTable.Api.register('updateButtons()', function () {
@@ -229,7 +229,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     const row = this.getSelectedRow();
     const disabled = row === null;
     const id = disabled ? 0 : row.id;
-    
+
     // get parameters
     const params = this.getParameters(id);
 
@@ -303,7 +303,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     }
 
     // columns search
-   	let searchCols = (new Array(columns.length)).fill(null);    
+    let searchCols = (new Array(columns.length)).fill(null);
     for (var i = 0, len = columns.length; i < len; i++) {
         const indexKey = 'search[' + i + '][index]';
         const valueKey = 'search[' + i + '][value]';
@@ -339,7 +339,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
 
     // initialize
     const table = $table.initDataTable(options).initEvents(id);
-    
+
     // update
     $('#table_search').val(query);
     $('#table_length').val(pagelength);
@@ -358,7 +358,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
         const index = table.row($row).index();
         table.cell(index, '0:visIdx').focus();
     });
-    
+
     // context menu
     const selector = '.dataTable .table-primary td:not(.d-print-none)';
     const show = function () {
@@ -367,9 +367,9 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     };
     const hide = function () {
         enableKeys();
-    };    
+    };
     $table.initContextMenu(selector, show, hide);
-    
+
     // drop-down menu
     $('#other_actions_button').handleKeys();
     $('#other_actions').handleKeys('show.bs.dropdown', 'hide.bs.dropdown');
@@ -383,17 +383,17 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
             if (key.startsWith('separator_')) {
                 const $separator = $('<div></div>', {
                     'class': 'dropdown-divider'
-                });                
+                });
                 $menus.push($separator);
-                
+
             } else if (key.startsWith('title_')) {
                 const $title = $('<h6></h6>', {
                     'class': 'dropdown-header',
-                    'text': value.text                        
-                });                
+                    'text': value.text
+                });
                 $menus.push($title);
-                
-            } else if (value.link){                
+
+            } else if (value.link){
                 const $action = $('<a></a>', {
                     'class': 'dropdown-item',
                     'text': value.name,
@@ -403,24 +403,24 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
                     e.stopPropagation();
                     value.link.get(0).click();
                 });
-                
+
                 if (value.icon) {
                     const $icon= $('<i></i>', {
                         'class': value.icon + ' mr-1',
                         'aria-hidden': 'true'
                     });
                     $icon.prependTo($action);
-                    
+
                 }
                 $menus.push($action);
             }
         }
-        
+
         // replace
         const $menu = $this.find('.dropdown-menu');
         $menu.empty().append($menus);
     });
-    
+
     // add row link if applicable
     if ($('#data-table tbody.rowlink').length) {
         // path
@@ -437,7 +437,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
                 const params = table.getParameters(this.id());
                 const href = path.replace('0', this.id()) + '?' + $.param(params);
                 const text = $cell.text().trim();
-                
+
                 // create link and replace content
                 const $a = $('<a/>', {
                     'href': href,
@@ -447,5 +447,5 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
             });
         });
     }
-    
+
 }(jQuery));

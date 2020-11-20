@@ -44,7 +44,7 @@
 {% block search_input -%}
 <div class="input-group input-group-sm">
     <input type="text" id="table_search" name="table_search" class="form-control" autocomplete="off">
-    <div class="input-group-append">
+    <div class="input-group-append dropdown" id="dropdown-menu-category">
         <button id="button-category" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'product.fields.category'|trans }}">
             {{- 'product.fields.category'|trans -}}
         </button>

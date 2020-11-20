@@ -62,6 +62,11 @@ clearSearch = function ($element, table, callback) { // jshint ignore:line
         $('#category').trigger('input');
     }).handleKeys();
 
+    // focus category menu
+    $('#dropdown-menu-category').on('shown.bs.dropdown', function () {
+        $('.dropdown-category.active').focus();
+    });
+
     // select category
     const category = $('#category').val();
     if (category) {

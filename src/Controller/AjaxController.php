@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
+use App\Repository\CustomerRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
 use App\Service\CalculationService;
@@ -27,6 +28,7 @@ use App\Translator\TranslatorFactory;
 use App\Util\DatabaseInfo;
 use App\Util\SymfonyUtils;
 use App\Util\Utils;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -70,8 +72,7 @@ class AjaxController extends AbstractController
     {
         $content = $this->renderView('about/licence_content.html.twig');
 
-        return $this->json([
-            'result' => true,
+        return $this->jsonTrue([
             'content' => $content,
         ]);
     }
@@ -91,8 +92,7 @@ class AjaxController extends AbstractController
         ];
         $content = $this->renderView('about/mysql_content.html.twig', $parameters);
 
-        return $this->json([
-            'result' => true,
+        return $this->jsonTrue([
             'content' => $content,
         ]);
     }
@@ -113,8 +113,7 @@ class AjaxController extends AbstractController
         ];
         $content = $this->renderView('about/php_content.html.twig', $parameters);
 
-        return $this->json([
-            'result' => true,
+        return $this->jsonTrue([
             'content' => $content,
         ]);
     }
@@ -129,8 +128,7 @@ class AjaxController extends AbstractController
     {
         $content = $this->renderView('about/policy_content.html.twig');
 
-        return $this->json([
-            'result' => true,
+        return $this->jsonTrue([
             'content' => $content,
         ]);
     }
@@ -180,8 +178,7 @@ class AjaxController extends AbstractController
         ];
         $content = $this->renderView('about/symfony_content.html.twig', $parameters);
 
-        return $this->json([
-            'result' => true,
+        return $this->jsonTrue([
             'content' => $content,
         ]);
     }
@@ -195,14 +192,12 @@ class AjaxController extends AbstractController
     public function captchaImage(CaptchaImageService $service): JsonResponse
     {
         if ($data = $service->generateImage(true)) {
-            return $this->json([
-                'result' => true,
+            return $this->jsonTrue([
                 'data' => $data,
             ]);
         }
 
-        return $this->json([
-            'result' => false,
+        return $this->jsonFalse([
             'message' => $this->trans('captcha.generate', [], 'validators'),
         ]);
     }
@@ -441,8 +436,7 @@ class AjaxController extends AbstractController
         $class = $request->get('service', TranslatorFactory::DEFAULT_SERVICE);
         $service = $factory->getService($class);
         if ($languages = $service->getLanguages()) {
-            return $this->json([
-                'result' => true,
+            return $this->jsonTrue([
                 'languages' => $languages,
             ]);
         }
@@ -456,15 +450,13 @@ class AjaxController extends AbstractController
                 $error['message'] = $this->trans($id, [], 'translator');
             }
 
-            return $this->json([
-                'result' => false,
+            return $this->jsonFalse([
                 'message' => $message,
                 'exception' => $error,
             ]);
         }
 
-        return $this->json([
-            'result' => false,
+        return $this->jsonFalse([
             'message' => $message,
         ]);
     }
@@ -485,8 +477,7 @@ class AjaxController extends AbstractController
         $faker = $service->getFaker();
         $text = $faker->realText($maxNbChars, $indexSize);
 
-        return $this->json([
-            'result' => true,
+        return $this->jsonTrue([
             'content' => $text,
         ]);
     }
@@ -546,7 +537,67 @@ class AjaxController extends AbstractController
      */
     public function searchCustomer(Request $request, CalculationRepository $repository): JsonResponse
     {
-        return $this->searchDistinct($request, $repository, 'customer');
+        return $this->getDistinctValues($request, $repository, 'customer');
+    }
+
+    /**
+     * Gets sorted, distinct and not null values.
+     *
+     * The request must have the following fields:
+     * <ul>
+     * <li><code>entity</code>: the entity class name without the namespace.</li>
+     * <li><code>field</code>: the field name (column) to get values for.</li>
+     * <li><code>query</code>: the value to search.</li>
+     * <li><code>limit</code>: the number of results to retrieve (default = 15).</li>
+     * </ul>
+     *
+     * @Route("/search/distinct", name="ajax_search_distinct")
+     * @IsGranted("ROLE_USER")
+     */
+    public function searchDistinct(Request $request, EntityManagerInterface $manager): JsonResponse
+    {
+        // class
+        $className = 'App\\Entity\\' . $request->get('entity', '');
+        if (!\class_exists($className)) {
+            return $this->jsonFalse([
+                'values' => [],
+            ]);
+        }
+
+        // field
+        $field = (string) $request->get('field');
+        if (!Utils::isString($field)) {
+            return $this->jsonFalse([
+                'values' => [],
+            ]);
+        }
+
+        // query
+        $query = (string) $request->get('query');
+        if (!Utils::isString($query)) {
+            return $this->jsonFalse([
+                'values' => [],
+            ]);
+        }
+
+        //limit
+        $limit = (int) $request->get('limit', 15);
+
+        try {
+            /** @var AbstractRepository $repository */
+            $repository = $manager->getRepository($className);
+            $values = $repository->getDistinctValues($field, $query, $limit);
+            if (!empty($values)) {
+                return $this->json($values);
+            }
+
+            // empty
+            return $this->jsonFalse([
+                'values' => [],
+            ]);
+        } catch (\Exception $e) {
+            return $this->jsonException($e, $this->trans('translator.translate_error'));
+        }
     }
 
     /**
@@ -568,8 +619,7 @@ class AjaxController extends AbstractController
             }
 
             // empty
-            return $this->json([
-                'result' => false,
+            return $this->jsonFalse([
                 'products' => [],
             ]);
         } catch (\Exception $e) {
@@ -585,7 +635,18 @@ class AjaxController extends AbstractController
      */
     public function searchSupplier(Request $request, ProductRepository $repository): JsonResponse
     {
-        return $this->searchDistinct($request, $repository, 'supplier');
+        return $this->getDistinctValues($request, $repository, 'supplier');
+    }
+
+    /**
+     * Search distinct customer's titles.
+     *
+     * @Route("/search/title", name="ajax_search_title")
+     * @IsGranted("ROLE_USER")
+     */
+    public function searchTitle(Request $request, CustomerRepository $repository): JsonResponse
+    {
+        return $this->getDistinctValues($request, $repository, 'title');
     }
 
     /**
@@ -596,7 +657,7 @@ class AjaxController extends AbstractController
      */
     public function searchUnit(Request $request, ProductRepository $repository): JsonResponse
     {
-        return $this->searchDistinct($request, $repository, 'unit');
+        return $this->getDistinctValues($request, $repository, 'unit');
     }
 
     /**
@@ -621,14 +682,12 @@ class AjaxController extends AbstractController
 
         // check parameters
         if (!Utils::isString($text)) {
-            return $this->json([
-                'result' => false,
+            return $this->jsonFalse([
                 'message' => $this->trans('translator.text_error'),
             ]);
         }
         if (!Utils::isString($to)) {
-            return $this->json([
-                'result' => false,
+            return $this->jsonFalse([
                 'message' => $this->trans('translator.to_error'),
             ]);
         }
@@ -636,8 +695,7 @@ class AjaxController extends AbstractController
         try {
             // translate
             if ($result = $service->translate($text, $to, $from)) {
-                return $this->json([
-                    'result' => true,
+                return $this->jsonTrue([
                     'data' => $result,
                 ]);
             }
@@ -651,15 +709,13 @@ class AjaxController extends AbstractController
                     $error['message'] = $this->trans($id, [], 'translator');
                 }
 
-                return $this->json([
-                    'result' => false,
+                return $this->jsonFalse([
                     'message' => $message,
                     'exception' => $error,
                 ]);
             }
 
-            return $this->json([
-                'result' => false,
+            return $this->jsonFalse([
                 'message' => $message,
             ]);
         } catch (\Exception $e) {
@@ -683,8 +739,7 @@ class AjaxController extends AbstractController
         // parameters
         $source = $request->get('calculation');
         if (null === $source) {
-            return $this->json([
-                'result' => false,
+            return $this->jsonFalse([
                 'message' => $this->trans('calculation.edit.error.update_total'),
             ]);
         }
@@ -818,8 +873,7 @@ class AjaxController extends AbstractController
     {
         // ajax call ?
         if (!$request->isXmlHttpRequest()) {
-            return $this->json([
-                'result' => false,
+            return $this->jsonFalse([
                 'message' => $this->trans('errors.invalid_request'),
             ]);
         }
@@ -897,6 +951,36 @@ class AjaxController extends AbstractController
     }
 
     /**
+     * Search distinct values.
+     *
+     * @param Request            $request    the request to get search parameters
+     * @param AbstractRepository $repository the respository to search in
+     * @param string             $field      the field name to search for
+     *
+     * @return JsonResponse the found values
+     */
+    private function getDistinctValues(Request $request, AbstractRepository $repository, string $field): JsonResponse
+    {
+        try {
+            $search = (string) $request->get('query', '');
+            if (Utils::isString($search)) {
+                $maxResults = (int) $request->get('limit', 15);
+                $values = $repository->getDistinctValues($field, $search, $maxResults);
+                if (!empty($values)) {
+                    return $this->json($values);
+                }
+            }
+
+            // empty
+            return $this->jsonFalse([
+                'values' => [],
+            ]);
+        } catch (\Exception $e) {
+            return $this->jsonException($e);
+        }
+    }
+
+    /**
      * Returns a string with the names of all modules compiled and loaded.
      *
      * @return string all the modules names
@@ -910,33 +994,22 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Search distinct values.
+     * Returns a Json response with false as result.
      *
-     * @param Request            $request    the request to get search parameters
-     * @param AbstractRepository $repository the respository to search in
-     * @param string             $field      the field name to search for
-     *
-     * @return JsonResponse the found values
+     * @param array $data the data to merge within the response
      */
-    private function searchDistinct(Request $request, AbstractRepository $repository, string $field): JsonResponse
+    private function jsonFalse(array $data = []): JsonResponse
     {
-        try {
-            $search = (string) $request->get('query', '');
-            if (Utils::isString($search)) {
-                $maxResults = (int) $request->get('limit', 15);
-                $values = $repository->getDistinctValues($field, $search, $maxResults);
-                if (!empty($values)) {
-                    return $this->json($values);
-                }
-            }
+        return $this->json(\array_merge_recursive(['result' => false], $data));
+    }
 
-            // empty
-            return $this->json([
-                'result' => false,
-                'values' => [],
-            ]);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
+    /**
+     * Returns a Json response with true as result.
+     *
+     * @param array $data the data to merge within the response
+     */
+    private function jsonTrue(array $data = []): JsonResponse
+    {
+        return $this->json(\array_merge_recursive(['result' => true], $data));
     }
 }

@@ -7,6 +7,9 @@
 /**
  * Returns a random element that is different from the given last index (if
  * any).
+ * 
+ * @param {integer}
+ *            lastIndex - the last selected index, if any; null otherwise.
  */
 /* eslint no-extend-native: ["error", { "exceptions": ["Array"] }] */
 Array.prototype.randomElement = function (lastIndex) {
@@ -44,7 +47,7 @@ Array.prototype.last = function () {
 /* eslint no-extend-native: ["error", { "exceptions": ["Array"] }] */
 Array.prototype.unique = function () {
     'use strict';
-    
+
     return this.filter(function (value, index, self) {
         return self.indexOf(value) === index;
     });

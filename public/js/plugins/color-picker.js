@@ -391,7 +391,7 @@
         /**
          * Finds color buttons for the given selector.
          * 
-         * @param {String}
+         * @param {string}
          *            selector - the buttons selector.
          * @returns {jQuery} the buttons, if found; null otherwise.
          */
@@ -420,9 +420,9 @@
         /**
          * Find the name for the given hexadecimal color.
          * 
-         * @param {String}
+         * @param {string}
          *            color - the hexadecimal color to search for.
-         * @returns {String} the color name, if found; the custom text
+         * @returns {string} the color name, if found; the custom text
          *          otherwise.
          */
         getColorName: function (color) {
@@ -445,9 +445,9 @@
         /**
          * Find the hexadecimal color for the given name.
          * 
-         * @param {String}
+         * @param {string}
          *            name - the color name to search for.
-         * @returns {String} the hexadecimal color, if found; the first color
+         * @returns {string} the hexadecimal color, if found; the first color
          *          otherwise.
          */
         getColorHex: function (name) {

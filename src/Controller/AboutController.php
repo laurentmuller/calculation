@@ -200,7 +200,7 @@ class AboutController extends AbstractController
      */
     private function getHomeUrl(): string
     {
-        $url = $this->generateUrl(IndexController::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $url = $this->generateUrl(self::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
         if (false !== $pos = \stripos($url, '/web')) {
             $url = \substr($url, 0, $pos);
         }

@@ -27,7 +27,6 @@ $.fn.extend({
     'use strict';
 
     // remove selection
-
     const $table = $('#calculations');
     if ($table.length) {
         // show selection
@@ -37,7 +36,7 @@ $.fn.extend({
         }
 
         // enable tooltips
-        $('#calculations tbody').customTooltip({
+        $table.customTooltip({
             selector: '.has-tooltip',
             type: 'danger overall-datatable'
         });
@@ -62,7 +61,7 @@ $.fn.extend({
         }
 
         // enable tooltips
-        $('body').customTooltip({
+        $('.card').customTooltip({
             selector: '.has-tooltip',
             type: 'danger overall-card'
         });

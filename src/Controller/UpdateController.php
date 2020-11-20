@@ -57,8 +57,7 @@ class UpdateController extends AbstractController
             'calculation.name' => ['data-help' => $this->trans('update.help.calculation')],
         ];
 
-        //$data = ['entity' => $choices['customer.name']];
-        $helper = $this->createFormHelper('update.fields.'); //, $data);
+        $helper = $this->createFormHelper('update.fields.');
 
         $helper->field('entity')
             ->updateOption('choice_attr', $attributes)

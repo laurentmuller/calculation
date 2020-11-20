@@ -58,21 +58,21 @@ class SearchService
     public const NO_LIMIT = -1;
 
     /**
-     * The search parameter name.
-     */
-    private const SEARCH_PARAM = 'search';
-
-    /**
      * The column names and types.
      *
      * @var string[]
      */
-    private static $COLUMNS = [
+    private const COLUMNS = [
         self::COLUMN_ID => 'integer',
         self::COLUMN_TYPE => 'string',
         self::COLUMN_FIELD => 'string',
         self::COLUMN_CONTENT => 'string',
     ];
+
+    /**
+     * The search parameter name.
+     */
+    private const SEARCH_PARAM = 'search';
 
     /**
      * The debug mode.
@@ -118,10 +118,11 @@ class SearchService
      * Gets the number of returned rows.
      *
      * @param string $search the term to search
+     * @param string $entity the entity to search in or null for all
      *
      * @return int the number of rows
      */
-    public function count(?string $search): int
+    public function count(?string $search, ?string $entity = null): int
     {
         // check value
         if (!Utils::isString($search)) {
@@ -129,7 +130,7 @@ class SearchService
         }
 
         // get result
-        $result = $this->getArrayResult($search);
+        $result = $this->getArrayResult($search, $entity);
 
         // count
         return \count($result);
@@ -141,12 +142,13 @@ class SearchService
      * Do nothing if the search term is empty or if the limit is equal to 0.
      *
      * @param string $search the term to search
+     * @param string $entity the entity name to search in or null for all
      * @param int    $limit  the number of rows to return or -1 for all
      * @param int    $offset the zero based index of the first row to return
      *
      * @return array the array of results for the given search (can be empty)
      */
-    public function search(?string $search, int $limit = 25, int $offset = 0): array
+    public function search(?string $search, ?string $entity = null, int $limit = 25, int $offset = 0): array
     {
         // check values
         if (!Utils::isString($search) || 0 === $limit) {
@@ -162,7 +164,7 @@ class SearchService
         $extra = " LIMIT {$limit} OFFSET {$offset}";
 
         // return result
-        return $this->getArrayResult($search, $extra);
+        return $this->getArrayResult($search, $entity, $extra);
     }
 
     /**
@@ -173,8 +175,9 @@ class SearchService
         $class = Calculation::class;
         $field = 'date';
         $content = "date_format(e.{$field}, '%d.%m.%Y')";
+        $key = $this->getKey($class, $field);
 
-        $this->queries[] = $this->createQueryBuilder($class, $field, $content)
+        $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
             ->getQuery()
             ->getSQL();
 
@@ -189,8 +192,9 @@ class SearchService
         $class = Calculation::class;
         $field = 'group';
         $content = 'g.code';
+        $key = $this->getKey($class, $field);
 
-        $this->queries[] = $this->createQueryBuilder($class, $field, $content)
+        $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
             ->join('e.groups', 'g')
             ->getQuery()
             ->getSQL();
@@ -206,8 +210,9 @@ class SearchService
         $class = Calculation::class;
         $field = 'item';
         $content = 'i.description';
+        $key = $this->getKey($class, $field);
 
-        $this->queries[] = $this->createQueryBuilder($class, $field, $content)
+        $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
             ->join('e.groups', 'g')
             ->join('g.items', 'i')
             ->getQuery()
@@ -224,8 +229,9 @@ class SearchService
         $class = Calculation::class;
         $field = 'state';
         $content = 's.code';
+        $key = $this->getKey($class, $field);
 
-        $this->queries[] = $this->createQueryBuilder($class, $field, $content)
+        $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
             ->join('e.state', 's')
             ->getQuery()
             ->getSQL();
@@ -242,7 +248,8 @@ class SearchService
     protected function createEntityQueries(string $class, array $fields): self
     {
         foreach ($fields as $field) {
-            $this->queries[] = $this->createQueryBuilder($class, $field)
+            $key = $this->getKey($class, $field);
+            $this->queries[$key] = $this->createQueryBuilder($class, $field)
                 ->getQuery()
                 ->getSQL();
         }
@@ -276,12 +283,20 @@ class SearchService
      * Creates the native query and returns the array result.
      *
      * @param string $search the term to search
+     * @param string $entity the entity to search in or null for all
      * @param string $extra  a SQL statement to add to the default native SELECT SQL statement
      */
-    protected function getArrayResult(string $search, string $extra = ''): array
+    protected function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
     {
         // queries:
         $queries = $this->getQueries();
+
+        // entity?
+        if (Utils::isString($entity)) {
+            $queries = \array_filter($queries, function (string $key) use ($entity) {
+                return 0 === \stripos($key, $entity);
+            }, ARRAY_FILTER_USE_KEY);
+        }
 
         // SQL
         $sql = \implode(' UNION ', $queries) . $extra;
@@ -310,20 +325,20 @@ class SearchService
                 ->createEntityQueries(Product::class, ['description', 'supplier', 'price'])
                 ->createEntityQueries(Category::class, ['code', 'description']);
 
-            // calculation queries
+            // custom calculation queries
             $this->createCalculationDateQuery()
                 ->createCalculationStateQuery()
                 ->createCalculationItemQuery();
 
             // debug queries
             if ($this->debug) {
-                $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company'])
+                $this->createEntityQueries(Customer::class, ['firstName', 'lastName', 'company', 'address', 'zipCode', 'city'])
                     ->createCalculationGroupQuery();
             }
 
             // update SQL
             $param = ':' . self::SEARCH_PARAM;
-            $columns = \array_keys(self::$COLUMNS);
+            $columns = \array_keys(self::COLUMNS);
             foreach ($this->queries as &$query) {
                 // replace parameter
                 $query = \str_replace('?', $param, $query);
@@ -345,11 +360,26 @@ class SearchService
     {
         if (!$this->mapping) {
             $this->mapping = new ResultSetMapping();
-            foreach (self::$COLUMNS as $name => $type) {
+            foreach (self::COLUMNS as $name => $type) {
                 $this->mapping->addScalarResult($name, $name, $type);
             }
         }
 
         return $this->mapping;
+    }
+
+    /**
+     * Gets the query key for the given class name and field.
+     *
+     * @param string $class the class name
+     * @param string $field the field
+     *
+     * @return string the key
+     */
+    private function getKey(string $class, string $field): string
+    {
+        $shortName = \strtolower(Utils::getShortName($class));
+
+        return "$shortName.$field";
     }
 }

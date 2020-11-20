@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Security;
 
-use App\Controller\IndexController;
+use App\Controller\AbstractController;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -153,7 +153,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
      */
     protected function getHomeUrl(): string
     {
-        return $this->generator->generate(IndexController::HOME_PAGE);
+        return $this->generator->generate(AbstractController::HOME_PAGE);
     }
 
     /**

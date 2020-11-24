@@ -1,0 +1,56 @@
+[
+	{
+		"name": "id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "imageName",
+		"title": "user.fields.imageFile",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"class": "text-image",
+		"formatter": "imageFormatter"
+	},
+	{
+		"name": "username",
+		"title": "user.fields.username_short",
+		"default": true,
+		"class": "w-15"
+	},
+	{
+		"name": "role",
+		"title": "user.fields.role",
+		"class": "w-25 cell",
+		"formatter": "roleFormatter"
+	},
+	{
+		"name": "email",
+		"title": "user.fields.email",
+		"class": "w-25 cell"
+	},
+	{
+		"name": "enabled",
+		"title": "user.fields.enabled",
+		"class": "w-15 cell",
+		"formatter": "enabledFormatter"
+	},
+	{
+		"name": "lastLogin",
+		"title": "user.fields.lastLogin",
+		"class": "text-date-time",
+		"formatter": "lastLoginFormatter"
+	},
+	{
+		"name": "id",
+		"title": "common.empty",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"formatter": "actionsFormatter",
+		"class": "actions rowlink-skip d-print-none"
+	}
+]

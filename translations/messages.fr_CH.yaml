@@ -83,7 +83,8 @@ calculation:
         duplicated_help: Supprime les articles contenu plus d'une fois dans une calculation.
         simulated: Simuler la mise à jour
         simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
-        last_update: 'Dernière mise à jour : %date%'
+        confirm: Confirmer la mise à jour des données
+        last_update: 'Dernière mise à jour : %date%'         
     result:
         description: Résultats de la mise à jour.
         simulated: La mise à jour a été simulée. Aucune donnée n'a été modifiée dans la base de données.

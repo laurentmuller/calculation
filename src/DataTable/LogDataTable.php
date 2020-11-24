@@ -16,6 +16,7 @@ namespace App\DataTable;
 
 use App\DataTable\Model\AbstractDataTable;
 use App\DataTable\Model\DataColumn;
+use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Log;
 use App\Service\ApplicationService;
 use App\Service\LogService;
@@ -82,9 +83,21 @@ class LogDataTable extends AbstractDataTable
      *
      * @return string the channel
      */
-    public function getChannel(string $value): string
+    public function channelFormatter(string $value): string
     {
         return LogService::getChannel($value, true);
+    }
+
+    /**
+     * Gets the formatted log date.
+     *
+     * @param \DateTime $value the source
+     *
+     * @return string the formatted date
+     */
+    public function dateFormatter(\DateTime $value): string
+    {
+        return $this->localeDateTime($value, null, \IntlDateFormatter::MEDIUM);
     }
 
     /**
@@ -98,35 +111,11 @@ class LogDataTable extends AbstractDataTable
     }
 
     /**
-     * Gets the formatted log date.
-     *
-     * @param \DateTime $value the source
-     *
-     * @return string the formatted date
-     */
-    public function getDate(\DateTime $value): string
-    {
-        return $this->localeDateTime($value, null, \IntlDateFormatter::MEDIUM);
-    }
-
-    /**
      * Gets the file name to parse.
      */
     public function getFileName(): ?string
     {
         return $this->service->getFileName();
-    }
-
-    /**
-     * Gets the log level.
-     *
-     * @param string $value the source
-     *
-     * @return string the level
-     */
-    public function getLevel(string $value): string
-    {
-        return LogService::getLevel($value, true);
     }
 
     /**
@@ -148,31 +137,25 @@ class LogDataTable extends AbstractDataTable
     }
 
     /**
+     * Gets the log level.
+     *
+     * @param string $value the source
+     *
+     * @return string the level
+     */
+    public function levelFormatter(string $value): string
+    {
+        return LogService::getLevel($value, true);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function createColumns(): array
     {
-        return [
-            DataColumn::hidden('id'),
-            DataColumn::date('createdAt')
-                ->setTitle('log.fields.createdAt')
-                ->setClassName('pl-3 date')
-                ->setCallback('renderLog')
-                ->setDescending()
-                ->setDefault(true)
-                ->setFormatter([$this, 'getDate']),
-            DataColumn::instance('channel')
-                ->setTitle('log.fields.channel')
-                ->setClassName('channel')
-                ->setFormatter([$this, 'getChannel']),
-            DataColumn::instance('level')
-                ->setTitle('log.fields.level')
-                ->setClassName('level')
-                ->setFormatter([$this, 'getLevel']),
-            DataColumn::instance('message')
-                ->setTitle('log.fields.message')
-                ->setClassName('cell'),
-        ];
+        $path = __DIR__ . '/Definition/log.json';
+
+        return  DataColumnFactory::fromJson($this, $path);
     }
 
     /**
@@ -255,20 +238,20 @@ class LogDataTable extends AbstractDataTable
         if (Utils::isString($value)) {
             $filter = function (Log $log) use ($value, $skipChannel, $skipLevel) {
                 if (!$skipChannel) {
-                    $channel = $this->getChannel($log->getChannel());
+                    $channel = $this->channelFormatter($log->getChannel());
                     if (Utils::contains($channel, $value, true)) {
                         return true;
                     }
                 }
 
                 if (!$skipLevel) {
-                    $level = $this->getLevel($log->getLevel());
+                    $level = $this->levelFormatter($log->getLevel());
                     if (Utils::contains($level, $value, true)) {
                         return true;
                     }
                 }
 
-                $date = $this->getDate($log->getCreatedAt());
+                $date = $this->dateFormatter($log->getCreatedAt());
                 if (Utils::contains($date, $value, true)) {
                     return true;
                 }

@@ -400,8 +400,8 @@ $.fn.getColumns = function (useName) {
         }
 
         // created callback
-        if (column.createdCell) {
-            column.createdCell = $.fn.dataTable[column.createdCell];
+        if (column.callback) {
+            column.createdCell = $.fn.dataTable[column.callback];
         }
 
         // render callback
@@ -440,17 +440,9 @@ $.fn.getDefaultOrder = function (columns) {
         return [[index, direction]];
     }
 
-    // let column = columns.find(c => c.isDefault && c.orderable) ||
-    // columns.find(c => c.visible && c.orderable);
-    // if (column) {
-    // const index = columns.indexOf(column);
-    // const direction = column.direction;
-    // return [[index, direction]];
-    // }
-
     // find default colmun
     for (let i = 0, len = columns.length; i < len; i++) {
-        if (columns[i].isDefault && columns[i].orderable) {
+        if (columns[i].default && columns[i].orderable) {
             return [[i, columns[i].direction]];
         }
     }

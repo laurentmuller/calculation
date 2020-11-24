@@ -1,0 +1,35 @@
+[
+	{
+		"name": "id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "createdAt",
+		"title": "log.fields.createdAt",
+		"default": true,
+		"direction": "desc",
+		"class": "pl-3 date",
+		"formatter": "dateFormatter",
+		"callback": "renderLog"
+	},
+	{
+		"name": "channel",
+		"title": "log.fields.channel",
+		"class": "channel",
+		"formatter": "channelFormatter"
+	},
+	{
+		"name": "level",
+		"title": "log.fields.level",
+		"class": "level",
+		"formatter": "levelFormatter"
+	},
+	{
+		"name": "message",
+		"title": "log.fields.message",
+		"class": "cell"
+	}
+]

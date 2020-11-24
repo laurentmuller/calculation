@@ -1,0 +1,40 @@
+[
+	{
+		"name": "id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "minimum",
+		"title": "categorymargin.fields.minimum",
+		"default": true,
+		"searchable": false,
+		"formatter": "amountFormatter",
+		"class": "text-currency w-35"
+	},
+	{
+		"name": "maximum",
+		"title": "categorymargin.fields.maximum",
+		"searchable": false,
+		"formatter": "amountFormatter",
+		"class": "text-currency w-35"
+	},
+	{
+		"name": "margin",
+		"title": "categorymargin.fields.margin",
+		"searchable": false,
+		"formatter": "percentFormatter",
+		"class": "text-currency w-30"
+	},
+	{
+		"name": "id",
+		"title": "common.empty",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"formatter": "actionsFormatter",
+		"class": "actions rowlink-skip d-print-none"
+	}
+]

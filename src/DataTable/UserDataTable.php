@@ -16,6 +16,7 @@ namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
+use App\DataTable\Model\DataColumnFactory;
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
@@ -74,6 +75,20 @@ class UserDataTable extends AbstractEntityDataTable
     }
 
     /**
+     * Translate the user's enabled state.
+     *
+     * @param bool $enabled the user enablement state
+     *
+     * @return string the translated enabled state
+     */
+    public function enabledFormatter(bool $enabled): string
+    {
+        $key = $enabled ? 'common.value_enabled' : 'common.value_disabled';
+
+        return $this->translator->trans($key);
+    }
+
+    /**
      * Render the image cell content with the user's image.
      *
      * @param string $image the image name
@@ -81,7 +96,7 @@ class UserDataTable extends AbstractEntityDataTable
      *
      * @return string the image cell content
      */
-    public function renderImage(?string $image, User $item): string
+    public function imageFormatter(?string $image, User $item): string
     {
         $context = [
             'image' > $image,
@@ -92,17 +107,15 @@ class UserDataTable extends AbstractEntityDataTable
     }
 
     /**
-     * Translate the user's enabled state.
+     * Format the last login date.
      *
-     * @param bool $enabled the user enablement state
+     * @param \DateTimeInterface $date the last login date
      *
-     * @return string the translated enabled state
+     * @return string the formatted date
      */
-    public function translateEnabled(bool $enabled): string
+    public function lastLoginFormatter(?\DateTimeInterface $date): string
     {
-        $key = $enabled ? 'common.value_enabled' : 'common.value_disabled';
-
-        return $this->translator->trans($key);
+        return $this->localeDateTime($date);
     }
 
     /**
@@ -112,7 +125,7 @@ class UserDataTable extends AbstractEntityDataTable
      *
      * @return string the translated role
      */
-    public function translateRole(string $role): string
+    public function roleFormatter(string $role): string
     {
         return Utils::translateRole($this->translator, $role);
     }
@@ -122,41 +135,9 @@ class UserDataTable extends AbstractEntityDataTable
      */
     protected function createColumns(): array
     {
-        // callback
-        $localeDateTime = function (\DateTimeInterface $date) {
-            return $this->localeDateTime($date);
-        };
+        $path = __DIR__ . '/Definition/user.json';
 
-        return [
-            DataColumn::hidden('id'),
-            DataColumn::instance('imageName')
-                ->setTitle('user.fields.imageFile')
-                ->setClassName('text-image')
-                ->setSearchable(false)
-                ->setOrderable(false)
-                ->setRawData(true)
-                ->setFormatter([$this, 'renderImage']),
-            DataColumn::instance('username')
-                ->setTitle('user.fields.username_short')
-                ->setClassName('w-15')
-                ->setDefault(true),
-            DataColumn::instance('role')
-                ->setTitle('user.fields.role')
-                ->setClassName('w-25 cell')
-                ->setFormatter([$this, 'translateRole']),
-            DataColumn::instance('email')
-                ->setTitle('user.fields.email')
-                ->setClassName('w-25 cell'),
-            DataColumn::instance('enabled')
-                ->setTitle('user.fields.enabled')
-                ->setClassName('w-15 cell')
-                ->setFormatter([$this, 'translateEnabled']),
-            DataColumn::instance('lastLogin')
-                ->setTitle('user.fields.lastLogin')
-                ->setClassName('text-date-time')
-                ->setFormatter($localeDateTime),
-            DataColumn::actions([$this, 'renderActions']),
-        ];
+        return DataColumnFactory::fromJson($this, $path);
     }
 
     /**

@@ -1,0 +1,46 @@
+[
+	{
+		"name": "id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "code",
+		"title": "category.fields.code",
+		"default": true,
+		"class": "text-code text-nowrap"
+	},
+	{
+		"name": "description",
+		"title": "category.fields.description",
+		"class": "w-50 cell"
+	},
+	{
+		"name": "margins",
+		"title": "category.fields.margins",
+		"orderable": false,
+		"searchable": false,
+		"class": "text-currency",
+		"formatter": "maginsFormatter"
+	},
+	{
+		"name": "products",
+		"title": "category.fields.products",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"class": "text-currency rowlink-skip",
+		"formatter": "productsFormatter"
+	},
+	{
+		"name": "id",
+		"title": "common.empty",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"formatter": "actionsFormatter",
+		"class": "actions rowlink-skip d-print-none"
+	}
+]

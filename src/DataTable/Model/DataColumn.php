@@ -16,7 +16,6 @@ namespace App\DataTable\Model;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a column in DataTables.
@@ -36,13 +35,6 @@ class DataColumn
     public const SORT_DESC = 'desc';
 
     /**
-     * The property accessor.
-     *
-     * @var PropertyAccessorInterface
-     */
-    protected $accessor;
-
-    /**
      * The function name used to update the cell.
      *
      * @var string
@@ -54,7 +46,7 @@ class DataColumn
      *
      * @var string
      */
-    protected $className;
+    protected $class;
 
     /**
      * The default sortable column.
@@ -67,17 +59,8 @@ class DataColumn
      * The sorting direction ('asc' or 'desc').
      *
      * @var string
-     *
-     * @Assert\Choice(choices={"asc", "desc"}, strict=true)
      */
     protected $direction = self::SORT_ASC;
-
-    /**
-     * The translation domain.
-     *
-     * @var string
-     */
-    protected $domain;
 
     /**
      * Either a sprintf compatible format string, or a callable function providing rendering conversion, or default null.
@@ -91,7 +74,7 @@ class DataColumn
      *
      * @var string
      */
-    protected $headerClassName;
+    protected $headerClass;
 
     /**
      * The mapped fields.
@@ -104,24 +87,8 @@ class DataColumn
      * The field name.
      *
      * @var string
-     *
-     * @Assert\NotBlank
      */
     protected $name;
-
-    /**
-     * The null value.
-     *
-     * @var string
-     */
-    protected $nullValue = '';
-
-    /**
-     * The additional options.
-     *
-     * @var array
-     */
-    protected $options;
 
     /**
      * The orderable behavior.
@@ -168,45 +135,13 @@ class DataColumn
     /**
      * Constructor.
      *
-     * @param string $name    the field name
-     * @param array  $options the additional options
+     * @param string $name  the field name
+     * @param string $class the cell class name
      */
-    public function __construct(string $name, array $options = [])
+    public function __construct(string $name = null, string $class = null)
     {
         $this->name = $name;
-        $this->options = $options;
-    }
-
-    /**
-     * Creates a new instance for drop-down menu actions.
-     *
-     * @param string|callable|null $formatter the column formatter
-     * @param string               $name      the field name
-     */
-    public static function actions($formatter, string $name = 'id'): self
-    {
-        return self::instance($name)
-            ->setClassName('actions rowlink-skip d-print-none')
-            ->setTitle('common.empty')
-            ->setFormatter($formatter)
-            ->setSearchable(false)
-            ->setOrderable(false)
-            ->setRawData(true);
-    }
-
-    /**
-     * Add a class name.
-     *
-     * @param string $className the class name to add
-     */
-    public function addClassName(?string $className): self
-    {
-        $names = $this->className ?: '';
-        if (false === \stripos($names, $className)) {
-            $names = \trim($names . ' ' . $className);
-        }
-
-        return $this->setClassName($names);
+        $this->class = $class;
     }
 
     /**
@@ -225,41 +160,11 @@ class DataColumn
     }
 
     /**
-     * Creates a new instance with the 'text-currency' class.
-     *
-     * @param string $name the field name
-     */
-    public static function currency(string $name): self
-    {
-        return self::instance($name)->setClassName('text-currency');
-    }
-
-    /**
-     * Creates a new instance with the 'text-date' class.
-     *
-     * @param string $name the field name
-     */
-    public static function date(string $name): self
-    {
-        return self::instance($name)->setClassName('text-date');
-    }
-
-    /**
-     * Creates a new instance with the 'text-date-time' class.
-     *
-     * @param string $name the field name
-     */
-    public static function dateTime(string $name): self
-    {
-        return self::instance($name)->setClassName('text-date-time');
-    }
-
-    /**
      * Converts the given value to a string.
      *
      * This implementation do the following:
      * <ul>
-     * <li>If the <code>$value</code> parameter is <code>null</code>, uses this <code>getNullValue()</code> function.</li>
+     * <li>If the <code>$value</code> parameter is <code>null</code>, returns an empty string ('').</li>
      * <li>If the formatter is a string, format the <code>$value</code> parameter using the <code>sprintf</code> function.</li>
      * <li>If the formatter is callable, convert the <code>$value</code> using the <code>call_user_func()</code> function with the <code>$value</code> and the <code>$data</code> as parameters.</li>
      * <li>Converts the <code>$value</code> parameter as string.</li>
@@ -271,13 +176,11 @@ class DataColumn
      * @return string the value as string
      *
      * @see DataColumn::getFormatter()
-     * @see DataColumn::getNullValue()
-     * @see DataColumn::getCellValue()
      */
     public function formatValue($value, $data): string
     {
         if (null === $value) {
-            return $this->getNullValue();
+            return '';
         }
         if (\is_string($this->formatter)) {
             return \sprintf($this->formatter, $value);
@@ -295,14 +198,14 @@ class DataColumn
     public function getAttributes(): array
     {
         return [
-            'name' => $this->name,
-            'class-name' => $this->getCellClassName(),
-            'visible' => \json_encode($this->isVisible()),
-            'orderable' => \json_encode($this->isOrderable()),
-            'searchable' => \json_encode($this->isSearchable()),
-            'is-default' => \json_encode($this->isDefault()),
+            'name' => $this->name ?: '',
+            'class' => $this->class ?: '',
+            'visible' => \json_encode($this->visible),
+            'orderable' => \json_encode($this->orderable),
+            'searchable' => \json_encode($this->searchable),
+            'default' => \json_encode($this->default),
             'render' => $this->render ?: \json_encode(false),
-            'created-cell' => $this->callback ?: \json_encode(false),
+            'callback' => $this->callback ?: \json_encode(false),
             'direction' => $this->direction,
         ];
     }
@@ -316,22 +219,11 @@ class DataColumn
     }
 
     /**
-     * Gets the cell (td) class name.
-     */
-    public function getCellClassName(): string
-    {
-        return $this->className ?: '';
-    }
-
-    /**
      * Gets the cell value for the given data.
      *
      * @param object|array $data the object or array to traverse
      *
      * @return mixed the cell value
-     *
-     * @see DataColumn::getAccessor()
-     * @see DataColumn::formatValue()
      */
     public function getCellValue($data)
     {
@@ -341,17 +233,15 @@ class DataColumn
             $property = \str_replace('.', '].[', $property);
         }
 
-        return $this->getAccessor()->getValue($data, $property);
+        return self::accessor()->getValue($data, $property);
     }
 
     /**
-     * Gets the class name.
-     *
-     * @return string
+     * Gets the cell class name.
      */
-    public function getClassName(): ?string
+    public function getClass(): string
     {
-        return $this->className;
+        return $this->class ?: '';
     }
 
     /**
@@ -360,16 +250,6 @@ class DataColumn
     public function getDirection(): string
     {
         return $this->direction;
-    }
-
-    /**
-     * Gets the translation domain.
-     *
-     * @return string
-     */
-    public function getDomain(): ?string
-    {
-        return $this->domain;
     }
 
     /**
@@ -392,21 +272,21 @@ class DataColumn
     /**
      * Gets the header (th) class name.
      */
-    public function getHeaderClassName(): string
+    public function getHeaderClass(): string
     {
-        $className = $this->headerClassName ?: $this->className ?: '';
+        $class = $this->headerClass ?: $this->class ?: '';
         if ($this->visible) {
             if ($this->orderable) {
-                $className .= ' sorting';
+                $class .= ' sorting';
                 if ($this->default) {
-                    $className .= '_' . $this->direction;
+                    $class .= '_' . $this->direction;
                 }
             } else {
-                $className .= ' sorting_disabled';
+                $class .= ' sorting_disabled';
             }
         }
 
-        return \trim($className);
+        return $class;
     }
 
     /**
@@ -419,7 +299,7 @@ class DataColumn
      */
     public function getMap(): array
     {
-        if (null !== $this->map && 0 !== \count($this->map)) {
+        if (!empty($this->map)) {
             return $this->map;
         }
 
@@ -432,16 +312,6 @@ class DataColumn
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * Gets the string to return when value is <code>null</code>.
-     *
-     * @see DataColumn::formatValue()
-     */
-    public function getNullValue(): string
-    {
-        return $this->nullValue;
     }
 
     /**
@@ -465,37 +335,7 @@ class DataColumn
     }
 
     /**
-     * Creates a new instance with the visible property set to false.
-     *
-     * @param string $name the field name
-     */
-    public static function hidden(string $name): self
-    {
-        return self::instance($name)->setVisible(false);
-    }
-
-    /**
-     * Creates a new instance with the identifier 'text-id' class.
-     *
-     * @param string $name the field name
-     */
-    public static function identifier(string $name): self
-    {
-        return self::instance($name)->setClassName('text-id');
-    }
-
-    /**
-     * Creates a new instance.
-     *
-     * @param string $name the field name
-     */
-    public static function instance(string $name): self
-    {
-        return new self($name);
-    }
-
-    /**
-     * Return if this is the default sorted column.
+     * Return if this column is the default sorted column.
      */
     public function isDefault(): bool
     {
@@ -537,16 +377,6 @@ class DataColumn
     }
 
     /**
-     * Creates a new instance with the 'text-percent' class.
-     *
-     * @param string $name the field name
-     */
-    public static function percent(string $name): self
-    {
-        return self::instance($name)->setClassName('text-percent');
-    }
-
-    /**
      * Sets the sorting direction to ascending.
      */
     public function setAscending(): self
@@ -567,19 +397,17 @@ class DataColumn
     }
 
     /**
-     * Sets the class name.
-     *
-     * @param string $className
+     * Sets the cell class name.
      */
-    public function setClassName(?string $className): self
+    public function setClass(?string $class): self
     {
-        $this->className = $className;
+        $this->class = $class;
 
         return $this;
     }
 
     /**
-     * Sets this is the default sorted column.
+     * Sets if this column is the default sorted column.
      */
     public function setDefault(bool $default): self
     {
@@ -615,18 +443,6 @@ class DataColumn
     }
 
     /**
-     * Sets the translation domain.
-     *
-     * @param string $domain
-     */
-    public function setDomain(?string $domain): self
-    {
-        $this->domain = $domain;
-
-        return $this;
-    }
-
-    /**
      * Sets either a sprintf compatible format string, a callable function providing rendering conversion or null for default.
      *
      * The callable function, if any, receives the value of the cell to format and the parent row (object or array). The callable function must have the following signature:
@@ -648,11 +464,11 @@ class DataColumn
     /**
      * Sets the header class name.
      *
-     * @param string $headerClassName the class name or null to use the cell class name
+     * @param string $headerClass the class name or null to use the cell class name
      */
-    public function setHeaderClassName(?string $headerClassName): self
+    public function setHeaderClass(?string $headerClass): self
     {
-        $this->headerClassName = $headerClassName;
+        $this->headerClass = $headerClass;
 
         return $this;
     }
@@ -662,7 +478,7 @@ class DataColumn
      *
      * This property map the name with a list of real field names.
      *
-     * @param string[] $map
+     * @param string[] $map the mapped fields
      */
     public function setMap(array $map): self
     {
@@ -677,18 +493,6 @@ class DataColumn
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Sets the string to display when the value is <code>null</code>.
-     *
-     * @see DataColumn::formatValue()
-     */
-    public function setNullValue(string $nullValue): self
-    {
-        $this->nullValue = $nullValue;
 
         return $this;
     }
@@ -740,33 +544,21 @@ class DataColumn
     /**
      * Sets the title.
      *
-     * @param string $title  the title to translate
-     * @param string $domain the translation domain
+     * @param string $title the title to translate
      */
-    public function setTitle(?string $title, ?string $domain = null): self
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
-        if ($domain) {
-            $this->domain = $domain;
-        }
 
         return $this;
     }
 
     /**
      * Sets the visibility behavior.
-     *
-     * If the visible parameter is FALSE, the orderable and searchable are also set to FALSE and the class name
-     * is set to 'd-none'.
      */
     public function setVisible(bool $visible): self
     {
         $this->visible = $visible;
-        if (!$visible) {
-            return $this->setOrderable(false)
-                ->setSearchable(false)
-                ->setClassName('d-none');
-        }
 
         return $this;
     }
@@ -789,24 +581,15 @@ class DataColumn
     }
 
     /**
-     * Creates a new instance with the 'text-unit' class.
-     *
-     * @param string $name the field name
+     * Gets the shared property accessor.
      */
-    public static function unit(string $name): self
+    private static function accessor(): PropertyAccessorInterface
     {
-        return self::instance($name)->setClassName('text-unit');
-    }
-
-    /**
-     * Gets the property accessor.
-     */
-    protected function getAccessor(): PropertyAccessorInterface
-    {
-        if (null === $this->accessor) {
-            $this->accessor = PropertyAccess::createPropertyAccessor();
+        static $accessor;
+        if (null === $accessor) {
+            $accessor = PropertyAccess::createPropertyAccessor();
         }
 
-        return $this->accessor;
+        return $accessor;
     }
 }

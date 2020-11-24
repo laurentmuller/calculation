@@ -58,7 +58,7 @@ class HomeController extends AbstractController
         }
 
         // render view
-        return $this->render('index/index.html.twig', [
+        return $this->render('home/index.html.twig', [
             'calculations' => $calculations,
             'min_margin' => $margin,
             'tabular' => $tabular,
@@ -118,7 +118,7 @@ class HomeController extends AbstractController
             'entities' => $entities,
         ];
 
-        return $this->render('index/search.html.twig', $parameters);
+        return $this->render('home/search.html.twig', $parameters);
     }
 
     /**
@@ -129,6 +129,6 @@ class HomeController extends AbstractController
      */
     public function siteMap(): Response
     {
-        return $this->render('index/sitemap.html.twig');
+        return $this->render('home/sitemap.html.twig');
     }
 }

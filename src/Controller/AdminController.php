@@ -376,8 +376,13 @@ class AdminController extends AbstractController
         $helper->field('simulated')
             ->help('calculation.update.simulated_help')
             ->updateHelpAttribute('class', 'ml-4 mb-2')
-            ->updateRowAttribute('class', 'mb-0')
             ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field('confirm')
+            ->updateOption('mapped', false)
+            ->updateRowAttribute('class', 'mb-0')
+            ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
             ->addCheckboxType();
 
         return $helper;

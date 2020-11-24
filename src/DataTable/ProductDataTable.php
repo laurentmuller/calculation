@@ -16,6 +16,7 @@ namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
+use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Service\ApplicationService;
@@ -50,31 +51,25 @@ class ProductDataTable extends AbstractEntityDataTable
     }
 
     /**
+     * Format the amount.
+     *
+     * @param float $value the amount to format
+     *
+     * @return string the formatted amount
+     */
+    public function amountFormatter(float $value): string
+    {
+        return $this->localeAmount($value);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function createColumns(): array
     {
-        return  [
-            DataColumn::hidden('id'),
-            DataColumn::instance('description')
-                ->setTitle('product.fields.description')
-                ->setClassName('w-50 cell')
-                ->setDefault(true),
-            DataColumn::instance('category.code')
-                ->setTitle('product.fields.category')
-                ->setClassName('cell'),
-            DataColumn::instance('supplier')
-                ->setTitle('product.fields.supplier')
-                ->setClassName('cell'),
-            DataColumn::unit('unit')
-                ->setTitle('product.fields.unit'),
-            DataColumn::currency('price')
-                ->setTitle('product.fields.price')
-                ->setFormatter([$this, 'localeAmount']),
-            DataColumn::hidden('category.id')
-                ->setSearchable(true),
-            DataColumn::actions([$this, 'renderActions']),
-        ];
+        $path = __DIR__ . '/Definition/product.json';
+
+        return DataColumnFactory::fromJson($this, $path);
     }
 
     /**

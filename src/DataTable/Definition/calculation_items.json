@@ -1,0 +1,59 @@
+[
+	{
+		"name": "id",
+		"title": "calculation.fields.id",
+		"default": true,
+		"direction": "desc",
+		"class": "text-id",
+		"formatter": "idFormatter",
+		"callback": "renderStateColor"
+	},
+	{
+		"name": "date",
+		"title": "calculation.fields.date",		
+		"direction": "desc",
+		"class": "text-date",
+		"formatter": "dateFormatter"
+	},
+	{
+		"name": "stateCode",
+		"title": "calculation.fields.state",
+		"class": "text-state"
+	},
+	{
+		"name": "customer",
+		"title": "calculation.fields.customer",
+		"class": "cell w-25"
+	},
+	{
+		"name": "description",
+		"title": "calculation.fields.description",
+		"class": "cell w-25"
+	},
+	{
+		"name": "items",
+		"title": "calculation.fields.items",
+		"class": "cell w-25 text-danger",
+		"headerClass": "text-body",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"formatter": "itemsFormatter"
+	},
+	{
+		"name": "stateColor",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "id",
+		"title": "common.empty",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"formatter": "actionsFormatter",
+		"class": "actions rowlink-skip d-print-none"
+	}
+]

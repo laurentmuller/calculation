@@ -16,6 +16,7 @@ namespace App\DataTable;
 
 use App\DataTable\Model\AbstractDataTable;
 use App\DataTable\Model\DataColumn;
+use App\DataTable\Model\DataColumnFactory;
 use App\Interfaces\EntityVoterInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
@@ -137,29 +138,9 @@ class SearchDataTable extends AbstractDataTable
      */
     protected function createColumns(): array
     {
-        return [
-            DataColumn::hidden(SearchService::COLUMN_ID),
-            DataColumn::instance(self::COLUMN_ENTITY)
-                ->setTitle('search.fields.entity')
-                ->setRender('renderEntityName')
-                ->setClassName('cell w-20')
-                ->setSearchable(false),
-            DataColumn::instance(self::COLUMN_FIELD)
-                ->setTitle('search.fields.field')
-                ->setClassName('cell w-20')
-                ->setSearchable(false),
-            DataColumn::instance(SearchService::COLUMN_CONTENT)
-                ->setTitle('search.fields.content')
-                ->setClassName('cell w-auto')
-                ->setSearchable(false)
-                ->setDefault(true)
-                ->setRawData(true),
-            DataColumn::hidden(SearchService::COLUMN_TYPE),
-            DataColumn::hidden(SearchService::COLUMN_FIELD),
-            DataColumn::hidden(self::COLUMN_SHOW),
-            DataColumn::hidden(self::COLUMN_EDIT),
-            DataColumn::hidden(self::COLUMN_DELETE),
-        ];
+        $path = __DIR__ . '/Definition/search.json';
+
+        return DataColumnFactory::fromJson($this, $path);
     }
 
     /**

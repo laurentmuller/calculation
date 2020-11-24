@@ -164,7 +164,7 @@
         {% for row in results.data -%}
 	        <tr{% if row[0] == id %} class="datatables-selection"{% endif %}>
     	    {% for cell in row -%}
-        		<td class="{{ columns[loop.index0].cellClassName }}">{{ columns[loop.index0].rawData ? cell|raw : cell }}</td>
+        		<td class="{{ columns[loop.index0].class }}">{{ columns[loop.index0].rawData ? cell|raw : cell }}</td>
             {%- endfor %}
 			</tr>
 		{%- endfor %}

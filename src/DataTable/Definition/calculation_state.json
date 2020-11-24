@@ -1,0 +1,53 @@
+[
+	{
+		"name": "id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "code",
+		"title": "calculationstate.fields.code",
+		"default": true,
+		"class": "text-code text-nowrap",
+		"callback": "renderStateColor"
+	},
+	{
+		"name": "description",
+		"title": "calculationstate.fields.description",
+		"class": "w-auto cell"
+	},
+	{
+		"name": "editable",
+		"title": "calculationstate.fields.editable",
+		"searchable": false,
+		"class": "text-state",
+		"formatter": "editableFormatter"
+	},
+	{
+		"name": "calculations",
+		"title": "calculationstate.fields.calculations",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"class": "text-currency rowlink-skip",
+		"formatter": "calculationsFormatter"
+	},
+	{
+		"name": "color",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "id",
+		"title": "common.empty",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"formatter": "actionsFormatter",
+		"class": "actions rowlink-skip d-print-none"
+	}
+]

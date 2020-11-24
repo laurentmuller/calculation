@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\DataTable;
 
 use App\DataTable\Model\AbstractDataTable;
-use App\DataTable\Model\DataColumn;
+use App\DataTable\Model\DataColumnFactory;
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
 use DataTables\DataTableQuery;
@@ -68,13 +68,26 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
     }
 
     /**
-     * Formats the invalid calculation items.
+     * Renders the actions column.
      *
-     * @param array $items the invalid calculation items
-     *
-     * @return string the formatted items
+     * @param int $id the entity identifier
      */
-    abstract public function formatInvalidItems(array $items): string;
+    public function actionsFormatter(int $id): string
+    {
+        return $this->environment->render('macros/_datatables_actions.html.twig', ['id' => $id]);
+    }
+
+    /**
+     * Format the date.
+     *
+     * @param \DateTimeInterface $date the date to format
+     *
+     * @return string the formatted date
+     */
+    public function dateFormatter(\DateTimeInterface $date): string
+    {
+        return $this->localeDate($date);
+    }
 
     /**
      * Gets the number of empty items.
@@ -85,67 +98,34 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
     }
 
     /**
-     * Renders the actions column.
+     * Format the identifier.
+     *
+     * @param int $id the identifier to format
+     *
+     * @return string the formatted identifier
      */
-    public function renderActions(int $id): string
+    public function idFormatter(int $id): string
     {
-        if (isset($this->environment)) {
-            return $this->environment->render('macros/_datatables_actions.html.twig', ['id' => $id]);
-        }
-
-        return '';
+        return $this->localeId($id);
     }
 
     /**
-     * Compute the number of items.
+     * Formats the invalid calculation items.
      *
-     * @param array $items the calculations
+     * @param array $items the invalid calculation items
      *
-     * @return int the number of items
+     * @return string the formatted items
      */
-    abstract protected function computeItemsCount(array $items): int;
+    abstract public function itemsFormatter(array $items): string;
 
     /**
      * {@inheritdoc}
      */
     protected function createColumns(): array
     {
-        // callbacks
-        $dateFormatter = function (\DateTimeInterface $date) {
-            return $this->localeDate($date);
-        };
+        $path = __DIR__ . '/Definition/calculation_items.json';
 
-        return [
-            DataColumn::identifier('id')
-                ->setTitle('calculation.fields.id')
-                ->setDescending()
-                ->setDefault(true)
-                ->setCallback('renderStateColor')
-                ->setFormatter([$this, 'localeId']),
-            DataColumn::date('date')
-                ->setTitle('calculation.fields.date')
-                ->setDescending()
-                ->setFormatter($dateFormatter),
-            DataColumn::instance('stateCode')
-                ->setTitle('calculation.fields.state')
-                ->setClassName('text-state'),
-            DataColumn::instance('customer')
-                ->setTitle('calculation.fields.customer')
-                ->setClassName('cell'),
-            DataColumn::instance('description')
-                ->setTitle('calculation.fields.description')
-                ->setClassName('cell'),
-            DataColumn::instance('items')
-                ->setTitle('calculation.fields.items')
-                ->setRawData(true)
-                ->setOrderable(false)
-                ->setSearchable(false)
-                ->setClassName('cell text-danger')
-                ->setHeaderClassName('text-body')
-                ->setFormatter([$this, 'formatInvalidItems']),
-            DataColumn::hidden('stateColor'),
-            DataColumn::actions([$this, 'renderActions']),
-        ];
+        return  DataColumnFactory::fromJson($this, $path);
     }
 
     /**
@@ -167,7 +147,7 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
         // create results
         $results = new DataTableResults();
         $results->recordsFiltered = $results->recordsTotal = \count($items);
-        $this->itemsCount = $this->computeItemsCount($items);
+        $this->itemsCount = $this->getItemsCount($items);
 
         // filter
         $offset = $query->start;
@@ -192,6 +172,15 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
      * @param string                $orderDirection the order direction ('ASC' or 'DESC')
      */
     abstract protected function getItems(CalculationRepository $repository, string $orderColumn, string $orderDirection): array;
+
+    /**
+     * Compute the number of items.
+     *
+     * @param array $items the calculations
+     *
+     * @return int the number of items
+     */
+    abstract protected function getItemsCount(array $items): int;
 
     /**
      * Converts the given item to an array.

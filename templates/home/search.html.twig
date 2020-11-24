@@ -58,7 +58,7 @@
             <div class="input-group input-group-sm bg-white">
                 <input type="text" id="table_search" name="table_search" class="form-control form-control-sm form-control-border-right-0" autocomplete="off">            
                 <div class="input-group-append dropdown" id="dropdown-menu-entity">
-                    <button id="button-entity" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'search.fields.type'|trans }}">
+                    <button id="button-entity" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'search.fields.entity'|trans }}">
                         {{- 'datatable.all'|trans -}}
                     </button>
                     <div class="dropdown-menu">
@@ -110,7 +110,7 @@
     	 	<tr{% if row['id'] == id %} class="datatables-selection"{% endif %}>
     	 	{% for column in columns -%}
     	 		{%- set value = row[column.name] -%}
-    	 		<td class="{{ column.cellClassName }}">
+    	 		<td class="{{ column.class }}">
     	 			{{- column.rawData ? value|raw : value -}}
     	 		</td>
     	 	{%- endfor %}

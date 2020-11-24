@@ -81,7 +81,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     /**
      * Renders the actions column.
      */
-    public function renderActions(int $id): string
+    public function actionsFormatter(int $id): string
     {
         return $this->renderTemplate('macros/_datatables_actions.html.twig', ['id' => $id]);
     }

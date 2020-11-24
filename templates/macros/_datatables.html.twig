@@ -5,8 +5,8 @@
 
 {# output a data colum header #}
 {% macro header(column) %}
-<th class="{{ column.headerClassName }}"{{ _self.attribs(column.attributes, 'data-') }}>
-    {{- column.title ? column.title|trans({}, column.domain) : column.name -}}
+<th class="{{ column.headerClass }}"{{ _self.attribs(column.attributes, 'data-') }}>
+    {{- column.title ? column.title|trans : column.name -}}
 </th>
 {% endmacro %}
 

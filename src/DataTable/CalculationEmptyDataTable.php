@@ -70,7 +70,7 @@ class CalculationEmptyDataTable extends CalculationItemsDataTable
     /**
      * {@inheritdoc}
      */
-    public function formatInvalidItems(array $items): string
+    public function itemsFormatter(array $items): string
     {
         $result = \array_map(function (array $item) {
             $founds = [];
@@ -90,18 +90,18 @@ class CalculationEmptyDataTable extends CalculationItemsDataTable
     /**
      * {@inheritdoc}
      */
-    protected function computeItemsCount(array $items): int
+    protected function getItems(CalculationRepository $repository, string $orderColumn, string $orderDirection): array
     {
-        return \array_reduce($items, function (int $carry, array $item) {
-            return $carry + \count($item['items']);
-        }, 0);
+        return $repository->getEmptyItems($orderColumn, $orderDirection);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getItems(CalculationRepository $repository, string $orderColumn, string $orderDirection): array
+    protected function getItemsCount(array $items): int
     {
-        return $repository->getEmptyItems($orderColumn, $orderDirection);
+        return \array_reduce($items, function (int $carry, array $item) {
+            return $carry + \count($item['items']);
+        }, 0);
     }
 }

@@ -1,0 +1,65 @@
+[
+	{
+		"name": "id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "entityName",
+		"title": "search.fields.entity",
+		"searchable": false,
+		"class": "cell w-20",
+		"render": "renderEntityName"
+	},
+	{
+		"name": "fieldName",
+		"title": "search.fields.field",
+		"searchable": false,
+		"class": "cell w-20"
+	},
+	{
+		"name": "content",
+		"title": "search.fields.content",
+		"searchable": false,
+		"class": "cell w-auto",
+		"default": true,
+		"rawData": true
+	},
+	{
+		"name": "type",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "field",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "show_granted",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "edit_granted",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "delete_granted",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	}
+]

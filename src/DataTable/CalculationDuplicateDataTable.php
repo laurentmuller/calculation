@@ -31,7 +31,7 @@ class CalculationDuplicateDataTable extends CalculationItemsDataTable
     /**
      * {@inheritdoc}
      */
-    public function formatInvalidItems(array $items): string
+    public function itemsFormatter(array $items): string
     {
         $result = \array_map(function (array $item) {
             return \sprintf('%s (%d)', $item['description'], $item['count']);
@@ -43,7 +43,15 @@ class CalculationDuplicateDataTable extends CalculationItemsDataTable
     /**
      * {@inheritdoc}
      */
-    protected function computeItemsCount(array $items): int
+    protected function getItems(CalculationRepository $repository, string $orderColumn, string $orderDirection): array
+    {
+        return $repository->getDuplicateItems($orderColumn, $orderDirection);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItemsCount(array $items): int
     {
         return \array_reduce($items, function (int $carry, array $item) {
             foreach ($item['items'] as $child) {
@@ -52,13 +60,5 @@ class CalculationDuplicateDataTable extends CalculationItemsDataTable
 
             return $carry;
         }, 0);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getItems(CalculationRepository $repository, string $orderColumn, string $orderDirection): array
-    {
-        return $repository->getDuplicateItems($orderColumn, $orderDirection);
     }
 }

@@ -434,15 +434,19 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
                 // create href attribute
                 const $row =  $(this.node());
                 const $cell = $row.find('td:first-child');
+                const text = $cell.text().trim();
+                const $image = $cell.find('img');
                 const params = table.getParameters(this.id());
                 const href = path.replace('0', this.id()) + '?' + $.param(params);
-                const text = $cell.text().trim();
 
                 // create link and replace content
                 const $a = $('<a/>', {
                     'href': href,
                     'text': text
                 });
+                if ($image.length) {
+                    $image.prependTo($a);
+                }
                 $cell.html($a);
             });
         });

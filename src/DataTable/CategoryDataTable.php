@@ -16,6 +16,7 @@ namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
+use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Repository\CategoryRepository;
@@ -52,6 +53,18 @@ class CategoryDataTable extends AbstractEntityDataTable
     }
 
     /**
+     * The margins formatter.
+     *
+     * @param Collection $margins the margins to format
+     *
+     * @return string the formatted margins
+     */
+    public function maginsFormatter(Collection $margins): string
+    {
+        return $this->localeInt(\count($margins));
+    }
+
+    /**
      * Creates the link to prodcuts.
      *
      * @param Collection|Product[] $products the list of products that fall into the given category
@@ -59,7 +72,7 @@ class CategoryDataTable extends AbstractEntityDataTable
      *
      * @return string the link, if applicable, the value otherwise
      */
-    public function linkProducts(Collection $products, Category $item): string
+    public function productsFormatter(Collection $products, Category $item): string
     {
         $context = [
             'id' => $item->getId(),
@@ -75,33 +88,9 @@ class CategoryDataTable extends AbstractEntityDataTable
      */
     protected function createColumns(): array
     {
-        // callbacks
-        $intFormatter = function (Collection $margins): string {
-            return $this->localeInt(\count($margins));
-        };
+        $path = __DIR__ . '/Definition/category.json';
 
-        return [
-            DataColumn::hidden('id'),
-            DataColumn::instance('code')
-                ->setTitle('category.fields.code')
-                ->setClassName('text-code text-nowrap')
-                ->setDefault(true),
-            DataColumn::instance('description')
-                ->setTitle('category.fields.description')
-                ->setClassName('w-50 cell'),
-            DataColumn::currency('margins')
-                ->setTitle('category.fields.margins')
-                ->setSearchable(false)
-                ->setOrderable(false)
-                ->setFormatter($intFormatter),
-            DataColumn::currency('products')
-                ->setTitle('category.fields.products')
-                ->setSearchable(false)
-                ->setOrderable(false)
-                ->setRawData(true)
-                ->setFormatter([$this, 'linkProducts']),
-            DataColumn::actions([$this, 'renderActions']),
-        ];
+        return DataColumnFactory::fromJson($this, $path);
     }
 
     /**

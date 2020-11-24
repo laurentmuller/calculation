@@ -16,6 +16,7 @@ namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
+use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
@@ -67,7 +68,7 @@ class CalculationStateDataTable extends AbstractEntityDataTable
      *
      * @return string the link, if applicable, the value otherwise
      */
-    public function linkCalculations(Collection $calculations, CalculationState $item): string
+    public function calculationsFormatter(Collection $calculations, CalculationState $item): string
     {
         $context = [
             'id' => $item->getId(),
@@ -85,7 +86,7 @@ class CalculationStateDataTable extends AbstractEntityDataTable
      *
      * @return string the translated value
      */
-    public function translateEditable(bool $value): string
+    public function editableFormatter(bool $value): string
     {
         $id = $value ? 'common.value_true' : 'common.value_false';
 
@@ -97,31 +98,9 @@ class CalculationStateDataTable extends AbstractEntityDataTable
      */
     protected function createColumns(): array
     {
-        return [
-            DataColumn::hidden('id'),
-            DataColumn::instance('code')
-                ->setTitle('calculationstate.fields.code')
-                ->setCallback('renderStateColor')
-                ->addClassName('text-code text-nowrap')
-                ->setDefault(true),
-            DataColumn::instance('description')
-                ->setTitle('calculationstate.fields.description')
-                ->setClassName('w-auto cell'),
-            DataColumn::instance('editable')
-                ->setTitle('calculationstate.fields.editable')
-                ->setClassName('text-state')
-                ->setSearchable(false)
-                //->setOrderable(false)
-                ->setFormatter([$this, 'translateEditable']),
-            DataColumn::currency('calculations')
-                ->setTitle('calculationstate.fields.calculations')
-                ->setSearchable(false)
-                ->setOrderable(false)
-                ->setRawData(true)
-                ->setFormatter([$this, 'linkCalculations']),
-            DataColumn::hidden('color'),
-            DataColumn::actions([$this, 'renderActions']),
-        ];
+        $path = __DIR__ . '/Definition/calculation_state.json';
+
+        return DataColumnFactory::fromJson($this, $path);
     }
 
     /**

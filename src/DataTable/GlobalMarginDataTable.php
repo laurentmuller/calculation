@@ -16,6 +16,7 @@ namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
+use App\DataTable\Model\DataColumnFactory;
 use App\Entity\GlobalMargin;
 use App\Repository\GlobalMarginRepository;
 use App\Service\ApplicationService;
@@ -50,35 +51,37 @@ class GlobalMarginDataTable extends AbstractEntityDataTable
     }
 
     /**
+     * Format the amount.
+     *
+     * @param float $value the amount to format
+     *
+     * @return string the formatted amount
+     */
+    public function amountFormatter(float $value): string
+    {
+        return $this->localeAmount($value);
+    }
+
+    /**
+     * Formats the given value as percent.
+     *
+     * @param float $number the value to format
+     *
+     * @return string the formatted value
+     */
+    public function percentFormatter(float $number): string
+    {
+        return $this->localePercent($number);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function createColumns(): array
     {
-        // callbacks
-        $percentFormatter = function (float $number): string {
-            return $this->localePercent($number);
-        };
+        $path = __DIR__ . '/Definition/global_margin.json';
 
-        return [
-            DataColumn::hidden('id'),
-            DataColumn::currency('minimum')
-                ->setTitle('categorymargin.fields.minimum')
-                ->addClassName('w-35')
-                ->setSearchable(false)
-                ->setDefault(true)
-                ->setFormatter([$this, 'localeAmount']),
-            DataColumn::currency('maximum')
-                ->setTitle('categorymargin.fields.maximum')
-                ->addClassName('w-35')
-                ->setSearchable(false)
-                ->setFormatter([$this, 'localeAmount']),
-            DataColumn::percent('margin')
-                ->setTitle('categorymargin.fields.margin')
-                ->addClassName('w-30')
-                ->setSearchable(false)
-                ->setFormatter($percentFormatter),
-            DataColumn::actions([$this, 'renderActions']),
-        ];
+        return DataColumnFactory::fromJson($this, $path);
     }
 
     /**

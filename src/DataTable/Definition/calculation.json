@@ -1,0 +1,69 @@
+[
+	{
+		"name": "id",
+		"title": "calculation.fields.id",
+		"direction": "desc",
+		"class": "text-id",
+		"formatter": "idFormatter",
+		"callback": "renderStateColor"
+	},
+	{
+		"name": "date",
+		"title": "calculation.fields.date",
+		"default": true,
+		"direction": "desc",
+		"class": "text-date",
+		"formatter": "dateFormatter"
+	},
+	{
+		"name": "state.code",
+		"title": "calculation.fields.state",
+		"class": "text-state"
+	},
+	{
+		"name": "customer",
+		"title": "calculation.fields.customer",
+		"class": "cell"
+	},
+	{
+		"name": "description",
+		"title": "calculation.fields.description",
+		"class": "cell"
+	},
+	{
+		"name": "overallMargin",
+		"title": "calculation.fields.margin",
+		"class": "text-percent",
+		"formatter": "marginFormatter",
+		"callback": "renderTooltip"
+	},
+	{
+		"name": "overallTotal",
+		"title": "calculation.fields.total",
+		"class": "text-currency",
+		"formatter": "amountFormatter"
+	},
+	{
+		"name": "state.color",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "state.id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "id",
+		"title": "common.empty",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"formatter": "actionsFormatter",
+		"class": "actions rowlink-skip d-print-none"
+	}
+]

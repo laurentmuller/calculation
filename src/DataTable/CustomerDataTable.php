@@ -16,6 +16,7 @@ namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
+use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Customer;
 use App\Repository\CustomerRepository;
 use App\Service\ApplicationService;
@@ -54,22 +55,9 @@ class CustomerDataTable extends AbstractEntityDataTable
      */
     protected function createColumns(): array
     {
-        return [
-            DataColumn::hidden('id'),
-            DataColumn::instance(CustomerRepository::NAME_COMPANY_FIELD)
-                ->setMap(CustomerRepository::NAME_COMPANY_FIELDS)
-                ->setTitle('customer.fields.nameAndCompany')
-                ->setDefault(true)
-                ->setClassName('w-50 cell'),
-            DataColumn::instance('address')
-                ->setTitle('customer.fields.address')
-                ->setClassName('w-auto cell'),
-            DataColumn::instance(CustomerRepository::ZIP_CITY_FIELD)
-                ->setMap(CustomerRepository::ZIP_CITY_FIELDS)
-                ->setTitle('customer.fields.zipCity')
-                ->setClassName('w-25 cell'),
-            DataColumn::actions([$this, 'renderActions']),
-        ];
+        $path = __DIR__ . '/Definition/customer.json';
+
+        return DataColumnFactory::fromJson($this, $path);
     }
 
     /**

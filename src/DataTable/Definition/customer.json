@@ -1,0 +1,43 @@
+[
+	{
+		"name": "id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "nameAndCompany",
+		"title": "customer.fields.nameAndCompany",
+		"default": true,
+		"map": [
+			"lastName",
+			"firstName",
+			"company"
+		],
+		"class": "w-50 cell"
+	},
+	{
+		"name": "address",
+		"title": "customer.fields.address",
+		"class": "w-auto cell"
+	},
+	{
+		"name": "zipCity",
+		"title": "customer.fields.zipCity",
+		"map": [
+			"zipCode",
+			"city"
+		],
+		"class": "w-25 cell"
+	},
+	{
+		"name": "id",
+		"title": "common.empty",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"formatter": "actionsFormatter",
+		"class": "actions rowlink-skip d-print-none"
+	}
+]

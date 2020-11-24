@@ -572,31 +572,13 @@ class AjaxController extends AbstractController
             ]);
         }
 
-        // query
-        $query = (string) $request->get('query');
-        if (!Utils::isString($query)) {
-            return $this->jsonFalse([
-                'values' => [],
-            ]);
-        }
-
-        //limit
-        $limit = (int) $request->get('limit', 15);
-
         try {
             /** @var AbstractRepository $repository */
             $repository = $manager->getRepository($className);
-            $values = $repository->getDistinctValues($field, $query, $limit);
-            if (!empty($values)) {
-                return $this->json($values);
-            }
 
-            // empty
-            return $this->jsonFalse([
-                'values' => [],
-            ]);
+            return $this->getDistinctValues($request, $repository, $field);
         } catch (\Exception $e) {
-            return $this->jsonException($e, $this->trans('translator.translate_error'));
+            return $this->jsonException($e);
         }
     }
 
@@ -964,8 +946,8 @@ class AjaxController extends AbstractController
         try {
             $search = (string) $request->get('query', '');
             if (Utils::isString($search)) {
-                $maxResults = (int) $request->get('limit', 15);
-                $values = $repository->getDistinctValues($field, $search, $maxResults);
+                $limit = (int) $request->get('limit', 15);
+                $values = $repository->getDistinctValues($field, $search, $limit);
                 if (!empty($values)) {
                     return $this->json($values);
                 }

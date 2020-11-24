@@ -16,6 +16,7 @@ namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
+use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
@@ -50,50 +51,61 @@ class CalculationDataTable extends AbstractEntityDataTable
     }
 
     /**
+     * Format the amount.
+     *
+     * @param float $value the amount to format
+     *
+     * @return string the formatted amount
+     */
+    public function amountFormatter(float $value): string
+    {
+        return $this->localeAmount($value);
+    }
+
+    /**
+     * Format the date.
+     *
+     * @param \DateTimeInterface $date the date to format
+     *
+     * @return string the formatted date
+     */
+    public function dateFormatter(\DateTimeInterface $date): string
+    {
+        return $this->localeDate($date);
+    }
+
+    /**
+     * Format the identifier.
+     *
+     * @param int $id the identifier to format
+     *
+     * @return string the formatted identifier
+     */
+    public function idFormatter(int $id): string
+    {
+        return $this->localeId($id);
+    }
+
+    /**
+     * Formats the given margin as percent.
+     *
+     * @param float $value the value to format
+     *
+     * @return string the formatted value
+     */
+    public function marginFormatter(float $value): string
+    {
+        return $this->localePercent($value);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function createColumns(): array
     {
-        //callback
-        $dateFormatter = function (\DateTimeInterface $date) {
-            return $this->localeDate($date);
-        };
-        $percentFormatter = function (float $value) {
-            return $this->localePercent($value);
-        };
+        $path = __DIR__ . '/Definition/calculation.json';
 
-        return [
-            DataColumn::identifier('id')
-                ->setTitle('calculation.fields.id')
-                ->setDescending()
-                ->setCallback('renderStateColor')
-                ->setFormatter([$this, 'localeId']),
-            DataColumn::date('date')
-                ->setTitle('calculation.fields.date')
-                ->setDefault(true)
-                ->setDescending()
-                ->setFormatter($dateFormatter),
-            DataColumn::instance('state.code')
-                ->setTitle('calculation.fields.state')
-                ->setClassName('text-state'),
-            DataColumn::instance('customer')
-                ->setTitle('calculation.fields.customer')
-                ->setClassName('cell'),
-            DataColumn::instance('description')
-                ->setTitle('calculation.fields.description')
-                ->setClassName('cell'),
-            DataColumn::percent('overallMargin')
-                ->setTitle('calculation.fields.margin')
-                ->setCallback('renderTooltip')
-                ->setFormatter($percentFormatter),
-            DataColumn::currency('overallTotal')
-                ->setTitle('calculation.fields.total')
-                ->setFormatter([$this, 'localeAmount']),
-            DataColumn::hidden('state.color'),
-            DataColumn::hidden('state.id')
-                ->setSearchable(true),
-            DataColumn::actions([$this, 'renderActions']),
-        ];
+        return DataColumnFactory::fromJson($this, $path);
     }
 
     /**

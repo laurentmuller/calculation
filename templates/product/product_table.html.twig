@@ -4,14 +4,10 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
-{% macro fill_text(text, count) %}
-{{ text ~ ' (' ~ count|integer ~')' }}
-{% endmacro %}
-
 {% macro fill_categories(categories, total) %}
-<button class="dropdown-item dropdown-category active" type="button" data-id="">{{ _self.fill_text('datatable.all'|trans, total) }}</button>
+<button class="dropdown-item dropdown-category active" type="button" data-id="">{{ 'datatable.all'|trans }}</button>
 {% for category in categories %}
-    <button class="dropdown-item dropdown-category" type="button" data-id="{{ category.id }}">{{ _self.fill_text(category.code, category.count) }}</button>
+    <button class="dropdown-item dropdown-category" type="button" data-id="{{ category.id }}">{{ category.code }}</button>
 {% endfor %}
 {% endmacro %}
 

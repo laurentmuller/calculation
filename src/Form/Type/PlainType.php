@@ -111,8 +111,8 @@ class PlainType extends AbstractType
         $data = $form->getViewData();
         $view->vars = \array_replace($view->vars,
             [
-                'hidden_input' => $options['hidden_input'],
                 'expanded' => $options['expanded'],
+                'hidden_input' => $options['hidden_input'],
                 'value' => $this->transformValue($data, $options),
             ]);
     }
@@ -300,8 +300,13 @@ class PlainType extends AbstractType
     private function getOptionString(array $options, string $name, ?string $defaultValue = null, bool $translate = false): ?string
     {
         if (isset($options[$name]) && \is_string($options[$name])) {
-            return (string) $options[$name];
+            $value = $options[$name];
+            if ($translate) {
+                return $this->trans($value);
+            }
+            return $value;
         }
+
         if ($translate) {
             return $this->trans($defaultValue);
         }

@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace App\DataTable\Model;
 
+use Symfony\Component\PropertyAccess\Exception\AccessException;
+use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
@@ -114,7 +116,13 @@ class DataColumnFactory
                 if ('formatter' === $key) {
                     $value = [$parent, $value];
                 }
-                $accessor->setValue($column, $key, $value);
+
+                try {
+                    $accessor->setValue($column, $key, $value);
+                } catch (AccessException | UnexpectedTypeException $e) {
+                    $message = "Cannot set the property '$key'.";
+                    throw new \InvalidArgumentException($message, 0, $e);
+                }
             }
 
             return $column;

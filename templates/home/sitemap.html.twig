@@ -61,13 +61,14 @@
             {%  set route = is_tabular ? 'user_table' : 'user_list' %}
             <li>{{ _self.link(route, 'user.list.title', 'user far') -}}</li>
             {% endif %}
+            {% if is_super_admin %}
+            <li>{{ _self.link('user_register', 'registration.register.title', 'user-plus') }}</li>
+            {% endif %}
+            <li>{{ _self.link('user_profile_edit', 'profile.edit.title', 'pencil-alt') }}</li>
             {% if is_remembered %}
             <li>{{ _self.link('app_logout', 'index.logout', 'sign-out-alt') }}</li>
             {% else %}
             <li>{{ _self.link('app_login', 'index.login', 'sign-in-alt') }}</li>
-            {% endif %}
-            {% if is_super_admin %}
-            <li>{{ _self.link('user_register', 'registration.register.title', 'user-plus') }}</li>
             {% endif %}
         </ul>
     </nav>

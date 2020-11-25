@@ -51,7 +51,7 @@ class DuplicateCalculationController extends AbstractController
         $edit = $this->getApplication()->isEditAction();
 
         // number of items
-        $items_count = \array_reduce($calculations, function (float $carry, array $calculation) {
+        $items_count = \array_reduce($calculations, function (int $carry, array $calculation) {
             foreach ($calculation['items'] as $item) {
                 $carry += $item['count'];
             }

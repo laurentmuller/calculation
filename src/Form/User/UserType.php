@@ -82,6 +82,7 @@ class UserType extends AbstractEntityType
             ->className('text-center')
             ->updateOption('date_format', PlainType::FORMAT_SHORT)
             ->updateOption('time_format', PlainType::FORMAT_SHORT)
+            ->updateOption('empty_value', 'common.value_none')
             ->addPlainType(true);
 
         $helper->field('imageFile')

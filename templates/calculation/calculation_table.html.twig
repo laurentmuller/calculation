@@ -3,14 +3,10 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
-{% macro fill_text(text, count) -%}
-    {{ text ~ ' (' ~ count|integer ~ ')' }}
-{%- endmacro %}
-
 {% macro fill_states(states, total) %}
-<button class="dropdown-item dropdown-state active" type="button"  data-id="">{{ _self.fill_text('datatable.all'|trans, total) }}</button>
+<button class="dropdown-item dropdown-state active" type="button"  data-id="">{{ 'datatable.all'|trans }}</button>
 {% for state in states %}
-    <button class="dropdown-item dropdown-state" type="button" data-id="{{ state.id }}">{{ _self.fill_text(state.code, state.count) }}</button>
+    <button class="dropdown-item dropdown-state" type="button" data-id="{{ state.id }}">{{ state.code }}</button>
 {% endfor %}
 {% endmacro %}
 

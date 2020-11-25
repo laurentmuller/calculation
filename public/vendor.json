@@ -251,6 +251,15 @@
 			"files": [
 				"iconify.js"
 			]
+		},
+		{
+			"name": "ckeditor5",
+			"version": "23.1.0",
+			"disabled": true,
+			"files": [
+				"ckeditor.js",
+				"translations/fr.min.js"
+			]	
 		}
 	]
 }

@@ -54,7 +54,7 @@
 		"name": "state.id",
 		"visible": false,
 		"orderable": false,
-		"searchable": false,
+		"searchable": true,
 		"class": "d-none"
 	},
 	{

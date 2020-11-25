@@ -45,7 +45,7 @@ class EmptyCalculationController extends AbstractController
         $edit = $this->getApplication()->isEditAction();
 
         // number of items
-        $items_count = \array_reduce($calculations, function (float $carry, array $calculation) {
+        $items_count = \array_reduce($calculations, function (int $carry, array $calculation) {
             return $carry + \count($calculation['items']);
         }, 0);
 

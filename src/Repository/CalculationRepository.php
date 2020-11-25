@@ -296,7 +296,7 @@ class CalculationRepository extends AbstractRepository
             }
             $result[$key]['items'][] = [
                 'description' => $item['item_description'],
-                'count' => $item['item_count'],
+                'count' => (int) $item['item_count'],
             ];
         }
 

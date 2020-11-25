@@ -82,12 +82,12 @@ override form errors. Rendered example:
 {% block plain_widget -%}
 {% apply spaceless %}
 {%- if expanded is defined and expanded -%}
-    {%- set class = (attr.class|default('') ~ ' plain-text border rounded bg-light text-muted')|trim -%}
+    {%- set class = (attr.class|default('') ~ ' form-control-plaintext text-muted border rounded px-2')|trim -%}
     <div class="{{ class }}">
-        <span>{{ value|escape }}</span>
+        <span>{{ value|default('&nbsp;')|raw }}</span>
     </div>
 {%- else -%}
-    <span>{{ value|escape }}</span>
+    <span>{{ value|default('&nbsp;')|raw }}</span>
 {%- endif -%}
 {%- if hidden_input is defined and hidden_input -%}{{- block('hidden_widget') -}}{%- endif -%}
 {% endapply %}

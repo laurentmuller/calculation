@@ -304,7 +304,7 @@ user:
     edit:
         title: Edition d'un utilisateur
         success: L'utilisateur <b>%name%</b> a été mis à jour avec succès.
-        delete_image: Supprimer la photo de profil
+        delete_image: Supprimer la photo de profil        
     image:
         title: Image du profil
         success: L'image du profil de l'utilisateur <b>%name%</b> a été mise à jour avec succès.
@@ -380,6 +380,7 @@ common:
     value_null: Vide
     value_enabled: Activé
     value_disabled: Désactivé
+    value_none: Aucune
     button_ok: OK
     button_cancel: Annuler
     button_close: Fermer

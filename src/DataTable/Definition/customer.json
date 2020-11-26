@@ -15,7 +15,7 @@
 			"firstName",
 			"company"
 		],
-		"class": "w-50 cell"
+		"class": "w-35 cell"
 	},
 	{
 		"name": "address",
@@ -29,7 +29,7 @@
 			"zipCode",
 			"city"
 		],
-		"class": "w-25 cell"
+		"class": "w-20 cell"
 	},
 	{
 		"name": "id",

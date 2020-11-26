@@ -2,7 +2,7 @@
 {% macro linkCalculations(query, date, count, class, title_message = 'counters.calculations_calendar') -%}
 {% import 'macros/_icons.html.twig' as icons %}
 {%- set title = title_message|trans({date: date, count: count}) -%}
-{%- set route = display_tabular() ? 'calculation_table' : 'calculation_list' -%}    
+{%- set route = app.displayTabular ? 'calculation_table' : 'calculation_list' -%}    
 <a class="{{ class }}" href="{{ path(route, {'query': query}) }}" title="{{ title }}">{{ icons.icon('calculator') }}</a>
 {%- endmacro %}
 
@@ -19,7 +19,7 @@
 
 {%  macro dataRow(calculation, class = '') %}
 {% import 'macros/_properties.html.twig' as properties %}
-{% set margin_class = margin_below(calculation) ? 'text-percent text-danger' : 'text-percent' %}
+{% set margin_class = app.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
 <tr>
     <td class="text-id" style="{{ properties.stateCss(calculation.stateColor) }}">{{ calculation.id|identifier }}</td>
     <td class="text-state">{{ calculation.state.code }}</td>

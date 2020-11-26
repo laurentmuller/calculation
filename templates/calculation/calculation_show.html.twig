@@ -9,7 +9,7 @@
 {%- set params = route_params(app.request, id) %}
 
 {# actions #}
-{%- set list_path   = display_tabular() ? 'calculation_table' : 'calculation_list' -%}
+{%- set list_path   = app.displayTabular ? 'calculation_table' : 'calculation_list' -%}
 {%- set edit_path   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, item) ? path('calculation_edit', params) : null -%}
 {%- set delete_path = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, item) ? path('calculation_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, list_path) -%}
@@ -105,7 +105,7 @@
         <tr>
             <td class="font-weight-bold">{{ 'calculation.fields.overallTotal'|trans }}</td>
             <td class="font-weight-bold text-currency">{{ item.groupsAmount|amount }}</td>
-            {%- if margin_below(item) -%}
+            {%- if app.marginBelow(item) -%}
                 {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
                 <td class="font-weight-bold text-currency text-danger below-cell has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallMargin|percent }}</td>
             {%- else -%}

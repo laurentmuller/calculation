@@ -108,7 +108,7 @@ class AdminController extends AbstractController
     public function import(Request $request, SwissPostService $service): Response
     {
         // clear
-        if ($this->getApplication()->isDebug()) {
+        if ($this->getApplication()->getDebug()) {
             $this->getApplication()->clearCache();
         }
 

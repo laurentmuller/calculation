@@ -20,7 +20,7 @@
 
 {# parameters #}
 {%- set title = 'timeline.title' -%}
-{%- set route = display_tabular() ? 'calculation_table' : 'calculation_list' -%}    
+{%- set route = app.displayTabular ? 'calculation_table' : 'calculation_list' -%}    
 
 {# body #}
 {% block body -%}

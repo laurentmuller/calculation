@@ -54,7 +54,7 @@
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
                 <td class="text-currency">{{ item.items|integer }}</td>
-                {%- set class_name = margin_below(item.marginPercent) ? 'text-danger' : '' -%}
+                {%- set class_name = app.marginBelow(item.marginPercent) ? 'text-danger' : '' -%}
                 <td class="text-percent {{ class_name }}">{{ item.marginPercent|percent(false) }}</td>
                 <td class="text-currency">{{ item.marginAmount|integer }}</td>
                 <td class="text-currency">{{ item.sum|integer }}</td>
@@ -66,7 +66,7 @@
             	<td class="font-weight-bold">{{ 'fields.total'|trans }}</td>
             	<td class="font-weight-bold text-currency">{{ count|integer }}</td>
                 <td class="font-weight-bold text-currency">{{ items|integer }}</td>
-                {%- set class_name = margin_below(marginPercent) ? ' text-danger' : '' -%}
+                {%- set class_name = app.marginBelow(marginPercent) ? ' text-danger' : '' -%}
             	<td class="font-weight-bold text-percent{{ class_name }}">{{ marginPercent|percent(false) }}</td>
                 <td class="font-weight-bold text-currency">{{ marginAmount|integer }}</td>
                 <td class="font-weight-bold text-currency">{{ total|integer }}</td>

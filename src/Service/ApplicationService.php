@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Property;
 use App\Interfaces\ApplicationServiceInterface;
@@ -25,6 +26,7 @@ use App\Util\Utils;
 use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -34,7 +36,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *
  * @author Laurent Muller
  */
-class ApplicationService implements ApplicationServiceInterface
+class ApplicationService extends AppVariable implements ApplicationServiceInterface
 {
     use LoggerTrait;
 
@@ -61,13 +63,6 @@ class ApplicationService implements ApplicationServiceInterface
     private $adapter;
 
     /**
-     * The debug mode.
-     *
-     * @var bool
-     */
-    private $debug;
-
-    /**
      * @var EntityManagerInterface
      */
     private $manager;
@@ -79,7 +74,9 @@ class ApplicationService implements ApplicationServiceInterface
     {
         $this->manager = $manager;
         $this->logger = $logger;
-        $this->debug = $kernel->isDebug();
+
+        $this->setDebug($kernel->isDebug());
+        $this->setEnvironment($kernel->getEnvironment());
 
         $dir = $kernel->getCacheDir();
         $this->adapter = AbstractAdapter::createSystemCache(self::CACHE_NAME_SPACE, self::CACHE_TIMEOUT, '', $dir, $logger);
@@ -416,23 +413,13 @@ class ApplicationService implements ApplicationServiceInterface
     }
 
     /**
-     * Returns if the debug mode is enabled.
-     *
-     * @return bool true if the debug mode is enabled, false otherwise
-     */
-    public function isDebug(): bool
-    {
-        return $this->debug;
-    }
-
-    /**
      * Gets a value indicating the image captcha is displayed when login.
      *
      * @return bool true to display the image; false to hide
      */
     public function isDisplayCaptcha(): bool
     {
-        return $this->isPropertyBoolean(self::DISPLAY_CAPTCHA, !$this->debug);
+        return $this->isPropertyBoolean(self::DISPLAY_CAPTCHA, !$this->getDebug());
     }
 
     /**
@@ -456,15 +443,21 @@ class ApplicationService implements ApplicationServiceInterface
     }
 
     /**
-     * Returns if the given margin is below the minimum.
+     * Returns if the given value is below the minimum margin.
      *
-     * @param float $margin the margin to be tested
+     * @param Calculation|float $value the calculation or the margin to be tested
      *
      * @return bool true if below the minimum
      */
-    public function isMarginBelow(float $margin): bool
+    public function isMarginBelow($value): bool
     {
-        return $margin < $this->getMinMargin();
+        if (\is_float($value)) {
+            return $value < $this->getMinMargin();
+        } elseif ($value instanceof Calculation) {
+            return $value->isMarginBelow($this->getMinMargin());
+        } else {
+            return false;
+        }
     }
 
     /**

@@ -5,7 +5,7 @@
 {# parameters #}
 {%- set title          = 'calculation.update.title' -%}
 {%- set title_icon     = 'pencil-alt' -%}
-{%- set tabular        = display_tabular() -%}
+{%- set tabular        = app.displayTabular -%}
 {%- set empty_path     = tabular ? path('empty_table') : path('empty_card') -%}
 {%- set duplicate_path = tabular ? path('duplicate_table') : path('duplicate_card') -%}
 

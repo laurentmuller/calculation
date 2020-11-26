@@ -21,7 +21,7 @@
 {%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
 {%- set is_remembered  = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
 {%- set is_bibi        = is_dev and is_remembered and app.user.username == 'Bibi' -%}
-{%- set is_tabular     = display_tabular() -%}
+{%- set is_tabular     = app.displayTabular -%}
 {%- set route_params   = {'caller': path('site_map')} -%}
 
 {# rights #}

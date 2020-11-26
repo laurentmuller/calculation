@@ -12,7 +12,7 @@
 {%- set is_previous_admin = is_granted('IS_IMPERSONATOR') -%}
 {%- set is_remembered     = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
 {%- set is_bibi           = is_dev and is_remembered and app.user.username == 'Bibi' -%}
-{%- set is_tabular        = display_tabular() -%}
+{%- set is_tabular        = app.displayTabular -%}
 
 {# rights #}
 {%- set is_granted_calculation       = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}

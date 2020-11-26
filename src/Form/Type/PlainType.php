@@ -304,6 +304,7 @@ class PlainType extends AbstractType
             if ($translate) {
                 return $this->trans($value);
             }
+
             return $value;
         }
 

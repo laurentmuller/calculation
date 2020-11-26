@@ -94,7 +94,7 @@
                 {{ properties.line(item.description) }}
                 {{ properties.line(item.date|localedate ~ ' / ' ~ item.stateCode) }}
                 {{ properties.separator() }}
-                {%- if margin_below(item) -%}
+                {%- if app.marginBelow(item) -%}
                     {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
                     <tr>
                     	<td>{{ 'calculation.fields.total'|trans }}</td>

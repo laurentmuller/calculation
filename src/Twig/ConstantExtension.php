@@ -18,6 +18,7 @@ use App\Interfaces\ActionInterface;
 use App\Interfaces\EntityVoterInterface;
 use App\Service\CalculationService;
 use App\Service\ThemeService;
+use App\Util\Utils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
@@ -67,10 +68,10 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
 
         // create array
         $values = [
-            $this->getShortName(ThemeService::class) => $this->getConstants(ThemeService::class),
-            $this->getShortName(ActionInterface::class) => $this->getConstants(ActionInterface::class),
-            $this->getShortName(CalculationService::class) => $this->getConstants(CalculationService::class),
-            $this->getShortName(EntityVoterInterface::class) => $this->getConstants(EntityVoterInterface::class),
+            Utils::getShortName(ThemeService::class) => $this->getConstants(ThemeService::class),
+            Utils::getShortName(ActionInterface::class) => $this->getConstants(ActionInterface::class),
+            Utils::getShortName(CalculationService::class) => $this->getConstants(CalculationService::class),
+            Utils::getShortName(EntityVoterInterface::class) => $this->getConstants(EntityVoterInterface::class),
         ];
 
         // put to the cache
@@ -92,8 +93,11 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     {
         $result = [];
 
+        /** @var \ReflectionClass $reflection */
+        $reflection = new \ReflectionClass($className);
+
         /** @var \ReflectionClassConstant[] $constants */
-        $constants = $this->getReflection($className)->getReflectionConstants();
+        $constants = $reflection->getReflectionConstants();
         foreach ($constants as $constant) {
             if ($constant->isPublic()) {
                 $result[$constant->getName()] = $constant->getValue();
@@ -101,29 +105,5 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
         }
 
         return $result;
-    }
-
-    /**
-     * Gets the reflection class.
-     *
-     * @param string $className the class name to get reflection for
-     *
-     * @return \ReflectionClass the reflection class
-     */
-    private function getReflection(string $className): \ReflectionClass
-    {
-        return new \ReflectionClass($className);
-    }
-
-    /**
-     * Gets short name of the given class name.
-     *
-     * @param string $className the class name to get short name for
-     *
-     * @return string the short name
-     */
-    private function getShortName(string $className): string
-    {
-        return $this->getReflection($className)->getShortName();
     }
 }

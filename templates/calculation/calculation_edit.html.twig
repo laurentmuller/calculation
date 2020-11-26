@@ -42,7 +42,7 @@
 {%- endif -%}
 
 {# cancel path #}
-{%- set list_path   = display_tabular() ? 'calculation_table' : 'calculation_list' -%}
+{%- set list_path   = app.displayTabular ? 'calculation_table' : 'calculation_list' -%}
 {%- set cancel_path = cancel_url(app.request, item.id|default(0), list_path) -%}
 
 {%- block container_class 'container-fluid' -%}

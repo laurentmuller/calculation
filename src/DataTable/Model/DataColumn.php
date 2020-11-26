@@ -164,10 +164,9 @@ class DataColumn
      *
      * This implementation do the following:
      * <ul>
-     * <li>If the <code>$value</code> parameter is <code>null</code>, returns an empty string ('').</li>
      * <li>If the formatter is a string, format the <code>$value</code> parameter using the <code>sprintf</code> function.</li>
      * <li>If the formatter is callable, convert the <code>$value</code> using the <code>call_user_func()</code> function with the <code>$value</code> and the <code>$data</code> as parameters.</li>
-     * <li>Converts the <code>$value</code> parameter as string.</li>
+     * <li>Cast the <code>$value</code> parameter as string.</li>
      * </ul>
      *
      * @param mixed        $value the value to convert
@@ -179,16 +178,18 @@ class DataColumn
      */
     public function formatValue($value, $data): string
     {
-        if (null === $value) {
-            return '';
-        }
         if (\is_string($this->formatter)) {
-            return \sprintf($this->formatter, $value);
+            if (null !== $value) {
+                return \sprintf($this->formatter, $value);
+            }
+
+            return '';
         }
         if (\is_callable($this->formatter)) {
             return \call_user_func($this->formatter, $value, $data);
         }
 
+        // default
         return (string) $value;
     }
 

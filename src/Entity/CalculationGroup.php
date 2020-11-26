@@ -349,6 +349,7 @@ class CalculationGroup extends AbstractEntity
      * This property is present only for the form builder.
      *
      * @param int $categoryId
+     * @psalm-suppress UnusedParam
      */
     public function setCategoryId(?int $categoryId): self
     {

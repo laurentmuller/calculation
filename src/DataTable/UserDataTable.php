@@ -115,6 +115,10 @@ class UserDataTable extends AbstractEntityDataTable
      */
     public function lastLoginFormatter(?\DateTimeInterface $date): string
     {
+        if (null === $date) {
+            return $this->translator->trans('common.value_none');
+        }
+
         return $this->localeDateTime($date);
     }
 

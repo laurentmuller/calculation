@@ -98,6 +98,7 @@ class GeneratorController extends AbstractController
         $calculations = [];
         for ($i = 0; $i < $count; ++$i) {
             $calculation = new Calculation();
+
             $calculation->setDate($faker->dateTimeBetween($dateStart, $dateEnd))
                 ->setDescription($faker->catchPhrase())
                 ->setUserMargin($faker->randomFloat(2, 0, 0.1))

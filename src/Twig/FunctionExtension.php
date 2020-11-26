@@ -26,7 +26,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
-use Twig\Extension\ExtensionInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
@@ -40,7 +39,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * The asset extension.
      *
-     * @var ExtensionInterface|null
+     * @var AssetExtension
      */
     private $asset;
 
@@ -230,8 +229,8 @@ final class FunctionExtension extends AbstractExtension
     {
         return [
             new TwigFilter('trans_role', [$this, 'translateRole']),
-            new TwigFilter('normalize_whitespace', [$this, 'normalizeWhitespace'], ['preserves_safety' => ['html']]),
             new TwigFilter('var_export', [Utils::class, 'exportVar']),
+            new TwigFilter('normalize_whitespace', [$this, 'normalizeWhitespace'], ['preserves_safety' => ['html']]),
         ];
     }
 
@@ -267,9 +266,9 @@ final class FunctionExtension extends AbstractExtension
 
         return [
             // flash bag messages
-            new TwigFunction('flashbag_position', [$this, 'getFlashbagPosition']),
-            new TwigFunction('flashbag_timeout', [$this, 'getFlashbagTimeout']),
-            new TwigFunction('flashbag_subtitle', [$this, 'isFlashbagSubTitle']),
+            new TwigFunction('flashbag_position', [$this, 'getFlashbagPosition'], ['deprecated' => true, 'alternative' => 'app.messagePosition']),
+            new TwigFunction('flashbag_timeout', [$this, 'getFlashbagTimeout'], ['deprecated' => true, 'alternative' => 'app.messageTimeout']),
+            new TwigFunction('flashbag_subtitle', [$this, 'isFlashbagSubTitle'], ['deprecated' => true, 'alternative' => 'app.messageSubTitle']),
 
             // asssets
             new TwigFunction('asset_exists', [$this, 'assetExists']),
@@ -291,8 +290,8 @@ final class FunctionExtension extends AbstractExtension
             new TwigFunction('is_int', 'is_int'),
 
             // application
-            new TwigFunction('margin_below', [$this, 'isMarginBelow']),
-            new TwigFunction('display_tabular', [$this, 'isDisplayTabular']),
+            new TwigFunction('margin_below', [$this, 'isMarginBelow'], ['deprecated' => true, 'alternative' => 'app.marginBelow']),
+            new TwigFunction('display_tabular', [$this, 'isDisplayTabular'], ['deprecated' => true, 'alternative' => 'app.displayTabular']),
         ];
     }
 
@@ -325,16 +324,6 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Returns if the minimum margin allowed.
-     *
-     * @return float the minimum margin allowed
-     */
-    public function getMinMargin(): float
-    {
-        return $this->service->getMinMargin();
-    }
-
-    /**
      * Gets a value indicating how entities are displayed.
      *
      * @return bool true, displays the entities in tabular mode; false, displays entities as cards
@@ -363,13 +352,7 @@ final class FunctionExtension extends AbstractExtension
      */
     public function isMarginBelow($value): bool
     {
-        if (\is_float($value)) {
-            return $this->service->isMarginBelow($value);
-        } elseif ($value instanceof Calculation) {
-            return $value->isMarginBelow($this->service->getMinMargin());
-        } else {
-            return false;
-        }
+        return $this->service->isMarginBelow($value);
     }
 
     /**
@@ -440,30 +423,30 @@ final class FunctionExtension extends AbstractExtension
      *
      * @param Environment $env         the Twig environnement
      * @param string      $path        a public path
-     * @param string      $packageName the name of the asset package to use
+     * @param string      $packageName the optional name of the asset package to use
      *
-     * @return string The public path of the asset
+     * @return string the public path of the asset
      */
     private function getAssetUrl(Environment $env, string $path, ?string $packageName = null): string
     {
-        if (!$this->asset) {
+        if (null === $this->asset) {
+            /** @phpstan-ignore-next-line */
             $this->asset = $env->getExtension(AssetExtension::class);
         }
 
-        /** @var AssetExtension $asset */
-        $asset = $this->asset;
-
-        return $asset->getAssetUrl($path, $packageName);
+        return $this->asset->getAssetUrl($path, $packageName);
     }
 
     /**
      * Generates a random nonce parameter.
      *
      * @param Environment $env the Twig environnement
+     *
+     * @return string the random nonce parameter
      */
     private function getNonce(Environment $env): string
     {
-        if (!$this->nonce) {
+        if (null === $this->nonce) {
             /** @var NonceExtension $extension */
             $extension = $env->getExtension(NonceExtension::class);
             $this->nonce = $extension->getNonce();

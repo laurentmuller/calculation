@@ -132,7 +132,7 @@ class UsersReport extends AbstractReport
                 ->add($user->getEmail())
                 ->add($role)
                 ->add($text, 1, $style)
-                ->add($this->localeDateTime($user->getLastLogin()))
+                ->add($this->formatLastLogin($user->getLastLogin()))
                 ->endRow();
         }
 
@@ -150,6 +150,22 @@ class UsersReport extends AbstractReport
         $this->users = $users;
 
         return $this;
+    }
+
+    /**
+     * Format the last login date.
+     *
+     * @param \DateTimeInterface $date the date to format
+     *
+     * @return string the formatted date
+     */
+    private function formatLastLogin(?\DateTimeInterface $date): string
+    {
+        if (null === $date) {
+            return $this->trans('common.value_none');
+        }
+
+        return $this->localeDateTime($date);
     }
 
     /**

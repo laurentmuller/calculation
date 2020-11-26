@@ -140,7 +140,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ->addChoiceType([
                 'parameters.editAction.show' => ActionInterface::ACTION_SHOW,
                 'parameters.editAction.edit' => ActionInterface::ACTION_EDIT,
-                // 'parameters.editAction.none' => ActionInterface::ACTION_NONE,
+                //'parameters.editAction.none' => ActionInterface::ACTION_NONE,
             ]);
 
         $helper->field(self::MIN_MARGIN)
@@ -177,7 +177,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     private function addSecuritySection(FormHelper $helper): void
     {
         // security
-        $captcha = (int) !$this->application->isDebug();
+        $captcha = (int) !$this->application->getDebug();
         $helper->field(self::DISPLAY_CAPTCHA)
             ->updateAttribute('data-default', $captcha)
             ->addChoiceType([

@@ -14,18 +14,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DataTable\SearchDataTable;
-use App\Entity\Calculation;
-use App\Entity\CalculationState;
-use App\Entity\Category;
-use App\Entity\Customer;
-use App\Entity\Product;
-use App\Interfaces\EntityVoterInterface;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
-use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -50,12 +41,12 @@ class HomeController extends AbstractController
         $edit = $this->getApplication()->isEditAction();
 
         // get states count and total
-        $count = 0;
-        $total = 0;
-        foreach ($states as $state) {
-            $count += $state['count'];
-            $total += $state['total'];
-        }
+        [$count, $total] = \array_reduce($states, function (array $carry, array $state) {
+            $carry[0] += $state['count'];
+            $carry[1] += $state['total'];
+
+            return $carry;
+        }, [0, 0]);
 
         // render view
         return $this->render('home/index.html.twig', [
@@ -71,58 +62,7 @@ class HomeController extends AbstractController
     }
 
     /**
-     * Render datatable for native query search.
-     *
-     * @param Request         $request the request to get parameters
-     * @param SearchDataTable $table   the datatable
-     *
-     * @Route("/search", name="search")
-     * @IsGranted("ROLE_USER")
-     */
-    public function search(Request $request, SearchDataTable $table): Response
-    {
-        $results = $table->handleRequest($request);
-        if ($table->isCallback()) {
-            return $this->json($results);
-        }
-
-        // authorizations
-        $show_granted = $table->isActionGranted(EntityVoterInterface::ATTRIBUTE_SHOW);
-        $edit_granted = $table->isActionGranted(EntityVoterInterface::ATTRIBUTE_EDIT);
-        $delete_granted = $table->isActionGranted(EntityVoterInterface::ATTRIBUTE_DELETE);
-
-        // attributes
-        $attributes = [
-            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
-        ];
-
-        // entity types
-        $entities = [
-            \strtolower(Utils::getShortName(Calculation::class)) => 'calculation.name',
-            \strtolower(Utils::getShortName(Product::class)) => 'product.name',
-            \strtolower(Utils::getShortName(Category::class)) => 'category.name',
-            \strtolower(Utils::getShortName(CalculationState::class)) => 'calculationstate.name',
-        ];
-        if ($this->isDebug()) {
-            $entities[\strtolower(Utils::getShortName(Customer::class))] = 'customer.name';
-        }
-
-        // render
-        $parameters = [
-            'results' => $results,
-            'columns' => $table->getColumns(),
-            'show_granted' => $show_granted,
-            'edit_granted' => $edit_granted,
-            'delete_granted' => $delete_granted,
-            'attributes' => $attributes,
-            'entities' => $entities,
-        ];
-
-        return $this->render('home/search.html.twig', $parameters);
-    }
-
-    /**
-     * Display the Site Map.
+     * Display the site map.
      *
      * @Route("/sitemap", name="site_map")
      * @IsGranted("ROLE_USER")

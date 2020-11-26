@@ -99,14 +99,14 @@ interface ApplicationServiceInterface
     /**
      * The property name for the display mode (boolean).
      *
-     * When <code>true</code>, displays the entities in tabular mode; when <code>false</code>, displays entities as cards.
+     * When <code>true</code>, displays the entities in tabular mode (default); when <code>false</code>, displays entities as cards.
      */
     public const DISPLAY_TABULAR = 'display_tabular';
 
     /**
      * The property name for the edit action when displaying entities (boolean).
      *
-     * When <code>false</code>, display the entity properties; when <code>true</code>, edit the entity.
+     * When <code>false</code>, display the entity properties; when <code>true</code> (default), edit the entity.
      */
     public const EDIT_ACTION = 'edit_action';
 
@@ -131,22 +131,22 @@ interface ApplicationServiceInterface
     public const LIST_LENGTH = 'list-length';
 
     /**
-     * The property name for the position of the flashbag messages (string).
+     * The property name for the position (default = 'bottom-right') of the flashbag messages (string).
      */
     public const MESSAGE_POSITION = 'message_position';
 
     /**
-     * The property name for displaying sub-title of the flashbag messages (boolean).
+     * The property name for displaying sub-title (default = true) of the flashbag messages (boolean).
      */
     public const MESSAGE_SUB_TITLE = 'message_sub_title';
 
     /**
-     * The property name for the timeout of the flashbag messages in milliseconds (int).
+     * The property name for the timeout (default = 4000 ms) of the flashbag messages in milliseconds (int).
      */
     public const MESSAGE_TIMEOUT = 'message_timeout';
 
     /**
-     * The property name for the minimum margin, in percent, for a calculation (float).
+     * The property name for the minimum margin (default = 300%), in percent, for a calculation (float).
      */
     public const MIN_MARGIN = 'minimum_margin';
 

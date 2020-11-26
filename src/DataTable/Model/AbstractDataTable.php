@@ -349,6 +349,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
      *
      * @param int        $key    the column index
      * @param DataColumn $column the column
+     * @psalm-suppress UnusedParam
      *
      * @return mixed the key
      */

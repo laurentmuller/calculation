@@ -18,6 +18,7 @@ use App\Entity\Calculation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
+use App\Util\FormatUtils;
 
 /**
  * Table to render a list of calculation totals.
@@ -73,20 +74,20 @@ class CalculationTotalTable extends PdfTableBuilder
         foreach ($groups as $group) {
             $this->startRow()
                 ->add($group->getCode())
-                ->add($parent->localeAmount($group->getAmount()))
-                ->add($parent->localePercent($group->getMargin()))
-                ->add($parent->localeAmount($group->getMarginAmount()))
-                ->add($parent->localeAmount($group->getTotal()))
+                ->add(FormatUtils::formatAmount($group->getAmount()))
+                ->add(FormatUtils::formatPercent($group->getMargin()))
+                ->add(FormatUtils::formatAmount($group->getMarginAmount()))
+                ->add(FormatUtils::formatAmount($group->getTotal()))
                 ->endRow();
         }
 
         // groups total
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.marginTotal'))
-            ->add($parent->localeAmount($calculation->getGroupsAmount()), 1, $style)
-            ->add($parent->localePercent($calculation->getGroupsMargin()), 1, $style)
-            ->add($parent->localeAmount($calculation->getGroupsMarginAmount()), 1, $style)
-            ->add($parent->localeAmount($calculation->getGroupsTotal()))
+            ->add(FormatUtils::formatAmount($calculation->getGroupsAmount()), 1, $style)
+            ->add(FormatUtils::formatPercent($calculation->getGroupsMargin()), 1, $style)
+            ->add(FormatUtils::formatAmount($calculation->getGroupsMarginAmount()), 1, $style)
+            ->add(FormatUtils::formatAmount($calculation->getGroupsTotal()))
             ->endRow();
     }
 

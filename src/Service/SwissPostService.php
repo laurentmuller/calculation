@@ -16,8 +16,8 @@ namespace App\Service;
 
 use App\Database\SwissDatabase;
 use App\Interfaces\ApplicationServiceInterface;
-use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -30,7 +30,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class SwissPostService
 {
-    use FormatterTrait;
     use TranslatorTrait;
 
     /**
@@ -72,6 +71,11 @@ class SwissPostService
      * The states file.
      */
     private const STATE_FILE = 'swiss_state.csv';
+
+    /**
+     * @var ApplicationService
+     */
+    private $application;
 
     /**
      * The data directory.
@@ -318,8 +322,8 @@ class SwissPostService
                         // check
                         if ($lastImport && $validity <= $lastImport) {
                             $params = [
-                                '%validity%' => $this->localeDate($validity, \IntlDateFormatter::LONG),
-                                '%import%' => $this->localeDate($lastImport, \IntlDateFormatter::LONG),
+                                '%validity%' => FormatUtils::formatDate($validity, \IntlDateFormatter::LONG),
+                                '%import%' => FormatUtils::formatDate($lastImport, \IntlDateFormatter::LONG),
                                 '%name%' => $name,
                             ];
 

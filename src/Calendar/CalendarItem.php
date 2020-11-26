@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
-use App\Traits\DateFormatterTrait;
 use App\Util\Utils;
 
 /**
@@ -24,8 +23,6 @@ use App\Util\Utils;
  */
 abstract class CalendarItem implements \JsonSerializable
 {
-    use DateFormatterTrait;
-
     /**
      * The parent's calendar.
      *

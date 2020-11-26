@@ -20,6 +20,7 @@ use App\Pdf\PdfConstantsInterface;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
+use App\Util\FormatUtils;
 
 /**
  * Abstract report to render calculations with empty or duplicate items.
@@ -153,12 +154,12 @@ abstract class CalculationItemsReports extends AbstractReport
             $table = new PdfTableBuilder($this, false);
             $table->addColumn(PdfColumn::left(null, $width));
 
-            $text = $this->localeId($calculation['id']);
+            $text = FormatUtils::formatId($calculation['id']);
             $this->singleLine($table, $currentX, $text, $idStyle);
 
             $text = $calculation['customer'] . PdfConstantsInterface::NEW_LINE;
             $text .= $calculation['description'] . PdfConstantsInterface::NEW_LINE;
-            $text .= $this->localeDate($calculation['date']) . ' / ' . $calculation['stateCode'];
+            $text .= FormatUtils::formatDate($calculation['date']) . ' / ' . $calculation['stateCode'];
             $this->singleLine($table, $currentX, $text);
 
             // items

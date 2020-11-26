@@ -18,8 +18,8 @@ use App\DataTable\Model\AbstractDataTable;
 use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Log;
-use App\Service\ApplicationService;
 use App\Service\LogService;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
@@ -66,13 +66,12 @@ class LogDataTable extends AbstractDataTable
     /**
      * Constructor.
      *
-     * @param ApplicationService  $application the application to get parameters
-     * @param SessionInterface    $session     the session to save/retrieve user parameters
-     * @param DataTablesInterface $datatables  the datatables to handle request
+     * @param SessionInterface    $session    the session to save/retrieve user parameters
+     * @param DataTablesInterface $datatables the datatables to handle request
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, LogService $service)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, LogService $service)
     {
-        parent::__construct($application, $session, $datatables);
+        parent::__construct($session, $datatables);
         $this->service = $service;
     }
 
@@ -97,7 +96,7 @@ class LogDataTable extends AbstractDataTable
      */
     public function dateFormatter(\DateTime $value): string
     {
-        return $this->localeDateTime($value, null, \IntlDateFormatter::MEDIUM);
+        return FormatUtils::formatDateTime($value, null, \IntlDateFormatter::MEDIUM);
     }
 
     /**

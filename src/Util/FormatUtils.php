@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-use App\Form\Admin\SeparatorType;
-
 /**
  * Utility class for default formats.
  *
@@ -24,7 +22,153 @@ use App\Form\Admin\SeparatorType;
 final class FormatUtils
 {
     /**
-     * Gets the default date type format.
+     * Format a number for the current locale with 2 decimals (Ex: 2312.5 -> 2'312.50).
+     *
+     * @param float|int $number the value to format
+     */
+    public static function formatAmount($number): string
+    {
+        static $formatter;
+        if (!$formatter) {
+            $formatter = self::getNumberFormatter(\NumberFormatter::DECIMAL, 2);
+        }
+
+        return $formatter->format((float) $number);
+    }
+
+    /**
+     * Format a date for the current locale; ignoring the time part.
+     *
+     * @param \DateTimeInterface|int    $date     the date to format
+     * @param int|null                  $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param \DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                       $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null               $pattern  the optional pattern to use when formatting
+     *
+     * @return string|bool the formatted date or false if formatting failed
+     */
+    public static function formatDate($date, ?int $datetype = null, $timezone = null, ?int $calendar = \IntlDateFormatter::GREGORIAN, ?string $pattern = null)
+    {
+        return self::formatDateTime($date, $datetype, \IntlDateFormatter::NONE, $timezone, $calendar, $pattern);
+    }
+
+    /**
+     * Format a date and time for the current locale.
+     *
+     * @param \DateTimeInterface|int    $date     the date and time to format
+     * @param int|null                  $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param int|null                  $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param \DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                       $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null               $pattern  the optional pattern to use when formatting
+     *
+     * @return string|null the formatted date and time or null if formatting failed or if the date is null
+     */
+    public static function formatDateTime($date, ?int $datetype = null, ?int $timetype = null, $timezone = null, ?int $calendar = \IntlDateFormatter::GREGORIAN, ?string $pattern = null)
+    {
+        if ($date) {
+            $formatter = self::getDateFormatter($datetype, $timetype, $timezone, $calendar, $pattern);
+            $result = $formatter->format($date);
+            if (false !== $result) {
+                return $result;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Format an integer identifier with 0 left padding  (Ex: 123 -> 000123).
+     *
+     * @param int $number the value to format
+     */
+    public static function formatId($number): string
+    {
+        return \sprintf('%06d', (int) $number);
+    }
+
+    /**
+     * Format a number for the current locale with 0 decimals (Ex: 2312.2 -> 2'312).
+     *
+     * @param float|int $number the value to format
+     */
+    public static function formatInt($number): string
+    {
+        static $formatter;
+        if (!$formatter) {
+            $formatter = self::getNumberFormatter(\NumberFormatter::DECIMAL, 0);
+        }
+
+        return $formatter->format((float) $number);
+    }
+
+    /**
+     * Format for the current locale a number as percent.
+     *
+     * @param float $number      the value to format
+     * @param bool  $includeSign true to include the percent sign
+     * @param int   $decimals    the number of decimals
+     */
+    public static function formatPercent($number, bool $includeSign = true, int $decimals = 0): string
+    {
+        $formatter = self::getNumberFormatter(\NumberFormatter::PERCENT, $decimals);
+        if (!$includeSign) {
+            $formatter->setSymbol(\NumberFormatter::PERCENT_SYMBOL, '');
+        }
+
+        return $formatter->format((float) $number);
+    }
+
+    /**
+     * Format a time for the current locale; ignoring the date part.
+     *
+     * @param \DateTimeInterface|int    $date     the time to format
+     * @param int|null                  $timetype the type of date formatting, one of the format type constants or null to use default
+     * @param \DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                       $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null               $pattern  the optional pattern to use when formatting
+     *
+     * @return string|bool the formatted time or false if formatting failed
+     */
+    public static function formatTime($date, ?int $timetype = null, $timezone = null, ?int $calendar = \IntlDateFormatter::GREGORIAN, ?string $pattern = null)
+    {
+        return self::formatDateTime($date, \IntlDateFormatter::NONE, $timetype, $timezone, $calendar, $pattern);
+    }
+
+    /**
+     * Creates a date formatter for the current locale.
+     *
+     * @param int|null                  $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param int|null                  $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param \DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                       $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null               $pattern  the optional pattern to use when formatting
+     *
+     * @return \IntlDateFormatter the date formatter
+     */
+    public static function getDateFormatter(?int $datetype = null, ?int $timetype = null, $timezone = null, ?int $calendar = \IntlDateFormatter::GREGORIAN, ?string $pattern = null): \IntlDateFormatter
+    {
+        // check values
+        $pattern = $pattern ?: '';
+        $datetype = $datetype ?: self::getDateType();
+        $timetype = $timetype ?: self::getTimeType();
+
+        /** @var \IntlDateFormatter $formatter */
+        $formatter = \IntlDateFormatter::create(\Locale::getDefault(), $datetype, $timetype, $timezone, $calendar, $pattern);
+        $formatter->setLenient(true);
+
+        // check if year pattern is present within 4 digits
+        $pattern = $formatter->getPattern();
+        if (false === \strpos($pattern, 'yyyy') && false !== \strpos($pattern, 'yy')) {
+            $pattern = \str_replace('yy', 'yyyy', $pattern);
+            $formatter->setPattern($pattern);
+        }
+
+        return $formatter;
+    }
+
+    /**
+     * Gets the date type format.
      *
      * @return int type of date formatting, one of the format type constants
      */
@@ -34,51 +178,79 @@ final class FormatUtils
     }
 
     /**
-     * Gets the default decimal separator for the current locale.
+     * Gets the decimal separator for the current locale.
      *
      * @return string the decimal separator
      */
     public static function getDecimal(): string
     {
-        $locale = \Locale::getDefault();
-
-        // special case for Swiss French
-        if ('fr_CH' === $locale) {
-            return SeparatorType::PERIOD_CHAR;
+        static $decimal;
+        if ($decimal) {
+            return $decimal;
         }
 
-        $formatter = \NumberFormatter::create($locale, \NumberFormatter::DECIMAL);
+        // special case for Swiss French
+        $locale = \Locale::getDefault();
+        if ('fr_CH' === $locale) {
+            $decimal = '.';
+        } else {
+            /** @var \NumberFormatter $formatter */
+            $formatter = \NumberFormatter::create($locale, \NumberFormatter::DECIMAL);
+            $decimal = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
+        }
 
-        return $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
+        return $decimal;
     }
 
     /**
-     * Gets the default grouping separator for the current locale.
+     * Gets the grouping separator for the current locale.
      *
      * @return string the grouping separator
      */
     public static function getGrouping(): string
     {
-        $locale = \Locale::getDefault();
+        static $grouping;
+        if ($grouping) {
+            return $grouping;
+        }
 
         // special case for Swiss French
+        $locale = \Locale::getDefault();
         if ('fr_CH' === $locale) {
-            return SeparatorType::QUOTE_CHAR;
+            $grouping = '\'';
+        } else {
+            /** @var \NumberFormatter $formatter */
+            $formatter = \NumberFormatter::create($locale, \NumberFormatter::DECIMAL);
+            $grouping = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
         }
-
-        $formatter = \NumberFormatter::create($locale, \NumberFormatter::DECIMAL);
-        $symbol = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
 
         // special case when space is in 2 characters
-        if (2 === \strlen($symbol) && 194 === \ord($symbol[0]) && 160 === \ord($symbol[1])) {
-            $symbol = SeparatorType::SPACE_CHAR;
+        if (2 === \strlen($grouping) && 194 === \ord($grouping[0]) && 160 === \ord($grouping[1])) {
+            $grouping = ' ';
         }
 
-        return $symbol;
+        return $grouping;
     }
 
     /**
-     * Gets the default time type format.
+     * Gets a number formatter for the current locale.
+     *
+     * @param int $style  the style of the formatter
+     * @param int $digits the number of fraction digits
+     */
+    public static function getNumberFormatter(int $style, int $digits): \NumberFormatter
+    {
+        /** @var \NumberFormatter $formatter */
+        $formatter = \NumberFormatter::create(\Locale::getDefault(), $style);
+        $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $digits);
+        $formatter->setSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL, self::getGrouping());
+        $formatter->setSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL, self::getDecimal());
+
+        return $formatter;
+    }
+
+    /**
+     * Gets the time type format.
      *
      * @return int type of time formatting, one of the format type constants
      */

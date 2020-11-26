@@ -15,9 +15,8 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\AbstractEntity;
-use App\Service\ApplicationService;
-use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
+use App\Util\FormatUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -34,7 +33,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class PlainType extends AbstractType
 {
-    use FormatterTrait;
     use TranslatorTrait;
 
     /**
@@ -95,10 +93,9 @@ class PlainType extends AbstractType
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, ApplicationService $application)
+    public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
-        $this->application = $application;
     }
 
     /**
@@ -220,10 +217,10 @@ class PlainType extends AbstractType
         $calendar = $this->getCalendarFormat($options);
         $timezone = $this->getOptionString($options, 'time_zone');
         $pattern = $this->getOptionString($options, 'date_pattern');
-        $datetype = $this->getOptionInt($options, 'date_format', $this->getDefaultDateType());
-        $timetype = $this->getOptionInt($options, 'time_format', $this->getDefaultTimeType());
+        $datetype = $this->getOptionInt($options, 'date_format', FormatUtils::getDateType());
+        $timetype = $this->getOptionInt($options, 'time_format', FormatUtils::getTimeType());
 
-        return $this->localeDateTime($value, $datetype, $timetype, $timezone, $calendar, $pattern);
+        return FormatUtils::formatDateTime($value, $datetype, $timetype, $timezone, $calendar, $pattern);
     }
 
     /**
@@ -239,13 +236,13 @@ class PlainType extends AbstractType
         $type = $this->getOptionString($options, 'number_pattern', '');
         switch ($type) {
             case self::NUMBER_IDENTIFIER:
-                return $this->localeId($value);
+                return FormatUtils::formatId($value);
             case self::NUMBER_INTEGER:
-                return $this->localeInt($value);
+                return FormatUtils::formatInt($value);
             case self::NUMBER_PERCENT:
-                return $this->localePercent($value, true);
+                return FormatUtils::formatPercent($value, true);
             case self::NUMBER_AMOUNT:
-                return $this->localeAmount($value);
+                return FormatUtils::formatAmount($value);
             default:
                 return (string) $value;
         }

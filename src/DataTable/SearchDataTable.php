@@ -19,9 +19,9 @@ use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Interfaces\EntityVoterInterface;
 use App\Security\EntityVoter;
-use App\Service\ApplicationService;
 use App\Service\SearchService;
 use App\Traits\TranslatorTrait;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
@@ -99,16 +99,15 @@ class SearchDataTable extends AbstractDataTable
     /**
      * Constructor.
      *
-     * @param ApplicationService            $application the application to get parameters
-     * @param SessionInterface              $session     the session to save/retrieve user parameters
-     * @param DataTablesInterface           $datatables  the datatables to handle request
-     * @param SearchService                 $service     the service to search entities
-     * @param AuthorizationCheckerInterface $checker     the authorization checker to get user rights
-     * @param TranslatorInterface           $translator  the service to translate messages
+     * @param SessionInterface              $session    the session to save/retrieve user parameters
+     * @param DataTablesInterface           $datatables the datatables to handle request
+     * @param SearchService                 $service    the service to search entities
+     * @param AuthorizationCheckerInterface $checker    the authorization checker to get user rights
+     * @param TranslatorInterface           $translator the service to translate messages
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
     {
-        parent::__construct($application, $session, $datatables);
+        parent::__construct($session, $datatables);
         $this->service = $service;
         $this->checker = $checker;
         $this->translator = $translator;
@@ -301,7 +300,7 @@ class SearchDataTable extends AbstractDataTable
             $content = $item[SearchService::COLUMN_CONTENT];
             switch ("{$type}.{$field}") {
                 case 'Calculation.id':
-                    $content = $this->localeId((int) $content);
+                    $content = FormatUtils::formatId((int) $content);
                     break;
                 case 'Calculation.overallTotal':
                 case 'Product.price':

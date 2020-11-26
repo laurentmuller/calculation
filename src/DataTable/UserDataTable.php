@@ -21,7 +21,7 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
-use App\Service\ApplicationService;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 use DataTables\DataTablesInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -55,7 +55,6 @@ class UserDataTable extends AbstractEntityDataTable
     /**
      * Constructor.
      *
-     * @param ApplicationService  $application the application to get parameters
      * @param SessionInterface    $session     the session to save/retrieve user parameters
      * @param DataTablesInterface $datatables  the datatables to handle request
      * @param UserRepository      $repository  the repository to get entities
@@ -63,9 +62,9 @@ class UserDataTable extends AbstractEntityDataTable
      * @param TranslatorInterface $translator  the service to translate messages
      * @param Security            $security    the service to get current user role
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, UserRepository $repository, Environment $environment, TranslatorInterface $translator, Security $security)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, UserRepository $repository, Environment $environment, TranslatorInterface $translator, Security $security)
     {
-        parent::__construct($application, $session, $datatables, $repository, $environment);
+        parent::__construct($session, $datatables, $repository, $environment);
         $this->translator = $translator;
 
         // check if current user has the super admin role
@@ -119,7 +118,7 @@ class UserDataTable extends AbstractEntityDataTable
             return $this->translator->trans('common.value_none');
         }
 
-        return $this->localeDateTime($date);
+        return FormatUtils::formatDateTime($date);
     }
 
     /**

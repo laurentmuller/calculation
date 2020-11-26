@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
+use App\Util\FormatUtils;
 use App\Util\Utils;
 
 /**
@@ -55,7 +56,7 @@ class Day extends CalendarItem implements WeekDaysInterface
     {
         $name = Utils::getShortName($this);
 
-        return \sprintf('%s(%s)', $name, $this->localeDate($this->date));
+        return \sprintf('%s(%s)', $name, FormatUtils::formatDate($this->date));
     }
 
     /**
@@ -248,7 +249,7 @@ class Day extends CalendarItem implements WeekDaysInterface
             'day' => $this->getNumber(),
             'name' => $this->getName(),
             'shortName' => $this->getShortName(),
-            'date' => $this->localeDate($this->date),
+            'date' => FormatUtils::formatDate($this->date),
         ];
     }
 }

@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
-use App\Traits\DateFormatterTrait;
+use App\Util\FormatUtils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -34,8 +34,6 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class OpenWeatherService extends HttpClientService
 {
-    use DateFormatterTrait;
-
     /**
      * The database name.
      */
@@ -647,25 +645,25 @@ class OpenWeatherService extends HttpClientService
                     break;
 
                 case 'dt':
-                    $result['dt_date'] = $this->localeDate($value, self::TYPE_SHORT);
-                    $result['dt_date_locale'] = $this->localeDate($value, self::TYPE_SHORT, $timezone);
+                    $result['dt_date'] = FormatUtils::formatDate($value, self::TYPE_SHORT);
+                    $result['dt_date_locale'] = FormatUtils::formatDate($value, self::TYPE_SHORT, $timezone);
 
-                    $result['dt_time'] = $this->localeTime($value, self::TYPE_SHORT);
-                    $result['dt_time_locale'] = $this->localeTime($value, self::TYPE_SHORT, $timezone);
+                    $result['dt_time'] = FormatUtils::formatTime($value, self::TYPE_SHORT);
+                    $result['dt_time_locale'] = FormatUtils::formatTime($value, self::TYPE_SHORT, $timezone);
 
-                    $result['dt_date_time'] = $this->localeDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT);
-                    $result['dt_date_time_locale'] = $this->localeDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
+                    $result['dt_date_time'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT);
+                    $result['dt_date_time_locale'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
 
-                    $result['dt_date_time_medium'] = $this->localeDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT);
+                    $result['dt_date_time_medium'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT);
                     unset($result['dt_txt']);
                     break;
 
                 case 'sunrise':
-                    $result['sunrise_formatted'] = $this->localeTime($value, self::TYPE_SHORT, $timezone);
+                    $result['sunrise_formatted'] = FormatUtils::formatTime($value, self::TYPE_SHORT, $timezone);
                     break;
 
                 case 'sunset':
-                    $result['sunset_formatted'] = $this->localeTime($value, self::TYPE_SHORT, $timezone);
+                    $result['sunset_formatted'] = FormatUtils::formatTime($value, self::TYPE_SHORT, $timezone);
                     break;
 
                 case 'weather':

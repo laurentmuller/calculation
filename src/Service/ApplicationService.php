@@ -447,7 +447,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      *
      * @param Calculation|float $value the calculation or the margin to be tested
      *
-     * @return bool true if below the minimum
+     * @return bool true if below the minimum; false otherwise
      */
     public function isMarginBelow($value): bool
     {

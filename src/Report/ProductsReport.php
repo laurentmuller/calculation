@@ -18,6 +18,7 @@ use App\Controller\AbstractController;
 use App\Entity\Product;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 
 /**
@@ -171,7 +172,7 @@ class ProductsReport extends AbstractReport
                     ->add($product->getDescription())
                     ->add($product->getSupplier())
                     ->add($product->getUnit())
-                    ->add($this->localeAmount($product->getPrice()))
+                    ->add(FormatUtils::formatAmount($product->getPrice()))
                     ->endRow();
             }
         }
@@ -197,7 +198,7 @@ class ProductsReport extends AbstractReport
                 ->add($product->getSupplier())
                 ->add($product->getCategory()->getDescription())
                 ->add($product->getUnit())
-                ->add($this->localeAmount($product->getPrice()))
+                ->add(FormatUtils::formatAmount($product->getPrice()))
                 ->endRow();
         }
     }

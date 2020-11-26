@@ -25,6 +25,7 @@ use App\Pdf\PdfLine;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
@@ -313,7 +314,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         $index = \count($cards) - 1;
         foreach ($cards as $key => $value) {
             $columns[] = PdfColumn::center($key, 25);
-            $valCells[] = new PdfCell($this->localeInt($value));
+            $valCells[] = new PdfCell(FormatUtils::formatInt($value));
             $textCells[] = new PdfCell(Utils::capitalize($key));
 
             // add separator if not last
@@ -356,7 +357,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         foreach ($logs as $log) {
             $this->level = $log->getLevel();
             $table->startRow()
-                ->add($this->localeDateTime($log->getCreatedAt(), null, \IntlDateFormatter::MEDIUM))
+                ->add(FormatUtils::formatDateTime($log->getCreatedAt(), null, \IntlDateFormatter::MEDIUM))
                 ->add(Utils::capitalize($log->getLevel()))
                 ->add(Utils::capitalize($log->getChannel()))
                 ->add($this->getMessage($log))

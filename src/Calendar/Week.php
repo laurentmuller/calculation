@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
+use App\Util\FormatUtils;
 use App\Util\Utils;
 
 /**
@@ -62,8 +63,8 @@ class Week extends CalendarItem
     public function __toString(): string
     {
         $name = Utils::getShortName($this);
-        $first = $this->localeDate($this->getFirstDate());
-        $last = $this->localeDate($this->getLastDate());
+        $first = FormatUtils::formatDate($this->getFirstDate());
+        $last = FormatUtils::formatDate($this->getLastDate());
 
         return \sprintf('%s(%d-%d, %s - %s)',
             $name, $this->getNumber(), $this->getYear(), $first, $last);
@@ -161,8 +162,8 @@ class Week extends CalendarItem
     {
         return [
             'week' => $this->getNumber(),
-            'startDate' => $this->localeDate($this->getFirstDate()),
-            'endDate' => $this->localeDate($this->getLastDate()),
+            'startDate' => FormatUtils::formatDate($this->getFirstDate()),
+            'endDate' => FormatUtils::formatDate($this->getLastDate()),
             'days' => $this->days,
         ];
     }

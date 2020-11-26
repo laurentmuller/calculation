@@ -84,25 +84,8 @@
                 {{ form_row(form.display_tabular) }}
             </div>
         </div>
-        {% if super_admin %}
-        <div class="form-row ml-2">
-            <div class="col-md-6">
-                {{ form_row(form.date_format) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_row(form.time_format) }}
-            </div>
-        </div>
-        <div class="form-row ml-2">
-            <div class="col-md-6">
-                {{ form_row(form.grouping_separator) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_row(form.decimal_separator) }}
-            </div>
-        </div>
-        {% endif %}
     </div>
+    
     {% if super_admin %}
     {{ _self.collapseLine('security') }}
     <div class="toggle-icon collapse" id="security" data-parent="#parent_accordion">
@@ -114,10 +97,11 @@
                 {{ form_row(form.minstrength) }}
             </div>
         </div>
-        <label class="horizontal-line font-weight-bold">{{ 'parameters.group_password'|trans }}</label>
-        <div class="ml-2">
-            {{ form_rest(form) }}
-        </div>    
+        
+            <label class="horizontal-line font-weight-bold">{{ 'parameters.group_password'|trans }}</label>
+            <div class="ml-2">
+                {{ form_rest(form) }}
+            </div>
     </div>
     {% endif %}
 </div>

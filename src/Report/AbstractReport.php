@@ -16,9 +16,9 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\PdfDocument;
-use App\Traits\FormatterTrait;
 use App\Traits\TranslatorTrait;
 use App\Twig\FormatExtension;
+use App\Util\FormatUtils;
 
 /**
  * Abstract report.
@@ -27,7 +27,6 @@ use App\Twig\FormatExtension;
  */
 abstract class AbstractReport extends PdfDocument
 {
-    use FormatterTrait;
     use TranslatorTrait;
 
     /**
@@ -50,14 +49,15 @@ abstract class AbstractReport extends PdfDocument
         parent::__construct($orientation, $unit, $size);
 
         $this->translator = $controller->getTranslator();
-        $this->application = $controller->getApplication();
 
+        $application = $controller->getApplication();
         $appName = $controller->getApplicationName();
+
         $this->SetCreator($appName);
         $this->setApplicationName($appName)
             ->setOwnerUrl($controller->getApplicationOwnerUrl())
-            ->setCompany($this->application->getCustomerName())
-            ->setCompanyUrl($this->application->getCustomerUrl());
+            ->setCompanyUrl($application->getCustomerUrl())
+            ->setCompany($application->getCustomerName());
 
         $userName = $controller->getUserName();
         if (null !== $userName) {
@@ -84,7 +84,7 @@ abstract class AbstractReport extends PdfDocument
     public function getExtension(): FormatExtension
     {
         if (null === $this->extension) {
-            $this->extension = new FormatExtension($this->translator, $this->application);
+            $this->extension = new FormatExtension($this->translator);
         }
 
         return $this->extension;
@@ -150,6 +150,6 @@ abstract class AbstractReport extends PdfDocument
      */
     protected function translateCount(int $count): string
     {
-        return $this->trans('common.count', ['%count%' => $this->localeInt($count)]);
+        return $this->trans('common.count', ['%count%' => FormatUtils::formatInt($count)]);
     }
 }

@@ -17,6 +17,7 @@ namespace App\Controller;
 use App\DataTable\CalculationBelowDataTable;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
+use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,7 +78,7 @@ class BelowCalculationController extends AbstractController
             return  $this->redirectToHomePage();
         }
 
-        $percent = $this->localePercent($minMargin);
+        $percent = FormatUtils::formatPercent($minMargin);
         $description = $this->trans('below.description', ['%margin%' => $percent]);
 
         $report = new CalculationsReport($this);
@@ -102,7 +103,7 @@ class BelowCalculationController extends AbstractController
 
         // get values
         $margin = $this->getApplication()->getMinMargin();
-        $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => $this->localePercent($margin)]);
+        $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => FormatUtils::formatPercent($margin)]);
 
         $attributes = [
             'min_margin' => $margin,

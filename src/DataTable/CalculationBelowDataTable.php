@@ -15,8 +15,13 @@ declare(strict_types=1);
 namespace App\DataTable;
 
 use App\Repository\AbstractRepository;
+use App\Repository\CalculationRepository;
+use App\Service\ApplicationService;
+use DataTables\DataTablesInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Twig\Environment;
 
 /**
  * Data table handler for calculation with margin below the minimum.
@@ -29,6 +34,28 @@ class CalculationBelowDataTable extends CalculationDataTable
      * The datatable identifier.
      */
     public const ID = 'Calculation.below';
+
+    /**
+     * The application service.
+     *
+     * @var ApplicationService
+     */
+    private $application;
+
+    /**
+     * Constructor.
+     *
+     * @param SessionInterface      $session     the session to save/retrieve user parameters
+     * @param DataTablesInterface   $datatables  the datatables to handle request
+     * @param CalculationRepository $repository  the repository to get entities
+     * @param Environment           $environment the Twig environment to render actions cells
+     * @param ApplicationService    $application the application to get parameters
+     */
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment, ApplicationService $application)
+    {
+        parent::__construct($session, $datatables, $repository, $environment);
+        $this->application = $application;
+    }
 
     /**
      * {@inheritdoc}

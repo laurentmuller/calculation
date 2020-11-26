@@ -19,6 +19,7 @@ use App\Entity\Category;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 
 /**
@@ -154,7 +155,7 @@ class CategoriesReport extends AbstractReport
         $table->startRow()
             ->add($category->getCode(), 1, $codeStyle)
             ->add($category->getDescription())
-            ->add($this->localeInt($category->countProducts()));
+            ->add(FormatUtils::formatInt($category->countProducts()));
 
         if ($category->hasMargins()) {
             $skip = false;
@@ -166,9 +167,9 @@ class CategoriesReport extends AbstractReport
                         ->add('')
                         ->add('');
                 }
-                $table->add($this->localeAmount($margin->getMinimum()))
-                    ->add($this->localeAmount($margin->getMaximum()))
-                    ->add($this->localePercent($margin->getMargin(), false))
+                $table->add(FormatUtils::formatAmount($margin->getMinimum()))
+                    ->add(FormatUtils::formatAmount($margin->getMaximum()))
+                    ->add(FormatUtils::formatPercent($margin->getMargin(), false))
                     ->endRow();
                 $skip = true;
             }

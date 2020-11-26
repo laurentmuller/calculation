@@ -32,6 +32,7 @@ use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\CalculationService;
+use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -305,7 +306,7 @@ class CalculationController extends AbstractEntityController
                     // rows
                     foreach ($dataset as $row) {
                         // convert
-                        $row['calculation_date'] = $this->localeDate($row['calculation_date']);
+                        $row['calculation_date'] = FormatUtils::formatDate($row['calculation_date']);
                         $row['calculation_overall_margin'] = \round($row['calculation_overall_margin'], 3);
                         $row['item_total'] = \round($row['item_total'], 2);
 
@@ -407,7 +408,7 @@ class CalculationController extends AbstractEntityController
         if (!$request->isXmlHttpRequest()) {
             // attributes
             $margin = $this->getApplication()->getMinMargin();
-            $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => $this->localePercent($margin)]);
+            $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => FormatUtils::formatPercent($margin)]);
             $attributes = [
                 'min_margin' => $margin,
                 'min_margin_text' => $margin_text,

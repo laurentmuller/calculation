@@ -70,7 +70,7 @@ class ChartController extends AbstractController
      */
     private function createChart($init_options = true): Basechart
     {
-        $chart = new Basechart($this->getApplication());
+        $chart = new Basechart();
         if ($init_options) {
             $chart->initLangOptions();
         }

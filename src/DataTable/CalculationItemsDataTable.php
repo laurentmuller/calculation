@@ -17,7 +17,7 @@ namespace App\DataTable;
 use App\DataTable\Model\AbstractDataTable;
 use App\DataTable\Model\DataColumnFactory;
 use App\Repository\CalculationRepository;
-use App\Service\ApplicationService;
+use App\Util\FormatUtils;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
 use DataTables\DataTablesInterface;
@@ -54,15 +54,14 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
     /**
      * Constructor.
      *
-     * @param ApplicationService    $application the application to get parameters
      * @param SessionInterface      $session     the session to save/retrieve user parameters
      * @param DataTablesInterface   $datatables  the datatables to handle request
      * @param CalculationRepository $repository  the repository to get entities
      * @param Environment           $environment the Twig environment to render actions cells
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment)
     {
-        parent::__construct($application, $session, $datatables);
+        parent::__construct($session, $datatables);
         $this->repository = $repository;
         $this->environment = $environment;
     }
@@ -86,7 +85,7 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
      */
     public function dateFormatter(\DateTimeInterface $date): string
     {
-        return $this->localeDate($date);
+        return FormatUtils::formatDate($date);
     }
 
     /**
@@ -106,7 +105,7 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
      */
     public function idFormatter(int $id): string
     {
-        return $this->localeId($id);
+        return FormatUtils::formatId($id);
     }
 
     /**

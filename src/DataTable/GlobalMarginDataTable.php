@@ -19,7 +19,7 @@ use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\GlobalMargin;
 use App\Repository\GlobalMarginRepository;
-use App\Service\ApplicationService;
+use App\Util\FormatUtils;
 use DataTables\DataTablesInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
@@ -39,15 +39,14 @@ class GlobalMarginDataTable extends AbstractEntityDataTable
     /**
      * Constructor.
      *
-     * @param ApplicationService     $application the application to get parameters
      * @param SessionInterface       $session     the session to save/retrieve user parameters
      * @param DataTablesInterface    $datatables  the datatables to handle request
      * @param GlobalMarginRepository $repository  the repository to get entities
      * @param Environment            $environment the Twig environment to render actions cells
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, GlobalMarginRepository $repository, Environment $environment)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, GlobalMarginRepository $repository, Environment $environment)
     {
-        parent::__construct($application, $session, $datatables, $repository, $environment);
+        parent::__construct($session, $datatables, $repository, $environment);
     }
 
     /**
@@ -59,7 +58,7 @@ class GlobalMarginDataTable extends AbstractEntityDataTable
      */
     public function amountFormatter(float $value): string
     {
-        return $this->localeAmount($value);
+        return FormatUtils::formatAmount($value);
     }
 
     /**
@@ -71,7 +70,7 @@ class GlobalMarginDataTable extends AbstractEntityDataTable
      */
     public function percentFormatter(float $number): string
     {
-        return $this->localePercent($number);
+        return FormatUtils::formatPercent($number);
     }
 
     /**

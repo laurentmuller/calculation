@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace App\DataTable;
 
 use App\Repository\CalculationRepository;
-use App\Service\ApplicationService;
 use App\Traits\MathTrait;
 use DataTables\DataTablesInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -53,16 +52,15 @@ class CalculationEmptyDataTable extends CalculationItemsDataTable
     /**
      * Constructor.
      *
-     * @param ApplicationService    $application the application to get parameters
      * @param SessionInterface      $session     the session to save/retrieve user parameters
      * @param DataTablesInterface   $datatables  the datatables to handle request
      * @param CalculationRepository $repository  the repository to get entities
      * @param Environment           $environment the Twig environment to render actions cells
      * @param TranslatorInterface   $translator  the service to translate messages
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment, TranslatorInterface $translator)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment, TranslatorInterface $translator)
     {
-        parent::__construct($application, $session, $datatables, $repository, $environment);
+        parent::__construct($session, $datatables, $repository, $environment);
         $this->priceLabel = $translator->trans('calculationitem.fields.price');
         $this->quantityLabel = $translator->trans('calculationitem.fields.quantity');
     }

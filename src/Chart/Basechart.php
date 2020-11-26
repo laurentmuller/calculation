@@ -14,9 +14,8 @@ declare(strict_types=1);
 
 namespace App\Chart;
 
-use App\Service\ApplicationService;
-use App\Traits\FormatterTrait;
 use App\Util\DateUtils;
+use App\Util\FormatUtils;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 
 /**
@@ -33,8 +32,6 @@ use Ob\HighchartsBundle\Highcharts\Highchart;
  */
 class Basechart extends Highchart
 {
-    use FormatterTrait;
-
     /**
      * The identifier (#id) of the div where to render the chart.
      */
@@ -63,10 +60,9 @@ class Basechart extends Highchart
     /**
      * Constructor.
      */
-    public function __construct(ApplicationService $application)
+    public function __construct()
     {
         parent::__construct();
-        $this->application = $application;
         $this->hideCredits();
         $this->chart->renderTo(self::CONTAINER);
         $this->style(['fontFamily' => 'var(--font-family-sans-serif)']);
@@ -112,8 +108,8 @@ class Basechart extends Highchart
             ->setLangOption('shortWeekdays', \array_values(DateUtils::getShortWeekdays()));
 
         // format options
-        $this->setLangOption('thousandsSep', $this->getDefaultGrouping())
-            ->setLangOption('decimalPoint', $this->getDefaultDecimal());
+        $this->setLangOption('thousandsSep', FormatUtils::getGrouping())
+            ->setLangOption('decimalPoint', FormatUtils::getDecimal());
 
         return $this;
     }

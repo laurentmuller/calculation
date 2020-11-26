@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Calendar;
 
 use App\Util\DateUtils;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 
 /**
@@ -142,8 +143,8 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
         $name = Utils::getShortName($this);
         $firstDate = new \DateTime('1 January ' . $this->year);
         $lastDate = new \DateTime('31 December ' . $this->year);
-        $first = $this->localeDate($firstDate);
-        $last = $this->localeDate($lastDate);
+        $first = FormatUtils::formatDate($firstDate);
+        $last = FormatUtils::formatDate($lastDate);
 
         return \sprintf('%s(%d, %s - %s)',
             $name, $this->getNumber(), $first, $last);
@@ -394,8 +395,8 @@ class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterfac
     {
         return [
             'year' => $this->year,
-            'startDate' => $this->localeDate($this->getFirstDate()),
-            'endDate' => $this->localeDate($this->getLastDate()),
+            'startDate' => FormatUtils::formatDate($this->getFirstDate()),
+            'endDate' => FormatUtils::formatDate($this->getLastDate()),
         ];
     }
 

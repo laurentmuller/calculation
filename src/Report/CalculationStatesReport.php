@@ -24,6 +24,7 @@ use App\Pdf\PdfFillColor;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 
 /**
@@ -130,7 +131,7 @@ class CalculationStatesReport extends AbstractReport implements PdfCellListenerI
                 ->add($state->getDescription())
                 ->add($this->booleanFilter($state->isEditable()))
                 ->add(null, 1, $this->getColorStyle($state))
-                ->add($this->localeInt($state->countCalculations()))
+                ->add(FormatUtils::formatInt($state->countCalculations()))
                 ->endRow();
         }
 

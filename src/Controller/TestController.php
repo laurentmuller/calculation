@@ -30,6 +30,7 @@ use App\Service\SwissPostService;
 use App\Service\ThemeService;
 use App\Translator\TranslatorFactory;
 use App\Util\DateUtils;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 use App\Validator\Captcha;
 use App\Validator\Password;
@@ -233,7 +234,7 @@ class TestController extends AbstractController
                         if (\is_array($value)) {
                             $value = \implode('<br>', $value);
                         } elseif ('challenge_ts' === $key && -1 !== $time = \strtotime($value)) {
-                            $value = $this->localeDateTime($time, null, \IntlDateFormatter::MEDIUM);
+                            $value = FormatUtils::formatDateTime($time, null, \IntlDateFormatter::MEDIUM);
                         }
                         $html .= "<tr><td>{$key}<td><td>:</td><td>{$value}</td></tr>";
                     }
@@ -327,7 +328,7 @@ class TestController extends AbstractController
         $from = DateUtils::sub($to, $interval);
         $calculations = $repository->getByInterval($from, $to);
         $data = Utils::groupBy($calculations, function (Calculation $c) {
-            return $this->localeDate($c->getDate(), \IntlDateFormatter::LONG);
+            return FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG);
         });
 
         $today = new \DateTime('today');
@@ -453,7 +454,7 @@ class TestController extends AbstractController
             $content = $row[SearchService::COLUMN_CONTENT];
             switch ("{$type}.{$field}") {
                 case 'calculation.id':
-                    $content = $this->localeId((int) $content);
+                    $content = FormatUtils::formatId((int) $content);
                     break;
                 case 'calculation.overallTotal':
                 case 'product.price':

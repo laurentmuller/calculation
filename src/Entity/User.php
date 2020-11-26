@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\RoleInterface;
-use App\Traits\DateFormatterTrait;
 use App\Traits\RightsTrait;
+use App\Util\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -36,7 +36,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class User extends AbstractEntity implements UserInterface, RoleInterface, ResetPasswordRequestInterface
 {
-    use DateFormatterTrait;
     use RightsTrait;
 
     /**
@@ -562,7 +561,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
         return [
             $this->email,
             $this->username,
-            $this->localeDateTime($this->lastLogin),
+            FormatUtils::formatDateTime($this->lastLogin),
         ];
     }
 }

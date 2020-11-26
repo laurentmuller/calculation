@@ -20,6 +20,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
+use App\Util\FormatUtils;
 
 /**
  * Report for a calculation.
@@ -127,7 +128,7 @@ class CalculationReport extends AbstractReport
         if ($calculation->isNew()) {
             $this->setTitleTrans('calculation.add.title');
         } else {
-            $id = $this->localeId($calculation->getId());
+            $id = FormatUtils::formatId($calculation->getId());
             $this->setTitleTrans('calculation.edit.title', ['%id%' => $id], true);
         }
 
@@ -147,7 +148,7 @@ class CalculationReport extends AbstractReport
         ];
 
         $state = $c->getStateCode();
-        $date = $this->localeDate($c->getDate());
+        $date = FormatUtils::formatDate($c->getDate());
         $style = PdfStyle::getHeaderStyle()->setFontRegular()
             ->setBorder('tbr');
 
@@ -196,20 +197,20 @@ class CalculationReport extends AbstractReport
         // global margin
         $table->startRow()
             ->add($this->trans('calculation.fields.globalMargin'), 2)
-            ->add($this->localePercent($globalMargin))
-            ->add($this->localeAmount($globalAmount), 2)
+            ->add(FormatUtils::formatPercent($globalMargin))
+            ->add(FormatUtils::formatAmount($globalAmount), 2)
             ->endRow();
 
         // user margin
         if (!empty($userMargin)) {
             $table->startHeaderRow()
                 ->add($this->trans('calculation.fields.totalNet'), 4)
-                ->add($this->localeAmount($totalNet))
+                ->add(FormatUtils::formatAmount($totalNet))
                 ->endRow();
             $table->startRow()
                 ->add($this->trans('calculation.fields.userMargin'), 2)
-                ->add($this->localePercent($userMargin))
-                ->add($this->localeAmount($userAmount), 2)
+                ->add(FormatUtils::formatPercent($userMargin))
+                ->add(FormatUtils::formatAmount($userAmount), 2)
                 ->endRow();
         }
 
@@ -222,10 +223,10 @@ class CalculationReport extends AbstractReport
         // overall margin and amouts
         $table->startHeaderRow()
             ->add($this->trans('calculation.fields.overallTotal'))
-            ->add($this->localeAmount($totalItems))
-            ->add($this->localePercent($c->getOverallMargin()), 1, $style)
-            ->add($this->localeAmount($c->getOverallMarginAmount()))
-            ->add($this->localeAmount($c->getOverallTotal()))
+            ->add(FormatUtils::formatAmount($totalItems))
+            ->add(FormatUtils::formatPercent($c->getOverallMargin()), 1, $style)
+            ->add(FormatUtils::formatAmount($c->getOverallMarginAmount()))
+            ->add(FormatUtils::formatAmount($c->getOverallTotal()))
             ->endRow();
     }
 }

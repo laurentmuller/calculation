@@ -20,7 +20,7 @@ use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Repository\CategoryRepository;
-use App\Service\ApplicationService;
+use App\Util\FormatUtils;
 use DataTables\DataTablesInterface;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -41,15 +41,14 @@ class CategoryDataTable extends AbstractEntityDataTable
     /**
      * Constructor.
      *
-     * @param ApplicationService  $application the application to get parameters
      * @param SessionInterface    $session     the session to save/retrieve user parameters
      * @param DataTablesInterface $datatables  the datatables to handle request
      * @param CategoryRepository  $repository  the repository to get entities
      * @param Environment         $environment the Twig environment to render cells
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CategoryRepository $repository, Environment $environment)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, CategoryRepository $repository, Environment $environment)
     {
-        parent::__construct($application, $session, $datatables, $repository, $environment);
+        parent::__construct($session, $datatables, $repository, $environment);
     }
 
     /**
@@ -61,7 +60,7 @@ class CategoryDataTable extends AbstractEntityDataTable
      */
     public function maginsFormatter(Collection $margins): string
     {
-        return $this->localeInt(\count($margins));
+        return FormatUtils::formatInt(\count($margins));
     }
 
     /**

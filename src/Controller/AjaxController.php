@@ -26,6 +26,7 @@ use App\Service\SwissPostService;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
 use App\Util\DatabaseInfo;
+use App\Util\FormatUtils;
 use App\Util\SymfonyUtils;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
@@ -874,7 +875,7 @@ class AjaxController extends AbstractController
     {
         $date = \DateTime::createFromFormat('m/Y', $date);
         if (false !== $date) {
-            return $this->localeDate($date->modify('last day of this month 23:59:59'));
+            return FormatUtils::formatDate($date->modify('last day of this month 23:59:59'));
         }
 
         return 'Unknown';

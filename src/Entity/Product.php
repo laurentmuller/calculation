@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Traits\NumberFormatterTrait;
+use App\Util\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -28,8 +28,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Product extends AbstractEntity
 {
-    use NumberFormatterTrait;
-
     /**
      * The parent's category.
      *
@@ -223,7 +221,7 @@ class Product extends AbstractEntity
             $this->description,
             $this->unit,
             $this->supplier,
-            $this->localeAmount($this->price),
+            FormatUtils::formatAmount($this->price),
             $this->category->getCode(),
         ];
     }

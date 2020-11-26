@@ -19,6 +19,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
+use App\Util\FormatUtils;
 
 /**
  * Report for calculations with invalid items.
@@ -71,8 +72,8 @@ abstract class CalculationItemsTableReport extends AbstractReport
         // add
         foreach ($this->items as $item) {
             $table->startRow()
-                ->add($this->localeId($item['id']))
-                ->add($this->localeDate($item['date']))
+                ->add(FormatUtils::formatId($item['id']))
+                ->add(FormatUtils::formatDate($item['date']))
                 ->add($item['stateCode'])
                 ->add($item['customer'])
                 ->add($item['description'])

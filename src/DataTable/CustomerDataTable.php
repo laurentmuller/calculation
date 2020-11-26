@@ -19,7 +19,6 @@ use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Customer;
 use App\Repository\CustomerRepository;
-use App\Service\ApplicationService;
 use DataTables\DataTablesInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
@@ -39,15 +38,14 @@ class CustomerDataTable extends AbstractEntityDataTable
     /**
      * Constructor.
      *
-     * @param ApplicationService  $application the application to get parameters
      * @param SessionInterface    $session     the session to save/retrieve user parameters
      * @param DataTablesInterface $datatables  the datatables to handle request
      * @param CustomerRepository  $repository  the repository to get entities
      * @param Environment         $environment the Twig environment to render actions cells
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CustomerRepository $repository, Environment $environment)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, CustomerRepository $repository, Environment $environment)
     {
-        parent::__construct($application, $session, $datatables, $repository, $environment);
+        parent::__construct($session, $datatables, $repository, $environment);
     }
 
     /**

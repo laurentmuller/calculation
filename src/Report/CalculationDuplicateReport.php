@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Util\FormatUtils;
 
 /**
  * Report for calculations with duplicate items.
@@ -52,7 +53,7 @@ class CalculationDuplicateReport extends CalculationItemsReports
      */
     protected function formatItem(array $item): string
     {
-        $count = $this->localeInt($item['count']);
+        $count = FormatUtils::formatInt($item['count']);
 
         return \sprintf('%s (%s)', $item['description'], $count);
     }

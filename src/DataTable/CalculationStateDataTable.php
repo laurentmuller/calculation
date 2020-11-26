@@ -20,7 +20,6 @@ use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
-use App\Service\ApplicationService;
 use DataTables\DataTablesInterface;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -47,16 +46,15 @@ class CalculationStateDataTable extends AbstractEntityDataTable
     /**
      * Constructor.
      *
-     * @param ApplicationService         $application the application to get parameters
      * @param SessionInterface           $session     the session to save/retrieve user parameters
      * @param DataTablesInterface        $datatables  the datatables to handle request
      * @param CalculationStateRepository $repository  the repository to get entities
      * @param Environment                $environment the Twig environment to render cells
      * @param TranslatorInterface        $translator  the service to translate messages
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, CalculationStateRepository $repository, Environment $environment, TranslatorInterface $translator)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, CalculationStateRepository $repository, Environment $environment, TranslatorInterface $translator)
     {
-        parent::__construct($application, $session, $datatables, $repository, $environment);
+        parent::__construct($session, $datatables, $repository, $environment);
         $this->translator = $translator;
     }
 

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Traits\NumberFormatterTrait;
+use App\Util\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -25,8 +25,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 abstract class AbstractMargin extends AbstractEntity
 {
-    use NumberFormatterTrait;
-
     /**
      * The margin in percent (%).
      *
@@ -91,7 +89,7 @@ abstract class AbstractMargin extends AbstractEntity
      */
     public function getDisplay(): string
     {
-        return $this->localeAmount($this->getMinimum()) . ' - ' . $this->localeAmount($this->getMaximum());
+        return FormatUtils::formatAmount($this->getMinimum()) . ' - ' . FormatUtils::formatAmount($this->getMaximum());
     }
 
     /**

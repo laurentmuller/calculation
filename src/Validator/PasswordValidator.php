@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Validator;
 
 use App\Traits\MathTrait;
-use App\Traits\NumberFormatterTrait;
+use App\Util\FormatUtils;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
@@ -28,7 +28,6 @@ use ZxcvbnPhp\Zxcvbn;
 class PasswordValidator extends AbstractConstraintValidator
 {
     use MathTrait;
-    use NumberFormatterTrait;
 
     /**
      * The strength levels.
@@ -189,7 +188,7 @@ class PasswordValidator extends AbstractConstraintValidator
     {
         if ($constraint->pwned && $count = $this->getPasswordCount($value)) {
             $parameters = [
-                '{{count}}' => $this->localeInt($count),
+                '{{count}}' => FormatUtils::formatInt($count),
             ];
 
             return $this->addViolation('pwned', $value, $parameters);

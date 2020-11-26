@@ -20,13 +20,9 @@ use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
-use App\Traits\FormatterTrait;
-use App\Traits\TranslatorTrait;
-use App\Util\FormatUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type for application parameters.
@@ -35,9 +31,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ParametersType extends AbstractType implements ApplicationServiceInterface
 {
-    use FormatterTrait;
-    use TranslatorTrait;
-
     /**
      * The password options.
      */
@@ -51,6 +44,11 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     ];
 
     /**
+     * @var ApplicationService
+     */
+    private $application;
+
+    /**
      * @var bool
      */
     private $superAdmin = false;
@@ -58,9 +56,8 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     /**
      * Constructor.
      */
-    public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $application)
+    public function __construct(Security $security, ApplicationService $application)
     {
-        $this->translator = $translator;
         $this->application = $application;
         if ($user = $security->getUser()) {
             $this->superAdmin = $user instanceof RoleInterface && $user->isSuperAdmin();
@@ -85,36 +82,8 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         // flashbag
         $this->addFlashbagSection($helper);
 
-        // super admin fields
-        $this->addAdminSection($helper);
-
         // security
-        $this->addSecuritySection($helper);
-    }
-
-    private function addAdminSection(FormHelper $helper): void
-    {
         if ($this->superAdmin) {
-            // display
-            $helper->field(self::DATE_FORMAT)
-                ->updateOption('format', 'date')
-                ->updateAttribute('data-default', FormatUtils::getDateType())
-                ->add(DateTimeFormatType::class);
-
-            $helper->field(self::TIME_FORMAT)
-                ->updateOption('format', 'time')
-                ->updateAttribute('data-default', FormatUtils::getTimeType())
-                ->add(DateTimeFormatType::class);
-
-            $helper->field(self::GROUPING_SEPARATOR)
-                ->updateAttribute('data-default', FormatUtils::getGrouping())
-                ->add(GroupingSeparatorType::class);
-
-            $helper->field(self::DECIMAL_SEPARATOR)
-                ->updateAttribute('data-default', FormatUtils::getDecimal())
-                ->add(DecimalSeparatorType::class);
-
-            // security
             $this->addSecuritySection($helper);
         }
     }

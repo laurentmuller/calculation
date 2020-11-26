@@ -22,6 +22,7 @@ use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
@@ -165,7 +166,7 @@ class UsersReport extends AbstractReport
             return $this->trans('common.value_none');
         }
 
-        return $this->localeDateTime($date);
+        return FormatUtils::formatDateTime($date);
     }
 
     /**

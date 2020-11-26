@@ -20,6 +20,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
+use App\Util\FormatUtils;
 
 /**
  * Render the calculation groups and items.
@@ -78,7 +79,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
         foreach ($groups as $group) {
             $this->setGroupKey($group->getCode());
             foreach ($group->getItems() as $item) {
-                /** @phpstan-ignore-next-line */
+                /* @phpstan-ignore-next-line */
                 $this->startRow()
                     ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
                     ->add($item->getUnit())
@@ -93,7 +94,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
         $total = $calculation->getItemsTotal();
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.itemsTotal'), 4)
-            ->add($parent->localeAmount($total))
+            ->add(FormatUtils::formatAmount($total))
             ->endRow();
     }
 
@@ -118,7 +119,7 @@ class CalculationGroupTable extends PdfGroupTableBuilder
     {
         /** @var CalculationReport $parent */
         $parent = $this->parent;
-        $text = $parent->localeAmount($amount);
+        $text = FormatUtils::formatAmount($amount);
         $style = empty($amount) ? $errorStyle : null;
         $this->add($text, 1, $style);
 

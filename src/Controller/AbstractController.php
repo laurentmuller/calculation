@@ -22,7 +22,6 @@ use App\Pdf\PdfResponse;
 use App\Report\AbstractReport;
 use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
-use App\Traits\FormatterTrait;
 use App\Traits\TranslatorFlashMessageTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
@@ -43,13 +42,19 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 abstract class AbstractController extends BaseController
 {
-    use FormatterTrait;
     use TranslatorFlashMessageTrait;
 
     /**
      * The home page route.
      */
     public const HOME_PAGE = 'homepage';
+
+    /**
+     * The application service.
+     *
+     * @var ApplicationService
+     */
+    protected $application;
 
     /**
      * The URL generator service.

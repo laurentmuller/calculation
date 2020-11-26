@@ -22,6 +22,7 @@ use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
 use App\Traits\MathTrait;
+use App\Util\FormatUtils;
 
 /**
  * Report for the list of calculations.
@@ -111,9 +112,9 @@ class CalculationsReport extends AbstractReport
             ->setFixed(false);
         $table->startHeaderRow()
             ->add($text, $columns)
-            ->add($this->localeAmount($items))
-            ->add($this->localePercent($margins))
-            ->add($this->localeAmount($overall))
+            ->add(FormatUtils::formatAmount($items))
+            ->add(FormatUtils::formatPercent($margins))
+            ->add(FormatUtils::formatAmount($overall))
             ->endRow();
 
         return true;
@@ -252,8 +253,8 @@ class CalculationsReport extends AbstractReport
         $style = $this->getMarginStyle($c);
 
         $table->startRow()
-            ->add($this->localeId($c->getId()))
-            ->add($this->localeDate($c->getDate()));
+            ->add(FormatUtils::formatId($c->getId()))
+            ->add(FormatUtils::formatDate($c->getDate()));
 
         if (!$groupByState) {
             $table->add($c->getStateCode());
@@ -261,9 +262,9 @@ class CalculationsReport extends AbstractReport
 
         $table->add($c->getCustomer())
             ->add($c->getDescription())
-            ->add($this->localeAmount($c->getItemsTotal()))
-            ->add($this->localePercent($c->getOverallMargin()), 1, $style)
-            ->add($this->localeAmount($c->getOverallTotal()))
+            ->add(FormatUtils::formatAmount($c->getItemsTotal()))
+            ->add(FormatUtils::formatPercent($c->getOverallMargin()), 1, $style)
+            ->add(FormatUtils::formatAmount($c->getOverallTotal()))
             ->endRow();
     }
 }

@@ -17,7 +17,6 @@ namespace App\DataTable\Model;
 use App\Entity\AbstractEntity;
 use App\Repository\AbstractRepository;
 use App\Security\EntityVoter;
-use App\Service\ApplicationService;
 use DataTables\Column;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
@@ -65,15 +64,14 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     /**
      * Constructor.
      *
-     * @param ApplicationService  $application the application to get parameters
      * @param SessionInterface    $session     the session to save/retrieve user parameters
      * @param DataTablesInterface $datatables  the datatables to handle request
      * @param AbstractRepository  $repository  the repository to get entities
      * @param Environment         $environment the Twig environment to render actions cells
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables, AbstractRepository $repository, Environment $environment = null)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, AbstractRepository $repository, Environment $environment = null)
     {
-        parent::__construct($application, $session, $datatables);
+        parent::__construct($session, $datatables);
         $this->repository = $repository;
         $this->environment = $environment;
     }

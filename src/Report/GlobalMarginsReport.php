@@ -17,6 +17,7 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfTableBuilder;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 
 /**
@@ -75,9 +76,9 @@ class GlobalMarginsReport extends AbstractReport
         // margins
         foreach ($globalMargins as $margin) {
             $table->startRow()
-                ->add($this->localeAmount($margin->getMinimum()))
-                ->add($this->localeAmount($margin->getMaximum()))
-                ->add($this->localePercent($margin->getMargin()))
+                ->add(FormatUtils::formatAmount($margin->getMinimum()))
+                ->add(FormatUtils::formatAmount($margin->getMaximum()))
+                ->add(FormatUtils::formatPercent($margin->getMargin()))
                 ->endRow();
         }
 

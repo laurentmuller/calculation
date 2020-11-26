@@ -22,6 +22,7 @@ use App\Entity\Product;
 use App\Entity\User;
 use App\Service\CalculationService;
 use App\Service\FakerService;
+use App\Util\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Person;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -139,12 +140,12 @@ class GeneratorController extends AbstractController
         // serialize
         $calculations = \array_map(function (Calculation $c) {
             return [
-                    'id' => $this->localeId($c->getId()),
-                    'date' => $this->localeDate($c->getDate()),
+                    'id' => FormatUtils::formatId($c->getId()),
+                    'date' => FormatUtils::formatDate($c->getDate()),
                     'state' => $c->getStateCode(),
                     'description' => $c->getDescription(),
                     'customer' => $c->getCustomer(),
-                    'total' => $this->localeAmount($c->getOverallTotal()),
+                    'total' => FormatUtils::formatAmount($c->getOverallTotal()),
                 ];
         }, $calculations);
 

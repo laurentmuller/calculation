@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace App\DataTable\Model;
 
-use App\Service\ApplicationService;
-use App\Traits\FormatterTrait;
 use App\Traits\SessionTrait;
 use App\Util\Utils;
 use DataTables\AbstractDataTableHandler;
@@ -34,7 +32,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 abstract class AbstractDataTable extends AbstractDataTableHandler
 {
-    use FormatterTrait;
     use SessionTrait;
 
     /**
@@ -108,13 +105,11 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
     /**
      * Constructor.
      *
-     * @param ApplicationService  $application the application to get parameters
-     * @param SessionInterface    $session     the session to save/retrieve user parameters
-     * @param DataTablesInterface $datatables  the datatables to handle request
+     * @param SessionInterface    $session    the session to save/retrieve user parameters
+     * @param DataTablesInterface $datatables the datatables to handle request
      */
-    public function __construct(ApplicationService $application, SessionInterface $session, DataTablesInterface $datatables)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables)
     {
-        $this->application = $application;
         $this->session = $session;
         $this->datatables = $datatables;
     }

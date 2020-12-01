@@ -24,13 +24,15 @@
 {% block card_body %}
 {{ parent() }}
 {% if not item.empty %}
-{# items #}
+{%  set groups = item.getItemGroups() %}
+{# items groups #}
 <table class="table table-hover table-sm table-list mt-3" id="data-table-edit">
     <tbody>
-	{% for group in item.groups %}
+    {% for group in item.getItemGroups() %}
 		<tr>
 			<td class="font-weight-bold" colspan="5">{{ group.code }}</td>
 		</tr>
+        {# items #}        
 		{% for product in group.items %}
 			<tr>
     			<td class="pl-3">{{ product.description }}</td>
@@ -62,7 +64,7 @@
     </thead>
     <tbody>
         {# total by group #}
-        {% for group in item.groups %}
+        {% for group in item.getRootGroups() %}
             <tr>
                 <td>{{ group.code }}</td>
                 <td class="text-currency">{{ group.amount|amount }}</td>
@@ -112,7 +114,7 @@
                 <td class="font-weight-bold text-currency">{{ item.overallMargin|percent }}</td>
             {%- endif -%}
             <td class="font-weight-bold text-currency">{{ item.overallMarginAmount|amount }}</td>
-            <td class="text-currency">{{ item.overallTotal|amount }}</td>
+            <td class="font-weight-bold text-currency">{{ item.overallTotal|amount }}</td>
         </tr>
     </tbody>
 </table>
@@ -127,11 +129,11 @@
 {{ properties.property('calculation.fields.date', item.date|localedate) }}
 {{ properties.property('calculation.fields.state', item.stateCode|default('')) }}
 {% if item.createdAt %}
-    {% set created = item.createdAt|localedatetime ~ ' - ' ~ item.createdBy|default('calculation.edit.empty_user'|trans) -%}
+    {% set created = item.createdAt|localedatetime ~ ' - ' ~ item.createdBy|default('common.empty_user'|trans) -%}
     {{ properties.property('calculation.fields.created', created) }}
 {% endif %}
 {% if item.updatedAt %}
-    {% set updated = item.updatedAt|localedatetime ~ ' - ' ~ item.createdBy|default('calculation.edit.empty_user'|trans) -%}
+    {% set updated = item.updatedAt|localedatetime ~ ' - ' ~ item.createdBy|default('common.empty_user'|trans) -%}
     {{ properties.property('calculation.fields.updated', updated) }}
 {% endif %}
 {% if item.empty %}

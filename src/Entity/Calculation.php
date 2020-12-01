@@ -243,6 +243,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         if ($create) {
+            // parent category
+            $parent = $category->getParent();
+            if (null !== $parent) {
+                $this->findGroup($parent, true);
+            }
             $group = CalculationGroup::create($category);
             $this->addGroup($group);
 
@@ -368,7 +373,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Get groups.
      *
-     * @return Collection|CalculationGroup[]
+     * @return CalculationGroup[]|Collection
      */
     public function getGroups(): Collection
     {
@@ -376,12 +381,12 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the total amount of all groups.
+     * Gets the total amount of all root groups.
      */
     public function getGroupsAmount(): float
     {
         $total = 0;
-        foreach ($this->groups as $group) {
+        foreach ($this->getRootGroups() as $group) {
             $total += $group->getAmount();
         }
 
@@ -397,23 +402,23 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the margin of all groups.
+     * Gets the margin of all root groups.
      */
     public function getGroupsMargin(): float
     {
         $divisor = $this->getGroupsAmount();
         $dividend = $this->getGroupsMarginAmount();
 
-        return $this->safeDivide($dividend, $divisor);
+        return 1.0 + $this->safeDivide($dividend, $divisor);
     }
 
     /**
-     * Gets the total margin amount of all groups.
+     * Gets the total margin amount of all root groups.
      */
     public function getGroupsMarginAmount(): float
     {
         $total = 0;
-        foreach ($this->groups as $group) {
+        foreach ($this->getRootGroups() as $group) {
             $total += $group->getMarginAmount();
         }
 
@@ -421,17 +426,28 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the total of all groups.
-     * This is the sum of the amount and the margin amount of all groups.
+     * Gets the total of all root groups.
      */
     public function getGroupsTotal(): float
     {
         $total = 0;
-        foreach ($this->groups as $group) {
+        foreach ($this->getRootGroups() as $group) {
             $total += $group->getTotal();
         }
 
         return $total;
+    }
+
+    /**
+     * Get item groups.
+     *
+     * @return CalculationGroup[]|Collection
+     */
+    public function getItemGroups(): Collection
+    {
+        return $this->groups->filter(function (CalculationGroup $group) {
+            return !$group->isRootGroup();
+        });
     }
 
     /**
@@ -474,12 +490,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getOverallMargin(): float
     {
-        // items?
-        if (!empty($this->itemsTotal)) {
-            return ($this->overallTotal / $this->itemsTotal) - 1;
-        }
-
-        return 0;
+        return $this->safeDivide($this->overallTotal, $this->itemsTotal);
     }
 
     /**
@@ -500,6 +511,37 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function getOverallTotal(): float
     {
         return $this->overallTotal;
+    }
+
+    /**
+     * Get root groups.
+     *
+     * @return CalculationGroup[]|Collection
+     */
+    public function getRootGroups(): Collection
+    {
+        return $this->groups->filter(function (CalculationGroup $group) {
+            return $group->isRootGroup();
+        });
+    }
+
+    /**
+     * Gets sorted groups.
+     *
+     * @return CalculationGroup[]
+     */
+    public function getSortedGroups(): array
+    {
+        $result = [];
+        if (!$this->isEmpty()) {
+            foreach ($this->groups as $group) {
+                $key = $group->getParentCode('') . $group->getCode();
+                $result[$key] = $group;
+            }
+            \ksort($result, SORT_NATURAL);
+        }
+
+        return $result;
     }
 
     /**

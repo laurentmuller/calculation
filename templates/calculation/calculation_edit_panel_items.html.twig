@@ -23,7 +23,7 @@
 			<div class="col">
 				<table id="data-table-edit" class="table table-edit table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ groupIndex }}" data-item-index="{{ itemIndex }}" data-prototype="{{ macroGroups.printGroupRow(form.groups.vars.prototype, editable)|e }}"{% endif -%}>
 				{# groups and items #}
-                {% for group in form.groups %}
+                {% for group in form.groups|filter(g => g.vars.value.category.parent != null) %}
                     {{ macroGroups.printGroupRow(group, editable) }}
                 {% endfor %}
 				</table>
@@ -32,7 +32,7 @@
 		</div>
 		<div id="empty-items" class="row{% if item.groups|length > 0 %} d-none{% endif %}">
 			<div class="col">
-				<p class="mb-0">{{ 'calculation.edit.empty_items'|trans }}</p>
+				<p class="mb-0 text-muted">{{ 'calculation.edit.empty_items'|trans }}</p>
 			</div>
 		</div>
 	</div>

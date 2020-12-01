@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Calculation;
+use App\Entity\CalculationGroup;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -44,8 +45,8 @@ class CalculationTotalTable extends PdfTableBuilder
      */
     public function output(Calculation $calculation): void
     {
-        // groups
-        $groups = $calculation->getGroups();
+        /** @var \Doctrine\Common\Collections\Collection|CalculationGroup[] $groups */
+        $groups = $calculation->getRootGroups();
         if ($groups->isEmpty()) {
             return;
         }
@@ -62,13 +63,14 @@ class CalculationTotalTable extends PdfTableBuilder
             PdfColumn::right($this->trans('report.calculation.margin_amount'), 20, true),
             PdfColumn::right($this->trans('report.calculation.total'), 20, true),
         ];
-        $this->addColumns($columns); //->outputHeaders();
-        $this->startHeaderRow();
-        $this->add($columns[0]->getText());
-        $this->add($columns[1]->getText());
-        $this->add($this->trans('report.calculation.margins'), 2, null, self::ALIGN_CENTER);
-        $this->add($columns[4]->getText());
-        $this->endRow();
+        $this->addColumns($columns);
+
+        $this->startHeaderRow()
+            ->add($columns[0]->getText())
+            ->add($columns[1]->getText())
+            ->add($this->trans('report.calculation.margins'), 2, null, self::ALIGN_CENTER)
+            ->add($columns[4]->getText())
+            ->endRow();
 
         // groups
         foreach ($groups as $group) {
@@ -105,20 +107,17 @@ class CalculationTotalTable extends PdfTableBuilder
     /**
      * Translates the given message.
      *
-     * @param string      $id         the message id (may also be an object that can be cast to string)
-     * @param array       $parameters an array of parameters for the message
-     * @param string|null $domain     the domain for the message or null to use the default
-     * @param string|null $locale     the locale or null to use the default
+     * @param string $id the message id (may also be an object that can be cast to string)
      *
      * @return string the translated string
      *
      * @throws \InvalidArgumentException if the locale contains invalid characters
      */
-    private function trans($id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
+    private function trans($id): string
     {
         /** @var AbstractReport $parent */
         $parent = $this->parent;
 
-        return $parent->trans($id, $parameters, $domain, $locale);
+        return $parent->trans($id);
     }
 }

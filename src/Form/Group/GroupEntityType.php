@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Category;
+namespace App\Form\Group;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
@@ -21,11 +21,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Type to display a list of child category entities.
+ * Type to display a list of parent categories (group).
  *
  * @author Laurent Muller
  */
-class CategoryEntityType extends AbstractType
+class GroupEntityType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -37,7 +37,7 @@ class CategoryEntityType extends AbstractType
             'choice_label' => 'code',
             'placeholder' => false,
             'query_builder' => function (CategoryRepository $r) {
-                return $r->getSortedBuilder();
+                return $r->getGroupSortedBuilder();
             },
         ]);
     }

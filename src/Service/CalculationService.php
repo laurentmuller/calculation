@@ -16,6 +16,7 @@ namespace App\Service;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationGroup;
+use App\Entity\Category;
 use App\Entity\CategoryMargin;
 use App\Entity\GlobalMargin;
 use App\Traits\MathTrait;
@@ -115,7 +116,7 @@ final class CalculationService
 
         $userMargin = $calculation->getUserMargin();
         $globalMargin = $calculation->getGlobalMargin();
-        $groups = $calculation->getGroups()->toArray();
+        $groups = $calculation->getRootGroups()->toArray();
 
         return $this->computeGroups($groups, $mapper, $userMargin, $globalMargin);
     }
@@ -134,47 +135,78 @@ final class CalculationService
             return [
                 'result' => true,
                 'groups' => [$this->createEmptyGroup()],
+                'overall_below' => false,
                 'overall_margin' => 0,
                 'overall_total' => 0,
-                'overall_below' => false,
             ];
         }
 
-        $mapper = function (array $group) {
-            // sum items
-            $amount = 0.0;
-            if (\array_key_exists('items', $group)) {
-                $amount = \array_reduce($group['items'], function (float $carry, array $item) {
-                    $price = $item['price']; //(float)
-                    $quantity = $item['quantity']; //(float)
-                    $total = $carry + ($price * $quantity);
+        // reduce items groups
+        $itemGroups = \array_reduce($source['groups'], function (array $carry, array $group) {
+            $id = (int) ($group['categoryId']);
+            $carry[$id] = $this->reduceGroupItems($group);
 
-                    return $total;
-                }, $amount);
+            return $carry;
+        }, []);
+
+        // create root groups
+        $groups = [];
+        foreach ($itemGroups as $key => $value) {
+            if (empty($value)) {
+                continue;
             }
 
-            // compute margin
-            $id = (int) ($group['categoryId']);
-            $amount = $this->round($amount);
-            $margin = $this->getCategoryMargin($id, $amount);
-            $margin_amount = $this->round($margin * $amount);
+            $category = $this->getCategory($key);
+            if (null !== $category && null !== $category->getParent()) {
+                $parent = $category->getParent();
+                $id = $parent->getId();
 
-            // create row
+                //create group if needed
+                if (!\array_key_exists($id, $groups)) {
+                    $groups[$id] = [
+                        'id' => self::ROW_GROUP,
+                        'amount' => 0,
+                        'margin' => 0,
+                        'margin_amount' => 0,
+                        'total' => 0,
+                        'description' => $parent->getCode(),
+                    ];
+                }
+
+                // update group
+                $parentGroup = &$groups[$id];
+                $amount = $parentGroup['amount'] + $value;
+                $margin = $this->getCategoryMargin($id, $amount);
+                $total = $this->round($margin * $amount);
+                $margin_amount = $total - $amount;
+                $parentGroup['amount'] = $amount;
+                $parentGroup['margin'] = $margin;
+                $parentGroup['margin_amount'] = $margin_amount;
+                $parentGroup['total'] = $total;
+            }
+        }
+
+        // root groups?
+        if (empty($groups)) {
             return [
-                'id' => self::ROW_GROUP,
-                'amount' => $amount,
-                'margin' => $margin,
-                'margin_amount' => $margin_amount,
-                'total' => $amount + $margin_amount,
-                'description' => $group['code'],
+                'result' => true,
+                'groups' => [$this->createEmptyGroup()],
+                'overall_below' => false,
+                'overall_margin' => 0,
+                'overall_total' => 0,
             ];
-        };
+        }
 
-        $userMargin = $source['userMargin'] / (float) 100;
-        $groups = $this->computeGroups($source['groups'], $mapper, $userMargin);
+        // sort
+        \uasort($groups, function (array $a, array $b) {
+            return $a['description'] <=> $b['description'];
+        });
+
+        $userMargin = (float) $source['userMargin'] / 100.0;
+        $groups = $this->computeGroups($groups, null, $userMargin);
         $overall_margin = \end($groups)['margin'];
         $overall_total = \end($groups)['total'];
-        $overall_below = !empty($groups) && !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
+        $overall_below = !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
         // OK
         return [
@@ -216,22 +248,48 @@ final class CalculationService
         $oldOverallTotal = $this->round($calculation->getOverallTotal());
         $oldGlobalMargin = $this->round($calculation->getGlobalMargin());
 
-        // update groups and totals
-        $itemsTotal = 0;
-        $overallTotal = 0;
-
         /** @var CalculationGroup[] $groups */
         $groups = $calculation->getGroups();
+
+        // 1. udpate each groups
         foreach ($groups as $group) {
             $group->update();
-            $itemsTotal += $group->getAmount();
-            $overallTotal += $group->getTotal();
         }
 
-        // update global margin, net total and overall total
+        // 2. add missing root groups
+        foreach ($groups as $group) {
+            $category = $group->getParentCategory();
+            if (null === $category) {
+                continue;
+            }
+            $parentGroup = $calculation->findGroup($category, true);
+            if (null === $parentGroup) {
+                continue;
+            }
+
+            // update
+            $amount = $parentGroup->getAmount() + $group->getAmount();
+            $margin = $category->findPercent($amount);
+            $parentGroup->setAmount($amount)->setMargin($margin);
+        }
+
+        // 3. compute item and overall total
+        $itemsTotal = 0;
+        $overallTotal = 0;
+        foreach ($groups as $group) {
+            if ($group->isRootGroup()) {
+                $overallTotal += $group->getTotal();
+            } else {
+                $itemsTotal += $group->getAmount();
+            }
+        }
+
+        // 4. update global margin, net total and overall total
         $globalMargin = $this->round($this->getGlobalMargin($overallTotal));
-        $overallTotal *= (1 + $globalMargin);
+        $overallTotal *= $globalMargin;
         $overallTotal *= (1 + $calculation->getUserMargin());
+
+        // round
         $overallTotal = $this->round($overallTotal);
         $itemsTotal = $this->round($itemsTotal);
 
@@ -257,10 +315,10 @@ final class CalculationService
      *
      * @return array the total groups
      */
-    private function computeGroups(array $groups, callable $callback, float $userMargin, ?float $globalMargin = null): array
+    private function computeGroups(array $groups, ?callable $callback, float $userMargin, ?float $globalMargin = null): array
     {
         // create group rows
-        $result = \array_map($callback, $groups);
+        $result = $callback ? \array_map($callback, $groups) : $groups;
 
         // groups amount
         $groups_amount = $this->round($this->getGroupsAmount($result));
@@ -275,7 +333,7 @@ final class CalculationService
         $result[] = [
             'id' => self::ROW_TOTAL_GROUP,
             'amount' => $groups_amount,
-            'margin' => $this->round($this->safeDivide($groups_margin, $groups_amount)),
+            'margin' => 1.0 + $this->round($this->safeDivide($groups_margin, $groups_amount)),
             'margin_amount' => $groups_margin,
             'total' => $total_net,
             'description' => $this->trans('calculation.fields.marginTotal'),
@@ -283,7 +341,7 @@ final class CalculationService
 
         // global margin row
         $globalmargin_percent = $globalMargin ?: $this->getGlobalMargin($total_net);
-        $globalmargin_amount = $this->round($total_net * $globalmargin_percent);
+        $globalmargin_amount = $this->round($total_net * ($globalmargin_percent - 1));
         $total_net += $globalmargin_amount;
         $result[] = [
             'id' => self::ROW_GLOBAL_MARGIN,
@@ -311,7 +369,7 @@ final class CalculationService
         // overall total row
         $overall_total = $total_net + $usermargin_amount;
         $overall_amount = $overall_total - $groups_amount;
-        $overall_margin = $this->round($this->safeDivide($overall_amount, $groups_amount));
+        $overall_margin = 1.0 + $this->round($this->safeDivide($overall_amount, $groups_amount));
         $overall_below = !empty($groups) && !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
         $result[] = [
@@ -334,8 +392,18 @@ final class CalculationService
     {
         return [
             'id' => self::ROW_EMPTY,
-            'description' => $this->trans('calculation.edit.empty_items'),
+            'description' => $this->trans('calculation.edit.empty'),
         ];
+    }
+
+    /**
+     * Gets the category for the given identifier.
+     *
+     * @param int $id the category identifier
+     */
+    private function getCategory(int $id): ?Category
+    {
+        return $this->manager->getRepository(Category::class)->find($id);
     }
 
     /**
@@ -399,5 +467,20 @@ final class CalculationService
         return \array_reduce($groups, function (float $carry, array $group) {
             return $carry + $group['margin_amount'];
         }, 0);
+    }
+
+    private function reduceGroupItems(array $group): float
+    {
+        if (\array_key_exists('items', $group)) {
+            return \array_reduce($group['items'], function (float $carry, array $item) {
+                $price = $item['price']; //(float)
+                $quantity = $item['quantity']; //(float)
+                $total = $carry + ($price * $quantity);
+
+                return $total;
+            }, 0);
+        }
+
+        return 0;
     }
 }

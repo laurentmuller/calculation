@@ -1,7 +1,9 @@
 {# Macro for calculation groups #}
 {% macro printGroupRow(group, editable) -%}
+{# import #}
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'calculation/_macro_items.html.twig' as macroItems %}
+
 <tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ macroItems.printItemRow(group.items.vars.prototype, editable, false, false)|e }}"{% endif -%}>
 	<tr class="drag-skip">
         {{ form_widget(group.categoryId) }}

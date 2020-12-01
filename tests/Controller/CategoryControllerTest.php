@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CategoryControllerTest extends AbstractControllerTest
 {
     private static ?Category $entity = null;
+    private static ?Category $parent = null;
 
     public function getRoutes(): array
     {
@@ -65,9 +66,16 @@ class CategoryControllerTest extends AbstractControllerTest
 
     protected function addEntities(): void
     {
+        if (null === self::$parent) {
+            self::$parent = new Category();
+            self::$parent->setCode('Test Parent');
+            $this->addEntity(self::$parent);
+        }
+
         if (null === self::$entity) {
             self::$entity = new Category();
             self::$entity->setCode('Test Code');
+            self::$entity->setParent(self::$parent);
             $this->addEntity(self::$entity);
         }
     }
@@ -75,5 +83,6 @@ class CategoryControllerTest extends AbstractControllerTest
     protected function deleteEntities(): void
     {
         self::$entity = $this->deleteEntity(self::$entity);
+        self::$parent = $this->deleteEntity(self::$parent);
     }
 }

@@ -39,17 +39,6 @@ interface ApplicationServiceInterface
     public const CUSTOMER_URL = 'customer_url';
 
     /**
-     * The property name for the date format (integer).
-     * Is one of the date formatter constants (SHORT, MEDIUM or LONG).
-     */
-    public const DATE_FORMAT = 'date_format';
-
-    /**
-     * The property name for the decimal separator symbol (character).
-     */
-    public const DECIMAL_SEPARATOR = 'decimal_separator';
-
-    /**
      * The default edit action (boolean).
      */
     public const DEFAULT_EDIT_ACTION = true;
@@ -111,11 +100,6 @@ interface ApplicationServiceInterface
     public const EDIT_ACTION = 'edit_action';
 
     /**
-     * The property name for the number grouping separator symbol (character).
-     */
-    public const GROUPING_SEPARATOR = 'grouping_separator';
-
-    /**
      * The property name for the last import of Swiss cities (date).
      */
     public const LAST_IMPORT = 'last_import';
@@ -154,12 +138,6 @@ interface ApplicationServiceInterface
      * The property name for the minimum password strength (int).
      */
     public const MIN_STRENGTH = 'minstrength';
-
-    /**
-     * The property name for the time format (integer).
-     * Is one of the date formatter constants (SHORT or MEDIUM).
-     */
-    public const TIME_FORMAT = 'time_format';
 
     /**
      * The property name for the user role rights (string).

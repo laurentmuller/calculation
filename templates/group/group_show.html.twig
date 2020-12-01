@@ -1,0 +1,53 @@
+{% extends 'cards/card_show.html.twig' %}
+
+{# imports #}
+{% import 'macros/_properties.html.twig' as properties %}
+
+{# parameters #}
+{%- set id     = item.id -%}
+{%- set title  = 'group.show.title' -%}
+{%- set params = route_params(app.request, id) %}
+
+{# actions #}
+{%- set edit_path   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, item) ? path('group_edit', params) : null -%}
+{%- set delete_path = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, item) ? path('group_delete', params) : null -%}
+{%- set cancel_path = cancel_url(app.request, id, 'group_list') -%}
+
+{# properties #}
+{% block property_body %}
+{{ properties.property('group.fields.code', item.code) }}
+{{ properties.property('group.fields.description', item.description) }}
+{%- if not item.hasMargins -%}
+{{- properties.property('group.fields.margins', item.countMargins|integer) }}
+{% endif -%}
+{%- if item.hasCategories -%}
+{% set categories = item.categories|sort((a, b) => a.code <=> b.code)|map(p => p.code)|join(', ') %}
+{{- properties.property('group.fields.categories', categories) }}
+{% endif -%}
+{% endblock %}
+
+{% block card_body %}
+{{ parent() }}
+{%- if item.hasMargins -%}
+ <table class="table table-sm table-list">
+ 	<thead>
+ 		<tr>
+ 			<th>{{ 'group.fields.margins'|trans }}</th>
+            <th class="text-right">{{ 'categorymargin.fields.minimum'|trans }}</th>
+            <th class="text-right">{{ 'categorymargin.fields.maximum'|trans }}</th>
+            <th class="text-right">{{ 'categorymargin.fields.margin'|trans }}</th>
+ 		</tr>
+    </thead>
+    <tbody>
+    {% for margin in item.margins -%}
+    	<tr>
+            <td>&nbsp;</td>
+    		<td class="text-right">{{ margin.minimum|amount }}</td>
+    		<td class="text-right">{{ margin.maximum|amount }}</td>
+    		<td class="text-right">{{ margin.margin|percent(false) }}</td>
+    	</tr>
+    {% endfor %}
+    </tbody>
+ </table>
+{%- endif -%}
+{% endblock %}

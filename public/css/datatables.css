@@ -55,6 +55,10 @@ table.dataTable thead > tr > th.sorting_disabled {
     cursor: initial !important;
 }
 
+table.dataTable.table-sm > thead > tr > th:not(.sorting_disabled) {
+  padding-right: 0.3rem;
+}
+
 /**
  * Use sort arrows from FontAwesome
  */

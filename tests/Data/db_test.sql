@@ -3,7 +3,9 @@ BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS "sy_Category" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
     "code"              varchar(30)  NOT NULL,
-    "description"       varchar(255) DEFAULT NULL
+    "description"       varchar(255) DEFAULT NULL,
+    "parent_id"         integer DEFAULT NULL,
+    FOREIGN KEY(parent_id) REFERENCES sy_Category(id)
 );
 
 CREATE TABLE IF NOT EXISTS "sy_CategoryMargin" (

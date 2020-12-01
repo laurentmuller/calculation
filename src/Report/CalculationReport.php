@@ -188,7 +188,7 @@ class CalculationReport extends AbstractReport
         $totalBrut = $totalItems + $totalMargins;
 
         $globalMargin = $c->getGlobalMargin();
-        $globalAmount = $totalBrut * $globalMargin;
+        $globalAmount = $totalBrut * ($globalMargin - 1);
 
         $totalNet = $totalBrut + $globalAmount;
         $userMargin = $c->getUserMargin();

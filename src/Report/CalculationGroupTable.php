@@ -49,20 +49,13 @@ class CalculationGroupTable extends PdfGroupTableBuilder
      */
     public function output(Calculation $calculation): void
     {
-        // groups
-        $groups = $calculation->getGroups();
-        if ($groups->isEmpty()) {
-            return;
-        }
-
-        /** @var CalculationReport $parent */
-        $parent = $this->parent;
+        $groups = $calculation->getSortedGroups();
         $duplicateItems = $calculation->getDuplicateItems();
 
         // styles
-        $color = PdfTextColor::red();
-        $defaultStyle = PdfStyle::getCellStyle(); //->setIndent(2);
-        $errorStyle = (clone $defaultStyle)->setTextColor($color);
+        $groupStyle = $this->getGroup()->getStyle();
+        $defaultStyle = PdfStyle::getCellStyle()->setIndent(4);
+        $errorStyle = (clone $defaultStyle)->setTextColor(PdfTextColor::red());
 
         // headers
         $columns = [
@@ -76,8 +69,11 @@ class CalculationGroupTable extends PdfGroupTableBuilder
             ->outputHeaders();
 
         // render
+
         foreach ($groups as $group) {
+            $groupStyle->setIndent($group->isRootGroup() ? 0 : 4);
             $this->setGroupKey($group->getCode());
+
             foreach ($group->getItems() as $item) {
                 /* @phpstan-ignore-next-line */
                 $this->startRow()

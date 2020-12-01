@@ -262,26 +262,36 @@
             });
         },
         render: function (items) {
-            let display;
             const data = [];
             const that = this;
+            
+            let display;
+            let separatorKey;
+            let oldSeparator = null;
             const separator = that.options.separator;
-            const isStr = that.isString(that.displayField);
+            const isStrSeparator = that.isString(separator);
+            const isStrDisplayField = that.isString(that.displayField);
 
             // run over items and add separators and categories if applicable
             $.each(items, function (key, value) {
+                // get separators
+                separatorKey = isStrSeparator ? value[separator] : separator(value);
+                if (key > 0) {
+                    oldSeparator = isStrSeparator ? items[key - 1][separator] : separator(items[key - 1]);    
+                }                
+
                 // inject separator
-                if (key > 0 && value[separator] !== items[key - 1][separator]) {
+                if (key > 0 && separatorKey !== oldSeparator) {
                     data.push({
                         __type__: "divider"
                     });
                 }
 
                 // inject category header
-                if (value[separator] && (key === 0 || value[separator] !== items[key - 1][separator])) {
+                if (separatorKey && (key === 0 || separatorKey !== oldSeparator)) {
                     data.push({
                         __type__: "category",
-                        name: value[separator]
+                        name: separatorKey
                     });
                 }
 
@@ -301,7 +311,7 @@
                 }
                 // item
                 if (that.isObject(item)) {
-                    display = isStr ? item[that.displayField] : that.displayField(item);
+                    display = isStrDisplayField ? item[that.displayField] : that.displayField(item);
                 } else {
                     display = item;
                 }
@@ -322,12 +332,12 @@
             let items;
             let display;
             const that = this;
-            const isStr = that.isString(that.displayField);
+            const isStrDisplayField = that.isString(that.displayField);
 
-            if (isStr && data && data.length) {
+            if (isStrDisplayField && data && data.length) {
                 if (data[0].hasOwnProperty(that.displayField)) {
                     items = $.grep(data, function (item) {
-                        display = isStr ? item[that.displayField] : that.displayField(item);
+                        display = isStrDisplayField ? item[that.displayField] : that.displayField(item);
                         return that.matcher(display);
                     });
                 } else if (that.isString(data[0])) {

@@ -39,7 +39,8 @@ class CalculationServiceTest extends KernelTestCase
 {
     use DatabaseTrait;
 
-    public const MARGIN_PERCENT = 0.1;
+    public const MARGIN_PERCENT = 1.1;
+    public const MARGIN_USER = 0.1;
     public const PRODUCT_PRICE = 100.0;
     public const QUANTITY = 10.0;
 
@@ -50,42 +51,49 @@ class CalculationServiceTest extends KernelTestCase
         $product = $this->init();
         $calculation = new Calculation();
         $calculation->addProduct($product, self::QUANTITY)
-            ->setUserMargin(self::MARGIN_PERCENT);
+            ->setUserMargin(self::MARGIN_USER);
 
         $manager = $this->getManager();
         $service = $this->getService($manager);
         $service->updateTotal($calculation);
 
-        $this->assertCount(1, $calculation->getGroups());
-        $this->assertCount(1, $calculation->getGroups()[0]->getItems());
+        $this->assertCount(2, $calculation->getGroups());
+        $this->assertCount(1, $calculation->getGroups()[1]->getItems());
 
-        /** @var CalculationGroup $group */
-        $group = $calculation->getGroups()[0];
+        /** @var CalculationGroup $rootGroup */
+        $rootGroup = $calculation->getGroups()[0];
+
+        /** @var CalculationGroup $itemsGroup */
+        $itemsGroup = $calculation->getGroups()[1];
 
         /** @var CalculationItem $item */
-        $item = $group->getItems()[0];
+        $item = $itemsGroup->getItems()[0];
 
         $totalItem = self::PRODUCT_PRICE * self::QUANTITY;
-        $totalGroup = $totalItem * (1 + self::MARGIN_PERCENT);
-        $totalUser = $totalGroup * (1 + self::MARGIN_PERCENT);
-        $totalOverall = $totalUser * (1 + self::MARGIN_PERCENT);
+        $totalGroup = $totalItem * self::MARGIN_PERCENT;
+        $totalUser = $totalGroup * (1 + self::MARGIN_USER);
+        $totalOverall = $totalUser * self::MARGIN_PERCENT;
 
         // item
         $this->assertSame(self::PRODUCT_PRICE, $item->getPrice());
         $this->assertSame(self::QUANTITY, $item->getQuantity());
         $this->assertSame($totalItem, $item->getTotal());
 
-        // group
-        $this->assertSame($totalItem, $group->getAmount());
-        $this->assertSame(self::MARGIN_PERCENT, $group->getMargin());
-        $this->assertSame($totalGroup, $group->getTotal());
-        $this->assertSame($group->getAmount(), $item->getTotal());
+        // parent group
+        $this->assertSame($totalItem, $rootGroup->getAmount());
+        $this->assertSame(self::MARGIN_PERCENT, $rootGroup->getMargin());
+        $this->assertSame($totalGroup, $rootGroup->getTotal());
+
+        // items group
+        $this->assertSame($totalItem, $itemsGroup->getAmount());
+        $this->assertSame(0.0, $itemsGroup->getTotal());
+        $this->assertSame($itemsGroup->getAmount(), $item->getTotal());
 
         // calculation
         $this->assertSame($totalItem, $calculation->getItemsTotal());
         $this->assertSame($totalGroup, $calculation->getGroupsTotal());
         $this->assertSame(self::MARGIN_PERCENT, $calculation->getGlobalMargin());
-        $this->assertSame(self::MARGIN_PERCENT, $calculation->getUserMargin());
+        $this->assertSame(self::MARGIN_USER, $calculation->getUserMargin());
         $this->assertSame($totalOverall, $calculation->getOverallTotal());
     }
 
@@ -126,14 +134,18 @@ class CalculationServiceTest extends KernelTestCase
         $this->initRepository($manager, CategoryMargin::class);
         $this->initRepository($manager, Category::class);
 
+        $parent = new Category();
+        $parent->setCode('Test');
+
         $category = new Category();
         $category->setCode('Test')
-            ->setDescription('Test description');
+            ->setParent($parent);
 
         $margin = new CategoryMargin();
         $margin->setValues(0, 1000000, self::MARGIN_PERCENT);
-        $category->addMargin($margin);
+        $parent->addMargin($margin);
 
+        $manager->persist($parent);
         $manager->persist($category);
         $manager->flush();
 

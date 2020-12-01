@@ -1,0 +1,52 @@
+{% extends 'cards/card_base.html.twig' %}
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title      = 'product.import.title' -%}
+{%- set title_icon = 'download' -%}
+
+{% block card_header %}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ 'product.import.results'|trans }}
+{% endblock %}
+
+{% block card_class -%}
+{% if valid %}{{ parent() }}{% else %} border-danger{% endif %}
+{%- endblock %}
+{% block card_header_class -%}
+{% if valid %}{{ parent() }}{% else %} text-white bg-danger{% endif %}
+{%- endblock %}
+
+{% block card_body %}
+{%- if valid %}
+<p>{{ 'product.import.success'|trans }}</p>
+<table class="table table-bordered table-sm mb-0">
+    <thead>
+        <tr>
+            <th>{{ 'import.objects'|trans }}</th>
+            <th class="text-currency">{{ 'import.errors'|trans }}</th>
+            <th class="text-currency">{{ 'import.valids'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ 'product.name'|trans }}</td>
+            <td class="text-currency">{{ skipped|integer }}</td>
+            <td class="text-currency">{{ products|integer }}</td>
+        </tr>
+    </tbody>
+</table>
+{% if simulate%}
+    <p class="text-right mt-2 mb-0 small">{{ 'calculation.result.simulated'|trans }}</p>
+{% endif %}
+
+{%- else -%}
+<p>{{ 'product.import.failure'|trans }}</p>
+{% if message is defined and message -%}<p class="mb-0">{{ message }}</p>{%- endif %}
+{%- endif %}
+{% endblock %}
+
+{% block card_footer %}
+{{- icons.homepage() -}}
+{% endblock %}

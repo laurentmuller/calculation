@@ -31,6 +31,16 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class Category extends AbstractEntity
 {
     /**
+     * The children categories.
+     *
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+     * @ORM\OrderBy({"code": "ASC"})
+     *
+     * @var Collection|Category[]
+     */
+    protected $categories;
+
+    /**
      * The unique code.
      *
      * @ORM\Column(name="code", type="string", length=30, unique=true)
@@ -68,6 +78,19 @@ class Category extends AbstractEntity
     protected $margins;
 
     /**
+     * The parent category (group).
+     *
+     * ALTER TABLE sy_Category ADD parent_id INT DEFAULT NULL;
+     * ALTER TABLE sy_Category ADD CONSTRAINT FK_31E80115727ACA70 FOREIGN KEY (parent_id) REFERENCES sy_Category (id);
+     *
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="categories")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     *
+     * @var Category
+     */
+    protected $parent;
+
+    /**
      * The list of products that fall into this category.
      *
      * @ORM\OneToMany(targetEntity="Product", mappedBy="category", cascade={"persist"}, orphanRemoval=true)
@@ -83,14 +106,31 @@ class Category extends AbstractEntity
     {
         $this->margins = new ArrayCollection();
         $this->products = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     /**
-     * Add margin.
+     * Add a child category.
      *
-     * @param \App\Entity\CategoryMargin $margin
-     *
-     * @return Category
+     * @throws \InvalidArgumentException if this is not a root category (group)
+     */
+    public function addCategory(self $category): self
+    {
+        // only allowed for root (group) categories
+        if (null !== $this->parent) {
+            throw new \InvalidArgumentException('Category can only be added to a root group.');
+        }
+
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->setParent($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add a margin.
      */
     public function addMargin(CategoryMargin $margin): self
     {
@@ -103,11 +143,7 @@ class Category extends AbstractEntity
     }
 
     /**
-     * Add product.
-     *
-     * @param \App\Entity\Product $product
-     *
-     * @return Category
+     * Add a product.
      */
     public function addProduct(Product $product): self
     {
@@ -117,6 +153,14 @@ class Category extends AbstractEntity
         }
 
         return $this;
+    }
+
+    /**
+     * Gets the number of categories.
+     */
+    public function countCategories(): int
+    {
+        return $this->categories->count();
     }
 
     /**
@@ -172,6 +216,16 @@ class Category extends AbstractEntity
     }
 
     /**
+     * Get categories.
+     *
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    /**
      * Get code.
      *
      * @return string
@@ -212,6 +266,26 @@ class Category extends AbstractEntity
     }
 
     /**
+     * Gets the parent.
+     */
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Gets the parent code (if any).
+     */
+    public function getParentCode(): ?string
+    {
+        if (null !== $this->parent) {
+            return $this->parent->getCode();
+        }
+
+        return null;
+    }
+
+    /**
      * Get products.
      *
      * @return Collection|Product[]
@@ -219,6 +293,16 @@ class Category extends AbstractEntity
     public function getProducts(): Collection
     {
         return $this->products;
+    }
+
+    /**
+     * Returns if this category contains one or more categories.
+     *
+     * @return bool true if contains products
+     */
+    public function hasCategories(): bool
+    {
+        return !$this->categories->isEmpty();
     }
 
     /**
@@ -242,6 +326,20 @@ class Category extends AbstractEntity
     }
 
     /**
+     * Remove a category.
+     */
+    public function removeCategory(self $category): self
+    {
+        if ($this->categories->removeElement($category)) {
+            if ($category->getParent() === $this) {
+                $category->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Remove margin.
      *
      * @param \App\Entity\CategoryMargin $margin
@@ -258,9 +356,7 @@ class Category extends AbstractEntity
     }
 
     /**
-     * Remove product.
-     *
-     * @param \App\Entity\Product $product
+     * Remove a product.
      */
     public function removeProduct(Product $product): self
     {
@@ -293,6 +389,16 @@ class Category extends AbstractEntity
     public function setDescription(?string $description): self
     {
         $this->description = $this->trim($description);
+
+        return $this;
+    }
+
+    /**
+     * Sets the parent.
+     */
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
 
         return $this;
     }

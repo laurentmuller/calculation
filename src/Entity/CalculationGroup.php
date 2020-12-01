@@ -254,7 +254,34 @@ class CalculationGroup extends AbstractEntity
      */
     public function getMarginAmount(): float
     {
-        return $this->amount * $this->margin;
+        return $this->amount * ($this->margin - 1);
+    }
+
+    /**
+     * Gets the parent category.
+     */
+    public function getParentCategory(): ?Category
+    {
+        if (null !== $this->category) {
+            return $this->category->getParent();
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets the parent category code.
+     *
+     * @param string $default the default value to use if the parent code is null
+     */
+    public function getParentCode(string $default = null): ?string
+    {
+        $category = $this->getParentCategory();
+        if (null !== $category) {
+            return $category->getCode();
+        }
+
+        return $default;
     }
 
     /**
@@ -263,7 +290,7 @@ class CalculationGroup extends AbstractEntity
      */
     public function getTotal(): float
     {
-        return $this->amount * (1 + $this->margin);
+        return $this->amount * $this->margin;
     }
 
     /**
@@ -274,6 +301,14 @@ class CalculationGroup extends AbstractEntity
     public function isEmpty(): bool
     {
         return $this->items->isEmpty();
+    }
+
+    /**
+     * Returns a value indicating if this group is a root group.
+     */
+    public function isRootGroup(): bool
+    {
+        return null === $this->getParentCategory();
     }
 
     /**

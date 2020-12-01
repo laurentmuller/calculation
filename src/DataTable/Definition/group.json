@@ -8,30 +8,31 @@
 	},
 	{
 		"name": "code",
-		"title": "category.fields.code",
+		"title": "group.fields.code",
 		"default": true,
 		"class": "text-code text-nowrap"
 	},
 	{
 		"name": "description",
-		"title": "category.fields.description",
+		"title": "group.fields.description",
 		"class": "w-50 cell"
 	},
 	{
-		"name": "parent.code",
-		"title": "category.fields.parent",
-		"class": "text-code",
-		"orderable": true,
-		"searchable": false
+		"name": "margins",
+		"title": "group.fields.margins",
+		"orderable": false,
+		"searchable": false,
+		"class": "text-currency",
+		"formatter": "maginsFormatter"
 	},
 	{
-		"name": "products",
-		"title": "category.fields.products",
+		"name": "categories",
+		"title": "group.fields.categories",
 		"orderable": false,
 		"searchable": false,
 		"rawData": true,
-		"class": "text-currency rowlink-skip",
-		"formatter": "productsFormatter"
+		"class": "text-currency",
+		"formatter": "categoriesFormatter"
 	},
 	{
 		"name": "id",

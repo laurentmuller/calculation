@@ -114,17 +114,20 @@ class ProductRepository extends AbstractRepository
      * @param string $value      the search term
      * @param int    $maxResults the maximum number of results to retrieve (the "limit")
      *
-     * @return Product[] an array, maybe empty, of products
+     * @return array an array, maybe empty, of matching products
      */
     public function search(string $value, int $maxResults = 15): array
     {
         $builder = $this->createQueryBuilder('p')
-            ->innerJoin('p.category', 'c')
             ->select('p.description')
             ->addSelect('p.unit')
             ->addSelect('p.price')
             ->addSelect('c.id as categoryId')
-            ->addSelect('upper(c.code) as category')
+            ->addSelect('upper(c.code) as category_code')
+            ->addSelect('upper(r.code) as parent_code')
+            ->addSelect("CONCAT(upper(c.code), ' - ', upper(r.code)) AS category")
+            ->innerJoin('p.category', 'c')
+            ->innerJoin('c.parent', 'r')
             ->orderBy('c.code')
             ->addOrderBy('p.description')
             ->setMaxResults($maxResults);

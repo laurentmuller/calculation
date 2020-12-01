@@ -32,8 +32,6 @@
 
 {% block item_property %}
 {{ properties.line(item.description, false, 1) }}
-{%- set text = 'counters.margins'|trans({count: item.countMargins}) -%}
-{{ properties.line(text, false, 1) }}
 {%- set text = 'counters.products'|trans({count: item.countProducts}) -%}
 {% if item.countProducts and product_list %}
     {%- set href = path('product_list', {'query': item.code}) -%}

@@ -66,17 +66,17 @@ class CalculationController extends AbstractEntityController
      *
      * @var CalculationService
      */
-    private $calculationService;
+    private $service;
 
     /**
      * Constructor.
      *
-     * @param CalculationService $calculationService the service to compute calculations
+     * @param CalculationService $service the service to compute calculations
      */
-    public function __construct(CalculationService $calculationService)
+    public function __construct(CalculationService $service)
     {
         parent::__construct(Calculation::class);
-        $this->calculationService = $calculationService;
+        $this->service = $service;
     }
 
     /**
@@ -435,7 +435,7 @@ class CalculationController extends AbstractEntityController
     {
         // update parameters
         $parameters['success'] = $item->isNew() ? 'calculation.add.success' : 'calculation.edit.success';
-        $parameters['groups'] = $this->calculationService->createGroupsFromCalculation($item);
+        $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
         $parameters['min_margin'] = $this->getApplication()->getMinMargin();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
         $parameters['emty_items'] = $item->hasEmptyItems();
@@ -445,8 +445,8 @@ class CalculationController extends AbstractEntityController
             $parameters['groupIndex'] = $item->getGroupsCount();
             $parameters['itemIndex'] = $item->getLinesCount();
             $parameters['categories'] = $this->getCategories();
-            $parameters['grouping'] = $this->getApplication()->getGrouping();
-            $parameters['decimal'] = $this->getApplication()->getDecimal();
+            $parameters['grouping'] = FormatUtils::getGrouping();
+            $parameters['decimal'] = FormatUtils::getDecimal();
         }
 
         return parent::editEntity($request, $item, $parameters);
@@ -507,7 +507,7 @@ class CalculationController extends AbstractEntityController
      */
     protected function saveToDatabase(AbstractEntity $item): void
     {
-        $this->calculationService->updateTotal($item);
+        $this->service->updateTotal($item);
         parent::saveToDatabase($item);
     }
 
@@ -529,7 +529,9 @@ class CalculationController extends AbstractEntityController
      */
     private function getPivotData(): array
     {
-        /** @var CalculationRepository $repository */
+        /**
+         * @var \App\Repository\CalculationRepository $repository
+         */
         $repository = $this->getRepository();
 
         return $repository->getPivot();

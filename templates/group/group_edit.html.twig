@@ -1,0 +1,90 @@
+{% extends 'cards/card_edit.html.twig' %}
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title         = new ? 'group.add.title' : 'group.edit.title' -%}
+{%- set title_icon    = 'code-branch' -%}
+{%- set page_list     = 'group_list' -%}
+{%- set margins_lengh = form.margins|length %}
+{%- set table_class   = 'table table-borderless table-edit' ~ (margins_lengh == 0 ? ' d-none' : '') -%}
+
+{# macros #}
+{% macro printMarginRow(margin) %}
+<tr>
+    <td class="w-35">
+        <div class="form-group">
+            {{ form_widget(margin.minimum, {'attr': {'aria-label': 'categorymargin.fields.minimum'|trans}}) }}
+            <em>{{ form_errors(margin.minimum) }}</em>
+        </div>
+    </td>
+    <td class="w-35">
+        <div class="form-group">
+            {{ form_widget(margin.maximum, {'attr': {'aria-label': 'categorymargin.fields.maximum'|trans}}) }}
+            <em>{{ form_errors(margin.maximum) }}</em>
+        </div>
+    </td>
+    <td class="w-30">
+        <div class="form-group">
+            {{ form_widget(margin.margin, {'attr': {'aria-label': 'categorymargin.fields.margin'|trans}}) }}
+            <em>{{ form_errors(margin.margin) }}</em>
+        </div>
+    </td>
+    <td class="actions pt-2 px-0 d-print-none">
+        {{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete d-print-none', 'times', 'group.edit.delete_margin') -}}
+    </td>
+</tr>
+{% endmacro %}
+
+{% block card_body %}
+<div class="form-row">
+    <div class="col-md-6">
+	    {{ form_row(form.code) }}
+    </div>
+</div>
+{{ form_row(form.description) }}
+<div class="form-row">
+    <div class="col-md-12">
+    	<div class="row">
+    		<div class="col">
+    			<label class="control-label" for="data-table-edit">{{ 'group.fields.margins'|trans }}</label>
+    		</div>
+    		<div class="col text-right">
+    			<a href="#" class="btn-add" role="button">{{ 'group.edit.add_margin'|trans }}</a>
+                <a href="#" class="btn btn-sort btn-link p-0{% if form.margins|length < 2 %} disabled{% endif %}" role="button" title="{{ 'group.edit.sort_margins'|trans }}"><i class="fas fa-sort-numeric-up fa-fw"></i></a>
+    		</div>
+    	</div>
+        <hr class="mt-0 mb-2">
+        <table id="data-table-edit" class="{{ table_class }}" data-index="{{ margins_lengh }}" data-prototype="{{ _self.printMarginRow(form.margins.vars.prototype)|e('html_attr') }}">
+            <thead>
+                <tr>
+                    <th class="vertical-middle text-right font-weight-normal required">{{ 'categorymargin.fields.minimum'|trans }}</th>
+                    <th class="vertical-middle text-right font-weight-normal required">{{ 'categorymargin.fields.maximum'|trans }}</th>
+                    <th class="vertical-middle text-right font-weight-normal required">{{ 'categorymargin.fields.margin'|trans }}</th>
+                    <th class="actions d-print-none">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for margin in form.margins %}
+                    {{ _self.printMarginRow(margin) }}                
+                {% endfor %}
+                
+            </tbody>
+        </table>
+        {{ form_errors(form.margins) }}        
+        <small id="empty_margins" class="text-muted{% if margins_lengh > 0 %} d-none{% endif %}">
+            {{- 'group.edit.empty_margins'|trans -}}            
+        </small>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/plugins/plugin-input.js') }}
+{{ asset_js('js/application/group_edit.js') }}
+{% else %}
+{{ asset_js('js/group_edit.js') }}
+{% endif %}
+{% endblock %}

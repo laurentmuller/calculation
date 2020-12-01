@@ -730,10 +730,12 @@ var Application = {
      */
     getDialogGroup: function () {
         'use strict';
-
+        
         return {
             categoryId: $('#item_category').val(),
-            code: $('#item_category :selected').text()
+            text: $('#item_category :selected').text(),
+            code: $('#item_category :selected').data('code')
+            
         };
     },
 
@@ -752,8 +754,8 @@ var Application = {
         return {
             description: $('#item_description').val(),
             unit: $('#item_unit').val(),
-            price: price,
             quantity: quantity,
+            price: price,            
             total: total
         };
 

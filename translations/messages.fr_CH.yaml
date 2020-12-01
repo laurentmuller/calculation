@@ -25,7 +25,7 @@ calculation:
     edit:
         title: Calculation Nº %id%
         title_short: Edition d'une calculation
-        empty: La calculation ne contient aucun article.
+        empty: La calculation ne contient aucun article ou le total est égale à 0.
         empty_items: Aucun article.
         success: La calculation Nº <b>%name%</b> a été mise à jour avec succès.
         panel_items: Articles
@@ -41,7 +41,6 @@ calculation:
         move_down_item: Déplacer vers le bas
         move_last_item: Déplacer à la dernière place
         read_only: Cette calculation ne peut pas être modifiée (Statut %name%).
-        empty_user: Système
         adjust_title: Ajuster la marge utilisateur pour atteindre le seuil minimal de <b>%minimum%</b>
         error:
             update_total: Une erreur s'est produite lors de la mise à jour des totaux de la calculation.<br><br>Veuillez ne plus modifier cette calculation et cliquer sur le boutton <b>Annuler</b>.
@@ -84,7 +83,7 @@ calculation:
         simulated: Simuler la mise à jour
         simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
         confirm: Confirmer la mise à jour des données
-        last_update: 'Dernière mise à jour : %date%'         
+        last_update: 'Dernière mise à jour : %date%'
     result:
         description: Résultats de la mise à jour.
         simulated: La mise à jour a été simulée. Aucune donnée n'a été modifiée dans la base de données.
@@ -151,17 +150,14 @@ category:
     fields:
         code: Nom
         description: Description
-        margins: Marges
         products: Articles
+        parent: Groupe
     add:
         title: Nouvelle catégorie
         success: La catégorie <b>%name%</b> a été créée avec succès.
     edit:
         title: Edition d'une catégorie
         success: La catégorie <b>%name%</b> a été mise à jour avec succès.
-        add_margin: Ajouter une marge
-        delete_margin: Supprimer la marge
-        sort_margins: Trier les marges
     delete:
         title: Supprimer une catégorie
         message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
@@ -176,6 +172,36 @@ category:
         product_title: Afficher les articles
     show:
         title: Propriétés de la catégorie
+group:
+    name: Groupe
+    fields:
+        code: Nom
+        description: Description
+        categories: Catégories
+        margins: Marges
+    add:
+        title: Nouveau groupe
+        success: Le groupe <b>%name%</b> a été créé avec succès.
+    edit:
+        title: Edition d'un groupe
+        success: Le groupe <b>%name%</b> a été mise à jour avec succès.
+        add_margin: Ajouter une marge
+        delete_margin: Supprimer la marge
+        sort_margins: Trier les marges
+        empty_margins: Aucune marge définie
+    delete:
+        title: Supprimer un groupe
+        message: Êtes-vous sûr de vouloir supprimer le groupe <b>%name%</b> ?
+        success: Le groupe <b>%name%</b> a été supprimé avec succès.
+        failure: Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans %categories%.
+    list:
+        title: Groupes
+        empty: Aucun groupe défini.
+        add_title: Créer un nouveau groupe
+        pdf_title: Télécharger la liste des groupes
+        excel_title: Exporter la liste des groupes
+    show:
+        title: Propriétés du groupe
 categorymargin:
     name: Marges
     fields:
@@ -276,7 +302,21 @@ product:
         category_all_description: Toutes
         category_description: Catégorie d'articles
     show:
-        title: Propriétés de l'articleg
+        title: Propriétés de l'article
+    import:
+        title: Importer des articles
+        description: Permet d'importer des articles depuis une feuille de calcul Excel (*.xlsx).
+        simulate_help: Simule l'importation sans enregister les changements dans la base de données.
+        submit_text: Importer
+        results: Résultat de l'importation.
+        success: L'importation des articles a été réalisée avec succès.
+        failure: Une erreur s'est produite lors de l'importation des articles.
+        fields:
+            file: Fichier
+            simulate: Simuler l'importation
+            confirm: Confirmer l'importation des données
+        error:
+            confirm: Vous devez cochez le message de confirmation.            
 user:
     name: Utilisateur
     fields:
@@ -304,7 +344,7 @@ user:
     edit:
         title: Edition d'un utilisateur
         success: L'utilisateur <b>%name%</b> a été mis à jour avec succès.
-        delete_image: Supprimer la photo de profil        
+        delete_image: Supprimer la photo de profil
     image:
         title: Image du profil
         success: L'image du profil de l'utilisateur <b>%name%</b> a été mise à jour avec succès.
@@ -409,6 +449,7 @@ common:
     top_of_page: Haut de la page
     id: Numéro
     empty: ''
+    empty_user: Système
     no_script_support: Votre navigateur ne supporte pas JavaScript !
     entity_created: 'Création : %date% - %user%'
     entity_updated: 'Mise à jour : %date% - %user%'
@@ -546,11 +587,6 @@ report:
         margins: Marges
         resume: Résumé
         total: Total
-    categories:
-        count_category: 'Nombre de catégories : %count%'
-        count_product: 'Nombre d''articles : %count%'
-        count_margin: 'Nombre de marges : %count%'
-        empty_margins: Aucune marge définie.
     customer:
         other: Autre
 show:
@@ -563,6 +599,7 @@ rights:
     edit: Modifier
     delete: Supprimer
     pdf: Exporter
+    group_category: Groupes / Catégories
 cookiebanner:
     message: Afin de vous proposer le meilleur service possible, ce site utilise des cookies. En acceptant de continuer sur ce site, vous déclarez accepter leurs utilisations.
     link: En savoir plus
@@ -808,7 +845,7 @@ import:
         empty_archive: L'archive '%name%' ne contient aucune donnée.
         entry_not_one: L'archive '%name%' ne contient pas une entrée valide.
         validity_before: La date de validité du %validity% de l'archive '%name%' est antérieure ou égale à la date de la dernière importation (%import%).
-        source_file: Aucun fichier à importer n'a été définit.
+        source_file: Aucun fichier à importer n'a été défini.
         mime_type: Le type de fichier sélectionné n'est pas valide.
 openweather:
     import:

@@ -12,19 +12,19 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Category;
+namespace App\Form\Group;
 
 use App\Entity\Category;
 use App\Form\AbstractEntityType;
+use App\Form\Category\CategoryMarginType;
 use App\Form\FormHelper;
-use App\Form\Group\GroupEntityType;
 
 /**
- * Category edit type.
+ * Root category (group) edit type.
  *
  * @author Laurent Muller
  */
-class CategoryType extends AbstractEntityType
+class GroupType extends AbstractEntityType
 {
     /**
      * Constructor.
@@ -47,9 +47,6 @@ class CategoryType extends AbstractEntityType
             ->notRequired()
             ->maxLength(255)
             ->addTextareaType();
-
-        $helper->field('parent')
-            ->add(GroupEntityType::class);
 
         $helper->field('margins')
             ->addCollectionType(CategoryMarginType::class);

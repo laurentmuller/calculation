@@ -40,9 +40,9 @@ function addMargin($table) {
     'use strict';
 
     // get prototype and update index
-    const prototype = $table.data("prototype");
-    const index = $table.data("index");
-    $table.data("index", index + 1);
+    const prototype = $table.data('prototype');
+    const index = $table.data('index');
+    $table.data('index', index + 1);
 
     // replace name
     const newForm = prototype.replace(/__name__/g, index);
@@ -53,9 +53,9 @@ function addMargin($table) {
     const maximum = Math.max(minimum * 2, 100);
 
     // add
-    $("#data-table-edit > tbody").append(newForm);
-    $("#data-table-edit").removeClass('d-none');
-    // $(".btn-sort").removeClass('d-none');
+    $('#data-table-edit > tbody').append(newForm);
+    $('#data-table-edit').removeClass('d-none');
+    $('#empty_margins').addClass('d-none');
 
     // set values and add validation
     $("input[name$='[minimum]']:last").floatVal(minimum).inputNumberFormat().selectFocus();
@@ -65,8 +65,8 @@ function addMargin($table) {
     });
 
     // update sort button
-    if ($("#data-table-edit > tbody > tr").length > 1) {
-        $(".btn-sort").removeClass('disabled');
+    if ($('#data-table-edit > tbody > tr').length > 1) {
+        $('.btn-sort').removeClass('disabled');
     }
 }
 
@@ -80,15 +80,16 @@ function removeMargin($caller) {
     'use strict';
 
     // remove row
-    const row = $caller.closest("tr");
+    const row = $caller.closest('tr');
     row.fadeOut(200, function () {
         row.remove();
-        const length = $("#data-table-edit > tbody > tr").length;
+        const length = $('#data-table-edit > tbody > tr').length;
         if (length === 0) {
-            $("#data-table-edit").addClass('d-none');
+            $('#data-table-edit').addClass('d-none');
+            $('#empty_margins').removeClass('d-none');
         }
         if (length < 2) {
-            $(".btn-sort").addClass('disabled');
+            $('.btn-sort').addClass('disabled');
         }
     });
 }
@@ -128,20 +129,20 @@ function sortMargins($table) {
     'use strict';
 
     // handle delete button
-    const $table = $("#data-table-edit");
-    $table.on("click", ".btn-delete", function (e) {
+    const $table = $('#data-table-edit');
+    $table.on('click', '.btn-delete', function (e) {
         e.preventDefault();
         removeMargin($(this));
     });
 
     // handle add button
-    $(".btn-add").on("click", function (e) {
+    $('.btn-add').on('click', function (e) {
         e.preventDefault();
         addMargin($table);
     });
 
     // handle sort button
-    $(".btn-sort").on("click", function (e) {
+    $('.btn-sort').on('click', function (e) {
         e.preventDefault();
         sortMargins($table);
     });
@@ -154,5 +155,5 @@ function sortMargins($table) {
     });
 
     // validation
-    $("form").initValidator();
+    $('form').initValidator();
 }(jQuery));

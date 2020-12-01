@@ -409,9 +409,8 @@ class AjaxController extends AbstractController
         }
 
         // format
-        $service = $this->getApplication();
-        $lang['decimal'] = $service->getDecimal();
-        $lang['thousands'] = $service->getGrouping();
+        $lang['decimal'] = FormatUtils::getDecimal();
+        $lang['thousands'] = FormatUtils::getGrouping();
 
         // encode
         $json = \json_encode($lang);

@@ -47,6 +47,8 @@
                     {{- icons.dropdownItem(href, 'product.list.title', 'file-alt far') -}}
                 {%- endif -%}
                 {%- if is_granted_category -%}
+                    {%- set href = is_tabular ? path('group_table') : path('group_list')  -%}
+                    {{- icons.dropdownItem(href, 'group.list.title', 'code-branch') -}}                    
                     {%- set href = is_tabular ? path('category_table') : path('category_list')  -%}
                     {{- icons.dropdownItem(href, 'category.list.title', 'folder far') -}}
                 {%- endif -%}

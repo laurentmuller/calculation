@@ -45,6 +45,11 @@ class ExcelDocument extends Spreadsheet
     public const HEADER_FOOTER_MARGIN = 0.51;
 
     /**
+     * The Microsoft Excel (OpenXML) mime type.
+     */
+    public const MIME_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+    /**
      * The boolean format.
      *
      * @var string[]
@@ -112,7 +117,7 @@ class ExcelDocument extends Spreadsheet
         $encoded = Utils::ascii($name);
 
         if ($inline) {
-            $type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+            $type = self::MIME_TYPE;
             $disposition = HeaderUtils::DISPOSITION_INLINE;
         } else {
             $type = 'application/x-download';

@@ -317,11 +317,11 @@ class AdminController extends AbstractController
             ];
 
             // save values to session
-            $this->setSessionValue('closed', $includeClosed);
-            $this->setSessionValue('empty', $includeEmpty);
-            $this->setSessionValue('duplicated', $includeDuplicated);
-            $this->setSessionValue('sorted', $includeSorted);
-            $this->setSessionValue('simulated', $isSimulated);
+            $this->setSessionValue('admin.update.closed', $includeClosed);
+            $this->setSessionValue('admin.update.empty', $includeEmpty);
+            $this->setSessionValue('admin.update.duplicated', $includeDuplicated);
+            $this->setSessionValue('admin.update.sorted', $includeSorted);
+            $this->setSessionValue('admin.update.simulated', $isSimulated);
 
             return $this->render('calculation/calculation_result.html.twig', $data);
         }
@@ -340,11 +340,11 @@ class AdminController extends AbstractController
     {
         // create form
         $data = [
-            'closed' => $this->isSessionBool('closed', false),
-            'sorted' => $this->isSessionBool('sorted', true),
-            'empty' => $this->isSessionBool('empty', true),
-            'duplicated' => $this->isSessionBool('duplicated', false),
-            'simulated' => $this->isSessionBool('simulated', true),
+            'closed' => $this->isSessionBool('admin.update.closed', false),
+            'sorted' => $this->isSessionBool('admin.update.sorted', true),
+            'empty' => $this->isSessionBool('admin.update.empty', true),
+            'duplicated' => $this->isSessionBool('admin.update.duplicated', false),
+            'simulated' => $this->isSessionBool('admin.update.simulated', true),
         ];
         $helper = $this->createFormHelper('calculation.update.', $data);
 

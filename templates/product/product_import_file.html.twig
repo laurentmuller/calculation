@@ -1,0 +1,27 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# parameters #}
+{%- set title       = 'product.import.title' -%}
+{%- set title_icon  = 'download' -%}
+{%- set submit_text = submit_text|default('product.import.submit_text') -%}
+{%- set cancel_path = path('homepage') -%}
+
+{% block card_header %}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ 'product.import.description'|trans }}</p>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset_css('css/fileinput.css') }}
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/plugins/plugin-fileinput.js') }}
+{{ asset_js('js/application/file_import.js') }}
+{% else %}
+{{ asset_js('js/file_import.js') }}
+{% endif %}
+{% endblock %}

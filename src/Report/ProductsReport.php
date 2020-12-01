@@ -136,7 +136,10 @@ class ProductsReport extends AbstractReport
     {
         $result = [];
         foreach ($products as $product) {
-            $key = $product->getCategory()->getCode();
+            $category = $product->getCategory();
+            $code = $category->getCode();
+            $parent = $category->getParentCode();
+            $key = $code . ' - ' . $parent;
             $result[$key][] = $product;
         }
 

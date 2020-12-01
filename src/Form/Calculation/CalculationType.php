@@ -65,7 +65,7 @@ class CalculationType extends AbstractEntityType
             ->addPlainType();
 
         $helper->field('createdBy')
-            ->updateOption('empty_value', 'calculation.edit.empty_user')
+            ->updateOption('empty_value', 'common.empty_user')
             ->addPlainType();
 
         $helper->field('updatedAt')
@@ -73,7 +73,7 @@ class CalculationType extends AbstractEntityType
             ->addPlainType();
 
         $helper->field('updatedBy')
-            ->updateOption('empty_value', 'calculation.edit.empty_user')
+            ->updateOption('empty_value', 'common.empty_user')
             ->addPlainType();
 
         // groups

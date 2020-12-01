@@ -488,7 +488,7 @@ class CalculationRepository extends AbstractRepository
             case 'date':
                 return "DATE_FORMAT({$alias}.{$field}, '%d.%m.%Y')";
             case 'overallMargin':
-                return "IFELSE({$alias}.itemsTotal != 0, CEIL(100 * (({$alias}.overallTotal / {$alias}.itemsTotal) - 1)), 0)";
+                return "IFELSE({$alias}.itemsTotal != 0, CEIL(100 * {$alias}.overallTotal / {$alias}.itemsTotal), 0)";
             case 'state.id':
                 return 's.id';
             case 'state.code':

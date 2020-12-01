@@ -14,5 +14,5 @@
 /**
  * Specific Files
  */
-<!--#include file="application/category_edit.js" -->
+<!--#include file="application/group_edit.js" -->
  

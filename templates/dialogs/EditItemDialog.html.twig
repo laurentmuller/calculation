@@ -35,7 +35,7 @@
                                 <label class="required" for="item_category">{{ 'calculationitem.fields.category'|trans }}</label>
                                 <select id="item_category" name="item_category" class="form-control">
                              	{% for category in categories %}
-                                    <option value="{{ category.id }}">{{ category.code }}</option>
+                                    <option value="{{ category.id }}" data-code="{{ category.code }}" data-parent="{{ category.parent_code }}">{{ category.full_code }}</option>
                                 {% endfor %}
                                 </select>
                             </div>

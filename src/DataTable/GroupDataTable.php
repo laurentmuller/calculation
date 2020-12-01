@@ -18,9 +18,9 @@ use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Category;
-use App\Entity\Product;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
+use App\Util\FormatUtils;
 use DataTables\DataTablesInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\QueryBuilder;
@@ -28,16 +28,16 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
 
 /**
- * Category data table handler.
+ * Parent category (group) data table handler.
  *
  * @author Laurent Muller
  */
-class CategoryDataTable extends AbstractEntityDataTable
+class GroupDataTable extends AbstractEntityDataTable
 {
     /**
      * The datatable identifier.
      */
-    public const ID = Category::class;
+    public const ID = Category::class . '.group';
 
     /**
      * Constructor.
@@ -53,22 +53,27 @@ class CategoryDataTable extends AbstractEntityDataTable
     }
 
     /**
-     * Creates the link to prodcuts.
+     * Creates the link to catégories.
      *
-     * @param Collection|Product[] $products the list of products that fall into the given category
-     * @param Category             $item     the category
+     * @param Collection|Category[] $categories the list of categories that fall into the given parent category
      *
      * @return string the link, if applicable, the value otherwise
      */
-    public function productsFormatter(Collection $products, Category $item): string
+    public function categoriesFormatter(Collection $categories): string
     {
-        $context = [
-            'id' => $item->getId(),
-            'code' => $item->getCode(),
-            'count' => \count($products),
-        ];
+        return FormatUtils::formatInt(\count($categories));
+    }
 
-        return $this->renderTemplate('category/category_product_cell.html.twig', $context);
+    /**
+     * The margins formatter.
+     *
+     * @param Collection $margins the margins to format
+     *
+     * @return string the formatted margins
+     */
+    public function maginsFormatter(Collection $margins): string
+    {
+        return FormatUtils::formatInt(\count($margins));
     }
 
     /**
@@ -76,7 +81,7 @@ class CategoryDataTable extends AbstractEntityDataTable
      */
     protected function createColumns(): array
     {
-        $path = __DIR__ . '/Definition/category.json';
+        $path = __DIR__ . '/Definition/group.json';
 
         return DataColumnFactory::fromJson($this, $path);
     }
@@ -86,8 +91,12 @@ class CategoryDataTable extends AbstractEntityDataTable
      */
     protected function createQueryBuilder($alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
+        /** @var CategoryRepository $repository */
+        $repository = $this->repository;
+        $predicate = $repository->getGroupPredicate($alias);
+
         return parent::createQueryBuilder($alias)
-            ->innerJoin($alias . '.parent', CategoryRepository::GROUP_ALIAS);
+            ->where($predicate);
     }
 
     /**

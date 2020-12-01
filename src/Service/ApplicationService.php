@@ -21,7 +21,6 @@ use App\Interfaces\ApplicationServiceInterface;
 use App\Repository\PropertyRepository;
 use App\Security\EntityVoter;
 use App\Traits\LoggerTrait;
-use App\Util\FormatUtils;
 use App\Util\Utils;
 use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
@@ -142,26 +141,6 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     }
 
     /**
-     * Gets the date format.
-     *
-     * @return int one of the date formatter constants (SHORT, MEDIUM or LONG)
-     */
-    public function getDateFormat(): int
-    {
-        return $this->getPropertyInteger(self::DATE_FORMAT, FormatUtils::getDateType());
-    }
-
-    /**
-     * Gets the decimal separator symbol.
-     *
-     * @return string the separator
-     */
-    public function getDecimal(): string
-    {
-        return $this->getPropertyString(self::DECIMAL_SEPARATOR, FormatUtils::getDecimal());
-    }
-
-    /**
      * Gets the default calculation state.
      *
      * @return CalculationState|null the calculation state, if any; null otherwise
@@ -186,16 +165,6 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     public function getDefaultStateId(): int
     {
         return $this->getPropertyInteger(self::DEFAULT_STATE);
-    }
-
-    /**
-     * Gets the number grouping separator symbol.
-     *
-     * @return string the separator
-     */
-    public function getGrouping(): string
-    {
-        return $this->getPropertyString(self::GROUPING_SEPARATOR, FormatUtils::getGrouping());
     }
 
     /**
@@ -276,12 +245,6 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
             self::MESSAGE_POSITION => $this->getMessagePosition(),
             self::MESSAGE_TIMEOUT => $this->getMessageTimeout(),
             self::MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
-
-            self::DATE_FORMAT => $this->getDateFormat(),
-            self::TIME_FORMAT => $this->getTimeFormat(),
-
-            self::GROUPING_SEPARATOR => $this->getGrouping(),
-            self::DECIMAL_SEPARATOR => $this->getDecimal(),
 
             self::LAST_UPDATE => $this->getLastUpdate(),
             self::LAST_IMPORT => $this->getLastImport(),
@@ -388,16 +351,6 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
         }
 
         return $default;
-    }
-
-    /**
-     * Gets the time format.
-     *
-     * @return int one of the date formatter constants (SHORT or MEDIUM)
-     */
-    public function getTimeFormat(): int
-    {
-        return $this->getPropertyInteger(self::TIME_FORMAT, FormatUtils::getTimeType());
     }
 
     /**

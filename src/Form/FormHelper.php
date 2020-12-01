@@ -362,6 +362,20 @@ class FormHelper
     }
 
     /**
+     * Adds a post-set-data-submit event listener.
+     * The FormEvents::POST_SET_DATA event is dispatched at the end of the Form::setData() method.
+     *
+     * @param callable $listener the event listener
+     * @param int      $priority The priority of the listener. Listeners
+     *                           with a higher priority are called before
+     *                           listeners with a lower priority.
+     */
+    public function addPostSetDataListener(callable $listener, int $priority = 0): self
+    {
+        return $this->addEventListener(FormEvents::POST_SET_DATA, $listener, $priority);
+    }
+
+    /**
      * Adds a post-submit event listener.
      * The FormEvents::POST_SUBMIT event is dispatched at the very end of the Form::submit().
      *

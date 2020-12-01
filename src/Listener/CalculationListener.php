@@ -50,7 +50,7 @@ final class CalculationListener implements DisableListenerInterface
     public function __construct(Security $security, TranslatorInterface $translator)
     {
         $this->security = $security;
-        $this->username = $translator->trans('calculation.edit.empty_user');
+        $this->username = $translator->trans('common.empty_user');
     }
 
     /**

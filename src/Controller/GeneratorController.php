@@ -115,6 +115,9 @@ class GeneratorController extends AbstractController
             foreach ($itemProducts as $product) {
                 // copy
                 $item = CalculationItem::create($product)->setQuantity($faker->numberBetween(1, 10));
+                if ($item->isEmptyPrice()) {
+                    $item->setPrice($faker->randomFloat(2, 1, 10));
+                }
 
                 // find group
                 $category = $product->getCategory();

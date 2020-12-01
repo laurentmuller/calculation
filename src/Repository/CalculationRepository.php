@@ -93,7 +93,7 @@ class CalculationRepository extends AbstractRepository
         $builder = $this->createQueryBuilder('c')
             ->addOrderBy('c.id', Criteria::DESC)
             ->where('c.itemsTotal != 0')
-            ->andWhere('(c.overallTotal / c.itemsTotal) - 1 < :minMargin ')
+            ->andWhere('(c.overallTotal / c.itemsTotal) < :minMargin ')
             ->setParameter('minMargin', $minMargin, Types::FLOAT);
 
         // execute

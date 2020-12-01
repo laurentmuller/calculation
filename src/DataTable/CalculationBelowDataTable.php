@@ -69,7 +69,7 @@ class CalculationBelowDataTable extends CalculationDataTable
 
         return parent::createQueryBuilder($alias)
             ->andWhere("{$itemsField} != 0")
-            ->andWhere("({$overallField} / {$itemsField}) - 1 < :{$param}")
+            ->andWhere("({$overallField} / {$itemsField}) < :{$param}")
             ->setParameter($param, $minMargin, Types::FLOAT);
     }
 }

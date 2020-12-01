@@ -4,10 +4,7 @@
 /.env.local.php
 /.env.*.local
 /.php_cs.cache
-/deploy/
 symfony.lock
-/public/images/users/
-/public/js/vendor
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
@@ -19,5 +16,8 @@ symfony.lock
 ###< symfony/phpunit-bridge ###
 
 ###> application ###
+/deploy/
+/public/images/users/
+/public/js/vendor
 /resources/data/swiss.sqlite
 ###< application ###

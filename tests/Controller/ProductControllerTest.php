@@ -25,8 +25,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ProductControllerTest extends AbstractControllerTest
 {
-    private static ?Category $parent = null;
     private static ?Category $category = null;
+    private static ?Category $parent = null;
     private static ?Product $product = null;
 
     public function getRoutes(): array

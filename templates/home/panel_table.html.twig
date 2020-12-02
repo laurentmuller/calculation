@@ -15,7 +15,8 @@
 {%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
 {%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
 {%- set single_page  = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
-{%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+{%- set default_page = app.actionEdit ? edit_page : show_page -%}
+{%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
 
 <div class="card mb-2">
     <div class="card-header">
@@ -32,14 +33,14 @@
     </div>
     <div class="card-body p-3">
         <table id="calculations" class="table table-hover table-sm m-0">
-            <tbody{% if edit_page or show_page %} data-link="row" class="rowlink"{% endif %}>
+            <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
             {% for calculation in calculations %}
                 {%- set id = calculation.id -%}
                 {%- set menu_id = 'dropdownMenuLast_' ~ id -%}
                 {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
                 <tr{% if id == selection %} class="table-primary"{% endif %}>
                     <td class="text-id" style="{{ properties.stateCss(calculation.stateColor) }}">
-                    {%- if edit_page or show_page -%}
+                    {%- if row_link -%}
                     	<a href="{{ path(default_page, params) }}">{{ calculation.id|identifier }}</a>
                     {%- else -%}
                         {{- calculation.id|identifier -}}

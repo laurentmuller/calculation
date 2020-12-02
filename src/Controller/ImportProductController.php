@@ -83,7 +83,7 @@ class ImportProductController extends AbstractController
                         if ($value) {
                             switch ($column) {
                                 case 'A': // group
-                                    // $groups[$value] = $value;
+                                    // ignore
                                     break;
 
                                 case 'B': // category
@@ -135,12 +135,9 @@ class ImportProductController extends AbstractController
                 // save
                 if (!$simulate) {
                     if (!empty($products)) {
+                        $manager->getConnection()->getConfiguration()->setSQLLogger(null);
                         $manager->beginTransaction();
-                        $oldPrdocucts = $manager->getRepository(Product::class)->findAll();
-                        foreach ($oldPrdocucts as $product) {
-                            $manager->remove($product);
-                        }
-                        $manager->flush();
+                        $manager->createQuery('DELETE FROM ' . Product::class)->execute();
                         foreach ($products as $product) {
                             $manager->persist($product);
                         }
@@ -152,7 +149,14 @@ class ImportProductController extends AbstractController
                 // save values to session
                 $this->setSessionValue('product.import.simulate', $simulate);
             } catch (\Exception $e) {
-                $logger->error($e->getMessage());
+                $message = $this->trans('product.import.failure');
+                $context = [
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString(),
+                ];
+                $logger->error($message, $context);
 
                 $data = [
                     'valid' => false,

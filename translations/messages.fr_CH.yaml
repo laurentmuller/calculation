@@ -349,6 +349,7 @@ user:
     image:
         title: Image du profil
         success: L'image du profil de l'utilisateur <b>%name%</b> a été mise à jour avec succès.
+        failure: Une erreur s'est produite lors du redimensionnement de l'image.
     delete:
         title: Supprimer un utilisateur
         message: Êtes-vous sûr de vouloir supprimer l'utilisateur <b>%name%</b> ?

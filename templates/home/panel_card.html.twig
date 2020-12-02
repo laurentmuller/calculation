@@ -15,7 +15,8 @@
 {%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
 {%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
 {%- set single_page  = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
-{%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+{%- set default_page = app.actionEdit ? edit_page : show_page -%}
+{%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
 
 <div class="card mb-2">
 	<div class="card-header">
@@ -40,7 +41,7 @@
 			<div class="row">
 				<div class="col-10 card-title mb-1 h5">
                     <div class="text-border" style="{{ properties.stateCss(item.stateColor) }}">
-                        {%- if default_page -%}
+                        {%- if row_link -%}
                             {%- set default_path = path(default_page, params) -%}
                             <a href="{{ default_path }}" class="text-body ml-1">{{ item_title }}</a>
                         {%- else -%}

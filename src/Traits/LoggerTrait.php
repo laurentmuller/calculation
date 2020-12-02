@@ -97,6 +97,24 @@ trait LoggerTrait
     }
 
     /**
+     * Logs the given exception as an error message.
+     *
+     * @param \Exception $e       the exception to log
+     * @param string     $message the optional message or null to use the exception message
+     */
+    public function logException(\Exception $e, string $message = null): void
+    {
+        $context = [
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => $e->getTraceAsString(),
+        ];
+
+        $this->logError($message ?? $e->getMessage(), $context);
+    }
+
+    /**
      * Logs an information message.
      *
      * @param string $message the message

@@ -8,7 +8,7 @@
 
 /**
  * Update the link href.
- *
+ * 
  * @param {Object}
  *            params - the parameters
  */
@@ -28,7 +28,7 @@ $.fn.updateHref = function (params) {
 
 /**
  * Creates the context menu items.
- *
+ * 
  * @returns {Object} the context menu items.
  */
 $.fn.getContextMenuItems = function () {
@@ -67,7 +67,7 @@ $.fn.getContextMenuItems = function () {
 
 /**
  * Handler to create margin tooltip for calculation.
- *
+ * 
  * @param {node}
  *            td - The TD node that has been created.
  * @param {any}
@@ -87,7 +87,7 @@ $.fn.dataTable.renderTooltip = function (td, cellData) {
 
 /**
  * Handler to render the state color.
- *
+ * 
  * @param {node}
  *            td - The TD node that has been created.
  * @param {any}
@@ -106,7 +106,7 @@ $.fn.dataTable.renderStateColor = function (td, cellData, rowData) {
 
 /**
  * Handler to create left border for log entry.
- *
+ * 
  * @param {node}
  *            td - The TD node that has been created.
  * @param {any}
@@ -123,7 +123,7 @@ $.fn.dataTable.renderLog = function (td, cellData, rowData) {
 
 /**
  * User send message button callback.
- *
+ * 
  * @param {DataTables.Api}
  *            row - the selected row.
  */
@@ -143,7 +143,7 @@ $.fn.userSendMessage = function (row) {
 
 /**
  * User switch button callback.
- *
+ * 
  * @param {DataTables.Api}
  *            row - the selected row.
  */
@@ -170,7 +170,7 @@ $.fn.userSwitch= function (row) {
 
 /**
  * Gets the parameters for the given identifier.
- *
+ * 
  * @param {int}
  *            id - the row identifier or 0 if none.
  * @returns {Object} the parameters.
@@ -219,7 +219,7 @@ $.fn.dataTable.Api.register('getParameters()', function (id) {
 
 /**
  * Update buttons link and enablement.
- *
+ * 
  * @returns {DataTables.Api} this instance.
  */
 $.fn.dataTable.Api.register('updateButtons()', function () {
@@ -421,11 +421,11 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
         $menu.empty().append($menus);
     });
 
-    // add row link if applicable
-    if ($('#data-table tbody.rowlink').length) {
+    // update row link if applicable
+    if ($table.attr('row-link').toBool()) {
         // path
         let path = $('.btn-table-show').data('path');
-        if (($table.attr('edit-action') || 'false').toBool()) {
+        if ($table.attr('edit-action').toBool()) {
             path = $('.btn-table-edit').data('path');
         }
         table.on('draw', function () {

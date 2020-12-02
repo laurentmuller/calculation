@@ -119,7 +119,7 @@ $.fn.extend({
      */
     editOrShow: function (e) {
         'use strict';
-        if (($(this).attr('edit-action') || 'false').toBool()) {
+        if ($(this).attr('edit-action').toBool()) {
             return triggerClick(e, '.btn-table-edit') || triggerClick(e, '.btn-table-show');
         } else {
             return triggerClick(e, '.btn-table-show') || triggerClick(e, '.btn-table-edit');

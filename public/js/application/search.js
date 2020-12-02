@@ -305,11 +305,11 @@ function searchCallback(table) {
     });
 
     // add row link if applicable
-    if ($('#data-table tbody.rowlink').length) {
+    if ($table.attr('row-link').toBool()) {
         // path
+        const editAction = $table.attr('edit-action').toBool();
         const showPath = $('.btn-table-show').data('path');
         const editPath = $('.btn-table-edit').data('path');
-        const editAction = ($table.attr('edit-action') || 'false').toBool();
 
         table.on('draw', function () {
             // run over rows

@@ -104,14 +104,6 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         $helper->field(self::P_DEFAULT_STATE)
             ->addStateType();
 
-        $helper->field(self::P_EDIT_ACTION)
-            ->updateAttribute('data-default', (int) self::DEFAULT_EDIT_ACTION)
-            ->addChoiceType([
-                'parameters.editAction.show' => ActionInterface::ACTION_SHOW,
-                'parameters.editAction.edit' => ActionInterface::ACTION_EDIT,
-                //'parameters.editAction.none' => ActionInterface::ACTION_NONE,
-            ]);
-
         $helper->field(self::P_MIN_MARGIN)
             ->updateAttribute('data-default', self::DEFAULT_MIN_MARGIN * 100)
             ->percent(true)
@@ -122,6 +114,14 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ->addChoiceType([
                 'parameters.tabular.table' => true,
                 'parameters.tabular.flex' => false,
+            ]);
+
+        $helper->field(self::P_EDIT_ACTION)
+            ->updateAttribute('data-default', self::DEFAULT_ACTION)
+            ->addChoiceType([
+                'parameters.editAction.show' => ActionInterface::ACTION_SHOW,
+                'parameters.editAction.edit' => ActionInterface::ACTION_EDIT,
+                'parameters.editAction.none' => ActionInterface::ACTION_NONE,
             ]);
     }
 

@@ -38,7 +38,6 @@ class HomeController extends AbstractController
         $months = $calculRepository->getByMonth();
         $calculations = $calculRepository->getLastCalculations($tabular ? 10 : 6);
         $margin = $this->getApplication()->getMinMargin();
-        $edit = $this->getApplication()->isEditAction();
 
         // get states count and total
         [$count, $total] = \array_reduce($states, function (array $carry, array $state) {
@@ -52,12 +51,10 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig', [
             'calculations' => $calculations,
             'min_margin' => $margin,
-            'tabular' => $tabular,
             'states' => $states,
             'months' => $months,
             'count' => $count,
             'total' => $total,
-            'edit' => $edit,
         ]);
     }
 

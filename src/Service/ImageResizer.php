@@ -15,10 +15,13 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Interfaces\ImageExtensionInterface;
+use App\Traits\LoggerTrait;
+use App\Traits\TranslatorTrait;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to resize images.
@@ -27,17 +30,14 @@ use Psr\Log\LoggerInterface;
  */
 class ImageResizer implements ImageExtensionInterface
 {
+    use LoggerTrait;
+    use TranslatorTrait;
+
     /**
      * The default options.
-     *
-     * @var array
      */
     private const DEFAULT_OPTIONS = [
         'format' => self::EXTENSION_PNG,
-//         'png_compression_level' => 0,
-//         'resolution-units' => ImageInterface::RESOLUTION_PIXELSPERINCH,
-//         'resolution-x' => 200,
-//         'resolution-y' => 200,
     ];
 
     /**
@@ -46,21 +46,18 @@ class ImageResizer implements ImageExtensionInterface
     private $imagine;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Constructor.
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, TranslatorInterface $translator)
     {
         $this->logger = $logger;
+        $this->translator = $translator;
 
         try {
             $this->imagine = new Imagine();
         } catch (\Exception $e) {
-            $this->logError($e);
+            $message = $this->trans('user.image.failure');
+            $this->logException($e, $message);
         }
     }
 
@@ -72,7 +69,7 @@ class ImageResizer implements ImageExtensionInterface
      * @param int    $size    the image size
      * @param array  $options the options to use when saving image
      *
-     * @return bool true on success, false on error or if the size is not positive
+     * @return bool true on success, false on error or if the size is not a positive value
      */
     public function resize(string $source, string $target, int $size, array $options = []): bool
     {
@@ -92,19 +89,18 @@ class ImageResizer implements ImageExtensionInterface
             } else {
                 $height = $width / $ratio;
             }
-
-            // load and resize
-            $image_size = new Box($width, $height);
-            $image = $this->imagine->open($source);
-            $image->resize($image_size);
-
-            // save
+            $size = new Box($width, $height);
             $options = \array_merge(self::DEFAULT_OPTIONS, $options);
-            $image->save($target, $options);
+
+            // open, resize and save
+            $this->imagine->open($source)
+                ->resize($size)
+                ->save($target, $options);
 
             return true;
         } catch (\Exception $e) {
-            $this->logError($e);
+            $message = $this->trans('user.image.failure');
+            $this->logException($e, $message);
 
             return false;
         }
@@ -150,19 +146,5 @@ class ImageResizer implements ImageExtensionInterface
     public function resizeSmall(string $source, string $target, array $options = []): bool
     {
         return $this->resize($source, $target, self::SIZE_SMALL, $options);
-    }
-
-    /**
-     * Logs the given exception.
-     *
-     * @param \Exception $e the exception to log
-     */
-    private function logError(\Exception $e): void
-    {
-        $context = [
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-        ];
-        $this->logger->error($e->getMessage(), $context);
     }
 }

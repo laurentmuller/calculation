@@ -26,7 +26,8 @@
 {%- set delete_page   = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'user_delete' : null -%}
 {%- set show_page     = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'user_show' : null -%}
 {%- set pdf_page      = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'user_pdf' : null -%}
-{%- set default_page  = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+{%- set default_page  = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+{%- set row_link      = not app.actionNone and (edit_page or show_page) -%}
 
 {% block item_title %}
 {% apply spaceless %}
@@ -43,8 +44,8 @@
 </span>
 {%- endif -%}
 {# title #}
-<span>
-{%- if default_page -%}
+<span class="align-top">
+{%- if row_link and default_page -%}
     <a href="{{ path(default_page, {'id': item.id}) }}" class="text-body align-top">{{ item_title }}</a>
 {%- else -%}
     {{ item_title }}

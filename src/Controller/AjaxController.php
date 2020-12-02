@@ -757,15 +757,17 @@ class AjaxController extends AbstractController
             return $this->json($result);
         } catch (\Exception $e) {
             // log
+            $message = $this->trans('calculation.edit.error.update_total');
             $context = [
                 'message' => $e->getMessage(),
                 'code' => $e->getCode(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString(), ];
-            $logger->error('An error occurred when updating the calculation totals.', $context);
+                'trace' => $e->getTraceAsString(),
+            ];
+            $logger->error($message, $context);
 
-            return $this->jsonException($e, $this->trans('calculation.edit.error.update_total'));
+            return $this->jsonException($e, $message);
         }
     }
 

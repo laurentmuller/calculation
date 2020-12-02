@@ -50,20 +50,16 @@ class BelowCalculationController extends AbstractController
             return  $this->redirectToHomePage();
         }
 
-        $selection = $request->get('selection', 0);
-        $edit = $this->getApplication()->isEditAction();
-
         // parameters
         $parameters = [
             'items' => $items,
             'items_count' => \count($items),
             'min_margin' => $minMargin,
             'query' => false,
-            'selection' => $selection,
+            'id' => $request->get('id', 0),
             'sortField' => 'id',
             'sortMode' => Criteria::DESC,
             'sortFields' => [],
-            'edit' => $edit,
         ];
 
         return $this->render('calculation/calculation_card_below.html.twig', $parameters);
@@ -122,7 +118,6 @@ class BelowCalculationController extends AbstractController
         $attributes = [
             'min_margin' => $minMargin,
             'min_margin_text' => $margin_text,
-            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
         ];
 
         // parameters

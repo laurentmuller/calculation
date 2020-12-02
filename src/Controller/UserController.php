@@ -339,7 +339,6 @@ class UserController extends AbstractEntityController
 
         // show form
         return $this->render('user/user_password.html.twig', [
-            'selection' => $item->getId(),
             'form' => $form->createView(),
         ]);
     }
@@ -403,7 +402,6 @@ class UserController extends AbstractEntityController
         // show form
         return $this->render('user/user_rights.html.twig', [
             'form' => $form->createView(),
-            'selection' => $item->getId(),
             'default' => EntityVoter::getRole($item),
         ]);
     }

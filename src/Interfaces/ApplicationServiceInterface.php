@@ -24,9 +24,9 @@ namespace App\Interfaces;
 interface ApplicationServiceInterface
 {
     /**
-     * The default edit action (boolean).
+     * The default action (string).
      */
-    public const DEFAULT_EDIT_ACTION = true;
+    public const DEFAULT_ACTION = ActionInterface::ACTION_EDIT;
 
     /**
      * The default number of items displayed in the tables (integer).

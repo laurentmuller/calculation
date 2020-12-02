@@ -47,9 +47,6 @@ class DuplicateCalculationController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        $selection = $request->get('selection', 0);
-        $edit = $this->getApplication()->isEditAction();
-
         // number of items
         $items_count = \array_reduce($items, function (int $carry, array $calculation) {
             foreach ($calculation['items'] as $item) {
@@ -64,11 +61,10 @@ class DuplicateCalculationController extends AbstractController
                 'items' => $items,
                 'items_count' => $items_count,
                 'query' => false,
-                'selection' => $selection,
+                'id' => $request->get('id', 0),
                 'sortField' => 'id',
                 'sortMode' => Criteria::DESC,
                 'sortFields' => [],
-                'edit' => $edit,
             ];
 
         return $this->render('calculation/calculation_card_duplicate.html.twig', $parameters);
@@ -115,7 +111,6 @@ class DuplicateCalculationController extends AbstractController
 
         // attributes
         $attributes = [
-            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
             'itemsCount' => $table->getItemCounts(),
         ];
 

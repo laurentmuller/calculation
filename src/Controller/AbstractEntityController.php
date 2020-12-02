@@ -125,7 +125,6 @@ abstract class AbstractEntityController extends AbstractController
         // update parameters
         $parameters['title'] = $title;
         $parameters['message'] = $message;
-        $parameters['selection'] = $item->getId();
         $parameters['form'] = $form->createView();
 
         // show page
@@ -196,9 +195,6 @@ abstract class AbstractEntityController extends AbstractController
         $parameters['new'] = $isNew;
         $parameters['item'] = $item;
         $parameters['form'] = $form->createView();
-        if (!$isNew) {
-            $parameters['selection'] = (int) $item->getId();
-        }
 
         // show form
         return $this->render($this->getEditTemplate(), $parameters);
@@ -300,10 +296,10 @@ abstract class AbstractEntityController extends AbstractController
         $mode = $this->getSessionString($key . '.sortMode', $sortMode);
 
         // get request values
-        $field = $request->get('sortField', $field);
-        $mode = $request->get('sortMode', $mode);
-        $selection = (int) $request->get('selection', 0);
+        $id = (int) $request->get('id', 0);
         $query = $request->get('query', '');
+        $mode = $request->get('sortMode', $mode);
+        $field = $request->get('sortField', $field);
 
         // update session values
         if ($sortField === $field && $sortMode === $mode) {
@@ -317,18 +313,14 @@ abstract class AbstractEntityController extends AbstractController
         // get items
         $items = $this->getEntities($field, $mode);
 
-        // default action
-        $edit = $this->getApplication()->isEditAction();
-
         // parameters
         $parameters = \array_merge([
             'items' => $items,
+            'id' => $id,
             'query' => $query,
-            'selection' => $selection,
-            'sortField' => $field,
             'sortMode' => $mode,
+            'sortField' => $field,
             'sortFields' => $sortFields,
-            'edit' => $edit,
         ], $parameters);
 
         return $this->render($this->getCardTemplate(), $parameters);
@@ -373,9 +365,6 @@ abstract class AbstractEntityController extends AbstractController
 
         // check permission
         $this->checkPermission(EntityVoterInterface::ATTRIBUTE_LIST);
-
-        // update attributes
-        $attributes['edit-action'] = \json_encode($this->getApplication()->isEditAction());
 
         // parameters
         $parameters += [

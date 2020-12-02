@@ -19,11 +19,12 @@
 {%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'product_delete' : null -%}
 {%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'product_show' : null -%}
 {%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'product_pdf' : null -%}
-{%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+{%- set default_page = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+{%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
 
 {% block item_title %}
 {%- set item_title = item.description -%}
-{%- if default_page -%}
+{%- if row_link and default_page -%}
     {%- set default_path = path(default_page, params) -%}    
     <a href="{{ default_path }}" class="text-body rowlink-skip">{{ item_title }}</a>
 {%- else -%} 
@@ -34,7 +35,11 @@
 {% block item_title_class %}font-weight-bold{% endblock %}
 
 {% block item_property %}
+{% if item.parentCode -%}
+{{ properties.line(item.categoryCode ~ ' - ' ~ item.parentCode) }}
+{%- else %}
 {{ properties.line(item.categoryCode) }}
+{%- endif %}
 {{ properties.line(item.supplier) }}
 {{ properties.separator() }}
 {{ properties.property('product.fields.price', item.price|amount ~ (item.unit ? ' / ' ~ item.unit : ''), 'text-right pr-4') }}

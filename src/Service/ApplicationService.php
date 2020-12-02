@@ -17,6 +17,7 @@ namespace App\Service;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Property;
+use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Repository\PropertyRepository;
 use App\Security\EntityVoter;
@@ -168,6 +169,21 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     }
 
     /**
+     * Gets the action to use whithin the entities.
+     * <p>
+     * Possible values are:
+     * <ul>
+     * <li>'<code>edit</code>': The entity is edited.</li>
+     * <li>'<code>show</code>': The entity is show.</li>
+     * <li>'<code>none</code>': Do nothing with the entity.</li>
+     * </ul>.
+     */
+    public function getEditAction(): string
+    {
+        return $this->getPropertyString(self::P_EDIT_ACTION, self::DEFAULT_ACTION);
+    }
+
+    /**
      * Gets the last import of Swiss cities.
      *
      * @return \DateTime|null the last import or NULL if none
@@ -239,7 +255,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
             self::P_CUSTOMER_NAME => $this->getCustomerName(),
             self::P_CUSTOMER_URL => $this->getCustomerUrl(),
 
-            self::P_EDIT_ACTION => $this->isEditAction(),
+            self::P_EDIT_ACTION => $this->getEditAction(),
             self::P_DEFAULT_STATE => $this->getDefaultState(),
 
             self::P_MESSAGE_POSITION => $this->getMessagePosition(),
@@ -364,6 +380,36 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     }
 
     /**
+     * Returns a value indicating if the default action is to edit the entity.
+     *
+     * @return bool true to edit the entity
+     */
+    public function isActionEdit(): bool
+    {
+        return ActionInterface::ACTION_EDIT === $this->getEditAction();
+    }
+
+    /**
+     * Returns a value indicating if the default action is to do nothing.
+     *
+     * @return bool true to do nothing with the entity
+     */
+    public function isActionNone(): bool
+    {
+        return ActionInterface::ACTION_NONE === $this->getEditAction();
+    }
+
+    /**
+     * Returns a value indicating if the default action is to show the entity.
+     *
+     * @return bool true to show the entity
+     */
+    public function isActionShow(): bool
+    {
+        return ActionInterface::ACTION_SHOW === $this->getEditAction();
+    }
+
+    /**
      * Gets a value indicating the image captcha is displayed when login.
      *
      * @return bool true to display the image; false to hide
@@ -381,16 +427,6 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     public function isDisplayTabular(): bool
     {
         return $this->isPropertyBoolean(self::P_DISPLAY_TABULAR, self::DEFAULT_TABULAR);
-    }
-
-    /**
-     * Gets the default action.
-     *
-     * @return bool false to display the entity properties; true to edit the entity
-     */
-    public function isEditAction(): bool
-    {
-        return $this->isPropertyBoolean(self::P_EDIT_ACTION, self::DEFAULT_EDIT_ACTION);
     }
 
     /**

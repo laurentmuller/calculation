@@ -22,9 +22,9 @@ namespace App\Interfaces;
 interface ActionInterface
 {
     /**
-     * Edit entity.
+     * Edit the entity.
      */
-    public const ACTION_EDIT = true;
+    public const ACTION_EDIT = 'edit';
 
     /**
      * No action.
@@ -32,7 +32,7 @@ interface ActionInterface
     public const ACTION_NONE = 'none';
 
     /**
-     * Show entity.
+     * Show the entity.
      */
-    public const ACTION_SHOW = false;
+    public const ACTION_SHOW = 'show';
 }

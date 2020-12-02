@@ -48,10 +48,10 @@
 {%- set orderdir      = app.session.get(object_type ~ '.orderdir') -%}
 {%- set pagelength    = app.session.get(object_type ~ '.pagelength', 15) -%}
 
-{%- set is_pdf_action   = pdf_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
-{%- set is_excel_action = excel_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
-{%- set other_actions   = is_pdf_action or is_excel_action or (other_actions ?? false) -%}
-{%- set row_link        = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) or is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) -%}
+{%- set is_pdf_action    = pdf_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
+{%- set is_excel_action  = excel_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
+{%- set is_other_actions = is_pdf_action or is_excel_action or (is_other_actions ?? false) -%}
+{%- set row_link         = not app.actionNone and (is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) or is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type)) -%}
 
 {# classes #}
 {% block card_container_class '' %}
@@ -77,7 +77,7 @@
                 {{ _self.button(add_path|default(false), 'common.button_add', 'btn-table-add btn-primary', add_title ?? false, 'far fa-fw fa-file') }}
             {% endif %}
             {% block other_actions -%}
-			{%- if other_actions -%}	   
+			{%- if is_other_actions -%}	   
 			<div id="other_actions" class="btn-group" role="group" aria-label="{{ 'common.other_actions'|trans }}">
                 <button id="other_actions_button" class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'common.other_actions'|trans }}">
                     <i class="fas fa-bars" aria-hidden="true"></i>
@@ -148,6 +148,8 @@
 
 {%- set attributes = attributes|default({})|merge({
         'id': 'data-table',
+        'row-link': row_link,
+        'edit-action': app.actionEdit,
         'class': 'table table-list table-hover table-sm dataTable border-bottom w-100',
         'data-ajax': ajax_path,
         'data-lang': ajax_lang,

@@ -53,11 +53,6 @@ class SearchController extends AbstractController
         // entities
         $entities = $this->getEntities();
 
-        // attributes
-        $attributes = [
-            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
-        ];
-
         // authorizations
         $show_granted = $table->isActionGranted(EntityVoterInterface::ATTRIBUTE_SHOW);
         $edit_granted = $table->isActionGranted(EntityVoterInterface::ATTRIBUTE_EDIT);
@@ -67,7 +62,6 @@ class SearchController extends AbstractController
         $parameters = [
             'results' => $results,
             'entities' => $entities,
-            'attributes' => $attributes,
             'columns' => $table->getColumns(),
             'show_granted' => $show_granted,
             'edit_granted' => $edit_granted,

@@ -12,7 +12,7 @@
 {% block body -%}
 <div class="row no-gutters">
 	<div class="col">
-        {% if tabular %}
+        {% if app.displayTabular %}
             {%- include 'home/panel_table.html.twig' -%}
         {% else %}
             {%- include 'home/panel_card.html.twig' -%}

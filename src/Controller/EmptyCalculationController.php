@@ -47,9 +47,6 @@ class EmptyCalculationController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        $selection = $request->get('selection', 0);
-        $edit = $this->getApplication()->isEditAction();
-
         // number of items
         $items_count = \array_reduce($items, function (int $carry, array $calculation) {
             return $carry + \count($calculation['items']);
@@ -58,14 +55,13 @@ class EmptyCalculationController extends AbstractController
         // parameters
         $parameters = [
             'items' => $items,
-                'items_count' => $items_count,
-                'query' => false,
-                'selection' => $selection,
-                'sortField' => 'id',
-                'sortMode' => Criteria::DESC,
-                'sortFields' => [],
-                'edit' => $edit,
-            ];
+            'items_count' => $items_count,
+            'query' => false,
+            'id' => $request->get('id', 0),
+            'sortField' => 'id',
+            'sortMode' => Criteria::DESC,
+            'sortFields' => [],
+        ];
 
         return $this->render('calculation/calculation_card_empty.html.twig', $parameters);
     }
@@ -112,7 +108,6 @@ class EmptyCalculationController extends AbstractController
 
         // attributes
         $attributes = [
-            'edit-action' => \json_encode($this->getApplication()->isEditAction()),
             'itemsCount' => $table->getItemCounts(),
         ];
 

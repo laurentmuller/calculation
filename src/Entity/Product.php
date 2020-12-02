@@ -229,6 +229,7 @@ class Product extends AbstractEntity
             $this->supplier,
             FormatUtils::formatAmount($this->price),
             $this->getCategoryCode(),
+            $this->getParentCode(),
         ];
     }
 }

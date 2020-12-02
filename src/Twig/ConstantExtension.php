@@ -87,7 +87,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      *
      * @param string $className the class name to get constants for
      *
-     * @return array an array tah hold the constant names and the contant values
+     * @return array an array that hold the constant names and the contant values
      */
     private function getConstants(string $className): array
     {

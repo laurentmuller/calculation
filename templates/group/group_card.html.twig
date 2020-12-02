@@ -17,12 +17,12 @@
 {%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'group_delete' : null -%}
 {%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'group_show' : null -%}
 {%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'group_pdf' : null -%}
-{%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
-{%- set product_list = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_PRODUCT) %}
+{%- set default_page = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+{%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
 
 {% block item_title %}
 {%- set item_title = item.code -%}
-{%- if default_page -%}
+{%- if row_link and default_page -%}
     {%- set default_path = path(default_page, params) -%}
     <a href="{{ default_path }}" class="text-body">{{ item_title }}</a>
 {%- else -%} 

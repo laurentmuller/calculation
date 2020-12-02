@@ -17,6 +17,7 @@
 {% block property_body %}
 {{ properties.property('product.fields.description', item.description) }}
 {{ properties.property('product.fields.category', item.categoryCode) }}
+{% if item.parentCode -%}{{ properties.property('product.fields.group', item.parentCode) }}{%- endif %}
 {{ properties.property('product.fields.supplier', item.supplier) }}
 {{ properties.property('product.fields.price', item.price|amount) }}
 {{ properties.property('product.fields.unit', item.unit) }}

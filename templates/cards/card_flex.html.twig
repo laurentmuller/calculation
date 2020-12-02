@@ -23,8 +23,7 @@
 {% endmacro %}
 
 {# parameters #}
-{%- set selection = selection|default(0) -%}
-{%- set caller    = caller|default(path(app.request.get('_route'))) -%}
+{%- set caller = caller|default(path(app.request.get('_route'))) -%}
 
 {# class #}
 {% block card_container_class '' %}

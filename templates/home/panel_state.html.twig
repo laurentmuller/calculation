@@ -22,7 +22,7 @@
 {# parameters #}
 {%- set list_path = false -%}
 {%- if is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
-    {%- set list_path = tabular ? 'calculation_table' : 'calculation_list' -%}
+    {%- set list_path = app.displayTabular ? 'calculation_table' : 'calculation_list' -%}
 {%- endif -%}
 
 <div class="card mb-2">
@@ -32,7 +32,7 @@
     <div class="card-body d-flex flex-row flex-wrap p-2">
     {% if states|length %}
         {% for state in states %}
-            {%- set parameters = tabular ? {'search[0][index]': 8, 'search[0][value]': state.id} : {'query': state.code} -%}
+            {%- set parameters = app.displayTabular ? {'search[0][index]': 8, 'search[0][value]': state.id} : {'query': state.code} -%}
             {{ _self.cardEntry(state.count, state.total, state.code, state.color, list_path, parameters) }}
         {% endfor %}
         {{ _self.cardEntry(count, total, 'calculation.fields.total'|trans, 'secondary', list_path) }}

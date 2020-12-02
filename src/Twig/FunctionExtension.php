@@ -15,8 +15,6 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
-use App\Entity\Calculation;
-use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Util\Utils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
@@ -58,13 +56,6 @@ final class FunctionExtension extends AbstractExtension
     private $nonce;
 
     /**
-     * The application service.
-     *
-     * @var ApplicationService
-     */
-    private $service;
-
-    /**
      * The translator service.
      *
      * @var TranslatorInterface
@@ -83,14 +74,11 @@ final class FunctionExtension extends AbstractExtension
      *
      * @param KernelInterface     $kernel     the kernel to get the public directory
      * @param TranslatorInterface $translator the translator service
-     * @param ApplicationService  $service    the application service
      * @param UrlGeneratorService $generator  the URL generator service
      */
-    public function __construct(KernelInterface $kernel, TranslatorInterface $translator, ApplicationService $service, UrlGeneratorService $generator)
+    public function __construct(KernelInterface $kernel, TranslatorInterface $translator, UrlGeneratorService $generator)
     {
         $this->webDir = \realpath($kernel->getProjectDir() . '/public');
-
-        $this->service = $service;
         $this->translator = $translator;
         $this->generator = $generator;
     }
@@ -235,26 +223,6 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Gets the position of the flashbag messages.
-     *
-     * @return string the position
-     */
-    public function getFlashbagPosition(): string
-    {
-        return $this->service->getMessagePosition();
-    }
-
-    /**
-     * Gets the timeout of the flashbag messages.
-     *
-     * @return int the timeout
-     */
-    public function getFlashbagTimeout(): int
-    {
-        return $this->service->getMessageTimeout();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getFunctions(): array
@@ -265,11 +233,6 @@ final class FunctionExtension extends AbstractExtension
         ];
 
         return [
-            // flash bag messages
-            new TwigFunction('flashbag_position', [$this, 'getFlashbagPosition'], ['deprecated' => true, 'alternative' => 'app.messagePosition']),
-            new TwigFunction('flashbag_timeout', [$this, 'getFlashbagTimeout'], ['deprecated' => true, 'alternative' => 'app.messageTimeout']),
-            new TwigFunction('flashbag_subtitle', [$this, 'isFlashbagSubTitle'], ['deprecated' => true, 'alternative' => 'app.messageSubTitle']),
-
             // asssets
             new TwigFunction('asset_exists', [$this, 'assetExists']),
             new TwigFunction('file_exists', [$this, 'fileExists']),
@@ -288,10 +251,6 @@ final class FunctionExtension extends AbstractExtension
 
             // php
             new TwigFunction('is_int', 'is_int'),
-
-            // application
-            new TwigFunction('margin_below', [$this, 'isMarginBelow'], ['deprecated' => true, 'alternative' => 'app.marginBelow']),
-            new TwigFunction('display_tabular', [$this, 'isDisplayTabular'], ['deprecated' => true, 'alternative' => 'app.displayTabular']),
         ];
     }
 
@@ -321,38 +280,6 @@ final class FunctionExtension extends AbstractExtension
         $fullPath = \realpath($this->webDir . $path);
 
         return \getimagesize($fullPath)[0];
-    }
-
-    /**
-     * Gets a value indicating how entities are displayed.
-     *
-     * @return bool true, displays the entities in tabular mode; false, displays entities as cards
-     */
-    public function isDisplayTabular(): bool
-    {
-        return $this->service->isDisplayTabular();
-    }
-
-    /**
-     * Gets a value indicating if the sub-title of the flashbag messages is displayed.
-     *
-     * @return bool true if displayed
-     */
-    public function isFlashbagSubTitle(): bool
-    {
-        return $this->service->isMessageSubTitle();
-    }
-
-    /**
-     * Returns if the given calculation or margin is below the minimum margin allowed.
-     *
-     * @param Calculation|float $value the calculation or the margin to be tested
-     *
-     * @return bool true if below the minimum margin allowed
-     */
-    public function isMarginBelow($value): bool
-    {
-        return $this->service->isMarginBelow($value);
     }
 
     /**

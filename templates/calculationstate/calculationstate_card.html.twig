@@ -17,17 +17,18 @@
 {%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'calculationstate_delete' : null -%}
 {%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'calculationstate_show' : null -%}
 {%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'calculationstate_pdf' : null -%}
-{%- set default_page = edit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
-{%- set list_path    = 'calculation_list' -%}
+{%- set list_path    = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION)-%}
+{%- set default_page = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+{%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
 
 {% block item_title %}
 {%- set item_title = item.code -%}
 <div class="text-border" style="{{ properties.stateCss(item.color) }}">
-{%- if default_page -%}
+{%- if row_link and default_page -%}
     {%- set default_path = path(default_page, params) -%}
     <a href="{{ default_path }}" class="text-body ml-1">{{ item.code }}</a>
 {%- else -%} 
-    {{ item_title }}{{ item.default }}
+    {{ item.code }}
 {%- endif -%}
 </div>
 {% endblock %}
@@ -36,8 +37,8 @@
 {{ properties.line(item.description, false, 1) }}
 {{ properties.separator(1) }}
 {%- set text = 'counters.calculations'|trans({count: item.countCalculations}) -%}
-{%- if item.countCalculations -%}
-    {% set href = path(list_path, {'query': item.code}) %}
+{%- if item.countCalculations and list_path -%}
+    {% set href = path('calculation_list', {'query': item.code}) %}
     {{ properties.link(href, text, false, false, 1) }}
 {%- else -%}
     {{ properties.line(text, false, 1) }}
@@ -50,9 +51,9 @@
 {% endblock %}
 
 {% block actions %}
-{% if item.countCalculations and is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) %}
+{% if item.countCalculations and list_path %}
     {{ icons.dropdownSeparator }}
-    {% set href = path(list_path, {'query': item.code}) %}
+    {% set href = path('calculation_list', {'query': item.code}) %}
     {{ icons.dropdownItem(href, 'calculationstate.list.calculation_title', 'external-link-alt') }}
 {% endif %}
 {% endblock -%}

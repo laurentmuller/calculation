@@ -50,19 +50,29 @@
 <label class="horizontal-line font-weight-bold">{{ 'parameters.group_customer'|trans }}</label>
 {{ form_row(form.customer_name) }}
 {{ form_row(form.customer_url) }}
-<label class="horizontal-line font-weight-bold">{{ 'parameters.group_default'|trans }}</label>
-<div class="form-row ml-2">
-	<div class="col-md-4">
-		{{ form_row(form.default_state) }}
-	</div>
-	<div class="col-md-4">
-		{{ form_row(form.edit_action) }}
-	</div>
-	 <div class="col-md-4">
-        {{ form_row(form.minimum_margin) }}
-    </div>
-</div>
 <div class="accordion" id="parent_accordion">
+    {{ _self.collapseLine('default') }}
+    <div class="toggle-icon collapse" id="default" data-parent="#parent_accordion">
+        <div class="form-row ml-2 mt-1">
+            <div class="col-md-7">
+                {{ form_row(form.default_state) }}
+            </div>
+             <div class="col-md-5">
+                {{ form_row(form.minimum_margin) }}
+            </div>
+        </div>
+    </div>
+    {{ _self.collapseLine('display') }}
+    <div class="toggle-icon collapse" id="display" data-parent="#parent_accordion">
+        <div class="form-row ml-2 mt-1">
+            <div class="col-md-7">
+                {{ form_row(form.display_tabular) }}
+            </div>
+            <div class="col-md-5">
+                {{ form_row(form.edit_action) }}
+            </div>            
+        </div>
+    </div>
     {{ _self.collapseLine('message') }}
     <div class="toggle-icon collapse" id="message" data-parent="#parent_accordion">
         <div class="form-row ml-2 mt-1">
@@ -77,15 +87,6 @@
             </div>
         </div>
     </div>
-    {{ _self.collapseLine('display') }}
-    <div class="toggle-icon collapse" id="display" data-parent="#parent_accordion">
-        <div class="form-row ml-2 mt-1">
-            <div class="col">
-                {{ form_row(form.display_tabular) }}
-            </div>
-        </div>
-    </div>
-    
     {% if super_admin %}
     {{ _self.collapseLine('security') }}
     <div class="toggle-icon collapse" id="security" data-parent="#parent_accordion">
@@ -97,11 +98,10 @@
                 {{ form_row(form.minstrength) }}
             </div>
         </div>
-        
-            <label class="horizontal-line font-weight-bold">{{ 'parameters.group_password'|trans }}</label>
-            <div class="ml-2">
-                {{ form_rest(form) }}
-            </div>
+        <label class="horizontal-line font-weight-bold">{{ 'parameters.group_password'|trans }}</label>
+        <div class="ml-2">
+            {{ form_rest(form) }}
+        </div>
     </div>
     {% endif %}
 </div>

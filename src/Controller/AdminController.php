@@ -159,8 +159,8 @@ class AdminController extends AbstractController
         // properties
         $service = $this->getApplication();
         $data = $service->getProperties([
-            ApplicationServiceInterface::LAST_UPDATE,
-            ApplicationServiceInterface::LAST_IMPORT,
+            ApplicationServiceInterface::P_LAST_UPDATE,
+            ApplicationServiceInterface::P_LAST_IMPORT,
         ]);
 
         // password options
@@ -197,7 +197,7 @@ class AdminController extends AbstractController
         $roleName = RoleInterface::ROLE_ADMIN;
         $rights = $this->getApplication()->getAdminRights();
         $default = EntityVoter::getRoleAdmin();
-        $property = ApplicationServiceInterface::ADMIN_RIGHTS;
+        $property = ApplicationServiceInterface::P_ADMIN_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);
     }
@@ -214,7 +214,7 @@ class AdminController extends AbstractController
         $roleName = RoleInterface::ROLE_USER;
         $rights = $this->getApplication()->getUserRights();
         $default = EntityVoter::getRoleUser();
-        $property = ApplicationServiceInterface::USER_RIGHTS;
+        $property = ApplicationServiceInterface::P_USER_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);
     }
@@ -288,7 +288,7 @@ class AdminController extends AbstractController
 
             if (!$isSimulated) {
                 // update last update
-                $this->getApplication()->setProperties([ApplicationServiceInterface::LAST_UPDATE => new \DateTime()]);
+                $this->getApplication()->setProperties([ApplicationServiceInterface::P_LAST_UPDATE => new \DateTime()]);
 
                 // log results
                 $context = [

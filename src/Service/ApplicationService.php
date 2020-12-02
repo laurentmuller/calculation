@@ -107,7 +107,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     {
         $default = EntityVoter::getRoleAdmin()->getRights();
 
-        return $this->getPropertyArray(self::ADMIN_RIGHTS, $default);
+        return $this->getPropertyArray(self::P_ADMIN_RIGHTS, $default);
     }
 
     /**
@@ -127,7 +127,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getCustomerName(): ?string
     {
-        return $this->getPropertyString(self::CUSTOMER_NAME);
+        return $this->getPropertyString(self::P_CUSTOMER_NAME);
     }
 
     /**
@@ -137,7 +137,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getCustomerUrl(): ?string
     {
-        return $this->getPropertyString(self::CUSTOMER_URL);
+        return $this->getPropertyString(self::P_CUSTOMER_URL);
     }
 
     /**
@@ -164,7 +164,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getDefaultStateId(): int
     {
-        return $this->getPropertyInteger(self::DEFAULT_STATE);
+        return $this->getPropertyInteger(self::P_DEFAULT_STATE);
     }
 
     /**
@@ -174,7 +174,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getLastImport(): ?\DateTime
     {
-        return $this->getPropertyDate(self::LAST_IMPORT);
+        return $this->getPropertyDate(self::P_LAST_IMPORT);
     }
 
     /**
@@ -184,7 +184,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getLastUpdate(): ?\DateTime
     {
-        return $this->getPropertyDate(self::LAST_UPDATE);
+        return $this->getPropertyDate(self::P_LAST_UPDATE);
     }
 
     /**
@@ -194,7 +194,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getMessagePosition(): string
     {
-        return $this->getPropertyString(self::MESSAGE_POSITION, self::DEFAULT_POSITION);
+        return $this->getPropertyString(self::P_MESSAGE_POSITION, self::DEFAULT_POSITION);
     }
 
     /**
@@ -204,7 +204,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getMessageTimeout(): int
     {
-        return $this->getPropertyInteger(self::MESSAGE_TIMEOUT, self::DEFAULT_TIMEOUT);
+        return $this->getPropertyInteger(self::P_MESSAGE_TIMEOUT, self::DEFAULT_TIMEOUT);
     }
 
     /**
@@ -212,7 +212,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getMinMargin(): float
     {
-        return $this->getPropertyFloat(self::MIN_MARGIN, self::DEFAULT_MIN_MARGIN);
+        return $this->getPropertyFloat(self::P_MIN_MARGIN, self::DEFAULT_MIN_MARGIN);
     }
 
     /**
@@ -220,7 +220,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getMinStrength(): int
     {
-        return $this->getPropertyInteger(self::MIN_STRENGTH, Strength::LEVEL_DISABLE);
+        return $this->getPropertyInteger(self::P_MIN_STRENGTH, Strength::LEVEL_DISABLE);
     }
 
     /**
@@ -236,30 +236,28 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
         $this->updateAdapter();
 
         $result = [
-            self::CUSTOMER_NAME => $this->getCustomerName(),
-            self::CUSTOMER_URL => $this->getCustomerUrl(),
+            self::P_CUSTOMER_NAME => $this->getCustomerName(),
+            self::P_CUSTOMER_URL => $this->getCustomerUrl(),
 
-            self::EDIT_ACTION => $this->isEditAction(),
-            self::DEFAULT_STATE => $this->getDefaultState(),
+            self::P_EDIT_ACTION => $this->isEditAction(),
+            self::P_DEFAULT_STATE => $this->getDefaultState(),
 
-            self::MESSAGE_POSITION => $this->getMessagePosition(),
-            self::MESSAGE_TIMEOUT => $this->getMessageTimeout(),
-            self::MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
+            self::P_MESSAGE_POSITION => $this->getMessagePosition(),
+            self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
+            self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
 
-            self::LAST_UPDATE => $this->getLastUpdate(),
-            self::LAST_IMPORT => $this->getLastImport(),
+            self::P_LAST_UPDATE => $this->getLastUpdate(),
+            self::P_LAST_IMPORT => $this->getLastImport(),
 
-            self::MIN_MARGIN => $this->getMinMargin(),
+            self::P_MIN_MARGIN => $this->getMinMargin(),
 
-            self::DISPLAY_TABULAR => $this->isDisplayTabular(),
-            self::DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
+            self::P_DISPLAY_TABULAR => $this->isDisplayTabular(),
+            self::P_DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
         ];
 
         // exlude keys
         if (!empty($exludes)) {
-            foreach ($exludes as $key) {
-                unset($result[$key]);
-            }
+            return \array_diff_key($result, \array_flip($exludes));
         }
 
         return $result;
@@ -362,7 +360,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     {
         $default = EntityVoter::getRoleUser()->getRights();
 
-        return $this->getPropertyArray(self::USER_RIGHTS, $default);
+        return $this->getPropertyArray(self::P_USER_RIGHTS, $default);
     }
 
     /**
@@ -372,7 +370,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function isDisplayCaptcha(): bool
     {
-        return $this->isPropertyBoolean(self::DISPLAY_CAPTCHA, !$this->getDebug());
+        return $this->isPropertyBoolean(self::P_DISPLAY_CAPTCHA, !$this->getDebug());
     }
 
     /**
@@ -382,7 +380,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function isDisplayTabular(): bool
     {
-        return $this->isPropertyBoolean(self::DISPLAY_TABULAR, self::DEFAULT_TABULAR);
+        return $this->isPropertyBoolean(self::P_DISPLAY_TABULAR, self::DEFAULT_TABULAR);
     }
 
     /**
@@ -392,7 +390,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function isEditAction(): bool
     {
-        return $this->isPropertyBoolean(self::EDIT_ACTION, self::DEFAULT_EDIT_ACTION);
+        return $this->isPropertyBoolean(self::P_EDIT_ACTION, self::DEFAULT_EDIT_ACTION);
     }
 
     /**
@@ -420,7 +418,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function isMessageSubTitle(): bool
     {
-        return $this->isPropertyBoolean(self::MESSAGE_SUB_TITLE, self::DEFAULT_SUB_TITLE);
+        return $this->isPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_SUB_TITLE);
     }
 
     /**

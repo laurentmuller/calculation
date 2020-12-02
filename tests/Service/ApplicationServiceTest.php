@@ -48,8 +48,8 @@ class ApplicationServiceTest extends KernelTestCase implements ApplicationServic
         $service = self::$container->get(ApplicationService::class);
 
         $service->setProperties([
-            self::CUSTOMER_NAME => 'customer_name',
-            self::CUSTOMER_URL => 'customer_url',
+            self::P_CUSTOMER_NAME => 'customer_name',
+            self::P_CUSTOMER_URL => 'customer_url',
         ]);
         $this->assertEquals('customer_name', $service->getCustomerName());
         $this->assertEquals('customer_url', $service->getCustomerUrl());

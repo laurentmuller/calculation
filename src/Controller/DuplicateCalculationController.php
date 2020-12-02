@@ -40,18 +40,18 @@ class DuplicateCalculationController extends AbstractController
      */
     public function card(Request $request, CalculationRepository $repository): Response
     {
-        $calculations = $repository->getDuplicateItems();
-        if (empty($calculations)) {
+        $items = $this->getItems($repository);
+        if (empty($items)) {
             $this->warningTrans('duplicate.empty');
 
-            return  $this->redirectToHomePage();
+            return $this->redirectToHomePage();
         }
 
         $selection = $request->get('selection', 0);
         $edit = $this->getApplication()->isEditAction();
 
         // number of items
-        $items_count = \array_reduce($calculations, function (int $carry, array $calculation) {
+        $items_count = \array_reduce($items, function (int $carry, array $calculation) {
             foreach ($calculation['items'] as $item) {
                 $carry += $item['count'];
             }
@@ -61,7 +61,7 @@ class DuplicateCalculationController extends AbstractController
 
         // parameters
         $parameters = [
-                'items' => $calculations,
+                'items' => $items,
                 'items_count' => $items_count,
                 'query' => false,
                 'selection' => $selection,
@@ -81,11 +81,11 @@ class DuplicateCalculationController extends AbstractController
      */
     public function pdf(CalculationRepository $repository): Response
     {
-        $items = $repository->getDuplicateItems();
+        $items = $this->getItems($repository);
         if (empty($items)) {
             $this->warningTrans('duplicate.empty');
 
-            return  $this->redirectToHomePage();
+            return $this->redirectToHomePage();
         }
 
         $report = new CalculationDuplicateTableReport($this);
@@ -99,11 +99,18 @@ class DuplicateCalculationController extends AbstractController
      *
      * @Route("/table", name="duplicate_table")
      */
-    public function table(Request $request, CalculationDuplicateDataTable $table): Response
+    public function table(Request $request, CalculationDuplicateDataTable $table, CalculationRepository $repository): Response
     {
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
             return $this->json($results);
+        }
+
+        $items = $this->getItems($repository);
+        if (empty($items)) {
+            $this->warningTrans('duplicate.empty');
+
+            return $this->redirectToHomePage();
         }
 
         // attributes
@@ -120,5 +127,13 @@ class DuplicateCalculationController extends AbstractController
         ];
 
         return $this->render('calculation/calculation_table_duplicate.html.twig', $parameters);
+    }
+
+    /**
+     * Gets items to display.
+     */
+    private function getItems(CalculationRepository $repository): array
+    {
+        return $repository->getDuplicateItems();
     }
 }

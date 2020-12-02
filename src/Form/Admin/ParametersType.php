@@ -90,21 +90,21 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
 
     private function addCustomerSection(FormHelper $helper): void
     {
-        $helper->field(self::CUSTOMER_NAME)
+        $helper->field(self::P_CUSTOMER_NAME)
             ->updateRowAttribute('class', 'ml-2')
             ->addTextType();
 
-        $helper->field(self::CUSTOMER_URL)
+        $helper->field(self::P_CUSTOMER_URL)
             ->updateRowAttribute('class', 'ml-2')
             ->addUrlType();
     }
 
     private function addDefaultValueSection(FormHelper $helper): void
     {
-        $helper->field(self::DEFAULT_STATE)
+        $helper->field(self::P_DEFAULT_STATE)
             ->addStateType();
 
-        $helper->field(self::EDIT_ACTION)
+        $helper->field(self::P_EDIT_ACTION)
             ->updateAttribute('data-default', (int) self::DEFAULT_EDIT_ACTION)
             ->addChoiceType([
                 'parameters.editAction.show' => ActionInterface::ACTION_SHOW,
@@ -112,12 +112,12 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
                 //'parameters.editAction.none' => ActionInterface::ACTION_NONE,
             ]);
 
-        $helper->field(self::MIN_MARGIN)
+        $helper->field(self::P_MIN_MARGIN)
             ->updateAttribute('data-default', self::DEFAULT_MIN_MARGIN * 100)
             ->percent(true)
             ->addPercentType(0);
 
-        $helper->field(self::DISPLAY_TABULAR)
+        $helper->field(self::P_DISPLAY_TABULAR)
             ->updateAttribute('data-default', (int) self::DEFAULT_TABULAR)
             ->addChoiceType([
                 'parameters.tabular.table' => true,
@@ -127,15 +127,15 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
 
     private function addFlashbagSection(FormHelper $helper): void
     {
-        $helper->field(self::MESSAGE_POSITION)
+        $helper->field(self::P_MESSAGE_POSITION)
             ->updateAttribute('data-default', self::DEFAULT_POSITION)
             ->addChoiceType($this->getPositions());
 
-        $helper->field(self::MESSAGE_TIMEOUT)
+        $helper->field(self::P_MESSAGE_TIMEOUT)
             ->updateAttribute('data-default', self::DEFAULT_TIMEOUT)
             ->addChoiceType($this->getTimeouts());
 
-        $helper->field(self::MESSAGE_SUB_TITLE)
+        $helper->field(self::P_MESSAGE_SUB_TITLE)
             ->updateAttribute('data-default', (int) self::DEFAULT_SUB_TITLE)
             ->addChoiceType([
                 'parameters.display.show' => true,
@@ -147,14 +147,14 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     {
         // security
         $captcha = (int) !$this->application->getDebug();
-        $helper->field(self::DISPLAY_CAPTCHA)
+        $helper->field(self::P_DISPLAY_CAPTCHA)
             ->updateAttribute('data-default', $captcha)
             ->addChoiceType([
                 'parameters.display.show' => true,
                 'parameters.display.hide' => false,
             ]);
 
-        $helper->field(self::MIN_STRENGTH)
+        $helper->field(self::P_MIN_STRENGTH)
             ->label('password.minstrength')
             ->updateAttribute('data-default', -1)
             ->add(MinStrengthType::class);

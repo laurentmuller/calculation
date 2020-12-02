@@ -240,7 +240,7 @@ class CalculationStateController extends AbstractEntityController
         // update default state (if applicable)
         $id = $this->getApplication()->getDefaultStateId();
         if ($id === $item->getId()) {
-            $this->getApplication()->setProperties([ApplicationServiceInterface::DEFAULT_STATE => null]);
+            $this->getApplication()->setProperties([ApplicationServiceInterface::P_DEFAULT_STATE => null]);
         }
         parent::deleteFromDatabase($item);
     }

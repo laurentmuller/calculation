@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ProductControllerTest extends AbstractControllerTest
 {
+    private static ?Category $parent = null;
     private static ?Category $category = null;
     private static ?Product $product = null;
 
@@ -71,9 +72,16 @@ class ProductControllerTest extends AbstractControllerTest
 
     protected function addEntities(): void
     {
+        if (null === self::$parent) {
+            self::$parent = new Category();
+            self::$parent->setCode('Test Parent');
+            $this->addEntity(self::$parent);
+        }
+
         if (null === self::$category) {
             self::$category = new Category();
             self::$category->setCode('Test Category');
+            self::$category->setParent(self::$parent);
             $this->addEntity(self::$category);
         }
 
@@ -89,5 +97,6 @@ class ProductControllerTest extends AbstractControllerTest
     {
         self::$product = $this->deleteEntity(self::$product);
         self::$category = $this->deleteEntity(self::$category);
+        self::$parent = $this->deleteEntity(self::$parent);
     }
 }

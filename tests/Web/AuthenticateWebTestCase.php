@@ -67,8 +67,8 @@ abstract class AuthenticateWebTestCase extends WebTestCase
         /** @var ApplicationService $application */
         $application = self::$container->get(ApplicationService::class);
         $application->setProperties([
-            ApplicationServiceInterface::USER_RIGHTS => $userRight,
-            ApplicationServiceInterface::ADMIN_RIGHTS => $adminRight,
+            ApplicationServiceInterface::P_USER_RIGHTS => $userRight,
+            ApplicationServiceInterface::P_ADMIN_RIGHTS => $adminRight,
         ]);
     }
 

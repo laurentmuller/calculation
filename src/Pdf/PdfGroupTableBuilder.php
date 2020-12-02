@@ -58,9 +58,9 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     /**
      * Gets the group.
      *
-     * @return \App\Pdf\PdfGroup
+     * @return PdfGroup
      */
-    public function getGroup(): PdfGroup
+    public function getGroup(): ?PdfGroup
     {
         return $this->group;
     }
@@ -73,6 +73,14 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     public function getGroupListener(): ?PdfGroupListenerInterface
     {
         return $this->groupListener;
+    }
+
+    /**
+     * Gets the group style.
+     */
+    public function getGroupStyle(): ?PdfStyle
+    {
+        return $this->group->getStyle();
     }
 
     /**
@@ -96,16 +104,20 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     /**
      * Sets the group.
      *
-     * @param \App\Pdf\PdfGroup $group  the group to set
-     * @param bool              $output true to output the new group (if not empty)
+     * Do nothing if the new group is equals to the existing group.
+     *
+     * @param PdfGroup $group  the group to set
+     * @param bool     $output true to output the new group (if not empty)
      *
      * @return self this instance
      */
     public function setGroup(PdfGroup $group, bool $output = true): self
     {
-        $this->group = $group;
-        if ($output) {
-            return $this->outputGroup();
+        if ($this->group !== $group) {
+            $this->group = $group;
+            if ($output) {
+                return $this->outputGroup();
+            }
         }
 
         return $this;
@@ -114,6 +126,8 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     /**
      * Sets the group key.
      *
+     * Do nothing if the new group key is equals to the existing group key.
+     *
      * @param mixed $key    the new group key
      * @param bool  $output true to output the new group (if not empty)
      *
@@ -121,9 +135,11 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function setGroupKey($key, bool $output = true): self
     {
-        $this->group->setKey($key);
-        if ($output) {
-            return $this->outputGroup();
+        if ($this->group->getKey() !== $key) {
+            $this->group->setKey($key);
+            if ($output) {
+                return $this->outputGroup();
+            }
         }
 
         return $this;
@@ -132,9 +148,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     /**
      * Sets the group listener.
      *
-     * @param \App\Pdf\PdfGroupListenerInterface $groupListener the listener to set
-     *
-     * @return self this instance
+     * @param PdfGroupListenerInterface $groupListener the listener to set
      */
     public function setGroupListener(?PdfGroupListenerInterface $groupListener): self
     {
@@ -146,7 +160,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     /**
      * Sets the group style.
      *
-     * @param \App\Pdf\PdfStyle $style The new group style
+     * @param PdfStyle $style the new group style
      *
      * @return self this instance
      */

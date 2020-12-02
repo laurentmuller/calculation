@@ -16,7 +16,6 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -70,13 +69,21 @@ class ProductRepository extends AbstractRepository
     }
 
     /**
-     * Gets all products order by description.
+     * Gets all products order by group, category and description.
      *
      * @return Product[]
      */
-    public function findAllByDescription(): array
+    public function findAllByGroup(): array
     {
-        return $this->findBy([], ['description' => Criteria::ASC]);
+        $builder = $this->createQueryBuilder('p')
+            ->innerJoin('p.category', 'c')
+            ->innerJoin('c.parent', 'g')
+            ->select('p')
+            ->orderBy('g.code')
+            ->addOrderBy('c.code')
+            ->addOrderBy('p.description');
+
+        return $builder->getQuery()->getResult();
     }
 
     /**

@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * Application service constants.
+ * Application service constants and default values.
  *
  * @author Laurent Muller
  *
@@ -23,21 +23,6 @@ namespace App\Interfaces;
  */
 interface ApplicationServiceInterface
 {
-    /**
-     * The property name for the administrator role rights (string).
-     */
-    public const ADMIN_RIGHTS = 'admin_rights';
-
-    /**
-     * The property name for the customer name (string).
-     */
-    public const CUSTOMER_NAME = 'customer_name';
-
-    /**
-     * The property name for the customer web site (string).
-     */
-    public const CUSTOMER_URL = 'customer_url';
-
     /**
      * The default edit action (boolean).
      */
@@ -59,11 +44,6 @@ interface ApplicationServiceInterface
     public const DEFAULT_POSITION = 'bottom-right';
 
     /**
-     * The property name for the default calculation state (integer).
-     */
-    public const DEFAULT_STATE = 'default_state';
-
-    /**
      * The default display message sub-title (boolean).
      */
     public const DEFAULT_SUB_TITLE = false;
@@ -79,68 +59,88 @@ interface ApplicationServiceInterface
     public const DEFAULT_TIMEOUT = 4000;
 
     /**
+     * The property name for the administrator role rights (string).
+     */
+    public const P_ADMIN_RIGHTS = 'admin_rights';
+
+    /**
+     * The property name for the customer name (string).
+     */
+    public const P_CUSTOMER_NAME = 'customer_name';
+
+    /**
+     * The property name for the customer web site (string).
+     */
+    public const P_CUSTOMER_URL = 'customer_url';
+
+    /**
+     * The property name for the default calculation state (integer).
+     */
+    public const P_DEFAULT_STATE = 'default_state';
+
+    /**
      * The property name to show or hide image captcha when login (boolean).
      *
      * When <code>true</code>, display the image; when <code>false</code>, hide.
      */
-    public const DISPLAY_CAPTCHA = 'display_captcha';
+    public const P_DISPLAY_CAPTCHA = 'display_captcha';
 
     /**
      * The property name for the display mode (boolean).
      *
      * When <code>true</code>, displays the entities in tabular mode (default); when <code>false</code>, displays entities as cards.
      */
-    public const DISPLAY_TABULAR = 'display_tabular';
+    public const P_DISPLAY_TABULAR = 'display_tabular';
 
     /**
      * The property name for the edit action when displaying entities (boolean).
      *
      * When <code>false</code>, display the entity properties; when <code>true</code> (default), edit the entity.
      */
-    public const EDIT_ACTION = 'edit_action';
+    public const P_EDIT_ACTION = 'edit_action';
 
     /**
      * The property name for the last import of Swiss cities (date).
      */
-    public const LAST_IMPORT = 'last_import';
+    public const P_LAST_IMPORT = 'last_import';
 
     /**
      * The property name for the last calculations update (date).
      */
-    public const LAST_UPDATE = 'last_update';
+    public const P_LAST_UPDATE = 'last_update';
 
     /**
      * The property name for the number items displayed in the tables (integer).
      */
-    public const LIST_LENGTH = 'list-length';
+    public const P_LIST_LENGTH = 'list-length';
 
     /**
      * The property name for the position (default = 'bottom-right') of the flashbag messages (string).
      */
-    public const MESSAGE_POSITION = 'message_position';
+    public const P_MESSAGE_POSITION = 'message_position';
 
     /**
      * The property name for displaying sub-title (default = true) of the flashbag messages (boolean).
      */
-    public const MESSAGE_SUB_TITLE = 'message_sub_title';
+    public const P_MESSAGE_SUB_TITLE = 'message_sub_title';
 
     /**
      * The property name for the timeout (default = 4000 ms) of the flashbag messages in milliseconds (int).
      */
-    public const MESSAGE_TIMEOUT = 'message_timeout';
+    public const P_MESSAGE_TIMEOUT = 'message_timeout';
 
     /**
      * The property name for the minimum margin (default = 300%), in percent, for a calculation (float).
      */
-    public const MIN_MARGIN = 'minimum_margin';
+    public const P_MIN_MARGIN = 'minimum_margin';
 
     /**
      * The property name for the minimum password strength (int).
      */
-    public const MIN_STRENGTH = 'minstrength';
+    public const P_MIN_STRENGTH = 'minstrength';
 
     /**
      * The property name for the user role rights (string).
      */
-    public const USER_RIGHTS = 'user_rights';
+    public const P_USER_RIGHTS = 'user_rights';
 }

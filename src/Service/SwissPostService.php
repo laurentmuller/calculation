@@ -383,7 +383,7 @@ class SwissPostService
 
             // save date
             $valid = true;
-            $this->application->setProperties([ApplicationServiceInterface::LAST_IMPORT => $validity]);
+            $this->application->setProperties([ApplicationServiceInterface::P_LAST_IMPORT => $validity]);
 
             // OK
             return [

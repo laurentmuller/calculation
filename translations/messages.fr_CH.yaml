@@ -275,6 +275,7 @@ product:
     fields:
         description: Description
         category: Catégorie
+        group: Groupe
         supplier: Fournisseur
         unit: Unité
         price: Prix

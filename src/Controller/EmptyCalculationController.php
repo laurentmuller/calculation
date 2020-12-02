@@ -40,18 +40,24 @@ class EmptyCalculationController extends AbstractController
      */
     public function card(Request $request, CalculationRepository $repository): Response
     {
-        $calculations = $repository->getEmptyItems();
+        $items = $this->getItems($repository);
+        if (empty($items)) {
+            $this->warningTrans('empty.empty');
+
+            return $this->redirectToHomePage();
+        }
+
         $selection = $request->get('selection', 0);
         $edit = $this->getApplication()->isEditAction();
 
         // number of items
-        $items_count = \array_reduce($calculations, function (int $carry, array $calculation) {
+        $items_count = \array_reduce($items, function (int $carry, array $calculation) {
             return $carry + \count($calculation['items']);
         }, 0);
 
         // parameters
         $parameters = [
-                'items' => $calculations,
+            'items' => $items,
                 'items_count' => $items_count,
                 'query' => false,
                 'selection' => $selection,
@@ -71,11 +77,11 @@ class EmptyCalculationController extends AbstractController
      */
     public function pdf(CalculationRepository $repository): Response
     {
-        $items = $repository->getEmptyItems();
+        $items = $this->getItems($repository);
         if (empty($items)) {
             $this->warningTrans('empty.empty');
 
-            return  $this->redirectToHomePage();
+            return $this->redirectToHomePage();
         }
 
         $report = new CalculationEmptyTableReport($this);
@@ -89,11 +95,19 @@ class EmptyCalculationController extends AbstractController
      *
      * @Route("/table", name="empty_table")
      */
-    public function table(Request $request, CalculationEmptyDataTable $table): Response
+    public function table(Request $request, CalculationEmptyDataTable $table, CalculationRepository $repository): Response
     {
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
             return $this->json($results);
+        }
+
+        // empty?
+        $items = $this->getItems($repository);
+        if (empty($items)) {
+            $this->warningTrans('empty.empty');
+
+            return $this->redirectToHomePage();
         }
 
         // attributes
@@ -110,5 +124,13 @@ class EmptyCalculationController extends AbstractController
         ];
 
         return $this->render('calculation/calculation_table_empty.html.twig', $parameters);
+    }
+
+    /**
+     * Gets items to display.
+     */
+    private function getItems(CalculationRepository $repository): array
+    {
+        return $repository->getEmptyItems();
     }
 }

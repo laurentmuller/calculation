@@ -135,8 +135,9 @@ class ProductController extends AbstractEntityController
 
         // headers
         $doc->setHeaderValues([
-            'product.fields.description' => Alignment::HORIZONTAL_GENERAL,
+            'product.fields.group' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.category' => Alignment::HORIZONTAL_GENERAL,
+            'product.fields.description' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.price' => Alignment::HORIZONTAL_RIGHT,
             'product.fields.unit' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.supplier' => Alignment::HORIZONTAL_GENERAL,
@@ -146,14 +147,15 @@ class ProductController extends AbstractEntityController
         $doc->setFormatAmount(3);
 
         /** @var Product[] $products */
-        $products = $repository->findAllByDescription();
+        $products = $repository->findAllByGroup();
 
         // rows
         $row = 2;
         foreach ($products as $product) {
             $doc->setRowValues($row++, [
-                $product->getDescription(),
+                $product->getParentCode(),
                 $product->getCategoryCode(),
+                $product->getDescription(),
                 $product->getPrice(),
                 $product->getUnit(),
                 $product->getSupplier(),
@@ -167,16 +169,12 @@ class ProductController extends AbstractEntityController
     /**
      * Export the products to a PDF document.
      *
-     * @Route("/pdf/{limit}/{offset}", name="product_pdf", requirements={"limit": "\d+", "offset": "\d+"})
+     * @Route("/pdf", name="product_pdf")
      */
-    public function pdf(int $limit = -1, int $offset = 0): PdfResponse
+    public function pdf(ProductRepository $repository): PdfResponse
     {
         // get products
-        if (-1 === $limit) {
-            $products = $this->getRepository()->findAll();
-        } else {
-            $products = $this->getRepository()->findBy([], ['description' => 'ASC'], $limit, $offset);
-        }
+        $products = $repository->findAllByGroup();
         if (empty($products)) {
             $message = $this->trans('product.list.empty');
 
@@ -186,7 +184,6 @@ class ProductController extends AbstractEntityController
         // create and render report
         $report = new ProductsReport($this);
         $report->setProducts($products);
-        $report->setGroupByCategory(-1 === $limit);
 
         return $this->renderPdfDocument($report);
     }

@@ -19,7 +19,6 @@ use App\Entity\Product;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 
 /**
  * Report for the list of products.
@@ -29,16 +28,9 @@ use App\Util\Utils;
 class ProductsReport extends AbstractReport
 {
     /**
-     * Set if the products are grouped by category.
-     *
-     * @var bool
-     */
-    protected $groupByCategory = false;
-
-    /**
      * The products to render.
      *
-     * @var \App\Entity\Product[]
+     * @var Product[]
      */
     protected $products;
 
@@ -67,11 +59,22 @@ class ProductsReport extends AbstractReport
         // new page
         $this->AddPage();
 
-        // grouping?
-        if ($this->groupByCategory) {
-            $this->outputGroups($this->products);
-        } else {
-            $this->outputList($this->products);
+        // create table
+        $table = $this->createTable();
+
+        // render
+        foreach ($this->products as $product) {
+            // group
+            $key = \sprintf('%s - %s', $product->getParentCode(), $product->getCategoryCode());
+            $table->setGroupKey($key);
+
+            // product
+            $table->startRow()
+                ->add($product->getDescription())
+                ->add($product->getSupplier())
+                ->add($product->getUnit())
+                ->add(FormatUtils::formatAmount($product->getPrice()))
+                ->endRow();
         }
 
         // count
@@ -79,21 +82,9 @@ class ProductsReport extends AbstractReport
     }
 
     /**
-     * Sets if the products are grouped by category.
-     *
-     * @param bool $groupByCategory true to group by category
-     */
-    public function setGroupByCategory(bool $groupByCategory): self
-    {
-        $this->groupByCategory = $groupByCategory;
-
-        return $this;
-    }
-
-    /**
      * Sets the products to render.
      *
-     * @param \App\Entity\Product[] $products
+     * @param Product[] $products
      */
     public function setProducts(array $products): self
     {
@@ -104,105 +95,19 @@ class ProductsReport extends AbstractReport
 
     /**
      * Creates the table.
-     *
-     * @param bool $groupByCategory true if products are grouped by category
      */
-    private function createTable(bool $groupByCategory): PdfGroupTableBuilder
+    private function createTable(): PdfGroupTableBuilder
     {
         $columns = [
             PdfColumn::left($this->trans('product.fields.description'), 90),
             PdfColumn::left($this->trans('product.fields.supplier'), 45, true),
+            PdfColumn::left($this->trans('product.fields.unit'), 20, true),
+            PdfColumn::right($this->trans('product.fields.price'), 20, true),
         ];
-        if (!$groupByCategory) {
-            $columns[] = PdfColumn::left($this->trans('product.fields.category'), 50, true);
-        }
-        $columns[] = PdfColumn::left($this->trans('product.fields.unit'), 20, true);
-        $columns[] = PdfColumn::right($this->trans('product.fields.price'), 20, true);
 
         $table = new PdfGroupTableBuilder($this);
         $table->addColumns($columns)->outputHeaders();
 
         return $table;
-    }
-
-    /**
-     * Groups the given products by category.
-     *
-     * @param Product[] $products the products to group
-     *
-     * @return array<string, Product[]> an array with category code as key, and corresponding products as value
-     */
-    private function groupProducts(array $products): array
-    {
-        $result = [];
-        foreach ($products as $product) {
-            $category = $product->getCategory();
-            $code = $category->getCode();
-            $parent = $category->getParentCode();
-            $key = $code . ' - ' . $parent;
-            $result[$key][] = $product;
-        }
-
-        // sort categories
-        \ksort($result);
-
-        // sort products
-        foreach ($result as $key => &$value) {
-            Utils::sortFields($value, 'description');
-        }
-
-        return $result;
-    }
-
-    /**
-     * Outputs the products grouped by category.
-     *
-     * @param Product[] $products
-     */
-    private function outputGroups(array $products): void
-    {
-        // group by category
-        $groups = $this->groupProducts($products);
-
-        // create table
-        $table = $this->createTable(true);
-
-        // output
-        foreach ($groups as $group => $list) {
-            $table->setGroupKey($group);
-            foreach ($list as $product) {
-                $table->startRow()
-                    ->add($product->getDescription())
-                    ->add($product->getSupplier())
-                    ->add($product->getUnit())
-                    ->add(FormatUtils::formatAmount($product->getPrice()))
-                    ->endRow();
-            }
-        }
-    }
-
-    /**
-     * Ouput the products.
-     *
-     * @param \App\Entity\Product[] $products
-     */
-    private function outputList(array $products): void
-    {
-        // create table
-        $table = $this->createTable(false);
-
-        // sort
-        Utils::sortFields($products, 'description');
-
-        // output
-        foreach ($products as $product) {
-            $table->startRow()
-                ->add($product->getDescription())
-                ->add($product->getSupplier())
-                ->add($product->getCategory()->getDescription())
-                ->add($product->getUnit())
-                ->add(FormatUtils::formatAmount($product->getPrice()))
-                ->endRow();
-        }
     }
 }

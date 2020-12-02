@@ -135,6 +135,14 @@ class Product extends AbstractEntity
     }
 
     /**
+     * Gets the parent (group) code.
+     */
+    public function getParentCode(): ?string
+    {
+        return $this->category ? $this->category->getParentCode() : null;
+    }
+
+    /**
      * Get price.
      */
     public function getPrice(): float
@@ -160,8 +168,6 @@ class Product extends AbstractEntity
 
     /**
      * Set category.
-     *
-     * @param \App\Entity\Category|null $category
      */
     public function setCategory(?Category $category): self
     {
@@ -222,7 +228,7 @@ class Product extends AbstractEntity
             $this->unit,
             $this->supplier,
             FormatUtils::formatAmount($this->price),
-            $this->category->getCode(),
+            $this->getCategoryCode(),
         ];
     }
 }

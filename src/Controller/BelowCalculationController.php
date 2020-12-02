@@ -43,14 +43,20 @@ class BelowCalculationController extends AbstractController
     {
         // get values
         $minMargin = $this->getApplication()->getMinMargin();
-        $calculations = $repository->getBelowMargin($minMargin);
+        $items = $this->getItems($repository, $minMargin);
+        if (empty($items)) {
+            $this->warningTrans('below.empty');
+
+            return  $this->redirectToHomePage();
+        }
+
         $selection = $request->get('selection', 0);
         $edit = $this->getApplication()->isEditAction();
 
         // parameters
         $parameters = [
-            'items' => $calculations,
-            'items_count' => \count($calculations),
+            'items' => $items,
+            'items_count' => \count($items),
             'min_margin' => $minMargin,
             'query' => false,
             'selection' => $selection,
@@ -71,8 +77,8 @@ class BelowCalculationController extends AbstractController
     public function pdf(CalculationRepository $repository): Response
     {
         $minMargin = $this->getApplication()->getMinMargin();
-        $calculations = $repository->getBelowMargin($minMargin);
-        if (empty($calculations)) {
+        $items = $this->getItems($repository, $minMargin);
+        if (empty($items)) {
             $this->warningTrans('below.empty');
 
             return  $this->redirectToHomePage();
@@ -82,7 +88,7 @@ class BelowCalculationController extends AbstractController
         $description = $this->trans('below.description', ['%margin%' => $percent]);
 
         $report = new CalculationsReport($this);
-        $report->setCalculations($calculations)
+        $report->setCalculations($items)
             ->setTitleTrans('below.title')
             ->setDescription($description);
 
@@ -94,7 +100,7 @@ class BelowCalculationController extends AbstractController
      *
      * @Route("/table", name="below_table")
      */
-    public function table(Request $request, CalculationBelowDataTable $table): Response
+    public function table(Request $request, CalculationBelowDataTable $table, CalculationRepository $repository): Response
     {
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
@@ -102,11 +108,19 @@ class BelowCalculationController extends AbstractController
         }
 
         // get values
-        $margin = $this->getApplication()->getMinMargin();
-        $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => FormatUtils::formatPercent($margin)]);
+        $minMargin = $this->getApplication()->getMinMargin();
+        $items = $this->getItems($repository, $minMargin);
+        if (empty($items)) {
+            $this->warningTrans('below.empty');
+
+            return  $this->redirectToHomePage();
+        }
+
+        // get values
+        $margin_text = $this->trans('calculation.list.margin_below', ['%minimum%' => FormatUtils::formatPercent($minMargin)]);
 
         $attributes = [
-            'min_margin' => $margin,
+            'min_margin' => $minMargin,
             'min_margin_text' => $margin_text,
             'edit-action' => \json_encode($this->getApplication()->isEditAction()),
         ];
@@ -119,5 +133,13 @@ class BelowCalculationController extends AbstractController
         ];
 
         return $this->render('calculation/calculation_table_below.html.twig', $parameters);
+    }
+
+    /**
+     * Gets items to display.
+     */
+    private function getItems(CalculationRepository $repository, float $minMargin): array
+    {
+        return $repository->getBelowMargin($minMargin);
     }
 }

@@ -56,14 +56,17 @@ class LogoutListener implements EventSubscriberInterface
      */
     public function onLogout(LogoutEvent $event): void
     {
-        $username = $this->getUsername($event);
-        $this->session = $event->getRequest()->getSession();
-        if (null !== $username && null !== $this->session) {
-            $params = [
-                '%username%' => $username,
-                '%appname%' => $this->appName,
-            ];
-            $this->succesTrans('security.logout.success', $params);
+        $request = $event->getRequest();
+        if ($request->hasSession()) {
+            $this->session = $request->getSession();
+            $username = $this->getUsername($event);
+            if (null !== $this->session && null !== $username) {
+                $params = [
+                    '%username%' => $username,
+                    '%appname%' => $this->appName,
+                ];
+                $this->succesTrans('security.logout.success', $params);
+            }
         }
     }
 

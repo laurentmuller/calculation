@@ -15,33 +15,33 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use App\Util\FormatUtils;
 
 /**
  * Report for calculations with duplicate items.
  *
  * @author Laurent Muller
  */
-class CalculationDuplicateReport extends CalculationItemsReports
+class CalculationDuplicateReport extends CalculationItemsReport
 {
     /**
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
+     * @param array              $items      the items to render
      */
-    public function __construct(AbstractController $controller)
+    public function __construct(AbstractController $controller, array $items)
     {
-        parent::__construct($controller, 'duplicate.title', 'duplicate.description');
+        parent::__construct($controller, $items, 'duplicate.title', 'duplicate.description');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function countItems(array $calculations): int
+    protected function computeItemsCount(array $items): int
     {
-        return  \array_reduce($this->calculations, function (int $carry, array $calculation) {
-            foreach ($calculation['items'] as $item) {
-                $carry += $item['count'];
+        return \array_reduce($items, function (int $carry, array $item) {
+            foreach ($item['items'] as $child) {
+                $carry += $child['count'];
             }
 
             return $carry;
@@ -51,11 +51,13 @@ class CalculationDuplicateReport extends CalculationItemsReports
     /**
      * {@inheritdoc}
      */
-    protected function formatItem(array $item): string
+    protected function formatItems(array $items): string
     {
-        $count = FormatUtils::formatInt($item['count']);
+        $result = \array_map(function (array $item) {
+            return \sprintf('%s (%d)', $item['description'], $item['count']);
+        }, $items);
 
-        return \sprintf('%s (%s)', $item['description'], $count);
+        return \implode("\n", $result);
     }
 
     /**

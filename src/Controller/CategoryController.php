@@ -17,15 +17,16 @@ namespace App\Controller;
 use App\DataTable\CategoryDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
-use App\Excel\ExcelDocument;
 use App\Excel\ExcelResponse;
 use App\Form\Category\CategoryType;
 use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
+use App\Repository\AbstractRepository;
 use App\Repository\CalculationGroupRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use App\Spreadsheet\CategoryDocument;
+use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -132,37 +133,19 @@ class CategoryController extends AbstractEntityController
      * Export the categories to an Excel document.
      *
      * @Route("/excel", name="category_excel")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no category is found
      */
-    public function excel(CategoryRepository $repository): ExcelResponse
+    public function excel(): ExcelResponse
     {
-        $doc = new ExcelDocument($this->getTranslator());
-        $doc->initialize($this, 'category.list.title');
-
-        // headers
-        $doc->setHeaderValues([
-            'category.fields.code' => Alignment::HORIZONTAL_GENERAL,
-            'category.fields.description' => Alignment::HORIZONTAL_GENERAL,
-            'category.fields.parent' => Alignment::HORIZONTAL_GENERAL,
-            'category.fields.products' => Alignment::HORIZONTAL_RIGHT,
-        ]);
-
-        // formats
-        $doc->setFormatInt(4);
-
         /** @var Category[] $categories */
-        $categories = $repository->findAllByCode();
-
-        // rows
-        $row = 2;
-        foreach ($categories as $category) {
-            $doc->setRowValues($row++, [
-                $category->getCode(),
-                $category->getDescription(),
-                $category->getParent()->getCode(),
-                $category->countProducts(),
-            ]);
+        $categories = $this->getEntities('code');
+        if (empty($categories)) {
+            $message = $this->trans('category.list.empty');
+            throw new NotFoundHttpException($message);
         }
-        $doc->setSelectedCell('A2');
+
+        $doc = new CategoryDocument($this, $categories);
 
         return $this->renderExcelDocument($doc);
     }
@@ -171,20 +154,21 @@ class CategoryController extends AbstractEntityController
      * Export the categories to a PDF document.
      *
      * @Route("/pdf", name="category_pdf")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no category is found
      */
-    public function pdf(CategoryRepository $repository): PdfResponse
+    public function pdf(): PdfResponse
     {
-        $categories = $repository->findAllByCode();
+        /** @var Category[] $categories */
+        $categories = $this->getEntities('code');
         if (empty($categories)) {
             $message = $this->trans('category.list.empty');
             throw new NotFoundHttpException($message);
         }
 
-        // create and render report
-        $report = new CategoriesReport($this);
-        $report->setCategories($categories);
+        $doc = new CategoriesReport($this, $categories);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument($doc);
     }
 
     /**
@@ -259,6 +243,16 @@ class CategoryController extends AbstractEntityController
     protected function getEditTemplate(): string
     {
         return 'category/category_edit.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEntities(string $field = null, string $mode = Criteria::ASC, array $criterias = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
+    {
+        $criterias[] = CategoryRepository::getCategoryPredicate($alias);
+
+        return parent::getEntities($field, $mode, $criterias, $alias);
     }
 
     /**

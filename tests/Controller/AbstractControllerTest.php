@@ -35,12 +35,19 @@ abstract class AbstractControllerTest extends AuthenticateWebTestCase
     abstract public function getRoutes(): array;
 
     /**
+     * Checks the given route.
+     *
+     * @param string $url      the URL to be tested
+     * @param string $username the user name to login
+     * @param int    $expected the expected result
+     * @param string $method   the request method
+     *
      * @dataProvider getRoutes
      */
-    public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
+    public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK, string $method = Request::METHOD_GET): void
     {
         $this->addEntities();
-        $this->checkRoute($url, $username, $expected);
+        $this->checkRoute($url, $username, $expected, $method);
     }
 
     /**

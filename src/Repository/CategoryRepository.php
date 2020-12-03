@@ -88,7 +88,7 @@ class CategoryRepository extends AbstractRepository
      *
      * @return string the predicate
      */
-    public function getCategoryPredicate(string $alias = self::DEFAULT_ALIAS): string
+    public static function getCategoryPredicate(string $alias = self::DEFAULT_ALIAS): string
     {
         return "$alias.parent IS NOT NULL";
     }
@@ -100,7 +100,7 @@ class CategoryRepository extends AbstractRepository
      *
      * @return string the predicate
      */
-    public function getGroupPredicate(string $alias = self::DEFAULT_ALIAS): string
+    public static function getGroupPredicate(string $alias = self::DEFAULT_ALIAS): string
     {
         return "$alias.parent IS NULL";
     }
@@ -153,7 +153,7 @@ class CategoryRepository extends AbstractRepository
     public function getGroupSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         $field = (string) $this->getSortFields('code', $alias);
-        $predicate = $this->getGroupPredicate($alias);
+        $predicate = self::getGroupPredicate($alias);
 
         return $this->createQueryBuilder($alias)
             ->orderBy($field, Criteria::ASC)
@@ -221,7 +221,7 @@ class CategoryRepository extends AbstractRepository
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         $field = (string) $this->getSortFields('code', $alias);
-        $predicate = $this->getCategoryPredicate($alias);
+        $predicate = self::getCategoryPredicate($alias);
 
         return $this->createQueryBuilder($alias)
             ->orderBy($field, Criteria::ASC)

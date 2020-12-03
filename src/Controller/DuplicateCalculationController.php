@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTable\CalculationDuplicateDataTable;
-use App\Report\CalculationDuplicateTableReport;
+use App\Report\CalculationDuplicateReport;
 use App\Repository\CalculationRepository;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -84,10 +84,9 @@ class DuplicateCalculationController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        $report = new CalculationDuplicateTableReport($this);
-        $report->setItems($items);
+        $doc = new CalculationDuplicateReport($this, $items);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument($doc);
     }
 
     /**

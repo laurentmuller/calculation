@@ -72,6 +72,10 @@ class UserControllerTest extends AbstractControllerTest
             ['/user/pdf', self::ROLE_ADMIN],
             ['/user/pdf', self::ROLE_SUPER_ADMIN],
 
+            ['/user/rights/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/user/rights/pdf', self::ROLE_ADMIN],
+            ['/user/rights/pdf', self::ROLE_SUPER_ADMIN],
+
             ['/user/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/user/excel', self::ROLE_ADMIN],
             ['/user/excel', self::ROLE_SUPER_ADMIN],

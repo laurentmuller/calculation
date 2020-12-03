@@ -33,6 +33,9 @@
 
 {% block item_property %}
 {{ properties.line(item.description, false, 1) }}
+{% if item.parentCode %}
+    {{ properties.line(item.parentCode, false, 1) }}
+{% endif %}
 {%- set text = 'counters.products'|trans({count: item.countProducts}) -%}
 {% if item.countProducts and product_list %}
     {%- set href = path('product_list', {'query': item.code}) -%}

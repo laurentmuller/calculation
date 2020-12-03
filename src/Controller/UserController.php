@@ -18,7 +18,6 @@ use App\DataTable\UserDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Comment;
 use App\Entity\User;
-use App\Excel\ExcelDocument;
 use App\Excel\ExcelResponse;
 use App\Form\User\ThemeType;
 use App\Form\User\UserChangePasswordType;
@@ -30,13 +29,12 @@ use App\Interfaces\RoleInterface;
 use App\Pdf\PdfResponse;
 use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
-use App\Repository\UserRepository;
+use App\Repository\AbstractRepository;
 use App\Security\EntityVoter;
 use App\Service\ThemeService;
-use App\Service\UserNamer;
+use App\Spreadsheet\UserDocument;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -184,51 +182,19 @@ class UserController extends AbstractEntityController
      * Export the customers to an Excel document.
      *
      * @Route("/excel", name="user_excel")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
-    public function excel(UserRepository $repository, KernelInterface $kernel): ExcelResponse
+    public function excel(PropertyMappingFactory $factory, StorageInterface $storage): ExcelResponse
     {
-        $doc = new ExcelDocument($this->getTranslator());
-        $doc->initialize($this, 'user.list.title');
-
-        // headers
-        $doc->setHeaderValues([
-            'user.fields.username' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'user.fields.email' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'user.fields.role' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'user.fields.enabled' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
-            'user.fields.lastLogin' => [Alignment::HORIZONTAL_CENTER, Alignment::VERTICAL_TOP],
-            'user.fields.imageFile' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
-        ]);
-
-        // formats
-        $doc->setFormatBoolean(4, 'common.value_enabled', 'common.value_disabled', true)
-            ->setFormatDateTime(5);
-
         /** @var User[] $users */
-        $users = $repository->findAllByUsername();
-
-        // rows
-        $row = 2;
-        $path = $kernel->getProjectDir() . '/public/images/users/';
-        foreach ($users as $user) {
-            $doc->setRowValues($row, [
-                $user->getUsername(),
-                $user->getEmail(),
-                Utils::translateRole($this->getTranslator(), $user->getRole()),
-                $user->isEnabled(),
-                $user->getLastLogin(),
-            ]);
-
-            // image
-            $fileName = $path . UserNamer::getBaseName($user, 32, 'png');
-            if (\is_file($fileName)) {
-                [$width, $height] = \getimagesize($fileName);
-                $doc->setCellImage($fileName, "F$row", $width, $height);
-            }
-
-            ++$row;
+        $users = $this->getEntities('username');
+        if (empty($users)) {
+            $message = $this->trans('user.list.empty');
+            throw $this->createNotFoundException($message);
         }
-        $doc->setSelectedCell('A2');
+
+        $doc = new UserDocument($this, $users, $factory, $storage);
 
         return $this->renderExcelDocument($doc);
     }
@@ -348,22 +314,21 @@ class UserController extends AbstractEntityController
      *
      * @Route("/pdf", name="user_pdf", methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
-    public function pdf(PropertyMappingFactory $factory, StorageInterface $storage, KernelInterface $kernel): PdfResponse
+    public function pdf(PropertyMappingFactory $factory, StorageInterface $storage): PdfResponse
     {
         /** @var User[] $users */
-        $users = $this->getEntities();
+        $users = $this->getEntities('username');
         if (empty($users)) {
             $message = $this->trans('user.list.empty');
-
             throw $this->createNotFoundException($message);
         }
 
-        // create and render report
-        $report = new UsersReport($this, $factory, $storage, $kernel);
-        $report->setUsers($users);
+        $doc = new UsersReport($this, $users, $factory, $storage);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument($doc);
     }
 
     /**
@@ -411,6 +376,8 @@ class UserController extends AbstractEntityController
      *
      * @Route("/rights/pdf", name="user_rights_pdf", methods={"GET"})
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
     public function rightsPdf(): PdfResponse
     {
@@ -418,15 +385,12 @@ class UserController extends AbstractEntityController
         $users = $this->getEntities();
         if (empty($users)) {
             $message = $this->trans('user.list.empty');
-
             throw $this->createNotFoundException($message);
         }
 
-        // create and render report
-        $report = new UsersRightsReport($this);
-        $report->setUsers($users);
+        $doc = new UsersRightsReport($this, $users);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument($doc);
     }
 
     /**
@@ -555,18 +519,15 @@ class UserController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function getEntities(?string $field = null, string $mode = Criteria::ASC): array
+    protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criterias = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
-        $result = parent::getEntities($field, $mode);
-
-        // remove super admin users if not in role
-        if (!$this->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
-            return \array_filter($result, function (User $user) {
-                return !$user->isSuperAdmin();
-            });
+        // remove super admin users if not granted
+        $role = RoleInterface::ROLE_SUPER_ADMIN;
+        if (!$this->isGranted($role)) {
+            $criterias[] = "$alias.role <> '$role' or $alias.role IS NULL";
         }
 
-        return $result;
+        return parent::getEntities($field, $mode, $criterias, $alias);
     }
 
     /**
@@ -583,6 +544,14 @@ class UserController extends AbstractEntityController
     protected function getTableTemplate(): string
     {
         return 'user/user_table.html.twig';
+    }
+
+    /**
+     * Gets the user's image path.
+     */
+    private function getImagePath(KernelInterface $kernel): string
+    {
+        return $kernel->getProjectDir() . '/public/images/users/';
     }
 
     /**

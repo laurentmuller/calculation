@@ -46,12 +46,14 @@ class CalculationReport extends AbstractReport
     /**
      * Constructor.
      *
-     * @param AbstractController $controller the parent controller
+     * @param AbstractController $controller  the parent controller
+     * @param Calculation        $calculation the calculation to render
      */
-    public function __construct(AbstractController $controller)
+    public function __construct(AbstractController $controller, Calculation $calculation)
     {
         parent::__construct($controller);
         $this->minMargin = $controller->getApplication()->getMinMargin();
+        $this->calculation = $calculation;
     }
 
     /**
@@ -82,6 +84,14 @@ class CalculationReport extends AbstractReport
         // calculation?
         if (null === $this->calculation) {
             return false;
+        }
+
+        // update title
+        if ($this->calculation->isNew()) {
+            $this->setTitleTrans('calculation.add.title');
+        } else {
+            $id = FormatUtils::formatId($this->calculation->getId());
+            $this->setTitleTrans('calculation.edit.title', ['%id%' => $id], true);
         }
 
         // new page
@@ -115,24 +125,6 @@ class CalculationReport extends AbstractReport
         $this->renderOverall();
 
         return true;
-    }
-
-    /**
-     * Sets the calculation to render.
-     */
-    public function setCalculation(Calculation $calculation): self
-    {
-        $this->calculation = $calculation;
-
-        // update title
-        if ($calculation->isNew()) {
-            $this->setTitleTrans('calculation.add.title');
-        } else {
-            $id = FormatUtils::formatId($calculation->getId());
-            $this->setTitleTrans('calculation.edit.title', ['%id%' => $id], true);
-        }
-
-        return $this;
     }
 
     /**

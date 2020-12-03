@@ -137,11 +137,9 @@ class LogController extends AbstractController
             return $this->handleEmptyEntries($request);
         }
 
-        // render report
-        $report = new LogReport($this);
-        $report->setValues($entries);
+        $doc = new LogReport($this, $entries);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument($doc);
     }
 
     /**

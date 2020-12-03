@@ -91,9 +91,7 @@ class GroupDataTable extends AbstractEntityDataTable
      */
     protected function createQueryBuilder($alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        /** @var CategoryRepository $repository */
-        $repository = $this->repository;
-        $predicate = $repository->getGroupPredicate($alias);
+        $predicate = CategoryRepository::getGroupPredicate($alias);
 
         return parent::createQueryBuilder($alias)
             ->where($predicate);

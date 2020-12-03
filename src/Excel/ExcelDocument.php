@@ -50,6 +50,11 @@ class ExcelDocument extends Spreadsheet
     public const MIME_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
     /**
+     * The TranslatorInterface.
+     */
+    protected TranslatorInterface $translator;
+
+    /**
      * The boolean format.
      *
      * @var string[]
@@ -62,11 +67,6 @@ class ExcelDocument extends Spreadsheet
      * @var string
      */
     private $title;
-
-    /**
-     * The TranslatorInterface.
-     */
-    private TranslatorInterface $translator;
 
     /**
      * Constructor.

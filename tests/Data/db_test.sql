@@ -121,40 +121,11 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
 );
 
 INSERT INTO "sy_User"
-(
-    'id', 'email', 'username', 'enabled', 'password', 'role'
-)
+	('id', 'email', 'username', 'enabled', 'password', 'role')
 VALUES
-(
-    1, 'ROLE_SUPER_ADMIN@TEST.COM', 'ROLE_SUPER_ADMIN', 1, 'ROLE_SUPER_ADMIN', 'ROLE_SUPER_ADMIN'
-);
-
-INSERT INTO "sy_User"
-(
-    'id', 'email', 'username', 'enabled', 'password', 'role'
-)
-VALUES
-(
-    2, 'ROLE_ADMIN@TEST.COM', 'ROLE_ADMIN', 1, 'ROLE_ADMIN', 'ROLE_ADMIN'
-);
-
-INSERT INTO "sy_User"
-(
-    'id', 'email', 'username', 'enabled', 'password'
-)
-VALUES
-(
-    3, 'ROLE_USER@TEST.COM', 'ROLE_USER', 1, 'ROLE_USER'
-);
-
-INSERT INTO "sy_User"
-(
-    'id', 'email', 'username', 'enabled', 'password'
-)
-VALUES
-(
-    4, 'ROLE_DISABLED@TEST.COM', 'ROLE_DISABLED', 0, 'ROLE_DISABLED'
-
-);
+	(1, 'ROLE_SUPER_ADMIN@TEST.COM', 'ROLE_SUPER_ADMIN', 1, 'ROLE_SUPER_ADMIN', 'ROLE_SUPER_ADMIN'),
+	(2, 'ROLE_ADMIN@TEST.COM',       'ROLE_ADMIN',       1, 'ROLE_ADMIN',       'ROLE_ADMIN'),
+	(3, 'ROLE_USER@TEST.COM',        'ROLE_USER',        1, 'ROLE_USER',        null),
+	(4, 'ROLE_DISABLED@TEST.COM',    'ROLE_DISABLED',    0, 'ROLE_DISABLED',    null);
 
 COMMIT;

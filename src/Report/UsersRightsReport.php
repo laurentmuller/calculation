@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
@@ -32,7 +31,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterface
+class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
     /**
      * The ASCII bullet character.
@@ -65,13 +64,6 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
     ];
 
     /**
-     * The users to render.
-     *
-     * @var \App\Entity\User[]
-     */
-    protected $users;
-
-    /**
      * The right cell style.
      *
      * @var PdfStyle
@@ -84,17 +76,6 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
      * @var PdfStyle
      */
     private $titleStyle;
-
-    /**
-     * Constructor.
-     *
-     * @param AbstractController $controller the parent controller
-     */
-    public function __construct(AbstractController $controller)
-    {
-        parent::__construct($controller);
-        $this->setTitleTrans('user.rights.title', [], true);
-    }
 
     /**
      * {@inheritdoc}
@@ -144,9 +125,12 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
     /**
      * {@inheritdoc}
      */
-    public function render(): bool
+    protected function doRender(array $entities): bool
     {
         $count = 0;
+
+        // title
+        $this->setTitleTrans('user.rights.title', [], true);
 
         // new page
         $this->AddPage();
@@ -165,22 +149,10 @@ class UsersRightsReport extends AbstractReport implements PdfGroupListenerInterf
         $count += $this->outputRoleUser($builder);
 
         // users rights
-        $count += $this->outputUsers($this->users, $builder);
+        $count += $this->outputUsers($entities, $builder);
 
         // count
         return $this->renderCount($count);
-    }
-
-    /**
-     * Sets the users.
-     *
-     * @param \App\Entity\User[] $users
-     */
-    public function setUsers(array $users): self
-    {
-        $this->users = $users;
-
-        return $this;
     }
 
     /**

@@ -17,14 +17,14 @@ namespace App\Controller;
 use App\DataTable\GroupDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
-use App\Excel\ExcelDocument;
 use App\Excel\ExcelResponse;
 use App\Form\Group\GroupType;
 use App\Pdf\PdfResponse;
 use App\Report\GroupsReport;
+use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
+use App\Spreadsheet\GroupDocument;
 use Doctrine\Common\Collections\Criteria;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,7 +58,7 @@ class GroupController extends AbstractEntityController
     }
 
     /**
-     * Add a category.
+     * Add a group.
      *
      * @Route("/add", name="group_add", methods={"GET", "POST"})
      */
@@ -68,7 +68,7 @@ class GroupController extends AbstractEntityController
     }
 
     /**
-     * List the categories.
+     * List the groups.
      *
      * @Route("", name="group_list", methods={"GET"})
      */
@@ -78,7 +78,7 @@ class GroupController extends AbstractEntityController
     }
 
     /**
-     * Delete a category.
+     * Delete a group.
      *
      * @Route("/delete/{id}", name="group_delete", requirements={"id": "\d+" })
      */
@@ -115,7 +115,7 @@ class GroupController extends AbstractEntityController
     }
 
     /**
-     * Edit a category.
+     * Edit a group.
      *
      * @Route("/edit/{id}", name="group_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
@@ -125,70 +125,49 @@ class GroupController extends AbstractEntityController
     }
 
     /**
-     * Export the categories to an Excel document.
+     * Export the groups to an Excel document.
      *
      * @Route("/excel", name="group_excel")
-     */
-    public function excel(CategoryRepository $repository): ExcelResponse
-    {
-        $doc = new ExcelDocument($this->getTranslator());
-        $doc->initialize($this, 'group.list.title');
-
-        // headers
-        $doc->setHeaderValues([
-            'group.fields.code' => Alignment::HORIZONTAL_GENERAL,
-            'group.fields.description' => Alignment::HORIZONTAL_GENERAL,
-            'group.fields.margins' => Alignment::HORIZONTAL_RIGHT,
-            'group.fields.categories' => Alignment::HORIZONTAL_RIGHT,
-        ]);
-
-        // formats
-        $doc->setFormatInt(3)
-            ->setFormatInt(4);
-
-        /** @var Category[] $categories */
-        $categories = $repository->findAllGroupsByCode();
-
-        // rows
-        $row = 2;
-        foreach ($categories as $category) {
-            $doc->setRowValues($row++, [
-                $category->getCode(),
-                $category->getDescription(),
-                $category->countMargins(),
-                $category->countCategories(),
-            ]);
-        }
-        $doc->setSelectedCell('A2');
-
-        return $this->renderExcelDocument($doc);
-    }
-
-    /**
-     * Export the categories to a PDF document.
      *
-     * @Route("/pdf", name="group_pdf")
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no group is found
      */
-    public function pdf(): PdfResponse
+    public function excel(): ExcelResponse
     {
-        // get categories
-        /** @var CategoryRepository $repository */
-        $repository = $this->getRepository();
-        $groups = $repository->getGroups();
+        /** @var Category[] $groups */
+        $groups = $this->getEntities('code');
         if (empty($groups)) {
             $message = $this->trans('group.list.empty');
             throw new NotFoundHttpException($message);
         }
 
-        // create and render report
-        $report = new GroupsReport($this);
-        $report->setCategories($groups);
+        $doc = new GroupDocument($this, $groups);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderExcelDocument($doc);
     }
 
     /**
-     * Show properties of a category.
+     * Export the groups to a PDF document.
+     *
+     * @Route("/pdf", name="group_pdf")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no group is found
+     */
+    public function pdf(): PdfResponse
+    {
+        /** @var Category[] $groups */
+        $groups = $this->getEntities('code');
+        if (empty($groups)) {
+            $message = $this->trans('group.list.empty');
+            throw new NotFoundHttpException($message);
+        }
+
+        $doc = new GroupsReport($this, $groups);
+
+        return $this->renderPdfDocument($doc);
+    }
+
+    /**
+     * Show properties of a group.
      *
      * @Route("/show/{id}", name="group_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
@@ -255,14 +234,11 @@ class GroupController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function getEntities(string $field = null, string $mode = Criteria::ASC): array
+    protected function getEntities(string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
-        /** @var CategoryRepository $repository */
-        $repository = $this->getRepository();
-        $sortedFields = $field ? [$field => $mode] : [];
+        $criterias[] = CategoryRepository::getGroupPredicate($alias);
 
-        return $repository->getGroupSearchQuery($sortedFields)
-            ->getResult();
+        return parent::getEntities($field, $mode, $criterias, $alias);
     }
 
     /**

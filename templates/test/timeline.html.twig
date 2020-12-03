@@ -54,16 +54,16 @@
         </div>
         <div class="col-auto pl-1">
             <div class="form-inline">
-                <div class="btn-group btn-group-sm mr-2" role="group">
-                    <button class="btn btn-primary btn-submit" type="submit" title="{{ 'common.button_refresh'|trans }}">
-                        {{ icons.icon('sync') }}
-                    </button>
-               </div>
-               <div class="btn-group btn-group-sm" role="group">
+               <div class="btn-group btn-group-sm mr-2" role="group">
                     {{ _self.navigate(previous, interval, 'chevron-left', 'timeline.previous') }}
                     {{ _self.navigate(today, interval, 'arrows-alt', 'timeline.today') }}
                     {{ _self.navigate(next, interval, 'chevron-right', 'timeline.next') }}
                 </div>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button class="btn btn-primary btn-submit" type="submit" title="{{ 'common.button_refresh'|trans }}">
+                        {{ icons.icon('sync') }}
+                    </button>
+               </div>
             </div>
         </div>        
     </div>

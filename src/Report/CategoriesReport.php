@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
@@ -28,48 +27,23 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class CategoriesReport extends AbstractReport
+class CategoriesReport extends AbstractArrayReport
 {
-    /**
-     * The categories to render.
-     *
-     * @var \App\Entity\Category[]
-     */
-    protected $categories;
-
-    /**
-     * Constructor.
-     *
-     * @param AbstractController $controller the parent controller
-     */
-    public function __construct(AbstractController $controller)
-    {
-        parent::__construct($controller);
-        $this->setTitleTrans('category.list.title', [], true);
-    }
-
     /**
      * {@inheritdoc}
      */
-    public function render(): bool
+    protected function doRender(array $entities): bool
     {
-        // categories?
-        $categories = $this->categories;
-        $categoriesCount = \count($categories);
-        if (0 === $categoriesCount) {
-            return false;
-        }
-
-        // sort
-        Utils::sortField($categories, 'code');
+        // title
+        $this->setTitleTrans('category.list.title', [], true);
 
         // group by parent code
-        $groups = Utils::groupBy($categories, function (Category $category) {
+        $groups = Utils::groupBy($entities, function (Category $category) {
             return $category->getParent()->getCode();
         });
 
         // count values
-        $productsCount = \array_reduce($categories, function (int $carry, Category $category) {
+        $productsCount = \array_reduce($entities, function (int $carry, Category $category) {
             return $carry + $category->countProducts();
         }, 0);
 
@@ -83,6 +57,7 @@ class CategoriesReport extends AbstractReport
         $style = PdfStyle::getCellStyle()->setIndent(2);
         foreach ($groups as $key => $items) {
             $table->setGroupKey($key);
+            /** @var Category $item */
             foreach ($items as $item) {
                 $table->startRow()
                     ->add($item->getCode(), 1, $style)
@@ -98,14 +73,14 @@ class CategoriesReport extends AbstractReport
             'count' => \count($groups),
         ]);
         $txtCount = $this->trans('counters.categories', [
-            'count' => $categoriesCount,
+            'count' => \count($entities),
         ]);
         $txtProduct = $this->trans('counters.products', [
             'count' => $productsCount,
         ]);
 
         $table = new PdfTableBuilder($this);
-        $table->addColumn(PdfColumn::left(null, 40, true))
+        $table->addColumn(PdfColumn::left(null, 20))
             ->addColumn(PdfColumn::center(null, 20))
             ->addColumn(PdfColumn::right(null, 20))
             ->startRow(PdfStyle::getNoBorderStyle())
@@ -115,18 +90,6 @@ class CategoriesReport extends AbstractReport
             ->endRow();
 
         return true;
-    }
-
-    /**
-     * Sets the categories to render.
-     *
-     * @param \App\Entity\Category[] $categories
-     */
-    public function setCategories(array $categories): self
-    {
-        $this->categories = $categories;
-
-        return $this;
     }
 
     /**

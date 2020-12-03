@@ -26,39 +26,37 @@ use App\Util\FormatUtils;
  *
  * @author Laurent Muller
  */
-abstract class CalculationItemsTableReport extends AbstractReport
+abstract class CalculationItemsReport extends AbstractArrayReport
 {
-    /**
-     * The items to render.
-     *
-     * @var array
-     */
-    private $items;
-
     /**
      * Constructor.
      *
      * @param AbstractController $controller  the parent controller
+     * @param array              $items       the items to render
      * @param string             $title       the title to translate
      * @param string             $description the description to translate
      */
-    protected function __construct(AbstractController $controller, string $title, string $description)
+    protected function __construct(AbstractController $controller, array $items, string $title, string $description)
     {
-        parent::__construct($controller, self::ORIENTATION_LANDSCAPE);
-        $this->setTitleTrans($title, [], true);
+        parent::__construct($controller, $items, self::ORIENTATION_LANDSCAPE);
         $this->setDescription($this->trans($description));
+        $this->setTitleTrans($title, [], true);
     }
+
+    /**
+     * Compute the number of items.
+     *
+     * @param array $items the calculations
+     *
+     * @return int the number of items
+     */
+    abstract protected function computeItemsCount(array $items): int;
 
     /**
      * {@inheritdoc}
      */
-    public function render(): bool
+    protected function doRender(array $entities): bool
     {
-        // calculations?
-        if (empty($this->items)) {
-            return false;
-        }
-
         // new page
         $this->AddPage();
 
@@ -70,47 +68,28 @@ abstract class CalculationItemsTableReport extends AbstractReport
             ->setTextColor(PdfTextColor::red());
 
         // add
-        foreach ($this->items as $item) {
+        foreach ($entities as $entity) {
             $table->startRow()
-                ->add(FormatUtils::formatId($item['id']))
-                ->add(FormatUtils::formatDate($item['date']))
-                ->add($item['stateCode'])
-                ->add($item['customer'])
-                ->add($item['description'])
-                ->add($this->formatItems($item['items']), 1, $style)
+                ->add(FormatUtils::formatId($entity['id']))
+                ->add(FormatUtils::formatDate($entity['date']))
+                ->add($entity['stateCode'])
+                ->add($entity['customer'])
+                ->add($entity['description'])
+                ->add($this->formatItems($entity['items']), 1, $style)
                 ->endRow();
         }
         PdfStyle::getDefaultStyle()->apply($this);
 
         // counters
         $parameters = [
-            '%calculations%' => \count($this->items),
-            '%items%' => $this->computeItemsCount($this->items),
+            '%calculations%' => \count($entities),
+            '%items%' => $this->computeItemsCount($entities),
         ];
         $text = $this->transCount($parameters);
         $this->Cell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, self::MOVE_TO_NEW_LINE);
 
         return true;
     }
-
-    /**
-     * Sets the items to render.
-     */
-    public function setItems(?array $items): self
-    {
-        $this->items = $items;
-
-        return $this;
-    }
-
-    /**
-     * Compute the number of items.
-     *
-     * @param array $items the calculations
-     *
-     * @return int the number of items
-     */
-    abstract protected function computeItemsCount(array $items): int;
 
     /**
      * Formats the calculation items.

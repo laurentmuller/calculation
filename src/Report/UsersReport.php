@@ -24,7 +24,6 @@ use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
 use App\Util\FormatUtils;
 use App\Util\Utils;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -33,14 +32,8 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  *
  * @author Laurent Muller
  */
-class UsersReport extends AbstractReport
+class UsersReport extends AbstractArrayReport
 {
-    /**
-     * The default image path.
-     *
-     * @var string
-     */
-    private $defaultImagePath;
     /**
      * The mapping factory.
      *
@@ -73,16 +66,13 @@ class UsersReport extends AbstractReport
      * Constructor.
      *
      * @param AbstractController     $controller the parent controller
+     * @param User[]                 $entities   the users to export
      * @param PropertyMappingFactory $factory    the factory to get mapping informations
      * @param StorageInterface       $storage    the storage to get images path
-     * @param KernelInterface        $kernel     the kernel to get the default image path
      */
-    public function __construct(AbstractController $controller, PropertyMappingFactory $factory, StorageInterface $storage, KernelInterface $kernel)
+    public function __construct(AbstractController $controller, array $entities, PropertyMappingFactory $factory, StorageInterface $storage)
     {
-        parent::__construct($controller);
-
-        $this->setTitleTrans('user.list.title');
-        $this->defaultImagePath = $kernel->getProjectDir() . '/public/images/avatar.png';
+        parent::__construct($controller, $entities);
         $this->factory = $factory;
         $this->storage = $storage;
     }
@@ -90,17 +80,10 @@ class UsersReport extends AbstractReport
     /**
      * {@inheritdoc}
      */
-    public function render(): bool
+    protected function doRender(array $entities): bool
     {
-        // users?
-        $users = $this->users;
-        $count = \count($users);
-        if (0 === $count) {
-            return false;
-        }
-
-        // sort
-        Utils::sortField($users, 'username');
+        // title
+        $this->setTitleTrans('user.list.title');
 
         // styles
         $disabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
@@ -119,38 +102,26 @@ class UsersReport extends AbstractReport
             ->addColumn(PdfColumn::left($this->trans('user.fields.lastLogin'), 30, true))
             ->outputHeaders();
 
-        // users
-        foreach ($users as $user) {
-            $enabled = $user->isEnabled();
+        /** @var User $entity */
+        foreach ($entities as $entity) {
+            $enabled = $entity->isEnabled();
             $style = $enabled ? $enabledStyle : $disabledStyle;
             $text = $this->booleanFilter($enabled, 'common.value_enabled', 'common.value_disabled', true);
-            $role = Utils::translateRole($this->translator, $user->getRole());
-            $cell = $this->getImageCell($user);
+            $role = Utils::translateRole($this->translator, $entity->getRole());
+            $cell = $this->getImageCell($entity);
 
             $table->startRow()
                 ->addCell($cell)
-                ->add($user->getUsername())
-                ->add($user->getEmail())
+                ->add($entity->getUsername())
+                ->add($entity->getEmail())
                 ->add($role)
                 ->add($text, 1, $style)
-                ->add($this->formatLastLogin($user->getLastLogin()))
+                ->add($this->formatLastLogin($entity->getLastLogin()))
                 ->endRow();
         }
 
         // count
-        return $this->renderCount($count);
-    }
-
-    /**
-     * Sets the users to render.
-     *
-     * @param \App\Entity\User[] $users
-     */
-    public function setUsers(array $users): self
-    {
-        $this->users = $users;
-
-        return $this;
+        return $this->renderCount(\count($entities));
     }
 
     /**
@@ -225,17 +196,11 @@ class UsersReport extends AbstractReport
      */
     private function getImagePath(User $user): ?string
     {
-        // get user image path
         if ($fieldName = $this->getFieldName($user)) {
             $path = $this->storage->resolvePath($user, $fieldName);
-            if ($path && \file_exists($path)) {
+            if ($path && \is_file($path)) {
                 return $path;
             }
-        }
-
-        // get default image path
-        if (\file_exists($this->defaultImagePath)) {
-            return $this->defaultImagePath;
         }
 
         return null;

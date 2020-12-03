@@ -17,6 +17,7 @@ namespace App\Repository;
 use App\Doctrine\ColumnHydrator;
 use App\Util\Utils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
@@ -101,14 +102,26 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * Creates a search query.
      *
      * @param array  $sortedFields the sorted fields where key is the field name and value is the sort mode ("ASC" or "DESC")
+     * @param array  $criterias    the filter criterias (the where clause)
      * @param string $alias        the entity alias
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
      */
-    public function getSearchQuery(array $sortedFields = [], string $alias = self::DEFAULT_ALIAS): Query
+    public function getSearchQuery(array $sortedFields = [], array $criterias = [], string $alias = self::DEFAULT_ALIAS): Query
     {
         // builder
         $builder = $this->createDefaultQueryBuilder($alias);
+
+        // criterias
+        if (!empty($criterias)) {
+            foreach ($criterias as $criteria) {
+                if ($criteria instanceof Criteria) {
+                    $builder->addCriteria($criteria);
+                } else {
+                    $builder->andWhere($criteria);
+                }
+            }
+        }
 
         // order by clause
         if (!empty($sortedFields)) {

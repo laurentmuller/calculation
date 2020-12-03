@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Product;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
@@ -25,36 +24,15 @@ use App\Util\FormatUtils;
  *
  * @author Laurent Muller
  */
-class ProductsReport extends AbstractReport
+class ProductsReport extends AbstractArrayReport
 {
-    /**
-     * The products to render.
-     *
-     * @var Product[]
-     */
-    protected $products;
-
-    /**
-     * Constructor.
-     *
-     * @param AbstractController $controller the parent controller
-     */
-    public function __construct(AbstractController $controller)
-    {
-        parent::__construct($controller);
-        $this->setTitleTrans('product.list.title');
-    }
-
     /**
      * {@inheritdoc}
      */
-    public function render(): bool
+    protected function doRender(array $entities): bool
     {
-        // products?
-        $count = \count($this->products);
-        if (0 === $count) {
-            return false;
-        }
+        //title
+        $this->setTitleTrans('product.list.title');
 
         // new page
         $this->AddPage();
@@ -62,35 +40,23 @@ class ProductsReport extends AbstractReport
         // create table
         $table = $this->createTable();
 
-        // render
-        foreach ($this->products as $product) {
+        /** @var Product $entity */
+        foreach ($entities as $entity) {
             // group
-            $key = \sprintf('%s - %s', $product->getParentCode(), $product->getCategoryCode());
+            $key = \sprintf('%s - %s', $entity->getParentCode(), $entity->getCategoryCode());
             $table->setGroupKey($key);
 
             // product
             $table->startRow()
-                ->add($product->getDescription())
-                ->add($product->getSupplier())
-                ->add($product->getUnit())
-                ->add(FormatUtils::formatAmount($product->getPrice()))
+                ->add($entity->getDescription())
+                ->add($entity->getSupplier())
+                ->add($entity->getUnit())
+                ->add(FormatUtils::formatAmount($entity->getPrice()))
                 ->endRow();
         }
 
         // count
-        return $this->renderCount($count);
-    }
-
-    /**
-     * Sets the products to render.
-     *
-     * @param Product[] $products
-     */
-    public function setProducts(array $products): self
-    {
-        $this->products = $products;
-
-        return $this;
+        return $this->renderCount(\count($entities));
     }
 
     /**

@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\CalculationState;
 use App\Pdf\PdfCellListenerInterface;
 use App\Pdf\PdfCellListenerTrait;
@@ -25,14 +24,13 @@ use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 
 /**
  * Report for the list of calculation states.
  *
  * @author Laurent Muller
  */
-class CalculationStatesReport extends AbstractReport implements PdfCellListenerInterface
+class CalculationStatesReport extends AbstractArrayReport implements PdfCellListenerInterface
 {
     use PdfCellListenerTrait;
 
@@ -42,24 +40,6 @@ class CalculationStatesReport extends AbstractReport implements PdfCellListenerI
      * @var bool
      */
     private $started = false;
-
-    /**
-     * The calculation states to render.
-     *
-     * @var CalculationState[]
-     */
-    private $states;
-
-    /**
-     * Constructor.
-     *
-     * @param AbstractController $controller the parent controller
-     */
-    public function __construct(AbstractController $controller)
-    {
-        parent::__construct($controller);
-        $this->setTitleTrans('calculationstate.list.title');
-    }
 
     /**
      * {@inheritdoc}
@@ -99,17 +79,10 @@ class CalculationStatesReport extends AbstractReport implements PdfCellListenerI
     /**
      * {@inheritdoc}
      */
-    public function render(): bool
+    protected function doRender(array $entities): bool
     {
-        // states?
-        $states = $this->states;
-        $count = \count($states);
-        if (0 === $count) {
-            return false;
-        }
-
-        // sort
-        Utils::sortField($states, 'code');
+        // title
+        $this->setTitleTrans('calculationstate.list.title');
 
         // new page
         $this->AddPage();
@@ -124,31 +97,19 @@ class CalculationStatesReport extends AbstractReport implements PdfCellListenerI
             ->addColumn(PdfColumn::right($this->trans('calculationstate.fields.calculations'), 22, true))
             ->outputHeaders();
 
-        // states
-        foreach ($states as $state) {
+        /** @var CalculationState $entity */
+        foreach ($entities as $entity) {
             $table->startRow()
-                ->add($state->getCode())
-                ->add($state->getDescription())
-                ->add($this->booleanFilter($state->isEditable()))
-                ->add(null, 1, $this->getColorStyle($state))
-                ->add(FormatUtils::formatInt($state->countCalculations()))
+                ->add($entity->getCode())
+                ->add($entity->getDescription())
+                ->add($this->booleanFilter($entity->isEditable()))
+                ->add(null, 1, $this->getColorStyle($entity))
+                ->add(FormatUtils::formatInt($entity->countCalculations()))
                 ->endRow();
         }
 
         // count
-        return $this->renderCount($count);
-    }
-
-    /**
-     * Sets the categories to render.
-     *
-     * @param \App\Entity\CalculationState[] $states
-     */
-    public function setStates(array $states): self
-    {
-        $this->states = $states;
-
-        return $this;
+        return $this->renderCount(\count($entities));
     }
 
     /**

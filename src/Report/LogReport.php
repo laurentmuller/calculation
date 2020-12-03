@@ -35,7 +35,7 @@ use Doctrine\SqlFormatter\SqlFormatter;
  *
  * @author Laurent Muller
  */
-class LogReport extends AbstractReport implements PdfCellListenerInterface
+class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
 {
     use PdfCellListenerTrait;
 
@@ -85,20 +85,14 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     private $started;
 
     /**
-     * The values to print.
-     *
-     * @var array
-     */
-    private $values;
-
-    /**
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
+     * @param array              $values     an array with the file name, the logs, the levels and the channels
      */
-    public function __construct(AbstractController $controller)
+    public function __construct(AbstractController $controller, array $values)
     {
-        parent::__construct($controller);
+        parent::__construct($controller, $values);
         $this->setTitleTrans('log.title');
     }
 
@@ -141,17 +135,11 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
     /**
      * {@inheritdoc}
      */
-    public function render(): bool
+    protected function doRender(array $entities): bool
     {
-        // values?
-        $values = $this->values;
-        if (empty($values)) {
-            return false;
-        }
-
         // file
         $file = $this->trans('log.show.file', [
-            '%file%' => $values['file'],
+            '%file%' => $entities['file'],
         ]);
         $this->setDescription($file);
 
@@ -159,7 +147,7 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         $this->AddPage();
 
         // logs
-        $logs = $values['logs'];
+        $logs = $entities['logs'];
         if (empty($logs)) {
             $this->Cell(0, self::LINE_HEIGHT, $this->trans('log.show.empty'));
 
@@ -167,23 +155,11 @@ class LogReport extends AbstractReport implements PdfCellListenerInterface
         }
 
         // levels and channels
-        $cards = \array_merge($this->values['levels'], $this->values['channels']);
+        $cards = \array_merge($entities['levels'], $entities['channels']);
         $this->outputCards($cards);
 
         // lines
         return $this->outputLogs($logs);
-    }
-
-    /**
-     * Sets the values to output.
-     *
-     * @param array $values an array with the file name, the logs, the levels and the channels
-     */
-    public function setValues(array $values): self
-    {
-        $this->values = $values;
-
-        return $this;
     }
 
     /**

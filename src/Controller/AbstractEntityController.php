@@ -235,17 +235,19 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the entities to display.
      *
-     * @param string $field the optional sorted field
-     * @param string $mode  the optional sort mode ("ASC" or "DESC")
+     * @param string $field     the optional sorted field
+     * @param string $mode      the optional sort mode ("ASC" or "DESC")
+     * @param array  $criterias the filter criterias
+     * @param string $alias     the entity alias
      *
      * @return AbstractEntity[] the entities
      */
-    protected function getEntities(?string $field = null, string $mode = Criteria::ASC): array
+    protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criterias = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
-        $sortedFields = $field ? [$field => $mode] : [];
+        $sortedFields = null !== $field ? [$field => $mode] : [];
 
         return $this->getRepository()
-            ->getSearchQuery($sortedFields)
+            ->getSearchQuery($sortedFields, $criterias, $alias)
             ->getResult();
     }
 

@@ -3,7 +3,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
-{% macro fill_states(states, total) %}
+{% macro fill_states(states) %}
 <button class="dropdown-item dropdown-state active" type="button"  data-id="">{{ 'datatable.all'|trans }}</button>
 {% for state in states %}
     <button class="dropdown-item dropdown-state" type="button" data-id="{{ state.id }}">{{ state.code }}</button>
@@ -47,7 +47,7 @@
             {{- 'calculation.fields.state'|trans -}}
         </button>
         <div class="dropdown-menu">
-            {{ _self.fill_states(states, total) -}}
+            {{ _self.fill_states(states) -}}
         </div>
         <input type="hidden" id="state" name="state">
     </div>

@@ -17,15 +17,14 @@ namespace App\Controller;
 use App\DataTable\ProductDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Product;
-use App\Excel\ExcelDocument;
 use App\Excel\ExcelResponse;
 use App\Form\Product\ProductType;
 use App\Pdf\PdfResponse;
 use App\Report\ProductsReport;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use App\Spreadsheet\ProductDocument;
 use Doctrine\Common\Collections\Criteria;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -127,41 +126,19 @@ class ProductController extends AbstractEntityController
      * Export the products to an Excel document.
      *
      * @Route("/excel", name="product_excel")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no product is found
      */
     public function excel(ProductRepository $repository): ExcelResponse
     {
-        $doc = new ExcelDocument($this->getTranslator());
-        $doc->initialize($this, 'product.list.title');
-
-        // headers
-        $doc->setHeaderValues([
-            'product.fields.group' => Alignment::HORIZONTAL_GENERAL,
-            'product.fields.category' => Alignment::HORIZONTAL_GENERAL,
-            'product.fields.description' => Alignment::HORIZONTAL_GENERAL,
-            'product.fields.price' => Alignment::HORIZONTAL_RIGHT,
-            'product.fields.unit' => Alignment::HORIZONTAL_GENERAL,
-            'product.fields.supplier' => Alignment::HORIZONTAL_GENERAL,
-        ]);
-
-        // formats
-        $doc->setFormatAmount(3);
-
         /** @var Product[] $products */
         $products = $repository->findAllByGroup();
-
-        // rows
-        $row = 2;
-        foreach ($products as $product) {
-            $doc->setRowValues($row++, [
-                $product->getParentCode(),
-                $product->getCategoryCode(),
-                $product->getDescription(),
-                $product->getPrice(),
-                $product->getUnit(),
-                $product->getSupplier(),
-                ]);
+        if (empty($products)) {
+            $message = $this->trans('product.list.empty');
+            throw $this->createNotFoundException($message);
         }
-        $doc->setSelectedCell('A2');
+
+        $doc = new ProductDocument($this, $products);
 
         return $this->renderExcelDocument($doc);
     }
@@ -170,22 +147,21 @@ class ProductController extends AbstractEntityController
      * Export the products to a PDF document.
      *
      * @Route("/pdf", name="product_pdf")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no product is found
      */
     public function pdf(ProductRepository $repository): PdfResponse
     {
-        // get products
+        /** @var Product[] $products */
         $products = $repository->findAllByGroup();
         if (empty($products)) {
             $message = $this->trans('product.list.empty');
-
             throw $this->createNotFoundException($message);
         }
 
-        // create and render report
-        $report = new ProductsReport($this);
-        $report->setProducts($products);
+        $doc = new ProductsReport($this, $products);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument($doc);
     }
 
     /**

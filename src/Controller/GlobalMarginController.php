@@ -17,13 +17,11 @@ namespace App\Controller;
 use App\DataTable\GlobalMarginDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\GlobalMargin;
-use App\Excel\ExcelDocument;
 use App\Excel\ExcelResponse;
 use App\Form\GlobalMargin\GlobalMarginType;
 use App\Pdf\PdfResponse;
 use App\Report\GlobalMarginsReport;
-use App\Repository\GlobalMarginRepository;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use App\Spreadsheet\GlobalMarginDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,37 +104,19 @@ class GlobalMarginController extends AbstractEntityController
      * Export the global margins to an Excel document.
      *
      * @Route("/excel", name="globalmargin_excel")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      */
-    public function excel(GlobalMarginRepository $repository): ExcelResponse
+    public function excel(): ExcelResponse
     {
-        $doc = new ExcelDocument($this->getTranslator());
-        $doc->initialize($this, 'globalmargin.list.title');
-
-        // headers
-        $doc->setHeaderValues([
-            'globalmargin.fields.minimum' => Alignment::HORIZONTAL_RIGHT,
-            'globalmargin.fields.maximum' => Alignment::HORIZONTAL_RIGHT,
-            'globalmargin.fields.margin' => Alignment::HORIZONTAL_RIGHT,
-        ]);
-
-        // formats
-        $doc->setFormatAmount(1)
-            ->setFormatAmount(2)
-            ->setFormatPercent(3);
-
         /** @var GlobalMargin[] $margins */
-        $margins = $repository->findAllByMinimum();
-
-        // rows
-        $row = 2;
-        foreach ($margins as $margin) {
-            $doc->setRowValues($row++, [
-                    $margin->getMinimum(),
-                    $margin->getMaximum(),
-                    $margin->getMargin(),
-                    ]);
+        $margins = $this->getEntities('minimum');
+        if (empty($margins)) {
+            $message = $this->trans('globalmargin.list.empty');
+            throw $this->createNotFoundException($message);
         }
-        $doc->setSelectedCell('A2');
+
+        $doc = new GlobalMarginDocument($this, $margins);
 
         return $this->renderExcelDocument($doc);
     }
@@ -145,20 +125,19 @@ class GlobalMarginController extends AbstractEntityController
      * Export the global margins to a PDF document.
      *
      * @Route("/pdf", name="globalmargin_pdf")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      */
     public function pdf(): PdfResponse
     {
-        // get categories
-        $margins = $this->getRepository()->findAll();
+        /** @var GlobalMargin[] $margins */
+        $margins = $this->getEntities('minimum');
         if (empty($margins)) {
             $message = $this->trans('globalmargin.list.empty');
-
             throw $this->createNotFoundException($message);
         }
 
-        // create and render report
-        $report = new GlobalMarginsReport($this);
-        $report->setGlobalMargins($margins);
+        $report = new GlobalMarginsReport($this, $margins);
 
         return $this->renderPdfDocument($report);
     }

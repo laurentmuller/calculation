@@ -17,14 +17,13 @@ namespace App\Controller;
 use App\DataTable\CustomerDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Customer;
-use App\Excel\ExcelDocument;
 use App\Excel\ExcelResponse;
 use App\Form\Customer\CustomerType;
 use App\Pdf\PdfResponse;
 use App\Report\CustomersReport;
 use App\Repository\CustomerRepository;
+use App\Spreadsheet\CustomerDocument;
 use Doctrine\Common\Collections\Criteria;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -114,38 +113,19 @@ class CustomerController extends AbstractEntityController
      * Export the customers to an Excel document.
      *
      * @Route("/excel", name="customer_excel")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
      */
     public function excel(CustomerRepository $repository): ExcelResponse
     {
-        $doc = new ExcelDocument($this->getTranslator());
-        $doc->initialize($this, 'customer.list.title');
-
-        // headers
-        $doc->setHeaderValues([
-            'customer.fields.lastName' => Alignment::HORIZONTAL_GENERAL,
-            'customer.fields.firstName' => Alignment::HORIZONTAL_GENERAL,
-            'customer.fields.company' => Alignment::HORIZONTAL_GENERAL,
-            'customer.fields.address' => Alignment::HORIZONTAL_GENERAL,
-            'customer.fields.zipCode' => Alignment::HORIZONTAL_RIGHT,
-            'customer.fields.city' => Alignment::HORIZONTAL_GENERAL,
-        ]);
-
         /** @var Customer[] $customers */
         $customers = $repository->findAllByNameAndCompany();
-
-        // rows
-        $row = 2;
-        foreach ($customers as $customer) {
-            $doc->setRowValues($row++, [
-                $customer->getLastName(),
-                $customer->getFirstName(),
-                $customer->getCompany(),
-                $customer->getAddress(),
-                $customer->getZipCode(),
-                $customer->getCity(),
-            ]);
+        if (empty($customers)) {
+            $message = $this->trans('customer.list.empty');
+            throw $this->createNotFoundException($message);
         }
-        $doc->setSelectedCell('A2');
+
+        $doc = new CustomerDocument($this, $customers);
 
         return $this->renderExcelDocument($doc);
     }
@@ -154,22 +134,20 @@ class CustomerController extends AbstractEntityController
      * Export the customers to a PDF document.
      *
      * @Route("/pdf", name="customer_pdf")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
      */
-    public function pdf(Request $request): PdfResponse
+    public function pdf(Request $request, CustomerRepository $repository): PdfResponse
     {
-        // get customers
-        $customers = $this->getRepository()->findAll();
+        /** @var Customer[] $customers */
+        $customers = $repository->findAllByNameAndCompany();
         if (empty($customers)) {
             $message = $this->trans('customer.list.empty');
-
             throw $this->createNotFoundException($message);
         }
 
-        // create and render report
         $grouped = (bool) $request->get('grouped', true);
-        $report = new CustomersReport($this);
-        $report->setCustomers($customers)
-            ->setGrouped($grouped);
+        $report = new CustomersReport($this, $customers, $grouped);
 
         return $this->renderPdfDocument($report);
     }

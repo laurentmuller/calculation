@@ -17,7 +17,6 @@ namespace App\Controller;
 use App\DataTable\CalculationStateDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
-use App\Excel\ExcelDocument;
 use App\Excel\ExcelResponse;
 use App\Form\CalculationState\CalculationStateType;
 use App\Interfaces\ApplicationServiceInterface;
@@ -25,9 +24,7 @@ use App\Pdf\PdfResponse;
 use App\Report\CalculationStatesReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Color;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
+use App\Spreadsheet\CalculationStateDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -130,50 +127,19 @@ class CalculationStateController extends AbstractEntityController
      * Export the calculation states to an Excel document.
      *
      * @Route("/excel", name="calculationstate_excel")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      */
     public function excel(CalculationStateRepository $repository): ExcelResponse
     {
-        $doc = new ExcelDocument($this->getTranslator());
-        $doc->initialize($this, 'calculationstate.list.title', true);
-
-        // headers
-        $doc->setHeaderValues([
-            'calculationstate.fields.code' => Alignment::HORIZONTAL_GENERAL,
-            'calculationstate.fields.description' => Alignment::HORIZONTAL_GENERAL,
-            'calculationstate.fields.editable' => Alignment::HORIZONTAL_RIGHT,
-            'calculationstate.fields.calculations' => Alignment::HORIZONTAL_RIGHT,
-            'calculationstate.fields.color' => Alignment::HORIZONTAL_CENTER,
-        ]);
-
-        // formats
-        $doc->setFormatYesNo(3)
-            ->setFormatInt(4);
-
         /** @var CalculationState[] $states */
-        $states = $repository->findAllByCode();
-
-        // rows
-        $row = 2;
-        foreach ($states as $state) {
-            $doc->setRowValues($row, [
-                $state->getCode(),
-                $state->getDescription(),
-                $state->isEditable(),
-                $state->countCalculations(),
-            ]);
-
-            // color
-            $col = $doc->stringFromColumnIndex(5);
-            $color = new Color(\substr($state->getColor(), 1));
-            $fill = $doc->getActiveSheet()
-                ->getStyle("$col$row")
-                ->getFill();
-            $fill->setFillType(Fill::FILL_SOLID)
-                ->setStartColor($color);
-
-            ++$row;
+        $states = $this->getEntities('code');
+        if (empty($states)) {
+            $message = $this->trans('calculationstate.list.empty');
+            throw $this->createNotFoundException($message);
         }
-        $doc->setSelectedCell('A2');
+
+        $doc = new CalculationStateDocument($this, $states);
 
         return $this->renderExcelDocument($doc);
     }
@@ -182,22 +148,21 @@ class CalculationStateController extends AbstractEntityController
      * Export the calculation states to a PDF document.
      *
      * @Route("/pdf", name="calculationstate_pdf")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      */
     public function pdf(): PdfResponse
     {
-        // get states
-        $states = $this->getRepository()->findAll();
+        /** @var CalculationState[] $states */
+        $states = $this->getEntities('code');
         if (empty($states)) {
             $message = $this->trans('calculationstate.list.empty');
-
             throw $this->createNotFoundException($message);
         }
 
-        // create and render report
-        $report = new CalculationStatesReport($this);
-        $report->setStates($states);
+        $doc = new CalculationStatesReport($this, $states);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument($doc);
     }
 
     /**

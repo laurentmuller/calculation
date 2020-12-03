@@ -18,7 +18,6 @@ use App\DataTable\CalculationDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\Category;
-use App\Excel\ExcelDocument;
 use App\Excel\ExcelResponse;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
@@ -29,12 +28,11 @@ use App\Pivot\PivotTable;
 use App\Pivot\PivotTableFactory;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
-use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\CalculationService;
+use App\Spreadsheet\CalculationDocument;
 use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -171,53 +169,19 @@ class CalculationController extends AbstractEntityController
      * Export the calculations to an Excel document.
      *
      * @Route("/excel", name="calculation_excel")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      */
-    public function excel(CalculationRepository $repository): ExcelResponse
+    public function excel(): ExcelResponse
     {
-        $doc = new ExcelDocument($this->getTranslator());
-        $doc->initialize($this, 'calculation.list.title', true);
-
-        // headers
-        $doc->setHeaderValues([
-            'calculation.fields.id' => Alignment::HORIZONTAL_CENTER,
-            'calculation.fields.date' => Alignment::HORIZONTAL_CENTER,
-            'calculation.fields.state' => Alignment::HORIZONTAL_GENERAL,
-            'calculation.fields.customer' => Alignment::HORIZONTAL_GENERAL,
-            'calculation.fields.description' => Alignment::HORIZONTAL_GENERAL,
-            'calculationgroup.fields.amount' => Alignment::HORIZONTAL_RIGHT,
-            'calculation.fields.margin' => Alignment::HORIZONTAL_RIGHT,
-            'calculation.fields.total' => Alignment::HORIZONTAL_RIGHT,
-        ]);
-
-        // formats
-        $percentage = $doc->getPercentFormat();
-        $minMargin = $this->getApplication()->getMinMargin();
-        $format = "[Red][<$minMargin]$percentage;$percentage";
-        $doc->setFormatId(1)
-            ->setFormatDate(2)
-            ->setFormatAmount(6)
-            ->setFormat(7, $format)
-            ->setFormatAmount(8);
-
         /** @var Calculation[] $calculations */
-        $calculations = $repository->findAllById();
-
-        // rows
-        $row = 2;
-        foreach ($calculations as $calculation) {
-            $doc->setRowValues($row++, [
-                $calculation->getId(),
-                $calculation->getDate(),
-                $calculation->getStateCode(),
-                $calculation->getCustomer(),
-                $calculation->getDescription(),
-                $calculation->getItemsTotal(),
-                $calculation->getOverallMargin(),
-                $calculation->getOverallTotal(),
-                ]);
+        $calculations = $this->getEntities('id');
+        if (empty($calculations)) {
+            $message = $this->trans('calculation.list.empty');
+            throw $this->createNotFoundException($message);
         }
 
-        $doc->setSelectedCell('A2');
+        $doc = new CalculationDocument($this, $calculations);
 
         return $this->renderExcelDocument($doc);
     }
@@ -226,24 +190,22 @@ class CalculationController extends AbstractEntityController
      * Export calculations to a PDF document.
      *
      * @Route("/pdf", name="calculation_pdf")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      */
     public function pdf(Request $request): PdfResponse
     {
-        // get calculations
-        $calculations = $this->getRepository()->findAll();
+        /** @var Calculation[] $calculations */
+        $calculations = $this->getEntities('id');
         if (empty($calculations)) {
             $message = $this->trans('calculation.list.empty');
-
             throw $this->createNotFoundException($message);
         }
 
-        // create and render report
         $grouped = (bool) $request->get('grouped', true);
-        $report = new CalculationsReport($this);
-        $report->setCalculations($calculations)
-            ->setGrouped($grouped);
+        $doc = new CalculationsReport($this, $calculations, $grouped);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument($doc);
     }
 
     /**
@@ -253,11 +215,9 @@ class CalculationController extends AbstractEntityController
      */
     public function pdfById(Calculation $calculation): PdfResponse
     {
-        // create and render report
-        $report = new CalculationReport($this);
-        $report->setCalculation($calculation);
+        $doc = new CalculationReport($this, $calculation);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument($doc);
     }
 
     /**
@@ -416,10 +376,8 @@ class CalculationController extends AbstractEntityController
 
             // parameters
             $states = $repository->getListCount();
-            $total = \array_sum(\array_column($states, 'count'));
             $parameters = [
                 'states' => $states,
-                'total' => $total,
             ];
         }
 

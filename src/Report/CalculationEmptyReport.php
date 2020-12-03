@@ -15,48 +15,72 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Traits\MathTrait;
 
 /**
  * Report for calculations with empty items.
  *
  * @author Laurent Muller
  */
-class CalculationEmptyReport extends CalculationItemsReports
+class CalculationEmptyReport extends CalculationItemsReport
 {
+    use MathTrait;
+
+    /**
+     * The price label.
+     *
+     * @var string
+     */
+    private $priceLabel;
+
+    /**
+     * The quantity label.
+     *
+     * @var string
+     */
+    private $quantityLabel;
+
     /**
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
+     * @param array              $items      the items to render
      */
-    public function __construct(AbstractController $controller)
+    public function __construct(AbstractController $controller, array $items)
     {
-        parent::__construct($controller, 'empty.title', 'empty.description');
+        parent::__construct($controller, $items, 'empty.title', 'empty.description');
+        $this->priceLabel = $this->trans('calculationitem.fields.price');
+        $this->quantityLabel = $this->trans('calculationitem.fields.quantity');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function countItems(array $calculations): int
+    protected function computeItemsCount(array $items): int
     {
-        return \array_reduce($calculations, function (int $carry, array $calculation) {
-            return $carry + \count($calculation['items']);
+        return \array_reduce($items, function (int $carry, array $item) {
+            return $carry + \count($item['items']);
         }, 0);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function formatItem(array $item): string
+    protected function formatItems(array $items): string
     {
-        $texts = [];
-        if (empty($item['price'])) {
-            $texts[] = $this->trans('calculationitem.fields.price');
-        }
-        if (empty($item['quantity'])) {
-            $texts[] = $this->trans('calculationitem.fields.quantity');
-        }
+        $result = \array_map(function (array $item) {
+            $founds = [];
+            if ($this->isFloatZero($item['price'])) {
+                $founds[] = $this->priceLabel;
+            }
+            if ($this->isFloatZero($item['quantity'])) {
+                $founds[] = $this->quantityLabel;
+            }
 
-        return \sprintf('%s (%s)', $item['description'], \implode(', ', $texts));
+            return \sprintf('%s (%s)', $item['description'], \implode(', ', $founds));
+        }, $items);
+
+        return \implode("\n", $result);
     }
 
     /**

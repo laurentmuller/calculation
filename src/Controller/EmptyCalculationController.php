@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTable\CalculationEmptyDataTable;
-use App\Report\CalculationEmptyTableReport;
+use App\Report\CalculationEmptyReport;
 use App\Repository\CalculationRepository;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -80,10 +80,9 @@ class EmptyCalculationController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        $report = new CalculationEmptyTableReport($this);
-        $report->setItems($items);
+        $doc = new CalculationEmptyReport($this, $items);
 
-        return $this->renderPdfDocument($report);
+        return $this->renderPdfDocument($doc);
     }
 
     /**

@@ -14,54 +14,25 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
+use App\Entity\GlobalMargin;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfTableBuilder;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 
 /**
  * Report for the list of global margins.
  *
  * @author Laurent Muller
  */
-class GlobalMarginsReport extends AbstractReport
+class GlobalMarginsReport extends AbstractArrayReport
 {
-    /**
-     * The global margins to render.
-     *
-     * @var \App\Entity\GlobalMargin[]
-     */
-    protected $globalMargins;
-
-    /**
-     * Constructor.
-     *
-     * @param AbstractController $controller the parent controller
-     */
-    public function __construct(AbstractController $controller)
-    {
-        parent::__construct($controller);
-        $this->setTitleTrans('globalmargin.list.title');
-    }
-
     /**
      * {@inheritdoc}
      */
-    public function render(): bool
+    protected function doRender(array $entities): bool
     {
-        // margins?
-        $globalMargins = $this->globalMargins;
-        $count = \count($globalMargins);
-        if (0 === $count) {
-            return false;
-        }
-
-        // sort
-        Utils::sortFields($globalMargins, [
-            'minimum',
-            'maximum',
-        ]);
+        // title
+        $this->setTitleTrans('globalmargin.list.title');
 
         // new page
         $this->AddPage();
@@ -73,28 +44,16 @@ class GlobalMarginsReport extends AbstractReport
             ->addColumn(PdfColumn::right($this->trans('globalmargin.fields.margin'), 50))
             ->outputHeaders();
 
-        // margins
-        foreach ($globalMargins as $margin) {
+        /** @var GlobalMargin $entity */
+        foreach ($entities as $entity) {
             $table->startRow()
-                ->add(FormatUtils::formatAmount($margin->getMinimum()))
-                ->add(FormatUtils::formatAmount($margin->getMaximum()))
-                ->add(FormatUtils::formatPercent($margin->getMargin()))
+                ->add(FormatUtils::formatAmount($entity->getMinimum()))
+                ->add(FormatUtils::formatAmount($entity->getMaximum()))
+                ->add(FormatUtils::formatPercent($entity->getMargin()))
                 ->endRow();
         }
 
         // count
-        return $this->renderCount($count);
-    }
-
-    /**
-     * Sets the global margins to render.
-     *
-     * @param \App\Entity\GlobalMargin[] $globalMargins
-     */
-    public function setGlobalMargins(array $globalMargins): self
-    {
-        $this->globalMargins = $globalMargins;
-
-        return $this;
+        return $this->renderCount(\count($entities));
     }
 }

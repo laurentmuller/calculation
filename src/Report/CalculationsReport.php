@@ -29,16 +29,9 @@ use App\Util\FormatUtils;
  *
  * @author Laurent Muller
  */
-class CalculationsReport extends AbstractReport
+class CalculationsReport extends AbstractArrayReport
 {
     use MathTrait;
-
-    /**
-     * The calculations to render.
-     *
-     * @var \App\Entity\Calculation[]
-     */
-    protected $calculations;
 
     /**
      * Set if the calculations are grouped by state.
@@ -65,46 +58,47 @@ class CalculationsReport extends AbstractReport
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
+     * @param Calculation[]      $entities   the calculations to render
+     * @param bool               $grouped    true if calculations are grouped by state
      */
-    public function __construct(AbstractController $controller)
+    public function __construct(AbstractController $controller, array $entities, bool $grouped = true)
     {
-        parent::__construct($controller, self::ORIENTATION_LANDSCAPE);
-
-        $this->setTitleTrans('calculation.list.title');
+        parent::__construct($controller, $entities, self::ORIENTATION_LANDSCAPE);
         $this->minMargin = $controller->getApplication()->getMinMargin();
+        $this->grouped = $grouped;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function render(): bool
+    protected function doRender(array $entities): bool
     {
-        // calculations?
-        if (empty($this->calculations)) {
-            return false;
-        }
+        // title
+        $this->setTitleTrans('calculation.list.title');
 
         // new page
         $this->AddPage();
 
         // grouping?
         if ($this->grouped) {
-            $table = $this->outputByGroup();
+            $table = $this->outputByGroup($entities);
         } else {
-            $table = $this->outputByList();
+            $table = $this->outputByList($entities);
         }
 
         // totals
         $items = 0.0;
         $overall = 0.0;
-        foreach ($this->calculations as $c) {
-            $items += $c->getItemsTotal();
-            $overall += $c->getOverallTotal();
+
+        /** @var Calculation $entity */
+        foreach ($entities as $entity) {
+            $items += $entity->getItemsTotal();
+            $overall += $entity->getOverallTotal();
         }
         $margins = $this->isFloatZero($items) ? 0 : $this->safeDivide($overall, $items) - 1;
 
         $text = $this->trans('common.count', [
-            '%count%' => \count($this->calculations),
+            '%count%' => \count($entities),
         ]);
 
         $columns = $table->getColumnsCount() - 3;
@@ -118,30 +112,6 @@ class CalculationsReport extends AbstractReport
             ->endRow();
 
         return true;
-    }
-
-    /**
-     * Sets the calculations to render.
-     *
-     * @param \App\Entity\Calculation[] $calculations the calculations to render
-     */
-    public function setCalculations(array $calculations): self
-    {
-        $this->calculations = $calculations;
-
-        return $this;
-    }
-
-    /**
-     * Sets a value indicating if calculations are grouped by state.
-     *
-     * @param bool $grouped true if grouped by state
-     */
-    public function setGrouped(bool $grouped): self
-    {
-        $this->grouped = $grouped;
-
-        return $this;
     }
 
     /**
@@ -197,15 +167,17 @@ class CalculationsReport extends AbstractReport
     /**
      * Outputs the calculations grouped by state.
      *
+     * @param Calculation[] $entities the calculations to render
+     *
      * @return PdfGroupTableBuilder the table builder
      */
-    private function outputByGroup(): PdfGroupTableBuilder
+    private function outputByGroup(array $entities): PdfGroupTableBuilder
     {
         // groups the calculations by state
         $groups = [];
-        foreach ($this->calculations as $c) {
-            $key = $c->getStateCode();
-            $groups[$key][] = $c;
+        foreach ($entities as $entity) {
+            $key = $entity->getStateCode();
+            $groups[$key][] = $entity;
         }
 
         // create table
@@ -225,16 +197,18 @@ class CalculationsReport extends AbstractReport
     /**
      * Ouput the calculations as list.
      *
+     * @param Calculation[] $entities the calculations to render
+     *
      * @return PdfGroupTableBuilder the table builder
      */
-    private function outputByList(): PdfGroupTableBuilder
+    private function outputByList(array $entities): PdfGroupTableBuilder
     {
         // create table
         $table = $this->createTable(false);
 
         // output
-        foreach ($this->calculations as $c) {
-            $this->outputItem($table, $c, false);
+        foreach ($entities as $entity) {
+            $this->outputItem($table, $entity, false);
         }
 
         return $table;

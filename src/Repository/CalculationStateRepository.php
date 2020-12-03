@@ -40,16 +40,6 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * Gets all calculation states order by code.
-     *
-     * @return CalculationState[]
-     */
-    public function findAllByCode(): array
-    {
-        return $this->findBy([], ['code' => Criteria::ASC]);
-    }
-
-    /**
      * Gets the the list of calculation states sorted by code.
      *
      * @return CalculationState[] the calculation states
@@ -58,7 +48,7 @@ class CalculationStateRepository extends AbstractRepository
     {
         return $this->getSortedBuilder()
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 
     /**
@@ -70,9 +60,9 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getListCount(): array
     {
-        $builder = $this->getListCountQueryBuilder();
-
-        return $builder->getQuery()->getArrayResult();
+        return $this->getListCountQueryBuilder()
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**

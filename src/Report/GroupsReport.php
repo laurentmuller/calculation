@@ -14,61 +14,34 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Category;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 
 /**
- * Report for the list of categories.
+ * Report for the list of groups.
  *
  * @author Laurent Muller
  */
-class GroupsReport extends AbstractReport
+class GroupsReport extends AbstractArrayReport
 {
-    /**
-     * The categories to render.
-     *
-     * @var \App\Entity\Category[]
-     */
-    protected $categories;
-
-    /**
-     * Constructor.
-     *
-     * @param AbstractController $controller the parent controller
-     */
-    public function __construct(AbstractController $controller)
-    {
-        parent::__construct($controller);
-        $this->setTitleTrans('group.list.title', [], true);
-    }
-
     /**
      * {@inheritdoc}
      */
-    public function render(): bool
+    protected function doRender(array $entities): bool
     {
-        // categories?
-        $categories = $this->categories;
-        $count = \count($categories);
-        if (0 === $count) {
-            return false;
-        }
+        // title
+        $this->setTitleTrans('group.list.title', [], true);
 
         // count values
         $marginsCount = 0;
-        $categoriesCount = 0;
-        foreach ($categories as $category) {
-            $marginsCount += $category->countMargins();
-            $categoriesCount += $category->countCategories();
+        $groupsCount = 0;
+        foreach ($entities as $entity) {
+            $marginsCount += $entity->countMargins();
+            $groupsCount += $entity->countCategories();
         }
-
-        // sort
-        Utils::sortField($categories, 'code');
 
         // new page
         $this->AddPage();
@@ -76,12 +49,13 @@ class GroupsReport extends AbstractReport
         // table
         $table = $this->createTable();
 
-        // categories
-        $last = \end($categories);
+        $last = \end($entities);
         $emptyStyle = PdfStyle::getCellStyle()->setBorder('LR');
-        foreach ($categories as $category) {
-            $this->outputCategory($table, $category);
-            if ($category !== $last) {
+
+        /** @var Category $entity */
+        foreach ($entities as $entity) {
+            $this->outputGroup($table, $entity);
+            if ($entity !== $last) {
                 $table->singleLine(null, $emptyStyle);
             }
         }
@@ -89,10 +63,10 @@ class GroupsReport extends AbstractReport
 
         // totals
         $txtCount = $this->trans('counters.groups', [
-            'count' => $count,
+            'count' => \count($entities),
         ]);
         $txtCategory = $this->trans('counters.categories', [
-            'count' => $categoriesCount,
+            'count' => $groupsCount,
         ]);
         $txtMargin = $this->trans('counters.margins', [
             'count' => $marginsCount,
@@ -100,8 +74,8 @@ class GroupsReport extends AbstractReport
 
         $table = new PdfTableBuilder($this);
         $table->addColumn(PdfColumn::left(null, 20))
-            ->addColumn(PdfColumn::right(null, 50, true))
-            ->addColumn(PdfColumn::right(null, 62, true))
+            ->addColumn(PdfColumn::center(null, 20))
+            ->addColumn(PdfColumn::right(null, 20))
             ->startRow(PdfStyle::getNoBorderStyle())
             ->add($txtCount)
             ->add($txtCategory)
@@ -109,18 +83,6 @@ class GroupsReport extends AbstractReport
             ->endRow();
 
         return true;
-    }
-
-    /**
-     * Sets the categories to render.
-     *
-     * @param \App\Entity\Category[] $categories
-     */
-    public function setCategories(array $categories): self
-    {
-        $this->categories = $categories;
-
-        return $this;
     }
 
     /**
@@ -143,21 +105,21 @@ class GroupsReport extends AbstractReport
     }
 
     /**
-     * Ouput a category.
+     * Ouput a group.
      *
-     * @param PdfTableBuilder $table    the table to render to
-     * @param Category        $category the category to output
+     * @param PdfTableBuilder $table the table to render to
+     * @param Category        $group the category to output
      */
-    private function outputCategory(PdfTableBuilder $table, Category $category): void
+    private function outputGroup(PdfTableBuilder $table, Category $group): void
     {
         $table->startRow()
-            ->add($category->getCode())
-            ->add($category->getDescription())
-            ->add(FormatUtils::formatInt($category->countCategories()));
+            ->add($group->getCode())
+            ->add($group->getDescription())
+            ->add(FormatUtils::formatInt($group->countCategories()));
 
-        if ($category->hasMargins()) {
+        if ($group->hasMargins()) {
             $skip = false;
-            $margins = $category->getMargins();
+            $margins = $group->getMargins();
             foreach ($margins as $margin) {
                 if ($skip) {
                     $table->startRow()

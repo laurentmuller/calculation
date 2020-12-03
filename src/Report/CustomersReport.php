@@ -19,23 +19,14 @@ use App\Entity\Customer;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
-use App\Repository\CustomerRepository;
-use App\Util\Utils;
 
 /**
  * Report for the list of customers.
  *
  * @author Laurent Muller
  */
-class CustomersReport extends AbstractReport
+class CustomersReport extends AbstractArrayReport
 {
-    /**
-     * The customers to render.
-     *
-     * @var \App\Entity\Customer[]
-     */
-    private $customers;
-
     /**
      * The group customers by first letter.
      *
@@ -54,25 +45,23 @@ class CustomersReport extends AbstractReport
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
+     * @param Customer[]         $entities   the customers to export
+     * @param bool               $grouped    true if the customers are grouped by the first letter
      */
-    public function __construct(AbstractController $controller)
+    public function __construct(AbstractController $controller, array $entities, bool $grouped = true)
     {
-        parent::__construct($controller, self::ORIENTATION_LANDSCAPE);
-        $this->setTitleTrans('customer.list.title');
-        $this->other = $controller->getTranslator()->trans('report.customer.other');
+        parent::__construct($controller, $entities, self::ORIENTATION_LANDSCAPE);
+        $this->grouped = $grouped;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function render(): bool
+    protected function doRender(array $entities): bool
     {
-        // customers?
-        $customers = $this->customers;
-        $count = \count($customers);
-        if (0 === $count) {
-            return false;
-        }
+        // title
+        $this->setTitleTrans('customer.list.title');
+        $this->other = $this->translator->trans('report.customer.other');
 
         // new page
         $this->AddPage();
@@ -88,48 +77,23 @@ class CustomersReport extends AbstractReport
             ->addColumns($columns)
             ->outputHeaders();
 
-        // sort
-        Utils::sortField($customers, CustomerRepository::NAME_COMPANY_FIELD);
-
         // grouped?
         if ($this->grouped) {
-            $groups = $this->groupCustomers($customers);
+            $groups = $this->groupCustomers($entities);
             foreach ($groups as $name => $items) {
                 $table->setGroupKey((string) $name);
-                foreach ($items as $customer) {
-                    $this->outputCustomer($table, $customer);
+                foreach ($items as $entity) {
+                    $this->outputCustomer($table, $entity);
                 }
             }
         } else {
-            foreach ($customers as $customer) {
-                $this->outputCustomer($table, $customer);
+            foreach ($entities as $entity) {
+                $this->outputCustomer($table, $entity);
             }
         }
 
         // count
-        return $this->renderCount($count);
-    }
-
-    /**
-     * Sets the customers to render.
-     *
-     * @param \App\Entity\Customer[] $customers
-     */
-    public function setCustomers(array $customers): self
-    {
-        $this->customers = $customers;
-
-        return $this;
-    }
-
-    /**
-     * Sets if the customers are grouped by the first letter.
-     */
-    public function setGrouped(bool $grouped): self
-    {
-        $this->grouped = $grouped;
-
-        return $this;
+        return $this->renderCount(\count($entities));
     }
 
     /**

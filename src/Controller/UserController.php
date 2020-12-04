@@ -40,7 +40,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -544,14 +543,6 @@ class UserController extends AbstractEntityController
     protected function getTableTemplate(): string
     {
         return 'user/user_table.html.twig';
-    }
-
-    /**
-     * Gets the user's image path.
-     */
-    private function getImagePath(KernelInterface $kernel): string
-    {
-        return $kernel->getProjectDir() . '/public/images/users/';
     }
 
     /**

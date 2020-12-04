@@ -65,7 +65,7 @@ class UpdateController extends AbstractController
             ->addChoiceType($choices);
 
         $helper->field('confirm')
-            ->updateOption('mapped', false)
+            ->notMapped()
             ->updateAttribute('data-error', $this->trans('update.error.confirm'))
             ->addCheckboxType();
 

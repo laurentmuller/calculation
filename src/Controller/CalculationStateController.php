@@ -23,7 +23,6 @@ use App\Interfaces\ApplicationServiceInterface;
 use App\Pdf\PdfResponse;
 use App\Report\CalculationStatesReport;
 use App\Repository\CalculationRepository;
-use App\Repository\CalculationStateRepository;
 use App\Spreadsheet\CalculationStateDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -130,7 +129,7 @@ class CalculationStateController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      */
-    public function excel(CalculationStateRepository $repository): ExcelResponse
+    public function excel(): ExcelResponse
     {
         /** @var CalculationState[] $states */
         $states = $this->getEntities('code');

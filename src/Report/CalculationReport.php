@@ -108,18 +108,18 @@ class CalculationReport extends AbstractReport
         }
 
         // items
-        CalculationGroupTable::render($this);
+        CalculationTableGroup::render($this);
         $this->Ln(3);
 
         // check if margin groups and overall total can fit in the current page
-        $lines = $groups->count() + 2;
+        $lines = $this->calculation->getRootGroups()->count() + 2;
         $lines += empty($this->calculation->getUserMargin()) ? 2 : 4;
         if (!$this->isPrintable(2 + self::LINE_HEIGHT * $lines)) {
             $this->AddPage();
         }
 
         // total by group
-        CalculationTotalTable::render($this);
+        CalculationTableTotal::render($this);
 
         // // overall total
         $this->renderOverall();

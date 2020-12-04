@@ -17,12 +17,14 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Excel\ExcelDocument;
-use App\Form\FormHelper;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Worksheet\RowCellIterator;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,78 +48,28 @@ class ImportProductController extends AbstractController
     public function import(Request $request, EntityManagerInterface $manager, LoggerInterface $logger): Response
     {
         // create form
-        $helper = $this->createImportHelper();
-        $form = $helper->createForm();
+        $form = $this->createImportForm();
 
         if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
-            $simulate = (bool) $data['simulate'];
 
             /** @var UploadedFile $file */
             $file = $data['file'];
+            $simulate = (bool) $data['simulate'];
 
-            $categories = [];
-
-            /** @var \App\Repository\CategoryRepository $categoryRepository */
-            $categoryRepository = $manager->getRepository(Category::class);
-            foreach ($categoryRepository->findAllByCode() as $category) {
-                $categories[$category->getCode()] = $category;
-            }
             $skipped = 0;
             $products = [];
+            $categories = $this->getCategories($manager);
 
             try {
-                $reader = new Xlsx();
-                $reader->setReadDataOnly(true);
+                // open
+                $sheet = $this->loadSheet($file->getRealPath());
 
-                $workbook = $reader->load($file->getRealPath());
-                $sheet = $workbook->setActiveSheetIndex(0);
-                $rowIterator = $sheet->getRowIterator(2);
-                foreach ($rowIterator as $row) {
-                    $product = new Product();
-                    $cellIterator = $row->getCellIterator();
-
-                    foreach ($cellIterator as $cell) {
-                        $value = $cell->getValue();
-                        $column = $cell->getColumn();
-                        if ($value) {
-                            switch ($column) {
-                                case 'A': // group
-                                    // ignore
-                                    break;
-
-                                case 'B': // category
-                                    if (\array_key_exists($value, $categories)) {
-                                        $category = $categories[$value];
-                                        $product->setCategory($category);
-                                    } else {
-                                        ++$skipped;
-                                    }
-                                    break;
-
-                                case 'C': // name
-                                    $product->setDescription($value);
-                                    break;
-                                case 'D': // complement
-                                    $description = $product->getDescription();
-                                    $description .= ' - ' . $value;
-                                    $product->setDescription($description);
-                                    break;
-
-                                case 'E': // price
-                                    $product->setPrice($value);
-                                    break;
-
-                                case 'F': // unit
-                                    $product->setUnit($value);
-                                    break;
-
-                                case 'G': // supplier
-                                    $product->setSupplier($value);
-                                    break;
-                            }
-                        }
-                    }
+                // run over rows
+                $iterator = $sheet->getRowIterator(2);
+                foreach ($iterator as $row) {
+                    // read cells
+                    $product = $this->createProduct($row->getCellIterator(), $categories);
                     if ($this->isValid($product)) {
                         $products[] = $product;
                     } else {
@@ -132,18 +84,9 @@ class ImportProductController extends AbstractController
                     'products' => \count($products),
                 ];
 
-                // save
-                if (!$simulate) {
-                    if (!empty($products)) {
-                        $manager->getConnection()->getConfiguration()->setSQLLogger(null);
-                        $manager->beginTransaction();
-                        $manager->createQuery('DELETE FROM ' . Product::class)->execute();
-                        foreach ($products as $product) {
-                            $manager->persist($product);
-                        }
-                        $manager->flush();
-                        $manager->commit();
-                    }
+                // update
+                if (!$simulate && !empty($products)) {
+                    $this->update($manager, $products);
                 }
 
                 // save values to session
@@ -173,18 +116,21 @@ class ImportProductController extends AbstractController
         ]);
     }
 
-    private function createImportHelper(): FormHelper
+    /**
+     * Creates the form to import products.
+     */
+    private function createImportForm(): FormInterface
     {
-        // create form
+        // data
         $data = [
             'confirm' => false,
             'simulate' => $this->isSessionBool('product.import.simulate', true),
         ];
 
-        // create form
+        // create helper
         $helper = $this->createFormHelper('product.import.fields.', $data);
 
-        // constraints
+        // file constraints
         $constraints = new File([
             'mimeTypes' => ExcelDocument::MIME_TYPE,
             'mimeTypesMessage' => $this->trans('import.error.mime_type'),
@@ -203,12 +149,86 @@ class ImportProductController extends AbstractController
             ->addCheckboxType();
 
         $helper->field('confirm')
-            ->updateOption('mapped', false)
+            ->notMapped()
             ->updateRowAttribute('class', 'mb-0')
             ->updateAttribute('data-error', $this->trans('product.import.error.confirm'))
             ->addCheckboxType();
 
-        return $helper;
+        return $helper->createForm();
+    }
+
+    /**
+     * Creates a product for the given iterator.
+     *
+     * @param RowCellIterator $iterator   the cell iterator to get values
+     * @param Category[]      $categories the categories
+     *
+     * @return Product the product
+     */
+    private function createProduct(RowCellIterator $iterator, array $categories): Product
+    {
+        $product = new Product();
+        foreach ($iterator as $cell) {
+            $value = $cell->getValue();
+            $column = $cell->getColumn();
+            if ($value) {
+                switch ($column) {
+                    case 'A': // group
+                        // ignore
+                        break;
+
+                    case 'B': // category
+                        if (\array_key_exists($value, $categories)) {
+                            $product->setCategory($categories[$value]);
+                        }
+                        break;
+                    case 'C': // name
+                        $product->setDescription($value);
+                        break;
+                    case 'D': // complement
+                        $description = $product->getDescription();
+                        $description .= ' - ' . $value;
+                        $product->setDescription($description);
+                        break;
+
+                    case 'E': // price
+                        $product->setPrice($value);
+                        break;
+
+                    case 'F': // unit
+                        $product->setUnit($value);
+                        break;
+
+                    case 'G': // supplier
+                        $product->setSupplier($value);
+                        break;
+                }
+            }
+        }
+
+        return $product;
+    }
+
+    /**
+     * Gets the categories.
+     *
+     * @param EntityManagerInterface $manager the manager
+     *
+     * @return Category[]
+     */
+    private function getCategories(EntityManagerInterface $manager): array
+    {
+        $categories = [];
+
+        /** @var \App\Repository\CategoryRepository $repository */
+        $repository = $manager->getRepository(Category::class);
+
+        /** @var \App\Entity\Category $category */
+        foreach ($repository->findAllByCode() as $category) {
+            $categories[$category->getCode()] = $category;
+        }
+
+        return $categories;
     }
 
     /**
@@ -221,5 +241,47 @@ class ImportProductController extends AbstractController
         }
 
         return false;
+    }
+
+    /**
+     * Opens the given Excel file path and select the first sheet.
+     *
+     * @param string $path the file path
+     *
+     * @return Worksheet the active sheet
+     */
+    private function loadSheet(string $path): Worksheet
+    {
+        $reader = new Xlsx();
+        $reader->setReadDataOnly(true);
+
+        $workbook = $reader->load($path);
+        $sheet = $workbook->setActiveSheetIndex(0);
+
+        return $sheet;
+    }
+
+    /**
+     * Remove all old products and insert the new ones.
+     *
+     * @param EntityManagerInterface $manager  the manager
+     * @param Product[]              $products the new products to insert
+     */
+    private function update(EntityManagerInterface $manager, array $products): void
+    {
+        $manager->getConnection()->getConfiguration()->setSQLLogger(null);
+        $manager->beginTransaction();
+
+        // delete old products
+        $manager->createQueryBuilder()->delete(Product::class)
+            ->getQuery()->execute();
+
+        // add new products
+        foreach ($products as $product) {
+            $manager->persist($product);
+        }
+
+        $manager->flush();
+        $manager->commit();
     }
 }

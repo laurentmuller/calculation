@@ -30,7 +30,7 @@ use App\Util\FormatUtils;
  * @see \App\Entity\CalculationGroup
  * @see \App\Entity\CalculationItem
  */
-class CalculationGroupTable extends PdfGroupTableBuilder
+class CalculationTableGroup extends PdfGroupTableBuilder
 {
     /**
      * Constructor.

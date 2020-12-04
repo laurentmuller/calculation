@@ -114,13 +114,17 @@ function displayUrl() {
         }
     });
 
-    // toogle icons
+    // toogle icons and titles
     $('.toggle-icon').on('show.bs.collapse', function () {
-        const icon = $(this).prev().find('i');
-        icon.removeClass('fa-angle-down').addClass('fa-angle-up');
+        const $prev = $(this).prev();
+        $prev.find('i').toggleClass('fa-caret-left fa-caret-down');
+        $prev.find('a').attr('title', $prev.data('hide'));
     }).on('hide.bs.collapse', function () {
-        const icon = $(this).prev().find('i');
-        icon.removeClass('fa-angle-up').addClass('fa-angle-down');
+        const $prev = $(this).prev();
+        $prev.find('i').toggleClass('fa-caret-down fa-caret-left');
+        $prev.find('a').attr('title', $prev.data('show'));
+    }).on('shown.bs.collapse', function () {
+        $(this).find(':input:first').focus();
     });
 
     // add handlers

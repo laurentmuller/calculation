@@ -26,7 +26,7 @@ use App\Util\FormatUtils;
  *
  * @author Laurent Muller
  */
-class CalculationTotalTable extends PdfTableBuilder
+class CalculationTableTotal extends PdfTableBuilder
 {
     /**
      * Constructor.

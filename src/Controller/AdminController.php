@@ -380,7 +380,7 @@ class AdminController extends AbstractController
             ->addCheckboxType();
 
         $helper->field('confirm')
-            ->updateOption('mapped', false)
+            ->notMapped()
             ->updateRowAttribute('class', 'mb-0')
             ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
             ->addCheckboxType();

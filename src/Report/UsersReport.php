@@ -56,13 +56,6 @@ class UsersReport extends AbstractArrayReport
     private $storage;
 
     /**
-     * The users to render.
-     *
-     * @var \App\Entity\User[]
-     */
-    private $users;
-
-    /**
      * Constructor.
      *
      * @param AbstractController     $controller the parent controller

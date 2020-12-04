@@ -64,7 +64,7 @@ class GeneratorController extends AbstractController
             ->addNumberType(0);
 
         $helper->field('confirm')
-            ->updateOption('mapped', false)
+            ->notMapped()
             ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
             ->addCheckboxType();
 

@@ -106,7 +106,7 @@ class CategoryRepository extends AbstractRepository
     }
 
     /**
-     * Gets the root categories (group).
+     * Gets the root categories (group) order by code.
      *
      * @return Category[] the root categories
      */

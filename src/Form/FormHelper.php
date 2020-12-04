@@ -328,7 +328,9 @@ class FormHelper
     public function addPercentType(int $min = PHP_INT_MIN, int $max = PHP_INT_MAX, float $step = 1.0): self
     {
         $this->className('text-right')
+            ->updateOption('html5', true)
             ->autocomplete('off');
+
         if (PHP_INT_MIN !== $min) {
             $this->updateAttribute('min', $min);
         }
@@ -698,20 +700,6 @@ class FormHelper
     }
 
     /**
-     * Sets the mapped property.
-     *
-     * If you wish the field to be ignored when reading or writing to the object, you can set the mapped option to false.
-     *
-     * @param bool $mapped false if not mapped
-     */
-    public function mapped(bool $mapped): self
-    {
-        $mapped = false === $mapped ? $mapped : null;
-
-        return $this->updateOption('mapped', $mapped);
-    }
-
-    /**
      * Sets the maximum length.
      *
      * @param int $maxLength the maximum length or 0 if none
@@ -729,6 +717,16 @@ class FormHelper
     public function minLength(int $minLength): self
     {
         return $this->updateAttribute('minLength', $minLength > 0 ? $minLength : null);
+    }
+
+    /**
+     * Sets the mapped property to false.
+     *
+     * Used if you wish the field to be ignored when reading or writing to the object.
+     */
+    public function notMapped(): self
+    {
+        return $this->updateOption('mapped', false);
     }
 
     /**

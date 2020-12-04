@@ -3,9 +3,12 @@
 
 {# macros #}
 {% macro collapseLine(href) %}
-<a class="horizontal-line mt-2" data-toggle="collapse" href="#{{ href }}" role="button" aria-expanded="false" aria-controls="{{ href }}">{{ ('parameters.group_' ~ href)|trans }}
-    <i class="fas fa-fw fa-angle-down"></i>
-</a>
+{%- set show = 'parameters.display.show'|trans -%}
+{%- set hide = 'parameters.display.hide'|trans -%}
+<div class="d-flex flex-row" style="margin-right: -8px;" data-show="{{ show }}" data-hide="{{ hide }}">
+    <a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" class="horizontal-line flex-fill">{{ ('parameters.group_' ~ href)|trans }}</a>
+	<a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" data-show="{{ show }}" data-hide="{{ hide }}"><i class="fas fa-fw fa-lg fa-caret-left"></i></a>
+</div>
 {% endmacro %}
 
 {# customized fields #}
@@ -53,7 +56,7 @@
 <div class="accordion" id="parent_accordion">
     {{ _self.collapseLine('default') }}
     <div class="toggle-icon collapse" id="default" data-parent="#parent_accordion">
-        <div class="form-row ml-2 mt-1">
+        <div class="form-row ml-0 mt-1">
             <div class="col-md-7">
                 {{ form_row(form.default_state) }}
             </div>
@@ -64,7 +67,7 @@
     </div>
     {{ _self.collapseLine('display') }}
     <div class="toggle-icon collapse" id="display" data-parent="#parent_accordion">
-        <div class="form-row ml-2 mt-1">
+        <div class="form-row ml-0 mt-1">
             <div class="col-md-7">
                 {{ form_row(form.display_tabular) }}
             </div>
@@ -75,7 +78,7 @@
     </div>
     {{ _self.collapseLine('message') }}
     <div class="toggle-icon collapse" id="message" data-parent="#parent_accordion">
-        <div class="form-row ml-2 mt-1">
+        <div class="form-row ml-0 mt-1">
             <div class="col-md-4">
                 {{ form_row(form.message_position) }}
             </div>
@@ -90,7 +93,7 @@
     {% if super_admin %}
     {{ _self.collapseLine('security') }}
     <div class="toggle-icon collapse" id="security" data-parent="#parent_accordion">
-        <div class="form-row ml-2 mt-1">
+        <div class="form-row ml-0 mt-1">
             <div class="col-md-6">
                 {{ form_row(form.display_captcha) }}
             </div>

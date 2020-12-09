@@ -34,8 +34,12 @@
                             <div class="form-group">
                                 <label class="required" for="item_category">{{ 'calculationitem.fields.category'|trans }}</label>
                                 <select id="item_category" name="item_category" class="form-control">
-                             	{% for category in categories %}
-                                    <option value="{{ category.id }}" data-code="{{ category.code }}" data-parent="{{ category.parent_code }}">{{ category.full_code }}</option>
+                                {% for group in dialog_groups %}
+                                    <optgroup label="{{ group.code }}">
+                                    {% for category in group.categories %}
+                                        <option value="{{ category.id }}" data-code="{{ category.code }}" data-group-id="{{ group.id }}" data-group-code="{{ group.code }}">{{ category.code }}</option>
+                                    {% endfor %}
+                                    </optgroup>
                                 {% endfor %}
                                 </select>
                             </div>

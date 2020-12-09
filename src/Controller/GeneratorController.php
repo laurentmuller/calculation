@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -23,8 +21,10 @@ use App\Entity\User;
 use App\Service\CalculationService;
 use App\Service\FakerService;
 use App\Util\FormatUtils;
+use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Person;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -78,7 +78,7 @@ class GeneratorController extends AbstractController
      *
      * @Route("/calculation/{count}", name="generate_calculation", requirements={"count": "\d+" })
      */
-    public function generateCalculation(EntityManagerInterface $manager, CalculationService $service, FakerService $fakerService, int $count = 1): JsonResponse
+    public function generateCalculation(EntityManagerInterface $manager, CalculationService $service, FakerService $fakerService, LoggerInterface $logger, int $count = 1): JsonResponse
     {
         /** @var \Faker\Generator $faker */
         $faker = $fakerService->getFaker();
@@ -119,12 +119,11 @@ class GeneratorController extends AbstractController
                     $item->setPrice($faker->randomFloat(2, 1, 10));
                 }
 
-                // find group
-                $category = $product->getCategory();
-                $group = $calculation->findGroup($category, true);
+                // find calculation category
+                $category = $calculation->findCategory($product->getCategory());
 
                 // add
-                $group->addItem($item);
+                $category->addItem($item);
             }
 
             // update
@@ -137,8 +136,15 @@ class GeneratorController extends AbstractController
             $calculations[] = $calculation;
         }
 
-        // commit
-        $manager->flush();
+        try {
+            $manager->flush();
+        } catch (\Exception $e) {
+            $message = $this->trans('generate.error.failed');
+            $context = Utils::getExceptionContext($e);
+            $logger->error($message, $context);
+
+            return $this->jsonException($e, $message);
+        }
 
         // serialize
         $calculations = \array_map(function (Calculation $c) {
@@ -167,7 +173,7 @@ class GeneratorController extends AbstractController
      *
      * @Route("/customer/{count}", name="generate_customer", requirements={"count": "\d+" })
      */
-    public function generateCustomer(EntityManagerInterface $manager, FakerService $fakerService, int $count = 1): JsonResponse
+    public function generateCustomer(EntityManagerInterface $manager, FakerService $fakerService, LoggerInterface $logger, int $count = 1): JsonResponse
     {
         /** @var \Faker\Generator $faker */
         $faker = $fakerService->getFaker();
@@ -213,8 +219,15 @@ class GeneratorController extends AbstractController
             $customers[] = $customer;
         }
 
-        // commit
-        $manager->flush();
+        try {
+            $manager->flush();
+        } catch (\Exception $e) {
+            $message = $this->trans('generate.error.failed');
+            $context = Utils::getExceptionContext($e);
+            $logger->error($message, $context);
+
+            return $this->jsonException($e, $message);
+        }
 
         // serialize
         $customers = \array_map(function (Customer $c) {

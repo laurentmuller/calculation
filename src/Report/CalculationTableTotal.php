@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -46,13 +44,12 @@ class CalculationTableTotal extends PdfTableBuilder
     public function output(Calculation $calculation): void
     {
         /** @var \Doctrine\Common\Collections\Collection|CalculationGroup[] $groups */
-        $groups = $calculation->getRootGroups();
+        $groups = $calculation->getGroups();
         if ($groups->isEmpty()) {
             return;
         }
 
-        /** @var CalculationReport $parent */
-        $parent = $this->parent;
+        // style
         $style = PdfStyle::getHeaderStyle()->setFontRegular();
 
         // header

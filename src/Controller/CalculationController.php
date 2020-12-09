@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -17,15 +15,11 @@ namespace App\Controller;
 use App\DataTable\CalculationDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
-use App\Entity\Category;
+use App\Entity\Group;
 use App\Excel\ExcelResponse;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
 use App\Pdf\PdfResponse;
-use App\Pivot\Aggregator\SumAggregator;
-use App\Pivot\Field\PivotFieldFactory;
-use App\Pivot\PivotTable;
-use App\Pivot\PivotTableFactory;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationStateRepository;
@@ -34,11 +28,8 @@ use App\Spreadsheet\CalculationDocument;
 use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -46,6 +37,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/calculation")
  * @IsGranted("ROLE_USER")
+ *
+ * @author Laurent Muller
  */
 class CalculationController extends AbstractEntityController
 {
@@ -221,95 +214,6 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Show the pivot data table.
-     *
-     * @Route("/pivot", name="calculation_pivot", methods={"GET", "POST"})
-     */
-    public function pivot(): Response
-    {
-        // create table
-        $table = $this->getPivotTable();
-
-        // options
-        $popover = $this->isSessionBool('popover', true);
-        $highlight = $this->isSessionBool('highlight', false);
-
-        // render
-        return $this->render('calculation/calculation_pivot.html.twig', [
-            'table' => $table,
-            'popover' => $popover,
-            'highlight' => $highlight,
-        ]);
-    }
-
-    /**
-     * Export pivot data to CSV.
-     *
-     * @Route("/pivot/export", name="calculation_pivot_export", methods={"GET", "POST"})
-     */
-    public function pivotExport(): Response
-    {
-        try {
-            // load data
-            $dataset = $this->getPivotData();
-
-            // callback
-            $callback = function () use ($dataset): void {
-                // data?
-                if (\count($dataset)) {
-                    // open
-                    $handle = \fopen('php://output', 'w+');
-
-                    // headers
-                    \fputcsv($handle, \array_keys($dataset[0]), ';');
-
-                    // rows
-                    foreach ($dataset as $row) {
-                        // convert
-                        $row['calculation_date'] = FormatUtils::formatDate($row['calculation_date']);
-                        $row['calculation_overall_margin'] = \round($row['calculation_overall_margin'], 3);
-                        $row['item_total'] = \round($row['item_total'], 2);
-
-                        \fputcsv($handle, $row, ';');
-                    }
-
-                    // close
-                    \fclose($handle);
-                }
-            };
-
-            // create response
-            $response = new StreamedResponse($callback);
-
-            // headers
-            $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, 'data.csv');
-            $response->headers->set('Content-Type', 'text/csv');
-            $response->headers->set('Content-Disposition', $disposition);
-
-            return $response;
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
-    }
-
-    /**
-     * Export pivot data to JSON.
-     *
-     * @Route("/pivot/json", name="calculation_pivot_json", methods={"GET", "POST"})
-     */
-    public function pivotJson(): JsonResponse
-    {
-        try {
-            // create table
-            $table = $this->getPivotTable();
-
-            return new JsonResponse($table);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
-    }
-
-    /**
      * Show properties of a calculation.
      *
      * @Route("/show/{id}", name="calculation_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
@@ -400,9 +304,10 @@ class CalculationController extends AbstractEntityController
 
         // editable?
         if ($parameters['editable'] = $item->isEditable()) {
-            $parameters['groupIndex'] = $item->getGroupsCount();
-            $parameters['itemIndex'] = $item->getLinesCount();
-            $parameters['categories'] = $this->getCategories();
+            $parameters['dialog_groups'] = $this->getGroups();
+            $parameters['group_index'] = $item->getGroupsCount();
+            $parameters['category_index'] = $item->getCategoriesCount();
+            $parameters['item_index'] = $item->getLinesCount();
             $parameters['grouping'] = FormatUtils::getGrouping();
             $parameters['decimal'] = FormatUtils::getDecimal();
         }
@@ -470,73 +375,16 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Gets the categories.
+     * Gets the groups.
      *
-     * @return Category[]
+     * @return Group[]
      */
-    private function getCategories(): array
+    private function getGroups(): array
     {
-        /** @var \App\Repository\CategoryRepository $repository */
-        $repository = $this->getManager()->getRepository(Category::class);
+        /** @var \App\Repository\GroupRepository $repository */
+        $repository = $this->getManager()->getRepository(Group::class);
 
-        return $repository->getList();
-    }
-
-    /**
-     * Gets the pivot data.
-     */
-    private function getPivotData(): array
-    {
-        /**
-         * @var \App\Repository\CalculationRepository $repository
-         */
-        $repository = $this->getRepository();
-
-        return $repository->getPivot();
-    }
-
-    /**
-     * Gets the pivot table.
-     */
-    private function getPivotTable(): PivotTable
-    {
-        // callbacks
-        $semesterFormatter = function (int $semestre) {
-            return $this->trans("pivot.semester.$semestre");
-        };
-        $quarterFormatter = function (int $quarter) {
-            return $this->trans("pivot.quarter.$quarter");
-        };
-
-        // fields
-        $key = PivotFieldFactory::integer('calculation_id', $this->trans('calculation.fields.id'));
-        $data = PivotFieldFactory::float('calculation_overall_total', $this->trans('calculation.fields.overallTotal'));
-        $rows = [
-            PivotFieldFactory::default('calculation_state', $this->trans('calculationstate.name')),
-            PivotFieldFactory::default('item_group', $this->trans('category.name')),
-        ];
-        $columns = [
-            PivotFieldFactory::year('calculation_date', $this->trans('pivot.fields.year')),
-            PivotFieldFactory::semester('calculation_date', $this->trans('pivot.fields.semester'))
-                ->setFormatter($semesterFormatter),
-            PivotFieldFactory::quarter('calculation_date', $this->trans('pivot.fields.quarter'))
-                ->setFormatter($quarterFormatter),
-            PivotFieldFactory::month('calculation_date', $this->trans('pivot.fields.month')),
-        ];
-
-        $dataset = $this->getPivotData();
-        $title = $this->trans('calculation.list.title');
-
-        // create pivot table
-        return PivotTableFactory::instance($dataset, $title)
-            //->setAggregatorClass(AverageAggregator::class)
-            //->setAggregatorClass(CountAggregator::class)
-            ->setAggregatorClass(SumAggregator::class)
-            ->setColumnFields($columns)
-            ->setRowFields($rows)
-            ->setDataField($data)
-            ->setKeyField($key)
-            ->create();
+        return $repository->findAllByCode();
     }
 
     /**

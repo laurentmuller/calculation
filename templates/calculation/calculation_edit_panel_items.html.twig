@@ -11,7 +11,7 @@
             </div>
             <div class="col text-right d-print-none mb-0">
                 {{ icons.link('#', 'calculation.edit.add_item', "btn-add-item") }}
-                {{ icons.link('#', null, 'btn btn-link btn-sort-items p-0' ~ (item.sortable ? '' : ' disabled'), 'sort-alpha-up fa-fw', 'calculation.edit.sort_items') }}
+                {{ icons.link('#', null, 'btn btn-link btn-sort-items p-0' ~ (item.sortable ? '' : ' disabled'), 'sort-alpha-up fa-fw', 'calculation.edit.sort_item') }}
             </div>
         </div>
     {% else %}
@@ -21,9 +21,9 @@
 	<div class="card-body p-2">
 		<div class="form-row">
 			<div class="col">
-				<table id="data-table-edit" class="table table-edit table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ groupIndex }}" data-item-index="{{ itemIndex }}" data-prototype="{{ macroGroups.printGroupRow(form.groups.vars.prototype, editable)|e }}"{% endif -%}>
+				<table id="data-table-edit" class="table table-edit table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ group_index }}" data-category-index="{{ category_index }}" data-item-index="{{ item_index }}" data-prototype="{{ macroGroups.printGroupRow(form.groups.vars.prototype, editable)|e }}"{% endif -%}>
 				{# groups and items #}
-                {% for group in form.groups|filter(g => g.vars.value.category.parent != null) %}
+                {% for group in form.groups %}
                     {{ macroGroups.printGroupRow(group, editable) }}
                 {% endfor %}
 				</table>

@@ -24,30 +24,35 @@
 {% block card_body %}
 {{ parent() }}
 {% if not item.empty %}
-{%  set groups = item.getItemGroups() %}
-{# items groups #}
 <table class="table table-hover table-sm table-list mt-3" id="data-table-edit">
     <tbody>
-    {% for group in item.getItemGroups() %}
+        {# groups #}
+        {% for group in item.groups %}
+        <tr>
+            <th colspan="5">{{ group.code }}</th>
+        </tr>
+        {# categories #}
+        {% for category in group.categories %}
 		<tr>
-			<td class="font-weight-bold" colspan="5">{{ group.code }}</td>
+			<th class="pl-3" colspan="5">{{ category.code }}</th>
 		</tr>
         {# items #}        
-		{% for product in group.items %}
-			<tr>
-    			<td class="pl-3">{{ product.description }}</td>
-    			<td class="text-unit">{{ product.unit }}</td>
-    			<td class="text-currency">{{ product.price|amount }}</td>
-            	<td class="text-currency">{{ product.quantity|amount }}</td>
-            	<td class="text-currency">{{ product.total|amount }}</td>
-    		</tr>
+		{% for product in category.items %}
+		<tr>
+			<td class="pl-3">{{ product.description }}</td>
+			<td class="text-unit">{{ product.unit }}</td>
+			<td class="text-currency">{{ product.price|amount }}</td>
+        	<td class="text-currency">{{ product.quantity|amount }}</td>
+        	<td class="text-currency">{{ product.total|amount }}</td>
+		</tr>
 		{% endfor %}
-	{% endfor %}
-    {# items total #}
-    <tr>
-        <td class="font-weight-bold" colspan="4">{{ 'calculation.fields.itemsTotal'|trans }}</td>
-        <td class="font-weight-bold text-currency">{{ item.groupsAmount|amount }}</td>
-    </tr>
+        {% endfor %}
+	    {% endfor %}
+        {# items total #}
+        <tr>
+            <td class="font-weight-bold" colspan="4">{{ 'calculation.fields.itemsTotal'|trans }}</td>
+            <td class="font-weight-bold text-currency">{{ item.groupsAmount|amount }}</td>
+        </tr>
     </tbody>
 </table>
 
@@ -64,7 +69,7 @@
     </thead>
     <tbody>
         {# total by group #}
-        {% for group in item.getRootGroups() %}
+        {% for group in item.groups %}
             <tr>
                 <td>{{ group.code }}</td>
                 <td class="text-currency">{{ group.amount|amount }}</td>

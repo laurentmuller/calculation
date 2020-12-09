@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -36,7 +34,7 @@ class CategoryDocument extends AbstractArrayDocument
         $this->setHeaderValues([
             'category.fields.code' => Alignment::HORIZONTAL_GENERAL,
             'category.fields.description' => Alignment::HORIZONTAL_GENERAL,
-            'category.fields.parent' => Alignment::HORIZONTAL_GENERAL,
+            'category.fields.group' => Alignment::HORIZONTAL_GENERAL,
             'category.fields.products' => Alignment::HORIZONTAL_RIGHT,
         ]);
 
@@ -45,12 +43,13 @@ class CategoryDocument extends AbstractArrayDocument
 
         // rows
         $row = 2;
+        $default = $this->translator->trans('report.other');
         /** @var Category $entity */
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getCode(),
                 $entity->getDescription(),
-                $entity->getParentCode(),
+                $entity->getGroupCode() ?: $default,
                 $entity->countProducts(),
             ]);
         }

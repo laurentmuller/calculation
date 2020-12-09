@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -15,6 +13,8 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Calculation;
+use App\Entity\CalculationCategory;
+use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
@@ -23,14 +23,14 @@ use App\Pdf\PdfTextColor;
 use App\Util\FormatUtils;
 
 /**
- * Render the calculation groups and items.
+ * Render the calculation groups, categories and items.
  *
  * @author Laurent Muller
  *
  * @see \App\Entity\CalculationGroup
  * @see \App\Entity\CalculationItem
  */
-class CalculationTableGroup extends PdfGroupTableBuilder
+class CalculationTableItems extends PdfGroupTableBuilder
 {
     /**
      * Constructor.
@@ -49,7 +49,10 @@ class CalculationTableGroup extends PdfGroupTableBuilder
      */
     public function output(Calculation $calculation): void
     {
-        $groups = $calculation->getSortedGroups();
+        // $groups = $calculation->getSortedGroups();
+
+        /** @var CalculationGroup[] $groups */
+        $groups = $calculation->getGroups();
         $duplicateItems = $calculation->getDuplicateItems();
 
         // styles
@@ -68,21 +71,26 @@ class CalculationTableGroup extends PdfGroupTableBuilder
         $this->addColumns($columns)
             ->outputHeaders();
 
-        // render
-
         foreach ($groups as $group) {
-            $groupStyle->setIndent($group->isRootGroup() ? 0 : 4);
+            $groupStyle->setIndent(0);
             $this->setGroupKey($group->getCode());
 
-            foreach ($group->getItems() as $item) {
-                /* @phpstan-ignore-next-line */
-                $this->startRow()
-                    ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
-                    ->add($item->getUnit())
-                    ->addAmount($item->getPrice(), $errorStyle)
-                    ->addAmount($item->getQuantity(), $errorStyle)
-                    ->addAmount($item->getTotal(), null)
-                    ->endRow();
+            /** @var CalculationCategory $category */
+            foreach ($group->getCategories() as $category) {
+                $groupStyle->setIndent(4);
+                $this->setGroupKey($category->getCode());
+
+                /** @var CalculationItem $item */
+                foreach ($category->getItems() as $item) {
+                    /* @phpstan-ignore-next-line */
+                    $this->startRow()
+                        ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
+                        ->add($item->getUnit())
+                        ->addAmount($item->getPrice(), $errorStyle)
+                        ->addAmount($item->getQuantity(), $errorStyle)
+                        ->addAmount($item->getTotal(), null)
+                        ->endRow();
+                }
             }
         }
 
@@ -113,8 +121,6 @@ class CalculationTableGroup extends PdfGroupTableBuilder
      */
     protected function addAmount(float $amount, ?PdfStyle $errorStyle): self
     {
-        /** @var CalculationReport $parent */
-        $parent = $this->parent;
         $text = FormatUtils::formatAmount($amount);
         $style = empty($amount) ? $errorStyle : null;
         $this->add($text, 1, $style);

@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -39,11 +37,12 @@ class EntityVoter extends Voter implements EntityVoterInterface
     public const ENTITY_OFFSETS = [
         self::ENTITY_CALCULATION => 0,
         self::ENTITY_CALCULATION_STATE => 1,
-        self::ENTITY_CATEGORY => 2,
-        self::ENTITY_CUSTOMER => 3,
-        self::ENTITY_PRODUCT => 4,
-        self::ENTITY_GLOBAL_MARGIN => 5,
-        self::ENTITY_USER => 6,
+        self::ENTITY_GROUP => 2,
+        self::ENTITY_CATEGORY => 3,
+        self::ENTITY_CUSTOMER => 4,
+        self::ENTITY_PRODUCT => 5,
+        self::ENTITY_GLOBAL_MARGIN => 6,
+        self::ENTITY_USER => 7,
     ];
 
     /**
@@ -217,6 +216,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         $role = new Role(RoleInterface::ROLE_USER);
         $role->{self::ENTITY_CALCULATION} = self::MASK_ATTRIBUTES;
         $role->{self::ENTITY_CALCULATION_STATE} = $default;
+        $role->{self::ENTITY_GROUP} = $default;
         $role->{self::ENTITY_CATEGORY} = $default;
         $role->{self::ENTITY_CUSTOMER} = $default;
         $role->{self::ENTITY_PRODUCT} = $default;

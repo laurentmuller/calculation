@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -17,13 +15,11 @@ namespace App\DataTable;
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
-use App\Entity\Category;
-use App\Repository\AbstractRepository;
-use App\Repository\CategoryRepository;
+use App\Entity\Group;
+use App\Repository\GroupRepository;
 use App\Util\FormatUtils;
 use DataTables\DataTablesInterface;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
 
@@ -37,25 +33,25 @@ class GroupDataTable extends AbstractEntityDataTable
     /**
      * The datatable identifier.
      */
-    public const ID = Category::class . '.group';
+    public const ID = Group::class;
 
     /**
      * Constructor.
      *
      * @param SessionInterface    $session     the session to save/retrieve user parameters
      * @param DataTablesInterface $datatables  the datatables to handle request
-     * @param CategoryRepository  $repository  the repository to get entities
+     * @param GroupRepository     $repository  the repository to get entities
      * @param Environment         $environment the Twig environment to render cells
      */
-    public function __construct(SessionInterface $session, DataTablesInterface $datatables, CategoryRepository $repository, Environment $environment)
+    public function __construct(SessionInterface $session, DataTablesInterface $datatables, GroupRepository $repository, Environment $environment)
     {
         parent::__construct($session, $datatables, $repository, $environment);
     }
 
     /**
-     * Creates the link to catégories.
+     * The categories formatter.
      *
-     * @param Collection|Category[] $categories the list of categories that fall into the given parent category
+     * @param Collection $categories the list of categories that fall into the given group
      *
      * @return string the link, if applicable, the value otherwise
      */
@@ -84,17 +80,6 @@ class GroupDataTable extends AbstractEntityDataTable
         $path = __DIR__ . '/Definition/group.json';
 
         return DataColumnFactory::fromJson($this, $path);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function createQueryBuilder($alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
-    {
-        $predicate = CategoryRepository::getGroupPredicate($alias);
-
-        return parent::createQueryBuilder($alias)
-            ->where($predicate);
     }
 
     /**

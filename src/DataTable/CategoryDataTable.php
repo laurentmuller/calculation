@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -18,12 +16,9 @@ use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Category;
-use App\Entity\Product;
-use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use DataTables\DataTablesInterface;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
 
@@ -55,8 +50,8 @@ class CategoryDataTable extends AbstractEntityDataTable
     /**
      * Creates the link to prodcuts.
      *
-     * @param Collection|Product[] $products the list of products that fall into the given category
-     * @param Category             $item     the category
+     * @param Collection $products the list of products that fall into the given category
+     * @param Category   $item     the category
      *
      * @return string the link, if applicable, the value otherwise
      */
@@ -79,15 +74,6 @@ class CategoryDataTable extends AbstractEntityDataTable
         $path = __DIR__ . '/Definition/category.json';
 
         return DataColumnFactory::fromJson($this, $path);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function createQueryBuilder($alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
-    {
-        return parent::createQueryBuilder($alias)
-            ->innerJoin($alias . '.parent', CategoryRepository::GROUP_ALIAS);
     }
 
     /**

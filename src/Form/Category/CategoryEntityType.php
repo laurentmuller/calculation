@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -33,11 +31,12 @@ class CategoryEntityType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'class' => Category::class,
-            'choice_label' => 'code',
             'placeholder' => false,
-            'query_builder' => function (CategoryRepository $r) {
-                return $r->getSortedBuilder();
+            'choice_label' => 'code',
+            'group_by' => 'groupCode',
+            'class' => Category::class,
+            'query_builder' => function (CategoryRepository $repository) {
+                return $repository->getParentCodeSortedBuilder();
             },
         ]);
     }

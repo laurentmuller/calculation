@@ -75,6 +75,8 @@
 {% endblock %}
 
 {% block javascripts -%}
-{{- parent() }}
-{% if states is defined %}{{- asset_js('js/application/calculation_table.js') }}{% endif %}
+{{ parent() }}
+{% if states is defined %}
+{{ asset_js('js/application/calculation_table.js') }}
+{% endif %}
 {% endblock %}

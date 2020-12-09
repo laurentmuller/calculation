@@ -35,11 +35,7 @@
 {% block item_title_class %}font-weight-bold{% endblock %}
 
 {% block item_property %}
-{% if item.parentCode -%}
-{{ properties.line(item.categoryCode ~ ' - ' ~ item.parentCode) }}
-{%- else %}
-{{ properties.line(item.categoryCode) }}
-{%- endif %}
+{{ properties.line(item.categoryCode ~ ' - ' ~ item.groupCode) }}
 {{ properties.line(item.supplier) }}
 {{ properties.separator() }}
 {{ properties.property('product.fields.price', item.price|amount ~ (item.unit ? ' / ' ~ item.unit : ''), 'text-right pr-4') }}

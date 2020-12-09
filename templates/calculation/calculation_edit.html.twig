@@ -60,38 +60,37 @@
 	</div>
 </div>
 {{ form_end(form) }}
-
 {# dialog #}
-{% if editable -%}{% include 'dialogs/EditItemDialog.html.twig' %}{%- endif %}
+{% if editable -%}{% include 'dialogs/edit_item_dialog.html.twig' %}{%- endif %}
 {%- endblock %}
 
 {% block stylesheets %}
 {{ asset_css('css/calculation.css') }}
 {%- endblock -%}
 
-{% block javascripts -%}
+{% block javascripts %}
 {% if app.debug %}
-    {{ parent() }}
-    {{ asset_js('js/application/calculation_error.js') }}
-    {% if editable %}
-        {{ asset_js('js/vendor/jquery-validate/jquery.validate.js') }}
-        {{ asset_js('js/vendor/jquery-validate/additional-methods.js') }}
-        {{ asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}
-        {{ asset_js('js/vendor/html5sortable/html5sortable.js') }}
-        {{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
-        {{ asset_js('js/extensions/contextmenu-extensions.js') }}
-        {{ asset_js('js/extensions/validator-extensions.js') }}
-        {{ asset_js('js/extensions/validator-extensions-fr.js') }}
-        {{ asset_js('js/plugins/plugin-typeahead.js') }}
-        {{ asset_js('js/plugins/plugin-rowlink.js') }}
-        {{ asset_js('js/plugins/plugin-input.js') }}
-        {{ asset_js('js/application/calculation_edit.js') }}
-    {% endif %}
-{% else %}
-    {% if editable %}
-        {{ asset_js('js/calculation_edit.js') }}
-    {% else %}
-        {{ asset_js('js/calculation_error.js') }}
-    {% endif %}
+{{ parent() }}
+{{ asset_js('js/application/calculation_error.js') }}
+{% if editable %}
+{{ asset_js('js/vendor/jquery-validate/jquery.validate.js') }}
+{{ asset_js('js/vendor/jquery-validate/additional-methods.js') }}
+{{ asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}
+{{ asset_js('js/vendor/html5sortable/html5sortable.js') }}
+{{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
+{{ asset_js('js/extensions/contextmenu-extensions.js') }}
+{{ asset_js('js/extensions/validator-extensions.js') }}
+{{ asset_js('js/extensions/validator-extensions-fr.js') }}
+{{ asset_js('js/plugins/plugin-typeahead.js') }}
+{{ asset_js('js/plugins/plugin-rowlink.js') }}
+{{ asset_js('js/plugins/plugin-input.js') }}
+{{ asset_js('js/application/calculation_edit.js') }}
 {% endif %}
-{%- endblock %}
+{% else %}
+{% if editable %}
+{{ asset_js('js/calculation_edit.js') }}
+{% else %}
+{{ asset_js('js/calculation_error.js') }}
+{% endif %}
+{% endif %}
+{% endblock %}

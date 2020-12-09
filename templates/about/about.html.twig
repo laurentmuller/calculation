@@ -67,9 +67,9 @@
 
 {% block javascripts %}
 {% if app.debug %}
-    {{ parent() }}
-    {{ asset_js('js/application/about.js') }}
+{{ parent() }}
+{{ asset_js('js/application/about.js') }}
 {% else %}
-    {{ asset_js('js/about.js') }}
+{{ asset_js('js/about.js') }}
 {% endif %}
 {% endblock %}

@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -227,6 +225,24 @@ final class Utils
     public static function getArrayValue(array $array, $key, $default = null)
     {
         return $array[$key] ?? $default;
+    }
+
+    /**
+     * Gets the context for the given exception,.
+     *
+     * @param \Exception $e the exception to get the context for
+     *
+     * @return array an array with the message, code, file, line and trace properties
+     */
+    public static function getExceptionContext(\Exception $e): array
+    {
+        return [
+            'message' => $e->getMessage(),
+            'code' => $e->getCode(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => $e->getTraceAsString(),
+        ];
     }
 
     /**

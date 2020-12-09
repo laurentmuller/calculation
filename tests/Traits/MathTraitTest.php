@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -54,24 +52,24 @@ class MathTraitTest extends TestCase
 
     public function testRound(): void
     {
-        $this->assertSame(0.0, $this->round(0));
-        $this->assertSame(1.5, $this->round(1.5));
-        $this->assertSame(1.55, $this->round(1.55));
-        $this->assertSame(1.55, $this->round(1.5545));
-        $this->assertSame(1.50, $this->round(1.52, 1));
+        $this->assertEquals(0.0, $this->round(0));
+        $this->assertEquals(1.5, $this->round(1.5));
+        $this->assertEquals(1.55, $this->round(1.55));
+        $this->assertEquals(1.55, $this->round(1.5545));
+        $this->assertEquals(1.50, $this->round(1.52, 1));
     }
 
     public function testSafeDivide(): void
     {
-        $this->assertSame(0.0, $this->safeDivide(100, 0));
-        $this->assertSame(10.0, $this->safeDivide(100, 10));
-        $this->assertSame(11.0, $this->safeDivide(100, 0, 11));
+        $this->assertEquals(0.0, $this->safeDivide(100, 0));
+        $this->assertEquals(10.0, $this->safeDivide(100, 10));
+        $this->assertEquals(11.0, $this->safeDivide(100, 0, 11));
     }
 
     public function testValidateIntRange(): void
     {
-        $this->assertSame(0, $this->validateIntRange(0, 0, 100));
-        $this->assertSame(0, $this->validateIntRange(-1, 0, 100));
-        $this->assertSame(100, $this->validateIntRange(101, 0, 100));
+        $this->assertEquals(0, $this->validateIntRange(0, 0, 100));
+        $this->assertEquals(0, $this->validateIntRange(-1, 0, 100));
+        $this->assertEquals(100, $this->validateIntRange(101, 0, 100));
     }
 }

@@ -180,19 +180,19 @@
 
 {% block javascripts -%}
 {% if app.debug %}
-    {{- parent() }}
-    {{- asset_js('js/vendor/datatables/js/jquery.dataTables.js') }}
-    {{- asset_js('js/vendor/datatables/js/dataTables.bootstrap4.js') }}
-    {{- asset_js('js/vendor/datatables/js/dataTables.keyTable.js') }}
-    {{- asset_js('js/vendor/datatables/js/dataTables.conditionalPaging.js') }}
-    {{- asset_js('js/vendor/datatables/js/jquery.mark.js') }}
-    {{- asset_js('js/vendor/datatables/js/datatables.mark.js') }}
-    {{- asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
-    {{- asset_js('js/plugins/plugin-rowlink.js') }}
-    {{- asset_js('js/extensions/contextmenu-extensions.js') }}
-    {{- asset_js('js/extensions/datatables-extensions.js') }}
-    {{- asset_js('js/application/datatables.js') }}
+{{ parent() }}
+{{ asset_js('js/vendor/datatables/js/jquery.dataTables.js') }}
+{{ asset_js('js/vendor/datatables/js/dataTables.bootstrap4.js') }}
+{{ asset_js('js/vendor/datatables/js/dataTables.keyTable.js') }}
+{{ asset_js('js/vendor/datatables/js/dataTables.conditionalPaging.js') }}
+{{ asset_js('js/vendor/datatables/js/jquery.mark.js') }}
+{{ asset_js('js/vendor/datatables/js/datatables.mark.js') }}
+{{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
+{{ asset_js('js/plugins/plugin-rowlink.js') }}
+{{ asset_js('js/extensions/contextmenu-extensions.js') }}
+{{ asset_js('js/extensions/datatables-extensions.js') }}
+{{ asset_js('js/application/datatables.js') }}
 {% else %}
-    {{- asset_js('js/datatables.js') }}
+{{ asset_js('js/datatables.js') }}
 {% endif %}
 {%- endblock -%}

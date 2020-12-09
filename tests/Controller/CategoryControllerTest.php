@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -15,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Entity\Category;
+use App\Entity\Group;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -25,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CategoryControllerTest extends AbstractControllerTest
 {
     private static ?Category $entity = null;
-    private static ?Category $parent = null;
+    private static ?Group $group = null;
 
     public function getRoutes(): array
     {
@@ -66,16 +65,16 @@ class CategoryControllerTest extends AbstractControllerTest
 
     protected function addEntities(): void
     {
-        if (null === self::$parent) {
-            self::$parent = new Category();
-            self::$parent->setCode('Test Parent');
-            $this->addEntity(self::$parent);
+        if (null === self::$group) {
+            self::$group = new Group();
+            self::$group->setCode('Test Parent');
+            $this->addEntity(self::$group);
         }
 
         if (null === self::$entity) {
             self::$entity = new Category();
-            self::$entity->setCode('Test Code');
-            self::$entity->setParent(self::$parent);
+            self::$entity->setCode('Test Code')
+                ->setGroup(self::$group);
             $this->addEntity(self::$entity);
         }
     }
@@ -83,6 +82,6 @@ class CategoryControllerTest extends AbstractControllerTest
     protected function deleteEntities(): void
     {
         self::$entity = $this->deleteEntity(self::$entity);
-        self::$parent = $this->deleteEntity(self::$parent);
+        self::$group = $this->deleteEntity(self::$group);
     }
 }

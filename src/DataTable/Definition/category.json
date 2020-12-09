@@ -18,8 +18,8 @@
 		"class": "w-50 cell"
 	},
 	{
-		"name": "parent.code",
-		"title": "category.fields.parent",
+		"name": "group.code",
+		"title": "category.fields.group",
 		"class": "text-code",
 		"orderable": true,
 		"searchable": false

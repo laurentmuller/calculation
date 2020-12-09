@@ -73,6 +73,8 @@ function generate() {
 
     $('#content').slideUp('slow');
     $.getJSON(url, function (response) {
+        const title = $(".card-title").text();
+        $('#form_confirm').setChecked(false);
         if (response.result) {
             const index = $('#form_entity').prop('selectedIndex');
             if (index === 0) {
@@ -81,9 +83,9 @@ function generate() {
                 renderCalculations(response.calculations);
             }
             $('#content').slideDown('slow');
-            $('#form_confirm').setChecked(false);
-            const title = $(".card-title").text();
             Toaster.success(response.message, title, $("#flashbags").data());
+        } else {            
+            Toaster.danger(response.message, title, $("#flashbags").data());
         }
     });
 }

@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -105,7 +103,7 @@ class RegistrationController extends AbstractController
             $this->verifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $e) {
             if ($request->hasSession()) {
-                $exception = $this->handleResetException($e);
+                $exception = $this->translateException($e);
                 $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
             }
 
@@ -118,20 +116,28 @@ class RegistrationController extends AbstractController
     }
 
     /**
+     * Creeates a custom user exception.
+     */
+    private function createUserException(string $message, \Throwable $previous): CustomUserMessageAuthenticationException
+    {
+        return new CustomUserMessageAuthenticationException($message, [], 0, $previous);
+    }
+
+    /**
      * Translate the given exception.
      */
-    private function handleResetException(VerifyEmailExceptionInterface $e): CustomUserMessageAuthenticationException
+    private function translateException(VerifyEmailExceptionInterface $e): CustomUserMessageAuthenticationException
     {
         if ($e instanceof ExpiredSignatureException) {
-            return new CustomUserMessageAuthenticationException('registration.expired_signature');
+            return $this->createUserException('registration.expired_signature', $e);
         }
         if ($e instanceof InvalidSignatureException) {
-            return new CustomUserMessageAuthenticationException('registration.invalid_signature');
+            return $this->createUserException('registration.invalid_signature', $e);
         }
         if ($e instanceof WrongEmailVerifyException) {
-            return new CustomUserMessageAuthenticationException('registration.wrong_email_verify');
+            return $this->createUserException('registration.wrong_email_verify', $e);
         }
 
-        return new CustomUserMessageAuthenticationException($e->getReason());
+        return $this->createUserException($e->getReason(), $e);
     }
 }

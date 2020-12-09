@@ -37,8 +37,9 @@
     </thead>
     <tbody>
         {{ _self.row(form.EntityCalculation, default.EntityCalculation, overwrite) }}
-        {{ _self.row(form.EntityProduct, default.EntityProduct, overwrite) }}
+        {{ _self.row(form.EntityGroup, default.EntityGroup, overwrite) }}
         {{ _self.row(form.EntityCategory, default.EntityCategory, overwrite) }}
+        {{ _self.row(form.EntityProduct, default.EntityProduct, overwrite) }}
         {{ _self.row(form.EntityCalculationState, default.EntityCalculationState, overwrite) }}
         {{ _self.row(form.EntityGlobalMargin, default.EntityGlobalMargin, overwrite) }}
         {%- if form.EntityCustomer|default(false) -%}

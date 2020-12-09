@@ -1,20 +1,26 @@
 BEGIN TRANSACTION;
 
+CREATE TABLE IF NOT EXISTS "sy_Group" (
+	"id"                integer PRIMARY KEY AUTOINCREMENT,
+	"code"              varchar(30)  NOT NULL,
+	"description"       varchar(255) DEFAULT NULL	
+);
+
 CREATE TABLE IF NOT EXISTS "sy_Category" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
     "code"              varchar(30)  NOT NULL,
     "description"       varchar(255) DEFAULT NULL,
-    "parent_id"         integer DEFAULT NULL,
-    FOREIGN KEY(parent_id) REFERENCES sy_Category(id)
+    "group_id"         	integer NOT NULL,
+    FOREIGN KEY(group_id) REFERENCES sy_Group(id)
 );
 
-CREATE TABLE IF NOT EXISTS "sy_CategoryMargin" (
+CREATE TABLE IF NOT EXISTS "sy_GroupMargin" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
-    "category_id"       integer NOT NULL,
+    "group_id"       	integer NOT NULL,
     "minimum"           double  NOT NULL DEFAULT '0',
     "maximum"           double  NOT NULL DEFAULT '0',
     "margin"            double  NOT NULL DEFAULT '0',
-    FOREIGN KEY(category_id) REFERENCES sy_Category(id)
+    FOREIGN KEY(group_id) REFERENCES sy_Group(id)
 );
 
 CREATE TABLE IF NOT EXISTS "sy_Product" (
@@ -55,22 +61,32 @@ CREATE TABLE IF NOT EXISTS "sy_Calculation" (
 CREATE TABLE IF NOT EXISTS "sy_CalculationGroup" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
     "calculation_id"    integer     NOT NULL,
-    "category_id"       integer     NOT NULL,
+    "group_id"       	integer     NOT NULL,
     "code"              varchar(30) NOT NULL,
     "margin"            double      NOT NULL DEFAULT '0',
     "amount"            double      NOT NULL DEFAULT '0',
     FOREIGN KEY(calculation_id) REFERENCES sy_Calculation(id),
-    FOREIGN KEY(category_id) REFERENCES sy_Category(id)
+    FOREIGN KEY(group_id) REFERENCES sy_Group(id)
+);
+
+CREATE TABLE IF NOT EXISTS "sy_CalculationCategory" (
+    "id"                integer PRIMARY KEY AUTOINCREMENT,
+    "group_id"       	integer     NOT NULL,
+    "category_id"    	integer     NOT NULL,    
+    "code"              varchar(30) NOT NULL,
+    "amount"            double      NOT NULL DEFAULT '0',
+    FOREIGN KEY(group_id) REFERENCES sy_CalculationGroup(id),
+    FOREIGN KEY(category_id) REFERENCES sy_Category(id)    
 );
 
 CREATE TABLE IF NOT EXISTS "sy_CalculationItem" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
-    "group_id"          integer      NOT NULL,
+    "category_id"       integer      NOT NULL,
     "description"       varchar(255) NOT NULL,
     "unit"              varchar(15)  DEFAULT NULL,
     "price"             double       NOT NULL DEFAULT '0',
     "quantity"          double       NOT NULL DEFAULT '0',
-    FOREIGN KEY(group_id) REFERENCES sy_CalculationGroup(id)
+    FOREIGN KEY(category_id) REFERENCES sy_CalculationCategory(id)
 );
 
 CREATE TABLE IF NOT EXISTS "sy_GlobalMargin" (

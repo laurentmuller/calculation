@@ -2,19 +2,17 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Entity\Category;
+use App\Entity\Group;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -38,6 +36,8 @@ class GroupsReport extends AbstractArrayReport
         // count values
         $marginsCount = 0;
         $groupsCount = 0;
+
+        /** @var Group $entity */
         foreach ($entities as $entity) {
             $marginsCount += $entity->countMargins();
             $groupsCount += $entity->countCategories();
@@ -52,7 +52,7 @@ class GroupsReport extends AbstractArrayReport
         $last = \end($entities);
         $emptyStyle = PdfStyle::getCellStyle()->setBorder('LR');
 
-        /** @var Category $entity */
+        /** @var Group $entity */
         foreach ($entities as $entity) {
             $this->outputGroup($table, $entity);
             if ($entity !== $last) {
@@ -96,9 +96,9 @@ class GroupsReport extends AbstractArrayReport
         $table->addColumn(PdfColumn::left($this->trans('group.fields.code'), 40, true))
             ->addColumn(PdfColumn::left($this->trans('group.fields.description'), 50))
             ->addColumn(PdfColumn::right($this->trans('group.fields.categories'), 25, true))
-            ->addColumn(PdfColumn::right($this->trans('categorymargin.fields.minimum'), 22, true))
-            ->addColumn(PdfColumn::right($this->trans('categorymargin.fields.maximum'), 22, true))
-            ->addColumn(PdfColumn::right($this->trans('categorymargin.fields.margin'), 18, true))
+            ->addColumn(PdfColumn::right($this->trans('groupmargin.fields.minimum'), 22, true))
+            ->addColumn(PdfColumn::right($this->trans('groupmargin.fields.maximum'), 22, true))
+            ->addColumn(PdfColumn::right($this->trans('groupmargin.fields.margin'), 18, true))
             ->outputHeaders();
 
         return $table;
@@ -108,9 +108,9 @@ class GroupsReport extends AbstractArrayReport
      * Ouput a group.
      *
      * @param PdfTableBuilder $table the table to render to
-     * @param Category        $group the category to output
+     * @param Group           $group the group to output
      */
-    private function outputGroup(PdfTableBuilder $table, Category $group): void
+    private function outputGroup(PdfTableBuilder $table, Group $group): void
     {
         $table->startRow()
             ->add($group->getCode())

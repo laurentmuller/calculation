@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -30,6 +28,11 @@ use Doctrine\Persistence\ManagerRegistry;
 class ProductRepository extends AbstractRepository
 {
     /**
+     * The alias for the category entity.
+     */
+    public const CATEGORY_ALIAS = 'c';
+
+    /**
      * Constructor.
      *
      * @param ManagerRegistry $registry The connections and entity managers registry
@@ -51,8 +54,8 @@ class ProductRepository extends AbstractRepository
         $result = $this->createQueryBuilder('e')
             ->select('COUNT(e.id)')
             ->innerJoin('e.category', 'c')
-            ->where('c.id = :categoryId')
-            ->setParameter('categoryId', $category->getId(), Types::INTEGER)
+            ->where('c.id = :id')
+            ->setParameter('id', $category->getId(), Types::INTEGER)
             ->getQuery()
             ->getSingleScalarResult();
 
@@ -65,7 +68,7 @@ class ProductRepository extends AbstractRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
-            ->innerJoin("$alias.category", 'c');
+            ->innerJoin("$alias.category", self::CATEGORY_ALIAS);
     }
 
     /**
@@ -77,7 +80,7 @@ class ProductRepository extends AbstractRepository
     {
         $builder = $this->createQueryBuilder('p')
             ->innerJoin('p.category', 'c')
-            ->innerJoin('c.parent', 'g')
+            ->innerJoin('c.group', 'g')
             ->select('p')
             ->orderBy('g.code')
             ->addOrderBy('c.code')
@@ -93,9 +96,9 @@ class ProductRepository extends AbstractRepository
     {
         switch ($field) {
             case 'category.id':
-                return 'c.id';
+                return parent::getSearchFields('id', self::CATEGORY_ALIAS);
             case 'category.code':
-                return 'c.code';
+                return parent::getSearchFields('code', self::CATEGORY_ALIAS);
             default:
                 return parent::getSearchFields($field, $alias);
         }
@@ -109,14 +112,14 @@ class ProductRepository extends AbstractRepository
         switch ($field) {
             case 'category.id':
             case 'category.code':
-                return 'c.code';
+                return parent::getSortFields('code', self::CATEGORY_ALIAS);
             default:
                 return parent::getSortFields($field, $alias);
         }
     }
 
     /**
-     * Search for products (used by calculation to add a new item).
+     * Search products (used by calculation to add a new item).
      *
      * @param string $value      the search term
      * @param int    $maxResults the maximum number of results to retrieve (the "limit")
@@ -131,10 +134,10 @@ class ProductRepository extends AbstractRepository
             ->addSelect('p.price')
             ->addSelect('c.id as categoryId')
             ->addSelect('upper(c.code) as category_code')
-            ->addSelect('upper(r.code) as parent_code')
-            ->addSelect("CONCAT(upper(c.code), ' - ', upper(r.code)) AS category")
+            ->addSelect('upper(g.code) as group_code')
+            ->addSelect("CONCAT(upper(c.code), ' - ', upper(g.code)) AS category")
             ->innerJoin('p.category', 'c')
-            ->innerJoin('c.parent', 'r')
+            ->innerJoin('c.group', 'g')
             ->orderBy('c.code')
             ->addOrderBy('p.description')
             ->setMaxResults($maxResults);
@@ -144,7 +147,8 @@ class ProductRepository extends AbstractRepository
         $expr = $builder->expr();
         $or = $expr->orx(
                 $expr->like('p.description', $param),
-                $expr->like('c.code', $param)
+                $expr->like('c.code', $param),
+                $expr->like('g.code', $param),
         );
         $builder->where($or)
             ->setParameter($param, "%{$value}%", Types::STRING);

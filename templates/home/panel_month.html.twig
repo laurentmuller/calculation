@@ -30,12 +30,14 @@
         <h1 class="card-title">{{ icons.icon('calendar far', 'index.panel_month') }}</h1>
     </div>
     <div class="card-body d-flex flex-row flex-wrap p-2">
-	{% for month in months %}
-        {{ _self.cardEntry(month.count, month.total, month.date, list_path) }}
+    {% if states|length %}
+        {% for month in months %}
+            {{ _self.cardEntry(month.count, month.total, month.date, list_path) }}
+        {% endfor %}
     {% else %}
     	<div class="alert alert-warning flex-fill mb-0 py-4 text-center">
             {{ 'calculation.list.empty'|trans }}
         </div>
-	{% endfor %}
+    {% endif %}        
     </div>
 </div>

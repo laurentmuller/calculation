@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -186,6 +184,28 @@ class PdfTableBuilder implements PdfConstantsInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Adds a new page, if needed, for the given height.
+     *
+     * @param float $height The desired height
+     *
+     * @return bool true if a new page is added
+     */
+    public function checkNewPage(float $height): bool
+    {
+        $parent = $this->parent;
+        if (!$parent->isPrintable($height)) {
+            $parent->AddPage();
+            if ($this->repeatHeader) {
+                $this->outputHeaders();
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -548,28 +568,6 @@ class PdfTableBuilder implements PdfConstantsInterface
         $this->rowStyle = $style ?: PdfStyle::getCellStyle();
 
         return $this;
-    }
-
-    /**
-     * Adds a new page, if needed, for the given height.
-     *
-     * @param float $height The desired height
-     *
-     * @return bool true if a new page is added
-     */
-    protected function checkNewPage(float $height): bool
-    {
-        $parent = $this->parent;
-        if (!$parent->isPrintable($height)) {
-            $parent->AddPage();
-            if ($this->repeatHeader) {
-                $this->outputHeaders();
-            }
-
-            return true;
-        }
-
-        return false;
     }
 
     /**

@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -20,9 +18,10 @@ use App\Repository\CalculationGroupRepository;
 use App\Repository\CalculationItemRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
-use App\Repository\CategoryMarginRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GlobalMarginRepository;
+use App\Repository\GroupMarginRepository;
+use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
 use App\Repository\PropertyRepository;
 use App\Repository\UserRepository;
@@ -50,8 +49,9 @@ class DatabaseTest extends KernelTestCase
     public function getRepositories(): array
     {
         return [
+            [GroupRepository::class, 0],
             [CategoryRepository::class, 0],
-            [CategoryMarginRepository::class, 0],
+            [GroupMarginRepository::class, 0],
             [ProductRepository::class, 0],
             [CalculationStateRepository::class, 0],
             [CalculationRepository::class, 0],
@@ -66,8 +66,9 @@ class DatabaseTest extends KernelTestCase
     public function getTables(): array
     {
         return [
+            ['sy_Group', 0],
             ['sy_Category', 0],
-            ['sy_CategoryMargin', 0],
+            ['sy_GroupMargin', 0],
             ['sy_Product', 0],
             ['sy_CalculationState', 0],
             ['sy_Calculation', 0],

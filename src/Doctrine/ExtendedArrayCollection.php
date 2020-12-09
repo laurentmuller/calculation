@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -79,7 +77,7 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
             $leftValue = $accessor->getValue($left, $field);
             $rightValue = $accessor->getValue($right, $field);
 
-            return $leftValue <=> $rightValue;
+            return $this->compare($leftValue, $rightValue);
         });
         $list = \iterator_to_array($iterator, false);
 
@@ -92,6 +90,26 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
     public function reduce(callable $callback, $initial = null)
     {
         return \array_reduce($this->toArray(), $callback, $initial);
+    }
+
+    /**
+     * Compare the given values.
+     * <p>
+     * <b>Note:</b> if both values are string, the {@link http://www.php.net/manual/en/function.strnatcasecmp.php strnatcasecmp} function is used.
+     * </p>.
+     *
+     * @param mixed $value1 the first value to compare
+     * @param mixed $value2 the second value to compare
+     *
+     * @return int returns &lt; 0 if value1 is less than value2; &gt; 0 if value1 is greater than value2 and 0 if both values are equal
+     */
+    protected function compare($value1, $value2): int
+    {
+        if (\is_string($value1) && \is_string($value2)) {
+            return \strnatcasecmp($value1, $value2);
+        }
+
+        return $value1 <=> $value2;
     }
 
     /**

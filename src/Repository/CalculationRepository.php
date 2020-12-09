@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -135,7 +133,6 @@ class CalculationRepository extends AbstractRepository
             ->select('COUNT(c.id)               as count')
             ->addSelect('SUM(c.itemsTotal)      as items')
             ->addSelect('SUM(c.overallTotal)    as total')
-            //->addSelect('SUM(c.overallTotal - c.itemsTotal) as margin')
             ->addSelect('YEAR(c.date)           as year')
             ->addSelect('MONTH(c.date)          as month')
             ->addGroupBy('year')
@@ -248,12 +245,12 @@ class CalculationRepository extends AbstractRepository
     public function getDuplicateItems(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
         // build
-        $builder = $this->createQueryBuilder('c')
+        $builder = $this->createQueryBuilder('e')
             // calculation
-            ->select('c.id              as calculation_id')
-            ->addSelect('c.date         as calculation_date')
-            ->addSelect('c.customer     as calculation_customer')
-            ->addSelect('c.description  as calculation_description')
+            ->select('e.id              as calculation_id')
+            ->addSelect('e.date         as calculation_date')
+            ->addSelect('e.customer     as calculation_customer')
+            ->addSelect('e.description  as calculation_description')
 
             // state
             ->addSelect('s.code         as calculation_state')
@@ -263,11 +260,12 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('i.description  as item_description')
             ->addSelect('count(i.id)    as item_count')
 
-            ->innerJoin('c.state', 's')
-            ->innerJoin('c.groups', 'g')
-            ->innerJoin('g.items', 'i')
+            ->innerJoin('e.state', 's')
+            ->innerJoin('e.groups', 'g')
+            ->innerJoin('g.categories', 'c')
+            ->innerJoin('c.items', 'i')
 
-            ->groupBy('c.id')
+            ->groupBy('e.id')
             ->addGroupBy('s.code')
             ->addGroupBy('i.description')
 
@@ -282,22 +280,10 @@ class CalculationRepository extends AbstractRepository
         // map calculations => items
         $result = [];
         foreach ($items as $item) {
-            $key = $item['calculation_id'];
-            if (!\array_key_exists($key, $result)) {
-                $result[$key] = [
-                    'id' => $key,
-                    'date' => $item['calculation_date'],
-                    'customer' => $item['calculation_customer'],
-                    'description' => $item['calculation_description'],
-                    'stateCode' => $item['calculation_state'],
-                    'stateColor' => $item['calculation_color'],
-                    'items' => [],
-                ];
-            }
-            $result[$key]['items'][] = [
+            $this->updateResult($result, $item, [
                 'description' => $item['item_description'],
                 'count' => (int) $item['item_count'],
-            ];
+            ]);
         }
 
         return $result;
@@ -314,12 +300,12 @@ class CalculationRepository extends AbstractRepository
     public function getEmptyItems(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
         // build
-        $builder = $this->createQueryBuilder('c')
+        $builder = $this->createQueryBuilder('e')
             // calculation
-            ->select('c.id              as calculation_id')
-            ->addSelect('c.date         as calculation_date')
-            ->addSelect('c.customer     as calculation_customer')
-            ->addSelect('c.description  as calculation_description')
+            ->select('e.id              as calculation_id')
+            ->addSelect('e.date         as calculation_date')
+            ->addSelect('e.customer     as calculation_customer')
+            ->addSelect('e.description  as calculation_description')
 
             // state
             ->addSelect('s.code         as calculation_state')
@@ -330,11 +316,12 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('i.price        as item_price')
             ->addSelect('i.quantity     as item_quantity')
 
-            ->innerJoin('c.state', 's')
-            ->innerJoin('c.groups', 'g')
-            ->innerJoin('g.items', 'i')
+            ->innerJoin('e.state', 's')
+            ->innerJoin('e.groups', 'g')
+            ->innerJoin('g.categories', 'c')
+            ->innerJoin('c.items', 'i')
 
-            ->groupBy('c.id')
+            ->groupBy('e.id')
             ->addGroupBy('s.code')
             ->addGroupBy('i.description')
 
@@ -350,23 +337,11 @@ class CalculationRepository extends AbstractRepository
         // map calculations => items
         $result = [];
         foreach ($items as $item) {
-            $key = $item['calculation_id'];
-            if (!\array_key_exists($key, $result)) {
-                $result[$key] = [
-                        'id' => $key,
-                        'date' => $item['calculation_date'],
-                        'customer' => $item['calculation_customer'],
-                        'description' => $item['calculation_description'],
-                        'stateCode' => $item['calculation_state'],
-                        'stateColor' => $item['calculation_color'],
-                        'items' => [],
-                    ];
-            }
-            $result[$key]['items'][] = [
-                    'description' => $item['item_description'],
-                    'quantity' => $item['item_quantity'],
-                    'price' => $item['item_price'],
-                ];
+            $this->updateResult($result, $item, [
+                'description' => $item['item_description'],
+                'quantity' => $item['item_quantity'],
+                'price' => $item['item_price'],
+            ]);
         }
 
         return $result;
@@ -452,27 +427,32 @@ class CalculationRepository extends AbstractRepository
     public function getPivot(): array
     {
         // build
-        $builder = $this->createQueryBuilder('c')
+        $builder = $this->createQueryBuilder('e')
             // calculation
-            ->select('c.id                                   AS calculation_id')
-            ->addSelect('c.date                              AS calculation_date')
-            ->addSelect('(c.overallTotal / c.itemsTotal) - 1 AS calculation_overall_margin')
-            ->addSelect('c.overallTotal                      AS calculation_overall_total')
+            ->select('e.id                                   AS calculation_id')
+            ->addSelect('e.date                              AS calculation_date')
+            ->addSelect('(e.overallTotal / e.itemsTotal) - 1 AS calculation_overall_margin')
+            ->addSelect('e.overallTotal                      AS calculation_overall_total')
             // state
             ->addSelect('s.code                              AS calculation_state')
             // groups
             ->addSelect('g.code                              AS item_group')
+            // category
+            ->addSelect('c.code                              AS item_category')
             // items
             ->addSelect('i.description                       AS item_description')
             ->addSelect('i.price                             AS item_price')
             ->addSelect('i.quantity                          AS item_quantity')
             ->addSelect('i.price * i.quantity                AS item_total')
+
             // tables
-            ->innerJoin('c.state', 's')
-            ->innerJoin('c.groups', 'g')
-            ->innerJoin('g.items', 'i')
+            ->innerJoin('e.state', 's')
+            ->innerJoin('e.groups', 'g')
+            ->innerJoin('g.categories', 'c')
+            ->innerJoin('c.items', 'i')
+
             // not empty
-            ->where('c.itemsTotal != 0');
+            ->where('e.itemsTotal != 0');
 
         // execute
         return $builder->getQuery()
@@ -568,11 +548,11 @@ class CalculationRepository extends AbstractRepository
             case 'date':
             case 'customer':
             case 'description':
-                return 'c.' . $column;
+                return "e.$column";
             case 'state':
                 return 's.code';
             default:
-                return 'c.id';
+                return 'e.id';
         }
     }
 
@@ -588,5 +568,30 @@ class CalculationRepository extends AbstractRepository
         $orderColumn = $this->getOrder($orderColumn);
         $orderDirection = $this->getDirection($orderDirection, Criteria::DESC);
         $builder->orderBy($orderColumn, $orderDirection);
+    }
+
+    /**
+     * Update the given result.
+     *
+     * @param array $result the result to update
+     * @param array $item   the item to get values for creating an entry result
+     * @param array $values the values to add as an item entry
+     */
+    private function updateResult(array &$result, array $item, array $values): void
+    {
+        $key = $item['calculation_id'];
+        if (!\array_key_exists($key, $result)) {
+            $result[$key] = [
+                'id' => $key,
+                'date' => $item['calculation_date'],
+                'customer' => $item['calculation_customer'],
+                'description' => $item['calculation_description'],
+                'stateCode' => $item['calculation_state'],
+                'stateColor' => $item['calculation_color'],
+                'items' => [],
+            ];
+        }
+
+        $result[$key]['items'][] = $values;
     }
 }

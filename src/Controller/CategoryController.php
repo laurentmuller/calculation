@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -21,12 +19,9 @@ use App\Excel\ExcelResponse;
 use App\Form\Category\CategoryType;
 use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
-use App\Repository\AbstractRepository;
-use App\Repository\CalculationGroupRepository;
-use App\Repository\CategoryRepository;
+use App\Repository\CalculationCategoryRepository;
 use App\Repository\ProductRepository;
 use App\Spreadsheet\CategoryDocument;
-use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -84,11 +79,11 @@ class CategoryController extends AbstractEntityController
      *
      * @Route("/delete/{id}", name="category_delete", requirements={"id": "\d+" })
      */
-    public function delete(Request $request, Category $item, ProductRepository $productRepository, CalculationGroupRepository $groupRepository): Response
+    public function delete(Request $request, Category $item, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository): Response
     {
         // external references?
         $products = $productRepository->countCategoryReferences($item);
-        $calculations = $groupRepository->countCategoryReferences($item);
+        $calculations = $categoryRepository->countCategoryReferences($item);
         if (0 !== $products || 0 !== $calculations) {
             $display = $item->getDisplay();
             $productsText = $this->trans('counters.products_lower', ['count' => $products]);
@@ -243,16 +238,6 @@ class CategoryController extends AbstractEntityController
     protected function getEditTemplate(): string
     {
         return 'category/category_edit.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEntities(string $field = null, string $mode = Criteria::ASC, array $criterias = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
-    {
-        $criterias[] = CategoryRepository::getCategoryPredicate($alias);
-
-        return parent::getEntities($field, $mode, $criterias, $alias);
     }
 
     /**

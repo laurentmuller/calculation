@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -19,27 +17,16 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Represents a category of prodcuts.
  *
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @ORM\Table(name="sy_Category")
+ * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @UniqueEntity(fields="code", message="category.unique_code")
  */
 class Category extends AbstractEntity
 {
-    /**
-     * The children categories.
-     *
-     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
-     * @ORM\OrderBy({"code": "ASC"})
-     *
-     * @var Collection|Category[]
-     */
-    protected $categories;
-
     /**
      * The unique code.
      *
@@ -49,7 +36,7 @@ class Category extends AbstractEntity
      *
      * @var string
      */
-    protected $code;
+    private $code;
 
     /**
      * The description.
@@ -59,36 +46,17 @@ class Category extends AbstractEntity
      *
      * @var string
      */
-    protected $description;
+    private $description;
 
     /**
-     * The margins.
+     * The parent group.
      *
-     * @ORM\OneToMany(
-     *     targetEntity="CategoryMargin",
-     *     mappedBy="category",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"minimum": "ASC"})
-     * @Assert\Valid
+     * @ORM\ManyToOne(targetEntity="Group", inversedBy="categories")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false)
      *
-     * @var Collection|CategoryMargin[]
+     * @var ?Group
      */
-    protected $margins;
-
-    /**
-     * The parent category (group).
-     *
-     * ALTER TABLE sy_Category ADD parent_id INT DEFAULT NULL;
-     * ALTER TABLE sy_Category ADD CONSTRAINT FK_31E80115727ACA70 FOREIGN KEY (parent_id) REFERENCES sy_Category (id);
-     *
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="categories")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     *
-     * @var Category
-     */
-    protected $parent;
+    private $group;
 
     /**
      * The list of products that fall into this category.
@@ -97,49 +65,14 @@ class Category extends AbstractEntity
      *
      * @var Collection|Product[]
      */
-    protected $products;
+    private $products;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->margins = new ArrayCollection();
         $this->products = new ArrayCollection();
-        $this->categories = new ArrayCollection();
-    }
-
-    /**
-     * Add a child category.
-     *
-     * @throws \InvalidArgumentException if this is not a root category (group)
-     */
-    public function addCategory(self $category): self
-    {
-        // only allowed for root (group) categories
-        if (null !== $this->parent) {
-            throw new \InvalidArgumentException('Category can only be added to a root group.');
-        }
-
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-            $category->setParent($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add a margin.
-     */
-    public function addMargin(CategoryMargin $margin): self
-    {
-        if (!$this->margins->contains($margin)) {
-            $this->margins->add($margin);
-            $margin->setCategory($this);
-        }
-
-        return $this;
     }
 
     /**
@@ -156,73 +89,11 @@ class Category extends AbstractEntity
     }
 
     /**
-     * Gets the number of categories.
-     */
-    public function countCategories(): int
-    {
-        return $this->categories->count();
-    }
-
-    /**
-     * Gets the number of margins.
-     */
-    public function countMargins(): int
-    {
-        return $this->margins->count();
-    }
-
-    /**
      * Gets the number of prodcuts.
      */
     public function countProducts(): int
     {
         return $this->products->count();
-    }
-
-    /**
-     * Finds the category margin for the given amount.
-     *
-     * @param float $amount the amount to get category margin for
-     *
-     * @return \App\Entity\CategoryMargin|null the category margin, if found; NULL otherwise
-     *
-     * @see CategoryMargin::contains()
-     */
-    public function findMargin(float $amount): ?CategoryMargin
-    {
-        foreach ($this->margins as $margin) {
-            if ($margin->containsAmount($amount)) {
-                return $margin;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Finds the margin in percent for the given amount.
-     *
-     * @param float $amount the amount to get percent
-     *
-     * @return float the percent of the category margin, if found; 0 otherwise
-     *
-     * @see Category::findMargin()
-     */
-    public function findPercent(float $amount): float
-    {
-        $margin = $this->findMargin($amount);
-
-        return $margin ? $margin->getMargin() : 0;
-    }
-
-    /**
-     * Get categories.
-     *
-     * @return Collection|Category[]
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
     }
 
     /**
@@ -256,33 +127,40 @@ class Category extends AbstractEntity
     }
 
     /**
-     * Get margins.
-     *
-     * @return Collection|CategoryMargin[]
+     * Gets the code and the group code.
      */
-    public function getMargins(): Collection
+    public function getFullCode(): ?string
     {
-        return $this->margins;
-    }
-
-    /**
-     * Gets the parent.
-     */
-    public function getParent(): ?self
-    {
-        return $this->parent;
-    }
-
-    /**
-     * Gets the parent code (if any).
-     */
-    public function getParentCode(): ?string
-    {
-        if (null !== $this->parent) {
-            return $this->parent->getCode();
+        $code = $this->code;
+        if ($parent = $this->getGroupCode()) {
+            return \sprintf('%s - %s', $code, $parent);
         }
 
-        return null;
+        return $code;
+    }
+
+    /**
+     * Gets the group.
+     */
+    public function getGroup(): ?Group
+    {
+        return $this->group;
+    }
+
+    /**
+     * Gets the group code.
+     */
+    public function getGroupCode(): ?string
+    {
+        return $this->group ? $this->group->getCode() : null;
+    }
+
+    /**
+     * Gets the group identifier.
+     */
+    public function getGroupId(): ?int
+    {
+        return $this->group ? $this->group->getId() : null;
     }
 
     /**
@@ -296,26 +174,6 @@ class Category extends AbstractEntity
     }
 
     /**
-     * Returns if this category contains one or more categories.
-     *
-     * @return bool true if contains products
-     */
-    public function hasCategories(): bool
-    {
-        return !$this->categories->isEmpty();
-    }
-
-    /**
-     * Returns if this category contains one or more margins.
-     *
-     * @return bool true if contains margins
-     */
-    public function hasMargins(): bool
-    {
-        return !$this->margins->isEmpty();
-    }
-
-    /**
      * Returns if this category contains one or more products.
      *
      * @return bool true if contains products
@@ -323,36 +181,6 @@ class Category extends AbstractEntity
     public function hasProducts(): bool
     {
         return !$this->products->isEmpty();
-    }
-
-    /**
-     * Remove a category.
-     */
-    public function removeCategory(self $category): self
-    {
-        if ($this->categories->removeElement($category)) {
-            if ($category->getParent() === $this) {
-                $category->setParent(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove margin.
-     *
-     * @param \App\Entity\CategoryMargin $margin
-     */
-    public function removeMargin(CategoryMargin $margin): self
-    {
-        if ($this->margins->removeElement($margin)) {
-            if ($margin->getCategory() === $this) {
-                $margin->setCategory(null);
-            }
-        }
-
-        return $this;
     }
 
     /**
@@ -394,67 +222,13 @@ class Category extends AbstractEntity
     }
 
     /**
-     * Sets the parent.
+     * Sets the group.
      */
-    public function setParent(?self $parent): self
+    public function setGroup(?Group $group): self
     {
-        $this->parent = $parent;
+        $this->group = $group;
 
         return $this;
-    }
-
-    /**
-     * @Assert\Callback
-     */
-    public function validate(ExecutionContextInterface $context): void
-    {
-        // get margins
-        $margins = $this->getMargins();
-        if ($margins->isEmpty()) {
-            return;
-        }
-
-        // validate
-        $lastMin = null;
-        $lastMax = null;
-        foreach ($margins as $key => $margin) {
-            // get values
-            $min = $margin->getMinimum();
-            $max = $margin->getMaximum();
-
-            if (null === $lastMin) {
-                // first time
-                $lastMin = $min;
-                $lastMax = $max;
-            } elseif ($min <= $lastMin) {
-                // the minimum is smaller than the previous maximum
-                $context->buildViolation('abstract_margin.minimum_overlap')
-                    ->atPath("margins[$key].minimum")
-                    ->addViolation();
-                break;
-            } elseif ($min >= $lastMin && $min < $lastMax) {
-                // the minimum is overlapping the previous margin
-                $context->buildViolation('abstract_margin.minimum_overlap')
-                    ->atPath("margins[$key].minimum")
-                    ->addViolation();
-                break;
-            } elseif ($max > $lastMin && $max < $lastMax) {
-                // the maximum is overlapping the previous margin
-                $context->buildViolation('abstract_margin.maximum_overlap')
-                    ->atPath("margins[$key].maximum")
-                    ->addViolation();
-                break;
-            } elseif ($min !== $lastMax) {
-                // the minimum is not equal to the previous maximum
-                $context->buildViolation('abstract_margin.minimum_discontinued')
-                    ->atPath("margins[$key].minimum")
-                    ->addViolation();
-                break;
-            } else {
-                $lastMin = $min;
-                $lastMax = $max;
-            }
-        }
     }
 
     /**

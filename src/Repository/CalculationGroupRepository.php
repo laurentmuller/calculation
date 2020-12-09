@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -15,8 +13,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CalculationGroup;
-use App\Entity\Category;
-use Doctrine\DBAL\Types\Types;
+use App\Entity\Group;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,19 +36,19 @@ class CalculationGroupRepository extends AbstractRepository
     }
 
     /**
-     * Count the number of calculations for the given category.
+     * Count the number of calculations for the given group.
      *
-     * @param Category $category the category to search for
+     * @param Group $group the group to search for
      *
      * @return int the number of calculations
      */
-    public function countCategoryReferences(Category $category): int
+    public function countGroupReferences(Group $group): int
     {
         $result = $this->createQueryBuilder('e')
-            ->select('DISTINCT COUNT(e.calculation)')
-            ->innerJoin('e.category', 'c')
-            ->where('c.id = :categoryId')
-            ->setParameter('categoryId', $category->getId(), Types::INTEGER)
+            ->select('DISTINCT COUNT(c.id)')
+            ->innerJoin('e.calculation', 'c')
+            ->where('e.group = :group')
+            ->setParameter('group', $group)
             ->getQuery()
             ->getSingleScalarResult();
 

@@ -44,7 +44,7 @@
 {% block footer -%}{% include 'footer.html.twig' %}{%- endblock %}
 {# java scripts #}
 <noscript>{{ 'common.no_script_support'|trans }}</noscript>
-{% block javascripts -%}
+{% block javascripts %}
 {% if app.debug %}
 {{ asset_js('js/vendor/jquery/jquery.js') }}
 {{ asset_js('js/vendor/twitter-bootstrap/js/bootstrap.bundle.js') }}
@@ -53,10 +53,10 @@
 {{ asset_js('js/extensions/params-extensions.js') }}
 {{ asset_js('js/extensions/string-extensions.js') }}
 {{ asset_js('js/plugins/plugin-toast.js') }}
-{{ asset_js('js/application/common.js') }}
+{{ asset_js('js/application/common.js') -}}
 {% else %}
 {{ asset_js('js/core_common.js') }}
-{%- endif %}
-{%- endblock %}
+{% endif %}
+{% endblock %}
 </body>
 </html>

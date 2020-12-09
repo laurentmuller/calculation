@@ -8,18 +8,15 @@
 function setDefaultValues() {
     'use strict';
 
-    $('.form-control').each(function () {
-        const $that = $(this);
-        const value = $that.data('default');
+    $('#edit-form :input:not(button), :checkbox').each(function () {
+        const $this = $(this);
+        const value = $this.data('default');
         if (!$.isUndefined(value) && value !== '') {
-            $that.val(value);
-        }
-    });
-    $('.custom-control-input').each(function () {
-        const $that = $(this);
-        const value = $that.data('default');
-        if (!$.isUndefined(value) && value !== '') {
-            $that.prop('checked', value);
+            if ($this.is(':checkbox')) {
+                $this.prop('checked', value);
+            } else {
+                $this.val(value);
+            }
         }
     });
 }
@@ -128,15 +125,15 @@ function displayUrl() {
     });
 
     // add handlers
-    $('#default').on('click', function (e) {
+    $('.btn-default').on('click', function (e) {
         e.preventDefault();
         setDefaultValues();
     });
-    $('#btn-notify').on('click', function (e) {
+    $('.btn-notify').on('click', function (e) {
         e.preventDefault();
         displayNotification();
     });
-    $('#btn-url').on('click', function (e) {
+    $('.btn-url').on('click', function (e) {
         e.preventDefault();
         displayUrl();
     });

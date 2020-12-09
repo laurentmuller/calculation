@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -76,12 +74,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The calculation groups.
      *
-     * @ORM\OneToMany(
-     *     targetEntity="CalculationGroup",
-     *     mappedBy="calculation",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="CalculationGroup", mappedBy="calculation", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"code": "ASC"})
      * @Assert\Valid
      *
@@ -132,12 +125,20 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     protected $userMargin;
 
     /**
+     * @ORM\OneToMany(targetEntity="CalculationLine", mappedBy="calculation")
+     *
+     * @var Collection|CalculationLine[]
+     */
+    private $lines;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         // groups
         $this->groups = new ArrayCollection();
+        $this->lines = new ArrayCollection();
 
         // default values
         $this->date = new \DateTime();
@@ -179,8 +180,18 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         return $this;
     }
 
+    public function addLine(CalculationLine $line): self
+    {
+        if (!$this->lines->contains($line)) {
+            $this->lines->add($line);
+            $line->setCalculation($this);
+        }
+
+        return $this;
+    }
+
     /**
-     * Adds a product; creating a group if needed.
+     * Adds a product; creating the group and the category if needed.
      *
      * @param Product $product  the product to add
      * @param float   $quantity the product quantity
@@ -188,9 +199,9 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function addProduct(Product $product, float $quantity = 1.0): self
     {
         $item = CalculationItem::create($product)->setQuantity($quantity);
-        $group = $this->findGroup($product->getCategory(), true);
-        $group->addItem($item);
-        $group->update();
+        $category = $this->findCategory($product->getCategory());
+        $category->addItem($item);
+        $category->update();
 
         return $this;
     }
@@ -226,35 +237,69 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Finds a group for the given category.
+     * Finds a calculation category for the given category.
+     * <p>
+     * <b>Note:</b> if the calculation category is not found, a new one is created.
+     * </p>.
      *
      * @param Category $category the category to find
-     * @param bool     $create   true to create a group if not found
-     *
-     * @return CalculationGroup|null the group, if found or created; null otherwise
      */
-    public function findGroup(Category $category, bool $create = false): ?CalculationGroup
+    public function findCategory(Category $category): CalculationCategory
     {
+        // find group
+        $group = $this->findGroup($category->getGroup());
+
+        // find category
         $code = $category->getCode();
+        foreach ($group->getCategories() as $current) {
+            if ($code === $current->getCode()) {
+                return $current;
+            }
+        }
+
+        // create category
+        $newCategory = CalculationCategory::create($category);
+        $group->addCategory($newCategory);
+
+        return $newCategory;
+    }
+
+    /**
+     * Finds a calculation group for the given group.
+     * <p>
+     * <b>Note:</b> if the calculation group is not found, a new one is created.
+     * </p>.
+     *
+     * @param Group $group the group to find
+     */
+    public function findGroup(Group $group): CalculationGroup
+    {
+        // find group
+        $code = $group->getCode();
+        foreach ($this->groups as $calculationGroup) {
+            if ($code === $calculationGroup->getCode()) {
+                return $calculationGroup;
+            }
+        }
+
+        // create group
+        $newGroup = CalculationGroup::create($group);
+        $this->addGroup($newGroup);
+
+        return $newGroup;
+    }
+
+    /**
+     * Gets the number of categories.
+     */
+    public function getCategoriesCount(): int
+    {
+        $count = 0;
         foreach ($this->groups as $group) {
-            if ($code === $group->getCode()) {
-                return $group;
-            }
+            $count += $group->getCategories()->count();
         }
 
-        if ($create) {
-            // parent category
-            $parent = $category->getParent();
-            if (null !== $parent) {
-                $this->findGroup($parent, true);
-            }
-            $group = CalculationGroup::create($category);
-            $this->addGroup($group);
-
-            return $group;
-        }
-
-        return null;
+        return $count;
     }
 
     /**
@@ -381,12 +426,12 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the total amount of all root groups.
+     * Gets the total amount of all groups.
      */
     public function getGroupsAmount(): float
     {
         $total = 0;
-        foreach ($this->getRootGroups() as $group) {
+        foreach ($this->groups as $group) {
             $total += $group->getAmount();
         }
 
@@ -398,7 +443,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getGroupsCount(): int
     {
-        return $this->getGroups()->count();
+        return $this->groups->count();
     }
 
     /**
@@ -418,7 +463,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function getGroupsMarginAmount(): float
     {
         $total = 0;
-        foreach ($this->getRootGroups() as $group) {
+        foreach ($this->groups as $group) {
             $total += $group->getMarginAmount();
         }
 
@@ -426,28 +471,16 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the total of all root groups.
+     * Gets the total of all groups.
      */
     public function getGroupsTotal(): float
     {
         $total = 0;
-        foreach ($this->getRootGroups() as $group) {
+        foreach ($this->groups as $group) {
             $total += $group->getTotal();
         }
 
         return $total;
-    }
-
-    /**
-     * Get item groups.
-     *
-     * @return CalculationGroup[]|Collection
-     */
-    public function getItemGroups(): Collection
-    {
-        return $this->groups->filter(function (CalculationGroup $group) {
-            return !$group->isRootGroup();
-        });
     }
 
     /**
@@ -458,8 +491,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function getItems(): \Traversable
     {
         foreach ($this->groups as $group) {
-            foreach ($group->getItems() as $item) {
-                yield $item;
+            /** @var CalculationCategory $category */
+            foreach ($group->getCategories() as $category) {
+                foreach ($category->getItems() as $item) {
+                    yield $item;
+                }
             }
         }
     }
@@ -473,13 +509,24 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
+     * @return Collection|CalculationLine[]
+     */
+    public function getLines(): Collection
+    {
+        return $this->lines;
+    }
+
+    /**
      * Gets the number of item lines.
      */
     public function getLinesCount(): int
     {
         $count = 0;
         foreach ($this->groups as $group) {
-            $count += $group->getItems()->count();
+            /** @var CalculationCategory $category */
+            foreach ($group->getCategories() as $category) {
+                $count += $category->getItems()->count();
+            }
         }
 
         return $count;
@@ -514,18 +561,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get root groups.
-     *
-     * @return CalculationGroup[]|Collection
-     */
-    public function getRootGroups(): Collection
-    {
-        return $this->groups->filter(function (CalculationGroup $group) {
-            return $group->isRootGroup();
-        });
-    }
-
-    /**
      * Gets sorted groups.
      *
      * @return CalculationGroup[]
@@ -535,8 +570,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         $result = [];
         if (!$this->isEmpty()) {
             foreach ($this->groups as $group) {
-                $key = $group->getParentCode('') . $group->getCode();
-                $result[$key] = $group;
+                $result[$group->getCode()] = $group;
             }
             \ksort($result, SORT_NATURAL);
         }
@@ -778,6 +812,17 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         return $this;
     }
 
+    public function removeLine(CalculationLine $line): self
+    {
+        if ($this->lines->removeElement($line)) {
+            if ($line->getCalculation() === $this) {
+                $line->setCalculation(null);
+            }
+        }
+
+        return $this;
+    }
+
     /**
      * Set customer.
      *
@@ -856,8 +901,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
     /**
      * Set state.
-     *
-     * @param \App\Entity\CalculationState $state
      */
     public function setState(?CalculationState $state): self
     {
@@ -927,17 +970,21 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Remove the given item.
      *
-     * If the group is empty after deletion of the item, the group is also deleted.
+     * If the category and the parent's group ar empty after deletion of the item, the category and the group is also deleted.
      *
      * @param CalculationItem $item the item to remove
      */
     private function removeItem(CalculationItem $item): bool
     {
-        $group = $item->getGroup();
-        if (null !== $group && $group->contains($item)) {
-            $group->removeItem($item);
-            if ($group->isEmpty()) {
-                $this->removeGroup($group);
+        $category = $item->getCategory();
+        if (null !== $category && $category->contains($item)) {
+            $category->removeItem($item);
+            if ($category->isEmpty()) {
+                $group = $category->getGroup();
+                $group->removeCategory($category);
+                if ($group->isEmpty()) {
+                    $this->removeGroup($group);
+                }
             }
 
             return true;

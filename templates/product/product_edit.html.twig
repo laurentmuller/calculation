@@ -14,19 +14,17 @@
 {% block card_body %}
 {{ form_row(form.description) }}
 <div class="form-row">
-    <div class="col-md-3">
-    	{{ form_row(form.unit) }}
+    <div class="col-md-6">
+        {{ form_row(form.category) }}
     </div>
-    <div class="col-md-9">
-	    {{ form_row(form.category) }}
+    <div class="col-md-3">
+        {{ form_row(form.price) }}
+    </div>
+    <div class="col-md-3">
+        {{ form_row(form.unit) }}
     </div>
 </div>
 {{ form_row(form.supplier) }}
-<div class="form-row">
-    <div class="col-md-3">
-	    {{ form_row(form.price) }}
-    </div>
-</div>
 {% endblock %}
 
 {% block javascripts %}

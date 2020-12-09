@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -19,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represents a calculation with groups and products.
+ * Represents an item in a calculation category.
  *
  * @ORM\Entity(repositoryClass="App\Repository\CalculationItemRepository")
  * @ORM\Table(name="sy_CalculationItem")
@@ -27,6 +25,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CalculationItem extends AbstractEntity
 {
     use MathTrait;
+
+    /**
+     * The parent's category.
+     *
+     * @ORM\ManyToOne(targetEntity="CalculationCategory", inversedBy="items")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     *
+     * @var ?CalculationCategory
+     */
+    protected $category;
 
     /**
      * The description.
@@ -38,24 +46,6 @@ class CalculationItem extends AbstractEntity
      * @var string
      */
     protected $description;
-
-    /**
-     * The parent's group.
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="CalculationGroup",
-     *     inversedBy="items"
-     * )
-     * @ORM\JoinColumn(
-     *     name="group_id",
-     *     referencedColumnName="id",
-     *     onDelete="CASCADE",
-     *     nullable=false
-     * )
-     *
-     * @var ?CalculationGroup
-     */
-    protected $group;
 
     /**
      * The price.
@@ -90,7 +80,6 @@ class CalculationItem extends AbstractEntity
      */
     public function __construct()
     {
-        // default values
         $this->price = 0.0;
         $this->quantity = 0.0;
     }
@@ -117,7 +106,15 @@ class CalculationItem extends AbstractEntity
      */
     public function getCalculation(): ?Calculation
     {
-        return $this->group ? $this->group->getCalculation() : null;
+        return $this->category ? $this->category->getCalculation() : null;
+    }
+
+    /**
+     * Get the parent's category.
+     */
+    public function getCategory(): ?CalculationCategory
+    {
+        return $this->category;
     }
 
     /**
@@ -141,16 +138,6 @@ class CalculationItem extends AbstractEntity
     }
 
     /**
-     * Get the parent's group.
-     *
-     * @return CalculationGroup
-     */
-    public function getGroup(): ?CalculationGroup
-    {
-        return $this->group;
-    }
-
-    /**
      * Get price.
      */
     public function getPrice(): float
@@ -168,6 +155,7 @@ class CalculationItem extends AbstractEntity
 
     /**
      * Gets the total of this item.
+     *
      * This is the quantity multiplied by the price.
      */
     public function getTotal(): float
@@ -216,6 +204,16 @@ class CalculationItem extends AbstractEntity
     }
 
     /**
+     * Set the parent's category.
+     */
+    public function setCategory(?CalculationCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
      * Set description.
      *
      * @param string $description
@@ -223,18 +221,6 @@ class CalculationItem extends AbstractEntity
     public function setDescription(?string $description): self
     {
         $this->description = $this->trim($description);
-
-        return $this;
-    }
-
-    /**
-     * Set the  parent's group.
-     *
-     * @param CalculationGroup $group
-     */
-    public function setGroup(?CalculationGroup $group): self
-    {
-        $this->group = $group;
 
         return $this;
     }

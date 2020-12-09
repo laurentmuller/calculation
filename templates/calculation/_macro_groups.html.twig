@@ -2,31 +2,30 @@
 {% macro printGroupRow(group, editable) -%}
 {# import #}
 {% import 'macros/_icons.html.twig' as icons %}
-{% import 'calculation/_macro_items.html.twig' as macroItems %}
+{% import 'calculation/_macro_categories.html.twig' as macroCategories %}
 
-<tbody{% if editable %} data-link="row" class="rowlink" data-prototype="{{ macroItems.printItemRow(group.items.vars.prototype, editable, false, false)|e }}"{% endif -%}>
-	<tr class="drag-skip">
-        {{ form_widget(group.categoryId) }}
+<thead{% if editable %} data-prototype="{{ macroCategories.printCategoryRow(group.categories.vars.prototype, editable, false, false)|e }}"{% endif -%}>
+    <tr class="drag-skip bg-light border-left border-right">
+        {{ form_widget(group.groupId) }}
         {{ form_widget(group.code) }}
-		<th class="rowlink-skip" colspan="5">{{ group.code.vars.value }}</th>
+        <th class="rowlink-skip pb-1" colspan="5">{{ group.code.vars.value }}</th>
         {% if editable -%}        
-		<th class="rowlink-skip actions d-print-none">
+        <th class="rowlink-skip actions d-print-none">
             {# menu #}
             <div class="dropdown">
                 {%- set menu_id = 'dropdownMenuGroup_' ~ group.vars.id -%}
                 {{ icons.dropdownEllipsis(menu_id) }}
-      			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
                     {{ icons.dropdownItemWithClass('#', 'calculation.edit.delete_group', 'times', 'btn-delete-group') }}
-                    {{ icons.dropdownItemWithClass('#', 'calculation.edit.sort_group', 'sort-alpha-up', 'btn-sort-group', group.items.count <= 1) }}
                     {{ icons.dropdownSeparator() }}
                     {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_item', 'file far', 'btn-add-item') }}
-      			</div>
-  			</div>
-		</th> 
+                </div>
+            </div>
+        </th> 
         {%- endif %}
     </tr>
-	{% for item in group.items %}
-	    {{ macroItems.printItemRow(item, editable, loop.first, loop.last) }}
-	{% endfor %}
-</tbody>
+</thead>
+{% for category in group.categories %}
+    {{ macroCategories.printCategoryRow(category, editable, loop.first, loop.last) }}
+{% endfor %}
 {%- endmacro %}

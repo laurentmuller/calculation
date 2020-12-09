@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -15,11 +13,13 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Entity\Calculation;
+use App\Entity\CalculationCategory;
 use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
 use App\Entity\Category;
-use App\Entity\CategoryMargin;
 use App\Entity\GlobalMargin;
+use App\Entity\Group;
+use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Service\ApplicationService;
 use App\Service\CalculationService;
@@ -57,17 +57,20 @@ class CalculationServiceTest extends KernelTestCase
         $service = $this->getService($manager);
         $service->updateTotal($calculation);
 
-        $this->assertCount(2, $calculation->getGroups());
-        $this->assertCount(1, $calculation->getGroups()[1]->getItems());
+        $this->assertEquals(1, $calculation->getGroupsCount());
+        $this->assertEquals(1, $calculation->getCategoriesCount());
 
-        /** @var CalculationGroup $rootGroup */
-        $rootGroup = $calculation->getGroups()[0];
+        $this->assertCount(1, $calculation->getGroups());
+        $this->assertCount(1, $calculation->getGroups()[0]->getCategories());
 
-        /** @var CalculationGroup $itemsGroup */
-        $itemsGroup = $calculation->getGroups()[1];
+        /** @var CalculationGroup $group */
+        $group = $calculation->getGroups()[0];
+
+        /** @var CalculationCategory $category */
+        $category = $group->getCategories()[0];
 
         /** @var CalculationItem $item */
-        $item = $itemsGroup->getItems()[0];
+        $item = $category->getItems()[0];
 
         $totalItem = self::PRODUCT_PRICE * self::QUANTITY;
         $totalGroup = $totalItem * self::MARGIN_PERCENT;
@@ -75,26 +78,25 @@ class CalculationServiceTest extends KernelTestCase
         $totalOverall = $totalUser * self::MARGIN_PERCENT;
 
         // item
-        $this->assertSame(self::PRODUCT_PRICE, $item->getPrice());
-        $this->assertSame(self::QUANTITY, $item->getQuantity());
-        $this->assertSame($totalItem, $item->getTotal());
+        $this->assertEquals(self::PRODUCT_PRICE, $item->getPrice());
+        $this->assertEquals(self::QUANTITY, $item->getQuantity());
+        $this->assertEquals($totalItem, $item->getTotal());
 
-        // parent group
-        $this->assertSame($totalItem, $rootGroup->getAmount());
-        $this->assertSame(self::MARGIN_PERCENT, $rootGroup->getMargin());
-        $this->assertSame($totalGroup, $rootGroup->getTotal());
+        // group
+        $this->assertEquals($totalItem, $group->getAmount());
+        $this->assertEquals(self::MARGIN_PERCENT, $group->getMargin());
+        $this->assertEquals($totalGroup, $group->getTotal());
 
-        // items group
-        $this->assertSame($totalItem, $itemsGroup->getAmount());
-        $this->assertSame(0.0, $itemsGroup->getTotal());
-        $this->assertSame($itemsGroup->getAmount(), $item->getTotal());
+        // category
+        $this->assertEquals($totalItem, $category->getAmount());
+        $this->assertEquals($category->getAmount(), $item->getTotal());
 
-        // calculation
-        $this->assertSame($totalItem, $calculation->getItemsTotal());
-        $this->assertSame($totalGroup, $calculation->getGroupsTotal());
-        $this->assertSame(self::MARGIN_PERCENT, $calculation->getGlobalMargin());
-        $this->assertSame(self::MARGIN_USER, $calculation->getUserMargin());
-        $this->assertSame($totalOverall, $calculation->getOverallTotal());
+//         // calculation
+        $this->assertEquals($totalItem, $calculation->getItemsTotal());
+        $this->assertEquals($totalGroup, $calculation->getGroupsTotal());
+        $this->assertEquals(self::MARGIN_PERCENT, $calculation->getGlobalMargin());
+        $this->assertEquals(self::MARGIN_USER, $calculation->getUserMargin());
+        $this->assertEquals($totalOverall, $calculation->getOverallTotal());
     }
 
     protected function echo(string $name, $value): void
@@ -131,21 +133,23 @@ class CalculationServiceTest extends KernelTestCase
 
     protected function initCategories(EntityManager $manager): Category
     {
-        $this->initRepository($manager, CategoryMargin::class);
+        $this->initRepository($manager, GroupMargin::class);
         $this->initRepository($manager, Category::class);
+        $this->initRepository($manager, Group::class);
 
-        $parent = new Category();
-        $parent->setCode('Test');
+        $group = new Group();
+        $group->setCode('Test');
+
+        $margin = new GroupMargin();
+        $margin->setValues(0, 1000000, self::MARGIN_PERCENT);
+        $group->addMargin($margin);
 
         $category = new Category();
         $category->setCode('Test')
-            ->setParent($parent);
+            ->setGroup($group);
 
-        $margin = new CategoryMargin();
-        $margin->setValues(0, 1000000, self::MARGIN_PERCENT);
-        $parent->addMargin($margin);
-
-        $manager->persist($parent);
+        $manager->persist($group);
+        $manager->persist($margin);
         $manager->persist($category);
         $manager->flush();
 

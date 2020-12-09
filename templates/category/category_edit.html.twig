@@ -1,13 +1,9 @@
 {% extends 'cards/card_edit.html.twig' %}
-{# imports #}
-{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title         = new ? 'category.add.title' : 'category.edit.title' -%}
-{%- set title_icon    = 'folder far' -%}
-{%- set page_list     = 'category_list' -%}
-{%- set margins_lengh = form.margins|length %}
-{%- set table_class   = 'table table-borderless table-edit' ~ (margins_lengh == 0 ? ' d-none' : '') -%}
+{%- set title      = new ? 'category.add.title' : 'category.edit.title' -%}
+{%- set title_icon = 'folder far' -%}
+{%- set page_list  = 'category_list' -%}
 
 {% block card_body %}
 <div class="form-row">
@@ -15,7 +11,7 @@
 	    {{ form_row(form.code) }}
     </div>
     <div class="col-md-6">
-        {{ form_row(form.parent) }}
+        {{ form_row(form.group) }}
     </div>
 </div>
 {{ form_row(form.description) }}

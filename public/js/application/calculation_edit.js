@@ -457,7 +457,7 @@ var Application = {
             that.showAddDialog($(this));
         });
 
-        // sort items button
+        // sort calculation button
         $('.btn-sort-items').on('click', function (e) {
             e.preventDefault();
             that.sortCalculation();
@@ -473,12 +473,12 @@ var Application = {
         }).on('click', '.btn-delete-item', function (e) {
             e.preventDefault();
             that.removeItem($(this));
+        }).on('click', '.btn-delete-category', function (e) {
+            e.preventDefault();
+            that.removeCategory($(this));            
         }).on('click', '.btn-delete-group', function (e) {
             e.preventDefault();
             that.removeGroup($(this));
-        }).on('click', '.btn-sort-group', function (e) {
-            e.preventDefault();
-            that.sortItems($(this));
         });
 
         return that;
@@ -520,6 +520,16 @@ var Application = {
     },
 
     /**
+     * Update the buttons, the total and initialize the drag-drop.
+     * 
+     * @return {Application} This application instance for chaining.
+     */
+    updateAll: function() {
+        'use strict';
+        return this.updateButtons().updateTotals().initDragDrop(true);
+    },
+    
+    /**
      * Update the total of the line in the item dialog.
      * 
      * @return {Application} This application instance for chaining.
@@ -537,7 +547,7 @@ var Application = {
     },
 
     /**
-     * Update the move up/down buttons.
+     * Update the move up/down and sort buttons.
      * 
      * @return {Application} This application instance for chaining.
      */
@@ -562,12 +572,25 @@ var Application = {
                 $row.find('.btn-last-item').toggleClass('d-none', hideDown);
                 $row.find('.dropdown-divider:first').toggleClass('d-none', hideUp && hideDown);
             });
-
-            $body.find('.btn-sort-group').toggleClass('d-none', $rows.length === 1);
             if ($rows.length > 1) {
                 disabled = false;  
             }
         });
+        
+        if (disabled) {
+            const $head = $('#data-table-edit thead');
+            if ($head.length > 1) {
+                disabled = false;
+            } else {
+                $head.each(function () {
+                    const $body = $(this).nextUntil('thead');
+                    if ($body.length > 1) {
+                        disabled = false;
+                        return false;
+                    }
+                });     
+            }
+        }
         
         // update global sort
         $('.btn-sort-items').toggleClass('disabled', disabled);
@@ -707,22 +730,33 @@ var Application = {
     },
 
     /**
+     * Finds the table head for the given group.
+     * 
+     * @param {int}
+     *            id - the group identifier.
+     * @returns {jQuery} - the table head, if found; null otherwise.
+     */
+    findGroup: function (id) {
+        'use strict';
+
+        const $head = $("#data-table-edit thead:has(input[name*='groupId'][value=" + id + "])");
+        return $head.length !== 0 ? $head : null;
+    },
+
+    /**
      * Finds the table body for the given category.
      * 
      * @param {int}
      *            id - the category identifier.
      * @returns {jQuery} - the table body, if found; null otherwise.
      */
-    findGroup: function (id) {
+    findCategory: function (id) {
         'use strict';
 
         const $body = $("#data-table-edit tbody:has(input[name*='categoryId'][value=" + id + "])");
-        if ($body.length) {
-            return $body;
-        }
-        return null;
+        return $body.length !== 0 ? $body : null;
     },
-
+    
     /**
      * Gets the edit dialog group.
      * 
@@ -731,9 +765,24 @@ var Application = {
     getDialogGroup: function () {
         'use strict';
         
+        const $selection = $('#item_category :selected');
         return {
-            categoryId: $('#item_category').val(),
-            text: $('#item_category :selected').text(),
+            id: $selection.data('groupId'),
+            code: $selection.data('groupCode')
+            
+        };
+    },
+    
+    /**
+     * Gets the edit dialog category.
+     * 
+     * @returns {Object} the category.
+     */
+    getDialogCategory: function () {
+        'use strict';
+        
+        return {
+            id: $('#item_category').val(),
             code: $('#item_category :selected').data('code')
             
         };
@@ -758,7 +807,6 @@ var Application = {
             price: price,            
             total: total
         };
-
     },
 
     /**
@@ -783,11 +831,11 @@ var Application = {
     },
 
     /**
-     * Sort items of a group.
+     * Sort items of a category.
      * 
      * @param {jQuery}
      *            $element - the caller element (button or tbody) used to find
-     *            the group.
+     *            the category.
      * @return {Application} This application instance for chaining.
      */
     sortItems: function ($element) {
@@ -830,26 +878,62 @@ var Application = {
     },
 
     /**
-     * Sort all groups by name.
+     * Sort categories by name.
+     * 
+     * @param {jQuery}
+     *            $element - the caller element (button, row or thead) used to
+     *            find the group and the categories.
      * 
      * @return {Application} This application instance for chaining.
      */
-    sortGroups: function () {
+    sortCategories: function ($element) {
         'use strict';
 
         const that = this;
-        let $table = $('#data-table-edit');
-        $table.find('tbody').sort(function (bodyA, bodyB) {
-            const textA = $('th:first', bodyA).text();
-            const textB = $('th:first', bodyB).text();
-            return that.compareStrings(textA, textB);
-        }).appendTo($table);
+        let $head = $element.parents('thead');
+        if ($head.length === 0) {
+            $head = $element.parents('tbody').prev();
+        }
+        const $bodies = $head.nextUntil('thead');
+        if ($bodies.length < 2) {
+            return that;
+        }
+
+        $bodies.sort(function (a, b) {
+          const textA = $('th:first', a).text();
+          const textB = $('th:first', b).text();
+          return that.compareStrings(textA, textB);
+        });
+        $head.after($bodies);
 
         return that;
     },
     
     /**
-     * Sort all items in all groups.
+     * Sort groups by name.
+     * 
+     * @return {Application} This application instance for chaining.
+     */
+    sortGroups: function () {
+        'use strict';
+        
+        const that = this;
+        const $heads = $('#data-table-edit thead');
+        if ($heads.length < 2) {
+            return that;
+        }
+        
+        $heads.sort(function (a, b) {
+            const textA = $('th:first', a).text();
+            const textB = $('th:first', b).text();
+            return that.compareStrings(textA, textB);
+        });
+        
+        return that;
+    },
+    
+    /**
+     * Sort groups, categories and items.
      * 
      * @return {Application} This application instance for chaining.
      */
@@ -857,10 +941,13 @@ var Application = {
         'use strict';
 
         const that = this;
+        that.sortGroups($(this));       
+        $('#data-table-edit thead').each(function () {
+            that.sortCategories($(this));
+        });        
         $('#data-table-edit tbody').each(function () {
             that.sortItems($(this));
         });
-
         return that;
     },
     
@@ -874,23 +961,86 @@ var Application = {
     appendGroup: function (group) {
         'use strict';
 
-        // get prototype
+        // find the next group where to insert this group before
+        const that = this;
+        let $nextGroup = null;
+        $('#data-table-edit thead').each(function() {
+            const $head = $(this);
+            const text = $head.find('th:first').text();
+            if (that.compareStrings(text, group.code) > 0) {
+                $nextGroup = $head;
+                return false;
+            }
+        });
+        
+        // create group and update
         const $parent = $('#data-table-edit');
-        let prototype = $parent.getPrototype(/__groupIndex__/g, 'groupIndex');
-
-        // append and update
-        let $newGroup = $(prototype).appendTo($parent);
-        $newGroup.find('tr:first th:first').text(group.code);
-        $newGroup.findNamedInput('categoryId').val(group.categoryId);
-        $newGroup.findNamedInput('code').val(group.code);
-
-        // sort
-        this.sortGroups();
+        const prototype = $parent.getPrototype(/__groupIndex__/g, 'groupIndex');
+        const $group = $(prototype);
+        $group.find('tr:first th:first').text(group.code);
+        $group.findNamedInput('groupId').val(group.id);
+        $group.findNamedInput('code').val(group.code);
+        
+        // insert or append
+        if ($nextGroup) {
+            $group.insertBefore($nextGroup);
+        } else {
+            $group.appendTo($parent);
+        }
 
         // reset the drag and drop handler.
         this.initDragDrop(true);
 
-        return $newGroup;
+        return $group;
+    },
+
+    /**
+     * Appends the given category to the table.
+     * 
+     * @param {jQuery}
+     *            $group - the parent group (thead).
+     * @param {Object}
+     *            category - the category data used to update row.
+     * @returns {jQuery} - the appended category.
+     */
+    appendCategory: function ($group, category) {
+        'use strict';
+
+        // find the next category where to insert this category before
+        const that = this;
+        let $nextCategory = null;
+        $group.nextUntil('thead').each(function() {
+            const $body = $(this);
+            const text = $body.find('th:first').text();
+            if (that.compareStrings(text, category.code) > 0) {
+                $nextCategory = $body;
+                return false;
+            }
+        });
+        
+        // create category and update
+        const prototype = $group.getPrototype(/__categoryIndex__/g, 'categoryIndex');
+        const $category = $(prototype);
+        $category.find('tr:first th:first').text(category.code);
+        $category.findNamedInput('categoryId').val(category.id);
+        $category.findNamedInput('code').val(category.code);
+        
+        // insert or append
+        if ($nextCategory) {
+            $category.insertBefore($nextCategory);
+        } else {
+            const $last = $group.nextUntil('thead').last();
+            if ($last.length) {
+                $last.after($category);
+            } else {
+                $group.after($category);    
+            }
+        }        
+        
+        // reset the drag and drop handler.
+        this.initDragDrop(true);
+
+        return $category;
     },
 
     /**
@@ -968,12 +1118,42 @@ var Application = {
         'use strict';
 
         const that = this;
-        $element.closest('tbody').removeFadeOut(function () {
-            that.updateButtons().updateTotals().initDragDrop(true);
+        const $head = $element.closest('thead');
+        const $elements = $head.add($head.nextUntil('thead'));
+        $elements.removeFadeOut(function () {
+            that.updateAll();
         });
+        
         return that;
     },
 
+    /**
+     * Remove a calculation category. If the parent group is empty after
+     * deletion, then group is also deleted.
+     * 
+     * @param {jQuery}
+     *            $element - the caller element (normally a button).
+     * @return {Application} This application instance for chaining.
+     */
+    removeCategory: function ($element) {
+        'use strict';
+
+        const that = this;
+        const $body = $element.closest('tbody');
+        const $prev = $body.prev();
+        const $next = $body.next();
+        
+        // if it is the last category then remove the group
+        if ($prev.is('thead') && ($next.length === 0 || $next.is('thead'))) {
+            return that.removeGroup($prev);
+        }
+        
+        $body.removeFadeOut(function () {
+            that.updateAll();
+        });    
+        return that;
+    },
+    
     /**
      * Remove a calculation item.
      * 
@@ -989,12 +1169,13 @@ var Application = {
         let $row = $element.getParentRow();
         const $body = $row.parents('tbody');
 
-        // if it is the last item then remove the group instead
+        // if it is the last item then remove the category
         if ($body.children().length === 2) {
-            $row = $body;
+            return that.removeCategory($body);
         }
+        
         $row.removeFadeOut(function () {
-            that.updateButtons().updateTotals().initDragDrop(true);
+            that.updateAll();
         });
         return that;
     },
@@ -1009,24 +1190,30 @@ var Application = {
         $('#item_modal').modal('hide');
         $('#empty-items').addClass('d-none');
 
-        // get values
+        // get dialog values
         const that = this;
         const group = that.getDialogGroup();
+        const category = that.getDialogCategory();
         const item = that.getDialogItem();
-
-        // get or add group
-        const $group = that.findGroup(group.categoryId) || that.appendGroup(group);
-
+        
+        // get or add group and category
+        const $group = that.findGroup(group.id) || that.appendGroup(group);
+        const $category = that.findCategory(category.id) || that.appendCategory($group, category);
+        
         // append
-        const $item = $group.appendRow(item);
+        const $row = $category.appendRow(item);
 
         // update total and scroll
-        this.updateButtons().updateTotals();
-        $item.scrollInViewport().timeoutToggle('table-success');
+        $row.scrollInViewport().timeoutToggle('table-success');
+        that.$editingRow = null;
+        that.updateAll();
+        
     },
 
     /**
      * Handle the dialog form submit event when editing an item.
+     * 
+     * @return {Application} This application instance for chaining.
      */
     onEditDialogSubmit: function () {
         'use strict';
@@ -1040,45 +1227,58 @@ var Application = {
             return;
         }
 
-        // get values
+        // get dialog values
         const group = that.getDialogGroup();
+        const category = that.getDialogCategory();
         const item = that.getDialogItem();
+        
+        // get old elements
+        const $oldBody = that.$editingRow.parents('tbody');
+        let $oldHead = $oldBody.prevUntil('thead').prev();
+        if ($oldHead.length === 0) {
+            $oldHead = $oldBody.prev();
+        } 
+        
+        // get old inputs
+        const $oldCategory = $oldBody.findNamedInput('categoryId');
+        const $oldGroup = $oldHead.findNamedInput('groupId');
 
-        let $oldBody = that.$editingRow.parents('tbody');
-        let $oldGroup = that.$editingRow.parent().findNamedInput('categoryId');
-        let oldCategoryId = $oldGroup.val();
-
-        // same category?
-        if (oldCategoryId !== group.categoryId) {
-            // get or add group
-            const $group = that.findGroup(group.categoryId) || that.appendGroup(group);
-
+        // get old values
+        const oldGroupId = $oldGroup.intVal();
+        const oldCategoryId = $oldCategory.intVal();
+        
+        // same group and category?
+        if (oldGroupId !== group.id || oldCategoryId !== category.id) {
+            const $group = that.findGroup(group.id) || that.appendGroup(group);
+            const $category = that.findCategory(category.id) || that.appendCategory($group, category);
+            
             // append
-            const $row = $group.appendRow(item);
-
-            // update callback
-            const callback = function () {
-                that.$editingRow.remove();
-                that.$editingRow = null;
-                that.updateButtons().updateTotals();
-                $row.scrollInViewport().timeoutToggle('table-success');
-            };
-
-            // remove old group if empty
-            if ($oldBody.children().length === 2) {
-                $oldBody.removeFadeOut(callback);
+            const $row = $category.appendRow(item);
+            
+            // check if empty
+            const $next = $oldHead.nextUntil('thead');
+            const emptyCategory = $oldBody.children().length === 2;
+            const emptyGroup = emptyCategory && $next.length === 1;
+            
+            that.$editingRow.remove();
+            that.$editingRow = null;
+            
+            if (emptyGroup) {
+                that.removeGroup($oldHead);                
+            } else if (emptyCategory) {
+                that.removeCategory($oldBody);
             } else {
-                // update
-                callback.call();
-            }
-
+                that.updateAll();
+            }   
+            $row.scrollInViewport().timeoutToggle('table-success');
         } else {
             // update
-            that.$editingRow.updateRow(item);
-            that.updateButtons().updateTotals();
-            that.$editingRow.timeoutToggle('table-success');
+            that.$editingRow.updateRow(item).timeoutToggle('table-success');
             that.$editingRow = null;
+            that.updateAll();
         }
+        
+        return that;
     },
 
     /**
@@ -1122,21 +1322,15 @@ var Application = {
                 $source.swapIdAndNames($target);
             }
 
-            // update callback
-            const callback = function () {
-                that.updateButtons().updateTotals().initDragDrop(true);
-                $newRow.timeoutToggle('table-success');
-            };
-
-            // remove old group if empty
+            // remove old category if empty
             const $oldBody = $(origin.container);
             if ($oldBody.children().length === 1) {
-                $oldBody.removeFadeOut(callback);
+                that.removeCategory($oldBody);
             } else {
-                // update
-                callback.call();
-            }
-
+                that.updateAll();
+            }   
+            $newRow.timeoutToggle('table-success');
+            
         } else if (origin.index !== destination.index) {
             // -----------------------------
             // Moved to a new position
@@ -1237,12 +1431,15 @@ $.fn.extend({
     removeFadeOut: function (callback) {
         'use strict';
 
-        const $element = $(this);
-        $element.fadeOut(400, function () {
-            $element.remove();
-            if ($.isFunction(callback)) {
-                callback();
-            }
+        const $this = $(this);
+        const lastIndex = $this.length - 1; 
+        $this.each(function(i, element) {
+            $(element).fadeOut(400, function () {
+                $(this).remove();
+                if (i === lastIndex && $.isFunction(callback)) {
+                    callback();
+                }
+            });
         });
     },
 
@@ -1273,7 +1470,7 @@ $.fn.extend({
     },
 
     /**
-     * Gets item data from the current row.
+     * Gets item values from the current row.
      * 
      * @returns {Object} the item data.
      */
@@ -1281,19 +1478,24 @@ $.fn.extend({
         'use strict';
 
         const $row = $(this);
+        const price = $row.findNamedInput('price').floatVal();
+        const quantity = $row.findNamedInput('quantity').floatVal();
+        const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
+        
         return {
             description: $row.findNamedInput('description').val(),
             unit: $row.findNamedInput('unit').val(),
-            price: $row.findNamedInput('price').val(),
-            quantity: $row.findNamedInput('quantity').val(),
+            price: price,
+            quantity: quantity,
+            total: total
         };
     },
 
     /**
-     * Create a new row and appends to this current parent group (tbody).
+     * Create a new row and appends to this current parent category (tbody).
      * 
      * @param {Object}
-     *            item - the row data used to update the row
+     *            item - the item values used to update the row
      * @returns {jQuery} - the created row.
      */
     appendRow: function (item) {
@@ -1443,5 +1645,13 @@ $.fn.extend({
             Application.updateTotals();
         }, 250);
     });
+
+    // prototypes
+    // const table = $('.table-edit').data('prototype');
+    // console.log('table', $(table).html());
+    // const head = $('.table-edit thead:first').data('prototype');
+    // console.log('thead', $(head).html());
+    // const body = $('.table-edit tbody:first').data('prototype');
+    // console.log('tbody', $(body).html());
     
 }(jQuery));

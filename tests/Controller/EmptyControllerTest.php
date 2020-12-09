@@ -2,12 +2,10 @@
 /*
  * This file is part of the Calculation package.
  *
- * Copyright (c) 2019 bibi.nu. All rights reserved.
+ * (c) bibi.nu. <bibi@bibi.nu>
  *
- * This computer code is protected by copyright law and international
- * treaties. Unauthorised reproduction or distribution of this code, or
- * any portion of it, may result in severe civil and criminal penalties,
- * and will be prosecuted to the maximum extent possible under the law.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -17,6 +15,7 @@ namespace App\Tests\Controller;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
+use App\Entity\Group;
 use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,6 +28,7 @@ class EmptyControllerTest extends AbstractControllerTest
 {
     private static ?Calculation $calculation = null;
     private static ?Category $category = null;
+    private static ?Group $group = null;
     private static ?Product $product = null;
     private static ?CalculationState $state = null;
 
@@ -63,9 +63,16 @@ class EmptyControllerTest extends AbstractControllerTest
             $this->addEntity(self::$state);
         }
 
+        if (null === self::$group) {
+            self::$group = new Group();
+            self::$group->setCode('Test Group');
+            $this->addEntity(self::$group);
+        }
+
         if (null === self::$category) {
             self::$category = new Category();
-            self::$category->setCode('Test Category');
+            self::$category->setCode('Test Category')
+                ->setGroup(self::$group);
             $this->addEntity(self::$category);
         }
 
@@ -94,6 +101,7 @@ class EmptyControllerTest extends AbstractControllerTest
     {
         self::$calculation = $this->deleteEntity(self::$calculation);
         self::$category = $this->deleteEntity(self::$category);
+        self::$group = $this->deleteEntity(self::$group);
         self::$product = $this->deleteEntity(self::$product);
         self::$state = $this->deleteEntity(self::$state);
     }

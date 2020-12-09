@@ -31,11 +31,11 @@ calculation:
         panel_items: Articles
         panel_resume: Résumé
         delete_group: Supprimer le groupe
-        sort_group: Trier les articles
-        sort_items: Trier tous les articles
+        delete_category: Supprimer la catégorie
         add_item: Ajouter un article
         edit_item: Modifier l'article
         delete_item: Supprimer l'article
+        sort_item: Trier les groupes, les catégories et les articles
         move_first_item: Déplacer à la première place
         move_up_item: Déplacer vers le haut
         move_down_item: Déplacer vers le bas
@@ -151,7 +151,7 @@ category:
         code: Nom
         description: Description
         products: Articles
-        parent: Groupe
+        group: Groupe
     add:
         title: Nouvelle catégorie
         success: La catégorie <b>%name%</b> a été créée avec succès.
@@ -193,7 +193,7 @@ group:
         title: Supprimer un groupe
         message: Êtes-vous sûr de vouloir supprimer le groupe <b>%name%</b> ?
         success: Le groupe <b>%name%</b> a été supprimé avec succès.
-        failure: Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans %categories%.
+        failure: Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans %calculations% et dans %categories%.
     list:
         title: Groupes
         empty: Aucun groupe défini.
@@ -201,8 +201,8 @@ group:
         pdf_title: Télécharger la liste des groupes
         excel_title: Exporter la liste des groupes
     show:
-        title: Propriétés du groupe
-categorymargin:
+        title: Propriétés du group
+groupmargin:
     name: Marges
     fields:
         margin: Marge (%)
@@ -317,7 +317,7 @@ product:
             simulate: Simuler l'importation
             confirm: Confirmer l'importation des données
         error:
-            confirm: Vous devez cochez le message de confirmation.            
+            confirm: Vous devez cochez le message de confirmation.
 user:
     name: Utilisateur
     fields:
@@ -582,6 +582,7 @@ pagination:
     page_previous: Page précédente (%page%)
     page_next: Page suivante (%page%)
 report:
+    other: Autre
     calculation:
         amount: Montant
         margin_amount: Marge (Fr.)
@@ -589,8 +590,6 @@ report:
         margins: Marges
         resume: Résumé
         total: Total
-    customer:
-        other: Autre
 show:
     name: Nom
     value: Valeur
@@ -601,7 +600,6 @@ rights:
     edit: Modifier
     delete: Supprimer
     pdf: Exporter
-    group_category: Groupes / Catégories
 cookiebanner:
     message: Afin de vous proposer le meilleur service possible, ce site utilise des cookies. En acceptant de continuer sur ce site, vous déclarez accepter leurs utilisations.
     link: En savoir plus
@@ -993,6 +991,7 @@ generate:
         confirm: Confirmer la génération des données
     error:
         confirm: Vous devez cochez le message de confirmation.
+        failed: Une erreur s'est produite lors de la génération des données.
 update:
     title: Mise à jour des données
     description: Cet outil permet de mettre à jour des données de façon aléatoire.
@@ -1005,3 +1004,31 @@ update:
     help:
         customer: Remplace le nom et le prénom du contact, le nom de la société et l'e-mail.
         calculation: Remplace le nom du client, la description et le statut.
+digiprint:
+    name: Digiprint
+    fields:
+        format: Format
+        height: Hauteur (mm)
+        width: Largeur (mm)
+        items_blacklit: Blacklit
+        items_price: Prix
+        items_replicating: Repiquage
+    add:
+        title: Nouveau Digiprint
+        success: Le Digiprint <b>%name%</b> a été créé avec succès.
+    edit:
+        title: Edition d'un Digiprint
+        success: Le Digiprint <b>%name%</b> a été mis à jour avec succès.
+    delete:
+        title: Supprimer un Digiprint
+        message: Êtes-vous sûr de vouloir supprimer le Digiprint <b>%name%</b> ?
+        success: Le Digiprint <b>%name%</b> a été supprimé avec succès.
+        failure: Impossible de supprimer le Digiprint <b>%name%</b>. Il est référencé dans %items%.
+    list:
+        title: Digiprints
+        empty: Aucun Digiprint défini.
+        add_title: Créer un nouveau Digiprint
+        pdf_title: Télécharger la liste des Digiprint
+        excel_title: Exporter la liste des Digiprint
+    show:
+        title: Propriétés du Digiprint

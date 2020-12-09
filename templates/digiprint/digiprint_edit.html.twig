@@ -1,0 +1,20 @@
+{% extends 'cards/card_edit.html.twig' %}
+
+{# parameters #}
+{%- set title      = new ? 'digiprint.add.title' : 'digiprint.edit.title' -%}
+{%- set title_icon = 'folder far' -%}
+{#%- set page_list  = 'category_list' -%#}
+
+{% block card_body %}
+<div class="form-row">
+    <div class="col-md-6">
+        {{ form_row(form.format) }}
+    </div>
+    <div class="col-md-3">
+        {{ form_row(form.height) }}
+    </div>
+    <div class="col-md-3">
+        {{ form_row(form.width) }}
+    </div>
+</div>
+{% endblock %}

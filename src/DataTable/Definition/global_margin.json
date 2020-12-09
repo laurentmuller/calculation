@@ -8,7 +8,7 @@
 	},
 	{
 		"name": "minimum",
-		"title": "categorymargin.fields.minimum",
+		"title": "groupmargin.fields.minimum",
 		"default": true,
 		"searchable": false,
 		"formatter": "amountFormatter",
@@ -16,14 +16,14 @@
 	},
 	{
 		"name": "maximum",
-		"title": "categorymargin.fields.maximum",
+		"title": "groupmargin.fields.maximum",
 		"searchable": false,
 		"formatter": "amountFormatter",
 		"class": "text-currency w-35"
 	},
 	{
 		"name": "margin",
-		"title": "categorymargin.fields.margin",
+		"title": "groupmargin.fields.margin",
 		"searchable": false,
 		"formatter": "percentFormatter",
 		"class": "text-currency w-30"

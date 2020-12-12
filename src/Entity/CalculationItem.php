@@ -39,7 +39,7 @@ class CalculationItem extends AbstractEntity
     /**
      * The description.
      *
-     * @ORM\Column(name="description", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      *
@@ -50,7 +50,7 @@ class CalculationItem extends AbstractEntity
     /**
      * The price.
      *
-     * @ORM\Column(name="price", type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default": 0})
      *
      * @var float
      */
@@ -59,7 +59,7 @@ class CalculationItem extends AbstractEntity
     /**
      * The quantity.
      *
-     * @ORM\Column(name="quantity", type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default": 0})
      *
      * @var float
      */
@@ -68,7 +68,7 @@ class CalculationItem extends AbstractEntity
     /**
      * The unit.
      *
-     * @ORM\Column(name="unit", type="string", length=15, nullable=true)
+     * @ORM\Column(type="string", length=15, nullable=true)
      * @Assert\Length(max=15)
      *
      * @var string

@@ -33,7 +33,7 @@ class DigiPrintsReport extends AbstractArrayReport
      * @param AbstractController $controller the parent controller
      * @param DigiPrint[]        $entities   the entities to export
      */
-    public function __construct(AbstractController $controller, array $entities, bool $grouped = true)
+    public function __construct(AbstractController $controller, array $entities)
     {
         parent::__construct($controller, $entities);
     }
@@ -44,17 +44,17 @@ class DigiPrintsReport extends AbstractArrayReport
     protected function doRender(array $entities): bool
     {
         //title
-        $this->SetTitle('Tarif d\'impression d\'affiches Digiprint XXL Eco solvants 720 dpi Blueback 120 gm2');
+        $this->setTitleTrans('digiprint.list.title');
 
         // new page
         $this->AddPage();
 
         // create table
         $columns = [
-            PdfColumn::left('Description', 50),
-            PdfColumn::right('Minimum', 30, true),
-            PdfColumn::right('Maximum', 30, true),
-            PdfColumn::right('Prix', 30, true),
+            PdfColumn::left($this->trans('digiprint.fields.format'), 50),
+            PdfColumn::right($this->trans('digiprintitem.fields.minimum'), 30, true),
+            PdfColumn::right($this->trans('digiprintitem.fields.maximum'), 30, true),
+            PdfColumn::right($this->trans('digiprintitem.fields.amount'), 30, true),
         ];
 
         $table = new PdfGroupTableBuilder($this);
@@ -64,9 +64,9 @@ class DigiPrintsReport extends AbstractArrayReport
         /** @var DigiPrint $entity */
         foreach ($entities as $entity) {
             $table->setGroupKey($entity->getDisplay());
-            $this->outputType($entity->getItemPrices(), $table, 'Prix de base');
-            $this->outputType($entity->getItemBacklits(), $table, 'Supplément pour Backlit');
-            $this->outputType($entity->getItemReplicatings(), $table, 'Supplément pour repiquage 1 couleur noir ou blanc');
+            $this->outputType($entity->getItemsPrice(), $table, $this->trans('digiprint.items.price'));
+            $this->outputType($entity->getItemsBacklit(), $table, $this->trans('digiprint.items.blacklit'));
+            $this->outputType($entity->getItemsReplicating(), $table, $this->trans('digiprint.items.replicating'));
         }
 
         // count

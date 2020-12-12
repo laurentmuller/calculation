@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class Customer extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="address", type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      *
      * @var string
@@ -35,7 +35,7 @@ class Customer extends AbstractEntity
     protected $address;
 
     /**
-     * @ORM\Column(name="birthday", type="date", nullable=true)
+     * @ORM\Column(type="date", nullable=true)
      * @Assert\Date
      *
      * @var \DateTime
@@ -43,7 +43,7 @@ class Customer extends AbstractEntity
     protected $birthday;
 
     /**
-     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      *
      * @var string
@@ -51,7 +51,7 @@ class Customer extends AbstractEntity
     protected $city;
 
     /**
-     * @ORM\Column(name="company", type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      *
      * @var string
@@ -59,7 +59,7 @@ class Customer extends AbstractEntity
     protected $company;
 
     /**
-     * @ORM\Column(name="country", type="string", length=100, nullable=true)
+     * @ORM\Column(type="string", length=100, nullable=true)
      * @Assert\Length(max=100)
      *
      * @var string
@@ -67,7 +67,7 @@ class Customer extends AbstractEntity
     protected $country;
 
     /**
-     * @ORM\Column(name="email", type="string", length=100, nullable=true)
+     * @ORM\Column(type="string", length=100, nullable=true)
      * @Assert\Email
      * @Assert\Length(max=100)
      *
@@ -91,7 +91,7 @@ class Customer extends AbstractEntity
     protected $lastName;
 
     /**
-     * @ORM\Column(name="title", type="string", length=50, nullable=true)
+     * @ORM\Column(type="string", length=50, nullable=true)
      * @Assert\Length(max=50)
      *
      * @var string

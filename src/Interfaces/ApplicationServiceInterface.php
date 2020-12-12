@@ -22,7 +22,7 @@ namespace App\Interfaces;
 interface ApplicationServiceInterface
 {
     /**
-     * The default action (string).
+     * The default action to trigger (string).
      */
     public const DEFAULT_ACTION = ActionInterface::ACTION_EDIT;
 
@@ -72,6 +72,11 @@ interface ApplicationServiceInterface
     public const P_CUSTOMER_URL = 'customer_url';
 
     /**
+     * The property name for the default category (integer).
+     */
+    public const P_DEFAULT_CATEGORY = 'default_category';
+
+    /**
      * The property name for the default calculation state (integer).
      */
     public const P_DEFAULT_STATE = 'default_state';
@@ -91,9 +96,16 @@ interface ApplicationServiceInterface
     public const P_DISPLAY_TABULAR = 'display_tabular';
 
     /**
-     * The property name for the edit action when displaying entities (boolean).
+     * The property name for the action to trigger within the entities (string).
      *
-     * When <code>false</code>, display the entity properties; when <code>true</code> (default), edit the entity.
+     * <p>
+     * Possible values are:
+     * <ul>
+     * <li>'<code>edit</code>': The entity is edited.</li>
+     * <li>'<code>show</code>': The entity is show.</li>
+     * <li>'<code>none</code>': No action is triggered.</li>
+     * </ul>
+     * </p>
      */
     public const P_EDIT_ACTION = 'edit_action';
 

@@ -5,7 +5,7 @@
 		"default": true,
 		"direction": "desc",
 		"class": "text-id",
-		"formatter": "idFormatter",
+		"formatter": "formatId",
 		"callback": "renderStateColor"
 	},
 	{
@@ -13,7 +13,7 @@
 		"title": "calculation.fields.date",		
 		"direction": "desc",
 		"class": "text-date",
-		"formatter": "dateFormatter"
+		"formatter": "formatDate"
 	},
 	{
 		"name": "stateCode",
@@ -38,7 +38,7 @@
 		"orderable": false,
 		"searchable": false,
 		"rawData": true,
-		"formatter": "itemsFormatter"
+		"formatter": "formatItems"
 	},
 	{
 		"name": "stateColor",
@@ -53,7 +53,7 @@
 		"orderable": false,
 		"searchable": false,
 		"rawData": true,
-		"formatter": "actionsFormatter",
+		"formatter": "formatActions",
 		"class": "actions rowlink-skip d-print-none"
 	}
 ]

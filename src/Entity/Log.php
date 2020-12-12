@@ -20,42 +20,42 @@ use Doctrine\ORM\Mapping as ORM;
 class Log extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="channel", type="string", length=50)
+     * @ORM\Column(type="string", length=50)
      *
      * @var string
      */
     private $channel;
 
     /**
-     * @ORM\Column(name="context", type="array", nullable=true)
+     * @ORM\Column(type="array", nullable=true)
      *
      * @var array
      */
     private $context;
 
     /**
-     * @ORM\Column(name="created_at", type="datetime")
+     * @ORM\Column(type="datetime")
      *
      * @var \DateTime
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(name="extra", type="array", nullable=true)
+     * @ORM\Column(type="array", nullable=true)
      *
      * @var array
      */
     private $extra;
 
     /**
-     * @ORM\Column(name="level", type="string", length=50)
+     * @ORM\Column(type="string", length=50)
      *
      * @var string
      */
     private $level;
 
     /**
-     * @ORM\Column(name="message", type="text")
+     * @ORM\Column(type="text")
      *
      * @var string
      */

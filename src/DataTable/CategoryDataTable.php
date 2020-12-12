@@ -55,7 +55,7 @@ class CategoryDataTable extends AbstractEntityDataTable
      *
      * @return string the link, if applicable, the value otherwise
      */
-    public function productsFormatter(Collection $products, Category $item): string
+    public function formatProducts(Collection $products, Category $item): string
     {
         $context = [
             'id' => $item->getId(),

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\DataTable\Model;
 
 use App\Traits\SessionTrait;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 use DataTables\AbstractDataTableHandler;
 use DataTables\DataTableQuery;
@@ -125,6 +126,78 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
         $params = $this->createParameters($request);
 
         return new DataTableQuery($params);
+    }
+
+    /**
+     * Formats the given value as amount.
+     */
+    public function formatAmount(float $value): string
+    {
+        return FormatUtils::formatAmount($value);
+    }
+
+    /**
+     * Formats the given value as integer.
+     */
+    public function formatCountable(\Countable $value): string
+    {
+        return $this->formatInt($value->count());
+    }
+
+    /**
+     * Format the date.
+     */
+    public function formatDate(\DateTimeInterface $date): string
+    {
+        return FormatUtils::formatDate($date);
+    }
+
+    /**
+     * Format the date and time.
+     */
+    public function formatDateTime(\DateTimeInterface $date): string
+    {
+        return FormatUtils::formatDateTime($date);
+    }
+
+    /**
+     * Formats the given value as identifier.
+     */
+    public function formatId(int $value): string
+    {
+        return FormatUtils::formatId($value);
+    }
+
+    /**
+     * Formats the given value as integer.
+     */
+    public function formatInt(int $value): string
+    {
+        return FormatUtils::formatInt($value);
+    }
+
+    /**
+     * Formats the given value as percent without the percent sign.
+     */
+    public function formatPercent(float $value): string
+    {
+        return FormatUtils::formatPercent($value, false);
+    }
+
+    /**
+     * Formats the given value as percent with the percent sign.
+     */
+    public function formatPercentSign(float $value): string
+    {
+        return FormatUtils::formatPercent($value, true);
+    }
+
+    /**
+     * Format the time.
+     */
+    public function formatTime(\DateTimeInterface $date): string
+    {
+        return FormatUtils::formatTime($date);
     }
 
     /**
@@ -342,9 +415,9 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
      *
      * @param int        $key    the column index
      * @param DataColumn $column the column
-     * @psalm-suppress UnusedParam
      *
      * @return mixed the key
+     * @psalm-suppress UnusedParam
      */
     protected function getColumnKey(int $key, DataColumn $column)
     {

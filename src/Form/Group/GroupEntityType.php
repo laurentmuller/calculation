@@ -19,7 +19,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Type to display a list of parent categories (group).
+ * Type to display a list of group.
  *
  * @author Laurent Muller
  */

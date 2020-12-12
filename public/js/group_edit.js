@@ -15,4 +15,3 @@
  * Specific Files
  */
 <!--#include file="application/group_edit.js" -->
- 

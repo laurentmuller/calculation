@@ -29,7 +29,7 @@ class CalculationDuplicateDataTable extends CalculationItemsDataTable
     /**
      * {@inheritdoc}
      */
-    public function itemsFormatter(array $items): string
+    public function formatItems(array $items): string
     {
         $result = \array_map(function (array $item) {
             return \sprintf('%s (%d)', $item['description'], $item['count']);

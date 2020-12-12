@@ -699,6 +699,7 @@ parameters:
         5: 5 secondes
     fields:
         default_state: Statut
+        default_category: Catégorie
         edit_action: Action
         date_format: Format des dates
         time_format: Format des heures
@@ -713,16 +714,6 @@ parameters:
         display_captcha: Code de contrôle
         display_tabular: Mode d'affichage
         mintrength: Force minimum
-separator:
-    period: 'Point : [ . ]'
-    comma: 'Virgule : [ , ]'
-    quote: 'Guillemet : [ '' ]'
-    space: Espace [  ]
-date_format:
-    short: 'Court : %date%'
-    medium: 'Moyen : %date%'
-    long: 'Long : %date%'
-    full: 'Complet : %date%'
 clear_cache:
     title: Vider le cache
     message: Êtes-vous sûr de vouloir vider le cache de l'application ?
@@ -1005,30 +996,58 @@ update:
         customer: Remplace le nom et le prénom du contact, le nom de la société et l'e-mail.
         calculation: Remplace le nom du client, la description et le statut.
 digiprint:
-    name: Digiprint
+    name: Affiche
     fields:
         format: Format
         height: Hauteur (mm)
         width: Largeur (mm)
-        items_blacklit: Blacklit
-        items_price: Prix
-        items_replicating: Repiquage
+        price: Prix
+        blacklit: Backlit
+        replicating: Repiquage
+        dimension: Dimensions
+    items:
+        price: Prix de base
+        blacklit: Supplément pour Backlit
+        replicating: Supplément pour repiquage
     add:
-        title: Nouveau Digiprint
-        success: Le Digiprint <b>%name%</b> a été créé avec succès.
+        title: Nouvelle affiche
+        success: L'affiche <b>%name%</b> a été créée avec succès.
     edit:
-        title: Edition d'un Digiprint
-        success: Le Digiprint <b>%name%</b> a été mis à jour avec succès.
+        title: Edition d'une affiche
+        success: L'affiche <b>%name%</b> a été mise à jour avec succès.
+        add_item: Ajouter une ligne
+        delete_item: Supprimer la ligne
+        sort_items: Trier
+        empty_items: Aucune valeur définie
     delete:
-        title: Supprimer un Digiprint
-        message: Êtes-vous sûr de vouloir supprimer le Digiprint <b>%name%</b> ?
-        success: Le Digiprint <b>%name%</b> a été supprimé avec succès.
-        failure: Impossible de supprimer le Digiprint <b>%name%</b>. Il est référencé dans %items%.
+        title: Supprimer une affiche
+        message: Êtes-vous sûr de vouloir supprimer l'affiche <b>%name%</b> ?
+        success: L'affiche <b>%name%</b> a été supprimée avec succès.
+        failure: Impossible de supprimer l'affiche <b>%name%</b>. Elle est référencée dans %items%.
     list:
-        title: Digiprints
-        empty: Aucun Digiprint défini.
-        add_title: Créer un nouveau Digiprint
-        pdf_title: Télécharger la liste des Digiprint
-        excel_title: Exporter la liste des Digiprint
+        title: Affiches
+        empty: Aucune affiche définie.
+        add_title: Créer une nouvelle affiche
+        pdf_title: Télécharger la liste des affiches
+        excel_title: Exporter la liste des affiches
     show:
-        title: Propriétés du Digiprint
+        title: Propriétés de l'affiche
+    compute:
+        title: Calculation d'une affiche
+        success: Le prix de l'affiche a été calculé avec succès.
+        failed: Une erreur est intervenue lors du calcule du prix de l'affiche.
+        button_ok: Calculer
+        fields:
+            digiprint: Format
+            quantity: Quantité
+            price: Prix unitaire
+            total: Total
+            overall_total: Total générale
+        error:
+            quantity: La quantité doit être égale ou supérieure à 1.
+            digiprint: Impossible de trouver une affiche correspondante.            
+digiprintitem:
+    fields:
+        minimum: Minimum
+        maximum: Maximum
+        amount: Prix

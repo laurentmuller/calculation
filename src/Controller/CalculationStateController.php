@@ -129,14 +129,14 @@ class CalculationStateController extends AbstractEntityController
      */
     public function excel(): ExcelResponse
     {
-        /** @var CalculationState[] $states */
-        $states = $this->getEntities('code');
-        if (empty($states)) {
+        /** @var CalculationState[] $entities */
+        $entities = $this->getEntities('code');
+        if (empty($entities)) {
             $message = $this->trans('calculationstate.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new CalculationStateDocument($this, $states);
+        $doc = new CalculationStateDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }
@@ -150,14 +150,14 @@ class CalculationStateController extends AbstractEntityController
      */
     public function pdf(): PdfResponse
     {
-        /** @var CalculationState[] $states */
-        $states = $this->getEntities('code');
-        if (empty($states)) {
+        /** @var CalculationState[] $entities */
+        $entities = $this->getEntities('code');
+        if (empty($entities)) {
             $message = $this->trans('calculationstate.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new CalculationStatesReport($this, $states);
+        $doc = new CalculationStatesReport($this, $entities);
 
         return $this->renderPdfDocument($doc);
     }
@@ -209,8 +209,6 @@ class CalculationStateController extends AbstractEntityController
 
     /**
      * {@inheritdoc}
-     *
-     * @param CalculationState $item
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {

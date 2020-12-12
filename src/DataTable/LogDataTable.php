@@ -74,27 +74,31 @@ class LogDataTable extends AbstractDataTable
     }
 
     /**
-     * Gets the formatted channel.
-     *
-     * @param string $value the source
-     *
-     * @return string the channel
+     * Formats the channel.
      */
-    public function channelFormatter(string $value): string
+    public function formatChannel(string $value): string
     {
         return LogService::getChannel($value, true);
     }
 
     /**
-     * Gets the formatted log date.
-     *
-     * @param \DateTime $value the source
-     *
-     * @return string the formatted date
+     * Formats the date.
      */
-    public function dateFormatter(\DateTime $value): string
+    public function formatCreatedAt(\DateTimeInterface $value): string
     {
         return FormatUtils::formatDateTime($value, null, \IntlDateFormatter::MEDIUM);
+    }
+
+    /**
+     * Formats the log level.
+     *
+     * @param string $value the source
+     *
+     * @return string the level
+     */
+    public function formatLevel(string $value): string
+    {
+        return LogService::getLevel($value, true);
     }
 
     /**
@@ -131,18 +135,6 @@ class LogDataTable extends AbstractDataTable
     public function getService(): LogService
     {
         return $this->service;
-    }
-
-    /**
-     * Gets the log level.
-     *
-     * @param string $value the source
-     *
-     * @return string the level
-     */
-    public function levelFormatter(string $value): string
-    {
-        return LogService::getLevel($value, true);
     }
 
     /**
@@ -235,20 +227,20 @@ class LogDataTable extends AbstractDataTable
         if (Utils::isString($value)) {
             $filter = function (Log $log) use ($value, $skipChannel, $skipLevel) {
                 if (!$skipChannel) {
-                    $channel = $this->channelFormatter($log->getChannel());
+                    $channel = $this->formatChannel($log->getChannel());
                     if (Utils::contains($channel, $value, true)) {
                         return true;
                     }
                 }
 
                 if (!$skipLevel) {
-                    $level = $this->levelFormatter($log->getLevel());
+                    $level = $this->formatLevel($log->getLevel());
                     if (Utils::contains($level, $value, true)) {
                         return true;
                     }
                 }
 
-                $date = $this->dateFormatter($log->getCreatedAt());
+                $date = $this->formatCreatedAt($log->getCreatedAt());
                 if (Utils::contains($date, $value, true)) {
                     return true;
                 }

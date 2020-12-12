@@ -38,7 +38,7 @@ class Property extends AbstractEntity
     /**
      * The property name (unique).
      *
-     * @ORM\Column(name="name", type="string", length=50, unique=true)
+     * @ORM\Column(type="string", length=50, unique=true)
      * @Assert\Length(max=50)
      * @Assert\NotBlank
      *
@@ -49,7 +49,7 @@ class Property extends AbstractEntity
     /**
      * The property value.
      *
-     * @ORM\Column(name="value", type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      * @Assert\NotBlank
      *

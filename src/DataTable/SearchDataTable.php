@@ -19,7 +19,6 @@ use App\Interfaces\EntityVoterInterface;
 use App\Security\EntityVoter;
 use App\Service\SearchService;
 use App\Traits\TranslatorTrait;
-use App\Util\FormatUtils;
 use App\Util\Utils;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
@@ -298,7 +297,7 @@ class SearchDataTable extends AbstractDataTable
             $content = $item[SearchService::COLUMN_CONTENT];
             switch ("{$type}.{$field}") {
                 case 'Calculation.id':
-                    $content = FormatUtils::formatId((int) $content);
+                    $content = $this->formatId((int) $content);
                     break;
                 case 'Calculation.overallTotal':
                 case 'Product.price':

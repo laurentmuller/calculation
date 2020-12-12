@@ -23,7 +23,7 @@
 		"orderable": false,
 		"searchable": false,
 		"class": "text-currency",
-		"formatter": "maginsFormatter"
+		"formatter": "formatCountable"
 	},
 	{
 		"name": "categories",
@@ -32,7 +32,7 @@
 		"searchable": false,
 		"rawData": true,
 		"class": "text-currency",
-		"formatter": "categoriesFormatter"
+		"formatter": "formatCountable"
 	},
 	{
 		"name": "id",
@@ -40,7 +40,7 @@
 		"orderable": false,
 		"searchable": false,
 		"rawData": true,
-		"formatter": "actionsFormatter",
+		"formatter": "FormatActions",
 		"class": "actions rowlink-skip d-print-none"
 	}
 ]

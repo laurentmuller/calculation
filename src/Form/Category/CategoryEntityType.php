@@ -19,7 +19,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Type to display a list of child category entities.
+ * Type to display a list of category entities.
  *
  * @author Laurent Muller
  */

@@ -35,7 +35,7 @@ class CalculationState extends AbstractEntity
     /**
      * The code (unique).
      *
-     * @ORM\Column(name="code", type="string", length=30, unique=true)
+     * @ORM\Column(type="string", length=30, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(max=30)
      *
@@ -46,7 +46,7 @@ class CalculationState extends AbstractEntity
     /**
      * The color used in the user interface (UI).
      *
-     * @ORM\Column(name="color", type="string", length=10, options={"default": "#000000"})
+     * @ORM\Column(type="string", length=10, options={"default": "#000000"})
      * @Assert\NotBlank
      * @Assert\Length(max=10)
      *
@@ -57,7 +57,7 @@ class CalculationState extends AbstractEntity
     /**
      * The description.
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      *
      * @var string
@@ -67,7 +67,7 @@ class CalculationState extends AbstractEntity
     /**
      * The editable state.
      *
-     * @ORM\Column(name="editable", type="boolean", options={"default": true})
+     * @ORM\Column(type="boolean", options={"default": true})
      *
      * @var bool
      */

@@ -35,22 +35,16 @@ class DigiPrintItem extends AbstractEntity
 
     /**
      * The price type.
-     *
-     * @var int
      */
     public const TYPE_PRICE = 0;
 
     /**
      * The replicating type.
-     *
-     * @var int
      */
     public const TYPE_REPLICATING = 2;
 
     /**
      * The allowed types.
-     *
-     * @var int[]
      */
     public const TYPES = [
         self::TYPE_PRICE,
@@ -59,7 +53,9 @@ class DigiPrintItem extends AbstractEntity
     ];
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", scale=2)
+     * @Assert\Type(type="float")
+     * @Assert\GreaterThanOrEqual(0)
      *
      * @var float
      */
@@ -68,11 +64,16 @@ class DigiPrintItem extends AbstractEntity
     /**
      * @ORM\ManyToOne(targetEntity=DigiPrint::class, inversedBy="items")
      * @ORM\JoinColumn(name="digi_print_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     *
+     * @var DigiPrint
      */
     private $digiPrint;
 
     /**
      * @ORM\Column(type="smallint")
+     * @Assert\Type(type="int")
+     * @Assert\GreaterThanOrEqual(0)
+     * @Assert\GreaterThan(propertyPath="minimum", message="digiprint.maximum_geather_minimum")
      *
      * @var int
      */
@@ -80,6 +81,8 @@ class DigiPrintItem extends AbstractEntity
 
     /**
      * @ORM\Column(type="smallint")
+     * @Assert\Type(type="int")
+     * @Assert\GreaterThanOrEqual(0)
      *
      * @var int
      */
@@ -87,7 +90,8 @@ class DigiPrintItem extends AbstractEntity
 
     /**
      * @ORM\Column(type="smallint")
-     * @Assert\Choice(CalculationLine::TYPES, message="The line type is invalid.")
+     * @Assert\Type(type="int")
+     * @Assert\Choice(DigiPrintItem::TYPES, message="digiprint.type")
      *
      * @var int
      */
@@ -117,7 +121,7 @@ class DigiPrintItem extends AbstractEntity
      */
     public function contains(int $quantity): bool
     {
-        return $quantity >= $this->minimum && $quantity < $this->maximum;
+        return $quantity >= $this->minimum && $quantity <= $this->maximum;
     }
 
     public function getAmount(): float
@@ -127,6 +131,10 @@ class DigiPrintItem extends AbstractEntity
 
     /**
      * Gets the total amount for the given quantity.
+     *
+     * @param int $quantity the quantity to get amount for
+     *
+     * @return float the amount
      */
     public function getAmountQuantity(int $quantity): float
     {

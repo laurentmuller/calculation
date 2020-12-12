@@ -4,7 +4,7 @@
 		"title": "calculation.fields.id",
 		"direction": "desc",
 		"class": "text-id",
-		"formatter": "idFormatter",
+		"formatter": "formatId",
 		"callback": "renderStateColor"
 	},
 	{
@@ -13,7 +13,7 @@
 		"default": true,
 		"direction": "desc",
 		"class": "text-date",
-		"formatter": "dateFormatter"
+		"formatter": "formatDate"
 	},
 	{
 		"name": "state.code",
@@ -34,14 +34,14 @@
 		"name": "overallMargin",
 		"title": "calculation.fields.margin",
 		"class": "text-percent",
-		"formatter": "marginFormatter",
+		"formatter": "formatPercentSign",
 		"callback": "renderTooltip"
 	},
 	{
 		"name": "overallTotal",
 		"title": "calculation.fields.total",
 		"class": "text-currency",
-		"formatter": "amountFormatter"
+		"formatter": "formatAmount"
 	},
 	{
 		"name": "state.color",
@@ -63,7 +63,7 @@
 		"orderable": false,
 		"searchable": false,
 		"rawData": true,
-		"formatter": "actionsFormatter",
+		"formatter": "formatActions",
 		"class": "actions rowlink-skip d-print-none"
 	}
 ]

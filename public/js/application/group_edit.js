@@ -1,6 +1,19 @@
 /**! compression tag for ftp-deployment */
 
 /**
+ * Initialize the number input formats.
+ */
+function initInputFormat() {
+    'use strict';
+
+    $("input[name$='[minimum]']").inputNumberFormat();
+    $("input[name$='[maximum]']").inputNumberFormat();
+    $("input[name$='[margin]']").inputNumberFormat({
+        'decimal': 0
+    });
+}
+
+/**
  * Gets the maximum value.
  * 
  * @returns the maximum value.
@@ -23,11 +36,11 @@ function getMaxValue() {
 function getMinMargin() {
     'use strict';
 
-    let min = Number.MAX_VALUE;
+    let minimum = Number.MAX_VALUE;
     $("input[name$='[margin]']").each(function () {
-        min = Math.min(min, $(this).intVal());
+        minimum = Math.min(minimum, $(this).intVal());
     });
-    return min === Number.MAX_VALUE ? 0 : min;
+    return minimum === Number.MAX_VALUE ? 0 : minimum;
 }
 
 /**
@@ -39,33 +52,36 @@ function getMinMargin() {
 function addMargin($table) {
     'use strict';
 
+    // get values before inserting the row
+    const margin = getMinMargin();
+    const minimum = getMaxValue();
+    const maximum = Math.max(minimum * 2, 100);
+
     // get prototype and update index
     const prototype = $table.data('prototype');
     const index = $table.data('index');
     $table.data('index', index + 1);
 
     // replace name
-    const newForm = prototype.replace(/__name__/g, index);
-
-    // get range
-    const margin = getMinMargin();
-    const minimum = getMaxValue();
-    const maximum = Math.max(minimum * 2, 100);
+    const $row = $(prototype.replace(/__name__/g, index));
 
     // add
-    $('#data-table-edit > tbody').append(newForm);
-    $('#data-table-edit').removeClass('d-none');
+    $table.find('tbody').append($row);
+
+    // update UI
+    $table.removeClass('d-none');
     $('#empty_margins').addClass('d-none');
 
-    // set values and add validation
-    $("input[name$='[minimum]']:last").floatVal(minimum).inputNumberFormat().selectFocus();
-    $("input[name$='[maximum]']:last").floatVal(maximum).inputNumberFormat();
-    $("input[name$='[margin]']:last").intVal(margin).inputNumberFormat({
-        'decimal': 0
-    });
+    // add numbers validation
+    initInputFormat();
+
+    // set values
+    $("input[name$='[minimum]']:last").floatVal(minimum).selectFocus();
+    $("input[name$='[maximum]']:last").floatVal(maximum);
+    $("input[name$='[margin]']:last").intVal(margin);
 
     // update sort button
-    if ($('#data-table-edit > tbody > tr').length > 1) {
+    if ($table.find('tbody > tr').length > 1) {
         $('.btn-sort').removeClass('disabled');
     }
 }
@@ -80,9 +96,9 @@ function removeMargin($caller) {
     'use strict';
 
     // remove row
-    const row = $caller.closest('tr');
-    row.fadeOut(200, function () {
-        row.remove();
+    const $row = $caller.closest('tr');
+    $row.fadeOut(200, function () {
+        $row.remove();
         const length = $('#data-table-edit > tbody > tr').length;
         if (length === 0) {
             $('#data-table-edit').addClass('d-none');
@@ -148,11 +164,7 @@ function sortMargins($table) {
     });
 
     // add numbers validation
-    $("input[name$='[minimum]']").inputNumberFormat();
-    $("input[name$='[maximum]']").inputNumberFormat();
-    $("input[name$='[margin]']").inputNumberFormat({
-        'decimal': 0
-    });
+    initInputFormat();
 
     // validation
     $('form').initValidator();

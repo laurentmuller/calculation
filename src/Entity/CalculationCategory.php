@@ -28,7 +28,7 @@ class CalculationCategory extends AbstractEntity
     /**
      * The total amount.
      *
-     * @ORM\Column(name="amount", type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default": 0})
      *
      * @var float
      */
@@ -47,7 +47,7 @@ class CalculationCategory extends AbstractEntity
     /**
      * The code.
      *
-     * @ORM\Column(name="code", type="string", length=30)
+     * @ORM\Column(type="string", length=30)
      * @Assert\NotBlank
      * @Assert\Length(max=30)
      *

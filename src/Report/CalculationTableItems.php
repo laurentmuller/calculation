@@ -49,8 +49,6 @@ class CalculationTableItems extends PdfGroupTableBuilder
      */
     public function output(Calculation $calculation): void
     {
-        // $groups = $calculation->getSortedGroups();
-
         /** @var CalculationGroup[] $groups */
         $groups = $calculation->getGroups();
         $duplicateItems = $calculation->getDuplicateItems();

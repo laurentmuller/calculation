@@ -12,10 +12,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Util\FormatUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Represents a digi print type.
@@ -41,7 +44,9 @@ class DigiPrint extends AbstractEntity
     private $height;
 
     /**
-     * @ORM\OneToMany(targetEntity=DigiPrintItem::class, mappedBy="digiPrint")
+     * @ORM\OneToMany(targetEntity=DigiPrintItem::class, mappedBy="digiPrint", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"minimum": "ASC"})
+     * @Assert\Valid
      *
      * @var Collection|DigiPrintItem[]
      */
@@ -60,6 +65,11 @@ class DigiPrint extends AbstractEntity
         $this->items = new ArrayCollection();
     }
 
+    /**
+     * Add an item.
+     *
+     * @param DigiPrintItem $item the item to add
+     */
     public function addItem(DigiPrintItem $item): self
     {
         if (!$this->items->contains($item)) {
@@ -71,11 +81,65 @@ class DigiPrint extends AbstractEntity
     }
 
     /**
+     * Gets the amount for the given type and quantity.
+     *
+     * @param int $type     one of the item <code>TYPE_*</code> constants
+     * @param int $quantity the quantity to get amount for
+     *
+     * @return float the amount, if item found; 0 otherwise
+     */
+    public function getAmount(int $type, int $quantity): float
+    {
+        $item = $this->getItem($type, $quantity);
+
+        return $item ? $item->getAmountQuantity($quantity) : 0;
+    }
+
+    /**
+     * Gets the blackit amount for the given quantity.
+     *
+     * @param int $quantity the quantity to get amount for
+     *
+     * @return float the amount, if item found; 0 otherwise
+     */
+    public function getAmountBlackit(int $quantity): float
+    {
+        return $this->getAmount(DigiPrintItem::TYPE_BACKLIT, $quantity);
+    }
+
+    /**
+     * Gets the price amount for the given quantity.
+     *
+     * @param int $quantity the quantity to get amount for
+     *
+     * @return float the amount, if item found; 0 otherwise
+     */
+    public function getAmountPrice(int $quantity): float
+    {
+        return $this->getAmount(DigiPrintItem::TYPE_PRICE, $quantity);
+    }
+
+    /**
+     * Gets the replicating amount for the given quantity.
+     *
+     * @param int $quantity the quantity to get amount for
+     *
+     * @return float the amount, if item found; 0 otherwise
+     */
+    public function getAmountReplicating(int $quantity): float
+    {
+        return $this->getAmount(DigiPrintItem::TYPE_REPLICATING, $quantity);
+    }
+
+    /**
      * Gets the formatted width and height.
      */
     public function getDimension(): string
     {
-        return \sprintf('%d x %d mm', $this->width, $this->height);
+        $width = FormatUtils::formatInt($this->width);
+        $height = FormatUtils::formatInt($this->height);
+
+        return \sprintf('%s x %s mm', $width, $height);
     }
 
     /**
@@ -83,7 +147,7 @@ class DigiPrint extends AbstractEntity
      */
     public function getDisplay(): string
     {
-        return \sprintf('%s - %d x %d mm', $this->format, $this->width, $this->height);
+        return \sprintf('%s - %s', $this->format, $this->getDimension());
     }
 
     public function getFormat(): ?string
@@ -97,55 +161,71 @@ class DigiPrint extends AbstractEntity
     }
 
     /**
-     * Gets this item backlits.
+     * Gets the item for the given type and quantity.
      *
-     * @return Collection|DigiPrintItem[]
+     * @param int $type     one of the item <code>TYPE_*</code> constants
+     * @param int $quantity the quantity to get item for
+     *
+     * @return DigiPrintItem the item, if found; null otherwise
      */
-    public function getItemBacklits(): Collection
+    public function getItem(int $type, int $quantity): ?DigiPrintItem
     {
-        return $this->getItemsType(DigiPrintItem::TYPE_BACKLIT);
+        /** @var DigiPrintItem $item */
+        foreach ($this->getItems($type) as $item) {
+            if ($item->contains($quantity)) {
+                return $item;
+            }
+        }
+
+        return null;
     }
 
     /**
-     * Gets this item prices.
+     * Gets items.
+     *
+     * @param int|null $type one of the item <code>TYPE_*</code> constants to return or null to return all items
      *
      * @return Collection|DigiPrintItem[]
      */
-    public function getItemPrices(): Collection
+    public function getItems(int $type = null): Collection
     {
-        return $this->getItemsType(DigiPrintItem::TYPE_PRICE);
-    }
+        if (null !== $type) {
+            return $this->items->filter(function (DigiPrintItem $item) use ($type) {
+                return $item->getType() === $type;
+            });
+        }
 
-    /**
-     * Gets this item replicatings.
-     *
-     * @return Collection|DigiPrintItem[]
-     */
-    public function getItemReplicatings(): Collection
-    {
-        return $this->getItemsType(DigiPrintItem::TYPE_REPLICATING);
-    }
-
-    /**
-     * @return Collection|DigiPrintItem[]
-     */
-    public function getItems(): Collection
-    {
         return $this->items;
     }
 
     /**
-     * Gets this items for the given type.
-     *
-     * @param int $type one of the item <code>TYPE_*</code> constants
+     * Gets this backlit items.
      *
      * @return Collection|DigiPrintItem[]
      */
-    public function getItemsType(int $type): Collection
+    public function getItemsBacklit(): Collection
     {
-        return $this->items->filter(function (DigiPrintItem $item) use ($type) {
-            return $item->getType() === $type;
-        });
+        return $this->getItems(DigiPrintItem::TYPE_BACKLIT);
+    }
+
+    /**
+     * Gets this price items.
+     *
+     * @return Collection|DigiPrintItem[]
+     */
+    public function getItemsPrice(): Collection
+    {
+        return $this->getItems(DigiPrintItem::TYPE_PRICE);
+    }
+
+    /**
+     * Gets this replicating items.
+     *
+     * @return Collection|DigiPrintItem[]
+     */
+    public function getItemsReplicating(): Collection
+    {
+        return $this->getItems(DigiPrintItem::TYPE_REPLICATING);
     }
 
     public function getWidth(): int
@@ -153,6 +233,41 @@ class DigiPrint extends AbstractEntity
         return $this->width;
     }
 
+    /**
+     * Returns if this contains one or more backlits.
+     *
+     * @return bool true if contains backlits
+     */
+    public function hasBacklits(): bool
+    {
+        return !$this->getItemsBacklit()->isEmpty();
+    }
+
+    /**
+     * Returns if this contains one or more prices.
+     *
+     * @return bool true if contains prices
+     */
+    public function hasPrices(): bool
+    {
+        return !$this->getItemsPrice()->isEmpty();
+    }
+
+    /**
+     * Returns if this contains one or more replicatings.
+     *
+     * @return bool true if contains replicatings
+     */
+    public function hasReplicatings(): bool
+    {
+        return !$this->getItemsReplicating()->isEmpty();
+    }
+
+    /**
+     * Remove an item.
+     *
+     * @param DigiPrintItem $item the item to remove
+     */
     public function removeItem(DigiPrintItem $item): self
     {
         if ($this->items->removeElement($item)) {
@@ -183,5 +298,79 @@ class DigiPrint extends AbstractEntity
         $this->width = $width;
 
         return $this;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context): void
+    {
+        $this->validateItems($this->getItemsPrice(), $context);
+        $this->validateItems($this->getItemsBacklit(), $context);
+        $this->validateItems($this->getItemsReplicating(), $context);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getSearchTerms(): array
+    {
+        return [
+            $this->format,
+            FormatUtils::formatInt($this->width),
+            FormatUtils::formatInt($this->height),
+        ];
+    }
+
+    private function validateItems(Collection $items, ExecutionContextInterface $context): void
+    {
+        // items?
+        if ($items->isEmpty()) {
+            return;
+        }
+
+        $lastMin = null;
+        $lastMax = null;
+
+        /** @var DigiPrintItem $item */
+        foreach ($items as $key => $item) {
+            // get values
+            $min = $item->getMinimum();
+            $max = $item->getMaximum();
+
+            if (null === $lastMin) {
+                // first time
+                $lastMin = $min;
+                $lastMax = $max;
+            } elseif ($min <= $lastMin) {
+                // the minimum is smaller than the previous maximum
+                $context->buildViolation('digiprint.minimum_overlap')
+                    ->atPath("items[$key].minimum")
+                    ->addViolation();
+                break;
+            } elseif ($min >= $lastMin && $min < $lastMax) {
+                // the minimum is overlapping the previous margin
+                $context->buildViolation('digiprint.minimum_overlap')
+                    ->atPath("items[$key].minimum")
+                    ->addViolation();
+                break;
+            } elseif ($max > $lastMin && $max < $lastMax) {
+                // the maximum is overlapping the previous margin
+                $context->buildViolation('digiprint.maximum_overlap')
+                    ->atPath("items[$key].maximum")
+                    ->addViolation();
+                break;
+            } elseif ($min !== $lastMax) {
+                // the minimum is not equal to the previous maximum
+                $context->buildViolation('digiprint.minimum_discontinued')
+                    ->atPath("items[$key].minimum")
+                    ->addViolation();
+                break;
+            } else {
+                // copy
+                $lastMin = $min;
+                $lastMax = $max;
+            }
+        }
     }
 }

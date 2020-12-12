@@ -28,7 +28,7 @@ class CalculationGroup extends AbstractEntity
     /**
      * The total amount.
      *
-     * @ORM\Column(name="amount", type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default": 0})
      *
      * @var float
      */
@@ -58,7 +58,7 @@ class CalculationGroup extends AbstractEntity
     /**
      * The code.
      *
-     * @ORM\Column(name="code", type="string", length=30)
+     * @ORM\Column(type="string", length=30)
      * @Assert\NotBlank
      * @Assert\Length(max=30)
      *
@@ -79,7 +79,7 @@ class CalculationGroup extends AbstractEntity
     /**
      * The margin in percent (%).
      *
-     * @ORM\Column(name="margin", type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default": 0})
      *
      * @var float
      */

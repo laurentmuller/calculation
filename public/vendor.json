@@ -93,7 +93,7 @@
 		},
 		{
 			"name": "conditionalPaging",
-			"version": "1.10.21",
+			"version": "1.10.22",
 			"source": "https://cdn.datatables.net/plug-ins/",
 			"format": "{source}{version}/features/{name}/{file}",
 			"target": "datatables/js",
@@ -114,7 +114,7 @@
 		{	
 			"example": "//cdn.datatables.net/plug-ins/1.10.21/features/mark.js/datatables.mark.js",
 			"name": "mark.js",
-			"version": "1.10.21",
+			"version": "1.10.22",
 			"source": "https://cdn.datatables.net/plug-ins/",
 			"format": "{source}{version}/features/{name}/{file}",
 			"target": "datatables/js",

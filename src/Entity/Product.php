@@ -40,7 +40,7 @@ class Product extends AbstractEntity
     /**
      * The description.
      *
-     * @ORM\Column(name="description", type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      *
@@ -51,7 +51,7 @@ class Product extends AbstractEntity
     /**
      * The price.
      *
-     * @ORM\Column(name="price", type="float", precision=2, options={"default": 0})
+     * @ORM\Column(type="float", precision=2, options={"default": 0})
      *
      * @var float
      */
@@ -60,7 +60,7 @@ class Product extends AbstractEntity
     /**
      * The supplier.
      *
-     * @ORM\Column(name="supplier", type="string", length=255, nullable=true)
+     * @ORM\Column(length=255, nullable=true)
      * @Assert\Length(max=255)
      *
      * @var string
@@ -70,7 +70,7 @@ class Product extends AbstractEntity
     /**
      * The unit.
      *
-     * @ORM\Column(name="unit", type="string", length=15, nullable=true)
+     * @ORM\Column(type="string", length=15, nullable=true)
      * @Assert\Length(max=15)
      *
      * @var string

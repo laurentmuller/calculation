@@ -15,7 +15,6 @@ namespace App\DataTable;
 use App\DataTable\Model\AbstractDataTable;
 use App\DataTable\Model\DataColumnFactory;
 use App\Repository\CalculationRepository;
-use App\Util\FormatUtils;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
 use DataTables\DataTablesInterface;
@@ -69,41 +68,9 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
      *
      * @param int $id the entity identifier
      */
-    public function actionsFormatter(int $id): string
+    public function formatActions(int $id): string
     {
         return $this->environment->render('macros/_datatables_actions.html.twig', ['id' => $id]);
-    }
-
-    /**
-     * Format the date.
-     *
-     * @param \DateTimeInterface $date the date to format
-     *
-     * @return string the formatted date
-     */
-    public function dateFormatter(\DateTimeInterface $date): string
-    {
-        return FormatUtils::formatDate($date);
-    }
-
-    /**
-     * Gets the number of empty items.
-     */
-    public function getItemCounts(): int
-    {
-        return $this->itemsCount;
-    }
-
-    /**
-     * Format the identifier.
-     *
-     * @param int $id the identifier to format
-     *
-     * @return string the formatted identifier
-     */
-    public function idFormatter(int $id): string
-    {
-        return FormatUtils::formatId($id);
     }
 
     /**
@@ -113,7 +80,15 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
      *
      * @return string the formatted items
      */
-    abstract public function itemsFormatter(array $items): string;
+    abstract public function formatItems(array $items): string;
+
+    /**
+     * Gets the number of empty items.
+     */
+    public function getItemCounts(): int
+    {
+        return $this->itemsCount;
+    }
 
     /**
      * {@inheritdoc}

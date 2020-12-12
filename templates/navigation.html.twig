@@ -18,6 +18,7 @@
 {%- set is_granted_calculation       = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
 {%- set is_granted_product           = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_PRODUCT) -%}
 {%- set is_granted_category          = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CATEGORY) -%}
+{%- set is_granted_group             = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_GROUP) -%}
 {%- set is_granted_calculation_state = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
 {%- set is_granted_global_margin     = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_granted_customer          = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev -%}
@@ -36,7 +37,7 @@
                 {%- set href = is_tabular ? path('calculation_table') : path('calculation_list')  -%}
                 {{- icons.navItem(href, 'calculation.list.title', 'calculator') -}}
                 {%- endif -%}
-            {%- if is_granted_product or is_granted_category or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
+            {%- if is_granted_product or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dataDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{- icons.icon('database', 'index.menu_data') -}}
@@ -47,10 +48,12 @@
                     {{- icons.dropdownItem(href, 'product.list.title', 'file-alt far') -}}
                 {%- endif -%}
                 {%- if is_granted_category -%}
-                    {%- set href = is_tabular ? path('group_table') : path('group_list')  -%}
-                    {{- icons.dropdownItem(href, 'group.list.title', 'code-branch') -}}                    
                     {%- set href = is_tabular ? path('category_table') : path('category_list')  -%}
                     {{- icons.dropdownItem(href, 'category.list.title', 'folder far') -}}
+                {%- endif -%}
+                {%- if is_granted_group -%}
+                    {%- set href = is_tabular ? path('group_table') : path('group_list')  -%}
+                    {{- icons.dropdownItem(href, 'group.list.title', 'code-branch') -}}                    
                 {%- endif -%}
                 {%- if is_granted_calculation_state -%}
                     {%- set href = is_tabular ? path('calculationstate_table') : path('calculationstate_list')  -%}
@@ -59,6 +62,11 @@
                 {%- if is_granted_global_margin -%}
                     {%- set href = is_tabular ? path('globalmargin_table') : path('globalmargin_list')  -%}
                     {{- icons.dropdownItem(href, 'globalmargin.list.title', 'percent') -}}
+                {%- endif -%}
+                {%- if is_dev %}
+                    {%- set href = path('digiprint_table')  -%}
+                    {{- icons.dropdownSeparator -}}
+                    {{- icons.dropdownItem(href, 'digiprint.list.title', 'outdent') -}}
                 {%- endif -%}
                 {%- if is_granted_customer %}
                     {%- set href = is_tabular ? path('customer_table') : path('customer_list')  -%}
@@ -85,6 +93,8 @@
                     {{- icons.dropdownItem(href, 'duplicate.title', 'copy far') -}}
                     {%- set href = is_tabular ? path('empty_table') : path('empty_card')  -%}
                     {{- icons.dropdownItem(href, 'empty.title', 'file-code far') -}}
+                    {{- icons.dropdownSeparator -}}
+                    {{- icons.dropdownItem(path('digiprint_compute', {'caller': path('homepage')}), 'digiprint.compute.title', 'keyboard') -}}
                     {% endif -%}
                 </div>
     		</li>
@@ -155,7 +165,7 @@
                     {{- icons.dropdownItem(path('app_logout'), 'index.logout', 'sign-out-alt') -}}
                     {{- icons.dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'pencil-alt') -}}
                     {{- icons.dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock-alt') -}}
-                    {% if is_dev %}
+                    {% if is_bibi %}
                     {{- icons.dropdownItem(path('user_theme'), 'index.menu_theme', 'file-image far', null, {'%name%': theme_name(app.request)}) -}}
                     {% endif %}
                     {% if is_admin %}

@@ -1,0 +1,33 @@
+{% extends 'cards/card_table.html.twig' %}
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title       = 'digiprint.list.title' -%}
+{%- set title_icon  = 'outdent' -%}
+{%- set pdf_title   = 'digiprint.list.pdf_title' -%}
+{%- set excel_title = 'digiprint.list.excel_title' -%}
+{%- set object_type = EntityVoterInterface.ENTITY_DIGI_PRINT -%}
+
+{# actions #}
+{%- set params      = {'id': 0} -%}
+{%- set add_path    = path('digiprint_add') -%}
+{%- set show_path   = path('digiprint_show', params) -%}
+{%- set edit_path   = path('digiprint_edit', params) -%}
+{%- set delete_path = path('digiprint_delete', params) -%}
+{%- set pdf_path    = path('digiprint_pdf') -%}
+{%- set excel_path  = path('digiprint_excel') -%}
+
+{# titles #}
+{%- set add_title    = 'digiprint.add.title' %}
+{%- set show_title   = 'digiprint.show.title' %}
+{%- set edit_title   = 'digiprint.edit.title' %}
+{%- set delete_title = 'digiprint.delete.title' %}
+
+{% block table_actions -%}
+{{ parent() }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItem(path('digiprint_compute'), 'digiprint.compute.title', 'keyboard') }}
+{{ icons.dropdownSeparator() }}
+{{ icons.dropdownItemCard('digiprint_list') }}
+{%- endblock %}

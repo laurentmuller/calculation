@@ -17,7 +17,6 @@ use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
-use App\Util\FormatUtils;
 use DataTables\DataTablesInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
@@ -45,18 +44,6 @@ class ProductDataTable extends AbstractEntityDataTable
     public function __construct(SessionInterface $session, DataTablesInterface $datatables, ProductRepository $repository, Environment $environment)
     {
         parent::__construct($session, $datatables, $repository, $environment);
-    }
-
-    /**
-     * Format the amount.
-     *
-     * @param float $value the amount to format
-     *
-     * @return string the formatted amount
-     */
-    public function amountFormatter(float $value): string
-    {
-        return FormatUtils::formatAmount($value);
     }
 
     /**

@@ -57,10 +57,13 @@
     {{ _self.collapseLine('default') }}
     <div class="toggle-icon collapse" id="default" data-parent="#parent_accordion">
         <div class="form-row ml-0 mt-1">
-            <div class="col-md-7">
+            <div class="col-md-4">
                 {{ form_row(form.default_state) }}
             </div>
-             <div class="col-md-5">
+             <div class="col-md-4">
+                {{ form_row(form.default_category) }}
+            </div>
+            <div class="col-md-4">
                 {{ form_row(form.minimum_margin) }}
             </div>
         </div>

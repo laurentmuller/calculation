@@ -133,14 +133,14 @@ class CategoryController extends AbstractEntityController
      */
     public function excel(): ExcelResponse
     {
-        /** @var Category[] $categories */
-        $categories = $this->getEntities('code');
-        if (empty($categories)) {
+        /** @var Category[] $entities */
+        $entities = $this->getEntities('code');
+        if (empty($entities)) {
             $message = $this->trans('category.list.empty');
             throw new NotFoundHttpException($message);
         }
 
-        $doc = new CategoryDocument($this, $categories);
+        $doc = new CategoryDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }
@@ -154,14 +154,14 @@ class CategoryController extends AbstractEntityController
      */
     public function pdf(): PdfResponse
     {
-        /** @var Category[] $categories */
-        $categories = $this->getEntities('code');
-        if (empty($categories)) {
+        /** @var Category[] $entities */
+        $entities = $this->getEntities('code');
+        if (empty($entities)) {
             $message = $this->trans('category.list.empty');
             throw new NotFoundHttpException($message);
         }
 
-        $doc = new CategoriesReport($this, $categories);
+        $doc = new CategoriesReport($this, $entities);
 
         return $this->renderPdfDocument($doc);
     }
@@ -197,8 +197,6 @@ class CategoryController extends AbstractEntityController
 
     /**
      * {@inheritdoc}
-     *
-     * @param \App\Entity\Category $item
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {

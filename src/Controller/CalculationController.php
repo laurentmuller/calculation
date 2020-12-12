@@ -167,14 +167,14 @@ class CalculationController extends AbstractEntityController
      */
     public function excel(): ExcelResponse
     {
-        /** @var Calculation[] $calculations */
-        $calculations = $this->getEntities('id');
-        if (empty($calculations)) {
+        /** @var Calculation[] $entities */
+        $entities = $this->getEntities('id');
+        if (empty($entities)) {
             $message = $this->trans('calculation.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new CalculationDocument($this, $calculations);
+        $doc = new CalculationDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }
@@ -188,15 +188,15 @@ class CalculationController extends AbstractEntityController
      */
     public function pdf(Request $request): PdfResponse
     {
-        /** @var Calculation[] $calculations */
-        $calculations = $this->getEntities('id');
-        if (empty($calculations)) {
+        /** @var Calculation[] $entities */
+        $entities = $this->getEntities('id');
+        if (empty($entities)) {
             $message = $this->trans('calculation.list.empty');
             throw $this->createNotFoundException($message);
         }
 
         $grouped = (bool) $request->get('grouped', true);
-        $doc = new CalculationsReport($this, $calculations, $grouped);
+        $doc = new CalculationsReport($this, $entities, $grouped);
 
         return $this->renderPdfDocument($doc);
     }
@@ -295,7 +295,7 @@ class CalculationController extends AbstractEntityController
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
-        // update parameters
+        /* @var Calculation $item */
         $parameters['success'] = $item->isNew() ? 'calculation.add.success' : 'calculation.edit.success';
         $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
         $parameters['min_margin'] = $this->getApplication()->getMinMargin();

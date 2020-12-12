@@ -58,6 +58,9 @@ class ApplicationServiceTest extends KernelTestCase implements ApplicationServic
         $this->assertNull($service->getDefaultState());
         $this->assertEquals(0, $service->getDefaultStateId());
 
+        $this->assertNull($service->getDefaultCategory());
+        $this->assertEquals(0, $service->getDefaultCategoryId());
+
         $this->assertEquals(3.0, $service->getMinMargin());
         $this->assertEquals(-1, $service->getMinStrength());
         $this->assertEquals(4000, $service->getMessageTimeout());

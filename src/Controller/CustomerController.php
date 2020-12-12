@@ -116,14 +116,14 @@ class CustomerController extends AbstractEntityController
      */
     public function excel(CustomerRepository $repository): ExcelResponse
     {
-        /** @var Customer[] $customers */
-        $customers = $repository->findAllByNameAndCompany();
-        if (empty($customers)) {
+        /** @var Customer[] $entities */
+        $entities = $repository->findAllByNameAndCompany();
+        if (empty($entities)) {
             $message = $this->trans('customer.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new CustomerDocument($this, $customers);
+        $doc = new CustomerDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }
@@ -137,15 +137,15 @@ class CustomerController extends AbstractEntityController
      */
     public function pdf(Request $request, CustomerRepository $repository): PdfResponse
     {
-        /** @var Customer[] $customers */
-        $customers = $repository->findAllByNameAndCompany();
-        if (empty($customers)) {
+        /** @var Customer[] $entities */
+        $entities = $repository->findAllByNameAndCompany();
+        if (empty($entities)) {
             $message = $this->trans('customer.list.empty');
             throw $this->createNotFoundException($message);
         }
 
         $grouped = (bool) $request->get('grouped', true);
-        $report = new CustomersReport($this, $customers, $grouped);
+        $report = new CustomersReport($this, $entities, $grouped);
 
         return $this->renderPdfDocument($report);
     }
@@ -172,8 +172,6 @@ class CustomerController extends AbstractEntityController
 
     /**
      * {@inheritdoc}
-     *
-     * @param Customer $item
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {

@@ -12,20 +12,20 @@
 		"default": true,
 		"direction": "desc",
 		"class": "pl-3 date",
-		"formatter": "dateFormatter",
+		"formatter": "formatCreatedAt",
 		"callback": "renderLog"
 	},
 	{
 		"name": "channel",
 		"title": "log.fields.channel",
 		"class": "channel",
-		"formatter": "channelFormatter"
+		"formatter": "formatChannel"
 	},
 	{
 		"name": "level",
 		"title": "log.fields.level",
 		"class": "level",
-		"formatter": "levelFormatter"
+		"formatter": "formatLevel"
 	},
 	{
 		"name": "message",

@@ -33,7 +33,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The customer name.
      *
-     * @ORM\Column(name="customer", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      *
@@ -44,7 +44,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The calculation date.
      *
-     * @ORM\Column(name="date", type="date")
+     * @ORM\Column(type="date")
      * @Assert\NotNull
      *
      * @var \DateTime
@@ -54,7 +54,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The description.
      *
-     * @ORM\Column(name="description", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      *

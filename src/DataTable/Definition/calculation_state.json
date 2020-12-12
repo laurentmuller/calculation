@@ -23,7 +23,7 @@
 		"title": "calculationstate.fields.editable",
 		"searchable": false,
 		"class": "text-state",
-		"formatter": "editableFormatter"
+		"formatter": "formatEditable"
 	},
 	{
 		"name": "calculations",
@@ -32,7 +32,7 @@
 		"searchable": false,
 		"rawData": true,
 		"class": "text-currency rowlink-skip",
-		"formatter": "calculationsFormatter"
+		"formatter": "formatCalculations"
 	},
 	{
 		"name": "color",
@@ -47,7 +47,7 @@
 		"orderable": false,
 		"searchable": false,
 		"rawData": true,
-		"formatter": "actionsFormatter",
+		"formatter": "formatActions",
 		"class": "actions rowlink-skip d-print-none"
 	}
 ]

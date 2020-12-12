@@ -1,0 +1,60 @@
+[
+	{
+		"name": "id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false,
+		"class": "d-none"
+	},
+	{
+		"name": "format",
+		"title": "digiprint.fields.format",
+		"default": true,
+		"class": "cell"
+	},
+	{
+		"name": "width",
+		"title": "digiprint.fields.width",
+		"class": "text-currency",
+		"formatter": "formatInt"
+	},
+	{
+		"name": "height",
+		"title": "digiprint.fields.height",
+		"class": "text-currency",
+		"formatter": "formatInt"
+	},
+	{
+		"name": "itemsPrice",
+		"title": "digiprint.fields.price",
+		"orderable": false,
+		"searchable": false,
+		"class": "text-currency",
+		"formatter": "formatCountable"
+	},
+	{
+		"name": "itemsBacklit",
+		"title": "digiprint.fields.blacklit",
+		"orderable": false,
+		"searchable": false,
+		"class": "text-currency",
+		"formatter": "formatCountable"
+	},
+	{
+		"name": "itemsReplicating",
+		"title": "digiprint.fields.replicating",
+		"orderable": false,
+		"searchable": false,
+		"class": "text-currency",
+		"formatter": "formatCountable"
+	},
+	{
+		"name": "id",
+		"title": "common.empty",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"formatter": "formatActions",
+		"class": "actions rowlink-skip d-print-none"
+	}
+]

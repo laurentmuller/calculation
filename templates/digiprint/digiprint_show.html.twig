@@ -1,0 +1,58 @@
+{% extends 'cards/card_show.html.twig' %}
+
+{# imports #}
+{% import 'macros/_properties.html.twig' as properties %}
+
+{# macro #}
+{% macro outputItems(title, items) %}
+<table class="table table-sm table-list">
+    <thead>
+        <tr>
+            <th>{{ title|trans }}</th>
+            <th class="text-currency">{{ 'digiprintitem.fields.minimum'|trans }}</th>
+            <th class="text-currency">{{ 'digiprintitem.fields.maximum'|trans }}</th>
+            <th class="text-currency">{{ 'digiprintitem.fields.amount'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in items -%}
+        <tr>
+            <td>&nbsp;</td>
+            <td class=" text-currency">{{ item.minimum|integer }}</td>
+            <td class=" text-currency">{{ item.maximum|integer }}</td>
+            <td class=" text-currency">{{ item.amount|amount }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+ </table>
+{% endmacro %}
+
+{# parameters #}
+{%- set id     = item.id -%}
+{%- set title  = 'digiprint.show.title' -%}
+{%- set params = route_params(app.request, id) %}
+
+{# actions #}
+{%- set edit_path   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, item) ? path('digiprint_edit', params) : null -%}
+{%- set delete_path = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, item) ? path('digiprint_delete', params) : null -%}
+{%- set cancel_path = cancel_url(app.request, id, 'digiprint_list') -%}
+
+{# properties #}
+{% block property_body %}
+{{ properties.property('digiprint.fields.format', item.format) }}
+{{ properties.property('digiprint.fields.height', item.height) }}
+{{ properties.property('digiprint.fields.width', item.width) }}
+{% endblock %}
+
+{% block card_body %}
+{{ parent() }}
+{%- if item.hasPrices -%}
+    {{ _self.outputItems('digiprint.items.price', item.itemsPrice) }}
+{%- endif -%}
+{%- if item.hasBacklits -%}
+    {{ _self.outputItems('digiprint.items.blacklit', item.itemsBacklit) }}
+{%- endif -%}
+{%- if item.hasReplicatings -%}
+    {{ _self.outputItems('digiprint.items.replicating', item.itemsReplicating) }}
+{%- endif -%}
+{% endblock %}

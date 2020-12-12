@@ -15,10 +15,12 @@ namespace App\Controller;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CustomerRepository;
+use App\Repository\DigiPrintRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
 use App\Service\CalculationService;
 use App\Service\CaptchaImageService;
+use App\Service\DigiPrintService;
 use App\Service\FakerService;
 use App\Service\SwissPostService;
 use App\Traits\MathTrait;
@@ -335,6 +337,51 @@ class AjaxController extends AbstractController
         }
 
         return $this->json($response);
+    }
+
+    /**
+     * Compute a Digiprint.
+     *
+     * @Route("/digiprint", name="ajax_digiprint", methods={"GET", "POST"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function computeDigiprint(Request $request, DigiPrintService $service, DigiPrintRepository $repository): JsonResponse
+    {
+        // get values
+        $id = (int) $request->get('id', 0);
+        $quantity = (int) $request->get('quantity', 0);
+        $price = \filter_var($request->get('price', false), FILTER_VALIDATE_BOOLEAN);
+        $blacklit = \filter_var($request->get('blacklit', false), FILTER_VALIDATE_BOOLEAN);
+        $replicating = \filter_var($request->get('replicating', false), FILTER_VALIDATE_BOOLEAN);
+
+        // validate
+        if ($quantity <= 0) {
+            return $this->jsonFalse([
+                'message' => $this->trans('digiprint.compute.error.quantity'),
+            ]);
+        }
+
+        /** @var ?\App\Entity\DigiPrint $digiPrint */
+        $digiPrint = $repository->find($id);
+        if (null === $digiPrint) {
+            return $this->jsonFalse([
+                'message' => $this->trans('digiprint.compute.error.digiprint'),
+            ]);
+        }
+
+        // update service and compute
+        $service->setDigiPrint($digiPrint)
+            ->setQuantity($quantity)
+            ->setPrice($price)
+            ->setBlacklit($blacklit)
+            ->setReplicating($replicating)
+            ->compute();
+
+        $data = \array_merge($service->jsonSerialize(), [
+            'message' => $this->trans('digiprint.compute.success'),
+        ]);
+
+        return $this->jsonTrue($data);
     }
 
     /**

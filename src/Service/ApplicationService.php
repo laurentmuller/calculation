@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
+use App\Entity\Category;
 use App\Entity\Property;
 use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
@@ -140,6 +141,33 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     }
 
     /**
+     * Gets the default category.
+     *
+     * @return Category|null the category, if any; null otherwise
+     */
+    public function getDefaultCategory(): ?Category
+    {
+        $id = $this->getDefaultCategoryId();
+        if (!empty($id)) {
+            $repository = $this->manager->getRepository(Category::class);
+
+            return $repository->find($id);
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets the default category identifier.
+     *
+     * @return int the category identifer, if any; 0 otherwise
+     */
+    public function getDefaultCategoryId(): int
+    {
+        return $this->getPropertyInteger(self::P_DEFAULT_CATEGORY);
+    }
+
+    /**
      * Gets the default calculation state.
      *
      * @return CalculationState|null the calculation state, if any; null otherwise
@@ -167,14 +195,15 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     }
 
     /**
-     * Gets the action to use whithin the entities.
+     * Gets the action to trigger within the entities.
      * <p>
      * Possible values are:
      * <ul>
      * <li>'<code>edit</code>': The entity is edited.</li>
      * <li>'<code>show</code>': The entity is show.</li>
-     * <li>'<code>none</code>': Do nothing with the entity.</li>
-     * </ul>.
+     * <li>'<code>none</code>': No action is triggered.</li>
+     * </ul>
+     * </p>.
      */
     public function getEditAction(): string
     {
@@ -255,6 +284,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
 
             self::P_EDIT_ACTION => $this->getEditAction(),
             self::P_DEFAULT_STATE => $this->getDefaultState(),
+            self::P_DEFAULT_CATEGORY => $this->getDefaultCategory(),
 
             self::P_MESSAGE_POSITION => $this->getMessagePosition(),
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),

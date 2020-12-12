@@ -17,7 +17,7 @@ use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 
 /**
- * Root category (group) edit type.
+ * Group edit type.
  *
  * @author Laurent Muller
  */

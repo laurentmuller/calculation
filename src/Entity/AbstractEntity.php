@@ -31,7 +31,7 @@ abstract class AbstractEntity
      * The primary key identifier.
      *
      * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @var int|null

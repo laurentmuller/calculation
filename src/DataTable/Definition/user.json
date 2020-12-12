@@ -13,7 +13,7 @@
 		"searchable": false,
 		"rawData": true,
 		"class": "text-image",
-		"formatter": "imageFormatter"
+		"formatter": "formatImage"
 	},
 	{
 		"name": "username",
@@ -25,7 +25,7 @@
 		"name": "role",
 		"title": "user.fields.role",
 		"class": "w-25 cell",
-		"formatter": "roleFormatter"
+		"formatter": "formatRole"
 	},
 	{
 		"name": "email",
@@ -36,13 +36,13 @@
 		"name": "enabled",
 		"title": "user.fields.enabled",
 		"class": "w-15 cell",
-		"formatter": "enabledFormatter"
+		"formatter": "formatEnabled"
 	},
 	{
 		"name": "lastLogin",
 		"title": "user.fields.lastLogin",
 		"class": "text-date-time",
-		"formatter": "lastLoginFormatter"
+		"formatter": "formatLastLogin"
 	},
 	{
 		"name": "id",
@@ -50,7 +50,7 @@
 		"orderable": false,
 		"searchable": false,
 		"rawData": true,
-		"formatter": "actionsFormatter",
+		"formatter": "formatActions",
 		"class": "actions rowlink-skip d-print-none"
 	}
 ]

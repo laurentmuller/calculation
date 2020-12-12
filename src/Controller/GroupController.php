@@ -188,8 +188,6 @@ class GroupController extends AbstractEntityController
 
     /**
      * {@inheritdoc}
-     *
-     * @param \App\Entity\Group $item
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {

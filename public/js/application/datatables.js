@@ -423,33 +423,36 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
 
     // update row link if applicable
     if ($table.attr('row-link').toBool()) {
-        // path
+        // get path
         let path = $('.btn-table-show').data('path');
         if ($table.attr('edit-action').toBool()) {
-            path = $('.btn-table-edit').data('path');
+            path = $('.btn-table-edit').data('path') || path;
         }
-        table.on('draw', function () {
-            // run over rows
-            table.rows().every(function() {
-                // create href attribute
-                const $row =  $(this.node());
-                const $cell = $row.find('td:first-child');
-                const text = $cell.text().trim();
-                const $image = $cell.find('img');
-                const params = table.getParameters(this.id());
-                const href = path.replace('0', this.id()) + '?' + $.param(params);
-
-                // create link and replace content
-                const $a = $('<a/>', {
-                    'href': href,
-                    'text': text
+        if (path) {
+            table.on('draw', function () {
+                // run over rows
+                table.rows().every(function() {
+                    // create href attribute
+                    const id = this.id();
+                    const $row =  $(this.node());
+                    const $cell = $row.find('td:first-child');
+                    const text = $cell.text().trim();
+                    const $image = $cell.find('img');
+                    const params = table.getParameters(id);
+                    const href = path.replace('0', id) + '?' + $.param(params);
+    
+                    // create link and replace content
+                    const $a = $('<a/>', {
+                        'href': href,
+                        'text': text
+                    });
+                    if ($image.length) {
+                        $image.prependTo($a);
+                    }
+                    $cell.html($a);
                 });
-                if ($image.length) {
-                    $image.prependTo($a);
-                }
-                $cell.html($a);
             });
-        });
+        }
     }
 
 }(jQuery));

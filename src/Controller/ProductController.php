@@ -129,14 +129,14 @@ class ProductController extends AbstractEntityController
      */
     public function excel(ProductRepository $repository): ExcelResponse
     {
-        /** @var Product[] $products */
-        $products = $repository->findAllByGroup();
-        if (empty($products)) {
+        /** @var Product[] $entities */
+        $entities = $repository->findAllByGroup();
+        if (empty($entities)) {
             $message = $this->trans('product.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new ProductDocument($this, $products);
+        $doc = new ProductDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }
@@ -150,14 +150,14 @@ class ProductController extends AbstractEntityController
      */
     public function pdf(ProductRepository $repository): PdfResponse
     {
-        /** @var Product[] $products */
-        $products = $repository->findAllByGroup();
-        if (empty($products)) {
+        /** @var Product[] $entities */
+        $entities = $repository->findAllByGroup();
+        if (empty($entities)) {
             $message = $this->trans('product.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new ProductsReport($this, $products);
+        $doc = new ProductsReport($this, $entities);
 
         return $this->renderPdfDocument($doc);
     }
@@ -194,8 +194,6 @@ class ProductController extends AbstractEntityController
 
     /**
      * {@inheritdoc}
-     *
-     * @param Product $item
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {

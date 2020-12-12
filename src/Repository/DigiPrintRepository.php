@@ -14,10 +14,11 @@ namespace App\Repository;
 
 use App\Entity\DigiPrint;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * Repository for digi print entity.
+ * Repository for DigiPrint entity.
  *
  * @author Laurent Muller
  *
@@ -36,12 +37,25 @@ class DigiPrintRepository extends AbstractRepository
     }
 
     /**
-     * Gets all digi print order by format.
+     * Gets all DigiPrint sorted by format.
      *
      * @return DigiPrint[]
      */
     public function findAllByFormat(): array
     {
         return $this->findBy([], ['format' => Criteria::ASC]);
+    }
+
+    /**
+     * Gets the query builder for the list of DigiPrint sorted by format.
+     *
+     * @param string $alias the default entity alias
+     */
+    public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        $field = $this->getSortFields('format', $alias);
+
+        return $this->createQueryBuilder($alias)
+            ->orderBy($field, Criteria::ASC);
     }
 }

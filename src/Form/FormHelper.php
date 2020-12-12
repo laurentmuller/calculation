@@ -193,14 +193,16 @@ class FormHelper
     /**
      * Add a collection type to the builder with the given entry type and reset all values to default.
      *
-     * @param string $entryType the entry type class
+     * @param string $entryType    the entry type class
+     * @param bool   $allow_add    true to allow user to add a new entry
+     * @param bool   $allow_delete true to allow user to delete an entry
      */
-    public function addCollectionType(string $entryType): self
+    public function addCollectionType(string $entryType, bool $allow_add = true, bool $allow_delete = true): self
     {
         return $this->updateOption('entry_type', $entryType)
             ->updateOption('by_reference', false)
-            ->updateOption('allow_delete', true)
-            ->updateOption('allow_add', true)
+            ->updateOption('allow_add', $allow_add)
+            ->updateOption('allow_delete', $allow_delete)
             ->updateOption('label', false)
             ->updateOption('entry_options', ['label' => false])
             ->add(CollectionType::class);

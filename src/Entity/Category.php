@@ -30,7 +30,7 @@ class Category extends AbstractEntity
     /**
      * The unique code.
      *
-     * @ORM\Column(name="code", type="string", length=30, unique=true)
+     * @ORM\Column(type="string", length=30, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(max=30)
      *
@@ -41,7 +41,7 @@ class Category extends AbstractEntity
     /**
      * The description.
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      *
      * @var string

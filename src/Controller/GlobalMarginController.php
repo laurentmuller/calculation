@@ -107,14 +107,14 @@ class GlobalMarginController extends AbstractEntityController
      */
     public function excel(): ExcelResponse
     {
-        /** @var GlobalMargin[] $margins */
-        $margins = $this->getEntities('minimum');
-        if (empty($margins)) {
+        /** @var GlobalMargin[] $entities */
+        $entities = $this->getEntities('minimum');
+        if (empty($entities)) {
             $message = $this->trans('globalmargin.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new GlobalMarginDocument($this, $margins);
+        $doc = new GlobalMarginDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }
@@ -128,14 +128,14 @@ class GlobalMarginController extends AbstractEntityController
      */
     public function pdf(): PdfResponse
     {
-        /** @var GlobalMargin[] $margins */
-        $margins = $this->getEntities('minimum');
-        if (empty($margins)) {
+        /** @var GlobalMargin[] $entities */
+        $entities = $this->getEntities('minimum');
+        if (empty($entities)) {
             $message = $this->trans('globalmargin.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $report = new GlobalMarginsReport($this, $margins);
+        $report = new GlobalMarginsReport($this, $entities);
 
         return $this->renderPdfDocument($report);
     }
@@ -162,8 +162,6 @@ class GlobalMarginController extends AbstractEntityController
 
     /**
      * {@inheritdoc}
-     *
-     * @param GlobalMargin $item
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {

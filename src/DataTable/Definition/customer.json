@@ -37,7 +37,7 @@
 		"orderable": false,
 		"searchable": false,
 		"rawData": true,
-		"formatter": "actionsFormatter",
+		"formatter": "formatActions",
 		"class": "actions rowlink-skip d-print-none"
 	}
 ]

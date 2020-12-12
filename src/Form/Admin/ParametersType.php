@@ -102,6 +102,9 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         $helper->field(self::P_DEFAULT_STATE)
             ->addStateType();
 
+        $helper->field(self::P_DEFAULT_CATEGORY)
+            ->addCategoryType();
+
         $helper->field(self::P_MIN_MARGIN)
             ->updateAttribute('data-default', self::DEFAULT_MIN_MARGIN * 100)
             ->percent(true)

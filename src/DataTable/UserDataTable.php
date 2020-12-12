@@ -19,7 +19,6 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
-use App\Util\FormatUtils;
 use App\Util\Utils;
 use DataTables\DataTablesInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -78,7 +77,7 @@ class UserDataTable extends AbstractEntityDataTable
      *
      * @return string the translated enabled state
      */
-    public function enabledFormatter(bool $enabled): string
+    public function formatEnabled(bool $enabled): string
     {
         $key = $enabled ? 'common.value_enabled' : 'common.value_disabled';
 
@@ -93,7 +92,7 @@ class UserDataTable extends AbstractEntityDataTable
      *
      * @return string the image cell content
      */
-    public function imageFormatter(?string $image, User $item): string
+    public function formatImage(?string $image, User $item): string
     {
         $context = [
             'image' > $image,
@@ -110,13 +109,13 @@ class UserDataTable extends AbstractEntityDataTable
      *
      * @return string the formatted date
      */
-    public function lastLoginFormatter(?\DateTimeInterface $date): string
+    public function formatLastLogin(?\DateTimeInterface $date): string
     {
         if (null === $date) {
             return $this->translator->trans('common.value_none');
         }
 
-        return FormatUtils::formatDateTime($date);
+        return $this->formatDateTime($date);
     }
 
     /**
@@ -126,7 +125,7 @@ class UserDataTable extends AbstractEntityDataTable
      *
      * @return string the translated role
      */
-    public function roleFormatter(string $role): string
+    public function formatRole(string $role): string
     {
         return Utils::translateRole($this->translator, $role);
     }

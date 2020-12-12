@@ -75,6 +75,11 @@ interface EntityVoterInterface
     public const ENTITY_CUSTOMER = 'EntityCustomer';
 
     /**
+     * The DigiPrint rights.
+     */
+    public const ENTITY_DIGI_PRINT = 'EntityDigiPrint';
+
+    /**
      * The global margin rights.
      */
     public const ENTITY_GLOBAL_MARGIN = 'EntityGlobalMargin';

@@ -64,7 +64,7 @@ class CalculationStateDataTable extends AbstractEntityDataTable
      *
      * @return string the link, if applicable, the value otherwise
      */
-    public function calculationsFormatter(Collection $calculations, CalculationState $item): string
+    public function formatCalculations(Collection $calculations, CalculationState $item): string
     {
         $context = [
             'id' => $item->getId(),
@@ -82,7 +82,7 @@ class CalculationStateDataTable extends AbstractEntityDataTable
      *
      * @return string the translated value
      */
-    public function editableFormatter(bool $value): string
+    public function formatEditable(bool $value): string
     {
         $id = $value ? 'common.value_true' : 'common.value_false';
 

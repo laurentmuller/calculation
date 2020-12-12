@@ -1,10 +1,8 @@
 abstract_margin:
-    maximum_geather_minimum: La valeur maximale doit être supérieure à la valeur minimale.
-    maximum_numeric: La valeur maximale doit être un nombre.
     minimum_overlap: La valeur minimale chevauche une marge existante.
     maximum_overlap: La valeur maximale chevauche une marge existante.
+    maximum_geather_minimum: La valeur maximale doit être supérieure à la valeur minimale.
     minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximal précédente.
-    type_numeric: La valeur doit être un nombre.
 group:
     unique_code: Ce nom est déjà utilisé par un autre groupe.
 category:
@@ -65,3 +63,12 @@ captcha:
     invalid: Le code de contrôle est invalide.
     timeout: Le délai d'attente est atteint. Essayez de recharger la page ou l'image.
     generate: Impossible de générer une nouvelle image.
+digiprint:
+    unique_code: Ce format est déjà utilisé.
+    type: Le type d'entrée n'est pas valide.
+    maximum_geather_minimum: La valeur maximale doit être supérieure à la valeur minimale.
+    minimum_numeric: La valeur minimale doit être un nombre entier.
+    maximum_numeric: La valeur maximale doit être un nombre entier.
+    minimum_overlap: La valeur minimale chevauche une marge existante.
+    maximum_overlap: La valeur maximale chevauche une marge existante.
+    minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximal précédente.

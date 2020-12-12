@@ -184,14 +184,14 @@ class UserController extends AbstractEntityController
      */
     public function excel(PropertyMappingFactory $factory, StorageInterface $storage): ExcelResponse
     {
-        /** @var User[] $users */
-        $users = $this->getEntities('username');
-        if (empty($users)) {
+        /** @var User[] $entities */
+        $entities = $this->getEntities('username');
+        if (empty($entities)) {
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new UserDocument($this, $users, $factory, $storage);
+        $doc = new UserDocument($this, $entities, $factory, $storage);
 
         return $this->renderExcelDocument($doc);
     }
@@ -316,14 +316,14 @@ class UserController extends AbstractEntityController
      */
     public function pdf(PropertyMappingFactory $factory, StorageInterface $storage): PdfResponse
     {
-        /** @var User[] $users */
-        $users = $this->getEntities('username');
-        if (empty($users)) {
+        /** @var User[] $entities */
+        $entities = $this->getEntities('username');
+        if (empty($entities)) {
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new UsersReport($this, $users, $factory, $storage);
+        $doc = new UsersReport($this, $entities, $factory, $storage);
 
         return $this->renderPdfDocument($doc);
     }
@@ -470,8 +470,6 @@ class UserController extends AbstractEntityController
 
     /**
      * {@inheritdoc}
-     *
-     * @param User $item
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {

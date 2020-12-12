@@ -10,22 +10,25 @@
 
 declare(strict_types=1);
 
-namespace App\Form\digiprint;
+namespace App\Form\Digiprint;
 
-use App\Entity\DigiPrint;
+use App\Entity\DigiPrintItem;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 
 /**
- * DigiPrint edit type.
+ * DigiPrintItem edit type.
  *
  * @author Laurent Muller
  */
-class DigiPrintType extends AbstractEntityType
+class DigiPrintItemType extends AbstractEntityType
 {
+    /**
+     * Constructor.
+     */
     public function __construct()
     {
-        parent::__construct(DigiPrint::class);
+        parent::__construct(DigiPrintItem::class);
     }
 
     /**
@@ -33,11 +36,16 @@ class DigiPrintType extends AbstractEntityType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field('format')
-            ->addTextType();
-        $helper->field('height')
+        $helper->field('type')
+            ->addHiddenType();
+
+        $helper->field('minimum')
             ->addNumberType(0);
-        $helper->field('width')
+
+        $helper->field('maximum')
             ->addNumberType(0);
+
+        $helper->field('amount')
+            ->addMoneyType();
     }
 }

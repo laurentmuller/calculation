@@ -1544,16 +1544,16 @@
         },
         {
             "name": "fzaninotto/faker",
-            "version": "v1.9.1",
+            "version": "v1.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f"
+                "reference": "848d8125239d7dbf8ab25cb7f054f1a630e68c2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/fc10d778e4b84d5bd315dad194661e091d307c6f",
-                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/848d8125239d7dbf8ab25cb7f054f1a630e68c2e",
+                "reference": "848d8125239d7dbf8ab25cb7f054f1a630e68c2e",
                 "shasum": ""
             },
             "require": {
@@ -1591,7 +1591,7 @@
                 "fixtures"
             ],
             "abandoned": true,
-            "time": "2019-12-12T13:22:17+00:00"
+            "time": "2020-12-11T09:56:16+00:00"
         },
         {
             "name": "google/recaptcha",
@@ -7879,20 +7879,20 @@
         },
         {
             "name": "symfonycasts/reset-password-bundle",
-            "version": "v1.1.1",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/reset-password-bundle.git",
-                "reference": "ac39892a5de861209cb7491e056a77a0b872e87d"
+                "reference": "b1002d223848f9f934aa6d335a172036db5cac7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/ac39892a5de861209cb7491e056a77a0b872e87d",
-                "reference": "ac39892a5de861209cb7491e056a77a0b872e87d",
+                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/b1002d223848f9f934aa6d335a172036db5cac7a",
+                "reference": "b1002d223848f9f934aa6d335a172036db5cac7a",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2",
+                "php": ">=7.2.5",
                 "symfony/config": "^4.4 | ^5.0",
                 "symfony/dependency-injection": "^4.4 | ^5.0",
                 "symfony/http-kernel": "^4.4 | ^5.0"
@@ -7921,7 +7921,7 @@
                 "MIT"
             ],
             "description": "Symfony bundle that adds password reset functionality.",
-            "time": "2020-04-18T00:37:02+00:00"
+            "time": "2020-12-10T14:18:36+00:00"
         },
         {
             "name": "symfonycasts/verify-email-bundle",

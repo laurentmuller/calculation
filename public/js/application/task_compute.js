@@ -57,8 +57,8 @@ function getItems() {
 /**
  * Display an error message.
  * 
- * @param message
- *            the message to display.
+ * @param string
+ *            message - the message to display.
  */
 function showError(message) {
     'use strict';
@@ -81,8 +81,8 @@ function update(form) {
     const $form = $(form);
     const url = $form.data('url');
     const data = {
-        'id': $('#task_service_task').intVal(),
-        'quantity': $('#task_service_quantity').floatVal(),
+        'id': $('#task').intVal(),
+        'quantity': $('#quantity').floatVal(),
         'items': getItems()
     };
 
@@ -96,8 +96,7 @@ function update(form) {
     $form.jqXHR = $.post(url, data, function (response) {
         if (response.result) {
             // update
-            const results = response.results;
-            results.forEach(function (item) {
+            response.results.forEach(function (item) {
                 updateValue('value_' + item.id, item.value);
                 updateValue('amount_' + item.id, item.amount);
             });
@@ -127,7 +126,7 @@ function onTaskChanged() {
     'use strict';
 
     // toogle rows visibility
-    const id = $('#task_service_task').intVal();
+    const id = $('#task').intVal();
     const selector = '[task-id="' + id + '"]';
     $('.item-row' + selector).removeClass('d-none');
     $('.item-row:not(' + selector + ')').addClass('d-none');
@@ -149,16 +148,15 @@ function onTaskChanged() {
 (function ($) {
     'use strict';
 
-    // format
-    $("#task_service_quantity").inputNumberFormat();
-
-    // bind change
-    $('#task_service_task').on('input', function () {
+    // attach handlers
+    $('#task').on('input', function () {
         $(this).updateTimer(onTaskChanged, 250);
     });
-    $('#task_service_quantity').on('input', function () {
+    
+    $('#quantity').on('input', function () {
         $(this).updateTimer(onInputChanged, 250);
-    });
+    }).inputNumberFormat().trigger('blur');
+    
     $('.item-input').on('change', function () {
         $(this).updateTimer(onInputChanged, 250);
     });

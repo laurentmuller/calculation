@@ -28,11 +28,10 @@
         "ext-iconv": "*",
         "beberlei/doctrineextensions": "^1.3",
         "bjeavons/zxcvbn-php": "^1.2",
-        "composer/package-versions-deprecated": "1.11.99.1",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.2",
         "doctrine/doctrine-migrations-bundle": "^3.0",
-        "doctrine/orm": "^2.7",
+        "doctrine/orm": "^2.8",
         "fpdf/fpdf": "^1.82",
         "fzaninotto/faker": "^1.9",
         "google/recaptcha": "^1.2",
@@ -111,7 +110,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": true,
+            "allow-contrib": false,
             "require": "5.2.*"
         }
     },

@@ -279,6 +279,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
      * @param string $value the search value
      *
      * @return mixed the parameter value
+     * @psalm-suppress UnusedParam
      */
     protected function createSearchParameterValue(string $field, string $value)
     {

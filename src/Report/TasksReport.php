@@ -23,7 +23,7 @@ use App\Pdf\PdfStyle;
 use App\Util\FormatUtils;
 
 /**
- * Report for the list of categories.
+ * Report for the list of tasks.
  *
  * @author Laurent Muller
  */
@@ -108,7 +108,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         return $table;
     }
 
-    private function outputItem(PdfGroupTableBuilder $table, Task $task, TaskItem $item, PdfStyle $itemStyle, PdfStyle $marginStyle): void
+    private function outputItem(PdfGroupTableBuilder $table, TaskItem $item, PdfStyle $itemStyle, PdfStyle $marginStyle): void
     {
         //check new page
         $count = 1 + ($item->isEmpty() ? 1 : $item->count());
@@ -117,7 +117,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $table->startRow()
             ->add($item->getName(), 1, $itemStyle)
             ->completeRow();
-        $this->outputMargins($table, $task, $item, $marginStyle);
+        $this->outputMargins($table, $item, $marginStyle);
     }
 
     private function outputItems(PdfGroupTableBuilder $table, Task $task, PdfStyle $itemStyle, PdfStyle $marginStyle): void
@@ -128,12 +128,12 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                 ->completeRow();
         } else {
             foreach ($task->getItems() as $item) {
-                $this->outputItem($table, $task, $item, $itemStyle, $marginStyle);
+                $this->outputItem($table, $item, $itemStyle, $marginStyle);
             }
         }
     }
 
-    private function outputMargin(PdfGroupTableBuilder $table, TaskItemMargin $margin, PdfStyle $style): void
+    private function outputMargin(PdfGroupTableBuilder $table, TaskItemMargin $margin): void
     {
         $table->startRow()
             ->add('')
@@ -144,7 +144,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
             ->completeRow();
     }
 
-    private function outputMargins(PdfGroupTableBuilder $table, Task $task, TaskItem $item, PdfStyle $style): void
+    private function outputMargins(PdfGroupTableBuilder $table, TaskItem $item, PdfStyle $style): void
     {
         if ($item->isEmpty()) {
             $table->startRow()
@@ -152,7 +152,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                 ->completeRow();
         } else {
             foreach ($item->getMargins() as $margin) {
-                $this->outputMargin($table, $margin, $style);
+                $this->outputMargin($table, $margin);
             }
         }
     }

@@ -36,16 +36,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class GroupController extends AbstractEntityController
 {
     /**
-     * The list route.
-     */
-    private const ROUTE_LIST = 'group_list';
-
-    /**
-     * The table route.
-     */
-    private const ROUTE_TABLE = 'groupe_table';
-
-    /**
      * Constructor.
      */
     public function __construct()

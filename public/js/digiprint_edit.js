@@ -5,7 +5,6 @@
  */
 <!--#include file="core_edit.js" -->
 
-
 /**
  * Plugin Files
  */

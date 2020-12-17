@@ -21,6 +21,11 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for global margin entity.
  *
+ * @method GlobalMargin|null find($id, $lockMode = null, $lockVersion = null)
+ * @method GlobalMargin|null findOneBy(array $criteria, array $orderBy = null)
+ * @method GlobalMargin[]    findAll()
+ * @method GlobalMargin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
  * @author Laurent Muller
  *
  * @see \App\Entity\GlobalMargin

@@ -3,8 +3,7 @@
 		"name": "id",
 		"visible": false,
 		"orderable": false,
-		"searchable": false,
-		"class": "d-none"
+		"searchable": false
 	},
 	{
 		"name": "imageName",
@@ -19,23 +18,23 @@
 		"name": "username",
 		"title": "user.fields.username_short",
 		"default": true,
-		"class": "w-15"
+		"class": "w-15 text-cell"
 	},
 	{
 		"name": "role",
 		"title": "user.fields.role",
-		"class": "w-25 cell",
+		"class": "w-25 text-cell",
 		"formatter": "formatRole"
 	},
 	{
 		"name": "email",
 		"title": "user.fields.email",
-		"class": "w-25 cell"
+		"class": "w-25 text-cell"
 	},
 	{
 		"name": "enabled",
 		"title": "user.fields.enabled",
-		"class": "w-15 cell",
+		"class": "w-15 text-cell",
 		"formatter": "formatEnabled"
 	},
 	{

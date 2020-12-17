@@ -38,7 +38,7 @@ class DigiPrintService implements \JsonSerializable
     private $blacklitTotal;
 
     /**
-     * @var ?DigiPrint
+     * @var DigiPrint|null
      */
     private $digiPrint;
 
@@ -240,6 +240,7 @@ class DigiPrintService implements \JsonSerializable
             'replicatingAmount' => $this->replicatingAmount,
             'replicatingTotal' => $this->replicatingTotal,
 
+            'quantity' => $this->quantity,
             'overall' => $this->overall,
         ];
     }

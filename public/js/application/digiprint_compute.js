@@ -1,4 +1,4 @@
-/** ! compression tag for ftp-deployment */
+/**! compression tag for ftp-deployment */
 
 /* globals Toaster */
 
@@ -18,6 +18,7 @@ function updateValue(id, value) {
     });
     $('#' + id).val(formatter.format(value));
 }
+
 /**
  * Send form to server and update UI.
  * 
@@ -110,5 +111,7 @@ function onInputChange() {
         }
     };
     $('form').initValidator(options);
+
+    // send
     onInputChange();
 }(jQuery));

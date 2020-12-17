@@ -131,7 +131,7 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
         }
 
         // transform
-        $results->data = \array_map([$this, 'toArray'], $filtered);
+        $results->data = \array_map([$this, 'getCellValues'], $filtered);
 
         return $results;
     }
@@ -153,14 +153,4 @@ abstract class CalculationItemsDataTable extends AbstractDataTable
      * @return int the number of items
      */
     abstract protected function getItemsCount(array $items): int;
-
-    /**
-     * Converts the given item to an array.
-     *
-     * @param array $item the item to convert
-     */
-    protected function toArray(array $item): array
-    {
-        return $this->getCellValues($item);
-    }
 }

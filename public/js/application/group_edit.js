@@ -1,16 +1,24 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Initialize the number input formats.
+ * Update the user interface.
  */
-function initInputFormat() {
+function updateUI() {
     'use strict';
 
+    // initialize the number input formats
     $("input[name$='[minimum]']").inputNumberFormat();
     $("input[name$='[maximum]']").inputNumberFormat();
     $("input[name$='[margin]']").inputNumberFormat({
         'decimal': 0
     });
+
+    // show / hide elements
+    const $table = $('#data-table-edit');
+    const rows = $table.find('tbody > tr').length;
+    $table.toggleClass('d-none', rows === 0);
+    $('.btn-sort').toggleClass('disabled', rows < 2);
+    $('#empty_margins').toggleClass('d-none', rows > 0);
 }
 
 /**
@@ -69,21 +77,12 @@ function addMargin($table) {
     $table.find('tbody').append($row);
 
     // update UI
-    $table.removeClass('d-none');
-    $('#empty_margins').addClass('d-none');
-
-    // add numbers validation
-    initInputFormat();
+    updateUI();
 
     // set values
     $("input[name$='[minimum]']:last").floatVal(minimum).selectFocus();
     $("input[name$='[maximum]']:last").floatVal(maximum);
     $("input[name$='[margin]']:last").intVal(margin);
-
-    // update sort button
-    if ($table.find('tbody > tr').length > 1) {
-        $('.btn-sort').removeClass('disabled');
-    }
 }
 
 /**
@@ -96,17 +95,9 @@ function removeMargin($caller) {
     'use strict';
 
     // remove row
-    const $row = $caller.closest('tr');
-    $row.fadeOut(200, function () {
-        $row.remove();
-        const length = $('#data-table-edit > tbody > tr').length;
-        if (length === 0) {
-            $('#data-table-edit').addClass('d-none');
-            $('#empty_margins').removeClass('d-none');
-        }
-        if (length < 2) {
-            $('.btn-sort').addClass('disabled');
-        }
+    $caller.closest('tr').fadeOut(200, function () {
+        $(this).remove();
+        updateUI();
     });
 }
 
@@ -163,8 +154,8 @@ function sortMargins($table) {
         sortMargins($table);
     });
 
-    // add numbers validation
-    initInputFormat();
+    // update UI
+    updateUI();
 
     // validation
     $('form').initValidator();

@@ -1,0 +1,45 @@
+{% extends 'cards/card_flex.html.twig' %}
+{# imports #}
+{% import 'macros/_properties.html.twig' as properties %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title        = 'task.list.title' -%}
+{%- set title_icon   = 'tasks' -%}
+{%- set add_title    = 'task.list.add_title' -%}
+{%- set pdf_title    = 'task.list.pdf_title' -%}
+{%- set empty_list   = 'task.list.empty' -%}
+
+{# actions #}
+{%- set object_type  = EntityVoterInterface.ENTITY_TASK -%}
+{%- set add_page     = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) ? 'task_add' : null -%}
+{%- set edit_page    = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'task_edit' : null -%}
+{%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'task_delete' : null -%}
+{%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'task_show' : null -%}
+{%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'task_pdf' : null -%}
+{%- set product_list = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_PRODUCT) %}
+{%- set default_page = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
+{%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
+
+{% block item_title %}
+{%- set item_title = item.name -%}
+{%- if row_link and default_page -%}
+    {%- set default_path = path(default_page, params) -%}
+    <a href="{{ default_path }}" class="text-body">{{ item_title }}</a>
+{%- else -%} 
+    {{ item_title }}
+{%- endif -%}
+{% endblock %}
+{% block item_title_class %}font-weight-bold{% endblock %}
+
+{% block item_property %}
+{{ properties.property('task.fields.category', item.categoryCode) }}
+{{ properties.property('task.fields.items', item.count|integer) }}
+{% endblock %}
+
+{% block search_action -%}{%- endblock %}
+
+{%- block toolbar_actions -%}
+{{ parent() }}
+{{ icons.linkTable('task_table') }}
+{%- endblock -%}

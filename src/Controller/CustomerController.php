@@ -38,16 +38,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class CustomerController extends AbstractEntityController
 {
     /**
-     * The list route.
-     */
-    private const ROUTE_LIST = 'customer_list';
-
-    /**
-     * The table route.
-     */
-    private const ROUTE_TABLE = 'customer_table';
-
-    /**
      * Constructor.
      */
     public function __construct()
@@ -184,48 +174,8 @@ class CustomerController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function getCardTemplate(): string
-    {
-        return 'customer/customer_card.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultRoute(): string
-    {
-        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return CustomerType::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEditTemplate(): string
-    {
-        return 'customer/customer_edit.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getShowTemplate(): string
-    {
-        return 'customer/customer_show.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTableTemplate(): string
-    {
-        return 'customer/customer_table.html.twig';
     }
 }

@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represents a item type.
+ * Represents a digi print item type.
  *
  * @ORM\Table(name="sy_DigiPrintItem")
  * @ORM\Entity(repositoryClass="App\Repository\DigiPrintItemRepository")

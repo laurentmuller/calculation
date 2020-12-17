@@ -53,16 +53,6 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 class UserController extends AbstractEntityController
 {
     /**
-     * The list route.
-     */
-    private const ROUTE_LIST = 'user_list';
-
-    /**
-     * The table route.
-     */
-    private const ROUTE_TABLE = 'user_table';
-
-    /**
      * Constructor.
      */
     public function __construct()
@@ -482,33 +472,9 @@ class UserController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function getCardTemplate(): string
-    {
-        return 'user/user_card.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultRoute(): string
-    {
-        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return UserType::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEditTemplate(): string
-    {
-        return 'user/user_edit.html.twig';
     }
 
     /**
@@ -523,22 +489,6 @@ class UserController extends AbstractEntityController
         }
 
         return parent::getEntities($field, $mode, $criterias, $alias);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getShowTemplate(): string
-    {
-        return 'user/user_show.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTableTemplate(): string
-    {
-        return 'user/user_table.html.twig';
     }
 
     /**

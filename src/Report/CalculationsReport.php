@@ -93,7 +93,7 @@ class CalculationsReport extends AbstractArrayReport
             $items += $entity->getItemsTotal();
             $overall += $entity->getOverallTotal();
         }
-        $margins = $this->isFloatZero($items) ? 0 : $this->safeDivide($overall, $items) - 1;
+        $margins = $this->isFloatZero($items) ? 0 : $this->safeDivide($overall, $items);
 
         $text = $this->trans('common.count', [
             '%count%' => \count($entities),

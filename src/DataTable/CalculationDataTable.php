@@ -59,6 +59,32 @@ class CalculationDataTable extends AbstractEntityDataTable
     /**
      * {@inheritdoc}
      */
+    protected function createSearchExpression(string $field, string $parameter)
+    {
+        switch ($field) {
+            case 's.id':
+                return "{$field} = :{$parameter}";
+            default:
+                return parent::createSearchExpression($field, $parameter);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createSearchParameterValue(string $field, string $value)
+    {
+        switch ($field) {
+            case 's.id':
+                return (int) $value;
+            default:
+                return parent::createSearchParameterValue($field, $value);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultOrder(): array
     {
         return ['id' => DataColumn::SORT_DESC];

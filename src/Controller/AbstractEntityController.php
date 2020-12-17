@@ -42,6 +42,13 @@ abstract class AbstractEntityController extends AbstractController
     protected $className;
 
     /**
+     * The lower case entity class name.
+     *
+     * @var string
+     */
+    protected $lowerName;
+
+    /**
      * Constructor.
      *
      * @param string $className the entity class name
@@ -49,6 +56,7 @@ abstract class AbstractEntityController extends AbstractController
     public function __construct(string $className)
     {
         $this->className = $className;
+        $this->lowerName = \strtolower(Utils::getShortName($className));
     }
 
     /**
@@ -201,12 +209,22 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the Twig template (path) name used to display entities as card.
      */
-    abstract protected function getCardTemplate(): string;
+    protected function getCardTemplate(): string
+    {
+        return \sprintf('%1$s/%1$s_card.html.twig', $this->lowerName);
+    }
 
     /**
      * Gets the default route name used to display the list of entities.
      */
-    abstract protected function getDefaultRoute(): string;
+    protected function getDefaultRoute(): string
+    {
+        if ($this->isDisplayTabular()) {
+            return \sprintf('%s_table', $this->lowerName);
+        }
+
+        return \sprintf('%s_list', $this->lowerName);
+    }
 
     /**
      * Gets sorted distinct and not null values of the given column.
@@ -228,7 +246,10 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the Twig template (path) name used to edit an entity.
      */
-    abstract protected function getEditTemplate(): string;
+    protected function getEditTemplate(): string
+    {
+        return \sprintf('%1$s/%1$s_edit.html.twig', $this->lowerName);
+    }
 
     /**
      * Gets the entities to display.
@@ -267,12 +288,18 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the Twig template (path) name used to show an entity.
      */
-    abstract protected function getShowTemplate(): string;
+    protected function getShowTemplate(): string
+    {
+        return \sprintf('%1$s/%1$s_show.html.twig', $this->lowerName);
+    }
 
     /**
      * Gets the Twig template (path) name used to display entities as table.
      */
-    abstract protected function getTableTemplate(): string;
+    protected function getTableTemplate(): string
+    {
+        return \sprintf('%1$s/%1$s_table.html.twig', $this->lowerName);
+    }
 
     /**
      * Render the entities as card.

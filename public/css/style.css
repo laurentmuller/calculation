@@ -179,6 +179,10 @@ a.btn-list {
 .text-state {
     width: 100px;
 }
+.text-category {
+    width: 180px;
+    white-space: nowrap;
+}
 .text-image {
     width: 75px;
     text-align: center;

@@ -72,3 +72,14 @@ digiprint:
     minimum_overlap: La valeur minimale chevauche une marge existante.
     maximum_overlap: La valeur maximale chevauche une marge existante.
     minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximal précédente.
+task:
+    unique_code: Ce nom est déjà utilisé par une autre tâche.
+task_item:
+    unique_code: Ce nom est déjà utilisé par une autre opération.
+    maximum_geather_minimum: La valeur maximale doit être supérieure à la valeur minimale.
+    value_numeric: Le prix unitaire doit être un nombre.
+    minimum_numeric: La valeur minimale doit être un nombre.
+    maximum_numeric: La valeur maximale doit être un nombre.
+    minimum_overlap: La valeur minimale chevauche une marge existante.
+    maximum_overlap: La valeur maximale chevauche une marge existante.
+    minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximal précédente.

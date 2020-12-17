@@ -141,6 +141,16 @@ class DataColumnFactory
     }
 
     /**
+     * Creates a new instance for the hidden identifier.
+     *
+     * @param string $name the field name
+     */
+    public static function hiddenId(string $name = 'id'): DataColumn
+    {
+        return self::hidden($name);
+    }
+
+    /**
      * Creates a new instance with the identifier 'text-id' class.
      *
      * @param string $name the field name

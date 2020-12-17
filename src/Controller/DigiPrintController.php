@@ -39,16 +39,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class DigiPrintController extends AbstractEntityController
 {
     /**
-     * The list route.
-     */
-    private const ROUTE_LIST = 'digiprint_list';
-
-    /**
-     * The table route.
-     */
-    private const ROUTE_TABLE = 'digiprint_table';
-
-    /**
      * Constructor.
      */
     public function __construct()
@@ -90,6 +80,7 @@ class DigiPrintController extends AbstractEntityController
 
         return $this->render('digiprint/digiprint_compute.html.twig', [
             'form' => $form->createView(),
+            'service' => $service,
         ]);
     }
 
@@ -202,48 +193,8 @@ class DigiPrintController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function getCardTemplate(): string
-    {
-        return 'digiprint/digiprint_card.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultRoute(): string
-    {
-        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return DigiPrintType::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEditTemplate(): string
-    {
-        return 'digiprint/digiprint_edit.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getShowTemplate(): string
-    {
-        return 'digiprint/digiprint_show.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTableTemplate(): string
-    {
-        return 'digiprint/digiprint_table.html.twig';
     }
 }

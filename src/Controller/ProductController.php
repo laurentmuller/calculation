@@ -37,16 +37,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractEntityController
 {
     /**
-     * The list route.
-     */
-    private const ROUTE_LIST = 'product_list';
-
-    /**
-     * The table route.
-     */
-    private const ROUTE_TABLE = 'product_table';
-
-    /**
      * Constructor.
      */
     public function __construct()
@@ -206,48 +196,8 @@ class ProductController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function getCardTemplate(): string
-    {
-        return 'product/product_card.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultRoute(): string
-    {
-        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return ProductType::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEditTemplate(): string
-    {
-        return 'product/product_edit.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getShowTemplate(): string
-    {
-        return 'product/product_show.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTableTemplate(): string
-    {
-        return 'product/product_table.html.twig';
     }
 }

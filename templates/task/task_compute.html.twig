@@ -1,0 +1,81 @@
+{% extends 'cards/card_edit.html.twig' %}
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+
+{# macros #}
+{% macro plain_text_input(id, value = 0, class = '') %}
+{%- set class = (class ~ ' text-right form-control-plaintext border rounded px-2')|trim -%}
+<input id="{{ id }}" type="text" class="{{ class }}" readonly="readonly" value="{{ value|amount }}">
+{% endmacro %}
+
+{% macro row_input(id, item, visible) %}
+<tr class="item-row{% if not visible %} d-none{% endif %}" task-id="{{ id }}">
+    <td>        
+        <div class="custom-control custom-switch mt-1">
+            <input type="checkbox" class="custom-control-input item-input" id="item_{{ item.id }}" name="items[]" value="{{ item.id }}"{% if item.checked|default(false) %} checked="checked"{% endif %}>
+            <label class="custom-control-label" for="item_{{ item.id }}">{{ item.name }}</label>
+        </div>
+    </td>
+    <td class="text-right w-25">
+        {{ _self.plain_text_input('value_' ~ item.id, item.value|default(0)) }}
+    </td>
+    <td class="text-right w-25">
+        {{ _self.plain_text_input('amount_' ~ item.id, item.amount|default(0)) }}
+    </td>
+</tr>
+{% endmacro %}
+
+{# parameters #}
+{%- set title       = 'taskcompute.title' -%}
+{%- set title_icon  = 'keyboard' -%}
+{%- set submit_text = 'taskcompute.button_ok' -%}
+{%- set cancel_path = app.request.get('caller',  path(app.displayTabular ? 'task_table' : 'task_list')) -%}
+{%- set form_attr   = form_attr|default({})|merge({'data-url': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
+
+{% block card_body %}
+<div class="form-row">
+    <div class="col-9">
+        {{ form_row(form.task) }}
+    </div>
+    <div class="col-3">
+        {{ form_row(form.quantity) }}
+    </div>
+</div>
+<div class="form-row row-table{% if service.task.count == 0 %} d-none{% endif %}">
+    <table class="table table-sm table-borderless" id="table-edit">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th class="text-right w-25">{{ 'taskcompute.fields.price'|trans }}</th>
+                <th class="text-right w-25">{{ 'taskcompute.fields.total'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                {% for item in task.items %}
+                    {{ _self.row_input(task.id, item, task.id == service.task.id) }}
+                {% endfor %}
+            {% endfor %}            
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3"><hr class="my-1"></td>
+            </tr>
+            <tr>
+                <th class="pt-3" colspan="2">{{ 'taskcompute.fields.overall_total'|trans }}</th>
+                <th class="text-right w-25">{{ _self.plain_text_input('overall', service.overall, 'font-weight-bold') }}</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<div class="form-row row-empty{% if service.task.count != 0 %} d-none{% endif %}">
+    <p class="small text-muted">{{ 'task.edit.empty_items'|trans }}</p>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ asset_js('js/plugins/plugin-input.js') }}
+{{ asset_js('js/application/task_compute.js') }}
+{% endblock %}

@@ -17,12 +17,14 @@ use App\Repository\CalculationRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\DigiPrintRepository;
 use App\Repository\ProductRepository;
+use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use App\Service\CalculationService;
 use App\Service\CaptchaImageService;
 use App\Service\DigiPrintService;
 use App\Service\FakerService;
 use App\Service\SwissPostService;
+use App\Service\TaskService;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
 use App\Util\DatabaseInfo;
@@ -379,6 +381,47 @@ class AjaxController extends AbstractController
 
         $data = \array_merge($service->jsonSerialize(), [
             'message' => $this->trans('digiprint.compute.success'),
+        ]);
+
+        return $this->jsonTrue($data);
+    }
+
+    /**
+     * Compute a Digiprint.
+     *
+     * @Route("/task", name="ajax_task", methods={"GET", "POST"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function computeTask(Request $request, TaskService $service, TaskRepository $repository): JsonResponse
+    {
+        // get values
+        $id = (int) $request->get('id', 0);
+        $quantity = (float) $request->get('quantity', 0.0);
+        $items = \array_map('intval', (array) $request->get('items', []));
+
+        // validate
+        if ($quantity <= 0) {
+            return $this->jsonFalse([
+                'message' => $this->trans('taskcompute.error.quantity'),
+            ]);
+        }
+
+        /** @var ?\App\Entity\Task $task */
+        $task = $repository->find($id);
+        if (null === $task) {
+            return $this->jsonFalse([
+                'message' => $this->trans('taskcompute.error.task'),
+            ]);
+        }
+
+        // update service and compute
+        $service->setTask($task)
+            ->setQuantity($quantity)
+            ->setItems($items)
+            ->compute();
+
+        $data = \array_merge($service->jsonSerialize(), [
+            'message' => $this->trans('taskcompute.success'),
         ]);
 
         return $this->jsonTrue($data);

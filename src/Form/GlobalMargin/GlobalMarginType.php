@@ -49,15 +49,11 @@ class GlobalMarginType extends AbstractMarginType
     {
         parent::configureOptions($resolver);
 
-        // callback
         $resolver->setDefaults([
             'constraints' => [
                 new Callback([$this, 'validate']),
             ],
         ]);
-
-        // entity manager
-        $resolver->setDefined('manager');
     }
 
     /**

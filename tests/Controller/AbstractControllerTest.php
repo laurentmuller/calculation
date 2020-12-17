@@ -60,7 +60,7 @@ abstract class AbstractControllerTest extends AuthenticateWebTestCase
      *
      * @param AbstractEntity $entity the entity to add
      */
-    protected function addEntity(AbstractEntity $entity): void
+    protected function addEntity(?AbstractEntity $entity): void
     {
         if (null !== $entity) {
             $em = self::getManager();
@@ -105,7 +105,7 @@ abstract class AbstractControllerTest extends AuthenticateWebTestCase
      *
      * @return mixed this function returns always null
      */
-    protected function deleteEntity(AbstractEntity $entity)
+    protected function deleteEntity(?AbstractEntity $entity)
     {
         if (null !== $entity) {
             $em = self::getManager();

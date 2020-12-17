@@ -23,17 +23,17 @@
 	{
 		"name": "customer",
 		"title": "calculation.fields.customer",
-		"class": "cell w-25"
+		"class": "text-cell w-25"
 	},
 	{
 		"name": "description",
 		"title": "calculation.fields.description",
-		"class": "cell w-25"
+		"class": "text-cell w-25"
 	},
 	{
 		"name": "items",
 		"title": "calculation.fields.items",
-		"class": "cell w-25 text-danger",
+		"class": "text-cell w-25 text-danger",
 		"headerClass": "text-body",
 		"orderable": false,
 		"searchable": false,
@@ -44,8 +44,7 @@
 		"name": "stateColor",
 		"visible": false,
 		"orderable": false,
-		"searchable": false,
-		"class": "d-none"
+		"searchable": false
 	},
 	{
 		"name": "id",

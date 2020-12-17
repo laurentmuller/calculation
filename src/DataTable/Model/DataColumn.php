@@ -554,10 +554,17 @@ class DataColumn
 
     /**
      * Sets the visibility behavior.
+     *
+     * <b>Note:</b> if visible is <code>false</code>, the class is set to <code>'d-none'</code> if not defined.
      */
     public function setVisible(bool $visible): self
     {
         $this->visible = $visible;
+
+        // update class
+        if (!$this->visible && !$this->class) {
+            $this->class = 'd-none';
+        }
 
         return $this;
     }

@@ -37,7 +37,7 @@ class CalculationGroup extends AbstractEntity
     /**
      * The parent's calculation.
      *
-     * @ORM\ManyToOne(targetEntity="Calculation", inversedBy="groups")
+     * @ORM\ManyToOne(targetEntity=Calculation::class, inversedBy="groups")
      * @ORM\JoinColumn(name="calculation_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      *
      * @var \App\Entity\Calculation
@@ -47,7 +47,7 @@ class CalculationGroup extends AbstractEntity
     /**
      * The calculation items.
      *
-     * @ORM\OneToMany(targetEntity="CalculationCategory", mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=CalculationCategory::class, mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"code": "ASC"})
      * @Assert\Valid
      *
@@ -69,7 +69,7 @@ class CalculationGroup extends AbstractEntity
     /**
      * The parent's category.
      *
-     * @ORM\ManyToOne(targetEntity="Group")
+     * @ORM\ManyToOne(targetEntity=Group::class)
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false)
      *
      * @var \App\Entity\Group

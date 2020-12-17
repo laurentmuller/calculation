@@ -70,7 +70,6 @@ class CategoryControllerTest extends AbstractControllerTest
             self::$group->setCode('Test Parent');
             $this->addEntity(self::$group);
         }
-
         if (null === self::$entity) {
             self::$entity = new Category();
             self::$entity->setCode('Test Code')

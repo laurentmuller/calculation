@@ -75,6 +75,7 @@ class RightsType extends AbstractHelperType
 
         $this->addRightType($helper, EntityVoterInterface::ENTITY_CALCULATION, 'calculation.list.title')
             ->addRightType($helper, EntityVoterInterface::ENTITY_PRODUCT, 'product.list.title')
+            ->addRightType($helper, EntityVoterInterface::ENTITY_TASK, 'task.list.title')
             ->addRightType($helper, EntityVoterInterface::ENTITY_GROUP, 'group.list.title')
             ->addRightType($helper, EntityVoterInterface::ENTITY_CATEGORY, 'category.list.title')
             ->addRightType($helper, EntityVoterInterface::ENTITY_CALCULATION_STATE, 'calculationstate.list.title')

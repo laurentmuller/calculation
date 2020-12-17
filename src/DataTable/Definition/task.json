@@ -1,0 +1,37 @@
+[
+	{
+		"name": "id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false
+	},
+	{
+		"name": "name",
+		"title": "task.fields.name",
+		"default": true,
+		"class": " text-cell"
+	},
+	{
+		"name": "category",
+		"title": "task.fields.category",
+		"class": "text-category"
+	},
+	{
+		"name": "items",
+		"title": "task.fields.items",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"class": "text-currency",
+		"formatter": "formatCountable"
+	},
+	{
+		"name": "id",
+		"title": "common.empty",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"formatter": "formatActions",
+		"class": "actions rowlink-skip d-print-none"
+	}
+]

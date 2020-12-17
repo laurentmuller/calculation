@@ -51,7 +51,7 @@ class Category extends AbstractEntity
     /**
      * The parent group.
      *
-     * @ORM\ManyToOne(targetEntity="Group", inversedBy="categories")
+     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="categories")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false)
      *
      * @var ?Group
@@ -61,11 +61,20 @@ class Category extends AbstractEntity
     /**
      * The list of products that fall into this category.
      *
-     * @ORM\OneToMany(targetEntity="Product", mappedBy="category", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="category")
      *
      * @var Collection|Product[]
      */
     private $products;
+
+    /**
+     * The list of taks that fall into this category.
+     *
+     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="category")
+     *
+     * @var Collection|Task[]
+     */
+    private $tasks;
 
     /**
      * Constructor.
@@ -73,6 +82,7 @@ class Category extends AbstractEntity
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     /**
@@ -88,12 +98,30 @@ class Category extends AbstractEntity
         return $this;
     }
 
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->setCategory($this);
+        }
+
+        return $this;
+    }
+
     /**
      * Gets the number of prodcuts.
      */
     public function countProducts(): int
     {
         return $this->products->count();
+    }
+
+    /**
+     * Gets the number of tasks.
+     */
+    public function countTasks(): int
+    {
+        return $this->tasks->count();
     }
 
     /**
@@ -174,6 +202,14 @@ class Category extends AbstractEntity
     }
 
     /**
+     * @return Collection|Task[]
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    /**
      * Returns if this category contains one or more products.
      *
      * @return bool true if contains products
@@ -184,6 +220,16 @@ class Category extends AbstractEntity
     }
 
     /**
+     * Returns if this category contains one or more tasks.
+     *
+     * @return bool true if contains tasks
+     */
+    public function hasTasks(): bool
+    {
+        return !$this->tasks->isEmpty();
+    }
+
+    /**
      * Remove a product.
      */
     public function removeProduct(Product $product): self
@@ -191,6 +237,17 @@ class Category extends AbstractEntity
         if ($this->products->removeElement($product)) {
             if ($product->getCategory() === $this) {
                 $product->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            if ($task->getCategory() === $this) {
+                $task->setCategory(null);
             }
         }
 

@@ -100,6 +100,11 @@ interface EntityVoterInterface
     public const ENTITY_PRODUCT = 'EntityProduct';
 
     /**
+     * The task rights.
+     */
+    public const ENTITY_TASK = 'EntityTask';
+
+    /**
      * The user rights.
      */
     public const ENTITY_USER = 'EntityUser';

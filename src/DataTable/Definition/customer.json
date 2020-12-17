@@ -3,8 +3,7 @@
 		"name": "id",
 		"visible": false,
 		"orderable": false,
-		"searchable": false,
-		"class": "d-none"
+		"searchable": false
 	},
 	{
 		"name": "nameAndCompany",
@@ -15,12 +14,12 @@
 			"firstName",
 			"company"
 		],
-		"class": "w-35 cell"
+		"class": "w-35 text-cell"
 	},
 	{
 		"name": "address",
 		"title": "customer.fields.address",
-		"class": "w-auto cell"
+		"class": "w-auto text-cell"
 	},
 	{
 		"name": "zipCity",
@@ -29,7 +28,7 @@
 			"zipCode",
 			"city"
 		],
-		"class": "w-20 cell"
+		"class": "w-20 text-cell"
 	},
 	{
 		"name": "id",

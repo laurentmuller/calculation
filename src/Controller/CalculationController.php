@@ -43,16 +43,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class CalculationController extends AbstractEntityController
 {
     /**
-     * The list route.
-     */
-    private const ROUTE_LIST = 'calculation_list';
-
-    /**
-     * The table route.
-     */
-    private const ROUTE_TABLE = 'calculation_table';
-
-    /**
      * The service to compute calculations.
      *
      * @var CalculationService
@@ -318,49 +308,9 @@ class CalculationController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function getCardTemplate(): string
-    {
-        return 'calculation/calculation_card.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultRoute(): string
-    {
-        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return CalculationType::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEditTemplate(): string
-    {
-        return 'calculation/calculation_edit.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getShowTemplate(): string
-    {
-        return 'calculation/calculation_show.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTableTemplate(): string
-    {
-        return 'calculation/calculation_table.html.twig';
     }
 
     /**

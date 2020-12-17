@@ -20,6 +20,11 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for DigiPrint entity.
  *
+ * @method DigiPrint|null find($id, $lockMode = null, $lockVersion = null)
+ * @method DigiPrint|null findOneBy(array $criteria, array $orderBy = null)
+ * @method DigiPrint[]    findAll()
+ * @method DigiPrint[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
  * @author Laurent Muller
  *
  * @see \App\Entity\DigiPrint

@@ -50,8 +50,8 @@
     			<label class="control-label" for="data-table-edit">{{ 'group.fields.margins'|trans }}</label>
     		</div>
     		<div class="col text-right">
-    			<a href="#" class="btn-add" role="button">{{ 'group.edit.add_margin'|trans }}</a>
-                <a href="#" class="btn btn-sort btn-link p-0{% if form.margins|length < 2 %} disabled{% endif %}" role="button" title="{{ 'group.edit.sort_margins'|trans }}"><i class="fas fa-sort-numeric-up fa-fw"></i></a>
+    			<a href="#" class="btn btn-link p-0 btn-add" role="button">{{ 'group.edit.add_margin'|trans }}</a>
+                <a href="#" class="btn btn-link p-0 btn-sort {% if form.margins|length < 2 %} disabled{% endif %}" role="button" title="{{ 'group.edit.sort_margins'|trans }}"><i class="fas fa-sort-numeric-up fa-fw"></i></a>
     		</div>
     	</div>
         <hr class="mt-0 mb-2">

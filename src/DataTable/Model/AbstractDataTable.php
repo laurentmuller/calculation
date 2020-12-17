@@ -203,7 +203,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
     /**
      * Gets the cell values for the given data (row).
      *
-     * The default implementation call the <code>getCellValue($data)</code> function and the <code>formatValue($value, $data)</code> function for each column.
+     * The default implementation call the <code>getCellValue($data)</code> function and then the <code>formatValue($value, $data)</code> function for each column.
      *
      * @param array|object $data the object or array to traverse for getting values
      *
@@ -214,15 +214,11 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
      */
     public function getCellValues($data): array
     {
-        $result = [];
-        $columns = $this->getColumns();
-
-        foreach ($columns as $column) {
+        return \array_map(function (DataColumn $column) use ($data) {
             $value = $column->getCellValue($data);
-            $result[] = $column->formatValue($value, $data);
-        }
 
-        return $result;
+            return $column->formatValue($value, $data);
+        }, $this->getColumns());
     }
 
     /**

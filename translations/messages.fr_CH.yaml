@@ -1017,8 +1017,8 @@ digiprint:
         success: L'affiche <b>%name%</b> a été mise à jour avec succès.
         add_item: Ajouter une ligne
         delete_item: Supprimer la ligne
-        sort_items: Trier
         empty_items: Aucune valeur définie
+        sort_items: Trier
     delete:
         title: Supprimer une affiche
         message: Êtes-vous sûr de vouloir supprimer l'affiche <b>%name%</b> ?
@@ -1045,9 +1045,70 @@ digiprint:
             overall_total: Total générale
         error:
             quantity: La quantité doit être égale ou supérieure à 1.
-            digiprint: Impossible de trouver une affiche correspondante.            
+            digiprint: Impossible de trouver une affiche correspondante.
 digiprintitem:
     fields:
         minimum: Minimum
         maximum: Maximum
         amount: Prix
+task:
+    name: Tâche
+    fields:
+        name: Nom
+        category: Catégorie
+        items: Opérations
+    add:
+        title: Nouvelle tâche
+        success: La tâche <b>%name%</b> a été créée avec succès.
+    edit:
+        title: Edition d'une tâche
+        success: La tâche <b>%name%</b> a été mise à jour avec succès.
+        add_item: Ajouter une opération
+        delete_item: Supprimer l'opération et ses marges
+        empty_items: Aucune opération définie.
+        sort_items: Trier
+    delete:
+        title: Supprimer une tâche
+        message: Êtes-vous sûr de vouloir supprimer la tâche <b>%name%</b> ?
+        success: La tâche <b>%name%</b> a été supprimée avec succès.
+        failure: Impossible de tâche la tâche <b>%name%</b>.
+    list:
+        title: Tâches
+        empty: Aucune tâche définie.
+        add_title: Créer une nouvelle tâche
+        pdf_title: Télécharger la liste des tâche
+        excel_title: Exporter la liste des tâche
+    show:
+        title: Propriétés de la tâche
+taskitem:
+    name: Opération
+    fields:
+        name: Opération
+        margins: Marges
+    list:
+        title: Opérations
+    edit:
+        add_item: Ajouter une marge
+        delete_item: Supprimer la marge
+        empty_items: Aucune marge définie.
+        sort_items: Trier les marges
+taskitemmargin:
+    name: Marge
+    fields:
+        minimum: Minimum
+        maximum: Maximum
+        value: Prix unitaire
+taskcompute:
+    title: Calculation d'une tâche
+    success: Le prix de la tâche a été calculé avec succès.
+    failed: Une erreur est intervenue lors du calcul du prix de la tâche.
+    button_ok: Calculer
+    fields:
+        task: Tâche
+        quantity: Quantité
+        price: Prix unitaire
+        total: Total
+        overall_total: Total générale
+    error:
+        quantity: La quantité doit être égale ou supérieure à 1.
+        task: Impossible de trouver une tâche correspondante.

@@ -74,7 +74,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The calculation groups.
      *
-     * @ORM\OneToMany(targetEntity="CalculationGroup", mappedBy="calculation", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=CalculationGroup::class, mappedBy="calculation", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"code": "ASC"})
      * @Assert\Valid
      *
@@ -103,11 +103,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The calculation state.
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="CalculationState",
-     *     inversedBy="calculations"
-     * )
-     *
+     * @ORM\ManyToOne(targetEntity=CalculationState::class, inversedBy="calculations")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotNull
      *
@@ -125,27 +121,16 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     protected $userMargin;
 
     /**
-     * @ORM\OneToMany(targetEntity="CalculationLine", mappedBy="calculation")
-     *
-     * @var Collection|CalculationLine[]
-     */
-    private $lines;
-
-    /**
      * Constructor.
      */
     public function __construct()
     {
-        // groups
-        $this->groups = new ArrayCollection();
-        $this->lines = new ArrayCollection();
-
-        // default values
         $this->date = new \DateTime();
         $this->globalMargin = 0.0;
         $this->userMargin = 0.0;
         $this->itemsTotal = 0.0;
         $this->overallTotal = 0.0;
+        $this->groups = new ArrayCollection();
     }
 
     /**
@@ -175,16 +160,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         if (!$this->contains($group)) {
             $this->groups->add($group);
             $group->setCalculation($this);
-        }
-
-        return $this;
-    }
-
-    public function addLine(CalculationLine $line): self
-    {
-        if (!$this->lines->contains($line)) {
-            $this->lines->add($line);
-            $line->setCalculation($this);
         }
 
         return $this;
@@ -509,14 +484,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * @return Collection|CalculationLine[]
-     */
-    public function getLines(): Collection
-    {
-        return $this->lines;
-    }
-
-    /**
      * Gets the number of item lines.
      */
     public function getLinesCount(): int
@@ -806,17 +773,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         if ($this->groups->removeElement($group)) {
             if ($group->getCalculation() === $this) {
                 $group->setCalculation(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function removeLine(CalculationLine $line): self
-    {
-        if ($this->lines->removeElement($line)) {
-            if ($line->getCalculation() === $this) {
-                $line->setCalculation(null);
             }
         }
 

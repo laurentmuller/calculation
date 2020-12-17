@@ -2,7 +2,7 @@ doctrine_migrations:
     connection: 'edit'
     check_database_platform: true
     migrations_paths:
-        DoctrineMigrations: '%kernel.project_dir%/src/Migrations'
+        'App\DoctrineMigrations': '%kernel.project_dir%/src/DoctrineMigrations'
     storage:
         table_storage:
             table_name: 'sy_Migration'

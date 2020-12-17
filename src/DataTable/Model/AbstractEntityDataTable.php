@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\DataTable\Model;
 
-use App\Entity\AbstractEntity;
 use App\Repository\AbstractRepository;
 use App\Security\EntityVoter;
+use App\Util\Utils;
 use DataTables\Column;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
@@ -33,17 +33,7 @@ use Twig\Environment;
 abstract class AbstractEntityDataTable extends AbstractDataTable
 {
     /**
-     * The name of key for the definition of search fields.
-     */
-    private const KEY_SEARCH = 'search';
-
-    /**
-     * the name of key for the definition of sort fields.
-     */
-    private const KEY_SORT = 'sort';
-
-    /**
-     * The name of the search parameter.
+     * The name of the global search parameter.
      */
     private const SEARCH_PARAMETER = 'search';
 
@@ -124,18 +114,16 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
      */
     protected function createDataTableResults(DataTableQuery $query): DataTableResults
     {
-        /** @var Column[] $columns */
-        $columns = $query->columns;
-
-        // map columns
-        $definitions = [];
-        foreach ($columns as $column) {
+        /** @var DataDefinitition[] $definitions */
+        $definitions = \array_map(function (Column $column) {
             $name = $column->name;
-            $definitions[$name][self::KEY_SORT] = (array) $this->repository->getSortFields($name);
-            $definitions[$name][self::KEY_SEARCH] = (array) $this->repository->getSearchFields($name);
-        }
+            $sortFields = $this->repository->getSortFields($name);
+            $searchFields = $this->repository->getSearchFields($name);
 
-        // result and query
+            return new DataDefinitition($column, $sortFields, $searchFields);
+        }, $query->columns);
+
+        // result and builder
         $results = new DataTableResults();
         $builder = $this->createQueryBuilder();
 
@@ -143,16 +131,16 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
         $results->recordsTotal = $this->countAll();
 
         // columns search
-        $this->createSearchColumns($builder, $columns, $definitions);
+        $this->createSearchColumns($builder, $definitions);
 
         // global search
-        $this->createSearchGlobal($builder, $columns, $definitions, $query->search->value);
+        $this->createSearchGlobal($builder, $definitions, $query->search->value);
 
         // filtered count
         $results->recordsFiltered = $this->countFiltered($builder);
 
         // order by
-        $this->createOrderBy($builder, $query->order, $columns, $definitions);
+        $this->createOrderBy($builder, $definitions, $query->order);
 
         // offset and limit.
         $builder->setFirstResult($query->start);
@@ -164,50 +152,45 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
         $items = $builder->getQuery()->getResult();
 
         // transform
-        $results->data = \array_map([$this, 'toArray'], $items);
+        $results->data = \array_map([$this, 'getCellValues'], $items);
 
         return $results;
     }
 
     /**
-     * Creates the order by clause.
+     * Update the given query builder by adding the order by clause.
      *
-     * @param QueryBuilder $builder     the query builder
-     * @param Order[]      $orders      the request orders
-     * @param Column[]     $columns     the datatable columns
-     * @param array        $definitions the database definitions
+     * @param QueryBuilder       $builder     the query builder to update
+     * @param DataDefinitition[] $definitions the data column definitions
+     * @param Order[]            $orders      the columns ordering (zero-based column index and direction)
      */
-    protected function createOrderBy(QueryBuilder $builder, array $orders, array $columns, array $definitions): self
+    protected function createOrderBy(QueryBuilder $builder, array $definitions, array $orders): void
     {
         // default order
         $defaultOrder = $this->getDefaultOrder();
 
         // add orders
         foreach ($orders as $order) {
-            $index = $order->column;
-            $column = $columns[$index];
-            if ($column->orderable) {
-                $name = $column->name;
+            $definition = $definitions[$order->column];
+            if ($definition->isOrderable()) {
                 $direction = $order->dir;
-                $fields = $definitions[$name][self::KEY_SORT];
-                foreach ($fields as $field) {
+                foreach ($definition->getSortFields() as $field) {
                     $builder->addOrderBy($field, $direction);
                 }
 
                 // remove
-                unset($defaultOrder[$name]);
+                unset($defaultOrder[$definition->getName()]);
             }
         }
 
         // add remaining default orders
         foreach ($defaultOrder as $name => $direction) {
-            $fields = $definitions[$name][self::KEY_SORT];
-            foreach ($fields as $field) {
-                $builder->addOrderBy($field, $direction);
+            if ($definition = $this->findDefinition($definitions, $name)) {
+                foreach ($definition->getSortFields() as $field) {
+                    $builder->addOrderBy($field, $direction);
+                }
             }
         }
-
-        return $this;
     }
 
     /**
@@ -225,30 +208,27 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     /**
      * Update the given query builder by adding the columns search (if any).
      *
-     * @param QueryBuilder $builder     the query builder to update
-     * @param Column[]     $columns     the datatable columns
-     * @param array        $definitions the database definitions
+     * @param QueryBuilder       $builder     the query builder to update
+     * @param DataDefinitition[] $definitions the data column definitions
      */
-    protected function createSearchColumns(QueryBuilder $builder, array $columns, array $definitions): self
+    protected function createSearchColumns(QueryBuilder $builder, array &$definitions): void
     {
-        foreach ($columns as $column) {
-            if ($column->searchable && $column->search->value) {
-                $name = $column->name;
-                $value = $column->search->value;
+        foreach ($definitions as &$definition) {
+            if ($definition->isSearch()) {
+                $name = $definition->getName();
+                $value = $definition->getSearchValue();
                 $parameter = \str_replace('.', '_', $name);
-                $fields = $definitions[$name][self::KEY_SEARCH];
-                foreach ($fields as $field) {
+                foreach ($definition->getSearchFields() as $field) {
                     if ($expression = $this->createSearchExpression($field, $parameter)) {
-                        $builder->andWhere($expression)->setParameter($parameter, "%{$value}%");
+                        $parameterValue = $this->createSearchParameterValue($field, $value);
+                        $builder->andWhere($expression)->setParameter($parameter, $parameterValue);
                     }
                 }
 
                 // remove the searchable from global search
-                $column->searchable = false;
+                $definition->setSearchable(false);
             }
         }
-
-        return $this;
     }
 
     /**
@@ -267,33 +247,42 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     /**
      * Update the given query builder by adding the global search expression (if any).
      *
-     * @param QueryBuilder $builder     the query builder to update
-     * @param Column[]     $columns     the datatable columns
-     * @param array        $definitions the database definitions
-     * @param string       $search      the search term (if any)
+     * @param QueryBuilder       $builder     the query builder to update
+     * @param DataDefinitition[] $definitions the data column definitions
+     * @param string             $search      the search term (if any)
      */
-    protected function createSearchGlobal(QueryBuilder $builder, array $columns, array $definitions, ?string $search): self
+    protected function createSearchGlobal(QueryBuilder $builder, array $definitions, ?string $search): void
     {
-        if ($search) {
+        if (Utils::isString($search)) {
             $expr = new Expr\Orx();
-            foreach ($columns as $column) {
-                if ($column->searchable) {
-                    $name = $column->name;
-                    $fields = $definitions[$name][self::KEY_SEARCH];
-                    foreach ($fields as $field) {
+            foreach ($definitions as $definition) {
+                if ($definition->isSearchable()) {
+                    foreach ($definition->getSearchFields() as $field) {
                         if ($expression = $this->createSearchExpression($field, self::SEARCH_PARAMETER)) {
                             $expr->add($expression);
                         }
                     }
                 }
             }
+
             if (0 !== $expr->count()) {
                 $builder->andWhere($expr)
                     ->setParameter(self::SEARCH_PARAMETER, "%{$search}%");
             }
         }
+    }
 
-        return $this;
+    /**
+     * Creates the search parameter value.
+     *
+     * @param string $field the field name to search in
+     * @param string $value the search value
+     *
+     * @return mixed the parameter value
+     */
+    protected function createSearchParameterValue(string $field, string $value)
+    {
+        return "%{$value}%";
     }
 
     /**
@@ -336,16 +325,21 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     }
 
     /**
-     * Converts the given entity to an array.
+     * Finds a data definition for the given column name.
      *
-     * The default implementation use the <code>getCellValues</code> function.
+     * @param DataDefinitition[] $definitions the definitions to search in
+     * @param string             $name        the column name to search for
      *
-     * @param AbstractEntity $item the entity to convert
-     *
-     * @see AbstractDataTable::getCellValues()
+     * @return DataDefinitition|null the definition, if found; null otherwise
      */
-    protected function toArray($item): array
+    private function findDefinition(array $definitions, string $name): ?DataDefinitition
     {
-        return $this->getCellValues($item);
+        foreach ($definitions as $definition) {
+            if ($name === $definition->getName()) {
+                return $definition;
+            }
+        }
+
+        return null;
     }
 }

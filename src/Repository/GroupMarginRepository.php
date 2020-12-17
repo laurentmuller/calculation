@@ -20,6 +20,11 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for group margin entity.
  *
+ * @method GroupMargin|null find($id, $lockMode = null, $lockVersion = null)
+ * @method GroupMargin|null findOneBy(array $criteria, array $orderBy = null)
+ * @method GroupMargin[]    findAll()
+ * @method GroupMargin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
  * @author Laurent Muller
  *
  * @see \App\Entity\GroupMargin

@@ -19,6 +19,11 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation group entity.
  *
+ * @method CalculationCategory|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CalculationCategory|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CalculationCategory[]    findAll()
+ * @method CalculationCategory[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
  * @author Laurent Muller
  *
  * @see \App\Entity\CalculationCategory

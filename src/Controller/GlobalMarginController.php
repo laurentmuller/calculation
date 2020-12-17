@@ -34,16 +34,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class GlobalMarginController extends AbstractEntityController
 {
     /**
-     * The list route.
-     */
-    private const ROUTE_LIST = 'globalmargin_list';
-
-    /**
-     * The table route.
-     */
-    private const ROUTE_TABLE = 'globalmargin_table';
-
-    /**
      * Constructor.
      */
     public function __construct()
@@ -174,48 +164,8 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function getCardTemplate(): string
-    {
-        return 'globalmargin/globalmargin_card.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultRoute(): string
-    {
-        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return GlobalMarginType::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEditTemplate(): string
-    {
-        return 'globalmargin/globalmargin_edit.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getShowTemplate(): string
-    {
-        return 'globalmargin/globalmargin_show.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTableTemplate(): string
-    {
-        return 'globalmargin/globalmargin_table.html.twig';
     }
 }

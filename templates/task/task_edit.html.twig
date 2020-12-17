@@ -1,0 +1,116 @@
+{% extends 'cards/card_edit.html.twig' %}
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# macros #}
+{% macro printTaskItemMargin(margin) %}
+<tr>
+    <td class="w-35">
+        <div class="form-group">
+            {{ form_widget(margin.minimum, {'attr': {'class': 'form-control-sm text-right', 'aria-label': 'taskitemmargin.fields.minimum'|trans}}) }}
+            <em>{{ form_errors(margin.minimum) }}</em>
+        </div>
+    </td>
+    <td class="w-35">
+        <div class="form-group">
+            {{ form_widget(margin.maximum, {'attr': {'aria-label': 'taskitemmargin.fields.maximum'|trans}}) }}
+            <em>{{ form_errors(margin.maximum) }}</em>
+        </div>
+    </td>
+    <td class="w-30">
+        <div class="form-group">
+            {{ form_widget(margin.value, {'attr': {'aria-label': 'taskitemmargin.fields.value'|trans}}) }}
+            <em>{{ form_errors(margin.value) }}</em>
+        </div>
+    </td>
+    <td class="actions px-0 d-print-none">
+        {{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete-margin d-print-none', 'times', 'taskitem.edit.delete_item') -}}
+    </td>
+</tr>
+{% endmacro -%}
+
+{% macro printTaskItem(item) %}
+{%- set id = item.vars.value.id|default(0) -%}
+{%- set count = item.vars.value.count|default(0) -%}
+<div class="item form-group">
+    <hr>
+    <div class="row">
+        <div class="col">{{ form_label(item.name) }}</div>
+        <div class="col-auto">{{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete-item d-print-none', 'times', 'task.edit.delete_item') -}}</div>
+    </div>
+    <div class="row">
+    	<div class="col">{{ form_widget(item.name) }}</div>
+    </div>    
+    <div class="form-group row ml-3 mt-1">
+        <div class="col-md-12">
+            <div class="row small">
+                <div class="col">
+                    <label class="control-label">{{ 'taskitem.fields.margins'|trans }}</label>
+                </div>
+                <div class="col-auto text-right">
+                    <a href="#" class="btn btn-sm btn-link p-0 btn-add-margin d-print-none" role="button">{{ 'taskitem.edit.add_item'|trans }}</a>
+                    <a href="#" class="btn btn-sm btn-link p-0 btn-sort-margin d-print-none{% if count < 2 %} disabled{% endif %}" role="button" title="{{ 'taskitem.edit.sort_items'|trans }}"><i class="fas fa-sort-numeric-up fa-fw"></i></a>
+                </div>
+            </div>
+            <hr class="my-0">
+            <table class="table table-borderless table-sm table-edit{% if count == 0 %} d-none{% endif %}" data-prototype="{{ _self.printTaskItemMargin(item.margins.vars.prototype)|e('html_attr') }}">
+                <thead>
+                    <tr>
+                        <th class="vertical-middle text-right font-weight-normal required small">{{ 'taskitemmargin.fields.minimum'|trans }}</th>
+                        <th class="vertical-middle text-right font-weight-normal required small">{{ 'taskitemmargin.fields.maximum'|trans }}</th>
+                        <th class="vertical-middle text-right font-weight-normal required small">{{ 'taskitemmargin.fields.value'|trans }}</th>
+                        <th class="actions d-print-none">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for margin in item.margins -%}
+                    {{ _self.printTaskItemMargin(margin) }}
+                {% endfor -%}               
+                </tbody>
+            </table>
+            <small class="text-muted text-right empty-margins{% if count > 0 %} d-none{% endif %}">{{- 'taskitem.edit.empty_items'|trans -}}</small>
+        </div>
+    </div>    
+</div>
+{% endmacro -%}
+
+{# parameters #}
+{%- set title      = new ? 'task.add.title' : 'task.edit.title' -%}
+{%- set title_icon = 'tasks' -%}
+{%- set page_list  = 'task_list' -%}
+
+{% block card_body %}
+<div class="form-row">
+    <div class="col-md-7">
+	    {{ form_row(form.name) }}
+    </div>
+    <div class="col-md-5">
+        {{ form_row(form.category) }}
+    </div>
+</div>
+<div class="items" data-item-index="{{ item_index }}" data-margin-index="{{ margin_index }}" data-prototype="{{ _self.printTaskItem(form.items.vars.prototype)|e('html_attr') }}">
+    <div class="form-row">
+        <div class="col">
+        {% for item in form.items -%}            
+            {{ _self.printTaskItem(item) }}
+        {% endfor -%}
+        <small class="text-muted text-right empty-items{% if form.vars.value.count > 0 %} d-none{% endif %} ">{{- 'task.edit.empty_items'|trans -}}</small>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block actions_form -%}
+{{ parent() }}
+<button type="button" class="btn btn-form btn-outline-success btn-add-item">{{ 'task.edit.add_item'|trans }}</button>
+{% endblock %}
+
+{% block javascripts %}
+{% if app.debug %}
+{{ parent() }}
+{{ asset_js('js/plugins/plugin-input.js') }}
+{{ asset_js('js/application/task_edit.js') }}
+{% else %}
+{{ asset_js('js/task_edit.js') }}
+{% endif %}
+{% endblock %}

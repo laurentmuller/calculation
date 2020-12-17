@@ -3,8 +3,7 @@
 		"name": "id",
 		"visible": false,
 		"orderable": false,
-		"searchable": false,
-		"class": "d-none"
+		"searchable": false
 	},
 	{
 		"name": "code",
@@ -15,12 +14,12 @@
 	{
 		"name": "description",
 		"title": "category.fields.description",
-		"class": "w-50 cell"
+		"class": "w-50 text-cell"
 	},
 	{
 		"name": "group.code",
 		"title": "category.fields.group",
-		"class": "text-code",
+		"class": "text-category",
 		"orderable": true,
 		"searchable": false
 	},

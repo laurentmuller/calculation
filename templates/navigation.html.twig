@@ -22,6 +22,7 @@
 {%- set is_granted_calculation_state = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
 {%- set is_granted_global_margin     = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_granted_customer          = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev -%}
+{%- set is_granted_task              = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_TASK)-%}
 
 {# navigation #}
 <nav id="navigation" class="navbar navbar-expand-md {{ theme_background(app.request) }}">
@@ -46,6 +47,10 @@
                 {%- if is_granted_product -%}
                     {%- set href = is_tabular ? path('product_table') : path('product_list')  -%}
                     {{- icons.dropdownItem(href, 'product.list.title', 'file-alt far') -}}
+                {%- endif -%}
+                {%- if is_granted_task and is_dev -%}
+                    {%- set href = is_tabular ? path('task_table') : path('task_list')  -%}
+                    {{- icons.dropdownItem(href, 'task.list.title', 'tasks') -}}
                 {%- endif -%}
                 {%- if is_granted_category -%}
                     {%- set href = is_tabular ? path('category_table') : path('category_list')  -%}
@@ -93,8 +98,10 @@
                     {{- icons.dropdownItem(href, 'duplicate.title', 'copy far') -}}
                     {%- set href = is_tabular ? path('empty_table') : path('empty_card')  -%}
                     {{- icons.dropdownItem(href, 'empty.title', 'file-code far') -}}
+                    {% if is_dev %}
                     {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(path('digiprint_compute', {'caller': path('homepage')}), 'digiprint.compute.title', 'keyboard') -}}
+                    {{- icons.dropdownItem(path('task_compute', {'caller': path('homepage')}), 'taskcompute.title', 'keyboard') -}}
+                    {% endif -%}
                     {% endif -%}
                 </div>
     		</li>

@@ -173,7 +173,6 @@ class LogDataTable extends AbstractDataTable
             $logs = $this->filterChannel($logs, $value);
             $skipChannel = true;
         }
-
         $skipLevel = false;
         if ($value = $query->columns[3]->search->value) {
             $logs = $this->filterLevel($logs, $value);
@@ -193,7 +192,7 @@ class LogDataTable extends AbstractDataTable
             $this->sort($logs, $field, $order->dir);
         }
 
-        // restrict
+        // restrict and convert
         $logs = \array_slice($logs, $query->start, $query->length);
         $results->data = \array_map([$this, 'getCellValues'], $logs);
 

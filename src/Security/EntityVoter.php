@@ -44,6 +44,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         self::ENTITY_GLOBAL_MARGIN => 6,
         self::ENTITY_USER => 7,
         self::ENTITY_DIGI_PRINT => 8,
+        self::ENTITY_TASK => 9,
     ];
 
     /**
@@ -223,6 +224,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         $role->{self::ENTITY_PRODUCT} = $default;
         $role->{self::ENTITY_GLOBAL_MARGIN} = $default;
         $role->{self::ENTITY_DIGI_PRINT} = $default;
+        $role->{self::ENTITY_TASK} = $default;
         $role->{self::ENTITY_USER} = 0;
 
         return $role;

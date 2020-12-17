@@ -3,8 +3,7 @@
 		"name": "id",
 		"visible": false,
 		"orderable": false,
-		"searchable": false,
-		"class": "d-none"
+		"searchable": false
 	},
 	{
 		"name": "code",

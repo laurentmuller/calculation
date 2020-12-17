@@ -18,6 +18,11 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation item entity.
  *
+ * @method CalculationItem|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CalculationItem|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CalculationItem[]    findAll()
+ * @method CalculationItem[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
  * @author Laurent Muller
  *
  * @see \App\Entity\CalculationItem

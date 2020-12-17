@@ -36,16 +36,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class CalculationStateController extends AbstractEntityController
 {
     /**
-     * The list route.
-     */
-    private const ROUTE_LIST = 'calculationstate_list';
-
-    /**
-     * The table route.
-     */
-    private const ROUTE_TABLE = 'calculationstate_table';
-
-    /**
      * Constructor.
      */
     public function __construct()
@@ -221,48 +211,8 @@ class CalculationStateController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function getCardTemplate(): string
-    {
-        return 'calculationstate/calculationstate_card.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultRoute(): string
-    {
-        return $this->isDisplayTabular() ? self::ROUTE_TABLE : self::ROUTE_LIST;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return CalculationStateType::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEditTemplate(): string
-    {
-        return 'calculationstate/calculationstate_edit.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getShowTemplate(): string
-    {
-        return 'calculationstate/calculationstate_show.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTableTemplate(): string
-    {
-        return 'calculationstate/calculationstate_table.html.twig';
     }
 }

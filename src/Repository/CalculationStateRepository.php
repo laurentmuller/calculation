@@ -21,6 +21,11 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation state entity.
  *
+ * @method CalculationState|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CalculationState|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CalculationState[]    findAll()
+ * @method CalculationState[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
  * @author Laurent Muller
  *
  * @see \App\Entity\CalculationState

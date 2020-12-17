@@ -3,8 +3,7 @@
 		"name": "id",
 		"visible": false,
 		"orderable": false,
-		"searchable": false,
-		"class": "d-none"
+		"searchable": false
 	},
 	{
 		"name": "code",
@@ -16,7 +15,7 @@
 	{
 		"name": "description",
 		"title": "calculationstate.fields.description",
-		"class": "w-auto cell"
+		"class": "w-auto text-cell"
 	},
 	{
 		"name": "editable",
@@ -38,8 +37,7 @@
 		"name": "color",
 		"visible": false,
 		"orderable": false,
-		"searchable": false,
-		"class": "d-none"
+		"searchable": false
 	},
 	{
 		"name": "id",

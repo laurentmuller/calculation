@@ -76,7 +76,7 @@ class CalculationState extends AbstractEntity
     /**
      * The list of calculations that fall into this category.
      *
-     * @ORM\OneToMany(targetEntity="Calculation", mappedBy="state")
+     * @ORM\OneToMany(targetEntity=Calculation::class, mappedBy="state")
      *
      * @var Collection|Calculation[]
      */

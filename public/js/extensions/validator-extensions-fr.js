@@ -14,13 +14,17 @@
          */
         getLabelText: function () {
             const $element = $(this);
+            const label = $element.attr('aria-label');
+            if (label) {
+                return label;
+            }
             const $parent = $element.parents('.form-group');
             if ($parent.length) {
-                let $label = $parent.children('label:first');
+                let $label = $parent.find('label:first');
                 if ($label.length) {
                     return $label.text();
                 }
-                $label = $parent.children('legend:first');
+                $label = $parent.find('legend:first');
                 if ($label.length) {
                     return $label.text();
                 }

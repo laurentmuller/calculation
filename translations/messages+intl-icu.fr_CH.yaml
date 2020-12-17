@@ -23,3 +23,5 @@ counters:
     years: '{count, plural, =0 {0 année} one {1 année} other {# années}}'
     customers_generate: '{count, plural, =0 {Aucun client n''a été généré.} one {1 client a été généré avec succès.} other {# clients ont été générés avec succès.}}'
     customers_update: '{count, plural, =0 {Aucun client n''a été mis à jour avec succès.} one {1 client a été mis à jour avec succès.} other {# clients ont été mis à jour avec succès.}}'
+    task_items: '{count, plural, =0 {Aucune entrée} one {1 entrée} other {# entrées}}'
+    task_items_lower: '{count, plural, =0 {aucune entrée} one {1 entrée} other {# entrées}}'

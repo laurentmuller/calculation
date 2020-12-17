@@ -1,0 +1,43 @@
+{% extends 'cards/card_show.html.twig' %}
+
+{# imports #}
+{% import 'macros/_properties.html.twig' as properties %}
+
+{# parameters #}
+{%- set id     = item.id -%}
+{%- set title  = 'task.show.title' -%}
+{%- set params = route_params(app.request, id) %}
+
+{# actions #}
+{%- set edit_path   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, item) ? path('task_edit', params) : null -%}
+{%- set delete_path = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, item) ? path('task_delete', params) : null -%}
+{%- set cancel_path = cancel_url(app.request, id, 'task_list') -%}
+
+{# properties #}
+{% block property_body %}
+{{ properties.property('task.fields.name', item.name) }}
+{{ properties.property('task.fields.category', item.categoryCode) }}
+{{ properties.property('task.fields.items', item.count|integer) }}
+{% endblock %}
+
+{% block card_body %}
+{{ parent() }}
+{% if not item.empty %}
+<table class="table table-hover table-sm table-list mt-1 mb-0">
+{% for taskItem in item.items %}
+    <tbody>
+       <tr><td colspan="3" class="">{{ taskItem.name }}</td></tr>
+       {% for taskMargin in taskItem.margins %}
+       <tr>
+            <td class="text-currency">{{ taskMargin.minimum|amount }}</td>
+            <td class="text-currency">{{ taskMargin.maximum|amount }}</td>
+            <td class="text-currency">{{ taskMargin.value|amount }}</td>
+        </tr>
+       {% else %}
+       <tr><td  class="text-right small" colspan="3">{{ 'taskitem.edit.empty_items'|trans }}</td></tr>
+       {% endfor %}
+    </tbody>
+{% endfor %}
+</table>
+{% endif %}
+{% endblock %}

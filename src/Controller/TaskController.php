@@ -90,10 +90,17 @@ class TaskController extends AbstractEntityController
     /**
      * Display the form to compute a task.
      *
-     * @Route("/compute", name="task_compute", methods={"GET", "POST"})
+     * @Route("/compute/{id}", name="task_compute", requirements={"id": "\d+" }, methods={"GET", "POST"})
      */
-    public function compute(Request $request, TaskService $service, TaskRepository $repository): Response
+    public function compute(Request $request, Task $task = null, TaskService $service, TaskRepository $repository): Response
     {
+        // task?
+        if (null !== $task) {
+            $service->setTask($task, true)
+                ->compute($request);
+        }
+
+        // select first task if none
         if (null === $service->getTask()) {
             $task = $repository->findOneBy([], ['name' => Criteria::ASC]);
             $service->setTask($task, true)
@@ -108,7 +115,6 @@ class TaskController extends AbstractEntityController
         return $this->render('task/task_compute.html.twig', [
             'tasks' => $repository->findAll(),
             'form' => $form->createView(),
-            'service' => $service,
         ]);
     }
 

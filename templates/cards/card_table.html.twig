@@ -132,12 +132,11 @@
             <label class="mr-2" for="table_length">{{ 'datatable.show'|trans }}</label>
             <select id="table_length" name="table_length" class="form-control form-control-sm custom-select custom-select-sm">
                 {{ helper.page(10, pagelength) }}
-                {% if results.recordsTotal > 10 %}{{ helper.page(15, pagelength) }}{% endif %}
-                {% if results.recordsTotal > 15 %}{{ helper.page(20, pagelength) }}{% endif %}
-                {% if results.recordsTotal > 20 %}{{ helper.page(25, pagelength) }}{% endif %}
-                {% if results.recordsTotal > 25 %}{{ helper.page(30, pagelength) }}{% endif %}
-                {% if results.recordsTotal > 30 %}{{ helper.page(50, pagelength) }}{% endif %}
-                {% if results.recordsTotal > 50 %}{{ helper.page((-1), pagelength, 'datatable.all') }}{% endif %}
+                {{ helper.page(15, pagelength, results.recordsTotal > 10) }}
+                {{ helper.page(20, pagelength, results.recordsTotal > 15) }}
+                {{ helper.page(25, pagelength, results.recordsTotal > 20) }}
+                {{ helper.page(30, pagelength, results.recordsTotal > 25) }}
+                {{ helper.page(50, pagelength, results.recordsTotal > 30) }}
             </select>
             <label class="ml-2">{{ 'datatable.elements'|trans }}</label>
         </div>

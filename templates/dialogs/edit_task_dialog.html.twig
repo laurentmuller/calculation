@@ -1,0 +1,53 @@
+{# Modal dialog to edit a calculation task #}
+
+{# macros #}
+{% macro plain_text_input(id, value = 0, class = '') %}
+{%- set class = (class ~ ' text-right form-control-plaintext border rounded px-2')|trim -%}
+<input id="{{ id }}" type="text" class="{{ class }}" disabled="disabled" value="{{ value|amount }}">
+{% endmacro %}
+
+{% macro row_input(id, item, visible) %}
+<tr class="item-row{% if not visible %} d-none{% endif %}" task-id="{{ id }}">
+    <td>        
+        <div class="custom-control custom-switch mt-1">
+            <input type="checkbox" class="custom-control-input item-input" id="item_{{ item.id }}" name="items[]" value="{{ item.id }}" checked="checked">
+            <label class="custom-control-label" for="item_{{ item.id }}">{{ item.name }}</label>
+        </div>
+    </td>
+    <td class="text-right w-25">
+        {{ _self.plain_text_input('value_' ~ item.id) }}
+    </td>
+    <td class="text-right w-25">
+        {{ _self.plain_text_input('amount_' ~ item.id) }}
+    </td>
+</tr>
+{% endmacro %}
+
+<div id="task_modal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
+    <form id="task_form" autocomplete="off" data-add="{{ 'calculationitem.add.title'|trans }}" data-edit="{{ 'calculationitem.edit.title'|trans }}">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header cursor-move">
+                    <h5 class="modal-title"><i class="fas fa-fw fa-edit" aria-hidden="true"></i><span id="dialog-title">{{ 'calculationitem.edit.title'|trans }}</span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'common.button_close'|trans }}" title="{{ 'common.button_close'|trans }}" >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+            
+            </div>
+            <div class="modal-footer">
+                <div class="row no-gutters w-100">
+                    <div class="col-9 text-left">
+                        <input type="submit" id="task_submit_button" class="btn btn-form btn-primary" value="{{ 'common.button_ok'|trans }}">
+                        <input type="button" id="task_cancel_button"  class="btn btn-form btn-secondary" value="{{ 'common.button_cancel'|trans }}" data-dismiss="modal">
+                    </div>
+                    <div class="col-3 text-right">
+                        <small class="text-danger">{{ 'common.required'|trans }}</small>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </form>
+</div>

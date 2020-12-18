@@ -15,13 +15,11 @@ namespace App\Controller;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CustomerRepository;
-use App\Repository\DigiPrintRepository;
 use App\Repository\ProductRepository;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use App\Service\CalculationService;
 use App\Service\CaptchaImageService;
-use App\Service\DigiPrintService;
 use App\Service\FakerService;
 use App\Service\SwissPostService;
 use App\Service\TaskService;
@@ -342,52 +340,7 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Compute a Digiprint.
-     *
-     * @Route("/digiprint", name="ajax_digiprint", methods={"GET", "POST"})
-     * @IsGranted("ROLE_USER")
-     */
-    public function computeDigiprint(Request $request, DigiPrintService $service, DigiPrintRepository $repository): JsonResponse
-    {
-        // get values
-        $id = (int) $request->get('id', 0);
-        $quantity = (int) $request->get('quantity', 0);
-        $price = \filter_var($request->get('price', false), FILTER_VALIDATE_BOOLEAN);
-        $blacklit = \filter_var($request->get('blacklit', false), FILTER_VALIDATE_BOOLEAN);
-        $replicating = \filter_var($request->get('replicating', false), FILTER_VALIDATE_BOOLEAN);
-
-        // validate
-        if ($quantity <= 0) {
-            return $this->jsonFalse([
-                'message' => $this->trans('digiprint.compute.error.quantity'),
-            ]);
-        }
-
-        /** @var ?\App\Entity\DigiPrint $digiPrint */
-        $digiPrint = $repository->find($id);
-        if (null === $digiPrint) {
-            return $this->jsonFalse([
-                'message' => $this->trans('digiprint.compute.error.digiprint'),
-            ]);
-        }
-
-        // update service and compute
-        $service->setDigiPrint($digiPrint)
-            ->setQuantity($quantity)
-            ->setPrice($price)
-            ->setBlacklit($blacklit)
-            ->setReplicating($replicating)
-            ->compute();
-
-        $data = \array_merge($service->jsonSerialize(), [
-            'message' => $this->trans('digiprint.compute.success'),
-        ]);
-
-        return $this->jsonTrue($data);
-    }
-
-    /**
-     * Compute a Digiprint.
+     * Compute a task.
      *
      * @Route("/task", name="ajax_task", methods={"GET", "POST"})
      * @IsGranted("ROLE_USER")
@@ -397,7 +350,6 @@ class AjaxController extends AbstractController
         // get values
         $id = (int) $request->get('id', 0);
         $quantity = (float) $request->get('quantity', 0.0);
-        $items = \array_map('intval', (array) $request->get('items', []));
 
         // validate
         if ($quantity <= 0) {
@@ -417,8 +369,7 @@ class AjaxController extends AbstractController
         // update service and compute
         $service->setTask($task)
             ->setQuantity($quantity)
-            ->setItems($items)
-            ->compute();
+            ->compute($request);
 
         $data = \array_merge($service->jsonSerialize(), [
             'message' => $this->trans('taskcompute.success'),

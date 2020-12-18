@@ -288,7 +288,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     // parameters
     const defaultLength = parseInt($table.data('pagelength') || 15, 10);
     const params = new URLSearchParams(window.location.search);
-    const paging = total > 15;
+    const paging = total > 10;
     const id = params.getIntOrDefault('id', 0);
     const page = params.getIntOrDefault('page', 0);
     const pagelength = params.getIntOrDefault('pagelength', defaultLength);

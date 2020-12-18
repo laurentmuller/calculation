@@ -995,62 +995,6 @@ update:
     help:
         customer: Remplace le nom et le prénom du contact, le nom de la société et l'e-mail.
         calculation: Remplace le nom du client, la description et le statut.
-digiprint:
-    name: Affiche
-    fields:
-        format: Format
-        height: Hauteur (mm)
-        width: Largeur (mm)
-        price: Prix
-        blacklit: Backlit
-        replicating: Repiquage
-        dimension: Dimensions
-    items:
-        price: Prix de base
-        blacklit: Supplément pour Backlit
-        replicating: Supplément pour repiquage
-    add:
-        title: Nouvelle affiche
-        success: L'affiche <b>%name%</b> a été créée avec succès.
-    edit:
-        title: Edition d'une affiche
-        success: L'affiche <b>%name%</b> a été mise à jour avec succès.
-        add_item: Ajouter une ligne
-        delete_item: Supprimer la ligne
-        empty_items: Aucune valeur définie
-        sort_items: Trier
-    delete:
-        title: Supprimer une affiche
-        message: Êtes-vous sûr de vouloir supprimer l'affiche <b>%name%</b> ?
-        success: L'affiche <b>%name%</b> a été supprimée avec succès.
-        failure: Impossible de supprimer l'affiche <b>%name%</b>. Elle est référencée dans %items%.
-    list:
-        title: Affiches
-        empty: Aucune affiche définie.
-        add_title: Créer une nouvelle affiche
-        pdf_title: Télécharger la liste des affiches
-        excel_title: Exporter la liste des affiches
-    show:
-        title: Propriétés de l'affiche
-    compute:
-        title: Calculation d'une affiche
-        success: Le prix de l'affiche a été calculé avec succès.
-        failed: Une erreur est intervenue lors du calcule du prix de l'affiche.
-        button_ok: Calculer
-        fields:
-            digiprint: Format
-            quantity: Quantité
-            price: Prix unitaire
-            total: Total
-            overall_total: Total générale
-        error:
-            quantity: La quantité doit être égale ou supérieure à 1.
-            digiprint: Impossible de trouver une affiche correspondante.
-digiprintitem:
-    fields:
-        minimum: Minimum
-        maximum: Maximum
-        amount: Prix
 task:
     name: Tâche
     fields:
@@ -1099,12 +1043,13 @@ taskitemmargin:
         maximum: Maximum
         value: Prix unitaire
 taskcompute:
-    title: Calculation d'une tâche
-    success: Le prix de la tâche a été calculé avec succès.
-    failed: Une erreur est intervenue lors du calcul du prix de la tâche.
+    title: Calculer une tâche
+    success: Le calcul de la tâche a été effectué avec succès.
+    failed: Une erreur est intervenue lors du calcul de la tâche.
     button_ok: Calculer
     fields:
         task: Tâche
+        category: Catégorie
         quantity: Quantité
         price: Prix unitaire
         total: Total

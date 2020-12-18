@@ -336,7 +336,7 @@ class GeneratorController extends AbstractController
      */
     private function sortProducts(array &$products): void
     {
-        \usort($products, function (Product $a, Product $b) {
+        \usort($products, static function (Product $a, Product $b) {
             $result = \strcasecmp($a->getCategoryCode(), $b->getCategoryCode());
             if (0 === $result) {
                 return \strcasecmp($a->getDescription(), $b->getDescription());

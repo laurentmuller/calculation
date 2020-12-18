@@ -321,7 +321,7 @@ var Application = {
             }
         }).on('shown.bs.modal', function () {
             if ($('#item_price').attr('readonly')) {
-                $('#item_reset_button').focus();
+                $('#item_cancel_button').focus();
             } else if (that.$editingRow) {
                 if ($('#item_price').isEmptyValue()) {
                     $('#item_price').selectFocus();
@@ -767,9 +767,8 @@ var Application = {
         
         const $selection = $('#item_category :selected');
         return {
-            id: $selection.data('groupId'),
+            id: parseInt($selection.data('groupId'), 10),
             code: $selection.data('groupCode')
-            
         };
     },
     
@@ -782,9 +781,8 @@ var Application = {
         'use strict';
         
         return {
-            id: $('#item_category').val(),
+            id: $('#item_category').intVal(),
             code: $('#item_category :selected').data('code')
-            
         };
     },
 
@@ -1646,6 +1644,9 @@ $.fn.extend({
         }, 250);
     });
 
+    // update total dialog
+    $('#item_total').removeClass('form-control');
+    
     // prototypes
     // const table = $('.table-edit').data('prototype');
     // console.log('table', $(table).html());

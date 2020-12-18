@@ -10,14 +10,15 @@
 {%- set object_type = EntityVoterInterface.ENTITY_TASK -%}
 
 {# actions #}
-{%- set params      = {'id': 0} -%}
-{%- set add_path    = path('task_add') -%}
-{%- set show_path   = path('task_show', params) -%}
-{%- set edit_path   = path('task_edit', params) -%}
-{%- set delete_path = path('task_delete', params) -%}
-{%- set clone_path  = path('task_clone', params) -%}
-{%- set pdf_path    = path('task_pdf') -%}
-{%- set excel_path  = path('task_excel') -%}
+{%- set params       = {'id': 0} -%}
+{%- set add_path     = path('task_add') -%}
+{%- set show_path    = path('task_show', params) -%}
+{%- set edit_path    = path('task_edit', params) -%}
+{%- set delete_path  = path('task_delete', params) -%}
+{%- set clone_path   = path('task_clone', params) -%}
+{%- set compute_path = path('task_compute', params) -%}
+{%- set pdf_path     = path('task_pdf') -%}
+{%- set excel_path   = path('task_excel') -%}
 
 {# titles #}
 {%- set add_title    = 'task.add.title' %}
@@ -28,9 +29,9 @@
 {% block table_actions -%}
 {{ _self.item_data(clone_path, 'common.button_clone', 'copy far') }}
 {{ icons.dropdownSeparator() }}
-{{ parent() }}
+{{ _self.item_data(compute_path, 'taskcompute.title', 'keyboard') }}
 {{ icons.dropdownSeparator() }}
-{{ icons.dropdownItem(path('task_compute'), 'taskcompute.title', 'keyboard') }}
+{{ parent() }}
 {{ icons.dropdownSeparator() }}
 {{ icons.dropdownItemCard('task_list') }}
 {%- endblock %}

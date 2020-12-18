@@ -587,7 +587,7 @@ class PivotNode extends PivotAggregator implements \Countable
     private function sortAscending(): self
     {
         if (!$this->isEmpty()) {
-            \usort($this->children, function (self $left, self $right): int {
+            \usort($this->children, static function (self $left, self $right): int {
                 return $left->getKey() <=> $right->getKey();
             });
         }
@@ -601,7 +601,7 @@ class PivotNode extends PivotAggregator implements \Countable
     private function sortDescending(): self
     {
         if (!$this->isEmpty()) {
-            \usort($this->children, function (self $left, self $right): int {
+            \usort($this->children, static function (self $left, self $right): int {
                 return $right->getKey() <=> $left->getKey();
             });
         }

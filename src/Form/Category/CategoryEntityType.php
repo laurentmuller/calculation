@@ -38,6 +38,13 @@ class CategoryEntityType extends AbstractType
             'query_builder' => function (CategoryRepository $repository) {
                 return $repository->getParentCodeSortedBuilder();
             },
+            'choice_attr' => function (Category $category) {
+                return [
+                    'data-code' => $category->getCode(),
+                    'data-group-id' => $category->getGroupId(),
+                    'data-group-code' => $category->getGroupCode(),
+                ];
+            },
         ]);
     }
 

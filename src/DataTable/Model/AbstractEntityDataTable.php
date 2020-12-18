@@ -88,28 +88,6 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     }
 
     /**
-     * Gets the total number of entities.
-     *
-     * @return int the number of entities
-     */
-    protected function countAll(): int
-    {
-        return $this->count($this->createQueryBuilder());
-    }
-
-    /**
-     * Gets filtered entities count.
-     *
-     * @param QueryBuilder $source the original query
-     *
-     * @return int the number of filtered entities
-     */
-    protected function countFiltered(QueryBuilder $source): int
-    {
-        return $this->count(clone $source);
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function createDataTableResults(DataTableQuery $query): DataTableResults
@@ -128,7 +106,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
         $builder = $this->createQueryBuilder();
 
         // total count
-        $results->recordsTotal = $this->countAll();
+        $results->recordsTotal = $this->count($this->createQueryBuilder());
 
         // columns search
         $this->createSearchColumns($builder, $definitions);
@@ -137,16 +115,14 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
         $this->createSearchGlobal($builder, $definitions, $query->search->value);
 
         // filtered count
-        $results->recordsFiltered = $this->countFiltered($builder);
+        $results->recordsFiltered = $this->count(clone $builder);
 
         // order by
         $this->createOrderBy($builder, $definitions, $query->order);
 
         // offset and limit.
-        $builder->setFirstResult($query->start);
-        if (self::SHOW_ALL !== $query->length) {
-            $builder->setMaxResults($query->length);
-        }
+        $builder->setFirstResult($query->start)
+            ->setMaxResults($query->length);
 
         // get items
         $items = $builder->getQuery()->getResult();

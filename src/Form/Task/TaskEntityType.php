@@ -19,7 +19,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Type to display a list of DigiPrint.
+ * Type to display a list of tasks.
  *
  * @author Laurent Muller
  */

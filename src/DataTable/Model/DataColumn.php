@@ -96,6 +96,13 @@ class DataColumn
     protected $orderable = true;
 
     /**
+     * The property path for array object.
+     *
+     * @var string
+     */
+    protected $property;
+
+    /**
      * The cell renderer behavior.
      *
      * @var bool
@@ -140,6 +147,46 @@ class DataColumn
     {
         $this->name = $name;
         $this->class = $class;
+        $this->updateProperty();
+    }
+
+    /**
+     * Gets the cell value for the given data and convert to a string.
+     *
+     * This implementation do the following:
+     * <ul>
+     * <li>First, get the cell value for the given data.</li>
+     * <li>Then if this formatter is a string, format the <code>value</code> using the <code>sprintf</code> function.</li>
+     * <li>Else if this formatter is callable, convert the <code>value</code> using the <code>call_user_func()</code> function with the <code>value</code> and the <code>data</code> as parameters.</li>
+     * <li>Else cast the <code>value</code> as string.</li>
+     * </ul>
+     *
+     * @param object|array $data the object or array to traverse
+     *
+     * @return string the value as string
+     */
+    public function convertValue($data): string
+    {
+        // get value
+        $property = \is_array($data) ? $this->property : $this->name;
+        $value = self::accessor()->getValue($data, $property);
+
+        // format
+        if (\is_string($this->formatter)) {
+            if (null !== $value) {
+                return \sprintf($this->formatter, $value);
+            }
+
+            return '';
+        }
+
+        // convert
+        if (\is_callable($this->formatter)) {
+            return \call_user_func($this->formatter, $value, $data);
+        }
+
+        // default
+        return (string) $value;
     }
 
     /**
@@ -155,40 +202,6 @@ class DataColumn
             'value' => $value,
             'regex' => \json_encode(false),
         ];
-    }
-
-    /**
-     * Converts the given value to a string.
-     *
-     * This implementation do the following:
-     * <ul>
-     * <li>If the formatter is a string, format the <code>$value</code> parameter using the <code>sprintf</code> function.</li>
-     * <li>If the formatter is callable, convert the <code>$value</code> using the <code>call_user_func()</code> function with the <code>$value</code> and the <code>$data</code> as parameters.</li>
-     * <li>Cast the <code>$value</code> parameter as string.</li>
-     * </ul>
-     *
-     * @param mixed        $value the value to convert
-     * @param object|array $data  the parent object or array
-     *
-     * @return string the value as string
-     *
-     * @see DataColumn::getFormatter()
-     */
-    public function formatValue($value, $data): string
-    {
-        if (\is_string($this->formatter)) {
-            if (null !== $value) {
-                return \sprintf($this->formatter, $value);
-            }
-
-            return '';
-        }
-        if (\is_callable($this->formatter)) {
-            return \call_user_func($this->formatter, $value, $data);
-        }
-
-        // default
-        return (string) $value;
     }
 
     /**
@@ -215,24 +228,6 @@ class DataColumn
     public function getCallback(): ?string
     {
         return $this->callback;
-    }
-
-    /**
-     * Gets the cell value for the given data.
-     *
-     * @param object|array $data the object or array to traverse
-     *
-     * @return mixed the cell value
-     */
-    public function getCellValue($data)
-    {
-        $property = $this->name;
-        if (\is_array($data)) {
-            $property = '[' . $property . ']';
-            $property = \str_replace('.', '].[', $property);
-        }
-
-        return self::accessor()->getValue($data, $property);
     }
 
     /**
@@ -493,7 +488,7 @@ class DataColumn
     {
         $this->name = $name;
 
-        return $this;
+        return $this->updateProperty();
     }
 
     /**
@@ -597,5 +592,17 @@ class DataColumn
         }
 
         return $accessor;
+    }
+
+    /**
+     * Update property path for array object.
+     */
+    private function updateProperty(): self
+    {
+        if ($this->name) {
+            $this->property = \str_replace('.', '].[', '[' . $this->name . ']');
+        }
+
+        return $this;
     }
 }

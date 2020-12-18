@@ -43,7 +43,6 @@
         {{ _self.row(form.EntityGroup, default.EntityGroup, overwrite) }}
         {{ _self.row(form.EntityCalculationState, default.EntityCalculationState, overwrite) }}
         {{ _self.row(form.EntityGlobalMargin, default.EntityGlobalMargin, overwrite) }}
-        {{ _self.row(form.EntityDigiPrint, default.EntityDigiPrint, overwrite) }}        
         {%- if form.EntityCustomer|default(false) -%}
             {{ _self.row(form.EntityCustomer, default.EntityCustomer, overwrite) }}
         {%- endif -%}

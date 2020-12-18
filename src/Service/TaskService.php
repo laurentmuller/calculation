@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Category;
 use App\Entity\Task;
 use App\Entity\TaskItem;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,6 +26,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TaskService implements \JsonSerializable
 {
+    /**
+     * @var Category|null
+     */
+    private $category;
     /**
      * @var int[]
      */
@@ -98,6 +103,14 @@ class TaskService implements \JsonSerializable
                 ];
             }
         }
+    }
+
+    /**
+     * Gets the category.
+     */
+    public function getCategory(): ?Category
+    {
+        return $this->category;
     }
 
     /**
@@ -188,6 +201,16 @@ class TaskService implements \JsonSerializable
     }
 
     /**
+     * Sets the category.
+     */
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
      * Sets the selected task item identifiers.
      *
      * @param int[] $items
@@ -211,6 +234,9 @@ class TaskService implements \JsonSerializable
 
     /**
      * Sets the task.
+     *
+     * @param Task|null $task      the task to set
+     * @param bool      $selectAll true to select all task items for the given task
      */
     public function setTask(?Task $task, bool $selectAll = false): self
     {
@@ -229,21 +255,22 @@ class TaskService implements \JsonSerializable
      *
      * @param Collection|TaskItem[] $items
      */
-    public function setTaskItems($items): self
+    public function setTaskItems(Collection $items): self
     {
-        $this->items = [];
-        foreach ($items as $item) {
-            if ($this->task === $item->getTask()) {
-                $this->items[] = $item->getId();
-            }
-        }
+        // filter and convert
+        $task = $this->task;
+        $this->items = $items->filter(function (TaskItem $item) use ($task) {
+            return $task === $item->getTask();
+        })->map(function (TaskItem $item) {
+            return $item->getId();
+        })->toArray();
 
         return $this;
     }
 
     private function parseRequest(Request $request): array
     {
-        $items = $request->get('items', []);
+        $items = (array) $request->get('items', []);
 
         return \array_map('intval', $items);
     }

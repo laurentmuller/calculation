@@ -48,7 +48,7 @@ function resetValues() {
 function getItems() {
     'use strict';
     let items = [];
-    $('.item-input:checked:not(.d-none)').each(function () {
+    $('#table-edit > tbody > tr:not(.d-none) .item-input:checked').each(function () {
         items.push(Number.parseInt($(this).attr('value'), 10));
     });
     return items;

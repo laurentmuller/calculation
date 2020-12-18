@@ -68,11 +68,6 @@
                     {%- set href = is_tabular ? path('globalmargin_table') : path('globalmargin_list')  -%}
                     {{- icons.dropdownItem(href, 'globalmargin.list.title', 'percent') -}}
                 {%- endif -%}
-                {%- if is_dev %}
-                    {%- set href = path('digiprint_table')  -%}
-                    {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(href, 'digiprint.list.title', 'outdent') -}}
-                {%- endif -%}
                 {%- if is_granted_customer %}
                     {%- set href = is_tabular ? path('customer_table') : path('customer_list')  -%}
                     {{- icons.dropdownSeparator -}}
@@ -98,9 +93,9 @@
                     {{- icons.dropdownItem(href, 'duplicate.title', 'copy far') -}}
                     {%- set href = is_tabular ? path('empty_table') : path('empty_card')  -%}
                     {{- icons.dropdownItem(href, 'empty.title', 'file-code far') -}}
-                    {% if is_dev %}
+                    {%- if is_granted_task and is_dev -%}
                     {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(path('task_compute', {'caller': path('homepage')}), 'taskcompute.title', 'keyboard') -}}
+                    {{- icons.dropdownItem(path('task_compute', {'id': 0, 'caller': path('homepage')}), 'taskcompute.title', 'keyboard') -}}
                     {% endif -%}
                     {% endif -%}
                 </div>

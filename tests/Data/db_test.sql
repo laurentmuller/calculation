@@ -136,23 +136,6 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
     "verified"          tinyint(1)   DEFAULT '0'
 );
 
-CREATE TABLE IF NOT EXISTS "sy_DigiPrint" (
-  "id"                integer PRIMARY KEY AUTOINCREMENT,
-  "format"            varchar(30) NOT NULL,
-  "width" 			  integer NOT NULL,
-  "height" 			  integer NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS "sy_DigiPrintItem" (
-	"id"                integer PRIMARY KEY AUTOINCREMENT,
-  	"digi_print_id" 	integer NOT NULL,
-  	"type" 				integer NOT NULL,
-  	"minimum"			integer NOT NULL DEFAULT '0',
-  	"maximum"			integer NOT NULL DEFAULT '0',
-  	"amount" 			double  NOT NULL DEFAULT '0',
-  	FOREIGN KEY(digi_print_id) REFERENCES sy_DigiPrint(id)
-);
-
 CREATE TABLE IF NOT EXISTS "sy_Task" (
   	"id"                integer PRIMARY KEY AUTOINCREMENT,
   	"category_id" 		integer NOT NULL,

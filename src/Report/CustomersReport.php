@@ -127,7 +127,7 @@ class CustomersReport extends AbstractArrayReport
         }
 
         // sort
-        \uksort($result, function (string $str1, string $str2) {
+        \uksort($result, static function (string $str1, string $str2) {
             if ($str1 === $this->other) {
                 return -1;
             }

@@ -80,7 +80,6 @@ class RightsType extends AbstractHelperType
             ->addRightType($helper, EntityVoterInterface::ENTITY_CATEGORY, 'category.list.title')
             ->addRightType($helper, EntityVoterInterface::ENTITY_CALCULATION_STATE, 'calculationstate.list.title')
             ->addRightType($helper, EntityVoterInterface::ENTITY_GLOBAL_MARGIN, 'globalmargin.list.title')
-            ->addRightType($helper, EntityVoterInterface::ENTITY_DIGI_PRINT, 'digiprint.list.title')
             ->addRightType($helper, EntityVoterInterface::ENTITY_USER, 'user.list.title');
 
         if ($this->debug) {

@@ -196,7 +196,7 @@ final class CalculationService
         }
 
         // sort
-        \uasort($groups, function (array $a, array $b) {
+        \uasort($groups, static function (array $a, array $b) {
             return $a['description'] <=> $b['description'];
         });
 

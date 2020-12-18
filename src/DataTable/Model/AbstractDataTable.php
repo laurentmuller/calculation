@@ -44,11 +44,6 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
     public const PAGE_START = 0;
 
     /**
-     * The show all records.
-     */
-    public const SHOW_ALL = -1;
-
-    /**
      * The order column parameter name.
      */
     private const PARAM_ORDER_COLUMN = 'ordercolumn';
@@ -208,16 +203,11 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
      * @param array|object $data the object or array to traverse for getting values
      *
      * @return string[] the cell values
-     *
-     * @see DataColumn::getCellValue()
-     * @see DataColumn::formatValue()
      */
     public function getCellValues($data): array
     {
         return \array_map(function (DataColumn $column) use ($data) {
-            $value = $column->getCellValue($data);
-
-            return $column->formatValue($value, $data);
+            return $column->convertValue($data);
         }, $this->getColumns());
     }
 
@@ -346,7 +336,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
         $params = new Parameters();
         $params->search = DataColumn::createSearch($query);
         $params->start = \max($page * $pagelength, 0);
-        $params->length = $pagelength;
+        $params->length = \max($pagelength, 10);
 
         // columns
         $columns = $this->getColumns();

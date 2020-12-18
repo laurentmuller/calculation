@@ -2,7 +2,6 @@
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
-
 {# macros #}
 {% macro plain_text_input(id, value = 0, class = '') %}
 {%- set class = (class ~ ' text-right form-control-plaintext border rounded px-2')|trim -%}
@@ -32,17 +31,29 @@
 {%- set submit_text = 'taskcompute.button_ok' -%}
 {%- set cancel_path = app.request.get('caller',  path(app.displayTabular ? 'task_table' : 'task_list')) -%}
 {%- set form_attr   = form_attr|default({})|merge({'data-url': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
+{%- set service     = form.vars.value -%}
+{%- set selection   = service.task.id -%}
+{%- set items_count = service.task.count -%}
 
 {% block card_body %}
 <div class="form-row">
+{% if form.category is defined %}
+    <div class="col-5">
+        {{ form_row(form.task) }}
+    </div>
+    <div class="col-4">
+        {{ form_row(form.category) }}
+    </div>
+{% else %}
     <div class="col-9">
         {{ form_row(form.task) }}
     </div>
+{% endif %}
     <div class="col-3">
         {{ form_row(form.quantity) }}
-    </div>
+    </div>    
 </div>
-<div class="form-row row-table{% if service.task.count == 0 %} d-none{% endif %}">
+<div class="form-row row-table{% if items_count == 0 %} d-none{% endif %}">
     <table class="table table-sm table-borderless" id="table-edit">
         <thead>
             <tr>
@@ -52,7 +63,6 @@
             </tr>
         </thead>
         <tbody>
-        	{%- set selection = service.task.id -%}
             {% for task in tasks %}
                 {% for item in task.items %}
                     {{ _self.row_input(task.id, item, task.id == selection) }}
@@ -70,7 +80,7 @@
         </tfoot>
     </table>
 </div>
-<div class="form-row row-empty{% if service.task.count != 0 %} d-none{% endif %}">
+<div class="form-row row-empty{% if items_count != 0 %} d-none{% endif %}">
     <p class="small text-muted">{{ 'task.edit.empty_items'|trans }}</p>
 </div>
 {% endblock %}

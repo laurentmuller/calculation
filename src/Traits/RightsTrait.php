@@ -26,7 +26,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @property int[] $EntityGlobalMargin
  * @property int[] $EntityProduct
  * @property int[] $EntityUser
- * @property int[] $EntityDigiPrint
  * @property int[] $EntityTask
  *
  * @author Laurent Muller

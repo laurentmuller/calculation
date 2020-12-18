@@ -19,6 +19,7 @@ use App\Entity\Group;
 use App\Excel\ExcelResponse;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
+use App\Form\Dialog\EditItemDialogType;
 use App\Pdf\PdfResponse;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
@@ -300,6 +301,7 @@ class CalculationController extends AbstractEntityController
             $parameters['item_index'] = $item->getLinesCount();
             $parameters['grouping'] = FormatUtils::getGrouping();
             $parameters['decimal'] = FormatUtils::getDecimal();
+            $parameters['dialog'] = $this->createForm(EditItemDialogType::class)->createView();
         }
 
         return parent::editEntity($request, $item, $parameters);

@@ -58,8 +58,8 @@ class GroupTest extends EntityValidatorTest
     public function testGroupMargin(): void
     {
         $margin = $this->createMargin(0, 100, 0.1);
-        $this->assertTrue($margin->containsAmount(0));
-        $this->assertFalse($margin->containsAmount(100));
+        $this->assertTrue($margin->contains(0));
+        $this->assertFalse($margin->contains(100));
         $this->assertEqualsWithDelta(1.0, $margin->getMarginAmount(10), 0.1);
     }
 

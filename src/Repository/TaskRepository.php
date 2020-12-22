@@ -44,13 +44,21 @@ class TaskRepository extends AbstractRepository
     /**
      * Gets the query builder for the list of tasks sorted by name.
      *
+     * @param bool   $all   true to return all, false to return only tasks that contains at least one operation with one margin
      * @param string $alias the default entity alias
      */
-    public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    public function getSortedBuilder(bool $all = true, string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         $field = $this->getSortFields('name', $alias);
-
-        return $this->createQueryBuilder($alias)
+        $builder = $this->createQueryBuilder($alias)
             ->orderBy($field, Criteria::ASC);
+
+        if (!$all) {
+            $builder->innerJoin("$alias.items", 'item')
+                ->innerJoin('item.margins', 'margin')
+                ->groupBy($field);
+        }
+
+        return $builder;
     }
 }

@@ -57,17 +57,18 @@
     <table class="table table-sm table-borderless" id="table-edit">
         <thead>
             <tr>
-                <td>&nbsp;</td>
+                <td><span class="task-items-empty text-danger d-none">{{ 'taskcompute.error.items'|trans }}</span></td>
                 <td class="text-right w-25">{{ 'taskcompute.fields.price'|trans }}</td>
                 <td class="text-right w-25">{{ 'taskcompute.fields.total'|trans }}</td>
             </tr>
         </thead>
         <tbody>
             {% for task in tasks %}
-                {% for item in task.items %}
-                    {{ _self.row_input(task.id, item, task.id == selection) }}
+                {% set visible = loop.index == 1 %}
+                {% for item in task.items|filter(item => item.count > 0) %}
+                    {{ _self.row_input(task.id, item, visible) }}
                 {% endfor %}
-            {% endfor %}            
+            {% endfor %}
         </tbody>
         <tfoot>
             <tr>

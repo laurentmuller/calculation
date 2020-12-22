@@ -58,7 +58,6 @@ class GeneratorController extends AbstractController
         ]);
 
         $helper->field('count')
-            ->updateOption('html5', true)
             ->updateAttribute('min', 1)
             ->updateAttribute('max', 50)
             ->addNumberType(0);

@@ -10,14 +10,14 @@
 
     // error handler
     const errorHandler = function () {
-        const title = $("#edit-form").data("title");
-        const message = $("#edit-form").data("error");
-        Toaster.danger(message, title, $("#flashbags").data());
+        const title = $('#edit-form').data('title');
+        const message = $('#edit-form').data('error');
+        Toaster.danger(message, title, $('#flashbags').data());
     };
     
     // title
     const $title = $('#customer_title');
-    const titleUrl = $("#edit-form").data("search-title");
+    const titleUrl = $('#edit-form').data('search-title');
     const titleOptions = {
         valueField: false,
         alignWidth: false,
@@ -43,7 +43,7 @@
     $title.typeahead(titleOptions);
 
     // controls
-    const addressUrl = $("#edit-form").data("search-address");
+    const addressUrl = $('#edit-form').data('search-address');
     const $address = $('#customer_address');
     const $zip = $('#customer_zipCode');
     const $city = $('#customer_city');
@@ -151,19 +151,19 @@
     // options
     const options = {
         rules: {
-            "customer[firstName]": {
+            'customer[firstName]': {
                 // eslint-disable-next-line camelcase
-                require_from_group: [1, ".customer-group"]
+                require_from_group: [1, '.customer-group']
             },
-            "customer[lastName]": {
+            'customer[lastName]': {
                 // eslint-disable-next-line camelcase
-                require_from_group: [1, ".customer-group"]
+                require_from_group: [1, '.customer-group']
             },
-            "customer[company]": {
+            'customer[company]': {
                 // eslint-disable-next-line camelcase
-                require_from_group: [1, ".customer-group"]
+                require_from_group: [1, '.customer-group']
             },
-            "customer[zipCode]": {
+            'customer[zipCode]': {
                 zipcodeCH: true
             },
             'customer[webSite]': {
@@ -173,5 +173,5 @@
     };
 
     // initialize
-    $("form").initValidator(options);
+    $('form').initValidator(options);
 }(jQuery));

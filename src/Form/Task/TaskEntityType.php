@@ -35,7 +35,10 @@ class TaskEntityType extends AbstractType
             'choice_label' => 'name',
             'placeholder' => false,
             'query_builder' => function (TaskRepository $r) {
-                return $r->getSortedBuilder();
+                return $r->getSortedBuilder(false);
+            },
+            'choice_attr' => function (Task $task) {
+                return ['data-category-id' => $task->getCategory()->getId()];
             },
         ]);
     }

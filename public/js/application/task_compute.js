@@ -77,13 +77,21 @@ function showError(message) {
 function update(form) {
     'use strict';
 
+    const items = getItems();
+    if (items.length === 0) {
+        $('.task-items-empty').removeClass('d-none');
+        return;
+    }
+    $('.task-items-empty').addClass('d-none');
+    
     // get data
     const $form = $(form);
     const url = $form.data('url');
+    
     const data = {
         'id': $('#task').intVal(),
         'quantity': $('#quantity').floatVal(),
-        'items': getItems()
+        'items': items
     };
 
     // cancel send
@@ -151,12 +159,10 @@ function onTaskChanged() {
     // attach handlers
     $('#task').on('input', function () {
         $(this).updateTimer(onTaskChanged, 250);
-    });
-    
+    });    
     $('#quantity').on('input', function () {
         $(this).updateTimer(onInputChanged, 250);
     }).inputNumberFormat().trigger('blur');
-    
     $('.item-input').on('change', function () {
         $(this).updateTimer(onInputChanged, 250);
     });

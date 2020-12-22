@@ -223,7 +223,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         $role->{self::ENTITY_PRODUCT} = $default;
         $role->{self::ENTITY_GLOBAL_MARGIN} = $default;
         $role->{self::ENTITY_TASK} = $default;
-        $role->{self::ENTITY_USER} = 0;
+        $role->{self::ENTITY_USER} = [];
 
         return $role;
     }

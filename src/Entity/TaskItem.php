@@ -27,16 +27,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class TaskItem extends AbstractEntity implements \Countable
 {
     /**
-     * Use the value as amount to compute total.
-     */
-    public const TYPE_AMOUNT = 0;
-
-    /**
-     * Use the value as margin to compute total.
-     */
-    public const TYPE_MARGIN = 1;
-
-    /**
      * @ORM\OneToMany(targetEntity=TaskItemMargin::class, mappedBy="taskItem", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"minimum": "ASC"})
      * @Assert\Valid
@@ -61,18 +51,10 @@ class TaskItem extends AbstractEntity implements \Countable
     private $task;
 
     /**
-     * @ORM\Column(type="smallint")
-     *
-     * @var int
-     */
-    private $type;
-
-    /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->type = self::TYPE_MARGIN;
         $this->margins = new ArrayCollection();
     }
 
@@ -147,11 +129,6 @@ class TaskItem extends AbstractEntity implements \Countable
         return $this->task;
     }
 
-    public function getType(): int
-    {
-        return $this->type;
-    }
-
     /**
      * Returns if the task item does not contain margins.
      */
@@ -181,13 +158,6 @@ class TaskItem extends AbstractEntity implements \Countable
     public function setTask(?Task $task): self
     {
         $this->task = $task;
-
-        return $this;
-    }
-
-    public function setType(int $type): self
-    {
-        $this->type = $type;
 
         return $this;
     }

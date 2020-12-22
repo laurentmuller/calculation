@@ -66,7 +66,7 @@ class TaskItemMargin extends AbstractEntity
      */
     public function contains(float $quantity): bool
     {
-        return $quantity >= $this->minimum && $quantity <= $this->maximum;
+        return $quantity >= $this->minimum && $quantity < $this->maximum;
     }
 
     public function getMaximum(): float

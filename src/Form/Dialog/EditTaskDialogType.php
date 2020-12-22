@@ -13,21 +13,23 @@ declare(strict_types=1);
 namespace App\Form\Dialog;
 
 use App\Form\AbstractHelperType;
+use App\Form\Category\CategoryEntityType;
 use App\Form\FormHelper;
+use App\Form\Task\TaskEntityType;
 
 /**
- * Type to edit a calculation item in a dialog.
+ * Type to edit a calculation task in a dialog.
  *
  * @author Laurent Muller
  */
-class EditItemDialogType extends AbstractHelperType
+class EditTaskDialogType extends AbstractHelperType
 {
     /**
      * {@inheritdoc}
      */
     public function getBlockPrefix()
     {
-        return 'item';
+        return 'task';
     }
 
     /**
@@ -35,21 +37,14 @@ class EditItemDialogType extends AbstractHelperType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field('description')
-            ->notMapped()
-            ->addTextType();
-
-        $helper->field('unit')
-            ->notRequired()
-            ->addTextType();
+        $helper->field('task')
+            ->add(TaskEntityType::class);
 
         $helper->field('category')
-            ->addCategoryType();
-
-        $helper->field('price')
-            ->addNumberType();
+            ->add(CategoryEntityType::class);
 
         $helper->field('quantity')
+            ->updateAttribute('min', 1)
             ->addNumberType();
     }
 
@@ -58,6 +53,6 @@ class EditItemDialogType extends AbstractHelperType
      */
     protected function getLabelPrefix(): string
     {
-        return 'calculationitem.fields.';
+        return 'taskcompute.fields.';
     }
 }

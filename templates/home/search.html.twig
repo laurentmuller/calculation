@@ -6,7 +6,7 @@
 {# macros #}
 {% macro button(class, text, action, icon) %}
 {%- set path = path('homepage') ~ '_type_/' ~ action ~ '/_id_' -%}
-    <a href="#" class="disabled btn btn-sm btn-form-sm {{ class }}" data-path="{{ path }}" data-icon="{{ icon }}">
+    <a href="#" class="disabled btn btn-form-sm {{ class }}" data-path="{{ path }}" data-icon="{{ icon }}">
         {{- text|trans -}}
     </a>
 {% endmacro %}
@@ -35,7 +35,7 @@
 <div class="row">
     <div class="col-lg-5 mt-1">{{ parent() }}</div>
     <div class="col-lg-7 text-lg-right d-print-none">
-        <div class="btn-group" role="group" aria-label="{{ 'common.actions'|trans }}">
+        <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
         	{% if show_granted %}
             {{ _self.button('btn-table-show btn-info', 'common.button_show', 'show', 'fas fa-fw fa-tv') }}
             {% endif %}

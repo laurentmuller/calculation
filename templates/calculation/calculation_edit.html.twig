@@ -28,9 +28,7 @@
 {%- if editable -%}
 {%- set form_attr        = form_attr|merge({
         				   	'data-title': title|trans(title_parameters),
-        				   	'data-grouping': grouping,
-        				   	'data-decimal': decimal,
-        					'data-update': url('ajax_update'), 
+        					'data-update': url('ajax_update'),
         				   	'data-search-customer': url('ajax_search_customer'),
         				   	'data-search-product': url('ajax_search_product'),
         				   	'data-search-unit': url('ajax_search_unit'),
@@ -38,7 +36,8 @@
         				   	'data-error-customer': 'calculation.edit.error.search_customer'|trans,
         				   	'data-error-product': 'calculation.edit.error.search_product'|trans,
         				   	'data-error-unit': 'calculation.edit.error.search_unit'|trans,
-        				   	'data-error-margin': 'calculation.edit.error.user_margin'|trans}) -%}
+        				   	'data-error-margin': 'calculation.edit.error.user_margin'|trans
+        				   	}) -%}
 {%- endif -%}
 
 {# cancel path #}
@@ -60,8 +59,11 @@
 	</div>
 </div>
 {{ form_end(form) }}
-{# dialog #}
-{% if editable -%}{% include 'dialogs/edit_item_dialog.html.twig' %}{%- endif %}
+{# dialogs #}
+{% if editable -%}
+    {%- include 'dialogs/edit_item_dialog.html.twig' with {'form': item_dialog} only %}
+    {%- include 'dialogs/edit_task_dialog.html.twig' with {'form': task_dialog, 'tasks': tasks} only %}
+{%- endif %}
 {%- endblock %}
 
 {% block stylesheets %}

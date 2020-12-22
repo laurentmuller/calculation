@@ -36,9 +36,7 @@
 
             // add handlers
             const $element = this.$element;
-            if ($element.attr('type') !== 'number') {
-                $element.on('keypress', $.proxy(this.keypress, this));
-            }
+            $element.on('keypress', $.proxy(this.keypress, this));
             $element.on('blur', $.proxy(this.blur, this));
             $element.on('change', $.proxy(this.change, this));
         },
@@ -46,9 +44,7 @@
         destroy: function () {
             // remove handlers and data
             const $element = this.$element;
-            if ($element.attr('type') !== 'number') {
-                $element.off('keypress', $.proxy(this.keypress, this));
-            }
+            $element.off('keypress', $.proxy(this.keypress, this));
             $element.off('blur', $.proxy(this.blur, this));
             $element.off('change', $.proxy(this.change, this));
             $element.removeData("inputNumberFormat");
@@ -77,6 +73,11 @@
 
         keypress: function (e) {
             if (e.ctrlKey || e.key.length > 1 || e.keyCode === 13) {
+                return;
+            }
+
+            // chrome?
+            if (e.target.selectionStart === null || e.target.selectionEnd === null) {
                 return;
             }
 

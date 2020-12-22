@@ -134,7 +134,7 @@ class Group extends AbstractEntity
     {
         /** @var GroupMargin $margin */
         foreach ($this->margins as $margin) {
-            if ($margin->containsAmount($amount)) {
+            if ($margin->contains($amount)) {
                 return $margin;
             }
         }

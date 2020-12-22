@@ -17,12 +17,12 @@
 {# rights #}
 {%- set is_granted_calculation       = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
 {%- set is_granted_product           = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_PRODUCT) -%}
+{%- set is_granted_task              = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_TASK)-%}
 {%- set is_granted_category          = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CATEGORY) -%}
 {%- set is_granted_group             = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_GROUP) -%}
 {%- set is_granted_calculation_state = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
 {%- set is_granted_global_margin     = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_granted_customer          = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev -%}
-{%- set is_granted_task              = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_TASK)-%}
 
 {# navigation #}
 <nav id="navigation" class="navbar navbar-expand-md {{ theme_background(app.request) }}">
@@ -38,7 +38,7 @@
                 {%- set href = is_tabular ? path('calculation_table') : path('calculation_list')  -%}
                 {{- icons.navItem(href, 'calculation.list.title', 'calculator') -}}
                 {%- endif -%}
-            {%- if is_granted_product or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer -%}
+            {%- if is_granted_product or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer or is_granted_task -%}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dataDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{- icons.icon('database', 'index.menu_data') -}}
@@ -48,7 +48,7 @@
                     {%- set href = is_tabular ? path('product_table') : path('product_list')  -%}
                     {{- icons.dropdownItem(href, 'product.list.title', 'file-alt far') -}}
                 {%- endif -%}
-                {%- if is_granted_task and is_dev -%}
+                {%- if is_granted_task -%}
                     {%- set href = is_tabular ? path('task_table') : path('task_list')  -%}
                     {{- icons.dropdownItem(href, 'task.list.title', 'tasks') -}}
                 {%- endif -%}
@@ -93,7 +93,7 @@
                     {{- icons.dropdownItem(href, 'duplicate.title', 'copy far') -}}
                     {%- set href = is_tabular ? path('empty_table') : path('empty_card')  -%}
                     {{- icons.dropdownItem(href, 'empty.title', 'file-code far') -}}
-                    {%- if is_granted_task and is_dev -%}
+                    {%- if is_granted_task -%}
                     {{- icons.dropdownSeparator -}}
                     {{- icons.dropdownItem(path('task_compute', {'id': 0, 'caller': path('homepage')}), 'taskcompute.title', 'keyboard') -}}
                     {% endif -%}

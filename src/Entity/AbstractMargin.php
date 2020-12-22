@@ -75,7 +75,7 @@ abstract class AbstractMargin extends AbstractEntity
      *
      * @return bool true if within this range
      */
-    public function containsAmount(float $amount): bool
+    public function contains(float $amount): bool
     {
         return $amount >= $this->minimum && $amount < $this->maximum;
     }

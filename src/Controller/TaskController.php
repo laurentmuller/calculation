@@ -112,9 +112,13 @@ class TaskController extends AbstractEntityController
             $service->compute($request);
         }
 
+        $tasks = $repository->getSortedBuilder(false)
+            ->getQuery()
+            ->getResult();
+
         return $this->render('task/task_compute.html.twig', [
-            'tasks' => $repository->findAll(),
             'form' => $form->createView(),
+            'tasks' => $tasks,
         ]);
     }
 

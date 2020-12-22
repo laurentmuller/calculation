@@ -40,6 +40,9 @@ calculation:
         move_up_item: Déplacer vers le haut
         move_down_item: Déplacer vers le bas
         move_last_item: Déplacer à la dernière place
+        add_task: Ajouter une tâche
+        edit_task: Modifier la tâche
+        delete_task: Supprimer la tâche
         read_only: Cette calculation ne peut pas être modifiée (Statut %name%).
         adjust_title: Ajuster la marge utilisateur pour atteindre le seuil minimal de <b>%minimum%</b>
         error:
@@ -1041,9 +1044,11 @@ taskitemmargin:
     fields:
         minimum: Minimum
         maximum: Maximum
-        value: Prix unitaire
+        value: Prix
 taskcompute:
     title: Calculer une tâche
+    edit: Edition d'une tâche
+    add: Nouvelle tâche
     success: Le calcul de la tâche a été effectué avec succès.
     failed: Une erreur est intervenue lors du calcul de la tâche.
     button_ok: Calculer
@@ -1051,9 +1056,10 @@ taskcompute:
         task: Tâche
         category: Catégorie
         quantity: Quantité
-        price: Prix unitaire
+        price: Prix
         total: Total
         overall_total: Total générale
     error:
         quantity: La quantité doit être égale ou supérieure à 1.
         task: Impossible de trouver une tâche correspondante.
+        items: Une opération doit être sélectionnée.

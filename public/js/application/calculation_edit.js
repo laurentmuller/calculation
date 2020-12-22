@@ -280,38 +280,43 @@ var Application = {
 
         return that;
     },
-
+    
     /**
-     * Initialize the edit dialog.
+     * Initialize the edit item dialog.
      * 
      * @return {Application} This application instance for chaining.
      */
-    initEditDialog: function () {
+    initEditItemDialog: function () {
         'use strict';
 
         // already initialized?
         const that = this;
-        if (that.dialogInitialized) {
+        if (that.dialogItemInitialized) {
             return that;
         }
+        
+        // widgets
+        const $form = $('#item_form');
+        const $price = $('#item_price').inputNumberFormat();
+        const $quantity = $('#item_quantity').inputNumberFormat();
 
         // dialog validator
         const options = {
             submitHandler: function () {
                 if (that.$editingRow) {
-                    that.onEditDialogSubmit();
+                    that.onEditItemDialogSubmit();
                 } else {
-                    that.onAddDialogSubmit();
+                    that.onAddItemDialogSubmit();
                 }
             }
         };
-        $('#item_form').initValidator(options);
+        $form.initValidator(options);
 
         // dialog events
         $('#item_modal').on('show.bs.modal', function () {
             const key = that.$editingRow ? 'edit' : 'add';
-            const title = $('#item_form').data(key);
-            $('#dialog-title').html(title);
+            const title = $form.data(key);
+            $('#item_modal .dialog-title').text(title);
             if (that.$editingRow) {
                 $('#item_search_row').hide();
                 $('#item_delete_button').show();
@@ -323,10 +328,10 @@ var Application = {
             if ($('#item_price').attr('readonly')) {
                 $('#item_cancel_button').focus();
             } else if (that.$editingRow) {
-                if ($('#item_price').isEmptyValue()) {
-                    $('#item_price').selectFocus();
+                if ($price.isEmptyValue()) {
+                    $price.selectFocus();
                 } else {
-                    $('#item_quantity').selectFocus();
+                    $quantity.selectFocus();
                 }
                 that.$editingRow.addClass('table-primary');
             } else {
@@ -347,21 +352,198 @@ var Application = {
             }
         });
 
-        // widgets
-        $('#item_price').inputNumberFormat();
-        $('#item_quantity').inputNumberFormat();
-
-        // bind
-        const proxy = $.proxy(that.updateItemLine, that);
-        $('#item_price, #item_quantity').on('input', proxy);
+        // update total line
+        $('#item_price, #item_quantity').on('input', function() {
+            const price = $price.floatVal().toFixed(2);
+            const quantity = $quantity.floatVal().toFixed(2);
+            const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
+            $('#item_total').text(that.toLocaleString(total));
+        });
 
         // ok
-        that.dialogInitialized = true;
+        that.dialogItemInitialized = true;
         return that;
     },
-
+    
     /**
-     * Initialize the draggable edit dialog.
+     * Initialize the edit task dialog.
+     * 
+     * @return {Application} This application instance for chaining.
+     */
+    initEditTaskDialog: function () {
+        'use strict';
+
+        // already initialized?
+        const that = this;
+        if (that.dialogTaskInitialized) {
+            return that;
+        }
+        
+        const $form = $('#task_form');        
+        $('#task_modal').on('show.bs.modal', function () {
+            const key = that.$editingRow ? 'edit' : 'add';
+            const title = $form.data(key);
+            $('#task_modal .dialog-title').text(title);
+            if (that.$editingRow) {
+                // $('#task_delete_button').show();
+            } else {
+                // $('#task_delete_button').hide();
+            }
+        }).on('shown.bs.modal', function () {
+             if (that.$editingRow) {
+                 if ($('#task_quantity').isEmptyValue()) {
+                     $('#task_quantity').selectFocus();
+                 } else {
+                     $('#task_task').focus();
+                 }
+                 that.$editingRow.addClass('table-primary');
+             } else {
+                 $('#task_task').focus();
+             }
+        }).on('hide.bs.modal', function () {
+            $('#data-table-edit tbody tr').removeClass('table-primary');
+        });
+        
+        const updateValue = function (id, value) {
+            $('#' + id).text(that.toLocaleString(value));
+        };
+
+        const resetValues = function() {
+            const value = that.toLocaleString(0);
+            $('#task_form .form-control-plaintext').text(value);
+        };
+        
+        const getItems = function() {
+            let items = [];
+            $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').each(function () {
+                items.push(Number.parseInt($(this).attr('value'), 10));
+            });
+            return items;
+        };
+        
+        const showError = function(message) {
+            resetValues();
+            $('#task_submit_button').attr("disabled", true);
+            $('#task_modal').modal('hide');
+            
+            const title = $('#task_modal .dialog-title').text();
+            const options = $('#flashbags').data();
+            Toaster.danger(message || $form.data('failed'), title, options);
+        };
+        
+        const update = function() {
+            // disable
+            $('#task_submit_button').attr("disabled", true);
+            
+            // valid?
+            if (!$form.valid()) {
+                resetValues();
+                return;
+            }
+            
+            const items = getItems();
+            if (items.length === 0) {
+                $('.task-items-empty').removeClass('d-none');
+                resetValues();
+                return;
+            }
+
+            $('.task-items-empty').addClass('d-none');
+
+            // get data
+            const url = $form.data('url');
+            const data = {
+                'id': $('#task_task').intVal(),
+                'quantity': $('#task_quantity').floatVal().toFixed(2),
+                'items': items
+            };
+
+            // cancel send
+            if ($form.jqXHR) {
+                try {
+                    $form.jqXHR.abort();    
+                } catch (e) {
+                    // ignore
+                    console.log(e);
+                } finally {
+                    $form.jqXHR = null;    
+                }                
+            }
+            
+            // send
+            $form.jqXHR = $.post(url, data, function (response) {
+                if (response.result) {
+                    // update
+                    response.results.forEach(function (item) {
+                        updateValue('task_value_' + item.id, item.value);
+                        updateValue('task_total_' + item.id, item.amount);
+                    });
+                    updateValue('task_overall', response.overall);
+                    $('#task_submit_button').attr("disabled", false);
+                    const categoryId = $('#task_task  :selected').data('category-id');
+                    $('#task_category').val(categoryId);                                 
+                } else {
+                    showError(response.message);                    
+                }
+            }).fail(function (jqxhr, textStatus, error) {
+                console.log( "Request Failed: " + textStatus + ", " + error );
+                showError($form.data('failed'));
+            });            
+        };
+        
+        const onTaskChanged = function() {
+            // toogle rows visibility
+            const id = $('#task_task').intVal();
+            const selector = '[task-id="' + id + '"]';
+            $('.task-item-row' + selector).removeClass('d-none');
+            $('.task-item-row:not(' + selector + ')').addClass('d-none');
+
+            // task items?
+            const empty = $('.task-item-row:not(.d-none)').length === 0;
+            $('.task-row-table').toggleClass('d-none', empty);
+            $('.task-row-empty').toggleClass('d-none', !empty);
+            
+            // submit
+            if (empty) {
+                $('#task_submit_button').attr("disabled", true);
+            } else {
+                update();
+            }
+        };
+        
+        $('#task_task').on('input', function () {
+            $(this).updateTimer(onTaskChanged, 250);
+        }); 
+        $('#task_quantity').on('input', function () {
+            $(this).updateTimer(update, 250);
+        }).inputNumberFormat().trigger('blur');
+        $('.item-input').on('change', function () {
+            $(this).updateTimer(update, 250);
+        });
+        
+        // dialog validator
+        const options = {
+            submitHandler: function (form) {
+                if (!$(form).valid()) {
+                    return;
+                }
+                if (that.$editingRow) {
+                    that.onEditTaskDialogSubmit();
+                } else {
+                    that.onAddTaskDialogSubmit();
+                }
+            }
+        };        
+        $form.initValidator(options);
+        update();
+        
+        // ok
+        that.dialogTaskInitialized = true;
+        return that;
+    },
+    
+    /**
+     * Initialize the draggable edit dialogs.
      * 
      * @return {Application} This application instance for chaining.
      */
@@ -375,7 +557,7 @@ var Application = {
         }
         
         // draggable edit dialog
-        $('#item_modal .modal-header').on('mousedown', function(e) {
+        $('.modal .modal-header').on('mousedown', function(e) {
             // left button?
             if (event.which !== 1) {
                 return;
@@ -454,7 +636,12 @@ var Application = {
         // add item button
         $('#items-panel .card-header .btn-add-item').on('click', function (e) {
             e.preventDefault();
-            that.showAddDialog($(this));
+            that.showAddItemDialog($(this));
+        });
+        
+        $('#items-panel .card-header .btn-add-task').on('click', function (e) {
+            e.preventDefault();
+            that.showAddTaskDialog($(this));
         });
 
         // sort calculation button
@@ -466,10 +653,13 @@ var Application = {
         // data table buttons
         $('#data-table-edit').on('click', '.btn-add-item', function (e) {
             e.preventDefault();
-            that.showAddDialog($(this));
+            that.showAddItemDialog($(this));
+        }).on('click', '.btn-add-task', function (e) {
+            e.preventDefault();
+            that.showAddTaskDialog($(this));
         }).on('click', '.btn-edit-item', function (e) {
             e.preventDefault();
-            that.showEditDialog($(this));
+            that.showEditItemDialog($(this));
         }).on('click', '.btn-delete-item', function (e) {
             e.preventDefault();
             that.removeItem($(this));
@@ -499,24 +689,16 @@ var Application = {
         if (isNaN(parsedValue)) {
             parsedValue = parseFloat(0);
         }
-
-        // format
-        let formatted = parsedValue.toLocaleString('de-CH', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-
-        // replace grouping and separator
-        const grouping = $('#edit-form').data('grouping');
-        if (grouping) {
-            formatted = formatted.replace(/’|'/g, grouping);
+        
+        // created?
+        if (!this.formatter) {
+            this.formatter = new Intl.NumberFormat('de-CH', {
+                'minimumFractionDigits': 2,
+                'maximumFractionDigits': 2
+            });
         }
-        const decimal = $('#edit-form').data('decimal');
-        if (decimal) {
-            formatted = formatted.replace(/\./g, decimal);
-        }
-
-        return formatted;
+       
+        return this.formatter.format(value);
     },
 
     /**
@@ -527,23 +709,6 @@ var Application = {
     updateAll: function() {
         'use strict';
         return this.updateButtons().updateTotals().initDragDrop(true);
-    },
-    
-    /**
-     * Update the total of the line in the item dialog.
-     * 
-     * @return {Application} This application instance for chaining.
-     */
-    updateItemLine: function () {
-        'use strict';
-
-        const that = this;
-        const price = $('#item_price').floatVal();
-        const quantity = $('#item_quantity').floatVal();
-        const total = that.toLocaleString(price * quantity);
-        $('#item_total').val(total);
-        
-        return that;
     },
 
     /**
@@ -730,39 +895,51 @@ var Application = {
     },
 
     /**
-     * Finds the table head for the given group.
+     * Finds or create the table head for the given group.
      * 
-     * @param {int}
-     *            id - the group identifier.
-     * @returns {jQuery} - the table head, if found; null otherwise.
+     * @param {Object}
+     *            group - the group data used to find row.
+     * @returns {jQuery} - the table head.
      */
-    findGroup: function (id) {
+    getGroup: function (group) {
         'use strict';
 
-        const $head = $("#data-table-edit thead:has(input[name*='groupId'][value=" + id + "])");
-        return $head.length !== 0 ? $head : null;
+        // find
+        const $head = $("#data-table-edit thead:has(input[name*='groupId'][value=" + group.id + "])");
+        if ($head.length !== 0 ) {
+            return $head;
+        }
+        
+        // append
+        return this.appendGroup(group);
     },
 
     /**
-     * Finds the table body for the given category.
+     * Find or create the table body for the given category.
      * 
-     * @param {int}
-     *            id - the category identifier.
-     * @returns {jQuery} - the table body, if found; null otherwise.
+     * @param {jQuery}
+     *            $group - the parent group (thead).
+     * @param {Object}
+     *            category - the category data used to update row.
+     * @returns {jQuery} - the table body.
      */
-    findCategory: function (id) {
+    getCategory: function ($group, category) {
         'use strict';
 
-        const $body = $("#data-table-edit tbody:has(input[name*='categoryId'][value=" + id + "])");
-        return $body.length !== 0 ? $body : null;
+        const $body = $("#data-table-edit tbody:has(input[name*='categoryId'][value=" + category.id + "])");
+        if ($body.length !== 0) {
+            return $body;
+        }
+        
+        return this.appendCategory($group, category);
     },
     
     /**
-     * Gets the edit dialog group.
+     * Gets the edit item dialog group.
      * 
      * @returns {Object} the group.
      */
-    getDialogGroup: function () {
+    getItemDialogGroup: function () {
         'use strict';
         
         const $selection = $('#item_category :selected');
@@ -773,11 +950,11 @@ var Application = {
     },
     
     /**
-     * Gets the edit dialog category.
+     * Gets the edit item dialog category.
      * 
      * @returns {Object} the category.
      */
-    getDialogCategory: function () {
+    getItemDialogCategory: function () {
         'use strict';
         
         return {
@@ -787,11 +964,11 @@ var Application = {
     },
 
     /**
-     * Gets the edit dialog item.
+     * Gets the edit item dialog item.
      * 
      * @returns {Object} the item.
      */
-    getDialogItem: function () {
+    getItemDialogItem: function () {
         'use strict';
 
         const price = $('#item_price').floatVal();
@@ -804,6 +981,36 @@ var Application = {
             quantity: quantity,
             price: price,            
             total: total
+        };
+    },
+    
+
+    /**
+     * Gets the edit task dialog group.
+     * 
+     * @returns {Object} the group.
+     */
+    getTaskDialogGroup: function () {
+        'use strict';
+        
+        const $selection = $('#task_category :selected');
+        return {
+            id: parseInt($selection.data('groupId'), 10),
+            code: $selection.data('groupCode')
+        };
+    },
+    
+    /**
+     * Gets the edit task dialog category.
+     * 
+     * @returns {Object} the category.
+     */
+    getTaskDialogCategory: function () {
+        'use strict';
+        
+        return {
+            id: $('#task_category').intVal(),
+            code: $('#task_category :selected').data('code')
         };
     },
 
@@ -1047,11 +1254,11 @@ var Application = {
      * @param {jQuery}
      *            $source - the caller element (normally a button).
      */
-    showAddDialog: function ($source) {
+    showAddItemDialog: function ($source) {
         'use strict';
 
         // initialize
-        this.initEditDialog().initDragDialog();
+        this.initEditItemDialog().initDragDialog();
         this.$editingRow = null;
 
         // reset
@@ -1065,12 +1272,42 @@ var Application = {
         }
         $('#item_price').floatVal(1);
         $('#item_quantity').floatVal(1);
-        $('#item_total').floatVal(1);
+        $('#item_total').text(this.toLocaleString(1));
 
         // show
         $('#item_modal').modal('show');
     },
 
+    /**
+     * Display the add item dialog.
+     * 
+     * @param {jQuery}
+     *            $source - the caller element (normally a button).
+     */
+    showAddTaskDialog: function ($source) {
+        'use strict';
+
+        // initialize
+        this.initEditTaskDialog().initDragDialog();
+        this.$editingRow = null;
+
+        // reset
+        $('tr.table-success').removeClass('table-success');
+        $('#task_form').resetValidator();
+
+        // update values
+        const $input = $source.parents('tbody').find("tr:first input[name*='categoryId']");
+        if ($input.length) {
+            $('#task_category').val($input.val());
+        }
+        $('#task_quantity').floatVal(1);
+        $('#task_overall').text(this.toLocaleString(0));
+
+        // show
+        $('#task_modal').modal('show');
+    },
+
+    
     /**
      * Display the edit item dialog.
      * 
@@ -1079,14 +1316,14 @@ var Application = {
      * @param {jQuery}
      *            $source - the caller element (normally a button).
      */
-    showEditDialog: function (source) {
+    showEditItemDialog: function (source) {
         'use strict';
 
         // row
         const $row = source.getParentRow();
 
         // initialize
-        this.initEditDialog().initDragDialog();
+        this.initEditItemDialog().initDragDialog();
         this.$editingRow = $row;
 
         // reset
@@ -1099,7 +1336,7 @@ var Application = {
         $('#item_category').val($row.parent().findNamedInput('categoryId').val());
         $('#item_price').floatVal($row.findNamedInput('price').val());
         $('#item_quantity').floatVal($row.findNamedInput('quantity').val());
-        $('#item_total').floatVal($row.findNamedInput('total').val());
+        $('#item_total').text(this.toLocaleString($row.findNamedInput('total').val()));
 
         // show
         $('#item_modal').modal('show');
@@ -1179,9 +1416,11 @@ var Application = {
     },
 
     /**
-     * Handle the dialog form submit event when adding an item.
+     * Handle the item dialog form submit event when adding an item.
+     * 
+     * @return {Application} This application instance for chaining.
      */
-    onAddDialogSubmit: function () {
+    onAddItemDialogSubmit: function () {
         'use strict';
 
         // hide
@@ -1190,13 +1429,13 @@ var Application = {
 
         // get dialog values
         const that = this;
-        const group = that.getDialogGroup();
-        const category = that.getDialogCategory();
-        const item = that.getDialogItem();
+        const group = that.getItemDialogGroup();
+        const category = that.getItemDialogCategory();
+        const item = that.getItemDialogItem();
         
-        // get or add group and category
-        const $group = that.findGroup(group.id) || that.appendGroup(group);
-        const $category = that.findCategory(category.id) || that.appendCategory($group, category);
+        // get group and category
+        const $group = that.getGroup(group);
+        const $category = that.getCategory($group, category);
         
         // append
         const $row = $category.appendRow(item);
@@ -1204,16 +1443,15 @@ var Application = {
         // update total and scroll
         $row.scrollInViewport().timeoutToggle('table-success');
         that.$editingRow = null;
-        that.updateAll();
-        
+        return that.updateAll();        
     },
-
+    
     /**
-     * Handle the dialog form submit event when editing an item.
+     * Handle the item dialog form submit event when editing an item.
      * 
      * @return {Application} This application instance for chaining.
      */
-    onEditDialogSubmit: function () {
+    onEditItemDialogSubmit: function () {
         'use strict';
 
         // hide
@@ -1226,9 +1464,9 @@ var Application = {
         }
 
         // get dialog values
-        const group = that.getDialogGroup();
-        const category = that.getDialogCategory();
-        const item = that.getDialogItem();
+        const group = that.getItemDialogGroup();
+        const category = that.getItemDialogCategory();
+        const item = that.getItemDialogItem();
         
         // get old elements
         const $oldBody = that.$editingRow.parents('tbody');
@@ -1247,8 +1485,9 @@ var Application = {
         
         // same group and category?
         if (oldGroupId !== group.id || oldCategoryId !== category.id) {
-            const $group = that.findGroup(group.id) || that.appendGroup(group);
-            const $category = that.findCategory(category.id) || that.appendCategory($group, category);
+            // get group and category
+            const $group = that.getGroup(group);
+            const $category = that.getCategory($group, category);
             
             // append
             const $row = $category.appendRow(item);
@@ -1274,11 +1513,70 @@ var Application = {
             that.$editingRow.updateRow(item).timeoutToggle('table-success');
             that.$editingRow = null;
             that.updateAll();
-        }
-        
+        }        
         return that;
     },
 
+    /**
+     * Handle the task dialog form submit event when adding a task.
+     * 
+     * @return {Application} This application instance for chaining.
+     */
+    onAddTaskDialogSubmit: function () {
+        'use strict';
+        
+        // hide
+        $('#task_modal').modal('hide');
+        
+        // get dialog values
+        const that = this;
+        const task = $('#task_task :selected').text();
+        const quantity = $('#task_quantity').floatVal();
+        const group = that.getTaskDialogGroup();
+        const category = that.getTaskDialogCategory();
+        
+        // create items
+        let items = [];
+        $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').each(function () {
+            const $row = $(this).parents('.task-item-row');
+            const text = $row.find('.custom-control-label').text();
+            const price = parseFloat($row.find('.task_value').text());
+            const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
+            items.push({
+                description: task + ' - ' + text,
+                unit: null,
+                quantity: quantity,
+                price: price,                
+                total: total
+            });
+        });
+        
+        // get group and category
+        const $group = that.getGroup(group);
+        const $category = that.getCategory($group, category);
+        
+        // append and select
+        items.forEach(function(item) {
+            const $row = $category.appendRow(item);
+            $row.scrollInViewport().timeoutToggle('table-success');
+        });
+        
+        that.$editingRow = null;
+        return that.updateAll();
+    },
+    
+    /**
+     * Handle the task dialog form submit event when editing a task.
+     * 
+     * @return {Application} This application instance for chaining.
+     */
+    onEditTaskDialogSubmit: function () {
+        'use strict';
+        
+        // hide
+        $('#task_modal').modal('hide');
+    },
+    
     /**
      * Handles the row drag start event.
      */
@@ -1644,15 +1942,4 @@ $.fn.extend({
         }, 250);
     });
 
-    // update total dialog
-    $('#item_total').removeClass('form-control');
-    
-    // prototypes
-    // const table = $('.table-edit').data('prototype');
-    // console.log('table', $(table).html());
-    // const head = $('.table-edit thead:first').data('prototype');
-    // console.log('thead', $(head).html());
-    // const body = $('.table-edit tbody:first').data('prototype');
-    // console.log('tbody', $(body).html());
-    
 }(jQuery));

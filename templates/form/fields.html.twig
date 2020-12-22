@@ -25,6 +25,7 @@
 override form errors. Rendered example: 
 <small id="form_message-error" class="is-invalid invalid-feedback">Ce champ est obligatoire.</small>
 #}
+
 {% block form_errors -%}
 {%- if errors|length > 0 -%}
     {%- set messages = [] -%}

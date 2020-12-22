@@ -15,11 +15,12 @@ namespace App\Controller;
 use App\DataTable\CalculationDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
-use App\Entity\Group;
+use App\Entity\Task;
 use App\Excel\ExcelResponse;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
 use App\Form\Dialog\EditItemDialogType;
+use App\Form\Dialog\EditTaskDialogType;
 use App\Pdf\PdfResponse;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
@@ -295,13 +296,12 @@ class CalculationController extends AbstractEntityController
 
         // editable?
         if ($parameters['editable'] = $item->isEditable()) {
-            $parameters['dialog_groups'] = $this->getGroups();
             $parameters['group_index'] = $item->getGroupsCount();
             $parameters['category_index'] = $item->getCategoriesCount();
             $parameters['item_index'] = $item->getLinesCount();
-            $parameters['grouping'] = FormatUtils::getGrouping();
-            $parameters['decimal'] = FormatUtils::getDecimal();
-            $parameters['dialog'] = $this->createForm(EditItemDialogType::class)->createView();
+            $parameters['tasks'] = $this->getTasks();
+            $parameters['item_dialog'] = $this->createForm(EditItemDialogType::class)->createView();
+            $parameters['task_dialog'] = $this->createForm(EditTaskDialogType::class)->createView();
         }
 
         return parent::editEntity($request, $item, $parameters);
@@ -327,16 +327,18 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Gets the groups.
+     * Gets the tasks.
      *
-     * @return Group[]
+     * @return Task[]
      */
-    private function getGroups(): array
+    private function getTasks(): array
     {
-        /** @var \App\Repository\GroupRepository $repository */
-        $repository = $this->getManager()->getRepository(Group::class);
+        /** @var \App\Repository\TaskRepository $repository */
+        $repository = $this->getManager()->getRepository(Task::class);
 
-        return $repository->findAllByCode();
+        return $repository->getSortedBuilder(false)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

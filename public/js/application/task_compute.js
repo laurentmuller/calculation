@@ -11,11 +11,15 @@
  */
 function formatValue(value) {
     'use strict';
-    const formatter = new Intl.NumberFormat('de-CH', {
-        'minimumFractionDigits': 2,
-        'maximumFractionDigits': 2
-    });
-    return formatter.format(value);
+
+    const $form = $('#edit-form');
+    if (!$form.formatter) {
+        $form.formatter = new Intl.NumberFormat('de-CH', {
+            'minimumFractionDigits': 2,
+            'maximumFractionDigits': 2
+        });
+    }
+    return $form.formatter.format(value);
 }
 
 /**
@@ -28,7 +32,7 @@ function formatValue(value) {
  */
 function updateValue(id, value) {
     'use strict';
-    $('#' + id).val(formatValue(value));
+    $('#' + id).text(formatValue(value));
 }
 
 /**
@@ -37,21 +41,7 @@ function updateValue(id, value) {
 function resetValues() {
     'use strict';
     const value = formatValue(0);
-    $('.form-control-plaintext').val(value);
-}
-
-/**
- * Gets the selected items.
- * 
- * @returns array - the selected items.
- */
-function getItems() {
-    'use strict';
-    let items = [];
-    $('#table-edit > tbody > tr:not(.d-none) .item-input:checked').each(function () {
-        items.push(Number.parseInt($(this).attr('value'), 10));
-    });
-    return items;
+    $('#edit-form .form-control-plaintext').text(value);
 }
 
 /**
@@ -77,17 +67,20 @@ function showError(message) {
 function update(form) {
     'use strict';
 
-    const items = getItems();
+    // get items
+    const items = $('#table-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
+        return Number.parseInt($(this).attr('value'), 10);
+    }).get();
     if (items.length === 0) {
         $('.task-items-empty').removeClass('d-none');
+        resetValues();
         return;
     }
     $('.task-items-empty').addClass('d-none');
-    
+
     // get data
     const $form = $(form);
     const url = $form.data('url');
-    
     const data = {
         'id': $('#task').intVal(),
         'quantity': $('#quantity').floatVal(),
@@ -96,10 +89,15 @@ function update(form) {
 
     // cancel send
     if ($form.jqXHR) {
-        $form.jqXHR.abort();
-        $form.jqXHR = null;
+        try {
+            $form.jqXHR.abort();
+        } catch (e) {
+            // ignore
+            console.log(e);
+        } finally {
+            $form.jqXHR = null;
+        }
     }
-
     // send
     $form.jqXHR = $.post(url, data, function (response) {
         if (response.result) {
@@ -110,7 +108,7 @@ function update(form) {
             });
             updateValue('overall', response.overall);
         } else {
-            showError(response.message);
+            showError(response.message || $form.data('failed'));
         }
     }).fail(function () {
         showError($form.data('failed'));
@@ -159,10 +157,10 @@ function onTaskChanged() {
     // attach handlers
     $('#task').on('input', function () {
         $(this).updateTimer(onTaskChanged, 250);
-    });    
+    });
     $('#quantity').on('input', function () {
         $(this).updateTimer(onInputChanged, 250);
-    }).inputNumberFormat().trigger('blur');
+    }).inputNumberFormat();
     $('.item-input').on('change', function () {
         $(this).updateTimer(onInputChanged, 250);
     });

@@ -24,7 +24,6 @@ use App\Report\TasksReport;
 use App\Repository\TaskRepository;
 use App\Service\TaskService;
 use App\Spreadsheet\TaskDocument;
-use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,27 +93,22 @@ class TaskController extends AbstractEntityController
      */
     public function compute(Request $request, Task $task = null, TaskService $service, TaskRepository $repository): Response
     {
-        // task?
-        if (null !== $task) {
-            $service->setTask($task, true)
-                ->compute($request);
-        }
+        // get tasks
+        $tasks = $repository->getSortedBuilder(false)
+            ->getQuery()
+            ->getResult();
 
-        // select first task if none
-        if (null === $service->getTask()) {
-            $task = $repository->findOneBy([], ['name' => Criteria::ASC]);
-            $service->setTask($task, true)
-                ->compute($request);
+        // set task
+        if (null === $task || $task->isEmpty()) {
+            $task = $tasks[0];
         }
+        $service->setTask($task, true)
+            ->compute();
 
         $form = $this->createForm(TaskServiceType::class, $service);
         if ($this->handleRequestForm($request, $form)) {
             $service->compute($request);
         }
-
-        $tasks = $repository->getSortedBuilder(false)
-            ->getQuery()
-            ->getResult();
 
         return $this->render('task/task_compute.html.twig', [
             'form' => $form->createView(),

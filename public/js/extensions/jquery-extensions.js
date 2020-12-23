@@ -91,7 +91,7 @@
             const $this = $(this);
             if ($this.length) {
                 if ($.isUndefined(bottomMargin)) {
-                    bottomMargin = 0;
+                    bottomMargin = 50;
                 }
                 const top = $this.offset().top;
                 const bottom = top + $this.outerHeight();
@@ -118,8 +118,8 @@
             const $this = $(this);
             try {
                 if ($this.length && !$this.isInViewport(bottomMargin)) {
-                    if ($.isUndefined(delay)) {
-                        delay = 350;
+                    if ($.isUndefined(bottomMargin)) {
+                        bottomMargin = 30;
                     }
                     const top = $this.offset().top;
                     const $target = $('html, body');
@@ -426,7 +426,7 @@
          * @return {jQuery} The jQuery element for chaining.
          */
         selectFocus: function () {
-            return $(this).select().focus();
+            return $(this).focus().select();
         },
 
         /**
@@ -550,7 +550,7 @@
          */
         removeDuplicateClasses: function () {
             return this.each(function (i, element) {
-                const $this = $(element); 
+                const $this = $(element);
                 const source = $this.attr('class');
                 const target = source.split(' ').unique();
                 $this.attr('class', target.join(' '));

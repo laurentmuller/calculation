@@ -14,9 +14,9 @@ namespace App\Form\Calculation;
 
 use App\Entity\CalculationCategory;
 use App\Form\AbstractEntityType;
+use App\Form\DataTransformer\CategoryTransformer;
 use App\Form\FormHelper;
-use App\Repository\CategoryRepository;
-use Symfony\Component\Form\Event\PostSubmitEvent;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Calculation category edit type.
@@ -26,38 +26,31 @@ use Symfony\Component\Form\Event\PostSubmitEvent;
 class CalculationCategoryType extends AbstractEntityType
 {
     /**
-     * @var CategoryRepository
+     * @var CategoryTransformer
      */
-    private $repository;
+    private $transformer;
 
     /**
      * Constructor.
      *
-     * @param CategoryRepository $repository the repository to update the entity
+     * @param CategoryTransformer $transformer the transformer to convert the category field
      */
-    public function __construct(CategoryRepository $repository)
+    public function __construct(CategoryTransformer $transformer)
     {
         parent::__construct(CalculationCategory::class);
-        $this->repository = $repository;
+        $this->transformer = $transformer;
     }
 
     /**
-     * Handles the post submit event.
+     * {@inheritdoc}
      */
-    public function onPostSubmit(PostSubmitEvent $event): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // get values
-        $form = $event->getForm();
+        parent::buildForm($builder, $options);
 
-        /** @var CalculationCategory $data */
-        $data = $form->getData();
-
-        // update category if needed
-        if (null === $data->getCategory() && $form->has('categoryId')) {
-            $id = (int) $form->get('categoryId')->getData();
-            $category = $this->repository->find($id);
-            $data->setCategory($category);
-        }
+        // add transformer
+        $builder->get('category')
+            ->addModelTransformer($this->transformer);
     }
 
     /**
@@ -66,15 +59,12 @@ class CalculationCategoryType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         // default
-        $helper->field('categoryId')->addHiddenType();
+        $helper->field('category')->addHiddenType();
         $helper->field('code')->addHiddenType();
 
         // items
         $helper->field('items')
             ->updateOption('prototype_name', '__itemIndex__')
             ->addCollectionType(CalculationItemType::class);
-
-        // add event
-        $helper->addPostSubmitListener([$this, 'onPostSubmit']);
     }
 }

@@ -158,7 +158,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function addGroup(CalculationGroup $group): self
     {
         if (!$this->contains($group)) {
-            $this->groups->add($group);
+            $this->groups[] = $group;
             $group->setCalculation($this);
         }
 

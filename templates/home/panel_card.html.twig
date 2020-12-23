@@ -21,12 +21,12 @@
 <div class="card mb-2">
 	<div class="card-header">
         <div class="row">
-            <div class="col">
+            <div class="col-auto mr-auto">
                 <h1 class="card-title">{{ icons.icon("calculator", "index.panel_last") }}</h1>
             </div>
             {%- if add_path -%}
-            <div class="col text-right d-print-none mb-0">
-                <a href="{{ add_path }}">{{ 'calculation.add.title'|trans }}</a>
+            <div class="col-auto d-print-none">
+                <a href="{{ add_path }}" class="p-0">{{ 'calculation.add.title'|trans }}</a>
             </div>
             {%- endif -%}
         </div>

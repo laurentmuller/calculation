@@ -14,9 +14,9 @@ namespace App\Form\Calculation;
 
 use App\Entity\CalculationGroup;
 use App\Form\AbstractEntityType;
+use App\Form\DataTransformer\GroupTransformer;
 use App\Form\FormHelper;
-use App\Repository\GroupRepository;
-use Symfony\Component\Form\Event\PostSubmitEvent;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Calculation group edit type.
@@ -26,38 +26,31 @@ use Symfony\Component\Form\Event\PostSubmitEvent;
 class CalculationGroupType extends AbstractEntityType
 {
     /**
-     * @var GroupRepository
+     * @var GroupTransformer
      */
-    private $repository;
+    private $transformer;
 
     /**
      * Constructor.
      *
-     * @param GroupRepository $repository the repository to update the entity
+     * @param GroupTransformer $transformer the transformer to convert the group field
      */
-    public function __construct(GroupRepository $repository)
+    public function __construct(GroupTransformer $transformer)
     {
         parent::__construct(CalculationGroup::class);
-        $this->repository = $repository;
+        $this->transformer = $transformer;
     }
 
     /**
-     * Handles the post submit event.
+     * {@inheritdoc}
      */
-    public function onPostSubmit(PostSubmitEvent $event): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // get values
-        $form = $event->getForm();
+        parent::buildForm($builder, $options);
 
-        /** @var CalculationGroup $data */
-        $data = $form->getData();
-
-        // update group if needed
-        if (null === $data->getGroup() && $form->has('groupId')) {
-            $id = (int) $form->get('groupId')->getData();
-            $group = $this->repository->find($id);
-            $data->setGroup($group);
-        }
+        // add transformer
+        $builder->get('group')
+            ->addModelTransformer($this->transformer);
     }
 
     /**
@@ -66,15 +59,12 @@ class CalculationGroupType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         // default
-        $helper->field('groupId')->addHiddenType();
+        $helper->field('group')->addHiddenType();
         $helper->field('code')->addHiddenType();
 
         // items
         $helper->field('categories')
             ->updateOption('prototype_name', '__groupIndex__')
             ->addCollectionType(CalculationCategoryType::class);
-
-        // add event
-        $helper->addPostSubmitListener([$this, 'onPostSubmit']);
     }
 }

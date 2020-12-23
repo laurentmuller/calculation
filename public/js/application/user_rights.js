@@ -10,7 +10,7 @@
 function findCheckBox($parent) {
     'use strict';
 
-    if ($parent) {
+    if ($parent && $parent.length) {
         return $parent.findExists(":checkbox");
     }
     return null;
@@ -46,7 +46,7 @@ function updateCheckBoxes($parent, callback) {
     // get values
     $parent.each(function () {
         const $input = callback($(this));
-        if ($input) {
+        if ($input && $input.length) {
             $inputs.push($input);
             if ($input.isChecked()) {
                 checked++;

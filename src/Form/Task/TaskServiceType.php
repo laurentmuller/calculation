@@ -13,10 +13,7 @@ declare(strict_types=1);
 namespace App\Form\Task;
 
 use App\Form\AbstractHelperType;
-use App\Form\Category\CategoryEntityType;
 use App\Form\FormHelper;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Type to compute a task.
@@ -25,29 +22,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class TaskServiceType extends AbstractHelperType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        parent::buildForm($builder, $options);
-
-        if (false === $options['show_category']) {
-            $builder->remove('category');
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        parent::configureOptions($resolver);
-
-        $resolver->setDefault('show_category', false)
-            ->addAllowedTypes('show_category', 'bool');
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -64,11 +38,7 @@ class TaskServiceType extends AbstractHelperType
         $helper->field('task')
             ->add(TaskEntityType::class);
 
-        $helper->field('category')
-            ->add(CategoryEntityType::class);
-
         $helper->field('quantity')
-            ->updateRowAttribute('class', 'text-right')
             ->updateAttribute('min', 1)
             ->addNumberType();
     }

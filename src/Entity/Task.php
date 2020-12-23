@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Table(name="sy_Task")
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
- * @UniqueEntity(fields="name", message="task.unique_code")
+ * @UniqueEntity(fields="name", message="task.unique_name")
  */
 class Task extends AbstractEntity implements \Countable
 {

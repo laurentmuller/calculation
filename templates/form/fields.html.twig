@@ -1,7 +1,7 @@
 {# vendor/symfony/twig-bridge/Resources/views/Form #}
 {% extends 'bootstrap_4_layout.html.twig' %}
 
-{# override form_row to display help and errors after input #}
+{# override form_row to display errors after help #}
 {% block form_row -%}
     {%- if compound is defined and compound -%}
         {%- set element = 'fieldset' -%}
@@ -17,15 +17,14 @@
         {{- form_errors(form) }}
     </{{ element|default('div') }}>
 {%- endblock form_row %}
-
+ 
 {# empty block because errors are displayed after input #}
-{% block form_label_errors -%}{%- endblock %}
-
+{% block form_label_errors -%}{%- endblock %} 
+ 
 {# 
 override form errors. Rendered example: 
 <small id="form_message-error" class="is-invalid invalid-feedback">Ce champ est obligatoire.</small>
 #}
-
 {% block form_errors -%}
 {%- if errors|length > 0 -%}
     {%- set messages = [] -%}
@@ -47,7 +46,7 @@ override form errors. Rendered example:
     <div id="{{ form.vars.id }}_passwordstrength" class="d-print-none password-strength"></div>
 {%- endif %}
 {%- endblock %}
- 
+
 {# extends text widget with with user icon #}
 {% block user_name_widget -%}
 <div class="input-group">

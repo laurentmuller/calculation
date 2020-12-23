@@ -91,7 +91,7 @@ class Category extends AbstractEntity
     public function addProduct(Product $product): self
     {
         if (!$this->products->contains($product)) {
-            $this->products->add($product);
+            $this->products[] = $product;
             $product->setCategory($this);
         }
 

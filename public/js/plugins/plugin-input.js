@@ -37,16 +37,19 @@
             // add handlers
             const $element = this.$element;
             $element.on('keypress', $.proxy(this.keypress, this));
-            $element.on('blur', $.proxy(this.blur, this));
-            $element.on('change', $.proxy(this.change, this));
+            $element.on('blur', $.proxy(this.update, this));
+            $element.on('change', $.proxy(this.update, this));
+
+            // format
+            this.update();
         },
 
         destroy: function () {
             // remove handlers and data
             const $element = this.$element;
             $element.off('keypress', $.proxy(this.keypress, this));
-            $element.off('blur', $.proxy(this.blur, this));
-            $element.off('change', $.proxy(this.change, this));
+            $element.off('blur', $.proxy(this.update, this));
+            $element.off('change', $.proxy(this.update, this));
             $element.removeData("inputNumberFormat");
         },
 
@@ -65,6 +68,12 @@
                 const decimals = options.decimalAuto - value.split(options.separator)[1].length;
                 if (decimals > 0) {
                     value += "0".repeat(decimals);
+                }
+
+            } else if (options.decimal === 0) {
+                const index = value.indexOf(options.separator);
+                if (index !== -1) {
+                    value = value.substring(0, index);
                 }
             }
 
@@ -93,15 +102,7 @@
             }
         },
 
-        blur: function () {
-            const oldValue = this.$element.val();
-            const newValue = this.formatValue(oldValue);
-            if (oldValue !== newValue) {
-                this.$element.val(newValue);
-            }
-        },
-
-        change: function () {
+        update: function () {
             const oldValue = this.$element.val();
             const newValue = this.formatValue(oldValue);
             if (oldValue !== newValue) {

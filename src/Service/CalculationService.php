@@ -141,7 +141,7 @@ final class CalculationService
 
         // reduce groups
         $itemGroups = \array_reduce($source['groups'], function (array $carry, array $group) {
-            $id = (int) ($group['groupId']);
+            $id = (int) ($group['group']);
             $carry[$id] = $this->reduceGroup($group);
 
             return $carry;

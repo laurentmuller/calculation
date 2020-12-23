@@ -114,7 +114,7 @@ class CalculationGroup extends AbstractEntity
     public function addCategory(CalculationCategory $category): self
     {
         if (!$this->contains($category)) {
-            $this->categories->add($category);
+            $this->categories[] = $category;
             $category->setGroup($this);
         }
 
@@ -325,19 +325,6 @@ class CalculationGroup extends AbstractEntity
             return $this->update();
         }
 
-        return $this;
-    }
-
-    /**
-     * Set group id.
-     *
-     * This property is present only for the form builder.
-     *
-     * @param int $groupId
-     * @psalm-suppress UnusedParam
-     */
-    public function setGroupId(?int $groupId): self
-    {
         return $this;
     }
 

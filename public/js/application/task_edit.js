@@ -17,8 +17,7 @@ function updateUI() {
         const rows = $table.find('tbody > tr').length;
         $table.toggleClass('d-none', rows === 0);
         $table.next('.empty-margins').toggleClass('d-none', rows !== 0);
-        $table.parents('.form-group').find('.btn-sort-margin').toggleClass('disabled', rows < 2);
-
+        $table.parents('.item').find('.btn-sort-margin').toggleClass('disabled', rows < 2);
     });
     $('.empty-items').toggleClass('d-none', $('.item').length !== 0);
 }
@@ -138,6 +137,7 @@ function addItem() {
 function addMargin($caller) {
     'use strict';
 
+    // get table
     const $table = $caller.parents('.item').find('.table-edit');
     if ($table.length === 0) {
         return;
@@ -158,13 +158,13 @@ function addMargin($caller) {
     updateUI();
 
     // set values
-    $table.find("input[name$='[minimum]']:last").floatVal(minimum).selectFocus();
+    $table.find("input[name$='[minimum]']:last").floatVal(minimum).selectFocus().scrollInViewport();
     $table.find("input[name$='[maximum]']:last").floatVal(maximum);
     $table.find("input[name$='[value]']:last").floatVal(value);
 }
 
 /**
- * Remove a item.
+ * Remove an item.
  * 
  * @param {jQuery}
  *            $caller - the caller.
@@ -205,13 +205,13 @@ function sortMargins($caller) {
     const $table = $caller.parents('.item').find('.table-edit');
     if ($table.length === 0) {
         return;
-    }    
+    }
     const $body = $table.find('tbody');
     const $rows = $body.find('tr');
     if ($rows.length < 2) {
         return;
     }
-    
+
     $rows.sort(function (rowA, rowB) {
         const valueA = $(rowA).find("input[name$='[minimum]']").floatVal();
         const valueB = $(rowB).find("input[name$='[minimum]']").floatVal();

@@ -3,9 +3,9 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
-{% macro plain_text_input(id, value = 0, class = '') %}
+{% macro plain_text_input(id, class = '') %}
 {%- set class = (class ~ ' text-right form-control-plaintext border rounded px-2')|trim -%}
-<input id="{{ id }}" type="text" class="{{ class }}" disabled="disabled" value="{{ value|amount }}">
+<div id="{{ id }}" class="{{ class }}">{{ 0|amount }}</div>
 {% endmacro %}
 
 {% macro row_input(id, item, visible) %}
@@ -17,10 +17,10 @@
         </div>
     </td>
     <td class="text-right w-25">
-        {{ _self.plain_text_input('value_' ~ item.id) }}
+        {{ _self.plain_text_input('value_' ~ item.id, 'task_value') }}
     </td>
     <td class="text-right w-25">
-        {{ _self.plain_text_input('amount_' ~ item.id) }}
+        {{ _self.plain_text_input('amount_' ~ item.id, 'task_total') }}
     </td>
 </tr>
 {% endmacro %}
@@ -29,26 +29,17 @@
 {%- set title       = 'taskcompute.title' -%}
 {%- set title_icon  = 'keyboard' -%}
 {%- set submit_text = 'taskcompute.button_ok' -%}
-{%- set cancel_path = app.request.get('caller',  path(app.displayTabular ? 'task_table' : 'task_list')) -%}
-{%- set form_attr   = form_attr|default({})|merge({'data-url': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
+{%- set cancel_text = 'common.button_close' -%}
+{%- set form_attr   = form_attr|default({})|merge({'action': path('ajax_task'), 'data-url': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
 {%- set service     = form.vars.value -%}
 {%- set selection   = service.task.id -%}
 {%- set items_count = service.task.count -%}
 
 {% block card_body %}
 <div class="form-row">
-{% if form.category is defined %}
-    <div class="col-5">
-        {{ form_row(form.task) }}
-    </div>
-    <div class="col-4">
-        {{ form_row(form.category) }}
-    </div>
-{% else %}
     <div class="col-9">
         {{ form_row(form.task) }}
     </div>
-{% endif %}
     <div class="col-3">
         {{ form_row(form.quantity) }}
     </div>    
@@ -58,13 +49,13 @@
         <thead>
             <tr>
                 <td><span class="task-items-empty text-danger d-none">{{ 'taskcompute.error.items'|trans }}</span></td>
-                <td class="text-right w-25">{{ 'taskcompute.fields.price'|trans }}</td>
-                <td class="text-right w-25">{{ 'taskcompute.fields.total'|trans }}</td>
+                <td class="w-25">{{ 'taskcompute.fields.price'|trans }}</td>
+                <td class="w-25">{{ 'taskcompute.fields.total'|trans }}</td>
             </tr>
         </thead>
         <tbody>
             {% for task in tasks %}
-                {% set visible = loop.index == 1 %}
+                {% set visible = task.id == selection %}
                 {% for item in task.items|filter(item => item.count > 0) %}
                     {{ _self.row_input(task.id, item, visible) }}
                 {% endfor %}
@@ -75,8 +66,8 @@
                 <td colspan="3"><hr class="my-1"></td>
             </tr>
             <tr>
-                <th class="pt-3" colspan="2">{{ 'taskcompute.fields.overall_total'|trans }}</th>
-                <th class="text-right w-25">{{ _self.plain_text_input('overall', service.overall, 'font-weight-bold') }}</th>
+                <td class="text-right pt-2" colspan="2">{{ 'taskcompute.fields.overall_total'|trans }}</td>
+                <td class="text-right">{{ _self.plain_text_input('overall') }}</td>
             </tr>
         </tfoot>
     </table>
@@ -86,8 +77,14 @@
 </div>
 {% endblock %}
 
+{% block actions_form -%} 
+{{ icons.button_cancel(cancel_path, cancel_text) }}
+{% endblock %}
+
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('js/plugins/plugin-input.js') }}
 {{ asset_js('js/application/task_compute.js') }}
 {% endblock %}
+
+

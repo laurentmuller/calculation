@@ -6,7 +6,7 @@
 
 <thead{% if editable %} data-prototype="{{ macroCategories.printCategoryRow(group.categories.vars.prototype, editable, false, false)|e('html_attr') }}"{% endif -%}>
     <tr class="drag-skip bg-light border-left border-right">
-        {{ form_widget(group.groupId) }}
+        {{ form_widget(group.group) }}
         {{ form_widget(group.code) }}
         <th class="rowlink-skip pb-1" colspan="5">{{ group.code.vars.value }}</th>
         {% if editable -%}        

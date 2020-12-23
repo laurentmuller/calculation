@@ -109,7 +109,7 @@ class CalculationCategory extends AbstractEntity
     public function addItem(CalculationItem $item): self
     {
         if (!$this->contains($item)) {
-            $this->items->add($item);
+            $this->items[] = $item;
             $item->setCategory($this);
         }
 
@@ -278,19 +278,6 @@ class CalculationCategory extends AbstractEntity
             return $this->update();
         }
 
-        return $this;
-    }
-
-    /**
-     * Set the category identifier.
-     *
-     * This property is present only for the form builder.
-     *
-     * @param int $categoryId
-     * @psalm-suppress UnusedParam
-     */
-    public function setCategoryId(?int $categoryId): self
-    {
         return $this;
     }
 

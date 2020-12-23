@@ -357,7 +357,7 @@ var Application = {
             const price = $price.floatVal().toFixed(2);
             const quantity = $quantity.floatVal().toFixed(2);
             const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
-            $('#item_total').text(that.toLocaleString(total));
+            $('#item_total').text(that.formatValue(total));
         });
 
         // ok
@@ -405,20 +405,12 @@ var Application = {
         });
         
         const updateValue = function (id, value) {
-            $('#' + id).text(that.toLocaleString(value));
+            $('#' + id).text(that.formatValue(value));
         };
 
         const resetValues = function() {
-            const value = that.toLocaleString(0);
+            const value = that.formatValue(0);
             $('#task_form .form-control-plaintext').text(value);
-        };
-        
-        const getItems = function() {
-            let items = [];
-            $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').each(function () {
-                items.push(Number.parseInt($(this).attr('value'), 10));
-            });
-            return items;
         };
         
         const showError = function(message) {
@@ -441,7 +433,10 @@ var Application = {
                 return;
             }
             
-            const items = getItems();
+            // items
+            const items = $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
+                return Number.parseInt($(this).attr('value'), 10);
+            }).get();
             if (items.length === 0) {
                 $('.task-items-empty').removeClass('d-none');
                 resetValues();
@@ -464,7 +459,6 @@ var Application = {
                     $form.jqXHR.abort();    
                 } catch (e) {
                     // ignore
-                    console.log(e);
                 } finally {
                     $form.jqXHR = null;    
                 }                
@@ -485,8 +479,7 @@ var Application = {
                 } else {
                     showError(response.message);                    
                 }
-            }).fail(function (jqxhr, textStatus, error) {
-                console.log( "Request Failed: " + textStatus + ", " + error );
+            }).fail(function () {
                 showError($form.data('failed'));
             });            
         };
@@ -516,7 +509,7 @@ var Application = {
         }); 
         $('#task_quantity').on('input', function () {
             $(this).updateTimer(update, 250);
-        }).inputNumberFormat().trigger('blur');
+        }).inputNumberFormat();
         $('.item-input').on('change', function () {
             $(this).updateTimer(update, 250);
         });
@@ -681,7 +674,7 @@ var Application = {
      *            value - the value to format.
      * @returns {string} - the formatted value.
      */
-    toLocaleString: function (value) {
+    formatValue: function (value) {
         'use strict';
 
         // get value
@@ -801,8 +794,13 @@ var Application = {
 
         // abort
         if (that.jqXHR) {
-            that.jqXHR.abort();
-            that.jqXHR = null;
+            try {
+                that.jqXHR.abort();    
+            } catch (e) {
+                // ignore
+            } finally {
+                that.jqXHR = null;    
+            }                
         }
 
         // parameters
@@ -872,7 +870,6 @@ var Application = {
         $('#data-table-edit a.btn-delete-item').removeClass('btn-delete-item');
         $('#data-table-edit a.btn-delete-group').removeClass('btn-delete-group');
         $('#data-table-edit a.btn-sort-group').removeClass('btn-sort-group');
-
         // $('#item_delete_button').remove();
         $('#data-table-edit div.dropdown').fadeOut();
         $('#error-all > p').html('<br>').addClass('small').removeClass('text-right');
@@ -905,7 +902,7 @@ var Application = {
         'use strict';
 
         // find
-        const $head = $("#data-table-edit thead:has(input[name*='groupId'][value=" + group.id + "])");
+        const $head = $("#data-table-edit thead:has(input[name*='group'][value=" + group.id + "])");
         if ($head.length !== 0 ) {
             return $head;
         }
@@ -926,7 +923,7 @@ var Application = {
     getCategory: function ($group, category) {
         'use strict';
 
-        const $body = $("#data-table-edit tbody:has(input[name*='categoryId'][value=" + category.id + "])");
+        const $body = $("#data-table-edit tbody:has(input[name*='category'][value=" + category.id + "])");
         if ($body.length !== 0) {
             return $body;
         }
@@ -978,8 +975,8 @@ var Application = {
         return {
             description: $('#item_description').val(),
             unit: $('#item_unit').val(),
-            quantity: quantity,
-            price: price,            
+            price: price,
+            quantity: quantity,                        
             total: total
         };
     },
@@ -1183,7 +1180,7 @@ var Application = {
         const prototype = $parent.getPrototype(/__groupIndex__/g, 'groupIndex');
         const $group = $(prototype);
         $group.find('tr:first th:first').text(group.code);
-        $group.findNamedInput('groupId').val(group.id);
+        $group.findNamedInput('group').val(group.id);
         $group.findNamedInput('code').val(group.code);
         
         // insert or append
@@ -1227,7 +1224,7 @@ var Application = {
         const prototype = $group.getPrototype(/__categoryIndex__/g, 'categoryIndex');
         const $category = $(prototype);
         $category.find('tr:first th:first').text(category.code);
-        $category.findNamedInput('categoryId').val(category.id);
+        $category.findNamedInput('category').val(category.id);
         $category.findNamedInput('code').val(category.code);
         
         // insert or append
@@ -1266,13 +1263,13 @@ var Application = {
         $('#item_form').resetValidator();
 
         // update values
-        const $input = $source.parents('tbody').find("tr:first input[name*='categoryId']");
+        const $input = $source.parents('tbody').find("tr:first input[name*='category']");
         if ($input.length) {
             $('#item_category').val($input.val());
         }
         $('#item_price').floatVal(1);
         $('#item_quantity').floatVal(1);
-        $('#item_total').text(this.toLocaleString(1));
+        $('#item_total').text(this.formatValue(1));
 
         // show
         $('#item_modal').modal('show');
@@ -1296,12 +1293,12 @@ var Application = {
         $('#task_form').resetValidator();
 
         // update values
-        const $input = $source.parents('tbody').find("tr:first input[name*='categoryId']");
+        const $input = $source.parents('tbody').find("tr:first input[name*='category']");
         if ($input.length) {
             $('#task_category').val($input.val());
         }
         $('#task_quantity').floatVal(1);
-        $('#task_overall').text(this.toLocaleString(0));
+        $('#task_overall').text(this.formatValue(0));
 
         // show
         $('#task_modal').modal('show');
@@ -1316,11 +1313,11 @@ var Application = {
      * @param {jQuery}
      *            $source - the caller element (normally a button).
      */
-    showEditItemDialog: function (source) {
+    showEditItemDialog: function ($source) {
         'use strict';
 
         // row
-        const $row = source.getParentRow();
+        const $row = $source.getParentRow();
 
         // initialize
         this.initEditItemDialog().initDragDialog();
@@ -1333,10 +1330,10 @@ var Application = {
         // update values
         $('#item_description').val($row.findNamedInput('description').val());
         $('#item_unit').val($row.findNamedInput('unit').val());
-        $('#item_category').val($row.parent().findNamedInput('categoryId').val());
+        $('#item_category').val($row.parent().findNamedInput('category').val());
         $('#item_price').floatVal($row.findNamedInput('price').val());
         $('#item_quantity').floatVal($row.findNamedInput('quantity').val());
-        $('#item_total').text(this.toLocaleString($row.findNamedInput('total').val()));
+        $('#item_total').text(this.formatValue($row.findNamedInput('total').val()));
 
         // show
         $('#item_modal').modal('show');
@@ -1476,12 +1473,20 @@ var Application = {
         } 
         
         // get old inputs
-        const $oldCategory = $oldBody.findNamedInput('categoryId');
-        const $oldGroup = $oldHead.findNamedInput('groupId');
+        const $oldCategory = $oldBody.findNamedInput('category');
+        const $oldGroup = $oldHead.findNamedInput('group');
 
         // get old values
         const oldGroupId = $oldGroup.intVal();
         const oldCategoryId = $oldCategory.intVal();
+        const oldItem = that.$editingRow.getRowItem();
+        
+        // no change?
+        if (oldGroupId === group.id && oldCategoryId === category.id && JSON.stringify(item) === JSON.stringify(oldItem)) {
+            that.$editingRow.timeoutToggle('table-success');
+            that.$editingRow = null;
+            return;
+        }       
         
         // same group and category?
         if (oldGroupId !== group.id || oldCategoryId !== category.id) {
@@ -1536,20 +1541,19 @@ var Application = {
         const category = that.getTaskDialogCategory();
         
         // create items
-        let items = [];
-        $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').each(function () {
+        const items = $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
             const $row = $(this).parents('.task-item-row');
             const text = $row.find('.custom-control-label').text();
             const price = parseFloat($row.find('.task_value').text());
             const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
-            items.push({
+            return {
                 description: task + ' - ' + text,
                 unit: null,
                 quantity: quantity,
                 price: price,                
                 total: total
-            });
-        });
+            };
+        }).get();
         
         // get group and category
         const $group = that.getGroup(group);
@@ -1782,7 +1786,7 @@ $.fn.extend({
             description: $row.findNamedInput('description').val(),
             unit: $row.findNamedInput('unit').val(),
             price: price,
-            quantity: quantity,
+            quantity: quantity,                        
             total: total
         };
     },
@@ -1829,9 +1833,9 @@ $.fn.extend({
         // update cells
         $row.find('td:eq(0) .btn-edit-item').text(item.description);
         $row.find('td:eq(1)').text(item.unit);
-        $row.find('td:eq(2)').text(Application.toLocaleString(item.price));
-        $row.find('td:eq(3)').text(Application.toLocaleString(item.quantity));
-        $row.find('td:eq(4)').text(Application.toLocaleString(item.total));
+        $row.find('td:eq(2)').text(Application.formatValue(item.price));
+        $row.find('td:eq(3)').text(Application.formatValue(item.quantity));
+        $row.find('td:eq(4)').text(Application.formatValue(item.total));
 
         return $row;
     },

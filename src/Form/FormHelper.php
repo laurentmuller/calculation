@@ -27,7 +27,6 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
@@ -278,23 +277,6 @@ class FormHelper
     public function addHiddenType(): self
     {
         return $this->add(HiddenType::class);
-    }
-
-    /**
-     * Add a money type to the builder and reset all values to default.
-     *
-     * @param bool         $symbol true to display the currency symbol; false to hide
-     * @param \Locale|null $locale the locale to use for the currency symbol or null to use the default locale
-     */
-    public function addMoneyType(bool $symbol = false, ?\Locale $locale = null): self
-    {
-        if ($symbol) {
-            $symbol = $this->getCurrencySymbol($locale);
-        }
-        $this->updateOption('currency', $symbol);
-
-        return $this->className('text-right')
-            ->add(MoneyType::class);
     }
 
     /**

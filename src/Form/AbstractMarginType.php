@@ -25,26 +25,14 @@ abstract class AbstractMarginType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('minimum')
-            ->addMoneyType($this->currency());
+            ->addNumberType();
 
         $helper->field('maximum')
-            ->addMoneyType($this->currency());
+            ->addNumberType();
 
         $helper->field('margin')
-            ->percent($this->percent())
+            ->percent(false)
             ->addPercentType(0);
-    }
-
-    /**
-     * Returns if the curreny symbol for the minimum and maximum is displayed.
-     *
-     * The default value is false.
-     *
-     * @return bool true to display; false to hide
-     */
-    protected function currency(): bool
-    {
-        return false;
     }
 
     /**
@@ -53,17 +41,5 @@ abstract class AbstractMarginType extends AbstractEntityType
     protected function getLabelPrefix(): string
     {
         return 'groupmargin.fields.';
-    }
-
-    /**
-     * Returns if the percent symbol for the margin is displayed.
-     *
-     * The default value is false.
-     *
-     * @return bool true to display; false to hide
-     */
-    protected function percent(): bool
-    {
-        return false;
     }
 }

@@ -381,13 +381,11 @@ $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex
 $.fn.getColumns = function (useName) {
     'use strict';
 
-    const columns = [];
     const $that = $(this);
     const debug = $that.data('debug');
-
-    $that.find('th').each(function () {
-        const $element = $(this);
-        const column = $element.data();
+    return $that.find('th').map(function () {
+        const $header = $(this);
+        const column = $header.data();
 
         // data
         if (useName) {
@@ -409,15 +407,13 @@ $.fn.getColumns = function (useName) {
             column.render = $.fn.dataTable[column.render];
         }
 
-        columns.push(column);
-
-        // remove
+        // remove attributes
         if (!debug) {
-            $element.removeDataAttributes();
+            $header.removeDataAttributes();
         }
-    });
-
-    return columns;
+        
+        return column;
+    }).get();
 };
 
 /**

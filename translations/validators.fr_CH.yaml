@@ -64,9 +64,9 @@ captcha:
     timeout: Le délai d'attente est atteint. Essayez de recharger la page ou l'image.
     generate: Impossible de générer une nouvelle image.
 task:
-    unique_code: Ce nom est déjà utilisé par une autre tâche.
+    unique_name: Ce nom est déjà utilisé par une autre tâche.
 task_item:
-    unique_code: Ce nom est déjà utilisé par une autre opération.
+    unique_name: Ce nom est déjà utilisé par une autre opération.
     maximum_geather_minimum: La valeur maximale doit être supérieure à la valeur minimale.
     value_numeric: Le prix unitaire doit être un nombre.
     minimum_numeric: La valeur minimale doit être un nombre.

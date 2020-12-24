@@ -54,8 +54,6 @@ trait RightsTrait
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
     public function __get(string $name)
     {
@@ -69,7 +67,7 @@ trait RightsTrait
     /**
      * {@inheritdoc}
      */
-    public function __isset(string $name)
+    public function __isset(string $name): bool
     {
         return $this->nameExists($name);
     }
@@ -166,9 +164,7 @@ trait RightsTrait
      */
     private function nameExists(string $name): bool
     {
-        $entities = \array_keys(EntityVoter::ENTITY_OFFSETS);
-
-        return \in_array($name, $entities, true);
+        return array_key_exists($name, EntityVoter::ENTITY_OFFSETS);
     }
 
     /**

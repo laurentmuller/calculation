@@ -16,6 +16,7 @@ use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Transformer to convert a category to an identifier.
@@ -30,19 +31,26 @@ class CategoryTransformer implements DataTransformerInterface
     private $repository;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * Constructor.
      *
-     * @param CategoryRepository $repository the repository to find category
+     * @param CategoryRepository  $repository the repository to find category
+     * @param TranslatorInterface $translator the translator used for error messages
      */
-    public function __construct(CategoryRepository $repository)
+    public function __construct(CategoryRepository $repository, TranslatorInterface $translator)
     {
         $this->repository = $repository;
+        $this->translator = $translator;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param ?int $id
+     * @param int|null $id
      */
     public function reverseTransform($id): ?Category
     {
@@ -52,7 +60,8 @@ class CategoryTransformer implements DataTransformerInterface
 
         $category = $this->repository->find((int) $id);
         if (null === $category) {
-            throw new TransformationFailedException(\sprintf('An category with the number "%s" does not exist!', $id));
+            $message = $this->translator->trans('category.id_not_found', ['%id%' => $id], 'validators');
+            throw new TransformationFailedException($message);
         }
 
         return $category;
@@ -61,14 +70,14 @@ class CategoryTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
-     * @param ?Category $category
+     * @param Category|null $category
      */
-    public function transform($category)
+    public function transform($category): ?int
     {
         if (null !== $category) {
             return $category->getId();
         }
 
-        return 0;
+        return null;
     }
 }

@@ -338,7 +338,7 @@ var Application = {
                 $('#item_search_input').selectFocus();
             }
         }).on('hide.bs.modal', function () {
-            $('#data-table-edit tbody tr').removeClass('table-primary');
+            $('#data-table-edit tbody tr.table-primary').removeClass('table-primary');
         });
 
         // buttons
@@ -401,7 +401,7 @@ var Application = {
                  $('#task_task').focus();
              }
         }).on('hide.bs.modal', function () {
-            $('#data-table-edit tbody tr').removeClass('table-primary');
+            $('#data-table-edit tbody tr.table-primary').removeClass('table-primary');
         });
         
         const updateValue = function (id, value) {
@@ -455,13 +455,8 @@ var Application = {
 
             // cancel send
             if ($form.jqXHR) {
-                try {
-                    $form.jqXHR.abort();    
-                } catch (e) {
-                    // ignore
-                } finally {
-                    $form.jqXHR = null;    
-                }                
+                $form.jqXHR.abort();    
+                $form.jqXHR = null;    
             }
             
             // send
@@ -479,8 +474,10 @@ var Application = {
                 } else {
                     showError(response.message);                    
                 }
-            }).fail(function () {
-                showError($form.data('failed'));
+            }).fail(function (jqXHR, textStatus) {
+                if (textStatus !== 'abort') {
+                    showError($form.data('failed'));    
+                }
             });            
         };
         
@@ -794,13 +791,8 @@ var Application = {
 
         // abort
         if (that.jqXHR) {
-            try {
-                that.jqXHR.abort();    
-            } catch (e) {
-                // ignore
-            } finally {
-                that.jqXHR = null;    
-            }                
+            that.jqXHR.abort();    
+            that.jqXHR = null;    
         }
 
         // parameters
@@ -839,8 +831,10 @@ var Application = {
             }
             updateErrors();
             return that;
-        }).fail(function () {
-            return that.disable(null);
+        }).fail(function (jqXHR, textStatus) {
+            if (textStatus !== 'abort') {
+                return that.disable(null);
+            }
         });
 
         return that;
@@ -1318,7 +1312,8 @@ var Application = {
 
         // row
         const $row = $source.getParentRow();
-
+        $row.scrollInViewport();
+        
         // initialize
         this.initEditItemDialog().initDragDialog();
         this.$editingRow = $row;
@@ -1454,9 +1449,11 @@ var Application = {
         // hide
         $('#item_modal').modal('hide');
 
-        // row?
+        // get row
         const that = this;
-        if (!that.$editingRow) {
+        const $editingRow = that.$editingRow;
+        that.$editingRow = null;
+        if (!$editingRow) {
             return;
         }
 
@@ -1466,25 +1463,22 @@ var Application = {
         const item = that.getItemDialogItem();
         
         // get old elements
-        const $oldBody = that.$editingRow.parents('tbody');
+        const $oldBody = $editingRow.parents('tbody');
         let $oldHead = $oldBody.prevUntil('thead').prev();
         if ($oldHead.length === 0) {
             $oldHead = $oldBody.prev();
         } 
         
-        // get old inputs
+        // get old values
         const $oldCategory = $oldBody.findNamedInput('category');
         const $oldGroup = $oldHead.findNamedInput('group');
-
-        // get old values
         const oldGroupId = $oldGroup.intVal();
         const oldCategoryId = $oldCategory.intVal();
-        const oldItem = that.$editingRow.getRowItem();
+        const oldItem = $editingRow.getRowItem();
         
         // no change?
         if (oldGroupId === group.id && oldCategoryId === category.id && JSON.stringify(item) === JSON.stringify(oldItem)) {
-            that.$editingRow.timeoutToggle('table-success');
-            that.$editingRow = null;
+            $editingRow.scrollInViewport().timeoutToggle('table-success');
             return;
         }       
         
@@ -1502,9 +1496,7 @@ var Application = {
             const emptyCategory = $oldBody.children().length === 2;
             const emptyGroup = emptyCategory && $next.length === 1;
             
-            that.$editingRow.remove();
-            that.$editingRow = null;
-            
+            $editingRow.remove();
             if (emptyGroup) {
                 that.removeGroup($oldHead);                
             } else if (emptyCategory) {
@@ -1515,8 +1507,7 @@ var Application = {
             $row.scrollInViewport().timeoutToggle('table-success');
         } else {
             // update
-            that.$editingRow.updateRow(item).timeoutToggle('table-success');
-            that.$editingRow = null;
+            $editingRow.updateRow(item).timeoutToggle('table-success');
             that.updateAll();
         }        
         return that;

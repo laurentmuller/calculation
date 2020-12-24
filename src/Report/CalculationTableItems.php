@@ -33,6 +33,11 @@ use App\Util\FormatUtils;
 class CalculationTableItems extends PdfGroupTableBuilder
 {
     /**
+     * The categories and items indent.
+     */
+    private const ITEM_INDENT = 4;
+
+    /**
      * Constructor.
      *
      * @param CalculationReport $parent the parent document to print in
@@ -55,7 +60,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
 
         // styles
         $groupStyle = $this->getGroup()->getStyle();
-        $defaultStyle = PdfStyle::getCellStyle()->setIndent(4);
+        $defaultStyle = PdfStyle::getCellStyle()->setIndent(self::ITEM_INDENT);
         $errorStyle = (clone $defaultStyle)->setTextColor(PdfTextColor::red());
 
         // headers
@@ -70,12 +75,12 @@ class CalculationTableItems extends PdfGroupTableBuilder
             ->outputHeaders();
 
         foreach ($groups as $group) {
-            $groupStyle->setIndent(0);
+            $groupStyle->resetIndent();
             $this->setGroupKey($group->getCode());
 
             /** @var CalculationCategory $category */
             foreach ($group->getCategories() as $category) {
-                $groupStyle->setIndent(4);
+                $groupStyle->setIndent(self::ITEM_INDENT);
                 $this->setGroupKey($category->getCode());
 
                 /** @var CalculationItem $item */

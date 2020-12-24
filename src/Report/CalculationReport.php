@@ -95,9 +95,8 @@ class CalculationReport extends AbstractReport
         // new page
         $this->AddPage();
 
-        // groups
-        $groups = $this->calculation->getGroups();
-        if ($groups->isEmpty()) {
+        // empty?
+        if ($this->calculation->isEmpty()) {
             $this->resetStyle()->Ln();
             $message = $this->trans('calculation.edit.empty');
             $this->Cell(0, 0, $message, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, self::ALIGN_CENTER);
@@ -110,7 +109,7 @@ class CalculationReport extends AbstractReport
         $this->Ln(3);
 
         // check if margin groups and overall total can fit in the current page
-        $lines = $this->calculation->getGroups()->count() + 2;
+        $lines = $this->calculation->getGroupsCount() + 2;
         $lines += empty($this->calculation->getUserMargin()) ? 2 : 4;
         if (!$this->isPrintable(2 + self::LINE_HEIGHT * $lines)) {
             $this->AddPage();

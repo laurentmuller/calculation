@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\CalculationGroupRepository")
  * @ORM\Table(name="sy_CalculationGroup")
  */
-class CalculationGroup extends AbstractEntity
+class CalculationGroup extends AbstractEntity implements \Countable
 {
     /**
      * The total amount.
@@ -40,7 +40,7 @@ class CalculationGroup extends AbstractEntity
      * @ORM\ManyToOne(targetEntity=Calculation::class, inversedBy="groups")
      * @ORM\JoinColumn(name="calculation_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      *
-     * @var \App\Entity\Calculation
+     * @var Calculation|null
      */
     protected $calculation;
 
@@ -67,7 +67,7 @@ class CalculationGroup extends AbstractEntity
     protected $code;
 
     /**
-     * The parent's category.
+     * The parent's group.
      *
      * @ORM\ManyToOne(targetEntity=Group::class)
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false)
@@ -134,6 +134,16 @@ class CalculationGroup extends AbstractEntity
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @return int the number of categories
+     */
+    public function count(): int
+    {
+        return $this->categories->count();
+    }
+
+    /**
      * Create a calculation group from the given group.
      *
      * @param Group $group the group to copy values from
@@ -146,7 +156,7 @@ class CalculationGroup extends AbstractEntity
     }
 
     /**
-     * Get amount.
+     * Get the total amount.
      */
     public function getAmount(): float
     {
@@ -193,20 +203,6 @@ class CalculationGroup extends AbstractEntity
     public function getGroup(): ?Group
     {
         return $this->group;
-    }
-
-    /**
-     * Get the group identifier.
-     *
-     * This property is created only for the form builder.
-     */
-    public function getGroupId(): ?int
-    {
-        if (null !== $this->group) {
-            return $this->group->getId();
-        }
-
-        return null;
     }
 
     /**
@@ -278,7 +274,7 @@ class CalculationGroup extends AbstractEntity
     }
 
     /**
-     * Set amount.
+     * Set the total amount.
      */
     public function setAmount(float $amount): self
     {
@@ -313,7 +309,7 @@ class CalculationGroup extends AbstractEntity
      * Set the group.
      *
      * @param Group $group  the group to copy values from
-     * @param bool  $update true to update the amount and the margin
+     * @param bool  $update true to update the total amount and the margin
      */
     public function setGroup(Group $group, $update = false): self
     {
@@ -379,7 +375,7 @@ class CalculationGroup extends AbstractEntity
     }
 
     /**
-     * Update amount and margin for this categories.
+     * Update the total amount, the margin and this categories.
      */
     public function update(): self
     {

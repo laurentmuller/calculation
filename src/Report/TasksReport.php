@@ -70,7 +70,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
             //check new page
             $count = 2;
             if (!$entity->isEmpty()) {
-                $item = $entity->getItems()[0];
+                $item = $entity->getItems()->first();
                 if ($item->isEmpty()) {
                     ++$count;
                 } else {

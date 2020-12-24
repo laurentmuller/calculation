@@ -83,7 +83,7 @@
          * Check if the element is visible into area of the browser window.
          * 
          * @param {int}
-         *            bottomMargin - The bottom margin.
+         *            bottomMargin - The bottom margin (default to 60).
          * 
          * @return {boolean} true if visible, false if not.
          */
@@ -91,7 +91,7 @@
             const $this = $(this);
             if ($this.length) {
                 if ($.isUndefined(bottomMargin)) {
-                    bottomMargin = 50;
+                    bottomMargin = 60;
                 }
                 const top = $this.offset().top;
                 const bottom = top + $this.outerHeight();
@@ -107,10 +107,11 @@
          * Scrolls the element into the visible area of the browser window.
          * 
          * @param {int}
-         *            delay - The scroll animation delay in milliseconds.
+         *            delay - The scroll animation delay in milliseconds
+         *            (default to 400).
          * 
          * @param {int}
-         *            bottomMargin - The bottom margin.
+         *            bottomMargin - The bottom margin (default to 60).
          * 
          * @return {jQuery} The jQuery element for chaining.
          */
@@ -118,11 +119,11 @@
             const $this = $(this);
             try {
                 if ($this.length && !$this.isInViewport(bottomMargin)) {
-                    if ($.isUndefined(bottomMargin)) {
-                        bottomMargin = 30;
-                    }
                     const top = $this.offset().top;
                     const $target = $('html, body');
+                    if ($.isUndefined(delay)) {
+                        delay = 400;
+                    }
                     if (delay > 0) {
                         $target.animate({
                             scrollTop: top
@@ -426,7 +427,8 @@
          * @return {jQuery} The jQuery element for chaining.
          */
         selectFocus: function () {
-            return $(this).focus().select();
+            $(this).focus().select();
+            return $(this);
         },
 
         /**

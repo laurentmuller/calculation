@@ -89,14 +89,8 @@ function update(form) {
 
     // cancel send
     if ($form.jqXHR) {
-        try {
-            $form.jqXHR.abort();
-        } catch (e) {
-            // ignore
-            console.log(e);
-        } finally {
-            $form.jqXHR = null;
-        }
+        $form.jqXHR.abort();
+        $form.jqXHR = null;
     }
     // send
     $form.jqXHR = $.post(url, data, function (response) {
@@ -110,8 +104,10 @@ function update(form) {
         } else {
             showError(response.message || $form.data('failed'));
         }
-    }).fail(function () {
-        showError($form.data('failed'));
+    }).fail(function (jqXHR, textStatus) {
+        if (textStatus !== 'abort') {
+            showError($form.data('failed'));
+        }
     });
 }
 

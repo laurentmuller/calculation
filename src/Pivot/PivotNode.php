@@ -142,6 +142,8 @@ class PivotNode extends PivotAggregator implements \Countable
 
     /**
      * {@inheritdoc}
+     *
+     * @return int the number of children
      */
     public function count(): int
     {

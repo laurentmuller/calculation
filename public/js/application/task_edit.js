@@ -125,7 +125,7 @@ function addItem() {
     updateUI();
 
     // focus
-    $item.find("input[name$='[name]']:last").selectFocus();
+    $item.find("input[name$='[name]']:last").selectFocus().scrollInViewport();
 }
 
 /**

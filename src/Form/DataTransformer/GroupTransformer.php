@@ -16,6 +16,7 @@ use App\Entity\Group;
 use App\Repository\GroupRepository;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Transformer to convert a group to an identifier.
@@ -30,19 +31,26 @@ class GroupTransformer implements DataTransformerInterface
     private $repository;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * Constructor.
      *
-     * @param GroupRepository $repository the repository to find group
+     * @param GroupRepository     $repository the repository to find group
+     * @param TranslatorInterface $translator the translator used for error messages
      */
-    public function __construct(GroupRepository $repository)
+    public function __construct(GroupRepository $repository, TranslatorInterface $translator)
     {
         $this->repository = $repository;
+        $this->translator = $translator;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param ?int $id
+     * @param int|null $id
      */
     public function reverseTransform($id): ?Group
     {
@@ -52,7 +60,8 @@ class GroupTransformer implements DataTransformerInterface
 
         $group = $this->repository->find((int) $id);
         if (null === $group) {
-            throw new TransformationFailedException(\sprintf('A group with the number "%s" does not exist!', $id));
+            $message = $this->translator->trans('group.id_not_found', ['%id%' => $id], 'validators');
+            throw new TransformationFailedException($message);
         }
 
         return $group;
@@ -61,14 +70,14 @@ class GroupTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
-     * @param ?Group $group
+     * @param Group|null $group
      */
-    public function transform($group)
+    public function transform($group): ?int
     {
         if (null !== $group) {
             return $group->getId();
         }
 
-        return 0;
+        return null;
     }
 }

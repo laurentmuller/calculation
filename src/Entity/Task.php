@@ -99,6 +99,8 @@ class Task extends AbstractEntity implements \Countable
 
     /**
      * {@inheritdoc}
+     *
+     * @return int the number of items
      */
     public function count(): int
     {

@@ -83,6 +83,8 @@ class TaskItem extends AbstractEntity implements \Countable
 
     /**
      * {@inheritdoc}
+     *
+     * @return int the number of margins
      */
     public function count(): int
     {

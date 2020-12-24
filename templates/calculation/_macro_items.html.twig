@@ -6,7 +6,8 @@
     {{ form_widget(item.price) }}
     {{ form_widget(item.quantity) }}
     {{ form_widget(item.total) }}
-	<td class="pl-3">{{ form_widget(item.description) -}}
+    {{ form_widget(item.description) -}}
+	<td class="pl-3">
         {%- if editable -%}
             <a href='#' class="btn-edit-item">{{ item.description.vars.value }}</a>
         {%- else -%}

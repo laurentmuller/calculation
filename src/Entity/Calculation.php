@@ -271,7 +271,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         $count = 0;
         foreach ($this->groups as $group) {
-            $count += $group->getCategories()->count();
+            $count += $group->count();
         }
 
         return $count;
@@ -492,7 +492,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         foreach ($this->groups as $group) {
             /** @var CalculationCategory $category */
             foreach ($group->getCategories() as $category) {
-                $count += $category->getItems()->count();
+                $count += $category->count();
             }
         }
 

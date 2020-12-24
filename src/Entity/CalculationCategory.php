@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\CalculationCategoryRepository")
  * @ORM\Table(name="sy_CalculationCategory")
  */
-class CalculationCategory extends AbstractEntity
+class CalculationCategory extends AbstractEntity implements \Countable
 {
     /**
      * The total amount.
@@ -61,7 +61,7 @@ class CalculationCategory extends AbstractEntity
      * @ORM\ManyToOne(targetEntity=CalculationGroup::class, inversedBy="categories")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      *
-     * @var ?CalculationGroup
+     * @var CalculationGroup|null
      */
     protected $group;
 
@@ -81,10 +81,7 @@ class CalculationCategory extends AbstractEntity
      */
     public function __construct()
     {
-        // items
         $this->items = new ArrayCollection();
-
-        // default values
         $this->amount = 0.0;
     }
 
@@ -129,6 +126,16 @@ class CalculationCategory extends AbstractEntity
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @return int the number of items
+     */
+    public function count(): int
+    {
+        return $this->items->count();
+    }
+
+    /**
      * Create a calculation category from the given category.
      *
      * @param Category $category the category to copy values from
@@ -141,7 +148,7 @@ class CalculationCategory extends AbstractEntity
     }
 
     /**
-     * Get amount.
+     * Get the total amount.
      */
     public function getAmount(): float
     {
@@ -162,22 +169,6 @@ class CalculationCategory extends AbstractEntity
     public function getCategory(): ?Category
     {
         return $this->category;
-    }
-
-    /**
-     * Get the category identifier.
-     *
-     * This property is created only for the form builder.
-     *
-     * @return int
-     */
-    public function getCategoryId(): ?int
-    {
-        if (null !== $this->category) {
-            return $this->category->getId();
-        }
-
-        return null;
     }
 
     /**
@@ -233,7 +224,7 @@ class CalculationCategory extends AbstractEntity
      */
     public function isSortable(): bool
     {
-        return $this->items->count() > 1;
+        return $this->count() > 1;
     }
 
     /**
@@ -253,7 +244,7 @@ class CalculationCategory extends AbstractEntity
     }
 
     /**
-     * Set amount.
+     * Set the total amount.
      */
     public function setAmount(float $amount): self
     {
@@ -342,7 +333,7 @@ class CalculationCategory extends AbstractEntity
     }
 
     /**
-     * Update amount and margin for this items.
+     * Update the total amount and this items.
      */
     public function update(): self
     {

@@ -12,9 +12,14 @@
 		"class": " text-cell"
 	},
 	{
-		"name": "category",
+		"name": "category.code",
 		"title": "task.fields.category",
 		"class": "text-category"
+	},
+	{
+		"name": "unit",
+		"title": "task.fields.unit",
+		"class": " text-unit"
 	},
 	{
 		"name": "items",

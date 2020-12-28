@@ -39,7 +39,6 @@ class TaskServiceType extends AbstractHelperType
             ->add(TaskEntityType::class);
 
         $helper->field('quantity')
-            ->updateAttribute('min', 1)
             ->addNumberType();
     }
 

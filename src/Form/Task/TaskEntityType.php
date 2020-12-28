@@ -38,7 +38,10 @@ class TaskEntityType extends AbstractType
                 return $r->getSortedBuilder(false);
             },
             'choice_attr' => function (Task $task) {
-                return ['data-category-id' => $task->getCategory()->getId()];
+                return [
+                    'data-category-id' => $task->getCategory()->getId(),
+                    'data-unit' => $task->getUnit(),
+                ];
             },
         ]);
     }

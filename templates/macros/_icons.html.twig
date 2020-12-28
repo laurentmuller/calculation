@@ -94,8 +94,8 @@
 
 {% macro dropdownBars(id, title = 'common.actions', class = 'btn btn-sm border-0 py-0') -%}
 {% apply spaceless %}
-{% if not ('btn-outline' in class) %}	
-    {% set class = class ~ ' btn-outline-secondary' %}
+{% if not ('btn-' in class) %}	
+    {% set class = class ~ ' btn-secondary' %}
 {% endif %}
 <button class="{{ class }}" type="button" id="{{ id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
     {{- _self.icon('bars') -}}    
@@ -140,5 +140,5 @@
 {%- endmacro %}
 
 {% macro linkTable(route_name, parameters = []) -%}
-{% if route_name %}{{ _self.link(path(route_name, parameters), '' , 'btn btn-sm btn-outline-secondary', 'table', 'common.button_table') }}{% endif %}
+{% if route_name %}{{ _self.link(path(route_name, parameters), '' , 'btn btn-secondary', 'table', 'common.button_table') }}{% endif %}
 {%- endmacro %}

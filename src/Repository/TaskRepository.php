@@ -12,8 +12,10 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Task;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -32,6 +34,11 @@ use Doctrine\Persistence\ManagerRegistry;
 class TaskRepository extends AbstractRepository
 {
     /**
+     * The alias for the category entity.
+     */
+    public const CATEGORY_ALIAS = 'c';
+
+    /**
      * Constructor.
      *
      * @param ManagerRegistry $registry The connections and entity managers registry
@@ -39,6 +46,50 @@ class TaskRepository extends AbstractRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Task::class);
+    }
+
+    /**
+     * Count the number of tasks for the given category.
+     *
+     * @param Category $category the category to search for
+     *
+     * @return int the number of tasks
+     */
+    public function countCategoryReferences(Category $category): int
+    {
+        $result = $this->createQueryBuilder('e')
+            ->select('COUNT(e.id)')
+            ->innerJoin('e.category', 'c')
+            ->where('c.id = :id')
+            ->setParameter('id', $category->getId(), Types::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return (int) $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        return parent::createDefaultQueryBuilder($alias)
+            ->innerJoin("$alias.category", self::CATEGORY_ALIAS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    {
+        switch ($field) {
+            case 'category.id':
+                return parent::getSearchFields('id', self::CATEGORY_ALIAS);
+            case 'category.code':
+                return parent::getSearchFields('code', self::CATEGORY_ALIAS);
+            default:
+                return parent::getSearchFields($field, $alias);
+        }
     }
 
     /**
@@ -60,5 +111,19 @@ class TaskRepository extends AbstractRepository
         }
 
         return $builder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSortFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    {
+        switch ($field) {
+            case 'category.id':
+            case 'category.code':
+                return parent::getSortFields('code', self::CATEGORY_ALIAS);
+            default:
+                return parent::getSortFields($field, $alias);
+        }
     }
 }

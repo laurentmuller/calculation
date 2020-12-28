@@ -43,6 +43,11 @@ class TaskType extends AbstractEntityType
         $helper->field('category')
             ->addCategoryType();
 
+        $helper->field('unit')
+            ->notRequired()
+            ->maxLength(15)
+            ->addTextType();
+
         $helper->field('items')
             ->updateOption('prototype_name', '__itemIndex__')
             ->addCollectionType(TaskItemType::class);

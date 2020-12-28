@@ -43,8 +43,12 @@ class EditTaskDialogType extends AbstractHelperType
         $helper->field('category')
             ->add(CategoryEntityType::class);
 
+        $helper->field('unit')
+            ->notRequired()
+            ->maxLength(15)
+            ->addTextType();
+
         $helper->field('quantity')
-            ->updateAttribute('min', 1)
             ->addNumberType();
     }
 

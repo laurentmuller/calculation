@@ -55,7 +55,7 @@ trait RightsTrait
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): ?array
     {
         if ($this->nameExists($name)) {
             return $this->getEntityRights($name);
@@ -164,7 +164,7 @@ trait RightsTrait
      */
     private function nameExists(string $name): bool
     {
-        return array_key_exists($name, EntityVoter::ENTITY_OFFSETS);
+        return \array_key_exists($name, EntityVoter::ENTITY_OFFSETS);
     }
 
     /**

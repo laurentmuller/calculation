@@ -2,12 +2,20 @@
 
 {# imports #}
 {% import 'macros/_datatables.html.twig' as helper %}
+{% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
-{% macro button(class, text, action, icon) %}
+{#% macro button(class, text, action, icon) %}
 {%- set path = path('homepage') ~ '_type_/' ~ action ~ '/_id_' -%}
     <a href="#" class="disabled btn btn-form-sm {{ class }}" data-path="{{ path }}" data-icon="{{ icon }}">
         {{- text|trans -}}
+    </a>
+{% endmacro %#}
+
+{% macro button(class, text, action, icon) %}
+{%- set path = path('homepage') ~ '_type_/' ~ action ~ '/_id_' -%}
+    <a href="#" class="btn btn-secondary disabled {{ class }}" data-path="{{ path }}" title="{{ text|trans }}">
+        {{- icons.icon(icon) -}} 
     </a>
 {% endmacro %}
 
@@ -37,13 +45,13 @@
     <div class="col-lg-7 text-lg-right d-print-none">
         <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
         	{% if show_granted %}
-            {{ _self.button('btn-table-show btn-info', 'common.button_show', 'show', 'fas fa-fw fa-tv') }}
+            {{ _self.button('btn-table-show', 'common.button_show', 'show', 'fas fa-fw fa-tv') }}
             {% endif %}
             {% if edit_granted %}
-            {{ _self.button('btn-table-edit btn-success', 'common.button_edit', 'edit', 'fas fa-fw fa-pencil-alt') }}
+            {{ _self.button('btn-table-edit', 'common.button_edit', 'edit', 'fas fa-fw fa-pencil-alt') }}
             {% endif %}
             {% if delete_granted %}
-            {{ _self.button('btn-table-delete btn-danger', 'common.button_delete', 'delete', 'fas fa-fw fa-times') }}
+            {{ _self.button('btn-table-delete', 'common.button_delete', 'delete', 'fas fa-fw fa-times') }}
             {% endif %}
         </div>
     </div>

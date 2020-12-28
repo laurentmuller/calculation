@@ -21,6 +21,7 @@ use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
 use App\Repository\CalculationCategoryRepository;
 use App\Repository\ProductRepository;
+use App\Repository\TaskRepository;
 use App\Spreadsheet\CategoryDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,24 +70,31 @@ class CategoryController extends AbstractEntityController
      *
      * @Route("/delete/{id}", name="category_delete", requirements={"id": "\d+" })
      */
-    public function delete(Request $request, Category $item, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository): Response
+    public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository): Response
     {
         // external references?
+        $tasks = $taskRepository->countCategoryReferences($item);
         $products = $productRepository->countCategoryReferences($item);
         $calculations = $categoryRepository->countCategoryReferences($item);
-        if (0 !== $products || 0 !== $calculations) {
-            $display = $item->getDisplay();
-            $productsText = $this->trans('counters.products_lower', ['count' => $products]);
-            $calculationsText = $this->trans('counters.calculations_lower', ['count' => $calculations]);
-            $message = $this->trans('category.delete.failure', [
-                '%name%' => $display,
-                '%products%' => $productsText,
-                '%calculations%' => $calculationsText,
-            ]);
+
+        if (0 !== $tasks || 0 !== $products || 0 !== $calculations) {
+            $items = [];
+            if (0 !== $tasks) {
+                $items[] = $this->trans('counters.tasks', ['count' => $tasks]);
+            }
+            if (0 !== $products) {
+                $items[] = $this->trans('counters.products', ['count' => $products]);
+            }
+            if (0 !== $calculations) {
+                $items[] = $this->trans('counters.calculations', ['count' => $calculations]);
+            }
+            $message = $this->trans('category.delete.failure', ['%name%' => $item->getDisplay()]);
+
             $parameters = [
                 'id' => $item->getId(),
                 'title' => 'category.delete.title',
                 'message' => $message,
+                'items' => $items,
                 'back_page' => $this->getDefaultRoute(),
                 'back_text' => 'common.button_back_list',
             ];

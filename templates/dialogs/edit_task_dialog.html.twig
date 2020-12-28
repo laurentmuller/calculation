@@ -7,8 +7,8 @@
 <div id="{{ id }}" class="{{ class }}">{{ 0|amount }}</div>
 {% endmacro %}
 
-{% macro row_input(id, item, visible = false) %}
-<tr class="task-item-row{% if not visible %} d-none{% endif %}" task-id="{{ id }}">
+{% macro row_input(task, item, visible = false) %}
+<tr class="task-item-row{% if not visible %} d-none{% endif %}" task-id="{{ task.id }}" task-unit="{{ task.unit }}">
     <td>        
         <div class="custom-control custom-switch pt-2">
             <input type="checkbox" class="custom-control-input item-input" id="item_{{ item.id }}" name="items[]" value="{{ item.id }}" checked="checked">
@@ -33,13 +33,18 @@
 
 {% block modal_body %}
 <div class="form-row">
-    <div class="col-5">
+    <div class="col-6">
         {{ form_row(form.task) }}
     </div>
-    <div class="col-4">
+    <div class="col-6">
         {{ form_row(form.category) }}
     </div>
-     <div class="col-3">
+</div>
+<div class="form-row">
+    <div class="col-3 offset-6">
+        {{ form_row(form.unit) }}
+    </div>
+    <div class="col-3">
         {{ form_row(form.quantity, {'attr': {'value': 1}}) }}
     </div>  
 </div>
@@ -56,7 +61,7 @@
             {% for task in tasks %}
                 {% set visible = loop.index == 1 %}
                 {% for item in task.items|filter(item => item.count > 0) %}
-	                {{ _self.row_input(task.id, item, visible) }}
+	                {{ _self.row_input(task, item, visible) }}
                 {% endfor %}
             {% endfor %}
         </tbody>

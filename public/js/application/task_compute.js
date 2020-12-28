@@ -165,6 +165,11 @@ function onTaskChanged() {
     const options = {
         submitHandler: function (form) {
             update(form);
+        },
+        rules: {
+            quantity: {
+                greaterThanValue: 0
+            }
         }
     };
     $('form').initValidator(options);

@@ -75,18 +75,20 @@ class GroupController extends AbstractEntityController
         $calculations = $groupRepository->countGroupReferences($item);
 
         if (0 !== $categories || 0 !== $calculations) {
-            $display = $item->getDisplay();
-            $categoriesText = $this->trans('counters.categories_lower', ['count' => $categories]);
-            $calculationsText = $this->trans('counters.calculations_lower', ['count' => $calculations]);
-            $message = $this->trans('group.delete.failure', [
-                '%name%' => $display,
-                '%categories%' => $categoriesText,
-                '%calculations%' => $calculationsText,
-            ]);
+            $items = [];
+            if (0 !== $categories) {
+                $items[] = $this->trans('counters.categories', ['count' => $categories]);
+            }
+            if (0 !== $calculations) {
+                $items[] = $this->trans('counters.calculations', ['count' => $calculations]);
+            }
+            $message = $this->trans('group.delete.failure', ['%name%' => $item->getDisplay()]);
+
             $parameters = [
                 'id' => $item->getId(),
                 'title' => 'group.delete.title',
                 'message' => $message,
+                'items' => $items,
                 'back_page' => $this->getDefaultRoute(),
                 'back_text' => 'common.button_back_list',
             ];

@@ -232,7 +232,7 @@
 		},
 		{
 			"name": "tinymce-i18n",
-			"version": "20.4.4",
+			"version": "20.12.25",
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/langs5/{file}",
 			"target": "tinymce/langs",

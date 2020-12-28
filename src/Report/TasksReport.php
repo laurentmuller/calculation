@@ -39,6 +39,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $parent->startRow()
             ->add($task->getName(), 1, $group->getStyle())
             ->add($task->getCategoryCode())
+            ->add($task->getUnit())
             ->completeRow();
 
         return true;
@@ -99,6 +100,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $table = new PdfGroupTableBuilder($this);
         $table->addColumn(PdfColumn::left($this->trans('task.fields.name'), 40))
             ->addColumn(PdfColumn::left($this->trans('task.fields.category'), 35, true))
+            ->addColumn(PdfColumn::left($this->trans('task.fields.unit'), 15, true))
             ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.minimum'), 20, true))
             ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.maximum'), 20, true))
             ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.value'), 25, true))
@@ -136,6 +138,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     private function outputMargin(PdfGroupTableBuilder $table, TaskItemMargin $margin): void
     {
         $table->startRow()
+            ->add('')
             ->add('')
             ->add('')
             ->add(FormatUtils::formatAmount($margin->getMinimum()))

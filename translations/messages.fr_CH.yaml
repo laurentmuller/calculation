@@ -24,7 +24,7 @@ calculation:
         success: La calculation Nº <b>%name%</b> a été créée avec succès.
     edit:
         title: Calculation Nº %id%
-        title_short: Edition d'une calculation
+        title_short: Modifier la calculation
         empty: La calculation ne contient aucun article ou le total est égale à 0.
         empty_items: Aucun article.
         success: La calculation Nº <b>%name%</b> a été mise à jour avec succès.
@@ -52,7 +52,7 @@ calculation:
             search_unit: Erreur lors de la recherche des unités.
             user_margin: La marge utilisateur doit être valide.
     delete:
-        title: Supprimer une calculation
+        title: Supprimer la calculation
         message: Êtes-vous sûr de vouloir supprimer la calculation Nº <b>%name%</b> ?
         success: La calculation Nº <b>%name%</b> a été supprimée avec succès.
         failure: Impossible de supprimer la calculation Nº <b>%name%</b>.
@@ -130,10 +130,10 @@ calculationstate:
         title: Nouveau statut
         success: Le statut <b>%name%</b> a été créé avec succès.
     edit:
-        title: Edition d'un statut
+        title: Modifier le statut
         success: Le statut <b>%name%</b> a été mis à jour avec succès.
     delete:
-        title: Supprimer un statut
+        title: Supprimer le statut
         message: Êtes-vous sûr de vouloir supprimer le statut <b>%name%</b> ?
         success: Le statut <b>%name%</b> a été supprimé avec succès.
         failure: Impossible de supprimer le statut <b>%name%</b>. Il est référencé dans %calculations%.
@@ -159,13 +159,13 @@ category:
         title: Nouvelle catégorie
         success: La catégorie <b>%name%</b> a été créée avec succès.
     edit:
-        title: Edition d'une catégorie
+        title: Modifier la catégorie
         success: La catégorie <b>%name%</b> a été mise à jour avec succès.
     delete:
-        title: Supprimer une catégorie
+        title: Supprimer la catégorie
         message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
         success: La catégorie <b>%name%</b> a été supprimée avec succès.
-        failure: Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans %calculations% et dans %products%.
+        failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans :'
     list:
         title: Catégories
         empty: Aucune catégorie définie.
@@ -186,17 +186,17 @@ group:
         title: Nouveau groupe
         success: Le groupe <b>%name%</b> a été créé avec succès.
     edit:
-        title: Edition d'un groupe
+        title: Modifier le groupe
         success: Le groupe <b>%name%</b> a été mise à jour avec succès.
         add_margin: Ajouter une marge
         delete_margin: Supprimer la marge
         sort_margins: Trier les marges
         empty_margins: Aucune marge définie.
     delete:
-        title: Supprimer un groupe
+        title: Supprimer le groupe
         message: Êtes-vous sûr de vouloir supprimer le groupe <b>%name%</b> ?
         success: Le groupe <b>%name%</b> a été supprimé avec succès.
-        failure: Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans %calculations% et dans %categories%.
+        failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans :'
     list:
         title: Groupes
         empty: Aucun groupe défini.
@@ -204,7 +204,7 @@ group:
         pdf_title: Télécharger la liste des groupes
         excel_title: Exporter la liste des groupes
     show:
-        title: Propriétés du group
+        title: Propriétés du groupe
 groupmargin:
     name: Marges
     fields:
@@ -231,11 +231,11 @@ customer:
         title: Nouveau client
         success: Le client <b>%name%</b> a été créé avec succès.
     edit:
-        title: Edition d'un client
+        title: Modifier le client
         success: Le client <b>%name%</b> a été mis à jour avec succès.
         error_search: Erreur lors de la recherche de l'adresse.
     delete:
-        title: Supprimer un client
+        title: Supprimer le client
         message: Êtes-vous sûr de vouloir supprimer le client <b>%name%</b> ?
         success: Le client <b>%name%</b> a été supprimé avec succès.
         failure: Impossible de supprimer le client <b>%name%</b>.
@@ -257,10 +257,10 @@ globalmargin:
         title: Nouvelle marge globale
         success: La marge globale <b>%name%</b> a été créée avec succès.
     edit:
-        title: Edition d'une marge globale
+        title: Modifier la marge globale
         success: La marge globale <b>%name%</b> a été mise à jour avec succès.
     delete:
-        title: Supprimer une marge globale
+        title: Supprimer la marge globale
         message: Êtes-vous sûr de vouloir supprimer la marge globale <b>%name%</b> ?
         success: La marge globale <b>%name%</b> a été supprimée avec succès.
         failure: Impossible de supprimer la marge globale <b>%name%</b>.
@@ -287,12 +287,12 @@ product:
         success: L'article <b>%name%</b> a été créé avec succès.
         clone: '%description% - Copie'
     edit:
-        title: Edition d'un article
+        title: Modifier l'article
         success: L'article <b>%name%</b> a été mis à jour avec succès.
         error_search_unit: Erreur lors de la recherche des unités.
         error_search_supplier: Erreur lors de la recherche des fournisseur.
     delete:
-        title: Supprimer un article
+        title: Supprimer l'article
         message: Êtes-vous sûr de vouloir supprimer l'article <b>%name%</b> ?
         success: L'article <b>%name%</b> a été supprimé avec succès.
         failure: Impossible de supprimer l'article <b>%name%</b>.
@@ -346,7 +346,7 @@ user:
         title: Nouvel utilisateur
         success: L'utilisateur <b>%name%</b> a été créé avec succès.
     edit:
-        title: Edition d'un utilisateur
+        title: Modifier l'utilisateur
         success: L'utilisateur <b>%name%</b> a été mis à jour avec succès.
         delete_image: Supprimer la photo de profil
     image:
@@ -354,7 +354,7 @@ user:
         success: L'image du profil de l'utilisateur <b>%name%</b> a été mise à jour avec succès.
         failure: Une erreur s'est produite lors du redimensionnement de l'image.
     delete:
-        title: Supprimer un utilisateur
+        title: Supprimer l'utilisateur
         message: Êtes-vous sûr de vouloir supprimer l'utilisateur <b>%name%</b> ?
         success: L'utilisateur <b>%name%</b> a été supprimé avec succès.
         failure: Impossible de supprimer l'utilisateur <b>%name%</b>.
@@ -1003,19 +1003,20 @@ task:
     fields:
         name: Nom
         category: Catégorie
+        unit: Unité
         items: Opérations
     add:
         title: Nouvelle tâche
         success: La tâche <b>%name%</b> a été créée avec succès.
     edit:
-        title: Edition d'une tâche
+        title: Modifier la tâche
         success: La tâche <b>%name%</b> a été mise à jour avec succès.
         add_item: Ajouter une opération
         delete_item: Supprimer l'opération et ses marges
         empty_items: Aucune opération définie.
         sort_items: Trier
     delete:
-        title: Supprimer une tâche
+        title: Supprimer la tâche
         message: Êtes-vous sûr de vouloir supprimer la tâche <b>%name%</b> ?
         success: La tâche <b>%name%</b> a été supprimée avec succès.
         failure: Impossible de tâche la tâche <b>%name%</b>.
@@ -1055,6 +1056,7 @@ taskcompute:
     fields:
         task: Tâche
         category: Catégorie
+        unit: Unité
         quantity: Quantité
         price: Prix
         total: Total

@@ -300,7 +300,7 @@
         greaterThanBoth: 'Le champ \"{0}\" doit avoir une valeur supérieure au champ \"{1}\".',
         greaterThan: function (parameters, element) {
             const target = $(element).getLabelText();
-            const source = $(parameters).getLabelText();
+            const source = $(parameters).getLabelText() || parameters;
             if (target && source) {
                 return $.validator.format($.validator.messages.greaterThanBoth, target, source);
             } else if (target) {
@@ -308,6 +308,15 @@
             } else {
                 return $.validator.messages.greaterThanFallback;
             }
+        },
+
+        /*
+         * greaterThanValue
+         */
+        greaterThanValueFallback: 'Veuillez fournir une valeur supérieure à {0}.',
+        greaterThanValueLabel: 'Le champ \"{0}\" doit avoir une valeur supérieure à {1}.',
+        greaterThanValue: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.greaterThanValueLabel, $.validator.messages.greaterThanValueFallback, parameters);
         },
 
         /*
@@ -329,6 +338,15 @@
         },
 
         /*
+         * greaterThanEqualValue
+         */
+        greaterThanEqualValueFallback: 'Veuillez fournir une valeur égale ou supérieure à {0}.',
+        greaterThanEqualValueLabel: 'Le champ \"{0}\" doit avoir une valeur égale ou supérieure à {1}.',
+        greaterThanEqualValue: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.greaterThanEqualValueLabel, $.validator.messages.greaterThanEqualValueFallback, parameters);
+        },
+
+        /*
          * lessThan
          */
         lessThanFallback: 'Veuillez fournir une valeur inférieure.',
@@ -347,6 +365,15 @@
         },
 
         /*
+         * lessThanValue
+         */
+        lessThanValueFallback: 'Veuillez fournir une valeur inférieure à {0}.',
+        lessThanValueLabel: 'Le champ \"{0}\" doit avoir une valeur inférieure à {1}.',
+        lessThanValue: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.lessThanValueLabel, $.validator.messages.lessThanValueFallback, parameters);
+        },
+
+        /*
          * lessThanEqual
          */
         lessThanEqualFallback: 'Veuillez fournir une valeur égale ou inférieure.',
@@ -362,6 +389,15 @@
             } else {
                 return $.validator.messages.lessThanEqualFallback;
             }
+        },
+
+        /*
+         * lessThanEqualValue
+         */
+        lessThanEqualValueFallback: 'Veuillez fournir une valeur égale ou inférieure à {0}.',
+        lessThanEqualValueLabel: 'Le champ \"{0}\" doit avoir une valeur égale ou inférieure au champ {1}.',
+        lessThanEqualValue: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.lessThanEqualValueLabel, $.validator.messages.lessThanEqualValueFallback, parameters);
         },
 
         /*

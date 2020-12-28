@@ -3,11 +3,20 @@
 {% import 'macros/_datatables.html.twig' as helper %}
 {% import 'macros/_icons.html.twig' as icons %}
 
-{# macros #}
+{# macros 
 {% macro button(path, text, class, title, icon, separator = false) %}
 {%- if path -%}
     <a href="#" class="btn btn-form-sm {{ class }}" data-path="{{ path }}"{% if title %} title="{{ title|trans }}"{% endif %} data-icon="{{ icon }}"{% if separator %} data-separator="true"{% endif %}>
         {{- text|trans -}}
+    </a>
+{%- endif -%}
+{% endmacro %}
+#}
+
+{% macro button(path, text, class, title, icon, separator = false) %}
+{%- if path -%}
+    <a href="#" class="btn btn-secondary {{ class|default('') }}" data-path="{{ path }}"{% if title %} title="{{ title|default(text)|trans }}"{% endif %}{% if separator %} data-separator="true"{% endif %}>
+        {{- icons.icon(icon ~ ' fa-fw') -}}  
     </a>
 {%- endif -%}
 {% endmacro %}
@@ -65,16 +74,16 @@
         {# actions toolbar #}
 		<div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
             {% if show_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) %}
-                {{ _self.button(show_path|default(false), 'common.button_show', 'btn-table-show btn-info disabled', show_title ?? false, 'fas fa-fw fa-tv') }}
+                {{ _self.button(show_path|default(false), 'common.button_show', 'btn-table-show disabled', show_title ?? false, 'tv') }}
             {% endif %}
     		{% if edit_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) %}
-                {{ _self.button(edit_path|default(false), 'common.button_edit', 'btn-table-edit btn-success disabled', edit_title ?? false, 'fas fa-fw fa-pencil-alt') }}
+                {{ _self.button(edit_path|default(false), 'common.button_edit', 'btn-table-edit disabled', edit_title ?? false, 'pencil-alt') }}
             {% endif %}
             {% if delete_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) %}
-                {{ _self.button(delete_path|default(false), 'common.button_delete', 'btn-table-delete btn-danger disabled', delete_title ?? false, 'fas fa-fw fa-times', true) }}
+                {{ _self.button(delete_path|default(false), 'common.button_delete', 'btn-table-delete disabled', delete_title ?? false, 'times', true) }}
             {% endif %}
             {% if add_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) %}
-                {{ _self.button(add_path|default(false), 'common.button_add', 'btn-table-add btn-primary', add_title ?? false, 'far fa-fw fa-file') }}
+                {{ _self.button(add_path|default(false), 'common.button_add', 'btn-table-add', add_title ?? false, 'file far') }}
             {% endif %}
             {% block other_actions -%}
 			{%- if is_other_actions -%}	   
@@ -90,7 +99,7 @@
                     {% endif %}
                     {% if is_excel_action %}
                         {% set excel_title = excel_title|default('common.button_excel_list') %}
-                        {{ icons.dropdownItem(excel_path, excel_title, 'file-excel far fa-fw') }}
+                        {{ icons.dropdownItem(excel_path, excel_title, 'file-excel far') }}
                     {% endif %}                    
                     {%- endblock %}
 	    		</div>
@@ -105,10 +114,9 @@
 {% block card_body %}
 {% if show_length or show_search -%}
 <div class="row mb-2 d-print-none">
-    {% block row_input %}{% endblock %}
     {# search #}
     {% if show_search -%}
-    <div class="col-auto pr-0">
+    <div class="col-lg-auto">
         <div class="form-inline">
              <label class="mr-2" for="table_search">{{ 'datatable.search'|trans }}</label>
              {%  block search_input -%}
@@ -121,13 +129,12 @@
                 </div>
              </div>
              {%- endblock %}
-             {% block show_length_actions -%}{%- endblock %}
         </div>
     </div>
     {%- endif %}
     
     {% if show_length -%}
-    <div class="col-auto ml-auto">
+    <div class="col-lg-auto ml-auto">
         <div class="form-inline">
             <label class="mr-2" for="table_length">{{ 'datatable.show'|trans }}</label>
             <select id="table_length" name="table_length" class="form-control form-control-sm custom-select custom-select-sm">
@@ -138,7 +145,7 @@
                 {{ helper.page(30, pagelength, results.recordsTotal > 25) }}
                 {{ helper.page(50, pagelength, results.recordsTotal > 30) }}
             </select>
-            <label class="ml-2">{{ 'datatable.elements'|trans }}</label>
+            <label class="ml-lg-2">{{ 'datatable.elements'|trans }}</label>
         </div>
     </div>
     {%- endif %}

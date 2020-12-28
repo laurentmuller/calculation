@@ -119,7 +119,7 @@ h1.card-title {
  * button edit in table
  */
 .btn-edit {
-    line-height: 0.8;
+    line-height: 0.8 !important;
 }
 
 a.btn-list {

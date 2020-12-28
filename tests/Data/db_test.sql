@@ -139,7 +139,8 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
 CREATE TABLE IF NOT EXISTS "sy_Task" (
   	"id"                integer PRIMARY KEY AUTOINCREMENT,
   	"category_id" 		integer NOT NULL,
-  	"name" 				varchar(255) NOT NULL
+  	"name" 				varchar(255) NOT NULL,
+  	"unit"              varchar(15)  DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "sy_TaskItem" (

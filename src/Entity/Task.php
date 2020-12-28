@@ -26,6 +26,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Task extends AbstractEntity implements \Countable
 {
     /**
+     * @ORM\Column(type="string", length=15, nullable=true)
+     * @Assert\Length(max=15)
+     *
+     * @var string
+     */
+    protected $unit;
+    /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tasks")
      * @ORM\JoinColumn(nullable=false)
      *
@@ -148,6 +155,16 @@ class Task extends AbstractEntity implements \Countable
     }
 
     /**
+     * Gets the category identifier.
+     */
+    public function getCategoryId(): ?int
+    {
+        $category = $this->getCategory();
+
+        return $category ? $category->getId() : null;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getDisplay(): string
@@ -166,6 +183,11 @@ class Task extends AbstractEntity implements \Countable
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    public function getUnit(): ?string
+    {
+        return $this->unit;
     }
 
     /**
@@ -197,6 +219,13 @@ class Task extends AbstractEntity implements \Countable
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function setUnit(?string $unit): self
+    {
+        $this->unit = $this->trim($unit);
 
         return $this;
     }

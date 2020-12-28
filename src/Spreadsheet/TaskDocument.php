@@ -34,6 +34,7 @@ class TaskDocument extends AbstractArrayDocument
         $this->setHeaderValues([
             'task.fields.name' => Alignment::HORIZONTAL_GENERAL,
             'task.fields.category' => Alignment::HORIZONTAL_GENERAL,
+            'task.fields.unit' => Alignment::HORIZONTAL_GENERAL,
             'task.fields.items' => Alignment::HORIZONTAL_RIGHT,
         ]);
 
@@ -44,6 +45,7 @@ class TaskDocument extends AbstractArrayDocument
             $this->setRowValues($row++, [
                 $entity->getName(),
                 $entity->getCategoryCode(),
+                $entity->getUnit(),
                 $entity->count(),
             ]);
         }

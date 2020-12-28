@@ -3,6 +3,7 @@
 /**
  * -------------- jQuery extensions --------------
  */
+
 /**
  * Finds an icon within in this element.
  * 
@@ -18,6 +19,29 @@ $.fn.findIcon = function () {
     const $child = $this.find('i');
     if ($child.length) {
         return $child.attr('class');
+    }
+    return null;
+};
+
+/**
+ * Finds an text within in this element.
+ * 
+ * @returns {string} the text, if found, null otherwise.
+ */
+$.fn.findText = function () {
+    'use strict';
+    const $this = $(this);
+    let text = $this.text().trim();
+    if (text.length) {
+        return text;
+    }
+    text = $this.attr('title');
+    if (text.length) {
+        return text;
+    }
+    text = $this.data('text');
+    if (text.length) {
+        return text;
     }
     return null;
 };
@@ -112,7 +136,7 @@ MenuBuilder.prototype = {
         const key = 'entry_' + this.index++;
         this.items[key] = {
             link: $link,
-            name: $link.text().trim(),
+            name: $link.findText(),
             icon: icon || $link.findIcon()
         };
         return this;

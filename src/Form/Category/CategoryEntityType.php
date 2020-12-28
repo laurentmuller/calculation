@@ -40,7 +40,6 @@ class CategoryEntityType extends AbstractType
             },
             'choice_attr' => function (Category $category) {
                 return [
-                    'data-code' => $category->getCode(),
                     'data-group-id' => $category->getGroupId(),
                     'data-group-code' => $category->getGroupCode(),
                 ];

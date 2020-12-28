@@ -494,7 +494,7 @@
         }
         const target = $target.val().trim();
         return target.length === 0 || value.indexOfIgnoreCase(target) === -1;    
-    }, $.validator.format('The field can not contain the user name.'));
+    }, 'The field can not contain the user name.');
 
     /*
      * check if value is not an email
@@ -504,7 +504,7 @@
             return true;
         }
         return !$.validator.methods.email.call(this, value, element);
-    }, $.validator.format('The field can not be an email.'));
+    }, 'The field can not be an email.');
 
     /*
      * check if contains a lower case character
@@ -514,7 +514,7 @@
             return true;
         }
         return /[a-z\u00E0-\u00FC]/g.test(value);
-    }, $.validator.format('The field must contain a lower case character.'));
+    }, 'The field must contain a lower case character.');
 
     /*
      * check if contains a upper case character
@@ -524,7 +524,7 @@
             return true;
         }
         return /[A-Z\u00C0-\u00DC]/g.test(value);
-    }, $.validator.format('The field must contain an upper case character.'));
+    }, 'The field must contain an upper case character.');
 
     /*
      * check if contains a upper and lower case characters
@@ -534,7 +534,7 @@
             return true;
         }
         return $.validator.methods.lowercase.call(this, value, element, param) && $.validator.methods.uppercase.call(this, value, element, param);
-    }, $.validator.format('The field must contain both upper and lower case characters.'));
+    }, 'The field must contain both upper and lower case characters.');
 
     /*
      * check if contains alphabetic characters
@@ -544,7 +544,7 @@
             return true;
         }
         return $.validator.methods.lowercase.call(this, value, element, param) || $.validator.methods.uppercase.call(this, value, element, param);
-    }, $.validator.format('The field must contain a letter.'));
+    }, 'The field must contain a letter.');
 
     /*
      * check if contains a digit character
@@ -554,7 +554,7 @@
             return true;
         }
         return /\d/g.test(value);
-    }, $.validator.format('The field must contain a digit character.'));
+    }, 'The field must contain a digit character.');
 
     /*
      * check if contains a special character
@@ -565,8 +565,35 @@
         }
         const regex = /[-!$%^&*()_+|~=`{}[:;<>?,.@#\]]/g;
         return regex.test(value);
-    }, $.validator.format('The field must contain a special character.'));
+    }, 'The field must contain a special character.');
 
+    /*
+     * check if contains a greater value
+     */
+    $.validator.addMethod('greaterThanValue', function(value, element, param) {
+        return this.optional(element) || value > param;
+    }, 'The field must contain a greater value.');
+    
+    /*
+     * check if contains a greater than or equal value
+     */
+    $.validator.addMethod( "greaterThanEqualValue", function( value, element, param ) {
+        return this.optional(element) || value >= param;
+    }, "The field must contain a greater than or equal value." );
+    
+    /*
+     * check if contains a lesser value
+     */
+    $.validator.addMethod('lessThanValue', function(value, element, param) {
+        return this.optional(element) || value > param;
+    }, 'The field must contain a lesser value.');
+
+    /*
+     * check if contains a lesser or equal value
+     */
+    $.validator.addMethod( "lessThanEqualValue", function( value, element, param ) {
+        return this.optional(element) || value <= param;
+    }, "The field must contain a lesser than or equal value." );
 
     /*
      * override URL by adding the protocol prefix (if any)
@@ -583,7 +610,7 @@
             return parent.call(this, value, element);
         };
     }($.validator.methods.url));
-
+    
     /*
      * replace email with a simple <string>@<string>.<string> value
      */

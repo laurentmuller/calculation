@@ -37,8 +37,8 @@
     <div class="form-group">
         <div class="row">
             <div class="col">{{ form_label(item.name) }}</div>            
-            <div class="col-auto d-print-none">   
-                {{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete-item d-print-none', 'times', 'task.edit.delete_item') -}}
+            <div class="col-auto d-print-none">
+                {{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete-item', 'times', 'task.edit.delete_item') -}}
             </div>
         </div>
         {{ form_widget(item.name) }}
@@ -93,11 +93,14 @@
 
 {% block card_body %}
 <div class="form-row">
-    <div class="col-md-7">
+    <div class="col-md-6">
 	    {{ form_row(form.name) }}
     </div>
-    <div class="col-md-5">
+    <div class="col-md-4">
         {{ form_row(form.category) }}
+    </div>
+    <div class="col-md-2">
+        {{ form_row(form.unit) }}
     </div>
 </div>
 <div class="items" data-item-index="{{ item_index }}" data-margin-index="{{ margin_index }}" data-prototype="{{ _self.printTaskItem(form.items.vars.prototype)|e('html_attr') }}">

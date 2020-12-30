@@ -18,6 +18,10 @@
 {%- set pdf_path    = path('empty_pdf') -%}
 {%- set single_path = path('calculation_pdf_id', params) -%}
 
+{# titles #}
+{%- set show_title   = 'calculation.show.title' %}
+{%- set edit_title   = 'calculation.edit.title_short' %}
+{%- set delete_title = 'calculation.delete.title' %}
 
 {% block card_header -%}
 {{ parent() }}

@@ -35,11 +35,11 @@ $.fn.findText = function () {
     if (text.length) {
         return text;
     }
-    text = $this.attr('title');
+    text = $this.attr('title') || '';
     if (text.length) {
         return text;
     }
-    text = $this.data('text');
+    text = $this.data('text') || '';
     if (text.length) {
         return text;
     }

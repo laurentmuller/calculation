@@ -17,6 +17,11 @@
 {%- set single_path = path('calculation_pdf_id', params) -%}
 {%- set pdf_path    = path('duplicate_pdf') -%}
 
+{# titles #}
+{%- set show_title   = 'calculation.show.title' %}
+{%- set edit_title   = 'calculation.edit.title_short' %}
+{%- set delete_title = 'calculation.delete.title' %}
+
 {% block card_header -%}
 {{ parent() }}
 <p class="ml-4 mb-0">{{ 'duplicate.description'|trans }}</p>

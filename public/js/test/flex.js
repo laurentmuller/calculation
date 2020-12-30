@@ -1,16 +1,8 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Parse input value to a float.
+ * Gets the number format.
  */
-function parse($input) {
-    'use strict';
-    const group = getGroup();
-    const decimal = getDecimal();
-    const value = $input.val().replace(group, '').replace(decimal, '.');
-    return parseFloat(value);
-}
-
 function getNumberFormat(decimal) {
     'use strict';
     return new Intl.NumberFormat('de-CH', {
@@ -19,20 +11,39 @@ function getNumberFormat(decimal) {
     });
 }
 
+/**
+ * Get the group separator.
+ */
 function getGroup() {
     'use strict';
     const formatter = getNumberFormat(2);
     const parts = formatter.formatToParts('1000');
-    const item = parts.find(item => item.type === 'group');
+    const item = parts.find(item => item.type === 'group'); // eslint-disable-line
     return item ? item.value : '';
 }
 
+
+/**
+ * Get the decimal separator.
+ */
 function getDecimal() {
     'use strict';
     const formatter = getNumberFormat(2);
     const parts = formatter.formatToParts('1000');
-    const item = parts.find(item => item.type === 'decimal');
+    const item = parts.find(item => item.type === 'decimal'); // eslint-disable-line
     return item ? item.value : '.'; 
+}
+
+
+/**
+ * Parse input value to a float.
+ */
+function parse($input) {
+    'use strict';
+    const group = getGroup();
+    const decimal = getDecimal();
+    const value = $input.val().replace(group, '').replace(decimal, '.');
+    return parseFloat(value);
 }
 
 /**

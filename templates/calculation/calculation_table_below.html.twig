@@ -16,6 +16,11 @@
 {%- set single_path = path('calculation_pdf_id', params) -%}
 {%- set pdf_path    = path('below_pdf') -%}
 
+{# titles #}
+{%- set show_title   = 'calculation.show.title' %}
+{%- set edit_title   = 'calculation.edit.title_short' %}
+{%- set delete_title = 'calculation.delete.title' %}
+
 {# highlight search #}
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
 

@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Util\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Trait to implement the ORM TimestampableInterface.
@@ -72,6 +74,20 @@ trait TimestampableTrait
     }
 
     /**
+     * Gets the created date and user text.
+     */
+    public function getCreatedText(TranslatorInterface $translator): string
+    {
+        $date = FormatUtils::formatDateTime($this->getCreatedAt()) ?: $translator->trans('common.empty_date');
+        $user = $this->getCreatedBy() ?: $translator->trans('common.empty_user');
+
+        return $translator->trans('common.entity_created', [
+            '%date%' => $date,
+            '%user%' => $user,
+        ]);
+    }
+
+    /**
      * Gets the updated date.
      */
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -85,6 +101,20 @@ trait TimestampableTrait
     public function getUpdatedBy(): ?string
     {
         return $this->updatedBy;
+    }
+
+    /**
+     * Gets the updated date and user text.
+     */
+    public function getUpdatedText(TranslatorInterface $translator): string
+    {
+        $date = FormatUtils::formatDateTime($this->getUpdatedAt()) ?: $translator->trans('common.empty_date');
+        $user = $this->getUpdatedBy() ?: $translator->trans('common.empty_user');
+
+        return $translator->trans('common.entity_updated', [
+            '%date%' => $date,
+            '%user%' => $user,
+        ]);
     }
 
     /**

@@ -58,22 +58,6 @@ class CalculationType extends AbstractEntityType
         $helper->field('state')
             ->addStateType();
 
-        $helper->field('createdAt')
-            ->updateOption('empty_value', 'common.value_none')
-            ->addPlainType();
-
-        $helper->field('createdBy')
-            ->updateOption('empty_value', 'common.empty_user')
-            ->addPlainType();
-
-        $helper->field('updatedAt')
-            ->updateOption('empty_value', 'common.value_none')
-            ->addPlainType();
-
-        $helper->field('updatedBy')
-            ->updateOption('empty_value', 'common.empty_user')
-            ->addPlainType();
-
         // groups
         $helper->field('groups')
             ->updateOption('prototype_name', '__groupIndex__')

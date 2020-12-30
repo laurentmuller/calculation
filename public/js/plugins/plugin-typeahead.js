@@ -69,8 +69,8 @@
         // UI
         selector: '.dropdown-item',
         menu: '<div class="typeahead dropdown-menu" role="listbox"></div>',
-        item: '<button class="dropdown-item" type="button" role="option" />', //
-        header: '<h6 class="dropdown-header"></h6>',
+        item: '<button class="dropdown-item" type="button" role="option" />',
+        header: '<h6 class="dropdown-header text-uppercase"></h6>',
         divider: '<div class="dropdown-divider"></div>',
 
         // functions
@@ -264,7 +264,7 @@
         render: function (items) {
             const data = [];
             const that = this;
-            
+
             let display;
             let separatorKey;
             let oldSeparator = null;
@@ -277,8 +277,8 @@
                 // get separators
                 separatorKey = isStrSeparator ? value[separator] : separator(value);
                 if (key > 0) {
-                    oldSeparator = isStrSeparator ? items[key - 1][separator] : separator(items[key - 1]);    
-                }                
+                    oldSeparator = isStrSeparator ? items[key - 1][separator] : separator(items[key - 1]);
+                }
 
                 // inject separator
                 if (key > 0 && separatorKey !== oldSeparator) {
@@ -287,7 +287,7 @@
                     });
                 }
 
-                // inject category header
+                // inject category
                 if (separatorKey && (key === 0 || separatorKey !== oldSeparator)) {
                     data.push({
                         __type__: 'category',

@@ -3,16 +3,6 @@
 {% import 'macros/_datatables.html.twig' as helper %}
 {% import 'macros/_icons.html.twig' as icons %}
 
-{# macros 
-{% macro button(path, text, class, title, icon, separator = false) %}
-{%- if path -%}
-    <a href="#" class="btn btn-form-sm {{ class }}" data-path="{{ path }}"{% if title %} title="{{ title|trans }}"{% endif %} data-icon="{{ icon }}"{% if separator %} data-separator="true"{% endif %}>
-        {{- text|trans -}}
-    </a>
-{%- endif -%}
-{% endmacro %}
-#}
-
 {% macro button(path, text, class, title, icon, separator = false) %}
 {%- if path -%}
     <a href="#" class="btn btn-secondary {{ class|default('') }}" data-path="{{ path }}"{% if title %} title="{{ title|default(text)|trans }}"{% endif %}{% if separator %} data-separator="true"{% endif %}>

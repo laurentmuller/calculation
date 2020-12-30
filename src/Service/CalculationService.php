@@ -88,6 +88,50 @@ final class CalculationService
     }
 
     /**
+     * Adjust the user margin to have the desired overall minimum margin.
+     *
+     * @param array $parameters the parameters (rows) to update
+     */
+    public function adjustUserMargin(array &$parameters): void
+    {
+        // no more below
+        $parameters['overall_below'] = false;
+
+        // get rows
+        $groups = &$parameters['groups'];
+        $totalGroup = &$this->findGroup($groups, self::ROW_TOTAL_GROUP);
+        $netGroup = &$this->findGroup($groups, self::ROW_TOTAL_NET);
+        $userGroup = &$this->findGroup($groups, self::ROW_USER_MARGIN);
+        $overallGroup = &$this->findGroup($groups, self::ROW_OVERALL_TOTAL);
+
+        // get values
+        $minMargin = $parameters['min_margin'];
+        $totalAmount = $totalGroup['amount'];
+        $netTotal = $netGroup['total'];
+
+        // net total?
+        if ($this->isFloatZero($netTotal)) {
+            return;
+        }
+
+        // compute user margin to reach minimum and round up
+        $userMargin = (($totalAmount * $minMargin) - $netTotal) / $netTotal;
+        $userMargin = \ceil($userMargin * 100.0) / 100.0;
+
+        // update user margin
+        $userGroup['margin'] = $userMargin;
+        $userGroup['total'] = $netTotal * $userMargin;
+
+        // update overall total
+        $overallGroup['total'] = $netTotal + $userGroup['total'];
+        $overallGroup['margin'] = $overallGroup['total'] / $totalAmount;
+        $overallGroup['margin_amount'] = $overallGroup['total'] - $totalAmount;
+
+        // update parameters
+        $parameters['user_margin'] = (int) (100 * $userMargin);
+    }
+
+    /**
      * Creates groups from a calculation.
      *
      * @param Calculation $calculation the calculation to get groups from
@@ -281,6 +325,36 @@ final class CalculationService
         }
 
         return false;
+    }
+
+    /**
+     * Finds a groups for the given identifier.
+     *
+     * @param array $groups the groups to search in
+     * @param int   $id     the identifier to search for
+     *
+     * @return array the group, if found, a new empty group otherwise
+     */
+    private function &findGroup(array &$groups, int $id): array
+    {
+        foreach ($groups as &$group) {
+            if ($group['id'] === $id) {
+                return $group;
+            }
+        }
+
+        // add emtpy
+        $group = [
+            'id' => $id,
+            'amount' => 0.0,
+            'margin' => 0.0,
+            'margin_amount' => 0.0,
+            'total' => 0.0,
+            'description' => 'Unknown',
+        ];
+        $groups[] = $group;
+
+        return $group;
     }
 
     /**

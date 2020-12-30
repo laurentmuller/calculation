@@ -595,8 +595,8 @@ var Application = {
             } else {
                 $totalPanel.fadeOut();
             }
-            if (adjust && !isNaN(response.overall_margin)) {
-                $('#calculation_userMargin').intVal(response.overall_margin).selectFocus();
+            if (adjust && !$.isUndefined(response.user_margin) && !isNaN(response.user_margin)) {
+                $('#calculation_userMargin').intVal(response.user_margin).selectFocus();
             }
             if (response.overall_below) {
                 $('.btn-adjust').removeAttr('disabled').removeClass('cursor-default');
@@ -605,6 +605,7 @@ var Application = {
             }
             updateErrors();
             return that;
+            
         }).fail(function (jqXHR, textStatus) {
             if (textStatus !== 'abort') {
                 return that.disable(null);

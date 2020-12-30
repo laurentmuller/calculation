@@ -3,6 +3,13 @@
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'macros/_properties.html.twig' as properties %}
 
+{# macro #}
+{% macro propertyDateUser(name, date, user) -%}
+{% set createdDate = date ? date|localedatetime : 'common.empty_date'|trans %}
+{% set createdUser = user|default('common.empty_user'|trans) -%}
+{{ properties.property(name, createdDate ~ ' - ' ~ createdUser) }}
+{%- endmacro %}
+
 {# parameters #}
 {%- set id     = item.id -%}
 {%- set title  = 'calculation.show.title' -%}
@@ -133,14 +140,8 @@
 {{ properties.property('calculation.fields.description', item.description) }}
 {{ properties.property('calculation.fields.date', item.date|localedate) }}
 {{ properties.property('calculation.fields.state', item.stateCode|default('')) }}
-{% if item.createdAt %}
-    {% set created = item.createdAt|localedatetime ~ ' - ' ~ item.createdBy|default('common.empty_user'|trans) -%}
-    {{ properties.property('calculation.fields.created', created) }}
-{% endif %}
-{% if item.updatedAt %}
-    {% set updated = item.updatedAt|localedatetime ~ ' - ' ~ item.createdBy|default('common.empty_user'|trans) -%}
-    {{ properties.property('calculation.fields.updated', updated) }}
-{% endif %}
+{{ _self.propertyDateUser('calculation.fields.created', item.createdAt, item.createdBy) }}
+{{ _self.propertyDateUser('calculation.fields.updated', item.updatedAt, item.updatedBy) }}
 {% if item.empty %}
     {{ properties.property('calculation.edit.panel_items', 'calculation.edit.empty'|trans) }}
 {% endif %}

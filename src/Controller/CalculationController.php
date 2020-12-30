@@ -289,6 +289,8 @@ class CalculationController extends AbstractEntityController
     {
         /* @var Calculation $item */
         $parameters['success'] = $item->isNew() ? 'calculation.add.success' : 'calculation.edit.success';
+        $parameters['created_item'] = $item->getCreatedText($this->getTranslator());
+        $parameters['updated_item'] = $item->getUpdatedText($this->getTranslator());
         $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
         $parameters['min_margin'] = $this->getApplication()->getMinMargin();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();

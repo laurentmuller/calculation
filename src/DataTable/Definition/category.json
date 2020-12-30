@@ -33,6 +33,15 @@
 		"formatter": "formatProducts"
 	},
 	{
+		"name": "tasks",
+		"title": "category.fields.tasks",
+		"orderable": false,
+		"searchable": false,
+		"rawData": true,
+		"class": "text-currency",
+		"formatter": "formatCountable"
+	},
+	{
 		"name": "id",
 		"title": "common.empty",
 		"orderable": false,

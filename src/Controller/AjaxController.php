@@ -775,11 +775,10 @@ class AjaxController extends AbstractController
             }
 
             // adjust user margin?
-            $minMargin = $service->getMinMargin();
+            $parameters['min_margin'] = $service->getMinMargin();
             if ($request->get('adjust', false) && $parameters['overall_below']) {
-                $this->adjustUserMargin($parameters, $minMargin);
+                $service->adjustUserMargin($parameters);
             }
-            $parameters['min_margin'] = $minMargin;
 
             // render table
             $body = $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters);
@@ -788,6 +787,7 @@ class AjaxController extends AbstractController
             $result = [
                 'result' => true,
                 'body' => $body,
+                'user_margin' => $parameters['user_margin'] ?? 0,
                 'overall_margin' => $parameters['overall_margin'],
                 'overall_total' => $parameters['overall_total'],
                 'overall_below' => $parameters['overall_below'],
@@ -802,83 +802,6 @@ class AjaxController extends AbstractController
 
             return $this->jsonException($e, $message);
         }
-    }
-
-    /**
-     * Finds a groups for the given identifier.
-     *
-     * @param array $groups the groups to search in
-     * @param int   $id     the identifier to search for
-     *
-     * @return array the group, if found, a new group otherwise
-     */
-    private function &findGroup(array &$groups, int $id): array
-    {
-        foreach ($groups as &$group) {
-            if ($group['id'] === $id) {
-                return $group;
-            }
-        }
-
-        $group = [
-            'id' => $id,
-            'amount' => 0.0,
-            'margin' => 0.0,
-            'margin_amount' => 0.0,
-            'total' => 0.0,
-            'description' => 'Unknown',
-        ];
-        $groups[] = $group;
-
-        return $group;
-    }
-
-    /**
-     * Adjust the user margin to have the desired overall minimum margin.
-     *
-     * @param array $parameters the parameters (rows) to update
-     * @param float $minMargin  the desired minimum margin
-     */
-    private function adjustUserMargin(array &$parameters, float $minMargin): void
-    {
-        // no more below
-        $parameters['overall_below'] = false;
-
-        // get rows
-        $groups = &$parameters['groups'];
-        $totalGroup = &$this->findGroup($groups, CalculationService::ROW_TOTAL_GROUP);
-        $netGroup = &$this->findGroup($groups, CalculationService::ROW_TOTAL_NET);
-        $userGroup = &$this->findGroup($groups, CalculationService::ROW_USER_MARGIN);
-        $overallGroup = &$this->findGroup($groups, CalculationService::ROW_OVERALL_TOTAL);
-
-        // get values
-        $groupAmount = $totalGroup['amount'];
-        $userMargin = $userGroup['margin'];
-        $netTotal = $netGroup['total'];
-
-        // net total?
-        if ($this->isFloatZero($netTotal)) {
-            return;
-        }
-
-        // compute user margin to reach minimum and round up
-        $userMargin = (($minMargin + 1) * $groupAmount / $netTotal) - 1;
-        $userMargin = \ceil($userMargin * 100.0) / 100.0;
-        if ($this->isFloatZero($userMargin)) {
-            $userMargin = 0;
-        }
-
-        // update user margin
-        $userGroup['margin'] = $userMargin;
-        $userGroup['total'] = $netTotal * $userMargin;
-
-        // update overall total
-        $overallGroup['total'] = $netTotal + $userGroup['total'];
-        $overallGroup['margin'] = ($overallGroup['total'] / $groupAmount) - 1;
-        $overallGroup['margin_amount'] = $overallGroup['total'] - $groupAmount;
-
-        // update parameters
-        $parameters['overall_margin'] = (int) (100 * $userMargin);
     }
 
     /**

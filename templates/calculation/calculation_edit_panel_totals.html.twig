@@ -15,10 +15,10 @@
     <div class="card-footer p-1{% if new %} d-none{% endif %}">
         <div class="row">
             <div class="col small text-muted my-2 mx-1">
-               <span>{{ 'common.entity_created'|trans({'%date%': form_widget(form.createdAt), '%user%': form_widget(form.createdBy)})|raw }}</span>
+               <span>{{ created_item|raw }}</span>
             </div>
             <div class="col small text-muted my-2 mx-1 text-right">
-                <span>{{ 'common.entity_updated'|trans({'%date%': form_widget(form.updatedAt), '%user%': form_widget(form.updatedBy)})|raw }}</span>
+                <span>{{ updated_item|raw }}</span>
             </div>
         </div>
     </div>

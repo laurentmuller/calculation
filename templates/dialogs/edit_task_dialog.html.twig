@@ -45,11 +45,11 @@
         {{ form_row(form.unit) }}
     </div>
     <div class="col-3">
-        {{ form_row(form.quantity, {'attr': {'value': 1}}) }}
+        {{ form_row(form.quantity, {'attr': {'value': 1.00}}) }}
     </div>  
 </div>
 <div class="form-row task-row-table">
-    <table class="table table-sm table-borderless" id="table-task-edit">
+    <table class="table table-sm table-borderless mb-0" id="table-task-edit">
         <thead>
             <tr>
                 <td><span class="task-items-empty text-danger d-none">{{ 'taskcompute.error.items'|trans }}</span></td>

@@ -154,6 +154,7 @@ category:
         code: Nom
         description: Description
         products: Articles
+        tasks: Tâches
         group: Groupe
     add:
         title: Nouvelle catégorie
@@ -417,7 +418,7 @@ common:
     add_success: L'objet <b>%name%</b> a été ajouté avec succès.
     edit_success: L'objet <b>%name%</b> a été mis à jour avec succès.
     delete_success: L'objet <b>%name%</b> a été supprimé avec succès.
-    delete_failure: Impossbile de supprimer l'objet <b>%name%</b> de la base de données.
+    delete_failure: Impossible de supprimer l'objet <b>%name%</b> de la base de données.
     delete_message: Êtes-vous sûr de vouloir supprimer l'objet <b>%name%</b> ?
     delete_title: Supprimer un objet
     value_true: Oui
@@ -455,6 +456,7 @@ common:
     id: Numéro
     empty: ''
     empty_user: Système
+    empty_date: Inconnue
     no_script_support: Votre navigateur ne supporte pas JavaScript !
     entity_created: 'Création : %date% - %user%'
     entity_updated: 'Mise à jour : %date% - %user%'

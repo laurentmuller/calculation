@@ -11,13 +11,48 @@
 
 {% block card_body %}
 {% for item in items %}
-    <div class="card-flex rounded border p-2 m-1 flex-fill">
-        <h5 class="mb-1">{{ loop.index }}. {{ item.code }}</h5>
-        <table class="table table-borderless table-sm ml-1 mr-0 my-0">
-            {{ properties.line(item.description) }}
-            {{ properties.separator() }}
-            {{ properties.property('calculationstate.fields.calculations', item.countCalculations|integer) }}
-	   </table>
-    </div>
+<div class="card-flex rounded border p-2 m-1 flex-fill">
+    <h5 class="mb-1">
+        {{ loop.index }}
+        .
+        {{ item.code }}
+    </h5>
+    <table class="table table-borderless table-sm ml-1 mr-0 my-0">
+        {{ properties.line(item.description) }}
+        {{ properties.separator() }}
+        {{ properties.property('calculationstate.fields.calculations', item.countCalculations|integer) }}
+    </table>
+</div>
 {% endfor %}
+
+<div class="flex-fill p-2 mt-3">
+    <p class="font-weight-bold">Table Editor</p>
+    <table class="table table-bordered table-sm" id="editable">
+        <thead>
+            <tr>
+                <th class="text-date">id</th>
+                <th class="text-state">Code</th>
+                <th>Description</th>
+                <th class="text-currency">Calculations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td class="cell-editable text-date">{{ item.id }}</td>
+                <td class="cell-editable text-state">{{ item.code }}</td>
+                <td class="cell-editable">{{ item.description }}</td>
+                <td class="cell-editable text-currency">{{ item.countCalculations|amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('js/plugins/plugin-input.js') }}
+{{ asset_js('js/plugins/plugin-table-editor.js') }}
+{{ asset_js('js/test/flex.js') }}
+{%- endblock %}

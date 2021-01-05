@@ -37,10 +37,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Controller for calculation entities.
  *
+ * @author Laurent Muller
+ *
  * @Route("/calculation")
  * @IsGranted("ROLE_USER")
- *
- * @author Laurent Muller
  */
 class CalculationController extends AbstractEntityController
 {

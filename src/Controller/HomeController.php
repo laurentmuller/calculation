@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * The home controler (home page, search and site map).
+ *
+ * @author Laurent Muller
  */
 class HomeController extends AbstractController
 {

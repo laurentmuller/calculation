@@ -19,6 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents an item in a calculation category.
  *
+ * @author Laurent Muller
+ *
  * @ORM\Entity(repositoryClass="App\Repository\CalculationItemRepository")
  * @ORM\Table(name="sy_CalculationItem")
  */

@@ -22,6 +22,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * Represents a group of categories.
  *
+ * @author Laurent Muller
+ *
  * @ORM\Table(name="sy_Group")
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  * @UniqueEntity(fields="code", message="group.unique_code")

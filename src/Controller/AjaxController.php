@@ -47,6 +47,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
  *
+ * @author Laurent Muller
+ *
  * @Route("/ajax")
  */
 class AjaxController extends AbstractController

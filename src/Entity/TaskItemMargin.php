@@ -15,6 +15,10 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Task item margin.
+ *
+ * @author Laurent Muller
+ *
  * @ORM\Table(name="sy_TaskItemMargin")
  * @ORM\Entity(repositoryClass="App\Repository\TaskItemMarginRepository")
  */

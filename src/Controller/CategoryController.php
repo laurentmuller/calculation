@@ -32,6 +32,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for category entities.
  *
+ * @author Laurent Muller
+ *
  * @Route("/category")
  * @IsGranted("ROLE_USER")
  */

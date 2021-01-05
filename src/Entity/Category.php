@@ -21,6 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a category of prodcuts.
  *
+ * @author Laurent Muller
+ *
  * @ORM\Table(name="sy_Category")
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @UniqueEntity(fields="code", message="category.unique_code")

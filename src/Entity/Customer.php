@@ -20,6 +20,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * Represents a customer.
  *
+ * @author Laurent Muller
+ *
  * @ORM\Table(name="sy_Customer")
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
  * @UniqueEntity(fields="email", message="customer.unique_email")

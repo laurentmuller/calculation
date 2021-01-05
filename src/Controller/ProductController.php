@@ -31,6 +31,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for product entities.
  *
+ * @author Laurent Muller
+ *
  * @Route("/product")
  * @IsGranted("ROLE_USER")
  */

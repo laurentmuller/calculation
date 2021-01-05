@@ -30,6 +30,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Controller for calculation state entities.
  *
+ * @author Laurent Muller
+ *
  * @Route("/calculationstate")
  * @IsGranted("ROLE_USER")
  */

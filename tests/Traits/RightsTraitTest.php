@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
  * Unit test for RightsTrait.
  *
  * @author Laurent Muller
+ *
  * @see RightsTrait
  */
 class RightsTraitTest extends TestCase implements EntityVoterInterface

@@ -20,6 +20,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a group of calculation categories.
  *
+ * @author Laurent Muller
+ *
  * @ORM\Entity(repositoryClass="App\Repository\CalculationGroupRepository")
  * @ORM\Table(name="sy_CalculationGroup")
  */

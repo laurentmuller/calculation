@@ -33,6 +33,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for task entities.
  *
+ * @author Laurent Muller
+ *
  * @Route("/task")
  * @IsGranted("ROLE_USER")
  */

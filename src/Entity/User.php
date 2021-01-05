@@ -26,6 +26,10 @@ use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
+ * User.
+ *
+ * @author Laurent Muller
+ *
  * @ORM\Table(name="sy_User")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="email.already_used")

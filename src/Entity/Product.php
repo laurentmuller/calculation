@@ -20,6 +20,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a product.
  *
+ * @author Laurent Muller
+ *
  * @ORM\Table(name="sy_Product")
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  * @UniqueEntity(fields="description", message="product.unique_description")

@@ -24,6 +24,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Listener to update calculation when groups or items are modified.
  *
+ * @author Laurent Muller
+ *
  * @internal
  */
 final class CalculationListener implements DisableListenerInterface

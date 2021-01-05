@@ -38,6 +38,8 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 /**
  * Controller to reset the user password.
  *
+ * @author Laurent Muller
+ *
  * @Route("/reset-password")
  */
 class ResetPasswordController extends AbstractController

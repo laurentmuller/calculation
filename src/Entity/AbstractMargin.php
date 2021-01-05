@@ -19,6 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Abstract margin used for global margins and categorie's margins.
  *
+ * @author Laurent Muller
+ *
  * @ORM\MappedSuperclass
  */
 abstract class AbstractMargin extends AbstractEntity

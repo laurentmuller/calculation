@@ -28,6 +28,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for global margins entities.
  *
+ * @author Laurent Muller
+ *
  * @Route("/globalmargin")
  * @IsGranted("ROLE_USER")
  */

@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraint;
  * Google reCaptcha contraint.
  *
  * @author Laurent Muller
+ *
  * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */

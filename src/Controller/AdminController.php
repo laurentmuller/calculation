@@ -39,6 +39,8 @@ use Symfony\Component\Validator\Constraints\File;
 /**
  * Controller for administation tasks.
  *
+ * @author Laurent Muller
+ *
  * @Route("/admin")
  */
 class AdminController extends AbstractController

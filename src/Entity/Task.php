@@ -19,6 +19,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * Task.
+ *
+ * @author Laurent Muller
+ *
  * @ORM\Table(name="sy_Task")
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
  * @UniqueEntity(fields="name", message="task.unique_name")

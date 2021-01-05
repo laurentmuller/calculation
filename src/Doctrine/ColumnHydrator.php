@@ -25,6 +25,8 @@ use Doctrine\ORM\Internal\Hydration\ArrayHydrator;
  * </pre>
  *
  * @see https://stackoverflow.com/questions/11657835/how-to-get-a-one-dimensional-scalar-array-as-a-doctrine-dql-query-result
+ *
+ * @author Laurent Muller
  */
 class ColumnHydrator extends ArrayHydrator
 {

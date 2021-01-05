@@ -32,6 +32,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @see \App\Entity\Customer
  *
+ * @author Laurent Muller
+ *
  * @Route("/customer")
  * @IsGranted("ROLE_USER")
  */

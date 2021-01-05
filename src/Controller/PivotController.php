@@ -28,10 +28,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Controller to display the pivot table.
  *
+ * @author Laurent Muller
+ *
  * @Route("/pivot")
  * @IsGranted("ROLE_USER")
- *
- * @author Laurent Muller
  */
 class PivotController extends AbstractController
 {

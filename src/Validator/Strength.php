@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraint;
  * Strength constraint.
  *
  * @author Laurent Muller
+ *
  * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */

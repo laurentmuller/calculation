@@ -25,6 +25,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for charts.
  *
+ * @author Laurent Muller
+ *
  * @Route("/chart")
  * @IsGranted("ROLE_USER")
  */

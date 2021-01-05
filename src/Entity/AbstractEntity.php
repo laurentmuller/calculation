@@ -20,6 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Base entity.
  *
+ * @author Laurent Muller
+ *
  * @ORM\MappedSuperclass
  */
 abstract class AbstractEntity

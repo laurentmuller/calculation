@@ -23,6 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a calculation.
  *
+ * @author Laurent Muller
+ *
  * @ORM\Entity(repositoryClass="App\Repository\CalculationRepository")
  * @ORM\Table(name="sy_Calculation")
  */

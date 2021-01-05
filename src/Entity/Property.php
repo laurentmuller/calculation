@@ -19,6 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents an application property.
  *
+ * @author Laurent Muller
+ *
  * @ORM\Table(name="sy_Property")
  * @ORM\Entity(repositoryClass="App\Repository\PropertyRepository")
  * @UniqueEntity(fields="name", message="property.unique_name")

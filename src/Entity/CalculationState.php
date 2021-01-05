@@ -21,6 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Represents a calculation state.
  *
+ * @author Laurent Muller
+ *
  * @ORM\Entity(repositoryClass="App\Repository\CalculationStateRepository")
  * @ORM\Table(name="sy_CalculationState")
  * @UniqueEntity(fields="code", message="state.unique_code")

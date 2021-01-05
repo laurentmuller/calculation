@@ -48,6 +48,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Controller for tests.
  *
+ * @author Laurent Muller
+ *
  * @Route("/test")
  * @IsGranted("ROLE_SUPER_ADMIN")
  */

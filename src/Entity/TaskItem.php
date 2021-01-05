@@ -20,6 +20,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
+ * Task item.
+ *
+ * @author Laurent Muller
+ *
  * @ORM\Table(name="sy_TaskItem")
  * @ORM\Entity(repositoryClass="App\Repository\TaskItemRepository")
  * @UniqueEntity(fields={"task", "name"}, message="task_item.unique_name", errorPath="name")

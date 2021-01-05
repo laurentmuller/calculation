@@ -30,6 +30,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * The controller for group entities.
  *
+ * @author Laurent Muller
+ *
  * @Route("/group")
  * @IsGranted("ROLE_USER")
  */

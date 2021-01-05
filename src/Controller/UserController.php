@@ -48,6 +48,8 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 /**
  * The controller for user entities.
  *
+ * @author Laurent Muller
+ *
  * @Route("/user")
  */
 class UserController extends AbstractEntityController

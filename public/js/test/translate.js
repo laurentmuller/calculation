@@ -85,7 +85,7 @@ function translate() {
             // message
             const from = data.from.name;
             const to = data.to.name;
-            const service = $('#service option:selected').text();
+            const service = $('#service').getSelectedOption().text();
             const message = $form.data('success').replace('%from%', from).replace('%to%', to).replace('%service%', service);
             notify(Toaster.NotificationTypes.PRIMARY, message);
 
@@ -144,13 +144,9 @@ function onSelection() {
     'use strict';
 
     // update exchange button.
-    const from = $('#from option:selected').index();
-    const to = $('#to option:selected').index();
-    if (from > 0 && to >= 0 && from - 1 !== to) {
-        $('.btn-exchange').removeClass('disabled');
-    } else {
-        $('.btn-exchange').addClass('disabled');
-    }
+    const from = $('#from').getSelectedOption().index();
+    const to = $('#to').getSelectedOption().index();
+    $('.btn-exchange').toggleClass('disabled', from === 0 || from - 1 === to);
 }
 
 /**

@@ -61,6 +61,7 @@ calculation:
         empty: Aucune calculation définie.
         add_title: Créer une nouvelle calculation
         pdf_title: Télécharger la liste des calculations
+        pdf_single_title: Télécharger la calculation
         excel_title: Exporter la liste des calculations
         state_title: Modifier le statut
         state_all_text: Tous
@@ -384,9 +385,9 @@ user:
     rights:
         title: Droits d'accès
         table_title: Objets / Actions
-        all_title: Tous
-        none_title: Aucun
-        toggle_title: Inverser
+        all_title: Tous les droits
+        none_title: Aucun droit
+        toggle_title: Inverser les droits
         default_title: Valeurs par défaut
         row_title: Activer ou désactiver tous les droits d'accès pour cet objet
         col_title: Activer ou désactiver tous les droits d'accès pour cette action
@@ -567,10 +568,13 @@ log:
         extra: Extra
     show:
         title: Entrée du journal de l'application
-        empty: Le journal de l'application ne contient aucune entrée.
-        file: 'Fichier : %file%'
-        pdf_title: Télécharger le journal de l'application
         not_found: Impossible d'afficher l'entrée du journal.
+    list:
+        title: Journal de l'application 
+        file: 'Fichier : %file%'        
+        empty: Le journal de l'application ne contient aucune entrée.    
+        pdf_title: Télécharger le journal de l'application
+        excel_title: Exporter le journal de l'application   
     delete:
         title: Supprimer le journal de l'application
         message: Êtes-vous sûr de vouloir supprimer le journal de l'application ?

@@ -976,8 +976,8 @@ var Application = {
         'use strict';
 
         const $row = $source.getParentRow();
-        if ($row) {
-            $row.scrollInViewport();
+        if ($row && $row.length) {
+            $row.addClass('table-primary').scrollInViewport();
             this.getItemDialog().showEdit($row);
         }
     },

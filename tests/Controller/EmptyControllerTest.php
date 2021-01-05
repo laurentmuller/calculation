@@ -49,6 +49,10 @@ class EmptyControllerTest extends AbstractControllerTest
             ['/empty/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/empty/pdf', self::ROLE_ADMIN],
             ['/empty/pdf', self::ROLE_SUPER_ADMIN],
+
+            ['/empty/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/empty/excel', self::ROLE_ADMIN],
+            ['/empty/excel', self::ROLE_SUPER_ADMIN],
         ];
     }
 

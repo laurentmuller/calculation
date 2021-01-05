@@ -56,7 +56,7 @@ EditTaskDialog.prototype = {
      */
     getGroup: function () {
         'use strict';
-        const $selection = this.$category.find(':selected');
+        const $selection = this.$category.getSelectedOption();
         return {
             id: parseInt($selection.data('groupId'), 10),
             code: $selection.data('groupCode')
@@ -70,9 +70,10 @@ EditTaskDialog.prototype = {
      */
     getCategory: function () {
         'use strict';
+        const $selection = this.$category.getSelectedOption();
         return {
             id: this.$category.intVal(),
-            code: this.$category.find(':selected').text()
+            code: $selection.text()
         };
     },
 
@@ -85,9 +86,9 @@ EditTaskDialog.prototype = {
         'use strict';
 
         const quantity = this.$quantity.floatVal();
-        const task = this.$task.find(':selected').text();
+        const task = this.$task.getSelectedOption().text();
         const unit = this.$unit.val();
-        
+
         return $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
             const $row = $(this).parents('.task-item-row');
             const text = $row.find('.custom-control-label').text();
@@ -222,7 +223,7 @@ EditTaskDialog.prototype = {
         that.$submit.attr("disabled", true);
 
         // valid?
-        if (!that.$form.valid()) {            
+        if (!that.$form.valid()) {
             return that._resetValues();
         }
 
@@ -276,9 +277,10 @@ EditTaskDialog.prototype = {
      */
     _getCategory: function () {
         'use strict';
-        return this.$task.find(':selected').data('categoryId');
+        const $selection = this.$task.getSelectedOption();
+        return $selection.data('categoryId');
     },
-    
+
     /**
      * Gets the selected unit.
      * 
@@ -286,7 +288,8 @@ EditTaskDialog.prototype = {
      */
     _getUnit: function () {
         'use strict';
-        return this.$task.find(':selected').data('unit');
+        const $selection = this.$task.getSelectedOption();
+        return $selection.data('unit');
     },
 
     /**
@@ -353,12 +356,12 @@ EditTaskDialog.prototype = {
     _onDialogVisible: function () {
         'use strict';
         if (this.$editingRow) {
+            this.$editingRow.addClass('table-primary');
             if (this.$quantity.isEmptyValue()) {
                 this.$quantity.selectFocus();
             } else {
                 this.$task.focus();
             }
-            this.$editingRow.addClass('table-primary');
         } else {
             this.$task.focus();
         }
@@ -372,10 +375,8 @@ EditTaskDialog.prototype = {
      */
     _onDialogHide: function () {
         'use strict';
-        if (this.$editingRow) {
-            this.$editingRow.removeClass('table-primary');
-            this.$editingRow = null;
-        }
+        // this.$editingRow = null;
+        $('tr.table-primary').removeClass('table-primary');
         return this;
     },
 

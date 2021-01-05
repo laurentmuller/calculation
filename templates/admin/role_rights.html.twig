@@ -8,18 +8,22 @@
 
 {% block card_container_class '' %}
 
+{% block card_header %}
+<div class="row">
+    <div class="col-lg-5 mt-1">
+        {{ parent() }}
+    </div>
+    <div class="col-lg-7 text-lg-right d-print-none">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
+            {{ rights.actions() }}
+        </div>
+    </div>
+</div>
+{%- endblock %}
+
 {% block card_body %}
 {{ form_row(form.name) }}
 {{ rights.table(form, default) }}
-{% endblock %}
-
-{% block actions_form %}
-{{ parent() }}
-{{ rights.actions() }}
-{% endblock %}
-
-{% block card_footer %}
-{{ block('actions_form') }}
 {% endblock %}
 
 {% block javascripts -%}

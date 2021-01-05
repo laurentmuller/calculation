@@ -46,6 +46,10 @@ class DuplicateControllerTest extends AbstractControllerTest
             ['/duplicate/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/duplicate/pdf', self::ROLE_ADMIN],
             ['/duplicate/pdf', self::ROLE_SUPER_ADMIN],
+
+            ['/duplicate/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/duplicate/excel', self::ROLE_ADMIN],
+            ['/duplicate/excel', self::ROLE_SUPER_ADMIN],
         ];
     }
 

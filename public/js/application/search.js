@@ -215,13 +215,10 @@ function searchCallback(table) {
     const oldSearch = table.search() || '';
     const newSearch = $input.val().trim();
     if (oldSearch !== newSearch) {
+        $input.toggleClass('is-invalid', newSearch.length < 2);
+        $('#minimum').toggleClass('d-none', newSearch.length > 1);
         if (newSearch.length > 1) {
-            $input.removeClass('is-invalid');
-            $('#minimum').addClass('d-none');
             table.search(newSearch).draw();
-        } else {
-            $input.addClass('is-invalid');
-            $('#minimum').removeClass('d-none');
         }
     }
 }

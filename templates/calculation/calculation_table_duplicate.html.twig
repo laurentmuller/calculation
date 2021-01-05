@@ -15,12 +15,14 @@
 {%- set edit_path   = path('calculation_edit', params) -%}
 {%- set delete_path = path('calculation_delete', params) -%}
 {%- set single_path = path('calculation_pdf_id', params) -%}
+{%- set excel_path  = path('duplicate_excel') -%}
 {%- set pdf_path    = path('duplicate_pdf') -%}
 
 {# titles #}
 {%- set show_title   = 'calculation.show.title' %}
 {%- set edit_title   = 'calculation.edit.title_short' %}
 {%- set delete_title = 'calculation.delete.title' %}
+{%- set excel_title  = 'calculation.list.excel_title' -%}
 
 {% block card_header -%}
 {{ parent() }}
@@ -32,7 +34,7 @@
 
 {# other actions #}
 {% block table_actions %}
-{{ _self.item_data_external(single_path, 'common.button_pdf', 'file-pdf far') }}
+{{ _self.item_data_external(single_path, 'calculation.list.pdf_single_title', 'file-pdf far') }}
 {{ icons.dropdownSeparator() }}
 {{ parent() }}
 {{ icons.dropdownSeparator() }}

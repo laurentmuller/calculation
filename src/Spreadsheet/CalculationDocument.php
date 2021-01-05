@@ -28,7 +28,8 @@ class CalculationDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         // initialize
-        $this->start('calculation.list.title', true);
+        $title = $this->title ?: 'calculation.list.title';
+        $this->start($title, true);
 
         // headers
         $this->setHeaderValues([

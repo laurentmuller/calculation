@@ -81,7 +81,7 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * List the calculations.
+     * Show the calculations, as card.
      *
      * @Route("", name="calculation_list", methods={"GET", "POST"})
      */
@@ -251,7 +251,7 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Render the table view.
+     * Show calculations, as table.
      *
      * @Route("/table", name="calculation_table", methods={"GET", "POST"})
      */

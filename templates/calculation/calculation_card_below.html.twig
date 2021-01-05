@@ -29,7 +29,9 @@
 {%- set clone_page   = false -%}
 
 {% block search_action %}
-{{ icons.linkTable('below_table') }}
+<div class="btn-group btn-group-sm" role="group">
+    {{ icons.linkTable('below_table') }}
+</div>
 {% endblock %}
 
 {% block card_header -%}

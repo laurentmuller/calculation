@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\DataTable\CalculationEmptyDataTable;
 use App\Report\CalculationEmptyReport;
 use App\Repository\CalculationRepository;
+use App\Spreadsheet\CalculationEmptyDocument;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/empty")
  * @IsGranted("ROLE_ADMIN")
  */
-class EmptyCalculationController extends AbstractController
+class CalculationEmptyController extends AbstractController
 {
     /**
      * Shows calculations, as card, where items has the price or the quantity is equal to 0.
@@ -62,6 +63,25 @@ class EmptyCalculationController extends AbstractController
         ];
 
         return $this->render('calculation/calculation_card_empty.html.twig', $parameters);
+    }
+
+    /**
+     * Export the empty items to an Excel document.
+     *
+     * @Route("/excel", name="empty_excel")
+     */
+    public function excel(CalculationRepository $repository): Response
+    {
+        $items = $this->getItems($repository);
+        if (empty($items)) {
+            $this->warningTrans('empty.empty');
+
+            return $this->redirectToHomePage();
+        }
+
+        $doc = new CalculationEmptyDocument($this, $items);
+
+        return $this->renderExcelDocument($doc);
     }
 
     /**

@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\DataTable\CalculationDuplicateDataTable;
 use App\Report\CalculationDuplicateReport;
 use App\Repository\CalculationRepository;
+use App\Spreadsheet\CalculationDuplicateDocument;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/duplicate")
  * @IsGranted("ROLE_ADMIN")
  */
-class DuplicateCalculationController extends AbstractController
+class CalculationDuplicateController extends AbstractController
 {
     /**
      * Shows duplicate items, as card, in the calculations.
@@ -66,6 +67,25 @@ class DuplicateCalculationController extends AbstractController
             ];
 
         return $this->render('calculation/calculation_card_duplicate.html.twig', $parameters);
+    }
+
+    /**
+     * Export the duplicate items to an Excel document.
+     *
+     * @Route("/excel", name="duplicate_excel")
+     */
+    public function excel(CalculationRepository $repository): Response
+    {
+        $items = $this->getItems($repository);
+        if (empty($items)) {
+            $this->warningTrans('duplicate.empty');
+
+            return $this->redirectToHomePage();
+        }
+
+        $doc = new CalculationDuplicateDocument($this, $items);
+
+        return $this->renderExcelDocument($doc);
     }
 
     /**

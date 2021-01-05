@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Controller\AbstractController;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
@@ -22,6 +23,7 @@ use App\Pdf\PdfGroupListenerInterface;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Security\EntityVoter;
+use App\Service\ApplicationService;
 use App\Util\Utils;
 
 /**
@@ -54,8 +56,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     private const RIGHTS = [
         'calculation.name' => EntityVoterInterface::ENTITY_CALCULATION,
         'product.name' => EntityVoterInterface::ENTITY_PRODUCT,
-        'group.name' => EntityVoterInterface::ENTITY_GROUP,
+        'task.name' => EntityVoterInterface::ENTITY_TASK,
         'category.name' => EntityVoterInterface::ENTITY_CATEGORY,
+        'group.name' => EntityVoterInterface::ENTITY_GROUP,
         'calculationstate.name' => EntityVoterInterface::ENTITY_CALCULATION_STATE,
         'globalmargin.name' => EntityVoterInterface::ENTITY_GLOBAL_MARGIN,
         'customer.name' => EntityVoterInterface::ENTITY_CUSTOMER,
@@ -70,11 +73,25 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     private $rightStyle;
 
     /**
+     * @var ApplicationService
+     */
+    private $service;
+
+    /**
      * The title cell style.
      *
      * @var PdfStyle
      */
     private $titleStyle;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(AbstractController $controller, array $entities, string $orientation = self::ORIENTATION_PORTRAIT)
+    {
+        parent::__construct($controller, $entities, $orientation);
+        $this->service = $controller->getApplication();
+    }
 
     /**
      * {@inheritdoc}
@@ -247,7 +264,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function outputRoleAdmin(PdfGroupTableBuilder $builder): int
     {
-        $this->outputRole($builder, EntityVoter::getRoleAdmin());
+        $this->outputRole($builder, $this->service->getAdminRole());
 
         return 1;
     }
@@ -261,7 +278,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function outputRoleUser(PdfGroupTableBuilder $builder): int
     {
-        $this->outputRole($builder, EntityVoter::getRoleUser());
+        $this->outputRole($builder, $this->service->getUserRole());
 
         return 1;
     }

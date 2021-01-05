@@ -136,7 +136,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     protected function doRender(array $entities): bool
     {
         // file
-        $file = $this->trans('log.show.file', [
+        $file = $this->trans('log.list.file', [
             '%file%' => $entities['file'],
         ]);
         $this->setDescription($file);
@@ -147,7 +147,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
         // logs
         $logs = $entities['logs'];
         if (empty($logs)) {
-            $this->Cell(0, self::LINE_HEIGHT, $this->trans('log.show.empty'));
+            $this->Cell(0, self::LINE_HEIGHT, $this->trans('log.list.empty'));
 
             return true;
         }

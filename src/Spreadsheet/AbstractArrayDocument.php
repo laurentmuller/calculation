@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Entity\AbstractEntity;
 
 /**
  * Asbtract Excel document to render an array of objects.
@@ -31,7 +30,7 @@ abstract class AbstractArrayDocument extends AbstractDocument
      * Constructor.
      *
      * @param AbstractController $controller the parent controller
-     * @param AbstractEntity[]   $entities   the entities to render
+     * @param array              $entities   the entities to render
      */
     public function __construct(AbstractController $controller, array $entities)
     {

@@ -23,7 +23,9 @@
 {%- set col_span     = 1 -%}
 
 {% block search_action %}
-{{ icons.linkTable('duplicate_table') }}
+<div class="btn-group btn-group-sm" role="group">
+    {{ icons.linkTable('duplicate_table') }}
+</div>    
 {% endblock %}
 
 {% block card_header -%}

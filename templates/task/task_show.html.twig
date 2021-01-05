@@ -18,25 +18,28 @@
 {{ properties.property('task.fields.name', item.name) }}
 {{ properties.property('task.fields.category', item.categoryCode) }}
 {{ properties.property('task.fields.unit', item.unit) }}
-{{ properties.property('task.fields.items', item.count|integer) }}
+{{ properties.property('task.fields.items', item.count ? item.count|integer : 'task.edit.empty_items'|trans) }}
 {% endblock %}
 
 {% block card_body %}
 {{ parent() }}
 {% if not item.empty %}
-<table class="table table-hover table-sm table-list mt-1 mb-0">
+<table class="table table-hover table-sm table-list my-0">
 {% for taskItem in item.items %}
-    <tbody>
-       <tr><td colspan="3" class="">{{ taskItem.name }}</td></tr>
-       {% for taskMargin in taskItem.margins %}
-       <tr>
-            <td class="text-currency">{{ taskMargin.minimum|amount }}</td>
-            <td class="text-currency">{{ taskMargin.maximum|amount }}</td>
-            <td class="text-currency">{{ taskMargin.value|amount }}</td>
+	<tbody>
+    {% for margin in taskItem.margins %}
+        <tr>
+            <td>{{ loop.index == 1 ? taskItem.name : '&nbsp;'|raw }}</td>
+            <td class="text-currency">{{ margin.minimum|amount }}</td>
+            <td class="text-currency">{{ margin.maximum|amount }}</td>
+            <td class="text-currency">{{ margin.value|amount }}</td>
         </tr>
-       {% else %}
-       <tr><td  class="text-right small" colspan="3">{{ 'taskitem.edit.empty_items'|trans }}</td></tr>
-       {% endfor %}
+    {% else %}
+        <tr>
+            <td>{{ taskItem.name }}</td>
+            <td class="text-right" colspan="3">{{ 'taskitem.edit.empty_items'|trans }}</td>
+        </tr>
+	{% endfor %}
     </tbody>
 {% endfor %}
 </table>

@@ -103,8 +103,7 @@ EditItemDialog.prototype = {
      */
     getGroup: function () {
         'use strict';
-
-        const $selection = this.$category.find(':selected');
+        const $selection = this.$category.getSelectedOption();
         return {
             id: parseInt($selection.data('groupId'), 10),
             code: $selection.data('groupCode')
@@ -118,7 +117,7 @@ EditItemDialog.prototype = {
      */
     getCategory: function () {
         'use strict';
-        const $selection = this.$category.find(':selected');
+        const $selection = this.$category.getSelectedOption();
         return {
             id: this.$category.intVal(),
             code: $selection.text()
@@ -199,7 +198,7 @@ EditItemDialog.prototype = {
         const updateProxy = $.proxy(that._updateTotal, that);
         that.$price.on('input', updateProxy);
         that.$quantity.on('input', updateProxy);
-        
+
         // handle delete button
         that.$deleteButton.on('click', $.proxy(that._onDelete, that));
 
@@ -231,45 +230,6 @@ EditItemDialog.prototype = {
         }
     },
 
-    // /**
-    // * Initialize the type ahead search products.
-    // *
-    // * @return {EditItemDialog} This instance for chaining.
-    // */
-    // _initSearchProduct: function () {
-    // 'use strict';
-    //
-    // const that = this;
-    //SearchHelper
-    // return that.$search.initSearch({
-    // alignWidth: false,
-    // valueField: 'description',
-    // displayField: 'description',
-    //
-    // url: that.$form.data('search-product'),
-    // error: that.$form.data('error-product'),
-    //
-    // onSelect: function (item) {
-    // // copy values
-    // that.$description.val(item.description);
-    // that.$unit.val(item.unit);
-    // that.$category.val(item.categoryId);
-    // that.$price.floatVal(item.price);
-    // that.$price.trigger('input');
-    //
-    // // clear
-    // that.$search.val('');
-    //
-    // // select
-    // if (item.price) {
-    // that.$quantity.selectFocus();
-    // } else {
-    // that.$price.selectFocus();
-    // }
-    // }
-    // });
-    // },
-
     /**
      * Handles the dialog show event.
      */
@@ -295,12 +255,12 @@ EditItemDialog.prototype = {
         if (this.$price.attr('readonly')) {
             this.$cancelButton.focus();
         } else if (this.$editingRow) {
+            this.$editingRow.addClass('table-primary');
             if (this.$price.isEmptyValue()) {
                 this.$price.selectFocus();
             } else {
                 this.$quantity.selectFocus();
             }
-            this.$editingRow.addClass('table-primary');
         } else {
             this.$search.selectFocus();
         }
@@ -311,7 +271,8 @@ EditItemDialog.prototype = {
      */
     _onDialogHide: function () {
         'use strict';
-        $('#data-table-edit tbody tr.table-primary').removeClass('table-primary');
+        // this.$editingRow = null;
+        $('tr.table-primary').removeClass('table-primary');
     },
 
     /**

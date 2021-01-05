@@ -1,0 +1,36 @@
+{
+	"title": "log.title",
+	"landscape": true,
+	"columns": [
+		{
+			"field": "createdAt",
+			"format": "dd/mm/yyyy hh:mm:ss",
+			"title": "log.fields.createdAt",
+			"alignment-vertical": "top",
+			"alignment-horizontal": "center"
+		},
+		{
+			"field": "level",
+			"formatter": "formatChannel",
+			"title": "log.fields.level",
+			"alignment-vertical": "top"
+		},
+		{
+			"field": "channel",
+			"formatter": "formatLevel",
+			"title": "log.fields.channel",
+			"alignment-vertical": "top"
+		},
+		{
+			"field": "message",
+			"formatter": "formatMessage",
+			"title": "log.fields.message",
+			"alignment-vertical": "top",
+			"width": 150,
+			"auto-size": false,
+			"wrap-text": false,
+			"font-name": "Courier New",
+			"font-size": 9
+		}
+	]
+}

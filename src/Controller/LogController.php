@@ -15,11 +15,11 @@ namespace App\Controller;
 use App\DataTable\LogDataTable;
 use App\Report\LogReport;
 use App\Service\LogService;
+use App\Spreadsheet\LogDocument;
 use App\Util\SymfonyUtils;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,10 +39,12 @@ class LogController extends AbstractController
      *
      * @Route("", name="log_list")
      */
-    public function card(Request $request, LogService $service): Response
+    public function card(LogService $service): Response
     {
         if (!$entries = $service->getEntries()) {
-            return $this->handleEmptyEntries($request);
+            $this->infoTrans('log.list.empty');
+
+            return $this->redirectToHomePage();
         }
 
         return $this->render('log/log_card.html.twig', $entries);
@@ -83,7 +85,9 @@ class LogController extends AbstractController
     {
         // get entries
         if (!$service->getEntries()) {
-            return $this->handleEmptyEntries($request);
+            $this->infoTrans('log.list.empty');
+
+            return $this->redirectToHomePage();
         }
 
         // handle request
@@ -124,15 +128,36 @@ class LogController extends AbstractController
     }
 
     /**
+     * Export the logs to an Excel document.
+     *
+     * @Route("/excel", name="log_excel")
+     */
+    public function excel(LogService $service): Response
+    {
+        // get entries
+        if (!$entries = $service->getEntries()) {
+            $this->infoTrans('log.list.empty');
+
+            return $this->redirectToHomePage();
+        }
+
+        $doc = new LogDocument($this, $entries);
+
+        return $this->renderExcelDocument($doc);
+    }
+
+    /**
      * Export to PDF the content of the log file.
      *
      * @Route("/pdf", name="log_pdf")
      */
-    public function pdf(Request $request, LogService $service): Response
+    public function pdf(LogService $service): Response
     {
         // get entries
         if (!$entries = $service->getEntries()) {
-            return $this->handleEmptyEntries($request);
+            $this->infoTrans('log.list.empty');
+
+            return $this->redirectToHomePage();
         }
 
         $doc = new LogReport($this, $entries);
@@ -148,7 +173,7 @@ class LogController extends AbstractController
     public function refresh(Request $request, LogService $service): Response
     {
         $service->clearCache();
-        $route = $request->get('route', 'log_table');
+        $route = $this->getDefaultRoute($request);
 
         return $this->redirectToRoute($route);
     }
@@ -158,12 +183,13 @@ class LogController extends AbstractController
      *
      * @Route("/show/{id}", name="log_show", requirements={"id": "\d+" }, methods={"GET"})
      */
-    public function show(int $id, LogService $service): Response
+    public function show(Request $request, int $id, LogService $service): Response
     {
         if (null === $item = $service->getLog($id)) {
             $this->warningTrans('log.show.not_found');
+            $route = $this->getDefaultRoute($request);
 
-            return $this->redirectToRoute('log_table');
+            return $this->redirectToRoute($route);
         }
 
         return $this->render('log/log_show.html.twig', ['item' => $item]);
@@ -178,7 +204,9 @@ class LogController extends AbstractController
     {
         $service = $table->getService();
         if (!$service->getEntries()) {
-            return $this->handleEmptyEntries($request);
+            $this->infoTrans('log.list.empty');
+
+            return $this->redirectToHomePage();
         }
 
         $results = $table->handleRequest($request);
@@ -199,16 +227,18 @@ class LogController extends AbstractController
     }
 
     /**
-     * Handles the empty log entries by redirecting to previous page, if applicable;
-     * to the home page otherwise.
+     * Gets the default route name used to display the logs.
      */
-    private function handleEmptyEntries(Request $request): RedirectResponse
+    private function getDefaultRoute(Request $request): string
     {
-        $this->infoTrans('log.show.empty');
-        if ($referer = $request->headers->get('referer')) {
-            return $this->redirect($referer);
+        if (null !== $route = $request->get('route')) {
+            return $route;
         }
 
-        return $this->redirectToHomePage();
+        if ($this->isDisplayTabular()) {
+            return 'log_table';
+        }
+
+        return 'log_list';
     }
 }

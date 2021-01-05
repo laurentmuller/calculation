@@ -421,7 +421,8 @@ final class CalculationService
         // overall total row
         $overall_total = $total_net + $usermargin_amount;
         $overall_amount = $overall_total - $groups_amount;
-        $overall_margin = 1.0 + $this->round($this->safeDivide($overall_amount, $groups_amount));
+        $overall_margin = $this->safeDivide($overall_amount, $groups_amount);
+        $overall_margin = 1.0 + \floor($overall_margin * 100) / 100;
         $overall_below = !empty($groups) && !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
         $result[] = [

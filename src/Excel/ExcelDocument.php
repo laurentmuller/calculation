@@ -13,11 +13,13 @@ declare(strict_types=1);
 namespace App\Excel;
 
 use App\Controller\AbstractController;
+use App\Traits\TranslatorTrait;
 use App\Util\Utils;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
@@ -32,6 +34,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ExcelDocument extends Spreadsheet
 {
+    use TranslatorTrait;
+
     /**
      * The default margins (0.4" = 10 millimeters).
      */
@@ -48,9 +52,11 @@ class ExcelDocument extends Spreadsheet
     public const MIME_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
     /**
-     * The TranslatorInterface.
+     * The file title.
+     *
+     * @var string
      */
-    protected TranslatorInterface $translator;
+    protected $title;
 
     /**
      * The boolean format.
@@ -58,13 +64,6 @@ class ExcelDocument extends Spreadsheet
      * @var string[]
      */
     private $booleanFormats = [];
-
-    /**
-     * The file title.
-     *
-     * @var string
-     */
-    private $title;
 
     /**
      * Constructor.
@@ -171,7 +170,7 @@ class ExcelDocument extends Spreadsheet
     {
         $company = $controller->getApplication()->getCustomerName();
         $application = $controller->getApplicationName();
-        $title = $this->translator->trans($title);
+        $title = $this->trans($title);
         $username = $controller->getUserName();
 
         $this->setHeaderFooter($title, $company, $application)
@@ -195,6 +194,21 @@ class ExcelDocument extends Spreadsheet
     public function setActiveTitle(string $title): self
     {
         $this->getActiveSheet()->setTitle(self::checkSheetTitle($title));
+
+        return $this;
+    }
+
+    /**
+     * Set the auto-sizing behavior for the given column.
+     *
+     * @param int  $columnIndex the column index (A = 1)
+     * @param bool $autoSize    true to auto-sizing; false if not
+     */
+    public function setAutoSize(int $columnIndex, bool $autoSize = true): self
+    {
+        $sheet = $this->getActiveSheet();
+        $name = $this->stringFromColumnIndex($columnIndex);
+        $sheet->getColumnDimension($name)->setAutoSize($autoSize);
 
         return $this;
     }
@@ -235,12 +249,12 @@ class ExcelDocument extends Spreadsheet
         $drawing->setWorksheet($this->getActiveSheet());
 
         // update size
-        [$col, $row] = Coordinate::coordinateFromString($coordinates);
-        $columnDimension = $this->getActiveSheet()->getColumnDimension($col);
+        [$columnIndex, $rowIndex] = Coordinate::coordinateFromString($coordinates);
+        $columnDimension = $this->getActiveSheet()->getColumnDimension($columnIndex);
         if ($width > $columnDimension->getWidth()) {
             $columnDimension->setWidth($width);
         }
-        $rowDimension = $this->getActiveSheet()->getRowDimension((int) $row);
+        $rowDimension = $this->getActiveSheet()->getRowDimension((int) $rowIndex);
         if ($height > $rowDimension->getRowHeight()) {
             $rowDimension->setRowHeight($height);
         }
@@ -251,17 +265,54 @@ class ExcelDocument extends Spreadsheet
     /**
      * Sets image at the given coordinate.
      *
-     * @param string $path   the image path
-     * @param int    $col    the column index (A = 1)
-     * @param int    $row    the row index (1 = first row)
-     * @param int    $width  the image width
-     * @param int    $height the image height
+     * @param string $path        the image path
+     * @param int    $columnIndex the column index (A = 1)
+     * @param int    $rowIndex    the row index (1 = first row)
+     * @param int    $width       the image width
+     * @param int    $height      the image height
      */
-    public function setCellImageByColumnAndRow(string $path, int $col, int $row, int $width, int $height): self
+    public function setCellImageByColumnAndRow(string $path, int $columnIndex, int $rowIndex, int $width, int $height): self
     {
-        $coordinates = $this->stringFromColumnAndRowIndex($col, $row);
+        $coordinates = $this->stringFromColumnAndRowIndex($columnIndex, $rowIndex);
 
         return $this->setCellImage($path, $coordinates, $width, $height);
+    }
+
+    /**
+     * Set a cell value by using numeric cell coordinates.
+     *
+     * @param Worksheet $sheet       the active work sheet
+     * @param int       $columnIndex the column index of the cell (1 = A)
+     * @param int       $rowIndex    the row index of the cell (first row  = 1)
+     * @param mixed     $value       the value of the cell
+     */
+    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): self
+    {
+        if (null !== $value) {
+            if ($value instanceof \DateTimeInterface) {
+                $value = Date::PHPToExcel($value);
+            } elseif (\is_bool($value)) {
+                $value = $value ? 1 : 0;
+            }
+            $sheet->setCellValueByColumnAndRow($columnIndex, $rowIndex, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the width for the given column.
+     *
+     * @param int $columnIndex the column index (A = 1)
+     * @param int $width       the width to set
+     */
+    public function setColumnWidth(int $columnIndex, int $width): self
+    {
+        $sheet = $this->getActiveSheet();
+        $name = $this->stringFromColumnIndex($columnIndex);
+        $sheet->getColumnDimension($name)->setWidth($width);
+
+        return $this;
     }
 
     /**
@@ -287,15 +338,42 @@ class ExcelDocument extends Spreadsheet
     }
 
     /**
-     * Sets the format for the given column.
+     * Sets the foreground color for the given column.
      *
-     * @param int    $col    the column index (A = 1)
-     * @param string $format the format to set
+     * @param int    $columnIndex   the column index (A = 1)
+     * @param string $color         the hexadecimal color or an empty string ('') for black color
+     * @param bool   $includeHeader true to set color for all rows; false to skip the first row
      */
-    public function setFormat(int $col, string $format): self
+    public function setForeground(int $columnIndex, string $color, bool $includeHeader = false): self
     {
         $sheet = $this->getActiveSheet();
-        $name = $this->stringFromColumnIndex($col);
+        $name = $this->stringFromColumnIndex($columnIndex);
+        $style = $sheet->getStyle($name)->getFont()->getColor();
+
+        if (\strlen($color) > 6) {
+            $style->setARGB($color);
+        } else {
+            $style->setRGB($color);
+        }
+
+        if (!$includeHeader) {
+            $style = $sheet->getStyle("{$name}1")->getFont()->getColor()
+                ->setARGB(Color::COLOR_BLACK);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets the format for the given column.
+     *
+     * @param int    $columnIndex the column index (A = 1)
+     * @param string $format      the format to set
+     */
+    public function setFormat(int $columnIndex, string $format): self
+    {
+        $sheet = $this->getActiveSheet();
+        $name = $this->stringFromColumnIndex($columnIndex);
         $sheet->getStyle($name)->getNumberFormat()->setFormatCode($format);
 
         return $this;
@@ -304,101 +382,101 @@ class ExcelDocument extends Spreadsheet
     /**
      * Sets the amount format ('#,##0.00') for the given column.
      *
-     * @param int $col the column index (A = 1)
+     * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatAmount(int $col): self
+    public function setFormatAmount(int $columnIndex): self
     {
-        return $this->setFormat($col, NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+        return $this->setFormat($columnIndex, NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
     }
 
     /**
      * Sets the boolean format for the given column.
      *
-     * @param int    $col       the column index (A = 1)
-     * @param string $true      the value to display when <code>true</code>
-     * @param string $false     the value to display when <code>false</code>
-     * @param bool   $translate <code>true</code> to translate values
+     * @param int    $columnIndex the column index (A = 1)
+     * @param string $true        the value to display when <code>true</code>
+     * @param string $false       the value to display when <code>false</code>
+     * @param bool   $translate   <code>true</code> to translate values
      */
-    public function setFormatBoolean(int $col, string $true, string $false, bool $translate = false): self
+    public function setFormatBoolean(int $columnIndex, string $true, string $false, bool $translate = false): self
     {
         $key = "$false-$true";
         if (!\array_key_exists($key, $this->booleanFormats)) {
             if ($translate) {
-                $true = $this->translator->trans($true);
-                $false = $this->translator->trans($false);
+                $true = $this->trans($true);
+                $false = $this->trans($false);
             }
             $true = \str_replace('"', "''", $true);
             $false = \str_replace('"', "''", $false);
-            $format = "\"$true\";;\"$false\";";
+            $format = "\"$true\";;\"$false\";@";
             $this->booleanFormats[$key] = $format;
         } else {
             $format = $this->booleanFormats[$key];
         }
 
-        return $this->setFormat($col, $format);
+        return $this->setFormat($columnIndex, $format);
     }
 
     /**
      * Sets the date format ('dd/mm/yyyy') for the given column.
      *
-     * @param int $col the column index (A = 1)
+     * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatDate(int $col): self
+    public function setFormatDate(int $columnIndex): self
     {
-        return $this->setFormat($col, NumberFormat::FORMAT_DATE_DDMMYYYY);
+        return $this->setFormat($columnIndex, NumberFormat::FORMAT_DATE_DDMMYYYY);
     }
 
     /**
      * Sets the date time format ('dd/mm/yyyy hh:mm') for the given column.
      *
-     * @param int $col the column index (A = 1)
+     * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatDateTime(int $col): self
+    public function setFormatDateTime(int $columnIndex): self
     {
-        return $this->setFormat($col, 'dd/mm/yyyy hh:mm');
+        return $this->setFormat($columnIndex, 'dd/mm/yyyy hh:mm');
     }
 
     /**
      * Sets the identifier format ('000000') for the given column.
      *
-     * @param int $col the column index (A = 1)
+     * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatId(int $col): self
+    public function setFormatId(int $columnIndex): self
     {
-        return $this->setFormat($col, '000000');
+        return $this->setFormat($columnIndex, '000000');
     }
 
     /**
      * Sets the integer format ('#,##0') for the given column.
      *
-     * @param int $col the column index (A = 1)
+     * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatInt(int $col): self
+    public function setFormatInt(int $columnIndex): self
     {
-        return $this->setFormat($col, '#,##0');
+        return $this->setFormat($columnIndex, '#,##0');
     }
 
     /**
      * Sets the percent format for the given column.
      *
-     * @param int  $col      the column index (A = 1)
-     * @param bool $decimals true to display 2 decimals ('0.00%'), false if none ('0%').
+     * @param int  $columnIndex the column index (A = 1)
+     * @param bool $decimals    true to display 2 decimals ('0.00%'), false if none ('0%').
      */
-    public function setFormatPercent(int $col, bool $decimals = false): self
+    public function setFormatPercent(int $columnIndex, bool $decimals = false): self
     {
         $format = $this->getPercentFormat($decimals);
 
-        return $this->setFormat($col, $format);
+        return $this->setFormat($columnIndex, $format);
     }
 
     /**
      * Sets the translated 'Yes/No' boolean format for the given column.
      *
-     * @param int $col the column index (A = 1)
+     * @param int $columnIndex the column index (A = 1)
      */
-    public function setFormatYesNo(int $col): self
+    public function setFormatYesNo(int $columnIndex): self
     {
-        return $this->setFormatBoolean($col, 'common.value_true', 'common.value_false', true);
+        return $this->setFormatBoolean($columnIndex, 'common.value_true', 'common.value_false', true);
     }
 
     /**
@@ -454,40 +532,35 @@ class ExcelDocument extends Spreadsheet
     /**
      * Sets the headers of the active sheet with bold style and freezed first row.
      *
-     * @param array $headers the headers where key is the text to translate and value is the
-     *                       horizontal alignment or if an array, the horizontal and the vertical
-     *                       alignments and
+     * @param array $headers     the headers where key is the text to translate and value is the
+     *                           horizontal alignment or if is an array, the horizontal and the vertical
+     *                           alignments
+     * @param int   $columnIndex the starting column index (A = 1)
      */
-    public function setHeaderValues(array $headers): self
+    public function setHeaderValues(array $headers, int $columnIndex = 1): self
     {
         $sheet = $this->getActiveSheet();
 
-        $col = 1;
+        $index = $columnIndex;
         foreach ($headers as $id => $alignment) {
-            $name = $this->stringFromColumnIndex($col);
-            $sheet->getColumnDimension($name)->setAutoSize(true);
-            $sheet->setCellValue("{$name}1", $this->translator->trans($id));
-
+            $name = $this->stringFromColumnIndex($index++);
             if (\is_array($alignment)) {
-                $sheet->getStyle($name)->getAlignment()
-                    ->setHorizontal($alignment[0])
-                    ->setVertical($alignment[1]);
-                $sheet->getStyle("{$name}1")
+                $sheet->getStyle($name)
                     ->getAlignment()
                     ->setHorizontal($alignment[0])
                     ->setVertical($alignment[1]);
             } else {
-                $sheet->getStyle($name)->getAlignment()
-                    ->setHorizontal($alignment);
-                $sheet->getStyle("{$name}1")->getAlignment()
+                $sheet->getStyle($name)
+                    ->getAlignment()
                     ->setHorizontal($alignment);
             }
-
-            ++$col;
+            $sheet->getColumnDimension($name)->setAutoSize(true);
+            $sheet->setCellValue("{$name}1", $this->trans($id));
         }
 
-        $name = $this->stringFromColumnIndex(\count($headers));
-        $sheet->getStyle('A1:' . $name . '1')->getFont()->setBold(true);
+        $firstName = $this->stringFromColumnIndex($columnIndex);
+        $lastName = $this->stringFromColumnIndex($columnIndex + \count($headers) - 1);
+        $sheet->getStyle("{$firstName}1:{$lastName}1")->getFont()->setBold(true);
         $sheet->freezePane('A2');
 
         $sheet->getPageSetup()
@@ -584,23 +657,15 @@ class ExcelDocument extends Spreadsheet
     /**
      * Sets the values of the given row.
      *
-     * @param int   $row    the row index (first row  = 1)
-     * @param array $values the values to set
-     * @param int   $col    the starting column index (A = 1)
+     * @param int   $rowIndex    the row index (first row  = 1)
+     * @param array $values      the values to set
+     * @param int   $columnIndex the starting column index (A = 1)
      */
-    public function setRowValues(int $row, array $values, int $col = 1): self
+    public function setRowValues(int $rowIndex, array $values, int $columnIndex = 1): self
     {
         $sheet = $this->getActiveSheet();
         foreach ($values as $value) {
-            if (null !== $value) {
-                if ($value instanceof \DateTimeInterface) {
-                    $value = Date::PHPToExcel($value);
-                } elseif (\is_bool($value)) {
-                    $value = $value ? 1 : 0;
-                }
-                $sheet->setCellValueByColumnAndRow($col, $row, $value);
-            }
-            ++$col;
+            $this->setCellValue($sheet, $columnIndex++, $rowIndex, $value);
         }
 
         return $this;
@@ -621,14 +686,28 @@ class ExcelDocument extends Spreadsheet
     /**
      * Sets selected cell of the active sheet.
      *
-     * @param int $col the column index (A = 1)
-     * @param int $row the row index (1 = first row)
+     * @param int $columnIndex the column index (A = 1)
+     * @param int $rowIndex    the row index (1 = first row)
      */
-    public function setSelectedCellByColumnAndRow(int $col, int $row): self
+    public function setSelectedCellByColumnAndRow(int $columnIndex, int $rowIndex): self
     {
-        $coordinates = $this->stringFromColumnAndRowIndex($col, $row);
+        $coordinates = $this->stringFromColumnAndRowIndex($columnIndex, $rowIndex);
 
         return $this->setSelectedCell($coordinates);
+    }
+
+    /**
+     * Sets the shrink to fit for the given column.
+     *
+     * @param int $columnIndex the column index (A = 1)
+     */
+    public function setShrinkToFit(int $columnIndex): self
+    {
+        $sheet = $this->getActiveSheet();
+        $name = $this->stringFromColumnIndex($columnIndex);
+        $sheet->getStyle($name)->getAlignment()->setShrinkToFit(true);
+
+        return $this;
     }
 
     /**
@@ -655,7 +734,7 @@ class ExcelDocument extends Spreadsheet
             $this->getProperties()->setTitle($title);
         }
 
-        return  $this;
+        return $this;
     }
 
     /**
@@ -670,6 +749,20 @@ class ExcelDocument extends Spreadsheet
                 ->setCreator($userName)
                 ->setLastModifiedBy($userName);
         }
+
+        return $this;
+    }
+
+    /**
+     * Set wrap text for the given column.
+     *
+     * @param int $columnIndex the column index (A = 1)
+     */
+    public function setWrapText(int $columnIndex): self
+    {
+        $sheet = $this->getActiveSheet();
+        $name = $this->stringFromColumnIndex($columnIndex);
+        $sheet->getStyle($name)->getAlignment()->setWrapText(true);
 
         return $this;
     }

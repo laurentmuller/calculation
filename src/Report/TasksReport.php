@@ -39,8 +39,11 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $parent->startRow()
             ->add($task->getName(), 1, $group->getStyle())
             ->add($task->getCategoryCode())
-            ->add($task->getUnit())
-            ->completeRow();
+            ->add($task->getUnit());
+        if ($task->isEmpty()) {
+            $parent->add($this->trans('task.edit.empty_items'), 3);
+        }
+        $parent->completeRow();
 
         return true;
     }
@@ -63,12 +66,10 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $table->getGroupStyle()->setFontBold();
         $itemStyle = PdfStyle::getCellStyle()
             ->setIndent(4);
-        $marginStyle = PdfStyle::getCellStyle()
-            ->setIndent(8);
 
         /** @var Task $entity */
         foreach ($entities as $entity) {
-            //check new page
+            //check for new page
             $count = 2;
             if (!$entity->isEmpty()) {
                 $item = $entity->getItems()->first();
@@ -86,7 +87,35 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                 $table->checkNewPage($count * self::LINE_HEIGHT);
             }
 
-            $this->outputItems($table, $entity, $itemStyle, $marginStyle);
+            /** @var TaskItem $item */
+            foreach ($entity->getItems() as $item) {
+                if ($item->isEmpty()) {
+                    $table->startRow()
+                        ->add($item->getName(), 1, $itemStyle)
+                        ->add('')
+                        ->add('')
+                        ->add($this->trans('taskitem.edit.empty_items'), 3)
+                        ->endRow();
+                } else {
+                    $index = 0;
+
+                    /** @var TaskItemMargin $margin */
+                    foreach ($item->getMargins() as $margin) {
+                        $table->startRow();
+                        if (0 === $index++) {
+                            $table->add($item->getName(), 1, $itemStyle);
+                        } else {
+                            $table->add('');
+                        }
+                        $table->add('')
+                            ->add('')
+                            ->add(FormatUtils::formatAmount($margin->getMinimum()))
+                            ->add(FormatUtils::formatAmount($margin->getMaximum()))
+                            ->add(FormatUtils::formatAmount($margin->getValue()))
+                            ->endRow();
+                    }
+                }
+            }
         }
 
         return true;
@@ -103,60 +132,10 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
             ->addColumn(PdfColumn::left($this->trans('task.fields.unit'), 15, true))
             ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.minimum'), 20, true))
             ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.maximum'), 20, true))
-            ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.value'), 25, true))
+            ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.value'), 20, true))
             ->outputHeaders();
         $table->setGroupListener($this);
 
         return $table;
-    }
-
-    private function outputItem(PdfGroupTableBuilder $table, TaskItem $item, PdfStyle $itemStyle, PdfStyle $marginStyle): void
-    {
-        //check new page
-        $count = 1 + ($item->isEmpty() ? 1 : $item->count());
-        $table->checkNewPage($count * self::LINE_HEIGHT);
-
-        $table->startRow()
-            ->add($item->getName(), 1, $itemStyle)
-            ->completeRow();
-        $this->outputMargins($table, $item, $marginStyle);
-    }
-
-    private function outputItems(PdfGroupTableBuilder $table, Task $task, PdfStyle $itemStyle, PdfStyle $marginStyle): void
-    {
-        if ($task->isEmpty()) {
-            $table->startRow()
-                ->add($this->trans('task.edit.empty_items'), 1, $itemStyle)
-                ->completeRow();
-        } else {
-            foreach ($task->getItems() as $item) {
-                $this->outputItem($table, $item, $itemStyle, $marginStyle);
-            }
-        }
-    }
-
-    private function outputMargin(PdfGroupTableBuilder $table, TaskItemMargin $margin): void
-    {
-        $table->startRow()
-            ->add('')
-            ->add('')
-            ->add('')
-            ->add(FormatUtils::formatAmount($margin->getMinimum()))
-            ->add(FormatUtils::formatAmount($margin->getMaximum()))
-            ->add(FormatUtils::formatAmount($margin->getValue()))
-            ->completeRow();
-    }
-
-    private function outputMargins(PdfGroupTableBuilder $table, TaskItem $item, PdfStyle $style): void
-    {
-        if ($item->isEmpty()) {
-            $table->startRow()
-                ->add($this->trans('taskitem.edit.empty_items'), 1, $style)
-                ->completeRow();
-        } else {
-            foreach ($item->getMargins() as $margin) {
-                $this->outputMargin($table, $margin);
-            }
-        }
     }
 }

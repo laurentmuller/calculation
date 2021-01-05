@@ -93,7 +93,7 @@ class UserDocument extends AbstractArrayDocument
                 $entity->getEmail(),
                 Utils::translateRole($this->translator, $entity->getRole()),
                 $entity->isEnabled(),
-                $entity->getLastLogin(),
+                $this->formatLastLogin($entity->getLastLogin()),
             ]);
 
             // image
@@ -109,6 +109,20 @@ class UserDocument extends AbstractArrayDocument
         $this->finish();
 
         return true;
+    }
+
+    /**
+     * Gets the last login date.
+     *
+     * @return \DateTimeInterface|string
+     */
+    private function formatLastLogin(?\DateTimeInterface $date)
+    {
+        if (null === $date) {
+            return $this->trans('common.value_none');
+        }
+
+        return $date;
     }
 
     /**

@@ -82,17 +82,6 @@ function getHiddenChannels() {
 }
 
 /**
- * Gets the PDF export button.
- * 
- * @returns {jQuery} the button.
- */
-function getPdfButton() {
-    'use strict';
-
-    return $(".btn.btn-form.btn-secondary");
-}
-
-/**
  * Updates the rows visibility.
  */
 function updateRows() {
@@ -157,13 +146,9 @@ function updateButton() {
     'use strict';
 
     // update button state
-    const $button = getPdfButton();
+    const $button = $(".btn-pdf");
     const count = $('#logs tbody tr:visible').length;
-    if (count > 0) {
-        $button.removeClass('disabled');
-    } else {
-        $button.addClass('disabled');
-    }
+    $button.toggleClass('disabled', count === 0);
 
     // update button link
     const $params = $("#parameters");

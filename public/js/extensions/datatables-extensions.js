@@ -491,7 +491,7 @@ $.fn.initDataTable = function (options) {
         orderMulti: false,
 
         // class
-        "stripeClasses": [],
+        stripeClasses: [],
         removeDuplicateClasses: true,
 
         // mark

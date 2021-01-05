@@ -9,6 +9,19 @@
 
 {% block card_container_class '' %}
 
+{% block card_header %}
+<div class="row">
+    <div class="col-lg-5 mt-1">
+        {{ parent() }}
+    </div>
+    <div class="col-lg-7 text-lg-right d-print-none">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
+            {{ rights.actions(overwrite) }}
+        </div>
+    </div>
+</div>
+{%- endblock %}
+
 {% block card_body %}
 <div class="row">
     <div class="col-md-7">
@@ -20,15 +33,6 @@
 </div>
 {{ rights.table(form, default, overwrite) }}
 {{ form_row(form.overwrite, {label_attr: {class: 'switch-custom mt-3'}, attr: {'data-default': default.overwrite|json_encode }}) }}
-{% endblock %}
-
-{% block actions_form %}
-{{ parent() }}
-{{ rights.actions(overwrite) }}
-{% endblock %}
-
-{% block card_footer %}
-{{ block('actions_form') }}
 {% endblock %}
 
 {% block javascripts -%}

@@ -504,7 +504,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getOverallMargin(): float
     {
-        return $this->safeDivide($this->overallTotal, $this->itemsTotal);
+        $value = $this->safeDivide($this->overallTotal, $this->itemsTotal);
+        $value = \floor($value * 100) / 100;
+
+        return $value;
     }
 
     /**

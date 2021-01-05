@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\DataTable\CalculationBelowDataTable;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
+use App\Spreadsheet\CalculationDocument;
 use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -33,7 +34,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BelowCalculationController extends AbstractController
 {
     /**
-     * Shows calculations, as card, where margins is below the minimum.
+     * Show calculations, as card.
      *
      * @Route("", name="below_card")
      */
@@ -64,7 +65,28 @@ class BelowCalculationController extends AbstractController
     }
 
     /**
-     * Exports calculations where margins is below the minimum.
+     * Export the calculations to an Excel document.
+     *
+     * @Route("/excel", name="below_excel")
+     */
+    public function excel(CalculationRepository $repository): Response
+    {
+        $minMargin = $this->getApplication()->getMinMargin();
+        $items = $this->getItems($repository, $minMargin);
+        if (empty($items)) {
+            $this->warningTrans('below.empty');
+
+            return  $this->redirectToHomePage();
+        }
+
+        $doc = new CalculationDocument($this, $items);
+        $doc->setTitle('below.title');
+
+        return $this->renderExcelDocument($doc);
+    }
+
+    /**
+     * Export calculations to a PDF document.
      *
      * @Route("/pdf", name="below_pdf")
      */
@@ -89,7 +111,7 @@ class BelowCalculationController extends AbstractController
     }
 
     /**
-     * Shows calculations, as table, where margins is below the minimum.
+     * Show calculations, as table.
      *
      * @Route("/table", name="below_table")
      */

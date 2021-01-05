@@ -9,7 +9,7 @@
     // bind events
     $('#form_entity').on('input', function () {
         const $this = $(this);
-        const $selected = $this.find(":selected");
+        const $selected = $this.getSelectedOption();
 
         $('form').attr('action', $this.val());
         $('#form_entity_help').text($selected.data('help'));

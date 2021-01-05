@@ -24,15 +24,19 @@
 {%- set object_type = EntityVoterInterface.ENTITY_LOG -%}
 
 {# actions #}
-{%- set params        = {'id': 0} -%}
-{%- set show_path     = path('log_show', params) -%}
-{%- set show_title    = 'log.show.title' %}
-{%- set pdf_path      = path('log_pdf') -%}
-{%- set pdf_title     = 'log.show.pdf_title' %}
+{%- set params     = {'id': 0} -%}
+{%- set show_path  = path('log_show', params) -%}
+{%- set pdf_path   = path('log_pdf') -%}
+{%- set excel_path = path('log_excel') -%}
+
+{# titles #}
+{%- set show_title  = 'log.show.title' %}
+{%- set pdf_title   = 'log.list.pdf_title' %}
+{%- set excel_title = 'log.list.excel_title' -%}
 
 {% block card_header %}
 {{ parent() }}
-<small class="ml-3">{{ 'log.show.file'|trans({'%file%': file}) }}</small>
+<small class="ml-3">{{ 'log.list.file'|trans({'%file%': file}) }}</small>
 {% endblock %}
 
 {% block search_input -%}

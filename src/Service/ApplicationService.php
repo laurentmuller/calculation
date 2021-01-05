@@ -16,6 +16,7 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Property;
+use App\Entity\Role;
 use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Repository\PropertyRepository;
@@ -105,9 +106,19 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getAdminRights(): array
     {
-        $default = EntityVoter::getRoleAdmin()->getRights();
+        return $this->getAdminRole()->getRights();
+    }
 
-        return $this->getPropertyArray(self::P_ADMIN_RIGHTS, $default);
+    /**
+     * Gets the administrator role.
+     */
+    public function getAdminRole(): Role
+    {
+        $role = EntityVoter::getRoleAdmin();
+        $rights = $this->getPropertyArray(self::P_ADMIN_RIGHTS, $role->getRights());
+        $role->setRights($rights);
+
+        return $role;
     }
 
     /**
@@ -402,9 +413,19 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getUserRights(): array
     {
-        $default = EntityVoter::getRoleUser()->getRights();
+        return $this->getUserRole()->getRights();
+    }
 
-        return $this->getPropertyArray(self::P_USER_RIGHTS, $default);
+    /**
+     * Gets the user role.
+     */
+    public function getUserRole(): Role
+    {
+        $role = EntityVoter::getRoleUser();
+        $rights = $this->getPropertyArray(self::P_USER_RIGHTS, $role->getRights());
+        $role->setRights($rights);
+
+        return $role;
     }
 
     /**

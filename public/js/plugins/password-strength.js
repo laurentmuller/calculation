@@ -73,11 +73,7 @@
             if ($progress) {
                 updateUI = true;
                 $progress.find('.progress-bar').each(function (index, element) {
-                    if (index <= verdict.score) {
-                        $(element).removeClass('d-none');
-                    } else {
-                        $(element).addClass('d-none');
-                    }
+                    $(element).toggleClass('d-none', index > verdict.score);
                 });
             }
             const $label = that.getLabel(options);

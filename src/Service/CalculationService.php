@@ -124,7 +124,7 @@ final class CalculationService
 
         // update overall total
         $overallGroup['total'] = $netTotal + $userGroup['total'];
-        $overallGroup['margin'] = $overallGroup['total'] / $totalAmount;
+        $overallGroup['margin'] = \floor($overallGroup['total'] / $totalAmount * 100.0) / 100.0;
         $overallGroup['margin_amount'] = $overallGroup['total'] - $totalAmount;
 
         // update parameters

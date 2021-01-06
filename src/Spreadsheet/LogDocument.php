@@ -34,8 +34,8 @@ class LogDocument extends AbstractArrayDocument
         parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
 
         if (4 === $columnIndex && $rowIndex > 1) {
-            $style = $sheet->getCellByColumnAndRow($columnIndex, $rowIndex)->getStyle();
-            $style->getFont()->setName('Courier New')->setSize(9);
+            $sheet->getCellByColumnAndRow($columnIndex, $rowIndex)->getStyle()
+                ->getFont()->setName('Courier New')->setSize(9);
         }
 
         return $this;

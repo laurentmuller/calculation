@@ -369,6 +369,7 @@ user:
         excel_title: Exporter la liste des utilisateurs
         rights_title: Droits d'accès
         rights_export: Télécharger la liste des droits d'accès
+        rights_excel: Exporter la liste des droits d'accès
     switch:
         connected: <b>%original%</b>, vous êtes connecté en tant qu'utilisateur <b>%current%</b>.
         take:
@@ -608,7 +609,7 @@ rights:
     add: Ajouter
     edit: Modifier
     delete: Supprimer
-    pdf: Exporter
+    export: Exporter
 cookiebanner:
     message: Afin de vous proposer le meilleur service possible, ce site utilise des cookies. En acceptant de continuer sur ce site, vous déclarez accepter leurs utilisations.
     link: En savoir plus

@@ -31,6 +31,7 @@ use App\Repository\AbstractRepository;
 use App\Security\EntityVoter;
 use App\Service\ThemeService;
 use App\Spreadsheet\UserDocument;
+use App\Spreadsheet\UserRightsDocument;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
@@ -361,6 +362,27 @@ class UserController extends AbstractEntityController
     }
 
     /**
+     * Export the user access rights to an Excel document.
+     *
+     * @Route("/rights/excel", name="user_rights_excel")
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
+     */
+    public function rightsExcel(): ExcelResponse
+    {
+        /** @var User[] $entities */
+        $entities = $this->getEntities('username');
+        if (empty($entities)) {
+            $message = $this->trans('user.list.empty');
+            throw $this->createNotFoundException($message);
+        }
+
+        $doc = new UserRightsDocument($this, $entities);
+
+        return $this->renderExcelDocument($doc);
+    }
+
+    /**
      * Export user access rights to a PDF document.
      *
      * @Route("/rights/pdf", name="user_rights_pdf", methods={"GET"})
@@ -371,7 +393,7 @@ class UserController extends AbstractEntityController
     public function rightsPdf(): PdfResponse
     {
         /** @var User[] $users */
-        $users = $this->getEntities();
+        $users = $this->getEntities('username');
         if (empty($users)) {
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);

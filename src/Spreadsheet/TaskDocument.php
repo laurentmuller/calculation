@@ -42,14 +42,14 @@ class TaskDocument extends AbstractArrayDocument
     {
         parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
 
-        if (1 === $columnIndex && $this->writeTask) {
-            $style = $sheet->getCellByColumnAndRow($columnIndex, $rowIndex)->getStyle();
-            $style->getFont()->setBold(true);
-        }
-
-        if (1 === $columnIndex && $this->writeItem) {
-            $style = $sheet->getCellByColumnAndRow($columnIndex, $rowIndex)->getStyle();
-            $style->getAlignment()->setIndent(2);
+        if (1 === $columnIndex) {
+            if ($this->writeTask) {
+                $sheet->getCellByColumnAndRow($columnIndex, $rowIndex)->getStyle()
+                    ->getFont()->setBold(true);
+            } elseif ($this->writeItem) {
+                $sheet->getCellByColumnAndRow($columnIndex, $rowIndex)->getStyle()
+                    ->getAlignment()->setIndent(2);
+            }
         }
 
         return $this;

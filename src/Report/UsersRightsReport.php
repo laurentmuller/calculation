@@ -34,11 +34,6 @@ use App\Util\Utils;
 class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
     /**
-     * The ASCII bullet character.
-     */
-    public const BULLET_ASCII = 183;
-
-    /**
      * The attribute names.
      */
     private const ATTRIBUTES = [
@@ -49,9 +44,13 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         EntityVoterInterface::ATTRIBUTE_DELETE,
         EntityVoterInterface::ATTRIBUTE_EXPORT,
     ];
+    /**
+     * The ASCII bullet character.
+     */
+    private const BULLET_ASCII = 183;
 
     /**
-     * The title and rights.
+     * The title and entities.
      */
     private const RIGHTS = [
         'calculation.name' => EntityVoterInterface::ENTITY_CALCULATION,
@@ -189,7 +188,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             ->addColumn(PdfColumn::center($this->trans('rights.add'), 25, true))
             ->addColumn(PdfColumn::center($this->trans('rights.edit'), 25, true))
             ->addColumn(PdfColumn::center($this->trans('rights.delete'), 25, true))
-            ->addColumn(PdfColumn::center($this->trans('rights.pdf'), 25, true))
+            ->addColumn(PdfColumn::center($this->trans('rights.export'), 25, true))
             ->outputHeaders();
 
         return $builder;
@@ -211,7 +210,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      *
      * @param PdfGroupTableBuilder $builder the table builder
      * @param string               $title   the row title
-     * @param array                $rights  the user rights
+     * @param array                $rights  the rights
      */
     private function outputRights(PdfGroupTableBuilder $builder, string $title, array $rights): self
     {
@@ -236,11 +235,11 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $outputUsers = $role->isAdmin() || $role->isSuperAdmin();
 
         // check new page
-        $linesHeight = \count(self::RIGHTS) * self::LINE_HEIGHT;
+        $lines = \count(self::RIGHTS);
         if ($outputUsers) {
-            $linesHeight += self::LINE_HEIGHT;
+            ++$lines;
         }
-        if (!$this->isPrintable($linesHeight)) {
+        if (!$this->isPrintable($lines * self::LINE_HEIGHT)) {
             $this->AddPage();
         }
 
@@ -298,20 +297,17 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             return 0;
         }
 
-        // sort
-        Utils::sortField($users, 'username');
-
         // render
         foreach ($users as $user) {
             // allow to output user entity rights
             $outputUsers = $user->isAdmin() || $user->isSuperAdmin();
 
             // keep together
-            $linesHeight = \count(self::RIGHTS) * self::LINE_HEIGHT;
+            $lines = \count(self::RIGHTS);
             if ($outputUsers) {
-                $linesHeight += self::LINE_HEIGHT;
+                ++$lines;
             }
-            if (!$this->isPrintable($linesHeight)) {
+            if (!$this->isPrintable($lines * self::LINE_HEIGHT)) {
                 $this->AddPage();
             }
 

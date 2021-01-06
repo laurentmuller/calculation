@@ -22,6 +22,7 @@
 {%- set pdf_path      = path('user_pdf') -%}
 {%- set pdf_right     = path('user_rights_pdf') -%}
 {%- set excel_path    = path('user_excel') -%}
+{%- set excel_right   = path('user_rights_excel') -%}
 
 {# titles #}
 {%- set add_title    = 'user.add.title' %}
@@ -43,6 +44,8 @@
 {%- endif -%}
 {{ icons.dropdownSeparator() }}
 {{ _self.item_external(pdf_right, 'user.list.rights_export', 'dropdown-item', 'file-pdf far') }}
+{{ _self.item_external(excel_right, 'user.list.rights_excel', 'dropdown-item', 'file-excel far') }}
+{{ icons.dropdownSeparator() }}
 {{ parent() }}
 {{ icons.dropdownSeparator() }}
 {{ icons.dropdownItemCard('user_list') }}

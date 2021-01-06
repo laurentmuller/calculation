@@ -697,22 +697,22 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/twig/cssinliner-extra/src">
+	<buildpathentry kind="src" path="vendor/twig/cssinliner-extra">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/twig/extra-bundle/src">
+	<buildpathentry kind="src" path="vendor/twig/extra-bundle">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/twig/inky-extra/src">
+	<buildpathentry kind="src" path="vendor/twig/inky-extra">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/twig/markdown-extra/src">
+	<buildpathentry kind="src" path="vendor/twig/markdown-extra">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

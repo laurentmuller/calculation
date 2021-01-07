@@ -66,7 +66,7 @@ class UserController extends AbstractEntityController
     /**
      * Add an user.
      *
-     * @Route("/add", name="user_add", methods={"GET", "POST"})
+     * @Route("/add", name="user_add")
      * @IsGranted("ROLE_ADMIN")
      */
     public function add(Request $request): Response
@@ -77,7 +77,7 @@ class UserController extends AbstractEntityController
     /**
      * Display the users as cards.
      *
-     * @Route("", name="user_list", methods={"GET"})
+     * @Route("/card", name="user_card")
      * @IsGranted("ROLE_ADMIN")
      */
     public function card(Request $request): Response
@@ -88,7 +88,7 @@ class UserController extends AbstractEntityController
     /**
      * Send comment to the web master.
      *
-     * @Route("/comment", name="user_comment", methods={"GET", "POST"})
+     * @Route("/comment", name="user_comment")
      * @IsGranted("ROLE_USER")
      */
     public function comment(Request $request, MailerInterface $mailer, LoggerInterface $logger): Response
@@ -134,7 +134,7 @@ class UserController extends AbstractEntityController
     /**
      * Delete an user.
      *
-     * @Route("/delete/{id}", name="user_delete", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/delete/{id}", name="user_delete", requirements={"id": "\d+" })
      * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, User $item): Response
@@ -160,7 +160,7 @@ class UserController extends AbstractEntityController
     /**
      * Edit an user.
      *
-     * @Route("/edit/{id}", name="user_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="user_edit", requirements={"id": "\d+" })
      * @IsGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, User $item): Response
@@ -192,7 +192,7 @@ class UserController extends AbstractEntityController
     /**
      * Edit an user's image.
      *
-     * @Route("/image/{id}", name="user_image", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/image/{id}", name="user_image", requirements={"id": "\d+" })
      * @IsGranted("ROLE_ADMIN")
      */
     public function image(Request $request, User $item): Response
@@ -220,7 +220,7 @@ class UserController extends AbstractEntityController
     /**
      * Send an email from the current user to an other user.
      *
-     * @Route("/message/{id}", name="user_message", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/message/{id}", name="user_message", requirements={"id": "\d+" })
      * @IsGranted("ROLE_ADMIN")
      */
     public function message(Request $request, User $user, MailerInterface $mailer, LoggerInterface $logger): Response
@@ -275,7 +275,7 @@ class UserController extends AbstractEntityController
     /**
      * Change password for an existing user.
      *
-     * @Route("/password/{id}", name="user_password", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/password/{id}", name="user_password", requirements={"id": "\d+" })
      * @IsGranted("ROLE_ADMIN")
      */
     public function password(Request $request, User $item): Response
@@ -302,7 +302,7 @@ class UserController extends AbstractEntityController
     /**
      * Export the users to a PDF document.
      *
-     * @Route("/pdf", name="user_pdf", methods={"GET", "POST"})
+     * @Route("/pdf", name="user_pdf")
      * @IsGranted("ROLE_ADMIN")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
@@ -324,7 +324,7 @@ class UserController extends AbstractEntityController
     /**
      * Edit user access rights.
      *
-     * @Route("/rights/{id}", name="user_rights", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/rights/{id}", name="user_rights", requirements={"id": "\d+" })
      * @IsGranted("ROLE_ADMIN")
      */
     public function rights(Request $request, User $item, RoleHierarchyInterface $hierarchy): Response
@@ -385,7 +385,7 @@ class UserController extends AbstractEntityController
     /**
      * Export user access rights to a PDF document.
      *
-     * @Route("/rights/pdf", name="user_rights_pdf", methods={"GET"})
+     * @Route("/rights/pdf", name="user_rights_pdf")
      * @IsGranted("ROLE_ADMIN")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
@@ -407,7 +407,7 @@ class UserController extends AbstractEntityController
     /**
      * Show the properties of a user.
      *
-     * @Route("/show/{id}", name="user_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/show/{id}", name="user_show", requirements={"id": "\d+" })
      * @IsGranted("ROLE_ADMIN")
      */
     public function show(User $item): Response
@@ -418,7 +418,7 @@ class UserController extends AbstractEntityController
     /**
      * Display the users as a table view.
      *
-     * @Route("/table", name="user_table", methods={"GET", "POST"})
+     * @Route("", name="user_table")
      */
     public function table(Request $request, UserDataTable $table): Response
     {

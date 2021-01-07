@@ -35,7 +35,7 @@ class CalculationDuplicateController extends AbstractController
     /**
      * Shows duplicate items, as card, in the calculations.
      *
-     * @Route("", name="duplicate_card")
+     * @Route("/card", name="duplicate_card")
      */
     public function card(Request $request, CalculationRepository $repository): Response
     {
@@ -110,7 +110,7 @@ class CalculationDuplicateController extends AbstractController
     /**
      * Display the duplicate items, as table, in the calculations.
      *
-     * @Route("/table", name="duplicate_table")
+     * @Route("", name="duplicate_table")
      */
     public function table(Request $request, CalculationDuplicateDataTable $table, CalculationRepository $repository): Response
     {

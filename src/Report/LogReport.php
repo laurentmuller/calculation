@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Log;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfCellListenerInterface;
@@ -83,18 +82,6 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
     private $started;
 
     /**
-     * Constructor.
-     *
-     * @param AbstractController $controller the parent controller
-     * @param array              $values     an array with the file name, the logs, the levels and the channels
-     */
-    public function __construct(AbstractController $controller, array $values)
-    {
-        parent::__construct($controller, $values);
-        $this->setTitleTrans('log.title');
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @param string $orientation
@@ -135,6 +122,9 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
      */
     protected function doRender(array $entities): bool
     {
+        // title
+        $this->setTitleTrans('log.title');
+
         // file
         $file = $this->trans('log.list.file', [
             '%file%' => $entities['file'],

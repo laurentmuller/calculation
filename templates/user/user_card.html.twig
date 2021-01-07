@@ -89,7 +89,7 @@
 {%- if not is_granted('IS_IMPERSONATOR') and is_granted('ROLE_SUPER_ADMIN') and item.username != app.user.username -%}
     {{ icons.dropdownSeparator }}
     {%- if item.hasRole('ROLE_ADMIN') or item.hasRole('ROLE_SUPER_ADMIN') -%}
-    {%- set switch_path = path('user_list', {'_switch_user': item.username}) -%}
+    {%- set switch_path = path('user_card', {'_switch_user': item.username}) -%}
     {%- else -%}
     {%- set switch_path = path('homepage', {'_switch_user': item.username}) -%}
     {%- endif -%}    

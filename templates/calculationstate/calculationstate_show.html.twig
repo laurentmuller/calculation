@@ -11,7 +11,7 @@
 {# actions #}
 {%- set edit_path   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, item) ? path('calculationstate_edit', params) : null -%}
 {%- set delete_path = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, item) ? path('calculationstate_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, id, 'calculationstate_list') -%}
+{%- set cancel_path = cancel_url(app.request, id, 'calculationstate_card') -%}
 
 {# properties #}
 {% block property_body %}

@@ -12,13 +12,11 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Controller\AbstractController;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
-use App\Service\ApplicationService;
 use App\Util\Utils;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -57,11 +55,6 @@ class UserRightsDocument extends AbstractArrayDocument
     ];
 
     /**
-     * @var ApplicationService
-     */
-    private $service;
-
-    /**
      * @var bool
      */
     private $writeName;
@@ -70,18 +63,6 @@ class UserRightsDocument extends AbstractArrayDocument
      * @var bool
      */
     private $writeRights;
-
-    /**
-     * Constructor.
-     *
-     * @param AbstractController $controller the parent controller
-     * @param array              $entities   the entities to render
-     */
-    public function __construct(AbstractController $controller, array $entities)
-    {
-        parent::__construct($controller, $entities);
-        $this->service = $controller->getApplication();
-    }
 
     /**
      * {@inheritdoc}
@@ -118,6 +99,8 @@ class UserRightsDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
+        $service = $this->controller->getApplication();
+
         // initialize
         $this->start('user.rights.title');
 
@@ -132,10 +115,10 @@ class UserRightsDocument extends AbstractArrayDocument
         $row = 2;
 
         // admin role
-        $this->outputRole($this->service->getAdminRole(), $row);
+        $this->outputRole($service->getAdminRole(), $row);
 
         // user role
-        $this->outputRole($this->service->getUserRole(), $row);
+        $this->outputRole($service->getUserRole(), $row);
 
         // users
         foreach ($entities as $entity) {
@@ -154,7 +137,7 @@ class UserRightsDocument extends AbstractArrayDocument
      */
     private function getEntityName(RoleInterface $entity): string
     {
-        $role = Utils::translateRole($this->translator, $entity->getRole());
+        $role = Utils::translateRole($this->translator, $entity);
         $description = $this->trans('user.fields.role') . ' ';
 
         if ($entity instanceof Role) {

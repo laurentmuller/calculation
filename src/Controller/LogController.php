@@ -37,7 +37,7 @@ class LogController extends AbstractController
     /**
      * Display the content of the log file as card.
      *
-     * @Route("", name="log_list")
+     * @Route("/card", name="log_card")
      */
     public function card(LogService $service): Response
     {
@@ -168,7 +168,7 @@ class LogController extends AbstractController
     /**
      * Clear the log file cache.
      *
-     * @Route("/refresh", name="log_refresh", methods={"GET", "POST"})
+     * @Route("/refresh", name="log_refresh")
      */
     public function refresh(Request $request, LogService $service): Response
     {
@@ -181,7 +181,7 @@ class LogController extends AbstractController
     /**
      * Show properties of a log entry.
      *
-     * @Route("/show/{id}", name="log_show", requirements={"id": "\d+" }, methods={"GET"})
+     * @Route("/show/{id}", name="log_show", requirements={"id": "\d+" })
      */
     public function show(Request $request, int $id, LogService $service): Response
     {
@@ -198,7 +198,7 @@ class LogController extends AbstractController
     /**
      * Display the content of the log file as table.
      *
-     * @Route("/table", name="log_table", methods={"GET", "POST"})
+     * @Route("", name="log_table")
      */
     public function table(Request $request, LogDataTable $table): Response
     {

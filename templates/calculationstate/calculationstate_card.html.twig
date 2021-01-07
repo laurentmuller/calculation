@@ -41,7 +41,7 @@
 {{ properties.separator(1) }}
 {%- set text = 'counters.calculations'|trans({count: item.countCalculations}) -%}
 {%- if item.countCalculations and list_path -%}
-    {% set href = path('calculation_list', {'query': item.code}) %}
+    {% set href = path('calculation_card', {'query': item.code}) %}
     {{ properties.link(href, text, false, false, 1) }}
 {%- else -%}
     {{ properties.line(text, false, 1) }}
@@ -56,7 +56,7 @@
 {% block actions %}
 {% if item.countCalculations and list_path %}
     {{ icons.dropdownSeparator }}
-    {% set href = path('calculation_list', {'query': item.code}) %}
+    {% set href = path('calculation_card', {'query': item.code}) %}
     {{ icons.dropdownItem(href, 'calculationstate.list.calculation_title', 'external-link-alt') }}
 {% endif %}
 {% endblock -%}

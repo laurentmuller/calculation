@@ -20,7 +20,6 @@
 {%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'task_delete' : null -%}
 {%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'task_show' : null -%}
 {%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'task_pdf' : null -%}
-{%- set product_list = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_PRODUCT) %}
 {%- set default_page = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 {%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
 

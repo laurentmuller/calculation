@@ -31,9 +31,9 @@ class CustomerControllerTest extends AbstractControllerTest
             ['/customer', self::ROLE_ADMIN],
             ['/customer', self::ROLE_SUPER_ADMIN],
 
-            ['/customer/table', self::ROLE_USER],
-            ['/customer/table', self::ROLE_ADMIN],
-            ['/customer/table', self::ROLE_SUPER_ADMIN],
+            ['/customer/card', self::ROLE_USER],
+            ['/customer/card', self::ROLE_ADMIN],
+            ['/customer/card', self::ROLE_SUPER_ADMIN],
 
             ['/customer/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/customer/add', self::ROLE_ADMIN],

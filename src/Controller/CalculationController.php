@@ -65,7 +65,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Add a new calculation.
      *
-     * @Route("/add", name="calculation_add", methods={"GET", "POST"})
+     * @Route("/add", name="calculation_add")
      */
     public function add(Request $request): Response
     {
@@ -83,7 +83,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Show the calculations, as card.
      *
-     * @Route("", name="calculation_list", methods={"GET", "POST"})
+     * @Route("/card", name="calculation_card")
      */
     public function card(Request $request): Response
     {
@@ -104,7 +104,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a copy (cloned) calculation.
      *
-     * @Route("/clone/{id}", name="calculation_clone", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/clone/{id}", name="calculation_clone", requirements={"id": "\d+" })
      */
     public function clone(Request $request, Calculation $item): Response
     {
@@ -141,7 +141,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a calculation.
      *
-     * @Route("/edit/{id}", name="calculation_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="calculation_edit", requirements={"id": "\d+" })
      */
     public function edit(Request $request, Calculation $item): Response
     {
@@ -208,7 +208,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Show properties of a calculation.
      *
-     * @Route("/show/{id}", name="calculation_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/show/{id}", name="calculation_show", requirements={"id": "\d+" })
      */
     public function show(Calculation $item): Response
     {
@@ -224,7 +224,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit the state of a calculation.
      *
-     * @Route("/state/{id}", name="calculation_state", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/state/{id}", name="calculation_state", requirements={"id": "\d+" })
      */
     public function state(Request $request, Calculation $item): Response
     {
@@ -253,7 +253,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Show calculations, as table.
      *
-     * @Route("/table", name="calculation_table", methods={"GET", "POST"})
+     * @Route("", name="calculation_table")
      */
     public function table(Request $request, CalculationDataTable $table, CalculationStateRepository $repository): Response
     {

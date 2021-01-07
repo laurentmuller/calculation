@@ -35,9 +35,9 @@ class ProductControllerTest extends AbstractControllerTest
             ['/product', self::ROLE_ADMIN],
             ['/product', self::ROLE_SUPER_ADMIN],
 
-            ['/product/table', self::ROLE_USER],
-            ['/product/table', self::ROLE_ADMIN],
-            ['/product/table', self::ROLE_SUPER_ADMIN],
+            ['/product/card', self::ROLE_USER],
+            ['/product/card', self::ROLE_ADMIN],
+            ['/product/card', self::ROLE_SUPER_ADMIN],
 
             ['/product/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/product/add', self::ROLE_ADMIN],

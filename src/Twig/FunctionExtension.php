@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
+use App\Interfaces\RoleInterface;
 use App\Service\UrlGeneratorService;
 use App\Util\Utils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
@@ -316,11 +317,11 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Translate the given role.
      *
-     * @param string $role the role name
+     * @param string|RoleInterface $role the role to translate
      *
      * @return string the translated role
      */
-    public function translateRole(string $role): string
+    public function translateRole($role): string
     {
         return Utils::translateRole($this->translator, $role);
     }

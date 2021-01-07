@@ -49,7 +49,7 @@ class ProductController extends AbstractEntityController
     /**
      * Add a product.
      *
-     * @Route("/add", name="product_add", methods={"GET", "POST"})
+     * @Route("/add", name="product_add")
      */
     public function add(Request $request): Response
     {
@@ -59,7 +59,7 @@ class ProductController extends AbstractEntityController
     /**
      * List the products.
      *
-     * @Route("", name="product_list", methods={"GET"})
+     * @Route("/card", name="product_card")
      */
     public function card(Request $request): Response
     {
@@ -75,7 +75,7 @@ class ProductController extends AbstractEntityController
     /**
      * Clone (copy) a product.
      *
-     * @Route("/clone/{id}", name="product_clone", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/clone/{id}", name="product_clone", requirements={"id": "\d+" })
      */
     public function clone(Request $request, Product $item): Response
     {
@@ -105,7 +105,7 @@ class ProductController extends AbstractEntityController
     /**
      * Edit a product.
      *
-     * @Route("/edit/{id}", name="product_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="product_edit", requirements={"id": "\d+" })
      */
     public function edit(Request $request, Product $item): Response
     {
@@ -157,7 +157,7 @@ class ProductController extends AbstractEntityController
     /**
      * Show properties of a product.
      *
-     * @Route("/show/{id}", name="product_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/show/{id}", name="product_show", requirements={"id": "\d+" })
      */
     public function show(Product $item): Response
     {
@@ -167,7 +167,7 @@ class ProductController extends AbstractEntityController
     /**
      * Render the table view.
      *
-     * @Route("/table", name="product_table", methods={"GET", "POST"})
+     * @Route("", name="product_table")
      */
     public function table(Request $request, ProductDataTable $table, CategoryRepository $repository): Response
     {

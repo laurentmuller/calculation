@@ -26,10 +26,8 @@ class UrlGeneratorService
 {
     /**
      * The parameter names.
-     *
-     * @var string[]
      */
-    public const PARAMETER_NAMES = [
+    private const PARAMETER_NAMES = [
         'id',
         'type', // for seach page
         'query',
@@ -119,7 +117,7 @@ class UrlGeneratorService
         }
 
         // identifier
-        if (!empty($id)) {
+        if (0 !== $id) {
             $params['id'] = $id;
         }
 

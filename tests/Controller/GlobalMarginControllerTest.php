@@ -31,9 +31,9 @@ class GlobalMarginControllerTest extends AbstractControllerTest
             ['/globalmargin', self::ROLE_ADMIN],
             ['/globalmargin', self::ROLE_SUPER_ADMIN],
 
-            ['/globalmargin/table', self::ROLE_USER],
-            ['/globalmargin/table', self::ROLE_ADMIN],
-            ['/globalmargin/table', self::ROLE_SUPER_ADMIN],
+            ['/globalmargin/card', self::ROLE_USER],
+            ['/globalmargin/card', self::ROLE_ADMIN],
+            ['/globalmargin/card', self::ROLE_SUPER_ADMIN],
 
             ['/globalmargin/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/globalmargin/add', self::ROLE_ADMIN],

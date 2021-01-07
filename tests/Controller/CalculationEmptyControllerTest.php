@@ -20,11 +20,11 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\EmptyController} class.
+ * Unit test for {@link App\Controller\CalculationEmptyController} class.
  *
  * @author Laurent Muller
  */
-class EmptyControllerTest extends AbstractControllerTest
+class CalculationEmptyControllerTest extends AbstractControllerTest
 {
     private static ?Calculation $calculation = null;
     private static ?Category $category = null;
@@ -42,9 +42,9 @@ class EmptyControllerTest extends AbstractControllerTest
             ['/empty', self::ROLE_ADMIN],
             ['/empty', self::ROLE_SUPER_ADMIN],
 
-            ['/empty/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/empty/table', self::ROLE_ADMIN],
-            ['/empty/table', self::ROLE_SUPER_ADMIN],
+            ['/empty/card', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/empty/card', self::ROLE_ADMIN],
+            ['/empty/card', self::ROLE_SUPER_ADMIN],
 
             ['/empty/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/empty/pdf', self::ROLE_ADMIN],

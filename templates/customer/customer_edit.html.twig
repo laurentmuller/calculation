@@ -3,7 +3,7 @@
 {# parameters #}
 {%- set title      = new ? 'customer.add.title' : 'customer.edit.title' -%}
 {%- set title_icon = 'address-card far' -%}
-{%- set page_list  = 'customer_list' -%}
+{%- set page_list  = 'customer_table' -%}
 {%- set form_attr  = form_attr|default({})|merge({
                      'data-title': title|trans,
                      'data-search-title': url('ajax_search_title'),

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Controller\AbstractController;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
@@ -23,7 +22,6 @@ use App\Pdf\PdfGroupListenerInterface;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Security\EntityVoter;
-use App\Service\ApplicationService;
 use App\Util\Utils;
 
 /**
@@ -72,25 +70,11 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     private $rightStyle;
 
     /**
-     * @var ApplicationService
-     */
-    private $service;
-
-    /**
      * The title cell style.
      *
      * @var PdfStyle
      */
     private $titleStyle;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(AbstractController $controller, array $entities, string $orientation = self::ORIENTATION_PORTRAIT)
-    {
-        parent::__construct($controller, $entities, $orientation);
-        $this->service = $controller->getApplication();
-    }
 
     /**
      * {@inheritdoc}
@@ -101,7 +85,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $description = $this->translator->trans('user.fields.role') . ' ';
 
         if ($key instanceof Role) {
-            $description .= Utils::translateRole($this->translator, $key->getRole());
+            $description .= Utils::translateRole($this->translator, $key);
             $parent->singleLine($description, $group->getStyle());
 
             return true;
@@ -110,7 +94,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         if ($key instanceof User) {
             $text = $key->getUsername();
             if ($key->isEnabled()) {
-                $description .= Utils::translateRole($this->translator, $key->getRole());
+                $description .= Utils::translateRole($this->translator, $key);
             } else {
                 $description .= $this->translator->trans('common.value_disabled');
             }
@@ -263,7 +247,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function outputRoleAdmin(PdfGroupTableBuilder $builder): int
     {
-        $this->outputRole($builder, $this->service->getAdminRole());
+        $service = $this->controller->getApplication();
+        $this->outputRole($builder, $service->getAdminRole());
 
         return 1;
     }
@@ -277,7 +262,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function outputRoleUser(PdfGroupTableBuilder $builder): int
     {
-        $this->outputRole($builder, $this->service->getUserRole());
+        $service = $this->controller->getApplication();
+        $this->outputRole($builder, $service->getUserRole());
 
         return 1;
     }

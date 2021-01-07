@@ -48,7 +48,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Add a new calculation state.
      *
-     * @Route("/add", name="calculationstate_add", methods={"GET", "POST"})
+     * @Route("/add", name="calculationstate_add")
      */
     public function add(Request $request): Response
     {
@@ -58,7 +58,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Render the card view.
      *
-     * @Route("", name="calculationstate_list", methods={"GET"})
+     * @Route("/card", name="calculationstate_card")
      */
     public function card(Request $request): Response
     {
@@ -105,7 +105,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Edit a calculation state.
      *
-     * @Route("/edit/{id}", name="calculationstate_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="calculationstate_edit", requirements={"id": "\d+" })
      */
     public function edit(Request $request, CalculationState $item): Response
     {
@@ -157,7 +157,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Show properties of a calculation state.
      *
-     * @Route("/show/{id}", name="calculationstate_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/show/{id}", name="calculationstate_show", requirements={"id": "\d+" })
      */
     public function show(CalculationState $item): Response
     {
@@ -167,7 +167,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Render the table view.
      *
-     * @Route("/table", name="calculationstate_table", methods={"GET", "POST"})
+     * @Route("", name="calculationstate_table")
      */
     public function table(Request $request, CalculationStateDataTable $table): Response
     {

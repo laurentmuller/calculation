@@ -58,7 +58,7 @@
         <ul>
             {% if is_admin %}
             <li>{{ _self.link('admin_parameters', 'parameters.title', 'cogs') }}</li>
-            {%  set route = is_tabular ? 'user_table' : 'user_list' %}
+            {%  set route = is_tabular ? 'user_table' : 'user_card' %}
             <li>{{ _self.link(route, 'user.list.title', 'user far') -}}</li>
             {% endif %}
             {% if is_super_admin %}
@@ -77,7 +77,7 @@
             {% if is_list_calculation %}
             <li id="home">{{ _self.link('homepage', 'index.title', 'home') }}</li>
             <li>
-                {%  set route = is_tabular ? 'calculation_table' : 'calculation_list' %}
+                {%  set route = is_tabular ? 'calculation_table' : 'calculation_card' %}
                 <ul>{{ _self.link(route, 'calculation.list.title', 'calculator') }}
                     {% if is_add_calculation or is_pdf_calculation %}
                     <li>
@@ -99,7 +99,7 @@
                 <span class="rounded">{{- icons.icon('database', 'index.menu_data') -}}</span>
                 <ul>
                     {% if is_list_product  %}
-                    {%  set route = is_tabular ? 'product_table' : 'product_list' %}
+                    {%  set route = is_tabular ? 'product_table' : 'product_card' %}
                     <li>{{ _self.link(route, 'product.list.title', 'file-alt far') }}
                         {% if is_add_product or is_pdf_product %}
                         <ul>
@@ -114,7 +114,7 @@
                     </li>
                     {% endif %}
                     {% if is_list_category  %}
-                    {%  set route = is_tabular ? 'category_table' : 'category_list' %}
+                    {%  set route = is_tabular ? 'category_table' : 'category_card' %}
                     <li>{{ _self.link(route, 'category.list.title', 'folder far') }}
                         {% if is_add_category or is_pdf_category %}
                         <ul>
@@ -129,7 +129,7 @@
                     </li>
                     {% endif %}
                     {% if is_list_state  %}
-                    {%  set route = is_tabular ? 'calculationstate_table' : 'calculationstate_list' %}
+                    {%  set route = is_tabular ? 'calculationstate_table' : 'calculationstate_card' %}
                     <li>{{ _self.link(route, 'calculationstate.list.title', 'flag far') }}
                         {% if is_add_state or is_pdf_state %}
                         <ul>
@@ -144,7 +144,7 @@
                     </li>
                     {% endif %}
                     {% if is_list_margin %}
-                    {%  set route = is_tabular ? 'globalmargin_table' : 'globalmargin_list' %}
+                    {%  set route = is_tabular ? 'globalmargin_table' : 'globalmargin_card' %}
                     <li>{{ _self.link(route, 'globalmargin.list.title', 'percent') }}
                         {% if is_add_margin or is_pdf_margin %}
                         <ul>
@@ -159,7 +159,7 @@
                     </li>
                     {% endif %}
                     {% if is_list_customer %}
-                    {%  set route = is_tabular ? 'customer_table' : 'customer_list' %}
+                    {%  set route = is_tabular ? 'customer_table' : 'customer_card' %}
                     <li>{{ _self.link(route, 'customer.list.title', 'address-card far') }}
                         {% if is_add_customer or is_pdf_customer %}
                         <ul>

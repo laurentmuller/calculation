@@ -20,11 +20,11 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\BelowController} class.
+ * Unit test for {@link App\Controller\CalculationDuplicateController} class.
  *
  * @author Laurent Muller
  */
-class BelowControllerTest extends AbstractControllerTest
+class CalculationDuplicateControllerTest extends AbstractControllerTest
 {
     private static ?Calculation $calculation = null;
     private static ?Category $category = null;
@@ -35,17 +35,21 @@ class BelowControllerTest extends AbstractControllerTest
     public function getRoutes(): array
     {
         return [
-            ['/below', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/below', self::ROLE_ADMIN],
-            ['/below', self::ROLE_SUPER_ADMIN],
+            ['/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/duplicate', self::ROLE_ADMIN],
+            ['/duplicate', self::ROLE_SUPER_ADMIN],
 
-            ['/below/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/below/table', self::ROLE_ADMIN],
-            ['/below/table', self::ROLE_SUPER_ADMIN],
+            ['/duplicate/card', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/duplicate/card', self::ROLE_ADMIN],
+            ['/duplicate/card', self::ROLE_SUPER_ADMIN],
 
-            ['/below/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/below/pdf', self::ROLE_ADMIN],
-            ['/below/pdf', self::ROLE_SUPER_ADMIN],
+            ['/duplicate/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/duplicate/pdf', self::ROLE_ADMIN],
+            ['/duplicate/pdf', self::ROLE_SUPER_ADMIN],
+
+            ['/duplicate/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/duplicate/excel', self::ROLE_ADMIN],
+            ['/duplicate/excel', self::ROLE_SUPER_ADMIN],
         ];
     }
 
@@ -77,7 +81,7 @@ class BelowControllerTest extends AbstractControllerTest
             self::$product = new Product();
             self::$product->setDescription('Test Product')
                 ->setCategory(self::$category)
-                ->setPrice(1.0);
+                ->setPrice(10);
             $this->addEntity(self::$product);
         }
 
@@ -86,11 +90,8 @@ class BelowControllerTest extends AbstractControllerTest
             self::$calculation->setCustomer('Test Customer')
                 ->setDescription('Test Description')
                 ->setState(self::$state)
+                ->addProduct(self::$product)
                 ->addProduct(self::$product);
-
-            self::$calculation->setItemsTotal(1.0)
-                ->setGlobalMargin(1.0)
-                ->setOverallTotal(2.0);
             $this->addEntity(self::$calculation);
         }
     }

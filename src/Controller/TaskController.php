@@ -51,7 +51,7 @@ class TaskController extends AbstractEntityController
     /**
      * Add a task.
      *
-     * @Route("/add", name="task_add", methods={"GET", "POST"})
+     * @Route("/add", name="task_add")
      */
     public function add(Request $request): Response
     {
@@ -67,7 +67,7 @@ class TaskController extends AbstractEntityController
     /**
      * List the taks.
      *
-     * @Route("", name="task_list", methods={"GET"})
+     * @Route("/card", name="task_card")
      */
     public function card(Request $request): Response
     {
@@ -77,7 +77,7 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a copy (cloned) task.
      *
-     * @Route("/clone/{id}", name="task_clone", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/clone/{id}", name="task_clone", requirements={"id": "\d+" })
      */
     public function clone(Request $request, Task $item): Response
     {
@@ -91,7 +91,7 @@ class TaskController extends AbstractEntityController
     /**
      * Display the form to compute a task.
      *
-     * @Route("/compute/{id}", name="task_compute", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/compute/{id}", name="task_compute", requirements={"id": "\d+" })
      */
     public function compute(Request $request, Task $task = null, TaskService $service, TaskRepository $repository): Response
     {
@@ -138,7 +138,7 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a task.
      *
-     * @Route("/edit/{id}", name="task_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="task_edit", requirements={"id": "\d+" })
      */
     public function edit(Request $request, Task $item): Response
     {
@@ -190,7 +190,7 @@ class TaskController extends AbstractEntityController
     /**
      * Show properties of a task.
      *
-     * @Route("/show/{id}", name="task_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/show/{id}", name="task_show", requirements={"id": "\d+" })
      */
     public function show(Task $item): Response
     {
@@ -200,7 +200,7 @@ class TaskController extends AbstractEntityController
     /**
      * Render the table view.
      *
-     * @Route("/table", name="task_table", methods={"GET", "POST"})
+     * @Route("", name="task_table")
      */
     public function table(Request $request, TaskDataTable $table): Response
     {

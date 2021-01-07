@@ -35,7 +35,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Shows calculations, as card, where items has the price or the quantity is equal to 0.
      *
-     * @Route("", name="empty_card")
+     * @Route("/card", name="empty_card")
      */
     public function card(Request $request, CalculationRepository $repository): Response
     {
@@ -106,7 +106,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Shows calculations, as table, where items has the price or the quantity is equal to 0.
      *
-     * @Route("/table", name="empty_table")
+     * @Route("", name="empty_table")
      */
     public function table(Request $request, CalculationEmptyDataTable $table, CalculationRepository $repository): Response
     {

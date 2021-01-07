@@ -20,6 +20,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
@@ -237,6 +238,8 @@ class ExcelDocument extends Spreadsheet
      */
     public function setCellImage(string $path, string $coordinates, int $width, int $height): self
     {
+        $sheet = $this->getActiveSheet();
+
         $drawing = new Drawing();
         $drawing->setResizeProportional(false)
             ->setPath($path)
@@ -244,17 +247,16 @@ class ExcelDocument extends Spreadsheet
             ->setWidth($width)
             ->setHeight($height)
             ->setOffsetX(2)
-            ->setOffsetY(2);
-
-        $drawing->setWorksheet($this->getActiveSheet());
+            ->setOffsetY(2)
+            ->setWorksheet($sheet);
 
         // update size
         [$columnIndex, $rowIndex] = Coordinate::coordinateFromString($coordinates);
-        $columnDimension = $this->getActiveSheet()->getColumnDimension($columnIndex);
+        $columnDimension = $sheet->getColumnDimension($columnIndex);
         if ($width > $columnDimension->getWidth()) {
             $columnDimension->setWidth($width);
         }
-        $rowDimension = $this->getActiveSheet()->getRowDimension((int) $rowIndex);
+        $rowDimension = $sheet->getRowDimension((int) $rowIndex);
         if ($height > $rowDimension->getRowHeight()) {
             $rowDimension->setRowHeight($height);
         }
@@ -267,7 +269,7 @@ class ExcelDocument extends Spreadsheet
      *
      * @param string $path        the image path
      * @param int    $columnIndex the column index (A = 1)
-     * @param int    $rowIndex    the row index (1 = first row)
+     * @param int    $rowIndex    the row index (1 = First row)
      * @param int    $width       the image width
      * @param int    $height      the image height
      */
@@ -282,8 +284,8 @@ class ExcelDocument extends Spreadsheet
      * Set a cell value by using numeric cell coordinates.
      *
      * @param Worksheet $sheet       the active work sheet
-     * @param int       $columnIndex the column index of the cell (1 = A)
-     * @param int       $rowIndex    the row index of the cell (first row  = 1)
+     * @param int       $columnIndex the column index of the cell (A = 1)
+     * @param int       $rowIndex    the row index of the cell (1 = First row)
      * @param mixed     $value       the value of the cell
      */
     public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): self
@@ -296,6 +298,23 @@ class ExcelDocument extends Spreadsheet
             }
             $sheet->setCellValueByColumnAndRow($columnIndex, $rowIndex, $value);
         }
+
+        return $this;
+    }
+
+    /**
+     * Add conditionals to the given column.
+     *
+     * @param int         $columnIndex     the column index (A = 1)
+     * @param Conditional ...$conditionals the conditionals to add
+     */
+    public function setColumnConditional(int $columnIndex, Conditional ...$conditionals): self
+    {
+        $sheet = $this->getActiveSheet();
+        $name = $this->stringFromColumnIndex($columnIndex);
+        $style = $sheet->getStyle($name);
+        $existingConditionals = \array_merge($style->getConditionalStyles(), $conditionals);
+        $style->setConditionalStyles($existingConditionals);
 
         return $this;
     }
@@ -657,7 +676,7 @@ class ExcelDocument extends Spreadsheet
     /**
      * Sets the values of the given row.
      *
-     * @param int   $rowIndex    the row index (first row  = 1)
+     * @param int   $rowIndex    the row index (1 = First row)
      * @param array $values      the values to set
      * @param int   $columnIndex the starting column index (A = 1)
      */
@@ -687,7 +706,7 @@ class ExcelDocument extends Spreadsheet
      * Sets selected cell of the active sheet.
      *
      * @param int $columnIndex the column index (A = 1)
-     * @param int $rowIndex    the row index (1 = first row)
+     * @param int $rowIndex    the row index (1 = First row)
      */
     public function setSelectedCellByColumnAndRow(int $columnIndex, int $rowIndex): self
     {
@@ -771,7 +790,7 @@ class ExcelDocument extends Spreadsheet
      * Get the string coordinate from the given column and row index (eg. 2,10 => 'B10').
      *
      * @param int $columnIndex the column index (A = 1)
-     * @param int $rowIndex    the row index (First = 1)
+     * @param int $rowIndex    the row index (1 = First row)
      */
     public function stringFromColumnAndRowIndex(int $columnIndex, int $rowIndex): string
     {

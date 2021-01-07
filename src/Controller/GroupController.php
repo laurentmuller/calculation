@@ -48,7 +48,7 @@ class GroupController extends AbstractEntityController
     /**
      * Add a group.
      *
-     * @Route("/add", name="group_add", methods={"GET", "POST"})
+     * @Route("/add", name="group_add")
      */
     public function add(Request $request): Response
     {
@@ -58,7 +58,7 @@ class GroupController extends AbstractEntityController
     /**
      * List the groups.
      *
-     * @Route("", name="group_list", methods={"GET"})
+     * @Route("/card", name="group_card")
      */
     public function card(Request $request): Response
     {
@@ -111,7 +111,7 @@ class GroupController extends AbstractEntityController
     /**
      * Edit a group.
      *
-     * @Route("/edit/{id}", name="group_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="group_edit", requirements={"id": "\d+" })
      */
     public function edit(Request $request, Group $item): Response
     {
@@ -163,7 +163,7 @@ class GroupController extends AbstractEntityController
     /**
      * Show properties of a group.
      *
-     * @Route("/show/{id}", name="group_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/show/{id}", name="group_show", requirements={"id": "\d+" })
      */
     public function show(Group $item): Response
     {
@@ -173,7 +173,7 @@ class GroupController extends AbstractEntityController
     /**
      * Render the table view.
      *
-     * @Route("/table", name="group_table", methods={"GET", "POST"})
+     * @Route("", name="group_table")
      */
     public function table(Request $request, GroupDataTable $table): Response
     {

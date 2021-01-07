@@ -50,7 +50,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Add a customer.
      *
-     * @Route("/add", name="customer_add", methods={"GET", "POST"})
+     * @Route("/add", name="customer_add")
      */
     public function add(Request $request): Response
     {
@@ -60,7 +60,7 @@ class CustomerController extends AbstractEntityController
     /**
      * List the customers.
      *
-     * @Route("", name="customer_list", methods={"GET"})
+     * @Route("/card", name="customer_card")
      */
     public function card(Request $request): Response
     {
@@ -92,7 +92,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Edit a customer.
      *
-     * @Route("/edit/{id}", name="customer_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="customer_edit", requirements={"id": "\d+" })
      */
     public function edit(Request $request, Customer $item): Response
     {
@@ -145,7 +145,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Show properties of a customer.
      *
-     * @Route("/show/{id}", name="customer_show", requirements={"id": "\d+" }, methods={"GET"})
+     * @Route("/show/{id}", name="customer_show", requirements={"id": "\d+" })
      */
     public function show(Customer $item): Response
     {
@@ -155,7 +155,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Render the table view.
      *
-     * @Route("/table", name="customer_table", methods={"GET", "POST"})
+     * @Route("", name="customer_table")
      */
     public function table(Request $request, CustomerDataTable $table): Response
     {

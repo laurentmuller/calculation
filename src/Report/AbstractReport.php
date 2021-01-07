@@ -28,6 +28,13 @@ abstract class AbstractReport extends PdfDocument
     use TranslatorTrait;
 
     /**
+     * The parent controller.
+     *
+     * @var AbstractController
+     */
+    protected $controller;
+
+    /**
      * The Twig extension to format values.
      *
      * @var FormatExtension
@@ -46,6 +53,7 @@ abstract class AbstractReport extends PdfDocument
     {
         parent::__construct($orientation, $unit, $size);
 
+        $this->controller = $controller;
         $this->translator = $controller->getTranslator();
 
         $application = $controller->getApplication();

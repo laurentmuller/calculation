@@ -22,7 +22,7 @@
 {# parameters #}
 {%- set list_path = false -%}
 {%- if is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
-    {%- set list_path = app.displayTabular ? 'calculation_table' : 'calculation_list' -%}
+    {%- set list_path = app.displayTabular ? 'calculation_table' : 'calculation_card' -%}
 {%- endif -%}
 
 <div class="card">

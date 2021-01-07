@@ -222,7 +222,7 @@ class AdminController extends AbstractController
     /**
      * Update calculation totals.
      *
-     * @Route("/update", name="admin_update", methods={"GET", "POST"})
+     * @Route("/update", name="admin_update")
      * @IsGranted("ROLE_ADMIN")
      */
     public function update(Request $request, CalculationRepository $repository, CalculationService $service, LoggerInterface $logger, SuspendEventListenerService $listener): Response

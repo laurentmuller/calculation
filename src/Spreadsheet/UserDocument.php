@@ -16,6 +16,8 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Util\Utils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -70,13 +72,16 @@ class UserDocument extends AbstractArrayDocument
         // initialize
         $this->start('user.list.title');
 
+        // conditionals
+        $this->createEnabledConditionals();
+
         // headers
         $this->setHeaderValues([
             'user.fields.username' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
             'user.fields.email' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
             'user.fields.role' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
             'user.fields.enabled' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
-            'user.fields.lastLogin' => [Alignment::HORIZONTAL_CENTER, Alignment::VERTICAL_TOP],
+            'user.fields.lastLogin' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
             'user.fields.imageFile' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
         ]);
 
@@ -91,14 +96,14 @@ class UserDocument extends AbstractArrayDocument
             $this->setRowValues($row, [
                 $entity->getUsername(),
                 $entity->getEmail(),
-                Utils::translateRole($this->translator, $entity->getRole()),
+                Utils::translateRole($this->translator, $entity),
                 $entity->isEnabled(),
                 $this->formatLastLogin($entity->getLastLogin()),
             ]);
 
             // image
             $path = $this->getImagePath($entity);
-            if (!empty($path)) {
+            if (!empty($path) && \is_file($path)) {
                 [$width, $height] = \getimagesize($path);
                 $this->setCellImage($path, "F$row", $width, $height);
             }
@@ -109,6 +114,33 @@ class UserDocument extends AbstractArrayDocument
         $this->finish();
 
         return true;
+    }
+
+    /**
+     * Creates a conditional.
+     *
+     * @param string $value the conditional value
+     * @param string $color the conditional color
+     */
+    private function createConditional(string $value, string $color): Conditional
+    {
+        $conditional = new Conditional();
+        $conditional->setConditionType(Conditional::CONDITION_CELLIS)
+            ->setOperatorType(Conditional::OPERATOR_EQUAL)
+            ->addCondition($value)
+            ->getStyle()->getFont()->getColor()->setARGB($color);
+
+        return $conditional;
+    }
+
+    /**
+     * Sets the enabled/disable conditionals.
+     */
+    private function createEnabledConditionals(): void
+    {
+        $disabled = $this->createConditional('0', Color::COLOR_RED);
+        $enabled = $this->createConditional('1', Color::COLOR_DARKGREEN);
+        $this->setColumnConditional(4, $disabled, $enabled);
     }
 
     /**

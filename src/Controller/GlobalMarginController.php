@@ -46,7 +46,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Add a global margin.
      *
-     * @Route("/add", name="globalmargin_add", methods={"GET", "POST"})
+     * @Route("/add", name="globalmargin_add")
      */
     public function add(Request $request): Response
     {
@@ -56,7 +56,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * List the global margins.
      *
-     * @Route("", name="globalmargin_list", methods={"GET"})
+     * @Route("/card", name="globalmargin_card")
      */
     public function card(Request $request): Response
     {
@@ -83,7 +83,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Edit a global margin.
      *
-     * @Route("/edit/{id}", name="globalmargin_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="globalmargin_edit", requirements={"id": "\d+" })
      */
     public function edit(Request $request, GlobalMargin $item): Response
     {
@@ -135,7 +135,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Show properties of a global margin.
      *
-     * @Route("/show/{id}", name="globalmargin_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/show/{id}", name="globalmargin_show", requirements={"id": "\d+" })
      */
     public function show(GlobalMargin $item): Response
     {
@@ -145,7 +145,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Render the table view.
      *
-     * @Route("/table", name="globalmargin_table", methods={"GET", "POST"})
+     * @Route("", name="globalmargin_table")
      */
     public function table(Request $request, GlobalMarginDataTable $table): Response
     {

@@ -189,7 +189,7 @@ class AjaxController extends AbstractController
     /**
      * Returns a new captcha image.
      *
-     * @Route("/captcha/image", name="ajax_captcha_image", methods={"GET", "POST"})
+     * @Route("/captcha/image", name="ajax_captcha_image")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function captchaImage(CaptchaImageService $service): JsonResponse
@@ -208,7 +208,7 @@ class AjaxController extends AbstractController
     /**
      * Validate a captcha image.
      *
-     * @Route("/captcha/validate", name="ajax_captcha_validate", methods={"GET", "POST"})
+     * @Route("/captcha/validate", name="ajax_captcha_validate")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function checkCaptcha(Request $request, CaptchaImageService $service): JsonResponse
@@ -227,7 +227,7 @@ class AjaxController extends AbstractController
     /**
      * Check if an user's e-mail already exists.
      *
-     * @Route("/checkemail", name="ajax_check_email", methods={"GET", "POST"})
+     * @Route("/checkemail", name="ajax_check_email")
      * @IsGranted("ROLE_USER")
      */
     public function checkEmail(Request $request, UserRepository $repository): JsonResponse
@@ -259,7 +259,7 @@ class AjaxController extends AbstractController
     /**
      * Check if the given reCaptcha response (if any) is valid.
      *
-     * @Route("/checkrecaptcha", name="ajax_check_recaptcha", methods={"GET", "POST"})
+     * @Route("/checkrecaptcha", name="ajax_check_recaptcha")
      * @IsGranted("ROLE_USER")
      */
     public function checkRecaptcha(Request $request, TranslatorInterface $translator): JsonResponse
@@ -293,7 +293,7 @@ class AjaxController extends AbstractController
     /**
      * Check if an user's name already exists.
      *
-     * @Route("/checkname", name="ajax_check_name", methods={"GET", "POST"})
+     * @Route("/checkname", name="ajax_check_name")
      * @IsGranted("ROLE_USER")
      */
     public function checkUsername(Request $request, UserRepository $repository): JsonResponse
@@ -325,7 +325,7 @@ class AjaxController extends AbstractController
     /**
      * Check if an user's name or an user's e-mail exists.
      *
-     * @Route("/checkexist", name="ajax_check_exist", methods={"GET", "POST"})
+     * @Route("/checkexist", name="ajax_check_exist")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function checkUsernameOrEmail(Request $request, UserRepository $repository): JsonResponse
@@ -344,7 +344,7 @@ class AjaxController extends AbstractController
     /**
      * Compute a task.
      *
-     * @Route("/task", name="ajax_task", methods={"GET", "POST"})
+     * @Route("/task", name="ajax_task")
      * @IsGranted("ROLE_USER")
      */
     public function computeTask(Request $request, TaskService $service, TaskRepository $repository): JsonResponse
@@ -749,7 +749,7 @@ class AjaxController extends AbstractController
     /**
      * Update the calculation's totals.
      *
-     * @Route("/update", name="ajax_update", methods={"POST"})
+     * @Route("/update", name="ajax_update")
      * @IsGranted("ROLE_USER")
      */
     public function updateCalculation(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse

@@ -20,11 +20,11 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Unit test for {@link App\Controller\DuplicateController} class.
+ * Unit test for {@link App\Controller\CalculationBelowController} class.
  *
  * @author Laurent Muller
  */
-class DuplicateControllerTest extends AbstractControllerTest
+class CalculationBelowControllerTest extends AbstractControllerTest
 {
     private static ?Calculation $calculation = null;
     private static ?Category $category = null;
@@ -35,21 +35,21 @@ class DuplicateControllerTest extends AbstractControllerTest
     public function getRoutes(): array
     {
         return [
-            ['/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/duplicate', self::ROLE_ADMIN],
-            ['/duplicate', self::ROLE_SUPER_ADMIN],
+            ['/below', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/below', self::ROLE_ADMIN],
+            ['/below', self::ROLE_SUPER_ADMIN],
 
-            ['/duplicate/table', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/duplicate/table', self::ROLE_ADMIN],
-            ['/duplicate/table', self::ROLE_SUPER_ADMIN],
+            ['/below/card', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/below/card', self::ROLE_ADMIN],
+            ['/below/card', self::ROLE_SUPER_ADMIN],
 
-            ['/duplicate/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/duplicate/pdf', self::ROLE_ADMIN],
-            ['/duplicate/pdf', self::ROLE_SUPER_ADMIN],
+            ['/below/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/below/pdf', self::ROLE_ADMIN],
+            ['/below/pdf', self::ROLE_SUPER_ADMIN],
 
-            ['/duplicate/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/duplicate/excel', self::ROLE_ADMIN],
-            ['/duplicate/excel', self::ROLE_SUPER_ADMIN],
+            ['/below/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/below/excel', self::ROLE_ADMIN],
+            ['/below/excel', self::ROLE_SUPER_ADMIN],
         ];
     }
 
@@ -81,7 +81,7 @@ class DuplicateControllerTest extends AbstractControllerTest
             self::$product = new Product();
             self::$product->setDescription('Test Product')
                 ->setCategory(self::$category)
-                ->setPrice(10);
+                ->setPrice(1.0);
             $this->addEntity(self::$product);
         }
 
@@ -90,8 +90,11 @@ class DuplicateControllerTest extends AbstractControllerTest
             self::$calculation->setCustomer('Test Customer')
                 ->setDescription('Test Description')
                 ->setState(self::$state)
-                ->addProduct(self::$product)
                 ->addProduct(self::$product);
+
+            self::$calculation->setItemsTotal(1.0)
+                ->setGlobalMargin(1.0)
+                ->setOverallTotal(2.0);
             $this->addEntity(self::$calculation);
         }
     }

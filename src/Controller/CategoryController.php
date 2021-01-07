@@ -50,7 +50,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Add a category.
      *
-     * @Route("/add", name="category_add", methods={"GET", "POST"})
+     * @Route("/add", name="category_add")
      */
     public function add(Request $request): Response
     {
@@ -60,7 +60,7 @@ class CategoryController extends AbstractEntityController
     /**
      * List the categories.
      *
-     * @Route("", name="category_list", methods={"GET"})
+     * @Route("/card", name="category_card")
      */
     public function card(Request $request): Response
     {
@@ -117,7 +117,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Edit a category.
      *
-     * @Route("/edit/{id}", name="category_edit", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="category_edit", requirements={"id": "\d+" })
      */
     public function edit(Request $request, Category $item): Response
     {
@@ -169,7 +169,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Show properties of a category.
      *
-     * @Route("/show/{id}", name="category_show", requirements={"id": "\d+" }, methods={"GET", "POST"})
+     * @Route("/show/{id}", name="category_show", requirements={"id": "\d+" })
      */
     public function show(Category $item): Response
     {
@@ -179,7 +179,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Render the table view.
      *
-     * @Route("/table", name="category_table", methods={"GET", "POST"})
+     * @Route("", name="category_table")
      */
     public function table(Request $request, CategoryDataTable $table): Response
     {

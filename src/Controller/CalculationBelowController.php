@@ -31,12 +31,12 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/below")
  * @IsGranted("ROLE_ADMIN")
  */
-class BelowCalculationController extends AbstractController
+class CalculationBelowController extends AbstractController
 {
     /**
      * Show calculations, as card.
      *
-     * @Route("", name="below_card")
+     * @Route("/card", name="below_card")
      */
     public function card(Request $request, CalculationRepository $repository): Response
     {
@@ -113,7 +113,7 @@ class BelowCalculationController extends AbstractController
     /**
      * Show calculations, as table.
      *
-     * @Route("/table", name="below_table")
+     * @Route("", name="below_table")
      */
     public function table(Request $request, CalculationBelowDataTable $table, CalculationRepository $repository): Response
     {

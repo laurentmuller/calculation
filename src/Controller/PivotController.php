@@ -38,7 +38,7 @@ class PivotController extends AbstractController
     /**
      * Show the pivot data table.
      *
-     * @Route("", name="calculation_pivot", methods={"GET", "POST"})
+     * @Route("", name="calculation_pivot")
      */
     public function pivot(): Response
     {
@@ -60,7 +60,7 @@ class PivotController extends AbstractController
     /**
      * Export pivot data to CSV.
      *
-     * @Route("/export", name="calculation_pivot_export", methods={"GET", "POST"})
+     * @Route("/export", name="calculation_pivot_export")
      */
     public function pivotExport(): Response
     {
@@ -110,7 +110,7 @@ class PivotController extends AbstractController
     /**
      * Export pivot data to JSON.
      *
-     * @Route("/json", name="calculation_pivot_json", methods={"GET", "POST"})
+     * @Route("/json", name="calculation_pivot_json")
      */
     public function pivotJson(): JsonResponse
     {

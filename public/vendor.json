@@ -111,7 +111,7 @@
 				"js/dataTables.keyTable.js"
 			]
 		},
-		{	
+		{
 			"example": "//cdn.datatables.net/plug-ins/1.10.21/features/mark.js/datatables.mark.js",
 			"name": "mark.js",
 			"version": "1.10.22",
@@ -129,7 +129,7 @@
 			"target": "datatables/js",
 			"files": [
 				"jquery.mark.js"
-			]						
+			]
 		},
 		{
 			"name": "zxcvbn",
@@ -259,7 +259,18 @@
 			"files": [
 				"ckeditor.js",
 				"translations/fr.min.js"
-			]	
+			]
+		},
+		{
+			"name": "bootstrap-table",
+			"version": "1.18.1",
+			"disabled": true,
+			"files": [
+				"bootstrap-table.js",
+				"bootstrap-table.css",
+				"extensions/key-events/bootstrap-table-key-events.js",
+				"locale/bootstrap-table-fr-CH.js"
+			]
 		}
 	]
 }

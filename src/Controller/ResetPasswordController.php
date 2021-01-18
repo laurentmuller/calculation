@@ -64,12 +64,12 @@ class ResetPasswordController extends AbstractController
     public function checkEmail(): Response
     {
         // We prevent users from directly accessing this page
-        if (!$this->canCheckEmail()) {
+        if (null === ($resetToken = $this->getTokenObjectFromSession())) {
             return $this->redirectToRoute('app_forgot_password_request');
         }
 
         return $this->render('reset_password/check_email.html.twig', [
-            'tokenLifetime' => $this->getTokenLifetime(),
+            'resetToken' => $resetToken,
         ]);
     }
 
@@ -149,14 +149,6 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
-     * Get the length of time in seconds a token is valid.
-     */
-    private function getTokenLifetime(): int
-    {
-        return $this->helper->getTokenLifetime();
-    }
-
-    /**
      * Translate the given exception.
      */
     private function handleResetException(ResetPasswordExceptionInterface $e): CustomUserMessageAuthenticationException
@@ -182,9 +174,6 @@ class ResetPasswordController extends AbstractController
     private function sendPasswordResetEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer): RedirectResponse
     {
         $user = $this->repository->findByUsernameOrEmail($usernameOrEmail);
-
-        // Marks that you are allowed to see the app_check_email page.
-        $this->setCanCheckEmailInSession();
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
@@ -212,11 +201,11 @@ class ResetPasswordController extends AbstractController
             ->context([
                 'username' => $user->getUsername(),
                 'resetToken' => $resetToken,
-                'tokenLifetime' => $this->getTokenLifetime(),
             ]);
 
         try {
             $mailer->send($email);
+            $this->setTokenObjectInSession($resetToken);
         } catch (TransportException $e) {
             $this->helper->removeResetRequest($resetToken->getToken());
             if ($request->hasSession()) {

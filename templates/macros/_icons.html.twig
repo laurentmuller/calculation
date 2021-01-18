@@ -81,12 +81,12 @@
 <div role="separator" class="{{ class }}"></div>
 {%- endmacro %}
 
-{% macro dropdownEllipsis(id, title = 'common.actions', class = 'btn btn-sm border-0 pt-0') -%}
+{% macro dropdownEllipsis(id = 0, title = 'common.actions', class = 'btn btn-sm border-0 pt-0') -%}
 {% apply spaceless %}
 {% if not ('btn-outline' in class) %}
     {% set class = class ~ ' btn-outline-secondary' %}
 {% endif %}
-<button class="{{ class }}" type="button" id="{{ id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
+<button class="{{ class }}" type="button"{% if id %} id="{{ id }}"{% endif %} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
     {{- _self.icon('ellipsis-v') -}}    
 </button>
 {% endapply %}

@@ -1,3 +1,4 @@
+{%- set tokenLifetime = resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') -%}
 {% apply inline_css %}
 <style>
     body {
@@ -10,7 +11,7 @@
     Vous pouvez réinitialiser votre mot de passe en cliquant sur le lien suivant : <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">Réinitialiser le mot de passe</a>.
 </p>
 <p>
-    <b>Remarque :</b> Ce lien expirera dans {{ 'counters.hours'|trans({'count': tokenLifetime|date('g')}) }}.
+    <b>Remarque :</b> Ce lien expirera dans {{ tokenLifetime }}.
 <p/>
 <p>
     Cordialement,<br>

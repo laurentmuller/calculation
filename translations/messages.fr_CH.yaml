@@ -943,7 +943,7 @@ resetting:
 
         Si vous ne recevez pas de courrier électronique, veuillez vérifier votre dossier de courrier indésirable (spam) ou <a href="%request%">essayer à nouveau</a>.
 
-        <b>Remarque :</b> Vous ne pouvez demander un nouveau mot de passe que toutes les %tokenLifetime% heures.
+        <b>Remarque :</b> Vous ne pouvez demander un nouveau mot de passe que dans %tokenLifetime%.
 registration:
     register:
         title: Créer un compte

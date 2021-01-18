@@ -522,7 +522,12 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/symfony/polyfill-intl-icu">
+	<buildpathentry excluding="Resources/stubs/" kind="src" path="vendor/symfony/polyfill-intl-icu">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/polyfill-intl-icu/Resources/stubs">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

@@ -128,3 +128,10 @@ div.dataTables_wrapper div.dataTables_info {
     background-image: none;
     padding-right: 1.75rem;
 }
+
+/**
+ *
+ */
+.footer-place-holder {
+    min-height: 60px;
+}

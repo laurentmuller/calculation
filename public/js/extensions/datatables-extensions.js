@@ -135,7 +135,7 @@ $.fn.extend({
  * Add alert class to processing message
  */
 $.extend($.fn.dataTable.ext.classes, {
-    sProcessing: "dataTables_processing alert alert-info"
+    sProcessing: "dataTables_processing alert alert-success"
 });
 
 /**
@@ -215,6 +215,28 @@ $.fn.dataTable.Api.register('removeDuplicateClasses()', function () {
 });
 
 /**
+ * Show or hide the pagination.
+ * 
+ * @param {Object}
+ *            settings - the table settings object.
+ * 
+ * @returns {DataTables.Api} this instance.
+ */
+$.fn.dataTable.Api.register('conditionalPaging()', function (settings) {
+    'use strict';
+    
+    const pages = this.page.info().pages;
+    const $pagination = $('.dataTables_paginate');
+    const duration = settings.iDraw === 1 ? 0 : 500;
+    if (pages <= 1) {
+        $pagination.stop().fadeOut(duration);
+    } else {
+        $pagination.stop().fadeIn(duration);
+    }
+    return this;
+});
+
+/**
  * Binds events.
  * 
  * @param {integer}
@@ -270,6 +292,13 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
 
     // bind table events
     table.one('init', function () {
+        // move to footer
+        const $footer = $('.card-footer.footer-place-holder');
+        if ($footer.length) {
+            $('.table-footer').appendTo($footer);
+            $footer.removeClass('footer-place-holder');
+        }
+
         // select row (if any)
         if (id) {
             const row = table.row('#' + id);
@@ -277,20 +306,24 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
                 table.cell(row.index(), '0:visIdx').focus();
             }
         }
+
         // remove hiden search text (aria)
         $(":text[tabindex='0']").parent().remove();
 
     }).on('preDraw', function () {
         $('.has-tooltip').tooltip('hide');
 
-    }).on('draw', function () {
+    }).on('draw', function (e, settings) {
+        // select
         if (lastPageCalled) {
             table.selectLastRow();
             lastPageCalled = false;
         } else {
             table.selectFirstRow();
         }
-        table.updateButtons().updateTitles();
+        
+        // update
+        table.updateButtons().updateTitles().conditionalPaging(settings);
 
     }).on('search.dt', function () {
         enableKeys();
@@ -411,7 +444,7 @@ $.fn.getColumns = function (useName) {
         if (!debug) {
             $header.removeDataAttributes();
         }
-        
+
         return column;
     }).get();
 };
@@ -483,9 +516,6 @@ $.fn.initDataTable = function (options) {
 
         // paging
         pagingType: 'full_numbers',
-        conditionalPaging: {
-            style: 'fade'
-        },
 
         // order
         orderMulti: false,
@@ -522,17 +552,21 @@ $.fn.initDataTable = function (options) {
 
         // layout
         // row 0 : table in card body
-        // row 1 : information + paging in card footer
+        // row 1 : information + paging moved in card footer
         // Note: drop-down length and search text are hidden
+        // dom: "<'row'<'col-sm-12'tr>>" + //
+        // "<'row card-footer px-0 d-print-none '<'col-sm-12
+        // col-md-5'i><'col-sm-12 col-md-7'p>>",
+
         dom: "<'row'<'col-sm-12'tr>>" + //
-        "<'row card-footer px-0 d-print-none '<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+             "<'row table-footer '<'col-lg-auto py-2'i><'col-lg-auto ml-auto'p>>",
     };
 
     // merge
     const settings = $.extend(true, defaultSettings, options);
 
     // debug?
-    if ($table.data('debug')) {
+    if ($table.data('debug') || false) {
         console.log(JSON.stringify(settings, '', '    '));
     } else {
         $table.removeDataAttributes();

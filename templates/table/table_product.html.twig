@@ -1,0 +1,178 @@
+{% extends 'cards/card_base.html.twig' %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{% macro output_column(column, pointer) -%}
+{% apply spaceless %}
+<th class="{{ column.class|default('d-none') ~ (pointer ? ' cursor-pointer': '') }}" 
+    data-field="{{ column.field }}" 
+    data-visible="{{ (column.visible ?? true)|json_encode }}" 
+    data-sortable="{{ (column.sortable ?? false)|json_encode }}" 
+    data-card-visible="{{ (column.card ?? true)|json_encode }}" 
+    data-formatter="{{ column.formatter|default('') }}">
+        {{ column.title is defined ? column.title|trans : '&nbsp;'|raw }}
+</th>
+{% endapply %}
+{%- endmacro %}
+
+{% macro output_size(page, selection) -%}
+<a href="#" data-value="{{ page }}" class="dropdown-item dropdown-size{% if page == selection %} active{% endif %}">{{ page }}</a>
+{%- endmacro %}
+
+{% macro output_category(category, selection) -%}
+<a href="#" data-value="{{ category.id }}" class="dropdown-item dropdown-category{% if category.id == selection %} active{% endif %}">{{ category.code }}</a>
+{%- endmacro %}
+
+{% macro item_external(path, text, icon, class = 'dropdown-item') %}
+{%- if path -%}
+    <a href="{{ path }}" target="_blank" rel="noopener noreferrer" class="{{ class }}">
+        {{- icons.icon(icon ~ ' fa-fw', text) -}}
+    </a>
+{%- endif -%}
+{%- endmacro %}
+
+{# parameters #}
+{%- set title        = 'product.list.title' -%}
+{%- set title_icon   = 'file-alt far' -%}
+{%- set row_selector = 'table-primary' -%}
+{%- set defer_url    = url('table_product') -%}
+{%- set save_url     = url('table_product_save') -%}
+{%- set categoryId   = category ? category.id : 0 -%}
+{%- set id           = app.request.get('id', 0) -%}
+{%- set row_edit     = app.actionEdit  %}
+{%- set row_show     = app.actionShow  %}
+{%- set caller       = path(app.request.attributes.get('_route')) -%}
+{%- set params = {
+        'id': 0, 
+        'caller': caller, 
+        'search': search, 
+        'sort': sort, 
+        'order': order, 
+        'offset': offset, 
+        'limit': limit,
+        'card': card} -%}
+        
+{# classes #}
+{% block card_container_class '' %}
+{% block card_body_class ' px-3 pb-0 pt-2' %}
+
+{# body #}
+{% block card_body -%}
+<div id="toolbar" class="d-print-none ml-2">
+    <div class="btn-group btn-group-sm" role="group">
+        <div class="btn-group btn-group-sm" role="group">
+            <button id="button-category" data-value="{{ categoryId }}" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" title="{{ 'product.fields.category'|trans }}">
+                {{- category ? category.code : 'product.fields.category'|trans -}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="button-category">
+                {{ _self.output_category({id: 0, code: 'product.list.category_all_text'|trans}, categoryId) }}
+                {% for category in categories %}
+                {{ _self.output_category(category, categoryId) }}
+                {% endfor %}
+            </div>
+        </div>        
+        <div class="btn-group btn-group-sm" role="group">
+            <button id="button_other_actions" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" title="{{ 'common.other_actions'|trans }}">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="button_other_actions">
+                {{ _self.item_external(path('product_pdf'), 'product.list.pdf_title', 'file-pdf far') }}
+                {{ _self.item_external(path('product_excel'), 'product.list.excel_title', 'file-excel far') }}
+            </div>
+        </div>
+    </div>        
+</div>
+<table id="table-edit" 
+    data-classes="table table-hover table-list table-sm" 
+    data-row-selector="{{ row_selector }}"
+     
+    data-show-toggle="true"
+    data-show-search-clear-button="true" 
+    data-show-extended-pagination="true" 
+    
+    data-search-align="left"
+    data-buttons-align="right"
+    data-toolbar-align="right"
+     
+    data-search="true" 
+    data-search-text="{{ search }}"
+    data-page-list="[5, 10, 15, 20, 25, 30, 50]"
+    
+    data-total-rows="{{ total }}"
+    data-total-not-filtered="{{ totalNotFiltered }}"
+    
+    data-card-view="{{ card|json_encode }}"
+    data-card-view-bold="true"
+    
+    data-sort-name="{{ sort }}"
+    data-sort-order="{{ order }}"
+    data-silent-sort="false"
+    
+    data-undefined-text="&nbsp;"
+    data-icon-size="sm"
+    
+    data-pagination="true" 
+    data-page-size="{{ limit }}"
+    data-page-number = "{{ page }}"
+    data-pagination-loop="false"
+    data-side-pagination="server"
+    data-pagination-pre-text="<i class='fa fa-caret-left fa-lg'></i>"
+    data-pagination-next-text="<i class='fa fa-caret-right fa-lg'></i>"
+    
+    data-toolbar="#toolbar"
+    
+    old_data-loading-font-size="1rem" 
+    data-loading-template="loadingTemplate"
+    
+    data-caller="{{ caller }}"
+    data-save-url="{{ save_url }}"    
+    data-defer-url="{{ defer_url }}">
+    <thead>
+        <tr>
+            {% for column in columns %}
+            {{ _self.output_column(column, (row_edit or row_show) and column.sortable) }}
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr{% if row.id == id %} class="{{ row_selector }}"{% endif %}>
+            {% for column in columns %}
+            <td>{{ row[column.field] }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div id="actions" class="dropdown dropleft text-right d-none d-print-none">
+    {%- set show_class = 'btn-show btn-path' ~ (row_show ? ' btn-default' : '') -%}
+    {%- set edit_class = 'btn-edit btn-path' ~ (row_edit ? ' btn-default' : '') -%}
+    {{ icons.dropdownEllipsis() }}
+    <div class="dropdown-menu">
+        {{ icons.dropdownItemWithClass(path('product_show', params), 'product.show.title', 'tv mr-1', show_class) }}
+        {{ icons.dropdownItemWithClass(path('product_edit', params), 'product.edit.title', 'pencil-alt mr-1', edit_class) }}
+        {{ icons.dropdownItemWithClass(path('product_delete', params), 'product.delete.title', 'times mr-1', 'btn-delete btn-path') }}
+        {{ icons.dropdownSeparator() }}
+        {{ icons.dropdownItemWithClass(path('product_add', params), 'product.add.title', 'file mr-1 far', 'btn-add btn-path') }}
+        {{ icons.dropdownSeparator() }}
+        {{ icons.dropdownItemWithClass(path('product_clone', params), 'common.button_clone', 'copy mr-1 far', 'btn-clone btn-path') }}
+    </div>
+</div>
+{%- endblock -%}
+
+{% block stylesheets %}
+{{ asset_css('css/bootstrap-table.css') }}
+{%- endblock -%}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('js/vendor/bootstrap-table/bootstrap-table.js') }}
+{{ asset_js('js/vendor/bootstrap-table/extensions/defer-url/bootstrap-table-defer-url.js') }}
+{{ asset_js('js/vendor/datatables/js/jquery.mark.js') }}
+{{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
+{{ asset_js('js/extensions/bootstrap-table-extensions.js') }}
+{{ asset_js('js/extensions/contextmenu-extensions.js') }}
+{{ asset_js('js/extensions/bootstrap-table-fr-CH.js') }}
+{{ asset_js('js/application/bootstrap_table.js') }}
+{%- endblock -%}

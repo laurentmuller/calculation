@@ -34,7 +34,7 @@
 		},
 		{
 			"name": "font-awesome",
-			"version": "5.15.1",
+			"version": "5.15.2",
 			"files": [
 				"css/all.css",
 				"webfonts/fa-brands-400.eot",
@@ -97,6 +97,7 @@
 			"source": "https://cdn.datatables.net/plug-ins/",
 			"format": "{source}{version}/features/{name}/{file}",
 			"target": "datatables/js",
+			"disabled": true,
 			"files": [
 				"dataTables.conditionalPaging.js"
 			]
@@ -264,12 +265,11 @@
 		{
 			"name": "bootstrap-table",
 			"version": "1.18.1",
-			"disabled": true,
+			"disabled": false,
 			"files": [
 				"bootstrap-table.js",
-				"bootstrap-table.css",
-				"extensions/key-events/bootstrap-table-key-events.js",
-				"locale/bootstrap-table-fr-CH.js"
+				"bootstrap-table.css",				
+				"extensions/defer-url/bootstrap-table-defer-url.js"
 			]
 		}
 	]

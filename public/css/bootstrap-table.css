@@ -1,0 +1,40 @@
+@import 'style.css';
+@import '../js/vendor/bootstrap-table/bootstrap-table.css';
+@import '../js/vendor/contextmenu/jquery.contextMenu.css';
+
+/**! compression tag for ftp-deployment */
+
+.bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-title {
+    font-weight: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    min-width: 25%;
+}
+
+.bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-title:after {
+    content: " :";
+}
+
+.bootstrap-table .fixed-table-container .table thead th .sortable {
+    padding-right: 20px !important;
+}
+
+.bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading {
+    color: var(--dark) !important;
+    background: var(--white) !important;
+}
+
+.bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading .loading-wrap .loading-text {
+    color: var(--dark) !important;
+}
+
+.bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading .loading-wrap .animation-dot {
+    background: var(--dark) !important;
+}

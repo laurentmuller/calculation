@@ -3,7 +3,7 @@
 {% import 'macros/_properties.html.twig' as properties %}
 <div class="card card-index text-center border rounded m-1">
     <div class="card-body px-1 pt-1 pb-0">
-        <p class="h4 font-weight-normal mb-1" style="{{ properties.stateCss(color) }}">{{ count|integer }}</p>
+        <p class="h4 font-weight-normal mb-1 border-left" style="border-left-width: 0.3rem !important; {{ properties.stateCss(color) }}">{{ count|integer }}</p>
         <p class="m-0 mb-1">{{ total|amount }}</p>
     </div>
     <div class="card-footer p-1">
@@ -35,7 +35,7 @@
             {%- set parameters = app.displayTabular ? {'search[0][index]': 8, 'search[0][value]': state.id} : {'query': state.code} -%}
             {{ _self.cardEntry(state.count, state.total, state.code, state.color, list_path, parameters) }}
         {% endfor %}
-        {{ _self.cardEntry(count, total, 'calculation.fields.total'|trans, 'secondary', list_path) }}
+        {{ _self.cardEntry(states_count, states_total, 'calculation.fields.total'|trans, '', list_path) }}
     {% else %}
         <div class="alert alert-warning flex-fill mb-0 py-4 text-center">
             {{ 'calculation.list.empty'|trans }}

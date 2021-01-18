@@ -121,8 +121,10 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
         $this->createOrderBy($builder, $definitions, $query->order);
 
         // offset and limit.
-        $builder->setFirstResult($query->start)
-            ->setMaxResults($query->length);
+        $builder->setFirstResult(\max($query->start, 0));
+        if ($query->length > 0) {
+            $builder->setMaxResults($query->length);
+        }
 
         // get items
         $items = $builder->getQuery()->getResult();

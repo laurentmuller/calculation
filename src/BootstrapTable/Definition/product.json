@@ -1,0 +1,48 @@
+[
+	{
+		"field": "id",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	},
+	{
+		"field": "description",
+		"title": "product.fields.description",
+		"default": true,
+		"class": "text-cell w-50"
+	},
+	{
+		"field": "category.code",
+		"title": "product.fields.category",
+		"class": "text-category"
+	},
+	{
+		"field": "supplier",
+		"title": "product.fields.supplier",
+		"class": "text-supplier"
+	},
+	{
+		"field": "unit",
+		"title": "product.fields.unit",
+		"class": "text-unit"
+	},
+	{
+		"field": "price",
+		"title": "product.fields.price",
+		"class": "text-currency",
+		"fieldFormatter": "formatAmount"
+	},
+	{
+		"field": "id",
+		"sortable": false,
+		"searchable": false,
+		"class": "actions rowlink-skip d-print-none",
+		"formatter": "actionsFormatter"		
+	},
+	{
+		"field": "category.id",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	}
+]

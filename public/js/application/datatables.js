@@ -454,5 +454,4 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
             });
         }
     }
-
 }(jQuery));

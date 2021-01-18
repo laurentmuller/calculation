@@ -136,6 +136,17 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
+     * Gets the name of the single id field. Note that this only works on
+     * entity classes that have a single-field primary key.
+     *
+     * @throws \Doctrine\ORM\Mapping\MappingException if the class doesn't have an identifier or it has a composite primary key
+     */
+    public function getSingleIdentifierFieldName(): string
+    {
+        return $this->_class->getSingleIdentifierFieldName();
+    }
+
+    /**
      * Gets the database sort fields.
      *
      * The default implementation returns the alias and the field separated by a dot ('.') character.

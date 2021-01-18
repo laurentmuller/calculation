@@ -11,7 +11,6 @@
 <!--#include file="vendor/datatables/js/jquery.dataTables.js" -->
 <!--#include file="vendor/datatables/js/dataTables.bootstrap4.js" -->
 <!--#include file="vendor/datatables/js/dataTables.keyTable.js" -->
-<!--#include file="vendor/datatables/js/dataTables.conditionalPaging.js" -->
 <!--#include file="vendor/datatables/js/jquery.mark.js" -->
 <!--#include file="vendor/datatables/js/datatables.mark.js" -->
 <!--#include file="vendor/contextmenu/jquery.contextMenu.js" -->

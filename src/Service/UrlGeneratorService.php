@@ -29,14 +29,24 @@ class UrlGeneratorService
      */
     private const PARAMETER_NAMES = [
         'id',
-        'type', // for seach page
-        'query',
+        'caller',
+
+        'query', // datatables
         'page',
         'pagelength',
         'ordercolumn',
         'orderdir',
-        'search',
-        'caller',
+
+        'search', // bootstrap-table
+        'sort',
+        'order',
+        'offset',
+        'limit',
+        'card',
+
+        'categoryId', // bootstrap-table product
+
+        'type', // seach page
     ];
 
     /**

@@ -72,7 +72,7 @@ $.fn.initContextMenu = function (selector, fnShow, fnHide) {
     'use strict';
 
     // build callback
-    const callback = function ($element) {
+    const build = function ($element) {
         // get items
         const items = $element.getContextMenuItems();
         if ($.isEmptyObject(items)) {
@@ -100,7 +100,7 @@ $.fn.initContextMenu = function (selector, fnShow, fnHide) {
 
     // create
     $.contextMenu({
-        build: callback,
+        build: build,
         selector: selector
     });
 

@@ -1,0 +1,68 @@
+[
+	{
+		"field": "id",
+		"title": "calculation.fields.id",
+		"direction": "desc",
+		"class": "text-id",
+		"fieldFormatter": "formatId",
+		"styleFormatter": "renderCalculationState"
+	},
+	{
+		"field": "date",
+		"title": "calculation.fields.date",
+		"default": true,
+		"order": "desc",
+		"class": "text-date",
+		"fieldFormatter": "formatDate"
+	},
+	{
+		"field": "state.code",
+		"title": "calculation.fields.state",
+		"class": "text-state"
+	},
+	{
+		"field": "customer",
+		"title": "calculation.fields.customer",
+		"class": "text-cell"
+	},
+	{
+		"field": "description",
+		"title": "calculation.fields.description",
+		"class": "text-cell"
+	},
+	{
+		"field": "overallMargin",
+		"title": "calculation.fields.margin",
+		"class": "text-percent",
+		"fieldFormatter": "formatPercentSign",
+		"styleFormatter": "renderCalculationMargin",
+		"callback": "renderTooltip"
+	},
+	{
+		"field": "overallTotal",
+		"title": "calculation.fields.total",
+		"class": "text-currency",
+		"fieldFormatter": "formatAmount"
+	},
+	{
+		"field": "action",
+		"virtual": true,
+		"sortable": false,
+		"searchable": false,
+		"class": "actions rowlink-skip d-print-none",
+		"fieldFormatter": "formatId",
+		"formatter": "actionsFormatter"
+	},
+	{
+		"field": "state.color",
+		"visible": false,
+		"orderable": false,
+		"searchable": false
+	},
+	{
+		"field": "state.id",
+		"visible": false,
+		"orderable": false,
+		"searchable": true
+	}
+]

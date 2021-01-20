@@ -3,109 +3,112 @@
 /**
  * -------------- jQuery extensions --------------
  */
-
-/**
- * Finds an icon within in this element.
- * 
- * @returns {string} the icon class, if found, null otherwise.
- */
-$.fn.findIcon = function () {
-    'use strict';
-    const $this = $(this);
-    const icon = $this.data('icon');
-    if (icon) {
-        return icon;
-    }
-    const $child = $this.find('i');
-    if ($child.length) {
-        return $child.attr('class');
-    }
-    return null;
-};
-
-/**
- * Finds an text within in this element.
- * 
- * @returns {string} the text, if found, null otherwise.
- */
-$.fn.findText = function () {
-    'use strict';
-    const $this = $(this);
-    let text = $this.text().trim();
-    if (text.length) {
-        return text;
-    }
-    text = $this.attr('title') || '';
-    if (text.length) {
-        return text;
-    }
-    text = $this.data('text') || '';
-    if (text.length) {
-        return text;
-    }
-    return null;
-};
-
-/**
- * Returns if this element is selectable.
- * 
- * @returns {boolean} true if selectable.
- */
-$.fn.isSelectable = function () {
-    'use strict';
-    const $this = $(this);
-    return !($this.hasClass('disabled') || $this.hasClass('d-none'));
-};
-
-/**
- * Initialize the context menu.
- * 
- * @param {string}
- *            selector - the selector matching the elements to trigger on.
- * @param {function}
- *            fnShow - the function called when the context menu is shown.
- * @param {function}
- *            fnHide - the function called when the context menu is hidden.
- * @return {jQuery} The jQuery element for chaining.
- */
-$.fn.initContextMenu = function (selector, fnShow, fnHide) {
+(function ($) {
     'use strict';
 
-    // build callback
-    const build = function ($element) {
-        // get items
-        const items = $element.getContextMenuItems();
-        if ($.isEmptyObject(items)) {
-            return false;
-        }
+    $.fn.extend({
+        /**
+         * Finds an icon within in this element.
+         * 
+         * @returns {string} the icon class, if found, null otherwise.
+         */
+        findIcon: function () {
+            const $this = $(this);
+            const icon = $this.data('icon');
+            if (icon) {
+                return icon;
+            }
+            const $child = $this.find('i');
+            if ($child.length) {
+                return $child.attr('class');
+            }
+            return null;
+        },
 
-        return {
-            zIndex: 1000,
-            autoHide: true,
-            callback: function (key, options, e) {
-                const item = options.items[key];
-                if (item.link) {
-                    e.stopPropagation();
-                    item.link.get(0).click();
-                    return true;
+        /**
+         * Finds an text within in this element.
+         * 
+         * @returns {string} the text, if found, null otherwise.
+         */
+        findText: function () {
+            const $this = $(this);
+            let text = $this.text().trim();
+            if (text.length) {
+                return text;
+            }
+            text = $this.attr('title') || '';
+            if (text.length) {
+                return text;
+            }
+            text = $this.data('text') || '';
+            if (text.length) {
+                return text;
+            }
+            return null;
+        },
+
+        /**
+         * Returns if this element is selectable.
+         * 
+         * @returns {boolean} true if selectable.
+         */
+        isSelectable: function () {
+            const $this = $(this);
+            return !($this.hasClass('disabled') || $this.hasClass('d-none'));
+        },
+
+        /**
+         * Initialize the context menu.
+         * 
+         * @param {string}
+         *            selector - the selector matching the elements to trigger
+         *            on.
+         * @param {function}
+         *            fnShow - the function called when the context menu is
+         *            shown.
+         * @param {function}
+         *            fnHide - the function called when the context menu is
+         *            hidden.
+         * @return {jQuery} The jQuery element for chaining.
+         */
+        initContextMenu: function (selector, fnShow, fnHide) {
+            // build callback
+            const build = function ($element) {
+                // get items
+                const items = $element.getContextMenuItems();
+                if ($.isEmptyObject(items)) {
+                    return false;
                 }
-            },
-            events: {
-                show: fnShow || $.noop,
-                hide: fnHide || $.noop
-            },
-            items: items
-        };
-    };
 
-    // create
-    $.contextMenu({
-        build: build,
-        selector: selector
+                return {
+                    zIndex: 1000,
+                    autoHide: true,
+                    callback: function (key, options, e) {
+                        const item = options.items[key];
+                        if (item.link) {
+                            e.stopPropagation();
+                            item.link.get(0).click();
+                            return true;
+                        }
+                    },
+                    events: {
+                        show: fnShow || $.noop,
+                        hide: fnHide || $.noop
+                    },
+                    items: items
+                };
+            };
+
+            // create
+            $.contextMenu({
+                build: build,
+                selector: selector
+            });
+
+            return $(this);
+        }
     });
-
-    return $(this);
-};
+})(jQuery);
 
 /**
  * Class to build context-menu items.

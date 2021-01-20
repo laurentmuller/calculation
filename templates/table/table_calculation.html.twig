@@ -1,0 +1,46 @@
+{% extends 'table/table_base.html.twig' %}
+
+{# macros #}
+{% macro output_state(state, selection) -%}
+<a href="#" data-value="{{ state.id }}" class="dropdown-item dropdown-state{% if state.id == selection %} active{% endif %}">{{ state.code }}</a>
+{%- endmacro %}
+
+{# parameters #}
+{%- set title        = 'calculation.list.title' -%}
+{%- set title_icon   = 'calculator' -%}
+{%- set defer_url    = url('table_calculation') -%}
+{%- set save_url     = url('table_calculation_save') -%}
+{%- set stateId      = state ? state.id : 0 -%}
+{%- set params       = { 'stateId': stateId } -%}
+
+{% block toolbar_actions -%}
+<div class="btn-group btn-group-sm" role="group">
+    <button id="button-state" data-value="{{ stateId }}" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" title="{{ 'calculation.fields.state'|trans }}">
+        {{- state ? state.code : 'calculation.fields.state'|trans -}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="button-state">
+        {{ _self.output_state({id: 0, code: 'calculation.list.state_all_text'|trans}, stateId) }}
+        {% for state in states %}
+        {{ _self.output_state(state, stateId) }}
+        {% endfor %}
+    </div>
+</div>     
+{%- endblock %}
+
+{% block global_actions -%}
+{{ _self.item_external(path('calculation_pdf'), 'calculation.list.pdf_title', 'file-pdf far') }}
+{{ _self.item_external(path('calculation_excel'), 'calculation.list.excel_title', 'file-excel far') }}
+{%- endblock %}        
+
+{% block edit_actions -%}
+{%- set show_class = 'btn-show btn-path' ~ (row_show ? ' btn-default' : '') -%}
+{%- set edit_class = 'btn-edit btn-path' ~ (row_edit ? ' btn-default' : '') -%}
+{{ _self.item_path(path('calculation_show', params), 'calculation.show.title', 'tv mr-1', show_class) }}
+{{ _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', 'pencil-alt mr-1', edit_class) }}
+{{ _self.item_path(path('calculation_delete', params), 'calculation.delete.title', 'times mr-1', 'btn-delete btn-path') }}
+{{ _self.item_separator() }}
+{{ _self.item_path(path('calculation_add', params), 'calculation.add.title', 'file mr-1 far', 'btn-add btn-path') }}
+{{ _self.item_path(path('calculation_clone', params), 'common.button_clone', 'copy mr-1 far', 'btn-clone btn-path') }}
+{{ _self.item_separator() }}
+{{ _self.item_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', 'file-pdf mr-1 far', 'btn-pdf btn-path') }}
+{%- endblock %}

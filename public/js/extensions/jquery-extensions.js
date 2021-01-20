@@ -309,7 +309,7 @@
             // get?
             if (!arguments.length) {
                 const parsedValue = Number.parseInt($(this).val(), 10);
-                return isNaN(parsedValue) ? 0 : parsedValue;
+                return Number.isNaN(parsedValue) ? 0 : parsedValue;
             }
 
             // set
@@ -331,14 +331,14 @@
         floatVal: function (value) {
             // get?
             if (!arguments.length) {
-                const parsedValue = parseFloat($(this).val());
-                return isNaN(parsedValue) ? 0 : parsedValue;
+                const parsedValue = Number.parseFloat($(this).val());
+                return Number.isNaN(parsedValue) ? 0 : parsedValue;
             }
 
             // set
-            let parsedValue = parseFloat(value);
-            if (isNaN(parsedValue) || parsedValue === -0) {
-                parsedValue = parseFloat(0);
+            let parsedValue = Number.parseFloat(value);
+            if (Number.isNaN(parsedValue) || parsedValue === -0) {
+                parsedValue = Number.parseFloat(0);
             }
             return $(this).val(parsedValue.toFixed(2));
         },

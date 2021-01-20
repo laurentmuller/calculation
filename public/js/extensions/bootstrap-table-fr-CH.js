@@ -20,7 +20,7 @@
             return "".concat(pageNumber, " entrées par page");
         },
         formatShowingRows: function formatShowingRows(pageFrom, pageTo, totalRows, totalNotFiltered) {
-            if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
+            if (typeof totalNotFiltered !== 'undefined' && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
                 return "Entrée ".concat(pageFrom, " - ").concat(pageTo, " / ").concat(totalRows, " (").concat(totalNotFiltered, " au total)");
             }
             return "Entrée ".concat(pageFrom, " - ").concat(pageTo, " / ").concat(totalRows);

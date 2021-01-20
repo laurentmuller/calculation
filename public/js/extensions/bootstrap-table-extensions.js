@@ -7,18 +7,67 @@
  * 
  * @param {number}
  *            value - the field value (id).
+ * @param {object}
+ *            row - the row record data.
  * 
  * @returns {string} the rendered cell.
  */
-function actionsFormatter(value) { // jshint ignore:line
+function actionsFormatter(value, row) { // jshint ignore:line
     'use strict';
-    const $actions = $('#actions').clone().removeClass('d-none');
+
+    const substr = '$1' + value;
+    const regex = /(\/|\bid=)(\d+)/;
+    const $actions = $('#dropdown-actions').clone().removeClass('d-none');
+
     $actions.find('.btn-path').each(function () {
         const $link = $(this);
-        const href = $link.attr('href').replace('0', value);
-        $link.attr('href', href);
+        const source = $link.attr('href');
+        const target = source.replace(regex, substr);
+        $link.attr('href', target);
     });
+    
     return $actions.html();
+}
+
+/**
+ * Formatter for calculation identifier column.
+ * 
+ * @param {number}
+ *            value - the field value.
+ * @param {object}
+ *            row - the row record data.
+ * 
+ * @returns {object} the cell style.
+ */
+function renderCalculationState(value, row) { // jshint ignore:line
+    'use strict';
+    return {
+        css: {
+          'border-left-color': row['state.color'] + ' !important'
+        }
+    };
+}
+
+/**
+ * Formatter for calculation margin column.
+ * 
+ * @param {number}
+ *            value - the field value.
+ * @param {object}
+ *            row - the row record data.
+ * 
+ * @returns {object} the cell style.
+ */
+function renderCalculationMargin(value, row) { // jshint ignore:line
+    'use strict';
+    const overallMargin = Number.parseFloat(row.overallMargin) / 100;
+    const minMargin = Number.parseFloat($('#table-edit').data('min-margin'));
+    if (overallMargin < minMargin) {
+        return {
+            'classes': 'text-percent text-danger cursor-pointer',
+        };
+    }
+    return {};
 }
 
 /**
@@ -39,6 +88,42 @@ function loadingTemplate(message) { // jshint ignore:line
 $.fn.extend({
 
     // -------------------------------
+    // Cell extension
+    // -------------------------------
+    
+    /**
+     * Gets the context menu items for the selected cell.
+     * 
+     * @return {object} the context menu items.
+     */
+    getContextMenuItems: function () {
+        'use strict';
+        const $row = $(this).parents('tr');
+        const $elements = $row.find('.dropdown-menu').children();
+        const builder = new MenuBuilder();
+        return builder.fill($elements).getItems();
+    },
+    
+    // -------------------------------
+    // Row extension
+    // -------------------------------
+    
+    /**
+     * Update the selected row.
+     * 
+     * @return {boolean} this function returns always true.
+     */
+    updateRow: function () {
+        'use strict';
+        const $row = $(this);
+        const $table = $row.parents('table');
+        const options = $table.getOptions();
+        $table.find(options.rowSelector).removeClass(options.selector);
+        $row.addClass(options.selector).scrollInViewport();
+        return true;
+    },
+
+    // -------------------------------
     // Table extension
     // -------------------------------
     
@@ -50,73 +135,70 @@ $.fn.extend({
      * 
      * @return {jQuery} this instance for chaining.
      */
-    initialize: function(options) {
+    initBootstrapTable: function(options) {
         'use strict';
         const $this = $(this);
         
-        // merge options
+        // settings
         const selector = $this.data('row-selector') || 'table-primary';
         const rowSelector = 'tr.' + selector.replaceAll(' ', '.');
         const settings = {
             selector: selector,
-            rowSelector: rowSelector
+            rowSelector: rowSelector,
+            
+            // select row on click
+            onClickRow: function(row, $element) {
+                $element.updateRow();  
+            },
+            
+            // edit row on cell double-click
+            onDblClickCell: function (field, value, row, $element) {
+                if (!$element.hasClass('rowlink-skip')) {
+                    $this.editRow($element.closest('tr'));
+                }
+            },
+            
+            // update UI on post page load
+            onPostBody: function (content) {
+                if (content.length) {
+                    // select first row if none
+                    if ($this.find(rowSelector).length === 0) {
+                        $this.selectFirstRow();
+                    }      
+                    $this.highlight();
+                    $('.card-footer').stop().fadeIn(250);
+                } else {
+                    $('.card-footer').stop().fadeOut(250);
+                }
+                $('.page-link').each(function (index, element) {
+                    const $this = $(element);
+                    $this.attr('title', $this.attr('aria-label'));
+                });
+                $this.updateCardView().updateHref();
+            },
+            
+            // update UI on card view toggle
+            onToggle: function (cardView) {
+                const options = $this.getOptions();
+                const $button = $('.bootstrap-table button[name="toggle"]');
+                const text = cardView ? options.formatToggleOff() : options.formatToggleOn();
+                $button.attr('aria-label', text).attr('title', text);
+                $this.updateCardView().saveParameters();
+            }
         }; 
-        
+     
         // initialize
         $this.bootstrapTable($.extend(true, settings, options));
         
-        // select row on click
-        $this.on('click-row.bs.table', function (e, row, $element) {
-            $element.updateRow();    
-        });
-        
-        // edit row on cell double-click
-        $this.on('dbl-click-cell.bs.table', function (e, field, value, row, $element) {
-            if (!$element.hasClass('rowlink-skip')) {
-                if ($this.editRow($element.closest('tr'))) {
-                    e.preventDefault();
-                }
-            }
-        });
-
-        // update UI on post page load
-        $this.on('post-body.bs.table', function (e, content) {
-            if (content.length) {
-                $this.highlight().selectFirstRow();
-                $('.card-footer').stop().fadeIn(250);
-            } else {
-                $('.card-footer').stop().fadeOut(250);
-            }
-            $('.page-link').each(function (index, element) {
-                const $this = $(element);
-                $this.attr('title', $this.attr('aria-label'));
-            });
-            $this.updateCardView().updateHref();
-        });
-        
-        // update UI on card view toggle
-        $this.on('toggle.bs.table', function (e, cardView) {
-            const options = $this.getOptions();
-            const $button = $('.bootstrap-table button[name="toggle"]');
-            const text = cardView ? options.formatToggleOff() : options.formatToggleOn();
-            $button.attr('aria-label', text).attr('title', text);
-            $this.updateCardView().saveParameters();
-        });
-        
+        // enable keys and update UI
+        $this.updateCardView().enableKeys().highlight();
+     
         // select row on right click
         $this.find('tbody').on('mousedown', 'tr', function (e) {
             if (e.button === 2) {
                 $(this).updateRow();
             }
         });
-        
-        // enable keys and update UI
-        $this.updateCardView().enableKeys().highlight();
-        
-        // select first row if none
-        if ($this.find(rowSelector).length === 0) {
-            $this.selectFirstRow();
-        }        
         
         return $this;
     },
@@ -152,7 +234,7 @@ $.fn.extend({
 
         // function?
         if ($.isFunction(options.queryParams)) {
-            params = options.queryParams(params);
+            params = $.extend(params, options.queryParams(params));
         }
         
         return params;
@@ -240,7 +322,6 @@ $.fn.extend({
                 } 
             }
             // $row.find('td:first').removeAttr('colspan');
-            
         });
         // $this.find('.card-view-title').remove();
         // $this.find('.card-view-title').toggleClass('undefined text-muted');
@@ -277,8 +358,7 @@ $.fn.extend({
         if (searchText && searchText.length) {
             const options = {
                 element: 'span',
-                //className: 'text-success font-weight-bold',
-                className: 'bg-warning',
+                className: 'text-success',
                 ignorePunctuation: ["'", ","]
             };
             const $ctx = $this.find('tbody tr');
@@ -520,41 +600,5 @@ $.fn.extend({
             $(document).off('keydown.bs.table', handler);
         }
         return $this;
-    },
-
-    // -------------------------------
-    // Row extension
-    // -------------------------------
-    
-    /**
-     * Update the selected row.
-     * 
-     * @return {boolean} this function returns always true.
-     */
-    updateRow: function () {
-        'use strict';
-        const $row = $(this);
-        const $table = $row.parents('table');
-        const options = $table.getOptions();
-        $table.find(options.rowSelector).removeClass(options.selector);
-        $row.addClass(options.selector).scrollInViewport();
-        return true;
-    },
-
-    // -------------------------------
-    // Cell extension
-    // -------------------------------
-    
-    /**
-     * Gets the context menu items for the selected cell.
-     * 
-     * @return {object} the context menu items.
-     */
-    getContextMenuItems: function () {
-        'use strict';
-        const $row = $(this).parents('tr');
-        const $elements = $row.find('.dropdown-menu').children();
-        const builder = new MenuBuilder();
-        return builder.fill($elements).getItems();
-    },
+    }
 });

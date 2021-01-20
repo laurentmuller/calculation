@@ -12,22 +12,19 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\BootstrapColumn;
+use App\BootstrapTable\AbstractBootstrapEntityTable;
+use App\BootstrapTable\AbstractBootstrapTable;
+use App\BootstrapTable\CalculationTable;
+use App\BootstrapTable\CustomerTable;
 use App\BootstrapTable\ProductTable;
-use App\Repository\AbstractRepository;
+use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
-use App\Repository\ProductRepository;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Query\Expr\Orx;
-use Doctrine\ORM\QueryBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Controler for the Bootstrap Table.
@@ -40,112 +37,141 @@ use Symfony\Component\Serializer\SerializerInterface;
 class BootstrapTableController extends AbstractController
 {
     /**
-     * The default page size.
-     */
-    private const PAGE_SIZE = 20;
-
-    // parameter names
-    private const PARAM_CARD = 'card';
-    private const PARAM_CATEGORY = 'categoryId';
-    private const PARAM_ID = 'id';
-    private const PARAM_LIMIT = 'limit';
-    private const PARAM_OFFSET = 'offset';
-    private const PARAM_ORDER = 'order';
-    private const PARAM_SEARCH = 'search';
-    private const PARAM_SORT = 'sort';
-
-    // session prefixes
-    private const PREFIX_PRODUCT = 'table.product';
-
-    /**
      * The where part name of the query builder.
      */
     private const WHERE_PART = 'where';
+
+    /**
+     * Display the calculation table.
+     *
+     * @Route("/calculation", name="table_calculation")
+     */
+    public function calculation(Request $request, CalculationTable $table, CalculationStateRepository $repository): Response
+    {
+        // get parameters
+        $parameters = $this->handleTableRequest($request, $table);
+
+        // ajax?
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse($parameters);
+        }
+
+        // state
+        $parameters['state'] = $table->getCalculationState($repository);
+        $parameters['states'] = $repository->getListCount();
+
+        // render
+        return $this->render('table/table_calculation.html.twig', $parameters);
+    }
+
+    /**
+     * Save calculation table parameters.
+     *
+     * @Route("/calculation/save", name="table_calculation_save")
+     */
+    public function calculationSave(Request $request, CalculationTable $table): JsonResponse
+    {
+        $result = $table->saveRequestValue($request, ProductTable::PARAM_CARD, false);
+
+        return new JsonResponse($result);
+    }
+
+    /**
+     * Display the customer table.
+     *
+     * @Route("/customer", name="table_customer")
+     */
+    public function customer(Request $request, CustomerTable $table): Response
+    {
+        // get parameters
+        $parameters = $this->handleTableRequest($request, $table);
+
+        // ajax?
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse($parameters);
+        }
+
+        // render
+        return $this->render('table/table_customer.html.twig', $parameters);
+    }
+
+    /**
+     * Save customer table parameters.
+     *
+     * @Route("/customer/save", name="table_customer_save")
+     */
+    public function customerSave(Request $request, CustomerTable $table): JsonResponse
+    {
+        $result = $table->saveRequestValue($request, AbstractBootstrapTable::PARAM_CARD, false);
+
+        return new JsonResponse($result);
+    }
 
     /**
      * Display the product table.
      *
      * @Route("/product", name="table_product")
      */
-    public function products(Request $request, ProductTable $table, ProductRepository $repository, CategoryRepository $categoryRepository, SerializerInterface $serializer): Response
+    public function product(Request $request, ProductTable $table, CategoryRepository $repository): Response
     {
-        /** @var BootstrapColumn[] $columns */
-        $columns = $table->getColumns();
-        $builder = $repository->createDefaultQueryBuilder();
+        // get parameters
+        $parameters = $this->handleTableRequest($request, $table);
 
-        // count
-        $totalNotFiltered = $filtered = $repository->count([]);
-
-        // search
-        $search = $request->get(self::PARAM_SEARCH, '');
-        if (\strlen($search) > 0) {
-            $expr = new Orx();
-            foreach ($columns as $column) {
-                if ($column->isSearchable()) {
-                    $fields = (array) $repository->getSearchFields($column->getField());
-                    foreach ($fields as $field) {
-                        $expr->add($field . ' LIKE :' . self::PARAM_SEARCH);
-                    }
-                }
-            }
-            if ($expr->count()) {
-                $builder->andWhere($expr)
-                    ->setParameter(self::PARAM_SEARCH, "%{$search}%");
-            }
+        // ajax?
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse($parameters);
         }
 
         // category
-        $categoryId = $request->get(self::PARAM_CATEGORY, false);
-        if ($categoryId) {
-            $field = $repository->getSearchFields('category.id');
-            $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
-                ->setParameter(self::PARAM_CATEGORY, $categoryId, Types::INTEGER);
-        }
+        $parameters['category'] = $table->getCategory($repository);
+        $parameters['categories'] = $repository->getListCount();
+
+        // render
+        return $this->render('table/table_product.html.twig', $parameters);
+    }
+
+    /**
+     * Save product table parameters.
+     *
+     * @Route("/product/save", name="table_product_save")
+     */
+    public function productSave(Request $request, ProductTable $table): JsonResponse
+    {
+        $result = $table->saveRequestValue($request, ProductTable::PARAM_CARD, false);
+
+        return new JsonResponse($result);
+    }
+
+    /**
+     * Handle the table request.
+     *
+     * @param Request                      $request the request
+     * @param AbstractBootstrapEntityTable $table   the table to get values for
+     *
+     * @return array the parameters
+     */
+    private function handleTableRequest(Request $request, AbstractBootstrapEntityTable $table): array
+    {
+        // builder
+        $builder = $table->createDefaultQueryBuilder();
+
+        // count
+        $totalNotFiltered = $filtered = $table->count();
+
+        // search
+        $search = $table->addSearch($request, $builder);
 
         // count filtered
         if (!empty($builder->getDQLPart(self::WHERE_PART))) {
-            $filtered = $this->countFiltered($repository, $builder);
+            $filtered = $table->countFiltered($builder);
         }
 
         // sort
-        $orderBy = [];
-        $sort = $this->getRequestValue($request, self::PREFIX_PRODUCT, self::PARAM_SORT, false);
-        $order = $this->getRequestValue($request, self::PREFIX_PRODUCT, self::PARAM_ORDER, Criteria::ASC);
-        if ($sort) {
-            $fields = (array) $repository->getSortFields($sort);
-            foreach ($fields as $field) {
-                if (!\array_key_exists($field, $orderBy)) {
-                    $orderBy[$field] = $order;
-                }
-            }
-        }
+        [$sort, $order] = $table->addOrderBy($request, $builder);
 
-        // add default order if not present
-        $defaultColumn = $table->getDefaultColumn();
-        $defaultOrder = $defaultColumn->getOrder();
-        $fields = (array) $repository->getSortFields($defaultColumn->getField());
-        foreach ($fields as $field) {
-            if (!\array_key_exists($field, $orderBy)) {
-                $orderBy[$field] = $defaultOrder;
-            }
-        }
-
-        //apply sort
-        foreach ($orderBy as $key => $value) {
-            $builder->addOrderBy($key, $value);
-        }
-
-        // default sort
-        if (false === $sort) {
-            $sort = $defaultColumn->getField();
-        }
-
-        // page
-        $offset = (int) $request->get(self::PARAM_OFFSET, 0);
-        $limit = (int) $this->getRequestValue($request, self::PREFIX_PRODUCT, self::PARAM_LIMIT, self::PAGE_SIZE);
+        // limit
+        [$offset, $limit] = $table->addLimit($request, $builder);
         $page = 1 + (int) \floor(($offset / $limit));
-        $builder->setFirstResult($offset)
-            ->setMaxResults($limit);
 
         // get result and map values
         $items = $builder->getQuery()->getResult();
@@ -156,90 +182,33 @@ class BootstrapTableController extends AbstractController
 
         // ajax?
         if ($request->isXmlHttpRequest()) {
-            return new JsonResponse([
+            return [
                 'totalNotFiltered' => $totalNotFiltered,
                 'total' => $filtered,
                 'rows' => $rows,
-            ]);
+            ];
         }
 
-        $order = \strtolower($order);
-        $id = (int) $request->get(self::PARAM_ID, 0);
-        $card = \filter_var($this->getRequestValue($request, self::PREFIX_PRODUCT, self::PARAM_CARD, false), FILTER_VALIDATE_BOOLEAN);
-        $category = $categoryId ? $categoryRepository->find($categoryId) : null;
+        $id = (int) $request->get(AbstractBootstrapTable::PARAM_ID, 0);
+        $card = (bool) \filter_var($table->getRequestValue($request, AbstractBootstrapTable::PARAM_CARD, false), FILTER_VALIDATE_BOOLEAN);
 
         // render
-        return $this->render('table/table_product.html.twig', [
+        return [
+            'columns' => $table->getColumns(),
             'rows' => $rows,
-            'total' => $filtered,
-            'totalNotFiltered' => $totalNotFiltered,
-            'columns' => $columns,
-            'search' => $search,
+            'id' => $id,
 
-            'offset' => $offset,
-            'limit' => $limit,
+            'totalNotFiltered' => $totalNotFiltered,
+            'total' => $filtered,
+
             'page' => $page,
+            'limit' => $limit,
+            'offset' => $offset,
+            'search' => $search,
+            'card' => $card,
 
             'sort' => $sort,
             'order' => $order,
-
-            'id' => $id,
-            'card' => $card,
-
-            'category' => $category,
-            'categories' => $categoryRepository->getListCount(),
-        ]);
-    }
-
-    /**
-     * Save products table parameters.
-     *
-     * @Route("/product/save", name="table_product_save")
-     */
-    public function productsSave(Request $request): JsonResponse
-    {
-        $this->getRequestValue($request, self::PREFIX_PRODUCT, self::PARAM_CARD, false);
-
-        return new JsonResponse(true);
-    }
-
-    private function countFiltered(AbstractRepository $repository, QueryBuilder $builder): int
-    {
-        $alias = $builder->getRootAliases()[0];
-        $field = $repository->getSingleIdentifierFieldName();
-        $select = "COUNT($alias.$field)";
-
-        $cloned = (clone $builder);
-        $cloned->select($select);
-
-        return (int) $cloned->getQuery()->getSingleScalarResult();
-    }
-
-    /**
-     * Gets the request parameter value.
-     *
-     * @param Request $request the request to get value from
-     * @param string  $prefix  the session key prefix
-     * @param string  $name    the parameter name
-     * @param mixed   $default the default value if not found
-     *
-     * @return mixed the parameter value
-     */
-    private function getRequestValue(Request $request, string $prefix, string $name, $default = null)
-    {
-        $key = "$prefix.$name";
-        $session = $request->hasSession() ? $request->getSession() : null;
-
-        if ($session) {
-            $default = $session->get($key, $default);
-        }
-
-        $value = $request->get($name, $default);
-
-        if ($session) {
-            $session->set($key, $value);
-        }
-
-        return $value;
+        ];
     }
 }

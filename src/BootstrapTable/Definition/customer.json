@@ -1,0 +1,32 @@
+[
+	{
+		"field": "id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false
+	},
+	{
+		"field": "nameAndCompany",
+		"title": "customer.fields.nameAndCompany",
+		"default": true,
+		"class": "w-35 text-cell"
+	},
+	{
+		"field": "address",
+		"title": "customer.fields.address",
+		"class": "w-auto text-cell"
+	},
+	{
+		"field": "zipCity",
+		"title": "customer.fields.zipCity",
+		"class": "w-20 text-cell"
+	},
+	{
+		"field": "action",
+		"virtual": true,
+		"sortable": false,
+		"searchable": false,
+		"class": "actions rowlink-skip d-print-none",
+		"formatter": "actionsFormatter"
+	}
+]

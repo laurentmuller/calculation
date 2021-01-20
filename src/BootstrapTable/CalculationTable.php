@@ -12,35 +12,35 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
-use App\Entity\Category;
-use App\Repository\CategoryRepository;
-use App\Repository\ProductRepository;
+use App\Entity\CalculationState;
+use App\Repository\CalculationRepository;
+use App\Repository\CalculationStateRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * The products table.
+ * The calculations table.
  *
  * @author Laurent Muller
  */
-class ProductTable extends AbstractBootstrapEntityTable
+class CalculationTable extends AbstractBootstrapEntityTable
 {
     /**
-     * The category parameter name.
+     * The state parameter name.
      */
-    private const PARAM_CATEGORY = 'categoryId';
+    private const PARAM_STATE = 'stateId';
 
     /**
-     * The selected category identifier.
+     * The selected state identifier.
      */
-    private int $categoryId = 0;
+    private int $stateId = 0;
 
     /**
      * Constructor.
      */
-    public function __construct(SerializerInterface $serializer, ProductRepository $repository)
+    public function __construct(SerializerInterface $serializer, CalculationRepository $repository)
     {
         parent::__construct($serializer, $repository);
     }
@@ -54,24 +54,24 @@ class ProductTable extends AbstractBootstrapEntityTable
     {
         $search = parent::addSearch($request, $builder);
 
-        // category?
-        $this->categoryId = (int) $request->get(self::PARAM_CATEGORY, 0);
-        if (0 !== $this->categoryId) {
-            $field = $this->repository->getSearchFields('category.id');
-            $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
-                ->setParameter(self::PARAM_CATEGORY, $this->categoryId, Types::INTEGER);
+        // state?
+        $this->stateId = (int) $request->get(self::PARAM_STATE, 0);
+        if (0 !== $this->stateId) {
+            $field = $this->repository->getSearchFields('state.id');
+            $builder->andWhere($field . '=:' . self::PARAM_STATE)
+                ->setParameter(self::PARAM_STATE, $this->stateId, Types::INTEGER);
         }
 
         return $search;
     }
 
     /**
-     * Gets the selected category or null if none.
+     * Gets the selected calculation state or null if none.
      */
-    public function getCategory(CategoryRepository $repository): ?Category
+    public function getCalculationState(CalculationStateRepository $repository): ?CalculationState
     {
-        if (0 !== $this->categoryId) {
-            return $repository->find($this->categoryId);
+        if (0 !== $this->stateId) {
+            return $repository->find($this->stateId);
         }
 
         return null;
@@ -84,7 +84,7 @@ class ProductTable extends AbstractBootstrapEntityTable
      */
     protected function createColumns(): array
     {
-        $path = __DIR__ . '/Definition/product.json';
+        $path = __DIR__ . '/Definition/calculation.json';
 
         return $this->deserializeColumns($path);
     }
@@ -94,6 +94,6 @@ class ProductTable extends AbstractBootstrapEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['description' => BootstrapColumn::SORT_ASC];
+        return ['id' => BootstrapColumn::SORT_DESC];
     }
 }

@@ -23,6 +23,16 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 class BootstrapColumn
 {
+    /**
+     * The ascending sortable direction.
+     */
+    public const SORT_ASC = 'asc';
+
+    /**
+     * The descending sortable direction.
+     */
+    public const SORT_DESC = 'desc';
+
     private ?string $class = null;
 
     private bool $default = false;
@@ -39,7 +49,11 @@ class BootstrapColumn
 
     private bool $sortable = true;
 
+    private ?string $styleFormatter = null;
+
     private ?string $title = null;
+
+    private bool $virtual = false;
 
     private bool $visible = true;
 
@@ -51,6 +65,21 @@ class BootstrapColumn
     public function formatAmount(float $value): string
     {
         return FormatUtils::formatAmount($value);
+    }
+
+    public function formatDate(\DateTimeInterface $value): string
+    {
+        return FormatUtils::formatDate($value);
+    }
+
+    public function formatId(int $value): string
+    {
+        return FormatUtils::formatId($value);
+    }
+
+    public function formatPercentSign(float $value): string
+    {
+        return FormatUtils::formatPercent($value);
     }
 
     public function getClass(): ?string
@@ -78,6 +107,11 @@ class BootstrapColumn
         return $this->order;
     }
 
+    public function getStyleFormatter(): ?string
+    {
+        return $this->styleFormatter;
+    }
+
     public function getTitle(): ?string
     {
         return $this->title;
@@ -98,6 +132,11 @@ class BootstrapColumn
         return $this->sortable;
     }
 
+    public function isVirtual(): bool
+    {
+        return $this->virtual;
+    }
+
     public function isVisible(): bool
     {
         return $this->visible;
@@ -113,6 +152,10 @@ class BootstrapColumn
      */
     public function mapValue($objectOrArray, PropertyAccessor $accessor): string
     {
+        if ($this->virtual) {
+            return (string) $accessor->getValue($objectOrArray, 'id');
+        }
+
         $field = $this->getField();
         $value = $accessor->getValue($objectOrArray, $field);
         if (\is_callable([$this, $this->fieldFormatter])) {
@@ -159,9 +202,10 @@ class BootstrapColumn
 
     public function setOrder(string $order): self
     {
+        $order = \strtolower($order);
         switch ($order) {
-            case Criteria::ASC:
-            case Criteria::DESC:
+            case self::SORT_ASC:
+            case self::SORT_DESC:
                 $this->order = $order;
             break;
         }
@@ -183,9 +227,23 @@ class BootstrapColumn
         return $this;
     }
 
+    public function setStyleFormatter(?string $styleFormatter): self
+    {
+        $this->styleFormatter = $styleFormatter;
+
+        return $this;
+    }
+
     public function setTitle(?string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function setVirtual(bool $virtual): self
+    {
+        $this->virtual = $virtual;
 
         return $this;
     }

@@ -45,6 +45,7 @@ class UrlGeneratorService
         'card',
 
         'categoryId', // bootstrap-table product
+        'stateId', // bootstrap-table calculation
 
         'type', // seach page
     ];

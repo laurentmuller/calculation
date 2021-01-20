@@ -33,11 +33,12 @@
 		"fieldFormatter": "formatAmount"
 	},
 	{
-		"field": "id",
+		"field": "action",
+		"virtual": true,
 		"sortable": false,
 		"searchable": false,
 		"class": "actions rowlink-skip d-print-none",
-		"formatter": "actionsFormatter"		
+		"formatter": "actionsFormatter"
 	},
 	{
 		"field": "category.id",

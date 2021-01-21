@@ -17,13 +17,13 @@ use App\BootstrapTable\AbstractBootstrapTable;
 use App\BootstrapTable\CalculationTable;
 use App\BootstrapTable\CustomerTable;
 use App\BootstrapTable\ProductTable;
+use App\Interfaces\EntityVoterInterface;
 use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -152,10 +152,14 @@ class BootstrapTableController extends AbstractController
      */
     private function handleTableRequest(Request $request, AbstractBootstrapEntityTable $table): array
     {
+        // check permission
+        $name = $table->getEntityClassName();
+        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $name);
+
         // builder
         $builder = $table->createDefaultQueryBuilder();
 
-        // count
+        // count all
         $totalNotFiltered = $filtered = $table->count();
 
         // search
@@ -173,12 +177,9 @@ class BootstrapTableController extends AbstractController
         [$offset, $limit] = $table->addLimit($request, $builder);
         $page = 1 + (int) \floor(($offset / $limit));
 
-        // get result and map values
-        $items = $builder->getQuery()->getResult();
-        $accessor = PropertyAccess::createPropertyAccessor();
-        $rows = \array_map(function ($entity) use ($table, $accessor) {
-            return $table->mapValues($entity, $accessor);
-        }, $items);
+        // get result and map entities
+        $entities = $builder->getQuery()->getResult();
+        $rows = $table->mapEntities($entities);
 
         // ajax?
         if ($request->isXmlHttpRequest()) {

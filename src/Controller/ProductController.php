@@ -79,10 +79,10 @@ class ProductController extends AbstractEntityController
      */
     public function clone(Request $request, Product $item): Response
     {
-        $description = $this->trans('product.add.clone', ['%description%' => $item->getDescription()]);
-        $item = $item->clone($description);
+        $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
+        $clone = $item->clone($description);
 
-        return $this->editEntity($request, $item);
+        return $this->editEntity($request, $clone);
     }
 
     /**

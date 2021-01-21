@@ -33,6 +33,13 @@ class BootstrapColumn
      */
     public const SORT_DESC = 'desc';
 
+    /**
+     * The callback formatter.
+     *
+     * @var callable|bool
+     */
+    private $callbackFormatter = null;
+
     private ?string $class = null;
 
     private bool $default = false;
@@ -156,13 +163,11 @@ class BootstrapColumn
             return (string) $accessor->getValue($objectOrArray, 'id');
         }
 
-        $field = $this->getField();
-        $value = $accessor->getValue($objectOrArray, $field);
-        if (\is_callable([$this, $this->fieldFormatter])) {
-            $value = \call_user_func([$this, $this->fieldFormatter], $value);
-        }
+        // get value
+        $value = $accessor->getValue($objectOrArray, $this->field);
 
-        return (string) $value;
+        // format
+        return $this->formatValue($value);
     }
 
     public function setClass(?string $class): self
@@ -253,5 +258,28 @@ class BootstrapColumn
         $this->visible = $visible;
 
         return $this;
+    }
+
+    /**
+     * Formats the given value using the field formatter if applicable.
+     *
+     * @param mixed $value the value to format
+     *
+     * @return string the formatted value
+     */
+    private function formatValue($value): string
+    {
+        if (null === $this->callbackFormatter) {
+            if (\is_callable([$this, $this->fieldFormatter])) {
+                $this->callbackFormatter = [$this, $this->fieldFormatter];
+            } else {
+                $this->callbackFormatter = false;
+            }
+        }
+        if ($this->callbackFormatter) {
+            return (string) \call_user_func($this->callbackFormatter, $value);
+        }
+
+        return (string) $value;
     }
 }

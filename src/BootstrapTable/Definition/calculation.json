@@ -58,11 +58,5 @@
 		"visible": false,
 		"orderable": false,
 		"searchable": false
-	},
-	{
-		"field": "state.id",
-		"visible": false,
-		"orderable": false,
-		"searchable": true
 	}
 ]

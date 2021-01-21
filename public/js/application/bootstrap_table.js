@@ -2,11 +2,11 @@
 
 
 /**
- * jQuery extension for Bootstrap tables, rows and cells.
+ * jQuery extensions.
  */
 $.fn.extend({
     
-    getCategoryId: function() {
+    getDataId: function() {
         'use strict';
         const $this = $(this);
         const id = Number.parseInt($this.data('value'), 10);
@@ -16,55 +16,30 @@ $.fn.extend({
         return null;
     },
     
-    setCategoryId(id, $selection) {
+    setDataId(id, $selection) {
         'use strict';
         const $this = $(this);
         $this.data('value', id);
-        if (id === 0) {
-            $this.text($this.attr('title'));
-        } else {
+        if (id) {
             $this.text($selection.text());
+        } else {
+            $this.text($this.attr('title'));
         }
     },
     
-    getStateId: function() {
-        'use strict';
-        const $this = $(this);
-        const id = Number.parseInt($this.data('value'), 10);
-        if (!Number.isNaN(id) && id !== 0) {
-            return id;
-        }
-        return null;
-    },
-    
-    setStateId(id, $selection) {
-        'use strict';
-        const $this = $(this);
-        $this.data('value', id);
-        if (id === 0) {
-            $this.text($this.attr('title'));
-        } else {
-            $this.text($selection.text());
-        }
-    },
-        
     initDropdown: function() {
         'use strict';
         const $this = $(this);
-        const defaultValue = $this.data('value');
         const $items = $this.next('.dropdown-menu').find('.dropdown-item');
         if ($items.length) {
             $items.on('click', function() {
                 const $item = $(this);
-                const newValue = $item.data('value');
-                const oldValue = $this.data('value');
+                const newValue = $item.getDataId();
+                const oldValue = $this.getDataId();
                 if (newValue !== oldValue) {
                     $items.removeClass('active');
                     $item.addClass('active');
-                    $this.data('value', newValue);
-                    if (newValue === defaultValue) {
-                        $this.text($this.attr('title') || $item.text());    
-                    }
+                    $this.setDataId(newValue, $item);
                     $this.trigger('input');
                 }
             });
@@ -81,15 +56,41 @@ $.fn.extend({
 
     // table
     const $table = $('#table-edit');
+    
+    // handle state selection
+    const $state = $('#button-state'); 
+    if ($state.length) {
+        $state.initDropdown().on('input', function() {
+            const id = $(this).getDataId();
+            $table.refresh({
+                query: {
+                    stateId: id
+                }
+            });
+        });    
+    }    
+        
+    // handle category selection
+    const $category = $('#button-category');
+    if ($category.length) {
+        $category.initDropdown().on('input', function() {
+            const id = $(this).getDataId();
+            $table.refresh({
+                query: {
+                    categoryId: id
+                }
+            });
+        });    
+    }
 
-    // initialize
+    // initialize table
     const options = {
         queryParams: function (params) {
-            const categoryId = $('#button-category').getCategoryId();
+            const categoryId = $category.getDataId();
             if (categoryId) {
                 params.categoryId = categoryId;
             }
-            const stateId = $('#button-state').getStateId();
+            const stateId = $state.getDataId();
             if (stateId) {
                 params.stateId = stateId;
             }
@@ -97,71 +98,18 @@ $.fn.extend({
         },
     };
     $table.initBootstrapTable(options);
-
-    // update UI
-    $('.fixed-table-pagination').appendTo('.card-footer');
-    $('input.search-input').attr('type', 'text');
-    $('.fa.fa-trash').toggleClass('fa fa-trash fas fa-eraser');
-    $('.fixed-table-toolbar').addClass('d-print-none');
-
-    // handle category selection
-    // $('#button-category').initDropdown().on('input', function() {
-    // const id = $(this).data('value')
-    // const id = $(this).getCategoryId();
-    // $table.refresh({
-    // query: {
-    // categoryId: id
-    // }
-    // });
-    // });
-    
-     // handle category selection
-     $('.dropdown-category').on('click', function () {
-         const $this = $(this);
-         const $category = $('#button-category');
-         const newId = Number.parseInt($this.data('value'), 10);
-         const oldId = $category.getCategoryId();
-         if (newId !== oldId) {
-             $('.dropdown-category').removeClass('active');
-             $this.addClass('active');
-             $category.setCategoryId(newId, $this);
-             $table.refresh({
-                 query: {
-                     categoryId: newId
-                 }
-             });
-         }
-     });
-
-     // handle state selection
-     $('.dropdown-state').on('click', function () {
-         const $this = $(this);
-         const $state = $('#button-state');
-         const newId = Number.parseInt($this.data('value'), 10);
-         const oldId = $state.getStateId();
-         if (newId !== oldId) {
-             $('.dropdown-state').removeClass('active');
-             $this.addClass('active');
-             $state.setStateId(newId, $this);
-             $table.refresh({
-                 query: {
-                     stateId: newId
-                 }
-             });
-         }
-     });
      
     // handle clear search
     $('[name ="clearSearch"]').on('click', function () {
+        const isState = $state.getDataId() !== null;
+        const isCategory = $category.getDataId() !== null;
         const isSearch = $table.getSearchText().length > 0;
-        const isState = $('#button-state').getStateId() !== null;
-        const isCategory = $('#button-category').getCategoryId() !== null;
         
         // refresh?
         if ((isState || isCategory) && !isSearch) {
             // reset
-            $('#button-state').setStateId(0);
-            $('#button-category').setCategoryId(0);
+            $state.setDataId(0);
+            $category.setDataId(0);
             $table.refresh({
                 query: {
                     stateId: 0,
@@ -179,7 +127,7 @@ $.fn.extend({
         $table.enableKeys();
     });
 
-    // context menu
+    // create context menu
     const rowSelector = $table.getOptions().rowSelector;    
     const ctxSelector =  rowSelector + ' td:not(.d-print-none)';
     const show = function () {
@@ -187,4 +135,11 @@ $.fn.extend({
     };
     $table.initContextMenu(ctxSelector, show);
 
+    // update UI
+    $('input.search-input').attr('type', 'text');
+    $('.fixed-table-pagination').appendTo('.card-footer');
+    $('.fixed-table-toolbar').addClass('d-print-none');
+    $('button[name ="toggle"]').insertBefore('#button_other_actions');
+    $('[name ="clearSearch"] .fa.fa-trash').toggleClass('fa fa-trash fas fa-eraser');
+    
 }(jQuery));

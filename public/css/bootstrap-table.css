@@ -5,9 +5,9 @@
 /**! compression tag for ftp-deployment */
 
 .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-title {
-    font-weight: normal;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-weight: normal;
     overflow: hidden;
     min-width: 25%;
 }
@@ -16,14 +16,11 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    text-align: left;
 }
 
 .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-title:after {
     content: " :";
-}
-
-.bootstrap-table .fixed-table-container .table thead th .sortable {
-    padding-right: 20px !important;
 }
 
 .bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading {
@@ -37,4 +34,46 @@
 
 .bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading .loading-wrap .animation-dot {
     background: var(--dark) !important;
+}
+
+/**
+ * Use sort arrows from FontAwesome
+ */
+.bootstrap-table .fixed-table-container .table thead th .sortable {
+    padding-right: 0 !important;
+}
+.bootstrap-table .fixed-table-container .table thead th .both,
+.bootstrap-table .fixed-table-container .table thead th .asc,
+.bootstrap-table .fixed-table-container .table thead th .desc {
+    background-image: none !important;   
+}
+
+.bootstrap-table .fixed-table-container .table thead th .sortable:after {
+    font-family: "Font Awesome 5 Free";
+    opacity: 0.3 !important;
+    padding-left: 0.25rem;
+}
+.bootstrap-table .fixed-table-container .table thead th .both:after {
+    content: "\f0dc";
+}
+
+.bootstrap-table .fixed-table-container .table thead th .asc:after {
+    content: "\f0d8" !important;
+    opacity: 1 !important;
+}
+
+.bootstrap-table .fixed-table-container .table thead th .desc:after {
+    content: "\f0d7" !important;
+    opacity: 1 !important;
+}
+/*
+ * Hide icons on print
+ */
+@media print {
+    .bootstrap-table .fixed-table-container .table thead th .sortable:after,
+    .bootstrap-table .fixed-table-container .table thead th .both:after,
+    .bootstrap-table .fixed-table-container .table thead th .asc:after,
+    .bootstrap-table .fixed-table-container .table thead th .desc:after {
+        display: none;
+    }
 }

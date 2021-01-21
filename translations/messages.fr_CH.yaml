@@ -287,7 +287,6 @@ product:
     add:
         title: Nouvel article
         success: L'article <b>%name%</b> a été créé avec succès.
-        clone: '%description% - Copie'
     edit:
         title: Modifier l'article
         success: L'article <b>%name%</b> a été mis à jour avec succès.
@@ -462,6 +461,7 @@ common:
     no_script_support: Votre navigateur ne supporte pas JavaScript !
     entity_created: 'Création : %date% - %user%'
     entity_updated: 'Mise à jour : %date% - %user%'
+    clone_description: '%description% - Copie'
 environment:
     dev: Développement
     prod: Production

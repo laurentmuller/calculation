@@ -29,7 +29,7 @@
 {% macro item_path(path, text, icon, class = '') %}
 {%- set class = ('dropdown-item rowlink-skip ' ~ class|default(''))|trim -%}
 <a href="{{ path }}" class="{{ class }}">
-    {{- icons.icon(icon ~ ' fa-fw', text) -}}
+    {{- icons.icon(icon ~ ' fa-fw mr-1', text) -}}
 </a>
 {%- endmacro %}
 
@@ -44,13 +44,20 @@
 {{ icons.dropdownSeparator() }}
 {%- endmacro %}
 
+{# granted actions #}
+{%- set object_type  = object_type|default('none') -%}
+{%- set allow_show   = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) -%}
+{%- set allow_add    = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) -%}
+{%- set allow_edit   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) -%}
+{%- set allow_delete = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) -%}
+{%- set allow_export = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
+{%- set row_show     = allow_show and app.actionShow -%}
+{%- set row_edit     = allow_edit and app.actionEdit -%}
+
 {# parameters #}
 {%- set row_selector = 'table-primary' -%}
 {%- set id           = app.request.get('id', 0) -%}
-{%- set row_edit     = app.actionEdit -%}
-{%- set row_show     = app.actionShow -%}
 {%- set caller       = path(app.request.attributes.get('_route')) -%}
-{%- set attributes   = attributes|default({}) -%}
 {%- set params = params|default({})|merge({
         'id': id,
         'caller': caller, 
@@ -60,7 +67,7 @@
         'offset': offset, 
         'limit': limit,
         'card': card}) -%}
-        
+
 {# classes #}
 {% block card_container_class '' %}
 {% block card_body_class ' px-3 py-2' %}
@@ -68,7 +75,7 @@
 {# body #}
 {% block card_body -%}
 {# toolbar #}
-<div id="toolbar" class="d-print-none ml-2">
+<div id="toolbar" class="d-print-none">
     <div class="btn-group btn-group-sm" role="group">
         {% block toolbar_actions -%}{%- endblock %}
         <div class="btn-group btn-group-sm" role="group">
@@ -83,35 +90,35 @@
 </div>
 {# table #}
 <table id="table-edit" 
-    {{ _self.attribs(attributes) }}
     data-classes="table table-hover table-list table-sm" 
-    data-row-selector="{{ row_selector }}"
-     
+    data-row-selector="{{ '.' ~ row_selector }}"
+    data-row-class="{{ row_selector }}"
+
     data-show-toggle="true"
     data-show-search-clear-button="true" 
     data-show-extended-pagination="true" 
-    
+
     data-search-align="left"
     data-buttons-align="right"
     data-toolbar-align="right"
-     
+
     data-search="true" 
     data-search-text="{{ search }}"
     data-page-list="[5, 10, 15, 20, 25, 30, 50]"
-    
+
     data-total-rows="{{ total }}"
     data-total-not-filtered="{{ totalNotFiltered }}"
-    
+
     data-card-view="{{ card|json_encode }}"
     data-card-view-bold="{{ cardBold|default(true)|json_encode }}"
-    
+
     data-sort-name="{{ sort }}"
     data-sort-order="{{ order }}"
     data-silent-sort="false"
-    
+
     data-undefined-text="&nbsp;"
     data-icon-size="sm"
-    
+
     data-pagination="true" 
     data-page-size="{{ limit }}"
     data-page-number = "{{ page }}"
@@ -119,10 +126,10 @@
     data-side-pagination="server"
     data-pagination-pre-text="<i class='fa fa-caret-left fa-lg'></i>"
     data-pagination-next-text="<i class='fa fa-caret-right fa-lg'></i>"
-    
+
     data-toolbar="#toolbar"
     data-loading-template="loadingTemplate"
-    
+
     data-min-margin="{{ app.minMargin }}"
     data-caller="{{ caller }}"
     data-save-url="{{ save_url }}"    

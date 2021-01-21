@@ -95,11 +95,14 @@ class Product extends AbstractEntity
      */
     public function clone(?string $description = null): self
     {
+        /** @var Product $copy */
+        $copy = clone $this;
+
         if ($description) {
-            return (clone $this)->setDescription($description);
+            $copy->setDescription($description);
         }
 
-        return clone $this;
+        return $copy;
     }
 
     /**

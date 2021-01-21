@@ -186,9 +186,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Clone this calculation.
      *
-     * @param CalculationState $state the default state
+     * @param CalculationState $state       the new state
+     * @param string           $description the new description
      */
-    public function clone(?CalculationState $state): self
+    public function clone(?CalculationState $state, ?string $description = null): self
     {
         /** @var Calculation $copy */
         $copy = clone $this;
@@ -196,6 +197,9 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         // copy default values
         if ($state) {
             $copy->setState($state);
+        }
+        if ($description) {
+            return $copy->setDescription($description);
         }
 
         return $copy;

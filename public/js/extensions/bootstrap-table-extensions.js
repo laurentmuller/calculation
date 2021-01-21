@@ -3,7 +3,7 @@
 /* globals MenuBuilder */
 
 /**
- * Formatter for actions column.
+ * Formatter for the actions column.
  * 
  * @param {number}
  *            value - the field value (id).
@@ -30,12 +30,12 @@ function actionsFormatter(value, row) { // jshint ignore:line
 }
 
 /**
- * Formatter for calculation identifier column.
+ * Formatter for the calculation identifier column.
  * 
  * @param {number}
  *            value - the field value.
  * @param {object}
- *            row - the row record data.
+ *            row - the record data.
  * 
  * @returns {object} the cell style.
  */
@@ -49,12 +49,12 @@ function renderCalculationState(value, row) { // jshint ignore:line
 }
 
 /**
- * Formatter for calculation margin column.
+ * Formatter for the calculation margin column.
  * 
  * @param {number}
  *            value - the field value.
  * @param {object}
- *            row - the row record data.
+ *            row - the record data.
  * 
  * @returns {object} the cell style.
  */
@@ -111,15 +111,17 @@ $.fn.extend({
     /**
      * Update the selected row.
      * 
+     * @param {jQuery}
+     *            $table - the parent table.
+     * 
      * @return {boolean} this function returns always true.
      */
-    updateRow: function () {
+    updateRow: function ($table) {
         'use strict';
         const $row = $(this);
-        const $table = $row.parents('table');
         const options = $table.getOptions();
-        $table.find(options.rowSelector).removeClass(options.selector);
-        $row.addClass(options.selector).scrollInViewport();
+        $table.find(options.rowSelector).removeClass(options.rowClass);
+        $row.addClass(options.rowClass).scrollInViewport();
         return true;
     },
 
@@ -140,21 +142,17 @@ $.fn.extend({
         const $this = $(this);
         
         // settings
-        const selector = $this.data('row-selector') || 'table-primary';
-        const rowSelector = 'tr.' + selector.replaceAll(' ', '.');
         const settings = {
-            selector: selector,
-            rowSelector: rowSelector,
-            
             // select row on click
             onClickRow: function(row, $element) {
-                $element.updateRow();  
+                $element.updateRow($this);  
             },
-            
-            // edit row on cell double-click
-            onDblClickCell: function (field, value, row, $element) {
-                if (!$element.hasClass('rowlink-skip')) {
-                    $this.editRow($element.closest('tr'));
+
+            // edit row on double-click
+            onDblClickRow: function(row, $element, field) {
+                $element.updateRow($this); 
+                if (field !== 'action') {
+                    $this.editRow($element);
                 }
             },
             
@@ -162,19 +160,20 @@ $.fn.extend({
             onPostBody: function (content) {
                 if (content.length) {
                     // select first row if none
+                    const rowSelector = $this.getOptions().rowSelector;
                     if ($this.find(rowSelector).length === 0) {
                         $this.selectFirstRow();
                     }      
-                    $this.highlight();
+                    $this.highlight().updateHref(content);
                     $('.card-footer').stop().fadeIn(250);
                 } else {
                     $('.card-footer').stop().fadeOut(250);
                 }
                 $('.page-link').each(function (index, element) {
-                    const $this = $(element);
-                    $this.attr('title', $this.attr('aria-label'));
+                    const $element = $(element);
+                    $element.attr('title', $element.attr('aria-label'));
                 });
-                $this.updateCardView().updateHref();
+                $this.updateCardView();
             },
             
             // update UI on card view toggle
@@ -196,7 +195,7 @@ $.fn.extend({
         // select row on right click
         $this.find('tbody').on('mousedown', 'tr', function (e) {
             if (e.button === 2) {
-                $(this).updateRow();
+                $(this).updateRow($this);
             }
         });
         
@@ -223,7 +222,7 @@ $.fn.extend({
         const $this = $(this);
         const options = $this.getOptions();
         let params = {
-            'caller': $this.data('caller'),
+            'caller': options.caller,
             'search': options.searchText,
             'sort': options.sortName,
             'order': options.sortOrder,
@@ -231,10 +230,15 @@ $.fn.extend({
             'limit': options.pageSize,
             'card': options.cardView
         };
-
-        // function?
+        
+        // query parameters function?
         if ($.isFunction(options.queryParams)) {
             params = $.extend(params, options.queryParams(params));
+        }
+        
+        // remove empty search
+        if (params.search === '') {
+            delete params.search;
         }
         
         return params;
@@ -242,14 +246,17 @@ $.fn.extend({
     
     /**
      * Save parameters to the session.
+     * 
+     * @return {jQuery} this instance for chaining.
      */
     saveParameters: function() {
         'use strict';
         const $this = $(this);
-        const url = $this.data('save-url');
+        const url = $this.getOptions().saveUrl;
         if (url) {
             $.post(url, $this.getParameters());
         }
+        return $this;
     },
     
     /**
@@ -261,30 +268,30 @@ $.fn.extend({
         'use strict';
         return $(this).getOptions().searchText;
     },
-
-    /**
-     * Returs if the card view is displayed.
-     * 
-     * @return {boolean} true if card view is displayed; false if tabular view.
-     */
-    isCardView: function() {
-        'use strict';
-        return $(this).getOptions().cardView;
-    },
     
     /**
      * Update the href attribute of the actions.
      * 
+     * @param {array}
+     *            content - the rendered data.
      * @return {jQuery} this instance for chaining.
      */
-    updateHref: function () {
+    updateHref: function (content) {
         'use strict';
+        
         const $this = $(this);
+        const regex = /\bid=\d+/;
         const params = $this.getParameters();
+        
         $this.find('.btn-path').each(function () {
             const $link = $(this);
-            const origin = $link.attr('href').split('?')[0];
-            const href = origin + '?' + $.param(params);
+            const values = $link.attr('href').split('?');
+            if (values.length > 1 && values[1].match(regex)) {
+                params.id = content[$link.parents('tr').index()].action;
+            } else {
+                delete params.id;
+            }
+            const href = values[0] + '?' + $.param(params);
             $link.attr('href', href);
         });
         return $this;
@@ -298,15 +305,15 @@ $.fn.extend({
     updateCardView: function () {
         'use strict';
         const $this = $(this);
-        if (!$this.isCardView()) {
+        const options = $this.getOptions();
+        if (!options.cardView) {
             return $this;
         }
         
-        const bold = $this.data('card-view-bold');
+        const bold = options.cardViewBold;
         $this.find('tr').each(function () {
             const $row = $(this);            
             const $views = $row.find('.card-views:first');
-            
             const $actions = $views.find('.card-view-value:last:has(button)');
             if ($actions.length) {
                 const $td = $('<td/>', {
@@ -314,18 +321,14 @@ $.fn.extend({
                 });
                 $actions.removeAttr('class').appendTo($td);
                 $td.appendTo($row).on('click', function() {
-                    $row.updateRow();
+                    $row.updateRow($this);
                 });                
                 $views.find('.card-view:last').remove();
                 if (bold) {
                     $views.find('.card-view-value:first').addClass('font-weight-bold'); 
                 } 
             }
-            // $row.find('td:first').removeAttr('colspan');
         });
-        // $this.find('.card-view-title').remove();
-        // $this.find('.card-view-title').toggleClass('undefined text-muted');
-        // $this.find('.card-view-value').toggleClass('undefined');
         $this.find('.card-view-title').addClass('text-muted');
                 
         return $this;
@@ -419,7 +422,7 @@ $.fn.extend({
         const $row = $this.find(options.rowSelector);
         const $first = $this.find('tbody tr:first');
         if ($first.length && $first !== $row) {
-            return $first.updateRow();
+            return $first.updateRow($this);
         }
         return false;
     },
@@ -436,7 +439,7 @@ $.fn.extend({
         const $row = $this.find(options.rowSelector);
         const $last = $this.find('tbody tr:last');
         if ($last.length && $last !== $row) {
-            return $last.updateRow();
+            return $last.updateRow($this);
         }
         return false;
     },
@@ -453,7 +456,7 @@ $.fn.extend({
         const $row = $this.find(options.rowSelector);
         const $prev = $row.prev('tr');
         if ($row.length && $prev.length) {
-            return $prev.updateRow();
+            return $prev.updateRow($this);
         }
 
         // previous page
@@ -472,7 +475,7 @@ $.fn.extend({
         const $row = $this.find(options.rowSelector);
         const $next = $row.next('tr');
         if ($row.length && $next.length) {
-            return $next.updateRow();
+            return $next.updateRow($this);
         }
 
         // next page
@@ -480,9 +483,9 @@ $.fn.extend({
     },
 
     /**
-     * Edit the selected row by calling the edit action.
+     * Call the edit action for the selected row (if any).
      * 
-     * @return {boolean} true if action is called.
+     * @return {boolean} true if the action is called.
      */
     editRow: function() {
         'use strict';
@@ -497,7 +500,7 @@ $.fn.extend({
     },
     
     /**
-     * Delete the selected row by calling the delete action.
+     * Call the delete action for the selected row (if any).
      * 
      * @return {boolean} true if the action is called.
      */
@@ -523,8 +526,8 @@ $.fn.extend({
 
         const $this = $(this);
         
-        // already registered?
-        let handler = this.data('keys.handler');
+        // already created?
+        let handler = $this.data('keys.handler');
         if (!handler) {
             handler = function (e) {
                 if ((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
@@ -532,7 +535,7 @@ $.fn.extend({
                 }
 
                 switch (e.keyCode) {
-                 case 13: // enter (edit)
+                 case 13: // enter (edit action on selected row)
                      if ($this.editRow()) {
                          e.preventDefault();
                      }
@@ -549,40 +552,40 @@ $.fn.extend({
                     }
                     break;
 
-                case 35: // end (end of current page)
+                case 35: // end (last row of the current page)
                     if ($this.selectLastRow()) {
                         e.preventDefault();
                     }
                     break;
 
-                case 36: // home (start of current page)
+                case 36: // home (first row of the current page)
                     if ($this.selectFirstRow()) {
                         e.preventDefault();
                     }
                     break;
-                case 38: // up arrow (previous row or page)
+                case 38: // up arrow (previous row of the current page)
                     if ($this.selectPreviousRow()) {
                         e.preventDefault();
                     }
                     break;
 
-                case 40: // down arrow (next row or page)
+                case 40: // down arrow (next row of the current page)
                     if ($this.selectNextRow()) {
                         e.preventDefault();
                     }
                     break;
                     
-                case 46: // delete (remove row)
+                case 46: // delete (delete action of the selected row)
                     if ($this.deleteRow()) {
                         e.preventDefault();
                     }
                     break;    
                 }
             };
-            this.data('keys.handler', handler);
+            $this.data('keys.handler', handler);
         }
         
-        // register
+        // add handler
         $(document).off('keydown.bs.table', handler).on('keydown.bs.table', handler);
         return $this;
     },
@@ -595,7 +598,7 @@ $.fn.extend({
     disableKeys: function () {
         'use strict';
         const $this = $(this);
-        const handler = this.data('keys.handler');
+        const handler = $this.data('keys.handler');
         if (handler) {
             $(document).off('keydown.bs.table', handler);
         }

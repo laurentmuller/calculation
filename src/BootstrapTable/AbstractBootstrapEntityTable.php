@@ -12,12 +12,14 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Entity\AbstractEntity;
 use App\Repository\AbstractRepository;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -186,11 +188,36 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
     }
 
     /**
+     * Gets the entity class name.
+     */
+    public function getEntityClassName(): string
+    {
+        return $this->repository->getClassName();
+    }
+
+    /**
      * Gets the repository.
      */
     public function getRepository(): AbstractRepository
     {
         return $this->repository;
+    }
+
+    /**
+     * Maps the given entities.
+     *
+     * @param AbstractEntity[] $entities the entities to map
+     *
+     * @return array the mapped entities
+     */
+    public function mapEntities(array $entities): array
+    {
+        $columns = $this->getColumns();
+        $accessor = PropertyAccess::createPropertyAccessor();
+
+        return \array_map(function (AbstractEntity $entity) use ($columns, $accessor) {
+            return $this->mapValues($entity, $columns, $accessor);
+        }, $entities);
     }
 
     /**

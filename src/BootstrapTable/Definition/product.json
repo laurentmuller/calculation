@@ -39,11 +39,5 @@
 		"searchable": false,
 		"class": "actions rowlink-skip d-print-none",
 		"formatter": "actionsFormatter"
-	},
-	{
-		"field": "category.id",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
 	}
 ]

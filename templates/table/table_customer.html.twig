@@ -5,18 +5,19 @@
 {%- set title_icon   = 'address-card far' -%}
 {%- set defer_url    = url('table_customer') -%}
 {%- set save_url     = url('table_customer_save') -%}
+{%- set object_type  = EntityVoterInterface.ENTITY_CUSTOMER -%}
 
 {% block global_actions -%}
 {{ _self.item_external(path('customer_pdf'), 'customer.list.pdf_title', 'file-pdf far') }}
 {{ _self.item_external(path('customer_excel'), 'customer.list.excel_title', 'file-excel far') }}
-{%- endblock %}   
+{%- endblock %}
 
 {% block edit_actions -%}
 {%- set show_class = 'btn-show btn-path' ~ (row_show ? ' btn-default' : '') -%}
 {%- set edit_class = 'btn-edit btn-path' ~ (row_edit ? ' btn-default' : '') -%}
-{{ _self.item_path(path('customer_show', params), 'customer.show.title', 'tv mr-1', show_class) }}
-{{ _self.item_path(path('customer_edit', params), 'customer.edit.title', 'pencil-alt mr-1', edit_class) }}
-{{ _self.item_path(path('customer_delete', params), 'customer.delete.title', 'times mr-1', 'btn-delete btn-path') }}
+{{ _self.item_path(path('customer_show', params), 'customer.show.title', 'tv', show_class) }}
+{{ _self.item_path(path('customer_edit', params), 'customer.edit.title', 'pencil-alt', edit_class) }}
+{{ _self.item_path(path('customer_delete', params), 'customer.delete.title', 'times', 'btn-delete btn-path') }}
 {{ _self.item_separator() }}
-{{ _self.item_path(path('customer_add', params), 'customer.add.title', 'file mr-1 far', 'btn-add btn-path') }}
+{{ _self.item_path(path('customer_add', params), 'customer.add.title', 'file far', 'btn-add btn-path') }}
 {%- endblock %}

@@ -151,22 +151,23 @@ abstract class AbstractBootstrapTable
     }
 
     /**
-     * Map the given object to array.
+     * Map the given object to an array where the keys are the column field.
      *
-     * @param mixed            $objectOrArray the object to map
-     * @param PropertyAccessor $accessor      the property accessor to get the object values
+     * @param mixed             $objectOrArray the object to map
+     * @param BootstrapColumn[] $columns       the column definitions
+     * @param PropertyAccessor  $accessor      the property accessor to get the object values
      *
      * @return string[] the mapped object
      */
-    public function mapValues($objectOrArray, PropertyAccessor $accessor): array
+    public function mapValues($objectOrArray, array $columns, PropertyAccessor $accessor): array
     {
-        $result = [];
-        $columns = $this->getColumns();
-        foreach ($columns as $column) {
+        $callback = static function (array $result, BootstrapColumn $column) use ($objectOrArray, $accessor) {
             $result[$column->getField()] = $column->mapValue($objectOrArray, $accessor);
-        }
 
-        return $result;
+            return $result;
+        };
+
+        return \array_reduce($columns, $callback, []);
     }
 
     /**

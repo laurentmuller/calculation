@@ -197,17 +197,17 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/markbaker/matrix/classes/src/functions">
+	<buildpathentry kind="src" path="vendor/markbaker/matrix/classes/src/Functions">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry excluding="functions/|operations/" kind="src" path="vendor/markbaker/matrix/classes/src">
+	<buildpathentry excluding="Functions/|Operations/" kind="src" path="vendor/markbaker/matrix/classes/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/markbaker/matrix/classes/src/operations">
+	<buildpathentry kind="src" path="vendor/markbaker/matrix/classes/src/Operations">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
@@ -228,21 +228,6 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/ob/highcharts-bundle">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/phpdocumentor/reflection-common/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/phpdocumentor/reflection-docblock/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/phpdocumentor/type-resolver/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
@@ -738,11 +723,6 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/webinarium/datatables-bundle/tests">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/webmozart/assert/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

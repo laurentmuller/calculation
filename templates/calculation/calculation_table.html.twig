@@ -65,7 +65,8 @@
 {# other actions #}
 {% block table_actions %}
 {{ _self.item_data(clone_path, 'common.button_clone', 'copy far') }}
-{{ _self.item_data(state_path, 'calculation.list.state_title', 'edit') }}
+{{ _self.item_data(state_path, 'calculation.list.state_title', 'flag far') }}
+{{ icons.dropdownSeparator() }}
 {{ _self.item_data_external(single_path, 'calculation.list.pdf_single_title', 'file-pdf far') }}
 {{ icons.dropdownSeparator() }}
 {{ parent() }}

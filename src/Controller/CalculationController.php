@@ -109,8 +109,9 @@ class CalculationController extends AbstractEntityController
     public function clone(Request $request, Calculation $item): Response
     {
         // clone
+        $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
         $state = $this->getApplication()->getDefaultState();
-        $clone = $item->clone($state);
+        $clone = $item->clone($state, $description);
 
         $parameters = [
             'overall_below' => $this->isMarginBelow($clone),

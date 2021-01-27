@@ -16,8 +16,13 @@ $.fn.extend({
 
         const $this = $(this);
         if ($this.length) {
-            $('#category').val($this.data('id'));
-            $('#button-category').text($this.text());
+            const id = $this.data('id');
+            $('#category').val(id);
+            if (id) {
+                $('#button-category').text($this.text());    
+            } else {
+                $('#button-category').text($('#button-category').data('default'));
+            }
             $('.dropdown-category').removeClass('active');
             $this.addClass('active');
         }

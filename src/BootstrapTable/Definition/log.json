@@ -1,0 +1,41 @@
+[
+	{
+		"field": "id",
+		"visible": false,
+		"orderable": false,
+		"searchable": false
+	},
+	{
+		"field": "createdAt",
+		"title": "log.fields.createdAt",
+		"default": true,
+		"order": "desc",
+		"class": "date",
+		"fieldFormatter": "formatCreatedAt",
+		"styleFormatter": "styleLogCreatedAt"
+	},
+	{
+		"field": "channel",
+		"title": "log.fields.channel",
+		"class": "channel",
+		"fieldFormatter": "formatChannel"
+	},
+	{
+		"field": "level",
+		"title": "log.fields.level",
+		"class": "level",
+		"fieldFormatter": "formatLevel"
+	},
+	{
+		"field": "message",
+		"title": "log.fields.message",
+		"class": "message"
+	},
+	{
+		"field": "action",
+		"sortable": false,
+		"searchable": false,
+		"class": "actions rowlink-skip d-print-none",
+		"cellFormatter": "formatActions"
+	}
+]

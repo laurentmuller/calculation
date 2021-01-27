@@ -1,0 +1,25 @@
+{% extends 'table/table_base.html.twig' %}
+
+{# parameters #}
+{%- set title        = 'calculationstate.list.title' -%}
+{%- set title_icon   = 'flag far' -%}
+{%- set defer_url    = url('table_calculationstate') -%}
+{%- set save_url     = url('table_calculationstate_save') -%}
+{%- set object_type  = EntityVoterInterface.ENTITY_CALCULATION_STATE -%}
+{%- set attributes   = {
+	'data-calculation-path': path('table_calculation', {stateId: 0}), 
+	'data-calculation-title': 'calculationstate.list.calculation_title'|trans
+} -%}
+
+{% block global_actions -%}
+{{ _self.item_external(path('calculationstate_pdf'), 'calculationstate.list.pdf_title', 'file-pdf far') }}
+{{ _self.item_external(path('calculationstate_excel'), 'calculationstate.list.excel_title', 'file-excel far') }}
+{%- endblock %}
+
+{% block edit_actions -%}
+{{ _self.item_path(path('calculationstate_show', params), 'calculationstate.show.title', 'tv', show_class) }}
+{{ _self.item_path(path('calculationstate_edit', params), 'calculationstate.edit.title', 'pencil-alt', edit_class) }}
+{{ _self.item_path(path('calculationstate_delete', params), 'calculationstate.delete.title', 'times', 'btn-delete') }}
+{{ _self.item_separator() }}
+{{ _self.item_path(path('calculationstate_add', params), 'calculationstate.add.title', 'file far', 'btn-add') }}
+{%- endblock %}

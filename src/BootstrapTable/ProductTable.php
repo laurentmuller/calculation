@@ -18,7 +18,6 @@ use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * The products table.
@@ -40,29 +39,9 @@ class ProductTable extends AbstractBootstrapEntityTable
     /**
      * Constructor.
      */
-    public function __construct(SerializerInterface $serializer, ProductRepository $repository)
+    public function __construct(ProductRepository $repository)
     {
-        parent::__construct($serializer, $repository);
-    }
-
-    /**
-     * (non-PHPdoc).
-     *
-     * @see \App\BootstrapTable\AbstractBootstrapEntityTable::addSearch()
-     */
-    public function addSearch(Request $request, QueryBuilder $builder): string
-    {
-        $search = parent::addSearch($request, $builder);
-
-        // category?
-        $this->categoryId = (int) $request->get(self::PARAM_CATEGORY, 0);
-        if (0 !== $this->categoryId) {
-            $field = $this->repository->getSearchFields('category.id');
-            $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
-                ->setParameter(self::PARAM_CATEGORY, $this->categoryId, Types::INTEGER);
-        }
-
-        return $search;
+        parent::__construct($repository);
     }
 
     /**
@@ -78,9 +57,25 @@ class ProductTable extends AbstractBootstrapEntityTable
     }
 
     /**
-     * (non-PHPdoc).
-     *
-     * @see \App\BootstrapTable\AbstractBootstrapTable::createColumns()
+     * {@inheritdoc}
+     */
+    protected function addSearch(Request $request, QueryBuilder $builder): string
+    {
+        $search = parent::addSearch($request, $builder);
+
+        // category?
+        $this->categoryId = (int) $request->get(self::PARAM_CATEGORY, 0);
+        if (0 !== $this->categoryId) {
+            $field = $this->repository->getSearchFields('category.id');
+            $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
+                ->setParameter(self::PARAM_CATEGORY, $this->categoryId, Types::INTEGER);
+        }
+
+        return $search;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     protected function createColumns(): array
     {

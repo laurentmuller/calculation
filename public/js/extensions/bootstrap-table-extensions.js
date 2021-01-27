@@ -12,14 +12,14 @@
  * 
  * @returns {string} the rendered cell.
  */
-function actionsFormatter(value, row) { // jshint ignore:line
+function formatActions(value, row) { // jshint ignore:line
     'use strict';
 
     const substr = '$1' + value;
     const regex = /(\/|\bid=)(\d+)/;
     const $actions = $('#dropdown-actions').clone().removeClass('d-none');
 
-    $actions.find('.btn-path').each(function () {
+    $actions.find('.dropdown-item-path').each(function () {
         const $link = $(this);
         const source = $link.attr('href');
         const target = source.replace(regex, substr);
@@ -30,7 +30,7 @@ function actionsFormatter(value, row) { // jshint ignore:line
 }
 
 /**
- * Formatter for the calculation identifier column.
+ * Style for the calculation identifier column.
  * 
  * @param {number}
  *            value - the field value.
@@ -39,13 +39,61 @@ function actionsFormatter(value, row) { // jshint ignore:line
  * 
  * @returns {object} the cell style.
  */
-function renderCalculationState(value, row) { // jshint ignore:line
+function styleCalculationState(value, row) { // jshint ignore:line
     'use strict';
     return {
         css: {
           'border-left-color': row['state.color'] + ' !important'
         }
     };
+}
+
+/**
+ * Checks if the overall margin of the calculation is below the minimum margin.
+ * 
+ * @param {number}
+ *            value - the margin value.
+ * @param {object}
+ *            row - the record data.
+ * @returns {boolean} true if below.
+ */
+function isCalcultionMarginBelow(value, row) {
+    'use strict';
+    const overallMargin = parseFloat(row.overallMargin) / 100.0;
+    const minMargin = parseFloat($('#table-edit').data('min-margin'));
+    return !isNaN(overallMargin) && !isNaN(minMargin) && overallMargin < minMargin;
+}
+
+/**
+ * Style for the calculation margin column.
+ * 
+ * @param {number}
+ *            value - the field value.
+ * @param {object}
+ *            row - the record data.
+ * 
+ * @returns {object} the cell style.
+ */
+function styleCalculationMargin(value, row) { // jshint ignore:line
+    'use strict';
+    if (isCalcultionMarginBelow(value, row)) {
+        return {
+            'classes': 'text-percent text-danger cursor-pointer'
+        };
+    }
+    return {};
+}
+
+/**
+ * Gets the given element as HTML.
+ * 
+ * @param {jQuery}
+ *            $element - the element to get HTML for.
+ * @returns {string} the HTML text.
+ */
+function toHtml($element) {
+    'use strict';
+    return $('<div/>').append($element).html();
 }
 
 /**
@@ -56,18 +104,156 @@ function renderCalculationState(value, row) { // jshint ignore:line
  * @param {object}
  *            row - the record data.
  * 
+ * @returns {string} the rendered cell.
+ */
+function formatCalculationMargin(value, row) { // jshint ignore:line
+    'use strict';
+    if (isCalcultionMarginBelow(value, row)) {
+        const title = $('#table-edit').data('min-margin-text').replace('%margin%', value);
+        const $content = $('<span/>', {
+            'text': value.replace('&nbsp;', ' '),
+           'class': 'has-tooltip',
+           'data-title': title,
+           'data-html': 'true'
+        });
+        return toHtml($content);
+    }
+    return value;
+}
+
+/**
+ * Style for the log created date column.
+ * 
+ * @param {number}
+ *            value - the field value.
+ * @param {object}
+ *            row - the record data.
+ * 
  * @returns {object} the cell style.
  */
-function renderCalculationMargin(value, row) { // jshint ignore:line
+function styleLogCreatedAt(value, row) { // jshint ignore:line
     'use strict';
-    const overallMargin = Number.parseFloat(row.overallMargin) / 100;
-    const minMargin = Number.parseFloat($('#table-edit').data('min-margin'));
-    if (overallMargin < minMargin) {
-        return {
-            'classes': 'text-percent text-danger cursor-pointer',
-        };
+    let color;
+    switch (row.level.toLowerCase()) {
+    case 'debug':
+        color = 'secondary';
+        break;
+    case 'warning':
+        color = 'warning';
+        break;
+    case 'error':
+    case 'critical':
+    case 'alert':
+    case 'emergency':
+        color = 'danger';
+        break;
+    case 'info':
+    case 'notice':
+    default:
+        color = 'info';
+        break;
     }
-    return {};
+     return {
+         css: {
+             'border-left-color': 'var(--' + color + ') !important'
+         }
+     };
+}
+
+/**
+ * Style for the calculation state column.
+ * 
+ * @param {number}
+ *            value - the field value.
+ * @param {object}
+ *            row - the record data.
+ * 
+ * @returns {object} the cell style.
+ */
+function styleStateColor(value, row) { // jshint ignore:line
+    'use strict';
+    return {
+        css: {
+          'border-left-color': row.color + ' !important'
+        }
+    };
+}
+
+/**
+ * Formatter for the calculation state calculations column.
+ * 
+ * @param {number}
+ *            value - the field value.
+ * @param {object}
+ *            row - the record data.
+ * 
+ * @returns {string} the rendered cell.
+ */
+function formatStateCalculations(value, row) { // jshint ignore:line
+    'use strict';
+    const count = Number.parseInt(value, 10);
+    if (!Number.isNaN(count) && count > 0) {
+        const $table = $('#table-edit');
+        const title = $table.data('calculationTitle');
+        const path = $table.data('calculationPath').replace('0', row.id);
+        const $content = $('<a/>', {
+            'href': path,
+            'title': title,
+            'text': value
+        });
+        return toHtml($content);
+    }    
+    return value;
+}
+
+/**
+ * Formatter for the category products column.
+ * 
+ * @param {number}
+ *            value - the field value.
+ * @param {object}
+ *            row - the record data.
+ * 
+ * @returns {string} the rendered cell.
+ */
+function formatCategoryProducts(value, row) { // jshint ignore:line
+    'use strict';
+    const count = Number.parseInt(value, 10);
+    if (!Number.isNaN(count) && count > 0) {
+        const $table = $('#table-edit');
+        const title = $table.data('productTitle');
+        const path = $table.data('productPath').replace('0', row.id);
+        const $content = $('<a/>', {
+            'href': path,
+            'title': title,
+            'text': value
+        });
+        return toHtml($content);
+    }    
+    return value;
+}
+
+/**
+ * Formatter for the user image column.
+ * 
+ * @param {string}
+ *            value - the image source.
+ * @param {object}
+ *            row - the record data.
+ *            
+ * @returns {string} the rendered cell.
+ */
+function formatUserImage(value, row) { // jshint ignore:line
+    'use strict';
+    if (value) {
+        const $content = $('<img/>', {            
+            'src': value,
+            'alt': row.username,
+            'title': $('#table-edit').data('image-title')            
+        });
+        return toHtml($content);
+    }
+    return value;
 }
 
 /**
@@ -142,15 +328,16 @@ $.fn.extend({
         const $this = $(this);
         
         // settings
-        const settings = {
+        const defaults = {
             // select row on click
             onClickRow: function(row, $element) {
-                $element.updateRow($this);  
+                $element.updateRow($this);
+                $this.enableKeys();
             },
 
             // edit row on double-click
             onDblClickRow: function(row, $element, field) {
-                $element.updateRow($this); 
+                $element.updateRow($this);
                 if (field !== 'action') {
                     $this.editRow($element);
                 }
@@ -164,7 +351,8 @@ $.fn.extend({
                     if ($this.find(rowSelector).length === 0) {
                         $this.selectFirstRow();
                     }      
-                    $this.highlight().updateHref(content);
+                    // update
+                    $this.updateCardView().highlight().updateHref(content);
                     $('.card-footer').stop().fadeIn(250);
                 } else {
                     $('.card-footer').stop().fadeOut(250);
@@ -173,25 +361,22 @@ $.fn.extend({
                     const $element = $(element);
                     $element.attr('title', $element.attr('aria-label'));
                 });
-                $this.updateCardView();
             },
             
-            // update UI on card view toggle
+            // update UI and save parameters
             onToggle: function (cardView) {
                 const options = $this.getOptions();
                 const $button = $('.bootstrap-table button[name="toggle"]');
                 const text = cardView ? options.formatToggleOff() : options.formatToggleOn();
                 $button.attr('aria-label', text).attr('title', text);
-                $this.updateCardView().saveParameters();
+                $this.saveParameters();
             }
         }; 
-     
-        // initialize
-        $this.bootstrapTable($.extend(true, settings, options));
+        const settings = $.extend(true, defaults, options);
         
-        // enable keys and update UI
-        $this.updateCardView().enableKeys().highlight();
-     
+        // initialize
+        $this.bootstrapTable(settings).enableKeys().highlight();
+        
         // select row on right click
         $this.find('tbody').on('mousedown', 'tr', function (e) {
             if (e.button === 2) {
@@ -243,6 +428,37 @@ $.fn.extend({
         
         return params;
     },
+
+    /**
+     * Gets the search text.
+     * 
+     * @return {string} the search text.
+     */
+    getSearchText: function() {
+        'use strict';
+        return $(this).getOptions().searchText;
+    },
+    
+    /**
+     * Return if a search text is present.
+     * 
+     * @return {boolean} true if a search text is present.
+     */
+    isSearchText: function() {
+        'use strict';
+        const text = $(this).getSearchText();
+        return text && text.length > 0;
+    },
+    
+    /**
+     * Get the loaded data of table at the moment that this method is called.
+     * 
+     * @return {array} the loaded data.
+     */
+    getData: function() {
+        'use strict';
+        return $(this).bootstrapTable('getData');
+    },
     
     /**
      * Save parameters to the session.
@@ -260,39 +476,36 @@ $.fn.extend({
     },
     
     /**
-     * Gets the search text.
-     * 
-     * @return {string} the search text.
-     */
-    getSearchText: function() {
-        'use strict';
-        return $(this).getOptions().searchText;
-    },
-    
-    /**
      * Update the href attribute of the actions.
      * 
      * @param {array}
-     *            content - the rendered data.
+     *            rows - the rendered data.
      * @return {jQuery} this instance for chaining.
      */
-    updateHref: function (content) {
+    updateHref: function (rows) {
         'use strict';
         
         const $this = $(this);
         const regex = /\bid=\d+/;
         const params = $this.getParameters();
+        const options = $this.getOptions();
+        const callback = $.isFunction(options.onRenderAction) ? options.onRenderAction : false;
         
-        $this.find('.btn-path').each(function () {
+        $this.find('.dropdown-item-path').each(function () {
             const $link = $(this);
+            const $row = $link.parents('tr');
+            const row = rows[$row.index()];
             const values = $link.attr('href').split('?');
             if (values.length > 1 && values[1].match(regex)) {
-                params.id = content[$link.parents('tr').index()].action;
+                params.id = row.action;
             } else {
                 delete params.id;
             }
             const href = values[0] + '?' + $.param(params);
             $link.attr('href', href);
+            if (callback) {
+                callback($this, row, $row, $link);
+            }
         });
         return $this;
     },
@@ -310,26 +523,43 @@ $.fn.extend({
             return $this;
         }
         
-        const bold = options.cardViewBold;
-        $this.find('tr').each(function () {
+        const callback = $.isFunction(options.onRenderCardView) ? options.onRenderCardView : false;
+        const data = callback ? $this.getData() : null;
+        const columns = options.columns[0].filter(c => c.visible && c.cardVisible);
+        
+        $this.find('tbody tr').each(function () {
             const $row = $(this);            
             const $views = $row.find('.card-views:first');
+            
+            // move actions (if any) to a new column
             const $actions = $views.find('.card-view-value:last:has(button)');
             if ($actions.length) {
                 const $td = $('<td/>', {
-                    class: 'actions d-print-none rowlink-skip align-top'
+                    class: 'actions d-print-none rowlink-skip'
                 });
                 $actions.removeAttr('class').appendTo($td);
                 $td.appendTo($row).on('click', function() {
                     $row.updateRow($this);
                 });                
                 $views.find('.card-view:last').remove();
-                if (bold) {
-                    $views.find('.card-view-value:first').addClass('font-weight-bold'); 
-                } 
+            }
+            
+            // update bold style
+            $views.find('.card-view-value').each(function(index, element) {
+                if (columns[index].cardBold) {
+                    $(element).addClass('font-weight-bold');
+                }
+            });
+            
+            // callback
+            if (callback) {
+                const row = data[$row.index()];
+                options.onRenderCardView($this, row, $row);                
             }
         });
+        $this.find('.undefined').removeClass('undefined');
         $this.find('.card-view-title').addClass('text-muted');
+        // $this.find('.card-view-title').remove();
                 
         return $this;
     },
@@ -357,15 +587,14 @@ $.fn.extend({
     highlight: function () {
         'use strict';
         const $this = $(this);
-        const searchText = $this.getSearchText();
-        if (searchText && searchText.length) {
+        if ($this.isSearchText()) {
             const options = {
                 element: 'span',
                 className: 'text-success',
-                ignorePunctuation: ["'", ","]
+                ignorePunctuation: ["'", ",", "."]
             };
-            const $ctx = $this.find('tbody tr');
-            $ctx.mark(searchText, options);
+            const $rows = $this.find('tbody tr');
+            $rows.mark($this.getSearchText(), options);
         }
         return $this;
     },

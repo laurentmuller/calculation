@@ -9,7 +9,8 @@
 		"field": "description",
 		"title": "product.fields.description",
 		"default": true,
-		"class": "text-cell w-50"
+		"class": "text-cell w-50",
+		"cardBold": true
 	},
 	{
 		"field": "category.code",
@@ -34,10 +35,9 @@
 	},
 	{
 		"field": "action",
-		"virtual": true,
 		"sortable": false,
 		"searchable": false,
 		"class": "actions rowlink-skip d-print-none",
-		"formatter": "actionsFormatter"
+		"cellFormatter": "formatActions"
 	}
 ]

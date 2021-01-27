@@ -13,10 +13,12 @@
     'data-field': column.field,
     'data-visible': (column.visible ?? true)|json_encode,
     'data-sortable': (column.sortable ?? false)|json_encode, 
-    'data-card-visible': (column.card ?? true)|json_encode,    
+    'data-sort-order': column.order,
+    'data-card-visible': (column.cardVisible ?? true)|json_encode,
+    'data-card-bold': (column.cardBold ?? false)|json_encode        
 } -%}
-{%- if column.formatter -%}
-    {%- set attributes = attributes|merge({'data-formatter': column.formatter}) -%}
+{%- if column.cellFormatter -%}
+    {%- set attributes = attributes|merge({'data-formatter': column.cellFormatter}) -%}
 {%- endif -%}
 {%- if column.styleFormatter -%}
     {%- set attributes = attributes|merge({'data-cell-style': column.styleFormatter}) -%}
@@ -26,18 +28,23 @@
 </th>
 {%- endmacro %}
 
+{# macros #}
+{% macro output_dropdown(suffix, value, selection, text) -%}
+<button type="button" data-value="{{ value }}" class="dropdown-item dropdown-{{ suffix }}{% if value == selection %} active{% endif %}">{{ text|default(value)|capitalize }}</button>
+{%- endmacro %}
+
 {% macro item_path(path, text, icon, class = '') %}
-{%- set class = ('dropdown-item rowlink-skip ' ~ class|default(''))|trim -%}
-<a href="{{ path }}" class="{{ class }}">
-    {{- icons.icon(icon ~ ' fa-fw mr-1', text) -}}
-</a>
+{%- set class = ('dropdown-item rowlink-skip dropdown-item-path ' ~ class|default(''))|trim -%}
+{{ icons.link(path, text, class, icon ~ ' fa-fw mr-1') }}
+{%- endmacro %}
+
+{% macro item_global(path, text, icon) %}
+{{ icons.dropdownItem(path, text, icon) }}
 {%- endmacro %}
 
 {% macro item_external(path, text, icon, class = '') %}
 {%- set class = ('dropdown-item rowlink-skip ' ~ class|default(''))|trim -%}
-<a href="{{ path }}" target="_blank" rel="noopener noreferrer" class="{{ class }}">
-    {{- icons.icon(icon ~ ' fa-fw', text) -}}
-</a>
+{{ icons.linkExternal(path, text, class, icon ~ ' fa-fw') }}
 {%- endmacro %}
 
 {% macro item_separator() %}
@@ -53,11 +60,14 @@
 {%- set allow_export = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 {%- set row_show     = allow_show and app.actionShow -%}
 {%- set row_edit     = allow_edit and app.actionEdit -%}
+{%- set show_class   = 'btn-show' ~ (row_show ? ' btn-default' : '') -%}
+{%- set edit_class   = 'btn-edit' ~ (row_edit ? ' btn-default' : '') -%}
 
 {# parameters #}
+{%- set attributes   = attributes|default({}) -%}
 {%- set row_selector = 'table-primary' -%}
 {%- set id           = app.request.get('id', 0) -%}
-{%- set caller       = path(app.request.attributes.get('_route')) -%}
+{%- set caller       = path(app.request.get('_route')) -%}
 {%- set params = params|default({})|merge({
         'id': id,
         'caller': caller, 
@@ -90,6 +100,7 @@
 </div>
 {# table #}
 <table id="table-edit" 
+    {{ _self.attribs(attributes) }}    
     data-classes="table table-hover table-list table-sm" 
     data-row-selector="{{ '.' ~ row_selector }}"
     data-row-class="{{ row_selector }}"
@@ -110,7 +121,6 @@
     data-total-not-filtered="{{ totalNotFiltered }}"
 
     data-card-view="{{ card|json_encode }}"
-    data-card-view-bold="{{ cardBold|default(true)|json_encode }}"
 
     data-sort-name="{{ sort }}"
     data-sort-order="{{ order }}"
@@ -130,7 +140,6 @@
     data-toolbar="#toolbar"
     data-loading-template="loadingTemplate"
 
-    data-min-margin="{{ app.minMargin }}"
     data-caller="{{ caller }}"
     data-save-url="{{ save_url }}"    
     data-defer-url="{{ defer_url }}">
@@ -152,7 +161,7 @@
     </tbody>
 </table>
 {# dropdown actions #}
-<div id="dropdown-actions" class="dropdown d-none d-print-none">
+<div id="dropdown-actions" class="dropdown d-print-none d-none">
     {{ icons.dropdownEllipsis() }}
     <div class="dropdown-menu dropdown-menu-right">
         {% block edit_actions -%}{%- endblock %}

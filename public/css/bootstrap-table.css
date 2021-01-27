@@ -9,7 +9,7 @@
     white-space: nowrap;
     font-weight: normal;
     overflow: hidden;
-    min-width: 25%;
+    min-width: 8rem;
 }
 
 .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
@@ -17,10 +17,31 @@
     white-space: nowrap;
     overflow: hidden;
     text-align: left;
+    max-width: 17rem;
+}
+@media ( min-width : 576px) {
+    .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
+        max-width: 19rem;
+    }
+}
+@media ( min-width : 768px) {
+    .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
+        max-width: 30rem;
+    }
+}
+@media ( min-width : 992px) {
+    .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
+        max-width: 45rem;
+    }
+}
+@media ( min-width : 1200px) {
+    .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
+        max-width: 55rem;
+    }
 }
 
-.bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-title:after {
-    content: " :";
+.bootstrap-table .fixed-table-container .table tbody td {
+    vertical-align: top !important;
 }
 
 .bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading {

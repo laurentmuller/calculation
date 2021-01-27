@@ -59,7 +59,7 @@ class GeneratorController extends AbstractController
 
         $helper->field('count')
             ->updateAttribute('min', 1)
-            ->updateAttribute('max', 50)
+            ->updateAttribute('max', 20)
             ->addNumberType(0);
 
         $helper->field('confirm')
@@ -160,7 +160,7 @@ class GeneratorController extends AbstractController
         $data = [
             'result' => true,
             'count' => $count,
-            'calculations' => $calculations,
+            'items' => $calculations,
             'message' => $this->trans('counters.calculations_generate', ['count' => $count]),
         ];
 
@@ -247,7 +247,7 @@ class GeneratorController extends AbstractController
         $data = [
             'result' => true,
             'count' => $count,
-            'customers' => $customers,
+            'items' => $customers,
             'message' => $this->trans('counters.customers_generate', ['count' => $count]),
         ];
 

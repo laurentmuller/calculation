@@ -1,10 +1,5 @@
 {% extends 'table/table_base.html.twig' %}
 
-{# macros #}
-{% macro output_category(category, selection) -%}
-<a href="#" data-value="{{ category.id }}" class="dropdown-item dropdown-category{% if category.id == selection %} active{% endif %}">{{ category.code }}</a>
-{%- endmacro %}
-
 {# parameters #}
 {%- set title        = 'product.list.title' -%}
 {%- set title_icon   = 'file-alt far' -%}
@@ -15,14 +10,14 @@
 {%- set object_type  = EntityVoterInterface.ENTITY_PRODUCT -%}
     
 {% block toolbar_actions -%}
-<div class="btn-group btn-group-sm" role="group">
-    <button id="button-category" data-value="{{ categoryId }}" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" title="{{ 'product.fields.category'|trans }}">
+<div class="input-group-append btn-dropdown">
+    <button id="categoryId" data-value="{{ categoryId }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'product.list.category_help'|trans }}">
         {{- category ? category.code : 'product.fields.category'|trans -}}
     </button>
-    <div class="dropdown-menu" aria-labelledby="button-category">
-        {{ _self.output_category({id: 0, code: 'product.list.category_all_text'|trans}, categoryId) }}
+    <div class="dropdown-menu" aria-labelledby="categoryId">
+        {{ _self.output_dropdown('category', 0, categoryId, 'product.list.category_all_text'|trans) }}
         {% for category in categories %}
-        {{ _self.output_category(category, categoryId) }}
+        {{ _self.output_dropdown('category', category.id, categoryId, category.code) }}
         {% endfor %}
     </div>
 </div>
@@ -34,12 +29,10 @@
 {%- endblock %}
 
 {% block edit_actions -%}
-{%- set show_class = 'btn-show btn-path' ~ (row_show ? ' btn-default' : '') -%}
-{%- set edit_class = 'btn-edit btn-path' ~ (row_edit ? ' btn-default' : '') -%}
 {{ _self.item_path(path('product_show', params), 'product.show.title', 'tv', show_class) }}
 {{ _self.item_path(path('product_edit', params), 'product.edit.title', 'pencil-alt', edit_class) }}
-{{ _self.item_path(path('product_delete', params), 'product.delete.title', 'times', 'btn-delete btn-path') }}
+{{ _self.item_path(path('product_delete', params), 'product.delete.title', 'times', 'btn-delete') }}
 {{ _self.item_separator() }}
-{{ _self.item_path(path('product_add', params), 'product.add.title', 'file far', 'btn-add btn-path') }}
-{{ _self.item_path(path('product_clone', params), 'common.button_clone', 'copy far', 'btn-clone btn-path') }}
+{{ _self.item_path(path('product_add', params), 'product.add.title', 'file far', 'btn-add') }}
+{{ _self.item_path(path('product_clone', params), 'common.button_clone', 'copy far', 'btn-clone') }}
 {%- endblock %}

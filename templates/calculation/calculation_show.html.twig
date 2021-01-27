@@ -121,7 +121,7 @@
             <td class="font-weight-bold text-currency">{{ item.groupsAmount|amount }}</td>
             {%- if app.marginBelow(item) -%}
                 {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
-                <td class="font-weight-bold text-currency text-danger below-cell has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallMargin|percent }}</td>
+                <td class="font-weight-bold text-currency text-danger has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallMargin|percent }}</td>
             {%- else -%}
                 <td class="font-weight-bold text-currency">{{ item.overallMargin|percent }}</td>
             {%- endif -%}

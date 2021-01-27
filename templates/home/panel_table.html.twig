@@ -53,7 +53,7 @@
                     <td class="text-cell">{{ calculation.description }}</td>                    
                     {%- if app.marginBelow(calculation) -%}
                         {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
-                        <td class="text-percent text-danger below-cell has-tooltip" data-html="true" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
+                        <td class="text-percent text-danger has-tooltip" data-html="true" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
                     {%- else -%}
                         <td class="text-percent">{{ calculation.overallMargin|percent }}</td>
                     {%- endif -%}                    

@@ -12,19 +12,19 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
-use App\Repository\CustomerRepository;
+use App\Repository\CategoryRepository;
 
 /**
- * The customers table.
+ * The categories table.
  *
  * @author Laurent Muller
  */
-class CustomerTable extends AbstractBootstrapEntityTable
+class CategoryTable extends AbstractBootstrapEntityTable
 {
     /**
      * Constructor.
      */
-    public function __construct(CustomerRepository $repository)
+    public function __construct(CategoryRepository $repository)
     {
         parent::__construct($repository);
     }
@@ -34,7 +34,7 @@ class CustomerTable extends AbstractBootstrapEntityTable
      */
     protected function createColumns(): array
     {
-        $path = __DIR__ . '/Definition/customer.json';
+        $path = __DIR__ . '/Definition/category.json';
 
         return $this->deserializeColumns($path);
     }
@@ -44,6 +44,6 @@ class CustomerTable extends AbstractBootstrapEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return [CustomerRepository::NAME_COMPANY_FIELD => BootstrapColumn::SORT_ASC];
+        return ['code' => BootstrapColumn::SORT_ASC];
     }
 }

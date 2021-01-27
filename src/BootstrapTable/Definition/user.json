@@ -1,0 +1,54 @@
+[
+	{
+		"field": "id",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	},
+	{
+		"field": "imageName",
+		"title": "user.fields.imageFile",
+		"sortable": false,
+		"searchable": false,
+		"class": "text-image",
+		"fieldFormatter": "formatImage",
+		"cellFormatter": "formatUserImage"
+	},
+	{
+		"field": "username",
+		"title": "user.fields.username_short",
+		"default": true,
+		"class": "w-15 text-cell",
+		"cardBold": true
+	},
+	{
+		"field": "role",
+		"title": "user.fields.role",
+		"class": "w-25 text-cell",
+		"fieldFormatter": "formatRole"
+	},
+	{
+		"field": "email",
+		"title": "user.fields.email",
+		"class": "w-25 text-cell"
+	},
+	{
+		"field": "enabled",
+		"title": "user.fields.enabled",
+		"class": "w-15 text-cell",
+		"fieldFormatter": "formatEnabled"
+	},
+	{
+		"field": "lastLogin",
+		"title": "user.fields.lastLogin",
+		"class": "text-date-time",
+		"fieldFormatter": "formatLastLogin"
+	},
+	{
+		"field": "action",
+		"sortable": false,
+		"searchable": false,
+		"class": "actions rowlink-skip d-print-none",
+		"cellFormatter": "formatActions"
+	}
+]

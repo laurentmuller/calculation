@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
-use App\Util\FormatUtils;
-use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
@@ -23,6 +21,11 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 class BootstrapColumn
 {
+    /**
+     * The action column name.
+     */
+    public const COL_ACTION = 'action';
+
     /**
      * The ascending sortable direction.
      */
@@ -34,59 +37,80 @@ class BootstrapColumn
     public const SORT_DESC = 'desc';
 
     /**
-     * The callback formatter.
-     *
-     * @var callable|bool
+     * Use the bold font style for the element when displayed in card view.
      */
-    private $callbackFormatter = null;
+    private bool $cardBold = false;
 
+    /**
+     * The displayed behavior for the element in the card view mode.
+     */
+    private bool $cardVisible = true;
+
+    /**
+     * The cell formatter (client side).
+     */
+    private ?string $cellFormatter = null;
+
+    /**
+     * The cell class.
+     */
     private ?string $class = null;
 
+    /**
+     * The default sorted column.
+     */
     private bool $default = false;
 
+    /**
+     * The field name.
+     */
     private string $field;
 
-    private ?string $fieldFormatter = null;
+    /**
+     * The field formatter (server side).
+     *
+     * @var string|callable|null
+     */
+    private $fieldFormatter = null;
 
-    private ?string $formatter = null;
+    /**
+     * The sort order.
+     */
+    private string $order = self::SORT_ASC;
 
-    private string $order = Criteria::ASC;
-
+    /**
+     * The searchable behavior.
+     */
     private bool $searchable = true;
 
+    /**
+     * The sortable behavior.
+     */
     private bool $sortable = true;
 
+    /**
+     * The style formatter (client side).
+     */
     private ?string $styleFormatter = null;
 
+    /**
+     * The column title to be transalted.
+     */
     private ?string $title = null;
 
-    private bool $virtual = false;
-
+    /**
+     * The visible behavior.
+     */
     private bool $visible = true;
 
     public function __toString(): string
     {
-        return $this->field;
+        return (string) $this->field;
     }
 
-    public function formatAmount(float $value): string
+    public function getCellFormatter(): ?string
     {
-        return FormatUtils::formatAmount($value);
-    }
-
-    public function formatDate(\DateTimeInterface $value): string
-    {
-        return FormatUtils::formatDate($value);
-    }
-
-    public function formatId(int $value): string
-    {
-        return FormatUtils::formatId($value);
-    }
-
-    public function formatPercentSign(float $value): string
-    {
-        return FormatUtils::formatPercent($value);
+        return $this->cellFormatter;
     }
 
     public function getClass(): ?string
@@ -99,14 +123,12 @@ class BootstrapColumn
         return $this->field;
     }
 
-    public function getFieldFormatter(): ?string
+    /**
+     * @return string|callable|null
+     */
+    public function getFieldFormatter()
     {
         return $this->fieldFormatter;
-    }
-
-    public function getFormatter(): ?string
-    {
-        return $this->formatter;
     }
 
     public function getOrder(): string
@@ -124,6 +146,16 @@ class BootstrapColumn
         return $this->title;
     }
 
+    public function isCardBold(): bool
+    {
+        return $this->cardBold;
+    }
+
+    public function isCardVisible(): bool
+    {
+        return $this->cardVisible;
+    }
+
     public function isDefault(): bool
     {
         return $this->default;
@@ -137,11 +169,6 @@ class BootstrapColumn
     public function isSortable(): bool
     {
         return $this->sortable;
-    }
-
-    public function isVirtual(): bool
-    {
-        return $this->virtual;
     }
 
     public function isVisible(): bool
@@ -159,7 +186,7 @@ class BootstrapColumn
      */
     public function mapValue($objectOrArray, PropertyAccessor $accessor): string
     {
-        if ($this->virtual) {
+        if (self::COL_ACTION === $this->field) {
             return (string) $accessor->getValue($objectOrArray, 'id');
         }
 
@@ -167,7 +194,28 @@ class BootstrapColumn
         $value = $accessor->getValue($objectOrArray, $this->field);
 
         // format
-        return $this->formatValue($value);
+        return $this->formatValue($objectOrArray, $value);
+    }
+
+    public function setCardBold(bool $cardBold): self
+    {
+        $this->cardBold = $cardBold;
+
+        return $this;
+    }
+
+    public function setCardVisible(bool $cardVisible): self
+    {
+        $this->cardVisible = $cardVisible;
+
+        return $this;
+    }
+
+    public function setCellFormatter(?string $cellFormatter): self
+    {
+        $this->cellFormatter = $cellFormatter;
+
+        return $this;
     }
 
     public function setClass(?string $class): self
@@ -191,16 +239,12 @@ class BootstrapColumn
         return $this;
     }
 
-    public function setFieldFormatter(?string $fieldFormatter): self
+    /**
+     * @param string|callable|null $fieldFormatter
+     */
+    public function setFieldFormatter($fieldFormatter): self
     {
         $this->fieldFormatter = $fieldFormatter;
-
-        return $this;
-    }
-
-    public function setFormatter(?string $formatter): self
-    {
-        $this->formatter = $formatter;
 
         return $this;
     }
@@ -246,13 +290,6 @@ class BootstrapColumn
         return $this;
     }
 
-    public function setVirtual(bool $virtual): self
-    {
-        $this->virtual = $virtual;
-
-        return $this;
-    }
-
     public function setVisible(bool $visible): self
     {
         $this->visible = $visible;
@@ -263,21 +300,15 @@ class BootstrapColumn
     /**
      * Formats the given value using the field formatter if applicable.
      *
-     * @param mixed $value the value to format
+     * @param mixed $objectOrArray the object to map
+     * @param mixed $value         the value to format
      *
      * @return string the formatted value
      */
-    private function formatValue($value): string
+    private function formatValue($objectOrArray, $value): string
     {
-        if (null === $this->callbackFormatter) {
-            if (\is_callable([$this, $this->fieldFormatter])) {
-                $this->callbackFormatter = [$this, $this->fieldFormatter];
-            } else {
-                $this->callbackFormatter = false;
-            }
-        }
-        if ($this->callbackFormatter) {
-            return (string) \call_user_func($this->callbackFormatter, $value);
+        if (\is_callable($this->fieldFormatter)) {
+            return (string) \call_user_func($this->fieldFormatter, $value, $objectOrArray);
         }
 
         return (string) $value;

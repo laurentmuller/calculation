@@ -60,7 +60,7 @@
         {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
         <tr>
         	<td>{{ 'calculation.fields.total'|trans }}</td>
-        	<td class="text-right pr-4 text-danger below-cell has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallTotal|amount }}</td>
+        	<td class="text-right pr-4 text-danger has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallTotal|amount }}</td>
         </tr>
     {%- else -%}
     	{{ properties.property('calculation.fields.total', item.overallTotal|amount, 'text-right pr-4') }}

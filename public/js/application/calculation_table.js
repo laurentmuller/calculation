@@ -16,8 +16,13 @@ $.fn.extend({
 
         const $this = $(this);
         if ($this.length) {
-            $('#state').val($this.data('id'));
-            $('#button-state').text($this.text());
+            const id = $this.data('id');
+            $('#state').val(id);
+            if (id) {
+                $('#button-state').text($this.text());    
+            } else {
+                $('#button-state').text($('#button-state').data('default'));
+            }
             $('.dropdown-state').removeClass('active');
             $this.addClass('active');
         }

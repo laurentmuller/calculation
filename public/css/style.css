@@ -425,10 +425,6 @@ span.state-color {
     font-size: smaller;
     vertical-align: super;
 }
-.below-cell:before {
-    content: "*";
-    color: var(--danger);
-}
 
 /**
  * textarea

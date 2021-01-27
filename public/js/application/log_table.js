@@ -9,18 +9,20 @@ $.fn.extend({
     /**
      * Update the channel selection.
      * 
-     * @param {string}
-     *            text - the text to use for the button or null to copy the
-     *            selected drop-down item.
      * @return {jQuery} The jQuery element for chaining.
      */
-    updateChannel: function (text) {
+    updateChannel: function () {
         'use strict';
 
         const $this = $(this);
         if ($this.length) {
-            $('#channel').val($this.data('id'));
-            $('#button-channel').text(text || $this.text());
+            const id = $this.data('id');
+            $('#channel').val(id);
+            if (id) {
+                $('#button-channel').text($this.text());    
+            } else {
+                $('#button-channel').text($('#button-channel').data('default'));
+            }
             $('.dropdown-channel').removeClass('active');
             $this.addClass('active');
         }
@@ -30,18 +32,20 @@ $.fn.extend({
     /**
      * Update the level selection.
      * 
-     * @param {string}
-     *            text - the text to use for the button or null to copy the
-     *            selected drop-down item.
      * @return {jQuery} The jQuery element for chaining.
      */
-    updateLevel: function (text) {
+    updateLevel: function () {
         'use strict';
 
         const $this = $(this);
         if ($this.length) {
-            $('#level').val($this.data('id'));
-            $('#button-level').text(text || $this.text());
+            const id = $this.data('id');
+            $('#level').val(id);
+            if (id) {
+                $('#button-level').text($this.text());    
+            } else {
+                $('#button-level').text($('#button-level').data('default'));
+            }
             $('.dropdown-level').removeClass('active');
             $this.addClass('active');
         }
@@ -60,8 +64,8 @@ clearSearch = function ($element, table, callback) { // jshint ignore:line
     const $level = $('#level');
     if ($channel.val() || $level.val()) {
         // update buttons
-        $('.dropdown-channel:first').updateChannel($('#button-channel').prop('title'));
-        $('.dropdown-level:first').updateLevel($('#button-level').prop('title'));
+        $('.dropdown-channel:first').updateChannel();
+        $('.dropdown-level:first').updateLevel();
 
         // clear
         table.column(2).search('');
@@ -119,7 +123,7 @@ clearSearch = function ($element, table, callback) { // jshint ignore:line
 
     // select level
     const level = $('#level').val();
-    if (channel) {
+    if (level) {
         const selector = '.dropdown-level[data-id="' + level + '"]';
         $(selector).updateLevel();
     }

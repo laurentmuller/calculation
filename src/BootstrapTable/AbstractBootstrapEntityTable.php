@@ -12,15 +12,11 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
-use App\Entity\AbstractEntity;
 use App\Repository\AbstractRepository;
 use App\Util\Utils;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Abstract table for entities.
@@ -30,6 +26,11 @@ use Symfony\Component\Serializer\SerializerInterface;
 abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
 {
     /**
+     * The where part name of the query builder.
+     */
+    private const WHERE_PART = 'where';
+
+    /**
      * The respository.
      */
     protected AbstractRepository $repository;
@@ -37,10 +38,82 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
     /**
      * Constructor.
      */
-    public function __construct(SerializerInterface $serializer, AbstractRepository $repository)
+    public function __construct(AbstractRepository $repository)
     {
-        parent::__construct($serializer);
         $this->repository = $repository;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEntityClassName(): string
+    {
+        return $this->repository->getClassName();
+    }
+
+    /**
+     * Gets the repository.
+     */
+    public function getRepository(): AbstractRepository
+    {
+        return $this->repository;
+    }
+
+    public function handleRequest(Request $request): array
+    {
+        // builder
+        $builder = $this->createDefaultQueryBuilder();
+
+        // count all
+        $totalNotFiltered = $filtered = $this->count();
+
+        // search
+        $search = $this->addSearch($request, $builder);
+
+        // count filtered
+        if (!empty($builder->getDQLPart(self::WHERE_PART))) {
+            $filtered = $this->countFiltered($builder);
+        }
+
+        // sort
+        [$sort, $order] = $this->addOrderBy($request, $builder);
+
+        // limit
+        [$offset, $limit] = $this->addLimit($request, $builder);
+        $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
+
+        // get result and map entities
+        $entities = $builder->getQuery()->getResult();
+        $rows = empty($entities) ? [] : $this->mapEntities($entities);
+
+        // ajax?
+        if ($request->isXmlHttpRequest()) {
+            return [
+                'totalNotFiltered' => $totalNotFiltered,
+                'total' => $filtered,
+                'rows' => $rows,
+            ];
+        }
+
+        // render
+        return [
+            'columns' => $this->getColumns(),
+            'rows' => $rows,
+
+            'card' => $this->getParamCard($request),
+            'id' => $this->getParamId($request),
+
+            'totalNotFiltered' => $totalNotFiltered,
+            'total' => $filtered,
+
+            'page' => $page,
+            'limit' => $limit,
+            'offset' => $offset,
+            'search' => $search,
+
+            'sort' => $sort,
+            'order' => $order,
+        ];
     }
 
     /**
@@ -51,7 +124,7 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
      *
      * @return int[] the offset and the limit parameters
      */
-    public function addLimit(Request $request, QueryBuilder $builder): array
+    protected function addLimit(Request $request, QueryBuilder $builder): array
     {
         $offset = (int) $request->get(self::PARAM_OFFSET, 0);
         $limit = (int) $this->getRequestValue($request, self::PARAM_LIMIT, self::PAGE_SIZE);
@@ -69,12 +142,12 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
      *
      * @return string[] the sort field and order parameters
      */
-    public function addOrderBy(Request $request, QueryBuilder $builder): array
+    protected function addOrderBy(Request $request, QueryBuilder $builder): array
     {
         $orderBy = [];
         $repository = $this->repository;
         $sort = (string) $this->getRequestValue($request, self::PARAM_SORT, '');
-        $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, Criteria::ASC);
+        $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, BootstrapColumn::SORT_ASC);
 
         if (Utils::isString($sort)) {
             $fields = (array) $repository->getSortFields($sort);
@@ -128,7 +201,7 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
      *
      * @return string the seeach parameter
      */
-    public function addSearch(Request $request, QueryBuilder $builder): string
+    protected function addSearch(Request $request, QueryBuilder $builder): string
     {
         $search = (string) $request->get(self::PARAM_SEARCH, '');
         if (Utils::isString($search)) {
@@ -155,7 +228,7 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
     /**
      * Gets the total number of unfiltered entities.
      */
-    public function count(): int
+    protected function count(): int
     {
         return $this->repository->count([]);
     }
@@ -165,14 +238,12 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
      *
      * @param QueryBuilder $builder the source builder
      */
-    public function countFiltered(QueryBuilder $builder): int
+    protected function countFiltered(QueryBuilder $builder): int
     {
         $alias = $builder->getRootAliases()[0];
         $field = $this->repository->getSingleIdentifierFieldName();
         $select = "COUNT($alias.$field)";
-
-        $cloned = (clone $builder);
-        $cloned->select($select);
+        $cloned = (clone $builder)->select($select);
 
         return (int) $cloned->getQuery()->getSingleScalarResult();
     }
@@ -182,48 +253,13 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
      *
      * @param string $alias the entity alias
      */
-    public function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->repository->createDefaultQueryBuilder($alias);
     }
 
     /**
-     * Gets the entity class name.
-     */
-    public function getEntityClassName(): string
-    {
-        return $this->repository->getClassName();
-    }
-
-    /**
-     * Gets the repository.
-     */
-    public function getRepository(): AbstractRepository
-    {
-        return $this->repository;
-    }
-
-    /**
-     * Maps the given entities.
-     *
-     * @param AbstractEntity[] $entities the entities to map
-     *
-     * @return array the mapped entities
-     */
-    public function mapEntities(array $entities): array
-    {
-        $columns = $this->getColumns();
-        $accessor = PropertyAccess::createPropertyAccessor();
-
-        return \array_map(function (AbstractEntity $entity) use ($columns, $accessor) {
-            return $this->mapValues($entity, $columns, $accessor);
-        }, $entities);
-    }
-
-    /**
      * Gets the default order to apply.
-     *
-     * Each order is apply, if not yet present, after the request order.
      *
      * @return array an array where each key is the column name and the value is the order direction ('asc' or 'desc')
      */

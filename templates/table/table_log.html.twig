@@ -1,0 +1,61 @@
+{% extends 'table/table_base.html.twig' %}
+
+{# parameters #}
+{%- set title        = 'log.title' -%}
+{%- set title_icon   = 'book' -%}
+{%- set defer_url    = url('table_log') -%}
+{%- set save_url     = url('table_log_save') -%}
+{%- set channel      = channel|default('') -%}
+{%- set level        = level|default('') -%}
+{%- set params       = {'channel': channel, 'level': level} -%}
+{%- set object_type  = EntityVoterInterface.ENTITY_LOG -%}
+
+{% block card_header %}
+<div class="row">
+    <div class="col-md-4">{{ parent() }}</div>
+    <div class="col-md-8 text-md-right"><small>{{ 'log.list.file'|trans({'%file%': file}) }}</small></div>
+</div>
+{% endblock %}
+
+{% block toolbar_actions -%}
+<div class="input-group-append btn-dropdown">
+    <button id="channel" data-value="{{ channel }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.channel'|trans }}" title="{{ 'log.list.channel_help'|trans }}">
+        {{- channel|length ? channel|capitalize : 'log.fields.channel'|trans -}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="channel">
+        {{ _self.output_dropdown('channel', '', channel, 'datatable.all'|trans) }}
+        {% for key in channels %}
+        {{ _self.output_dropdown('channel', key, channel, key|capitalize) }}
+        {% endfor %}
+    </div>
+</div>    
+<div class="input-group-append btn-dropdown">
+    <button id="level" data-value="{{ level }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
+        {{- level|length ? level|capitalize: 'log.fields.level'|trans -}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="level">
+        {{ _self.output_dropdown('level', '', level, 'datatable.all'|trans) }}
+        {% for key in levels %}
+        {{ _self.output_dropdown('level', key, level, key|capitalize) }}
+        {% endfor %}
+    </div>
+</div>
+{%- endblock %}
+
+{% block global_actions -%}
+{%- set route = app.request.get('_route') -%}
+{{ _self.item_global(path('log_refresh', {'route' : route}), 'common.button_refresh', 'sync-alt') }}
+{{ _self.item_separator() }}
+{{ _self.item_global(path('log_delete', {'route' : route}), 'log.delete.title', 'times') }}
+{{ _self.item_separator() }}
+{{ _self.item_external(path('log_pdf'), 'log.list.pdf_title', 'file-pdf far') }}
+{{ _self.item_external(path('log_excel'), 'log.list.excel_title', 'file-excel far') }}
+{%- endblock %}
+
+{% block edit_actions -%}
+{{ _self.item_path(path('log_show', params), 'log.show.title', 'tv', 'btn-show btn-default') }}
+{%- endblock %}
+
+{% block stylesheets %}
+{{ asset_css('css/logs_boostrap_table.css') }}
+{% endblock %}

@@ -8,8 +8,8 @@
  * @param {array}
  *            values - the cell values.
  * @param {array}
- *            classes - the optional cell classes. This array must have the same
- *            length of elements as the array of values.
+ *            classes - the cell classes. This array must have the same length
+ *            of the values.
  * @returns {jQuery} the created row.
  */
 function createRow(values, classes) {
@@ -17,11 +17,10 @@ function createRow(values, classes) {
 
     const $row = $('<tr/>');
     values.forEach(function (value, index) {
-        const $cell = $('<td/>').html(value);
-        if (classes[index]) {
-            $cell.addClass(classes[index]);
-        }
-        $row.append($cell);
+        $row.append($('<td/>', {
+            'html': value,
+            'class': classes[index]
+        }));
     });
 
     return $row;
@@ -37,7 +36,7 @@ function renderCalculations(calculations) {
     'use strict';
 
     const $body = $('<tbody/>');
-    const classes = ['text-id', 'text-date', null, null, 'text-currency'];
+    const classes = ['text-id', 'text-date', '', '', 'text-currency'];
     calculations.forEach(function (c) {
         $body.append(createRow([c.id, c.date, c.state, c.description + "<br>" + c.customer, c.total], classes));
     });
@@ -62,29 +61,54 @@ function renderCustomers(customers) {
 }
 
 /**
+ * Disable the submit and cancel buttons.
+ */
+function disableButtons() {
+    'use strict';
+    const $form = $('#edit-form');
+    const $submit = $form.find(':submit');
+    const spinner = '<span class="spinner-border spinner-border-sm"></span>';
+    $submit.data('text', $submit.text()).addClass('disabled').html(spinner);
+    $form.find('.btn-cancel').addClass('disabled');
+}
+
+/**
+ * Enable the submit and cancel buttons.
+ */
+function enableButtons() {
+    'use strict';
+    const $form = $('#edit-form');
+    const $submit = $form.find(':submit');
+    $submit.removeClass('disabled').html($submit.data('text'));
+    $form.find('.btn-cancel').removeClass('disabled');
+}
+
+/**
  * Generate values.
  */
 function generate() {
     'use strict';
 
+    disableButtons();
+    $('#content').slideUp('slow');
+
     const entity = $('#form_entity').val();
     const count = $('#form_count').intVal();
     const url = entity.replace(/0/g, count);
-
-    $('#content').slideUp('slow');
     $.getJSON(url, function (response) {
+        enableButtons();
         const title = $(".card-title").text();
         $('#form_confirm').setChecked(false);
         if (response.result) {
             const index = $('#form_entity').prop('selectedIndex');
             if (index === 0) {
-                renderCustomers(response.customers);
+                renderCustomers(response.items);
             } else {
-                renderCalculations(response.calculations);
+                renderCalculations(response.items);
             }
             $('#content').slideDown('slow');
             Toaster.success(response.message, title, $("#flashbags").data());
-        } else {            
+        } else {
             Toaster.danger(response.message, title, $("#flashbags").data());
         }
     });
@@ -95,11 +119,6 @@ function generate() {
  */
 (function ($) {
     'use strict';
-
-    // hide result on change
-    $('#form_entity, #form_count').on('input', function () {        
-        $('#content').slideUp();
-    });
 
     // init validation
     const options = {

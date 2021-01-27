@@ -9,7 +9,8 @@
 		"field": "nameAndCompany",
 		"title": "customer.fields.nameAndCompany",
 		"default": true,
-		"class": "w-35 text-cell"
+		"class": "w-35 text-cell",
+		"cardBold": true
 	},
 	{
 		"field": "address",
@@ -23,10 +24,9 @@
 	},
 	{
 		"field": "action",
-		"virtual": true,
 		"sortable": false,
 		"searchable": false,
 		"class": "actions rowlink-skip d-print-none",
-		"formatter": "actionsFormatter"
+		"cellFormatter": "formatActions"
 	}
 ]

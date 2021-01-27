@@ -2,10 +2,11 @@
 	{
 		"field": "id",
 		"title": "calculation.fields.id",
-		"direction": "desc",
+		"order": "desc",
 		"class": "text-id",
 		"fieldFormatter": "formatId",
-		"styleFormatter": "renderCalculationState"
+		"styleFormatter": "styleCalculationState",
+		"cardBold": true
 	},
 	{
 		"field": "date",
@@ -34,9 +35,9 @@
 		"field": "overallMargin",
 		"title": "calculation.fields.margin",
 		"class": "text-percent",
-		"fieldFormatter": "formatPercentSign",
-		"styleFormatter": "renderCalculationMargin",
-		"callback": "renderTooltip"
+		"fieldFormatter": "formatPercent",
+		"cellFormatter": "formatCalculationMargin",
+		"styleFormatter": "styleCalculationMargin"
 	},
 	{
 		"field": "overallTotal",
@@ -46,12 +47,10 @@
 	},
 	{
 		"field": "action",
-		"virtual": true,
 		"sortable": false,
 		"searchable": false,
 		"class": "actions rowlink-skip d-print-none",
-		"fieldFormatter": "formatId",
-		"formatter": "actionsFormatter"
+		"cellFormatter": "formatActions"
 	},
 	{
 		"field": "state.color",

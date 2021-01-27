@@ -15,10 +15,10 @@ namespace App\BootstrapTable;
 use App\Entity\CalculationState;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Util\FormatUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * The calculations table.
@@ -40,29 +40,14 @@ class CalculationTable extends AbstractBootstrapEntityTable
     /**
      * Constructor.
      */
-    public function __construct(SerializerInterface $serializer, CalculationRepository $repository)
+    public function __construct(CalculationRepository $repository)
     {
-        parent::__construct($serializer, $repository);
+        parent::__construct($repository);
     }
 
-    /**
-     * (non-PHPdoc).
-     *
-     * @see \App\BootstrapTable\AbstractBootstrapEntityTable::addSearch()
-     */
-    public function addSearch(Request $request, QueryBuilder $builder): string
+    public function formatId(int $value): string
     {
-        $search = parent::addSearch($request, $builder);
-
-        // state?
-        $this->stateId = (int) $request->get(self::PARAM_STATE, 0);
-        if (0 !== $this->stateId) {
-            $field = $this->repository->getSearchFields('state.id');
-            $builder->andWhere($field . '=:' . self::PARAM_STATE)
-                ->setParameter(self::PARAM_STATE, $this->stateId, Types::INTEGER);
-        }
-
-        return $search;
+        return FormatUtils::formatId($value);
     }
 
     /**
@@ -78,9 +63,25 @@ class CalculationTable extends AbstractBootstrapEntityTable
     }
 
     /**
-     * (non-PHPdoc).
-     *
-     * @see \App\BootstrapTable\AbstractBootstrapTable::createColumns()
+     * {@inheritdoc}
+     */
+    protected function addSearch(Request $request, QueryBuilder $builder): string
+    {
+        $search = parent::addSearch($request, $builder);
+
+        // state?
+        $this->stateId = (int) $request->get(self::PARAM_STATE, 0);
+        if (0 !== $this->stateId) {
+            $field = $this->repository->getSearchFields('state.id');
+            $builder->andWhere($field . '=:' . self::PARAM_STATE)
+                ->setParameter(self::PARAM_STATE, $this->stateId, Types::INTEGER);
+        }
+
+        return $search;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     protected function createColumns(): array
     {

@@ -67,6 +67,7 @@ calculation:
         state_all_text: Tous
         state_all_description: Toutes les calculations
         state_description: Statut des calculations
+        state_help: Afficher les calculations pour le statut sélectionné
         margin_below: La marge globale de <b>%margin%</b> est en dessous du seuil minimal de <b>%minimum%</b>
     show:
         title: Propriétés de la calculation
@@ -144,7 +145,7 @@ calculationstate:
         add_title: Créer un nouveau statut
         pdf_title: Télécharger la liste des status
         excel_title: Exporter la liste des status
-        calculation_title: Afficher les calculations
+        calculation_title: Afficher les calculations de ce statut
         editable: Modifiable
         not_editable: Non-Modifiable
     show:
@@ -174,7 +175,7 @@ category:
         add_title: Créer une nouvelle catégorie
         pdf_title: Télécharger la liste des catégories
         excel_title: Exporter la liste des catégories
-        product_title: Afficher les articles
+        product_title: Afficher les articles de cette catégorie 
     show:
         title: Propriétés de la catégorie
 group:
@@ -306,6 +307,7 @@ product:
         category_all_text: Toutes
         category_all_description: Toutes
         category_description: Catégorie d'articles
+        category_help: Afficher les articles pour la catégorie sélectionnée
     show:
         title: Propriétés de l'article
     import:
@@ -568,14 +570,16 @@ log:
         context: Contexte
         extra: Extra
     show:
-        title: Entrée du journal de l'application
+        title: Propriétés de l'entrée du journal
         not_found: Impossible d'afficher l'entrée du journal.
     list:
         title: Journal de l'application 
         file: 'Fichier : %file%'        
         empty: Le journal de l'application ne contient aucune entrée.    
         pdf_title: Télécharger le journal de l'application
-        excel_title: Exporter le journal de l'application   
+        excel_title: Exporter le journal de l'application
+        channel_help: Afficher les entrées pour le canal sélectionné   
+        level_help: Afficher les entrées pour le niveau sélectionné
     delete:
         title: Supprimer le journal de l'application
         message: Êtes-vous sûr de vouloir supprimer le journal de l'application ?

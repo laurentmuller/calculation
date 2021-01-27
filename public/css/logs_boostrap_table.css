@@ -1,0 +1,70 @@
+@import 'bootstrap-table.css';
+
+/**! compression tag for ftp-deployment */
+
+.date {
+    border-left: 0.3rem solid transparent !important;
+    width: 170px;
+}
+
+.channel {
+    width: 100px;
+    white-space: nowrap;
+}
+
+.level {
+    width: 90px;
+    white-space: nowrap;
+}
+
+.message {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width:5rem;
+}
+
+@media ( min-width : 576px) {
+    .message {
+        max-width:5rem;
+    }
+}
+@media ( min-width : 768px) {
+    .message {
+        max-width:10rem;
+    }
+}
+/*
+@media ( min-width : 992px) {
+    .message {
+        max-width:10rem;
+    }
+}
+
+@media ( min-width : 1200px) {
+    .message {
+        max-width:10rem;
+    }
+}
+*/
+
+.debug {
+    border-left-color: var(--secondary) !important;
+}
+
+.info,
+.notice {
+    border-left-color: var(--info) !important;
+}
+
+.warning {
+    border-left-color: var(--warning) !important;
+}
+
+.error,
+.critical,
+.alert,
+.emergency {
+    border-left-color: var(--danger) !important;
+}
+

@@ -80,7 +80,7 @@ $.fn.dataTable.renderTooltip = function (td, cellData) {
     const value = parseFloat(cellData.replace(/[^\d\.\-]/g, '')) / 100.0;
     if (!isNaN(margin) && !isNaN(value) && value < margin) {
         const title = $('#data-table').attr('min_margin_text').replace('%margin%', cellData);
-        $(td).addClass('text-danger below-cell has-tooltip').attr('data-title', title).attr('data-html', true);
+        $(td).addClass('text-danger has-tooltip').attr('data-title', title).attr('data-html', true);
     }
 };
 

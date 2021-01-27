@@ -1,0 +1,4 @@
+{%- set image = asset_if(vich_uploader_asset(user, 'imageFile')|replace({'192': '032'}), false) -%}
+{% if image -%}
+    {{- asset(image) }}?{{ 'now'|date('c') -}}
+{%- endif %}

@@ -41,9 +41,8 @@
 
 {% block search_input -%}
 <div class="input-group input-group-sm">
-    <input type="text" id="table_search" name="table_search" class="form-control" autocomplete="off">
-    <div class="input-group-append dropdown" id="dropdown-menu-channel">
-        <button id="button-channel" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" reference="dropdown-channel" aria-haspopup="true" aria-expanded="false" title="{{ 'log.fields.channel'|trans }}">
+    <div class="input-group-prepend" id="dropdown-menu-channel">
+        <button id="button-channel" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" reference="dropdown-channel" aria-haspopup="true" aria-expanded="false" data-default="{{ 'log.fields.channel'|trans }}" title="{{ 'log.list.channel_help'|trans }}">
             {{- 'log.fields.channel'|trans -}}
         </button>
         <div class="dropdown-menu">
@@ -51,8 +50,8 @@
         </div>
         <input type="hidden" id="channel" name="channel">
     </div>
-    <div class="input-group-append dropdown" id="dropdown-menu-level">        
-        <button id="button-level" class="btn btn-outline-secondary dropdown-toggle rounded-0 border-right-0" type="button" data-toggle="dropdown" reference="dropdown-level" aria-haspopup="true" aria-expanded="false" title="{{ 'log.fields.level'|trans }}">
+    <div class="input-group-prepend" id="dropdown-menu-level">        
+        <button id="button-level" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" reference="dropdown-level" aria-haspopup="true" aria-expanded="false" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
             {{- 'log.fields.level'|trans -}}
         </button>
         <div class="dropdown-menu">
@@ -60,11 +59,7 @@
         </div>
         <input type="hidden" id="level" name="level">
     </div>
-    <div class="input-group-append">
-        <button type="button" class="btn btn-clear btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
-            <i class="fas fa-eraser" aria-hidden="true"></i>
-        </button>                
-    </div>
+    {{ parent() }}
 </div>
 {%- endblock %}
 

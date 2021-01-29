@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Pivot\Aggregator\Aggregator;
+use App\Pivot\Aggregator\AbstractAggregator;
 use App\Util\Utils;
 
 /**
@@ -20,7 +20,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class PivotNode extends PivotAggregator implements \Countable
+class PivotNode extends AbstractPivotAggregator implements \Countable
 {
     /**
      * The path separator.
@@ -80,11 +80,11 @@ class PivotNode extends PivotAggregator implements \Countable
     /**
      * Constructor.
      *
-     * @param Aggregator $aggregator the aggregator function
-     * @param mixed      $key        the key
-     * @param mixed      $value      the initial value
+     * @param AbstractAggregator $aggregator the aggregator function
+     * @param mixed              $key        the key
+     * @param mixed              $value      the initial value
      */
-    public function __construct(Aggregator $aggregator, $key = null, $value = null)
+    public function __construct(AbstractAggregator $aggregator, $key = null, $value = null)
     {
         parent::__construct($aggregator, $value);
         $this->key = $key;
@@ -100,13 +100,13 @@ class PivotNode extends PivotAggregator implements \Countable
     /**
      * Creates a new node and add it to this list of children.
      *
-     * @param Aggregator $aggregator the aggregator function
-     * @param mixed      $key        the key
-     * @param mixed      $value      the initial value
+     * @param AbstractAggregator $aggregator the aggregator function
+     * @param mixed              $key        the key
+     * @param mixed              $value      the initial value
      *
      * @return self the newly created node
      */
-    public function add(Aggregator $aggregator, $key = null, $value = null): self
+    public function add(AbstractAggregator $aggregator, $key = null, $value = null): self
     {
         $node = new self($aggregator, $key, $value);
         $this->addNode($node);

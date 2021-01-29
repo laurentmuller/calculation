@@ -1,0 +1,56 @@
+[
+	{
+		"field": "id",
+		"title": "calculation.fields.id",
+		"order": "desc",
+		"class": "text-id",
+		"fieldFormatter": "formatId",
+		"styleFormatter": "styleStateColor",
+		"cardBold": true
+	},
+	{
+		"field": "date",
+		"title": "calculation.fields.date",
+		"default": true,
+		"order": "desc",
+		"class": "text-date",
+		"fieldFormatter": "formatDate"
+	},
+	{
+		"field": "stateCode",
+		"title": "calculation.fields.state",
+		"class": "text-state"
+	},
+	{
+		"field": "customer",
+		"title": "calculation.fields.customer",
+		"class": "text-cell w-25"
+	},
+	{
+		"field": "description",
+		"title": "calculation.fields.description",
+		"class": "text-cell w-25"
+	},
+	{
+		"field": "items",
+		"title": "calculation.fields.items",
+		"class": "text-cell w-25 text-danger",
+		"sortable": false,
+		"searchable": false,
+		"fieldFormatter": "formatItems",
+		"cellFormatter": "formatItems"
+	},
+	{
+		"field": "action",
+		"sortable": false,
+		"searchable": false,
+		"class": "actions rowlink-skip d-print-none",
+		"cellFormatter": "formatActions"
+	},
+	{
+		"field": "stateColor",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	}
+]

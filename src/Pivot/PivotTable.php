@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Pivot\Aggregator\Aggregator;
+use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Field\PivotField;
 use App\Util\Utils;
 
@@ -21,7 +21,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class PivotTable extends PivotAggregator
+class PivotTable extends AbstractPivotAggregator
 {
     /**
      * The cell data.
@@ -89,10 +89,10 @@ class PivotTable extends PivotAggregator
     /**
      * Constructor.
      *
-     * @param Aggregator $aggregator the aggregator function
-     * @param string     $title      the table title
+     * @param AbstractAggregator $aggregator the aggregator function
+     * @param string             $title      the table title
      */
-    public function __construct(Aggregator $aggregator, ?string $title = null)
+    public function __construct(AbstractAggregator $aggregator, ?string $title = null)
     {
         parent::__construct($aggregator);
 
@@ -116,14 +116,14 @@ class PivotTable extends PivotAggregator
     /**
      * Creates and adds a cell.
      *
-     * @param Aggregator $aggregator the aggregator
-     * @param PivotNode  $column     the parent column
-     * @param PivotNode  $row        the parent row
-     * @param mixed      $value      the initial value
+     * @param AbstractAggregator $aggregator the aggregator
+     * @param PivotNode          $column     the parent column
+     * @param PivotNode          $row        the parent row
+     * @param mixed              $value      the initial value
      *
      * @return PivotCell the newly created cell-
      */
-    public function addCellValue(Aggregator $aggregator, PivotNode $column, PivotNode $row, $value = null): PivotCell
+    public function addCellValue(AbstractAggregator $aggregator, PivotNode $column, PivotNode $row, $value = null): PivotCell
     {
         $cell = new PivotCell($aggregator, $column, $row, $value);
         $this->addCell($cell);

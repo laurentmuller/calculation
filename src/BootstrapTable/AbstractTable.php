@@ -12,25 +12,19 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
-use App\Entity\AbstractEntity;
 use App\Traits\MathTrait;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 /**
- * Abstract Bootstrap table.
+ * The abstract table.
  *
  * @author Laurent Muller
  */
-abstract class AbstractBootstrapTable
+abstract class AbstractTable
 {
     use MathTrait;
 
@@ -75,9 +69,14 @@ abstract class AbstractBootstrapTable
     public const PARAM_SORT = 'sort';
 
     /**
+     * The page list.
+     */
+    private const PAGE_LIST = [5, 10, 15, 20, 25, 30, 50];
+
+    /**
      * The column definitions.
      *
-     * @var BootstrapColumn[]
+     * @var Column[]
      */
     protected ?array $columns = null;
 
@@ -101,6 +100,11 @@ abstract class AbstractBootstrapTable
         return FormatUtils::formatDate($value);
     }
 
+    public function formatId(int $value): string
+    {
+        return FormatUtils::formatId($value);
+    }
+
     public function formatInt(int $value): string
     {
         return FormatUtils::formatInt($value);
@@ -114,7 +118,7 @@ abstract class AbstractBootstrapTable
     /**
      * Gets the column definitions.
      *
-     * @return BootstrapColumn[]
+     * @return Column[]
      */
     public function getColumns(): array
     {
@@ -160,51 +164,26 @@ abstract class AbstractBootstrapTable
     }
 
     /**
-     * Create the columns definitions.
+     * Create the columns.
      *
-     * @return BootstrapColumn[] the columns definitions
+     * @return Column[] the columns
      */
-    abstract protected function createColumns(): array;
+    protected function createColumns(): array
+    {
+        $path = $this->getColumnDefinitions();
+
+        return Column::fromJson($this, $path);
+    }
 
     /**
-     * Deserialize the column definitions from the given JSON file.
-     *
-     * @param string $path the JSON file path
-     *
-     * @return BootstrapColumn[] the columns definitions
-     *
-     * @throws \Symfony\Component\Serializer\Exception\UnexpectedValueException if the file path can not be found or
-     *                                                                          if the file can not be deserialized
+     * Gets the JSON file containing the column definitions.
      */
-    protected function deserializeColumns(string $path): array
-    {
-        //file?
-        if (!\file_exists($path) || !\is_file($path)) {
-            throw new UnexpectedValueException("The file '$path' can not be found.");
-        }
-
-        $data = \file_get_contents($path);
-        $normalizers = [new ArrayDenormalizer(), new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, [new JsonEncoder()]);
-        $type = \sprintf('%s[]', BootstrapColumn::class);
-
-        /** var BootstrapColumn[] $columns */
-        $columns = $serializer->deserialize($data, $type, 'json');
-
-        /** var BootstrapColumn $column */
-        foreach ($columns as $column) {
-            if (null !== $column->getFieldFormatter()) {
-                $column->setFieldFormatter([$this, $column->getFieldFormatter()]);
-            }
-        }
-
-        return $columns;
-    }
+    abstract protected function getColumnDefinitions(): string;
 
     /**
      * Gets the default column.
      */
-    protected function getDefaultColumn(): ?BootstrapColumn
+    protected function getDefaultColumn(): ?Column
     {
         $columns = $this->getColumns();
         foreach ($columns as $column) {
@@ -219,6 +198,25 @@ abstract class AbstractBootstrapTable
         }
 
         return null;
+    }
+
+    /**
+     * Gets the allowed page list.
+     *
+     * @param int $totalNotFiltered the number of not filtered entities
+     *
+     * @return int[] the allowed page list
+     */
+    protected function getPageList(int $totalNotFiltered): array
+    {
+        $sizes = self::PAGE_LIST;
+        for ($i = 0, $count = \count($sizes); $i < $count; ++$i) {
+            if ($sizes[$i] > $totalNotFiltered) {
+                return \array_slice($sizes, 0, $i + 1);
+            }
+        }
+
+        return $sizes;
     }
 
     /**
@@ -283,32 +281,36 @@ abstract class AbstractBootstrapTable
     /**
      * Maps the given entities.
      *
-     * @param AbstractEntity[] $entities the entities to map
+     * @param array $entities the entities to map
      *
      * @return array the mapped entities
      */
     protected function mapEntities(array $entities): array
     {
-        $columns = $this->getColumns();
-        $accessor = PropertyAccess::createPropertyAccessor();
+        if (!empty($entities)) {
+            $columns = $this->getColumns();
+            $accessor = PropertyAccess::createPropertyAccessor();
 
-        return \array_map(function (AbstractEntity $entity) use ($columns, $accessor) {
-            return $this->mapValues($entity, $columns, $accessor);
-        }, $entities);
+            return \array_map(function ($entity) use ($columns, $accessor) {
+                return $this->mapValues($entity, $columns, $accessor);
+            }, $entities);
+        }
+
+        return [];
     }
 
     /**
      * Map the given object to an array where the keys are the column field.
      *
-     * @param mixed             $objectOrArray the object to map
-     * @param BootstrapColumn[] $columns       the column definitions
-     * @param PropertyAccessor  $accessor      the property accessor to get the object values
+     * @param mixed            $objectOrArray the object to map
+     * @param Column[]         $columns       the column definitions
+     * @param PropertyAccessor $accessor      the property accessor to get the object values
      *
      * @return string[] the mapped object
      */
     protected function mapValues($objectOrArray, array $columns, PropertyAccessor $accessor): array
     {
-        $callback = static function (array $result, BootstrapColumn $column) use ($objectOrArray, $accessor) {
+        $callback = static function (array $result, Column $column) use ($objectOrArray, $accessor) {
             $result[$column->getField()] = $column->mapValue($objectOrArray, $accessor);
 
             return $result;

@@ -18,7 +18,7 @@ namespace App\Comparable;
  *
  * @author Laurent Muller
  */
-interface IComparable
+interface ComparableInterface
 {
     /**
      * Compare this object with an other object.
@@ -27,7 +27,7 @@ interface IComparable
      * <code>$this == $other</code> =>  returns 0<br>
      * <code>$this >&nbsp;  $other</code> =>  returns greater then 0<br>
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return int (-1, 0, 1)
      *
@@ -38,7 +38,7 @@ interface IComparable
     /**
      * Returns if this instance is equal to the other object.
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return bool true if equal
      */
@@ -47,7 +47,7 @@ interface IComparable
     /**
      * Returns if this instance is greather than to the other object.
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return bool true if greather than
      */
@@ -56,7 +56,7 @@ interface IComparable
     /**
      * Returns if this instance is greather than or equal to the other object.
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return bool true if greather than or equal
      */
@@ -65,7 +65,7 @@ interface IComparable
     /**
      * Returns if this instance is less (smaller) than to the other object.
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return bool true if less than
      */
@@ -74,7 +74,7 @@ interface IComparable
     /**
      * Returns if this instance is less (smaller) than or equal to the other object.
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return bool true if less than or equal
      */

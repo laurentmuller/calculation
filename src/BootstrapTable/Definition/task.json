@@ -1,0 +1,40 @@
+[
+	{
+		"field": "id",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	},
+	{
+		"field": "name",
+		"title": "task.fields.name",
+		"default": true,
+		"class": " text-cell",
+		"cardBold": true
+	},
+	{
+		"field": "category.code",
+		"title": "task.fields.category",
+		"class": "text-category"
+	},
+	{
+		"field": "unit",
+		"title": "task.fields.unit",
+		"class": " text-unit"
+	},
+	{
+		"field": "items",
+		"title": "task.fields.items",
+		"sortable": false,
+		"searchable": false,
+		"class": "text-currency",
+		"fieldFormatter": "formatCountable"
+	},
+	{
+		"field": "action",
+		"sortable": false,
+		"searchable": false,
+		"class": "actions rowlink-skip d-print-none",
+		"cellFormatter": "formatActions"
+	}
+]

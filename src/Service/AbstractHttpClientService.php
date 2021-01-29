@@ -25,7 +25,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  *
  * @see Symfony\Component\HttpClient\HttpClient
  */
-abstract class HttpClientService
+abstract class AbstractHttpClientService
 {
     /**
      * The base URI parameter name.
@@ -101,7 +101,7 @@ abstract class HttpClientService
     /**
      * Gets the HTTP client.
      *
-     * @see HttpClientService::getDefaultOptions()
+     * @see AbstractHttpClientService::getDefaultOptions()
      */
     protected function getClient(): HttpClientInterface
     {
@@ -118,7 +118,7 @@ abstract class HttpClientService
      *
      * @return array the default requests options
      *
-     * @see HttpClientService::getClient()
+     * @see AbstractHttpClientService::getClient()
      */
     protected function getDefaultOptions(): array
     {

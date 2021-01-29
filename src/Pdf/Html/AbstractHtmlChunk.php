@@ -24,7 +24,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-abstract class HtmlChunk implements HtmlConstantsInterface, PdfConstantsInterface
+abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstantsInterface
 {
     /**
      * The class name.

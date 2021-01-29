@@ -21,7 +21,7 @@ use Symfony\Component\Form\FormInterface;
  *
  * @author Laurent Muller
  */
-class FileTypeExtension extends BaseFileTypeExtension
+class FileTypeExtension extends AbstractFileTypeExtension
 {
     /**
      * {@inheritdoc}

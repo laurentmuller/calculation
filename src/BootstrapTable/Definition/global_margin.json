@@ -1,0 +1,37 @@
+[
+	{
+		"field": "id",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	},
+	{
+		"field": "minimum",
+		"title": "globalmargin.fields.minimum",
+		"default": true,
+		"searchable": false,
+		"fieldFormatter": "formatAmount",
+		"class": "text-currency w-35"
+	},
+	{
+		"field": "maximum",
+		"title": "globalmargin.fields.maximum",
+		"searchable": false,
+		"fieldFormatter": "formatAmount",
+		"class": "text-currency w-35"
+	},
+	{
+		"field": "margin",
+		"title": "globalmargin.fields.margin",
+		"searchable": false,
+		"fieldFormatter": "formatPercent",
+		"class": "text-currency w-30"
+	},
+	{
+		"field": "action",
+		"sortable": false,
+		"searchable": false,
+		"class": "actions rowlink-skip d-print-none",
+		"cellFormatter": "formatActions"
+	}
+]

@@ -26,6 +26,9 @@
 {%- set pdf_title    = 'globalmargin.list.pdf_title' -%}
 {%- set excel_title  = 'globalmargin.list.excel_title' -%}
 
+{# classes #}
+{% block card_container_class %} col-md-8 offset-md-2{% endblock -%}
+
 {% block table_actions -%}
 {{ parent() }}
 {{ icons.dropdownSeparator() }}

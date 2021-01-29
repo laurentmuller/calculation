@@ -1,22 +1,20 @@
 framework:
+    # global
     secret: '%app_secret%'
-    #csrf_protection: ~
-    http_method_override: true
-
-    # Enables session support. Note that the session will ONLY be started if you read or write from it.
-    # Remove or comment this section to explicitly disable session support.
+        
+    # session
     session:
-        handler_id: 'session.handler.native_file'
-        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
-
         cookie_path: '%cookie_path%'
         cookie_samesite: lax
         cookie_secure: 'auto'
-
-    #esi: true
-    #fragments: true
+    
+    # errors
     php_errors:
         log: true
+
+    # see https://symfony.com/doc/current/forms.html#form-validation-messages
+    form:
+        legacy_error_messages: false
 
     # assets
     assets:

@@ -14,8 +14,9 @@ namespace App\Controller;
 
 use App\Database\OpenWeatherDatabase;
 use App\Service\OpenWeatherService;
-use App\Util\Utils;
+use App\Util\FileUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -256,7 +257,7 @@ class OpenWeatherController extends AbstractController
 
             try {
                 // get temp file
-                if (!$temp_name = Utils::tempfile('sql')) {
+                if (!$temp_name = FileUtils::tempfile('sql')) {
                     return $this->renderErrorResult('import.error.temp_file');
                 }
 
@@ -302,7 +303,12 @@ class OpenWeatherController extends AbstractController
 
                 // move
                 $target = $service->getDatabaseName();
-                if (!\rename($temp_name, $target)) {
+
+                try {
+                    if (!FileUtils::rename($temp_name, $target)) {
+                        return $this->renderErrorResult('openweather.error.move_database');
+                    }
+                } catch (IOException $e) {
                     return $this->renderErrorResult('openweather.error.move_database');
                 }
 
@@ -316,8 +322,8 @@ class OpenWeatherController extends AbstractController
                 if (null !== $db) {
                     $db->close();
                 }
-                Utils::unlink($temp_name);
-                Utils::unlink($file);
+                FileUtils::remove($temp_name);
+                FileUtils::remove($file);
             }
         }
 

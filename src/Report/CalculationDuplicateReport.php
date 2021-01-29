@@ -19,7 +19,7 @@ use App\Controller\AbstractController;
  *
  * @author Laurent Muller
  */
-class CalculationDuplicateReport extends CalculationItemsReport
+class CalculationDuplicateReport extends AbstractCalculationItemsReport
 {
     /**
      * Constructor.

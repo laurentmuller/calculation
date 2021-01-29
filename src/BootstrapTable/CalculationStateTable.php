@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class CalculationStateTable extends AbstractBootstrapEntityTable
+class CalculationStateTable extends AbstractEntityTable
 {
     private TranslatorInterface $translator;
 
@@ -45,11 +45,9 @@ class CalculationStateTable extends AbstractBootstrapEntityTable
     /**
      * {@inheritdoc}
      */
-    protected function createColumns(): array
+    protected function getColumnDefinitions(): string
     {
-        $path = __DIR__ . '/Definition/calculation_state.json';
-
-        return $this->deserializeColumns($path);
+        return __DIR__ . '/Definition/calculation_state.json';
     }
 
     /**
@@ -57,6 +55,6 @@ class CalculationStateTable extends AbstractBootstrapEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['code' => BootstrapColumn::SORT_ASC];
+        return ['code' => Column::SORT_ASC];
     }
 }

@@ -21,7 +21,7 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
  *
  * @author Laurent Muller
  */
-abstract class CalculationItemsDocument extends AbstractArrayDocument
+abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
 {
     /**
      * Constructor.

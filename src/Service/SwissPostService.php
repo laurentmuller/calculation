@@ -15,8 +15,8 @@ namespace App\Service;
 use App\Database\SwissDatabase;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Traits\TranslatorTrait;
+use App\Util\FileUtils;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -215,7 +215,7 @@ class SwissPostService
     public function import(): array
     {
         // source file?
-        if (!$this->sourceFile || !\file_exists($this->sourceFile)) {
+        if (!$this->sourceFile || !FileUtils::exists($this->sourceFile)) {
             return [
                 'valid' => false,
                 'message' => $this->trans('import.error.source_file'),
@@ -223,7 +223,7 @@ class SwissPostService
         }
 
         // create a temporary file
-        if (!$tempName = Utils::tempfile('sql')) {
+        if (!$tempName = FileUtils::tempfile('sql')) {
             return [
                 'valid' => false,
                 'message' => $this->trans('import.error.temp_file'),
@@ -292,7 +292,7 @@ class SwissPostService
             $lastImport = $this->application->getLastImport();
 
             // database exist?
-            if (!\file_exists($this->getDatabaseName())) {
+            if (!FileUtils::exists($this->getDatabaseName())) {
                 $lastImport = null;
             }
 
@@ -418,12 +418,12 @@ class SwissPostService
 
                 // move to new location
                 if ($valid) {
-                    \rename($tempName, $this->getDatabaseName());
+                    FileUtils::rename($tempName, $this->getDatabaseName(), true);
                 }
             }
 
             // delete temp file (if any)
-            Utils::unlink($tempName);
+            FileUtils::remove($tempName);
         }
     }
 
@@ -477,7 +477,7 @@ class SwissPostService
         $valid = 0;
         $error = 0;
         $filename = $this->dataDirectory . self::STATE_FILE;
-        if (\file_exists($filename)) {
+        if (FileUtils::exists($filename)) {
             if (false !== ($handle = \fopen($filename, 'r'))) {
                 while (false !== ($data = \fgetcsv($handle, 0, ';'))) {
                     if ($db->insertState($data)) {

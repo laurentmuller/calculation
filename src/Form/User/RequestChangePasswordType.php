@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author Laurent Muller
  */
-class RequestChangePasswordType extends UserCaptchaType
+class RequestChangePasswordType extends AbstractUserCaptchaType
 {
     /**
      * @var string

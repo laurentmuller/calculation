@@ -185,8 +185,10 @@ $.fn.extend({
             // reset
             const options = {query: {}};
             for (let key in params) {
-                options.query[key] = '';
-                $('#' + key).setDataId('');
+                if (Object.prototype.hasOwnProperty.call(params, key)) {
+                    options.query[key] = '';
+                    $('#' + key).setDataId('');    
+                }                
             }
             $table.refresh(options);
         }

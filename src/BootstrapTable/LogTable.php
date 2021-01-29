@@ -20,10 +20,22 @@ use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ * The application logs table.
+ *
  * @author Laurent Muller
  */
-class LogTable extends AbstractBootstrapTable
+class LogTable extends AbstractTable
 {
+    /**
+     * The channel parameter name.
+     */
+    public const PARAM_CHANNEL = 'channel';
+
+    /**
+     * The level parameter name.
+     */
+    public const PARAM_LEVEL = 'level';
+
     /**
      * The created at column name.
      */
@@ -154,9 +166,7 @@ class LogTable extends AbstractBootstrapTable
     public function handleRequest(Request $request): array
     {
         //clear
-        $this->levels = [];
-        $this->channels = [];
-        $this->level = $this->channel = '';
+        $this->clearValues();
 
         // get entries
         if (!$entries = $this->service->getEntries()) {
@@ -169,42 +179,31 @@ class LogTable extends AbstractBootstrapTable
             return [];
         }
 
-        $totalNotFiltered = $filtered = \count($entities);
+        // count
+        $totalNotFiltered = \count($entities);
 
-        // filter
-        $skipChannel = false;
-        if ($this->channel = $request->get('channel', '')) {
-            $entities = $this->filterChannel($entities, $this->channel);
-            $skipChannel = true;
-        }
-        $skipLevel = false;
-        if ($this->level = $request->get('level', '')) {
-            $entities = $this->filterLevel($entities, $this->level);
-            $skipLevel = true;
-        }
+        // filter channel and level
+        $entities = $this->filterChannel($request, $entities);
+        $entities = $this->filterLevel($request, $entities);
 
-        // search
-        $search = (string) $request->get(self::PARAM_SEARCH, '');
-        if (Utils::isString($search)) {
-            $entities = $this->filter($entities, $search, $skipChannel, $skipLevel);
+        // filter search
+        if ($search = (string) $request->get(self::PARAM_SEARCH, '')) {
+            $entities = $this->filterSearch($entities, $search);
         }
         $filtered = \count($entities);
 
         // sort
-        $sort = (string) $this->getRequestValue($request, self::PARAM_SORT, self::COLUMN_DATE);
-        $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, BootstrapColumn::SORT_DESC);
+        [$sort, $order] = $this->getSort($request);
         if (Utils::isString($sort)) {
             $this->sort($entities, $sort, $order);
         }
 
         // limit
-        $offset = (int) $request->get(self::PARAM_OFFSET, 0);
-        $limit = (int) $this->getRequestValue($request, self::PARAM_LIMIT, self::PAGE_SIZE);
-        $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
-
-        // get result and map entities
+        [$offset, $limit, $page] = $this->getLimit($request);
         $entities = \array_slice($entities, $offset, $limit);
-        $rows = empty($entities) ? [] : $this->mapEntities($entities);
+
+        // map entities
+        $rows = $this->mapEntities($entities);
 
         // copy
         $this->channels = \array_keys($entries[LogService::KEY_CHANNELS]);
@@ -218,6 +217,10 @@ class LogTable extends AbstractBootstrapTable
                 'rows' => $rows,
             ];
         }
+
+        // page list
+        $pageList = $this->getPageList($totalNotFiltered);
+        $limit = \min($limit, \max($pageList));
 
         // render
         return [
@@ -234,6 +237,7 @@ class LogTable extends AbstractBootstrapTable
             'limit' => $limit,
             'offset' => $offset,
             'search' => $search,
+            'pageList' => $pageList,
 
             'sort' => $sort,
             'order' => $order,
@@ -243,95 +247,132 @@ class LogTable extends AbstractBootstrapTable
     /**
      * {@inheritdoc}
      */
-    protected function createColumns(): array
+    protected function getColumnDefinitions(): string
     {
-        $path = __DIR__ . '/Definition/log.json';
-
-        return $this->deserializeColumns($path);
+        return __DIR__ . '/Definition/log.json';
     }
 
     /**
-     * Filters the log.
-     *
-     * @param Log[]  $logs        the logs to search in
-     * @param string $value       the value to search for
-     * @param bool   $skipChannel true to skip search in channel
-     * @param bool   $skipLevel   true to skip search in level
-     *
-     * @return Log[] the filtered logs
+     * Clear values.
      */
-    private function filter(array $logs, ?string $value, bool $skipChannel, bool $skipLevel): array
+    private function clearValues(): void
     {
-        if (Utils::isString($value)) {
-            $filter = function (Log $log) use ($value, $skipChannel, $skipLevel) {
-                if (!$skipChannel) {
-                    $channel = $this->formatChannel($log->getChannel());
-                    if (Utils::contains($channel, $value, true)) {
-                        return true;
-                    }
-                }
-
-                if (!$skipLevel) {
-                    $level = $this->formatLevel($log->getLevel());
-                    if (Utils::contains($level, $value, true)) {
-                        return true;
-                    }
-                }
-
-                $date = $this->formatCreatedAt($log->getCreatedAt());
-                if (Utils::contains($date, $value, true)) {
-                    return true;
-                }
-
-                if (Utils::contains($log->getMessage(), $value, true)) {
-                    return true;
-                }
-
-                return false;
-            };
-
-            return \array_filter($logs, $filter);
-        }
-
-        return $logs;
+        $this->level = '';
+        $this->levels = [];
+        $this->channel = '';
+        $this->channels = [];
     }
 
     /**
-     * Filters the log for the given channel.
+     * Filters the log for the request channel (if any).
      *
-     * @param Log[]  $logs  the logs to search in
-     * @param string $value the channel value to search for
+     * @param Request $request  the request to get the channel
+     * @param Log[]   $entities the logs to search in
      *
      * @return Log[] the filtered logs
      */
-    private function filterChannel(array $logs, ?string $value): array
+    private function filterChannel(Request $request, array $entities): array
     {
-        if (Utils::isString($value)) {
-            return \array_filter($logs, function (Log $log) use ($value) {
-                return $value === $log->getChannel();
+        if ($this->channel = $request->get(self::PARAM_CHANNEL, '')) {
+            return \array_filter($entities, function (Log $entity) {
+                return  $this->channel === $entity->getChannel();
             });
         }
 
-        return $logs;
+        return $entities;
     }
 
     /**
-     * Filters the log for the given level.
+     * Filters the log for the request level (if any).
      *
-     * @param Log[]  $logs  the logs to search in
-     * @param string $value the level value to search for
+     * @param Request $request  the request to get the level
+     * @param Log[]   $entities the logs to search in
      *
      * @return Log[] the filtered logs
      */
-    private function filterLevel(array $logs, ?string $value): array
+    private function filterLevel(Request $request, array $entities): array
     {
-        if (Utils::isString($value)) {
-            return \array_filter($logs, function (Log $log) use ($value) {
-                return $value === $log->getLevel();
+        if ($this->level = $request->get(self::PARAM_LEVEL, '')) {
+            return \array_filter($entities, function (Log $entity) {
+                return $this->level === $entity->getLevel();
             });
         }
 
-        return $logs;
+        return $entities;
+    }
+
+    /**
+     * Filters the logs for the given value.
+     *
+     * @param Log[]  $entities the logs to search in
+     * @param string $value    the value to search for
+     *
+     * @return Log[] the filtered logs
+     */
+    private function filterSearch(array $entities, string $value): array
+    {
+        $skipLevel = Utils::isString($this->level);
+        $skipChannel = Utils::isString($this->channel);
+
+        $filter = function (Log $log) use ($value, $skipChannel, $skipLevel) {
+            if (!$skipLevel) {
+                $level = $this->formatLevel($log->getLevel());
+                if (Utils::contains($level, $value, true)) {
+                    return true;
+                }
+            }
+
+            if (!$skipChannel) {
+                $channel = $this->formatChannel($log->getChannel());
+                if (Utils::contains($channel, $value, true)) {
+                    return true;
+                }
+            }
+
+            $date = $this->formatCreatedAt($log->getCreatedAt());
+            if (Utils::contains($date, $value, true)) {
+                return true;
+            }
+
+            if (Utils::contains($log->getMessage(), $value, true)) {
+                return true;
+            }
+
+            return false;
+        };
+
+        return \array_filter($entities, $filter);
+    }
+
+    /**
+     * Gets the limit, the maximum and the page parameters.
+     *
+     * @param Request $request the request to get values from
+     *
+     * @return int[] the offset, the limit and the page parameters
+     */
+    private function getLimit(Request $request): array
+    {
+        $offset = (int) $request->get(self::PARAM_OFFSET, 0);
+        $limit = (int) $this->getRequestValue($request, self::PARAM_LIMIT, self::PAGE_SIZE);
+        $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
+
+        return [$offset, $limit, $page];
+    }
+
+    /**
+     * Gets the sorted field and order.
+     *
+     * @param Request $request the request to get values from
+     *
+     * @return string[] the sorted field and order
+     */
+    private function getSort(Request $request): array
+    {
+        $sort = (string) $this->getRequestValue($request, self::PARAM_SORT, self::COLUMN_DATE);
+        $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, Column::SORT_DESC);
+
+        return [$sort, $order];
     }
 
     /**
@@ -339,15 +380,15 @@ class LogTable extends AbstractBootstrapTable
      *
      * <b>NB:</b> Sorts only when not the default order (date ascending).
      *
-     * @param Log[]  $logs      the logs to sort
+     * @param Log[]  $entities  the logs to sort
      * @param string $field     the sorted field
      * @param string $direction the sorted direction ('asc' or 'desc')
      */
-    private function sort(array &$logs, string $field, string $direction): void
+    private function sort(array &$entities, string $field, string $direction): void
     {
-        if (self::COLUMN_DATE !== $field || BootstrapColumn::SORT_ASC !== $direction) {
-            $ascending = BootstrapColumn::SORT_ASC === $direction;
-            Utils::sortField($logs, $field, $ascending);
+        if (self::COLUMN_DATE !== $field || Column::SORT_ASC !== $direction) {
+            $ascending = Column::SORT_ASC === $direction;
+            Utils::sortField($entities, $field, $ascending);
         }
     }
 }

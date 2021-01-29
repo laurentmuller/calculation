@@ -21,7 +21,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class Calendar extends CalendarItem implements MonthsInterface, WeekDaysInterface
+class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDaysInterface
 {
     use DaysTrait;
     use ModelTrait;

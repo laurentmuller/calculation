@@ -282,7 +282,7 @@ class CalculationRepository extends AbstractRepository
         foreach ($items as $item) {
             $this->updateResult($result, $item, [
                 'description' => $item['item_description'],
-                'count' => (int) $item['item_count'],
+                'count' => $item['item_count'],
             ]);
         }
 

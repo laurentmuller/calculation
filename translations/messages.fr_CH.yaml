@@ -175,7 +175,8 @@ category:
         add_title: Créer une nouvelle catégorie
         pdf_title: Télécharger la liste des catégories
         excel_title: Exporter la liste des catégories
-        product_title: Afficher les articles de cette catégorie 
+        product_title: Afficher les articles de cette catégorie
+        group_help: Afficher les catégories pour le groupe sélectionné
     show:
         title: Propriétés de la catégorie
 group:
@@ -206,14 +207,16 @@ group:
         add_title: Créer un nouveau groupe
         pdf_title: Télécharger la liste des groupes
         excel_title: Exporter la liste des groupes
+        category_title: Afficher les catégories de ce groupe 
     show:
         title: Propriétés du groupe
 groupmargin:
     name: Marges
     fields:
-        margin: Marge (%)
-        maximum: Maximum
         minimum: Minimum
+        maximum: Maximum
+        margin: Marge
+        margin_percent: Marge (%)
 customer:
     name: Client
     fields:
@@ -256,6 +259,7 @@ globalmargin:
         minimum: Minimum
         maximum: Maximum
         margin: Marge
+        margin_percent: Marge (%)
     add:
         title: Nouvelle marge globale
         success: La marge globale <b>%name%</b> a été créée avec succès.
@@ -305,8 +309,6 @@ product:
         pdf_title: Télécharger la liste des articles
         excel_title: Exporter la liste des articles
         category_all_text: Toutes
-        category_all_description: Toutes
-        category_description: Catégorie d'articles
         category_help: Afficher les articles pour la catégorie sélectionnée
     show:
         title: Propriétés de l'article
@@ -415,6 +417,36 @@ user:
         confirmation: Répéter le mot de passe
         new: Nouveau mot de passe
         new_confirmation: Répéter le nouveau mot de passe
+log:
+    title: Journal de l'application
+    level_all: Tous les niveaux
+    channel_all: Tous les cannaux
+    fields:
+        createdAt: Date
+        channel: Canal
+        level: Niveau
+        message: Message
+        context: Contexte
+        extra: Extra
+    show:
+        title: Propriétés de l'entrée du journal
+        not_found: Impossible d'afficher l'entrée du journal.
+    list:
+        title: Journal de l'application
+        file: 'Fichier : %file%'
+        empty: Le journal de l'application ne contient aucune entrée.
+        pdf_title: Télécharger le journal de l'application
+        excel_title: Exporter le journal de l'application
+        channel_help: Afficher les entrées pour le canal sélectionné
+        level_help: Afficher les entrées pour le niveau sélectionné
+    delete:
+        title: Supprimer le journal de l'application
+        message: Êtes-vous sûr de vouloir supprimer le journal de l'application ?
+        success: Le journal de l'application a été supprimé avec succès.
+        error: Impossible de supprimer le journal de l'application.
+        file: Fichier
+        size: Taille
+        entries: Nombre d'entrées
 common:
     actions: Actions
     other_actions: Autre actions
@@ -519,6 +551,7 @@ index:
     menu_info: A propos de %app_name%
     menu_tools: Outils
     menu_test: Tests
+    menu_table: Tables
     menu_rights_user: Droits d'accès de l'utilisateur
     menu_rights_admin: Droits d'accès de l'administrateur
     menu_theme: Thème (%name%)
@@ -558,36 +591,6 @@ list:
     sort_default_title: Tri par défaut
     sort_ascending_title: '%name% - Croissant'
     sort_desscending_title: '%name% - Décroissant'
-log:
-    title: Journal de l'application
-    level_all: Tous les niveaux
-    channel_all: Tous les cannaux
-    fields:
-        createdAt: Date
-        channel: Canal
-        level: Niveau
-        message: Message
-        context: Contexte
-        extra: Extra
-    show:
-        title: Propriétés de l'entrée du journal
-        not_found: Impossible d'afficher l'entrée du journal.
-    list:
-        title: Journal de l'application 
-        file: 'Fichier : %file%'        
-        empty: Le journal de l'application ne contient aucune entrée.    
-        pdf_title: Télécharger le journal de l'application
-        excel_title: Exporter le journal de l'application
-        channel_help: Afficher les entrées pour le canal sélectionné   
-        level_help: Afficher les entrées pour le niveau sélectionné
-    delete:
-        title: Supprimer le journal de l'application
-        message: Êtes-vous sûr de vouloir supprimer le journal de l'application ?
-        success: Le journal de l'application a été supprimé avec succès.
-        error: Impossible de supprimer le journal de l'application.
-        file: Fichier
-        size: Taille
-        entries: Nombre d'entrées
 pagination:
     counter: Entrées %start% à %end% sur %count%
     page: Page %page%

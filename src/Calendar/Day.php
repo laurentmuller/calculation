@@ -20,7 +20,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class Day extends CalendarItem implements WeekDaysInterface
+class Day extends AbstractCalendarItem implements WeekDaysInterface
 {
     /**
      * The date format used to generate this key.

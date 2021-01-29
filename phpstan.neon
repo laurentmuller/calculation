@@ -1,6 +1,7 @@
 includes:
     - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
     - vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
+    - vendor/slam/phpstan-extensions/conf/symfony-rules.neon
 
 parameters:
     level: 6
@@ -26,3 +27,6 @@ parameters:
     - '#proc_open#'                         # Command\CompileAssetsCommand.php
     # Level 6
     - '#Unable to resolve the template#'    # Controller\AbstractEntityController
+    # slam/phpstan-extensions
+    - '#function has no typehint#'
+    - '#proc_close#'                        # Command\CompileAssetsCommand.php

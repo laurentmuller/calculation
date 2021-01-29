@@ -19,7 +19,7 @@ use App\Traits\MathTrait;
  *
  * @author Laurent Muller
  */
-class AverageAggregator extends Aggregator
+class AverageAggregator extends AbstractAggregator
 {
     use MathTrait;
 
@@ -36,7 +36,7 @@ class AverageAggregator extends Aggregator
     /**
      * {@inheritdoc}
      */
-    public function add($value): Aggregator
+    public function add($value): AbstractAggregator
     {
         if ($value instanceof self) {
             $this->sum += $value->sum;
@@ -72,7 +72,7 @@ class AverageAggregator extends Aggregator
     /**
      * {@inheritdoc}
      */
-    public function init(): Aggregator
+    public function init(): AbstractAggregator
     {
         $this->sum = 0;
         $this->count = 0;

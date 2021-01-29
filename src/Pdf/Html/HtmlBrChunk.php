@@ -17,7 +17,7 @@ namespace App\Pdf\Html;
  *
  * @author Laurent Muller
  */
-class HtmlBrChunk extends HtmlChunk
+class HtmlBrChunk extends AbstractHtmlChunk
 {
     /**
      * {@inheritdoc}

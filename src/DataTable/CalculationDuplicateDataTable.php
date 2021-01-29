@@ -19,7 +19,7 @@ use App\Repository\CalculationRepository;
  *
  * @author Laurent Muller
  */
-class CalculationDuplicateDataTable extends CalculationItemsDataTable
+class CalculationDuplicateDataTable extends AbstractCalculationItemsDataTable
 {
     /**
      * The datatable identifier.

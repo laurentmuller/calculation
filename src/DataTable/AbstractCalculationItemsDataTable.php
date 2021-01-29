@@ -27,7 +27,7 @@ use Twig\Environment;
  *
  * @author Laurent Muller
  */
-abstract class CalculationItemsDataTable extends AbstractDataTable
+abstract class AbstractCalculationItemsDataTable extends AbstractDataTable
 {
     /**
      * @var Environment

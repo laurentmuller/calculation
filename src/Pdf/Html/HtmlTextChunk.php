@@ -20,7 +20,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class HtmlTextChunk extends HtmlChunk
+class HtmlTextChunk extends AbstractHtmlChunk
 {
     /**
      * The names of parents to use with multi-cell.
@@ -84,7 +84,7 @@ class HtmlTextChunk extends HtmlChunk
             $index = $this->index();
             $count = $parent->count();
             if (-1 !== $index && $index < $count - 1) {
-                /** @var HtmlChunk $next */
+                /** @var AbstractHtmlChunk $next */
                 $next = $parent->getChildren()[$index + 1];
 
                 return $next->is(self::LIST_ORDERED, self::LIST_UNORDERED);

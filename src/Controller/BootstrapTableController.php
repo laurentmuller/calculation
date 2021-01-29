@@ -12,19 +12,27 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\BootstrapTable\AbstractBootstrapTable;
+use App\BootstrapTable\AbstractTable;
+use App\BootstrapTable\CalculationBelowTable;
+use App\BootstrapTable\CalculationDuplicateTable;
+use App\BootstrapTable\CalculationEmptyTable;
 use App\BootstrapTable\CalculationStateTable;
 use App\BootstrapTable\CalculationTable;
 use App\BootstrapTable\CategoryTable;
 use App\BootstrapTable\CustomerTable;
+use App\BootstrapTable\GlobalMarginTable;
+use App\BootstrapTable\GroupTable;
 use App\BootstrapTable\LogTable;
 use App\BootstrapTable\ProductTable;
+use App\BootstrapTable\TaskTable;
 use App\BootstrapTable\UserTable;
 use App\Interfaces\EntityVoterInterface;
 use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\GroupRepository;
 use App\Traits\MathTrait;
 use App\Util\FormatUtils;
+use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,35 +52,57 @@ class BootstrapTableController extends AbstractController
     use MathTrait;
 
     /**
+     * Display the calculation below table.
+     *
+     * @Route("/below", name="table_below")
+     */
+    public function below(Request $request, CalculationBelowTable $table): Response
+    {
+        $additionalParameters = function () {
+            $margin = $this->getApplication()->getMinMargin();
+
+            return [
+                'min_margin' => $margin,
+                'min_margin_text' => $this->trans('calculation.list.margin_below', ['%minimum%' => FormatUtils::formatPercent($margin)]),
+            ];
+        };
+
+        return $this->handleTableRequest($request, $table, 'table/table_calculation_below.html.twig', $additionalParameters);
+    }
+
+    /**
+     * Save the parameters of the calculation below.
+     *
+     * @Route("/below/save", name="table_below_save")
+     */
+    public function belowSave(Request $request, CalculationBelowTable $table): JsonResponse
+    {
+        return $this->saveTableParameters($request, $table);
+    }
+
+    /**
      * Display the calculation table.
      *
      * @Route("/calculation", name="table_calculation")
      */
     public function calculation(Request $request, CalculationTable $table, CalculationStateRepository $repository): Response
     {
-        // get parameters
-        $parameters = $this->handleTableRequest($request, $table);
+        $additionalParameters = function () use ($table, $repository) {
+            $margin = $this->getApplication()->getMinMargin();
 
-        // ajax?
-        if ($request->isXmlHttpRequest()) {
-            return new JsonResponse($parameters);
-        }
+            return [
+                'state' => $table->getCalculationState($repository),
+                'states' => $repository->getListCount(),
+                'min_margin' => $margin,
+                'min_margin_text' => $this->trans('calculation.list.margin_below', ['%minimum%' => FormatUtils::formatPercent($margin)]),
+            ];
+        };
 
-        // state
-        $parameters['state'] = $table->getCalculationState($repository);
-        $parameters['states'] = $repository->getListCount();
-
-        // margin
-        $margin = $this->getApplication()->getMinMargin();
-        $parameters['min_margin'] = $margin;
-        $parameters['min_margin_text'] = $this->trans('calculation.list.margin_below', ['%minimum%' => FormatUtils::formatPercent($margin)]);
-
-        // render
-        return $this->render('table/table_calculation.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_calculation.html.twig', $additionalParameters);
     }
 
     /**
-     * Save calculation table parameters.
+     * Save the parameters of the calculation table.
      *
      * @Route("/calculation/save", name="table_calculation_save")
      */
@@ -88,20 +118,11 @@ class BootstrapTableController extends AbstractController
      */
     public function calculationState(Request $request, CalculationStateTable $table): Response
     {
-        // get parameters
-        $parameters = $this->handleTableRequest($request, $table);
-
-        // ajax?
-        if ($request->isXmlHttpRequest()) {
-            return new JsonResponse($parameters);
-        }
-
-        // render
-        return $this->render('table/table_calculation_state.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_calculation_state.html.twig');
     }
 
     /**
-     * Save calculation state table parameters.
+     * Save the parameters of the calculation state table.
      *
      * @Route("/calculationstate/save", name="table_calculationstate_save")
      */
@@ -115,22 +136,20 @@ class BootstrapTableController extends AbstractController
      *
      * @Route("/category", name="table_category")
      */
-    public function category(Request $request, CategoryTable $table): Response
+    public function category(Request $request, CategoryTable $table, GroupRepository $repository): Response
     {
-        // get parameters
-        $parameters = $this->handleTableRequest($request, $table);
+        $additionalParameters = function () use ($table, $repository) {
+            return [
+                'group' => $table->getGroup($repository),
+                'groups' => $repository->getListCount(),
+            ];
+        };
 
-        // ajax?
-        if ($request->isXmlHttpRequest()) {
-            return new JsonResponse($parameters);
-        }
-
-        // render
-        return $this->render('table/table_category.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_category.html.twig', $additionalParameters);
     }
 
     /**
-     * Save category table parameters.
+     * Save the parameters of the category table.
      *
      * @Route("/category/save", name="table_category_save")
      */
@@ -146,16 +165,7 @@ class BootstrapTableController extends AbstractController
      */
     public function customer(Request $request, CustomerTable $table): Response
     {
-        // get parameters
-        $parameters = $this->handleTableRequest($request, $table);
-
-        // ajax?
-        if ($request->isXmlHttpRequest()) {
-            return new JsonResponse($parameters);
-        }
-
-        // render
-        return $this->render('table/table_customer.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_customer.html.twig');
     }
 
     /**
@@ -169,38 +179,126 @@ class BootstrapTableController extends AbstractController
     }
 
     /**
+     * Display the calculation table with duplicate items.
+     *
+     * @Route("/duplicate", name="table_duplicate")
+     */
+    public function duplicate(Request $request, CalculationDuplicateTable $table): Response
+    {
+        if ($table->isEmpty($request)) {
+            $this->warningTrans('duplicate.empty');
+
+            return $this->redirectToHomePage();
+        }
+
+        return $this->handleTableRequest($request, $table, 'table/table_calculation_duplicate.html.twig');
+    }
+
+    /**
+     * Save the parameters of the calculation table with duplicate items.
+     *
+     * @Route("/duplicate/save", name="table_duplicate_save")
+     */
+    public function duplicateSave(Request $request, CalculationDuplicateTable $table): JsonResponse
+    {
+        return $this->saveTableParameters($request, $table);
+    }
+
+    /**
+     * Display the calculation table with empty items.
+     *
+     * @Route("/empty", name="table_empty")
+     */
+    public function empty(Request $request, CalculationEmptyTable $table): Response
+    {
+        if ($table->isEmpty($request)) {
+            $this->warningTrans('empty.empty');
+
+            return $this->redirectToHomePage();
+        }
+
+        return $this->handleTableRequest($request, $table, 'table/table_calculation_empty.html.twig');
+    }
+
+    /**
+     * Save the parameters of the calculation table with empty items.
+     *
+     * @Route("/empty/save", name="table_empty_save")
+     */
+    public function emptySave(Request $request, CalculationEmptyTable $table): JsonResponse
+    {
+        return $this->saveTableParameters($request, $table);
+    }
+
+    /**
+     * Display the global margin table.
+     *
+     * @Route("/globalmargin", name="table_globalmargin")
+     */
+    public function globalMargin(Request $request, GlobalMarginTable $table): Response
+    {
+        return $this->handleTableRequest($request, $table, 'table/table_global_margin.html.twig');
+    }
+
+    /**
+     * Save the parameters of the global margin table.
+     *
+     * @Route("/globalmargin/save", name="table_globalmargin_save")
+     */
+    public function globalMarginSave(Request $request, GlobalMarginTable $table): JsonResponse
+    {
+        return $this->saveTableParameters($request, $table);
+    }
+
+    /**
+     * Display the group table.
+     *
+     * @Route("/group", name="table_group")
+     */
+    public function group(Request $request, GroupTable $table): Response
+    {
+        return $this->handleTableRequest($request, $table, 'table/table_group.html.twig');
+    }
+
+    /**
+     * Save the parameters of the group table.
+     *
+     * @Route("/group/save", name="table_group_save")
+     */
+    public function groupSave(Request $request, GroupTable $table): JsonResponse
+    {
+        return $this->saveTableParameters($request, $table);
+    }
+
+    /**
      * Display the log table.
      *
      * @Route("/log", name="table_log")
      */
     public function log(Request $request, LogTable $table): Response
     {
-        // get parameters
-        $parameters = $this->handleTableRequest($request, $table);
-        if (empty($parameters)) {
+        // entries?
+        if (!$table->getService()->getEntries()) {
             $this->infoTrans('log.list.empty');
 
             return $this->redirectToHomePage();
         }
 
-        // ajax?
-        if ($request->isXmlHttpRequest()) {
-            return new JsonResponse($parameters);
-        }
+        $additionalParameters = function () use ($table) {
+            return [
+                'file' => $table->getFileName(),
+                'level' => $table->getLevel(),
+                'levels' => $table->getLevels(),
+                'channel' => $table->getChannel(),
+                'channels' => $table->getChannels(),
+            ];
+        };
 
-        // channels and levels
-        $parameters['channels'] = $table->getChannels();
-        $parameters['channel'] = $table->getChannel();
-        $parameters['levels'] = $table->getLevels();
-        $parameters['level'] = $table->getLevel();
-        $parameters['file'] = $table->getFileName();
-
-        // render
-        return $this->render('table/table_log.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_log.html.twig', $additionalParameters);
     }
 
     /**
-     * Save log table parameters.
+     * Save the parameters of the log table.
      *
      * @Route("/log/save", name="table_log_save")
      */
@@ -216,28 +314,42 @@ class BootstrapTableController extends AbstractController
      */
     public function product(Request $request, ProductTable $table, CategoryRepository $repository): Response
     {
-        // get parameters
-        $parameters = $this->handleTableRequest($request, $table);
+        $additionalParameters = function () use ($table, $repository) {
+            return [
+                'category' => $table->getCategory($repository),
+                'categories' => $repository->getListCount(),
+            ];
+        };
 
-        // ajax?
-        if ($request->isXmlHttpRequest()) {
-            return new JsonResponse($parameters);
-        }
-
-        // category
-        $parameters['category'] = $table->getCategory($repository);
-        $parameters['categories'] = $repository->getListCount();
-
-        // render
-        return $this->render('table/table_product.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_product.html.twig', $additionalParameters);
     }
 
     /**
-     * Save product table parameters.
+     * Save the parameters of the product table.
      *
      * @Route("/product/save", name="table_product_save")
      */
     public function productSave(Request $request, ProductTable $table): JsonResponse
+    {
+        return $this->saveTableParameters($request, $table);
+    }
+
+    /**
+     * Display the task table.
+     *
+     * @Route("/task", name="table_task")
+     */
+    public function task(Request $request, TaskTable $table): Response
+    {
+        return $this->handleTableRequest($request, $table, 'table/table_task.html.twig');
+    }
+
+    /**
+     * Save the parameters of the task table.
+     *
+     * @Route("/task/save", name="table_task_save")
+     */
+    public function taskSave(Request $request, TaskTable $table): JsonResponse
     {
         return $this->saveTableParameters($request, $table);
     }
@@ -249,20 +361,11 @@ class BootstrapTableController extends AbstractController
      */
     public function user(Request $request, UserTable $table): Response
     {
-        // get parameters
-        $parameters = $this->handleTableRequest($request, $table);
-
-        // ajax?
-        if ($request->isXmlHttpRequest()) {
-            return new JsonResponse($parameters);
-        }
-
-        // render
-        return $this->render('table/table_user.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_user.html.twig');
     }
 
     /**
-     * Save user table parameters.
+     * Save the parameters of the user table.
      *
      * @Route("/user/save", name="table_user_save")
      */
@@ -273,22 +376,59 @@ class BootstrapTableController extends AbstractController
 
     /**
      * Handle the table request.
+     *
+     * @param Request       $request              the request to handle
+     * @param AbstractTable $table                the table
+     * @param string        $template             the template to render
+     * @param callable      $additionalParameters the function used to merge additional parameters
+     *
+     * @return Response the response
      */
-    private function handleTableRequest(Request $request, AbstractBootstrapTable $table): array
+    private function handleTableRequest(Request $request, AbstractTable $table, string $template, ?callable $additionalParameters = null): Response
     {
         // check permission
         $name = $table->getEntityClassName();
         $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $name);
 
-        return $table->handleRequest($request);
+        try {
+            $status = Response::HTTP_OK;
+            $parameters = $table->handleRequest($request);
+        } catch (\Exception $e) {
+            $status = Response::HTTP_BAD_REQUEST;
+            $parameters = [
+                'result' => false,
+                'status_code' => $status,
+                'status_text' => $this->trans('errors.invalid_request'),
+                'message' => $this->trans('error_page.description'),
+                'exception' => Utils::getExceptionContext($e),
+            ];
+        }
+
+        // ajax?
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse($parameters, $status);
+        }
+
+        // ok?
+        if (Response::HTTP_OK !== $status) {
+            return $this->render('bundles/TwigBundle/Exception/error.html.twig', $parameters);
+        }
+
+        // additional parameters?
+        if (\is_callable($additionalParameters)) {
+            $parameters = \array_merge($parameters, \call_user_func($additionalParameters));
+        }
+
+        // render
+        return $this->render($template, $parameters);
     }
 
     /**
-     * Save the table parameters.
+     * Save the parameters of the given table.
      */
-    private function saveTableParameters(Request $request, AbstractBootstrapTable $table): JsonResponse
+    private function saveTableParameters(Request $request, AbstractTable $table): JsonResponse
     {
-        $result = $table->saveRequestValue($request, AbstractBootstrapTable::PARAM_CARD, false);
+        $result = $table->saveRequestValue($request, AbstractTable::PARAM_CARD, false);
 
         return new JsonResponse($result);
     }

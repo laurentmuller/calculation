@@ -20,7 +20,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class Week extends CalendarItem
+class Week extends AbstractCalendarItem
 {
     use DaysTrait;
 

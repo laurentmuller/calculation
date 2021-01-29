@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Theme;
+use App\Util\FileUtils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -218,7 +219,7 @@ class ThemeService
 
         // get file
         $filename = $this->getThemesFile();
-        if (!\file_exists($filename)) {
+        if (!FileUtils::exists($filename)) {
             return $themes;
         }
 

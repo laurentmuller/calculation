@@ -94,11 +94,11 @@ class HtmlOlChunk extends HtmlParentChunk
     /**
      * Gets the bullet text for the given child.
      *
-     * @param HtmlChunk $chunk the child chunk to get text for
+     * @param AbstractHtmlChunk $chunk the child chunk to get text for
      *
      * @return string the bullet text
      */
-    public function getBulletChunk(HtmlChunk $chunk): string
+    public function getBulletChunk(AbstractHtmlChunk $chunk): string
     {
         return $this->getBulletIndex($this->indexOf($chunk) + 1);
     }

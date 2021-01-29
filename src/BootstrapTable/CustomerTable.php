@@ -19,7 +19,7 @@ use App\Repository\CustomerRepository;
  *
  * @author Laurent Muller
  */
-class CustomerTable extends AbstractBootstrapEntityTable
+class CustomerTable extends AbstractEntityTable
 {
     /**
      * Constructor.
@@ -29,14 +29,9 @@ class CustomerTable extends AbstractBootstrapEntityTable
         parent::__construct($repository);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function createColumns(): array
+    protected function getColumnDefinitions(): string
     {
-        $path = __DIR__ . '/Definition/customer.json';
-
-        return $this->deserializeColumns($path);
+        return __DIR__ . '/Definition/customer.json';
     }
 
     /**
@@ -44,6 +39,6 @@ class CustomerTable extends AbstractBootstrapEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return [CustomerRepository::NAME_COMPANY_FIELD => BootstrapColumn::SORT_ASC];
+        return [CustomerRepository::NAME_COMPANY_FIELD => Column::SORT_ASC];
     }
 }

@@ -31,7 +31,7 @@
 		"searchable": false,
 		"class": "text-currency rowlink-skip",
 		"fieldFormatter": "formatCountable",
-		"cellFormatter": "formatCategoryProducts"
+		"cellFormatter": "formatDataLink"
 	},
 	{
 		"field": "tasks",

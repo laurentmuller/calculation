@@ -12,15 +12,30 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Entity\Group;
 use App\Repository\CategoryRepository;
+use App\Repository\GroupRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * The categories table.
  *
  * @author Laurent Muller
  */
-class CategoryTable extends AbstractBootstrapEntityTable
+class CategoryTable extends AbstractEntityTable
 {
+    /**
+     * The group parameter name.
+     */
+    private const PARAM_GROUP = 'groupId';
+
+    /**
+     * The selected group identifier.
+     */
+    private int $groupId = 0;
+
     /**
      * Constructor.
      */
@@ -30,13 +45,41 @@ class CategoryTable extends AbstractBootstrapEntityTable
     }
 
     /**
+     * Gets the selected group or null if none.
+     */
+    public function getGroup(GroupRepository $repository): ?Group
+    {
+        if (0 !== $this->groupId) {
+            return $repository->find($this->groupId);
+        }
+
+        return null;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    protected function createColumns(): array
+    protected function addSearch(Request $request, QueryBuilder $builder): string
     {
-        $path = __DIR__ . '/Definition/category.json';
+        $search = parent::addSearch($request, $builder);
 
-        return $this->deserializeColumns($path);
+        // category?
+        $this->groupId = (int) $request->get(self::PARAM_GROUP, 0);
+        if (0 !== $this->groupId) {
+            $field = $this->repository->getSearchFields('group.id');
+            $builder->andWhere($field . '=:' . self::PARAM_GROUP)
+                ->setParameter(self::PARAM_GROUP, $this->groupId, Types::INTEGER);
+        }
+
+        return $search;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getColumnDefinitions(): string
+    {
+        return __DIR__ . '/Definition/category.json';
     }
 
     /**
@@ -44,6 +87,6 @@ class CategoryTable extends AbstractBootstrapEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['code' => BootstrapColumn::SORT_ASC];
+        return ['code' => Column::SORT_ASC];
     }
 }

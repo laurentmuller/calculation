@@ -20,6 +20,7 @@ use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
+use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
@@ -189,7 +190,7 @@ class UsersReport extends AbstractArrayReport
     {
         if ($fieldName = $this->getFieldName($user)) {
             $path = $this->storage->resolvePath($user, $fieldName);
-            if ($path && \is_file($path)) {
+            if ($path && FileUtils::isFile($path)) {
                 return $path;
             }
         }

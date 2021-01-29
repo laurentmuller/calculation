@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Service\ThemeService;
-use Symfony\Component\Filesystem\Filesystem;
+use App\Util\FileUtils;
 
 /**
  * Represents a Bootstrap theme.
@@ -100,8 +100,7 @@ class Theme implements \JsonSerializable
     public function exists(): bool
     {
         if (null === $this->exist) {
-            $fs = new Filesystem();
-            $this->exist = $fs->exists($this->css);
+            $this->exist = FileUtils::exists($this->css);
         }
 
         return $this->exist;

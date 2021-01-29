@@ -14,6 +14,7 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Util\FileUtils;
 use App\Util\Utils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
@@ -103,7 +104,7 @@ class UserDocument extends AbstractArrayDocument
 
             // image
             $path = $this->getImagePath($entity);
-            if (!empty($path) && \is_file($path)) {
+            if (!empty($path) && FileUtils::isFile($path)) {
                 [$width, $height] = \getimagesize($path);
                 $this->setCellImage($path, "F$row", $width, $height);
             }
@@ -189,7 +190,7 @@ class UserDocument extends AbstractArrayDocument
             $path = $this->storage->resolvePath($user, $fieldName);
             if ($path) {
                 $path = \str_replace('192', '032', $path);
-                if (\is_file($path)) {
+                if (FileUtils::isFile($path)) {
                     return $path;
                 }
             }

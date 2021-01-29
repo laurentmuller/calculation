@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Pivot\Aggregator\Aggregator;
+use App\Pivot\Aggregator\AbstractAggregator;
 
 /**
  * Represents a data cell.
  *
  * @author Laurent Muller
  */
-class PivotCell extends PivotAggregator
+class PivotCell extends AbstractPivotAggregator
 {
     /**
      * The parent column.
@@ -38,12 +38,12 @@ class PivotCell extends PivotAggregator
     /**
      * Constructor.
      *
-     * @param Aggregator $aggregator the aggregator function
-     * @param PivotNode  $column     the parent column
-     * @param PivotNode  $row        the parent row
-     * @param mixed      $value      the initial value
+     * @param AbstractAggregator $aggregator the aggregator function
+     * @param PivotNode          $column     the parent column
+     * @param PivotNode          $row        the parent row
+     * @param mixed              $value      the initial value
      */
-    public function __construct(Aggregator $aggregator, PivotNode $column, PivotNode $row, $value = null)
+    public function __construct(AbstractAggregator $aggregator, PivotNode $column, PivotNode $row, $value = null)
     {
         parent::__construct($aggregator, $value);
 

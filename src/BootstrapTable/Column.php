@@ -12,19 +12,28 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Util\FileUtils;
+use Symfony\Component\PropertyAccess\Exception\AccessException;
+use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
- * Bootstrap column definition.
+ * The table column.
  *
  * @author Laurent Muller
  */
-class BootstrapColumn
+class Column
 {
     /**
      * The action column name.
      */
     public const COL_ACTION = 'action';
+
+    /**
+     * The property name of the field formatter.
+     */
+    public const FIELD_FORMATTER = 'fieldFormatter';
 
     /**
      * The ascending sortable direction.
@@ -79,6 +88,11 @@ class BootstrapColumn
     private string $order = self::SORT_ASC;
 
     /**
+     * The property path for array object.
+     */
+    private string  $property;
+
+    /**
      * The searchable behavior.
      */
     private bool $searchable = true;
@@ -106,6 +120,64 @@ class BootstrapColumn
     public function __toString(): string
     {
         return (string) $this->field;
+    }
+
+    /**
+     * Creates columns from the given JSON file definitions.
+     *
+     * @param AbstractTable $parent the table owner
+     * @param string        $path   the path to the JSON file definitions
+     *
+     * @return Column[] the column definitions
+     *
+     * @throws \InvalidArgumentException if the definitions can not be parsed
+     */
+    public static function fromJson(AbstractTable $parent, string $path): array
+    {
+        //file?
+        if (!FileUtils::isFile($path)) {
+            throw new \InvalidArgumentException("The file '$path' can not be found.");
+        }
+
+        // get content
+        if (false === $json = \file_get_contents($path)) {
+            throw new \InvalidArgumentException("Unable to get content of the file '$path'.");
+        }
+
+        // decode
+        $definitions = \json_decode($json, true);
+        if (JSON_ERROR_NONE !== \json_last_error()) {
+            $message = \json_last_error_msg();
+            throw new \InvalidArgumentException("Unable to decode the content of the file '$path' ($message).");
+        }
+
+        // definitions?
+        if (empty($definitions)) {
+            throw new \InvalidArgumentException("The file '$path' does not contain any definition.");
+        }
+
+        // accessor
+        $accessor = PropertyAccess::createPropertyAccessor();
+
+        // map
+        return \array_map(function (array $definition) use ($parent, $accessor): self {
+            $column = new self();
+            foreach ($definition as $key => $value) {
+                // special case for the field formatter
+                if (self::FIELD_FORMATTER === $key) {
+                    $value = [$parent, $value];
+                }
+
+                try {
+                    $accessor->setValue($column, $key, $value);
+                } catch (AccessException | UnexpectedTypeException $e) {
+                    $message = "Cannot set the property '$key'.";
+                    throw new \InvalidArgumentException($message, 0, $e);
+                }
+            }
+
+            return $column;
+        }, $definitions);
     }
 
     public function getCellFormatter(): ?string
@@ -186,12 +258,16 @@ class BootstrapColumn
      */
     public function mapValue($objectOrArray, PropertyAccessor $accessor): string
     {
+        // special case for actions column
         if (self::COL_ACTION === $this->field) {
-            return (string) $accessor->getValue($objectOrArray, 'id');
+            $property = \is_array($objectOrArray) ? '[id]' : 'id';
+
+            return (string) $accessor->getValue($objectOrArray, $property);
         }
 
         // get value
-        $value = $accessor->getValue($objectOrArray, $this->field);
+        $property = \is_array($objectOrArray) ? $this->property : $this->field;
+        $value = $accessor->getValue($objectOrArray, $property);
 
         // format
         return $this->formatValue($objectOrArray, $value);
@@ -236,7 +312,7 @@ class BootstrapColumn
     {
         $this->field = $field;
 
-        return $this;
+        return $this->updateProperty();
     }
 
     /**
@@ -312,5 +388,17 @@ class BootstrapColumn
         }
 
         return (string) $value;
+    }
+
+    /**
+     * Update property path for array object.
+     */
+    private function updateProperty(): self
+    {
+        if ($this->field) {
+            $this->property = \str_replace('.', '].[', '[' . $this->field . ']');
+        }
+
+        return $this;
     }
 }

@@ -20,7 +20,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class Month extends CalendarItem
+class Month extends AbstractCalendarItem
 {
     use DaysTrait;
 

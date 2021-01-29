@@ -379,20 +379,6 @@ final class Utils
     }
 
     /**
-     * Create temporary file with an unique name.
-     *
-     * @param string $prefix the prefix of the generated temporary file name
-     *
-     * @return string|null the new temporary file name (with path), or null on failure
-     */
-    public static function tempfile(string $prefix = 'tmp'): ?string
-    {
-        $tempName = \tempnam(\sys_get_temp_dir(), $prefix);
-
-        return false === $tempName ? null : $tempName;
-    }
-
-    /**
      * Ensure that the given variable is a float.
      *
      * @param mixed $var the variable to cast
@@ -444,25 +430,6 @@ final class Utils
         $role = \strtolower(\str_replace('ROLE_', 'user.roles.', $role));
 
         return $translator->trans($role);
-    }
-
-    /**
-     * Deletes a file.
-     *
-     * @param string|\SplFileInfo $file the file to delete
-     *
-     * @return bool true on success or false on failure
-     */
-    public static function unlink($file): bool
-    {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getRealPath();
-        }
-        if (\is_string($file) && \is_file($file)) {
-            return \unlink($file);
-        }
-
-        return false;
     }
 
     /**

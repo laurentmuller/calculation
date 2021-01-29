@@ -81,7 +81,7 @@ class CategoryRepository extends AbstractRepository
      *
      * <b>Note:</b> Only categories with at least one product are returned.
      *
-     * @return array an array with the category and the number of product
+     * @return array an array with the category and the number of products
      */
     public function getListCount(): array
     {
@@ -119,6 +119,8 @@ class CategoryRepository extends AbstractRepository
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
     {
         switch ($field) {
+            case 'group.id':
+                return parent::getSearchFields('id', self::GROUP_ALIAS);
             case 'group.code':
                 return parent::getSearchFields('code', self::GROUP_ALIAS);
             default:
@@ -145,6 +147,7 @@ class CategoryRepository extends AbstractRepository
     public function getSortFields(string $field, string $alias = self::DEFAULT_ALIAS)
     {
         switch ($field) {
+            case 'group.id':
             case 'group.code':
                 return parent::getSortFields('code', self::GROUP_ALIAS);
             default:

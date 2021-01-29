@@ -16,6 +16,7 @@ use App\DataTable\LogDataTable;
 use App\Report\LogReport;
 use App\Service\LogService;
 use App\Spreadsheet\LogDocument;
+use App\Util\FileUtils;
 use App\Util\SymfonyUtils;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
@@ -96,7 +97,7 @@ class LogController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // empty file
-                \file_put_contents($file, '');
+                FileUtils::dumpFile($file, '');
             } catch (\Exception $e) {
                 $message = $this->trans('log.delete.error');
                 $logger->error($message, ['file' => $file]);

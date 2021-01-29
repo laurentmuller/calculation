@@ -22,7 +22,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * @author Laurent Muller
  */
-abstract class AssetsCommand extends Command
+abstract class AbstractAssetsCommand extends Command
 {
     use FileTrait;
 

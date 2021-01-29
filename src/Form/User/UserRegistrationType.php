@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Laurent Muller
  */
-class UserRegistrationType extends UserCaptchaType
+class UserRegistrationType extends AbstractUserCaptchaType
 {
     /**
      * Constructor.

@@ -19,7 +19,7 @@ use App\Controller\AbstractController;
  *
  * @author Laurent Muller
  */
-class CalculationDuplicateDocument extends CalculationItemsDocument
+class CalculationDuplicateDocument extends AbstractCalculationItemsDocument
 {
     /**
      * Constructor.

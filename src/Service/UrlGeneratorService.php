@@ -44,10 +44,9 @@ class UrlGeneratorService
         'limit',
         'card',
 
+        'groupId', // bootstrap-table group
         'categoryId', // bootstrap-table product
-
         'stateId', // bootstrap-table calculation
-
         'channel', // bootstrap-table log
         'level',
 

@@ -275,15 +275,15 @@ class HtmlParser
         // create chunk
         switch ($node->nodeType) {
             case XML_ELEMENT_NODE:
-                if (HtmlChunk::PAGE_BREAK === $class) {
+                if (AbstractHtmlChunk::PAGE_BREAK === $class) {
                     $this->createPageBreakChunk($name, $parent);
-                } elseif (HtmlChunk::LINE_BREAK === $name) {
+                } elseif (AbstractHtmlChunk::LINE_BREAK === $name) {
                     $this->createBrChunk($name, $parent, $class);
-                } elseif (HtmlChunk::LIST_ITEM === $name) {
+                } elseif (AbstractHtmlChunk::LIST_ITEM === $name) {
                     $parent = $this->createLiChunk($name, $parent, $class);
-                } elseif (HtmlChunk::LIST_ORDERED === $name) {
+                } elseif (AbstractHtmlChunk::LIST_ORDERED === $name) {
                     $parent = $this->createOlChunk($name, $parent, $class, $node);
-                } elseif (HtmlChunk::LIST_UNORDERED === $name) {
+                } elseif (AbstractHtmlChunk::LIST_UNORDERED === $name) {
                     $parent = $this->createUlChunk($name, $parent, $class);
                 } else {
                     $parent = $this->createParentChunk($name, $parent, $class);

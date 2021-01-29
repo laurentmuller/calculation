@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Pivot\Aggregator\Aggregator;
+use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotField;
 use Symfony\Component\Intl\Exception\UnexpectedTypeException;
@@ -391,7 +391,7 @@ class PivotTableFactory
      *
      * @param mixed $value the initial value
      */
-    private function createAggregator($value = null): Aggregator
+    private function createAggregator($value = null): AbstractAggregator
     {
         return new $this->aggregatorClass($value);
     }

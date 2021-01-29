@@ -15,9 +15,9 @@ namespace App\Twig;
 use App\Controller\AbstractController;
 use App\Interfaces\RoleInterface;
 use App\Service\UrlGeneratorService;
+use App\Util\FileUtils;
 use App\Util\Utils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -107,7 +107,7 @@ final class FunctionExtension extends AbstractExtension
         }
 
         // file exists?
-        if (!\is_file($file)) {
+        if (!FileUtils::isFile($file)) {
             return false;
         }
 
@@ -163,11 +163,7 @@ final class FunctionExtension extends AbstractExtension
      */
     public function fileExists(?string $filename): bool
     {
-        if ($filename) {
-            return (new Filesystem())->exists($filename);
-        }
-
-        return false;
+        return $filename && FileUtils::exists($filename);
     }
 
     /**

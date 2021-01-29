@@ -27,19 +27,19 @@ class LogoutListener implements EventSubscriberInterface
     use TranslatorFlashMessageTrait;
 
     /**
-     * The application name.
+     * The application name and version.
      *
      * @var string
      */
-    private $appName;
+    private $appNameVersion;
 
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator, string $appName)
+    public function __construct(TranslatorInterface $translator, string $appNameVersion)
     {
         $this->translator = $translator;
-        $this->appName = $appName;
+        $this->appNameVersion = $appNameVersion;
     }
 
     public static function getSubscribedEvents()
@@ -61,7 +61,7 @@ class LogoutListener implements EventSubscriberInterface
             if (null !== $this->session && null !== $username) {
                 $params = [
                     '%username%' => $username,
-                    '%appname%' => $this->appName,
+                    '%appname%' => $this->appNameVersion,
                 ];
                 $this->succesTrans('security.logout.success', $params);
             }

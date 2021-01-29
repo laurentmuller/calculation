@@ -26,7 +26,7 @@
     </td>
     <td class="w-30">
         <div class="form-group">
-            {{ form_widget(margin.margin, {'attr': {'aria-label': 'groupmargin.fields.margin'|trans}}) }}
+            {{ form_widget(margin.margin, {'attr': {'aria-label': 'groupmargin.fields.margin_percent'|trans}}) }}
             <em>{{ form_errors(margin.margin) }}</em>
         </div>
     </td>
@@ -60,7 +60,7 @@
                 <tr>
                     <th class="vertical-middle text-right font-weight-normal required">{{ 'groupmargin.fields.minimum'|trans }}</th>
                     <th class="vertical-middle text-right font-weight-normal required">{{ 'groupmargin.fields.maximum'|trans }}</th>
-                    <th class="vertical-middle text-right font-weight-normal required">{{ 'groupmargin.fields.margin'|trans }}</th>
+                    <th class="vertical-middle text-right font-weight-normal required">{{ 'groupmargin.fields.margin_percent'|trans }}</th>
                     <th class="actions d-print-none">&nbsp;</th>
                 </tr>
             </thead>

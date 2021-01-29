@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Laurent Muller
  */
-abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
+abstract class AbstractEntityTable extends AbstractTable
 {
     /**
      * The where part name of the query builder.
@@ -59,6 +59,9 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
         return $this->repository;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function handleRequest(Request $request): array
     {
         // builder
@@ -78,13 +81,12 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
         // sort
         [$sort, $order] = $this->addOrderBy($request, $builder);
 
-        // limit
-        [$offset, $limit] = $this->addLimit($request, $builder);
-        $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
+        // limit and page
+        [$offset, $limit, $page] = $this->addLimit($request, $builder);
 
         // get result and map entities
         $entities = $builder->getQuery()->getResult();
-        $rows = empty($entities) ? [] : $this->mapEntities($entities);
+        $rows = $this->mapEntities($entities);
 
         // ajax?
         if ($request->isXmlHttpRequest()) {
@@ -94,6 +96,10 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
                 'rows' => $rows,
             ];
         }
+
+        // page list
+        $pageList = $this->getPageList($totalNotFiltered);
+        $limit = \min($limit, \max($pageList));
 
         // render
         return [
@@ -110,6 +116,7 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
             'limit' => $limit,
             'offset' => $offset,
             'search' => $search,
+            'pageList' => $pageList,
 
             'sort' => $sort,
             'order' => $order,
@@ -122,16 +129,18 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
      * @param Request      $request the request
      * @param QueryBuilder $builder the query builder to update
      *
-     * @return int[] the offset and the limit parameters
+     * @return int[] the offset, the limit and the page parameters
      */
     protected function addLimit(Request $request, QueryBuilder $builder): array
     {
         $offset = (int) $request->get(self::PARAM_OFFSET, 0);
         $limit = (int) $this->getRequestValue($request, self::PARAM_LIMIT, self::PAGE_SIZE);
+        $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
+
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
 
-        return [$offset, $limit];
+        return [$offset, $limit, $page];
     }
 
     /**
@@ -145,41 +154,22 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
     protected function addOrderBy(Request $request, QueryBuilder $builder): array
     {
         $orderBy = [];
-        $repository = $this->repository;
         $sort = (string) $this->getRequestValue($request, self::PARAM_SORT, '');
-        $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, BootstrapColumn::SORT_ASC);
+        $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, Column::SORT_ASC);
 
         if (Utils::isString($sort)) {
-            $fields = (array) $repository->getSortFields($sort);
-            foreach ($fields as $field) {
-                if (!\array_key_exists($field, $orderBy)) {
-                    $orderBy[$field] = $order;
-                }
-            }
+            $this->updateOrderBy($orderBy, $sort, $order);
         }
 
         // default column
         if (!Utils::isString($sort) && $column = $this->getDefaultColumn()) {
-            $order = $column->getOrder();
-            $sort = $column->getField();
-            $fields = (array) $repository->getSortFields($sort);
-            foreach ($fields as $field) {
-                if (!\array_key_exists($field, $orderBy)) {
-                    $orderBy[$field] = $order;
-                }
-            }
+            $this->updateOrderBy($orderBy, $column->getField(), $column->getOrder());
         }
 
         // default order
         $defaultSort = $this->getDefaultOrder();
         foreach ($defaultSort as $defaultField => $defaultOrder) {
-            $fields = (array) $repository->getSortFields($defaultField);
-            foreach ($fields as $field) {
-                if (!\array_key_exists($field, $orderBy)) {
-                    $orderBy[$field] = $defaultOrder;
-                }
-            }
-            // default sort field
+            $this->updateOrderBy($orderBy, $defaultField, $defaultOrder);
             if (!Utils::isString($sort)) {
                 $sort = $defaultField;
             }
@@ -266,5 +256,22 @@ abstract class AbstractBootstrapEntityTable extends AbstractBootstrapTable
     protected function getDefaultOrder(): array
     {
         return [];
+    }
+
+    /**
+     * Update the order by clause.
+     *
+     * @param array  $orderBy    the order by clause to update
+     * @param string $orderField the order field to add
+     * @param string $orderSort  the order direction to add
+     */
+    private function updateOrderBy(array &$orderBy, string $orderField, string $orderSort): void
+    {
+        $fields = (array) $this->repository->getSortFields($orderField);
+        foreach ($fields as $field) {
+            if (!\array_key_exists($field, $orderBy)) {
+                $orderBy[$field] = $orderSort;
+            }
+        }
     }
 }

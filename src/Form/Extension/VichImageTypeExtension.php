@@ -20,7 +20,7 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
  *
  * @author Laurent Muller
  */
-class VichImageTypeExtension extends BaseFileTypeExtension
+class VichImageTypeExtension extends AbstractFileTypeExtension
 {
     /**
      * {@inheritdoc}

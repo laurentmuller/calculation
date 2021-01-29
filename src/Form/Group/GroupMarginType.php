@@ -16,7 +16,7 @@ use App\Entity\GroupMargin;
 use App\Form\AbstractMarginType;
 
 /**
- * Task item margin edit type.
+ * Group margin edit type.
  *
  * @author Laurent Muller
  */

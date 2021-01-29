@@ -40,8 +40,10 @@
                 {{ icons.link(href, null, 'btn btn-primary', 'calendar-week', 'calendar.month_show', null, {'%year%': month.year, '%month%': month.name}) }}
             {%- endif %}       
             {# current year calendar #}
-            {% set href = path('calendar_year', {'year': next.year}) %}
-            {{ icons.link(href, null, 'btn btn-primary', 'calendar-alt far', 'calendar.year_show', null, {'%year%': next.year}) }}
+            {% if next %}
+                {% set href = path('calendar_year', {'year': next.year}) %}
+                {{ icons.link(href, null, 'btn btn-primary', 'calendar-alt far', 'calendar.year_show', null, {'%year%': next.year}) }}
+            {% endif %}
         </div>
     </div>
 </div>

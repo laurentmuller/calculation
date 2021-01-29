@@ -17,7 +17,7 @@ namespace App\Pdf;
  *
  * @author Laurent Muller
  */
-class PdfDrawColor extends PdfColor
+class PdfDrawColor extends AbstractPdfColor
 {
     /**
      * {@inheritdoc}

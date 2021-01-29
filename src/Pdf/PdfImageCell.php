@@ -14,6 +14,7 @@ namespace App\Pdf;
 
 use App\Interfaces\ImageExtensionInterface;
 use App\Traits\MathTrait;
+use App\Util\FileUtils;
 
 /**
  * Specialized cell containing an image.
@@ -71,7 +72,7 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
      */
     public function __construct(string $path, $cols = 1, ?PdfStyle $style = null, string $alignment = PdfConstantsInterface::ALIGN_INHERITED)
     {
-        if (!\file_exists($path)) {
+        if (!FileUtils::exists($path)) {
             throw new \InvalidArgumentException("The image '{$path}' does not exist.");
         }
 

@@ -82,7 +82,7 @@ final class SymfonyUtils
      */
     public static function formatFileSize(string $path): string
     {
-        if (\is_file($path)) {
+        if (FileUtils::isFile($path)) {
             $size = \filesize($path) ?: 0;
         } else {
             $size = 0;
@@ -187,7 +187,7 @@ final class SymfonyUtils
      */
     public static function getLines(string $filename, bool $skipEmpty = true): int
     {
-        if (!\is_file($filename)) {
+        if (!FileUtils::isFile($filename)) {
             return 0;
         }
 
@@ -219,7 +219,7 @@ final class SymfonyUtils
     {
         // get file
         $path = $kernel->getProjectDir() . '/composer.lock';
-        if (!\file_exists($path)) {
+        if (!FileUtils::exists($path)) {
             return [];
         }
 

@@ -20,14 +20,14 @@ use App\Traits\MathTrait;
  *
  * @author Laurent Muller
  */
-class HtmlParentChunk extends HtmlChunk implements \Countable
+class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
 {
     use MathTrait;
 
     /**
      * The children chunks.
      *
-     * @var HtmlChunk[]
+     * @var AbstractHtmlChunk[]
      */
     protected $children;
 
@@ -46,9 +46,9 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
     /**
      * Adds a child to the collection of children. Do nothing if the child is already in this collection.
      *
-     * @param HtmlChunk $child the child to add
+     * @param AbstractHtmlChunk $child the child to add
      */
-    public function add(HtmlChunk $child): self
+    public function add(AbstractHtmlChunk $child): self
     {
         if (!\in_array($child, $this->children, true)) {
             $child->setParent($this);
@@ -73,9 +73,9 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
      *
      * @param string[] ...$names the tag names to search for
      *
-     * @return HtmlChunk|null the child, if found; <code>null</code> otherwise
+     * @return AbstractHtmlChunk|null the child, if found; <code>null</code> otherwise
      */
-    public function findChild(string ...$names): ?HtmlChunk
+    public function findChild(string ...$names): ?AbstractHtmlChunk
     {
         foreach ($this->children as $child) {
             if ($child->is(...$names)) {
@@ -95,7 +95,7 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
     /**
      * Gets the children.
      *
-     * @return HtmlChunk[]
+     * @return AbstractHtmlChunk[]
      */
     public function getChildren(): array
     {
@@ -105,11 +105,11 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
     /**
      * Gets the index of the given child.
      *
-     * @param HtmlChunk $chunk the child chunk
+     * @param AbstractHtmlChunk $chunk the child chunk
      *
      * @return int the index, if found; -1 otherwise
      */
-    public function indexOf(HtmlChunk $chunk): int
+    public function indexOf(AbstractHtmlChunk $chunk): int
     {
         $index = \array_search($chunk, $this->children, true);
 
@@ -194,9 +194,9 @@ class HtmlParentChunk extends HtmlChunk implements \Countable
     /**
      * Remove a child from the collection of children. Do nothing if the child is not in this collection.
      *
-     * @param HtmlChunk $child the child to remove
+     * @param AbstractHtmlChunk $child the child to remove
      */
-    public function remove(HtmlChunk $child): self
+    public function remove(AbstractHtmlChunk $child): self
     {
         if (\in_array($child, $this->children, true)) {
             $child->setParent(null);

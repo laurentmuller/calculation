@@ -52,6 +52,27 @@ class GroupRepository extends AbstractRepository
     }
 
     /**
+     * Gets groups with the number of categories.
+     *
+     * <b>Note:</b> Only groups with at least one category are returned.
+     *
+     * @return array an array with the group and the number of categories
+     */
+    public function getListCount(): array
+    {
+        $builder = $this->createQueryBuilder('g')
+            ->select('g.id')
+            ->addSelect('g.code')
+            ->addSelect('g.description')
+            ->addSelect('COUNT(c.id) as count')
+            ->innerJoin('g.categories', 'c')
+            ->groupBy('g.id')
+            ->orderBy('g.code', Criteria::ASC);
+
+        return $builder->getQuery()->getArrayResult();
+    }
+
+    /**
      * Gets the query builder for the list of groups sorted by code.
      *
      * @param string $alias the default entity alias

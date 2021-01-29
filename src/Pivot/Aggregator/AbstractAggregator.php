@@ -15,11 +15,11 @@ namespace App\Pivot\Aggregator;
 use App\Util\Utils;
 
 /**
- * Aggregator function.
+ * AbstractAggregator function.
  *
  * @author Laurent Muller
  */
-abstract class Aggregator implements \JsonSerializable
+abstract class AbstractAggregator implements \JsonSerializable
 {
     /**
      *  Constructor.

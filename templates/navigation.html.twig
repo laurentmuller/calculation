@@ -1,4 +1,5 @@
 {# Navigation toolbar #}
+
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
@@ -117,37 +118,8 @@
             </li>
             {% endif -%}
             {% if is_bibi -%}
-            <li class="nav-item dropdown">
-            	<a class="nav-link dropdown-toggle" href="#" id="testDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{- icons.icon('bug', 'index.menu_test') -}}
-                </a>
-                <div class="dropdown-menu" aria-labelledby="testDropdown">
-                    {{- icons.dropdownItem(path('test_notifications'), 'test.notification', 'bell far') -}}
-                    {{- icons.dropdownItem(path('test_tinymce'), 'test.tinymce', 'edit') -}}
-                    {{- icons.dropdownItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) -}}
-                    {{- icons.dropdownItem(path('test_timeline'), 'timeline.title', 'stream') -}}
-                    {{- icons.dropdownItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') -}}
-                    {{- icons.dropdownItem(path('test_translate'), 'translator.title', 'globe') -}}
-                    {{- icons.dropdownItemExternal(path('test_html'), 'test.html', 'code') -}}
-                    {{- icons.dropdownItem(path('test_password'), 'password.title', 'lock') -}}
-                    {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') -}}
-                    {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(path('admin_import'), 'import.title', 'download') -}}
-                    {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(path('generate'), 'generate.title', 'random') -}}
-                    {{- icons.dropdownItem(path('update'), 'update.title', 'edit') -}}
-                    {{- icons.dropdownSeparator -}}
-                    {{- icons.dropdownItem(path('table_product'), 'product.list.title', 'file-alt far') -}}
-                    {{- icons.dropdownItem(path('table_calculation'), 'calculation.list.title', 'calculator') -}}
-                    {{- icons.dropdownItem(path('table_category'), 'category.list.title', 'folder far') -}}
-                    {{- icons.dropdownItem(path('table_calculationstate'), 'calculationstate.list.title', 'flag far') -}}
-                    {{- icons.dropdownItem(path('table_customer'), 'customer.list.title', 'address-card far') -}}
-                    {{- icons.dropdownItem(path('table_user'), 'user.list.title', 'user far') -}}
-                    {{- icons.dropdownItem(path('table_log'), 'log.title', 'book') -}}
-                </div>
-            </li>
-    		{% endif -%}
+                {% include 'navigation_bibi.html.twig' %}
+            {% endif -%}
         </ul>
         <ul class="navbar-nav">
             {# search #}

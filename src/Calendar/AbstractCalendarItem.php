@@ -19,7 +19,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-abstract class CalendarItem implements \JsonSerializable
+abstract class AbstractCalendarItem implements \JsonSerializable
 {
     /**
      * The parent's calendar.

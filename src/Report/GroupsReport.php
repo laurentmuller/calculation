@@ -129,7 +129,7 @@ class GroupsReport extends AbstractArrayReport
                 }
                 $table->add(FormatUtils::formatAmount($margin->getMinimum()))
                     ->add(FormatUtils::formatAmount($margin->getMaximum()))
-                    ->add(FormatUtils::formatPercent($margin->getMargin(), false))
+                    ->add(FormatUtils::formatPercent($margin->getMargin()))
                     ->endRow();
                 $skip = true;
             }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Log;
+use App\Util\FileUtils;
 use App\Util\Utils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -192,7 +193,7 @@ class LogService
      */
     public function isFileValid(): bool
     {
-        return \file_exists($this->fileName) && 0 !== \filesize($this->fileName);
+        return FileUtils::exists($this->fileName) && 0 !== \filesize($this->fileName);
     }
 
     /**

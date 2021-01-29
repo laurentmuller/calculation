@@ -1,0 +1,24 @@
+{% extends 'table/table_base.html.twig' %}
+
+{# parameters #}
+{%- set title        = 'group.list.title' -%}
+{%- set title_icon   = 'code-branch' -%}
+{%- set defer_url    = url('table_group') -%}
+{%- set save_url     = url('table_group_save') -%}
+{%- set object_type  = EntityVoterInterface.ENTITY_GROUP -%}
+{%- set attributes   = {
+    'data-link-path': path('table_category', {groupId: 0}), 
+    'data-link-title': 'group.list.category_title'|trans
+} -%}
+{% block global_actions -%}
+{{ _self.item_external(path('group_pdf'), 'group.list.pdf_title', 'file-pdf far') }}
+{{ _self.item_external(path('group_excel'), 'group.list.excel_title', 'file-excel far') }}
+{%- endblock %}
+
+{% block edit_actions -%}
+{{ _self.item_path(path('group_show', params), 'group.show.title', 'tv', show_class) }}
+{{ _self.item_path(path('group_edit', params), 'group.edit.title', 'pencil-alt', edit_class) }}
+{{ _self.item_path(path('group_delete', params), 'group.delete.title', 'times', 'btn-delete') }}
+{{ _self.item_separator() }}
+{{ _self.item_path(path('group_add', params), 'group.add.title', 'file far', 'btn-add') }}
+{%- endblock %}

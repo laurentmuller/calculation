@@ -19,7 +19,7 @@ use App\Report\HtmlReport;
  *
  * @author Laurent Muller
  */
-class HtmlPageBreakChunk extends HtmlChunk
+class HtmlPageBreakChunk extends AbstractHtmlChunk
 {
     /**
      * {@inheritdoc}

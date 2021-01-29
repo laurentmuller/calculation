@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\DataTable\Model;
 
+use App\Util\FileUtils;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -82,7 +83,7 @@ class DataColumnFactory
     public static function fromJson(AbstractDataTable $parent, string $path): array
     {
         //file?
-        if (!\file_exists($path) || !\is_file($path)) {
+        if (!FileUtils::exists($path) || !FileUtils::isFile($path)) {
             throw new \InvalidArgumentException("The file '$path' can not be found.");
         }
 

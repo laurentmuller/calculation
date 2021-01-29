@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  *
  * @author Laurent Muller
  */
-abstract class UserCaptchaType extends AbstractHelperType
+abstract class AbstractUserCaptchaType extends AbstractHelperType
 {
     /**
      * The display captcha image flag.

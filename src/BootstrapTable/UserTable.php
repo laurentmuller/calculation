@@ -24,7 +24,7 @@ use Twig\Environment;
  *
  * @author Laurent Muller
  */
-class UserTable extends AbstractBootstrapEntityTable
+class UserTable extends AbstractEntityTable
 {
     /**
      * @var TranslatorInterface
@@ -105,11 +105,9 @@ class UserTable extends AbstractBootstrapEntityTable
     /**
      * {@inheritdoc}
      */
-    protected function createColumns(): array
+    protected function getColumnDefinitions(): string
     {
-        $path = __DIR__ . '/Definition/user.json';
-
-        return $this->deserializeColumns($path);
+        return __DIR__ . '/Definition/user.json';
     }
 
     /**
@@ -117,6 +115,6 @@ class UserTable extends AbstractBootstrapEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['username' => BootstrapColumn::SORT_ASC];
+        return ['username' => Column::SORT_ASC];
     }
 }

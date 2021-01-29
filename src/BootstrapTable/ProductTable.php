@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Laurent Muller
  */
-class ProductTable extends AbstractBootstrapEntityTable
+class ProductTable extends AbstractEntityTable
 {
     /**
      * The category parameter name.
@@ -77,11 +77,9 @@ class ProductTable extends AbstractBootstrapEntityTable
     /**
      * {@inheritdoc}
      */
-    protected function createColumns(): array
+    protected function getColumnDefinitions(): string
     {
-        $path = __DIR__ . '/Definition/product.json';
-
-        return $this->deserializeColumns($path);
+        return __DIR__ . '/Definition/product.json';
     }
 
     /**
@@ -89,6 +87,6 @@ class ProductTable extends AbstractBootstrapEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['description' => BootstrapColumn::SORT_ASC];
+        return ['description' => Column::SORT_ASC];
     }
 }

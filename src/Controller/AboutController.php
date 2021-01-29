@@ -117,7 +117,7 @@ class AboutController extends AbstractController
      *
      * @Route("/php/ini", name="about_php_ini")
      */
-    public function phpIni(): Response
+    public function phpIni(): JsonResponse
     {
         // get content
         $array = SymfonyUtils::getPhpInfoArray();

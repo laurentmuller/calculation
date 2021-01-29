@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace App\Comparable;
 
 /**
- * Trait to implement the <code>IComparable</code> interface.
+ * Trait to implement the <code>ComparableInterface</code> interface.
  *
  * @author Laurent Muller
  *
- * @see \App\Comparable\IComparable
+ * @see \App\Comparable\ComparableInterface
  */
 trait ComparableTrait
 {
@@ -28,22 +28,22 @@ trait ComparableTrait
      * <code>$this == $other</code> =>  returns 0<br>
      * <code>$this >&nbsp;  $other</code> =>  returns greater then 0<br>
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return int (-1, 0, 1)
      *
      * @throws \LogicException if the other object can not be compared
      */
-    abstract public function compare(IComparable $other): int;
+    abstract public function compare(ComparableInterface $other): int;
 
     /**
      * Returns if this instance is equal to the other object.
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return bool true if equal
      */
-    public function isEqual(IComparable $other): bool
+    public function isEqual(ComparableInterface $other): bool
     {
         return 0 === $this->compare($other);
     }
@@ -51,11 +51,11 @@ trait ComparableTrait
     /**
      * Returns if this instance is greather than to the other object.
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return bool true if greather than
      */
-    public function isGreaterThan(IComparable $other): bool
+    public function isGreaterThan(ComparableInterface $other): bool
     {
         return $this->compare($other) > 0;
     }
@@ -63,11 +63,11 @@ trait ComparableTrait
     /**
      * Returns if this instance is greather than or equal to the other object.
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return bool true if greather than or equal
      */
-    public function isGreaterThanOrEqual(IComparable $other): bool
+    public function isGreaterThanOrEqual(ComparableInterface $other): bool
     {
         return $this->compare($other) >= 0;
     }
@@ -75,11 +75,11 @@ trait ComparableTrait
     /**
      * Returns if this instance is less (smaller) than to the other object.
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return bool true if less than
      */
-    public function isLessThan(IComparable $other): bool
+    public function isLessThan(ComparableInterface $other): bool
     {
         return $this->compare($other) < 0;
     }
@@ -87,27 +87,27 @@ trait ComparableTrait
     /**
      * Returns if this instance is less (smaller) than or equal to the other object.
      *
-     * @param IComparable $other the other object to compare to
+     * @param ComparableInterface $other the other object to compare to
      *
      * @return bool true if less than or equal
      */
-    public function isLessThanOrEqual(IComparable $other): bool
+    public function isLessThanOrEqual(ComparableInterface $other): bool
     {
         return $this->compare($other) <= 0;
     }
 
     /**
-     * Sort an array of <code>IComparable</code>.
+     * Sort an array of <code>ComparableInterface</code>.
      *
-     * @param IComparable[] $array     the array to sort
-     * @param bool          $ascending true to sort ascending, false to sort descending
+     * @param ComparableInterface[] $array     the array to sort
+     * @param bool                  $ascending true to sort ascending, false to sort descending
      *
      * @throws \LogicException if objects can not be compared
      */
     public static function sort(array &$array, bool $ascending = true): void
     {
         $order = $ascending ? 1 : -1;
-        \usort($array, function (IComparable $a, IComparable $b) use ($order) {
+        \usort($array, function (ComparableInterface $a, ComparableInterface $b) use ($order) {
             return $order * $a->compare($b);
         });
     }

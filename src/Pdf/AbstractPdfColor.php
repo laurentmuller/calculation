@@ -20,7 +20,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-abstract class PdfColor implements PdfDocumentUpdaterInterface
+abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 {
     use MathTrait;
 
@@ -119,7 +119,7 @@ abstract class PdfColor implements PdfDocumentUpdaterInterface
      *
      * @return static|null the color or null if the RGB value can not be parsed
      *
-     * @see PdfColor::parse()
+     * @see AbstractPdfColor::parse()
      */
     public static function create($rgb): ?self
     {

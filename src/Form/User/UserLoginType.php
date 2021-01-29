@@ -21,7 +21,7 @@ use App\Service\CaptchaImageService;
  *
  * @author Laurent Muller
  */
-class UserLoginType extends UserCaptchaType
+class UserLoginType extends AbstractUserCaptchaType
 {
     /**
      * Constructor.

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
-use App\Pivot\Aggregator\Aggregator;
+use App\Pivot\Aggregator\AbstractAggregator;
 use App\Util\Utils;
 
 /**
@@ -20,22 +20,22 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-abstract class PivotAggregator implements \JsonSerializable
+abstract class AbstractPivotAggregator implements \JsonSerializable
 {
     /**
      * The aggregator function.
      *
-     * @var Aggregator
+     * @var AbstractAggregator
      */
     protected $aggregator;
 
     /**
      * Constructor.
      *
-     * @param Aggregator $aggregator the aggregator function
-     * @param mixed      $value      the initial value
+     * @param AbstractAggregator $aggregator the aggregator function
+     * @param mixed              $value      the initial value
      */
-    public function __construct(Aggregator $aggregator, $value = null)
+    public function __construct(AbstractAggregator $aggregator, $value = null)
     {
         $this->aggregator = $aggregator;
         $this->addValue($value);
@@ -66,7 +66,7 @@ abstract class PivotAggregator implements \JsonSerializable
     /**
      * Gets the aggregator function.
      */
-    public function getAggregator(): Aggregator
+    public function getAggregator(): AbstractAggregator
     {
         return $this->aggregator;
     }

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Database;
 
+use App\Util\FileUtils;
+
 /**
  * Extended the SQLite3 database with transaction support.
  *
@@ -63,7 +65,7 @@ abstract class AbstractDatabase extends \SQLite3
         $this->filename = $filename;
 
         // check creation state
-        $create = '' === $filename || self::IN_MEMORY === $filename || !\file_exists($filename) || 0 === \filesize($filename);
+        $create = '' === $filename || self::IN_MEMORY === $filename || !FileUtils::exists($filename) || 0 === \filesize($filename);
 
         if ($create) {
             $flags = SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE;

@@ -26,6 +26,7 @@ use App\Service\TaskService;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
 use App\Util\DatabaseInfo;
+use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use App\Util\SymfonyUtils;
 use App\Util\Utils;
@@ -889,7 +890,7 @@ class AjaxController extends AbstractController
         $locale = \Locale::getDefault();
         $file = "$dir/translations/datatables.$locale.yaml";
 
-        return \file_exists($file) ? $file : null;
+        return FileUtils::exists($file) ? $file : null;
     }
 
     /**

@@ -229,7 +229,7 @@ class CalendarController extends AbstractController
      * @param int   $year       the current year
      * @param int   $week       the current week
      *
-     * @return int[]|bool the next year and month, if found; false otherwise
+     * @return int[]|bool the next year and week, if found; false otherwise
      */
     private function nextWeek(array $yearsWeeks, int $year, int $week)
     {
@@ -287,7 +287,7 @@ class CalendarController extends AbstractController
      * @param int   $year       the current year
      * @param int   $week       the current week
      *
-     * @return int[]|bool the previous year and month, if found; false otherwise
+     * @return int[]|bool the previous year and week, if found; false otherwise
      */
     private function previousWeek(array $yearsWeeks, int $year, int $week)
     {

@@ -28,7 +28,7 @@ use Symfony\Component\Routing\RouterInterface;
  *
  * @author Laurent Muller
  */
-class ResponseSubscriber implements EventSubscriberInterface
+class ResponseListener implements EventSubscriberInterface
 {
     /**
      * The CSP data directive.

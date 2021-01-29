@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Laurent Muller
  */
-abstract class BaseFileTypeExtension extends AbstractTypeExtension
+abstract class AbstractFileTypeExtension extends AbstractTypeExtension
 {
     /**
      * {@inheritdoc}

@@ -16,6 +16,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Traits\TranslatorFlashMessageTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
@@ -33,22 +34,22 @@ class InteractiveLoginListener implements EventSubscriberInterface
     use TranslatorFlashMessageTrait;
 
     /**
-     * The application name.
+     * The application name and version.
      *
      * @var string
      */
-    private $appName;
+    private $appNameVersion;
 
     private UserRepository $repository;
 
     /**
      * Constructor.
      */
-    public function __construct(UserRepository $repository, TranslatorInterface $translator, string $appName)
+    public function __construct(UserRepository $repository, TranslatorInterface $translator, string $appNameVersion)
     {
         $this->repository = $repository;
         $this->translator = $translator;
-        $this->appName = $appName;
+        $this->appNameVersion = $appNameVersion;
     }
 
     public static function getSubscribedEvents()
@@ -64,11 +65,24 @@ class InteractiveLoginListener implements EventSubscriberInterface
     public function onInteractiveLogin(InteractiveLoginEvent $event): void
     {
         $token = $event->getAuthenticationToken();
-        $this->session = $event->getRequest()->getSession();
-        if ($this->updateUser($token) && null !== $this->session) {
+        if ($this->updateUser($token)) {
+            $this->notify($event->getRequest(), $token);
+        }
+    }
+
+    /**
+     * Notify the success login to the user.
+     *
+     * @param Request        $request the request
+     * @param TokenInterface $token   the token
+     */
+    private function notify(Request $request, TokenInterface $token): void
+    {
+        if ($request->hasSession()) {
+            $this->session = $request->getSession();
             $params = [
                 '%username%' => $token->getUsername(),
-                '%appname%' => $this->appName,
+                '%appname%' => $this->appNameVersion,
             ];
             $this->succesTrans('security.login.success', $params);
         }

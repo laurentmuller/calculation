@@ -170,8 +170,8 @@ class PivotController extends AbstractController
 
         // create pivot table
         return PivotTableFactory::instance($dataset, $title)
-        //->setAggregatorClass(AverageAggregator::class)
-        //->setAggregatorClass(CountAggregator::class)
+            //->setAggregatorClass(AverageAggregator::class)
+            //->setAggregatorClass(CountAggregator::class)
             ->setAggregatorClass(SumAggregator::class)
             ->setColumnFields($columns)
             ->setRowFields($rows)

@@ -51,6 +51,14 @@
 {{ icons.dropdownSeparator() }}
 {%- endmacro %}
 
+{% macro page_list(totalNotFiltered) %}
+{% set sizes = [5, 10, 15, 20, 25, 30, 50] %}
+{% for size in sizes %}
+
+{% endfor %}
+{{ sizes|filter(v => v > totalNotFiltered)|join(', ') }}
+{%- endmacro %}
+
 {# granted actions #}
 {%- set object_type  = object_type|default('none') -%}
 {%- set allow_show   = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) -%}
@@ -80,7 +88,7 @@
 
 {# classes #}
 {% block card_container_class '' %}
-{% block card_body_class ' px-3 py-2' %}
+{% block card_body_class ' px-3 pt-0 pb-2' %}
 
 {# body #}
 {% block card_body -%}
@@ -113,9 +121,9 @@
     data-buttons-align="right"
     data-toolbar-align="right"
 
-    data-search="true" 
+    data-search="{{ (searchAllowed ?? true)|json_encode }}" 
     data-search-text="{{ search }}"
-    data-page-list="[5, 10, 15, 20, 25, 30, 50]"
+    data-page-list="[{{ pageList|join(',') }}]"
 
     data-total-rows="{{ total }}"
     data-total-not-filtered="{{ totalNotFiltered }}"
@@ -160,6 +168,7 @@
         {% endfor %}
     </tbody>
 </table>
+
 {# dropdown actions #}
 <div id="dropdown-actions" class="dropdown d-print-none d-none">
     {{ icons.dropdownEllipsis() }}

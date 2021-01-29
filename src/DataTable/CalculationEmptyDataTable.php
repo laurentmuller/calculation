@@ -24,7 +24,7 @@ use Twig\Environment;
  *
  * @author Laurent Muller
  */
-class CalculationEmptyDataTable extends CalculationItemsDataTable
+class CalculationEmptyDataTable extends AbstractCalculationItemsDataTable
 {
     use MathTrait;
 

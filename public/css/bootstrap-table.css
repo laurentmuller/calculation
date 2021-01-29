@@ -40,6 +40,9 @@
     }
 }
 
+.bootstrap-table .fixed-table-container .table thead th {
+    color: initial !important;
+}
 .bootstrap-table .fixed-table-container .table tbody td {
     vertical-align: top !important;
 }

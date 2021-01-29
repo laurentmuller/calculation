@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
-use App\Service\HttpClientService;
+use App\Service\AbstractHttpClientService;
 use App\Util\Utils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -24,7 +24,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  *
  * @author Laurent Muller
  */
-abstract class AbstractTranslatorService extends HttpClientService implements TranslatorServiceInterface
+abstract class AbstractTranslatorService extends AbstractHttpClientService implements TranslatorServiceInterface
 {
     /**
      * The cache timeout (60 minutes).

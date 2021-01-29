@@ -17,7 +17,7 @@ namespace App\Pivot\Aggregator;
  *
  * @author Laurent Muller
  */
-class CountAggregator extends Aggregator
+class CountAggregator extends AbstractAggregator
 {
     /**
      * @var int
@@ -27,7 +27,7 @@ class CountAggregator extends Aggregator
     /**
      * {@inheritdoc}
      */
-    public function add($value): Aggregator
+    public function add($value): AbstractAggregator
     {
         if ($value instanceof self) {
             $this->result += $value->result;
@@ -49,7 +49,7 @@ class CountAggregator extends Aggregator
     /**
      * {@inheritdoc}
      */
-    public function init(): Aggregator
+    public function init(): AbstractAggregator
     {
         $this->result = 0;
 

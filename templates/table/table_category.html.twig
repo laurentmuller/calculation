@@ -5,11 +5,26 @@
 {%- set title_icon   = 'folder far' -%}
 {%- set defer_url    = url('table_category') -%}
 {%- set save_url     = url('table_category_save') -%}
+{%- set groupId      = group.id|default(0) -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_CATEGORY -%}
 {%- set attributes   = {
-	'data-product-path': path('table_product', {categoryId: 0}), 
-	'data-product-title': 'category.list.product_title'|trans
+	'data-link-path': path('table_product', {categoryId: 0}), 
+	'data-link-title': 'category.list.product_title'|trans
 } -%}
+
+{% block toolbar_actions -%}
+<div class="input-group-append btn-dropdown">
+    <button id="groupId" data-value="{{ groupId }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'category.fields.group'|trans }}" title="{{ 'category.list.group_help'|trans }}">
+        {{- group ? group.code : 'category.fields.group'|trans -}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="groupId">
+        {{ _self.output_dropdown('group', 0, groupId, 'datatable.all'|trans) }}
+        {% for group in groups %}
+        {{ _self.output_dropdown('group', group.id, groupId, group.code) }}
+        {% endfor %}
+    </div>
+</div>
+{%- endblock %}
 
 {% block global_actions -%}
 {{ _self.item_external(path('category_pdf'), 'category.list.pdf_title', 'file-pdf far') }}

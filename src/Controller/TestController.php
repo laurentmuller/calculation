@@ -21,8 +21,8 @@ use App\Pdf\PdfResponse;
 use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Service\AbstractHttpClientService;
 use App\Service\CaptchaImageService;
-use App\Service\HttpClientService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
 use App\Service\ThemeService;
@@ -421,7 +421,7 @@ class TestController extends AbstractController
         // form and parameters
         $parameters = [
             'form' => $this->getForm()->createView(),
-            'language' => HttpClientService::getAcceptLanguage(true),
+            'language' => AbstractHttpClientService::getAcceptLanguage(true),
             'languages' => $languages,
             'services' => $factory->getServices(),
             'service_name' => $service::getName(),

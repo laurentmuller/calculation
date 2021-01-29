@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Laurent Muller
  */
-class UpdateAssetsCommand extends AssetsCommand
+class UpdateAssetsCommand extends AbstractAssetsCommand
 {
     /**
      * The boostrap CSS file name.

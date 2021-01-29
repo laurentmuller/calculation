@@ -5,7 +5,7 @@
 		"order": "desc",
 		"class": "text-id",
 		"fieldFormatter": "formatId",
-		"styleFormatter": "styleCalculationState",
+		"styleFormatter": "styleStateColor",
 		"cardBold": true
 	},
 	{
@@ -55,7 +55,7 @@
 	{
 		"field": "state.color",
 		"visible": false,
-		"orderable": false,
+		"sortable": false,
 		"searchable": false
 	}
 ]

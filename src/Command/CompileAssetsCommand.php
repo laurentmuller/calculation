@@ -23,7 +23,7 @@ use Symfony\Component\Finder\SplFileInfo;
  *
  * @author Laurent Muller
  */
-class CompileAssetsCommand extends AssetsCommand
+class CompileAssetsCommand extends AbstractAssetsCommand
 {
     /**
      * The assets configuration file name.

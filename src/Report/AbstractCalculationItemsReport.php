@@ -24,7 +24,7 @@ use App\Util\FormatUtils;
  *
  * @author Laurent Muller
  */
-abstract class CalculationItemsReport extends AbstractArrayReport
+abstract class AbstractCalculationItemsReport extends AbstractArrayReport
 {
     /**
      * Constructor.

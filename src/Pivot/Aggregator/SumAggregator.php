@@ -17,7 +17,7 @@ namespace App\Pivot\Aggregator;
  *
  * @author Laurent Muller
  */
-class SumAggregator extends Aggregator
+class SumAggregator extends AbstractAggregator
 {
     /**
      * @var float
@@ -27,7 +27,7 @@ class SumAggregator extends Aggregator
     /**
      * {@inheritdoc}
      */
-    public function add($value): Aggregator
+    public function add($value): AbstractAggregator
     {
         if ($value instanceof self) {
             $this->result += $value->result;
@@ -57,7 +57,7 @@ class SumAggregator extends Aggregator
     /**
      * {@inheritdoc}
      */
-    public function init(): Aggregator
+    public function init(): AbstractAggregator
     {
         $this->result = 0;
 

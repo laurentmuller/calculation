@@ -30,7 +30,7 @@ use Symfony\Contracts\Cache\ItemInterface;
  *
  * @see https://openweathermap.org/api
  */
-class OpenWeatherService extends HttpClientService
+class OpenWeatherService extends AbstractHttpClientService
 {
     /**
      * The database name.

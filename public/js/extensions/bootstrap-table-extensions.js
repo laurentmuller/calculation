@@ -1,6 +1,34 @@
 /**! compression tag for ftp-deployment */
 
-/* globals MenuBuilder */
+/* globals MenuBuilder, Toaster */
+
+/**
+ * Gets the given element as HTML.
+ * 
+ * @param {jQuery}
+ *            $element - the element to get HTML for.
+ * @returns {string} the HTML text.
+ */
+function toHtml($element) {
+    'use strict';
+    return $('<div/>').append($element).html();
+}
+
+/**
+ * Checks if the overall margin of the calculation is below the minimum margin.
+ * 
+ * @param {number}
+ *            value - the margin value.
+ * @param {object}
+ *            row - the record data.
+ * @returns {boolean} true if below.
+ */
+function isCalcultionMarginBelow(value, row) {
+    'use strict';
+    const overallMargin = parseFloat(row.overallMargin) / 100.0;
+    const minMargin = parseFloat($('#table-edit').data('min-margin'));
+    return !isNaN(overallMargin) && !isNaN(minMargin) && overallMargin < minMargin;
+}
 
 /**
  * Formatter for the actions column.
@@ -30,73 +58,6 @@ function formatActions(value, row) { // jshint ignore:line
 }
 
 /**
- * Style for the calculation identifier column.
- * 
- * @param {number}
- *            value - the field value.
- * @param {object}
- *            row - the record data.
- * 
- * @returns {object} the cell style.
- */
-function styleCalculationState(value, row) { // jshint ignore:line
-    'use strict';
-    return {
-        css: {
-          'border-left-color': row['state.color'] + ' !important'
-        }
-    };
-}
-
-/**
- * Checks if the overall margin of the calculation is below the minimum margin.
- * 
- * @param {number}
- *            value - the margin value.
- * @param {object}
- *            row - the record data.
- * @returns {boolean} true if below.
- */
-function isCalcultionMarginBelow(value, row) {
-    'use strict';
-    const overallMargin = parseFloat(row.overallMargin) / 100.0;
-    const minMargin = parseFloat($('#table-edit').data('min-margin'));
-    return !isNaN(overallMargin) && !isNaN(minMargin) && overallMargin < minMargin;
-}
-
-/**
- * Style for the calculation margin column.
- * 
- * @param {number}
- *            value - the field value.
- * @param {object}
- *            row - the record data.
- * 
- * @returns {object} the cell style.
- */
-function styleCalculationMargin(value, row) { // jshint ignore:line
-    'use strict';
-    if (isCalcultionMarginBelow(value, row)) {
-        return {
-            'classes': 'text-percent text-danger cursor-pointer'
-        };
-    }
-    return {};
-}
-
-/**
- * Gets the given element as HTML.
- * 
- * @param {jQuery}
- *            $element - the element to get HTML for.
- * @returns {string} the HTML text.
- */
-function toHtml($element) {
-    'use strict';
-    return $('<div/>').append($element).html();
-}
-
-/**
  * Formatter for the calculation margin column.
  * 
  * @param {number}
@@ -117,6 +78,72 @@ function formatCalculationMargin(value, row) { // jshint ignore:line
            'data-html': 'true'
         });
         return toHtml($content);
+    }
+    return value;
+}
+
+/**
+ * Formatter for a link column.
+ * 
+ * @param {number}
+ *            value - the field value.
+ * @param {object}
+ *            row - the record data.
+ * 
+ * @returns {string} the rendered cell.
+ */
+function formatDataLink(value, row) { // jshint ignore:line
+    'use strict';
+    const count = Number.parseInt(value, 10);
+    if (!Number.isNaN(count) && count > 0) {
+        const $table = $('#table-edit');
+        const title = $table.data('link-title');
+        const path = $table.data('link-path').replace('0', row.id);
+        const $content = $('<a/>', {
+            'href': path,
+            'title': title,
+            'text': value
+        });
+        return toHtml($content);
+    }    
+    return value;
+}
+
+/**
+ * Formatter for the user image column.
+ * 
+ * @param {string}
+ *            value - the image source.
+ * @param {object}
+ *            row - the record data.
+ * 
+ * @returns {string} the rendered cell.
+ */
+function formatUserImage(value, row) { // jshint ignore:line
+    'use strict';
+    if (value) {
+        const $content = $('<img/>', {            
+            'src': value,
+            'alt': row.username,
+            'title': $('#table-edit').data('image-title')            
+        });
+        return toHtml($content);
+    }
+    return value;
+}
+
+/**
+ * Formatter for the calculation items column.
+ * 
+ * @param {string}
+ *            value - the items.
+ * 
+ * @returns {string} the rendered cell.
+ */
+function formatItems(value) { // jshint ignore:line
+    'use strict';
+    if (value) {
+        return value.replace("&lt;","<").replace("&gt;",">");    
     }
     return value;
 }
@@ -153,11 +180,11 @@ function styleLogCreatedAt(value, row) { // jshint ignore:line
         color = 'info';
         break;
     }
-     return {
-         css: {
-             'border-left-color': 'var(--' + color + ') !important'
-         }
-     };
+    return {
+        css: {
+            'border-left-color': 'var(--' + color + ') !important'
+        }
+    };
 }
 
 /**
@@ -172,88 +199,34 @@ function styleLogCreatedAt(value, row) { // jshint ignore:line
  */
 function styleStateColor(value, row) { // jshint ignore:line
     'use strict';
-    return {
-        css: {
-          'border-left-color': row.color + ' !important'
-        }
-    };
-}
-
-/**
- * Formatter for the calculation state calculations column.
- * 
- * @param {number}
- *            value - the field value.
- * @param {object}
- *            row - the record data.
- * 
- * @returns {string} the rendered cell.
- */
-function formatStateCalculations(value, row) { // jshint ignore:line
-    'use strict';
-    const count = Number.parseInt(value, 10);
-    if (!Number.isNaN(count) && count > 0) {
-        const $table = $('#table-edit');
-        const title = $table.data('calculationTitle');
-        const path = $table.data('calculationPath').replace('0', row.id);
-        const $content = $('<a/>', {
-            'href': path,
-            'title': title,
-            'text': value
-        });
-        return toHtml($content);
-    }    
-    return value;
-}
-
-/**
- * Formatter for the category products column.
- * 
- * @param {number}
- *            value - the field value.
- * @param {object}
- *            row - the record data.
- * 
- * @returns {string} the rendered cell.
- */
-function formatCategoryProducts(value, row) { // jshint ignore:line
-    'use strict';
-    const count = Number.parseInt(value, 10);
-    if (!Number.isNaN(count) && count > 0) {
-        const $table = $('#table-edit');
-        const title = $table.data('productTitle');
-        const path = $table.data('productPath').replace('0', row.id);
-        const $content = $('<a/>', {
-            'href': path,
-            'title': title,
-            'text': value
-        });
-        return toHtml($content);
-    }    
-    return value;
-}
-
-/**
- * Formatter for the user image column.
- * 
- * @param {string}
- *            value - the image source.
- * @param {object}
- *            row - the record data.
- *            
- * @returns {string} the rendered cell.
- */
-function formatUserImage(value, row) { // jshint ignore:line
-    'use strict';
-    if (value) {
-        const $content = $('<img/>', {            
-            'src': value,
-            'alt': row.username,
-            'title': $('#table-edit').data('image-title')            
-        });
-        return toHtml($content);
+    const color =  row.color || row.stateColor || row['state.color'] ||null;
+    if (color) {
+        return {
+            css: {
+              'border-left-color': color + ' !important'
+            }
+        };
     }
-    return value;
+}
+
+/**
+ * Style for the calculation margin column.
+ * 
+ * @param {number}
+ *            value - the field value.
+ * @param {object}
+ *            row - the record data.
+ * 
+ * @returns {object} the cell style.
+ */
+function styleCalculationMargin(value, row) { // jshint ignore:line
+    'use strict';
+    if (isCalcultionMarginBelow(value, row)) {
+        return {
+            'classes': 'text-percent text-danger cursor-pointer'
+        };
+    }
+    return {};
 }
 
 /**
@@ -370,6 +343,13 @@ $.fn.extend({
                 const text = cardView ? options.formatToggleOff() : options.formatToggleOn();
                 $button.attr('aria-label', text).attr('title', text);
                 $this.saveParameters();
+            },
+            
+            // show message
+            onLoadError: function (status, jqXHR) {
+                const title = $('.card-title').text();
+                const message = jqXHR.responseJSON.message;
+                Toaster.danger(message, title, $("#flashbags").data());
             }
         }; 
         const settings = $.extend(true, defaults, options);
@@ -525,7 +505,7 @@ $.fn.extend({
         
         const callback = $.isFunction(options.onRenderCardView) ? options.onRenderCardView : false;
         const data = callback ? $this.getData() : null;
-        const columns = options.columns[0].filter(c => c.visible && c.cardVisible);
+        const columns = options.columns[0].filter((c) => c.visible && c.cardVisible);
         
         $this.find('tbody tr').each(function () {
             const $row = $(this);            

@@ -15,7 +15,6 @@ namespace App\BootstrapTable;
 use App\Entity\CalculationState;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
-use App\Util\FormatUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Laurent Muller
  */
-class CalculationTable extends AbstractBootstrapEntityTable
+class CalculationTable extends AbstractEntityTable
 {
     /**
      * The state parameter name.
@@ -43,11 +42,6 @@ class CalculationTable extends AbstractBootstrapEntityTable
     public function __construct(CalculationRepository $repository)
     {
         parent::__construct($repository);
-    }
-
-    public function formatId(int $value): string
-    {
-        return FormatUtils::formatId($value);
     }
 
     /**
@@ -83,11 +77,9 @@ class CalculationTable extends AbstractBootstrapEntityTable
     /**
      * {@inheritdoc}
      */
-    protected function createColumns(): array
+    protected function getColumnDefinitions(): string
     {
-        $path = __DIR__ . '/Definition/calculation.json';
-
-        return $this->deserializeColumns($path);
+        return __DIR__ . '/Definition/calculation.json';
     }
 
     /**
@@ -95,6 +87,6 @@ class CalculationTable extends AbstractBootstrapEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['id' => BootstrapColumn::SORT_DESC];
+        return ['id' => Column::SORT_DESC];
     }
 }

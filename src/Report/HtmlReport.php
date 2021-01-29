@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use App\Pdf\Html\HtmlChunk;
+use App\Pdf\Html\AbstractHtmlChunk;
 use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlParser;
 
@@ -215,7 +215,7 @@ class HtmlReport extends AbstractReport
         }
     }
 
-    private function outputDebug(HtmlChunk $chunk, int $indent = 0): void
+    private function outputDebug(AbstractHtmlChunk $chunk, int $indent = 0): void
     {
         // current
         $this->SetX($this->x + $indent);

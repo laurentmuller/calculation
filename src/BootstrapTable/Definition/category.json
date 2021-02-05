@@ -38,8 +38,9 @@
 		"title": "category.fields.tasks",
 		"sortable": false,
 		"searchable": false,
-		"class": "text-currency",
-		"fieldFormatter": "formatCountable"
+		"class": "text-currency rowlink-skip",
+		"fieldFormatter": "formatCountable",
+		"cellFormatter": "formatDataLink"
 	},
 	{
 		"field": "action",

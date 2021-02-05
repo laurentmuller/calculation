@@ -189,7 +189,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @param CalculationState $state       the new state
      * @param string           $description the new description
      */
-    public function clone(?CalculationState $state, ?string $description = null): self
+    public function clone(?CalculationState $state = null, ?string $description = null): self
     {
         /** @var Calculation $copy */
         $copy = clone $this;

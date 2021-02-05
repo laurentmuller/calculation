@@ -176,6 +176,7 @@ category:
         pdf_title: Télécharger la liste des catégories
         excel_title: Exporter la liste des catégories
         product_title: Afficher les articles de cette catégorie
+        task_title: Afficher les tâches de cette catégorie
         group_help: Afficher les catégories pour le groupe sélectionné
     show:
         title: Propriétés de la catégorie
@@ -207,7 +208,7 @@ group:
         add_title: Créer un nouveau groupe
         pdf_title: Télécharger la liste des groupes
         excel_title: Exporter la liste des groupes
-        category_title: Afficher les catégories de ce groupe 
+        category_title: Afficher les catégories de ce groupe
     show:
         title: Propriétés du groupe
 groupmargin:
@@ -466,6 +467,7 @@ common:
     button_cancel: Annuler
     button_close: Fermer
     button_add: Nouveau
+    button_show: Afficher
     button_edit: Modifier
     button_delete: Supprimer
     button_back: Retour
@@ -476,7 +478,6 @@ common:
     button_pdf: Télécharger
     button_pdf_list: Télécharger la liste
     button_excel_list: Exporter la liste
-    button_show: Afficher
     button_search: Rechercher
     button_browse: Parcourir
     button_refresh: Actualiser
@@ -780,6 +781,7 @@ search:
     search: Lancer la recherche
     clear: Effacer la recherche
     minimum: Saisir 2 caractères au minimum
+    entity_help: Afficher les résultats pour l'objet sélectionné
     fields:
         query: Rechercher
         entity: Objet
@@ -1040,6 +1042,8 @@ task:
         add_title: Créer une nouvelle tâche
         pdf_title: Télécharger la liste des tâche
         excel_title: Exporter la liste des tâche
+        category_all_text: Toutes
+        category_help: Afficher les tâches pour la catégorie sélectionnée
     show:
         title: Propriétés de la tâche
 taskitem:
@@ -1079,3 +1083,40 @@ taskcompute:
         quantity: La quantité doit être égale ou supérieure à 1.
         task: Impossible de trouver une tâche correspondante.
         items: Une opération doit être sélectionnée.
+help:
+    title: Aide
+    title_name: Aide - %name%
+    description: Bienvenue dans le système d'aide de l'application <b>%appname%</b>.
+    main_menu: Menu principal
+    dialog_menu: Pages
+    entity_menu: Objets de la base de données
+    back_menu: Retourner à page principale de l'aide
+    pdf_menu: Télécharger l'aide au format PDF
+    labels:
+        screenshot: 'Capture d''écran :'
+        entity_fields: 'Les champs sont définis comme suit :'
+        entity_empty: Cet objet ne contient aucun champ.
+        entity_actions: 'Les actions possibles sur l''objet sont les suivantes :'
+        global_actions: 'Les actions globales suivantes peuvent être sélectionnées :'
+        edit_actions: 'Les actions suivantes peuvent être sélectionnées :'
+        edit_fields: 'Les champs de saisie sont définis comme suit :'
+        edit_columns: 'La table contient les colonnes suivantes :'
+        forbidden_text: Si l'objet sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.
+    actions:
+        toggle: Afficher la vue
+        clear: Effacer la recherche
+    fields:
+        field: Champ
+        column: Colonne
+        description: Description
+        type: Type
+        required: Requis
+        action: Action
+    types:
+        text: Texte
+        reference: Référence
+        amount: Montant
+        collection: Collection
+        date: Date
+        percent: Pourcentage
+        quantity: Quantité

@@ -4,7 +4,7 @@
 		"title": "calculation.fields.id",
 		"default": true,
 		"direction": "desc",
-		"class": "text-id",
+		"class": "text-id text-border",
 		"formatter": "formatId",
 		"callback": "renderStateColor"
 	},

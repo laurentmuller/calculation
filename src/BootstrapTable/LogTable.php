@@ -42,30 +42,6 @@ class LogTable extends AbstractTable
     private const COLUMN_DATE = 'createdAt';
 
     /**
-     * The selected channel.
-     */
-    private string $channel = '';
-
-    /**
-     * The channels.
-     *
-     * @var string[]
-     */
-    private $channels;
-
-    /**
-     * The selected level.
-     */
-    private string $level = '';
-
-    /**
-     * The levels.
-     *
-     * @var string[]
-     */
-    private $levels;
-
-    /**
      * The log service.
      */
     private LogService $service;
@@ -106,21 +82,6 @@ class LogTable extends AbstractTable
         return LogService::getLevel($value, true);
     }
 
-    public function getChannel(): string
-    {
-        return $this->channel;
-    }
-
-    /**
-     * Gets the channels.
-     *
-     * @return string[]
-     */
-    public function getChannels(): array
-    {
-        return $this->channels ?? [];
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -130,44 +91,10 @@ class LogTable extends AbstractTable
     }
 
     /**
-     * Gets the file name to parse.
-     */
-    public function getFileName(): ?string
-    {
-        return $this->service->getFileName();
-    }
-
-    public function getLevel(): string
-    {
-        return $this->level;
-    }
-
-    /**
-     * Gets the levels.
-     *
-     * @return string[]
-     */
-    public function getLevels(): array
-    {
-        return $this->levels ?? [];
-    }
-
-    /**
-     * Gets the log service.
-     */
-    public function getService(): LogService
-    {
-        return $this->service;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function handleRequest(Request $request): array
     {
-        //clear
-        $this->clearValues();
-
         // get entries
         if (!$entries = $this->service->getEntries()) {
             return [];
@@ -182,13 +109,21 @@ class LogTable extends AbstractTable
         // count
         $totalNotFiltered = \count($entities);
 
-        // filter channel and level
-        $entities = $this->filterChannel($request, $entities);
-        $entities = $this->filterLevel($request, $entities);
+        // filter level
+        if ($level = (string) $request->get(self::PARAM_LEVEL, '')) {
+            $entities = $this->filterLevel($entities, $level);
+        }
+
+        // filter channel
+        if ($channel = (string) $request->get(self::PARAM_CHANNEL, '')) {
+            $entities = $this->filterChannel($entities, $channel);
+        }
 
         // filter search
         if ($search = (string) $request->get(self::PARAM_SEARCH, '')) {
-            $entities = $this->filterSearch($entities, $search);
+            $skipLevel = Utils::isString($level);
+            $skipChannel = Utils::isString($channel);
+            $entities = $this->filterSearch($entities, $search, $skipLevel, $skipChannel);
         }
         $filtered = \count($entities);
 
@@ -206,8 +141,8 @@ class LogTable extends AbstractTable
         $rows = $this->mapEntities($entities);
 
         // copy
-        $this->channels = \array_keys($entries[LogService::KEY_CHANNELS]);
-        $this->levels = \array_keys($entries[LogService::KEY_LEVELS]);
+        $levels = \array_keys($entries[LogService::KEY_LEVELS]);
+        $channels = \array_keys($entries[LogService::KEY_CHANNELS]);
 
         // ajax?
         if ($request->isXmlHttpRequest()) {
@@ -241,7 +176,27 @@ class LogTable extends AbstractTable
 
             'sort' => $sort,
             'order' => $order,
+
+            'level' => $level,
+            'levels' => $levels,
+            'channel' => $channel,
+            'channels' => $channels,
+            'file' => $this->service->getFileName(),
         ];
+    }
+
+    /**
+     * Returns if the log service is empty.
+     *
+     * @return bool true if empty
+     */
+    public function isEmpty(): bool
+    {
+        if (!$entries = $this->service->getEntries()) {
+            return true;
+        }
+
+        return empty($entries[LogService::KEY_LOGS]);
     }
 
     /**
@@ -253,68 +208,48 @@ class LogTable extends AbstractTable
     }
 
     /**
-     * Clear values.
-     */
-    private function clearValues(): void
-    {
-        $this->level = '';
-        $this->levels = [];
-        $this->channel = '';
-        $this->channels = [];
-    }
-
-    /**
-     * Filters the log for the request channel (if any).
+     * Filters the log for the request channel.
      *
-     * @param Request $request  the request to get the channel
-     * @param Log[]   $entities the logs to search in
+     * @param Log[]  $entities the logs to search in
+     * @param string $channel  the selected channel
      *
      * @return Log[] the filtered logs
      */
-    private function filterChannel(Request $request, array $entities): array
+    private function filterChannel(array $entities, string $channel): array
     {
-        if ($this->channel = $request->get(self::PARAM_CHANNEL, '')) {
-            return \array_filter($entities, function (Log $entity) {
-                return  $this->channel === $entity->getChannel();
-            });
-        }
-
-        return $entities;
+        return \array_filter($entities, function (Log $entity) use ($channel) {
+            return $channel === $entity->getChannel();
+        });
     }
 
     /**
-     * Filters the log for the request level (if any).
+     * Filters the log for the request level.
      *
-     * @param Request $request  the request to get the level
-     * @param Log[]   $entities the logs to search in
+     * @param Log[]  $entities the logs to search in
+     * @param string $level    the selected level
      *
      * @return Log[] the filtered logs
      */
-    private function filterLevel(Request $request, array $entities): array
+    private function filterLevel(array $entities, string $level): array
     {
-        if ($this->level = $request->get(self::PARAM_LEVEL, '')) {
-            return \array_filter($entities, function (Log $entity) {
-                return $this->level === $entity->getLevel();
-            });
-        }
-
-        return $entities;
+        return \array_filter($entities, function (Log $entity) use ($level) {
+            return $level === $entity->getLevel();
+        });
     }
 
     /**
      * Filters the logs for the given value.
      *
-     * @param Log[]  $entities the logs to search in
-     * @param string $value    the value to search for
+     * @param Log[]  $entities    the logs to search in
+     * @param string $value       the value to search for
+     * @param bool   $skipLevel   true to skip search in the level
+     * @param bool   $skipChannel true to skip search in the channel
      *
      * @return Log[] the filtered logs
      */
-    private function filterSearch(array $entities, string $value): array
+    private function filterSearch(array $entities, string $value, bool $skipLevel, bool $skipChannel): array
     {
-        $skipLevel = Utils::isString($this->level);
-        $skipChannel = Utils::isString($this->channel);
-
-        $filter = function (Log $log) use ($value, $skipChannel, $skipLevel) {
+        $filter = function (Log $log) use ($value, $skipLevel, $skipChannel) {
             if (!$skipLevel) {
                 $level = $this->formatLevel($log->getLevel());
                 if (Utils::contains($level, $value, true)) {

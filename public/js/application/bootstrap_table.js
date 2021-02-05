@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* globals getStateColor */
+
 /**
  * Returns if the current row is rendered for the connected user
  * 
@@ -13,7 +15,7 @@ function isConnectedUser($table, row) {
     'use strict';
     const currentId = Number.parseInt(row.id, 10);
     const connectedId = Number.parseInt($table.data('user-id'), 10);
-    return currentId === connectedId;
+    return Number.isNaN(currentId) || Number.isNaN(connectedId) || currentId === connectedId;
 }
 
 /**
@@ -61,6 +63,34 @@ function updateUserSwitchAction($table, row, $element, $action) {
 }
 
 /**
+ * Update the search action.
+ * 
+ * @param $table
+ *            {jQuery} the parent table.
+ * @param row
+ *            {object} the row data.
+ * @param $element
+ *            {jQuery} the table row.
+ * @param $action
+ *            {jQuery} the action to update
+ */
+function updateSearchAction($table, row, $element, $action) {
+    'use strict';
+    if ($action.is('.btn-show') && !row.show_granted) {
+        $action.remove();
+    } else if ($action.is('.btn-edit') && !row.edit_granted) {
+        $action.remove();
+    } else if ($action.is('.btn-delete') && !row.delete_granted) {
+        $action.remove();
+    } else {
+        const id =  row.id;
+        const type = row.type.toLowerCase();
+        const href = $action.attr('href').replace('_type_', type).replace('_id_', id);
+        $action.attr('href', href);    
+    }
+}
+
+/**
  * Update the export calculation action.
  * 
  * @param $table
@@ -76,6 +106,27 @@ function updateCalculationPdfAction($table, row, $element, $action) {
     'use strict';
     const href = $action.attr('href').split('?')[0];
     $action.attr('href', href);
+}
+
+/**
+ * Update the task compute action.
+ * 
+ * @param $table
+ *            {jQuery} the parent table.
+ * @param row
+ *            {object} the row data.
+ * @param $element
+ *            {jQuery} the table row.
+ * @param $action
+ *            {jQuery} the action to update
+ */
+function updateTaskComputeAction($table, row, $element, $action) {
+    'use strict';
+    const items = Number.parseInt(row.items, 10);
+    if (Number.isNaN(items) || items === 0) {
+        $action.prev('.dropdown-divider').remove();
+        $action.remove();
+    }
 }
 
 /**
@@ -99,7 +150,7 @@ $.fn.extend({
             return $this.text($selection.text());
         }
         $items.first().addClass('active');
-        return $this.text($this.data('default') || $this.attr('title'));
+        return $this.text($this.data('default'));
     },
     
     initDropdown: function() {
@@ -115,6 +166,7 @@ $.fn.extend({
                 if (newValue !== oldValue) {
                     $this.setDataId(newValue || '', $item).trigger('input');
                 }
+                $this.focus();
             });
             $this.parent().on('shown.bs.dropdown', function () {
                 $menu.find('.active').focus();
@@ -145,13 +197,13 @@ $.fn.extend({
             }); 
             return params;
         },
-        
+
         onRenderCardView: function($table, row, $element) {
-            const color = $element.find('td:first .card-view-title:first').css('border-left-color');
+            const color =  getStateColor(row);
             if (color) {
                 const $cell = $element.find('td:first');
-                const style = 'border-left-color: ' + color + ' !important;';
-                $cell.addClass('text-id').attr('style', style);
+                const style = 'border-left-color: ' + color;
+                $cell.addClass('text-border').attr('style', style);
             }
         },
         
@@ -162,37 +214,42 @@ $.fn.extend({
                 updateUserAction($table, row, $element, $action);
             } else if ($action.is('.btn-calculation-pdf')) {
                 updateCalculationPdfAction($table, row, $element, $action);
+            } else if ($action.is('.btn-search')) {
+                updateSearchAction($table, row, $element, $action);
+            } else if ($action.is('.btn-task-compute')) {
+                updateTaskComputeAction($table, row, $element, $action);
             }
-        }
+        },
     };
     $table.initBootstrapTable(options);
     
     // handle drop-down input buttons
     $inputs.each(function () {
         $(this).initDropdown().on('input', function() {
-            const settings = {
-              query: options.queryParams({})
-            };
-            $table.refresh(settings);
-        });  
+             $table.refresh();
+        });
+     });
+    
+    // handle toggle button
+    $('#toggle').on('click', function () {
+        $table.toggleView();
     });
     
-    // handle clear search
-    $('[name ="clearSearch"]').on('click', function () {
-        const isSearch = $table.isSearchText();
-        const params = options.queryParams({});
-        if (Object.keys(params).length && !isSearch) {
-            // reset
-            const options = {query: {}};
-            for (let key in params) {
-                if (Object.prototype.hasOwnProperty.call(params, key)) {
-                    options.query[key] = '';
-                    $('#' + key).setDataId('');    
-                }                
-            }
-            $table.refresh(options);
+    // handle clear search button
+    $('#clear_search').on('click', function () {
+        const isSearchText = $table.isSearchText();
+        const isQueryParams = !$.isEmptyObject(options.queryParams({}));
+        
+        // clear drop-down
+        $inputs.each(function () {
+            $(this).setDataId(null);
+        });
+        if (isSearchText) {
+            $table.resetSearch();
+        } else if (isQueryParams)  {
+            $table.refresh();
         }
-        $('.search-input').focus();
+        $('input.search-input').focus();
     });
 
     // handle keys enablement
@@ -218,14 +275,16 @@ $.fn.extend({
             selector: '.has-tooltip',
         });
     }
-    
-    // update UI
-    $('input.search-input').attr('type', 'text');
-    $('.fixed-table-toolbar').addClass('d-print-none');
-    $('.fixed-table-pagination').appendTo('.card-footer');
-    $('button[name ="toggle"]').insertBefore('#button_other_actions');
-    $('[name ="clearSearch"]').toggleClass('btn-secondary btn-outline-secondary');
-    $('[name ="clearSearch"] .fa.fa-trash').toggleClass('fa fa-trash fas fa-eraser');
-    $('#toolbar .btn-dropdown').insertAfter('.search-input').removeClass('btn-dropdown');
 
+    // update UI
+    $('.fixed-table-pagination').appendTo('.card-footer');
+    $('.fixed-table-toolbar').appendTo('.col-search');
+    $('.fixed-table-toolbar input.search-input').attr('type', 'text').addClass('form-control-sm').prependTo('.input-group-search');
+    $('.fixed-table-toolbar .search').remove();
+    $('.btn-group-search').appendTo('.fixed-table-toolbar');
+
+    // focus
+    if ($table.getData().length === 0) {
+        $('input.search-input').focus();
+    }
 }(jQuery));

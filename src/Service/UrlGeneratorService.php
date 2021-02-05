@@ -49,6 +49,7 @@ class UrlGeneratorService
         'stateId', // bootstrap-table calculation
         'channel', // bootstrap-table log
         'level',
+        'entity', // bootstrap-table search
 
         'type', // seach page
     ];

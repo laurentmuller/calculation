@@ -65,7 +65,7 @@
 		},
 		{
 			"name": "highcharts",
-			"version": "8.2.2",
+			"version": "9.0.0",
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/{file}",
 			"files": [
@@ -127,7 +127,7 @@
 			"example": "https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.js",
 			"name": "mark.js",
 			"version": "8.11.1",
-			"target": "datatables/js",
+			"target": "jquery-mark",
 			"files": [
 				"jquery.mark.js"
 			]

@@ -8,8 +8,10 @@
 {%- set groupId      = group.id|default(0) -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_CATEGORY -%}
 {%- set attributes   = {
-	'data-link-path': path('table_product', {categoryId: 0}), 
-	'data-link-title': 'category.list.product_title'|trans
+	'data-link-path-products': path('table_product', {categoryId: 0}), 
+	'data-link-title-products': 'category.list.product_title'|trans,
+    'data-link-path-tasks': path('table_task', {categoryId: 0}), 
+    'data-link-title-tasks': 'category.list.task_title'|trans
 } -%}
 
 {% block toolbar_actions -%}

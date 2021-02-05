@@ -1,0 +1,4 @@
+{# output attributes #}
+{% macro attribs(attributes, prefix = '') -%}
+{% for attrname, attrvalue in attributes %} {{ prefix }}{{ attrname }}="{{ attrvalue }}"{% endfor %}
+{%- endmacro %}

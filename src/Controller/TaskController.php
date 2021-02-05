@@ -82,8 +82,9 @@ class TaskController extends AbstractEntityController
     public function clone(Request $request, Task $item): Response
     {
         // clone
-        $state = $this->getApplication()->getDefaultCategory();
-        $clone = $item->clone($state);
+        $category = $this->getApplication()->getDefaultCategory();
+        $name = $this->trans('common.clone_description', ['%description%' => $item->getName()]);
+        $clone = $item->clone($name, $category);
 
         return $this->editEntity($request, $clone);
     }

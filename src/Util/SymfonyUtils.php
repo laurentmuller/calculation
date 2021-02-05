@@ -219,24 +219,28 @@ final class SymfonyUtils
     {
         // get file
         $path = $kernel->getProjectDir() . '/composer.lock';
-        if (!FileUtils::exists($path)) {
-            return [];
+        if (FileUtils::exists($path)) {
+            try {
+                // parse
+                $content = FileUtils::decodeJson($path);
+
+                // runtime packages
+                $result = [
+                    'runtime' => self::processPackages($content['packages'], false),
+                ];
+
+                //development packages
+                if ($kernel->isDebug()) {
+                    $result['debug'] = self::processPackages($content['packages-dev'], true);
+                }
+
+                return $result;
+            } catch (\InvalidArgumentException $e) {
+                // ignore
+            }
         }
 
-        // parse
-        $content = \json_decode(\file_get_contents($path), true);
-
-        // runtime packages
-        $result = [
-            'runtime' => self::processPackages($content['packages'], false),
-        ];
-
-        //development packages
-        if ($kernel->isDebug()) {
-            $result['debug'] = self::processPackages($content['packages-dev'], true);
-        }
-
-        return $result;
+        return [];
     }
 
     /**

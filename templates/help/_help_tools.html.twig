@@ -1,0 +1,67 @@
+{# macros for help templates #}
+
+{% macro output_type(field) -%}
+{%- set type = ('help.types.' ~ field.type)|trans -%}
+{%- set length = field.length|default(false) -%}
+{{ type }}{% if length  %} ({{ length }}){% endif %}
+{%- endmacro %}
+
+{% macro output_required(field) -%}
+{{ (field.required ? 'common.value_true' : 'common.value_false')|trans }}
+{%- endmacro %}
+
+{% macro output_image(path, screenshot = true) -%}
+{%- set image = asset_if('/help/images/' ~ path) -%}
+{% if image %}
+{% if screenshot %}<p class="mb-1">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
+<img src="{{ asset(image) }}" class="img-fluid"> 
+{% endif %} 
+{%- endmacro %}
+
+{% macro output_table_actions(actions, table_class, head_class, service) -%}
+<table class="{{ table_class }}">
+    <thead class="{{ head_class }}">
+        <tr>
+            <th>{{ 'help.fields.action'|trans }}</th>
+            <th>{{ 'help.fields.description'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for action in actions %}
+        {{ _self.output_row_action(action, service) }}
+    {% endfor %}
+    </tbody>
+</table>
+{%- endmacro %}
+
+{% macro output_row_action(action, service) -%}
+{%- set dialog = service.findDialog(action.dialog|default(action.id)) -%}
+{%- set href = dialog ? path('help_dialog', {'id': dialog.id}) : false -%}
+<tr>
+    <td>
+        {%- if href -%}
+            <a href="{{ href }}">{{- _self.output_icon(action.icon|default(false), action.id) -}}</a>
+        {%- else -%}
+            {{- _self.output_icon(action.icon|default(false), action.id) -}}
+        {%- endif -%}
+    </td>
+    <td>{{ action.description }}</td>
+</tr>
+{%- endmacro %}
+
+{% macro output_icon(icon, text) -%}
+{% import 'macros/_icons.html.twig' as icons %}
+{%- if text -%}
+    {%- set values = text|split('|') -%}
+    {%- set text = values[0] -%}
+    {%- set domain = values|length > 1 ?  values[1] : null -%}
+    {{- icons.icon(icon, text, domain) -}}
+{%- else -%}
+    {{- icons.icon(icon, text) -}}
+{%- endif -%}
+{%- endmacro %}
+
+{% macro home() -%}
+{% import 'macros/_icons.html.twig' as icons %}
+{{ icons.link(path('help'), null, null, 'home', 'help.back_menu') }}
+{%- endmacro %}

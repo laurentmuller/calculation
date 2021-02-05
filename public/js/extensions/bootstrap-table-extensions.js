@@ -25,9 +25,24 @@ function toHtml($element) {
  */
 function isCalcultionMarginBelow(value, row) {
     'use strict';
-    const overallMargin = parseFloat(row.overallMargin) / 100.0;
-    const minMargin = parseFloat($('#table-edit').data('min-margin'));
-    return !isNaN(overallMargin) && !isNaN(minMargin) && overallMargin < minMargin;
+    const overallMargin = Number.parseFloat(row.overallMargin) / 100.0;
+    const minMargin = Number.parseFloat($('#table-edit').data('min-margin'));
+    return !Number.isNaN(overallMargin) && !Number.isNaN(minMargin) && overallMargin < minMargin;
+}
+/**
+ * Gets the state style color of the given row.
+ * 
+ * @param {object}
+ *            row - the record data.
+ * @returns {string} the state style color, if any; null otherwise.
+ */
+function getStateColor(row) {
+    'use strict';
+    const color = row.color || row.stateColor || row['state.color'] || null;
+    if (color) {
+        return color + ' !important';
+    }
+    return null;
 }
 
 /**
@@ -89,16 +104,20 @@ function formatCalculationMargin(value, row) { // jshint ignore:line
  *            value - the field value.
  * @param {object}
  *            row - the record data.
- * 
- * @returns {string} the rendered cell.
+ * @param {number}
+ *            index - the row index.
+ * @param {string}
+ *            field - the row field.
+ *            
+ * @returns {string} the rendered cell, if applicable; the value otherwise.
  */
-function formatDataLink(value, row) { // jshint ignore:line
+function formatDataLink(value, row, index, field) { // jshint ignore:line
     'use strict';
     const count = Number.parseInt(value, 10);
     if (!Number.isNaN(count) && count > 0) {
         const $table = $('#table-edit');
-        const title = $table.data('link-title');
-        const path = $table.data('link-path').replace('0', row.id);
+        const title = $table.data('link-title-' + field);
+        const path = $table.data('link-path-' + field).replace('0', row.id);
         const $content = $('<a/>', {
             'href': path,
             'title': title,
@@ -147,6 +166,47 @@ function formatItems(value) { // jshint ignore:line
     }
     return value;
 }
+/**
+ * Formatter for the search entity item column.
+ * 
+ * @param {string}
+ *            value - the entity name.
+ * 
+ * @returns {string} the rendered cell.
+ */
+function formatEntityName(value, row) { // jshint ignore:line
+    'use strict';
+
+    let icon;
+    switch (row.type) {
+    case 'Calculation':
+        icon = 'calculator fas';
+        break;
+    case 'CalculationState':
+        icon = 'flag far';
+        break;
+    case 'Task':
+        icon = 'tasks fas';
+        break;
+    case 'Category':
+        icon = 'folder far';
+        break;
+    case 'Group':
+        icon = 'code-branch fas';
+        break;
+    case 'Product':
+        icon = 'file-alt far';
+        break;
+    case 'Customer':
+        icon = 'address-card far';
+        break;
+    default:
+        icon = 'file far';
+        break;
+    }
+
+    return '<i class="fa-fw fa-' + icon + '" aria-hidden="true"></i>&nbsp;' + value;
+}
 
 /**
  * Style for the log created date column.
@@ -188,7 +248,7 @@ function styleLogCreatedAt(value, row) { // jshint ignore:line
 }
 
 /**
- * Style for the calculation state column.
+ * Style for a state column (calculations or status).
  * 
  * @param {number}
  *            value - the field value.
@@ -199,11 +259,11 @@ function styleLogCreatedAt(value, row) { // jshint ignore:line
  */
 function styleStateColor(value, row) { // jshint ignore:line
     'use strict';
-    const color =  row.color || row.stateColor || row['state.color'] ||null;
+    const color =  getStateColor(row);
     if (color) {
         return {
             css: {
-              'border-left-color': color + ' !important'
+              'border-left-color': color
             }
         };
     }
@@ -280,7 +340,9 @@ $.fn.extend({
         const $row = $(this);
         const options = $table.getOptions();
         $table.find(options.rowSelector).removeClass(options.rowClass);
-        $row.addClass(options.rowClass).scrollInViewport();
+        if (!$row.hasClass('no-records-found')) {
+            $row.addClass(options.rowClass).scrollInViewport();    
+        }        
         return true;
     },
 
@@ -338,10 +400,7 @@ $.fn.extend({
             
             // update UI and save parameters
             onToggle: function (cardView) {
-                const options = $this.getOptions();
-                const $button = $('.bootstrap-table button[name="toggle"]');
-                const text = cardView ? options.formatToggleOff() : options.formatToggleOn();
-                $button.attr('aria-label', text).attr('title', text);
+                $this.updateCardViewButton(cardView);
                 $this.saveParameters();
             },
             
@@ -355,8 +414,10 @@ $.fn.extend({
         const settings = $.extend(true, defaults, options);
         
         // initialize
-        $this.bootstrapTable(settings).enableKeys().highlight();
-        
+        $this.bootstrapTable(settings);
+        $this.updateCardViewButton($this.isCardView());
+        $this.enableKeys().highlight();
+                
         // select row on right click
         $this.find('tbody').on('mousedown', 'tr', function (e) {
             if (e.button === 2) {
@@ -388,22 +449,21 @@ $.fn.extend({
         const options = $this.getOptions();
         let params = {
             'caller': options.caller,
-            'search': options.searchText,
             'sort': options.sortName,
             'order': options.sortOrder,
             'offset': (options.pageNumber - 1) * options.pageSize,
             'limit': options.pageSize,
             'card': options.cardView
         };
+
+        // add search
+        if (options.searchText.length) {
+            params.search = options.searchText; 
+        }
         
         // query parameters function?
         if ($.isFunction(options.queryParams)) {
             params = $.extend(params, options.queryParams(params));
-        }
-        
-        // remove empty search
-        if (params.search === '') {
-            delete params.search;
         }
         
         return params;
@@ -416,7 +476,7 @@ $.fn.extend({
      */
     getSearchText: function() {
         'use strict';
-        return $(this).getOptions().searchText;
+        return $(this).getOptions().searchText || '';
     },
     
     /**
@@ -426,8 +486,17 @@ $.fn.extend({
      */
     isSearchText: function() {
         'use strict';
-        const text = $(this).getSearchText();
-        return text && text.length > 0;
+        return $(this).getSearchText().length > 0;
+    },
+    
+    /**
+     * Return if the card view mode is displayed.
+     * 
+     * @return {boolean} true if the card view mode is displayed.
+     */
+    isCardView: function() {
+        'use strict';
+        return $(this).getOptions().cardView;
     },
     
     /**
@@ -537,13 +606,30 @@ $.fn.extend({
                 options.onRenderCardView($this, row, $row);                
             }
         });
-        $this.find('.undefined').removeClass('undefined');
-        $this.find('.card-view-title').addClass('text-muted');
-        // $this.find('.card-view-title').remove();
+        $this.find('tbody .undefined').removeClass('undefined');
+        $this.find('tbody .card-view-title').addClass('text-muted');
                 
         return $this;
     },
 
+    /**
+     * Update the card view toggle button
+     * 
+     * @param {boolean}
+     *            cardView - the cardView state of the table.
+     * @return {jQuery} this instance for chaining.
+     */
+    updateCardViewButton: function(cardView) {
+        'use strict';
+        const $this = $(this);
+        const options = $this.getOptions();
+        const $button = $(options.toggleSelector);
+        const text = cardView ? options.formatToggleOff() : options.formatToggleOn();
+        const icon = cardView ? 'fas fa-toggle-on' : 'fas fa-toggle-off';
+        $button.attr('aria-label', text).attr('title', text).find('i').attr('class', icon);
+        return $this;
+    },
+    
     /**
      * Refresh/reload the remote server data.
      * 
@@ -554,11 +640,31 @@ $.fn.extend({
      */
     refresh: function (options) {
         'use strict';
-        const $this = $(this);
-        $this.bootstrapTable('refresh', options || {});
-        return $this;
+        return $(this).bootstrapTable('refresh', options || {});
     },
 
+    /**
+     * Reset the search text.
+     * 
+     * @param {string}
+     *            text - the optional search text.
+     * @return {jQuery} this instance for chaining.
+     */
+    resetSearch: function (text) {
+        'use strict';
+        return $(this).bootstrapTable('resetSearch', text || '');
+    },
+    
+    /**
+     * Toggle the card/table view.
+     * 
+     * @return {jQuery} this instance for chaining.
+     */
+    toggleView: function() {
+        'use strict';
+        return $(this).bootstrapTable('toggleView');
+    },
+    
     /**
      * Highlight matching text.
      * 
@@ -573,8 +679,9 @@ $.fn.extend({
                 className: 'text-success',
                 ignorePunctuation: ["'", ",", "."]
             };
-            const $rows = $this.find('tbody tr');
-            $rows.mark($this.getSearchText(), options);
+            const text = $this.getSearchText();
+            const $rows = $this.find('tbody td:not(.actions)');
+            $rows.mark(text, options);
         }
         return $this;
     },

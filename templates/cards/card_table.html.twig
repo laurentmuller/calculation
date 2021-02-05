@@ -1,7 +1,8 @@
 {% extends 'cards/card_base.html.twig' %}
 {# imports #}
-{% import 'macros/_datatables.html.twig' as helper %}
 {% import 'macros/_icons.html.twig' as icons %}
+{% import 'macros/_attributes.html.twig' as tools %}
+{% import 'macros/_datatables.html.twig' as helper %}
 
 {% macro button(path, text, class, title, icon, separator = false) %}
 {%- if path -%}
@@ -13,7 +14,7 @@
 
 {% macro item_data(path, text, icon, attributes = {}) %}
 {%- if path -%}
-    <a href="#" data-path="{{ path }}" class="dropdown-item"{{ helper.attribs(attributes) }}>
+    <a href="#" data-path="{{ path }}" class="dropdown-item"{{ tools.attribs(attributes) }}>
         {{- icons.icon(icon ~ ' fa-fw', text) -}}    	
     </a>
 {%- endif -%}
@@ -155,7 +156,7 @@
       	'data-orderdir': orderdir,
         'data-debug': app.debug
 }) -%}
-<table{{ helper.attribs(attributes) }}>
+<table{{ tools.attribs(attributes) }}>
     {{ helper.headers(columns) }}
     <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
         {% for row in results.data -%}
@@ -176,10 +177,10 @@
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() }}
+{{ asset_js('js/vendor/jquery-mark/jquery.mark.js') }}
 {{ asset_js('js/vendor/datatables/js/jquery.dataTables.js') }}
 {{ asset_js('js/vendor/datatables/js/dataTables.bootstrap4.js') }}
 {{ asset_js('js/vendor/datatables/js/dataTables.keyTable.js') }}
-{{ asset_js('js/vendor/datatables/js/jquery.mark.js') }}
 {{ asset_js('js/vendor/datatables/js/datatables.mark.js') }}
 {{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
 {{ asset_js('js/plugins/plugin-rowlink.js') }}

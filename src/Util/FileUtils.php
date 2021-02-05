@@ -23,20 +23,58 @@ use Symfony\Component\Filesystem\Filesystem;
 class FileUtils
 {
     /**
+     * Decode the given file as JSON.
+     *
+     * @param string $file    the path to the file
+     * @param bool   $assoc   when true, returned objects will be converted into associative arrays
+     * @param int    $depth   user specified recursion depth
+     * @param int    $options bitmask of JSON_BIGINT_AS_STRING (enabled by default)
+     *
+     * @return mixed the mixed the value encoded in json in appropriate PHP type
+     *
+     * @throws \InvalidArgumentException if the file can not be decoded
+     */
+    public static function decodeJson(string $file, bool $assoc = true, int $depth = null, int $options = null)
+    {
+        //file?
+        if (!self::isFile($file)) {
+            throw new \InvalidArgumentException("The file '$file' can not be found.");
+        }
+
+        // get content
+        if (false === $json = \file_get_contents($file)) {
+            throw new \InvalidArgumentException("Unable to get content of the file '$file'.");
+        }
+
+        // decode
+        $content = \json_decode($json, $assoc);
+        if (JSON_ERROR_NONE !== \json_last_error()) {
+            $message = \json_last_error_msg();
+            throw new \InvalidArgumentException("Unable to decode the content of the file '$file' ($message).");
+        }
+
+        return $content;
+    }
+
+    /**
      * Atomically dumps content into a file.
      *
-     * @param string|\SplFileInfo|resource $file    the file to write to
-     * @param string                       $content the data to write into the file
+     * @param string|\SplFileInfo $file      the file to write to
+     * @param string|resource     $content   the data to write into the file
+     * @param bool                $useNative true to use the native <code>file_put_contents</code> function, false to use the file system
      *
      * @return bool true on success, false on failure
      */
-    public static function dumpFile($file, string $content): bool
+    public static function dumpFile($file, $content, bool $useNative = false): bool
     {
         if ($file instanceof \SplFileInfo) {
             $file = $file->getRealPath();
         }
 
         try {
+            if ($useNative) {
+                return false !== \file_put_contents($file, $content);
+            }
             self::getFilesystem()->dumpFile($file, $content);
 
             return true;

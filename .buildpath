@@ -687,6 +687,11 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/taptima/phpstan-custom/src/Taptima/PHPStan">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/tijsverkoyen/css-to-inline-styles/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>

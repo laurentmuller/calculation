@@ -13,13 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DataTable\SearchDataTable;
-use App\Entity\Calculation;
-use App\Entity\CalculationState;
-use App\Entity\Category;
-use App\Entity\Customer;
-use App\Entity\Product;
 use App\Interfaces\EntityVoterInterface;
-use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,7 +43,7 @@ class SearchController extends AbstractController
         }
 
         // entities
-        $entities = $this->getEntities();
+        $entities = $table->getService()->getEntities();
 
         // authorizations
         $show_granted = $table->isActionGranted(EntityVoterInterface::ATTRIBUTE_SHOW);
@@ -67,37 +61,5 @@ class SearchController extends AbstractController
         ];
 
         return $this->render('home/search.html.twig', $parameters);
-    }
-
-    /**
-     * Gets the entities class and name.
-     *
-     * @return string[]
-     */
-    private function getEntities(): array
-    {
-        $entities = [
-            $this->getEntityName(Calculation::class) => 'calculation.name',
-            $this->getEntityName(Product::class) => 'product.name',
-            $this->getEntityName(Category::class) => 'category.name',
-            $this->getEntityName(CalculationState::class) => 'calculationstate.name',
-        ];
-        if ($this->isDebug()) {
-            $entities[$this->getEntityName(Customer::class)] = 'customer.name';
-        }
-
-        return $entities;
-    }
-
-    /**
-     * Gets the entity name for the given class.
-     *
-     * @param string $class the entity class
-     *
-     * @return string the entity name
-     */
-    private function getEntityName(string $class): string
-    {
-        return \strtolower(Utils::getShortName($class));
     }
 }

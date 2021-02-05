@@ -9,7 +9,7 @@
 		"name": "code",
 		"title": "calculationstate.fields.code",
 		"default": true,
-		"class": "text-code text-nowrap",
+		"class": "text-code text-border text-nowrap",
 		"callback": "renderStateColor"
 	},
 	{

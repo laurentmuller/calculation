@@ -97,7 +97,7 @@ class LogController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // empty file
-                FileUtils::dumpFile($file, '');
+                FileUtils::dumpFile($file, '', true);
             } catch (\Exception $e) {
                 $message = $this->trans('log.delete.error');
                 $logger->error($message, ['file' => $file]);

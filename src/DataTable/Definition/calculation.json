@@ -3,7 +3,7 @@
 		"name": "id",
 		"title": "calculation.fields.id",
 		"direction": "desc",
-		"class": "text-id",
+		"class": "text-id text-border",
 		"formatter": "formatId",
 		"callback": "renderStateColor"
 	},

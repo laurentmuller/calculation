@@ -1,11 +1,7 @@
-{# output attributes #}
-{% macro attribs(attributes, prefix = '') -%}
-{% for attrname, attrvalue in attributes %} {{ prefix }}{{ attrname }}="{{ attrvalue }}"{% endfor %}
-{%- endmacro %}
-
 {# output a data colum header #}
 {% macro header(column) %}
-<th class="{{ column.headerClass }}"{{ _self.attribs(column.attributes, 'data-') }}>
+{% import 'macros/_attributes.html.twig' as tools %}
+<th class="{{ column.headerClass }}"{{ tools.attribs(column.attributes, 'data-') }}>
     {{- column.title ? column.title|trans : column.name -}}
 </th>
 {% endmacro %}

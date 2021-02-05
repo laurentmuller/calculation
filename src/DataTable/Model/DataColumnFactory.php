@@ -82,22 +82,8 @@ class DataColumnFactory
      */
     public static function fromJson(AbstractDataTable $parent, string $path): array
     {
-        //file?
-        if (!FileUtils::exists($path) || !FileUtils::isFile($path)) {
-            throw new \InvalidArgumentException("The file '$path' can not be found.");
-        }
-
-        // get content
-        if (false === $json = \file_get_contents($path)) {
-            throw new \InvalidArgumentException("Unable to get content of the file '$path'.");
-        }
-
         // decode
-        $definitions = \json_decode($json, true);
-        if (JSON_ERROR_NONE !== \json_last_error()) {
-            $message = \json_last_error_msg();
-            throw new \InvalidArgumentException("Unable to decode the content of the file '$path' ($message).");
-        }
+        $definitions = FileUtils::decodeJson($path);
 
         // definitions?
         if (empty($definitions)) {
@@ -152,13 +138,13 @@ class DataColumnFactory
     }
 
     /**
-     * Creates a new instance with the identifier 'text-id' class.
+     * Creates a new instance with the identifier 'text-id' and 'text-border' class.
      *
      * @param string $name the field name
      */
     public static function identifier(string $name): DataColumn
     {
-        return self::instance($name, 'text-id');
+        return self::instance($name, 'text-id text-border');
     }
 
     /**

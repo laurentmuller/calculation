@@ -21,7 +21,7 @@
 {% import 'macros/_properties.html.twig' as properties %}
 {% set margin_class = app.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
 <tr>
-    <td class="text-id" style="{{ properties.stateCss(calculation.stateColor) }}">{{ calculation.id|identifier }}</td>
+    <td class="text-id text-border" style="{{ properties.stateCss(calculation.stateColor) }}">{{ calculation.id|identifier }}</td>
     <td class="text-state">{{ calculation.state.code }}</td>
     <td{% if class %} class="{{ class }}"{% endif %}>{{ calculation.customer }}</td>
     <td{% if class %} class="{{ class }}"{% endif %}>{{ calculation.description }}</td>

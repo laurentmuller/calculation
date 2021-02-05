@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{# imports #}
+{% import 'help/_help_tools.html.twig' as tools %}
+
+{# parameters #}
+{%- set table_class = 'table table-list table-sm' -%}
+{%- set head_class  = 'thead-light' -%}
+
+{# body #}
+{% block body -%}
+<div class="row no-gutters">
+    <div class="col col-md-10 offset-md-1 mb-2">
+        <div class="row">
+            <div class="col-md-8"><h4>{% block help_title -%}{%- endblock %}</h4></div>
+            <div class="col-md-4 text-md-right">{% block help_home -%}{{ tools.home }}{%- endblock %}</div>
+        </div>
+        {% block help_body -%}{%- endblock %}
+    </div>
+</div>
+{%- endblock %}

@@ -23,7 +23,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  *
  * @author Laurent Muller
  */
-class Column
+class Column implements \JsonSerializable
 {
     /**
      * The action column name.
@@ -90,7 +90,7 @@ class Column
     /**
      * The property path for array object.
      */
-    private string  $property;
+    private string $property;
 
     /**
      * The searchable behavior.
@@ -134,22 +134,8 @@ class Column
      */
     public static function fromJson(AbstractTable $parent, string $path): array
     {
-        //file?
-        if (!FileUtils::isFile($path)) {
-            throw new \InvalidArgumentException("The file '$path' can not be found.");
-        }
-
-        // get content
-        if (false === $json = \file_get_contents($path)) {
-            throw new \InvalidArgumentException("Unable to get content of the file '$path'.");
-        }
-
         // decode
-        $definitions = \json_decode($json, true);
-        if (JSON_ERROR_NONE !== \json_last_error()) {
-            $message = \json_last_error_msg();
-            throw new \InvalidArgumentException("Unable to decode the content of the file '$path' ($message).");
-        }
+        $definitions = FileUtils::decodeJson($path);
 
         // definitions?
         if (empty($definitions)) {
@@ -246,6 +232,35 @@ class Column
     public function isVisible(): bool
     {
         return $this->visible;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $result = [
+            'field' => $this->field,
+            'visible' => $this->visible,
+            'sortable' => $this->sortable,
+            'sortOrder' => $this->order,
+            'cardBold' => $this->cardBold,
+            'cardVisible' => $this->cardVisible,
+        ];
+        if (null !== $this->class) {
+            $result['class'] = $this->class;
+        }
+        if (null !== $this->title) {
+            $result['title'] = $this->title;
+        }
+        if (null !== $this->cellFormatter) {
+            $result['cellFormatter'] = $this->cellFormatter;
+        }
+        if (null !== $this->styleFormatter) {
+            $result['styleFormatter'] = $this->styleFormatter;
+        }
+
+        return $result;
     }
 
     /**

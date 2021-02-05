@@ -111,6 +111,14 @@ class SearchDataTable extends AbstractDataTable
     }
 
     /**
+     * Gets the search service.
+     */
+    public function getService(): SearchService
+    {
+        return $this->service;
+    }
+
+    /**
      * Returns if the given action is granted for one or more entities.
      *
      * @param string $action the action to be tested
@@ -311,8 +319,6 @@ class SearchDataTable extends AbstractDataTable
             $item[self::COLUMN_EDIT] = $this->isGrantedEdit($type);
             $item[self::COLUMN_DELETE] = $this->isGrantedDelete($type);
         }
-
-        // sort
     }
 
     /**

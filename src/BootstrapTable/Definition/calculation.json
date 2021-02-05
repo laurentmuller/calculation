@@ -3,7 +3,7 @@
 		"field": "id",
 		"title": "calculation.fields.id",
 		"order": "desc",
-		"class": "text-id",
+		"class": "text-id text-border",
 		"fieldFormatter": "formatId",
 		"styleFormatter": "styleStateColor",
 		"cardBold": true

@@ -1,0 +1,66 @@
+[
+	{
+		"field": "id",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	},
+	{
+		"field": "entityName",
+		"title": "search.fields.entity",
+		"searchable": false,
+		"class": "text-cell w-20",
+		"cellFormatter": "formatEntityName"
+	},
+	{
+		"field": "fieldName",
+		"title": "search.fields.field",
+		"searchable": false,
+		"class": "text-cell w-20"
+	},
+	{
+		"field": "content",
+		"title": "search.fields.content",
+		"searchable": false,
+		"class": "text-cell w-auto",
+		"default": true,
+		"cardBold": true
+	},
+	{
+		"field": "type",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	},
+	{
+		"field": "field",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	},
+	{
+		"field": "show_granted",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	},
+	{
+		"field": "edit_granted",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	},
+	{
+		"field": "delete_granted",
+		"visible": false,
+		"sortable": false,
+		"searchable": false
+	},
+	{
+		"field": "action",
+		"sortable": false,
+		"searchable": false,
+		"class": "actions rowlink-skip d-print-none",
+		"cellFormatter": "formatActions"
+	}
+]

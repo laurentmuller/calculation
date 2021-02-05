@@ -1,0 +1,108 @@
+{% extends 'help/help_base.html.twig' %}
+{# imports #}
+{% import 'help/_help_tools.html.twig' as tools %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{% macro output_dialog(item) -%}
+{% set href = path('help_dialog', {'id': item.id}) %}
+<dt class="font-weight-normal"><a href="{{ href }}">{{ item.id|trans }}</a></dt>
+<dd>{{ item.description }}</dd>
+{%- endmacro %}
+
+{% macro output_entity(item) -%}
+{%- set entity_name = item.id ~ '.name' -%}
+{% set href = path('help_entity', {'id': item.id}) %}
+<dt class="font-weight-normal"><a href="{{ href }}">{{ entity_name|trans }}</a></dt>
+<dd>{{ item.description }}</dd>
+{%- endmacro %}
+
+{% macro output_menus(menus, help, indent = 0) -%}
+<dl{% if indent > 0 %} " style="margin-left: {{ indent }}rem;"{% endif %}>
+    {%- for menu in menus -%}{{- _self.output_menu(menu, help, indent) -}}{%- endfor -%}
+</dl>
+{%- endmacro %}
+
+{% macro output_menu(menu, help, indent = 0) -%}
+{%- set href = false -%}
+{%- set description = menu.description %}
+{%- set dialog = menu.dialog|default(false) -%}
+{%- if dialog -%}    
+    {%- set target = help.dialogs|filter(d => d.id == dialog) -%}
+    {%- if target|length -%}
+        {%- set target = target|first -%}
+        {%- set href = path('help_dialog', {'id': target.id}) -%}
+        {%- set description = target.description -%}
+    {%- endif -%}    
+{%- endif -%}
+
+{%- set menus = menu.menus|default(false) -%}
+<dt class="font-weight-normal">
+{%- if href -%}
+    {{- tools.output_icon(menu.icon|default(false), null) -}}
+	<a class="ml-1" href="{{ href }}">{{ menu.id|trans }}</a>
+{%- else -%}
+    {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
+{%- endif -%}
+</dt>
+<dd>{{ description }}
+    {%- if menus %}{{ _self.output_menus(menus, help, indent + 2) }}{% endif -%}
+</dd>
+{%- endmacro %}
+
+{# parameters #}
+{%- set title    = 'help.title' -%}
+{%- set dialogs  = help.dialogs|default(false) -%}
+{%- set entities = help.entities|default(false) -%}
+{%- set menus    = help.mainMenu.menus|default(false) -%}
+
+{%- block container_class 'container-fluid' -%}
+
+{% block help_title -%}
+{{- tools.output_icon('question-circle', 'help.title') -}}
+{%- endblock %}
+
+{# body #}
+{% block help_body -%}
+<p class="mb-1">{{ 'help.description'|trans({'%appname%': app_name_version})|raw }}</p>
+<hr class="mt-1">
+<div class="row">
+{# main menu #}
+    {% if menus %}
+    <div class="col-xl-4 col-lg-6">
+        <h5>{{ 'help.main_menu'|trans }}</h5>
+        <hr class="my-1">
+        {% set description = help['mainMenu']['description']|default(false) %}
+        {% if description %}<p class="small mb-1">{{ description }}</p>{% endif %}
+        {{ _self.output_menus(menus, help) }}
+    </div>
+{% endif %}
+{# dialogs #}
+{% if dialogs %}
+    <div class="col-xl-4 col-lg-6">
+        <h5>{{ 'help.dialog_menu'|trans }}</h5>
+        <hr class="my-1">
+        <dl>
+        {% for dialog in dialogs %}
+            {{ _self.output_dialog(dialog) }}
+        {% endfor %}
+        </dl>
+    </div>
+{% endif %}
+{# entities #}
+{% if entities %}
+    <div class="col-xl-4 col-lg-6">
+        <h5>{{ 'help.entity_menu'|trans }}</h5>
+        <hr class="my-1">
+        <dl>
+        {% for entity in entities %}
+            {{ _self.output_entity(entity) }}
+        {% endfor %}
+        </dl>
+    </div>
+{% endif %}
+</div>
+{%- endblock %}
+
+{% block help_home -%}
+{{- icons.linkExternal(path('help_pdf'), 'common.button_pdf', '', '', 'help.pdf_menu') -}}
+{%- endblock %}

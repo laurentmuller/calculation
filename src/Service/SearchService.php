@@ -16,7 +16,9 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Customer;
+use App\Entity\Group;
 use App\Entity\Product;
+use App\Entity\Task;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -132,6 +134,28 @@ class SearchService
 
         // count
         return \count($result);
+    }
+
+    /**
+     * Gets the entities class and name.
+     *
+     * @return string[]
+     */
+    public function getEntities(): array
+    {
+        $entities = [
+            $this->getEntityName(Calculation::class) => 'calculation.name',
+            $this->getEntityName(Product::class) => 'product.name',
+            $this->getEntityName(Task::class) => 'task.name',
+            $this->getEntityName(Category::class) => 'category.name',
+            $this->getEntityName(Group::class) => 'group.name',
+            $this->getEntityName(CalculationState::class) => 'calculationstate.name',
+        ];
+        if ($this->debug) {
+            $entities[$this->getEntityName(Customer::class)] = 'customer.name';
+        }
+
+        return $entities;
     }
 
     /**
@@ -322,7 +346,9 @@ class SearchService
             $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal'])
                 ->createEntityQueries(CalculationState::class, ['code', 'description'])
                 ->createEntityQueries(Product::class, ['description', 'supplier', 'price'])
-                ->createEntityQueries(Category::class, ['code', 'description']);
+                ->createEntityQueries(Task::class, ['name'])
+                ->createEntityQueries(Category::class, ['code', 'description'])
+                ->createEntityQueries(Group::class, ['code', 'description']);
 
             // custom calculation queries
             $this->createCalculationDateQuery()
@@ -365,6 +391,18 @@ class SearchService
         }
 
         return $this->mapping;
+    }
+
+    /**
+     * Gets the entity name for the given class.
+     *
+     * @param string $class the entity class
+     *
+     * @return string the entity name
+     */
+    private function getEntityName(string $class): string
+    {
+        return \strtolower(Utils::getShortName($class));
     }
 
     /**

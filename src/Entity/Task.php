@@ -93,14 +93,18 @@ class Task extends AbstractEntity implements \Countable
     /**
      * Clone this task.
      *
+     * @param string   $name     the new name
      * @param Category $category the default category
      */
-    public function clone(?Category $category): self
+    public function clone(?string $name = null, ?Category $category = null): self
     {
         /** @var Task $copy */
         $copy = clone $this;
 
         // copy default values
+        if ($name) {
+            $copy->setName($name);
+        }
         if ($category) {
             $copy->setCategory($category);
         }

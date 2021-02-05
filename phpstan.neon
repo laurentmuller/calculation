@@ -30,3 +30,4 @@ parameters:
     # slam/phpstan-extensions
     - '#function has no typehint#'
     - '#proc_close#'                        # Command\CompileAssetsCommand.php
+    - '#file_put_contents#'

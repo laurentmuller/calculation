@@ -7,8 +7,8 @@
 {%- set save_url     = url('table_group_save') -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_GROUP -%}
 {%- set attributes   = {
-    'data-link-path': path('table_category', {groupId: 0}), 
-    'data-link-title': 'group.list.category_title'|trans
+    'data-link-path-categories': path('table_category', {groupId: 0}), 
+    'data-link-title-categories': 'group.list.category_title'|trans
 } -%}
 {% block global_actions -%}
 {{ _self.item_external(path('group_pdf'), 'group.list.pdf_title', 'file-pdf far') }}

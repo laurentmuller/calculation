@@ -9,21 +9,21 @@
 		"field": "minimum",
 		"title": "globalmargin.fields.minimum",
 		"default": true,
-		"searchable": false,
+		"searchable": true,
 		"fieldFormatter": "formatAmount",
 		"class": "text-currency w-35"
 	},
 	{
 		"field": "maximum",
 		"title": "globalmargin.fields.maximum",
-		"searchable": false,
+		"searchable": true,
 		"fieldFormatter": "formatAmount",
 		"class": "text-currency w-35"
 	},
 	{
 		"field": "margin",
 		"title": "globalmargin.fields.margin",
-		"searchable": false,
+		"searchable": true,
 		"fieldFormatter": "formatPercent",
 		"class": "text-currency w-30"
 	},

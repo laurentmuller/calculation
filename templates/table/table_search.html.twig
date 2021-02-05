@@ -1,0 +1,40 @@
+{% extends 'table/table_base.html.twig' %}
+
+{# parameters #}
+{%- set title        = 'search.title' -%}
+{%- set title_icon   = 'search' -%}
+{%- set defer_url    = url('table_search') -%}
+{%- set save_url     = url('table_search_save') -%}
+{%- set entity       = entity|default('') -%}
+{%- set path         = path('homepage') -%}
+{%- set allow_global = false -%}
+
+{% block card_header %}
+<div class="row">
+    <div class="col-md-6">{{ parent() }}</div>
+    <div class="col-md-6 text-md-right"><small>{{ 'search.minimum'|trans }}</small></div>
+</div>
+{% endblock %}
+
+{% block toolbar_actions -%}
+<div class="input-group-append btn-dropdown">
+    <button id="entity" data-value="{{ entity }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'datatable.all'|trans }}" title="{{ 'search.entity_help'|trans }}">
+        {{- entity ? entity : 'datatable.all'|trans -}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="entity">
+        {{ _self.output_dropdown('entity', '', entity, 'datatable.all'|trans) }}
+        {% for key, value in entities %}
+        {{ _self.output_dropdown('entity', key, entity, value|trans) }}
+        {% endfor %}
+    </div>
+</div>
+{%- endblock %}
+
+{% block edit_actions -%}
+{%- set show_class = 'btn-search btn-show' ~ (app.actionShow ? ' btn-default' : '') -%}
+{%- set edit_class = 'btn-search btn-edit' ~ (app.actionEdit ? ' btn-default' : '') -%}
+{{ _self.item_path(path ~ '_type_/show/_id_', 'common.button_show', 'tv', show_class) }}
+{{ _self.item_path(path ~ '_type_/edit/_id_', 'common.button_edit', 'pencil-alt', edit_class) }}
+{{ _self.item_path(path ~ '_type_/delete/_id_', 'common.button_delete', 'times', 'btn-search btn-delete') }}
+{%- endblock %}
+

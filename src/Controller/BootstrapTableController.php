@@ -24,6 +24,7 @@ use App\BootstrapTable\GlobalMarginTable;
 use App\BootstrapTable\GroupTable;
 use App\BootstrapTable\LogTable;
 use App\BootstrapTable\ProductTable;
+use App\BootstrapTable\SearchTable;
 use App\BootstrapTable\TaskTable;
 use App\BootstrapTable\UserTable;
 use App\Interfaces\EntityVoterInterface;
@@ -45,7 +46,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author Laurent Muller
  *
  * @Route("/table")
- * @IsGranted("ROLE_ADMIN")
+ * @IsGranted("ROLE_USER")
  */
 class BootstrapTableController extends AbstractController
 {
@@ -58,7 +59,7 @@ class BootstrapTableController extends AbstractController
      */
     public function below(Request $request, CalculationBelowTable $table): Response
     {
-        $additionalParameters = function () {
+        $parameters = function () {
             $margin = $this->getApplication()->getMinMargin();
 
             return [
@@ -67,7 +68,7 @@ class BootstrapTableController extends AbstractController
             ];
         };
 
-        return $this->handleTableRequest($request, $table, 'table/table_calculation_below.html.twig', $additionalParameters);
+        return $this->handleTableRequest($request, $table, 'table/table_calculation_below.html.twig', $parameters);
     }
 
     /**
@@ -87,7 +88,7 @@ class BootstrapTableController extends AbstractController
      */
     public function calculation(Request $request, CalculationTable $table, CalculationStateRepository $repository): Response
     {
-        $additionalParameters = function () use ($table, $repository) {
+        $parameters = function () use ($table, $repository) {
             $margin = $this->getApplication()->getMinMargin();
 
             return [
@@ -98,7 +99,7 @@ class BootstrapTableController extends AbstractController
             ];
         };
 
-        return $this->handleTableRequest($request, $table, 'table/table_calculation.html.twig', $additionalParameters);
+        return $this->handleTableRequest($request, $table, 'table/table_calculation.html.twig', $parameters);
     }
 
     /**
@@ -138,14 +139,14 @@ class BootstrapTableController extends AbstractController
      */
     public function category(Request $request, CategoryTable $table, GroupRepository $repository): Response
     {
-        $additionalParameters = function () use ($table, $repository) {
+        $parameters = function () use ($table, $repository) {
             return [
                 'group' => $table->getGroup($repository),
                 'groups' => $repository->getListCount(),
             ];
         };
 
-        return $this->handleTableRequest($request, $table, 'table/table_category.html.twig', $additionalParameters);
+        return $this->handleTableRequest($request, $table, 'table/table_category.html.twig', $parameters);
     }
 
     /**
@@ -277,24 +278,14 @@ class BootstrapTableController extends AbstractController
      */
     public function log(Request $request, LogTable $table): Response
     {
-        // entries?
-        if (!$table->getService()->getEntries()) {
+        // empty?
+        if ($table->isEmpty()) {
             $this->infoTrans('log.list.empty');
 
             return $this->redirectToHomePage();
         }
 
-        $additionalParameters = function () use ($table) {
-            return [
-                'file' => $table->getFileName(),
-                'level' => $table->getLevel(),
-                'levels' => $table->getLevels(),
-                'channel' => $table->getChannel(),
-                'channels' => $table->getChannels(),
-            ];
-        };
-
-        return $this->handleTableRequest($request, $table, 'table/table_log.html.twig', $additionalParameters);
+        return $this->handleTableRequest($request, $table, 'table/table_log.html.twig');
     }
 
     /**
@@ -314,14 +305,14 @@ class BootstrapTableController extends AbstractController
      */
     public function product(Request $request, ProductTable $table, CategoryRepository $repository): Response
     {
-        $additionalParameters = function () use ($table, $repository) {
+        $parameters = function () use ($table, $repository) {
             return [
                 'category' => $table->getCategory($repository),
                 'categories' => $repository->getListCount(),
             ];
         };
 
-        return $this->handleTableRequest($request, $table, 'table/table_product.html.twig', $additionalParameters);
+        return $this->handleTableRequest($request, $table, 'table/table_product.html.twig', $parameters);
     }
 
     /**
@@ -335,13 +326,40 @@ class BootstrapTableController extends AbstractController
     }
 
     /**
+     * Display the search table.
+     *
+     * @Route("/search", name="table_search")
+     */
+    public function search(Request $request, SearchTable $table): Response
+    {
+        return $this->handleTableRequest($request, $table, 'table/table_search.html.twig');
+    }
+
+    /**
+     * Save the parameters of the search table.
+     *
+     * @Route("/search/save", name="table_search_save")
+     */
+    public function searchSave(Request $request, SearchTable $table): JsonResponse
+    {
+        return $this->saveTableParameters($request, $table);
+    }
+
+    /**
      * Display the task table.
      *
      * @Route("/task", name="table_task")
      */
-    public function task(Request $request, TaskTable $table): Response
+    public function task(Request $request, TaskTable $table, CategoryRepository $repository): Response
     {
-        return $this->handleTableRequest($request, $table, 'table/table_task.html.twig');
+        $parameters = function () use ($table, $repository) {
+            return [
+                'category' => $table->getCategory($repository),
+                'categories' => $repository->getListTaskCount(),
+            ];
+        };
+
+        return $this->handleTableRequest($request, $table, 'table/table_task.html.twig', $parameters);
     }
 
     /**
@@ -380,7 +398,7 @@ class BootstrapTableController extends AbstractController
      * @param Request       $request              the request to handle
      * @param AbstractTable $table                the table
      * @param string        $template             the template to render
-     * @param callable      $additionalParameters the function used to merge additional parameters
+     * @param callable      $additionalParameters the function used to merge parameters
      *
      * @return Response the response
      */

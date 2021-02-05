@@ -114,8 +114,14 @@ $.fn.dataTable.renderEntityName = function (data, type, row) {
     case 'CalculationState':
         icon = 'flag far';
         break;
+    case 'Task':
+        icon = 'tasks fas';
+        break;
     case 'Category':
         icon = 'folder far';
+        break;
+    case 'Group':
+        icon = 'code-branch fas';
         break;
     case 'Product':
         icon = 'file-alt far';

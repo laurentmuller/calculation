@@ -29,6 +29,11 @@ abstract class AbstractTable
     use MathTrait;
 
     /**
+     * The allowed page sizes.
+     */
+    public const PAGE_LIST = [5, 10, 15, 20, 25, 50];
+
+    /**
      * The default page size.
      */
     public const PAGE_SIZE = 20;
@@ -67,11 +72,6 @@ abstract class AbstractTable
      * The sort parameter name.
      */
     public const PARAM_SORT = 'sort';
-
-    /**
-     * The page list.
-     */
-    private const PAGE_LIST = [5, 10, 15, 20, 25, 30, 50];
 
     /**
      * The column definitions.

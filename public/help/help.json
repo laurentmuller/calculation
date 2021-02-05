@@ -1,0 +1,990 @@
+{
+	"entities": [
+		{
+			"id": "product",
+			"icon": "file-alt far",
+			"description": "Représente un article du catalogue.",
+			"fields": [
+				{
+					"name": "description",
+					"description": "Description de l'article. La description doit être unique à travers tout le catalogue.",
+					"required": true,
+					"type": "text",
+					"length": "255"
+				},
+				{
+					"name": "category",
+					"description": "Catégorie à laquelle appartient l'article.",
+					"required": true,
+					"type": "reference",
+					"entity": "category"
+				},
+				{
+					"name": "price",
+					"description": "Prix unitaire de l'article.",
+					"required": true,
+					"type": "amount"
+				},
+				{
+					"name": "unit",
+					"description": "Unité de l'article.",
+					"required": false,
+					"type": "text",
+					"length": "30"
+				},
+				{
+					"name": "supplier",
+					"description": "Nom du fournisseur de l'article.",
+					"required": false,
+					"type": "text",
+					"length": "255"
+				}
+			],
+			"actions": [
+				{
+					"id": "product.show.title",
+					"icon": "tv",
+					"description": "Affiche la page des propriétés de l'article.",
+					"dialog": "product.show.title"
+				},
+				{
+					"id": "product.edit.title",
+					"icon": "pencil-alt",
+					"description": "Affiche la page d'édition de l'article.",
+					"dialog": "product.edit.title"
+				},
+				{
+					"id": "product.delete.title",
+					"icon": "times",
+					"description": "Affiche la page de suppression de l'article.",
+					"dialog": "product.delete.title"
+				},
+				{
+					"id": "product.add.title",
+					"icon": "file far",
+					"description": "Affiche la page de création d'un article.",
+					"dialog": "product.add.title"
+				},
+				{
+					"id": "common.button_clone",
+					"icon": "copy far",
+					"description": "Crée une copie de l'article et affiche la page de création."
+				}
+			]
+		},
+		{
+			"id": "task",
+			"icon": "tasks",
+			"description": "Représente une tâche du catalogue. Une tâche regroupe plusieurs opérations.",
+			"fields": [
+				{
+					"name": "name",
+					"description": "Description de l'article. La description doit être unique à travers tout le catalogue.",
+					"required": true,
+					"type": "text",
+					"length": "255"
+				},
+				{
+					"name": "category",
+					"description": "Catégorie à laquelle appartient la tâche.",
+					"required": true,
+					"type": "reference",
+					"entity": "category"
+				},
+				{
+					"name": "unit",
+					"description": "Unité de la tâche.",
+					"required": false,
+					"type": "text",
+					"length": "30"
+				},
+				{
+					"name": "items",
+					"description": "Liste des opération appartenant à cette tâche.",
+					"required": false,
+					"type": "collection"
+				}
+			],
+			"actions": [
+				{
+					"id": "task.show.title",
+					"icon": "tv",
+					"description": "Affiche la page des propriétés de la tâche."
+				},
+				{
+					"id": "task.edit.title",
+					"icon": "pencil-alt",
+					"description": "Affiche la page d'édition de la tâche."
+				},
+				{
+					"id": "task.delete.title",
+					"icon": "times",
+					"description": "Affiche la page de suppression de la tâche."
+				},
+				{
+					"id": "task.add.title",
+					"icon": "file far",
+					"description": "Affiche la page de création d'une tâche."
+				},
+				{
+					"id": "common.button_clone",
+					"icon": "copy far",
+					"description": "Crée une copie de la tâche et affiche la page de création."
+				},
+				{
+					"id": "taskcompute.title",
+					"icon": "keyboard",
+					"description": "Permet de simuler le calcul d'une tâche."
+				}
+			]
+		},
+		{
+			"id": "category",
+			"icon": "folder far",
+			"description": "Représente un catégorie du catalogue. Elle contient une liste d'articles et de tâches.",
+			"fields": [
+				{
+					"name": "code",
+					"description": "Nom de la catégorie. Le nom doit être unique à travers tout le catalogue.",
+					"required": true,
+					"type": "text",
+					"length": "30"
+				},
+				{
+					"name": "description",
+					"description": "Description de la catégorie.",
+					"required": false,
+					"type": "text",
+					"length": "255"
+				},
+				{
+					"name": "group",
+					"description": "Groupe à laquelle appartient la catégorie.",
+					"required": true,
+					"type": "reference",
+					"entity": "group"
+				},
+				{
+					"name": "products",
+					"description": "Liste des articles appartenant à cette catégorie.",
+					"required": false,
+					"type": "collection",
+					"entity": "product"
+				},
+				{
+					"name": "tasks",
+					"description": "Liste des tâches appartenant à cette catégorie.",
+					"required": false,
+					"type": "collection",
+					"entity": "task"
+				}
+			],
+			"actions": [
+				{
+					"id": "category.show.title",
+					"icon": "tv",
+					"description": "Affiche la page des propriétés de la catégorie."
+				},
+				{
+					"id": "category.edit.title",
+					"icon": "pencil-alt",
+					"description": "Affiche la page d'édition de la catégorie."
+				},
+				{
+					"id": "category.delete.title",
+					"icon": "times",
+					"description": "Affiche la page de suppression de la catégorie."
+				},
+				{
+					"id": "category.add.title",
+					"icon": "file far",
+					"description": "Affiche la page de création d'une catégorie."
+				}
+			]
+		},
+		{
+			"id": "group",
+			"icon": "code-branch",
+			"description": "Représente un groupe du catalogue. Il contient une liste de catégories et de marges à appliquer aux calculations.",
+			"fields": [
+				{
+					"name": "code",
+					"description": "Nom du groupe. Le nom doit être unique à travers tout le catalogue.",
+					"required": true,
+					"type": "text",
+					"length": "30"
+				},
+				{
+					"name": "description",
+					"description": "Description du groupe.",
+					"required": false,
+					"type": "text",
+					"length": "255"
+				},
+				{
+					"name": "margins",
+					"description": "Liste de marges à appliquer à une calculation.",
+					"required": false,
+					"type": "collection"
+				},
+				{
+					"name": "categories",
+					"description": "Liste de catégories appartenant à ce groupe.",
+					"required": false,
+					"type": "collection",
+					"entity": "category"
+				}
+			],
+			"actions": [
+				{
+					"id": "group.show.title",
+					"icon": "tv",
+					"description": "Affiche la page des propriétés du groupe."
+				},
+				{
+					"id": "group.edit.title",
+					"icon": "pencil-alt",
+					"description": "Affiche la page d'édition du groupe."
+				},
+				{
+					"id": "group.delete.title",
+					"icon": "times",
+					"description": "Affiche la page de suppression du groupe."
+				},
+				{
+					"id": "group.add.title",
+					"icon": "file far",
+					"description": "Affiche la page de création d'un groupe."
+				}
+			]
+		},
+		{
+			"id": "globalmargin",
+			"icon": "percent",
+			"description": "Représente une marge globale à appliquer aux calculations.",
+			"fields": [
+				{
+					"name": "minimum",
+					"description": "Valeur minimale pour laquelle la marge est appliquée.",
+					"required": true,
+					"type": "amount"
+				},
+				{
+					"name": "maximum",
+					"description": "Valeur maximale pour laquelle la marge est appliquée.",
+					"required": true,
+					"type": "amount"
+				},
+				{
+					"name": "margin",
+					"description": "Marge à appliquer à la calculation.",
+					"type": "percent",
+					"required": true
+				}
+			],
+			"actions": [
+				{
+					"id": "globalmargin.show.title",
+					"icon": "tv",
+					"description": "Affiche la page des propriétés de la marge globale."
+				},
+				{
+					"id": "globalmargin.edit.title",
+					"icon": "pencil-alt",
+					"description": "Affiche la page d'édition de la marge globale."
+				},
+				{
+					"id": "globalmargin.delete.title",
+					"icon": "times",
+					"description": "Affiche la page de suppression de la marge globale."
+				},
+				{
+					"id": "globalmargin.add.title",
+					"icon": "file far",
+					"description": "Affiche la page de création d'une la marge globale."
+				}
+			]
+		}
+	],
+	"mainMenu": {
+		"image": "navigation.png",
+		"description": "Le menu principal (menu de navigation) est une partie de l'interface d'utilisateur permettant de parcourir les pages du site.",
+		"menus": [
+			{
+				"id": "index.title",
+				"icon": "home",
+				"description": "Page principale de l'application."
+			},
+			{
+				"id": "calculation.list.title",
+				"icon": "calculator",
+				"description": "Liste des calculations."
+			},
+			{
+				"id": "index.menu_data",
+				"icon": "database",
+				"description": "Menu d'accès aux données",
+				"menus": [
+					{
+						"id": "product.list.title",
+						"icon": "file-alt far",
+						"description": "Gestion des articles du catalogue.",
+						"dialog": "product.list.title"
+					},
+					{
+						"id": "task.list.title",
+						"icon": "tasks",
+						"description": "Gestion des tâches du catalogue.",
+						"dialog": "task.list.title"
+					},
+					{
+						"id": "category.list.title",
+						"icon": "folder far",
+						"description": "Gestion des catégories du catalogue.",
+						"dialog": "category.list.title"
+					},
+					{
+						"id": "group.list.title",
+						"icon": "code-branch",
+						"description": "Gestion des groupes du catalogue.",
+						"dialog": "group.list.title"
+					},
+					{
+						"id": "globalmargin.list.title",
+						"icon": "percent",
+						"description": "Gestion des marge globales du catalogue.",
+						"dialog": "globalmargin.list.title"
+					}
+				]
+			},
+			{
+				"id": "index.menu_tools",
+				"icon": "tools",
+				"description": "Menu d'accès aux outils de l'application.",
+				"menus": [
+					{
+						"id": "search.title",
+						"icon": "search",
+						"description": "Page de recherche.",
+						"dialog": "search.title"
+					},
+					{
+						"id": "calculation.update.title",
+						"icon": "pencil-alt",
+						"description": "Page de mise à jour des calculations."
+					},
+					{
+						"id": "below.title",
+						"icon": "percent",
+						"description": "Page des calculations contenant une marge globale inférieure au seuil définit."
+					},
+					{
+						"id": "duplicate.title",
+						"icon": "copy far",
+						"description": "Page des calculations contenant le même article plus d'une fois."
+					},
+					{
+						"id": "empty.title",
+						"icon": "file-code far",
+						"description": "Page des calculations contenant un article avec une quantité ou un prix égale à 0."
+					},
+					{
+						"id": "taskcompute.title",
+						"icon": "keyboard",
+						"description": "Permet de calculer une tâche.",
+						"dialog": "taskcompute.title"
+					}
+				]
+			},
+			{
+				"id": "menu_graphics|chart",
+				"icon": "chart-area",
+				"description": "Menu d'accès aux statistiques.",
+				"menus": [
+					{
+						"id": "title_by_month|chart",
+						"icon": "calendar-alt far",
+						"description": "Page affichant un graphique des calculations par mois."
+					},
+					{
+						"id": "title_by_state|chart",
+						"icon": "flag far",
+						"description": "Page affichant un graphique des calculations par statut."
+					}
+				]
+			}
+		]
+	},
+	"dialogs": [
+		{
+			"id": "product.list.title",
+			"entity": "product",
+			"image": "product/product_list.png",
+			"description": "Gestion des articles du catalogue.",
+			"displayEntityColumns": true,
+			"displayEntityActions": true,
+			"globalActions": [
+				{
+					"id": "help.actions.clear",
+					"icon": "eraser",
+					"description": "Efface tous les critères de recherche saisie.",
+					"description2": "Efface tous les critères de recherche saisie."
+				},
+				{
+					"id": "help.actions.toggle",
+					"icon": "toggle-on",
+					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
+				},
+				{
+					"id": "product.list.pdf_title",
+					"icon": "file-pdf far",
+					"description": "Exporte la liste des articles au format PDF."
+				},
+				{
+					"id": "product.list.excel_title",
+					"icon": "file-excel far",
+					"description": "Exporte la liste des articles au format Microsoft® Excel®."
+				}
+			]
+		},
+		{
+			"id": "product.show.title",
+			"entity": "product",
+			"image": "product/product_show.png",
+			"icon": "tv",
+			"description": "Cette page affiche les propriétés de l'article.",
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Retourne à la page précédente."
+				},
+				{
+					"id": "common.button_edit",
+					"description": "Affiche la page d'édition de l'article.",
+					"dialog": "product.edit.title"
+				},
+				{
+					"id": "common.button_delete",
+					"description": "Affiche la page de suppression de l'article.",
+					"dialog": "product.delete.title"
+				}
+			]
+		},
+		{
+			"id": "product.add.title",
+			"entity": "product",
+			"image": "product/product_add.png",
+			"description": "Cette page permet de créer un nouvel article.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "product.edit.title",
+			"entity": "product",
+			"image": "product/product_edit.png",
+			"description": "Cette page permet de modifier un article.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "product.delete.title",
+			"entity": "product",
+			"image": "product/product_delete.png",
+			"icon": "times",
+			"description": "Cette page permet de confirmer la suppression d'un article.",
+			"editActions": [
+				{
+					"id": "common.button_delete",
+					"description": "Supprime l'article et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule la suppression et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "task.list.title",
+			"entity": "task",
+			"image": "task/task_list.png",
+			"description": "Gestion des tâches du catalogue.",
+			"displayEntityColumns": true,
+			"displayEntityActions": true,
+			"globalActions": [
+				{
+					"id": "help.actions.clear",
+					"icon": "eraser",
+					"description": "Efface tous les critères de recherche saisie."
+				},
+				{
+					"id": "help.actions.toggle",
+					"icon": "toggle-on",
+					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
+				},
+				{
+					"id": "task.list.pdf_title",
+					"icon": "file-pdf far",
+					"description": "Exporte la liste des tâches au format PDF."
+				},
+				{
+					"id": "task.list.excel_title",
+					"icon": "file-excel far",
+					"description": "Exporte la liste des tâches au format Microsoft® Excel®."
+				}
+			]
+		},
+		{
+			"id": "task.show.title",
+			"entity": "task",
+			"image": "task/task_show.png",
+			"icon": "tv",
+			"description": "Cette page affiche les propriétés de la tâches.",
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Retourne à la page précédente."
+				},
+				{
+					"id": "common.button_edit",
+					"description": "Affiche la page d'édition de la tâches.",
+					"dialog": "task.edit.title"
+				},
+				{
+					"id": "common.button_delete",
+					"description": "Affiche la page de suppression de la tâches.",
+					"dialog": "task.delete.title"
+				}
+			]
+		},
+		{
+			"id": "task.add.title",
+			"entity": "task",
+			"image": "task/task_add.png",
+			"description": "Cette page permet de créer un nouvelle tâche.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "task.edit.title",
+			"entity": "task",
+			"image": "task/task_edit.png",
+			"description": "Cette page permet de modifier une tâche.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "task.delete.title",
+			"entity": "task",
+			"image": "task/task_delete.png",
+			"icon": "times",
+			"description": "Cette page permet de confirmer la suppression d'une tâche.",
+			"editActions": [
+				{
+					"id": "common.button_delete",
+					"description": "Supprime la tâche et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule la suppression et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "taskcompute.title",
+			"entity": "task",
+			"image": "task/task_compute.png",
+			"icon": "keyboard",
+			"description": "Permet de calculer une tâche.",
+			"editActions": [
+				{
+					"id": "common.button_close",
+					"description": "Retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "category.list.title",
+			"entity": "category",
+			"image": "category/category_list.png",
+			"description": "Gestion des catégories du catalogue.",
+			"displayEntityColumns": true,
+			"displayEntityActions": true,
+			"globalActions": [
+				{
+					"id": "help.actions.clear",
+					"icon": "eraser",
+					"description": "Efface tous les critères de recherche saisie."
+				},
+				{
+					"id": "help.actions.toggle",
+					"icon": "toggle-on",
+					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
+				},
+				{
+					"id": "category.list.pdf_title",
+					"icon": "file-pdf far",
+					"description": "Exporte la liste des catégories au format PDF."
+				},
+				{
+					"id": "category.list.excel_title",
+					"icon": "file-excel far",
+					"description": "Exporte la liste des catégories au format Microsoft® Excel®."
+				}
+			]
+		},
+		{
+			"id": "category.show.title",
+			"entity": "category",
+			"image": "category/category_show.png",
+			"icon": "tv",
+			"description": "Cette page affiche les propriétés de la catégorie.",
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Retourne à la page précédente."
+				},
+				{
+					"id": "common.button_edit",
+					"description": "Affiche la page d'édition de la catégorie.",
+					"dialog": "category.edit.title"
+				},
+				{
+					"id": "common.button_delete",
+					"description": "Affiche la page de suppression de la catégorie.",
+					"dialog": "category.delete.title"
+				}
+			]
+		},
+		{
+			"id": "category.add.title",
+			"entity": "category",
+			"image": "category/category_add.png",
+			"description": "Cette page permet de créer une nouvelle catégorie.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "category.edit.title",
+			"entity": "category",
+			"image": "category/category_edit.png",
+			"description": "Cette page permet de modifier une catégorie.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "category.delete.title",
+			"entity": "category",
+			"image": "category/category_delete.png",
+			"forbidden": {
+				"image": "category/category_delete_forbidden.png",
+				"text": "Si la catégorie sélectionnée ne peut pas être supprimée, l'avertissement ci-dessous est affiché.",
+				"action": {
+					"id": "common.button_back_list",
+					"icon": "chevron-left",
+					"description": "Retourne la page précédente."
+				}
+			},
+			"icon": "times",
+			"description": "Cette page permet de confirmer la suppression d'une catégorie.",
+			"editActions": [
+				{
+					"id": "common.button_delete",
+					"description": "Supprime la catégorie et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule la suppression et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "group.list.title",
+			"entity": "group",
+			"image": "group/group_list.png",
+			"description": "Gestion des groupes du catalogue.",
+			"displayEntityColumns": true,
+			"displayEntityActions": true,
+			"globalActions": [
+				{
+					"id": "help.actions.clear",
+					"icon": "eraser",
+					"description": "Efface tous les critères de recherche saisie."
+				},
+				{
+					"id": "help.actions.toggle",
+					"icon": "toggle-on",
+					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
+				},
+				{
+					"id": "group.list.pdf_title",
+					"icon": "file-pdf far",
+					"description": "Exporte la liste des groupes au format PDF."
+				},
+				{
+					"id": "group.list.excel_title",
+					"icon": "file-excel far",
+					"description": "Exporte la liste des groupes au format Microsoft® Excel®."
+				}
+			]
+		},
+		{
+			"id": "group.show.title",
+			"entity": "group",
+			"image": "group/group_show.png",
+			"icon": "tv",
+			"description": "Cette page affiche les propriétés du groupe.",
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Retourne à la page précédente."
+				},
+				{
+					"id": "common.button_edit",
+					"description": "Affiche la page d'édition du groupe.",
+					"dialog": "group.edit.title"
+				},
+				{
+					"id": "common.button_delete",
+					"description": "Affiche la page de suppression du groupe.",
+					"dialog": "group.delete.title"
+				}
+			]
+		},
+		{
+			"id": "group.add.title",
+			"entity": "group",
+			"image": "group/group_add.png",
+			"description": "Cette page permet de créer un nouveau group.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "group.edit.title",
+			"entity": "group",
+			"image": "group/group_edit.png",
+			"description": "Cette page permet de modifier un groupe.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "group.delete.title",
+			"entity": "group",
+			"image": "group/group_delete.png",
+			"icon": "times",
+			"description": "Cette page permet de confirmer la suppression d'un groupe.",
+			"editActions": [
+				{
+					"id": "common.button_delete",
+					"description": "Supprime le groupe et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule la suppression et retourne à la page précédente."
+				}
+			],
+			"forbidden": {
+				"image": "group/group_delete_forbidden.png",
+				"text": "Si le groupe sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.",
+				"action": {
+					"id": "common.button_back_list",
+					"icon": "chevron-left",
+					"description": "Retourne la page précédente."
+				}
+			}
+		},
+		{
+			"id": "globalmargin.list.title",
+			"entity": "globalmargin",
+			"image": "globalmargin/globalmargin_list.png",
+			"description": "Gestion des marges globales du catalogue.",
+			"displayEntityColumns": true,
+			"displayEntityActions": true,
+			"globalActions": [
+				{
+					"id": "help.actions.clear",
+					"icon": "eraser",
+					"description": "Efface tous les critères de recherche saisie."
+				},
+				{
+					"id": "help.actions.toggle",
+					"icon": "toggle-on",
+					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
+				},
+				{
+					"id": "group.list.pdf_title",
+					"icon": "file-pdf far",
+					"description": "Exporte la liste des marges globales au format PDF."
+				},
+				{
+					"id": "group.list.excel_title",
+					"icon": "file-excel far",
+					"description": "Exporte la liste des marges globales au format Microsoft® Excel®."
+				}
+			]
+		},
+		{
+			"id": "globalmargin.show.title",
+			"entity": "globalmargin",
+			"image": "globalmargin/globalmargin_show.png",
+			"icon": "tv",
+			"description": "Cette page affiche les propriétés de la marge globale.",
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Retourne à la page précédente."
+				},
+				{
+					"id": "common.button_edit",
+					"description": "Affiche la page d'édition de la marge globale.",
+					"dialog": "globalmargin.edit.title"
+				},
+				{
+					"id": "common.button_delete",
+					"description": "Affiche la page de suppression de la marge globale.",
+					"dialog": "globalmargin.delete.title"
+				}
+			]
+		},
+		{
+			"id": "globalmargin.add.title",
+			"entity": "globalmargin",
+			"image": "globalmargin/globalmargin_add.png",
+			"description": "Cette page permet de créer une marge globale.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "globalmargin.edit.title",
+			"entity": "globalmargin",
+			"image": "globalmargin/globalmargin_edit.png",
+			"description": "Cette page permet de modifier une marge globale.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "globalmargin.delete.title",
+			"entity": "globalmargin",
+			"image": "globalmargin/globalmargin_delete.png",
+			"icon": "times",
+			"description": "Cette page permet de confirmer la suppression d'une marge globale.",
+			"editActions": [
+				{
+					"id": "common.button_delete",
+					"description": "Supprime la marge globale et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule la suppression et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "search.title",
+			"image": "search.png",
+			"description": "Permet de rechercher des données.",
+			"displayEntityColumns": true,
+			"globalActions": [
+				{
+					"id": "help.actions.clear",
+					"icon": "eraser",
+					"description": "Efface tous les critères de recherche saisie."
+				},
+				{
+					"id": "help.actions.toggle",
+					"icon": "toggle-on",
+					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
+				}
+			]
+		}
+	]
+}

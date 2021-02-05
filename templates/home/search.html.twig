@@ -1,16 +1,9 @@
 {% extends 'cards/card_base.html.twig' %}
 
 {# imports #}
-{% import 'macros/_datatables.html.twig' as helper %}
 {% import 'macros/_icons.html.twig' as icons %}
-
-{# macros #}
-{#% macro button(class, text, action, icon) %}
-{%- set path = path('homepage') ~ '_type_/' ~ action ~ '/_id_' -%}
-    <a href="#" class="disabled btn btn-form-sm {{ class }}" data-path="{{ path }}" data-icon="{{ icon }}">
-        {{- text|trans -}}
-    </a>
-{% endmacro %#}
+{% import 'macros/_attributes.html.twig' as tools %}
+{% import 'macros/_datatables.html.twig' as helper %}
 
 {% macro button(class, text, action, icon) %}
 {%- set path = path('homepage') ~ '_type_/' ~ action ~ '/_id_' -%}
@@ -67,7 +60,7 @@
             <div class="input-group input-group-sm bg-white">
                 <input type="text" id="table_search" name="table_search" class="form-control form-control-sm form-control-border-right-0" autocomplete="off">            
                 <div class="input-group-append dropdown" id="dropdown-menu-entity">
-                    <button id="button-entity" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'search.fields.entity'|trans }}">
+                    <button id="button-entity" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'search.entity_help'|trans }}">
                         {{- 'datatable.all'|trans -}}
                     </button>
                     <div class="dropdown-menu">
@@ -114,7 +107,7 @@
         'data-debug': app.debug,
         'data-search-highlight': true
 }) -%}
-<table{{ helper.attribs(attributes) }}>
+<table{{ tools.attribs(attributes) }}>
     {{ helper.headers(columns) }}
     <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
     	{% for row in results.data -%}
@@ -144,10 +137,10 @@
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() }}
+{{ asset_js('js/vendor/jquery-mark/jquery.mark.js') }}
 {{ asset_js('js/vendor/datatables/js/jquery.dataTables.js') }}
 {{ asset_js('js/vendor/datatables/js/dataTables.bootstrap4.js') }}
 {{ asset_js('js/vendor/datatables/js/dataTables.keyTable.js') }}
-{{ asset_js('js/vendor/datatables/js/jquery.mark.js') }}
 {{ asset_js('js/vendor/datatables/js/datatables.mark.js') }}
 {{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
 {{ asset_js('js/plugins/plugin-rowlink.js') }}

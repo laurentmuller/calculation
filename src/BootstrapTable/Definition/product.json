@@ -18,9 +18,10 @@
 		"class": "text-category"
 	},
 	{
-		"field": "supplier",
-		"title": "product.fields.supplier",
-		"class": "text-supplier"
+		"field": "price",
+		"title": "product.fields.price",
+		"class": "text-currency",
+		"fieldFormatter": "formatAmount"
 	},
 	{
 		"field": "unit",
@@ -28,10 +29,9 @@
 		"class": "text-unit"
 	},
 	{
-		"field": "price",
-		"title": "product.fields.price",
-		"class": "text-currency",
-		"fieldFormatter": "formatAmount"
+		"field": "supplier",
+		"title": "product.fields.supplier",
+		"class": "text-supplier"
 	},
 	{
 		"field": "action",

@@ -7,8 +7,8 @@
 {%- set save_url     = url('table_calculationstate_save') -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_CALCULATION_STATE -%}
 {%- set attributes   = {
-	'data-link-path': path('table_calculation', {stateId: 0}), 
-	'data-link-title': 'calculationstate.list.calculation_title'|trans
+	'data-link-path-calculations': path('table_calculation', {stateId: 0}), 
+	'data-link-title-calculations': 'calculationstate.list.calculation_title'|trans
 } -%}
 
 {% block global_actions -%}

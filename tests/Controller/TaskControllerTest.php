@@ -47,6 +47,10 @@ class TaskControllerTest extends AbstractControllerTest
             ['/task/edit/1', self::ROLE_ADMIN],
             ['/task/edit/1', self::ROLE_SUPER_ADMIN],
 
+            ['/task/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/task/clone/1', self::ROLE_ADMIN],
+            ['/task/clone/1', self::ROLE_SUPER_ADMIN],
+
             ['/task/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/task/delete/1', self::ROLE_ADMIN],
             ['/task/delete/1', self::ROLE_SUPER_ADMIN],

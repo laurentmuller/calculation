@@ -4,9 +4,9 @@
 		"title": "calculation.fields.id",
 		"order": "desc",
 		"class": "text-id text-border",
+		"cardClass": "font-weight-bold",
 		"fieldFormatter": "formatId",
-		"styleFormatter": "styleStateColor",
-		"cardBold": true
+		"styleFormatter": "styleStateColor"
 	},
 	{
 		"field": "date",
@@ -35,10 +35,10 @@
 		"field": "items",
 		"title": "calculation.fields.items",
 		"class": "text-cell w-25 text-danger",
+		"cardClass": "text-danger",
 		"sortable": false,
 		"searchable": false,
-		"fieldFormatter": "formatItems",
-		"cellFormatter": "formatItems"
+		"fieldFormatter": "formatItems"
 	},
 	{
 		"field": "action",
@@ -49,8 +49,6 @@
 	},
 	{
 		"field": "stateColor",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
+		"visible": false
 	}
 ]

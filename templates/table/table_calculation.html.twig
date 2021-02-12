@@ -1,16 +1,17 @@
 {% extends 'table/table_base.html.twig' %}
 
 {# parameters #}
-{%- set title        = 'calculation.list.title' -%}
-{%- set title_icon   = 'calculator' -%}
-{%- set defer_url    = url('table_calculation') -%}
-{%- set save_url     = url('table_calculation_save') -%}
-{%- set stateId      = state.id|default(0) -%}
-{%- set params       = { 'stateId': stateId } -%}
-{%- set attributes   = {'data-min-margin': min_margin, 'data-min-margin-text': min_margin_text} -%}
+{%- set title        = title|default('calculation.list.title') -%}
+{%- set title_icon   = title_icon|default('calculator') -%}
+{%- set defer_url    = defer_url|default(url('table_calculation')) -%}
+{%- set save_url     = save_url|default(url('table_calculation_save')) -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_CALCULATION -%}
+{%- set allow_global = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
+{%- set attributes   = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
 
 {% block toolbar_actions -%}
+{% if states is defined %}
+{%- set stateId = state.id|default(0) -%}
 <div class="input-group-append btn-dropdown">
     <button id="stateId" data-value="{{ stateId }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
         {{- state ? state.code : 'calculation.fields.state'|trans -}}
@@ -22,22 +23,36 @@
         {% endfor %}
     </div>
 </div>
+{% endif %}
 {%- endblock %}
 
 {% block global_actions -%}
-{{ _self.item_external(path('calculation_pdf'), 'calculation.list.pdf_title', 'file-pdf far') }}
-{{ _self.item_external(path('calculation_excel'), 'calculation.list.excel_title', 'file-excel far') }}
+{{- _self.item_external(path('calculation_pdf'), 'calculation.list.pdf_title', 'file-pdf far') }}
+{{- _self.item_external(path('calculation_excel'), 'calculation.list.excel_title', 'file-excel far') }}
+{%- endblock %}
+
+{% block show_actions -%}
+{{- _self.item_path(path('calculation_show', params), 'calculation.show.title', 'tv', show_class) }}
 {%- endblock %}
 
 {% block edit_actions -%}
-{{ _self.item_path(path('calculation_show', params), 'calculation.show.title', 'tv', show_class) }}
-{{ _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', 'pencil-alt', edit_class) }}
-{{ _self.item_path(path('calculation_delete', params), 'calculation.delete.title', 'times', 'btn-delete') }}
-{{ _self.item_separator() }}
-{{ _self.item_path(path('calculation_state', params), 'calculation.list.state_title', 'flag far', 'btn-state') }}
-{{ _self.item_separator() }}
-{{ _self.item_path(path('calculation_add', params), 'calculation.add.title', 'file far', 'btn-add') }}
-{{ _self.item_path(path('calculation_clone', params), 'common.button_clone', 'copy far', 'btn-clone') }}
-{{ _self.item_separator() }}
-{{ _self.item_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', 'file-pdf far', 'btn-calculation-pdf') }}
+{{- _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', 'pencil-alt', edit_class) }}
+{{- _self.item_path(path('calculation_state', params), 'calculation.list.state_title', 'flag far', 'btn-state') }}
+{%- endblock %}
+
+{% block delete_actions -%}
+{{- _self.item_path(path('calculation_delete', params), 'calculation.delete.title', 'times', 'btn-delete') }}
+{%- endblock %}
+
+{% block add_actions -%}
+{{- _self.item_separator() }}
+{{- _self.item_path(path('calculation_add', params), 'calculation.add.title', 'file far', 'btn-add') }}
+{{- _self.item_path(path('calculation_clone', params), 'common.button_clone', 'copy far', 'btn-clone') }}
+{%- endblock %}
+
+{% block other_actions -%}
+{% if allow_export %}
+{{- _self.item_separator() }}
+{{- _self.item_path_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', 'file-pdf far', 'btn-calculation-pdf') }}
+{% endif %}
 {%- endblock %}

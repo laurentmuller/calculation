@@ -45,6 +45,10 @@ class CategoryControllerTest extends AbstractControllerTest
             ['/category/edit/1', self::ROLE_ADMIN],
             ['/category/edit/1', self::ROLE_SUPER_ADMIN],
 
+            ['/category/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/category/clone/1', self::ROLE_ADMIN],
+            ['/category/clone/1', self::ROLE_SUPER_ADMIN],
+
             ['/category/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/category/delete/1', self::ROLE_ADMIN],
             ['/category/delete/1', self::ROLE_SUPER_ADMIN],

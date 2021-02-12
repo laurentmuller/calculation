@@ -68,6 +68,19 @@ class CategoryController extends AbstractEntityController
     }
 
     /**
+     * Clone (copy) a category.
+     *
+     * @Route("/clone/{id}", name="category_clone", requirements={"id": "\d+" })
+     */
+    public function clone(Request $request, Category $item): Response
+    {
+        $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
+        $clone = $item->clone($code);
+
+        return $this->editEntity($request, $clone);
+    }
+
+    /**
      * Delete a category.
      *
      * @Route("/delete/{id}", name="category_delete", requirements={"id": "\d+" })
@@ -81,14 +94,14 @@ class CategoryController extends AbstractEntityController
 
         if (0 !== $tasks || 0 !== $products || 0 !== $calculations) {
             $items = [];
-            if (0 !== $tasks) {
-                $items[] = $this->trans('counters.tasks', ['count' => $tasks]);
+            if (0 !== $calculations) {
+                $items[] = $this->trans('counters.calculations', ['count' => $calculations]);
             }
             if (0 !== $products) {
                 $items[] = $this->trans('counters.products', ['count' => $products]);
             }
-            if (0 !== $calculations) {
-                $items[] = $this->trans('counters.calculations', ['count' => $calculations]);
+            if (0 !== $tasks) {
+                $items[] = $this->trans('counters.tasks', ['count' => $tasks]);
             }
             $message = $this->trans('category.delete.failure', ['%name%' => $item->getDisplay()]);
 

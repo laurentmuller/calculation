@@ -66,6 +66,19 @@ class GroupController extends AbstractEntityController
     }
 
     /**
+     * Clone (copy) a group.
+     *
+     * @Route("/clone/{id}", name="group_clone", requirements={"id": "\d+" })
+     */
+    public function clone(Request $request, Group $item): Response
+    {
+        $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
+        $clone = $item->clone($code);
+
+        return $this->editEntity($request, $clone);
+    }
+
+    /**
      * Delete a group.
      *
      * @Route("/delete/{id}", name="group_delete", requirements={"id": "\d+" })

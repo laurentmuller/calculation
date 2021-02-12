@@ -1,0 +1,36 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title        = 'test.pell' -%}
+{%- set title_icon   = 'edit' -%}
+{%- set cancel_path  = path('homepage') -%}
+
+{% block card_body %}
+{{ form_label(form.message) }}
+<div id="editor" class="border rounded"></div>
+{{ form_widget(form.message) }}
+{# head style #}
+<div id="dropdown-title" class="btn-group btn-group-sm d-none" role="group">
+    <button class="btn btn-outline-secondary rounded-0 border-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Titres">
+        <i class="fa-fw fas fa-heading group-font"></i>
+    </button>
+    <div class="dropdown-menu">
+        {% for i in 1..6 %}
+        <button class="dropdown-item dropdown-title" data-value="<h{{ i }}>" type="button">Titre {{ i }}</button>
+        {% endfor %}
+    </div>
+</div>
+{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset_css('js/vendor/pell/pell.css') }}
+{%- endblock -%}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('js/vendor/pell/pell.js') }}
+{{ asset_js('js/test/pelleditor.js') }}
+{% endblock %}

@@ -30,11 +30,10 @@
 </div>
 {%- endblock %}
 
-{% block edit_actions -%}
-{%- set show_class = 'btn-search btn-show' ~ (app.actionShow ? ' btn-default' : '') -%}
-{%- set edit_class = 'btn-search btn-edit' ~ (app.actionEdit ? ' btn-default' : '') -%}
-{{ _self.item_path(path ~ '_type_/show/_id_', 'common.button_show', 'tv', show_class) }}
-{{ _self.item_path(path ~ '_type_/edit/_id_', 'common.button_edit', 'pencil-alt', edit_class) }}
-{{ _self.item_path(path ~ '_type_/delete/_id_', 'common.button_delete', 'times', 'btn-search btn-delete') }}
+{% block other_actions -%}
+{%- set show_class = show_class ~ ' btn-search btn-show' -%}
+{%- set edit_class = show_class ~ ' btn-search btn-edit' -%}
+{{- _self.item_path(path ~ '_type_/show/_id_', 'common.button_show', 'tv', show_class) }}
+{{- _self.item_path(path ~ '_type_/edit/_id_', 'common.button_edit', 'pencil-alt', edit_class) }}
+{{- _self.item_path(path ~ '_type_/delete/_id_', 'common.button_delete', 'times', 'btn-search btn-delete') }}
 {%- endblock %}
-

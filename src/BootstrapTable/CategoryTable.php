@@ -12,12 +12,15 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Entity\Category;
 use App\Entity\Group;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Environment;
 
 /**
  * The categories table.
@@ -29,7 +32,7 @@ class CategoryTable extends AbstractEntityTable
     /**
      * The group parameter name.
      */
-    private const PARAM_GROUP = 'groupId';
+    public const PARAM_GROUP = 'groupId';
 
     /**
      * The selected group identifier.
@@ -37,23 +40,53 @@ class CategoryTable extends AbstractEntityTable
     private int $groupId = 0;
 
     /**
+     * The group repository.
+     */
+    private GroupRepository $groupRepository;
+
+    /**
+     * The template renderer.
+     */
+    private Environment $twig;
+
+    /**
      * Constructor.
      */
-    public function __construct(CategoryRepository $repository)
+    public function __construct(CategoryRepository $repository, GroupRepository $groupRepository, Environment $twig)
     {
         parent::__construct($repository);
+        $this->groupRepository = $groupRepository;
+        $this->twig = $twig;
     }
 
     /**
-     * Gets the selected group or null if none.
+     * Formatter for the products column.
      */
-    public function getGroup(GroupRepository $repository): ?Group
+    public function formatProducts(Collection $products, Category $category): string
     {
-        if (0 !== $this->groupId) {
-            return $repository->find($this->groupId);
-        }
+        return $this->twig->render('table/_cell_table_link.html.twig', [
+            'route' => 'table_product',
+            'count' => \count($products),
+            'title' => 'category.list.product_title',
+            'parameters' => [
+                ProductTable::PARAM_CATEGORY => $category->getId(),
+            ],
+        ]);
+    }
 
-        return null;
+    /**
+     * Formatter for the tasks column.
+     */
+    public function formatTasks(Collection $tasks, Category $category): string
+    {
+        return $this->twig->render('table/_cell_table_link.html.twig', [
+            'route' => 'table_task',
+            'count' => \count($tasks),
+            'title' => 'category.list.task_title',
+            'parameters' => [
+                TaskTable::PARAM_CATEGORY => $category->getId(),
+            ],
+        ]);
     }
 
     /**
@@ -88,5 +121,41 @@ class CategoryTable extends AbstractEntityTable
     protected function getDefaultOrder(): array
     {
         return ['code' => Column::SORT_ASC];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function updateParameters(array $parameters): array
+    {
+        return \array_merge_recursive($parameters, [
+            'group' => $this->getGroup(),
+            'groups' => $this->getGroups(),
+            'params' => [
+                self::PARAM_GROUP => $this->groupId,
+            ],
+        ]);
+    }
+
+    /**
+     * Gets the selected group or null if none.
+     */
+    private function getGroup(): ?Group
+    {
+        if (0 !== $this->groupId) {
+            return $this->groupRepository->find($this->groupId);
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets groups.
+     *
+     * @return Group[]
+     */
+    private function getGroups(): array
+    {
+        return $this->groupRepository->getListCount();
     }
 }

@@ -43,6 +43,10 @@ class GroupControllerTest extends AbstractControllerTest
             ['/group/edit/1', self::ROLE_ADMIN],
             ['/group/edit/1', self::ROLE_SUPER_ADMIN],
 
+            ['/group/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/group/clone/1', self::ROLE_ADMIN],
+            ['/group/clone/1', self::ROLE_SUPER_ADMIN],
+
             ['/group/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
             ['/group/delete/1', self::ROLE_ADMIN],
             ['/group/delete/1', self::ROLE_SUPER_ADMIN],

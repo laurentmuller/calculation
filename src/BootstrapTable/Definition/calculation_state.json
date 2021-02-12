@@ -1,17 +1,15 @@
 [
 	{
 		"field": "id",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
+		"visible": false
 	},
 	{
 		"field": "code",
 		"title": "calculationstate.fields.code",
 		"default": true,
 		"class": "text-code text-border text-nowrap",
-		"styleFormatter": "styleStateColor",
-		"cardBold": true
+		"cardClass": "font-weight-bold",
+		"styleFormatter": "styleStateColor"
 	},
 	{
 		"field": "description",
@@ -31,14 +29,7 @@
 		"sortable": false,
 		"searchable": false,
 		"class": "text-currency rowlink-skip",
-		"fieldFormatter": "formatCountable",
-		"cellFormatter": "formatDataLink"
-	},
-	{
-		"field": "color",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
+		"fieldFormatter": "formatCalculations"
 	},
 	{
 		"field": "action",
@@ -46,5 +37,9 @@
 		"searchable": false,
 		"class": "actions rowlink-skip d-print-none",
 		"cellFormatter": "formatActions"
+	},
+	{
+		"field": "color",
+		"visible": false
 	}
 ]

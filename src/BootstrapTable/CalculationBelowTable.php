@@ -14,9 +14,11 @@ namespace App\BootstrapTable;
 
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
+use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
+use Twig\Environment;
 
 /**
  * The calculations table for margin below.
@@ -27,17 +29,15 @@ class CalculationBelowTable extends CalculationTable
 {
     /**
      * The application service.
-     *
-     * @var ApplicationService
      */
-    private $service;
+    private ApplicationService $service;
 
     /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository, ApplicationService $service)
+    public function __construct(CalculationRepository $repository, CalculationStateRepository $stateRepository, Environment $twig, ApplicationService $service)
     {
-        parent::__construct($repository);
+        parent::__construct($repository, $stateRepository, $twig);
         $this->service = $service;
     }
 
@@ -57,11 +57,30 @@ class CalculationBelowTable extends CalculationTable
         $param = 'minMargin';
         $itemsField = "{$alias}.itemsTotal";
         $overallField = "{$alias}.overallTotal";
-        $minMargin = $this->service->getMinMargin();
+        $minMargin = $this->getMinMargin();
 
         return parent::createDefaultQueryBuilder($alias)
-            ->andWhere("{$itemsField} != 0")
-            ->andWhere("({$overallField} / {$itemsField}) < :{$param}")
+            ->andWhere("$itemsField != 0")
+            ->andWhere("($overallField / $itemsField) < :$param")
             ->setParameter($param, $minMargin, Types::FLOAT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function updateParameters(array $parameters): array
+    {
+        // $parameters = parent::updateParameters($parameters);
+        $parameters['min_margin'] = $this->getMinMargin();
+
+        return $parameters;
+    }
+
+    /**
+     * Gets the minimum margin, in percent, for a calculation.
+     */
+    private function getMinMargin(): float
+    {
+        return $this->service->getMinMargin();
     }
 }

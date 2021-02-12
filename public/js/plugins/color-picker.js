@@ -33,8 +33,13 @@
             const that = this;
             const $element = that.$element;
             const focused = $element.is(':focus');
-            that.rows = that.options.names.length;
-            that.cols = that.options.names[0].length;
+
+            const length = Object.keys(that.options.colors).length;
+            that.cols = that.options.columns;
+            that.rows = Math.trunc(length / that.cols);
+            if (length % that.cols !== 0) {
+                that.rows++;
+            }
 
             // drop-down
             that.createDropDown();
@@ -64,8 +69,9 @@
          */
         createDropDown: function () {
             const that = this;
+            const options = that.options;
 
-            // already creatd?
+            // already created?
             if (that.$element.parents('.dropdown').length) {
                 // find elements
                 that.$dropdown = that.$element.parents('.dropdown');
@@ -76,28 +82,30 @@
             } else {
                 // create
                 that.$dropdown = $('<div/>', {
-                    'class': 'color-picker dropdown form-control'
+                    'class': 'dropdown color-picker ' + (options.dropdownClass || '')
                 });
 
                 that.$dropdownToggle = $('<button/>', {
                     'type': 'button',
-                    'class': 'dropdown-toggle btn',
+                    'class': 'dropdown-toggle ' + (options.dropdownToggleClass || ''),
                     'data-toggle': 'dropdown',
                     'aria-haspopup': 'true',
                     'aria-expanded': 'false'
-                }).appendTo(this.$dropdown);
+                }).appendTo(that.$dropdown);
 
                 that.$spanColor = $('<span/>', {
-                    'class': 'drowpdown-color border border-secondary'
-                }).appendTo(this.$dropdownToggle);
+                    'class': 'drowpdown-color border'
+                }).appendTo(that.$dropdownToggle);
 
-                that.$spanText = $('<span/>', {
-                    'class': 'drowpdown-text'
-                }).appendTo(this.$dropdownToggle);
+                if (options.displayText) {
+                    that.$spanText = $('<span/>', {
+                        'class': 'drowpdown-text'
+                    }).appendTo(that.$dropdownToggle);
+                }
 
                 that.$dropdownMenu = $('<div/>', {
                     'class': 'dropdown-menu d-print-none'
-                }).appendTo(this.$dropdown);
+                }).appendTo(that.$dropdown);
 
                 // hide element and add dropdown
                 that.$element.addClass('d-none').after(that.$dropdown).prependTo(that.$dropdown);
@@ -121,6 +129,7 @@
         createPalette: function () {
             const that = this;
             const options = that.options;
+            const colors = this.options.colors;
 
             // get tooltip options
             const display = options.tooltipDisplay;
@@ -142,29 +151,25 @@
                 'class': 'color-palette',
             });
 
-            // rows
-            for (let row = 0; row < that.rows; row++) {
+            let $row;
+            Object.keys(colors).forEach(function (name, index) {
                 // row
-                const $row = $('<div/>', {
-                    'class': 'color-row'
-                });
+                if (index % options.columns === 0) {
+                    $row = $('<div/>', {
+                        'class': 'color-row'
+                    });
+                    $row.appendTo(that.$palette);
+                }
 
                 // buttons
-                const names = options.names[row];
-                const colors = options.colors[row];
-                for (let col = 0; col < that.cols; col++) {
-                    const name = names[col];
-                    const color = colors[col].toUpperCase();
-
-                    buttonOptions.css = {
-                        'background-color': color
-                    };
-                    buttonOptions['data-value'] = color;
-                    buttonOptions.title = content.replace('{name}', name).replace('{color}', color);
-                    $('<button/>', buttonOptions).appendTo($row);
-                }
-                $row.appendTo(that.$palette);
-            }
+                const color = colors[name];
+                buttonOptions.css = {
+                    'background-color': color
+                };
+                buttonOptions['data-value'] = color;
+                buttonOptions.title = content.replace('{name}', name).replace('{color}', color);
+                $('<button/>', buttonOptions).appendTo($row);
+            });
 
             // custom button
             that.$customButton = $('<button/>', {
@@ -269,16 +274,21 @@
          *            e - the event.
          */
         onColorButtonKeyDown: function (e) {
+            const cols = this.cols;
             const lastCol = this.cols - 1;
             const lastRow = this.rows - 1;
             const $button = $(e.target);
             const selection = this.getSelection($button);
+            const count =  this.$palette.find('.color-button').length;
+            let index = selection.row * this.cols + selection.col;
             
             switch (e.which || e.keyCode) {
             case 35: // end
                 selection.col = lastCol;
-                if (e.ctrlKey) {
-                    selection.row = lastRow;
+                if (e.ctrlKey || selection.row * cols + selection.col >= count) {
+                    index = count - 1;
+                    selection.row =  Math.trunc(index / cols);
+                    selection.col = index % this.cols;
                 }
                 break;
 
@@ -291,47 +301,58 @@
 
             case 37: // left arrow
                 selection.col = selection.col > 0 ? selection.col - 1 : lastCol;
+                if (selection.row * cols + selection.col >= count) {
+                    index = count - 1;
+                    selection.row =  Math.trunc(index / cols);
+                    selection.col = index % this.cols;
+                }
                 break;
 
             case 38: // up arrow
                 selection.row = selection.row > 0 ? selection.row - 1 : lastRow;
+                if (selection.row * cols + selection.col >= count) {
+                    selection.row = lastRow - 1;
+                }
                 break;
 
             case 39: // right arrow
                 selection.col = selection.col < lastCol ? selection.col + 1 : 0;
+                if (selection.row * cols + selection.col >= count) {
+                    selection.col = 0;
+                }
                 break;
 
             case 40: // down arrow
                 selection.row = selection.row < lastRow ? selection.row + 1 : 0;
+                if (selection.row * cols + selection.col >= count) {
+                    selection.row = 0;
+                }
                 break;
 
             case 107: // add
-                if (selection.col < lastCol) {
-                    selection.col++;
-                } else if (selection.row < lastRow) {
-                    selection.col = 0;
-                    selection.row++;
+                if (index < count - 1) {
+                    index++;
+                    selection.row =  Math.trunc(index / cols);
+                    selection.col = index % cols;
                 } else {
                     selection.col = selection.row = 0;
                 }
                 break;
 
             case 109: // subtract
-                if (selection.col > 0) {
-                    selection.col--;
-                } else if (selection.row > 0) {
-                    selection.col = lastCol;
-                    selection.row--;
+                if (index > 0) {
+                    index--;
                 } else {
-                    selection.col = lastCol;
-                    selection.row = lastRow;
+                    index = count - 1;
                 }
+                selection.row =  Math.trunc(index / cols);
+                selection.col = index % cols;
                 break;
 
             default:
                 return;
             }
-
+            
             // update
             this.setSelection(selection);
             e.preventDefault();
@@ -353,9 +374,11 @@
          */
         updateUI: function () {
             const value = this.$element.val();
-            const text = this.getColorName(value);
             this.$spanColor.css('background-color', value);
-            this.$spanText.text(text);
+            if (this.$spanText) {
+                const text = this.getColorName(value);
+                this.$spanText.text(text);
+            }
         },
 
         /**
@@ -405,13 +428,13 @@
          * 
          * @param {Object}
          *            selection - the selection to set (must contains a 'row'
-         *            and a 'col' field).
+         *            and a 'col' fields).
          * @returns {jQuery} the button, if found; null otherwise.
          */
         setSelection: function (selection) {
             const selector = '.color-row:eq(' + selection.row + ') .color-button:eq(' + selection.col + ')';
             const $button = this.findButton(selector);
-            if ($button.length) {
+            if ($button) {
                 return $button.focus();
             }
             return null;
@@ -427,17 +450,13 @@
          */
         getColorName: function (color) {
             color = color || '';
-            const cols = this.cols;
             const colors = this.options.colors;
-
-            for (let row = 0, rows = this.rows; row < rows; row++) {
-                for (let col = 0; col < cols; col++) {
-                    if (colors[row][col].equalsIgnoreCase(color)) {
-                        return this.options.names[row][col];
-                    }
-                }
+            const values = Object.values(colors);
+            const index = values.findIndex(c => c.equalsIgnoreCase(color));
+            if (index !== -1) {
+               return Object.keys(colors)[index];
             }
-
+            
             // custom text
             return this.options.customText;
         },
@@ -452,19 +471,15 @@
          */
         getColorHex: function (name) {
             name = name || '';
-            const cols = this.cols;
-            const names = this.options.names;
-
-            for (let row = 0, rows = this.rows; row < rows; row++) {
-                for (let col = 0; col < cols; col++) {
-                    if (names[row][col].equalsIgnoreCase(name)) {
-                        return this.options.colors[row][col];
-                    }
-                }
+            const colors = this.options.colors;
+            const names = Object.keys(colors);
+            const found = names.find(n => n.equalsIgnoreCase(name));
+            if (found) {
+                return colors[found];
             }
 
             // first color
-            return this.options.colors[0][0];
+            return colors[names[0]];
         },
     };
 
@@ -475,19 +490,19 @@
         focus: false, // set focus to the control
 
         // classes
-        // dropdownClass: 'color-picker dropdown form-control',
-        // dropdownToggleClass: 'dropdown-toggle btn',
+        dropdownClass: 'form-control',
+        dropdownToggleClass: 'btn',
+
         // dropdownMenuClass: 'dropdown-menu d-print-none',
-        //
         // dropdownColorClass: 'drowpdown-color',
         // dropdownTextClass: 'drowpdown-text',
-        //
         // paletteClass: 'color-palette',
         // paletteRrowClass: 'color-row',
         // paletteButtonClass: 'color-button',
         // paletteCustomClass: 'btn btn-sm btn-outline-secondary mt-1 w-100',
 
-        // columns: 8, // the number of columns
+        columns: 8, // the number of columns
+        displayText: true, // false to hide text
 
         // texts
         customText: 'Custom', // the custom color text
@@ -498,112 +513,74 @@
         tooltipPlacement: 'top', // placement
         tooltipContent: '{name} ({color})', // text format
         tooltipTrigger: 'hover', // trigger event
-
-        colors: [// color values
-        ['#000000', '#424242', '#636363', '#9C9C94', '#CEC6CE', '#EFEFEF', '#F7F7F7', '#FFFFFF'], // 
-        ['#FF0000', '#FF9C00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#9C00FF', '#FF00FF'], //
-        ['#F7C6CE', '#FFE7CE', '#FFEFC6', '#D6EFD6', '#CEDEE7', '#CEE7F7', '#D6D6E7', '#E7D6DE'], //
-        ['#E79C9C', '#FFC69C', '#FFE79C', '#B5D6A5', '#A5C6CE', '#9CC6EF', '#B5A5D6', '#D6A5BD'], //
-        ['#E76363', '#F7AD6B', '#FFD663', '#94BD7B', '#73A5AD', '#6BADDE', '#8C7BC6', '#C67BA5'], //
-        ['#CE0000', '#E79439', '#EFC631', '#6BA54A', '#4A7B8C', '#3984C6', '#634AA5', '#A54A7B'], //
-        ['#9C0000', '#B56308', '#BD9400', '#397B21', '#104A5A', '#085294', '#311873', '#731842'], //
-        ['#630000', '#7B3900', '#846300', '#295218', '#083139', '#003163', '#21104A', '#4A1031'], //
-        ],
-        names: [ // color names (french)
-        ['Noir', 'Tundora', 'Colombe grise', 'Poussière d\'étoile', 'Ardoise pâle', 'Galerie', 'Albâtre', 'Blanc'], //
-        ['Rouge', 'Pelure d\'orange', 'Jaune', 'Vert', 'Cyan', 'Bleu', 'Violet électrique', 'Magenta'], //
-        ['Azalée', 'Karry', 'Blanc d\'oeuf', 'Zanah', 'Botticelli', 'Bleu tropical', 'Mischka', 'Crépuscule'], //
-        ['Rose Tonys', 'Orange pêche', 'Crème brulée', 'Germes', 'Casper', 'Perano', 'Violet froid', 'Rose Careys'], //
-        ['Mandy', 'Rajah', 'Pissenlit', 'Olivine', 'Ruisseau du Golfe', 'Viking', 'Blue Marguerite', 'Puce'], //
-        ['Gardien Rouge', 'Fire Bush', 'Rêve d\'or', 'Concombre', 'Bleu slim', 'Bleu Boston', 'Papillon', 'Cadillac'], //
-        ['Sangria', 'Mai Tai', 'Bouddha d\'or', 'Vert forêt', 'Eden', 'Bleu Venise', 'Météorite', 'Bordeaux'], //
-        ['Bois de rose', 'Cannelle', 'Olive', 'Persil', 'Tibre', 'Bleu Minuit', 'Valentino', 'Loulou'] //
-        ],
-
-    // color names (english)
-    // ['Black', 'Tundora', 'Dove Gray', 'Star Dust', 'Pale Slate',
-    // 'Gallery', 'Alabaster', 'White'], //
-    // ['Red', 'Orange Peel', 'Yellow', 'Green', 'Cyan', 'Blue', 'Electric
-    // Violet', 'Magenta'], //
-    // ['Azalea', 'Karry', 'Egg White', 'Zanah', 'Botticelli', 'Tropical
-    // Blue', 'Mischka', 'Twilight'], //
-    // ['Tonys Pink', 'Peach Orange', 'Cream Brulee', 'Sprout', 'Casper',
-    // 'Perano', 'Cold Purple', 'Careys Pink'], //
-    // ['Mandy', 'Rajah', 'Dandelion', 'Olivine', 'Gulf Stream', 'Viking',
-    // 'Blue Marguerite', 'Puce'], //
-    // ['Guardsman Red', 'Fire Bush', 'Golden Dream', 'Chelsea Cucumber',
-    // 'Smalt Blue', 'Boston Blue', 'Butterfly Bush', 'Cadillac'], //
-    // ['Sangria', 'Mai Tai', 'Buddha Gold', 'Forest Green', 'Eden', 'Venice
-    // Blue', 'Meteorite', 'Claret'], //
-    // ['Rosewood', 'Cinnamon', 'Olive', 'Parsley', 'Tiber', 'Midnight
-    // Blue', 'Valentino', 'Loulou'], //
-
-    // input: {
-    // "Noir": "#000000",
-    // "Tundora": "#424242",
-    // "Colombe grise": "#636363",
-    // "Poussière d'étoile": "#9C9C94",
-    // "Ardoise pâle": "#CEC6CE",
-    // "Galerie": "#EFEFEF",
-    // "Albâtre": "#F7F7F7",
-    // "Blanc": "#FFFFFF",
-    // "Rouge": "#FF0000",
-    // "Pelure d'orange": "#FF9C00",
-    // "Jaune": "#FFFF00",
-    // "Vert": "#00FF00",
-    // "Cyan": "#00FFFF",
-    // "Bleu": "#0000FF",
-    // "Violet électrique": "#9C00FF",
-    // "Magenta": "#FF00FF",
-    // "Azalée": "#F7C6CE",
-    // "Karry": "#FFE7CE",
-    // "Blanc d'oeuf": "#FFEFC6",
-    // "Zanah": "#D6EFD6",
-    // "Botticelli": "#CEDEE7",
-    // "Bleu tropical": "#CEE7F7",
-    // "Mischka": "#D6D6E7",
-    // "Crépuscule": "#E7D6DE",
-    // "Rose Tonys": "#E79C9C",
-    // "Orange pêche": "#FFC69C",
-    // "Crème brulée": "#FFE79C",
-    // "Germes": "#B5D6A5",
-    // "Casper": "#A5C6CE",
-    // "Perano": "#9CC6EF",
-    // "Violet froid": "#B5A5D6",
-    // "Rose Careys": "#D6A5BD",
-    // "Mandy": "#E76363",
-    // "Rajah": "#F7AD6B",
-    // "Pissenlit": "#FFD663",
-    // "Olivine": "#94BD7B",
-    // "Ruisseau du Golfe": "#73A5AD",
-    // "Viking": "#6BADDE",
-    // "Blue Marguerite": "#8C7BC6",
-    // "Puce": "#C67BA5",
-    // "Gardien Rouge": "#CE0000",
-    // "Fire Bush": "#E79439",
-    // "Rêve d'or": "#EFC631",
-    // "Concombre de Chelsea": "#6BA54A",
-    // "Bleu slim": "#4A7B8C",
-    // "Bleu Boston": "#3984C6",
-    // "Papillon du Bush": "#634AA5",
-    // "Cadillac": "#A54A7B",
-    // "Sangria": "#9C0000",
-    // "Mai Tai": "#B56308",
-    // "Bouddha d'or": "#BD9400",
-    // "Vert forêt": "#397B21",
-    // "Eden": "#104A5A",
-    // "Bleu Venise": "#085294",
-    // "Météorite": "#311873",
-    // "Bordeaux": "#731842",
-    // "Bois de rose": "#630000",
-    // "Cannelle": "#7B3900",
-    // "Olive": "#846300",
-    // "Persil": "#295218",
-    // "Tibre": "#083139",
-    // "Bleu Minuit": "#003163",
-    // "Valentino": "#21104A",
-    // "Loulou": "#4A1031"
-    // }
+        
+        // colors
+        colors: {
+            "Noir": "#000000",
+            "Tundora": "#424242",
+            "Colombe grise": "#636363",
+            "Poussière d'étoile": "#9C9C94",
+            "Ardoise pâle": "#CEC6CE",
+            "Galerie": "#EFEFEF",
+            "Albâtre": "#F7F7F7",
+            "Blanc": "#FFFFFF",
+            "Rouge": "#FF0000",
+            "Pelure d'orange": "#FF9C00",
+            "Jaune": "#FFFF00",
+            "Vert": "#00FF00",
+            "Cyan": "#00FFFF",
+            "Bleu": "#0000FF",
+            "Violet électrique": "#9C00FF",
+            "Magenta": "#FF00FF",
+            "Azalée": "#F7C6CE",
+            "Karry": "#FFE7CE",
+            "Blanc d'oeuf": "#FFEFC6",
+            "Zanah": "#D6EFD6",
+            "Botticelli": "#CEDEE7",
+            "Bleu tropical": "#CEE7F7",
+            "Mischka": "#D6D6E7",
+            "Crépuscule": "#E7D6DE",
+            "Rose Tonys": "#E79C9C",
+            "Orange pêche": "#FFC69C",
+            "Crème brulée": "#FFE79C",
+            "Germes": "#B5D6A5",
+            "Casper": "#A5C6CE",
+            "Perano": "#9CC6EF",
+            "Violet froid": "#B5A5D6",
+            "Rose Careys": "#D6A5BD",
+            "Mandy": "#E76363",
+            "Rajah": "#F7AD6B",
+            "Pissenlit": "#FFD663",
+            "Olivine": "#94BD7B",
+            "Ruisseau du Golfe": "#73A5AD",
+            "Viking": "#6BADDE",
+            "Blue Marguerite": "#8C7BC6",
+            "Puce": "#C67BA5",
+            "Gardien Rouge": "#CE0000",
+            "Fire Bush": "#E79439",
+            "Rêve d'or": "#EFC631",
+            "Concombre de Chelsea": "#6BA54A",
+            "Bleu slim": "#4A7B8C",
+            "Bleu Boston": "#3984C6",
+            "Papillon du Bush": "#634AA5",
+            "Cadillac": "#A54A7B",
+            "Sangria": "#9C0000",
+            "Mai Tai": "#B56308",
+            "Bouddha d'or": "#BD9400",
+            "Vert forêt": "#397B21",
+            "Eden": "#104A5A",
+            "Bleu Venise": "#085294",
+            "Météorite": "#311873",
+            "Bordeaux": "#731842",
+            "Bois de rose": "#630000",
+            "Cannelle": "#7B3900",
+            "Olive": "#846300",
+            "Persil": "#295218",
+            "Tibre": "#083139",
+            "Bleu Minuit": "#003163",
+            "Valentino": "#21104A",
+            "Loulou": "#4A1031"
+        }
     };
 
     // -----------------------------------

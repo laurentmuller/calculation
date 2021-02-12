@@ -18,6 +18,7 @@ use App\Form\FormHelper;
 use App\Form\Type\CaptchaImage;
 use App\Form\Type\MinStrengthType;
 use App\Pdf\PdfResponse;
+use App\Pdf\PdfTocDocument;
 use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
@@ -177,6 +178,31 @@ class TestController extends AbstractController
         }
 
         return $this->render('test/password.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/pell", name="test_pell")
+     */
+    public function pellEditor(Request $request): Response
+    {
+        $data = ['message' => ''];
+        $helper = $this->createFormHelper('user.fields.', $data);
+        $helper->field('message')
+            ->updateAttribute('minlength', 10)
+            ->addHiddenType();
+
+        $form = $helper->createForm();
+        if ($this->handleRequestForm($request, $form)) {
+            $data = $form->getData();
+            $message = 'Message :<br>' . (string) $data['message'];
+            $this->succes($message);
+
+            return $this->redirectToHomePage();
+        }
+
+        return $this->render('test/pelleditor.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -386,6 +412,43 @@ class TestController extends AbstractController
         return $this->render('test/tinymce.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * Test the PdfTocDocument.
+     *
+     * @Route("/toc", name="test_toc")
+     */
+    public function tocDocument(): PdfResponse
+    {
+        $doc = new PdfTocDocument();
+
+        $doc->AddPage();
+        $doc->Cell(0, 5, 'Cover', 0, 1, 'C');
+
+        $doc->AddPage();
+        $doc->tocStart();
+        $doc->Cell(0, 5, 'TOC1', 0, 1, 'L');
+        $doc->tocAddEntry('TOC1', 0);
+        $doc->Cell(0, 5, 'TOC1.1', 0, 1, 'L');
+        $doc->tocAddEntry('TOC1.1', 1);
+
+        $doc->AddPage();
+        $doc->Cell(0, 5, 'TOC2', 0, 1, 'L');
+        $doc->tocAddEntry('TOC2', 0);
+
+        $doc->AddPage();
+        for ($i = 3; $i <= 25; ++$i) {
+            if (0 === $i % 10) {
+                $doc->AddPage();
+            }
+            $doc->Cell(0, 5, 'TOC' . $i, 0, 1, 'L');
+            $doc->tocAddEntry('TOC' . $i, 0);
+        }
+        $doc->tocStop();
+        $doc->tocOutput(2);
+
+        return $this->renderPdfDocument($doc);
     }
 
     /**

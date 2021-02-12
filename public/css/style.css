@@ -189,6 +189,9 @@ a.btn-list {
     width: 75px;
     text-align: center;
 }
+.text-image img {
+    mix-blend-mode: multiply;
+}
 .text-nowrap {
     white-space: nowrap;
 }
@@ -624,8 +627,7 @@ span.color-value {
     width: 1.5rem;
     display: inline-block;
     margin-right: 0.25rem;
-    margin-top: 0.25rem;
-    vertical-align: top;
+    align-self: center;
 }
 .color-picker .drowpdown-text {
     text-overflow: ellipsis;

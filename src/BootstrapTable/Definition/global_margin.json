@@ -1,9 +1,7 @@
 [
 	{
 		"field": "id",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
+		"visible": false
 	},
 	{
 		"field": "minimum",

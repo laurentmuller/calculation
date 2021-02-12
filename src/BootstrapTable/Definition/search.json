@@ -1,16 +1,13 @@
 [
 	{
 		"field": "id",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
+		"visible": false
 	},
 	{
 		"field": "entityName",
 		"title": "search.fields.entity",
 		"searchable": false,
-		"class": "text-cell w-20",
-		"cellFormatter": "formatEntityName"
+		"class": "text-cell w-20"
 	},
 	{
 		"field": "fieldName",
@@ -23,38 +20,8 @@
 		"title": "search.fields.content",
 		"searchable": false,
 		"class": "text-cell w-auto",
-		"default": true,
-		"cardBold": true
-	},
-	{
-		"field": "type",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
-	},
-	{
-		"field": "field",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
-	},
-	{
-		"field": "show_granted",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
-	},
-	{
-		"field": "edit_granted",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
-	},
-	{
-		"field": "delete_granted",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
+		"cardClass": "font-weight-bold",
+		"default": true
 	},
 	{
 		"field": "action",
@@ -62,5 +29,21 @@
 		"searchable": false,
 		"class": "actions rowlink-skip d-print-none",
 		"cellFormatter": "formatActions"
+	},
+	{
+		"field": "type",
+		"visible": false
+	},
+	{
+		"field": "showGranted",
+		"visible": false
+	},
+	{
+		"field": "editGranted",
+		"visible": false
+	},
+	{
+		"field": "deleteGranted",
+		"visible": false
 	}
 ]

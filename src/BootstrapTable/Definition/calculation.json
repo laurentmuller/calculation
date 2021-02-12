@@ -4,9 +4,9 @@
 		"title": "calculation.fields.id",
 		"order": "desc",
 		"class": "text-id text-border",
+		"cardClass": "font-weight-bold",
 		"fieldFormatter": "formatId",
-		"styleFormatter": "styleStateColor",
-		"cardBold": true
+		"styleFormatter": "styleStateColor"
 	},
 	{
 		"field": "date",
@@ -35,9 +35,7 @@
 		"field": "overallMargin",
 		"title": "calculation.fields.margin",
 		"class": "text-percent",
-		"fieldFormatter": "formatPercent",
-		"cellFormatter": "formatCalculationMargin",
-		"styleFormatter": "styleCalculationMargin"
+		"fieldFormatter": "formatOverallMargin"
 	},
 	{
 		"field": "overallTotal",
@@ -54,8 +52,6 @@
 	},
 	{
 		"field": "state.color",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
+		"visible": false
 	}
 ]

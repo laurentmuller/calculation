@@ -78,3 +78,4 @@ Affiche les propriétés de l'article.
 | OK        | Retourne à la page précédente.               |
 | Modifier  | Affiche la page d'édition de l'article.      |
 | Supprimer | Affiche la page de suppression de l'article. |
+

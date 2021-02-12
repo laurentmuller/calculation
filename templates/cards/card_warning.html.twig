@@ -18,18 +18,20 @@
 <p class="mb-0">
 	{{- message|default('http_error_500.description'|trans)|raw -}}
 </p>
+{# message_list #}
 {% if message_list|default(false) %}
 <p class="mt-2">
     {{- message_list|trans|raw -}}
 </p>
 {% endif %}
-{% if items|default(false) and items|length %}
-    <ul class="mt-2 ml-5">
+{# items #}
+{%- if items|default(false) and items|length -%}
+<ul class="mt-2 ml-5">
     {% for item in items -%}
-        <li>{{ item|raw }}</li>
+    <li>{{ item|raw }}</li>
     {%- endfor %}
-    </ul>
-{% endif %}
+</ul>
+{%- endif -%}
 {%- endblock %}
 
 {% block card_footer %}

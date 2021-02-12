@@ -44,4 +44,15 @@ class GlobalMarginTable extends AbstractEntityTable
     {
         return ['minimum' => Column::SORT_ASC];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function updateParameters(array $parameters): array
+    {
+        $parameters = parent::updateParameters($parameters);
+        $parameters['attributes']['search'] = \json_encode(false);
+
+        return $parameters;
+    }
 }

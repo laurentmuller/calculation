@@ -1,6 +1,83 @@
 /**! compression tag for ftp-deployment */
 
-/* globals getStateColor */
+/* globals MenuBuilder */
+
+/**
+ * Gets the state style color of the given row.
+ * 
+ * @param {object}
+ *            row - the record data.
+ * @returns {string} the state style color, if any; null otherwise.
+ */
+function getStateColor(row) {
+    'use strict';
+    const color = row.color || row.stateColor || row['state.color'] || null;
+    if(color) {
+        return color + ' !important';
+    }
+    return null;
+}
+
+/**
+ * Style for a state column (calculations or status).
+ * 
+ * @param {number}
+ *            value - the field value.
+ * @param {object}
+ *            row - the record data.
+ * 
+ * @returns {object} the cell style.
+ */
+function styleStateColor(value, row) { // jshint ignore:line
+    'use strict';
+    const color = getStateColor(row);
+    if(color) {
+        return {
+            css: {
+                'border-left-color': color
+            }
+        };
+    }
+}
+
+/**
+ * Style for the log created date column.
+ * 
+ * @param {number}
+ *            value - the field value.
+ * @param {object}
+ *            row - the record data.
+ * 
+ * @returns {object} the cell style.
+ */
+function styleLogCreatedAt(value, row) { // jshint ignore:line
+    'use strict';
+    let color;
+    switch(row.level.toLowerCase()) {
+        case 'debug':
+            color = 'secondary';
+            break;
+        case 'warning':
+            color = 'warning';
+            break;
+        case 'error':
+        case 'critical':
+        case 'alert':
+        case 'emergency':
+            color = 'danger';
+            break;
+        case 'info':
+        case 'notice':
+        default:
+            color = 'info';
+            break;
+    }
+    return {
+        css: {
+            'border-left-color': 'var(--' + color + ') !important'
+        }
+    };
+}
 
 /**
  * Returns if the current row is rendered for the connected user
@@ -32,7 +109,7 @@ function isConnectedUser($table, row) {
  */
 function updateUserAction($table, row, $element, $action) {
     'use strict';
-    if (isConnectedUser($table, row)) {
+    if(isConnectedUser($table, row)) {
         $action.remove();
     }
 }
@@ -51,15 +128,17 @@ function updateUserAction($table, row, $element, $action) {
  */
 function updateUserSwitchAction($table, row, $element, $action) {
     'use strict';
-    if (isConnectedUser($table, row)) {
+    if(isConnectedUser($table, row)) {
         $action.prev('.dropdown-divider').remove();
         $action.remove();
     } else {
         const source = $action.attr('href').split('?')[0];
-        const params = {'_switch_user': row.username};
+        const params = {
+            '_switch_user': row.username
+        };
         const href = source + '?' + $.param(params);
         $action.attr('href', href);
-    }    
+    }
 }
 
 /**
@@ -76,17 +155,23 @@ function updateUserSwitchAction($table, row, $element, $action) {
  */
 function updateSearchAction($table, row, $element, $action) {
     'use strict';
-    if ($action.is('.btn-show') && !row.show_granted) {
+    if($action.is('.btn-show') && !row.showGranted) {
         $action.remove();
-    } else if ($action.is('.btn-edit') && !row.edit_granted) {
+    } else if($action.is('.btn-edit') && !row.editGranted) {
         $action.remove();
-    } else if ($action.is('.btn-delete') && !row.delete_granted) {
+    } else if($action.is('.btn-delete') && !row.deleteGranted) {
         $action.remove();
     } else {
-        const id =  row.id;
-        const type = row.type.toLowerCase();
+        const id = row.id;
+        const type = row.type;
         const href = $action.attr('href').replace('_type_', type).replace('_id_', id);
-        $action.attr('href', href);    
+        $action.attr('href', href);
+        const defaultAction = $table.data('defaultAction');
+        if($action.is('.btn-show') && defaultAction === 'show') {
+            $action.addClass('btn-default');
+        } else if($action.is('.btn-edit') && defaultAction === 'edit') {
+            $action.addClass('btn-default');
+        }
     }
 }
 
@@ -123,10 +208,34 @@ function updateCalculationPdfAction($table, row, $element, $action) {
 function updateTaskComputeAction($table, row, $element, $action) {
     'use strict';
     const items = Number.parseInt(row.items, 10);
-    if (Number.isNaN(items) || items === 0) {
+    if(Number.isNaN(items) || items === 0) {
         $action.prev('.dropdown-divider').remove();
         $action.remove();
     }
+}
+
+/**
+ * Formatter for the actions column.
+ * 
+ * @param {number}
+ *            value - the field value (id).
+ * @param {object}
+ *            row - the row record data.
+ * 
+ * @returns {string} the rendered cell.
+ */
+function formatActions(value, row) { // jshint ignore:line
+    'use strict';
+    const substr = '$1' + value;
+    const regex = /(\/|\bid=)(\d+)/;
+    const $actions = $('#dropdown-actions').clone().removeClass('d-none');
+    $actions.find('.dropdown-item-path').each(function() {
+        const $link = $(this);
+        const source = $link.attr('href');
+        const target = source.replace(regex, substr);
+        $link.attr('href', target);
+    });
+    return $actions.html();
 }
 
 /**
@@ -134,145 +243,225 @@ function updateTaskComputeAction($table, row, $element, $action) {
  */
 $.fn.extend({
     
-    getDataId: function() {
+    getDataValue: function() {
         'use strict';
         const $this = $(this);
         return $this.data('value') || null;
     },
-    
-    setDataId(id, $selection) {
+
+    setDataValue(value, $selection) {
         'use strict';
         const $this = $(this);
         const $items = $this.next('.dropdown-menu').find('.dropdown-item').removeClass('active');
-        $this.data('value', id);
-        if (id) {
+        $this.data('value', value);
+        if(value) {
             $selection.addClass('active');
             return $this.text($selection.text());
         }
         $items.first().addClass('active');
         return $this.text($this.data('default'));
     },
-    
+
     initDropdown: function() {
         'use strict';
         const $this = $(this);
         const $menu = $this.next('.dropdown-menu');
-        const $items = $menu.find('.dropdown-item');
-        if ($items.length) {
-            $items.on('click', function() {
-                const $item = $(this);
-                const newValue = $item.getDataId();
-                const oldValue = $this.getDataId();
-                if (newValue !== oldValue) {
-                    $this.setDataId(newValue || '', $item).trigger('input');
-                }
-                $this.focus();
-            });
-            $this.parent().on('shown.bs.dropdown', function () {
-                $menu.find('.active').focus();
-            });
-        }
+        $menu.on('click', '.dropdown-item', function() {
+            const $item = $(this);
+            const newValue = $item.getDataValue();
+            const oldValue = $this.getDataValue();
+            if(newValue !== oldValue) {
+                $this.setDataValue(newValue || '', $item).trigger('input');
+            }
+            $this.focus();
+        });
+        $this.parent().on('shown.bs.dropdown', function() {
+            $menu.find('.active').focus();
+        });
         return $this;
+    },
+
+    /**
+     * Gets the context menu items for the selected cell.
+     * 
+     * @return {object} the context menu items.
+     */
+    getContextMenuItems: function() {
+        'use strict';
+        const $row = $(this).parents('tr');
+        const $elements = $row.find('.dropdown-menu').children();
+        const builder = new MenuBuilder();
+        return builder.fill($elements).getItems();
     }
 });
 
 /**
  * Ready function
  */
-(function ($) {
+(function($) {
     'use strict';
     
+    const $toggle = $('#toggle');
     const $table = $('#table-edit');
+    const $pageButton = $('#button_page');
+    const $clearButton = $('#clear_search');
     const $inputs = $('.dropdown-toggle.dropdown-input');
     
     // initialize table
     const options = {
-        queryParams: function (params) {
-            $inputs.each(function () {
+        queryParams: function(params) {
+            $inputs.each(function() {
                 const $this = $(this);
-                const value = $this.getDataId();
-                if (value) {
-                    params[$this.attr('id')] = value;    
-                }                
-            }); 
+                const value = $this.getDataValue();
+                if(value) {
+                    params[$this.attr('id')] = value;
+                }
+            });
             return params;
         },
 
+        onPreBody: function(data) {
+            // update pages list and page button
+            if ($pageButton.length) {
+                const options = $table.getOptions();
+                let pageList = options.pageList;
+                for(let i = 0; i < pageList.length; i++) {
+                    if(pageList[i] >= options.totalRows) {
+                        pageList = pageList.splice(0, i + 1);
+                        break;
+                    }
+                }
+                if(pageList.length <= 1) {
+                    $pageButton.addClass('disabled');
+                } else {
+                    const pageSize = Number.parseInt(options.pageSize, 10);
+                    const $links = pageList.map(function(page) {
+                        const $link = $('<button/>', {
+                            'class': 'dropdown-page dropdown-item',
+                            'data-value': page,
+                            'text': page
+                        });
+                        if(page === pageSize) {
+                            $link.addClass('active');
+                        }
+                        return $link;
+                    });
+                    $('.dropdown-page').remove();
+                    $('.dropdown-menu-page').append($links);
+                    $pageButton.removeClass('disabled');
+                }
+            }
+            
+            // update clear search button
+            if ($clearButton.length) {
+                let enabled = $table.isSearchText();
+                if (!enabled && $inputs.length) {
+                    $inputs.each(function() {
+                        if ($(this).getDataValue()) {
+                            enabled = true;
+                            return false;
+                        }
+                    });
+                }    
+                $clearButton.toggleClass('disabled', !enabled);
+            }
+            
+            // update toggle view button
+            $toggle.toggleClass('disabled', data.length === 0);
+        },
+
         onRenderCardView: function($table, row, $element) {
-            const color =  getStateColor(row);
-            if (color) {
+            const color = getStateColor(row);
+            if(color) {
                 const $cell = $element.find('td:first');
                 const style = 'border-left-color: ' + color;
                 $cell.addClass('text-border').attr('style', style);
             }
         },
-        
+
         onRenderAction: function($table, row, $element, $action) {
-            if ($action.is('.btn-user-switch')) {
+            if($action.is('.btn-user-switch')) {
                 updateUserSwitchAction($table, row, $element, $action);
-            } else if ($action.is('.btn-user-message, .btn-user-delete')) {
+            } else if($action.is('.btn-user-message, .btn-user-delete')) {
                 updateUserAction($table, row, $element, $action);
-            } else if ($action.is('.btn-calculation-pdf')) {
+            } else if($action.is('.btn-calculation-pdf')) {
                 updateCalculationPdfAction($table, row, $element, $action);
-            } else if ($action.is('.btn-search')) {
+            } else if($action.is('.btn-search')) {
                 updateSearchAction($table, row, $element, $action);
-            } else if ($action.is('.btn-task-compute')) {
+            } else if($action.is('.btn-task-compute')) {
                 updateTaskComputeAction($table, row, $element, $action);
             }
         },
+        
+        onUpdateHref: function($table, $actions) {
+            if($actions.length === 1) {
+                $actions.addClass('btn-default');
+            }
+        }
     };
     $table.initBootstrapTable(options);
-    
+
     // handle drop-down input buttons
-    $inputs.each(function () {
+    $inputs.each(function() {
         $(this).initDropdown().on('input', function() {
-             $table.refresh();
-        });
-     });
-    
-    // handle toggle button
-    $('#toggle').on('click', function () {
-        $table.toggleView();
-    });
-    
-    // handle clear search button
-    $('#clear_search').on('click', function () {
-        const isSearchText = $table.isSearchText();
-        const isQueryParams = !$.isEmptyObject(options.queryParams({}));
-        
-        // clear drop-down
-        $inputs.each(function () {
-            $(this).setDataId(null);
-        });
-        if (isSearchText) {
-            $table.resetSearch();
-        } else if (isQueryParams)  {
             $table.refresh();
-        }
-        $('input.search-input').focus();
+        });
     });
 
+    // handle toggle button
+    $toggle.on('click', function() {
+        $table.toggleView();
+    });
+
+    // handle clear search button
+    if ($clearButton.length) {
+        $clearButton.on('click', function() {
+            const isSearchText = $table.isSearchText();
+            const isQueryParams = !$.isEmptyObject(options.queryParams({}));
+            // clear drop-down
+            $inputs.each(function() {
+                $(this).setDataValue(null);
+            });
+            if(isSearchText) {
+                $table.resetSearch();
+            } else if(isQueryParams) {
+                $table.refresh();
+            }
+            $('input.search-input').focus();
+        });
+    }
+    
+    // handle the page button
+    if ($pageButton.length) {
+        $pageButton.initDropdown().on('input', function() {
+            const pageSize = $pageButton.getDataValue();
+            $table.refresh({
+                pageSize: pageSize
+            });
+        });
+    }
+
     // handle keys enablement
-    $('.search-input, .btn, .dropdown-item, .page-link, .rowlink-skip').on('focus', function () {
+    $('.card-body').on('focus', '.search-input, .btn, .dropdown-item, .page-link, .rowlink-skip', function() {
         $table.disableKeys();
-    }).on('blur', function () {
+    }).on('blur', function() {
         $table.enableKeys();
     });
 
     // initialize context menu
-    const rowSelector = $table.getOptions().rowSelector;    
-    const ctxSelector =  rowSelector + ' td:not(.d-print-none)';
-    const show = function () {
+    const rowSelector = $table.getOptions().rowSelector;
+    const ctxSelector = rowSelector + ' td:not(.d-print-none)';
+    const show = function() {
         $('.dropdown-menu.show').removeClass('show');
     };
     $table.initContextMenu(ctxSelector, show);
 
-    // initialize tooltip for calculations
-    if ($table.data('min-margin-text')) {
+    // initialize danger tooltips
+    if($table.data('danger-tooltip-selector')) {
         $table.customTooltip({
             type: 'danger',
             trigger: 'hover',
-            selector: '.has-tooltip',
+            selector: $table.data('danger-tooltip-selector')
         });
     }
 
@@ -284,7 +473,7 @@ $.fn.extend({
     $('.btn-group-search').appendTo('.fixed-table-toolbar');
 
     // focus
-    if ($table.getData().length === 0) {
+    if($table.getData().length === 0) {
         $('input.search-input').focus();
     }
 }(jQuery));

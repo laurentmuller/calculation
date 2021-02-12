@@ -23,7 +23,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  *
  * @author Laurent Muller
  */
-class Column implements \JsonSerializable
+class Column
 {
     /**
      * The action column name.
@@ -46,9 +46,9 @@ class Column implements \JsonSerializable
     public const SORT_DESC = 'desc';
 
     /**
-     * Use the bold font style for the element when displayed in card view.
+     * The class for the element in the card view mode.
      */
-    private bool $cardBold = false;
+    private ?string $cardClass = null;
 
     /**
      * The displayed behavior for the element in the card view mode.
@@ -166,6 +166,40 @@ class Column implements \JsonSerializable
         }, $definitions);
     }
 
+    /**
+     * Gets the attributes used to output the column to the Twig template.
+     */
+    public function getAttributes(): array
+    {
+        // required
+        $result = [
+            'class' => $this->getClass(),
+            'field' => $this->getField(),
+            'sort-order' => $this->getOrder(),
+            'visible' => \json_encode($this->isVisible()),
+            'sortable' => \json_encode($this->isSortable()),
+            'card-visible' => \json_encode($this->isCardVisible()),
+        ];
+
+        // optionnal
+        if ($this->cardClass) {
+            $result['card-class'] = $this->cardClass;
+        }
+        if ($this->cellFormatter) {
+            $result['formatter'] = $this->cellFormatter;
+        }
+        if ($this->styleFormatter) {
+            $result['cell-style'] = $this->styleFormatter;
+        }
+
+        return $result;
+    }
+
+    public function getCardClass(): ?string
+    {
+        return $this->cardClass;
+    }
+
     public function getCellFormatter(): ?string
     {
         return $this->cellFormatter;
@@ -173,7 +207,12 @@ class Column implements \JsonSerializable
 
     public function getClass(): ?string
     {
-        return $this->class;
+        $class = (string) $this->class;
+        if (false === \strpos($class, 'rowlink-skip')) {
+            return \trim($class . ' cursor-pointer');
+        }
+
+        return $class;
     }
 
     public function getField(): string
@@ -204,11 +243,6 @@ class Column implements \JsonSerializable
         return $this->title;
     }
 
-    public function isCardBold(): bool
-    {
-        return $this->cardBold;
-    }
-
     public function isCardVisible(): bool
     {
         return $this->cardVisible;
@@ -221,46 +255,17 @@ class Column implements \JsonSerializable
 
     public function isSearchable(): bool
     {
-        return $this->searchable;
+        return $this->visible && $this->searchable;
     }
 
     public function isSortable(): bool
     {
-        return $this->sortable;
+        return $this->visible && $this->sortable;
     }
 
     public function isVisible(): bool
     {
         return $this->visible;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        $result = [
-            'field' => $this->field,
-            'visible' => $this->visible,
-            'sortable' => $this->sortable,
-            'sortOrder' => $this->order,
-            'cardBold' => $this->cardBold,
-            'cardVisible' => $this->cardVisible,
-        ];
-        if (null !== $this->class) {
-            $result['class'] = $this->class;
-        }
-        if (null !== $this->title) {
-            $result['title'] = $this->title;
-        }
-        if (null !== $this->cellFormatter) {
-            $result['cellFormatter'] = $this->cellFormatter;
-        }
-        if (null !== $this->styleFormatter) {
-            $result['styleFormatter'] = $this->styleFormatter;
-        }
-
-        return $result;
     }
 
     /**
@@ -288,9 +293,9 @@ class Column implements \JsonSerializable
         return $this->formatValue($objectOrArray, $value);
     }
 
-    public function setCardBold(bool $cardBold): self
+    public function setCardClass(?string $cardClass): self
     {
-        $this->cardBold = $cardBold;
+        $this->cardClass = $cardClass;
 
         return $this;
     }

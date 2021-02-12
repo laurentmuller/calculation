@@ -7,8 +7,8 @@
 {%- set save_url     = url('table_log_save') -%}
 {%- set channel      = channel|default('') -%}
 {%- set level        = level|default('') -%}
-{%- set params       = {'channel': channel, 'level': level} -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_LOG -%}
+{%- set allow_global = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 
 {% block card_header %}
 <div class="row">
@@ -44,16 +44,16 @@
 
 {% block global_actions -%}
 {%- set route = app.request.get('_route') -%}
-{{ _self.item_global(path('log_refresh', {'route' : route}), 'common.button_refresh', 'sync-alt') }}
-{{ _self.item_separator() }}
-{{ _self.item_global(path('log_delete', {'route' : route}), 'log.delete.title', 'times') }}
-{{ _self.item_separator() }}
-{{ _self.item_external(path('log_pdf'), 'log.list.pdf_title', 'file-pdf far') }}
-{{ _self.item_external(path('log_excel'), 'log.list.excel_title', 'file-excel far') }}
+{{- _self.item_global(path('log_refresh', {'route' : route}), 'common.button_refresh', 'sync-alt') }}
+{{- _self.item_separator() }}
+{{- _self.item_global(path('log_delete', {'route' : route}), 'log.delete.title', 'times') }}
+{{- _self.item_separator() }}
+{{- _self.item_external(path('log_pdf'), 'log.list.pdf_title', 'file-pdf far') }}
+{{- _self.item_external(path('log_excel'), 'log.list.excel_title', 'file-excel far') }}
 {%- endblock %}
 
-{% block edit_actions -%}
-{{ _self.item_path(path('log_show', params), 'log.show.title', 'tv', 'btn-show btn-default') }}
+{% block show_actions -%}
+{{- _self.item_path(path('log_show', params), 'log.show.title', 'tv', 'btn-show btn-default') }}
 {%- endblock %}
 
 {% block stylesheets %}

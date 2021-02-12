@@ -6,16 +6,26 @@
 {%- set defer_url    = url('table_customer') -%}
 {%- set save_url     = url('table_customer_save') -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_CUSTOMER -%}
+{%- set allow_global = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 
 {% block global_actions -%}
-{{ _self.item_external(path('customer_pdf'), 'customer.list.pdf_title', 'file-pdf far') }}
-{{ _self.item_external(path('customer_excel'), 'customer.list.excel_title', 'file-excel far') }}
+{{- _self.item_external(path('customer_pdf'), 'customer.list.pdf_title', 'file-pdf far') }}
+{{- _self.item_external(path('customer_excel'), 'customer.list.excel_title', 'file-excel far') }}
+{%- endblock %}
+
+{% block show_actions -%}
+{{- _self.item_path(path('customer_show', params), 'customer.show.title', 'tv', show_class) }}
 {%- endblock %}
 
 {% block edit_actions -%}
-{{ _self.item_path(path('customer_show', params), 'customer.show.title', 'tv', show_class) }}
-{{ _self.item_path(path('customer_edit', params), 'customer.edit.title', 'pencil-alt', edit_class) }}
-{{ _self.item_path(path('customer_delete', params), 'customer.delete.title', 'times', 'btn-delete') }}
-{{ _self.item_separator() }}
-{{ _self.item_path(path('customer_add', params), 'customer.add.title', 'file far', 'btn-add') }}
+{{- _self.item_path(path('customer_edit', params), 'customer.edit.title', 'pencil-alt', edit_class) }}
+{%- endblock %}
+
+{% block delete_actions -%}
+{{- _self.item_path(path('customer_delete', params), 'customer.delete.title', 'times', 'btn-delete') }}
+{%- endblock %}
+
+{% block add_actions -%}
+{{- _self.item_separator() }}
+{{- _self.item_path(path('customer_add', params), 'customer.add.title', 'file far', 'btn-add') }}
 {%- endblock %}

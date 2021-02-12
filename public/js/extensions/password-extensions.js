@@ -95,6 +95,7 @@
     });
 
     // update password types
+    // $('[data-toggle="password"]').password();
     $("input:password").togglePassword();
 
 }(jQuery));

@@ -27,10 +27,13 @@ use Twig\Environment;
 class UserTable extends AbstractEntityTable
 {
     /**
-     * @var TranslatorInterface
+     * The translator.
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
+    /**
+     * The template renderer.
+     */
     private Environment $twig;
 
     /**
@@ -68,7 +71,7 @@ class UserTable extends AbstractEntityTable
     public function formatImage(?string $image, User $user): string
     {
         if (Utils::isString($image)) {
-            return $this->twig->render('table/_user_image_cell.html.twig', ['user' => $user]);
+            return $this->twig->render('table/_cell_user_image.html.twig', ['user' => $user]);
         }
 
         return '';

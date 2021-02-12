@@ -199,6 +199,11 @@
 					"id": "category.add.title",
 					"icon": "file far",
 					"description": "Affiche la page de création d'une catégorie."
+				},
+				{
+					"id": "common.button_clone",
+					"icon": "copy far",
+					"description": "Crée une copie de la catégorie et affiche la page de création."
 				}
 			]
 		},
@@ -223,7 +228,7 @@
 				},
 				{
 					"name": "margins",
-					"description": "Liste de marges à appliquer à une calculation.",
+					"description": "Liste de marges à appliquer à un groupe d'articles d'une calculation.",
 					"required": false,
 					"type": "collection"
 				},
@@ -265,13 +270,13 @@
 			"fields": [
 				{
 					"name": "minimum",
-					"description": "Valeur minimale pour laquelle la marge est appliquée.",
+					"description": "Valeur minimale (inclus) pour laquelle la marge est appliquée.",
 					"required": true,
 					"type": "amount"
 				},
 				{
 					"name": "maximum",
-					"description": "Valeur maximale pour laquelle la marge est appliquée.",
+					"description": "Valeur maximale (exclus) pour laquelle la marge est appliquée.",
 					"required": true,
 					"type": "amount"
 				},
@@ -302,6 +307,169 @@
 					"id": "globalmargin.add.title",
 					"icon": "file far",
 					"description": "Affiche la page de création d'une la marge globale."
+				}
+			]
+		},
+		{
+			"id": "calculation",
+			"icon": "calculator",
+			"description": "Représente une calculation.",
+			"fields": [
+				{
+					"name": "id",
+					"description": "Numéro unique identifiant la calculation.",
+					"required": true,
+					"type": "identifier"
+				},
+				{
+					"name": "customer",
+					"description": "Nom du client.",
+					"required": true,
+					"type": "text",
+					"length": "255"
+				},
+				{
+					"name": "description",
+					"description": "Description de la calculation.",
+					"required": true,
+					"type": "text",
+					"length": "255"
+				},
+				{
+					"name": "date",
+					"description": "Date de la calculation. La valeur par défaut est la date du jour.",
+					"required": true,
+					"type": "date"
+				},
+				{
+					"name": "state",
+					"description": "Statut de la calculation.",
+					"required": true,
+					"type": "reference",
+					"entity2": "calculationstate"
+				},
+				{
+					"name": "itemsTotal",
+					"description": "Montant total des articles.",
+					"type": "amount",
+					"required": false
+				},
+				{
+					"name": "globalMargin",
+					"description": "Marge globale calculée automatiquement par le programme en fonction du montant total des articles.",
+					"type": "percent",
+					"required": false
+				},
+				{
+					"name": "totalNet",
+					"description": "Montant total net de la calculation.",
+					"type": "amount",
+					"required": false
+				},
+				{
+					"name": "userMargin",
+					"description": "Marge de l'utilisateur à appliquer à la calculation.",
+					"type": "percent",
+					"required": false
+				},
+				{
+					"name": "overallTotal",
+					"description": "Total général de la calculation.",
+					"type": "amount",
+					"required": false
+				},
+				{
+					"name": "created",
+					"description": "Date et nom de l'utilisateur ayant crée la calculation.",
+					"type": "text",
+					"required": false
+				},
+				{
+					"name": "updated",
+					"description": "Date et nom de l'utilisateur ayant modifier la calculation en dernier.",
+					"type": "text",
+					"required": false
+				}
+			],
+			"actions": [
+				{
+					"id": "calculation.show.title",
+					"icon": "tv",
+					"description": "Affiche la page des propriétés de la calculation."
+				},
+				{
+					"id": "calculation.edit.title_short",
+					"icon": "pencil-alt",
+					"description": "Affiche la page d'édition de la calculation."
+				},
+				{
+					"id": "calculation.delete.title",
+					"icon": "times",
+					"description": "Affiche la page de suppression de la calculation."
+				},
+				{
+					"id": "calculation.add.title",
+					"icon": "file far",
+					"description": "Affiche la page de création d'une calculation."
+				},
+				{
+					"id": "common.button_clone",
+					"icon": "copy far",
+					"description": "Crée une copie de la calculation et affiche la page de création."
+				},
+				{
+					"id": "calculation.list.state_title",
+					"icon": "flag far",
+					"description": "Affiche la page de modification du statut de la calculation."
+				},
+				{
+					"id": "calculation.list.pdf_single_title",
+					"icon": "file-pdf far",
+					"description": "Exporte la calculation au format PDF."
+				}
+			]
+		},
+		{
+			"id": "log",
+			"icon": "book",
+			"description": "Représente une entrée dans le journal de l'application.",
+			"fields": [
+				{
+					"name": "createdAt",
+					"description": "Date de création de l'entrée.",
+					"required": false,
+					"type": "date"
+				},
+				{
+					"name": "channel",
+					"description": "Nom du cannal.",
+					"required": false,
+					"type": "text"
+				},
+				{
+					"name": "level",
+					"description": "Niveau d'erreur.",
+					"type": "text",
+					"required": false
+				},
+				{
+					"name": "message",
+					"description": "Message d'information ou d'erreur.",
+					"type": "text",
+					"required": false
+				},
+				{
+					"name": "context",
+					"description": "Contexte d'information ou d'erreur.",
+					"type": "text",
+					"required": false
+				}
+			],
+			"actions": [
+				{
+					"id": "log.show.title",
+					"icon": "tv",
+					"description": "Affiche la page des propriétés de l'entrée."
 				}
 			]
 		}
@@ -427,13 +595,17 @@
 				{
 					"id": "help.actions.clear",
 					"icon": "eraser",
-					"description": "Efface tous les critères de recherche saisie.",
-					"description2": "Efface tous les critères de recherche saisie."
+					"description": "Efface tous les critères de recherche."
 				},
 				{
 					"id": "help.actions.toggle",
 					"icon": "toggle-on",
 					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
+				},
+				{
+					"id": "help.actions.pages",
+					"icon": "sort-amount-down",
+					"description": "Sélectionne le nombre de lignes affichées par page."
 				},
 				{
 					"id": "product.list.pdf_title",
@@ -964,7 +1136,7 @@
 				},
 				{
 					"id": "common.button_cancel",
-					"description": "Annule la suppression et retourne à la page précédente."
+					"description": "Annule la suppression et retourne à la page précédente."					
 				}
 			]
 		},
@@ -983,6 +1155,78 @@
 					"id": "help.actions.toggle",
 					"icon": "toggle-on",
 					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
+				}
+			]
+		},
+		{
+			"id": "log.list.title",
+			"entity": "log",
+			"image": "log/log_list.png",
+			"description": "Affichage des entrées du journal de l'application. Cette page est accessible uniquement aux administrateurs.",
+			"displayEntityColumns": true,
+			"displayEntityActions": true,
+			"globalActions": [
+				{
+					"id": "help.actions.clear",
+					"icon": "eraser",
+					"description": "Efface tous les critères de recherche saisie."
+				},
+				{
+					"id": "help.actions.toggle",
+					"icon": "toggle-on",
+					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
+				},
+				{
+					"id": "common.button_refresh",
+					"icon": "sync-alt",
+					"description": "Actualise la liste des entrées du journal."
+				},
+				{
+					"id": "log.delete.title",
+					"icon": "times",
+					"description": "Supprime la liste des entrées du journal."
+				},
+				{
+					"id": "log.list.pdf_title",
+					"icon": "file-pdf far",
+					"description": "Exporte la liste des entrées au format PDF."
+				},
+				{
+					"id": "log.list.excel_title",
+					"icon": "file-excel far",
+					"description": "Exporte la liste des entrées au format Microsoft® Excel®."
+				}
+			]
+		},
+		{
+			"id": "log.show.title",
+			"entity": "log",
+			"image": "log/log_show.png",
+			"icon": "tv",
+			"description": "Cette page affiche les propriétés d'une entrée dans le journal de l'application. Cette page est accessible uniquement aux administrateurs.",
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Retourne à la page précédente.",
+					"dialog": "log.list.title"
+				}
+			]
+		},
+		{
+			"id": "log.delete.title",
+			"entity": "globalmargin",
+			"image": "log/log_delete.png",
+			"icon": "times",
+			"description": "Cette page permet de confirmer la suppression du journal de l'application. Cette page est accessible uniquement aux administrateurs.",
+			"editActions": [
+				{
+					"id": "common.button_delete",
+					"description": "Supprime le journal et retourne à la page principale du site."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule la suppression et retourne à la page précédente.",
+					"dialog": "log.list.title"
 				}
 			]
 		}

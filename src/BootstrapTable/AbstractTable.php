@@ -44,6 +44,11 @@ abstract class AbstractTable
     public const PARAM_CARD = 'card';
 
     /**
+     * The columns parameter name.
+     */
+    public const PARAM_COLUMNS = 'columns';
+
+    /**
      * The identifier parameter name.
      */
     public const PARAM_ID = 'id';
@@ -64,6 +69,21 @@ abstract class AbstractTable
     public const PARAM_ORDER = 'order';
 
     /**
+     * The page parameter name.
+     */
+    public const PARAM_PAGE = 'page';
+
+    /**
+     * The page list parameter name.
+     */
+    public const PARAM_PAGE_LIST = 'pageList';
+
+    /**
+     * The rows parameter name.
+     */
+    public const PARAM_ROWS = 'rows';
+
+    /**
      * The search parameter name.
      */
     public const PARAM_SEARCH = 'search';
@@ -72,6 +92,16 @@ abstract class AbstractTable
      * The sort parameter name.
      */
     public const PARAM_SORT = 'sort';
+
+    /**
+     * The total parameter name.
+     */
+    public const PARAM_TOTAL = 'total';
+
+    /**
+     * The total not filtred parameter name.
+     */
+    public const PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
 
     /**
      * The column definitions.
@@ -130,9 +160,9 @@ abstract class AbstractTable
     }
 
     /**
-     * Gets the entity class name.
+     * Gets the entity class name or null if not applicable.
      */
-    abstract public function getEntityClassName(): string;
+    abstract public function getEntityClassName(): ?string;
 
     /**
      * Handles the given request and returns the result parameters.
@@ -161,6 +191,23 @@ abstract class AbstractTable
         }
 
         return false;
+    }
+
+    /**
+     * Cleans the parameters to return.
+     */
+    protected function cleanParameters(Request $request, array $parameters): array
+    {
+        if ($request->isXmlHttpRequest()) {
+            return [
+                self::PARAM_TOTAL_NOT_FILTERED => $parameters[self::PARAM_TOTAL_NOT_FILTERED] ?? 0,
+                self::PARAM_TOTAL => $parameters[self::PARAM_TOTAL] ?? 0,
+                self::PARAM_ROWS => $parameters[self::PARAM_ROWS] ?? [],
+            ];
+        }
+        $parameters[self::PARAM_COLUMNS] = $this->getColumns();
+
+        return $parameters;
     }
 
     /**
@@ -201,6 +248,16 @@ abstract class AbstractTable
     }
 
     /**
+     * Gets the default order to apply.
+     *
+     * @return array an array where each key is the field name and the value is the order direction ('asc' or 'desc')
+     */
+    protected function getDefaultOrder(): array
+    {
+        return [];
+    }
+
+    /**
      * Gets the allowed page list.
      *
      * @param int $totalNotFiltered the number of not filtered entities
@@ -211,7 +268,7 @@ abstract class AbstractTable
     {
         $sizes = self::PAGE_LIST;
         for ($i = 0, $count = \count($sizes); $i < $count; ++$i) {
-            if ($sizes[$i] > $totalNotFiltered) {
+            if ($sizes[$i] >= $totalNotFiltered) {
                 return \array_slice($sizes, 0, $i + 1);
             }
         }
@@ -227,6 +284,42 @@ abstract class AbstractTable
         $value = $this->getRequestValue($request, self::PARAM_CARD, false);
 
         return (bool) \filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Gets the request parameters.
+     */
+    protected function getParameters(Request $request): array
+    {
+        // offset and limit
+        $offset = (int) $request->get(self::PARAM_OFFSET, 0);
+        $limit = (int) $this->getRequestValue($request, self::PARAM_LIMIT, self::PAGE_SIZE);
+        $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
+
+        // sort and order
+        $sort = '';
+        $order = Column::SORT_ASC;
+        $defaultOrder = $this->getDefaultOrder();
+        if (!empty($defaultOrder)) {
+            $sort = \array_key_first($defaultOrder);
+            $order = $defaultOrder[$sort];
+        }
+
+        $result = [
+            self::PARAM_SEARCH => (string) $request->get(self::PARAM_SEARCH, ''),
+
+            self::PARAM_ID => $this->getParamId($request),
+            self::PARAM_CARD => $this->getParamCard($request),
+
+            self::PARAM_SORT => (string) $this->getRequestValue($request, self::PARAM_SORT, $sort),
+            self::PARAM_ORDER => (string) $this->getRequestValue($request, self::PARAM_ORDER, $order),
+
+            self::PARAM_OFFSET => $offset,
+            self::PARAM_LIMIT => $limit,
+            self::PARAM_PAGE => $page,
+        ];
+
+        return $result;
     }
 
     /**
@@ -279,6 +372,16 @@ abstract class AbstractTable
     }
 
     /**
+     * Implode the given page list.
+     *
+     * @param int[] $pageList the page list
+     */
+    protected function implodePageList(array $pageList): string
+    {
+        return '[' . \implode(',', $pageList) . ']';
+    }
+
+    /**
      * Maps the given entities.
      *
      * @param array $entities the entities to map
@@ -318,4 +421,14 @@ abstract class AbstractTable
 
         return \array_reduce($columns, $callback, []);
     }
+
+
+    /**
+     * Update the parameters before sending back.
+     */
+    protected function updateParameters(array $parameters): array
+    {
+        return $parameters;
+    }
+
 }

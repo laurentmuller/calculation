@@ -63,7 +63,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
     /**
      * {@inheritdoc}
      */
-    public function getEntityClassName(): string
+    public function getEntityClassName(): ?string
     {
         return EntityVoterInterface::ENTITY_CALCULATION;
     }
@@ -110,9 +110,9 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
         // ajax?
         if ($request->isXmlHttpRequest()) {
             return [
-                'totalNotFiltered' => $totalNotFiltered,
-                'total' => $filtered,
-                'rows' => $rows,
+                self::PARAM_TOTAL_NOT_FILTERED => $totalNotFiltered,
+                self::PARAM_TOTAL => $filtered,
+                self::PARAM_ROWS => $rows,
             ];
         }
 
@@ -120,27 +120,49 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
         $pageList = $this->getPageList($totalNotFiltered);
         $limit = \min($limit, \max($pageList));
 
+        // card view
+        $card = $this->getParamCard($request);
+
         // render
         return [
-            'columns' => $this->getColumns(),
-            'rows' => $rows,
+            // template parameters
+            self::PARAM_COLUMNS => $this->getColumns(),
+            self::PARAM_ROWS => $rows,
+            self::PARAM_PAGE_LIST => $pageList,
+            self::PARAM_LIMIT => $limit,
 
-            'card' => $this->getParamCard($request),
-            'id' => $this->getParamId($request),
-
+            // custom parameters
             'itemsCount' => $this->getItemsCount($entities),
-            'totalNotFiltered' => $totalNotFiltered,
-            'total' => $filtered,
+            'allow_search' => false,
 
-            'page' => $page,
-            'limit' => $limit,
-            'offset' => $offset,
-            'search' => $search,
-            'pageList' => $pageList,
-            'searchAllowed' => false,
+            // action parameters
+            'params' => [
+                self::PARAM_ID => $this->getParamId($request),
+                self::PARAM_SEARCH => $search,
+                self::PARAM_SORT => $sort,
+                self::PARAM_ORDER => $order,
+                self::PARAM_OFFSET => $offset,
+                self::PARAM_LIMIT => $limit,
+                self::PARAM_CARD => $card,
+            ],
 
-            'sort' => $sort,
-            'order' => $order,
+            // table attributes
+            'attributes' => [
+                'total-not-filtered' => $totalNotFiltered,
+                'total-rows' => $filtered,
+
+                'search' => \json_encode(false),
+                'search-text' => $search,
+
+                'page-list' => $this->implodePageList($pageList),
+                'page-size' => $limit,
+                'page-number' => $page,
+
+                'card-view' => \json_encode($this->getParamCard($request)),
+
+                'sort-name' => $sort,
+                'sort-order' => $order,
+            ],
         ];
     }
 

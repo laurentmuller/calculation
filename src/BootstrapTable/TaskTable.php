@@ -29,7 +29,7 @@ class TaskTable extends AbstractEntityTable
     /**
      * The category parameter name.
      */
-    private const PARAM_CATEGORY = 'categoryId';
+    public const PARAM_CATEGORY = 'categoryId';
 
     /**
      * The selected category identifier.
@@ -37,23 +37,25 @@ class TaskTable extends AbstractEntityTable
     private int $categoryId = 0;
 
     /**
+     * The category repository.
+     */
+    private CategoryRepository $categoryRepository;
+
+    /**
      * Constructor.
      */
-    public function __construct(TaskRepository $repository)
+    public function __construct(TaskRepository $repository, CategoryRepository $categoryRepository)
     {
         parent::__construct($repository);
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
-     * Gets the selected category or null if none.
+     * Gets the selected category identifier.
      */
-    public function getCategory(CategoryRepository $repository): ?Category
+    public function getCategoryId(): int
     {
-        if (0 !== $this->categoryId) {
-            return $repository->find($this->categoryId);
-        }
-
-        return null;
+        return $this->categoryId;
     }
 
     /**
@@ -88,5 +90,41 @@ class TaskTable extends AbstractEntityTable
     protected function getDefaultOrder(): array
     {
         return ['name' => Column::SORT_ASC];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function updateParameters(array $parameters): array
+    {
+        return \array_merge_recursive($parameters, [
+            'category' => $this->getCategory(),
+            'categories' => $this->getCategories(),
+            'params' => [
+                self::PARAM_CATEGORY => $this->categoryId,
+             ],
+        ]);
+    }
+
+    /**
+     * Gets categories.
+     *
+     * @return Category[]
+     */
+    private function getCategories(): array
+    {
+        return $this->categoryRepository->getListTaskCount();
+    }
+
+    /**
+     * Gets the selected category or null if none.
+     */
+    private function getCategory(): ?Category
+    {
+        if (0 !== $this->categoryId) {
+            return $this->categoryRepository->find($this->categoryId);
+        }
+
+        return null;
     }
 }

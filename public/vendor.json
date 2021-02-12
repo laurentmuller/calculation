@@ -271,6 +271,16 @@
 				"bootstrap-table.css",				
 				"extensions/defer-url/bootstrap-table-defer-url.js"
 			]
+		},
+		{
+			"github": "https://github.com/jaredreich/pell",
+			"name": "pell",
+			"version": "1.0.6",
+			"disabled": false,
+			"files": [
+				"pell.css",
+				"pell.js"
+			]
 		}
 	]
 }

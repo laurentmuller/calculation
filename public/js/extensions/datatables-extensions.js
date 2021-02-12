@@ -528,7 +528,8 @@ $.fn.initDataTable = function (options) {
         mark: {
             element: 'span',
             className: 'highlight',
-            ignorePunctuation: ["'", ","]
+            separateWordSearch: false,
+            ignorePunctuation: ["'", ",", "."]
         },
 
         // keys

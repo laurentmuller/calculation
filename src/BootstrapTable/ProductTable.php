@@ -29,7 +29,7 @@ class ProductTable extends AbstractEntityTable
     /**
      * The category parameter name.
      */
-    private const PARAM_CATEGORY = 'categoryId';
+    public const PARAM_CATEGORY = 'categoryId';
 
     /**
      * The selected category identifier.
@@ -37,23 +37,17 @@ class ProductTable extends AbstractEntityTable
     private int $categoryId = 0;
 
     /**
-     * Constructor.
+     * The category repository.
      */
-    public function __construct(ProductRepository $repository)
-    {
-        parent::__construct($repository);
-    }
+    private CategoryRepository $categoryRepository;
 
     /**
-     * Gets the selected category or null if none.
+     * Constructor.
      */
-    public function getCategory(CategoryRepository $repository): ?Category
+    public function __construct(ProductRepository $repository, CategoryRepository $categoryRepository)
     {
-        if (0 !== $this->categoryId) {
-            return $repository->find($this->categoryId);
-        }
-
-        return null;
+        parent::__construct($repository);
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -88,5 +82,41 @@ class ProductTable extends AbstractEntityTable
     protected function getDefaultOrder(): array
     {
         return ['description' => Column::SORT_ASC];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function updateParameters(array $parameters): array
+    {
+        return \array_merge_recursive($parameters, [
+            'category' => $this->getCategory(),
+            'categories' => $this->getCategories(),
+            'params' => [
+                self::PARAM_CATEGORY => $this->categoryId,
+            ],
+        ]);
+    }
+
+    /**
+     * Gets categories.
+     *
+     * @return Category[]
+     */
+    private function getCategories(): array
+    {
+        return $this->categoryRepository->getListCount();
+    }
+
+    /**
+     * Gets the selected category or null if none.
+     */
+    private function getCategory(): ?Category
+    {
+        if (0 !== $this->categoryId) {
+            return $this->categoryRepository->find($this->categoryId);
+        }
+
+        return null;
     }
 }

@@ -18,15 +18,16 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Trait to set or get access rights.
  *
- * @property int[] $EntityCalculation
- * @property int[] $EntityCalculationState
- * @property int[] $EntityGroup
- * @property int[] $EntityCategory
- * @property int[] $EntityCustomer
- * @property int[] $EntityGlobalMargin
- * @property int[] $EntityProduct
- * @property int[] $EntityUser
- * @property int[] $EntityTask
+ * @property int[] $EntityCalculation      the rights for calculations.
+ * @property int[] $EntityCalculationState the rights for calculation states.
+ * @property int[] $EntityGroup            the rights for groups.
+ * @property int[] $EntityCategory         the rights for categories.
+ * @property int[] $EntityCustomer         the rights for customers.
+ * @property int[] $EntityGlobalMargin     the rights for global margins.
+ * @property int[] $EntityProduct          the rights for products.
+ * @property int[] $EntityUser             the rights for users.
+ * @property int[] $EntityTask             the rights for tasks.
+ * @property int[] $EntityLog              the rights for entry logs.
  *
  * @author Laurent Muller
  */

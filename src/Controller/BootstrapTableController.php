@@ -28,11 +28,8 @@ use App\BootstrapTable\SearchTable;
 use App\BootstrapTable\TaskTable;
 use App\BootstrapTable\UserTable;
 use App\Interfaces\EntityVoterInterface;
-use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
-use App\Repository\GroupRepository;
 use App\Traits\MathTrait;
-use App\Util\FormatUtils;
 use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -59,16 +56,7 @@ class BootstrapTableController extends AbstractController
      */
     public function below(Request $request, CalculationBelowTable $table): Response
     {
-        $parameters = function () {
-            $margin = $this->getApplication()->getMinMargin();
-
-            return [
-                'min_margin' => $margin,
-                'min_margin_text' => $this->trans('calculation.list.margin_below', ['%minimum%' => FormatUtils::formatPercent($margin)]),
-            ];
-        };
-
-        return $this->handleTableRequest($request, $table, 'table/table_calculation_below.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_calculation_below.html.twig');
     }
 
     /**
@@ -86,20 +74,9 @@ class BootstrapTableController extends AbstractController
      *
      * @Route("/calculation", name="table_calculation")
      */
-    public function calculation(Request $request, CalculationTable $table, CalculationStateRepository $repository): Response
+    public function calculation(Request $request, CalculationTable $table): Response
     {
-        $parameters = function () use ($table, $repository) {
-            $margin = $this->getApplication()->getMinMargin();
-
-            return [
-                'state' => $table->getCalculationState($repository),
-                'states' => $repository->getListCount(),
-                'min_margin' => $margin,
-                'min_margin_text' => $this->trans('calculation.list.margin_below', ['%minimum%' => FormatUtils::formatPercent($margin)]),
-            ];
-        };
-
-        return $this->handleTableRequest($request, $table, 'table/table_calculation.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_calculation.html.twig');
     }
 
     /**
@@ -137,16 +114,9 @@ class BootstrapTableController extends AbstractController
      *
      * @Route("/category", name="table_category")
      */
-    public function category(Request $request, CategoryTable $table, GroupRepository $repository): Response
+    public function category(Request $request, CategoryTable $table): Response
     {
-        $parameters = function () use ($table, $repository) {
-            return [
-                'group' => $table->getGroup($repository),
-                'groups' => $repository->getListCount(),
-            ];
-        };
-
-        return $this->handleTableRequest($request, $table, 'table/table_category.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_category.html.twig');
     }
 
     /**
@@ -305,14 +275,7 @@ class BootstrapTableController extends AbstractController
      */
     public function product(Request $request, ProductTable $table, CategoryRepository $repository): Response
     {
-        $parameters = function () use ($table, $repository) {
-            return [
-                'category' => $table->getCategory($repository),
-                'categories' => $repository->getListCount(),
-            ];
-        };
-
-        return $this->handleTableRequest($request, $table, 'table/table_product.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_product.html.twig');
     }
 
     /**
@@ -352,14 +315,7 @@ class BootstrapTableController extends AbstractController
      */
     public function task(Request $request, TaskTable $table, CategoryRepository $repository): Response
     {
-        $parameters = function () use ($table, $repository) {
-            return [
-                'category' => $table->getCategory($repository),
-                'categories' => $repository->getListTaskCount(),
-            ];
-        };
-
-        return $this->handleTableRequest($request, $table, 'table/table_task.html.twig', $parameters);
+        return $this->handleTableRequest($request, $table, 'table/table_task.html.twig');
     }
 
     /**
@@ -395,18 +351,18 @@ class BootstrapTableController extends AbstractController
     /**
      * Handle the table request.
      *
-     * @param Request       $request              the request to handle
-     * @param AbstractTable $table                the table
-     * @param string        $template             the template to render
-     * @param callable      $additionalParameters the function used to merge parameters
+     * @param Request       $request  the request to handle
+     * @param AbstractTable $table    the table to get parameters for
+     * @param string        $template the template to render
      *
      * @return Response the response
      */
-    private function handleTableRequest(Request $request, AbstractTable $table, string $template, ?callable $additionalParameters = null): Response
+    private function handleTableRequest(Request $request, AbstractTable $table, string $template): Response
     {
         // check permission
-        $name = $table->getEntityClassName();
-        $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $name);
+        if ($name = $table->getEntityClassName()) {
+            $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $name);
+        }
 
         try {
             $status = Response::HTTP_OK;
@@ -430,11 +386,6 @@ class BootstrapTableController extends AbstractController
         // ok?
         if (Response::HTTP_OK !== $status) {
             return $this->render('bundles/TwigBundle/Exception/error.html.twig', $parameters);
-        }
-
-        // additional parameters?
-        if (\is_callable($additionalParameters)) {
-            $parameters = \array_merge($parameters, \call_user_func($additionalParameters));
         }
 
         // render

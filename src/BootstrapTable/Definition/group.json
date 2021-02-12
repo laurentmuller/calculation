@@ -1,16 +1,14 @@
 [
 	{
 		"field": "id",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
+		"visible": false
 	},
 	{
 		"field": "code",
 		"title": "group.fields.code",
 		"default": true,
 		"class": "text-code text-nowrap",
-		"cardBold": true
+		"cardClass": "font-weight-bold"
 	},
 	{
 		"field": "description",
@@ -31,8 +29,7 @@
 		"sortable": false,
 		"searchable": false,
 		"class": "text-currency rowlink-skip",
-		"fieldFormatter": "formatCountable",
-		"cellFormatter": "formatDataLink"
+		"fieldFormatter": "formatCategories"
 	},
 	{
 		"field": "action",

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
-use App\Entity\Calculation;
 use App\Interfaces\EntityVoterInterface;
 use App\Service\SearchService;
 use App\Traits\TranslatorTrait;
@@ -38,34 +37,43 @@ class SearchTable extends AbstractTable
     private const COLUMN_CONTENT = SearchService::COLUMN_CONTENT;
 
     /**
+     * The entity column name.
+     */
+    private const COLUMN_ENTITY_NAME = 'entityName';
+
+    /**
+     * The entity column name.
+     */
+    private const COLUMN_FIELD_NAME = 'fieldName';
+
+    /**
      * The delete granted column name.
      */
-    private const COLUMN_DELETE = 'delete_granted';
+    private const COLUMN_GRANTED_DELETE = 'deleteGranted';
 
     /**
      * The edit granted column name.
      */
-    private const COLUMN_EDIT = 'edit_granted';
-
-    /**
-     * The entity column name.
-     */
-    private const COLUMN_ENTITY = 'entityName';
-
-    /**
-     * The entity column name.
-     */
-    private const COLUMN_FIELD = 'fieldName';
+    private const COLUMN_GRANTED_EDIT = 'editGranted';
 
     /**
      * The show granted column name.
      */
-    private const COLUMN_SHOW = 'show_granted';
+    private const COLUMN_GRANTED_SHOW = 'showGranted';
 
     /**
      * The entity parameter name.
      */
     private const PARAM_ENTITY = 'entity';
+
+    /**
+     * The default sort columns order.
+     */
+    private const SORT_COLUMNS = [
+        self::COLUMN_CONTENT,
+        self::COLUMN_ENTITY_NAME,
+        self::COLUMN_FIELD_NAME,
+    ];
 
     /**
      * @var AuthorizationCheckerInterface
@@ -103,9 +111,9 @@ class SearchTable extends AbstractTable
     /**
      * {@inheritdoc}
      */
-    public function getEntityClassName(): string
+    public function getEntityClassName(): ?string
     {
-        return Calculation::class;
+        return null;
     }
 
     /**
@@ -140,22 +148,25 @@ class SearchTable extends AbstractTable
             $this->processItems($items);
 
             // sort
-            $orders = $this->getSortOrder($sort, $order);
-            $this->sortItems($items, $orders);
+            $this->sortItems($items, $sort, $order);
 
             // limit
-            $rows = \array_slice($items, $offset, $limit);
-        //$filtered = \count($rows);
+            $items = \array_slice($items, $offset, $limit);
+
+            // update entity name (icon)
+            foreach ($items as &$item) {
+                $this->updateItem($item);
+            }
         } else {
-            $rows = [];
+            $items = [];
         }
 
         // ajax?
         if ($request->isXmlHttpRequest()) {
             return [
-                'totalNotFiltered' => $totalNotFiltered,
-                'total' => $filtered,
-                'rows' => $rows,
+                self::PARAM_TOTAL_NOT_FILTERED => $totalNotFiltered,
+                self::PARAM_TOTAL => $filtered,
+                self::PARAM_ROWS => $items,
             ];
         }
 
@@ -163,29 +174,52 @@ class SearchTable extends AbstractTable
         $pageList = self::PAGE_LIST;
         $limit = \min($limit, \max($pageList));
 
-        // render
-        return [
-            'columns' => $this->getColumns(),
-            'rows' => $rows,
+        // card view
+        $card = $this->getParamCard($request);
 
+        // render
+        $parameters = [
+            // template parameters
+            self::PARAM_COLUMNS => $this->getColumns(),
+            self::PARAM_ROWS => $items,
+            self::PARAM_PAGE_LIST => $pageList,
+            self::PARAM_LIMIT => $limit,
+
+            // custom parameters
             'entity' => $entity,
             'entities' => $this->service->getEntities(),
 
-            'id' => $this->getParamId($request),
-            'card' => $this->getParamCard($request),
+            // action parameters
+            'params' => [
+                self::PARAM_ID => $this->getParamId($request),
+                self::PARAM_SEARCH => $search,
+                self::PARAM_SORT => $sort,
+                self::PARAM_ORDER => $order,
+                self::PARAM_OFFSET => $offset,
+                self::PARAM_LIMIT => $limit,
+                self::PARAM_CARD => $card,
+            ],
 
-            'totalNotFiltered' => $totalNotFiltered,
-            'total' => $filtered,
+            // table attributes
+            'attributes' => [
+                'total-not-filtered' => $totalNotFiltered,
+                'total-rows' => $filtered,
 
-            'page' => $page,
-            'limit' => $limit,
-            'offset' => $offset,
-            'search' => $search,
-            'pageList' => $pageList,
+                'search' => \json_encode(true),
+                'search-text' => $search,
 
-            'sort' => $sort,
-            'order' => $order,
+                'page-list' => $this->implodePageList($pageList),
+                'page-size' => $limit,
+                'page-number' => $page,
+
+                'card-view' => \json_encode($this->getParamCard($request)),
+
+                'sort-name' => $sort,
+                'sort-order' => $order,
+            ],
         ];
+
+        return  $this->updateParameters($parameters);
     }
 
     /**
@@ -194,6 +228,18 @@ class SearchTable extends AbstractTable
     protected function getColumnDefinitions(): string
     {
         return __DIR__ . '/Definition/search.json';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultOrder(): array
+    {
+        return [
+            self::COLUMN_CONTENT => Column::SORT_ASC,
+            self::COLUMN_ENTITY_NAME => Column::SORT_ASC,
+            self::COLUMN_FIELD_NAME => Column::SORT_ASC,
+        ];
     }
 
     /**
@@ -210,39 +256,6 @@ class SearchTable extends AbstractTable
         $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
 
         return [$offset, $limit, $page];
-    }
-
-    /**
-     * Gets the columns order for the given request.
-     *
-     * @param string $sort  the sorted column
-     * @param string $order the sorted direction
-     *
-     * @return array the columns order where key it the column name and value the order direction ('asc' or 'desc')
-     */
-    private function getSortOrder(string $sort, string $order): array
-    {
-        switch ($sort) {
-            case self::COLUMN_ENTITY:
-                return [
-                    self::COLUMN_ENTITY => $order,
-                    self::COLUMN_CONTENT => Column::SORT_ASC,
-                    self::COLUMN_FIELD => Column::SORT_ASC,
-                ];
-            case self::COLUMN_FIELD:
-                return [
-                    self::COLUMN_FIELD => $order,
-                    self::COLUMN_CONTENT => Column::SORT_ASC,
-                    self::COLUMN_ENTITY => Column::SORT_ASC,
-                ];
-            case self::COLUMN_CONTENT:
-            default:
-                return [
-                    self::COLUMN_CONTENT => $order,
-                    self::COLUMN_ENTITY => Column::SORT_ASC,
-                    self::COLUMN_FIELD => Column::SORT_ASC,
-                ];
-        }
     }
 
     /**
@@ -312,9 +325,10 @@ class SearchTable extends AbstractTable
 
             // translate entity and field names
             $lowerType = \strtolower($type);
+            $entity = $this->trans("{$lowerType}.name");
             $item[Column::COL_ACTION] = $item['id'];
-            $item[self::COLUMN_ENTITY] = $this->trans("{$lowerType}.name");
-            $item[self::COLUMN_FIELD] = $this->trans("{$lowerType}.fields.{$field}");
+            $item[self::COLUMN_ENTITY_NAME] = $entity;
+            $item[self::COLUMN_FIELD_NAME] = $this->trans("{$lowerType}.fields.{$field}");
 
             // format content
             $content = $item[SearchService::COLUMN_CONTENT];
@@ -330,24 +344,28 @@ class SearchTable extends AbstractTable
             $item[SearchService::COLUMN_CONTENT] = $content;
 
             // set authorizations
-            $item[self::COLUMN_SHOW] = $this->isGrantedShow($type);
-            $item[self::COLUMN_EDIT] = $this->isGrantedEdit($type);
-            $item[self::COLUMN_DELETE] = $this->isGrantedDelete($type);
+            $item[self::COLUMN_GRANTED_SHOW] = $this->isGrantedShow($type);
+            $item[self::COLUMN_GRANTED_EDIT] = $this->isGrantedEdit($type);
+            $item[self::COLUMN_GRANTED_DELETE] = $this->isGrantedDelete($type);
         }
     }
 
     /**
      * Sorts items.
      *
-     * @param array $items  the items to sort
-     * @param array $orders the order definitions where key is the field and value is the order ('asc' or 'desc')
+     * @param array  $items the items to sort
+     * @param string $sort  the sorted column
+     * @param string $order the sorted direction ('asc' or 'desc')
      */
-    private function sortItems(array &$items, array $orders): void
+    private function sortItems(array &$items, string $sort, string $order): void
     {
-        // convert orders
-        $sorts = [];
-        foreach ($orders as $column => $direction) {
-            $sorts["[$column]"] = Column::SORT_ASC === $direction;
+        // create sort
+        $sorts = ["[$sort]" => Column::SORT_ASC === $order];
+        foreach (self::SORT_COLUMNS as $field) {
+            $field = "[$field]";
+            if (!\array_key_exists($field, $sorts)) {
+                $sorts[$field] = true;
+            }
         }
 
         $accessor = PropertyAccess::createPropertyAccessor();
@@ -361,5 +379,42 @@ class SearchTable extends AbstractTable
 
             return 0;
         });
+    }
+
+    /**
+     * Update the item.
+     */
+    private function updateItem(array &$item): void
+    {
+        $name = $item[self::COLUMN_ENTITY_NAME];
+        $type = \strtolower($item[SearchService::COLUMN_TYPE]);
+
+        $icon = 'file far';
+        switch ($type) {
+            case 'calculation':
+                $icon = 'calculator fas';
+                break;
+            case 'calculationstate':
+                $icon = 'flag far';
+                break;
+            case 'task':
+                $icon = 'tasks fas';
+                break;
+            case 'category':
+                $icon = 'folder far';
+                break;
+            case 'group':
+                $icon = 'code-branch fas';
+                break;
+            case 'product':
+                $icon = 'file-alt far';
+                break;
+            case 'customer':
+                $icon = 'address-card far';
+                break;
+        }
+        $item[self::COLUMN_ENTITY_NAME] = \sprintf('<i class="fa-fw fa-%s" aria-hidden="true"></i>&nbsp;%s', $icon, $name);
+        $item[SearchService::COLUMN_TYPE] = $type;
+        unset($item[SearchService::COLUMN_FIELD]);
     }
 }

@@ -12,7 +12,10 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Entity\Group;
 use App\Repository\GroupRepository;
+use Doctrine\Common\Collections\Collection;
+use Twig\Environment;
 
 /**
  * The goups table.
@@ -22,11 +25,32 @@ use App\Repository\GroupRepository;
 class GroupTable extends AbstractEntityTable
 {
     /**
+     * The template renderer.
+     */
+    private Environment $twig;
+
+    /**
      * Constructor.
      */
-    public function __construct(GroupRepository $repository)
+    public function __construct(GroupRepository $repository, Environment $twig)
     {
         parent::__construct($repository);
+        $this->twig = $twig;
+    }
+
+    /**
+     * Formatter for the categories column.
+     */
+    public function formatCategories(Collection $categories, Group $group): string
+    {
+        return $this->twig->render('table/_cell_table_link.html.twig', [
+            'route' => 'table_category',
+            'count' => \count($categories),
+            'title' => 'group.list.category_title',
+            'parameters' => [
+                CategoryTable::PARAM_GROUP => $group->getId(),
+            ],
+        ]);
     }
 
     /**

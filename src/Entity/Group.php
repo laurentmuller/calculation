@@ -108,6 +108,23 @@ class Group extends AbstractEntity
     }
 
     /**
+     * Clone this group.
+     *
+     * @param string $code the new code
+     */
+    public function clone(?string $code = null): self
+    {
+        /** @var Group $copy */
+        $copy = clone $this;
+
+        if ($code) {
+            $copy->setCode($code);
+        }
+
+        return $copy;
+    }
+
+    /**
      * Gets the number of categories.
      */
     public function countCategories(): int

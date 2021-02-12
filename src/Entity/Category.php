@@ -111,6 +111,23 @@ class Category extends AbstractEntity
     }
 
     /**
+     * Clone this category.
+     *
+     * @param string $code the new code
+     */
+    public function clone(?string $code = null): self
+    {
+        /** @var Category $copy */
+        $copy = clone $this;
+
+        if ($code) {
+            $copy->setCode($code);
+        }
+
+        return $copy;
+    }
+
+    /**
      * Gets the number of prodcuts.
      */
     public function countProducts(): int

@@ -1,16 +1,14 @@
 [
 	{
 		"field": "id",
-		"visible": false,
-		"sortable": false,
-		"searchable": false
+		"visible": false
 	},
 	{
 		"field": "nameAndCompany",
 		"title": "customer.fields.nameAndCompany",
 		"default": true,
 		"class": "w-35 text-cell",
-		"cardBold": true
+		"cardClass": "font-weight-bold"
 	},
 	{
 		"field": "address",

@@ -85,7 +85,7 @@ class LogTable extends AbstractTable
     /**
      * {@inheritdoc}
      */
-    public function getEntityClassName(): string
+    public function getEntityClassName(): ?string
     {
         return EntityVoterInterface::ENTITY_LOG;
     }
@@ -121,9 +121,7 @@ class LogTable extends AbstractTable
 
         // filter search
         if ($search = (string) $request->get(self::PARAM_SEARCH, '')) {
-            $skipLevel = Utils::isString($level);
-            $skipChannel = Utils::isString($channel);
-            $entities = $this->filterSearch($entities, $search, $skipLevel, $skipChannel);
+            $entities = $this->filterSearch($entities, $search, Utils::isString($level), Utils::isString($channel));
         }
         $filtered = \count($entities);
 
@@ -147,9 +145,9 @@ class LogTable extends AbstractTable
         // ajax?
         if ($request->isXmlHttpRequest()) {
             return [
-                'totalNotFiltered' => $totalNotFiltered,
-                'total' => $filtered,
-                'rows' => $rows,
+                self::PARAM_TOTAL_NOT_FILTERED => $totalNotFiltered,
+                self::PARAM_TOTAL => $filtered,
+                self::PARAM_ROWS => $rows,
             ];
         }
 
@@ -157,31 +155,54 @@ class LogTable extends AbstractTable
         $pageList = $this->getPageList($totalNotFiltered);
         $limit = \min($limit, \max($pageList));
 
+        // card view
+        $card = $this->getParamCard($request);
+
         // render
         return [
-            'columns' => $this->getColumns(),
-            'rows' => $rows,
+            // template parameters
+            self::PARAM_COLUMNS => $this->getColumns(),
+            self::PARAM_ROWS => $rows,
+            self::PARAM_PAGE_LIST => $pageList,
+            self::PARAM_LIMIT => $limit,
 
-            'card' => $this->getParamCard($request),
-            'id' => $this->getParamId($request),
-
-            'totalNotFiltered' => $totalNotFiltered,
-            'total' => $filtered,
-
-            'page' => $page,
-            'limit' => $limit,
-            'offset' => $offset,
-            'search' => $search,
-            'pageList' => $pageList,
-
-            'sort' => $sort,
-            'order' => $order,
-
+            // custom parameters
             'level' => $level,
             'levels' => $levels,
             'channel' => $channel,
             'channels' => $channels,
             'file' => $this->service->getFileName(),
+
+            // action parameters
+            'params' => [
+                self::PARAM_ID => $this->getParamId($request),
+                self::PARAM_SEARCH => $search,
+                self::PARAM_SORT => $sort,
+                self::PARAM_ORDER => $order,
+                self::PARAM_OFFSET => $offset,
+                self::PARAM_LIMIT => $limit,
+                self::PARAM_CARD => $card,
+                self::PARAM_CHANNEL => $channel,
+                self::PARAM_LEVEL => $level,
+            ],
+
+            // table attributes
+            'attributes' => [
+                'total-not-filtered' => $totalNotFiltered,
+                'total-rows' => $filtered,
+
+                'search' => \json_encode(true),
+                'search-text' => $search,
+
+                'page-list' => $this->implodePageList($pageList),
+                'page-size' => $limit,
+                'page-number' => $page,
+
+                'card-view' => \json_encode($this->getParamCard($request)),
+
+                'sort-name' => $sort,
+                'sort-order' => $order,
+            ],
         ];
     }
 
@@ -205,6 +226,14 @@ class LogTable extends AbstractTable
     protected function getColumnDefinitions(): string
     {
         return __DIR__ . '/Definition/log.json';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultOrder(): array
+    {
+        return [self::COLUMN_DATE => Column::SORT_DESC];
     }
 
     /**

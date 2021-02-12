@@ -419,6 +419,7 @@ user:
         new: Nouveau mot de passe
         new_confirmation: Répéter le nouveau mot de passe
 log:
+    name: Entré du journal
     title: Journal de l'application
     level_all: Tous les niveaux
     channel_all: Tous les cannaux
@@ -436,12 +437,12 @@ log:
         title: Journal de l'application
         file: 'Fichier : %file%'
         empty: Le journal de l'application ne contient aucune entrée.
-        pdf_title: Télécharger le journal de l'application
-        excel_title: Exporter le journal de l'application
+        pdf_title: Télécharger le journal
+        excel_title: Exporter le journal
         channel_help: Afficher les entrées pour le canal sélectionné
         level_help: Afficher les entrées pour le niveau sélectionné
     delete:
-        title: Supprimer le journal de l'application
+        title: Supprimer le journal
         message: Êtes-vous sûr de vouloir supprimer le journal de l'application ?
         success: Le journal de l'application a été supprimé avec succès.
         error: Impossible de supprimer le journal de l'application.
@@ -584,7 +585,7 @@ list:
     limit_title: Nombre de lignes affichées par page
     pdf_title: Télécharger la liste
     add_title: Créer un nouvel élément
-    search_title: Effacer la recherche
+    search_title: Effacer les critères de recherche
     search_placeholder: Rechercher
     empty_list: Aucune donnée correspondante.
     filter: 'Filtre : {0}/{1}'
@@ -678,6 +679,7 @@ test:
     html: Exportation HTML
     recaptcha: reCAPTCHA
     tinymce: Editeur TinyMCE
+    pell: Editeur Pell
 parameters:
     title: Paramètres
     description: Définition des paramètres de l'application.
@@ -697,8 +699,8 @@ parameters:
         edit: Modifier l'objet
         none: Aucune action
     display:
-        show: Afficher
-        hide: Masquer
+        show: Afficher le groupe de paramètres
+        hide: Masquer le groupe de paramètres
     tabular:
         table: Tabulaire
         flex: Mosaïque
@@ -779,8 +781,8 @@ search:
     empty: Aucun objet correspondant.
     placeholder: Tapez un texte à rechercher
     search: Lancer la recherche
-    clear: Effacer la recherche
-    minimum: Saisir 2 caractères au minimum
+    clear: Effacer les critères de recherche
+    minimum: Saisir 2 caractères au minimum.
     entity_help: Afficher les résultats pour l'objet sélectionné
     fields:
         query: Rechercher
@@ -791,7 +793,7 @@ datatable:
     show: Afficher
     elements: éléments
     search: Rechercher
-    clear: Effacer la recherche
+    clear: Effacer les critères de recherche
     all: Tous
 pivot:
     title: Tableau croisé dynamique
@@ -1104,7 +1106,8 @@ help:
         forbidden_text: Si l'objet sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.
     actions:
         toggle: Afficher la vue
-        clear: Effacer la recherche
+        clear: Effacer les critères de recherche
+        pages: Lignes par page
     fields:
         field: Champ
         column: Colonne
@@ -1120,3 +1123,5 @@ help:
         date: Date
         percent: Pourcentage
         quantity: Quantité
+        identifier: Identifiant
+

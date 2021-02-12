@@ -18,6 +18,7 @@ use App\Repository\CalculationStateRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Environment;
 
 /**
  * The calculations table.
@@ -29,7 +30,7 @@ class CalculationTable extends AbstractEntityTable
     /**
      * The state parameter name.
      */
-    private const PARAM_STATE = 'stateId';
+    public const PARAM_STATE = 'stateId';
 
     /**
      * The selected state identifier.
@@ -37,23 +38,31 @@ class CalculationTable extends AbstractEntityTable
     private int $stateId = 0;
 
     /**
+     * The calculation state repository.
+     */
+    private CalculationStateRepository $stateRepository;
+
+    /**
+     * The template renderer.
+     */
+    private Environment $twig;
+
+    /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository)
+    public function __construct(CalculationRepository $repository, CalculationStateRepository $stateRepository, Environment $twig)
     {
         parent::__construct($repository);
+        $this->stateRepository = $stateRepository;
+        $this->twig = $twig;
     }
 
     /**
-     * Gets the selected calculation state or null if none.
+     * Formats the overall margin column.
      */
-    public function getCalculationState(CalculationStateRepository $repository): ?CalculationState
+    public function formatOverallMargin(float $margin): string
     {
-        if (0 !== $this->stateId) {
-            return $repository->find($this->stateId);
-        }
-
-        return null;
+        return $this->twig->render('table/_cell_calculation_margin.html.twig', ['margin' => $margin]);
     }
 
     /**
@@ -88,5 +97,41 @@ class CalculationTable extends AbstractEntityTable
     protected function getDefaultOrder(): array
     {
         return ['id' => Column::SORT_DESC];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function updateParameters(array $parameters): array
+    {
+        return \array_merge_recursive($parameters, [
+            'state' => $this->getCalculationState(),
+            'states' => $this->getCalculationStates(),
+            'params' => [
+                self::PARAM_STATE => $this->stateId,
+            ],
+        ]);
+    }
+
+    /**
+     * Gets the selected calculation state or null if none.
+     */
+    private function getCalculationState(): ?CalculationState
+    {
+        if (0 !== $this->stateId) {
+            return $this->stateRepository->find($this->stateId);
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets calculation states.
+     *
+     * @return CalculationState[]
+     */
+    private function getCalculationStates(): array
+    {
+        return $this->stateRepository->getListCount();
     }
 }

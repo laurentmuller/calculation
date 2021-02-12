@@ -1,0 +1,5 @@
+{%- if route and count > 0 -%}
+<a href="{{ path(route, parameters|default({})) }}"{% if title %} title="{{ title|trans }}"{% endif %}>{{ count|integer }}</a>
+{% else %}
+{{- count|integer -}}
+{% endif %}

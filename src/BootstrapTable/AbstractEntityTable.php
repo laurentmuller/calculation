@@ -46,7 +46,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * {@inheritdoc}
      */
-    public function getEntityClassName(): string
+    public function getEntityClassName(): ?string
     {
         return $this->repository->getClassName();
     }
@@ -91,9 +91,9 @@ abstract class AbstractEntityTable extends AbstractTable
         // ajax?
         if ($request->isXmlHttpRequest()) {
             return [
-                'totalNotFiltered' => $totalNotFiltered,
-                'total' => $filtered,
-                'rows' => $rows,
+                self::PARAM_TOTAL_NOT_FILTERED => $totalNotFiltered,
+                self::PARAM_TOTAL => $filtered,
+                self::PARAM_ROWS => $rows,
             ];
         }
 
@@ -101,26 +101,49 @@ abstract class AbstractEntityTable extends AbstractTable
         $pageList = $this->getPageList($totalNotFiltered);
         $limit = \min($limit, \max($pageList));
 
-        // render
-        return [
-            'columns' => $this->getColumns(),
-            'rows' => $rows,
+        // card view
+        $card = $this->getParamCard($request);
 
-            'card' => $this->getParamCard($request),
-            'id' => $this->getParamId($request),
+        // parameters
+        $parameters = [
+            // template parameters
+            self::PARAM_COLUMNS => $this->getColumns(),
+            self::PARAM_ROWS => $rows,
+            self::PARAM_PAGE_LIST => $pageList,
+            self::PARAM_LIMIT => $limit,
 
-            'totalNotFiltered' => $totalNotFiltered,
-            'total' => $filtered,
+            // action parameters
+            'params' => [
+                self::PARAM_ID => $this->getParamId($request),
+                self::PARAM_SEARCH => $search,
+                self::PARAM_SORT => $sort,
+                self::PARAM_ORDER => $order,
+                self::PARAM_OFFSET => $offset,
+                self::PARAM_LIMIT => $limit,
+                self::PARAM_CARD => $card,
+            ],
 
-            'page' => $page,
-            'limit' => $limit,
-            'offset' => $offset,
-            'search' => $search,
-            'pageList' => $pageList,
+            // table attributes
+            'attributes' => [
+                'total-not-filtered' => $totalNotFiltered,
+                'total-rows' => $filtered,
 
-            'sort' => $sort,
-            'order' => $order,
+                'search' => \json_encode(true),
+                'search-text' => $search,
+
+                'page-list' => $this->implodePageList($pageList),
+                'page-size' => $limit,
+                'page-number' => $page,
+
+                'card-view' => \json_encode($card),
+
+                'sort-name' => $sort,
+                'sort-order' => $order,
+            ],
         ];
+
+        // update
+        return $this->updateParameters($parameters);
     }
 
     /**
@@ -155,15 +178,17 @@ abstract class AbstractEntityTable extends AbstractTable
     {
         $orderBy = [];
         $sort = (string) $this->getRequestValue($request, self::PARAM_SORT, '');
-        $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, Column::SORT_ASC);
+        $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, '');
 
-        if (Utils::isString($sort)) {
+        if (Utils::isString($sort) && Utils::isString($order)) {
             $this->updateOrderBy($orderBy, $sort, $order);
         }
 
         // default column
         if (!Utils::isString($sort) && $column = $this->getDefaultColumn()) {
-            $this->updateOrderBy($orderBy, $column->getField(), $column->getOrder());
+            $sort = $column->getField();
+            $order = $column->getOrder();
+            $this->updateOrderBy($orderBy, $sort, $order);
         }
 
         // default order
@@ -172,6 +197,9 @@ abstract class AbstractEntityTable extends AbstractTable
             $this->updateOrderBy($orderBy, $defaultField, $defaultOrder);
             if (!Utils::isString($sort)) {
                 $sort = $defaultField;
+            }
+            if (!Utils::isString($order)) {
+                $order = $defaultOrder;
             }
         }
 
@@ -247,17 +275,6 @@ abstract class AbstractEntityTable extends AbstractTable
     {
         return $this->repository->createDefaultQueryBuilder($alias);
     }
-
-    /**
-     * Gets the default order to apply.
-     *
-     * @return array an array where each key is the column name and the value is the order direction ('asc' or 'desc')
-     */
-    protected function getDefaultOrder(): array
-    {
-        return [];
-    }
-
     /**
      * Update the order by clause.
      *

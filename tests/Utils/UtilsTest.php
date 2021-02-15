@@ -110,7 +110,7 @@ class UtilsTest extends TestCase
             [0.0, '0.0'],
             [0.01, '0.01'],
             [1000, '1000'],
-            ['fake', '"fake"'],
+            ['fake', "'fake'"],
         ];
     }
 

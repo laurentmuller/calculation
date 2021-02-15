@@ -66,11 +66,21 @@ class CalculationBelowTable extends CalculationTable
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function getCalculationStates(): array
+    {
+        $margin = $this->getMinMargin();
+
+        return $this->stateRepository->getListCountBelow($margin);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function updateParameters(array $parameters): array
     {
-        // $parameters = parent::updateParameters($parameters);
+        $parameters = parent::updateParameters($parameters);
         $parameters['min_margin'] = $this->getMinMargin();
 
         return $parameters;

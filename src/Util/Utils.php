@@ -161,29 +161,14 @@ final class Utils
     public static function exportVar($expression): ?string
     {
         try {
-            $result = VarExporter::export($expression, VarExporter::INLINE_NUMERIC_SCALAR_ARRAY, 0);
-            if ($result) {
-                return \str_replace('\\\\', '\\', $result);
-            }
-
-            $export = \var_export($expression, true);
+            $export = VarExporter::export($expression);
 
             $searches = [
+                '    ' => '  ',
                 '\\\\' => '\\',
-                //'\'' => '"',
-                ',' => '',
             ];
-            $export = \str_replace(\array_keys($searches), \array_values($searches), $export);
 
-            $patterns = [
-                "/array \(/" => '[',
-                "/^([ ]*)\)(,?)$/m" => '$1]$2',
-                "/=>[ ]?\n[ ]+\[/" => '=> [',
-                "/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
-            ];
-            $export = \preg_replace(\array_keys($patterns), \array_values($patterns), $export);
-
-            return $export;
+            return \str_replace(\array_keys($searches), \array_values($searches), $export);
         } catch (\Exception $e) {
             return $expression;
         }

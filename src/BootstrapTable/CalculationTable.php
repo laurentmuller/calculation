@@ -33,14 +33,14 @@ class CalculationTable extends AbstractEntityTable
     public const PARAM_STATE = 'stateId';
 
     /**
+     * The calculation state repository.
+     */
+    protected CalculationStateRepository $stateRepository;
+
+    /**
      * The selected state identifier.
      */
     private int $stateId = 0;
-
-    /**
-     * The calculation state repository.
-     */
-    private CalculationStateRepository $stateRepository;
 
     /**
      * The template renderer.
@@ -84,6 +84,16 @@ class CalculationTable extends AbstractEntityTable
     }
 
     /**
+     * Gets calculation states.
+     *
+     * @return CalculationState[]
+     */
+    protected function getCalculationStates(): array
+    {
+        return $this->stateRepository->getListCount();
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getColumnDefinitions(): string
@@ -123,15 +133,5 @@ class CalculationTable extends AbstractEntityTable
         }
 
         return null;
-    }
-
-    /**
-     * Gets calculation states.
-     *
-     * @return CalculationState[]
-     */
-    private function getCalculationStates(): array
-    {
-        return $this->stateRepository->getListCount();
     }
 }

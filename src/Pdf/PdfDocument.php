@@ -91,7 +91,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
     public const SIZE_A4 = 'A4';
 
     /**
-     * The A4 document size.
+     * The A5 document size.
      */
     public const SIZE_A5 = 'A5';
 

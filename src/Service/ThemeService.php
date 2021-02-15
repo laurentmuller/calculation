@@ -230,7 +230,7 @@ class ThemeService
 
         // decode and check error
         $entries = \json_decode($content, true);
-        if (JSON_ERROR_NONE !== \json_last_error() || empty($entries)) {
+        if (\JSON_ERROR_NONE !== \json_last_error() || empty($entries)) {
             return $themes;
         }
 

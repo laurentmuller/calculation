@@ -483,7 +483,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
                 break;
 
             case 'border-top-0':
-
                 break;
             case 'border-right-0':
                 break;
@@ -550,7 +549,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     {
         if ($this->css) {
             $matches = [];
-            if (\preg_match_all("/([\w-]+)\s*:\s*([^;]+)\s*;?/", $this->css, $matches, PREG_SET_ORDER)) {
+            if (\preg_match_all("/([\w-]+)\s*:\s*([^;]+)\s*;?/", $this->css, $matches, \PREG_SET_ORDER)) {
                 $update = false;
                 $style = $this->getStyle() ?? new HtmlStyle();
 

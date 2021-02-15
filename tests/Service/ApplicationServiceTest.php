@@ -34,7 +34,7 @@ class ApplicationServiceTest extends KernelTestCase implements ApplicationServic
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         self::bootKernel();
         $this->debug = self::$kernel->isDebug();

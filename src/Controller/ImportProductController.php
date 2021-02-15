@@ -14,7 +14,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use App\Excel\ExcelDocument;
+use App\Excel\ExcelResponse;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -125,14 +125,14 @@ class ImportProductController extends AbstractController
 
         // file constraints
         $constraints = new File([
-            'mimeTypes' => ExcelDocument::MIME_TYPE,
+            'mimeTypes' => ExcelResponse::MIME_TYPE_EXCEL,
             'mimeTypesMessage' => $this->trans('import.error.mime_type'),
         ]);
 
         // fields
         $helper->field('file')
             ->updateOption('constraints', $constraints)
-            ->updateAttribute('accept', ExcelDocument::MIME_TYPE)
+            ->updateAttribute('accept', ExcelResponse::MIME_TYPE_EXCEL)
             ->addFileType();
 
         $helper->field('simulate')

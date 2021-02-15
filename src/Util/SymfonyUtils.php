@@ -134,7 +134,7 @@ final class SymfonyUtils
             return \preg_replace('~^' . \preg_quote($baseDir, '~') . '~', '.', $path);
         }
 
-        return  $path;
+        return $path;
     }
 
     /**
@@ -199,7 +199,7 @@ final class SymfonyUtils
         try {
             $file = new \SplFileObject($filename, 'r');
             $file->setFlags($flags);
-            $file->seek(PHP_INT_MAX);
+            $file->seek(\PHP_INT_MAX);
             $lines = $file->key() + 1;
 
             return $lines;
@@ -254,12 +254,12 @@ final class SymfonyUtils
      */
     public static function getPhpInfoArray(): array
     {
-        $content = self::getPhpInfoText(INFO_MODULES);
+        $content = self::getPhpInfoText(\INFO_MODULES);
 
         $content = \strip_tags($content, '<h2><th><td>');
         $content = \preg_replace('/<th[^>]*>([^<]+)<\/th>/', '<info>\1</info>', $content);
         $content = \preg_replace('/<td[^>]*>([^<]+)<\/td>/', '<info>\1</info>', $content);
-        $array = \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $content, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $array = \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $content, -1, \PREG_SPLIT_DELIM_CAPTURE);
 
         $result = [];
         $count = \count($array);
@@ -335,7 +335,7 @@ final class SymfonyUtils
      *                  One can also combine the respective constants or bitwise values
      *                  together with the bitwise or operator.
      */
-    public static function getPhpInfoText(int $what = INFO_ALL): string
+    public static function getPhpInfoText(int $what = \INFO_ALL): string
     {
         \ob_start();
         \phpinfo($what);

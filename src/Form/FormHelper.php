@@ -307,16 +307,16 @@ class FormHelper
      * @param int   $max  the maximum value allowed (inclusive) or <code>PHP_INT_MAX</code> if none
      * @param float $step the step increment or -1 if none
      */
-    public function addPercentType(int $min = PHP_INT_MIN, int $max = PHP_INT_MAX, float $step = 1.0): self
+    public function addPercentType(int $min = \PHP_INT_MIN, int $max = \PHP_INT_MAX, float $step = 1.0): self
     {
         $this->className('text-right')
             ->updateOption('html5', true)
             ->autocomplete('off');
 
-        if (PHP_INT_MIN !== $min) {
+        if (\PHP_INT_MIN !== $min) {
             $this->updateAttribute('min', $min);
         }
-        if (PHP_INT_MAX !== $max) {
+        if (\PHP_INT_MAX !== $max) {
             $this->updateAttribute('max', $max);
         }
         if (-1 !== $step) {

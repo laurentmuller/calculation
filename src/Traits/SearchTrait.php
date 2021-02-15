@@ -35,7 +35,7 @@ trait SearchTrait
         $query = $this->ascii($query)->toString();
         foreach ($terms as $term) {
             if (null !== $term && $this->ignoreCase($term)->containsAny($query)) {
-                return  true;
+                return true;
             }
         }
 

@@ -220,7 +220,7 @@ class ChartController extends AbstractController
 
         // click event
         $function = <<<EOF
-            function() { 
+            function() {
                 const href = "{$url}?query=" + Highcharts.dateFormat("%m.%Y", this.category);
                 location.href = href;
             }

@@ -14,7 +14,6 @@ namespace App\Excel;
 
 use App\Controller\AbstractController;
 use App\Traits\TranslatorTrait;
-use App\Util\Utils;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
@@ -25,7 +24,6 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -46,11 +44,6 @@ class ExcelDocument extends Spreadsheet
      * The top and bottom margins when header and/or footer is present (0.51" = 13 millimeters).
      */
     public const HEADER_FOOTER_MARGIN = 0.51;
-
-    /**
-     * The Microsoft Excel (OpenXML) mime type.
-     */
-    public const MIME_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
     /**
      * The file title.
@@ -96,38 +89,6 @@ class ExcelDocument extends Spreadsheet
         }
 
         return $title;
-    }
-
-    /**
-     * Gets the output headers.
-     *
-     * @param bool   $inline <code>true</code> to send the file inline to the browser. The Spreasheet viewer is used if available.
-     *                       <code>false</code> to send to the browser and force a file download with the name given.
-     * @param string $name   the name of the document file or <code>''</code> to use the default name ('document.xlsx')
-     *
-     * @return string[] the output headers
-     *
-     * @see ExcelResponse
-     */
-    public function getOutputHeaders(bool $inline = true, string $name = ''): array
-    {
-        $name = empty($name) ? 'document.xlsx' : \basename($name);
-        $encoded = Utils::ascii($name);
-
-        if ($inline) {
-            $type = self::MIME_TYPE;
-            $disposition = HeaderUtils::DISPOSITION_INLINE;
-        } else {
-            $type = 'application/x-download';
-            $disposition = HeaderUtils::DISPOSITION_ATTACHMENT;
-        }
-
-        return [
-            'Pragma' => 'public',
-            'Content-Type' => $type,
-            'Cache-Control' => 'private, max-age=0, must-revalidate',
-            'Content-Disposition' => HeaderUtils::makeDisposition($disposition, $name, $encoded),
-        ];
     }
 
     /**

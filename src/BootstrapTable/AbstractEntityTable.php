@@ -275,6 +275,7 @@ abstract class AbstractEntityTable extends AbstractTable
     {
         return $this->repository->createDefaultQueryBuilder($alias);
     }
+
     /**
      * Update the order by clause.
      *

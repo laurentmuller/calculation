@@ -48,7 +48,7 @@ class FileUtils
 
         // decode
         $content = \json_decode($json, $assoc);
-        if (JSON_ERROR_NONE !== \json_last_error()) {
+        if (\JSON_ERROR_NONE !== \json_last_error()) {
             $message = \json_last_error_msg();
             throw new \InvalidArgumentException("Unable to decode the content of the file '$file' ($message).");
         }

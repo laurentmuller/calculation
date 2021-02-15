@@ -46,7 +46,7 @@ class CalculationBelowController extends AbstractController
         if (empty($items)) {
             $this->warningTrans('below.empty');
 
-            return  $this->redirectToHomePage();
+            return $this->redirectToHomePage();
         }
 
         // parameters
@@ -76,7 +76,7 @@ class CalculationBelowController extends AbstractController
         if (empty($items)) {
             $this->warningTrans('below.empty');
 
-            return  $this->redirectToHomePage();
+            return $this->redirectToHomePage();
         }
 
         $doc = new CalculationDocument($this, $items);
@@ -97,7 +97,7 @@ class CalculationBelowController extends AbstractController
         if (empty($items)) {
             $this->warningTrans('below.empty');
 
-            return  $this->redirectToHomePage();
+            return $this->redirectToHomePage();
         }
 
         $percent = FormatUtils::formatPercent($minMargin);
@@ -128,7 +128,7 @@ class CalculationBelowController extends AbstractController
         if (empty($items)) {
             $this->warningTrans('below.empty');
 
-            return  $this->redirectToHomePage();
+            return $this->redirectToHomePage();
         }
 
         // get values

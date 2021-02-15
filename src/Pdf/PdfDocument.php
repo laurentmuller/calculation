@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Traits\MathTrait;
-use App\Util\Utils;
 use Fpdf\Fpdf;
-use Symfony\Component\HttpFoundation\HeaderUtils;
 
 /**
  * PDF document with default header and footer.
@@ -456,7 +454,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
         // clean text
         $text = \str_replace("\r", '', (string) $text);
         $lenText = \strlen($text);
-        while ($lenText > 0 and self::NEW_LINE === $text[$lenText - 1]) {
+        while ($lenText > 0 && self::NEW_LINE === $text[$lenText - 1]) {
             --$lenText;
         }
 
@@ -508,38 +506,6 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
         }
 
         return $linesCount;
-    }
-
-    /**
-     * Gets the output headers.
-     *
-     * @param bool   $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if available.
-     *                       <code>false</code> to send to the browser and force a file download with the name given.
-     * @param string $name   the name of the document file or <code>''</code> to use the default name ('document.pdf')
-     *
-     * @return string[] the output headers
-     *
-     * @see PdfResponse
-     */
-    public function getOutputHeaders(bool $inline = true, string $name = ''): array
-    {
-        $name = empty($name) ? 'document.pdf' : \basename($name);
-        $encoded = Utils::ascii($name);
-
-        if ($inline) {
-            $type = 'application/pdf';
-            $disposition = HeaderUtils::DISPOSITION_INLINE;
-        } else {
-            $type = 'application/x-download';
-            $disposition = HeaderUtils::DISPOSITION_ATTACHMENT;
-        }
-
-        return [
-            'Pragma' => 'public',
-            'Content-Type' => $type,
-            'Cache-Control' => 'private, max-age=0, must-revalidate',
-            'Content-Disposition' => HeaderUtils::makeDisposition($disposition, $name, $encoded),
-        ];
     }
 
     /**

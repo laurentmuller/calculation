@@ -103,7 +103,7 @@ class SwissDatabase extends AbstractDatabase
             printf('%s (%s)', name, zip) as display
         FROM city
         WHERE name LIKE :value
-        ORDER BY 
+        ORDER BY
             name,
             zip
         LIMIT :limit
@@ -124,10 +124,10 @@ class SwissDatabase extends AbstractDatabase
         FROM street
         INNER JOIN city on street.city_id = city.id
         WHERE street.name LIKE :value
-        ORDER BY 
+        ORDER BY
             street.name,
             city.zip,
-            city.name    
+            city.name
         LIMIT :limit
         sql;
 
@@ -144,9 +144,9 @@ class SwissDatabase extends AbstractDatabase
             printf('%s %s', zip, name) as display
         FROM city
         WHERE zip LIKE :value
-        ORDER BY 
+        ORDER BY
             zip,
-            name    
+            name
         LIMIT :limit
         sql;
 
@@ -219,10 +219,10 @@ class SwissDatabase extends AbstractDatabase
         $stmt = $this->getStatement(self::INSERT_CITY);
 
         // parameters
-        $stmt->bindParam(':id', $data[0], SQLITE3_INTEGER);
-        $stmt->bindParam(':zip', $data[1], SQLITE3_INTEGER);
-        $stmt->bindParam(':name', $data[2], SQLITE3_TEXT);
-        $stmt->bindParam(':state', $data[3], SQLITE3_TEXT);
+        $stmt->bindParam(':id', $data[0], \SQLITE3_INTEGER);
+        $stmt->bindParam(':zip', $data[1], \SQLITE3_INTEGER);
+        $stmt->bindParam(':name', $data[2], \SQLITE3_TEXT);
+        $stmt->bindParam(':state', $data[3], \SQLITE3_TEXT);
 
         // execute
         return false !== $stmt->execute();
@@ -252,8 +252,8 @@ class SwissDatabase extends AbstractDatabase
         $stmt = $this->getStatement(self::INSERT_STATE);
 
         // parameters
-        $stmt->bindParam(':id', $data[0], SQLITE3_TEXT);
-        $stmt->bindParam(':name', $data[1], SQLITE3_TEXT);
+        $stmt->bindParam(':id', $data[0], \SQLITE3_TEXT);
+        $stmt->bindParam(':name', $data[1], \SQLITE3_TEXT);
 
         // execute
         return false !== $stmt->execute();
@@ -283,8 +283,8 @@ class SwissDatabase extends AbstractDatabase
         $stmt = $this->getStatement(self::INSERT_STREET);
 
         // parameters
-        $stmt->bindParam(':city_id', $data[0], SQLITE3_INTEGER);
-        $stmt->bindParam(':name', $data[1], SQLITE3_TEXT);
+        $stmt->bindParam(':city_id', $data[0], \SQLITE3_INTEGER);
+        $stmt->bindParam(':name', $data[1], \SQLITE3_TEXT);
 
         // execute
         return false !== $stmt->execute();

@@ -97,7 +97,7 @@ abstract class AbstractCalculationItemsDataTable extends AbstractDataTable
     {
         $path = __DIR__ . '/Definition/calculation_items.json';
 
-        return  DataColumnFactory::fromJson($this, $path);
+        return DataColumnFactory::fromJson($this, $path);
     }
 
     /**

@@ -4,7 +4,7 @@
 
 /**
  * Gets the loading template.
- *
+ * 
  * @param {string}
  *            message - the loading message.
  * @returns {string} the loading template.
@@ -24,10 +24,10 @@ $.fn.extend({
     // -------------------------------
     /**
      * Update the selected row.
-     *
+     * 
      * @param {jQuery}
      *            $table - the parent table.
-     *
+     * 
      * @return {boolean} this function returns always true.
      */
     updateRow: function($table) {
@@ -47,10 +47,10 @@ $.fn.extend({
 
     /**
      * Initialize the table-boostrap.
-     *
+     * 
      * @param {object}
      *            options - the options to use.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     initBootstrapTable: function(options) {
@@ -77,10 +77,9 @@ $.fn.extend({
             onPostBody: function(content) {
                 if(content.length) {
                     // select first row if none
-                    const rowSelector = $this.getOptions().rowSelector;
-                    if($this.find(rowSelector).length === 0) {
+                    if (!$this.getSelectRow()) {
                         $this.selectFirstRow();
-                    }
+                    }                    
                     // update
                     $this.updateCardView().highlight().updateHref(content);
                     $('.card-footer').stop().fadeIn(250);
@@ -126,7 +125,7 @@ $.fn.extend({
 
     /**
      * Gets the boostrap-table option.
-     *
+     * 
      * @return {Object} the options.
      */
     getOptions: function() {
@@ -136,7 +135,7 @@ $.fn.extend({
 
     /**
      * Gets the boostrap-table parameters.
-     *
+     * 
      * @return {Object} the parameters.
      */
     getParameters: function() {
@@ -164,7 +163,7 @@ $.fn.extend({
 
     /**
      * Gets the search text.
-     *
+     * 
      * @return {string} the search text.
      */
     getSearchText: function() {
@@ -174,7 +173,7 @@ $.fn.extend({
 
     /**
      * Return if a search text is present.
-     *
+     * 
      * @return {boolean} true if a search text is present.
      */
     isSearchText: function() {
@@ -184,7 +183,7 @@ $.fn.extend({
 
     /**
      * Return if the card view mode is displayed.
-     *
+     * 
      * @return {boolean} true if the card view mode is displayed.
      */
     isCardView: function() {
@@ -194,7 +193,7 @@ $.fn.extend({
 
     /**
      * Get the loaded data of table at the moment that this method is called.
-     *
+     * 
      * @return {array} the loaded data.
      */
     getData: function() {
@@ -203,8 +202,20 @@ $.fn.extend({
     },
  
     /**
+     * Gets the select row.
+     * 
+     * @return {jQuery} the selected row, if any; null otherwise.
+     */
+    getSelectRow: function() {
+        'use strict';
+        const $this = $(this);
+        const $row = $this.find($this.getOptions().rowSelector);
+        return $row.length ? $row : null;
+    },
+    
+    /**
      * Save parameters to the session.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     saveParameters: function() {
@@ -219,7 +230,7 @@ $.fn.extend({
 
     /**
      * Update the href attribute of the actions.
-     *
+     * 
      * @param {array}
      *            rows - the rendered data.
      * @return {jQuery} this instance for chaining.
@@ -262,7 +273,7 @@ $.fn.extend({
 
     /**
      * Update this card view UI.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     updateCardView: function() {
@@ -312,7 +323,7 @@ $.fn.extend({
 
     /**
      * Update the card view toggle button
-     *
+     * 
      * @param {boolean}
      *            cardView - the cardView state of the table.
      * @return {jQuery} this instance for chaining.
@@ -330,10 +341,10 @@ $.fn.extend({
 
     /**
      * Refresh/reload the remote server data.
-     *
+     * 
      * @param {object}
      *            options - the optional options to use.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     refresh: function(options) {
@@ -343,7 +354,7 @@ $.fn.extend({
 
     /**
      * Reset the search text.
-     *
+     * 
      * @param {string}
      *            text - the optional search text.
      * @return {jQuery} this instance for chaining.
@@ -355,7 +366,7 @@ $.fn.extend({
 
     /**
      * Toggle the card/table view.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     toggleView: function() {
@@ -365,7 +376,7 @@ $.fn.extend({
 
     /**
      * Highlight matching text.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     highlight: function() {
@@ -387,10 +398,10 @@ $.fn.extend({
 
     /**
      * Shows the previous page.
-     *
+     * 
      * @param {boolean}
      *            selectLast - true to select the last row.
-     *
+     * 
      * @return {boolean} true if the previous page is displayed.
      */
     showPreviousPage: function(selectLast) {
@@ -411,7 +422,7 @@ $.fn.extend({
 
     /**
      * Shows the next page.
-     *
+     * 
      * @return {boolean} true if the next page is displayed.
      */
     showNextPage: function() {
@@ -427,14 +438,13 @@ $.fn.extend({
 
     /**
      * Select the first row.
-     *
+     * 
      * @return {boolean} true if the first row is selected.
      */
     selectFirstRow: function() {
         'use strict';
         const $this = $(this);
-        const options = $this.getOptions();
-        const $row = $this.find(options.rowSelector);
+        const $row = $this.getSelectRow();
         const $first = $this.find('tbody tr:first');
         if($first.length && $first !== $row) {
             return $first.updateRow($this);
@@ -444,14 +454,13 @@ $.fn.extend({
 
     /**
      * Select the last row.
-     *
+     * 
      * @return {boolean} true if the first last is selected.
      */
     selectLastRow: function() {
         'use strict';
         const $this = $(this);
-        const options = $this.getOptions();
-        const $row = $this.find(options.rowSelector);
+        const $row = $this.getSelectRow();
         const $last = $this.find('tbody tr:last');
         if($last.length && $last !== $row) {
             return $last.updateRow($this);
@@ -461,14 +470,13 @@ $.fn.extend({
 
     /**
      * Select the previous row.
-     *
+     * 
      * @return {boolean} true if the previous row is selected.
      */
     selectPreviousRow: function() {
         'use strict';
         const $this = $(this);
-        const options = $this.getOptions();
-        const $row = $this.find(options.rowSelector);
+        const $row = $this.getSelectRow();
         const $prev = $row.prev('tr');
         if($row.length && $prev.length) {
             return $prev.updateRow($this);
@@ -479,14 +487,13 @@ $.fn.extend({
 
     /**
      * Select the next row.
-     *
+     * 
      * @return {boolean} true if the next row is selected.
      */
     selectNextRow: function() {
         'use strict';
         const $this = $(this);
-        const options = $this.getOptions();
-        const $row = $this.find(options.rowSelector);
+        const $row = $this.getSelectRow();
         const $next = $row.next('tr');
         if($row.length && $next.length) {
             return $next.updateRow($this);
@@ -497,14 +504,14 @@ $.fn.extend({
 
     /**
      * Call the edit action for the selected row (if any).
-     *
+     * 
      * @return {boolean} true if the action is called.
      */
     editRow: function() {
         'use strict';
         const $this = $(this);
-        const options = $this.getOptions();
-        const $link = $this.find(options.rowSelector + ' a.btn-default');
+        const rowSelector = $this.getOptions().rowSelector;
+        const $link = $this.find(rowSelector + ' a.btn-default');
         if($link.length) {
             $link[0].click();
             return true;
@@ -514,14 +521,14 @@ $.fn.extend({
 
     /**
      * Call the delete action for the selected row (if any).
-     *
+     * 
      * @return {boolean} true if the action is called.
      */
     deleteRow: function() {
         'use strict';
         const $this = $(this);
-        const options = $this.getOptions();
-        const $link = $this.find(options.rowSelector + ' a.btn-delete');
+        const rowSelector = $this.getOptions().rowSelector;
+        const $link = $this.find(rowSelector + ' a.btn-delete');
         if($link.length) {
             $link[0].click();
             return true;
@@ -531,7 +538,7 @@ $.fn.extend({
 
     /**
      * Enable the key handler.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     enableKeys: function() {
@@ -596,7 +603,7 @@ $.fn.extend({
 
     /**
      * Disable the key handler.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     disableKeys: function() {

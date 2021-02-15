@@ -134,7 +134,7 @@ class AboutController extends AbstractController
 
         // create response
         $response = new JsonResponse($array, JsonResponse::HTTP_OK, $headers);
-        $response->setEncodingOptions(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $response->setEncodingOptions(\JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
 
         return $response;
     }

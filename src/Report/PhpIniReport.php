@@ -55,7 +55,7 @@ class PhpIniReport extends AbstractReport
         }
 
         // sort keys
-        \ksort($content, SORT_STRING | SORT_FLAG_CASE);
+        \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
 
         // new page
         $this->AddPage();

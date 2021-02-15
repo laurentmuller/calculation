@@ -133,8 +133,8 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkEmail(Password $constraint, string $value): bool
     {
-        if ($constraint->email && false !== \filter_var($value, FILTER_VALIDATE_EMAIL)) {
-            return  $this->addViolation('email', $value);
+        if ($constraint->email && false !== \filter_var($value, \FILTER_VALIDATE_EMAIL)) {
+            return $this->addViolation('email', $value);
         }
 
         return false;
@@ -168,7 +168,7 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkNumber(Password $constraint, string $value): bool
     {
         if ($constraint->numbers && !\preg_match('/\pN/u', $value)) {
-            return  $this->addViolation('numbers', $value);
+            return $this->addViolation('numbers', $value);
         }
 
         return false;
@@ -256,7 +256,7 @@ class PasswordValidator extends AbstractConstraintValidator
 
         // load
         $url = "https://api.pwnedpasswords.com/range/{$hashPrefix}";
-        $lines = \file($url, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $lines = \file($url, \FILE_IGNORE_NEW_LINES | \FILE_SKIP_EMPTY_LINES);
         if (empty($lines)) {
             return 0;
         }

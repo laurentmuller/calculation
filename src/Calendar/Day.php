@@ -206,7 +206,7 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface
      */
     public function isInWeek(Week $week): bool
     {
-        return  ($this->getWeek() === $week->getNumber())
+        return ($this->getWeek() === $week->getNumber())
             && ($this->getYear() === $week->getYear());
     }
 

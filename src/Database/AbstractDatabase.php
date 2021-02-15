@@ -68,11 +68,11 @@ abstract class AbstractDatabase extends \SQLite3
         $create = '' === $filename || self::IN_MEMORY === $filename || !FileUtils::exists($filename) || 0 === \filesize($filename);
 
         if ($create) {
-            $flags = SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE;
+            $flags = \SQLITE3_OPEN_READWRITE | \SQLITE3_OPEN_CREATE;
         } elseif ($readonly) {
-            $flags = SQLITE3_OPEN_READONLY;
+            $flags = \SQLITE3_OPEN_READONLY;
         } else {
-            $flags = SQLITE3_OPEN_READWRITE;
+            $flags = \SQLITE3_OPEN_READWRITE;
         }
 
         parent::__construct($filename, $flags, $encryption_key);
@@ -238,7 +238,7 @@ abstract class AbstractDatabase extends \SQLite3
      * @param int          $mode controls how the next row will be returned to the caller. This value
      *                           must be one of either SQLITE3_ASSOC (default), SQLITE3_NUM, or SQLITE3_BOTH.
      */
-    protected function executeAndfetch(\SQLite3Stmt $stmt, int $mode = SQLITE3_ASSOC): array
+    protected function executeAndfetch(\SQLite3Stmt $stmt, int $mode = \SQLITE3_ASSOC): array
     {
         $rows = [];
 
@@ -300,7 +300,7 @@ abstract class AbstractDatabase extends \SQLite3
      *
      * @return array the search result
      */
-    protected function search(string $query, string $value, int $limit, int $mode = SQLITE3_ASSOC): array
+    protected function search(string $query, string $value, int $limit, int $mode = \SQLITE3_ASSOC): array
     {
         // parameter
         $value = $this->likeValue($value);
@@ -308,8 +308,8 @@ abstract class AbstractDatabase extends \SQLite3
         // create statement
         /** @var \SQLite3Stmt $stmt */
         $stmt = $this->getStatement($query);
-        $stmt->bindParam(':value', $value, SQLITE3_TEXT);
-        $stmt->bindParam(':limit', $limit, SQLITE3_INTEGER);
+        $stmt->bindParam(':value', $value, \SQLITE3_TEXT);
+        $stmt->bindParam(':limit', $limit, \SQLITE3_INTEGER);
 
         // execute
         return $this->executeAndfetch($stmt, $mode);

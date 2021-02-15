@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Util;
 
 use App\Interfaces\RoleInterface;
+use Brick\VarExporter\VarExporter;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\String\UnicodeString;
@@ -160,11 +161,16 @@ final class Utils
     public static function exportVar($expression): ?string
     {
         try {
+            $result = VarExporter::export($expression, VarExporter::INLINE_NUMERIC_SCALAR_ARRAY, 0);
+            if ($result) {
+                return \str_replace('\\\\', '\\', $result);
+            }
+
             $export = \var_export($expression, true);
 
             $searches = [
                 '\\\\' => '\\',
-                '\'' => '"',
+                //'\'' => '"',
                 ',' => '',
             ];
             $export = \str_replace(\array_keys($searches), \array_values($searches), $export);
@@ -179,7 +185,7 @@ final class Utils
 
             return $export;
         } catch (\Exception $e) {
-            return '';
+            return $expression;
         }
     }
 
@@ -276,7 +282,7 @@ final class Utils
     {
         // check key
         if (!\is_string($key) && !\is_int($key) && !\is_callable($key)) { // && !\is_float($key)
-            \trigger_error('groupBy(): The key should be a string, an integer or a function', E_USER_ERROR);
+            \trigger_error('groupBy(): The key should be a string, an integer or a function', \E_USER_ERROR);
         }
         $isFunction = \is_callable($key);
 

@@ -275,7 +275,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         // super admin can access all
         $roles = $token->getRoleNames();
         if (\in_array(RoleInterface::ROLE_SUPER_ADMIN, $roles, true)) {
-            return  true;
+            return true;
         }
 
         // special case for Log entity

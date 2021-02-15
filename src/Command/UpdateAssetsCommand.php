@@ -34,13 +34,11 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      * The CSS custom style comments.
      */
     private const CSS_COMMENTS = <<<'TEXT'
-        
         /*
          * -----------------------------
          *         Custom styles
          * -----------------------------
          */
-            
         TEXT;
 
     /**
@@ -324,7 +322,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     private function dumpFile(string $content, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
         // get extension
-        $ext = \pathinfo($targetFile, PATHINFO_EXTENSION);
+        $ext = \pathinfo($targetFile, \PATHINFO_EXTENSION);
 
         // add prefix
         if (isset($prefixes[$ext])) {
@@ -343,12 +341,12 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         }
 
         // css?
-        if ('css' === \pathinfo($targetFile, PATHINFO_EXTENSION)) {
+        if ('css' === \pathinfo($targetFile, \PATHINFO_EXTENSION)) {
             $content = \str_replace('/*!', '/*', $content);
         }
 
         // bootstrap.css?
-        $name = \pathinfo($targetFile, PATHINFO_BASENAME);
+        $name = \pathinfo($targetFile, \PATHINFO_BASENAME);
         if (self::BOOTSTRAP_FILE_NAME === $name) {
             $content = $this->updateStyle($content);
         }
@@ -373,7 +371,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         $matches = [];
         foreach ($entries as $entry) {
             $pattern = '/^\s*' . \preg_quote($entry) . '\s*:\s*.*;/m';
-            if (!empty(\preg_match_all($pattern, $style, $matches, PREG_SET_ORDER, 0))) {
+            if (!empty(\preg_match_all($pattern, $style, $matches, \PREG_SET_ORDER, 0))) {
                 foreach ($matches as $matche) {
                     $result[] = $matche[0];
                 }
@@ -395,7 +393,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     {
         $matches = [];
         $pattern = '/^' . \preg_quote($style) . '\s+\{([^}]+)\}/m';
-        if (!empty(\preg_match_all($pattern, $content, $matches, PREG_SET_ORDER, 0))) {
+        if (!empty(\preg_match_all($pattern, $content, $matches, \PREG_SET_ORDER, 0))) {
             $result = [];
             foreach ($matches as $matche) {
                 $result[] = $matche[0];
@@ -531,7 +529,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
         // save
         $targetFile = $targetDir . $themesDir . ThemeService::getFileName();
-        $content = \json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $content = \json_encode($result, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
         if ($this->dumpFile($content, $targetFile, $prefixes, $suffixes, $renames)) {
             ++$count;
         }

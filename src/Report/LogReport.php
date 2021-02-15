@@ -114,7 +114,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
         }
 
         // lines
-        return  (0 === $index) && $this->drawBorder($builder, $this->level, $bounds, $border);
+        return (0 === $index) && $this->drawBorder($builder, $this->level, $bounds, $border);
     }
 
     /**

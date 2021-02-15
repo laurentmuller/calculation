@@ -73,7 +73,7 @@ class ImageResizer implements ImageExtensionInterface
     {
         // check values?
         if (null === $this->imagine || $size <= 0) {
-            return  false;
+            return false;
         }
 
         try {

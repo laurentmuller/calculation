@@ -92,7 +92,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
         }
 
         // default
-        return  parent::isNewLine();
+        return parent::isNewLine();
     }
 
     /**

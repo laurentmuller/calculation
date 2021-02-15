@@ -102,7 +102,7 @@ trait FileTrait
         }
 
         $data = \json_decode($content);
-        if (JSON_ERROR_NONE !== \json_last_error()) {
+        if (\JSON_ERROR_NONE !== \json_last_error()) {
             $this->writeError(\json_last_error_msg());
             $this->writeError("Unable to decode file '{$filename}'.");
 

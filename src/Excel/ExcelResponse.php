@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Excel;
 
+use App\Util\Utils;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -25,6 +27,16 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ExcelResponse extends StreamedResponse
 {
     /**
+     * The application download type.
+     */
+    public const MIME_TYPE_DOWNLOAD = 'application/x-download';
+
+    /**
+     * The application Microsoft Excel (OpenXML) mime type.
+     */
+    public const MIME_TYPE_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+    /**
      * Constructor.
      *
      * @param ExcelDocument $doc    the document to output
@@ -34,11 +46,28 @@ class ExcelResponse extends StreamedResponse
      */
     public function __construct(ExcelDocument $doc, bool $inline = true, string $name = '')
     {
-        $writer = IOFactory::createWriter($doc, 'Xlsx');
-        $callback = function () use ($writer): void {
+        $name = empty($name) ? 'document.xlsx' : \basename($name);
+        $encoded = Utils::ascii($name);
+
+        if ($inline) {
+            $type = self::MIME_TYPE_EXCEL;
+            $disposition = HeaderUtils::DISPOSITION_INLINE;
+        } else {
+            $type = self::MIME_TYPE_DOWNLOAD;
+            $disposition = HeaderUtils::DISPOSITION_ATTACHMENT;
+        }
+
+        $headers = [
+            'Pragma' => 'public',
+            'Content-Type' => $type,
+            'Cache-Control' => 'private, max-age=0, must-revalidate',
+            'Content-Disposition' => HeaderUtils::makeDisposition($disposition, $name, $encoded),
+        ];
+
+        $callback = function () use ($doc): void {
+            $writer = IOFactory::createWriter($doc, 'Xlsx');
             $writer->save('php://output');
         };
-        $headers = $doc->getOutputHeaders($inline, $name);
 
         parent::__construct($callback, self::HTTP_OK, $headers);
     }

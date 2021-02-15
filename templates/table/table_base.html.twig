@@ -70,7 +70,7 @@
 
 {%- set attributes = attributes|default({})|merge({
     'classes': 'table table-hover table-list table-sm',
-    'row-selector': '.' ~ row_selector,
+    'row-selector': 'tbody .' ~ row_selector,
     'row-class': row_selector,
     'toggle-selector': '#toggle',
     'undefined-text': '&nbsp;',

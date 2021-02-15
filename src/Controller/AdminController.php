@@ -80,7 +80,7 @@ class AdminController extends AbstractController
                 $message = $this->succesTrans('clear_cache.success');
                 $logger->info($message, $context);
 
-                return  $this->redirectToHomePage();
+                return $this->redirectToHomePage();
             } catch (\Exception $e) {
                 // show error
                 $parameters = [
@@ -176,7 +176,7 @@ class AdminController extends AbstractController
             $service->setProperties($data);
             $this->succesTrans('parameters.success');
 
-            return  $this->redirectToHomePage();
+            return $this->redirectToHomePage();
         }
 
         // display
@@ -416,7 +416,7 @@ class AdminController extends AbstractController
             ]);
             $this->succesTrans('admin.rights.success', ['%name%' => $role->getName()]);
 
-            return  $this->redirectToHomePage();
+            return $this->redirectToHomePage();
         }
 
         // show form

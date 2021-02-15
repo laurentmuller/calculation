@@ -201,7 +201,7 @@ abstract class AbstractController extends BaseController
      */
     public function redirectToHomePage(): RedirectResponse
     {
-        return  $this->redirectToRoute(self::HOME_PAGE);
+        return $this->redirectToRoute(self::HOME_PAGE);
     }
 
     /**

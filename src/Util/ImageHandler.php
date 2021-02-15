@@ -238,7 +238,7 @@ class ImageHandler implements ImageExtensionInterface
      */
     public static function fromName(string $filename)
     {
-        $ext = \strtolower(\pathinfo($filename, PATHINFO_EXTENSION));
+        $ext = \strtolower(\pathinfo($filename, \PATHINFO_EXTENSION));
         switch ($ext) {
             case self::EXTENSION_BMP:
                 return self::fromBmp($filename);

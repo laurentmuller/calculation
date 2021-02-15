@@ -107,7 +107,7 @@ class UserController extends AbstractEntityController
                 $this->succesTrans('user.comment.success');
 
                 // home page
-                return  $this->redirectToHomePage();
+                return $this->redirectToHomePage();
             } catch (TransportExceptionInterface $e) {
                 $message = $this->trans('user.comment.error');
                 $logger->error($message, [

@@ -187,7 +187,7 @@ abstract class AbstractTable
             $value = $request->get($name, $default);
             $session->set($key, $value);
 
-            return  true;
+            return true;
         }
 
         return false;
@@ -283,7 +283,7 @@ abstract class AbstractTable
     {
         $value = $this->getRequestValue($request, self::PARAM_CARD, false);
 
-        return (bool) \filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        return (bool) \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -422,7 +422,6 @@ abstract class AbstractTable
         return \array_reduce($columns, $callback, []);
     }
 
-
     /**
      * Update the parameters before sending back.
      */
@@ -430,5 +429,4 @@ abstract class AbstractTable
     {
         return $parameters;
     }
-
 }

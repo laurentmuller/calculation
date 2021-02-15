@@ -51,7 +51,7 @@ class HtmlParser
 
         // load content
         $dom = new \DOMDocument();
-        if (!$dom->loadHTML($html, LIBXML_NOERROR | LIBXML_NOBLANKS)) {
+        if (!$dom->loadHTML($html, \LIBXML_NOERROR | \LIBXML_NOBLANKS)) {
             return null;
         }
 
@@ -190,7 +190,7 @@ class HtmlParser
      *
      * @return \DOMNode|null the body, if found; null otherwise
      */
-    private function findBody(\DOMDocument $dom): ? \DOMNode
+    private function findBody(\DOMDocument $dom): ?\DOMNode
     {
         $bodies = $dom->getElementsByTagName('body');
         if ($bodies->length) {
@@ -274,7 +274,7 @@ class HtmlParser
 
         // create chunk
         switch ($node->nodeType) {
-            case XML_ELEMENT_NODE:
+            case \XML_ELEMENT_NODE:
                 if (AbstractHtmlChunk::PAGE_BREAK === $class) {
                     $this->createPageBreakChunk($name, $parent);
                 } elseif (AbstractHtmlChunk::LINE_BREAK === $name) {
@@ -290,7 +290,7 @@ class HtmlParser
                 }
                 break;
 
-            case XML_TEXT_NODE:
+            case \XML_TEXT_NODE:
                 $this->createTextChunk($name, $parent, $class, $node);
                 break;
         }

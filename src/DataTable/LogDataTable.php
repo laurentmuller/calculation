@@ -144,7 +144,7 @@ class LogDataTable extends AbstractDataTable
     {
         $path = __DIR__ . '/Definition/log.json';
 
-        return  DataColumnFactory::fromJson($this, $path);
+        return DataColumnFactory::fromJson($this, $path);
     }
 
     /**

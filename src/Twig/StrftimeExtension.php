@@ -52,12 +52,12 @@ final class StrftimeExtension extends AbstractExtension
 
         // locale
         $locale = \Locale::getDefault();
-        if (false === \setlocale(LC_TIME, $locale)) {
-            \setlocale(LC_TIME, \Locale::getPrimaryLanguage($locale));
+        if (false === \setlocale(\LC_TIME, $locale)) {
+            \setlocale(\LC_TIME, \Locale::getPrimaryLanguage($locale));
         }
 
         // windows?
-        if ('WIN' === \strtoupper(\substr(PHP_OS, 0, 3))) {
+        if ('WIN' === \strtoupper(\substr(\PHP_OS, 0, 3))) {
             $format = \preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
         }
 

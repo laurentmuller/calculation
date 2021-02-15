@@ -39,7 +39,7 @@ class HelpController extends AbstractController
     {
         $dialog = $service->findDialog($id);
         if (null === $dialog) {
-            throw  new NotFoundHttpException("Unable to find the resource for the dialog '$id'.");
+            throw new NotFoundHttpException("Unable to find the resource for the dialog '$id'.");
         }
 
         if (isset($dialog['entity'])) {
@@ -64,7 +64,7 @@ class HelpController extends AbstractController
     {
         $entity = $service->findEntity($id);
         if (null === $entity) {
-            throw  new NotFoundHttpException("Unable to find the resource for the object '$id'.");
+            throw new NotFoundHttpException("Unable to find the resource for the object '$id'.");
         }
 
         return $this->render('help/help_entity.html.twig', [

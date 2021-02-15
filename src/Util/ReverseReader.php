@@ -89,9 +89,9 @@ class ReverseReader
         while (!$hasLine) {
             // move
             if (0 === \ftell($this->handle)) {
-                \fseek($this->handle, -1, SEEK_END);
+                \fseek($this->handle, -1, \SEEK_END);
             } else {
-                \fseek($this->handle, -2, SEEK_CUR);
+                \fseek($this->handle, -2, \SEEK_CUR);
             }
 
             // read
@@ -112,7 +112,7 @@ class ReverseReader
         }
 
         // move
-        \fseek($this->handle, 1, SEEK_CUR);
+        \fseek($this->handle, 1, \SEEK_CUR);
 
         // reverse
         return 0 === \strlen($line) ? null : \strrev($line);

@@ -265,7 +265,7 @@ class LogService
     {
         try {
             $result = \json_decode($value, true);
-            if ($result && JSON_ERROR_NONE === \json_last_error()) {
+            if ($result && \JSON_ERROR_NONE === \json_last_error()) {
                 return $result;
             }
         } catch (\Exception $e) {
@@ -350,8 +350,8 @@ class LogService
         // logs?
         if (!empty($logs)) {
             // sort
-            \ksort($levels, SORT_LOCALE_STRING);
-            \ksort($channels, SORT_LOCALE_STRING);
+            \ksort($levels, \SORT_LOCALE_STRING);
+            \ksort($channels, \SORT_LOCALE_STRING);
 
             // result
             return [

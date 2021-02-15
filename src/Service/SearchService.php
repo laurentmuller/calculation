@@ -179,7 +179,7 @@ class SearchService
 
         // all?
         if (self::NO_LIMIT === $limit) {
-            $limit = PHP_INT_MAX;
+            $limit = \PHP_INT_MAX;
         }
 
         // sort, limit and offset
@@ -318,7 +318,7 @@ class SearchService
         if (Utils::isString($entity)) {
             $queries = \array_filter($queries, function (string $key) use ($entity) {
                 return 0 === \stripos($key, $entity);
-            }, ARRAY_FILTER_USE_KEY);
+            }, \ARRAY_FILTER_USE_KEY);
         }
 
         // SQL

@@ -102,7 +102,7 @@ trait MathTrait
         } elseif ($value > $max) {
             return $max;
         } else {
-            return  $value;
+            return $value;
         }
     }
 }

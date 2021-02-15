@@ -152,7 +152,7 @@ class UserRightsDocument extends AbstractArrayDocument
                 $description .= $this->trans('common.value_disabled');
             }
 
-            return  $text . '|' . $description;
+            return $text . '|' . $description;
         }
 
         return '';

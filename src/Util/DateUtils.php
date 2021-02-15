@@ -262,8 +262,8 @@ final class DateUtils
     private static function setDefaultLocale(): bool
     {
         $locale = \Locale::getDefault();
-        if (false === \setlocale(LC_TIME, $locale)) {
-            return false !== \setlocale(LC_TIME, \Locale::getPrimaryLanguage($locale));
+        if (false === \setlocale(\LC_TIME, $locale)) {
+            return false !== \setlocale(\LC_TIME, \Locale::getPrimaryLanguage($locale));
         }
 
         return true;

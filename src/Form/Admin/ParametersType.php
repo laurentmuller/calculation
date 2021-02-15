@@ -203,6 +203,6 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             $result["parameters.message_timeout.{$i}"] = $i * 1000;
         }
 
-        return  $result;
+        return $result;
     }
 }

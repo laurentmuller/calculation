@@ -548,7 +548,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             foreach ($this->groups as $group) {
                 $result[$group->getCode()] = $group;
             }
-            \ksort($result, SORT_NATURAL);
+            \ksort($result, \SORT_NATURAL);
         }
 
         return $result;

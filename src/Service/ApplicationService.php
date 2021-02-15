@@ -128,7 +128,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getCacheClass(): string
     {
-        return  Utils::getShortName($this->adapter);
+        return Utils::getShortName($this->adapter);
     }
 
     /**

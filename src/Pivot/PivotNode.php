@@ -449,7 +449,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable
             }
         }
 
-        return  -1;
+        return -1;
     }
 
     /**

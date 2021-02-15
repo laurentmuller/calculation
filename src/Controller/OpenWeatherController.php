@@ -485,7 +485,7 @@ class OpenWeatherController extends AbstractController
         if (false === $handle = \fopen($filename, 'r')) {
             return null;
         }
-        \fseek($handle, -4, SEEK_END);
+        \fseek($handle, -4, \SEEK_END);
         $buffer = \fread($handle, 4);
         $unpacked = \unpack('V', $buffer);
         $uncompressedSize = \end($unpacked);
@@ -504,7 +504,7 @@ class OpenWeatherController extends AbstractController
     private function getJsonContent(string $content): ?array
     {
         $decoded = \json_decode($content, true);
-        if (JSON_ERROR_NONE !== \json_last_error()) {
+        if (\JSON_ERROR_NONE !== \json_last_error()) {
             return null;
         }
 

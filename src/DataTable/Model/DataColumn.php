@@ -572,7 +572,7 @@ class DataColumn
      */
     public function toArray($key, ?string $search = null): array
     {
-        return  [
+        return [
             'data' => $key,
             'name' => $this->name,
             'search' => self::createSearch($search),

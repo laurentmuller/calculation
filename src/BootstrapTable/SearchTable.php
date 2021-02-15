@@ -219,7 +219,7 @@ class SearchTable extends AbstractTable
             ],
         ];
 
-        return  $this->updateParameters($parameters);
+        return $this->updateParameters($parameters);
     }
 
     /**

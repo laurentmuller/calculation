@@ -100,6 +100,6 @@ class RightsType extends AbstractHelperType
             ->label($label)
             ->add(AttributeRightType::class);
 
-        return  $this;
+        return $this;
     }
 }

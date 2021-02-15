@@ -215,7 +215,7 @@ class HtmlOlChunk extends HtmlParentChunk
                 break;
         }
 
-        return  $this;
+        return $this;
     }
 
     /**

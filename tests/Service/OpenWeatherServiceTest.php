@@ -110,7 +110,7 @@ class OpenWeatherServiceTest extends KernelTestCase
     private function doEcho(array $result): void
     {
         if ($this->debug) {
-            echo \json_encode($result, JSON_PRETTY_PRINT);
+            echo \json_encode($result, \JSON_PRETTY_PRINT);
         }
     }
 

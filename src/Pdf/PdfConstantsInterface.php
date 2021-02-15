@@ -91,7 +91,7 @@ interface PdfConstantsInterface
 
     /**
      * Move at the beginning of the next line after the cell is printed.
-     * It is equivalent to the setting <b>MOVE_RIGHT</b> and calling the
+     * it is equivalent to the setting <b>MOVE_RIGHT</b> and calling the
      * <code>PdfDocument->Ln()</code> method immediately afterwards.
      */
     public const MOVE_TO_NEW_LINE = 1;

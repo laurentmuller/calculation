@@ -148,7 +148,7 @@ function updateButton() {
     // update button state
     const $button = $(".btn-pdf");
     const count = $('#logs tbody tr:visible').length;
-    $button.toggleClass('disabled', count === 0);
+    $button.toggleDisabled(count === 0);
 
     // update button link
     const $params = $("#parameters");

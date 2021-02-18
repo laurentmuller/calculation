@@ -318,17 +318,14 @@
             case positions.TOP_LEFT:
             case positions.TOP_CENTER:
             case positions.TOP_RIGHT:
-
             case positions.CENTER_LEFT:
             case positions.CENTER_CENTER:
             case positions.CENTER_RIGHT:
                 return position;
-
             case positions.BOTTOM_LEFT:
             case positions.BOTTOM_CENTER:
             case positions.BOTTOM_RIGHT:
                 return position;
-            
             default:
                 return positions.BOTTOM_RIGHT;
             }
@@ -350,7 +347,6 @@
             case positions.TOP_LEFT:
             case positions.TOP_CENTER:
             case positions.TOP_RIGHT:
-                
             case positions.CENTER_LEFT:
             case positions.CENTER_CENTER:
             case positions.CENTER_RIGHT:

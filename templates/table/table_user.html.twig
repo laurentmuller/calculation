@@ -6,8 +6,11 @@
 {%- set defer_url    = url('table_user') -%}
 {%- set save_url     = url('table_user_save') -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_USER -%}
-{%- set allow_global = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 {%- set attributes   = attributes|default({})|merge({'user-id': app.user.id}) -%}
+
+{% block header_actions -%}
+{% if allow_add %}<a class="add-link p-0" href="{{ path('user_add', params) }}">{{ 'user.add.title'|trans }}</a>{% endif %}
+{%- endblock %}
 
 {% block global_actions -%}
 {{- _self.item_external(path('user_pdf'), 'user.list.pdf_title', 'file-pdf far') }}

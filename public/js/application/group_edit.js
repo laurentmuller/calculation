@@ -17,7 +17,7 @@ function updateUI() {
     const $table = $('#data-table-edit');
     const rows = $table.find('tbody > tr').length;
     $table.toggleClass('d-none', rows === 0);
-    $('.btn-sort').toggleClass('disabled', rows < 2);
+    $('.btn-sort').toggleDisabled(rows < 2);
     $('#empty_margins').toggleClass('d-none', rows > 0);
 }
 

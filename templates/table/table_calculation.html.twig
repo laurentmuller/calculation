@@ -6,8 +6,11 @@
 {%- set defer_url    = defer_url|default(url('table_calculation')) -%}
 {%- set save_url     = save_url|default(url('table_calculation_save')) -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_CALCULATION -%}
-{%- set allow_global = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 {%- set attributes   = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
+
+{% block header_actions -%}
+{% if allow_add %}<a class="add-link p-0" href="{{ path('calculation_add', params) }}">{{ 'calculation.add.title'|trans }}</a>{% endif %}
+{%- endblock %}
 
 {% block toolbar_actions -%}
 {% if states is defined %}

@@ -8,13 +8,9 @@
 {%- set channel      = channel|default('') -%}
 {%- set level        = level|default('') -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_LOG -%}
-{%- set allow_global = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 
-{% block card_header %}
-<div class="row">
-    <div class="col-md-4">{{ parent() }}</div>
-    <div class="col-md-8 text-md-right"><small>{{ 'log.list.file'|trans({'%file%': file}) }}</small></div>
-</div>
+{% block header_actions %}
+<small>{{ 'log.list.file'|trans({'%file%': file}) }}</small>
 {% endblock %}
 
 {% block toolbar_actions -%}

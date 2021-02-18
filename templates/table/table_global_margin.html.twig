@@ -6,10 +6,13 @@
 {%- set defer_url    = url('table_globalmargin') -%}
 {%- set save_url     = url('table_globalmargin_save') -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_GLOBAL_MARGIN -%}
-{%- set allow_global = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 
 {# classes #}
 {% block card_container_class %} col-md-8 offset-md-2{% endblock -%}
+
+{% block header_actions -%}
+{% if allow_add %}<a class="add-link p-0" href="{{ path('globalmargin_add', params) }}">{{ 'globalmargin.add.title'|trans }}</a>{% endif %}
+{%- endblock %}
 
 {% block global_actions -%}
 {{- _self.item_external(path('globalmargin_pdf'), 'globalmargin.list.pdf_title', 'file-pdf far') }}

@@ -7,7 +7,10 @@
 {%- set save_url     = url('table_category_save') -%}
 {%- set groupId      = group.id|default(0) -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_CATEGORY -%}
-{%- set allow_global = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
+
+{% block header_actions -%}
+{% if allow_add %}<a class="add-link p-0" href="{{ path('category_add', params) }}">{{ 'category.add.title'|trans }}</a>{% endif %}
+{%- endblock %}
 
 {% block toolbar_actions -%}
 <div class="input-group-append btn-dropdown">

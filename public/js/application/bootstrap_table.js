@@ -332,7 +332,7 @@ $.fn.extend({
                     }
                 }
                 if(pageList.length <= 1) {
-                    $pageButton.addClass('disabled');
+                    $pageButton.toggleDisabled(true);
                 } else {
                     const pageSize = Number.parseInt(options.pageSize, 10);
                     const $links = pageList.map(function(page) {
@@ -348,7 +348,7 @@ $.fn.extend({
                     });
                     $('.dropdown-page').remove();
                     $('.dropdown-menu-page').append($links);
-                    $pageButton.removeClass('disabled');
+                    $pageButton.toggleDisabled(false);
                 }
             }
             
@@ -363,11 +363,19 @@ $.fn.extend({
                         }
                     });
                 }    
-                $clearButton.toggleClass('disabled', !enabled);
+                $clearButton.toggleDisabled(!enabled);
             }
             
-            // update toggle view button
-            $toggle.toggleClass('disabled', data.length === 0);
+            // update UI
+            if (data.length === 0) {
+                $toggle.toggleDisabled(true);
+                $table.find('thead').hide();
+                $('.card-footer').hide();
+            } else {
+                $('.card-footer').show();
+                $table.find('thead').show();
+                $toggle.toggleDisabled(false);
+            }
         },
 
         onRenderCardView: function($table, row, $element) {
@@ -401,6 +409,17 @@ $.fn.extend({
     };
     $table.initBootstrapTable(options);
 
+    // handle the add button link
+    const $addButton = $('.add-link');
+    if ($addButton.length) {
+        $table.on('update-row.bs.table', function() {
+            const $source = $table.getSelectRow().find('.btn-add');
+            if ($source.length) {
+                $addButton.attr('href', $source.attr('href'));    
+            }
+        });
+    }
+    
     // handle drop-down input buttons
     $inputs.each(function() {
         $(this).initDropdown().on('input', function() {

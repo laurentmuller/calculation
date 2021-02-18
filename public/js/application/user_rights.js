@@ -110,9 +110,8 @@ function onOverwriteClick($element) {
     'use strict';
 
     const disabled = !$element.isChecked();
-    getAllCheckboxes().attr('disabled', disabled);
-    $(".btn-col, .btn-row").attr('disabled', disabled);
-    $("#all, #none, #toggle").attr('disabled', disabled);
+    getAllCheckboxes().toggleDisabled(disabled);
+    $('#all, #none, #toggle, .btn-col, .btn-row').toggleDisabled(disabled);
 }
 
 /**

@@ -1,6 +1,7 @@
-{# imports #}
+{# test menu #}
 {% import 'macros/_icons.html.twig' as icons %}
 
+{% if is_test -%}
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="testDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{- icons.icon('bug', 'index.menu_test') -}}
@@ -51,3 +52,4 @@
         {{- icons.dropdownItem(path('table_log'), 'log.title', 'book') -}}
     </div>
 </li>
+{% endif -%}

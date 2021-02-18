@@ -58,21 +58,6 @@
         },
 
         /**
-         * Toggle the disabled state.
-         * 
-         * @parame {boolean} state - true to disable; false to enable.
-         */
-        toggleDisabled: function (state) {
-            return this.each(function () {
-                if (state) {
-                    $(this).attr('disabled', 'disabled').attr('aria-disabled', 'true');
-                } else {
-                    $(this).removeAttr('disabled aria-disabled');
-                }
-            });
-        },
-
-        /**
          * Initialize a Simple-Editor.
          * 
          * @param {Object}
@@ -87,7 +72,7 @@
                 return document.queryCommandEnabled(command);
             };
             const execCommand = function (command) {
-                const value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+                const value = arguments.length > 1 && typeof arguments[1] !== 'undefined' ? arguments[1] : null;
                 return document.execCommand(command, false, value);
             };
 

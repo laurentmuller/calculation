@@ -18,7 +18,7 @@ grecaptcha.ready(function () {
         action: action
     }).then(function (token) {
         $('#form_recaptcha').val(token);
-        $(':submit').removeAttr('disabled');
+        $(':submit').toggleDisabled(false);
     });
 });
 

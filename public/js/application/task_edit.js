@@ -17,7 +17,7 @@ function updateUI() {
         const rows = $table.find('tbody > tr').length;
         $table.toggleClass('d-none', rows === 0);
         $table.next('.empty-margins').toggleClass('d-none', rows !== 0);
-        $table.parents('.item').find('.btn-sort-margin').toggleClass('disabled', rows < 2);
+        $table.parents('.item').find('.btn-sort-margin').toggleDisabled(rows < 2);
     });
     $('.empty-items').toggleClass('d-none', $('.item').length !== 0);
 }

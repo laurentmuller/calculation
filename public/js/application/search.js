@@ -66,7 +66,7 @@ $.fn.updateHref = function (granted, params) {
 
     // type and granted?
     if (params === null || params.type === null || !granted) {
-        return $that.attr('href', '#').addClass('disabled');
+        return $that.attr('href', '#').toggleDisabled(true);
     }
 
     // build URL
@@ -74,7 +74,7 @@ $.fn.updateHref = function (granted, params) {
     const href = path + '?' + $.param(params);
 
     // update
-    return $that.attr('href', href).removeClass('disabled');
+    return $that.attr('href', href).toggleDisabled(false);
 };
 
 /**

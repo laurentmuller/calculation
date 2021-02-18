@@ -522,7 +522,7 @@ var Application = {
         }
         
         // update global sort
-        $('.btn-sort-items').toggleClass('disabled', disabled);
+        $('.btn-sort-items').toggleDisabled(disabled);
 
         return this;
     },
@@ -559,7 +559,7 @@ var Application = {
             } else {
                 $('#user-margin-row').removeClass('d-none');
             }
-            $('.btn-adjust').attr('disabled', 'disabled').addClass('cursor-default');
+            $('.btn-adjust').toggleDisabled(true).addClass('cursor-default');
             return that;
         }
 
@@ -599,9 +599,9 @@ var Application = {
                 $('#calculation_userMargin').intVal(response.user_margin).selectFocus();
             }
             if (response.overall_below) {
-                $('.btn-adjust').removeAttr('disabled').removeClass('cursor-default');
+                $('.btn-adjust').toggleDisabled(false).removeClass('cursor-default');
             } else {
-                $('.btn-adjust').attr('disabled', 'disabled').addClass('cursor-default');
+                $('.btn-adjust').toggleDisabled(true).addClass('cursor-default');
             }
             updateErrors();
             return that;

@@ -237,7 +237,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     $('a[data-path]').each(function () {
         // update
         const $this = $(this);
-        $this.toggleClass('disabled', disabled).updateHref(params);
+        $this.toggleDisabled(disabled).updateHref(params);
 
         // callback?
         if (!disabled) {
@@ -249,7 +249,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     });
 
     // special case for the add button
-    $('.btn-table-add').removeClass('disabled');
+    $('.btn-table-add').toggleDisabled(false);
 
     return this;
 });

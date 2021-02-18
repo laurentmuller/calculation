@@ -557,7 +557,23 @@
                 const target = source.split(' ').unique();
                 $this.attr('class', target.join(' '));
             });
-        }
+        },
+
+        /**
+         * Toggle the disabled attribute.
+         * 
+         * @parame {boolean} state - true to add attribute (disabled); false to
+         *         remove attribute (enabled).
+         */
+        toggleDisabled: function (state) {
+            return this.each(function () {
+                if (state) {
+                    $(this).addClass('disabled').attr('disabled', 'disabled').attr('aria-disabled', 'true');
+                } else {
+                    $(this).removeClass('disabled').removeAttr('disabled aria-disabled');
+                }
+            });
+        },
     });
 
 }(jQuery));

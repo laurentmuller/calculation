@@ -21,9 +21,9 @@ function applyTheme() {
         // update links
         $('link[title]').each(function () {
             const $this = $(this);
-            $this.attr('disabled', true);
+            $this.toggleDisabled(true);
             if ($this.attr('title') === title) {
-                $this.attr('disabled', false);
+                $this.toggleDisabled(false);
             }
         });
 

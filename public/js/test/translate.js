@@ -49,8 +49,8 @@ function translate() {
     // wait
     const html = $buttonSubmit.html();
     const spinner = '<span class="spinner-border spinner-border-sm"></span>';
-    $buttonSubmit.addClass('disabled').html(spinner);
-    $buttonCopy.attr('disabled', 'disabled');
+    $buttonSubmit.toggleDisabled(true).html(spinner);
+    $buttonCopy.toggleDisabled(true);
 
     // build parameters
     $('#text').val($('#text').val().trim());
@@ -66,13 +66,13 @@ function translate() {
     const url = $form.data('ajax');
     $.post(url, data, function (response) {
         // restore
-        $buttonSubmit.removeClass('disabled').html(html);
+        $buttonSubmit.toggleDisabled(false).html(html);
 
         // ok?
         if (response.result) {
             const data = response.data;
             $textResult.val(data.target);
-            $buttonCopy.removeAttr('disabled');
+            $buttonCopy.toggleDisabled(false);
 
             // update
             if ($('#from').val()) {
@@ -93,7 +93,7 @@ function translate() {
             // update
             $textResult.val('');
             $labelDetected.text('');
-            $buttonCopy.attr('disabled', 'disabled');
+            $buttonCopy.toggleDisabled(true);
 
             // message
             handleError(response);
@@ -146,7 +146,7 @@ function onSelection() {
     // update exchange button.
     const from = $('#from').getSelectedOption().index();
     const to = $('#to').getSelectedOption().index();
-    $('.btn-exchange').toggleClass('disabled', from === 0 || from - 1 === to);
+    $('.btn-exchange').toggleDisabled(from === 0 || from - 1 === to);
 }
 
 /**

@@ -6,7 +6,10 @@
 {%- set defer_url    = url('table_group') -%}
 {%- set save_url     = url('table_group_save') -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_GROUP -%}
-{%- set allow_global = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
+
+{% block header_actions -%}
+{% if allow_add %}<a class="add-link p-0" href="{{ path('group_add', params) }}">{{ 'group.add.title'|trans }}</a>{% endif %}
+{%- endblock %}
 
 {% block global_actions -%}
 {{- _self.item_external(path('group_pdf'), 'group.list.pdf_title', 'file-pdf far') }}

@@ -1,0 +1,41 @@
+{# data menu #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{%- if is_granted_product or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer or is_granted_task -%}
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="dataDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{- icons.icon('database', 'index.menu_data') -}}
+    </a>
+    <div class="dropdown-menu" aria-labelledby="dataDropdown">
+    {%- if is_granted_product -%}
+        {%- set href = is_tabular ? path('product_table') : path('product_card')  -%}
+        {{- icons.dropdownItem(href, 'product.list.title', 'file-alt far') -}}
+    {%- endif -%}
+    {%- if is_granted_task -%}
+        {%- set href = is_tabular ? path('task_table') : path('task_card')  -%}
+        {{- icons.dropdownItem(href, 'task.list.title', 'tasks') -}}
+    {%- endif -%}
+    {%- if is_granted_category -%}
+        {%- set href = is_tabular ? path('category_table') : path('category_card')  -%}
+        {{- icons.dropdownItem(href, 'category.list.title', 'folder far') -}}
+    {%- endif -%}
+    {%- if is_granted_group -%}
+        {%- set href = is_tabular ? path('group_table') : path('group_card')  -%}
+        {{- icons.dropdownItem(href, 'group.list.title', 'code-branch') -}}                    
+    {%- endif -%}
+    {%- if is_granted_calculation_state -%}
+        {%- set href = is_tabular ? path('calculationstate_table') : path('calculationstate_card')  -%}
+        {{- icons.dropdownItem(href, 'calculationstate.list.title', 'flag far') -}}
+    {%- endif -%}
+    {%- if is_granted_global_margin -%}
+        {%- set href = is_tabular ? path('globalmargin_table') : path('globalmargin_card')  -%}
+        {{- icons.dropdownItem(href, 'globalmargin.list.title', 'percent') -}}
+    {%- endif -%}
+    {%- if is_granted_customer %}
+        {%- set href = is_tabular ? path('customer_table') : path('customer_card')  -%}
+        {{- icons.dropdownSeparator -}}
+        {{- icons.dropdownItem(href, 'customer.list.title', 'address-card far') -}}
+    {%- endif -%}
+    </div>
+</li>
+{% endif %}

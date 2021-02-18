@@ -141,6 +141,32 @@
                 };
             }($.validator.prototype.focusInvalid));
 
+            /**
+             * Finds the container of the given element.
+             * 
+             * @param {jQuery}
+             *            $element - the element to update.
+             */
+            $.validator.prototype.findElement = function($element) {
+                let $toUpdate = null;
+                if (tinymceeditor && !$toUpdate) {
+                    $toUpdate = $element.findTinymceEditor();
+                }  
+                if (simpleeditor && !$toUpdate) {
+                    $toUpdate = $element.findSimpleEditor();
+                }  
+                if (recaptcha && !$toUpdate) {
+                    $toUpdate = $element.findReCaptcha();
+                }
+                if (fileInput && !$toUpdate) {
+                    $toUpdate = $element.findFileInput();
+                }
+                if (colorpicker && !$toUpdate) {
+                    $toUpdate = $element.findColorPicker();
+                }
+                return $toUpdate;
+            };
+            
             // default options
             let defaults = {
                 focus: true,
@@ -159,28 +185,11 @@
                     }
                     error.addClass('invalid-feedback').appendTo($parent);    
                 },
-
+                
                 highlight: function(element, errorClass) {
                     const $element = $(element);
+                    const $toUpdate = this.findElement($element);
                     $element.addClass(errorClass);
-
-                    // find custom element
-                    let $toUpdate = null;
-                    if (tinymceeditor && !$toUpdate) {
-                        $toUpdate = $element.findTinymceEditor();
-                    }  
-                    if (simpleeditor && !$toUpdate) {
-                        $toUpdate = $element.findSimpleEditor();
-                    }  
-                    if (recaptcha && !$toUpdate) {
-                        $toUpdate = $element.findReCaptcha();
-                    }
-                    if (fileInput && !$toUpdate) {
-                        $toUpdate = $element.findFileInput();
-                    }
-                    if (colorpicker && !$toUpdate) {
-                        $toUpdate = $element.findColorPicker();
-                    }
                     if ($toUpdate) {
                         $toUpdate.addClass('border-danger');
                         if ($toUpdate.hasClass('field-valid')) {
@@ -190,27 +199,9 @@
                 },
 
                 unhighlight: function(element, errorClass) {
-                    // default
                     const $element = $(element);
+                    const $toUpdate = this.findElement($element);
                     $element.removeClass(errorClass);
-
-                    // find custom element
-                    let $toUpdate = null;
-                    if (tinymceeditor && !$toUpdate) {
-                        $toUpdate = $element.findTinymceEditor();
-                    }                  
-                    if (simpleeditor && !$toUpdate) {
-                        $toUpdate = $element.findSimpleEditor();
-                    } 
-                    if (recaptcha && !$toUpdate) {
-                        $toUpdate = $element.findReCaptcha();
-                    }
-                    if (fileInput && !$toUpdate) {
-                        $toUpdate = $element.findFileInput();
-                    }
-                    if (colorpicker && !$toUpdate) {
-                        $toUpdate = $element.findColorPicker();
-                    }
                     if ($toUpdate) {
                         $toUpdate.removeClass('border-danger');
                         if ($toUpdate.hasClass('field-invalid')) {
@@ -223,15 +214,10 @@
             // add spinner on submit
             if (!options.submitHandler) {
                 defaults.submitHandler = function(form) {
-                    const $submit = $(form).find(':submit');
-                    if ($submit.length) {
-                        const spinner = '<span class="spinner-border spinner-border-sm"></span>';
-                        $submit.addClass('disabled').html(spinner);
-                    }
-                    const $cancel = $(form).find('.btn-cancel');
-                    if ($cancel.length) {
-                        $cancel.addClass('disabled');
-                    }
+                    const $form = $(form);
+                    const spinner = '<span class="spinner-border spinner-border-sm"></span>';
+                    $form.find(':submit').addClass('disabled').html(spinner);
+                    $form.find('.btn-cancel').toggleDisabled(true);
                     form.submit();
                 };
             }

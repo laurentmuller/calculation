@@ -6,7 +6,10 @@
 {%- set defer_url    = url('table_calculationstate') -%}
 {%- set save_url     = url('table_calculationstate_save') -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_CALCULATION_STATE -%}
-{%- set allow_global = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
+
+{% block header_actions -%}
+{% if allow_add %}<a class="add-link p-0" href="{{ path('calculationstate_add', params) }}">{{ 'calculationstate.add.title'|trans }}</a>{% endif %}
+{%- endblock %}
 
 {% block global_actions -%}
 {{- _self.item_external(path('calculationstate_pdf'), 'calculationstate.list.pdf_title', 'file-pdf far') }}

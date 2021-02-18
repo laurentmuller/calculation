@@ -69,7 +69,7 @@ function disableButtons() {
     const $submit = $form.find(':submit');
     const spinner = '<span class="spinner-border spinner-border-sm"></span>';
     $submit.data('text', $submit.text()).addClass('disabled').html(spinner);
-    $form.find('.btn-cancel').addClass('disabled');
+    $form.find('.btn-cancel').toggleDisabled(true);
 }
 
 /**
@@ -79,8 +79,8 @@ function enableButtons() {
     'use strict';
     const $form = $('#edit-form');
     const $submit = $form.find(':submit');
-    $submit.removeClass('disabled').html($submit.data('text'));
-    $form.find('.btn-cancel').removeClass('disabled');
+    $submit.toggleDisabled(false).html($submit.data('text'));
+    $form.find('.btn-cancel').toggleDisabled(false);
 }
 
 /**

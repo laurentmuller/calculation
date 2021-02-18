@@ -6,20 +6,14 @@
 {%- set defer_url    = url('table_empty') -%}
 {%- set save_url     = url('table_empty_save') -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_CALCULATION -%}
-{%- set allow_global = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 
 {% block card_header -%}
-<div class="row">
-    <div class="col-md-3">
-        {{ parent() }}        
-    </div>
-    <div class="col-md-9 text-md-right">
-        <small>{{ 'empty.description'|trans }}</small>
-    </div>
-</div>
-{% if itemsCount and rows|length  -%}
-<small>{{ 'empty.count'|trans({'%calculations%': rows|length, '%items%': itemsCount}) }}</small>
-{%- endif %}
+{{ parent() }}        
+{% if itemsCount and rows|length  -%}<small>{{ 'empty.count'|trans({'%calculations%': rows|length, '%items%': itemsCount}) }}</small>{%- endif %}
+{%- endblock %}
+
+{% block header_actions -%}
+<small>{{ 'empty.description'|trans }}</small>
 {%- endblock %}
 
 {% block global_actions -%}

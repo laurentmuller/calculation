@@ -45,10 +45,6 @@
 {%- set allow_delete = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) -%}
 {%- set allow_export = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 
-{# url #}
-{%- set defer_url    = defer_url ?? false -%}
-{%- set save_url     = save_url ?? false -%}
-
 {# default action #}
 {%- set row_none     = app.actionNone -%}
 {%- set row_show     = allow_show and app.actionShow -%}
@@ -63,11 +59,11 @@
 
 {# parameters #}
 {%- set allow_search    = attributes.search|default(true|json_encode) == true|json_encode -%}
-{%- set allow_global    = allow_global ?? true -%}
+{%- set allow_global    = allow_global ?? is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
 {%- set row_selector    = 'table-primary' -%}
-{%- set id              = params.id|default(0) -%}
 {%- set caller          = path(app.request.get('_route')) -%}
-
+{%- set params          = params|default({})|merge({'caller': caller}) -%}
+{%- set id              = params.id|default(0) -%}
 {%- set attributes = attributes|default({})|merge({
     'classes': 'table table-hover table-list table-sm',
     'row-selector': 'tbody .' ~ row_selector,
@@ -85,14 +81,22 @@
     'loading-template': 'loadingTemplate',
     'error-message': 'error_page.description'|trans,
     'default-action': app.editAction,
-    'defer-url': defer_url,
-    'save-url': save_url,
+    'defer-url': defer_url ?? false,
+    'save-url': save_url ?? false,
     'caller': caller   
 }) -%}
 
 {# classes #}
 {% block card_container_class '' %}
 {% block card_body_class ' px-3 pt-0 pb-2' %}
+
+{# header #}
+{% block card_header -%}
+<div class="row">
+    <div class="col-md-3">{{ parent() }}</div>
+    <div class="col-md-9 text-md-right">{% block header_actions -%}{%- endblock %}</div>
+</div>
+{%- endblock %}
 
 {# body #}
 {% block card_body -%}
@@ -126,7 +130,7 @@
             </div>
             {% endif %}
             <button id="toggle" name="toggle" class="btn btn-outline-secondary" type="button">
-                <i class="{{ attributes['card-view'] ? 'fa-fw fas fa-toggle-on' : 'fa-fw fas fa-toggle-off' }} "></i>
+                <i class="{{ params.card|default(false) ? 'fa-fw fas fa-toggle-on' : 'fa-fw fas fa-toggle-off' }} "></i>
             </button>
             {% if allow_global %}
             <div class="btn-group btn-group-sm" role="group">

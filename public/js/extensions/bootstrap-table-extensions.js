@@ -11,7 +11,7 @@
  */
 function loadingTemplate(message) { // jshint ignore:line
     'use strict';
-    return '<i class="fa fa-spinner fa-spin fa-fw fa-2x"></i>' + message;
+    return '<i class="fa fa-spinner fa-spin fa-fw"></i>' + message;
 }
 
 /**
@@ -37,6 +37,7 @@ $.fn.extend({
         $table.find(options.rowSelector).removeClass(options.rowClass);
         if(!$row.hasClass('no-records-found')) {
             $row.addClass(options.rowClass).scrollInViewport();
+            $table.trigger('update-row.bs.table');
         }
         return true;
     },
@@ -82,13 +83,8 @@ $.fn.extend({
                     }
                     // update
                     $this.updateCardView().highlight().updateHref(content);
-                    $('.card-footer').stop().fadeIn(250);
-
-                    $this.addClass('table-hover');
-                } else {
-                    $('.card-footer').stop().fadeOut(250);
-                    $this.removeClass('table-hover');
                 }
+                $this.toggleClass('table-hover', content.length);
                 $('.page-link').each(function(index, element) {
                     const $element = $(element);
                     $element.attr('title', $element.attr('aria-label'));
@@ -241,6 +237,7 @@ $.fn.extend({
         const $this = $(this);
         const regex = /\bid=\d+/;
         const params = $this.getParameters();
+        
         // action callback
         const options = $this.getOptions();
         const callback = $.isFunction(options.onRenderAction) ? options.onRenderAction : false;
@@ -260,6 +257,7 @@ $.fn.extend({
                 callback($this, row, $row, $link);
             }
         });
+        
         // actions row callback
         if($.isFunction(options.onUpdateHref)) {
             $this.find('tbody tr').each(function() {

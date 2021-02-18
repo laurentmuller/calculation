@@ -679,7 +679,7 @@ test:
     html: Exportation HTML
     recaptcha: reCAPTCHA
     tinymce: Editeur TinyMCE
-    pell: Editeur Pell
+    simple_editor: Editeur Simple 
 parameters:
     title: Paramètres
     description: Définition des paramètres de l'application.
@@ -699,18 +699,26 @@ parameters:
         edit: Modifier l'objet
         none: Aucune action
     display:
+        show: Afficher
+        hide: Masquer
+    display_parameters:
         show: Afficher le groupe de paramètres
         hide: Masquer le groupe de paramètres
     tabular:
         table: Tabulaire
         flex: Mosaïque
     message_position:
-        top-left: En haut - A gauche
-        top-center: En haut - Centrer
-        top-right: En haut - A droite
-        bottom-left: En bas - A gauche
-        bottom-center: En bas - Centrer
-        bottom-right: En bas - A droite
+        top-left: En haut à gauche
+        top-center: En haut centré
+        top-right: En haut à droite
+        
+        center-left: Au millieu à gauche
+        center-center: Au millieu centré
+        center-right: Au millieu à droite
+        
+        bottom-left: En bas à gauche
+        bottom-center: En bas centré
+        bottom-right: En bas à droite
     message_timeout:
         1: 1 seconde
         2: 2 secondes
@@ -1124,4 +1132,23 @@ help:
         percent: Pourcentage
         quantity: Quantité
         identifier: Identifiant
-
+simple-editor:
+    header_h1: Titre 1
+    bold: Gras
+    italic: Italique
+    underline: Souligné
+    strikethrough: Barré
+    superscript: Exposant
+    subscript: Indice
+    justifyLeft: Aligner à gauche
+    justifyCenter: Centrer
+    justifyRight: Aligner à droite
+    justifyFull: Justifier
+    indent: Augmenter le retrait
+    outdent: Diminuer le retrait
+    olist: Liste numérotée
+    ulist: Liste à puces
+    removeFormat: Effacer la mise en forme
+    line: Ligne horizontale
+    undo: Annuler la dernière action
+    redo: Rétablir la dernière action

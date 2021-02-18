@@ -79,10 +79,11 @@ $.fn.extend({
                     // select first row if none
                     if (!$this.getSelectRow()) {
                         $this.selectFirstRow();
-                    }                    
+                    }
                     // update
                     $this.updateCardView().highlight().updateHref(content);
                     $('.card-footer').stop().fadeIn(250);
+
                     $this.addClass('table-hover');
                 } else {
                     $('.card-footer').stop().fadeOut(250);
@@ -200,7 +201,7 @@ $.fn.extend({
         'use strict';
         return $(this).bootstrapTable('getData');
     },
- 
+
     /**
      * Gets the select row.
      * 
@@ -212,7 +213,7 @@ $.fn.extend({
         const $row = $this.find($this.getOptions().rowSelector);
         return $row.length ? $row : null;
     },
-    
+
     /**
      * Save parameters to the session.
      * 

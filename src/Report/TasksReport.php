@@ -118,7 +118,8 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
             }
         }
 
-        return true;
+        // count
+        return $this->renderCount(\count($entities));
     }
 
     /**

@@ -340,7 +340,7 @@ class SearchService
      */
     protected function getQueries(): array
     {
-        // build?
+        // created?
         if (empty($this->queries)) {
             // entities queries
             $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal'])

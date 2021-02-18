@@ -4,6 +4,9 @@
 
 /**! compression tag for ftp-deployment */
 
+/**
+ * Card View
+ */
 .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-title {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -11,7 +14,6 @@
     overflow: hidden;
     min-width: 8rem;
 }
-
 .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -47,6 +49,9 @@
     vertical-align: top !important;
 }
 
+/**
+ * Loading
+ */
 .bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading {
     color: var(--dark) !important;
     background: var(--white) !important;
@@ -90,6 +95,7 @@
     content: "\f0d7" !important;
     opacity: 1 !important;
 }
+
 /*
  * Hide icons on print
  */
@@ -103,5 +109,5 @@
 }
 
 .pagination-detail {
-    margin-top: .35rem;
+    line-height: 2rem;
 }

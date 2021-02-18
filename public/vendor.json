@@ -65,7 +65,7 @@
 		},
 		{
 			"name": "highcharts",
-			"version": "9.0.0",
+			"version": "9.0.1",
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/{file}",
 			"files": [
@@ -163,7 +163,7 @@
 		},
 		{
 			"name": "tinymce",
-			"version": "5.6.2",
+			"version": "5.7.0",
 			"files": [
 				"tinymce.min.js",
 				"jquery.tinymce.min.js",
@@ -265,21 +265,19 @@
 		{
 			"name": "bootstrap-table",
 			"version": "1.18.2",
-			"disabled": false,
 			"files": [
 				"bootstrap-table.js",
-				"bootstrap-table.css",				
-				"extensions/defer-url/bootstrap-table-defer-url.js"
+				"bootstrap-table.css"				
 			]
 		},
 		{
-			"github": "https://github.com/jaredreich/pell",
-			"name": "pell",
-			"version": "1.0.6",
-			"disabled": false,
+			"example": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.2/extensions/defer-url/bootstrap-table-defer-url.min.js",
+			"name": "bootstrap-table",
+			"version": "1.18.2",
+			"format": "{source}{name}/{version}/extensions/defer-url/{file}",
+			"target": "bootstrap-table",
 			"files": [
-				"pell.css",
-				"pell.js"
+				"bootstrap-table-defer-url.js"
 			]
 		}
 	]

@@ -47,9 +47,9 @@ class ProductsReport extends AbstractArrayReport
             // product
             $table->startRow()
                 ->add($entity->getDescription())
-                ->add($entity->getSupplier())
-                ->add($entity->getUnit())
                 ->add(FormatUtils::formatAmount($entity->getPrice()))
+                ->add($entity->getUnit())
+                ->add($entity->getSupplier())
                 ->endRow();
         }
 
@@ -64,9 +64,9 @@ class ProductsReport extends AbstractArrayReport
     {
         $columns = [
             PdfColumn::left($this->trans('product.fields.description'), 90),
-            PdfColumn::left($this->trans('product.fields.supplier'), 45, true),
-            PdfColumn::left($this->trans('product.fields.unit'), 20, true),
             PdfColumn::right($this->trans('product.fields.price'), 20, true),
+            PdfColumn::left($this->trans('product.fields.unit'), 20, true),
+            PdfColumn::left($this->trans('product.fields.supplier'), 45, true),
         ];
 
         $table = new PdfGroupTableBuilder($this);

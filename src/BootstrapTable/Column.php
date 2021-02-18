@@ -209,7 +209,7 @@ class Column
     {
         $class = (string) $this->class;
         if (false === \strpos($class, 'rowlink-skip')) {
-            return \trim($class . ' cursor-pointer');
+            return \trim($class . ' user-select-none cursor-pointer');
         }
 
         return $class;

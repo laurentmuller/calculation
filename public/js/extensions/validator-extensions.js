@@ -1,7 +1,5 @@
 /**! compression tag for ftp-deployment */
 
-/* globals tinymce */
-
 /**
  * jQuery Validation Plugin extensions.
  */
@@ -42,38 +40,13 @@
             }
             return -1;
         },
-
-        /**
-         * Finds the TinyMCE editor container within the current element.
-         */
-        findTinyEditor: function() {
-            if (tinymce) {                
-                const id = $(this).attr('id');
-                const editor = tinymce.get(id);
-                if (editor) {
-                    return $(editor.getContainer());     
-                }
-            }
-            return null;
-        },
         
         /**
          * Finds the reCaptcha frame within the current element.
          */
         findReCaptcha: function() {
             const $element = $(this);
-
-            // find within the current element or the parent element
             return $element.findExists('iframe:first') || $element.parent().findExists('iframe:first');
-        },
-
-        /**
-         * Finds the parent div within a file input.
-         */
-        findFileInput() {
-            const $element = $(this);
-            const $parent = $element.parents('.form-group');
-            return $parent.findExists('.fileinput.input-group, .fileinput-preview.img-thumbnail');
         },
 
         /**
@@ -92,30 +65,28 @@
          */
         initValidator: function(options) {
             // get options
-            const inline = options && options.inline;
-            const recaptcha = options && options.recaptcha;
-            const fileInput = options && options.fileInput;
-            const colorpicker = options && options.colorpicker;
-            const tinyeditor = options && options.tinyeditor;
+            options = options || {};
+            const inline = options.inline;
+            const recaptcha = options.recaptcha;
+            const fileInput = options.fileInput;
+            const colorpicker = options.colorpicker;
+            const tinymceeditor = options.tinymceeditor;
+            const simpleeditor = options.simpleeditor;
             
-            if (tinyeditor) {
-                // override elementValue function
+            // override elementValue function
+            if (tinymceeditor || simpleeditor) {
                 $.validator.prototype.elementValue = (function(parent) {
                     return function(element) {
-                        // get editor content
-                        const id = $(element).attr('id');
-                        const editor = tinymce.get(id);
-                        if (editor) {
-                            return  editor.getContent({format: 'text'}).trim();
+                        if (tinymceeditor && $(element).findTinymceEditor()) {
+                            return $(element).getTinymceEditorContent();    
+                        } 
+                        if (simpleeditor && $(element).findSimpleEditor()) {
+                            return $(element).getSimpleEditorContent();
                         }
-
-                        // call the original function
                         return parent.apply(this, arguments);
-                    };
-
+                    };          
                 }($.validator.prototype.elementValue));
             }
-            
 
             // override focusInvalid function
             $.validator.prototype.focusInvalid = (function(parent) {
@@ -124,13 +95,16 @@
                         // get invalid elements
                         const $elements = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
 
-                        // tinyeditor
-                        if (tinyeditor) {
-                            const $editor = $elements.findTinyEditor();
-                            if ($editor) {
-                                const id = $elements.attr('id');
-                                const editor = tinymce.get(id);
-                                editor.focus();
+                        // tinymceeditor
+                        if (tinymceeditor) {
+                            if ($elements.focusTinymceEditor()) {
+                                return;
+                            }
+                        }
+                        
+                        // simpleeditor
+                        if (simpleeditor) {
+                            if ($elements.focusSimpleEditor()) {
                                 return;
                             }
                         }
@@ -192,9 +166,12 @@
 
                     // find custom element
                     let $toUpdate = null;
-                    if (tinyeditor && !$toUpdate) {
-                        $toUpdate = $element.findTinyEditor();
-                    }                    
+                    if (tinymceeditor && !$toUpdate) {
+                        $toUpdate = $element.findTinymceEditor();
+                    }  
+                    if (simpleeditor && !$toUpdate) {
+                        $toUpdate = $element.findSimpleEditor();
+                    }  
                     if (recaptcha && !$toUpdate) {
                         $toUpdate = $element.findReCaptcha();
                     }
@@ -219,9 +196,12 @@
 
                     // find custom element
                     let $toUpdate = null;
-                    if (tinyeditor && !$toUpdate) {
-                        $toUpdate = $element.findTinyEditor();
-                    }                    
+                    if (tinymceeditor && !$toUpdate) {
+                        $toUpdate = $element.findTinymceEditor();
+                    }                  
+                    if (simpleeditor && !$toUpdate) {
+                        $toUpdate = $element.findSimpleEditor();
+                    } 
                     if (recaptcha && !$toUpdate) {
                         $toUpdate = $element.findReCaptcha();
                     }
@@ -241,7 +221,7 @@
             };
 
             // add spinner on submit
-            if (!options || !options.submitHandler) {
+            if (!options.submitHandler) {
                 defaults.submitHandler = function(form) {
                     const $submit = $(form).find(':submit');
                     if ($submit.length) {
@@ -304,125 +284,7 @@
             }
             return this;
         },
-
-        /**
-         * Initialize a Summernote editor.
-         */
-        initTinyEditor: function(options) {
-            // concat values
-            const plugins = 'autolink lists link image table paste ' + (options.plugins || '');
-            const toolbar = 'styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent |' + (options.toolbar || '');
-            const help_tabs = ['shortcuts'].concat(options.help_tabs || []); // eslint-disable-line
-                                                                                // camelcase
-            
-            // remove
-            if (options) {
-                delete options.plugins;
-                delete options.toolbar;
-                delete options.help_tabs;
-            }
-            
-            const defaults = {
-                menubar: false,
-                statusbar: true,
-                contextmenu: false,
-                elementpath: false,
-                branding: false,                
-                language: 'fr_FR',
-                min_height: 150, // eslint-disable-line camelcase
-                max_height: 500, // eslint-disable-line camelcase
-                height: 250,
-                plugins: plugins.trim(),
-                toolbar: toolbar.trim(),
-                help_tabs: help_tabs, // eslint-disable-line camelcase
-                setup: function(editor) {
-                    editor.on('init', function() {
-                        const $container = $(editor.getContainer());
-                        $container.addClass('rounded');
-                    });
-                    editor.on('change', function() {
-                        editor.save();
-                        $(editor.getElement()).valid();
-                    });
-                    editor.on('focus', function() {
-                        const $element = $(editor.getElement());
-                        const validator = $element.parents('form').data('validator');
-                        if (validator) {
-                            validator.lastActive = $element;
-                        }
-                        const $container = $(editor.getContainer());
-                        if ($container.hasClass('border-danger')) {
-                            $container.addClass('field-invalid');
-                        } else {
-                            $container.addClass('field-valid');
-                        }
-                    });
-                    editor.on('blur', function() {
-                        const $container = $(editor.getContainer());
-                        $container.removeClass('field-valid field-invalid');
-                    });
-                }
-            };
-            const $this = $(this);
-            
-            // merge
-            const settings = $.extend(true, defaults, options, $this.data());
-            
-            // focus
-            if (settings.focus) {
-                delete settings.focus;
-                settings.auto_focus = $this.attr('id'); // eslint-disable-line
-                                                        // camelcase
-            }
-
-            // initialize
-            return $this.tinymce(settings);
-        },
         
-        /**
-         * Intitialize an input type file.
-         * 
-         * @param {function}
-         *            callback - the optional callback function to use after
-         *            change.
-         */
-        initFileType: function(callback) {
-            return this.each(function() {
-                const $that = $(this);
-                const isThumbnail = $that.parents('.form-group').findExists('.img-thumbnail');
-                $that.on('change', function() {
-                    $that.valid();
-                    if ($.isFunction(callback)) {
-                        callback($that);
-                    }
-                    if (!isThumbnail) {
-                        const isFiles = $that.getInputFiles().length !== 0;
-                        $that.parent().toggleClass('rounded-right', !isFiles).css('border-right', isFiles  ? '' : '0');
-                    }
-                });
-
-                // find group
-                const $group = $that.findFileInput();
-                if ($group) {
-                    // update class
-                    $that.on('focus', function() {
-                        if ($that.hasClass('is-invalid')) {
-                            $group.addClass('field-invalid');
-                        } else {
-                            $group.addClass('field-valid');
-                        }
-                    }).on('blur', function() {
-                        $group.removeClass('field-valid field-invalid');
-                    });
-
-                    // focus when select file
-                    $group.find('.fileinput-filename,.fileinput-exists').on('click', function() {
-                        $that.focus();
-                    });
-                }
-            });
-        },
-
         /**
          * Intitialize an input type color within the color-picker plugin.
          * 

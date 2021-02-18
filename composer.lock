@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7689e01f68756cf95d415c9af6191281",
+    "content-hash": "c2392284251828f63e55b3352fdbf3e6",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -113,49 +113,6 @@
                 "source": "https://github.com/bjeavons/zxcvbn-php/tree/1.2.0"
             },
             "time": "2020-11-30T16:47:23+00:00"
-        },
-        {
-            "name": "brick/varexporter",
-            "version": "0.3.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/varexporter.git",
-                "reference": "05241f28dfcba2b51b11e2d750e296316ebbe518"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/brick/varexporter/zipball/05241f28dfcba2b51b11e2d750e296316ebbe518",
-                "reference": "05241f28dfcba2b51b11e2d750e296316ebbe518",
-                "shasum": ""
-            },
-            "require": {
-                "nikic/php-parser": "^4.0",
-                "php": "^7.2 || ^8.0"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "^2.2",
-                "phpunit/phpunit": "^8.5 || ^9.0",
-                "vimeo/psalm": "4.4.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Brick\\VarExporter\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A powerful alternative to var_export(), which can export closures and objects without __set_state()",
-            "keywords": [
-                "var_export"
-            ],
-            "support": {
-                "issues": "https://github.com/brick/varexporter/issues",
-                "source": "https://github.com/brick/varexporter/tree/0.3.5"
-            },
-            "time": "2021-02-10T13:53:07+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -1319,16 +1276,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.8.1",
+            "version": "2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "242cf1a33df1b8bc5e1b86c3ebd01db07851c833"
+                "reference": "ebae57eb9637acd8252b398df3121b120688ed5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/242cf1a33df1b8bc5e1b86c3ebd01db07851c833",
-                "reference": "242cf1a33df1b8bc5e1b86c3ebd01db07851c833",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/ebae57eb9637acd8252b398df3121b120688ed5c",
+                "reference": "ebae57eb9637acd8252b398df3121b120688ed5c",
                 "shasum": ""
             },
             "require": {
@@ -1336,7 +1293,7 @@
                 "doctrine/annotations": "^1.11.1",
                 "doctrine/cache": "^1.9.1",
                 "doctrine/collections": "^1.5",
-                "doctrine/common": "^3.0",
+                "doctrine/common": "^3.0.3",
                 "doctrine/dbal": "^2.10.0",
                 "doctrine/event-manager": "^1.1",
                 "doctrine/inflector": "^1.4|^2.0",
@@ -1405,9 +1362,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.8.1"
+                "source": "https://github.com/doctrine/orm/tree/2.8.2"
             },
-            "time": "2020-12-04T19:53:07+00:00"
+            "time": "2021-02-16T22:10:18+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -2690,26 +2647,26 @@
         },
         {
             "name": "myclabs/php-enum",
-            "version": "1.7.7",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/php-enum.git",
-                "reference": "d178027d1e679832db9f38248fcc7200647dc2b7"
+                "reference": "46cf3d8498b095bd33727b13fd5707263af99421"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/php-enum/zipball/d178027d1e679832db9f38248fcc7200647dc2b7",
-                "reference": "d178027d1e679832db9f38248fcc7200647dc2b7",
+                "url": "https://api.github.com/repos/myclabs/php-enum/zipball/46cf3d8498b095bd33727b13fd5707263af99421",
+                "reference": "46cf3d8498b095bd33727b13fd5707263af99421",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": ">=7.1"
+                "php": "^7.3 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7",
+                "phpunit/phpunit": "^9.5",
                 "squizlabs/php_codesniffer": "1.*",
-                "vimeo/psalm": "^3.8"
+                "vimeo/psalm": "^4.5.1"
             },
             "type": "library",
             "autoload": {
@@ -2734,7 +2691,7 @@
             ],
             "support": {
                 "issues": "https://github.com/myclabs/php-enum/issues",
-                "source": "https://github.com/myclabs/php-enum/tree/1.7.7"
+                "source": "https://github.com/myclabs/php-enum/tree/1.8.0"
             },
             "funding": [
                 {
@@ -2746,63 +2703,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-14T18:14:52+00:00"
-        },
-        {
-            "name": "nikic/php-parser",
-            "version": "v4.10.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "c6d052fc58cb876152f89f532b95a8d7907e7f0e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/c6d052fc58cb876152f89f532b95a8d7907e7f0e",
-                "reference": "c6d052fc58cb876152f89f532b95a8d7907e7f0e",
-                "shasum": ""
-            },
-            "require": {
-                "ext-tokenizer": "*",
-                "php": ">=7.0"
-            },
-            "require-dev": {
-                "ircmaxell/php-yacc": "^0.0.7",
-                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
-            },
-            "bin": [
-                "bin/php-parse"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.9-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PhpParser\\": "lib/PhpParser"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Nikita Popov"
-                }
-            ],
-            "description": "A PHP parser written in PHP",
-            "keywords": [
-                "parser",
-                "php"
-            ],
-            "support": {
-                "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.10.4"
-            },
-            "time": "2020-12-20T10:01:03+00:00"
+            "time": "2021-02-15T16:11:48+00:00"
         },
         {
             "name": "ob/highcharts-bundle",
@@ -4811,16 +4712,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.12.1",
+            "version": "v1.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "394f3e4dc03ea2a5448aeedc9658c8b596b1d39f"
+                "reference": "e472606b4b3173564f0edbca8f5d32b52fc4f2c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/394f3e4dc03ea2a5448aeedc9658c8b596b1d39f",
-                "reference": "394f3e4dc03ea2a5448aeedc9658c8b596b1d39f",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/e472606b4b3173564f0edbca8f5d32b52fc4f2c9",
+                "reference": "e472606b4b3173564f0edbca8f5d32b52fc4f2c9",
                 "shasum": ""
             },
             "require": {
@@ -4837,7 +4738,7 @@
             "type": "composer-plugin",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.9-dev"
+                    "dev-main": "1.12-dev"
                 },
                 "class": "Symfony\\Flex\\Flex"
             },
@@ -4859,7 +4760,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v1.12.1"
+                "source": "https://github.com/symfony/flex/tree/v1.12.2"
             },
             "funding": [
                 {
@@ -4875,7 +4776,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-02T16:29:45+00:00"
+            "time": "2021-02-16T14:05:05+00:00"
         },
         {
             "name": "symfony/form",
@@ -5961,16 +5862,16 @@
         },
         {
             "name": "symfony/polyfill-intl-grapheme",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-grapheme.git",
-                "reference": "267a9adeb8ecb8071040a740930e077cdfb987af"
+                "reference": "5601e09b69f26c1828b13b6bb87cb07cddba3170"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-grapheme/zipball/267a9adeb8ecb8071040a740930e077cdfb987af",
-                "reference": "267a9adeb8ecb8071040a740930e077cdfb987af",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-grapheme/zipball/5601e09b69f26c1828b13b6bb87cb07cddba3170",
+                "reference": "5601e09b69f26c1828b13b6bb87cb07cddba3170",
                 "shasum": ""
             },
             "require": {
@@ -6022,7 +5923,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -6038,20 +5939,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-intl-icu",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-icu.git",
-                "reference": "b2b1e732a6c039f1a3ea3414b3379a2433e183d6"
+                "reference": "af1842919c7e7364aaaa2798b29839e3ba168588"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-icu/zipball/b2b1e732a6c039f1a3ea3414b3379a2433e183d6",
-                "reference": "b2b1e732a6c039f1a3ea3414b3379a2433e183d6",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-icu/zipball/af1842919c7e7364aaaa2798b29839e3ba168588",
+                "reference": "af1842919c7e7364aaaa2798b29839e3ba168588",
                 "shasum": ""
             },
             "require": {
@@ -6109,7 +6010,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-icu/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-intl-icu/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -6125,20 +6026,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-intl-idn",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-idn.git",
-                "reference": "0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44"
+                "reference": "2d63434d922daf7da8dd863e7907e67ee3031483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44",
-                "reference": "0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/2d63434d922daf7da8dd863e7907e67ee3031483",
+                "reference": "2d63434d922daf7da8dd863e7907e67ee3031483",
                 "shasum": ""
             },
             "require": {
@@ -6196,7 +6097,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -6212,20 +6113,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
-                "reference": "6e971c891537eb617a00bb07a43d182a6915faba"
+                "reference": "43a0283138253ed1d48d352ab6d0bdb3f809f248"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/6e971c891537eb617a00bb07a43d182a6915faba",
-                "reference": "6e971c891537eb617a00bb07a43d182a6915faba",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/43a0283138253ed1d48d352ab6d0bdb3f809f248",
+                "reference": "43a0283138253ed1d48d352ab6d0bdb3f809f248",
                 "shasum": ""
             },
             "require": {
@@ -6280,7 +6181,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -6296,20 +6197,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T17:09:11+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13"
+                "reference": "5232de97ee3b75b0360528dae24e73db49566ab1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
-                "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/5232de97ee3b75b0360528dae24e73db49566ab1",
+                "reference": "5232de97ee3b75b0360528dae24e73db49566ab1",
                 "shasum": ""
             },
             "require": {
@@ -6360,7 +6261,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -6376,11 +6277,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2021-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.22.0",
+            "version": "v1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
@@ -6443,7 +6344,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.22.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.22.1"
             },
             "funding": [
                 {
@@ -8270,16 +8171,16 @@
         },
         {
             "name": "symfonycasts/reset-password-bundle",
-            "version": "v1.3.0",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/reset-password-bundle.git",
-                "reference": "73d55cf1637328b6243bf97ef9f9e3ff392a498d"
+                "reference": "3040f3d98dae1167e3311d5d7fa5265e7d61ddbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/73d55cf1637328b6243bf97ef9f9e3ff392a498d",
-                "reference": "73d55cf1637328b6243bf97ef9f9e3ff392a498d",
+                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/3040f3d98dae1167e3311d5d7fa5265e7d61ddbe",
+                "reference": "3040f3d98dae1167e3311d5d7fa5265e7d61ddbe",
                 "shasum": ""
             },
             "require": {
@@ -8315,9 +8216,9 @@
             "description": "Symfony bundle that adds password reset functionality.",
             "support": {
                 "issues": "https://github.com/SymfonyCasts/reset-password-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.3.0"
+                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.4.0"
             },
-            "time": "2021-01-15T16:49:22+00:00"
+            "time": "2021-02-17T16:33:50+00:00"
         },
         {
             "name": "symfonycasts/verify-email-bundle",
@@ -8951,6 +8852,62 @@
     ],
     "packages-dev": [
         {
+            "name": "nikic/php-parser",
+            "version": "v4.10.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "c6d052fc58cb876152f89f532b95a8d7907e7f0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/c6d052fc58cb876152f89f532b95a8d7907e7f0e",
+                "reference": "c6d052fc58cb876152f89f532b95a8d7907e7f0e",
+                "shasum": ""
+            },
+            "require": {
+                "ext-tokenizer": "*",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "ircmaxell/php-yacc": "^0.0.7",
+                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
+            },
+            "bin": [
+                "bin/php-parse"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.9-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpParser\\": "lib/PhpParser"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/nikic/PHP-Parser/issues",
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.10.4"
+            },
+            "time": "2020-12-20T10:01:03+00:00"
+        },
+        {
             "name": "phpstan/extension-installer",
             "version": "1.1.0",
             "source": {
@@ -8997,16 +8954,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.76",
+            "version": "0.12.77",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "7aaaf9a759a29795e8f46d48041af1c1f1b23d38"
+                "reference": "1f10b8c8d118d01e7b492f9707999d456be5812c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7aaaf9a759a29795e8f46d48041af1c1f1b23d38",
-                "reference": "7aaaf9a759a29795e8f46d48041af1c1f1b23d38",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1f10b8c8d118d01e7b492f9707999d456be5812c",
+                "reference": "1f10b8c8d118d01e7b492f9707999d456be5812c",
                 "shasum": ""
             },
             "require": {
@@ -9037,7 +8994,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.76"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.77"
             },
             "funding": [
                 {
@@ -9053,7 +9010,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-13T11:47:44+00:00"
+            "time": "2021-02-17T16:22:19+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -9176,16 +9133,16 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "0.12.18",
+            "version": "0.12.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "cc9d9ac264b8ac04961a03dc5b481b58ceaac248"
+                "reference": "d986994c32c11c67a6d565a959075d44f28a7122"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/cc9d9ac264b8ac04961a03dc5b481b58ceaac248",
-                "reference": "cc9d9ac264b8ac04961a03dc5b481b58ceaac248",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/d986994c32c11c67a6d565a959075d44f28a7122",
+                "reference": "d986994c32c11c67a6d565a959075d44f28a7122",
                 "shasum": ""
             },
             "require": {
@@ -9240,9 +9197,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/0.12.18"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/0.12.19"
             },
-            "time": "2021-02-13T07:38:10+00:00"
+            "time": "2021-02-15T10:32:01+00:00"
         },
         {
             "name": "slam/phpstan-extensions",

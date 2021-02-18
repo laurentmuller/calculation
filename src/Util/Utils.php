@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Util;
 
 use App\Interfaces\RoleInterface;
-use Brick\VarExporter\VarExporter;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\String\UnicodeString;
@@ -161,14 +160,23 @@ final class Utils
     public static function exportVar($expression): ?string
     {
         try {
-            $export = VarExporter::export($expression);
+            $export = \var_export($expression, true);
 
             $searches = [
-                '    ' => '  ',
                 '\\\\' => '\\',
+                ',' => '',
             ];
+            $export = \str_replace(\array_keys($searches), \array_values($searches), $export);
 
-            return \str_replace(\array_keys($searches), \array_values($searches), $export);
+            $patterns = [
+                "/array \(/" => '[',
+                "/^([ ]*)\)(,?)$/m" => '$1]$2',
+                "/=>[ ]?\n[ ]+\[/" => '=> [',
+                "/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
+            ];
+            $export = \preg_replace(\array_keys($patterns), \array_values($patterns), $export);
+
+            return $export;
         } catch (\Exception $e) {
             return $expression;
         }

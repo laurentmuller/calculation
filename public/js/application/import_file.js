@@ -10,7 +10,7 @@
     // delete $.validator.methods.accept;
 
     // initialize attachements
-    $("#form_file").initFileType();
+    $("#form_file").initFileInput();
 
     // initialize validator
     $("form").initValidator({

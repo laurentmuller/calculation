@@ -53,7 +53,7 @@ final class ThemesExtension extends AbstractExtension
             new TwigFunction('theme_name', [$this, 'getThemeName']),
             new TwigFunction('theme_default', [$this, 'isDefaultTheme']),
             new TwigFunction('theme_background', [$this, 'getThemeBackground']),
-            new TwigFunction('theme_dark', [$this, 'isThemeDark']),
+            new TwigFunction('theme_dark', [$this, 'isDarkTheme']),
         ];
     }
 
@@ -106,6 +106,16 @@ final class ThemesExtension extends AbstractExtension
     }
 
     /**
+     * Returns if the selected theme is dark.
+     *
+     * @param Request $request the request
+     */
+    public function isDarkTheme(Request $request): bool
+    {
+        return $this->service->isDarkTheme($request);
+    }
+
+    /**
      * Returns if the selected theme is the default theme (Boostrap).
      *
      * @param Request $request the request
@@ -113,16 +123,6 @@ final class ThemesExtension extends AbstractExtension
     public function isDefaultTheme(Request $request): bool
     {
         return $this->getCurrentTheme($request)->isDefault();
-    }
-
-    /**
-     * Returns if the selected theme is dark.
-     *
-     * @param Request $request the request
-     */
-    public function isThemeDark(Request $request): bool
-    {
-        return $this->getCurrentTheme($request)->isDark();
     }
 
     /**

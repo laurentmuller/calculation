@@ -19,15 +19,15 @@
 		"cardClass": "font-weight-bold"
 	},
 	{
+		"field": "email",
+		"title": "user.fields.email",
+		"class": "w-25 text-cell"
+	},
+	{
 		"field": "role",
 		"title": "user.fields.role",
 		"class": "w-25 text-cell",
 		"fieldFormatter": "formatRole"
-	},
-	{
-		"field": "email",
-		"title": "user.fields.email",
-		"class": "w-25 text-cell"
 	},
 	{
 		"field": "enabled",

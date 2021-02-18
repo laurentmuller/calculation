@@ -7,18 +7,17 @@
     'use strict';
 
     // initialize editor
-    const focus = $("form").data('focus');
-    $("#user_comment_message").initTinyEditor({
-        focus: focus
+    $("#user_comment_message").initTinymceEditor({
+        focus: true
     });
 
     // initialize attachements
-    $("#user_comment_attachments").initFileType();
+    $("#user_comment_attachments").initFileInput();
 
     // initialize validator
     $("form").initValidator({
-        tinyeditor: true,
+        tinymceeditor: true,
         fileInput: true,
-        focus: !focus
+        focus: false
     });
 }(jQuery));

@@ -72,6 +72,7 @@ class GroupsReport extends AbstractArrayReport
             'count' => $marginsCount,
         ]);
 
+        $margins = $this->setCellMargin(0);
         $table = new PdfTableBuilder($this);
         $table->addColumn(PdfColumn::left(null, 20))
             ->addColumn(PdfColumn::center(null, 20))
@@ -81,6 +82,7 @@ class GroupsReport extends AbstractArrayReport
             ->add($txtCategory)
             ->add($txtMargin)
             ->endRow();
+        $this->setCellMargin($margins);
 
         return true;
     }

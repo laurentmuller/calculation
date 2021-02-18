@@ -15,8 +15,10 @@ namespace App\Controller;
 use App\Entity\Calculation;
 use App\Form\Admin\ParametersType;
 use App\Form\FormHelper;
-use App\Form\Type\CaptchaImage;
+use App\Form\Type\CaptchaImageType;
 use App\Form\Type\MinStrengthType;
+use App\Form\Type\SimpleEditorType;
+use App\Form\Type\TinyMceEditorType;
 use App\Pdf\PdfResponse;
 use App\Pdf\PdfTocDocument;
 use App\Report\HtmlReport;
@@ -26,7 +28,6 @@ use App\Service\AbstractHttpClientService;
 use App\Service\CaptchaImageService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
-use App\Service\ThemeService;
 use App\Translator\TranslatorFactory;
 use App\Util\DateUtils;
 use App\Util\FormatUtils;
@@ -35,7 +36,6 @@ use App\Validator\Captcha;
 use App\Validator\Password;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -163,13 +163,13 @@ class TestController extends AbstractController
             ->add(MinStrengthType::class);
 
         $helper->field('captcha')
+            ->label('captcha.label')
             ->updateOption('image', $service->generateImage(false))
             ->updateOption('constraints', [
                 new NotBlank(),
                 new Captcha(),
             ])
-            ->label('captcha.label')
-            ->add(CaptchaImage::class);
+            ->add(CaptchaImageType::class);
 
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
@@ -178,31 +178,6 @@ class TestController extends AbstractController
         }
 
         return $this->render('test/password.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/pell", name="test_pell")
-     */
-    public function pellEditor(Request $request): Response
-    {
-        $data = ['message' => ''];
-        $helper = $this->createFormHelper('user.fields.', $data);
-        $helper->field('message')
-            ->updateAttribute('minlength', 10)
-            ->addHiddenType();
-
-        $form = $helper->createForm();
-        if ($this->handleRequestForm($request, $form)) {
-            $data = $form->getData();
-            $message = 'Message :<br>' . (string) $data['message'];
-            $this->succes($message);
-
-            return $this->redirectToHomePage();
-        }
-
-        return $this->render('test/pelleditor.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -287,6 +262,37 @@ class TestController extends AbstractController
         return $this->render('test/recaptcha.html.twig', [
             'form' => $form->createView(),
             'recaptcha_action' => $recaptcha_action,
+        ]);
+    }
+
+    /**
+     * @Route("/simple", name="test_simple")
+     */
+    public function simpleEditor(Request $request): Response
+    {
+        $data = [
+            'email' => 'bibi@bibi.nu',
+            'message' => '',
+        ];
+
+        $helper = $this->createFormHelper('user.fields.', $data);
+        $helper->field('email')
+            ->addEmailType();
+        $helper->field('message')
+            ->updateAttribute('minlength', 10)
+            ->add(SimpleEditorType::class);
+
+        $form = $helper->createForm();
+        if ($this->handleRequestForm($request, $form)) {
+            $data = $form->getData();
+            $message = 'Message :<br>' . (string) $data['message'];
+            $this->succes($message);
+
+            return $this->redirectToHomePage();
+        }
+
+        return $this->render('test/simpleeditor.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
@@ -379,7 +385,7 @@ class TestController extends AbstractController
      *
      * @Route("/tinymce", name="test_tinymce")
      */
-    public function tinymce(Request $request, ThemeService $service): Response
+    public function tinymce(Request $request): Response
     {
         $data = [
             'email' => 'bibi@bibi.nu',
@@ -392,12 +398,9 @@ class TestController extends AbstractController
         $helper->field('email')
             ->addEmailType();
 
-        $dark = $service->getCurrentTheme()->isDark();
         $helper->field('message')
             ->updateAttribute('minlength', 10)
-            ->updateAttribute('data-skin', $dark ? 'oxide-dark' : 'oxide')
-            ->className('must-validate')
-            ->add(TextareaType::class);
+            ->add(TinyMceEditorType::class);
 
         // handle request
         $form = $helper->createForm();

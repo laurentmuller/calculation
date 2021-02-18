@@ -161,7 +161,7 @@ $.fn.userSwitch= function (row) {
 
     // update link
     const params = {
-        _switch_user: row.data()[2] // eslint-disable-line camelcase
+        _switch_user: row.data()[2] // eslint-disable-line
     };
     const newHref = $this.data('path') + '?' + $.param(params);
     $this.prev().removeClass('d-none');

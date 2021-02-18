@@ -215,3 +215,43 @@ override form errors. Rendered example:
     {% endif %}
 </div>
 {%- endblock %}
+
+{# simple editor #}
+{% block simple_editor_row -%}
+    {{- block('form_row') -}}
+{%- endblock %}
+
+{% block simple_editor_widget -%}
+{%- set type = type|default('hidden') -%}
+{%- set editor_id = form.vars.id ~ '_editor' -%}
+{%- set actions = form.vars.actions|default([]) -%}
+<div class="simple-editor rounded border" id="{{ editor_id }}" name="{{ editor_id }}">
+    {% if actions|length -%}
+    <div class="simple-editor-toolbar btn-group btn-group-sm d-print-none">        
+	{% for action in actions %}
+        {% set exec = action.exec|default(false) %}
+        {% if exec %}
+            {% set attributes = {'title': ('simple-editor.' ~ action.title|default(exec))|trans, 'data-exec': exec|raw} %}
+            {% if action.parameter is defined %}
+                {% set attributes = attributes|merge({'data-parameter': action.parameter|raw}) %}
+            {%- endif %}
+            {% if action.state is defined %}
+                {% set attributes = attributes|merge({'data-state': action.state|raw}) %}
+            {%- endif %}
+            {% if action.enabled is defined %}
+                {% set attributes = attributes|merge({'data-enabled': action.enabled|raw}) %}
+            {%- endif %}
+            {% if action.group is defined %}
+                {% set attributes = attributes|merge({'data-group': action.group|raw}) %}
+            {%- endif %}
+            <button type="button" class="btn btn-outline-secondary"{% with { attr: attributes } %}{{ block('attributes') }}{% endwith %}>
+                <i class="{{ 'fa-fw fas fa-' ~ action.icon }}"></i>
+            </button> 
+        {%- endif %}   
+    {% endfor %}
+    </div>
+    {%- endif %}
+    <div class="simple-editor-content border-top" contenteditable="true"></div>
+    {{- block('form_widget_simple') -}}
+</div>
+{%- endblock %}

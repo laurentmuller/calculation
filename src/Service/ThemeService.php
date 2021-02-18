@@ -146,7 +146,7 @@ class ThemeService
     /**
      * Gets the current theme.
      *
-     * @param Request $request the request
+     * @param Request $request the optional request
      *
      * @return Theme the current theme, if any; the default theme otherwise
      */
@@ -259,9 +259,21 @@ class ThemeService
     }
 
     /**
+     * Returns if the current theme is a dark theme.
+     *
+     * @param Request $request the optional request
+     *
+     * @return bool true if dark; false otherwise
+     */
+    public function isDarkTheme(?Request $request = null): bool
+    {
+        return $this->getCurrentTheme($request)->isDark();
+    }
+
+    /**
      * Gets the current request.
      *
-     * @param Request $request an optional default request
+     * @param Request $request the optional request
      *
      * @return Request|null the request, if any; null otherwise
      */

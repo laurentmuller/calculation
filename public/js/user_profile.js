@@ -13,6 +13,7 @@
 /**
  * Extensions
  */
+<!--#include file="extensions/file-input-extensions.js" -->
 <!--#include file="extensions/password-extensions.js" -->
 
 /**

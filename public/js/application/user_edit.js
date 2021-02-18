@@ -21,7 +21,7 @@
         }
 
         // initialize
-        $imageFile.initFileType(callback);
+        $imageFile.initFileInput(callback);
     }
 
     // options

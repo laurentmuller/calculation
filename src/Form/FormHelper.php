@@ -231,15 +231,6 @@ class FormHelper
     }
 
     /**
-     * Add a text area type used within the Summernote editor to the builder and reset all values to default.
-     */
-    public function addEditorType(): self
-    {
-        return $this->className('must-validate')
-            ->add(TextareaType::class);
-    }
-
-    /**
      * Add an email type to the builder and reset all values to default.
      */
     public function addEmailType(): self

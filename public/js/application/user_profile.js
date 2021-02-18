@@ -21,7 +21,7 @@
     }
 
     // image file handler
-    $("#imageFile_file").initFileType(callback);
+    $("#imageFile_file").initFileInput(callback);
 
     // options
     const urlName = $("form").data("check_name");

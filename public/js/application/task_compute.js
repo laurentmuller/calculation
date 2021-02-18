@@ -92,6 +92,7 @@ function update(form) {
         $form.jqXHR.abort();
         $form.jqXHR = null;
     }
+    
     // send
     $form.jqXHR = $.post(url, data, function (response) {
         if (response.result) {
@@ -172,7 +173,7 @@ function onTaskChanged() {
             }
         }
     };
-    $('form').initValidator(options);
+    $("#edit-form").initValidator(options);
 
     // update
     onInputChanged();

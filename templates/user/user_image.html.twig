@@ -15,6 +15,7 @@
 {% if app.debug %}
 {{ parent() }}
 {{ asset_js('js/plugins/plugin-fileinput.js') }}
+{{ asset_js('js/extensions/file-input-extensions.js') }}
 {{ asset_js('js/application/user_image.js') }}
 {% else %}
 {{ asset_js('js/user_image.js') }}

@@ -42,7 +42,6 @@
     });
 
     $.extend($.validator, {
-
         /**
          * Format message within the label (if any).
          * 

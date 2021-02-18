@@ -36,6 +36,7 @@ class CategoryDocument extends AbstractArrayDocument
             'category.fields.description' => Alignment::HORIZONTAL_GENERAL,
             'category.fields.group' => Alignment::HORIZONTAL_GENERAL,
             'category.fields.products' => Alignment::HORIZONTAL_RIGHT,
+            'category.fields.tasks' => Alignment::HORIZONTAL_RIGHT,
         ]);
 
         // formats
@@ -51,6 +52,7 @@ class CategoryDocument extends AbstractArrayDocument
                 $entity->getDescription(),
                 $entity->getGroupCode() ?: $default,
                 $entity->countProducts(),
+                $entity->countTasks(),
             ]);
         }
 

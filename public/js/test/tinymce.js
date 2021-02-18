@@ -51,14 +51,15 @@
     });
 
     // initialize editor
-    $('#form_message').initTinyEditor({
+    $('#form_message').initTinymceEditor({
         plugins: 'clearContent help',
         toolbar: 'clearContent | help',
         focus: true
     });
 
     // initialize validator
-    $("form").initValidator({
-        tinyeditor: true
+    $("#edit-form").initValidator({
+        tinymceeditor: true,
+        focus: false
     });
 }(jQuery));

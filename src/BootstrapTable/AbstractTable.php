@@ -194,23 +194,6 @@ abstract class AbstractTable
     }
 
     /**
-     * Cleans the parameters to return.
-     */
-    protected function cleanParameters(Request $request, array $parameters): array
-    {
-        if ($request->isXmlHttpRequest()) {
-            return [
-                self::PARAM_TOTAL_NOT_FILTERED => $parameters[self::PARAM_TOTAL_NOT_FILTERED] ?? 0,
-                self::PARAM_TOTAL => $parameters[self::PARAM_TOTAL] ?? 0,
-                self::PARAM_ROWS => $parameters[self::PARAM_ROWS] ?? [],
-            ];
-        }
-        $parameters[self::PARAM_COLUMNS] = $this->getColumns();
-
-        return $parameters;
-    }
-
-    /**
      * Create the columns.
      *
      * @return Column[] the columns
@@ -220,6 +203,25 @@ abstract class AbstractTable
         $path = $this->getColumnDefinitions();
 
         return Column::fromJson($this, $path);
+    }
+
+    /**
+     * Gets the allowed page list.
+     *
+     * @param int $totalNotFiltered the number of not filtered entities
+     *
+     * @return int[] the allowed page list
+     */
+    protected function getAllowedPageList(int $totalNotFiltered): array
+    {
+        $sizes = self::PAGE_LIST;
+        for ($i = 0, $count = \count($sizes); $i < $count; ++$i) {
+            if ($sizes[$i] >= $totalNotFiltered) {
+                return \array_slice($sizes, 0, $i + 1);
+            }
+        }
+
+        return $sizes;
     }
 
     /**
@@ -258,25 +260,6 @@ abstract class AbstractTable
     }
 
     /**
-     * Gets the allowed page list.
-     *
-     * @param int $totalNotFiltered the number of not filtered entities
-     *
-     * @return int[] the allowed page list
-     */
-    protected function getPageList(int $totalNotFiltered): array
-    {
-        $sizes = self::PAGE_LIST;
-        for ($i = 0, $count = \count($sizes); $i < $count; ++$i) {
-            if ($sizes[$i] >= $totalNotFiltered) {
-                return \array_slice($sizes, 0, $i + 1);
-            }
-        }
-
-        return $sizes;
-    }
-
-    /**
      * Gets the display card parameter.
      */
     protected function getParamCard(Request $request): bool
@@ -287,11 +270,19 @@ abstract class AbstractTable
     }
 
     /**
-     * Gets the request parameters.
+     * Gets the selected identifier parameter.
      */
-    protected function getParameters(Request $request): array
+    protected function getParamId(Request $request): int
     {
-        // offset and limit
+        return (int) $request->get(self::PARAM_ID, 0);
+    }
+
+    /**
+     * Gets the parameters from the given request.
+     */
+    protected function getRequestParameters(Request $request): array
+    {
+        // offset, limit and page
         $offset = (int) $request->get(self::PARAM_OFFSET, 0);
         $limit = (int) $this->getRequestValue($request, self::PARAM_LIMIT, self::PAGE_SIZE);
         $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
@@ -299,17 +290,19 @@ abstract class AbstractTable
         // sort and order
         $sort = '';
         $order = Column::SORT_ASC;
-        $defaultOrder = $this->getDefaultOrder();
-        if (!empty($defaultOrder)) {
-            $sort = \array_key_first($defaultOrder);
-            $order = $defaultOrder[$sort];
+        if ($column = $this->getDefaultColumn()) {
+            $sort = $column->getField();
+            $order = $column->getOrder();
+        } else {
+            $defaultOrder = $this->getDefaultOrder();
+            if (!empty($defaultOrder)) {
+                $sort = \array_key_first($defaultOrder);
+                $order = $defaultOrder[$sort];
+            }
         }
 
-        $result = [
+        return [
             self::PARAM_SEARCH => (string) $request->get(self::PARAM_SEARCH, ''),
-
-            self::PARAM_ID => $this->getParamId($request),
-            self::PARAM_CARD => $this->getParamCard($request),
 
             self::PARAM_SORT => (string) $this->getRequestValue($request, self::PARAM_SORT, $sort),
             self::PARAM_ORDER => (string) $this->getRequestValue($request, self::PARAM_ORDER, $order),
@@ -317,17 +310,10 @@ abstract class AbstractTable
             self::PARAM_OFFSET => $offset,
             self::PARAM_LIMIT => $limit,
             self::PARAM_PAGE => $page,
+
+            self::PARAM_ID => $this->getParamId($request),
+            self::PARAM_CARD => $this->getParamCard($request),
         ];
-
-        return $result;
-    }
-
-    /**
-     * Gets the selected identifier parameter.
-     */
-    protected function getParamId(Request $request): int
-    {
-        return (int) $request->get(self::PARAM_ID, 0);
     }
 
     /**

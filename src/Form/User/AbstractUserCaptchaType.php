@@ -14,7 +14,7 @@ namespace App\Form\User;
 
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
-use App\Form\Type\CaptchaImage;
+use App\Form\Type\CaptchaImageType;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
 use App\Validator\Captcha;
@@ -65,13 +65,13 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
         // captcha image
         if ($this->displayCaptcha) {
             $helper->field('_captcha')
+                ->label('captcha.label')
                 ->updateOption('image', $this->service->generateImage(false))
                 ->updateOption('constraints', [
                     new NotBlank(),
                     new Captcha(),
                 ])
-                ->label('captcha.label')
-                ->add(CaptchaImage::class);
+                ->add(CaptchaImageType::class);
         }
     }
 }

@@ -5,7 +5,6 @@
 {%- set title        = isMail ? 'user.message.title' : 'user.comment.title' -%}
 {%- set description  = isMail ? 'user.message.description'|trans : 'user.comment.description'|trans -%}
 {%- set page_list    = isMail ? 'user_card' : 'homepage' -%}
-{%- set form_attr    = form_attr|default({})|merge({'data-focus': (not isMail)|json_encode}) -%}
 
 {% block card_header %}
 {{ parent() }}
@@ -33,8 +32,10 @@
 {% else %}
 {{ asset_js('js/core_edit.js') }}
 {% endif %}
-{{ asset_js('js/plugins/plugin-fileinput.js') }}
 {{ asset_js('js/vendor/tinymce/tinymce.min.js') }}
 {{ asset_js('js/vendor/tinymce/jquery.tinymce.min.js') }}
-{{ asset_js('js/application/user_comment_edit.js') }}
+{{ asset_js('js/plugins/plugin-fileinput.js') }}
+{{ asset_js('js/extensions/file-input-extensions.js') }}
+{{ asset_js('js/extensions/tinymce-extensions.js') }}
+{{ asset_js('js/application/user_comment.js') }}
 {% endblock %}

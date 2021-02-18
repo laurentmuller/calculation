@@ -143,7 +143,7 @@ class SearchTable extends AbstractTable
         $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, Column::SORT_ASC);
 
         // found?
-        if (!empty($items)) {
+        if (0 !== $totalNotFiltered) {
             // process
             $this->processItems($items);
 
@@ -212,7 +212,7 @@ class SearchTable extends AbstractTable
                 'page-size' => $limit,
                 'page-number' => $page,
 
-                'card-view' => \json_encode($this->getParamCard($request)),
+                'card-view' => \json_encode($card),
 
                 'sort-name' => $sort,
                 'sort-order' => $order,

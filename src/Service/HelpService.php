@@ -241,8 +241,8 @@ class HelpService
     private function sortDialogs(array &$values): void
     {
         \usort($values, function (array $a, array $b) {
-            $entityA = $this->trans(($a['entity'] ?? 'zzzz') . '.name');
-            $entityB = $this->trans(($b['entity'] ?? 'zzzz') . '.name');
+            $entityA = isset($a['entity']) ? $this->trans($a['entity'] . '.name') : 'zzzz';
+            $entityB = isset($b['entity']) ? $this->trans($b['entity'] . '.name') : 'zzzz';
             if (0 !== $result = \strnatcmp($entityA, $entityB)) {
                 return $result;
             }

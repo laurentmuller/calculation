@@ -394,6 +394,6 @@ class ChartController extends AbstractController
      */
     private function getForeground(ThemeService $service): string
     {
-        return $service->getCurrentTheme()->isDark() ? 'white' : 'black';
+        return $service->isDarkTheme() ? 'white' : 'black';
     }
 }

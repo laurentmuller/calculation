@@ -215,6 +215,11 @@
             TOP_LEFT: 'top-left',
             TOP_CENTER: 'top-center',
             TOP_RIGHT: 'top-right',
+            
+            CENTER_LEFT: 'center-left',
+            CENTER_CENTER: 'center-center',
+            CENTER_RIGHT: 'center-right',
+            
             BOTTOM_LEFT: 'bottom-left',
             BOTTOM_CENTER: 'bottom-center',
             BOTTOM_RIGHT: 'bottom-right'
@@ -313,9 +318,17 @@
             case positions.TOP_LEFT:
             case positions.TOP_CENTER:
             case positions.TOP_RIGHT:
+
+            case positions.CENTER_LEFT:
+            case positions.CENTER_CENTER:
+            case positions.CENTER_RIGHT:
+                return position;
+
             case positions.BOTTOM_LEFT:
             case positions.BOTTOM_CENTER:
+            case positions.BOTTOM_RIGHT:
                 return position;
+            
             default:
                 return positions.BOTTOM_RIGHT;
             }
@@ -337,8 +350,12 @@
             case positions.TOP_LEFT:
             case positions.TOP_CENTER:
             case positions.TOP_RIGHT:
+                
+            case positions.CENTER_LEFT:
+            case positions.CENTER_CENTER:
+            case positions.CENTER_RIGHT:
                 return false;
-            default: // bottom
+            default: // BOTTOM_XXX
                 return true;
             }
         },
@@ -375,13 +392,13 @@
                 css.top = 0;
                 css.left = 0;
                 css['margin-top'] = this.toPixel(options.marginTop);
-                css['margin-left'] = this.toPixel(options.marginLeft);
+                css['margin-left'] = this.toPixel(options.marginLeft);                
                 break;
             case positions.TOP_CENTER:
                 css.top = 0;
                 css.left = '50%';
                 css['margin-top'] = this.toPixel(options.marginTop);
-                css['margin-left'] = this.toPixel(-options.containerWidth / 2);
+                css.transform = 'translateX(-50%)';
                 break;
             case positions.TOP_RIGHT:
                 css.top = 0;
@@ -389,6 +406,25 @@
                 css['margin-top'] = this.toPixel(options.marginTop);
                 css['margin-right'] = this.toPixel(options.marginRight);
                 break;
+            
+            case positions.CENTER_LEFT:
+                css.top = '50%';
+                css.left = 0;
+                css.transform ='translateY(-50%)';
+                css['margin-left'] = this.toPixel(options.marginLeft);
+                break;
+            case positions.CENTER_CENTER:
+                css.top = '50%';
+                css.left = '50%';
+                css.transform = 'translate(-50%,-50%)';
+                break;
+            case positions.CENTER_RIGHT:
+                css.top = '50%';
+                css.right = 0;
+                css.transform ='translateY(-50%)';
+                css['margin-right'] = this.toPixel(options.marginRight);
+                break;
+                
             case positions.BOTTOM_LEFT:
                 css.bottom = 0;
                 css.left = 0;
@@ -399,9 +435,10 @@
                 css.bottom = 0;
                 css.left = '50%';
                 css['margin-bottom'] = this.toPixel(options.marginBottom);
-                css['margin-left'] = this.toPixel(-options.containerWidth / 2);
-                break;
-            default: // positions.BOTTOM_RIGHT:
+                css.transform = 'translateX(-50%)';
+                break;  
+            case positions.BOTTOM_RIGHT:
+            default:
                 css.bottom = 0;
                 css.right = 0;
                 css['margin-bottom'] = this.toPixel(options.marginBottom);

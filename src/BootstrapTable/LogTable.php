@@ -152,7 +152,7 @@ class LogTable extends AbstractTable
         }
 
         // page list
-        $pageList = $this->getPageList($totalNotFiltered);
+        $pageList = $this->getAllowedPageList($totalNotFiltered);
         $limit = \min($limit, \max($pageList));
 
         // card view

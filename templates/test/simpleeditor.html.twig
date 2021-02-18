@@ -1,0 +1,18 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# parameters #}
+{%- set title        = 'test.simple_editor' -%}
+{%- set title_icon   = 'edit' -%}
+{%- set cancel_path  = path('homepage') -%}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset_css('css/simple-editor.css') }}
+{%- endblock -%}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('js/extensions/simple-editor-extension.js') }}
+{{ asset_js('js/test/simple-editor.js') }}
+{% endblock %}

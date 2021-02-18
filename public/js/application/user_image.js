@@ -18,7 +18,7 @@
     }
 
     // image file handler
-    $("#user_imageFile_file").initFileType(callback);
+    $("#user_imageFile_file").initFileInput(callback);
 
     // initialize
     $('#edit-form').initValidator({

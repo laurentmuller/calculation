@@ -49,25 +49,23 @@
 </div>
 <div class="row">
     <div class="col">
-    {% for day in week.days|filter(day => day.inWeek(week)) -%}
-        <table class="table table-sm table-borderless">
+    {% for day in week.days|filter(day => not day.empty and day.inWeek(week)) -%}
+        <table class="table table-sm table-borderless position-relative">
             <thead>
                 <tr class="bg-secondary text-white">
                     <td colspan="5" class="week-head"><span>{{ day.date|localedate('long') }}</span><span class="small"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span> </td>
                     <td class="text-right">
                         {% if not day.empty -%}
-                            <span>{{ helper.linkCalculations(day.date|localedate('short'), day.date|localedate('long'), day.count, 'text-white', 'counters.calculations_day') }}</span>
+                            <span>{{ helper.linkCalculations(day.date|localedate('short'), day.date|localedate('long'), day.count, 'text-white stretched-link', 'counters.calculations_day') }}</span>
                         {%- endif %}
                     </td>
                 </tr>
             </thead>
-            {% if not day.empty %}
             <tbody>
-                {% for calculation in day.calculations -%}
-                     {{ helper.dataRow(calculation, 'text-cell') -}}
-                {%- endfor %}
+            {% for calculation in day.calculations -%}
+                 {{ helper.dataRow(calculation, 'text-cell') -}}
+            {%- endfor %}
             </tbody>
-            {% endif %}
         </table>
     {%- endfor %}
     </div>    

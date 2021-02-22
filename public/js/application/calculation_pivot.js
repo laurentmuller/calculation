@@ -101,13 +101,12 @@ function togglePopover($source, $selector, save) {
     if (checked) {
         if (popover) {
             $selector.popover('enable');
-        } else {
-            $selector.customPopover({
+        } else {            
+            $selector.popover({
                 html: true,
-                type: 'primary',
                 trigger: 'hover',
                 placement: 'top',
-                container: 'body',
+                customClass: 'popover-primary popover-w-100',
                 content: function () {
                     const body = $(this).data('body');
                     return $(body);
@@ -160,7 +159,7 @@ function togglePopover($source, $selector, save) {
     $highlight.on('input', function () {
         toggleHighlight($(this), $table, true);
     });
-
+    
     // hover
     $selector.on('mouseenter', function () {
         $(this).addClass('text-hover');

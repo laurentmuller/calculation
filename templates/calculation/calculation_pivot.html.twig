@@ -1,4 +1,7 @@
-{% extends 'cards/card_base.html.twig' %}
+{% extends 'base.html.twig' %}
+
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
 {% macro format(value) -%}
@@ -114,16 +117,15 @@
 {%- set col_level   = table.column.maxLevel -%}
 {%- set total_title = table.totalTitle|default('calculation.fields.total'|trans) -%}
 
-{# classes #}
 {% block container_class 'container-fluid' %}
-{% block card_footer_class 'd-none' %}
-{% block card_container_class '' %}
 
 {# header #}
-{% block card_header %}
-<div class="row">
-    <div class="col-auto mr-auto">{{ parent() }}</div>
-    <div class="col-auto d-print-none">
+{% block body %}
+<div class="row mb-2">
+    <div class="col-auto mr-auto">
+        <h4>{{ icons.icon(title_icon, title) }}</h4>
+    </div>
+    <div class="col-auto  d-print-none">
     	<div class="form-inline">
         	<div class="custom-control custom-switch mr-2">
                 <input type="checkbox" class="custom-control-input" id="popover" name="popover"{% if popover %} checked="checked"{% endif %}>
@@ -136,12 +138,8 @@
        </div>
     </div>
 </div>
-{%- endblock %}
-
-{# body #}
-{% block card_body %}
-<div class="table-responsive">
-    <table id="pivot" class="table table-bordered table-sm mb-0" data-session="{{ url('ajax_session_set') }}">
+<div class="table-responsive pb-3">
+    <table id="pivot" class="table table-bordered table-sm popover-w-100 mb-0" data-session="{{ url('ajax_session_set') }}">
         <thead>
             {%- for i in 1..col_level -%}
             <tr>

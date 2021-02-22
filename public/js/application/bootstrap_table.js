@@ -369,12 +369,12 @@ $.fn.extend({
             // update UI
             if (data.length === 0) {
                 $toggle.toggleDisabled(true);
-                $table.find('thead').hide();
                 $('.card-footer').hide();
+                // $table.find('thead').hide();
             } else {
-                $('.card-footer').show();
-                $table.find('thead').show();
                 $toggle.toggleDisabled(false);
+                $('.card-footer').show();
+                // $table.find('thead').show();
             }
         },
 
@@ -477,9 +477,8 @@ $.fn.extend({
 
     // initialize danger tooltips
     if($table.data('danger-tooltip-selector')) {
-        $table.customTooltip({
-            type: 'danger',
-            trigger: 'hover',
+        $table.tooltip({
+            customClass: 'tooltip-danger',
             selector: $table.data('danger-tooltip-selector')
         });
     }

@@ -35,7 +35,7 @@ parameters:
     google_translator_key: '%env(GOOGLE_TRANSLATOR_KEY)%'
     yandex_translator_key: '%env(YANDEX_TRANSLATOR_KEY)%'
 
-    google_recaptcha_secret: '%env(GOOGLE_RECAPTCHA_SECRET)%'
+    google_recaptcha_secret_key: '%env(GOOGLE_RECAPTCHA_SECRET_KEY)%'
     google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
 
     #links
@@ -73,7 +73,7 @@ services:
 
     # validators
     App\Validator\RecaptchaValidator:
-        arguments: ['%google_recaptcha_secret%']
+        arguments: ['%google_recaptcha_secret_key%']
 
     # datatables
     App\DataTable\:

@@ -20,7 +20,8 @@
 
 {# parameters #}
 {%- set title = 'timeline.title' -%}
-{%- set route = app.displayTabular ? 'calculation_table' : 'calculation_card' -%}    
+{%- set title_icon = 'stream' -%}
+{%- set route = 'table_calculation' -%}    
 
 {# body #}
 {% block body -%}
@@ -28,16 +29,16 @@
     <div class="row">
         <div class="col">
             <div class="form-inline">
-                <h4>{{ title|trans }}</h4>
+                <h4>{{ icons.icon(title_icon, title) }}</h4>
             </div>
         </div>
-        <div class="col-auto pr-2">
+        <div class="col-auto pr-1">
             <div class="form-inline">
                 <label for="date" class="mr-2">{{ 'timeline.date'|trans }}</label>
                 <input id="date" name="date" type="date" class="form-control form-control-sm" value="{{ date }}">
             </div>
         </div>
-        <div class="col-auto pr-2 pl-1">
+        <div class="col-auto px-1">
             <div class="form-inline">
                 <label for="interval" class="mr-2">{{ 'timeline.interval'|trans }}</label>
                 <select id="interval" name="interval" class="form-control form-control-sm custom-select custom-select-sm">
@@ -71,12 +72,13 @@
     <div class="row">
         <div class="col">
             <ul class="timeline">
-                {% for key, calculations in data %}
-                    <li class="success">
-                        {%- set count = calculations|length -%}
-                        {%- set query = calculations[0].date|localedate('short')  -%}
-                        {%- set title = 'counters.calculations_day'|trans({'count': count, 'date': key}) -%}
-                        <a href="{{ path(route, {'query': query}) }}" title="{{ title }}">{{ key }}</a>
+            {% for key, calculations in data %}
+                {%- set count = calculations|length -%}
+                {%- set query = calculations[0].date|localedate('short')  -%}
+                {%- set title = 'counters.calculations_day'|trans({'count': count, 'date': key}) -%}
+                <li class="success">
+                    <div class="position-relative">
+                        <a class="text-decoration-none stretched-link" href="{{ path(route, {'search': query}) }}" title="{{ title }}">{{ key }}</a>
                         <span class="float-right small">{{ 'counters.calculations'|trans({'count': count}) }}</span>
                         <hr class="my-0">
                         <table class="table table-sm table-borderless">
@@ -86,8 +88,9 @@
                             {% endfor %}
                             </tbody>
                         </table>
-                    </li>
-                {% endfor %}
+                    </div>
+                </li>
+            {% endfor %}
             </ul>
         </div>
     </div>

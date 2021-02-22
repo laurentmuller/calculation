@@ -452,7 +452,7 @@
             color = color || '';
             const colors = this.options.colors;
             const values = Object.values(colors);
-            const index = values.findIndex(c => c.equalsIgnoreCase(color));
+            const index = values.findIndex((value) => value.equalsIgnoreCase(color));
             if (index !== -1) {
                return Object.keys(colors)[index];
             }
@@ -473,7 +473,7 @@
             name = name || '';
             const colors = this.options.colors;
             const names = Object.keys(colors);
-            const found = names.find(n => n.equalsIgnoreCase(name));
+            const found = names.find((key) => key.equalsIgnoreCase(name));
             if (found) {
                 return colors[found];
             }

@@ -36,9 +36,9 @@ $.fn.extend({
         }
 
         // enable tooltips
-        $table.customTooltip({
+        $table.tooltip({
             selector: '.has-tooltip',
-            type: 'danger overall-datatable'
+            customClass: 'tooltip-danger overall-datatable'
         });
 
         // initialize context menu
@@ -61,9 +61,9 @@ $.fn.extend({
         }
 
         // enable tooltips
-        $('.card').customTooltip({
+        $('.card').tooltip({
             selector: '.has-tooltip',
-            type: 'danger overall-card'
+            customClass: 'tooltip-danger overall-card'
         });
     }
 }(jQuery));

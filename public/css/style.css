@@ -707,17 +707,6 @@ span.color-value {
 }
 
 /**
- * popover for calendar and cross-table
- */
-.popover {
-    max-width: 100%;
-}
-.table-popover tr:first-child td,
-.table-popover tr:first-child th {
-    border-top-style: hidden;
-}
-
-/**
  * Context menu
  */
  .context-menu-list {

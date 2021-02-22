@@ -9,7 +9,7 @@ $.fn.extend({
      */
     enableCellNavigation: function () {
         'use strict';
-        
+
         const arrow = {
             left: 37,
             up: 38,
@@ -45,21 +45,20 @@ $.fn.extend({
             const $cell = $(e.target).closest('td');
 
             switch (e.which) {
-            case arrow.left: {
+            case arrow.left:
                 if (input.selectionStart || 0 === 0) {
                     $moveTo = $cell.prev('td:has(input)');
                 }
                 break;
-            }
-            case arrow.right: {
+
+            case arrow.right:
                 if (input.selectionEnd || input.value.length === input.value.length) {
                     $moveTo = $cell.next('td:has(input)');
                 }
                 break;
-            }
 
             case arrow.up:
-            case arrow.down: {
+            case arrow.down:
                 var $moveToRow = null;
                 const $row = $cell.closest('tr');
                 const pos = $cell[0].cellIndex;
@@ -72,7 +71,6 @@ $.fn.extend({
                     $moveTo = $($moveToRow[0].cells[pos]);
                 }
                 break;
-            }
             }
 
             if ($moveTo && $moveTo.length) {

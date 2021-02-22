@@ -7,8 +7,8 @@
     'use strict';
 
     // tooltip
-    $('body').customTooltip({
+    $('body').tooltip({
         selector: '.has-tooltip',
-        type: 'danger overall-card'
+        customClass: 'tooltip-danger overall-card'
     });
 }(jQuery));

@@ -54,8 +54,8 @@
 {% endmacro %}
 
 {% macro actions(overwrite = true) %}
-<button type="button" id="all" class="btn btn-secondary" title="{{ 'user.rights.all_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}><i class="fa-fw fas fa-plus"></i></button>
-<button type="button" id="none" class="btn btn-secondary" title="{{ 'user.rights.none_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}><i class="fa-fw fas fa-minus"></i></button>
-<button type="button" id="toggle" class="btn btn-secondary" title="{{ 'user.rights.toggle_title'|trans }}" {%- if not overwrite -%} disabled="disabled"{%- endif -%}><i class="fa-fw fas fa-exchange-alt"></i></button>
-<button type="button" id="default" class="btn btn-secondary" title="{{ 'user.rights.default_title'|trans }}"><i class="fa-fw fas fa-trash-restore"></i></button>
+<button type="button" id="all" class="btn btn-outline-secondary" title="{{ 'user.rights.all_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}><i class="fa-fw fas fa-check-double"></i></button>
+<button type="button" id="none" class="btn btn-outline-secondary" title="{{ 'user.rights.none_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}><i class="fa-fw fas fa-eraser"></i></button>
+<button type="button" id="toggle" class="btn btn-outline-secondary" title="{{ 'user.rights.toggle_title'|trans }}" {%- if not overwrite -%} disabled="disabled"{%- endif -%}><i class="fa-fw fas fa-toggle-on"></i></button>
+<button type="button" id="default" class="btn btn-outline-secondary" title="{{ 'user.rights.default_title'|trans }}"><i class="fa-fw fab fa-rev"></i></button>
 {% endmacro %}

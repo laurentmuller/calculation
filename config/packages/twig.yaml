@@ -21,7 +21,7 @@ twig:
         cookie_same_site: '%cookie_same_site%'
     
         google_recaptcha_site_key: '%google_recaptcha_site_key%'
-        google_recaptcha_secret: '%google_recaptcha_secret%'
+        google_recaptcha_secret_key: '%google_recaptcha_secret_key%'
     
         link_dev: '%link_dev%'
         link_prod: '%link_prod%'

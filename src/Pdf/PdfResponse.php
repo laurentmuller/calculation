@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PdfResponse extends Response
 {
     /**
-     * The application download type.
+     * The application download mime type.
      */
     public const MIME_TYPE_DOWNLOAD = 'application/x-download';
 

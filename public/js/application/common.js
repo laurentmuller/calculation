@@ -79,8 +79,8 @@ function initSearchToolbar() {
         } else {
             // validate
             if ($query.val().trim().length < 2) {
-                $query.addClass('is-invalid').customTooltip({
-                    type: 'danger'
+                $query.addClass('is-invalid').tooltip({
+                    customClass: 'tooltip-danger'
                 }).tooltip('show');
             } else {
                 $query.hideInvalid();

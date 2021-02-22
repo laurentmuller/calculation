@@ -26,3 +26,8 @@
     border-left-width: 0.3rem !important; 
     border-left-color: var(--secondary) !important;
 }
+
+.table-popover tr:first-child td,
+.table-popover tr:first-child th {
+    border-top-style: hidden;
+}

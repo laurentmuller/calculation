@@ -320,11 +320,19 @@ final class SymfonyUtils
         // remove links
         $info = \preg_replace('/<a\s(.+?)>(.+?)<\/a>/is', '<p>$2</p>', $info);
 
+        // remove sensitive informations
+        $info = \preg_replace('/<tr>.*KEY.*<\/tr>/m', '', $info);
+        $info = \preg_replace('/<tr>.*MAILER_DSN.*<\/tr>/m', '', $info);
+        $info = \preg_replace('/<tr>.*DATABASE_URL.*<\/tr>/m', '', $info);
+        $info = \preg_replace('/<tr>.*DATABASE_EDIT.*<\/tr>/m', '', $info);
+
         // replace version
         $info = \str_replace('PHP Version', 'Version', $info);
 
         // update table class
-        return \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
+        $info = \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
+
+        return $info;
     }
 
     /**

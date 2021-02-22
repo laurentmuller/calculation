@@ -47,7 +47,6 @@ class ImportProductController extends AbstractController
     {
         // create form
         $form = $this->createImportForm();
-
         if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
 

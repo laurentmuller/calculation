@@ -268,10 +268,9 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     const $table = $('#data-table');
 
     // tooltip
-    $table.customTooltip({
-        trigger: 'hover',
+    $table.tooltip({
         selector: '.has-tooltip',
-        type: 'danger overall-datatable'
+        customClass: 'tooltip-danger overall-datatable'
     });
 
     // columns

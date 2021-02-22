@@ -92,10 +92,11 @@ function updateErrors() {
     if ($('.btn-adjust').length) {
         $('.btn-adjust').tooltip();
     }
-    $('body').customTooltip({
+    $('body').tooltip({
         selector: '.has-tooltip',
-        type: 'danger overall-cell'
+        customClass: 'tooltip-danger overall-cell'
     });
+    
 
     // errors
     if ($("#data-table-edit").length) {

@@ -10,7 +10,7 @@
         html: true,
         trigger: 'hover',
         placement: 'top',
-        container: 'body',
+        customClass: 'popover-w-100',
         content: function () {
             const content = $(this).data("html");
             return $(content);

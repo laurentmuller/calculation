@@ -189,16 +189,16 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "1.11.1",
+            "version": "1.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "ce77a7ba1770462cd705a91a151b6c3746f9c6ad"
+                "reference": "b17c5014ef81d212ac539f07a1001832df1b6d3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/ce77a7ba1770462cd705a91a151b6c3746f9c6ad",
-                "reference": "ce77a7ba1770462cd705a91a151b6c3746f9c6ad",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/b17c5014ef81d212ac539f07a1001832df1b6d3b",
+                "reference": "b17c5014ef81d212ac539f07a1001832df1b6d3b",
                 "shasum": ""
             },
             "require": {
@@ -213,11 +213,6 @@
                 "phpunit/phpunit": "^7.5 || ^9.1.5"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.11.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Doctrine\\Common\\Annotations\\": "lib/Doctrine/Common/Annotations"
@@ -258,9 +253,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/annotations/issues",
-                "source": "https://github.com/doctrine/annotations/tree/1.11.1"
+                "source": "https://github.com/doctrine/annotations/tree/1.12.1"
             },
-            "time": "2020-10-26T10:28:16+00:00"
+            "time": "2021-02-21T21:00:45+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -8954,16 +8949,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.77",
+            "version": "0.12.78",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "1f10b8c8d118d01e7b492f9707999d456be5812c"
+                "reference": "eecce8d2ee3cac6769f37b4cb1998b2715f82984"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1f10b8c8d118d01e7b492f9707999d456be5812c",
-                "reference": "1f10b8c8d118d01e7b492f9707999d456be5812c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/eecce8d2ee3cac6769f37b4cb1998b2715f82984",
+                "reference": "eecce8d2ee3cac6769f37b4cb1998b2715f82984",
                 "shasum": ""
             },
             "require": {
@@ -8994,7 +8989,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.77"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.78"
             },
             "funding": [
                 {
@@ -9010,7 +9005,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-17T16:22:19+00:00"
+            "time": "2021-02-20T13:24:36+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -9133,16 +9128,16 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "0.12.19",
+            "version": "0.12.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "d986994c32c11c67a6d565a959075d44f28a7122"
+                "reference": "ab56a2efc564243c0962432e1d12012655e79ea7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/d986994c32c11c67a6d565a959075d44f28a7122",
-                "reference": "d986994c32c11c67a6d565a959075d44f28a7122",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/ab56a2efc564243c0962432e1d12012655e79ea7",
+                "reference": "ab56a2efc564243c0962432e1d12012655e79ea7",
                 "shasum": ""
             },
             "require": {
@@ -9197,9 +9192,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/0.12.19"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/0.12.20"
             },
-            "time": "2021-02-15T10:32:01+00:00"
+            "time": "2021-02-19T11:55:30+00:00"
         },
         {
             "name": "slam/phpstan-extensions",
@@ -9272,16 +9267,16 @@
         },
         {
             "name": "spaze/phpstan-disallowed-calls",
-            "version": "v1.2.2",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spaze/phpstan-disallowed-calls.git",
-                "reference": "d78e950e239e04d0aee9e9d0878d479f40db6f38"
+                "reference": "bb809a32e0669cba26a32a37e4b215816a436afa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spaze/phpstan-disallowed-calls/zipball/d78e950e239e04d0aee9e9d0878d479f40db6f38",
-                "reference": "d78e950e239e04d0aee9e9d0878d479f40db6f38",
+                "url": "https://api.github.com/repos/spaze/phpstan-disallowed-calls/zipball/bb809a32e0669cba26a32a37e4b215816a436afa",
+                "reference": "bb809a32e0669cba26a32a37e4b215816a436afa",
                 "shasum": ""
             },
             "require": {
@@ -9321,9 +9316,9 @@
             "description": "Disallowed method and function calls plug-in for PHPStan",
             "support": {
                 "issues": "https://github.com/spaze/phpstan-disallowed-calls/issues",
-                "source": "https://github.com/spaze/phpstan-disallowed-calls/tree/v1.2.2"
+                "source": "https://github.com/spaze/phpstan-disallowed-calls/tree/v1.3.0"
             },
-            "time": "2021-02-10T23:55:28+00:00"
+            "time": "2021-02-19T22:26:49+00:00"
         },
         {
             "name": "symfony/browser-kit",

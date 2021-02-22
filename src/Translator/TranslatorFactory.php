@@ -128,11 +128,6 @@ class TranslatorFactory
                 'class' => GoogleTranslatorService::getClassName(),
                 'api' => GoogleTranslatorService::getApiUrl(),
             ],
-            [
-                'name' => YandexTranslatorService::getName(),
-                'class' => YandexTranslatorService::getClassName(),
-                'api' => YandexTranslatorService::getApiUrl(),
-            ],
         ];
     }
 

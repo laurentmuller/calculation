@@ -50,7 +50,7 @@ $.fn.extend({
      * Initialize the table-boostrap.
      * 
      * @param {object}
-     *            options - the options to use.
+     *            options - the options to merge with default.
      * 
      * @return {jQuery} this instance for chaining.
      */
@@ -282,6 +282,7 @@ $.fn.extend({
         if(!options.cardView) {
             return $this;
         }
+        
         const $body = $this.find('tbody');
         const callback = $.isFunction(options.onRenderCardView) ? options.onRenderCardView : false;
         const data = callback ? $this.getData() : null;
@@ -289,6 +290,7 @@ $.fn.extend({
         $body.find('tr').each(function() {
             const $row = $(this);
             const $views = $row.find('.card-views:first');
+
             // move actions (if any) to a new column
             const $actions = $views.find('.card-view-value:last:has(button)');
             if($actions.length) {
@@ -301,18 +303,21 @@ $.fn.extend({
                 });
                 $views.find('.card-view:last').remove();
             }
+
             // update class
             $views.find('.card-view-value').each(function(index, element) {
                 if(columns[index].cardClass) {
                     $(element).addClass(columns[index].cardClass);
                 }
             });
+
             // callback
             if(callback) {
                 const row = data[$row.index()];
                 options.onRenderCardView($this, row, $row);
             }
         });
+        
         // clean
         $body.find('.undefined').removeClass('undefined');
         $body.find('.card-views').addClass('cursor-pointer');
@@ -342,7 +347,7 @@ $.fn.extend({
      * Refresh/reload the remote server data.
      * 
      * @param {object}
-     *            options - the optional options to use.
+     *            options - the optional options.
      * 
      * @return {jQuery} this instance for chaining.
      */

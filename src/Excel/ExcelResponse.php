@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ExcelResponse extends StreamedResponse
 {
     /**
-     * The application download type.
+     * The application download mime type.
      */
     public const MIME_TYPE_DOWNLOAD = 'application/x-download';
 

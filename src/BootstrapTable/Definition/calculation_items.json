@@ -49,6 +49,12 @@
 	},
 	{
 		"field": "stateColor",
+		"alias": "color",
+		"visible": false
+	},
+	{
+		"field": "stateEditable",
+		"alias": "editable",
 		"visible": false
 	}
 ]

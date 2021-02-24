@@ -128,7 +128,7 @@ class CategoryTable extends AbstractEntityTable
      */
     protected function updateParameters(array $parameters): array
     {
-        return \array_merge_recursive($parameters, [
+        return \array_merge_recursive(parent::updateParameters($parameters), [
             'group' => $this->getGroup(),
             'groups' => $this->getGroups(),
             'params' => [

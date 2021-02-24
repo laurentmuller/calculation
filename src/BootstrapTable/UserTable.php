@@ -120,4 +120,16 @@ class UserTable extends AbstractEntityTable
     {
         return ['username' => Column::SORT_ASC];
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function updateParameters(array $parameters): array
+    {
+        return \array_merge_recursive(parent::updateParameters($parameters), [
+            'attributes' => [
+                'row-style' => 'styleUserEnabled',
+            ],
+        ]);
+    }
 }

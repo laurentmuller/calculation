@@ -296,18 +296,11 @@ class PlainType extends AbstractType
     {
         if (isset($options[$name]) && \is_string($options[$name])) {
             $value = $options[$name];
-            if ($translate) {
-                return $this->trans($value);
-            }
-
-            return $value;
+        } else {
+            $value = $defaultValue;
         }
 
-        if ($translate) {
-            return $this->trans($defaultValue);
-        }
-
-        return $defaultValue;
+        return $translate ? $this->trans($value) : $value;
     }
 
     /**

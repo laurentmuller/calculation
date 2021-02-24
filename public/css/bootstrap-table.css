@@ -108,6 +108,16 @@
     }
 }
 
+/**
+ * Page informations
+ */
 .pagination-detail {
     line-height: 2rem;
+}
+
+/*
+ * Calculation overall margin below
+ */
+tr.text-muted td .text-danger {
+    opacity: 0.75;
 }

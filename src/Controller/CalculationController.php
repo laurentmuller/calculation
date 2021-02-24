@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\DataTable\CalculationDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
@@ -41,6 +42,10 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/calculation")
  * @IsGranted("ROLE_USER")
+ * @Breadcrumb({
+ *     {"label": "index.title", "route": "homepage" },
+ *     {"label": "calculation.list.title", "route": "table_calculation" }
+ * })
  */
 class CalculationController extends AbstractEntityController
 {
@@ -66,6 +71,9 @@ class CalculationController extends AbstractEntityController
      * Add a new calculation.
      *
      * @Route("/add", name="calculation_add")
+     * @Breadcrumb({
+     *     { "label": "common.button_add" }
+     * })
      */
     public function add(Request $request): Response
     {
@@ -105,6 +113,9 @@ class CalculationController extends AbstractEntityController
      * Edit a copy (cloned) calculation.
      *
      * @Route("/clone/{id}", name="calculation_clone", requirements={"id": "\d+" })
+     * @Breadcrumb({
+     *     { "label": "common.button_clone" }
+     * })
      */
     public function clone(Request $request, Calculation $item): Response
     {
@@ -124,6 +135,9 @@ class CalculationController extends AbstractEntityController
      * Delete a calculation.
      *
      * @Route("/delete/{id}", name="calculation_delete", requirements={"id": "\d+" })
+     * @Breadcrumb({
+     *     { "label": "common.button_delete" }
+     * })
      */
     public function delete(Request $request, Calculation $item): Response
     {
@@ -143,6 +157,9 @@ class CalculationController extends AbstractEntityController
      * Edit a calculation.
      *
      * @Route("/edit/{id}", name="calculation_edit", requirements={"id": "\d+" })
+     * @Breadcrumb({
+     *     { "label": "common.button_edit" }
+     * })
      */
     public function edit(Request $request, Calculation $item): Response
     {
@@ -210,6 +227,9 @@ class CalculationController extends AbstractEntityController
      * Show properties of a calculation.
      *
      * @Route("/show/{id}", name="calculation_show", requirements={"id": "\d+" })
+     * @Breadcrumb({
+     *     { "label": "common.button_property" }
+     * })
      */
     public function show(Calculation $item): Response
     {
@@ -226,6 +246,9 @@ class CalculationController extends AbstractEntityController
      * Edit the state of a calculation.
      *
      * @Route("/state/{id}", name="calculation_state", requirements={"id": "\d+" })
+     * @Breadcrumb({
+     *     { "label": "common.button_edit" }
+     * })
      */
     public function state(Request $request, Calculation $item): Response
     {

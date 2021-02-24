@@ -519,37 +519,42 @@ input[type="number"] {
 body {
     margin-bottom: 20px;
 }
-.footer {
+ul.footer {
     left: 0;
     bottom: 0;
     width: 100%;
     padding: 3px;
     margin-bottom: 0;
     position: fixed;
-    z-index: 501;
+    padding: 3px;
+    display: table;
+
+    overflow: hidden;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 
     color: var(--white);
     background-color: var(--gray);
-
-    font-size: 0.8rem;
-    text-align: right;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
-.footer a {
-    color: var(--white);
+ul.footer a {
+  color: var(--white);
 }
-.footer ul {
-    list-style: none;
-}
-.footer li {
-    display: inline;
+ul.footer li {
     padding: 0 8px;
+    display: table-cell;
     border-left: solid 1px var(--white);
 }
-.footer li:first-child {
+ul.footer li:first-child {
+    width: 100%;
+    padding-left: 1px;
     border-left: none;
+}
+ul.footer li:nth-child(2) {
+    border-left: none;
+}
+ul.footer .li:last-child {
+    padding-right: 1px;
 }
 
 /*

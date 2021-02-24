@@ -114,11 +114,14 @@ class CalculationTable extends AbstractEntityTable
      */
     protected function updateParameters(array $parameters): array
     {
-        return \array_merge_recursive($parameters, [
+        return \array_merge_recursive(parent::updateParameters($parameters), [
             'state' => $this->getCalculationState(),
             'states' => $this->getCalculationStates(),
             'params' => [
                 self::PARAM_STATE => $this->stateId,
+            ],
+            'attributes' => [
+                'row-style' => 'styleCalculationEditable',
             ],
         ]);
     }

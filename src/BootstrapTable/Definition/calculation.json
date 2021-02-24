@@ -52,6 +52,12 @@
 	},
 	{
 		"field": "state.color",
+		"alias": "color",
+		"visible": false
+	},
+	{
+		"field": "state.editable",
+		"alias": "editable",
 		"visible": false
 	}
 ]

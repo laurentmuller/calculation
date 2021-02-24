@@ -343,7 +343,7 @@ user:
         message: Message
         attachments: Fichier
         recaptcha: Vérification
-        overwrite: Remplace les droits d'accès par défaut
+        overwrite: Remplacer les droits d'accès par défaut
     roles:
         user: Utilisateur
         admin: Administrateur
@@ -475,6 +475,7 @@ common:
     button_back_list: Retour à la liste
     button_copy: Copier
     button_clone: Créer une copie
+    button_property: Propriétés
     button_import: Importer
     button_pdf: Télécharger
     button_pdf_list: Télécharger la liste
@@ -562,6 +563,7 @@ index:
     panel_month: Résumé par mois
     panel_state: Calculations par statut
     toggle_navigation: Basculer la navigation
+    disabled: Vous ne pouvez pas accéder à ce site car votre profile a été désactivé.<br><br>Veuillez demander à votre supérieur ou à l'administrateur du site pour vous octroyer les droits nécessaires.
 about:
     title: A propos de
     app_customer: Client
@@ -679,7 +681,7 @@ test:
     html: Exportation HTML
     recaptcha: reCAPTCHA
     tinymce: Editeur TinyMCE
-    simple_editor: Editeur Simple 
+    simple_editor: Editeur Simple
 parameters:
     title: Paramètres
     description: Définition des paramètres de l'application.
@@ -711,11 +713,9 @@ parameters:
         top-left: En haut à gauche
         top-center: En haut centré
         top-right: En haut à droite
-        
         center-left: Au millieu à gauche
         center-center: Au millieu centré
         center-right: Au millieu à droite
-        
         bottom-left: En bas à gauche
         bottom-center: En bas centré
         bottom-right: En bas à droite

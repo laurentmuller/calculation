@@ -78,7 +78,7 @@ trait TimestampableTrait
      */
     public function getCreatedText(TranslatorInterface $translator): string
     {
-        $date = FormatUtils::formatDateTime($this->getCreatedAt()) ?: $translator->trans('common.empty_date');
+        $date = $this->getCreatedAt() ? FormatUtils::formatDateTime($this->getCreatedAt()) : $translator->trans('common.empty_date');
         $user = $this->getCreatedBy() ?: $translator->trans('common.empty_user');
 
         return $translator->trans('common.entity_created', [
@@ -108,7 +108,7 @@ trait TimestampableTrait
      */
     public function getUpdatedText(TranslatorInterface $translator): string
     {
-        $date = FormatUtils::formatDateTime($this->getUpdatedAt()) ?: $translator->trans('common.empty_date');
+        $date = $this->getUpdatedAt() ? FormatUtils::formatDateTime($this->getUpdatedAt()) : $translator->trans('common.empty_date');
         $user = $this->getUpdatedBy() ?: $translator->trans('common.empty_user');
 
         return $translator->trans('common.entity_updated', [

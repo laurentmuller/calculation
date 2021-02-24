@@ -158,7 +158,7 @@
         {% for row in rows %}
         <tr{% if row.id == id %} class="{{ row_selector }}"{%- set row_selector='' -%}{% endif %}>
             {% for column in columns %}
-            <td>{{ row[column.field]|raw }}</td>
+            <td>{{ row[column.alias]|raw }}</td>
             {% endfor %}
         </tr>
         {% endfor %}

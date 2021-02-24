@@ -46,6 +46,11 @@ class Column
     public const SORT_DESC = 'desc';
 
     /**
+     * The field alias name.
+     */
+    private ?string $alias = null;
+
+    /**
      * The class for the element in the card view mode.
      */
     private ?string $cardClass = null;
@@ -166,6 +171,11 @@ class Column
         }, $definitions);
     }
 
+    public function getAlias(): ?string
+    {
+        return $this->alias ?? $this->field;
+    }
+
     /**
      * Gets the attributes used to output the column to the Twig template.
      */
@@ -174,7 +184,7 @@ class Column
         // required
         $result = [
             'class' => $this->getClass(),
-            'field' => $this->getField(),
+            'field' => $this->getAlias(),
             'sort-order' => $this->getOrder(),
             'visible' => \json_encode($this->isVisible()),
             'sortable' => \json_encode($this->isSortable()),
@@ -205,10 +215,10 @@ class Column
         return $this->cellFormatter;
     }
 
-    public function getClass(): ?string
+    public function getClass(): string
     {
         $class = (string) $this->class;
-        if (false === \strpos($class, 'rowlink-skip')) {
+        if ($this->visible && false === \strpos($class, 'rowlink-skip')) {
             return \trim($class . ' user-select-none cursor-pointer');
         }
 
@@ -245,7 +255,7 @@ class Column
 
     public function isCardVisible(): bool
     {
-        return $this->cardVisible;
+        return $this->visible && $this->cardVisible;
     }
 
     public function isDefault(): bool
@@ -291,6 +301,13 @@ class Column
 
         // format
         return $this->formatValue($objectOrArray, $value);
+    }
+
+    public function setAlias(?string $alias): self
+    {
+        $this->alias = $alias;
+
+        return $this;
     }
 
     public function setCardClass(?string $cardClass): self
@@ -405,6 +422,10 @@ class Column
     {
         if (\is_callable($this->fieldFormatter)) {
             return (string) \call_user_func($this->fieldFormatter, $value, $objectOrArray);
+        }
+
+        if (\is_bool($value)) {
+            return $value ? '1' : '0';
         }
 
         return (string) $value;

@@ -37,7 +37,7 @@
         {% endfor %}
         {{ _self.cardEntry(states_count, states_total, 'calculation.fields.total'|trans, '', list_path) }}
     {% else %}
-        <div class="alert alert-warning flex-fill mb-0 py-4 text-center">
+        <div class="alert alert-warning flex-fill mb-0 py-4 text-center" role="alert">
             {{ 'calculation.list.empty'|trans }}
         </div>
     {% endif %}

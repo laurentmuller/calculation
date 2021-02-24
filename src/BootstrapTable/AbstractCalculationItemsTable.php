@@ -124,7 +124,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
         $card = $this->getParamCard($request);
 
         // render
-        return [
+        $parameters = [
             // template parameters
             self::PARAM_COLUMNS => $this->getColumns(),
             self::PARAM_ROWS => $rows,
@@ -164,6 +164,9 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
                 'sort-order' => $order,
             ],
         ];
+
+        // update
+        return $this->updateParameters($parameters);
     }
 
     /**
@@ -211,6 +214,18 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
      * @return int the number of calculation items
      */
     abstract protected function getItemsCount(array $items): int;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function updateParameters(array $parameters): array
+    {
+        return \array_merge_recursive(parent::updateParameters($parameters), [
+            'attributes' => [
+                'row-style' => 'styleCalculationEditable',
+            ],
+        ]);
+    }
 
     /**
      * Gets the limit, the maximum and the page parameters.

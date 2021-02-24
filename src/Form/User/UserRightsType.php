@@ -52,6 +52,20 @@ class UserRightsType extends RightsType
     }
 
     /**
+     * Translate the enabled state.
+     *
+     * @param string $enabled the enabled state
+     *
+     * @return string the translated enabled state
+     */
+    public function translateEnabled(string $enabled): string
+    {
+        $enabled = \filter_var($enabled, \FILTER_VALIDATE_BOOLEAN);
+
+        return $this->translator->trans($enabled ? 'common.value_enabled' : 'common.value_disabled');
+    }
+
+    /**
      * Translate the given role.
      *
      * @param string $role the role name
@@ -75,6 +89,10 @@ class UserRightsType extends RightsType
 
         $helper->field('role')
             ->updateOption('transformer', [$this, 'translateRole'])
+            ->addPlainType(true);
+
+        $helper->field('enabled')
+            ->updateOption('transformer', [$this, 'translateEnabled'])
             ->addPlainType(true);
 
         $helper->field('overwrite')

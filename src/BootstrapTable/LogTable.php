@@ -158,8 +158,8 @@ class LogTable extends AbstractTable
         // card view
         $card = $this->getParamCard($request);
 
-        // render
-        return [
+        // parameters
+        $parameters = [
             // template parameters
             self::PARAM_COLUMNS => $this->getColumns(),
             self::PARAM_ROWS => $rows,
@@ -204,6 +204,9 @@ class LogTable extends AbstractTable
                 'sort-order' => $order,
             ],
         ];
+
+        // update
+        return $this->updateParameters($parameters);
     }
 
     /**

@@ -97,7 +97,7 @@ class TaskTable extends AbstractEntityTable
      */
     protected function updateParameters(array $parameters): array
     {
-        return \array_merge_recursive($parameters, [
+        return \array_merge_recursive(parent::updateParameters($parameters), [
             'category' => $this->getCategory(),
             'categories' => $this->getCategories(),
             'params' => [

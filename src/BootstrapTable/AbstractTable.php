@@ -400,7 +400,7 @@ abstract class AbstractTable
     protected function mapValues($objectOrArray, array $columns, PropertyAccessor $accessor): array
     {
         $callback = static function (array $result, Column $column) use ($objectOrArray, $accessor) {
-            $result[$column->getField()] = $column->mapValue($objectOrArray, $accessor);
+            $result[$column->getAlias()] = $column->mapValue($objectOrArray, $accessor);
 
             return $result;
         };

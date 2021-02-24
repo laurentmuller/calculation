@@ -12,6 +12,11 @@
 			<attribute name="composer" value="source"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/asprega/breadcrumb-bundle">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/beberlei/doctrineextensions/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>

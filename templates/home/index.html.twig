@@ -2,42 +2,53 @@
 
 {# parameters #}
 {%- set title = 'index.title' -%}
+{%- set enabled = app.user.enabled -%}
 
 {# show search #}
 {% block navigation -%}
-{%- set show_navigation = true -%}
-{{ parent() }}
+{%- if enabled -%}
+    {%- set show_navigation = true -%}
+    {{ parent() }}
+{%- endif -%}
+{%- endblock %}
+
+{% block footer -%}
+{%- if enabled -%}{{- parent() -}}{%- endif -%}
 {%- endblock %}
 
 {% block body -%}
 <div class="row no-gutters">
+{% if enabled %}
 	<div class="col">
-        {% if app.displayTabular %}
-            {%- include 'home/panel_table.html.twig' -%}
-        {% else %}
-            {%- include 'home/panel_card.html.twig' -%}
-        {% endif %}        
+        {%- include 'home/panel_table.html.twig' -%}
         {%- include 'home/panel_state.html.twig' -%}
         {%- include 'home/panel_month.html.twig' -%}
+        {%- include 'user/user_switch.html.twig' -%}
 	</div>
+{% else %}
+    <div class="col my-auto h-50">
+        {%- include 'home/panel_disabled.html.twig' -%}
+        {%- include 'user/user_switch.html.twig' -%}            
+    </div>
+{% endif %}
 </div>
-{# switch user #}
-{%- include 'user/user_switch.html.twig' -%}
 {%- endblock %}
 
 {% block stylesheets %}
-{{ asset_css('css/calculation.css') }}
+{{ asset_css(enabled ? 'css/calculation.css' : 'css/center.css') }}
 {%- endblock -%}
 
 {% block javascripts %}
-{% if app.debug %}
-{{ parent() -}}
-{{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
-{{ asset_js('js/plugins/plugin-rowlink.js') }}
-{{ asset_js('js/extensions/contextmenu-extensions.js') }}
-{{ asset_js('js/application/index.js') }}
-{% else -%}
-{{ asset_js('js/index.js') }}
+{% if enabled %}
+    {% if app.debug %}
+        {{- parent() -}}
+        {{- asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
+        {{- asset_js('js/plugins/plugin-rowlink.js') }}
+        {{- asset_js('js/extensions/contextmenu-extensions.js') }}
+        {{- asset_js('js/application/index.js') }}
+    {% else %}
+        {{- asset_js('js/index.js') }}
+    {% endif %}
+    {% include 'cookie_banner.html.twig' %}
 {% endif %}
-{% include 'cookie_banner.html.twig' %}
 {% endblock %}

@@ -80,10 +80,9 @@ class CalculationBelowTable extends CalculationTable
      */
     protected function updateParameters(array $parameters): array
     {
-        $parameters = parent::updateParameters($parameters);
-        $parameters['min_margin'] = $this->getMinMargin();
-
-        return $parameters;
+        return \array_merge_recursive(parent::updateParameters($parameters), [
+            'min_margin' => $this->getMinMargin(),
+        ]);
     }
 
     /**

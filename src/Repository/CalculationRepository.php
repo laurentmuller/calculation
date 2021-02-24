@@ -255,6 +255,7 @@ class CalculationRepository extends AbstractRepository
             // state
             ->addSelect('s.code         as calculation_state')
             ->addSelect('s.color        as calculation_color')
+            ->addSelect('s.editable     as calculation_editable')
 
             // item
             ->addSelect('i.description  as item_description')
@@ -310,6 +311,7 @@ class CalculationRepository extends AbstractRepository
             // state
             ->addSelect('s.code         as calculation_state')
             ->addSelect('s.color        as calculation_color')
+            ->addSelect('s.editable     as calculation_editable')
 
             // item
             ->addSelect('i.description  as item_description')
@@ -588,6 +590,7 @@ class CalculationRepository extends AbstractRepository
                 'description' => $item['calculation_description'],
                 'stateCode' => $item['calculation_state'],
                 'stateColor' => $item['calculation_color'],
+                'stateEditable' => $item['calculation_editable'],
                 'items' => [],
             ];
         }

@@ -3,22 +3,6 @@
 /* globals MenuBuilder */
 
 /**
- * Gets the state style color of the given row.
- * 
- * @param {object}
- *            row - the record data.
- * @returns {string} the state style color, if any; null otherwise.
- */
-function getStateColor(row) {
-    'use strict';
-    const color = row.color || row.stateColor || row['state.color'] || null;
-    if(color) {
-        return color + ' !important';
-    }
-    return null;
-}
-
-/**
  * Style for a state column (calculations or status).
  * 
  * @param {number}
@@ -30,14 +14,52 @@ function getStateColor(row) {
  */
 function styleStateColor(value, row) { // jshint ignore:line
     'use strict';
-    const color = getStateColor(row);
+    const color = row.color;
     if(color) {
         return {
             css: {
-                'border-left-color': color
+                'border-left-color': color + ' !important'
             }
         };
     }
+}
+
+/**
+ * Row style for the user enabled state.
+ * 
+ * @param {object}
+ *            row - the record data.
+ * 
+ * @returns {object} the row style.
+ */
+function styleUserEnabled(row) { // jshint ignore:line
+    'use strict';
+    const value = Number.parseInt(row.active, 10);
+    if (!Number.isNaN(value) && value === 0) {
+        return {
+            classes: 'text-muted'
+        };    
+    }
+    return {};
+}
+
+/**
+ * Row style for the calculation editable state.
+ * 
+ * @param {object}
+ *            row - the record data.
+ * 
+ * @returns {object} the row style.
+ */
+function styleCalculationEditable(row) { // jshint ignore:line
+    'use strict';
+    const value = Number.parseInt(row.editable, 10);
+    if (!Number.isNaN(value) && value === 0) {
+        return {
+            classes: 'text-muted'
+        };    
+    }
+    return {};
 }
 
 /**
@@ -368,18 +390,16 @@ $.fn.extend({
             
             // update UI
             if (data.length === 0) {
-                $toggle.toggleDisabled(true);
                 $('.card-footer').hide();
-                // $table.find('thead').hide();
+                $toggle.toggleDisabled(true);
             } else {
-                $toggle.toggleDisabled(false);
                 $('.card-footer').show();
-                // $table.find('thead').show();
+                $toggle.toggleDisabled(false);
             }
         },
 
         onRenderCardView: function($table, row, $element) {
-            const color = getStateColor(row);
+            const color = row.color;
             if(color) {
                 const $cell = $element.find('td:first');
                 const style = 'border-left-color: ' + color;
@@ -412,8 +432,8 @@ $.fn.extend({
     // handle the add button link
     const $addButton = $('.add-link');
     if ($addButton.length) {
-        $table.on('update-row.bs.table', function() {
-            const $source = $table.getSelectRow().find('.btn-add');
+        $table.on('update-row.bs.table', function(e, row) {
+            const $source = $(row).find('.btn-add');
             if ($source.length) {
                 $addButton.attr('href', $source.attr('href'));    
             }

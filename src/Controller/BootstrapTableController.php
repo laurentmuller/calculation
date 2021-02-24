@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\BootstrapTable\AbstractTable;
 use App\BootstrapTable\CalculationBelowTable;
 use App\BootstrapTable\CalculationDuplicateTable;
@@ -44,6 +45,9 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/table")
  * @IsGranted("ROLE_USER")
+ * @Breadcrumb({
+ *     {"label": "index.title", "route": "homepage" },
+ * })
  */
 class BootstrapTableController extends AbstractController
 {
@@ -73,6 +77,9 @@ class BootstrapTableController extends AbstractController
      * Display the calculation table.
      *
      * @Route("/calculation", name="table_calculation")
+     * @Breadcrumb({
+     *     { "label": "calculation.list.title" }
+     * })
      */
     public function calculation(Request $request, CalculationTable $table): Response
     {

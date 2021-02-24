@@ -325,6 +325,7 @@ final class SymfonyUtils
         $info = \preg_replace('/<tr>.*MAILER_DSN.*<\/tr>/m', '', $info);
         $info = \preg_replace('/<tr>.*DATABASE_URL.*<\/tr>/m', '', $info);
         $info = \preg_replace('/<tr>.*DATABASE_EDIT.*<\/tr>/m', '', $info);
+        $info = \preg_replace('/<tr>.*PASSWORD.*<\/tr>/m', '', $info);
 
         // replace version
         $info = \str_replace('PHP Version', 'Version', $info);

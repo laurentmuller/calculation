@@ -47,5 +47,10 @@
 		"searchable": false,
 		"class": "actions rowlink-skip d-print-none",
 		"cellFormatter": "formatActions"
+	},
+	{
+		"field": "enabled",
+		"alias": "active",
+		"visible": false
 	}
 ]

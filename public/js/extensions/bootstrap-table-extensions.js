@@ -22,6 +22,7 @@ $.fn.extend({
     // -------------------------------
     // Row extension
     // -------------------------------
+    
     /**
      * Update the selected row.
      * 
@@ -34,10 +35,13 @@ $.fn.extend({
         'use strict';
         const $row = $(this);
         const options = $table.getOptions();
+        if ($row.hasClass(options.rowClass)) {
+            return true;
+        }
         $table.find(options.rowSelector).removeClass(options.rowClass);
         if(!$row.hasClass('no-records-found')) {
             $row.addClass(options.rowClass).scrollInViewport();
-            $table.trigger('update-row.bs.table');
+            $table.trigger('update-row.bs.table', this);
         }
         return true;
     },
@@ -76,7 +80,7 @@ $.fn.extend({
 
             // update UI on post page load
             onPostBody: function(content) {
-                if(content.length) {
+                if(content.length !== 0) {
                     // select first row if none
                     if (!$this.getSelectRow()) {
                         $this.selectFirstRow();
@@ -84,7 +88,7 @@ $.fn.extend({
                     // update
                     $this.updateCardView().highlight().updateHref(content);
                 }
-                $this.toggleClass('table-hover', content.length);
+                $this.toggleClass('table-hover', content.length !== 0);
                 $('.page-link').each(function(index, element) {
                     const $element = $(element);
                     $element.attr('title', $element.attr('aria-label'));

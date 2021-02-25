@@ -1,10 +1,12 @@
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
+{%- set is_card_route = 'card' in app.request.attributes.get('_route') -%}
+{%- set show_readcrumb = (app.debug or app_environment == 'dev') and not is_card_route -%}
 <footer class="d-print-none">
     <ul class="footer">
-        <li>{%- if app.debug or is_env_dev -%}{{- asprega_breadcrumb() -}}{%- endif -%}</li>
-        <li><a href="{{ path('about') }}">{{ app_name_version }}</a></li>
-        <li>{{ ('environment.' ~ app_environment)|trans }}</li>
+        <li>{%- if show_readcrumb -%}{{- asprega_breadcrumb() -}}{%- endif -%}</li>
+        <li><a href="{{ path('about') }}" title="{{ 'footer.about_title'|trans }}">{{ app_name_version }}</a></li>
+        <li><span title="{{ 'footer.environment_title'|trans }}">{{ ('environment.' ~ app_environment)|trans }}</span></li>
         <li>{{ icons.copyright_link() }}</li>
     </ul>
 </footer>

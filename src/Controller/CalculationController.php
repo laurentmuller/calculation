@@ -43,8 +43,16 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/calculation")
  * @IsGranted("ROLE_USER")
  * @Breadcrumb({
- *     {"label": "index.title", "route": "homepage" },
- *     {"label": "calculation.list.title", "route": "table_calculation" }
+ *     {"label" = "index.title", "route" = "homepage" },
+ *     {"label" = "calculation.list.title", "route" = "table_calculation", "params" = {
+ *         "id" = "$params.[id]",
+ *         "search" = "$params.[search]",
+ *         "sort" = "$params.[sort]",
+ *         "order" = "$params.[order]",
+ *         "offset" = "$params.[offset]",
+ *         "limit" = "$params.[limit]",
+ *         "card" = "$params.[card]"
+ *     }}
  * })
  */
 class CalculationController extends AbstractEntityController
@@ -72,7 +80,7 @@ class CalculationController extends AbstractEntityController
      *
      * @Route("/add", name="calculation_add")
      * @Breadcrumb({
-     *     { "label": "common.button_add" }
+     *     {"label" = "breadcrumb.add"}
      * })
      */
     public function add(Request $request): Response
@@ -112,9 +120,9 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a copy (cloned) calculation.
      *
-     * @Route("/clone/{id}", name="calculation_clone", requirements={"id": "\d+" })
+     * @Route("/clone/{id}", name="calculation_clone", requirements={"id" = "\d+" })
      * @Breadcrumb({
-     *     { "label": "common.button_clone" }
+     *     {"label" = "breadcrumb.clone"}
      * })
      */
     public function clone(Request $request, Calculation $item): Response
@@ -123,8 +131,8 @@ class CalculationController extends AbstractEntityController
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
         $state = $this->getApplication()->getDefaultState();
         $clone = $item->clone($state, $description);
-
         $parameters = [
+            'params' => ['id' => $item->getId()],
             'overall_below' => $this->isMarginBelow($clone),
         ];
 
@@ -134,9 +142,10 @@ class CalculationController extends AbstractEntityController
     /**
      * Delete a calculation.
      *
-     * @Route("/delete/{id}", name="calculation_delete", requirements={"id": "\d+" })
+     * @Route("/delete/{id}", name="calculation_delete", requirements={"id" = "\d+" })
      * @Breadcrumb({
-     *     { "label": "common.button_delete" }
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.delete"}
      * })
      */
     public function delete(Request $request, Calculation $item): Response
@@ -156,9 +165,10 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit a calculation.
      *
-     * @Route("/edit/{id}", name="calculation_edit", requirements={"id": "\d+" })
+     * @Route("/edit/{id}", name="calculation_edit", requirements={"id" = "\d+" })
      * @Breadcrumb({
-     *     { "label": "common.button_edit" }
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.edit" }
      * })
      */
     public function edit(Request $request, Calculation $item): Response
@@ -214,7 +224,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Export a single calculation to a PDF document.
      *
-     * @Route("/pdf/{id}", name="calculation_pdf_id", requirements={"id": "\d+" })
+     * @Route("/pdf/{id}", name="calculation_pdf_id", requirements={"id" = "\d+" })
      */
     public function pdfById(Calculation $calculation): PdfResponse
     {
@@ -226,9 +236,10 @@ class CalculationController extends AbstractEntityController
     /**
      * Show properties of a calculation.
      *
-     * @Route("/show/{id}", name="calculation_show", requirements={"id": "\d+" })
+     * @Route("/show/{id}", name="calculation_show", requirements={"id" = "\d+" })
      * @Breadcrumb({
-     *     { "label": "common.button_property" }
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.property" }
      * })
      */
     public function show(Calculation $item): Response
@@ -245,9 +256,10 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit the state of a calculation.
      *
-     * @Route("/state/{id}", name="calculation_state", requirements={"id": "\d+" })
+     * @Route("/state/{id}", name="calculation_state", requirements={"id" = "\d+" })
      * @Breadcrumb({
-     *     { "label": "common.button_edit" }
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.edit" }
      * })
      */
     public function state(Request $request, Calculation $item): Response
@@ -267,11 +279,15 @@ class CalculationController extends AbstractEntityController
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
-        // display
-        return $this->render('calculation/calculation_state.html.twig', [
+        // parameters
+        $parameters = [
             'form' => $form->createView(),
             'item' => $item,
-        ]);
+        ];
+        $this->updateQueryParameters($request, $parameters, (int) $item->getId());
+
+        // display
+        return $this->render('calculation/calculation_state.html.twig', $parameters);
     }
 
     /**

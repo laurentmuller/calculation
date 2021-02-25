@@ -37,7 +37,7 @@ class ChartController extends AbstractController
     /**
      * Gets the calculations by month.
      *
-     * @Route("/month/{count}", name="chart_by_month", requirements={"count": "\d+" })
+     * @Route("/month/{count}", name="chart_by_month", requirements={"count" = "\d+" })
      */
     public function byMonth(int $count = 12, CalculationRepository $repository, ThemeService $service): Response
     {

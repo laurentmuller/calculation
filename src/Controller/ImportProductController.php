@@ -43,7 +43,7 @@ class ImportProductController extends AbstractController
      *
      * @Route("/product/import", name="product_import")
      */
-    public function import(Request $request, EntityManagerInterface $manager, LoggerInterface $logger): Response
+    public function invoke(Request $request, EntityManagerInterface $manager, LoggerInterface $logger): Response
     {
         // create form
         $form = $this->createImportForm();

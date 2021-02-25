@@ -42,6 +42,7 @@ $rules = [
     'concat_space'                => ['spacing' => 'one'],
     'array_syntax'                => ['syntax' => 'short'],
     'list_syntax'                 => ['syntax' => 'short'],
+    'doctrine_annotation_array_assignment' => ['operator' => '='],
 ];
 
 $finder = PhpCsFixer\Finder::create()

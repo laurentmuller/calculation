@@ -40,7 +40,7 @@ class CalendarController extends AbstractController
     /**
      * Display a month of a calendar.
      *
-     * @Route("/month/{year}/{month}", name="calendar_month", requirements={"year": "\d+", "month": "\d+"})
+     * @Route("/month/{year}/{month}", name="calendar_month", requirements={"year" = "\d+", "month" = "\d+"})
      *
      * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations
@@ -82,7 +82,7 @@ class CalendarController extends AbstractController
     /**
      * Display a week of a calendar.
      *
-     * @Route("/week/{year}/{week}", name="calendar_week", requirements={"year": "\d+", "week": "\d+"})
+     * @Route("/week/{year}/{week}", name="calendar_week", requirements={"year" = "\d+", "week" = "\d+"})
      *
      * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations
@@ -123,7 +123,7 @@ class CalendarController extends AbstractController
     /**
      * Display a calendar.
      *
-     * @Route("/year/{year}", name="calendar_year", requirements={"year": "\d+" })
+     * @Route("/year/{year}", name="calendar_year", requirements={"year" = "\d+" })
      *
      * @param CalendarService       $service    the service to generate the calendar
      * @param CalculationRepository $repository the repository to query calculations

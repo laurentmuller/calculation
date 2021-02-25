@@ -30,7 +30,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
     /**
      * The total amount.
      *
-     * @ORM\Column(type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */

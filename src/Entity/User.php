@@ -50,7 +50,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     private $email;
 
     /**
-     * @ORM\Column(type="boolean", options={"default": 1})
+     * @ORM\Column(type="boolean", options={"default" = 1})
      *
      * @var bool
      */
@@ -148,7 +148,7 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     private $username;
 
     /**
-     * @ORM\Column(type="boolean", options={"default": 0})
+     * @ORM\Column(type="boolean", options={"default" = 0})
      *
      * @var bool
      */

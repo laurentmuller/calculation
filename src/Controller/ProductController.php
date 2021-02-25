@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\DataTable\ProductDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Product;
@@ -35,6 +36,18 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/product")
  * @IsGranted("ROLE_USER")
+ * @Breadcrumb({
+ *     {"label" = "index.title", "route" = "homepage" },
+ *     {"label" = "product.list.title", "route" = "table_product", "params" = {
+ *         "id" = "$params.[id]",
+ *         "search" = "$params.[search]",
+ *         "sort" = "$params.[sort]",
+ *         "order" = "$params.[order]",
+ *         "offset" = "$params.[offset]",
+ *         "limit" = "$params.[limit]",
+ *         "card" = "$params.[card]"
+ *     }}
+ * })
  */
 class ProductController extends AbstractEntityController
 {
@@ -50,6 +63,9 @@ class ProductController extends AbstractEntityController
      * Add a product.
      *
      * @Route("/add", name="product_add")
+     * @Breadcrumb({
+     *     {"label" = "breadcrumb.add"}
+     * })
      */
     public function add(Request $request): Response
     {
@@ -75,20 +91,30 @@ class ProductController extends AbstractEntityController
     /**
      * Clone (copy) a product.
      *
-     * @Route("/clone/{id}", name="product_clone", requirements={"id": "\d+" })
+     * @Route("/clone/{id}", name="product_clone", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "breadcrumb.clone" }
+     * })
      */
     public function clone(Request $request, Product $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
         $clone = $item->clone($description);
+        $parameters = [
+            'params' => ['id' => $item->getId()],
+        ];
 
-        return $this->editEntity($request, $clone);
+        return $this->editEntity($request, $clone, $parameters);
     }
 
     /**
      * Delete a product.
      *
-     * @Route("/delete/{id}", name="product_delete", requirements={"id": "\d+" })
+     * @Route("/delete/{id}", name="product_delete", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.delete" }
+     * })
      */
     public function delete(Request $request, Product $item): Response
     {
@@ -105,7 +131,11 @@ class ProductController extends AbstractEntityController
     /**
      * Edit a product.
      *
-     * @Route("/edit/{id}", name="product_edit", requirements={"id": "\d+" })
+     * @Route("/edit/{id}", name="product_edit", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.edit" }
+     * })
      */
     public function edit(Request $request, Product $item): Response
     {
@@ -157,7 +187,11 @@ class ProductController extends AbstractEntityController
     /**
      * Show properties of a product.
      *
-     * @Route("/show/{id}", name="product_show", requirements={"id": "\d+" })
+     * @Route("/show/{id}", name="product_show", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.property" }
+     * })
      */
     public function show(Product $item): Response
     {

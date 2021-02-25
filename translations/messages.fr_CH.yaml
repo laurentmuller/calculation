@@ -547,7 +547,6 @@ http_error_503:
 index:
     title: Accueil
     change_password: Modifier le mot de passe
-    copyright: <a href="%owner_url%" target="_blank" rel="noopener noreferrer">Copyright © %year% %owner%</a>
     login: Connexion
     logout: Déconnexion
     menu_data: Données
@@ -1152,3 +1151,15 @@ simple-editor:
     line: Ligne horizontale
     undo: Annuler la dernière action
     redo: Rétablir la dernière action
+footer:
+    about_title: Afficher les informations à propos de l'application
+    copyright: Copyright © %year% %owner%
+    copyright_title: Afficher les informations à propos du concepteur de l'application
+    environment_title: Environnement d'exécution de l'application
+    breadcrumb_title: Accéder à la page %title%
+breadcrumb:
+    add: Nouveau
+    clone: Copie
+    edit: Modification
+    delete: Suppression
+    property: Propriétés

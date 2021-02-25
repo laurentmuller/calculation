@@ -38,7 +38,7 @@ trait RightsTrait
     /**
      * The overwrite rights flag.
      *
-     * @ORM\Column(type="boolean", options={"default": 0})
+     * @ORM\Column(type="boolean", options={"default" = 0})
      *
      * @var bool
      */

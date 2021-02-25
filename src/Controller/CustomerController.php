@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\DataTable\CustomerDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Customer;
@@ -36,6 +37,18 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/customer")
  * @IsGranted("ROLE_USER")
+ * @Breadcrumb({
+ *     {"label" = "index.title", "route" = "homepage"},
+ *     {"label" = "customer.list.title", "route" = "table_customer", "params" = {
+ *         "id" = "$params.[id]",
+ *         "search" = "$params.[search]",
+ *         "sort" = "$params.[sort]",
+ *         "order" = "$params.[order]",
+ *         "offset" = "$params.[offset]",
+ *         "limit" = "$params.[limit]",
+ *         "card" = "$params.[card]"
+ *     }}
+ * })
  */
 class CustomerController extends AbstractEntityController
 {
@@ -51,6 +64,9 @@ class CustomerController extends AbstractEntityController
      * Add a customer.
      *
      * @Route("/add", name="customer_add")
+     * @Breadcrumb({
+     *     {"label" = "breadcrumb.add"}
+     * })
      */
     public function add(Request $request): Response
     {
@@ -75,7 +91,11 @@ class CustomerController extends AbstractEntityController
     /**
      * Delete a customer.
      *
-     * @Route("/delete/{id}", name="customer_delete", requirements={"id": "\d+" })
+     * @Route("/delete/{id}", name="customer_delete", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.delete" }
+     * })
      */
     public function delete(Request $request, Customer $item): Response
     {
@@ -92,7 +112,11 @@ class CustomerController extends AbstractEntityController
     /**
      * Edit a customer.
      *
-     * @Route("/edit/{id}", name="customer_edit", requirements={"id": "\d+" })
+     * @Route("/edit/{id}", name="customer_edit", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.edit" }
+     * })
      */
     public function edit(Request $request, Customer $item): Response
     {
@@ -145,7 +169,11 @@ class CustomerController extends AbstractEntityController
     /**
      * Show properties of a customer.
      *
-     * @Route("/show/{id}", name="customer_show", requirements={"id": "\d+" })
+     * @Route("/show/{id}", name="customer_show", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.property" }
+     * })
      */
     public function show(Customer $item): Response
     {

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\DataTable\CalculationStateDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
@@ -34,6 +35,10 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/calculationstate")
  * @IsGranted("ROLE_USER")
+ * @Breadcrumb({
+ *     {"label" = "index.title", "route" = "homepage" },
+ *     {"label" = "calculationstate.list.title", "route" = "table_calculationstate" }
+ * })
  */
 class CalculationStateController extends AbstractEntityController
 {
@@ -49,6 +54,9 @@ class CalculationStateController extends AbstractEntityController
      * Add a new calculation state.
      *
      * @Route("/add", name="calculationstate_add")
+     * @Breadcrumb({
+     *     {"label" = "breadcrumb.add"}
+     * })
      */
     public function add(Request $request): Response
     {
@@ -66,9 +74,29 @@ class CalculationStateController extends AbstractEntityController
     }
 
     /**
+     * Clone (copy) a calculation state.
+     *
+     * @Route("/clone/{id}", name="calculationstate_clone", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "breadcrumb.clone" }
+     * })
+     */
+    public function clone(Request $request, CalculationState $item): Response
+    {
+        $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
+        $clone = $item->clone($code);
+
+        return $this->editEntity($request, $clone);
+    }
+
+    /**
      * Delete a calculation state.
      *
-     * @Route("/delete/{id}", name="calculationstate_delete", requirements={"id": "\d+" })
+     * @Route("/delete/{id}", name="calculationstate_delete", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.delete" }
+     * })
      */
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository): Response
     {
@@ -82,6 +110,7 @@ class CalculationStateController extends AbstractEntityController
                 '%calculations%' => $calculationsText,
                 ]);
             $parameters = [
+                'item' => $item,
                 'id' => $item->getId(),
                 'title' => 'calculationstate.delete.title',
                 'message' => $message,
@@ -105,7 +134,11 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Edit a calculation state.
      *
-     * @Route("/edit/{id}", name="calculationstate_edit", requirements={"id": "\d+" })
+     * @Route("/edit/{id}", name="calculationstate_edit", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.edit" }
+     * })
      */
     public function edit(Request $request, CalculationState $item): Response
     {
@@ -157,7 +190,11 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Show properties of a calculation state.
      *
-     * @Route("/show/{id}", name="calculationstate_show", requirements={"id": "\d+" })
+     * @Route("/show/{id}", name="calculationstate_show", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.property" }
+     * })
      */
     public function show(CalculationState $item): Response
     {

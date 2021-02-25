@@ -48,7 +48,7 @@ class CalculationState extends AbstractEntity
     /**
      * The color used in the user interface (UI).
      *
-     * @ORM\Column(type="string", length=10, options={"default": "#000000"})
+     * @ORM\Column(type="string", length=10, options={"default" = "#000000"})
      * @Assert\NotBlank
      * @Assert\Length(max=10)
      *
@@ -69,7 +69,7 @@ class CalculationState extends AbstractEntity
     /**
      * The editable state.
      *
-     * @ORM\Column(type="boolean", options={"default": true})
+     * @ORM\Column(type="boolean", options={"default" = true})
      *
      * @var bool
      */
@@ -92,6 +92,23 @@ class CalculationState extends AbstractEntity
         $this->calculations = new ArrayCollection();
         $this->setEditable(true)
             ->setColor(self::DEFAULT_COLOR);
+    }
+
+    /**
+     * Clone this calculation state.
+     *
+     * @param string $code the new code
+     */
+    public function clone(?string $code = null): self
+    {
+        /** @var CalculationState $copy */
+        $copy = clone $this;
+
+        if ($code) {
+            $copy->setCode($code);
+        }
+
+        return $copy;
     }
 
     /**

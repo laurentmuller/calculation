@@ -52,7 +52,7 @@ class CalculationItem extends AbstractEntity
     /**
      * The price.
      *
-     * @ORM\Column(type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */
@@ -61,7 +61,7 @@ class CalculationItem extends AbstractEntity
     /**
      * The quantity.
      *
-     * @ORM\Column(type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */

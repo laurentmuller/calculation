@@ -53,7 +53,7 @@ class Product extends AbstractEntity
     /**
      * The price.
      *
-     * @ORM\Column(type="float", precision=2, options={"default": 0})
+     * @ORM\Column(type="float", precision=2, options={"default" = 0})
      *
      * @var float
      */

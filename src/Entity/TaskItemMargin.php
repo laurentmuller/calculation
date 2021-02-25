@@ -25,14 +25,14 @@ use Doctrine\ORM\Mapping as ORM;
 class TaskItemMargin extends AbstractEntity
 {
     /**
-     * @ORM\Column(type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */
     private $maximum;
 
     /**
-     * @ORM\Column(type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */
@@ -47,7 +47,7 @@ class TaskItemMargin extends AbstractEntity
     private $taskItem;
 
     /**
-     * @ORM\Column(type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */

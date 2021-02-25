@@ -95,7 +95,7 @@ abstract class AbstractEntityController extends AbstractController
         $display = $item->getDisplay();
 
         //add item as parameter
-        $parameters['item'] = $parameters;
+        $parameters['item'] = $item;
 
         // create form and handle request
         $form = $this->getForm();
@@ -132,6 +132,7 @@ abstract class AbstractEntityController extends AbstractController
         $parameters['title'] = $title;
         $parameters['message'] = $message;
         $parameters['form'] = $form->createView();
+        $this->updateQueryParameters($request, $parameters, $item->getId());
 
         // show page
         return $this->render('cards/card_delete.html.twig', $parameters);
@@ -201,6 +202,7 @@ abstract class AbstractEntityController extends AbstractController
         $parameters['new'] = $isNew;
         $parameters['item'] = $item;
         $parameters['form'] = $form->createView();
+        $this->updateQueryParameters($request, $parameters, (int) $item->getId());
 
         // show form
         return $this->render($this->getEditTemplate(), $parameters);
@@ -437,5 +439,21 @@ abstract class AbstractEntityController extends AbstractController
 
         // render
         return $this->render($this->getShowTemplate(), $parameters);
+    }
+
+    /**
+     * Update the parameters by adding the request query values.
+     *
+     * @param Request $request    the request to get the query values
+     * @param array   $parameters the $parameters to update
+     * @param int     $id         an optional entity identifier
+     */
+    protected function updateQueryParameters(Request $request, array &$parameters, int $id = 0): void
+    {
+        $queryParameters = $request->query->all();
+        $parameters['params'] = \array_merge($queryParameters, $parameters['params'] ?? []);
+        if (0 !== $id && !isset($parameters['params']['id'])) {
+            $parameters['params']['id'] = $id;
+        }
     }
 }

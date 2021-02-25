@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\DataTable\GroupDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Group;
@@ -34,6 +35,18 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/group")
  * @IsGranted("ROLE_USER")
+ * @Breadcrumb({
+ *     {"label" = "index.title", "route" = "homepage" },
+ *     {"label" = "group.list.title", "route" = "table_group", "params" = {
+ *         "id" = "$params.[id]",
+ *         "search" = "$params.[search]",
+ *         "sort" = "$params.[sort]",
+ *         "order" = "$params.[order]",
+ *         "offset" = "$params.[offset]",
+ *         "limit" = "$params.[limit]",
+ *         "card" = "$params.[card]"
+ *     }}
+ * })
  */
 class GroupController extends AbstractEntityController
 {
@@ -49,6 +62,9 @@ class GroupController extends AbstractEntityController
      * Add a group.
      *
      * @Route("/add", name="group_add")
+     * @Breadcrumb({
+     *     {"label" = "breadcrumb.add"}
+     * })
      */
     public function add(Request $request): Response
     {
@@ -68,20 +84,30 @@ class GroupController extends AbstractEntityController
     /**
      * Clone (copy) a group.
      *
-     * @Route("/clone/{id}", name="group_clone", requirements={"id": "\d+" })
+     * @Route("/clone/{id}", name="group_clone", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "breadcrumb.clone" }
+     * })
      */
     public function clone(Request $request, Group $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
         $clone = $item->clone($code);
+        $parameters = [
+            'params' => ['id' => $item->getId()],
+        ];
 
-        return $this->editEntity($request, $clone);
+        return $this->editEntity($request, $clone, $parameters);
     }
 
     /**
      * Delete a group.
      *
-     * @Route("/delete/{id}", name="group_delete", requirements={"id": "\d+" })
+     * @Route("/delete/{id}", name="group_delete", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.delete" }
+     * })
      */
     public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository): Response
     {
@@ -100,6 +126,7 @@ class GroupController extends AbstractEntityController
             $message = $this->trans('group.delete.failure', ['%name%' => $item->getDisplay()]);
 
             $parameters = [
+                'item' => $item,
                 'id' => $item->getId(),
                 'title' => 'group.delete.title',
                 'message' => $message,
@@ -107,6 +134,7 @@ class GroupController extends AbstractEntityController
                 'back_page' => $this->getDefaultRoute(),
                 'back_text' => 'common.button_back_list',
             ];
+            $this->updateQueryParameters($request, $parameters, $item->getId());
 
             return $this->render('cards/card_warning.html.twig', $parameters);
         }
@@ -124,7 +152,11 @@ class GroupController extends AbstractEntityController
     /**
      * Edit a group.
      *
-     * @Route("/edit/{id}", name="group_edit", requirements={"id": "\d+" })
+     * @Route("/edit/{id}", name="group_edit", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.edit" }
+     * })
      */
     public function edit(Request $request, Group $item): Response
     {
@@ -176,7 +208,11 @@ class GroupController extends AbstractEntityController
     /**
      * Show properties of a group.
      *
-     * @Route("/show/{id}", name="group_show", requirements={"id": "\d+" })
+     * @Route("/show/{id}", name="group_show", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.property" }
+     * })
      */
     public function show(Group $item): Response
     {

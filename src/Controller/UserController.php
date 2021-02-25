@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\DataTable\UserDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Comment;
 use App\Entity\User;
 use App\Excel\ExcelResponse;
-use App\Form\User\ThemeType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
 use App\Form\User\UserImageType;
@@ -29,14 +29,12 @@ use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
 use App\Repository\AbstractRepository;
 use App\Security\EntityVoter;
-use App\Service\ThemeService;
 use App\Spreadsheet\UserDocument;
 use App\Spreadsheet\UserRightsDocument;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -52,6 +50,18 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  * @author Laurent Muller
  *
  * @Route("/user")
+ * @Breadcrumb({
+ *     {"label" = "index.title", "route" = "homepage" },
+ *     {"label" = "user.list.title", "route" = "table_user", "params" = {
+ *         "id" = "$params.[id]",
+ *         "search" = "$params.[search]",
+ *         "sort" = "$params.[sort]",
+ *         "order" = "$params.[order]",
+ *         "offset" = "$params.[offset]",
+ *         "limit" = "$params.[limit]",
+ *         "card" = "$params.[card]"
+ *     }}
+ * })
  */
 class UserController extends AbstractEntityController
 {
@@ -68,6 +78,9 @@ class UserController extends AbstractEntityController
      *
      * @Route("/add", name="user_add")
      * @IsGranted("ROLE_ADMIN")
+     * @Breadcrumb({
+     *     {"label" = "breadcrumb.add"}
+     * })
      */
     public function add(Request $request): Response
     {
@@ -86,56 +99,14 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Send comment to the web master.
-     *
-     * @Route("/comment", name="user_comment")
-     * @IsGranted("ROLE_USER")
-     */
-    public function comment(Request $request, MailerInterface $mailer, LoggerInterface $logger): Response
-    {
-        $comment = new Comment(false);
-        $comment->setSubject($this->getApplicationName())
-            ->setFromUser($this->getUser())
-            ->setToAddress($this->getAddressFrom());
-
-        // create and handle request
-        $form = $this->createForm(UserCommentType::class, $comment);
-        if ($this->handleRequestForm($request, $form)) {
-            try {
-                // send
-                $comment->send($mailer);
-                $this->succesTrans('user.comment.success');
-
-                // home page
-                return $this->redirectToHomePage();
-            } catch (TransportExceptionInterface $e) {
-                $message = $this->trans('user.comment.error');
-                $logger->error($message, [
-                        'class' => Utils::getShortName($e),
-                        'message' => $e->getMessage(),
-                        'code' => (int) $e->getCode(),
-                        'file' => $e->getFile() . ':' . $e->getLine(),
-                ]);
-
-                return $this->render('@Twig/Exception/exception.html.twig', [
-                    'message' => $message,
-                    'exception' => $e,
-                ]);
-            }
-        }
-
-        // render
-        return $this->render('user/user_comment.html.twig', [
-            'form' => $form->createView(),
-            'isMail' => $comment->isMail(),
-        ]);
-    }
-
-    /**
      * Delete an user.
      *
-     * @Route("/delete/{id}", name="user_delete", requirements={"id": "\d+" })
+     * @Route("/delete/{id}", name="user_delete", requirements={"id" = "\d+" })
      * @IsGranted("ROLE_ADMIN")
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.delete" }
+     * })
      */
     public function delete(Request $request, User $item): Response
     {
@@ -160,8 +131,12 @@ class UserController extends AbstractEntityController
     /**
      * Edit an user.
      *
-     * @Route("/edit/{id}", name="user_edit", requirements={"id": "\d+" })
+     * @Route("/edit/{id}", name="user_edit", requirements={"id" = "\d+" })
      * @IsGranted("ROLE_ADMIN")
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.edit" }
+     * })
      */
     public function edit(Request $request, User $item): Response
     {
@@ -192,8 +167,12 @@ class UserController extends AbstractEntityController
     /**
      * Edit an user's image.
      *
-     * @Route("/image/{id}", name="user_image", requirements={"id": "\d+" })
+     * @Route("/image/{id}", name="user_image", requirements={"id" = "\d+" })
      * @IsGranted("ROLE_ADMIN")
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "user.image.title" }
+     * })
      */
     public function image(Request $request, User $item): Response
     {
@@ -210,18 +189,26 @@ class UserController extends AbstractEntityController
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
-        // render
-        return $this->render('user/user_image.html.twig', [
+        // parameters
+        $parameters = [
+            'params' => ['id' => $item->getId()],
             'form' => $form->createView(),
             'item' => $item,
-        ]);
+        ];
+
+        // render
+        return $this->render('user/user_image.html.twig', $parameters);
     }
 
     /**
      * Send an email from the current user to an other user.
      *
-     * @Route("/message/{id}", name="user_message", requirements={"id": "\d+" })
+     * @Route("/message/{id}", name="user_message", requirements={"id" = "\d+" })
      * @IsGranted("ROLE_ADMIN")
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "user.message.title" }
+     * })
      */
     public function message(Request $request, User $user, MailerInterface $mailer, LoggerInterface $logger): Response
     {
@@ -264,19 +251,27 @@ class UserController extends AbstractEntityController
             }
         }
 
-        // render
-        return $this->render('user/user_comment.html.twig', [
+        // parameters
+        $parameters = [
             'item' => $user,
             'form' => $form->createView(),
             'isMail' => $comment->isMail(),
-        ]);
+            'params' => ['id' => $user->getId()],
+        ];
+
+        // render
+        return $this->render('user/user_comment.html.twig', $parameters);
     }
 
     /**
      * Change password for an existing user.
      *
-     * @Route("/password/{id}", name="user_password", requirements={"id": "\d+" })
+     * @Route("/password/{id}", name="user_password", requirements={"id" = "\d+" })
      * @IsGranted("ROLE_ADMIN")
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "user.change_password.title" }
+     * })
      */
     public function password(Request $request, User $item): Response
     {
@@ -293,10 +288,15 @@ class UserController extends AbstractEntityController
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
-        // show form
-        return $this->render('user/user_password.html.twig', [
+        // parameters
+        $parameters = [
+            'item' => $item,
             'form' => $form->createView(),
-        ]);
+            'params' => ['id' => $item->getId()],
+        ];
+
+        // show form
+        return $this->render('user/user_password.html.twig', $parameters);
     }
 
     /**
@@ -324,8 +324,12 @@ class UserController extends AbstractEntityController
     /**
      * Edit user access rights.
      *
-     * @Route("/rights/{id}", name="user_rights", requirements={"id": "\d+" })
+     * @Route("/rights/{id}", name="user_rights", requirements={"id" = "\d+" })
      * @IsGranted("ROLE_ADMIN")
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "user.rights.title" }
+     * })
      */
     public function rights(Request $request, User $item, RoleHierarchyInterface $hierarchy): Response
     {
@@ -354,11 +358,16 @@ class UserController extends AbstractEntityController
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
         }
 
-        // show form
-        return $this->render('user/user_rights.html.twig', [
+        // parameters
+        $parameters = [
+            'item' => $item,
             'form' => $form->createView(),
             'default' => EntityVoter::getRole($item),
-        ]);
+            'params' => ['id' => $item->getId()],
+        ];
+
+        // show form
+        return $this->render('user/user_rights.html.twig', $parameters);
     }
 
     /**
@@ -407,8 +416,12 @@ class UserController extends AbstractEntityController
     /**
      * Show the properties of a user.
      *
-     * @Route("/show/{id}", name="user_show", requirements={"id": "\d+" })
+     * @Route("/show/{id}", name="user_show", requirements={"id" = "\d+" })
      * @IsGranted("ROLE_ADMIN")
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.property" }
+     * })
      */
     public function show(User $item): Response
     {
@@ -423,63 +436,6 @@ class UserController extends AbstractEntityController
     public function table(Request $request, UserDataTable $table): Response
     {
         return $this->renderTable($request, $table);
-    }
-
-    /**
-     * Display the page to select the web site theme.
-     *
-     * @Route("/theme", name="user_theme")
-     * @IsGranted("ROLE_USER")
-     */
-    public function theme(Request $request, ThemeService $service): Response
-    {
-        // create form and handle request
-        $theme = $service->getCurrentTheme();
-        $background = $service->getThemeBackground($request);
-
-        $data = [
-            'theme' => $theme,
-            'background' => $background,
-        ];
-
-        $form = $this->createForm(ThemeType::class, $data);
-        if ($this->handleRequestForm($request, $form)) {
-            // get values
-            $data = $form->getData();
-            $theme = $data['theme'];
-            $background = $data['background'];
-            $dark = $theme->isDark();
-
-            // check values
-            $css = $theme->getCss();
-            if (ThemeService::DEFAULT_CSS === $css) {
-                $css = null;
-            }
-            if (ThemeService::DEFAULT_BACKGROUND === $background) {
-                $background = null;
-            }
-            if (ThemeService::DEFAULT_DARK === $dark) {
-                $dark = null;
-            }
-
-            // create response and update cookies
-            $response = $this->redirectToHomePage();
-            $this->updateCookie($response, ThemeService::KEY_CSS, $css)
-                ->updateCookie($response, ThemeService::KEY_BACKGROUND, $background)
-                ->updateCookie($response, ThemeService::KEY_DARK, (string) $dark);
-
-            $this->succesTrans('theme.success', ['%name%' => $theme->getName()]);
-
-            return $response;
-        }
-
-        // render
-        return $this->render('user/user_theme.html.twig', [
-            'asset_base' => $this->getParameter('asset_base'),
-            'form' => $form->createView(),
-            'themes' => $service->getThemes(),
-            'theme' => $theme,
-        ]);
     }
 
     /**
@@ -527,30 +483,5 @@ class UserController extends AbstractEntityController
         $connectedUser = $this->getUser();
 
         return $connectedUser instanceof User && $connectedUser->getId() === $user->getId();
-    }
-
-    /**
-     * Update a response by adding or removing a cookie.
-     *
-     * @param Response $response the response to update
-     * @param string   $name     the cookie name
-     * @param string   $value    the cookie value or null to remove
-     * @param int      $days     the number of days the cookie expires after
-     */
-    private function updateCookie(Response $response, string $name, ?string $value, ?int $days = 30): self
-    {
-        $headers = $response->headers;
-        $path = $this->getParameter('cookie_path');
-
-        if (null !== $value) {
-            $time = \strtotime("now + {$days} day");
-            $secure = $this->getParameter('cookie_secure');
-            $cookie = new Cookie($name, $value, $time, $path, null, $secure, true, true);
-            $headers->setCookie($cookie);
-        } else {
-            $headers->clearCookie($name, $path);
-        }
-
-        return $this;
     }
 }

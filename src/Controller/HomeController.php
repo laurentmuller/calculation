@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -29,8 +29,11 @@ class HomeController extends AbstractController
      * Display the home page.
      *
      * @Route("/", name="homepage")
+     * @Breadcrumb({
+     *     {"label" = "index.title"}
+     * })
      */
-    public function home(CalculationRepository $calculRepository, CalculationStateRepository $stateRepository): Response
+    public function invoke(CalculationRepository $calculRepository, CalculationStateRepository $stateRepository): Response
     {
         // get values to display
         $tabular = $this->isDisplayTabular();
@@ -56,16 +59,5 @@ class HomeController extends AbstractController
             'states' => $states,
             'months' => $months,
         ]);
-    }
-
-    /**
-     * Display the site map.
-     *
-     * @Route("/sitemap", name="site_map")
-     * @IsGranted("ROLE_USER")
-     */
-    public function siteMap(): Response
-    {
-        return $this->render('home/sitemap.html.twig');
     }
 }

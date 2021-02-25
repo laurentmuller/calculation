@@ -128,7 +128,8 @@
 {%- endmacro %}
 
 {% macro copyright_link() -%}
-{{ 'index.copyright'|trans({'%year%': 'now'|date('Y'), '%owner_url%': app_owner_url, '%owner%': app_owner})|raw }}
+{%- set parameters = {'%year%': 'now'|date('Y'), '%owner%': app_owner} -%}
+{{- _self.linkExternal(app_owner_url, 'footer.copyright', null, null, 'footer.copyright_title', null, parameters) -}}
 {%- endmacro %}
 
 {% macro dropdownItemCard(route_name, parameters = []) -%}

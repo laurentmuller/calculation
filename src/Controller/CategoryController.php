@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\DataTable\CategoryDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
@@ -36,6 +37,18 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/category")
  * @IsGranted("ROLE_USER")
+ * @Breadcrumb({
+ *     {"label" = "index.title", "route" = "homepage" },
+ *     {"label" = "category.list.title", "route" = "table_category", "params" = {
+ *         "id" = "$params.[id]",
+ *         "search" = "$params.[search]",
+ *         "sort" = "$params.[sort]",
+ *         "order" = "$params.[order]",
+ *         "offset" = "$params.[offset]",
+ *         "limit" = "$params.[limit]",
+ *         "card" = "$params.[card]"
+ *     }}
+ * })
  */
 class CategoryController extends AbstractEntityController
 {
@@ -51,6 +64,9 @@ class CategoryController extends AbstractEntityController
      * Add a category.
      *
      * @Route("/add", name="category_add")
+     * @Breadcrumb({
+     *     {"label" = "breadcrumb.add"}
+     * })
      */
     public function add(Request $request): Response
     {
@@ -70,20 +86,30 @@ class CategoryController extends AbstractEntityController
     /**
      * Clone (copy) a category.
      *
-     * @Route("/clone/{id}", name="category_clone", requirements={"id": "\d+" })
+     * @Route("/clone/{id}", name="category_clone", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "breadcrumb.clone" }
+     * })
      */
     public function clone(Request $request, Category $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
         $clone = $item->clone($code);
+        $parameters = [
+            'params' => ['id' => $item->getId()],
+        ];
 
-        return $this->editEntity($request, $clone);
+        return $this->editEntity($request, $clone, $parameters);
     }
 
     /**
      * Delete a category.
      *
-     * @Route("/delete/{id}", name="category_delete", requirements={"id": "\d+" })
+     * @Route("/delete/{id}", name="category_delete", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.delete" }
+     * })
      */
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository): Response
     {
@@ -105,7 +131,9 @@ class CategoryController extends AbstractEntityController
             }
             $message = $this->trans('category.delete.failure', ['%name%' => $item->getDisplay()]);
 
+            // parameters
             $parameters = [
+                'item' => $item,
                 'id' => $item->getId(),
                 'title' => 'category.delete.title',
                 'message' => $message,
@@ -113,6 +141,7 @@ class CategoryController extends AbstractEntityController
                 'back_page' => $this->getDefaultRoute(),
                 'back_text' => 'common.button_back_list',
             ];
+            $this->updateQueryParameters($request, $parameters, $item->getId());
 
             return $this->render('cards/card_warning.html.twig', $parameters);
         }
@@ -130,7 +159,11 @@ class CategoryController extends AbstractEntityController
     /**
      * Edit a category.
      *
-     * @Route("/edit/{id}", name="category_edit", requirements={"id": "\d+" })
+     * @Route("/edit/{id}", name="category_edit", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.edit" }
+     * })
      */
     public function edit(Request $request, Category $item): Response
     {
@@ -182,7 +215,11 @@ class CategoryController extends AbstractEntityController
     /**
      * Show properties of a category.
      *
-     * @Route("/show/{id}", name="category_show", requirements={"id": "\d+" })
+     * @Route("/show/{id}", name="category_show", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "$item.display" },
+     *     {"label" = "breadcrumb.property" }
+     * })
      */
     public function show(Category $item): Response
     {

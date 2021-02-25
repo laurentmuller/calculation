@@ -67,7 +67,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The global margin in percent (%).
      *
-     * @ORM\Column(name="globalMargin", type="float", scale=2, options={"default": 0})
+     * @ORM\Column(name="globalMargin", type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */
@@ -77,7 +77,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * The calculation groups.
      *
      * @ORM\OneToMany(targetEntity=CalculationGroup::class, mappedBy="calculation", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"code": "ASC"})
+     * @ORM\OrderBy({"code" = "ASC"})
      * @Assert\Valid
      *
      * @var Collection|CalculationGroup[]
@@ -87,7 +87,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The total of all items.
      *
-     * @ORM\Column(name="itemsTotal", type="float", scale=2, options={"default": 0})
+     * @ORM\Column(name="itemsTotal", type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */
@@ -96,7 +96,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The overall total.
      *
-     * @ORM\Column(name="overallTotal", type="float", scale=2, options={"default": 0})
+     * @ORM\Column(name="overallTotal", type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */
@@ -116,7 +116,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * The user margin in percent (%).
      *
-     * @ORM\Column(name="userMargin", type="float", scale=2, options={"default": 0})
+     * @ORM\Column(name="userMargin", type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */

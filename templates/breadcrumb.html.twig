@@ -1,7 +1,7 @@
 {# override breadcrumbs #}
 {%- for item in items -%}
     {%- if item.url -%}
-        <a href="{{ item.url }}">{{ item.translatedLabel }}</a>
+        <a href="{{ item.url }}" title="{{ 'footer.breadcrumb_title'|trans({'%title%': item.translatedLabel}) }}">{{ item.translatedLabel }}</a>
     {%- else -%}
         {{- item.translatedLabel -}}
     {%- endif -%}

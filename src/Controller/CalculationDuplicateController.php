@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\DataTable\CalculationDuplicateDataTable;
 use App\Report\CalculationDuplicateReport;
 use App\Repository\CalculationRepository;
@@ -29,6 +30,18 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/duplicate")
  * @IsGranted("ROLE_ADMIN")
+ * @Breadcrumb({
+ *     {"label" = "index.title", "route" = "homepage" },
+ *     {"label" = "calculation.list.title", "route" = "table_duplicate", "params" = {
+ *         "id" = "$params.[id]",
+ *         "search" = "$params.[search]",
+ *         "sort" = "$params.[sort]",
+ *         "order" = "$params.[order]",
+ *         "offset" = "$params.[offset]",
+ *         "limit" = "$params.[limit]",
+ *         "card" = "$params.[card]"
+ *     }}
+ * })
  */
 class CalculationDuplicateController extends AbstractController
 {

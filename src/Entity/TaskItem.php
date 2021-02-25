@@ -32,7 +32,7 @@ class TaskItem extends AbstractEntity implements \Countable
 {
     /**
      * @ORM\OneToMany(targetEntity=TaskItemMargin::class, mappedBy="taskItem", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"minimum": "ASC"})
+     * @ORM\OrderBy({"minimum" = "ASC"})
      * @Assert\Valid
      *
      * @var Collection|TaskItemMargin[]

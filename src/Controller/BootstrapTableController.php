@@ -46,7 +46,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/table")
  * @IsGranted("ROLE_USER")
  * @Breadcrumb({
- *     {"label": "index.title", "route": "homepage" },
+ *     {"label" = "index.title", "route" = "homepage" },
  * })
  */
 class BootstrapTableController extends AbstractController
@@ -57,6 +57,9 @@ class BootstrapTableController extends AbstractController
      * Display the calculation below table.
      *
      * @Route("/below", name="table_below")
+     * @Breadcrumb({
+     *     {"label" = "below.title" }
+     * })
      */
     public function below(Request $request, CalculationBelowTable $table): Response
     {
@@ -78,7 +81,7 @@ class BootstrapTableController extends AbstractController
      *
      * @Route("/calculation", name="table_calculation")
      * @Breadcrumb({
-     *     { "label": "calculation.list.title" }
+     *     {"label" = "calculation.list.title" }
      * })
      */
     public function calculation(Request $request, CalculationTable $table): Response
@@ -100,6 +103,9 @@ class BootstrapTableController extends AbstractController
      * Display the calculation state table.
      *
      * @Route("/calculationstate", name="table_calculationstate")
+     * @Breadcrumb({
+     *     {"label" = "calculationstate.list.title" }
+     * })
      */
     public function calculationState(Request $request, CalculationStateTable $table): Response
     {
@@ -120,6 +126,9 @@ class BootstrapTableController extends AbstractController
      * Display the category table.
      *
      * @Route("/category", name="table_category")
+     * @Breadcrumb({
+     *     {"label" = "category.list.title" }
+     * })
      */
     public function category(Request $request, CategoryTable $table): Response
     {
@@ -140,6 +149,9 @@ class BootstrapTableController extends AbstractController
      * Display the customer table.
      *
      * @Route("/customer", name="table_customer")
+     * @Breadcrumb({
+     *     {"label" = "customer.list.title" }
+     * })
      */
     public function customer(Request $request, CustomerTable $table): Response
     {
@@ -160,6 +172,9 @@ class BootstrapTableController extends AbstractController
      * Display the calculation table with duplicate items.
      *
      * @Route("/duplicate", name="table_duplicate")
+     * @Breadcrumb({
+     *     {"label" = "duplicate.title" }
+     * })
      */
     public function duplicate(Request $request, CalculationDuplicateTable $table): Response
     {
@@ -186,6 +201,9 @@ class BootstrapTableController extends AbstractController
      * Display the calculation table with empty items.
      *
      * @Route("/empty", name="table_empty")
+     * @Breadcrumb({
+     *     {"label" = "empty.title" }
+     * })
      */
     public function empty(Request $request, CalculationEmptyTable $table): Response
     {
@@ -212,6 +230,9 @@ class BootstrapTableController extends AbstractController
      * Display the global margin table.
      *
      * @Route("/globalmargin", name="table_globalmargin")
+     * @Breadcrumb({
+     *     {"label" = "globalmargin.list.title" }
+     * })
      */
     public function globalMargin(Request $request, GlobalMarginTable $table): Response
     {
@@ -232,6 +253,9 @@ class BootstrapTableController extends AbstractController
      * Display the group table.
      *
      * @Route("/group", name="table_group")
+     * @Breadcrumb({
+     *     {"label" = "group.list.title" }
+     * })
      */
     public function group(Request $request, GroupTable $table): Response
     {
@@ -252,6 +276,9 @@ class BootstrapTableController extends AbstractController
      * Display the log table.
      *
      * @Route("/log", name="table_log")
+     * @Breadcrumb({
+     *     {"label" = "log.title" }
+     * })
      */
     public function log(Request $request, LogTable $table): Response
     {
@@ -279,6 +306,9 @@ class BootstrapTableController extends AbstractController
      * Display the product table.
      *
      * @Route("/product", name="table_product")
+     * @Breadcrumb({
+     *     {"label" = "product.list.title" }
+     * })
      */
     public function product(Request $request, ProductTable $table, CategoryRepository $repository): Response
     {
@@ -309,6 +339,9 @@ class BootstrapTableController extends AbstractController
      * Save the parameters of the search table.
      *
      * @Route("/search/save", name="table_search_save")
+     * @Breadcrumb({
+     *     {"label" = "search.title" }
+     * })
      */
     public function searchSave(Request $request, SearchTable $table): JsonResponse
     {
@@ -319,6 +352,9 @@ class BootstrapTableController extends AbstractController
      * Display the task table.
      *
      * @Route("/task", name="table_task")
+     * @Breadcrumb({
+     *     {"label" = "task.list.title" }
+     * })
      */
     public function task(Request $request, TaskTable $table, CategoryRepository $repository): Response
     {
@@ -339,6 +375,9 @@ class BootstrapTableController extends AbstractController
      * Display the user table.
      *
      * @Route("/user", name="table_user")
+     * @Breadcrumb({
+     *     {"label" = "user.list.title" }
+     * })
      */
     public function user(Request $request, UserTable $table): Response
     {

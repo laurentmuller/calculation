@@ -34,7 +34,7 @@ class Group extends AbstractEntity
      * The categories.
      *
      * @ORM\OneToMany(targetEntity=Category::class, mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"code": "ASC"})
+     * @ORM\OrderBy({"code" = "ASC"})
      *
      * @var Collection|Category[]
      */
@@ -65,7 +65,7 @@ class Group extends AbstractEntity
      * The margins.
      *
      * @ORM\OneToMany(targetEntity=GroupMargin::class, mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"minimum": "ASC"})
+     * @ORM\OrderBy({"minimum" = "ASC"})
      * @Assert\Valid
      *
      * @var Collection|GroupMargin[]

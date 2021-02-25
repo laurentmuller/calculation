@@ -28,7 +28,7 @@ abstract class AbstractMargin extends AbstractEntity
     /**
      * The margin in percent (%).
      *
-     * @ORM\Column(type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      * @Assert\Type(type="float")
      * @Assert\GreaterThanOrEqual(0)
      *
@@ -39,7 +39,7 @@ abstract class AbstractMargin extends AbstractEntity
     /**
      * The maximum amount (exclusive) to apply within this margin.
      *
-     * @ORM\Column(type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      * @Assert\Type(type="float")
      * @Assert\GreaterThanOrEqual(0)
      * @Assert\GreaterThan(propertyPath="minimum", message="abstract_margin.maximum_geather_minimum")
@@ -51,7 +51,7 @@ abstract class AbstractMargin extends AbstractEntity
     /**
      * The minimum amount (inclusive) to apply within this margin.
      *
-     * @ORM\Column(type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      * @Assert\Type(type="float")
      * @Assert\GreaterThanOrEqual(0)
      *

@@ -30,7 +30,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
     /**
      * The total amount.
      *
-     * @ORM\Column(type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */
@@ -50,7 +50,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
      * The calculation items.
      *
      * @ORM\OneToMany(targetEntity=CalculationCategory::class, mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"code": "ASC"})
+     * @ORM\OrderBy({"code" = "ASC"})
      * @Assert\Valid
      *
      * @var Collection|CalculationCategory[]
@@ -81,7 +81,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
     /**
      * The margin in percent (%).
      *
-     * @ORM\Column(type="float", scale=2, options={"default": 0})
+     * @ORM\Column(type="float", scale=2, options={"default" = 0})
      *
      * @var float
      */

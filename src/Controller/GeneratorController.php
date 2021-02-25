@@ -75,7 +75,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more calculations with random data.
      *
-     * @Route("/calculation/{count}", name="generate_calculation", requirements={"count": "\d+" })
+     * @Route("/calculation/{count}", name="generate_calculation", requirements={"count" = "\d+" })
      */
     public function generateCalculation(EntityManagerInterface $manager, CalculationService $service, FakerService $fakerService, LoggerInterface $logger, int $count = 1): JsonResponse
     {
@@ -170,7 +170,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more customers with random data.
      *
-     * @Route("/customer/{count}", name="generate_customer", requirements={"count": "\d+" })
+     * @Route("/customer/{count}", name="generate_customer", requirements={"count" = "\d+" })
      */
     public function generateCustomer(EntityManagerInterface $manager, FakerService $fakerService, LoggerInterface $logger, int $count = 1): JsonResponse
     {

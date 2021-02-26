@@ -64,7 +64,7 @@
 {%- set caller          = path(app.request.get('_route')) -%}
 {%- set params          = params|default({})|merge({'caller': caller}) -%}
 {%- set id              = params.id|default(0) -%}
-{%- set attributes = attributes|default({})|merge({
+{%- set attributes      = attributes|default({})|merge({
     'classes': 'table table-hover table-list table-sm',
     'row-selector': 'tbody .' ~ row_selector,
     'row-class': row_selector,
@@ -156,7 +156,7 @@
     </thead>
     <tbody>
         {% for row in rows %}
-        <tr{% if row.id == id %} class="{{ row_selector }}"{%- set row_selector='' -%}{% endif %}>
+        <tr{% if row.id == id %} class="{{ row_selector }}"{%- set row_selector = '' -%}{% endif %}>
             {% for column in columns %}
             <td>{{ row[column.alias]|raw }}</td>
             {% endfor %}

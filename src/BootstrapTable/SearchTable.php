@@ -32,6 +32,11 @@ class SearchTable extends AbstractTable
     use TranslatorTrait;
 
     /**
+     * The action column name.
+     */
+    private const COLUMN_ACTION = 'action';
+
+    /**
      * The content column name.
      */
     private const COLUMN_CONTENT = SearchService::COLUMN_CONTENT;
@@ -326,7 +331,7 @@ class SearchTable extends AbstractTable
             // translate entity and field names
             $lowerType = \strtolower($type);
             $entity = $this->trans("{$lowerType}.name");
-            $item[Column::COL_ACTION] = $item['id'];
+            $item[self::COLUMN_ACTION] = $item['id'];
             $item[self::COLUMN_ENTITY_NAME] = $entity;
             $item[self::COLUMN_FIELD_NAME] = $this->trans("{$lowerType}.fields.{$field}");
 

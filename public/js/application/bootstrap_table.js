@@ -327,6 +327,7 @@ $.fn.extend({
     const $table = $('#table-edit');
     const $pageButton = $('#button_page');
     const $clearButton = $('#clear_search');
+    const $searchMinimum = $('#search_minimum');
     const $inputs = $('.dropdown-toggle.dropdown-input');
     
     // initialize table
@@ -395,6 +396,11 @@ $.fn.extend({
             } else {
                 $('.card-footer').show();
                 $toggle.toggleDisabled(false);
+            }
+            
+            // update search minimum
+            if ($searchMinimum.length) {
+                $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
             }
         },
 
@@ -509,6 +515,9 @@ $.fn.extend({
     $('.fixed-table-toolbar input.search-input').attr('type', 'text').addClass('form-control-sm').prependTo('.input-group-search');
     $('.fixed-table-toolbar .search').remove();
     $('.btn-group-search').appendTo('.fixed-table-toolbar');
+    if ($searchMinimum.length) {
+        $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
+    }
 
     // focus
     if($table.getData().length === 0) {

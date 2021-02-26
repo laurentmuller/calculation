@@ -226,11 +226,11 @@ customer:
         lastName: Nom
         fullName: Contact
         company: Société
-        nameAndCompany: Contact/Société
+        nameAndCompany: Contact / Société
         address: Adresse
         zipCode: NPA
         city: Localité
-        zipCity: NPA/Localité
+        zipCity: NPA / Localité
         email: E-Mail
         webSite: Site web
         birthday: Date de naissance

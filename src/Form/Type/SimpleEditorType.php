@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
+use App\Util\FileUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormInterface;
@@ -73,113 +74,12 @@ class SimpleEditorType extends AbstractType
      */
     private function getDefaultActions(): array
     {
-        return [
-            // font
-            [
-                'exec' => 'formatBlock',
-                'title' => 'header_h1',
-                'icon' => 'heading',
-                'group' => 'font',
-                'parameter' => '<h1>',
-            ],
-            [
-                'exec' => 'bold',
-                'state' => 'bold',
-                'icon' => 'bold',
-                'group' => 'font',
-            ],
-            [
-                'exec' => 'italic',
-                'state' => 'italic',
-                'icon' => 'italic',
-                'group' => 'font',
-            ],
-            [
-                'exec' => 'underline',
-                'state' => 'underline',
-                'icon' => 'underline',
-                'group' => 'font',
-            ],
-            [
-                'exec' => 'strikethrough',
-                'state' => 'strikethrough',
-                'icon' => 'strikethrough',
-                'group' => 'font',
-            ],
+        $file = __DIR__ . '/simple_editor_actions.json';
 
-            // script
-            [
-                'exec' => 'superscript',
-                'icon' => 'superscript',
-                'group' => 'script',
-            ],
-            [
-                'exec' => 'subscript',
-                'icon' => 'subscript',
-                'group' => 'script',
-            ],
-
-            // align
-            [
-                'exec' => 'justifyLeft',
-                'state' => 'justifyLeft',
-                'icon' => 'align-left',
-                'group' => 'align',
-            ],
-            [
-                'exec' => 'justifyCenter',
-                'state' => 'justifyCenter',
-                'icon' => 'align-center',
-                'group' => 'align',
-            ],
-            [
-                'exec' => 'justifyRight',
-                'state' => 'justifyRight',
-                'icon' => 'align-right',
-                'group' => 'align',
-            ],
-
-            // paragraph
-            [
-                'exec' => 'indent',
-                'icon' => 'indent',
-                'group' => 'paragraph',
-            ],
-            [
-                'exec' => 'outdent',
-                'icon' => 'outdent',
-                'group' => 'paragraph',
-            ],
-
-            // list
-            [
-                'exec' => 'insertOrderedList',
-                'state' => 'insertOrderedList',
-                'icon' => 'list-ol',
-                'group' => 'list',
-            ],
-            [
-                'exec' => 'insertUnorderedList',
-                'state' => 'insertUnorderedList',
-                'icon' => 'list-ul',
-                'group' => 'list',
-            ],
-
-            // edit
-            [
-                'exec' => 'undo',
-                'state' => 'undo',
-                'enabled' => 'undo',
-                'icon' => 'undo',
-                'group' => 'edit',
-            ],
-            [
-                'exec' => 'redo',
-                'state' => 'redo',
-                'enabled' => 'redo',
-                'icon' => 'redo',
-                'group' => 'edit',
-            ],
-        ];
+        try {
+            return FileUtils::decodeJson($file);
+        } catch (\InvalidArgumentException $e) {
+            return [];
+        }
     }
 }

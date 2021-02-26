@@ -121,3 +121,10 @@
 tr.text-muted td .text-danger {
     opacity: 0.75;
 }
+
+/**
+ * User image
+ */
+.card-view-value img {
+    mix-blend-mode: multiply;
+}

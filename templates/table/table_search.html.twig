@@ -10,7 +10,7 @@
 {%- set allow_global = false -%}
 
 {% block header_actions %}
-<small>{{ 'search.minimum'|trans }}</small>
+<small id="search_minimum" class="text-danger d-print-none">{{ 'search.minimum'|trans }}</small>
 {% endblock %}
 
 {% block toolbar_actions -%}

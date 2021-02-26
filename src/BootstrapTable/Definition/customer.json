@@ -21,7 +21,8 @@
 		"class": "w-20 text-cell"
 	},
 	{
-		"field": "action",
+		"field": "id",
+		"alias": "action",
 		"sortable": false,
 		"searchable": false,
 		"class": "actions rowlink-skip d-print-none",

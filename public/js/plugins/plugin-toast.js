@@ -23,14 +23,15 @@
          * @param {string}
          *            message - The message.
          * @param {string}
-         *            [title] - The title.
+         *            title - The title.
          * @param {Object}
-         *            [options] - The options.
+         *            options - The options.
          * @returns {jQuery} this instance.
          */
         notify: function (type, message, title, options) {
             // merge options
             const settings = $.extend({}, this.DEFAULTS, options);
+            settings.closeButton = settings.closeButton || !settings.autohide;
             settings.position = this.checkPosition(settings.position);
             settings.type = this.checkType(type);
             settings.message = message;
@@ -59,7 +60,7 @@
             // update close style
             if ($title && settings.closeButton) {
                 $title.find('.close').css({
-                    'background-color': $title.css('background-color'),
+                    // 'background-color': $title.css('background-color'),
                     'color': $title.css('color')
                 });
             }
@@ -74,9 +75,9 @@
          * @param {string}
          *            message - The message.
          * @param {string}
-         *            [title] - The title.
+         *            title - The title.
          * @param {Object}
-         *            [options] - The options.
+         *            options - The options.
          * @returns {jQuery} this instance.
          */
         info: function (message, title, options) {
@@ -89,9 +90,9 @@
          * @param {string}
          *            message - The message.
          * @param {string}
-         *            [title] - The title.
+         *            title - The title.
          * @param {Object}
-         *            [options] - The options.
+         *            options - The options.
          * @returns {jQuery} this instance.
          */
         success: function (message, title, options) {
@@ -104,9 +105,9 @@
          * @param {string}
          *            message - The message.
          * @param {string}
-         *            [title] - The title.
+         *            title - The title.
          * @param {Object}
-         *            [options] - The options.
+         *            options - The options.
          * @returns {jQuery} this instance.
          */
         warning: function (message, title, options) {
@@ -119,9 +120,9 @@
          * @param {string}
          *            message - The message.
          * @param {string}
-         *            [title] - The title.
+         *            title - The title.
          * @param {Object}
-         *            [options] - The options.
+         *            options - The options.
          * @returns {jQuery} this instance.
          */
         danger: function (message, title, options) {
@@ -134,9 +135,9 @@
          * @param {string}
          *            message - The message.
          * @param {string}
-         *            [title] - The title.
+         *            title - The title.
          * @param {Object}
-         *            [options] - The options.
+         *            options - The options.
          * @returns {jQuery} this instance.
          */
         primary: function (message, title, options) {
@@ -149,9 +150,9 @@
          * @param {string}
          *            message - The message.
          * @param {string}
-         *            [title] - The title.
+         *            title - The title.
          * @param {Object}
-         *            [options] - The options.
+         *            options - The options.
          * @returns {jQuery} this instance.
          */
         secondary: function (message, title, options) {
@@ -164,9 +165,9 @@
          * @param {string}
          *            message - The message.
          * @param {string}
-         *            [title] - The title.
+         *            title - The title.
          * @param {Object}
-         *            [options] - The options.
+         *            options - The options.
          * @returns {jQuery} this instance.
          */
         dark: function (message, title, options) {
@@ -206,11 +207,11 @@
             TOP_LEFT: 'top-left',
             TOP_CENTER: 'top-center',
             TOP_RIGHT: 'top-right',
-            
+
             CENTER_LEFT: 'center-left',
             CENTER_CENTER: 'center-center',
             CENTER_RIGHT: 'center-right',
-            
+
             BOTTOM_LEFT: 'bottom-left',
             BOTTOM_CENTER: 'bottom-center',
             BOTTOM_RIGHT: 'bottom-right'
@@ -271,7 +272,7 @@
         // ------------------------
 
         /**
-         * Check the type.
+         * Check the notification type.
          * 
          * @param {string}
          *            type - The type to valdiate.
@@ -298,7 +299,7 @@
          * Check the position type.
          * 
          * @param {string}
-         *            type - The position type.
+         *            position - The position to valdiate.
          * 
          * @returns {string} A valid position.
          */
@@ -326,10 +327,9 @@
          * the position.
          * 
          * @param {Object}
-         *            [options] - The custom options.
+         *            options - The toast options.
          * 
-         * @returns {boolean} true to prepend (top positions), false to append
-         *          (bottom positions).
+         * @returns {boolean} true to prepend, false to append.
          */
         isPrepend: function (options) {
             const positions = this.NotificationPositions;
@@ -341,7 +341,7 @@
             case positions.CENTER_CENTER:
             case positions.CENTER_RIGHT:
                 return false;
-            default:  // BOTTOM_XXX
+            default: // BOTTOM_XXX
                 return true;
             }
         },
@@ -362,7 +362,7 @@
          * Gets or creates the toasts container div.
          * 
          * @param {Object}
-         *            [options] - The custom options.
+         *            options - The toast options.
          * 
          * @returns {jQuery} The toasts container.
          */
@@ -387,7 +387,7 @@
                 css.top = 0;
                 css.left = 0;
                 css['margin-top'] = this.toPixel(options.marginTop);
-                css['margin-left'] = this.toPixel(options.marginLeft);                
+                css['margin-left'] = this.toPixel(options.marginLeft);
                 break;
             case positions.TOP_CENTER:
                 css.top = 0;
@@ -401,11 +401,11 @@
                 css['margin-top'] = this.toPixel(options.marginTop);
                 css['margin-right'] = this.toPixel(options.marginRight);
                 break;
-            
+
             case positions.CENTER_LEFT:
                 css.top = '50%';
                 css.left = 0;
-                css.transform ='translateY(-50%)';
+                css.transform = 'translateY(-50%)';
                 css['margin-left'] = this.toPixel(options.marginLeft);
                 break;
             case positions.CENTER_CENTER:
@@ -416,10 +416,10 @@
             case positions.CENTER_RIGHT:
                 css.top = '50%';
                 css.right = 0;
-                css.transform ='translateY(-50%)';
+                css.transform = 'translateY(-50%)';
                 css['margin-right'] = this.toPixel(options.marginRight);
                 break;
-                
+
             case positions.BOTTOM_LEFT:
                 css.bottom = 0;
                 css.left = 0;
@@ -431,7 +431,7 @@
                 css.left = '50%';
                 css['margin-bottom'] = this.toPixel(options.marginBottom);
                 css.transform = 'translateX(-50%)';
-                break;  
+                break;
             case positions.BOTTOM_RIGHT:
             default:
                 css.bottom = 0;
@@ -455,7 +455,7 @@
          * Creates the div title.
          * 
          * @param {Object}
-         *            options - The custom options.
+         *            options - The toast options.
          * 
          * @returns {jQuery} The div title or null if no title.
          */
@@ -542,7 +542,7 @@
          * Creates the sub-title.
          * 
          * @param {Object}
-         *            options - The custom options.
+         *            options - The toast options.
          * 
          * @returns {jQuery} The sub-title or null if no sub-title defined.
          */
@@ -560,7 +560,7 @@
          * Creates the close button.
          * 
          * @param {Object}
-         *            options - The custom options.
+         *            options - The toast options.
          * 
          * @returns {jQuery} The close button or null if no button.
          */
@@ -586,7 +586,8 @@
         /**
          * Creates the div message.
          * 
-         * options - The custom options.
+         * @param {Object}
+         *            options - The toast options.
          * 
          * @returns {jQuery} The div message.
          */
@@ -601,7 +602,7 @@
          * Creates the div toast.
          * 
          * @param {Object}
-         *            options - The custom options.
+         *            options - The toast options.
          * 
          * @returns {jQuery} The div toast.
          */
@@ -618,28 +619,21 @@
          * Show the toast.
          * 
          * @param {jQuery}
-         *            [$toast] - The toast to show.
+         *            $toast - The toast to show.
          * @param {Object}
-         *            [options] - The custom options.
+         *            options - The toast options.
          * @return {Object} This instance.
          */
         showToast: function ($toast, options) {
-            // set options
             $toast.toast({
                 delay: options.timeout,
                 autohide: options.autohide
-            });
-
-            // remove toast when hidden
-            $toast.on('hidden.bs.toast', function () {
+            }).on('hidden.bs.toast', function () {
                 $toast.remove();
                 if ($.isFunction(options.onHide)) {
                     options.onHide(options);
                 }
-            });
-
-            // show
-            $toast.toast('show');
+            }).toast('show');
 
             return this;
         }

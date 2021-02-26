@@ -89,6 +89,6 @@ function notify(type, title, options, clear) {
     });
 
     // random notification
-    const button = $('.btn-form').toArray().randomElement();
+    const button = $('.btn-notify').toArray().randomElement();
     $(button).trigger('click').focus();
 }(jQuery));

@@ -26,11 +26,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 class Column
 {
     /**
-     * The action column name.
-     */
-    public const COL_ACTION = 'action';
-
-    /**
      * The property name of the field formatter.
      */
     public const FIELD_FORMATTER = 'fieldFormatter';
@@ -288,13 +283,6 @@ class Column
      */
     public function mapValue($objectOrArray, PropertyAccessor $accessor): string
     {
-        // special case for actions column
-        if (self::COL_ACTION === $this->field) {
-            $property = \is_array($objectOrArray) ? '[id]' : 'id';
-
-            return (string) $accessor->getValue($objectOrArray, $property);
-        }
-
         // get value
         $property = \is_array($objectOrArray) ? $this->property : $this->field;
         $value = $accessor->getValue($objectOrArray, $property);

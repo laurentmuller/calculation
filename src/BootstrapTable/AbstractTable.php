@@ -350,19 +350,11 @@ abstract class AbstractTable
      */
     protected function getSessionKey(string $name): string
     {
-        switch ($name) {
-            case self::PARAM_LIMIT:
-            case self::PARAM_CARD:
-                // global to all tables
-                return $name;
-            default:
-                // specific for each table
-                if (null === $this->prefix) {
-                    $this->prefix = Utils::getShortName($this);
-                }
-
-                return "{$this->prefix}.$name";
+        if (null === $this->prefix) {
+            $this->prefix = Utils::getShortName($this);
         }
+
+        return "{$this->prefix}.$name";
     }
 
     /**

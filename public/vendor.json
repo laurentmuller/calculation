@@ -13,7 +13,7 @@
 	"plugins": [
 		{
 			"name": "jquery",
-			"version": "3.5.1",
+			"version": "3.6.0",
 			"files": [
 				"jquery.js"
 			]
@@ -34,7 +34,7 @@
 		},
 		{
 			"name": "font-awesome",
-			"version": "5.15.2",
+			"version": "5.15.3",
 			"files": [
 				"css/all.css",
 				"webfonts/fa-brands-400.eot",
@@ -74,7 +74,7 @@
 		},
 		{
 			"name": "html5sortable",
-			"version": "0.10.0",
+			"version": "0.11.1",
 			"files": [
 				"html5sortable.js"
 			]
@@ -155,7 +155,7 @@
 		},
 		{
 			"name": "clipboard.js",
-			"version": "2.0.6",
+			"version": "2.0.8",
 			"target": "clipboard",
 			"files": [
 				"clipboard.js"
@@ -163,7 +163,7 @@
 		},
 		{
 			"name": "tinymce",
-			"version": "5.7.0",
+			"version": "5.7.1",
 			"files": [
 				"tinymce.min.js",
 				"jquery.tinymce.min.js",

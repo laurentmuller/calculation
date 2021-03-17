@@ -68,7 +68,7 @@ function disableButtons() {
     const $form = $('#edit-form');
     const $submit = $form.find(':submit');
     const spinner = '<span class="spinner-border spinner-border-sm"></span>';
-    $submit.data('text', $submit.text()).addClass('disabled').html(spinner);
+    $submit.data('text', $submit.text()).toggleDisabled(true).html(spinner);
     $form.find('.btn-cancel').toggleDisabled(true);
 }
 

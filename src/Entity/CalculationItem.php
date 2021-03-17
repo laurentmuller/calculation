@@ -32,7 +32,7 @@ class CalculationItem extends AbstractEntity
      * The parent's category.
      *
      * @ORM\ManyToOne(targetEntity=CalculationCategory::class, inversedBy="items")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\JoinColumn(name="category_id", onDelete="CASCADE", nullable=false)
      *
      * @var CalculationCategory|null
      */

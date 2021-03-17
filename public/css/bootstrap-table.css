@@ -7,6 +7,9 @@
 /**
  * Card View
  */
+.bootstrap-table .fixed-table-container .table tbody tr .card-views {
+    cursor: pointer;
+} 
 .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-title {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -21,9 +24,10 @@
     text-align: left;
     max-width: 17rem;
 }
+
 @media ( min-width : 576px) {
     .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
-        max-width: 19rem;
+        max-width: 18rem;
     }
 }
 @media ( min-width : 768px) {

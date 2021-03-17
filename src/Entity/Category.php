@@ -54,7 +54,7 @@ class Category extends AbstractEntity
      * The parent group.
      *
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="categories")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="group_id", nullable=false)
      *
      * @var ?Group
      */

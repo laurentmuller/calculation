@@ -147,7 +147,6 @@ CREATE TABLE IF NOT EXISTS "sy_TaskItem" (
   	"id"                integer PRIMARY KEY AUTOINCREMENT,
   	"task_id" 			integer NOT NULL,
   	"name" 				varchar(255) NOT NULL,
-  	"type" 				integer NOT NULL,
   	FOREIGN KEY(task_id) REFERENCES sy_Task(id)
 );
 

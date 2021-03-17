@@ -115,6 +115,9 @@ class TaskController extends AbstractEntityController
      * Display the form to compute a task.
      *
      * @Route("/compute/{id}", name="task_compute", requirements={"id" = "\d+" })
+     * @Breadcrumb({
+     *     {"label" = "taskcompute.title" }
+     * })
      */
     public function compute(Request $request, Task $task = null, TaskService $service, TaskRepository $repository): Response
     {
@@ -135,10 +138,13 @@ class TaskController extends AbstractEntityController
             $service->compute($request);
         }
 
-        return $this->render('task/task_compute.html.twig', [
+        $parameters = [
             'form' => $form->createView(),
             'tasks' => $tasks,
-        ]);
+        ];
+        $this->updateQueryParameters($request, $parameters, (int) $task->getId());
+
+        return $this->render('task/task_compute.html.twig', $parameters);
     }
 
     /**

@@ -40,7 +40,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
      * The parent's calculation.
      *
      * @ORM\ManyToOne(targetEntity=Calculation::class, inversedBy="groups")
-     * @ORM\JoinColumn(name="calculation_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\JoinColumn(name="calculation_id", onDelete="CASCADE", nullable=false)
      *
      * @var Calculation|null
      */
@@ -72,7 +72,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
      * The parent's group.
      *
      * @ORM\ManyToOne(targetEntity=Group::class)
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="group_id", nullable=false)
      *
      * @var \App\Entity\Group
      */

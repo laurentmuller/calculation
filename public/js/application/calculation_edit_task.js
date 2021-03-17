@@ -197,7 +197,7 @@ EditTaskDialog.prototype = {
                 that.$unit.val(response.unit);
                 that.$category.val(response.categoryId);
                 that._updateValue('task_overall', response.overall);
-                that.$submit.attr("disabled", false);
+                that.$submit.toggleDisabled(false);
             } else {
                 that.showError(response.message);
             }
@@ -220,7 +220,7 @@ EditTaskDialog.prototype = {
         const that = this;
 
         // disable
-        that.$submit.attr("disabled", true);
+        that.$submit.toggleDisabled(true);
 
         // valid?
         if (!that.$form.valid()) {
@@ -327,7 +327,7 @@ EditTaskDialog.prototype = {
     _showError: function (message) {
         'use strict';
         this.resetValues();
-        this.$submit.attr("disabled", true);
+        this.$submit.toggleDisabled(true);
         this.$modal.modal('hide');
         const title = this.$modal.find('.dialog-title').text();
         const options = $('#flashbags').data();
@@ -401,7 +401,7 @@ EditTaskDialog.prototype = {
 
         // submit
         if (empty) {
-            this.$submit.attr("disabled", true);
+            this.$submit.toggleDisabled(true);
             return this;
         }
         return this._update();

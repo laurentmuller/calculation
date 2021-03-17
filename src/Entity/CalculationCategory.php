@@ -40,7 +40,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * The parent's category.
      *
      * @ORM\ManyToOne(targetEntity=Category::class)
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="category_id", nullable=false)
      *
      * @var \App\Entity\Category
      */
@@ -61,7 +61,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * The parent's group.
      *
      * @ORM\ManyToOne(targetEntity=CalculationGroup::class, inversedBy="categories")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\JoinColumn(name="group_id", onDelete="CASCADE", nullable=false)
      *
      * @var CalculationGroup|null
      */

@@ -216,7 +216,7 @@
                 defaults.submitHandler = function(form) {
                     const $form = $(form);
                     const spinner = '<span class="spinner-border spinner-border-sm"></span>';
-                    $form.find(':submit').addClass('disabled').html(spinner);
+                    $form.find(':submit').toggleDisabled(true).html(spinner);
                     $form.find('.btn-cancel').toggleDisabled(true);
                     form.submit();
                 };

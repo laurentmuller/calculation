@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Task;
+use App\Entity\TaskItem;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -27,6 +28,7 @@ class TaskControllerTest extends AbstractControllerTest
     private static ?Category $category = null;
     private static ?Task $entity = null;
     private static ?Group $group = null;
+    private static ?TaskItem $item = null;
 
     public function getRoutes(): array
     {
@@ -70,6 +72,10 @@ class TaskControllerTest extends AbstractControllerTest
             ['/task/excel', self::ROLE_USER],
             ['/task/excel', self::ROLE_ADMIN],
             ['/task/excel', self::ROLE_SUPER_ADMIN],
+
+            ['/task/compute/1', self::ROLE_USER],
+            ['/task/compute/1', self::ROLE_ADMIN],
+            ['/task/compute/1', self::ROLE_SUPER_ADMIN],
         ];
     }
 
@@ -92,10 +98,17 @@ class TaskControllerTest extends AbstractControllerTest
                 ->setCategory(self::$category);
             $this->addEntity(self::$entity);
         }
+        if (null === self::$item) {
+            self::$item = new TaskItem();
+            self::$item->setName('Test Item');
+            self::$item->setTask(self::$entity);
+            $this->addEntity(self::$item);
+        }
     }
 
     protected function deleteEntities(): void
     {
+        self::$item = $this->deleteEntity(self::$item);
         self::$entity = $this->deleteEntity(self::$entity);
         self::$category = $this->deleteEntity(self::$category);
         self::$group = $this->deleteEntity(self::$group);

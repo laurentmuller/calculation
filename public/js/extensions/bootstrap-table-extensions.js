@@ -324,7 +324,6 @@ $.fn.extend({
         
         // clean
         $body.find('.undefined').removeClass('undefined');
-        $body.find('.card-views').addClass('cursor-pointer');
         $body.find('.card-view-title').addClass('text-muted');
         return $this;
     },

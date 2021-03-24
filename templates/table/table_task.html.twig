@@ -5,7 +5,7 @@
 {%- set title_icon   = 'tasks' -%}
 {%- set defer_url    = url('table_task') -%}
 {%- set save_url     = url('table_task_save') -%}
-{%- set categoryId   = category.id|default(0) -%}
+{%- set categoryId   = customData.category.id|default(0) -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_TASK -%}
 
 {% block header_actions -%}
@@ -15,11 +15,11 @@
 {% block toolbar_actions -%}
 <div class="input-group-append btn-dropdown">
     <button id="categoryId" data-value="{{ categoryId }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'task.fields.category'|trans }}" title="{{ 'task.list.category_help'|trans }}">
-        {{- category ? category.code : 'task.fields.category'|trans -}}
+        {{- customData.category ? customData.category.code : 'task.fields.category'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="categoryId">
         {{ _self.output_dropdown('category', 0, categoryId, 'task.list.category_all_text'|trans) }}
-        {% for category in categories %}
+        {% for category in customData.categories %}
         {{ _self.output_dropdown('category', category.id, categoryId, category.code) }}
         {% endfor %}
     </div>

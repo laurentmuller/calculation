@@ -48,6 +48,17 @@
 <p>{{ 'help.labels.entity_empty'|trans }}</p>
 {% endif %}
 
+{# constraints #}
+{%- if entity.constraints|default([])|length -%}
+    <hr class="mt-0 mb-2">
+    <p class="mb-0">{{ 'help.labels.constraints'|trans }}</p>
+    <ul>
+    {% for constraint in entity.constraints -%}
+        <li>{{ constraint|raw }}</li>
+    {%- endfor %}
+    </ul>
+{%- endif -%}
+
 {# actions #}
 {% if actions %}
 <p class="mb-1 mt-2">{{ 'help.labels.entity_actions'|trans }}</p>

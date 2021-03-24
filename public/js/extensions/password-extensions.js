@@ -17,12 +17,20 @@
         togglePassword: function () {
             return this.each(function () {
                 const $element = $(this);
-                const $button = $element.parents('.input-group').findExists('.btn-password');
-                if ($button) {
-                    $button.on('click', function () {
-                        const type = $element.is(':text') ? 'password' : 'text';
-                        $(this).find('i').toggleClass('fa-eye fa-eye-slash');
-                        $element.prop('type', type).select();
+                const $button = $element.parents('.input-group').find('.btn-password');
+                if ($button.length) {
+                    const $icon = $button.find('i');
+                    $button.on('mousedown', function (e) {
+                        if (e.which === 1) {
+                            $element.prop('type', 'text');
+                            $icon.addClass('fa-eye-slash').removeClass('fa-eye');
+                        }
+                    }).on('mouseup mouseout', function () {
+                        $element.prop('type', 'password').select();
+                        $icon.addClass('fa-eye').removeClass('fa-eye-slash');
+                    });
+                    $element.on('input', function () {
+                        $button.toggleClass('disabled', $element.val().length === 0);
                     });
                 }
             });
@@ -51,8 +59,8 @@
                 }
 
                 // get groups or element
-                const $left = $parent.findExists('.input-group-prepend .input-group-text:first') || $element;
-                const $right = $parent.findExists('.input-group-append .input-group-text:last') || $element;
+                const $left = $parent.findExists('.input-group-prepend :first-child') || $element;
+                const $right = $parent.findExists('.input-group-append :last-child') || $element;
 
                 // radius
                 const leftRadius = $left.css('border-bottom-left-radius');

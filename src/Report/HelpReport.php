@@ -150,19 +150,44 @@ class HelpReport extends AbstractReport
         }
     }
 
+    private function outputConstraints(array $constraints): void
+    {
+        $margin = $this->getLeftMargin();
+        $this->SetLeftMargin($margin + 4);
+        foreach ($constraints as $constraint) {
+            $this->MultiCell(0, self::LINE_HEIGHT, \strip_tags("- $constraint"), self::BORDER_NONE, self::ALIGN_LEFT);
+        }
+        $this->SetLeftMargin($margin);
+    }
+
+    private function outputDetails(array $details): void
+    {
+        $text = \strip_tags(\implode(' ', $details));
+        $this->MultiCell(0, self::LINE_HEIGHT, $text, self::BORDER_NONE, self::ALIGN_LEFT);
+    }
+
     private function outputDialog(array $item): void
     {
         // title
         $this->outputTitle($item['id']);
 
-        //description
-        $this->MultiCell(0, self::LINE_HEIGHT, $item['description']);
+        // description
+        if ($description = $item['description'] ?? false) {
+            $this->MultiCell(0, self::LINE_HEIGHT, $description);
+        }
 
         // image
         if ($image = $item['image'] ?? false) {
             $this->Ln(3);
             $this->outputText('help.labels.screenshot');
             $this->outputImage($image);
+        }
+
+        // details
+        if ($details = $item['details'] ?? null) {
+            $this->Ln(3);
+            $this->outputText('help.labels.description');
+            $this->outputDetails($details);
         }
 
         // entity and fields
@@ -276,10 +301,12 @@ class HelpReport extends AbstractReport
     private function outputEntity(array $item): void
     {
         $this->outputTitle($item['id'] . '.name');
-        $this->MultiCell(0, self::LINE_HEIGHT, $item['description']);
 
-        $fields = $this->findFields($item);
-        if (!empty($fields)) {
+        if ($description = $item['description'] ?? false) {
+            $this->MultiCell(0, self::LINE_HEIGHT, $description);
+        }
+
+        if ($fields = $this->findFields($item)) {
             $this->Ln(3);
             $this->outputText('help.labels.edit_fields');
             $this->outputFields($item, $fields);
@@ -287,8 +314,13 @@ class HelpReport extends AbstractReport
             $this->outputText('help.labels.entity_empty');
         }
 
-        $actions = $item['actions'] ?? null;
-        if (!empty($actions)) {
+        if ($constraints = $item['constraints'] ?? false) {
+            $this->Ln(3);
+            $this->outputText('help.labels.constraints');
+            $this->outputConstraints($constraints);
+        }
+
+        if ($actions = $item['actions'] ?? false) {
             $this->Ln(3);
             $this->outputText('help.labels.entity_actions');
             $this->outputActions($actions);

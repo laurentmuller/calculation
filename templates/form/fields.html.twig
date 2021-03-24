@@ -65,9 +65,9 @@ override form errors. Rendered example:
     </div>
     {{ parent() }}
     <div class="input-group-append">
-        <button class="btn btn-password btn-outline-secondary" type="button" title="{{ 'common.toggle_password'|trans }}">
+        <span class="btn btn-outline-secondary btn-password{% if not value %} disabled{% endif %}" title="{{ 'common.toggle_password'|trans }}">
             <i class="far fa-eye" aria-hidden="true"></i>
-        </button>
+        </span>
     </div>
 </div>
 {%- endblock %}

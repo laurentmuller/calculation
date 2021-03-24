@@ -13,15 +13,15 @@
 {%- endblock %}
 
 {% block toolbar_actions -%}
-{% if states is defined %}
-{%- set stateId = state.id|default(0) -%}
+{% if customData.states is defined %}
+{%- set stateId = customData.state.id|default(0) -%}
 <div class="input-group-append btn-dropdown">
     <button id="stateId" data-value="{{ stateId }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
-        {{- state ? state.code : 'calculation.fields.state'|trans -}}
+        {{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="stateId">
         {{ _self.output_dropdown('state', 0, stateId, 'datatable.all'|trans) }}
-        {% for state in states %}
+        {% for state in customData.states %}
         {{ _self.output_dropdown('state', state.id, stateId, state.code) }}
         {% endfor %}
     </div>

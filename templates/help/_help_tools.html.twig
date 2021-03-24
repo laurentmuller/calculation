@@ -14,7 +14,7 @@
 {%- set image = asset_if('/help/images/' ~ path) -%}
 {% if image %}
 {% if screenshot %}<p class="mb-1">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
-<img src="{{ asset(image) }}" class="img-fluid"> 
+<img src="{{ asset(image) }}" class="img-fluid mx-auto d-block"> 
 {% endif %} 
 {%- endmacro %}
 

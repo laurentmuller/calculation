@@ -16,11 +16,11 @@
 {% block toolbar_actions -%}
 <div class="input-group-append btn-dropdown">
     <button id="entity" data-value="{{ entity }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'datatable.all'|trans }}" title="{{ 'search.entity_help'|trans }}">
-        {{- entity ? entity : 'datatable.all'|trans -}}
+        {{- customData.entity ? customData.entity : 'datatable.all'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="entity">
         {{ _self.output_dropdown('entity', '', entity, 'datatable.all'|trans) }}
-        {% for key, value in entities %}
+        {% for key, value in customData.entities %}
         {{ _self.output_dropdown('entity', key, entity, value|trans) }}
         {% endfor %}
     </div>

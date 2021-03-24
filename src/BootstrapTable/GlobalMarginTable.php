@@ -46,13 +46,11 @@ class GlobalMarginTable extends AbstractEntityTable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function updateParameters(array $parameters): array
+    protected function updateResults(DataQuery $query, DataResults &$results): void
     {
-        $parameters = parent::updateParameters($parameters);
-        $parameters['attributes']['search'] = \json_encode(false);
-
-        return $parameters;
+        parent::updateResults($query, $results);
+        $results->addAttribute('search', \json_encode(false));
     }
 }

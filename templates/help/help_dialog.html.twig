@@ -74,6 +74,14 @@
 <hr class="my-2">
 {{ tools.output_image(dialog.image|default(false)) }}
 
+{# details #}
+{%- if dialog.details|default([])|length -%}
+    <p class="mt-2 mb-0">{{ 'help.labels.description'|trans }}</p>
+    <p class="mb-0 ml">
+    {% for detail in dialog.details -%}{{ detail|raw }} {% endfor %}
+    </p>
+{%- endif -%}
+
 {# entity columns #}
 {%- if dialog.displayEntityColumns|default(false) -%}
     {{- _self.output_entity_columns(entity, table_class, head_class) }}

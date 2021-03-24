@@ -17,7 +17,6 @@ use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Log;
 use App\Service\LogService;
-use App\Util\FormatUtils;
 use App\Util\Utils;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
@@ -86,7 +85,7 @@ class LogDataTable extends AbstractDataTable
      */
     public function formatCreatedAt(\DateTimeInterface $value): string
     {
-        return FormatUtils::formatDateTime($value, null, \IntlDateFormatter::MEDIUM);
+        return LogService::getCreatedAt($value);
     }
 
     /**
@@ -170,17 +169,16 @@ class LogDataTable extends AbstractDataTable
         // filter
         $skipChannel = false;
         if ($value = $query->columns[2]->search->value) {
-            $logs = $this->filterChannel($logs, $value);
+            $logs = LogService::filterChannel($logs, $value);
             $skipChannel = true;
         }
         $skipLevel = false;
         if ($value = $query->columns[3]->search->value) {
-            $logs = $this->filterLevel($logs, $value);
+            $logs = LogService::filterLevel($logs, $value);
             $skipLevel = true;
         }
-
         if ($value = $query->search->value) {
-            $logs = $this->filter($logs, $value, $skipChannel, $skipLevel);
+            $logs = LogService::filter($logs, $value, $skipChannel, $skipLevel);
         }
         $results->recordsFiltered = \count($logs);
 
@@ -209,90 +207,6 @@ class LogDataTable extends AbstractDataTable
     protected function createSessionPrefix(): string
     {
         return Utils::getShortName(Log::class);
-    }
-
-    /**
-     * Filters the log.
-     *
-     * @param Log[]  $logs        the logs to search in
-     * @param string $value       the value to search for
-     * @param bool   $skipChannel true to skip search in channel
-     * @param bool   $skipLevel   true to skip search in level
-     *
-     * @return Log[] the filtered logs
-     */
-    private function filter(array $logs, ?string $value, bool $skipChannel, bool $skipLevel): array
-    {
-        if (Utils::isString($value)) {
-            $filter = function (Log $log) use ($value, $skipChannel, $skipLevel) {
-                if (!$skipChannel) {
-                    $channel = $this->formatChannel($log->getChannel());
-                    if (Utils::contains($channel, $value, true)) {
-                        return true;
-                    }
-                }
-
-                if (!$skipLevel) {
-                    $level = $this->formatLevel($log->getLevel());
-                    if (Utils::contains($level, $value, true)) {
-                        return true;
-                    }
-                }
-
-                $date = $this->formatCreatedAt($log->getCreatedAt());
-                if (Utils::contains($date, $value, true)) {
-                    return true;
-                }
-
-                if (Utils::contains($log->getMessage(), $value, true)) {
-                    return true;
-                }
-
-                return false;
-            };
-
-            return \array_filter($logs, $filter);
-        }
-
-        return $logs;
-    }
-
-    /**
-     * Filters the log for the given channel.
-     *
-     * @param Log[]  $logs  the logs to search in
-     * @param string $value the channel value to search for
-     *
-     * @return Log[] the filtered logs
-     */
-    private function filterChannel(array $logs, ?string $value): array
-    {
-        if (Utils::isString($value)) {
-            return \array_filter($logs, function (Log $log) use ($value) {
-                return $value === $log->getChannel();
-            });
-        }
-
-        return $logs;
-    }
-
-    /**
-     * Filters the log for the given level.
-     *
-     * @param Log[]  $logs  the logs to search in
-     * @param string $value the level value to search for
-     *
-     * @return Log[] the filtered logs
-     */
-    private function filterLevel(array $logs, ?string $value): array
-    {
-        if (Utils::isString($value)) {
-            return \array_filter($logs, function (Log $log) use ($value) {
-                return $value === $log->getLevel();
-            });
-        }
-
-        return $logs;
     }
 
     /**

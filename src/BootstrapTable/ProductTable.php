@@ -27,14 +27,9 @@ use Symfony\Component\HttpFoundation\Request;
 class ProductTable extends AbstractEntityTable
 {
     /**
-     * The category parameter name.
+     * The category parameter name (int).
      */
     public const PARAM_CATEGORY = 'categoryId';
-
-    /**
-     * The selected category identifier.
-     */
-    private int $categoryId = 0;
 
     /**
      * The category repository.
@@ -51,21 +46,15 @@ class ProductTable extends AbstractEntityTable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function addSearch(Request $request, QueryBuilder $builder): string
+    public function getDataQuery(Request $request): DataQuery
     {
-        $search = parent::addSearch($request, $builder);
+        $query = parent::getDataQuery($request);
+        $categoryId = (int) $request->get(self::PARAM_CATEGORY, 0);
+        $query->addCustomData(self::PARAM_CATEGORY, $categoryId);
 
-        // category?
-        $this->categoryId = (int) $request->get(self::PARAM_CATEGORY, 0);
-        if (0 !== $this->categoryId) {
-            $field = $this->repository->getSearchFields('category.id');
-            $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
-                ->setParameter(self::PARAM_CATEGORY, $this->categoryId, Types::INTEGER);
-        }
-
-        return $search;
+        return $query;
     }
 
     /**
@@ -85,17 +74,28 @@ class ProductTable extends AbstractEntityTable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function updateParameters(array $parameters): array
+    protected function search(DataQuery $query, QueryBuilder $builder): void
     {
-        return \array_merge_recursive(parent::updateParameters($parameters), [
-            'category' => $this->getCategory(),
-            'categories' => $this->getCategories(),
-            'params' => [
-                self::PARAM_CATEGORY => $this->categoryId,
-            ],
-        ]);
+        parent::search($query, $builder);
+        if (0 !== $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0)) {
+            $field = $this->repository->getSearchFields('category.id');
+            $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
+                ->setParameter(self::PARAM_CATEGORY, $categoryId, Types::INTEGER);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function updateResults(DataQuery $query, DataResults &$results): void
+    {
+        parent::updateResults($query, $results);
+        $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0);
+        $results->addCustomData('category', $this->getCategory($categoryId));
+        $results->addCustomData('categories', $this->getCategories());
+        $results->addParameter(self::PARAM_CATEGORY, $categoryId);
     }
 
     /**
@@ -109,12 +109,12 @@ class ProductTable extends AbstractEntityTable
     }
 
     /**
-     * Gets the selected category or null if none.
+     * Gets the category for the given identifier.
      */
-    private function getCategory(): ?Category
+    private function getCategory(int $categoryId): ?Category
     {
-        if (0 !== $this->categoryId) {
-            return $this->categoryRepository->find($this->categoryId);
+        if (0 !== $categoryId) {
+            return $this->categoryRepository->find($categoryId);
         }
 
         return null;

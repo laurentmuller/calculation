@@ -26,13 +26,13 @@
             return "Entrée ".concat(pageFrom, " - ").concat(pageTo, " / ").concat(totalRows);
         },
         formatSRPaginationPreText: function formatSRPaginationPreText() {
-            return 'Page précédente';
+            return 'Afficher la page précédente';
         },
         formatSRPaginationPageText: function formatSRPaginationPageText(page) {
             return "Afficher la page ".concat(page);
         },
         formatSRPaginationNextText: function () {
-            return 'Page suivante';
+            return 'Afficher la page suivante';
         },
         formatDetailPagination: function formatDetailPagination(totalRows) {
             return "Afficher ".concat(totalRows, " entrées");

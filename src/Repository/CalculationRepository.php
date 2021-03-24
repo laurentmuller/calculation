@@ -40,6 +40,59 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
+     * Count the number of calculations with duplicate items. Items are duplicate if the descriptions are equal.
+     *
+     * @return int the number of calculations
+     */
+    public function countDuplicateItems(): int
+    {
+        // sub query
+        $dql = $this->createQueryBuilder('e2')
+            ->select('e2.id')
+            ->innerJoin('e2.groups', 'g')
+            ->innerJoin('g.categories', 'c')
+            ->innerJoin('c.items', 'i')
+            ->groupBy('e2.id')
+            ->addGroupBy('i.description')
+            ->having('COUNT(i.id) > 1')
+            ->getDQL();
+
+        // main query
+        $builder = $this->createQueryBuilder('e')
+            ->select('COUNT(e.id)')
+            ->where("e.id in($dql)");
+
+        // execute
+        return (int) $builder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Count the number of calculations with empty items. Items are empty if the price or the quantity is equal to 0.
+     *
+     * @return int the number of calculations
+     */
+    public function countEmptyItems(): int
+    {
+        // sub query
+        $dql = $this->createQueryBuilder('e2')
+            ->select('e2.id')
+            ->innerJoin('e2.groups', 'g')
+            ->innerJoin('g.categories', 'c')
+            ->innerJoin('c.items', 'i')
+            ->where('i.price = 0')
+            ->orWhere('i.quantity = 0')
+            ->getDQL();
+
+        // main query
+        $builder = $this->createQueryBuilder('e')
+            ->select('COUNT(e.id)')
+            ->where("e.id in($dql)");
+
+        // execute
+        return (int) $builder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
      * Count the number of calculations for the given state.
      *
      * @param CalculationState $state the state to search for

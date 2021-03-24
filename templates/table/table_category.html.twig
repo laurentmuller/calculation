@@ -5,7 +5,7 @@
 {%- set title_icon   = 'folder far' -%}
 {%- set defer_url    = url('table_category') -%}
 {%- set save_url     = url('table_category_save') -%}
-{%- set groupId      = group.id|default(0) -%}
+{%- set groupId      = customData.group.id|default(0) -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_CATEGORY -%}
 
 {% block header_actions -%}
@@ -15,11 +15,11 @@
 {% block toolbar_actions -%}
 <div class="input-group-append btn-dropdown">
     <button id="groupId" data-value="{{ groupId }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'category.fields.group'|trans }}" title="{{ 'category.list.group_help'|trans }}">
-        {{- group ? group.code : 'category.fields.group'|trans -}}
+        {{- customData.group ? customData.group.code : 'category.fields.group'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="groupId">
         {{ _self.output_dropdown('group', 0, groupId, 'datatable.all'|trans) }}
-        {% for group in groups %}
+        {% for group in customData.groups %}
         {{ _self.output_dropdown('group', group.id, groupId, group.code) }}
         {% endfor %}
     </div>

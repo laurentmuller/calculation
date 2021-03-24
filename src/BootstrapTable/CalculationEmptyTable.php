@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\BootstrapTable;
 
 use App\Repository\CalculationRepository;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -47,6 +48,14 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function countEntities(): int
+    {
+        return $this->repository->countEmptyItems();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function formatItems(array $items): string
@@ -69,7 +78,7 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     /**
      * {@inheritdoc}
      */
-    protected function getEntities($orderColumn, $orderDirection): array
+    protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
         return $this->repository->getEmptyItems($orderColumn, $orderDirection);
     }

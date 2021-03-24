@@ -1111,6 +1111,8 @@ help:
         edit_fields: 'Les champs de saisie sont définis comme suit :'
         edit_columns: 'La table contient les colonnes suivantes :'
         forbidden_text: Si l'objet sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.
+        description: 'Description :'
+        constraints: 'Les contraintes suivantes sont appliquées :'
     actions:
         toggle: Afficher la vue
         clear: Effacer les critères de recherche

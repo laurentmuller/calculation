@@ -235,7 +235,12 @@ class DataColumn
      */
     public function getClass(): string
     {
-        return $this->class ?: '';
+        $class = $this->class ?? '';
+        if ($this->visible && false === \strpos($class, 'rowlink-skip')) {
+            return \trim($class . ' user-select-none');
+        }
+
+        return $class;
     }
 
     /**

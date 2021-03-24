@@ -124,12 +124,9 @@ class UserTable extends AbstractEntityTable
     /**
      * {@inheritDoc}
      */
-    protected function updateParameters(array $parameters): array
+    protected function updateResults(DataQuery $query, DataResults &$results): void
     {
-        return \array_merge_recursive(parent::updateParameters($parameters), [
-            'attributes' => [
-                'row-style' => 'styleUserEnabled',
-            ],
-        ]);
+        parent::updateResults($query, $results);
+        $results->addAttribute('row-style', 'styleUserEnabled');
     }
 }

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use Doctrine\Common\Collections\Criteria;
+
 /**
  * Calculation table for duplicate items.
  *
@@ -19,6 +21,14 @@ namespace App\BootstrapTable;
  */
 class CalculationDuplicateTable extends AbstractCalculationItemsTable
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function countEntities(): int
+    {
+        return $this->repository->countDuplicateItems();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,7 +44,7 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     /**
      * {@inheritdoc}
      */
-    protected function getEntities(string $orderColumn, string $orderDirection): array
+    protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
         return $this->repository->getDuplicateItems($orderColumn, $orderDirection);
     }

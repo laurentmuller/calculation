@@ -8,9 +8,9 @@
 		"title": "log.fields.createdAt",
 		"default": true,
 		"order": "desc",
-		"class": "date",
+		"class": "date text-border",
 		"fieldFormatter": "formatCreatedAt",
-		"styleFormatter": "styleLogCreatedAt"
+		"styleFormatter": "styleBorderColor"
 	},
 	{
 		"field": "channel",
@@ -36,5 +36,9 @@
 		"searchable": false,
 		"class": "actions rowlink-skip d-print-none",
 		"cellFormatter": "formatActions"
+	},
+	{
+		"field": "color",
+		"visible": false
 	}
 ]

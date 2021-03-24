@@ -9,7 +9,7 @@
 
 {% block card_header -%}
 {{ parent() }}        
-{% if itemsCount and rows|length  -%}<small>{{ 'empty.count'|trans({'%calculations%': rows|length, '%items%': itemsCount}) }}</small>{%- endif %}
+{% if customData.itemsCount and rows|length  -%}<small>{{ 'empty.count'|trans({'%calculations%': rows|length, '%items%': customData.itemsCount}) }}</small>{%- endif %}
 {%- endblock %}
 
 {% block header_actions -%}

@@ -26,9 +26,9 @@
 			"formatter": "formatMessage",
 			"title": "log.fields.message",
 			"alignment-vertical": "top",
-			"width": 150,
+			"width": 120,
 			"auto-size": false,
-			"wrap-text": false,
+			"wrap-text": true,
 			"font-name": "Courier New",
 			"font-size": 9
 		}

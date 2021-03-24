@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Entity\Log;
 use App\Util\FileUtils;
+use App\Util\FormatUtils;
 use App\Util\Utils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -108,6 +109,90 @@ class LogService
     }
 
     /**
+     * Filters the given logs.
+     *
+     * @param Log[]  $logs        the logs to search in
+     * @param string $value       the value to search for
+     * @param bool   $skipChannel true to skip search in channel
+     * @param bool   $skipLevel   true to skip search in level
+     *
+     * @return Log[] the filtered logs
+     */
+    public static function filter(array $logs, ?string $value, bool $skipChannel, bool $skipLevel): array
+    {
+        if (Utils::isString($value)) {
+            $filter = static function (Log $log) use ($value, $skipChannel, $skipLevel) {
+                if (!$skipChannel) {
+                    $channel = self::getChannel($log->getChannel());
+                    if (Utils::contains($channel, $value, true)) {
+                        return true;
+                    }
+                }
+
+                if (!$skipLevel) {
+                    $level = self::getLevel($log->getLevel());
+                    if (Utils::contains($level, $value, true)) {
+                        return true;
+                    }
+                }
+
+                $date = self::getCreatedAt($log->getCreatedAt());
+                if (Utils::contains($date, $value, true)) {
+                    return true;
+                }
+
+                if (Utils::contains($log->getMessage(), $value, true)) {
+                    return true;
+                }
+
+                return false;
+            };
+
+            return \array_filter($logs, $filter);
+        }
+
+        return $logs;
+    }
+
+    /**
+     * Filters the log for the given channel.
+     *
+     * @param Log[]  $logs  the logs to search in
+     * @param string $value the channel value to search for
+     *
+     * @return Log[] the filtered logs
+     */
+    public static function filterChannel(array $logs, ?string $value): array
+    {
+        if (Utils::isString($value)) {
+            return \array_filter($logs, function (Log $log) use ($value) {
+                return 0 === \strcasecmp($value, $log->getChannel());
+            });
+        }
+
+        return $logs;
+    }
+
+    /**
+     * Filters the log for the given level.
+     *
+     * @param Log[]  $logs  the logs to search in
+     * @param string $value the level value to search for
+     *
+     * @return Log[] the filtered logs
+     */
+    public static function filterLevel(array $logs, ?string $value): array
+    {
+        if (Utils::isString($value)) {
+            return \array_filter($logs, function (Log $log) use ($value) {
+                return 0 === \strcasecmp($value, $log->getLevel());
+            });
+        }
+
+        return $logs;
+    }
+
+    /**
      * Gets the log channel.
      *
      * @param string $value      the source
@@ -123,6 +208,14 @@ class LogService
         }
 
         return $value;
+    }
+
+    /**
+     * Formats the log date.
+     */
+    public static function getCreatedAt(\DateTimeInterface $value): string
+    {
+        return FormatUtils::formatDateTime($value, null, \IntlDateFormatter::MEDIUM);
     }
 
     /**

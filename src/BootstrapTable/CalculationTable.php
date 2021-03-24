@@ -28,7 +28,7 @@ use Twig\Environment;
 class CalculationTable extends AbstractEntityTable
 {
     /**
-     * The state parameter name.
+     * The state parameter name (int).
      */
     public const PARAM_STATE = 'stateId';
 
@@ -36,11 +36,6 @@ class CalculationTable extends AbstractEntityTable
      * The calculation state repository.
      */
     protected CalculationStateRepository $stateRepository;
-
-    /**
-     * The selected state identifier.
-     */
-    private int $stateId = 0;
 
     /**
      * The template renderer.
@@ -66,31 +61,15 @@ class CalculationTable extends AbstractEntityTable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function addSearch(Request $request, QueryBuilder $builder): string
+    public function getDataQuery(Request $request): DataQuery
     {
-        $search = parent::addSearch($request, $builder);
+        $query = parent::getDataQuery($request);
+        $stateId = (int) $request->get(self::PARAM_STATE, 0);
+        $query->addCustomData(self::PARAM_STATE, $stateId);
 
-        // state?
-        $this->stateId = (int) $request->get(self::PARAM_STATE, 0);
-        if (0 !== $this->stateId) {
-            $field = $this->repository->getSearchFields('state.id');
-            $builder->andWhere($field . '=:' . self::PARAM_STATE)
-                ->setParameter(self::PARAM_STATE, $this->stateId, Types::INTEGER);
-        }
-
-        return $search;
-    }
-
-    /**
-     * Gets calculation states.
-     *
-     * @return CalculationState[]
-     */
-    protected function getCalculationStates(): array
-    {
-        return $this->stateRepository->getListCount();
+        return $query;
     }
 
     /**
@@ -110,31 +89,50 @@ class CalculationTable extends AbstractEntityTable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function updateParameters(array $parameters): array
+    protected function search(DataQuery $query, QueryBuilder $builder): void
     {
-        return \array_merge_recursive(parent::updateParameters($parameters), [
-            'state' => $this->getCalculationState(),
-            'states' => $this->getCalculationStates(),
-            'params' => [
-                self::PARAM_STATE => $this->stateId,
-            ],
-            'attributes' => [
-                'row-style' => 'styleCalculationEditable',
-            ],
-        ]);
+        parent::search($query, $builder);
+        if (0 !== $stateId = $query->getCustomData(self::PARAM_STATE, 0)) {
+            $field = $this->repository->getSearchFields('state.id');
+            $builder->andWhere($field . '=:' . self::PARAM_STATE)
+                ->setParameter(self::PARAM_STATE, $stateId, Types::INTEGER);
+        }
     }
 
     /**
-     * Gets the selected calculation state or null if none.
+     * {@inheritDoc}
      */
-    private function getCalculationState(): ?CalculationState
+    protected function updateResults(DataQuery $query, DataResults &$results): void
     {
-        if (0 !== $this->stateId) {
-            return $this->stateRepository->find($this->stateId);
+        parent::updateResults($query, $results);
+        $results->addAttribute('row-style', 'styleCalculationEditable');
+        $stateId = $query->getCustomData(self::PARAM_STATE, 0);
+        $results->addCustomData('state', $this->getCalculationState($stateId));
+        $results->addCustomData('states', $this->getCalculationStates());
+        $results->addParameter(self::PARAM_STATE, $stateId);
+    }
+
+    /**
+     * Gets the calculation state for the given identifier.
+     */
+    private function getCalculationState(int $stateId): ?CalculationState
+    {
+        if (0 !== $stateId) {
+            return $this->stateRepository->find($stateId);
         }
 
         return null;
+    }
+
+    /**
+     * Gets calculation states.
+     *
+     * @return CalculationState[]
+     */
+    private function getCalculationStates(): array
+    {
+        return $this->stateRepository->getListCount();
     }
 }

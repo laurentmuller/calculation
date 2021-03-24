@@ -52,14 +52,14 @@ class CalculationDuplicateController extends AbstractController
      */
     public function card(Request $request, CalculationRepository $repository): Response
     {
-        $items = $this->getItems($repository);
-        if (empty($items)) {
+        if ($this->isEmptyItems($repository)) {
             $this->warningTrans('duplicate.empty');
 
             return $this->redirectToHomePage();
         }
 
         // number of items
+        $items = $this->getItems($repository);
         $items_count = \array_reduce($items, function (int $carry, array $calculation) {
             foreach ($calculation['items'] as $item) {
                 $carry += $item['count'];
@@ -89,13 +89,13 @@ class CalculationDuplicateController extends AbstractController
      */
     public function excel(CalculationRepository $repository): Response
     {
-        $items = $this->getItems($repository);
-        if (empty($items)) {
+        if ($this->isEmptyItems($repository)) {
             $this->warningTrans('duplicate.empty');
 
             return $this->redirectToHomePage();
         }
 
+        $items = $this->getItems($repository);
         $doc = new CalculationDuplicateDocument($this, $items);
 
         return $this->renderExcelDocument($doc);
@@ -108,13 +108,13 @@ class CalculationDuplicateController extends AbstractController
      */
     public function pdf(CalculationRepository $repository): Response
     {
-        $items = $this->getItems($repository);
-        if (empty($items)) {
+        if ($this->isEmptyItems($repository)) {
             $this->warningTrans('duplicate.empty');
 
             return $this->redirectToHomePage();
         }
 
+        $items = $this->getItems($repository);
         $doc = new CalculationDuplicateReport($this, $items);
 
         return $this->renderPdfDocument($doc);
@@ -127,6 +127,12 @@ class CalculationDuplicateController extends AbstractController
      */
     public function table(Request $request, CalculationDuplicateDataTable $table, CalculationRepository $repository): Response
     {
+        if (!$request->isXmlHttpRequest() && $this->isEmptyItems($repository)) {
+            $this->warningTrans('duplicate.empty');
+
+            return $this->redirectToHomePage();
+        }
+
         $results = $table->handleRequest($request);
         if ($table->isCallback()) {
             return $this->json($results);
@@ -160,5 +166,13 @@ class CalculationDuplicateController extends AbstractController
     private function getItems(CalculationRepository $repository): array
     {
         return $repository->getDuplicateItems();
+    }
+
+    /**
+     * Returns a value indicating if no item is duplicated.
+     */
+    private function isEmptyItems(CalculationRepository $repository): bool
+    {
+        return 0 === $repository->countDuplicateItems();
     }
 }

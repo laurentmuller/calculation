@@ -7,7 +7,7 @@
 {%- set save_url     = url('table_below_save') -%}
 
 {% block header_actions -%}
-<small>{{ 'below.description'|trans({'%margin%': min_margin|percent}) }}</small>
+<small>{{ 'below.description'|trans({'%margin%': customData.min_margin|percent}) }}</small>
 {%- endblock %}
 
 {% block global_actions -%}

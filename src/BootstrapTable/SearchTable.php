@@ -12,8 +12,9 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
-use App\Interfaces\EntityVoterInterface;
+use App\Interfaces\TableInterface;
 use App\Service\SearchService;
+use App\Traits\CheckerTrait;
 use App\Traits\TranslatorTrait;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class SearchTable extends AbstractTable
 {
+    use CheckerTrait;
     use TranslatorTrait;
 
     /**
@@ -81,21 +83,9 @@ class SearchTable extends AbstractTable
     ];
 
     /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $checker;
-
-    /**
      * @var bool
      */
     private $debug;
-
-    /**
-     * The granted values.
-     *
-     * @var bool[]
-     */
-    private $rights = [];
 
     /**
      * @var SearchService
@@ -114,117 +104,22 @@ class SearchTable extends AbstractTable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getEntityClassName(): ?string
+    public function getDataQuery(Request $request): DataQuery
     {
-        return null;
+        $query = parent::getDataQuery($request);
+        $query->addCustomData(self::PARAM_ENTITY, (string) $request->get(self::PARAM_ENTITY, ''));
+
+        return $query;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handleRequest(Request $request): array
+    public function getEntityClassName(): ?string
     {
-        // entity
-        $entity = (string) $request->get(self::PARAM_ENTITY, '');
-
-        // search
-        $search = (string) $request->get(self::PARAM_SEARCH, '');
-        if (\strlen($search) > 1) {
-            $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);
-        } else {
-            $items = [];
-        }
-
-        // total
-        $totalNotFiltered = $filtered = \count($items);
-
-        // limit parameters
-        [$offset, $limit, $page] = $this->getLimit($request);
-
-        //sort parameters
-        $sort = (string) $this->getRequestValue($request, self::PARAM_SORT, self::COLUMN_CONTENT);
-        $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, Column::SORT_ASC);
-
-        // found?
-        if (0 !== $totalNotFiltered) {
-            // process
-            $this->processItems($items);
-
-            // sort
-            $this->sortItems($items, $sort, $order);
-
-            // limit
-            $items = \array_slice($items, $offset, $limit);
-
-            // update entity name (icon)
-            foreach ($items as &$item) {
-                $this->updateItem($item);
-            }
-        } else {
-            $items = [];
-        }
-
-        // ajax?
-        if ($request->isXmlHttpRequest()) {
-            return [
-                self::PARAM_TOTAL_NOT_FILTERED => $totalNotFiltered,
-                self::PARAM_TOTAL => $filtered,
-                self::PARAM_ROWS => $items,
-            ];
-        }
-
-        // page list
-        $pageList = self::PAGE_LIST;
-        $limit = \min($limit, \max($pageList));
-
-        // card view
-        $card = $this->getParamCard($request);
-
-        // render
-        $parameters = [
-            // template parameters
-            self::PARAM_COLUMNS => $this->getColumns(),
-            self::PARAM_ROWS => $items,
-            self::PARAM_PAGE_LIST => $pageList,
-            self::PARAM_LIMIT => $limit,
-
-            // custom parameters
-            'entity' => $entity,
-            'entities' => $this->service->getEntities(),
-
-            // action parameters
-            'params' => [
-                self::PARAM_ID => $this->getParamId($request),
-                self::PARAM_SEARCH => $search,
-                self::PARAM_SORT => $sort,
-                self::PARAM_ORDER => $order,
-                self::PARAM_OFFSET => $offset,
-                self::PARAM_LIMIT => $limit,
-                self::PARAM_CARD => $card,
-            ],
-
-            // table attributes
-            'attributes' => [
-                'total-not-filtered' => $totalNotFiltered,
-                'total-rows' => $filtered,
-
-                'search' => \json_encode(true),
-                'search-text' => $search,
-
-                'page-list' => $this->implodePageList($pageList),
-                'page-size' => $limit,
-                'page-number' => $page,
-
-                'card-view' => \json_encode($card),
-
-                'sort-name' => $sort,
-                'sort-order' => $order,
-            ],
-        ];
-
-        return $this->updateParameters($parameters);
+        return null;
     }
 
     /**
@@ -248,77 +143,100 @@ class SearchTable extends AbstractTable
     }
 
     /**
-     * Gets the limit, the maximum and the page parameters.
-     *
-     * @param Request $request the request to get values from
-     *
-     * @return int[] the offset, the limit and the page parameters
+     * {@inheritDoc}
      */
-    private function getLimit(Request $request): array
+    protected function handleQuery(DataQuery $query): DataResults
     {
-        $offset = (int) $request->get(self::PARAM_OFFSET, 0);
-        $limit = (int) $this->getRequestValue($request, self::PARAM_LIMIT, self::PAGE_SIZE);
-        $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
+        $results = new DataResults();
 
-        return [$offset, $limit, $page];
-    }
+        // get parameters
+        $search = $query->search;
+        $entity = $query->customData[self::PARAM_ENTITY];
 
-    /**
-     * Returns if the given action for the given subject is granted.
-     *
-     * @param string $action  the action to be tested
-     * @param string $subject the subject (the entity name)
-     *
-     * @return bool true if the action is granted
-     */
-    private function isGranted(string $action, string $subject): bool
-    {
-        $key = "{$action}.{$subject}";
-        if (!isset($this->rights[$key])) {
-            return $this->rights[$key] = $this->checker->isGranted($action, $subject);
+        // search
+        if (\strlen($search) > 1) {
+            $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);
+        } else {
+            $items = [];
         }
 
-        return $this->rights[$key];
+        // total
+        $results->totalNotFiltered = $results->filtered = \count($items);
+
+        // found?
+        if (0 !== $results->totalNotFiltered) {
+            // process
+            $this->processItems($items);
+
+            // sort
+            $this->sortItems($items, $query->sort, $query->order);
+
+            // limit
+            $items = \array_slice($items, $query->offset, $query->limit);
+
+            // update entity name (icon)
+            foreach ($items as &$item) {
+                $this->updateItem($item);
+            }
+        } else {
+            $items = [];
+        }
+        $results->rows = $items;
+
+        // ajax?
+        if ($query->callback) {
+            return $results;
+        }
+
+        // page list
+        $pageList = TableInterface::PAGE_LIST;
+        $limit = \min($query->limit, \max($pageList));
+
+        // results
+        $results->columns = $this->getColumns();
+        $results->pageList = $pageList;
+        $results->limit = $limit;
+
+        // action parameters
+        $results->params = [
+            TableInterface::PARAM_ID => $query->id,
+            TableInterface::PARAM_SEARCH => $search,
+            TableInterface::PARAM_SORT => $query->sort,
+            TableInterface::PARAM_ORDER => $query->order,
+            TableInterface::PARAM_OFFSET => $query->offset,
+            TableInterface::PARAM_LIMIT => $limit,
+            TableInterface::PARAM_CARD => $query->card,
+        ];
+
+        // table attributes
+        $results->attributes = [
+            'total-not-filtered' => $results->totalNotFiltered,
+            'total-rows' => $results->filtered,
+
+            'search' => \json_encode(true),
+            'search-text' => $search,
+
+            'page-list' => $this->implodePageList($pageList),
+            'page-number' => $query->page,
+            'page-size' => $limit,
+
+            'card-view' => \json_encode($query->card),
+
+            'sort-name' => $query->sort,
+            'sort-order' => $query->order,
+        ];
+
+        // custom data
+        $results->customData = [
+            'entity' => $entity,
+            'entities' => $this->service->getEntities(),
+        ];
+
+        return $results;
     }
 
     /**
-     * Returns if the given subject can be deleted.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the subject can be deleted
-     */
-    private function isGrantedDelete(string $subject): bool
-    {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_DELETE, $subject);
-    }
-
-    /**
-     * Returns if the given subject can be edited.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the subject can be edited
-     */
-    private function isGrantedEdit(string $subject): bool
-    {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_EDIT, $subject);
-    }
-
-    /**
-     * Returns if the given subject can be displayed.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the subject can be displayed
-     */
-    private function isGrantedShow(string $subject): bool
-    {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_SHOW, $subject);
-    }
-
-    /**
-     * Update results.
+     * Update items.
      *
      * @param array $items the items to update
      */

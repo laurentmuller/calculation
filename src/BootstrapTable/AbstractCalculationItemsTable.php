@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace App\BootstrapTable;
 
 use App\Interfaces\EntityVoterInterface;
+use App\Interfaces\TableInterface;
 use App\Repository\CalculationRepository;
-use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Abstract Calculation table to display items.
@@ -52,6 +53,11 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
     }
 
     /**
+     * Gets the number of calculations.
+     */
+    abstract public function countEntities(): int;
+
+    /**
      * Formats the invalid calculation items.
      *
      * @param array $items the invalid calculation items
@@ -85,101 +91,13 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function handleRequest(Request $request): array
-    {
-        // sort
-        [$sort, $order] = $this->getSort($request);
-
-        // find all
-        $entities = $this->entities ?? $this->getEntities($sort, $order);
-        $totalNotFiltered = $filtered = \count($entities);
-
-        // filter search
-        if ($search = (string) $request->get(self::PARAM_SEARCH, '')) {
-        }
-
-        // limit
-        [$offset, $limit, $page] = $this->getLimit($request);
-        $entities = \array_slice($entities, $offset, $limit);
-
-        // map
-        $rows = $this->mapEntities($entities);
-
-        // ajax?
-        if ($request->isXmlHttpRequest()) {
-            return [
-                self::PARAM_TOTAL_NOT_FILTERED => $totalNotFiltered,
-                self::PARAM_TOTAL => $filtered,
-                self::PARAM_ROWS => $rows,
-            ];
-        }
-
-        // page list
-        $pageList = $this->getAllowedPageList($totalNotFiltered);
-        $limit = \min($limit, \max($pageList));
-
-        // card view
-        $card = $this->getParamCard($request);
-
-        // render
-        $parameters = [
-            // template parameters
-            self::PARAM_COLUMNS => $this->getColumns(),
-            self::PARAM_ROWS => $rows,
-            self::PARAM_PAGE_LIST => $pageList,
-            self::PARAM_LIMIT => $limit,
-
-            // custom parameters
-            'itemsCount' => $this->getItemsCount($entities),
-            'allow_search' => false,
-
-            // action parameters
-            'params' => [
-                self::PARAM_ID => $this->getParamId($request),
-                self::PARAM_SEARCH => $search,
-                self::PARAM_SORT => $sort,
-                self::PARAM_ORDER => $order,
-                self::PARAM_OFFSET => $offset,
-                self::PARAM_LIMIT => $limit,
-                self::PARAM_CARD => $card,
-            ],
-
-            // table attributes
-            'attributes' => [
-                'total-not-filtered' => $totalNotFiltered,
-                'total-rows' => $filtered,
-
-                'search' => \json_encode(false),
-                'search-text' => $search,
-
-                'page-list' => $this->implodePageList($pageList),
-                'page-size' => $limit,
-                'page-number' => $page,
-
-                'card-view' => \json_encode($this->getParamCard($request)),
-
-                'sort-name' => $sort,
-                'sort-order' => $order,
-            ],
-        ];
-
-        // update
-        return $this->updateParameters($parameters);
-    }
-
-    /**
      * Returns a value indicating if no items match.
      *
      * @return bool true if empty
      */
-    public function isEmpty(Request $request): bool
+    public function isEmpty(): bool
     {
-        [$sort, $order] = $this->getSort($request);
-        $this->entities = $this->getEntities($sort, $order);
-
-        return empty($this->entities);
+        return 0 === $this->countEntities();
     }
 
     /**
@@ -204,7 +122,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      */
-    abstract protected function getEntities(string $orderColumn, string $orderDirection): array;
+    abstract protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array;
 
     /**
      * Compute the number of calculation items.
@@ -216,45 +134,80 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
     abstract protected function getItemsCount(array $items): int;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function updateParameters(array $parameters): array
+    protected function handleQuery(DataQuery $query): DataResults
     {
-        return \array_merge_recursive(parent::updateParameters($parameters), [
-            'attributes' => [
-                'row-style' => 'styleCalculationEditable',
-            ],
-        ]);
+        $results = new DataResults();
+
+        // find all
+        $entities = $this->entities ?? $this->getEntities($query->sort, $query->order);
+        $results->totalNotFiltered = $results->filtered = \count($entities);
+
+        // limit
+        $entities = \array_slice($entities, $query->offset, $query->limit);
+
+        // map
+        $results->rows = $this->mapEntities($entities);
+
+        // ajax?
+        if ($query->callback) {
+            return $results;
+        }
+
+        // page list
+        $pageList = $this->getAllowedPageList($results->totalNotFiltered);
+        $limit = \min($query->limit, \max($pageList));
+
+        // results
+        $results->columns = $this->getColumns();
+        $results->pageList = $pageList;
+        $results->limit = $limit;
+
+        // action parameters
+        $results->params = [
+            TableInterface::PARAM_ID => $query->id,
+            TableInterface::PARAM_SEARCH => $query->search,
+            TableInterface::PARAM_SORT => $query->sort,
+            TableInterface::PARAM_ORDER => $query->order,
+            TableInterface::PARAM_OFFSET => $query->offset,
+            TableInterface::PARAM_LIMIT => $limit,
+            TableInterface::PARAM_CARD => $query->card,
+        ];
+
+        // table attributes
+        $results->attributes = [
+            'total-not-filtered' => $results->totalNotFiltered,
+            'total-rows' => $results->filtered,
+
+            'search' => \json_encode(false),
+            'search-text' => $query->search,
+
+            'page-list' => $this->implodePageList($pageList),
+            'page-size' => $limit,
+            'page-number' => $query->page,
+
+            'card-view' => \json_encode($query->card),
+
+            'sort-name' => $query->sort,
+            'sort-order' => $query->order,
+        ];
+
+        // custom data
+        $results->customData = [
+            'itemsCount' => $this->getItemsCount($entities),
+            'allow_search' => false,
+        ];
+
+        return $results;
     }
 
     /**
-     * Gets the limit, the maximum and the page parameters.
-     *
-     * @param Request $request the request to get values from
-     *
-     * @return int[] the offset, the limit and the page parameters
+     * {@inheritDoc}
      */
-    private function getLimit(Request $request): array
+    protected function updateResults(DataQuery $query, DataResults &$results): void
     {
-        $offset = (int) $request->get(self::PARAM_OFFSET, 0);
-        $limit = (int) $this->getRequestValue($request, self::PARAM_LIMIT, self::PAGE_SIZE);
-        $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
-
-        return [$offset, $limit, $page];
-    }
-
-    /**
-     * Gets the sorted field and order.
-     *
-     * @param Request $request the request to get values from
-     *
-     * @return string[] the sorted field and order
-     */
-    private function getSort(Request $request): array
-    {
-        $sort = (string) $this->getRequestValue($request, self::PARAM_SORT, 'id');
-        $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, Column::SORT_DESC);
-
-        return [$sort, $order];
+        parent::updateResults($query, $results);
+        $results->addAttribute('row-style', 'styleCalculationEditable');
     }
 }

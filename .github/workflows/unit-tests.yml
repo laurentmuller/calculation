@@ -37,6 +37,3 @@ jobs:
         
       - name: Run Tests
         run: php bin/phpunit
-        
-      - name: PHPStan
-        uses: docker://oskarstark/phpstan-ga

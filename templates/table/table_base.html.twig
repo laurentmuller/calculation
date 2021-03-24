@@ -83,7 +83,7 @@
     'default-action': app.editAction,
     'defer-url': defer_url ?? false,
     'save-url': save_url ?? false,
-    'caller': caller   
+    'caller': caller  	   
 }) -%}
 
 {# classes #}
@@ -168,9 +168,9 @@
 <div id="dropdown-actions" class="dropdown d-print-none d-none">
     {{ icons.dropdownEllipsis() }}
     <div class="dropdown-menu dropdown-menu-right">
-        {% if allow_show %}{% block show_actions -%}{%- endblock %}{% endif %}
         {% if allow_edit %}{% block edit_actions -%}{%- endblock %}{% endif %}
-        {% if allow_delete %}{% block delete_actions -%}{%- endblock %}{% endif %}
+        {% if allow_show %}{% block show_actions -%}{%- endblock %}{% endif %}
+    	{% if allow_delete %}{% block delete_actions -%}{%- endblock %}{% endif %}
         {% if allow_add %}{% block add_actions -%}{%- endblock %}{% endif %}
         {% block other_actions -%}{%- endblock %}
     </div>

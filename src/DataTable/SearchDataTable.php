@@ -15,9 +15,9 @@ namespace App\DataTable;
 use App\DataTable\Model\AbstractDataTable;
 use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
-use App\Interfaces\EntityVoterInterface;
 use App\Security\EntityVoter;
 use App\Service\SearchService;
+use App\Traits\CheckerTrait;
 use App\Traits\TranslatorTrait;
 use App\Util\Utils;
 use DataTables\DataTableQuery;
@@ -35,6 +35,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class SearchDataTable extends AbstractDataTable
 {
+    use CheckerTrait;
     use TranslatorTrait;
 
     /**
@@ -71,20 +72,6 @@ class SearchDataTable extends AbstractDataTable
      * The show granted column name.
      */
     private const COLUMN_SHOW = 'show_granted';
-
-    /**
-     * The authorization checker to get user rights.
-     *
-     * @var AuthorizationCheckerInterface
-     */
-    private $checker;
-
-    /**
-     * The granted values.
-     *
-     * @var bool[]
-     */
-    private $rights = [];
 
     /**
      * The service to search entities.
@@ -229,60 +216,6 @@ class SearchDataTable extends AbstractDataTable
                     self::COLUMN_FIELD => DataColumn::SORT_ASC,
                  ];
         }
-    }
-
-    /**
-     * Returns if the given action for the given subject is granted.
-     *
-     * @param string $action  the action to be tested
-     * @param string $subject the subject (the entity name)
-     *
-     * @return bool true if the action is granted
-     */
-    private function isGranted(string $action, string $subject): bool
-    {
-        $key = "{$action}.{$subject}";
-        if (!isset($this->rights[$key])) {
-            return $this->rights[$key] = $this->checker->isGranted($action, $subject);
-        }
-
-        return $this->rights[$key];
-    }
-
-    /**
-     * Returns if the given subject can be deleted.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the subject can be deleted
-     */
-    private function isGrantedDelete(string $subject): bool
-    {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_DELETE, $subject);
-    }
-
-    /**
-     * Returns if the given subject can be edited.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the subject can be edited
-     */
-    private function isGrantedEdit(string $subject): bool
-    {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_EDIT, $subject);
-    }
-
-    /**
-     * Returns if the given subject can be displayed.
-     *
-     * @param string $subject the subject (entity name)
-     *
-     * @return bool true if the subject can be displayed
-     */
-    private function isGrantedShow(string $subject): bool
-    {
-        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_SHOW, $subject);
     }
 
     /**

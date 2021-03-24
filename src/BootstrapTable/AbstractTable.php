@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Interfaces\TableInterface;
 use App\Traits\MathTrait;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -27,81 +29,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 abstract class AbstractTable
 {
     use MathTrait;
-
-    /**
-     * The allowed page sizes.
-     */
-    public const PAGE_LIST = [5, 10, 15, 20, 25, 50];
-
-    /**
-     * The default page size.
-     */
-    public const PAGE_SIZE = 20;
-
-    /**
-     * The card parameter name.
-     */
-    public const PARAM_CARD = 'card';
-
-    /**
-     * The columns parameter name.
-     */
-    public const PARAM_COLUMNS = 'columns';
-
-    /**
-     * The identifier parameter name.
-     */
-    public const PARAM_ID = 'id';
-
-    /**
-     * The limit parameter name.
-     */
-    public const PARAM_LIMIT = 'limit';
-
-    /**
-     * The offset parameter name.
-     */
-    public const PARAM_OFFSET = 'offset';
-
-    /**
-     * The order parameter name.
-     */
-    public const PARAM_ORDER = 'order';
-
-    /**
-     * The page parameter name.
-     */
-    public const PARAM_PAGE = 'page';
-
-    /**
-     * The page list parameter name.
-     */
-    public const PARAM_PAGE_LIST = 'pageList';
-
-    /**
-     * The rows parameter name.
-     */
-    public const PARAM_ROWS = 'rows';
-
-    /**
-     * The search parameter name.
-     */
-    public const PARAM_SEARCH = 'search';
-
-    /**
-     * The sort parameter name.
-     */
-    public const PARAM_SORT = 'sort';
-
-    /**
-     * The total parameter name.
-     */
-    public const PARAM_TOTAL = 'total';
-
-    /**
-     * The total not filtred parameter name.
-     */
-    public const PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
 
     /**
      * The column definitions.
@@ -160,14 +87,55 @@ abstract class AbstractTable
     }
 
     /**
+     * Gets the data query from the given request.
+     */
+    public function getDataQuery(Request $request): DataQuery
+    {
+        $query = new DataQuery();
+
+        // offset, limit and page
+        $query->offset = (int) $request->get(TableInterface::PARAM_OFFSET, 0);
+        $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
+        $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
+
+        // sort and order
+        if ($column = $this->getDefaultColumn()) {
+            $query->sort = $column->getField();
+            $query->order = $column->getOrder();
+        }
+        $query->sort = (string) $this->getRequestValue($request, TableInterface::PARAM_SORT, $query->sort);
+        $query->order = (string) $this->getRequestValue($request, TableInterface::PARAM_ORDER, $query->order);
+
+        // other parameters
+        $query->id = $this->getParamId($request);
+        $query->card = $this->getParamCard($request);
+        $query->search = (string) $request->get(TableInterface::PARAM_SEARCH, '');
+        $query->callback = $request->isXmlHttpRequest();
+
+        return $query;
+    }
+
+    /**
      * Gets the entity class name or null if not applicable.
      */
     abstract public function getEntityClassName(): ?string;
 
     /**
-     * Handles the given request and returns the result parameters.
+     * Process the given query and returns the results.
+     *
+     * @param DataQuery $query the query to handle
+     *
+     * @return DataResults the results
      */
-    abstract public function handleRequest(Request $request): array;
+    public function processQuery(DataQuery $query): DataResults
+    {
+        $results = $this->handleQuery($query);
+        if (!$query->callback) {
+            $this->updateResults($query, $results);
+        }
+
+        return $results;
+    }
 
     /**
      * Save the request parameter value to the session.
@@ -185,7 +153,11 @@ abstract class AbstractTable
             $key = $this->getSessionKey($name);
             $default = $session->get($key, $default);
             $value = $request->get($name, $default);
-            $session->set($key, $value);
+            if (null === $value) {
+                $session->remove($key);
+            } else {
+                $session->set($key, $value);
+            }
 
             return true;
         }
@@ -214,7 +186,7 @@ abstract class AbstractTable
      */
     protected function getAllowedPageList(int $totalNotFiltered): array
     {
-        $sizes = self::PAGE_LIST;
+        $sizes = TableInterface::PAGE_LIST;
         for ($i = 0, $count = \count($sizes); $i < $count; ++$i) {
             if ($sizes[$i] >= $totalNotFiltered) {
                 return \array_slice($sizes, 0, $i + 1);
@@ -230,7 +202,7 @@ abstract class AbstractTable
     abstract protected function getColumnDefinitions(): string;
 
     /**
-     * Gets the default column.
+     * Gets the default sorting column.
      */
     protected function getDefaultColumn(): ?Column
     {
@@ -257,63 +229,6 @@ abstract class AbstractTable
     protected function getDefaultOrder(): array
     {
         return [];
-    }
-
-    /**
-     * Gets the display card parameter.
-     */
-    protected function getParamCard(Request $request): bool
-    {
-        $value = $this->getRequestValue($request, self::PARAM_CARD, false);
-
-        return (bool) \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
-    }
-
-    /**
-     * Gets the selected identifier parameter.
-     */
-    protected function getParamId(Request $request): int
-    {
-        return (int) $request->get(self::PARAM_ID, 0);
-    }
-
-    /**
-     * Gets the parameters from the given request.
-     */
-    protected function getRequestParameters(Request $request): array
-    {
-        // offset, limit and page
-        $offset = (int) $request->get(self::PARAM_OFFSET, 0);
-        $limit = (int) $this->getRequestValue($request, self::PARAM_LIMIT, self::PAGE_SIZE);
-        $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
-
-        // sort and order
-        $sort = '';
-        $order = Column::SORT_ASC;
-        if ($column = $this->getDefaultColumn()) {
-            $sort = $column->getField();
-            $order = $column->getOrder();
-        } else {
-            $defaultOrder = $this->getDefaultOrder();
-            if (!empty($defaultOrder)) {
-                $sort = \array_key_first($defaultOrder);
-                $order = $defaultOrder[$sort];
-            }
-        }
-
-        return [
-            self::PARAM_SEARCH => (string) $request->get(self::PARAM_SEARCH, ''),
-
-            self::PARAM_SORT => (string) $this->getRequestValue($request, self::PARAM_SORT, $sort),
-            self::PARAM_ORDER => (string) $this->getRequestValue($request, self::PARAM_ORDER, $order),
-
-            self::PARAM_OFFSET => $offset,
-            self::PARAM_LIMIT => $limit,
-            self::PARAM_PAGE => $page,
-
-            self::PARAM_ID => $this->getParamId($request),
-            self::PARAM_CARD => $this->getParamCard($request),
-        ];
     }
 
     /**
@@ -355,6 +270,21 @@ abstract class AbstractTable
         }
 
         return "{$this->prefix}.$name";
+    }
+
+    /**
+     * Handle the query parameters.
+     *
+     * @param DataQuery $query the query parameters
+     *
+     * @return DataResults the data results
+     */
+    protected function handleQuery(DataQuery $query): DataResults
+    {
+        $results = new DataResults();
+        $results->status = Response::HTTP_PRECONDITION_FAILED;
+
+        return $results;
     }
 
     /**
@@ -409,10 +339,30 @@ abstract class AbstractTable
     }
 
     /**
-     * Update the parameters before sending back.
+     * Update the results before sending back. This function is called only when rendering the template.
+     *
+     * @param DataQuery   $query   the data query
+     * @param DataResults $results the results to update
      */
-    protected function updateParameters(array $parameters): array
+    protected function updateResults(DataQuery $query, DataResults &$results): void
     {
-        return $parameters;
+    }
+
+    /**
+     * Gets the display card parameter.
+     */
+    private function getParamCard(Request $request): bool
+    {
+        $value = $this->getRequestValue($request, TableInterface::PARAM_CARD, false);
+
+        return (bool) \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Gets the selected identifier parameter.
+     */
+    private function getParamId(Request $request): int
+    {
+        return (int) $request->get(TableInterface::PARAM_ID, 0);
     }
 }

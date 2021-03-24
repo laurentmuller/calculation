@@ -29,6 +29,7 @@ use App\BootstrapTable\SearchTable;
 use App\BootstrapTable\TaskTable;
 use App\BootstrapTable\UserTable;
 use App\Interfaces\EntityVoterInterface;
+use App\Interfaces\TableInterface;
 use App\Repository\CategoryRepository;
 use App\Traits\MathTrait;
 use App\Util\Utils;
@@ -178,7 +179,7 @@ class BootstrapTableController extends AbstractController
      */
     public function duplicate(Request $request, CalculationDuplicateTable $table): Response
     {
-        if ($table->isEmpty($request)) {
+        if (!$request->isXmlHttpRequest() && $table->isEmpty()) {
             $this->warningTrans('duplicate.empty');
 
             return $this->redirectToHomePage();
@@ -207,7 +208,7 @@ class BootstrapTableController extends AbstractController
      */
     public function empty(Request $request, CalculationEmptyTable $table): Response
     {
-        if ($table->isEmpty($request)) {
+        if (!$request->isXmlHttpRequest() && $table->isEmpty()) {
             $this->warningTrans('empty.empty');
 
             return $this->redirectToHomePage();
@@ -411,8 +412,16 @@ class BootstrapTableController extends AbstractController
         }
 
         try {
-            $status = Response::HTTP_OK;
-            $parameters = $table->handleRequest($request);
+            // get query and results
+            $query = $table->getDataQuery($request);
+            $results = $table->processQuery($query);
+
+            // callback?
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse($results->getAjaxResults());
+            }
+
+            return $this->render($template, (array) $results);
         } catch (\Exception $e) {
             $status = Response::HTTP_BAD_REQUEST;
             $parameters = [
@@ -422,20 +431,13 @@ class BootstrapTableController extends AbstractController
                 'message' => $this->trans('error_page.description'),
                 'exception' => Utils::getExceptionContext($e),
             ];
-        }
 
-        // ajax?
-        if ($request->isXmlHttpRequest()) {
-            return new JsonResponse($parameters, $status);
-        }
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse($parameters, $status);
+            }
 
-        // ok?
-        if (Response::HTTP_OK !== $status) {
             return $this->render('bundles/TwigBundle/Exception/error.html.twig', $parameters);
         }
-
-        // render
-        return $this->render($template, $parameters);
     }
 
     /**
@@ -443,7 +445,7 @@ class BootstrapTableController extends AbstractController
      */
     private function saveTableParameters(Request $request, AbstractTable $table): JsonResponse
     {
-        $result = $table->saveRequestValue($request, AbstractTable::PARAM_CARD, false);
+        $result = $table->saveRequestValue($request, TableInterface::PARAM_CARD, false);
 
         return new JsonResponse($result);
     }

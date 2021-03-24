@@ -5,12 +5,12 @@
 {%- set title_icon   = 'book' -%}
 {%- set defer_url    = url('table_log') -%}
 {%- set save_url     = url('table_log_save') -%}
-{%- set channel      = channel|default('') -%}
-{%- set level        = level|default('') -%}
+{%- set channel      = customData.channel|default('') -%}
+{%- set level        = customData.level|default('') -%}
 {%- set object_type  = EntityVoterInterface.ENTITY_LOG -%}
 
 {% block header_actions %}
-<small>{{ 'log.list.file'|trans({'%file%': file}) }}</small>
+<small>{{ 'log.list.file'|trans({'%file%': customData.file}) }}</small>
 {% endblock %}
 
 {% block toolbar_actions -%}
@@ -20,7 +20,7 @@
     </button>
     <div class="dropdown-menu" aria-labelledby="channel">
         {{ _self.output_dropdown('channel', '', channel, 'datatable.all'|trans) }}
-        {% for key in channels %}
+        {% for key in customData.channels %}
         {{ _self.output_dropdown('channel', key, channel, key|capitalize) }}
         {% endfor %}
     </div>
@@ -31,7 +31,7 @@
     </button>
     <div class="dropdown-menu" aria-labelledby="level">
         {{ _self.output_dropdown('level', '', level, 'datatable.all'|trans) }}
-        {% for key in levels %}
+        {% for key in customData.levels %}
         {{ _self.output_dropdown('level', key, level, key|capitalize) }}
         {% endfor %}
     </div>

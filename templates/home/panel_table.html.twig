@@ -40,24 +40,24 @@
                 {%- set menu_id = 'dropdownMenuLast_' ~ id -%}
                 {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
                 <tr{% if id == selection %} class="table-primary"{% endif %}>
-                    <td class="text-id text-border" style="{{ properties.stateCss(calculation.stateColor) }}">
+                    <td class="text-id text-border user-select-none" style="{{ properties.stateCss(calculation.stateColor) }}">
                     {%- if row_link -%}
                     	<a href="{{ path(default_page, params) }}">{{ calculation.id|identifier }}</a>
                     {%- else -%}
                         {{- calculation.id|identifier -}}
  	                {%- endif -%}
                     </td>
-                    <td class="text-date">{{ calculation.date|localedate }}</td>
-                    <td class="text-state">{{ calculation.stateCode }}</td>
-                    <td class="text-cell">{{ calculation.customer }}</td>
-                    <td class="text-cell">{{ calculation.description }}</td>                    
+                    <td class="text-date user-select-none">{{ calculation.date|localedate }}</td>
+                    <td class="text-state user-select-none">{{ calculation.stateCode }}</td>
+                    <td class="text-cell user-select-none">{{ calculation.customer }}</td>
+                    <td class="text-cell user-select-none">{{ calculation.description }}</td>                    
                     {%- if app.marginBelow(calculation) -%}
                         {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
-                        <td class="text-percent text-danger has-tooltip" data-html="true" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
+                        <td class="text-percent user-select-none text-danger has-tooltip" data-html="true" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
                     {%- else -%}
-                        <td class="text-percent">{{ calculation.overallMargin|percent }}</td>
+                        <td class="text-percent user-select-none">{{ calculation.overallMargin|percent }}</td>
                     {%- endif -%}                    
-                    <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
+                    <td class="text-currency user-select-none">{{ calculation.overallTotal|amount }}</td>
                     {%- if show_page or edit_page or delete_page or state_page or single_page or add_path -%}
                         <td class="actions rowlink-skip d-print-none">
                             <div class="dropdown dropleft text-right">

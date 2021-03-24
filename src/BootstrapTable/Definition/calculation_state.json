@@ -9,7 +9,7 @@
 		"default": true,
 		"class": "text-code text-border text-nowrap",
 		"cardClass": "font-weight-bold",
-		"styleFormatter": "styleStateColor"
+		"styleFormatter": "styleBorderColor"
 	},
 	{
 		"field": "description",

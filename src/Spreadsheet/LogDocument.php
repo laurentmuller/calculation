@@ -18,6 +18,7 @@ use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use App\Service\LogService;
 
 /**
  * Excel document for application logs.
@@ -52,8 +53,8 @@ class LogDocument extends AbstractArrayDocument
         // headers
         $this->setHeaderValues([
             'log.fields.createdAt' => [Alignment::HORIZONTAL_CENTER, Alignment::VERTICAL_TOP],
-            'log.fields.level' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
             'log.fields.channel' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
+            'log.fields.level' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
             'log.fields.message' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
         ]);
 
@@ -70,8 +71,8 @@ class LogDocument extends AbstractArrayDocument
         foreach ($logs as $log) {
             $this->setRowValues($row++, [
                 $log->getCreatedAt(),
-                Utils::capitalize($log->getLevel()),
-                Utils::capitalize($log->getChannel()),
+                LogService::getChannel($log->getChannel(), true),
+                LogService::getLevel($log->getLevel(), true),
                 $this->getMessage($log),
             ]);
         }

@@ -76,13 +76,12 @@ class CalculationBelowTable extends CalculationTable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function updateParameters(array $parameters): array
+    protected function updateResults(DataQuery $query, DataResults &$results): void
     {
-        return \array_merge_recursive(parent::updateParameters($parameters), [
-            'min_margin' => $this->getMinMargin(),
-        ]);
+        parent::updateResults($query, $results);
+        $results->addCustomData('min_margin', $this->getMinMargin());
     }
 
     /**

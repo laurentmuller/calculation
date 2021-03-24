@@ -132,8 +132,8 @@ class ExcelDocument extends Spreadsheet
     {
         $company = $controller->getApplication()->getCustomerName();
         $application = $controller->getApplicationName();
-        $title = $this->trans($title);
         $username = $controller->getUserName();
+        $title = $this->trans($title);
 
         $this->setHeaderFooter($title, $company, $application)
             ->setTitle($title)

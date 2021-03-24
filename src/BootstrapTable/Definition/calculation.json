@@ -6,7 +6,7 @@
 		"class": "text-id text-border",
 		"cardClass": "font-weight-bold",
 		"fieldFormatter": "formatId",
-		"styleFormatter": "styleStateColor"
+		"styleFormatter": "styleBorderColor"
 	},
 	{
 		"field": "date",
@@ -19,7 +19,7 @@
 	{
 		"field": "state.code",
 		"title": "calculation.fields.state",
-		"class": "text-state"
+		"class": "text-state"		
 	},
 	{
 		"field": "customer",

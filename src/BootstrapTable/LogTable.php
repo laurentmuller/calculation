@@ -14,10 +14,11 @@ namespace App\BootstrapTable;
 
 use App\Entity\Log;
 use App\Interfaces\EntityVoterInterface;
+use App\Interfaces\TableInterface;
 use App\Service\LogService;
-use App\Util\FormatUtils;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * The application logs table.
@@ -67,7 +68,7 @@ class LogTable extends AbstractTable
      */
     public function formatCreatedAt(\DateTimeInterface $value): string
     {
-        return FormatUtils::formatDateTime($value, null, \IntlDateFormatter::MEDIUM);
+        return LogService::getCreatedAt($value);
     }
 
     /**
@@ -83,130 +84,23 @@ class LogTable extends AbstractTable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getEntityClassName(): ?string
+    public function getDataQuery(Request $request): DataQuery
     {
-        return EntityVoterInterface::ENTITY_LOG;
+        $query = parent::getDataQuery($request);
+        $query->addCustomData(self::PARAM_CHANNEL, (string) $request->get(self::PARAM_CHANNEL, ''));
+        $query->addCustomData(self::PARAM_LEVEL, (string) $request->get(self::PARAM_LEVEL, ''));
+
+        return $query;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handleRequest(Request $request): array
+    public function getEntityClassName(): ?string
     {
-        // get entries
-        if (!$entries = $this->service->getEntries()) {
-            return [];
-        }
-
-        // get entities
-        $entities = $entries[LogService::KEY_LOGS];
-        if (empty($entities)) {
-            return [];
-        }
-
-        // count
-        $totalNotFiltered = \count($entities);
-
-        // filter level
-        if ($level = (string) $request->get(self::PARAM_LEVEL, '')) {
-            $entities = $this->filterLevel($entities, $level);
-        }
-
-        // filter channel
-        if ($channel = (string) $request->get(self::PARAM_CHANNEL, '')) {
-            $entities = $this->filterChannel($entities, $channel);
-        }
-
-        // filter search
-        if ($search = (string) $request->get(self::PARAM_SEARCH, '')) {
-            $entities = $this->filterSearch($entities, $search, Utils::isString($level), Utils::isString($channel));
-        }
-        $filtered = \count($entities);
-
-        // sort
-        [$sort, $order] = $this->getSort($request);
-        if (Utils::isString($sort)) {
-            $this->sort($entities, $sort, $order);
-        }
-
-        // limit
-        [$offset, $limit, $page] = $this->getLimit($request);
-        $entities = \array_slice($entities, $offset, $limit);
-
-        // map entities
-        $rows = $this->mapEntities($entities);
-
-        // copy
-        $levels = \array_keys($entries[LogService::KEY_LEVELS]);
-        $channels = \array_keys($entries[LogService::KEY_CHANNELS]);
-
-        // ajax?
-        if ($request->isXmlHttpRequest()) {
-            return [
-                self::PARAM_TOTAL_NOT_FILTERED => $totalNotFiltered,
-                self::PARAM_TOTAL => $filtered,
-                self::PARAM_ROWS => $rows,
-            ];
-        }
-
-        // page list
-        $pageList = $this->getAllowedPageList($totalNotFiltered);
-        $limit = \min($limit, \max($pageList));
-
-        // card view
-        $card = $this->getParamCard($request);
-
-        // parameters
-        $parameters = [
-            // template parameters
-            self::PARAM_COLUMNS => $this->getColumns(),
-            self::PARAM_ROWS => $rows,
-            self::PARAM_PAGE_LIST => $pageList,
-            self::PARAM_LIMIT => $limit,
-
-            // custom parameters
-            'level' => $level,
-            'levels' => $levels,
-            'channel' => $channel,
-            'channels' => $channels,
-            'file' => $this->service->getFileName(),
-
-            // action parameters
-            'params' => [
-                self::PARAM_ID => $this->getParamId($request),
-                self::PARAM_SEARCH => $search,
-                self::PARAM_SORT => $sort,
-                self::PARAM_ORDER => $order,
-                self::PARAM_OFFSET => $offset,
-                self::PARAM_LIMIT => $limit,
-                self::PARAM_CARD => $card,
-                self::PARAM_CHANNEL => $channel,
-                self::PARAM_LEVEL => $level,
-            ],
-
-            // table attributes
-            'attributes' => [
-                'total-not-filtered' => $totalNotFiltered,
-                'total-rows' => $filtered,
-
-                'search' => \json_encode(true),
-                'search-text' => $search,
-
-                'page-list' => $this->implodePageList($pageList),
-                'page-size' => $limit,
-                'page-number' => $page,
-
-                'card-view' => \json_encode($this->getParamCard($request)),
-
-                'sort-name' => $sort,
-                'sort-order' => $order,
-            ],
-        ];
-
-        // update
-        return $this->updateParameters($parameters);
+        return EntityVoterInterface::ENTITY_LOG;
     }
 
     /**
@@ -240,106 +134,114 @@ class LogTable extends AbstractTable
     }
 
     /**
-     * Filters the log for the request channel.
-     *
-     * @param Log[]  $entities the logs to search in
-     * @param string $channel  the selected channel
-     *
-     * @return Log[] the filtered logs
+     * {@inheritDoc}
      */
-    private function filterChannel(array $entities, string $channel): array
+    protected function handleQuery(DataQuery $query): DataResults
     {
-        return \array_filter($entities, function (Log $entity) use ($channel) {
-            return $channel === $entity->getChannel();
-        });
-    }
+        $results = new DataResults();
 
-    /**
-     * Filters the log for the request level.
-     *
-     * @param Log[]  $entities the logs to search in
-     * @param string $level    the selected level
-     *
-     * @return Log[] the filtered logs
-     */
-    private function filterLevel(array $entities, string $level): array
-    {
-        return \array_filter($entities, function (Log $entity) use ($level) {
-            return $level === $entity->getLevel();
-        });
-    }
+        // get entries
+        if (!$entries = $this->service->getEntries()) {
+            $results->status = Response::HTTP_PRECONDITION_FAILED;
 
-    /**
-     * Filters the logs for the given value.
-     *
-     * @param Log[]  $entities    the logs to search in
-     * @param string $value       the value to search for
-     * @param bool   $skipLevel   true to skip search in the level
-     * @param bool   $skipChannel true to skip search in the channel
-     *
-     * @return Log[] the filtered logs
-     */
-    private function filterSearch(array $entities, string $value, bool $skipLevel, bool $skipChannel): array
-    {
-        $filter = function (Log $log) use ($value, $skipLevel, $skipChannel) {
-            if (!$skipLevel) {
-                $level = $this->formatLevel($log->getLevel());
-                if (Utils::contains($level, $value, true)) {
-                    return true;
-                }
-            }
+            return $results;
+        }
 
-            if (!$skipChannel) {
-                $channel = $this->formatChannel($log->getChannel());
-                if (Utils::contains($channel, $value, true)) {
-                    return true;
-                }
-            }
+        // get entities
+        $entities = $entries[LogService::KEY_LOGS];
+        if (empty($entities)) {
+            $results->status = Response::HTTP_PRECONDITION_FAILED;
 
-            $date = $this->formatCreatedAt($log->getCreatedAt());
-            if (Utils::contains($date, $value, true)) {
-                return true;
-            }
+            return $results;
+        }
 
-            if (Utils::contains($log->getMessage(), $value, true)) {
-                return true;
-            }
+        // count
+        $results->totalNotFiltered = \count($entities);
 
-            return false;
-        };
+        // filter
+        if ($level = $query->customData[self::PARAM_LEVEL]) {
+            $entities = LogService::filterLevel($entities, $level);
+        }
+        if ($channel = $query->customData[self::PARAM_CHANNEL]) {
+            $entities = LogService::filterChannel($entities, $channel);
+        }
+        if ($search = $query->search) {
+            $entities = LogService::filter($entities, $search, Utils::isString($level), Utils::isString($channel));
+        }
+        $results->filtered = \count($entities);
 
-        return \array_filter($entities, $filter);
-    }
+        // sort
+        $sort = $query->sort;
+        $order = $query->order;
+        if (Utils::isString($sort)) {
+            $this->sort($entities, $sort, $order);
+        }
 
-    /**
-     * Gets the limit, the maximum and the page parameters.
-     *
-     * @param Request $request the request to get values from
-     *
-     * @return int[] the offset, the limit and the page parameters
-     */
-    private function getLimit(Request $request): array
-    {
-        $offset = (int) $request->get(self::PARAM_OFFSET, 0);
-        $limit = (int) $this->getRequestValue($request, self::PARAM_LIMIT, self::PAGE_SIZE);
-        $page = 1 + (int) \floor($this->safeDivide($offset, $limit));
+        // limit
+        $entities = \array_slice($entities, $query->offset, $query->limit);
 
-        return [$offset, $limit, $page];
-    }
+        // map entities
+        $results->rows = $this->mapEntities($entities);
 
-    /**
-     * Gets the sorted field and order.
-     *
-     * @param Request $request the request to get values from
-     *
-     * @return string[] the sorted field and order
-     */
-    private function getSort(Request $request): array
-    {
-        $sort = (string) $this->getRequestValue($request, self::PARAM_SORT, self::COLUMN_DATE);
-        $order = (string) $this->getRequestValue($request, self::PARAM_ORDER, Column::SORT_DESC);
+        // copy
+        $levels = \array_keys($entries[LogService::KEY_LEVELS]);
+        $channels = \array_keys($entries[LogService::KEY_CHANNELS]);
 
-        return [$sort, $order];
+        // ajax?
+        if ($query->callback) {
+            return $results;
+        }
+
+        // page list and limit
+        $pageList = $this->getAllowedPageList($results->totalNotFiltered);
+        $limit = \min($query->limit, \max($pageList));
+
+        // results
+        $results->columns = $this->getColumns();
+        $results->pageList = $pageList;
+        $results->limit = $limit;
+
+        // action parameters
+        $results->params = [
+            TableInterface::PARAM_ID => $query->id,
+            TableInterface::PARAM_SEARCH => $search,
+            TableInterface::PARAM_SORT => $sort,
+            TableInterface::PARAM_ORDER => $order,
+            TableInterface::PARAM_OFFSET => $query->offset,
+            TableInterface::PARAM_LIMIT => $query->limit,
+            TableInterface::PARAM_CARD => $query->card,
+            self::PARAM_CHANNEL => $channel,
+            self::PARAM_LEVEL => $level,
+        ];
+
+        // table attributes
+        $results->attributes = [
+            'total-not-filtered' => $results->totalNotFiltered,
+            'total-rows' => $results->filtered,
+
+            'search' => \json_encode(true),
+            'search-text' => $search,
+
+            'page-list' => $this->implodePageList($pageList),
+            'page-size' => $limit,
+            'page-number' => $query->page,
+
+            'card-view' => \json_encode($query->card),
+
+            'sort-name' => $sort,
+            'sort-order' => $order,
+        ];
+
+        // custom data
+        $results->customData = [
+            'level' => $level,
+            'levels' => $levels,
+            'channel' => $channel,
+            'channels' => $channels,
+            'file' => $this->service->getFileName(),
+        ];
+
+        return $results;
     }
 
     /**

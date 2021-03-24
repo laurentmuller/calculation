@@ -80,6 +80,28 @@ class Log extends AbstractEntity
     }
 
     /**
+     * Gets the color depending of the level.
+     */
+    public function getColor(): string
+    {
+        switch ($this->level) {
+            case 'debug':
+                return 'var(--secondary)';
+            case 'warning':
+                return 'var(--warning)';
+            case 'error':
+            case 'critical':
+            case 'alert':
+            case 'emergency':
+                return 'var(--danger)';
+            case 'info':
+            case 'notice':
+            default:
+                return 'var(--info)';
+        }
+    }
+
+    /**
      * Gets the context.
      */
     public function getContext(): ?array

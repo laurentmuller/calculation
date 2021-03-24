@@ -3,7 +3,7 @@
 /* globals MenuBuilder */
 
 /**
- * Style for a state column (calculations or status).
+ * Cell style for a border column (calculations, status or log).
  * 
  * @param {number}
  *            value - the field value.
@@ -12,16 +12,16 @@
  * 
  * @returns {object} the cell style.
  */
-function styleStateColor(value, row) { // jshint ignore:line
+function styleBorderColor(value, row) { // jshint ignore:line
     'use strict';
-    const color = row.color;
-    if(color) {
+    if(row.color) {
         return {
             css: {
-                'border-left-color': color + ' !important'
+                'border-left-color': row.color + ' !important'
             }
         };
     }
+    return {};
 }
 
 /**
@@ -60,45 +60,6 @@ function styleCalculationEditable(row) { // jshint ignore:line
         };    
     }
     return {};
-}
-
-/**
- * Style for the log created date column.
- * 
- * @param {number}
- *            value - the field value.
- * @param {object}
- *            row - the record data.
- * 
- * @returns {object} the cell style.
- */
-function styleLogCreatedAt(value, row) { // jshint ignore:line
-    'use strict';
-    let color;
-    switch(row.level.toLowerCase()) {
-        case 'debug':
-            color = 'secondary';
-            break;
-        case 'warning':
-            color = 'warning';
-            break;
-        case 'error':
-        case 'critical':
-        case 'alert':
-        case 'emergency':
-            color = 'danger';
-            break;
-        case 'info':
-        case 'notice':
-        default:
-            color = 'info';
-            break;
-    }
-    return {
-        css: {
-            'border-left-color': 'var(--' + color + ') !important'
-        }
-    };
 }
 
 /**
@@ -342,7 +303,7 @@ $.fn.extend({
             });
             return params;
         },
-
+        
         onPreBody: function(data) {
             // update pages list and page button
             if ($pageButton.length) {
@@ -402,13 +363,15 @@ $.fn.extend({
             if ($searchMinimum.length) {
                 $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
             }
+           
+            // $('.fixed-table-pagination .page-item.active
+            // .page-link').focus();
         },
 
         onRenderCardView: function($table, row, $element) {
-            const color = row.color;
-            if(color) {
+            if(row.color) {
                 const $cell = $element.find('td:first');
-                const style = 'border-left-color: ' + color;
+                const style = 'border-left-color: ' + row.color + ' !important';
                 $cell.addClass('text-border').attr('style', style);
             }
         },
@@ -487,12 +450,13 @@ $.fn.extend({
     }
 
     // handle keys enablement
-    $('.card-body').on('focus', '.search-input, .btn, .dropdown-item, .page-link, .rowlink-skip', function() {
+    $('body').on('focus', 'a, input, .btn, .dropdown-item, .rowlink-skip', function() {
         $table.disableKeys();
-    }).on('blur', function() {
+    });    
+    $('body').on('blur', 'a, input, .btn, .dropdown-item, .rowlink-skip', function() {
         $table.enableKeys();
     });
-
+    
     // initialize context menu
     const rowSelector = $table.getOptions().rowSelector;
     const ctxSelector = rowSelector + ' td:not(.d-print-none)';
@@ -520,7 +484,7 @@ $.fn.extend({
     }
 
     // focus
-    if($table.getData().length === 0) {
+    if($table.isEmpty()) {
         $('input.search-input').focus();
     }
 }(jQuery));

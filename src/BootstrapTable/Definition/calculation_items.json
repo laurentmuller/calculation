@@ -6,7 +6,7 @@
 		"class": "text-id text-border",
 		"cardClass": "font-weight-bold",
 		"fieldFormatter": "formatId",
-		"styleFormatter": "styleStateColor"
+		"styleFormatter": "styleBorderColor"
 	},
 	{
 		"field": "date",

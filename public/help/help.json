@@ -7,7 +7,7 @@
 			"fields": [
 				{
 					"name": "description",
-					"description": "Description de l'article. La description doit être unique à travers tout le catalogue.",
+					"description": "Description de l'article.",
 					"required": true,
 					"type": "text",
 					"length": "255"
@@ -39,6 +39,9 @@
 					"type": "text",
 					"length": "255"
 				}
+			],
+			"constraints": [
+				"La description de l'article doit être unique à travers tout le catalogue."
 			],
 			"actions": [
 				{
@@ -79,7 +82,7 @@
 			"fields": [
 				{
 					"name": "name",
-					"description": "Description de l'article. La description doit être unique à travers tout le catalogue.",
+					"description": "Description de la tâche.",
 					"required": true,
 					"type": "text",
 					"length": "255"
@@ -104,6 +107,9 @@
 					"required": false,
 					"type": "collection"
 				}
+			],
+			"constraints": [
+				"La description de la tâche doit être unique à travers tout le catalogue."
 			],
 			"actions": [
 				{
@@ -145,7 +151,7 @@
 			"fields": [
 				{
 					"name": "code",
-					"description": "Nom de la catégorie. Le nom doit être unique à travers tout le catalogue.",
+					"description": "Nom de la catégorie.",
 					"required": true,
 					"type": "text",
 					"length": "30"
@@ -178,6 +184,9 @@
 					"type": "collection",
 					"entity": "task"
 				}
+			],
+			"constraints": [
+				"Le nom de la catégorie doit être unique à travers tout le catalogue."
 			],
 			"actions": [
 				{
@@ -214,7 +223,7 @@
 			"fields": [
 				{
 					"name": "code",
-					"description": "Nom du groupe. Le nom doit être unique à travers tout le catalogue.",
+					"description": "Nom du groupe.",
 					"required": true,
 					"type": "text",
 					"length": "30"
@@ -239,6 +248,9 @@
 					"type": "collection",
 					"entity": "category"
 				}
+			],
+			"constraints": [
+				"Le nom du groupe doit être unique à travers tout le catalogue."
 			],
 			"actions": [
 				{
@@ -287,6 +299,12 @@
 					"required": true
 				}
 			],
+			"constraints": [
+				"La valeur minimale d'une marge ne doit pas chevaucher une marge existante.",
+				"La valeur maximale d'une marge ne doit pas chevaucher une marge existante.",
+				"La valeur maximale d'une marge doit être supérieure à la valeur minimale.",
+				"La valeur minimale d'une marge doit être égale à la valeur maximal de la marge précédente."
+			],
 			"actions": [
 				{
 					"id": "globalmargin.show.title",
@@ -317,7 +335,7 @@
 			"fields": [
 				{
 					"name": "id",
-					"description": "Numéro unique identifiant la calculation.",
+					"description": "Numéro unique identifiant la calculation. Ce numéro est généré automatiquement par l'application.",
 					"required": true,
 					"type": "identifier"
 				},
@@ -380,13 +398,13 @@
 				},
 				{
 					"name": "created",
-					"description": "Date et nom de l'utilisateur ayant crée la calculation.",
+					"description": "Date et nom de l'utilisateur qui a crée la calculation.",
 					"type": "text",
 					"required": false
 				},
 				{
 					"name": "updated",
-					"description": "Date et nom de l'utilisateur ayant modifier la calculation en dernier.",
+					"description": "Date et nom de l'utilisateur qui a modifié la calculation en dernier.",
 					"type": "text",
 					"required": false
 				}
@@ -803,6 +821,11 @@
 			"image": "task/task_compute.png",
 			"icon": "keyboard",
 			"description": "Permet de calculer une tâche.",
+			"details": [
+				"L'utilisateur doit sélectionner une <b>tâche</b> et une <b>quantitée</b>.",
+				"L'utilisateur doit également sélectionner une ou plusieurs <b>opérations</b>.",
+				"Le programme recalcule automatiquement le <b>totale générale</b> à chaque changement."
+			],
 			"editActions": [
 				{
 					"id": "common.button_close",
@@ -1136,7 +1159,7 @@
 				},
 				{
 					"id": "common.button_cancel",
-					"description": "Annule la suppression et retourne à la page précédente."					
+					"description": "Annule la suppression et retourne à la page précédente."
 				}
 			]
 		},

@@ -434,14 +434,14 @@ final class Utils
     /**
      * Creates an unicode string.
      *
-     * @param string $haystack   the string content
+     * @param string $string     the string content
      * @param bool   $ignorecase true to ignore case considerations
      *
      * @return UnicodeString the unicode string
      */
-    private static function getString(string $haystack, bool $ignorecase): UnicodeString
+    private static function getString(string $string, bool $ignorecase): UnicodeString
     {
-        $string = new UnicodeString($haystack);
+        $string = new UnicodeString($string);
         if ($ignorecase) {
             return $string->ignoreCase();
         }

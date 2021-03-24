@@ -45,6 +45,34 @@ $.fn.extend({
         }
         return true;
     },
+    
+    /**
+     * Replace the tag name.
+     * 
+     * @param {string}
+     *            newTag - the new tag name.
+     * @param {array} -
+     *            excludeAttributes - the attributes to exclude.
+     * @return {jQuery} the elements for chaining.
+     */
+    tagName: function(newTag, excludeAttributes){
+        'use strict';
+        newTag = "<" + newTag + ">";
+        excludeAttributes = excludeAttributes || [];
+        
+        return $(this).each(function(index, element){
+            const $element = $(element);
+            const $newTag = $(newTag, {
+                html: $element.html()
+            });
+            $.each(element.attributes, function(i, attribute) {
+                if (!excludeAttributes.includes(attribute.name)) {
+                    $newTag.attr(attribute.name, attribute.value);    
+                }
+            });
+            $element.replaceWith($newTag);
+        });
+    },
 
     // -------------------------------
     // Table extension
@@ -89,10 +117,14 @@ $.fn.extend({
                     $this.updateCardView().highlight().updateHref(content);
                 }
                 $this.toggleClass('table-hover', content.length !== 0);
-                $('.page-link').each(function(index, element) {
+                
+                // update pagination
+                $('.fixed-table-pagination .page-link').each(function(index, element) {
                     const $element = $(element);
                     $element.attr('title', $element.attr('aria-label'));
                 });
+                $('.fixed-table-pagination .page-item.disabled .page-link').tagName('span', ['href']);
+                $('.fixed-table-pagination .page-item.active .page-link').tagName('span', ['href']);
             },
 
             // update UI and save parameters
@@ -106,7 +138,7 @@ $.fn.extend({
                 const title = $('.card-title').text();
                 const message = jqXHR.responseJSON.message || $this.data('errorMessage');
                 Toaster.danger(message, title, $("#flashbags").data());
-            }
+            },
         };
         const settings = $.extend(true, defaults, options);
 
@@ -193,7 +225,17 @@ $.fn.extend({
     },
 
     /**
-     * Get the loaded data of table at the moment that this method is called.
+     * Returns if no loaded data (rows) is displayed.
+     * 
+     * @return {boolean} true if not data is displayed.
+     */
+    isEmpty: function() {
+        'use strict';
+        return $(this).getData().length === 0;
+    },
+    
+    /**
+     * Get the loaded data (rows) of table at the moment that this method is called.
      * 
      * @return {array} the loaded data.
      */
@@ -201,7 +243,7 @@ $.fn.extend({
         'use strict';
         return $(this).bootstrapTable('getData');
     },
-
+    
     /**
      * Gets the select row.
      * 
@@ -322,9 +364,10 @@ $.fn.extend({
             }
         });
         
-        // clean
-        $body.find('.undefined').removeClass('undefined');
-        $body.find('.card-view-title').addClass('text-muted');
+        // update classes
+        $body.find('.card-view-title').toggleClass('text-muted user-select-none undefined');
+        $body.find('.card-view-value').toggleClass('user-select-none undefined');
+        
         return $this;
     },
 
@@ -332,7 +375,7 @@ $.fn.extend({
      * Update the card view toggle button
      * 
      * @param {boolean}
-     *            cardView - the cardView state of the table.
+     *            cardView - the card view state of the table.
      * @return {jQuery} this instance for chaining.
      */
     updateCardViewButton: function(cardView) {
@@ -389,14 +432,14 @@ $.fn.extend({
     highlight: function() {
         'use strict';
         const $this = $(this);
-        if($this.isSearchText()) {
+        const text = $this.getSearchText();
+        if(text.length > 0) {
             const options = {
                 element: 'span',
                 className: 'text-success',
                 separateWordSearch: false,
-                ignorePunctuation: ["'", ",", "."]
+                ignorePunctuation: ["'", ",", "."] // ":;.,-–—‒_(){}[]!'\"+=".split("")
             };
-            const text = $this.getSearchText();
             const $rows = $this.find('tbody td:not(.rowlink-skip)');
             $rows.mark(text, options);
         }
@@ -551,10 +594,11 @@ $.fn.extend({
     enableKeys: function() {
         'use strict';
         const $this = $(this);
-        // already created?
-        let handler = $this.data('keys.handler');
-        if(!handler) {
-            handler = function(e) {
+        
+        // get or create the key handler
+        let keyHandler = $this.data('keys.handler');
+        if(!keyHandler) {
+            keyHandler = function(e) {                
                 if((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
                     return;
                 }
@@ -601,10 +645,11 @@ $.fn.extend({
                         break;
                 }
             };
-            $this.data('keys.handler', handler);
+            $this.data('keys.handler', keyHandler);
         }
-        // add handler
-        $(document).off('keydown.bs.table', handler).on('keydown.bs.table', handler);
+        
+        // add handlers
+        $(document).off('keydown.bs.table', keyHandler).on('keydown.bs.table', keyHandler);
         return $this;
     },
 
@@ -616,9 +661,9 @@ $.fn.extend({
     disableKeys: function() {
         'use strict';
         const $this = $(this);
-        const handler = $this.data('keys.handler');
-        if(handler) {
-            $(document).off('keydown.bs.table', handler);
+        const keyHandler = $this.data('keys.handler');
+        if(keyHandler) {
+            $(document).off('keydown.bs.table', keyHandler);
         }
         return $this;
     }

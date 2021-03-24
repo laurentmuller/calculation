@@ -60,9 +60,20 @@
             // update close style
             if ($title && settings.closeButton) {
                 $title.find('.close').css({
-                    // 'background-color': $title.css('background-color'),
                     'color': $title.css('color')
                 });
+            }
+
+            // update background
+            let background = $toast.css('background-color');
+            if (background.startsWith('rgba')) {
+                const start = background.indexOf('(');
+                const end = background.indexOf(')', start + 1);
+                if (start !== -1 && end !== -1) {
+                    const rgb = background.substring(start + 1, end).split(',').splice(0, 3).join(',');
+                    background = 'rgb(' + rgb + background.substring(end);
+                    $toast.css('background-color', background);
+                }
             }
 
             // show

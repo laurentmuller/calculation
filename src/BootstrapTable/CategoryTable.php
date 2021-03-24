@@ -30,14 +30,9 @@ use Twig\Environment;
 class CategoryTable extends AbstractEntityTable
 {
     /**
-     * The group parameter name.
+     * The group parameter name (int).
      */
     public const PARAM_GROUP = 'groupId';
-
-    /**
-     * The selected group identifier.
-     */
-    private int $groupId = 0;
 
     /**
      * The group repository.
@@ -90,21 +85,15 @@ class CategoryTable extends AbstractEntityTable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function addSearch(Request $request, QueryBuilder $builder): string
+    public function getDataQuery(Request $request): DataQuery
     {
-        $search = parent::addSearch($request, $builder);
+        $query = parent::getDataQuery($request);
+        $groupId = (int) $request->get(self::PARAM_GROUP, 0);
+        $query->addCustomData(self::PARAM_GROUP, $groupId);
 
-        // category?
-        $this->groupId = (int) $request->get(self::PARAM_GROUP, 0);
-        if (0 !== $this->groupId) {
-            $field = $this->repository->getSearchFields('group.id');
-            $builder->andWhere($field . '=:' . self::PARAM_GROUP)
-                ->setParameter(self::PARAM_GROUP, $this->groupId, Types::INTEGER);
-        }
-
-        return $search;
+        return $query;
     }
 
     /**
@@ -124,26 +113,37 @@ class CategoryTable extends AbstractEntityTable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function updateParameters(array $parameters): array
+    protected function search(DataQuery $query, QueryBuilder $builder): void
     {
-        return \array_merge_recursive(parent::updateParameters($parameters), [
-            'group' => $this->getGroup(),
-            'groups' => $this->getGroups(),
-            'params' => [
-                self::PARAM_GROUP => $this->groupId,
-            ],
-        ]);
+        parent::search($query, $builder);
+        if (0 !== $groupId = $query->getCustomData(self::PARAM_GROUP, 0)) {
+            $field = $this->repository->getSearchFields('group.id');
+            $builder->andWhere($field . '=:' . self::PARAM_GROUP)
+                ->setParameter(self::PARAM_GROUP, $groupId, Types::INTEGER);
+        }
     }
 
     /**
-     * Gets the selected group or null if none.
+     * {@inheritDoc}
      */
-    private function getGroup(): ?Group
+    protected function updateResults(DataQuery $query, DataResults &$results): void
     {
-        if (0 !== $this->groupId) {
-            return $this->groupRepository->find($this->groupId);
+        parent::updateResults($query, $results);
+        $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
+        $results->addCustomData('group', $this->getGroup($groupId));
+        $results->addCustomData('groups', $this->getGroups());
+        $results->addParameter(self::PARAM_GROUP, $groupId);
+    }
+
+    /**
+     * Gets the group for the given identifier.
+     */
+    private function getGroup(int $groupId): ?Group
+    {
+        if (0 !== $groupId) {
+            return $this->groupRepository->find($groupId);
         }
 
         return null;

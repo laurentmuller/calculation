@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\BootstrapTable;
 
 use App\Interfaces\EntityVoterInterface;
-use App\Interfaces\TableInterface;
 use App\Repository\CalculationRepository;
 use Doctrine\Common\Collections\Criteria;
 
@@ -138,60 +137,17 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
         $entities = $this->getEntities($query->sort, $query->order);
         $results->totalNotFiltered = $results->filtered = \count($entities);
 
-        // limit
+        // limit and and map entities
         $entities = \array_slice($entities, $query->offset, $query->limit);
-
-        // map
         $results->rows = $this->mapEntities($entities);
 
         // ajax?
-        if ($query->callback) {
-            return $results;
+        if (!$query->callback) {
+            $results->customData = [
+                'itemsCount' => $this->getItemsCount($entities),
+                'allow_search' => false,
+            ];
         }
-
-        // page list
-        $pageList = $this->getAllowedPageList($results->totalNotFiltered);
-        $limit = \min($query->limit, \max($pageList));
-
-        // results
-        $results->columns = $this->getColumns();
-        $results->pageList = $pageList;
-        $results->limit = $limit;
-
-        // action parameters
-        $results->params = [
-            TableInterface::PARAM_ID => $query->id,
-            TableInterface::PARAM_SEARCH => $query->search,
-            TableInterface::PARAM_SORT => $query->sort,
-            TableInterface::PARAM_ORDER => $query->order,
-            TableInterface::PARAM_OFFSET => $query->offset,
-            TableInterface::PARAM_LIMIT => $limit,
-            TableInterface::PARAM_CARD => $query->card,
-        ];
-
-        // custom data
-        $results->customData = [
-            'itemsCount' => $this->getItemsCount($entities),
-            'allow_search' => false,
-        ];
-
-        // table attributes
-        $results->attributes = [
-            'total-not-filtered' => $results->totalNotFiltered,
-            'total-rows' => $results->filtered,
-
-            'search' => \json_encode(false),
-            'search-text' => $query->search,
-
-            'page-list' => $this->implodePageList($pageList),
-            'page-size' => $limit,
-            'page-number' => $query->page,
-
-            'card-view' => \json_encode($query->card),
-
-            'sort-name' => $query->sort,
-            'sort-order' => $query->order,
-        ];
 
         return $results;
     }
@@ -202,6 +158,8 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
-        $results->addAttribute('row-style', 'styleCalculationEditable');
+        if (!$query->callback) {
+            $results->addAttribute('row-style', 'styleCalculationEditable');
+        }
     }
 }

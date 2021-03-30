@@ -10,5 +10,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Install Composer dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
+      env: 
+        COMPOSER_MEMORY_LIMIT: -1
+
     - name: PHPStan
       uses: docker://oskarstark/phpstan-ga

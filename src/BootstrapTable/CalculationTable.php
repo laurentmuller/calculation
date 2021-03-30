@@ -107,11 +107,13 @@ class CalculationTable extends AbstractEntityTable
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
-        $results->addAttribute('row-style', 'styleCalculationEditable');
-        $stateId = $query->getCustomData(self::PARAM_STATE, 0);
-        $results->addCustomData('state', $this->getCalculationState($stateId));
-        $results->addCustomData('states', $this->getCalculationStates());
-        $results->addParameter(self::PARAM_STATE, $stateId);
+        if (!$query->callback) {
+            $results->addAttribute('row-style', 'styleCalculationEditable');
+            $stateId = $query->getCustomData(self::PARAM_STATE, 0);
+            $results->addCustomData('state', $this->getCalculationState($stateId));
+            $results->addCustomData('states', $this->getCalculationStates());
+            $results->addParameter(self::PARAM_STATE, $stateId);
+        }
     }
 
     /**

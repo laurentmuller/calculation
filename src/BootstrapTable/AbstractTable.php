@@ -130,9 +130,7 @@ abstract class AbstractTable
     public function processQuery(DataQuery $query): DataResults
     {
         $results = $this->handleQuery($query);
-        if (!$query->callback) {
-            $this->updateResults($query, $results);
-        }
+        $this->updateResults($query, $results);
 
         return $results;
     }
@@ -339,13 +337,56 @@ abstract class AbstractTable
     }
 
     /**
-     * Update the results before sending back. This function is called only when rendering the template.
+     * Update the results before sending back.
      *
      * @param DataQuery   $query   the data query
      * @param DataResults $results the results to update
      */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
+        // callback?
+        if ($query->callback) {
+            return;
+        }
+
+        // page list and limit
+        if (empty($results->pageList)) {
+            $results->pageList = $this->getAllowedPageList($results->totalNotFiltered);
+        }
+        $limit = \min($query->limit, \max($results->pageList));
+
+        // results
+        $results->columns = $this->getColumns();
+        $results->limit = $limit;
+
+        // parameters
+        $results->params = \array_merge($results->params, [
+            TableInterface::PARAM_ID => $query->id,
+            TableInterface::PARAM_SEARCH => $query->search,
+            TableInterface::PARAM_SORT => $query->sort,
+            TableInterface::PARAM_ORDER => $query->order,
+            TableInterface::PARAM_OFFSET => $query->offset,
+            TableInterface::PARAM_CARD => $query->card,
+            TableInterface::PARAM_LIMIT => $limit,
+        ]);
+
+        // attributes
+        $results->attributes = \array_merge($results->attributes, [
+            'total-not-filtered' => $results->totalNotFiltered,
+            'total-rows' => $results->filtered,
+
+            'search' => \json_encode(true),
+            'search-text' => $query->search,
+
+            'page-list' => $this->implodePageList($results->pageList),
+            'page-number' => $query->page,
+            'page-size' => $limit,
+
+            'card-view' => \json_encode($query->card),
+
+            'sort-name' => $query->sort,
+            'sort-order' => $query->order,
+        ]);
     }
 
     /**

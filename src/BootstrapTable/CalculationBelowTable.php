@@ -81,7 +81,9 @@ class CalculationBelowTable extends CalculationTable
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
-        $results->addCustomData('min_margin', $this->getMinMargin());
+        if (!$query->callback) {
+            $results->addCustomData('min_margin', $this->getMinMargin());
+        }
     }
 
     /**

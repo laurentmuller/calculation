@@ -177,53 +177,13 @@ class SearchTable extends AbstractTable
         $results->rows = $items;
 
         // ajax?
-        if ($query->callback) {
-            return $results;
+        if (!$query->callback) {
+            $results->pageList = TableInterface::PAGE_LIST;
+            $results->customData = [
+                'entity' => $entity,
+                'entities' => $this->service->getEntities(),
+            ];
         }
-
-        // page list
-        $pageList = TableInterface::PAGE_LIST;
-        $limit = \min($query->limit, \max($pageList));
-
-        // results
-        $results->columns = $this->getColumns();
-        $results->pageList = $pageList;
-        $results->limit = $limit;
-
-        // action parameters
-        $results->params = [
-            TableInterface::PARAM_ID => $query->id,
-            TableInterface::PARAM_SEARCH => $search,
-            TableInterface::PARAM_SORT => $query->sort,
-            TableInterface::PARAM_ORDER => $query->order,
-            TableInterface::PARAM_OFFSET => $query->offset,
-            TableInterface::PARAM_LIMIT => $limit,
-            TableInterface::PARAM_CARD => $query->card,
-        ];
-
-        // table attributes
-        $results->attributes = [
-            'total-not-filtered' => $results->totalNotFiltered,
-            'total-rows' => $results->filtered,
-
-            'search' => \json_encode(true),
-            'search-text' => $search,
-
-            'page-list' => $this->implodePageList($pageList),
-            'page-number' => $query->page,
-            'page-size' => $limit,
-
-            'card-view' => \json_encode($query->card),
-
-            'sort-name' => $query->sort,
-            'sort-order' => $query->order,
-        ];
-
-        // custom data
-        $results->customData = [
-            'entity' => $entity,
-            'entities' => $this->service->getEntities(),
-        ];
 
         return $results;
     }

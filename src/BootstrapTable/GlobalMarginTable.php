@@ -51,6 +51,8 @@ class GlobalMarginTable extends AbstractEntityTable
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
-        $results->addAttribute('search', \json_encode(false));
+        if (!$query->callback) {
+            $results->addAttribute('search', \json_encode(false));
+        }
     }
 }

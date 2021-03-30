@@ -14,7 +14,6 @@ namespace App\BootstrapTable;
 
 use App\Entity\Log;
 use App\Interfaces\EntityVoterInterface;
-use App\Interfaces\TableInterface;
 use App\Service\LogService;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
@@ -188,58 +187,22 @@ class LogTable extends AbstractTable
         $channels = \array_keys($entries[LogService::KEY_CHANNELS]);
 
         // ajax?
-        if ($query->callback) {
-            return $results;
+        if (!$query->callback) {
+            // action parameters
+            $results->params = [
+                self::PARAM_CHANNEL => $channel,
+                self::PARAM_LEVEL => $level,
+            ];
+
+            // custom data
+            $results->customData = [
+                'level' => $level,
+                'levels' => $levels,
+                'channel' => $channel,
+                'channels' => $channels,
+                'file' => $this->service->getFileName(),
+            ];
         }
-
-        // page list and limit
-        $pageList = $this->getAllowedPageList($results->totalNotFiltered);
-        $limit = \min($query->limit, \max($pageList));
-
-        // results
-        $results->columns = $this->getColumns();
-        $results->pageList = $pageList;
-        $results->limit = $limit;
-
-        // action parameters
-        $results->params = [
-            TableInterface::PARAM_ID => $query->id,
-            TableInterface::PARAM_SEARCH => $search,
-            TableInterface::PARAM_SORT => $sort,
-            TableInterface::PARAM_ORDER => $order,
-            TableInterface::PARAM_OFFSET => $query->offset,
-            TableInterface::PARAM_LIMIT => $query->limit,
-            TableInterface::PARAM_CARD => $query->card,
-            self::PARAM_CHANNEL => $channel,
-            self::PARAM_LEVEL => $level,
-        ];
-
-        // table attributes
-        $results->attributes = [
-            'total-not-filtered' => $results->totalNotFiltered,
-            'total-rows' => $results->filtered,
-
-            'search' => \json_encode(true),
-            'search-text' => $search,
-
-            'page-list' => $this->implodePageList($pageList),
-            'page-size' => $limit,
-            'page-number' => $query->page,
-
-            'card-view' => \json_encode($query->card),
-
-            'sort-name' => $sort,
-            'sort-order' => $order,
-        ];
-
-        // custom data
-        $results->customData = [
-            'level' => $level,
-            'levels' => $levels,
-            'channel' => $channel,
-            'channels' => $channels,
-            'file' => $this->service->getFileName(),
-        ];
 
         return $results;
     }

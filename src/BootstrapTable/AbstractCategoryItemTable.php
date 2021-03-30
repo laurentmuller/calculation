@@ -98,9 +98,11 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
-        $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0);
-        $results->addCustomData('category', $this->getCategory($categoryId));
-        $results->addCustomData('categories', $this->getCategories());
-        $results->addParameter(self::PARAM_CATEGORY, $categoryId);
+        if (!$query->callback) {
+            $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0);
+            $results->addCustomData('category', $this->getCategory($categoryId));
+            $results->addCustomData('categories', $this->getCategories());
+            $results->addParameter(self::PARAM_CATEGORY, $categoryId);
+        }
     }
 }

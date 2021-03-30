@@ -46,6 +46,7 @@ class DatabaseInfo
             $statement = $connection->prepare($sql);
 
             if ($statement->execute()) {
+                /* @phpstan-ignore-next-line */
                 $entries = $statement->fetchAllAssociative();
                 $statement->free();
 
@@ -98,6 +99,7 @@ class DatabaseInfo
             $statement = $connection->prepare($sql);
 
             if ($statement->execute()) {
+                /* @phpstan-ignore-next-line */
                 $result = $statement->fetchAssociative();
                 $statement->free();
 

@@ -127,6 +127,8 @@ class UserTable extends AbstractEntityTable
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
-        $results->addAttribute('row-style', 'styleUserEnabled');
+        if (!$query->callback) {
+            $results->addAttribute('row-style', 'styleUserEnabled');
+        }
     }
 }

@@ -131,10 +131,12 @@ class CategoryTable extends AbstractEntityTable
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
-        $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
-        $results->addCustomData('group', $this->getGroup($groupId));
-        $results->addCustomData('groups', $this->getGroups());
-        $results->addParameter(self::PARAM_GROUP, $groupId);
+        if (!$query->callback) {
+            $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
+            $results->addCustomData('group', $this->getGroup($groupId));
+            $results->addCustomData('groups', $this->getGroups());
+            $results->addParameter(self::PARAM_GROUP, $groupId);
+        }
     }
 
     /**

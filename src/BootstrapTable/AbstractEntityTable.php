@@ -123,49 +123,6 @@ abstract class AbstractEntityTable extends AbstractTable
         $entities = $builder->getQuery()->getResult();
         $results->rows = $this->mapEntities($entities);
 
-        // ajax?
-        if ($query->callback) {
-            return $results;
-        }
-
-        // page list
-        $pageList = $this->getAllowedPageList($results->totalNotFiltered);
-        $limit = \min($query->limit, \max($pageList));
-
-        // results
-        $results->columns = $this->getColumns();
-        $results->pageList = $pageList;
-        $results->limit = $limit;
-
-        // action parameters
-        $results->params = [
-            TableInterface::PARAM_ID => $query->id,
-            TableInterface::PARAM_SEARCH => $query->search,
-            TableInterface::PARAM_SORT => $query->sort,
-            TableInterface::PARAM_ORDER => $query->order,
-            TableInterface::PARAM_OFFSET => $query->offset,
-            TableInterface::PARAM_LIMIT => $limit,
-            TableInterface::PARAM_CARD => $query->card,
-        ];
-
-        // table attributes
-        $results->attributes = [
-            'total-not-filtered' => $results->totalNotFiltered,
-            'total-rows' => $results->filtered,
-
-            'search' => \json_encode(true),
-            'search-text' => $query->search,
-
-            'page-list' => $this->implodePageList($pageList),
-            'page-size' => $limit,
-            'page-number' => $query->page,
-
-            'card-view' => \json_encode($query->card),
-
-            'sort-name' => $query->sort,
-            'sort-order' => $query->order,
-        ];
-
         return $results;
     }
 

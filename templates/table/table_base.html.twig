@@ -39,11 +39,11 @@
 
 {# granted actions #}
 {%- set object_type  = object_type|default('none') -%}
-{%- set allow_show   = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) -%}
-{%- set allow_add    = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) -%}
-{%- set allow_edit   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) -%}
-{%- set allow_delete = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) -%}
-{%- set allow_export = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
+{%- set allow_show   = is_granted(ATTRIBUTE_SHOW, object_type) -%}
+{%- set allow_add    = is_granted(ATTRIBUTE_ADD, object_type) -%}
+{%- set allow_edit   = is_granted(ATTRIBUTE_EDIT, object_type) -%}
+{%- set allow_delete = is_granted(ATTRIBUTE_DELETE, object_type) -%}
+{%- set allow_export = is_granted(ATTRIBUTE_EXPORT, object_type) -%}
 
 {# default action #}
 {%- set row_none     = app.actionNone -%}
@@ -59,7 +59,7 @@
 
 {# parameters #}
 {%- set allow_search    = attributes.search|default(true|json_encode) == true|json_encode -%}
-{%- set allow_global    = allow_global ?? is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
+{%- set allow_global    = allow_global ?? is_granted(ATTRIBUTE_EXPORT, object_type) -%}
 {%- set row_selector    = 'table-primary' -%}
 {%- set caller          = path(app.request.get('_route')) -%}
 {%- set params          = params|default({})|merge({'caller': caller}) -%}

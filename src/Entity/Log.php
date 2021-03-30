@@ -59,7 +59,7 @@ class Log extends AbstractEntity
     /**
      * @ORM\Column(type="text")
      *
-     * @var string
+     * @var ?string
      */
     private $message;
 

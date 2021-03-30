@@ -15,27 +15,27 @@
 {%- set col_span     = col_span|default(2) -%}
 
 {# actions #}
-{%- set object_type  = EntityVoterInterface.ENTITY_CALCULATION -%}
-{%- set edit_page    = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
-{%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
-{%- set single_page  = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
+{%- set object_type  = ENTITY_CALCULATION -%}
+{%- set edit_page    = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
+{%- set show_page    = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
+{%- set single_page  = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
 {%- set default_page = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 {%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
 
 {%- if add_page is not defined -%}
-    {%- set add_page = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) ? 'calculation_add' : null -%}
+    {%- set add_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_add' : null -%}
 {%- endif -%}
 {%- if clone_page is not defined -%}
-    {%- set clone_page = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
+    {%- set clone_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
 {%- endif -%}
 {%- if state_page is not defined -%}
-    {%- set state_page = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
+    {%- set state_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
 {%- endif -%}
 {%- if pdf_page is not defined -%}
-    {%- set pdf_page = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf' : null -%}
+    {%- set pdf_page = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf' : null -%}
 {%- endif -%}
 {%- if delete_page is not defined -%}
-    {%- set delete_page = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
+    {%- set delete_page = is_granted(ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
 {%- endif -%}
 
 {% block item_title %}

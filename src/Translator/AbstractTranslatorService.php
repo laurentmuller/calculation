@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use App\Service\AbstractHttpClientService;
+use App\Traits\CacheTrait;
 use App\Util\Utils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -26,10 +27,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 abstract class AbstractTranslatorService extends AbstractHttpClientService implements TranslatorServiceInterface
 {
-    /**
-     * The cache timeout (60 minutes).
-     */
-    protected const CACHE_TIMEOUT = 60 * 60;
+    use CacheTrait;
 
     /**
      * The field not found status code.
@@ -44,25 +42,11 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     protected $accessor;
 
     /**
-     * The translator cache.
-     *
-     * @var AdapterInterface
-     */
-    protected $cache;
-
-    /**
      * The key to cache language.
      *
      * @var string
      */
     protected $cacheKey;
-
-    /**
-     * The debug mode.
-     *
-     * @var bool
-     */
-    protected $debug;
 
     /**
      * The API key.
@@ -74,21 +58,21 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     /**
      * Constructor.
      *
-     * @param KernelInterface  $kernel the kernel to get the debug mode
-     * @param AdapterInterface $cache  the cache used to save or retrieve languages
-     * @param string           $key    the API key
+     * @param KernelInterface  $kernel  the kernel to get the debug mode
+     * @param AdapterInterface $adapter the cache used to save or retrieve languages
+     * @param string           $key     the API key
      *
      * @throws \InvalidArgumentException if the API key is null or empty
      */
-    public function __construct(KernelInterface $kernel, AdapterInterface $cache, string $key)
+    public function __construct(KernelInterface $kernel, AdapterInterface $adapter, string $key)
     {
         // check key
         if (empty($key)) {
             throw new \InvalidArgumentException('The translator key is empty.');
         }
-
-        $this->debug = $kernel->isDebug();
-        $this->cache = $cache;
+        if (!$kernel->isDebug()) {
+            $this->adapter = $adapter;
+        }
         $this->key = $key;
     }
 
@@ -124,21 +108,17 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     public function getLanguages()
     {
         // already cached?
-        if (!$this->debug) {
-            $item = $this->cache->getItem($this->getCacheKey());
-            if ($item->isHit()) {
-                return $item->get();
-            }
+        $key = $this->getCacheKey();
+        if ($languages = $this->getCacheValue($key)) {
+            return $languages;
         }
 
         // get language
         $languages = $this->doGetLanguages();
 
         // cache result
-        if (isset($item) && !empty($languages) && empty($this->lastError)) {
-            $item->set($languages)
-                ->expiresAfter(self::CACHE_TIMEOUT);
-            $this->cache->save($item);
+        if (!empty($languages) && empty($this->lastError)) {
+            $this->setCacheValue($key, $languages);
         }
 
         return $languages;

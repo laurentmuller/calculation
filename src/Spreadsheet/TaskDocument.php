@@ -84,11 +84,23 @@ class TaskDocument extends AbstractArrayDocument
         /** @var Task $entity */
         foreach ($entities as $entity) {
             $this->writeTask = true;
-            $this->setRowValues($row++, [
-                $entity->getName(),
-                $entity->getCategoryCode(),
-                $entity->getUnit(),
-            ]);
+            if ($entity->isEmpty()) {
+                $this->setRowValues($row++, [
+                    $entity->getName(),
+                    $entity->getCategoryCode(),
+                    $entity->getUnit(),
+                    $this->trans('task.edit.empty_items'),
+                ]);
+                $this->getActiveSheet()
+                    ->mergeCellsByColumnAndRow(4, $row - 1, 6, $row - 1);
+            } else {
+                $this->setRowValues($row++, [
+                    $entity->getName(),
+                    $entity->getCategoryCode(),
+                    $entity->getUnit(),
+                ]);
+            }
+
             $this->writeTask = false;
 
             /** @var TaskItem $item */
@@ -97,7 +109,12 @@ class TaskDocument extends AbstractArrayDocument
                 if ($item->isEmpty()) {
                     $this->setRowValues($row++, [
                         $item->getName(),
+                        null,
+                        null,
+                        $this->trans('taskitem.edit.empty_items'),
                     ]);
+                    $this->getActiveSheet()
+                        ->mergeCellsByColumnAndRow(4, $row - 1, 6, $row - 1);
                     $this->writeItem = false;
                 } else {
                     $index = 0;

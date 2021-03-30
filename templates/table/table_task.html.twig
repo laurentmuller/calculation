@@ -6,7 +6,7 @@
 {%- set defer_url    = url('table_task') -%}
 {%- set save_url     = url('table_task_save') -%}
 {%- set categoryId   = customData.category.id|default(0) -%}
-{%- set object_type  = EntityVoterInterface.ENTITY_TASK -%}
+{%- set object_type  = ENTITY_TASK -%}
 
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('task_add', params) }}">{{ 'task.add.title'|trans }}</a>{% endif %}

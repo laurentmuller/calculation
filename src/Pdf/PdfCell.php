@@ -24,28 +24,28 @@ class PdfCell
     /**
      * The bottom border style.
      *
-     * @var PdfCellBorder
+     * @var ?PdfCellBorder
      */
     protected $borderBottom;
 
     /**
      * The left border style.
      *
-     * @var PdfCellBorder
+     * @var ?PdfCellBorder
      */
     protected $borderLeft;
 
     /**
      * The right border style.
      *
-     * @var PdfCellBorder
+     * @var ?PdfCellBorder
      */
     protected $borderRight;
 
     /**
      * The top border style.
      *
-     * @var PdfCellBorder
+     * @var ?PdfCellBorder
      */
     protected $borderTop;
 

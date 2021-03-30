@@ -20,6 +20,7 @@ use Symfony\Component\Routing\RouterInterface;
  *
  * @author Laurent Muller
  *
+ * @see https://github.com/symfony/symfony/blob/5.x/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
  * @see https://github.com/EasyCorp/easy-doc-bundle/blob/master/src/Command/DocCommand.php
  *
  * @internal
@@ -29,7 +30,7 @@ final class SymfonyUtils
     /**
      * The build-in routes.
      *
-     * @var array
+     * @var string[]
      */
     private static $BUILT_IN_ROUTES = [
         '_profiler',
@@ -48,9 +49,9 @@ final class SymfonyUtils
     ];
 
     /**
-     * The names of properties to get for a package.
+     * The properties to get for a package.
      *
-     * @var array
+     * @var string[]
      */
     private static $PACKAGE_PROPERTIES = [
         'name',
@@ -74,6 +75,37 @@ final class SymfonyUtils
     }
 
     /**
+     * Gets the number of days before expiration.
+     *
+     * @param string $date the date to get for
+     *
+     * @return string the number of days
+     */
+    public static function daysBeforeExpiration(string $date): string
+    {
+        $date = \DateTime::createFromFormat('d/m/Y', '01/' . $date);
+
+        return (new \DateTime())->diff($date->modify('last day of this month 23:59:59'))->format('%R%a days');
+    }
+
+    /**
+     * Format the expired date.
+     *
+     * @param string $date the date to format
+     *
+     * @return string the formatted date, if applicable; 'Unknown' otherwise
+     */
+    public static function formatExpired(string $date): string
+    {
+        $date = \DateTime::createFromFormat('m/Y', $date);
+        if (false !== $date) {
+            return FormatUtils::formatDate($date->modify('last day of this month 23:59:59'));
+        }
+
+        return 'Unknown';
+    }
+
+    /**
      * Formats the size of the given path.
      *
      * @param string $path the file or directory path
@@ -90,7 +122,9 @@ final class SymfonyUtils
             $innerIterator = new \RecursiveDirectoryIterator($path, $flags);
             $outerIterator = new \RecursiveIteratorIterator($innerIterator);
             foreach ($outerIterator as $file) {
-                $size += $file->getSize();
+                if ($file->isReadable()) {
+                    $size += $file->getSize();
+                }
             }
         }
 
@@ -416,6 +450,20 @@ final class SymfonyUtils
         } else {
             return \str_replace('\\', '/', $var);
         }
+    }
+
+    /**
+     * Returns a value indicating if the given date is expired.
+     *
+     * @param string $date the date to verify
+     *
+     * @return bool true if expired
+     */
+    private static function isExpired(string $date): bool
+    {
+        $date = \DateTime::createFromFormat('d/m/Y', '01/' . $date);
+
+        return false !== $date && new \DateTime() > $date->modify('last day of this month 23:59:59');
     }
 
     /**

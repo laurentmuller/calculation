@@ -61,11 +61,17 @@ class EmailVerifier
      */
     public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, TemplatedEmail $email): void
     {
-        $signature = $this->helper->generateSignature($verifyEmailRouteName, (string) $user->getId(), $user->getEmail());
+        $signature = $this->helper->generateSignature(
+            $verifyEmailRouteName,
+            (string) $user->getId(),
+            $user->getEmail(),
+            ['id' => $user->getId()]
+        );
 
         $context = $email->getContext();
         $context['signedUrl'] = $signature->getSignedUrl();
-        $context['expiresAt'] = $signature->getExpiresAt();
+        $context['expiresAtMessageKey'] = $signature->getExpirationMessageKey();
+        $context['expiresAtMessageData'] = $signature->getExpirationMessageData();
         $context['username'] = $user->getUsername();
         $email->context($context);
 

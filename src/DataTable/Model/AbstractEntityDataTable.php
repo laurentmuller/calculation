@@ -38,7 +38,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     private const SEARCH_PARAMETER = 'search';
 
     /**
-     * @var Environment
+     * @var ?Environment
      */
     protected $environment;
 

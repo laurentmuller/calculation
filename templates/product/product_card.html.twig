@@ -15,13 +15,13 @@
 {%- set empty_list   = 'product.list.empty' -%}
 
 {# actions #}
-{%- set object_type  = EntityVoterInterface.ENTITY_PRODUCT -%}
-{%- set add_page     = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) ? 'product_add' : null -%}
-{%- set edit_page    = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'product_edit' : null -%}
-{%- set clone_page   = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) ? 'product_clone' : null -%}
-{%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'product_delete' : null -%}
-{%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'product_show' : null -%}
-{%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'product_pdf' : null -%}
+{%- set object_type  = ENTITY_PRODUCT -%}
+{%- set add_page     = is_granted(ATTRIBUTE_ADD, object_type) ? 'product_add' : null -%}
+{%- set edit_page    = is_granted(ATTRIBUTE_EDIT, object_type) ? 'product_edit' : null -%}
+{%- set clone_page   = is_granted(ATTRIBUTE_ADD, object_type) ? 'product_clone' : null -%}
+{%- set delete_page  = is_granted(ATTRIBUTE_DELETE, object_type) ? 'product_delete' : null -%}
+{%- set show_page    = is_granted(ATTRIBUTE_SHOW, object_type) ? 'product_show' : null -%}
+{%- set pdf_page     = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'product_pdf' : null -%}
 {%- set default_page = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 {%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
 

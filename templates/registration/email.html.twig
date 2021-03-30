@@ -10,7 +10,7 @@
     Veuillez confirmer votre adresse électronique en cliquant sur le lien suivant : <a href="{{ signedUrl|raw }}">Confirmer mon email</a>.
 </p>
 <p>
-    <b>Remarque :</b> Ce lien expirera dans {{ 'counters.hours'|trans({'count': expiresAt|date('g')}) }}.
+    <b>Remarque :</b> Ce lien expirera dans {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
 <p/>
 <p>
     Cordialement,<br>

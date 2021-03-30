@@ -14,12 +14,12 @@
 {%- set empty_list   = 'customer.list.empty' -%}
 
 {# actions #}
-{%- set object_type  = EntityVoterInterface.ENTITY_CUSTOMER -%}
-{%- set add_page     = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) ? 'customer_add' : null -%}
-{%- set edit_page    = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) ? 'customer_edit' : null -%}
-{%- set delete_page  = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) ? 'customer_delete' : null -%}
-{%- set show_page    = is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) ? 'customer_show' : null -%}
-{%- set pdf_page     = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) ? 'customer_pdf' : null -%}
+{%- set object_type  = ENTITY_CUSTOMER -%}
+{%- set add_page     = is_granted(ATTRIBUTE_ADD, object_type) ? 'customer_add' : null -%}
+{%- set edit_page    = is_granted(ATTRIBUTE_EDIT, object_type) ? 'customer_edit' : null -%}
+{%- set delete_page  = is_granted(ATTRIBUTE_DELETE, object_type) ? 'customer_delete' : null -%}
+{%- set show_page    = is_granted(ATTRIBUTE_SHOW, object_type) ? 'customer_show' : null -%}
+{%- set pdf_page     = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'customer_pdf' : null -%}
 {%- set default_page = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 {%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
 

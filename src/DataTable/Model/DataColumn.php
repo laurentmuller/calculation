@@ -42,7 +42,7 @@ class DataColumn
     /**
      * The class name.
      *
-     * @var string
+     * @var ?string
      */
     protected $class;
 

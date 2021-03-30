@@ -966,6 +966,9 @@ registration:
     register:
         title: Créer un compte
         submit: Créer
+    agreeTerms:
+        label: J'accepte les conditions générales d'utilisation de l'application.
+        error: Vous devez accepter les conditions générales d'utilisation.
     email:
         subject: Bienvenue %username% !
         message: |

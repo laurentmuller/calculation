@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
+use App\Traits\CacheTrait;
 use App\Util\FormatUtils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
@@ -32,6 +33,8 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class OpenWeatherService extends AbstractHttpClientService
 {
+    use CacheTrait;
+
     /**
      * The database name.
      */
@@ -186,25 +189,11 @@ class OpenWeatherService extends AbstractHttpClientService
     ];
 
     /**
-     * The cache adapter.
-     *
-     * @var AdapterInterface
-     */
-    private $adapter;
-
-    /**
      * The data directory.
      *
      * @var string
      */
     private $dataDirectory;
-
-    /**
-     * The debug mode.
-     *
-     * @var bool
-     */
-    private $debug;
 
     /**
      * The invalid characters for the cache key.
@@ -229,9 +218,10 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         $this->key = $params->get(self::PARAM_KEY);
         $this->dataDirectory = $kernel->getProjectDir() . self::DATA_PATH;
-        $this->debug = $kernel->isDebug();
-        $this->adapter = $adapter;
         $this->invalidChars = \str_split(ItemInterface::RESERVED_CHARACTERS);
+        if (!$kernel->isDebug()) {
+            $this->adapter = $adapter;
+        }
     }
 
     /**
@@ -422,9 +412,8 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         // find from cache
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units]);
-        $item = $this->debug ? false : $this->adapter->getItem($key);
-        if ($item && $item->isHit()) {
-            return $item->get();
+        if ($result = $this->getCacheValue($key)) {
+            return $result;
         }
 
         // search
@@ -437,11 +426,7 @@ class OpenWeatherService extends AbstractHttpClientService
             $this->updateResult($result);
 
             // save to cache
-            if ($item) {
-                $item->expiresAfter(self::CACHE_TIMEOUT)
-                    ->set($result);
-                $this->adapter->save($item);
-            }
+            $this->setCacheValue($key, $result, self::CACHE_TIMEOUT);
         }
 
         return $result;
@@ -526,9 +511,8 @@ class OpenWeatherService extends AbstractHttpClientService
 
         // find from cache
         $key = $this->getCacheKey($uri, $query);
-        $item = $this->debug ? false : $this->adapter->getItem($key);
-        if ($item && $item->isHit()) {
-            return $item->get();
+        if ($result = $this->getCacheValue($key)) {
+            return $result;
         }
 
         // call
@@ -551,11 +535,7 @@ class OpenWeatherService extends AbstractHttpClientService
         $this->addUnits($result, $query['units']);
 
         // save to cache
-        if ($item) {
-            $item->expiresAfter(self::CACHE_TIMEOUT)
-                ->set($result);
-            $this->adapter->save($item);
-        }
+        $this->setCacheValue($key, $result, self::CACHE_TIMEOUT);
 
         return $result;
     }

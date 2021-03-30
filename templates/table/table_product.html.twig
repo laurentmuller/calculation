@@ -6,7 +6,7 @@
 {%- set defer_url    = url('table_product') -%}
 {%- set save_url     = url('table_product_save') -%}
 {%- set categoryId   = customData.category.id|default(0) -%}
-{%- set object_type  = EntityVoterInterface.ENTITY_PRODUCT -%}
+{%- set object_type  = ENTITY_PRODUCT -%}
 
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('product_add', params) }}">{{ 'product.add.title'|trans }}</a>{% endif %}

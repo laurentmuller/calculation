@@ -32,12 +32,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
     protected $repository;
 
     /**
-     * The entities.
-     *
-     * @var array
-     */
-    private $entities;
-    /**
      * The number of items.
      *
      * @var int
@@ -141,7 +135,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
         $results = new DataResults();
 
         // find all
-        $entities = $this->entities ?? $this->getEntities($query->sort, $query->order);
+        $entities = $this->getEntities($query->sort, $query->order);
         $results->totalNotFiltered = $results->filtered = \count($entities);
 
         // limit
@@ -175,6 +169,12 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
             TableInterface::PARAM_CARD => $query->card,
         ];
 
+        // custom data
+        $results->customData = [
+            'itemsCount' => $this->getItemsCount($entities),
+            'allow_search' => false,
+        ];
+
         // table attributes
         $results->attributes = [
             'total-not-filtered' => $results->totalNotFiltered,
@@ -191,12 +191,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
 
             'sort-name' => $query->sort,
             'sort-order' => $query->order,
-        ];
-
-        // custom data
-        $results->customData = [
-            'itemsCount' => $this->getItemsCount($entities),
-            'allow_search' => false,
         ];
 
         return $results;

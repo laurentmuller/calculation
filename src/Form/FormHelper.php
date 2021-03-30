@@ -84,7 +84,7 @@ class FormHelper
     /**
      * The labels prefix.
      *
-     * @var string
+     * @var string|null
      */
     private $labelPrefix;
 
@@ -613,9 +613,9 @@ class FormHelper
     /**
      * Gets the currency symbol for the given locale.
      *
-     * @param \Locale|null $locale the locale to use or null to use the default locale
+     * @param \Locale|string|null $locale the locale to use or null to use the default locale
      */
-    public function getCurrencySymbol(?\Locale $locale = null): string
+    public function getCurrencySymbol($locale = null): string
     {
         if (null === $locale) {
             $locale = \Locale::getDefault();
@@ -628,9 +628,9 @@ class FormHelper
     /**
      * Gets the percent symbol for the given locale.
      *
-     * @param \Locale|null $locale the locale to use or null to use the default locale
+     * @param \Locale|string|null $locale the locale to use or null to use the default locale
      */
-    public function getPercentSymbol(?\Locale $locale = null): string
+    public function getPercentSymbol($locale = null): string
     {
         if (null === $locale) {
             $locale = \Locale::getDefault();

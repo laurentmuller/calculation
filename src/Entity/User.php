@@ -125,8 +125,9 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
+     * @phpstan-ignore-next-line
      *
-     * @var ?string
+     * @var string|null
      */
     private $selector;
 
@@ -135,7 +136,9 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      *
      * @ORM\Column(type="datetime", nullable=true)
      *
-     * @var ?\DateTime
+     * @phpstan-ignore-next-line
+     *
+     * @var \DateTime|null
      */
     private $updatedAt;
 

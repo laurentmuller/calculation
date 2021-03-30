@@ -92,7 +92,7 @@ class SwissPostService
     /**
      * The original import (uploaded) file name.
      *
-     * @var string
+     * @var ?string
      */
     private $sourceName;
 

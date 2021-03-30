@@ -5,7 +5,7 @@
 {%- set title_icon   = 'address-card far' -%}
 {%- set defer_url    = url('table_customer') -%}
 {%- set save_url     = url('table_customer_save') -%}
-{%- set object_type  = EntityVoterInterface.ENTITY_CUSTOMER -%}
+{%- set object_type  = ENTITY_CUSTOMER -%}
 
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('customer_add', params) }}">{{ 'customer.add.title'|trans }}</a>{% endif %}

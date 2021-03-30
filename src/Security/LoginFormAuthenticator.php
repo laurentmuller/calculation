@@ -12,24 +12,20 @@ declare(strict_types=1);
 
 namespace App\Security;
 
-use App\Controller\AbstractController;
-use App\Repository\UserRepository;
+use App\Controller\SecurityController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
-use Symfony\Component\Security\Guard\AuthenticatorInterface;
-use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
+use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
@@ -37,98 +33,47 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
  *
  * @author Laurent Muller
  */
-class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
+class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    /**
-     * The login route name.
-     */
-    private const LOGIN_ROUTE = 'app_login';
-
-    private UserPasswordEncoderInterface $encoder;
     private UrlGeneratorInterface $generator;
-    private UserRepository $repository;
-    private CsrfTokenManagerInterface $tokenManager;
 
-    public function __construct(UserRepository $repository, UrlGeneratorInterface $generator, CsrfTokenManagerInterface $tokenManager, UserPasswordEncoderInterface $encoder)
+    /**
+     * Constructor.
+     */
+    public function __construct(UrlGeneratorInterface $generator)
     {
-        $this->repository = $repository;
         $this->generator = $generator;
-        $this->tokenManager = $tokenManager;
-        $this->encoder = $encoder;
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @see AuthenticatorInterface
+     * {@inheritDoc}
      */
-    public function checkCredentials($credentials, UserInterface $user): bool
+    public function authenticate(Request $request): PassportInterface
     {
-        return $this->encoder->isPasswordValid($user, $credentials['password']);
+        $username = $request->get('username', '');
+        $password = $request->get('password', '');
+        $csrf_token = $request->get('_csrf_token', '');
+
+        $request->getSession()->set(Security::LAST_USERNAME, $username);
+
+        return new Passport(
+            new UserBadge($username),
+            new PasswordCredentials($password),
+            [
+                new RememberMeBadge(),
+                new CsrfTokenBadge('authenticate', $csrf_token),
+            ]
+        );
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @see AuthenticatorInterface
+     * {@inheritDoc}
      */
-    public function getCredentials(Request $request): array
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $credentials = [
-            'username' => $request->request->get('username'),
-            'password' => $request->request->get('password'),
-            'csrf_token' => $request->request->get('_csrf_token'),
-        ];
-
-        $request->getSession()->set(Security::LAST_USERNAME, $credentials['username']);
-
-        return $credentials;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see PasswordAuthenticatedInterface
-     */
-    public function getPassword($credentials): ?string
-    {
-        return $credentials['password'];
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see AuthenticatorInterface
-     */
-    public function getUser($credentials, UserProviderInterface $userProvider)
-    {
-        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
-        if (!$this->tokenManager->isTokenValid($token)) {
-            throw new InvalidCsrfTokenException();
-        }
-
-        $user = $this->repository->findByUsername($credentials['username']);
-        if (!$user) {
-            throw new CustomUserMessageAuthenticationException('Username could not be found.');
-        }
-        if (!$user->isEnabled()) {
-            throw new CustomUserMessageAuthenticationException('Account is disabled.');
-        }
-
-        return $user;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see AuthenticatorInterface
-     */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey): Response
-    {
-        $session = $request->getSession();
-        if ($targetPath = $this->getTargetPath($session, $providerKey)) {
+        if ($request->hasSession() && $targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
 
@@ -136,14 +81,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @see AuthenticatorInterface
+     * {@inheritDoc}
      */
     public function supports(Request $request): bool
     {
-        return self::LOGIN_ROUTE === $request->attributes->get('_route')
-            && $request->isMethod(Request::METHOD_POST);
+        $route = $request->attributes->get('_route');
+
+        return $request->isMethod(Request::METHOD_POST) && SecurityController::LOGIN_ROUTE === $route;
     }
 
     /**
@@ -151,16 +95,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
      */
     protected function getHomeUrl(): string
     {
-        return $this->generator->generate(AbstractController::HOME_PAGE);
+        return $this->generator->generate(SecurityController::HOME_PAGE);
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @see AbstractFormLoginAuthenticator
+     * {@inheritDoc}
      */
-    protected function getLoginUrl(): string
+    protected function getLoginUrl(Request $request): string
     {
-        return $this->generator->generate(self::LOGIN_ROUTE);
+        return $this->generator->generate(SecurityController::LOGIN_ROUTE);
     }
 }

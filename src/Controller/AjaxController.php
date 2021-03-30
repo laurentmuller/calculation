@@ -152,8 +152,8 @@ class AjaxController extends AbstractController
         $projectDir = \str_replace('\\', '/', $kernel->getProjectDir());
         $cacheDir = SymfonyUtils::formatPath($kernel->getCacheDir(), $projectDir) . ' (' . SymfonyUtils::formatFileSize($kernel->getCacheDir()) . ')';
         $logDir = SymfonyUtils::formatPath($kernel->getLogDir(), $projectDir) . ' (' . SymfonyUtils::formatFileSize($kernel->getLogDir()) . ')';
-        $endOfMaintenance = $this->formatExpired(Kernel::END_OF_MAINTENANCE);
-        $endOfLife = $this->formatExpired(Kernel::END_OF_LIFE);
+        $endOfMaintenance = SymfonyUtils::formatExpired(Kernel::END_OF_MAINTENANCE) . ' (' . SymfonyUtils::daysBeforeExpiration(Kernel::END_OF_MAINTENANCE) . ')';
+        $endOfLife = SymfonyUtils::formatExpired(Kernel::END_OF_LIFE) . ' (' . SymfonyUtils::daysBeforeExpiration(Kernel::END_OF_LIFE) . ')';
 
         $locale = \Locale::getDefault();
         $localeName = Locales::getName($locale, 'en');
@@ -191,7 +191,7 @@ class AjaxController extends AbstractController
      * Returns a new captcha image.
      *
      * @Route("/captcha/image", name="ajax_captcha_image")
-     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
+     * @IsGranted("PUBLIC_ACCESS")
      */
     public function captchaImage(CaptchaImageService $service): JsonResponse
     {
@@ -210,7 +210,7 @@ class AjaxController extends AbstractController
      * Validate a captcha image.
      *
      * @Route("/captcha/validate", name="ajax_captcha_validate")
-     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
+     * @IsGranted("PUBLIC_ACCESS")
      */
     public function checkCaptcha(Request $request, CaptchaImageService $service): JsonResponse
     {
@@ -327,7 +327,7 @@ class AjaxController extends AbstractController
      * Check if an user's name or an user's e-mail exists.
      *
      * @Route("/checkexist", name="ajax_check_exist")
-     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
+     * @IsGranted("PUBLIC_ACCESS")
      */
     public function checkUsernameOrEmail(Request $request, UserRepository $repository): JsonResponse
     {
@@ -441,6 +441,7 @@ class AjaxController extends AbstractController
                 $current = &$lang;
                 $paths = \explode('.', $key);
                 foreach ($paths as $path) {
+                    /* @phpstan-ignore-next-line */
                     if (!isset($current[$path])) {
                         $current[$path] = [];
                     }
@@ -822,23 +823,6 @@ class AjaxController extends AbstractController
         }
 
         return null;
-    }
-
-    /**
-     * Format the expired date.
-     *
-     * @param string $date the date to format
-     *
-     * @return string the formatted date, if applicable; 'Unknown' otherwise
-     */
-    private function formatExpired(string $date): string
-    {
-        $date = \DateTime::createFromFormat('m/Y', $date);
-        if (false !== $date) {
-            return FormatUtils::formatDate($date->modify('last day of this month 23:59:59'));
-        }
-
-        return 'Unknown';
     }
 
     /**

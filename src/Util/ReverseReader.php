@@ -34,7 +34,7 @@ class ReverseReader
      *
      * @var resource|bool
      */
-    private $handle;
+    private $handle = false;
 
     /**
      * Constructor.
@@ -125,6 +125,6 @@ class ReverseReader
      */
     public function isOpen(): bool
     {
-        return false !== $this->handle;
+        return null !== $this->handle;
     }
 }

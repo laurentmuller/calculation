@@ -14,19 +14,20 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\User\UserRegistrationType;
+use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
-use App\Security\LoginFormAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\InvalidSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -39,6 +40,13 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
  */
 class RegistrationController extends AbstractController
 {
+    use TargetPathTrait;
+
+    /**
+     * The register route name.
+     */
+    private const REGISTER_ROUTE = 'user_register';
+
     private EmailVerifier $verifier;
 
     public function __construct(EmailVerifier $verifier)
@@ -49,7 +57,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="user_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $encoder, GuardAuthenticatorHandler $handler, LoginFormAuthenticator $authenticator, AuthenticationUtils $utils): Response
+    public function register(Request $request, UserPasswordEncoderInterface $encoder, AuthenticationUtils $utils, UrlGeneratorInterface $generator): Response
     {
         $user = new User();
         $form = $this->createForm(UserRegistrationType::class, $user);
@@ -60,6 +68,7 @@ class RegistrationController extends AbstractController
             $encodedPassword = $encoder->encodePassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
 
+            // save user
             $manager = $this->getManager();
             $manager->persist($user);
             $manager->flush();
@@ -75,14 +84,14 @@ class RegistrationController extends AbstractController
             try {
                 $this->verifier->sendEmailConfirmation('app_verify_email', $user, $email);
 
-                return $handler->authenticateUserAndHandleSuccess($user, $request, $authenticator, 'main');
+                return $this->createRedirectResponse($request, $generator);
             } catch (TransportException $e) {
                 if ($request->hasSession()) {
                     $exception = new CustomUserMessageAuthenticationException('registration.send_email_error');
                     $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
                 }
 
-                return $this->redirectToRoute('user_register');
+                return $this->redirectToRoute(self::REGISTER_ROUTE);
             }
         }
 
@@ -95,24 +104,48 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/verify/email", name="app_verify_email")
      */
-    public function verifyUserEmail(Request $request): RedirectResponse
+    public function verifyUserEmail(Request $request, UserRepository $repository): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $id = $request->get('id');
+        if (null === $id) {
+            return $this->redirectToRoute(self::REGISTER_ROUTE);
+        }
+
+        $user = $repository->find($id);
+        if (null === $user) {
+            return $this->redirectToRoute(self::REGISTER_ROUTE);
+        }
+
         try {
-            $this->verifier->handleEmailConfirmation($request, $this->getUser());
+            $this->verifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $e) {
             if ($request->hasSession()) {
                 $exception = $this->translateException($e);
                 $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
             }
 
-            return $this->redirectToRoute('user_register');
+            return $this->redirectToRoute(self::REGISTER_ROUTE);
         }
 
-        $this->succesTrans('registration.confirmed', [' %username%' => $this->getUserName()]);
+        $this->succesTrans('registration.confirmed', [' %username%' => $user->getUserName()]);
 
         return $this->redirectToHomePage();
+    }
+
+    /**
+     * Creates a redirect response.
+     */
+    private function createRedirectResponse(Request $request, UrlGeneratorInterface $generator): Response
+    {
+        if ($request->hasSession() && $targetPath = $this->getTargetPath($request->getSession(), 'main')) {
+            return new RedirectResponse($targetPath);
+        }
+
+        $url = $generator->generate(self::HOME_PAGE);
+
+        return new RedirectResponse($url);
     }
 
     /**

@@ -13,12 +13,12 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Entity\Log;
+use App\Service\LogService;
 use App\Util\Utils;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use App\Service\LogService;
 
 /**
  * Excel document for application logs.

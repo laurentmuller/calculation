@@ -27,7 +27,7 @@ class Role implements RoleInterface
     /**
      * The name.
      *
-     * @var string
+     * @var ?string
      */
     protected $name;
 

@@ -159,6 +159,26 @@ function updateSearchAction($table, row, $element, $action) {
 }
 
 /**
+ * Update the edit calculation action.
+ * 
+ * @param $table
+ *            {jQuery} the parent table.
+ * @param row
+ *            {object} the row data.
+ * @param $element
+ *            {jQuery} the table row.
+ * @param $action
+ *            {jQuery} the action to update
+ */
+function updateCalculationEditAction($table, row, $element, $action) {
+    'use strict';
+    const editable = Number.parseInt(row.editable, 10);
+    if(!Number.isNaN(editable) && editable === 0) {
+        $action.remove();
+    }
+}
+
+/**
  * Update the export calculation action.
  * 
  * @param $table
@@ -381,6 +401,8 @@ $.fn.extend({
                 updateUserSwitchAction($table, row, $element, $action);
             } else if($action.is('.btn-user-message, .btn-user-delete')) {
                 updateUserAction($table, row, $element, $action);
+            } else if($action.is('.btn-calculation-edit')) {
+                updateCalculationEditAction($table, row, $element, $action);
             } else if($action.is('.btn-calculation-pdf')) {
                 updateCalculationPdfAction($table, row, $element, $action);
             } else if($action.is('.btn-search')) {

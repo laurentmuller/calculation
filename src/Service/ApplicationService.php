@@ -280,11 +280,11 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     /**
      * Gets all properties.
      *
-     * @param string[] $exludes the property keys to exclude
+     * @param string[] $excluded the property keys to exclude
      *
      * @return array the properties with names and values
      */
-    public function getProperties(array $exludes = []): array
+    public function getProperties(array $excluded = []): array
     {
         // reload data
         $this->updateAdapter();
@@ -311,8 +311,8 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
         ];
 
         // exlude keys
-        if (!empty($exludes)) {
-            return \array_diff_key($result, \array_flip($exludes));
+        if (!empty($excluded)) {
+            return \array_diff_key($result, \array_flip($excluded));
         }
 
         return $result;

@@ -18,7 +18,6 @@ use App\Traits\CheckerTrait;
 use App\Traits\TranslatorTrait;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -83,11 +82,6 @@ class SearchTable extends AbstractTable
     ];
 
     /**
-     * @var bool
-     */
-    private $debug;
-
-    /**
      * @var SearchService
      */
     private $service;
@@ -95,12 +89,11 @@ class SearchTable extends AbstractTable
     /**
      * Constructor.
      */
-    public function __construct(SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator, KernelInterface $kernel)
+    public function __construct(SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
     {
         $this->service = $service;
         $this->checker = $checker;
         $this->translator = $translator;
-        $this->debug = $kernel->isDebug();
     }
 
     /**

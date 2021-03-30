@@ -1,4 +1,6 @@
 security:
+    enable_authenticator_manager: true
+
     encoders:
         App\Entity\User:
             algorithm: auto
@@ -19,41 +21,29 @@ security:
             security: false
 
         main:
-            pattern: ^/
-            anonymous: true
-            provider: app_user_provider
-            guard:
-                authenticators:
-                    - App\Security\LoginFormAuthenticator
+            lazy: true
+            switch_user: true
+            custom_authenticator: App\Security\LoginFormAuthenticator
+
             logout:
                 path: app_logout
                 invalidate_session: false
 
-            switch_user: true
-
-            # form_login:
-                # csrf_token_generator: security.csrf.token_manager
-                # username_parameter: username
-                # password_parameter: password
-                # csrf_parameter: csrf_token
-
             remember_me:
-                remember_me_parameter: remember_me
+                remember_me_parameter: remember_me                 
                 secret: '%app_secret%'
                 path:   '%cookie_path%'
                 secure: false
 
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/login$,                roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting,             roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/reset-password,        roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        #- { path: ^/register$,             roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/about/policy,          roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/about/licence,         roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/ajax/checkexist,       roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/ajax/captcha/image,    roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/ajax/captcha/validate, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login,                 roles: PUBLIC_ACCESS  }
+        - { path: ^/resetting,             roles: PUBLIC_ACCESS  }
+        - { path: ^/reset-password,        roles: PUBLIC_ACCESS  }
+        #- { path: ^/register$,             roles: PUBLIC_ACCESS  }
+        - { path: ^/about/policy,          roles: PUBLIC_ACCESS  }
+        - { path: ^/about/licence,         roles: PUBLIC_ACCESS  }
+        - { path: ^/ajax/checkexist,       roles: PUBLIC_ACCESS  }
+        - { path: ^/ajax/captcha/image,    roles: PUBLIC_ACCESS  }
+        - { path: ^/ajax/captcha/validate, roles: PUBLIC_ACCESS  }
         - { path: ^/admin/,                roles: ROLE_ADMIN }
         - { path: ^/,                      roles: ROLE_USER }

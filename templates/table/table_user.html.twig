@@ -5,7 +5,7 @@
 {%- set title_icon   = 'user far' -%}
 {%- set defer_url    = url('table_user') -%}
 {%- set save_url     = url('table_user_save') -%}
-{%- set object_type  = EntityVoterInterface.ENTITY_USER -%}
+{%- set object_type  = ENTITY_USER -%}
 {%- set attributes   = attributes|default({})|merge({'user-id': app.user.id}) -%}
 
 {% block header_actions -%}

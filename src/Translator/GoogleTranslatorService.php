@@ -56,10 +56,9 @@ class GoogleTranslatorService extends AbstractTranslatorService
      *
      * @throws ParameterNotFoundException if the Google key parameter is not defined
      */
-    public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $cache)
+    public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter)
     {
-        $key = $params->get(self::PARAM_KEY);
-        parent::__construct($kernel, $cache, $key);
+        parent::__construct($kernel, $adapter, $params->get(self::PARAM_KEY));
     }
 
     /**

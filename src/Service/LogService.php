@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Log;
+use App\Traits\CacheTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
@@ -26,6 +27,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class LogService
 {
+    use CacheTrait;
+
     /**
      * The key for channels.
      */
@@ -52,11 +55,6 @@ class LogService
     private const APP_CHANNEL = 'app';
 
     /**
-     * The cache validity in seconds (2 minutes).
-     */
-    private const CACHE_TIMEOUT = 60 * 2;
-
-    /**
      * The date format.
      */
     private const DATE_FORMAT = 'd.m.Y H:i:s';
@@ -75,11 +73,6 @@ class LogService
      * The values separator.
      */
     private const VALUES_SEP = '|';
-
-    /**
-     * The cache adapter.
-     */
-    private AdapterInterface $adapter;
 
     /**
      * The log file name.
@@ -103,7 +96,7 @@ class LogService
      */
     public function clearCache(): self
     {
-        $this->adapter->deleteItems(self::KEYS);
+        $this->deleteCacheItems(self::KEYS);
 
         return $this;
     }
@@ -310,7 +303,7 @@ class LogService
     private function getCachedValues()
     {
         $entries = [];
-        $items = $this->adapter->getItems(self::KEYS);
+        $items = $this->getCacheItems(self::KEYS);
         foreach ($items as $item) {
             if ($item->isHit()) {
                 $entries[$item->getKey()] = $item->get();
@@ -467,14 +460,9 @@ class LogService
      */
     private function setCachedValues(array $entries): array
     {
-        $adapter = $this->adapter;
         foreach ($entries as $key => $value) {
-            $item = $adapter->getItem($key)
-                ->expiresAfter(self::CACHE_TIMEOUT)
-                ->set($value);
-            $adapter->saveDeferred($item);
+            $this->setCacheValue($key, $value);
         }
-        $adapter->commit();
 
         return $entries;
     }

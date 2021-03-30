@@ -34,7 +34,7 @@ class ImageHandler implements ImageExtensionInterface
     /**
      * The image file name.
      *
-     * @var string
+     * @var string|null
      */
     protected $filename;
 
@@ -685,7 +685,7 @@ class ImageHandler implements ImageExtensionInterface
      */
     public function ttfSize(float $size, float $angle, string $fontfile, string $text): array
     {
-        if (false !== $box = $this->ttfBox($size, $angle, $fontfile, $text)) {
+        if ($box = $this->ttfBox($size, $angle, $fontfile, $text)) {
             $values = [$box[0], $box[2], $box[4], $box[6]];
             $width = \max($values) - \min($values);
 

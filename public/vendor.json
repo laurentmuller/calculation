@@ -264,16 +264,16 @@
 		},
 		{
 			"name": "bootstrap-table",
-			"version": "1.18.2",
+			"version": "1.18.3",
 			"files": [
 				"bootstrap-table.js",
 				"bootstrap-table.css"				
 			]
 		},
 		{
-			"example": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.2/extensions/defer-url/bootstrap-table-defer-url.min.js",
+			"example": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/defer-url/bootstrap-table-defer-url.min.js",
 			"name": "bootstrap-table",
-			"version": "1.18.2",
+			"version": "1.18.3",
 			"format": "{source}{name}/{version}/extensions/defer-url/{file}",
 			"target": "bootstrap-table",
 			"files": [

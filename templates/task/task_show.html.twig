@@ -9,8 +9,8 @@
 {%- set params = route_params(app.request, id) %}
 
 {# actions #}
-{%- set edit_path   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, item) ? path('task_edit', params) : null -%}
-{%- set delete_path = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, item) ? path('task_delete', params) : null -%}
+{%- set edit_path   = is_granted(ATTRIBUTE_EDIT, item) ? path('task_edit', params) : null -%}
+{%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('task_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, 'task_card') -%}
 
 {# properties #}

@@ -52,14 +52,14 @@ abstract class AbstractController extends BaseController
     /**
      * The application service.
      *
-     * @var ApplicationService
+     * @var ?ApplicationService
      */
     protected $application;
 
     /**
      * The URL generator service.
      *
-     * @var UrlGeneratorService
+     * @var ?UrlGeneratorService
      */
     protected $generatorService;
 

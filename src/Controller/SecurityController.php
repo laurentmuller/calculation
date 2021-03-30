@@ -25,19 +25,27 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
+     * The login route name.
+     */
+    public const LOGIN_ROUTE = 'app_login';
+
+    /**
      * @Route("/login", name="app_login")
      */
     public function login(AuthenticationUtils $utils): Response
     {
+        $username = $utils->getLastUsername();
+        $error = $utils->getLastAuthenticationError();
+
         $form = $this->createForm(UserLoginType::class, [
-            'username' => $utils->getLastUsername(),
+            'username' => $username,
             'remember_me' => true,
         ]);
 
         // display form
         return $this->render('security/login.html.twig', [
             'form' => $form->createView(),
-            'error' => $utils->getLastAuthenticationError(),
+            'error' => $error,
         ]);
     }
 

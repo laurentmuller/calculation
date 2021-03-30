@@ -44,14 +44,14 @@ class LogDataTable extends AbstractDataTable
     /**
      * The channels.
      *
-     * @var string[]
+     * @var ?string[]
      */
     private $channels;
 
     /**
      * The levels.
      *
-     * @var string[]
+     * @var ?string[]
      */
     private $levels;
 

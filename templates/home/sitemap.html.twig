@@ -25,29 +25,29 @@
 {%- set route_params   = {'caller': path('site_map')} -%}
 
 {# rights #}
-{%- set is_list_calculation = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION) -%}
-{%- set is_add_calculation  = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_CALCULATION) -%}
-{%- set is_pdf_calculation  = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, EntityVoterInterface.ENTITY_CALCULATION) -%}
+{%- set is_list_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
+{%- set is_add_calculation  = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION) -%}
+{%- set is_pdf_calculation  = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) -%}
 
-{%- set is_list_product    = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_PRODUCT) -%}
-{%- set is_add_product     = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_PRODUCT) -%}
-{%- set is_pdf_product     = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, EntityVoterInterface.ENTITY_PRODUCT) -%}
+{%- set is_list_product    = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
+{%- set is_add_product     = is_granted(ATTRIBUTE_ADD, ENTITY_PRODUCT) -%}
+{%- set is_pdf_product     = is_granted(ATTRIBUTE_EXPORT, ENTITY_PRODUCT) -%}
   
-{%- set is_list_category   = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CATEGORY) -%}
-{%- set is_add_category    = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_CATEGORY) -%}
-{%- set is_pdf_category    = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, EntityVoterInterface.ENTITY_CATEGORY) -%}
+{%- set is_list_category   = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) -%}
+{%- set is_add_category    = is_granted(ATTRIBUTE_ADD, ENTITY_CATEGORY) -%}
+{%- set is_pdf_category    = is_granted(ATTRIBUTE_EXPORT, ENTITY_CATEGORY) -%}
 
-{%- set is_list_state      = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
-{%- set is_add_state       = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
-{%- set is_pdf_state       = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, EntityVoterInterface.ENTITY_CALCULATION_STATE) -%}
+{%- set is_list_state      = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
+{%- set is_add_state       = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION_STATE) -%}
+{%- set is_pdf_state       = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION_STATE) -%}
 
-{%- set is_list_margin     = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
-{%- set is_add_margin      = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
-{%- set is_pdf_margin      = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, EntityVoterInterface.ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_list_margin     = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_add_margin      = is_granted(ATTRIBUTE_ADD, ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_pdf_margin      = is_granted(ATTRIBUTE_EXPORT, ENTITY_GLOBAL_MARGIN) -%}
 
-{%- set is_list_customer   = is_granted(EntityVoterInterface.ATTRIBUTE_LIST, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev -%}
-{%- set is_add_customer    = is_granted(EntityVoterInterface.ATTRIBUTE_ADD, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev  -%}
-{%- set is_pdf_customer    = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, EntityVoterInterface.ENTITY_CUSTOMER) and is_dev  -%}
+{%- set is_list_customer   = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_dev -%}
+{%- set is_add_customer    = is_granted(ATTRIBUTE_ADD, ENTITY_CUSTOMER) and is_dev  -%}
+{%- set is_pdf_customer    = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_dev  -%}
 
 {# class #}
 {% block container_class 'container-fluid' %}

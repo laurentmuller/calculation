@@ -17,10 +17,10 @@
 
 {# actions #}
 {%- set list_path   = app.displayTabular ? 'calculation_table' : 'calculation_card' -%}
-{%- set edit_path   = is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, item) ? path('calculation_edit', params) : null -%}
-{%- set delete_path = is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, item) ? path('calculation_delete', params) : null -%}
+{%- set edit_path   = is_granted(ATTRIBUTE_EDIT, item) and item.editable ? path('calculation_edit', params) : null -%}
+{%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('calculation_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, list_path) -%}
-{%- set pdf_export  = is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, item) -%}
+{%- set pdf_export  = is_granted(ATTRIBUTE_EXPORT, item) -%}
 
 {% block card_header_class ' d-print-none' %}
 {% block card_container_class '' %}

@@ -73,7 +73,7 @@ class Column
     /**
      * The field name.
      */
-    private string $field;
+    private ?string $field = null;
 
     /**
      * The field formatter (server side).
@@ -90,7 +90,7 @@ class Column
     /**
      * The property path for array object.
      */
-    private string $property;
+    private ?string $property = null;
 
     /**
      * The searchable behavior.

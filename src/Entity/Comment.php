@@ -30,7 +30,7 @@ class Comment
     /**
      * The attachments.
      *
-     * @var UploadedFile[]
+     * @var ?UploadedFile[]
      *
      * @Assert\Count(max=3)
      * @Assert\All(@Assert\File(maxSize="10485760"))

@@ -17,9 +17,6 @@ use App\Repository\UserRepository;
 use App\Traits\TranslatorFlashMessageTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -65,23 +62,21 @@ class InteractiveLoginListener implements EventSubscriberInterface
     public function onInteractiveLogin(InteractiveLoginEvent $event): void
     {
         $token = $event->getAuthenticationToken();
-        if ($this->updateUser($token)) {
-            $this->notify($event->getRequest(), $token);
-        }
+        $this->updateUser($token->getUser());
+        $this->notify($event->getRequest(), $token->getUsername());
     }
 
     /**
      * Notify the success login to the user.
      *
-     * @param Request        $request the request
-     * @param TokenInterface $token   the token
+     * @param string|null $username the logged user name
      */
-    private function notify(Request $request, TokenInterface $token): void
+    private function notify(Request $request, ?string $username): void
     {
-        if ($request->hasSession()) {
+        if ($username && $request->hasSession()) {
             $this->session = $request->getSession();
             $params = [
-                '%username%' => $token->getUsername(),
+                '%username%' => $username,
                 '%appname%' => $this->appNameVersion,
             ];
             $this->succesTrans('security.login.success', $params);
@@ -89,21 +84,14 @@ class InteractiveLoginListener implements EventSubscriberInterface
     }
 
     /**
-     * Update the last login date, if applicable, of the user.
+     * Update the last login date, if applicable, of the given user.
      *
-     * @param TokenInterface $token the token to get user from
-     *
-     * @return bool true if updated
+     * @param mixed $user the logged user
      */
-    private function updateUser(TokenInterface $token): bool
+    private function updateUser($user): void
     {
-        if ($token instanceof RememberMeToken || $token instanceof PostAuthenticationGuardToken) {
-            $user = $token->getUser();
-            if ($user instanceof User) {
-                return $this->repository->updateLastLogin($user);
-            }
+        if ($user instanceof User) {
+            $this->repository->updateLastLogin($user);
         }
-
-        return false;
     }
 }

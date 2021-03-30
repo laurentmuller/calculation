@@ -2,6 +2,7 @@ includes:
     - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
     - vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
     - vendor/slam/phpstan-extensions/conf/symfony-rules.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 parameters:
     level: 6
@@ -17,6 +18,9 @@ parameters:
     # Level 6
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
+    
+    # PHP 7.4
+    checkUninitializedProperties: true
 
     scanFiles:
     - vendor/twig/twig/src/Extension/CoreExtension.php

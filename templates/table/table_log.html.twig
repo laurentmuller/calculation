@@ -7,7 +7,7 @@
 {%- set save_url     = url('table_log_save') -%}
 {%- set channel      = customData.channel|default('') -%}
 {%- set level        = customData.level|default('') -%}
-{%- set object_type  = EntityVoterInterface.ENTITY_LOG -%}
+{%- set object_type  = ENTITY_LOG -%}
 
 {% block header_actions %}
 <small>{{ 'log.list.file'|trans({'%file%': customData.file}) }}</small>

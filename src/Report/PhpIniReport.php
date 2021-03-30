@@ -40,7 +40,11 @@ class PhpIniReport extends AbstractReport
     public function __construct(AbstractController $controller)
     {
         parent::__construct($controller);
-        $this->SetTitle(\php_ini_loaded_file() ?? 'php.ini');
+        if ($title = \php_ini_loaded_file()) {
+            $this->SetTitle($title);
+        } else {
+            $this->SetTitle('php.ini');
+        }
     }
 
     /**

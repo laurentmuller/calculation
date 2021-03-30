@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Theme;
+use App\Traits\CacheTrait;
 use App\Util\FileUtils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +27,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class ThemeService
 {
+    use CacheTrait;
+
     /**
      * The default background class name for the navigation bar.
      */
@@ -87,11 +90,6 @@ class ThemeService
     private const THEME_DIRECTORY = 'themes/';
 
     /**
-     * @var AdapterInterface
-     */
-    private $cache;
-
-    /**
      * The default theme.
      *
      * @var Theme|null
@@ -111,15 +109,17 @@ class ThemeService
     /**
      * Constructor.
      *
-     * @param KernelInterface  $kernel the kernel to get themes file
-     * @param RequestStack     $stack  the request stack to get current theme
-     * @param AdapterInterface $cache  the cache used to save or retrieve themes
+     * @param KernelInterface  $kernel  the kernel to get themes file
+     * @param RequestStack     $stack   the request stack to get current theme
+     * @param AdapterInterface $adapter the cache used to save or retrieve themes
      */
-    public function __construct(KernelInterface $kernel, RequestStack $stack, AdapterInterface $cache)
+    public function __construct(KernelInterface $kernel, RequestStack $stack, AdapterInterface $adapter)
     {
         $this->kernel = $kernel;
-        $this->cache = $cache;
         $this->stack = $stack;
+        if (!$kernel->isDebug()) {
+            $this->adapter = $adapter;
+        }
     }
 
     /**
@@ -207,11 +207,8 @@ class ThemeService
     public function getThemes(): array
     {
         // already cached?
-        if (!$this->kernel->isDebug()) {
-            $item = $this->cache->getItem(self::KEY_THEMES);
-            if ($item->isHit()) {
-                return $item->get();
-            }
+        if ($themes = $this->getCacheValue(self::KEY_THEMES)) {
+            return $themes;
         }
 
         // add default theme (Boostrap)
@@ -241,11 +238,7 @@ class ThemeService
         }
 
         // cache themes
-        if (isset($item)) {
-            $item->set($themes)
-                ->expiresAfter(10 * 60); // 10 minutes
-            $this->cache->save($item);
-        }
+        $this->setCacheValue(self::KEY_THEMES, $themes);
 
         return $themes;
     }

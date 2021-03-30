@@ -16,7 +16,9 @@ use App\Entity\User;
 use App\Form\FormHelper;
 use App\Service\ApplicationService;
 use App\Service\CaptchaImageService;
+use App\Traits\TranslatorTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to register a new user.
@@ -25,12 +27,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class UserRegistrationType extends AbstractUserCaptchaType
 {
+    use TranslatorTrait;
+
     /**
      * Constructor.
      */
-    public function __construct(CaptchaImageService $service, ApplicationService $application)
+    public function __construct(CaptchaImageService $service, ApplicationService $application, TranslatorInterface $translator)
     {
         parent::__construct($service, $application);
+        $this->translator = $translator;
     }
 
     /**
@@ -60,6 +65,13 @@ class UserRegistrationType extends AbstractUserCaptchaType
             ->addRepeatPasswordType();
 
         parent::addFormFields($helper);
+
+        $helper->field('agreeTerms')
+            ->notMapped()
+            ->updateRowAttribute('class', 'mb-0')
+            ->label('registration.agreeTerms.label')
+            ->updateAttribute('data-error', $this->trans('registration.agreeTerms.error'))
+            ->addCheckboxType();
     }
 
     /**

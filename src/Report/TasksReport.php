@@ -69,26 +69,24 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
 
         /** @var Task $entity */
         foreach ($entities as $entity) {
-            //check for new page
-            $count = 2;
-            if (!$entity->isEmpty()) {
-                $item = $entity->getItems()->first();
-                if ($item->isEmpty()) {
-                    ++$count;
-                } else {
-                    $count += $item->count();
-                }
-            }
-            $height = $count * self::LINE_HEIGHT;
-            if ($this->isPrintable($height)) {
+            // empty?
+            if ($entity->isEmpty()) {
                 $table->setGroupKey($entity);
-            } else {
-                $table->setGroupKey($entity, false);
-                $table->checkNewPage($count * self::LINE_HEIGHT);
+                continue;
             }
 
             /** @var TaskItem $item */
             foreach ($entity->getItems() as $item) {
+                //check for new page
+                $count = 1 + \max($item->count(), 1);
+                $height = $count * self::LINE_HEIGHT;
+                if ($this->isPrintable($height)) {
+                    $table->setGroupKey($entity);
+                } else {
+                    $table->setGroupKey($entity, false);
+                    $table->checkNewPage($height);
+                }
+
                 if ($item->isEmpty()) {
                     $table->startRow()
                         ->add($item->getName(), 1, $itemStyle)
@@ -105,10 +103,10 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                         if (0 === $index++) {
                             $table->add($item->getName(), 1, $itemStyle);
                         } else {
-                            $table->add('');
+                            $table->add(null);
                         }
-                        $table->add('')
-                            ->add('')
+                        $table->add(null)
+                            ->add(null)
                             ->add(FormatUtils::formatAmount($margin->getMinimum()))
                             ->add(FormatUtils::formatAmount($margin->getMaximum()))
                             ->add(FormatUtils::formatAmount($margin->getValue()))

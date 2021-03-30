@@ -48,10 +48,10 @@
 {%- set orderdir      = app.session.get(object_type ~ '.orderdir') -%}
 {%- set pagelength    = app.session.get(object_type ~ '.pagelength', 15) -%}
 
-{%- set is_pdf_action    = pdf_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
-{%- set is_excel_action  = excel_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_EXPORT, object_type) -%}
+{%- set is_pdf_action    = pdf_path|default(false) and is_granted(ATTRIBUTE_EXPORT, object_type) -%}
+{%- set is_excel_action  = excel_path|default(false) and is_granted(ATTRIBUTE_EXPORT, object_type) -%}
 {%- set is_other_actions = is_pdf_action or is_excel_action or (is_other_actions ?? false) -%}
-{%- set row_link         = not app.actionNone and (is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) or is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type)) -%}
+{%- set row_link         = not app.actionNone and (is_granted(ATTRIBUTE_EDIT, object_type) or is_granted(ATTRIBUTE_SHOW, object_type)) -%}
 
 {# classes #}
 {% block card_container_class '' %}
@@ -64,16 +64,16 @@
 	<div class="col-lg-7 text-lg-right d-print-none">
         {# actions toolbar #}
 		<div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
-            {% if show_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_SHOW, object_type) %}
+            {% if show_path|default(false) and is_granted(ATTRIBUTE_SHOW, object_type) %}
                 {{ _self.button(show_path|default(false), 'common.button_show', 'btn-table-show disabled', show_title ?? false, 'tv') }}
             {% endif %}
-    		{% if edit_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_EDIT, object_type) %}
+    		{% if edit_path|default(false) and is_granted(ATTRIBUTE_EDIT, object_type) %}
                 {{ _self.button(edit_path|default(false), 'common.button_edit', 'btn-table-edit disabled', edit_title ?? false, 'pencil-alt') }}
             {% endif %}
-            {% if delete_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_DELETE, object_type) %}
+            {% if delete_path|default(false) and is_granted(ATTRIBUTE_DELETE, object_type) %}
                 {{ _self.button(delete_path|default(false), 'common.button_delete', 'btn-table-delete disabled', delete_title ?? false, 'times', true) }}
             {% endif %}
-            {% if add_path|default(false) and is_granted(EntityVoterInterface.ATTRIBUTE_ADD, object_type) %}
+            {% if add_path|default(false) and is_granted(ATTRIBUTE_ADD, object_type) %}
                 {{ _self.button(add_path|default(false), 'common.button_add', 'btn-table-add', add_title ?? false, 'file far') }}
             {% endif %}
             {% block other_actions -%}

@@ -57,8 +57,7 @@ class LogoutListener implements EventSubscriberInterface
         $request = $event->getRequest();
         if ($request->hasSession()) {
             $this->session = $request->getSession();
-            $username = $this->getUsername($event);
-            if (null !== $this->session && null !== $username) {
+            if ($username = $this->getUsername($event)) {
                 $params = [
                     '%username%' => $username,
                     '%appname%' => $this->appNameVersion,

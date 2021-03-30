@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\CacheTrait;
 use App\Traits\TranslatorTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -24,12 +25,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class HelpService
 {
+    use CacheTrait;
     use TranslatorTrait;
 
     /**
-     * The cache timeout (60 minutes).
+     * The key name to cache content.
      */
-    private const CACHE_TIMEOUT = 3600;
+    private const CACHE_KEY = 'help';
 
     /**
      * The relative path to the JSON help file.
@@ -40,20 +42,6 @@ class HelpService
      * The relative path to the images.
      */
     private const IMAGE_PATH = '/public/help/images/';
-
-    /**
-     * The cache adapter.
-     *
-     * @var AdapterInterface
-     */
-    private $adapter;
-
-    /**
-     * The debug mode.
-     *
-     * @var bool
-     */
-    private $debug;
 
     /**
      * The absolute path to the JSON help file.
@@ -74,10 +62,10 @@ class HelpService
      */
     public function __construct(AdapterInterface $adapter, TranslatorInterface $translator, KernelInterface $kernel)
     {
-        $this->adapter = $adapter;
+        if (!$kernel->isDebug()) {
+            $this->adapter = $adapter;
+        }
         $this->translator = $translator;
-
-        $this->debug = $kernel->isDebug();
         $this->file = $kernel->getProjectDir() . self::FILE_PATH;
         $this->imagePath = $kernel->getProjectDir() . self::IMAGE_PATH;
     }
@@ -156,9 +144,8 @@ class HelpService
     public function getHelp(): array
     {
         // read from cache
-        $item = $this->debug ? false : $this->adapter->getItem('help');
-        if ($item && $item->isHit()) {
-            return $item->get();
+        if ($help = $this->getCacheValue(self::CACHE_KEY)) {
+            return $help;
         }
 
         // load
@@ -173,10 +160,7 @@ class HelpService
             }
 
             // save to cache
-            if ($item) {
-                $item->expiresAfter(self::CACHE_TIMEOUT)->set($help);
-                $this->adapter->save($item);
-            }
+            $this->setCacheValue(self::CACHE_KEY, $help);
 
             return $help;
         }

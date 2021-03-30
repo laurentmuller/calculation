@@ -12,12 +12,11 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Interfaces\ActionInterface;
 use App\Interfaces\EntityVoterInterface;
 use App\Service\CalculationService;
-use App\Service\ThemeService;
-use App\Util\Utils;
+use App\Traits\CacheTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 
@@ -28,29 +27,35 @@ use Twig\Extension\GlobalsInterface;
  */
 final class ConstantExtension extends AbstractExtension implements GlobalsInterface
 {
+    use CacheTrait;
+
     /**
      * The key name to cache constants.
      */
     private const CACHE_KEY = 'constant_extension';
 
     /**
-     * The cache timeout (60 minutes).
-     */
-    private const CACHE_TIMEOUT = 60 * 60;
-
-    /**
-     * The cache.
-     *
-     * @var AdapterInterface
-     */
-    private $cache;
-
-    /**
      * Constructor.
      */
-    public function __construct(AdapterInterface $cache)
+    public function __construct(AdapterInterface $adapter, KernelInterface $kernel)
     {
-        $this->cache = $cache;
+        if (!$kernel->isDebug()) {
+            $this->adapter = $adapter;
+        }
+    }
+
+    /**
+     * The callback function used to create constants.
+     *
+     * @return array the constants
+     */
+    public function callback(): array
+    {
+        $values = [];
+        $this->addConstants(CalculationService::class, $values);
+        $this->addConstants(EntityVoterInterface::class, $values);
+
+        return $values;
     }
 
     /**
@@ -58,50 +63,25 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      */
     public function getGlobals(): array
     {
-        // already in the cache?
-        $item = $this->cache->getItem(self::CACHE_KEY);
-        if ($item->isHit()) {
-            return $item->get();
-        }
-
-        // create array
-        $values = [
-            Utils::getShortName(ThemeService::class) => $this->getConstants(ThemeService::class),
-            Utils::getShortName(ActionInterface::class) => $this->getConstants(ActionInterface::class),
-            Utils::getShortName(CalculationService::class) => $this->getConstants(CalculationService::class),
-            Utils::getShortName(EntityVoterInterface::class) => $this->getConstants(EntityVoterInterface::class),
-        ];
-
-        // put to the cache
-        $item->expiresAfter(self::CACHE_TIMEOUT)
-            ->set($values);
-        $this->cache->save($item);
-
-        return $values;
+        return $this->getCacheValue(self::CACHE_KEY, [$this, 'callback']);
     }
 
     /**
-     * Gets public constants of the given class name.
+     * Adds the public constants of the given class name.
      *
      * @param string $className the class name to get constants for
-     *
-     * @return array an array that hold the constant names and the contant values
+     * @param array  $values    the array to update
      */
-    private function getConstants(string $className): array
+    private function addConstants(string $className, array &$values): void
     {
-        $result = [];
-
-        /** @var \ReflectionClass $reflection */
         $reflection = new \ReflectionClass($className);
 
         /** @var \ReflectionClassConstant[] $constants */
         $constants = $reflection->getReflectionConstants();
         foreach ($constants as $constant) {
             if ($constant->isPublic()) {
-                $result[$constant->getName()] = $constant->getValue();
+                $values[$constant->getName()] = $constant->getValue();
             }
         }
-
-        return $result;
     }
 }

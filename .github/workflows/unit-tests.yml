@@ -24,8 +24,5 @@ jobs:
       - name: Validate Composer
         run: composer validate
 
-      - name: PHPStan
-        uses: docker://oskarstark/phpstan-ga
-
       - name: Run Tests
         run: php bin/phpunit

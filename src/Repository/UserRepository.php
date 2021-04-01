@@ -151,17 +151,17 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
     public function removeExpiredResetPasswordRequests(): int
     {
         $time = new \DateTimeImmutable('-1 week');
-        $builder = $this->createQueryBuilder('u')
+        $query = $this->createQueryBuilder('u')
             ->update()
             ->set('u.selector', 'NULL')
             ->set('u.hashedToken', 'NULL')
             ->set('u.requestedAt', 'NULL')
             ->set('u.expiresAt', 'NULL')
             ->where('u.expiresAt <= :time')
-            ->setParameter('time', $time);
-        $query = $builder->getQuery();
+            ->setParameter('time', $time)
+            ->getQuery();
 
-        return $query->execute();
+        return (int) $query->execute();
     }
 
     /**

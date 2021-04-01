@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Laurent Muller
  */
-class DataResults
+class DataResults implements \JsonSerializable
 {
     /**
      * The table attributes.
@@ -151,9 +151,9 @@ class DataResults
     }
 
     /**
-     * Gets the subset of values for the ajax response.
+     * {@inheritDoc}
      */
-    public function getAjaxResults(): array
+    public function jsonSerialize()
     {
         return [
             TableInterface::PARAM_TOTAL_NOT_FILTERED => $this->totalNotFiltered,

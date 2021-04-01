@@ -417,8 +417,8 @@ class BootstrapTableController extends AbstractController
             $results = $table->processQuery($query);
 
             // callback?
-            if ($request->isXmlHttpRequest()) {
-                return new JsonResponse($results->getAjaxResults());
+            if ($query->callback) {
+                return new JsonResponse($results);
             }
 
             return $this->render($template, (array) $results);

@@ -109,8 +109,8 @@ abstract class AbstractTable
         // other parameters
         $query->id = $this->getParamId($request);
         $query->card = $this->getParamCard($request);
-        $query->search = (string) $request->get(TableInterface::PARAM_SEARCH, '');
         $query->callback = $request->isXmlHttpRequest();
+        $query->search = (string) $request->get(TableInterface::PARAM_SEARCH, '');
 
         return $query;
     }
@@ -185,12 +185,17 @@ abstract class AbstractTable
     protected function getAllowedPageList(int $totalNotFiltered): array
     {
         $sizes = TableInterface::PAGE_LIST;
+        if (\end($sizes) <= $totalNotFiltered) {
+            return $sizes;
+        }
+
         for ($i = 0, $count = \count($sizes); $i < $count; ++$i) {
             if ($sizes[$i] >= $totalNotFiltered) {
                 return \array_slice($sizes, 0, $i + 1);
             }
         }
 
+        // must never been here!
         return $sizes;
     }
 
@@ -350,9 +355,7 @@ abstract class AbstractTable
         }
 
         // page list and limit
-        if (empty($results->pageList)) {
-            $results->pageList = $this->getAllowedPageList($results->totalNotFiltered);
-        }
+        $results->pageList = $this->getAllowedPageList($results->totalNotFiltered);
         $limit = \min($query->limit, \max($results->pageList));
 
         // results
@@ -360,7 +363,7 @@ abstract class AbstractTable
         $results->limit = $limit;
 
         // parameters
-        $results->params = \array_merge($results->params, [
+        $results->params = \array_merge([
             TableInterface::PARAM_ID => $query->id,
             TableInterface::PARAM_SEARCH => $query->search,
             TableInterface::PARAM_SORT => $query->sort,
@@ -368,10 +371,10 @@ abstract class AbstractTable
             TableInterface::PARAM_OFFSET => $query->offset,
             TableInterface::PARAM_CARD => $query->card,
             TableInterface::PARAM_LIMIT => $limit,
-        ]);
+        ], $results->params);
 
         // attributes
-        $results->attributes = \array_merge($results->attributes, [
+        $results->attributes = \array_merge([
             'total-not-filtered' => $results->totalNotFiltered,
             'total-rows' => $results->filtered,
 
@@ -386,7 +389,7 @@ abstract class AbstractTable
 
             'sort-name' => $query->sort,
             'sort-order' => $query->order,
-        ]);
+        ], $results->attributes);
     }
 
     /**

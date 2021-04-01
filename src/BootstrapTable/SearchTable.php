@@ -116,6 +116,14 @@ class SearchTable extends AbstractTable
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function getAllowedPageList(int $totalNotFiltered): array
+    {
+        return TableInterface::PAGE_LIST;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getColumnDefinitions(): string
@@ -178,7 +186,6 @@ class SearchTable extends AbstractTable
 
         // ajax?
         if (!$query->callback) {
-            $results->pageList = TableInterface::PAGE_LIST;
             $results->customData = [
                 'entity' => $entity,
                 'entities' => $this->service->getEntities(),

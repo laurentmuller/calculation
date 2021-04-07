@@ -3,13 +3,13 @@
 /* globals Toaster */
 
 /**
- * Creates a row.
+ * Creates a row for the given values.
  * 
  * @param {array}
  *            values - the cell values.
  * @param {array}
  *            classes - the cell classes. This array must have the same length
- *            of the values.
+ *            as the values.
  * @returns {jQuery} the created row.
  */
 function createRow(values, classes) {
@@ -27,6 +27,33 @@ function createRow(values, classes) {
 }
 
 /**
+ * Creates rows for the given items.
+ * 
+ * @param {array}
+ *            items - the items to render.
+ * @param {function}
+ *            valuesCallback - the function to get the cell values.
+ * @param {array}
+ *            classes - the cell classes.
+ * @param {function}
+ *            rowCallback - the optional function to update the row.
+ */
+function createRows(items, valuesCallback, classes, rowCallback) {
+    'use strict';
+
+    const $body = $('<tbody/>');
+    items.forEach(function (item) {
+        const values = valuesCallback(item);
+        const $row = createRow(values, classes);
+        if ($.isFunction(rowCallback)) {
+            rowCallback(item, $row);
+        }
+        $body.append($row);
+    });
+    $('#result').html($body);
+}
+
+/**
  * Fill the table with the generated calculations
  * 
  * @param {array}
@@ -35,12 +62,15 @@ function createRow(values, classes) {
 function renderCalculations(calculations) {
     'use strict';
 
-    const $body = $('<tbody/>');
-    const classes = ['text-id', 'text-date', '', '', 'text-currency'];
-    calculations.forEach(function (c) {
-        $body.append(createRow([c.id, c.date, c.state, c.description + "<br>" + c.customer, c.total], classes));
-    });
-    $('#result').html($body);
+    const valuesCallback = function (c) {
+        return [c.id, c.date, c.state, c.description + "<br>" + c.customer, c.margin, c.total];
+    };
+    const rowCallback = function (c, $row) {
+        const $cell = $row.find('td:first');
+        $cell[0].style.setProperty('border-left-color', c.color, 'important');
+    };
+    const classes = ['text-id text-border', 'text-date', 'text-state', '', 'text-percent', 'text-currency'];
+    createRows(calculations, valuesCallback, classes, rowCallback);
 }
 
 /**
@@ -52,12 +82,11 @@ function renderCalculations(calculations) {
 function renderCustomers(customers) {
     'use strict';
 
-    const $body = $('<tbody/>');
+    const valuesCallback = function (c) {
+        return [c.nameAndCompany, c.address, c.zipCity];
+    };
     const classes = ['w-50', 'w-25', 'w-25'];
-    customers.forEach(function (c) {
-        $body.append(createRow([c.nameAndCompany, c.address, c.zipCity], classes));
-    });
-    $('#result').html($body);
+    createRows(customers, valuesCallback, classes);
 }
 
 /**
@@ -90,12 +119,14 @@ function generate() {
     'use strict';
 
     disableButtons();
-    $('#content').slideUp('slow');
+    $('#content').slideUp();
 
-    const entity = $('#form_entity').val();
-    const count = $('#form_count').intVal();
-    const url = entity.replace(/0/g, count);
-    $.getJSON(url, function (response) {
+    const url = $('#form_entity').val();
+    const data = {
+        count: $('#form_count').intVal(),
+        simulate: $('#form_simulate').isChecked()
+    };
+    $.getJSON(url, data, function (response) {
         enableButtons();
         const title = $(".card-title").text();
         $('#form_confirm').setChecked(false);
@@ -106,7 +137,7 @@ function generate() {
             } else {
                 renderCalculations(response.items);
             }
-            $('#content').slideDown('slow');
+            $('#content').slideDown();
             Toaster.success(response.message, title, $("#flashbags").data());
         } else {
             Toaster.danger(response.message, title, $("#flashbags").data());

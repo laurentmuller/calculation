@@ -110,8 +110,7 @@ trait CacheTrait
             return $this->adapter->getItems($keys);
         }
 
-        /* @phpstan-ignore-next-line */
-        return [];
+        return []; /* @phpstan-ignore-line */
     }
 
     /**

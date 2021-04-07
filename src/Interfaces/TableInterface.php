@@ -30,17 +30,12 @@ interface TableInterface
     public const PAGE_SIZE = 20;
 
     /**
-     * The ajax parameter name (boolean).
-     */
-    public const PARAM_AJAX = 'ajax';
-
-    /**
      * The card parameter name (boolean).
      */
     public const PARAM_CARD = 'card';
 
     /**
-     * The columns parameter name (array).
+     * The columns parameter name (array of columns).
      */
     public const PARAM_COLUMNS = 'columns';
 
@@ -70,7 +65,7 @@ interface TableInterface
     public const PARAM_PAGE = 'page';
 
     /**
-     * The page list parameter name (array).
+     * The page list parameter name (array of integers).
      */
     public const PARAM_PAGE_LIST = 'pageList';
 

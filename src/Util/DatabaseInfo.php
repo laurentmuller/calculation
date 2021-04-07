@@ -46,8 +46,7 @@ class DatabaseInfo
             $statement = $connection->prepare($sql);
 
             if ($statement->execute()) {
-                /* @phpstan-ignore-next-line */
-                $entries = $statement->fetchAllAssociative();
+                $entries = $statement->fetchAllAssociative(); /* @phpstan-ignore-line */
                 $statement->free();
 
                 // convert
@@ -99,8 +98,7 @@ class DatabaseInfo
             $statement = $connection->prepare($sql);
 
             if ($statement->execute()) {
-                /* @phpstan-ignore-next-line */
-                $result = $statement->fetchAssociative();
+                $result = $statement->fetchAssociative(); /* @phpstan-ignore-line */
                 $statement->free();
 
                 if (false !== $result) {

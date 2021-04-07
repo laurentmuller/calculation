@@ -441,8 +441,7 @@ class AjaxController extends AbstractController
                 $current = &$lang;
                 $paths = \explode('.', $key);
                 foreach ($paths as $path) {
-                    /* @phpstan-ignore-next-line */
-                    if (!isset($current[$path])) {
+                    if (!isset($current[$path])) { /* @phpstan-ignore-line */
                         $current[$path] = [];
                     }
                     $current = &$current[$path];

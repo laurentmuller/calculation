@@ -4,6 +4,9 @@
 {%- set title       = 'generate.title' -%}
 {%- set title_icon  = 'random' -%}
 {%- set submit_text = 'generate.submit_text' -%}
+{%- set cancel_text = 'common.button_close' -%}
+
+{% block card_container_class '' %}
 
 {% block card_header %}
 {{ parent() }}
@@ -19,10 +22,17 @@
         {{ form_row(form.count) }}
     </div>
 </div>
-{{ form_row(form.confirm) }}
+<div class="form-row">
+    <div class="col-md-8">
+        {{ form_row(form.simulate) }}
+    </div>
+    <div class="col-md-4">
+        {{ form_row(form.confirm) }}
+    </div>
+</div>
 <div class="row" id="content" style="display: none;">
     <div class="col">
-        <table class="table table-sm" id="result"></table>
+        <table class="table table-sm mb-0" id="result"></table>
     </div>
 </div>
 {% endblock %}

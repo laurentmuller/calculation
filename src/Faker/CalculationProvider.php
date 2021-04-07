@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Faker;
 
 use App\Entity\CalculationState;
-use App\Entity\Customer;
 use App\Entity\Product;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Generator;
 use Faker\Provider\Base;
@@ -27,11 +27,6 @@ use Faker\Provider\Base;
 class CalculationProvider extends Base
 {
     /**
-     * @var Customer[]
-     */
-    private $customers;
-
-    /**
      * @var Product[]
      */
     private $products;
@@ -42,30 +37,27 @@ class CalculationProvider extends Base
     private $states;
 
     /**
+     * @var User[]
+     */
+    private $users;
+
+    /**
      * Constructor.
      */
     public function __construct(Generator $generator, EntityManagerInterface $manager)
     {
         parent::__construct($generator);
         $this->products = $manager->getRepository(Product::class)->findAll();
-        $this->customers = $manager->getRepository(Customer::class)->findAll();
         $this->states = $manager->getRepository(CalculationState::class)->findBy(['editable' => true]);
+        $this->users = $manager->getRepository(User::class)->findBy(['enabled' => true]);
     }
 
     /**
-     * Gets a random calculation state.
+     * Gets the number of products.
      */
-    public function calculationState(): CalculationState
+    public function countProducts(): int
     {
-        return $this->randomElement($this->states);
-    }
-
-    /**
-     * Gets a random customer.
-     */
-    public function customer(): Customer
-    {
-        return $this->randomElement($this->customers);
+        return \count($this->products);
     }
 
     /**
@@ -74,5 +66,50 @@ class CalculationProvider extends Base
     public function product(): Product
     {
         return $this->randomElement($this->products);
+    }
+
+    /**
+     * Gets random products. The products are sorted by category code and description.
+     *
+     * @return Product[]
+     */
+    public function products(int $count = 1, bool $allowDuplicates = false): array
+    {
+        $products = $this->randomElements($this->products, $count, $allowDuplicates);
+
+        \usort($products, static function (Product $a, Product $b) {
+            $result = \strcasecmp($a->getCategoryCode(), $b->getCategoryCode());
+            if (0 === $result) {
+                return \strcasecmp($a->getDescription(), $b->getDescription());
+            }
+
+            return $result;
+        });
+
+        return $products;
+    }
+
+    /**
+     * Gets a random calculation state.
+     */
+    public function state(): CalculationState
+    {
+        return $this->randomElement($this->states);
+    }
+
+    /**
+     * Gets a random user.
+     */
+    public function user(): User
+    {
+        return $this->randomElement($this->users);
+    }
+
+    /**
+     * Gets a random user name.
+     */
+    public function userName(): string
+    {
+        return $this->user()->getUsername();
     }
 }

@@ -135,7 +135,6 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      * The last updated date.
      *
      * @ORM\Column(type="datetime", nullable=true)
-     *
      * @phpstan-ignore-next-line
      *
      * @var \DateTime|null

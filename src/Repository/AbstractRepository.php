@@ -82,6 +82,19 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
+     * Gets the next identifier.
+     */
+    public function getNextId(): int
+    {
+        $maxId = (int) $this->createQueryBuilder('e')
+            ->select('MAX(e.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $maxId + 1;
+    }
+
+    /**
      * Gets the database search fields.
      *
      * The default implementation returns the alias and the field separated by a dot ('.') character.

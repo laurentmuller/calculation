@@ -57,7 +57,7 @@ class DataResults implements \JsonSerializable
     /**
      * The maximum number of results to retrieve (the "limit").
      */
-    public int $limit = 20;
+    public int $limit = TableInterface::PAGE_SIZE;
 
     /**
      * The position of the first result to retrieve (the "offset").
@@ -79,7 +79,7 @@ class DataResults implements \JsonSerializable
      *
      * @var int[]
      */
-    public array $pageList = [];
+    public array $pageList = TableInterface::PAGE_LIST;
 
     /**
      * The action parameters.

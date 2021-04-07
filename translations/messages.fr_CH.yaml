@@ -1010,7 +1010,10 @@ generate:
     fields:
         entity: Objet à générer
         count: Nombre
+        simulate: Simuler la génération des données
         confirm: Confirmer la génération des données
+    help:
+        simulate: Simule la génération des données sans enregister les changements dans la base de données.
     error:
         confirm: Vous devez cochez le message de confirmation.
         failed: Une erreur s'est produite lors de la génération des données.

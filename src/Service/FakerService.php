@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Faker\CalculationProvider;
 use App\Faker\CustomAddress;
 use App\Faker\CustomCompany;
 use App\Faker\CustomPerson;
 use App\Faker\CustomPhoneNumber;
+use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
 use Faker\Generator;
 
@@ -30,15 +32,15 @@ class FakerService
 {
     /**
      * The faker generator.
-     *
-     * @var Generator
      */
-    protected $faker;
+    private ?Generator $faker = null;
 
     /**
      * Gets the faker generator.
+     *
+     * @param EntityManagerInterface $manager the manager used for the calculation provider
      */
-    public function getFaker(): Generator
+    public function getFaker(EntityManagerInterface $manager = null): Generator
     {
         if (null === $this->faker) {
             $locale = \Locale::getDefault();
@@ -50,6 +52,27 @@ class FakerService
             $this->faker = $faker;
         }
 
+        if (null !== $manager && !$this->hasCalculationProvider()) {
+            $this->faker->addProvider(new CalculationProvider($this->faker, $manager));
+        }
+
         return $this->faker;
+    }
+
+    /**
+     * Checks if the calculatio provider is already in this list of providers.
+     *
+     * @return bool true if present
+     */
+    private function hasCalculationProvider(): bool
+    {
+        $providers = $this->faker->getProviders();
+        foreach ($providers as $provider) {
+            if ($provider instanceof CalculationProvider) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

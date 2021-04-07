@@ -352,8 +352,7 @@ final class FunctionExtension extends AbstractExtension
     private function getAssetUrl(Environment $env, string $path, ?string $packageName = null): string
     {
         if (null === $this->asset) {
-            /* @phpstan-ignore-next-line */
-            $this->asset = $env->getExtension(AssetExtension::class);
+            $this->asset = $env->getExtension(AssetExtension::class); /* @phpstan-ignore-line */
         }
 
         return $this->asset->getAssetUrl($path, $packageName);

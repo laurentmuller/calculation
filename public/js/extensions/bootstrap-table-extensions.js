@@ -111,7 +111,7 @@ $.fn.extend({
                 if(content.length !== 0) {
                     // select first row if none
                     if (!$this.getSelectRow()) {
-                        //$this.selectFirstRow();
+                        $this.selectFirstRow();
                     }
                     // update
                     $this.updateCardView().highlight().updateHref(content);

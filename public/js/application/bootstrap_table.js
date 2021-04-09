@@ -25,6 +25,31 @@ function styleBorderColor(value, row) { // jshint ignore:line
 }
 
 /**
+ * Row classes for the text muted.
+ * 
+ * @param {object}
+ *            row - the record data.
+ * @param {int}
+ *            index - the row index.
+ * @param {String}
+ *            field - the record field.
+ * 
+ * @returns {object} the row classes.
+ */
+function styleTextMuted(row, index, field) {
+    'use strict';
+    const value = Number.parseInt(row[field], 10);
+    if (!Number.isNaN(value) && value === 0) {
+        const $row = $('#table-edit tbody tr:eq(' + index + ')');
+        const classes = $row.attr('class') + ' text-muted';
+        return {
+            classes: classes.trim()
+        }; 
+    }
+    return {};
+}
+
+/**
  * Row classes for the user enabled state.
  * 
  * @param {object}
@@ -36,15 +61,7 @@ function styleBorderColor(value, row) { // jshint ignore:line
  */
 function styleUserEnabled(row, index) { // jshint ignore:line
     'use strict';
-    const value = Number.parseInt(row.active, 10);
-    if (!Number.isNaN(value) && value === 0) {
-        const $row = $('#table-edit tbody tr:eq(' + index + ')');
-        const classes = $row.attr('class') + ' text-muted';
-        return {
-            classes: classes.trim()
-        }; 
-    }
-    return {};
+    return styleTextMuted(row, index, 'active');
 }
 
 /**
@@ -59,15 +76,7 @@ function styleUserEnabled(row, index) { // jshint ignore:line
  */
 function styleCalculationEditable(row, index) { // jshint ignore:line
     'use strict';
-    const value = Number.parseInt(row.editable, 10);
-    if (!Number.isNaN(value) && value === 0) {
-        const $row = $('#table-edit tbody tr:eq(' + index + ')');
-        const classes = $row.attr('class') + ' text-muted';
-        return {
-            classes: classes.trim()
-        };    
-    }
-    return {};
+    return styleTextMuted(row, index, 'editable');
 }
 
 /**

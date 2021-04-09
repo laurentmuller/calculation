@@ -1,4 +1,4 @@
-name: Coding Standards
+name: Coding standards
 
 on: [push, pull_request]
 

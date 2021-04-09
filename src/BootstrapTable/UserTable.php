@@ -23,6 +23,7 @@ use Twig\Environment;
  * The users table.
  *
  * @author Laurent Muller
+ * @template-extends AbstractEntityTable<\App\Entity\User>
  */
 class UserTable extends AbstractEntityTable
 {

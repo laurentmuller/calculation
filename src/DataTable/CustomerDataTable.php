@@ -25,6 +25,8 @@ use Twig\Environment;
  * Customer data table handler.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityDataTable<Customer>
  */
 class CustomerDataTable extends AbstractEntityDataTable
 {

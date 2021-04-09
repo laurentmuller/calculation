@@ -54,7 +54,7 @@ abstract class AbstractTable
 
     public function formatDate(\DateTimeInterface $value): string
     {
-        return FormatUtils::formatDate($value);
+        return (string) FormatUtils::formatDate($value);
     }
 
     public function formatId(int $value): string
@@ -356,7 +356,7 @@ abstract class AbstractTable
 
         // page list and limit
         $results->pageList = $this->getAllowedPageList($results->totalNotFiltered);
-        $limit = \min($query->limit, \max($results->pageList));
+        $limit = (int) \min($query->limit, \max($results->pageList));
 
         // results
         $results->columns = $this->getColumns();

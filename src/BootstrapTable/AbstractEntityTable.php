@@ -22,6 +22,8 @@ use Doctrine\ORM\QueryBuilder;
  * Abstract table for entities.
  *
  * @author Laurent Muller
+ *
+ * @template T of \App\Entity\AbstractEntity
  */
 abstract class AbstractEntityTable extends AbstractTable
 {
@@ -32,11 +34,15 @@ abstract class AbstractEntityTable extends AbstractTable
 
     /**
      * The respository.
+     *
+     * @psalm-var AbstractRepository<T> $repository
      */
     protected AbstractRepository $repository;
 
     /**
      * Constructor.
+     *
+     * @psalm-param AbstractRepository<T> $repository
      */
     public function __construct(AbstractRepository $repository)
     {
@@ -53,6 +59,8 @@ abstract class AbstractEntityTable extends AbstractTable
 
     /**
      * Gets the repository.
+     *
+     * @psalm-return AbstractRepository<T> $repository
      */
     public function getRepository(): AbstractRepository
     {

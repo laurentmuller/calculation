@@ -104,7 +104,7 @@ class UpdateController extends AbstractController
                         $calculation->setCustomer($faker->name(Person::GENDER_FEMALE));
                         break;
                 }
-                $calculation->setDescription($faker->catchPhrase())
+                $calculation->setDescription($faker->catchPhrase)
                     ->setState($faker->randomElement($states));
             }
 

@@ -84,9 +84,9 @@ class GeneratorController extends AbstractController
     {
         try {
             $calculations = [];
-            $faker = $fakerService->getFaker($manager);
-            $count = (int) $request->query->getInt('count', 0);
-            $simulate = (bool) $request->query->getBoolean('simulate', true);
+            $faker = $fakerService->getFaker();
+            $count = $this->getRequestInt($request, 'count');
+            $simulate = $this->getRequestBoolean($request, 'simulate', true);
             $id = $simulate ? $manager->getRepository(Calculation::class)->getNextId() : 0;
 
             // products range
@@ -101,7 +101,7 @@ class GeneratorController extends AbstractController
 
                 $calculation = new Calculation();
                 $calculation->setDate($date)
-                    ->setDescription($faker->catchPhrase())
+                    ->setDescription($faker->catchPhrase)
                     ->setUserMargin($faker->randomFloat(2, 0, 0.1))
                     ->setState($state)
                     ->setCustomer($faker->name())
@@ -184,8 +184,8 @@ class GeneratorController extends AbstractController
         try {
             $customers = [];
             $faker = $fakerService->getFaker();
-            $count = (int) $request->query->getInt('count', 0);
-            $simulate = (bool) $request->query->getBoolean('simulate', true);
+            $count = $this->getRequestInt($request, 'count');
+            $simulate = $this->getRequestBoolean($request, 'simulate', true);
 
             $styles = [0, 1, 2];
             $genders = [Person::GENDER_MALE, Person::GENDER_FEMALE];

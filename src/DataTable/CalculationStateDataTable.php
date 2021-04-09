@@ -15,11 +15,9 @@ namespace App\DataTable;
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
-use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
 use DataTables\DataTablesInterface;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -28,6 +26,8 @@ use Twig\Environment;
  * Calculation state data table handler.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityDataTable<CalculationState>
  */
 class CalculationStateDataTable extends AbstractEntityDataTable
 {
@@ -58,18 +58,13 @@ class CalculationStateDataTable extends AbstractEntityDataTable
 
     /**
      * Creates the link to calculations.
-     *
-     * @param Collection|Calculation[] $calculations the list of calculations that fall into the given state
-     * @param CalculationState         $item         the calculation state
-     *
-     * @return string the link, if applicable, the value otherwise
      */
-    public function formatCalculations(Collection $calculations, CalculationState $item): string
+    public function formatCalculations(\Countable $calculations, CalculationState $item): string
     {
         $context = [
             'id' => $item->getId(),
             'code' => $item->getCode(),
-            'count' => \count($calculations),
+            'count' => $calculations->count(),
         ];
 
         return $this->renderTemplate('calculationstate/calculationstate_calculation_cell.html.twig', $context);

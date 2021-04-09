@@ -25,6 +25,8 @@ use Twig\Environment;
  * Parent category (group) data table handler.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityDataTable<Group>
  */
 class GroupDataTable extends AbstractEntityDataTable
 {

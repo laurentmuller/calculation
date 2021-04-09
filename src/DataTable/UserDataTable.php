@@ -31,6 +31,8 @@ use Twig\Environment;
  * User data table handler.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityDataTable<User>
  */
 class UserDataTable extends AbstractEntityDataTable
 {

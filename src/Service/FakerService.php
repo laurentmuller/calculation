@@ -30,17 +30,22 @@ use Faker\Generator;
  */
 class FakerService
 {
-    /**
-     * The faker generator.
-     */
     private ?Generator $faker = null;
+
+    private EntityManagerInterface $manager;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(EntityManagerInterface $manager)
+    {
+        $this->manager = $manager;
+    }
 
     /**
      * Gets the faker generator.
-     *
-     * @param EntityManagerInterface $manager the manager used for the calculation provider
      */
-    public function getFaker(EntityManagerInterface $manager = null): Generator
+    public function getFaker(): Generator
     {
         if (null === $this->faker) {
             $locale = \Locale::getDefault();
@@ -49,30 +54,10 @@ class FakerService
             $faker->addProvider(new CustomCompany($faker));
             $faker->addProvider(new CustomAddress($faker));
             $faker->addProvider(new CustomPhoneNumber($faker));
+            $faker->addProvider(new CalculationProvider($faker, $this->manager));
             $this->faker = $faker;
         }
 
-        if (null !== $manager && !$this->hasCalculationProvider()) {
-            $this->faker->addProvider(new CalculationProvider($this->faker, $manager));
-        }
-
         return $this->faker;
-    }
-
-    /**
-     * Checks if the calculatio provider is already in this list of providers.
-     *
-     * @return bool true if present
-     */
-    private function hasCalculationProvider(): bool
-    {
-        $providers = $this->faker->getProviders();
-        foreach ($providers as $provider) {
-            if ($provider instanceof CalculationProvider) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

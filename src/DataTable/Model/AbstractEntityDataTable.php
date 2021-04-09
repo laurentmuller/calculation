@@ -29,6 +29,8 @@ use Twig\Environment;
  * Abstract data table handler for entities.
  *
  * @author Laurent Muller
+ *
+ * @template T of \App\Entity\AbstractEntity
  */
 abstract class AbstractEntityDataTable extends AbstractDataTable
 {
@@ -45,9 +47,9 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     /**
      * The repository to get entities.
      *
-     * @var AbstractRepository
+     * @psalm-var AbstractRepository<T> $repository
      */
-    protected $repository;
+    protected AbstractRepository $repository;
 
     /**
      * Constructor.
@@ -56,6 +58,8 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
      * @param DataTablesInterface $datatables  the datatables to handle request
      * @param AbstractRepository  $repository  the repository to get entities
      * @param Environment         $environment the Twig environment to render actions cells
+     *
+     * @psalm-param AbstractRepository<T> $repository
      */
     public function __construct(SessionInterface $session, DataTablesInterface $datatables, AbstractRepository $repository, Environment $environment = null)
     {
@@ -257,6 +261,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
      * @param string $value the search value
      *
      * @return mixed the parameter value
+     *
      * @psalm-suppress UnusedParam
      */
     protected function createSearchParameterValue(string $field, string $value)

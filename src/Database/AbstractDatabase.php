@@ -152,7 +152,7 @@ abstract class AbstractDatabase extends \SQLite3
      */
     public function compact(): bool
     {
-        return (bool) $this->exec('VACUUM;');
+        return $this->exec('VACUUM;');
     }
 
     /**
@@ -221,7 +221,7 @@ abstract class AbstractDatabase extends \SQLite3
         $name = "idx_{$table}_{$column}";
         $query = "CREATE INDEX IF NOT EXISTS {$name} ON {$table}({$column})";
 
-        return (bool) $this->exec($query);
+        return $this->exec($query);
     }
 
     /**

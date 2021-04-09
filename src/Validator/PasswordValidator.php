@@ -21,6 +21,8 @@ use ZxcvbnPhp\Zxcvbn;
 /**
  * Password constraint validator.
  *
+ * @extends AbstractConstraintValidator<Password>
+ *
  * @author Laurent Muller
  */
 class PasswordValidator extends AbstractConstraintValidator

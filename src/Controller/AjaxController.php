@@ -268,7 +268,7 @@ class AjaxController extends AbstractController
         // get values
         $remoteIp = $request->getClientIp();
         $response = $request->get('g-recaptcha-response', $request->get('response'));
-        $secret = $this->getParameter('recaptcha_secret');
+        $secret = (string) $this->getParameter('recaptcha_secret');
 
         // verify
         $recaptcha = new ReCaptcha($secret);
@@ -598,7 +598,6 @@ class AjaxController extends AbstractController
      */
     public function searchDistinct(Request $request, EntityManagerInterface $manager): JsonResponse
     {
-        // class
         $className = 'App\\Entity\\' . $request->get('entity', '');
         if (!\class_exists($className)) {
             return $this->jsonFalse([
@@ -615,7 +614,7 @@ class AjaxController extends AbstractController
         }
 
         try {
-            /** @var AbstractRepository $repository */
+            /** @psalm-var AbstractRepository<\App\Entity\AbstractEntity> $repository */
             $repository = $manager->getRepository($className);
 
             return $this->getDistinctValues($request, $repository, $field);
@@ -884,6 +883,9 @@ class AjaxController extends AbstractController
      * @param string             $field      the field name to search for
      *
      * @return JsonResponse the found values
+     *
+     * @template T of \App\Entity\AbstractEntity
+     * @psalm-param AbstractRepository<T> $repository
      */
     private function getDistinctValues(Request $request, AbstractRepository $repository, string $field): JsonResponse
     {

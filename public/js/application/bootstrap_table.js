@@ -25,38 +25,46 @@ function styleBorderColor(value, row) { // jshint ignore:line
 }
 
 /**
- * Row style for the user enabled state.
+ * Row classes for the user enabled state.
  * 
  * @param {object}
  *            row - the record data.
+ * @param {int}
+ *            index - the row index.
  * 
- * @returns {object} the row style.
+ * @returns {object} the row classes.
  */
-function styleUserEnabled(row) { // jshint ignore:line
+function styleUserEnabled(row, index) { // jshint ignore:line
     'use strict';
     const value = Number.parseInt(row.active, 10);
     if (!Number.isNaN(value) && value === 0) {
+        const $row = $('#table-edit tbody tr:eq(' + index + ')');
+        const classes = $row.attr('class') + ' text-muted';
         return {
-            classes: 'text-muted'
-        };    
+            classes: classes.trim()
+        }; 
     }
     return {};
 }
 
 /**
- * Row style for the calculation editable state.
+ * Row classes for the calculation editable state.
  * 
  * @param {object}
  *            row - the record data.
+ * @param {int}
+ *            index - the row index.
  * 
- * @returns {object} the row style.
+ * @returns {object} the row classes.
  */
-function styleCalculationEditable(row) { // jshint ignore:line
+function styleCalculationEditable(row, index) { // jshint ignore:line
     'use strict';
     const value = Number.parseInt(row.editable, 10);
     if (!Number.isNaN(value) && value === 0) {
+        const $row = $('#table-edit tbody tr:eq(' + index + ')');
+        const classes = $row.attr('class') + ' text-muted';
         return {
-            classes: 'text-muted'
+            classes: classes.trim()
         };    
     }
     return {};
@@ -174,6 +182,7 @@ function updateCalculationEditAction($table, row, $element, $action) {
     'use strict';
     const editable = Number.parseInt(row.editable, 10);
     if(!Number.isNaN(editable) && editable === 0) {
+        $element.find('.btn-show').addClass('btn-default');
         $action.remove();
     }
 }

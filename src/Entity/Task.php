@@ -49,6 +49,7 @@ class Task extends AbstractEntity implements \Countable
      * @Assert\Valid
      *
      * @var Collection|TaskItem[]
+     * @psalm-var Collection<int, TaskItem>
      */
     private $items;
 
@@ -141,6 +142,7 @@ class Task extends AbstractEntity implements \Countable
      * @param \Closure $p the predicate used for filtering
      *
      * @return Collection|TaskItem[] the collection with the results of the filter operation
+     * @psalm-return Collection<int, TaskItem>
      */
     public function filter(\Closure $p): Collection
     {
@@ -182,6 +184,7 @@ class Task extends AbstractEntity implements \Countable
 
     /**
      * @return Collection|TaskItem[]
+     * @psalm-return Collection<int, TaskItem>
      */
     public function getItems(): Collection
     {

@@ -37,6 +37,7 @@ class Group extends AbstractEntity
      * @ORM\OrderBy({"code" = "ASC"})
      *
      * @var Collection|Category[]
+     * @psalm-var Collection<int, Category>
      */
     private $categories;
 
@@ -69,6 +70,7 @@ class Group extends AbstractEntity
      * @Assert\Valid
      *
      * @var Collection|GroupMargin[]
+     * @psalm-var Collection<int, GroupMargin>
      */
     private $margins;
 
@@ -181,6 +183,7 @@ class Group extends AbstractEntity
      * Get categories.
      *
      * @return Collection|Category[]
+     * @psalm-return Collection<int, Category>
      */
     public function getCategories(): Collection
     {
@@ -221,6 +224,7 @@ class Group extends AbstractEntity
      * Get margins.
      *
      * @return Collection|GroupMargin[]
+     * @psalm-return Collection<int, GroupMargin>
      */
     public function getMargins(): Collection
     {

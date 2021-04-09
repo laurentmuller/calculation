@@ -75,6 +75,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * @Assert\Valid
      *
      * @var Collection|CalculationItem[]
+     * @psalm-var Collection<int, CalculationItem>
      */
     protected $items;
 
@@ -203,6 +204,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * Get calculation items.
      *
      * @return Collection|CalculationItem[]
+     * @psalm-return Collection<int, CalculationItem>
      */
     public function getItems(): Collection
     {
@@ -306,7 +308,6 @@ class CalculationCategory extends AbstractEntity implements \Countable
             return false;
         }
 
-        /** @var \ArrayIterator $iterator */
         $iterator = $this->items->getIterator();
 
         // first sort

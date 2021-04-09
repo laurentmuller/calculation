@@ -27,6 +27,11 @@ use Faker\Provider\Base;
 class CalculationProvider extends Base
 {
     /**
+     * @var EntityManagerInterface
+     */
+    private $manager;
+
+    /**
      * @var Product[]
      */
     private $products;
@@ -47,9 +52,7 @@ class CalculationProvider extends Base
     public function __construct(Generator $generator, EntityManagerInterface $manager)
     {
         parent::__construct($generator);
-        $this->products = $manager->getRepository(Product::class)->findAll();
-        $this->states = $manager->getRepository(CalculationState::class)->findBy(['editable' => true]);
-        $this->users = $manager->getRepository(User::class)->findBy(['enabled' => true]);
+        $this->manager = $manager;
     }
 
     /**
@@ -57,7 +60,49 @@ class CalculationProvider extends Base
      */
     public function countProducts(): int
     {
-        return \count($this->products);
+        return \count($this->getProducts());
+    }
+
+    /**
+     * Gets the products.
+     *
+     * @return Product[]
+     */
+    public function getProducts(): array
+    {
+        if (null === $this->products) {
+            $this->products = $this->manager->getRepository(Product::class)->findAll();
+        }
+
+        return $this->products;
+    }
+
+    /**
+     * Gets the states.
+     *
+     * @return CalculationState[]
+     */
+    public function getStates()
+    {
+        if (null === $this->states) {
+            $this->states = $this->manager->getRepository(CalculationState::class)->findBy(['editable' => true]);
+        }
+
+        return $this->states;
+    }
+
+    /**
+     * Gets the users.
+     *
+     * @return User[]
+     */
+    public function getUsers()
+    {
+        if (null === $this->users) {
+            $this->users = $this->manager->getRepository(User::class)->findBy(['enabled' => true]);
+        }
+
+        return $this->users;
     }
 
     /**
@@ -65,7 +110,7 @@ class CalculationProvider extends Base
      */
     public function product(): Product
     {
-        return $this->randomElement($this->products);
+        return $this->randomElement($this->getProducts());
     }
 
     /**
@@ -75,7 +120,7 @@ class CalculationProvider extends Base
      */
     public function products(int $count = 1, bool $allowDuplicates = false): array
     {
-        $products = $this->randomElements($this->products, $count, $allowDuplicates);
+        $products = $this->randomElements($this->getProducts(), $count, $allowDuplicates);
 
         \usort($products, static function (Product $a, Product $b) {
             $result = \strcasecmp($a->getCategoryCode(), $b->getCategoryCode());
@@ -94,7 +139,7 @@ class CalculationProvider extends Base
      */
     public function state(): CalculationState
     {
-        return $this->randomElement($this->states);
+        return $this->randomElement($this->getStates());
     }
 
     /**
@@ -102,7 +147,7 @@ class CalculationProvider extends Base
      */
     public function user(): User
     {
-        return $this->randomElement($this->users);
+        return $this->randomElement($this->getUsers());
     }
 
     /**

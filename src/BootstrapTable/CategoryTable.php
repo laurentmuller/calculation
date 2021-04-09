@@ -16,7 +16,6 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +25,7 @@ use Twig\Environment;
  * The categories table.
  *
  * @author Laurent Muller
+ * @template-extends AbstractEntityTable<\App\Entity\Category>
  */
 class CategoryTable extends AbstractEntityTable
 {
@@ -57,11 +57,11 @@ class CategoryTable extends AbstractEntityTable
     /**
      * Formatter for the products column.
      */
-    public function formatProducts(Collection $products, Category $category): string
+    public function formatProducts(\Countable $products, Category $category): string
     {
         return $this->twig->render('table/_cell_table_link.html.twig', [
             'route' => 'table_product',
-            'count' => \count($products),
+            'count' => $products->count(),
             'title' => 'category.list.product_title',
             'parameters' => [
                 ProductTable::PARAM_CATEGORY => $category->getId(),
@@ -72,11 +72,11 @@ class CategoryTable extends AbstractEntityTable
     /**
      * Formatter for the tasks column.
      */
-    public function formatTasks(Collection $tasks, Category $category): string
+    public function formatTasks(\Countable $tasks, Category $category): string
     {
         return $this->twig->render('table/_cell_table_link.html.twig', [
             'route' => 'table_task',
-            'count' => \count($tasks),
+            'count' => $tasks->count(),
             'title' => 'category.list.task_title',
             'parameters' => [
                 TaskTable::PARAM_CATEGORY => $category->getId(),

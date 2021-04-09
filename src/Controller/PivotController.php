@@ -138,7 +138,7 @@ class PivotController extends AbstractController
     /**
      * Gets the pivot table.
      */
-    private function getPivotTable(): PivotTable
+    private function getPivotTable(): ?PivotTable
     {
         // callbacks
         $semesterFormatter = function (int $semestre) {

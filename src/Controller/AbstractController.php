@@ -68,8 +68,8 @@ abstract class AbstractController extends BaseController
      */
     public function getAddressFrom(): Address
     {
-        $email = $this->getParameter('mailer_user_email');
-        $name = $this->getParameter('mailer_user_name');
+        $email = (string) $this->getParameter('mailer_user_email');
+        $name = (string) $this->getParameter('mailer_user_name');
 
         return new Address($email, $name);
     }
@@ -91,8 +91,8 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationName(): string
     {
-        $name = $this->getParameter('app_name');
-        $version = $this->getParameter('app_version');
+        $name = (string) $this->getParameter('app_name');
+        $version = (string) $this->getParameter('app_version');
 
         return \sprintf('%s v%s', $name, $version);
     }
@@ -102,7 +102,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationOwner(): string
     {
-        return $this->getParameter('app_owner');
+        return (string) $this->getParameter('app_owner');
     }
 
     /**
@@ -110,7 +110,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationOwnerUrl(): string
     {
-        return $this->getParameter('app_owner_url');
+        return (string) $this->getParameter('app_owner_url');
     }
 
     /**
@@ -244,6 +244,32 @@ abstract class AbstractController extends BaseController
         $manager = $this->getDoctrine()->getManager();
 
         return $manager;
+    }
+
+    /**
+     * Returns the request parameter value converted to boolean.
+     *
+     * @param Request $request the request to get parameter value from
+     * @param string  $key     the parameter key
+     * @param bool    $default the default value if the parameter key does not exist
+     */
+    protected function getRequestBoolean(Request $request, string $key, bool $default = false): bool
+    {
+        $value = $request->get($key, $default);
+
+        return (bool) \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Returns the request parameter value converted to integer.
+     *
+     * @param Request $request the request to get parameter value from
+     * @param string  $key     the parameter key
+     * @param int     $default the default value if the parameter key does not exist
+     */
+    protected function getRequestInt(Request $request, string $key, int $default = 0): int
+    {
+        return (int) $request->get($key, $default);
     }
 
     /**

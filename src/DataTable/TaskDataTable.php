@@ -25,6 +25,8 @@ use Twig\Environment;
  * Task data table handler.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityDataTable<Task>
  */
 class TaskDataTable extends AbstractEntityDataTable
 {

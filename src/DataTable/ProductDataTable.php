@@ -25,6 +25,8 @@ use Twig\Environment;
  * Product data table handler.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityDataTable<Product>
  */
 class ProductDataTable extends AbstractEntityDataTable
 {

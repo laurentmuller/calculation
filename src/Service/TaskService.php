@@ -159,6 +159,7 @@ class TaskService implements \JsonSerializable
      * Gets the selected task items.
      *
      * @return Collection|TaskItem[]
+     * @psalm-return Collection<int, TaskItem>
      */
     public function getTaskItems(): Collection
     {
@@ -257,7 +258,7 @@ class TaskService implements \JsonSerializable
     /**
      * Sets the selected task item.
      *
-     * @param Collection|TaskItem[] $items
+     * @param Collection<int, TaskItem> $items
      */
     public function setTaskItems(Collection $items): self
     {

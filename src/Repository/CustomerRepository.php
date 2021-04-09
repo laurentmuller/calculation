@@ -27,6 +27,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @author Laurent Muller
  *
  * @see \App\Entity\Customer
+ * @template-extends AbstractRepository<Customer>
  */
 class CustomerRepository extends AbstractRepository
 {

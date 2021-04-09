@@ -72,23 +72,15 @@
 		"webinarium/datatables-bundle": "^2.4"
 	},
 	"require-dev" : {
-		"phpstan/extension-installer" : "^1.0",
-		"phpstan/phpstan" : "^0.12.58",
-		"phpstan/phpstan-deprecation-rules" : "^0.12.5",
-		"phpstan/phpstan-doctrine" : "^0.12.25",
-		"phpstan/phpstan-phpunit" : "^0.12.18",
-		"phpstan/phpstan-symfony" : "^0.12.11",
-		"slam/phpstan-extensions" : "^5.1",
-		"spaze/phpstan-disallowed-calls" : "^1.0",
-		"symfony/browser-kit" : "^5.2",
-		"symfony/css-selector" : "^5.2",
-		"symfony/debug-bundle" : "^5.2",
-		"symfony/maker-bundle" : "^1.0",
-		"symfony/phpunit-bridge" : "^5.2",
-		"symfony/stopwatch" : "^5.2",
-		"symfony/var-dumper" : "^5.2",
-		"symfony/web-profiler-bundle" : "^5.2",
-		"taptima/phpstan-custom" : "dev-master"
+		"bamarni/composer-bin-plugin": "^1.4",
+		"symfony/browser-kit": "^5.2",
+		"symfony/css-selector": "^5.2",
+		"symfony/debug-bundle": "^5.2",
+		"symfony/maker-bundle": "^1.0",
+		"symfony/phpunit-bridge": "^5.2",
+		"symfony/stopwatch": "^5.2",
+		"symfony/var-dumper": "^5.2",
+		"symfony/web-profiler-bundle": "^5.2"
 	},
 	"replace" : {
 		"symfony/polyfill-ctype" : "*",
@@ -125,7 +117,9 @@
 			"App\\Tests\\" : "tests/"
 		}
 	},
-	"scripts" : {
-		"app-cs-fixer" : "php-cs-fixer fix --diff --diff-format udiff"
-	}
+     "scripts": {
+        "bin": "echo 'bin not installed'",
+        "post-install-cmd": ["@composer bin all install --ansi"],
+        "post-update-cmd": ["@composer bin all update --ansi"]
+    }
 }

@@ -62,6 +62,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  *         "card" = "$params.[card]"
  *     }}
  * })
+ * @template-extends AbstractEntityController<User>
  */
 class UserController extends AbstractEntityController
 {

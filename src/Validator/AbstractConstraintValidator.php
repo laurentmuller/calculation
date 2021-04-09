@@ -20,12 +20,16 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 /**
  * Abstract constraint validator.
  *
+ * @template T of Constraint
+ *
  * @author Laurent Muller
  */
 abstract class AbstractConstraintValidator extends ConstraintValidator
 {
     /**
      * The constraint class.
+     *
+     * @psalm-var class-string<T> $class
      *
      * @var string
      */
@@ -35,6 +39,7 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
      * Constructor.
      *
      * @param string $class the constraint class
+     * @psalm-param class-string<T> $class
      */
     public function __construct(string $class)
     {
@@ -43,6 +48,8 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-param T $constraint
      */
     public function validate($value, Constraint $constraint): void
     {
@@ -83,8 +90,8 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
     /**
      * Performs validation.
      *
-     * @param mixed      $value      the value that should be validated
-     * @param Constraint $constraint the constraint
+     * @param mixed $value the value that should be validated
+     * @psalm-param T $constraint
      */
     abstract protected function doValidate($value, Constraint $constraint): void;
 

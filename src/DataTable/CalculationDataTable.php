@@ -25,6 +25,8 @@ use Twig\Environment;
  * Calculation data table handler.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityDataTable<Calculation>
  */
 class CalculationDataTable extends AbstractEntityDataTable
 {

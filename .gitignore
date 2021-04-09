@@ -21,3 +21,8 @@ symfony.lock
 /public/js/vendor
 /resources/data/swiss.sqlite
 ###< application ###
+
+###> tools ###
+/vendor-bin/php-cs-fixer/vendor/
+/vendor-bin/phpstan/vendor/
+###< tools ###

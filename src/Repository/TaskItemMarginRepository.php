@@ -26,6 +26,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @author Laurent Muller
  *
  * @see \App\Entity\TaskItemMargin
+ * @template-extends AbstractRepository<TaskItemMargin>
  */
 class TaskItemMarginRepository extends AbstractRepository
 {

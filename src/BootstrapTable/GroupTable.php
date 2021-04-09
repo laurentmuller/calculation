@@ -14,13 +14,13 @@ namespace App\BootstrapTable;
 
 use App\Entity\Group;
 use App\Repository\GroupRepository;
-use Doctrine\Common\Collections\Collection;
 use Twig\Environment;
 
 /**
  * The goups table.
  *
  * @author Laurent Muller
+ * @template-extends AbstractEntityTable<Group>
  */
 class GroupTable extends AbstractEntityTable
 {
@@ -41,11 +41,11 @@ class GroupTable extends AbstractEntityTable
     /**
      * Formatter for the categories column.
      */
-    public function formatCategories(Collection $categories, Group $group): string
+    public function formatCategories(\Countable $categories, Group $group): string
     {
         return $this->twig->render('table/_cell_table_link.html.twig', [
             'route' => 'table_category',
-            'count' => \count($categories),
+            'count' => $categories->count(),
             'title' => 'group.list.category_title',
             'parameters' => [
                 CategoryTable::PARAM_GROUP => $group->getId(),

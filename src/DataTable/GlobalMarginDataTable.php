@@ -25,6 +25,8 @@ use Twig\Environment;
  * GlobalMargin data table handler.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityDataTable<GlobalMargin>
  */
 class GlobalMarginDataTable extends AbstractEntityDataTable
 {

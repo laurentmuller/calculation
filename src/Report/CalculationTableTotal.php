@@ -18,6 +18,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Util\FormatUtils;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Table to render a list of calculation totals.
@@ -43,7 +44,8 @@ class CalculationTableTotal extends PdfTableBuilder
      */
     public function output(Calculation $calculation): void
     {
-        /** @var \Doctrine\Common\Collections\Collection|CalculationGroup[] $groups */
+        /** @var CalculationGroup[]|Collection $groups */
+        /**  @psalm-var Collection<int, CalculationGroup> $groups */
         $groups = $calculation->getGroups();
         if ($groups->isEmpty()) {
             return;

@@ -113,6 +113,7 @@ class LogTable extends AbstractTable
             return true;
         }
 
+        /* @var array $entries */
         return empty($entries[LogService::KEY_LOGS]);
     }
 

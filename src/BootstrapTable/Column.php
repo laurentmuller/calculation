@@ -148,6 +148,7 @@ class Column
         // map
         return \array_map(function (array $definition) use ($parent, $accessor): self {
             $column = new self();
+            /** @var string $key */
             foreach ($definition as $key => $value) {
                 // special case for the field formatter
                 if (self::FIELD_FORMATTER === $key) {
@@ -220,7 +221,7 @@ class Column
         return $class;
     }
 
-    public function getField(): string
+    public function getField(): ?string
     {
         return $this->field;
     }

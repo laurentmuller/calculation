@@ -26,6 +26,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @author Laurent Muller
  *
  * @see \App\Entity\CalculationItem
+ * @template-extends AbstractRepository<CalculationItem>
  */
 class CalculationItemRepository extends AbstractRepository
 {

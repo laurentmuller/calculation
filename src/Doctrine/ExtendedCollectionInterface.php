@@ -19,6 +19,11 @@ use Symfony\Component\PropertyAccess\PropertyPathInterface;
  * Class implementing this interface extends the doctrine collection.
  *
  * @author Laurent Muller
+ *
+ * @phpstan-template TKey
+ * @psalm-template TKey of array-key
+ * @psalm-template T
+ * @template-extends Collection<TKey, T>
  */
 interface ExtendedCollectionInterface extends Collection
 {
@@ -26,6 +31,8 @@ interface ExtendedCollectionInterface extends Collection
      * Return a new collection with sorted result.
      *
      * @param string|PropertyPathInterface $field the field name or the property path to sort by
+     *
+     * @psalm-return ExtendedCollectionInterface<TKey, T>
      */
     public function getSortedCollection($field): self;
 
@@ -33,6 +40,8 @@ interface ExtendedCollectionInterface extends Collection
      * Gets the sorted iterator.
      *
      * @param string|PropertyPathInterface $field the field name or the property path to sort by
+     *
+     * @psalm-return \ArrayIterator<TKey, T>
      */
     public function getSortedIterator($field): \ArrayIterator;
 

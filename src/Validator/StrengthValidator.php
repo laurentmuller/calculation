@@ -20,6 +20,8 @@ use ZxcvbnPhp\Zxcvbn;
 /**
  * Strength constraint validator.
  *
+ * @extends AbstractConstraintValidator<Strength>
+ *
  * @author Laurent Muller
  */
 class StrengthValidator extends AbstractConstraintValidator

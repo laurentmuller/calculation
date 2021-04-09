@@ -39,6 +39,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     {"label" = "index.title", "route" = "homepage" },
  *     {"label" = "calculationstate.list.title", "route" = "table_calculationstate" }
  * })
+ * @template-extends AbstractEntityController<CalculationState>
  */
 class CalculationStateController extends AbstractEntityController
 {

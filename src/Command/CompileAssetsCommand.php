@@ -187,7 +187,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      */
     private function checkCompressMark(string $content): bool
     {
-        return \preg_match('#/\*+!#', $content); // must contain /**!
+        return 1 === \preg_match('#/\*+!#', $content); // must contain /**!
     }
 
     /**
@@ -352,28 +352,28 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     {
         $dir = \dirname($origFile);
 
-        return \preg_replace_callback('#@import\s+(?:url)?[(\'"]+(.+)[)\'"]+;#U', function ($m) use ($dir) {
-            $file = $dir . '/' . $m[1];
+        return \preg_replace_callback('#@import\s+(?:url)?[(\'"]+(.+)[)\'"]+;#U', function (array $matches) use ($dir) {
+            $file = $dir . '/' . $matches[1];
             if (!\is_file($file)) {
                 $this->writeError("Expanding file {$file} not found!");
 
-                return $m[0];
+                return $matches[0];
             }
 
             $this->writeVeryVerbose("Including {$file}");
-            $s = \file_get_contents($file);
+            $content = \file_get_contents($file);
             $newDir = \dirname($file);
-            $s = $this->expandCssImports($s, $file);
+            $content = $this->expandCssImports($content, $file);
             if ($newDir !== $dir) {
                 $tmp = $dir . '/';
                 if (\substr($newDir, 0, \strlen($tmp)) === $tmp) {
-                    $s = \preg_replace('#\burl\(["\']?(?=[.\w])(?!\w+:)#', '$0' . \substr($newDir, \strlen($tmp)) . '/', $s);
-                } elseif (false !== \strpos($s, 'url(')) {
-                    return $m[0];
+                    $content = \preg_replace('#\burl\(["\']?(?=[.\w])(?!\w+:)#', '$0' . \substr($newDir, \strlen($tmp)) . '/', $content);
+                } elseif (false !== \strpos($content, 'url(')) {
+                    return $matches[0];
                 }
             }
 
-            return $s;
+            return $content;
         }, $content);
     }
 
@@ -389,12 +389,12 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     {
         $dir = \dirname($origFile);
 
-        return \preg_replace_callback('~<!--#include\s+file="(.+)"\s+-->~U', function ($m) use ($dir) {
-            $file = $dir . '/' . $m[1];
+        return \preg_replace_callback('~<!--#include\s+file="(.+)"\s+-->~U', function (array $matches) use ($dir) {
+            $file = $dir . '/' . $matches[1];
             if (!\is_file($file)) {
                 $this->writeError("Expanding file {$file} not found!");
 
-                return $m[0];
+                return $matches[0];
             }
             $this->writeVeryVerbose("Including {$file}");
 

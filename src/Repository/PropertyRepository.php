@@ -26,6 +26,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @author Laurent Muller
  *
  * @see \App\Entity\Property
+ * @template-extends AbstractRepository<Property>
  */
 class PropertyRepository extends AbstractRepository
 {

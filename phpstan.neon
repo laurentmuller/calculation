@@ -1,8 +1,8 @@
 includes:
-    - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
-    - vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
-    - vendor/slam/phpstan-extensions/conf/symfony-rules.neon
-    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor-bin/phpstan/vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
+    - vendor-bin/phpstan/vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
+    - vendor-bin/phpstan/vendor/slam/phpstan-extensions/conf/symfony-rules.neon
+    - vendor-bin/phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 parameters:
     level: 6
@@ -17,7 +17,7 @@ parameters:
 
     # Level 6
     checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
+    # checkGenericClassInNonGenericObjectType: false
     
     # PHP 7.4
     checkUninitializedProperties: true
@@ -26,7 +26,6 @@ parameters:
     - vendor/twig/twig/src/Extension/CoreExtension.php
 
     ignoreErrors:
-    - '#catchPhrase#'                       # Faker\Generator
     # disallowed-execution-calls
     - '#proc_open#'                         # Command\CompileAssetsCommand.php
     # Level 6

@@ -28,6 +28,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @author Laurent Muller
  *
  * @see \App\Entity\Category
+ * @template-extends AbstractRepository<Category>
  */
 class CategoryRepository extends AbstractRepository
 {

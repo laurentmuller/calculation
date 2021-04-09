@@ -439,7 +439,7 @@ final class SymfonyUtils
         } elseif (\is_int($var) || \preg_match('/^-?\d+$/', $value)) {
             return (int) $value;
         } elseif (\is_float($var)) {
-            return (float) $var;
+            return $var;
         } elseif (\preg_match('/^-?\d+\.\d+$/', $value)) {
             $pos = \strrpos($value, '.');
             $decimals = \strlen($value) - $pos - 1;

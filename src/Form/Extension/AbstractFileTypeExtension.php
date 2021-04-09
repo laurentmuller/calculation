@@ -96,6 +96,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
      * @param FormInterface $form       the form
      * @param array         $attributes the attributes to update
      * @param array         $options    the options
+     *
      * @psalm-suppress UnusedParam
      */
     protected function updateAttributes(FormInterface $form, array &$attributes, array &$options): void

@@ -50,6 +50,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *         "card" = "$params.[card]"
  *     }}
  * })
+ * @template-extends AbstractEntityController<Task>
  */
 class TaskController extends AbstractEntityController
 {

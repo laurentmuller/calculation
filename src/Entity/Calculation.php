@@ -80,7 +80,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @ORM\OrderBy({"code" = "ASC"})
      * @Assert\Valid
      *
-     * @var Collection|CalculationGroup[]
+     * @var CalculationGroup|Collection
+     * @psalm-var Collection<int, CalculationGroup>
      */
     protected $groups;
 
@@ -400,6 +401,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Get groups.
      *
      * @return CalculationGroup[]|Collection
+     *
+     * @psalm-return Collection<int, CalculationGroup>
      */
     public function getGroups(): Collection
     {

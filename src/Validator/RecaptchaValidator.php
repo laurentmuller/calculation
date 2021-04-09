@@ -12,11 +12,13 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use ReCaptcha\ReCaptcha;
+use ReCaptcha\ReCaptcha as ReCaptchaService;
 use Symfony\Component\Validator\Constraint;
 
 /**
  * Google reCaptcha constraint validator.
+ *
+ * @extends AbstractConstraintValidator<Recaptcha>
  *
  * @author Laurent Muller
  */
@@ -42,10 +44,12 @@ class RecaptchaValidator extends AbstractConstraintValidator
 
     /**
      * {@inheritdoc}
+     *
+     * @param Recaptcha $constraint
      */
     protected function doValidate($value, Constraint $constraint): void
     {
-        $recaptcha = new ReCaptcha($this->secret);
+        $recaptcha = new ReCaptchaService($this->secret);
         $result = $recaptcha->verify($value);
         if (!$result->isSuccess()) {
             foreach ($result->getErrorCodes() as $code) {

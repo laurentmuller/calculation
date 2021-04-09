@@ -30,6 +30,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @author Laurent Muller
  *
  * @see \App\Entity\Task
+ * @template-extends AbstractRepository<Task>
  */
 class TaskRepository extends AbstractRepository
 {

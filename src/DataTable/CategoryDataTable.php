@@ -18,7 +18,6 @@ use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use DataTables\DataTablesInterface;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
 
@@ -26,6 +25,8 @@ use Twig\Environment;
  * Category data table handler.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityDataTable<Category>
  */
 class CategoryDataTable extends AbstractEntityDataTable
 {
@@ -49,13 +50,8 @@ class CategoryDataTable extends AbstractEntityDataTable
 
     /**
      * Creates the link to prodcuts.
-     *
-     * @param Collection $products the list of products that fall into the given category
-     * @param Category   $item     the category
-     *
-     * @return string the link, if applicable, the value otherwise
      */
-    public function formatProducts(Collection $products, Category $item): string
+    public function formatProducts(\Countable $products, Category $item): string
     {
         $context = [
             'id' => $item->getId(),

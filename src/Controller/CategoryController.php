@@ -49,6 +49,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *         "card" = "$params.[card]"
  *     }}
  * })
+ * @template-extends AbstractEntityController<Category>
  */
 class CategoryController extends AbstractEntityController
 {

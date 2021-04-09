@@ -31,6 +31,8 @@ use Symfony\Component\HttpFoundation\Response;
  * Abstract controller for entities management.
  *
  * @author Laurent Muller
+ *
+ * @template T of AbstractEntity
  */
 abstract class AbstractEntityController extends AbstractController
 {
@@ -38,6 +40,8 @@ abstract class AbstractEntityController extends AbstractController
      * The entity class name.
      *
      * @var string
+     *
+     * @psalm-var class-string<T> $className
      */
     protected $className;
 
@@ -278,10 +282,12 @@ abstract class AbstractEntityController extends AbstractController
      * This function use the class name given at the constructor.
      *
      * @return \App\Repository\AbstractRepository the repository
+     *
+     * @psalm-return AbstractRepository<T> $repository
      */
     protected function getRepository(): AbstractRepository
     {
-        /** @var AbstractRepository $repository */
+        /** @psalm-var AbstractRepository<T> $repository */
         $repository = $this->getManager()->getRepository($this->className);
 
         return $repository;
@@ -384,6 +390,8 @@ abstract class AbstractEntityController extends AbstractController
      * @param array                   $parameters parameters to pass to the view
      *
      * @return Response a JSON response if is a callback, the data table view otherwise
+     *
+     * @psalm-param AbstractEntityDataTable<T> $table
      */
     protected function renderTable(Request $request, AbstractEntityDataTable $table, array $attributes = [], array $parameters = []): Response
     {

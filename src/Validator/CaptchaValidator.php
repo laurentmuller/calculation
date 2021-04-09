@@ -18,6 +18,8 @@ use Symfony\Component\Validator\Constraint;
 /**
  * Captcha constraint validator.
  *
+ * @extends AbstractConstraintValidator<Captcha>
+ *
  * @author Laurent Muller
  */
 class CaptchaValidator extends AbstractConstraintValidator

@@ -45,6 +45,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *         "card" = "$params.[card]"
  *     }}
  * })
+ * @template-extends AbstractEntityController<GlobalMargin>
  */
 class GlobalMarginController extends AbstractEntityController
 {

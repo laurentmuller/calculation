@@ -14,7 +14,6 @@ namespace App\BootstrapTable;
 
 use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -22,6 +21,7 @@ use Twig\Environment;
  * The calculation states table.
  *
  * @author Laurent Muller
+ * @template-extends AbstractEntityTable<\App\Entity\CalculationState>
  */
 class CalculationStateTable extends AbstractEntityTable
 {
@@ -48,11 +48,11 @@ class CalculationStateTable extends AbstractEntityTable
     /**
      * Formatter for the calculations column.
      */
-    public function formatCalculations(Collection $calculations, CalculationState $state): string
+    public function formatCalculations(\Countable $calculations, CalculationState $state): string
     {
         return $this->twig->render('table/_cell_table_link.html.twig', [
             'route' => 'table_calculation',
-            'count' => \count($calculations),
+            'count' => $calculations->count(),
             'title' => 'calculationstate.list.calculation_title',
             'parameters' => [
                 CalculationTable::PARAM_STATE => $state->getId(),

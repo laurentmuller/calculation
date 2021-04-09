@@ -23,6 +23,8 @@ use Doctrine\ORM\QueryBuilder;
  * Base repository.
  *
  * @author Laurent Muller
+ * @template T of \App\Entity\AbstractEntity
+ * @template-extends ServiceEntityRepository<T>
  */
 abstract class AbstractRepository extends ServiceEntityRepository
 {

@@ -36,6 +36,7 @@ class TaskItem extends AbstractEntity implements \Countable
      * @Assert\Valid
      *
      * @var Collection|TaskItemMargin[]
+     * @psalm-var Collection<int, TaskItemMargin>
      */
     private $margins;
 
@@ -119,6 +120,7 @@ class TaskItem extends AbstractEntity implements \Countable
 
     /**
      * @return Collection|TaskItemMargin[]
+     * @psalm-return Collection<int, TaskItemMargin>
      */
     public function getMargins(): Collection
     {

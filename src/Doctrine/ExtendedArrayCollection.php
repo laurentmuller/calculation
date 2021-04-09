@@ -21,6 +21,12 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  * Extends the array collection.
  *
  * @author Laurent Muller
+ *
+ * @phpstan-template TKey
+ * @psalm-template TKey of array-key
+ * @psalm-template T
+ * @template-extends ArrayCollection<TKey,T>
+ * @template-implements ExtendedCollectionInterface<TKey,T>
  */
 class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollectionInterface
 {
@@ -28,6 +34,7 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
      * Initializes a new collection.
      *
      * @param array $elements the initial elements
+     * @psalm-param array<TKey,T> $elements
      */
     public function __construct(array $elements = [])
     {
@@ -38,6 +45,8 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
      * Creates a new instance from the given array.
      *
      * @param array $elements the initial elements
+     * @psalm-param array<TKey,T> $elements
+     * @psalm-return static<TKey,T>
      */
     public static function fromArray(array $elements = []): self
     {
@@ -48,6 +57,8 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
      * Creates a new instance from the given collection.
      *
      * @param Collection $collection the collection to get initial elements
+     * @psalm-param Collection<TKey,T> $collection
+     * @psalm-return static<TKey,T>
      */
     public static function fromCollection(Collection $collection): self
     {
@@ -56,6 +67,8 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-return static<TKey,T>
      */
     public function getSortedCollection($field): self
     {
@@ -66,10 +79,12 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-return \ArrayIterator<TKey,T>
      */
     public function getSortedIterator($field): \ArrayIterator
     {
-        /** @var \ArrayIterator $iterator */
+        /** @psalm-var \ArrayIterator<TKey, T> $iterator */
         $iterator = $this->getIterator();
         $accessor = $this->getPropertyAccessor();
 

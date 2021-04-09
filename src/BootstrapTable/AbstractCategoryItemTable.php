@@ -23,6 +23,9 @@ use Symfony\Component\HttpFoundation\Request;
  * Common abstract table for products and tasks.
  *
  * @author Laurent Muller
+ *
+ * @template T of \App\Entity\AbstractEntity
+ * @template-extends AbstractEntityTable<T>
  */
 abstract class AbstractCategoryItemTable extends AbstractEntityTable
 {
@@ -41,6 +44,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
      *
      * @param AbstractRepository $repository         the entity repository
      * @param CategoryRepository $categoryRepository the category repository
+     * @psalm-param AbstractRepository<T> $repository
      */
     public function __construct(AbstractRepository $repository, CategoryRepository $categoryRepository)
     {

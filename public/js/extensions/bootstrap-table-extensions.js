@@ -111,7 +111,7 @@ $.fn.extend({
                 if(content.length !== 0) {
                     // select first row if none
                     if (!$this.getSelectRow()) {
-                        $this.selectFirstRow();
+                        //$this.selectFirstRow();
                     }
                     // update
                     $this.updateCardView().highlight().updateHref(content);
@@ -235,7 +235,8 @@ $.fn.extend({
     },
     
     /**
-     * Get the loaded data (rows) of table at the moment that this method is called.
+     * Get the loaded data (rows) of table at the moment that this method is
+     * called.
      * 
      * @return {array} the loaded data.
      */

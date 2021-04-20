@@ -39,3 +39,22 @@
 {{- _self.item_path_external(path('calculation_pdf_id', params), 'calculation.list.pdf_single_title', 'file-pdf far', 'btn-calculation-pdf') }}
 {% endif %}
 {%- endblock %}
+
+{% block custom_view_card_class ' text-border' %}
+{% block custom_view_header -%}
+{%- if row_edit -%}
+    <a href="{{ path('calculation_edit', params) }}" class="item-link text-body" title="{{ 'calculation.edit.title_short'|trans }}">%id%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('calculation_show', params) }}" class="item-link text-body" title="{{ 'calculation.show.title'|trans }}">%id%</a>
+{%- else -%}
+    <span>%id%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%date% / %stateCode%') }}
+{{ _self.property_value('%customer%') }}
+{{ _self.property_value('%description%') }}
+{{ _self.property_line() }}
+{{ _self.property_value('%items%', 'text-danger') }}
+{%- endblock %}

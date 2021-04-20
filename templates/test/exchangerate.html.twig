@@ -1,0 +1,97 @@
+{% extends 'cards/card_edit.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{# macros #}
+{% macro fillCodes(codes, selection = '') %}
+{% for key, code in codes -%}
+    <option value="{{ key }}" data-name="{{ code.symbol }}" data-digits="{{ code.fractionDigits }}"{% if key == selection %} selected="selected"{% endif %}>{{ code.name ~ ' - ' ~ code.symbol }}</option>
+{% endfor -%}
+{% endmacro %}
+
+{% macro fillEntries(codes, selection = '') %}
+{% for key, code in codes -%}
+    <button class="dropdown-item{% if key == selection %} active{% endif %}" type="button" data-value="{{ key }}" data-name="{{ code.symbol }}" data-digits="{{ code.fractionDigits }}">{{ code.name ~ ' - ' ~ code.symbol }}</button>
+{% endfor -%}
+{% endmacro %}
+
+{# parameters #}
+{%- set title       = 'exchangerate.title' -%}
+{%- set title_icon  = 'hand-holding-usd' -%}
+{%- set cancel_text = 'common.button_close' -%}
+{%- set form_attr   = form_attr|default({})|merge({
+                        'action': url('exchange_rate'),
+                	  	'data-error': 'unknown'|trans({}, 'exchangerate')            
+                      }) -%}
+
+{% block card_header %}
+{{ parent() }}
+<p class="ml-4 mb-0">{{ 'exchangerate.description'|trans }}</p>
+{% endblock %}
+
+{% block card_body %}
+{{ parent() }}
+<div class="row">
+    <div class="col-5">
+        <div class="form-group">
+            <label class="required" for="baseCode">{{ 'exchangerate.source'|trans }}</label>
+            <select class="form-control js-example-placeholder-single" id="baseCode" name="baseCode" required="required">
+                {{ _self.fillCodes(codes, 'CHF') }}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group text-center">
+            <label>&nbsp;</label>
+            <a href="#" role="button" class="btn btn-swap btn-secondary form-control" title="{{ 'exchangerate.swap_label'|trans }}">
+                <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+    <div class="col-5">
+        <div class="form-group">
+            <label class="required" for="targetCode">{{ 'exchangerate.target'|trans }}</label>
+            <select class="form-control" id="targetCode" name="targetCode" required="required">
+                {{ _self.fillCodes(codes, 'EUR') }}
+            </select>
+        </div>
+    </div>
+</div>
+<p class="text-center mb-0" id="rate">&nbsp;</p>
+<div class="row">
+    <div class="col-5">
+        <div class="form-group">
+            <label class="required" for="amount">{{ 'exchangerate.amount'|trans }}</label>
+            <input type="number" class="form-control text-right" id="amount" name="amount" value="100" required="required">
+        </div>
+    </div>
+    <div class="col-md-2">&nbsp;</div>
+    <div class="col-5">
+        <div class="form-group">
+            <label for="result">{{ 'exchangerate.result'|trans }}</label>
+            <input type="number" class="form-control text-right font-weight-bold" id="result" name="result" value="1.00" disabled="disabled">
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block actions_form -%}
+{{ icons.button_cancel(cancel_path, cancel_text) }}
+{%- endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset_css('js/vendor/select2/css/select2.css') }}
+{{ asset_css('js/vendor/select2/css/select2-bootstrap4.css') }}
+<style>
+    .select2-dropdown.select2-dropdown--below {
+        width: 310px !important;
+    }
+</style>
+{%- endblock -%}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('js/vendor/select2/js/select2.js') }}
+{{ asset_js('js/vendor/select2/js/i18n/fr.min.js') }}
+{{ asset_js('js/test/exchangerate.js') }}
+{%- endblock %}

@@ -93,4 +93,24 @@ interface TableInterface
      * The total not filtred parameter name (int).
      */
     public const PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
+
+    /**
+     * The dispay view parameter name (string: null, 'custom' or 'card').
+     */
+    public const PARAM_VIEW = 'view';
+
+    /**
+     * The view name to show values as card (detailled view).
+     */
+    public const VIEW_CARD = 'card';
+
+    /**
+     * The view name to show values as custom (mosaic view).
+     */
+    public const VIEW_CUSTOM = 'custom';
+
+    /**
+     * The view name to show values as table (default view).
+     */
+    public const VIEW_TABLE = 'table';
 }

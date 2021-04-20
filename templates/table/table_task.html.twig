@@ -55,3 +55,19 @@
 {{- _self.item_path(path('task_compute', params), 'taskcompute.title', 'keyboard', 'btn-task-compute') }}
 {% endif %}
 {%- endblock %}
+
+{% block custom_view_header -%}
+{%- if row_edit -%}
+    <a href="{{ path('task_edit', params) }}" class="item-link text-body" title="{{ 'task.edit.title'|trans }}">%name%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('task_show', params) }}" class="item-link text-body" title="{{ 'task.show.title'|trans }}">%name%</a>
+{%- else -%}
+    <span>%name%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%category.code%') }}
+{{ _self.property_row('task.fields.unit', '%unit%') }}
+{{ _self.property_row('task.fields.items', '%items%') }}
+{%- endblock %}

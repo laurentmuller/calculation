@@ -33,7 +33,7 @@
         {% endif %}
         {% if is_previous_admin %}
             {{- icons.dropdownSeparator -}}
-            {%- set route = is_tabular ? 'user_table' : 'user_card'  -%}
+            {%- set route = is_tabular ? 'user_table' : 'user_card' -%}
             {{- icons.dropdownItem(path(route, {'_switch_user': '_exit'}), 'user.switch.exit.title', 'user-slash') -}}
         {% endif %}
         {# switch environment #}

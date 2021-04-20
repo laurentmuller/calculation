@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Util\Utils;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,7 +82,7 @@ abstract class AbstractHttpClientService
     /**
      * Gets the last error.
      *
-     * @return array|null the last error with the 'code' and the 'message' entries; null if none
+     * @return array|null the last error with the 'code' and the 'message' and eventually the exception; null if none
      */
     public function getLastError(): ?array
     {
@@ -174,17 +175,26 @@ abstract class AbstractHttpClientService
     /**
      * Sets the last error.
      *
-     * @param int    $code    the error code
-     * @param string $message the error message
+     * @param int        $code    the error code
+     * @param string     $message the error message
+     * @param \Exception $e       the optional source exception
      *
      * @return bool this function returns always false
      */
-    protected function setLastError(int $code, string $message): bool
+    protected function setLastError(int $code, string $message, \Exception $e = null): bool
     {
-        $this->lastError = [
-            'code' => $code,
-            'message' => $message,
-        ];
+        if (null !== $e) {
+            $this->lastError = [
+                'code' => $code,
+                'message' => $message,
+                'exception' => Utils::getExceptionContext($e),
+            ];
+        } else {
+            $this->lastError = [
+                'code' => $code,
+                'message' => $message,
+            ];
+        }
 
         return false;
     }

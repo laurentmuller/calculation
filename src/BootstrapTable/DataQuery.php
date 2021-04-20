@@ -70,6 +70,11 @@ class DataQuery
     public string $sort = '';
 
     /**
+     * The view (null, 'card' or 'custom').
+     */
+    public ?string $view = null;
+
+    /**
      * Adds a custom data to this list of custom datas.
      *
      * @param string $name  the custom data name

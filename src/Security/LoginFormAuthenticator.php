@@ -16,7 +16,6 @@ use App\Controller\SecurityController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
@@ -26,6 +25,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
@@ -37,14 +37,14 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    private UrlGeneratorInterface $generator;
+    private HttpUtils $utils;
 
     /**
      * Constructor.
      */
-    public function __construct(UrlGeneratorInterface $generator)
+    public function __construct(HttpUtils $utils)
     {
-        $this->generator = $generator;
+        $this->utils = $utils;
     }
 
     /**
@@ -62,8 +62,8 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             new UserBadge($username),
             new PasswordCredentials($password),
             [
-                new RememberMeBadge(),
                 new CsrfTokenBadge('authenticate', $csrf_token),
+                new RememberMeBadge(),
             ]
         );
     }
@@ -77,7 +77,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->getHomeUrl());
+        return new RedirectResponse($this->getHomeUrl($request));
     }
 
     /**
@@ -85,17 +85,16 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
      */
     public function supports(Request $request): bool
     {
-        $route = $request->attributes->get('_route');
-
-        return $request->isMethod(Request::METHOD_POST) && SecurityController::LOGIN_ROUTE === $route;
+        return $request->isMethod(Request::METHOD_POST) &&
+            $this->utils->checkRequestPath($request, SecurityController::LOGIN_ROUTE);
     }
 
     /**
      * Return the URL to the index (home) page.
      */
-    protected function getHomeUrl(): string
+    protected function getHomeUrl(Request $request): string
     {
-        return $this->generator->generate(SecurityController::HOME_PAGE);
+        return $this->utils->generateUri($request, SecurityController::HOME_PAGE);
     }
 
     /**
@@ -103,6 +102,6 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
      */
     protected function getLoginUrl(Request $request): string
     {
-        return $this->generator->generate(SecurityController::LOGIN_ROUTE);
+        return $this->utils->generateUri($request, SecurityController::LOGIN_ROUTE);
     }
 }

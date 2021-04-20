@@ -48,3 +48,20 @@
 {{- _self.item_path(path('product_add', params), 'product.add.title', 'file far', 'btn-add') }}
 {{- _self.item_path(path('product_clone', params), 'common.button_clone', 'copy far', 'btn-clone') }}
 {%- endblock %}
+
+{% block custom_view_header -%}
+{%- if row_edit -%}
+    <a href="{{ path('product_edit', params) }}" class="item-link stretched-link text-body" title="{{ 'product.edit.title'|trans }}">%description%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('product_show', params) }}" class="item-link stretched-link text-body" title="{{ 'product.show.title'|trans }}">%description%</a>
+{%- else -%}
+    <span>%description%</span>
+{%- endif -%} 
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%category.code%') }}
+{{ _self.property_value('%supplier%') }}
+{{ _self.property_line() }}
+{{ _self.property_row('product.fields.price', 'JavaScript:formatProductPrice', 'text-right') }}
+{%- endblock %}

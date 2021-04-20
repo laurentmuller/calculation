@@ -50,3 +50,22 @@
     {{- _self.item_path(path('homepage', {'_switch_user': 'username'}), 'user.switch.take.title', 'user-plus', 'btn-user-switch') }}
 {%- endif -%}
 {%- endblock %}
+
+{% block custom_view_header -%}
+<span class="mr-1">%imageName%</span>
+{%- if row_edit -%}
+    <a href="{{ path('user_edit', params) }}" class="item-link text-body" title="{{ 'user.edit.title'|trans }}">%username%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('user_show', params) }}" class="item-link text-body" title="{{ 'user.show.title'|trans }}">%username%</a>
+{%- else -%}
+    <span>%username%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%email%') }}
+{{ _self.property_line() }}
+{{ _self.property_row('user.fields.role', '%role%') }}
+{{ _self.property_row('user.fields.enabled', '%enabled%') }}
+{{ _self.property_row('user.fields.lastLogin', '%lastLogin%') }}
+{%- endblock %}

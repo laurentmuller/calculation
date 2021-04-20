@@ -47,11 +47,10 @@ function translate() {
     const $textResult = $('#result');
 
     // wait
-    const html = $buttonSubmit.html();
-    const spinner = '<span class="spinner-border spinner-border-sm"></span>';
-    $buttonSubmit.toggleDisabled(true).html(spinner);
+    $buttonSubmit.toggleDisabled(true);
     $buttonCopy.toggleDisabled(true);
-
+    $('*').css('cursor', 'wait');
+    
     // build parameters
     $('#text').val($('#text').val().trim());
 
@@ -63,11 +62,9 @@ function translate() {
     };
 
     // call
+    
     const url = $form.data('ajax');
     $.post(url, data, function (response) {
-        // restore
-        $buttonSubmit.toggleDisabled(false).html(html);
-
         // ok?
         if (response.result) {
             const data = response.data;
@@ -98,6 +95,9 @@ function translate() {
             // message
             handleError(response);
         }
+    }).always(function () {
+        $buttonSubmit.toggleDisabled(false);
+        $('*').css('cursor', '');
     });
 }
 
@@ -253,7 +253,7 @@ function onService() {
     // validate
     const options = {
         focus: false,
-        submitHandler: function () {
+        submitHandler: function() {
             translate();
         },
         rules: {

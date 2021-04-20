@@ -153,9 +153,9 @@ function generate() {
 
     // init validation
     const options = {
-        submitHandler: function () {
+        submitHandler: function() {
             generate();
-        },
+        }
     };
     $('#edit-form').initValidator(options);
 }(jQuery));

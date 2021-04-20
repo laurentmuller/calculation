@@ -44,17 +44,14 @@ class DatabaseInfo
             $sql = 'SHOW VARIABLES';
             $connection = $this->getConnection();
             $statement = $connection->prepare($sql);
+            $entries = $statement->executeQuery()->fetchAllAssociative();
+            $statement->free();
 
-            if ($statement->execute()) {
-                $entries = $statement->fetchAllAssociative(); /* @phpstan-ignore-line */
-                $statement->free();
-
-                // convert
-                foreach ($entries as $entry) {
-                    if (0 !== \strlen($entry['Value'])) {
-                        $key = $entry['Variable_name'];
-                        $result[$key] = $entry['Value'];
-                    }
+            // convert
+            foreach ($entries as $entry) {
+                if (0 !== \strlen($entry['Value'])) {
+                    $key = $entry['Variable_name'];
+                    $result[$key] = $entry['Value'];
                 }
             }
         } catch (\Exception $e) {
@@ -96,14 +93,11 @@ class DatabaseInfo
             $sql = 'SHOW VARIABLES LIKE "version"';
             $connection = $this->getConnection();
             $statement = $connection->prepare($sql);
+            $result = $statement->executeQuery()->fetchAssociative();
+            $statement->free();
 
-            if ($statement->execute()) {
-                $result = $statement->fetchAssociative(); /* @phpstan-ignore-line */
-                $statement->free();
-
-                if (false !== $result) {
-                    return $result['Value'];
-                }
+            if (false !== $result) {
+                return $result['Value'];
             }
         } catch (\Exception $e) {
             // ignore

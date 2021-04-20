@@ -254,20 +254,11 @@
 			]
 		},
 		{
-			"name": "ckeditor5",
-			"version": "23.1.0",
-			"disabled": true,
-			"files": [
-				"ckeditor.js",
-				"translations/fr.min.js"
-			]
-		},
-		{
 			"name": "bootstrap-table",
 			"version": "1.18.3",
 			"files": [
 				"bootstrap-table.js",
-				"bootstrap-table.css"				
+				"bootstrap-table.css"
 			]
 		},
 		{
@@ -278,6 +269,38 @@
 			"target": "bootstrap-table",
 			"files": [
 				"bootstrap-table-defer-url.js"
+			]
+		},
+		{
+			"example": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/defer-url/bootstrap-table-defer-url.min.js",
+			"name": "bootstrap-table",
+			"version": "1.18.3",
+			"format": "{source}{name}/{version}/extensions/custom-view/{file}",
+			"target": "bootstrap-table",
+			"files": [
+				"bootstrap-table-custom-view.js"
+			]
+		},
+		{
+			"example": "https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js",
+			"source": "https://cdn.jsdelivr.net/npm/",
+			"format": "{source}{name}@{version}/dist/{file}",
+			"name": "select2",
+			"version": "4.1.0-rc.0",
+			"files": [
+				"js/select2.js",
+				"js/i18n/fr.min.js",
+				"css/select2.css"
+			]
+		},
+		{
+			"source": "https://cdn.jsdelivr.net/npm/@ttskch/",
+			"format": "{source}{name}@{version}/dist/{file}",
+			"name": "select2-bootstrap4-theme",
+			"version": "1.5.2",
+			"target": "select2/css",
+			"files": [
+				"select2-bootstrap4.css"
 			]
 		}
 	]

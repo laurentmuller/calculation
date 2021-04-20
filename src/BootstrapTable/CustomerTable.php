@@ -42,4 +42,12 @@ class CustomerTable extends AbstractEntityTable
     {
         return [CustomerRepository::NAME_COMPANY_FIELD => Column::SORT_ASC];
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function isCustomViewAllowed(): bool
+    {
+        return true;
+    }
 }

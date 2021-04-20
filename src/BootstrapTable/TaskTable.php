@@ -54,4 +54,12 @@ class TaskTable extends AbstractCategoryItemTable
     {
         return ['name' => Column::SORT_ASC];
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function isCustomViewAllowed(): bool
+    {
+        return true;
+    }
 }

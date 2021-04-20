@@ -48,3 +48,20 @@
 {{- _self.item_path(path('category_add', params), 'category.add.title', 'file far', 'btn-add') }}
 {{- _self.item_path(path('category_clone', params), 'common.button_clone', 'copy far', 'btn-clone') }}
 {%- endblock %}
+
+{% block custom_view_header -%}
+{%- if row_edit -%}
+    <a href="{{ path('category_edit', params) }}" class="item-link text-body" title="{{ 'category.edit.title'|trans }}">%code%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('category_show', params) }}" class="item-link text-body" title="{{ 'category.show.title'|trans }}">%code%</a>
+{%- else -%}
+    <span>%code%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%description%') }}
+{{ _self.property_value('%group.code%') }}
+{{ _self.property_row('category.fields.products', '%products%') }}
+{{ _self.property_row('category.fields.tasks', '%tasks%') }}
+{%- endblock %}

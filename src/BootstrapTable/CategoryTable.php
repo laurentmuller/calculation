@@ -115,6 +115,14 @@ class CategoryTable extends AbstractEntityTable
     /**
      * {@inheritDoc}
      */
+    protected function isCustomViewAllowed(): bool
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function search(DataQuery $query, QueryBuilder $builder): void
     {
         parent::search($query, $builder);
@@ -144,11 +152,7 @@ class CategoryTable extends AbstractEntityTable
      */
     private function getGroup(int $groupId): ?Group
     {
-        if (0 !== $groupId) {
-            return $this->groupRepository->find($groupId);
-        }
-
-        return null;
+        return 0 !== $groupId ? $this->groupRepository->find($groupId) : null;
     }
 
     /**

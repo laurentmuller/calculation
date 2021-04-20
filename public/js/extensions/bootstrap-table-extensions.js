@@ -35,14 +35,36 @@ $.fn.extend({
         'use strict';
         const $row = $(this);
         const options = $table.getOptions();
+        
+        // already selected?
         if ($row.hasClass(options.rowClass)) {
             return true;
         }
-        $table.find(options.rowSelector).removeClass(options.rowClass);
-        if(!$row.hasClass('no-records-found')) {
-            $row.addClass(options.rowClass).scrollInViewport();
-            $table.trigger('update-row.bs.table', this);
+        
+        // no data?
+        if($row.hasClass('no-records-found')) {
+            return true;
         }
+        
+        // remove old selection
+        $table.find(options.rowSelector).removeClass(options.rowClass);
+        
+        // add selection
+        $row.addClass(options.rowClass);
+        
+        // custom view?
+        if ($table.isCustomView()) {
+            const $view = $table.getCustomView();
+            $view.find('.custom-item').removeClass(options.rowClass);
+            const $selection = $view.find('.custom-item:eq(' + $row.index() + ')');
+            if ($selection.length) {
+                $selection.addClass(options.rowClass).scrollInViewport();
+            }
+        } else {
+            $row.scrollInViewport();
+        }
+        $table.trigger('update-row.bs.table', this);
+        
         return true;
     },
     
@@ -110,7 +132,7 @@ $.fn.extend({
             onPostBody: function(content) {
                 if(content.length !== 0) {
                     // select first row if none
-                    if (!$this.getSelectRow()) {
+                    if (!$this.getSelection()) {
                         $this.selectFirstRow();
                     }
                     // update
@@ -126,7 +148,35 @@ $.fn.extend({
                 $('.fixed-table-pagination .page-item.disabled .page-link').tagName('span', ['href']);
                 $('.fixed-table-pagination .page-item.active .page-link').tagName('span', ['href']);
             },
-
+            
+            onCustomViewPostBody: function(data) { 
+                const options = $this.getOptions();
+                const params = $this.getParameters();
+                const callback = $.isFunction(options.onRenderCustomView) ? options.onRenderCustomView: false;
+                
+                const selector = '.custom-view-actions:eq(%index%)';
+                const $view = $this.getCustomView();
+                $this.find('tbody tr .actions').each(function(index, element) {
+                    // copy actions
+                    const $rowActions = $(element).children();
+                    const $cardActions = $view.find(selector.replace('%index%', index));
+                    $rowActions.appendTo($cardActions);
+                    
+                    if (callback) {
+                        const row = data[index];
+                        const $item = $cardActions.parents('.custom-item');
+                        callback($this, row, $item, params);
+                    }
+                });                
+                $this.saveParameters().highlight();
+                
+                // display selection
+                const $selection = $view.find('.custom-item.' + options.rowClass);
+                if ($selection.length) {
+                    $selection.scrollInViewport();
+                }
+            },
+            
             // update UI and save parameters
             onToggle: function(cardView) {
                 $this.updateCardViewButton(cardView);
@@ -143,7 +193,7 @@ $.fn.extend({
         const settings = $.extend(true, defaults, options);
 
         // initialize
-        $this.bootstrapTable(settings);
+        $this.bootstrapTable(settings);        
         $this.updateCardViewButton($this.isCardView());
         $this.enableKeys().highlight();
 
@@ -153,6 +203,16 @@ $.fn.extend({
                 $(this).updateRow($this);
             }
         });
+        
+        // select row on custom item mouse down
+        $this.parents('.bootstrap-table').on('mousedown', '.custom-item', function() {
+            const index = $(this).parent().index();
+            const $row = $this.find('tbody tr:eq(' + index + ')');
+            if ($row.length) {
+                $row.updateRow($this);
+            }
+        });
+        
         return $this;
     },
 
@@ -183,13 +243,24 @@ $.fn.extend({
             'limit': options.pageSize,
             'card': options.cardView
         };
+        
+        // view
+        if ($this.isCustomView()) {
+            params.view = 'custom';
+        } else if (options.cardView) {
+            params.view = 'card';            
+        } else {
+            params.view = 'table';
+        }
+        
         // add search
         if(('' + options.searchText).length) {
             params.search = options.searchText;
         }
+        
         // query parameters function?
         if($.isFunction(options.queryParams)) {
-            params = $.extend(params, options.queryParams(params));
+            return $.extend(params, options.queryParams(params));
         }
         return params;
     },
@@ -225,6 +296,20 @@ $.fn.extend({
     },
 
     /**
+     * Return if the custom view mode is displayed.
+     * 
+     * @return {boolean} true if the custom view mode is displayed.
+     */
+    isCustomView: function() {
+        'use strict';
+        const data = $(this).data('bootstrap.table');
+        if (data) {
+            return data.showCustomView;
+        }
+        return false;
+    },
+    
+    /**
      * Returns if no loaded data (rows) is displayed.
      * 
      * @return {boolean} true if not data is displayed.
@@ -246,17 +331,45 @@ $.fn.extend({
     },
     
     /**
-     * Gets the select row.
+     * Gets the selected row.
      * 
      * @return {jQuery} the selected row, if any; null otherwise.
      */
-    getSelectRow: function() {
+    getSelection: function() {
         'use strict';
         const $this = $(this);
         const $row = $this.find($this.getOptions().rowSelector);
         return $row.length ? $row : null;
     },
 
+    /**
+     * Gets the selected row index.
+     * 
+     * @return {int} the selected row index, if any; -1 otherwise.
+     */
+    getSelectionIndex: function() {
+        'use strict';
+        const $row  = $(this).getSelection();
+        if ($row) {
+            return $row.index();  
+        }
+        return -1;
+    },
+    
+    /**
+     * Gets the custom view.
+     * 
+     * @return {JQuery} the custom view, if displayed, null otherwise.
+     */
+    getCustomView: function() {
+        'use strict';
+        const $this = $(this);
+        if ($this.isCustomView()) {
+            return $this.parents('.bootstrap-table').find('.fixed-table-custom-view');    
+        }
+        return null;
+    },
+    
     /**
      * Save parameters to the session.
      * 
@@ -361,7 +474,7 @@ $.fn.extend({
             // callback
             if(callback) {
                 const row = data[$row.index()];
-                options.onRenderCardView($this, row, $row);
+                callback($this, row, $row);
             }
         });
         
@@ -424,7 +537,70 @@ $.fn.extend({
         'use strict';
         return $(this).bootstrapTable('toggleView');
     },
+    
+    /**
+     * Toggles the view between the table and the custom view.
+     * 
+     * @return {jQuery} this instance for chaining.
+     */
+    toggleCustomView: function() {
+        'use strict';
+        return $(this).bootstrapTable('toggleCustomView');
+    },
+    
+    /**
+     * Toggles the display mode.
+     * 
+     * @param {string}
+     *            mode the display mode to set ('table', 'card' or 'custom').
+     * @return {jQuery} this instance for chaining.
+     */
+    setDisplayMode: function(mode) {
+        'use strict';
+        const $this = $(this);
+        switch (mode) {
+        case 'custom':
+            if (!$this.isCustomView()) {
+                $this.toggleCustomView();
+            }
+            break;
+        case 'card':
+            if (!$this.isCardView()) {
+                $this.toggleView();
+            }
+            if ($this.isCustomView()) {
+                $this.toggleCustomView();
+            }
+            break;
+        default: // table
+            if ($this.isCardView()) {
+                $this.toggleView();
+            }
+            if ($this.isCustomView()) {
+                $this.toggleCustomView();
+            }
+            break;
+        }
+        return $this;
+    },
 
+    /**
+     * Gets the display mode.
+     * 
+     * @return {string} the display mode ('table', 'card' or 'custom').
+     */
+    getDisplayMode : function() {
+        'use strict';
+        const $this = $(this);
+        if ($this.isCustomView()) {
+            return 'custom';
+        } else if ($this.isCardView()) {
+            return 'card';
+        } else {
+            return 'table';
+        }
+    },
+    
     /**
      * Highlight matching text.
      * 
@@ -441,8 +617,13 @@ $.fn.extend({
                 separateWordSearch: false,
                 ignorePunctuation: ["'", ",", "."] // ":;.,-–—‒_(){}[]!'\"+=".split("")
             };
-            const $rows = $this.find('tbody td:not(.rowlink-skip)');
-            $rows.mark(text, options);
+            if ($this.isCustomView()) {
+                const $items = $this.getCustomView().find('.custom-item');
+                $items.mark(text, options);    
+            } else {
+                const $rows = $this.find('tbody td:not(.rowlink-skip)');
+                $rows.mark(text, options);    
+            }
         }
         return $this;
     },
@@ -495,7 +676,7 @@ $.fn.extend({
     selectFirstRow: function() {
         'use strict';
         const $this = $(this);
-        const $row = $this.getSelectRow();
+        const $row = $this.getSelection();
         const $first = $this.find('tbody tr:first');
         if($first.length && $first !== $row) {
             return $first.updateRow($this);
@@ -511,7 +692,7 @@ $.fn.extend({
     selectLastRow: function() {
         'use strict';
         const $this = $(this);
-        const $row = $this.getSelectRow();
+        const $row = $this.getSelection();
         const $last = $this.find('tbody tr:last');
         if($last.length && $last !== $row) {
             return $last.updateRow($this);
@@ -527,7 +708,7 @@ $.fn.extend({
     selectPreviousRow: function() {
         'use strict';
         const $this = $(this);
-        const $row = $this.getSelectRow();
+        const $row = $this.getSelection();
         const $prev = $row.prev('tr');
         if($row.length && $prev.length) {
             return $prev.updateRow($this);
@@ -544,7 +725,7 @@ $.fn.extend({
     selectNextRow: function() {
         'use strict';
         const $this = $(this);
-        const $row = $this.getSelectRow();
+        const $row = $this.getSelection();
         const $next = $row.next('tr');
         if($row.length && $next.length) {
             return $next.updateRow($this);
@@ -629,12 +810,14 @@ $.fn.extend({
                             e.preventDefault();
                         }
                         break;
-                    case 38: // up arrow (previous row of the current page)
+                    case 37: // left arrow (previous row of the current page)
+                    case 38: // up arrow
                         if($this.selectPreviousRow()) {
                             e.preventDefault();
                         }
                         break;
-                    case 40: // down arrow (next row of the current page)
+                    case 39: // right arrow (next row of the current page)
+                    case 40: // down arrow
                         if($this.selectNextRow()) {
                             e.preventDefault();
                         }

@@ -76,11 +76,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
      */
     protected function getCategory(int $categoryId): ?Category
     {
-        if (0 !== $categoryId) {
-            return $this->categoryRepository->find($categoryId);
-        }
-
-        return null;
+        return 0 !== $categoryId ? $this->categoryRepository->find($categoryId) : null;
     }
 
     /**

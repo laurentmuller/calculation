@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Exception\MissingResourceException;
-use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Service to get weather from OpenWeatherMap.
@@ -196,13 +195,6 @@ class OpenWeatherService extends AbstractHttpClientService
     private $dataDirectory;
 
     /**
-     * The invalid characters for the cache key.
-     *
-     * @var string[]
-     */
-    private $invalidChars;
-
-    /**
      * The API key.
      *
      * @var string
@@ -218,7 +210,6 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         $this->key = $params->get(self::PARAM_KEY);
         $this->dataDirectory = $kernel->getProjectDir() . self::DATA_PATH;
-        $this->invalidChars = \str_split(ItemInterface::RESERVED_CHARACTERS);
         if (!$kernel->isDebug()) {
             $this->adapter = $adapter;
         }
@@ -546,9 +537,8 @@ class OpenWeatherService extends AbstractHttpClientService
     private function getCacheKey(string $uri, array $query): string
     {
         $key = $uri . '?' . \http_build_query($query);
-        $key = \str_replace($this->invalidChars, '_', $key);
 
-        return $key;
+        return $this->cleanKey($key);
     }
 
     /**

@@ -37,6 +37,9 @@ class InteractiveLoginListener implements EventSubscriberInterface
      */
     private $appNameVersion;
 
+    /**
+     * the user repository.
+     */
     private UserRepository $repository;
 
     /**

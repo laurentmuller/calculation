@@ -34,3 +34,11 @@
 {{- _self.item_path(path ~ '_type_/edit/_id_', 'common.button_edit', 'pencil-alt', edit_class) }}
 {{- _self.item_path(path ~ '_type_/delete/_id_', 'common.button_delete', 'times', 'btn-search btn-delete') }}
 {%- endblock %}
+
+{% block custom_view_header -%}
+<span>%entityName% - %fieldName%</span>
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%content%') }}
+{%- endblock %}

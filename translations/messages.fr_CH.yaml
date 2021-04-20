@@ -499,6 +499,10 @@ common:
     entity_created: 'Création : %date% - %user%'
     entity_updated: 'Mise à jour : %date% - %user%'
     clone_description: '%description% - Copie'
+    view_title: Affichage
+    view_table: Vue table
+    view_card: Vue détaillée
+    view_custom: Vue mosaïque
 environment:
     dev: Développement
     prod: Production
@@ -553,6 +557,7 @@ index:
     menu_info: A propos de %app_name%
     menu_tools: Outils
     menu_test: Tests
+    menu_sevice: Services
     menu_table: Tables
     menu_rights_user: Droits d'accès de l'utilisateur
     menu_rights_admin: Droits d'accès de l'administrateur
@@ -583,7 +588,7 @@ about:
     error: Erreur lors du chargement des informations.
     php_ini: PHP.ini
 list:
-    limit_title: Nombre de lignes affichées par page
+    limit_title: Nombre d'éléments affichés par page
     pdf_title: Télécharger la liste
     add_title: Créer un nouvel élément
     search_title: Effacer les critères de recherche
@@ -878,7 +883,7 @@ openweather:
         success: L'importation des localités a été réalisée avec succès.
         failure: Une erreur s'est produite lors de l'importation des localités.
     current:
-        title: Météo actuelle
+        title: Météo
         metric: Système métrique
         imperial: Système impériale
         date_calculation: Valeurs obtenue le %date%
@@ -1171,3 +1176,11 @@ breadcrumb:
     edit: Modification
     delete: Suppression
     property: Propriétés
+exchangerate:
+    title: Calculateur de change
+    description: Choisissez les devises et le montant pour obtenir le taux de change.
+    swap_label: Inverser les devises
+    source: Devise locale
+    target: Devise étrangère
+    amount: Montant
+    result: Résultat

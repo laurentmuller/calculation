@@ -3,6 +3,63 @@
 /* globals MenuBuilder */
 
 /**
+ * Formatter for the custom view.
+ * 
+ * @param data
+ *            the data (rows) to format.
+ * @returns the custom view
+ */
+function customViewFormatter(data) { // jshint ignore:line
+    'use strict';
+    let view = '';
+    const regex = /JavaScript:(\w*)/gm;
+    const $template = $('#custom-view');
+    const rowIndex = $('#table-edit').getSelectionIndex();
+    const rowClass = $('#table-edit').getOptions().rowClass;
+    
+    $.each(data, function (index, row) {
+        // id === row.action ||
+        $template.find('.custom-item').toggleClass(rowClass, rowIndex === index);
+        let html = $template.html();
+        
+        // fields
+        Object.keys(row).forEach(function(key) {
+            html = html.replaceAll('%' + key + '%', row[key] || '&#160;');
+        });
+        
+        // functions
+        let match;
+        while ((match = regex.exec(html)) !== null) {
+            let value = ''; 
+            const callback = match[1];
+            if(typeof window[callback] !== 'undefined' ) {
+                value = window[callback](row) || '';
+            }
+            html = html.replaceAll(match[0], value);
+        }
+        
+        view += html;
+    });
+    
+    return '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 m-0">' + view + '</div>';
+}
+
+/**
+ * Format the product price in the custom view.
+ * 
+ * @param {object}
+ *            row - the record data.
+ * @returns {string} the formatted product price.
+ */
+function formatProductPrice(row, $row) { // jshint ignore:line
+    'use strict';
+    if (row.unit) {
+        return row.price + ' / ' + row.unit;
+    }
+    return row.price;
+}
+
+/**
  * Cell style for a border column (calculations, status or log).
  * 
  * @param {number}
@@ -266,33 +323,64 @@ $.fn.extend({
     
     getDataValue: function() {
         'use strict';
-        const $this = $(this);
-        return $this.data('value') || null;
+        return $(this).data('value') || null;
     },
 
-    setDataValue(value, $selection) {
+    setDataValue(value, $selection, ignoreText, ignoreIcon) {
         'use strict';
         const $this = $(this);
         const $items = $this.next('.dropdown-menu').find('.dropdown-item').removeClass('active');
+        if (typeof ignoreText === 'undefined' || ignoreText === null) {
+            ignoreText = false;    
+        }        
+        if (typeof ignoreIcon === 'undefined' || ignoreIcon === null) {
+            ignoreIcon = true;    
+        }
         $this.data('value', value);
         if(value) {
             $selection.addClass('active');
-            return $this.text($selection.text());
+            if (!ignoreIcon) {
+                const $icon = $selection.find('i');
+                if ($icon.length) {
+                    $this.find('i').remove();
+                    $this.prepend($icon.clone());    
+                }                
+            }
+            if (!ignoreText) {
+                $this.text($selection.text());
+            }
+            return $this;
         }
         $items.first().addClass('active');
-        return $this.text($this.data('default'));
+        if (!ignoreIcon) {
+            const icon = $this.data('icon');
+             if (icon) {
+                 $this.find('i').remove();
+                 $this.prepend($(icon));
+             }
+        }
+        if (!ignoreText) {
+            $this.text($this.data('default'));
+        }
+        return $this;
     },
 
-    initDropdown: function() {
+    initDropdown: function(ignoreText, ignoreIcon) {
         'use strict';
         const $this = $(this);
         const $menu = $this.next('.dropdown-menu');
+        if (typeof ignoreText === 'undefined' || ignoreText === null) {
+            ignoreText = false;    
+        }        
+        if (typeof ignoreIcon === 'undefined' || ignoreIcon === null) {
+            ignoreIcon = true;    
+        }
         $menu.on('click', '.dropdown-item', function() {
             const $item = $(this);
             const newValue = $item.getDataValue();
             const oldValue = $this.getDataValue();
             if(newValue !== oldValue) {
-                $this.setDataValue(newValue || '', $item).trigger('input');
+                $this.setDataValue(newValue || '', $item, ignoreText, ignoreIcon).trigger('input');
             }
             $this.focus();
         });
@@ -309,8 +397,14 @@ $.fn.extend({
      */
     getContextMenuItems: function() {
         'use strict';
-        const $row = $(this).parents('tr');
-        const $elements = $row.find('.dropdown-menu').children();
+        let $parent;
+        const $this = $(this);
+        if ($this.is('div')) {
+            $parent = $this.parents('.custom-item');
+        } else {
+            $parent = $this.parents('tr');    
+        }
+        const $elements = $parent.find('.dropdown-menu').children();
         const builder = new MenuBuilder();
         return builder.fill($elements).getItems();
     }
@@ -322,8 +416,8 @@ $.fn.extend({
 (function($) {
     'use strict';
     
-    const $toggle = $('#toggle');
     const $table = $('#table-edit');
+    const $viewButton = $('#button_view');
     const $pageButton = $('#button_page');
     const $clearButton = $('#clear_search');
     const $searchMinimum = $('#search_minimum');
@@ -391,24 +485,45 @@ $.fn.extend({
             // update UI
             if (data.length === 0) {
                 $('.card-footer').hide();
-                $toggle.toggleDisabled(true);
+                $viewButton.toggleDisabled(true);
             } else {
                 $('.card-footer').show();
-                $toggle.toggleDisabled(false);
+                $viewButton.toggleDisabled(false);
             }
             
             // update search minimum
             if ($searchMinimum.length) {
                 $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
             }
-           
-            // $('.fixed-table-pagination .page-item.active
-            // .page-link').focus();
         },
-
-        onRenderCardView: function($table, row, $element) {
+        
+        onRenderCustomView: function ($table, row, $item, params) {
+            // update border color
             if(row.color) {
-                const $cell = $element.find('td:first');
+                const style = 'border-left-color: ' + row.color + ' !important';
+                $item.attr('style', style);
+            }
+            
+            // update links
+            const regex = /\bid=\d+/;
+            $item.find('a.item-link').each(function() {
+                const $link = $(this);
+                const values = $link.attr('href').split('?');
+                values[0] = values[0].replace(/\/\d+/, '/' + row.action);
+                if(values.length > 1 && values[1].match(regex)) {
+                    params.id = row.action;
+                } else {
+                    delete params.id;
+                }
+                const href = values[0] + '?' + $.param(params);
+                $link.attr('href', href);
+            });
+        },
+        
+        onRenderCardView: function($table, row, $item) {
+            // update border color
+            if(row.color) {
+                const $cell = $item.find('td:first');
                 const style = 'border-left-color: ' + row.color + ' !important';
                 $cell.addClass('text-border').attr('style', style);
             }
@@ -438,15 +553,22 @@ $.fn.extend({
     };
     $table.initBootstrapTable(options);
 
-    // handle the add button link
+    // update add button
     const $addButton = $('.add-link');
     if ($addButton.length) {
-        $table.on('update-row.bs.table', function(e, row) {
-            const $source = $(row).find('.btn-add');
-            if ($source.length) {
+        $table.on('update-row.bs.table', function() {// e, row
+            let $source = null;
+            if ($table.isCustomView()) {
+                const $view = $table.getCustomView();
+                $source = $view.find('.custom-item .btn-add:first');
+            } else {
+                $source = $table.find('.btn-add:first');
+            }
+            if ($source && $source.length) {
                 $addButton.attr('href', $source.attr('href'));    
             }
         });
+        
     }
     
     // handle drop-down input buttons
@@ -454,11 +576,6 @@ $.fn.extend({
         $(this).initDropdown().on('input', function() {
             $table.refresh();
         });
-    });
-
-    // handle toggle button
-    $toggle.on('click', function() {
-        $table.toggleView();
     });
 
     // handle clear search button
@@ -489,6 +606,12 @@ $.fn.extend({
         });
     }
 
+    // handle view button
+    $('#button_view').initDropdown(true, false).on('input', function() {
+        const view = $(this).getDataValue();
+        $table.setDisplayMode(view);
+    });
+    
     // handle keys enablement
     $('body').on('focus', 'a, input, .btn, .dropdown-item, .rowlink-skip', function() {
         $table.disableKeys();
@@ -498,16 +621,16 @@ $.fn.extend({
     });
     
     // initialize context menu
-    const rowSelector = $table.getOptions().rowSelector;
-    const ctxSelector = rowSelector + ' td:not(.d-print-none)';
+    // const rowClass = $table.getOptions().rowClass;// .rowSelector;
+    const ctxSelector =  'tr.table-primary td:not(.d-print-none), .custom-item.table-primary div:not(.d-print-none)';
     const show = function() {
         $('.dropdown-menu.show').removeClass('show');
     };
-    $table.initContextMenu(ctxSelector, show);
+    $table.parents('.bootstrap-table').initContextMenu(ctxSelector, show);
 
     // initialize danger tooltips
     if($table.data('danger-tooltip-selector')) {
-        $table.tooltip({
+        $table.parents('.bootstrap-table').tooltip({
             customClass: 'tooltip-danger',
             selector: $table.data('danger-tooltip-selector')
         });

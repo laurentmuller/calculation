@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\CacheItem;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Trait to save or load data from a cache.
@@ -30,6 +31,23 @@ trait CacheTrait
     protected $adapter = null;
 
     /**
+     * Remove all reserved characters that cannot be used in a key.
+     *
+     * @param string $key the key to clean
+     *
+     * @return string a valid key
+     */
+    public function cleanKey(string $key): string
+    {
+        static $reservedCharacters;
+        if (!$reservedCharacters) {
+            $reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);
+        }
+
+        return \str_replace($reservedCharacters, '_', $key);
+    }
+
+    /**
      * Removes the item from the cache pool.
      *
      * @param string $key
@@ -44,7 +62,7 @@ trait CacheTrait
     public function deleteCacheItem(string $key): bool
     {
         if (null !== $this->adapter) {
-            return $this->adapter->deleteItem($key);
+            return $this->adapter->deleteItem($this->cleanKey($key));
         }
 
         return false;
@@ -65,6 +83,8 @@ trait CacheTrait
     public function deleteCacheItems(array $keys): bool
     {
         if (null !== $this->adapter) {
+            $keys = \array_map([$this, 'cleanKey'], $keys);
+
             return $this->adapter->deleteItems($keys);
         }
 
@@ -84,7 +104,7 @@ trait CacheTrait
     public function getCacheItem(string $key): ?CacheItem
     {
         if (null !== $this->adapter) {
-            return $this->adapter->getItem($key);
+            return $this->adapter->getItem($this->cleanKey($key));
         }
 
         return null;
@@ -107,6 +127,8 @@ trait CacheTrait
     public function getCacheItems(array $keys)
     {
         if (null !== $this->adapter) {
+            $keys = \array_map([$this, 'cleanKey'], $keys);
+
             return $this->adapter->getItems($keys);
         }
 
@@ -127,6 +149,9 @@ trait CacheTrait
      */
     public function getCacheValue(string $key, $default = null)
     {
+        // clean key
+        $key = $this->cleanKey($key);
+
         if ($item = $this->getCacheItem($key)) {
             if ($item->isHit()) {
                 return $item->get();
@@ -161,6 +186,9 @@ trait CacheTrait
      */
     public function setCacheValue(string $key, $value, $time = null): self
     {
+        // clean key
+        $key = $this->cleanKey($key);
+
         // value?
         if (null === $value) {
             $this->deleteCacheItem($key);

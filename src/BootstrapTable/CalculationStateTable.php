@@ -84,4 +84,12 @@ class CalculationStateTable extends AbstractEntityTable
     {
         return ['code' => Column::SORT_ASC];
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function isCustomViewAllowed(): bool
+    {
+        return true;
+    }
 }

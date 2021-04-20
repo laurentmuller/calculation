@@ -55,3 +55,18 @@
 {% block stylesheets %}
 {{ asset_css('css/logs_boostrap_table.css') }}
 {% endblock %}
+
+{% block custom_view_card_class ' text-border' %}
+{% block custom_view_header -%}
+{%- if allow_show -%}
+    <a href="{{ path('log_show', params) }}" class="item-link text-body" title="{{ 'log.show.title'|trans }}">%createdAt%</a>
+{%- else -%}
+    <span>%createdAt%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%message%') }}
+{{ _self.property_row('log.fields.channel', '%channel%') }}
+{{ _self.property_row('log.fields.level', '%level%') }}
+{%- endblock %}

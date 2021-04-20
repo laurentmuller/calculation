@@ -13,11 +13,13 @@
         {{- icons.dropdownItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) -}}
         {{- icons.dropdownItem(path('test_timeline'), 'timeline.title', 'stream') -}}
         {{- icons.dropdownItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') -}}
+        {{- icons.dropdownSeparator -}}
+        {{- icons.dropdownItem(path('exchange_display'), 'exchangerate.title', 'hand-holding-usd') -}}
+        {{- icons.dropdownItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') -}}
         {{- icons.dropdownItem(path('test_translate'), 'translator.title', 'globe') -}}
+        {{- icons.dropdownSeparator -}}
         {{- icons.dropdownItemExternal(path('test_html'), 'test.html', 'code') -}}
         {{- icons.dropdownItem(path('test_password'), 'password.title', 'lock') -}}
-        {{- icons.dropdownSeparator -}}
-        {{- icons.dropdownItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') -}}
         {{- icons.dropdownSeparator -}}
         {{- icons.dropdownItem(path('admin_import'), 'import.title', 'download') -}}
         {{- icons.dropdownSeparator -}}
@@ -29,7 +31,7 @@
 </li>
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="testTable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {{- icons.icon('bug', 'index.menu_table') -}}
+        {{- icons.icon('table', 'index.menu_table') -}}
     </a>
     <div class="dropdown-menu" aria-labelledby="testTable">
         {{- icons.dropdownItem(path('table_calculation'), 'calculation.list.title', 'calculator') -}}

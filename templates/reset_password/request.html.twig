@@ -15,7 +15,7 @@
 {% block card_header %}
 {{ parent() }}
 {% if error|default(false) %}
-    <em class="text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</em>
+    <p class="text-danger mb-0 ml-3">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
 {% endif %}
 {% endblock %}
 

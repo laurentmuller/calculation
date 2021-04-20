@@ -92,6 +92,14 @@ class CalculationTable extends AbstractEntityTable
     /**
      * {@inheritDoc}
      */
+    protected function isCustomViewAllowed(): bool
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function search(DataQuery $query, QueryBuilder $builder): void
     {
         parent::search($query, $builder);
@@ -110,6 +118,7 @@ class CalculationTable extends AbstractEntityTable
         parent::updateResults($query, $results);
         if (!$query->callback) {
             $results->addAttribute('row-style', 'styleCalculationEditable');
+
             $stateId = $query->getCustomData(self::PARAM_STATE, 0);
             $results->addCustomData('state', $this->getCalculationState($stateId));
             $results->addCustomData('states', $this->getCalculationStates());
@@ -122,11 +131,7 @@ class CalculationTable extends AbstractEntityTable
      */
     private function getCalculationState(int $stateId): ?CalculationState
     {
-        if (0 !== $stateId) {
-            return $this->stateRepository->find($stateId);
-        }
-
-        return null;
+        return 0 !== $stateId ? $this->stateRepository->find($stateId) : null;
     }
 
     /**

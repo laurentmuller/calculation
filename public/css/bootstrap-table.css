@@ -5,52 +5,49 @@
 /**! compression tag for ftp-deployment */
 
 /**
+ * Global styles
+ */
+.bootstrap-table .fixed-table-container .fixed-table-body .table {
+    table-layout: fixed !important;
+}
+.bootstrap-table .fixed-table-container .fixed-table-body .table thead th {
+    color: initial !important;
+}
+.bootstrap-table .fixed-table-container .fixed-table-body .table td {
+    vertical-align: top !important;
+}
+.bootstrap-table .fixed-table-container .fixed-table-body .table thead tr .text-id {
+    width: 90px;
+}
+.bootstrap-table .fixed-table-container .fixed-table-body .table thead tr .text-percent {
+    width: 70px;
+}
+.bootstrap-table .fixed-table-container .fixed-table-body .table thead tr .text-currency {
+    width: 110px;
+}
+.bootstrap-table .fixed-table-container .fixed-table-body .table thead tr .text-state {
+    width: 110px;
+}
+
+/**
  * Card View
  */
-.bootstrap-table .fixed-table-container .table tbody tr .card-views {
+.bootstrap-table .fixed-table-container .fixed-table-body .table tbody tr .card-views {
     cursor: pointer;
 } 
-.bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-title {
+.bootstrap-table .fixed-table-container .fixed-table-body .table tbody tr .card-view .card-view-title {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: normal;
     overflow: hidden;
-    min-width: 8rem;
+    min-width: 10rem;
 }
-.bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
+.bootstrap-table .fixed-table-container .fixed-table-body .table tbody tr .card-view .card-view-value {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     text-align: left;
-    max-width: 17rem;
-}
-
-@media ( min-width : 576px) {
-    .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
-        max-width: 18rem;
-    }
-}
-@media ( min-width : 768px) {
-    .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
-        max-width: 30rem;
-    }
-}
-@media ( min-width : 992px) {
-    .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
-        max-width: 45rem;
-    }
-}
-@media ( min-width : 1200px) {
-    .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-value {
-        max-width: 55rem;
-    }
-}
-
-.bootstrap-table .fixed-table-container .table thead th {
-    color: initial !important;
-}
-.bootstrap-table .fixed-table-container .table tbody td {
-    vertical-align: top !important;
+    /*max-width: 17rem;*/
 }
 
 /**
@@ -131,4 +128,8 @@ tr.text-muted td .text-danger {
  */
 .card-view-value img {
     mix-blend-mode: multiply;
+}
+
+.custom-item {
+    cursor: pointer;
 }

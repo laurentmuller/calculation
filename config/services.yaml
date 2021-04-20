@@ -37,6 +37,8 @@ parameters:
 
     google_recaptcha_secret_key: '%env(GOOGLE_RECAPTCHA_SECRET_KEY)%'
     google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
+    
+    exchange_rate_key: '%env(EXCHANGE_RATE_KEY)%'
 
     #links
     link_dev: '%env(LINK_DEV)%'

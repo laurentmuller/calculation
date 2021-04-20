@@ -111,6 +111,7 @@ abstract class AbstractTable
         $query->card = $this->getParamCard($request);
         $query->callback = $request->isXmlHttpRequest();
         $query->search = (string) $request->get(TableInterface::PARAM_SEARCH, '');
+        $query->view = $this->getRequestValue($request, TableInterface::PARAM_VIEW);
 
         return $query;
     }
@@ -203,6 +204,14 @@ abstract class AbstractTable
      * Gets the JSON file containing the column definitions.
      */
     abstract protected function getColumnDefinitions(): string;
+
+    /**
+     * Gets the JavaScript function used to format the custom view.
+     */
+    protected function getCustomViewFormatter(): string
+    {
+        return 'customViewFormatter';
+    }
 
     /**
      * Gets the default sorting column.
@@ -301,6 +310,14 @@ abstract class AbstractTable
     }
 
     /**
+     * Returns a value indicating if the custom view is allowed.
+     */
+    protected function isCustomViewAllowed(): bool
+    {
+        return false;
+    }
+
+    /**
      * Maps the given entities.
      *
      * @param array $entities the entities to map
@@ -370,6 +387,7 @@ abstract class AbstractTable
             TableInterface::PARAM_ORDER => $query->order,
             TableInterface::PARAM_OFFSET => $query->offset,
             TableInterface::PARAM_CARD => $query->card,
+            TableInterface::PARAM_VIEW => $query->view ?? 'table',
             TableInterface::PARAM_LIMIT => $limit,
         ], $results->params);
 
@@ -390,6 +408,14 @@ abstract class AbstractTable
             'sort-name' => $query->sort,
             'sort-order' => $query->order,
         ], $results->attributes);
+
+        // custom view?
+        if ($this->isCustomViewAllowed()) {
+            $results->attributes = \array_merge([
+                'show-custom-view' => \json_encode(TableInterface::VIEW_CUSTOM === $query->view),
+                'custom-view' => $this->getCustomViewFormatter(),
+            ], $results->attributes);
+        }
     }
 
     /**

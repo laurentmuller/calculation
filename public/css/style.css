@@ -324,14 +324,22 @@ span.state-color {
 .card-flex {
     min-width: 270px;
 }
-.card-flex td {
+.card-flex table {
+    table-layout: fixed !important;
+}
+.card-flex table td {
     padding-top: 0;
     padding-bottom: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;    
 }
+/*
 .card-flex td.data-search {
     word-break: break-word;
     white-space: normal;
 }
+*/
 @media ( min-width : 768px) {
     .card-flex {
         max-width: 48.7%;
@@ -519,6 +527,9 @@ input[type="number"] {
 body {
     margin-bottom: 20px;
 }
+.footer {
+    z-index: 4;
+}
 ul.footer {
     left: 0;
     bottom: 0;
@@ -642,7 +653,7 @@ span.color-value {
 }
 
 /**
- * widths
+ * widths 25%, 50%, 75% and 100% are already set by Boostrap
  */
 .w-15 {
     width: 15% !important;
@@ -655,6 +666,15 @@ span.color-value {
 }
 .w-35 {
     width: 35% !important;
+}
+.w-70 {
+    width: 70% !important;
+}
+.w-80 {
+    width: 80% !important;
+}
+.w-85 {
+    width: 85% !important;
 }
 
 /* $input-border-color */

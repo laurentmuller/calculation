@@ -33,3 +33,21 @@
 {{- _self.item_path(path('calculationstate_add', params), 'calculationstate.add.title', 'file far', 'btn-add') }}
 {{- _self.item_path(path('calculationstate_clone', params), 'common.button_clone', 'copy far', 'btn-clone') }}
 {%- endblock %}
+
+{% block custom_view_card_class ' text-border' %}
+{% block custom_view_header -%}
+{%- if row_edit -%}
+    <a href="{{ path('calculationstate_edit', params) }}" class="item-link text-body" title="{{ 'calculationstate.edit.title'|trans }}">%code%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('calculationstate_show', params) }}" class="item-link text-body" title="{{ 'calculationstate.show.title'|trans }}">%code%</a>
+{%- else -%}
+    <span>%code%</span>
+{%- endif -%}
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_value('%description%') }}
+{{ _self.property_line() }}
+{{ _self.property_row('calculationstate.fields.calculations', '%calculations%') }}
+{{ _self.property_row('calculationstate.fields.editable', '%editable%') }}
+{%- endblock %}

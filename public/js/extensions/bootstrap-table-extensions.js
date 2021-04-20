@@ -95,6 +95,30 @@ $.fn.extend({
             $element.replaceWith($newTag);
         });
     },
+    
+    /**
+     * Update the href attribute of the action.
+     * 
+     * @param {Object}
+     *            row - the row data.
+     * @param {Object}
+     *            params - the query parameters.
+     */
+    updateLink: function(row, params) {
+        'use strict';
+        const $link = $(this);
+        const regex = /\bid=\d+/;
+        const values = $link.attr('href').split('?');
+
+        values[0] = values[0].replace(/\/\d+/, '/' + row.action);
+        if(values.length > 1 && values[1].match(regex)) {
+            params.id = row.action;
+        } else {
+            delete params.id;
+        }
+        const href = values[0] + '?' + $.param(params);
+        $link.attr('href', href);
+    },
 
     // -------------------------------
     // Table extension
@@ -395,24 +419,15 @@ $.fn.extend({
     updateHref: function(rows) {
         'use strict';
         const $this = $(this);
-        const regex = /\bid=\d+/;
-        const params = $this.getParameters();
-        
-        // action callback
         const options = $this.getOptions();
+        const params = $this.getParameters();
         const callback = $.isFunction(options.onRenderAction) ? options.onRenderAction : false;
+
         $this.find('tbody tr .dropdown-item-path').each(function() {
             const $link = $(this);
             const $row = $link.parents('tr');
             const row = rows[$row.index()];
-            const values = $link.attr('href').split('?');
-            if(values.length > 1 && values[1].match(regex)) {
-                params.id = row.action;
-            } else {
-                delete params.id;
-            }
-            const href = values[0] + '?' + $.param(params);
-            $link.attr('href', href);
+            $link.updateLink(row, params);
             if(callback) {
                 callback($this, row, $row, $link);
             }
@@ -429,7 +444,7 @@ $.fn.extend({
         }
         return $this;
     },
-
+    
     /**
      * Update this card view UI.
      * 

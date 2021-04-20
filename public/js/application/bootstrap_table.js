@@ -505,18 +505,8 @@ $.fn.extend({
             }
             
             // update links
-            const regex = /\bid=\d+/;
             $item.find('a.item-link').each(function() {
-                const $link = $(this);
-                const values = $link.attr('href').split('?');
-                values[0] = values[0].replace(/\/\d+/, '/' + row.action);
-                if(values.length > 1 && values[1].match(regex)) {
-                    params.id = row.action;
-                } else {
-                    delete params.id;
-                }
-                const href = values[0] + '?' + $.param(params);
-                $link.attr('href', href);
+                $(this).updateLink(row, params);
             });
         },
         

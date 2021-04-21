@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Interfaces\TableInterface;
+
 /**
  * Contains the data query parameters.
  *
@@ -23,11 +25,6 @@ class DataQuery
      * The callback state (XMLHttpRequest).
      */
     public bool $callback = false;
-
-    /**
-     * The card view state.
-     */
-    public bool $card = false;
 
     /**
      * The custom datas.
@@ -42,7 +39,7 @@ class DataQuery
     /**
      * The maximum number of results to retrieve (the "limit").
      */
-    public int $limit = 20;
+    public int $limit = TableInterface::PAGE_SIZE;
 
     /**
      * The position of the first result to retrieve (the "offset").
@@ -70,9 +67,9 @@ class DataQuery
     public string $sort = '';
 
     /**
-     * The view (null, 'card' or 'custom').
+     * The view ('table', 'card' or 'custom').
      */
-    public ?string $view = null;
+    public string $view = TableInterface::VIEW_TABLE;
 
     /**
      * Adds a custom data to this list of custom datas.
@@ -98,5 +95,29 @@ class DataQuery
     public function getCustomData(string $name, $default = null)
     {
         return $this->customData[$name] ?? $default;
+    }
+
+    /**
+     * Returns if the values must be show as card.
+     */
+    public function isViewCard(): bool
+    {
+        return TableInterface::VIEW_CARD === $this->view;
+    }
+
+    /**
+     * Returns if the values must be show as custom.
+     */
+    public function isViewCustom(): bool
+    {
+        return TableInterface::VIEW_CUSTOM === $this->view;
+    }
+
+    /**
+     * Returns if the values must be show as table.
+     */
+    public function isViewTable(): bool
+    {
+        return TableInterface::VIEW_TABLE === $this->view;
     }
 }

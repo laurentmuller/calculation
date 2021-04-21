@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals MenuBuilder */
+/* globals Toaster, MenuBuilder */
 
 /**
  * Formatter for the custom view.
@@ -496,6 +496,17 @@ $.fn.extend({
                 $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
             }
         },
+
+        // onAll: function(name) {
+        // console.log(name);
+        // },
+        
+        onPageChange: function() {
+            // hide 
+            if ($table.isCustomView()) {
+                $('.bootstrap-table .fixed-table-custom-view .custom-item').animate({'opacity': '0'}, 200);    
+            }
+        },
         
         onRenderCustomView: function ($table, row, $item, params) {
             // update border color
@@ -539,6 +550,13 @@ $.fn.extend({
             if($actions.length === 1) {
                 $actions.addClass('btn-default');
             }
+        },
+
+        // show message
+        onLoadError: function(status, jqXHR) {
+            const title = $('.card-title').text();
+            const message = jqXHR.responseJSON.message || $table.data('errorMessage');
+            Toaster.danger(message, title, $("#flashbags").data());
         }
     };
     $table.initBootstrapTable(options);
@@ -546,19 +564,12 @@ $.fn.extend({
     // update add button
     const $addButton = $('.add-link');
     if ($addButton.length) {
-        $table.on('update-row.bs.table', function() {// e, row
-            let $source = null;
-            if ($table.isCustomView()) {
-                const $view = $table.getCustomView();
-                $source = $view.find('.custom-item .btn-add:first');
-            } else {
-                $source = $table.find('.btn-add:first');
-            }
-            if ($source && $source.length) {
+        $table.on('update-row.bs.table', function() {
+            const $source =  $table.findAction('.btn-add');
+            if ($source) {
                 $addButton.attr('href', $source.attr('href'));    
             }
         });
-        
     }
     
     // handle drop-down input buttons
@@ -611,10 +622,10 @@ $.fn.extend({
     });
     
     // initialize context menu
-    // const rowClass = $table.getOptions().rowClass;// .rowSelector;
-    const ctxSelector =  'tr.table-primary td:not(.d-print-none), .custom-item.table-primary div:not(.d-print-none)';
+    const ctxSelector =  'tr.table-primary td:not(.rowlink-skip), .custom-item.table-primary div:not(.rowlink-skip)';
     const show = function() {
         $('.dropdown-menu.show').removeClass('show');
+        return true;
     };
     $table.parents('.bootstrap-table').initContextMenu(ctxSelector, show);
 

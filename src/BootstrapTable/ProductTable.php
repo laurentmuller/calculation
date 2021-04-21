@@ -54,12 +54,4 @@ class ProductTable extends AbstractCategoryItemTable
     {
         return ['description' => Column::SORT_ASC];
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function isCustomViewAllowed(): bool
-    {
-        return true;
-    }
 }

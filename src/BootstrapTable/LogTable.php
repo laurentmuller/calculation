@@ -209,14 +209,6 @@ class LogTable extends AbstractTable
     }
 
     /**
-     * {@inheritDoc}
-     */
-    protected function isCustomViewAllowed(): bool
-    {
-        return true;
-    }
-
-    /**
      * Sort logs.
      *
      * <b>NB:</b> Sorts only when not the default order (date ascending).

@@ -5,7 +5,7 @@ os:
 php:
 - 7.4
 env:
-- SYMFONY_VERSION=5.1.*
+- SYMFONY_VERSION=5.2.*
 before_install:
 - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 - composer self-update

@@ -445,7 +445,6 @@ class BootstrapTableController extends AbstractController
      */
     private function saveTableParameters(Request $request, AbstractTable $table): JsonResponse
     {
-        $result = $table->saveRequestValue($request, TableInterface::PARAM_CARD, false);
         $result = $table->saveRequestValue($request, TableInterface::PARAM_VIEW);
 
         return new JsonResponse($result);

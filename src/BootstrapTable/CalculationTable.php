@@ -92,14 +92,6 @@ class CalculationTable extends AbstractEntityTable
     /**
      * {@inheritDoc}
      */
-    protected function isCustomViewAllowed(): bool
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     protected function search(DataQuery $query, QueryBuilder $builder): void
     {
         parent::search($query, $builder);

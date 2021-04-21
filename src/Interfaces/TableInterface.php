@@ -30,11 +30,6 @@ interface TableInterface
     public const PAGE_SIZE = 20;
 
     /**
-     * The card parameter name (boolean).
-     */
-    public const PARAM_CARD = 'card';
-
-    /**
      * The columns parameter name (array of columns).
      */
     public const PARAM_COLUMNS = 'columns';
@@ -95,7 +90,7 @@ interface TableInterface
     public const PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
 
     /**
-     * The dispay view parameter name (string: null, 'custom' or 'card').
+     * The dispay view parameter name (string: 'table', 'custom' or 'card').
      */
     public const PARAM_VIEW = 'view';
 

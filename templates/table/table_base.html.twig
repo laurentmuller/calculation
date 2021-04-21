@@ -38,22 +38,22 @@
 {%- endmacro %}
 
 {% macro property_row(field, value, class = '') -%}
-{% set class = ('col-8 text-truncate ' ~ class)|trim %}
-<div class="row no-gutters">
-    <div class="col-4">{{ field|trans }}</div>
+{% set class = ('col-8 text-truncate user-select-none ' ~ class)|trim %}
+<div class="row rowlink-skip no-gutters">
+    <div class="col-4 user-select-none">{{ field|trans }}</div>
     <div class="{{ class }}">{{ value|raw }}</div>
 </div>
 {%- endmacro %}
 
 {% macro property_value(value, class = '') -%}
-{% set class = ('text-truncate ' ~ class)|trim %}
+{% set class = ('text-truncate user-select-none ' ~ class)|trim %}
 <div class="{{ class }}">{{ value|raw }}</div>
 {%- endmacro %}
 
 {% macro property_both(leftValue, rightValue, leftClass = '', rightClass = '') -%}
-{% set leftClass = ('col-6 ' ~ leftClass)|trim %}
-{% set rightClass = ('col-6 ' ~ rightClass)|trim %}
-<div class="row no-gutters">
+{% set leftClass = ('col-6 user-select-none ' ~ leftClass)|trim %}
+{% set rightClass = ('col-6 user-select-none ' ~ rightClass)|trim %}
+<div class="row rowlink-skip no-gutters">
     <div class="{{ leftClass }}">{{ leftValue|raw }}</div>
     <div class="{{ rightClass }}">{{ rightValue|raw }}</div>
 </div>
@@ -82,8 +82,10 @@
 {%- set show_class   = 'btn-show' ~ (row_show ? ' btn-default' : '') -%}
 {%- set edit_class   = 'btn-edit' ~ (row_edit ? ' btn-default' : '') -%}
 {% if not row_edit and not row_none and allow_show %}
+    {%- set row_show = true -%}
     {%- set show_class = 'btn-show btn-default' -%}
 {% elseif not row_show and not row_none and allow_edit %}
+    {%- set row_edit = true -%}
     {%- set edit_class = 'btn-edit btn-default' -%}
 {% endif %}
 
@@ -98,6 +100,7 @@
 {%- set attributes      = attributes|default({})|merge({
     'classes': 'table table-hover table-list table-sm',
     'row-selector': 'tbody .' ~ row_selector,
+    'custom-selector': '.custom-item.' ~ row_selector,
     'row-class': row_selector,
     'toggle-selector': '#toggle',
     'undefined-text': '&nbsp;',
@@ -125,7 +128,7 @@
 {% block card_header -%}
 <div class="row">
     <div class="col-md-4">{{ parent() }}</div>
-    <div class="col-md-8 text-md-right">{% block header_actions -%}{%- endblock %}</div>
+    <div class="col-md-8 d-print-none text-md-right">{% block header_actions -%}{%- endblock %}</div>
 </div>
 {%- endblock %}
 
@@ -227,9 +230,9 @@
 <div id="custom-view" class="d-none">
     <div class="col mb-2 px-1">
         <div class="custom-item border rounded h-100 px-2 py-1{% block custom_view_card_class %}{%- endblock %}">
-            <div class="row no-gutters">
-                <div class="col-11 text-truncate font-weight-bold">{% block custom_view_header -%}{%- endblock %}</div>
-                <div class="col-1 text-right d-print-none custom-view-actions"></div>
+            <div class="row rowlink-skip no-gutters">
+                <div class="col-11 text-truncate font-weight-bold{% if row_edit or row_show %} rowlink-skip{% endif %}">{% block custom_view_header -%}{%- endblock %}</div>
+                <div class="col-1 text-right rowlink-skip d-print-none custom-view-actions"></div>
             </div>
             {% block custom_view_body -%}{%- endblock %}
         </div>

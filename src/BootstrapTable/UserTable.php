@@ -125,14 +125,6 @@ class UserTable extends AbstractEntityTable
     /**
      * {@inheritDoc}
      */
-    protected function isCustomViewAllowed(): bool
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

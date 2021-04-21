@@ -49,6 +49,14 @@ class GlobalMarginTable extends AbstractEntityTable
     /**
      * {@inheritDoc}
      */
+    protected function isCustomViewAllowed(): bool
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

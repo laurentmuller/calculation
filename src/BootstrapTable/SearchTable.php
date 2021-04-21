@@ -196,14 +196,6 @@ class SearchTable extends AbstractTable
     }
 
     /**
-     * {@inheritDoc}
-     */
-    protected function isCustomViewAllowed(): bool
-    {
-        return true;
-    }
-
-    /**
      * Update items.
      *
      * @param array $items the items to update

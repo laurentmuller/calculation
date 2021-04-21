@@ -42,7 +42,6 @@ class UrlGeneratorService
         'order',
         'offset',
         'limit',
-        'card',
         'view',
 
         'groupId', // bootstrap-table group

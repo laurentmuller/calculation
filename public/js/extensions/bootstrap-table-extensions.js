@@ -1,7 +1,5 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster */
-
 /**
  * Gets the loading template.
  * 
@@ -195,30 +193,21 @@ $.fn.extend({
                 $this.saveParameters().highlight();
                 
                 // display selection
-                const $selection = $view.find('.custom-item.' + options.rowClass);
+                const $selection = $view.find(options.customSelector);
                 if ($selection.length) {
                     $selection.scrollInViewport();
                 }
             },
             
-            // update UI and save parameters
-            onToggle: function(cardView) {
-                $this.updateCardViewButton(cardView);
+            // save parameters
+            onToggle: function() {
                 $this.saveParameters();
-            },
-
-            // show message
-            onLoadError: function(status, jqXHR) {
-                const title = $('.card-title').text();
-                const message = jqXHR.responseJSON.message || $this.data('errorMessage');
-                Toaster.danger(message, title, $("#flashbags").data());
-            },
+            }
         };
         const settings = $.extend(true, defaults, options);
 
         // initialize
         $this.bootstrapTable(settings);        
-        $this.updateCardViewButton($this.isCardView());
         $this.enableKeys().highlight();
 
         // select row on right click
@@ -228,13 +217,17 @@ $.fn.extend({
             }
         });
         
-        // select row on custom item mouse down
+        // handle items in custom view
         $this.parents('.bootstrap-table').on('mousedown', '.custom-item', function() {
             const index = $(this).parent().index();
             const $row = $this.find('tbody tr:eq(' + index + ')');
             if ($row.length) {
                 $row.updateRow($this);
             }
+        }).on('dblclick', '.custom-item.table-primary div:not(.rowlink-skip)', function(e) {
+            if(e.button === 0) {
+                $this.editRow();    
+            }            
         });
         
         return $this;
@@ -264,8 +257,7 @@ $.fn.extend({
             'sort': options.sortName,
             'order': options.sortOrder,
             'offset': (options.pageNumber - 1) * options.pageSize,
-            'limit': options.pageSize,
-            'card': options.cardView
+            'limit': options.pageSize
         };
         
         // view
@@ -501,24 +493,6 @@ $.fn.extend({
     },
 
     /**
-     * Update the card view toggle button
-     * 
-     * @param {boolean}
-     *            cardView - the card view state of the table.
-     * @return {jQuery} this instance for chaining.
-     */
-    updateCardViewButton: function(cardView) {
-        'use strict';
-        const $this = $(this);
-        const options = $this.getOptions();
-        const $button = $(options.toggleSelector);
-        const text = cardView ? options.formatToggleOff() : options.formatToggleOn();
-        const icon = cardView ? 'fa-fw fas fa-toggle-on' : 'fa-fw fas fa-toggle-off';
-        $button.attr('aria-label', text).attr('title', text).find('i').attr('class', icon);
-        return $this;
-    },
-
-    /**
      * Refresh/reload the remote server data.
      * 
      * @param {object}
@@ -750,16 +724,41 @@ $.fn.extend({
     },
 
     /**
+     * Finds an action for the given selector
+     * 
+     * @param {string}
+     *            actionSelector - the action selector.
+     * @return{JQuery} the action, if found; null otherwise.
+     */
+    findAction: function(actionSelector) {
+        'use strict';
+        let $link;
+        let $parent;
+        let selector; 
+        const $this = $(this);
+        if ($this.isCustomView()) {
+            $parent = $this.getCustomView();
+            selector = $this.getOptions().customSelector;
+        } else {
+            $parent = $this;
+            selector = $this.getOptions().rowSelector;
+        }   
+        $link = $parent.find(selector + ' ' + actionSelector);
+        if($link.length) {
+            return $link;
+        }
+        return null;
+    },
+    
+    /**
      * Call the edit action for the selected row (if any).
      * 
      * @return {boolean} true if the action is called.
      */
     editRow: function() {
         'use strict';
-        const $this = $(this);
-        const rowSelector = $this.getOptions().rowSelector;
-        const $link = $this.find(rowSelector + ' a.btn-default');
-        if($link.length) {
+        const $link = $(this).findAction('a.btn-default');
+        if($link) {
             $link[0].click();
             return true;
         }
@@ -773,10 +772,8 @@ $.fn.extend({
      */
     deleteRow: function() {
         'use strict';
-        const $this = $(this);
-        const rowSelector = $this.getOptions().rowSelector;
-        const $link = $this.find(rowSelector + ' a.btn-delete');
-        if($link.length) {
+        const $link = $(this).findAction('a.btn-delete');
+        if($link) {
             $link[0].click();
             return true;
         }

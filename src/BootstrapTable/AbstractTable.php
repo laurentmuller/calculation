@@ -108,10 +108,9 @@ abstract class AbstractTable
 
         // other parameters
         $query->id = $this->getParamId($request);
-        $query->card = $this->getParamCard($request);
         $query->callback = $request->isXmlHttpRequest();
         $query->search = (string) $request->get(TableInterface::PARAM_SEARCH, '');
-        $query->view = $this->getRequestValue($request, TableInterface::PARAM_VIEW);
+        $query->view = (string) $this->getRequestValue($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
 
         return $query;
     }
@@ -310,11 +309,11 @@ abstract class AbstractTable
     }
 
     /**
-     * Returns a value indicating if the custom view is allowed.
+     * Returns a value indicating if the custom view is allowed (true by default).
      */
     protected function isCustomViewAllowed(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -386,8 +385,7 @@ abstract class AbstractTable
             TableInterface::PARAM_SORT => $query->sort,
             TableInterface::PARAM_ORDER => $query->order,
             TableInterface::PARAM_OFFSET => $query->offset,
-            TableInterface::PARAM_CARD => $query->card,
-            TableInterface::PARAM_VIEW => $query->view ?? 'table',
+            TableInterface::PARAM_VIEW => $query->view,
             TableInterface::PARAM_LIMIT => $limit,
         ], $results->params);
 
@@ -403,7 +401,7 @@ abstract class AbstractTable
             'page-number' => $query->page,
             'page-size' => $limit,
 
-            'card-view' => \json_encode($query->card),
+            'card-view' => \json_encode($query->isViewCard()),
 
             'sort-name' => $query->sort,
             'sort-order' => $query->order,
@@ -412,20 +410,10 @@ abstract class AbstractTable
         // custom view?
         if ($this->isCustomViewAllowed()) {
             $results->attributes = \array_merge([
-                'show-custom-view' => \json_encode(TableInterface::VIEW_CUSTOM === $query->view),
+                'show-custom-view' => \json_encode($query->isViewCustom()),
                 'custom-view' => $this->getCustomViewFormatter(),
             ], $results->attributes);
         }
-    }
-
-    /**
-     * Gets the display card parameter.
-     */
-    private function getParamCard(Request $request): bool
-    {
-        $value = $this->getRequestValue($request, TableInterface::PARAM_CARD, false);
-
-        return (bool) \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
     }
 
     /**

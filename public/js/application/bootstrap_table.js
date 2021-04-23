@@ -71,7 +71,7 @@ function formatProductPrice(row, $row) { // jshint ignore:line
  */
 function styleBorderColor(value, row) { // jshint ignore:line
     'use strict';
-    if(row.color) {
+    if (typeof row.color !== "undefined") {
         return {
             css: {
                 'border-left-color': row.color + ' !important'
@@ -88,14 +88,12 @@ function styleBorderColor(value, row) { // jshint ignore:line
  *            row - the record data.
  * @param {int}
  *            index - the row index.
- * @param {String}
- *            field - the record field.
  * 
  * @returns {object} the row classes.
  */
-function styleTextMuted(row, index, field) {
+function styleTextMuted(row, index) { // jshint ignore:line
     'use strict';
-    const value = Number.parseInt(row[field], 10);
+    const value = Number.parseInt(row.textMuted, 10);
     if (!Number.isNaN(value) && value === 0) {
         const $row = $('#table-edit tbody tr:eq(' + index + ')');
         const classes = $row.attr('class') + ' text-muted';
@@ -104,36 +102,6 @@ function styleTextMuted(row, index, field) {
         }; 
     }
     return {};
-}
-
-/**
- * Row classes for the user enabled state.
- * 
- * @param {object}
- *            row - the record data.
- * @param {int}
- *            index - the row index.
- * 
- * @returns {object} the row classes.
- */
-function styleUserEnabled(row, index) { // jshint ignore:line
-    'use strict';
-    return styleTextMuted(row, index, 'active');
-}
-
-/**
- * Row classes for the calculation editable state.
- * 
- * @param {object}
- *            row - the record data.
- * @param {int}
- *            index - the row index.
- * 
- * @returns {object} the row classes.
- */
-function styleCalculationEditable(row, index) { // jshint ignore:line
-    'use strict';
-    return styleTextMuted(row, index, 'editable');
 }
 
 /**
@@ -246,8 +214,8 @@ function updateSearchAction($table, row, $element, $action) {
  */
 function updateCalculationEditAction($table, row, $element, $action) {
     'use strict';
-    const editable = Number.parseInt(row.editable, 10);
-    if(!Number.isNaN(editable) && editable === 0) {
+    const textMuted = Number.parseInt(row.textMuted, 10);
+    if(!Number.isNaN(textMuted) && textMuted === 0) {
         $element.find('.btn-show').addClass('btn-default');
         $action.remove();
     }
@@ -502,7 +470,7 @@ $.fn.extend({
         // },
         
         onPageChange: function() {
-            // hide 
+            // hide
             if ($table.isCustomView()) {
                 $('.bootstrap-table .fixed-table-custom-view .custom-item').animate({'opacity': '0'}, 200);    
             }
@@ -510,9 +478,17 @@ $.fn.extend({
         
         onRenderCustomView: function ($table, row, $item, params) {
             // update border color
-            if(row.color) {
+            if (typeof row.color !== "undefined") {
                 const style = 'border-left-color: ' + row.color + ' !important';
                 $item.attr('style', style);
+            }
+            
+            // text-muted
+            if (typeof row.textMuted !== "undefined") {
+                const value = Number.parseInt(row.textMuted, 10);
+                if (!Number.isNaN(value) && value === 0) {
+                    $item.addClass('text-muted');    
+                }
             }
             
             // update links
@@ -522,11 +498,19 @@ $.fn.extend({
         },
         
         onRenderCardView: function($table, row, $item) {
-            // update border color
-            if(row.color) {
+            // border color
+            if (typeof row.color !== "undefined") {
                 const $cell = $item.find('td:first');
                 const style = 'border-left-color: ' + row.color + ' !important';
                 $cell.addClass('text-border').attr('style', style);
+            }
+            
+            // text-muted
+            if (typeof row.textMuted !== "undefined") {
+                const value = Number.parseInt(row.textMuted, 10);
+                if (!Number.isNaN(value) && value === 0) {
+                    $item.find('.card-view-value.font-weight-bold').addClass('text-body');
+                }
             }
         },
 

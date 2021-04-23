@@ -19,6 +19,8 @@ use App\Form\AbstractMarginType;
  * Group margin edit type.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractMarginType<GroupMargin>
  */
 class GroupMarginType extends AbstractMarginType
 {

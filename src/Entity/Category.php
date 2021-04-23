@@ -35,30 +35,24 @@ class Category extends AbstractEntity
      * @ORM\Column(type="string", length=30, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(max=30)
-     *
-     * @var string
      */
-    private $code;
+    private ?string $code = null;
 
     /**
      * The description.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    private $description;
+    private ?string $description = null;
 
     /**
      * The parent group.
      *
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="categories")
      * @ORM\JoinColumn(name="group_id", nullable=false)
-     *
-     * @var ?Group
      */
-    private $group;
+    private ?Group $group = null;
 
     /**
      * The list of products that fall into this category.

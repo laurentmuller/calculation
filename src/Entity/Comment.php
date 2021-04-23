@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Util\Utils;
 use SimpleHtmlToText\Parser;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -35,50 +36,40 @@ class Comment
      * @Assert\Count(max=3)
      * @Assert\All(@Assert\File(maxSize="10485760"))
      */
-    private $attachments;
+    private ?array $attachments = null;
 
     /**
      * The from address.
      *
-     * @var Address
-     *
      * @Assert\NotNull
      */
-    private $fromAddress;
+    private ?Address $fromAddress = null;
 
     /**
      * The mail type.
-     *
-     * @var bool
      */
-    private $mail;
+    private bool $mail;
 
     /**
      * The message.
      *
-     * @var string
-     *
      * @Assert\NotNull
      */
-    private $message;
+    private ?string $message = null;
 
     /**
      * The subject.
      *
-     * @var string
-     *
      * @Assert\NotNull
      */
-    private $subject;
+    private ?string $subject = null;
 
     /**
      * The to address.
      *
-     * @var Address
-     *
      * @Assert\NotNull
      */
-    private $toAddress;
+    private ?Address $toAddress = null;
 
     /**
      * Constructor.
@@ -93,7 +84,7 @@ class Comment
     /**
      * Gets the file attachments.
      *
-     * @return \Symfony\Component\HttpFoundation\File\UploadedFile[]
+     * @return UploadedFile[]
      */
     public function getAttachments(): array
     {
@@ -105,7 +96,7 @@ class Comment
      */
     public function getFrom(): ?string
     {
-        return null !== $this->fromAddress ? $this->fromAddress->toString() : null;
+        return Utils::formatAddress($this->fromAddress);
     }
 
     /**
@@ -137,7 +128,7 @@ class Comment
      */
     public function getTo(): ?string
     {
-        return null !== $this->toAddress ? $this->toAddress->toString() : null;
+        return Utils::formatAddress($this->toAddress);
     }
 
     /**
@@ -186,7 +177,7 @@ class Comment
     /**
      * Sets the file attachments.
      *
-     * @param \Symfony\Component\HttpFoundation\File\UploadedFile[] $attachments
+     * @param UploadedFile[] $attachments
      */
     public function setAttachments(?array $attachments): self
     {

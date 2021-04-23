@@ -23,6 +23,8 @@ use Symfony\Component\Form\FormEvent;
  * User edit type.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityType<User>
  */
 class UserType extends AbstractEntityType
 {

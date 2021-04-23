@@ -31,20 +31,16 @@ class CalculationGroup extends AbstractEntity implements \Countable
      * The total amount.
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    protected $amount;
+    protected float $amount = 0.0;
 
     /**
      * The parent's calculation.
      *
      * @ORM\ManyToOne(targetEntity=Calculation::class, inversedBy="groups")
      * @ORM\JoinColumn(name="calculation_id", onDelete="CASCADE", nullable=false)
-     *
-     * @var Calculation|null
      */
-    protected $calculation;
+    protected ?Calculation $calculation = null;
 
     /**
      * The calculation items.
@@ -64,29 +60,23 @@ class CalculationGroup extends AbstractEntity implements \Countable
      * @ORM\Column(type="string", length=30)
      * @Assert\NotBlank
      * @Assert\Length(max=30)
-     *
-     * @var string
      */
-    protected $code;
+    protected ?string $code = null;
 
     /**
      * The parent's group.
      *
      * @ORM\ManyToOne(targetEntity=Group::class)
      * @ORM\JoinColumn(name="group_id", nullable=false)
-     *
-     * @var \App\Entity\Group
      */
-    protected $group;
+    protected ?Group $group = null;
 
     /**
      * The margin in percent (%).
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    protected $margin;
+    protected float $margin = 0.0;
 
     /**
      * Constructor.
@@ -94,8 +84,6 @@ class CalculationGroup extends AbstractEntity implements \Countable
     public function __construct()
     {
         $this->categories = new ArrayCollection();
-        $this->amount = 0.0;
-        $this->margin = 0.0;
     }
 
     /**

@@ -31,10 +31,8 @@ class Week extends AbstractCalendarItem
 
     /**
      * The week number (1 - 53).
-     *
-     * @var int
      */
-    protected $number;
+    protected int $number;
 
     /**
      * Constructor.

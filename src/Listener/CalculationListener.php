@@ -32,17 +32,9 @@ final class CalculationListener implements DisableListenerInterface
 {
     use DisableListenerTrait;
 
-    /**
-     * @var Security
-     */
-    private $security;
+    private Security $security;
 
-    /**
-     * the default user name.
-     *
-     * @var string
-     */
-    private $username;
+    private string $username;
 
     /**
      * Constructor.

@@ -89,22 +89,11 @@ class ThemeService
      */
     private const THEME_DIRECTORY = 'themes/';
 
-    /**
-     * The default theme.
-     *
-     * @var Theme|null
-     */
-    private static $defaultTheme;
+    private static ?Theme $defaultTheme = null;
 
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
+    private KernelInterface $kernel;
 
-    /**
-     * @var RequestStack
-     */
-    private $stack;
+    private RequestStack $stack;
 
     /**
      * Constructor.

@@ -27,17 +27,13 @@ class SuspendEventListenerService
 {
     /**
      * The disabled state.
-     *
-     * @var bool
      */
-    private $disabled = false;
+    private bool $disabled = false;
 
     /**
      * The entity manager.
-     *
-     * @var EntityManagerInterface
      */
-    private $manager;
+    private EntityManagerInterface $manager;
 
     /**
      * Constructor.

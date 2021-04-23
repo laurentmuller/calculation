@@ -16,9 +16,11 @@ use App\Entity\Calculation;
 use App\Form\Admin\ParametersType;
 use App\Form\FormHelper;
 use App\Form\Type\CaptchaImageType;
+use App\Form\Type\ImportanceType;
 use App\Form\Type\MinStrengthType;
 use App\Form\Type\SimpleEditorType;
 use App\Form\Type\TinyMceEditorType;
+use App\Mime\NotificationEmail;
 use App\Pdf\PdfResponse;
 use App\Pdf\PdfTocDocument;
 use App\Report\HtmlReport;
@@ -34,6 +36,7 @@ use App\Util\FormatUtils;
 use App\Util\Utils;
 use App\Validator\Captcha;
 use App\Validator\Password;
+use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormError;
@@ -41,7 +44,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -266,18 +271,90 @@ class TestController extends AbstractController
     }
 
     /**
-     * @Route("/simple", name="test_simple")
+     * Test sending notification mail.
+     *
+     * @Route("/mailer", name="test_mailer")
      */
-    public function simpleEditor(Request $request): Response
+    public function sendNotification(Request $request, MailerInterface $mailer, TranslatorInterface $translator, LoggerInterface $logger, UrlGeneratorInterface $generator): Response
     {
         $data = [
             'email' => 'bibi@bibi.nu',
+            'importance' => NotificationEmail::IMPORTANCE_LOW,
             'message' => '',
         ];
 
         $helper = $this->createFormHelper('user.fields.', $data);
         $helper->field('email')
             ->addEmailType();
+        $helper->field('importance')
+            ->label('importance.name')
+            ->add(ImportanceType::class);
+        $helper->field('message')
+            ->updateAttribute('minlength', 10)
+            ->add(SimpleEditorType::class);
+
+        $form = $helper->createForm();
+        if ($this->handleRequestForm($request, $form)) {
+            $data = $form->getData();
+            $email = (string) $data['email'];
+            $message = (string) $data['message'];
+            $importance = (string) $data['importance'];
+            $content = \str_replace('&nbsp;', ' ', \strip_tags($message));
+
+            try {
+                $urlText = "Accéder à l'application";
+                $urlAction = $generator->generate(self::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+                $notification = new NotificationEmail($translator);
+                $notification->to($email)
+                    ->from($this->getAddressFrom())
+                    ->importance($importance)
+                    ->subject($this->trans('user.comment.title'))
+                    ->content($content)
+                    ->action($urlText, $urlAction)
+                    ->context(['footer_text' => $this->getApplicationName()]);
+
+                $mailer->send($notification);
+                $this->succesTrans('user.comment.success');
+
+                return $this->redirectToHomePage();
+            } catch (\Exception $e) {
+                $logger->error($this->trans('user.comment.error'), [
+                    'class' => Utils::getShortName($e),
+                    'message' => $e->getMessage(),
+                    'code' => (int) $e->getCode(),
+                    'file' => $e->getFile() . ':' . $e->getLine(),
+                ]);
+
+                return $this->render('@Twig/Exception/exception.html.twig', [
+                    'message' => $message,
+                    'exception' => $e,
+                ]);
+            }
+        }
+
+        return $this->render('test/simpleeditor.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/simple", name="test_simple")
+     */
+    public function simpleEditor(Request $request): Response
+    {
+        $data = [
+            'email' => 'bibi@bibi.nu',
+            'importance' => 'low',
+            'message' => '',
+        ];
+
+        $helper = $this->createFormHelper('user.fields.', $data);
+        $helper->field('email')
+            ->addEmailType();
+        $helper->field('importance')
+            ->label('importance.name')
+            ->add(ImportanceType::class);
         $helper->field('message')
             ->updateAttribute('minlength', 10)
             ->add(SimpleEditorType::class);

@@ -23,7 +23,13 @@ security:
         main:
             lazy: true
             switch_user: true
-            custom_authenticator: App\Security\LoginFormAuthenticator
+            login_throttling: ~
+            
+            form_login:
+                enable_csrf: true
+                check_path: /login
+                username_parameter: username
+                password_parameter: password
 
             logout:
                 path: app_logout

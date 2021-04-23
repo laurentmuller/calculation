@@ -42,24 +42,18 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * The URL generator service.
-     *
-     * @var UrlGeneratorService
      */
-    private $generator;
+    private UrlGeneratorService $generator;
 
     /**
      * The nonce value.
-     *
-     * @var string
      */
-    private $nonce;
+    private ?string $nonce = null;
 
     /**
      * The translator service.
-     *
-     * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * The real path of the public directory.
@@ -70,10 +64,6 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * Constructor.
-     *
-     * @param KernelInterface     $kernel     the kernel to get the public directory
-     * @param TranslatorInterface $translator the translator service
-     * @param UrlGeneratorService $generator  the URL generator service
      */
     public function __construct(KernelInterface $kernel, TranslatorInterface $translator, UrlGeneratorService $generator)
     {

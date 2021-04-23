@@ -24,10 +24,8 @@ abstract class AbstractDocument extends ExcelDocument
 {
     /**
      * The parent controller.
-     *
-     * @var AbstractController
      */
-    protected $controller;
+    protected AbstractController $controller;
 
     /**
      * Constructor.

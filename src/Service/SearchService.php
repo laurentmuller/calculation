@@ -76,31 +76,25 @@ class SearchService
 
     /**
      * The debug mode.
-     *
-     * @var bool
      */
-    private $debug;
+    private bool $debug;
 
     /**
      * The manager.
-     *
-     * @var EntityManagerInterface
      */
-    private $manager;
+    private EntityManagerInterface $manager;
 
     /**
      * The result set mapping.
-     *
-     * @var ResultSetMapping|null
      */
-    private $mapping;
+    private ?ResultSetMapping $mapping = null;
 
     /**
      * The SQL queries.
      *
-     * @var string[]|null
+     * @var string[]
      */
-    private $queries;
+    private ?array $queries = null;
 
     /**
      * Constructor.

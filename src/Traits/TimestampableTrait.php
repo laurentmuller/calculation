@@ -28,34 +28,30 @@ trait TimestampableTrait
     /**
      * The creation date.
      *
-     * @var ?\DateTimeInterface
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    protected $createdAt;
+    protected ?\DateTimeInterface $createdAt = null;
 
     /**
      * The creation user name.
      *
-     * @var ?string
      * @ORM\Column(nullable=true)
      */
-    protected $createdBy;
+    protected ?string $createdBy = null;
 
     /**
      * The updated date.
      *
-     * @var ?\DateTimeInterface
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    protected $updatedAt;
+    protected ?\DateTimeInterface $updatedAt = null;
 
     /**
      * The updated user name.
      *
-     * @var ?string
      * @ORM\Column(nullable=true)
      */
-    protected $updatedBy;
+    protected ?string $updatedBy = null;
 
     /**
      * Gets the creation date.

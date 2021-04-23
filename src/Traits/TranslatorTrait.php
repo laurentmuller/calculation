@@ -24,10 +24,8 @@ trait TranslatorTrait
 {
     /**
      * The translator instance.
-     *
-     * @var TranslatorInterface|null
      */
-    protected $translator;
+    protected ?TranslatorInterface $translator = null;
 
     /**
      * Checks if a message has a translation (it does not take into account the fallback mechanism).

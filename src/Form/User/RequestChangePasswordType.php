@@ -24,10 +24,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class RequestChangePasswordType extends AbstractUserCaptchaType
 {
-    /**
-     * @var string
-     */
-    private $remote;
+    private string $remote;
 
     /**
      * Constructor.

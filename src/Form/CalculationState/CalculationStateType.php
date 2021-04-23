@@ -20,6 +20,8 @@ use App\Form\FormHelper;
  * Calculation state edit type.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityType<CalculationState>
  */
 class CalculationStateType extends AbstractEntityType
 {

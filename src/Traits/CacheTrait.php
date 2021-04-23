@@ -25,10 +25,8 @@ trait CacheTrait
 {
     /**
      * The cache adapter.
-     *
-     * @var AdapterInterface
      */
-    protected $adapter = null;
+    protected ?AdapterInterface $adapter = null;
 
     /**
      * Remove all reserved characters that cannot be used in a key.

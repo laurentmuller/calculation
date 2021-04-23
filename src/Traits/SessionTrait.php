@@ -23,10 +23,8 @@ trait SessionTrait
 {
     /**
      * The session instance.
-     *
-     * @var SessionInterface|null
      */
-    protected $session;
+    protected ?SessionInterface $session = null;
 
     /**
      * Gets the session.

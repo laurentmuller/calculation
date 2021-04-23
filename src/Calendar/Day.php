@@ -29,10 +29,8 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface
 
     /**
      * The date.
-     *
-     * @var \DateTimeImmutable
      */
-    protected $date;
+    protected \DateTimeImmutable $date;
 
     /**
      * Constructor.

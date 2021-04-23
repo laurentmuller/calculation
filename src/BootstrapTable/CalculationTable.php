@@ -109,8 +109,7 @@ class CalculationTable extends AbstractEntityTable
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $results->addAttribute('row-style', 'styleCalculationEditable');
-
+            $results->addAttribute('row-style', 'styleTextMuted');
             $stateId = $query->getCustomData(self::PARAM_STATE, 0);
             $results->addCustomData('state', $this->getCalculationState($stateId));
             $results->addCustomData('states', $this->getCalculationStates());

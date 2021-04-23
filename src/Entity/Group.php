@@ -47,20 +47,16 @@ class Group extends AbstractEntity
      * @ORM\Column(type="string", length=30, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(max=30)
-     *
-     * @var string
      */
-    private $code;
+    private ?string $code = null;
 
     /**
      * The description.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    private $description;
+    private ?string $description = null;
 
     /**
      * The margins.

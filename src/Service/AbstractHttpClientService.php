@@ -50,17 +50,13 @@ abstract class AbstractHttpClientService
 
     /**
      * The HTTP client.
-     *
-     * @var HttpClientInterface|null
      */
-    protected $client;
+    protected ?HttpClientInterface $client = null;
 
     /**
      * The last error.
-     *
-     * @var array|null
      */
-    protected $lastError;
+    protected ?array $lastError = null;
 
     /**
      * Gets the language to use for user interface strings.

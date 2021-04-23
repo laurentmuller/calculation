@@ -38,10 +38,7 @@ class ImageResizer implements ImageExtensionInterface
         'format' => self::EXTENSION_PNG,
     ];
 
-    /**
-     * @var ImagineInterface
-     */
-    private $imagine;
+    private ?ImagineInterface $imagine = null;
 
     /**
      * Constructor.

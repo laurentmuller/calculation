@@ -70,10 +70,8 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
 
     /**
      * The JSON (XMLHttpRequest) callback state.
-     *
-     * @var bool
      */
-    protected $callback = false;
+    protected bool $callback = false;
 
     /**
      * The columns.
@@ -84,10 +82,8 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
 
     /**
      * The datatables to handle request.
-     *
-     * @var DataTablesInterface
      */
-    protected $datatables;
+    protected DataTablesInterface $datatables;
 
     /**
      * The parameter prefix for session.

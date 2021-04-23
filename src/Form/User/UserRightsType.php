@@ -14,6 +14,7 @@ namespace App\Form\User;
 
 use App\Entity\User;
 use App\Form\FormHelper;
+use App\Traits\TranslatorTrait;
 use App\Util\Utils;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,10 +28,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserRightsType extends RightsType
 {
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    use TranslatorTrait;
 
     /**
      * Constructor.
@@ -62,7 +60,7 @@ class UserRightsType extends RightsType
     {
         $enabled = \filter_var($enabled, \FILTER_VALIDATE_BOOLEAN);
 
-        return $this->translator->trans($enabled ? 'common.value_enabled' : 'common.value_disabled');
+        return $this->trans($enabled ? 'common.value_enabled' : 'common.value_disabled');
     }
 
     /**

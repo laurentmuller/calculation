@@ -14,6 +14,7 @@ namespace App\Form\DataTransformer;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
+use App\Traits\TranslatorTrait;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -25,21 +26,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CategoryTransformer implements DataTransformerInterface
 {
-    /**
-     * @var CategoryRepository
-     */
-    private $repository;
+    use TranslatorTrait;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private CategoryRepository $repository;
 
     /**
      * Constructor.
-     *
-     * @param CategoryRepository  $repository the repository to find category
-     * @param TranslatorInterface $translator the translator used for error messages
      */
     public function __construct(CategoryRepository $repository, TranslatorInterface $translator)
     {
@@ -60,7 +52,7 @@ class CategoryTransformer implements DataTransformerInterface
 
         $category = $this->repository->find((int) $id);
         if (null === $category) {
-            $message = $this->translator->trans('category.id_not_found', ['%id%' => $id], 'validators');
+            $message = $this->trans('category.id_not_found', ['%id%' => $id], 'validators');
             throw new TransformationFailedException($message);
         }
 

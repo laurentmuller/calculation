@@ -95,7 +95,7 @@ abstract class AbstractTable
 
         // offset, limit and page
         $query->offset = (int) $request->get(TableInterface::PARAM_OFFSET, 0);
-        $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
+        $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE, false);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
         // sort and order
@@ -110,15 +110,34 @@ abstract class AbstractTable
         $query->id = $this->getParamId($request);
         $query->callback = $request->isXmlHttpRequest();
         $query->search = (string) $request->get(TableInterface::PARAM_SEARCH, '');
-        $query->view = (string) $this->getRequestValue($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+        $query->view = (string) $this->getRequestValue($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE, false);
 
         return $query;
     }
 
     /**
+     * Gets the empty message to show when no records are available.
+     */
+    public function getEmptyMessage(): ?string
+    {
+        return null;
+    }
+
+    /**
      * Gets the entity class name or null if not applicable.
      */
-    abstract public function getEntityClassName(): ?string;
+    public function getEntityClassName(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Returns a value indicating whether this table should be shown, even if no records are available.
+     */
+    public function isEmptyAllowed(): bool
+    {
+        return true;
+    }
 
     /**
      * Process the given query and returns the results.
@@ -245,15 +264,16 @@ abstract class AbstractTable
     /**
      * Gets the request parameter value.
      *
-     * @param Request $request the request to get value from
-     * @param string  $name    the parameter name
-     * @param mixed   $default the default value if not found
+     * @param Request $request       the request to get value from
+     * @param string  $name          the parameter name
+     * @param mixed   $default       the default value if not found
+     * @param bool    $useSessionKey true to use session key; false to use the parameter name
      *
      * @return mixed the parameter value
      */
-    protected function getRequestValue(Request $request, string $name, $default = null)
+    protected function getRequestValue(Request $request, string $name, $default = null, bool $useSessionKey = true)
     {
-        $key = $this->getSessionKey($name);
+        $key = $useSessionKey ? $this->getSessionKey($name) : $name;
         $session = $request->hasSession() ? $request->getSession() : null;
 
         if ($session) {

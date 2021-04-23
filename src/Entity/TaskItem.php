@@ -42,18 +42,14 @@ class TaskItem extends AbstractEntity implements \Countable
 
     /**
      * @ORM\Column(type="string", length=255)
-     *
-     * @var string
      */
-    private $name;
+    private ?string $name = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Task::class, inversedBy="items")
      * @ORM\JoinColumn(nullable=false)
-     *
-     * @var Task
      */
-    private $task;
+    private ?Task $task = null;
 
     /**
      * Constructor.

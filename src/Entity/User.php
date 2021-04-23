@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\RoleInterface;
+use App\Interfaces\TableInterface;
 use App\Traits\RightsTrait;
 use App\Util\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
@@ -44,31 +45,23 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank
      * @Assert\Email
-     *
-     * @var ?string
      */
-    private $email;
+    private ?string $email = null;
 
     /**
      * @ORM\Column(type="boolean", options={"default" = 1})
-     *
-     * @var bool
      */
-    private $enabled = true;
+    private bool $enabled = true;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
-     *
-     * @var ?\DateTimeInterface
      */
-    private $expiresAt;
+    private ?\DateTimeInterface $expiresAt = null;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
-     *
-     * @var ?string
      */
-    private $hashedToken;
+    private ?string $hashedToken = null;
 
     /**
      * The image file.
@@ -79,91 +72,67 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
      *
      * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
      * @Assert\Image(maxSize="10485760")
-     *
-     * @var File
      */
-    private $imageFile;
+    private ?File $imageFile = null;
 
     /**
      * The image file name.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
-     *
-     * @var ?string
      */
-    private $imageName;
+    private ?string $imageName = null;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
-     *
-     * @var ?\DateTimeInterface
      */
-    private $lastLogin;
+    private ?\DateTimeInterface $lastLogin = null;
 
     /**
      * @ORM\Column(type="string")
      * @Assert\NotBlank
-     *
-     * @var string
      */
-    private $password;
+    private ?string $password = null;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
-     *
-     * @var ?\DateTimeInterface
      */
-    private $requestedAt;
+    private ?\DateTimeInterface $requestedAt = null;
 
     /**
      * @ORM\Column(type="string", length=25, nullable=true)
-     *
-     * @var ?string
      */
-    private $role;
+    private ?string $role = null;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      * @phpstan-ignore-next-line
-     *
-     * @var string|null
      */
-    private $selector;
+    private ?string $selector = null;
 
     /**
      * The last updated date.
      *
      * @ORM\Column(type="datetime", nullable=true)
      * @phpstan-ignore-next-line
-     *
-     * @var \DateTime|null
      */
-    private $updatedAt;
+    private ?\DateTime $updatedAt = null;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank
-     *
-     * @var string
      */
-    private $username;
+    private ?string $username = null;
 
     /**
      * @ORM\Column(type="boolean", options={"default" = 0})
-     *
-     * @var bool
      */
-    private $verified = false;
+    private bool $verified = false;
 
     /**
-     * Constructor.
+     * The prefered view.
      */
-    public function __construct()
-    {
-        $this->setEnabled(true)
-            ->setOverwrite(false);
-    }
+    private string $view = TableInterface::VIEW_TABLE;
 
     /**
      * Used because the $imageFile property can not be serialized.
@@ -379,6 +348,14 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     }
 
     /**
+     * Gets the preferred view.
+     */
+    public function getView(): string
+    {
+        return $this->view;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @see RoleInterface
@@ -553,6 +530,24 @@ class User extends AbstractEntity implements UserInterface, RoleInterface, Reset
     public function setVerified(bool $verified): self
     {
         $this->verified = $verified;
+
+        return $this;
+    }
+
+    /**
+     * Sets the preferred view.
+     */
+    public function setView(string $view): self
+    {
+        switch ($view) {
+            case TableInterface::VIEW_CARD:
+            case TableInterface::VIEW_CUSTOM:
+                $this->view = $view;
+                break;
+                default:
+                    $this->view = TableInterface::VIEW_TABLE;
+                    break;
+        }
 
         return $this;
     }

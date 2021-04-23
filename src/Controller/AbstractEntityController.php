@@ -39,18 +39,14 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * The entity class name.
      *
-     * @var string
-     *
      * @psalm-var class-string<T> $className
      */
-    protected $className;
+    protected string $className;
 
     /**
      * The lower case entity class name.
-     *
-     * @var string
      */
-    protected $lowerName;
+    protected string $lowerName;
 
     /**
      * Constructor.

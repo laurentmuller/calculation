@@ -39,23 +39,9 @@ class PersistenceListener implements EventSubscriber
     use TranslatorFlashMessageTrait;
 
     /**
-     * The message title.
-     */
-    private const TITLE = 'Debug';
-
-    /**
-     * The application name.
-     *
-     * @var string
-     */
-    private $appName;
-
-    /**
      * The entity class names to listen for.
-     *
-     * @var array
      */
-    private static $CLASS_NAMES = [
+    private const CLASS_NAMES = [
         Calculation::class,
         CalculationState::class,
         Category::class,
@@ -66,11 +52,19 @@ class PersistenceListener implements EventSubscriber
     ];
 
     /**
-     * The debug mode.
-     *
-     * @var bool
+     * The message title.
      */
-    private $debug;
+    private const TITLE = 'Debug';
+
+    /**
+     * The application name.
+     */
+    private string $appName;
+
+    /**
+     * The debug mode.
+     */
+    private bool $debug;
 
     /**
      * Constructor.
@@ -154,7 +148,7 @@ class PersistenceListener implements EventSubscriber
     private function getEntity(LifecycleEventArgs $args): ?AbstractEntity
     {
         $entity = $args->getObject();
-        if (\in_array(\get_class($entity), self::$CLASS_NAMES, true)) {
+        if (\in_array(\get_class($entity), self::CLASS_NAMES, true)) {
             return $entity;
         }
 

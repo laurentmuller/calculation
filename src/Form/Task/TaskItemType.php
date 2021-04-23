@@ -20,6 +20,8 @@ use App\Form\FormHelper;
  * Task item edit type.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityType<TaskItem>
  */
 class TaskItemType extends AbstractEntityType
 {

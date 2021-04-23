@@ -55,17 +55,9 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     private const CACHE_TIMEOUT = 60 * 60;
 
-    /**
-     * The cache adapter.
-     *
-     * @var AdapterInterface
-     */
-    private $adapter;
+    private AdapterInterface $adapter;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $manager;
+    private EntityManagerInterface $manager;
 
     /**
      * Constructor.

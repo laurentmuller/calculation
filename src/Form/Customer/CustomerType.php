@@ -20,6 +20,8 @@ use App\Form\FormHelper;
  * Customer edit type.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityType<Customer>
  */
 class CustomerType extends AbstractEntityType
 {

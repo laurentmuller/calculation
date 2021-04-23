@@ -30,19 +30,9 @@ class TimestampableListener implements DisableListenerInterface
 {
     use DisableListenerTrait;
 
-    /**
-     * The security to get current user name.
-     *
-     * @var Security
-     */
-    private $security;
+    private Security $security;
 
-    /**
-     * The default user name.
-     *
-     * @var string
-     */
-    private $username;
+    private string $username;
 
     /**
      * Constructor.

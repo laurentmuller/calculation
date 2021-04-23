@@ -20,6 +20,8 @@ use App\Form\FormHelper;
  * Group edit type.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityType<Group>
  */
 class GroupType extends AbstractEntityType
 {

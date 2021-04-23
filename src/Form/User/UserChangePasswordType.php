@@ -20,6 +20,8 @@ use App\Form\FormHelper;
  * Change user password type.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityType<User>
  */
 class UserChangePasswordType extends AbstractEntityType
 {

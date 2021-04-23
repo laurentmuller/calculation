@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @property int[] $EntityProduct          the rights for products.
  * @property int[] $EntityUser             the rights for users.
  * @property int[] $EntityTask             the rights for tasks.
- * @property int[] $EntityLog              the rights for entry logs.
+ * @property int[] $EntityLog              the rights for logs.
  *
  * @author Laurent Muller
  */
@@ -39,10 +39,8 @@ trait RightsTrait
      * The overwrite rights flag.
      *
      * @ORM\Column(type="boolean", options={"default" = 0})
-     *
-     * @var bool
      */
-    protected $overwrite = false;
+    protected bool $overwrite = false;
 
     /**
      * The rights.
@@ -51,7 +49,7 @@ trait RightsTrait
      *
      * @var ?int[]
      */
-    protected $rights;
+    protected ?array $rights = null;
 
     /**
      * {@inheritdoc}

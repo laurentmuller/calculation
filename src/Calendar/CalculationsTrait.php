@@ -24,7 +24,7 @@ trait CalculationsTrait
     /**
      * @var Calculation[]
      */
-    protected $calculations = [];
+    protected array $calculations = [];
 
     /**
      * Add a calculation.

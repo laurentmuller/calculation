@@ -51,17 +51,13 @@ abstract class AbstractController extends BaseController
 
     /**
      * The application service.
-     *
-     * @var ?ApplicationService
      */
-    protected $application;
+    protected ?ApplicationService $application = null;
 
     /**
      * The URL generator service.
-     *
-     * @var ?UrlGeneratorService
      */
-    protected $generatorService;
+    protected ?UrlGeneratorService $generatorService = null;
 
     /**
      * Gets the address from (email and name) used to send email.

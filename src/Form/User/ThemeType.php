@@ -16,6 +16,7 @@ use App\Entity\Theme;
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
 use App\Service\ThemeService;
+use App\Traits\TranslatorTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -25,6 +26,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ThemeType extends AbstractHelperType
 {
+    use TranslatorTrait;
+
     /**
      * The backgound choices.
      *
@@ -52,15 +55,7 @@ class ThemeType extends AbstractHelperType
         'theme.foreground.light' => 'navbar-light',
     ];
 
-    /**
-     * @var ThemeService
-     */
-    private $service;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private ThemeService $service;
 
     /**
      * Constructor.
@@ -143,10 +138,5 @@ class ThemeType extends AbstractHelperType
             ->addChoiceType($themes);
 
         return $this;
-    }
-
-    private function trans(string $id): string
-    {
-        return $this->translator->trans($id);
     }
 }

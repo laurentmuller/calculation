@@ -87,31 +87,23 @@ class ResponseListener implements EventSubscriberInterface
 
     /**
      * The asset URL.
-     *
-     * @var string
      */
-    private $asset;
+    private string $asset;
 
     /**
      * The debug mode.
-     *
-     * @var bool
      */
-    private $debug;
+    private bool $debug;
 
     /**
      * The nonce extension.
-     *
-     * @var NonceExtension
      */
-    private $extension;
+    private NonceExtension $extension;
 
     /**
      * The reporting URL.
-     *
-     * @var string
      */
-    private $reportUrl;
+    private string $reportUrl;
 
     /**
      * Constructor.

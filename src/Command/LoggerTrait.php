@@ -24,17 +24,13 @@ trait LoggerTrait
 {
     /**
      * The installer name.
-     *
-     * @var string
      */
-    protected $installerName;
+    protected ?string $installerName = null;
 
     /**
      * The symfony style.
-     *
-     * @var SymfonyStyle
      */
-    protected $io;
+    protected ?SymfonyStyle $io = null;
 
     /**
      * Concat this installer name and the message.

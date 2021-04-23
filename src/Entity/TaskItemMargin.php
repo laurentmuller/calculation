@@ -26,40 +26,24 @@ class TaskItemMargin extends AbstractEntity
 {
     /**
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    private $maximum;
+    private float $maximum = 0.0;
 
     /**
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    private $minimum;
+    private float $minimum = 0.0;
 
     /**
      * @ORM\ManyToOne(targetEntity=TaskItem::class, inversedBy="margins")
      * @ORM\JoinColumn(nullable=false)
-     *
-     * @var TaskItem
      */
-    private $taskItem;
+    private ?TaskItem $taskItem = null;
 
     /**
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    private $value;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->minimum = $this->maximum = $this->value = 0;
-    }
+    private float $value = 0.0;
 
     /**
      * Checks if this margin is between this minimum (inclusive) and this maximum (exlcusive) quantity.

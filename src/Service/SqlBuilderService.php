@@ -22,12 +22,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
  */
 class SqlBuilderService
 {
-    /**
-     * The manager.
-     *
-     * @var EntityManagerInterface
-     */
-    private $manager;
+    private EntityManagerInterface $manager;
 
     /**
      * Constructor.

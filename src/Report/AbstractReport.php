@@ -29,17 +29,13 @@ abstract class AbstractReport extends PdfDocument
 
     /**
      * The parent controller.
-     *
-     * @var AbstractController
      */
-    protected $controller;
+    protected AbstractController $controller;
 
     /**
      * The Twig extension to format values.
-     *
-     * @var FormatExtension
      */
-    private $extension;
+    private ?FormatExtension $extension = null;
 
     /**
      * Constructor.

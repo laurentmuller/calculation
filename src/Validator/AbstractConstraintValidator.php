@@ -30,10 +30,8 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
      * The constraint class.
      *
      * @psalm-var class-string<T> $class
-     *
-     * @var string
      */
-    protected $class;
+    protected string $class;
 
     /**
      * Constructor.

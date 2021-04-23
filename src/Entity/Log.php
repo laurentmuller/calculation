@@ -23,45 +23,33 @@ class Log extends AbstractEntity
 {
     /**
      * @ORM\Column(type="string", length=50)
-     *
-     * @var string
      */
-    private $channel;
+    private ?string $channel = null;
 
     /**
      * @ORM\Column(type="array", nullable=true)
-     *
-     * @var array
      */
-    private $context;
+    private ?array $context = null;
 
     /**
      * @ORM\Column(type="datetime")
-     *
-     * @var \DateTime
      */
-    private $createdAt;
+    private \DateTime $createdAt;
 
     /**
      * @ORM\Column(type="array", nullable=true)
-     *
-     * @var array
      */
-    private $extra;
+    private ?array $extra = null;
 
     /**
      * @ORM\Column(type="string", length=50)
-     *
-     * @var string
      */
-    private $level;
+    private ?string $level = null;
 
     /**
      * @ORM\Column(type="text")
-     *
-     * @var ?string
      */
-    private $message;
+    private ?string $message = null;
 
     /**
      * Constructor.

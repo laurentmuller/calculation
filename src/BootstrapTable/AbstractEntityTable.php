@@ -142,10 +142,8 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     protected function limit(DataQuery $query, QueryBuilder $builder): void
     {
-        $offset = $query->offset;
-        $limit = $query->limit;
-        $builder->setFirstResult($offset)
-            ->setMaxResults($limit);
+        $builder->setFirstResult($query->offset)
+            ->setMaxResults($query->limit);
     }
 
     /**

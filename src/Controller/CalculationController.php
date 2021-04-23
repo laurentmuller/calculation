@@ -60,10 +60,8 @@ class CalculationController extends AbstractEntityController
 {
     /**
      * The service to compute calculations.
-     *
-     * @var CalculationService
      */
-    private $service;
+    private CalculationService $service;
 
     /**
      * Constructor.

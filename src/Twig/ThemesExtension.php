@@ -26,12 +26,7 @@ use Twig\TwigFunction;
  */
 final class ThemesExtension extends AbstractExtension
 {
-    /**
-     * The theme service.
-     *
-     * @var ThemeService
-     */
-    private $service;
+    private ThemeService $service;
 
     /**
      * Constructor.

@@ -26,8 +26,6 @@ class Theme implements \JsonSerializable
 {
     /**
      * The dark theme names.
-     *
-     * @var string[]
      */
     private const DARK_THEMES = [
         'Cyborg',
@@ -39,38 +37,28 @@ class Theme implements \JsonSerializable
 
     /**
      * The style sheet path.
-     *
-     * @var string
      */
-    protected $css;
+    protected string $css;
 
     /**
      * The dark style.
-     *
-     * @var bool|null
      */
-    protected $dark;
+    protected ?bool $dark = null;
 
     /**
      * The description.
-     *
-     * @var string
      */
-    protected $description;
+    protected string $description;
 
     /**
      * The path exist.
-     *
-     * @var bool|null
      */
-    protected $exist;
+    protected ?bool $exist = null;
 
     /**
      * The name.
-     *
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * Constructor.

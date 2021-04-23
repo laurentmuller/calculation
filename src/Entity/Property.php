@@ -43,10 +43,8 @@ class Property extends AbstractEntity
      * @ORM\Column(type="string", length=50, unique=true)
      * @Assert\Length(max=50)
      * @Assert\NotBlank
-     *
-     * @var string
      */
-    protected $name;
+    protected ?string $name = null;
 
     /**
      * The property value.
@@ -54,17 +52,8 @@ class Property extends AbstractEntity
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      * @Assert\NotBlank
-     *
-     * @var string
      */
-    protected $value;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-    }
+    protected ?string $value = null;
 
     /**
      * Creates a property.

@@ -47,17 +47,15 @@ class ExcelDocument extends Spreadsheet
 
     /**
      * The file title.
-     *
-     * @var string
      */
-    protected $title;
+    protected ?string $title = null;
 
     /**
      * The boolean format.
      *
      * @var string[]
      */
-    private $booleanFormats = [];
+    private array $booleanFormats = [];
 
     /**
      * Constructor.

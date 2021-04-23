@@ -29,10 +29,8 @@ class GroupMargin extends AbstractMargin
      *
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="margins")
      * @ORM\JoinColumn(name="group_id", nullable=false)
-     *
-     * @var Group
      */
-    protected $group;
+    protected ?Group $group = null;
 
     /**
      * Get the group.

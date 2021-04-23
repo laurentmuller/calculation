@@ -26,17 +26,13 @@ class Role implements RoleInterface
 
     /**
      * The name.
-     *
-     * @var ?string
      */
-    protected $name;
+    protected ?string $name = null;
 
     /**
      * The role.
-     *
-     * @var string
      */
-    protected $role;
+    protected string $role;
 
     /**
      * Constructor.

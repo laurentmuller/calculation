@@ -81,10 +81,7 @@ class SearchTable extends AbstractTable
         self::COLUMN_FIELD_NAME,
     ];
 
-    /**
-     * @var SearchService
-     */
-    private $service;
+    private SearchService $service;
 
     /**
      * Constructor.
@@ -105,14 +102,6 @@ class SearchTable extends AbstractTable
         $query->addCustomData(self::PARAM_ENTITY, (string) $request->get(self::PARAM_ENTITY, ''));
 
         return $query;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEntityClassName(): ?string
-    {
-        return null;
     }
 
     /**

@@ -23,6 +23,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  * Type to change the proilfe of the current (logged) user.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityType<User>
  */
 class ProfileChangePasswordType extends AbstractEntityType
 {

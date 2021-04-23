@@ -31,10 +31,8 @@ class Month extends AbstractCalendarItem
 
     /**
      * The month number (1 - 12).
-     *
-     * @var int
      */
-    protected $number;
+    protected int $number;
 
     /**
      * Constructor.

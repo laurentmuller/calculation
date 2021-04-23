@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Util;
 
 use App\Interfaces\RoleInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\String\UnicodeString;
@@ -200,6 +201,21 @@ final class Utils
             if ($callback($value)) {
                 return $value;
             }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns a string representation of the given address.
+     */
+    public static function formatAddress(?Address $address): ?string
+    {
+        if (null !== $address) {
+            $name = $address->getName();
+            $encoded = $address->getAddress();
+
+            return empty($name) ? $encoded : \htmlentities($name . ' <' . $encoded . '>');
         }
 
         return null;

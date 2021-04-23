@@ -6,6 +6,15 @@
 {%- set title_icon   = 'edit' -%}
 {%- set cancel_path  = path('homepage') -%}
 
+
+{% block card_body %}
+<div class="row">
+    <div class="col-md-8">{{ form_row(form.email) }}</div>
+    <div class="col-md-4">{{ form_row(form.importance) }}</div>
+</div>
+{{ form_row(form.message) }}
+{% endblock %}
+
 {% block stylesheets %}
 {{ parent() }}
 {{ asset_css('css/simple-editor.css') }}

@@ -31,20 +31,16 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * The total amount.
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    protected $amount;
+    protected float $amount = 0.0;
 
     /**
      * The parent's category.
      *
      * @ORM\ManyToOne(targetEntity=Category::class)
      * @ORM\JoinColumn(name="category_id", nullable=false)
-     *
-     * @var \App\Entity\Category
      */
-    protected $category;
+    protected ?Category $category = null;
 
     /**
      * The code.
@@ -52,20 +48,16 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * @ORM\Column(type="string", length=30)
      * @Assert\NotBlank
      * @Assert\Length(max=30)
-     *
-     * @var string
      */
-    protected $code;
+    protected ?string $code = null;
 
     /**
      * The parent's group.
      *
      * @ORM\ManyToOne(targetEntity=CalculationGroup::class, inversedBy="categories")
      * @ORM\JoinColumn(name="group_id", onDelete="CASCADE", nullable=false)
-     *
-     * @var CalculationGroup|null
      */
-    protected $group;
+    protected ?CalculationGroup $group = null;
 
     /**
      * The calculation items.
@@ -85,7 +77,6 @@ class CalculationCategory extends AbstractEntity implements \Countable
     public function __construct()
     {
         $this->items = new ArrayCollection();
-        $this->amount = 0.0;
     }
 
     /**

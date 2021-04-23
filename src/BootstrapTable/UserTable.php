@@ -129,7 +129,7 @@ class UserTable extends AbstractEntityTable
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $results->addAttribute('row-style', 'styleUserEnabled');
+            $results->addAttribute('row-style', 'styleTextMuted');
         }
     }
 }

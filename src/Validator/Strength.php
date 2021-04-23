@@ -41,15 +41,11 @@ class Strength extends Constraint
 
     /**
      * The password strength (Value from 0 to 4 or -1 to disable).
-     *
-     * @var int
      */
-    public $minStrength = self::LEVEL_DISABLE;
+    public int $minStrength = self::LEVEL_DISABLE;
 
     /**
-     * The password strength message.
-     *
-     * @var string
+     * The password strength error message.
      */
-    public $minStrengthMessage = 'The password is to weak.';
+    public string $minStrengthMessage = 'The password is to weak.';
 }

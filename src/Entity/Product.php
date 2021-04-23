@@ -34,10 +34,8 @@ class Product extends AbstractEntity
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
      * @ORM\JoinColumn(name="category_id", nullable=false)
      * @Assert\NotNull
-     *
-     * @var ?Category
      */
-    protected $category;
+    protected ?Category $category = null;
 
     /**
      * The description.
@@ -45,48 +43,31 @@ class Product extends AbstractEntity
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
      * The price.
      *
      * @ORM\Column(type="float", precision=2, options={"default" = 0})
-     *
-     * @var float
      */
-    protected $price;
+    protected float $price = 0.0;
 
     /**
      * The supplier.
      *
      * @ORM\Column(length=255, nullable=true)
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    protected $supplier;
+    protected ?string $supplier = null;
 
     /**
      * The unit.
      *
      * @ORM\Column(type="string", length=15, nullable=true)
      * @Assert\Length(max=15)
-     *
-     * @var string
      */
-    protected $unit;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        // default values
-        $this->price = 0.0;
-    }
+    protected ?string $unit = null;
 
     /**
      * Clone this product.

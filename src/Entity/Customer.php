@@ -31,92 +31,70 @@ class Customer extends AbstractEntity
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    protected $address;
+    protected ?string $address = null;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Assert\Date
-     *
-     * @var \DateTime
      */
-    protected $birthday;
+    protected ?\DateTime $birthday = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    protected $city;
+    protected ?string $city = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    protected $company;
+    protected ?string $company = null;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      * @Assert\Length(max=100)
-     *
-     * @var string
      */
-    protected $country;
+    protected ?string $country = null;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      * @Assert\Email
      * @Assert\Length(max=100)
-     *
-     * @var string
      */
-    protected $email;
+    protected ?string $email = null;
 
     /**
      * @ORM\Column(name="firstName", type="string", length=255, nullable=true)
-     *
-     * @var string
      */
-    protected $firstName;
+    protected ?string $firstName = null;
 
     /**
      * @ORM\Column(name="lastName", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    protected $lastName;
+    protected ?string $lastName = null;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      * @Assert\Length(max=50)
-     *
-     * @var string
      */
-    protected $title;
+    protected ?string $title = null;
 
     /**
      * @ORM\Column(name="webSite", type="string", length=100, nullable=true)
      * @Assert\Url
      * @Assert\Length(max=100)
-     *
-     * @var string
      */
-    protected $webSite;
+    protected ?string $webSite = null;
 
     /**
      * @ORM\Column(name="zipCode", type="string", length=10, nullable=true)
      * @Assert\Regex(pattern="/^[1-9]\d{3}$/", message="customer.zip_code")
      * @Assert\Length(max=10)
-     *
-     * @var string
      */
-    protected $zipCode;
+    protected ?string $zipCode = null;
 
     /**
      * Get address.

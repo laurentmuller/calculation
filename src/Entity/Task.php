@@ -32,17 +32,14 @@ class Task extends AbstractEntity implements \Countable
     /**
      * @ORM\Column(type="string", length=15, nullable=true)
      * @Assert\Length(max=15)
-     *
-     * @var string
      */
-    protected $unit;
+    protected ?string $unit = null;
+
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tasks")
      * @ORM\JoinColumn(nullable=false)
-     *
-     * @var Category
      */
-    private $category;
+    private ?Category $category = null;
 
     /**
      * @ORM\OneToMany(targetEntity=TaskItem::class, mappedBy="task", cascade={"persist", "remove"}, orphanRemoval=true)
@@ -55,10 +52,8 @@ class Task extends AbstractEntity implements \Countable
 
     /**
      * @ORM\Column(type="string", length=255)
-     *
-     * @var string
      */
-    private $name;
+    private ?string $name = null;
 
     /**
      * Constructor.

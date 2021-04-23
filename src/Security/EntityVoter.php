@@ -63,10 +63,7 @@ class EntityVoter extends Voter implements EntityVoterInterface
         self::ATTRIBUTE_SHOW => 32,
     ];
 
-    /**
-     * @var ApplicationService
-     */
-    private $service;
+    private ApplicationService $service;
 
     /**
      * Constructor.

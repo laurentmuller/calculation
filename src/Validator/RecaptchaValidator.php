@@ -26,10 +26,8 @@ class RecaptchaValidator extends AbstractConstraintValidator
 {
     /**
      * The reCaptcha secret key.
-     *
-     * @var string
      */
-    protected $secret;
+    protected string $secret;
 
     /**
      * Constructor.

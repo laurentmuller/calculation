@@ -43,17 +43,13 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
 
     /**
      * The day model class.
-     *
-     * @var string
      */
-    protected $dayModel = self::DEFAULT_DAY_MODEL;
+    protected string $dayModel = self::DEFAULT_DAY_MODEL;
 
     /**
      * The month model class.
-     *
-     * @var string
      */
-    protected $monthModel = self::DEFAULT_MONTH_MODEL;
+    protected string $monthModel = self::DEFAULT_MONTH_MODEL;
 
     /**
      * The full month names.
@@ -67,7 +63,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      *
      * @var Month[]
      */
-    protected $months;
+    protected array $months;
 
     /**
      * The short month names.
@@ -78,17 +74,13 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
 
     /**
      * The today day.
-     *
-     * @var ?Day
      */
-    protected $today;
+    protected ?Day $today = null;
 
     /**
      * The week model class.
-     *
-     * @var string
      */
-    protected $weekModel = self::DEFAULT_WEEK_MODEL;
+    protected string $weekModel = self::DEFAULT_WEEK_MODEL;
 
     /**
      * The full name of the week days.
@@ -102,7 +94,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      *
      * @var Week[]
      */
-    protected $weeks;
+    protected array $weeks;
 
     /**
      * The short name of the week days.
@@ -113,10 +105,8 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
 
     /**
      * Year for calendar.
-     *
-     * @var int
      */
-    protected $year;
+    protected ?int $year = null;
 
     /**
      * Constructor.

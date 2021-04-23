@@ -48,59 +48,43 @@ class FormHelper
 {
     /**
      * The attributes.
-     *
-     * @var array
      */
-    private $attributes = [];
+    private array $attributes = [];
 
     /**
      * The parent builder.
-     *
-     * @var FormBuilderInterface
      */
-    private $builder;
+    private FormBuilderInterface $builder;
 
     /**
      * The field identifier.
-     *
-     * @var string
      */
-    private $field;
+    private ?string $field = null;
 
     /**
      * The help attributes.
-     *
-     * @var array
      */
-    private $helpAttributes = [];
+    private array $helpAttributes = [];
 
     /**
      * The label attributes.
-     *
-     * @var array
      */
-    private $labelAttributes = [];
+    private array $labelAttributes = [];
 
     /**
      * The labels prefix.
-     *
-     * @var string|null
      */
-    private $labelPrefix;
+    private ?string $labelPrefix = null;
 
     /**
      * The options.
-     *
-     * @var array
      */
-    private $options = [];
+    private array $options = [];
 
     /**
      * The row attributes.
-     *
-     * @var array
      */
-    private $rowAttributes = [];
+    private array $rowAttributes = [];
 
     /**
      * Constructor.

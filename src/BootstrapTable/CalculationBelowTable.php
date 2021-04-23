@@ -42,6 +42,22 @@ class CalculationBelowTable extends CalculationTable
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getEmptyMessage(): string
+    {
+        return 'below.empty';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isEmptyAllowed(): bool
+    {
+        return false;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function count(): int

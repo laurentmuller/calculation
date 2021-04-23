@@ -32,10 +32,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
 {
     use FileExtensionTrait;
 
-    /**
-     * @var ImageResizer
-     */
-    private $resizer;
+    private ImageResizer $resizer;
 
     /**
      * Constructor.

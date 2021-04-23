@@ -19,15 +19,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Base type to use with an entity class.
  *
  * @author Laurent Muller
+ *
+ * @template T of \App\Entity\AbstractEntity
  */
 abstract class AbstractEntityType extends AbstractHelperType
 {
     /**
      * The entity class name.
      *
-     * @var string
+     * @psalm-var class-string<T> $className
      */
-    protected $className;
+    protected string $className;
 
     /**
      * Constructor.

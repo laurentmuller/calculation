@@ -20,6 +20,8 @@ use App\Form\FormHelper;
  * Product edit type.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityType<Product>
  */
 class ProductType extends AbstractEntityType
 {

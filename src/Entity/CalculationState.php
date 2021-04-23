@@ -40,10 +40,8 @@ class CalculationState extends AbstractEntity
      * @ORM\Column(type="string", length=30, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(max=30)
-     *
-     * @var string
      */
-    protected $code;
+    protected ?string $code = null;
 
     /**
      * The color used in the user interface (UI).
@@ -51,29 +49,23 @@ class CalculationState extends AbstractEntity
      * @ORM\Column(type="string", length=10, options={"default" = "#000000"})
      * @Assert\NotBlank
      * @Assert\Length(max=10)
-     *
-     * @var string
      */
-    protected $color;
+    protected string $color = self::DEFAULT_COLOR;
 
     /**
      * The description.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
      * The editable state.
      *
      * @ORM\Column(type="boolean", options={"default" = true})
-     *
-     * @var bool
      */
-    protected $editable;
+    protected bool $editable = true;
 
     /**
      * The list of calculations that fall into this category.
@@ -91,8 +83,6 @@ class CalculationState extends AbstractEntity
     public function __construct()
     {
         $this->calculations = new ArrayCollection();
-        $this->setEditable(true)
-            ->setColor(self::DEFAULT_COLOR);
     }
 
     /**

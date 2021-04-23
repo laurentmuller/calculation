@@ -4,12 +4,12 @@
 {%- set title        = 'globalmargin.list.title' -%}
 {%- set title_icon   = 'percent' -%}
 {%- set defer_url    = url('table_globalmargin') -%}
-{%- set save_url     = url('table_globalmargin_save') -%}
 {%- set object_type  = ENTITY_GLOBAL_MARGIN -%}
 
-{# classes #}
+{# classes
 {% block card_container_class %} col-md-8 offset-md-2{% endblock -%}
-
+ #}
+ 
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('globalmargin_add', params) }}">{{ 'globalmargin.add.title'|trans }}</a>{% endif %}
 {%- endblock %}
@@ -34,4 +34,19 @@
 {% block add_actions -%}
 {{- _self.item_separator() }}
 {{- _self.item_path(path('globalmargin_add', params), 'globalmargin.add.title', 'file far', 'btn-add') }}
+{%- endblock %}
+
+{% block custom_view_header -%}
+{%- if row_edit -%}
+    <a href="{{ path('globalmargin_edit', params) }}" class="item-link stretched-link text-body" title="{{ 'globalmargin.edit.title'|trans }}">%minimum% - %maximum%</a>
+{%- elseif row_show -%}
+    <a href="{{ path('globalmargin_show', params) }}" class="item-link stretched-link text-body" title="{{ 'globalmargin.show.title'|trans }}">%minimum% - %maximum%</a>
+{%- else -%}
+    <span>%minimum% - %maximum%</span>
+{%- endif -%} 
+{%- endblock %}
+
+{% block custom_view_body -%}
+{{ _self.property_line() }}
+{{ _self.property_row('globalmargin.fields.margin', '%margin%', 'text-right') }}
 {%- endblock %}

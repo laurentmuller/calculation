@@ -33,10 +33,8 @@ class CalculationItem extends AbstractEntity
      *
      * @ORM\ManyToOne(targetEntity=CalculationCategory::class, inversedBy="items")
      * @ORM\JoinColumn(name="category_id", onDelete="CASCADE", nullable=false)
-     *
-     * @var CalculationCategory|null
      */
-    protected $category;
+    protected ?CalculationCategory $category = null;
 
     /**
      * The description.
@@ -44,47 +42,30 @@ class CalculationItem extends AbstractEntity
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
      * The price.
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    protected $price;
+    protected float $price = 0.0;
 
     /**
      * The quantity.
      *
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    protected $quantity;
+    protected float $quantity = 0.0;
 
     /**
      * The unit.
      *
      * @ORM\Column(type="string", length=15, nullable=true)
      * @Assert\Length(max=15)
-     *
-     * @var string
      */
-    protected $unit;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->price = 0.0;
-        $this->quantity = 0.0;
-    }
+    protected ?string $unit = null;
 
     /**
      * Create a calculation item from the given product.

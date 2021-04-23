@@ -20,6 +20,8 @@ use App\Form\FormHelper;
  * Calculation item edit type.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityType<CalculationItem>
  */
 class CalculationItemType extends AbstractEntityType
 {

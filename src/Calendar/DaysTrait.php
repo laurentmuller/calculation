@@ -24,7 +24,7 @@ trait DaysTrait
      *
      * @var Day[]
      */
-    protected $days = [];
+    protected array $days = [];
 
     /**
      * Adds a day.

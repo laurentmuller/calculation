@@ -38,20 +38,11 @@ class TranslatorFactory
      */
     private const KEY_LAST_SERVICE = 'translator_service';
 
-    /**
-     * @var AdapterInterface
-     */
-    private $cache;
+    private AdapterInterface $cache;
 
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
+    private KernelInterface $kernel;
 
-    /**
-     * @var ParameterBagInterface
-     */
-    private $params;
+    private ParameterBagInterface $params;
 
     /**
      * Constructor.

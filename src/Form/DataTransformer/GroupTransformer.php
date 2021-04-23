@@ -14,6 +14,7 @@ namespace App\Form\DataTransformer;
 
 use App\Entity\Group;
 use App\Repository\GroupRepository;
+use App\Traits\TranslatorTrait;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -25,15 +26,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class GroupTransformer implements DataTransformerInterface
 {
-    /**
-     * @var GroupRepository
-     */
-    private $repository;
+    use TranslatorTrait;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private GroupRepository $repository;
 
     /**
      * Constructor.
@@ -60,7 +55,7 @@ class GroupTransformer implements DataTransformerInterface
 
         $group = $this->repository->find((int) $id);
         if (null === $group) {
-            $message = $this->translator->trans('group.id_not_found', ['%id%' => $id], 'validators');
+            $message = $this->trans('group.id_not_found', ['%id%' => $id], 'validators');
             throw new TransformationFailedException($message);
         }
 

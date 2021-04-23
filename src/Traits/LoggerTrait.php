@@ -24,10 +24,8 @@ trait LoggerTrait
 {
     /**
      * The logger instance.
-     *
-     * @var LoggerInterface|null
      */
-    protected $logger;
+    protected ?LoggerInterface $logger = null;
 
     /**
      * Logs with an arbitrary level message.

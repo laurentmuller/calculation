@@ -366,16 +366,13 @@ $.fn.extend({
     getSelectionIndex: function() {
         'use strict';
         const $row  = $(this).getSelection();
-        if ($row) {
-            return $row.index();  
-        }
-        return -1;
+        return $row ? $row.index() : -1;
     },
     
     /**
-     * Gets the custom view.
+     * Gets the custom view container.
      * 
-     * @return {JQuery} the custom view, if displayed, null otherwise.
+     * @return {JQuery} the custom view container, if displayed, null otherwise.
      */
     getCustomView: function() {
         'use strict';
@@ -457,7 +454,7 @@ $.fn.extend({
         $body.find('tr').each(function() {
             const $row = $(this);
             const $views = $row.find('.card-views:first');
-
+            
             // move actions (if any) to a new column
             const $actions = $views.find('.card-view-value:last:has(button)');
             if($actions.length) {
@@ -486,8 +483,9 @@ $.fn.extend({
         });
         
         // update classes
-        $body.find('.card-view-title').toggleClass('text-muted user-select-none undefined');
-        $body.find('.card-view-value').toggleClass('user-select-none undefined');
+        $body.find('.undefined').removeClass('undefined');
+        $body.find('.card-view-title, .card-view-value').addClass('user-select-none');
+        $body.find('.card-view-title').addClass('text-muted');
         
         return $this;
     },
@@ -744,10 +742,7 @@ $.fn.extend({
             selector = $this.getOptions().rowSelector;
         }   
         $link = $parent.find(selector + ' ' + actionSelector);
-        if($link.length) {
-            return $link;
-        }
-        return null;
+        return $link.length ? $link : null;
     },
     
     /**

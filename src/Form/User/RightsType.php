@@ -29,15 +29,13 @@ class RightsType extends AbstractHelperType
 {
     /**
      * Debug mode.
-     *
-     * @var bool
      */
-    protected $debug;
+    protected bool $debug;
 
     /**
-     * @var RoleHierarchyInterface
+     * Role hierarchy.
      */
-    protected $roleHierarchy;
+    protected RoleHierarchyInterface $roleHierarchy;
 
     /**
      * Constructor.

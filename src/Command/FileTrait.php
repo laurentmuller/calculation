@@ -28,17 +28,13 @@ trait FileTrait
 
     /**
      * The HTTP client.
-     *
-     * @var ?HttpClientInterface
      */
-    private $client;
+    private ?HttpClientInterface $client = null;
 
     /**
      * The file system instance.
-     *
-     * @var ?Filesystem
      */
-    private $fs;
+    private ?Filesystem $fs = null;
 
     /**
      * Change mode for a of file or a directory.

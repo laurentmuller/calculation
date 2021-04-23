@@ -26,92 +26,76 @@ class Password extends Constraint
 {
     /**
      * Add all violations or stop of the first violation found.
-     *
-     * @var bool
      */
-    public $all = false;
+    public bool $all = false;
 
     /**
      * Checks if the password contains upper and lower characters.
-     *
-     * @var bool
      */
-    public $casediff = false;
+    public bool $casediff = false;
 
     /**
-     * @var string
+     * Case diff error message.
      */
-    public $casediffMessage = 'The password must be both upper and lower case.';
+    public string $casediffMessage = 'The password must be both upper and lower case.';
 
     /**
      * Checks if the password is an e-mail.
-     *
-     * @var bool
      */
-    public $email = false;
+    public bool $email = false;
 
     /**
-     * @var string
+     * Email error message.
      */
-    public $emailMessage = 'The password cannot be an email address.';
+    public string $emailMessage = 'The password cannot be an email address.';
 
     /**
      * Checks if the password contains letters.
-     *
-     * @var bool
      */
-    public $letters = true;
+    public bool $letters = true;
 
     /**
-     * @var string
+     * Letters error message.
      */
-    public $lettersMessage = 'The password must contain at least one letter.';
+    public string $lettersMessage = 'The password must contain at least one letter.';
 
     /**
      * Checks the password strength (Value from 0 to 4 or -1 to disable).
-     *
-     * @var int
      */
-    public $minstrength = -1;
+    public int $minstrength = -1;
 
     /**
-     * @var string
+     * Minimim strength error message.
      */
-    public $minstrengthMessage = 'The password is to weak.';
+    public string $minstrengthMessage = 'The password is to weak.';
 
     /**
      * Checks if the password contains numbers.
-     *
-     * @var bool
      */
-    public $numbers = false;
+    public bool $numbers = false;
 
     /**
-     * @var string
+     * Numbers error message.
      */
-    public $numbersMessage = 'The password must include at least one digit.';
+    public string $numbersMessage = 'The password must include at least one digit.';
 
     /**
      * Checks if the password is compromised.
-     *
-     * @var bool
      */
-    public $pwned = false;
+    public bool $pwned = false;
 
     /**
-     * @var string
+     *  Pawword comprise error message.
      */
-    public $pwnedMessage = 'The password was found in a compromised password database.';
+    public string $pwnedMessage = 'The password was found in a compromised password database.';
 
     /**
      * Checks if the password contains special characters.
-     *
-     * @var bool
      */
-    public $specialchar = false;
+    public bool $specialchar = false;
 
     /**
-     * @var string
+     * Special char error message.
      */
-    public $specialcharMessage = 'The password must contain at least one special character.';
+    public string $specialcharMessage = 'The password must contain at least one special character.';
 }

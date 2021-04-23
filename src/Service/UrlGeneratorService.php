@@ -54,10 +54,7 @@ class UrlGeneratorService
         'type', // seach page
     ];
 
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $generator;
+    private UrlGeneratorInterface $generator;
 
     /**
      * Constructor.

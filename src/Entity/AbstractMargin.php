@@ -31,10 +31,8 @@ abstract class AbstractMargin extends AbstractEntity
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
      * @Assert\Type(type="float")
      * @Assert\GreaterThanOrEqual(0)
-     *
-     * @var float
      */
-    protected $margin;
+    protected float $margin = 0.0;
 
     /**
      * The maximum amount (exclusive) to apply within this margin.
@@ -43,10 +41,8 @@ abstract class AbstractMargin extends AbstractEntity
      * @Assert\Type(type="float")
      * @Assert\GreaterThanOrEqual(0)
      * @Assert\GreaterThan(propertyPath="minimum", message="abstract_margin.maximum_geather_minimum")
-     *
-     * @var float
      */
-    protected $maximum;
+    protected float $maximum = 0.0;
 
     /**
      * The minimum amount (inclusive) to apply within this margin.
@@ -54,21 +50,8 @@ abstract class AbstractMargin extends AbstractEntity
      * @ORM\Column(type="float", scale=2, options={"default" = 0})
      * @Assert\Type(type="float")
      * @Assert\GreaterThanOrEqual(0)
-     *
-     * @var float
      */
-    protected $minimum;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        // default values
-        $this->minimum = 0.0;
-        $this->maximum = 0.0;
-        $this->margin = 0.0;
-    }
+    protected float $minimum = 0.0;
 
     /**
      * Checks if the given amount is between this minimum (inclusive) and this maximum (exlcusive).

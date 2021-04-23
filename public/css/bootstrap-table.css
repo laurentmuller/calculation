@@ -123,13 +123,13 @@ tr.text-muted td .text-danger {
     opacity: 0.75;
 }
 
+.custom-item {
+    cursor: pointer;
+}
+
 /**
  * User image
  */
-.card-view-value img {
+.bootstrap-table img {
     mix-blend-mode: multiply;
-}
-
-.custom-item {
-    cursor: pointer;
 }

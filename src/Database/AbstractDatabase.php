@@ -28,24 +28,20 @@ abstract class AbstractDatabase extends \SQLite3
 
     /**
      * The file name.
-     *
-     * @var string
      */
-    protected $filename;
+    protected string $filename;
 
     /**
      * The opened statements.
      *
      * @var \SQLite3Stmt[]
      */
-    protected $statements = [];
+    protected array $statements = [];
 
     /**
      * The transaction state.
-     *
-     * @var bool
      */
-    protected $transaction = false;
+    protected bool $transaction = false;
 
     /**
      * Instantiates and opens the database.

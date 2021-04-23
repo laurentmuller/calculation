@@ -39,10 +39,7 @@ class StrengthValidator extends AbstractConstraintValidator
         4 => 'very_strong',
     ];
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Constructor.

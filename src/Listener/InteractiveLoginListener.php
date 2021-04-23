@@ -30,16 +30,8 @@ class InteractiveLoginListener implements EventSubscriberInterface
 {
     use TranslatorFlashMessageTrait;
 
-    /**
-     * The application name and version.
-     *
-     * @var string
-     */
-    private $appNameVersion;
+    private string $appNameVersion;
 
-    /**
-     * the user repository.
-     */
     private UserRepository $repository;
 
     /**

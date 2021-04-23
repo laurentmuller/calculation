@@ -70,17 +70,9 @@ class SwissPostService
      */
     private const STATE_FILE = 'swiss_state.csv';
 
-    /**
-     * @var ApplicationService
-     */
-    private $application;
+    private ApplicationService $application;
 
-    /**
-     * The data directory.
-     *
-     * @var string
-     */
-    private $dataDirectory;
+    private string $dataDirectory;
 
     /**
      * The source file to import.
@@ -91,10 +83,8 @@ class SwissPostService
 
     /**
      * The original import (uploaded) file name.
-     *
-     * @var ?string
      */
-    private $sourceName;
+    private ?string $sourceName = null;
 
     /**
      * Constructor.

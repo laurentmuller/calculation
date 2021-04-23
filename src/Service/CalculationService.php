@@ -67,15 +67,9 @@ final class CalculationService
      */
     public const ROW_USER_MARGIN = 5;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $manager;
+    private EntityManagerInterface $manager;
 
-    /**
-     * @var ApplicationService
-     */
-    private $service;
+    private ApplicationService $service;
 
     /**
      * Constructor.

@@ -45,17 +45,13 @@ class HelpService
 
     /**
      * The absolute path to the JSON help file.
-     *
-     * @var string
      */
-    private $file;
+    private string $file;
 
     /**
      * The absolute root path to the images.
-     *
-     * @var string
      */
-    private $imagePath;
+    private string $imagePath;
 
     /**
      * Constructor.

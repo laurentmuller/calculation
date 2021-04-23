@@ -36,24 +36,18 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
 
     /**
      * The property accessor.
-     *
-     * @var PropertyAccessor|null
      */
-    protected $accessor;
+    protected ?PropertyAccessor $accessor = null;
 
     /**
      * The key to cache language.
-     *
-     * @var string
      */
-    protected $cacheKey;
+    protected ?string $cacheKey = null;
 
     /**
      * The API key.
-     *
-     * @var string
      */
-    protected $key;
+    protected string $key;
 
     /**
      * Constructor.

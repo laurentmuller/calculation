@@ -4,7 +4,6 @@
 {%- set title        = title|default('calculation.list.title') -%}
 {%- set title_icon   = title_icon|default('calculator') -%}
 {%- set defer_url    = defer_url|default(url('table_calculation')) -%}
-{%- set save_url     = save_url|default(url('table_calculation_save')) -%}
 {%- set object_type  = ENTITY_CALCULATION -%}
 {%- set attributes   = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
 

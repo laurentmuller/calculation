@@ -51,7 +51,7 @@
 	},
 	{
 		"field": "enabled",
-		"alias": "active",
+		"alias": "textMuted",
 		"visible": false
 	}
 ]

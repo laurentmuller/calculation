@@ -26,25 +26,22 @@ use Faker\Provider\Base;
  */
 class CalculationProvider extends Base
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $manager;
+    private EntityManagerInterface $manager;
 
     /**
      * @var Product[]
      */
-    private $products;
+    private ?array $products = null;
 
     /**
      * @var CalculationState[]
      */
-    private $states;
+    private ?array $states = null;
 
     /**
      * @var User[]
      */
-    private $users;
+    private ?array $users = null;
 
     /**
      * Constructor.

@@ -25,17 +25,13 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
 {
     /**
      * The price label.
-     *
-     * @var string
      */
-    private $priceLabel;
+    private string $priceLabel;
 
     /**
      * The quantity label.
-     *
-     * @var string
      */
-    private $quantityLabel;
+    private string $quantityLabel;
 
     /**
      * Constructor.
@@ -73,6 +69,14 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
         }, $items);
 
         return \implode('<br>', $result);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEmptyMessage(): string
+    {
+        return 'empty.empty';
     }
 
     /**

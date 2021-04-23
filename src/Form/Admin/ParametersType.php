@@ -41,15 +41,9 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         'pwned',
     ];
 
-    /**
-     * @var ApplicationService
-     */
-    private $application;
+    private ApplicationService $application;
 
-    /**
-     * @var bool
-     */
-    private $superAdmin = false;
+    private bool $superAdmin = false;
 
     /**
      * Constructor.

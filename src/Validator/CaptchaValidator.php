@@ -24,10 +24,7 @@ use Symfony\Component\Validator\Constraint;
  */
 class CaptchaValidator extends AbstractConstraintValidator
 {
-    /**
-     * @var CaptchaImageService
-     */
-    protected $service;
+    private CaptchaImageService $service;
 
     /**
      * Constructor.

@@ -35,10 +35,8 @@ abstract class AbstractEntity
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var int|null
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
      * Magic method called after clone.

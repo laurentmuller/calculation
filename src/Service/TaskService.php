@@ -26,44 +26,26 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TaskService implements \JsonSerializable
 {
-    /**
-     * @var Category|null
-     */
-    private $category;
+    private ?Category $category = null;
+
     /**
      * @var int[]
      */
-    private $items;
+    private array $items = [];
 
-    /**
-     * @var float
-     */
-    private $overall;
+    private float $overall = 0.0;
 
-    /**
-     * @var float
-     */
-    private $quantity;
+    private float $quantity = 1.0;
 
-    /**
-     * @var array
-     */
-    private $results;
+    private array $results = [];
 
-    /**
-     * @var Task|null
-     */
-    private $task;
+    private ?Task $task = null;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->overall = 0.0;
-        $this->quantity = 1.0;
-        $this->results = [];
-        $this->items = [];
     }
 
     /**

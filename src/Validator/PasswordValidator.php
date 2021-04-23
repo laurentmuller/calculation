@@ -40,10 +40,7 @@ class PasswordValidator extends AbstractConstraintValidator
         4 => 'very_strong',
     ];
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Constructor.
@@ -52,14 +49,6 @@ class PasswordValidator extends AbstractConstraintValidator
     {
         parent::__construct(Password::class);
         $this->translator = $translator;
-    }
-
-    /**
-     * Gets the translator.
-     */
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
     }
 
     /**

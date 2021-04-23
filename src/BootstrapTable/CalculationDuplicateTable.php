@@ -42,6 +42,14 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getEmptyMessage(): string
+    {
+        return 'duplicate.empty';
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array

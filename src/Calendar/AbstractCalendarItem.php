@@ -23,17 +23,13 @@ abstract class AbstractCalendarItem implements \JsonSerializable
 {
     /**
      * The parent's calendar.
-     *
-     * @var Calendar
      */
-    protected $calendar;
+    protected Calendar $calendar;
 
     /**
      * The item's key.
-     *
-     * @var string
      */
-    protected $key;
+    protected string $key;
 
     /**
      * Constructor.

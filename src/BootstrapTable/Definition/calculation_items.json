@@ -55,7 +55,7 @@
 	},
 	{
 		"field": "stateEditable",
-		"alias": "editable",
+		"alias": "textMuted",
 		"visible": false
 	}
 ]

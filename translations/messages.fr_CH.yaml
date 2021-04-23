@@ -1184,3 +1184,14 @@ exchangerate:
     target: Devise étrangère
     amount: Montant
     result: Résultat
+importance:
+    name: Importance
+    urgent: Urgente
+    high: Haute
+    medium: Moyenne
+    low: Basse
+    full:
+        urgent: Urgent !
+        high: Importance haute
+        medium: Importance moyenne
+        low: Importance basse

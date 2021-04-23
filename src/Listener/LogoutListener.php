@@ -26,12 +26,7 @@ class LogoutListener implements EventSubscriberInterface
 {
     use TranslatorFlashMessageTrait;
 
-    /**
-     * The application name and version.
-     *
-     * @var string
-     */
-    private $appNameVersion;
+    private string $appNameVersion;
 
     /**
      * Constructor.
@@ -72,8 +67,7 @@ class LogoutListener implements EventSubscriberInterface
      */
     private function getUsername(LogoutEvent $event): ?string
     {
-        $token = $event->getToken();
-        if (null !== $token) {
+        if ($token = $event->getToken()) {
             return $token->getUsername();
         }
 

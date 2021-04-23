@@ -1,0 +1,10 @@
+{% extends '@email/default/notification/body.html.twig' %}
+
+{% block lead %}
+    {% if importance is not null %}
+        <small><strong>{{ ('importance.full.' ~ importance)|trans }}</strong></small>
+    {% endif %}
+    <p class="lead">
+        {{ email.subject }}
+    </p>
+{% endblock %}

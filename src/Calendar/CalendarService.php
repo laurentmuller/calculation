@@ -30,31 +30,23 @@ class CalendarService
 
     /**
      * The calendar model class.
-     *
-     * @var string
      */
-    private $calendarModel = self::DEFAULT_CALENDAR_MODEL;
+    private string $calendarModel = self::DEFAULT_CALENDAR_MODEL;
 
     /**
      * The day model.
-     *
-     * @var string
      */
-    private $dayModel;
+    private ?string $dayModel = null;
 
     /**
      * The month model.
-     *
-     * @var string
      */
-    private $monthModel;
+    private ?string  $monthModel = null;
 
     /**
      * The week model.
-     *
-     * @var string
      */
-    private $weekModel;
+    private ?string $weekModel = null;
 
     /**
      * Returns a calendar for specified year.

@@ -27,10 +27,8 @@ class TinyMceEditorType extends AbstractType
 {
     /**
      * The dark theme state.
-     *
-     * @var bool
      */
-    protected $darkTheme;
+    protected bool $darkTheme;
 
     /**
      * Constructor.

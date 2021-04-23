@@ -25,10 +25,8 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
 {
     /**
      * The repository to get entities.
-     *
-     * @var CalculationRepository
      */
-    protected $repository;
+    protected CalculationRepository $repository;
 
     /**
      * The number of items.
@@ -91,6 +89,14 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
     public function isEmpty(): bool
     {
         return 0 === $this->countEntities();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isEmptyAllowed(): bool
+    {
+        return false;
     }
 
     /**
@@ -159,7 +165,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $results->addAttribute('row-style', 'styleCalculationEditable');
+            $results->addAttribute('row-style', 'styleTextMuted');
         }
     }
 }

@@ -38,20 +38,16 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    protected $customer;
+    protected ?string $customer = null;
 
     /**
      * The calculation date.
      *
      * @ORM\Column(type="date")
      * @Assert\NotNull
-     *
-     * @var \DateTime
      */
-    protected $date;
+    protected \DateTime $date;
 
     /**
      * The description.
@@ -59,19 +55,15 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
-     *
-     * @var string
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
      * The global margin in percent (%).
      *
      * @ORM\Column(name="globalMargin", type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    protected $globalMargin;
+    protected float $globalMargin = 0.0;
 
     /**
      * The calculation groups.
@@ -89,19 +81,15 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * The total of all items.
      *
      * @ORM\Column(name="itemsTotal", type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    protected $itemsTotal;
+    protected float $itemsTotal = 0.0;
 
     /**
      * The overall total.
      *
      * @ORM\Column(name="overallTotal", type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    protected $overallTotal;
+    protected float $overallTotal = 0.0;
 
     /**
      * The calculation state.
@@ -109,19 +97,15 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @ORM\ManyToOne(targetEntity=CalculationState::class, inversedBy="calculations")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotNull
-     *
-     * @var ?CalculationState
      */
-    protected $state;
+    protected ?CalculationState $state = null;
 
     /**
      * The user margin in percent (%).
      *
      * @ORM\Column(name="userMargin", type="float", scale=2, options={"default" = 0})
-     *
-     * @var float
      */
-    protected $userMargin;
+    protected float $userMargin = 0.0;
 
     /**
      * Constructor.
@@ -129,10 +113,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function __construct()
     {
         $this->date = new \DateTime();
-        $this->globalMargin = 0.0;
-        $this->userMargin = 0.0;
-        $this->itemsTotal = 0.0;
-        $this->overallTotal = 0.0;
         $this->groups = new ArrayCollection();
     }
 

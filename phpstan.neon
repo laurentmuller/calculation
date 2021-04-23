@@ -28,8 +28,6 @@ parameters:
     ignoreErrors:
     # disallowed-execution-calls
     - '#proc_open#'                         # Command\CompileAssetsCommand.php
-    # Level 6
-    - '#Unable to resolve the template#'    # Controller\AbstractEntityController
     # slam/phpstan-extensions
     - '#function has no typehint#'
     - '#proc_close#'                        # Command\CompileAssetsCommand.php

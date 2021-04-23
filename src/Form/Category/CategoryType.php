@@ -21,6 +21,8 @@ use App\Form\Group\GroupEntityType;
  * Category edit type.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractEntityType<Category>
  */
 class CategoryType extends AbstractEntityType
 {

@@ -95,6 +95,14 @@ class LogTable extends AbstractTable
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getEmptyMessage(): string
+    {
+        return 'log.list.empty';
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getEntityClassName(): ?string
@@ -115,6 +123,14 @@ class LogTable extends AbstractTable
 
         /* @var array $entries */
         return empty($entries[LogService::KEY_LOGS]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isEmptyAllowed(): bool
+    {
+        return false;
     }
 
     /**

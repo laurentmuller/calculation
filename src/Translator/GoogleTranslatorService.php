@@ -215,7 +215,10 @@ class GoogleTranslatorService extends AbstractTranslatorService
         $response = $response->toArray(false);
 
         // check error
-        if ($this->lastError = $this->getProperty($response, 'error', false)) {
+        $error = $this->getProperty($response, 'error', false);
+        if (false !== $error) {
+            $this->lastError = $error;
+
             return false;
         }
 

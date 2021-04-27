@@ -349,12 +349,9 @@ class LogService
      */
     private function parseJson(string $value): array
     {
-        try {
-            $result = \json_decode($value, true);
-            if ($result && \JSON_ERROR_NONE === \json_last_error()) {
-                return $result;
-            }
-        } catch (\Exception $e) {
+        $result = \json_decode($value, true);
+        if (\is_array($result) && \JSON_ERROR_NONE === \json_last_error()) {
+            return $result;
         }
 
         return [];

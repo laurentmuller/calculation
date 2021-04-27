@@ -37,10 +37,10 @@ function customViewFormatter(data) { // jshint ignore:line
             }
             html = html.replaceAll(match[0], value);
         }
-        
+
         view += html;
     });
-    
+
     return '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 m-0">' + view + '</div>';
 }
 
@@ -405,9 +405,11 @@ $.fn.extend({
         },
         
         onPreBody: function(data) {
+            // options
+            const options = $table.getOptions();
+            
             // update pages list and page button
             if ($pageButton.length) {
-                const options = $table.getOptions();
                 let pageList = options.pageList;
                 for(let i = 0; i < pageList.length; i++) {
                     if(pageList[i] >= options.totalRows) {
@@ -463,12 +465,17 @@ $.fn.extend({
             if ($searchMinimum.length) {
                 $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
             }
+            
+            // update sort
+            $('.btn-group-sort').toggleClass('d-none', $table.getDisplayMode() === 'table');
+            $('.btn-group-sort').find('.dropdown-menu-sort.active').removeClass('active');
+            $('.btn-group-sort').find(".dropdown-menu-sort[data-sort='" + options.sortName + "'][data-order='" + options.sortOrder + "']").addClass('active');
         },
 
         // onAll: function(name) {
-        // console.log(name);
+        // console.log(name, Array.from(arguments).slice(1));
         // },
-        
+
         onPageChange: function() {
             // hide
             if ($table.isCustomView()) {
@@ -591,10 +598,26 @@ $.fn.extend({
         });
     }
 
-    // handle view button
+    // handle view buttons
     $('#button_view').initDropdown(true, false).on('input', function() {
         const view = $(this).getDataValue();
         $table.setDisplayMode(view);
+    });
+    
+    // handle sort buttons
+    $('.dropdown-menu-sort').on('click', function() {
+        const $this = $(this);
+        const sortName = $this.data('sort');
+        const sortOrder = $this.data('order');
+        const data = $table.data('bootstrap.table');
+        if (data.options.sortName !== sortName || data.options.sortOrder !== sortOrder) {
+            data.options.sortName = sortName;
+            data.options.sortOrder = sortOrder;
+            $table.refresh();
+        }        
+    });
+    $('.btn-group-sort').on('shown.bs.dropdown', function() {
+        $(this).find('.dropdown-menu-sort.active').focus();
     });
     
     // handle keys enablement

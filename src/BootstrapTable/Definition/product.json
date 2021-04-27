@@ -19,7 +19,8 @@
 		"field": "price",
 		"title": "product.fields.price",
 		"class": "text-currency",
-		"fieldFormatter": "formatAmount"
+		"fieldFormatter": "formatAmount",
+		"numeric": true
 	},
 	{
 		"field": "unit",

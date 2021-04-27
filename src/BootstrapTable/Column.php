@@ -83,6 +83,11 @@ class Column
     private $fieldFormatter = null;
 
     /**
+     * The numeric type.
+     */
+    private bool $numeric = false;
+
+    /**
      * The sort order.
      */
     private string $order = self::SORT_ASC;
@@ -183,6 +188,7 @@ class Column
             'field' => $this->getAlias(),
             'sort-order' => $this->getOrder(),
             'visible' => \json_encode($this->isVisible()),
+            'numeric' => \json_encode($this->isNumeric()),
             'sortable' => \json_encode($this->isSortable()),
             'card-visible' => \json_encode($this->isCardVisible()),
         ];
@@ -257,6 +263,14 @@ class Column
     public function isDefault(): bool
     {
         return $this->default;
+    }
+
+    /**
+     * Gets a value indicating if this column is displayed as a numeric value.
+     */
+    public function isNumeric(): bool
+    {
+        return $this->numeric;
     }
 
     public function isSearchable(): bool
@@ -347,6 +361,16 @@ class Column
     public function setFieldFormatter($fieldFormatter): self
     {
         $this->fieldFormatter = $fieldFormatter;
+
+        return $this;
+    }
+
+    /**
+     * Sets a value indicating if this column is displayed as a numeric value.
+     */
+    public function setNumeric(bool $numeric): self
+    {
+        $this->numeric = $numeric;
 
         return $this;
     }

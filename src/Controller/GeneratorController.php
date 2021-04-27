@@ -87,7 +87,7 @@ class GeneratorController extends AbstractController
             $faker = $fakerService->getFaker();
             $count = $this->getRequestInt($request, 'count');
             $simulate = $this->getRequestBoolean($request, 'simulate', true);
-            $id = $simulate ? $manager->getRepository(Calculation::class)->getNextId() : 0;
+            $id = $simulate ? (int) $manager->getRepository(Calculation::class)->getNextId() : 0;
 
             // products range
             $countProducts = $faker->countProducts(); /* @phpstan-ignore-line */

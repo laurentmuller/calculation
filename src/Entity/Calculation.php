@@ -816,11 +816,9 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Sets the key.
-     *
-     * @param int $id
+     * Sets the identifier.
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 

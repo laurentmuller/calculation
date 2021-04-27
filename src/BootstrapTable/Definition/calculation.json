@@ -6,7 +6,8 @@
 		"class": "text-id text-border",
 		"cardClass": "font-weight-bold",
 		"fieldFormatter": "formatId",
-		"styleFormatter": "styleBorderColor"
+		"styleFormatter": "styleBorderColor",
+		"numeric": true
 	},
 	{
 		"field": "date",
@@ -19,7 +20,7 @@
 	{
 		"field": "state.code",
 		"title": "calculation.fields.state",
-		"class": "text-state"		
+		"class": "text-state"
 	},
 	{
 		"field": "customer",
@@ -35,13 +36,15 @@
 		"field": "overallMargin",
 		"title": "calculation.fields.margin",
 		"class": "text-percent",
-		"fieldFormatter": "formatOverallMargin"
+		"fieldFormatter": "formatOverallMargin",
+		"numeric": true
 	},
 	{
 		"field": "overallTotal",
 		"title": "calculation.fields.total",
 		"class": "text-currency",
-		"fieldFormatter": "formatAmount"
+		"fieldFormatter": "formatAmount",
+		"numeric": true
 	},
 	{
 		"field": "id",

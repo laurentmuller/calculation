@@ -1,0 +1,70 @@
+name: "Lint"
+
+on: [push, pull_request]
+
+env:
+    fail-fast: true
+
+jobs:
+    linters:
+        name: Linters with PHP 7.4
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: "Checkout code"
+              uses: actions/checkout@v2.3.3
+
+            - name: "Install PHP with extensions"
+              uses: shivammathur/setup-php@2.7.0
+              with:
+                  coverage: "none"
+                  extensions: intl
+                  php-version: '7.4'
+                  tools: composer:v2
+
+            - name: Determine composer cache directory
+              id: composer-cache
+              run: echo "::set-output name=directory::$(composer config cache-dir)"
+
+            - name: Cache dependencies installed with composer
+              uses: actions/cache@v2.1.4
+              with:
+                  path: ${{ steps.composer-cache.outputs.directory }}
+                  key: composer-${{ runner.os }}-${{ hashFiles('composer.*') }}
+                  restore-keys: composer-${{ runner.os }}-composer-
+
+            - name: Download dependencies
+              id: install
+              run: composer install --no-interaction --no-progress --no-scripts
+
+            - name: Lint YAML files
+              if: always() && steps.install.outcome == 'success'
+              run: ./bin/console lint:yaml config --parse-tags
+
+            - name: Lint Twig templates
+              if: always() && steps.install.outcome == 'success'
+              run: ./bin/console lint:twig templates --env=prod
+
+            - name: Lint XLIFF translations
+              if: always() && steps.install.outcome == 'success'
+              run: ./bin/console lint:xliff translations
+
+            - name: Lint Parameters and Services
+              if: always() && steps.install.outcome == 'success'
+              run: ./bin/console lint:container
+
+            - name: Lint Doctrine entities
+              if: always() && steps.install.outcome == 'success'
+              run: ./bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
+
+            - name: Lint Composer config
+              if: always() && steps.install.outcome == 'success'
+              run: composer validate --strict
+
+            - name: Download Symfony CLI
+              if: always() && steps.install.outcome == 'success'
+              run: wget https://get.symfony.com/cli/installer -O - | bash
+
+            - name: Check if any dependencies are compromised
+              if: always() && steps.install.outcome == 'success'
+              run: /home/runner/.symfony/bin/symfony check:security

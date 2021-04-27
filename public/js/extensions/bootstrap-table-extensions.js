@@ -514,6 +514,18 @@ $.fn.extend({
         'use strict';
         return $(this).bootstrapTable('resetSearch', text || '');
     },
+    
+    /**
+     * Refresh the table options.
+     * 
+     * @param {Object}
+     *            options - the options to refresh.
+     * @return {jQuery} this instance for chaining.
+     */
+    refreshOptions: function(options) {
+        'use strict';
+        return $(this).bootstrapTable('refreshOptions', options || {});
+    },
 
     /**
      * Toggle the card/table view.

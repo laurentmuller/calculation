@@ -9,21 +9,24 @@
 		"default": true,
 		"searchable": true,
 		"fieldFormatter": "formatAmount",
-		"class": "text-currency w-35"
+		"class": "text-currency w-35",
+		"numeric": true
 	},
 	{
 		"field": "maximum",
 		"title": "globalmargin.fields.maximum",
 		"searchable": true,
 		"fieldFormatter": "formatAmount",
-		"class": "text-currency w-35"
+		"class": "text-currency w-35",
+		"numeric": true
 	},
 	{
 		"field": "margin",
 		"title": "globalmargin.fields.margin",
 		"searchable": true,
 		"fieldFormatter": "formatPercent",
-		"class": "text-currency w-30"
+		"class": "text-currency w-30",
+		"numeric": true
 	},
 	{
 		"field": "id",

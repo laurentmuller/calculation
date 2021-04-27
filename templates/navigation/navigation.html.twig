@@ -4,9 +4,9 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set is_env_dev        = app_environment == 'dev' -%}
-{%- set is_env_prod       = app_environment == 'prod' -%}
-{%- set is_env_local      = app_environment == 'local' -%}
+{%- set is_env_dev        = app_mode == 'dev' -%}
+{%- set is_env_prod       = app_mode == 'prod' -%}
+{%- set is_env_local      = app_mode == 'local' -%}
 {%- set is_dev            = app.debug or is_env_dev -%}
 {%- set is_admin          = is_granted('ROLE_ADMIN') -%}
 {%- set is_super_admin    = is_granted('ROLE_SUPER_ADMIN') -%}

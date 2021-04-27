@@ -11,7 +11,7 @@ twig:
         app_owner_url: '%app_owner_url%'
         app_owner_city: '%app_owner_city%'
         app_description: '%app_description%'
-        app_environment: '%app_environment%'
+        app_mode: '%app_mode%'
     
         mailer_user_name: '%mailer_user_email%'
         mailer_user_email: '%mailer_user_email%'

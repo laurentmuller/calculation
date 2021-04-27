@@ -27,7 +27,7 @@
             </tr>
             {{ tools.rowInfo('about.app_name'|trans, app_name) }}
             {{ tools.rowInfo('about.app_version'|trans, app_version) }}
-            {{ tools.rowInfo('about.app_environment'|trans, ('environment.' ~ app_environment)|trans) }}
+            {{ tools.rowInfo('about.app_environment'|trans, ('environment.' ~ app_mode)|trans) }}
             {{ tools.rowInfoLink('about.app_customer'|trans, app_customer, app_customer_url) }}
             {{ tools.rowInfoLink('about.app_owner'|trans, app_owner, app_owner_url) }}
         </tbody>
@@ -51,7 +51,7 @@
         {{ icons.homepage() }}
         {{ icons.link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far') }}        
     </div>
-    {% if app.debug or app_environment == 'dev' -%}
+    {% if app.debug or app_mode == 'dev' -%}
     <div class="col text-right">
         {{ icons.button_pdf('about_pdf') }}
         {{ icons.link(path('about_php_ini'), 'about.php_ini', 'btn btn-form btn-outline-info') }}            

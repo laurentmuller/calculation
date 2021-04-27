@@ -15,6 +15,7 @@
             {{ tools.headerInfo('Kernel') }}
             {# { tools.rowInfo('Name', kernel.name) } #}
             {{ tools.rowInfo('Environment', kernel.environment) }}
+            {{ tools.rowInfo('Mode', app_mode) }}
             {{ tools.rowInfo('Debug', kernel.debug|json_encode) }}
             {{ tools.rowInfo('Intl Locale', locale) }}
             {{ tools.rowInfo('Timezone', timezone) }}

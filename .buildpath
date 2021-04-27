@@ -77,11 +77,6 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/doctrine/doctrine-migrations-bundle">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/doctrine/event-manager/lib/Doctrine/Common">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -98,11 +93,6 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/doctrine/lexer/lib/Doctrine/Common/Lexer">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/doctrine/migrations/lib/Doctrine/Migrations">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
@@ -147,11 +137,6 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/friendsofphp/proxy-manager-lts/src/ProxyManager">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/google/recaptcha/src/ReCaptcha">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -163,16 +148,6 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/jms/metadata/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/laminas/laminas-code/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/laminas/laminas-eventmanager/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

@@ -14,7 +14,7 @@ parameters:
     app_description:    Programme de calculation.
 
     app_secret:         '%env(APP_SECRET)%'
-    app_environment:    '%env(APP_ENVIRONMENT)%'
+    app_mode:           '%env(APP_MODE)%'
 
     # mailer
     mailer_user_name: Calculation

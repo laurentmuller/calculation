@@ -383,8 +383,8 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
     {
         return [
             'year' => $this->year,
-            'startDate' => FormatUtils::formatDate($this->getFirstDate()),
-            'endDate' => FormatUtils::formatDate($this->getLastDate()),
+            'startDate' => (string) FormatUtils::formatDate($this->getFirstDate()),
+            'endDate' => (string) FormatUtils::formatDate($this->getLastDate()),
         ];
     }
 
@@ -507,6 +507,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      */
     private function createDay(\DateTime $date): Day
     {
+        /** @var Day $day */
         $day = new $this->dayModel($this, $date);
         $this->addDay($day);
 

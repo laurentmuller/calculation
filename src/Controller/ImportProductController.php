@@ -60,7 +60,7 @@ class ImportProductController extends AbstractController
 
             try {
                 // open
-                $sheet = $this->loadSheet($file->getRealPath());
+                $sheet = $this->loadSheet((string) $file->getRealPath());
 
                 // run over rows
                 $iterator = $sheet->getRowIterator(2);

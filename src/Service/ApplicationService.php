@@ -348,7 +348,9 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     {
         $timestamp = $this->getPropertyInteger($name);
         if (Property::FALSE_VALUE !== $timestamp) {
-            return \DateTime::createFromFormat('U', (string) $timestamp);
+            if ($date = \DateTime::createFromFormat('U', (string) $timestamp)) {
+                return $date;
+            }
         }
 
         return $default;

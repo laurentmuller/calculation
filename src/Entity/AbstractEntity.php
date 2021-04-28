@@ -82,8 +82,6 @@ abstract class AbstractEntity
     /**
      * Gets the terms to search in.
      *
-     * @return string[]
-     *
      * @see AbstractEntity::match()
      */
     protected function getSearchTerms(): array

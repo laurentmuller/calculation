@@ -146,7 +146,7 @@ class HelpService
 
         // load
         $content = \file_get_contents($this->file);
-        if ($help = \json_decode($content, true)) {
+        if ($help = \json_decode((string) $content, true)) {
             // sort
             if (isset($help['entities'])) {
                 $this->sortEntities($help['entities']);

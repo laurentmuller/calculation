@@ -73,6 +73,7 @@ class PivotController extends AbstractController
                 // data?
                 if (\count($dataset)) {
                     // open
+                    /** @var resource $handle */
                     $handle = \fopen('php://output', 'w+');
 
                     // headers

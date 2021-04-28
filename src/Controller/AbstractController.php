@@ -64,8 +64,8 @@ abstract class AbstractController extends BaseController
      */
     public function getAddressFrom(): Address
     {
-        $email = (string) $this->getParameter('mailer_user_email');
-        $name = (string) $this->getParameter('mailer_user_name');
+        $email = \strval($this->getParameter('mailer_user_email'));
+        $name = \strval($this->getParameter('mailer_user_name'));
 
         return new Address($email, $name);
     }
@@ -75,10 +75,13 @@ abstract class AbstractController extends BaseController
      */
     public function getApplication(): ApplicationService
     {
-        if (isset($this->application)) {
+        if (null !== $this->application) {
             return $this->application;
         } else {
-            return $this->application = $this->get(ApplicationService::class);
+            /** @var ApplicationService $service */
+            $service = $this->get(ApplicationService::class);
+
+            return $this->application = $service;
         }
     }
 
@@ -87,8 +90,8 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationName(): string
     {
-        $name = (string) $this->getParameter('app_name');
-        $version = (string) $this->getParameter('app_version');
+        $name = \strval($this->getParameter('app_name'));
+        $version = \strval($this->getParameter('app_version'));
 
         return \sprintf('%s v%s', $name, $version);
     }
@@ -98,7 +101,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationOwner(): string
     {
-        return (string) $this->getParameter('app_owner');
+        return \strval($this->getParameter('app_owner'));
     }
 
     /**
@@ -106,7 +109,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationOwnerUrl(): string
     {
-        return (string) $this->getParameter('app_owner_url');
+        return \strval($this->getParameter('app_owner_url'));
     }
 
     /**
@@ -114,10 +117,13 @@ abstract class AbstractController extends BaseController
      */
     public function getSession(): SessionInterface
     {
-        if (isset($this->session)) {
+        if (null !== $this->session) {
             return $this->session;
         } else {
-            return $this->session = $this->get('session');
+            /** @var SessionInterface $service */
+            $service = $this->get('session');
+
+            return $this->session = $service;
         }
     }
 
@@ -138,10 +144,13 @@ abstract class AbstractController extends BaseController
      */
     public function getTranslator(): TranslatorInterface
     {
-        if (isset($this->translator)) {
+        if (null !== $this->translator) {
             return $this->translator;
         } else {
-            return $this->translator = $this->get(TranslatorInterface::class);
+            /** @var TranslatorInterface $service */
+            $service = $this->get(TranslatorInterface::class);
+
+            return $this->translator = $service;
         }
     }
 
@@ -150,10 +159,13 @@ abstract class AbstractController extends BaseController
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
-        if (isset($this->generatorService)) {
+        if (null !== $this->generatorService) {
             return $this->generatorService;
         } else {
-            return $this->generatorService = $this->get(UrlGeneratorService::class);
+            /** @var UrlGeneratorService $service */
+            $service = $this->get(UrlGeneratorService::class);
+
+            return $this->generatorService = $service;
         }
     }
 

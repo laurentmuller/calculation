@@ -139,10 +139,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
         // order by clause
         if (!empty($sortedFields)) {
             foreach ($sortedFields as $name => $order) {
-                $fields = (array) $this->getSortFields($name, $alias);
-                foreach ($fields as $field) {
-                    $builder->addOrderBy($field, $order);
-                }
+                $field = $this->getSortField($name, $alias);
+                $builder->addOrderBy($field, $order);
             }
         }
 
@@ -169,9 +167,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * @param string $field the field name
      * @param string $alias the entity alias
      *
-     * @return string|string[] one on more database sort fields
+     * @return string the sort field
      */
-    public function getSortFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return "$alias.$field";
     }

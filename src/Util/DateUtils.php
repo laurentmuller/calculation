@@ -24,28 +24,28 @@ final class DateUtils
     /**
      * The month names.
      *
-     * @var array
+     * @var string[]
      */
     private static $monthNames;
 
     /**
      * The short month names.
      *
-     * @var array
+     * @var string[]
      */
     private static $shortMonthNames;
 
     /**
      * The short week day names.
      *
-     * @var array
+     * @var string[]
      */
     private static $shortWeekNames;
 
     /**
      * The week day names.
      *
-     * @var array
+     * @var string[]
      */
     private static $weekNames;
 
@@ -144,7 +144,7 @@ final class DateUtils
      *
      * @return string[]
      */
-    public static function getShortWeekdays(?string $firstday = 'sunday'): array
+    public static function getShortWeekdays(string $firstday = 'sunday'): array
     {
         if (!self::$shortWeekNames) {
             self::$shortWeekNames = self::getDayNames('%a', $firstday);
@@ -175,7 +175,7 @@ final class DateUtils
      *
      * @return string[]
      */
-    public static function getWeekdays(?string $firstday = 'sunday'): array
+    public static function getWeekdays(string $firstday = 'sunday'): array
     {
         if (!self::$weekNames) {
             self::$weekNames = self::getDayNames('%A', $firstday);
@@ -212,7 +212,7 @@ final class DateUtils
     private static function format(string $format, int $time): string
     {
         self::setDefaultLocale();
-        $name = \ucfirst(\strftime($format, $time));
+        $name = \ucfirst((string) \strftime($format, $time));
 
         return \utf8_encode($name);
     }
@@ -225,12 +225,12 @@ final class DateUtils
      *
      * @return string[] the week day names
      */
-    private static function getDayNames(string $format, $firstday = 'sunday'): array
+    private static function getDayNames(string $format, string $firstday = 'sunday'): array
     {
         $result = [];
         for ($i = 0; $i <= 6; ++$i) {
             $time = \strtotime("last {$firstday} +{$i} day");
-            $result[$i + 1] = self::format($format, $time);
+            $result[$i + 1] = self::format($format, (int) $time);
         }
 
         return $result;
@@ -248,7 +248,7 @@ final class DateUtils
         $result = [];
         for ($i = 1; $i <= 12; ++$i) {
             $time = \mktime(0, 0, 0, $i, 1);
-            $result[$i] = self::format($format, $time);
+            $result[$i] = self::format($format, (int) $time);
         }
 
         return $result;

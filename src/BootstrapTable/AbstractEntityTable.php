@@ -223,11 +223,9 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     private function updateOrderBy(array &$orderBy, string $orderField, string $orderSort): void
     {
-        $fields = (array) $this->repository->getSortFields($orderField);
-        foreach ($fields as $field) {
-            if (!\array_key_exists($field, $orderBy)) {
-                $orderBy[$field] = $orderSort;
-            }
+        $field = $this->repository->getSortField($orderField);
+        if (!\array_key_exists($field, $orderBy)) {
+            $orderBy[$field] = $orderSort;
         }
     }
 }

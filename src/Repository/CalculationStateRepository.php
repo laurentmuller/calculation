@@ -95,7 +95,7 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        $field = (string) $this->getSortFields('code', $alias);
+        $field = $this->getSortField('code', $alias);
 
         return $this->createQueryBuilder($alias)
             ->orderBy($field, Criteria::ASC);

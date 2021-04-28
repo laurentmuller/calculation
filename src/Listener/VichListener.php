@@ -63,6 +63,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
      */
     public function onPostUpload(Event $event): void
     {
+        /** @var \App\Entity\User $obj */
         $obj = $event->getObject();
         $mapping = $event->getMapping();
 
@@ -72,7 +73,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         }
 
         // get values
-        $source = $file->getRealPath();
+        $source = (string) $file->getRealPath();
         $extension = $file->getExtension();
         $path = $file->getPath() . \DIRECTORY_SEPARATOR;
 
@@ -94,6 +95,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
      */
     public function onPreRemove(Event $event): void
     {
+        /** @var \App\Entity\User $obj */
         $obj = $event->getObject();
         $mapping = $event->getMapping();
 
@@ -123,6 +125,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
      */
     public function onPreUpload(Event $event): void
     {
+        /** @var \App\Entity\User $obj */
         $obj = $event->getObject();
         $mapping = $event->getMapping();
 
@@ -138,7 +141,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         }
 
         // resize
-        $source = $file->getRealPath();
+        $source = (string) $file->getRealPath();
         $this->resizer->resizeDefault($source, $source);
 
         // rename if not same extension

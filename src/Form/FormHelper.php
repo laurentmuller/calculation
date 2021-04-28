@@ -597,9 +597,9 @@ class FormHelper
     /**
      * Gets the currency symbol for the given locale.
      *
-     * @param \Locale|string|null $locale the locale to use or null to use the default locale
+     * @param string|null $locale the locale to use or null to use the default locale
      */
-    public function getCurrencySymbol($locale = null): string
+    public function getCurrencySymbol(string $locale = null): string
     {
         if (null === $locale) {
             $locale = \Locale::getDefault();
@@ -612,14 +612,14 @@ class FormHelper
     /**
      * Gets the percent symbol for the given locale.
      *
-     * @param \Locale|string|null $locale the locale to use or null to use the default locale
+     * @param string|null $locale the locale to use or null to use the default locale
      */
-    public function getPercentSymbol($locale = null): string
+    public function getPercentSymbol(string $locale = null): string
     {
         if (null === $locale) {
             $locale = \Locale::getDefault();
         }
-        $formatter = new \NumberFormatter($locale, \NumberFormatter::PERCENT);
+        $formatter = new \NumberFormatter((string) $locale, \NumberFormatter::PERCENT);
 
         return $formatter->getSymbol(\NumberFormatter::PERCENT_SYMBOL);
     }

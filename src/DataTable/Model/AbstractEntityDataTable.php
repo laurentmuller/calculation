@@ -99,10 +99,10 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
         /** @var DataDefinitition[] $definitions */
         $definitions = \array_map(function (Column $column) {
             $name = $column->name;
-            $sortFields = $this->repository->getSortFields($name);
+            $sortField = $this->repository->getSortField($name);
             $searchFields = $this->repository->getSearchFields($name);
 
-            return new DataDefinitition($column, $sortFields, $searchFields);
+            return new DataDefinitition($column, $sortField, $searchFields);
         }, $query->columns);
 
         // result and builder
@@ -156,9 +156,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
             $definition = $definitions[$order->column];
             if ($definition->isOrderable()) {
                 $direction = $order->dir;
-                foreach ($definition->getSortFields() as $field) {
-                    $builder->addOrderBy($field, $direction);
-                }
+                $builder->addOrderBy($definition->getSortField(), $direction);
 
                 // remove
                 unset($defaultOrder[$definition->getName()]);
@@ -168,9 +166,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
         // add remaining default orders
         foreach ($defaultOrder as $name => $direction) {
             if ($definition = $this->findDefinition($definitions, $name)) {
-                foreach ($definition->getSortFields() as $field) {
-                    $builder->addOrderBy($field, $direction);
-                }
+                $builder->addOrderBy($definition->getSortField(), $direction);
             }
         }
     }

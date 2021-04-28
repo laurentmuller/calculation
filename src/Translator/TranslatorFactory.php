@@ -82,6 +82,8 @@ class TranslatorFactory
      * @return TranslatorServiceInterface the translator service
      *
      * @throws ParameterNotFoundException if the service can not be found or if the API key parameter is not defined
+     * @template T of TranslatorServiceInterface
+     * @psalm-param class-string<T> $class
      */
     public function getService(string $class): TranslatorServiceInterface
     {

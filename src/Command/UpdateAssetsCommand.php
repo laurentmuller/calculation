@@ -81,7 +81,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         }
 
         // decode
-        if (false === ($configuration = $this->loadJson($vendorFile))) {
+        $configuration = $this->loadJson($vendorFile);
+        if (!$configuration instanceof \stdClass) {
             return Command::SUCCESS;
         }
 
@@ -242,7 +243,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     private function copyFile(string $sourceFile, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
         if (false !== ($content = $this->readFile($sourceFile))) {
-            return $this->dumpFile($content, $targetFile, $prefixes, $suffixes, $renames);
+            return $this->dumpFile((string) $content, $targetFile, $prefixes, $suffixes, $renames);
         }
 
         return false;
@@ -260,7 +261,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      */
     private function copyStyle(string $content, string $searchStyle, string $newStyle, bool $important = true): string
     {
-        if ($styles = $this->findStyles($content, $searchStyle)) {
+        $styles = $this->findStyles($content, $searchStyle);
+        if (\is_array($styles)) {
             $result = "\n/*\n * Copied from '$searchStyle'  \n */";
             foreach ($styles as $style) {
                 if ($important) {
@@ -287,10 +289,12 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
      */
     private function copyStyleEntries(string $content, string $searchStyle, string $newStyle, array $entries): string
     {
-        if ($styles = $this->findStyles($content, $searchStyle)) {
+        $styles = $this->findStyles($content, $searchStyle);
+        if (\is_array($styles)) {
             $result = '';
             foreach ($styles as $style) {
-                if ($styleEntries = $this->findStyleEntries($style, $entries)) {
+                $styleEntries = $this->findStyleEntries($style, $entries);
+                if (\is_array($styleEntries)) {
                     $result .= "$newStyle {\n";
                     foreach ($styleEntries as $styleEntry) {
                         $styleEntry = \str_replace(';', ' !important;', $styleEntry);
@@ -376,7 +380,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             $pattern = '/^\s*' . \preg_quote($entry) . '\s*:\s*.*;/m';
             if (!empty(\preg_match_all($pattern, $style, $matches, \PREG_SET_ORDER, 0))) {
                 foreach ($matches as $matche) {
-                    $result[] = $matche[0];
+                    $result[] = (string) $matche[0];
                 }
             }
         }
@@ -447,7 +451,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
         // format
         if (isset($plugin->format)) {
-            $format = $plugin->format;
+            $format = (string) $plugin->format;
         }
 
         // build
@@ -505,7 +509,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         // check bootswatch entry
         if ($this->propertyExists($configuration, 'bootswatch')) {
             // load file
-            if (false !== $source = $this->loadJson($configuration->bootswatch)) {
+            $source = $this->loadJson($configuration->bootswatch);
+            if ($source instanceof \stdClass) {
                 // message
                 $version = $source->version;
                 $this->writeVerbose("Installing 'bootswatch v{$version}'.");
@@ -533,7 +538,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         // save
         $targetFile = $targetDir . $themesDir . ThemeService::getFileName();
         $content = \json_encode($result, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
-        if ($this->dumpFile($content, $targetFile, $prefixes, $suffixes, $renames)) {
+        if ($this->dumpFile((string) $content, $targetFile, $prefixes, $suffixes, $renames)) {
             ++$count;
         }
 

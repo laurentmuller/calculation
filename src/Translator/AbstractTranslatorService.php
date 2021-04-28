@@ -80,8 +80,8 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     public function findLanguage(?string $tag): ?string
     {
         if ($tag && $languages = $this->getLanguages()) {
-            if ($name = \array_search($tag, $languages, true)) {
-                return $name;
+            if ($name = \array_search($tag, (array) $languages, true)) {
+                return (string) $name;
             }
         }
 

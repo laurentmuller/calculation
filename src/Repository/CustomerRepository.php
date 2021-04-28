@@ -94,7 +94,7 @@ class CustomerRepository extends AbstractRepository
     /**
      * {@inheritdoc}
      */
-    public function getSortFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         switch ($field) {
             case self::NAME_COMPANY_FIELD:
@@ -102,7 +102,7 @@ class CustomerRepository extends AbstractRepository
             case self::ZIP_CITY_FIELD:
                 return $this->concat($alias, self::ZIP_CITY_FIELDS);
             default:
-                return parent::getSortFields($field, $alias);
+                return parent::getSortField($field, $alias);
         }
     }
 }

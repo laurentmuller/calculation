@@ -67,7 +67,7 @@ final class FunctionExtension extends AbstractExtension
      */
     public function __construct(KernelInterface $kernel, TranslatorInterface $translator, UrlGeneratorService $generator)
     {
-        $this->webDir = \realpath($kernel->getProjectDir() . '/public');
+        $this->webDir = (string) \realpath($kernel->getProjectDir() . '/public');
         $this->translator = $translator;
         $this->generator = $generator;
     }
@@ -248,9 +248,10 @@ final class FunctionExtension extends AbstractExtension
      */
     public function getImageHeight(string $path): int
     {
-        $fullPath = \realpath($this->webDir . $path);
+        $fullPath = (string) \realpath($this->webDir . $path);
+        $size = (array) \getimagesize($fullPath);
 
-        return \getimagesize($fullPath)[1];
+        return $size[1];
     }
 
     /**
@@ -262,9 +263,10 @@ final class FunctionExtension extends AbstractExtension
      */
     public function getImageWidth(string $path): int
     {
-        $fullPath = \realpath($this->webDir . $path);
+        $fullPath = (string) \realpath($this->webDir . $path);
+        $size = (array) \getimagesize($fullPath);
 
-        return \getimagesize($fullPath)[0];
+        return $size[0];
     }
 
     /**

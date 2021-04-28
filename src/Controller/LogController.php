@@ -48,7 +48,7 @@ class LogController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        return $this->render('log/log_card.html.twig', $entries);
+        return $this->render('log/log_card.html.twig', (array) $entries);
     }
 
     /**
@@ -59,8 +59,8 @@ class LogController extends AbstractController
      */
     public function cspViolation(LoggerInterface $logger): Response
     {
-        $data = \file_get_contents('php://input');
-        if ($data = \json_decode($data, true)) {
+        $content = (string) \file_get_contents('php://input');
+        if ($data = \json_decode($content, true)) {
             $context = \array_filter($data['csp-report'], function ($value) {
                 return Utils::isString($value);
             });
@@ -142,7 +142,7 @@ class LogController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        $doc = new LogDocument($this, $entries);
+        $doc = new LogDocument($this, (array) $entries);
 
         return $this->renderExcelDocument($doc);
     }
@@ -161,7 +161,7 @@ class LogController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        $doc = new LogReport($this, $entries);
+        $doc = new LogReport($this, (array) $entries);
 
         return $this->renderPdfDocument($doc);
     }

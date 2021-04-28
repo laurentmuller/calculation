@@ -105,7 +105,7 @@ class UserDocument extends AbstractArrayDocument
             // image
             $path = $this->getImagePath($entity);
             if (!empty($path) && FileUtils::isFile($path)) {
-                [$width, $height] = \getimagesize($path);
+                [$width, $height] = (array) \getimagesize($path);
                 $this->setCellImage($path, "F$row", $width, $height);
             }
 

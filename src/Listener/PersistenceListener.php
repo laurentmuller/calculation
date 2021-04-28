@@ -147,6 +147,7 @@ class PersistenceListener implements EventSubscriber
      */
     private function getEntity(LifecycleEventArgs $args): ?AbstractEntity
     {
+        /** @var AbstractEntity $entity */
         $entity = $args->getObject();
         if (\in_array(\get_class($entity), self::CLASS_NAMES, true)) {
             return $entity;

@@ -28,6 +28,9 @@ class PivotTableFactory
      * The aggregator class name.
      *
      * @var string
+     *
+     * @template T of AbstractAggregator
+     * @psalm-var class-string<T> $aggregatorClass
      */
     private $aggregatorClass;
 
@@ -274,6 +277,9 @@ class PivotTableFactory
      * Sets the aggregator class name.
      *
      * @param string $aggregatorClass the aggregator class name to set
+     *
+     * @template T of AbstractAggregator
+     * @psalm-param class-string<T> $aggregatorClass
      */
     public function setAggregatorClass(string $aggregatorClass): self
     {
@@ -393,6 +399,9 @@ class PivotTableFactory
      */
     private function createAggregator($value = null): AbstractAggregator
     {
-        return new $this->aggregatorClass($value);
+        /** @psalm-var class-string<AbstractAggregator> $class */
+        $class = $this->aggregatorClass;
+
+        return new $class($value);
     }
 }

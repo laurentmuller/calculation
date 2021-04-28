@@ -516,7 +516,7 @@ class OpenWeatherService extends AbstractHttpClientService
         }
 
         // update
-        $offset = $this->findTimezone($result);
+        $offset = $this->findTimezone((array) $result);
         $timezone = $this->offsetToTimZone($offset);
         $this->updateResult($result, $timezone);
         $this->addUnits($result, $query['units']);

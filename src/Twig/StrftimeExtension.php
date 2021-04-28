@@ -45,7 +45,7 @@ final class StrftimeExtension extends AbstractExtension
      *
      * @see http://www.php.net/manual/en/function.strftime.php
      */
-    public function strftimeFilter(Environment $env, $date, $format = '%c', $timezone = null): string
+    public function strftimeFilter(Environment $env, $date, string $format = '%c', $timezone = null): string
     {
         // convert
         $date = twig_date_converter($env, $date, $timezone);
@@ -58,11 +58,11 @@ final class StrftimeExtension extends AbstractExtension
 
         // windows?
         if ('WIN' === \strtoupper(\substr(\PHP_OS, 0, 3))) {
-            $format = \preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
+            $format = (string) \preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
         }
 
         // format with first character uppercase
-        $string = \ucfirst(\strftime($format, $date->getTimestamp()));
+        $string = \ucfirst((string) \strftime($format, $date->getTimestamp()));
 
         // encode
         return \utf8_encode($string);

@@ -91,7 +91,7 @@ class UserTable extends AbstractEntityTable
             return $this->translator->trans('common.value_none');
         }
 
-        return FormatUtils::formatDateTime($date);
+        return (string) FormatUtils::formatDateTime($date);
     }
 
     /**

@@ -220,7 +220,7 @@ class TestController extends AbstractController
             $data = $form->getData();
             $response = $data['recaptcha'];
             $hostname = $request->server->get('HTTP_HOST');
-            $secret = (string) $this->getParameter('google_recaptcha_secret_key');
+            $secret = \strval($this->getParameter('google_recaptcha_secret_key'));
 
             // verify
             $recaptcha = new ReCaptcha($secret);

@@ -48,24 +48,24 @@ class DataDefinitition
     private $searchFields;
 
     /**
-     * @var string[]
+     * @var string
      */
-    private $sortFields;
+    private $sortField;
 
     /**
      * Constructor.
      *
      * @param Column          $column       the column
-     * @param string|string[] $sortFields   the sort fields
+     * @param string          $sortField    the sort field
      * @param string|string[] $searchFields the search fields
      */
-    public function __construct(Column $column, $sortFields, $searchFields)
+    public function __construct(Column $column, string $sortField, $searchFields)
     {
         $this->name = $column->name;
         $this->orderable = $column->orderable;
         $this->searchable = $column->searchable;
         $this->seachValue = $column->search->value;
-        $this->sortFields = (array) $sortFields;
+        $this->sortField = $sortField;
         $this->searchFields = (array) $searchFields;
     }
 
@@ -101,13 +101,11 @@ class DataDefinitition
     }
 
     /**
-     * Gets the sort fields.
-     *
-     * @return string[]
+     * Gets the sort field.
      */
-    public function getSortFields(): array
+    public function getSortField(): string
     {
-        return $this->sortFields;
+        return $this->sortField;
     }
 
     /**

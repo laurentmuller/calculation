@@ -44,8 +44,6 @@ trait SearchTrait
 
     /**
      * Gets the search terms.
-     *
-     * @return string[]
      */
     abstract protected function getSearchTerms(): array;
 

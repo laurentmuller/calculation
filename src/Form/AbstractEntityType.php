@@ -35,6 +35,7 @@ abstract class AbstractEntityType extends AbstractHelperType
      * Constructor.
      *
      * @param string $className the entity class name
+     * @psalm-param class-string<T> $className
      */
     protected function __construct(string $className)
     {

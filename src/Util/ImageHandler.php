@@ -496,7 +496,7 @@ class ImageHandler implements ImageExtensionInterface
      */
     public function toJpeg($to = null, int $quality = -1): bool
     {
-        return \imagejpeg($this->image, $to, $quality);
+        return (bool) \imagejpeg($this->image, $to, $quality);
     }
 
     /**
@@ -685,7 +685,8 @@ class ImageHandler implements ImageExtensionInterface
      */
     public function ttfSize(float $size, float $angle, string $fontfile, string $text): array
     {
-        if ($box = $this->ttfBox($size, $angle, $fontfile, $text)) {
+        $box = $this->ttfBox($size, $angle, $fontfile, $text);
+        if (\is_array($box)) {
             $values = [$box[0], $box[2], $box[4], $box[6]];
             $width = \max($values) - \min($values);
 

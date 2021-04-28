@@ -113,14 +113,14 @@ class ProductRepository extends AbstractRepository
     /**
      * {@inheritdoc}
      */
-    public function getSortFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         switch ($field) {
             case 'category.id':
             case 'category.code':
-                return parent::getSortFields('code', self::CATEGORY_ALIAS);
+                return parent::getSortField('code', self::CATEGORY_ALIAS);
             default:
-                return parent::getSortFields($field, $alias);
+                return parent::getSortField($field, $alias);
         }
     }
 

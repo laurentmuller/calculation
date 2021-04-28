@@ -52,6 +52,7 @@ abstract class AbstractEntityController extends AbstractController
      * Constructor.
      *
      * @param string $className the entity class name
+     * @psalm-param class-string<T> $className
      */
     public function __construct(string $className)
     {

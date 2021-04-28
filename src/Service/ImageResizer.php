@@ -74,15 +74,15 @@ class ImageResizer implements ImageExtensionInterface
         }
 
         try {
-            [$imageWidth, $imageHeight] = \getimagesize($source);
+            [$imageWidth, $imageHeight] = (array) \getimagesize($source);
             $ratio = $imageWidth / $imageHeight;
 
             $width = $size;
             $height = $size;
             if ($width / $height > $ratio) {
-                $width = $height * $ratio;
+                $width = (int) ($height * $ratio);
             } else {
-                $height = $width / $ratio;
+                $height = (int) ($width / $ratio);
             }
             $size = new Box($width, $height);
             $options = \array_merge(self::DEFAULT_OPTIONS, $options);

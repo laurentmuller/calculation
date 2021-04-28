@@ -60,7 +60,7 @@ class CalendarService
     public function generate(?int $year = null): Calendar
     {
         // check year
-        $year = DateUtils::completYear($year ?? \date('Y'));
+        $year = DateUtils::completYear($year ?? (int) \date('Y'));
 
         /** @var Calendar $calendar */
         $calendar = new $this->calendarModel();

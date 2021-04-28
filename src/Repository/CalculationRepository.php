@@ -539,7 +539,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * {@inheritdoc}
      */
-    public function getSortFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         switch ($field) {
             case 'overallMargin':
@@ -550,7 +550,7 @@ class CalculationRepository extends AbstractRepository
             case 'state.color':
                 return 's.color';
             default:
-                return parent::getSortFields($field, $alias);
+                return parent::getSortField($field, $alias);
         }
     }
 

@@ -73,9 +73,9 @@ class FileUtils
 
         try {
             if ($useNative) {
-                return false !== \file_put_contents($file, $content);
+                return false !== \file_put_contents((string) $file, $content);
             }
-            self::getFilesystem()->dumpFile($file, $content);
+            self::getFilesystem()->dumpFile((string) $file, $content);
 
             return true;
         } catch (IOException $e) {
@@ -148,8 +148,8 @@ class FileUtils
         }
 
         try {
-            if (self::exists($file)) {
-                self::getFilesystem()->remove($file);
+            if (self::exists((string) $file)) {
+                self::getFilesystem()->remove((string) $file);
 
                 return true;
             }

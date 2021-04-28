@@ -101,7 +101,7 @@ class PhpIniReport extends AbstractReport
     private function convert($var): string
     {
         if (\is_bool($var)) {
-            return \ucfirst(\json_encode($var));
+            return \ucfirst((string) \json_encode($var));
         } else {
             return \htmlspecialchars_decode((string) $var);
         }

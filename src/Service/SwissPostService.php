@@ -258,7 +258,7 @@ class SwissPostService
             }
 
             // check entry
-            $streamName = $archive->getNameIndex(0);
+            $streamName = (string) $archive->getNameIndex(0);
 
             // open entry
             if (false === $stream = $archive->getStream($streamName)) {

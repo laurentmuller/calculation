@@ -95,7 +95,7 @@ class SuspendEventListenerService
         $manager = $this->manager->getEventManager();
 
         foreach ($manager->getListeners() as $listeners) {
-            foreach ($listeners as $listener) {
+            foreach ((array) $listeners as $listener) {
                 if ($listener instanceof DisableListenerInterface) {
                     $listener->setEnabled($enabled);
                 }

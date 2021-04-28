@@ -79,7 +79,7 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
         parent::__construct(null, $cols, $style, $alignment);
 
         $this->path = $path;
-        [$this->width, $this->height] = \getimagesize($path);
+        [$this->width, $this->height] = (array) \getimagesize($path);
         $this->originalWidth = $this->width;
         $this->originalHeight = $this->height;
     }

@@ -100,9 +100,9 @@ class CaptchaImageService
      * @param int  $width  the image width
      * @param int  $height the image height
      *
-     * @return string the image encoded with the base 64
+     * @return string the image encoded with the base 64 or null if the image canot be created
      */
-    public function generateImage(bool $force, int $length = 6, int $width = 150, int $height = 30): string
+    public function generateImage(bool $force, int $length = 6, int $width = 150, int $height = 30): ?string
     {
         // not force and valid?
         if (!$force && $this->validateTimeout() && $this->hasSessionValue(self::KEY_DATA)) {
@@ -117,16 +117,19 @@ class CaptchaImageService
 
         // image
         $image = $this->createImage($text, $width, $height);
+        if ($image instanceof ImageHandler) {
+            // convert image
+            $data = self::IMAGE_PREFIX . $this->encodeImage($image);
 
-        // convert image
-        $data = self::IMAGE_PREFIX . $this->encodeImage($image);
+            // save
+            $this->setSessionValue(self::KEY_TEXT, $text);
+            $this->setSessionValue(self::KEY_DATA, $data);
+            $this->setSessionValue(self::KEY_TIME, \time());
 
-        // save
-        $this->setSessionValue(self::KEY_TEXT, $text);
-        $this->setSessionValue(self::KEY_DATA, $data);
-        $this->setSessionValue(self::KEY_TIME, \time());
+            return $data;
+        }
 
-        return $data;
+        return null;
     }
 
     /**
@@ -239,7 +242,9 @@ class CaptchaImageService
     protected function drawBackground(ImageHandler $image): self
     {
         $color = $image->allocateWhite();
-        $image->fill($color);
+        if (\is_int($color)) {
+            $image->fill($color);
+        }
 
         return $this;
     }
@@ -253,12 +258,14 @@ class CaptchaImageService
      */
     protected function drawLines(ImageHandler $image, int $width, int $height): self
     {
-        $lines = \random_int(3, 7);
         $color = $image->allocate(195, 195, 195);
-        for ($i = 0; $i < $lines; ++$i) {
-            $y1 = \random_int(0, $height);
-            $y2 = \random_int(0, $height);
-            $image->line(0, $y1, $width, $y2, $color);
+        if (\is_int($color)) {
+            $lines = \random_int(3, 7);
+            for ($i = 0; $i < $lines; ++$i) {
+                $y1 = \random_int(0, $height);
+                $y2 = \random_int(0, $height);
+                $image->line(0, $y1, $width, $y2, $color);
+            }
         }
 
         return $this;
@@ -273,12 +280,14 @@ class CaptchaImageService
      */
     protected function drawPoints(ImageHandler $image, int $width, int $height): self
     {
-        $points = \random_int(300, 400);
         $color = $image->allocate(0, 0, 255);
-        for ($i = 0; $i < $points; ++$i) {
-            $x = \random_int(0, $width);
-            $y = \random_int(0, $height);
-            $image->setPixel($x, $y, $color);
+        if (\is_int($color)) {
+            $points = \random_int(300, 400);
+            for ($i = 0; $i < $points; ++$i) {
+                $x = \random_int(0, $width);
+                $y = \random_int(0, $height);
+                $image->setPixel($x, $y, $color);
+            }
         }
 
         return $this;
@@ -297,27 +306,28 @@ class CaptchaImageService
         // font and color
         $font = $this->font;
         $color = $image->allocateBlack();
+        if (\is_int($color)) {
+            // get layout
+            $size = (int) ($height * 0.7);
+            $items = $this->computeText($image, $size, $font, $text);
 
-        // get layout
-        $size = (int) ($height * 0.7);
-        $items = $this->computeText($image, $size, $font, $text);
+            // get position
+            $textHeight = 0;
+            $textWidth = -self::CHAR_SPACE;
+            foreach ($items as $item) {
+                $textWidth += $item['width'] + self::CHAR_SPACE;
+                $textHeight = \max($textHeight, $item['height']);
+            }
+            $x = \intdiv($width - $textWidth, 2);
+            $y = \intdiv($height - $textHeight, 2) + $size;
 
-        // get position
-        $textHeight = 0;
-        $textWidth = -self::CHAR_SPACE;
-        foreach ($items as $item) {
-            $textWidth += $item['width'] + self::CHAR_SPACE;
-            $textHeight = \max($textHeight, $item['height']);
-        }
-        $x = \intdiv($width - $textWidth, 2);
-        $y = \intdiv($height - $textHeight, 2) + $size;
-
-        //draw
-        foreach ($items as $item) {
-            $char = $item['char'];
-            $angle = $item['angle'];
-            $image->ttfText($size, $angle, $x, $y, $color, $font, $char);
-            $x += $item['width'] + self::CHAR_SPACE;
+            //draw
+            foreach ($items as $item) {
+                $char = $item['char'];
+                $angle = $item['angle'];
+                $image->ttfText($size, $angle, $x, $y, (int) $color, $font, $char);
+                $x += $item['width'] + self::CHAR_SPACE;
+            }
         }
 
         return $this;
@@ -339,7 +349,7 @@ class CaptchaImageService
         \ob_end_clean();
 
         // encode
-        return \base64_encode($buffer);
+        return \base64_encode((string) $buffer);
     }
 
     /**

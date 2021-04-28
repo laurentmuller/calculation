@@ -352,7 +352,7 @@ class HelpReport extends AbstractReport
             return;
         }
 
-        [$width, $height] = \getimagesize($file);
+        [$width, $height] = (array) \getimagesize($file);
         $width = $this->pixels2UserUnit($width);
         $height = $this->pixels2UserUnit($height);
         $width = \min($width, $this->getPrintableWidth());

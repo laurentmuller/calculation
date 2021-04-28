@@ -147,6 +147,7 @@ class BingTranslatorService extends AbstractTranslatorService
         if (!$translations = $this->getPropertyArray($result, 'translations')) {
             return false;
         }
+        /** @var array $translations */
         $translation = $translations[0];
 
         // target
@@ -195,7 +196,7 @@ class BingTranslatorService extends AbstractTranslatorService
 
         // build
         $result = [];
-        foreach ($translation as $key => $value) {
+        foreach ((array) $translation as $key => $value) {
             $result[$value['name']] = $key;
         }
         \ksort($result);
@@ -226,7 +227,9 @@ class BingTranslatorService extends AbstractTranslatorService
     private function createGUID(): string
     {
         if (\function_exists('com_create_guid')) {
-            return \com_create_guid();
+            if ($guid = \com_create_guid()) {
+                return $guid;
+            }
         }
 
         return \sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',

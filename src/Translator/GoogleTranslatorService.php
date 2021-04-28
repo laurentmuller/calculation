@@ -72,11 +72,13 @@ class GoogleTranslatorService extends AbstractTranslatorService
         }
 
         // detections
+
         if (!$detections = $this->getPropertyArray($response, 'detections')) {
             return false;
         }
 
         // entries
+        /** @var array $detections */
         if (!$this->isValidArray($detections[0], 'entries')) {
             return false;
         }
@@ -134,6 +136,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
         if (!$translations = $this->getPropertyArray($response, 'translations')) {
             return false;
         }
+        /** @var array $translations */
         $translation = $translations[0];
 
         // target
@@ -177,7 +180,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
 
         // build
         $result = [];
-        foreach ($languages as $language) {
+        foreach ((array) $languages as $language) {
             $result[$language['name']] = $language['language'];
         }
         \ksort($result);

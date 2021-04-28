@@ -187,7 +187,7 @@ class OpenWeatherController extends AbstractController
 
             // add urls
             $parameters = ['units' => $units];
-            foreach ($response as &$city) {
+            foreach ((array) $response as &$city) {
                 $parameters['latitude'] = $city['latitude'];
                 $parameters['longitude'] = $city['longitude'];
                 $city['onecall_url'] = $generator->generate('openweather_api_onecall', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
@@ -389,6 +389,7 @@ class OpenWeatherController extends AbstractController
             $count = (int) $form->get('count')->getData();
 
             // search
+            /** @var array $cities */
             $cities = $this->service->search($query, $units, $limit);
 
             // get identifers
@@ -403,6 +404,7 @@ class OpenWeatherController extends AbstractController
                     $ids = \array_splice($cityIds, 0, OpenWeatherService::MAX_GROUP);
                     $group = $this->service->group($ids, $units);
                 }
+                /** @var array $group */
                 if ($group) {
                     $cities[$i]['name'] = $group['list'][$i % 20]['name'];
                     $cities[$i]['current'] = $group['list'][$i % 20];
@@ -479,15 +481,15 @@ class OpenWeatherController extends AbstractController
 
     private function getGzContent(UploadedFile $file): ?string
     {
-        $filename = $file->getRealPath();
+        $filename = (string) $file->getRealPath();
 
         // get size
         if (false === $handle = \fopen($filename, 'r')) {
             return null;
         }
         \fseek($handle, -4, \SEEK_END);
-        $buffer = \fread($handle, 4);
-        $unpacked = \unpack('V', $buffer);
+        $buffer = (string) \fread($handle, 4);
+        $unpacked = (array) \unpack('V', $buffer);
         $uncompressedSize = \end($unpacked);
         \fclose($handle);
 
@@ -495,7 +497,7 @@ class OpenWeatherController extends AbstractController
         if (false === $handle = \gzopen($filename, 'rb')) {
             return null;
         }
-        $content = \gzread($handle, $uncompressedSize);
+        $content = (string) \gzread($handle, $uncompressedSize);
         \gzclose($handle);
 
         return $content;

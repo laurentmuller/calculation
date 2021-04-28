@@ -224,7 +224,7 @@ class LogService
         }
 
         if ($entries = $this->readFile()) {
-            return $this->setCachedValues($entries);
+            return $this->setCachedValues((array) $entries);
         }
 
         return false;
@@ -265,7 +265,8 @@ class LogService
      */
     public function getLog(int $id): ?Log
     {
-        if ($entries = $this->getEntries()) {
+        $entries = $this->getEntries();
+        if (\is_array($entries)) {
             return $entries[self::KEY_LOGS][$id] ?? null;
         }
 

@@ -71,6 +71,9 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      *
      * @param string $className the class name to get constants for
      * @param array  $values    the array to update
+     *
+     * @template T
+     * @psalm-param class-string<T> $className
      */
     private function addConstants(string $className, array &$values): void
     {

@@ -96,10 +96,8 @@ class Theme implements \JsonSerializable
 
     /**
      * Gets the style sheet path.
-     *
-     * @return string
      */
-    public function getCss(): ?string
+    public function getCss(): string
     {
         return $this->css;
     }
@@ -116,10 +114,8 @@ class Theme implements \JsonSerializable
 
     /**
      * Gets the name.
-     *
-     * @return string
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

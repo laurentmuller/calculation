@@ -598,6 +598,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
         // class
         if ($this->className) {
+            /** @var string[] $classNames */
             $classNames = \preg_split('/\s+/m', $this->className);
             foreach ($classNames as $class) {
                 switch ($class) {

@@ -45,9 +45,11 @@ class CommentController extends AbstractController
      */
     public function invoke(Request $request, MailerInterface $mailer, LoggerInterface $logger): Response
     {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
         $comment = new Comment(false);
         $comment->setSubject($this->getApplicationName())
-            ->setFromUser($this->getUser())
+            ->setFromUser($user)
             ->setToAddress($this->getAddressFrom());
 
         // create and handle request

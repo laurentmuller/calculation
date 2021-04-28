@@ -96,6 +96,7 @@ class DataColumnFactory
         // map
         return \array_map(function (array $definition) use ($parent, $accessor): DataColumn {
             $column = self::instance();
+            /** @var string $key */
             foreach ($definition as $key => $value) {
                 // special case for the formatter
                 if ('formatter' === $key) {

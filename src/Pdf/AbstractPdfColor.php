@@ -246,9 +246,9 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
                 return [$r, $g, $b];
 
             case 3: // FAC -> FFAACC
-                $r = \hexdec(\str_repeat(\substr($value, 0, 1), 2));
-                $g = \hexdec(\str_repeat(\substr($value, 1, 1), 2));
-                $b = \hexdec(\str_repeat(\substr($value, 2, 1), 2));
+                $r = (int) \hexdec(\str_repeat(\substr($value, 0, 1), 2));
+                $g = (int) \hexdec(\str_repeat(\substr($value, 1, 1), 2));
+                $b = (int) \hexdec(\str_repeat(\substr($value, 2, 1), 2));
 
                 return [$r, $g, $b];
 

@@ -293,14 +293,15 @@ final class Utils
         if (!\is_string($key) && !\is_int($key) && !\is_callable($key)) { // && !\is_float($key)
             \trigger_error('groupBy(): The key should be a string, an integer or a function', \E_USER_ERROR);
         }
-        $isFunction = \is_callable($key);
+
+        $callable = \is_callable($key) ? $key : null;
 
         // load the new array, splitting by the target key
         $grouped = [];
         foreach ($array as $value) {
             $groupKey = null;
-            if ($isFunction) {
-                $groupKey = $key($value);
+            if ($callable) {
+                $groupKey = $callable($value);
             } elseif (\is_object($value)) {
                 $groupKey = $value->{$key};
             } else {

@@ -103,10 +103,9 @@ class ThemeController extends AbstractController
     private function updateCookie(Response $response, string $name, ?string $value, int $days = 30): self
     {
         $headers = $response->headers;
-        $path = (string) $this->getParameter('cookie_path');
-
+        $path = \strval($this->getParameter('cookie_path'));
         if (Utils::isString($value)) {
-            $time = \strtotime("now + {$days} day");
+            $time = (int) \strtotime("now + {$days} day");
             $secure = (bool) $this->getParameter('cookie_secure');
             $cookie = new Cookie($name, $value, $time, $path, null, $secure, true, true);
             $headers->setCookie($cookie);

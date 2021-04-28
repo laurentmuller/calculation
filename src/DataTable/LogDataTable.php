@@ -163,6 +163,7 @@ class LogDataTable extends AbstractDataTable
             return $results;
         }
 
+        /** @var array $entries */
         $logs = $entries[LogService::KEY_LOGS];
         $results->recordsTotal = \count($logs);
 

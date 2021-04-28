@@ -268,7 +268,7 @@ class AjaxController extends AbstractController
         // get values
         $remoteIp = $request->getClientIp();
         $response = $request->get('g-recaptcha-response', $request->get('response'));
-        $secret = (string) $this->getParameter('recaptcha_secret');
+        $secret = \strval($this->getParameter('recaptcha_secret'));
 
         // verify
         $recaptcha = new ReCaptcha($secret);
@@ -455,7 +455,7 @@ class AjaxController extends AbstractController
         $lang['thousands'] = FormatUtils::getGrouping();
 
         // encode
-        $json = \json_encode($lang);
+        $json = (string) \json_encode($lang);
 
         // save
         if (isset($item)) {

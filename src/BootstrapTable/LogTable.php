@@ -117,7 +117,8 @@ class LogTable extends AbstractTable
      */
     public function isEmpty(): bool
     {
-        if (!$entries = $this->service->getEntries()) {
+        $entries = $this->service->getEntries();
+        if (!\is_array($entries)) {
             return true;
         }
 
@@ -156,8 +157,8 @@ class LogTable extends AbstractTable
     {
         $results = new DataResults();
 
-        // get entries
-        if (!$entries = $this->service->getEntries()) {
+        $entries = $this->service->getEntries();
+        if (!\is_array($entries)) {
             $results->status = Response::HTTP_PRECONDITION_FAILED;
 
             return $results;

@@ -261,9 +261,20 @@ abstract class AbstractDatabase extends \SQLite3
      *
      * @return \SQLite3Stmt the statement
      */
-    protected function getStatement(string $query): \SQLite3Stmt
+    protected function getStatement(string $query): ?\SQLite3Stmt
     {
-        return $this->statements[$query] ??= $this->prepare($query);
+        if (!isset($this->statements[$query])) {
+            $statement = $this->prepare($query);
+            if (false !== $statement) {
+                $this->statements[$query] = $statement;
+
+                return $statement;
+            }
+
+            return null;
+        }
+
+        return $this->statements[$query];
     }
 
     /**

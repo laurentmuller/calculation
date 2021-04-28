@@ -105,7 +105,7 @@ class CategoryRepository extends AbstractRepository
      */
     public function getParentCodeSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        $field = $this->getSortFields('code', $alias);
+        $field = $this->getSortField('code', $alias);
 
         return $this->createQueryBuilder($alias)
             ->select($alias)
@@ -157,7 +157,7 @@ class CategoryRepository extends AbstractRepository
      */
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        $field = $this->getSortFields('code', $alias);
+        $field = $this->getSortField('code', $alias);
 
         return $this->createQueryBuilder($alias)
             ->orderBy($field, Criteria::ASC);
@@ -166,14 +166,14 @@ class CategoryRepository extends AbstractRepository
     /**
      * {@inheritdoc}
      */
-    public function getSortFields(string $field, string $alias = self::DEFAULT_ALIAS)
+    public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         switch ($field) {
             case 'group.id':
             case 'group.code':
-                return parent::getSortFields('code', self::GROUP_ALIAS);
+                return parent::getSortField('code', self::GROUP_ALIAS);
             default:
-                return parent::getSortFields($field, $alias);
+                return parent::getSortField($field, $alias);
         }
     }
 }

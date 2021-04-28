@@ -32,9 +32,9 @@ class ReverseReader
     /**
      * The file handler.
      *
-     * @var resource|bool
+     * @var ?resource
      */
-    private $handle = false;
+    private $handle = null;
 
     /**
      * Constructor.
@@ -43,7 +43,10 @@ class ReverseReader
      */
     public function __construct(string $filename)
     {
-        $this->handle = \fopen($filename, 'r');
+        $resource = \fopen($filename, 'r');
+        if (\is_resource($resource)) {
+            $this->handle = $resource;
+        }
     }
 
     /**
@@ -62,9 +65,9 @@ class ReverseReader
     public function close(): bool
     {
         $result = true;
-        if ($this->isOpen()) {
+        if (null !== $this->handle) {
             $result = \fclose($this->handle);
-            $this->handle = false;
+            $this->handle = null;
         }
 
         return $result;
@@ -78,7 +81,7 @@ class ReverseReader
     public function current(): ?string
     {
         // valid?
-        if (!$this->isOpen()) {
+        if (null === $this->handle) {
             return null;
         }
 

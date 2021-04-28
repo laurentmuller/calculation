@@ -115,6 +115,8 @@ trait RightsTrait
 
     /**
      * Sets the rights.
+     *
+     * @psalm-param array<int>|null $rights
      */
     public function setRights(?array $rights): self
     {

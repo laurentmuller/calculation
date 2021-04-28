@@ -83,9 +83,12 @@ final class SymfonyUtils
      */
     public static function daysBeforeExpiration(string $date): string
     {
-        $date = \DateTime::createFromFormat('d/m/Y', '01/' . $date);
+        $datetime = \DateTime::createFromFormat('d/m/Y', '01/' . $date);
+        if (false !== $datetime) {
+            return (new \DateTime())->diff($datetime->modify('last day of this month 23:59:59'))->format('%R%a days');
+        }
 
-        return (new \DateTime())->diff($date->modify('last day of this month 23:59:59'))->format('%R%a days');
+        return '';
     }
 
     /**
@@ -97,9 +100,9 @@ final class SymfonyUtils
      */
     public static function formatExpired(string $date): string
     {
-        $date = \DateTime::createFromFormat('m/Y', $date);
-        if (false !== $date) {
-            return FormatUtils::formatDate($date->modify('last day of this month 23:59:59'));
+        $datetime = \DateTime::createFromFormat('m/Y', $date);
+        if (false !== $datetime) {
+            return (string) FormatUtils::formatDate($datetime->modify('last day of this month 23:59:59'));
         }
 
         return 'Unknown';
@@ -162,10 +165,10 @@ final class SymfonyUtils
     public static function formatPath(string $path, ?string $baseDir = null): string
     {
         $path = \str_replace('\\', '/', $path);
-        if ($baseDir) {
+        if (null !== $baseDir) {
             $baseDir = \str_replace('\\', '/', $baseDir);
 
-            return \preg_replace('~^' . \preg_quote($baseDir, '~') . '~', '.', $path);
+            return (string) \preg_replace('~^' . \preg_quote($baseDir, '~') . '~', '.', $path);
         }
 
         return $path;
@@ -291,9 +294,9 @@ final class SymfonyUtils
         $content = self::getPhpInfoText(\INFO_MODULES);
 
         $content = \strip_tags($content, '<h2><th><td>');
-        $content = \preg_replace('/<th[^>]*>([^<]+)<\/th>/', '<info>\1</info>', $content);
-        $content = \preg_replace('/<td[^>]*>([^<]+)<\/td>/', '<info>\1</info>', $content);
-        $array = \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $content, -1, \PREG_SPLIT_DELIM_CAPTURE);
+        $content = (string) \preg_replace('/<th[^>]*>([^<]+)<\/th>/', '<info>\1</info>', $content);
+        $content = (string) \preg_replace('/<td[^>]*>([^<]+)<\/td>/', '<info>\1</info>', $content);
+        $array = (array) \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $content, -1, \PREG_SPLIT_DELIM_CAPTURE);
 
         $result = [];
         $count = \count($array);
@@ -306,9 +309,9 @@ final class SymfonyUtils
         $directive1 = null;
         $directive2 = null;
         for ($i = 1; $i < $count; ++$i) {
-            if (\preg_match('/<h2[^>]*>([^<]+)<\/h2>/', $array[$i], $matchs)) {
+            if (\preg_match('/<h2[^>]*>([^<]+)<\/h2>/', (string) $array[$i], $matchs)) {
                 $name = \trim($matchs[1]);
-                $vals = \explode("\n", $array[$i + 1]);
+                $vals = \explode("\n", (string) $array[$i + 1]);
                 foreach ($vals as $val) {
                     if (\preg_match($regex3cols, $val, $matchs)) { // 3 columns
                         $match1 = \trim($matchs[1]);
@@ -349,23 +352,23 @@ final class SymfonyUtils
         $info = self::getPhpInfoText();
 
         // extract body
-        $info = \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
+        $info = (string) \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
 
         // remove links
-        $info = \preg_replace('/<a\s(.+?)>(.+?)<\/a>/is', '<p>$2</p>', $info);
+        $info = (string) \preg_replace('/<a\s(.+?)>(.+?)<\/a>/is', '<p>$2</p>', $info);
 
         // remove sensitive informations
-        $info = \preg_replace('/<tr>.*KEY.*<\/tr>/m', '', $info);
-        $info = \preg_replace('/<tr>.*MAILER_DSN.*<\/tr>/m', '', $info);
-        $info = \preg_replace('/<tr>.*DATABASE_URL.*<\/tr>/m', '', $info);
-        $info = \preg_replace('/<tr>.*DATABASE_EDIT.*<\/tr>/m', '', $info);
-        $info = \preg_replace('/<tr>.*PASSWORD.*<\/tr>/m', '', $info);
+        $info = (string) \preg_replace('/<tr>.*KEY.*<\/tr>/m', '', $info);
+        $info = (string) \preg_replace('/<tr>.*MAILER_DSN.*<\/tr>/m', '', $info);
+        $info = (string) \preg_replace('/<tr>.*DATABASE_URL.*<\/tr>/m', '', $info);
+        $info = (string) \preg_replace('/<tr>.*DATABASE_EDIT.*<\/tr>/m', '', $info);
+        $info = (string) \preg_replace('/<tr>.*PASSWORD.*<\/tr>/m', '', $info);
 
         // replace version
-        $info = \str_replace('PHP Version', 'Version', $info);
+        $info = (string) \str_replace('PHP Version', 'Version', $info);
 
         // update table class
-        $info = \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
+        $info = (string) \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
 
         return $info;
     }
@@ -382,7 +385,7 @@ final class SymfonyUtils
     {
         \ob_start();
         \phpinfo($what);
-        $content = \ob_get_contents();
+        $content = (string) \ob_get_contents();
         \ob_end_clean();
 
         return $content;

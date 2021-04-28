@@ -84,7 +84,10 @@ class Property extends AbstractEntity
     {
         $timestamp = $this->getInteger();
         if (self::FALSE_VALUE !== $timestamp) {
-            return \DateTime::createFromFormat('U', (string) $timestamp);
+            $date = \DateTime::createFromFormat('U', (string) $timestamp);
+            if ($date instanceof \DateTime) {
+                return $date;
+            }
         }
 
         return null;
@@ -133,7 +136,7 @@ class Property extends AbstractEntity
      */
     public function setArray(array $value): self
     {
-        return $this->setString(\json_encode($value));
+        return $this->setString((string) \json_encode($value));
     }
 
     /**

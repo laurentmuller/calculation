@@ -93,7 +93,8 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         }
 
         // decode
-        if (false === ($configuration = $this->loadJson($assetFile))) {
+        $configuration = $this->loadJson($assetFile);
+        if (!$configuration instanceof \stdClass) {
             return Command::SUCCESS;
         }
 
@@ -331,7 +332,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
             $output = \stream_get_contents($pipes[2]);
         }
 
-        $output = \str_replace("\r\n", "\n", $output);
+        $output = \str_replace("\r\n", "\n", (string) $output);
         $output = \trim($output);
 
         return [
@@ -361,7 +362,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
             }
 
             $this->writeVeryVerbose("Including {$file}");
-            $content = \file_get_contents($file);
+            $content = (string) \file_get_contents($file);
             $newDir = \dirname($file);
             $content = $this->expandCssImports($content, $file);
             if ($newDir !== $dir) {
@@ -398,7 +399,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
             }
             $this->writeVeryVerbose("Including {$file}");
 
-            return $this->expandJsImports(\file_get_contents($file), $file);
+            return $this->expandJsImports((string) \file_get_contents($file), $file);
         }, $content);
     }
 
@@ -412,8 +413,8 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     private function processCss(SplFileInfo $file, string $source, string $target): void
     {
         // load, expand and compress
-        $path = $file->getRealPath();
-        $content = $this->readFile($path);
+        $path = (string) $file->getRealPath();
+        $content = (string) $this->readFile($path);
         $content = $this->expandCssImports($content, $path);
         $content = $this->compressCss($content, $path);
 
@@ -432,8 +433,8 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     private function processJs(SplFileInfo $file, string $source, string $target): void
     {
         // load, expand and compress
-        $path = $file->getRealPath();
-        $content = $this->readFile($path);
+        $path = (string) $file->getRealPath();
+        $content = (string) $this->readFile($path);
         $content = $this->expandJsImports($content, $path);
         $content = $this->compressJs($content, $path);
 

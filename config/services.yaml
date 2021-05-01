@@ -7,7 +7,7 @@ parameters:
     # fixed
     locale:             fr_CH
     app_name:           Calculation
-    app_version:        1.5.2.6
+    app_version:        1.5.2.7
     app_owner:          bibi.nu
     app_owner_url:      https://www.bibi.nu
     app_owner_city:     Montévraz
@@ -37,7 +37,7 @@ parameters:
 
     google_recaptcha_secret_key: '%env(GOOGLE_RECAPTCHA_SECRET_KEY)%'
     google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
-    
+
     exchange_rate_key: '%env(EXCHANGE_RATE_KEY)%'
 
     #links

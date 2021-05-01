@@ -271,7 +271,6 @@ class BootstrapTableController extends AbstractController
 
         // update query
         $this->updateQuery($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
-        $this->updateQuery($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
 
         try {
             // get query and results
@@ -296,7 +295,6 @@ class BootstrapTableController extends AbstractController
 
             // save results
             $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
-            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
 
             return $response;
         } catch (\Exception $e) {

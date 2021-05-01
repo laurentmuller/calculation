@@ -82,6 +82,7 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     protected function countFiltered(QueryBuilder $builder): int
     {
+        // clone
         $alias = $builder->getRootAliases()[0];
         $field = $this->repository->getSingleIdentifierFieldName();
         $select = "COUNT($alias.$field)";

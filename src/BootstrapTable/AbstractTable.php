@@ -95,7 +95,7 @@ abstract class AbstractTable
 
         // offset, limit and page
         $query->offset = (int) $request->get(TableInterface::PARAM_OFFSET, 0);
-        $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE, false);
+        $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
         // sort and order

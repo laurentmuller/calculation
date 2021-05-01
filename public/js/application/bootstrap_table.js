@@ -4,7 +4,7 @@
 
 /**
  * Formatter for the custom view.
- * 
+ *
  * @param data
  *            the data (rows) to format.
  * @returns the custom view
@@ -12,66 +12,83 @@
 function customViewFormatter(data) { // jshint ignore:line
     'use strict';
     let view = '';
-    const regex = /JavaScript:(\w*)/gm;
+    const $table = $('#table-edit');
+    const regex = /JavaScript:(\w*)/m;
     const $template = $('#custom-view');
-    const rowIndex = $('#table-edit').getSelectionIndex();
-    const rowClass = $('#table-edit').getOptions().rowClass;
-    
+    const rowIndex = $table.getSelectionIndex();
+    const rowClass = $table.getOptions().rowClass;
+
     $.each(data, function (index, row) {
-        // id === row.action ||
+        // update class selection
         $template.find('.custom-item').toggleClass(rowClass, rowIndex === index);
-        let html = $template.html();
-        
+
         // fields
+        let html = $template.html();
         Object.keys(row).forEach(function(key) {
             html = html.replaceAll('%' + key + '%', row[key] || '&#160;');
         });
-        
-        // functions
+
+        // JS functions
         let match;
         while ((match = regex.exec(html)) !== null) {
-            let value = ''; 
+            let value = '';
             const callback = match[1];
             if(typeof window[callback] !== 'undefined' ) {
-                value = window[callback](row) || '';
+                value = window[callback](row) || '&#160;';
             }
             html = html.replaceAll(match[0], value);
         }
 
+        // append
         view += html;
     });
 
-    return '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 m-0">' + view + '</div>';
+    return '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 m-0 mx-n1">' + view + '</div>';
 }
 
 /**
- * Format the product price in the custom view.
- * 
+ * Format the product unit in the custom view.
+ *
  * @param {object}
  *            row - the record data.
- * @returns {string} the formatted product price.
+ * @returns {string} the formatted product unit.
  */
-function formatProductPrice(row, $row) { // jshint ignore:line
+function formatProductUnit(row) { // jshint ignore:line
     'use strict';
     if (row.unit) {
-        return row.price + ' / ' + row.unit;
+        return ' / ' + row.unit;
     }
-    return row.price;
+    return '';
+}
+
+/**
+ * Gets the class of the product price in the custom view.
+ *
+ * @param {object}
+ *            row - the record data.
+ * @returns {string} the class.
+ */
+function formatProductClass(row) { // jshint ignore:line
+    'use strict';
+    const price = Number.parseFloat(row.price, 10);
+    if (!Number.isNaN(price) && price === 0) {
+        return ' text-danger';
+    }
+    return '';
 }
 
 /**
  * Cell style for a border column (calculations, status or log).
- * 
+ *
  * @param {number}
  *            value - the field value.
  * @param {object}
  *            row - the record data.
- * 
  * @returns {object} the cell style.
  */
 function styleBorderColor(value, row) { // jshint ignore:line
     'use strict';
-    if (typeof row.color !== "undefined") {
+    if (typeof row.color !== 'undefined') {
         return {
             css: {
                 'border-left-color': row.color + ' !important'
@@ -82,13 +99,36 @@ function styleBorderColor(value, row) { // jshint ignore:line
 }
 
 /**
+ * Cell class for the product price.
+ *
+ * @param {float}
+ *            value - the product price.
+ * @param {object}
+ *            row - the row record data..
+ * @param {int}
+ *            index - the row index.
+ * @returns {object} the cell classes.
+ */
+function styleProductPrice(value) { // jshint ignore:line
+    'use strict';
+    const price = Number.parseFloat(value, 10);
+    if (!Number.isNaN(price) && price === 0) {
+        return {
+            css: {
+                color: 'var(--danger)'
+            }
+        };
+    }
+    return {};
+}
+
+/**
  * Row classes for the text muted.
- * 
+ *
  * @param {object}
  *            row - the record data.
  * @param {int}
  *            index - the row index.
- * 
  * @returns {object} the row classes.
  */
 function styleTextMuted(row, index) { // jshint ignore:line
@@ -99,14 +139,14 @@ function styleTextMuted(row, index) { // jshint ignore:line
         const classes = $row.attr('class') + ' text-muted';
         return {
             classes: classes.trim()
-        }; 
+        };
     }
     return {};
 }
 
 /**
  * Returns if the current row is rendered for the connected user
- * 
+ *
  * @param $table
  *            {jQuery} the parent table.
  * @param row
@@ -122,7 +162,7 @@ function isConnectedUser($table, row) {
 
 /**
  * Update the user action.
- * 
+ *
  * @param $table
  *            {jQuery} the parent table.
  * @param row
@@ -141,7 +181,7 @@ function updateUserAction($table, row, $element, $action) {
 
 /**
  * Update the switch user action.
- * 
+ *
  * @param $table
  *            {jQuery} the parent table.
  * @param row
@@ -168,7 +208,7 @@ function updateUserSwitchAction($table, row, $element, $action) {
 
 /**
  * Update the search action.
- * 
+ *
  * @param $table
  *            {jQuery} the parent table.
  * @param row
@@ -202,7 +242,7 @@ function updateSearchAction($table, row, $element, $action) {
 
 /**
  * Update the edit calculation action.
- * 
+ *
  * @param $table
  *            {jQuery} the parent table.
  * @param row
@@ -223,7 +263,7 @@ function updateCalculationEditAction($table, row, $element, $action) {
 
 /**
  * Update the export calculation action.
- * 
+ *
  * @param $table
  *            {jQuery} the parent table.
  * @param row
@@ -241,7 +281,7 @@ function updateCalculationPdfAction($table, row, $element, $action) {
 
 /**
  * Update the task compute action.
- * 
+ *
  * @param $table
  *            {jQuery} the parent table.
  * @param row
@@ -262,12 +302,11 @@ function updateTaskComputeAction($table, row, $element, $action) {
 
 /**
  * Formatter for the actions column.
- * 
+ *
  * @param {number}
  *            value - the field value (id).
  * @param {object}
  *            row - the row record data.
- * 
  * @returns {string} the rendered cell.
  */
 function formatActions(value, row) { // jshint ignore:line
@@ -288,7 +327,7 @@ function formatActions(value, row) { // jshint ignore:line
  * jQuery extensions.
  */
 $.fn.extend({
-    
+
     getDataValue: function() {
         'use strict';
         return $(this).data('value') || null;
@@ -299,10 +338,10 @@ $.fn.extend({
         const $this = $(this);
         const $items = $this.next('.dropdown-menu').find('.dropdown-item').removeClass('active');
         if (typeof ignoreText === 'undefined' || ignoreText === null) {
-            ignoreText = false;    
-        }        
+            ignoreText = false;
+        }
         if (typeof ignoreIcon === 'undefined' || ignoreIcon === null) {
-            ignoreIcon = true;    
+            ignoreIcon = true;
         }
         $this.data('value', value);
         if(value) {
@@ -311,8 +350,8 @@ $.fn.extend({
                 const $icon = $selection.find('i');
                 if ($icon.length) {
                     $this.find('i').remove();
-                    $this.prepend($icon.clone());    
-                }                
+                    $this.prepend($icon.clone());
+                }
             }
             if (!ignoreText) {
                 $this.text($selection.text());
@@ -338,10 +377,10 @@ $.fn.extend({
         const $this = $(this);
         const $menu = $this.next('.dropdown-menu');
         if (typeof ignoreText === 'undefined' || ignoreText === null) {
-            ignoreText = false;    
-        }        
+            ignoreText = false;
+        }
         if (typeof ignoreIcon === 'undefined' || ignoreIcon === null) {
-            ignoreIcon = true;    
+            ignoreIcon = true;
         }
         $menu.on('click', '.dropdown-item', function() {
             const $item = $(this);
@@ -360,7 +399,7 @@ $.fn.extend({
 
     /**
      * Gets the context menu items for the selected cell.
-     * 
+     *
      * @return {object} the context menu items.
      */
     getContextMenuItems: function() {
@@ -370,7 +409,7 @@ $.fn.extend({
         if ($this.is('div')) {
             $parent = $this.parents('.custom-item');
         } else {
-            $parent = $this.parents('tr');    
+            $parent = $this.parents('tr');
         }
         const $elements = $parent.find('.dropdown-menu').children();
         const builder = new MenuBuilder();
@@ -383,14 +422,14 @@ $.fn.extend({
  */
 (function($) {
     'use strict';
-    
+
     const $table = $('#table-edit');
     const $viewButton = $('#button_view');
     const $pageButton = $('#button_page');
     const $clearButton = $('#clear_search');
     const $searchMinimum = $('#search_minimum');
     const $inputs = $('.dropdown-toggle.dropdown-input');
-    
+
     // initialize table
     const options = {
         queryParams: function(params) {
@@ -403,11 +442,11 @@ $.fn.extend({
             });
             return params;
         },
-        
+
         onPreBody: function(data) {
             // options
             const options = $table.getOptions();
-            
+
             // update pages list and page button
             if ($pageButton.length) {
                 let pageList = options.pageList;
@@ -437,7 +476,7 @@ $.fn.extend({
                     $pageButton.toggleDisabled(false);
                 }
             }
-            
+
             // update clear search button
             if ($clearButton.length) {
                 let enabled = $table.isSearchText();
@@ -448,10 +487,10 @@ $.fn.extend({
                             return false;
                         }
                     });
-                }    
+                }
                 $clearButton.toggleDisabled(!enabled);
             }
-            
+
             // update UI
             if (data.length === 0) {
                 $('.card-footer').hide();
@@ -460,18 +499,18 @@ $.fn.extend({
                 $('.card-footer').show();
                 $viewButton.toggleDisabled(false);
             }
-            
+
             // update search minimum
             if ($searchMinimum.length) {
                 $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
             }
-            
+
             // update sort
-            $('.btn-group-sort').toggleClass('d-none', $table.getDisplayMode() === 'table');
-            $('.btn-group-sort').find('.dropdown-menu-sort.active').removeClass('active');
-            $('.btn-group-sort').find(".dropdown-menu-sort[data-sort='" + options.sortName + "'][data-order='" + options.sortOrder + "']").addClass('active');
+            $('.dropdown-menu-sort.active').removeClass('active');
+            $('.dropdown-menu-sort[data-sort="' + options.sortName + '"][data-order="' + options.sortOrder + '"]').addClass('active');
         },
 
+        // for debug purpose
         // onAll: function(name) {
         // console.log(name, Array.from(arguments).slice(1));
         // },
@@ -479,41 +518,49 @@ $.fn.extend({
         onPageChange: function() {
             // hide
             if ($table.isCustomView()) {
-                $('.bootstrap-table .fixed-table-custom-view .custom-item').animate({'opacity': '0'}, 200);    
+                $('.bootstrap-table .fixed-table-custom-view .custom-item').animate({'opacity': '0'}, 200);
             }
         },
-        
-        onRenderCustomView: function ($table, row, $item, params) {
+
+        onRenderCustomView: function ($table, row, $item) {
             // update border color
-            if (typeof row.color !== "undefined") {
+            if (typeof row.color !== 'undefined') {
                 const style = 'border-left-color: ' + row.color + ' !important';
                 $item.attr('style', style);
             }
-            
+
             // text-muted
-            if (typeof row.textMuted !== "undefined") {
+            if (typeof row.textMuted !== 'undefined') {
                 const value = Number.parseInt(row.textMuted, 10);
                 if (!Number.isNaN(value) && value === 0) {
-                    $item.addClass('text-muted');    
+                    $item.addClass('text-muted');
                 }
             }
-            
+
+            // update link
+            const $link = $item.find('a.item-link');
+            const $button = $item.find('a.btn-default');
+            if ($link.length && $button.length) {
+                 $link.attr('href', $button.attr('href'));
+                 $link.attr('title', $button.text());
+            }
+
             // update links
-            $item.find('a.item-link').each(function() {
-                $(this).updateLink(row, params);
-            });
+            // $item.find('a.item-link').each(function() {
+            // $(this).updateLink(row, params);
+            // });
         },
-        
+
         onRenderCardView: function($table, row, $item) {
             // border color
-            if (typeof row.color !== "undefined") {
+            if (typeof row.color !== 'undefined') {
                 const $cell = $item.find('td:first');
                 const style = 'border-left-color: ' + row.color + ' !important';
                 $cell.addClass('text-border').attr('style', style);
             }
-            
+
             // text-muted
-            if (typeof row.textMuted !== "undefined") {
+            if (typeof row.textMuted !== 'undefined') {
                 const value = Number.parseInt(row.textMuted, 10);
                 if (!Number.isNaN(value) && value === 0) {
                     $item.find('.card-view-value.font-weight-bold').addClass('text-body');
@@ -536,7 +583,7 @@ $.fn.extend({
                 updateTaskComputeAction($table, row, $element, $action);
             }
         },
-        
+
         onUpdateHref: function($table, $actions) {
             if($actions.length === 1) {
                 $actions.addClass('btn-default');
@@ -547,7 +594,7 @@ $.fn.extend({
         onLoadError: function(status, jqXHR) {
             const title = $('.card-title').text();
             const message = jqXHR.responseJSON.message || $table.data('errorMessage');
-            Toaster.danger(message, title, $("#flashbags").data());
+            Toaster.danger(message, title, $('#flashbags').data());
         }
     };
     $table.initBootstrapTable(options);
@@ -558,11 +605,11 @@ $.fn.extend({
         $table.on('update-row.bs.table', function() {
             const $source =  $table.findAction('.btn-add');
             if ($source) {
-                $addButton.attr('href', $source.attr('href'));    
+                $addButton.attr('href', $source.attr('href'));
             }
         });
     }
-    
+
     // handle drop-down input buttons
     $inputs.each(function() {
         $(this).initDropdown().on('input', function() {
@@ -587,7 +634,7 @@ $.fn.extend({
             $('input.search-input').focus();
         });
     }
-    
+
     // handle the page button
     if ($pageButton.length) {
         $pageButton.initDropdown().on('input', function() {
@@ -603,7 +650,7 @@ $.fn.extend({
         const view = $(this).getDataValue();
         $table.setDisplayMode(view);
     });
-    
+
     // handle sort buttons
     $('.dropdown-menu-sort').on('click', function() {
         const $this = $(this);
@@ -614,20 +661,20 @@ $.fn.extend({
             data.options.sortName = sortName;
             data.options.sortOrder = sortOrder;
             $table.refresh();
-        }        
+        }
     });
     $('.btn-group-sort').on('shown.bs.dropdown', function() {
         $(this).find('.dropdown-menu-sort.active').focus();
     });
-    
+
     // handle keys enablement
     $('body').on('focus', 'a, input, .btn, .dropdown-item, .rowlink-skip', function() {
         $table.disableKeys();
-    });    
+    });
     $('body').on('blur', 'a, input, .btn, .dropdown-item, .rowlink-skip', function() {
         $table.enableKeys();
     });
-    
+
     // initialize context menu
     const ctxSelector =  'tr.table-primary td:not(.rowlink-skip), .custom-item.table-primary div:not(.rowlink-skip)';
     const show = function() {

@@ -22,7 +22,7 @@ interface TableInterface
     /**
      * The allowed page sizes.
      */
-    public const PAGE_LIST = [5, 10, 15, 20, 25, 50];
+    public const PAGE_LIST = [5, 10, 15, 20, 25, 30, 50];
 
     /**
      * The default page size.

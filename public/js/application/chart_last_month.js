@@ -2,7 +2,7 @@
 
 /**
  * Handles the months input change.
- * 
+ *
  * @param {jQuery}
  *            $months - the months element to get value from.
  */

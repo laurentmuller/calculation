@@ -35,9 +35,9 @@
 {%- endblock %}
 
 {% block custom_view_header -%}
-<span>%entityName% - %fieldName%</span>
+<a href="#" class="item-link text-body">%entityName%</a>
 {%- endblock %}
 
 {% block custom_view_body -%}
-{{ _self.property_value('%content%') }}
+{{ _self.property_both('%fieldName%', '%content%', '', 'text-truncate') }}
 {%- endblock %}

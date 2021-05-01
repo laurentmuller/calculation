@@ -385,18 +385,9 @@ abstract class AbstractTable
      */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
-        // callback?
-        if ($query->callback) {
-            return;
-        }
-
         // page list and limit
         $results->pageList = $this->getAllowedPageList($results->totalNotFiltered);
         $limit = (int) \min($query->limit, \max($results->pageList));
-
-        // results
-        $results->columns = $this->getColumns();
-        $results->limit = $limit;
 
         // parameters
         $results->params = \array_merge([
@@ -408,6 +399,14 @@ abstract class AbstractTable
             TableInterface::PARAM_VIEW => $query->view,
             TableInterface::PARAM_LIMIT => $limit,
         ], $results->params);
+
+        // callback?
+        if ($query->callback) {
+            return;
+        }
+
+        // columns
+        $results->columns = $this->getColumns();
 
         // attributes
         $results->attributes = \array_merge([

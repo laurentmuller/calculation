@@ -412,6 +412,7 @@ user:
     change_password:
         title: Modifier le mot de passe
         change_success: Le mot de passe de l'utilisateur <b>%name%</b> a été modifié avec succès.
+        check_password: Tester si le mot de passe est compromis
     password:
         label: Mot de passe
         current: Mot de passe actuel

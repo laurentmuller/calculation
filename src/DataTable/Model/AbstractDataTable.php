@@ -46,22 +46,27 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
     /**
      * The order column parameter name.
      */
-    private const PARAM_ORDER_COLUMN = 'ordercolumn';
+    public const PARAM_ORDER_COLUMN = 'ordercolumn';
 
     /**
      * The order direction parameter name.
      */
-    private const PARAM_ORDER_DIR = 'orderdir';
+    public const PARAM_ORDER_DIR = 'orderdir';
 
     /**
      * The page index parameter name.
      */
-    private const PARAM_PAGE_INDEX = 'page';
+    public const PARAM_PAGE_INDEX = 'page';
 
     /**
      * The page length parameter name.
      */
-    private const PARAM_PAGE_LENGTH = 'pagelength';
+    public const PARAM_PAGE_LENGTH = 'pagelength';
+
+    /**
+     * The query parameter name.
+     */
+    public const PARAM_QUERY = 'query';
 
     /**
      * The columns search parameter name.

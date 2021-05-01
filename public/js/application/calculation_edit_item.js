@@ -18,10 +18,9 @@ EditItemDialog.prototype = {
 
     /**
      * Display the add item dialog.
-     * 
+     *
      * @param {jQuery}
      *            $row - the selected row.
-     * 
      * @return {EditItemDialog} - the selected row.
      */
     showAdd: function ($row) {
@@ -52,13 +51,11 @@ EditItemDialog.prototype = {
     },
 
     /**
-     * Display the edit item dialog.
-     * 
-     * This function copy the element to the dialog and display it.
-     * 
+     * Display the edit item dialog. This function copy the element to the
+     * dialog and display it.
+     *
      * @param {jQuery}
      *            $row - the selected row.
-     * 
      * @return {EditItemDialog} This instance for chaining.
      */
     showEdit: function ($row) {
@@ -87,7 +84,7 @@ EditItemDialog.prototype = {
 
     /**
      * Hide the dialog.
-     * 
+     *
      * @return {EditItemDialog} This instance for chaining.
      */
     hide: function () {
@@ -98,7 +95,7 @@ EditItemDialog.prototype = {
 
     /**
      * Gets the selected group.
-     * 
+     *
      * @returns {Object} the group.
      */
     getGroup: function () {
@@ -112,7 +109,7 @@ EditItemDialog.prototype = {
 
     /**
      * Gets the selected category.
-     * 
+     *
      * @returns {Object} the category.
      */
     getCategory: function () {
@@ -126,7 +123,7 @@ EditItemDialog.prototype = {
 
     /**
      * Gets the selected item.
-     * 
+     *
      * @returns {Object} the item.
      */
     getItem: function () {
@@ -146,7 +143,7 @@ EditItemDialog.prototype = {
 
     /**
      * Gets the editing row.
-     * 
+     *
      * @return {JQuery} the row or null if none.
      */
     getEditingRow: function () {
@@ -156,7 +153,7 @@ EditItemDialog.prototype = {
 
     /**
      * Initialize.
-     * 
+     *
      * @return {EditItemDialog} This instance for chaining.
      */
     _init: function () {
@@ -277,7 +274,7 @@ EditItemDialog.prototype = {
 
     /**
      * Format a value with 2 fixed decimals and grouping separator.
-     * 
+     *
      * @param {Number}
      *            value - the value to format.
      * @returns {string} - the formatted value.
@@ -287,3 +284,4 @@ EditItemDialog.prototype = {
         return this.application.formatValue(value);
     }
 };
+

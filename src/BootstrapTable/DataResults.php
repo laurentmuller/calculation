@@ -151,6 +151,32 @@ class DataResults implements \JsonSerializable
     }
 
     /**
+     * Gets a custom data value for the given name.
+     *
+     * @param string $name    the custom data name to get value for
+     * @param mixed  $default the default value to return if the custom data is nof found
+     *
+     * @return mixed|null the custom data value, if found; the default value otherwise
+     */
+    public function getCustomData(string $name, $default = null)
+    {
+        return $this->customData[$name] ?? $default;
+    }
+
+    /**
+     * Gets a parameter value for the given name.
+     *
+     * @param string     $name    the parameter name to get value for
+     * @param mixed|null $default the default value to return if the parameter is nof found
+     *
+     * @return mixed the parameter value, if found; the default value otherwise
+     */
+    public function getParams(string $name, $default = null)
+    {
+        return $this->params[$name] ?? $default;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function jsonSerialize()

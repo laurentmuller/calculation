@@ -13,11 +13,10 @@ parameters:
         repositoryClass: App\Repository\AbstractRepository
 
     # symfony:
-    #    container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
+    # container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
 
     # Level 6
     checkMissingIterableValueType: false
-    # checkGenericClassInNonGenericObjectType: false
     
     # PHP 7.4
     checkUninitializedProperties: true

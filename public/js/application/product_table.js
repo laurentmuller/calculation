@@ -8,7 +8,7 @@
 $.fn.extend({
     /**
      * Update the category selection.
-     * 
+     *
      * @return {jQuery} The jQuery element for chaining.
      */
     updateCategory: function () {
@@ -19,7 +19,7 @@ $.fn.extend({
             const id = $this.data('id');
             $('#category').val(id);
             if (id) {
-                $('#button-category').text($this.text());    
+                $('#button-category').text($this.text());
             } else {
                 $('#button-category').text($('#button-category').data('default'));
             }

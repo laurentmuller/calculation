@@ -44,13 +44,10 @@ class CalculationDocument extends AbstractArrayDocument
         ]);
 
         // formats
-        $minMargin = $this->getMinMargin();
-        $percentage = $this->getPercentFormat();
-        $format = "[Red][<$minMargin]$percentage;$percentage";
         $this->setFormatId(1)
             ->setFormatDate(2)
             ->setFormatAmount(6)
-            ->setFormat(7, $format)
+            ->setFormat(7, $this->getMarginFormat())
             ->setFormatAmount(8);
 
         // rows
@@ -75,10 +72,13 @@ class CalculationDocument extends AbstractArrayDocument
     }
 
     /**
-     * Gets the minimum margin.
+     * Gets the overall margin format.
      */
-    private function getMinMargin(): float
+    private function getMarginFormat(): string
     {
-        return $this->controller->getApplication()->getMinMargin();
+        $minMargin = $this->controller->getApplication()->getMinMargin();
+        $format = $this->getPercentFormat();
+
+        return "[Red][<$minMargin]$format;$format";
     }
 }

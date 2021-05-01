@@ -21,6 +21,7 @@ use App\BootstrapTable\CalculationStateTable;
 use App\BootstrapTable\CalculationTable;
 use App\BootstrapTable\CategoryTable;
 use App\BootstrapTable\CustomerTable;
+use App\BootstrapTable\DataResults;
 use App\BootstrapTable\GlobalMarginTable;
 use App\BootstrapTable\GroupTable;
 use App\BootstrapTable\LogTable;
@@ -34,6 +35,7 @@ use App\Repository\CategoryRepository;
 use App\Traits\MathTrait;
 use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -267,6 +269,10 @@ class BootstrapTableController extends AbstractController
             $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $name);
         }
 
+        // update query
+        $this->updateQuery($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+        $this->updateQuery($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
+
         try {
             // get query and results
             $query = $table->getDataQuery($request);
@@ -274,18 +280,25 @@ class BootstrapTableController extends AbstractController
 
             // callback?
             if ($query->callback) {
-                return new JsonResponse($results);
+                $response = new JsonResponse($results);
+            } else {
+                // empty?
+                if (0 === $results->totalNotFiltered && !$table->isEmptyAllowed()) {
+                    $message = $table->getEmptyMessage() ?? 'list.empty_list';
+                    $this->infoTrans($message);
+
+                    return $this->redirectToHomePage();
+                }
+
+                // generate
+                $response = $this->render($template, (array) $results);
             }
 
-            // empty?
-            if (0 === $results->totalNotFiltered && !$table->isEmptyAllowed()) {
-                $message = $table->getEmptyMessage() ?? 'list.empty_list';
-                $this->infoTrans($message);
+            // save results
+            $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
 
-                return $this->redirectToHomePage();
-            }
-
-            return $this->render($template, (array) $results);
+            return $response;
         } catch (\Exception $e) {
             $status = Response::HTTP_BAD_REQUEST;
             $parameters = [
@@ -301,6 +314,36 @@ class BootstrapTableController extends AbstractController
             }
 
             return $this->render('bundles/TwigBundle/Exception/error.html.twig', $parameters);
+        }
+    }
+
+    /**
+     * @param mixed|null $default the default value if the input key does not exist
+     */
+    private function saveCookie(Response $response, DataResults $results, string $key, $default): void
+    {
+        $name = \strtoupper($key);
+        $value = $results->getParams($key, $default);
+        if ($value) {
+            $expire = (new \DateTime())->modify('+1 year');
+            $cookie = new Cookie($name, (string) $value, $expire);
+            $response->headers->setCookie($cookie);
+        } else {
+            $response->headers->clearCookie($name);
+        }
+    }
+
+    /**
+     * @param mixed|null $default the default value if the input key does not exist
+     */
+    private function updateQuery(Request $request, string $key, $default = null): void
+    {
+        $value = $request->get($key);
+        if (null === $value) {
+            $value = $request->cookies->get(\strtoupper($key), null === $default ? null : (string) $default);
+            if (null !== $value) {
+                $request->query->set($key, $value);
+            }
         }
     }
 }

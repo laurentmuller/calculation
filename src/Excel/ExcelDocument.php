@@ -90,6 +90,14 @@ class ExcelDocument extends Spreadsheet
     }
 
     /**
+     * Gets the amount format.
+     */
+    public function getAmountFormat(): string
+    {
+        return NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1;
+    }
+
+    /**
      * Gets the page setup of the active sheet.
      */
     public function getPageSetup(): PageSetup
@@ -364,7 +372,7 @@ class ExcelDocument extends Spreadsheet
      */
     public function setFormatAmount(int $columnIndex): self
     {
-        return $this->setFormat($columnIndex, NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+        return $this->setFormat($columnIndex, $this->getAmountFormat());
     }
 
     /**
@@ -442,9 +450,7 @@ class ExcelDocument extends Spreadsheet
      */
     public function setFormatPercent(int $columnIndex, bool $decimals = false): self
     {
-        $format = $this->getPercentFormat($decimals);
-
-        return $this->setFormat($columnIndex, $format);
+        return $this->setFormat($columnIndex, $this->getPercentFormat($decimals));
     }
 
     /**

@@ -62,5 +62,5 @@
 {{ _self.property_value('%category.code%') }}
 {{ _self.property_value('%supplier%') }}
 {{ _self.property_line() }}
-{{ _self.property_row('product.fields.price', 'JavaScript:formatProductPrice', 'text-right') }}
+{{ _self.property_row('product.fields.price', '<span class="JavaScript:formatProductClass">%price%</span>JavaScript:formatProductUnit', 'text-right') }}
 {%- endblock %}

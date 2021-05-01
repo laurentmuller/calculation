@@ -332,7 +332,7 @@ span.state-color {
     padding-bottom: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;    
+    overflow: hidden;
 }
 /*
 .card-flex td.data-search {
@@ -340,17 +340,17 @@ span.state-color {
     white-space: normal;
 }
 */
-@media ( min-width : 768px) {
+@media (min-width : 768px) {
     .card-flex {
         max-width: 48.7%;
     }
 }
-@media ( min-width : 992px) {
+@media (min-width : 992px) {
     .card-flex {
         max-width: 32.3%;
     }
 }
-@media ( min-width : 1200px) {
+@media (min-width : 1200px) {
     .card-flex {
         max-width: 32.55%;
     }
@@ -367,17 +367,17 @@ span.state-color {
     word-break: break-word;
     white-space: normal;
 }
-@media ( min-width : 0px) {
+@media (min-width : 0px) {
     .card-last {
         flex: 1 0 calc(100% - 30px);
     }
 }
-@media ( min-width : 768px) {
+@media (min-width : 768px) {
     .card-last {
         flex: 1 0 calc(50% - 30px);
     }
 }
-@media ( min-width : 992px) {
+@media (min-width : 992px) {
     .card-last {
         flex: 1 0 calc(33.33333333333333% - 30px);
     }
@@ -649,7 +649,7 @@ span.color-value {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    flex: 1 1 auto;    
+    flex: 1 1 auto;
 }
 
 /**

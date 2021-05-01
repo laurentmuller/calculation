@@ -12,7 +12,14 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\BootstrapTable\AbstractCategoryItemTable;
+use App\BootstrapTable\CalculationTable;
+use App\BootstrapTable\CategoryTable;
+use App\BootstrapTable\LogTable;
+use App\BootstrapTable\SearchTable;
 use App\Controller\AbstractController;
+use App\DataTable\Model\AbstractDataTable;
+use App\Interfaces\TableInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -25,33 +32,42 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class UrlGeneratorService
 {
     /**
+     * The caller parameter name.
+     */
+    public const PARAM_CALLER = 'caller';
+
+    /**
      * The parameter names.
      */
     private const PARAMETER_NAMES = [
-        'id',
-        'caller',
+        // global
+        self::PARAM_CALLER,
 
-        'query', // datatables
-        'page',
-        'pagelength',
-        'ordercolumn',
-        'orderdir',
+        // datatables
+        AbstractDataTable::PARAM_QUERY,
+        AbstractDataTable::PARAM_PAGE_INDEX,
+        AbstractDataTable::PARAM_PAGE_LENGTH,
+        AbstractDataTable::PARAM_ORDER_COLUMN,
+        AbstractDataTable::PARAM_ORDER_DIR,
 
-        'search', // bootstrap-table
-        'sort',
-        'order',
-        'offset',
-        'limit',
-        'view',
+        // bootstrap-table
+        TableInterface::PARAM_ID,
+        TableInterface::PARAM_SEARCH,
+        TableInterface::PARAM_SORT,
+        TableInterface::PARAM_ORDER,
+        TableInterface::PARAM_OFFSET,
+        TableInterface::PARAM_VIEW,
+        TableInterface::PARAM_LIMIT,
 
-        'groupId', // bootstrap-table group
-        'categoryId', // bootstrap-table product
-        'stateId', // bootstrap-table calculation
-        'channel', // bootstrap-table log
-        'level',
-        'entity', // bootstrap-table search
+        LogTable::PARAM_LEVEL,
+        LogTable::PARAM_CHANNEL,
 
-        'type', // seach page
+        CategoryTable::PARAM_GROUP,
+        CalculationTable::PARAM_STATE,
+        AbstractCategoryItemTable::PARAM_CATEGORY,
+
+        SearchTable::PARAM_TYPE,
+        SearchTable::PARAM_ENTITY,
     ];
 
     private UrlGeneratorInterface $generator;
@@ -81,9 +97,9 @@ class UrlGeneratorService
         $params = $this->routeParams($request, $id);
 
         // caller?
-        if (isset($params['caller']) && !empty($params['caller'])) {
-            $caller = $params['caller'];
-            unset($params['caller']);
+        if (isset($params[self::PARAM_CALLER]) && !empty($params[self::PARAM_CALLER])) {
+            $caller = $params[self::PARAM_CALLER];
+            unset($params[self::PARAM_CALLER]);
 
             $caller .= (false === \strpos($caller, '?')) ? '?' : '&';
             $caller .= \http_build_query($params);

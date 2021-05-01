@@ -33,6 +33,16 @@ class SearchTable extends AbstractTable
     use TranslatorTrait;
 
     /**
+     * The entity parameter name.
+     */
+    public const PARAM_ENTITY = 'entity';
+
+    /**
+     * The type parameter name.
+     */
+    public const PARAM_TYPE = 'type';
+
+    /**
      * The action column name.
      */
     private const COLUMN_ACTION = 'action';
@@ -66,11 +76,6 @@ class SearchTable extends AbstractTable
      * The show granted column name.
      */
     private const COLUMN_GRANTED_SHOW = 'showGranted';
-
-    /**
-     * The entity parameter name.
-     */
-    private const PARAM_ENTITY = 'entity';
 
     /**
      * The default sort columns order.

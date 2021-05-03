@@ -1,0 +1,72 @@
+/**! compression tag for ftp-deployment */
+
+/**
+ * Toast plugin
+ */
+.toast-plugin {
+    position: fixed;
+}
+
+.toast-plugin.top-left {
+    top: 0;
+    left: 0;
+}
+
+.toast-plugin.top-center {
+    top: 0;
+    left: 50%;
+}
+
+.toast-plugin.top-right {
+    top: 0;
+    right: 0;
+}
+
+.toast-plugin.center-left {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.toast-plugin.center-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.toast-plugin.center-right {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+.toast-plugin.bottom-left {
+    bottom: 0;
+    left: 0;
+}
+
+.toast-plugin.bottom-center {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.toast-plugin.bottom-right {
+    bottom: 0;
+    right: 0;
+}
+
+@media only screen and (max-width: 576px) {
+    .toast-plugin.top-left,
+    .toast-plugin.center-left,
+    .toast-plugin.bottom-left,
+    .toast-plugin.top-right,
+    .toast-plugin.center-right,
+    .toast-plugin.bottom-right {
+        left: 0 !important;
+        right: 0 !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        max-width: fit-content !important;
+    }
+}

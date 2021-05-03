@@ -17,7 +17,7 @@
 
         /**
          * Display a toast.
-         * 
+         *
          * @param {string}
          *            type - The type.
          * @param {string}
@@ -82,7 +82,7 @@
 
         /**
          * Display a toast with info style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -97,7 +97,7 @@
 
         /**
          * Display a toast with success style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -112,7 +112,7 @@
 
         /**
          * Display a toast with warning style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -127,7 +127,7 @@
 
         /**
          * Display a toast with danger style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -142,7 +142,7 @@
 
         /**
          * Display a toast with primary style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -157,7 +157,7 @@
 
         /**
          * Display a toast with secondary style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -172,7 +172,7 @@
 
         /**
          * Display a toast with dark style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -187,7 +187,7 @@
 
         /**
          * Remove this toasts DIV container.
-         * 
+         *
          * @returns {jQuery} this instance.
          */
         removeContainer: function () {
@@ -250,7 +250,7 @@
 
             // the container margins
             marginTop: 20,
-            marginBottom: 10,
+            marginBottom: 20,
             marginLeft: 20,
             marginRight: 20,
 
@@ -284,10 +284,9 @@
 
         /**
          * Check the notification type.
-         * 
+         *
          * @param {string}
          *            type - The type to valdiate.
-         * 
          * @returns {string} A valid type.
          */
         checkType: function (type) {
@@ -308,10 +307,9 @@
 
         /**
          * Check the position type.
-         * 
+         *
          * @param {string}
          *            position - The position to valdiate.
-         * 
          * @returns {string} A valid position.
          */
         checkPosition: function (position) {
@@ -336,10 +334,9 @@
         /**
          * Returns if toast must be prepend or append to the list; depending of
          * the position.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
-         * 
          * @returns {boolean} true to prepend, false to append.
          */
         isPrepend: function (options) {
@@ -359,10 +356,9 @@
 
         /**
          * Returns the given value with the appended pixel (px) unit.
-         * 
+         *
          * @param {int}
          *            value - The value to append unit to.
-         * 
          * @return {string} The value within the pixel unit.
          */
         toPixel: function (value) {
@@ -371,10 +367,9 @@
 
         /**
          * Gets or creates the toasts container div.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
-         * 
          * @returns {jQuery} The toasts container.
          */
         getContainer: function (options) {
@@ -387,87 +382,65 @@
 
             // global style
             const css = {
-                'position': 'fixed',
                 'z-index': options.zindex
             };
 
-            // position
+            // margins
             const positions = this.NotificationPositions;
             switch (options.position) {
             case positions.TOP_LEFT:
-                css.top = 0;
-                css.left = 0;
                 css['margin-top'] = this.toPixel(options.marginTop);
                 css['margin-left'] = this.toPixel(options.marginLeft);
                 break;
             case positions.TOP_CENTER:
-                css.top = 0;
-                css.left = '50%';
                 css['margin-top'] = this.toPixel(options.marginTop);
-                css.transform = 'translateX(-50%)';
                 break;
             case positions.TOP_RIGHT:
-                css.top = 0;
-                css.right = 0;
                 css['margin-top'] = this.toPixel(options.marginTop);
                 css['margin-right'] = this.toPixel(options.marginRight);
                 break;
 
             case positions.CENTER_LEFT:
-                css.top = '50%';
-                css.left = 0;
-                css.transform = 'translateY(-50%)';
                 css['margin-left'] = this.toPixel(options.marginLeft);
                 break;
-            case positions.CENTER_CENTER:
-                css.top = '50%';
-                css.left = '50%';
-                css.transform = 'translate(-50%,-50%)';
-                break;
+            // case positions.CENTER_CENTER:
+            //    break;
             case positions.CENTER_RIGHT:
-                css.top = '50%';
-                css.right = 0;
-                css.transform = 'translateY(-50%)';
                 css['margin-right'] = this.toPixel(options.marginRight);
                 break;
 
             case positions.BOTTOM_LEFT:
-                css.bottom = 0;
-                css.left = 0;
                 css['margin-bottom'] = this.toPixel(options.marginBottom);
                 css['margin-left'] = this.toPixel(options.marginLeft);
                 break;
             case positions.BOTTOM_CENTER:
-                css.bottom = 0;
-                css.left = '50%';
                 css['margin-bottom'] = this.toPixel(options.marginBottom);
-                css.transform = 'translateX(-50%)';
                 break;
             case positions.BOTTOM_RIGHT:
-            default:
-                css.bottom = 0;
-                css.right = 0;
                 css['margin-bottom'] = this.toPixel(options.marginBottom);
                 css['margin-right'] = this.toPixel(options.marginRight);
                 break;
             }
 
             // target
-            const $target = $(options.target);
+            let $target = $(options.target);
+            if ($target.length === 0) {
+                $target = $('body');
+            }
 
             // create and append
             return $('<div/>', {
                 id: id,
-                css: css
+                css: css,
+                class: 'toast-plugin ' + options.position
             }).appendTo($target);
         },
 
         /**
          * Creates the div title.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
-         * 
          * @returns {jQuery} The div title or null if no title.
          */
         createTitle: function (options) {
@@ -510,10 +483,9 @@
 
         /**
          * Creates the icon title.
-         * 
+         *
          * @param {Object}
          *            options - The options.
-         * 
          * @returns {jQuery} The icon or null if no icon.
          */
         createIcon: function (options) {
@@ -551,10 +523,9 @@
 
         /**
          * Creates the sub-title.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
-         * 
          * @returns {jQuery} The sub-title or null if no sub-title defined.
          */
         createSubtitle: function (options) {
@@ -569,10 +540,9 @@
 
         /**
          * Creates the close button.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
-         * 
          * @returns {jQuery} The close button or null if no button.
          */
         createCloseButton: function (options) {
@@ -596,10 +566,9 @@
 
         /**
          * Creates the div message.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
-         * 
          * @returns {jQuery} The div message.
          */
         createMessage: function (options) {
@@ -611,10 +580,9 @@
 
         /**
          * Creates the div toast.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
-         * 
          * @returns {jQuery} The div toast.
          */
         createToast: function (options) {
@@ -628,7 +596,7 @@
 
         /**
          * Show the toast.
-         * 
+         *
          * @param {jQuery}
          *            $toast - The toast to show.
          * @param {Object}

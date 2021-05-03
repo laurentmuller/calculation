@@ -273,14 +273,13 @@ class TestController extends AbstractController
     /**
      * Test sending notification mail.
      *
-     * @Route("/mailer", name="test_mailer")
+     * @Route("/simple", name="test_simple")
      */
-    public function sendNotification(Request $request, MailerInterface $mailer, TranslatorInterface $translator, LoggerInterface $logger, UrlGeneratorInterface $generator): Response
+    public function simpleEditor(Request $request, MailerInterface $mailer, TranslatorInterface $translator, LoggerInterface $logger, UrlGeneratorInterface $generator): Response
     {
         $data = [
             'email' => 'bibi@bibi.nu',
             'importance' => NotificationEmail::IMPORTANCE_LOW,
-            'message' => '',
         ];
 
         $helper = $this->createFormHelper('user.fields.', $data);
@@ -306,13 +305,16 @@ class TestController extends AbstractController
                 $urlAction = $generator->generate(self::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
 
                 $notification = new NotificationEmail($translator);
-                $notification->to($email)
-                    ->from($this->getAddressFrom())
+                $notification->to($this->getAddressFrom())
+                    ->from($email)
                     ->importance($importance)
                     ->subject($this->trans('user.comment.title'))
                     ->content($content)
                     ->action($urlText, $urlAction)
-                    ->context(['footer_text' => $this->getApplicationName()]);
+                    ->context([
+                        'footer_text' => $this->getApplicationName(),
+                        // 'raw' => true,
+                    ]);
 
                 $mailer->send($notification);
                 $this->succesTrans('user.comment.success');
@@ -331,41 +333,6 @@ class TestController extends AbstractController
                     'exception' => $e,
                 ]);
             }
-        }
-
-        return $this->render('test/simpleeditor.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/simple", name="test_simple")
-     */
-    public function simpleEditor(Request $request): Response
-    {
-        $data = [
-            'email' => 'bibi@bibi.nu',
-            'importance' => 'low',
-            'message' => '',
-        ];
-
-        $helper = $this->createFormHelper('user.fields.', $data);
-        $helper->field('email')
-            ->addEmailType();
-        $helper->field('importance')
-            ->label('importance.name')
-            ->add(ImportanceType::class);
-        $helper->field('message')
-            ->updateAttribute('minlength', 10)
-            ->add(SimpleEditorType::class);
-
-        $form = $helper->createForm();
-        if ($this->handleRequestForm($request, $form)) {
-            $data = $form->getData();
-            $message = 'Message :<br>' . (string) $data['message'];
-            $this->succes($message);
-
-            return $this->redirectToHomePage();
         }
 
         return $this->render('test/simpleeditor.html.twig', [

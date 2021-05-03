@@ -1,0 +1,33 @@
+{
+	"name": "Calculation",
+	"short_name": "Calculation",
+	"lang": "fr-CH",
+	"description": "Programe de calculation",
+	"display": "standalone",
+	"orientation": "landscape",
+	"theme_color": "Peru",
+	"background_color": "Peru",
+	"start_url": ".",
+	"icons": [
+		{
+			"src": "images/icons/icon-032x032.png",
+			"sizes": "32x32",
+			"type": "image/png"
+		},
+		{
+			"src": "images/icons/icon-048x048.png",
+			"sizes": "48x48",
+			"type": "image/png"
+		},
+		{
+			"src": "images/icons/icon-064x064.png",
+			"sizes": "64x64",
+			"type": "image/png"
+		},
+		{
+			"src": "images/icons/icon-256x256.png",
+			"sizes": "256x256",
+			"type": "image/png"
+		}
+	]
+}

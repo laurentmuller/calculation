@@ -2,6 +2,7 @@
 @import 'custom-control.css';
 @import 'tooltips.css';
 @import 'popover.css';
+@import 'toast.css';
 
 /**! compression tag for ftp-deployment */
 
@@ -465,17 +466,7 @@ textarea.fixed {
 .cursor-not-allowed {
     cursor: not-allowed !important;
 }
-/*
-.frame-theme {
-    width: 1px;
-    min-width: 100%;
-    border: none;
-    pointer-events: none;
-    display: block;
-    overflow-x:hidden;
-    overflow-Y:hidden;
-}
-*/
+
 /**
  * Remove spin buttons for number type
  */

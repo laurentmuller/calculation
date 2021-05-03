@@ -21,7 +21,7 @@
 <title>{{ page_title }}</title>
 <link rel="icon" type="image/png" sizes="64x64" href="{{ page_icon }}" />
 <link rel="apple-touch-icon" type="image/png" sizes="256x256" href="{{ apple_icon }}">
-<link rel="manifest" href="{{ asset('manifest.json', 'local') }}">
+<link rel="manifest" href="{{ asset('manifest.webmanifest', 'local') }}">
 {#  stylesheets  #}
 {{ asset_css(theme_css(app.request), {'title': theme_name(app.request)}) }}
 {% block stylesheets -%}

@@ -21,6 +21,7 @@ function showFlashbag() {
 
         // display
         if (text) {
+            //containerId
             Toaster.notify(type, text, title, $("#flashbags").data());
         }
 
@@ -63,7 +64,7 @@ function initSearchToolbar() {
             $button.show().focus();
         });
     };
-    
+
     $button.on("click", function () {
         $button.hide();
         $form.show().animate({

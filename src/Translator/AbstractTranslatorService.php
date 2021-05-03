@@ -54,11 +54,11 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      *
      * @param KernelInterface  $kernel  the kernel to get the debug mode
      * @param AdapterInterface $adapter the cache used to save or retrieve languages
-     * @param string           $key     the API key
+     * @param mixed            $key     the API key
      *
      * @throws \InvalidArgumentException if the API key is null or empty
      */
-    public function __construct(KernelInterface $kernel, AdapterInterface $adapter, string $key)
+    public function __construct(KernelInterface $kernel, AdapterInterface $adapter, $key)
     {
         // check key
         if (empty($key)) {

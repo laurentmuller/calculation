@@ -194,8 +194,10 @@ class OpenWeatherService extends AbstractHttpClientService
 
     /**
      * The API key.
+     *
+     * @var mixed
      */
-    private string $key;
+    private $key;
 
     /**
      * Constructor.

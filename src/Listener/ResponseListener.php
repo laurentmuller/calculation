@@ -87,8 +87,10 @@ class ResponseListener implements EventSubscriberInterface
 
     /**
      * The asset URL.
+     *
+     * @var mixed
      */
-    private string $asset;
+    private $asset;
 
     /**
      * The debug mode.

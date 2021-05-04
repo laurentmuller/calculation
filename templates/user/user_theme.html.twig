@@ -1,17 +1,17 @@
 {% extends 'cards/card_edit.html.twig' %}
 
 {# parameters #}
-{%- set title       = 'theme.title' -%}
-{%- set title_icon  = 'file-image far' -%}
+{%- set title = 'theme.title' -%}
+{%- set title_icon = 'file-image far' -%}
 {%- set cancel_path = path('homepage') -%}
-{%- set form_attr   = form_attr|default({})|merge({'data-asset': asset_base}) -%}
+{%- set form_attr = form_attr|default({})|merge({'data-asset': asset_base}) -%}
 
 {% block stylesheets -%}
 {% set selection = theme_name(app.request) %}
 {% for theme in themes %}
-	{% if theme.name != selection %}
+    {% if theme.name != selection %}
         {{ asset_css(asset_base ~ theme.css, {'title': theme.name, 'alternate': true}) }}
-	{% endif %}
+    {% endif %}
 {% endfor %}
 {{ parent() }}
 {%- endblock %}
@@ -28,20 +28,20 @@
         {{ form_row(form.theme) }}
     </div>
     <div class="col-md-6">
-    	{{ form_row(form.background) }}
+        {{ form_row(form.background) }}
     </div>
 </div>
 {# example #}
 <label>{{ 'theme.fields.example'|trans }}</label>
 <div class="form-row p-3 border rounded">
-	<div class="col-12 mb-2">
-    	<h1 id="example_name">{{ theme.name }}</h1>
+    <div class="col-12 mb-2">
+        <h1 id="example_name">{{ theme.name }}</h1>
         <p id="example_description" class="mb-1">{{ theme.description }}</p>
         <hr>
-    </div>    
-	<div class="col-12 text-center">
-    	<span class="btn btn-form btn-danger btn-example disabled mb-2">{{ 'theme.button.danger'|trans }}</span>
-    	<span class="btn btn-form btn-warning btn-example disabled mb-2">{{ 'theme.button.warning'|trans }}</span>
+    </div>
+    <div class="col-12 text-center">
+        <span class="btn btn-form btn-danger btn-example disabled mb-2">{{ 'theme.button.danger'|trans }}</span>
+        <span class="btn btn-form btn-warning btn-example disabled mb-2">{{ 'theme.button.warning'|trans }}</span>
         <span class="btn btn-form btn-success btn-example disabled mb-2">{{ 'theme.button.success'|trans }}</span>
         <span class="btn btn-form btn-secondary btn-example disabled mb-2">{{ 'theme.button.secondary'|trans }}</span>
         <span class="btn btn-form btn-primary btn-example disabled mb-2">{{ 'theme.button.primary'|trans }}</span>
@@ -49,7 +49,7 @@
 </div>
 {# link #}
 <div class="text-right small mt-2">
-	<a href="https://bootswatch.com" target="_blank" rel="noopener noreferrer">Powered by Bootswatch</a>
+    <a href="https://bootswatch.com" target="_blank" rel="noopener noreferrer">Powered by Bootswatch</a>
 </div>
 {% endblock %}
 

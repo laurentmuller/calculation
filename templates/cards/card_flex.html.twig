@@ -4,12 +4,12 @@
 
 {# create a sort menu #}
 {% macro sortMenu(route, field, currentField, currentMode, separator) %}
-{%- set name        = field.name -%}
-{%- set label       = field.label|trans -%}
-{%- set numeric     = field.numeric is defined ? field.numeric : false -%}
-{%- set asc_path    = path(route, {'sortField': name, 'sortMode': 'ASC'}) -%}
-{%- set desc_path   = path(route, {'sortField': name, 'sortMode': 'DESC'}) -%}
-{%- set asc_active  = name == currentField and currentMode == 'ASC' -%}
+{%- set name = field.name -%}
+{%- set label = field.label|trans -%}
+{%- set numeric = field.numeric is defined ? field.numeric : false -%}
+{%- set asc_path = path(route, {'sortField': name, 'sortMode': 'ASC'}) -%}
+{%- set desc_path = path(route, {'sortField': name, 'sortMode': 'DESC'}) -%}
+{%- set asc_active = name == currentField and currentMode == 'ASC' -%}
 {%- set desc_active = name == currentField and currentMode == 'DESC' -%}
 <a class="dropdown-item{% if asc_active %} active{% endif %}" href="{{ asc_path }}">
     {%- set icon = numeric ? 'sort-numeric-down' : 'sort-alpha-down' -%}
@@ -32,12 +32,12 @@
 
 {% block card_header %}
 <div class="row">
-	{# title #}
-	<div class="col-lg-5 mt-1">
+    {# title #}
+    <div class="col-lg-5 mt-1">
         {{ parent() }}
-	</div>
-	{# toolbar #}
-	<div class="col-lg-7 text-lg-right d-print-none">
+    </div>
+    {# toolbar #}
+    <div class="col-lg-7 text-lg-right d-print-none">
         <div class="btn-toolbar align-items-center justify-content-lg-end" role="toolbar">
             {% block search_action %}
             <small id="counter" class="text-muted mr-2"></small>
@@ -70,19 +70,19 @@
                 {% endif %}
                 {%- block toolbar_actions -%}{%- endblock -%}
             </div>
-	   </div>    
+       </div>
     </div>
 </div>
 {% endblock %}
 
 {% block card_body %}
 {# pages #}
-{%- set show_page   = show_page|default(false) -%}
-{%- set edit_page   = edit_page|default(false) -%}
+{%- set show_page = show_page|default(false) -%}
+{%- set edit_page = edit_page|default(false) -%}
 {%- set delete_page = delete_page|default(false) -%}
-{%- set add_page    = add_page|default(false) -%}
-{%- set dropdown    = show_page or edit_page or delete_page or add_page -%}
-{%- set selection   = app.request.get('id', 0) -%}
+{%- set add_page = add_page|default(false) -%}
+{%- set dropdown = show_page or edit_page or delete_page or add_page -%}
+{%- set selection = app.request.get('id', 0) -%}
 
 {# empty list #}
 {%- set empty_class = 'alert alert-warning flex-fill m-3' -%}
@@ -98,7 +98,7 @@
     {% if caller|default(false) %}
         {%- set params = params|merge({'caller': caller}) -%}
     {% endif %}
-    {# item class #}  
+    {# item class #}
     {%- set item_class = 'card-flex rounded border p-2 m-1 flex-fill' -%}
     {%- if item.id == selection -%}
         {%- set item_class = item_class ~ ' border-primary' -%}
@@ -115,7 +115,7 @@
             {%- if dropdown -%}
             <div class="col-2 d-print-none">
                 <div class="dropdown dropleft text-right">
-                	{%- set menu_id = 'dropdown_' ~ item.id -%}
+                    {%- set menu_id = 'dropdown_' ~ item.id -%}
                     {{ icons.dropdownEllipsis(menu_id) }}
                     <div class="dropdown-menu" aria-labelledby="{{ menu_id }}">
                         {%- if show_page -%}
@@ -145,7 +145,7 @@
                         {% endblock %}
                     </div>
                 </div>
-            </div> 
+            </div>
             {%- endif -%}
         </div>
         <table class="table table-borderless table-sm ml-2 my-0">

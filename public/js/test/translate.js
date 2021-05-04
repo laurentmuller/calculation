@@ -4,7 +4,7 @@
 
 /**
  * Display a notification.
- * 
+ *
  * @param {string}
  *            type - the notification type.
  * @param {string}
@@ -19,7 +19,7 @@ function notify(type, message) {
 
 /**
  * Handle the error response.
- * 
+ *
  * @param {Object}
  *            response - the Ajax call response.
  */
@@ -50,7 +50,7 @@ function translate() {
     $buttonSubmit.toggleDisabled(true);
     $buttonCopy.toggleDisabled(true);
     $('*').css('cursor', 'wait');
-    
+
     // build parameters
     $('#text').val($('#text').val().trim());
 
@@ -62,7 +62,7 @@ function translate() {
     };
 
     // call
-    
+
     const url = $form.data('ajax');
     $.post(url, data, function (response) {
         // ok?
@@ -126,21 +126,21 @@ function onCopyError(e) {
 /**
  * Handle exchange click event.
  */
-function onExchange() {
+function handleExchange() {
     'use strict';
 
-    // Exhange from and to language.
+    // exchange from and to language.
     const from = $('#from').val();
     if (from) {
-        $('#from').val($('#to').val());
-        $('#to').val(from);
+        $('#from').val($('#to').val()).trigger('change');
+        $('#to').val(from).trigger('change');
     }
 }
 
 /**
  * Handle from and to input event.
  */
-function onSelection() {
+function handleSelection() {
     'use strict';
 
     // update exchange button.
@@ -151,7 +151,7 @@ function onSelection() {
 
 /**
  * Gets the locale (language).
- * 
+ *
  * @returns the locale.
  */
 function getLocale() {
@@ -164,7 +164,7 @@ function getLocale() {
 /**
  * Handles the service input event.
  */
-function onService() {
+function handleService() {
     'use strict';
 
     // get selection
@@ -223,6 +223,9 @@ function onService() {
 (function ($) {
     'use strict';
 
+    // initialize select
+    $('#from, #to').initSelect2();
+
     // clipboard
     if (ClipboardJS.isSupported()) {
         const clipboard = new ClipboardJS('.btn-copy');
@@ -238,22 +241,22 @@ function onService() {
 
     // bind events
     $('.btn-exchange').on('click', function () {
-        onExchange();
+        handleExchange();
     });
     $('#from, #to').on('input', function () {
-        onSelection();
+        handleSelection();
     });
     $('#text, #result').on('focus', function () {
         $(this).select();
     });
     $('#service').on('input', function () {
-        onService();
+        handleService();
     });
 
     // validate
     const options = {
         focus: false,
-        submitHandler: function() {
+        submitHandler: function () {
             translate();
         },
         rules: {

@@ -1,13 +1,13 @@
 {% extends 'cards/card_edit.html.twig' %}
 
 {# parameters #}
-{%- set title      = new ? 'customer.add.title' : 'customer.edit.title' -%}
+{%- set title = new ? 'customer.add.title' : 'customer.edit.title' -%}
 {%- set title_icon = 'address-card far' -%}
-{%- set page_list  = 'customer_table' -%}
-{%- set form_attr  = form_attr|default({})|merge({
+{%- set page_list = 'customer_table' -%}
+{%- set form_attr = form_attr|default({})|merge({
                      'data-title': title|trans,
                      'data-search-title': url('ajax_search_title'),
-                     'data-search-address': url('ajax_search_address'),                     
+                     'data-search-address': url('ajax_search_address'),
                      'data-search-distinct': url('ajax_search_distinct'),
                      'data-error': 'customer.edit.error_search'|trans}) -%}
 {% block card_body %}
@@ -20,7 +20,7 @@
 </div>
 <div class="form-row">
     <div class="col-md-6">
-	    {{ form_row(form.lastName) }}
+        {{ form_row(form.lastName) }}
     </div>
     <div class="col-md-6">
         {{ form_row(form.firstName) }}

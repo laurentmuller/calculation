@@ -16,23 +16,23 @@
 {%- endmacro %}
 
 {# parameters #}
-{%- set title        = 'empty.title' -%}
-{%- set title_icon   = 'file-code far' -%}
-{%- set empty_list   = 'empty.empty' -%}
-{%- set caller       = path(app.request.get('_route')) -%}
-{%- set col_span      = 1 -%}
+{%- set title = 'empty.title' -%}
+{%- set title_icon = 'file-code far' -%}
+{%- set empty_list = 'empty.empty' -%}
+{%- set caller = path(app.request.get('_route')) -%}
+{%- set col_span = 1 -%}
 
 {# actions #}
-{%- set add_page     = false -%}
-{%- set delete_page  = false -%}
-{%- set pdf_page     = false -%}
-{%- set state_page   = false -%}
-{%- set clone_page   = false -%}
+{%- set add_page = false -%}
+{%- set delete_page = false -%}
+{%- set pdf_page = false -%}
+{%- set state_page = false -%}
+{%- set clone_page = false -%}
 
 {% block search_action %}
 <div class="btn-group btn-group-sm" role="group">
     {{ icons.linkTable('empty_table') }}
-</div>    
+</div>
 {% endblock %}
 
 {% block card_header -%}

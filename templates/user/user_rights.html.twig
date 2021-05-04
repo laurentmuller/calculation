@@ -2,10 +2,10 @@
 {% import 'macros/_rights.html.twig' as rights %}
 
 {# parameters #}
-{%- set title      = 'user.rights.title' -%}
+{%- set title = 'user.rights.title' -%}
 {%- set title_icon = 'unlock' -%}
-{%- set page_list  = 'user_table' -%}
-{%- set overwrite  = form.overwrite.vars.checked -%}
+{%- set page_list = 'user_table' -%}
+{%- set overwrite = form.overwrite.vars.checked -%}
 
 {% block card_container_class '' %}
 
@@ -35,7 +35,7 @@
     </div>
 </div>
 {{ rights.table(form, default, overwrite) }}
-{{ form_row(form.overwrite, {label_attr: {class: 'switch-custom mt-3'}, attr: {'data-default': default.overwrite|json_encode }}) }}
+{{ form_row(form.overwrite, {label_attr: {class: 'switch-custom mt-3'}, attr: {'data-default': default.overwrite|json_encode}}) }}
 {% endblock %}
 
 {% block required_form -%}{%- endblock %}

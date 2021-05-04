@@ -51,7 +51,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *         "order" = "$params.[order]",
  *         "offset" = "$params.[offset]",
  *         "limit" = "$params.[limit]",
- *         "card" = "$params.[card]"
+ *         "view" = "$params.[view]"
  *     }}
  * })
  * @template-extends AbstractEntityController<Calculation>

@@ -20,7 +20,7 @@
 {%- set sep = '&nbsp;&nbsp;<i class="fas fa-caret-right" aria-hidden="true"></i>&nbsp;&nbsp;' -%}
 <table class="table table-borderless table-sm mb-0">
     <tbody>
-    	<tr>
+        <tr>
             <td class="font-weight-bold">{{ 'pivot.value'|trans }}</td>
             <td class="text-currency" colspan="2">{{ value }}</td>
         </tr>
@@ -38,7 +38,7 @@
 </table>
 {%- endmacro %}
 
-{% macro outputPopoverTitle(cell, row = false) -%}
+{% macro outputPopoverTitle(cell, row=false) -%}
 {%- set sep = '&nbsp;&nbsp;<i class="fas fa-caret-right" aria-hidden="true"></i>&nbsp;&nbsp;' -%}
 <p class="mb-0">{{ cell.titles|join(sep)|raw }}{{ sep|raw }}{{ _self.format(cell.value) }}</p>
 {%- endmacro %}
@@ -57,10 +57,10 @@
 {%- set class = ('text-currency ' ~ class|default(''))|trim -%}
 {% if cell %}
     {%- set popover = 'not-hover' not in class -%}
-    {%- set value   = _self.format(cell.value) -%}    
-	<td class="{{ class }}"{% if popover %} data-toggle="popover" data-body="{{ _self.outputPopover(cell, value)|e }}"{% endif %}>{{ value }}</td>
+    {%- set value = _self.format(cell.value) -%}    
+    <td class="{{ class }}"{% if popover %} data-toggle="popover" data-body="{{ _self.outputPopover(cell, value)|e }}"{% endif %}>{{ value }}</td>
 {% else %}
-	<td class="{{ class }} not-hover">&nbsp;</td>
+    <td class="{{ class }} not-hover">&nbsp;</td>
 {% endif %}
 {%- endmacro %}
 
@@ -80,7 +80,7 @@
 {% if row.index >= row.level - 1 -%}
 <tr>
 {% endif -%}
-	<td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(row, true)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>
+    <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(row, true)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>
 {%- if row.leaf -%}
     {{ _self.outputCells(table, columns, row) -}}
 </tr>
@@ -111,10 +111,10 @@
 {%- endmacro %}
 
 {# parameters #}
-{%- set title       = 'pivot.title' -%}
-{%- set title_icon  = 'table' -%}
-{%- set row_level   = table.row.maxLevel -%}
-{%- set col_level   = table.column.maxLevel -%}
+{%- set title = 'pivot.title' -%}
+{%- set title_icon = 'table' -%}
+{%- set row_level = table.row.maxLevel -%}
+{%- set col_level = table.column.maxLevel -%}
 {%- set total_title = table.totalTitle|default('calculation.fields.total'|trans) -%}
 
 {% block container_class 'container-fluid' %}
@@ -126,8 +126,8 @@
         <h4>{{ icons.icon(title_icon, title) }}</h4>
     </div>
     <div class="col-auto  d-print-none">
-    	<div class="form-inline">
-        	<div class="custom-control custom-switch mr-2">
+        <div class="form-inline">
+            <div class="custom-control custom-switch mr-2">
                 <input type="checkbox" class="custom-control-input" id="popover" name="popover"{% if popover %} checked="checked"{% endif %}>
                 <label class="custom-control-label" for="popover">{{ 'pivot.popover'|trans }}</label>
             </div>

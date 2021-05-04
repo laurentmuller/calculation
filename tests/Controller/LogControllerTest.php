@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -21,32 +22,44 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LogControllerTest extends AbstractControllerTest
 {
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        /** @var LoggerInterface $logger */
+        $logger = self::$container->get(LoggerInterface::class);
+        $logger->debug('This is a message for testing purpose.');
+    }
+
     public function getRoutes(): array
     {
         return [
             ['/log/card', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-//             ['/log/card', self::ROLE_ADMIN],
-//             ['/log/card', self::ROLE_SUPER_ADMIN],
+            ['/log/card', self::ROLE_ADMIN],
+            ['/log/card', self::ROLE_SUPER_ADMIN],
 
             ['/log/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-//             ['/log/excel', self::ROLE_ADMIN],
-//             ['/log/excel', self::ROLE_SUPER_ADMIN],
+            ['/log/excel', self::ROLE_ADMIN],
+            ['/log/excel', self::ROLE_SUPER_ADMIN],
 
             ['/log/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-//             ['/log/pdf', self::ROLE_ADMIN],
-//             ['/log/pdf', self::ROLE_SUPER_ADMIN],
+            ['/log/pdf', self::ROLE_ADMIN],
+            ['/log/pdf', self::ROLE_SUPER_ADMIN],
 
             ['/log/refresh', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-//             ['/log/refresh', self::ROLE_ADMIN],
-//             ['/log/refresh', self::ROLE_SUPER_ADMIN],
+            ['/log/refresh', self::ROLE_ADMIN, Response::HTTP_FOUND],
+            ['/log/refresh', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
 
             ['/log', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-//             ['/log', self::ROLE_ADMIN],
-//             ['/log', self::ROLE_SUPER_ADMIN],
+            ['/log', self::ROLE_ADMIN],
+            ['/log', self::ROLE_SUPER_ADMIN],
 
             ['/log/delete', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-//             ['/log/delete', self::ROLE_ADMIN],
-//             ['/log/delete', self::ROLE_SUPER_ADMIN],
+            ['/log/delete', self::ROLE_ADMIN],
+            ['/log/delete', self::ROLE_SUPER_ADMIN],
         ];
     }
 }

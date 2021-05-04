@@ -15,17 +15,17 @@
         {%- set attr = {'data-default': checked|json_encode} -%}
         {%- if not overwrite -%}
             {%- set attr = attr|merge({'disabled': 'disabled', 'checked': checked}) -%}
-	    {%- endif -%}    
+        {%- endif -%}    
         <td>{{ form_widget(entry, {label_attr: {class: 'switch-custom'}, attr: attr}) }}</td>
     {% endfor %}
 </tr>    
 {%- endmacro %}
 
-{% macro table(form, default, overwrite = true) %}
+{% macro table(form, default, overwrite=true) %}
 {% import 'macros/_icons.html.twig' as icons %}
 <table class="table table-bordered table-list" id="table-edit">
     <thead>
-	   <tr class="text-center">
+       <tr class="text-center">
             <th class="text-left font-weight-normal">{{ icons.icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icons.icon('arrow-right') }}</th>
             {{ _self.header('rights.list', overwrite) }}
             {{ _self.header('rights.show', overwrite) }}
@@ -53,7 +53,7 @@
 </table>
 {% endmacro %}
 
-{% macro actions(overwrite = true) %}
+{% macro actions(overwrite=true) %}
 <button type="button" id="all" class="btn btn-outline-secondary" title="{{ 'user.rights.all_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}><i class="fa-fw fas fa-check-double"></i></button>
 <button type="button" id="none" class="btn btn-outline-secondary" title="{{ 'user.rights.none_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}><i class="fa-fw fas fa-eraser"></i></button>
 <button type="button" id="toggle" class="btn btn-outline-secondary" title="{{ 'user.rights.toggle_title'|trans }}" {%- if not overwrite -%} disabled="disabled"{%- endif -%}><i class="fa-fw fas fa-toggle-on"></i></button>

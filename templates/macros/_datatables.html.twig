@@ -18,7 +18,7 @@
 {% endmacro %}
 
 {# add a page length option #}
-{% macro page(value, default, display = true) -%}
+{% macro page(value, default, display=true) -%}
 {%- if display -%}
     <option value="{{ value }}"{% if value == default %} selected="selected"{% endif %}>{{ value }}</option>
 {%- endif -%}

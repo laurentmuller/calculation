@@ -1,31 +1,31 @@
 [
-	{
-		"field": "id",
-		"visible": false
-	},
-	{
-		"field": "nameAndCompany",
-		"title": "customer.fields.nameAndCompany",
-		"default": true,
-		"class": "w-35 text-cell",
-		"cardClass": "font-weight-bold"
-	},
-	{
-		"field": "address",
-		"title": "customer.fields.address",
-		"class": "w-auto text-cell"
-	},
-	{
-		"field": "zipCity",
-		"title": "customer.fields.zipCity",
-		"class": "w-20 text-cell"
-	},
-	{
-		"field": "id",
-		"alias": "action",
-		"sortable": false,
-		"searchable": false,
-		"class": "actions rowlink-skip d-print-none",
-		"cellFormatter": "formatActions"
-	}
+    {
+        "field": "id",
+        "visible": false
+    },
+    {
+        "field": "nameAndCompany",
+        "title": "customer.fields.nameAndCompany",
+        "default": true,
+        "class": "w-35 text-cell",
+        "cardClass": "font-weight-bold"
+    },
+    {
+        "field": "address",
+        "title": "customer.fields.address",
+        "class": "w-auto text-cell"
+    },
+    {
+        "field": "zipCity",
+        "title": "customer.fields.zipCity",
+        "class": "w-20 text-cell"
+    },
+    {
+        "field": "id",
+        "alias": "action",
+        "sortable": false,
+        "searchable": false,
+        "class": "actions rowlink-skip d-print-none",
+        "cellFormatter": "formatActions"
+    }
 ]

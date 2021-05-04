@@ -12,7 +12,7 @@
 
 {% macro navigate(date, interval, icon, title) -%}
 {% if date %}
-    {% set class = 'btn btn-secondary btn-' ~  title|split('.')[1] %}
+    {% set class = 'btn btn-secondary btn-' ~ title|split('.')[1] %}
     {% set href = url('test_timeline', {'date': date, 'interval': interval}) %}
     {{ icons.link(href, null, class, icon, title) }}
  {% endif %}
@@ -21,7 +21,7 @@
 {# parameters #}
 {%- set title = 'timeline.title' -%}
 {%- set title_icon = 'stream' -%}
-{%- set route = 'table_calculation' -%}    
+{%- set route = 'table_calculation' -%}
 
 {# body #}
 {% block body -%}
@@ -64,7 +64,7 @@
                     </button>
                 </div>
             </div>
-        </div>        
+        </div>
     </div>
 </form>
 <hr class="mb-0 mt-2">
@@ -74,7 +74,7 @@
             <ul class="timeline">
             {% for key, calculations in data %}
                 {%- set count = calculations|length -%}
-                {%- set query = calculations[0].date|localedate('short')  -%}
+                {%- set query = calculations[0].date|localedate('short') -%}
                 {%- set title = 'counters.calculations_day'|trans({'count': count, 'date': key}) -%}
                 <li class="success">
                     <div class="position-relative">

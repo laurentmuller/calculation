@@ -35,10 +35,16 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>nu.bibi.twigcs.builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.php.core.PHPNature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 		<nature>com.dubture.doctrine.core.doctrineNature</nature>
+		<nature>nu.bibi.twigcs.nature</nature>
 	</natures>
 </projectDescription>

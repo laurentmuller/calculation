@@ -14,12 +14,12 @@
 <button type="button" data-value="{{ value }}" class="dropdown-item dropdown-{{ suffix }}{% if value == selection %} active{% endif %}">{{ text|default(value)|capitalize }}</button>
 {%- endmacro %}
 
-{% macro item_path(path, text, icon, class = '') %}
+{% macro item_path(path, text, icon, class='') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
 {{ icons.link(path, text, class, icon ~ ' fa-fw') }}
 {%- endmacro %}
 
-{% macro item_path_external(path, text, icon, class = '') %}
+{% macro item_path_external(path, text, icon, class='') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
 {{ icons.linkExternal(path, text, class, icon ~ ' fa-fw') }}
 {%- endmacro %}
@@ -28,7 +28,7 @@
 {{ icons.dropdownItem(path, text, icon) }}
 {%- endmacro %}
 
-{% macro item_external(path, text, icon, class = '') %}
+{% macro item_external(path, text, icon, class='') %}
 {%- set class = ('dropdown-item rowlink-skip ' ~ class|default(''))|trim -%}
 {{ icons.linkExternal(path, text, class, icon ~ ' fa-fw') }}
 {%- endmacro %}
@@ -41,15 +41,15 @@
 {%- set icon = column.numeric ? 'numeric' : 'alpha' -%}
 {%- set active = (column.field == sort and 'asc' == order) ? ' active' : '' -%}
 <button type="button" class="dropdown-item dropdown-menu-sort{{ active }}" data-sort="{{ column.field }}" data-order="asc">
-    <i class="fas fa-fw fa-sort-{{ icon }}-up" aria-hidden="true"></i>{{ 'list.sort_ascending_title'|trans({'%name%' : column.title|trans}) }}
+    <i class="fas fa-fw fa-sort-{{ icon }}-up" aria-hidden="true"></i>{{ 'list.sort_ascending_title'|trans({'%name%': column.title|trans}) }}
 </button>
 {%- set active = (column.field == sort and 'desc' == order) ? ' active' : '' -%}
 <button type="button" class="dropdown-item dropdown-menu-sort{{ active }}" data-sort="{{ column.field }}" data-order="desc">
-    <i class="fas fa-fw fa-sort-{{ icon }}-down" aria-hidden="true"></i>{{ 'list.sort_desscending_title'|trans({'%name%' : column.title|trans}) }}
+    <i class="fas fa-fw fa-sort-{{ icon }}-down" aria-hidden="true"></i>{{ 'list.sort_desscending_title'|trans({'%name%': column.title|trans}) }}
 </button>
 {%- endmacro %}
 
-{% macro property_row(field, value, class = '') -%}
+{% macro property_row(field, value, class='') -%}
 {% set class = ('col-8 text-truncate user-select-none ' ~ class)|trim %}
 <div class="row rowlink-skip no-gutters">
     <div class="col-4 user-select-none">{{ field|trans }}</div>
@@ -57,17 +57,17 @@
 </div>
 {%- endmacro %}
 
-{% macro property_value(value, class = '') -%}
+{% macro property_value(value, class='') -%}
 {% set class = ('text-truncate user-select-none ' ~ class)|trim %}
 <div class="{{ class }}">{{ value|raw }}</div>
 {%- endmacro %}
 
-{% macro property_both(leftValue, rightValue, leftClass = '', rightClass = '') -%}
-{% set leftClass = ('col-4 user-select-none ' ~ leftClass)|trim %}
-{% set rightClass = ('col-8 user-select-none ' ~ rightClass)|trim %}
+{% macro property_both(leftValue, rightValue, left_class='', right_class='') -%}
+{% set left_class = ('col-4 user-select-none ' ~ left_class)|trim %}
+{% set right_class = ('col-8 user-select-none ' ~ right_class)|trim %}
 <div class="row rowlink-skip no-gutters">
-    <div class="{{ leftClass }}">{{ leftValue|raw }}</div>
-    <div class="{{ rightClass }}">{{ rightValue|raw }}</div>
+    <div class="{{ left_class }}">{{ leftValue|raw }}</div>
+    <div class="{{ right_class }}">{{ rightValue|raw }}</div>
 </div>
 {%- endmacro %}
 
@@ -80,19 +80,19 @@
 {%- endmacro %}
 
 {# granted actions #}
-{%- set object_type  = object_type|default('none') -%}
-{%- set allow_show   = is_granted(ATTRIBUTE_SHOW, object_type) -%}
-{%- set allow_add    = is_granted(ATTRIBUTE_ADD, object_type) -%}
-{%- set allow_edit   = is_granted(ATTRIBUTE_EDIT, object_type) -%}
+{%- set object_type = object_type|default('none') -%}
+{%- set allow_show = is_granted(ATTRIBUTE_SHOW, object_type) -%}
+{%- set allow_add = is_granted(ATTRIBUTE_ADD, object_type) -%}
+{%- set allow_edit = is_granted(ATTRIBUTE_EDIT, object_type) -%}
 {%- set allow_delete = is_granted(ATTRIBUTE_DELETE, object_type) -%}
 {%- set allow_export = is_granted(ATTRIBUTE_EXPORT, object_type) -%}
 
 {# default action #}
-{%- set row_none     = app.actionNone -%}
-{%- set row_show     = allow_show and app.actionShow -%}
-{%- set row_edit     = allow_edit and app.actionEdit -%}
-{%- set show_class   = 'btn-show' ~ (row_show ? ' btn-default' : '') -%}
-{%- set edit_class   = 'btn-edit' ~ (row_edit ? ' btn-default' : '') -%}
+{%- set row_none = app.actionNone -%}
+{%- set row_show = allow_show and app.actionShow -%}
+{%- set row_edit = allow_edit and app.actionEdit -%}
+{%- set show_class = 'btn-show' ~ (row_show ? ' btn-default' : '') -%}
+{%- set edit_class = 'btn-edit' ~ (row_edit ? ' btn-default' : '') -%}
 {% if not row_edit and not row_none and allow_show %}
     {%- set row_show = true -%}
     {%- set show_class = 'btn-show btn-default' -%}
@@ -102,15 +102,15 @@
 {% endif %}
 
 {# parameters #}
-{%- set allow_search    = attributes.search|default(true|json_encode) == true|json_encode -%}
-{%- set allow_global    = allow_global ?? is_granted(ATTRIBUTE_EXPORT, object_type) -%}
-{%- set row_selector    = 'table-primary' -%}
-{%- set caller          = path(app.request.get('_route')) -%}
-{%- set params          = params|default({})|merge({'caller': caller}) -%}
-{%- set id              = params.id|default(0) -%}
-{%- set limit           = params.limit|default(20) -%}
-{%- set customView      = attributes['custom-view']|default(false) -%}
-{%- set attributes      = attributes|default({})|merge({
+{%- set allow_search = attributes.search|default(true|json_encode) == true|json_encode -%}
+{%- set allow_global = allow_global ?? is_granted(ATTRIBUTE_EXPORT, object_type) -%}
+{%- set row_selector = 'table-primary' -%}
+{%- set caller = path(app.request.get('_route')) -%}
+{%- set params = params|default({})|merge({'caller': caller}) -%}
+{%- set id = params.id|default(0) -%}
+{%- set limit = params.limit|default(20) -%}
+{%- set custom_view = attributes['custom-view']|default(false) -%}
+{%- set attributes = attributes|default({})|merge({
     'classes': 'table table-hover table-list table-sm',
     'row-selector': 'tbody .' ~ row_selector,
     'custom-selector': '.custom-item.' ~ row_selector,
@@ -123,7 +123,7 @@
     'pagination-pre-text': '<i class="fa fa-caret-left fa-lg"></i>',
     'pagination-next-text': '<i class="fa fa-caret-right fa-lg"></i>',
     'pagination-parts': '["pageInfo", "pageList"]',
-	'pagination-loop': "false",
+    'pagination-loop': "false",
     'pagination': 'true',
     'loading-template': 'loadingTemplate',
     'error-message': 'error_page.description'|trans,
@@ -200,7 +200,7 @@
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="button_view">
                     {{ _self.button_view('common.view_table', 'fas fa-table', 'table', params.view) }}
                     {{ _self.button_view('common.view_card', 'fas fa-grip-horizontal', 'card', params.view) }}
-                    {% if customView %}
+                    {% if custom_view %}
                     {{ _self.button_view('common.view_custom', 'fas fa-border-none', 'custom', params.view) }}
                     {% endif %}
                 </div>
@@ -244,13 +244,13 @@
     <div class="dropdown-menu dropdown-menu-right dropdown-menu-actions">
         {% if allow_edit %}{% block edit_actions -%}{%- endblock %}{% endif %}
         {% if allow_show %}{% block show_actions -%}{%- endblock %}{% endif %}
-    	{% if allow_delete %}{% block delete_actions -%}{%- endblock %}{% endif %}
+        {% if allow_delete %}{% block delete_actions -%}{%- endblock %}{% endif %}
         {% if allow_add %}{% block add_actions -%}{%- endblock %}{% endif %}
         {% block other_actions -%}{%- endblock %}
     </div>
 </div>
 {# custom view template #}
-{% if customView %}
+{% if custom_view %}
 <div id="custom-view" class="d-none">
     <div class="col mb-2 px-1">
         <div class="custom-item border rounded h-100 px-2 py-1{% block custom_view_card_class %}{%- endblock %}">

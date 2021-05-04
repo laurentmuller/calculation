@@ -82,7 +82,7 @@ class CalculationStateRepository extends AbstractRepository
     {
         $builder = $this->getListCountQueryBuilder()
             ->where('c.itemsTotal != 0')
-            ->andWhere('(c.overallTotal / c.itemsTotal) - 1 < :margin')
+            ->andWhere('(c.overallTotal / c.itemsTotal) < :margin')
             ->setParameter('margin', $margin, Types::FLOAT);
 
         return $builder->getQuery()->getArrayResult();

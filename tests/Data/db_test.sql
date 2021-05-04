@@ -1,22 +1,22 @@
 BEGIN TRANSACTION;
 
 CREATE TABLE IF NOT EXISTS "sy_Group" (
-	"id"                integer PRIMARY KEY AUTOINCREMENT,
-	"code"              varchar(30)  NOT NULL,
-	"description"       varchar(255) DEFAULT NULL	
+    "id"                integer PRIMARY KEY AUTOINCREMENT,
+    "code"              varchar(30)  NOT NULL,
+    "description"       varchar(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "sy_Category" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
     "code"              varchar(30)  NOT NULL,
     "description"       varchar(255) DEFAULT NULL,
-    "group_id"         	integer NOT NULL,
+    "group_id"             integer NOT NULL,
     FOREIGN KEY(group_id) REFERENCES sy_Group(id)
 );
 
 CREATE TABLE IF NOT EXISTS "sy_GroupMargin" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
-    "group_id"       	integer NOT NULL,
+    "group_id"           integer NOT NULL,
     "minimum"           double  NOT NULL DEFAULT '0',
     "maximum"           double  NOT NULL DEFAULT '0',
     "margin"            double  NOT NULL DEFAULT '0',
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS "sy_Calculation" (
 CREATE TABLE IF NOT EXISTS "sy_CalculationGroup" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
     "calculation_id"    integer     NOT NULL,
-    "group_id"       	integer     NOT NULL,
+    "group_id"           integer     NOT NULL,
     "code"              varchar(30) NOT NULL,
     "margin"            double      NOT NULL DEFAULT '0',
     "amount"            double      NOT NULL DEFAULT '0',
@@ -71,12 +71,12 @@ CREATE TABLE IF NOT EXISTS "sy_CalculationGroup" (
 
 CREATE TABLE IF NOT EXISTS "sy_CalculationCategory" (
     "id"                integer PRIMARY KEY AUTOINCREMENT,
-    "group_id"       	integer     NOT NULL,
-    "category_id"    	integer     NOT NULL,    
+    "group_id"           integer     NOT NULL,
+    "category_id"        integer     NOT NULL,
     "code"              varchar(30) NOT NULL,
     "amount"            double      NOT NULL DEFAULT '0',
     FOREIGN KEY(group_id) REFERENCES sy_CalculationGroup(id),
-    FOREIGN KEY(category_id) REFERENCES sy_Category(id)    
+    FOREIGN KEY(category_id) REFERENCES sy_Category(id)
 );
 
 CREATE TABLE IF NOT EXISTS "sy_CalculationItem" (
@@ -137,34 +137,34 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
 );
 
 CREATE TABLE IF NOT EXISTS "sy_Task" (
-  	"id"                integer PRIMARY KEY AUTOINCREMENT,
-  	"category_id" 		integer NOT NULL,
-  	"name" 				varchar(255) NOT NULL,
-  	"unit"              varchar(15)  DEFAULT NULL
+      "id"                integer PRIMARY KEY AUTOINCREMENT,
+      "category_id"         integer NOT NULL,
+      "name"                 varchar(255) NOT NULL,
+      "unit"              varchar(15)  DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "sy_TaskItem" (
-  	"id"                integer PRIMARY KEY AUTOINCREMENT,
-  	"task_id" 			integer NOT NULL,
-  	"name" 				varchar(255) NOT NULL,
-  	FOREIGN KEY(task_id) REFERENCES sy_Task(id)
+      "id"                integer PRIMARY KEY AUTOINCREMENT,
+      "task_id"             integer NOT NULL,
+      "name"                 varchar(255) NOT NULL,
+      FOREIGN KEY(task_id) REFERENCES sy_Task(id)
 );
 
 CREATE TABLE IF NOT EXISTS "sy_TaskItemMargin" (
-  	"id"                integer PRIMARY KEY AUTOINCREMENT,
-  	"task_item_id" 		integer NOT NULL,
-  	"maximum" 			double NOT NULL DEFAULT '0',
-  	"minimum" 			double NOT NULL DEFAULT '0',
-  	"value" 			double NOT NULL DEFAULT '0',
-  	FOREIGN KEY(task_item_id) REFERENCES sy_TaskItem(id)
+      "id"                integer PRIMARY KEY AUTOINCREMENT,
+      "task_item_id"         integer NOT NULL,
+      "maximum"             double NOT NULL DEFAULT '0',
+      "minimum"             double NOT NULL DEFAULT '0',
+      "value"             double NOT NULL DEFAULT '0',
+      FOREIGN KEY(task_item_id) REFERENCES sy_TaskItem(id)
 );
 
 INSERT INTO "sy_User"
-	('id', 'email', 'username', 'enabled', 'password', 'role')
+    ('id', 'email', 'username', 'enabled', 'password', 'role')
 VALUES
-	(1, 'ROLE_SUPER_ADMIN@TEST.COM', 'ROLE_SUPER_ADMIN', 1, 'ROLE_SUPER_ADMIN', 'ROLE_SUPER_ADMIN'),
-	(2, 'ROLE_ADMIN@TEST.COM',       'ROLE_ADMIN',       1, 'ROLE_ADMIN',       'ROLE_ADMIN'),
-	(3, 'ROLE_USER@TEST.COM',        'ROLE_USER',        1, 'ROLE_USER',        null),
-	(4, 'ROLE_DISABLED@TEST.COM',    'ROLE_DISABLED',    0, 'ROLE_DISABLED',    null);
+    (1, 'ROLE_SUPER_ADMIN@TEST.COM', 'ROLE_SUPER_ADMIN', 1, 'ROLE_SUPER_ADMIN', 'ROLE_SUPER_ADMIN'),
+    (2, 'ROLE_ADMIN@TEST.COM',       'ROLE_ADMIN',       1, 'ROLE_ADMIN',       'ROLE_ADMIN'),
+    (3, 'ROLE_USER@TEST.COM',        'ROLE_USER',        1, 'ROLE_USER',        null),
+    (4, 'ROLE_DISABLED@TEST.COM',    'ROLE_DISABLED',    0, 'ROLE_DISABLED',    null);
 
 COMMIT;

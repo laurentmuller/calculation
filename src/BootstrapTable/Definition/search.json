@@ -1,50 +1,50 @@
 [
-	{
-		"field": "id",
-		"visible": false
-	},
-	{
-		"field": "entityName",
-		"title": "search.fields.entity",
-		"searchable": false,
-		"class": "text-cell w-20"
-	},
-	{
-		"field": "fieldName",
-		"title": "search.fields.field",
-		"searchable": false,
-		"class": "text-cell w-20"
-	},
-	{
-		"field": "content",
-		"title": "search.fields.content",
-		"searchable": false,
-		"class": "text-cell w-auto",
-		"cardClass": "font-weight-bold",
-		"default": true
-	},
-	{
-		"field": "id",
-		"alias": "action",
-		"sortable": false,
-		"searchable": false,
-		"class": "actions rowlink-skip d-print-none",
-		"cellFormatter": "formatActions"
-	},
-	{
-		"field": "type",
-		"visible": false
-	},
-	{
-		"field": "showGranted",
-		"visible": false
-	},
-	{
-		"field": "editGranted",
-		"visible": false
-	},
-	{
-		"field": "deleteGranted",
-		"visible": false
-	}
+    {
+        "field": "id",
+        "visible": false
+    },
+    {
+        "field": "entityName",
+        "title": "search.fields.entity",
+        "searchable": false,
+        "class": "text-cell w-20"
+    },
+    {
+        "field": "fieldName",
+        "title": "search.fields.field",
+        "searchable": false,
+        "class": "text-cell w-20"
+    },
+    {
+        "field": "content",
+        "title": "search.fields.content",
+        "searchable": false,
+        "class": "text-cell w-auto",
+        "cardClass": "font-weight-bold",
+        "default": true
+    },
+    {
+        "field": "id",
+        "alias": "action",
+        "sortable": false,
+        "searchable": false,
+        "class": "actions rowlink-skip d-print-none",
+        "cellFormatter": "formatActions"
+    },
+    {
+        "field": "type",
+        "visible": false
+    },
+    {
+        "field": "showGranted",
+        "visible": false
+    },
+    {
+        "field": "editGranted",
+        "visible": false
+    },
+    {
+        "field": "deleteGranted",
+        "visible": false
+    }
 ]

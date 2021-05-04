@@ -36,9 +36,10 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     {
         /** @var Task $task */
         $task = $group->getKey();
+        $category = \sprintf('%s / %s', $task->getGroupCode(), $task->getCategoryCode());
         $parent->startRow()
             ->add($task->getName(), 1, $group->getStyle())
-            ->add($task->getCategoryCode())
+            ->add($category)
             ->add($task->getUnit());
         if ($task->isEmpty()) {
             $parent->add($this->trans('task.edit.empty_items'), 3);
@@ -127,7 +128,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     {
         $table = new PdfGroupTableBuilder($this);
         $table->addColumn(PdfColumn::left($this->trans('task.fields.name'), 40))
-            ->addColumn(PdfColumn::left($this->trans('task.fields.category'), 35, true))
+            ->addColumn(PdfColumn::left($this->trans('task.fields.category'), 50, true))
             ->addColumn(PdfColumn::left($this->trans('task.fields.unit'), 15, true))
             ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.minimum'), 20, true))
             ->addColumn(PdfColumn::right($this->trans('taskitemmargin.fields.maximum'), 20, true))

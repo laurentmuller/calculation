@@ -5,11 +5,11 @@
 {% import 'openweather/_weather_macro.html.twig' as tools %}
 
 {# macros #}
-{% macro system(units, route, cityId, count) -%}
-{% set text  = units == 'metric' ? '°C' : '°F' %}
-{% set title = ('openweather.current.'~ units)|trans %}  
+{% macro system(units, route, city_id, count) -%}
+{% set text = units == 'metric' ? '°C' : '°F' %}
+{% set title = ('openweather.current.' ~ units)|trans %}
 {% if route %}
-    {% set href = path(route, {'cityId': cityId, 'units': units, 'count': count})  %}
+    {% set href = path(route, {'cityId': city_id, 'units': units, 'count': count}) %}
     <a href="{{ href }}" class="small" title="{{ title }}">{{ text }}</a>
 {% else %}
     <span class="small" title="{{ title }}">{{ text }}</span>
@@ -17,31 +17,31 @@
 {%- endmacro %}
 
 {# parameters #}
-{%- set title      = 'openweather.current.title' -%}
+{%- set title = 'openweather.current.title' -%}
 {%- set title_icon = 'cloud-sun' -%}
-{%- set cityId     = current.id|default(false) -%}
-{%- set route      = app.request.get('_route') -%}
+{%- set city_id = current.id|default(false) -%}
+{%- set route = app.request.get('_route') -%}
 
 {# units #}
-{% if cityId %}
-    {%- set units_system    = current.units.system -%}
-    {%- set units_temp      = current.units.temperature -%}
-    {%- set units_pressure  = current.units.pressure -%}
-    {%- set units_percent   = current.units.percent -%}
-    {%- set units_degree    = current.units.degree -%}
-    {%- set units_speed     = current.units.speed -%}
-    {%- set units_volume    = current.units.volume -%}
+{% if city_id %}
+    {%- set units_system = current.units.system -%}
+    {%- set units_temp = current.units.temperature -%}
+    {%- set units_pressure = current.units.pressure -%}
+    {%- set units_percent = current.units.percent -%}
+    {%- set units_degree = current.units.degree -%}
+    {%- set units_speed = current.units.speed -%}
+    {%- set units_volume = current.units.volume -%}
 {% endif %}
 
 {# class #}
-{%- block card_container_class cityId ? '' : parent() -%}
-{%- block card_class cityId ? parent() : ' border-danger' -%}
-{%- block card_header_class cityId ? parent() : ' bg-danger text-white' -%}
+{%- block card_container_class city_id ? '' : parent() -%}
+{%- block card_class city_id ? parent() : ' border-danger' -%}
+{%- block card_header_class city_id ? parent() : ' bg-danger text-white' -%}
 {%- block card_footer_class ' d-none' -%}
 
 {# header #}
 {% block card_header %}
-{% if cityId %}
+{% if city_id %}
     <div class="row">
         <div class="col-md-6">
             {{ parent() }}
@@ -49,9 +49,9 @@
         </div>
         <div class="col-md-6 text-md-right d-print-none">
             {% if units_system == 'metric' %}
-                {{ _self.system(units_system) }}<span class"small"> / </span>{{ _self.system('imperial', route, cityId, count) }}
+                {{ _self.system(units_system) }}<span class"small"> / </span>{{ _self.system('imperial', route, city_id, count) }}
             {% else %}
-                {{ _self.system('metric', route, cityId, count) }}<span class"small"> / </span>{{ _self.system(units_system) }}
+                {{ _self.system('metric', route, city_id, count) }}<span class"small"> / </span>{{ _self.system(units_system) }}
             {% endif %}
             {{ icons.link(path('openweather_search'), 'common.button_search', 'btn btn-link btn-sm') }}
         </div>
@@ -63,10 +63,10 @@
 
 {# body #}
 {% block card_body %}
-{% if cityId %}
+{% if city_id %}
     <h2>{{ current.name }}, {{ current.sys.country_name }}<img class="align-top pt-2 pl-1" alt="Flag" src="{{ current.sys.country_flag }}"></h2>
     <h3 class="font-weight-normal">
-        <img src="{{ current.weather.icon_small }}" alt="Icon" width="50" height="50">{{  tools.value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
+        <img src="{{ current.weather.icon_small }}" alt="Icon" width="50" height="50">{{ tools.value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
     </h3>
     <div class="row">
         <div class="col-lg-5">
@@ -74,12 +74,12 @@
         </div>
         <div class="col-lg-7">
             {% include 'openweather/current_weather_forecast.html.twig' %}
-            {% include 'openweather/current_weather_daily.html.twig' %}        
+            {% include 'openweather/current_weather_daily.html.twig' %}
         </div>
     </div>
 {% else %}
-    <p class="mb-0 text-center">{{ 'openweather.current.empty'|trans|replace({'#' : path('openweather_search')})|raw }}</p>
-{% endif %}    
+    <p class="mb-0 text-center">{{ 'openweather.current.empty'|trans|replace({'#': path('openweather_search')})|raw }}</p>
+{% endif %}
 {% endblock %}
 
 {% block stylesheets %}

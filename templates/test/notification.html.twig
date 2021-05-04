@@ -14,11 +14,11 @@
 
 {% macro timeout(value, selection) -%}
 {%- set round = (value / 1000)|round(0, 'floor') -%}
-{%- set text  = 'parameters.message_timeout.' ~ round -%}
+{%- set text = 'parameters.message_timeout.' ~ round -%}
 <option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text|trans }}</option>
 {%- endmacro %}
 
-{% macro checkbox(id, text, checked = true) -%}
+{% macro checkbox(id, text, checked=true) -%}
 <div class="custom-control custom-switch custom-control-inline">
   <input type="checkbox" class="custom-control-input" id="{{ id }}"{% if checked %} checked="checked"{% endif %}>
   <label class="custom-control-label" for="{{ id }}">{{ text }}</label>
@@ -26,7 +26,7 @@
 {%- endmacro %}
 
 {# parameters #}
-{%- set title      = 'test.notification' -%}
+{%- set title = 'test.notification' -%}
 {%- set title_icon = 'bell far' -%}
 
 {% block card_body %}
@@ -59,11 +59,11 @@
                 {{ _self.position('top-left', position) }}
                 {{ _self.position('top-center', position) }}
                 {{ _self.position('top-right', position) }}
-                
+
                 {{ _self.position('center-left', position) }}
                 {{ _self.position('center-center', position) }}
                 {{ _self.position('center-right', position) }}
-                
+
                 {{ _self.position('bottom-left', position) }}
                 {{ _self.position('bottom-center', position) }}
                 {{ _self.position('bottom-right', position) }}

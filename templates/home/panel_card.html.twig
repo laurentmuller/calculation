@@ -3,23 +3,23 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set caller       = path('homepage') -%}
-{%- set selection    = app.request.get('id', 0) -%}
+{%- set caller = path('homepage') -%}
+{%- set selection = app.request.get('id', 0) -%}
 
 {# actions #}
-{%- set object_type  = ENTITY_CALCULATION -%}
-{%- set add_path     = is_granted(ATTRIBUTE_ADD, object_type) ? path('calculation_add', {'caller': caller}) : null -%}
-{%- set clone_page   = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
-{%- set edit_page    = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
-{%- set state_page   = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
-{%- set delete_page  = is_granted(ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
-{%- set show_page    = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
-{%- set single_page  = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
+{%- set object_type = ENTITY_CALCULATION -%}
+{%- set add_path = is_granted(ATTRIBUTE_ADD, object_type) ? path('calculation_add', {'caller': caller}) : null -%}
+{%- set clone_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
+{%- set edit_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
+{%- set state_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
+{%- set delete_page = is_granted(ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
+{%- set show_page = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
+{%- set single_page = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
 {%- set default_page = app.actionEdit ? edit_page : show_page -%}
-{%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
+{%- set row_link = not app.actionNone and (edit_page or show_page) -%}
 
 <div class="card mb-2">
-	<div class="card-header">
+    <div class="card-header">
         <div class="row">
             <div class="col-auto mr-auto">
                 <h1 class="card-title">{{ icons.icon("calculator", "index.panel_last") }}</h1>
@@ -32,27 +32,27 @@
         </div>
     </div>
     <div class="card-body d-flex flex-row flex-wrap p-2">
-	{% for item in calculations %}
+    {% for item in calculations %}
         {# item parameters #}
         {%- set id = item.id -%}
         {%- set item_title = item.id|identifier -%}
         {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
-		<div class="card-last border rounded p-2 m-1{% if id == selection %} border-primary{%- endif %}">
-			<div class="row">
-				<div class="col-10 card-title mb-1 h5">
+        <div class="card-last border rounded p-2 m-1{% if id == selection %} border-primary{%- endif %}">
+            <div class="row">
+                <div class="col-10 card-title mb-1 h5">
                     <div class="text-border" style="{{ properties.stateCss(item.stateColor) }}">
                         {%- if row_link -%}
                             {%- set default_path = path(default_page, params) -%}
                             <a href="{{ default_path }}" class="text-body ml-1">{{ item_title }}</a>
                         {%- else -%}
                             <span class="ml-1">{{ item_title }}</span>
-                        {%- endif -%}   
+                        {%- endif -%}
                     </div>
                 </div>
                 {%- if show_page or edit_page or delete_page or state_page or single_page or add_path -%}
                 <div class="col-1 d-print-none">
-                	<div class="dropdown dropleft text-right">
-                		{%- set menu_id = 'dropdownMenuLast_' ~ id -%}
+                    <div class="dropdown dropleft text-right">
+                        {%- set menu_id = 'dropdownMenuLast_' ~ id -%}
                         {{ icons.dropdownEllipsis(menu_id) }}
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
                             {%- if show_page -%}
@@ -70,26 +70,26 @@
                             {%- if delete_page -%}
                                 {%- set delete_path = path(delete_page, params) -%}
                                 {{ icons.dropdownItem(delete_path, 'common.button_delete', 'times') }}
-                            {%- endif -%}                            
+                            {%- endif -%}
                             {%- if state_page -%}
                                 {{ icons.dropdownSeparator }}
                                 {%- set state_path = path(state_page, params) -%}
                                 {{ icons.dropdownItem(state_path, 'calculation.list.state_title', 'edit') }}
-                            {%- endif -%}   
+                            {%- endif -%}
                             {%- if single_page -%}
                                 {{ icons.dropdownSeparator }}
                                 {%- set pdf_path = path(single_page, {'id': id}) -%}
                                 {{ icons.dropdownItemExternal(pdf_path, 'common.button_pdf', 'file-pdf far') }}
-                            {%- endif -%}   
+                            {%- endif -%}
                             {%- if add_path -%}
-                            	{{ icons.dropdownSeparator }}
-                            	{{ icons.dropdownItem(add_path, 'calculation.add.title', 'file far') }}
+                                {{ icons.dropdownSeparator }}
+                                {{ icons.dropdownItem(add_path, 'calculation.add.title', 'file far') }}
                             {%- endif -%}
                         </div>
-                	</div>
+                    </div>
                 </div>
                 {%- endif -%}
-			</div>
+            </div>
             <table class="table table-borderless table-sm ml-2 mr-0 my-0">
                 {{ properties.line(item.customer) }}
                 {{ properties.line(item.description) }}
@@ -98,18 +98,18 @@
                 {%- if app.marginBelow(item) -%}
                     {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
                     <tr>
-                    	<td>{{ 'calculation.fields.total'|trans }}</td>
-                    	<td class="text-right pr-4 text-danger has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallTotal|amount }}</td>
+                        <td>{{ 'calculation.fields.total'|trans }}</td>
+                        <td class="text-right pr-4 text-danger has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallTotal|amount }}</td>
                     </tr>
                 {%- else -%}
-                	{{ properties.property('calculation.fields.total', item.overallTotal|amount, 'text-right pr-4') }}
+                    {{ properties.property('calculation.fields.total', item.overallTotal|amount, 'text-right pr-4') }}
                 {%- endif -%}
             </table>
-		</div>
+        </div>
     {%- else -%}
         <div class="alert alert-warning flex-fill mb-0 py-4 text-center" role="alert">
             {{ 'calculation.list.empty'|trans }}
         </div>
-	{%- endfor -%}
+    {%- endfor -%}
     </div>
 </div>

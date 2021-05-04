@@ -1,11 +1,11 @@
 {% extends 'table/table_base.html.twig' %}
 
 {# parameters #}
-{%- set title        = title|default('calculation.list.title') -%}
-{%- set title_icon   = title_icon|default('calculator') -%}
-{%- set defer_url    = defer_url|default(url('table_calculation')) -%}
-{%- set object_type  = ENTITY_CALCULATION -%}
-{%- set attributes   = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
+{%- set title = title|default('calculation.list.title') -%}
+{%- set title_icon = title_icon|default('calculator') -%}
+{%- set defer_url = defer_url|default(url('table_calculation')) -%}
+{%- set object_type = ENTITY_CALCULATION -%}
+{%- set attributes = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
 
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('calculation_add', params) }}">{{ 'calculation.add.title'|trans }}</a>{% endif %}
@@ -13,15 +13,15 @@
 
 {% block toolbar_actions -%}
 {% if customData.states is defined %}
-{%- set stateId = customData.state.id|default(0) -%}
+{%- set state_id = customData.state.id|default(0) -%}
 <div class="input-group-append btn-dropdown">
-    <button id="stateId" data-value="{{ stateId }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
+    <button id="stateId" data-value="{{ state_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
         {{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="stateId">
-        {{ _self.output_dropdown('state', 0, stateId, 'datatable.all'|trans) }}
+        {{ _self.output_dropdown('state', 0, state_id, 'datatable.all'|trans) }}
         {% for state in customData.states %}
-        {{ _self.output_dropdown('state', state.id, stateId, state.code) }}
+        {{ _self.output_dropdown('state', state.id, state_id, state.code) }}
         {% endfor %}
     </div>
 </div>

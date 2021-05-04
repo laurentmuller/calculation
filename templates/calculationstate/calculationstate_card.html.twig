@@ -4,25 +4,25 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title        = 'calculationstate.list.title' -%}
-{%- set title_icon   = 'flag far' -%}
-{%- set add_title    = 'calculationstate.list.add_title' -%}
-{%- set show_title   = 'calculationstate.show.title' %}
-{%- set edit_title   = 'calculationstate.edit.title' %}
+{%- set title = 'calculationstate.list.title' -%}
+{%- set title_icon = 'flag far' -%}
+{%- set add_title = 'calculationstate.list.add_title' -%}
+{%- set show_title = 'calculationstate.show.title' %}
+{%- set edit_title = 'calculationstate.edit.title' %}
 {%- set delete_title = 'calculationstate.delete.title' %}
-{%- set pdf_title    = 'calculationstate.list.pdf_title' -%}
-{%- set empty_list   = 'calculationstate.list.empty' -%}
+{%- set pdf_title = 'calculationstate.list.pdf_title' -%}
+{%- set empty_list = 'calculationstate.list.empty' -%}
 
 {# actions #}
-{%- set object_type  = ENTITY_CALCULATION_STATE -%}
-{%- set add_page     = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculationstate_add' : null -%}
-{%- set edit_page    = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculationstate_edit' : null -%}
-{%- set delete_page  = is_granted(ATTRIBUTE_DELETE, object_type) ? 'calculationstate_delete' : null -%}
-{%- set show_page    = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculationstate_show' : null -%}
-{%- set pdf_page     = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculationstate_pdf' : null -%}
-{%- set list_path    = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION)-%}
+{%- set object_type = ENTITY_CALCULATION_STATE -%}
+{%- set add_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculationstate_add' : null -%}
+{%- set edit_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculationstate_edit' : null -%}
+{%- set delete_page = is_granted(ATTRIBUTE_DELETE, object_type) ? 'calculationstate_delete' : null -%}
+{%- set show_page = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculationstate_show' : null -%}
+{%- set pdf_page = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculationstate_pdf' : null -%}
+{%- set list_path = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
 {%- set default_page = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
-{%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
+{%- set row_link = not app.actionNone and (edit_page or show_page) -%}
 
 {% block item_title %}
 {%- set item_title = item.code -%}
@@ -30,7 +30,7 @@
 {%- if row_link and default_page -%}
     {%- set default_path = path(default_page, params) -%}
     <a href="{{ default_path }}" class="text-body ml-1">{{ item.code }}</a>
-{%- else -%} 
+{%- else -%}
     {{ item.code }}
 {%- endif -%}
 </div>

@@ -93,9 +93,25 @@ abstract class AbstractTable
     {
         $query = new DataQuery();
 
-        // offset, limit and page
+        // global parameters
+        $query->id = $this->getParamId($request);
+        $query->callback = $request->isXmlHttpRequest();
+        $query->search = (string) $request->get(TableInterface::PARAM_SEARCH, '');
+        $query->view = (string) $this->getRequestValue($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE, false);
+
+        // limit, offset and page
+        switch ($query->view) {
+            case TableInterface::VIEW_CARD:
+                $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE_CARD);
+                break;
+            case TableInterface::VIEW_CUSTOM:
+                $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE_CUSTOM);
+                break;
+            default: // TableInterface::VIEW_TABLE
+                $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
+                break;
+        }
         $query->offset = (int) $request->get(TableInterface::PARAM_OFFSET, 0);
-        $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
         // sort and order
@@ -105,12 +121,6 @@ abstract class AbstractTable
         }
         $query->sort = (string) $this->getRequestValue($request, TableInterface::PARAM_SORT, $query->sort);
         $query->order = (string) $this->getRequestValue($request, TableInterface::PARAM_ORDER, $query->order);
-
-        // other parameters
-        $query->id = $this->getParamId($request);
-        $query->callback = $request->isXmlHttpRequest();
-        $query->search = (string) $request->get(TableInterface::PARAM_SEARCH, '');
-        $query->view = (string) $this->getRequestValue($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE, false);
 
         return $query;
     }

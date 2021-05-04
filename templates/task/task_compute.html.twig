@@ -3,14 +3,14 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
-{% macro plain_text_input(id, class = '') %}
+{% macro plain_text_input(id, class='') %}
 {%- set class = (class ~ ' text-right form-control-plaintext border rounded px-2')|trim -%}
 <div id="{{ id }}" class="{{ class }}">{{ 0|amount }}</div>
 {% endmacro %}
 
 {% macro row_input(id, item, visible) %}
 <tr class="item-row{% if not visible %} d-none{% endif %}" task-id="{{ id }}">
-    <td>        
+    <td>
         <div class="custom-control custom-switch mt-1">
             <input type="checkbox" class="custom-control-input item-input" id="item_{{ item.id }}" name="items[]" value="{{ item.id }}" checked="checked">
             <label class="custom-control-label" for="item_{{ item.id }}">{{ item.name }}</label>
@@ -26,13 +26,13 @@
 {% endmacro %}
 
 {# parameters #}
-{%- set title       = 'taskcompute.title' -%}
-{%- set title_icon  = 'keyboard' -%}
+{%- set title = 'taskcompute.title' -%}
+{%- set title_icon = 'keyboard' -%}
 {%- set submit_text = 'taskcompute.button_ok' -%}
 {%- set cancel_text = 'common.button_close' -%}
-{%- set form_attr   = form_attr|default({})|merge({'action': path('ajax_task'), 'data-url': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
-{%- set service     = form.vars.value -%}
-{%- set selection   = service.task.id -%}
+{%- set form_attr = form_attr|default({})|merge({'action': path('ajax_task'), 'data-url': path('ajax_task'), 'data-failed': 'taskcompute.failed'|trans}) -%}
+{%- set service = form.vars.value -%}
+{%- set selection = service.task.id -%}
 {%- set items_count = service.task.count -%}
 
 {% block card_body %}
@@ -42,7 +42,7 @@
     </div>
     <div class="col-3">
         {{ form_row(form.quantity) }}
-    </div>    
+    </div>
 </div>
 <div class="form-row row-table{% if items_count == 0 %} d-none{% endif %}">
     <table class="table table-sm table-borderless" id="table-edit">
@@ -77,7 +77,7 @@
 </div>
 {% endblock %}
 
-{% block actions_form -%} 
+{% block actions_form -%}
 {{ icons.button_cancel(cancel_path, cancel_text) }}
 {% endblock %}
 

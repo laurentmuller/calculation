@@ -5,12 +5,12 @@
 {% import 'macros/_properties.html.twig' as properties %}
 
 {# parameters #}
-{%- set id     = item.id -%}
-{%- set title  = 'user.show.title' -%}
+{%- set id = item.id -%}
+{%- set title = 'user.show.title' -%}
 {%- set params = route_params(app.request, id) %}
 
 {# actions #}
-{%- set edit_path   = is_granted(ATTRIBUTE_EDIT, item) ? path('user_edit', params) : null -%}
+{%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('user_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('user_delete', params) : null -%}
 {%- set rights_path = is_granted(ATTRIBUTE_EDIT, item) ? path('user_rights', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, 'user_card') -%}
@@ -32,8 +32,8 @@
 <tr>
     <td class="w-25">{{ 'user.fields.imageFile'|trans }}</td>
     <td class="w-75">
-		<img class="img-thumbnail avatar-lg" alt="{{ 'user.fields.imageFile'|trans }}" src="{{ asset(image) }}?{{ 'now'|date('c') }}"  width="{{ image_width(image) }}" height="{{ image_height(image) }}">
-   	</td>
+        <img class="img-thumbnail avatar-lg" alt="{{ 'user.fields.imageFile'|trans }}" src="{{ asset(image) }}?{{ 'now'|date('c') }}"  width="{{ image_width(image) }}" height="{{ image_height(image) }}">
+       </td>
 </tr>
 {%- endif -%}
 {% endblock %}

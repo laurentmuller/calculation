@@ -1,3 +1,2 @@
 eclipse.preferences.version=1
-excludePaths=vendor
-includePaths=tests
+includePaths=templates

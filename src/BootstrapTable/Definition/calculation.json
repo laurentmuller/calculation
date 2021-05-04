@@ -1,67 +1,67 @@
 [
-	{
-		"field": "id",
-		"title": "calculation.fields.id",
-		"order": "desc",
-		"class": "text-id text-border",
-		"cardClass": "font-weight-bold",
-		"fieldFormatter": "formatId",
-		"styleFormatter": "styleBorderColor",
-		"numeric": true
-	},
-	{
-		"field": "date",
-		"title": "calculation.fields.date",
-		"default": true,
-		"order": "desc",
-		"class": "text-date",
-		"fieldFormatter": "formatDate"
-	},
-	{
-		"field": "state.code",
-		"title": "calculation.fields.state",
-		"class": "text-state"
-	},
-	{
-		"field": "customer",
-		"title": "calculation.fields.customer",
-		"class": "text-cell"
-	},
-	{
-		"field": "description",
-		"title": "calculation.fields.description",
-		"class": "text-cell"
-	},
-	{
-		"field": "overallMargin",
-		"title": "calculation.fields.margin",
-		"class": "text-percent",
-		"fieldFormatter": "formatOverallMargin",
-		"numeric": true
-	},
-	{
-		"field": "overallTotal",
-		"title": "calculation.fields.total",
-		"class": "text-currency",
-		"fieldFormatter": "formatAmount",
-		"numeric": true
-	},
-	{
-		"field": "id",
-		"alias": "action",
-		"sortable": false,
-		"searchable": false,
-		"class": "actions rowlink-skip d-print-none",
-		"cellFormatter": "formatActions"
-	},
-	{
-		"field": "state.color",
-		"alias": "color",
-		"visible": false
-	},
-	{
-		"field": "state.editable",
-		"alias": "textMuted",
-		"visible": false
-	}
+    {
+        "field": "id",
+        "title": "calculation.fields.id",
+        "order": "desc",
+        "class": "text-id text-border",
+        "cardClass": "font-weight-bold",
+        "fieldFormatter": "formatId",
+        "styleFormatter": "styleBorderColor",
+        "numeric": true
+    },
+    {
+        "field": "date",
+        "title": "calculation.fields.date",
+        "default": true,
+        "order": "desc",
+        "class": "text-date",
+        "fieldFormatter": "formatDate"
+    },
+    {
+        "field": "state.code",
+        "title": "calculation.fields.state",
+        "class": "text-state"
+    },
+    {
+        "field": "customer",
+        "title": "calculation.fields.customer",
+        "class": "text-cell"
+    },
+    {
+        "field": "description",
+        "title": "calculation.fields.description",
+        "class": "text-cell"
+    },
+    {
+        "field": "overallMargin",
+        "title": "calculation.fields.margin",
+        "class": "text-percent",
+        "fieldFormatter": "formatOverallMargin",
+        "numeric": true
+    },
+    {
+        "field": "overallTotal",
+        "title": "calculation.fields.total",
+        "class": "text-currency",
+        "fieldFormatter": "formatAmount",
+        "numeric": true
+    },
+    {
+        "field": "id",
+        "alias": "action",
+        "sortable": false,
+        "searchable": false,
+        "class": "actions rowlink-skip d-print-none",
+        "cellFormatter": "formatActions"
+    },
+    {
+        "field": "state.color",
+        "alias": "color",
+        "visible": false
+    },
+    {
+        "field": "state.editable",
+        "alias": "textMuted",
+        "visible": false
+    }
 ]

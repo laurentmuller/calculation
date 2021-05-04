@@ -64,15 +64,14 @@
                 });
             }
 
-            // update background
-            let background = $toast.css('background-color');
-            if (background.startsWith('rgba')) {
+            // update background color
+            const background = $toast.css('background-color');
+            if (background && background.startsWith('rgba')) {
                 const start = background.indexOf('(');
                 const end = background.indexOf(')', start + 1);
                 if (start !== -1 && end !== -1) {
                     const rgb = background.substring(start + 1, end).split(',').splice(0, 3).join(',');
-                    background = 'rgb(' + rgb + background.substring(end);
-                    $toast.css('background-color', background);
+                    $toast.css('background-color', 'rgb(' + rgb + ')');
                 }
             }
 
@@ -249,10 +248,10 @@
             position: 'bottom-right',
 
             // the container margins
-            marginTop: 20,
-            marginBottom: 20,
-            marginLeft: 20,
-            marginRight: 20,
+            marginTop: '20px',
+            marginBottom: '20px',
+            marginLeft: '20px',
+            marginRight: '20px',
 
             // the show duration in milliseconds
             timeout: 4000,
@@ -355,17 +354,6 @@
         },
 
         /**
-         * Returns the given value with the appended pixel (px) unit.
-         *
-         * @param {int}
-         *            value - The value to append unit to.
-         * @return {string} The value within the pixel unit.
-         */
-        toPixel: function (value) {
-            return value + 'px';
-        },
-
-        /**
          * Gets or creates the toasts container div.
          *
          * @param {Object}
@@ -386,41 +374,13 @@
             };
 
             // margins
-            const positions = this.NotificationPositions;
-            switch (options.position) {
-            case positions.TOP_LEFT:
-                css['margin-top'] = this.toPixel(options.marginTop);
-                css['margin-left'] = this.toPixel(options.marginLeft);
-                break;
-            case positions.TOP_CENTER:
-                css['margin-top'] = this.toPixel(options.marginTop);
-                break;
-            case positions.TOP_RIGHT:
-                css['margin-top'] = this.toPixel(options.marginTop);
-                css['margin-right'] = this.toPixel(options.marginRight);
-                break;
-
-            case positions.CENTER_LEFT:
-                css['margin-left'] = this.toPixel(options.marginLeft);
-                break;
-            // case positions.CENTER_CENTER:
-            //    break;
-            case positions.CENTER_RIGHT:
-                css['margin-right'] = this.toPixel(options.marginRight);
-                break;
-
-            case positions.BOTTOM_LEFT:
-                css['margin-bottom'] = this.toPixel(options.marginBottom);
-                css['margin-left'] = this.toPixel(options.marginLeft);
-                break;
-            case positions.BOTTOM_CENTER:
-                css['margin-bottom'] = this.toPixel(options.marginBottom);
-                break;
-            case positions.BOTTOM_RIGHT:
-                css['margin-bottom'] = this.toPixel(options.marginBottom);
-                css['margin-right'] = this.toPixel(options.marginRight);
-                break;
-            }
+            options.position.split('-').forEach(function(edge) {
+                const key = 'margin-' + edge;
+                const value = options[key.camelize()];
+                if (value) {
+                    css[key] = value;
+                }
+            });
 
             // target
             let $target = $(options.target);

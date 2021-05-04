@@ -60,6 +60,7 @@ class BootstrapTableController extends AbstractController
      * Display the calculation below table.
      *
      * @Route("/below", name="table_below")
+     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "below.title" }
      * })
@@ -125,6 +126,7 @@ class BootstrapTableController extends AbstractController
      * Display the calculation table with duplicate items.
      *
      * @Route("/duplicate", name="table_duplicate")
+     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "duplicate.title" }
      * })
@@ -138,6 +140,7 @@ class BootstrapTableController extends AbstractController
      * Display the calculation table with empty items.
      *
      * @Route("/empty", name="table_empty")
+     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "empty.title" }
      * })
@@ -177,6 +180,7 @@ class BootstrapTableController extends AbstractController
      * Display the log table.
      *
      * @Route("/log", name="table_log")
+     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "log.title" }
      * })
@@ -340,7 +344,11 @@ class BootstrapTableController extends AbstractController
         if (null === $value) {
             $value = $request->cookies->get(\strtoupper($key), null === $default ? null : (string) $default);
             if (null !== $value) {
-                $request->query->set($key, $value);
+                if (Request::METHOD_POST === $request->getMethod()) {
+                    $request->request->set($key, $value);
+                } else {
+                    $request->query->set($key, $value);
+                }
             }
         }
     }

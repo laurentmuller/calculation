@@ -3,20 +3,20 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set caller       = path('homepage') -%}
-{%- set selection    = app.request.get('id', 0) -%}
+{%- set caller = path('homepage') -%}
+{%- set selection = app.request.get('id', 0) -%}
 
 {# actions #}
-{%- set object_type  = ENTITY_CALCULATION -%}
-{%- set add_path     = is_granted(ATTRIBUTE_ADD, object_type) ? path('calculation_add', {'caller': caller}) : null -%}
-{%- set clone_page   = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
-{%- set edit_page    = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
-{%- set state_page   = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
-{%- set delete_page  = is_granted(ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
-{%- set show_page    = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
-{%- set single_page  = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
+{%- set object_type = ENTITY_CALCULATION -%}
+{%- set add_path = is_granted(ATTRIBUTE_ADD, object_type) ? path('calculation_add', {'caller': caller}) : null -%}
+{%- set clone_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
+{%- set edit_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
+{%- set state_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
+{%- set delete_page = is_granted(ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
+{%- set show_page = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
+{%- set single_page = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
 {%- set default_page = app.actionEdit ? edit_page : show_page -%}
-{%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
+{%- set row_link = not app.actionNone and (edit_page or show_page) -%}
 
 <div class="card mb-2">
     <div class="card-header">
@@ -42,21 +42,21 @@
                 <tr{% if id == selection %} class="table-primary"{% endif %}>
                     <td class="text-id text-border user-select-none" style="{{ properties.stateCss(calculation.stateColor) }}">
                     {%- if row_link -%}
-                    	<a href="{{ path(default_page, params) }}">{{ calculation.id|identifier }}</a>
+                        <a href="{{ path(default_page, params) }}">{{ calculation.id|identifier }}</a>
                     {%- else -%}
                         {{- calculation.id|identifier -}}
- 	                {%- endif -%}
+                     {%- endif -%}
                     </td>
                     <td class="text-date user-select-none">{{ calculation.date|localedate }}</td>
                     <td class="text-state user-select-none">{{ calculation.stateCode }}</td>
                     <td class="text-cell user-select-none">{{ calculation.customer }}</td>
-                    <td class="text-cell user-select-none">{{ calculation.description }}</td>                    
+                    <td class="text-cell user-select-none">{{ calculation.description }}</td>
                     {%- if app.marginBelow(calculation) -%}
                         {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
                         <td class="text-percent user-select-none text-danger has-tooltip" data-html="true" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
                     {%- else -%}
                         <td class="text-percent user-select-none">{{ calculation.overallMargin|percent }}</td>
-                    {%- endif -%}                    
+                    {%- endif -%}
                     <td class="text-currency user-select-none">{{ calculation.overallTotal|amount }}</td>
                     {%- if show_page or edit_page or delete_page or state_page or single_page or add_path -%}
                         <td class="actions rowlink-skip d-print-none">
@@ -78,28 +78,28 @@
                                     {%- if delete_page -%}
                                         {%- set delete_path = path(delete_page, params) -%}
                                         {{ icons.dropdownItem(delete_path, 'common.button_delete', 'times') }}
-                                    {%- endif -%}                            
+                                    {%- endif -%}
                                     {%- if state_page -%}
                                         {{ icons.dropdownSeparator }}
                                         {%- set state_path = path(state_page, params) -%}
                                         {{ icons.dropdownItem(state_path, 'calculation.list.state_title', 'flag far') }}
-                                    {%- endif -%}   
+                                    {%- endif -%}
                                     {%- if single_page -%}
                                         {{ icons.dropdownSeparator }}
                                         {%- set pdf_path = path(single_page, {'id': id}) -%}
                                         {{ icons.dropdownItemExternal(pdf_path, 'calculation.list.pdf_single_title', 'file-pdf far') }}
-                                    {%- endif -%}   
+                                    {%- endif -%}
                                     {%- if add_path -%}
                                         {{ icons.dropdownSeparator }}
                                         {{ icons.dropdownItem(add_path, 'calculation.add.title', 'file far') }}
-                                    {%- endif -%}                                    
-                                </div>    
-                            </div>                            
+                                    {%- endif -%}
+                                </div>
+                            </div>
                         </td>
-                    {% endif %}                    
+                    {% endif %}
                 </tr>
             {%- endfor -%}
-            </tbody>        
+            </tbody>
         </table>
         {%- else -%}
         <div class="alert alert-warning flex-fill mb-0 py-4 text-center" role="alert">

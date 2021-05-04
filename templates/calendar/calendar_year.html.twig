@@ -18,7 +18,7 @@
             {{ week.number }}
         {% else %}
             {% set href = path('calendar_week', {'year': week.year, 'week': week.number}) %}
-            <a href="{{ href }}" class="text-white">{{ week.number }}</a>            
+            <a href="{{ href }}" class="text-white">{{ week.number }}</a>
         {% endif %}
     </td>
     {% for day in week.days -%}
@@ -30,26 +30,26 @@
 {% macro monthTable(month) %}
 {%- set class = 'text-white font-weight-normal' ~ (month.current ? ' bg-primary' : ' bg-secondary') -%}
 <div class="col-lg-4 col-md-6 mb-4">
-	<table class="border w-100 calendar">
-		<thead>
-			<tr>
-                {% if month.empty %}                
+    <table class="border w-100 calendar">
+        <thead>
+            <tr>
+                {% if month.empty %}
                 <th colspan="8" class="{{ class }} text-center">
                     <span class="text-white">{{ month.name }}</span>
                 </th>
                 {% else %}
                 <th class="{{ class }} text-center">
                     <span>&nbsp;</span>
-                </th>                
+                </th>
                 <th colspan="6" class="{{ class }} text-center">
-                    <a class="text-white" href="{{ path('calendar_month', {'year': month.year, 'month': month.number}) }}" title="{{ 'calendar.month_show'|trans({'%month%': month.name, '%year%': month.year}) }}">{{ month.Name }}</a>                    
+                    <a class="text-white" href="{{ path('calendar_month', {'year': month.year, 'month': month.number}) }}" title="{{ 'calendar.month_show'|trans({'%month%': month.name, '%year%': month.year}) }}">{{ month.Name }}</a>
                 </th>
                 <th class="{{ class }} text-right pr-2">
                     {{ helper.linkCalculations('%02d.%d'|format(month.number, month.year), month.name ~ ' ' ~ month.year, month.count, 'text-white') }}
                 </th>
                 {% endif %}
-			</tr>
-			<tr>
+            </tr>
+            <tr>
                 <th class="border bg-secondary">&nbsp;</th>
                 {% for name in month.calendar.weekShortNames %}
                     {%- set class = 'border text-center font-weight-normal' -%}
@@ -57,18 +57,18 @@
                     <th class="{{ class }}">{{ name }}</th>
                 {% endfor %}
             </tr>
-		</thead>
-		<tbody>
-    	{% for week in month.weeks -%}
+        </thead>
+        <tbody>
+        {% for week in month.weeks -%}
             {{ _self.weekRow(month, week) }}
-		{%- endfor %}
-		</tbody>
-	</table>
+        {%- endfor %}
+        </tbody>
+    </table>
 </div>
 {% endmacro %}
 
 {# parameters #}
-{%- set title            = 'calendar.year_title' -%}
+{%- set title = 'calendar.year_title' -%}
 {%- set title_parameters = {'%year%': calendar.year} -%}
 
 {# class #}
@@ -80,7 +80,7 @@
         <h2 class="">{{ title|trans(title_parameters) }}</h2>
     </div>
     <div class="col-md-4 text-md-center">
-    	<h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
+        <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
     </div>
     <div class="col-md-4 align-self-center text-md-right">
         <div class="btn-group btn-group-sm" role="group">

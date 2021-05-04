@@ -1,20 +1,20 @@
 {% extends 'cards/card_edit.html.twig' %}
 
 {# parameters #}
-{%- set title      = new ? 'globalmargin.add.title' : 'globalmargin.edit.title' -%}
+{%- set title = new ? 'globalmargin.add.title' : 'globalmargin.edit.title' -%}
 {%- set title_icon = 'percent' -%}
-{%- set page_list  = 'globalmargin_table' -%}
+{%- set page_list = 'globalmargin_table' -%}
 
 {% block card_body %}
 <div class="form-row">
     <div class="col-md-4">
-	    {{ form_row(form.minimum) }}
+        {{ form_row(form.minimum) }}
     </div>
     <div class="col-md-4">
-	    {{ form_row(form.maximum) }}
+        {{ form_row(form.maximum) }}
     </div>
     <div class="col-md-4">
-	    {{ form_row(form.margin) }}
+        {{ form_row(form.margin) }}
     </div>
 </div>
 {% endblock %}

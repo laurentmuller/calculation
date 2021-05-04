@@ -3,8 +3,8 @@
 {% import 'calculation/_macro_groups.html.twig' as macroGroups %}
 
 <div id='items-panel' class="card mb-3">
-	<div class="card-header">
-	{% if editable %}
+    <div class="card-header">
+    {% if editable %}
         <div class="row">
             <div class="col">
                 <h1 class="card-title">{{ icons.icon('file-alt far', 'calculation.edit.panel_items') }}</h1>
@@ -13,38 +13,38 @@
                 <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
                     {{ icons.link('#', null, 'btn btn-secondary btn-add-item', 'file far', 'calculation.edit.add_item') }}
                     {{ icons.link('#', null, 'btn btn-secondary btn-add-task', 'tasks', 'calculation.edit.add_task') }}
-                    {{ icons.link('#', null, 'btn btn-secondary btn-sort-items' ~ (item.sortable ? '' : ' disabled'), 'sort-alpha-up', 'calculation.edit.sort_item') }}    
+                    {{ icons.link('#', null, 'btn btn-secondary btn-sort-items' ~ (item.sortable ? '' : ' disabled'), 'sort-alpha-up', 'calculation.edit.sort_item') }}
                 </div>
             </div>
         </div>
     {% else %}
         <h1 class="card-title">{{ icons.icon('file-alt far', 'calculation.edit.panel_items') }}</h1>
     {% endif %}
-	</div>
-	<div class="card-body p-2">
-		<div class="form-row">
-			<div class="col">
-				<table id="data-table-edit" class="table table-edit table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ group_index }}" data-category-index="{{ category_index }}" data-item-index="{{ item_index }}" data-prototype="{{ macroGroups.printGroupRow(form.groups.vars.prototype, editable)|e('html_attr') }}"{% endif -%}>
-				{# groups and items #}
+    </div>
+    <div class="card-body p-2">
+        <div class="form-row">
+            <div class="col">
+                <table id="data-table-edit" class="table table-edit table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ group_index }}" data-category-index="{{ category_index }}" data-item-index="{{ item_index }}" data-prototype="{{ macroGroups.printGroupRow(form.groups.vars.prototype, editable)|e('html_attr') }}"{% endif -%}>
+                {# groups and items #}
                 {% for group in form.groups %}
                     {{ macroGroups.printGroupRow(group, editable) }}
                 {% endfor %}
-				</table>
+                </table>
                 {{ form_errors(form.groups) }}
-			</div>
-		</div>
-		<div id="empty-items" class="row{% if item.groups|length > 0 %} d-none{% endif %}">
-			<div class="col">
-				<p class="mb-0 text-muted">{{ 'calculation.edit.empty_items'|trans }}</p>
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+        <div id="empty-items" class="row{% if item.groups|length > 0 %} d-none{% endif %}">
+            <div class="col">
+                <p class="mb-0 text-muted">{{ 'calculation.edit.empty_items'|trans }}</p>
+            </div>
+        </div>
+    </div>
     {# errors #}
-    {%- set class_error     = (emty_items or duplicate_items) ? 'card-footer' : 'card-footer d-none' -%}
+    {%- set class_error = (emty_items or duplicate_items) ? 'card-footer' : 'card-footer d-none' -%}
     {%- set class_duplicate = duplicate_items ? 'ml-1' : 'ml-1 d-none' -%}
-    {%- set class_empty     = emty_items ? 'ml-1' : 'ml-1 d-none' -%}
-	<div id="error-all" class="{{ class_error }}">
-		<p class="mb-0 text-right">
+    {%- set class_empty = emty_items ? 'ml-1' : 'ml-1 d-none' -%}
+    <div id="error-all" class="{{ class_error }}">
+        <p class="mb-0 text-right">
             <span id="error-duplicate" class="{{ class_duplicate }}"><span class="duplicate-footer"></span>{{ 'duplicate.title'|trans }}</span>
             <span id="error-empty" class="{{ class_empty }}"><span class="empty-footer"></span>{{ 'empty.title'|trans }}</span>
         </p>

@@ -11,10 +11,10 @@
 <tr>
     <td class="{{ class }}" title="{{ week_title }}">
     {% if week.empty %}
-    	{{ week.number }}
+        {{ week.number }}
     {% else %}
-    	{% set href = path('calendar_week', {'year': week.year, 'week': week.number}) %}
-        <a href="{{ href }}" class="text-white">{{ week.number }}</a>            
+        {% set href = path('calendar_week', {'year': week.year, 'week': week.number}) %}
+        <a href="{{ href }}" class="text-white">{{ week.number }}</a>
     {% endif %}
     {% for day in week.days -%}
         {{ helper.dayCell(month, day, false) }}
@@ -23,9 +23,9 @@
 {% endmacro %}
 
 {# parameters #}
-{%- set title            = 'calendar.month_title' -%}
+{%- set title = 'calendar.month_title' -%}
 {%- set title_parameters = {'%year%': calendar.year, '%month%': month.Name} -%}
-{%- set month_index      = month.number -%}
+{%- set month_index = month.number -%}
 
 {% block body %}
 <div class="row">
@@ -33,7 +33,7 @@
         <h2>{{ title|trans(title_parameters) }}</h2>
     </div>
     <div class="col-md-4 text-md-center">
-    	<h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
+        <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
     </div>
     <div class="col-md-4 align-self-center text-md-right">
         <div class="btn-group btn-group-sm" role="group">
@@ -57,7 +57,7 @@
             {{ icons.link(href, null, 'btn btn-primary', 'calendar-alt far', 'calendar.year_show', null, {'%year%': calendar.year}) }}
             {# calculations #}
             {{ helper.linkCalculations('%02d.%d'|format(month.number, month.year), month.name ~ ' ' ~ month.year, calculations|length, 'btn btn-primary') }}
-        </div>           
+        </div>
     </div>
 </div>
 <div class="row popover-w-100">
@@ -69,7 +69,7 @@
                     <th class="border bg-secondary text-white text-center font-weight-normal">{{ name }}</th>
                 {% endfor %}
             </tr>
-            {% for week in month.weeks -%}   
+            {% for week in month.weeks -%}
                 {{ _self.weekRow(month, week) }}
             {%- endfor %}
         </table>

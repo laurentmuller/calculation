@@ -4,7 +4,7 @@
 
 {# parameters #}
 {%- set is_exception = exception is defined -%}
-{%- set title_icon  = 'exclamation-circle' -%}
+{%- set title_icon = 'exclamation-circle' -%}
 {% if not title is defined %}
     {% if status_code is defined and status_code != 0 %}
         {%- set title = 'error_page.title' -%}
@@ -78,14 +78,14 @@
                     <td class="property" rowspan="{{ traces|length }}">{{ 'error_page.fields.trace'|trans }}</td>
                 {% endif %}
                 <td class="value">
-                	<samp>
-                    	<span><strong>#{{ loop.index0 }}.</strong></span>
+                    <samp>
+                        <span><strong>#{{ loop.index0 }}.</strong></span>
                         {%- if trace.file|default(false) -%}
                             <span>{{ trace.file }}({{ trace.line|default(0) }})</span>
                         {%- endif -%}
                         {%- if trace.function|default(false) and trace.class|default(false) -%}
                             <span>: {{ trace.class|abbr_class|striptags ~ trace.type|default('->') ~ trace.function }}()</span>
-	                    {%- endif -%}
+                        {%- endif -%}
                     </samp>
                 </td>
             </tr>
@@ -99,7 +99,7 @@
 {% block card_footer %}
 {% if page_list is defined %}
     {%- set id = id|default(0) -%}
-    {%- set href  = cancel_url(app.request, id, page_list) -%}
+    {%- set href = cancel_url(app.request, id, page_list) -%}
     {{ icons.link(href, 'common.button_back_list', 'btn btn-form btn-primary', 'chevron-left') }}
 {% else %}
     {{ icons.homepage() }}

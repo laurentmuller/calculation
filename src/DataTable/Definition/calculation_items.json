@@ -1,58 +1,58 @@
 [
-	{
-		"name": "id",
-		"title": "calculation.fields.id",
-		"default": true,
-		"direction": "desc",
-		"class": "text-id text-border",
-		"formatter": "formatId",
-		"callback": "renderStateColor"
-	},
-	{
-		"name": "date",
-		"title": "calculation.fields.date",		
-		"direction": "desc",
-		"class": "text-date",
-		"formatter": "formatDate"
-	},
-	{
-		"name": "stateCode",
-		"title": "calculation.fields.state",
-		"class": "text-state"
-	},
-	{
-		"name": "customer",
-		"title": "calculation.fields.customer",
-		"class": "text-cell w-25"
-	},
-	{
-		"name": "description",
-		"title": "calculation.fields.description",
-		"class": "text-cell w-25"
-	},
-	{
-		"name": "items",
-		"title": "calculation.fields.items",
-		"class": "text-cell w-25 text-danger",
-		"headerClass": "text-body",
-		"orderable": false,
-		"searchable": false,
-		"rawData": true,
-		"formatter": "formatItems"
-	},
-	{
-		"name": "stateColor",
-		"visible": false,
-		"orderable": false,
-		"searchable": false
-	},
-	{
-		"name": "id",
-		"title": "common.empty",
-		"orderable": false,
-		"searchable": false,
-		"rawData": true,
-		"formatter": "formatActions",
-		"class": "actions rowlink-skip d-print-none"
-	}
+    {
+        "name": "id",
+        "title": "calculation.fields.id",
+        "default": true,
+        "direction": "desc",
+        "class": "text-id text-border",
+        "formatter": "formatId",
+        "callback": "renderStateColor"
+    },
+    {
+        "name": "date",
+        "title": "calculation.fields.date",        
+        "direction": "desc",
+        "class": "text-date",
+        "formatter": "formatDate"
+    },
+    {
+        "name": "stateCode",
+        "title": "calculation.fields.state",
+        "class": "text-state"
+    },
+    {
+        "name": "customer",
+        "title": "calculation.fields.customer",
+        "class": "text-cell w-25"
+    },
+    {
+        "name": "description",
+        "title": "calculation.fields.description",
+        "class": "text-cell w-25"
+    },
+    {
+        "name": "items",
+        "title": "calculation.fields.items",
+        "class": "text-cell w-25 text-danger",
+        "headerClass": "text-body",
+        "orderable": false,
+        "searchable": false,
+        "rawData": true,
+        "formatter": "formatItems"
+    },
+    {
+        "name": "stateColor",
+        "visible": false,
+        "orderable": false,
+        "searchable": false
+    },
+    {
+        "name": "id",
+        "title": "common.empty",
+        "orderable": false,
+        "searchable": false,
+        "rawData": true,
+        "formatter": "formatActions",
+        "class": "actions rowlink-skip d-print-none"
+    }
 ]

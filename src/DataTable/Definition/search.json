@@ -1,59 +1,59 @@
 [
-	{
-		"name": "id",
-		"visible": false,
-		"orderable": false,
-		"searchable": false
-	},
-	{
-		"name": "entityName",
-		"title": "search.fields.entity",
-		"searchable": false,
-		"class": "text-cell w-20",
-		"render": "renderEntityName"
-	},
-	{
-		"name": "fieldName",
-		"title": "search.fields.field",
-		"searchable": false,
-		"class": "text-cell w-20"
-	},
-	{
-		"name": "content",
-		"title": "search.fields.content",
-		"searchable": false,
-		"class": "text-cell w-auto",
-		"default": true,
-		"rawData": true
-	},
-	{
-		"name": "type",
-		"visible": false,
-		"orderable": false,
-		"searchable": false
-	},
-	{
-		"name": "field",
-		"visible": false,
-		"orderable": false,
-		"searchable": false
-	},
-	{
-		"name": "show_granted",
-		"visible": false,
-		"orderable": false,
-		"searchable": false
-	},
-	{
-		"name": "edit_granted",
-		"visible": false,
-		"orderable": false,
-		"searchable": false
-	},
-	{
-		"name": "delete_granted",
-		"visible": false,
-		"orderable": false,
-		"searchable": false
-	}
+    {
+        "name": "id",
+        "visible": false,
+        "orderable": false,
+        "searchable": false
+    },
+    {
+        "name": "entityName",
+        "title": "search.fields.entity",
+        "searchable": false,
+        "class": "text-cell w-20",
+        "render": "renderEntityName"
+    },
+    {
+        "name": "fieldName",
+        "title": "search.fields.field",
+        "searchable": false,
+        "class": "text-cell w-20"
+    },
+    {
+        "name": "content",
+        "title": "search.fields.content",
+        "searchable": false,
+        "class": "text-cell w-auto",
+        "default": true,
+        "rawData": true
+    },
+    {
+        "name": "type",
+        "visible": false,
+        "orderable": false,
+        "searchable": false
+    },
+    {
+        "name": "field",
+        "visible": false,
+        "orderable": false,
+        "searchable": false
+    },
+    {
+        "name": "show_granted",
+        "visible": false,
+        "orderable": false,
+        "searchable": false
+    },
+    {
+        "name": "edit_granted",
+        "visible": false,
+        "orderable": false,
+        "searchable": false
+    },
+    {
+        "name": "delete_granted",
+        "visible": false,
+        "orderable": false,
+        "searchable": false
+    }
 ]

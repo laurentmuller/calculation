@@ -3,27 +3,27 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title       = 'empty.title' -%}
-{%- set title_icon  = 'file-code far' -%}
-{%- set pdf_title   = 'calculation.list.pdf_title' -%}
+{%- set title = 'empty.title' -%}
+{%- set title_icon = 'file-code far' -%}
+{%- set pdf_title = 'calculation.list.pdf_title' -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 
 {# actions #}
-{%- set params      = {'id': 0} -%}
-{%- set add_path    = false -%}
+{%- set params = {'id': 0} -%}
+{%- set add_path = false -%}
 {%- set show_search = false -%}
-{%- set show_path   = path('calculation_show', params) -%}
-{%- set edit_path   = path('calculation_edit', params) -%}
+{%- set show_path = path('calculation_show', params) -%}
+{%- set edit_path = path('calculation_edit', params) -%}
 {%- set delete_path = path('calculation_delete', params) -%}
-{%- set pdf_path    = path('empty_pdf') -%}
-{%- set excel_path  = path('empty_excel') -%}
+{%- set pdf_path = path('empty_pdf') -%}
+{%- set excel_path = path('empty_excel') -%}
 {%- set single_path = path('calculation_pdf_id', params) -%}
 
 {# titles #}
-{%- set show_title   = 'calculation.show.title' %}
-{%- set edit_title   = 'calculation.edit.title_short' %}
+{%- set show_title = 'calculation.show.title' %}
+{%- set edit_title = 'calculation.edit.title_short' %}
 {%- set delete_title = 'calculation.delete.title' %}
-{%- set excel_title  = 'calculation.list.excel_title' -%}
+{%- set excel_title = 'calculation.list.excel_title' -%}
 
 {% block card_header -%}
 {{ parent() }}

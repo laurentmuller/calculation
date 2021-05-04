@@ -26,11 +26,11 @@ class SwissDatabase extends AbstractDatabase
      */
     private const CREATE_CITY = <<<'sql'
         CREATE TABLE IF NOT EXISTS city (
-        	id    INTEGER NOT NULL,
-        	zip	  INTEGER NOT NULL,
-        	name  TEXT NOT NULL,
-        	state TEXT NOT NULL,
-        	PRIMARY KEY(id)
+            id    INTEGER NOT NULL,
+            zip      INTEGER NOT NULL,
+            name  TEXT NOT NULL,
+            state TEXT NOT NULL,
+            PRIMARY KEY(id)
         ) WITHOUT ROWID
         sql;
 
@@ -41,9 +41,9 @@ class SwissDatabase extends AbstractDatabase
      */
     private const CREATE_STATE = <<<'sql'
         CREATE TABLE "state" (
-        	id	    TEXT NOT NULL,
-        	name	TEXT NOT NULL,
-        	PRIMARY KEY(id)
+            id        TEXT NOT NULL,
+            name    TEXT NOT NULL,
+            PRIMARY KEY(id)
         ) WITHOUT ROWID
         sql;
 
@@ -54,9 +54,9 @@ class SwissDatabase extends AbstractDatabase
      */
     private const CREATE_STREET = <<<'sql'
         CREATE TABLE IF NOT EXISTS street (
-        	city_id INTEGER NOT NULL,
-        	name    TEXT NOT NULL,
-        	FOREIGN KEY(city_id) REFERENCES city(id)
+            city_id INTEGER NOT NULL,
+            name    TEXT NOT NULL,
+            FOREIGN KEY(city_id) REFERENCES city(id)
         )
         sql;
 
@@ -98,7 +98,7 @@ class SwissDatabase extends AbstractDatabase
     private const SEARCH_CITY = <<<'sql'
         SELECT
             name,
-        	zip,
+            zip,
             state,
             printf('%s (%s)', name, zip) as display
         FROM city

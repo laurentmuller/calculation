@@ -1,13 +1,13 @@
 {% extends 'table/table_base.html.twig' %}
 
 {# parameters #}
-{%- set title        = 'duplicate.title' -%}
-{%- set title_icon   = 'copy far' -%}
-{%- set defer_url    = url('table_duplicate') -%}
-{%- set object_type  = ENTITY_CALCULATION -%}
+{%- set title = 'duplicate.title' -%}
+{%- set title_icon = 'copy far' -%}
+{%- set defer_url = url('table_duplicate') -%}
+{%- set object_type = ENTITY_CALCULATION -%}
 
 {% block card_header -%}
-{{ parent() }}        
+{{ parent() }}
 {% if customData.itemsCount and rows|length -%}<small>{{ 'duplicate.count'|trans({'%calculations%': rows|length, '%items%': customData.itemsCount}) }}</small>{%- endif %}
 {%- endblock %}
 

@@ -1,46 +1,46 @@
 [
-	{
-		"field": "id",
-		"visible": false
-	},
-	{
-		"field": "code",
-		"title": "calculationstate.fields.code",
-		"default": true,
-		"class": "text-code text-border text-nowrap",
-		"cardClass": "font-weight-bold",
-		"styleFormatter": "styleBorderColor"
-	},
-	{
-		"field": "description",
-		"title": "calculationstate.fields.description",
-		"class": "w-auto text-cell"
-	},
-	{
-		"field": "editable",
-		"title": "calculationstate.fields.editable",
-		"searchable": false,
-		"class": "text-state",
-		"fieldFormatter": "formatEditable"
-	},
-	{
-		"field": "calculations",
-		"title": "calculationstate.fields.calculations",
-		"sortable": false,
-		"searchable": false,
-		"class": "text-currency rowlink-skip",
-		"fieldFormatter": "formatCalculations"
-	},
-	{
-		"field": "id",
-		"alias": "action",
-		"sortable": false,
-		"searchable": false,
-		"class": "actions rowlink-skip d-print-none",
-		"cellFormatter": "formatActions"
-	},
-	{
-		"field": "color",
-		"visible": false
-	}
+    {
+        "field": "id",
+        "visible": false
+    },
+    {
+        "field": "code",
+        "title": "calculationstate.fields.code",
+        "default": true,
+        "class": "text-code text-border text-nowrap",
+        "cardClass": "font-weight-bold",
+        "styleFormatter": "styleBorderColor"
+    },
+    {
+        "field": "description",
+        "title": "calculationstate.fields.description",
+        "class": "w-auto text-cell"
+    },
+    {
+        "field": "editable",
+        "title": "calculationstate.fields.editable",
+        "searchable": false,
+        "class": "text-state",
+        "fieldFormatter": "formatEditable"
+    },
+    {
+        "field": "calculations",
+        "title": "calculationstate.fields.calculations",
+        "sortable": false,
+        "searchable": false,
+        "class": "text-currency rowlink-skip",
+        "fieldFormatter": "formatCalculations"
+    },
+    {
+        "field": "id",
+        "alias": "action",
+        "sortable": false,
+        "searchable": false,
+        "class": "actions rowlink-skip d-print-none",
+        "cellFormatter": "formatActions"
+    },
+    {
+        "field": "color",
+        "visible": false
+    }
 ]

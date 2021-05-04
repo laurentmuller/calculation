@@ -1,13 +1,13 @@
 {% extends 'table/table_base.html.twig' %}
 
 {# parameters #}
-{%- set title        = 'empty.title' -%}
-{%- set title_icon   = 'file-code far' -%}
-{%- set defer_url    = url('table_empty') -%}
-{%- set object_type  = ENTITY_CALCULATION -%}
+{%- set title = 'empty.title' -%}
+{%- set title_icon = 'file-code far' -%}
+{%- set defer_url = url('table_empty') -%}
+{%- set object_type = ENTITY_CALCULATION -%}
 
 {% block card_header -%}
-{{ parent() }}        
+{{ parent() }}
 {% if customData.itemsCount and rows|length  -%}<small>{{ 'empty.count'|trans({'%calculations%': rows|length, '%items%': customData.itemsCount}) }}</small>{%- endif %}
 {%- endblock %}
 

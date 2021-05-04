@@ -1,10 +1,10 @@
 {% extends 'table/table_base.html.twig' %}
 
 {# parameters #}
-{%- set title        = 'customer.list.title' -%}
-{%- set title_icon   = 'address-card far' -%}
-{%- set defer_url    = url('table_customer') -%}
-{%- set object_type  = ENTITY_CUSTOMER -%}
+{%- set title = 'customer.list.title' -%}
+{%- set title_icon = 'address-card far' -%}
+{%- set defer_url = url('table_customer') -%}
+{%- set object_type = ENTITY_CUSTOMER -%}
 
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('customer_add', params) }}">{{ 'customer.add.title'|trans }}</a>{% endif %}

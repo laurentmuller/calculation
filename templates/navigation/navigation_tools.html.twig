@@ -11,11 +11,11 @@
         {{- icons.dropdownSeparator -}}
         {{- icons.dropdownItem(path('admin_update'), 'calculation.update.title', 'pencil-alt') -}}
         {{- icons.dropdownSeparator -}}
-        {%- set href = is_tabular ? path('below_table') : path('below_card')  -%}
+        {%- set href = is_tabular ? path('below_table') : path('below_card') -%}
         {{- icons.dropdownItem(href, 'below.title', 'percent') -}}
-        {%- set href = is_tabular ? path('duplicate_table') : path('duplicate_card')  -%}
+        {%- set href = is_tabular ? path('duplicate_table') : path('duplicate_card') -%}
         {{- icons.dropdownItem(href, 'duplicate.title', 'copy far') -}}
-        {%- set href = is_tabular ? path('empty_table') : path('empty_card')  -%}
+        {%- set href = is_tabular ? path('empty_table') : path('empty_card') -%}
         {{- icons.dropdownItem(href, 'empty.title', 'file-code far') -}}
         {%- if is_granted_task -%}
         {{- icons.dropdownSeparator -}}

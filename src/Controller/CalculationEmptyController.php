@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\DataTable\CalculationEmptyDataTable;
 use App\Report\CalculationEmptyReport;
 use App\Repository\CalculationRepository;
@@ -29,6 +30,18 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/empty")
  * @IsGranted("ROLE_ADMIN")
+ * @Breadcrumb({
+ *     {"label" = "index.title", "route" = "homepage" },
+ *     {"label" = "calculation.list.title", "route" = "table_empty", "params" = {
+ *         "id" = "$params.[id]",
+ *         "search" = "$params.[search]",
+ *         "sort" = "$params.[sort]",
+ *         "order" = "$params.[order]",
+ *         "offset" = "$params.[offset]",
+ *         "limit" = "$params.[limit]",
+ *         "view" = "$params.[view]"
+ *     }}
+ * })
  */
 class CalculationEmptyController extends AbstractController
 {

@@ -9,23 +9,23 @@
 {%- endmacro %}
 
 {# parameters #}
-{%- set title        = 'duplicate.title' -%}
-{%- set title_icon   = 'copy far' -%}
-{%- set empty_list   = 'duplicate.empty' -%}
-{%- set caller       = path(app.request.get('_route')) -%}
+{%- set title = 'duplicate.title' -%}
+{%- set title_icon = 'copy far' -%}
+{%- set empty_list = 'duplicate.empty' -%}
+{%- set caller = path(app.request.get('_route')) -%}
 
 {# actions #}
-{%- set add_page     = false -%}
-{%- set delete_page  = false -%}
-{%- set pdf_page     = false -%}
-{%- set state_page   = false -%}
-{%- set clone_page   = false -%}
-{%- set col_span     = 1 -%}
+{%- set add_page = false -%}
+{%- set delete_page = false -%}
+{%- set pdf_page = false -%}
+{%- set state_page = false -%}
+{%- set clone_page = false -%}
+{%- set col_span = 1 -%}
 
 {% block search_action %}
 <div class="btn-group btn-group-sm" role="group">
     {{ icons.linkTable('duplicate_table') }}
-</div>    
+</div>
 {% endblock %}
 
 {% block card_header -%}

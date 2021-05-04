@@ -30,6 +30,16 @@ interface TableInterface
     public const PAGE_SIZE = 20;
 
     /**
+     * The default page size for the card view.
+     */
+    public const PAGE_SIZE_CARD = 5;
+
+    /**
+     * The default page size for the custom view.
+     */
+    public const PAGE_SIZE_CUSTOM = 15;
+
+    /**
      * The columns parameter name (array of columns).
      */
     public const PARAM_COLUMNS = 'columns';

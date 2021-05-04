@@ -1,11 +1,11 @@
 {% extends 'table/table_base.html.twig' %}
 
 {# parameters #}
-{%- set title        = 'user.list.title' -%}
-{%- set title_icon   = 'user far' -%}
-{%- set defer_url    = url('table_user') -%}
-{%- set object_type  = ENTITY_USER -%}
-{%- set attributes   = attributes|default({})|merge({'user-id': app.user.id}) -%}
+{%- set title = 'user.list.title' -%}
+{%- set title_icon = 'user far' -%}
+{%- set defer_url = url('table_user') -%}
+{%- set object_type = ENTITY_USER -%}
+{%- set attributes = attributes|default({})|merge({'user-id': app.user.id}) -%}
 
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('user_add', params) }}">{{ 'user.add.title'|trans }}</a>{% endif %}

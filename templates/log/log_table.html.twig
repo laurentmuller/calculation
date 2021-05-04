@@ -19,19 +19,19 @@
 {% endmacro %}
 
 {# parameters #}
-{%- set title       = 'log.title' -%}
-{%- set title_icon  = 'book' -%}
+{%- set title = 'log.title' -%}
+{%- set title_icon = 'book' -%}
 {%- set object_type = ENTITY_LOG -%}
 
 {# actions #}
-{%- set params     = {'id': 0} -%}
-{%- set show_path  = path('log_show', params) -%}
-{%- set pdf_path   = path('log_pdf') -%}
+{%- set params = {'id': 0} -%}
+{%- set show_path = path('log_show', params) -%}
+{%- set pdf_path = path('log_pdf') -%}
 {%- set excel_path = path('log_excel') -%}
 
 {# titles #}
-{%- set show_title  = 'log.show.title' %}
-{%- set pdf_title   = 'log.list.pdf_title' %}
+{%- set show_title = 'log.show.title' %}
+{%- set pdf_title = 'log.list.pdf_title' %}
 {%- set excel_title = 'log.list.excel_title' -%}
 
 {% block card_header %}
@@ -50,7 +50,7 @@
         </div>
         <input type="hidden" id="channel" name="channel">
     </div>
-    <div class="input-group-prepend" id="dropdown-menu-level">        
+    <div class="input-group-prepend" id="dropdown-menu-level">
         <button id="button-level" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" reference="dropdown-level" aria-haspopup="true" aria-expanded="false" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
             {{- 'log.fields.level'|trans -}}
         </button>
@@ -65,9 +65,9 @@
 
 {% block table_actions %}
 {{ parent() }}
-{{ icons.dropdownItem(path('log_delete', {'route' : app.request.get('_route')}), 'log.delete.title', 'times') }}
+{{ icons.dropdownItem(path('log_delete', {'route': app.request.get('_route')}), 'log.delete.title', 'times') }}
 {{ icons.dropdownSeparator() }}
-{{ icons.dropdownItem(path('log_refresh', {'route' : app.request.get('_route')}), 'common.button_refresh', 'sync-alt') }}
+{{ icons.dropdownItem(path('log_refresh', {'route': app.request.get('_route')}), 'common.button_refresh', 'sync-alt') }}
 {{ icons.dropdownSeparator() }}
 {{ icons.dropdownItemCard('log_card') }}
 {% endblock %}

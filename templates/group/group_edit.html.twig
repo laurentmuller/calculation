@@ -3,11 +3,11 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title         = new ? 'group.add.title' : 'group.edit.title' -%}
-{%- set title_icon    = 'code-branch' -%}
-{%- set page_list     = 'group_table' -%}
+{%- set title = new ? 'group.add.title' : 'group.edit.title' -%}
+{%- set title_icon = 'code-branch' -%}
+{%- set page_list = 'group_table' -%}
 {%- set margins_length = form.margins|length %}
-{%- set table_class   = 'table table-borderless table-edit' ~ (margins_length == 0 ? ' d-none' : '') -%}
+{%- set table_class = 'table table-borderless table-edit' ~ (margins_length == 0 ? ' d-none' : '') -%}
 
 {# macros #}
 {% macro printMarginRow(margin) %}
@@ -39,21 +39,21 @@
 {% block card_body %}
 <div class="form-row">
     <div class="col-md-6">
-	    {{ form_row(form.code) }}
+        {{ form_row(form.code) }}
     </div>
 </div>
 {{ form_row(form.description) }}
 <div class="form-row">
     <div class="col-md-12">
-    	<div class="row">
-    		<div class="col">
-    			<label class="control-label" for="data-table-edit">{{ 'group.fields.margins'|trans }}</label>
-    		</div>
-    		<div class="col text-right">
+        <div class="row">
+            <div class="col">
+                <label class="control-label" for="data-table-edit">{{ 'group.fields.margins'|trans }}</label>
+            </div>
+            <div class="col text-right">
                 <a href="#" role="button" class="p-0 btn-add btn-link">{{ 'group.edit.add_margin'|trans }}</a>
                 <a href="#" role="button" class="p-0 btn-sort btn-link {% if form.margins|length < 2 %} disabled{% endif %}" title="{{ 'group.edit.sort_margins'|trans }}"><i class="fas fa-sort-numeric-up fa-fw"></i></a>
-    		</div>
-    	</div>
+            </div>
+        </div>
         <hr class="mt-0 mb-2">
         <table id="data-table-edit" class="{{ table_class }}" data-index="{{ margins_length }}" data-prototype="{{ _self.printMarginRow(form.margins.vars.prototype)|e('html_attr') }}">
             <thead>
@@ -66,14 +66,14 @@
             </thead>
             <tbody>
                 {% for margin in form.margins %}
-                    {{ _self.printMarginRow(margin) }}                
+                    {{ _self.printMarginRow(margin) }}
                 {% endfor %}
-                
+
             </tbody>
         </table>
-        {{ form_errors(form.margins) }}        
+        {{ form_errors(form.margins) }}
         <small id="empty_margins" class="text-muted{% if margins_length > 0 %} d-none{% endif %}">
-            {{- 'group.edit.empty_margins'|trans -}}            
+            {{- 'group.edit.empty_margins'|trans -}}
         </small>
     </div>
 </div>

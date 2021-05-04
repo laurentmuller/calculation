@@ -67,6 +67,7 @@ class TaskDocument extends AbstractArrayDocument
         // headers
         $this->setHeaderValues([
             'task.fields.name' => Alignment::HORIZONTAL_GENERAL,
+            'task.fields.group' => Alignment::HORIZONTAL_GENERAL,
             'task.fields.category' => Alignment::HORIZONTAL_GENERAL,
             'task.fields.unit' => Alignment::HORIZONTAL_GENERAL,
             'taskitemmargin.fields.minimum' => Alignment::HORIZONTAL_RIGHT,
@@ -75,9 +76,9 @@ class TaskDocument extends AbstractArrayDocument
         ]);
 
         // formats
-        $this->setFormatAmount(4)
-            ->setFormatAmount(5)
-            ->setFormatAmount(6);
+        $this->setFormatAmount(5)
+            ->setFormatAmount(6)
+            ->setFormatAmount(7);
 
         // rows
         $row = 2;
@@ -87,15 +88,17 @@ class TaskDocument extends AbstractArrayDocument
             if ($entity->isEmpty()) {
                 $this->setRowValues($row++, [
                     $entity->getName(),
+                    $entity->getGroupCode(),
                     $entity->getCategoryCode(),
                     $entity->getUnit(),
                     $this->trans('task.edit.empty_items'),
                 ]);
                 $this->getActiveSheet()
-                    ->mergeCellsByColumnAndRow(4, $row - 1, 6, $row - 1);
+                    ->mergeCellsByColumnAndRow(5, $row - 1, 7, $row - 1);
             } else {
                 $this->setRowValues($row++, [
                     $entity->getName(),
+                    $entity->getGroupCode(),
                     $entity->getCategoryCode(),
                     $entity->getUnit(),
                 ]);
@@ -111,10 +114,11 @@ class TaskDocument extends AbstractArrayDocument
                         $item->getName(),
                         null,
                         null,
+                        null,
                         $this->trans('taskitem.edit.empty_items'),
                     ]);
                     $this->getActiveSheet()
-                        ->mergeCellsByColumnAndRow(4, $row - 1, 6, $row - 1);
+                        ->mergeCellsByColumnAndRow(5, $row - 1, 7, $row - 1);
                     $this->writeItem = false;
                 } else {
                     $index = 0;
@@ -123,6 +127,7 @@ class TaskDocument extends AbstractArrayDocument
                         $text = (0 === $index++) ? $item->getName() : null;
                         $this->setRowValues($row++, [
                             $text,
+                            null,
                             null,
                             null,
                             $margin->getMinimum(),

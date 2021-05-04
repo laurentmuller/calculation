@@ -4,18 +4,18 @@
 {% import 'macros/_attributes.html.twig' as tools %}
 {% import 'macros/_datatables.html.twig' as helper %}
 
-{% macro button(path, text, class, title, icon, separator = false) %}
+{% macro button(path, text, class, title, icon, separator=false) %}
 {%- if path -%}
     <a href="#" class="btn btn-secondary {{ class|default('') }}" data-path="{{ path }}"{% if title %} title="{{ title|default(text)|trans }}"{% endif %}{% if separator %} data-separator="true"{% endif %}>
-        {{- icons.icon(icon ~ ' fa-fw') -}}  
+        {{- icons.icon(icon ~ ' fa-fw') -}}
     </a>
 {%- endif -%}
 {% endmacro %}
 
-{% macro item_data(path, text, icon, attributes = {}) %}
+{% macro item_data(path, text, icon, attributes={}) %}
 {%- if path -%}
     <a href="#" data-path="{{ path }}" class="dropdown-item"{{ tools.attribs(attributes) }}>
-        {{- icons.icon(icon ~ ' fa-fw', text) -}}    	
+        {{- icons.icon(icon ~ ' fa-fw', text) -}}
     </a>
 {%- endif -%}
 {% endmacro %}
@@ -23,7 +23,7 @@
 {% macro item_data_external(path, text, icon) %}
 {%- if path -%}
     <a href="#" data-path="{{ path }}" class="dropdown-item" target="_blank" rel="noopener noreferrer">
-        {{- icons.icon(icon ~ ' fa-fw', text) -}}    	
+        {{- icons.icon(icon ~ ' fa-fw', text) -}}
     </a>
 {%- endif -%}
 {% endmacro %}
@@ -32,26 +32,26 @@
 {%- if path -%}
     <a href="{{ path }}" target="_blank" rel="noopener noreferrer" class="{{ class }}">
         {{- icons.icon(icon ~ ' fa-fw', text) -}}
-	</a>
+    </a>
 {%- endif -%}
 {% endmacro %}
 
 {# parameters #}
-{%- set object_type   = object_type|default('none') -%}
-{%- set ajax_path     = path(app.request.get('_route')) -%}
-{%- set ajax_lang     = path('ajax_language') -%}
-{%- set show_search   = (show_search is defined ? show_search : true) and results.recordsTotal > 10 -%}
-{%- set show_length   = (show_length is defined ? show_length : true) and results.recordsTotal > 10 -%}
+{%- set object_type = object_type|default('none') -%}
+{%- set ajax_path = path(app.request.get('_route')) -%}
+{%- set ajax_lang = path('ajax_language') -%}
+{%- set show_search = (show_search is defined ? show_search : true) and results.recordsTotal > 10 -%}
+{%- set show_length = (show_length is defined ? show_length : true) and results.recordsTotal > 10 -%}
 
-{%- set id            = app.request.get('id', 0) -%}
-{%- set ordercolumn   = app.session.get(object_type ~ '.ordercolumn') -%}
-{%- set orderdir      = app.session.get(object_type ~ '.orderdir') -%}
-{%- set pagelength    = app.session.get(object_type ~ '.pagelength', 15) -%}
+{%- set id = app.request.get('id', 0) -%}
+{%- set ordercolumn = app.session.get(object_type ~ '.ordercolumn') -%}
+{%- set orderdir = app.session.get(object_type ~ '.orderdir') -%}
+{%- set pagelength = app.session.get(object_type ~ '.pagelength', 15) -%}
 
-{%- set is_pdf_action    = pdf_path|default(false) and is_granted(ATTRIBUTE_EXPORT, object_type) -%}
-{%- set is_excel_action  = excel_path|default(false) and is_granted(ATTRIBUTE_EXPORT, object_type) -%}
+{%- set is_pdf_action = pdf_path|default(false) and is_granted(ATTRIBUTE_EXPORT, object_type) -%}
+{%- set is_excel_action = excel_path|default(false) and is_granted(ATTRIBUTE_EXPORT, object_type) -%}
 {%- set is_other_actions = is_pdf_action or is_excel_action or (is_other_actions ?? false) -%}
-{%- set row_link         = not app.actionNone and (is_granted(ATTRIBUTE_EDIT, object_type) or is_granted(ATTRIBUTE_SHOW, object_type)) -%}
+{%- set row_link = not app.actionNone and (is_granted(ATTRIBUTE_EDIT, object_type) or is_granted(ATTRIBUTE_SHOW, object_type)) -%}
 
 {# classes #}
 {% block card_container_class '' %}
@@ -60,14 +60,14 @@
 
 {% block card_header %}
 <div class="row">
-	<div class="col-lg-5 mt-1">{{ parent() }}</div>
-	<div class="col-lg-7 text-lg-right d-print-none">
+    <div class="col-lg-5 mt-1">{{ parent() }}</div>
+    <div class="col-lg-7 text-lg-right d-print-none">
         {# actions toolbar #}
-		<div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
+        <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
             {% if show_path|default(false) and is_granted(ATTRIBUTE_SHOW, object_type) %}
                 {{ _self.button(show_path|default(false), 'common.button_show', 'btn-table-show disabled', show_title ?? false, 'tv') }}
             {% endif %}
-    		{% if edit_path|default(false) and is_granted(ATTRIBUTE_EDIT, object_type) %}
+            {% if edit_path|default(false) and is_granted(ATTRIBUTE_EDIT, object_type) %}
                 {{ _self.button(edit_path|default(false), 'common.button_edit', 'btn-table-edit disabled', edit_title ?? false, 'pencil-alt') }}
             {% endif %}
             {% if delete_path|default(false) and is_granted(ATTRIBUTE_DELETE, object_type) %}
@@ -77,13 +77,13 @@
                 {{ _self.button(add_path|default(false), 'common.button_add', 'btn-table-add', add_title ?? false, 'file far') }}
             {% endif %}
             {% block other_actions -%}
-			{%- if is_other_actions -%}	   
-			<div id="other_actions" class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.other_actions'|trans }}">
+            {%- if is_other_actions -%}
+            <div id="other_actions" class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.other_actions'|trans }}">
                 <button id="other_actions_button" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'common.other_actions'|trans }}">
                     <i class="fas fa-bars" aria-hidden="true"></i>
                 </button>
-	    		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="other_actions_button">
-	    			{% block table_actions -%}
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="other_actions_button">
+                    {% block table_actions -%}
                     {% if is_pdf_action %}
                         {% set pdf_title = pdf_title|default('common.button_pdf_list') %}
                         {{ _self.item_external(pdf_path|default(false), pdf_title, 'dropdown-item btn-pdf-list', 'file-pdf far') }}
@@ -91,14 +91,14 @@
                     {% if is_excel_action %}
                         {% set excel_title = excel_title|default('common.button_excel_list') %}
                         {{ icons.dropdownItem(excel_path, excel_title, 'file-excel far') }}
-                    {% endif %}                    
+                    {% endif %}
                     {%- endblock %}
-	    		</div>
-			</div>            
-			{%- endif -%}
+                </div>
+            </div>
+            {%- endif -%}
             {%- endblock %}
-		</div>
-	</div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -122,7 +122,7 @@
         </div>
     </div>
     {%- endif %}
-    
+
     {% if show_length -%}
     <div class="col-lg-auto ml-auto">
         <div class="form-inline">
@@ -153,19 +153,19 @@
         'data-filtered': results.recordsFiltered,
         'data-pagelength': pagelength,
         'data-ordercolumn': ordercolumn,
-      	'data-orderdir': orderdir,
+          'data-orderdir': orderdir,
         'data-debug': app.debug
 }) -%}
 <table{{ tools.attribs(attributes) }}>
     {{ helper.headers(columns) }}
     <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
         {% for row in results.data -%}
-	        <tr{% if row[0] == id %} class="datatables-selection"{% endif %}>
-    	    {% for cell in row -%}
-        		<td class="{{ columns[loop.index0].class }}">{{ columns[loop.index0].rawData ? cell|raw : cell }}</td>
+            <tr{% if row[0] == id %} class="datatables-selection"{% endif %}>
+            {% for cell in row -%}
+                <td class="{{ columns[loop.index0].class }}">{{ columns[loop.index0].rawData ? cell|raw : cell }}</td>
             {%- endfor %}
-			</tr>
-		{%- endfor %}
+            </tr>
+        {%- endfor %}
     </tbody>
 </table>
 {% endblock %}

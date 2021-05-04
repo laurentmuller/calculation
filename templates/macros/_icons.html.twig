@@ -1,5 +1,5 @@
 {# macros for icons, links and navigation entries #}
-{% macro icon(icon, text, domain = null, parameters = []) -%}
+{% macro icon(icon, text, domain=null, parameters=[]) -%}
 {%- if icon -%}
     {%- if 'fab' in icon -%}
         {%- set class = 'fab fa-' ~ icon|split(' ')|filter(c => c != 'fab')|join(' ') -%}
@@ -18,7 +18,7 @@
 {%- if icon -%}
     {% if 'fa-fw' in icon -%}
         {% set size = 'data-width="1.5rem" data-height="1rem" hAlign="left"' %}
-    {%- endif %}    
+    {%- endif %}
     {%- if 'fab' in icon -%}
         {%- set prefix = 'fa-brands:' -%}
     {%- elseif 'far' in icon -%}
@@ -32,9 +32,9 @@
 {%- if text %}{% if icon %} {% endif %}{{ text|trans(parameters, domain) -}}{%- endif -%}
 {%- endmacro %}
 #}
- 
-{% macro link(href, text, class, icon, title = null, domain = null, parameters = []) -%}
-{%- set role  = (class and 'btn' in class) ? ' role="button"' : '' -%}
+
+{% macro link(href, text, class, icon, title=null, domain=null, parameters=[]) -%}
+{%- set role = (class and 'btn' in class) ? ' role="button"' : '' -%}
 {%- set title = title ? ' title="' ~ title|trans(parameters, domain) ~ '"' : '' -%}
 {%- set class = class ? ' class="' ~ class ~ '"' : '' -%}
 <a href="{{ href }}"{{ class|raw }}{{ role|raw }}{{ title|raw }}>
@@ -42,8 +42,8 @@
 </a>
 {%- endmacro %}
 
-{% macro linkExternal(href, text, class, icon, title = null, domain = null, parameters = []) -%}
-{%- set role  = (class and 'btn' in class) ? ' role="button"' : '' -%}
+{% macro linkExternal(href, text, class, icon, title=null, domain=null, parameters=[]) -%}
+{%- set role = (class and 'btn' in class) ? ' role="button"' : '' -%}
 {%- set title = title ? ' title="' ~ title|trans(parameters, domain) ~ '"' : '' -%}
 {%- set class = class ? ' class="' ~ class ~ '"' : '' -%}
 <a href="{{ href }}" target="_blank" rel="noopener noreferrer"{{ class|raw }}{{ title|raw }}{{ role|raw }}>
@@ -51,79 +51,79 @@
 </a>
 {%- endmacro %}
 
-{% macro navItem(href, text, icon, domain = null, parameters = []) -%}
+{% macro navItem(href, text, icon, domain=null, parameters=[]) -%}
 <li class="nav-item">{{ _self.link(href, text, 'nav-link', icon, null, domain, parameters) }}</li>
 {%- endmacro %}
 
-{% macro dropdownItem(href, text, icon, domain = null, parameters = []) -%}
+{% macro dropdownItem(href, text, icon, domain=null, parameters=[]) -%}
 {{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, domain, parameters) -}}
 {%- endmacro %}
 
-{% macro dropdownItemExternal(href, text, icon, domain = null, parameters = []) -%}
+{% macro dropdownItemExternal(href, text, icon, domain=null, parameters=[]) -%}
 {{- _self.linkExternal(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, domain, parameters) -}}
 {%- endmacro %}
 
-{% macro dropdownItemWithId(href, text, icon, id, disabled, domain = null, parameters = []) -%}
+{% macro dropdownItemWithId(href, text, icon, id, disabled, domain=null, parameters=[]) -%}
 <a href="{{ href }}" class="dropdown-item rowlink-skip{% if disabled %} disabled {% endif %}" id="{{ id }}">
     {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}
 </a>
 {%- endmacro %}
 
-{% macro dropdownItemWithClass(href, text, icon, class, hidden, domain = null, parameters = []) -%}
+{% macro dropdownItemWithClass(href, text, icon, class, hidden, domain=null, parameters=[]) -%}
 {%- set class = ('dropdown-item rowlink-skip ' ~ (hidden ? 'd-none ' : '') ~ class|default(''))|trim -%}
 <a href="{{ href }}" class="{{ class }}">
     {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}
 </a>
 {%- endmacro %}
 
-{% macro dropdownSeparator(hidden = false) -%}
+{% macro dropdownSeparator(hidden=false) -%}
 {%- set class = ('dropdown-divider ' ~ (hidden ? ' d-none' : ''))|trim -%}
 <div role="separator" class="{{ class }}"></div>
 {%- endmacro %}
 
-{% macro dropdownEllipsis(id = 0, title = 'common.actions', class = 'btn btn-sm border-0 pt-0') -%}
+{% macro dropdownEllipsis(id=0, title='common.actions', class='btn btn-sm border-0 pt-0') -%}
 {% apply spaceless %}
 {% if not ('btn-outline' in class) %}
     {% set class = class ~ ' btn-outline-secondary' %}
 {% endif %}
 <button class="{{ class }}" type="button"{% if id %} id="{{ id }}"{% endif %} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
-    {{- _self.icon('ellipsis-v') -}}    
+    {{- _self.icon('ellipsis-v') -}}
 </button>
 {% endapply %}
 {%- endmacro %}
 
-{% macro dropdownBars(id, title = 'common.actions', class = 'btn btn-sm border-0 py-0') -%}
+{% macro dropdownBars(id, title='common.actions', class='btn btn-sm border-0 py-0') -%}
 {% apply spaceless %}
-{% if not ('btn-' in class) %}	
+{% if not ('btn-' in class) %}
     {% set class = class ~ ' btn-secondary' %}
 {% endif %}
 <button class="{{ class }}" type="button" id="{{ id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
-    {{- _self.icon('bars') -}}    
+    {{- _self.icon('bars') -}}
 </button>
 {% endapply %}
 {%- endmacro %}
 
-{% macro homepage(href = null, text = 'index.title', class = 'btn btn-form btn-primary', domain = null) -%}
+{% macro homepage(href=null, text='index.title', class='btn btn-form btn-primary', domain=null) -%}
 {%- set href = href|default(path('homepage')) -%}
 {{- _self.link(href, text, class, 'fas fa-home', null, domain) -}}
 {%- endmacro %}
 
-{% macro button_submit(text = 'common.button_ok', class = 'btn btn-form btn-primary', parameters = {}) -%}
+{% macro button_submit(text='common.button_ok', class='btn btn-form btn-primary', parameters={}) -%}
 {%- set parameters = parameters|merge({'class': class}) -%}
 <button type="submit"{% for attrname, attrvalue in parameters %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ text|trans }}</button>
 {%- endmacro %}
 
-{% macro button_ok(href = '#', text = 'common.button_ok', class = 'btn btn-form btn-primary') -%}
+{% macro button_ok(href='#', text='common.button_ok', class='btn btn-form btn-primary') -%}
 {{- _self.link(href, text, class) -}}
 {%- endmacro %}
 
-{% macro button_cancel(href = '#', text = 'common.button_cancel', class = 'btn btn-cancel btn-form btn-secondary') -%}
-{%- set text  = text|default('common.button_cancel') -%}
+{% macro button_cancel(href='#', text='common.button_cancel', class='btn btn-cancel btn-form btn-secondary') -%}
+{%- set text = text|default('common.button_cancel') -%}
 {%- set class = class|default('btn btn-cancel btn-form btn-secondary') -%}
 {{- _self.link(href, text, class) -}}
 {%- endmacro %}
 
-{% macro button_pdf(href, parameters = []) -%}
+{% macro button_pdf(href, parameters=[]) -%}
 {{- _self.linkExternal(path(href, parameters), 'common.button_pdf', 'btn btn-form btn-outline-secondary', 'file-pdf far') -}}
 {%- endmacro %}
 
@@ -132,14 +132,14 @@
 {{- _self.linkExternal(app_owner_url, 'footer.copyright', null, null, 'footer.copyright_title', null, parameters) -}}
 {%- endmacro %}
 
-{% macro dropdownItemCard(route_name, parameters = []) -%}
+{% macro dropdownItemCard(route_name, parameters=[]) -%}
 {% if route_name %}{{ _self.dropdownItem(path(route_name, parameters), 'common.button_flex', 'grip-horizontal') }}{% endif %}
 {%- endmacro %}
 
-{% macro dropdownItemTable(route_name, parameters = []) -%}
+{% macro dropdownItemTable(route_name, parameters=[]) -%}
 {% if route_name %}{{ _self.dropdownItem(path(route_name, parameters), 'common.button_table', 'table') }}{% endif %}
 {%- endmacro %}
 
-{% macro linkTable(route_name, parameters = []) -%}
-{% if route_name %}{{ _self.link(path(route_name, parameters), '' , 'btn btn-secondary', 'table', 'common.button_table') }}{% endif %}
+{% macro linkTable(route_name, parameters=[]) -%}
+{% if route_name %}{{ _self.link(path(route_name, parameters), '', 'btn btn-secondary', 'table', 'common.button_table') }}{% endif %}
 {%- endmacro %}

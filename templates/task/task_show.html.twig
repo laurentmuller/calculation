@@ -4,12 +4,12 @@
 {% import 'macros/_properties.html.twig' as properties %}
 
 {# parameters #}
-{%- set id     = item.id -%}
-{%- set title  = 'task.show.title' -%}
+{%- set id = item.id -%}
+{%- set title = 'task.show.title' -%}
 {%- set params = route_params(app.request, id) %}
 
 {# actions #}
-{%- set edit_path   = is_granted(ATTRIBUTE_EDIT, item) ? path('task_edit', params) : null -%}
+{%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('task_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('task_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, 'task_card') -%}
 
@@ -25,21 +25,21 @@
 {{ parent() }}
 {% if not item.empty %}
 <table class="table table-hover table-sm table-list my-0">
-{% for taskItem in item.items %}
-	<tbody>
-    {% for margin in taskItem.margins %}
+{% for child in item.items %}
+    <tbody>
+    {% for margin in child.margins %}
         <tr>
-            <td>{{ loop.index == 1 ? taskItem.name : '&nbsp;'|raw }}</td>
+            <td>{{ loop.index == 1 ? child.name : '&nbsp;'|raw }}</td>
             <td class="text-currency">{{ margin.minimum|amount }}</td>
             <td class="text-currency">{{ margin.maximum|amount }}</td>
             <td class="text-currency">{{ margin.value|amount }}</td>
         </tr>
     {% else %}
         <tr>
-            <td>{{ taskItem.name }}</td>
+            <td>{{ child.name }}</td>
             <td class="text-right" colspan="3">{{ 'taskitem.edit.empty_items'|trans }}</td>
         </tr>
-	{% endfor %}
+    {% endfor %}
     </tbody>
 {% endfor %}
 </table>

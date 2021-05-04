@@ -15,6 +15,7 @@
 .toast-plugin.top-center {
     top: 0;
     left: 50%;
+    transform: translateX(-50%);
 }
 
 .toast-plugin.top-right {

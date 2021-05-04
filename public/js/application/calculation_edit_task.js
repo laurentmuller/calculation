@@ -20,7 +20,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Display the add task dialog.
-     * 
+     *
      * @return {EditTaskDialog} This instance for chaining.
      */
     showAdd: function () {
@@ -40,7 +40,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Hide the dialog.
-     * 
+     *
      * @return {EditTaskDialog} This instance for chaining.
      */
     hide: function () {
@@ -51,7 +51,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Gets the selected group.
-     * 
+     *
      * @returns {Object} the group.
      */
     getGroup: function () {
@@ -65,7 +65,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Gets the selected category.
-     * 
+     *
      * @returns {Object} the category.
      */
     getCategory: function () {
@@ -79,7 +79,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Gets the selected items.
-     * 
+     *
      * @return {Object} the items.
      */
     getItems: function () {
@@ -106,7 +106,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Initialize.
-     * 
+     *
      * @return {EditTaskDialog} This instance for chaining.
      */
     _init: function () {
@@ -164,7 +164,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Abort the ajax call.
-     * 
+     *
      * @return {EditTaskDialog} This instance for chaining.
      */
     _abort: function () {
@@ -178,7 +178,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Send data to server and update UI.
-     * 
+     *
      * @param {Object}
      *            data - the data to send.
      * @return {EditTaskDialog} This instance for chaining.
@@ -211,7 +211,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Gets UI values and send to the server.
-     * 
+     *
      * @return {EditTaskDialog} This instance for chaining.
      */
     _update: function () {
@@ -248,7 +248,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Format a value with 2 fixed decimals and grouping separator.
-     * 
+     *
      * @param {Number}
      *            value - the value to format.
      * @returns {string} - the formatted value.
@@ -260,7 +260,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Gets selected items.
-     * 
+     *
      * @return {array} - the selected item identifiers.
      */
     _getItems: function () {
@@ -272,7 +272,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Gets the selected category identifier.
-     * 
+     *
      * @return {int} the category identifier.
      */
     _getCategory: function () {
@@ -283,7 +283,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Gets the selected unit.
-     * 
+     *
      * @return {string} the unit.
      */
     _getUnit: function () {
@@ -294,7 +294,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Update a plain-text.
-     * 
+     *
      * @param {string}
      *            id - the plain-text identifier.
      * @param {number}
@@ -309,7 +309,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Update all plain-texts to 0.00.
-     * 
+     *
      * @return {EditTaskDialog} This instance for chaining.
      */
     _resetValues: function () {
@@ -321,7 +321,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Shows the error.
-     * 
+     *
      * @return {EditTaskDialog} This instance for chaining.
      */
     _showError: function (message) {
@@ -330,14 +330,13 @@ EditTaskDialog.prototype = {
         this.$submit.toggleDisabled(true);
         this.$modal.modal('hide');
         const title = this.$modal.find('.dialog-title').text();
-        const options = $('#flashbags').data();
-        Toaster.danger(message || this.$form.data('failed'), title, options);
+        Toaster.danger(message || this.$form.data('failed'), title, $('#flashbags').data());
         return this;
     },
 
     /**
      * Handles the dialog show event.
-     * 
+     *
      * @return {EditTaskDialog} This instance for chaining.
      */
     _onDialogShow: function () {
@@ -350,7 +349,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Handles the dialog visible event.
-     * 
+     *
      * @return {EditTaskDialog} This instance for chaining.
      */
     _onDialogVisible: function () {
@@ -370,7 +369,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Handles the dialog hide event.
-     * 
+     *
      * @return {EditTaskDialog} This instance for chaining.
      */
     _onDialogHide: function () {
@@ -382,7 +381,7 @@ EditTaskDialog.prototype = {
 
     /**
      * Handle the task input event.
-     * 
+     *
      * @return {EditTaskDialog} This instance for chaining.
      */
     _onTaskChanged: function () {

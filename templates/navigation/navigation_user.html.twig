@@ -24,7 +24,7 @@
             {{- icons.dropdownItem(href, 'log.title', 'book') -}}
             {{- icons.dropdownItem(path('admin_clear'), 'clear_cache.title', 'times') -}}
             {{- icons.dropdownSeparator -}}
-            {%- set href = is_tabular ? path('user_table') : path('user_card')  -%}
+            {%- set href = is_tabular ? path('user_table') : path('user_card') -%}
             {{- icons.dropdownItem(href, 'user.list.title', 'user far') -}}
             {{- icons.dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'unlock-alt') -}}
         {% endif %}

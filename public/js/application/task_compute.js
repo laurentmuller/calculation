@@ -4,7 +4,7 @@
 
 /**
  * Fomats the given value.
- * 
+ *
  * @param number
  *            value - the value to format.
  * @returns string - the formatted value.
@@ -24,7 +24,7 @@ function formatValue(value) {
 
 /**
  * Update the given input.
- * 
+ *
  * @param string
  *            id - the input identifier.
  * @param number
@@ -46,7 +46,7 @@ function resetValues() {
 
 /**
  * Display an error message.
- * 
+ *
  * @param string
  *            message - the message to display.
  */
@@ -54,13 +54,12 @@ function showError(message) {
     'use strict';
     resetValues();
     const title = $('.card-title').text();
-    const options = $('#flashbags').data();
-    Toaster.danger(message, title, options);
+    Toaster.danger(message, title, $('#flashbags').data());
 }
 
 /**
  * Send form to server and update UI.
- * 
+ *
  * @param form
  *            form - the submitted form.
  */
@@ -92,7 +91,7 @@ function update(form) {
         $form.jqXHR.abort();
         $form.jqXHR = null;
     }
-    
+
     // send
     $form.jqXHR = $.post(url, data, function (response) {
         if (response.result) {

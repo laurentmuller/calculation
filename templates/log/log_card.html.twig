@@ -20,7 +20,7 @@
 {% endmacro %}
 
 {# parameters #}
-{%- set title      = 'log.title' -%}
+{%- set title = 'log.title' -%}
 {%- set title_icon = 'book' -%}
 
 {% block card_container_class %}
@@ -41,9 +41,9 @@
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="actions_button">
                 {{ icons.dropdownItemWithClass(path('log_pdf'), 'log.list.pdf_title', 'file-pdf far', 'btn-pdf') }}
-                {{ icons.dropdownItem(path('log_delete', {'route' : app.request.get('_route')}), 'log.delete.title', 'times') }}
+                {{ icons.dropdownItem(path('log_delete', {'route': app.request.get('_route')}), 'log.delete.title', 'times') }}
                 {{ icons.dropdownSeparator() }}
-                {{ icons.dropdownItem(path('log_refresh', {'route' : app.request.get('_route')}), 'common.button_refresh', 'sync-alt') }}
+                {{ icons.dropdownItem(path('log_refresh', {'route': app.request.get('_route')}), 'common.button_refresh', 'sync-alt') }}
                 {{ icons.dropdownSeparator() }}
                 {{ icons.dropdownItemTable('log_table') }}
             </div>

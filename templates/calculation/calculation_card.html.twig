@@ -4,23 +4,23 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title        = title|default('calculation.list.title') -%}
-{%- set title_icon   = title_icon|default('calculator') -%}
-{%- set add_title    = 'calculation.list.add_title' -%}
-{%- set show_title   = 'calculation.show.title' %}
-{%- set edit_title   = 'calculation.edit.title_short' %}
+{%- set title = title|default('calculation.list.title') -%}
+{%- set title_icon = title_icon|default('calculator') -%}
+{%- set add_title = 'calculation.list.add_title' -%}
+{%- set show_title = 'calculation.show.title' %}
+{%- set edit_title = 'calculation.edit.title_short' %}
 {%- set delete_title = 'calculation.delete.title' %}
-{%- set pdf_title    = 'calculation.list.pdf_title' -%}
-{%- set empty_list   = empty_list|default('calculation.list.empty') -%}
-{%- set col_span     = col_span|default(2) -%}
+{%- set pdf_title = 'calculation.list.pdf_title' -%}
+{%- set empty_list = empty_list|default('calculation.list.empty') -%}
+{%- set col_span = col_span|default(2) -%}
 
 {# actions #}
-{%- set object_type  = ENTITY_CALCULATION -%}
-{%- set edit_page    = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
-{%- set show_page    = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
-{%- set single_page  = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
+{%- set object_type = ENTITY_CALCULATION -%}
+{%- set edit_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
+{%- set show_page = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
+{%- set single_page = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
 {%- set default_page = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
-{%- set row_link     = not app.actionNone and (edit_page or show_page) -%}
+{%- set row_link = not app.actionNone and (edit_page or show_page) -%}
 
 {%- if add_page is not defined -%}
     {%- set add_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_add' : null -%}
@@ -59,11 +59,11 @@
     {%- if app.marginBelow(item) -%}
         {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': item.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
         <tr>
-        	<td>{{ 'calculation.fields.total'|trans }}</td>
-        	<td class="text-right pr-4 text-danger has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallTotal|amount }}</td>
+            <td>{{ 'calculation.fields.total'|trans }}</td>
+            <td class="text-right pr-4 text-danger has-tooltip" data-html="true" title="{{ margin_below_title }}">{{ item.overallTotal|amount }}</td>
         </tr>
     {%- else -%}
-    	{{ properties.property('calculation.fields.total', item.overallTotal|amount, 'text-right pr-4') }}
+        {{ properties.property('calculation.fields.total', item.overallTotal|amount, 'text-right pr-4') }}
     {%- endif -%}
 {% endblock -%}
 {%- endblock %}
@@ -72,7 +72,7 @@
 {%- if state_page or single_page -%}
     {{ icons.dropdownSeparator }}
     {%- if state_page -%}
-        {%- set state_path  = path(state_page, {'id': item.id}) -%}
+        {%- set state_path = path(state_page, {'id': item.id}) -%}
         {{ icons.dropdownItem(state_path, 'calculation.list.state_title', 'edit') }}
     {%- endif -%}
     {%- if single_page -%}

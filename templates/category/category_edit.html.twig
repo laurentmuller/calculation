@@ -1,14 +1,14 @@
 {% extends 'cards/card_edit.html.twig' %}
 
 {# parameters #}
-{%- set title      = new ? 'category.add.title' : 'category.edit.title' -%}
+{%- set title = new ? 'category.add.title' : 'category.edit.title' -%}
 {%- set title_icon = 'folder far' -%}
-{%- set page_list  = 'category_table' -%}
+{%- set page_list = 'category_table' -%}
 
 {% block card_body %}
 <div class="form-row">
     <div class="col-md-6">
-	    {{ form_row(form.code) }}
+        {{ form_row(form.code) }}
     </div>
     <div class="col-md-6">
         {{ form_row(form.group) }}

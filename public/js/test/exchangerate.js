@@ -4,7 +4,7 @@
 
 /**
  * Show an error message
- * 
+ *
  * @param {JQuery}
  *            $form - the edit form.
  * @param {string}
@@ -74,45 +74,13 @@ function swapCodes() {
 }
 
 /**
- * Initialize a select with select2 plugin.
- * 
- * @param {JQuery}
- *            $select - the select to initialize
- * @returns {JQuery} the select for chaining.
- */
-function initSelect2($select) {
-    'use strict';
-    $select.select2({
-        theme: 'bootstrap4'
-    }).on('select2:opening', function () {
-        $('.select2-hidden-accessible').each(function () {
-            if ($(this) !== $select) {
-                $(this).select2('close');
-            }
-        });
-    }).on('select2:open', function () {
-        const $search = $('.select2-search--dropdown .select2-search__field');
-        if ($search.length) {
-            $search.addClass('form-control');
-            $search[0].focus();
-        }
-        const $dropdown = $('.select2-dropdown.select2-dropdown--below');
-        if ($dropdown.length) {
-            $dropdown.addClass('border-top rounded-top');
-        }
-    });
-    return $select;
-}
-
-/**
  * Ready function
  */
 (function ($) {
     'use strict';
 
     // initialize select
-    initSelect2($('#baseCode'));
-    initSelect2($('#targetCode'));
+    $('#baseCode, #targetCode').initSelect2();
 
     // bind events
     $('.btn-swap').on('click', function () {

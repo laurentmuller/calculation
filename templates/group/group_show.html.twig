@@ -4,12 +4,12 @@
 {% import 'macros/_properties.html.twig' as properties %}
 
 {# parameters #}
-{%- set id     = item.id -%}
-{%- set title  = 'group.show.title' -%}
+{%- set id = item.id -%}
+{%- set title = 'group.show.title' -%}
 {%- set params = route_params(app.request, id) %}
 
 {# actions #}
-{%- set edit_path   = is_granted(ATTRIBUTE_EDIT, item) ? path('group_edit', params) : null -%}
+{%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('group_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('group_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, 'group_card') -%}
 
@@ -30,22 +30,22 @@
 {{ parent() }}
 {%- if item.hasMargins -%}
  <table class="table table-sm table-list">
- 	<thead>
- 		<tr>
- 			<th>{{ 'group.fields.margins'|trans }}</th>
+     <thead>
+         <tr>
+             <th>{{ 'group.fields.margins'|trans }}</th>
             <th class="text-right">{{ 'groupmargin.fields.minimum'|trans }}</th>
             <th class="text-right">{{ 'groupmargin.fields.maximum'|trans }}</th>
             <th class="text-right">{{ 'groupmargin.fields.margin'|trans }}</th>
- 		</tr>
+         </tr>
     </thead>
     <tbody>
     {% for margin in item.margins -%}
-    	<tr>
+        <tr>
             <td>&nbsp;</td>
-    		<td class="text-right">{{ margin.minimum|amount }}</td>
-    		<td class="text-right">{{ margin.maximum|amount }}</td>
-    		<td class="text-right">{{ margin.margin|percent }}</td>
-    	</tr>
+            <td class="text-right">{{ margin.minimum|amount }}</td>
+            <td class="text-right">{{ margin.maximum|amount }}</td>
+            <td class="text-right">{{ margin.margin|percent }}</td>
+        </tr>
     {% endfor %}
     </tbody>
  </table>

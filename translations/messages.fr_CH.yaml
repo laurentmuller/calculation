@@ -285,8 +285,8 @@ product:
     name: Article
     fields:
         description: Description
-        category: Catégorie
         group: Groupe
+        category: Catégorie
         supplier: Fournisseur
         unit: Unité
         price: Prix
@@ -1039,6 +1039,7 @@ task:
     name: Tâche
     fields:
         name: Nom
+        group: Groupe
         category: Catégorie
         unit: Unité
         items: Opérations

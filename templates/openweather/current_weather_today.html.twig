@@ -16,19 +16,19 @@
 </tr>
 {% endmacro %}
 
-{% macro row_unit(name, value, unit = '', separator = ' ') %}
+{% macro row_unit(name, value, unit='', separator=' ') %}
     {{ _self.row_text(name, tools.value_unit(value, unit, separator)) }}
 {% endmacro %}
 
-{% macro row_temp(name, value, unit = '') %}
+{% macro row_temp(name, value, unit='') %}
     {{ _self.row_text(name, tools.value_temp(value, unit, '')) }}
 {% endmacro %}
 
-{% macro row_volume(name, value, unit = '') %}
+{% macro row_volume(name, value, unit='') %}
     {{ _self.row_unit(name, value|number_format(1), unit, ' ') }}
 {% endmacro %}
 
-{% macro row_no_sep(name, value, unit = '') %}
+{% macro row_no_sep(name, value, unit='') %}
     {{ _self.row_unit(name, value|number_format(1), unit, '') }}
 {% endmacro %}
 
@@ -50,7 +50,7 @@
         {% if current.wind.gust|default(false) %}
             {{ _self.row_unit('openweather.fields.wind_gust', current.wind.gust, units_speed) }}
         {% endif %}
-    
+
         {% if current.rain|default(false) %}
             {{ _self.row_title('openweather.fields.rain') }}
             {% if current.rain['1h']|default(false) %}
@@ -60,7 +60,7 @@
                 {{ _self.row_volume('openweather.fields.last_3_hours', current.rain['3h'], units_volume) }}
             {% endif %}
         {% endif %}
-        
+
         {% if current.snow|default(false) %}
             {{ _self.row_title('openweather.fields.snow') }}
             {% if current.snow['1h']|default(false) %}
@@ -72,17 +72,17 @@
         {% endif %}
 
         {{ _self.row_title('openweather.fields.sun') }}
-        {{ _self.row_text('openweather.fields.sunrise', current.sys.sunrise_formatted) }}  
+        {{ _self.row_text('openweather.fields.sunrise', current.sys.sunrise_formatted) }}
         {{ _self.row_text('openweather.fields.sunset', current.sys.sunset_formatted) }}
 
         {{ _self.row_title('openweather.fields.miscellaneous') }}
         {{ _self.row_unit('openweather.fields.pressure', current.main.pressure, units_pressure) }}
         {{ _self.row_no_sep('openweather.fields.humidity', current.main.humidity, units_percent) }}
         {{ _self.row_no_sep('openweather.fields.clouds', current.clouds.all, units_percent) }}
-        
-        {%- set href = 'https://www.google.ch/maps/place/' ~ current.coord.lat ~ ',' ~  current.coord.lon -%}
+
+        {%- set href = 'https://www.google.ch/maps/place/' ~ current.coord.lat ~ ',' ~ current.coord.lon -%}
         {%- set text = tools.value_no_sep(current.coord.lat, units_degree) ~ ' / ' ~ tools.value_no_sep(current.coord.lon, units_degree) -%}
-        {%- set raw  = '<a href="' ~ href ~ '" target="_blank" rel="noopener noreferrer">' ~ text ~ '</a>' -%}
+        {%- set raw = '<a href="' ~ href ~ '" target="_blank" rel="noopener noreferrer">' ~ text ~ '</a>' -%}
         {{ _self.row_text('openweather.fields.position', raw) }}
         {{ _self.row_text('openweather.fields.locale_date', current.dt_date_time_locale) }}
     </tbody>

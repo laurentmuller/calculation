@@ -1,13 +1,13 @@
 {% extends 'cards/card_edit.html.twig' %}
 
 {# parameters #}
-{%- set title      = new ? 'user.add.title' : 'user.edit.title' -%}
+{%- set title = new ? 'user.add.title' : 'user.edit.title' -%}
 {%- set title_icon = 'user far' -%}
-{%- set page_list  = 'user_table' -%}
-{%- set form_attr  = form_attr|default({})|merge({
-				 	'data-check_name': url('ajax_check_name'), 
-				 	'data-check_email': url('ajax_check_email'),
-				 	'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
+{%- set page_list = 'user_table' -%}
+{%- set form_attr = form_attr|default({})|merge({
+                     'data-check_name': url('ajax_check_name'), 
+                     'data-check_email': url('ajax_check_email'),
+                     'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
 
 {% block card_body %}
 {{ form_row(form.username) }}

@@ -3,11 +3,11 @@
 {% import 'help/_help_tools.html.twig' as tools %}
 
 {# parameters #}
-{%- set entity_name      = entity.id ~ '.name' -%}
-{%- set title            = 'help.title_name' -%}
-{%- set title_parameters = {'%name%': entity_name|trans } -%}
-{% set fields            = entity.fields|default(false) %}
-{% set actions           = entity.actions|default(false) %}
+{%- set entity_name = entity.id ~ '.name' -%}
+{%- set title = 'help.title_name' -%}
+{%- set title_parameters = {'%name%': entity_name|trans} -%}
+{%- set fields = entity.fields|default(false) -%}
+{%- set actions = entity.actions|default(false) -%}
 
 {# body #}
 {% block help_title -%}
@@ -32,13 +32,13 @@
     </thead>
     <tbody>
     {% for field in fields %}
-        {% set fieldName = (entity.id ~ '.fields.' ~ field.name)|trans %}
-        {% set fieldEntity = field.entity|default(false)  %}
-        {% set path = fieldEntity ? path('help_entity', {'id': fieldEntity}) : false %}
+        {% set field_name = (entity.id ~ '.fields.' ~ field.name)|trans %}
+        {% set field_entity = field.entity|default(false) %}
+        {% set path = field_entity ? path('help_entity', {'id': field_entity}) : false %}
         <tr>
-            <td>{% if path %}<a href="{{ path }}">{% endif %}{{ fieldName }}{% if path %}</a>{% endif %}</td>
+            <td>{% if path %}<a href="{{ path }}">{% endif %}{{ field_name }}{% if path %}</a>{% endif %}</td>
             <td>{{ field.description }}</td>
-            <td>{{ tools.output_type(field)}}</td>
+            <td>{{ tools.output_type(field) }}</td>
             <td>{{ tools.output_required(field) }}</td>
         </tr>
     {% endfor %}
@@ -65,3 +65,4 @@
 {{ tools.output_table_actions(actions, table_class, head_class, service) }}
 {% endif %}
 {%- endblock %}
+

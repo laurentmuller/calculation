@@ -1,44 +1,49 @@
 [
-	{
-		"field": "id",
-		"visible": false
-	},
-	{
-		"field": "description",
-		"title": "product.fields.description",
-		"default": true,
-		"class": "text-cell w-50",
-		"cardClass": "font-weight-bold"
-	},
-	{
-		"field": "category.code",
-		"title": "product.fields.category",
-		"class": "text-category"
-	},
-	{
-		"field": "price",
-		"title": "product.fields.price",
-		"class": "text-currency",
-		"fieldFormatter": "formatAmount",
-		"styleFormatter": "styleProductPrice",
-		"numeric": true
-	},
-	{
-		"field": "unit",
-		"title": "product.fields.unit",
-		"class": "text-unit"
-	},
-	{
-		"field": "supplier",
-		"title": "product.fields.supplier",
-		"class": "text-supplier"
-	},
-	{
-		"field": "id",
-		"alias": "action",
-		"sortable": false,
-		"searchable": false,
-		"class": "actions rowlink-skip d-print-none",
-		"cellFormatter": "formatActions"
-	}
+    {
+        "field": "id",
+        "visible": false
+    },
+    {
+        "field": "description",
+        "title": "product.fields.description",
+        "default": true,
+        "class": "text-cell w-50",
+        "cardClass": "font-weight-bold"
+    },
+    {
+        "field": "group.code",
+        "title": "product.fields.group",
+        "class": "text-group"
+    },
+    {
+        "field": "category.code",
+        "title": "product.fields.category",
+        "class": "text-category"
+    },
+    {
+        "field": "price",
+        "title": "product.fields.price",
+        "class": "text-currency",
+        "fieldFormatter": "formatAmount",
+        "styleFormatter": "styleProductPrice",
+        "numeric": true
+    },
+    {
+        "field": "unit",
+        "title": "product.fields.unit",
+        "class": "text-unit"
+    },
+    {
+        "field": "supplier",
+        "title": "product.fields.supplier",
+        "class": "text-supplier"
+    },
+    {
+        "field": "id",
+        "alias": "action",
+        "sortable": false,
+        "searchable": false,
+        "class": "actions rowlink-skip d-print-none",
+        "cellFormatter": "formatActions"
+    }
 ]

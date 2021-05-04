@@ -27,10 +27,9 @@
     $.extend({
         /**
          * Returns if the given data is a string.
-         * 
+         *
          * @param {any}
          *            data - The data to evaluate.
-         * 
          * @return {boolean} true if a string.
          */
         isString: function (data) {
@@ -39,10 +38,9 @@
 
         /**
          * Returns if the given data is an object.
-         * 
+         *
          * @param {any}
          *            data - The data to evaluate.
-         * 
          * @return {boolean} true if an object.
          */
         isObject: function (data) {
@@ -51,10 +49,9 @@
 
         /**
          * Returns if the given data is a boolean.
-         * 
+         *
          * @param {any}
          *            data - The data to evaluate.
-         * 
          * @return {boolean} true if a boolean.
          */
         isBoolean: function (data) {
@@ -63,10 +60,9 @@
 
         /**
          * Returns if the given data is undefined.
-         * 
+         *
          * @param {any}
          *            data - The data to evaluate.
-         * 
          * @return {boolean} true if undefined.
          */
         isUndefined: function (data) {
@@ -81,10 +77,9 @@
 
         /**
          * Check if the element is visible into area of the browser window.
-         * 
+         *
          * @param {int}
          *            bottomMargin - The bottom margin (default to 60).
-         * 
          * @return {boolean} true if visible, false if not.
          */
         isInViewport: function (bottomMargin) {
@@ -105,14 +100,12 @@
 
         /**
          * Scrolls the element into the visible area of the browser window.
-         * 
+         *
          * @param {int}
          *            delay - The scroll animation delay in milliseconds
          *            (default to 400).
-         * 
          * @param {int}
          *            bottomMargin - The bottom margin (default to 60).
-         * 
          * @return {jQuery} The jQuery element for chaining.
          */
         scrollInViewport: function (delay, bottomMargin) {
@@ -141,7 +134,7 @@
         /**
          * Add the given class to the element and remove it after a delay of
          * 1500 ms.
-         * 
+         *
          * @param {string}
          *            className - The class name to toggle.
          * @param {function}
@@ -164,7 +157,7 @@
 
         /**
          * Sets the given attribute class name to the element.
-         * 
+         *
          * @param {string}
          *            className - The class name to set.
          * @return {jQuery} The jQuery element for chaining.
@@ -178,7 +171,7 @@
         /**
          * Create a timer within the element. Callback function parameters can
          * be given after the callback and timeout values.
-         * 
+         *
          * @param {function}
          *            callback - The callback function that will be executed
          *            after the timer expires.
@@ -204,7 +197,7 @@
 
         /**
          * Clear the timer (if any) of the element.
-         * 
+         *
          * @return {jQuery} The jQuery element for chaining.
          */
         removeTimer: function () {
@@ -221,7 +214,7 @@
         /**
          * Clear the existing timer (if any) and create a new timer within the
          * element.
-         * 
+         *
          * @param {function}
          *            callback - The callback function that will be executed
          *            after the timer expires.
@@ -236,11 +229,9 @@
         },
 
         /**
-         * Create a timer interval within the element.
-         * 
-         * Callback function parameters can be given after the callback and
-         * timeout values.
-         * 
+         * Create a timer interval within the element. Callback function
+         * parameters can be given after the callback and timeout values.
+         *
          * @param {function}
          *            callback - The callback function that will be executed.
          * @param {int}
@@ -265,7 +256,7 @@
 
         /**
          * Clear the timer interval (if any) of the element.
-         * 
+         *
          * @return {jQuery} The jQuery element for chaining.
          */
         removeInterval: function () {
@@ -283,13 +274,12 @@
          * Clear the timer interval (if any) and create a timer interval within
          * the element. Callback function parameters can be given after the
          * callback and timeout values.
-         * 
+         *
          * @param {function}
          *            callback - The callback function that will be executed.
          * @param {int}
          *            timeout - The intervals (in milliseconds) on how often to
          *            execute the callback.
-         * 
          * @return {jQuery} The jQuery element for chaining.
          */
         updateInterval: function (callback, timeout) { // jshint ignore:line
@@ -299,7 +289,7 @@
 
         /**
          * Sets or gets the value as integer.
-         * 
+         *
          * @param {int}
          *            value - if present the value to set; otherwise return the
          *            value.
@@ -322,7 +312,7 @@
 
         /**
          * Sets or gets the value as float with 2 fixed decimals.
-         * 
+         *
          * @param {number}
          *            value - if present the value to set; otherwise return the
          *            value.
@@ -345,7 +335,7 @@
 
         /**
          * Returns if the checkbox is checked.
-         * 
+         *
          * @return {boolean} The checked value.
          */
         isChecked: function () {
@@ -354,7 +344,7 @@
 
         /**
          * Sets the checkbox checked value.
-         * 
+         *
          * @param {boolean}
          *            checked - the checked value to set.
          * @return {jQuery} The jQuery element for chaining.
@@ -367,7 +357,7 @@
 
         /**
          * Toggle the checkbox checked value
-         * 
+         *
          * @return {jQuery} The jQuery element for chaining.
          */
         toggleChecked: function () {
@@ -379,7 +369,7 @@
 
         /**
          * Returns the first file (if any) from an input type file.
-         * 
+         *
          * @return {file|boolean} The first selected file, if any; false if none
          *         or if not valid.
          */
@@ -413,7 +403,7 @@
 
         /**
          * Returns the files (if any) from an input type file.
-         * 
+         *
          * @return {array} The selected files, if any; an empty array otherwise.
          */
         getInputFiles: function () {
@@ -423,7 +413,7 @@
 
         /**
          * Select content and set focus.
-         * 
+         *
          * @return {jQuery} The jQuery element for chaining.
          */
         selectFocus: function () {
@@ -433,7 +423,7 @@
 
         /**
          * Select the first option in the list.
-         * 
+         *
          * @return {jQuery} The jQuery element for chaining.
          */
         selectFirstOption: function () {
@@ -443,7 +433,7 @@
 
         /**
          * Gets select option in the list.
-         * 
+         *
          * @return {Object|null} the selected element, if any; null otherwise.
          */
         getSelectedOption: function () {
@@ -453,7 +443,7 @@
         /**
          * Get the descendants of each element in the current set of matched
          * elements, filtered by a selector, jQuery object, or element.
-         * 
+         *
          * @param {string}
          *            selector - a string containing a selector expression to
          *            match elements against.
@@ -467,7 +457,7 @@
 
         /**
          * Remove all 'data' attributes.
-         * 
+         *
          * @return {jQuery} The jQuery element for chaining.
          */
         removeDataAttributes: function () {
@@ -481,7 +471,7 @@
 
         /**
          * Remove duplicate classes.
-         * 
+         *
          * @return {jQuery} The jQuery element for chaining.
          */
         removeDuplicateClasses: function () {
@@ -495,9 +485,10 @@
 
         /**
          * Toggle the disabled attribute.
-         * 
-         * @parame {boolean} state - true to add attribute (disabled); false to
-         *         remove attribute (enabled).
+         *
+         * @param {boolean}
+         *            state - true to add attribute (disabled); false to remove
+         *            attribute (enabled).
          */
         toggleDisabled: function (state) {
             return this.each(function () {
@@ -508,6 +499,40 @@
                 }
             });
         },
+
+        /**
+         * Initialize a select with select2 plugin.
+         *
+         * @param {object}
+         *            options - The select2 options.
+         */
+        initSelect2: function () {
+            return this.each(function (options) {
+                options = $.extend({
+                    theme: 'bootstrap4',
+                    dropdownAutoWidth: true
+                }, options);
+
+                const $select = $(this);
+                $select.select2(options).on('select2:opening', function () {
+                    $('.select2-hidden-accessible').each(function () {
+                        if ($(this) !== $select) {
+                            $(this).select2('close');
+                        }
+                    });
+                }).on('select2:open', function () {
+                    const $search = $('.select2-search--dropdown .select2-search__field');
+                    if ($search.length) {
+                        $search.addClass('form-control');
+                        $search[0].focus();
+                    }
+                    const $dropdown = $('.select2-dropdown.select2-dropdown--below');
+                    if ($dropdown.length) {
+                        $dropdown.addClass('border-top rounded-top');
+                    }
+                });
+            });
+        }
     });
 
 }(jQuery));

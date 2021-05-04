@@ -1,10 +1,10 @@
 {% extends 'cards/card_edit.html.twig' %}
 
 {# parameters #}
-{%- set title       = 'update.title' -%}
-{%- set title_icon  = 'edit' -%}
+{%- set title = 'update.title' -%}
+{%- set title_icon = 'edit' -%}
 {%- set submit_text = 'update.submit_text' -%}
-{%- set form_attr  = form_attr|default({})|merge({'action': url('update_customer')}) -%}
+{%- set form_attr = form_attr|default({})|merge({'action': url('update_customer')}) -%}
 
 {% block card_header %}
 {{ parent() }}

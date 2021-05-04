@@ -35,7 +35,7 @@ class Product extends AbstractEntity
      * @ORM\JoinColumn(name="category_id", nullable=false)
      * @Assert\NotNull
      */
-    protected ?Category $category = null;
+    private ?Category $category = null;
 
     /**
      * The description.
@@ -44,14 +44,14 @@ class Product extends AbstractEntity
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      */
-    protected ?string $description = null;
+    private ?string $description = null;
 
     /**
      * The price.
      *
      * @ORM\Column(type="float", precision=2, options={"default" = 0})
      */
-    protected float $price = 0.0;
+    private float $price = 0.0;
 
     /**
      * The supplier.
@@ -59,7 +59,7 @@ class Product extends AbstractEntity
      * @ORM\Column(length=255, nullable=true)
      * @Assert\Length(max=255)
      */
-    protected ?string $supplier = null;
+    private ?string $supplier = null;
 
     /**
      * The unit.
@@ -67,7 +67,7 @@ class Product extends AbstractEntity
      * @ORM\Column(type="string", length=15, nullable=true)
      * @Assert\Length(max=15)
      */
-    protected ?string $unit = null;
+    private ?string $unit = null;
 
     /**
      * Clone this product.
@@ -116,6 +116,14 @@ class Product extends AbstractEntity
     public function getDisplay(): string
     {
         return $this->getDescription();
+    }
+
+    /**
+     * Gets the group.
+     */
+    public function getGroup(): ?Group
+    {
+        return $this->category ? $this->category->getGroup() : null;
     }
 
     /**

@@ -1,25 +1,25 @@
 {% extends 'cards/card_edit.html.twig' %}
 
 {# macros #}
-{% macro fillLanguages(languages, language = false) %}
+{% macro fillLanguages(languages, language=false) %}
 {% for key, value in languages -%}
     <option value="{{ value }}"{% if value == language %} selected="selected"{% endif %}>{{ key }}</option>
 {% endfor -%}
 {% endmacro %}
 
 {# parameters #}
-{%- set title       = 'translator.title' -%}
-{%- set title_icon  = 'globe' -%}
+{%- set title = 'translator.title' -%}
+{%- set title_icon = 'globe' -%}
 {%- set submit_text = 'translator.submit_text' -%}
 {%- set cancel_path = false -%}
-{%- set form_attr   = form_attr|default({})|merge({
+{%- set form_attr = form_attr|default({})|merge({
                      'data-ajax': url('ajax_translate'),
                      'data-title': 'translator.title'|trans,
                      'data-success': 'translator.translate_sucess'|trans,
                      'data-copy-success': 'translator.copy_sucess'|trans,
                      'data-copy-error': 'translator.copy_error'|trans,
                      'data-last-error': 'translator.last_error'|trans,
-                     'data-detected': 'translator.detect_label'|trans, 
+                     'data-detected': 'translator.detect_label'|trans,
                      'data-locale': app.request.locale}) -%}
 
 {% block card_container_class '' %}
@@ -31,7 +31,7 @@
             <label for="from" class="required">{{ 'translator.from_label'|trans }}</label>
             <select id="from" name="from" class="form-control">
                 <option value="">{{ 'translator.auto_detect'|trans }}</option>
-                {{ _self.fillLanguages(languages ) }}
+                {{ _self.fillLanguages(languages) }}
             </select>
         </div>
     </div>
@@ -91,8 +91,14 @@
 <button type="button" class="btn btn-copy btn-form btn-success" disabled="disabled" data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>
 {%- endblock %}
 
+{% block stylesheets %}
+{{ asset_css('css/select2.css') }}
+{%- endblock -%}
+
 {% block javascripts -%}
 {{ parent() }}
+{{ asset_js('js/vendor/select2/js/select2.js') }}
+{{ asset_js('js/vendor/select2/js/i18n/fr.min.js') }}
 {{ asset_js('js/vendor/clipboard/clipboard.js') }}
 {{ asset_js('js/test/translate.js') }}
 {%- endblock %}

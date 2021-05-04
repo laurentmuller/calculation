@@ -5,22 +5,22 @@
 
 {# macro #}
 {% macro propertyDateUser(name, date, user) -%}
-{% set createdDate = date ? date|localedatetime : 'common.empty_date'|trans %}
-{% set createdUser = user|default('common.empty_user'|trans) -%}
-{{ properties.property(name, createdDate ~ ' - ' ~ createdUser) }}
+{% set created_date = date ? date|localedatetime : 'common.empty_date'|trans %}
+{% set created_user = user|default('common.empty_user'|trans) -%}
+{{ properties.property(name, created_date ~ ' - ' ~ created_user) }}
 {%- endmacro %}
 
 {# parameters #}
-{%- set id     = item.id -%}
-{%- set title  = 'calculation.show.title' -%}
+{%- set id = item.id -%}
+{%- set title = 'calculation.show.title' -%}
 {%- set params = route_params(app.request, id) %}
 
 {# actions #}
-{%- set list_path   = app.displayTabular ? 'calculation_table' : 'calculation_card' -%}
-{%- set edit_path   = is_granted(ATTRIBUTE_EDIT, item) and item.editable ? path('calculation_edit', params) : null -%}
+{%- set list_path = app.displayTabular ? 'calculation_table' : 'calculation_card' -%}
+{%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) and item.editable ? path('calculation_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('calculation_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, list_path) -%}
-{%- set pdf_export  = is_granted(ATTRIBUTE_EXPORT, item) -%}
+{%- set pdf_export = is_granted(ATTRIBUTE_EXPORT, item) -%}
 
 {% block card_header_class ' d-print-none' %}
 {% block card_container_class '' %}
@@ -40,21 +40,21 @@
         </tr>
         {# categories #}
         {% for category in group.categories %}
-		<tr>
-			<th class="pl-3" colspan="5">{{ category.code }}</th>
-		</tr>
-        {# items #}        
-		{% for product in category.items %}
-		<tr>
-			<td class="pl-3">{{ product.description }}</td>
-			<td class="text-unit">{{ product.unit }}</td>
-			<td class="text-currency">{{ product.price|amount }}</td>
-        	<td class="text-currency">{{ product.quantity|amount }}</td>
-        	<td class="text-currency">{{ product.total|amount }}</td>
-		</tr>
-		{% endfor %}
+        <tr>
+            <th class="pl-3" colspan="5">{{ category.code }}</th>
+        </tr>
+        {# items #}
+        {% for product in category.items %}
+        <tr>
+            <td class="pl-3">{{ product.description }}</td>
+            <td class="text-unit">{{ product.unit }}</td>
+            <td class="text-currency">{{ product.price|amount }}</td>
+            <td class="text-currency">{{ product.quantity|amount }}</td>
+            <td class="text-currency">{{ product.total|amount }}</td>
+        </tr>
         {% endfor %}
-	    {% endfor %}
+        {% endfor %}
+        {% endfor %}
         {# items total #}
         <tr>
             <td class="font-weight-bold" colspan="4">{{ 'calculation.fields.itemsTotal'|trans }}</td>
@@ -150,9 +150,9 @@
 {% block card_footer %}
 <div class="row">
     <div class="col-md-8">
-	{{ parent() }}
-	{%- if pdf_export -%}
-	    {{ icons.button_pdf('calculation_pdf_id', {'id': id}) }}
+    {{ parent() }}
+    {%- if pdf_export -%}
+        {{ icons.button_pdf('calculation_pdf_id', {'id': id}) }}
     {%- endif -%}
     </div>
     <div class="col-md-4 text-md-right">

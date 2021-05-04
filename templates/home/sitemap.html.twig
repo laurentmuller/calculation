@@ -3,51 +3,51 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
-{% macro link(route, text, icon, domain = null, parameters = []) -%}
+{% macro link(route, text, icon, domain=null, parameters=[]) -%}
 {% set href = path(route, parameters) %}
 {{ icons.link(href, text, '', icon ~ ' fa-fw', '', domain, parameters) }}
 {%- endmacro %}
 
-{% macro linkExternal(route, text, icon, domain = null, parameters = []) -%}
+{% macro linkExternal(route, text, icon, domain=null, parameters=[]) -%}
 {% set href = path(route, parameters) %}
 {{ icons.linkExternal(href, text, '', icon ~ ' fa-fw', '', domain, parameters) }}
 {%- endmacro %}
 
 {# parameters #}
-{%- set title          = 'index.menu_site_map' -%}
-{%- set title_icon     = 'sitemap' -%}
-{%- set is_dev         = app.debug or is_env_dev -%}
-{%- set is_admin       = is_granted('ROLE_ADMIN') -%}
+{%- set title = 'index.menu_site_map' -%}
+{%- set title_icon = 'sitemap' -%}
+{%- set is_dev = app.debug or is_env_dev -%}
+{%- set is_admin = is_granted('ROLE_ADMIN') -%}
 {%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
-{%- set is_remembered  = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
-{%- set is_bibi        = is_dev and is_remembered and app.user.username == 'Bibi' -%}
-{%- set is_tabular     = app.displayTabular -%}
-{%- set route_params   = {'caller': path('site_map')} -%}
+{%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
+{%- set is_bibi = is_dev and is_remembered and app.user.username == 'Bibi' -%}
+{%- set is_tabular = app.displayTabular -%}
+{%- set route_params = {'caller': path('site_map')} -%}
 
 {# rights #}
 {%- set is_list_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
-{%- set is_add_calculation  = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION) -%}
-{%- set is_pdf_calculation  = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) -%}
+{%- set is_add_calculation = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION) -%}
+{%- set is_pdf_calculation = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) -%}
 
-{%- set is_list_product    = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
-{%- set is_add_product     = is_granted(ATTRIBUTE_ADD, ENTITY_PRODUCT) -%}
-{%- set is_pdf_product     = is_granted(ATTRIBUTE_EXPORT, ENTITY_PRODUCT) -%}
-  
-{%- set is_list_category   = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) -%}
-{%- set is_add_category    = is_granted(ATTRIBUTE_ADD, ENTITY_CATEGORY) -%}
-{%- set is_pdf_category    = is_granted(ATTRIBUTE_EXPORT, ENTITY_CATEGORY) -%}
+{%- set is_list_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
+{%- set is_add_product = is_granted(ATTRIBUTE_ADD, ENTITY_PRODUCT) -%}
+{%- set is_pdf_product = is_granted(ATTRIBUTE_EXPORT, ENTITY_PRODUCT) -%}
 
-{%- set is_list_state      = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
-{%- set is_add_state       = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION_STATE) -%}
-{%- set is_pdf_state       = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION_STATE) -%}
+{%- set is_list_category = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) -%}
+{%- set is_add_category = is_granted(ATTRIBUTE_ADD, ENTITY_CATEGORY) -%}
+{%- set is_pdf_category = is_granted(ATTRIBUTE_EXPORT, ENTITY_CATEGORY) -%}
 
-{%- set is_list_margin     = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
-{%- set is_add_margin      = is_granted(ATTRIBUTE_ADD, ENTITY_GLOBAL_MARGIN) -%}
-{%- set is_pdf_margin      = is_granted(ATTRIBUTE_EXPORT, ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_list_state = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
+{%- set is_add_state = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION_STATE) -%}
+{%- set is_pdf_state = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION_STATE) -%}
 
-{%- set is_list_customer   = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_dev -%}
-{%- set is_add_customer    = is_granted(ATTRIBUTE_ADD, ENTITY_CUSTOMER) and is_dev  -%}
-{%- set is_pdf_customer    = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_dev  -%}
+{%- set is_list_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_add_margin = is_granted(ATTRIBUTE_ADD, ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_pdf_margin = is_granted(ATTRIBUTE_EXPORT, ENTITY_GLOBAL_MARGIN) -%}
+
+{%- set is_list_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_dev -%}
+{%- set is_add_customer = is_granted(ATTRIBUTE_ADD, ENTITY_CUSTOMER) and is_dev -%}
+{%- set is_pdf_customer = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_dev -%}
 
 {# class #}
 {% block container_class 'container-fluid' %}
@@ -58,7 +58,7 @@
         <ul>
             {% if is_admin %}
             <li>{{ _self.link('admin_parameters', 'parameters.title', 'cogs') }}</li>
-            {%  set route = is_tabular ? 'user_table' : 'user_card' %}
+            {% set route = is_tabular ? 'user_table' : 'user_card' %}
             <li>{{ _self.link(route, 'user.list.title', 'user far') -}}</li>
             {% endif %}
             {% if is_super_admin %}
@@ -77,7 +77,7 @@
             {% if is_list_calculation %}
             <li id="home">{{ _self.link('homepage', 'index.title', 'home') }}</li>
             <li>
-                {%  set route = is_tabular ? 'calculation_table' : 'calculation_card' %}
+                {% set route = is_tabular ? 'calculation_table' : 'calculation_card' %}
                 <ul>{{ _self.link(route, 'calculation.list.title', 'calculator') }}
                     {% if is_add_calculation or is_pdf_calculation %}
                     <li>
@@ -90,7 +90,7 @@
                             {% endif %}
                         </ul>
                     </li>
-                    {% endif %}                
+                    {% endif %}
                 </ul>
             </li>
             {% endif %}
@@ -99,7 +99,7 @@
                 <span class="rounded">{{- icons.icon('database', 'index.menu_data') -}}</span>
                 <ul>
                     {% if is_list_product  %}
-                    {%  set route = is_tabular ? 'product_table' : 'product_card' %}
+                    {% set route = is_tabular ? 'product_table' : 'product_card' %}
                     <li>{{ _self.link(route, 'product.list.title', 'file-alt far') }}
                         {% if is_add_product or is_pdf_product %}
                         <ul>
@@ -114,7 +114,7 @@
                     </li>
                     {% endif %}
                     {% if is_list_category  %}
-                    {%  set route = is_tabular ? 'category_table' : 'category_card' %}
+                    {% set route = is_tabular ? 'category_table' : 'category_card' %}
                     <li>{{ _self.link(route, 'category.list.title', 'folder far') }}
                         {% if is_add_category or is_pdf_category %}
                         <ul>
@@ -129,7 +129,7 @@
                     </li>
                     {% endif %}
                     {% if is_list_state  %}
-                    {%  set route = is_tabular ? 'calculationstate_table' : 'calculationstate_card' %}
+                    {% set route = is_tabular ? 'calculationstate_table' : 'calculationstate_card' %}
                     <li>{{ _self.link(route, 'calculationstate.list.title', 'flag far') }}
                         {% if is_add_state or is_pdf_state %}
                         <ul>
@@ -144,7 +144,7 @@
                     </li>
                     {% endif %}
                     {% if is_list_margin %}
-                    {%  set route = is_tabular ? 'globalmargin_table' : 'globalmargin_card' %}
+                    {% set route = is_tabular ? 'globalmargin_table' : 'globalmargin_card' %}
                     <li>{{ _self.link(route, 'globalmargin.list.title', 'percent') }}
                         {% if is_add_margin or is_pdf_margin %}
                         <ul>
@@ -159,7 +159,7 @@
                     </li>
                     {% endif %}
                     {% if is_list_customer %}
-                    {%  set route = is_tabular ? 'customer_table' : 'customer_card' %}
+                    {% set route = is_tabular ? 'customer_table' : 'customer_card' %}
                     <li>{{ _self.link(route, 'customer.list.title', 'address-card far') }}
                         {% if is_add_customer or is_pdf_customer %}
                         <ul>
@@ -203,7 +203,7 @@
                 {{ _self.link('about', 'about.title', 'info-circle') }}
                 <ul>
                     <li>{{ _self.link('about_licence', 'about.licence_short', 'info-circle') }}</li>
-                    <li>{{ _self.link('about_policy', 'about.policy_short', 'info-circle') }}</li>                    
+                    <li>{{ _self.link('about_policy', 'about.policy_short', 'info-circle') }}</li>
                     <li>{{ _self.link('user_comment', 'user.comment.title', 'envelope far') }}</li>
                 </ul>
             </li>

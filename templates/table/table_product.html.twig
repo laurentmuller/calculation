@@ -1,25 +1,25 @@
 {% extends 'table/table_base.html.twig' %}
 
 {# parameters #}
-{%- set title        = 'product.list.title' -%}
-{%- set title_icon   = 'file-alt far' -%}
-{%- set defer_url    = url('table_product') -%}
-{%- set categoryId   = customData.category.id|default(0) -%}
-{%- set object_type  = ENTITY_PRODUCT -%}
+{%- set title = 'product.list.title' -%}
+{%- set title_icon = 'file-alt far' -%}
+{%- set defer_url = url('table_product') -%}
+{%- set category_id = customData.category.id|default(0) -%}
+{%- set object_type = ENTITY_PRODUCT -%}
 
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('product_add', params) }}">{{ 'product.add.title'|trans }}</a>{% endif %}
 {%- endblock %}
-  
+
 {% block toolbar_actions -%}
 <div class="input-group-append btn-dropdown">
-    <button id="categoryId" data-value="{{ categoryId }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'product.list.category_help'|trans }}">
+    <button id="categoryId" data-value="{{ category_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'product.list.category_help'|trans }}">
         {{- customData.category ? customData.category.code : 'product.fields.category'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="categoryId">
-        {{ _self.output_dropdown('category', 0, categoryId, 'product.list.category_all_text'|trans) }}
+        {{ _self.output_dropdown('category', 0, category_id, 'product.list.category_all_text'|trans) }}
         {% for category in customData.categories %}
-        {{ _self.output_dropdown('category', category.id, categoryId, category.code) }}
+        {{ _self.output_dropdown('category', category.id, category_id, category.code) }}
         {% endfor %}
     </div>
 </div>
@@ -55,7 +55,7 @@
     <a href="{{ path('product_show', params) }}" class="item-link stretched-link text-body" title="{{ 'product.show.title'|trans }}">%description%</a>
 {%- else -%}
     <span>%description%</span>
-{%- endif -%} 
+{%- endif -%}
 {%- endblock %}
 
 {% block custom_view_body -%}

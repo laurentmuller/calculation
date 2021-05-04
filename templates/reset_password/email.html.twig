@@ -1,9 +1,9 @@
-{%- set tokenLifetime = resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') -%}
+{%- set token_life_time = resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') -%}
 {% apply inline_css %}
 <style>
     body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-        font-size: 14px; 
+        font-size: 14px;
     }
 </style>
 <p><b>Bonjour {{ username }}</b></p>
@@ -11,7 +11,7 @@
     Vous pouvez réinitialiser votre mot de passe en cliquant sur le lien suivant : <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">Réinitialiser le mot de passe</a>.
 </p>
 <p>
-    <b>Remarque :</b> Ce lien expirera dans {{ tokenLifetime }}.
+    <b>Remarque :</b> Ce lien expirera dans {{ token_life_time }}.
 <p/>
 <p>
     Cordialement,<br>

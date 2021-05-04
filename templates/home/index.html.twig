@@ -19,12 +19,12 @@
 {% block body -%}
 <div class="row no-gutters">
 {% if enabled %}
-	<div class="col">
+    <div class="col">
         {%- include 'home/panel_table.html.twig' -%}
         {%- include 'home/panel_state.html.twig' -%}
         {%- include 'home/panel_month.html.twig' -%}
         {%- include 'user/user_switch.html.twig' -%}
-	</div>
+    </div>
 {% else %}
     <div class="col my-auto h-50">
         {%- include 'home/panel_disabled.html.twig' -%}

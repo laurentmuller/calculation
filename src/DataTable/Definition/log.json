@@ -1,34 +1,34 @@
 [
-	{
-		"name": "id",
-		"visible": false,
-		"orderable": false,
-		"searchable": false
-	},
-	{
-		"name": "createdAt",
-		"title": "log.fields.createdAt",
-		"default": true,
-		"direction": "desc",
-		"class": "pl-3 date",
-		"formatter": "formatCreatedAt",
-		"callback": "renderLog"
-	},
-	{
-		"name": "channel",
-		"title": "log.fields.channel",
-		"class": "channel",
-		"formatter": "formatChannel"
-	},
-	{
-		"name": "level",
-		"title": "log.fields.level",
-		"class": "level",
-		"formatter": "formatLevel"
-	},
-	{
-		"name": "message",
-		"title": "log.fields.message",
-		"class": "text-cell"
-	}
+    {
+        "name": "id",
+        "visible": false,
+        "orderable": false,
+        "searchable": false
+    },
+    {
+        "name": "createdAt",
+        "title": "log.fields.createdAt",
+        "default": true,
+        "direction": "desc",
+        "class": "pl-3 date",
+        "formatter": "formatCreatedAt",
+        "callback": "renderLog"
+    },
+    {
+        "name": "channel",
+        "title": "log.fields.channel",
+        "class": "channel",
+        "formatter": "formatChannel"
+    },
+    {
+        "name": "level",
+        "title": "log.fields.level",
+        "class": "level",
+        "formatter": "formatLevel"
+    },
+    {
+        "name": "message",
+        "title": "log.fields.message",
+        "class": "text-cell"
+    }
 ]

@@ -36,7 +36,7 @@
     {#{ form_row(item.name) }#}
     <div class="form-group">
         <div class="row">
-            <div class="col">{{ form_label(item.name) }}</div>            
+            <div class="col">{{ form_label(item.name) }}</div>
             <div class="col-auto d-print-none">
                 {{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete-item', 'times', 'task.edit.delete_item') -}}
             </div>
@@ -69,7 +69,7 @@
                 <tbody>
                 {% for margin in item.margins -%}
                     {{ _self.printTaskItemMargin(margin) }}
-                {% endfor -%}               
+                {% endfor -%}
                 </tbody>
             </table>
             <small class="text-muted text-right empty-margins{% if count > 0 %} d-none{% endif %}">{{- 'taskitem.edit.empty_items'|trans -}}</small>
@@ -80,9 +80,9 @@
 {% endmacro -%}
 
 {# parameters #}
-{%- set title      = new ? 'task.add.title' : 'task.edit.title' -%}
+{%- set title = new ? 'task.add.title' : 'task.edit.title' -%}
 {%- set title_icon = 'tasks' -%}
-{%- set page_list  = 'task_table' -%}
+{%- set page_list = 'task_table' -%}
 
 {% block card_header %}
 <div class="row">
@@ -94,7 +94,7 @@
 {% block card_body %}
 <div class="form-row">
     <div class="col-md-6">
-	    {{ form_row(form.name) }}
+        {{ form_row(form.name) }}
     </div>
     <div class="col-md-4">
         {{ form_row(form.category) }}

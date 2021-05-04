@@ -3,25 +3,25 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title       = 'below.title' -%}
-{%- set title_icon  = 'percent' -%}
-{%- set pdf_title   = 'calculation.list.pdf_title' -%}
+{%- set title = 'below.title' -%}
+{%- set title_icon = 'percent' -%}
+{%- set pdf_title = 'calculation.list.pdf_title' -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 
 {# actions #}
-{%- set params      = {'id': 0} -%}
-{%- set show_path   = path('calculation_show', params) -%}
-{%- set edit_path   = path('calculation_edit', params) -%}
+{%- set params = {'id': 0} -%}
+{%- set show_path = path('calculation_show', params) -%}
+{%- set edit_path = path('calculation_edit', params) -%}
 {%- set delete_path = path('calculation_delete', params) -%}
 {%- set single_path = path('calculation_pdf_id', params) -%}
-{%- set excel_path  = path('below_excel') -%}
-{%- set pdf_path    = path('below_pdf') -%}
+{%- set excel_path = path('below_excel') -%}
+{%- set pdf_path = path('below_pdf') -%}
 
 {# titles #}
-{%- set show_title   = 'calculation.show.title' %}
-{%- set edit_title   = 'calculation.edit.title_short' %}
+{%- set show_title = 'calculation.show.title' %}
+{%- set edit_title = 'calculation.edit.title_short' %}
 {%- set delete_title = 'calculation.delete.title' %}
-{%- set excel_title  = 'calculation.list.excel_title' -%}
+{%- set excel_title = 'calculation.list.excel_title' -%}
 
 {# highlight search #}
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}

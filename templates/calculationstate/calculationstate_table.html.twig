@@ -3,26 +3,26 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title       = 'calculationstate.list.title' -%}
-{%- set title_icon  = 'flag far' -%}
+{%- set title = 'calculationstate.list.title' -%}
+{%- set title_icon = 'flag far' -%}
 {%- set object_type = ENTITY_CALCULATION_STATE -%}
 
 {# actions #}
-{%- set params      = {'id': 0} -%}
-{%- set add_path    = path('calculationstate_add') -%}
-{%- set show_path   = path('calculationstate_show', params) -%}
-{%- set edit_path   = path('calculationstate_edit', params) -%}
+{%- set params = {'id': 0} -%}
+{%- set add_path = path('calculationstate_add') -%}
+{%- set show_path = path('calculationstate_show', params) -%}
+{%- set edit_path = path('calculationstate_edit', params) -%}
 {%- set delete_path = path('calculationstate_delete', params) -%}
-{%- set pdf_path    = path('calculationstate_pdf') -%}
-{%- set excel_path  = path('calculationstate_excel') -%}
+{%- set pdf_path = path('calculationstate_pdf') -%}
+{%- set excel_path = path('calculationstate_excel') -%}
 
 {# titles #}
-{%- set add_title    = 'calculationstate.add.title' %}
-{%- set show_title   = 'calculationstate.show.title' %}
-{%- set edit_title   = 'calculationstate.edit.title' %}
+{%- set add_title = 'calculationstate.add.title' %}
+{%- set show_title = 'calculationstate.show.title' %}
+{%- set edit_title = 'calculationstate.edit.title' %}
 {%- set delete_title = 'calculationstate.delete.title' %}
-{%- set pdf_title    = 'calculationstate.list.pdf_title' -%}
-{%- set excel_title  = 'calculationstate.list.excel_title' -%}
+{%- set pdf_title = 'calculationstate.list.pdf_title' -%}
+{%- set excel_title = 'calculationstate.list.excel_title' -%}
 
 {% block table_actions -%}
 {{ parent() }}

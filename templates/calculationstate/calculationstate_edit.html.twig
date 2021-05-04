@@ -1,20 +1,20 @@
 {% extends 'cards/card_edit.html.twig' %}
 
 {# parameters #}
-{%- set title      = new ? 'calculationstate.add.title' : 'calculationstate.edit.title' -%}
+{%- set title = new ? 'calculationstate.add.title' : 'calculationstate.edit.title' -%}
 {%- set title_icon = 'flag far' -%}
-{%- set page_list  = 'calculationstate_table' -%}
+{%- set page_list = 'calculationstate_table' -%}
 
 {% block card_body %}
 <div class="form-row">
     <div class="col-md-5">
-	    {{ form_row(form.code) }}
+        {{ form_row(form.code) }}
     </div>
     <div class="col-md-3">
-	    {{ form_row(form.editable) }}
+        {{ form_row(form.editable) }}
     </div>
     <div class="col-md-4">
-	    {{ form_row(form.color) }}
+        {{ form_row(form.color) }}
     </div>
 </div>
 {{ form_row(form.description) }}

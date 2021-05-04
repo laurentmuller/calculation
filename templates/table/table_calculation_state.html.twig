@@ -1,10 +1,10 @@
 {% extends 'table/table_base.html.twig' %}
 
 {# parameters #}
-{%- set title        = 'calculationstate.list.title' -%}
-{%- set title_icon   = 'flag far' -%}
-{%- set defer_url    = url('table_calculationstate') -%}
-{%- set object_type  = ENTITY_CALCULATION_STATE -%}
+{%- set title = 'calculationstate.list.title' -%}
+{%- set title_icon = 'flag far' -%}
+{%- set defer_url = url('table_calculationstate') -%}
+{%- set object_type = ENTITY_CALCULATION_STATE -%}
 
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('calculationstate_add', params) }}">{{ 'calculationstate.add.title'|trans }}</a>{% endif %}

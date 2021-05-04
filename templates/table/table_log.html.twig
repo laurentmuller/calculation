@@ -1,12 +1,12 @@
 {% extends 'table/table_base.html.twig' %}
 
 {# parameters #}
-{%- set title        = 'log.title' -%}
-{%- set title_icon   = 'book' -%}
-{%- set defer_url    = url('table_log') -%}
-{%- set channel      = customData.channel|default('') -%}
-{%- set level        = customData.level|default('') -%}
-{%- set object_type  = ENTITY_LOG -%}
+{%- set title = 'log.title' -%}
+{%- set title_icon = 'book' -%}
+{%- set defer_url = url('table_log') -%}
+{%- set channel = customData.channel|default('') -%}
+{%- set level = customData.level|default('') -%}
+{%- set object_type = ENTITY_LOG -%}
 
 {% block header_actions %}
 <small>{{ 'log.list.file'|trans({'%file%': customData.file}) }}</small>
@@ -23,10 +23,10 @@
         {{ _self.output_dropdown('channel', key, channel, key|capitalize) }}
         {% endfor %}
     </div>
-</div>    
+</div>
 <div class="input-group-append btn-dropdown">
     <button id="level" data-value="{{ level }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
-        {{- level|length ? level|capitalize: 'log.fields.level'|trans -}}
+        {{- level|length ? level|capitalize : 'log.fields.level'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="level">
         {{ _self.output_dropdown('level', '', level, 'datatable.all'|trans) }}
@@ -39,9 +39,9 @@
 
 {% block global_actions -%}
 {%- set route = app.request.get('_route') -%}
-{{- _self.item_global(path('log_refresh', {'route' : route}), 'common.button_refresh', 'sync-alt') }}
+{{- _self.item_global(path('log_refresh', {'route': route}), 'common.button_refresh', 'sync-alt') }}
 {{- _self.item_separator() }}
-{{- _self.item_global(path('log_delete', {'route' : route}), 'log.delete.title', 'times') }}
+{{- _self.item_global(path('log_delete', {'route': route}), 'log.delete.title', 'times') }}
 {{- _self.item_separator() }}
 {{- _self.item_external(path('log_pdf'), 'log.list.pdf_title', 'file-pdf far') }}
 {{- _self.item_external(path('log_excel'), 'log.list.excel_title', 'file-excel far') }}

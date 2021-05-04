@@ -16,13 +16,13 @@
 <dd>{{ item.description }}</dd>
 {%- endmacro %}
 
-{% macro output_menus(menus, help, indent = 0) -%}
+{% macro output_menus(menus, help, indent=0) -%}
 <dl{% if indent > 0 %} " style="margin-left: {{ indent }}rem;"{% endif %}>
     {%- for menu in menus -%}{{- _self.output_menu(menu, help, indent) -}}{%- endfor -%}
 </dl>
 {%- endmacro %}
 
-{% macro output_menu(menu, help, indent = 0) -%}
+{% macro output_menu(menu, help, indent=0) -%}
 {%- set href = false -%}
 {%- set description = menu.description %}
 {%- set dialog = menu.dialog|default(false) -%}
@@ -39,7 +39,7 @@
 <dt class="font-weight-normal">
 {%- if href -%}
     {{- tools.output_icon(menu.icon|default(false), null) -}}
-	<a class="ml-1" href="{{ href }}">{{ menu.id|trans }}</a>
+    <a class="ml-1" href="{{ href }}">{{ menu.id|trans }}</a>
 {%- else -%}
     {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
 {%- endif -%}
@@ -50,10 +50,10 @@
 {%- endmacro %}
 
 {# parameters #}
-{%- set title    = 'help.title' -%}
-{%- set dialogs  = help.dialogs|default(false) -%}
+{%- set title = 'help.title' -%}
+{%- set dialogs = help.dialogs|default(false) -%}
 {%- set entities = help.entities|default(false) -%}
-{%- set menus    = help.mainMenu.menus|default(false) -%}
+{%- set menus = help.mainMenu.menus|default(false) -%}
 
 {%- block container_class 'container-fluid' -%}
 

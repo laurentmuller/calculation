@@ -8,7 +8,7 @@
 {% macro button(class, text, action, icon) %}
 {%- set path = path('homepage') ~ '_type_/' ~ action ~ '/_id_' -%}
     <a href="#" class="btn btn-secondary disabled {{ class }}" data-path="{{ path }}" title="{{ text|trans }}">
-        {{- icons.icon(icon) -}} 
+        {{- icons.icon(icon) -}}
     </a>
 {% endmacro %}
 
@@ -20,16 +20,16 @@
 {% endmacro %}
 
 {# parameters #}
-{%- set title       = 'search.title' -%}
-{%- set title_icon  = 'search' -%}
-{%- set ajax_path   = path(app.request.get('_route')) -%}
-{%- set ajax_lang   = path('ajax_language') -%}
+{%- set title = 'search.title' -%}
+{%- set title_icon = 'search' -%}
+{%- set ajax_path = path(app.request.get('_route')) -%}
+{%- set ajax_lang = path('ajax_language') -%}
 
-{%- set id          = app.request.get('id', 0) -%}
-{%- set orderdir    = app.session.get('FullSearchDataTable.orderdir') -%}
+{%- set id = app.request.get('id', 0) -%}
+{%- set orderdir = app.session.get('FullSearchDataTable.orderdir') -%}
 {%- set ordercolumn = app.session.get('FullSearchDataTable.ordercolumn') -%}
-{%- set pagelength  = app.session.get('FullSearchDataTable.pagelength', 15) -%}
-{%- set row_link    = not app.actionNone -%}
+{%- set pagelength = app.session.get('FullSearchDataTable.pagelength', 15) -%}
+{%- set row_link = not app.actionNone -%}
 
 {# header #}
 {% block card_header %}
@@ -37,7 +37,7 @@
     <div class="col-lg-5 mt-1">{{ parent() }}</div>
     <div class="col-lg-7 text-lg-right d-print-none">
         <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
-        	{% if show_granted %}
+            {% if show_granted %}
             {{ _self.button('btn-table-show', 'common.button_show', 'show', 'fas fa-fw fa-tv') }}
             {% endif %}
             {% if edit_granted %}
@@ -56,9 +56,9 @@
 <div class="row mb-2 d-print-none">
     <div class="col-auto mr-auto">
         <div class="form-inline">
-            <label class="mr-2 required" for="table_search">{{ 'datatable.search'|trans }}</label>             
+            <label class="mr-2 required" for="table_search">{{ 'datatable.search'|trans }}</label>
             <div class="input-group input-group-sm bg-white">
-                <input type="text" id="table_search" name="table_search" class="form-control form-control-sm form-control-border-right-0" autocomplete="off">            
+                <input type="text" id="table_search" name="table_search" class="form-control form-control-sm form-control-border-right-0" autocomplete="off">
                 <div class="input-group-append dropdown" id="dropdown-menu-entity">
                     <button id="button-entity" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'search.entity_help'|trans }}">
                         {{- 'datatable.all'|trans -}}
@@ -66,13 +66,13 @@
                     <div class="dropdown-menu">
                         {{ _self.fill_entities(entities) -}}
                     </div>
-                    <input type="hidden" id="entity" name="entity">                
+                    <input type="hidden" id="entity" name="entity">
                 </div>
                 <div class="input-group-append">
                     <button type="button" class="btn btn-clear btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
                         <i class="fas fa-eraser" aria-hidden="true"></i>
                     </button>
-                </div>    
+                </div>
              </div>
              <label id="minimum" class="ml-2 text-danger d-none">{{ 'search.minimum'|trans }}</label>
         </div>
@@ -103,23 +103,23 @@
         'data-filtered': results.recordsFiltered,
         'data-pagelength': pagelength,
         'data-ordercolumn': ordercolumn,
-      	'data-orderdir': orderdir,
+          'data-orderdir': orderdir,
         'data-debug': app.debug,
         'data-search-highlight': true
 }) -%}
 <table{{ tools.attribs(attributes) }}>
     {{ helper.headers(columns) }}
     <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
-    	{% for row in results.data -%}
-    	 	<tr{% if row['id'] == id %} class="datatables-selection"{% endif %}>
-    	 	{% for column in columns -%}
-    	 		{%- set value = row[column.name] -%}
-    	 		<td class="{{ column.class }}">
-    	 			{{- column.rawData ? value|raw : value -}}
-    	 		</td>
-    	 	{%- endfor %}
-			</tr>
-    	{%- endfor %}
+        {% for row in results.data -%}
+             <tr{% if row['id'] == id %} class="datatables-selection"{% endif %}>
+             {% for column in columns -%}
+                 {%- set value = row[column.name] -%}
+                 <td class="{{ column.class }}">
+                     {{- column.rawData ? value|raw : value -}}
+                 </td>
+             {%- endfor %}
+            </tr>
+        {%- endfor %}
     </tbody>
 </table>
 {% endblock %}

@@ -20,13 +20,13 @@
             {{ tools.rowInfo('Intl Locale', locale) }}
             {{ tools.rowInfo('Timezone', timezone) }}
             {{ tools.rowInfo('Charset', kernel.charset) }}
-            
+
             {{ tools.rowInfo('OPcache', zend_opcache_enabled ? 'enabled' : 'disabled') }}
             {{ tools.rowInfo('APCu', apcu_enabled ? 'enabled' : 'disabled') }}
             {{ tools.rowInfo('Xdebug', xdebug_enabled ? 'enabled' : 'disabled') }}
-            
+
             {{ tools.rowInfo('End of maintenance', endOfMaintenance) }}
-            {{ tools.rowInfo('End of product life', endOfLife) }}            
+            {{ tools.rowInfo('End of product life', endOfLife) }}
             {{ tools.headerInfo('Directories') }}
             {{ tools.rowInfo('Project', projectDir) }}
             {{ tools.rowInfo('Logs', logDir) }}
@@ -50,7 +50,7 @@
             </tbody>
         </table>
         {% endif %}
-        
+
         {# rumtime packages #}
         {% if runtimePackages|length %}
         <table id="data-table-runtime-packages" class="table table-hover table-sm mb-0">
@@ -61,8 +61,8 @@
                 {% endfor %}
             </tbody>
         </table>
-        {% endif %}    
-             
+        {% endif %}
+
         {# debug packages #}
         {% if debugPackages|length %}
         <table id="data-table-development-packages" class="table table-hover table-sm mb-0">
@@ -74,7 +74,7 @@
             </tbody>
         </table>
         {% endif %}
-        
+
         {# runtime routes #}
         {% if runtimeRoutes|length %}
             <table id="data-table-routes" class="table table-hover table-sm mb-0">
@@ -86,7 +86,7 @@
                 </tbody>
             </table>
         {% endif %}
-        
+
         {# debug routes #}
         {% if debugRoutes|length %}
             <table id="data-table-routes-dev" class="table table-hover table-sm mb-0">
@@ -98,5 +98,5 @@
                 </tbody>
             </table>
         {% endif %}
-     </div>   
+     </div>
 </div>

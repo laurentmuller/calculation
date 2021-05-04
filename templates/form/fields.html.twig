@@ -17,12 +17,12 @@
         {{- form_errors(form) }}
     </{{ element|default('div') }}>
 {%- endblock form_row %}
- 
+
 {# empty block because errors are displayed after input #}
-{% block form_label_errors -%}{%- endblock %} 
- 
-{# 
-override form errors. Rendered example: 
+{% block form_label_errors -%}{%- endblock %}
+
+{#
+override form errors. Rendered example:
 <small id="form_message-error" class="is-invalid invalid-feedback">Ce champ est obligatoire.</small>
 #}
 {% block form_errors -%}
@@ -31,7 +31,7 @@ override form errors. Rendered example:
     <span class="invalid-feedback d-block">
         {%- for error in errors -%}
             {%- if error.message not in messages -%}
-                <span class="mb-0 d-block">{{ error.message }}</span>               
+                <span class="mb-0 d-block">{{ error.message }}</span>
             {%- endif -%}
             {%- set messages = messages|merge([error.message]) -%}
         {%- endfor -%}
@@ -53,7 +53,7 @@ override form errors. Rendered example:
     <div class="input-group-prepend">
         <span class="input-group-text"><i class="far fa-fw fa-user" aria-hidden="true"></i></span>
     </div>
-    {{- block('form_widget_simple') -}}    
+    {{- block('form_widget_simple') -}}
 </div>
 {%- endblock %}
 
@@ -95,11 +95,11 @@ override form errors. Rendered example:
     <div class="color-picker dropdown form-control">
         {# <input type="color" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
         {{ block('form_widget_simple') }}
-    	<button type="button" class="dropdown-toggle btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    		<span class="drowpdown-color border border-secondary" style="background-color: {{ value|default('#000000') }};"></span>
-    		<span class="drowpdown-text"></span>
-    	</button>
-    	<div class="dropdown-menu d-print-none"></div>
+        <button type="button" class="dropdown-toggle btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="drowpdown-color border border-secondary" style="background-color: {{ value|default('#000000') }};"></span>
+            <span class="drowpdown-text"></span>
+        </button>
+        <div class="dropdown-menu d-print-none"></div>
     </div>
 {%- else -%}
     {{- parent() -}}
@@ -123,7 +123,7 @@ override form errors. Rendered example:
     <div class="input-group-prepend">
         <span class="input-group-text"><i class="fas fa-fw fa-at" aria-hidden="true"></i></span>
     </div>
-    {{- parent() -}}  
+    {{- parent() -}}
 </div>
 {%- endblock -%}
 
@@ -151,7 +151,7 @@ override form errors. Rendered example:
                 <a href="#" class="btn btn-form btn-outline-danger fileinput-exists" data-dismiss="fileinput">{{ 'common.button_delete'|trans }}</a>
             </div>
         </div>
-    </div>    
+    </div>
 {%- else -%}
     {%- set placeholder = attr.placeholder is defined ? (translation_domain is same as(false) ? attr.placeholder : attr.placeholder|trans({}, translation_domain)) : false -%}
     <div class="fileinput fileinput-new input-group rounded border" data-provides="fileinput">
@@ -227,8 +227,8 @@ override form errors. Rendered example:
 {%- set actions = form.vars.actions|default([]) -%}
 <div class="simple-editor rounded border" id="{{ editor_id }}" name="{{ editor_id }}">
     {% if actions|length -%}
-    <div class="simple-editor-toolbar btn-group btn-group-sm d-print-none">        
-	{% for action in actions %}
+    <div class="simple-editor-toolbar btn-group btn-group-sm d-print-none">
+    {% for action in actions %}
         {% set exec = action.exec|default(false) %}
         {% if exec %}
             {% set attributes = {'title': ('simple-editor.' ~ action.title|default(exec))|trans, 'data-exec': exec|raw} %}
@@ -244,10 +244,10 @@ override form errors. Rendered example:
             {% if action.group is defined %}
                 {% set attributes = attributes|merge({'data-group': action.group|raw}) %}
             {%- endif %}
-            <button type="button" class="btn btn-outline-secondary"{% with { attr: attributes } %}{{ block('attributes') }}{% endwith %}>
+            <button type="button" class="btn btn-outline-secondary"{% with {attr: attributes} %}{{ block('attributes') }}{% endwith %}>
                 <i class="{{ 'fa-fw fas fa-' ~ action.icon }}"></i>
-            </button> 
-        {%- endif %}   
+            </button>
+        {%- endif %}
     {% endfor %}
     </div>
     {%- endif %}

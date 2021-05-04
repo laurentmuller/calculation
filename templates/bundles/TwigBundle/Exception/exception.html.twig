@@ -4,16 +4,16 @@
 {% switch status_code -%}
 {% case 403 %}
     {% set description = 'http_error_403.description'|trans %}
-    {% set suggestion  = 'http_error_403.suggestion'|trans %}
+    {% set suggestion = 'http_error_403.suggestion'|trans %}
 {% case 404 %}
-	{% set description = 'http_error_404.description'|trans %}
-    {% set suggestion  = 'http_error_404.suggestion'|trans({'%url%': path('homepage')}) %}
+    {% set description = 'http_error_404.description'|trans %}
+    {% set suggestion = 'http_error_404.suggestion'|trans({'%url%': path('homepage')}) %}
 {% case 500 %}
-	{% set description = 'http_error_500.description'|trans %}
-    {% set suggestion  = 'http_error_500.suggestion'|trans({'%url%': path('homepage')}) %}
+    {% set description = 'http_error_500.description'|trans %}
+    {% set suggestion = 'http_error_500.suggestion'|trans({'%url%': path('homepage')}) %}
 {% case 503 %}
-	{% set description = 'http_error_503.description'|trans %}
-    {% set suggestion  = 'http_error_503.suggestion'|trans({'%url%': path('homepage')}) %}
+    {% set description = 'http_error_503.description'|trans %}
+    {% set suggestion = 'http_error_503.suggestion'|trans({'%url%': path('homepage')}) %}
 {%- endswitch %}
 
 {% block error_message -%}

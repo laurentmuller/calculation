@@ -104,9 +104,9 @@ class CalculationEmptyControllerTest extends AbstractControllerTest
     protected function deleteEntities(): void
     {
         self::$calculation = $this->deleteEntity(self::$calculation);
+        self::$product = $this->deleteEntity(self::$product);
         self::$category = $this->deleteEntity(self::$category);
         self::$group = $this->deleteEntity(self::$group);
-        self::$product = $this->deleteEntity(self::$product);
         self::$state = $this->deleteEntity(self::$state);
     }
 }

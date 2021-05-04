@@ -47,7 +47,7 @@ class ProductsReport extends AbstractArrayReport
         /** @var Product $entity */
         foreach ($entities as $entity) {
             // group
-            $key = \sprintf('%s - %s', $entity->getGroupCode(), $entity->getCategoryCode());
+            $key = \sprintf('%s / %s', $entity->getGroupCode(), $entity->getCategoryCode());
             $table->setGroupKey($key);
 
             $style = empty($entity->getPrice()) ? $emptyStyle : null;

@@ -16,17 +16,17 @@
 {%- endmacro %}
 
 {# parameters #}
-{%- set title        = 'below.title' -%}
-{%- set title_icon   = 'percent' -%}
-{%- set empty_list   = 'below.empty' -%}
-{%- set caller       = path(app.request.get('_route')) -%}
+{%- set title = 'below.title' -%}
+{%- set title_icon = 'percent' -%}
+{%- set empty_list = 'below.empty' -%}
+{%- set caller = path(app.request.get('_route')) -%}
 
 {# actions #}
-{%- set add_page     = false -%}
-{%- set delete_page  = false -%}
-{%- set pdf_page     = false -%}
-{%- set state_page   = false -%}
-{%- set clone_page   = false -%}
+{%- set add_page = false -%}
+{%- set delete_page = false -%}
+{%- set pdf_page = false -%}
+{%- set state_page = false -%}
+{%- set clone_page = false -%}
 
 {% block search_action %}
 <div class="btn-group btn-group-sm" role="group">

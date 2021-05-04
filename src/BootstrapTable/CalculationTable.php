@@ -74,6 +74,16 @@ class CalculationTable extends AbstractEntityTable
     }
 
     /**
+     * Gets calculation states.
+     *
+     * @return CalculationState[]
+     */
+    protected function getCalculationStates(): array
+    {
+        return $this->stateRepository->getListCount();
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getColumnDefinitions(): string
@@ -123,15 +133,5 @@ class CalculationTable extends AbstractEntityTable
     private function getCalculationState(int $stateId): ?CalculationState
     {
         return 0 !== $stateId ? $this->stateRepository->find($stateId) : null;
-    }
-
-    /**
-     * Gets calculation states.
-     *
-     * @return CalculationState[]
-     */
-    private function getCalculationStates(): array
-    {
-        return $this->stateRepository->getListCount();
     }
 }

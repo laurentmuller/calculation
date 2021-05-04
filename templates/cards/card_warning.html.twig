@@ -3,11 +3,11 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title      = title|default('flashbag.warning') -%}
+{%- set title = title|default('flashbag.warning') -%}
 {%- set title_icon = title_icon|default('exclamation-circle') -%}
-{%- set back_page  = back_page|default(false) -%}
-{%- set back_text  = back_text|default('common.button_back') -%}
-{%- set back_icon  = back_icon|default('chevron-left') -%}
+{%- set back_page = back_page|default(false) -%}
+{%- set back_text = back_text|default('common.button_back') -%}
+{%- set back_icon = back_icon|default('chevron-left') -%}
 {%- set back_class = back_class|default('btn btn-form btn-primary') -%}
 
 {# classes #}
@@ -16,7 +16,7 @@
 
 {% block card_body %}
 <p class="mb-0">
-	{{- message|default('http_error_500.description'|trans)|raw -}}
+    {{- message|default('http_error_500.description'|trans)|raw -}}
 </p>
 {# message_list #}
 {% if message_list|default(false) %}

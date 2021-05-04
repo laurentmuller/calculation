@@ -3,28 +3,28 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title       = 'globalmargin.list.title' -%}
-{%- set title_icon  = 'percent' -%}
+{%- set title = 'globalmargin.list.title' -%}
+{%- set title_icon = 'percent' -%}
 {%- set object_type = ENTITY_GLOBAL_MARGIN -%}
 {%- set show_search = false -%}
 {%- set show_length = false -%}
 
 {# actions #}
-{%- set params      = {'id': 0} -%}
-{%- set add_path    = path('globalmargin_add') -%}
-{%- set show_path   = path('globalmargin_show', params) -%}
-{%- set edit_path   = path('globalmargin_edit', params) -%}
+{%- set params = {'id': 0} -%}
+{%- set add_path = path('globalmargin_add') -%}
+{%- set show_path = path('globalmargin_show', params) -%}
+{%- set edit_path = path('globalmargin_edit', params) -%}
 {%- set delete_path = path('globalmargin_delete', params) -%}
-{%- set pdf_path    = path('globalmargin_pdf') -%}
-{%- set excel_path  = path('globalmargin_excel') -%}
+{%- set pdf_path = path('globalmargin_pdf') -%}
+{%- set excel_path = path('globalmargin_excel') -%}
 
 {# titles #}
-{%- set add_title    = 'globalmargin.add.title' %}
-{%- set show_title   = 'globalmargin.show.title' %}
-{%- set edit_title   = 'globalmargin.edit.title' %}
+{%- set add_title = 'globalmargin.add.title' %}
+{%- set show_title = 'globalmargin.show.title' %}
+{%- set edit_title = 'globalmargin.edit.title' %}
 {%- set delete_title = 'globalmargin.delete.title' %}
-{%- set pdf_title    = 'globalmargin.list.pdf_title' -%}
-{%- set excel_title  = 'globalmargin.list.excel_title' -%}
+{%- set pdf_title = 'globalmargin.list.pdf_title' -%}
+{%- set excel_title = 'globalmargin.list.excel_title' -%}
 
 {# classes #}
 {% block card_container_class %} col-md-8 offset-md-2{% endblock -%}

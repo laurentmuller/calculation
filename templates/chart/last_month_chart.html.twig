@@ -7,9 +7,9 @@
 {%- endmacro %}
 
 {# parameters #}
-{%- set title      = 'title_by_month' -%}
+{%- set title = 'title_by_month' -%}
 {%- set title_icon = 'calendar-alt far' -%}
-{%- set list_path  =  tabular ? 'calculation_table' : 'calculation_card' -%}
+{%- set list_path = tabular ? 'calculation_table' : 'calculation_card' -%}
 
 {# class #}
 {% block card_container_class '' -%}
@@ -26,7 +26,7 @@
                 {% for i in [4, 6, 12, 18, 24] %}
                     {{ _self.month(i, i == months) }}
                 {% endfor %}
-            </select>                
+            </select>
         </div>
     </div>
 </div>
@@ -48,9 +48,9 @@
         <tbody data-link="row" class="rowlink">
             {% for item in data -%}
             {%- set month = item.date|strftime('%B %Y') -%}
-        	<tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
+            <tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
                 <td>
-                	<a href="{{ path(list_path, {'query': item.date|strftime('%m.%Y')}) }}">{{ month }}</a>
+                    <a href="{{ path(list_path, {'query': item.date|strftime('%m.%Y')}) }}">{{ month }}</a>
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
                 <td class="text-currency">{{ item.items|integer }}</td>
@@ -63,11 +63,11 @@
         </tbody>
         <tfoot>
             <tr>
-            	<td class="font-weight-bold">{{ 'fields.total'|trans }}</td>
-            	<td class="font-weight-bold text-currency">{{ count|integer }}</td>
+                <td class="font-weight-bold">{{ 'fields.total'|trans }}</td>
+                <td class="font-weight-bold text-currency">{{ count|integer }}</td>
                 <td class="font-weight-bold text-currency">{{ items|integer }}</td>
                 {%- set class_name = app.marginBelow(marginPercent) ? ' text-danger' : '' -%}
-            	<td class="font-weight-bold text-percent{{ class_name }}">{{ marginPercent|percent(false) }}</td>
+                <td class="font-weight-bold text-percent{{ class_name }}">{{ marginPercent|percent(false) }}</td>
                 <td class="font-weight-bold text-currency">{{ marginAmount|integer }}</td>
                 <td class="font-weight-bold text-currency">{{ total|integer }}</td>
             </tr>

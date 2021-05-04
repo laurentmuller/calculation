@@ -1,10 +1,10 @@
 {% extends 'table/table_base.html.twig' %}
 
 {# parameters #}
-{%- set title        = 'group.list.title' -%}
-{%- set title_icon   = 'code-branch' -%}
-{%- set defer_url    = url('table_group') -%}
-{%- set object_type  = ENTITY_GROUP -%}
+{%- set title = 'group.list.title' -%}
+{%- set title_icon = 'code-branch' -%}
+{%- set defer_url = url('table_group') -%}
+{%- set object_type = ENTITY_GROUP -%}
 
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('group_add', params) }}">{{ 'group.add.title'|trans }}</a>{% endif %}

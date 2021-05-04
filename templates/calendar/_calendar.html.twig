@@ -1,5 +1,5 @@
 {# macros #}
-{% macro linkCalculations(query, date, count, class, title_message = 'counters.calculations_calendar') -%}
+{% macro linkCalculations(query, date, count, class, title_message='counters.calculations_calendar') -%}
 {% import 'macros/_icons.html.twig' as icons %}
 {%- set title = title_message|trans({date: date, count: count}) -%}
 <a class="{{ class }}" href="{{ path('table_calculation', {'search': query}) }}" title="{{ title }}">{{ icons.icon('calculator') }}</a>
@@ -16,7 +16,7 @@
 </table>
 {%- endmacro %}
 
-{%  macro dataRow(calculation, class = '') %}
+{% macro dataRow(calculation, class='') %}
 {% import 'macros/_properties.html.twig' as properties %}
 {% set margin_class = app.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
 <tr>
@@ -30,10 +30,10 @@
 {%- endmacro %}
 
 {% macro dayCell(month, day, small) %}
-{%- set text  = day.number -%}
+{%- set text = day.number -%}
 {%- set title = '' -%}
 {%- set class = 'text-center align-middle' ~ (small ? ' border' : '') -%}
-{%- set link  = false -%}
+{%- set link = false -%}
 
 {% if day.inMonth(month) -%}    
     {%- set title = day.date|localedate('long') -%}
@@ -58,8 +58,8 @@
 {% if link %}
 <td class="{{ class }}"{% if title %} title="{{ title }}"{% endif %}>
     <a href="{{ href }}" class="text-white">
-    	<span>{{ text }}</span>
-    	<span class="badge badge-light" data-toggle="popover" data-html="{{ content|e }}"{% if title %} title="{{ title }}"{% endif %}>{{ count }}</span>
+        <span>{{ text }}</span>
+        <span class="badge badge-light" data-toggle="popover" data-html="{{ content|e }}"{% if title %} title="{{ title }}"{% endif %}>{{ count }}</span>
     </a>
 </td>
 {% else %}

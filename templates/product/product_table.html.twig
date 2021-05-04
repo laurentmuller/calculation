@@ -12,27 +12,27 @@
 {% endmacro %}
 
 {# parameters #}
-{%- set title       = 'product.list.title' -%}
-{%- set title_icon  = 'file-alt far' -%}
+{%- set title = 'product.list.title' -%}
+{%- set title_icon = 'file-alt far' -%}
 {%- set object_type = ENTITY_PRODUCT -%}
 
 {# actions #}
-{%- set params      = {'id': 0} -%}
-{%- set add_path    = path('product_add') -%}
-{%- set show_path   = path('product_show', params) -%}
-{%- set edit_path   = path('product_edit', params) -%}
+{%- set params = {'id': 0} -%}
+{%- set add_path = path('product_add') -%}
+{%- set show_path = path('product_show', params) -%}
+{%- set edit_path = path('product_edit', params) -%}
 {%- set delete_path = path('product_delete', params) -%}
-{%- set clone_path  = path('product_clone', params) -%}
-{%- set pdf_path    = path('product_pdf') -%}
-{%- set excel_path  = path('product_excel') -%}
+{%- set clone_path = path('product_clone', params) -%}
+{%- set pdf_path = path('product_pdf') -%}
+{%- set excel_path = path('product_excel') -%}
 
 {# titles #}
-{%- set add_title    = 'product.add.title' %}
-{%- set show_title   = 'product.show.title' %}
-{%- set edit_title   = 'product.edit.title' %}
+{%- set add_title = 'product.add.title' %}
+{%- set show_title = 'product.show.title' %}
+{%- set edit_title = 'product.edit.title' %}
 {%- set delete_title = 'product.delete.title' %}
-{%- set pdf_title    = 'product.list.pdf_title' -%}
-{%- set excel_title  = 'product.list.excel_title' -%}
+{%- set pdf_title = 'product.list.pdf_title' -%}
+{%- set excel_title = 'product.list.excel_title' -%}
 
 {# highlight search #}
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
@@ -46,9 +46,9 @@
         <div class="dropdown-menu">
             {{ _self.fill_categories(categories, total) -}}
         </div>
-        <input type="hidden" id="category" name="category">                
+        <input type="hidden" id="category" name="category">
     </div>
-    {{ parent() }}    
+    {{ parent() }}
 </div>
 {%- endblock %}
 

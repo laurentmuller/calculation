@@ -1,42 +1,42 @@
 [
-	{
-		"field": "id",
-		"visible": false
-	},
-	{
-		"field": "code",
-		"title": "group.fields.code",
-		"default": true,
-		"class": "text-code text-nowrap",
-		"cardClass": "font-weight-bold"
-	},
-	{
-		"field": "description",
-		"title": "group.fields.description",
-		"class": "w-50 cell"
-	},
-	{
-		"field": "margins",
-		"title": "group.fields.margins",
-		"sortable": false,
-		"searchable": false,
-		"class": "text-currency",
-		"fieldFormatter": "formatCountable"
-	},
-	{
-		"field": "categories",
-		"title": "group.fields.categories",
-		"sortable": false,
-		"searchable": false,
-		"class": "text-currency rowlink-skip",
-		"fieldFormatter": "formatCategories"
-	},
-	{
-		"field": "id",
-		"alias": "action",
-		"sortable": false,
-		"searchable": false,
-		"class": "actions rowlink-skip d-print-none",
-		"cellFormatter": "formatActions"
-	}
+    {
+        "field": "id",
+        "visible": false
+    },
+    {
+        "field": "code",
+        "title": "group.fields.code",
+        "default": true,
+        "class": "text-code text-nowrap",
+        "cardClass": "font-weight-bold"
+    },
+    {
+        "field": "description",
+        "title": "group.fields.description",
+        "class": "w-50 cell"
+    },
+    {
+        "field": "margins",
+        "title": "group.fields.margins",
+        "sortable": false,
+        "searchable": false,
+        "class": "text-currency",
+        "fieldFormatter": "formatCountable"
+    },
+    {
+        "field": "categories",
+        "title": "group.fields.categories",
+        "sortable": false,
+        "searchable": false,
+        "class": "text-currency rowlink-skip",
+        "fieldFormatter": "formatCategories"
+    },
+    {
+        "field": "id",
+        "alias": "action",
+        "sortable": false,
+        "searchable": false,
+        "class": "actions rowlink-skip d-print-none",
+        "cellFormatter": "formatActions"
+    }
 ]

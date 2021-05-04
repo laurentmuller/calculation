@@ -13,7 +13,7 @@
 </tbody>
 {%- endmacro %}
 
-{% macro rowInfo(name, value, name_class = '', value_class = '') -%}
+{% macro rowInfo(name, value, name_class='', value_class='') -%}
 {%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
 {%- set value_class = ('v ' ~ value_class|default(''))|trim -%}
 <tr>

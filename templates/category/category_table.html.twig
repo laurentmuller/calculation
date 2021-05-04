@@ -3,26 +3,26 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title       = 'category.list.title' -%}
-{%- set title_icon  = 'folder far' -%}
+{%- set title = 'category.list.title' -%}
+{%- set title_icon = 'folder far' -%}
 {%- set object_type = ENTITY_CATEGORY -%}
 
 {# actions #}
-{%- set params      = {'id': 0} -%}
-{%- set add_path    = path('category_add') -%}
-{%- set show_path   = path('category_show', params) -%}
-{%- set edit_path   = path('category_edit', params) -%}
+{%- set params = {'id': 0} -%}
+{%- set add_path = path('category_add') -%}
+{%- set show_path = path('category_show', params) -%}
+{%- set edit_path = path('category_edit', params) -%}
 {%- set delete_path = path('category_delete', params) -%}
-{%- set pdf_path    = path('category_pdf') -%}
-{%- set excel_path  = path('category_excel') -%}
+{%- set pdf_path = path('category_pdf') -%}
+{%- set excel_path = path('category_excel') -%}
 
 {# titles #}
-{%- set add_title    = 'category.add.title' %}
-{%- set show_title   = 'category.show.title' %}
-{%- set edit_title   = 'category.edit.title' %}
+{%- set add_title = 'category.add.title' %}
+{%- set show_title = 'category.show.title' %}
+{%- set edit_title = 'category.edit.title' %}
 {%- set delete_title = 'category.delete.title' %}
-{%- set pdf_title    = 'category.list.pdf_title' -%}
-{%- set excel_title  = 'category.list.excel_title' -%}
+{%- set pdf_title = 'category.list.pdf_title' -%}
+{%- set excel_title = 'category.list.excel_title' -%}
 
 {% block table_actions -%}
 {{ parent() }}

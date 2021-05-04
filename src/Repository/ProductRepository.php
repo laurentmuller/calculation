@@ -39,6 +39,11 @@ class ProductRepository extends AbstractRepository
     public const CATEGORY_ALIAS = 'c';
 
     /**
+     * The alias for the group entity.
+     */
+    public const GROUP_ALIAS = 'g';
+
+    /**
      * Constructor.
      *
      * @param ManagerRegistry $registry The connections and entity managers registry
@@ -74,7 +79,8 @@ class ProductRepository extends AbstractRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
-            ->innerJoin("$alias.category", self::CATEGORY_ALIAS);
+            ->innerJoin($alias . '.category', self::CATEGORY_ALIAS)
+            ->innerJoin(self::CATEGORY_ALIAS . '.group', self::GROUP_ALIAS);
     }
 
     /**
@@ -101,6 +107,10 @@ class ProductRepository extends AbstractRepository
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
     {
         switch ($field) {
+            case 'group.id':
+                return parent::getSearchFields('id', self::GROUP_ALIAS);
+            case 'group.code':
+                return parent::getSearchFields('code', self::GROUP_ALIAS);
             case 'category.id':
                 return parent::getSearchFields('id', self::CATEGORY_ALIAS);
             case 'category.code':
@@ -116,6 +126,9 @@ class ProductRepository extends AbstractRepository
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         switch ($field) {
+            case 'group.id':
+            case 'group.code':
+                return parent::getSortField('code', self::GROUP_ALIAS);
             case 'category.id':
             case 'category.code':
                 return parent::getSortField('code', self::CATEGORY_ALIAS);

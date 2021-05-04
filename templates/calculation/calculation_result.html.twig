@@ -3,10 +3,10 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title          = 'calculation.update.title' -%}
-{%- set title_icon     = 'pencil-alt' -%}
-{%- set tabular        = app.displayTabular -%}
-{%- set empty_path     = tabular ? path('empty_table') : path('empty_card') -%}
+{%- set title = 'calculation.update.title' -%}
+{%- set title_icon = 'pencil-alt' -%}
+{%- set tabular = app.displayTabular -%}
+{%- set empty_path = tabular ? path('empty_table') : path('empty_card') -%}
 {%- set duplicate_path = tabular ? path('duplicate_table') : path('duplicate_card') -%}
 
 {% block card_header %}
@@ -39,24 +39,24 @@
             <td colspan="2">&nbsp;</td>
         </tr>
     {% endif %}
-	<tr>
-		<td>{{ 'calculation.result.updated'|trans }}</td>
-		<td class="text-right">{{ updated|integer }}</td>
-	</tr>
+    <tr>
+        <td>{{ 'calculation.result.updated'|trans }}</td>
+        <td class="text-right">{{ updated|integer }}</td>
+    </tr>
     <tr>
         <td>{{ 'calculation.result.skipped'|trans }}</td>
         <td class="text-right">{{ skipped|integer }}</td>
     </tr>
-	{% if unmodifiable > 0 %}
-    	<tr>
-    		<td>{{ 'calculation.result.unmodifiable'|trans }}</td>
-    		<td class="text-right">{{ unmodifiable|integer }}</td>
-    	</tr>
-	{% endif %}
-	<tr>
-    	<td class="font-weight-bold">{{ 'calculation.result.total'|trans }}</<td>
-    	<td class="font-weight-bold text-right">{{ total|integer }}</td>
-	</tr>
+    {% if unmodifiable > 0 %}
+        <tr>
+            <td>{{ 'calculation.result.unmodifiable'|trans }}</td>
+            <td class="text-right">{{ unmodifiable|integer }}</td>
+        </tr>
+    {% endif %}
+    <tr>
+        <td class="font-weight-bold">{{ 'calculation.result.total'|trans }}</<td>
+        <td class="font-weight-bold text-right">{{ total|integer }}</td>
+    </tr>
 </table>
 {% if simulated %}
     <hr class="my-1">

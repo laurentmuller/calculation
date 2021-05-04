@@ -50,6 +50,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  * @author Laurent Muller
  *
  * @Route("/user")
+ * @IsGranted("ROLE_ADMIN")
  * @Breadcrumb({
  *     {"label" = "index.title", "route" = "homepage" },
  *     {"label" = "user.list.title", "route" = "table_user", "params" = {
@@ -59,7 +60,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  *         "order" = "$params.[order]",
  *         "offset" = "$params.[offset]",
  *         "limit" = "$params.[limit]",
- *         "card" = "$params.[card]"
+ *         "view" = "$params.[view]"
  *     }}
  * })
  * @template-extends AbstractEntityController<User>
@@ -78,7 +79,6 @@ class UserController extends AbstractEntityController
      * Add an user.
      *
      * @Route("/add", name="user_add")
-     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "breadcrumb.add"}
      * })
@@ -92,7 +92,6 @@ class UserController extends AbstractEntityController
      * Display the users as cards.
      *
      * @Route("/card", name="user_card")
-     * @IsGranted("ROLE_ADMIN")
      */
     public function card(Request $request): Response
     {
@@ -103,7 +102,6 @@ class UserController extends AbstractEntityController
      * Delete an user.
      *
      * @Route("/delete/{id}", name="user_delete", requirements={"id" = "\d+" })
-     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "$item.display" },
      *     {"label" = "breadcrumb.delete" }
@@ -133,7 +131,6 @@ class UserController extends AbstractEntityController
      * Edit an user.
      *
      * @Route("/edit/{id}", name="user_edit", requirements={"id" = "\d+" })
-     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "$item.display" },
      *     {"label" = "breadcrumb.edit" }
@@ -169,7 +166,6 @@ class UserController extends AbstractEntityController
      * Edit an user's image.
      *
      * @Route("/image/{id}", name="user_image", requirements={"id" = "\d+" })
-     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "$item.display" },
      *     {"label" = "user.image.title" }
@@ -205,7 +201,6 @@ class UserController extends AbstractEntityController
      * Send an email from the current user to an other user.
      *
      * @Route("/message/{id}", name="user_message", requirements={"id" = "\d+" })
-     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "$item.display" },
      *     {"label" = "user.message.title" }
@@ -270,7 +265,6 @@ class UserController extends AbstractEntityController
      * Change password for an existing user.
      *
      * @Route("/password/{id}", name="user_password", requirements={"id" = "\d+" })
-     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "$item.display" },
      *     {"label" = "user.change_password.title" }
@@ -306,7 +300,6 @@ class UserController extends AbstractEntityController
      * Export the users to a PDF document.
      *
      * @Route("/pdf", name="user_pdf")
-     * @IsGranted("ROLE_ADMIN")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
@@ -328,7 +321,6 @@ class UserController extends AbstractEntityController
      * Edit user access rights.
      *
      * @Route("/rights/{id}", name="user_rights", requirements={"id" = "\d+" })
-     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "$item.display" },
      *     {"label" = "user.rights.title" }
@@ -398,7 +390,6 @@ class UserController extends AbstractEntityController
      * Export user access rights to a PDF document.
      *
      * @Route("/rights/pdf", name="user_rights_pdf")
-     * @IsGranted("ROLE_ADMIN")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
@@ -420,7 +411,6 @@ class UserController extends AbstractEntityController
      * Show the properties of a user.
      *
      * @Route("/show/{id}", name="user_show", requirements={"id" = "\d+" })
-     * @IsGranted("ROLE_ADMIN")
      * @Breadcrumb({
      *     {"label" = "$item.display" },
      *     {"label" = "breadcrumb.property" }

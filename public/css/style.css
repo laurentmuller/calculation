@@ -182,6 +182,10 @@ a.btn-list {
     width: 180px;
     white-space: nowrap;
 }
+.text-group {
+    width: 160px;
+    white-space: nowrap;
+}
 .text-supplier{
     width: 180px;
     white-space: nowrap;

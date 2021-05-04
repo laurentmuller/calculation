@@ -3,26 +3,26 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title       = 'customer.list.title' -%}
-{%- set title_icon  = 'address-card far' -%}
+{%- set title = 'customer.list.title' -%}
+{%- set title_icon = 'address-card far' -%}
 {%- set object_type = ENTITY_CUSTOMER -%}
 
 {# actions #}
-{%- set params      = {'id': 0} -%}
-{%- set add_path    = path('customer_add') -%}
-{%- set show_path   = path('customer_show', params) -%}
-{%- set edit_path   = path('customer_edit', params) -%}
+{%- set params = {'id': 0} -%}
+{%- set add_path = path('customer_add') -%}
+{%- set show_path = path('customer_show', params) -%}
+{%- set edit_path = path('customer_edit', params) -%}
 {%- set delete_path = path('customer_delete', params) -%}
-{%- set pdf_path    = path('customer_pdf') -%}
-{%- set excel_path  = path('customer_excel') -%}
+{%- set pdf_path = path('customer_pdf') -%}
+{%- set excel_path = path('customer_excel') -%}
 
 {# titles #}
-{%- set add_title    = 'customer.add.title' %}
-{%- set show_title   = 'customer.show.title' %}
-{%- set edit_title   = 'customer.edit.title' %}
+{%- set add_title = 'customer.add.title' %}
+{%- set show_title = 'customer.show.title' %}
+{%- set edit_title = 'customer.edit.title' %}
 {%- set delete_title = 'customer.delete.title' %}
-{%- set pdf_title    = 'customer.list.pdf_title' -%}
-{%- set excel_title  = 'customer.list.excel_title' -%}
+{%- set pdf_title = 'customer.list.pdf_title' -%}
+{%- set excel_title = 'customer.list.excel_title' -%}
 
 {# highlight search #}
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}

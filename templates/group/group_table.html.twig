@@ -3,26 +3,26 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title       = 'group.list.title' -%}
-{%- set title_icon  = 'code-branch' -%}
+{%- set title = 'group.list.title' -%}
+{%- set title_icon = 'code-branch' -%}
 {%- set object_type = ENTITY_CATEGORY -%}
 
 {# actions #}
-{%- set params      = {'id': 0} -%}
-{%- set add_path    = path('group_add') -%}
-{%- set show_path   = path('group_show', params) -%}
-{%- set edit_path   = path('group_edit', params) -%}
+{%- set params = {'id': 0} -%}
+{%- set add_path = path('group_add') -%}
+{%- set show_path = path('group_show', params) -%}
+{%- set edit_path = path('group_edit', params) -%}
 {%- set delete_path = path('group_delete', params) -%}
-{%- set pdf_path    = path('group_pdf') -%}
-{%- set excel_path  = path('group_excel') -%}
+{%- set pdf_path = path('group_pdf') -%}
+{%- set excel_path = path('group_excel') -%}
 
 {# titles #}
-{%- set add_title    = 'group.add.title' %}
-{%- set show_title   = 'group.show.title' %}
-{%- set edit_title   = 'group.edit.title' %}
+{%- set add_title = 'group.add.title' %}
+{%- set show_title = 'group.show.title' %}
+{%- set edit_title = 'group.edit.title' %}
 {%- set delete_title = 'group.delete.title' %}
-{%- set pdf_title    = 'group.list.pdf_title' -%}
-{%- set excel_title  = 'group.list.excel_title' -%}
+{%- set pdf_title = 'group.list.pdf_title' -%}
+{%- set excel_title = 'group.list.excel_title' -%}
 
 {% block table_actions -%}
 {{ parent() }}

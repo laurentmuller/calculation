@@ -7,7 +7,7 @@
 {%- set hide = 'parameters.display_parameters.hide'|trans -%}
 <div class="d-flex flex-row" style="margin-right: -8px;" data-show="{{ show }}" data-hide="{{ hide }}">
     <a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" class="horizontal-line flex-fill">{{ ('parameters.group_' ~ href)|trans }}</a>
-	<a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" data-show="{{ show }}" data-hide="{{ hide }}"><i class="fas fa-fw fa-lg fa-caret-left"></i></a>
+    <a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" data-show="{{ show }}" data-hide="{{ hide }}"><i class="fas fa-fw fa-lg fa-caret-left"></i></a>
 </div>
 {% endmacro %}
 
@@ -35,14 +35,14 @@
 {% form_theme form with _self %}
 
 {# parameters #}
-{%- set title       = 'parameters.title' -%}
-{%- set title_icon  = 'cogs' -%}
-{%- set super_admin  = is_granted('ROLE_SUPER_ADMIN') -%}
+{%- set title = 'parameters.title' -%}
+{%- set title_icon = 'cogs' -%}
+{%- set super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
 {%- set cancel_path = path('homepage') -%}
-{%- set form_attr   = form_attr|default({})|merge({
-						'data-random': url('ajax_random_text'),
-						'data-title': 'parameters.title'|trans,
-						'data-failure': 'parameters.failure'|trans}) -%}
+{%- set form_attr = form_attr|default({})|merge({
+                        'data-random': url('ajax_random_text'),
+                        'data-title': 'parameters.title'|trans,
+                        'data-failure': 'parameters.failure'|trans}) -%}
 
 {% block card_header -%}
 {{ parent() }}
@@ -76,7 +76,7 @@
             </div>
             <div class="col-md-5">
                 {{ form_row(form.edit_action) }}
-            </div>            
+            </div>
         </div>
     </div>
     {{ _self.collapseLine('message') }}

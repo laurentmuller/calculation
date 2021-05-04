@@ -18,42 +18,42 @@
 {% macro formatSql(name, value) %}
 <tr>
     <td class="w-25">{{ name|trans }}</td>
-    <td class="w-75">{{ value|doctrine_format_sql(true)  }}</td>
+    <td class="w-75">{{ value|doctrine_format_sql(true) }}</td>
 </tr>
 {% endmacro %}
 {% macro level_class(level, background) -%}
 {% switch level -%}
 {%- case 'error' %}
-	{%- set class = 'danger' -%}
+    {%- set class = 'danger' -%}
 {%- case 'critical' -%}
-	{%- set class = 'danger' -%}
+    {%- set class = 'danger' -%}
 {%- case 'alert' -%}
-	{%- set class = 'danger' -%}
+    {%- set class = 'danger' -%}
 {%- case 'emergency' -%}
-	{%- set class = 'danger' -%}
-{%- case 'warning' -%}	
-	{%- set class = 'warning' -%}
+    {%- set class = 'danger' -%}
+{%- case 'warning' -%}
+    {%- set class = 'warning' -%}
 {%- case 'info' -%}
-	{%- set class = 'info' -%}
+    {%- set class = 'info' -%}
 {%- case 'notice' -%}
-	{%- set class = 'info' -%}
+    {%- set class = 'info' -%}
 {%- case 'debug' -%}
     {%- set class = 'secondary' -%}
 {%- default -%}
-	{%- set class = 'secondary' -%}
+    {%- set class = 'secondary' -%}
 {%- endswitch %}
 {% if background %}
-	{%- set class = ' border-' ~ class ~ ' text-white bg-' ~ class -%}
+    {%- set class = ' border-' ~ class ~ ' text-white bg-' ~ class -%}
 {%- else -%}
-	{%- set class = ' border-' ~ class -%}
+    {%- set class = ' border-' ~ class -%}
 {% endif %}
 {{- class -}}
 {%- endmacro %}
 
 {# parameters #}
-{%- set id     = item.id -%}
-{%- set title  = 'log.show.title' -%}
-{%- set route  = route|default('log_table') -%}
+{%- set id = item.id -%}
+{%- set title = 'log.show.title' -%}
+{%- set route = route|default('log_table') -%}
 {%- set params = route_params(app.request, id) -%}
 
 {# actions #}

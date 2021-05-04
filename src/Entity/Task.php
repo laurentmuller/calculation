@@ -30,12 +30,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Task extends AbstractEntity implements \Countable
 {
     /**
-     * @ORM\Column(type="string", length=15, nullable=true)
-     * @Assert\Length(max=15)
-     */
-    protected ?string $unit = null;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tasks")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -54,6 +48,11 @@ class Task extends AbstractEntity implements \Countable
      * @ORM\Column(type="string", length=255)
      */
     private ?string $name = null;
+    /**
+     * @ORM\Column(type="string", length=15, nullable=true)
+     * @Assert\Length(max=15)
+     */
+    private ?string $unit = null;
 
     /**
      * Constructor.
@@ -175,6 +174,22 @@ class Task extends AbstractEntity implements \Countable
     public function getDisplay(): string
     {
         return (string) $this->name;
+    }
+
+    /**
+     * Gets the group.
+     */
+    public function getGroup(): ?Group
+    {
+        return $this->category ? $this->category->getGroup() : null;
+    }
+
+    /**
+     * Gets the group code.
+     */
+    public function getGroupCode(): ?string
+    {
+        return $this->category ? $this->category->getGroupCode() : null;
     }
 
     /**

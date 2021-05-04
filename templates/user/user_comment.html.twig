@@ -1,10 +1,10 @@
 {% extends 'cards/card_edit.html.twig' %}
 
 {# parameters #}
-{%- set title_icon   = 'envelope far' -%}
-{%- set title        = isMail ? 'user.message.title' : 'user.comment.title' -%}
-{%- set description  = isMail ? 'user.message.description'|trans : 'user.comment.description'|trans -%}
-{%- set page_list    = isMail ? 'user_table' : 'homepage' -%}
+{%- set title_icon = 'envelope far' -%}
+{%- set title = isMail ? 'user.message.title' : 'user.comment.title' -%}
+{%- set description = isMail ? 'user.message.description'|trans : 'user.comment.description'|trans -%}
+{%- set page_list = isMail ? 'user_table' : 'homepage' -%}
 
 {% block card_header %}
 {{ parent() }}

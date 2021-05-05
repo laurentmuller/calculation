@@ -20,6 +20,7 @@ use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupListenerInterface;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
+use App\Pdf\PdfTextColor;
 use App\Util\FormatUtils;
 
 /**
@@ -67,6 +68,8 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $table->getGroupStyle()->setFontBold();
         $itemStyle = PdfStyle::getCellStyle()
             ->setIndent(4);
+        $emptyStyle = PdfStyle::getCellStyle()
+            ->setTextColor(PdfTextColor::red());
 
         /** @var Task $entity */
         foreach ($entities as $entity) {
@@ -106,11 +109,12 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                         } else {
                             $table->add(null);
                         }
+                        $style = empty($margin->getValue()) ? $emptyStyle : null;
                         $table->add(null)
                             ->add(null)
                             ->add(FormatUtils::formatAmount($margin->getMinimum()))
                             ->add(FormatUtils::formatAmount($margin->getMaximum()))
-                            ->add(FormatUtils::formatAmount($margin->getValue()))
+                            ->add(FormatUtils::formatAmount($margin->getValue()), 1, $style)
                             ->endRow();
                     }
                 }

@@ -41,7 +41,7 @@ class ProductDocument extends AbstractArrayDocument
         ]);
 
         // price format
-        $this->setFormat(4, $this->getPriceFormat());
+        $this->setFormatPrice(4);
 
         // rows
         $row = 2;
@@ -60,15 +60,5 @@ class ProductDocument extends AbstractArrayDocument
         $this->finish();
 
         return true;
-    }
-
-    /**
-     * Gets the price format.
-     */
-    private function getPriceFormat(): string
-    {
-        $amountFormat = $this->getAmountFormat();
-
-        return "[Red][<=0]$amountFormat;$amountFormat";
     }
 }

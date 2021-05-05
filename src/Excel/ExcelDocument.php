@@ -90,14 +90,6 @@ class ExcelDocument extends Spreadsheet
     }
 
     /**
-     * Gets the amount format.
-     */
-    public function getAmountFormat(): string
-    {
-        return NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1;
-    }
-
-    /**
      * Gets the page setup of the active sheet.
      */
     public function getPageSetup(): PageSetup
@@ -372,7 +364,7 @@ class ExcelDocument extends Spreadsheet
      */
     public function setFormatAmount(int $columnIndex): self
     {
-        return $this->setFormat($columnIndex, $this->getAmountFormat());
+        return $this->setFormat($columnIndex, NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
     }
 
     /**
@@ -451,6 +443,18 @@ class ExcelDocument extends Spreadsheet
     public function setFormatPercent(int $columnIndex, bool $decimals = false): self
     {
         return $this->setFormat($columnIndex, $this->getPercentFormat($decimals));
+    }
+
+    /**
+     * Sets the price format ('#,##0.00') for the given column and whith the red color when value is equal to 0.
+     *
+     * @param int $columnIndex the column index (A = 1)
+     */
+    public function setFormatPrice(int $columnIndex): self
+    {
+        $format = NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1;
+
+        return $this->setFormat($columnIndex, "[Red][<=0]$format;$format");
     }
 
     /**

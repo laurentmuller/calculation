@@ -12,10 +12,8 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -29,20 +27,10 @@ use Doctrine\Persistence\ManagerRegistry;
  * @author Laurent Muller
  *
  * @see \App\Entity\Product
- * @template-extends AbstractRepository<\App\Entity\Product>
+ * @template-extends AbstractCategoryItemRepository<\App\Entity\Product>
  */
-class ProductRepository extends AbstractRepository
+class ProductRepository extends AbstractCategoryItemRepository
 {
-    /**
-     * The alias for the category entity.
-     */
-    public const CATEGORY_ALIAS = 'c';
-
-    /**
-     * The alias for the group entity.
-     */
-    public const GROUP_ALIAS = 'g';
-
     /**
      * Constructor.
      *
@@ -54,87 +42,22 @@ class ProductRepository extends AbstractRepository
     }
 
     /**
-     * Count the number of products for the given category.
-     *
-     * @param Category $category the category to search for
-     *
-     * @return int the number of products
-     */
-    public function countCategoryReferences(Category $category): int
-    {
-        $result = $this->createQueryBuilder('e')
-            ->select('COUNT(e.id)')
-            ->innerJoin('e.category', 'c')
-            ->where('c.id = :id')
-            ->setParameter('id', $category->getId(), Types::INTEGER)
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        return (int) $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
-    {
-        return parent::createDefaultQueryBuilder($alias)
-            ->innerJoin($alias . '.category', self::CATEGORY_ALIAS)
-            ->innerJoin(self::CATEGORY_ALIAS . '.group', self::GROUP_ALIAS);
-    }
-
-    /**
      * Gets all products order by group, category and description.
      *
      * @return Product[]
      */
     public function findAllByGroup(): array
     {
-        $builder = $this->createQueryBuilder('p')
-            ->innerJoin('p.category', 'c')
-            ->innerJoin('c.group', 'g')
-            ->select('p')
-            ->orderBy('g.code')
-            ->addOrderBy('c.code')
-            ->addOrderBy('p.description');
+        $groupField = $this->getSortField('group.code');
+        $categoryField = $this->getSortField('category.code');
+        $descriptionField = $this->getSortField('description');
+
+        $builder = $this->createDefaultQueryBuilder()
+            ->orderBy($groupField)
+            ->addOrderBy($categoryField)
+            ->addOrderBy($descriptionField);
 
         return $builder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
-    {
-        switch ($field) {
-            case 'group.id':
-                return parent::getSearchFields('id', self::GROUP_ALIAS);
-            case 'group.code':
-                return parent::getSearchFields('code', self::GROUP_ALIAS);
-            case 'category.id':
-                return parent::getSearchFields('id', self::CATEGORY_ALIAS);
-            case 'category.code':
-                return parent::getSearchFields('code', self::CATEGORY_ALIAS);
-            default:
-                return parent::getSearchFields($field, $alias);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
-    {
-        switch ($field) {
-            case 'group.id':
-            case 'group.code':
-                return parent::getSortField('code', self::GROUP_ALIAS);
-            case 'category.id':
-            case 'category.code':
-                return parent::getSortField('code', self::CATEGORY_ALIAS);
-            default:
-                return parent::getSortField($field, $alias);
-        }
     }
 
     /**

@@ -31,7 +31,7 @@ class LogControllerTest extends AbstractControllerTest
 
         /** @var LoggerInterface $logger */
         $logger = self::$container->get(LoggerInterface::class);
-        $logger->debug('This is a message for testing purpose.');
+        $logger->info('LogControllerTest: A message for testing purposes.');
     }
 
     public function getRoutes(): array

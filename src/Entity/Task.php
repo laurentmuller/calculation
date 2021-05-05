@@ -32,6 +32,7 @@ class Task extends AbstractEntity implements \Countable
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tasks")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull
      */
     private ?Category $category = null;
 
@@ -48,6 +49,7 @@ class Task extends AbstractEntity implements \Countable
      * @ORM\Column(type="string", length=255)
      */
     private ?string $name = null;
+
     /**
      * @ORM\Column(type="string", length=15, nullable=true)
      * @Assert\Length(max=15)

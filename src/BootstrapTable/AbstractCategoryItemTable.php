@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\BootstrapTable;
 
 use App\Entity\Category;
+use App\Repository\AbstractCategoryItemRepository;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\DBAL\Types\Types;
@@ -44,9 +45,9 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
      *
      * @param AbstractRepository $repository         the entity repository
      * @param CategoryRepository $categoryRepository the category repository
-     * @psalm-param AbstractRepository<T> $repository
+     * @psalm-param AbstractCategoryItemRepository<T> $repository
      */
-    public function __construct(AbstractRepository $repository, CategoryRepository $categoryRepository)
+    public function __construct(AbstractCategoryItemRepository $repository, CategoryRepository $categoryRepository)
     {
         parent::__construct($repository);
         $this->categoryRepository = $categoryRepository;

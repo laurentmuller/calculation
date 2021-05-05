@@ -78,7 +78,7 @@ class TaskDocument extends AbstractArrayDocument
         // formats
         $this->setFormatAmount(5)
             ->setFormatAmount(6)
-            ->setFormatAmount(7);
+            ->setFormatPrice(7);
 
         // rows
         $row = 2;

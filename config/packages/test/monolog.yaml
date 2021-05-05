@@ -4,4 +4,6 @@ monolog:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.log'
             formatter: monolog.custom_formatter
-            level: debug
+            channels:
+            - 'app'
+

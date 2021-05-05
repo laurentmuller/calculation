@@ -50,7 +50,8 @@ $finder = PhpCsFixer\Finder::create()
     ->in(realpath(__DIR__ . '/src'))
     ->in(realpath(__DIR__ . '/tests'));
 
-return PhpCsFixer\Config::create()
+$config = new PhpCsFixer\Config();
+return $config
     ->setRiskyAllowed(true)
     ->setUsingCache(false)
     ->setFinder($finder)

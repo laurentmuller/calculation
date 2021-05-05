@@ -24,7 +24,7 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     /**
      * {@inheritDoc}
      */
-    public function countEntities(): int
+    public function count(): int
     {
         return $this->repository->countDuplicateItems();
     }

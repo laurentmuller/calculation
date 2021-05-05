@@ -16,7 +16,6 @@ use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Twig\Environment;
 
@@ -25,7 +24,7 @@ use Twig\Environment;
  *
  * @author Laurent Muller
  */
-class CalculationBelowTable extends CalculationTable
+class CalculationBelowTable extends CalculationTable implements \Countable
 {
     /**
      * The application service.
@@ -39,6 +38,17 @@ class CalculationBelowTable extends CalculationTable
     {
         parent::__construct($repository, $stateRepository, $twig);
         $this->service = $service;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count(): int
+    {
+        /** @var CalculationRepository $repository */
+        $repository = $this->repository;
+
+        return $repository->countBelowItems($this->getMinMargin());
     }
 
     /**
@@ -60,25 +70,14 @@ class CalculationBelowTable extends CalculationTable
     /**
      * {@inheritdoc}
      */
-    protected function count(): int
-    {
-        return $this->countFiltered($this->createDefaultQueryBuilder());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        $param = 'minMargin';
-        $itemsField = "{$alias}.itemsTotal";
-        $overallField = "{$alias}.overallTotal";
-        $minMargin = $this->getMinMargin();
+        /** @var CalculationRepository $repository */
+        $repository = $this->repository;
 
-        return parent::createDefaultQueryBuilder($alias)
-            ->andWhere("$itemsField != 0")
-            ->andWhere("($overallField / $itemsField) < :$param")
-            ->setParameter($param, $minMargin, Types::FLOAT);
+        $builder = parent::createDefaultQueryBuilder($alias);
+
+        return $repository->addBelowFilter($builder, $this->getMinMargin());
     }
 
     /**

@@ -213,7 +213,7 @@ final class CalculationService
             // update group
             $current = &$groups[$id];
             $amount = $current['amount'] + $value;
-            $margin = $this->getGroupMargin($id, $amount);
+            $margin = $this->getGroupMargin($group, $amount);
             $total = $this->round($margin * $amount);
             $margin_amount = $total - $amount;
             $current['amount'] = $amount;
@@ -475,18 +475,18 @@ final class CalculationService
     /**
      * Gets the margin, in percent, for the given group and amount.
      *
-     * @param int   $id     the group identifier
+     * @param Group $group  the group
      * @param float $amount the amount to get percent for
      *
      * @return float the margin, in percent, if found; 0 otherwise
      */
-    private function getGroupMargin(int $id, float $amount): float
+    private function getGroupMargin(Group $group, float $amount): float
     {
-        if ($amount) {
+        if (!empty($amount)) {
             /** @var \App\Repository\GroupMarginRepository $repository */
             $repository = $this->manager->getRepository(GroupMargin::class);
 
-            return (float) ($repository->getMargin($id, $amount));
+            return $repository->getMargin($group, $amount);
         }
 
         return 0;

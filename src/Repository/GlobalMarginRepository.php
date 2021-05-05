@@ -63,15 +63,13 @@ class GlobalMarginRepository extends AbstractRepository
     public function getMargin(float $amount): float
     {
         // builder
-        $qb = $this->createQueryBuilder('e')
+        $builder = $this->createQueryBuilder('e')
             ->select('e.margin')
-            ->where(':amount >= e.minimum AND :amount < e.maximum')
+            ->where(':amount >= e.minimum')
+            ->andWhere(':amount < e.maximum')
             ->setParameter('amount', $amount, Types::FLOAT);
 
-        //query
-        $query = $qb->getQuery();
-
         // execute
-        return (float) $query->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
+        return (float) $builder->getQuery()->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
     }
 }

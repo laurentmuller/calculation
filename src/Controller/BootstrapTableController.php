@@ -269,12 +269,19 @@ class BootstrapTableController extends AbstractController
     private function handleTableRequest(Request $request, AbstractTable $table, string $template): Response
     {
         // check permission
-        if ($name = $table->getEntityClassName()) {
-            $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $name);
+        if ($subject = $table->getEntityClassName()) {
+            $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $subject);
         }
 
         // update query
         $this->updateQuery($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+
+        // countable and empty?
+        if ($table instanceof \Countable && 0 === $table->count() && !$table->isEmptyAllowed()) {
+            $this->infoTrans($table->getEmptyMessage());
+
+            return $this->redirectToHomePage();
+        }
 
         try {
             // get query and results
@@ -287,8 +294,7 @@ class BootstrapTableController extends AbstractController
             } else {
                 // empty?
                 if (0 === $results->totalNotFiltered && !$table->isEmptyAllowed()) {
-                    $message = $table->getEmptyMessage() ?? 'list.empty_list';
-                    $this->infoTrans($message);
+                    $this->infoTrans($table->getEmptyMessage());
 
                     return $this->redirectToHomePage();
                 }

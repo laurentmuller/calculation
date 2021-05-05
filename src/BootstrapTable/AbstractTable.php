@@ -128,9 +128,9 @@ abstract class AbstractTable
     /**
      * Gets the empty message to show when no records are available.
      */
-    public function getEmptyMessage(): ?string
+    public function getEmptyMessage(): string
     {
-        return null;
+        return 'list.empty_list';
     }
 
     /**

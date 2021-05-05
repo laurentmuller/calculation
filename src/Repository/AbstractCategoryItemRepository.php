@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Category;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -31,7 +30,7 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     public const CATEGORY_ALIAS = 'c';
 
     /**
-     * Count the number of products for the given category.
+     * Count the number of products or tasks for the given category.
      *
      * @param Category $category the category to search for
      *
@@ -39,15 +38,12 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
      */
     public function countCategoryReferences(Category $category): int
     {
-        $result = $this->createQueryBuilder('e')
+        $builder = $this->createQueryBuilder('e')
             ->select('COUNT(e.id)')
-            ->innerJoin('e.category', 'c')
-            ->where('c.id = :id')
-            ->setParameter('id', $category->getId(), Types::INTEGER)
-            ->getQuery()
-            ->getSingleScalarResult();
+            ->where('e.category = :category')
+            ->setParameter('category', $category);
 
-        return (int) $result;
+        return (int) $builder->getQuery()->getSingleScalarResult();
     }
 
     /**

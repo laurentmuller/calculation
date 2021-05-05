@@ -41,6 +41,47 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
+     * Update the given query builder by adding the filter for calculations below the given margin.
+     *
+     * @param QueryBuilder $builder   the query builder to update
+     * @param float        $minMargin the minimum margin
+     *
+     * @return QueryBuilder the updated query builder
+     */
+    public function addBelowFilter(QueryBuilder $builder, float $minMargin): QueryBuilder
+    {
+        $param = 'minMargin';
+        $alias = $builder->getRootAliases()[0];
+        $itemsField = "$alias.itemsTotal";
+        $overallField = "$alias.overallTotal";
+
+        return $builder
+            ->andWhere("$itemsField != 0")
+            ->andWhere("($overallField / $itemsField) < :$param")
+            ->setParameter($param, $minMargin, Types::FLOAT);
+    }
+
+    /**
+     * Gets the number of calculations below the given margin.
+     *
+     * @param float $minMargin the minimum margin
+     *
+     * @return int the number of calculations
+     */
+    public function countBelowItems(float $minMargin): int
+    {
+        // create
+        $builder = $this->createQueryBuilder('e')
+            ->select('COUNT(e.id)');
+
+        // filter
+        $builder = $this->addBelowFilter($builder, $minMargin);
+
+        // execute
+        return (int) $builder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
      * Count the number of calculations with duplicate items. Items are duplicate if the descriptions are equal.
      *
      * @return int the number of calculations
@@ -48,20 +89,20 @@ class CalculationRepository extends AbstractRepository
     public function countDuplicateItems(): int
     {
         // sub query
-        $dql = $this->createQueryBuilder('e2')
-            ->select('e2.id')
-            ->innerJoin('e2.groups', 'g')
+        $dql = $this->createQueryBuilder('e')
+            ->select('e.id')
+            ->innerJoin('e.groups', 'g')
             ->innerJoin('g.categories', 'c')
             ->innerJoin('c.items', 'i')
-            ->groupBy('e2.id')
+            ->groupBy('e.id')
             ->addGroupBy('i.description')
             ->having('COUNT(i.id) > 1')
             ->getDQL();
 
         // main query
-        $builder = $this->createQueryBuilder('e')
-            ->select('COUNT(e.id)')
-            ->where("e.id in($dql)");
+        $builder = $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->where("r.id in($dql)");
 
         // execute
         return (int) $builder->getQuery()->getSingleScalarResult();
@@ -75,9 +116,9 @@ class CalculationRepository extends AbstractRepository
     public function countEmptyItems(): int
     {
         // sub query
-        $dql = $this->createQueryBuilder('e2')
-            ->select('e2.id')
-            ->innerJoin('e2.groups', 'g')
+        $dql = $this->createQueryBuilder('e')
+            ->select('e.id')
+            ->innerJoin('e.groups', 'g')
             ->innerJoin('g.categories', 'c')
             ->innerJoin('c.items', 'i')
             ->where('i.price = 0')
@@ -85,9 +126,9 @@ class CalculationRepository extends AbstractRepository
             ->getDQL();
 
         // main query
-        $builder = $this->createQueryBuilder('e')
-            ->select('COUNT(e.id)')
-            ->where("e.id in($dql)");
+        $builder = $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->where("r.id in($dql)");
 
         // execute
         return (int) $builder->getQuery()->getSingleScalarResult();
@@ -102,15 +143,12 @@ class CalculationRepository extends AbstractRepository
      */
     public function countStateReferences(CalculationState $state): int
     {
-        $result = $this->createQueryBuilder('e')
+        $builder = $this->createQueryBuilder('e')
             ->select('COUNT(e.id)')
-            ->innerJoin('e.state', 's')
-            ->where('s.id = :stateId')
-            ->setParameter('stateId', $state->getId(), Types::INTEGER)
-            ->getQuery()
-            ->getSingleScalarResult();
+            ->where('e.state= :state')
+            ->setParameter('state', $state);
 
-        return (int) $result;
+        return (int) $builder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -123,16 +161,6 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Gets all calculations order by identifier descending.
-     *
-     * @return Calculation[]
-     */
-    public function findAllById(): array
-    {
-        return $this->findBy([], ['id' => Criteria::DESC]);
-    }
-
-    /**
      * Gets calculations with the overall margin below the given value.
      *
      * @param float $minMargin the minimum margin in percent
@@ -141,12 +169,12 @@ class CalculationRepository extends AbstractRepository
      */
     public function getBelowMargin(float $minMargin): array
     {
-        // builder
+        // create
         $builder = $this->createQueryBuilder('c')
-            ->addOrderBy('c.id', Criteria::DESC)
-            ->where('c.itemsTotal != 0')
-            ->andWhere('(c.overallTotal / c.itemsTotal) < :minMargin ')
-            ->setParameter('minMargin', $minMargin, Types::FLOAT);
+            ->addOrderBy('c.id', Criteria::DESC);
+
+        // filter
+        $builder = $this->addBelowFilter($builder, $minMargin);
 
         // execute
         return $builder->getQuery()->getResult();
@@ -464,7 +492,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @return Calculation[] the last calculations
      */
-    public function getLastCalculations(int $maxResults = 12): array
+    public function getLastCalculations(int $maxResults): array
     {
         // builder
         $builder = $this->createQueryBuilder('c')

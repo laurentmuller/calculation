@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Laurent Muller
  */
-class LogTable extends AbstractTable
+class LogTable extends AbstractTable implements \Countable
 {
     /**
      * The channel parameter name.
@@ -52,6 +52,20 @@ class LogTable extends AbstractTable
     public function __construct(LogService $service)
     {
         $this->service = $service;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count(): int
+    {
+        $entries = $this->service->getEntries();
+        if (!\is_array($entries)) {
+            return 0;
+        }
+
+        /* @var array $entries */
+        return \count($entries[LogService::KEY_LOGS]);
     }
 
     /**
@@ -108,22 +122,6 @@ class LogTable extends AbstractTable
     public function getEntityClassName(): ?string
     {
         return EntityVoterInterface::ENTITY_LOG;
-    }
-
-    /**
-     * Returns if the log service is empty.
-     *
-     * @return bool true if empty
-     */
-    public function isEmpty(): bool
-    {
-        $entries = $this->service->getEntries();
-        if (!\is_array($entries)) {
-            return true;
-        }
-
-        /* @var array $entries */
-        return empty($entries[LogService::KEY_LOGS]);
     }
 
     /**

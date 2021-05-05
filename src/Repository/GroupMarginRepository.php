@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Group;
 use App\Entity\GroupMargin;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query;
@@ -43,26 +44,25 @@ class GroupMarginRepository extends AbstractRepository
     }
 
     /**
-     * Gets the margin, in percent, for the given group identifier and amount.
+     * Gets the margin, in percent, for the given group and amount.
      *
-     * @param int   $id     the group identifier
+     * @param Group $group  the group
      * @param float $amount the amount to get percent for
      *
      * @return float the margin, in percent, if found; 0 otherwise
      */
-    public function getMargin(int $id, float $amount): float
+    public function getMargin(Group $group, float $amount): float
     {
         // builder
-        $qb = $this->createQueryBuilder('e');
-        $qb->select('e.margin')
-            ->where('e.group = :id AND :amount >= e.minimum AND :amount < e.maximum')
-            ->setParameter('id', $id, Types::INTEGER)
+        $builder = $this->createQueryBuilder('e')
+            ->select('e.margin')
+            ->where('e.group = :group')
+            ->andWhere(':amount >= e.minimum')
+            ->andWhere(':amount < e.maximum')
+            ->setParameter('group', $group)
             ->setParameter('amount', $amount, Types::FLOAT);
 
-        //query
-        $query = $qb->getQuery();
-
         // execute
-        return (float) $query->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
+        return (float) $builder->getQuery()->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
     }
 }

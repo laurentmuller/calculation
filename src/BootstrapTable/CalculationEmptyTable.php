@@ -46,7 +46,7 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     /**
      * {@inheritDoc}
      */
-    public function countEntities(): int
+    public function count(): int
     {
         return $this->repository->countEmptyItems();
     }

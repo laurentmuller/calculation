@@ -21,7 +21,7 @@ use Doctrine\Common\Collections\Criteria;
  *
  * @author Laurent Muller
  */
-abstract class AbstractCalculationItemsTable extends AbstractTable
+abstract class AbstractCalculationItemsTable extends AbstractTable implements \Countable
 {
     /**
      * The repository to get entities.
@@ -42,11 +42,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
     {
         $this->repository = $repository;
     }
-
-    /**
-     * Gets the number of calculations.
-     */
-    abstract public function countEntities(): int;
 
     /**
      * Formats the invalid calculation items.
@@ -88,7 +83,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable
      */
     public function isEmpty(): bool
     {
-        return 0 === $this->countEntities();
+        return 0 === $this->count();
     }
 
     /**

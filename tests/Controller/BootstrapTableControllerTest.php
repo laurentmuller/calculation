@@ -19,6 +19,8 @@ use App\Entity\Group;
 use App\Entity\Product;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use App\Service\ApplicationService;
+use App\Util\FormatUtils;
 
 /**
  * Unit test for {@link App\Controller\BootstrapTableController} class.
@@ -154,6 +156,9 @@ class BootstrapTableControllerTest extends AbstractControllerTest
                 ->setOverallTotal(2.0);
 
             $this->addEntity(self::$calculation);
+
+            $this->doEcho('EmptyItems', self::$calculation->hasEmptyItems() ? 'true' : 'false');
+            $this->doEcho('DuplicateItems', self::$calculation->hasDuplicateItems() ? 'true' : 'false');
         }
     }
 

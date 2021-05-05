@@ -29,13 +29,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     protected CalculationRepository $repository;
 
     /**
-     * The number of items.
-     *
-     * @var int
-     */
-    private $itemsCount = 0;
-
-    /**
      * Constructor.
      */
     public function __construct(CalculationRepository $repository)
@@ -58,14 +51,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     public function getEntityClassName(): ?string
     {
         return EntityVoterInterface::ENTITY_CALCULATION;
-    }
-
-    /**
-     * Gets the number of empty items.
-     */
-    public function getItemCounts(): int
-    {
-        return $this->itemsCount;
     }
 
     /**

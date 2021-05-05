@@ -19,8 +19,7 @@ use App\Entity\Group;
 use App\Entity\Product;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use App\Service\ApplicationService;
-use App\Util\FormatUtils;
+use App\Repository\CalculationRepository;
 
 /**
  * Unit test for {@link App\Controller\BootstrapTableController} class.
@@ -143,22 +142,23 @@ class BootstrapTableControllerTest extends AbstractControllerTest
 
         if (null === self::$calculation) {
             self::$calculation = new Calculation();
-
             self::$calculation->setCustomer('Test Customer')
                 ->setDescription('Test Description')
-                ->setState(self::$state);
-
-            self::$calculation
+                ->setState(self::$state)
                 ->addProduct(self::$product, 0.0)
                 ->addProduct(self::$product, 1.0)
                 ->setItemsTotal(1.0)
                 ->setGlobalMargin(1.0)
                 ->setOverallTotal(2.0);
-
             $this->addEntity(self::$calculation);
 
             $this->doEcho('EmptyItems', self::$calculation->hasEmptyItems() ? 'true' : 'false');
             $this->doEcho('DuplicateItems', self::$calculation->hasDuplicateItems() ? 'true' : 'false');
+
+            /** @var CalculationRepository $repository */
+            $repository = self::$container->get(CalculationRepository::class);
+            $this->doEcho('CountEmptyItems', $repository->countEmptyItems());
+            $this->doEcho('CountDuplicateItems', $repository->countDuplicateItems());
         }
     }
 

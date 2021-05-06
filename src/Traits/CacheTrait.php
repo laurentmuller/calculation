@@ -190,7 +190,7 @@ trait CacheTrait
         // value?
         if (null === $value) {
             $this->deleteCacheItem($key);
-        } elseif ($item = $this->getCacheItem($key)) {
+        } elseif ($this->adapter && $item = $this->getCacheItem($key)) {
             // save
             $item->expiresAfter($time ?? 3600)
                 ->set($value);

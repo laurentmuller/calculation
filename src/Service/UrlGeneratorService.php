@@ -91,7 +91,7 @@ class UrlGeneratorService
      *
      * @return string the cancel URL
      */
-    public function cancelUrl(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
+    public function cancelUrl(Request $request, ?int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
     {
         // build parameters
         $params = $this->routeParams($request, $id);
@@ -118,7 +118,7 @@ class UrlGeneratorService
      * @param int     $id           the entity identifier
      * @param string  $defaultRoute the default route to use
      */
-    public function redirect(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): RedirectResponse
+    public function redirect(Request $request, ?int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): RedirectResponse
     {
         $url = $this->cancelUrl($request, $id, $defaultRoute);
 
@@ -133,7 +133,7 @@ class UrlGeneratorService
      *
      * @return array the parameters
      */
-    public function routeParams(Request $request, int $id = 0): array
+    public function routeParams(Request $request, ?int $id = 0): array
     {
         $params = [];
 
@@ -145,7 +145,7 @@ class UrlGeneratorService
         }
 
         // identifier
-        if (0 !== $id) {
+        if (!empty($id)) {
             $params['id'] = $id;
         }
 

@@ -196,12 +196,14 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      */
     private function checkCssClean(): ?string
     {
-        [$ok, $output] = $this->executeCommand(\escapeshellarg($this->cleanCssBinary) . ' --version', '', false);
-        if (!$ok) {
-            return 'Error while executing ' . $this->cleanCssBinary . ', install Node.js and clean-css.';
-        }
-        if (\version_compare($output, '4.2') < 0) {
-            return "Update to clean-css 4.2 or newer. Actual version: {$output}.";
+        if ($this->cleanCssBinary) {
+            [$ok, $output] = $this->executeCommand(\escapeshellarg($this->cleanCssBinary) . ' --version', '', false);
+            if (!$ok) {
+                return 'Error while executing ' . $this->cleanCssBinary . ', install Node.js and clean-css.';
+            }
+            if (\version_compare($output, '4.2') < 0) {
+                return "Update to clean-css 4.2 or newer. Actual version: {$output}.";
+            }
         }
 
         return null;
@@ -212,17 +214,19 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      */
     private function checkUglifyJs(): ?string
     {
-        [$ok, $output] = $this->executeCommand(\escapeshellarg($this->uglifyJsBinary) . ' --version', '', false);
-        if (!$ok) {
-            return 'Error while executing ' . $this->uglifyJsBinary . ', install Node.js and uglify-es.';
-        }
+        if ($this->uglifyJsBinary) {
+            [$ok, $output] = $this->executeCommand(\escapeshellarg($this->uglifyJsBinary) . ' --version', '', false);
+            if (!$ok) {
+                return 'Error while executing ' . $this->uglifyJsBinary . ', install Node.js and uglify-es.';
+            }
 
-        // version is set as 'uglify-es 3.3.9'
-        if ($pos = \strripos($output, ' ')) {
-            $output = \substr($output, $pos + 1);
-        }
-        if (\version_compare($output, '3.3') < 0) {
-            return "Update to uglify-es 3.3 or newer. Actual version: {$output}.";
+            // version is set as 'uglify-es 3.3.9'
+            if ($pos = \strripos($output, ' ')) {
+                $output = \substr($output, $pos + 1);
+            }
+            if (\version_compare($output, '3.3') < 0) {
+                return "Update to uglify-es 3.3 or newer. Actual version: {$output}.";
+            }
         }
 
         return null;
@@ -243,7 +247,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         }
 
         $this->writeVeryVerbose("Compressing {$origFile}");
-        $cmd = \escapeshellarg($this->cleanCssBinary) . ' ' . $this->cleanCssArgs;
+        $cmd = \escapeshellarg((string) $this->cleanCssBinary) . ' ' . $this->cleanCssArgs;
         [$ok, $output] = $this->executeCommand($cmd, $content, false);
         if (!$ok) {
             $this->writeError("Error while executing {$cmd}");
@@ -270,7 +274,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         }
 
         $this->writeVeryVerbose("Compressing {$origFile}");
-        $cmd = \escapeshellarg($this->uglifyJsBinary) . ' ' . $this->uglifyJsArgs;
+        $cmd = \escapeshellarg((string) $this->uglifyJsBinary) . ' ' . $this->uglifyJsArgs;
         [$ok, $output] = $this->executeCommand($cmd, $content, false);
         if (!$ok) {
             $this->writeError("Error while executing {$cmd}");
@@ -353,7 +357,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     {
         $dir = \dirname($origFile);
 
-        return \preg_replace_callback('#@import\s+(?:url)?[(\'"]+(.+)[)\'"]+;#U', function (array $matches) use ($dir) {
+        return (string) \preg_replace_callback('#@import\s+(?:url)?[(\'"]+(.+)[)\'"]+;#U', function (array $matches) use ($dir) {
             $file = $dir . '/' . $matches[1];
             if (!\is_file($file)) {
                 $this->writeError("Expanding file {$file} not found!");
@@ -390,7 +394,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     {
         $dir = \dirname($origFile);
 
-        return \preg_replace_callback('~<!--#include\s+file="(.+)"\s+-->~U', function (array $matches) use ($dir) {
+        return (string) \preg_replace_callback('~<!--#include\s+file="(.+)"\s+-->~U', function (array $matches) use ($dir) {
             $file = $dir . '/' . $matches[1];
             if (!\is_file($file)) {
                 $this->writeError("Expanding file {$file} not found!");

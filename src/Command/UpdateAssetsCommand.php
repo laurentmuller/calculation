@@ -341,16 +341,16 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         // rename
         foreach ($renames as $reg => $replace) {
             $pattern = "/{$reg}/";
-            $targetFile = \preg_replace($pattern, $replace, $targetFile);
+            $targetFile = (string) \preg_replace($pattern, $replace, $targetFile);
         }
 
         // css?
-        if ('css' === \pathinfo($targetFile, \PATHINFO_EXTENSION)) {
+        if ('css' === (string) \pathinfo($targetFile, \PATHINFO_EXTENSION)) {
             $content = \str_replace('/*!', '/*', $content);
         }
 
         // bootstrap.css?
-        $name = \pathinfo($targetFile, \PATHINFO_BASENAME);
+        $name = (string) \pathinfo($targetFile, \PATHINFO_BASENAME);
         if (self::BOOTSTRAP_FILE_NAME === $name) {
             $content = $this->updateStyle($content);
         }

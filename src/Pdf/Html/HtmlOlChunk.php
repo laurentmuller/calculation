@@ -57,26 +57,6 @@ class HtmlOlChunk extends HtmlParentChunk
      * @var string
      */
     protected $type;
-    /**
-     * The number to roman map.
-     *
-     * @var array
-     */
-    private static $NUMBER_TO_ROMAN = [
-        1000 => 'M',
-        900 => 'CM',
-        500 => 'D',
-        400 => 'CD',
-        100 => 'C',
-        90 => 'XC',
-        50 => 'L',
-        40 => 'XL',
-        10 => 'X',
-        9 => 'IX',
-        5 => 'V',
-        4 => 'IV',
-        1 => 'I',
-    ];
 
     /**
      * Constructor.
@@ -142,11 +122,11 @@ class HtmlOlChunk extends HtmlParentChunk
                 break;
 
             case self::TYPE_ROMAN_LOWER:
-                $text = \strtolower($this->toRoman($index));
+                $text = \strtolower(self::toRoman($index));
                 break;
 
             case self::TYPE_ROMAN_UPPER:
-                $text = $this->toRoman($index);
+                $text = self::toRoman($index);
                 break;
 
             default:
@@ -221,27 +201,46 @@ class HtmlOlChunk extends HtmlParentChunk
     /**
      * Converts the value to a roman number.
      *
-     * <b>N.B.:</b> If the value is smaller than or equal to 0, an empty string ('') is returned. If value is greather than 4999. the "<code>#N/A#</code>" string is returned.
+     * <b>N.B.:</b> If value is smaller than or equal to 0 or if value is greather than 4999, the "<code>#N/A#</code>" string is returned.
      *
-     * @param int $value the value to convert
+     * @param int $number the value to convert
      *
      * @return string the roman number
      */
-    public static function toRoman(int $value): string
+    public static function toRoman(int $number): string
     {
-        if ($value <= 0) {
-            return '';
-        }
-        if ($value > 4999) {
+        // out of range?
+        if ($number <= 0 || $number > 4999) {
             return '#N/A#';
         }
 
+        // lookup array that we will use to traverse the number
+        static $lookup = [
+            'M' => 1000,
+            'CM' => 900,
+            'D' => 500,
+            'CD' => 400,
+            'C' => 100,
+            'XC' => 90,
+            'L' => 50,
+            'XL' => 40,
+            'X' => 10,
+            'IX' => 9,
+            'V' => 5,
+            'IV' => 4,
+            'I' => 1,
+        ];
+
         $result = '';
-        foreach (self::$NUMBER_TO_ROMAN as $limit => $glyph) {
-            while ($value >= $limit) {
-                $result .= $glyph;
-                $value -= $limit;
-            }
+        foreach ($lookup as $roman => $value) {
+            // look for number of matches
+            $multiplier = (int) ($number / $value);
+
+            // concatenate characters
+            $result .= \str_repeat($roman, $multiplier);
+
+            // substract that from the number
+            $number = $number % $value;
         }
 
         return $result;

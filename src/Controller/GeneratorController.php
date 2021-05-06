@@ -146,7 +146,7 @@ class GeneratorController extends AbstractController
             // serialize
             $items = \array_map(function (Calculation $c) {
                 return [
-                    'id' => FormatUtils::formatId($c->getId()),
+                    'id' => FormatUtils::formatId((int) $c->getId()),
                     'date' => FormatUtils::formatDate($c->getDate()),
                     'state' => $c->getStateCode(),
                     'description' => $c->getDescription(),

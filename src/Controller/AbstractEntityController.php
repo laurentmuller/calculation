@@ -57,7 +57,7 @@ abstract class AbstractEntityController extends AbstractController
     public function __construct(string $className)
     {
         $this->className = $className;
-        $this->lowerName = \strtolower(Utils::getShortName($className));
+        $this->lowerName = \strtolower((string) Utils::getShortName($className));
     }
 
     /**
@@ -453,11 +453,11 @@ abstract class AbstractEntityController extends AbstractController
      * @param array   $parameters the $parameters to update
      * @param int     $id         an optional entity identifier
      */
-    protected function updateQueryParameters(Request $request, array &$parameters, int $id = 0): void
+    protected function updateQueryParameters(Request $request, array &$parameters, ?int $id = 0): void
     {
         $queryParameters = $request->query->all();
         $parameters['params'] = \array_merge($queryParameters, $parameters['params'] ?? []);
-        if (0 !== $id && !isset($parameters['params']['id'])) {
+        if (!empty($id) && !isset($parameters['params']['id'])) {
             $parameters['params']['id'] = $id;
         }
     }

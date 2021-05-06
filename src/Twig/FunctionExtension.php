@@ -281,10 +281,10 @@ final class FunctionExtension extends AbstractExtension
     public function normalizeWhitespace(string $value): string
     {
         // attributes
-        $value = \preg_replace('/\s+=\s+/u', '=', $value);
+        $value = (string) \preg_replace('/\s+=\s+/u', '=', $value);
 
         // space and new lines
-        $value = \preg_replace('/\s+/u', ' ', $value);
+        $value = (string) \preg_replace('/\s+/u', ' ', $value);
 
         return \trim($value);
     }

@@ -101,7 +101,7 @@ abstract class AbstractEntity
         if (!Utils::isString($str)) {
             return null;
         }
-        if (!Utils::isString($str = \trim($str))) {
+        if (!Utils::isString($str = \trim((string) $str))) {
             return null;
         }
 

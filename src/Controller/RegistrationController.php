@@ -77,7 +77,7 @@ class RegistrationController extends AbstractController
             $subject = $this->trans('registration.email.subject', ['%username%' => $user->getUsername()]);
             $email = (new TemplatedEmail())
                 ->from($this->getAddressFrom())
-                ->to($user->getEmail())
+                ->to((string) $user->getEmail())
                 ->subject($subject)
                 ->htmlTemplate('registration/email.html.twig');
 

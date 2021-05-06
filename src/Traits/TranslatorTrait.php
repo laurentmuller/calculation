@@ -43,7 +43,7 @@ trait TranslatorTrait
                 /** @var \Symfony\Component\Translation\MessageCatalogueInterface $catalogue */
                 $catalogue = $translator->getCatalogue($locale);
 
-                return $catalogue->defines($id, $domain);
+                return $catalogue->defines($id, $domain ?? 'messages');
             }
         }
 

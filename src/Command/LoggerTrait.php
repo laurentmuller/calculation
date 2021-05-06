@@ -55,7 +55,7 @@ trait LoggerTrait
             $this->installerName = Utils::getShortName(static::class);
         }
 
-        return $this->installerName;
+        return (string) $this->installerName;
     }
 
     /**
@@ -65,7 +65,7 @@ trait LoggerTrait
      */
     protected function isVerbose(): bool
     {
-        return $this->isIO() && $this->io->isVerbose();
+        return $this->io && $this->io->isVerbose();
     }
 
     /**
@@ -75,7 +75,7 @@ trait LoggerTrait
      */
     protected function isVeryVerbose(): bool
     {
-        return $this->isIO() && $this->io->isVeryVerbose();
+        return $this->io && $this->io->isVeryVerbose();
     }
 
     /**
@@ -96,7 +96,7 @@ trait LoggerTrait
      */
     protected function write(string $message, string $tag = 'info'): void
     {
-        if ($this->isIO()) {
+        if ($this->io) {
             $concat = $this->concat($message);
             $this->io->writeln("<$tag>$concat</$tag>");
         }
@@ -109,7 +109,7 @@ trait LoggerTrait
      */
     protected function writeError(string $message): void
     {
-        if ($this->isIO()) {
+        if ($this->io) {
             $concat = $this->concat($message);
             $this->io->error($concat);
         }
@@ -122,7 +122,7 @@ trait LoggerTrait
      */
     protected function writeNote(string $message): void
     {
-        if ($this->isIO()) {
+        if ($this->io) {
             $concat = $this->concat($message);
             $this->io->note($concat);
         }
@@ -135,7 +135,7 @@ trait LoggerTrait
      */
     protected function writeSuccess(string $message): void
     {
-        if ($this->isIO()) {
+        if ($this->io) {
             $concat = $this->concat($message);
             $this->io->success($concat);
         }
@@ -165,10 +165,5 @@ trait LoggerTrait
         if ($this->isVeryVerbose()) {
             $this->write($message, $tag);
         }
-    }
-
-    private function isIO(): bool
-    {
-        return null !== $this->io;
     }
 }

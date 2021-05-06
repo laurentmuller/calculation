@@ -322,8 +322,12 @@ class OpenWeatherController extends AbstractController
                 if (null !== $db) {
                     $db->close();
                 }
-                FileUtils::remove($temp_name);
-                FileUtils::remove($file);
+                if (null !== $temp_name) {
+                    FileUtils::remove($temp_name);
+                }
+                if (null !== $file) {
+                    FileUtils::remove($file);
+                }
             }
         }
 

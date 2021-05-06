@@ -36,7 +36,7 @@ jobs:
 
             - name: Lint YAML files
               if: always() && steps.install.outcome == 'success'
-              run: 'php bin/console lint:yaml config --parse-tags'
+              run: 'php bin/console lint:yaml translations config .github/workflows --parse-tags'
 
             - name: Lint Twig templates
               if: always() && steps.install.outcome == 'success'

@@ -57,7 +57,7 @@ abstract class AbstractEntityController extends AbstractController
     public function __construct(string $className)
     {
         $this->className = $className;
-        $this->lowerName = \strtolower((string) Utils::getShortName($className));
+        $this->lowerName = \strtolower(Utils::getShortName($className));
     }
 
     /**

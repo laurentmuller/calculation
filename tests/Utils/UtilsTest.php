@@ -233,6 +233,7 @@ class UtilsTest extends TestCase
 
     /**
      * @dataProvider getArrayValue
+     *
      * @param mixed $key
      * @param mixed $expected
      * @param mixed $default

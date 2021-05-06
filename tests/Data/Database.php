@@ -66,7 +66,7 @@ class Database extends AbstractDatabase
     {
         // load script
         $file = __DIR__ . '/db_test.sql';
-        $sql = (string)\file_get_contents($file);
+        $sql = (string) \file_get_contents($file);
 
         // execute
         $this->exec($sql);

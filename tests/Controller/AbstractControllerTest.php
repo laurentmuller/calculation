@@ -15,9 +15,9 @@ namespace App\Tests\Controller;
 use App\Entity\AbstractEntity;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 /**
  * Asbtract unit test for controllers.

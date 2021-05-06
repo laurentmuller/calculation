@@ -25,3 +25,8 @@ symfony.lock
 /vendor-bin/php-cs-fixer/vendor/
 /vendor-bin/phpstan/vendor/
 ###< tools ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###

@@ -43,7 +43,7 @@ trait LogErrorTrait
 
         $message = $e->getMessage();
         $trace = $e->getTraceAsString();
-        $response = (string)$this->client->getResponse()->getContent();
+        $response = (string) $this->client->getResponse()->getContent();
 
         // Generate a file name containing the test file name and the test name, e.g. App_Tests_Controller_MyControllerTest___testDefault.html
         $fileName = \str_replace('\\', '_', "$testClass" . "_$testName.html");

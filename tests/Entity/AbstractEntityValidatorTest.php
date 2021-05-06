@@ -42,7 +42,7 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
         static::bootKernel();
 
         /** @var ValidatorInterface $validator */
-        $validator  = self::$container->get(ValidatorInterface::class);
+        $validator = self::$container->get(ValidatorInterface::class);
 
         $this->validator = $validator;
     }

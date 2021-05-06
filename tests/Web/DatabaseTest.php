@@ -94,6 +94,7 @@ class DatabaseTest extends KernelTestCase
      * @dataProvider getRepositories
      *
      * @template T
+     *
      * @param class-string<T> $className
      */
     public function testRepository(string $className, int $expected): void

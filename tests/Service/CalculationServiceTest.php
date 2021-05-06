@@ -191,6 +191,7 @@ class CalculationServiceTest extends KernelTestCase
 
     /**
      * @template T
+     *
      * @param class-string<T> $entityName
      * @psalm-return EntityRepository<T> $repository
      */

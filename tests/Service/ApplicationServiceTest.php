@@ -69,7 +69,7 @@ class ApplicationServiceTest extends KernelTestCase implements ApplicationServic
     /**
      * @param mixed $value
      */
-     protected function echo(string $name, $value, bool $newLine = false): void
+    protected function echo(string $name, $value, bool $newLine = false): void
     {
         if ($this->debug) {
             $format = "\n%-15s: %s" . ($newLine ? "\n" : '');

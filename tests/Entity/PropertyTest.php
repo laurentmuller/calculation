@@ -19,7 +19,7 @@ use App\Entity\Property;
  *
  * @author Laurent Muller
  */
-class PropertyTest extends EntityValidatorTest
+class PropertyTest extends AbstractEntityValidatorTest
 {
     public function testDuplicate(): void
     {

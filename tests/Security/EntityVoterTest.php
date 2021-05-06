@@ -114,12 +114,17 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
         $this->checkVote($user, $subject, $attribute, $expected);
     }
 
-    protected function echo(string $name, $value, bool $newLine = false): void
+    protected function echo(string $name, string $value, bool $newLine = false): void
     {
         $format = "\n%-15s: %s" . ($newLine ? "\n" : '');
         \printf($format, \htmlspecialchars($name), $value);
     }
 
+    /**
+     * @param mixed $subject
+     * @param mixed $attribute
+     * @param mixed $expected
+     */
     private function checkVote(User $user, $subject, $attribute, $expected): void
     {
         $token = $this->getUserToken($user);

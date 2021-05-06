@@ -20,7 +20,7 @@ use App\Entity\CalculationState;
  *
  * @author Laurent Muller
  */
-class CalculationTest extends EntityValidatorTest
+class CalculationTest extends AbstractEntityValidatorTest
 {
     public function testInvalidAll(): void
     {

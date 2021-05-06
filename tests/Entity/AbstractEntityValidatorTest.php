@@ -14,7 +14,8 @@ namespace App\Tests\Entity;
 
 use App\Entity\AbstractEntity;
 use App\Tests\DatabaseTrait;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -23,7 +24,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  *
  * @author Laurent Muller
  */
-abstract class EntityValidatorTest extends KernelTestCase
+abstract class AbstractEntityValidatorTest extends KernelTestCase
 {
     use DatabaseTrait;
 
@@ -39,7 +40,11 @@ abstract class EntityValidatorTest extends KernelTestCase
     {
         parent::setUp();
         static::bootKernel();
-        $this->validator = self::$container->get(ValidatorInterface::class);
+
+        /** @var ValidatorInterface $validator */
+        $validator  = self::$container->get(ValidatorInterface::class);
+
+        $this->validator = $validator;
     }
 
     protected function deleteEntity(AbstractEntity $object): void
@@ -49,9 +54,15 @@ abstract class EntityValidatorTest extends KernelTestCase
         $manager->flush();
     }
 
-    protected function getManager(): ObjectManager
+    protected function getManager(): EntityManager
     {
-        return self::$container->get('doctrine')->getManager();
+        /** @var ManagerRegistry $doctrine */
+        $doctrine = self::$container->get('doctrine');
+
+        /** @var EntityManager $manager */
+        $manager = $doctrine->getManager();
+
+        return $manager;
     }
 
     protected function saveEntity(AbstractEntity $object): void

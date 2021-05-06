@@ -21,7 +21,7 @@ use App\Entity\Product;
  *
  * @author Laurent Muller
  */
-class ProductTest extends EntityValidatorTest
+class ProductTest extends AbstractEntityValidatorTest
 {
     public function testDuplicate(): void
     {

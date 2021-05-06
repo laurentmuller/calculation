@@ -68,7 +68,7 @@ class CategoryContraintTest extends ConstraintValidatorTestCase
         $this->assertEquals(0, $violations->count());
     }
 
-    protected function createValidator()
+    protected function createValidator(): NotNullValidator
     {
         // not used
         return new NotNullValidator();

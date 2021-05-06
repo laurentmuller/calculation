@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Data;
 
 use App\Database\AbstractDatabase;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * The database test.
@@ -27,10 +28,10 @@ class Database extends AbstractDatabase
     public static function createDatabase(): self
     {
         // remove existing file
+        self::deleteDatabase();
+
+        // file
         $filename = self::getDatabaseFilename();
-        if (\file_exists($filename)) {
-            \unlink($filename);
-        }
 
         // create
         return new self($filename);
@@ -41,9 +42,10 @@ class Database extends AbstractDatabase
      */
     public static function deleteDatabase(): ?self
     {
+        $fs = new Filesystem();
         $filename = self::getDatabaseFilename();
-        if (\file_exists($filename)) {
-            \unlink($filename);
+        if ($fs->exists($filename)) {
+            $fs->remove($filename);
         }
 
         return null;
@@ -64,7 +66,7 @@ class Database extends AbstractDatabase
     {
         // load script
         $file = __DIR__ . '/db_test.sql';
-        $sql = \file_get_contents($file);
+        $sql = (string)\file_get_contents($file);
 
         // execute
         $this->exec($sql);

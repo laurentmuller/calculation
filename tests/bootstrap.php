@@ -15,12 +15,15 @@ namespace App\Tests;
 use Symfony\Component\Dotenv\Dotenv;
 
 $logfile = \dirname(__DIR__) . '/var/log/test.log';
+
+// @phpstan-ignore-next-line
 if (\file_exists($logfile)) {
     \file_put_contents($logfile, '');
 }
 
 require \dirname(__DIR__) . '/vendor/autoload.php';
 
+// @phpstan-ignore-next-line
 if (\file_exists(\dirname(__DIR__) . '/config/bootstrap.php')) {
     require \dirname(__DIR__) . '/config/bootstrap.php';
 } elseif (\method_exists(Dotenv::class, 'bootEnv')) {

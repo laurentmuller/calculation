@@ -27,7 +27,7 @@ class GeneratorControllerTest extends AbstractControllerTest
 {
     private static ?Category $category = null;
     private static ?Group $group = null;
-    private static $products = null;
+    private static ?array $products = null;
     private static ?CalculationState $state = null;
 
     public function getRoutes(): array

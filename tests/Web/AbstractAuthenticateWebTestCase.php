@@ -28,7 +28,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *
  * @author Laurent Muller
  */
-abstract class AuthenticateWebTestCase extends WebTestCase
+abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 {
     use DatabaseTrait;
     use LogErrorTrait;
@@ -84,6 +84,9 @@ abstract class AuthenticateWebTestCase extends WebTestCase
         $this->assertEquals($expected, $statusCode, "Invalid status code for '{$url}' and '{$username}'.");
     }
 
+    /**
+     * @param mixed $value
+     */
     protected function doEcho(string $name, $value, bool $newLine = false): void
     {
         $format = "\n%-15s: %s" . ($newLine ? "\n" : '');

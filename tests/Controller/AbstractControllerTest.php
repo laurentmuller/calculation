@@ -13,17 +13,18 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Entity\AbstractEntity;
-use App\Tests\Web\AuthenticateWebTestCase;
+use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 /**
  * Asbtract unit test for controllers.
  *
  * @author Laurent Muller
  */
-abstract class AbstractControllerTest extends AuthenticateWebTestCase
+abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
 {
     /**
      * Gets the route to test.
@@ -121,6 +122,12 @@ abstract class AbstractControllerTest extends AuthenticateWebTestCase
      */
     protected static function getManager(): EntityManager
     {
-        return self::$container->get('doctrine')->getManager();
+        /** @var ManagerRegistry $doctrine */
+        $doctrine = self::$container->get('doctrine');
+
+        /** @var EntityManager $manager */
+        $manager = $doctrine->getManager();
+
+        return $manager;
     }
 }

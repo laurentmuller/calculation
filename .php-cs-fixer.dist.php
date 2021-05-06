@@ -38,7 +38,6 @@ $rules = [
     'strict_comparison'           => true,
     'strict_param'                => true,
     'ordered_imports'             => true,
-    'modernize_types_casting'     => false,
     'ordered_class_elements'      => ['sort_algorithm' => 'alpha'],
     'concat_space'                => ['spacing' => 'one'],
     'array_syntax'                => ['syntax' => 'short'],

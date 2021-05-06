@@ -29,7 +29,7 @@ class ApplicationServiceTest extends KernelTestCase implements ApplicationServic
     /*
      * the debug mode
      */
-    protected $debug = false;
+    protected bool $debug = false;
 
     /**
      * {@inheritdoc}
@@ -66,7 +66,10 @@ class ApplicationServiceTest extends KernelTestCase implements ApplicationServic
         $this->assertEquals(4000, $service->getMessageTimeout());
     }
 
-    protected function echo(string $name, $value, bool $newLine = false): void
+    /**
+     * @param mixed $value
+     */
+     protected function echo(string $name, $value, bool $newLine = false): void
     {
         if ($this->debug) {
             $format = "\n%-15s: %s" . ($newLine ? "\n" : '');

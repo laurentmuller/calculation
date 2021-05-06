@@ -119,7 +119,8 @@ class CategoryTable extends AbstractEntityTable
     {
         parent::search($query, $builder);
         if (0 !== $groupId = (int) $query->getCustomData(self::PARAM_GROUP, 0)) {
-            $field = \strval($this->repository->getSearchFields('group.id'));
+            /** @var string $field */
+            $field = $this->repository->getSearchFields('group.id');
             $builder->andWhere($field . '=:' . self::PARAM_GROUP)
                 ->setParameter(self::PARAM_GROUP, $groupId, Types::INTEGER);
         }

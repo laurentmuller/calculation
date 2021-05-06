@@ -19,7 +19,7 @@ use App\Entity\CalculationState;
  *
  * @author Laurent Muller
  */
-class CalculationStateTest extends EntityValidatorTest
+class CalculationStateTest extends AbstractEntityValidatorTest
 {
     public function testDuplicate(): void
     {

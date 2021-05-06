@@ -20,7 +20,7 @@ use App\Entity\Group;
  *
  * @author Laurent Muller
  */
-class CategoryTest extends EntityValidatorTest
+class CategoryTest extends AbstractEntityValidatorTest
 {
     public function testDuplicate(): void
     {

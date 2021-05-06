@@ -268,7 +268,7 @@ class AjaxController extends AbstractController
         // get values
         $remoteIp = $request->getClientIp();
         $response = $request->get('g-recaptcha-response', $request->get('response'));
-        $secret = \strval($this->getParameter('recaptcha_secret'));
+        $secret = $this->getStringParameter('recaptcha_secret');
 
         // verify
         $recaptcha = new ReCaptcha($secret);

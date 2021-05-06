@@ -87,7 +87,8 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     {
         parent::search($query, $builder);
         if (0 !== $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0)) {
-            $field = \strval($this->repository->getSearchFields('category.id'));
+            /** @var string $field */
+            $field = $this->repository->getSearchFields('category.id');
             $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
                 ->setParameter(self::PARAM_CATEGORY, $categoryId, Types::INTEGER);
         }

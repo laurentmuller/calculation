@@ -8,6 +8,7 @@ parameters:
     level: 7
     paths:
     - src
+    - tests
 
     doctrine:
         repositoryClass: App\Repository\AbstractRepository
@@ -20,6 +21,9 @@ parameters:
 
     scanFiles:
     - vendor/twig/twig/src/Extension/CoreExtension.php
+
+    bootstrapFiles:
+    - vendor/bin/.phpunit/phpunit/vendor/autoload.php
 
     ignoreErrors:
     # disallowed-execution-calls

@@ -20,7 +20,7 @@ use App\Entity\GroupMargin;
  *
  * @author Laurent Muller
  */
-class GroupTest extends EntityValidatorTest
+class GroupTest extends AbstractEntityValidatorTest
 {
     public function testDuplicate(): void
     {

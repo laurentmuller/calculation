@@ -83,20 +83,26 @@ class DatabaseTest extends KernelTestCase
     public function getUsers(): array
     {
         return [
-            [AuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER],
-            [AuthenticateWebTestCase::ROLE_ADMIN, RoleInterface::ROLE_ADMIN],
-            [AuthenticateWebTestCase::ROLE_SUPER_ADMIN, RoleInterface::ROLE_SUPER_ADMIN],
-            [AuthenticateWebTestCase::ROLE_DISABLED, RoleInterface::ROLE_USER],
+            [AbstractAuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER],
+            [AbstractAuthenticateWebTestCase::ROLE_ADMIN, RoleInterface::ROLE_ADMIN],
+            [AbstractAuthenticateWebTestCase::ROLE_SUPER_ADMIN, RoleInterface::ROLE_SUPER_ADMIN],
+            [AbstractAuthenticateWebTestCase::ROLE_DISABLED, RoleInterface::ROLE_USER],
         ];
     }
 
     /**
      * @dataProvider getRepositories
+     *
+     * @template T
+     * @param class-string<T> $className
      */
-    public function testRepository(string $class, int $expected): void
+    public function testRepository(string $className, int $expected): void
     {
-        /** @var EntityRepository $repository */
-        $repository = self::$container->get($class);
+        /**
+         * @var EntityRepository $repository
+         * @psalm-var EntityRepository<T> $repository
+         */
+        $repository = self::$container->get($className);
         $this->assertNotNull($repository);
 
         $result = $repository->findAll();

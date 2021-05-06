@@ -66,7 +66,7 @@ class AboutController extends AbstractController
         ]);
 
         // title parameters
-        $parameters = ['%app_name%' => $this->getParameter('app_name')];
+        $parameters = ['%app_name%' => $this->getStringParameter('app_name')];
 
         // create report
         $report = new HtmlReport($this);

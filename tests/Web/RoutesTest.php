@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Laurent Muller
  */
-class RoutesTest extends AuthenticateWebTestCase
+class RoutesTest extends AbstractAuthenticateWebTestCase
 {
     public function getRoutes(): array
     {

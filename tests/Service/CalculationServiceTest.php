@@ -99,6 +99,9 @@ class CalculationServiceTest extends KernelTestCase
         $this->assertEquals($totalOverall, $calculation->getOverallTotal());
     }
 
+    /**
+     * @param mixed $value
+     */
     protected function echo(string $name, $value): void
     {
         echo \sprintf("\n%-15s: %s", $name, $value);
@@ -109,16 +112,20 @@ class CalculationServiceTest extends KernelTestCase
         /** @var ManagerRegistry $registry */
         $registry = self::$container->get('doctrine');
 
-        return $registry->getManager();
+        /** @var EntityManager $manager */
+        $manager = $registry->getManager();
+
+        return $manager;
     }
 
     protected function getService(EntityManager $manager): CalculationService
     {
-        $service = self::$container->get(ApplicationService::class);
+        /** @var ApplicationService $application */
+        $application = self::$container->get(ApplicationService::class);
+        /** @var TranslatorInterface $translator */
         $translator = self::$container->get(TranslatorInterface::class);
-        $service = new CalculationService($manager, $service, $translator);
 
-        return $service;
+        return new CalculationService($manager, $application, $translator);
     }
 
     protected function init(): Product
@@ -182,8 +189,17 @@ class CalculationServiceTest extends KernelTestCase
         return $product;
     }
 
+    /**
+     * @template T
+     * @param class-string<T> $entityName
+     * @psalm-return EntityRepository<T> $repository
+     */
     protected function initRepository(EntityManager $manager, string $entityName): EntityRepository
     {
+        /**
+         *  @var EntityRepository $repository
+         *  @psalm-var EntityRepository<T> $repository
+         */
         $repository = $manager->getRepository($entityName);
 
         // remove existing elements

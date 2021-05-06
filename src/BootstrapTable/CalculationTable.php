@@ -106,7 +106,8 @@ class CalculationTable extends AbstractEntityTable
     {
         parent::search($query, $builder);
         if (0 !== $stateId = $query->getCustomData(self::PARAM_STATE, 0)) {
-            $field = \strval($this->repository->getSearchFields('state.id'));
+            /** @var string $field */
+            $field = $this->repository->getSearchFields('state.id');
             $builder->andWhere($field . '=:' . self::PARAM_STATE)
                 ->setParameter(self::PARAM_STATE, $stateId, Types::INTEGER);
         }

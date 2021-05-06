@@ -221,8 +221,11 @@ class UtilsTest extends TestCase
 
     /**
      * @dataProvider getExportVar
+     *
+     * @param mixed $var
+     * @param mixed $expected
      */
-    public function testExportVar($var, string $expected): void
+    public function testExportVar($var, $expected): void
     {
         $actual = Utils::exportVar($var);
         $this->assertEquals($expected, $actual);
@@ -230,6 +233,9 @@ class UtilsTest extends TestCase
 
     /**
      * @dataProvider getArrayValue
+     * @param mixed $key
+     * @param mixed $expected
+     * @param mixed $default
      */
     public function testGetArrayValue(array $array, $key, $expected, $default = null): void
     {
@@ -239,6 +245,9 @@ class UtilsTest extends TestCase
 
     /**
      * @dataProvider getShortName
+     *
+     * @param mixed $var
+     * @param mixed $expected
      */
     public function testGetShortName($var, $expected, bool $exception = false): void
     {
@@ -269,6 +278,8 @@ class UtilsTest extends TestCase
 
     /**
      * @dataProvider getToFloat
+     *
+     * @param mixed $var
      */
     public function testToFloat($var, float $expected, bool $equal): void
     {
@@ -282,6 +293,8 @@ class UtilsTest extends TestCase
 
     /**
      * @dataProvider getToInt
+     *
+     * @param mixed $var
      */
     public function testToInt($var, int $expected, bool $equal): void
     {
@@ -295,6 +308,8 @@ class UtilsTest extends TestCase
 
     /**
      * @dataProvider getToString
+     *
+     * @param mixed $var
      */
     public function testToString($var, string $expected, bool $equal): void
     {

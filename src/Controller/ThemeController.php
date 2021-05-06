@@ -85,7 +85,7 @@ class ThemeController extends AbstractController
 
         // render
         return $this->render('user/user_theme.html.twig', [
-            'asset_base' => $this->getParameter('asset_base'),
+            'asset_base' => $this->getStringParameter('asset_base'),
             'form' => $form->createView(),
             'themes' => $service->getThemes(),
             'theme' => $theme,
@@ -103,10 +103,10 @@ class ThemeController extends AbstractController
     private function updateCookie(Response $response, string $name, ?string $value, int $days = 30): self
     {
         $headers = $response->headers;
-        $path = \strval($this->getParameter('cookie_path'));
+        $path = $this->getStringParameter('cookie_path');
         if (Utils::isString($value)) {
             $time = (int) \strtotime("now + {$days} day");
-            $secure = (bool) $this->getParameter('cookie_secure');
+            $secure = $this->getBoolParameter('cookie_secure');
             $cookie = new Cookie($name, $value, $time, $path, null, $secure, true, true);
             $headers->setCookie($cookie);
         } else {

@@ -19,7 +19,7 @@ use App\Entity\GlobalMargin;
  *
  * @author Laurent Muller
  */
-class GlobalMarginTest extends EntityValidatorTest
+class GlobalMarginTest extends AbstractEntityValidatorTest
 {
     public function testMarginLessZero(): void
     {

@@ -19,7 +19,7 @@ use App\Entity\User;
  *
  * @author Laurent Muller
  */
-class UserTest extends EntityValidatorTest
+class UserTest extends AbstractEntityValidatorTest
 {
     public function testDuplicateBoth(): void
     {

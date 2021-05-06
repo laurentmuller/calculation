@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 /**
  * Trait to log error in HTML file.
  *
@@ -19,25 +21,17 @@ namespace App\Tests;
  */
 trait LogErrorTrait
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function onNotSuccessfulTest(\Throwable $e): void
-    {
-        if ($this->client) {
-            //$this->writeErrorFile($e);
-        }
-
-        parent::onNotSuccessfulTest($e);
-    }
-
     private function getLogDir(): string
     {
         $basedir = $this->client->getKernel()->getLogDir();
         $logDir = $basedir . '/tests';
-        if (!\is_dir($logDir)) {
-            \mkdir($logDir, 0777, true);
+        $fs = new Filesystem();
+        if (!$fs->exists($logDir)) {
+            $fs->mkdir($logDir);
         }
+//         if (!\is_dir($logDir)) {
+//             \mkdir($logDir, 0777, true);
+//         }
 
         return $logDir;
     }
@@ -49,7 +43,7 @@ trait LogErrorTrait
 
         $message = $e->getMessage();
         $trace = $e->getTraceAsString();
-        $response = $this->client->getResponse()->getContent();
+        $response = (string)$this->client->getResponse()->getContent();
 
         // Generate a file name containing the test file name and the test name, e.g. App_Tests_Controller_MyControllerTest___testDefault.html
         $fileName = \str_replace('\\', '_', "$testClass" . "_$testName.html");

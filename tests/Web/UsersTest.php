@@ -17,7 +17,7 @@ namespace App\Tests\Web;
  *
  * @author Laurent Muller
  */
-class UsersTest extends AuthenticateWebTestCase
+class UsersTest extends AbstractAuthenticateWebTestCase
 {
     public function getUserExist(): array
     {

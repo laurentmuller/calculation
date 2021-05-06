@@ -64,8 +64,8 @@ abstract class AbstractController extends BaseController
      */
     public function getAddressFrom(): Address
     {
-        $email = \strval($this->getParameter('mailer_user_email'));
-        $name = \strval($this->getParameter('mailer_user_name'));
+        $email = $this->getStringParameter('mailer_user_email');
+        $name = $this->getStringParameter('mailer_user_name');
 
         return new Address($email, $name);
     }
@@ -90,8 +90,8 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationName(): string
     {
-        $name = \strval($this->getParameter('app_name'));
-        $version = \strval($this->getParameter('app_version'));
+        $name = $this->getStringParameter('app_name');
+        $version = $this->getStringParameter('app_version');
 
         return \sprintf('%s v%s', $name, $version);
     }
@@ -101,7 +101,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationOwner(): string
     {
-        return \strval($this->getParameter('app_owner'));
+        return $this->getStringParameter('app_owner');
     }
 
     /**
@@ -109,7 +109,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationOwnerUrl(): string
     {
-        return \strval($this->getParameter('app_owner_url'));
+        return $this->getStringParameter('app_owner_url');
     }
 
     /**
@@ -191,7 +191,7 @@ abstract class AbstractController extends BaseController
      */
     public function isDebug(): bool
     {
-        return (bool) $this->getParameter('kernel.debug');
+        return $this->getBoolParameter('kernel.debug');
     }
 
     /**
@@ -226,6 +226,17 @@ abstract class AbstractController extends BaseController
         $builder = $this->createFormBuilder($data, $options);
 
         return new FormHelper($builder, $labelPrefix);
+    }
+
+    /**
+     * Gets a container parameter by its name.
+     */
+    protected function getBoolParameter(string $name): bool
+    {
+        /** @var bool $value */
+        $value = $this->getParameter($name);
+
+        return $value;
     }
 
     /**
@@ -278,6 +289,17 @@ abstract class AbstractController extends BaseController
     protected function getRequestInt(Request $request, string $key, int $default = 0): int
     {
         return (int) $request->get($key, $default);
+    }
+
+    /**
+     * Gets a container parameter by its name.
+     */
+    protected function getStringParameter(string $name): string
+    {
+        /** @var string $value */
+        $value = $this->getParameter($name);
+
+        return $value;
     }
 
     /**

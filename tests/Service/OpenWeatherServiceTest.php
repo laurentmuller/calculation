@@ -26,11 +26,6 @@ class OpenWeatherServiceTest extends KernelTestCase
 
     public const CITY_VALID = 2660718;
 
-    /*
-     * the debug mode
-     */
-    private $debug = false;
-
     /**
      * @var OpenWeatherService
      */
@@ -39,8 +34,10 @@ class OpenWeatherServiceTest extends KernelTestCase
     protected function setUp(): void
     {
         self::bootKernel();
-        $this->service = self::$container->get(OpenWeatherService::class);
-        $this->debug = self::$kernel->isDebug();
+
+        /** @var OpenWeatherService $service */
+        $service = self::$container->get(OpenWeatherService::class);
+        $this->service = $service;
     }
 
     public function testCurrent(): void
@@ -105,13 +102,6 @@ class OpenWeatherServiceTest extends KernelTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->service->group(\range(0, 25));
-    }
-
-    private function doEcho(array $result): void
-    {
-        if ($this->debug) {
-            echo \json_encode($result, \JSON_PRETTY_PRINT);
-        }
     }
 
     private function validateCoord(array $data): void

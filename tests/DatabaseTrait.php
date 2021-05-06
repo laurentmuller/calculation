@@ -24,7 +24,7 @@ trait DatabaseTrait
     /**
      * The database.
      *
-     * @var Database
+     * @var ?Database
      */
     protected static $database;
 
@@ -41,7 +41,7 @@ trait DatabaseTrait
      */
     public static function tearDownAfterClass(): void
     {
-        if (self::$database) {
+        if (null !== self::$database) {
             self::$database->close();
             self::$database = Database::deleteDatabase();
         }

@@ -1,9 +1,6 @@
-name: "Lint"
+name: PHP-Lint
 
 on: [push, pull_request]
-
-env:
-    fail-fast: true
 
 jobs:
     linters:

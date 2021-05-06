@@ -1,4 +1,4 @@
-name: Coding standards
+name: PHP-CS-Fixer
 
 on: [push, pull_request]
 

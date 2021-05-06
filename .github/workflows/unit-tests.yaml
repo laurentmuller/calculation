@@ -1,4 +1,4 @@
-name: Unit tests
+name: PHP-Units
 
 on: [push, pull_request]
 
@@ -6,7 +6,7 @@ jobs:
   phpunit:
     name: PHPUnit with PHP 7.4
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

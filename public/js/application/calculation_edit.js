@@ -9,7 +9,7 @@ var SearchHelper = {
 
     /**
      * Initialize type ahead searches.
-     * 
+     *
      * @return {SearchHelper} this instance for chaining.
      */
     init: function () {
@@ -18,13 +18,13 @@ var SearchHelper = {
         this.initSearchCustomer();
         this.initSearchProduct();
         this.initSearchUnits();
-        
+
         return this;
     },
 
     /**
      * Initialize the type ahead search customers.
-     * 
+     *
      * @return {Typeahead} The type ahead instance.
      */
     initSearchCustomer: function () {
@@ -39,7 +39,7 @@ var SearchHelper = {
 
     /**
      * Initialize the type ahead search products.
-     * 
+     *
      * @return {Typeahead} The type ahead instance.
      */
     initSearchProduct: function () {
@@ -77,7 +77,7 @@ var SearchHelper = {
 
     /**
      * Initialize the type ahead search product units.
-     * 
+     *
      * @return {Typeahead} The type ahead instance.
      */
     initSearchUnits: function () {
@@ -120,7 +120,7 @@ var MoveRowHandler = {
 
     /**
      * Move a source row before or after the target row.
-     * 
+     *
      * @param {jQuery}
      *            $source - the row to move.
      * @param {jQuery}
@@ -128,7 +128,6 @@ var MoveRowHandler = {
      * @param {boolean}
      *            up - true to move before the target (up); false to move after
      *            (down).
-     * 
      * @return {jQuery} - The moved row.
      */
     move: function ($source, $target, up) {
@@ -147,10 +146,9 @@ var MoveRowHandler = {
 
     /**
      * Move a calculation item to the first position.
-     * 
+     *
      * @param {jQuery}
      *            $row - the row to move.
-     * 
      * @return {jQuery} - The parent row.
      */
     moveFirst: function ($row) {
@@ -166,10 +164,9 @@ var MoveRowHandler = {
 
     /**
      * Move a calculation item to the last position.
-     * 
+     *
      * @param {jQuery}
      *            $row - the row to move.
-     * 
      * @return {jQuery} - The parent row.
      */
     moveLast: function ($row) {
@@ -186,10 +183,9 @@ var MoveRowHandler = {
 
     /**
      * Move up a calculation item.
-     * 
+     *
      * @param {jQuery}
      *            $row - the row to move.
-     * 
      * @return {jQuery} - The parent row.
      */
     moveUp: function ($row) {
@@ -205,17 +201,16 @@ var MoveRowHandler = {
 
     /**
      * Move down a calculation item.
-     * 
+     *
      * @param {jQuery}
      *            $row - the row to move.
-     * 
      * @return {jQuery} - The parent row.
      */
     moveDown: function ($row) {
         'use strict';
 
         const index = $row.index();
-        const count = $row.siblings().length;        
+        const count = $row.siblings().length;
         if (index < count && $row.next()) {
             const $target = $row.next();
             return this.move($row, $target, false);
@@ -231,7 +226,7 @@ var Application = {
 
     /**
      * Initialize application.
-     * 
+     *
      * @return {Application} This instance for chaining.
      */
     init: function () {
@@ -241,7 +236,7 @@ var Application = {
 
     /**
      * Initialize the drag and drop.
-     * 
+     *
      * @param {boolean}
      *            destroy - true to destroy the existing sortable.
      * @return {Application} This instance for chaining.
@@ -254,11 +249,18 @@ var Application = {
         const $bodies = $(selector);
 
         if (destroy) {
-            // remove proxies
-            $bodies.off('sortstart', that.dragStartProxy).off('sortupdate', that.dragStopProxy);
+            // remove handlers
+            if (that.dragStartProxy) {
+                $bodies.off('sortstart', that.dragStartProxy).off('sortupdate', that.dragStopProxy);
+            }
+
+            // destroy
+            sortable(selector, 'disable');
             sortable(selector, 'destroy');
-        } else {
-            // create proxies
+        }
+
+        // create handlers
+        if (!that.dragStartProxy) {
             that.dragStartProxy = $.proxy(that.onDragStart, that);
             that.dragStopProxy = $.proxy(that.onDragStop, that);
         }
@@ -271,18 +273,18 @@ var Application = {
             acceptFrom: 'tbody'
         });
 
-        // remove role attribute (aria)
-        $('#data-table-edit tbody tr').removeAttr('role');
-
         // add handlers
         $bodies.on('sortstart', that.dragStartProxy).on('sortupdate', that.dragStopProxy);
+
+        // remove role attribute
+        $bodies.find('tr').removeAttr('role');
 
         return that;
     },
 
     /**
      * Gets the item dialog.
-     * 
+     *
      * @return {Object} the dialog.
      */
     getItemDialog:function() {
@@ -290,12 +292,12 @@ var Application = {
         if (!this.itemDialog) {
             this.itemDialog = new EditItemDialog(this);
         }
-        return this.itemDialog; 
+        return this.itemDialog;
     },
 
     /**
      * Gets the task dialog.
-     * 
+     *
      * @return {Object} the dialog.
      */
     getTaskDialog:function() {
@@ -303,12 +305,12 @@ var Application = {
         if (!this.taskDialog) {
             this.taskDialog = new EditTaskDialog(this);
         }
-        return this.taskDialog; 
+        return this.taskDialog;
     },
-    
+
     /**
      * Initialize the draggable edit dialogs.
-     * 
+     *
      * @return {Application} This instance for chaining.
      */
     initDragDialog: function() {
@@ -319,21 +321,21 @@ var Application = {
         if (that.dragDialogInitialized) {
             return that;
         }
-        
+
         // draggable edit dialog
         $('.modal .modal-header').on('mousedown', function(e) {
             // left button?
             if (event.which !== 1) {
                 return;
             }
-            
+
             // get elements
-            const $draggable = $(this);            
+            const $draggable = $(this);
             const $dialog = $draggable.closest('.modal-dialog');
             const $content = $draggable.closest('.modal-content');
             const $close = $draggable.find('.close');
             const $focused = $(':focus');
-            
+
             // save values
             const startX = e.pageX - $draggable.offset().left;
             const startY = e.pageY - $draggable.offset().top;
@@ -347,7 +349,7 @@ var Application = {
             // update style
             $draggable.toggleClass('bg-primary text-white');
             $close.toggleClass('bg-primary text-white');
-            
+
             $('body').on('mousemove.draggable', function(e) {
                 // compute
                 const left = Math.max(margin, Math.min(right, e.pageX - startX));
@@ -374,15 +376,15 @@ var Application = {
                 $dialog.removeAttr('style');
             });
         });
-        
+
         // ok
         that.dragDialogInitialized = true;
-        return that;        
+        return that;
     },
-    
+
     /**
      * Initialize group and item menus.
-     * 
+     *
      * @return {Application} This instance for chaining.
      */
     initMenus: function () {
@@ -402,7 +404,7 @@ var Application = {
             e.preventDefault();
             that.showAddItemDialog($(this));
         });
-        
+
         $('#items-panel .card-header .btn-add-task').on('click', function (e) {
             e.preventDefault();
             that.showAddTaskDialog($(this));
@@ -429,7 +431,7 @@ var Application = {
             that.removeItem($(this));
         }).on('click', '.btn-delete-category', function (e) {
             e.preventDefault();
-            that.removeCategory($(this));            
+            that.removeCategory($(this));
         }).on('click', '.btn-delete-group', function (e) {
             e.preventDefault();
             that.removeGroup($(this));
@@ -440,7 +442,7 @@ var Application = {
 
     /**
      * Format a value with 2 fixed decimals and grouping separator.
-     * 
+     *
      * @param {Number}
      *            value - the value to format.
      * @returns {string} - the formatted value.
@@ -453,7 +455,7 @@ var Application = {
         if (isNaN(parsedValue)) {
             parsedValue = parseFloat(0);
         }
-        
+
         // created?
         if (!this.formatter) {
             this.formatter = new Intl.NumberFormat('de-CH', {
@@ -461,13 +463,13 @@ var Application = {
                 'maximumFractionDigits': 2
             });
         }
-       
+
         return this.formatter.format(value);
     },
 
     /**
      * Update the buttons, the total and initialize the drag-drop.
-     * 
+     *
      * @return {Application} This instance for chaining.
      */
     updateAll: function() {
@@ -477,7 +479,7 @@ var Application = {
 
     /**
      * Update the move up/down and sort buttons.
-     * 
+     *
      * @return {Application} This instance for chaining.
      */
     updateButtons: function () {
@@ -502,10 +504,10 @@ var Application = {
                 $row.find('.dropdown-divider:first').toggleClass('d-none', hideUp && hideDown);
             });
             if ($rows.length > 1) {
-                disabled = false;  
+                disabled = false;
             }
         });
-        
+
         if (disabled) {
             const $head = $('#data-table-edit thead');
             if ($head.length > 1) {
@@ -517,10 +519,10 @@ var Application = {
                         disabled = false;
                         return false;
                     }
-                });     
+                });
             }
         }
-        
+
         // update global sort
         $('.btn-sort-items').toggleDisabled(disabled);
 
@@ -529,10 +531,9 @@ var Application = {
 
     /**
      * Update the totals.
-     * 
+     *
      * @param {boolean}
      *            adjust - true to adjust the user margin.
-     * 
      * @return {Application} This instance for chaining.
      */
     updateTotals: function (adjust) {
@@ -565,8 +566,8 @@ var Application = {
 
         // abort
         if (that.jqXHR) {
-            that.jqXHR.abort();    
-            that.jqXHR = null;    
+            that.jqXHR.abort();
+            that.jqXHR = null;
         }
 
         // parameters
@@ -605,7 +606,7 @@ var Application = {
             }
             updateErrors();
             return that;
-            
+
         }).fail(function (jqXHR, textStatus) {
             if (textStatus !== 'abort') {
                 return that.disable(null);
@@ -617,10 +618,9 @@ var Application = {
 
     /**
      * Disable edition.
-     * 
+     *
      * @param {string}
      *            message - the error message to display.
-     * 
      * @return {Application} This instance for chaining.
      */
     disable: function (message) {
@@ -662,7 +662,7 @@ var Application = {
 
     /**
      * Finds or create the table head for the given group.
-     * 
+     *
      * @param {Object}
      *            group - the group data used to find row.
      * @returns {jQuery} - the table head.
@@ -675,14 +675,14 @@ var Application = {
         if ($head.length !== 0 ) {
             return $head;
         }
-        
+
         // append
         return this.appendGroup(group);
     },
 
     /**
      * Find or create the table body for the given category.
-     * 
+     *
      * @param {jQuery}
      *            $group - the parent group (thead).
      * @param {Object}
@@ -696,13 +696,13 @@ var Application = {
         if ($body.length !== 0) {
             return $body;
         }
-        
+
         return this.appendCategory($group, category);
     },
-    
+
     /**
      * Compare 2 strings with language sensitive.
-     * 
+     *
      * @param {string}
      *            string1 - the first string to compare.
      * @param {string}
@@ -713,7 +713,7 @@ var Application = {
      */
     compareStrings: function (string1, string2) {
         'use strict';
-        
+
         if ($.isUndefined(this.collator)) {
             const lang = $('html').attr('lang') || 'fr-CH';
             this.collator = new Intl.Collator(lang, {sensitivity: 'variant', caseFirst: 'upper'});
@@ -723,7 +723,7 @@ var Application = {
 
     /**
      * Sort items of a category.
-     * 
+     *
      * @param {jQuery}
      *            $element - the caller element (button or tbody) used to find
      *            the category.
@@ -744,37 +744,36 @@ var Application = {
         const identifiers = $rows.map(function() {
             return $(this).inputIndex();
         });
-        
+
         // sort
         $rows.sort(function (rowA, rowB) {
             const textA = $('td:first', rowA).text();
             const textB = $('td:first', rowB).text();
             return that.compareStrings(textA, textB);
         }).appendTo($tbody);
-        
+
         // update identifiers
         $rows.each(function(index) {
             const $row = $(this);
-            const oldId = $row.inputIndex(); 
+            const oldId = $row.inputIndex();
             const newId = identifiers[index];
             if (oldId !== newId) {
                 $rows.filter(function() {
                     return newId === $(this).inputIndex();
-                }).swapIdAndNames($row);                
+                }).swapIdAndNames($row);
             }
         });
-        
+
         // update UI
         return that.updateButtons().initDragDrop(true);
     },
 
     /**
      * Sort categories by name.
-     * 
+     *
      * @param {jQuery}
      *            $element - the caller element (button, row or thead) used to
      *            find the group and the categories.
-     * 
      * @return {Application} This instance for chaining.
      */
     sortCategories: function ($element) {
@@ -799,52 +798,52 @@ var Application = {
 
         return that;
     },
-    
+
     /**
      * Sort groups by name.
-     * 
+     *
      * @return {Application} This instance for chaining.
      */
     sortGroups: function () {
         'use strict';
-        
+
         const that = this;
         const $heads = $('#data-table-edit thead');
         if ($heads.length < 2) {
             return that;
         }
-        
+
         $heads.sort(function (a, b) {
             const textA = $('th:first', a).text();
             const textB = $('th:first', b).text();
             return that.compareStrings(textA, textB);
         });
-        
+
         return that;
     },
-    
+
     /**
      * Sort groups, categories and items.
-     * 
+     *
      * @return {Application} This instance for chaining.
      */
     sortCalculation: function () {
         'use strict';
 
         const that = this;
-        that.sortGroups($(this));       
+        that.sortGroups($(this));
         $('#data-table-edit thead').each(function () {
             that.sortCategories($(this));
-        });        
+        });
         $('#data-table-edit tbody').each(function () {
             that.sortItems($(this));
         });
         return that;
     },
-    
+
     /**
      * Appends the given group to the table.
-     * 
+     *
      * @param {Object}
      *            group - the group data used to update row.
      * @returns {jQuery} - the appended group.
@@ -863,7 +862,7 @@ var Application = {
                 return false;
             }
         });
-        
+
         // create group and update
         const $parent = $('#data-table-edit');
         const prototype = $parent.getPrototype(/__groupIndex__/g, 'groupIndex');
@@ -871,7 +870,7 @@ var Application = {
         $group.find('tr:first th:first').text(group.code);
         $group.findNamedInput('group').val(group.id);
         $group.findNamedInput('code').val(group.code);
-        
+
         // insert or append
         if ($nextGroup) {
             $group.insertBefore($nextGroup);
@@ -887,7 +886,7 @@ var Application = {
 
     /**
      * Appends the given category to the table.
-     * 
+     *
      * @param {jQuery}
      *            $group - the parent group (thead).
      * @param {Object}
@@ -908,14 +907,14 @@ var Application = {
                 return false;
             }
         });
-        
+
         // create category and update
         const prototype = $group.getPrototype(/__categoryIndex__/g, 'categoryIndex');
         const $category = $(prototype);
         $category.find('tr:first th:first').text(category.code);
         $category.findNamedInput('category').val(category.id);
         $category.findNamedInput('code').val(category.code);
-        
+
         // insert or append
         if ($nextCategory) {
             $category.insertBefore($nextCategory);
@@ -924,10 +923,10 @@ var Application = {
             if ($last.length) {
                 $last.after($category);
             } else {
-                $group.after($category);    
+                $group.after($category);
             }
-        }        
-        
+        }
+
         // reset the drag and drop handler.
         this.initDragDrop(true);
 
@@ -936,7 +935,7 @@ var Application = {
 
     /**
      * Display the add item dialog.
-     * 
+     *
      * @param {jQuery}
      *            $source - the caller element (normally a button).
      */
@@ -955,20 +954,19 @@ var Application = {
      */
     showAddTaskDialog: function () {
         'use strict';
-        
+
         // reset
         $('tr.table-success').removeClass('table-success');
-        
+
         // show dialog
         this.getTaskDialog().showAdd();
     },
 
-    
+
     /**
-     * Display the edit item dialog.
-     * 
-     * This function copy the element to the dialog and display it.
-     * 
+     * Display the edit item dialog. This function copy the element to the
+     * dialog and display it.
+     *
      * @param {jQuery}
      *            $source - the caller element (normally a button).
      */
@@ -984,7 +982,7 @@ var Application = {
 
     /**
      * Remove a calculation group.
-     * 
+     *
      * @param {jQuery}
      *            $element - the caller element (normally a button).
      * @return {Application} This instance for chaining.
@@ -998,14 +996,14 @@ var Application = {
         $elements.removeFadeOut(function () {
             that.updateAll();
         });
-        
+
         return that;
     },
 
     /**
      * Remove a calculation category. If the parent group is empty after
      * deletion, then group is also deleted.
-     * 
+     *
      * @param {jQuery}
      *            $element - the caller element (normally a button).
      * @return {Application} This instance for chaining.
@@ -1017,21 +1015,21 @@ var Application = {
         const $body = $element.closest('tbody');
         const $prev = $body.prev();
         const $next = $body.next();
-        
+
         // if it is the last category then remove the group
         if ($prev.is('thead') && ($next.length === 0 || $next.is('thead'))) {
             return that.removeGroup($prev);
         }
-        
+
         $body.removeFadeOut(function () {
             that.updateAll();
-        });    
+        });
         return that;
     },
-    
+
     /**
      * Remove a calculation item.
-     * 
+     *
      * @param {jQuery}
      *            $element - the caller element (button).
      * @return {Application} This instance for chaining.
@@ -1048,7 +1046,7 @@ var Application = {
         if ($body.children().length === 2) {
             return that.removeCategory($body);
         }
-        
+
         $row.removeFadeOut(function () {
             that.updateAll();
         });
@@ -1057,7 +1055,7 @@ var Application = {
 
     /**
      * Handle the item dialog form submit event when adding an item.
-     * 
+     *
      * @return {Application} This instance for chaining.
      */
     onAddItemDialogSubmit: function () {
@@ -1065,16 +1063,16 @@ var Application = {
 
         // hide dialog
         const dialog = this.getItemDialog().hide();
-        
+
         // get dialog values
         const group = dialog.getGroup();
         const category = dialog.getCategory();
         const item = dialog.getItem();
-        
+
         // get or create group and category
         const $group = this.getGroup(group);
         const $category = this.getCategory($group, category);
-        
+
         // append
         const $row = $category.appendRow(item);
         $row.scrollInViewport().timeoutToggle('table-success');
@@ -1082,10 +1080,10 @@ var Application = {
         // update
         return this.updateAll();
     },
-    
+
     /**
      * Handle the item dialog form submit event when editing an item.
-     * 
+     *
      * @return {Application} This instance for chaining.
      */
     onEditItemDialogSubmit: function () {
@@ -1093,7 +1091,7 @@ var Application = {
 
         // hide dialog
         const dialog = this.getItemDialog().hide();
-        
+
         // get dialog values
         const $editingRow = dialog.getEditingRow();
         if (!$editingRow) {
@@ -1102,113 +1100,113 @@ var Application = {
         const group = dialog.getGroup();
         const category = dialog.getCategory();
         const item = dialog.getItem();
-                
+
         // get old elements
         // const $oldCategoryRow = $editingRow.siblings(':first');
         // const $oldBody = $oldCategoryRow.parents('tbody');
         // const $oldGroupHead = $oldBody.prev('thead');
-        
+
         // // get old values
         // const oldCategoryId =
         // $oldCategoryRow.findNamedInput('category').intVal();
         // const oldGroupId = $oldGroupHead.findNamedInput('group').intVal();
         // const oldItem = $editingRow.getRowItem();
-        
+
         const $oldBody = $editingRow.parents('tbody');
         let $oldHead = $oldBody.prevUntil('thead').prev();
         if ($oldHead.length === 0) {
             $oldHead = $oldBody.prev();
-        } 
-        
+        }
+
         // get old values
         const oldGroupId = $oldHead.findNamedInput('group').intVal();
         const oldCategoryId = $oldBody.findNamedInput('category').intVal();
         const oldItem = $editingRow.getRowItem();
-        
+
         // change?
         if (oldGroupId === group.id && oldCategoryId === category.id && JSON.stringify(item) === JSON.stringify(oldItem)) {
             $editingRow.scrollInViewport().timeoutToggle('table-success');
             return;
-        }       
-        
+        }
+
         // same group and category?
         if (oldGroupId !== group.id || oldCategoryId !== category.id) {
             // get or create group and category
             const $group = this.getGroup(group);
             const $category = this.getCategory($group, category);
-            
+
             // append
             const $row = $category.appendRow(item);
-            
+
             // const $oldBody = $oldCategoryRow.parents('tbody');
             // const $next = $$oldGroupHead.nextUntil('thead');
             // const isEmptyCategory = $tbody.children('tr').length === 2;
             // const isEmptyGroup = isEmptyCategory && next.length === 1;
-            
+
             // check if empty
             const $next = $oldHead.nextUntil('thead');
             const isEmptyCategory = $oldBody.children().length === 2;
             const isEmptyGroup = isEmptyCategory && $next.length === 1;
-            
+
             $editingRow.remove();
             if (isEmptyGroup) {
-                this.removeGroup($oldHead);                
+                this.removeGroup($oldHead);
             } else if (isEmptyCategory) {
                 this.removeCategory($oldBody);
             } else {
                 this.updateAll();
-            }   
+            }
             $row.scrollInViewport().timeoutToggle('table-success');
         } else {
             // update
             $editingRow.updateRow(item).timeoutToggle('table-success');
             this.updateAll();
-        }        
+        }
         return this;
     },
 
     /**
      * Handle the task dialog form submit event when adding a task.
-     * 
+     *
      * @return {Application} This instance for chaining.
      */
     onAddTaskDialogSubmit: function () {
         'use strict';
-        
+
         // hide dialog
         const dialog = this.getTaskDialog().hide();
-        
+
         // get dialog values
         const group = dialog .getGroup();
         const category = dialog .getCategory();
         const items = dialog.getItems();
-        
+
         // get or create group and category
         const $group = this.getGroup(group);
         const $category = this.getCategory($group, category);
-        
+
         // append items and select
         items.forEach(function(item) {
             const $row = $category.appendRow(item);
             $row.scrollInViewport().timeoutToggle('table-success');
         });
-        
+
         this.$editingRow = null;
         return this.updateAll();
     },
-    
+
     /**
      * Handle the task dialog form submit event when editing a task.
-     * 
+     *
      * @return {Application} This instance for chaining.
      */
     onEditTaskDialogSubmit: function () {
         'use strict';
-        
+
         // hide dialog
         this.getTaskDialog().hide();
     },
-    
+
     /**
      * Handles the row drag start event.
      */
@@ -1219,7 +1217,7 @@ var Application = {
 
     /**
      * Handles the row drag stop event.
-     * 
+     *
      * @param {Event}
      *            e - the source event.
      */
@@ -1256,9 +1254,9 @@ var Application = {
                 that.removeCategory($oldBody);
             } else {
                 that.updateAll();
-            }   
+            }
             $newRow.timeoutToggle('table-success');
-            
+
         } else if (origin.index !== destination.index) {
             // -----------------------------
             // Moved to a new position
@@ -1280,10 +1278,9 @@ var Application = {
 $.fn.extend({
 
     /**
-     * Gets the index, for a row, of the first item input.
-     * 
-     * For example: calculation_groups_4_items_12_total will return 12.
-     * 
+     * Gets the index, for a row, of the first item input. For example:
+     * calculation_groups_4_items_12_total will return 12.
+     *
      * @returns {int} - the index, if found; -1 otherwise.
      */
     inputIndex() {
@@ -1293,13 +1290,12 @@ $.fn.extend({
         const value = Number.parseInt(values[values.length - 2], 10);
         return isNaN(value) ? - 1 : value;
     },
-    
+
     /**
      * Swap id and name input attributes.
-     * 
+     *
      * @param {jQuery}
      *            $target - the target row.
-     * 
      * @return {jQuery} - The jQuery source row.
      */
     swapIdAndNames: function ($target) {
@@ -1331,14 +1327,13 @@ $.fn.extend({
 
         return $source;
     },
-    
+
     /**
      * Finds an input element that have the name attribute within a given
      * substring.
-     * 
+     *
      * @param {string}
      *            name - the partial attribute name.
-     * 
      * @return {jQuery} - The input, if found; null otherwise.
      */
     findNamedInput: function (name) {
@@ -1351,7 +1346,7 @@ $.fn.extend({
 
     /**
      * Fade out and remove the selected element.
-     * 
+     *
      * @param {function}
      *            callback - the optional function to call after the element is
      *            removed.
@@ -1360,7 +1355,7 @@ $.fn.extend({
         'use strict';
 
         const $this = $(this);
-        const lastIndex = $this.length - 1; 
+        const lastIndex = $this.length - 1;
         $this.each(function(i, element) {
             $(element).fadeOut(400, function () {
                 $(this).remove();
@@ -1373,7 +1368,7 @@ $.fn.extend({
 
     /**
      * Gets the template prototype from the current element.
-     * 
+     *
      * @param {string}
      *            pattern - the regex pattern used to replace the index.
      * @param {string}
@@ -1399,7 +1394,7 @@ $.fn.extend({
 
     /**
      * Gets item values from the current row.
-     * 
+     *
      * @returns {Object} the item data.
      */
     getRowItem: function () {
@@ -1409,19 +1404,19 @@ $.fn.extend({
         const price = $row.findNamedInput('price').floatVal();
         const quantity = $row.findNamedInput('quantity').floatVal();
         const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
-        
+
         return {
             description: $row.findNamedInput('description').val(),
             unit: $row.findNamedInput('unit').val(),
             price: price,
-            quantity: quantity,                        
+            quantity: quantity,
             total: total
         };
     },
 
     /**
      * Create a new row and appends to this current parent category (tbody).
-     * 
+     *
      * @param {Object}
      *            item - the item values used to update the row
      * @returns {jQuery} - the created row.
@@ -1441,7 +1436,7 @@ $.fn.extend({
 
     /**
      * Copy the values of the item to the current row.
-     * 
+     *
      * @param {Object}
      *            item - the item to get values from.
      * @returns {jQuery} - The updated row.
@@ -1470,10 +1465,9 @@ $.fn.extend({
 
     /**
      * Initialize a type ahead search.
-     * 
+     *
      * @param {Object}
      *            options - the options to override.
-     * 
      * @return {Typeahead} The type ahead instance.
      */
     initSearch: function (options) {
@@ -1512,7 +1506,7 @@ $.fn.extend({
 
     /**
      * Gets the parent row.
-     * 
+     *
      * @returns {jQuery} - The parent row.
      */
     getParentRow: function () {
@@ -1523,12 +1517,12 @@ $.fn.extend({
 
     /**
      * Creates the context menu items.
-     * 
+     *
      * @returns {Object} the context menu items.
      */
     getContextMenuItems: function () {
         'use strict';
-        
+
         const $elements = $(this).getParentRow().find('.dropdown-menu').children();
         return (new MenuBuilder()).fill($elements).getItems();
     }

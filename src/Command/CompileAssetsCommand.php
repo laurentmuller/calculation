@@ -315,8 +315,6 @@ class CompileAssetsCommand extends AbstractAssetsCommand
      * Executes a command.
      *
      * @return array [success, output]
-     *
-     * @throws \ErrorException
      */
     private function executeCommand(string $command, string $input, bool $bypassShell = true): array
     {

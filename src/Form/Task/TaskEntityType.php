@@ -32,8 +32,8 @@ class TaskEntityType extends AbstractType
     {
         $resolver->setDefaults([
             'class' => Task::class,
-            'choice_label' => 'name',
             'placeholder' => false,
+            'choice_label' => 'name',
             'query_builder' => function (TaskRepository $r) {
                 return $r->getSortedBuilder(false);
             },

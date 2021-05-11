@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\AbstractEntity;
 use App\Util\Utils;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Laurent Muller
  *
- * @template T of \App\Entity\AbstractEntity
+ * @template T of AbstractEntity
  */
 abstract class AbstractEntityType extends AbstractHelperType
 {
@@ -36,9 +37,15 @@ abstract class AbstractEntityType extends AbstractHelperType
      *
      * @param string $className the entity class name
      * @psalm-param class-string<T> $className
+     *
+     * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractEntity class
      */
     protected function __construct(string $className)
     {
+        if (!\is_subclass_of($className, AbstractEntity::class)) {
+            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', AbstractEntity::class, $className));
+        }
+
         $this->className = $className;
     }
 

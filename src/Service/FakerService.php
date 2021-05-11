@@ -26,7 +26,7 @@ use Faker\Generator;
  *
  * @author Laurent Muller
  *
- * @see https://github.com/fzaninotto/Faker
+ * @see https://fakerphp.github.io/
  */
 class FakerService
 {

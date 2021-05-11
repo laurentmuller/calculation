@@ -956,7 +956,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
     protected function cleanText(?string $str): ?string
     {
         try {
-            if ($str && \mb_detect_encoding($str, 'UTF-8', true)) {
+            if (null !== $str && false !== \mb_detect_encoding($str, 'UTF-8', true)) {
                 $result = \iconv('UTF-8', 'windows-1252', $str);
                 if (false !== $result) {
                     return $result;

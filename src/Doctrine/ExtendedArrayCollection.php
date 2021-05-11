@@ -81,6 +81,11 @@ class ExtendedArrayCollection extends ArrayCollection implements ExtendedCollect
      * {@inheritdoc}
      *
      * @psalm-return \ArrayIterator<TKey,T>
+     *
+     * @throws \Symfony\Component\PropertyAccess\Exception\InvalidArgumentException If the property path is invalid
+     * @throws \Symfony\Component\PropertyAccess\Exception\AccessException          If a property/index does not exist or is not public
+     * @throws \Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException  If a value within the path is neither object
+     *                                                                              nor array
      */
     public function getSortedIterator($field): \ArrayIterator
     {

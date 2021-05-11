@@ -216,7 +216,7 @@ class ImportProductController extends AbstractController
         $repository = $manager->getRepository(Category::class);
 
         /** @var \App\Entity\Category $category */
-        foreach ($repository->findAllByCode() as $category) {
+        foreach ($repository->findAll() as $category) {
             $categories[$category->getCode()] = $category;
         }
 

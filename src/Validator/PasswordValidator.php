@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use App\Traits\MathTrait;
 use App\Util\FormatUtils;
+use App\Util\Utils;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
@@ -27,19 +27,6 @@ use ZxcvbnPhp\Zxcvbn;
  */
 class PasswordValidator extends AbstractConstraintValidator
 {
-    use MathTrait;
-
-    /**
-     * The strength levels.
-     */
-    public const LEVEL_TO_LABEL = [
-        0 => 'very_weak',
-        1 => 'weak',
-        2 => 'medium',
-        3 => 'strong',
-        4 => 'very_strong',
-    ];
-
     private TranslatorInterface $translator;
 
     /**
@@ -89,7 +76,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function addViolation(string $message, string $value, array $parameters = []): bool
     {
-        $this->context->buildViolation("password.{$message}")
+        $this->context->buildViolation($message)
             ->setParameters($parameters)
             ->setInvalidValue($value)
             ->addViolation();
@@ -108,7 +95,7 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkCaseDiff(Password $constraint, string $value): bool
     {
         if ($constraint->casediff && !\preg_match('/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u', $value)) {
-            return $this->addViolation('casediff', $value);
+            return $this->addViolation($constraint->casediffMessage, $value);
         }
 
         return false;
@@ -125,7 +112,7 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkEmail(Password $constraint, string $value): bool
     {
         if ($constraint->email && false !== \filter_var($value, \FILTER_VALIDATE_EMAIL)) {
-            return $this->addViolation('email', $value);
+            return $this->addViolation($constraint->emailMessage, $value);
         }
 
         return false;
@@ -142,7 +129,7 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkLetters(Password $constraint, string $value): bool
     {
         if ($constraint->letters && !\preg_match('/\pL/u', $value)) {
-            return $this->addViolation('letters', $value);
+            return $this->addViolation($constraint->lettersMessage, $value);
         }
 
         return false;
@@ -159,7 +146,7 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkNumber(Password $constraint, string $value): bool
     {
         if ($constraint->numbers && !\preg_match('/\pN/u', $value)) {
-            return $this->addViolation('numbers', $value);
+            return $this->addViolation($constraint->numbersMessage, $value);
         }
 
         return false;
@@ -180,7 +167,7 @@ class PasswordValidator extends AbstractConstraintValidator
                 '{{count}}' => FormatUtils::formatInt($count),
             ];
 
-            return $this->addViolation('pwned', $value, $parameters);
+            return $this->addViolation($constraint->pwnedMessage, $value, $parameters);
         }
 
         return false;
@@ -197,7 +184,7 @@ class PasswordValidator extends AbstractConstraintValidator
     private function checkSpecialChar(Password $constraint, string $value): bool
     {
         if ($constraint->specialchar && !\preg_match('/[^p{Ll}\p{Lu}\pL\pN]/u', $value)) {
-            return $this->addViolation('specialchar', $value);
+            return $this->addViolation($constraint->specialcharMessage, $value);
         }
 
         return false;
@@ -218,14 +205,14 @@ class PasswordValidator extends AbstractConstraintValidator
             $strength = $zx->passwordStrength($value);
             $score = $strength['score'];
             if ($score < $constraint->minstrength) {
-                $strength_min = $this->translateLevel($constraint->minstrength);
-                $strength_current = $this->translateLevel($score);
+                $strength_min = Utils::translateLevel($this->translator, $constraint->minstrength);
+                $strength_current = Utils::translateLevel($this->translator, $score);
                 $parameters = [
                     '{{strength_min}}' => $strength_min,
                     '{{strength_current}}' => $strength_current,
                 ];
 
-                return $this->addViolation('minstrength', $value, $parameters);
+                return $this->addViolation($constraint->minstrengthMessage, $value, $parameters);
             }
         }
 
@@ -261,20 +248,5 @@ class PasswordValidator extends AbstractConstraintValidator
         }
 
         return 0;
-    }
-
-    /**
-     * Translate the level.
-     *
-     * @param int $level the level (0 - 4)
-     *
-     * @return string the translated level
-     */
-    private function translateLevel(int $level): string
-    {
-        $level = $this->validateIntRange($level, 0, 4);
-        $id = 'password.strength_level.' . self::LEVEL_TO_LABEL[$level];
-
-        return $this->translator->trans($id, []);
     }
 }

@@ -16,7 +16,7 @@
          */
         initCaptcha() {
             return this.each(function () {
-                const $that = $(this); 
+                const $that = $(this);
                 const url = $that.data('refresh');
                 $('#refresh_captcha').on('click', function () {
                     $.get(url, function (response) {
@@ -28,7 +28,7 @@
                 });
             });
         },
-        
+
         /**
          * Gets password strength score or -1 if not found.
          */
@@ -40,7 +40,7 @@
             }
             return -1;
         },
-        
+
         /**
          * Finds the reCaptcha frame within the current element.
          */
@@ -60,7 +60,7 @@
 
         /**
          * Initialize default validator options.
-         * 
+         *
          * @returns the validator.
          */
         initValidator: function(options) {
@@ -72,19 +72,19 @@
             const colorpicker = options.colorpicker;
             const tinymceeditor = options.tinymceeditor;
             const simpleeditor = options.simpleeditor;
-            
+
             // override elementValue function
             if (tinymceeditor || simpleeditor) {
                 $.validator.prototype.elementValue = (function(parent) {
                     return function(element) {
                         if (tinymceeditor && $(element).findTinymceEditor()) {
-                            return $(element).getTinymceEditorContent();    
-                        } 
+                            return $(element).getTinymceEditorContent();
+                        }
                         if (simpleeditor && $(element).findSimpleEditor()) {
                             return $(element).getSimpleEditorContent();
                         }
                         return parent.apply(this, arguments);
-                    };          
+                    };
                 }($.validator.prototype.elementValue));
             }
 
@@ -101,14 +101,14 @@
                                 return;
                             }
                         }
-                        
+
                         // simpleeditor
                         if (simpleeditor) {
                             if ($elements.focusSimpleEditor()) {
                                 return;
                             }
                         }
-                        
+
                         // reCaptcha
                         if (recaptcha) {
                             const $recaptcha = $elements.findReCaptcha();
@@ -143,7 +143,7 @@
 
             /**
              * Finds the container of the given element.
-             * 
+             *
              * @param {jQuery}
              *            $element - the element to update.
              */
@@ -151,10 +151,10 @@
                 let $toUpdate = null;
                 if (tinymceeditor && !$toUpdate) {
                     $toUpdate = $element.findTinymceEditor();
-                }  
+                }
                 if (simpleeditor && !$toUpdate) {
                     $toUpdate = $element.findSimpleEditor();
-                }  
+                }
                 if (recaptcha && !$toUpdate) {
                     $toUpdate = $element.findReCaptcha();
                 }
@@ -166,7 +166,7 @@
                 }
                 return $toUpdate;
             };
-            
+
             // default options
             let defaults = {
                 focus: true,
@@ -183,9 +183,9 @@
                             $parent = $(element).closest('.form-group');
                         }
                     }
-                    error.addClass('invalid-feedback').appendTo($parent);    
+                    error.addClass('invalid-feedback').appendTo($parent);
                 },
-                
+
                 highlight: function(element, errorClass) {
                     const $element = $(element);
                     const $toUpdate = this.findElement($element);
@@ -270,14 +270,14 @@
             }
             return this;
         },
-        
+
         /**
          * Intitialize an input type color within the color-picker plugin.
-         * 
+         *
          * @param {Object}
          *            options - the options
          */
-        initColorPicker: function(options) {            
+        initColorPicker: function(options) {
             return this.each(function() {
                 const $that = $(this);
                 $that.colorpicker(options);
@@ -341,7 +341,7 @@
             });
         }
         const target = $target.val().trim();
-        return target.length === 0 || value.indexOfIgnoreCase(target) === -1;    
+        return target.length === 0 || value.indexOfIgnoreCase(target) === -1;
     }, 'The field can not contain the user name.');
 
     /*
@@ -421,14 +421,14 @@
     $.validator.addMethod('greaterThanValue', function(value, element, param) {
         return this.optional(element) || value > param;
     }, 'The field must contain a greater value.');
-    
+
     /*
      * check if contains a greater than or equal value
      */
     $.validator.addMethod( "greaterThanEqualValue", function( value, element, param ) {
         return this.optional(element) || value >= param;
     }, "The field must contain a greater than or equal value." );
-    
+
     /*
      * check if contains a lesser value
      */
@@ -458,7 +458,7 @@
             return parent.call(this, value, element);
         };
     }($.validator.methods.url));
-    
+
     /*
      * replace email with a simple <string>@<string>.<string> value
      */

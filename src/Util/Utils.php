@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Util;
 
 use App\Interfaces\RoleInterface;
+use App\Interfaces\StrengthInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -104,6 +105,10 @@ final class Utils
      *             1 if the second value is greater than the first value and
      *             0 if both values are equal.
      *             If $ascending if false, the result is inversed.
+     *
+     * @throws \Symfony\Component\PropertyAccess\Exception\InvalidArgumentException If the property path is invalid
+     * @throws \Symfony\Component\PropertyAccess\Exception\AccessException          If a property/index does not exist or is not public
+     * @throws \Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException  If a value within the path is neither object
      */
     public static function compare($a, $b, string $field, PropertyAccessorInterface $accessor, bool $ascending = true): int
     {
@@ -428,6 +433,26 @@ final class Utils
     public static function toString($var): string
     {
         return \is_string($var) ? $var : (string) $var;
+    }
+
+    /**
+     * Translate a password strength level.
+     *
+     * @param TranslatorInterface $translator the translator
+     * @param int                 $level      the strength level (-1 to 4) to translate
+     *
+     * @return string the translated level
+     */
+    public static function translateLevel(TranslatorInterface $translator, int $level): string
+    {
+        if ($level <= StrengthInterface::LEVEL_NONE) {
+            $level = StrengthInterface::LEVEL_NONE;
+        } elseif ($level >= StrengthInterface::LEVEL_MAX) {
+            $level = StrengthInterface::LEVEL_MAX;
+        }
+        $id = StrengthInterface::LEVEL_TO_LABEL[$level];
+
+        return $translator->trans($id);
     }
 
     /**

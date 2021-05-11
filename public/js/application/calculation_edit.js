@@ -235,7 +235,7 @@ var Application = {
     },
 
     /**
-     * Initialize the drag and drop.
+     * Initialize the sortable drag and drop.
      *
      * @param {boolean}
      *            destroy - true to destroy the existing sortable.
@@ -254,7 +254,7 @@ var Application = {
                 $bodies.off('sortstart', that.dragStartProxy).off('sortupdate', that.dragStopProxy);
             }
 
-            // destroy
+            // destroy sortable
             sortable(selector, 'disable');
             sortable(selector, 'destroy');
         }
@@ -265,11 +265,11 @@ var Application = {
             that.dragStopProxy = $.proxy(that.onDragStop, that);
         }
 
-        // create
+        // create sortable
         sortable(selector, {
-            items: 'tr:not(.drag-skip)',
             placeholderClass: 'table-primary',
             forcePlaceholderSize: false,
+            items: 'tr:not(.drag-skip)',
             acceptFrom: 'tbody'
         });
 

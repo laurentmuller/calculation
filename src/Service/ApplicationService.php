@@ -19,11 +19,11 @@ use App\Entity\Property;
 use App\Entity\Role;
 use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
+use App\Interfaces\StrengthInterface;
 use App\Repository\PropertyRepository;
 use App\Security\EntityVoter;
 use App\Traits\LoggerTrait;
 use App\Util\Utils;
-use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\AppVariable;
@@ -266,7 +266,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function getMinStrength(): int
     {
-        return $this->getPropertyInteger(self::P_MIN_STRENGTH, Strength::LEVEL_DISABLE);
+        return $this->getPropertyInteger(self::P_MIN_STRENGTH, StrengthInterface::LEVEL_NONE);
     }
 
     /**

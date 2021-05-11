@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
+use App\Interfaces\StrengthInterface;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -25,27 +26,12 @@ use Symfony\Component\Validator\Constraint;
 class Strength extends Constraint
 {
     /**
-     * The disable level.
-     */
-    public const LEVEL_DISABLE = -1;
-
-    /**
-     * The maximum level.
-     */
-    public const LEVEL_MAX = 4;
-
-    /**
-     * The minimum level.
-     */
-    public const LEVEL_MIN = 0;
-
-    /**
      * The password strength (Value from 0 to 4 or -1 to disable).
      */
-    public int $minStrength = self::LEVEL_DISABLE;
+    public int $minstrength = StrengthInterface::LEVEL_NONE;
 
     /**
      * The password strength error message.
      */
-    public string $minStrengthMessage = 'The password is to weak.';
+    public string $minstrengthMessage = 'password.minstrength';
 }

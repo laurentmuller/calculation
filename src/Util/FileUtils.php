@@ -97,12 +97,7 @@ class FileUtils
             $file = $file->getRealPath();
         }
 
-        try {
-            return self::getFilesystem()->exists((string) $file);
-        } catch (IOException $e) {
-        }
-
-        return false;
+        return self::getFilesystem()->exists((string) $file);
     }
 
     /**
@@ -189,10 +184,6 @@ class FileUtils
      */
     public static function tempfile(string $prefix = 'tmp'): ?string
     {
-        try {
-            return self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
-        } catch (IOException $e) {
-            return null;
-        }
+        return self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
     }
 }

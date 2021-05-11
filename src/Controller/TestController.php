@@ -20,6 +20,7 @@ use App\Form\Type\ImportanceType;
 use App\Form\Type\MinStrengthType;
 use App\Form\Type\SimpleEditorType;
 use App\Form\Type\TinyMceEditorType;
+use App\Interfaces\StrengthInterface;
 use App\Mime\NotificationEmail;
 use App\Pdf\PdfResponse;
 use App\Pdf\PdfTocDocument;
@@ -85,12 +86,12 @@ class TestController extends AbstractController
     public function html(): PdfResponse
     {
         // get content
-        $ontent = $this->renderView('test/html_report.html.twig');
+        $content = $this->renderView('test/html_report.html.twig');
 
         // create report
         $report = new HtmlReport($this);
         $report->setDebug(false)
-            ->setContent($ontent)
+            ->setContent($content)
             ->SetTitle($this->trans('test.html'), true);
 
         // render
@@ -133,12 +134,12 @@ class TestController extends AbstractController
             foreach ($options as $option) {
                 $constraint->{$option} = (bool) ($data[$option] ?? false);
             }
-            $constraint->minstrength = (int) ($data['minstrength'] ?? -1);
+            $constraint->minstrength = (int) ($data['minstrength'] ?? StrengthInterface::LEVEL_NONE);
         };
 
         // default values
         $data = [
-            'input' => '123456',
+            'input' => 'aB123456#*/82568A',
             'minstrength' => 2,
         ];
         foreach ($options as $option) {
@@ -178,7 +179,29 @@ class TestController extends AbstractController
 
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            return $this->succes($this->trans('password.success'))
+            $data = $form->getData();
+            $message = $this->trans('password.success');
+            $message .= '<ul>';
+
+            // options
+            foreach ($options as $option) {
+                if ($data[$option]) {
+                    $message .= '<li>' . $this->trans("password.{$option}") . '</li>';
+                }
+            }
+
+            // minimum strength
+            if (StrengthInterface::LEVEL_NONE !== $data['minstrength']) {
+                $message .= '<li>';
+                $message .= $this->trans('password.minstrength');
+                $message .= ' : ';
+                $message .= Utils::translateLevel($this->translator, $data['minstrength']);
+                $message .= '</li>';
+            }
+
+            $message .= '</ul>';
+
+            return $this->succes($message)
                 ->redirectToHomePage();
         }
 

@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
+use App\Interfaces\StrengthInterface;
 use App\Traits\MathTrait;
+use App\Util\Utils;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
@@ -27,17 +29,6 @@ use ZxcvbnPhp\Zxcvbn;
 class StrengthValidator extends AbstractConstraintValidator
 {
     use MathTrait;
-
-    /**
-     * The strength levels.
-     */
-    private const LEVEL_TO_LABEL = [
-        0 => 'very_weak',
-        1 => 'weak',
-        2 => 'medium',
-        3 => 'strong',
-        4 => 'very_strong',
-    ];
 
     private TranslatorInterface $translator;
 
@@ -57,41 +48,23 @@ class StrengthValidator extends AbstractConstraintValidator
      */
     protected function doValidate($value, Constraint $constraint): void
     {
-        $minStrength = $this->validateIntRange($constraint->minStrength, Strength::LEVEL_DISABLE, Strength::LEVEL_MAX);
-        if (Strength::LEVEL_DISABLE === $minStrength) {
-            return;
-        }
-
-        $zx = new Zxcvbn();
-        $strength = $zx->passwordStrength($value);
-        $score = $strength['score'];
-        if ($score < $minStrength) {
-            $strength_min = $this->translateLevel($minStrength);
-            $strength_current = $this->translateLevel($score);
-            $parameters = [
+        if ($constraint->minstrength >= StrengthInterface::LEVEL_MIN) {
+            $zx = new Zxcvbn();
+            $strength = $zx->passwordStrength($value);
+            $score = $strength['score'];
+            if ($score < $constraint->minstrength) {
+                $strength_min = Utils::translateLevel($this->translator, $constraint->minstrength);
+                $strength_current = Utils::translateLevel($this->translator, $score);
+                $parameters = [
                     '{{strength_min}}' => $strength_min,
                     '{{strength_current}}' => $strength_current,
                 ];
 
-            $this->context->buildViolation('password.minStrength')
-                ->setParameters($parameters)
-                ->setInvalidValue($value)
-                ->addViolation();
+                $this->context->buildViolation($constraint->minstrengthMessage)
+                    ->setParameters($parameters)
+                    ->setInvalidValue($value)
+                    ->addViolation();
+            }
         }
-    }
-
-    /**
-     * Translate the level.
-     *
-     * @param int $level the level (0 - 4)
-     *
-     * @return string the translated level
-     */
-    private function translateLevel(int $level): string
-    {
-        $level = $this->validateIntRange($level, Strength::LEVEL_MIN, Strength::LEVEL_MAX);
-        $id = 'password.strength_level.' . self::LEVEL_TO_LABEL[$level];
-
-        return $this->translator->trans($id);
     }
 }

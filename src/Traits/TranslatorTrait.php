@@ -59,8 +59,6 @@ trait TranslatorTrait
      * @param string|null $locale     the locale or null to use the default
      *
      * @return string the translated string
-     *
-     * @throws \InvalidArgumentException If the locale contains invalid characters
      */
     public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {

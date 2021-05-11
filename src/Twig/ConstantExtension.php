@@ -80,11 +80,12 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
         $reflection = new \ReflectionClass($className);
 
         /** @var \ReflectionClassConstant[] $constants */
-        $constants = $reflection->getReflectionConstants();
+        $constants = \array_filter($reflection->getReflectionConstants(), static function (\ReflectionClassConstant $constant) {
+            return $constant->isPublic();
+        });
+
         foreach ($constants as $constant) {
-            if ($constant->isPublic()) {
-                $values[$constant->getName()] = $constant->getValue();
-            }
+            $values[$constant->getName()] = $constant->getValue();
         }
     }
 }

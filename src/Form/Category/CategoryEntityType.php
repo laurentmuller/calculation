@@ -31,12 +31,12 @@ class CategoryEntityType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'class' => Category::class,
             'placeholder' => false,
             'choice_label' => 'code',
             'group_by' => 'groupCode',
-            'class' => Category::class,
             'query_builder' => function (CategoryRepository $repository) {
-                return $repository->getParentCodeSortedBuilder();
+                return $repository->getQueryBuilderByGroup();
             },
             'choice_attr' => function (Category $category) {
                 return [

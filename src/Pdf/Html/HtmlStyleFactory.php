@@ -54,7 +54,7 @@ final class HtmlStyleFactory
                 return self::doCreate(false, PdfFont::DEFAULT_SIZE, 2);
             case 'ul':
             case 'ol':
-                return self::doCreate(false, PdfFont::DEFAULT_SIZE, 2, 8);
+                return self::doCreate(false, PdfFont::DEFAULT_SIZE, 2, 4);
             case 'li':
                 return self::default();
             case 'b':

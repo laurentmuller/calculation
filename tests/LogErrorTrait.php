@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -21,6 +22,9 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 trait LogErrorTrait
 {
+    /**
+     * @throws IOException
+     */
     private function getLogDir(): string
     {
         $basedir = $this->client->getKernel()->getLogDir();
@@ -29,9 +33,6 @@ trait LogErrorTrait
         if (!$fs->exists($logDir)) {
             $fs->mkdir($logDir);
         }
-//         if (!\is_dir($logDir)) {
-//             \mkdir($logDir, 0777, true);
-//         }
 
         return $logDir;
     }

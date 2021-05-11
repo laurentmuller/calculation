@@ -134,8 +134,6 @@ class Column
      * @param string        $path   the path to the JSON file definitions
      *
      * @return Column[] the column definitions
-     *
-     * @throws \InvalidArgumentException if the definitions can not be parsed
      */
     public static function fromJson(AbstractTable $parent, string $path): array
     {

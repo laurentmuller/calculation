@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
+use App\Interfaces\StrengthInterface;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -37,7 +38,7 @@ class Password extends Constraint
     /**
      * Case diff error message.
      */
-    public string $casediffMessage = 'The password must be both upper and lower case.';
+    public string $casediffMessage = 'password.casediff';
 
     /**
      * Checks if the password is an e-mail.
@@ -47,7 +48,7 @@ class Password extends Constraint
     /**
      * Email error message.
      */
-    public string $emailMessage = 'The password cannot be an email address.';
+    public string $emailMessage = 'password.email';
 
     /**
      * Checks if the password contains letters.
@@ -57,17 +58,17 @@ class Password extends Constraint
     /**
      * Letters error message.
      */
-    public string $lettersMessage = 'The password must contain at least one letter.';
+    public string $lettersMessage = 'password.letters';
 
     /**
-     * Checks the password strength (Value from 0 to 4 or -1 to disable).
+     * Checks the password strength (value from 0 to 4 or -1 to disable).
      */
-    public int $minstrength = -1;
+    public int $minstrength = StrengthInterface::LEVEL_NONE;
 
     /**
-     * Minimim strength error message.
+     * Strength error message.
      */
-    public string $minstrengthMessage = 'The password is to weak.';
+    public string $minstrengthMessage = 'password.minstrength';
 
     /**
      * Checks if the password contains numbers.
@@ -77,7 +78,7 @@ class Password extends Constraint
     /**
      * Numbers error message.
      */
-    public string $numbersMessage = 'The password must include at least one digit.';
+    public string $numbersMessage = 'password.numbers';
 
     /**
      * Checks if the password is compromised.
@@ -87,7 +88,7 @@ class Password extends Constraint
     /**
      *  Pawword comprise error message.
      */
-    public string $pwnedMessage = 'The password was found in a compromised password database.';
+    public string $pwnedMessage = 'password.pwned';
 
     /**
      * Checks if the password contains special characters.
@@ -97,5 +98,5 @@ class Password extends Constraint
     /**
      * Special char error message.
      */
-    public string $specialcharMessage = 'The password must contain at least one special character.';
+    public string $specialcharMessage = 'password.specialchar';
 }

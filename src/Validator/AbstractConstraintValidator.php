@@ -29,19 +29,25 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
     /**
      * The constraint class.
      *
-     * @psalm-var class-string<T> $class
+     * @psalm-var class-string<T> $className
      */
-    protected string $class;
+    protected string $className;
 
     /**
      * Constructor.
      *
-     * @param string $class the constraint class
-     * @psalm-param class-string<T> $class
+     * @param string $className the constraint class
+     * @psalm-param class-string<T> $className
+     *
+     * @throws \InvalidArgumentException if the given class name is not a subclass of the Constraint class
      */
-    public function __construct(string $class)
+    public function __construct(string $className)
     {
-        $this->class = $class;
+        if (!\is_subclass_of($className, Constraint::class)) {
+            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', Constraint::class, $className));
+        }
+
+        $this->className = $className;
     }
 
     /**
@@ -51,8 +57,8 @@ abstract class AbstractConstraintValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint): void
     {
-        if (!\is_a($constraint, $this->class)) {
-            throw new UnexpectedTypeException($constraint, $this->class);
+        if (!\is_a($constraint, $this->className)) {
+            throw new UnexpectedTypeException($constraint, $this->className);
         }
 
         if ($this->isAllowEmpty() && (null === $value || '' === $value)) {

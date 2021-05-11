@@ -32,8 +32,8 @@ class GroupEntityType extends AbstractType
     {
         $resolver->setDefaults([
             'class' => Group::class,
-            'choice_label' => 'code',
             'placeholder' => false,
+            'choice_label' => 'code',
             'query_builder' => function (GroupRepository $r) {
                 return $r->getSortedBuilder();
             },

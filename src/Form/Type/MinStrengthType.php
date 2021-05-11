@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Form\AbstractChoiceType;
+use App\Interfaces\StrengthInterface;
 
 /**
  * A form type to select a minimum password strength.
@@ -26,12 +27,6 @@ class MinStrengthType extends AbstractChoiceType
      */
     protected function getChoices(): array
     {
-        return [
-            'password.strength_level.none' => -1,
-            'password.strength_level.very_weak' => 0,
-            'password.strength_level.weak' => 1,
-            'password.strength_level.medium' => 2,
-            'password.strength_level.very_strong' => 3,
-        ];
+        return \array_flip(StrengthInterface::LEVEL_TO_LABEL);
     }
 }

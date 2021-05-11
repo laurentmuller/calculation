@@ -280,9 +280,14 @@ class PivotTableFactory
      *
      * @template T of AbstractAggregator
      * @psalm-param class-string<T> $aggregatorClass
+     *
+     * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractAggregator class
      */
     public function setAggregatorClass(string $aggregatorClass): self
     {
+        if (!\is_subclass_of($aggregatorClass, AbstractAggregator::class)) {
+            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', AbstractAggregator::class, $aggregatorClass));
+        }
         $this->aggregatorClass = $aggregatorClass;
 
         return $this;

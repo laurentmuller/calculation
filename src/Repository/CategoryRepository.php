@@ -57,27 +57,6 @@ class CategoryRepository extends AbstractRepository
     }
 
     /**
-     * Gets all categories order by code.
-     *
-     * @return Category[]
-     */
-    public function findAllByCode(): array
-    {
-        return $this->findBy([], ['code' => Criteria::ASC]);
-    }
-
-    /**
-     * Gets all categories order by the parent's group code and then by the code.
-     *
-     * @return Category[]
-     */
-    public function findAllParentCode(): array
-    {
-        return $this->getParentCodeSortedBuilder()
-            ->getQuery()->getResult();
-    }
-
-    /**
      * Gets categories with the number of tasks.
      *
      * <b>Note:</b> Only categories with at least one task are returned.
@@ -96,22 +75,6 @@ class CategoryRepository extends AbstractRepository
             ->orderBy('c.code', Criteria::ASC);
 
         return $builder->getQuery()->getArrayResult();
-    }
-
-    /**
-     * Gets the query builder for the list of categories sorted by the parent's group code and then by the code.
-     *
-     * @param string $alias the default entity alias
-     */
-    public function getParentCodeSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
-    {
-        $field = $this->getSortField('code', $alias);
-
-        return $this->createQueryBuilder($alias)
-            ->select($alias)
-            ->innerJoin("$alias.group", 'g')
-            ->orderBy('g.code')
-            ->addOrderBy($field);
     }
 
     /**
@@ -136,6 +99,21 @@ class CategoryRepository extends AbstractRepository
     }
 
     /**
+     * Gets the query builder for the list of categories sorted by the parent's group code and then by the code.
+     *
+     * @param string $alias the default entity alias
+     */
+    public function getQueryBuilderByGroup(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        $field = $this->getSortField('code', $alias);
+
+        return $this->createQueryBuilder($alias)
+            ->innerJoin("$alias.group", 'g')
+            ->orderBy('g.code')
+            ->addOrderBy($field);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS)
@@ -150,18 +128,18 @@ class CategoryRepository extends AbstractRepository
         }
     }
 
-    /**
-     * Gets the query builder for the list of categories sorted by code.
-     *
-     * @param string $alias the default entity alias
-     */
-    public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
-    {
-        $field = $this->getSortField('code', $alias);
+//     /**
+//      * Gets the query builder for the list of categories sorted by code.
+//      *
+//      * @param string $alias the default entity alias
+//      */
+//     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+//     {
+//         $field = $this->getSortField('code', $alias);
 
-        return $this->createQueryBuilder($alias)
-            ->orderBy($field, Criteria::ASC);
-    }
+//         return $this->createQueryBuilder($alias)
+//             ->orderBy($field, Criteria::ASC);
+//     }
 
     /**
      * {@inheritdoc}

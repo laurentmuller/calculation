@@ -845,7 +845,7 @@ password:
         strong: Forte
         very_strong: Très forte
     input: Mot de passe
-    success: Le mot de passe est valide.
+    success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
 import:
     title: Importer les localités et les noms de rue
     file: Fichier

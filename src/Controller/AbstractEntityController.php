@@ -53,9 +53,15 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @param string $className the entity class name
      * @psalm-param class-string<T> $className
+     *
+     * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractEntity class
      */
     public function __construct(string $className)
     {
+        if (!\is_subclass_of($className, AbstractEntity::class)) {
+            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', AbstractEntity::class, $className));
+        }
+
         $this->className = $className;
         $this->lowerName = \strtolower(Utils::getShortName($className));
     }

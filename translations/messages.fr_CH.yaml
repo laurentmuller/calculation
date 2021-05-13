@@ -1154,15 +1154,15 @@ simple-editor:
     strikethrough: Barré
     superscript: Exposant
     subscript: Indice
-    justifyLeft: Aligner à gauche
-    justifyCenter: Centrer
-    justifyRight: Aligner à droite
-    justifyFull: Justifier
+    justify_left: Aligner à gauche
+    justify_center: Centrer
+    justify_right: Aligner à droite
+    justify_full: Justifier
     indent: Augmenter le retrait
     outdent: Diminuer le retrait
-    olist: Liste numérotée
-    ulist: Liste à puces
-    removeFormat: Effacer la mise en forme
+    ordered_list: Liste numérotée
+    unordered_list: Liste à puces
+    remove_format: Supprimer le format
     line: Ligne horizontale
     undo: Annuler la dernière action
     redo: Rétablir la dernière action

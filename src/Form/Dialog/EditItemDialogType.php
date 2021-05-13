@@ -36,11 +36,11 @@ class EditItemDialogType extends AbstractHelperType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('description')
+            ->notMapped()
             ->addTextType();
 
         $helper->field('unit')
             ->notRequired()
-            ->maxLength(15)
             ->addTextType();
 
         $helper->field('category')

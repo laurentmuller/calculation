@@ -32,7 +32,7 @@
 {% macro printTaskItem(item) %}
 {%- set id = item.vars.value.id|default(0) -%}
 {%- set count = item.vars.value.count|default(0) -%}
-<div class="item">
+<div class="item ml-3">
     {#{ form_row(item.name) }#}
     <div class="form-group">
         <div class="row">

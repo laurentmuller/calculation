@@ -235,28 +235,28 @@ var Application = {
     },
 
     /**
-     * Initialize the drag and drop.
+     * Initialize the sortable drag and drop.
      *
      * @param {boolean}
-     *            destroy - true to destroy the existing sortable (if any).
+     *            destroy - true to destroy the existing sortable.
      * @return {Application} This instance for chaining.
      */
     initDragDrop: function (destroy) {
         'use strict';
 
         const that = this;
+        const selector = '#data-table-edit tbody';
+        const $bodies = $(selector);
 
         if (destroy) {
-            const $existing = $('#data-table-edit tbody.sortable');
-
             // remove handlers
             if (that.dragStartProxy) {
-                $existing.off('sortstart', that.dragStartProxy)
-                    .off('sortupdate', that.dragStopProxy);
+                $bodies.off('sortstart', that.dragStartProxy).off('sortupdate', that.dragStopProxy);
             }
 
-            // destroy
-            sortable($existing, 'destroy');
+            // destroy sortable
+            sortable(selector, 'disable');
+            sortable(selector, 'destroy');
         }
 
         // create handlers
@@ -266,19 +266,18 @@ var Application = {
         }
 
         // create sortable
-        const $bodies = $('#data-table-edit tbody');
-        sortable($bodies, {
+        sortable(selector, {
             placeholderClass: 'table-primary',
             forcePlaceholderSize: false,
             items: 'tr:not(.drag-skip)',
             acceptFrom: 'tbody'
         });
 
-        // update bodies
-        $bodies.addClass('sortable')
-            .on('sortstart', that.dragStartProxy)
-            .on('sortupdate', that.dragStopProxy)
-            .find('tr').removeAttr('role');
+        // add handlers
+        $bodies.on('sortstart', that.dragStartProxy).on('sortupdate', that.dragStopProxy);
+
+        // remove role attribute
+        $bodies.find('tr').removeAttr('role');
 
         return that;
     },
@@ -1102,6 +1101,17 @@ var Application = {
         const category = dialog.getCategory();
         const item = dialog.getItem();
 
+        // get old elements
+        // const $oldCategoryRow = $editingRow.siblings(':first');
+        // const $oldBody = $oldCategoryRow.parents('tbody');
+        // const $oldGroupHead = $oldBody.prev('thead');
+
+        // // get old values
+        // const oldCategoryId =
+        // $oldCategoryRow.findNamedInput('category').intVal();
+        // const oldGroupId = $oldGroupHead.findNamedInput('group').intVal();
+        // const oldItem = $editingRow.getRowItem();
+
         const $oldBody = $editingRow.parents('tbody');
         let $oldHead = $oldBody.prevUntil('thead').prev();
         if ($oldHead.length === 0) {
@@ -1127,6 +1137,11 @@ var Application = {
 
             // append
             const $row = $category.appendRow(item);
+
+            // const $oldBody = $oldCategoryRow.parents('tbody');
+            // const $next = $$oldGroupHead.nextUntil('thead');
+            // const isEmptyCategory = $tbody.children('tr').length === 2;
+            // const isEmptyGroup = isEmptyCategory && next.length === 1;
 
             // check if empty
             const $next = $oldHead.nextUntil('thead');

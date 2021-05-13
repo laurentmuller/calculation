@@ -13,7 +13,7 @@
 
         /**
          * Finds the Simple-Editor container within the current element.
-         *
+         * 
          * @return {jQuery} the editor or null if not found.
          */
         findSimpleEditor: function () {
@@ -23,7 +23,7 @@
 
         /**
          * Set focus to the editor.
-         *
+         * 
          * @return {boolean} true if focused.
          */
         focusSimpleEditor: function () {
@@ -40,7 +40,7 @@
 
         /**
          * Gets the editor content as text.
-         *
+         * 
          * @return {string} the content.
          */
         getSimpleEditorContent: function () {
@@ -59,7 +59,7 @@
 
         /**
          * Initialize a Simple-Editor.
-         *
+         * 
          * @param {Object}
          *            options - the initialisation options.
          * @return {jQuery} the input for chaining.
@@ -128,7 +128,7 @@
                         }).insertBefore($button);
                     }
                     oldGroup = newGroup;
-
+                    
                     // remove attributes
                     $button.removeAttr('data-exec data-parameter data-state data-enabled data-group');
                 });

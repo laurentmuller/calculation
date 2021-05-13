@@ -96,23 +96,13 @@ function displayUrl() {
     }
 }
 
-//
-// function output(event) {
-// 'use strict';
-// const $elements = $('#edit-form')
-// .find('input, select, textarea, [contenteditable]' )
-// .not(':submit, :reset, :image, :disabled')
-// .not('[type="hidden"]');
-// console.log(event, $elements);
-// }
-
 /**
  * Ready function
  */
 (function ($) {
     'use strict';
 
-    $('#edit-form').initValidator({
+    $('form').initValidator({
         inline: true,
         rules: {
             'parameters[customer_url]': {
@@ -128,16 +118,10 @@ function displayUrl() {
         $prev.find('a').attr('title', $prev.data('hide'));
     }).on('hide.bs.collapse', function () {
         const $prev = $(this).prev();
-        $prev.find('i').toggleClass('fa-caret-left fa-caret-down');
+        $prev.find('i').toggleClass('fa-caret-down fa-caret-left');
         $prev.find('a').attr('title', $prev.data('show'));
-        // }).on('hidden.bs.collapse', function () {
-        // output('hidden');
-
     }).on('shown.bs.collapse', function () {
-        if ($(this).find('.is-invalid').length === 0) {
-            $(this).find(':input:first').focus();
-        }
-        // output('shown');
+        $(this).find(':input:first').focus();
     });
 
     // add handlers

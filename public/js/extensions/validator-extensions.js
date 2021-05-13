@@ -95,13 +95,6 @@
                         // get invalid elements
                         const $elements = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
 
-                        // display if parent's accordion
-                         const $collapse = $elements.parents('.collapse:not(.show)');
-                         const $accordion = $elements.parents('.accordion');
-                         if ($collapse.length && $accordion.length) {
-                             $collapse.collapse('show');
-                         }
-
                         // tinymceeditor
                         if (tinymceeditor) {
                             if ($elements.focusTinymceEditor()) {
@@ -179,7 +172,7 @@
                 focus: true,
                 errorElement: 'small',
                 errorClass: 'is-invalid',
-                ignore: '[type="hidden"]',
+                ignore: ':hidden:not(.must-validate)',
 
                 errorPlacement: function(error, element) {
                     let $parent = $(element).closest('.form-group').find('.passwordstrength');

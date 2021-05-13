@@ -128,19 +128,6 @@ class CategoryRepository extends AbstractRepository
         }
     }
 
-//     /**
-//      * Gets the query builder for the list of categories sorted by code.
-//      *
-//      * @param string $alias the default entity alias
-//      */
-//     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
-//     {
-//         $field = $this->getSortField('code', $alias);
-
-//         return $this->createQueryBuilder($alias)
-//             ->orderBy($field, Criteria::ASC);
-//     }
-
     /**
      * {@inheritdoc}
      */

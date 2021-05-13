@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Calculation;
+use App\Entity\Comment;
 use App\Form\Admin\ParametersType;
 use App\Form\FormHelper;
 use App\Form\Type\CaptchaImageType;
@@ -46,8 +47,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -262,7 +263,7 @@ class TestController extends AbstractController
                     if ($value) {
                         if (\is_array($value)) {
                             $value = \implode('<br>', $value);
-                        } elseif ('challenge_ts' === $key && -1 !== $time = \strtotime($value)) {
+                        } elseif ('challenge_ts' === $key && false !== $time = \strtotime($value)) {
                             $value = FormatUtils::formatDateTime($time, null, \IntlDateFormatter::MEDIUM);
                         }
                         $html .= "<tr><td>{$key}<td><td>:</td><td>{$value}</td></tr>";
@@ -298,7 +299,7 @@ class TestController extends AbstractController
      *
      * @Route("/simple", name="test_simple")
      */
-    public function simpleEditor(Request $request, MailerInterface $mailer, TranslatorInterface $translator, LoggerInterface $logger, UrlGeneratorInterface $generator): Response
+    public function simpleEditor(Request $request, MailerInterface $mailer, TranslatorInterface $translator, LoggerInterface $logger): Response
     {
         $data = [
             'email' => 'bibi@bibi.nu',
@@ -319,27 +320,19 @@ class TestController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
             $email = (string) $data['email'];
-            $message = (string) $data['message'];
-            $importance = (string) $data['importance'];
-            $content = \str_replace('&nbsp;', ' ', \strip_tags($message));
+            $importance = $translator->trans('importance.full.' . $data['importance']);
+            $message = "<p style=\"font-weight: bold;\">$importance</p>" . $data['message'];
 
             try {
-                $urlText = "Accéder à l'application";
-                $urlAction = $generator->generate(self::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
+                /** @var \App\Entity\User $user */
+                $user = $this->getUser();
+                $comment = new Comment(true);
+                $comment->setFromAddress(new Address($email))
+                    ->setToUser($user)
+                    ->setSubject($this->trans('user.comment.title'))
+                    ->setMessage($message);
+                $comment->send($mailer);
 
-                $notification = new NotificationEmail($translator);
-                $notification->to($this->getAddressFrom())
-                    ->from($email)
-                    ->importance($importance)
-                    ->subject($this->trans('user.comment.title'))
-                    ->content($content)
-                    ->action($urlText, $urlAction)
-                    ->context([
-                        'footer_text' => $this->getApplicationName(),
-                        // 'raw' => true,
-                    ]);
-
-                $mailer->send($notification);
                 $this->succesTrans('user.comment.success');
 
                 return $this->redirectToHomePage();

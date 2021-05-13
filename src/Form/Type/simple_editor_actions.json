@@ -1,97 +1,110 @@
 [
-    {
-        "exec": "formatBlock",
-        "title": "header_h1",
-        "icon": "heading",
-        "group": "font",
-        "parameter": "<h1>"
-    },
-    {
-        "exec": "bold",
-        "state": "bold",
-        "icon": "bold",
-        "group": "font"
-    },
-    {
-        "exec": "italic",
-        "state": "italic",
-        "icon": "italic",
-        "group": "font"
-    },
-    {
-        "exec": "underline",
-        "state": "underline",
-        "icon": "underline",
-        "group": "font"
-    },
-    {
-        "exec": "strikethrough",
-        "state": "strikethrough",
-        "icon": "strikethrough",
-        "group": "font"
-    },
-    {
-        "exec": "superscript",
-        "icon": "superscript",
-        "group": "script"
-    },
-    {
-        "exec": "subscript",
-        "icon": "subscript",
-        "group": "script"
-    },
-    {
-        "exec": "justifyLeft",
-        "state": "justifyLeft",
-        "icon": "align-left",
-        "group": "align"
-    },
-    {
-        "exec": "justifyCenter",
-        "state": "justifyCenter",
-        "icon": "align-center",
-        "group": "align"
-    },
-    {
-        "exec": "justifyRight",
-        "state": "justifyRight",
-        "icon": "align-right",
-        "group": "align"
-    },
-    {
-        "exec": "indent",
-        "icon": "indent",
-        "group": "paragraph"
-    },
-    {
-        "exec": "outdent",
-        "icon": "outdent",
-        "group": "paragraph"
-    },
-    {
-        "exec": "insertOrderedList",
-        "state": "insertOrderedList",
-        "icon": "list-ol",
-        "group": "list"
-    },
-    {
-        "exec": "insertUnorderedList",
-        "state": "insertUnorderedList",
-        "icon": "list-ul",
-        "group": "list"
-    },
-    {
-        "exec": "undo",
-        "state": "undo",
-        "enabled": "undo",
-        "icon": "undo",
-        "group": "edit"
-    },
-    {
-        "exec": "redo",
-        "state": "redo",
-        "enabled": "redo",
-        "icon": "redo",
-        "group": "edit"
-    }
+	{
+		"exec": "formatBlock",
+		"title": "header_h1",
+		"icon": "heading",
+		"group": "font",
+		"parameter": "<h1>"
+	},
+	{
+		"exec": "bold",
+		"state": "bold",
+		"icon": "bold",
+		"group": "font"
+	},
+	{
+		"exec": "italic",
+		"state": "italic",
+		"icon": "italic",
+		"group": "font"
+	},
+	{
+		"exec": "underline",
+		"state": "underline",
+		"icon": "underline",
+		"group": "font"
+	},
+	{
+		"exec": "strikethrough",
+		"state": "strikethrough",
+		"icon": "strikethrough",
+		"group": "font"
+	},
+	{
+		"exec": "superscript",
+		"icon": "superscript",
+		"group": "script"
+	},
+	{
+		"exec": "subscript",
+		"icon": "subscript",
+		"group": "script"
+	},
+	{
+		"title": "justify_left",
+		"exec": "justifyLeft",
+		"state": "justifyLeft",
+		"icon": "align-left",
+		"group": "align"
+	},
+	{
+		"title": "justify_center",
+		"exec": "justifyCenter",
+		"state": "justifyCenter",
+		"icon": "align-center",
+		"group": "align"
+	},
+	{
+		"title": "justify_right",
+		"exec": "justifyRight",
+		"state": "justifyRight",
+		"icon": "align-right",
+		"group": "align"
+	},
+	{
+		"exec": "indent",
+		"icon": "indent",
+		"group": "paragraph"
+	},
+	{
+		"exec": "outdent",
+		"icon": "outdent",
+		"group": "paragraph"
+	},
+	{
+		"title": "ordered_list",
+		"exec": "insertOrderedList",
+		"state": "insertOrderedList",
+		"icon": "list-ol",
+		"group": "list"
+	},
+	{
+		"title": "unordered_list",
+		"exec": "insertUnorderedList",
+		"state": "insertUnorderedList",
+		"icon": "list-ul",
+		"group": "list"
+	},
+	{
+		"title": "remove_format",
+		"exec": "removeFormat",
+		"state": "removeFormat",
+		"enabled": "removeFormat",
+		"icon": "remove-format",
+		"group": "edit"
+	},
+	{
+		"exec": "undo",
+		"state": "undo",
+		"enabled": "undo",
+		"icon": "undo",
+		"group": "edit"
+	},
+	{
+		"exec": "redo",
+		"state": "redo",
+		"enabled": "redo",
+		"icon": "redo",
+		"group": "edit"
+	}
 ]

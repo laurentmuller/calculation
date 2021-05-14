@@ -38,7 +38,7 @@
 
         /**
          * Initialize the password strength.
-         * 
+         *
          * @param {Object}
          *            options - The optional options.
          */

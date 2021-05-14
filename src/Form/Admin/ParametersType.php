@@ -84,6 +84,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     {
         $helper->field(self::P_CUSTOMER_NAME)
             ->updateRowAttribute('class', 'ml-2')
+            ->updateAttribute('spellcheck', 'false')
             ->addTextType();
 
         $helper->field(self::P_CUSTOMER_URL)

@@ -16,6 +16,7 @@ use App\Entity\AbstractEntity;
 use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -310,6 +311,8 @@ class PlainType extends AbstractType
      * @param array $options the options
      *
      * @return string|null the transformed value
+     *
+     * @throws TransformationFailedException if the value can not be mapped to a string
      */
     private function transformValue($value, array $options): ?string
     {
@@ -358,16 +361,12 @@ class PlainType extends AbstractType
             return $this->formatNumber($value, $options);
         }
 
-        // object?
-        if (\is_object($value)) {
-            if (\method_exists($value, '__toString')) {
-                return $value->__toString();
-            }
-
-            return \get_class($value);
+        // to string?
+        if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
+            return (string) $value;
         }
 
-        //default
-        return (string) $value;
+        // error
+        throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', \is_object($value) ? \get_class($value) : \gettype($value)));
     }
 }

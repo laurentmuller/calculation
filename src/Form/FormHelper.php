@@ -505,20 +505,19 @@ class FormHelper
     /**
      * Add a class name.
      *
-     * @param string $name the class name to add
+     * @param string $name one or more space-separated classes to be added to the class attribute
      */
-    public function className(?string $name): self
+    public function className(string $name): self
     {
-        if (!empty($name)) {
-            $names = $this->attributes['class'] ?? '';
-            if (false === \stripos($names, $name)) {
-                $names = \trim($names . ' ' . $name, ' ');
-
-                return $this->updateAttribute('class', $names);
-            }
+        if ('' === $name) {
+            return $this;
         }
 
-        return $this;
+        $newValues = \array_filter(\explode(' ', $name));
+        $oldValues = \array_filter(\explode(' ', $this->attributes['class'] ?? ''));
+        $class = \implode(' ', \array_unique(\array_merge($newValues, $oldValues)));
+
+        return $this->updateAttribute('class', $class);
     }
 
     /**
@@ -701,7 +700,7 @@ class FormHelper
      */
     public function percent(bool $visible): self
     {
-        return $this->updateOption('symbol', $visible ? '%' : false);
+        return $this->updateOption('symbol', $visible ? $this->getPercentSymbol() : false);
     }
 
     /**

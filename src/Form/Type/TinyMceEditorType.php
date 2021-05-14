@@ -62,11 +62,9 @@ class TinyMceEditorType extends AbstractType
      */
     private function getClassName(FormView $view): string
     {
-        $classes = $view->vars['attr']['class'] ?? '';
-        if (false === \stripos($classes, 'must-validate')) {
-            return \trim($classes . ' must-validate');
-        }
+        $values = \array_filter(\explode(' ', $view->vars['attr']['class'] ?? ''));
+        $values[] = 'must-validate';
 
-        return $classes;
+        return \implode(' ', $values);
     }
 }

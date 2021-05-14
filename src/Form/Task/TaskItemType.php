@@ -39,6 +39,7 @@ class TaskItemType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('name')
+            ->className('unique-name')
             ->maxLength(255)
             ->addTextType();
 

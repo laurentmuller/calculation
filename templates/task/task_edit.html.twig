@@ -1,5 +1,4 @@
 {% extends 'cards/card_edit.html.twig' %}
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
@@ -29,24 +28,44 @@
 </tr>
 {% endmacro -%}
 
-{% macro printTaskItem(item) %}
+{% macro printTaskItem(item, show=false) %}
 {%- set id = item.vars.value.id|default(0) -%}
+{%- set id_header = 'item_header_' ~ id -%}
+{%- set id_content = 'item_content_' ~ id -%}
 {%- set count = item.vars.value.count|default(0) -%}
-<div class="item">
-    {#{ form_row(item.name) }#}
-    <div class="form-group">
-        <div class="row">
-            <div class="col">{{ form_label(item.name) }}</div>
-            <div class="col-auto d-print-none">
-                {{- icons.link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete-item', 'times', 'task.edit.delete_item') -}}
+<div class="item card">
+    <div class="card-header px-3 pb-1" id="{{ id_header }}">
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label for="{{ item.vars.id }}">
+                        <a href="#{{ id_content }}" class="required" title="{{ 'taskitem.edit.toggle_items'|trans }}" data-toggle="collapse" aria-controls="{{ id_content }}" aria-expanded="{{ show|json_encode }}">{{ 'taskitem.fields.name'|trans }}</a>
+                    </label>
+                </div>
+                <div class="col-auto d-print-none">
+                    <button type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-item" title="{{ 'task.edit.delete_item'|trans }}">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </button>
+                    {#
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'calculation.edit.move_up_item'|trans }}" disabled="disabled">
+                            <i class="fas fa-angle-up" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-edit btn-outline-secondary btn-down-item" title="{{ 'calculation.edit.move_down_item'|trans }}" disabled="disabled">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </button>
+
+                    </div>
+                    #}
+                </div>
             </div>
+            {{ form_widget(item.name) }}
+            {{ form_help(item.name) }}
+            {{ form_errors(item.name) }}
         </div>
-        {{ form_widget(item.name) }}
-        {{ form_help(item.name) }}
-        {{ form_errors(item.name) }}
     </div>
-    <div class="form-row ml-3 mt-1">
-        <div class="col-md-12">
+    <div id="{{ id_content }}" class="collapse{% if show %} show{% endif %}" aria-labelledby="{{ id_header }}" data-parent="#items">
+        <div class="card-body p-3">
             <div class="row">
                 <div class="col-auto mr-auto">
                     <label class="control-label">{{ 'taskitem.fields.margins'|trans }}</label>
@@ -75,7 +94,6 @@
             <small class="text-muted text-right empty-margins{% if count > 0 %} d-none{% endif %}">{{- 'taskitem.edit.empty_items'|trans -}}</small>
         </div>
     </div>
-    <hr>
 </div>
 {% endmacro -%}
 
@@ -103,18 +121,13 @@
         {{ form_row(form.unit) }}
     </div>
 </div>
-<div class="items" data-item-index="{{ item_index }}" data-margin-index="{{ margin_index }}" data-prototype="{{ _self.printTaskItem(form.items.vars.prototype)|e('html_attr') }}">
+<div class="items accordion" id="items" data-item-index="{{ item_index }}" data-margin-index="{{ margin_index }}" data-prototype="{{ _self.printTaskItem(form.items.vars.prototype)|e('html_attr') }}">
     {% for item in form.items -%}
-        {{ _self.printTaskItem(item) }}
+        {{ _self.printTaskItem(item, loop.index == 1) }}
     {% endfor -%}
     <small class="text-muted text-right empty-items{% if form.vars.value.count > 0 %} d-none{% endif %} ">{{- 'task.edit.empty_items'|trans -}}</small>
 </div>
 {% endblock %}
-
-{#% block actions_form -%}
-{{ parent() }}
-<button type="button" class="btn btn-form btn-outline-success btn-add-item">{{ 'task.edit.add_item'|trans }}</button>
-{% endblock %#}
 
 {% block javascripts %}
 {% if app.debug %}

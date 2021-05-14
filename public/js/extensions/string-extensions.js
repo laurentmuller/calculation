@@ -6,10 +6,10 @@
 
 /**
  * Clean this string.
- * 
+ *
  * @return {string} this clean string.
  */
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.clean = function () {
     'use strict';
     if (String.prototype.normalize) {
@@ -21,7 +21,7 @@ String.prototype.clean = function () {
 /**
  * Returns the index of the first occurrence in this string, ignoring case, of
  * the specified value.
- * 
+ *
  * @param {string}
  *            searchvalue - the value to search for.
  * @param {integer}
@@ -30,7 +30,7 @@ String.prototype.clean = function () {
  * @return {integer} the index of the first occurrence of searchValue, or -1 if
  *         not found.
  */
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.indexOfIgnoreCase = function (searchvalue, fromIndex) {
     'use strict';
     return this.toLowerCase().indexOf(searchvalue.toLowerCase(), fromIndex);
@@ -38,23 +38,28 @@ String.prototype.indexOfIgnoreCase = function (searchvalue, fromIndex) {
 
 /**
  * Check if the given value is equal to this string, ignoring case.
- * 
+ *
  * @param {string}
  *            value - the value to compare with.
  * @return {boolean} true if equal, ignoring case.
  */
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.equalsIgnoreCase = function (value) {
     'use strict';
-    return this === value || this.toLowerCase() === value.toLowerCase();
+    const regexp = RegExp("^" + this.replace(/[.\\+*?\[\^\]$(){}=!<>|:-]/g, "\\$&") + "$", "i");
+    return regexp.test(value);
+
+    // const string1 = this.toLocaleLowerCase();
+    // const string2 = value.toLocaleLowerCase();
+    // return string1 === string2;
 };
 
 /**
  * Replace camel cased to dashed ('isAnEntry' => 'is-an-entry').
- * 
+ *
  * @return {string} this dashed string.
  */
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.dasherize = function () {
     'use strict';
     // first character is always in lower case
@@ -67,10 +72,10 @@ String.prototype.dasherize = function () {
 
 /**
  * Replace dashed to camel cased ('is-an-entry' => 'isAnEntry').
- * 
+ *
  * @return {string} this camelized string.
  */
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.camelize = function () {
     'use strict';
     return this.trim().replace(/[-_\s]+(.)?/g, function (match, c) {
@@ -80,10 +85,10 @@ String.prototype.camelize = function () {
 
 /**
  * Converts this string to a boolean value
- * 
+ *
  * @return {boolean} the boolean value.
  */
-/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.toBool = function () {
     'use strict';
     try {
@@ -98,7 +103,7 @@ String.prototype.toBool = function () {
  * <p>
  * 'First {0}. Second {1}'.format('ASP', 'PHP');
  * </p>
- * 
+ *
  * @return {string} this formatted string.
  */
 /* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */

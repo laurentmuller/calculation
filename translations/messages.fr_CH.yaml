@@ -1080,6 +1080,7 @@ taskitem:
         delete_item: Supprimer la marge
         empty_items: Aucune marge définie.
         sort_items: Trier les marges
+        toggle_items: Afficher / Masquer les marges
 taskitemmargin:
     name: Marge
     fields:

@@ -45,8 +45,7 @@
          */
         getSimpleEditorContent: function () {
             const $this = $(this);
-            const $editor = $this.findSimpleEditor();
-            if ($editor) {
+            if ($this.findSimpleEditor()) {
                 const value = $this.val().trim();
                 try {
                     return $(value).text().trim();

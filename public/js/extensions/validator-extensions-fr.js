@@ -9,7 +9,7 @@
     $.fn.extend({
         /**
          * Returns the label text of the input element.
-         * 
+         *
          * @return {jQuery|boolean} the label text, if found; false otherwise.
          */
         getLabelText: function () {
@@ -44,7 +44,7 @@
     $.extend($.validator, {
         /**
          * Format message within the label (if any).
-         * 
+         *
          * @param {HTMLElement}
          *            element - The element to search in.
          * @param {string}
@@ -80,7 +80,7 @@
 
         /**
          * Translate the given size.
-         * 
+         *
          * @param {int}
          *            size - the size, in bytes, to translate.
          * @return {string} the translated size.
@@ -470,6 +470,15 @@
         max: function (parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.maxLabel, $.validator.messages.maxFallback, parameters);
         },
+
+        /*
+         * unique
+         */
+        uniqueFallback: 'La valeur doit être unique.',
+        uniqueLabel: 'Le champ \"{0}\" doit être unique.',
+        unique: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.uniqueLabel, $.validator.messages.uniqueFallback, parameters);
+        }
 
     });
 }(jQuery));

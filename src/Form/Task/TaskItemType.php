@@ -39,9 +39,12 @@ class TaskItemType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('name')
-            ->className('unique-name')
+            ->widgetClass('unique-name')
             ->maxLength(255)
             ->addTextType();
+
+        $helper->field('position')
+            ->addHiddenType();
 
         $helper->field('margins')
             ->updateOption('prototype_name', '__marginIndex__')

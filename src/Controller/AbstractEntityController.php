@@ -419,7 +419,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * This function save the given entity to the database.
      *
-     * Derived class can compute values and update entity.
+     * Derived class can update entity before it is saved to the database.
      *
      * @param AbstractEntity $item the entity to save
      */

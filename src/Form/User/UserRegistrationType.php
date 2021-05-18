@@ -68,7 +68,7 @@ class UserRegistrationType extends AbstractUserCaptchaType
 
         $helper->field('agreeTerms')
             ->notMapped()
-            ->updateRowAttribute('class', 'mb-0')
+            ->rowClass('mb-0')
             ->label('registration.agreeTerms.label')
             ->updateAttribute('data-error', $this->trans('registration.agreeTerms.error'))
             ->addCheckboxType();

@@ -44,7 +44,7 @@ class TinyMceEditorType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if ($options['required']) {
-            $view->vars['attr']['class'] = $this->getClassName($view);
+            $view->vars['attr']['class'] = $this->getwidgetClass($view);
         }
         $view->vars['attr']['data-skin'] = $this->darkTheme ? 'oxide-dark' : 'oxide';
     }
@@ -60,11 +60,11 @@ class TinyMceEditorType extends AbstractType
     /**
      * Gets the class name when the required option is set.
      */
-    private function getClassName(FormView $view): string
+    private function getwidgetClass(FormView $view): string
     {
         $values = \array_filter(\explode(' ', $view->vars['attr']['class'] ?? ''));
         $values[] = 'must-validate';
 
-        return \implode(' ', $values);
+        return \implode(' ', \array_unique($values));
     }
 }

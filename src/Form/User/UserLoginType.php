@@ -61,7 +61,7 @@ class UserLoginType extends AbstractUserCaptchaType
         parent::addFormFields($helper);
 
         $helper->field('remember_me')
-            ->updateRowAttribute('class', 'text-right')
+            ->rowClass('text-right')
             ->notRequired()
             ->addCheckboxType();
     }

@@ -61,7 +61,7 @@ class GeneratorController extends AbstractController
 
         $helper->field('simulate')
             ->help('generate.help.simulate')
-            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 

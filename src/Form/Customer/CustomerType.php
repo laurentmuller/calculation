@@ -44,19 +44,19 @@ class CustomerType extends AbstractEntityType
             ->addTextType();
 
         $helper->field('lastName')
-            ->className('customer-group')
+            ->widgetClass('customer-group')
             ->maxLength(50)
             ->notRequired()
             ->addTextType();
 
         $helper->field('firstName')
-            ->className('customer-group')
+            ->widgetClass('customer-group')
             ->maxLength(50)
             ->notRequired()
             ->addTextType();
 
         $helper->field('company')
-            ->className('customer-group')
+            ->widgetClass('customer-group')
             ->maxLength(255)
             ->notRequired()
             ->addTextType();

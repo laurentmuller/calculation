@@ -93,6 +93,7 @@ function update(form) {
     }
 
     // send
+    $('*').css('cursor', 'wait');
     $form.jqXHR = $.post(url, data, function (response) {
         if (response.result) {
             // update
@@ -108,6 +109,8 @@ function update(form) {
         if (textStatus !== 'abort') {
             showError($form.data('failed'));
         }
+    }).always(function () {
+        $('*').css('cursor', '');
     });
 }
 

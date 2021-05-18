@@ -41,17 +41,17 @@ class CalculationEditStateType extends AbstractEntityType
     {
         $helper->field('id')
             ->updateOption('number_pattern', PlainType::NUMBER_IDENTIFIER)
-            ->className('text-center')
+            ->widgetClass('text-center')
             ->addPlainType(true);
 
         $helper->field('date')
             ->updateOption('time_format', PlainType::FORMAT_NONE)
-            ->className('text-center')
+            ->widgetClass('text-center')
             ->addPlainType(true);
 
         $helper->field('overallTotal')
             ->updateOption('number_pattern', PlainType::NUMBER_AMOUNT)
-            ->className('text-right')
+            ->widgetClass('text-right')
             ->addPlainType(true);
 
         $helper->field('customer')

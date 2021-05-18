@@ -152,7 +152,7 @@ class TestController extends AbstractController
         $helper->addPreSubmitListener($listener);
 
         $helper->field('input')
-            ->className('password-strength')
+            ->widgetClass('password-strength')
             ->minLength(6)
             ->updateOption('constraints', [
                 new Length(['min' => 6]),

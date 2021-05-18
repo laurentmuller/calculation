@@ -1,73 +1,36 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * -------------- jQuery extensions --------------
- */
-$.fn.extend({
-    /**
-     * Swap id and name input attributes.
-     *
-     * @param {jQuery}
-     *            $target - the target row.
-     * @return {jQuery} - The jQuery source row.
-     */
-    swapIdAndNames: function ($target) {
-        'use strict';
-
-        // get inputs
-        const $source = $(this);
-        const sourceInputs = $source.find('input');
-        const targetInputs = $target.find('input');
-
-        for (let i = 0, len = sourceInputs.length; i < len; i++) {
-            // get source attributes
-            const $sourceInput = $(sourceInputs[i]);
-            const sourceId = $sourceInput.attr('id');
-            const sourceName = $sourceInput.attr('name');
-
-            // get target attributes
-            const $targetInput = $(targetInputs[i]);
-            const targetId = $targetInput.attr('id');
-            const targetName = $targetInput.attr('name');
-
-            // swap
-            $targetInput.attr('id', sourceId).attr('name', sourceName);
-            $sourceInput.attr('id', targetId).attr('name', targetName);
-        }
-
-        return $source;
-    }
-});
-
-/**
  * Update the user interface.
  */
 function updateUI() {
     'use strict';
 
     // initialize the number input formats
-    $('input[name$="[minimum]"]').inputNumberFormat();
-    $('input[name$="[maximum]"]').inputNumberFormat();
-    $('input[name$="[value]"]').inputNumberFormat();
+    $('#items input[name$="[minimum]"]').inputNumberFormat();
+    $('#items input[name$="[maximum]"]').inputNumberFormat();
+    $('#items input[name$="[value]"]').inputNumberFormat();
 
     // update tables
-    $('.table-edit').each(function () {
+    $('#items .table-edit').each(function () {
         const $table = $(this);
         const rows = $table.find('tbody > tr').length;
         $table.toggleClass('d-none', rows === 0);
         $table.next('.empty-margins').toggleClass('d-none', rows !== 0);
         $table.parents('.item').find('.btn-sort-margin').toggleDisabled(rows < 2);
     });
-    $('.empty-items').toggleClass('d-none', $('.item').length !== 0);
+    $('.empty-items').toggleClass('d-none', $('#items .item').length !== 0);
 
-    // update move actions and rule
+    // update actions, rule and position
+    let position = 0;
     $('#items .item').each(function (index, item) {
         const $item = $(item);
         $item.find('.btn-up-item').attr('disabled', $item.is(':first-of-type'));
         $item.find('.btn-down-item').attr('disabled', $item.is(':last-of-type'));
-        // $item.find('.unique-name').rules('add', {
-        // unique: '.unique-name'
-        // });
+        $item.find('.unique-name').rules('add', {
+            unique: '.unique-name'
+        });
+        $item.find('input[name$="[position]"]').val(position++);
     });
 }
 
@@ -165,10 +128,12 @@ function getMarginPrototype($table) {
 function addItem() {
     'use strict';
 
-    // create and add item
+    // create item
     const index = getNextItemIndex();
     const prototype = getItemPrototype();
     const $item = $(prototype.replace(/__itemIndex__/g, index));
+
+    // append
     $('#items').append($item);
 
     // update UI
@@ -177,45 +142,13 @@ function addItem() {
     // focus
     $item.find('input[name$="[name]"]:last').selectFocus().scrollInViewport();
 
+    // hide others
+    $('#items').find('.collapse:not(:last)').collapse('hide');
+
     // expand
-    $item.find('.collapse').collapse('show');
+    $('#items').find('.collapse:last').addClass('show');
 
     return $item;
-}
-
-/**
- * Adds a new margin.
- *
- * @param {jQuery}
- *            $caller - the caller (normally a button).
- */
-function addMargin($caller) {
-    'use strict';
-
-    // get table
-    const $table = $caller.parents('.item').find('.table-edit');
-    if ($table.length === 0) {
-        return;
-    }
-
-    // get values before inserting the row
-    const value = getMinValue($table);
-    const minimum = getMaxValue($table);
-    const maximum = Math.max(minimum * 2, 1);
-
-    // create and add margin
-    const index = getNextMarginIndex($table);
-    const prototype = getMarginPrototype($table);
-    const $row = $(prototype.replace(/__marginIndex__/g, index));
-    $table.find('tbody').append($row);
-
-    // update UI
-    updateUI();
-
-    // set values
-    $table.find('input[name$="[minimum]"]:last').floatVal(minimum).selectFocus().scrollInViewport();
-    $table.find('input[name$="[maximum]"]:last').floatVal(maximum);
-    $table.find('input[name$="[value]"]:last').floatVal(value);
 }
 
 /**
@@ -251,13 +184,12 @@ function moveUpItem($caller) {
 
     // previous?
     const $target = $source.prev('.item');
-    if (0 === $target.length) {
+    if (0 === $target.length || $source === $target) {
         return $source;
     }
 
     // move
     $target.insertAfter($source);
-    $source.swapIdAndNames($target);
     updateUI();
 
     return $source;
@@ -281,16 +213,50 @@ function moveDownItem($caller) {
 
     // next?
     const $target = $source.next('.item');
-    if (0 === $target.length) {
+    if (0 === $target.length || $source === $target) {
         return $source;
     }
 
     // move
     $target.insertBefore($source);
-    $source.swapIdAndNames($target);
     updateUI();
 
     return $source;
+}
+
+/**
+ * Adds a new margin.
+ *
+ * @param {jQuery}
+ *            $caller - the caller (normally a button).
+ */
+function addMargin($caller) {
+    'use strict';
+
+    // get table
+    const $table = $caller.parents('.item').find('.table-edit');
+    if ($table.length === 0) {
+        return;
+    }
+
+    // get values before inserting the row
+    const value = getMinValue($table);
+    const minimum = getMaxValue($table);
+    const maximum = Math.max(minimum * 2, 1);
+
+    // create and add margin
+    const index = getNextMarginIndex($table);
+    const prototype = getMarginPrototype($table);
+    const $row = $(prototype.replace(/__marginIndex__/g, index));
+    $table.find('tbody').append($row);
+
+    // update UI
+    updateUI();
+
+    // set values
+    $table.find('input[name$="[minimum]"]:last').floatVal(minimum).selectFocus().scrollInViewport();
+    $table.find('input[name$="[maximum]"]:last').floatVal(maximum);
+    $table.find('input[name$="[value]"]:last').floatVal(value);
 }
 
 /**
@@ -371,14 +337,18 @@ function sortMargins($caller) {
     }).on('click', '.btn-sort-margin', function (e) {
         e.preventDefault();
         sortMargins($(this));
-    }).on('focus', '.unique-name', function () {
-        // $(this).parents('.item').find('.collapse').collapse('show');
+    }).on('show.bs.collapse', '.collapse', function () {
+        const $link = $(this).parents('.item').find('.stretched-link');
+        $link.attr('title', $('#edit-form').data('hide'));
+        $link.find('i').toggleClass('fa-caret-down fa-caret-right');
+    }).on('hide.bs.collapse', '.collapse', function () {
+        const $link = $(this).parents('.item').find('.stretched-link');
+        $link.attr('title', $('#edit-form').data('show'));
+        $link.find('i').toggleClass('fa-caret-down fa-caret-right');
     });
 
     // validation
-    $('#edit-form').initValidator({
-        'inline': true
-    });
+    $('#edit-form').initValidator();
 
     // update UI
     updateUI();

@@ -39,6 +39,7 @@ class Task extends AbstractEntity implements \Countable
     /**
      * @ORM\OneToMany(targetEntity=TaskItem::class, mappedBy="task", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Assert\Valid
+     * @ORM\OrderBy({"position" = "ASC"})
      *
      * @var Collection|TaskItem[]
      * @psalm-var Collection<int, TaskItem>
@@ -227,6 +228,8 @@ class Task extends AbstractEntity implements \Countable
             if ($item->getTask() === $this) {
                 $item->setTask(null);
             }
+
+            return $this->updatePositions();
         }
 
         return $this;
@@ -249,6 +252,24 @@ class Task extends AbstractEntity implements \Countable
     public function setUnit(?string $unit): self
     {
         $this->unit = $this->trim($unit);
+
+        return $this;
+    }
+
+    /**
+     * Update position of items.
+     */
+    public function updatePositions(): self
+    {
+        $position = 0;
+
+        /** @var TaskItem $item */
+        foreach ($this->items as $item) {
+            if ($item->getPosition() !== $position) {
+                $item->setPosition($position);
+            }
+            ++$position;
+        }
 
         return $this;
     }

@@ -35,12 +35,15 @@ function handleError(response) {
 }
 
 /**
- * Transalte
+ * Transalte.
+ *
+ * @param form
+ *            form - the submitted form.
  */
-function translate() {
+function translate(form) {
     'use strict';
 
-    const $form = $('#edit-form');
+    const $form = $(form);
     const $buttonSubmit = $form.find(':submit');
     const $buttonCopy = $('.btn-copy');
     const $labelDetected = $('#detected');
@@ -256,8 +259,8 @@ function handleService() {
     // validate
     const options = {
         focus: false,
-        submitHandler: function () {
-            translate();
+        submitHandler: function (form) {
+            translate(form);
         },
         rules: {
             text: {

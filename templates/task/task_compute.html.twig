@@ -48,26 +48,27 @@
     <table class="table table-sm table-borderless" id="table-edit">
         <thead>
             <tr>
-                <td><span class="task-items-empty text-danger d-none">{{ 'taskcompute.error.items'|trans }}</span></td>
+                <td>&nbsp;</td>
                 <td class="w-25">{{ 'taskcompute.fields.price'|trans }}</td>
                 <td class="w-25">{{ 'taskcompute.fields.total'|trans }}</td>
             </tr>
         </thead>
         <tbody>
-            {% for task in tasks %}
-                {% set visible = task.id == selection %}
-                {% for item in task.items|filter(item => item.count > 0) %}
-                    {{ _self.row_input(task.id, item, visible) }}
-                {% endfor %}
+        {% for task in tasks %}
+            {% set visible = task.id == selection %}
+            {% for item in task.items|filter(item => item.count > 0) %}
+                {{ _self.row_input(task.id, item, visible) }}
             {% endfor %}
+        {% endfor %}
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="3"><hr class="my-1"></td>
             </tr>
             <tr>
-                <td class="text-right pt-2" colspan="2">{{ 'taskcompute.fields.overall_total'|trans }}</td>
-                <td class="text-right">{{ _self.plain_text_input('overall') }}</td>
+                <td><span class="task-items-empty text-danger d-none">{{ 'taskcompute.error.items'|trans }}</span></td>
+                <td class="w-25 text-right pt-2">{{ 'taskcompute.fields.overall_total'|trans }}</td>
+                <td class="w-25 text-right">{{ _self.plain_text_input('overall') }}</td>
             </tr>
         </tfoot>
     </table>
@@ -86,5 +87,3 @@
 {{ asset_js('js/plugins/plugin-input.js') }}
 {{ asset_js('js/application/task_compute.js') }}
 {% endblock %}
-
-

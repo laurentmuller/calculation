@@ -32,7 +32,7 @@ class SimpleEditorType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if ($options['required']) {
-            $view->vars['attr']['class'] = $this->getClassName($view);
+            $view->vars['attr']['class'] = $this->getwidgetClass($view);
         }
         $view->vars['actions'] = $options['actions'];
     }
@@ -57,17 +57,6 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * Gets the class name when the required option is set.
-     */
-    private function getClassName(FormView $view): string
-    {
-        $values = \array_filter(\explode(' ', $view->vars['attr']['class'] ?? ''));
-        $values[] = 'must-validate';
-
-        return \implode(' ', $values);
-    }
-
-    /**
      * Gets the definition of the default actions.
      */
     private function getDefaultActions(): array
@@ -79,5 +68,16 @@ class SimpleEditorType extends AbstractType
         } catch (\InvalidArgumentException $e) {
             return [];
         }
+    }
+
+    /**
+     * Gets the class name when the required option is set.
+     */
+    private function getwidgetClass(FormView $view): string
+    {
+        $values = \array_filter(\explode(' ', $view->vars['attr']['class'] ?? ''));
+        $values[] = 'must-validate';
+
+        return \implode(' ', \array_unique($values));
     }
 }

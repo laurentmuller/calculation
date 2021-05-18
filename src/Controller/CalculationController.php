@@ -359,7 +359,7 @@ class CalculationController extends AbstractEntityController
     /**
      * {@inheritdoc}
      *
-     * @param Calculation $item
+     * @psalm-param Calculation $item
      */
     protected function saveToDatabase(AbstractEntity $item): void
     {

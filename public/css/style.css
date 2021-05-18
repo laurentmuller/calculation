@@ -36,7 +36,7 @@
 /*
  * required
  */
-a.required:after,
+span.required:after,
 label.required:after,
 legend.required:after,
 th.required:after {
@@ -262,6 +262,7 @@ span.state-color {
  * Print media
  */
 @media print {
+    span.required:after,
     label.required:after,
     legend.required:after,
     th.required:after {

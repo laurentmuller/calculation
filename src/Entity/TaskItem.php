@@ -46,6 +46,13 @@ class TaskItem extends AbstractEntity implements \Countable
     private ?string $name = null;
 
     /**
+     * The index position.
+     *
+     * @ORM\Column(type="integer", options={"default" = 0})
+     */
+    private int $position = 0;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Task::class, inversedBy="items")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -128,6 +135,11 @@ class TaskItem extends AbstractEntity implements \Countable
         return $this->name;
     }
 
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
     public function getTask(): ?Task
     {
         return $this->task;
@@ -155,6 +167,13 @@ class TaskItem extends AbstractEntity implements \Countable
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function setPosition(int $position): self
+    {
+        $this->position = $position;
 
         return $this;
     }

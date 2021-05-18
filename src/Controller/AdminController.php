@@ -351,37 +351,37 @@ class AdminController extends AbstractController
         // fields
         $helper->field('closed')
             ->help('calculation.update.closed_help')
-            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 
         $helper->field('empty')
             ->help('calculation.update.empty_help')
-            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 
         $helper->field('duplicated')
             ->help('calculation.update.duplicated_help')
-            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 
         $helper->field('sorted')
             ->help('calculation.update.sorted_help')
-            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 
         $helper->field('simulated')
             ->help('calculation.update.simulated_help')
-            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 
         $helper->field('confirm')
             ->notMapped()
-            ->updateRowAttribute('class', 'mb-0')
+            ->helpClass('mb-0')
             ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
             ->addCheckboxType();
 

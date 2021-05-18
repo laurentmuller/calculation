@@ -1051,8 +1051,9 @@ task:
         success: La tâche <b>%name%</b> a été mise à jour avec succès.
         add_item: Ajouter une opération
         delete_item: Supprimer l'opération et ses marges
+        move_up_item: Déplacer l'opération vers le haut
+        move_down_item: Déplacer l'opération vers le bas
         empty_items: Aucune opération définie.
-        sort_items: Trier
     delete:
         title: Supprimer la tâche
         message: Êtes-vous sûr de vouloir supprimer la tâche <b>%name%</b> ?
@@ -1080,7 +1081,8 @@ taskitem:
         delete_item: Supprimer la marge
         empty_items: Aucune marge définie.
         sort_items: Trier les marges
-        toggle_items: Afficher / Masquer les marges
+        items_show: Afficher les marges
+        items_hide: Masquer les marges
 taskitemmargin:
     name: Marge
     fields:

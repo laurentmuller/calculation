@@ -83,12 +83,12 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     private function addCustomerSection(FormHelper $helper): void
     {
         $helper->field(self::P_CUSTOMER_NAME)
-            ->updateRowAttribute('class', 'ml-2')
+            ->rowClass('ml-2')
             ->updateAttribute('spellcheck', 'false')
             ->addTextType();
 
         $helper->field(self::P_CUSTOMER_URL)
-            ->updateRowAttribute('class', 'ml-2')
+            ->rowClass('ml-2')
             ->addUrlType();
     }
 
@@ -160,7 +160,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             $helper->field($option)
                 ->label("password.{$option}")
                 ->updateAttribute('data-default', 0)
-                ->updateRowAttribute('class', 'mb-1 ml-1')
+                ->rowClass('mb-1 ml-1')
                 ->notRequired()
                 ->addCheckboxType();
         }

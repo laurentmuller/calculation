@@ -136,13 +136,13 @@ class ImportProductController extends AbstractController
 
         $helper->field('simulate')
             ->help('product.import.simulate_help')
-            ->updateHelpAttribute('class', 'ml-4 mb-2')
+            ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 
         $helper->field('confirm')
             ->notMapped()
-            ->updateRowAttribute('class', 'mb-0')
+            ->helpClass('mb-0')
             ->updateAttribute('data-error', $this->trans('product.import.error.confirm'))
             ->addCheckboxType();
 

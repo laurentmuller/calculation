@@ -154,9 +154,7 @@ class FormHelper
     public function addCheckboxType(bool $switchStyle = true): self
     {
         if ($switchStyle) {
-            $class = $this->labelAttributes['class'] ?? '';
-            $class .= ' switch-custom';
-            $this->updateLabelAttribute('class', \trim($class));
+            $this->labelClass('switch-custom');
         }
 
         return $this->add(CheckboxType::class);
@@ -199,7 +197,7 @@ class FormHelper
     public function addColorType(bool $colorPicker = true): self
     {
         if ($colorPicker) {
-            $this->className('color-picker');
+            $this->widgetClass('color-picker');
         }
 
         return $this->add(ColorType::class);
@@ -261,7 +259,7 @@ class FormHelper
      */
     public function addNumberType(int $scale = 2): self
     {
-        return $this->className('text-right')
+        return $this->widgetClass('text-right')
             ->updateOption('html5', true)
             ->updateAttribute('scale', $scale)
             ->add(NumberType::class);
@@ -284,7 +282,7 @@ class FormHelper
      */
     public function addPercentType(int $min = \PHP_INT_MIN, int $max = \PHP_INT_MAX, float $step = 1.0): self
     {
-        $this->className('text-right')
+        $this->widgetClass('text-right')
             ->updateOption('html5', true)
             ->autocomplete('off');
 
@@ -416,7 +414,7 @@ class FormHelper
     public function addTextareaType(): self
     {
         return $this->updateAttribute('rows', 4)
-            ->className('resizable')
+            ->widgetClass('resizable')
             ->add(TextareaType::class);
     }
 
@@ -500,24 +498,6 @@ class FormHelper
     public function autofocus(): self
     {
         return $this->updateAttribute('autofocus', true);
-    }
-
-    /**
-     * Add a class name.
-     *
-     * @param string $name one or more space-separated classes to be added to the class attribute
-     */
-    public function className(string $name): self
-    {
-        if ('' === $name) {
-            return $this;
-        }
-
-        $newValues = \array_filter(\explode(' ', $name));
-        $oldValues = \array_filter(\explode(' ', $this->attributes['class'] ?? ''));
-        $class = \implode(' ', \array_unique(\array_merge($newValues, $oldValues)));
-
-        return $this->updateAttribute('class', $class);
     }
 
     /**
@@ -636,6 +616,16 @@ class FormHelper
     }
 
     /**
+     * Add a class name to the help class attributes.
+     *
+     * @param string $name one or more space-separated classes to be added to the help class attribute
+     */
+    public function helpClass(string $name): self
+    {
+        return $this->addClasses($this->helpAttributes, $name);
+    }
+
+    /**
      * Hides the label.
      */
     public function hideLabel(): self
@@ -653,6 +643,16 @@ class FormHelper
         $label = empty($label) ? null : $label;
 
         return $this->updateOption('label_format', $label);
+    }
+
+    /**
+     * Add a class name to the label class attributes.
+     *
+     * @param string $name one or more space-separated classes to be added to the label class attribute
+     */
+    public function labelClass(string $name): self
+    {
+        return $this->addClasses($this->labelAttributes, $name);
     }
 
     /**
@@ -723,6 +723,16 @@ class FormHelper
         $this->labelAttributes = [];
 
         return $this;
+    }
+
+    /**
+     * Add a class name to the row class attributes.
+     *
+     * @param string $name one or more space-separated classes to be added to the row class attribute
+     */
+    public function rowClass(string $name): self
+    {
+        return $this->addClasses($this->rowAttributes, $name);
     }
 
     /**
@@ -798,6 +808,35 @@ class FormHelper
     }
 
     /**
+     * Add a class name to the widget class attribute.
+     *
+     * @param string $name one or more space-separated classes to be added to the widget class attribute
+     */
+    public function widgetClass(string $name): self
+    {
+        return $this->addClasses($this->attributes, $name);
+    }
+
+    /**
+     * Add one or more classes.
+     *
+     * @param array  $array the array attributes where to find and update existing classes
+     * @param string $name  one or more space-separated classes to add
+     */
+    private function addClasses(array &$array, string $name): self
+    {
+        if ('' === \trim($name)) {
+            return $this;
+        }
+
+        $newValues = \array_filter(\explode(' ', $name));
+        $oldValues = \array_filter(\explode(' ', $array['class'] ?? ''));
+        $className = \implode(' ', \array_unique(\array_merge($newValues, $oldValues)));
+
+        return $this->updateEntry($array, 'class', '' === $className ? null : $className, false);
+    }
+
+    /**
      * Update an entry in the given array.
      *
      * @param array  $array the array to update
@@ -805,7 +844,7 @@ class FormHelper
      * @param mixed  $value the entry value or null to remove
      * @param bool   $force true to put the entry, even if the value is null
      */
-    protected function updateEntry(array &$array, string $name, $value, bool $force): self
+    private function updateEntry(array &$array, string $name, $value, bool $force): self
     {
         if (null !== $value || $force) {
             $array[$name] = $value;

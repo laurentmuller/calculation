@@ -29,7 +29,9 @@ use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Service\AbstractHttpClientService;
+use App\Service\AkismetService;
 use App\Service\CaptchaImageService;
+use App\Service\FakerService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
 use App\Translator\TranslatorFactory;
@@ -601,5 +603,38 @@ class TestController extends AbstractController
         ];
 
         return $this->json($data);
+    }
+
+    /**
+     * @Route("/spam", name="test_spam")
+     */
+    public function verifyAkismetComment(AkismetService $akismetservice, FakerService $fakerService): JsonResponse
+    {
+        /** @var \Faker\Generator $faker */
+        $faker = $fakerService->getFaker();
+        $comment = $faker->realText(145, 2);
+
+        $value = $akismetservice->verifyComment($comment);
+        if ($lastError = $akismetservice->getLastError()) {
+            return new JsonResponse($lastError);
+        }
+
+        return new JsonResponse([
+            'comment' => $comment,
+            'spam' => $value,
+        ]);
+    }
+
+    /**
+     * @Route("/verify", name="test_verify")
+     */
+    public function verifyAkismetKey(AkismetService $service): JsonResponse
+    {
+        $value = $service->verifyKey();
+        if ($lastError = $service->getLastError()) {
+            return new JsonResponse($lastError);
+        }
+
+        return new JsonResponse(['valid_key' => $value]);
     }
 }

@@ -6,16 +6,6 @@
 {%- set cancel_path = path('homepage') -%}
 {%- set form_attr = form_attr|default({})|merge({'data-asset': asset_base}) -%}
 
-{% block stylesheets -%}
-{% set selection = theme_name(app.request) %}
-{% for theme in themes %}
-    {% if theme.name != selection %}
-        {{ asset_css(asset_base ~ theme.css, {'title': theme.name, 'alternate': true}) }}
-    {% endif %}
-{% endfor %}
-{{ parent() }}
-{%- endblock %}
-
 {% block card_header %}
 {{ parent() }}
 <p class="ml-4 mb-0">{{ 'theme.description'|trans }}
@@ -55,7 +45,7 @@
 
 {% block actions_form %}
 {{ parent() }}
-<a href="#" id="default"  class="btn btn-form btn-outline-success">{{ 'theme.default'|trans }}</a>
+<a href="#" id="default" class="btn btn-form btn-outline-success">{{ 'theme.default'|trans }}</a>
 {% endblock %}
 
 {% block javascripts %}

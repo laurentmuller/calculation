@@ -34,6 +34,14 @@ class SqlBuilderService
         $this->manager = $manager;
     }
 
+    /**
+     * Gets the child join.
+     *
+     * @param string $className the class name
+     * @psalm-param class-string<T> $className
+     *
+     * @template T of object
+     */
     public function getChildJoin(string $className, string $fieldName): string
     {
         if ($association = $this->getAssociation($className, $fieldName)) {
@@ -56,6 +64,14 @@ class SqlBuilderService
         return '';
     }
 
+    /**
+     * Gets the parent join.
+     *
+     * @param string $className the class name
+     * @psalm-param class-string<T> $className
+     *
+     * @template T of object
+     */
     public function getParentJoin(string $className, string $fieldName): string
     {
         if ($association = $this->getAssociation($className, $fieldName)) {
@@ -82,17 +98,31 @@ class SqlBuilderService
      * Gets the table name.
      *
      * @param string $className the class name
+     * @psalm-param class-string<T> $className
      *
-     * @return string the table name
+     * @template T of object
      */
     public function getTableName(string $className): string
     {
-        return $this->getClassMetadata($className)->getTableName();
+        /** @psalm-var ClassMetadata<T> $data */
+        $data = $this->getClassMetadata($className);
+
+        return $data->getTableName();
     }
 
+    /**
+     * Gets the association for the given class name.
+     *
+     * @param string $className the class name
+     * @psalm-param class-string<T> $className
+     *
+     * @template T of object
+     */
     private function getAssociation(string $className, string $fieldName): ?array
     {
+        /** @psalm-var ClassMetadata<T> $data */
         $data = $this->getClassMetadata($className);
+
         if ($data->hasAssociation($fieldName)) {
             return $data->getAssociationMapping($fieldName);
         }
@@ -100,8 +130,21 @@ class SqlBuilderService
         return null;
     }
 
+    /**
+     * Returns the class meta-data descriptor for the given class.
+     *
+     * @param string $className the class name
+     * @psalm-param class-string<T> $className
+
+     * @psalm-return ClassMetadata<T>
+     *
+     * @template T of object
+     */
     private function getClassMetadata(string $className): ClassMetadata
     {
-        return $this->manager->getClassMetadata($className);
+        /** @psalm-var ClassMetadata<T> $data */
+        $data = $this->manager->getClassMetadata($className);
+
+        return $data;
     }
 }

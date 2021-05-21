@@ -34,6 +34,11 @@ abstract class AbstractHttpClientService
     protected const BASE_URI = 'base_uri';
 
     /**
+     * The body parameter name.
+     */
+    protected const BODY = 'body';
+
+    /**
      * The headers parameter name.
      */
     protected const HEADERS = 'headers';
@@ -102,7 +107,7 @@ abstract class AbstractHttpClientService
      */
     protected function getClient(): HttpClientInterface
     {
-        if (!$this->client) {
+        if (null === $this->client) {
             $options = $this->getDefaultOptions();
             $this->client = HttpClient::create($options);
         }

@@ -17,15 +17,10 @@ function applyTheme() {
         const $option = $('#theme').getSelectedOption();
         const title = $option.text();
         const description = $option.data('description');
+        const href = $form.data('asset') + $option.data('css');
 
-        // update links
-        $('link[title]').each(function () {
-            const $this = $(this);
-            $this.toggleDisabled(true);
-            if ($this.attr('title') === title) {
-                $this.toggleDisabled(false);
-            }
-        });
+        // update link
+        $('head link[title][rel="stylesheet"]').attr('href', href);
 
         // update texts
         $('#example_name').text(title);

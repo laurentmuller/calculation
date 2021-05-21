@@ -128,6 +128,7 @@ class ThemeType extends AbstractHelperType
         $choice_attr = function (Theme $choice) {
             return [
                 'data-description' => $choice->getDescription(),
+                'data-css' => $choice->getCss(),
             ];
         };
         $helper->field('theme')

@@ -19,6 +19,10 @@ calculation:
         items: Articles
         created: Création
         updated: Mise à jour
+        createdBy: Création
+        createdAt: Création
+        updatedBy: Mise à jour
+        updatedAt: Mise à jour
     add:
         title: Nouvelle calculation
         success: La calculation Nº <b>%name%</b> a été créée avec succès.

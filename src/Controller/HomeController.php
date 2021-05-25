@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 

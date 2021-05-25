@@ -50,10 +50,8 @@ class ExchangeRateService extends AbstractHttpClientService
 
     /**
      * The API key.
-     *
-     * @var mixed
      */
-    private $key;
+    private string $key;
 
     /**
      * Constructor.

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\DataTable\GlobalMarginDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\GlobalMargin;
@@ -22,6 +21,7 @@ use App\Pdf\PdfResponse;
 use App\Report\GlobalMarginsReport;
 use App\Spreadsheet\GlobalMarginDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

@@ -38,5 +38,5 @@ twig:
     form_themes:
     - form/fields.html.twig
 
-asprega_breadcrumb:
+slope_it_breadcrumb:
     template: 'breadcrumb.html.twig'

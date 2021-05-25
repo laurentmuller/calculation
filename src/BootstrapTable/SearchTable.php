@@ -58,7 +58,7 @@ class SearchTable extends AbstractTable
     private const COLUMN_ENTITY_NAME = 'entityName';
 
     /**
-     * The entity column name.
+     * The field column name.
      */
     private const COLUMN_FIELD_NAME = 'fieldName';
 

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\BootstrapTable\AbstractTable;
 use App\BootstrapTable\CalculationBelowTable;
 use App\BootstrapTable\CalculationDuplicateTable;
@@ -35,6 +34,7 @@ use App\Repository\CategoryRepository;
 use App\Traits\MathTrait;
 use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

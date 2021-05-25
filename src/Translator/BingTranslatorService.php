@@ -228,7 +228,7 @@ class BingTranslatorService extends AbstractTranslatorService
     {
         if (\function_exists('com_create_guid')) {
             if ($guid = \com_create_guid()) {
-                return $guid;
+                return \trim($guid, '{}');
             }
         }
 

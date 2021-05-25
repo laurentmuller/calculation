@@ -184,18 +184,19 @@ class SearchService
     }
 
     /**
-     * Create the SQL query for the calculation date.
+     * Create the SQL query for the calculation dates.
      */
-    protected function createCalculationDateQuery(): self
+    protected function createCalculationDatesQuery(): self
     {
         $class = Calculation::class;
-        $field = 'date';
-        $content = "date_format(e.{$field}, '%d.%m.%Y')";
-        $key = $this->getKey($class, $field);
-
-        $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
-            ->getQuery()
-            ->getSQL();
+        $fields = ['date', 'createdAt', 'updatedAt'];
+        foreach ($fields as $field) {
+            $content = "date_format(e.{$field}, '%d.%m.%Y')";
+            $key = $this->getKey($class, $field);
+            $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
+                ->getQuery()
+                ->getSQL();
+        }
 
         return $this;
     }
@@ -337,7 +338,7 @@ class SearchService
         // created?
         if (empty($this->queries)) {
             // entities queries
-            $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal'])
+            $this->createEntityQueries(Calculation::class, ['id', 'customer', 'description', 'overallTotal', 'createdBy', 'updatedBy'])
                 ->createEntityQueries(CalculationState::class, ['code', 'description'])
                 ->createEntityQueries(Product::class, ['description', 'supplier', 'price'])
                 ->createEntityQueries(Task::class, ['name'])
@@ -345,7 +346,7 @@ class SearchService
                 ->createEntityQueries(Group::class, ['code', 'description']);
 
             // custom calculation queries
-            $this->createCalculationDateQuery()
+            $this->createCalculationDatesQuery()
                 ->createCalculationStateQuery()
                 ->createCalculationItemQuery();
 

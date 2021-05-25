@@ -44,12 +44,12 @@ class AkismetService extends AbstractHttpClientService
     /**
      * The comment check URI.
      */
-    private const URI_COMMENT_CHECK = '/1.1/comment-check';
+    private const URI_COMMENT_CHECK = 'comment-check';
 
     /**
      * The verify key URI.
      */
-    private const URI_VERIFY = '/1.1/verify-key';
+    private const URI_VERIFY = 'verify-key';
 
     /**
      * The value returned when the comment is not a spam.
@@ -95,16 +95,11 @@ class AkismetService extends AbstractHttpClientService
      * Constructor.
      *
      * @throws ParameterNotFoundException if the API key parameter is not defined
-     *
-     * @psalm-suppress PossiblyNullOperand
      */
     public function __construct(ParameterBagInterface $params, RequestStack $stack, Security $security, TranslatorInterface $translator, KernelInterface $kernel, AdapterInterface $adapter)
     {
-        $key = $params->get(self::PARAM_KEY);
-        if (\is_string($key)) {
-            $this->key = $key;
-        }
-        $this->endpoint = \sprintf('https://%s.rest.akismet.com', $this->key);
+        $this->key = $params->get(self::PARAM_KEY);
+        $this->endpoint = \sprintf('https://%s.rest.akismet.com/1.1/', $this->key);
         $this->stack = $stack;
         $this->security = $security;
         $this->translator = $translator;
@@ -163,8 +158,8 @@ class AkismetService extends AbstractHttpClientService
                 'user_agent' => $headers->get('User-Agent') ?? '',
                 'referrer' => $headers->get('referer') ?? '',
 
-                'comment_type' => 'contact-form',
                 'comment_content' => $content,
+                'comment_type' => 'contact-form',
                 'comment_author' => $user->getUsername(), // 'viagra-test-123',
                 'comment_author_email' => $user->getEmail(),
                 'comment_date_gmt' => (new \DateTime())->format(\DateTime::ISO8601),

@@ -87,10 +87,8 @@ class ResponseListener implements EventSubscriberInterface
 
     /**
      * The asset URL.
-     *
-     * @var mixed
      */
-    private $asset;
+    private string $asset;
 
     /**
      * The debug mode.
@@ -109,11 +107,6 @@ class ResponseListener implements EventSubscriberInterface
 
     /**
      * Constructor.
-     *
-     * @param KernelInterface       $kernel    the kernel to get the debug mode
-     * @param RouterInterface       $router    the router to get reporting URL
-     * @param ParameterBagInterface $params    the bag to get asset parameter
-     * @param NonceExtension        $extension the extension to generate nonce
      */
     public function __construct(KernelInterface $kernel, RouterInterface $router, ParameterBagInterface $params, NonceExtension $extension)
     {

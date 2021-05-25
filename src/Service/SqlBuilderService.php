@@ -44,21 +44,13 @@ class SqlBuilderService
      */
     public function getChildJoin(string $className, string $fieldName): string
     {
-        if ($association = $this->getAssociation($className, $fieldName)) {
-            if (isset($association['joinColumns']) && !empty($association['joinColumns'])) {
-                $join = $association['joinColumns'][0];
+        if ($mapping = $this->getAssociationMapping($className, $fieldName)) {
+            $sourceTable = $mapping['sourceTable'];
+            $sourceField = $mapping['sourceField'];
+            $targetTable = $mapping['targetTable'];
+            $targetField = $mapping['targetField'];
 
-                $sourceEntity = $association['sourceEntity'];
-                $sourceTable = $this->getTableName($sourceEntity);
-
-                $targetEntity = $association['targetEntity'];
-                $targetTable = $this->getTableName($targetEntity);
-
-                $sourceField = $join['name'];
-                $targetField = $join['referencedColumnName'];
-
-                return "INNER JOIN {$sourceTable} ON {$sourceTable}.{$sourceField} = {$targetTable}.{$targetField} ";
-            }
+            return "INNER JOIN {$sourceTable} ON {$sourceTable}.{$sourceField} = {$targetTable}.{$targetField} ";
         }
 
         return '';
@@ -74,21 +66,13 @@ class SqlBuilderService
      */
     public function getParentJoin(string $className, string $fieldName): string
     {
-        if ($association = $this->getAssociation($className, $fieldName)) {
-            if (isset($association['joinColumns']) && !empty($association['joinColumns'])) {
-                $join = $association['joinColumns'][0];
+        if ($mapping = $this->getAssociationMapping($className, $fieldName)) {
+            $sourceTable = $mapping['sourceTable'];
+            $sourceField = $mapping['sourceField'];
+            $targetTable = $mapping['targetTable'];
+            $targetField = $mapping['targetField'];
 
-                $sourceEntity = $association['sourceEntity'];
-                $sourceTable = $this->getTableName($sourceEntity);
-
-                $targetEntity = $association['targetEntity'];
-                $targetTable = $this->getTableName($targetEntity);
-
-                $sourceField = $join['name'];
-                $targetField = $join['referencedColumnName'];
-
-                return "INNER JOIN {$targetTable} ON {$sourceTable}.{$sourceField} = {$targetTable}.{$targetField} ";
-            }
+            return "INNER JOIN {$targetTable} ON {$sourceTable}.{$sourceField} = {$targetTable}.{$targetField} ";
         }
 
         return '';
@@ -111,20 +95,38 @@ class SqlBuilderService
     }
 
     /**
-     * Gets the association for the given class name.
+     * Gets the association mapping for the given class name.
      *
      * @param string $className the class name
      * @psalm-param class-string<T> $className
      *
      * @template T of object
      */
-    private function getAssociation(string $className, string $fieldName): ?array
+    private function getAssociationMapping(string $className, string $fieldName): ?array
     {
         /** @psalm-var ClassMetadata<T> $data */
         $data = $this->getClassMetadata($className);
-
         if ($data->hasAssociation($fieldName)) {
-            return $data->getAssociationMapping($fieldName);
+            $association = $data->getAssociationMapping($fieldName);
+            if (isset($association['joinColumns']) && !empty($association['joinColumns'])) {
+                $join = $association['joinColumns'][0];
+
+                $sourceEntity = $association['sourceEntity'];
+                $sourceTable = $this->getTableName($sourceEntity);
+
+                $targetEntity = $association['targetEntity'];
+                $targetTable = $this->getTableName($targetEntity);
+
+                $sourceField = $join['name'];
+                $targetField = $join['referencedColumnName'];
+
+                return [
+                    'sourceTable' => $sourceTable,
+                    'sourceField' => $sourceField,
+                    'targetTable' => $targetTable,
+                    'targetField' => $targetField,
+                ];
+            }
         }
 
         return null;

@@ -12,11 +12,6 @@
 			<attribute name="composer" value="source"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/asprega/breadcrumb-bundle">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/bamarni/composer-bin-plugin/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -438,6 +433,11 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/sensio/framework-extra-bundle/src">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/slope-it/breadcrumb-bundle/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

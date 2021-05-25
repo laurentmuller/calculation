@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use AndreaSprega\Bundle\BreadcrumbBundle\Annotation\Breadcrumb;
 use App\DataTable\CategoryDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
@@ -25,6 +24,7 @@ use App\Repository\ProductRepository;
 use App\Repository\TaskRepository;
 use App\Spreadsheet\CategoryDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

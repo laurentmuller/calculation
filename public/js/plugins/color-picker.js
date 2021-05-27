@@ -22,7 +22,7 @@
     ColorPicker.prototype = {
 
         /**
-         * Constrcutor.
+         * Constructor.
          */
         constructor: ColorPicker,
 
@@ -240,7 +240,7 @@
 
         /**
          * Handles the custom button click event.
-         * 
+         *
          * @param {Event}
          *            e - the event.
          */
@@ -252,7 +252,7 @@
 
         /**
          * Handles the color button click event.
-         * 
+         *
          * @param {Event}
          *            e - the event.
          */
@@ -269,7 +269,7 @@
 
         /**
          * Handles the color button key down event.
-         * 
+         *
          * @param {Event}
          *            e - the event.
          */
@@ -281,7 +281,7 @@
             const selection = this.getSelection($button);
             const count =  this.$palette.find('.color-button').length;
             let index = selection.row * this.cols + selection.col;
-            
+
             switch (e.which || e.keyCode) {
             case 35: // end
                 selection.col = lastCol;
@@ -352,7 +352,7 @@
             default:
                 return;
             }
-            
+
             // update
             this.setSelection(selection);
             e.preventDefault();
@@ -383,7 +383,7 @@
 
         /**
          * Gets the selected color button.
-         * 
+         *
          * @param {jQuery}
          *            $button - the clicked button element.
          * @returns {Object} the row and column index of the selected button.
@@ -413,7 +413,7 @@
 
         /**
          * Finds color buttons for the given selector.
-         * 
+         *
          * @param {string}
          *            selector - the buttons selector.
          * @returns {jQuery} the buttons, if found; null otherwise.
@@ -425,7 +425,7 @@
 
         /**
          * Sets the selected (focus) color button.
-         * 
+         *
          * @param {Object}
          *            selection - the selection to set (must contains a 'row'
          *            and a 'col' fields).
@@ -442,7 +442,7 @@
 
         /**
          * Find the name for the given hexadecimal color.
-         * 
+         *
          * @param {string}
          *            color - the hexadecimal color to search for.
          * @returns {string} the color name, if found; the custom text
@@ -456,14 +456,14 @@
             if (index !== -1) {
                return Object.keys(colors)[index];
             }
-            
+
             // custom text
             return this.options.customText;
         },
 
         /**
          * Find the hexadecimal color for the given name.
-         * 
+         *
          * @param {string}
          *            name - the color name to search for.
          * @returns {string} the hexadecimal color, if found; the first color
@@ -513,7 +513,7 @@
         tooltipPlacement: 'top', // placement
         tooltipContent: '{name} ({color})', // text format
         tooltipTrigger: 'hover', // trigger event
-        
+
         // colors
         colors: {
             "Noir": "#000000",

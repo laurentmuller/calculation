@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{# parameters #}
+{% set title = 'Bootstrap TreeView Demo' %}
+{% set title_icon = 'table' %}
+
+{% block body -%}
+<div class="row pt-5">
+    <div class="col-md-6 offset-md-2">
+        <h1>{{ title }}</h1>
+    </div>
+    <div class="col-md-2 text-right mt-3">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Toolbar">
+        <button type="button" class="btn btn-outline-secondary btn-expand-all" title="Expand All">
+                <i class="fas fa-plus"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-collapse-all" title="Collapse All">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-expand-level" title="Expand to level 1">
+                <i class="fas fa-expand-alt"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div id="tree" data-url="{{ path('test_tree') }}"></div>
+    </div>
+</div>
+{%- endblock %}
+
+{% block stylesheets -%}
+{{ parent() }}
+{{ asset_css('css/bstreeview.css') }}
+{% endblock %}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('js/plugins/bstreeview.js') }}
+{{ asset_js('js/test/treeview.js') }}
+{% endblock %}

@@ -28,6 +28,7 @@ use App\Pdf\PdfTocDocument;
 use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Repository\GroupRepository;
 use App\Service\AbstractHttpClientService;
 use App\Service\AkismetService;
 use App\Service\CaptchaImageService;
@@ -54,7 +55,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use App\Repository\GroupRepository;
 
 /**
  * Controller for tests.
@@ -562,6 +562,52 @@ class TestController extends AbstractController
     }
 
     /**
+     * @Route("/tree", name="test_tree")
+     */
+    public function treeView(Request $request, GroupRepository $repository): Response
+    {
+        // JSON?
+        if ($request->isXmlHttpRequest()) {
+            /** @var \App\Entity\Group[] $groups */
+            $groups = $repository->findAllByCode();
+
+            $nodes = [];
+            foreach ($groups as $group) {
+                $node = [
+                    'id' => 'group-' . $group->getId(),
+                    'text' => $group->getCode(),
+                    'icon' => 'fas fa-code-branch fa-fw',
+                ];
+
+                /** @var \App\Entity\Category $category */
+                foreach ($group->getCategories() as $category) {
+                    $node['nodes'][] = [
+                        'id' => 'category-' . $category->getId(),
+                        'text' => $category->getCode(),
+                        'icon' => 'far fa-folder fa-fw',
+                        'badgeValue' => (string) ($category->countProducts() + $category->countTasks()),
+                    ];
+                }
+
+                $nodes[] = $node;
+            }
+
+            //root
+            $root = [
+                'id' => 'root',
+                'text' => 'Catalogue',
+                'icon' => 'fas fa-table fa-fw',
+                'expanded' => true,
+                'nodes' => $nodes,
+            ];
+
+            return new JsonResponse([$root]);
+        }
+
+        return $this->render('test/treeview.html.twig');
+    }
+
+    /**
      * @Route("/union", name="test_union")
      */
     public function union(Request $request, SearchService $service): JsonResponse
@@ -637,50 +683,5 @@ class TestController extends AbstractController
         }
 
         return new JsonResponse(['valid_key' => $value]);
-    }
-
-    /**
-     * @Route("/tree", name="test_tree")
-     */
-    public function treeView(Request $request, GroupRepository $repository): Response {
-        // JSON?
-        if ($request->isXmlHttpRequest()) {
-            /** @var \App\Entity\Group[] $groups */
-            $groups =  $repository->findAllByCode();
-
-            $nodes = [];
-            foreach ($groups as $group) {
-                $jsonGroup = [
-                    'id' => 'group-' . $group->getId(),
-                    'text' => $group->getCode(),
-                    'icon' => "fas fa-code-branch fa-fw"
-                ];
-
-                /** @var \App\Entity\Category $category */
-                foreach ($group->getCategories() as $category) {
-                    $jsonGroup['nodes'][] = [
-                        'id' => 'category-' . $category->getId(),
-                        'text' => $category->getCode(),
-                        'icon' => "far fa-folder fa-fw",
-                        'badgeValue' => (string)($category->countProducts() + $category->countTasks())
-                    ];
-                }
-
-                $nodes[] = $jsonGroup;
-            }
-
-            //root
-            $root = [
-                'id' => 'root',
-                'text' => 'Catalogue',
-                'icon' => 'fas fa-table fa-fw',
-                'expanded' => true,
-                'nodes' => $nodes
-            ];
-
-            return new JsonResponse([$root]);
-        }
-
-        return $this->render('test/treeview.html.twig');
     }
 }

@@ -9,10 +9,7 @@
     $tree.boostrapTreeView({
         badgeCount: true,
         url: $tree.data('url'),
-        hoverClass: 'list-group-item-primary',
-        templates: {
-            item: '<button type="button" role="treeitem" class="list-group-item list-group-item-action text-left" data-toggle="collapse"></button>'
-        }
+        loading: 'Recherche des données...'
     });
     $('.btn-expand-all').on('click', function () {
         $tree.data('boostrapTreeView').expandAll();
@@ -22,5 +19,8 @@
     });
     $('.btn-expand-level').on('click', function () {
         $tree.data('boostrapTreeView').expandToLevel(1);
+    });
+    $('.btn-refresh').on('click', function () {
+        $tree.data('boostrapTreeView').refresh();
     });
 }(jQuery));

@@ -31,67 +31,70 @@
          */
         init: function () {
             const that = this;
+            const options = that.options;
             const $element = that.$element;
 
             that.tree = [];
             that.nodes = [];
 
             // retrieve Json Data.
-            if (that.options.data) {
-                if (that.options.data.isPrototypeOf(String)) {
-                    that.options.data = $.parseJSON(this.options.data);
+            if (options.data) {
+                if (options.data.isPrototypeOf(String)) {
+                    options.data = $.parseJSON(this.options.data);
                 }
                 that.tree = $.extend(true, [], this.options.data);
-                delete that.options.data;
-            } else if (that.options.url) {
-                $.get(that.options.url, function (data) {
+                // delete options.data;
+            } else if (options.url) {
+                $('*').css('cursor', 'wait');
+                const $loading = $(options.templates.item)
+                    .text(options.loading)
+                    .appendTo($element);
+                $.get(options.url, function (data) {
                     that.tree = $.extend(true, [], data);
-                    that.initData({
-                        nodes: that.tree
-                    });
-                    that.build(that.$element, that.tree, 0);
+                    // initialise
+                    if (that.tree.length) {
+                        that.initData({
+                            nodes: that.tree
+                        });
+                        that.build(that.$element, that.tree, 0);
+                    }
+                }).always(function () {
+                    $loading.remove();
                     that.selectFirst();
+                    $('*').css('cursor', '');
                 });
             }
 
             // set main class to element.
             $element.addClass('bstreeview ' + this.options.treeClass);
 
-            // initialise
-            that.initData({
-                nodes: that.tree
-            });
+            if (that.tree.length) {
+                // initialise
+                that.initData({
+                    nodes: that.tree
+                });
 
-            // build
-            that.build($element, that.tree, 0);
-            that.selectFirst();
+                // build
+                that.build($element, that.tree, 0);
+                that.selectFirst();
+            }
 
             // handle events
             $element.on('click', '.list-group-item', function (e) {
                 // update state icon
                 $('.state-icon', this)
-                    .toggleClass(that.options.expandIcon)
-                    .toggleClass(that.options.collapseIcon);
+                    .toggleClass(options.expandIcon)
+                    .toggleClass(options.collapseIcon);
 
                 // navigate to href if present
                 if (e.target.hasAttribute('href')) {
-                    if (that.options.openNodeLinkOnNewTab) {
+                    if (options.openNodeLinkOnNewTab) {
                         window.open(e.target.getAttribute('href'), '_blank');
                     } else {
                         window.location = e.target.getAttribute('href');
                     }
                 }
-
                 that.setSelection($(this));
-
-                // }).on('mouseenter', '.list-group-item', function () {
-                // const $this = $(this);
-                // $this.addClass(that.options.hoverClass)
-                // .removeClass($this.data('class') || '');
-                // }).on('mouseleave', '.list-group-item', function () {
-                // const $this = $(this);
-                // $this.removeClass(that.options.hoverClass)
-                // .addClass($this.data('class') || '');
             });
         },
 
@@ -118,15 +121,15 @@
          */
         build: function ($parentElement, nodes, depth) {
             const that = this;
+            const options = that.options;
+            const templates = options.templates;
 
             // calculate item padding
-            let paddingLeft = that.options.parentIndent + "rem;";
+            let paddingLeft = options.parentIndent + "rem;";
             if (depth > 0) {
-                paddingLeft = (that.options.indent + depth * that.options.indent).toString() + "rem;";
+                paddingLeft = (options.indent + depth * options.indent).toString() + "rem;";
             }
             depth++;
-
-            const templates = that.options.templates;
 
             // add each node and sub-nodes
             $.each(nodes, function (index, node) {
@@ -139,7 +142,7 @@
                 // set expand or collapse icons
                 if (node.nodes && node.nodes.length) {
                     $(templates.stateIcon)
-                        .addClass(node.expanded ? that.options.expandIcon : that.options.collapseIcon)
+                        .addClass(node.expanded ? options.expandIcon : options.collapseIcon)
                         .appendTo($treeItem);
                 }
 
@@ -154,7 +157,7 @@
                 $treeItem.append(node.text);
 
                 // set badge if present
-                const badgeValue = node.badgeValue || (that.options.badgeCount && node.nodes ? node.nodes.length : false);
+                const badgeValue = node.badgeValue || (options.badgeCount && node.nodes ? node.nodes.length : false);
                 if (badgeValue) {
                     $(templates.itemBadge)
                         .addClass(node.badgeClass || 'badge-primary')
@@ -215,10 +218,27 @@
             }
         },
 
+        /**
+         * Gets the selected element.
+         */
         getSelection: function () {
+            let $selection = null;
             const selectionClass = this.options.selectionClass;
-            const $selection = this.$element.find('.list-group-item').hasClass(selectionClass);
-            return $selection.length ? $selection : null;
+            this.$element.find('.list-group-item').each(function () {
+                if ($(this).hasClass(selectionClass)) {
+                    $selection = $(this);
+                    return false;
+                }
+            });
+            return $selection;
+        },
+
+        /**
+         * Refresh data
+         */
+        refresh: function () {
+            this.$element.children().remove();
+            this.init();
         },
 
         /**
@@ -235,7 +255,6 @@
          * Expand all.
          */
         expandAll: function () {
-            // '.list-group-item'
             this.$element.find('.list-group.collapse:not(.show)').each(function () {
                 $(this).prev('.list-group-item').trigger('click');
             });
@@ -253,8 +272,6 @@
                     $group.trigger('click');
                 }
             });
-            console.log(this.getSelection());
-            this.selectFirst();
         }
     };
 
@@ -263,9 +280,9 @@
     // -----------------------------------
     BoostrapTreeView.DEFAULTS = {
         url: null,
+        loading: 'Loading...',
         treeClass: 'border rounded',
-        hoverClass: 'active',
-        selectionClass: 'active',
+        selectionClass: 'list-group-item-primary',
         expandIcon: 'fas fa-caret-down fa-fw',
         collapseIcon: 'fas fa-caret-right fa-fw',
         indent: 1.25,
@@ -273,8 +290,8 @@
         openNodeLinkOnNewTab: true,
         badgeCount: false,
         templates: {
-            item: '<div role="treeitem" class="list-group-item" data-toggle="collapse"></div>',
             groupItem: '<div role="group" class="list-group collapse" id="itemid"></div>',
+            item: '<button type="button" role="treeitem" class="list-group-item list-group-item-action text-left" data-toggle="collapse"></button>',
             stateIcon: '<i class="state-icon"></i>',
             itemIcon: '<i class="item-icon"></i>',
             itemBadge: '<span class="item-badge badge badge-pill"></span>'

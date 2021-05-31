@@ -1118,22 +1118,22 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.9.1",
+            "version": "2.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "f3e55fae9fdbdbc23897006bdbf016c20e11f6e9"
+                "reference": "75b4b88c5b7cebc24ed7251a20c2a5aa027300e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/f3e55fae9fdbdbc23897006bdbf016c20e11f6e9",
-                "reference": "f3e55fae9fdbdbc23897006bdbf016c20e11f6e9",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/75b4b88c5b7cebc24ed7251a20c2a5aa027300e1",
+                "reference": "75b4b88c5b7cebc24ed7251a20c2a5aa027300e1",
                 "shasum": ""
             },
             "require": {
                 "composer/package-versions-deprecated": "^1.8",
                 "doctrine/annotations": "^1.13",
-                "doctrine/cache": "^1.11|^2.0",
+                "doctrine/cache": "^1.11.3|^2.0.3",
                 "doctrine/collections": "^1.5",
                 "doctrine/common": "^3.0.3",
                 "doctrine/dbal": "^2.13.0",
@@ -1204,9 +1204,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.9.1"
+                "source": "https://github.com/doctrine/orm/tree/2.9.2"
             },
-            "time": "2021-05-24T15:54:12+00:00"
+            "time": "2021-05-31T09:53:14+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -3116,16 +3116,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v6.1.4",
+            "version": "v6.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "d962626a1b454edb36f727f8e0090b45280af98c"
+                "reference": "62c5909f49cf74dccdf50a294511cc24be2f969c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/d962626a1b454edb36f727f8e0090b45280af98c",
-                "reference": "d962626a1b454edb36f727f8e0090b45280af98c",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/62c5909f49cf74dccdf50a294511cc24be2f969c",
+                "reference": "62c5909f49cf74dccdf50a294511cc24be2f969c",
                 "shasum": ""
             },
             "require": {
@@ -3188,9 +3188,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues",
-                "source": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/tree/v6.1.4"
+                "source": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/tree/v6.1.5"
             },
-            "time": "2021-05-17T13:48:05+00:00"
+            "time": "2021-05-31T10:40:46+00:00"
         },
         {
             "name": "slope-it/breadcrumb-bundle",
@@ -11003,26 +11003,26 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v5.2.9",
+            "version": "v5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "ea24e42c1ee04792f5d814da6f0814b20ece2907"
+                "reference": "15cab721487b7bf43ad545a1e7d0095782e26f8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/ea24e42c1ee04792f5d814da6f0814b20ece2907",
-                "reference": "ea24e42c1ee04792f5d814da6f0814b20ece2907",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/15cab721487b7bf43ad545a1e7d0095782e26f8c",
+                "reference": "15cab721487b7bf43ad545a1e7d0095782e26f8c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9"
+                "php": ">=7.1.3",
+                "symfony/deprecation-contracts": "^2.1"
             },
             "conflict": {
-                "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0|<6.4,>=6.0|9.1.2"
+                "phpunit/phpunit": "<7.5|9.1.2"
             },
             "require-dev": {
-                "symfony/deprecation-contracts": "^2.1",
                 "symfony/error-handler": "^4.4|^5.0"
             },
             "suggest": {
@@ -11066,7 +11066,7 @@
             "description": "Provides utilities for PHPUnit, especially user deprecation notices management",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/phpunit-bridge/tree/v5.2.9"
+                "source": "https://github.com/symfony/phpunit-bridge/tree/v5.3.0"
             },
             "funding": [
                 {
@@ -11082,7 +11082,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-16T13:07:46+00:00"
+            "time": "2021-05-26T17:57:12+00:00"
         },
         {
             "name": "symfony/stopwatch",

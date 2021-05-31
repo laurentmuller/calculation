@@ -6,21 +6,21 @@
 (function ($) {
     'use strict';
     const $tree = $('#tree');
-    $tree.boostrapTreeView({
+    const view = $tree.boostrapTreeView({
         badgeCount: true,
         url: $tree.data('url'),
         loading: 'Recherche des données...'
-    });
+    }).data('boostrapTreeView');
     $('.btn-expand-all').on('click', function () {
-        $tree.data('boostrapTreeView').expandAll();
+        view.expandAll().focus();
     });
     $('.btn-collapse-all').on('click', function () {
-        $tree.data('boostrapTreeView').collapseAll();
+        view.collapseAll().focus();
     });
     $('.btn-expand-level').on('click', function () {
-        $tree.data('boostrapTreeView').expandToLevel(1);
+        view.expandToLevel(1).focus();
     });
     $('.btn-refresh').on('click', function () {
-        $tree.data('boostrapTreeView').refresh();
+        view.refresh().focus();
     });
 }(jQuery));

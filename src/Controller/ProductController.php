@@ -208,7 +208,7 @@ class ProductController extends AbstractEntityController
     {
         $parameters = [];
         if (!$request->isXmlHttpRequest()) {
-            $categories = $repository->getProductListCount();
+            $categories = $repository->getListCountProducts();
             $total = \array_sum(\array_column($categories, 'count'));
             $parameters = [
                 'categories' => $categories,

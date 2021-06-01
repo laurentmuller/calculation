@@ -20,6 +20,7 @@ use App\Form\Category\CategoryType;
 use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
 use App\Repository\CalculationCategoryRepository;
+use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
 use App\Repository\TaskRepository;
 use App\Spreadsheet\CategoryDocument;
@@ -232,18 +233,20 @@ class CategoryController extends AbstractEntityController
      *
      * @Route("", name="category_table")
      */
-    public function table(Request $request, CategoryDataTable $table): Response
+    public function table(Request $request, CategoryDataTable $table, GroupRepository $respository): Response
     {
         // callback?
-        $attributes = [];
+        $parameters = [];
         if (!$request->isXmlHttpRequest()) {
-            $attributes = [
-                'link_href' => $this->generateUrl('product_table'),
-                'link_title' => $this->trans('category.list.product_title'),
+            $groups = $respository->getListCountCategories();
+            $total = \array_sum(\array_column($groups, 'count'));
+            $parameters = [
+                'groups' => $groups,
+                'total' => $total,
             ];
         }
 
-        return $this->renderTable($request, $table, $attributes);
+        return $this->renderTable($request, $table, [], $parameters);
     }
 
     /**

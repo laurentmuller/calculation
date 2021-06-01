@@ -37,7 +37,7 @@ class HomeController extends AbstractController
     {
         // get values to display
         $tabular = $this->isDisplayTabular();
-        $states = $stateRepository->getListCount();
+        $states = $stateRepository->getListCountCalculations();
         $months = $calculRepository->getByMonth();
         $calculations = $calculRepository->getLastCalculations($tabular ? 10 : 6);
         $min_margin = $this->getApplication()->getMinMargin();

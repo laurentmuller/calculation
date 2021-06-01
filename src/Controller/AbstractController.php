@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Excel\ExcelDocument;
 use App\Excel\ExcelResponse;
 use App\Form\FormHelper;
@@ -30,9 +31,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -113,21 +112,6 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets the session.
-     */
-    public function getSession(): SessionInterface
-    {
-        if (null !== $this->session) {
-            return $this->session;
-        } else {
-            /** @var SessionInterface $service */
-            $service = $this->get('session');
-
-            return $this->session = $service;
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     public static function getSubscribedServices(): array
@@ -177,7 +161,7 @@ abstract class AbstractController extends BaseController
     public function getUserName(): ?string
     {
         $user = $this->getUser();
-        if ($user instanceof UserInterface) {
+        if ($user instanceof User) {
             return $user->getUsername();
         }
 
@@ -191,7 +175,7 @@ abstract class AbstractController extends BaseController
      */
     public function isDebug(): bool
     {
-        return $this->getBoolParameter('kernel.debug');
+        return (bool) $this->getParameter('kernel.debug');
     }
 
     /**
@@ -226,17 +210,6 @@ abstract class AbstractController extends BaseController
         $builder = $this->createFormBuilder($data, $options);
 
         return new FormHelper($builder, $labelPrefix);
-    }
-
-    /**
-     * Gets a container parameter by its name.
-     */
-    protected function getBoolParameter(string $name): bool
-    {
-        /** @var bool $value */
-        $value = $this->getParameter($name);
-
-        return $value;
     }
 
     /**

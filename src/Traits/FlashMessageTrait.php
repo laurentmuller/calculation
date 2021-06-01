@@ -30,7 +30,7 @@ trait FlashMessageTrait
     protected function addFlashMessage(string $type, string $message): self
     {
         /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
-        $session = $this->doGetSession();
+        $session = $this->getSession();
         if (null !== $session) {
             $session->getFlashBag()->add($type, $message);
         }

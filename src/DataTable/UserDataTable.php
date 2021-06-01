@@ -22,7 +22,7 @@ use App\Repository\UserRepository;
 use App\Util\Utils;
 use DataTables\DataTablesInterface;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -53,17 +53,10 @@ class UserDataTable extends AbstractEntityDataTable
 
     /**
      * Constructor.
-     *
-     * @param SessionInterface    $session     the session to save/retrieve user parameters
-     * @param DataTablesInterface $datatables  the datatables to handle request
-     * @param UserRepository      $repository  the repository to get entities
-     * @param Environment         $environment the Twig environment to render cells
-     * @param TranslatorInterface $translator  the service to translate messages
-     * @param Security            $security    the service to get current user role
      */
-    public function __construct(SessionInterface $session, DataTablesInterface $datatables, UserRepository $repository, Environment $environment, TranslatorInterface $translator, Security $security)
+    public function __construct(RequestStack $requestStack, DataTablesInterface $datatables, UserRepository $repository, Environment $environment, TranslatorInterface $translator, Security $security)
     {
-        parent::__construct($session, $datatables, $repository, $environment);
+        parent::__construct($requestStack, $datatables, $repository, $environment);
         $this->translator = $translator;
 
         // check if current user has the super admin role
@@ -96,7 +89,7 @@ class UserDataTable extends AbstractEntityDataTable
      */
     public function formatImage(?string $image, User $item): string
     {
-        return $this->renderTemplate('user/user_image_cell.html.twig', ['item' => $item]);
+        return $this->renderTemplate('user/user_cell_image.html.twig', ['item' => $item]);
     }
 
     /**

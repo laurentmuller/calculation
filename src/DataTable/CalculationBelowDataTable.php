@@ -18,7 +18,7 @@ use App\Service\ApplicationService;
 use DataTables\DataTablesInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 /**
@@ -42,16 +42,10 @@ class CalculationBelowDataTable extends CalculationDataTable
 
     /**
      * Constructor.
-     *
-     * @param SessionInterface      $session     the session to save/retrieve user parameters
-     * @param DataTablesInterface   $datatables  the datatables to handle request
-     * @param CalculationRepository $repository  the repository to get entities
-     * @param Environment           $environment the Twig environment to render actions cells
-     * @param ApplicationService    $application the application to get parameters
      */
-    public function __construct(SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment, ApplicationService $application)
+    public function __construct(RequestStack $requestStack, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment, ApplicationService $application)
     {
-        parent::__construct($session, $datatables, $repository, $environment);
+        parent::__construct($requestStack, $datatables, $repository, $environment);
         $this->application = $application;
     }
 

@@ -29,6 +29,6 @@
     {
         "name": "message",
         "title": "log.fields.message",
-        "class": "text-cell"
+        "class": "w-50 text-cell"
     }
 ]

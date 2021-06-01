@@ -80,7 +80,7 @@ class CalculationTable extends AbstractEntityTable
      */
     protected function getCalculationStates(): array
     {
-        return $this->stateRepository->getListCount();
+        return $this->stateRepository->getListCountCalculations();
     }
 
     /**

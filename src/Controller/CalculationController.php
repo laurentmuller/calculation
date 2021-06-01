@@ -310,7 +310,7 @@ class CalculationController extends AbstractEntityController
             ];
 
             // parameters
-            $states = $repository->getListCount();
+            $states = $repository->getListCountCalculations();
             $parameters = [
                 'states' => $states,
             ];

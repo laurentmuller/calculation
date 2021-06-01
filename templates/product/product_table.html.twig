@@ -38,17 +38,14 @@
 {%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
 
 {% block search_input -%}
-<div class="input-group input-group-sm">
-    <div class="input-group-prepend" id="dropdown-menu-category">
-        <button id="button-category" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'product.list.category_help'|trans }}">
-            {{- 'product.fields.category'|trans -}}
-        </button>
-        <div class="dropdown-menu">
-            {{ _self.fill_categories(categories, total) -}}
-        </div>
-        <input type="hidden" id="category" name="category">
+<div class="input-group-append" id="dropdown-menu-category">
+    <button id="button-category" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'product.list.category_help'|trans }}">
+        {{- 'product.fields.category'|trans -}}
+    </button>
+    <div class="dropdown-menu">
+        {{ _self.fill_categories(categories, total) -}}
     </div>
-    {{ parent() }}
+    <input type="hidden" id="category" name="category">
 </div>
 {%- endblock %}
 

@@ -56,20 +56,6 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * Gets states with the number and the sum (overall total) of calculations.
-     *
-     * <b>Note:</b> Only states with at least one calculation are returned.
-     *
-     * @return array the states with the number and the sum of calculations
-     */
-    public function getListCount(): array
-    {
-        return $this->getListCountQueryBuilder()
-            ->getQuery()
-            ->getArrayResult();
-    }
-
-    /**
      * Gets states with the number and the sum (overall total) of calculations with overall margin below.
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
@@ -78,7 +64,7 @@ class CalculationStateRepository extends AbstractRepository
      *
      * @return array the states with the number and the sum of calculations
      */
-    public function getListCountBelow(float $margin): array
+    public function getListCountBelows(float $margin): array
     {
         $builder = $this->getListCountQueryBuilder()
             ->where('c.itemsTotal != 0')
@@ -86,6 +72,20 @@ class CalculationStateRepository extends AbstractRepository
             ->setParameter('margin', $margin, Types::FLOAT);
 
         return $builder->getQuery()->getArrayResult();
+    }
+
+    /**
+     * Gets states with the number and the sum (overall total) of calculations.
+     *
+     * <b>Note:</b> Only states with at least one calculation are returned.
+     *
+     * @return array the states with the number and the sum of calculations
+     */
+    public function getListCountCalculations(): array
+    {
+        return $this->getListCountQueryBuilder()
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**

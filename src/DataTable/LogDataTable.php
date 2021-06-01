@@ -22,7 +22,7 @@ use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
 use DataTables\DataTablesInterface;
 use DataTables\Order;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Log data table for a file name.
@@ -62,13 +62,10 @@ class LogDataTable extends AbstractDataTable
 
     /**
      * Constructor.
-     *
-     * @param SessionInterface    $session    the session to save/retrieve user parameters
-     * @param DataTablesInterface $datatables the datatables to handle request
      */
-    public function __construct(SessionInterface $session, DataTablesInterface $datatables, LogService $service)
+    public function __construct(RequestStack $requestStack, DataTablesInterface $datatables, LogService $service)
     {
-        parent::__construct($session, $datatables);
+        parent::__construct($requestStack, $datatables);
         $this->service = $service;
     }
 

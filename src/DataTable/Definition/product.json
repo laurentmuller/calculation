@@ -30,7 +30,7 @@
     {
         "name": "supplier",
         "title": "product.fields.supplier",
-        "class": "text-cell"
+        "class": "text-category"
     },
     {
         "name": "category.id",

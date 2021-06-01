@@ -132,7 +132,7 @@ class ResponseListener implements EventSubscriberInterface
     public function updateResponse(ResponseEvent $event): void
     {
         // master request?
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 

@@ -36,7 +36,7 @@ class ProductTable extends AbstractCategoryItemTable
      */
     protected function getCategories(): array
     {
-        return $this->categoryRepository->getProductListCount();
+        return $this->categoryRepository->getListCountProducts();
     }
 
     /**

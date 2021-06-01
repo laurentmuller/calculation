@@ -18,7 +18,7 @@ use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
 use DataTables\DataTablesInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 /**
@@ -37,15 +37,10 @@ class TaskDataTable extends AbstractEntityDataTable
 
     /**
      * Constructor.
-     *
-     * @param SessionInterface    $session     the session to save/retrieve user parameters
-     * @param DataTablesInterface $datatables  the datatables to handle request
-     * @param TaskRepository      $repository  the repository to get entities
-     * @param Environment         $environment the Twig environment to render cells
      */
-    public function __construct(SessionInterface $session, DataTablesInterface $datatables, TaskRepository $repository, Environment $environment)
+    public function __construct(RequestStack $requestStack, DataTablesInterface $datatables, TaskRepository $repository, Environment $environment)
     {
-        parent::__construct($session, $datatables, $repository, $environment);
+        parent::__construct($requestStack, $datatables, $repository, $environment);
     }
 
     /**
@@ -56,6 +51,32 @@ class TaskDataTable extends AbstractEntityDataTable
         $path = __DIR__ . '/Definition/task.json';
 
         return DataColumnFactory::fromJson($this, $path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createSearchExpression(string $field, string $parameter)
+    {
+        switch ($field) {
+            case 'c.id':
+                return "{$field} = :{$parameter}";
+            default:
+                return parent::createSearchExpression($field, $parameter);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createSearchParameterValue(string $field, string $value)
+    {
+        switch ($field) {
+            case 'c.id':
+                return (int) $value;
+            default:
+                return parent::createSearchParameterValue($field, $value);
+        }
     }
 
     /**

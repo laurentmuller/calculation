@@ -40,26 +40,23 @@
 {% endblock %}
 
 {% block search_input -%}
-<div class="input-group input-group-sm">
-    <div class="input-group-prepend" id="dropdown-menu-channel">
-        <button id="button-channel" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" reference="dropdown-channel" aria-haspopup="true" aria-expanded="false" data-default="{{ 'log.fields.channel'|trans }}" title="{{ 'log.list.channel_help'|trans }}">
-            {{- 'log.fields.channel'|trans -}}
-        </button>
-        <div class="dropdown-menu">
-            {{ _self.fill_options(channels, 'channel') -}}
-        </div>
-        <input type="hidden" id="channel" name="channel">
+<div class="input-group-append" id="dropdown-menu-channel">
+    <button id="button-channel" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" reference="dropdown-channel" aria-haspopup="true" aria-expanded="false" data-default="{{ 'log.fields.channel'|trans }}" title="{{ 'log.list.channel_help'|trans }}">
+        {{- 'log.fields.channel'|trans -}}
+    </button>
+    <div class="dropdown-menu">
+        {{ _self.fill_options(channels, 'channel') -}}
     </div>
-    <div class="input-group-prepend" id="dropdown-menu-level">
-        <button id="button-level" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" reference="dropdown-level" aria-haspopup="true" aria-expanded="false" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
-            {{- 'log.fields.level'|trans -}}
-        </button>
-        <div class="dropdown-menu">
-            {{ _self.fill_options(levels, 'level') -}}
-        </div>
-        <input type="hidden" id="level" name="level">
+    <input type="hidden" id="channel" name="channel">
+</div>
+<div class="input-group-append" id="dropdown-menu-level">
+    <button id="button-level" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" reference="dropdown-level" aria-haspopup="true" aria-expanded="false" data-default="{{ 'log.fields.level'|trans }}" title="{{ 'log.list.level_help'|trans }}">
+        {{- 'log.fields.level'|trans -}}
+    </button>
+    <div class="dropdown-menu">
+        {{ _self.fill_options(levels, 'level') -}}
     </div>
-    {{ parent() }}
+    <input type="hidden" id="level" name="level">
 </div>
 {%- endblock %}
 

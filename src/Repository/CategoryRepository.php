@@ -57,34 +57,13 @@ class CategoryRepository extends AbstractRepository
     }
 
     /**
-     * Gets categories with the number of tasks.
-     *
-     * <b>Note:</b> Only categories with at least one task are returned.
-     *
-     * @return array an array with the category and the number of tasks
-     */
-    public function getListTaskCount(): array
-    {
-        $builder = $this->createQueryBuilder('c')
-            ->select('c.id')
-            ->addSelect('c.code')
-            ->addSelect('c.description')
-            ->addSelect('COUNT(t.id) as count')
-            ->innerJoin('c.tasks', 't')
-            ->groupBy('c.id')
-            ->orderBy('c.code', Criteria::ASC);
-
-        return $builder->getQuery()->getArrayResult();
-    }
-
-    /**
      * Gets categories with the number of products.
      *
      * <b>Note:</b> Only categories with at least one product are returned.
      *
      * @return array an array with the category and the number of products
      */
-    public function getProductListCount(): array
+    public function getListCountProducts(): array
     {
         $builder = $this->createQueryBuilder('c')
             ->select('c.id')
@@ -92,6 +71,27 @@ class CategoryRepository extends AbstractRepository
             ->addSelect('c.description')
             ->addSelect('COUNT(p.id) as count')
             ->innerJoin('c.products', 'p')
+            ->groupBy('c.id')
+            ->orderBy('c.code', Criteria::ASC);
+
+        return $builder->getQuery()->getArrayResult();
+    }
+
+    /**
+     * Gets categories with the number of tasks.
+     *
+     * <b>Note:</b> Only categories with at least one task are returned.
+     *
+     * @return array an array with the category and the number of tasks
+     */
+    public function getListCountTasks(): array
+    {
+        $builder = $this->createQueryBuilder('c')
+            ->select('c.id')
+            ->addSelect('c.code')
+            ->addSelect('c.description')
+            ->addSelect('COUNT(t.id) as count')
+            ->innerJoin('c.tasks', 't')
             ->groupBy('c.id')
             ->orderBy('c.code', Criteria::ASC);
 

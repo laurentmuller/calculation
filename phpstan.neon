@@ -1,6 +1,4 @@
 includes:
-    - vendor-bin/phpstan/vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
-    - vendor-bin/phpstan/vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
     - vendor-bin/phpstan/vendor/slam/phpstan-extensions/conf/symfony-rules.neon
     - vendor-bin/phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
 

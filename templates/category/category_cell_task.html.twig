@@ -1,0 +1,6 @@
+{%- if count > 0 -%}
+    {%- set href = path('task_table', {'search[0][index]': 5, 'search[0][value]': id}) -%}
+    <a href="{{ href }}" title="{{ 'category.list.task_title'|trans }}">{{ count|integer }}</a>
+{%- else -%}
+    {{- count|integer -}}
+{%- endif -%}

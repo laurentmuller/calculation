@@ -23,7 +23,7 @@ use App\Util\Utils;
 use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
 use DataTables\DataTablesInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -82,16 +82,10 @@ class SearchDataTable extends AbstractDataTable
 
     /**
      * Constructor.
-     *
-     * @param SessionInterface              $session    the session to save/retrieve user parameters
-     * @param DataTablesInterface           $datatables the datatables to handle request
-     * @param SearchService                 $service    the service to search entities
-     * @param AuthorizationCheckerInterface $checker    the authorization checker to get user rights
-     * @param TranslatorInterface           $translator the service to translate messages
      */
-    public function __construct(SessionInterface $session, DataTablesInterface $datatables, SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
+    public function __construct(RequestStack $requestStack, DataTablesInterface $datatables, SearchService $service, AuthorizationCheckerInterface $checker, TranslatorInterface $translator)
     {
-        parent::__construct($session, $datatables);
+        parent::__construct($requestStack, $datatables);
         $this->service = $service;
         $this->checker = $checker;
         $this->translator = $translator;

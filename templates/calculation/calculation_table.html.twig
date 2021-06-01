@@ -40,17 +40,14 @@
 
 {% block search_input -%}
 {% if states is defined %}
-<div class="input-group input-group-sm">
-    <div class="input-group-prepend" id="dropdown-menu-state">
-        <button id="button-state" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
-            {{- 'calculation.fields.state'|trans -}}
-        </button>
-        <div class="dropdown-menu">
-            {{ _self.fill_states(states) -}}
-        </div>
-        <input type="hidden" id="state" name="state">
+<div class="input-group-append" id="dropdown-menu-state">
+    <button id="button-state" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
+        {{- 'calculation.fields.state'|trans -}}
+    </button>
+    <div class="dropdown-menu">
+        {{ _self.fill_states(states) -}}
     </div>
-    {{ parent() }}
+    <input type="hidden" id="state" name="state">
 </div>
 {% else %}
     {{ parent() }}

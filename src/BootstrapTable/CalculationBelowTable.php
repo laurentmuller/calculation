@@ -87,7 +87,7 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     {
         $margin = $this->getMinMargin();
 
-        return $this->stateRepository->getListCountBelow($margin);
+        return $this->stateRepository->getListCountBelows($margin);
     }
 
     /**

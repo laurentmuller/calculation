@@ -109,7 +109,6 @@
     {% if show_search -%}
     <div class="col-lg-auto">
         <div class="form-inline">
-             {% block search_input -%}
              <div class="input-group input-group-sm">
                 <input type="text" id="table_search" name="table_search" class="form-control form-control-sm" autocomplete="off" placeholder="{{ 'datatable.search'|trans }}">
                 <div class="input-group-append">
@@ -117,8 +116,8 @@
                         <i class="fas fa-eraser" aria-hidden="true"></i>
                     </button>
                 </div>
+                {% block search_input -%}{%- endblock %}
              </div>
-             {%- endblock %}
         </div>
     </div>
     {%- endif %}

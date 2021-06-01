@@ -17,8 +17,8 @@ use App\Form\User\ProfileChangePasswordType;
 use App\Form\User\ProfileEditType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Controller for user profile.
@@ -34,7 +34,7 @@ class ProfileController extends AbstractController
      *
      * @Route("/change-password", name="user_profile_change_password")
      */
-    public function changePassword(Request $request, UserPasswordEncoderInterface $encoder): Response
+    public function changePassword(Request $request, UserPasswordHasherInterface $hasher): Response
     {
         // get user
         $user = $this->getUser();
@@ -49,7 +49,7 @@ class ProfileController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             // update password
             $plainPassword = $form->get('plainPassword')->getData();
-            $encodedPassword = $encoder->encodePassword($user, $plainPassword);
+            $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
             $this->getManager()->flush();
 

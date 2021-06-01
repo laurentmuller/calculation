@@ -9,7 +9,7 @@
         "name": "name",
         "title": "task.fields.name",
         "default": true,
-        "class": " text-cell"
+        "class": "w-50 text-nowrap"
     },
     {
         "name": "category.code",
@@ -29,6 +29,12 @@
         "rawData": true,
         "class": "text-currency",
         "formatter": "formatCountable"
+    },
+    {
+        "name": "category.id",
+        "visible": false,
+        "orderable": false,
+        "searchable": true
     },
     {
         "name": "id",

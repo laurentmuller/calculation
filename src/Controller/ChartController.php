@@ -295,7 +295,7 @@ class ChartController extends AbstractController
     private function getChartStateData(CalculationStateRepository $repository, ThemeService $service, bool $tabular): array
     {
         // get values
-        $states = $repository->getListCount();
+        $states = $repository->getListCountCalculations();
 
         // update percents
         $count = \array_reduce($states, function (float $carry, array $state) {

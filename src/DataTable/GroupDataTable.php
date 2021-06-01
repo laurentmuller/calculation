@@ -18,7 +18,7 @@ use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Group;
 use App\Repository\GroupRepository;
 use DataTables\DataTablesInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 /**
@@ -37,15 +37,24 @@ class GroupDataTable extends AbstractEntityDataTable
 
     /**
      * Constructor.
-     *
-     * @param SessionInterface    $session     the session to save/retrieve user parameters
-     * @param DataTablesInterface $datatables  the datatables to handle request
-     * @param GroupRepository     $repository  the repository to get entities
-     * @param Environment         $environment the Twig environment to render cells
      */
-    public function __construct(SessionInterface $session, DataTablesInterface $datatables, GroupRepository $repository, Environment $environment)
+    public function __construct(RequestStack $requestStack, DataTablesInterface $datatables, GroupRepository $repository, Environment $environment)
     {
-        parent::__construct($session, $datatables, $repository, $environment);
+        parent::__construct($requestStack, $datatables, $repository, $environment);
+    }
+
+    /**
+     * Creates the cell link to categories.
+     */
+    public function formatCategories(\Countable $categories, Group $item): string
+    {
+        $context = [
+            'id' => $item->getId(),
+            'code' => $item->getCode(),
+            'count' => \count($categories),
+        ];
+
+        return $this->renderTemplate('group/group_cell_category.html.twig', $context);
     }
 
     /**

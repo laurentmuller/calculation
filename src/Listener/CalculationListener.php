@@ -124,7 +124,7 @@ final class CalculationListener implements DisableListenerInterface
     private function getUserName(): string
     {
         if ($user = $this->security->getUser()) {
-            return $user->getUsername();
+            return $user->getUserIdentifier();
         }
 
         // default user

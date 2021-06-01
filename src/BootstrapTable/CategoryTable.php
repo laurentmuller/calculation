@@ -155,6 +155,6 @@ class CategoryTable extends AbstractEntityTable
      */
     private function getGroups(): array
     {
-        return $this->groupRepository->getListCount();
+        return $this->groupRepository->getListCountCategories();
     }
 }

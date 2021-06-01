@@ -142,7 +142,7 @@ class ThemeService
     public function getCurrentTheme(?Request $request = null): Theme
     {
         if ($request = $this->getRequest($request)) {
-            $css = $request->cookies->get(self::KEY_CSS, self::DEFAULT_CSS);
+            $css = (string) $request->cookies->get(self::KEY_CSS, self::DEFAULT_CSS);
 
             return $this->findTheme($css);
         }
@@ -182,7 +182,7 @@ class ThemeService
     public function getThemeBackground(?Request $request = null): string
     {
         if ($request = $this->getRequest($request)) {
-            return $request->cookies->get(self::KEY_BACKGROUND, self::DEFAULT_BACKGROUND);
+            return (string) $request->cookies->get(self::KEY_BACKGROUND, self::DEFAULT_BACKGROUND);
         }
 
         return self::DEFAULT_BACKGROUND;

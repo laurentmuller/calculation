@@ -36,7 +36,7 @@ class TaskTable extends AbstractCategoryItemTable
      */
     protected function getCategories(): array
     {
-        return $this->categoryRepository->getListTaskCount();
+        return $this->categoryRepository->getListCountTasks();
     }
 
     /**

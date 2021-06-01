@@ -25,7 +25,7 @@ use App\Util\Utils;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -69,9 +69,9 @@ class PersistenceListener implements EventSubscriber
     /**
      * Constructor.
      */
-    public function __construct(SessionInterface $session, TranslatorInterface $translator, KernelInterface $kernel, string $appName)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, KernelInterface $kernel, string $appName)
     {
-        $this->session = $session;
+        $this->requestStack = $requestStack;
         $this->translator = $translator;
         $this->debug = $kernel->isDebug();
         $this->appName = $appName;

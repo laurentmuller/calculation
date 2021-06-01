@@ -1,6 +1,15 @@
 {% extends 'cards/card_table.html.twig' %}
+
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
+
+{# macros #}
+{% macro fill_groups(groups, total) %}
+<button class="dropdown-item dropdown-group active" type="button" data-id="">{{ 'datatable.all'|trans }}</button>
+{% for group in groups %}
+    <button class="dropdown-item dropdown-group" type="button" data-id="{{ group.id }}">{{ group.code }}</button>
+{% endfor %}
+{% endmacro %}
 
 {# parameters #}
 {%- set title = 'category.list.title' -%}
@@ -24,8 +33,28 @@
 {%- set pdf_title = 'category.list.pdf_title' -%}
 {%- set excel_title = 'category.list.excel_title' -%}
 
+{# highlight search #}
+{%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
+
+{% block search_input -%}
+<div class="input-group-append" id="dropdown-menu-group">
+    <button id="button-group" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'category.list.group_help'|trans }}">
+        {{- 'category.fields.group'|trans -}}
+    </button>
+    <div class="dropdown-menu">
+        {{ _self.fill_groups(groups, total) -}}
+    </div>
+    <input type="hidden" id="group" name="group">
+</div>
+{%- endblock %}
+
 {% block table_actions -%}
 {{ parent() }}
 {{ icons.dropdownSeparator() }}
 {{ icons.dropdownItemCard('category_card') }}
 {%- endblock %}
+
+{% block javascripts -%}
+{{- parent() }}
+{{- asset_js('js/application/category_table.js') }}
+{% endblock %}

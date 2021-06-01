@@ -16,7 +16,7 @@ use App\Traits\SessionTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -47,12 +47,12 @@ class TranslatorFactory
     /**
      * Constructor.
      */
-    public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $cache, SessionInterface $session)
+    public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $cache, RequestStack $requestStack)
     {
         $this->params = $params;
         $this->kernel = $kernel;
         $this->cache = $cache;
-        $this->session = $session;
+        $this->requestStack = $requestStack;
     }
 
     /**

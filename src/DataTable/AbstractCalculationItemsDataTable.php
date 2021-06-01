@@ -19,7 +19,7 @@ use DataTables\DataTableQuery;
 use DataTables\DataTableResults;
 use DataTables\DataTablesInterface;
 use Doctrine\Common\Collections\Criteria;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 /**
@@ -50,15 +50,10 @@ abstract class AbstractCalculationItemsDataTable extends AbstractDataTable
 
     /**
      * Constructor.
-     *
-     * @param SessionInterface      $session     the session to save/retrieve user parameters
-     * @param DataTablesInterface   $datatables  the datatables to handle request
-     * @param CalculationRepository $repository  the repository to get entities
-     * @param Environment           $environment the Twig environment to render actions cells
      */
-    public function __construct(SessionInterface $session, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment)
+    public function __construct(RequestStack $requestStack, DataTablesInterface $datatables, CalculationRepository $repository, Environment $environment)
     {
-        parent::__construct($session, $datatables);
+        parent::__construct($requestStack, $datatables);
         $this->repository = $repository;
         $this->environment = $environment;
     }

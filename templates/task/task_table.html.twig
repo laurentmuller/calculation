@@ -2,6 +2,14 @@
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
+{# macros #}
+{% macro fill_categories(categories, total) %}
+<button class="dropdown-item dropdown-category active" type="button" data-id="">{{ 'datatable.all'|trans }}</button>
+{% for category in categories %}
+    <button class="dropdown-item dropdown-category" type="button" data-id="{{ category.id }}">{{ category.code }}</button>
+{% endfor %}
+{% endmacro %}
+
 {# parameters #}
 {%- set title = 'task.list.title' -%}
 {%- set title_icon = 'tasks' -%}
@@ -26,6 +34,21 @@
 {%- set pdf_title = 'task.list.pdf_title' -%}
 {%- set excel_title = 'task.list.excel_title' -%}
 
+{# highlight search #}
+{%- set attributes = attributes|default({})|merge({'data-search-highlight': true}) -%}
+
+{% block search_input -%}
+<div class="input-group-append" id="dropdown-menu-category">
+    <button id="button-category" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-default="{{ 'task.fields.category'|trans }}" title="{{ 'task.list.category_help'|trans }}">
+        {{- 'task.fields.category'|trans -}}
+    </button>
+    <div class="dropdown-menu">
+        {{ _self.fill_categories(categories, total) -}}
+    </div>
+    <input type="hidden" id="category" name="category">
+</div>
+{%- endblock %}
+
 {% block table_actions -%}
 {{ _self.item_data(clone_path, 'common.button_clone', 'copy far') }}
 {{ icons.dropdownSeparator() }}
@@ -35,3 +58,8 @@
 {{ icons.dropdownSeparator() }}
 {{ icons.dropdownItemCard('task_card') }}
 {%- endblock %}
+
+{% block javascripts -%}
+{{- parent() }}
+{{- asset_js('js/application/task_table.js') }}
+{% endblock %}

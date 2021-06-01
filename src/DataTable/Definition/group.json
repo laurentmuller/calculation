@@ -30,8 +30,8 @@
         "orderable": false,
         "searchable": false,
         "rawData": true,
-        "class": "text-currency",
-        "formatter": "formatCountable"
+        "class": "text-currency rowlink-skip",
+        "formatter": "formatCategories"
     },
     {
         "name": "id",

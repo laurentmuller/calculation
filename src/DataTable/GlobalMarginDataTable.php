@@ -18,7 +18,7 @@ use App\DataTable\Model\DataColumnFactory;
 use App\Entity\GlobalMargin;
 use App\Repository\GlobalMarginRepository;
 use DataTables\DataTablesInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 /**
@@ -37,15 +37,10 @@ class GlobalMarginDataTable extends AbstractEntityDataTable
 
     /**
      * Constructor.
-     *
-     * @param SessionInterface       $session     the session to save/retrieve user parameters
-     * @param DataTablesInterface    $datatables  the datatables to handle request
-     * @param GlobalMarginRepository $repository  the repository to get entities
-     * @param Environment            $environment the Twig environment to render actions cells
      */
-    public function __construct(SessionInterface $session, DataTablesInterface $datatables, GlobalMarginRepository $repository, Environment $environment)
+    public function __construct(RequestStack $requestStack, DataTablesInterface $datatables, GlobalMarginRepository $repository, Environment $environment)
     {
-        parent::__construct($session, $datatables, $repository, $environment);
+        parent::__construct($requestStack, $datatables, $repository, $environment);
     }
 
     /**

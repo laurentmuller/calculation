@@ -14,7 +14,7 @@ namespace App\Service;
 
 use App\Traits\SessionTrait;
 use App\Util\ImageHandler;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -74,9 +74,9 @@ class CaptchaImageService
     /**
      * Constructor.
      */
-    public function __construct(SessionInterface $session, KernelInterface $kernel)
+    public function __construct(RequestStack $requestStack, KernelInterface $kernel)
     {
-        $this->session = $session;
+        $this->requestStack = $requestStack;
         $this->font = $kernel->getProjectDir() . self::FONT_PATH;
     }
 

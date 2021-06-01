@@ -59,7 +59,7 @@ class GroupRepository extends AbstractRepository
      *
      * @return array an array with the group and the number of categories
      */
-    public function getListCount(): array
+    public function getListCountCategories(): array
     {
         $builder = $this->createQueryBuilder('g')
             ->select('g.id')

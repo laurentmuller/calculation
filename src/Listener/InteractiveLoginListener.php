@@ -58,7 +58,7 @@ class InteractiveLoginListener implements EventSubscriberInterface
     {
         $token = $event->getAuthenticationToken();
         $this->updateUser($token->getUser());
-        $this->notify($event->getRequest(), $token->getUsername());
+        $this->notify($event->getRequest(), $token->getUserIdentifier());
     }
 
     /**

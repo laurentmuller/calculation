@@ -21,6 +21,7 @@ use App\Form\Task\TaskServiceType;
 use App\Form\Task\TaskType;
 use App\Pdf\PdfResponse;
 use App\Report\TasksReport;
+use App\Repository\CategoryRepository;
 use App\Repository\TaskRepository;
 use App\Service\TaskService;
 use App\Spreadsheet\TaskDocument;
@@ -244,9 +245,19 @@ class TaskController extends AbstractEntityController
      *
      * @Route("", name="task_table")
      */
-    public function table(Request $request, TaskDataTable $table): Response
+    public function table(Request $request, TaskDataTable $table, CategoryRepository $repository): Response
     {
-        return $this->renderTable($request, $table);
+        $parameters = [];
+        if (!$request->isXmlHttpRequest()) {
+            $categories = $repository->getListCountTasks();
+            $total = \array_sum(\array_column($categories, 'count'));
+            $parameters = [
+                'categories' => $categories,
+                'total' => $total,
+            ];
+        }
+
+        return $this->renderTable($request, $table, [], $parameters);
     }
 
     /**

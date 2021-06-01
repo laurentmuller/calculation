@@ -22,7 +22,7 @@ use DataTables\DataTablesInterface;
 use DataTables\Order;
 use DataTables\Parameters;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Abstract data table handler.
@@ -99,13 +99,10 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
 
     /**
      * Constructor.
-     *
-     * @param SessionInterface    $session    the session to save/retrieve user parameters
-     * @param DataTablesInterface $datatables the datatables to handle request
      */
-    public function __construct(SessionInterface $session, DataTablesInterface $datatables)
+    public function __construct(RequestStack $requestStack, DataTablesInterface $datatables)
     {
-        $this->session = $session;
+        $this->requestStack = $requestStack;
         $this->datatables = $datatables;
     }
 

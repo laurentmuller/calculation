@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -22,6 +24,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 trait SessionTrait
 {
     /**
+     * The request stack used to get session.
+     */
+    protected ?RequestStack $requestStack = null;
+
+    /**
      * The session instance.
      */
     protected ?SessionInterface $session = null;
@@ -31,10 +38,17 @@ trait SessionTrait
      *
      * @return SessionInterface|null the session, if found; null otherwise
      */
-    protected function doGetSession(): ?SessionInterface
+    protected function getSession(): ?SessionInterface
     {
-        if (!$this->session && \method_exists($this, 'getSession')) {
-            return $this->session = $this->getSession();
+        if (null === $this->session) {
+            if (null === $this->requestStack && $this instanceof AbstractController) {
+                /** @var RequestStack $requestStack */
+                $requestStack = $this->get('request_stack');
+                $this->requestStack = $requestStack;
+            }
+            if (null !== $this->requestStack) {
+                $this->session = $this->requestStack->getSession();
+            }
         }
 
         return $this->session;
@@ -89,7 +103,7 @@ trait SessionTrait
      */
     protected function getSessionValue(string $key, $default = null)
     {
-        if ($session = $this->doGetSession()) {
+        if ($session = $this->getSession()) {
             $sessionKey = $this->getSessionKey($key);
 
             return $session->get($sessionKey, $default);
@@ -107,7 +121,7 @@ trait SessionTrait
      */
     protected function hasSessionValue(string $key): bool
     {
-        if ($session = $this->doGetSession()) {
+        if ($session = $this->getSession()) {
             $sessionKey = $this->getSessionKey($key);
 
             return $session->has($sessionKey);
@@ -138,7 +152,7 @@ trait SessionTrait
      */
     protected function removeSessionValue(string $key)
     {
-        if ($session = $this->doGetSession()) {
+        if ($session = $this->getSession()) {
             $sessionKey = $this->getSessionKey($key);
 
             return $session->remove($sessionKey);
@@ -155,7 +169,7 @@ trait SessionTrait
      */
     protected function setSessionValue(string $key, $value): self
     {
-        if ($session = $this->doGetSession()) {
+        if ($session = $this->getSession()) {
             $sessionKey = $this->getSessionKey($key);
             $session->set($sessionKey, $value);
         }

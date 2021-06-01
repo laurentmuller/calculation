@@ -21,9 +21,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -57,7 +57,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="user_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $encoder, AuthenticationUtils $utils, UrlGeneratorInterface $generator): Response
+    public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils, UrlGeneratorInterface $generator): Response
     {
         $user = new User();
         $form = $this->createForm(UserRegistrationType::class, $user);
@@ -65,7 +65,7 @@ class RegistrationController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             // encode the plain password
             $plainPassword = $form->get('plainPassword')->getData();
-            $encodedPassword = $encoder->encodePassword($user, $plainPassword);
+            $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
 
             // save user

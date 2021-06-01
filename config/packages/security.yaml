@@ -1,7 +1,8 @@
 security:
     enable_authenticator_manager: true
 
-    encoders:
+
+    password_hashers:
         App\Entity\User:
             algorithm: auto
 
@@ -24,7 +25,7 @@ security:
             lazy: true
             switch_user: true
             login_throttling: ~
-            
+
             form_login:
                 enable_csrf: true
                 check_path: /login
@@ -36,7 +37,7 @@ security:
                 invalidate_session: false
 
             remember_me:
-                remember_me_parameter: remember_me                 
+                remember_me_parameter: remember_me
                 secret: '%app_secret%'
                 path:   '%cookie_path%'
                 secure: false

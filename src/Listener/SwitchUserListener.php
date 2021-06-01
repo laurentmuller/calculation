@@ -93,7 +93,7 @@ class SwitchUserListener implements EventSubscriberInterface
     {
         $token = $event->getToken();
         if ($token instanceof SwitchUserToken) {
-            return $token->getOriginalToken()->getUsername();
+            return $token->getOriginalToken()->getUserIdentifier();
         }
 
         return null;
@@ -104,6 +104,6 @@ class SwitchUserListener implements EventSubscriberInterface
      */
     private function getTargetUsername(SwitchUserEvent $event): string
     {
-        return $event->getTargetUser()->getUsername();
+        return $event->getTargetUser()->getUserIdentifier();
     }
 }

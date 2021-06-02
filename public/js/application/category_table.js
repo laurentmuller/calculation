@@ -37,7 +37,7 @@ $.fn.extend({
 /**
  * Override clear search
  */
-clearSearch = function ($parent) { // jshint ignore:line
+clearSearch = (function ($parent) { // jshint ignore:line
     'use strict';
     return function ($element, table) {
         const $group = $('#group');
@@ -53,7 +53,7 @@ clearSearch = function ($parent) { // jshint ignore:line
             return $parent.apply(this, arguments);
         }
     };
-}(clearSearch);
+})(clearSearch);
 
 /**
  * Ready function

@@ -9,17 +9,17 @@
 		"name": "code",
 		"title": "category.fields.code",
 		"default": true,
-		"class": "text-category text-nowrap"
+		"class": "text-code text-nowrap"
 	},
 	{
 		"name": "description",
 		"title": "category.fields.description",
-		"class": "w-50 text-cell"
+		"class": "w-auto text-cell"
 	},
 	{
 		"name": "group.code",
 		"title": "category.fields.group",
-		"class": "text-category",
+		"class": "text-code",
 		"orderable": true,
 		"searchable": false
 	},

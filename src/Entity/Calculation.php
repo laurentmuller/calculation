@@ -213,6 +213,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
 
         // find category
         $code = $category->getCode();
+        /** @var CalculationCategory $current */
         foreach ($group->getCategories() as $current) {
             if ($code === $current->getCode()) {
                 return $current;
@@ -238,9 +239,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         // find group
         $code = $group->getCode();
-        foreach ($this->groups as $calculationGroup) {
-            if ($code === $calculationGroup->getCode()) {
-                return $calculationGroup;
+        /** @var CalculationGroup $current */
+        foreach ($this->groups as $current) {
+            if ($code === $current->getCode()) {
+                return $current;
             }
         }
 
@@ -454,6 +456,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getItems(): \Traversable
     {
+        /** @var CalculationGroup $group */
         foreach ($this->groups as $group) {
             /** @var CalculationCategory $category */
             foreach ($group->getCategories() as $category) {
@@ -478,6 +481,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function getLinesCount(): int
     {
         $count = 0;
+        /** @var CalculationGroup $group */
         foreach ($this->groups as $group) {
             /** @var CalculationCategory $category */
             foreach ($group->getCategories() as $category) {
@@ -688,6 +692,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function isSortable(): bool
     {
         if (!$this->isEmpty()) {
+            /** @var CalculationGroup $group */
             foreach ($this->groups as $group) {
                 if ($group->isSortable()) {
                     return true;
@@ -916,7 +921,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Remove the given item.
      *
-     * If the category and the parent's group ar empty after deletion of the item, the category and the group is also deleted.
+     * If the category and the parent's group are empty after deletion of the item, the category and the group are also deleted.
      *
      * @param CalculationItem $item the item to remove
      */

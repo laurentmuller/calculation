@@ -23,12 +23,12 @@
     {
         "name": "customer",
         "title": "calculation.fields.customer",
-        "class": "text-cell"
+        "class": "w-auto text-cell"
     },
     {
         "name": "description",
         "title": "calculation.fields.description",
-        "class": "text-cell"
+        "class": "w-auto text-cell"
     },
     {
         "name": "overallMargin",

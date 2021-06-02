@@ -3,12 +3,17 @@
 /* globals clearSearch */
 
 /**
+ * The state column index
+ */
+const STATE_COLUMN = 8;
+
+/**
  * -------------- Functions extensions --------------
  */
 $.fn.extend({
     /**
      * Update the state selection.
-     * 
+     *
      * @return {jQuery} The jQuery element for chaining.
      */
     updateState: function () {
@@ -19,7 +24,7 @@ $.fn.extend({
             const id = $this.data('id');
             $('#state').val(id);
             if (id) {
-                $('#button-state').text($this.text());    
+                $('#button-state').text($this.text());
             } else {
                 $('#button-state').text($('#button-state').data('default'));
             }
@@ -33,23 +38,23 @@ $.fn.extend({
 /**
  * Override clear search
  */
-const noConflictSearch = clearSearch;
-clearSearch = function ($element, table, callback) { // jshint ignore:line
+clearSearch = function ($parent) { // jshint ignore:line
     'use strict';
-
-    const $state = $('#state');
-    if ($state.length && $state.val() !== '') {
-        $('.dropdown-state:first').updateState();
-        table.column(8).search('');
-        if (!noConflictSearch($element, table, callback)) {
-            table.draw();
-            return false;
+    return function ($element, table) {
+        const $state = $('#state');
+        if ($state.length && $state.val() !== '') {
+            $('.dropdown-state:first').updateState();
+            table.column(STATE_COLUMN).search('');
+            if (!$parent.apply(this, arguments)) {
+                table.draw();
+                return false;
+            }
+            return true;
+        } else {
+            return $parent.apply(this, arguments);
         }
-        return true;
-    } else {
-        return noConflictSearch($element, table, callback);
-    }
-};
+    };
+}(clearSearch);
 
 /**
  * Ready function
@@ -62,7 +67,7 @@ clearSearch = function ($element, table, callback) { // jshint ignore:line
     if ($state.length) {
         // initialize state search column
         const table = $('#data-table').dataTable().api();
-        table.initSearchColumn($state, 8, $('#button-state'));
+        table.initSearchColumn($state, STATE_COLUMN, $('#button-state'));
 
         // handle drop-down state
         $('.dropdown-state').on('click', function () {

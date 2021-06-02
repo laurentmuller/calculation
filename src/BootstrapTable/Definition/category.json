@@ -13,12 +13,12 @@
     {
         "field": "description",
         "title": "category.fields.description",
-        "class": "w-50 text-cell"
+        "class": "w-auto text-cell"
     },
     {
         "field": "group.code",
         "title": "category.fields.group",
-        "class": "text-category",
+        "class": "text-code text-nowrap",
         "sortable": true,
         "searchable": false
     },

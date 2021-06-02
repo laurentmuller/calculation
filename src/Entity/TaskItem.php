@@ -46,7 +46,7 @@ class TaskItem extends AbstractEntity implements \Countable
     private ?string $name = null;
 
     /**
-     * The index position.
+     * The position index.
      *
      * @ORM\Column(type="integer", options={"default" = 0})
      */

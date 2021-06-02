@@ -14,7 +14,7 @@
     {
         "name": "description",
         "title": "group.fields.description",
-        "class": "w-50 cell"
+        "class": "w-auto text-cell"
     },
     {
         "name": "margins",

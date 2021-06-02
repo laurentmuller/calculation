@@ -111,12 +111,13 @@
         <div class="form-inline">
              <div class="input-group input-group-sm">
                 <input type="text" id="table_search" name="table_search" class="form-control form-control-sm" autocomplete="off" placeholder="{{ 'datatable.search'|trans }}">
+                {% block search_input -%}{%- endblock %}
                 <div class="input-group-append">
                     <button type="button" class="btn btn-clear btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
                         <i class="fas fa-eraser" aria-hidden="true"></i>
                     </button>
                 </div>
-                {% block search_input -%}{%- endblock %}
+
              </div>
         </div>
     </div>

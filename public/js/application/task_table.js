@@ -3,6 +3,11 @@
 /* globals clearSearch */
 
 /**
+ * The category column index
+ */
+const CATEGORY_COLUMN = 6;
+
+/**
  * -------------- Functions extensions --------------
  */
 $.fn.extend({
@@ -33,23 +38,23 @@ $.fn.extend({
 /**
  * Override clear search
  */
-const noConflictSearch = clearSearch;
-clearSearch = function ($element, table, callback) { // jshint ignore:line
+clearSearch = function ($parent) { // jshint ignore:line
     'use strict';
-
-    const $category = $('#category');
-    if ($category.val() !== '') {
-        $('.dropdown-category:first').updateCategory();
-        table.column(6).search('');
-        if (!noConflictSearch($element, table, callback)) {
-            table.draw();
-            return false;
+    return function ($element, table) {
+        const $category = $('#category');
+        if ($category.val() !== '') {
+            $('.dropdown-category:first').updateCategory();
+            table.column(CATEGORY_COLUMN).search('');
+            if (!$parent.apply(this, arguments)) {
+                table.draw();
+                return false;
+            }
+            return true;
+        } else {
+            return $parent.apply(this, arguments);
         }
-        return true;
-    } else {
-        return noConflictSearch($element, table, callback);
-    }
-};
+    };
+}(clearSearch);
 
 /**
  * Ready function
@@ -59,7 +64,7 @@ clearSearch = function ($element, table, callback) { // jshint ignore:line
 
     // initialize category search column
     const table = $('#data-table').dataTable().api();
-    table.initSearchColumn($('#category'), 5, $('#button-category'));
+    table.initSearchColumn($('#category'), CATEGORY_COLUMN, $('#button-category'));
 
     // handle drop-down category
     $('.dropdown-category').on('click', function () {

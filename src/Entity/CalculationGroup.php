@@ -240,6 +240,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
      */
     public function isSortable(): bool
     {
+        /** @var CalculationCategory $category */
         foreach ($this->categories as $category) {
             if ($category->isSortable()) {
                 return true;

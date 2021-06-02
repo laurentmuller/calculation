@@ -61,7 +61,7 @@ class CalculationStateDataTable extends AbstractEntityDataTable
             'count' => $calculations->count(),
         ];
 
-        return $this->renderTemplate('calculationstate/calculationstate_calculation_cell.html.twig', $context);
+        return $this->renderTemplate('calculationstate/calculationstate_cell_calculation.html.twig', $context);
     }
 
     /**

@@ -154,7 +154,6 @@ a.btn-list {
     white-space: nowrap;
 }
 .text-date-time {
-    /*text-align: center;*/
     width: 150px;
     white-space: nowrap;
 }
@@ -174,22 +173,28 @@ a.btn-list {
     width: 90px;
 }
 .text-code {
-    width: 120px;
+    width: 180px;
 }
 .text-state {
     width: 100px;
 }
 .text-category {
-    width: 180px;
+    width: 140px;
+    overflow: hidden;
     white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .text-group {
     width: 160px;
+    overflow: hidden;
     white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .text-supplier{
-    width: 180px;
+    width: 160px;
+    overflow: hidden;
     white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .text-image {
     width: 75px;
@@ -207,7 +212,11 @@ a.btn-list {
     text-overflow: ellipsis;
     max-width: 0;
 }
-
+.text-operation {
+    text-align: right;
+    width: 95px;
+    white-space: nowrap;
+}
 /**
  * Pivot selection
  */
@@ -663,6 +672,9 @@ span.color-value {
 }
 .w-35 {
     width: 35% !important;
+}
+.w-60 {
+    width: 60% !important;
 }
 .w-70 {
     width: 70% !important;

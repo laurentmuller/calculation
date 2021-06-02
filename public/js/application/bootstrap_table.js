@@ -512,7 +512,7 @@ $.fn.extend({
 
         // for debug purpose
         // onAll: function(name) {
-        // console.log(name, Array.from(arguments).slice(1));
+        //    console.log(name, Array.from(arguments).slice(1));
         // },
 
         onPageChange: function() {

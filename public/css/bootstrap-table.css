@@ -16,25 +16,12 @@
 .bootstrap-table .fixed-table-container .fixed-table-body .table td {
     vertical-align: top !important;
 }
-.bootstrap-table .fixed-table-container .fixed-table-body .table thead tr .text-id {
-    width: 90px;
-}
-.bootstrap-table .fixed-table-container .fixed-table-body .table thead tr .text-percent {
-    width: 70px;
-}
-.bootstrap-table .fixed-table-container .fixed-table-body .table thead tr .text-currency {
-    width: 110px;
-}
-.bootstrap-table .fixed-table-container .fixed-table-body .table thead tr .text-state {
-    width: 110px;
-}
-
 /**
  * Card View
  */
 .bootstrap-table .fixed-table-container .fixed-table-body .table tbody tr .card-views {
     cursor: pointer;
-} 
+}
 .bootstrap-table .fixed-table-container .fixed-table-body .table tbody tr .card-view .card-view-title {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -75,7 +62,7 @@
 .bootstrap-table .fixed-table-container .table thead th .both,
 .bootstrap-table .fixed-table-container .table thead th .asc,
 .bootstrap-table .fixed-table-container .table thead th .desc {
-    background-image: none !important;   
+    background-image: none !important;
 }
 
 .bootstrap-table .fixed-table-container .table thead th .sortable:after {

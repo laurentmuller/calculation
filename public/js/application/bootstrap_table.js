@@ -511,9 +511,9 @@ $.fn.extend({
         },
 
         // for debug purpose
-        // onAll: function(name) {
-        //    console.log(name, Array.from(arguments).slice(1));
-        // },
+// onAll: function(name) {
+// console.log(name, Array.from(arguments).slice(1));
+// },
 
         onPageChange: function() {
             // hide
@@ -592,9 +592,11 @@ $.fn.extend({
 
         // show message
         onLoadError: function(status, jqXHR) {
-            const title = $('.card-title').text();
-            const message = jqXHR.responseJSON.message || $table.data('errorMessage');
-            Toaster.danger(message, title, $('#flashbags').data());
+            if ('abort' !== jqXHR.statusText) {
+                const title = $('.card-title').text();
+                const message = $table.data('errorMessage');
+                Toaster.danger(message, title, $('#flashbags').data());
+            }
         }
     };
     $table.initBootstrapTable(options);

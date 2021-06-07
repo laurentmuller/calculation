@@ -204,7 +204,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler
      */
     public function getCellValues($data): array
     {
-        return \array_map(function (DataColumn $column) use ($data) {
+        return \array_map(function (DataColumn $column) use ($data): string {
             return $column->convertValue($data);
         }, $this->getColumns());
     }

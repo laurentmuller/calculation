@@ -31,7 +31,7 @@ class CalculationDuplicateDataTable extends AbstractCalculationItemsDataTable
      */
     public function formatItems(array $items): string
     {
-        $result = \array_map(function (array $item) {
+        $result = \array_map(function (array $item): string {
             return \sprintf('%s (%d)', $item['description'], $item['count']);
         }, $items);
 

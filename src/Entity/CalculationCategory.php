@@ -63,7 +63,6 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * The calculation items.
      *
      * @ORM\OneToMany(targetEntity=CalculationItem::class, mappedBy="category", cascade={"persist", "remove"}, orphanRemoval=true)
-     *
      * @Assert\Valid
      *
      * @var Collection|CalculationItem[]

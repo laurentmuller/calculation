@@ -124,6 +124,14 @@ class Category extends AbstractEntity
     }
 
     /**
+     * Gets the number of products and tasks.
+     */
+    public function countItems(): int
+    {
+        return $this->countProducts() + $this->countTasks();
+    }
+
+    /**
      * Gets the number of prodcuts.
      */
     public function countProducts(): int

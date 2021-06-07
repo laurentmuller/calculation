@@ -184,7 +184,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      */
     protected function addPrefixes(string $alias, array $names): array
     {
-        return \array_map(function (string $name) use ($alias) {
+        return \array_map(function (string $name) use ($alias): string {
             return "{$alias}.{$name}";
         }, $names);
     }

@@ -70,7 +70,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Gets the created date and user text.
+     * Gets the created date and user name text.
      */
     public function getCreatedText(TranslatorInterface $translator): string
     {
@@ -100,7 +100,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Gets the updated date and user text.
+     * Gets the updated date and user name text.
      */
     public function getUpdatedText(TranslatorInterface $translator): string
     {
@@ -131,6 +131,14 @@ trait TimestampableTrait
         $this->createdBy = $createdBy;
 
         return $this;
+    }
+
+    /**
+     * Sets the updated date and the updated user name.
+     */
+    public function setUpdated(\DateTimeInterface $updatedAt, string $updatedBy): self
+    {
+        return $this->setUpdatedAt($updatedAt)->setUpdatedBy($updatedBy);
     }
 
     /**

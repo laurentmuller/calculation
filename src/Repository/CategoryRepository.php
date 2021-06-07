@@ -106,10 +106,11 @@ class CategoryRepository extends AbstractRepository
     public function getQueryBuilderByGroup(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         $field = $this->getSortField('code', $alias);
+        $groupField = self::GROUP_ALIAS . '.code';
 
         return $this->createQueryBuilder($alias)
-            ->innerJoin("$alias.group", 'g')
-            ->orderBy('g.code')
+            ->innerJoin("$alias.group", self::GROUP_ALIAS)
+            ->orderBy($groupField)
             ->addOrderBy($field);
     }
 

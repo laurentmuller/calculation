@@ -76,8 +76,7 @@ final class CalculationListener implements DisableListenerInterface
 
         foreach ($calculations as $calculation) {
             // update
-            $calculation->setUpdatedAt($date)
-                ->setUpdatedBy($user);
+            $calculation->setUpdated($date, $user);
             $em->persist($calculation);
 
             // recompute

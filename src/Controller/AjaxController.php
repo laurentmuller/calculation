@@ -280,7 +280,7 @@ class AjaxController extends AbstractController
         }
 
         // translate errors
-        $errorCodes = \array_map(function ($code) use ($translator) {
+        $errorCodes = \array_map(function ($code) use ($translator): string {
             return $translator->trans("recaptcha.{$code}", [], 'validators');
         }, $result->getErrorCodes());
         if (empty($errorCodes)) {

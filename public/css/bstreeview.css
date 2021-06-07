@@ -5,9 +5,9 @@
     display: flex;
     flex-direction: column;
     min-width: 0;
-    word-wrap: break-word;
+    /*word-wrap: break-word;*/
     background-clip: border-box;
-    padding: 0;
+    /*padding: 0;*/
     overflow: hidden;
 }
 
@@ -23,15 +23,16 @@
     cursor: pointer;
 }
 
-.bstreeview>.list-group-item:first-child {
+.bstreeview > .list-group-item:first-child {
     border-top-width: 0;
 }
 
+/*
 .bstreeview .list-group-item + .list-group-item.active {
     margin-top: 1px;
     border-top-width: 0;
 }
-
+*/
 .bstreeview .state-icon {
     margin-right: 8px;
     width: 12px;
@@ -43,6 +44,5 @@
 }
 
 .bstreeview .item-badge {
-    float: right !important;
     margin-top: 0.25rem;
 }

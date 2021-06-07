@@ -169,13 +169,13 @@
 
     // TableEditor plugin definition
     const oldTableEditor = $.fn.tableEditor;
-    $.fn.tableEditor = function (option) {
+    $.fn.tableEditor = function (options) {
         return this.each(function () {
             const $this = $(this);
             let data = $this.data("tableEditor");
             if (!data) {
-                const options = typeof option === "object" && option;
-                $this.data("tableEditor", data = new TableEditor(this, options));
+                const settings = typeof options === "object" && options;
+                $this.data("tableEditor", data = new TableEditor(this, settings));
             }
         });
     };

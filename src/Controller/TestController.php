@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Calculation;
+use App\Entity\Category;
 use App\Entity\Comment;
+use App\Entity\Group;
 use App\Form\Admin\ParametersType;
 use App\Form\FormHelper;
 use App\Form\Type\CaptchaImageType;
@@ -279,7 +281,7 @@ class TestController extends AbstractController
             }
 
             // translate errors
-            $errorCodes = \array_map(function ($code) use ($translator) {
+            $errorCodes = \array_map(function ($code) use ($translator): string {
                 return $translator->trans("recaptcha.{$code}", [], 'validators');
             }, $result->getErrorCodes());
             if (empty($errorCodes)) {
@@ -568,7 +570,9 @@ class TestController extends AbstractController
     {
         // JSON?
         if ($request->isXmlHttpRequest()) {
-            /** @var \App\Entity\Group[] $groups */
+            $count = 0;
+
+            /** @var Group[] $groups */
             $groups = $repository->findAllByCode();
 
             $nodes = [];
@@ -577,15 +581,17 @@ class TestController extends AbstractController
                     'id' => 'group-' . $group->getId(),
                     'text' => $group->getCode(),
                     'icon' => 'fas fa-code-branch fa-fw',
+                    'badgeValue' => $group->countItems(),
                 ];
 
-                /** @var \App\Entity\Category $category */
+                /** @var Category $category */
                 foreach ($group->getCategories() as $category) {
+                    $count += $category->countItems();
                     $node['nodes'][] = [
                         'id' => 'category-' . $category->getId(),
                         'text' => $category->getCode(),
                         'icon' => 'far fa-folder fa-fw',
-                        'badgeValue' => (string) ($category->countProducts() + $category->countTasks()),
+                        'badgeValue' => $category->countItems(),
                     ];
                 }
 
@@ -597,8 +603,9 @@ class TestController extends AbstractController
                 'id' => 'root',
                 'text' => 'Catalogue',
                 'icon' => 'fas fa-table fa-fw',
-                'expanded' => true,
                 'nodes' => $nodes,
+                'expanded' => true,
+                'badgeValue' => $count,
             ];
 
             return new JsonResponse([$root]);

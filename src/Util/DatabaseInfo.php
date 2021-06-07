@@ -74,7 +74,10 @@ class DatabaseInfo
                 $result[$key] = $params[$key] ?? null;
             }
 
-            return \array_filter($result, function ($value) {
+            /*
+             * @psalm-param mixed $value
+             */
+            return \array_filter($result, function ($value): bool {
                 return Utils::isString($value);
             });
         } catch (\Exception $e) {

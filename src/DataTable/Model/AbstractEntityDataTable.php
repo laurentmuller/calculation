@@ -92,7 +92,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     protected function createDataTableResults(DataTableQuery $query): DataTableResults
     {
         /** @var DataDefinitition[] $definitions */
-        $definitions = \array_map(function (Column $column) {
+        $definitions = \array_map(function (Column $column): DataDefinitition {
             $name = $column->name;
             $sortField = $this->repository->getSortField($name);
             $searchFields = $this->repository->getSearchFields($name);

@@ -23,10 +23,9 @@ parameters:
     ignoreErrors:
     # disallowed-execution-calls
     - '#proc_open#'                             # Command\CompileAssetsCommand.php
+    - '#proc_close#'                            # Command\CompileAssetsCommand.php
 
     # slam/phpstan-extensions
-    - '#function has no typehint#'
-    - '#proc_close#'                            # Command\CompileAssetsCommand.php
+    - '#function has no typehint#'              # callbacks
     - '#file_put_contents#'
-
     - '#array\|bool\|float\|int\|string\|null#' # ParameterBagInterface

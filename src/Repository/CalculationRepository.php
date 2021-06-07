@@ -31,6 +31,11 @@ use Doctrine\Persistence\ManagerRegistry;
 class CalculationRepository extends AbstractRepository
 {
     /**
+     * The alias for the state entity.
+     */
+    public const STATE_ALIAS = 's';
+
+    /**
      * Constructor.
      *
      * @param ManagerRegistry $registry the connections and entity managers registry
@@ -157,7 +162,7 @@ class CalculationRepository extends AbstractRepository
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
-            ->innerJoin("$alias.state", 's');
+            ->innerJoin("$alias.state", self::STATE_ALIAS);
     }
 
     /**
@@ -554,11 +559,11 @@ class CalculationRepository extends AbstractRepository
             case 'overallMargin':
                 return "IFELSE({$alias}.itemsTotal != 0, CEIL(100 * {$alias}.overallTotal / {$alias}.itemsTotal), 0)";
             case 'state.id':
-                return 's.id';
+                return parent::getSearchFields('id', self::STATE_ALIAS);
             case 'state.code':
-                return 's.code';
+                return parent::getSearchFields('code', self::STATE_ALIAS);
             case 'state.color':
-                return 's.color';
+                return parent::getSearchFields('color', self::STATE_ALIAS);
             default:
                 return parent::getSearchFields($field, $alias);
         }
@@ -574,9 +579,9 @@ class CalculationRepository extends AbstractRepository
                 return "IFELSE({$alias}.itemsTotal != 0, {$alias}.overallTotal / {$alias}.itemsTotal, 0)";
             case 'state.id':
             case 'state.code':
-                return 's.code';
+                return parent::getSortField('s', self::STATE_ALIAS);
             case 'state.color':
-                return 's.color';
+                return parent::getSortField('color', self::STATE_ALIAS);
             default:
                 return parent::getSortField($field, $alias);
         }
@@ -641,7 +646,7 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Update the order by of the given query builder.
+     * Update the order for the given query builder.
      *
      * @param QueryBuilder $builder        the query builder to update
      * @param string       $orderColumn    the order column

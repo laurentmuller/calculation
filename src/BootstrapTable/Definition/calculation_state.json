@@ -20,7 +20,7 @@
         "field": "editable",
         "title": "calculationstate.fields.editable",
         "searchable": false,
-        "class": "text-state",
+        "class": "text-editable",
         "fieldFormatter": "formatEditable"
     },
     {
@@ -28,7 +28,7 @@
         "title": "calculationstate.fields.calculations",
         "sortable": false,
         "searchable": false,
-        "class": "text-currency rowlink-skip",
+        "class": "text-calculation rowlink-skip",
         "fieldFormatter": "formatCalculations"
     },
     {

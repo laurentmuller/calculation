@@ -131,11 +131,47 @@ class Group extends AbstractEntity
     }
 
     /**
+     * Gets the number of products and tasks.
+     */
+    public function countItems(): int
+    {
+        return $this->reduceCategories(function (int $carry, Category $category): int {
+            $carry += $category->countItems();
+
+            return $carry;
+        });
+    }
+
+    /**
      * Gets the number of margins.
      */
     public function countMargins(): int
     {
         return $this->margins->count();
+    }
+
+    /**
+     * Gets the number of prodcuts.
+     */
+    public function countProducts(): int
+    {
+        return $this->reduceCategories(function (int $carry, Category $category): int {
+            $carry += $category->countProducts();
+
+            return $carry;
+        });
+    }
+
+    /**
+     * Gets the number of tasks.
+     */
+    public function countTasks(): int
+    {
+        return $this->reduceCategories(function (int $carry, Category $category): int {
+            $carry += $category->countTasks();
+
+            return $carry;
+        });
     }
 
     /**
@@ -362,5 +398,13 @@ class Group extends AbstractEntity
             $this->code,
             $this->description,
         ];
+    }
+
+    /**
+     * Iteratively reduce this categories to a single value using the callback function.
+     */
+    private function reduceCategories(callable $callback): int
+    {
+        return (int) \array_reduce($this->categories->toArray(), $callback, 0);
     }
 }

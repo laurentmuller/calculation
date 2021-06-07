@@ -113,32 +113,32 @@ class ChartController extends AbstractController
         $data = $repository->getByMonth($months);
 
         // dates (x values)
-        $dates = \array_map(function (array $item) {
+        $dates = \array_map(function (array $item): int {
             return $item['date']->getTimestamp() * 1000;
         }, $data);
 
         // count serie
-        $countData = \array_map(function (array $item) {
+        $countData = \array_map(function (array $item): int {
             return (int) ($item['count']);
         }, $data);
 
         // items amount serie
-        $itemsData = \array_map(function (array $item) {
+        $itemsData = \array_map(function (array $item): float {
             return (float) ($item['items']);
         }, $data);
 
         // margin amount serie
-        $marginsData = \array_map(function (array $item) {
+        $marginsData = \array_map(function (array $item): float {
             return (float) ($item['total']) - (float) ($item['items']);
         }, $data);
 
         // total serie
-        $sumData = \array_map(function (array $item) {
+        $sumData = \array_map(function (array $item): float {
             return (float) ($item['total']);
         }, $data);
 
         // margins (percent)
-        $marginsPercent = \array_map(function (array $item) {
+        $marginsPercent = \array_map(function (array $item): float {
             $items = (float) ($item['items']);
             $total = (float) ($item['total']);
             if ($this->isFloatZero($total)) {
@@ -153,7 +153,7 @@ class ChartController extends AbstractController
         }, $data);
 
         // margins (amount)
-        $marginsAmount = \array_map(function (array $item) {
+        $marginsAmount = \array_map(function (array $item): float {
             return (float) ($item['total']) - (float) ($item['items']);
         }, $data);
 
@@ -312,7 +312,7 @@ class ChartController extends AbstractController
         $title = $this->trans('title_by_state', [], 'chart');
 
         // data
-        $data = \array_map(function (array $state) use ($tabular) {
+        $data = \array_map(function (array $state) use ($tabular): array {
             return [
                 'name' => $state['code'],
                 'y' => (float) ($state['total']),
@@ -321,7 +321,7 @@ class ChartController extends AbstractController
         }, $states);
 
         // colors
-        $colors = \array_map(function (array $state) {
+        $colors = \array_map(function (array $state): string {
             return $state['color'];
         }, $states);
 

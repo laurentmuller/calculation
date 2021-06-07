@@ -102,6 +102,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     /**
      * @ORM\Column(type="string", length=25, nullable=true)
+     * @Assert\Choice({RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN})
      */
     private ?string $role = null;
 

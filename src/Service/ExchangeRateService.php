@@ -190,7 +190,7 @@ class ExchangeRateService extends AbstractHttpClientService
     private function mapCodes(array $codes): array
     {
         // filter
-        $codes = \array_filter(\array_column($codes, 0), function (string $code) {
+        $codes = \array_filter(\array_column($codes, 0), function (string $code): bool {
             return Currencies::exists($code);
         });
 

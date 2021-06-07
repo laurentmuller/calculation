@@ -192,7 +192,7 @@ class CaptchaImageService
      */
     protected function computeText(ImageHandler $image, float $size, string $font, string $text): array
     {
-        return \array_map(function (string $char) use ($image, $size, $font) {
+        return \array_map(function (string $char) use ($image, $size, $font): array {
             $angle = \random_int(-8, 8);
             [$width, $height] = $image->ttfSize($size, $angle, $font, $char);
 

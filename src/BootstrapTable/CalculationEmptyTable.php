@@ -56,7 +56,7 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
      */
     public function formatItems(array $items): string
     {
-        $result = \array_map(function (array $item) {
+        $result = \array_map(function (array $item): string {
             $founds = [];
             if ($this->isFloatZero($item['price'])) {
                 $founds[] = $this->priceLabel;

@@ -6,21 +6,28 @@
 (function ($) {
     'use strict';
     const $tree = $('#tree');
-    const view = $tree.boostrapTreeView({
-        badgeCount: true,
-        url: $tree.data('url'),
-        loading: 'Recherche des données...'
-    }).data('boostrapTreeView');
+    const treeView = $tree.boostrapTreeView().data('boostrapTreeView');
     $('.btn-expand-all').on('click', function () {
-        view.expandAll().focus();
+        treeView.expandAll().focus();
     });
     $('.btn-collapse-all').on('click', function () {
-        view.collapseAll().focus();
+        treeView.collapseAll().focus();
     });
     $('.btn-expand-level').on('click', function () {
-        view.expandToLevel(1).focus();
+        treeView.expandToLevel(1).focus();
     });
     $('.btn-refresh').on('click', function () {
-        view.refresh().focus();
+        treeView.refresh().focus();
     });
+
+    $tree.on('collapseall', function(e) {
+        console.log('Collapse All', e.items);
+    }).on('expandall', function(e) {
+        console.log('Expand All', e.items);
+    }).on('expandtolevel', function(e) {
+        console.log('Expand to Level', e.level, e.items);
+    }).on('togglegroup', function(e) {
+        console.log('Toggle Group', e.expanded, e.item);
+    });
+
 }(jQuery));

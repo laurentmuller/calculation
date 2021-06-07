@@ -326,10 +326,12 @@ class CalculationController extends AbstractEntityController
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
+        $translator = $this->getTranslator();
+
         /* @var Calculation $item */
         $parameters['success'] = $item->isNew() ? 'calculation.add.success' : 'calculation.edit.success';
-        $parameters['created_item'] = $item->getCreatedText($this->getTranslator());
-        $parameters['updated_item'] = $item->getUpdatedText($this->getTranslator());
+        $parameters['created_item'] = $item->getCreatedText($translator);
+        $parameters['updated_item'] = $item->getUpdatedText($translator);
         $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
         $parameters['min_margin'] = $this->getApplication()->getMinMargin();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();

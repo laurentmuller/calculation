@@ -28,7 +28,7 @@
 {%- if editable -%}
 {%- set form_attr = form_attr|merge({
                                'data-title': title|trans(title_parameters),
-                            'data-update': url('ajax_update'),
+                               'data-update': url('ajax_update'),
                                'data-search-customer': url('ajax_search_customer'),
                                'data-search-product': url('ajax_search_product'),
                                'data-search-unit': url('ajax_search_unit'),

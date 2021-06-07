@@ -113,13 +113,13 @@
 
     // InputNumberFormat plugin definition
     const oldInputNumberFormat = $.fn.inputNumberFormat;
-    $.fn.inputNumberFormat = function (option) {
+    $.fn.inputNumberFormat = function (options) {
         return this.each(function () {
             const $this = $(this);
             let data = $this.data("inputNumberFormat");
             if (!data) {
-                const options = typeof option === "object" && option;
-                $this.data("inputNumberFormat", data = new InputNumberFormat(this, options));
+                const settings = typeof options === "object" && options;
+                $this.data("inputNumberFormat", data = new InputNumberFormat(this, settings));
             }
         });
     };

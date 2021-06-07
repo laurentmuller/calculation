@@ -145,7 +145,7 @@ a.btn-list {
 }
 .text-percent {
     text-align: right;
-    width: 60px;
+    width: 70px;
     white-space: nowrap;
 }
 .text-date {
@@ -218,6 +218,14 @@ a.btn-list {
     width: 95px;
     white-space: nowrap;
 }
+.text-editable{
+    width: 110px;
+}
+.text-calculation {
+    text-align: right;
+    width: 110px;
+}
+
 /**
  * Pivot selection
  */

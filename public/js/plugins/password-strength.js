@@ -289,13 +289,13 @@
     // -----------------------------------
     const oldPasswordStrength = $.fn.passwordstrength;
 
-    $.fn.passwordstrength = function (option) {
+    $.fn.passwordstrength = function (options) {
         return this.each(function () {
             const $this = $(this);
             let data = $this.data("passwordstrength");
             if (!data) {
-                const options = typeof option === "object" && option;
-                $this.data("passwordstrength", data = new PasswordStrength(this, options));
+                const settings = typeof options === "object" && options;
+                $this.data("passwordstrength", data = new PasswordStrength(this, settings));
             }
         });
     };

@@ -515,16 +515,16 @@
     // -----------------------------
     const oldTypeahead = $.fn.typeahead;
 
-    $.fn.typeahead = function (option) {
+    $.fn.typeahead = function (options) {
         return this.each(function () {
             const $this = $(this);
             let data = $this.data('typeahead');
             if (!data) {
-                const options = typeof option === 'object' && option;
-                $this.data('typeahead', data = new Typeahead(this, options));
+                const settings = typeof options === 'object' && options;
+                $this.data('typeahead', data = new Typeahead(this, settings));
             }
-            if (data.isString(option)) {
-                data[option]();
+            if (data.isString(options)) {
+                data[options]();
             }
         });
     };

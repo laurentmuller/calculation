@@ -144,7 +144,7 @@ class GeneratorController extends AbstractController
             $this->setSessionValue('admin.generate.simulate', $simulate);
 
             // serialize
-            $items = \array_map(function (Calculation $c) {
+            $items = \array_map(function (Calculation $c): array {
                 return [
                     'id' => FormatUtils::formatId((int) $c->getId()),
                     'date' => FormatUtils::formatDate($c->getDate()),
@@ -237,7 +237,7 @@ class GeneratorController extends AbstractController
             $this->setSessionValue('admin.generate.simulate', $simulate);
 
             // serialize
-            $items = \array_map(function (Customer $c) {
+            $items = \array_map(function (Customer $c): array {
                 return [
                     'id' => $c->getId(),
                     'company' => $c->getCompany(),

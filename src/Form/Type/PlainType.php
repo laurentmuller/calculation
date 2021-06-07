@@ -337,7 +337,7 @@ class PlainType extends AbstractType
 
         // array?
         if (\is_array($value)) {
-            $callback = function ($item) use ($options) {
+            $callback = function ($item) use ($options): ?string {
                 return $this->transformValue($item, $options);
             };
             $values = \array_map($callback, (array) $value);

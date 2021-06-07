@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Entity\AbstractEntity;
 use App\Interfaces\TableInterface;
 use App\Traits\MathTrait;
 use App\Util\FormatUtils;
@@ -359,7 +360,7 @@ abstract class AbstractTable
             $columns = $this->getColumns();
             $accessor = PropertyAccess::createPropertyAccessor();
 
-            return \array_map(function ($entity) use ($columns, $accessor) {
+            return \array_map(function ($entity) use ($columns, $accessor): array {
                 return $this->mapValues($entity, $columns, $accessor);
             }, $entities);
         }
@@ -370,9 +371,9 @@ abstract class AbstractTable
     /**
      * Map the given object to an array where the keys are the column field.
      *
-     * @param mixed            $objectOrArray the object to map
-     * @param Column[]         $columns       the column definitions
-     * @param PropertyAccessor $accessor      the property accessor to get the object values
+     * @param array|AbstractEntity $objectOrArray the object to map
+     * @param Column[]             $columns       the column definitions
+     * @param PropertyAccessor     $accessor      the property accessor to get the object values
      *
      * @return string[] the mapped object
      */

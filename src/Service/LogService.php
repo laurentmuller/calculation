@@ -114,7 +114,7 @@ class LogService
     public static function filter(array $logs, ?string $value, bool $skipChannel, bool $skipLevel): array
     {
         if (Utils::isString($value)) {
-            $filter = static function (Log $log) use ($value, $skipChannel, $skipLevel) {
+            $filter = static function (Log $log) use ($value, $skipChannel, $skipLevel): bool {
                 if (!$skipChannel) {
                     $channel = self::getChannel($log->getChannel());
                     if (Utils::contains($channel, $value, true)) {
@@ -158,7 +158,7 @@ class LogService
     public static function filterChannel(array $logs, ?string $value): array
     {
         if (Utils::isString($value)) {
-            return \array_filter($logs, function (Log $log) use ($value) {
+            return \array_filter($logs, function (Log $log) use ($value): bool {
                 return 0 === \strcasecmp($value, $log->getChannel());
             });
         }
@@ -177,7 +177,7 @@ class LogService
     public static function filterLevel(array $logs, ?string $value): array
     {
         if (Utils::isString($value)) {
-            return \array_filter($logs, function (Log $log) use ($value) {
+            return \array_filter($logs, function (Log $log) use ($value): bool {
                 return 0 === \strcasecmp($value, $log->getLevel());
             });
         }

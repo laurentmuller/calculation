@@ -588,13 +588,13 @@
     // -----------------------------------
     const oldColorPicker = $.fn.colorpicker;
 
-    $.fn.colorpicker = function (option) {
+    $.fn.colorpicker = function (options) {
         return this.each(function () {
             const $this = $(this);
             let data = $this.data('colorpicker');
             if (!data) {
-                const options = typeof option === 'object' && option;
-                $this.data('colorpicker', data = new ColorPicker(this, options));
+                const settings = typeof options === 'object' && options;
+                $this.data('colorpicker', data = new ColorPicker(this, settings));
             }
         });
     };

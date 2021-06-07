@@ -22,6 +22,7 @@ use Faker\Provider\Person;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -134,7 +135,7 @@ class UpdateController extends AbstractController
 
         $styles = [0, 1, 2];
         $genders = $this->getGenders();
-        $accessor = new PropertyAccessor();
+        $accessor = PropertyAccess::createPropertyAccessor();
 
         try {
             $listener->disableListeners();

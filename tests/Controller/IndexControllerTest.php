@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 /**
- * Unit test for {@link App\Controller\HomeController} class.
+ * Unit test for {@link App\Controller\IndexController} class.
  *
  * @author Laurent Muller
  */
-class HomeControllerTest extends AbstractControllerTest
+class IndexControllerTest extends AbstractControllerTest
 {
     public function getRoutes(): array
     {

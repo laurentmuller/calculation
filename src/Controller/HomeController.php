@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author Laurent Muller
  */
-class IndexController extends AbstractController
+class HomeController extends AbstractController
 {
     /**
      * Display the home page.

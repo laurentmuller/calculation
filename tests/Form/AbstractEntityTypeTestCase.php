@@ -32,7 +32,6 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
 
         // create model and form
         $model = new $className();
-        //$form = $this->factory->createNamed('name', $this->getFormTypeClass(), $model);
         $form = $this->factory->create($this->getFormTypeClass(), $model);
 
         // populate form data

@@ -22,11 +22,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method TaskItem|null findOneBy(array $criteria, array $orderBy = null)
  * @method TaskItem[]    findAll()
  * @method TaskItem[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @template-extends AbstractRepository<TaskItem>
  *
  * @author Laurent Muller
- *
- * @see \App\Entity\TaskItem
- * @template-extends AbstractRepository<TaskItem>
  */
 class TaskItemRepository extends AbstractRepository
 {

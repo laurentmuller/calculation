@@ -810,7 +810,7 @@ $.fn.extend({
                         }
                         break;
                     case 33: // page up (previous page)
-                        if($this.showPreviousPage()) {
+                        if($this.showPreviousPage(false)) {
                             e.preventDefault();
                         }
                         break;

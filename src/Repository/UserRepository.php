@@ -28,11 +28,9 @@ use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepository
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @template-extends AbstractRepository<\App\Entity\User>
  *
  * @author Laurent Muller
- *
- * @see \App\Entity\User
- * @template-extends AbstractRepository<\App\Entity\User>
  */
 class UserRepository extends AbstractRepository implements ResetPasswordRequestRepositoryInterface
 {

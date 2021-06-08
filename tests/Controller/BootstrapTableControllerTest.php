@@ -120,7 +120,6 @@ class BootstrapTableControllerTest extends AbstractControllerTest
         if (null === self::$group) {
             self::$group = new Group();
             self::$group->setCode('Test Group');
-
             $this->addEntity(self::$group);
         }
 
@@ -134,8 +133,8 @@ class BootstrapTableControllerTest extends AbstractControllerTest
         if (null === self::$product) {
             self::$product = new Product();
             self::$product->setDescription('Test Product')
-                ->setCategory(self::$category)
-                ->setPrice(1.0);
+                ->setPrice(1.0)
+                ->setCategory(self::$category);
             $this->addEntity(self::$product);
         }
 

@@ -23,11 +23,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Customer|null findOneBy(array $criteria, array $orderBy = null)
  * @method Customer[]    findAll()
  * @method Customer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @template-extends AbstractRepository<Customer>
  *
  * @author Laurent Muller
- *
- * @see \App\Entity\Customer
- * @template-extends AbstractRepository<Customer>
  */
 class CustomerRepository extends AbstractRepository
 {

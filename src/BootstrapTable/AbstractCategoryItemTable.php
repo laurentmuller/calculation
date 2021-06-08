@@ -14,7 +14,6 @@ namespace App\BootstrapTable;
 
 use App\Entity\Category;
 use App\Repository\AbstractCategoryItemRepository;
-use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -25,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Laurent Muller
  *
- * @template T of \App\Entity\AbstractEntity
+ * @template T of \App\Entity\AbstractCategoryItemEntity
  * @template-extends AbstractEntityTable<T>
  */
 abstract class AbstractCategoryItemTable extends AbstractEntityTable
@@ -43,8 +42,6 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     /**
      * Constructor.
      *
-     * @param AbstractRepository $repository         the entity repository
-     * @param CategoryRepository $categoryRepository the category repository
      * @psalm-param AbstractCategoryItemRepository<T> $repository
      */
     public function __construct(AbstractCategoryItemRepository $repository, CategoryRepository $categoryRepository)
@@ -70,7 +67,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
      *
      * @return Category[]
      */
-    abstract protected function getCategories(): array;
+    abstract protected function getCategories(CategoryRepository $repository): array;
 
     /**
      * Gets the category for the given identifier.
@@ -103,7 +100,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         if (!$query->callback) {
             $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0);
             $results->addCustomData('category', $this->getCategory($categoryId));
-            $results->addCustomData('categories', $this->getCategories());
+            $results->addCustomData('categories', $this->getCategories($this->categoryRepository));
             $results->addParameter(self::PARAM_CATEGORY, $categoryId);
         }
     }

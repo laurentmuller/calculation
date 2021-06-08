@@ -25,11 +25,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method GlobalMargin|null findOneBy(array $criteria, array $orderBy = null)
  * @method GlobalMargin[]    findAll()
  * @method GlobalMargin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @template-extends AbstractRepository<GlobalMargin>
  *
  * @author Laurent Muller
- *
- * @see \App\Entity\GlobalMargin
- * @template-extends AbstractRepository<GlobalMargin>
  */
 class GlobalMarginRepository extends AbstractRepository
 {

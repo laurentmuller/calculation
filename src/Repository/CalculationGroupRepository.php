@@ -23,11 +23,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CalculationGroup|null findOneBy(array $criteria, array $orderBy = null)
  * @method CalculationGroup[]    findAll()
  * @method CalculationGroup[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @template-extends AbstractRepository<CalculationGroup>
  *
  * @author Laurent Muller
- *
- * @see \App\Entity\CalculationGroup
- * @template-extends AbstractRepository<CalculationGroup>
  */
 class CalculationGroupRepository extends AbstractRepository
 {

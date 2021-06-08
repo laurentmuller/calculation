@@ -180,8 +180,8 @@ class CalculationServiceTest extends KernelTestCase
 
         $product = new Product();
         $product->setDescription('Product Test')
-            ->setCategory($category)
-            ->setPrice(self::PRODUCT_PRICE);
+            ->setPrice(self::PRODUCT_PRICE)
+            ->setCategory($category);
 
         $manager->persist($product);
         $manager->flush();

@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Task.
+ * Represent a Task.
  *
  * @author Laurent Muller
  *
@@ -27,16 +27,20 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
  * @UniqueEntity(fields="name", message="task.unique_name")
  */
-class Task extends AbstractEntity implements \Countable
+class Task extends AbstractCategoryItemEntity implements \Countable
 {
     /**
+     * The parent's category.
+     *
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tasks")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="category_id", nullable=false)
      * @Assert\NotNull
      */
-    private ?Category $category = null;
+    protected ?Category $category = null;
 
     /**
+     * The task items.
+     *
      * @ORM\OneToMany(targetEntity=TaskItem::class, mappedBy="task", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Assert\Valid
      * @ORM\OrderBy({"position" = "ASC"})
@@ -47,15 +51,11 @@ class Task extends AbstractEntity implements \Countable
     private $items;
 
     /**
+     * The name.
+     *
      * @ORM\Column(type="string", length=255)
      */
     private ?string $name = null;
-
-    /**
-     * @ORM\Column(type="string", length=15, nullable=true)
-     * @Assert\Length(max=15)
-     */
-    private ?string $unit = null;
 
     /**
      * Constructor.
@@ -78,6 +78,9 @@ class Task extends AbstractEntity implements \Countable
         });
     }
 
+    /**
+     * Add a task item.
+     */
     public function addItem(TaskItem $item): self
     {
         if (!$this->items->contains($item)) {
@@ -146,53 +149,12 @@ class Task extends AbstractEntity implements \Countable
         return $this->items->filter($p);
     }
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    /**
-     * Gets the category code.
-     */
-    public function getCategoryCode(): ?string
-    {
-        $category = $this->getCategory();
-
-        return $category ? $category->getCode() : null;
-    }
-
-    /**
-     * Gets the category identifier.
-     */
-    public function getCategoryId(): ?int
-    {
-        $category = $this->getCategory();
-
-        return $category ? $category->getId() : null;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function getDisplay(): string
     {
         return (string) $this->name;
-    }
-
-    /**
-     * Gets the group.
-     */
-    public function getGroup(): ?Group
-    {
-        return $this->category ? $this->category->getGroup() : null;
-    }
-
-    /**
-     * Gets the group code.
-     */
-    public function getGroupCode(): ?string
-    {
-        return $this->category ? $this->category->getGroupCode() : null;
     }
 
     /**
@@ -209,11 +171,6 @@ class Task extends AbstractEntity implements \Countable
         return $this->name;
     }
 
-    public function getUnit(): ?string
-    {
-        return $this->unit;
-    }
-
     /**
      * Returns if the task does not contain items.
      */
@@ -222,6 +179,9 @@ class Task extends AbstractEntity implements \Countable
         return $this->items->isEmpty();
     }
 
+    /**
+     * Remove the given item.
+     */
     public function removeItem(TaskItem $item): self
     {
         if ($this->items->removeElement($item)) {
@@ -235,23 +195,9 @@ class Task extends AbstractEntity implements \Countable
         return $this;
     }
 
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function setUnit(?string $unit): self
-    {
-        $this->unit = $this->trim($unit);
 
         return $this;
     }
@@ -281,6 +227,9 @@ class Task extends AbstractEntity implements \Countable
     {
         return [
             $this->name,
+            $this->unit,
+            $this->getCategoryCode(),
+            $this->getGroupCode(),
         ];
     }
 }

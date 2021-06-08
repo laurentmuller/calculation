@@ -80,8 +80,8 @@ class CalculationDuplicateControllerTest extends AbstractControllerTest
         if (null === self::$product) {
             self::$product = new Product();
             self::$product->setDescription('Test Product')
-                ->setCategory(self::$category)
-                ->setPrice(10);
+                ->setPrice(10)
+                ->setCategory(self::$category);
             $this->addEntity(self::$product);
         }
 

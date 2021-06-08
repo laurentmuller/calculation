@@ -25,11 +25,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method GroupMargin|null findOneBy(array $criteria, array $orderBy = null)
  * @method GroupMargin[]    findAll()
  * @method GroupMargin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @template-extends AbstractRepository<GroupMargin>
  *
  * @author Laurent Muller
- *
- * @see \App\Entity\GroupMargin
- * @template-extends AbstractRepository<GroupMargin>
  */
 class GroupMarginRepository extends AbstractRepository
 {

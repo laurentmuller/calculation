@@ -28,8 +28,8 @@ class ProductTest extends AbstractEntityValidatorTest
         $category = $this->getCategory();
 
         $first = new Product();
-        $first->setCategory($category)
-            ->setDescription('My Product');
+        $first->setDescription('My Product')
+            ->setCategory($category);
 
         try {
             $this->saveEntity($category->getGroup());
@@ -37,8 +37,8 @@ class ProductTest extends AbstractEntityValidatorTest
             $this->saveEntity($first);
 
             $second = new Product();
-            $second->setCategory($category)
-                ->setDescription('My Product');
+            $second->setDescription('My Product')
+                ->setCategory($category);
 
             $this->validate($second, 1);
         } finally {
@@ -74,8 +74,8 @@ class ProductTest extends AbstractEntityValidatorTest
         $category = $this->getCategory();
 
         $first = new Product();
-        $first->setCategory($category)
-            ->setDescription('My Product');
+        $first->setDescription('My Product')
+            ->setCategory($category);
 
         try {
             $this->saveEntity($category->getGroup());
@@ -83,8 +83,8 @@ class ProductTest extends AbstractEntityValidatorTest
             $this->saveEntity($first);
 
             $second = new Product();
-            $second->setCategory($category)
-                ->setDescription('My Product 2');
+            $second->setDescription('My Product 2')
+                ->setCategory($category);
 
             $this->validate($second, 0);
         } finally {
@@ -96,8 +96,8 @@ class ProductTest extends AbstractEntityValidatorTest
     public function testValid(): void
     {
         $product = new Product();
-        $product->setCategory($this->getCategory())
-            ->setDescription('My Product');
+        $product->setDescription('My Product')
+            ->setCategory($this->getCategory());
         $this->validate($product, 0);
     }
 

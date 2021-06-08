@@ -22,11 +22,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CalculationItem|null findOneBy(array $criteria, array $orderBy = null)
  * @method CalculationItem[]    findAll()
  * @method CalculationItem[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @template-extends AbstractRepository<CalculationItem>
  *
  * @author Laurent Muller
- *
- * @see \App\Entity\CalculationItem
- * @template-extends AbstractRepository<CalculationItem>
  */
 class CalculationItemRepository extends AbstractRepository
 {

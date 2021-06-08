@@ -23,10 +23,13 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation entity.
  *
- * @author Laurent Muller
- *
- * @see \App\Entity\Calculation
+ * @method Calculation|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Calculation|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Calculation[]    findAll()
+ * @method Calculation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @template-extends AbstractRepository<Calculation>
+ *
+ * @author Laurent Muller
  */
 class CalculationRepository extends AbstractRepository
 {

@@ -30,7 +30,6 @@ use App\BootstrapTable\TaskTable;
 use App\BootstrapTable\UserTable;
 use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\TableInterface;
-use App\Repository\CategoryRepository;
 use App\Traits\MathTrait;
 use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -198,7 +197,7 @@ class BootstrapTableController extends AbstractController
      *     {"label" = "product.list.title" }
      * })
      */
-    public function product(Request $request, ProductTable $table, CategoryRepository $repository): Response
+    public function product(Request $request, ProductTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'table/table_product.html.twig');
     }
@@ -239,7 +238,7 @@ class BootstrapTableController extends AbstractController
      *     {"label" = "task.list.title" }
      * })
      */
-    public function task(Request $request, TaskTable $table, CategoryRepository $repository): Response
+    public function task(Request $request, TaskTable $table): Response
     {
         return $this->handleTableRequest($request, $table, 'table/table_task.html.twig');
     }

@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  * @UniqueEntity(fields="description", message="product.unique_description")
  */
-class Product extends AbstractEntity
+class Product extends AbstractCategoryItemEntity
 {
     /**
      * The parent's category.
@@ -35,7 +35,7 @@ class Product extends AbstractEntity
      * @ORM\JoinColumn(name="category_id", nullable=false)
      * @Assert\NotNull
      */
-    private ?Category $category = null;
+    protected ?Category $category = null;
 
     /**
      * The description.
@@ -62,14 +62,6 @@ class Product extends AbstractEntity
     private ?string $supplier = null;
 
     /**
-     * The unit.
-     *
-     * @ORM\Column(type="string", length=15, nullable=true)
-     * @Assert\Length(max=15)
-     */
-    private ?string $unit = null;
-
-    /**
      * Clone this product.
      *
      * @param string $description the new description
@@ -84,22 +76,6 @@ class Product extends AbstractEntity
         }
 
         return $copy;
-    }
-
-    /**
-     * Get category.
-     */
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    /**
-     * Gets the category code.
-     */
-    public function getCategoryCode(): ?string
-    {
-        return $this->category ? $this->category->getCode() : null;
     }
 
     /**
@@ -119,22 +95,6 @@ class Product extends AbstractEntity
     }
 
     /**
-     * Gets the group.
-     */
-    public function getGroup(): ?Group
-    {
-        return $this->category ? $this->category->getGroup() : null;
-    }
-
-    /**
-     * Gets the group code.
-     */
-    public function getGroupCode(): ?string
-    {
-        return $this->category ? $this->category->getGroupCode() : null;
-    }
-
-    /**
      * Get price.
      */
     public function getPrice(): float
@@ -148,24 +108,6 @@ class Product extends AbstractEntity
     public function getSupplier(): ?string
     {
         return $this->supplier;
-    }
-
-    /**
-     * Get unit.
-     */
-    public function getUnit(): ?string
-    {
-        return $this->unit;
-    }
-
-    /**
-     * Set category.
-     */
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
     }
 
     /**
@@ -196,16 +138,6 @@ class Product extends AbstractEntity
     public function setSupplier(?string $supplier): self
     {
         $this->supplier = $this->trim($supplier);
-
-        return $this;
-    }
-
-    /**
-     * Set unit.
-     */
-    public function setUnit(?string $unit): self
-    {
-        $this->unit = $this->trim($unit);
 
         return $this;
     }

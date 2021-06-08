@@ -22,11 +22,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Property|null findOneBy(array $criteria, array $orderBy = null)
  * @method Property[]    findAll()
  * @method Property[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @template-extends AbstractRepository<Property>
  *
  * @author Laurent Muller
- *
- * @see \App\Entity\Property
- * @template-extends AbstractRepository<Property>
  */
 class PropertyRepository extends AbstractRepository
 {

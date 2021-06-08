@@ -76,8 +76,8 @@ class PivotControllerTest extends AbstractControllerTest
         if (null === self::$product) {
             self::$product = new Product();
             self::$product->setDescription('Test Product')
-                ->setCategory(self::$category)
-                ->setPrice(10.0);
+                ->setPrice(10.0)
+                ->setCategory(self::$category);
             $this->addEntity(self::$product);
         }
 

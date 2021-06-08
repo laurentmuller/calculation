@@ -24,11 +24,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Group|null findOneBy(array $criteria, array $orderBy = null)
  * @method Group[]    findAll()
  * @method Group[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @template-extends AbstractRepository<Group>
  *
  * @author Laurent Muller
- *
- * @see \App\Entity\Group
- * @template-extends AbstractRepository<Group>
  */
 class GroupRepository extends AbstractRepository
 {

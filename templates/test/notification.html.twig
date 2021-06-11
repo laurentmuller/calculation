@@ -91,11 +91,13 @@
 <div class="form-row">
     <div class="col">
         <div class="form-group mb-0">
-            {{ _self.checkbox('title', 'Titre') }}
-            {{ _self.checkbox('icon', 'Icône') }}
-            {{ _self.checkbox('subtitle', 'Sous-titre', subtitle) }}
-            {{ _self.checkbox('close', 'Fermer') }}
-            {{ _self.checkbox('autohide', 'Masquer automatiquement') }}
+            <div class="text-center ml-3">
+                {{ _self.checkbox('title', 'Titre') }}
+                {{ _self.checkbox('icon', 'Icône') }}
+                {{ _self.checkbox('subtitle', 'Sous-titre', subtitle) }}
+                {{ _self.checkbox('close', 'Fermer') }}
+                {{ _self.checkbox('autohide', 'Masquer automatiquement') }}
+            </div>
         </div>
     </div>
 </div>

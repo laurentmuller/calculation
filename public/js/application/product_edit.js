@@ -4,14 +4,14 @@
 
 /**
  * Initialize a search for an element.
- * 
+ *
  * @param {jQuery}
  *            $element - The element to handle.
  * @param {String]
  *            url - The search URL.
  * @param {string}
  *            error - The message to display on search error.
- * 
+ *
  * @returns {jQuery} The element for chaining.
  */
 function initSearchElement($element, url, error) {
@@ -35,8 +35,7 @@ function initSearchElement($element, url, error) {
         },
         onError: function () {
             const title = $("#edit-form").data("title");
-            const message = $("#edit-form").data(error);
-            Toaster.danger(message, title, $("#flashbags").data());
+            Toaster.danger(error, title, $("#flashbags").data());
         }
     };
     $element.typeahead(options);
@@ -49,10 +48,9 @@ function initSearchElement($element, url, error) {
  */
 (function ($) {
     'use strict';
-
     const $form = $("#edit-form");
-    initSearchElement($("#product_unit"), $form.data("search-unit"), $form.data("error-unit"));
-    initSearchElement($("#product_supplier"), $form.data("search-supplier"), $form.data("error-supplier"));
+    initSearchElement($("#product_unit"), $form.data("unit-search"), $form.data("unit-error"));
+    initSearchElement($("#product_supplier"), $form.data("supplier-search"), $form.data("supplier-error"));
     $('#product_price').inputNumberFormat();
     $form.initValidator();
 }(jQuery));

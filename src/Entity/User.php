@@ -108,17 +108,15 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
-     * @phpstan-ignore-next-line
      */
-    private ?string $selector = null;
+    private ?string $selector = null; // @phpstan-ignore-line
 
     /**
      * The last updated date.
      *
      * @ORM\Column(type="datetime", nullable=true)
-     * @phpstan-ignore-next-line
      */
-    private ?\DateTime $updatedAt = null;
+    private ?\DateTime $updatedAt = null; // @phpstan-ignore-line
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)

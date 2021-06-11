@@ -244,7 +244,7 @@ customer:
     edit:
         title: Modifier le client
         success: Le client <b>%name%</b> a été mis à jour avec succès.
-        error_search: Erreur lors de la recherche de l'adresse.
+        error_search: Une erreur s'est produite lors de la recherche de l'adresse.
     delete:
         title: Supprimer le client
         message: Êtes-vous sûr de vouloir supprimer le client <b>%name%</b> ?
@@ -300,8 +300,8 @@ product:
     edit:
         title: Modifier l'article
         success: L'article <b>%name%</b> a été mis à jour avec succès.
-        error_search_unit: Erreur lors de la recherche des unités.
-        error_search_supplier: Erreur lors de la recherche des fournisseur.
+        error_search_unit: Une erreur s'est produite lors de la recherche des unités.
+        error_search_supplier: Une erreur s'est produite lors de la recherche des fournisseur.
     delete:
         title: Supprimer l'article
         message: Êtes-vous sûr de vouloir supprimer l'article <b>%name%</b> ?
@@ -494,7 +494,7 @@ common:
     show_password: Afficher le mot de passe
     hide_password: Masquer le mot de passe
     toggle_password: Afficher/Masquer le mot de passe
-    required: '* = Valeur requise'
+    required: Les champs marqués d’un <span class="text-danger">*</span> sont obligatoires.
     top_of_page: Haut de la page
     id: Numéro
     empty: ''
@@ -684,7 +684,6 @@ calendar:
     invalid_week: La semaine doit être comprises entre 1 et 53.
 test:
     notification: Notifications
-    summernote: Editeur Summernote
     minify: Minify
     drag_drop: Drag & drop
     html: Exportation HTML

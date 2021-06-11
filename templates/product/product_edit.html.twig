@@ -6,11 +6,11 @@
 {%- set page_list = 'product_table' -%}
 {%- set form_attr = form_attr|default({})|merge({
                      'data-title': title|trans,
-                     'data-search-unit': url('ajax_search_unit'),
-                     'data-search-supplier': url('ajax_search_supplier'),
-                     'data-error-unit': 'product.edit.error_search_unit'|trans,
-                     'data-error-supplier': 'product.edit.error_search_supplier'|trans}) -%}
-                      
+                     'data-unit-search': url('ajax_search_unit'),
+                     'data-unit-error': 'product.edit.error_search_unit'|trans,
+                     'data-supplier-search': url('ajax_search_supplier'),
+                     'data-supplier-error': 'product.edit.error_search_supplier'|trans}) -%}
+
 {% block card_body %}
 {{ form_row(form.description) }}
 <div class="form-row">

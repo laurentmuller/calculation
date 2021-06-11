@@ -46,6 +46,7 @@ class TaskType extends AbstractEntityType
             ->addCategoryType();
 
         $helper->field('unit')
+            ->autocomplete('off')
             ->notRequired()
             ->maxLength(15)
             ->addTextType();

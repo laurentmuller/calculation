@@ -34,11 +34,11 @@
                 </div>
                 <div class="modal-footer">
                     <div class="row no-gutters w-100">
-                        <div class="col-9">
+                        <div class="col-7">
                             {% block modal_buttons %}{% endblock %}
                         </div>
-                        <div class="col-3 text-right">
-                            <small class="text-danger">{{ 'common.required'|trans }}</small>
+                        <div class="col-5 text-right mt-1">
+                            <small>{{ 'common.required'|trans|raw }}</small>
                         </div>
                     </div>
                 </div>

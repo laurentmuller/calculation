@@ -104,8 +104,11 @@
 {%- set title_icon = 'tasks' -%}
 {%- set page_list = 'task_table' -%}
 {%- set form_attr = form_attr|default({})|merge({
+					 'data-title': title|trans,
                      'data-show': 'taskitem.edit.items_show'|trans,
-                     'data-hide': 'taskitem.edit.items_hide'|trans}) -%}
+                     'data-hide': 'taskitem.edit.items_hide'|trans,
+                     'data-unit-search': url('ajax_search_unit'),
+                     'data-unit-error': 'product.edit.error_search_unit'|trans}) -%}
 
 {% block card_header %}
 <div class="row">
@@ -137,6 +140,7 @@
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}
+{{ asset_js('js/plugins/plugin-typeahead.js') }}
 {{ asset_js('js/plugins/plugin-input.js') }}
 {{ asset_js('js/application/task_edit.js') }}
 {% else %}

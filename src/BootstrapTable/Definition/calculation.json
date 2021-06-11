@@ -25,12 +25,12 @@
     {
         "field": "customer",
         "title": "calculation.fields.customer",
-        "class": "text-cell"
+        "class": "w-20 text-cell"
     },
     {
         "field": "description",
         "title": "calculation.fields.description",
-        "class": "text-cell"
+        "class": "w-30 text-cell"
     },
     {
         "field": "overallMargin",

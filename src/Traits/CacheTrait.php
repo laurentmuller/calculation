@@ -111,16 +111,13 @@ trait CacheTrait
     /**
      * Returns a traversable set of cache items.
      *
-     * @param string[] $keys
-     *                       An indexed array of keys of items to retrieve
+     * @param string[] $keys An indexed array of keys of items to retrieve
      *
-     * @return \Traversable|CacheItem[]
-     *                                  A traversable collection of Cache Items keyed by the cache keys of
+     * @return \Traversable|CacheItem[] A traversable collection of Cache Items keyed by the cache keys of
      *                                  each item. A Cache item will be returned for each key, even if that
      *                                  key is not found.
      *
-     * @throws \InvalidArgumentException
-     *                                   If any of the keys in $keys are not a legal value
+     * @throws \InvalidArgumentException If any of the keys in $keys are not a legal value
      */
     public function getCacheItems(array $keys)
     {
@@ -130,7 +127,7 @@ trait CacheTrait
             return $this->adapter->getItems($keys);
         }
 
-        return []; /* @phpstan-ignore-line */
+        return []; // @phpstan-ignore-line
     }
 
     /**

@@ -30,18 +30,16 @@
 
 {% block card_footer -%}
 <div class="row">
-    <div class="col-md-9">
-    {% block actions_form -%} 
+    <div class="col-md-7">
+    {% block actions_form -%}
         {{ icons.button_submit(submit_text, submit_class, submit_params) }}
         {% if cancel_path|default(false) %}
             {{ icons.button_cancel(cancel_path, cancel_text) }}
         {% endif %}
     {%- endblock %}
     </div>
-    <div class="col-md-3 text-md-right">
-    {% block required_form -%}
-        <small class="text-danger">{{ 'common.required'|trans }}</small>
-    {%- endblock %}
+    <div class="col-md-5 text-md-right mt-1">
+        {% block required_form -%}<small>{{ 'common.required'|trans|raw }}</small>{%- endblock %}
     </div>
 </div>
 {%- endblock %}

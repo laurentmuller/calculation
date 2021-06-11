@@ -85,7 +85,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
 
                 /** @var CalculationItem $item */
                 foreach ($category->getItems() as $item) {
-                    /* @phpstan-ignore-next-line */
+                    // @phpstan-ignore-next-line
                     $this->startRow()
                         ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
                         ->add($item->getUnit())

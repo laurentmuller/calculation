@@ -90,13 +90,13 @@ class GeneratorController extends AbstractController
             $id = $simulate ? (int) $manager->getRepository(Calculation::class)->getNextId() : 0;
 
             // products range
-            $countProducts = $faker->countProducts(); /* @phpstan-ignore-line */
+            $countProducts = $faker->countProducts();  // @phpstan-ignore-line
             $min = \min(5, $countProducts);
             $max = \min(15, $countProducts);
 
             for ($i = 0; $i < $count; ++$i) {
-                $state = $faker->state(); /* @phpstan-ignore-line */
-                $userName = $faker->userName(); /* @phpstan-ignore-line */
+                $state = $faker->state();  // @phpstan-ignore-line
+                $userName = $faker->userName();  // @phpstan-ignore-line
                 $date = $faker->dateTimeBetween('first day of previous month', 'last day of next month');
 
                 $calculation = new Calculation();
@@ -108,7 +108,7 @@ class GeneratorController extends AbstractController
                     ->setCreatedBy($userName);
 
                 // add products
-                $products = $faker->products($faker->numberBetween($min, $max)); /* @phpstan-ignore-line */
+                $products = $faker->products($faker->numberBetween($min, $max));  // @phpstan-ignore-line
                 foreach ($products as $product) {
                     // copy
                     $item = CalculationItem::create($product)->setQuantity($faker->numberBetween(1, 10));

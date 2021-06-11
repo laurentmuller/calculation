@@ -441,7 +441,7 @@ class AjaxController extends AbstractController
                 $current = &$lang;
                 $paths = \explode('.', $key);
                 foreach ($paths as $path) {
-                    if (!isset($current[$path])) { /* @phpstan-ignore-line */
+                    if (!isset($current[$path])) { // @phpstan-ignore-line
                         $current[$path] = [];
                     }
                     $current = &$current[$path];
@@ -673,14 +673,30 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Search distinct product's units in existing products.
+     * Search distinct units from products and tasks.
      *
      * @Route("/search/unit", name="ajax_search_unit")
      * @IsGranted("ROLE_USER")
      */
-    public function searchUnit(Request $request, ProductRepository $repository): JsonResponse
+    public function searchUnit(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository): JsonResponse
     {
-        return $this->getDistinctValues($request, $repository, 'unit');
+        $search = (string) $request->get('query', '');
+        if (Utils::isString($search)) {
+            $limit = (int) $request->get('limit', 15);
+            $productUnits = $productRepository->getDistinctValues('unit', $search);
+            $taskUnits = $taskRepository->getDistinctValues('unit', $search);
+            $values = \array_unique(\array_merge($productUnits, $taskUnits));
+            \sort($values, \SORT_NATURAL);
+            $values = \array_slice($values, 0, $limit);
+            if (!empty($values)) {
+                return $this->json($values);
+            }
+        }
+
+        // empty
+        return $this->jsonFalse([
+            'values' => [],
+        ]);
     }
 
     /**

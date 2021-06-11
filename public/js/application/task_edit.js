@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* globals Toaster */
+
 /**
  * Update the user interface.
  */
@@ -307,6 +309,44 @@ function sortMargins($caller) {
 }
 
 /**
+ * Inititalize the search units.
+ *  @returns {jQuery} The tak unit for chaining.
+ */
+function initSearchUnit() {
+    'use strict';
+
+    const $form = $('#edit-form');
+    const $element = $('#task_unit');
+    const url = $form.data("unit-search");
+    const error = $form.data("unit-error");
+
+    // search units url
+    const options = {
+        valueField: '',
+        ajax: {
+            url: url
+        },
+        // overridden functions (all are set in the server side)
+        matcher: function () {
+            return true;
+        },
+        grepper: function (data) {
+            return data;
+        },
+        onSelect: function () {
+            $element.select();
+        },
+        onError: function () {
+            const title = $form.data("title");
+            Toaster.danger(error, title, $("#flashbags").data());
+        }
+    };
+    $element.typeahead(options);
+
+    return $element;
+}
+
+/**
  * Ready function
  */
 (function ($) {
@@ -346,6 +386,9 @@ function sortMargins($caller) {
         $link.attr('title', $('#edit-form').data('show'));
         $link.find('i').toggleClass('fa-caret-down fa-caret-right');
     });
+
+    // initalize search
+    initSearchUnit();
 
     // validation
     $('#edit-form').initValidator();

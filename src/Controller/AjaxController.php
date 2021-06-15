@@ -85,7 +85,7 @@ class AjaxController extends AbstractController
      * Render the MySql informations content.
      *
      * @Route("/mysql", name="ajax_mysql")
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function aboutMySql(DatabaseInfo $info): JsonResponse
     {
@@ -105,7 +105,7 @@ class AjaxController extends AbstractController
      * Render the PHP informations content.
      *
      * @Route("/php", name="ajax_php")
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function aboutPhp(Request $request): JsonResponse
     {
@@ -141,7 +141,7 @@ class AjaxController extends AbstractController
      * Render Symfony informations content.
      *
      * @Route("/symfony", name="ajax_symfony")
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function aboutSymfony(KernelInterface $kernel, RouterInterface $router): JsonResponse
     {

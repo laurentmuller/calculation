@@ -133,7 +133,7 @@ class CategoryTable extends AbstractEntityTable
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
+            $groupId = (int) $query->getCustomData(self::PARAM_GROUP, 0);
             $results->addCustomData('group', $this->getGroup($groupId));
             $results->addCustomData('groups', $this->getGroups());
             $results->addParameter(self::PARAM_GROUP, $groupId);

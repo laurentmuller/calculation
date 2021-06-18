@@ -26,7 +26,6 @@ $.fn.extend({
      *
      * @param {jQuery}
      *            $table - the parent table.
-     *
      * @return {boolean} this function returns always true.
      */
     updateRow: function($table) {
@@ -127,7 +126,6 @@ $.fn.extend({
      *
      * @param {object}
      *            options - the options to merge with default.
-     *
      * @return {jQuery} this instance for chaining.
      */
     initBootstrapTable: function(options) {
@@ -152,7 +150,8 @@ $.fn.extend({
 
             // update UI on post page load
             onPostBody: function(content) {
-                if(content.length !== 0) {
+                const isData = content.length !== 0;
+                if(isData) {
                     // select first row if none
                     if (!$this.getSelection()) {
                         $this.selectFirstRow();
@@ -160,7 +159,7 @@ $.fn.extend({
                     // update
                     $this.updateCardView().highlight().updateHref(content);
                 }
-                $this.toggleClass('table-hover', content.length !== 0);
+                $this.updateHistory().toggleClass('table-hover', isData);
 
                 // update pagination
                 $('.fixed-table-pagination .page-link').each(function(index, element) {
@@ -257,17 +256,9 @@ $.fn.extend({
             'sort': options.sortName,
             'order': options.sortOrder,
             'offset': (options.pageNumber - 1) * options.pageSize,
-            'limit': options.pageSize
+            'limit': options.pageSize,
+            'view': $this.getDisplayMode()
         };
-
-        // view
-        if ($this.isCustomView()) {
-            params.view = 'custom';
-        } else if (options.cardView) {
-            params.view = 'card';
-        } else {
-            params.view = 'table';
-        }
 
         // add search
         if(('' + options.searchText).length) {
@@ -495,7 +486,6 @@ $.fn.extend({
      *
      * @param {object}
      *            options - the optional options.
-     *
      * @return {jQuery} this instance for chaining.
      */
     refresh: function(options) {
@@ -614,14 +604,12 @@ $.fn.extend({
                 element: 'span',
                 className: 'text-success',
                 separateWordSearch: false,
-                ignorePunctuation: ["'", ",", "."] // ":;.,-–—‒_(){}[]!'\"+=".split("")
+                ignorePunctuation: ["'", ","]
             };
             if ($this.isCustomView()) {
-                const $items = $this.getCustomView().find('.custom-item');
-                $items.mark(text, options);
+                $this.getCustomView().find('.custom-item').mark(text, options);
             } else {
-                const $rows = $this.find('tbody td:not(.rowlink-skip)');
-                $rows.mark(text, options);
+                $this.find('tbody td:not(.rowlink-skip)').mark(text, options);
             }
         }
         return $this;
@@ -632,7 +620,6 @@ $.fn.extend({
      *
      * @param {boolean}
      *            selectLast - true to select the last row.
-     *
      * @return {boolean} true if the previous page is displayed.
      */
     showPreviousPage: function(selectLast) {
@@ -868,6 +855,24 @@ $.fn.extend({
         if(keyHandler) {
             $(document).off('keydown.bs.table', keyHandler);
         }
+        return $this;
+    },
+
+    /**
+     * Update the history state.
+     */
+    updateHistory: function() {
+        'use strict';
+        const $this = $(this);
+        const params = $this.getParameters();
+        delete params.caller;
+
+        let url = '';
+        for (const [key, value] of Object.entries(params)) {
+            url += url.match('[?]') ? '&' : '?';
+            url += key + '=' + encodeURIComponent(value);
+        }
+        window.history.pushState({}, '', url);
         return $this;
     }
 });

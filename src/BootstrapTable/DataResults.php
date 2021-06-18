@@ -28,11 +28,6 @@ class DataResults implements \JsonSerializable
     public array $attributes = [];
 
     /**
-     * The card view state.
-     */
-    public bool $card = false;
-
-    /**
      * The column definitions.
      *
      * @var Column[]
@@ -50,31 +45,6 @@ class DataResults implements \JsonSerializable
     public int $filtered = 0;
 
     /**
-     * The selected identifier.
-     */
-    public int $id = 0;
-
-    /**
-     * The maximum number of results to retrieve (the "limit").
-     */
-    public int $limit = TableInterface::PAGE_SIZE;
-
-    /**
-     * The position of the first result to retrieve (the "offset").
-     */
-    public int $offset = 0;
-
-    /**
-     * The sort order ('asc' or 'desc').
-     */
-    public string $order = Column::SORT_ASC;
-
-    /**
-     * The page index (first = 1).
-     */
-    public int $page = 1;
-
-    /**
      * The pages list.
      *
      * @var int[]
@@ -90,16 +60,6 @@ class DataResults implements \JsonSerializable
      * The rows to display.
      */
     public array $rows = [];
-
-    /**
-     * The search term.
-     */
-    public string $search = '';
-
-    /**
-     * The sorted field.
-     */
-    public string $sort = '';
 
     /**
      * The response status.

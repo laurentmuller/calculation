@@ -582,7 +582,7 @@ class CalculationRepository extends AbstractRepository
                 return "IFELSE({$alias}.itemsTotal != 0, {$alias}.overallTotal / {$alias}.itemsTotal, 0)";
             case 'state.id':
             case 'state.code':
-                return parent::getSortField('s', self::STATE_ALIAS);
+                return parent::getSortField('code', self::STATE_ALIAS);
             case 'state.color':
                 return parent::getSortField('color', self::STATE_ALIAS);
             default:

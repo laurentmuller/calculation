@@ -672,10 +672,18 @@ $.fn.extend({
     // handle keys enablement
     $('body').on('focus', 'a, input, .btn, .dropdown-item, .rowlink-skip', function() {
         $table.disableKeys();
-    });
-    $('body').on('blur', 'a, input, .btn, .dropdown-item, .rowlink-skip', function() {
+    }).on('blur', 'a, input, .btn, .dropdown-item, .rowlink-skip', function() {
         $table.enableKeys();
     });
+
+    // $('body').on('focus', 'a, input, .btn, .dropdown-item, .rowlink-skip',
+    // function() {
+    // $table.disableKeys();
+    // });
+    // $('body').on('blur', 'a, input, .btn, .dropdown-item, .rowlink-skip',
+    // function() {
+    // $table.enableKeys();
+    // });
 
     // initialize context menu
     const ctxSelector =  'tr.table-primary td:not(.rowlink-skip), .custom-item.table-primary div:not(.rowlink-skip)';

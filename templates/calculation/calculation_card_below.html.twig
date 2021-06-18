@@ -36,8 +36,11 @@
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'below.description'|trans({'%margin%': min_margin|percent}) }}</p>
-{% if items|length %}<p class="ml-4 mb-0">{{ 'below.count'|trans({'%calculations%': items|length}) }}</p>{% endif %}
+<p class="ml-4 mb-0">{{ 'below.description'|trans({'%margin%': min_margin|percent}) }}
+{% if items|length %}
+    {{ 'below.count'|trans({'%calculations%': items|length}) }}
+{% endif %}
+</p>
 {%- endblock %}
 
 {%- block card_footer_class '' -%}

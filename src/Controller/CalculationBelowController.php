@@ -52,7 +52,6 @@ class CalculationBelowController extends AbstractController
         // parameters
         $parameters = [
             'items' => $items,
-            'items_count' => \count($items),
             'min_margin' => $minMargin,
             'query' => false,
             'id' => $request->get('id', 0),

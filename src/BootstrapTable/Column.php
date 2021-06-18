@@ -83,7 +83,7 @@ class Column
     private $fieldFormatter = null;
 
     /**
-     * The numeric type.
+     * The value indicating if this column is displayed as a numeric value.
      */
     private bool $numeric = false;
 
@@ -263,9 +263,6 @@ class Column
         return $this->default;
     }
 
-    /**
-     * Gets a value indicating if this column is displayed as a numeric value.
-     */
     public function isNumeric(): bool
     {
         return $this->numeric;
@@ -363,9 +360,6 @@ class Column
         return $this;
     }
 
-    /**
-     * Sets a value indicating if this column is displayed as a numeric value.
-     */
     public function setNumeric(bool $numeric): self
     {
         $this->numeric = $numeric;

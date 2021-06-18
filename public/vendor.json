@@ -19,7 +19,6 @@
 			]
 		},
 		{
-			"example": "https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.css",
 			"name": "bootstrap",
 			"version": "4.6.0",
 			"source": "https://cdn.jsdelivr.net/npm/",
@@ -65,7 +64,7 @@
 		},
 		{
 			"name": "highcharts",
-			"version": "9.1.1",
+			"version": "9.1.2",
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/{file}",
 			"files": [
@@ -74,13 +73,12 @@
 		},
 		{
 			"name": "html5sortable",
-			"version": "0.12.1",
+			"version": "0.13.0",
 			"files": [
 				"html5sortable.js"
 			]
 		},
 		{
-			"example": "https://datatables.net/download/packages",
 			"name": "datatables",
 			"version": "1.10.22",
 			"source": "https://cdn.datatables.net/",
@@ -103,7 +101,6 @@
 			]
 		},
 		{
-			"example": "https://datatables.net/download/packages",
 			"name": "keytable",
 			"version": "2.5.3",
 			"source": "http://cdn.datatables.net/",
@@ -113,7 +110,6 @@
 			]
 		},
 		{
-			"example": "//cdn.datatables.net/plug-ins/1.10.21/features/mark.js/datatables.mark.js",
 			"name": "mark.js",
 			"version": "1.10.22",
 			"source": "https://cdn.datatables.net/plug-ins/",
@@ -124,7 +120,6 @@
 			]
 		},
 		{
-			"example": "https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.js",
 			"name": "mark.js",
 			"version": "8.11.1",
 			"target": "jquery-mark",
@@ -242,7 +237,6 @@
 			]
 		},
 		{
-			"example": "https://cdn.jsdelivr.net/npm/@iconify/iconify@1.0.7/dist/iconify.js",
 			"name": "@iconify/iconify",
 			"version": "1.0.7",
 			"source": "https://cdn.jsdelivr.net/npm/",
@@ -256,33 +250,33 @@
 		{
 			"name": "bootstrap-table",
 			"version": "1.18.3",
+			"target": "bootstrap-table",
 			"files": [
 				"bootstrap-table.js",
 				"bootstrap-table.css"
 			]
 		},
 		{
-			"example": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/defer-url/bootstrap-table-defer-url.min.js",
 			"name": "bootstrap-table",
 			"version": "1.18.3",
-			"format": "{source}{name}/{version}/extensions/defer-url/{file}",
+			"source": "https://cdn.jsdelivr.net/npm/",
+			"format": "{source}{name}@{version}/dist/extensions/defer-url/{file}",
 			"target": "bootstrap-table",
 			"files": [
 				"bootstrap-table-defer-url.js"
 			]
 		},
 		{
-			"example": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/defer-url/bootstrap-table-defer-url.min.js",
 			"name": "bootstrap-table",
 			"version": "1.18.3",
-			"format": "{source}{name}/{version}/extensions/custom-view/{file}",
+			"source": "https://cdn.jsdelivr.net/npm/",
+			"format": "{source}{name}@{version}/dist/extensions/custom-view/{file}",
 			"target": "bootstrap-table",
 			"files": [
 				"bootstrap-table-custom-view.js"
 			]
 		},
 		{
-			"example": "https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js",
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/dist/{file}",
 			"name": "select2",
@@ -304,7 +298,6 @@
 			]
 		},
 		{
-			"example": "https://cdn.jsdelivr.net/npm/bstreeview@1.2.0/src/css/bstreeview.css",
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/src/{file}",
 			"name": "bstreeview",

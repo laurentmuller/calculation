@@ -160,7 +160,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
-     * Gets the database sort fields.
+     * Gets the database sort field.
      *
      * The default implementation returns the alias and the field separated by a dot ('.') character.
      *

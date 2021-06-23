@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
-use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\GlobalMargin;
 use App\Repository\GlobalMarginRepository;
@@ -58,6 +57,6 @@ class GlobalMarginDataTable extends AbstractEntityDataTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['minimum' => DataColumn::SORT_ASC];
+        return ['minimum' => self::SORT_ASC];
     }
 }

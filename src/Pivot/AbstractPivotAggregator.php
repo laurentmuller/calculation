@@ -24,10 +24,8 @@ abstract class AbstractPivotAggregator implements \JsonSerializable
 {
     /**
      * The aggregator function.
-     *
-     * @var AbstractAggregator
      */
-    protected $aggregator;
+    protected AbstractAggregator $aggregator;
 
     /**
      * Constructor.

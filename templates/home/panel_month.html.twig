@@ -1,18 +1,19 @@
 {# macros #}
 {% macro cardEntry(count, total, date, list_path) -%}
-<div class="card card-index text-center border rounded m-1">
-    <div class="card-body px-1 pt-1 pb-0">
-        <p class="h4 font-weight-normal mb-1">{{ count|integer }}</p>
-        <p class="m-0 mb-1">{{ total|amount }}</p>
-    </div>
-    <div class="card-footer p-1">
-    {%- set text = date|strftime('%B %Y') -%}
+<div class="card text-center m-1">
+    <div class="card-header p-1">
+    {%- set text = date|strftime('%b %Y') -%}
     {%- if list_path -%}
-        <a href="{{ path(list_path, {'query': date|strftime('%m.%Y')}) }}">{{ text }}</a>
+        <a href="{{ path(list_path, {'query': date|strftime('%m.%Y')}) }}" class="card-link">{{ text }}</a>
     {%- else -%}
         <span>{{ text }}</span>
     {%- endif -%}
     </div>
+    <div class="card-body px-1 pt-1 pb-0">
+        <p class="h4 font-weight-normal mb-1">{{ count|integer }}</p>
+        <p class="m-0 mb-1">{{ total|amount }}</p>
+    </div>
+
 </div>
 {%- endmacro %}
 
@@ -29,13 +30,13 @@
     <div class="card-header">
         <h1 class="card-title">{{ icons.icon('calendar far', 'index.panel_month') }}</h1>
     </div>
-    <div class="card-body d-flex flex-row flex-wrap p-2">
-    {% if states|length %}
+    <div class="card-body card-deck py-2">
+    {% if months|length %}
         {% for month in months %}
             {{ _self.cardEntry(month.count, month.total, month.date, list_path) }}
         {% endfor %}
     {% else %}
-        <div class="alert alert-warning flex-fill mb-0 py-4 text-center" role="alert">
+        <div class="alert alert-warning flex-fill mb-0 py-2 text-center" role="alert">
             {{ 'calculation.list.empty'|trans }}
         </div>
     {% endif %}

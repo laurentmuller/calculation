@@ -25,16 +25,14 @@ class FileUtils
     /**
      * Decode the given file as JSON.
      *
-     * @param string $file    the path to the file
-     * @param bool   $assoc   when true, returned objects will be converted into associative arrays
-     * @param int    $depth   user specified recursion depth
-     * @param int    $options bitmask of JSON_BIGINT_AS_STRING (enabled by default)
+     * @param string $file  the path to the file
+     * @param bool   $assoc when true, returned objects will be converted into associative arrays
      *
      * @return mixed the mixed the value encoded in json in appropriate PHP type
      *
      * @throws \InvalidArgumentException if the file can not be decoded
      */
-    public static function decodeJson(string $file, bool $assoc = true, int $depth = null, int $options = null)
+    public static function decodeJson(string $file, bool $assoc = true)
     {
         //file?
         if (!self::isFile($file)) {

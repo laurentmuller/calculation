@@ -36,7 +36,7 @@ class TaskServiceType extends AbstractHelperType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('task')
-            ->add(TaskEntityType::class);
+            ->add(TaskListType::class);
 
         $helper->field('quantity')
             ->addNumberType();

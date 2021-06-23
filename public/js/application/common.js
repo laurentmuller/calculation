@@ -21,7 +21,7 @@ function showFlashbag() {
 
         // display
         if (text) {
-            //containerId
+            // containerId
             Toaster.notify(type, text, title, $("#flashbags").data());
         }
 
@@ -115,8 +115,8 @@ function initBackToTop() {
         });
         $button.on('click', function (e) {
             e.preventDefault();
-            $('html, body').animate({
-                scrollTop: 0
+            $('html, body').stop().animate({
+                scrollTop: $('body').offset().top
             }, 700);
             return false;
         });

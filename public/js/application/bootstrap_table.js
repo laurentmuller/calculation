@@ -256,7 +256,12 @@ function updateCalculationEditAction($table, row, $element, $action) {
     'use strict';
     const textMuted = Number.parseInt(row.textMuted, 10);
     if(!Number.isNaN(textMuted) && textMuted === 0) {
-        $element.find('.btn-show').addClass('btn-default');
+        const $state = $element.find('.btn-state');
+        if ($state.length) {
+            $state.addClass('btn-default');
+        } else {
+            $element.find('.btn-show').addClass('btn-default');
+        }
         $action.remove();
     }
 }
@@ -333,61 +338,61 @@ $.fn.extend({
         return $(this).data('value') || null;
     },
 
-    setDataValue(value, $selection, ignoreText, ignoreIcon) {
+    setDataValue(value, $selection, copyText, copyIcon) {
         'use strict';
         const $this = $(this);
         const $items = $this.next('.dropdown-menu').find('.dropdown-item').removeClass('active');
-        if (typeof ignoreText === 'undefined' || ignoreText === null) {
-            ignoreText = false;
+        if ($.isUndefined(copyText) || copyText === null) {
+            copyText = true;
         }
-        if (typeof ignoreIcon === 'undefined' || ignoreIcon === null) {
-            ignoreIcon = true;
+        if ($.isUndefined(copyIcon) || copyIcon === null) {
+            copyIcon = false;
         }
-        $this.data('value', value);
-        if(value) {
+
+        let $icon = $this.find('i');
+        let text = $this.text().trim();
+        if (value) {
             $selection.addClass('active');
-            if (!ignoreIcon) {
-                const $icon = $selection.find('i');
-                if ($icon.length) {
-                    $this.find('i').remove();
-                    $this.prepend($icon.clone());
-                }
+            if (copyIcon) {
+                $icon = $selection.find('i') || $icon;
             }
-            if (!ignoreText) {
-                $this.text($selection.text());
+            if (copyText) {
+                text = $selection.text().trim() || text;
             }
-            return $this;
+        } else {
+            $items.first().addClass('active');
+            if (copyIcon) {
+                $icon = $this.data('icon') || $icon;
+            }
+            if (copyText) {
+                text = $this.data('default') || text;
+            }
         }
-        $items.first().addClass('active');
-        if (!ignoreIcon) {
-            const icon = $this.data('icon');
-             if (icon) {
-                 $this.find('i').remove();
-                 $this.prepend($(icon));
-             }
+        if ($icon.length) {
+            $this.text(' ' + text);
+            $this.prepend($icon.clone());
+        } else {
+            $this.text(text);
         }
-        if (!ignoreText) {
-            $this.text($this.data('default'));
-        }
-        return $this;
+        return $this.data('value', value);
     },
 
-    initDropdown: function(ignoreText, ignoreIcon) {
+    initDropdown: function(copyText, copyIcon) {
         'use strict';
         const $this = $(this);
         const $menu = $this.next('.dropdown-menu');
-        if (typeof ignoreText === 'undefined' || ignoreText === null) {
-            ignoreText = false;
+        if ($.isUndefined(copyText) || copyText === null) {
+            copyText = true;
         }
-        if (typeof ignoreIcon === 'undefined' || ignoreIcon === null) {
-            ignoreIcon = true;
+        if ($.isUndefined(copyIcon) || copyIcon === null) {
+            copyIcon = false;
         }
         $menu.on('click', '.dropdown-item', function() {
             const $item = $(this);
             const newValue = $item.getDataValue();
             const oldValue = $this.getDataValue();
             if(newValue !== oldValue) {
-                $this.setDataValue(newValue || '', $item, ignoreText, ignoreIcon).trigger('input');
+                $this.setDataValue(newValue || '', $item, copyText, copyIcon).trigger('input');
             }
             $this.focus();
         });
@@ -424,6 +429,7 @@ $.fn.extend({
     'use strict';
 
     const $table = $('#table-edit');
+    const $sortButton = $('#button_sort');
     const $viewButton = $('#button_view');
     const $pageButton = $('#button_page');
     const $clearButton = $('#clear_search');
@@ -495,9 +501,11 @@ $.fn.extend({
             if (data.length === 0) {
                 $('.card-footer').hide();
                 $viewButton.toggleDisabled(true);
+                $sortButton.toggleDisabled(true);
             } else {
                 $('.card-footer').show();
                 $viewButton.toggleDisabled(false);
+                $sortButton.toggleDisabled(false);
             }
 
             // update search minimum
@@ -519,6 +527,7 @@ $.fn.extend({
             // hide
             if ($table.isCustomView()) {
                 $('.bootstrap-table .fixed-table-custom-view .custom-item').animate({'opacity': '0'}, 200);
+                $table.hideCustomViewMessage();
             }
         },
 
@@ -544,11 +553,6 @@ $.fn.extend({
                  $link.attr('href', $button.attr('href'));
                  $link.attr('title', $button.text());
             }
-
-            // update links
-            // $item.find('a.item-link').each(function() {
-            // $(this).updateLink(row, params);
-            // });
         },
 
         onRenderCardView: function($table, row, $item) {
@@ -648,7 +652,7 @@ $.fn.extend({
     }
 
     // handle view buttons
-    $('#button_view').initDropdown(true, false).on('input', function() {
+    $('#button_view').initDropdown(false, true).on('input', function() {
         const view = $(this).getDataValue();
         $table.setDisplayMode(view);
     });
@@ -658,12 +662,12 @@ $.fn.extend({
         const $this = $(this);
         const sortName = $this.data('sort');
         const sortOrder = $this.data('order');
-        const data = $table.data('bootstrap.table');
-        if (data.options.sortName !== sortName || data.options.sortOrder !== sortOrder) {
-            data.options.sortName = sortName;
-            data.options.sortOrder = sortOrder;
-            $table.refresh();
-        }
+        const data = $table.getBootstrapTable();
+        if (data && data.options.sortName !== sortName || data.options.sortOrder !== sortOrder) {
+             data.options.sortName = sortName;
+             data.options.sortOrder = sortOrder;
+             $table.refresh();
+         }
     });
     $('.btn-group-sort').on('shown.bs.dropdown', function() {
         $(this).find('.dropdown-menu-sort.active').focus();
@@ -675,15 +679,6 @@ $.fn.extend({
     }).on('blur', 'a, input, .btn, .dropdown-item, .rowlink-skip', function() {
         $table.enableKeys();
     });
-
-    // $('body').on('focus', 'a, input, .btn, .dropdown-item, .rowlink-skip',
-    // function() {
-    // $table.disableKeys();
-    // });
-    // $('body').on('blur', 'a, input, .btn, .dropdown-item, .rowlink-skip',
-    // function() {
-    // $table.enableKeys();
-    // });
 
     // initialize context menu
     const ctxSelector =  'tr.table-primary td:not(.rowlink-skip), .custom-item.table-primary div:not(.rowlink-skip)';

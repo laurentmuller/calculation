@@ -46,7 +46,7 @@ String.prototype.indexOfIgnoreCase = function (searchvalue, fromIndex) {
 /* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.equalsIgnoreCase = function (value) {
     'use strict';
-    const regexp = RegExp("^" + this.replace(/[.\\+*?\[\^\]$(){}=!<>|:-]/g, "\\$&") + "$", "i");
+    const regexp = RegExp('^' + this.replace(/[.\\+*?\[\^\]$(){}=!<>|:-]/g, '\\$&') + '$', 'i');
     return regexp.test(value);
 
     // const string1 = this.toLocaleLowerCase();

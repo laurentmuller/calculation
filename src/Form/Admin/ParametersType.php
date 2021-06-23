@@ -95,10 +95,10 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     private function addDefaultValueSection(FormHelper $helper): void
     {
         $helper->field(self::P_DEFAULT_STATE)
-            ->addStateType();
+            ->addCalculationStateListType();
 
         $helper->field(self::P_DEFAULT_CATEGORY)
-            ->addCategoryType();
+            ->addCategoryListType();
 
         $helper->field(self::P_MIN_MARGIN)
             ->updateAttribute('data-default', self::DEFAULT_MIN_MARGIN * 100)

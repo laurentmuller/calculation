@@ -131,9 +131,9 @@ class SearchTable extends AbstractTable
     protected function getDefaultOrder(): array
     {
         return [
-            self::COLUMN_CONTENT => Column::SORT_ASC,
-            self::COLUMN_ENTITY_NAME => Column::SORT_ASC,
-            self::COLUMN_FIELD_NAME => Column::SORT_ASC,
+            self::COLUMN_CONTENT => self::SORT_ASC,
+            self::COLUMN_ENTITY_NAME => self::SORT_ASC,
+            self::COLUMN_FIELD_NAME => self::SORT_ASC,
         ];
     }
 
@@ -142,7 +142,7 @@ class SearchTable extends AbstractTable
      */
     protected function handleQuery(DataQuery $query): DataResults
     {
-        $results = new DataResults();
+        $results = parent::handleQuery($query);
 
         // get parameters
         $search = $query->search;
@@ -237,7 +237,7 @@ class SearchTable extends AbstractTable
     private function sortItems(array &$items, string $sort, string $order): void
     {
         // create sort
-        $sorts = ["[$sort]" => Column::SORT_ASC === $order];
+        $sorts = ["[$sort]" => self::SORT_ASC === $order];
         foreach (self::SORT_COLUMNS as $field) {
             $field = "[$field]";
             if (!\array_key_exists($field, $sorts)) {

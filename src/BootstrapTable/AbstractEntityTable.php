@@ -106,7 +106,7 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     protected function handleQuery(DataQuery $query): DataResults
     {
-        $results = new DataResults();
+        $results = parent::handleQuery($query);
 
         // builder
         $builder = $this->createDefaultQueryBuilder();

@@ -26,7 +26,7 @@ class PivotWeekdayField extends PivotDateField
      *
      * @var string[]
      */
-    private $names;
+    private array $names;
 
     /**
      * Constructor.

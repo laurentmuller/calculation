@@ -456,20 +456,6 @@ final class SymfonyUtils
     }
 
     /**
-     * Returns a value indicating if the given date is expired.
-     *
-     * @param string $date the date to verify
-     *
-     * @return bool true if expired
-     */
-    private static function isExpired(string $date): bool
-    {
-        $date = \DateTime::createFromFormat('d/m/Y', '01/' . $date);
-
-        return false !== $date && new \DateTime() > $date->modify('last day of this month 23:59:59');
-    }
-
-    /**
      * Process the given packages.
      *
      * @param array $packages the packages to process

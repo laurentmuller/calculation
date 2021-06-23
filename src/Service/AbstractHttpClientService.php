@@ -91,6 +91,18 @@ abstract class AbstractHttpClientService
     }
 
     /**
+     * Returns a value indicating if the connection status is normal.
+     *
+     * @return bool true if the connection status is normal
+     */
+    public static function isConnected(): bool
+    {
+        $result = \connection_status();
+
+        return \CONNECTION_NORMAL === $result;
+    }
+
+    /**
      * Clear the last error.
      */
     protected function clearLastError(): self

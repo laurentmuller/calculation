@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
-use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Customer;
 use App\Repository\CustomerRepository;
@@ -58,6 +57,6 @@ class CustomerDataTable extends AbstractEntityDataTable
      */
     protected function getDefaultOrder(): array
     {
-        return [CustomerRepository::NAME_COMPANY_FIELD => DataColumn::SORT_ASC];
+        return [CustomerRepository::NAME_COMPANY_FIELD => self::SORT_ASC];
     }
 }

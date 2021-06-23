@@ -27,19 +27,17 @@ class PivotTableFactory
     /**
      * The aggregator class name.
      *
-     * @var string
-     *
      * @template T of AbstractAggregator
      * @psalm-var class-string<T> $aggregatorClass
      */
-    private $aggregatorClass;
+    private string $aggregatorClass;
 
     /**
      * The column fields.
      *
      * @var PivotField[]
      */
-    private $columnFields = [];
+    private array $columnFields = [];
 
     /**
      * The data field.
@@ -50,10 +48,8 @@ class PivotTableFactory
 
     /**
      * The data source.
-     *
-     * @var array
      */
-    private $dataset;
+    private array $dataset;
 
     /**
      * The key field.
@@ -74,7 +70,7 @@ class PivotTableFactory
      *
      * @var string
      */
-    private $title;
+    private ?string $title;
 
     /**
      * Constructor.
@@ -278,9 +274,6 @@ class PivotTableFactory
      *
      * @param string $aggregatorClass the aggregator class name to set
      *
-     * @template T of AbstractAggregator
-     * @psalm-param class-string<T> $aggregatorClass
-     *
      * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractAggregator class
      */
     public function setAggregatorClass(string $aggregatorClass): self
@@ -364,7 +357,7 @@ class PivotTableFactory
      */
     private function buildFieldsTitle(array $fields): string
     {
-        return \array_reduce($fields, function (string $carry, PivotField $field) {
+        return \array_reduce($fields, function (string $carry, PivotField $field): string {
             if (\strlen($carry)) {
                 return $carry . '\\' . $field->getTitle();
             } else {

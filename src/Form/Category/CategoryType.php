@@ -15,7 +15,7 @@ namespace App\Form\Category;
 use App\Entity\Category;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use App\Form\Group\GroupEntityType;
+use App\Form\Group\GroupListType;
 
 /**
  * Category edit type.
@@ -49,6 +49,6 @@ class CategoryType extends AbstractEntityType
             ->addTextareaType();
 
         $helper->field('group')
-            ->add(GroupEntityType::class);
+            ->add(GroupListType::class);
     }
 }

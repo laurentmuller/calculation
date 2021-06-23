@@ -57,7 +57,7 @@
             this.$element.off('blur', options.dotInputClass, this.blurProxy);
 
             // remove
-            this.$element.removeData("tableEditor");
+            this.$element.removeData('tableEditor');
         },
 
         click: function (e) {
@@ -160,7 +160,7 @@
         },
 
         isFunction: function (value) {
-            if (typeof value === "function") {
+            if (typeof value === 'function') {
                 return value !== $.noop;
             }
             return false;
@@ -172,10 +172,10 @@
     $.fn.tableEditor = function (options) {
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data("tableEditor");
+            let data = $this.data('tableEditor');
             if (!data) {
-                const settings = typeof options === "object" && options;
-                $this.data("tableEditor", data = new TableEditor(this, settings));
+                const settings = typeof options === 'object' && options;
+                $this.data('tableEditor', data = new TableEditor(this, settings));
             }
         });
     };

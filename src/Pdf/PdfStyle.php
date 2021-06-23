@@ -113,8 +113,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the black header cell style.
-     * The style has the following properties:
+     * Gets the black header cell style. The style has the following properties:
      * <table style='padding:15px'>
      * <tr><td>Font</td><td>:</td><td>Arial 9pt Bold</td></tr>
      * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
@@ -135,8 +134,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the bold cell style.
-     * The style has the following properties:
+     * Gets the bold cell style. The style has the following properties:
      * <table style='padding:15px'>
      * <tr><td>Font</td><td>:</td><td>Arial 9pt Bold</td></tr>
      * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
@@ -154,8 +152,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the cell style.
-     * The style has the following properties:
+     * Gets the cell style. The style has the following properties:
      * <table style='padding:15px'>
      * <tr><td>Font</td><td>:</td><td>Arial 9pt Regular</td></tr>
      * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
@@ -174,8 +171,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the default style.
-     * The style has the following properties:
+     * Gets the default style. The style has the following properties:
      * <table style='padding:15px'>
      * <tr><td>Font</td><td>:</td><td>Arial 9pt Regular</td></tr>
      * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
@@ -216,8 +212,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the header cell style.
-     * The style has the following properties:
+     * Gets the header cell style. The style has the following properties:
      * <table style='padding:15px'>
      * <tr><td>Font</td><td>:</td><td>Arial 9pt Bold</td></tr>
      * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
@@ -252,8 +247,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the link style.
-     * The style has the following properties:
+     * Gets the link style. The style has the following properties:
      * <table style='padding:15px'>
      * <tr><td>Font</td><td>:</td><td>Arial 9pt Regular</td></tr>
      * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
@@ -271,8 +265,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the no border style.
-     * The style has the following properties:
+     * Gets the no border style. The style has the following properties:
      * <table style='padding:15px'>
      * <tr><td>Font</td><td>:</td><td>Arial 9pt Regular</td></tr>
      * <tr><td>Border</td><td>:</td><td>None</td></tr>
@@ -309,8 +302,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Reset all properties to the default values.
-     * The default values are:
+     * Reset all properties to the default values. The default values are:
      * <table style='padding:15px'>
      * <tr><td>Font</td><td>:</td><td>Arial 9pt Regular</td></tr>
      * <tr><td>Line width</td><td>:</td><td>0.2mm</td></tr>
@@ -331,8 +323,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets colors properties to the default values.
-     * The default colors are:
+     * Sets colors properties to the default values. The default colors are:
      * <table style='padding:15px'>
      * <tr><td>Fill color</td><td>:</td><td>White</td></tr>
      * <tr><td>Draw color</td><td>:</td><td>Black</td></tr>
@@ -349,8 +340,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets font to the default value.
-     * The default value is "<code>Arial, 9pt, regular</code>".
+     * Sets font to the default value. The default value is "<code>Arial, 9pt, regular</code>".
      *
      * @return self this instance
      */
@@ -360,8 +350,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the left indent to the default value.
-     * The default value is "<code>0 mm</code>".
+     * Sets the left indent to the default value. The default value is "<code>0 mm</code>".
      *
      * @return self this instance
      */
@@ -371,8 +360,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the line width property to the default value.
-     * The default line width is "<code>0.2 mm</code>".
+     * Sets the line width property to the default value. The default line width is "<code>0.2 mm</code>".
      *
      * @return self this instance
      */

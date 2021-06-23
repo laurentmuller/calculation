@@ -7,7 +7,7 @@
     'use strict';
 
     // InputNumberFormat public class definition
-    var InputNumberFormat = function (element, options) {
+    const InputNumberFormat = function (element, options) {
         this.$element = $(element);
         this.options = $.extend(true, {}, InputNumberFormat.DEFAULTS, options);
         this.init();
@@ -27,11 +27,11 @@
         init: function () {
             // build regex
             const options = this.options;
-            var pattern = "^[0-9]+";
+            var pattern = '^[0-9]+';
             if (options.decimal) {
-                pattern += "[" + options.separatorAuthorized.join("") + "]?[0-9]{0," + options.decimal + "}";
+                pattern += '[' + options.separatorAuthorized.join('') + ']?[0-9]{0,' + options.decimal + '}';
             }
-            pattern += "$";
+            pattern += '$';
             this.regex = new RegExp(pattern);
 
             // add handlers
@@ -50,7 +50,7 @@
             $element.off('keypress', $.proxy(this.keypress, this));
             $element.off('blur', $.proxy(this.update, this));
             $element.off('change', $.proxy(this.update, this));
-            $element.removeData("inputNumberFormat");
+            $element.removeData('inputNumberFormat');
         },
 
         formatValue: function (value) {
@@ -59,15 +59,15 @@
             }
 
             const options = this.options;
-            value = value.replace(",", options.separator);
+            value = value.replace(',', options.separator);
             if (options.decimal && options.decimalAuto) {
-                value = Math.round(value * Math.pow(10, options.decimal)) / Math.pow(10, options.decimal) + "";
+                value = Math.round(value * Math.pow(10, options.decimal)) / Math.pow(10, options.decimal) + '';
                 if (value.indexOf(options.separator) === -1) {
                     value += options.separator;
                 }
                 const decimals = options.decimalAuto - value.split(options.separator)[1].length;
                 if (decimals > 0) {
-                    value += "0".repeat(decimals);
+                    value += '0'.repeat(decimals);
                 }
 
             } else if (options.decimal === 0) {
@@ -116,10 +116,10 @@
     $.fn.inputNumberFormat = function (options) {
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data("inputNumberFormat");
+            let data = $this.data('inputNumberFormat');
             if (!data) {
-                const settings = typeof options === "object" && options;
-                $this.data("inputNumberFormat", data = new InputNumberFormat(this, settings));
+                const settings = typeof options === 'object' && options;
+                $this.data('inputNumberFormat', data = new InputNumberFormat(this, settings));
             }
         });
     };

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Interfaces\SortModeInterface;
 use App\Util\FileUtils;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
@@ -23,22 +24,12 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  *
  * @author Laurent Muller
  */
-class Column
+class Column implements SortModeInterface
 {
     /**
      * The property name of the field formatter.
      */
     public const FIELD_FORMATTER = 'fieldFormatter';
-
-    /**
-     * The ascending sortable direction.
-     */
-    public const SORT_ASC = 'asc';
-
-    /**
-     * The descending sortable direction.
-     */
-    public const SORT_DESC = 'desc';
 
     /**
      * The field alias name.
@@ -238,6 +229,12 @@ class Column
         return $this->fieldFormatter;
     }
 
+    /**
+     * Gets the sorting order.
+     *
+     * @see SortModeInterface::SORT_ASC
+     * @see SortModeInterface::SORT_DESC
+     */
     public function getOrder(): string
     {
         return $this->order;
@@ -367,6 +364,12 @@ class Column
         return $this;
     }
 
+    /**
+     * Sets the sorting order.
+     *
+     * @see SortModeInterface::SORT_ASC
+     * @see SortModeInterface::SORT_DESC
+     */
     public function setOrder(string $order): self
     {
         $order = \strtolower($order);

@@ -12,9 +12,9 @@
 {%- endblock %}
 
 {% block toolbar_actions -%}
-<div class="input-group-append btn-dropdown">
+<div class="input-group-append">
     <button id="groupId" data-value="{{ group_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'category.fields.group'|trans }}" title="{{ 'category.list.group_help'|trans }}">
-        {{- customData.group ? customData.group.code : 'category.fields.group'|trans -}}
+        <i class="fas fa-code-branch" aria-hidden="true"></i>&nbsp;{{- customData.group ? customData.group.code : 'category.fields.group'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="groupId">
         {{ _self.output_dropdown('group', 0, group_id, 'datatable.all'|trans) }}
@@ -60,7 +60,7 @@
 
 {% block custom_view_body -%}
 {{ _self.property_value('%description%') }}
-{{ _self.property_value('%group.code%') }}
+{{ _self.property_row('category.fields.group', '%group.code%') }}
 {{ _self.property_row('category.fields.products', '%products%') }}
 {{ _self.property_row('category.fields.tasks', '%tasks%') }}
 {%- endblock %}

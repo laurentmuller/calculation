@@ -87,7 +87,7 @@
         stringify: function (data) {
             return JSON.stringify(data, '', '    ');
         },
-        
+
         /**
          * Check if console is present
          */

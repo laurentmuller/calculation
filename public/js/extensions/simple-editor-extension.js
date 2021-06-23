@@ -29,7 +29,7 @@
         focusSimpleEditor: function () {
             const $editor = $(this).findSimpleEditor();
             if ($editor) {
-                const $content = $editor.find(".simple-editor-content");
+                const $content = $editor.find('.simple-editor-content');
                 if ($content.length) {
                     $content.focus();
                     return true;

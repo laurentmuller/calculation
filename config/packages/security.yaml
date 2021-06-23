@@ -1,7 +1,6 @@
 security:
     enable_authenticator_manager: true
 
-
     password_hashers:
         App\Entity\User:
             algorithm: auto
@@ -46,7 +45,7 @@ security:
         - { path: ^/login,                 roles: PUBLIC_ACCESS  }
         - { path: ^/resetting,             roles: PUBLIC_ACCESS  }
         - { path: ^/reset-password,        roles: PUBLIC_ACCESS  }
-        #- { path: ^/register$,             roles: PUBLIC_ACCESS  }
+        # - { path: ^/register$,             roles: PUBLIC_ACCESS  }
         - { path: ^/about/policy,          roles: PUBLIC_ACCESS  }
         - { path: ^/about/licence,         roles: PUBLIC_ACCESS  }
         - { path: ^/ajax/checkexist,       roles: PUBLIC_ACCESS  }

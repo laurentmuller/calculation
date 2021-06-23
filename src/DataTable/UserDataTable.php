@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
-use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
@@ -155,6 +154,6 @@ class UserDataTable extends AbstractEntityDataTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['username' => DataColumn::SORT_ASC];
+        return ['username' => self::SORT_ASC];
     }
 }

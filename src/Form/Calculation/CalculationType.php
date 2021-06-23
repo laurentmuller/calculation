@@ -58,7 +58,7 @@ class CalculationType extends AbstractEntityType
             ->addPercentType(-100, 300);
 
         $helper->field('state')
-            ->addStateType();
+            ->addCalculationStateListType();
 
         // groups
         $helper->field('groups')

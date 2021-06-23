@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\DataTable\Model;
 
+use App\Interfaces\SortModeInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -20,18 +21,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  *
  * @author Laurent Muller
  */
-class DataColumn
+class DataColumn implements SortModeInterface
 {
-    /**
-     * The ascending sortable direction.
-     */
-    public const SORT_ASC = 'asc';
-
-    /**
-     * The descending sortable direction.
-     */
-    public const SORT_DESC = 'desc';
-
     /**
      * The function name used to update the cell.
      *
@@ -245,6 +236,9 @@ class DataColumn
 
     /**
      * Gets the sorting direction.
+     *
+     * @see SortModeInterface::SORT_ASC
+     * @see SortModeInterface::SORT_DESC
      */
     public function getDirection(): string
     {
@@ -428,14 +422,17 @@ class DataColumn
      *
      * @param string $direction One of the "<code>asc</code>" or "<code>desc</code>"' values
      *
-     * @see DataColumn::SORT_ASC
-     * @see DataColumn::SORT_DESC
+     * @see SortModeInterface::SORT_ASC
+     * @see SortModeInterface::SORT_DESC
      */
     public function setDirection(string $direction): self
     {
         $direction = \strtolower($direction);
-        if (self::SORT_ASC === $direction || self::SORT_DESC === $direction) {
-            $this->direction = $direction;
+        switch ($direction) {
+            case self::SORT_ASC:
+            case self::SORT_DESC:
+                $this->direction = $direction;
+                break;
         }
 
         return $this;

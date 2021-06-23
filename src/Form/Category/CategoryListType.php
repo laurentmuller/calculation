@@ -13,45 +13,46 @@ declare(strict_types=1);
 namespace App\Form\Category;
 
 use App\Entity\Category;
+use App\Form\AbstractListEntityType;
 use App\Repository\CategoryRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\AbstractType;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Type to display a list of category entities.
+ * Type to display a list of categories grouped by groups.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractListEntityType<Category>
  */
-class CategoryEntityType extends AbstractType
+class CategoryListType extends AbstractListEntityType
 {
     /**
-     * {@inheritdoc}
+     * Constructor.
      */
-    public function configureOptions(OptionsResolver $resolver): void
+    public function __construct()
     {
-        $resolver->setDefaults([
-            'class' => Category::class,
-            'placeholder' => false,
-            'choice_label' => 'code',
-            'group_by' => 'groupCode',
-            'query_builder' => function (CategoryRepository $repository) {
-                return $repository->getQueryBuilderByGroup();
-            },
-            'choice_attr' => function (Category $category) {
-                return [
-                    'data-group-id' => $category->getGroupId(),
-                    'data-group-code' => $category->getGroupCode(),
-                ];
-            },
-        ]);
+        parent::__construct(Category::class);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getParent(): string
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        return EntityType::class;
+        parent::configureOptions($resolver);
+        $resolver->setDefaults([
+            'choice_label' => 'code',
+            'group_by' => 'groupCode',
+            'choice_attr' => function (Category $category): array {
+                return [
+                    'data-group-id' => $category->getGroupId(),
+                    'data-group-code' => $category->getGroupCode(),
+                ];
+            },
+            'query_builder' => function (CategoryRepository $repository): QueryBuilder {
+                return $repository->getQueryBuilderByGroup();
+            },
+        ]);
     }
 }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\DataTable\Model;
 
+use App\Interfaces\SortModeInterface;
 use App\Traits\SessionTrait;
 use App\Util\FormatUtils;
 use App\Util\Utils;
@@ -29,7 +30,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *
  * @author Laurent Muller
  */
-abstract class AbstractDataTable extends AbstractDataTableHandler
+abstract class AbstractDataTable extends AbstractDataTableHandler implements SortModeInterface
 {
     use SessionTrait;
 

@@ -28,63 +28,59 @@ class PivotTable extends AbstractPivotAggregator
      *
      * @var PivotCell[]
      */
-    private $cells = [];
+    private array $cells = [];
 
     /**
      * The column fields.
      *
      * @var PivotField[]
      */
-    private $columnFields = [];
+    private array $columnFields = [];
 
     /**
      * The data field.
      *
      * @var PivotField
      */
-    private $dataField;
+    private ?PivotField $dataField = null;
 
     /**
      * The key field.
      *
      * @var PivotField
      */
-    private $keyField;
+    private ?PivotField $keyField = null;
 
     /**
      * The root column.
-     *
-     * @var PivotNode
      */
-    private $rootCol;
+    private PivotNode $rootCol;
 
     /**
      * The root row.
-     *
-     * @var PivotNode
      */
-    private $rootRow;
+    private PivotNode $rootRow;
 
     /**
      * The row fields.
      *
      * @var PivotField[]
      */
-    private $rowFields = [];
+    private array $rowFields = [];
 
     /**
      * The title.
      *
      * @var string
      */
-    private $title;
+    private ?string $title;
 
     /**
      * The total title.
      *
      * @var string
      */
-    private $totalTitle;
+    private ?string $totalTitle = null;
 
     /**
      * Constructor.

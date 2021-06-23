@@ -44,7 +44,7 @@ class EditItemDialogType extends AbstractHelperType
             ->addTextType();
 
         $helper->field('category')
-            ->addCategoryType();
+            ->addCategoryListType();
 
         $helper->field('price')
             ->addNumberType();

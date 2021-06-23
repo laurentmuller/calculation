@@ -13,12 +13,12 @@ declare(strict_types=1);
 namespace App\BootstrapTable;
 
 use App\Entity\AbstractEntity;
+use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Traits\MathTrait;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -27,7 +27,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  *
  * @author Laurent Muller
  */
-abstract class AbstractTable
+abstract class AbstractTable implements SortModeInterface
 {
     use MathTrait;
 
@@ -323,10 +323,7 @@ abstract class AbstractTable
      */
     protected function handleQuery(DataQuery $query): DataResults
     {
-        $results = new DataResults();
-        $results->status = Response::HTTP_PRECONDITION_FAILED;
-
-        return $results;
+        return new DataResults();
     }
 
     /**

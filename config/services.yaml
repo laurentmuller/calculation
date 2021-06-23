@@ -43,6 +43,9 @@ parameters:
     link_dev: '%env(LINK_DEV)%'
     link_prod: '%env(LINK_PROD)%'
 
+    # optimize
+    container.dumper.inline_factories: true
+
 services:
     # default configuration for services in *this* file
     _defaults:

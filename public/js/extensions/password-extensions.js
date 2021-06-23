@@ -47,7 +47,7 @@
                 // get parent
                 const $element = $(this);
                 const $parent = $element.parents('.form-group');
-                const id = $element.attr('id') + "_passwordstrength";
+                const id = $element.attr('id') + '_passwordstrength';
 
                 // find or create UI container
                 let $container = $parent.findExists('#' + id);
@@ -103,7 +103,7 @@
     });
 
     // update password types
-    // $('[data-toggle="password"]').password();
-    $("input:password").togglePassword();
+    // $('[data-toggle='password']').password();
+    $('input:password').togglePassword();
 
 }(jQuery));

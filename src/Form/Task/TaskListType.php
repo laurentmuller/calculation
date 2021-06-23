@@ -13,44 +13,46 @@ declare(strict_types=1);
 namespace App\Form\Task;
 
 use App\Entity\Task;
+use App\Form\AbstractListEntityType;
 use App\Repository\TaskRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\AbstractType;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Type to display a list of tasks.
  *
  * @author Laurent Muller
+ *
+ * @template-extends AbstractListEntityType<Task>
  */
-class TaskEntityType extends AbstractType
+class TaskListType extends AbstractListEntityType
 {
     /**
-     * {@inheritdoc}
+     * Constructor.
      */
-    public function configureOptions(OptionsResolver $resolver): void
+    public function __construct()
     {
-        $resolver->setDefaults([
-            'class' => Task::class,
-            'placeholder' => false,
-            'choice_label' => 'name',
-            'query_builder' => function (TaskRepository $r) {
-                return $r->getSortedBuilder(false);
-            },
-            'choice_attr' => function (Task $task) {
-                return [
-                    'data-category-id' => $task->getCategory()->getId(),
-                    'data-unit' => $task->getUnit(),
-                ];
-            },
-        ]);
+        parent::__construct(Task::class);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getParent(): string
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        return EntityType::class;
+        parent::configureOptions($resolver);
+        $resolver->setDefaults([
+            'choice_label' => 'name',
+            'choice_attr' => function (Task $task): array {
+                return [
+                    'data-category-id' => $task->getCategoryId(),
+                    'data-category-code' => $task->getCategoryCode(),
+                    'data-unit' => $task->getUnit(),
+                ];
+            },
+            'query_builder' => function (TaskRepository $repository): QueryBuilder {
+                return $repository->getSortedBuilder(false);
+            },
+        ]);
     }
 }

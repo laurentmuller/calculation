@@ -153,7 +153,7 @@ class LogTable extends AbstractTable implements \Countable
      */
     protected function handleQuery(DataQuery $query): DataResults
     {
-        $results = new DataResults();
+        $results = parent::handleQuery($query);
 
         $entries = $this->service->getEntries();
         if (!\is_array($entries)) {
@@ -226,7 +226,7 @@ class LogTable extends AbstractTable implements \Countable
     /**
      * Sort logs.
      *
-     * <b>NB:</b> Sorts only when not the default order (date ascending).
+     * <b>NB:</b> Sorts only when not set to the default order (created date field ascending).
      *
      * @param Log[]  $entities  the logs to sort
      * @param string $field     the sorted field
@@ -234,9 +234,20 @@ class LogTable extends AbstractTable implements \Countable
      */
     private function sort(array &$entities, string $field, string $direction): void
     {
-        if (self::COLUMN_DATE !== $field || Column::SORT_ASC !== $direction) {
-            $ascending = Column::SORT_ASC === $direction;
+        // need sort?
+        if (self::COLUMN_DATE === $field && self::SORT_ASC === $direction) {
+            return;
+        }
+
+        $ascending = Column::SORT_ASC === $direction;
+        if (self::COLUMN_DATE === $field) {
             Utils::sortField($entities, $field, $ascending);
+        } else {
+            $fields = [
+                $field => $ascending,
+                self::COLUMN_DATE => false,
+            ];
+            Utils::sortFields($entities, $fields);
         }
     }
 }

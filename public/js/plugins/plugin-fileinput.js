@@ -4,8 +4,8 @@
  * Ready function
  */
 (function ($) {
-    
-    "use strict";
+
+    'use strict';
 
     const isIE = window.navigator.appName === 'Microsoft Internet Explorer';
 
@@ -15,12 +15,12 @@
     var Fileinput = function(element, options) {
         this.$element = $(element);
         this.options = $.extend({}, Fileinput.DEFAULTS, options);
-        
+
         this.$input = this.$element.find(':file');
         if (this.$input.length === 0) {
             return;
         }
-        
+
         this.name = this.$input.attr('name') || options.name;
         this.placeholder = this.$input.attr('placeholder') || options.placeholder || '';
 
@@ -30,7 +30,7 @@
         }
 
         this.$preview = this.$element.find('.fileinput-preview');
-        
+
         this.original = {
             exists: this.$element.hasClass('fileinput-exists'),
             preview: this.$preview.html(),
@@ -210,7 +210,7 @@
             const width = img.width;
             const height = img.height;
             const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext("2d");
+            const ctx = canvas.getContext('2d');
 
             // set proper canvas dimensions before transform & export
             if ([5, 6, 7, 8].indexOf(transform) > -1) {
@@ -283,10 +283,10 @@
         this.$preview.html('');
         this.$element.find('.fileinput-filename').text(this.placeholder);
         this.$element.addClass('fileinput-new').removeClass('fileinput-exists');
-        
+
         if (!$.isUndefined(e)) {
             this.$input.trigger('change');
-            this.$element.trigger('clear.bs.fileinput');            
+            this.$element.trigger('clear.bs.fileinput');
         }
         this.$input.focus();
     };
@@ -322,7 +322,7 @@
             const $this = $(this);
             let data = $this.data('bs.fileinput');
             if (!data) {
-                const settings = typeof options === "object" && options;
+                const settings = typeof options === 'object' && options;
                 $this.data('bs.fileinput', data = new Fileinput(this, settings));
             }
         });
@@ -348,7 +348,7 @@
         }
 
         $this.fileinput($this.data());
-        
+
         const $target = $(e.target);
         if ($target.is('img')) {
             $this.data('bs.fileinput').trigger(e);

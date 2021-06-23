@@ -130,7 +130,7 @@
                 }
             });
             if (settings.linkUrl) {
-                const $link = $("<a/>", {
+                const $link = $('<a/>', {
                     'id': 'cookie-banner-link',
                     'rel': settings.linkRel,
                     'href': settings.linkUrl,
@@ -140,7 +140,7 @@
                 });
                 $message.append($link);
             }
-            const $close = $("<a/>", {
+            const $close = $('<a/>', {
                 'id': 'cookie-banner-close',
                 'class': settings.closeClass,
                 'text': settings.closeMessage,

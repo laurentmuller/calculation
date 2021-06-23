@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 
 /**
@@ -19,7 +20,7 @@ use App\Interfaces\TableInterface;
  *
  * @author Laurent Muller
  */
-class DataQuery
+class DataQuery implements SortModeInterface
 {
     /**
      * The callback state (XMLHttpRequest).
@@ -49,7 +50,7 @@ class DataQuery
     /**
      * The sort order ('asc' or 'desc').
      */
-    public string $order = Column::SORT_ASC;
+    public string $order = self::SORT_ASC;
 
     /**
      * The page index (first = 1).

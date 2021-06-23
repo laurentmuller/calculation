@@ -278,10 +278,10 @@
         height: 4,
 
         // verdict keys
-        verdictKeys: ["veryWeak", "weak", "normal", "strong", "veryStrong"],
+        verdictKeys: ['veryWeak', 'weak', 'normal', 'strong', 'veryStrong'],
 
         // progress bar classes
-        progressClasses: ["bg-danger", "bg-danger", "bg-warning", "bg-success", "bg-primary"],
+        progressClasses: ['bg-danger', 'bg-danger', 'bg-warning', 'bg-success', 'bg-primary'],
     };
 
     // -----------------------------------
@@ -292,10 +292,10 @@
     $.fn.passwordstrength = function (options) {
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data("passwordstrength");
+            let data = $this.data('passwordstrength');
             if (!data) {
-                const settings = typeof options === "object" && options;
-                $this.data("passwordstrength", data = new PasswordStrength(this, settings));
+                const settings = typeof options === 'object' && options;
+                $this.data('passwordstrength', data = new PasswordStrength(this, settings));
             }
         });
     };

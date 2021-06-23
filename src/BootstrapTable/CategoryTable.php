@@ -109,7 +109,7 @@ class CategoryTable extends AbstractEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['code' => Column::SORT_ASC];
+        return ['code' => self::SORT_ASC];
     }
 
     /**

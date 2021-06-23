@@ -6,7 +6,7 @@
 
 /**
  * Trigger the click event.
- * 
+ *
  * @param {Object}
  *            e - the source event.
  * @param {string}
@@ -28,7 +28,7 @@ function triggerClick(e, selector) { // jshint ignore:line
 
 /**
  * Clear the table search.
- * 
+ *
  * @param {jQuery}
  *            $element the search input element.
  * @param {DataTables.Api}
@@ -50,7 +50,7 @@ function clearSearch($element, table, callback) {
 
 /**
  * Table length callback.
- * 
+ *
  * @param {DataTables.Api}
  *            table - the table to update.
  */
@@ -65,7 +65,7 @@ function tableLengthCallback(table) {
 
 /**
  * Search callback.
- * 
+ *
  * @param {DataTables.Api}
  *            table - the table to update.
  */
@@ -83,7 +83,7 @@ function searchCallback(table) {
 
 /**
  * Disable table keys plugin.
- * 
+ *
  * @param {string}
  *            selector - the data table selector (default is '#data-table').
  */
@@ -95,7 +95,7 @@ function disableKeys(selector) {
 
 /**
  * Enable table keys plugin.
- * 
+ *
  * @param {string}
  *            selector - the data table selector (default is '#data-table').
  */
@@ -112,7 +112,7 @@ function enableKeys(selector) {
 $.fn.extend({
     /**
      * Edit or show the selected item.
-     * 
+     *
      * @param {Object}
      *            e - the source event.
      * @returns {boolean} true if handle.
@@ -135,12 +135,12 @@ $.fn.extend({
  * Add alert class to processing message
  */
 $.extend($.fn.dataTable.ext.classes, {
-    sProcessing: "dataTables_processing alert alert-success"
+    sProcessing: 'dataTables_processing alert alert-success'
 });
 
 /**
  * Gets the selected row.
- * 
+ *
  * @returns {DataTables.Api} the selected row, if any; null otherwise.
  */
 $.fn.dataTable.Api.register('getSelectedRow()', function () {
@@ -152,7 +152,7 @@ $.fn.dataTable.Api.register('getSelectedRow()', function () {
 
 /**
  * Select the first row (if any).
- * 
+ *
  * @returns {DataTables.Api} this instance.
  */
 $.fn.dataTable.Api.register('selectFirstRow()', function () {
@@ -166,7 +166,7 @@ $.fn.dataTable.Api.register('selectFirstRow()', function () {
 
 /**
  * Select the last row (if any).
- * 
+ *
  * @returns {DataTables.Api} this instance.
  */
 $.fn.dataTable.Api.register('selectLastRow()', function () {
@@ -180,7 +180,7 @@ $.fn.dataTable.Api.register('selectLastRow()', function () {
 
 /**
  * Update the column titles.
- * 
+ *
  * @returns {DataTables.Api} this instance.
  */
 $.fn.dataTable.Api.register('updateTitles()', function () {
@@ -204,7 +204,7 @@ $.fn.dataTable.Api.register('updateTitles()', function () {
 
 /**
  * Remove duplicate classes in all cells (header and body).
- * 
+ *
  * @returns {DataTables.Api} this instance.
  */
 $.fn.dataTable.Api.register('removeDuplicateClasses()', function () {
@@ -216,15 +216,15 @@ $.fn.dataTable.Api.register('removeDuplicateClasses()', function () {
 
 /**
  * Show or hide the pagination.
- * 
+ *
  * @param {Object}
  *            settings - the table settings object.
- * 
+ *
  * @returns {DataTables.Api} this instance.
  */
 $.fn.dataTable.Api.register('conditionalPaging()', function (settings) {
     'use strict';
-    
+
     const pages = this.page.info().pages;
     const $pagination = $('.dataTables_paginate');
     const duration = settings.iDraw === 1 ? 0 : 500;
@@ -238,12 +238,12 @@ $.fn.dataTable.Api.register('conditionalPaging()', function (settings) {
 
 /**
  * Binds events.
- * 
+ *
  * @param {integer}
  *            id - the selected row identifier (if any).
  * @param {function}
  *            callback - the search callback to call.
- * 
+ *
  * @returns {DataTables.Api} this instance.
  */
 $.fn.dataTable.Api.register('initEvents()', function (id) {
@@ -286,7 +286,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
         } else if (e.keyCode === 93) { // context-menu
             e.stopPropagation();
             $('.dropdown-menu.show').removeClass('show');
-            $('.dataTable .table-primary').first().trigger("contextmenu");
+            $('.dataTable .table-primary').first().trigger('contextmenu');
         }
     });
 
@@ -321,7 +321,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
         } else {
             table.selectFirstRow();
         }
-        
+
         // update
         table.updateButtons().updateTitles().conditionalPaging(settings);
 
@@ -357,7 +357,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
 
 /**
  * Binds a column search.
- * 
+ *
  * @param {jQuery}
  *            $source - the search input.
  * @param {integer}
@@ -405,10 +405,10 @@ $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex
 
 /**
  * Creates the table column definitions.
- * 
+ *
  * @param {boolean}
  *            useName - true to use the column name as column data.
- * 
+ *
  * @returns {Object} the column definitions.
  */
 $.fn.getColumns = function (useName) {
@@ -427,7 +427,7 @@ $.fn.getColumns = function (useName) {
 
         // order sequence
         if (column.visible && column.orderable && column.direction === 'desc') {
-            column.orderSequence = ["desc", "asc"];
+            column.orderSequence = ['desc', 'asc'];
         }
 
         // created callback
@@ -451,7 +451,7 @@ $.fn.getColumns = function (useName) {
 
 /**
  * Gets the default table order.
- * 
+ *
  * @param {array}
  *            columns - the column definitions.
  * @returns {array} the default table order, if any; an empty array otherwise.
@@ -490,10 +490,10 @@ $.fn.getDefaultOrder = function (columns) {
 /**
  * Merge the default options within the given options and initialize the data
  * table.
- * 
+ *
  * @param {Object}
  *            options - the options to merge with default values.
- * 
+ *
  * @return {jQuery} The jQuery element for chaining.
  */
 $.fn.initDataTable = function (options) {
@@ -590,10 +590,10 @@ $.fn.initDataTable = function (options) {
 $.fn.extend({
     /**
      * Initialise the search input.
-     * 
+     *
      * @param {DataTables.Api}
      *            table - the table to update.
-     * 
+     *
      * @return {jQuery} The jQuery element for chaining.
      */
     initSearchInput: function (table) {
@@ -614,7 +614,7 @@ $.fn.extend({
 
     /**
      * Initialize the table length input.
-     * 
+     *
      * @param {DataTables.Api}
      *            table - the table to update.
      * @return {jQuery} The jQuery element for chaining.
@@ -629,7 +629,7 @@ $.fn.extend({
 
     /**
      * Enabled/Disabled datatables keys.
-     * 
+     *
      * @param {string}
      *            disableEvent - the event name to disable keys (default is
      *            'focus').
@@ -638,7 +638,7 @@ $.fn.extend({
      *            'blur').
      * @param {string}
      *            selector - the data table selector (default is '#data-table').
-     * 
+     *
      * @return {jQuery} The jQuery element for chaining.
      */
     handleKeys: function (disableEvent, enableEvent, selector) {

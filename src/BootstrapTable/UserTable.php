@@ -119,7 +119,7 @@ class UserTable extends AbstractEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['username' => Column::SORT_ASC];
+        return ['username' => self::SORT_ASC];
     }
 
     /**

@@ -19,10 +19,7 @@ namespace App\Pivot\Aggregator;
  */
 class SumAggregator extends AbstractAggregator
 {
-    /**
-     * @var float
-     */
-    protected $result;
+    protected float $result = 0.0;
 
     /**
      * {@inheritdoc}

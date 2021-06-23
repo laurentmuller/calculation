@@ -43,7 +43,7 @@ class GlobalMarginTable extends AbstractEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['minimum' => Column::SORT_ASC];
+        return ['minimum' => self::SORT_ASC];
     }
 
     /**

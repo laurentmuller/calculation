@@ -171,31 +171,41 @@ $.fn.extend({
             },
 
             onCustomViewPostBody: function(data) {
-                const options = $this.getOptions();
-                const params = $this.getParameters();
-                const callback = $.isFunction(options.onRenderCustomView) ? options.onRenderCustomView: false;
-
-                const selector = '.custom-view-actions:eq(%index%)';
                 const $view = $this.getCustomView();
-                $this.find('tbody tr .actions').each(function(index, element) {
-                    // copy actions
-                    const $rowActions = $(element).children();
-                    const $cardActions = $view.find(selector.replace('%index%', index));
-                    $rowActions.appendTo($cardActions);
 
-                    if (callback) {
-                        const row = data[index];
-                        const $item = $cardActions.parents('.custom-item');
-                        callback($this, row, $item, params);
+                // data?
+                if (data.length !== 0) {
+                    // hide empty data message
+                    $this.hideCustomViewMessage();
+
+                    const params = $this.getParameters();
+                    const selector = '.custom-view-actions:eq(%index%)';
+                    const callback = $.isFunction(options.onRenderCustomView) ? options.onRenderCustomView: false;
+
+                    $this.find('tbody tr .actions').each(function(index, element) {
+                        // copy actions
+                        const $rowActions = $(element).children();
+                        const $cardActions = $view.find(selector.replace('%index%', index));
+                        $rowActions.appendTo($cardActions);
+
+                        if (callback) {
+                            const row = data[index];
+                            const $item = $cardActions.parents('.custom-item');
+                            callback($this, row, $item, params);
+                        }
+                    });
+
+                    // display selection
+                    const $selection = $view.find(options.customSelector);
+                    if ($selection.length) {
+                        $selection.scrollInViewport();
                     }
-                });
-                $this.saveParameters().highlight();
-
-                // display selection
-                const $selection = $view.find(options.customSelector);
-                if ($selection.length) {
-                    $selection.scrollInViewport();
+                    $this.highlight();
+                } else {
+                    // show empty data message
+                    $this.showCustomViewMessage();
                 }
+                $this.saveParameters();
             },
 
             // save parameters
@@ -309,11 +319,8 @@ $.fn.extend({
      */
     isCustomView: function() {
         'use strict';
-        const data = $(this).data('bootstrap.table');
-        if (data) {
-            return data.showCustomView;
-        }
-        return false;
+        const data = $(this).getBootstrapTable();
+        return data && data.showCustomView;
     },
 
     /**
@@ -335,6 +342,16 @@ $.fn.extend({
     getData: function() {
         'use strict';
         return $(this).bootstrapTable('getData');
+    },
+
+    /**
+     * Gets the bootstrap table.
+     *
+     * @return {object} the bootstrap table.
+     */
+    getBootstrapTable: function () {
+        'use strict';
+        return $(this).data('bootstrap.table');
     },
 
     /**
@@ -411,6 +428,7 @@ $.fn.extend({
             if(callback) {
                 callback($this, row, $row, $link);
             }
+
         });
 
         // actions row callback
@@ -790,8 +808,9 @@ $.fn.extend({
                 if((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
                     return;
                 }
+
                 switch(e.keyCode) {
-                    case 13: // enter (edit action on selected row)
+                    case 13:  // enter (edit action on selected row)
                         if($this.editRow()) {
                             e.preventDefault();
                         }
@@ -874,5 +893,31 @@ $.fn.extend({
         }
         window.history.pushState({}, '', url);
         return $this;
+    },
+
+    /**
+     * Hide the empty data message in custom view.
+     */
+    hideCustomViewMessage: function() {
+        'use strict';
+        const $view = $(this).getCustomView();
+        if ($view) {
+            $view.find('.no-records-found').remove();
+        }
+    },
+
+    /**
+     * Show the empty data message in custom view.
+     */
+    showCustomViewMessage: function() {
+        'use strict';
+        const $this = $(this);
+        const $view = $this.getCustomView();
+        if ($view) {
+            $('<p/>', {
+                class:'no-records-found text-center border-top p-2 mb-1',
+                text: $this.getOptions().formatNoMatches()
+            }).appendTo($view);
+        }
     }
 });

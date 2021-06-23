@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\DataTable;
 
 use App\DataTable\Model\AbstractDataTable;
-use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Log;
 use App\Service\LogService;
@@ -210,7 +209,7 @@ class LogDataTable extends AbstractDataTable
     /**
      * Sort logs.
      *
-     * <b>NB:</b> Sorts only when not the default order (date ascending).
+     * <b>NB:</b> Sorts only when not set to the default order (date ascending).
      *
      * @param Log[]  $logs      the logs to sort
      * @param string $field     the sorted field
@@ -218,9 +217,20 @@ class LogDataTable extends AbstractDataTable
      */
     private function sort(array &$logs, string $field, string $direction): void
     {
-        if (self::COLUMN_DATE !== $field || DataColumn::SORT_ASC !== $direction) {
-            $ascending = DataColumn::SORT_ASC === $direction;
+        // need sort?
+        if (self::COLUMN_DATE === $field && self::SORT_ASC === $direction) {
+            return;
+        }
+
+        $ascending = self::SORT_ASC === $direction;
+        if (self::COLUMN_DATE === $field) {
             Utils::sortField($logs, $field, $ascending);
+        } else {
+            $fields = [
+                $field => $ascending,
+                self::COLUMN_DATE => false,
+            ];
+            Utils::sortFields($logs, $fields);
         }
     }
 }

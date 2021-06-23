@@ -310,7 +310,8 @@ function sortMargins($caller) {
 
 /**
  * Inititalize the search units.
- *  @returns {jQuery} The tak unit for chaining.
+ *
+ * @returns {jQuery} The tak unit for chaining.
  */
 function initSearchUnit() {
     'use strict';
@@ -385,6 +386,8 @@ function initSearchUnit() {
         const $link = $(this).parents('.item').find('.stretched-link');
         $link.attr('title', $('#edit-form').data('show'));
         $link.find('i').toggleClass('fa-caret-down fa-caret-right');
+    }).on('focus', '.unique-name', function () {
+        $(this).parents('.card').children('.collapse').collapse('show');
     });
 
     // initalize search

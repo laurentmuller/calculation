@@ -41,10 +41,8 @@ class PivotDateField extends PivotField
 
     /**
      * The date format.
-     *
-     * @var string
      */
-    protected $format;
+    protected string $format;
 
     /**
      * Constructor.

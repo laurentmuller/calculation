@@ -26,7 +26,7 @@ class PivotMonthField extends PivotDateField
      *
      * @var string[]
      */
-    private $names;
+    private array $names;
 
     /**
      * Constructor.

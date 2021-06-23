@@ -5,7 +5,7 @@
  */
 (function ($) {
     'use strict';
-    
+
     // ------------------------------------
     // jQuery extensions
     // ------------------------------------
@@ -26,11 +26,11 @@
         this.options = $.extend(true, {}, CellHighlight.DEFAULTS, options);
         this.tableIndex = this.indexTable();
         this.enabled = false;
-        
+
         // bind events
         const enabled = this.isUndefined(this.options.enabled) ? true : this.options.enabled;
         if (enabled) {
-            this.enable();    
+            this.enable();
         }
     };
 
@@ -38,15 +38,15 @@
         rowSelector: 'tr',
         cellSelector: 'td, th',
         highlightVertical: null,
-        highlightHorizontal: null        
+        highlightHorizontal: null
     };
-    
+
     CellHighlight.prototype = {
         // -----------------------------
         // public functions
         // -----------------------------
         constructor: CellHighlight,
-            
+
         enable: function () {
             if (!this.enabled) {
                 const selector = this.options.cellSelector;
@@ -55,7 +55,7 @@
                 this.enabled = true;
             }
         },
-        
+
         disable: function () {
             if (this.enabled) {
                 const selector = this.options.cellSelector;
@@ -64,10 +64,10 @@
                 this.enabled = false;
             }
         },
-        
+
         destroy: function () {
             this.disable();
-            this.$element.removeData("cellhighlight");
+            this.$element.removeData('cellhighlight');
         },
 
         // -----------------------------
@@ -105,8 +105,8 @@
 
             // trigger events
             that.horizontal.trigger('cellhighlight.mouseenter-horizontal');
-            that.vertical.trigger('cellhighlight.mouseenter-vertical');            
-            
+            that.vertical.trigger('cellhighlight.mouseenter-vertical');
+
             that.$element.trigger('cellhighlight.mouseenter', {
                 horizontal: that.horizontal,
                 vertical: that.vertical
@@ -131,7 +131,7 @@
             // trigger events
             that.horizontal.trigger('cellhighlight.mouseleave-horizontal');
             that.vertical.trigger('cellhighlight.mouseleave-vertical');
-            
+
             that.$element.trigger('cellhighlight.mouseleave', {
                 horizontal: that.horizontal,
                 vertical: that.vertical
@@ -145,10 +145,10 @@
             const selector = this.options.rowSelector;
             return this.$element.find(selector);
         },
-        
+
         getTableMaxCellLength: function () {
             let maxWidth = 0;
-            const that  = this;            
+            const that  = this;
             that.getTableRows().each(function () {
                 const rowWidth = that.getRowCellLength($(this));
                 if (rowWidth > maxWidth) {
@@ -186,7 +186,7 @@
             let colspan, rowspan;
             const that = this;
             const rows = that.getTableRows();
-            const tableIndex = that.generateTableMatrix();            
+            const tableIndex = that.generateTableMatrix();
 
             // Iterate through each hypothetical table row.
             $.each(tableIndex, function (y) {
@@ -202,8 +202,8 @@
                     let cell = tableIndex[y][x];
                     // Table matrix is iterated left to right, top to bottom.
                     // It might be that cell has been assigned a value already
-                    // because previous row-cell had a "rowspan" property,
-                    // possibly together with "colspan".
+                    // because previous row-cell had a 'rowspan' property,
+                    // possibly together with 'colspan'.
                     if (!cell) {
                         cell = columns.eq(cellIndex++);
                         colspan = cell.colspan();
@@ -224,9 +224,9 @@
 
             return tableIndex;
         },
-        
+
         isUndefined: function (value) {
-            return typeof value === "undefined";
+            return typeof value === 'undefined';
         }
     };
 
@@ -234,18 +234,18 @@
     // CellHighlight plugin definition
     // -----------------------------
     const oldCellHighlight = $.fn.cellhighlight;
-    
+
     $.fn.cellhighlight = function (options) {
         return this.each(function () {
             const $this = $(this);
-            let data = $this.data("cellhighlight");
+            let data = $this.data('cellhighlight');
             if (!data) {
-                const settings = typeof options === "object" && options;
-                $this.data("cellhighlight", data = new CellHighlight(this, settings));
+                const settings = typeof options === 'object' && options;
+                $this.data('cellhighlight', data = new CellHighlight(this, settings));
             }
         });
     };
-    
+
     $.fn.cellhighlight.Constructor = CellHighlight;
 
     // ------------------------------------
@@ -255,5 +255,5 @@
         $.fn.cellhighlight = oldCellHighlight;
         return this;
     };
-    
+
 }(jQuery));

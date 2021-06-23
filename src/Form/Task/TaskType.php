@@ -43,7 +43,7 @@ class TaskType extends AbstractEntityType
             ->addTextType();
 
         $helper->field('category')
-            ->addCategoryType();
+            ->addCategoryListType();
 
         $helper->field('unit')
             ->autocomplete('off')

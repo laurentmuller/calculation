@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
-use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
@@ -84,6 +83,6 @@ class TaskDataTable extends AbstractEntityDataTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['name' => DataColumn::SORT_ASC];
+        return ['name' => self::SORT_ASC];
     }
 }

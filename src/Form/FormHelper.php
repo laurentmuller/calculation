@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Form\CalculationState\CalculationStateEntityType;
-use App\Form\Category\CategoryEntityType;
+use App\Form\CalculationState\CalculationStateListType;
+use App\Form\Category\CategoryListType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
 use App\Form\Type\YesNoType;
-use App\Form\User\UserEntityType;
+use App\Form\User\UserListType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -137,13 +137,23 @@ class FormHelper
     }
 
     /**
-     * Add a category type to the builder and reset all values to default.
+     * Add a calculation state list type to the builder and reset all values to default.
+     *
+     * This type display a drop-down list of CalculationState entities.
+     */
+    public function addCalculationStateListType(): self
+    {
+        return $this->add(CalculationStateListType::class);
+    }
+
+    /**
+     * Add a category list type to the builder and reset all values to default.
      *
      * This type display a drop-down list of Category entities.
      */
-    public function addCategoryType(): self
+    public function addCategoryListType(): self
     {
-        return $this->add(CategoryEntityType::class);
+        return $this->add(CategoryListType::class);
     }
 
     /**
@@ -399,16 +409,6 @@ class FormHelper
     }
 
     /**
-     * Add a calculation state type to the builder and reset all values to default.
-     *
-     * This type display a drop-down list of CalculationState entities.
-     */
-    public function addStateType(): self
-    {
-        return $this->add(CalculationStateEntityType::class);
-    }
-
-    /**
      * Add a text area type to the builder and reset all values to default.
      */
     public function addTextareaType(): self
@@ -439,13 +439,13 @@ class FormHelper
     }
 
     /**
-     * Add an user type to the builder and reset all values to default.
+     * Add an user list type to the builder and reset all values to default.
      *
      * This type display a drop-down list of user entities.
      */
-    public function addUserType(): self
+    public function addUserListType(): self
     {
-        return $this->add(UserEntityType::class);
+        return $this->add(UserListType::class);
     }
 
     /**
@@ -763,7 +763,7 @@ class FormHelper
      * Updates a help attribute.
      *
      * @param string $name  the attribute name
-     * @param mixed  $value the attribute value or null to remove
+     * @param mixed  $value the attribute value
      * @param bool   $force true to put the attribute, even if the value is null
      */
     public function updateHelpAttribute(string $name, $value, bool $force = false): self
@@ -775,7 +775,7 @@ class FormHelper
      * Updates a label attribute.
      *
      * @param string $name  the attribute name
-     * @param mixed  $value the attribute value or null to remove
+     * @param mixed  $value the attribute value
      * @param bool   $force true to put the attribute, even if the value is null
      */
     public function updateLabelAttribute(string $name, $value, bool $force = false): self
@@ -787,7 +787,7 @@ class FormHelper
      * Updates an option.
      *
      * @param string $name  the option name
-     * @param mixed  $value the option value or null to remove
+     * @param mixed  $value the option value
      * @param bool   $force true to put the option, even if the value is null
      */
     public function updateOption(string $name, $value, bool $force = false): self
@@ -799,7 +799,7 @@ class FormHelper
      * Updates a row attribute.
      *
      * @param string $name  the attribute name
-     * @param mixed  $value the attribute value or null to remove
+     * @param mixed  $value the attribute value
      * @param bool   $force true to put the attribute, even if the value is null
      */
     public function updateRowAttribute(string $name, $value, bool $force = false): self
@@ -831,7 +831,7 @@ class FormHelper
 
         $newValues = \array_filter(\explode(' ', $name));
         $oldValues = \array_filter(\explode(' ', $array['class'] ?? ''));
-        $className = \implode(' ', \array_unique(\array_merge($newValues, $oldValues)));
+        $className = \implode(' ', \array_unique(\array_merge($oldValues, $newValues)));
 
         return $this->updateEntry($array, 'class', '' === $className ? null : $className, false);
     }
@@ -841,7 +841,7 @@ class FormHelper
      *
      * @param array  $array the array to update
      * @param string $name  the entry name
-     * @param mixed  $value the entry value or null to remove
+     * @param mixed  $value the entry value
      * @param bool   $force true to put the entry, even if the value is null
      */
     private function updateEntry(array &$array, string $name, $value, bool $force): self

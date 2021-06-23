@@ -13,17 +13,17 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\AbstractEntity;
-use App\Util\Utils;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Edition type to use within an entity class.
+ * Abstract type to display a list of entities.
  *
  * @author Laurent Muller
- *
  * @template T of AbstractEntity
  */
-abstract class AbstractEntityType extends AbstractHelperType
+abstract class AbstractListEntityType extends AbstractType
 {
     /**
      * The entity class name.
@@ -40,7 +40,7 @@ abstract class AbstractEntityType extends AbstractHelperType
      *
      * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractEntity class
      */
-    protected function __construct(string $className)
+    public function __construct(string $className)
     {
         if (!\is_subclass_of($className, AbstractEntity::class)) {
             throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', AbstractEntity::class, $className));
@@ -49,23 +49,19 @@ abstract class AbstractEntityType extends AbstractHelperType
         $this->className = $className;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => $this->className,
+            'placeholder' => false,
+            'class' => $this->className,
         ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getLabelPrefix(): ?string
+    public function getParent(): string
     {
-        $name = \strtolower(Utils::getShortName($this->className));
-
-        return "$name.fields.";
+        return EntityType::class;
     }
 }

@@ -27,7 +27,7 @@
     // ------------------------------------
     // Rowlink public class definition
     // ------------------------------------
-    var Rowlink = function (element, options) {
+    const Rowlink = function (element, options) {
         this.$element = $(element);
         this.options = $.extend({}, Rowlink.DEFAULTS, options);
         this.proxy = $.proxy(this.click, this);
@@ -36,7 +36,7 @@
     };
 
     Rowlink.DEFAULTS = {
-        target: "a"
+        target: 'a'
     };
 
     Rowlink.prototype = {
@@ -61,7 +61,7 @@
 
         destroy: function () {
             this.disable();
-            this.$element.removeData("bs.rowlink");
+            this.$element.removeData('bs.rowlink');
         },
 
         // -----------------------------
@@ -78,7 +78,7 @@
             if (!ctrlKey && target.click) {
                 target.click();
             } else if (document.createEvent) {
-                const evt = new MouseEvent("click", {
+                const evt = new MouseEvent('click', {
                     view: window,
                     bubbles: true,
                     cancelable: true,
@@ -99,7 +99,7 @@
             const $this = $(this);
             let data = $this.data('bs.rowlink');
             if (!data) {
-                const settings = typeof options === "object" && options;
+                const settings = typeof options === 'object' && options;
                 $this.data('bs.rowlink', data = new Rowlink(this, settings));
             }
         });

@@ -23,17 +23,13 @@ class PivotCell extends AbstractPivotAggregator
 {
     /**
      * The parent column.
-     *
-     * @var PivotNode
      */
-    private $column;
+    private PivotNode $column;
 
     /**
      * The parent row.
-     *
-     * @var PivotNode
      */
-    private $row;
+    private PivotNode $row;
 
     /**
      * Constructor.

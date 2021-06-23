@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Form\Dialog;
 
 use App\Form\AbstractHelperType;
-use App\Form\Category\CategoryEntityType;
+use App\Form\Category\CategoryListType;
 use App\Form\FormHelper;
-use App\Form\Task\TaskEntityType;
+use App\Form\Task\TaskListType;
 
 /**
  * Type to edit a calculation task in a dialog.
@@ -38,10 +38,10 @@ class EditTaskDialogType extends AbstractHelperType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('task')
-            ->add(TaskEntityType::class);
+            ->add(TaskListType::class);
 
         $helper->field('category')
-            ->add(CategoryEntityType::class);
+            ->add(CategoryListType::class);
 
         $helper->field('unit')
             ->notRequired()

@@ -117,7 +117,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      */
     protected function handleQuery(DataQuery $query): DataResults
     {
-        $results = new DataResults();
+        $results = parent::handleQuery($query);
 
         // find all
         $entities = $this->getEntities($query->sort, $query->order);

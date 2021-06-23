@@ -52,6 +52,6 @@ class ProductTable extends AbstractCategoryItemTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['description' => Column::SORT_ASC];
+        return ['description' => self::SORT_ASC];
     }
 }

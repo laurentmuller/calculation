@@ -342,11 +342,11 @@ final class Utils
     }
 
     /**
-     * Sorts an array for the given fields.
+     * Sorts an array for the given field.
      *
      * @param array  $array     the array to sort
      * @param string $field     the field name to get values for
-     * @param bool   $ascending true to sort ascending, false to sort descending
+     * @param bool   $ascending true to sort in ascending, false to sort in descending
      */
     public static function sortField(array &$array, string $field, bool $ascending = true): void
     {
@@ -359,28 +359,32 @@ final class Utils
     /**
      * Sorts an array for the given fields.
      *
-     * @param array           $array     the array to sort
-     * @param string|string[] $fields    the array of field names to get values for
-     * @param bool            $ascending true to sort ascending, false to sort descending
+     * @param array $array  the array to sort
+     * @param array $fields the array where the key is field name to sort and the value is ascending state
+     *                      (true to sort in ascending, false to sort in descending)
+     * @psalm-param array<string, boolean> $fields
      */
-    public static function sortFields(array &$array, $fields, bool $ascending = true): void
+    public static function sortFields(array &$array, array $fields): void
     {
-        if (!\is_array($fields)) {
-            $fields = [$fields];
-        }
-
-        $accessor = self::getAccessor();
-        \usort($array, function ($a, $b) use ($accessor, $fields, $ascending) {
-            $result = 0;
-            foreach ($fields as $field) {
-                $result = self::compare($a, $b, $field, $accessor, $ascending);
-                if (0 !== $result) {
-                    break;
+        $count = \count($fields);
+        if (1 === $count) {
+            $field = \array_key_first($fields);
+            $ascending = $fields[$field];
+            self::sortField($array, $field, $ascending);
+        } elseif ($count > 1) {
+            $accessor = self::getAccessor();
+            \usort($array, function ($a, $b) use ($accessor, $fields): int {
+                $result = 0;
+                foreach ($fields as $field => $ascending) {
+                    $result = self::compare($a, $b, $field, $accessor, $ascending);
+                    if (0 !== $result) {
+                        break;
+                    }
                 }
-            }
 
-            return $result;
-        });
+                return $result;
+            });
+        }
     }
 
     /**

@@ -52,6 +52,6 @@ class TaskTable extends AbstractCategoryItemTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['name' => Column::SORT_ASC];
+        return ['name' => self::SORT_ASC];
     }
 }

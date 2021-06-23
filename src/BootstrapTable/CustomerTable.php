@@ -40,6 +40,6 @@ class CustomerTable extends AbstractEntityTable
      */
     protected function getDefaultOrder(): array
     {
-        return [CustomerRepository::NAME_COMPANY_FIELD => Column::SORT_ASC];
+        return [CustomerRepository::NAME_COMPANY_FIELD => self::SORT_ASC];
     }
 }

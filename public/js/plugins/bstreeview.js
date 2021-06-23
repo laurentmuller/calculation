@@ -4,7 +4,7 @@
  * Ready function
  */
 (function($) {
-    "use strict";
+    'use strict';
 
     // -----------------------------
     // Initialization
@@ -321,7 +321,7 @@
                 const $item = $group.prev('.list-group-item');
                 const $icon = $item.find('.state-icon');
 
-                const event = $.Event("togglegroup", {
+                const event = $.Event('togglegroup', {
                     'item': $item,
                     'expanded': $icon.hasClass(options.expandIcon)});
                 if (!that.trigger(event)) {
@@ -446,7 +446,7 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-            const event = $.Event("collapseall", {'items': $items});
+            const event = $.Event('collapseall', {'items': $items});
             if (!that.trigger(event)) {
                 return that;
             }
@@ -473,7 +473,7 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-            const event = $.Event("expandall", {'items': $items});
+            const event = $.Event('expandall', {'items': $items});
             if (!that.trigger(event)) {
                 return that;
             }
@@ -508,7 +508,7 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-            const event = $.Event("expandtolevel", {
+            const event = $.Event('expandtolevel', {
                 'level': level,
                 'items': $items});
             if (!that.trigger(event)) {

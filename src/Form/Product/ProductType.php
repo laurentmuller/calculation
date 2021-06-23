@@ -52,7 +52,7 @@ class ProductType extends AbstractEntityType
             ->addNumberType();
 
         $helper->field('category')
-            ->addCategoryType();
+            ->addCategoryListType();
 
         $helper->field('supplier')
             ->autocomplete('off')

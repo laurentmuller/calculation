@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pivot;
 
+use App\Interfaces\SortModeInterface;
 use App\Pivot\Aggregator\AbstractAggregator;
 use App\Util\Utils;
 
@@ -20,7 +21,7 @@ use App\Util\Utils;
  *
  * @author Laurent Muller
  */
-class PivotNode extends AbstractPivotAggregator implements \Countable
+class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeInterface
 {
     /**
      * The path separator.
@@ -28,26 +29,11 @@ class PivotNode extends AbstractPivotAggregator implements \Countable
     public const PATH_SEPARATOR = '/';
 
     /**
-     * The ascending sort mode.
-     */
-    public const SORT_ASC = 1;
-
-    /**
-     * The descending sort mode.
-     */
-    public const SORT_DESC = 2;
-
-    /**
-     * The none sort mode.
-     */
-    public const SORT_NONE = 0;
-
-    /**
      * The children.
      *
      * @var PivotNode[]
      */
-    private $children = [];
+    private array $children = [];
 
     /**
      * The key.
@@ -58,24 +44,20 @@ class PivotNode extends AbstractPivotAggregator implements \Countable
 
     /**
      * The parent node.
-     *
-     * @var PivotNode|null
      */
-    private $parent;
+    private ?PivotNode $parent = null;
 
     /**
      * The sort direction.
-     *
-     * @var int
      */
-    private $sortMode = self::SORT_ASC;
+    private string $sortMode = self::SORT_ASC;
 
     /**
      * The title.
      *
      * @var string
      */
-    private $title;
+    private ?string $title = null;
 
     /**
      * Constructor.
@@ -393,9 +375,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable
     /**
      * Gets the sort mode.
      *
-     * @return int one of the SORT_XX constant
+     * @return string one of the SORT_XX constant
      */
-    public function getSortMode()
+    public function getSortMode(): string
     {
         return $this->sortMode;
     }
@@ -535,9 +517,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable
     /**
      * Sets the sort mode.
      *
-     * @param int $sortMode one of the SORT_XX constant
+     * @param string $sortMode one of the SORT_XX constant
      */
-    public function setSortMode(int $sortMode): self
+    public function setSortMode(string $sortMode): self
     {
         switch ($sortMode) {
             case self::SORT_ASC:

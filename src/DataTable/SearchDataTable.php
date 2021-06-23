@@ -194,20 +194,20 @@ class SearchDataTable extends AbstractDataTable
             case 0: // entity
                 return [
                     self::COLUMN_ENTITY => $direction,
-                    self::COLUMN_CONTENT => DataColumn::SORT_ASC,
-                    self::COLUMN_FIELD => DataColumn::SORT_ASC,
+                    self::COLUMN_CONTENT => self::SORT_ASC,
+                    self::COLUMN_FIELD => self::SORT_ASC,
                 ];
             case 1: // field
                 return [
                     self::COLUMN_FIELD => $direction,
-                    self::COLUMN_CONTENT => DataColumn::SORT_ASC,
-                    self::COLUMN_ENTITY => DataColumn::SORT_ASC,
+                    self::COLUMN_CONTENT => self::SORT_ASC,
+                    self::COLUMN_ENTITY => self::SORT_ASC,
                  ];
             default: // content
                 return [
                     self::COLUMN_CONTENT => $direction,
-                    self::COLUMN_ENTITY => DataColumn::SORT_ASC,
-                    self::COLUMN_FIELD => DataColumn::SORT_ASC,
+                    self::COLUMN_ENTITY => self::SORT_ASC,
+                    self::COLUMN_FIELD => self::SORT_ASC,
                  ];
         }
     }
@@ -259,7 +259,7 @@ class SearchDataTable extends AbstractDataTable
         // convert orders
         $sorts = [];
         foreach ($orders as $column => $direction) {
-            $sorts["[$column]"] = DataColumn::SORT_ASC === $direction;
+            $sorts["[$column]"] = self::SORT_ASC === $direction;
         }
 
         $accessor = PropertyAccess::createPropertyAccessor();

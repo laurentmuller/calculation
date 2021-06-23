@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\DataTable;
 
 use App\DataTable\Model\AbstractEntityDataTable;
-use App\DataTable\Model\DataColumn;
 use App\DataTable\Model\DataColumnFactory;
 use App\Entity\Group;
 use App\Repository\GroupRepository;
@@ -72,6 +71,6 @@ class GroupDataTable extends AbstractEntityDataTable
      */
     protected function getDefaultOrder(): array
     {
-        return ['code' => DataColumn::SORT_ASC];
+        return ['code' => self::SORT_ASC];
     }
 }

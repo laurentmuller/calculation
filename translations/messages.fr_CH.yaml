@@ -494,7 +494,7 @@ common:
     show_password: Afficher le mot de passe
     hide_password: Masquer le mot de passe
     toggle_password: Afficher/Masquer le mot de passe
-    required: Les champs marqués d’un <span class="text-danger">*</span> sont obligatoires.
+    required: <span class="text-danger">*</span> = Valeur requise
     top_of_page: Haut de la page
     id: Numéro
     empty: ''

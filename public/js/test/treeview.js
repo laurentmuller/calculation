@@ -20,14 +20,13 @@
         treeView.refresh().focus();
     });
 
-    $tree.on('collapseall', function(e) {
+    $tree.on('collapseall', function (e) {
         console.log('Collapse All', e.items);
-    }).on('expandall', function(e) {
+    }).on('expandall', function (e) {
         console.log('Expand All', e.items);
-    }).on('expandtolevel', function(e) {
+    }).on('expandtolevel', function (e) {
         console.log('Expand to Level', e.level, e.items);
-    }).on('togglegroup', function(e) {
-        console.log('Toggle Group', e.expanded, e.item);
+    }).on('togglegroup', function (e) {
+        console.log('Toggle Group','expanding:' + e.expanding, e.item);
     });
-
 }(jQuery));

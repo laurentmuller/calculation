@@ -28,15 +28,10 @@
 </div>
 <div class="row">
     <div class="col-md-8 offset-md-2">
-        <div id="tree" data-url="{{ path('test_tree') }}" data-loading="{{ 'about.loading'|trans }}" data-badge-count="true"></div>
+        <div id="tree" class="list-group" role="tree" data-url="{{ path('test_tree') }}" data-loading-text="{{ 'about.loading'|trans }}" data-badge-class="badge-secondary" data-badge-count="true"></div>
     </div>
 </div>
 {%- endblock %}
-
-{% block stylesheets -%}
-{{ parent() }}
-{{ asset_css('css/bstreeview.css') }}
-{% endblock %}
 
 {% block javascripts -%}
 {{ parent() }}

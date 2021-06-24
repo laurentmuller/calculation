@@ -42,6 +42,7 @@
 
             // retrieve Json Data.
             if (options.data) {
+                // get data
                 if (options.data.isPrototypeOf(String)) {
                     options.data = $.parseJSON(options.data);
                 }
@@ -53,15 +54,19 @@
                         nodes: that.tree
                     });
                     that.build($element, that.tree, 0);
-                    that.selectFirst();
+                    that.updateBorders().selectFirst();
                 }
             } else if (options.url) {
                 $('*').css('cursor', 'wait');
                 const $loading = $(options.templates.item)
                     .addClass(options.loadingClass)
-                    .text(options.loading)
+                    .text(options.loadingText)
                     .appendTo($element);
                 $.getJSON(options.url, function (data) {
+                    // get data
+                    if (data.isPrototypeOf(String)) {
+                        data = $.parseJSON(data);
+                    }
                     that.tree = $.extend(true, [], data);
 
                     // initialise
@@ -71,17 +76,15 @@
                         });
                         that.build(that.$element, that.tree, 0);
                     }
+
                 }).always(function () {
                     $loading.remove();
-                    that.selectFirst();
+                    that.updateBorders().selectFirst();
                     $('*').css('cursor', '');
                 });
             }
 
-            // set main class to element.
-            $element.addClass('bstreeview ' + options.treeClass);
-
-            // handle events
+            // add handlers
             $element.on('click', '.list-group-item', that.clickProxy);
             $element.on('keydown', '.list-group-item', that.keyDownProxy);
 
@@ -122,7 +125,7 @@
             // calculate padding
             let paddingLeft = options.parentIndent;
             if (depth > 0) {
-                paddingLeft = (depth + 1) * options.indent;
+                paddingLeft += depth * options.indent;
             }
             depth++;
 
@@ -149,7 +152,9 @@
 
                 // set node text if present
                 if (node.text) {
-                    $item.append(node.text);
+                    $(templates.itemText)
+                        .text(node.text)
+                        .appendTo($item);
                 }
 
                 // set badge if present
@@ -211,8 +216,6 @@
             const $target = $(e.currentTarget);
             this.toggleGroup($target.next('.list-group'));
 
-            // notify
-
             // navigate to href if present
             if ($target.attr('href')) {
                 if (this.options.openNodeLinkOnNewTab) {
@@ -232,6 +235,10 @@
          * @return {BoostrapTreeView} this instance for chaining.
          */
         keydown: function (e) {
+            if (this.toggling) {
+                return this;
+            }
+
             const $target = $(e.currentTarget);
             switch (e.keyCode || e.which) {
             case 35: { // end => last
@@ -314,28 +321,42 @@
          *            $group - the group to toggle.
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        toggleGroup($group) {
+        toggleGroup: function ($group) {
             const that = this;
             if ($group && $group.length) {
                 const options = that.options;
                 const $item = $group.prev('.list-group-item');
                 const $icon = $item.find('.state-icon');
 
-                const event = $.Event('togglegroup', {
+                const event = $.Event('togglegroup', { // jshint ignore:line
                     'item': $item,
-                    'expanded': $icon.hasClass(options.expandIcon)});
+                    'expanding': $icon.hasClass(options.collapseIcon)});
                 if (!that.trigger(event)) {
                     return that;
                 }
 
-
-                $group.toggle(options.toggleDuration, function() {
+                that.toggling = true;
+                $item.removeClass('rounded-bottom');
+                $group.toggle(options.toggleDuration, function () {
                     $icon.toggleClass(options.collapseIcon)
                         .toggleClass(options.expandIcon);
+                    that.updateBorders().toggling = false;
                 });
 
             }
             return that;
+        },
+
+        /**
+         * Update the borders.
+         *
+         * @return {BoostrapTreeView} this instance for chaining.
+         */
+        updateBorders: function () {
+            this.$element.find('.list-group-item:first').removeClass('border-top-0');
+            this.$element.find('.list-group-item.rounded-bottom').removeClass('rounded-bottom');
+            this.$element.find('.list-group-item:visible:last').addClass('rounded-bottom');
+            return this;
         },
 
         /**
@@ -355,7 +376,7 @@
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        selectFirst: function() {
+        selectFirst: function () {
             return this.setSelection(this.$element.find('.list-group-item:first'));
         },
 
@@ -366,7 +387,7 @@
          *            $$selection - the item to select.
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        setSelection: function($selection) {
+        setSelection: function ($selection) {
             const selectionClass = this.options.selectionClass;
             if ($selection && $selection.length) {
                 this.$element.find('.list-group-item').removeClass(selectionClass);
@@ -410,7 +431,7 @@
          *            e - the event to trigger.
          * @return true if the event is not prevented; false otherwise.
          */
-        trigger: function(e) {
+        trigger: function (e) {
             if (e) {
                 this.$element.trigger(e);
                 return !e.isDefaultPrevented();
@@ -424,10 +445,14 @@
          * @return {BoostrapTreeView} this instance for chaining.
          */
         refresh: function () {
+            // remove handlers
             this.$element.off('click', '.list-group-item', this.clickProxy);
             this.$element.off('keydown', '.list-group-item', this.keyDownProxy);
+
+            // clear and initialize
             this.$element.children().remove();
             this.init();
+
             return this;
         },
 
@@ -446,7 +471,8 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-            const event = $.Event('collapseall', {'items': $items});
+            const event = $.Event('collapseall', { // jshint ignore:line
+                'items': $items});
             if (!that.trigger(event)) {
                 return that;
             }
@@ -473,7 +499,9 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-            const event = $.Event('expandall', {'items': $items});
+            // jshint ignore:line
+            const event = $.Event('expandall', { // jshint ignore:line
+                'items': $items});
             if (!that.trigger(event)) {
                 return that;
             }
@@ -508,7 +536,7 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-            const event = $.Event('expandtolevel', {
+            const event = $.Event('expandtolevel', { // jshint ignore:line
                 'level': level,
                 'items': $items});
             if (!that.trigger(event)) {
@@ -528,10 +556,9 @@
     // -----------------------------------
     BoostrapTreeView.DEFAULTS = {
         url: null,
-        toggleDuration: 400,
-        loading: 'Loading...',
+        toggleDuration: 350,
+        loadingText: 'Loading...',
         loadingClass: 'list-group-item-success',
-        treeClass: 'list-group border',
         selectionClass: 'list-group-item-primary',
         expandIcon: 'fas fa-caret-down fa-fw',
         collapseIcon: 'fas fa-caret-right fa-fw',
@@ -539,13 +566,14 @@
         parentIndent: 1.25,
         openNodeLinkOnNewTab: true,
         badgeCount: false,
-        badgeClass: 'badge-primary',
+        badgeClass: 'badge-pill badge-primary',
         templates: {
-            item: '<button type="button" role="treeitem" class="list-group-item list-group-item-action" />',
-            groupItem: '<div role="group" class="list-group" />',
-            stateIcon: '<i class="state-icon" />',
-            itemIcon: '<i class="item-icon" />',
-            itemBadge: '<span class="float-right item-badge badge badge-pill" />'
+            item: '<button type="button" role="treeitem" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2 border-top-0" />',
+            stateIcon: '<i class="state-icon mr-1" />',
+            itemIcon: '<i class="item-icon mr-1" />',
+            itemText: '<span class="item-text w-100" />',
+            itemBadge: '<span class="badge" />',
+            groupItem: '<div role="group" class="group-item list-group rounded-0" />'
         }
     };
 

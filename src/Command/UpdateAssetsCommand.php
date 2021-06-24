@@ -114,7 +114,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
                 $name = $plugin->name;
                 $version = $plugin->version;
-                $this->writeVerbose("Installing '{$name} v{$version}'.");
+                $display = $plugin->display ?? $plugin->name;
+                $this->writeVerbose("Installing '{$display} v{$version}'.");
 
                 // copy files
                 foreach ($plugin->files as $file) {

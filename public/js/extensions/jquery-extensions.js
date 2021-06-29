@@ -506,15 +506,15 @@
          * @param {object}
          *            options - The select2 options.
          */
-        initSelect2: function () {
-            return this.each(function (options) {
-                options = $.extend({
+        initSelect2: function (options) {
+            return this.each(function () {
+                const settings = $.extend(true, {
                     theme: 'bootstrap4',
                     dropdownAutoWidth: true
                 }, options);
 
                 const $select = $(this);
-                $select.select2(options).on('select2:opening', function () {
+                $select.select2(settings).on('select2:opening', function () {
                     $('.select2-hidden-accessible').each(function () {
                         if ($(this) !== $select) {
                             $(this).select2('close');

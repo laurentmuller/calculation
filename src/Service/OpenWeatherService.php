@@ -504,7 +504,7 @@ class OpenWeatherService extends AbstractHttpClientService
 
         // call
         $response = $this->requestGet($uri, [
-            'query' => $query,
+            self::QUERY => $query,
         ]);
 
         // decode

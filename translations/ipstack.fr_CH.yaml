@@ -1,0 +1,13 @@
+404_not_found: La ressource demandée n'existe pas.
+missing_access_key: Aucune clé API n'a été spécifiée.
+invalid_access_key: Aucune clé API n'a été spécifiée ou une clé API non valide a été spécifiée.
+inactive_user: Le compte d'utilisateur actuel n'est pas actif. L'utilisateur est invité à entrer en contact avec le support client.
+invalid_api_function: Le point de terminaison d'API demandé n'existe pas.
+usage_limit_reached: Le nombre maximal autorisé de demandes d'API mensuelles a été atteint.
+function_access_restricted: Le plan d'abonnement actuel ne prend pas en charge ce point de terminaison d'API.
+https_access_restricted: Le plan d'abonnement actuel de l'utilisateur ne prend pas en charge le chiffrement HTTPS.
+invalid_fields: Un ou plusieurs champs non valides ont été spécifiés à l'aide du paramètre fields.
+too_many_ips: Trop d'adresses IP ont été spécifiées pour le point de terminaison de recherche en bloc (maximum 50).
+batch_not_supported_on_plan: Le point de terminaison de recherche en bloc n'est pas pris en charge sur le plan d'abonnement actuel.
+ip_not_found: L'adresse IP demandée n'existe pas.
+unknown: Une erreur inconnue s'est déclarée lors de l'utilisation du service Ip Stack.

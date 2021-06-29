@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Service\ExchangeRateService;
+use App\Util\FormatUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,7 +97,7 @@ class ExchangeRateController extends AbstractController
     {
         $baseCode = (string) $request->get('baseCode', '');
         $targetCode = (string) $request->get('targetCode', '');
-        $rate = $this->service->getRate($baseCode, $targetCode);
+        $result = $this->service->getRateAndDates($baseCode, $targetCode);
 
         if ($lastError = $this->service->getLastError()) {
             return $this->json([
@@ -107,7 +108,9 @@ class ExchangeRateController extends AbstractController
 
         return $this->json([
             'result' => true,
-            'rate' => $rate,
+            'rate' => $result['rate'],
+            'next' => FormatUtils::formatDateTime($result['next']),
+            'update' => FormatUtils::formatDateTime($result['update']),
         ]);
     }
 }

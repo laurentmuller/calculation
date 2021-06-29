@@ -22,6 +22,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RoutesTest extends AbstractAuthenticateWebTestCase
 {
+    /**
+     * @return array<int, array<int, int|string>>
+     */
     public function getRoutes(): array
     {
         return [

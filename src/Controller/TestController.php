@@ -51,6 +51,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Intl\Countries;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
@@ -611,7 +612,9 @@ class TestController extends AbstractController
             return new JsonResponse([$root]);
         }
 
-        return $this->render('test/treeview.html.twig');
+        return $this->render('test/treeview.html.twig', [
+            'countries' => Countries::getNames(),
+        ]);
     }
 
     /**

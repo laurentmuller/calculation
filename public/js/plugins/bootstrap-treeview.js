@@ -38,7 +38,8 @@
             that.tree = [];
             that.nodes = [];
             that.clickProxy = $.proxy(that.click, that);
-            that.keyDownProxy = $.proxy(that.keydown, that);
+            that.doubleclickProxy = $.proxy(that.doubleclick, that);
+            that.keydownProxy = $.proxy(that.keydown, that);
 
             // retrieve Json Data.
             if (options.data) {
@@ -85,8 +86,13 @@
             }
 
             // add handlers
-            $element.on('click', '.list-group-item', that.clickProxy);
-            $element.on('keydown', '.list-group-item', that.keyDownProxy);
+            // $element.on('click', '.state-icon', function() {
+            // console.log('state-icon');
+            // });
+
+            $element.on('click', '.list-group-item, .state-icon', that.clickProxy);
+            $element.on('dblclick', '.list-group-item', that.doubleclickProxy);
+            $element.on('keydown', '.list-group-item', that.keydownProxy);
 
             return that;
         },
@@ -205,27 +211,44 @@
         },
 
         /**
-         * Handle item click.
+         * Handle item and state icon click.
          *
          * @param {Event}
          *            e - the source event.
          * @return {BoostrapTreeView} this instance for chaining.
          */
         click: function (e) {
-            // toggle group
             const $target = $(e.currentTarget);
-            this.toggleGroup($target.next('.list-group'));
-
-            // navigate to href if present
-            if ($target.attr('href')) {
-                if (this.options.openNodeLinkOnNewTab) {
-                    window.open($target.attr('href'), '_blank');
-                } else {
-                    window.location = $target.attr('href');
+            const $item = $target.closest('.list-group-item');
+            if ($target.is('.state-icon')) {
+                this.toggleGroup($item.next('.list-group'));
+            } else {
+                const href = $item.attr('href');
+                if (href) {
+                    if (this.options.openNodeLinkOnNewTab) {
+                        window.open(href, '_blank');
+                    } else {
+                        window.location = href;
+                    }
                 }
             }
+
+            return this.setSelection($item);
+        },
+
+        /**
+         * Handle the item double-click.
+         *
+         * @param {Event}
+         *            e - the source event.
+         * @return {BoostrapTreeView} this instance for chaining.
+         */
+        doubleclick: function (e) {
+            const $target = $(e.currentTarget);
+            this.toggleGroup($target.next('.list-group'));
             return this.setSelection($target);
         },
+
 
         /**
          * Handle item key down event
@@ -365,8 +388,9 @@
          * @return {BoostrapTreeView} this instance for chaining.
          */
         destroy: function () {
-            this.$element.off('click', '.list-group-item', this.clickProxy);
-            this.$element.off('keydown', '.list-group-item', this.keyDownProxy);
+            this.$element.off('click', '.list-group-item, .state-icon', this.clickProxy);
+            this.$element.off('dblclick', '.list-group-item', this.doubleclickProxy);
+            this.$element.off('keydown', '.list-group-item', this.keydownProxy);
             this.$element.removeData('boostrapTreeView');
             return this;
         },
@@ -446,8 +470,9 @@
          */
         refresh: function () {
             // remove handlers
-            this.$element.off('click', '.list-group-item', this.clickProxy);
-            this.$element.off('keydown', '.list-group-item', this.keyDownProxy);
+            this.$element.off('click', '.list-group-item, .state-icon', this.clickProxy);
+            this.$element.off('dblclick', '.list-group-item', this.doubleclickProxy);
+            this.$element.off('keydown', '.list-group-item', this.keydownProxy);
 
             // clear and initialize
             this.$element.children().remove();

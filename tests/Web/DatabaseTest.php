@@ -46,6 +46,9 @@ class DatabaseTest extends KernelTestCase
         self::bootKernel();
     }
 
+    /**
+     * @return array<int, array<int, int|string>>
+     */
     public function getRepositories(): array
     {
         return [
@@ -63,6 +66,9 @@ class DatabaseTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return array<int, array<int, int|string>>
+     */
     public function getTables(): array
     {
         return [
@@ -80,6 +86,9 @@ class DatabaseTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return array<int, array<int, int|string>>
+     */
     public function getUsers(): array
     {
         return [

@@ -38,6 +38,7 @@ parameters:
     google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
     exchange_rate_key: '%env(EXCHANGE_RATE_KEY)%'
     akismet_key: '%env(AKISMET_KEY)%'
+    ip_stack_key: '%env(IP_STACK_KEY)%'
 
     #links
     link_dev: '%env(LINK_DEV)%'

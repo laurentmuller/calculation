@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {# parameters #}
-{% set title = 'Bootstrap TreeView Demo' %}
+{% set title = 'Bootstrap TreeView' %}
 {% set title_icon = 'table' %}
 
 {% block body -%}
@@ -30,11 +30,29 @@
     <div class="col-md-8 offset-md-2">
         <div id="tree" class="list-group" role="tree" data-url="{{ path('test_tree') }}" data-loading-text="{{ 'about.loading'|trans }}" data-badge-class="badge-secondary" data-badge-count="true"></div>
     </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group">
+            <label for="country">Pays</label>
+            <select id="country" class="form-control" data-url="{{ asset('images/flag_blank.png') }}"></select>
+        </div>
+        <div class="d-none" id="countries">
+        {% for key, name in countries %}
+            <div data-id="{{ key }}">{{ name }}</div>
+        {% endfor %}
+        </div>
+    </div>
 </div>
 {%- endblock %}
 
+{% block stylesheets -%}
+{{ asset_css('css/select2.css') }}
+{{ asset_css('css/flags.css') }}
+{% endblock %}
+
 {% block javascripts -%}
 {{ parent() }}
-{{ asset_js('js/plugins/bstreeview.js') }}
+{{ asset_js('js/plugins/bootstrap-treeview.js') }}
+{{ asset_js('js/vendor/select2/js/select2.js') }}
+{{ asset_js('js/vendor/select2/js/i18n/fr.min.js') }}
 {{ asset_js('js/test/treeview.js') }}
 {% endblock %}

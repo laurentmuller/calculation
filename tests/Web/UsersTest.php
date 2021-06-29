@@ -19,6 +19,9 @@ namespace App\Tests\Web;
  */
 class UsersTest extends AbstractAuthenticateWebTestCase
 {
+    /**
+     * @return array<int, array<int, bool|string>>
+     */
     public function getUserExist(): array
     {
         return [
@@ -30,6 +33,9 @@ class UsersTest extends AbstractAuthenticateWebTestCase
         ];
     }
 
+    /**
+     * @return array<int, array<int, string>>
+     */
     public function getUserRole(): array
     {
         return [

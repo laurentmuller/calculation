@@ -87,7 +87,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if ($response = $this->getResponse($url)) {
             $rates = (array) ($response['conversion_rates'] ?? []);
             if (!empty($rates)) {
-                $time = $this->getNextTime($response);
+                $time = $this->getDeltaTime($response);
                 $this->setCacheValue($url, $rates, $time);
 
                 return $rates;
@@ -118,7 +118,7 @@ class ExchangeRateService extends AbstractHttpClientService
         if ($response = $this->getResponse($url)) {
             $rate = (float) ($response['conversion_rate'] ?? 0.0);
             if (!empty($rate)) {
-                $time = $this->getNextTime($response);
+                $time = $this->getDeltaTime($response);
                 $this->setCacheValue($url, $rate, $time);
 
                 return $rate;
@@ -126,6 +126,44 @@ class ExchangeRateService extends AbstractHttpClientService
         }
 
         return 0.0;
+    }
+
+    /**
+     * Gets the exchange rate and last update date from the base curreny code to the target currency code.
+     *
+     * @param string $baseCode   the base curreny code
+     * @param string $targetCode the target curreny code
+     *
+     * @return array|null the exchange rate, the next update and last update dates or null if an error occurs
+     */
+    public function getRateAndDates(string $baseCode, string $targetCode): ?array
+    {
+        $sourceCode = \strtoupper($baseCode);
+        $targetCode = \strtoupper($targetCode);
+        $url = $this->getUrl("/pair/$sourceCode/$targetCode");
+        $key = "$url/dates";
+
+        if ($response = $this->getCacheValue($key)) {
+            return $response;
+        }
+
+        if ($response = $this->getResponse($url)) {
+            $rate = (float) ($response['conversion_rate'] ?? 0.0);
+            if (!empty($rate)) {
+                $result = [
+                    'rate' => $rate,
+                    'next' => $this->getNextTime($response),
+                    'update' => $this->getUpdateTime($response),
+                ];
+
+                $time = $this->getDeltaTime($response);
+                $this->setCacheValue($key, $result, $time);
+
+                return $result;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -145,7 +183,7 @@ class ExchangeRateService extends AbstractHttpClientService
             $codes = (array) ($response['supported_codes'] ?? []);
             if (!empty($codes)) {
                 $codes = $this->mapCodes($codes);
-                $time = $this->getNextTime($response);
+                $time = $this->getDeltaTime($response);
                 $this->setCacheValue($url, $codes, $time);
 
                 return $codes;
@@ -155,17 +193,24 @@ class ExchangeRateService extends AbstractHttpClientService
         return [];
     }
 
-    private function getNextTime(array $response): ?int
+    private function getDeltaTime(array $response): ?int
     {
-        $nextupdate = (int) ($response['time_next_update_unix'] ?? 0);
-        if (0 !== $nextupdate) {
-            $delta = $nextupdate - \time() - 1;
+        $time = (int) ($response['time_next_update_unix'] ?? 0);
+        if (0 !== $time) {
+            $delta = $time - \time() - 1;
             if ($delta > 0) {
                 return $delta;
             }
         }
 
         return null;
+    }
+
+    private function getNextTime(array $response): ?int
+    {
+        $time = (int) ($response['time_next_update_unix'] ?? 0);
+
+        return 0 !== $time ? $time : null;
     }
 
     private function getResponse(string $url): ?array
@@ -180,6 +225,13 @@ class ExchangeRateService extends AbstractHttpClientService
         }
 
         return null;
+    }
+
+    private function getUpdateTime(array $response): ?int
+    {
+        $time = (int) ($response['time_last_update_unix'] ?? 0);
+
+        return 0 !== $time ? $time : null;
     }
 
     private function getUrl(string $endPoint): string

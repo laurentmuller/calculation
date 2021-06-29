@@ -1187,6 +1187,8 @@ breadcrumb:
 exchangerate:
     title: Calculateur de change
     description: Choisissez les devises et le montant pour obtenir le taux de change.
+    last_update: 'Dernière mise à jour : %date%'
+    next_update: 'Prochaine mise à jour : %date%'
     swap_label: Inverser les devises
     source: Devise locale
     target: Devise étrangère

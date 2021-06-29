@@ -18,6 +18,23 @@ function showError($form, message) {
 }
 
 /**
+ * Update the text of the given element.
+ *
+ * @param {JQuery}
+ *            $element - the element to update.
+ * @param {String}
+ *            date - the new date.
+ * @returns {JQuery} the element for chaining.
+ */
+function updateDate($element, date) {
+    'use strict';
+    const source = $element.data('text');
+    const target = source.replace('%date%', date);
+    $element.text(target);
+    return $element;
+}
+
+/**
  * Compute values and update UI.
  */
 function compute() {
@@ -50,8 +67,11 @@ function compute() {
             const $targetDigits = $targetOption.data('digits');
             const $targetText = rate + ' ' + $targetCode;
 
-            $('#rate').text($baseText + ' = ' + $targetText);
             $('#result').val(result.toFixed($targetDigits));
+            $('#rate').text($baseText + ' = ' + $targetText);
+            updateDate($('#last-update'), response.update);
+            updateDate($('#next-update'), response.next);
+
         } else {
             showError($form, response.message);
         }

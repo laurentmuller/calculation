@@ -18,7 +18,9 @@
 {%- set title = 'exchangerate.title' -%}
 {%- set title_icon = 'hand-holding-usd' -%}
 {%- set cancel_text = 'common.button_close' -%}
-{%- set form_attr = form_attr|default({})|merge({'action': url('exchange_rate'), 'data-error': 'unknown'|trans({}, 'exchangerate')}) -%}
+{%- set form_attr = form_attr|default({})|merge({
+	'action': url('exchange_rate'),
+	'data-error': 'unknown'|trans({}, 'exchangerate')}) -%}
 
 {% block card_header %}
 {{ parent() }}
@@ -28,10 +30,10 @@
 {% block card_body %}
 {{ parent() }}
 <div class="row">
-    <div class="col-5">
+    <div class="col-md-5">
         <div class="form-group">
             <label class="required" for="baseCode">{{ 'exchangerate.source'|trans }}</label>
-            <select class="form-control" id="baseCode" name="baseCode" required="required">
+            <select class="form-control" id="baseCode" name="baseCode" required="required" style="width: 100% !important;">
                 {{ _self.fillCodes(codes, 'CHF') }}
             </select>
         </div>
@@ -44,10 +46,10 @@
             </a>
         </div>
     </div>
-    <div class="col-5">
+    <div class="col-md-5">
         <div class="form-group">
             <label class="required" for="targetCode">{{ 'exchangerate.target'|trans }}</label>
-            <select class="form-control" id="targetCode" name="targetCode" required="required">
+            <select class="form-control" id="targetCode" name="targetCode" required="required" style="width: 100% !important;">
                 {{ _self.fillCodes(codes, 'EUR') }}
             </select>
         </div>
@@ -55,18 +57,26 @@
 </div>
 <p class="text-center mb-0" id="rate">&nbsp;</p>
 <div class="row">
-    <div class="col-5">
+    <div class="col-md-5">
         <div class="form-group">
             <label class="required" for="amount">{{ 'exchangerate.amount'|trans }}</label>
             <input type="number" class="form-control text-right" id="amount" name="amount" value="100" required="required">
         </div>
     </div>
     <div class="col-md-2">&nbsp;</div>
-    <div class="col-5">
+    <div class="col-md-5">
         <div class="form-group">
             <label for="result">{{ 'exchangerate.result'|trans }}</label>
             <input type="number" class="form-control text-right font-weight-bold" id="result" name="result" value="1.00" disabled="disabled">
         </div>
+    </div>
+</div>
+<div class="row small text-muted">
+    <div class="col-md-6" id="last-update" data-text="{{ 'exchangerate.last_update'|trans }}">
+        {{- 'exchangerate.last_update'|trans({'%date%': 'common.empty_date'|trans}) -}}
+    </div>
+    <div class="col-md-6 text-md-right" id="next-update" data-text="{{ 'exchangerate.next_update'|trans }}">
+        {{- 'exchangerate.next_update'|trans({'%date%': 'common.empty_date'|trans}) -}}
     </div>
 </div>
 {% endblock %}

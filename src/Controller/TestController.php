@@ -35,6 +35,7 @@ use App\Service\AbstractHttpClientService;
 use App\Service\AkismetService;
 use App\Service\CaptchaImageService;
 use App\Service\FakerService;
+use App\Service\IpStackService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
 use App\Translator\TranslatorFactory;
@@ -103,6 +104,23 @@ class TestController extends AbstractController
 
         // render
         return $this->renderPdfDocument($report);
+    }
+
+    /**
+     * @Route("/ipstack", name="test_ipstack")
+     */
+    public function ipStrack(Request $request, IpStackService $service): JsonResponse
+    {
+        $result = $service->getIpInfo($request);
+
+        if ($lastError = $service->getLastError()) {
+            return $this->json($lastError);
+        }
+
+        return $this->json([
+            'result' => true,
+            'response' => $result,
+        ]);
     }
 
     /**
@@ -553,7 +571,7 @@ class TestController extends AbstractController
         // form and parameters
         $parameters = [
             'form' => $this->getForm()->createView(),
-            'language' => AbstractHttpClientService::getAcceptLanguage(true),
+            'language' => AbstractHttpClientService::getAcceptLanguage(),
             'languages' => $languages,
             'services' => $factory->getServices(),
             'service_name' => $service::getName(),
@@ -687,11 +705,10 @@ class TestController extends AbstractController
      */
     public function verifyAkismetKey(AkismetService $service): JsonResponse
     {
-        $value = $service->verifyKey();
-        if ($lastError = $service->getLastError()) {
-            return new JsonResponse($lastError);
+        if (false === $result = $service->verifyKey()) {
+            return new JsonResponse($service->getLastError());
         }
 
-        return new JsonResponse(['valid_key' => $value]);
+        return new JsonResponse(['valid_key' => $result]);
     }
 }

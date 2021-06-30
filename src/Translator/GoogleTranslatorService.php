@@ -54,7 +54,8 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * Constructor.
      *
-     * @throws ParameterNotFoundException if the Google key parameter is not defined
+     * @throws ParameterNotFoundException if the API key parameter is not defined
+     * @throws \InvalidArgumentException  if the API key is null or empty
      */
     public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter)
     {
@@ -168,7 +169,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
      */
     protected function doGetLanguages()
     {
-        $query = ['target' => self::getAcceptLanguage(true)];
+        $query = ['target' => self::getAcceptLanguage()];
         if (!$response = $this->get(self::URI_LANGUAGE, $query)) {
             return false;
         }

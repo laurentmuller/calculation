@@ -262,7 +262,7 @@ abstract class AbstractDatabase extends \SQLite3
      *
      * @param string $query the SQL query to prepare
      *
-     * @return \SQLite3Stmt the statement
+     * @return \SQLite3Stmt the statement object on success or false on failure
      */
     protected function getStatement(string $query): ?\SQLite3Stmt
     {

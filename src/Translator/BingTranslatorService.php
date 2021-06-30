@@ -60,7 +60,8 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * Constructor.
      *
-     * @throws ParameterNotFoundException if the Bing key parameter is not defined
+     * @throws ParameterNotFoundException if the API key parameter is not defined
+     * @throws \InvalidArgumentException  if the API key is null or empty
      */
     public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter)
     {
@@ -210,7 +211,7 @@ class BingTranslatorService extends AbstractTranslatorService
     protected function getDefaultOptions(): array
     {
         $headers = [
-            'Accept-language' => self::getAcceptLanguage(true),
+            'Accept-language' => self::getAcceptLanguage(),
             'Ocp-Apim-Subscription-Key' => $this->key,
             'X-ClientTraceId' => $this->createGUID(),
         ];

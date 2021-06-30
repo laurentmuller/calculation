@@ -10,11 +10,11 @@
 .ow-icon {
     width: 100px;
     text-align: center;
-    vertical-align: top;    
+    vertical-align: top;
 }
 
 .ow-temperature {
-    width: 150px;   
+    width: 150px;
 }
 
 .ow-temperature-pills {
@@ -26,20 +26,22 @@
 .ow-temperature-forecast {
     color: var(--white);
     background-color: var(--primary);
-} 
+}
 
 .ow-temperature-day {
     color: var(--white);
     background-color: var(--danger);
-} 
+}
 
 .ow-temperature-night {
     color: var(--white);
     background-color: var(--secondary);
-} 
+}
 
 .ow-table-responsive {
+    /*
     max-height: 285px;
     overflow-y: auto;
+    */
     margin: 0;
 }

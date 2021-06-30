@@ -254,7 +254,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     }
 
     /**
-     * Gets the minimum margin, in percent, for a calculation.
+     * Gets the minimum margin, in percent, for a calculation (default: 3.0 = 300%).
      */
     public function getMinMargin(): float
     {

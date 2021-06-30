@@ -12,12 +12,13 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\CacheTrait;
+use App\Traits\TranslatorTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to get IP lookup.
@@ -28,7 +29,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class IpStackService extends AbstractHttpClientService
 {
-    use CacheTrait;
+    use TranslatorTrait;
 
     /**
      * The host name.
@@ -41,85 +42,73 @@ class IpStackService extends AbstractHttpClientService
     private const PARAM_KEY = 'ip_stack_key';
 
     /**
-     * The API endpoint capable of detecting the IP address.
+     * The API endpoint for detecting the IP address.
      */
     private const URI_CHECK = 'check';
 
     /**
-     * The API key.
-     */
-    private string $key;
-
-    /**
      * Constructor.
      *
-     * @throws ParameterNotFoundException if the Ip Stack key parameter is not defined
+     * @throws ParameterNotFoundException if the API key parameter is not defined
+     * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter)
+    public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter, TranslatorInterface $translator)
     {
-        $this->key = $params->get(self::PARAM_KEY);
-        if (!$kernel->isDebug()) {
-            $this->adapter = $adapter;
-        }
+        parent::__construct($kernel, $adapter, $params->get(self::PARAM_KEY));
+        $this->translator = $translator;
     }
 
     /**
-     * Gets the API key.
-     */
-    public function getApiKey(): string
-    {
-        return $this->key;
-    }
-
-    /**
-     * Gets the IP information.
+     * Gets the IP informations.
      *
-     * @param Request $request the request to get client IP address
+     * @param Request $request the request to get client IP address or null for detecting the IP address
      *
-     * @return array|bool the current Ip information if success; false on error
+     * @return array the current Ip informations if success; null on error
      */
-    public function getIpInfo(?Request $request = null)
+    public function getIpInfo(?Request $request = null): ?array
     {
-        // request?
-        if (null === $request) {
-            $request = Request::createFromGlobals();
-        }
-
-        // get client Ip
-        $clientIp = $request->getClientIp();
-        if (null === $clientIp || '127.0.0.1' === $clientIp) {
-            $clientIp = self::URI_CHECK;
-        }
+        $clientIp = $this->getClientIp($request);
 
         // find from cache
-        $key = "IpStackService.$clientIp";
-        if ($result = $this->getCacheValue($key)) {
+        if ($result = $this->getUrlCacheValue($clientIp)) {
             return $result;
         }
 
-        $query = [
-            'access_key' => $this->key,
-            'language' => self::getAcceptLanguage(true),
-            'output' => 'json',
-        ];
+        try {
+            // parameters
+            $query = [
+                'output' => 'json',
+                'access_key' => $this->key,
+                'language' => self::getAcceptLanguage(),
+            ];
 
-        // call
-        $response = $this->requestGet($clientIp, [
-            self::QUERY => $query,
-        ]);
+            // call
+            $response = $this->requestGet($clientIp, [
+                self::QUERY => $query,
+            ]);
 
-        // decode
-        $result = $response->toArray(false);
+            // decode
+            $result = $response->toArray();
 
-        // check
-        if (!$result = $this->checkErrorCode($result)) {
-            return false;
+            // check
+            if (!$this->isValidResult($result)) {
+                return null;
+            }
+
+            // update region name
+            if (isset($result['region_name'])) {
+                $result['region_name'] = \ucfirst($result['region_name']);
+            }
+
+            // save to cache
+            $this->setUrlCacheValue($clientIp, $result);
+
+            return $result;
+        } catch (\Exception $e) {
+            $this->setLastError(404, $this->translateError('unknown'), $e);
         }
 
-        // save to cache
-        $this->setCacheValue($key, $result);
-
-        return $result;
+        return null;
     }
 
     /**
@@ -131,25 +120,43 @@ class IpStackService extends AbstractHttpClientService
     }
 
     /**
-     * Checks if the response contains an error.
-     *
-     * @param array $result the response to validate
-     *
-     * @return array|bool the result if no error found; false if an error
+     * Gets the client IP address for the given request.
      */
-    private function checkErrorCode(array $result)
+    private function getClientIp(?Request $request = null): string
+    {
+        if (null === $request) {
+            return self::URI_CHECK;
+        }
+
+        $clientIp = $request->getClientIp();
+        if (null === $clientIp || '127.0.0.1' === $clientIp) {
+            return self::URI_CHECK;
+        }
+
+        return $clientIp;
+    }
+
+    private function isValidResult(array $result): bool
     {
         if (isset($result['error'])) {
             $code = (int) ($result['code'] ?? 404);
-            $message = (string) ($result['type'] ?? 'unknown');
+            $id = (string) ($result['type'] ?? 'unknown');
 
-            return $this->setLastError($code, $message);
+            return $this->setLastError($code, $this->translateError($id));
         }
 
-        if ('' === (string) ($result['city'] ?? '')) {
-            return $this->setLastError(404, 'ip_not_found');
+        if (empty($result['city'] ?? '')) {
+            $code = (int) ($result['code'] ?? 404);
+            $id = 'ip_not_found';
+
+            return $this->setLastError($code, $this->translateError($id));
         }
 
-        return $result;
+        return true;
+    }
+
+    private function translateError(string $id): string
+    {
+        return $this->trans($id, [], 'ipstack');
     }
 }

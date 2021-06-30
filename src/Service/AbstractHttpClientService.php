@@ -12,10 +12,13 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\CacheTrait;
 use App\Util\Utils;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -28,6 +31,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 abstract class AbstractHttpClientService
 {
+    use CacheTrait;
+
     /**
      * The base URI parameter name.
      */
@@ -59,9 +64,31 @@ abstract class AbstractHttpClientService
     protected ?HttpClientInterface $client = null;
 
     /**
+     * The API key.
+     */
+    protected string $key;
+
+    /**
      * The last error.
      */
     protected ?array $lastError = null;
+
+    /**
+     * Constructor.
+     *
+     * @throws \InvalidArgumentException if the API key is null or empty
+     */
+    public function __construct(KernelInterface $kernel, AdapterInterface $adapter, string $key)
+    {
+        // check key
+        if (empty($key)) {
+            throw new \InvalidArgumentException('The API key is empty.');
+        }
+        if (!$kernel->isDebug()) {
+            $this->adapter = $adapter;
+        }
+        $this->key = $key;
+    }
 
     /**
      * Gets the language to use for user interface strings.
@@ -70,7 +97,7 @@ abstract class AbstractHttpClientService
      *
      * @return string the language
      */
-    public static function getAcceptLanguage(bool $languageOnly = false): string
+    public static function getAcceptLanguage(bool $languageOnly = true): string
     {
         $locale = \Locale::getDefault();
         if ($languageOnly) {
@@ -140,6 +167,35 @@ abstract class AbstractHttpClientService
     }
 
     /**
+     * Gets the value from this cache for the given URL.
+     *
+     * @param string         $url     The URL for which to return the corresponding value
+     * @param mixed|callable $default The default value to return or a callable function to get the defaule value.
+     *                                If the callable function returns a value, this value is saved to the cache.
+     *
+     * @return mixed the value, if found; the default otherwise
+     */
+    protected function getUrlCacheValue(string $url, $default = null)
+    {
+        $key = $this->getUrlKey($url);
+
+        return $this->getCacheValue($key, $default);
+    }
+
+    /**
+     * Gets the cache key for the given URL.
+     */
+    protected function getUrlKey(string $url): string
+    {
+        $options = $this->getDefaultOptions();
+        if (isset($options[self::BASE_URI])) {
+            return $options[self::BASE_URI] . $url;
+        }
+
+        return Utils::getShortName($this) . $url;
+    }
+
+    /**
      * Requests an HTTP resource.
      *
      * @param string $method  the method name ('GET', 'POST')
@@ -198,17 +254,35 @@ abstract class AbstractHttpClientService
     {
         if (null !== $e) {
             $this->lastError = [
+                'result' => false,
                 'code' => $code,
                 'message' => $message,
                 'exception' => Utils::getExceptionContext($e),
             ];
         } else {
             $this->lastError = [
+                'result' => false,
                 'code' => $code,
                 'message' => $message,
             ];
         }
 
         return false;
+    }
+
+    /**
+     * Save the given value to the cache for the given URL.
+     *
+     * @param string                 $url   The URL for which to save the value
+     * @param mixed                  $value The value to save. If null, the key item is removed.
+     * @param int|\DateInterval|null $time  The period of time from the present after which the item must be considered
+     *                                      expired. An integer parameter is understood to be the time in seconds until
+     *                                      expiration. If null is passed, a default value (60 minutes) is used.
+     */
+    protected function setUrlCacheValue(string $url, $value, $time = null): self
+    {
+        $key = $this->getUrlKey($url);
+
+        return $this->setCacheValue($key, $value, $time);
     }
 }

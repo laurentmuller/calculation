@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\CacheTrait;
 use App\Traits\TranslatorTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
@@ -30,13 +29,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ExchangeRateService extends AbstractHttpClientService
 {
-    use CacheTrait;
     use TranslatorTrait;
 
     /**
      * The host name.
      */
-    private const HOST_NAME = 'https://v6.exchangerate-api.com/v6/';
+    private const HOST_NAME = 'https://v6.exchangerate-api.com/v6/%s/';
 
     /**
      * The parameter name for the API key.
@@ -49,22 +47,36 @@ class ExchangeRateService extends AbstractHttpClientService
     private const RESPONSE_SUCCESS = 'success';
 
     /**
-     * The API key.
+     * The URI for supported currency codes.
      */
-    private string $key;
+    private const URI_CODES = 'codes';
+
+    /**
+     * The URI for latest exchange rates.
+     */
+    private const URI_LATEST = 'latest/%s';
+
+    /**
+     * The URI for exchange rate.
+     */
+    private const URI_RATE = 'pair/%s/%s';
+
+    /**
+     * The base URI.
+     */
+    private string $endpoint;
 
     /**
      * Constructor.
      *
-     * @throws ParameterNotFoundException if the API key is not found
+     * @throws ParameterNotFoundException if the API key is not defined
+     * @throws \InvalidArgumentException  if the API key is null or empty
      */
     public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter, TranslatorInterface $translator)
     {
-        $this->key = $params->get(self::PARAM_KEY);
+        parent::__construct($kernel, $adapter, $params->get(self::PARAM_KEY));
+        $this->endpoint = \sprintf(self::HOST_NAME, $this->key);
         $this->translator = $translator;
-        if (!$kernel->isDebug()) {
-            $this->adapter = $adapter;
-        }
     }
 
     /**
@@ -77,10 +89,9 @@ class ExchangeRateService extends AbstractHttpClientService
      */
     public function getLatest(string $code): array
     {
-        $code = \strtoupper($code);
-        $url = $this->getUrl("/latest/$code");
+        $url = \sprintf(self::URI_LATEST, \strtoupper($code));
 
-        if ($response = $this->getCacheValue($url)) {
+        if ($response = $this->getUrlCacheValue($url)) {
             return $response;
         }
 
@@ -88,7 +99,7 @@ class ExchangeRateService extends AbstractHttpClientService
             $rates = (array) ($response['conversion_rates'] ?? []);
             if (!empty($rates)) {
                 $time = $this->getDeltaTime($response);
-                $this->setCacheValue($url, $rates, $time);
+                $this->setUrlCacheValue($url, $rates, $time);
 
                 return $rates;
             }
@@ -107,11 +118,8 @@ class ExchangeRateService extends AbstractHttpClientService
      */
     public function getRate(string $baseCode, string $targetCode): float
     {
-        $sourceCode = \strtoupper($baseCode);
-        $targetCode = \strtoupper($targetCode);
-        $url = $this->getUrl("/pair/$sourceCode/$targetCode");
-
-        if ($response = $this->getCacheValue($url)) {
+        $url = \sprintf(self::URI_RATE, \strtoupper($baseCode), \strtoupper($targetCode));
+        if ($response = $this->getUrlCacheValue($url)) {
             return $response;
         }
 
@@ -119,7 +127,7 @@ class ExchangeRateService extends AbstractHttpClientService
             $rate = (float) ($response['conversion_rate'] ?? 0.0);
             if (!empty($rate)) {
                 $time = $this->getDeltaTime($response);
-                $this->setCacheValue($url, $rate, $time);
+                $this->setUrlCacheValue($url, $rate, $time);
 
                 return $rate;
             }
@@ -129,7 +137,7 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * Gets the exchange rate and last update date from the base curreny code to the target currency code.
+     * Gets the exchange rate, last and next update dates from the base curreny code to the target currency code.
      *
      * @param string $baseCode   the base curreny code
      * @param string $targetCode the target curreny code
@@ -138,12 +146,8 @@ class ExchangeRateService extends AbstractHttpClientService
      */
     public function getRateAndDates(string $baseCode, string $targetCode): ?array
     {
-        $sourceCode = \strtoupper($baseCode);
-        $targetCode = \strtoupper($targetCode);
-        $url = $this->getUrl("/pair/$sourceCode/$targetCode");
-        $key = "$url/dates";
-
-        if ($response = $this->getCacheValue($key)) {
+        $url = \sprintf(self::URI_RATE, \strtoupper($baseCode), \strtoupper($targetCode));
+        if ($response = $this->getUrlCacheValue($url)) {
             return $response;
         }
 
@@ -157,7 +161,7 @@ class ExchangeRateService extends AbstractHttpClientService
                 ];
 
                 $time = $this->getDeltaTime($response);
-                $this->setCacheValue($key, $result, $time);
+                $this->setUrlCacheValue($url, $result, $time);
 
                 return $result;
             }
@@ -174,8 +178,8 @@ class ExchangeRateService extends AbstractHttpClientService
      */
     public function getSupportedCodes(): array
     {
-        $url = $this->getUrl('/codes');
-        if ($response = $this->getCacheValue($url)) {
+        $url = self::URI_CODES;
+        if ($response = $this->getUrlCacheValue($url)) {
             return $response;
         }
 
@@ -184,13 +188,21 @@ class ExchangeRateService extends AbstractHttpClientService
             if (!empty($codes)) {
                 $codes = $this->mapCodes($codes);
                 $time = $this->getDeltaTime($response);
-                $this->setCacheValue($url, $codes, $time);
+                $this->setUrlCacheValue($url, $codes, $time);
 
                 return $codes;
             }
         }
 
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultOptions(): array
+    {
+        return [self::BASE_URI => $this->endpoint];
     }
 
     private function getDeltaTime(array $response): ?int
@@ -216,9 +228,9 @@ class ExchangeRateService extends AbstractHttpClientService
     private function getResponse(string $url): ?array
     {
         try {
-            $response = $this->requestGet($url)->toArray();
-            if ($this->validateResponse($response)) {
-                return $response;
+            $result = $this->requestGet($url)->toArray();
+            if ($this->isValidResult($result)) {
+                return $result;
             }
         } catch (\Exception $e) {
             $this->setLastError(404, $this->translateError('unknown'), $e);
@@ -234,9 +246,18 @@ class ExchangeRateService extends AbstractHttpClientService
         return 0 !== $time ? $time : null;
     }
 
-    private function getUrl(string $endPoint): string
+    private function isValidResult(array $result): bool
     {
-        return self::HOST_NAME . $this->key . $endPoint;
+        $result = $result['result'] ?? 'unknown';
+        if (self::RESPONSE_SUCCESS === $result) {
+            return true;
+        }
+
+        // error
+        $error = $result['error-type'] ?? 'unknown';
+        $this->setLastError(404, $this->translateError($error));
+
+        return false;
     }
 
     private function mapCodes(array $codes): array
@@ -268,19 +289,5 @@ class ExchangeRateService extends AbstractHttpClientService
     private function translateError(string $id): string
     {
         return $this->trans($id, [], 'exchangerate');
-    }
-
-    private function validateResponse(array $response): bool
-    {
-        $result = $response['result'] ?? 'unknown';
-        if (self::RESPONSE_SUCCESS === $result) {
-            return true;
-        }
-
-        // error
-        $error = $response['error-type'] ?? 'unknown';
-        $this->setLastError(404, $this->translateError($error));
-
-        return false;
     }
 }

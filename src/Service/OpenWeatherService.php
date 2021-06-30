@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
-use App\Traits\CacheTrait;
 use App\Util\FormatUtils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
@@ -32,8 +31,6 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
  */
 class OpenWeatherService extends AbstractHttpClientService
 {
-    use CacheTrait;
-
     /**
      * The database name.
      */
@@ -193,22 +190,15 @@ class OpenWeatherService extends AbstractHttpClientService
     private string $dataDirectory;
 
     /**
-     * The API key.
-     */
-    private string $key;
-
-    /**
      * Constructor.
      *
-     * @throws ParameterNotFoundException if the OpenWeather key parameter is not defined
+     * @throws ParameterNotFoundException if the API key parameter is not defined
+     * @throws \InvalidArgumentException  if the API key is null or empty
      */
     public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter)
     {
-        $this->key = $params->get(self::PARAM_KEY);
+        parent::__construct($kernel, $adapter, $params->get(self::PARAM_KEY));
         $this->dataDirectory = $kernel->getProjectDir() . self::DATA_PATH;
-        if (!$kernel->isDebug()) {
-            $this->adapter = $adapter;
-        }
     }
 
     /**
@@ -280,14 +270,6 @@ class OpenWeatherService extends AbstractHttpClientService
         }
 
         return $result;
-    }
-
-    /**
-     * Gets the API key.
-     */
-    public function getApiKey(): string
-    {
-        return $this->key;
     }
 
     /**
@@ -492,15 +474,15 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     private function get(string $uri, array $query = [])
     {
-        // add API key and language
-        $query['appid'] = $this->key;
-        $query['lang'] = self::getAcceptLanguage(true);
-
         // find from cache
         $key = $this->getCacheKey($uri, $query);
         if ($result = $this->getCacheValue($key)) {
             return $result;
         }
+
+        // add API key and language
+        $query['appid'] = $this->key;
+        $query['lang'] = self::getAcceptLanguage();
 
         // call
         $response = $this->requestGet($uri, [
@@ -528,13 +510,11 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Gets the cache key for the given uri and query.
+     * Gets the cache key for the given uri and query parameters.
      */
     private function getCacheKey(string $uri, array $query): string
     {
-        $key = $uri . '?' . \http_build_query($query);
-
-        return $this->cleanKey($key);
+        return $uri . '?' . \http_build_query($query);
     }
 
     /**

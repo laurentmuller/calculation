@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\CacheTrait;
 use App\Traits\TranslatorTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
@@ -33,8 +32,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class AkismetService extends AbstractHttpClientService
 {
-    use CacheTrait;
     use TranslatorTrait;
+
+    /**
+     * The host name.
+     */
+    private const HOST_NAME = 'https://%s.rest.akismet.com/1.1/';
 
     /**
      * The parameter name for the API key.
@@ -72,14 +75,9 @@ class AkismetService extends AbstractHttpClientService
     private const VALUE_VALID = 'valid';
 
     /**
-     * The end point.
+     * The base URI.
      */
     private string $endpoint;
-
-    /**
-     * The API key.
-     */
-    private string $key;
 
     /**
      * The security to get user informations.
@@ -95,17 +93,15 @@ class AkismetService extends AbstractHttpClientService
      * Constructor.
      *
      * @throws ParameterNotFoundException if the API key parameter is not defined
+     * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, RequestStack $stack, Security $security, TranslatorInterface $translator, KernelInterface $kernel, AdapterInterface $adapter)
+    public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter, RequestStack $stack, Security $security, TranslatorInterface $translator)
     {
-        $this->key = $params->get(self::PARAM_KEY);
-        $this->endpoint = \sprintf('https://%s.rest.akismet.com/1.1/', $this->key);
+        parent::__construct($kernel, $adapter, $params->get(self::PARAM_KEY));
+        $this->endpoint = \sprintf(self::HOST_NAME, $this->key);
         $this->stack = $stack;
         $this->security = $security;
         $this->translator = $translator;
-        if (!$kernel->isDebug()) {
-            $this->adapter = $adapter;
-        }
     }
 
     /**
@@ -205,7 +201,7 @@ class AkismetService extends AbstractHttpClientService
     public function verifyKey(): bool
     {
         // already saved?
-        $verified = $this->getCacheValue(self::URI_VERIFY);
+        $verified = $this->getUrlCacheValue(self::URI_VERIFY);
         if (\is_bool($verified)) {
             return $verified;
         }
@@ -227,7 +223,7 @@ class AkismetService extends AbstractHttpClientService
             }
 
             $verified = self::VALUE_VALID === $response->getContent();
-            $this->setCacheValue(self::URI_VERIFY, $verified);
+            $this->setUrlCacheValue(self::URI_VERIFY, $verified);
 
             return $verified;
         }

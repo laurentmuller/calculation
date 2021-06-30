@@ -138,9 +138,6 @@ trait CacheTrait
      *                                If the callable function returns a value, this value is saved to the cache.
      *
      * @return mixed the value, if found; the default otherwise
-     *
-     * @throws \InvalidArgumentException
-     *                                   If the $key string is not a legal value
      */
     public function getCacheValue(string $key, $default = null)
     {
@@ -175,9 +172,6 @@ trait CacheTrait
      * @param int|\DateInterval|null $time  The period of time from the present after which the item must be considered
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, a default value (60 minutes) is used.
-     *
-     * @throws \InvalidArgumentException
-     *                                   If the $key string is not a legal value
      */
     public function setCacheValue(string $key, $value, $time = null): self
     {

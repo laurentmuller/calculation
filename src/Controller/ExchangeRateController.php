@@ -50,8 +50,8 @@ class ExchangeRateController extends AbstractController
      */
     public function display(): Response
     {
-        return $this->render('test/exchangerate.html.twig', [
-            'form' => $this->getForm()->createView(),
+        return $this->renderForm('test/exchangerate.html.twig', [
+            'form' => $this->getForm(),
             'codes' => $this->service->getSupportedCodes(),
         ]);
     }

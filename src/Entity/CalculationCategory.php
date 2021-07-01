@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Traits\PositionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +28,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CalculationCategory extends AbstractEntity implements \Countable
 {
+    use PositionTrait;
+
     /**
      * The total amount.
      *
@@ -63,6 +66,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * The calculation items.
      *
      * @ORM\OneToMany(targetEntity=CalculationItem::class, mappedBy="category", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
      * @Assert\Valid
      *
      * @var Collection|CalculationItem[]
@@ -232,6 +236,8 @@ class CalculationCategory extends AbstractEntity implements \Countable
             if ($item->getCategory() === $this) {
                 $item->setCategory(null);
             }
+
+            return $this->updatePositions();
         }
 
         return $this;
@@ -298,31 +304,25 @@ class CalculationCategory extends AbstractEntity implements \Countable
             return false;
         }
 
-        $iterator = $this->items->getIterator();
+        // sort
+        $items = $this->items->toArray();
+        \uasort($items, static function (CalculationItem $a, CalculationItem $b): int {
+            return \strcasecmp($a->getDescription(), $b->getDescription());
+        });
 
-        // first sort
-        $changed = $this->sortIterator($iterator);
+        $position = 0;
+        $changed = false;
 
-        // sort until no change found
-        if ($changed) {
-            do {
-                $dirty = $this->sortIterator($iterator);
-            } while ($dirty);
+        /** @var CalculationItem $item */
+        foreach ($items as $item) {
+            if ($position !== $item->getPosition()) {
+                $item->setPosition($position);
+                $changed = true;
+            }
+            ++$position;
         }
 
         return $changed;
-    }
-
-    /**
-     * Swaps the identifiers.
-     *
-     * @param CalculationCategory $other the other item to swap identifier for
-     */
-    public function swapIds(self $other): void
-    {
-        $oldId = $this->id;
-        $this->id = $other->id;
-        $other->id = $oldId;
     }
 
     /**
@@ -341,25 +341,20 @@ class CalculationCategory extends AbstractEntity implements \Countable
     }
 
     /**
-     * Sorts items of the given iterator.
-     *
-     * @param mixed $iterator the iterator to sort
-     *
-     * @return bool true if sort changed the order
-     *
-     * @see \ArrayIterator::uasort
+     * Update position of items.
      */
-    private function sortIterator($iterator): bool
+    public function updatePositions(): self
     {
-        $changed = false;
-        $iterator->uasort(function (CalculationItem $a, CalculationItem $b) use (&$changed): void {
-            $result = \strcasecmp($a->getDescription(), $b->getDescription());
-            if ($result > 0) {
-                $b->swapValues($a);
-                $changed = true;
-            }
-        });
+        $position = 0;
 
-        return $changed;
+        /** @var CalculationItem $item */
+        foreach ($this->items as $item) {
+            if ($item->getPosition() !== $position) {
+                $item->setPosition($position);
+            }
+            ++$position;
+        }
+
+        return $this;
     }
 }

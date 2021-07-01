@@ -779,7 +779,7 @@ translator:
     service_label: Service
     result_label: Résultat
     detect_label: 'Langue détectée : %name%'
-    exchange_label: Inverser
+    swap_label: Inverser
     auto_detect: Détecter la langue
     submit_text: Traduire
     copy_sucess: La traduction du texte a été copiée avec succès dans le presse-papiers.
@@ -1189,7 +1189,7 @@ exchangerate:
     description: Choisissez les devises et le montant pour obtenir le taux de change.
     last_update: 'Dernière mise à jour : %date%'
     next_update: 'Prochaine mise à jour : %date%'
-    swap_label: Inverser les devises
+    swap_label: Inverser
     source: Devise locale
     target: Devise étrangère
     amount: Montant

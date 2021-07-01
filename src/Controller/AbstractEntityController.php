@@ -120,7 +120,7 @@ abstract class AbstractEntityController extends AbstractController
                 $failure = Utils::getArrayValue($parameters, 'failure', 'common.delete_failure');
                 $parameters['failure'] = $this->trans($failure, ['%name%' => $display]);
 
-                return $this->render('@Twig/Exception/exception.html.twig', $parameters);
+                return $this->renderForm('@Twig/Exception/exception.html.twig', $parameters);
             }
 
             // redirect
@@ -138,11 +138,11 @@ abstract class AbstractEntityController extends AbstractController
         // update parameters
         $parameters['title'] = $title;
         $parameters['message'] = $message;
-        $parameters['form'] = $form->createView();
+        $parameters['form'] = $form;
         $this->updateQueryParameters($request, $parameters, $item->getId());
 
         // show page
-        return $this->render('cards/card_delete.html.twig', $parameters);
+        return $this->renderForm('cards/card_delete.html.twig', $parameters);
     }
 
     /**
@@ -208,11 +208,11 @@ abstract class AbstractEntityController extends AbstractController
         // update parameters
         $parameters['new'] = $isNew;
         $parameters['item'] = $item;
-        $parameters['form'] = $form->createView();
+        $parameters['form'] = $form;
         $this->updateQueryParameters($request, $parameters, (int) $item->getId());
 
         // show form
-        return $this->render($this->getEditTemplate(), $parameters);
+        return $this->renderForm($this->getEditTemplate(), $parameters);
     }
 
     /**
@@ -361,7 +361,7 @@ abstract class AbstractEntityController extends AbstractController
             'sortFields' => $sortFields,
         ], $parameters);
 
-        return $this->render($this->getCardTemplate(), $parameters);
+        return $this->renderForm($this->getCardTemplate(), $parameters);
     }
 
     /**
@@ -413,7 +413,7 @@ abstract class AbstractEntityController extends AbstractController
             'columns' => $table->getColumns(),
         ];
 
-        return $this->render($this->getTableTemplate(), $parameters);
+        return $this->renderForm($this->getTableTemplate(), $parameters);
     }
 
     /**
@@ -449,7 +449,7 @@ abstract class AbstractEntityController extends AbstractController
         $parameters['item'] = $item;
 
         // render
-        return $this->render($this->getShowTemplate(), $parameters);
+        return $this->renderForm($this->getShowTemplate(), $parameters);
     }
 
     /**

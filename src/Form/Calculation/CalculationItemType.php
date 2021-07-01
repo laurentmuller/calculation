@@ -42,6 +42,10 @@ class CalculationItemType extends AbstractEntityType
             ->field('unit')->addHiddenType()
             ->field('price')->addHiddenType()
             ->field('quantity')->addHiddenType()
-            ->field('total')->disabled()->addHiddenType();
+            ->field('position')->addHiddenType();
+
+        $helper->field('total')
+            ->disabled()
+            ->addHiddenType();
     }
 }

@@ -48,7 +48,7 @@ class LogController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        return $this->render('log/log_card.html.twig', (array) $entries);
+        return $this->renderForm('log/log_card.html.twig', (array) $entries);
     }
 
     /**
@@ -102,7 +102,7 @@ class LogController extends AbstractController
                 $message = $this->trans('log.delete.error');
                 $logger->error($message, ['file' => $file]);
 
-                return $this->render('@Twig/Exception/exception.html.twig', [
+                return $this->renderForm('@Twig/Exception/exception.html.twig', [
                         'message' => $message,
                         'exception' => $e,
                     ]);
@@ -118,14 +118,14 @@ class LogController extends AbstractController
 
         $parameters = [
             'route' => $request->get('route'),
-            'form' => $form->createView(),
+            'form' => $form,
             'file' => $file,
             'size' => SymfonyUtils::formatFileSize($file),
             'entries' => SymfonyUtils::getLines($file),
         ];
 
         // display
-        return $this->render('log/log_delete.html.twig', $parameters);
+        return $this->renderForm('log/log_delete.html.twig', $parameters);
     }
 
     /**
@@ -193,7 +193,7 @@ class LogController extends AbstractController
             return $this->redirectToRoute($route);
         }
 
-        return $this->render('log/log_show.html.twig', ['item' => $item]);
+        return $this->renderForm('log/log_show.html.twig', ['item' => $item]);
     }
 
     /**
@@ -224,7 +224,7 @@ class LogController extends AbstractController
             'levels' => $table->getLevels(),
         ];
 
-        return $this->render('log/log_table.html.twig', $parameters);
+        return $this->renderForm('log/log_table.html.twig', $parameters);
     }
 
     /**

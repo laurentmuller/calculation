@@ -5,7 +5,7 @@
 /**
  * -------------- The type ahead search helper --------------
  */
-var SearchHelper = {
+const SearchHelper = {
 
     /**
      * Initialize type ahead searches.
@@ -92,137 +92,9 @@ var SearchHelper = {
 };
 
 /**
- * -------------- The move rows handler --------------
- */
-var MoveRowHandler = {
-
-    /**
-     * Initialize.
-     */
-    init: function () {
-        'use strict';
-
-        const that = this;
-        $('#data-table-edit').on('click', '.btn-first-item', function (e) {
-            e.preventDefault();
-            that.moveFirst($(this).getParentRow());
-        }).on('click', '.btn-up-item', function (e) {
-            e.preventDefault();
-            that.moveUp($(this).getParentRow());
-        }).on('click', '.btn-down-item', function (e) {
-            e.preventDefault();
-            that.moveDown($(this).getParentRow());
-        }).on('click', '.btn-last-item', function (e) {
-            e.preventDefault();
-            that.moveLast($(this).getParentRow());
-        });
-    },
-
-    /**
-     * Move a source row before or after the target row.
-     *
-     * @param {jQuery}
-     *            $source - the row to move.
-     * @param {jQuery}
-     *            $target - the target row.
-     * @param {boolean}
-     *            up - true to move before the target (up); false to move after
-     *            (down).
-     * @return {jQuery} - The moved row.
-     */
-    move: function ($source, $target, up) {
-        'use strict';
-
-        if ($source && $target) {
-            if (up) {
-                $source.insertBefore($target);
-            } else {
-                $source.insertAfter($target);
-            }
-            $source.swapIdAndNames($target).scrollInViewport().timeoutToggle('table-success');
-        }
-        return $source;
-    },
-
-    /**
-     * Move a calculation item to the first position.
-     *
-     * @param {jQuery}
-     *            $row - the row to move.
-     * @return {jQuery} - The parent row.
-     */
-    moveFirst: function ($row) {
-        'use strict';
-
-        const index = $row.index();
-        if (index > 1 && $row.prev()) {
-            const $target = $row.siblings(':nth-child(2)');
-            return this.move($row, $target, true);
-        }
-        return $row;
-    },
-
-    /**
-     * Move a calculation item to the last position.
-     *
-     * @param {jQuery}
-     *            $row - the row to move.
-     * @return {jQuery} - The parent row.
-     */
-    moveLast: function ($row) {
-        'use strict';
-
-        const index = $row.index();
-        const count = $row.siblings().length;
-        if (index < count && $row.next()) {
-            const $target = $row.siblings(':last');
-            return this.move($row, $target, false);
-        }
-        return $row;
-    },
-
-    /**
-     * Move up a calculation item.
-     *
-     * @param {jQuery}
-     *            $row - the row to move.
-     * @return {jQuery} - The parent row.
-     */
-    moveUp: function ($row) {
-        'use strict';
-
-        const index = $row.index();
-        if (index > 1 && $row.prev()) {
-            const $target = $row.prev();
-            return this.move($row, $target, true);
-        }
-        return $row;
-    },
-
-    /**
-     * Move down a calculation item.
-     *
-     * @param {jQuery}
-     *            $row - the row to move.
-     * @return {jQuery} - The parent row.
-     */
-    moveDown: function ($row) {
-        'use strict';
-
-        const index = $row.index();
-        const count = $row.siblings().length;
-        if (index < count && $row.next()) {
-            const $target = $row.next();
-            return this.move($row, $target, false);
-        }
-        return $row;
-    }
-};
-
-/**
  * -------------- The Application handler --------------
  */
-var Application = {
+const Application = {
 
     /**
      * Initialize application.
@@ -475,7 +347,11 @@ var Application = {
      */
     updateAll: function() {
         'use strict';
-        return this.updateButtons().updateTotals().initDragDrop(true);
+        this.updatePositions();
+        this.updateButtons();
+        this.updateTotals();
+        this.initDragDrop(true);
+        return this;
     },
 
     /**
@@ -741,11 +617,6 @@ var Application = {
             return that;
         }
 
-        // save identifiers
-        const identifiers = $rows.map(function() {
-            return $(this).inputIndex();
-        });
-
         // sort
         $rows.sort(function (rowA, rowB) {
             const textA = $('td:first', rowA).text();
@@ -753,20 +624,8 @@ var Application = {
             return that.compareStrings(textA, textB);
         }).appendTo($tbody);
 
-        // update identifiers
-        $rows.each(function(index) {
-            const $row = $(this);
-            const oldId = $row.inputIndex();
-            const newId = identifiers[index];
-            if (oldId !== newId) {
-                $rows.filter(function() {
-                    return newId === $(this).inputIndex();
-                }).swapIdAndNames($row);
-            }
-        });
-
         // update UI
-        return that.updateButtons().initDragDrop(true);
+        return that.updateButtons().updatePositions().initDragDrop(true);
     },
 
     /**
@@ -1225,14 +1084,6 @@ var Application = {
             const $newRow = $newBody.appendRow(item);
             $row.replaceWith($newRow);
 
-            // swap ids and names
-            const rows = $newBody.children();
-            for (let i = destination.index + 2, len = rows.length; i < len; i++) {
-                const $source = $(rows[i - 1]);
-                const $target = $(rows[i]);
-                $source.swapIdAndNames($target);
-            }
-
             // remove old category if empty
             const $oldBody = $(origin.container);
             if ($oldBody.children().length === 1) {
@@ -1246,8 +1097,7 @@ var Application = {
             // -----------------------------
             // Moved to a new position
             // -----------------------------
-            const $target = origin.index < destination.index ? $row.prev() : $row.next();
-            $row.swapIdAndNames($target).timeoutToggle('table-success');
+            that.updateButtons().updatePositions();
         } else {
             // -----------------------------
             // No change
@@ -1255,6 +1105,40 @@ var Application = {
             $row.timeoutToggle('table-success');
         }
     },
+
+
+    /**
+     * Update positions of groups, categories and items.
+     *
+     * @return {Application} This instance for chaining.
+     */
+    updatePositions: function () {
+        'use strict';
+        const that = this;
+
+        // groups
+        const $groups = $('#data-table-edit thead');
+        $groups.each(function (i, element) {
+            const $group = $(element);
+            $group.findNamedInput('position').val(i);
+
+            // categories
+            const $categories = $group.nextUntil('thead').find('tr:first');
+            $categories.each(function (i, element) {
+                const $category = $(element);
+                $category.findNamedInput('position').val(i);
+
+                // items
+                const $items = $category.parents('tbody').find('tr:not(:first)');
+                $items.each(function (i, element) {
+                    const $item = $(element);
+                    $item.findNamedInput('position').val(i);
+                });
+            });
+        });
+
+        return that;
+    }
 };
 
 /**
@@ -1274,43 +1158,6 @@ $.fn.extend({
         const values = $input.attr('id').split('_');
         const value = Number.parseInt(values[values.length - 2], 10);
         return isNaN(value) ? - 1 : value;
-    },
-
-    /**
-     * Swap id and name input attributes.
-     *
-     * @param {jQuery}
-     *            $target - the target row.
-     * @return {jQuery} - The jQuery source row.
-     */
-    swapIdAndNames: function ($target) {
-        'use strict';
-
-        // get inputs
-        const $source = $(this);
-        const sourceInputs = $source.find('input');
-        const targetInputs = $target.find('input');
-
-        for (let i = 0, len = sourceInputs.length; i < len; i++) {
-            // get source attributes
-            const $sourceInput = $(sourceInputs[i]);
-            const sourceId = $sourceInput.attr('id');
-            const sourceName = $sourceInput.attr('name');
-
-            // get target attributes
-            const $targetInput = $(targetInputs[i]);
-            const targetId = $targetInput.attr('id');
-            const targetName = $targetInput.attr('name');
-
-            // swap
-            $targetInput.attr('id', sourceId).attr('name', sourceName);
-            $sourceInput.attr('id', targetId).attr('name', targetName);
-        }
-
-        // update
-        Application.updateButtons();
-
-        return $source;
     },
 
     /**
@@ -1496,7 +1343,6 @@ $.fn.extend({
      */
     getParentRow: function () {
         'use strict';
-
         return $(this).parents('tr:first');
     },
 
@@ -1507,11 +1353,140 @@ $.fn.extend({
      */
     getContextMenuItems: function () {
         'use strict';
-
         const $elements = $(this).getParentRow().find('.dropdown-menu').children();
         return (new MenuBuilder()).fill($elements).getItems();
     }
 });
+
+/**
+ * -------------- The move rows handler --------------
+ */
+const MoveRowHandler = {
+
+    /**
+     * Initialize.
+     */
+    init: function () {
+        'use strict';
+
+        const that = this;
+        $('#data-table-edit').on('click', '.btn-first-item', function (e) {
+            e.preventDefault();
+            that.moveFirst($(this).getParentRow());
+        }).on('click', '.btn-up-item', function (e) {
+            e.preventDefault();
+            that.moveUp($(this).getParentRow());
+        }).on('click', '.btn-down-item', function (e) {
+            e.preventDefault();
+            that.moveDown($(this).getParentRow());
+        }).on('click', '.btn-last-item', function (e) {
+            e.preventDefault();
+            that.moveLast($(this).getParentRow());
+        });
+    },
+
+    /**
+     * Move a source row before or after the target row.
+     *
+     * @param {jQuery}
+     *            $source - the row to move.
+     * @param {jQuery}
+     *            $target - the target row.
+     * @param {boolean}
+     *            up - true to move before the target (up); false to move after
+     *            (down).
+     * @return {jQuery} - The moved row.
+     */
+    move: function ($source, $target, up) {
+        'use strict';
+
+        if ($source && $target) {
+            if (up) {
+                $source.insertBefore($target);
+            } else {
+                $source.insertAfter($target);
+            }
+            // $source.swapIdAndNames($target).scrollInViewport().timeoutToggle('table-success');
+            $source.scrollInViewport().timeoutToggle('table-success');
+            Application.updateButtons().updatePositions();
+        }
+        return $source;
+    },
+
+    /**
+     * Move a calculation item to the first position.
+     *
+     * @param {jQuery}
+     *            $row - the row to move.
+     * @return {jQuery} - The parent row.
+     */
+    moveFirst: function ($row) {
+        'use strict';
+
+        const index = $row.index();
+        if (index > 1 && $row.prev()) {
+            const $target = $row.siblings(':nth-child(2)');
+            return this.move($row, $target, true);
+        }
+        return $row;
+    },
+
+    /**
+     * Move a calculation item to the last position.
+     *
+     * @param {jQuery}
+     *            $row - the row to move.
+     * @return {jQuery} - The parent row.
+     */
+    moveLast: function ($row) {
+        'use strict';
+
+        const index = $row.index();
+        const count = $row.siblings().length;
+        if (index < count && $row.next()) {
+            const $target = $row.siblings(':last');
+            return this.move($row, $target, false);
+        }
+        return $row;
+    },
+
+    /**
+     * Move up a calculation item.
+     *
+     * @param {jQuery}
+     *            $row - the row to move.
+     * @return {jQuery} - The parent row.
+     */
+    moveUp: function ($row) {
+        'use strict';
+
+        const index = $row.index();
+        if (index > 1 && $row.prev()) {
+            const $target = $row.prev();
+            return this.move($row, $target, true);
+        }
+        return $row;
+    },
+
+    /**
+     * Move down a calculation item.
+     *
+     * @param {jQuery}
+     *            $row - the row to move.
+     * @return {jQuery} - The parent row.
+     */
+    moveDown: function ($row) {
+        'use strict';
+
+        const index = $row.index();
+        const count = $row.siblings().length;
+        if (index < count && $row.next()) {
+            const $target = $row.next();
+            return this.move($row, $target, false);
+        }
+        return $row;
+    }
+};
 
 /**
  * Ready function

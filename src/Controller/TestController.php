@@ -81,7 +81,7 @@ class TestController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        return $this->render('test/flex.html.twig', [
+        return $this->renderForm('test/flex.html.twig', [
             'items' => $items,
         ]);
     }
@@ -137,7 +137,7 @@ class TestController extends AbstractController
             'subtitle' => $application->isMessageSubTitle(),
         ];
 
-        return $this->render('test/notification.html.twig', $data);
+        return $this->renderForm('test/notification.html.twig', $data);
     }
 
     /**
@@ -230,8 +230,8 @@ class TestController extends AbstractController
                 ->redirectToHomePage();
         }
 
-        return $this->render('test/password.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('test/password.html.twig', [
+            'form' => $form,
         ]);
     }
 
@@ -312,8 +312,8 @@ class TestController extends AbstractController
             }
         }
 
-        return $this->render('test/recaptcha.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('test/recaptcha.html.twig', [
+            'form' => $form,
             'recaptcha_action' => $recaptcha_action,
         ]);
     }
@@ -368,15 +368,15 @@ class TestController extends AbstractController
                     'file' => $e->getFile() . ':' . $e->getLine(),
                 ]);
 
-                return $this->render('@Twig/Exception/exception.html.twig', [
+                return $this->renderForm('@Twig/Exception/exception.html.twig', [
                     'message' => $message,
                     'exception' => $e,
                 ]);
             }
         }
 
-        return $this->render('test/simpleeditor.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('test/simpleeditor.html.twig', [
+            'form' => $form,
         ]);
     }
 
@@ -461,7 +461,7 @@ class TestController extends AbstractController
             'data' => $data,
         ];
 
-        return $this->render('test/timeline.html.twig', $parameters);
+        return $this->renderForm('test/timeline.html.twig', $parameters);
     }
 
     /**
@@ -496,8 +496,8 @@ class TestController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        return $this->render('test/tinymce.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('test/tinymce.html.twig', [
+            'form' => $form,
         ]);
     }
 
@@ -570,7 +570,7 @@ class TestController extends AbstractController
 
         // form and parameters
         $parameters = [
-            'form' => $this->getForm()->createView(),
+            'form' => $this->getForm(),
             'language' => AbstractHttpClientService::getAcceptLanguage(),
             'languages' => $languages,
             'services' => $factory->getServices(),
@@ -579,7 +579,7 @@ class TestController extends AbstractController
             'error' => $error,
         ];
 
-        return $this->render('test/translate.html.twig', $parameters);
+        return $this->renderForm('test/translate.html.twig', $parameters);
     }
 
     /**
@@ -630,7 +630,7 @@ class TestController extends AbstractController
             return new JsonResponse([$root]);
         }
 
-        return $this->render('test/treeview.html.twig', [
+        return $this->renderForm('test/treeview.html.twig', [
             'countries' => Countries::getNames(),
         ]);
     }

@@ -75,7 +75,7 @@ class CalculationEmptyController extends AbstractController
             'sortFields' => [],
         ];
 
-        return $this->render('calculation/calculation_card_empty.html.twig', $parameters);
+        return $this->renderForm('calculation/calculation_card_empty.html.twig', $parameters);
     }
 
     /**
@@ -154,7 +154,7 @@ class CalculationEmptyController extends AbstractController
             'columns' => $table->getColumns(),
         ];
 
-        return $this->render('calculation/calculation_table_empty.html.twig', $parameters);
+        return $this->renderForm('calculation/calculation_table_empty.html.twig', $parameters);
     }
 
     /**

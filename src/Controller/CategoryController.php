@@ -145,7 +145,7 @@ class CategoryController extends AbstractEntityController
             ];
             $this->updateQueryParameters($request, $parameters, $item->getId());
 
-            return $this->render('cards/card_warning.html.twig', $parameters);
+            return $this->renderForm('cards/card_warning.html.twig', $parameters);
         }
 
         $parameters = [

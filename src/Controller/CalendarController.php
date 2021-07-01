@@ -68,7 +68,7 @@ class CalendarController extends AbstractController
         $next = $this->nextMonth($yearsMonths, $year, $month);
         $currentMonth = $calendar->getMonth(Month::formatKey($year, $month));
 
-        return $this->render('calendar/calendar_month.html.twig',
+        return $this->renderForm('calendar/calendar_month.html.twig',
             [
                 'calendar' => $calendar,
                 'month' => $currentMonth,
@@ -109,7 +109,7 @@ class CalendarController extends AbstractController
         $next = $this->nextWeek($yearsWeeks, $year, $week);
         $currentWeek = $calendar->getWeek(Week::formatKey($year, $week));
 
-        return $this->render('calendar/calendar_week.html.twig',
+        return $this->renderForm('calendar/calendar_week.html.twig',
             [
                 'calendar' => $calendar,
                 'week' => $currentWeek,
@@ -146,7 +146,7 @@ class CalendarController extends AbstractController
         $previous = $this->previousYear($years, $year);
         $next = $this->nextYear($years, $year);
 
-        return $this->render('calendar/calendar_year.html.twig',
+        return $this->renderForm('calendar/calendar_year.html.twig',
             [
                 'calendar' => $calendar,
                 'calculations' => $calculations,

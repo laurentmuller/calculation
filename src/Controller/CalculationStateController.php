@@ -119,7 +119,7 @@ class CalculationStateController extends AbstractEntityController
                 'back_text' => 'common.button_back_list',
             ];
 
-            return $this->render('cards/card_warning.html.twig', $parameters);
+            return $this->renderForm('cards/card_warning.html.twig', $parameters);
         }
 
         $parameters = [

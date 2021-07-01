@@ -60,6 +60,6 @@ class SearchController extends AbstractController
             'delete_granted' => $delete_granted,
         ];
 
-        return $this->render('home/search.html.twig', $parameters);
+        return $this->renderForm('home/search.html.twig', $parameters);
     }
 }

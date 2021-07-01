@@ -79,7 +79,7 @@ class CalculationDuplicateController extends AbstractController
                 'sortFields' => [],
             ];
 
-        return $this->render('calculation/calculation_card_duplicate.html.twig', $parameters);
+        return $this->renderForm('calculation/calculation_card_duplicate.html.twig', $parameters);
     }
 
     /**
@@ -157,7 +157,7 @@ class CalculationDuplicateController extends AbstractController
             'columns' => $table->getColumns(),
         ];
 
-        return $this->render('calculation/calculation_table_duplicate.html.twig', $parameters);
+        return $this->renderForm('calculation/calculation_table_duplicate.html.twig', $parameters);
     }
 
     /**

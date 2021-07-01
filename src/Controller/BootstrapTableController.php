@@ -299,7 +299,7 @@ class BootstrapTableController extends AbstractController
                 }
 
                 // generate
-                $response = $this->render($template, (array) $results);
+                $response = $this->renderForm($template, (array) $results);
             }
 
             // save results
@@ -320,7 +320,7 @@ class BootstrapTableController extends AbstractController
                 return new JsonResponse($parameters, $status);
             }
 
-            return $this->render('bundles/TwigBundle/Exception/error.html.twig', $parameters);
+            return $this->renderForm('bundles/TwigBundle/Exception/error.html.twig', $parameters);
         }
     }
 

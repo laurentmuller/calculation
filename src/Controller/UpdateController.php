@@ -68,8 +68,8 @@ class UpdateController extends AbstractController
             ->updateAttribute('data-error', $this->trans('update.error.confirm'))
             ->addCheckboxType();
 
-        return $this->render('admin/update.html.twig', [
-            'form' => $helper->createView(),
+        return $this->renderForm('admin/update.html.twig', [
+            'form' => $helper->createForm(),
         ]);
     }
 

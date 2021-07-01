@@ -60,11 +60,10 @@ class CalculationGroupType extends AbstractEntityType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        // default
-        $helper->field('group')->addHiddenType();
-        $helper->field('code')->addHiddenType();
+        $helper->field('group')->addHiddenType()
+            ->field('code')->addHiddenType()
+            ->field('position')->addHiddenType();
 
-        // items
         $helper->field('categories')
             ->updateOption('prototype_name', '__groupIndex__')
             ->addCollectionType(CalculationCategoryType::class);

@@ -41,7 +41,7 @@ class AboutController extends AbstractController
      */
     public function about(): Response
     {
-        return $this->render('about/about.html.twig', [
+        return $this->renderForm('about/about.html.twig', [
             'app_customer' => $this->getApplication()->getCustomerName(),
             'app_customer_url' => $this->getApplication()->getCustomerUrl(),
             'app_home_url' => $this->getHomeUrl(),
@@ -83,7 +83,7 @@ class AboutController extends AbstractController
      */
     public function licence(): Response
     {
-        return $this->render('about/licence.html.twig', [
+        return $this->renderForm('about/licence.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
             'licence_date' => true,
             'link' => true,
@@ -164,7 +164,7 @@ class AboutController extends AbstractController
      */
     public function policy(): Response
     {
-        return $this->render('about/policy.html.twig', [
+        return $this->renderForm('about/policy.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
             'policy_date' => true,
             'link' => true,

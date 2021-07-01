@@ -70,8 +70,8 @@ class GeneratorController extends AbstractController
             ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
             ->addCheckboxType();
 
-        return $this->render('admin/generate.html.twig', [
-            'form' => $helper->createView(),
+        return $this->renderForm('admin/generate.html.twig', [
+                'form' => $helper->createForm(),
         ]);
     }
 

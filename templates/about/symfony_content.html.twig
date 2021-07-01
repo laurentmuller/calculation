@@ -54,7 +54,7 @@
         {# rumtime packages #}
         {% if runtimePackages|length %}
         <table id="data-table-runtime-packages" class="table table-hover table-sm mb-0">
-            {{ tools.headerLinkInfo('Packages', 'runtime-packages', runtimePackages|length, 3) }}
+            {{ tools.headerLinkInfo('Packages', 'runtime-packages', runtimePackages|length, 2) }}
             <tbody class="collapse" id="runtime-packages" data-parent="#symfonyAccordion">
                 {% for package in runtimePackages %}
                     {{ tools.rowPackage(package) }}
@@ -66,7 +66,7 @@
         {# debug packages #}
         {% if debugPackages|length %}
         <table id="data-table-development-packages" class="table table-hover table-sm mb-0">
-            {{ tools.headerLinkInfo('Debug Packages', 'development-packages', debugPackages|length, 3) }}
+            {{ tools.headerLinkInfo('Debug Packages', 'development-packages', debugPackages|length, 2) }}
             <tbody class="collapse" id="development-packages" data-parent="#symfonyAccordion">
                 {% for package in debugPackages %}
                     {{ tools.rowPackage(package) }}

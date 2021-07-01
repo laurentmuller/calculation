@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Traits\PositionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,6 +31,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class TaskItem extends AbstractEntity implements \Countable
 {
+    use PositionTrait;
+
     /**
      * @ORM\OneToMany(targetEntity=TaskItemMargin::class, mappedBy="taskItem", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"minimum" = "ASC"})
@@ -44,13 +47,6 @@ class TaskItem extends AbstractEntity implements \Countable
      * @ORM\Column(type="string", length=255)
      */
     private ?string $name = null;
-
-    /**
-     * The position index.
-     *
-     * @ORM\Column(type="integer", options={"default" = 0})
-     */
-    private int $position = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity=Task::class, inversedBy="items")
@@ -135,11 +131,6 @@ class TaskItem extends AbstractEntity implements \Countable
         return $this->name;
     }
 
-    public function getPosition(): int
-    {
-        return $this->position;
-    }
-
     public function getTask(): ?Task
     {
         return $this->task;
@@ -167,13 +158,6 @@ class TaskItem extends AbstractEntity implements \Countable
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function setPosition(int $position): self
-    {
-        $this->position = $position;
 
         return $this;
     }

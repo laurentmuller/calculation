@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS "sy_CalculationGroup" (
     "code"              varchar(30) NOT NULL,
     "margin"            double      NOT NULL DEFAULT '0',
     "amount"            double      NOT NULL DEFAULT '0',
+    "position"          integer     NOT NULL DEFAULT '0',
     FOREIGN KEY(calculation_id) REFERENCES sy_Calculation(id),
     FOREIGN KEY(group_id) REFERENCES sy_Group(id)
 );
@@ -75,6 +76,7 @@ CREATE TABLE IF NOT EXISTS "sy_CalculationCategory" (
     "category_id"       integer     NOT NULL,
     "code"              varchar(30) NOT NULL,
     "amount"            double      NOT NULL DEFAULT '0',
+    "position"          integer     NOT NULL DEFAULT '0',
     FOREIGN KEY(group_id) REFERENCES sy_CalculationGroup(id),
     FOREIGN KEY(category_id) REFERENCES sy_Category(id)
 );
@@ -86,6 +88,7 @@ CREATE TABLE IF NOT EXISTS "sy_CalculationItem" (
     "unit"              varchar(15)  DEFAULT NULL,
     "price"             double       NOT NULL DEFAULT '0',
     "quantity"          double       NOT NULL DEFAULT '0',
+    "position"          integer      NOT NULL DEFAULT '0',
     FOREIGN KEY(category_id) REFERENCES sy_CalculationCategory(id)
 );
 

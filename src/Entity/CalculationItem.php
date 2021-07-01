@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Traits\MathTrait;
+use App\Traits\PositionTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -27,6 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CalculationItem extends AbstractEntity
 {
     use MathTrait;
+    use PositionTrait;
 
     /**
      * The parent's category.
@@ -238,31 +240,5 @@ class CalculationItem extends AbstractEntity
         $this->unit = $this->trim($unit);
 
         return $this;
-    }
-
-    /**
-     * Swaps this values with the given other item.
-     *
-     * @param CalculationItem $other the other item to swap values for
-     */
-    public function swapValues(self $other): void
-    {
-        $this->swapValue($other, 'description');
-        $this->swapValue($other, 'price');
-        $this->swapValue($other, 'quantity');
-        $this->swapValue($other, 'unit');
-    }
-
-    /**
-     * Swap the given property.
-     *
-     * @param self   $other    the other item to swap value for
-     * @param string $property the property name to swap
-     */
-    private function swapValue(self $other, string $property): void
-    {
-        $temp = $this->$property;
-        $this->$property = $other->$property;
-        $other->$property = $temp;
     }
 }

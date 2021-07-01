@@ -280,13 +280,13 @@ class CalculationController extends AbstractEntityController
 
         // parameters
         $parameters = [
-            'form' => $form->createView(),
+            'form' => $form,
             'item' => $item,
         ];
         $this->updateQueryParameters($request, $parameters, (int) $item->getId());
 
         // display
-        return $this->render('calculation/calculation_state.html.twig', $parameters);
+        return $this->renderForm('calculation/calculation_state.html.twig', $parameters);
     }
 
     /**
@@ -343,8 +343,8 @@ class CalculationController extends AbstractEntityController
             $parameters['category_index'] = $item->getCategoriesCount();
             $parameters['item_index'] = $item->getLinesCount();
             $parameters['tasks'] = $this->getTasks();
-            $parameters['item_dialog'] = $this->createForm(EditItemDialogType::class)->createView();
-            $parameters['task_dialog'] = $this->createForm(EditTaskDialogType::class)->createView();
+            $parameters['item_dialog'] = $this->createForm(EditItemDialogType::class);
+            $parameters['task_dialog'] = $this->createForm(EditTaskDialogType::class);
         }
 
         return parent::editEntity($request, $item, $parameters);

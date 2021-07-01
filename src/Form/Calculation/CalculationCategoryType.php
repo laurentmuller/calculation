@@ -60,11 +60,10 @@ class CalculationCategoryType extends AbstractEntityType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        // default
-        $helper->field('category')->addHiddenType();
-        $helper->field('code')->addHiddenType();
+        $helper->field('category')->addHiddenType()
+            ->field('code')->addHiddenType()
+            ->field('position')->addHiddenType();
 
-        // items
         $helper->field('items')
             ->updateOption('prototype_name', '__itemIndex__')
             ->addCollectionType(CalculationItemType::class);

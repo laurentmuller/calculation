@@ -59,8 +59,8 @@ class ProfileController extends AbstractController
         }
 
         // display
-        return $this->render('profile/profile_change_password.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('profile/profile_change_password.html.twig', [
+            'form' => $form,
         ]);
     }
 
@@ -89,8 +89,8 @@ class ProfileController extends AbstractController
         }
 
         // display
-        return $this->render('profile/profile_edit.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('profile/profile_edit.html.twig', [
+            'form' => $form,
         ]);
     }
 }

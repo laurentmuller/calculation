@@ -189,12 +189,12 @@ class UserController extends AbstractEntityController
         // parameters
         $parameters = [
             'params' => ['id' => $item->getId()],
-            'form' => $form->createView(),
+            'form' => $form,
             'item' => $item,
         ];
 
         // render
-        return $this->render('user/user_image.html.twig', $parameters);
+        return $this->renderForm('user/user_image.html.twig', $parameters);
     }
 
     /**
@@ -242,7 +242,7 @@ class UserController extends AbstractEntityController
                         'file' => $e->getFile() . ':' . $e->getLine(),
                 ]);
 
-                return $this->render('@Twig/Exception/exception.html.twig', [
+                return $this->renderForm('@Twig/Exception/exception.html.twig', [
                     'message' => $message,
                     'exception' => $e,
                 ]);
@@ -252,13 +252,13 @@ class UserController extends AbstractEntityController
         // parameters
         $parameters = [
             'item' => $user,
-            'form' => $form->createView(),
+            'form' => $form,
             'isMail' => $comment->isMail(),
             'params' => ['id' => $user->getId()],
         ];
 
         // render
-        return $this->render('user/user_comment.html.twig', $parameters);
+        return $this->renderForm('user/user_comment.html.twig', $parameters);
     }
 
     /**
@@ -288,12 +288,12 @@ class UserController extends AbstractEntityController
         // parameters
         $parameters = [
             'item' => $item,
-            'form' => $form->createView(),
+            'form' => $form,
             'params' => ['id' => $item->getId()],
         ];
 
         // show form
-        return $this->render('user/user_password.html.twig', $parameters);
+        return $this->renderForm('user/user_password.html.twig', $parameters);
     }
 
     /**
@@ -356,13 +356,13 @@ class UserController extends AbstractEntityController
         // parameters
         $parameters = [
             'item' => $item,
-            'form' => $form->createView(),
+            'form' => $form,
             'default' => EntityVoter::getRole($item),
             'params' => ['id' => $item->getId()],
         ];
 
         // show form
-        return $this->render('user/user_rights.html.twig', $parameters);
+        return $this->renderForm('user/user_rights.html.twig', $parameters);
     }
 
     /**

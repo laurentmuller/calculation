@@ -51,7 +51,7 @@ class HomeController extends AbstractController
         }, [0, 0]);
 
         // render view
-        return $this->render('home/index.html.twig', [
+        return $this->renderForm('home/index.html.twig', [
             'calculations' => $calculations,
             'min_margin' => $min_margin,
             'states_count' => $states_count,

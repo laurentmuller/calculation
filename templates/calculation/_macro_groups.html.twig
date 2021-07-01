@@ -5,11 +5,12 @@
 {% import 'calculation/_macro_categories.html.twig' as macroCategories %}
 
 <thead{% if editable %} data-prototype="{{ macroCategories.printCategoryRow(group.categories.vars.prototype, editable, false, false)|e('html_attr') }}"{% endif -%}>
-    <tr class="drag-skip bg-light border-left border-right">
+    <tr class="drag-skip bg-light border-left border-right group">
         {{ form_widget(group.group) }}
         {{ form_widget(group.code) }}
+        {{ form_widget(group.position) }}
         <th class="rowlink-skip pb-1" colspan="5">{{ group.code.vars.value }}</th>
-        {% if editable -%}        
+        {% if editable -%}
         <th class="rowlink-skip actions d-print-none">
             {# menu #}
             <div class="dropdown">
@@ -22,7 +23,7 @@
                     {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_task', 'tasks', 'btn-add-task') }}
                 </div>
             </div>
-        </th> 
+        </th>
         {%- endif %}
     </tr>
 </thead>

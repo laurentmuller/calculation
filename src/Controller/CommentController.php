@@ -71,7 +71,7 @@ class CommentController extends AbstractController
                     'file' => $e->getFile() . ':' . $e->getLine(),
                 ]);
 
-                return $this->render('@Twig/Exception/exception.html.twig', [
+                return $this->renderForm('@Twig/Exception/exception.html.twig', [
                     'message' => $message,
                     'exception' => $e,
                 ]);
@@ -79,8 +79,8 @@ class CommentController extends AbstractController
         }
 
         // render
-        return $this->render('user/user_comment.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('user/user_comment.html.twig', [
+            'form' => $form,
             'isMail' => $comment->isMail(),
         ]);
     }

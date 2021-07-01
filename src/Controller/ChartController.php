@@ -46,7 +46,7 @@ class ChartController extends AbstractController
         $data = $this->getChartMonthData($count, $repository, $service, $url);
         $data['tabular'] = \json_encode($tabular);
 
-        return $this->render('chart/last_month_chart.html.twig', $data);
+        return $this->renderForm('chart/last_month_chart.html.twig', $data);
     }
 
     /**
@@ -60,7 +60,7 @@ class ChartController extends AbstractController
         $data = $this->getChartStateData($repository, $service, $tabular);
         $data['tabular'] = \json_encode($tabular);
 
-        return $this->render('chart/by_state_chart.html.twig', $data);
+        return $this->renderForm('chart/by_state_chart.html.twig', $data);
     }
 
     /**

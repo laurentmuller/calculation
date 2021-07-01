@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Traits\PositionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +28,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CalculationGroup extends AbstractEntity implements \Countable
 {
+    use PositionTrait;
+
     /**
      * The total amount.
      *
@@ -46,7 +49,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
      * The calculation items.
      *
      * @ORM\OneToMany(targetEntity=CalculationCategory::class, mappedBy="group", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"code" = "ASC"})
+     * @ORM\OrderBy({"position" = "ASC", "code" = "ASC"})
      * @Assert\Valid
      *
      * @var Collection|CalculationCategory[]
@@ -261,6 +264,8 @@ class CalculationGroup extends AbstractEntity implements \Countable
             if ($category->getGroup() === $this) {
                 $category->setGroup(null);
             }
+
+            return $this->updatePositions();
         }
 
         return $this;
@@ -328,7 +333,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
     }
 
     /**
-     * Sorts this items by the alphabetical order of descriptions.
+     * Sorts categories and items in alphabetical order.
      *
      * @return bool true if the order has changed
      */
@@ -339,31 +344,28 @@ class CalculationGroup extends AbstractEntity implements \Countable
             return false;
         }
 
-        $iterator = $this->categories->getIterator();
+        // sort
+        $categories = $this->categories->toArray();
+        \uasort($categories, static function (CalculationCategory $a, CalculationCategory $b): int {
+            return \strcasecmp($a->getCode(), $b->getCode());
+        });
 
-        // first sort
-        $changed = $this->sortIterator($iterator);
+        $position = 0;
+        $changed = false;
 
-        // sort until no change found
-        if ($changed) {
-            do {
-                $dirty = $this->sortIterator($iterator);
-            } while ($dirty);
+        /** @var CalculationCategory $category */
+        foreach ($categories as $category) {
+            if ($position !== $category->getPosition()) {
+                $category->setPosition($position);
+                $changed = true;
+            }
+            if ($category->sort()) {
+                $changed = true;
+            }
+            ++$position;
         }
 
         return $changed;
-    }
-
-    /**
-     * Swaps the identifiers.
-     *
-     * @param CalculationGroup $other the other item to swap identifier for
-     */
-    public function swapIds(self $other): void
-    {
-        $oldId = $this->id;
-        $this->id = $other->id;
-        $other->id = $oldId;
     }
 
     /**
@@ -385,25 +387,21 @@ class CalculationGroup extends AbstractEntity implements \Countable
     }
 
     /**
-     * Sorts categories of the given iterator.
-     *
-     * @param mixed $iterator the iterator to sort
-     *
-     * @return bool true if sort changed the order
-     *
-     * @see \ArrayIterator::uasort
+     * Update position of categories and items.
      */
-    private function sortIterator($iterator): bool
+    public function updatePositions(): self
     {
-        $changed = false;
-        $iterator->uasort(function (CalculationCategory $a, CalculationCategory $b) use (&$changed): void {
-            $result = \strcasecmp($a->getCode(), $b->getCode());
-            if ($result > 0) {
-                $b->swapIds($a);
-                $changed = true;
-            }
-        });
+        $position = 0;
 
-        return $changed;
+        /** @var CalculationCategory $category */
+        foreach ($this->categories as $category) {
+            if ($category->getPosition() !== $position) {
+                $category->setPosition($position);
+            }
+            $category->updatePositions();
+            ++$position;
+        }
+
+        return $this;
     }
 }

@@ -141,12 +141,12 @@ class TaskController extends AbstractEntityController
         }
 
         $parameters = [
-            'form' => $form->createView(),
+            'form' => $form,
             'tasks' => $tasks,
         ];
         $this->updateQueryParameters($request, $parameters, (int) $task->getId());
 
-        return $this->render('task/task_compute.html.twig', $parameters);
+        return $this->renderForm('task/task_compute.html.twig', $parameters);
     }
 
     /**

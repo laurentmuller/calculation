@@ -69,7 +69,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * The calculation groups.
      *
      * @ORM\OneToMany(targetEntity=CalculationGroup::class, mappedBy="calculation", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"code" = "ASC"})
+     * @ORM\OrderBy({"position" = "ASC", "code" = "ASC"})
      * @Assert\Valid
      *
      * @var CalculationGroup|Collection
@@ -771,6 +771,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             if ($group->getCalculation() === $this) {
                 $group->setCalculation(null);
             }
+
+            return $this->updatePositions();
         }
 
         return $this;
@@ -871,7 +873,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Sorts groups and items in alphabetical order.
+     * Sorts groups, categories and items in alphabetical order.
      *
      * @return bool true if the order has changed
      */
@@ -881,8 +883,9 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             return false;
         }
 
-        // sort items
         $changed = false;
+
+        /** @var CalculationGroup $group */
         foreach ($this->groups as $group) {
             if ($group->sort()) {
                 $changed = true;
@@ -890,6 +893,25 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         return $changed;
+    }
+
+    /**
+     * Update position of groups, categories and items.
+     */
+    public function updatePositions(): self
+    {
+        $position = 0;
+
+        /** @var CalculationGroup $group */
+        foreach ($this->groups as $group) {
+            if ($group->getPosition() !== $position) {
+                $group->setPosition($position);
+            }
+            $group->updatePositions();
+            ++$position;
+        }
+
+        return $this;
     }
 
     /**

@@ -99,12 +99,12 @@ class ImportProductController extends AbstractController
                 ];
             }
 
-            return $this->render('product/product_import_result.html.twig', $data);
+            return $this->renderForm('product/product_import_result.html.twig', $data);
         }
 
         // display
-        return $this->render('product/product_import_file.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('product/product_import_file.html.twig', [
+            'form' => $form,
         ]);
     }
 

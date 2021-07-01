@@ -3,12 +3,13 @@
 <tr class="h"><th colspan="2">{{ name }}</th></tr>
 {%- endmacro %}
 
-{% macro headerLinkInfo(name, target, count, colspan) -%}
-{%- set colspan = colspan|default(2) -%}
+{% macro headerLinkInfo(name, target, count, colspan=1) -%}
 <tbody>
     <th class="h font-weight-normal" colspan="{{ colspan }}">
         <a data-toggle="collapse" href="#{{ target }}" class="card-link ml-1" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
-        <span class="text-muted small align-text-top"> ({{ count|integer }})</span>
+    </th>
+    <th class="h font-weight-normal text-right">
+        <span class="badge badge-pill badge-secondary">{{ count|integer }}</span>
     </th>
 </tbody>
 {%- endmacro %}

@@ -36,6 +36,6 @@ class SiteMapController extends AbstractController
      */
     public function invoke(): Response
     {
-        return $this->render('home/sitemap.html.twig');
+        return $this->renderForm('home/sitemap.html.twig');
     }
 }

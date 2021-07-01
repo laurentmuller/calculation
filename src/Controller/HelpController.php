@@ -48,7 +48,7 @@ class HelpController extends AbstractController
             $entity = null;
         }
 
-        return $this->render('help/help_dialog.html.twig', [
+        return $this->renderForm('help/help_dialog.html.twig', [
             'service' => $service,
             'dialog' => $dialog,
             'entity' => $entity,
@@ -67,7 +67,7 @@ class HelpController extends AbstractController
             throw new NotFoundHttpException("Unable to find the resource for the object '$id'.");
         }
 
-        return $this->render('help/help_entity.html.twig', [
+        return $this->renderForm('help/help_entity.html.twig', [
             'service' => $service,
             'entity' => $entity,
         ]);
@@ -80,7 +80,7 @@ class HelpController extends AbstractController
      */
     public function index(HelpService $service): Response
     {
-        return $this->render('help/help_index.html.twig', [
+        return $this->renderForm('help/help_index.html.twig', [
             'service' => $service,
             'help' => $service->getHelp(),
         ]);

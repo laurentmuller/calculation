@@ -88,14 +88,14 @@ class AdminController extends AbstractController
                     'failure' => $this->trans('clear_cache.failure'),
                 ];
 
-                return $this->render('@Twig/Exception/exception.html.twig', $parameters);
+                return $this->renderForm('@Twig/Exception/exception.html.twig', $parameters);
             }
         }
 
         // display
-        return $this->render('admin/clear_cache.html.twig', [
+        return $this->renderForm('admin/clear_cache.html.twig', [
             'size' => SymfonyUtils::getCacheSize($kernel),
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
@@ -136,15 +136,15 @@ class AdminController extends AbstractController
             $data = $service->setSourceFile($file)->import();
 
             // display result
-            return $this->render('admin/import_result.html.twig', [
+            return $this->renderForm('admin/import_result.html.twig', [
                 'data' => $data,
             ]);
         }
 
         // display
-        return $this->render('admin/import_file.html.twig', [
+        return $this->renderForm('admin/import_file.html.twig', [
             'last_import' => $this->getApplication()->getLastImport(),
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
@@ -180,8 +180,8 @@ class AdminController extends AbstractController
         }
 
         // display
-        return $this->render('admin/parameters.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('admin/parameters.html.twig', [
+            'form' => $form,
         ]);
     }
 
@@ -323,13 +323,13 @@ class AdminController extends AbstractController
             $this->setSessionValue('admin.update.sorted', $includeSorted);
             $this->setSessionValue('admin.update.simulated', $isSimulated);
 
-            return $this->render('calculation/calculation_result.html.twig', $data);
+            return $this->renderForm('calculation/calculation_result.html.twig', $data);
         }
 
         // display
-        return $this->render('calculation/calculation_update.html.twig', [
+        return $this->renderForm('calculation/calculation_update.html.twig', [
             'last_update' => $this->getApplication()->getLastUpdate(),
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
@@ -420,8 +420,8 @@ class AdminController extends AbstractController
         }
 
         // show form
-        return $this->render('admin/role_rights.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('admin/role_rights.html.twig', [
+            'form' => $form,
             'default' => $default,
         ]);
     }

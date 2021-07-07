@@ -90,25 +90,26 @@ class GeneratorController extends AbstractController
             $id = $simulate ? (int) $manager->getRepository(Calculation::class)->getNextId() : 0;
 
             // products range
-            $countProducts = $faker->countProducts();  // @phpstan-ignore-line
+            $countProducts = $faker->countProducts(); // @phpstan-ignore-line
             $min = \min(5, $countProducts);
             $max = \min(15, $countProducts);
 
             for ($i = 0; $i < $count; ++$i) {
-                $state = $faker->state();  // @phpstan-ignore-line
-                $userName = $faker->userName();  // @phpstan-ignore-line
+                $state = $faker->state(); // @phpstan-ignore-line
+                $userName = $faker->userName();
                 $date = $faker->dateTimeBetween('first day of previous month', 'last day of next month');
+                $description = $faker->catchPhrase(); // @phpstan-ignore-line
 
                 $calculation = new Calculation();
                 $calculation->setDate($date)
-                    ->setDescription($faker->catchPhrase)
+                    ->setDescription($description)
                     ->setUserMargin($faker->randomFloat(2, 0, 0.1))
                     ->setState($state)
                     ->setCustomer($faker->name())
                     ->setCreatedBy($userName);
 
                 // add products
-                $products = $faker->products($faker->numberBetween($min, $max));  // @phpstan-ignore-line
+                $products = $faker->products($faker->numberBetween($min, $max)); // @phpstan-ignore-line
                 foreach ($products as $product) {
                     // copy
                     $item = CalculationItem::create($product)->setQuantity($faker->numberBetween(1, 10));
@@ -158,13 +159,12 @@ class GeneratorController extends AbstractController
             }, $calculations);
 
             $data = [
-                    'result' => true,
                     'count' => $count,
                     'items' => $items,
                     'message' => $this->trans('counters.calculations_generate', ['count' => $count]),
                 ];
 
-            return $this->json($data);
+            return $this->jsonTrue($data);
         } catch (\Exception $e) {
             $message = $this->trans('generate.error.failed');
             $context = Utils::getExceptionContext($e);
@@ -197,29 +197,29 @@ class GeneratorController extends AbstractController
 
                 switch ($style) {
                 case 0: // company
-                    $customer->setCompany($faker->company)
-                        ->setEmail($faker->companyEmail);
+                    $customer->setCompany($faker->company())
+                        ->setEmail($faker->companyEmail());
                     break;
 
                 case 1: // contact
                     $customer->setTitle($faker->title($gender))
                         ->setFirstName($faker->firstName($gender))
-                        ->setLastName($faker->lastName)
-                        ->setEmail($faker->email);
+                        ->setLastName($faker->lastName())
+                        ->setEmail($faker->email());
                     break;
 
                 default: // both
-                    $customer->setCompany($faker->company)
+                    $customer->setCompany($faker->company())
                         ->setFirstName($faker->firstName($gender))
                         ->setTitle($faker->title($gender))
-                        ->setLastName($faker->lastName)
-                        ->setEmail($faker->email);
+                        ->setLastName($faker->lastName())
+                        ->setEmail($faker->email());
                     break;
                 }
 
-                $customer->setAddress($faker->streetAddress)
-                    ->setZipCode($faker->postcode)
-                    ->setCity($faker->city);
+                $customer->setAddress($faker->streetAddress())
+                    ->setZipCode($faker->postcode())
+                    ->setCity($faker->city());
 
                 // save
                 if (!$simulate) {
@@ -253,13 +253,12 @@ class GeneratorController extends AbstractController
             }, $customers);
 
             $data = [
-                    'result' => true,
                     'count' => $count,
                     'items' => $items,
                     'message' => $this->trans('counters.customers_generate', ['count' => $count]),
                 ];
 
-            return $this->json($data);
+            return $this->jsonTrue($data);
         } catch (\Exception $e) {
             $message = $this->trans('generate.error.failed');
             $context = Utils::getExceptionContext($e);

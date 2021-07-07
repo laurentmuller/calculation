@@ -62,9 +62,8 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        // captcha image
         if ($this->displayCaptcha) {
-            $helper->field('_captcha')
+            $helper->field('captcha')
                 ->label('captcha.label')
                 ->updateOption('image', $this->service->generateImage(false))
                 ->updateOption('constraints', [

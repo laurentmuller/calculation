@@ -45,7 +45,7 @@ class RecaptchaValidator extends AbstractConstraintValidator
      *
      * @param Recaptcha $constraint
      */
-    protected function doValidate($value, Constraint $constraint): void
+    protected function doValidate(string $value, Constraint $constraint): void
     {
         $recaptcha = new ReCaptchaService($this->secret);
         $result = $recaptcha->verify($value);

@@ -7,7 +7,7 @@
     'use strict';
 
     // initialize captcha
-    $('#_captcha').initCaptcha();
+    $('#captcha').initCaptcha();
 
     // initialize validator
     $("#edit-form").initValidator();

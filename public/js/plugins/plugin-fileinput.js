@@ -12,7 +12,7 @@
     // ------------------------------------
     // Fileinput public class definition
     // ------------------------------------
-    var Fileinput = function(element, options) {
+    var Fileinput = function (element, options) {
         this.$element = $(element);
         this.options = $.extend({}, Fileinput.DEFAULTS, options);
 
@@ -48,7 +48,7 @@
         clearName: true
     };
 
-    Fileinput.prototype.listen = function() {
+    Fileinput.prototype.listen = function () {
         this.$input.on('change.bs.fileinput', $.proxy(this.change, this));
         $(this.$input[0].form).on('reset.bs.fileinput', $.proxy(this.reset, this));
 
@@ -56,7 +56,7 @@
         this.$element.find('[data-dismiss="fileinput"]').on('click.bs.fileinput', $.proxy(this.clear, this));
     };
 
-    Fileinput.prototype.verifySizes = function(files) {
+    Fileinput.prototype.verifySizes = function (files) {
         if ($.isUndefined(this.options.maxSize)) {
             return true;
         }
@@ -80,7 +80,7 @@
         return true;
     };
 
-    Fileinput.prototype.change = function(e) {
+    Fileinput.prototype.change = function (e) {
         e.stopPropagation();
         const files = $.isUndefined(e.target.files) ? e.target && e.target.value ? [{name: e.target.value.replace(/^.+\\/, '')}] : [] : e.target.files;
         if (files.length === 0) {
@@ -108,7 +108,7 @@
             const preview = this.$preview;
             const element = this.$element;
 
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 let $img = preview.find('img');
                 if (!$img || !$img.length) {
                     $img = $('<img>');
@@ -144,7 +144,7 @@
             const $nameView = this.$element.find('.fileinput-filename');
 
             if (files.length > 1) {
-                text = $.map(files, function(file) {
+                text = $.map(files, function (file) {
                     return file.name;
                 }).join(', ');
             }
@@ -156,10 +156,10 @@
         }
     };
 
-    Fileinput.prototype.setImageTransform = function($img, file) {
+    Fileinput.prototype.setImageTransform = function ($img, file) {
         const Fileinput = this;
         const reader = new FileReader();
-        reader.onload = function() {
+        reader.onload = function () {
             const view = new DataView(reader.result);
             const exif = Fileinput.getImageExif(view);
             if (exif) {
@@ -170,7 +170,7 @@
         reader.readAsArrayBuffer(file);
     };
 
-    Fileinput.prototype.getImageExif = function(view) {
+    Fileinput.prototype.getImageExif = function (view) {
         if (view.getUint16(0, false) !== 0xFFD8) {
             return -2;
         }
@@ -203,10 +203,10 @@
         return -1;
     };
 
-    Fileinput.prototype.resetOrientation = function($img, transform) {
+    Fileinput.prototype.resetOrientation = function ($img, transform) {
         const img = new Image();
 
-        img.onload = function() {
+        img.onload = function () {
             const width = img.width;
             const height = img.height;
             const canvas = document.createElement('canvas');
@@ -258,7 +258,7 @@
         img.src = $img.attr('src');
     };
 
-    Fileinput.prototype.clear = function(e) {
+    Fileinput.prototype.clear = function (e) {
         if (e) {
             e.preventDefault();
         }
@@ -291,7 +291,7 @@
         this.$input.focus();
     };
 
-    Fileinput.prototype.reset = function() {
+    Fileinput.prototype.reset = function () {
         this.clear();
         this.$hidden.val(this.original.hiddenVal);
         this.$preview.html(this.original.preview);
@@ -306,7 +306,7 @@
         this.$element.trigger('reseted.bs.fileinput');
     };
 
-    Fileinput.prototype.trigger = function(e) {
+    Fileinput.prototype.trigger = function (e) {
         this.$input.trigger('click');
         e.preventDefault();
     };
@@ -317,8 +317,8 @@
     // ------------------------------------
     const oldFileInput = $.fn.fileinput;
 
-    $.fn.fileinput = function(options) {
-        return this.each(function() {
+    $.fn.fileinput = function (options) {
+        return this.each(function () {
             const $this = $(this);
             let data = $this.data('bs.fileinput');
             if (!data) {
@@ -333,7 +333,7 @@
     // ------------------------------------
     // FileInput no conflict
     // ------------------------------------
-    $.fn.fileinput.noConflict = function() {
+    $.fn.fileinput.noConflict = function () {
         $.fn.fileinput = oldFileInput;
         return this;
     };
@@ -341,7 +341,7 @@
     // ------------------------------------
     // FileInput data-api
     // ------------------------------------
-    $(document).on('click.fileinput.data-api', '[data-provides="fileinput"]', function(e) {
+    $(document).on('click.fileinput.data-api', '[data-provides="fileinput"]', function (e) {
         const $this = $(this);
         if ($this.data('bs.fileinput')) {
             return;

@@ -58,8 +58,8 @@ class CaptchaImageType extends AbstractType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'remote' => $this->generator->generate('ajax_captcha_validate'),
-            'refresh' => $this->generator->generate('ajax_captcha_image'),
+            'refresh' => $this->generate('ajax_captcha_image'),
+            'remote' => $this->generate('ajax_captcha_validate'),
             'attr' => [
                 'autocomplete' => 'off',
                 'spellcheck' => 'false',
@@ -79,5 +79,15 @@ class CaptchaImageType extends AbstractType
     public function getParent(): string
     {
         return TextType::class;
+    }
+
+    /**
+     * Generates an absolute URL for the given route name.
+     *
+     * @param string $name the route name
+     */
+    private function generate(string $name): string
+    {
+        return $this->generator->generate($name, [], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }

@@ -23,44 +23,45 @@ use App\Pdf\PdfTextColor;
 use App\Util\FormatUtils;
 
 /**
- * Render the calculation groups, categories and items.
+ * Table to render the groups, categories and items of a calculation.
  *
  * @author Laurent Muller
- *
- * @see \App\Entity\CalculationGroup
- * @see \App\Entity\CalculationItem
  */
 class CalculationTableItems extends PdfGroupTableBuilder
 {
     /**
      * The categories and items indent.
      */
-    private const ITEM_INDENT = 4;
+    private const INDENT = 4;
+
+    /**
+     * The calculation to render.
+     */
+    private Calculation $calculation;
 
     /**
      * Constructor.
-     *
-     * @param CalculationReport $parent the parent document to print in
      */
     public function __construct(CalculationReport $parent)
     {
-        parent::__construct($parent, true);
+        parent::__construct($parent);
+        $this->calculation = $parent->getCalculation();
     }
 
     /**
-     * Output the given calculation.
-     *
-     * @param Calculation $calculation the calculation to output
+     * Output groups, categories and items.
      */
-    public function output(Calculation $calculation): void
+    public function output(): void
     {
+        $calculation = $this->calculation;
+
         /** @var CalculationGroup[] $groups */
         $groups = $calculation->getGroups();
         $duplicateItems = $calculation->getDuplicateItems();
 
         // styles
         $groupStyle = $this->getGroup()->getStyle();
-        $defaultStyle = PdfStyle::getCellStyle()->setIndent(self::ITEM_INDENT);
+        $defaultStyle = PdfStyle::getCellStyle()->setIndent(self::INDENT);
         $errorStyle = (clone $defaultStyle)->setTextColor(PdfTextColor::red());
 
         // headers
@@ -80,7 +81,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
 
             /** @var CalculationCategory $category */
             foreach ($group->getCategories() as $category) {
-                $groupStyle->setIndent(self::ITEM_INDENT);
+                $groupStyle->setIndent(self::INDENT);
                 $this->setGroupKey($category->getCode());
 
                 /** @var CalculationItem $item */
@@ -107,13 +108,13 @@ class CalculationTableItems extends PdfGroupTableBuilder
 
     /**
      * Render the table for the given calculation.
-     *
-     * @param CalculationReport $parent the parent document to print in
      */
-    public static function render(CalculationReport $parent): void
+    public static function render(CalculationReport $parent): self
     {
         $table = new self($parent);
-        $table->output($parent->getCalculation());
+        $table->output();
+
+        return $table;
     }
 
     /**

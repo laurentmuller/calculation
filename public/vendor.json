@@ -299,17 +299,6 @@
 			"files": [
 				"select2-bootstrap4.css"
 			]
-		},
-		{
-			"source": "https://cdn.jsdelivr.net/npm/",
-			"format": "{source}{name}@{version}/src/{file}",
-			"name": "bstreeview",
-			"version": "1.2.0",
-			"disabled": true,
-			"files": [
-				"js/bstreeview.js",
-				"css/bstreeview.css"
-			]
 		}
 	]
 }

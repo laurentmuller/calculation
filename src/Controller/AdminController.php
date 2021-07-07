@@ -24,7 +24,7 @@ use App\Security\EntityVoter;
 use App\Service\CalculationService;
 use App\Service\SuspendEventListenerService;
 use App\Service\SwissPostService;
-use App\Util\SymfonyUtils;
+use App\Util\SymfonyInfo;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -51,7 +51,7 @@ class AdminController extends AbstractController
      * @Route("/clear", name="admin_clear")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function clearCache(Request $request, KernelInterface $kernel, LoggerInterface $logger): Response
+    public function clearCache(Request $request, KernelInterface $kernel, LoggerInterface $logger, SymfonyInfo $info): Response
     {
         // handle request
         $form = $this->getForm();
@@ -94,7 +94,7 @@ class AdminController extends AbstractController
 
         // display
         return $this->renderForm('admin/clear_cache.html.twig', [
-            'size' => SymfonyUtils::getCacheSize($kernel),
+            'size' => $info->getCacheSize(),
             'form' => $form,
         ]);
     }

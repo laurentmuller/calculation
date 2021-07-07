@@ -374,7 +374,7 @@
             };
 
             // margins
-            options.position.split('-').forEach(function(edge) {
+            options.position.split('-').forEach(function (edge) {
                 const key = 'margin-' + edge;
                 const value = options[key.camelize()];
                 if (value) {

@@ -19,7 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
  *
  * @author Laurent Muller
  */
-class DatabaseInfo
+final class DatabaseInfo
 {
     private EntityManagerInterface $manager;
 

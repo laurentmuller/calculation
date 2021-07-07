@@ -3,7 +3,7 @@
 /**
  * jQuery Validation Plugin extensions.
  */
-(function($) {
+(function ($) {
     'use strict';
 
     /**
@@ -18,10 +18,13 @@
             return this.each(function () {
                 const $that = $(this);
                 const url = $that.data('refresh');
-                $('#refresh_captcha').on('click', function () {
+                const $parent = $that.parents('.form-group');
+                const $image = $parent.find('.captcha-image');
+                const $refresh = $parent.find('.captcha-refresh');
+                $refresh.on('click', function () {
                     $.get(url, function (response) {
                         if (response.result) {
-                            $('#image_captcha').attr('src', response.data);
+                            $image.attr('src', response.data);
                             $that.val('').focus();
                         }
                     });

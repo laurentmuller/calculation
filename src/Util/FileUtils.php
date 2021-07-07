@@ -20,8 +20,15 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @author Laurent Muller
  */
-class FileUtils
+final class FileUtils
 {
+    private const SIZES = [
+        1073741824 => '%.1f GB',
+        1048576 => '%.1f MB',
+        1024 => '%.0f KB',
+        0 => '%.0f B',
+    ];
+
     /**
      * Decode the given file as JSON.
      *
@@ -99,6 +106,43 @@ class FileUtils
     }
 
     /**
+     * Formats the size of the given path.
+     *
+     * @param string $path the file or directory path
+     */
+    public static function formatSize(string $path): string
+    {
+        if (self::isFile($path)) {
+            $size = \filesize($path) ?: 0;
+        } else {
+            $size = 0;
+            $flags = \RecursiveDirectoryIterator::SKIP_DOTS;
+            $innerIterator = new \RecursiveDirectoryIterator($path, $flags);
+            $outerIterator = new \RecursiveIteratorIterator($innerIterator);
+            foreach ($outerIterator as $file) {
+                if ($file->isReadable()) {
+                    $size += $file->getSize();
+                }
+            }
+        }
+
+        if (0 === $size) {
+            return 'empty';
+        }
+
+        foreach (self::SIZES as $minSize => $format) {
+            if ($size >= $minSize) {
+                $value = 0 !== $minSize ? $size / $minSize : $size;
+
+                return \sprintf($format, $value);
+            }
+        }
+
+        // must never reached
+        return 'unknown';
+    }
+
+    /**
      * Gets the shared file system instance.
      */
     public static function getFilesystem(): Filesystem
@@ -109,6 +153,39 @@ class FileUtils
         }
 
         return $fs;
+    }
+
+    /**
+     * Gets the number of lines for the given file name.
+     *
+     * @param string $filename  the file name to get count for
+     * @param bool   $skipEmpty true to skip empty lines
+     *
+     * @return int the number of lines; 0 if an error occurs
+     */
+    public static function getLines(string $filename, bool $skipEmpty = true): int
+    {
+        if (!self::isFile($filename)) {
+            return 0;
+        }
+
+        $flags = \SplFileObject::DROP_NEW_LINE;
+        if ($skipEmpty) {
+            $flags |= \SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY;
+        }
+
+        try {
+            $file = new \SplFileObject($filename, 'r');
+            $file->setFlags($flags);
+            $file->seek(\PHP_INT_MAX);
+            $lines = $file->key() + 1;
+
+            return $lines;
+        } catch (\Exception $e) {
+            return 0;
+        } finally {
+            $file = null;
+        }
     }
 
     /**

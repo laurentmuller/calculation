@@ -32,7 +32,7 @@ class SimpleEditorType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if ($options['required']) {
-            $view->vars['attr']['class'] = $this->getwidgetClass($view);
+            $view->vars['attr']['class'] = $this->getWidgetClass($view);
         }
         $view->vars['actions'] = $options['actions'];
     }
@@ -73,7 +73,7 @@ class SimpleEditorType extends AbstractType
     /**
      * Gets the class name when the required option is set.
      */
-    private function getwidgetClass(FormView $view): string
+    private function getWidgetClass(FormView $view): string
     {
         $values = \array_filter(\explode(' ', $view->vars['attr']['class'] ?? ''));
         $values[] = 'must-validate';

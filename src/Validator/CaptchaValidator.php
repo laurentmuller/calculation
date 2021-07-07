@@ -38,7 +38,7 @@ class CaptchaValidator extends AbstractConstraintValidator
     /**
      * {@inheritdoc}
      */
-    protected function doValidate($value, Constraint $constraint): void
+    protected function doValidate(string $value, Constraint $constraint): void
     {
         if (!$this->service->validateTimeout()) {
             $this->context->addViolation('captcha.timeout');

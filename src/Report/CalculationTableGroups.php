@@ -21,31 +21,35 @@ use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * Table to render a list of calculation totals.
+ * Table to render the totals by group of a calculation.
  *
  * @author Laurent Muller
  */
-class CalculationTableTotal extends PdfTableBuilder
+class CalculationTableGroups extends PdfTableBuilder
 {
     /**
+     * The calculation to render.
+     */
+    private Calculation $calculation;
+
+    /**
      * Constructor.
-     *
-     * @param CalculationReport $parent the parent document to print in
      */
     public function __construct(CalculationReport $parent)
     {
-        parent::__construct($parent, true);
+        parent::__construct($parent);
+        $this->calculation = $parent->getCalculation();
     }
 
     /**
-     * Output the given calculation.
-     *
-     * @param Calculation $calculation the calculation to output
+     * Output totals by group.
      */
-    public function output(Calculation $calculation): void
+    public function output(): void
     {
+        $calculation = $this->calculation;
+
         /** @var CalculationGroup[]|Collection $groups */
-        /**  @psalm-var Collection<int, CalculationGroup> $groups */
+        /** @psalm-var Collection<int, CalculationGroup> $groups */
         $groups = $calculation->getGroups();
         if ($groups->isEmpty()) {
             return;
@@ -54,7 +58,7 @@ class CalculationTableTotal extends PdfTableBuilder
         // style
         $style = PdfStyle::getHeaderStyle()->setFontRegular();
 
-        // header
+        // headers
         $columns = [
             PdfColumn::left($this->trans('report.calculation.resume'), 50),
             PdfColumn::right($this->trans('report.calculation.amount'), 20, true),
@@ -93,14 +97,14 @@ class CalculationTableTotal extends PdfTableBuilder
     }
 
     /**
-     * Render the table for the given groups.
-     *
-     * @param CalculationReport $parent the parent document to print in
+     * Render the table for the given report.
      */
-    public static function render(CalculationReport $parent): void
+    public static function render(CalculationReport $parent): self
     {
         $table = new self($parent);
-        $table->output($parent->getCalculation());
+        $table->output();
+
+        return $table;
     }
 
     /**

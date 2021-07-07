@@ -299,19 +299,34 @@ abstract class AbstractController extends BaseController
      * Returns the given exception as a JsonResponse.
      *
      * @param \Exception  $e       the exception to serialize
-     * @param string|null $message an additionnal error message
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse The response
+     * @param string|null $message the optional error message
      */
     protected function jsonException(\Exception $e, ?string $message = null): JsonResponse
     {
-        $result = [
-            'result' => false,
+        return $this->jsonFalse([
             'message' => $message ?? $e->getMessage(),
             'exception' => Utils::getExceptionContext($e),
-        ];
+        ]);
+    }
 
-        return $this->json($result);
+    /**
+     * Returns a Json response with false as result.
+     *
+     * @param array $data the data to merge within the response
+     */
+    protected function jsonFalse(array $data = []): JsonResponse
+    {
+        return $this->json(\array_merge_recursive(['result' => false], $data));
+    }
+
+    /**
+     * Returns a Json response with true as result.
+     *
+     * @param array $data the data to merge within the response
+     */
+    protected function jsonTrue(array $data = []): JsonResponse
+    {
+        return $this->json(\array_merge_recursive(['result' => true], $data));
     }
 
     /**

@@ -25,10 +25,8 @@ use App\Service\SwissPostService;
 use App\Service\TaskService;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
-use App\Util\DatabaseInfo;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
-use App\Util\SymfonyUtils;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -37,11 +35,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -65,127 +60,6 @@ class AjaxController extends AbstractController
      * The cache key.
      */
     private const KEY_LANGUAGE = 'LanguageService';
-
-    /**
-     * Render the licence informations content.
-     *
-     * @Route("/licence", name="ajax_licence")
-     * @IsGranted("ROLE_USER")
-     */
-    public function aboutLicence(): JsonResponse
-    {
-        $content = $this->renderView('about/licence_content.html.twig');
-
-        return $this->jsonTrue([
-            'content' => $content,
-        ]);
-    }
-
-    /**
-     * Render the MySql informations content.
-     *
-     * @Route("/mysql", name="ajax_mysql")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function aboutMySql(DatabaseInfo $info): JsonResponse
-    {
-        $parameters = [
-            'version' => $info->getVersion(),
-            'database' => $info->getDatabase(),
-            'configuration' => $info->getConfiguration(),
-        ];
-        $content = $this->renderView('about/mysql_content.html.twig', $parameters);
-
-        return $this->jsonTrue([
-            'content' => $content,
-        ]);
-    }
-
-    /**
-     * Render the PHP informations content.
-     *
-     * @Route("/php", name="ajax_php")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function aboutPhp(Request $request): JsonResponse
-    {
-        $parameters = [
-            'phpInfo' => SymfonyUtils::getPhpInfoHtml(),
-            'cache' => $this->getCacheClass(),
-            'extensions' => $this->getLoadedExtensions(),
-            'apache' => $this->getApacheVersion($request),
-        ];
-        $content = $this->renderView('about/php_content.html.twig', $parameters);
-
-        return $this->jsonTrue([
-            'content' => $content,
-        ]);
-    }
-
-    /**
-     * Render the policy informations content.
-     *
-     * @Route("/policy", name="ajax_policy")
-     * @IsGranted("ROLE_USER")
-     */
-    public function aboutPolicy(): JsonResponse
-    {
-        $content = $this->renderView('about/policy_content.html.twig');
-
-        return $this->jsonTrue([
-            'content' => $content,
-        ]);
-    }
-
-    /**
-     * Render Symfony informations content.
-     *
-     * @Route("/symfony", name="ajax_symfony")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function aboutSymfony(KernelInterface $kernel, RouterInterface $router): JsonResponse
-    {
-        $bundles = SymfonyUtils::getBundles($kernel);
-        $packages = SymfonyUtils::getPackages($kernel);
-        $routes = SymfonyUtils::getRoutes($router);
-
-        $projectDir = \str_replace('\\', '/', $kernel->getProjectDir());
-        $cacheDir = SymfonyUtils::formatPath($kernel->getCacheDir(), $projectDir) . ' (' . SymfonyUtils::formatFileSize($kernel->getCacheDir()) . ')';
-        $logDir = SymfonyUtils::formatPath($kernel->getLogDir(), $projectDir) . ' (' . SymfonyUtils::formatFileSize($kernel->getLogDir()) . ')';
-        $endOfMaintenance = SymfonyUtils::formatExpired(Kernel::END_OF_MAINTENANCE) . ' (' . SymfonyUtils::daysBeforeExpiration(Kernel::END_OF_MAINTENANCE) . ')';
-        $endOfLife = SymfonyUtils::formatExpired(Kernel::END_OF_LIFE) . ' (' . SymfonyUtils::daysBeforeExpiration(Kernel::END_OF_LIFE) . ')';
-
-        $locale = \Locale::getDefault();
-        $localeName = Locales::getName($locale, 'en');
-        $xdebug_enabled = \extension_loaded('xdebug');
-        $apcu_enabled = \extension_loaded('apcu') && \filter_var(\ini_get('apc.enabled'), \FILTER_VALIDATE_BOOLEAN);
-        $zend_opcache_enabled = \extension_loaded('Zend OPcache') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN);
-
-        $parameters = [
-            'kernel' => $kernel,
-            'version' => Kernel::VERSION,
-            'bundles' => $bundles,
-            'runtimePackages' => $packages['runtime'] ?? [],
-            'debugPackages' => $packages['debug'] ?? [],
-            'runtimeRoutes' => $routes['runtime'] ?? [],
-            'debugRoutes' => $routes['debug'] ?? [],
-            'timezone' => \date_default_timezone_get(),
-            'projectDir' => $projectDir,
-            'cacheDir' => $cacheDir,
-            'logDir' => $logDir,
-            'endOfMaintenance' => $endOfMaintenance,
-            'endOfLife' => $endOfLife,
-            'locale' => $localeName . ' - ' . $locale,
-            'xdebug_enabled' => \json_encode($xdebug_enabled),
-            'apcu_enabled' => \json_encode($apcu_enabled),
-            'zend_opcache_enabled' => \json_encode($zend_opcache_enabled),
-        ];
-        $content = $this->renderView('about/symfony_content.html.twig', $parameters);
-
-        return $this->jsonTrue([
-            'content' => $content,
-        ]);
-    }
 
     /**
      * Returns a new captcha image.
@@ -212,11 +86,11 @@ class AjaxController extends AbstractController
      * @Route("/captcha/validate", name="ajax_captcha_validate")
      * @IsGranted("PUBLIC_ACCESS")
      */
-    public function checkCaptcha(Request $request, CaptchaImageService $service): JsonResponse
+    public function captchaValidate(Request $request, CaptchaImageService $service): JsonResponse
     {
         if (!$service->validateTimeout()) {
             $response = $this->trans('captcha.timeout', [], 'validators');
-        } elseif (!$service->validateToken($request->get('_captcha'))) {
+        } elseif (!$service->validateToken($request->get('captcha'))) {
             $response = $this->trans('captcha.invalid', [], 'validators');
         } else {
             $response = true;
@@ -514,8 +388,6 @@ class AjaxController extends AbstractController
         // get parameters
         $maxNbChars = (int) $request->get('maxNbChars', 145);
         $indexSize = (int) $request->get('indexSize', 2);
-
-        /** @var \Faker\Generator $faker */
         $faker = $service->getFaker();
         $text = $faker->realText($maxNbChars, $indexSize);
 
@@ -542,7 +414,7 @@ class AjaxController extends AbstractController
             $result = true;
         }
 
-        return new JsonResponse($result);
+        return $this->json($result);
     }
 
     /**
@@ -840,42 +712,6 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Gets the Apache version.
-     *
-     * @return string|bool the Apache version on success or <code>false</code> on failure
-     */
-    private function getApacheVersion(Request $request)
-    {
-        //$request->server
-        $matches = [];
-        $regex = '/Apache\/(?P<version>[1-9][0-9]*\.[0-9][^\s]*)/i';
-
-        if (\function_exists('apache_get_version')) {
-            if (($version = apache_get_version()) && \preg_match($regex, $version, $matches)) {
-                return $matches['version'];
-            }
-        }
-
-        $server = $request->server;
-        $software = $server->get('SERVER_SOFTWARE', false);
-        if ($software && false !== \stripos($software, 'apache')) {
-            if (\preg_match($regex, $software, $matches)) {
-                return $matches['version'];
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Gets the cache adapter class.
-     */
-    private function getCacheClass(): string
-    {
-        return $this->getApplication()->getCacheClass();
-    }
-
-    /**
      * Gets the datatables translations file for the current locale.
      *
      * @param KernelInterface $kernel the kernel to get root directory
@@ -922,38 +758,5 @@ class AjaxController extends AbstractController
         } catch (\Exception $e) {
             return $this->jsonException($e);
         }
-    }
-
-    /**
-     * Returns a string with the names of all modules compiled and loaded.
-     *
-     * @return string all the modules names
-     */
-    private function getLoadedExtensions(): string
-    {
-        $extensions = \array_map('strtolower', \get_loaded_extensions());
-        \sort($extensions);
-
-        return \implode(', ', $extensions);
-    }
-
-    /**
-     * Returns a Json response with false as result.
-     *
-     * @param array $data the data to merge within the response
-     */
-    private function jsonFalse(array $data = []): JsonResponse
-    {
-        return $this->json(\array_merge_recursive(['result' => false], $data));
-    }
-
-    /**
-     * Returns a Json response with true as result.
-     *
-     * @param array $data the data to merge within the response
-     */
-    private function jsonTrue(array $data = []): JsonResponse
-    {
-        return $this->json(\array_merge_recursive(['result' => true], $data));
     }
 }

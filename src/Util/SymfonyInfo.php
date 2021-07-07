@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Util;
 
+use App\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -25,14 +26,12 @@ use Symfony\Component\Routing\RouterInterface;
  *
  * @internal
  */
-final class SymfonyUtils
+final class SymfonyInfo
 {
     /**
      * The build-in routes.
-     *
-     * @var string[]
      */
-    private static $BUILT_IN_ROUTES = [
+    private const BUILT_IN_ROUTES = [
         '_profiler',
         '_profiler_exception',
         '_profiler_exception_css',
@@ -50,10 +49,8 @@ final class SymfonyUtils
 
     /**
      * The properties to get for a package.
-     *
-     * @var string[]
      */
-    private static $PACKAGE_PROPERTIES = [
+    private const PACKAGE_PROPERTIES = [
         'name',
         'version',
         'description',
@@ -68,90 +65,21 @@ final class SymfonyUtils
         // 'time'
     ];
 
-    // prevent instance creation
-    private function __construct()
-    {
-        // no-op
-    }
+    private KernelInterface $kernel;
+
+    private ?array $packages = null;
+
+    private RouterInterface $router;
+
+    private ?array $routes = null;
 
     /**
-     * Gets the number of days before expiration.
-     *
-     * @param string $date the date to get for
-     *
-     * @return string the number of days
+     * Constructor.
      */
-    public static function daysBeforeExpiration(string $date): string
+    public function __construct(KernelInterface $kernel, RouterInterface $router)
     {
-        $datetime = \DateTime::createFromFormat('d/m/Y', '01/' . $date);
-        if (false !== $datetime) {
-            return (new \DateTime())->diff($datetime->modify('last day of this month 23:59:59'))->format('%R%a days');
-        }
-
-        return '';
-    }
-
-    /**
-     * Format the expired date.
-     *
-     * @param string $date the date to format
-     *
-     * @return string the formatted date, if applicable; 'Unknown' otherwise
-     */
-    public static function formatExpired(string $date): string
-    {
-        $datetime = \DateTime::createFromFormat('m/Y', $date);
-        if (false !== $datetime) {
-            return (string) FormatUtils::formatDate($datetime->modify('last day of this month 23:59:59'));
-        }
-
-        return 'Unknown';
-    }
-
-    /**
-     * Formats the size of the given path.
-     *
-     * @param string $path the file or directory path
-     *
-     * @return string the formatted size
-     */
-    public static function formatFileSize(string $path): string
-    {
-        if (FileUtils::isFile($path)) {
-            $size = \filesize($path) ?: 0;
-        } else {
-            $size = 0;
-            $flags = \RecursiveDirectoryIterator::SKIP_DOTS;
-            $innerIterator = new \RecursiveDirectoryIterator($path, $flags);
-            $outerIterator = new \RecursiveIteratorIterator($innerIterator);
-            foreach ($outerIterator as $file) {
-                if ($file->isReadable()) {
-                    $size += $file->getSize();
-                }
-            }
-        }
-
-        if (0 === $size) {
-            return 'empty';
-        }
-
-        $sizes = [
-            1073741824 => '%.1f GB',
-            1048576 => '%.1f MB',
-            1024 => '%.0f KB',
-            0 => '%.0f B',
-        ];
-
-        foreach ($sizes as $minSize => $format) {
-            if ($size >= $minSize) {
-                $value = 0 !== $minSize ? $size / $minSize : $size;
-
-                return \sprintf($format, $value);
-            }
-        }
-
-        // must never reached
-        return 'unknown';
+        $this->kernel = $kernel;
+        $this->router = $router;
     }
 
     /**
@@ -162,7 +90,7 @@ final class SymfonyUtils
      *
      * @return string the relative path
      */
-    public static function formatPath(string $path, ?string $baseDir = null): string
+    public function formatPath(string $path, ?string $baseDir = null): string
     {
         $path = \str_replace('\\', '/', $path);
         if (null !== $baseDir) {
@@ -176,14 +104,12 @@ final class SymfonyUtils
 
     /**
      * Gets bundles informations.
-     *
-     * @param KernelInterface $kernel the kernel to get bundles for
      */
-    public static function getBundles(KernelInterface $kernel): array
+    public function getBundles(): array
     {
         $bundles = [];
-        $rootDir = \realpath($kernel->getProjectDir() . '/..') . \DIRECTORY_SEPARATOR;
-        foreach ($kernel->getBundles() as $key => $bundleObject) {
+        $rootDir = \realpath($this->kernel->getProjectDir() . '/..') . \DIRECTORY_SEPARATOR;
+        foreach ($this->kernel->getBundles() as $key => $bundleObject) {
             $bundle = [
                 'name' => $key,
                 'namespace' => $bundleObject->getNamespace(),
@@ -201,83 +127,147 @@ final class SymfonyUtils
     }
 
     /**
-     * Gets the formatted size of the cache directory.
-     *
-     * @param KernelInterface $kernel the kernel used to get the cache directory
-     *
-     * @return string the formatted size
+     * Gets the cache directory path.
      */
-    public static function getCacheSize(KernelInterface $kernel): string
+    public function getCacheDir(): string
     {
-        $dir = $kernel->getCacheDir();
-
-        return self::formatFileSize($dir);
+        return $this->formatPath($this->kernel->getCacheDir(), $this->getProjectDir());
     }
 
     /**
-     * Gets the number of lines for the given file name.
-     *
-     * @param string $filename  the file name to get count for
-     * @param bool   $skipEmpty true to skip empty lines
-     *
-     * @return int the number of lines; 0 if an error occurs
+     * Gets the cache directory path and the formatted size.
      */
-    public static function getLines(string $filename, bool $skipEmpty = true): int
+    public function getCacheInfo(): string
     {
-        if (!FileUtils::isFile($filename)) {
-            return 0;
-        }
+        return "{$this->getCacheDir()} ({$this->getCacheSize()})";
+    }
 
-        $flags = \SplFileObject::DROP_NEW_LINE;
-        if ($skipEmpty) {
-            $flags |= \SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY;
-        }
+    /**
+     * Gets the formatted size of the cache directory.
+     */
+    public function getCacheSize(): string
+    {
+        return FileUtils::formatSize($this->kernel->getCacheDir());
+    }
 
-        try {
-            $file = new \SplFileObject($filename, 'r');
-            $file->setFlags($flags);
-            $file->seek(\PHP_INT_MAX);
-            $lines = $file->key() + 1;
+    /**
+     * Gets the charset of the application.
+     */
+    public function getCharset(): string
+    {
+        return $this->kernel->getCharset();
+    }
 
-            return $lines;
-        } catch (\Exception $e) {
-            return 0;
-        } finally {
-            $file = null;
-        }
+    /**
+     * Gets the end of life.
+     */
+    public function getEndOfLife(): string
+    {
+        return $this->formatExpired(Kernel::END_OF_LIFE);
+    }
+
+    /**
+     * Gets the end of life in days.
+     */
+    public function getEndOfLifeDays(): string
+    {
+        return $this->formatDays(Kernel::END_OF_LIFE);
+    }
+
+    /**
+     * Gets the end of life date and days.
+     */
+    public function getEndOfLifeInfo(): string
+    {
+        return "{$this->getEndOfLife()} ({$this->getEndOfLifeDays()})";
+    }
+
+    /**
+     * Gets the end of maintenance.
+     */
+    public function getEndOfMaintenance(): string
+    {
+        return $this->formatExpired(Kernel::END_OF_MAINTENANCE);
+    }
+
+    /**
+     * Gets the end of maintenance in days.
+     */
+    public function getEndOfMaintenanceDays(): string
+    {
+        return $this->formatDays(Kernel::END_OF_MAINTENANCE);
+    }
+
+    /**
+     * Gets the end of maintenance date and days.
+     */
+    public function getEndOfMaintenanceInfo(): string
+    {
+        return "{$this->getEndOfMaintenance()} ({$this->getEndOfMaintenanceDays()})";
+    }
+
+    /**
+     * Gets the kernel environment.
+     */
+    public function getEnvironment(): string
+    {
+        return $this->kernel->getEnvironment();
+    }
+
+    /**
+     * Gets the log directory path.
+     */
+    public function getLogDir(): string
+    {
+        return $this->formatPath($this->kernel->getLogDir(), $this->getProjectDir());
+    }
+
+    /**
+     * Gets the log directory path and the formatted size.
+     */
+    public function getLogInfo(): string
+    {
+        return "{$this->getLogDir()} ({$this->getLogSize()})";
+    }
+
+    /**
+     * Gets the formatted size of the log directory.
+     */
+    public function getLogSize(): string
+    {
+        return FileUtils::formatSize($this->kernel->getLogDir());
     }
 
     /**
      * Gets packages informations.
-     *
-     * @param KernelInterface $kernel the kernel to get packages for
      */
-    public static function getPackages(KernelInterface $kernel): array
+    public function getPackages(): array
     {
-        // get file
-        $path = $kernel->getProjectDir() . '/composer.lock';
-        if (FileUtils::exists($path)) {
-            try {
-                // parse
-                $content = FileUtils::decodeJson($path);
+        if (null === $this->packages) {
+            $result = [];
+            $path = $this->kernel->getProjectDir() . '/composer.lock';
+            if (FileUtils::exists($path)) {
+                try {
+                    // parse
+                    $content = FileUtils::decodeJson($path);
 
-                // runtime packages
-                $result = [
-                    'runtime' => self::processPackages($content['packages'], false),
-                ];
+                    // runtime packages
+                    $result = [
+                        'runtime' => $this->processPackages($content['packages'], false),
+                    ];
 
-                //development packages
-                if ($kernel->isDebug()) {
-                    $result['debug'] = self::processPackages($content['packages-dev'], true);
+                    //development packages
+                    if ($this->isDebug()) {
+                        $result['debug'] = $this->processPackages($content['packages-dev'], true);
+                    }
+                } catch (\InvalidArgumentException $e) {
+                    // ignore
                 }
-
-                return $result;
-            } catch (\InvalidArgumentException $e) {
-                // ignore
             }
+            $this->packages = $result;
         }
 
-        return [];
+        return $this->packages;
     }
 
     /**
@@ -289,9 +279,9 @@ final class SymfonyUtils
      * <li>if applicable values are converted to integer or float.</li>
      * </ul>.
      */
-    public static function getPhpInfoArray(): array
+    public function getPhpInfoArray(): array
     {
-        $content = self::getPhpInfoText(\INFO_MODULES);
+        $content = $this->getPhpInfoText(\INFO_MODULES);
 
         $content = \strip_tags($content, '<h2><th><td>');
         $content = (string) \preg_replace('/<th[^>]*>([^<]+)<\/th>/', '<info>\1</info>', $content);
@@ -315,8 +305,8 @@ final class SymfonyUtils
                 foreach ($vals as $val) {
                     if (\preg_match($regex3cols, $val, $matchs)) { // 3 columns
                         $match1 = \trim($matchs[1]);
-                        $match2 = self::convert(\trim($matchs[2]));
-                        $match3 = self::convert(\trim($matchs[3]));
+                        $match2 = $this->convert(\trim($matchs[2]));
+                        $match3 = $this->convert(\trim($matchs[3]));
 
                         // special case for 'Directive'
                         if (0 === \strcasecmp('directive', $match1)) {
@@ -332,7 +322,7 @@ final class SymfonyUtils
                         }
                     } elseif (\preg_match($regex2cols, $val, $matchs)) { // 2 columns
                         $match1 = \trim($matchs[1]);
-                        $match2 = self::convert(\trim($matchs[2]));
+                        $match2 = $this->convert(\trim($matchs[2]));
                         $result[$name][$match1] = $match2;
                         $directive1 = $directive2 = null;
                     }
@@ -346,10 +336,10 @@ final class SymfonyUtils
     /**
      * Gets PHP informations as HTML.
      */
-    public static function getPhpInfoHtml(): string
+    public function getPhpInfoHtml(): string
     {
         // get info
-        $info = self::getPhpInfoText();
+        $info = $this->getPhpInfoText();
 
         // extract body
         $info = (string) \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
@@ -381,7 +371,7 @@ final class SymfonyUtils
      *                  One can also combine the respective constants or bitwise values
      *                  together with the bitwise or operator.
      */
-    public static function getPhpInfoText(int $what = \INFO_ALL): string
+    public function getPhpInfoText(int $what = \INFO_ALL): string
     {
         \ob_start();
         \phpinfo($what);
@@ -392,37 +382,95 @@ final class SymfonyUtils
     }
 
     /**
-     * Gets all routes.
-     *
-     * @param routerInterface $router the router
+     * Gets the project directory path.
      */
-    public static function getRoutes(RouterInterface $router): array
+    public function getProjectDir(): string
     {
-        $result = [];
-        $collection = $router->getRouteCollection();
-        foreach ($collection->all() as $name => $routeObject) {
-            $route = [
-                'name' => $name,
-                'path' => $routeObject->getPath(),
-                'php_class' => \get_class($routeObject),
-            ];
+        return \str_replace('\\', '/', $this->kernel->getProjectDir());
+    }
 
-            if (\in_array($name, self::$BUILT_IN_ROUTES, true)) {
-                $result['debug'][$name] = $route;
-            } else {
-                $result['runtime'][$name] = $route;
+    /**
+     * Gets all routes.
+     */
+    public function getRoutes(): array
+    {
+        if (null === $this->routes) {
+            $result = [];
+            $collection = $this->router->getRouteCollection();
+            foreach ($collection->all() as $name => $routeObject) {
+                $route = [
+                    'name' => $name,
+                    'path' => $routeObject->getPath(),
+                    'php_class' => \get_class($routeObject),
+                ];
+
+                if (\in_array($name, self::BUILT_IN_ROUTES, true)) {
+                    $result['debug'][$name] = $route;
+                } else {
+                    $result['runtime'][$name] = $route;
+                }
             }
+
+            // sort
+            if (!empty($result['runtime'])) {
+                \ksort($result['runtime']);
+            }
+            if (!empty($result['debug'])) {
+                \ksort($result['debug']);
+            }
+
+            $this->routes = $result;
         }
 
-        // sort
-        if (!empty($result['runtime'])) {
-            \ksort($result['runtime']);
-        }
-        if (!empty($result['debug'])) {
-            \ksort($result['debug']);
-        }
+        return $this->routes;
+    }
 
-        return $result;
+    /**
+     * Gets the time zone.
+     */
+    public function getTimeZone(): string
+    {
+        return \date_default_timezone_get();
+    }
+
+    /**
+     * Gets the kernel version.
+     */
+    public function getVersion(): string
+    {
+        return Kernel::VERSION;
+    }
+
+    /**
+     * Returns if the 'apcu' extension is loaded and enabled.
+     */
+    public function isApcuLoaded(): bool
+    {
+        return \extension_loaded('apcu') && \filter_var(\ini_get('apc.enabled'), \FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Gets if debug mode is enabled.
+     */
+    public function isDebug(): bool
+    {
+        return $this->kernel->isDebug();
+    }
+
+    /**
+     * Returns if the 'xdebug' extension is loaded.
+     */
+    public function isXdebugLoaded(): bool
+    {
+        return \extension_loaded('xdebug');
+    }
+
+    /**
+     * Returns if the 'Zend OPcache' extension is loaded and enabled.
+     */
+    public function isZendCacheLoaded(): bool
+    {
+        return \extension_loaded('Zend OPcache') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -432,7 +480,7 @@ final class SymfonyUtils
      *
      * @return mixed the converted variable
      */
-    private static function convert($var)
+    private function convert($var)
     {
         $value = \strtolower((string) $var);
         if (\in_array($value, ['yes', 'enabled', 'on', '1'], true)) {
@@ -456,6 +504,40 @@ final class SymfonyUtils
     }
 
     /**
+     * Gets the number of days before expiration.
+     *
+     * @param string $date the date to get for
+     *
+     * @return string the number of days
+     */
+    private function formatDays(string $date): string
+    {
+        $datetime = \DateTime::createFromFormat('d/m/Y', '01/' . $date);
+        if (false !== $datetime) {
+            return (new \DateTime())->diff($datetime->modify('last day of this month 23:59:59'))->format('%R%a days');
+        }
+
+        return '';
+    }
+
+    /**
+     * Format the expired date.
+     *
+     * @param string $date the date to format
+     *
+     * @return string the formatted date, if applicable; 'Unknown' otherwise
+     */
+    private function formatExpired(string $date): string
+    {
+        $datetime = \DateTime::createFromFormat('m/Y', $date);
+        if (false !== $datetime) {
+            return (string) FormatUtils::formatDate($datetime->modify('last day of this month 23:59:59'));
+        }
+
+        return 'Unknown';
+    }
+
+    /**
      * Process the given packages.
      *
      * @param array $packages the packages to process
@@ -463,13 +545,13 @@ final class SymfonyUtils
      *
      * @return string[][]
      */
-    private static function processPackages(array $packages, bool $isDev): array
+    private function processPackages(array $packages, bool $isDev): array
     {
         $result = [];
         foreach ($packages as $entry) {
             $package = [];
             $package['dev'] = $isDev;
-            foreach (self::$PACKAGE_PROPERTIES as $key) {
+            foreach (self::PACKAGE_PROPERTIES as $key) {
                 if ('version' === $key) {
                     $entry[$key] = \ltrim($entry[$key], 'v');
                 } elseif ('description' === $key) {

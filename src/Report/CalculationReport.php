@@ -17,7 +17,6 @@ use App\Entity\Calculation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
-use App\Pdf\PdfTextColor;
 use App\Util\FormatUtils;
 
 /**
@@ -29,17 +28,13 @@ class CalculationReport extends AbstractReport
 {
     /**
      * The calculation.
-     *
-     * @var \App\Entity\Calculation
      */
-    protected $calculation;
+    private Calculation $calculation;
 
     /**
      * The minimum margin.
-     *
-     * @var float
      */
-    protected $minMargin;
+    private float $minMargin;
 
     /**
      * Constructor.
@@ -56,12 +51,18 @@ class CalculationReport extends AbstractReport
 
     /**
      * Gets the calculation.
-     *
-     * @return Calculation
      */
-    public function getCalculation(): ?Calculation
+    public function getCalculation(): Calculation
     {
         return $this->calculation;
+    }
+
+    /**
+     * Gets the minimum allowed margin.
+     */
+    public function getMinMargin(): float
+    {
+        return $this->minMargin;
     }
 
     /**
@@ -79,16 +80,13 @@ class CalculationReport extends AbstractReport
      */
     public function render(): bool
     {
-        // calculation?
-        if (null === $this->calculation) {
-            return false;
-        }
+        $calculation = $this->calculation;
 
         // update title
-        if ($this->calculation->isNew()) {
+        if ($calculation->isNew()) {
             $this->setTitleTrans('calculation.add.title');
         } else {
-            $id = FormatUtils::formatId($this->calculation->getId());
+            $id = FormatUtils::formatId($calculation->getId());
             $this->setTitleTrans('calculation.edit.title', ['%id%' => $id], true);
         }
 
@@ -96,7 +94,7 @@ class CalculationReport extends AbstractReport
         $this->AddPage();
 
         // empty?
-        if ($this->calculation->isEmpty()) {
+        if ($calculation->isEmpty()) {
             $this->resetStyle()->Ln();
             $message = $this->trans('calculation.edit.empty');
             $this->Cell(0, 0, $message, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, self::ALIGN_CENTER);
@@ -108,36 +106,36 @@ class CalculationReport extends AbstractReport
         CalculationTableItems::render($this);
         $this->Ln(3);
 
-        // check if margin groups and overall total can fit in the current page
-        $lines = $this->calculation->getGroupsCount() + 2;
-        $lines += empty($this->calculation->getUserMargin()) ? 2 : 4;
+        // check if totals by group and overall totals fit in the current page
+        $lines = $calculation->getGroupsCount() + 2;
+        $lines += empty($calculation->getUserMargin()) ? 2 : 4;
         if (!$this->isPrintable(2 + self::LINE_HEIGHT * $lines)) {
             $this->AddPage();
         }
 
-        // total by group
-        CalculationTableTotal::render($this);
+        // totals by group
+        CalculationTableGroups::render($this);
 
-        // // overall total
-        $this->renderOverall();
+        // overall totals
+        CalculationTableOverall::render($this);
 
         return true;
     }
 
     /**
-     * Render the calculation.
+     * Render the calculation properties.
      */
     private function renderCalculation(): void
     {
-        $c = $this->calculation;
+        $calculation = $this->calculation;
 
         $columns = [
             PdfColumn::left(null, 100),
             PdfColumn::right(null, 40, true),
         ];
 
-        $state = $c->getStateCode();
-        $date = FormatUtils::formatDate($c->getDate());
+        $state = $calculation->getStateCode();
+        $date = FormatUtils::formatDate($calculation->getDate());
         $style = PdfStyle::getHeaderStyle()->setFontRegular()
             ->setBorder('tbr');
 
@@ -145,77 +143,13 @@ class CalculationReport extends AbstractReport
         $table->setHeaderStyle(PdfStyle::getHeaderStyle()->setBorder('tbl'));
         $table->addColumns($columns)
             ->startHeaderRow()
-            ->add($c->getCustomer())
+            ->add($calculation->getCustomer())
             ->add($state, 1, $style)
             ->endRow()
 
             ->startHeaderRow()
-            ->add($c->getDescription())
+            ->add($calculation->getDescription())
             ->add($date, 1, $style)
-            ->endRow();
-    }
-
-    /**
-     * Render the overall total table.
-     */
-    private function renderOverall(): void
-    {
-        $c = $this->calculation;
-        $columns = [
-            PdfColumn::left(null, 40, false),
-            PdfColumn::right(null, 20, true),
-            PdfColumn::right(null, 20, true),
-            PdfColumn::right(null, 20, true),
-            PdfColumn::right(null, 20, true),
-        ];
-        $table = new PdfTableBuilder($this);
-        $table->addColumns($columns)->setRepeatHeader(false);
-
-        // compute values
-        $totalItems = $c->getGroupsAmount();
-        $totalMargins = $c->getGroupsMarginAmount();
-        $totalBrut = $totalItems + $totalMargins;
-
-        $globalMargin = $c->getGlobalMargin();
-        $globalAmount = $totalBrut * ($globalMargin - 1);
-
-        $totalNet = $totalBrut + $globalAmount;
-        $userMargin = $c->getUserMargin();
-        $userAmount = $totalNet * $userMargin;
-
-        // global margin
-        $table->startRow()
-            ->add($this->trans('calculation.fields.globalMargin'), 2)
-            ->add(FormatUtils::formatPercent($globalMargin))
-            ->add(FormatUtils::formatAmount($globalAmount), 2)
-            ->endRow();
-
-        // user margin
-        if (!empty($userMargin)) {
-            $table->startHeaderRow()
-                ->add($this->trans('calculation.fields.totalNet'), 4)
-                ->add(FormatUtils::formatAmount($totalNet))
-                ->endRow();
-            $table->startRow()
-                ->add($this->trans('calculation.fields.userMargin'), 2)
-                ->add(FormatUtils::formatPercent($userMargin))
-                ->add(FormatUtils::formatAmount($userAmount), 2)
-                ->endRow();
-        }
-
-        // style for margin
-        $style = null;
-        if ($c->isMarginBelow($this->minMargin)) {
-            $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
-        }
-
-        // overall margin and amouts
-        $table->startHeaderRow()
-            ->add($this->trans('calculation.fields.overallTotal'))
-            ->add(FormatUtils::formatAmount($totalItems))
-            ->add(FormatUtils::formatPercent($c->getOverallMargin()), 1, $style)
-            ->add(FormatUtils::formatAmount($c->getOverallMarginAmount()))
-            ->add(FormatUtils::formatAmount($c->getOverallTotal()))
             ->endRow();
     }
 }

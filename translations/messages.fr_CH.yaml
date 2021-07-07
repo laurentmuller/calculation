@@ -95,7 +95,7 @@ calculation:
         last_update: 'Dernière mise à jour : %date%'
     result:
         description: Résultats de la mise à jour.
-        simulated: La mise à jour a été simulée. Aucune donnée n'a été modifiée dans la base de données.
+        simulated: La mise à jour a été simulée. Aucune calculation n'a été modifiée dans la base de données.
         updated: Calculations mises à jour
         skipped: Calculations inchangées
         sorted: Calculations triées

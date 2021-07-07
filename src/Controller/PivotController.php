@@ -119,7 +119,7 @@ class PivotController extends AbstractController
             // create table
             $table = $this->getPivotTable();
 
-            return new JsonResponse($table);
+            return $this->json($table);
         } catch (\Exception $e) {
             return $this->jsonException($e);
         }

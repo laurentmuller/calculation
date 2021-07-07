@@ -46,7 +46,7 @@ class StrengthValidator extends AbstractConstraintValidator
      *
      * @param Strength $constraint
      */
-    protected function doValidate($value, Constraint $constraint): void
+    protected function doValidate(string $value, Constraint $constraint): void
     {
         if ($constraint->minstrength >= StrengthInterface::LEVEL_MIN) {
             $zx = new Zxcvbn();

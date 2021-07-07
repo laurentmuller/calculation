@@ -15,12 +15,16 @@ namespace App\Controller;
 use App\Pdf\PdfResponse;
 use App\Report\HtmlReport;
 use App\Report\PhpIniReport;
-use App\Util\SymfonyUtils;
+use App\Util\DatabaseInfo;
+use App\Util\PhpInfo;
+use App\Util\SymfonyInfo;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -91,6 +95,21 @@ class AboutController extends AbstractController
     }
 
     /**
+     * Render the licence informations content.
+     *
+     * @Route("/licence/content", name="about_licence_content")
+     * @IsGranted("ROLE_USER")
+     */
+    public function licenceContent(): JsonResponse
+    {
+        $content = $this->renderView('about/licence_content.html.twig');
+
+        return $this->jsonTrue([
+            'content' => $content,
+        ]);
+    }
+
+    /**
      * Export the licence page to PDF.
      *
      * @Route("/licence/pdf", name="about_licence_pdf")
@@ -113,14 +132,55 @@ class AboutController extends AbstractController
     }
 
     /**
+     * Render the MySql informations content.
+     *
+     * @Route("/mysql/content", name="about_mysql_content")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function mysqlContent(DatabaseInfo $info): JsonResponse
+    {
+        $parameters = [
+            'version' => $info->getVersion(),
+            'database' => $info->getDatabase(),
+            'configuration' => $info->getConfiguration(),
+        ];
+        $content = $this->renderView('about/mysql_content.html.twig', $parameters);
+
+        return $this->jsonTrue([
+            'content' => $content,
+        ]);
+    }
+
+    /**
+     * Render the PHP informations content.
+     *
+     * @Route("/php/content", name="about_php_content")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function phpContent(Request $request, PhpInfo $info): JsonResponse
+    {
+        $parameters = [
+            'cache' => $this->getCacheClass(),
+            'phpInfo' => $info->asHtml(),
+            'extensions' => $this->getLoadedExtensions(),
+            'apache' => $this->getApacheVersion($request),
+        ];
+        $content = $this->renderView('about/php_content.html.twig', $parameters);
+
+        return $this->jsonTrue([
+            'content' => $content,
+        ]);
+    }
+
+    /**
      * Download the php.ini as JSON.
      *
      * @Route("/php/ini", name="about_php_ini")
      */
-    public function phpIni(): JsonResponse
+    public function phpIni(PhpInfo $info): JsonResponse
     {
         // get content
-        $array = SymfonyUtils::getPhpInfoArray();
+        $array = $info->asArray();
 
         // create headers
         $disposition = HeaderUtils::makeDisposition(
@@ -133,7 +193,7 @@ class AboutController extends AbstractController
         ];
 
         // create response
-        $response = new JsonResponse($array, JsonResponse::HTTP_OK, $headers);
+        $response = $this->json($array, JsonResponse::HTTP_OK, $headers);
         $response->setEncodingOptions(\JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
 
         return $response;
@@ -144,10 +204,10 @@ class AboutController extends AbstractController
      *
      * @Route("/php/ini/pdf", name="about_php_ini_pdf")
      */
-    public function phpIniPdf(): PdfResponse
+    public function phpIniPdf(PhpInfo $info): PdfResponse
     {
         // get content
-        $content = SymfonyUtils::getPhpInfoArray();
+        $content = $info->asArray();
 
         // create report
         $report = new PhpIniReport($this);
@@ -168,6 +228,21 @@ class AboutController extends AbstractController
             'app_home_url' => $this->getHomeUrl(),
             'policy_date' => true,
             'link' => true,
+        ]);
+    }
+
+    /**
+     * Render the policy informations content.
+     *
+     * @Route("/policy/content", name="about_policy_content")
+     * @IsGranted("ROLE_USER")
+     */
+    public function policyContent(): JsonResponse
+    {
+        $content = $this->renderView('about/policy_content.html.twig');
+
+        return $this->jsonTrue([
+            'content' => $content,
         ]);
     }
 
@@ -194,6 +269,89 @@ class AboutController extends AbstractController
     }
 
     /**
+     * Render Symfony informations content.
+     *
+     * @Route("/symfony/content", name="about_symfony_content")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function symfonyContent(SymfonyInfo $info): JsonResponse
+    {
+        $locale = \Locale::getDefault();
+        $localeName = Locales::getName($locale, 'en');
+
+        $routes = $info->getRoutes();
+        $packages = $info->getPackages();
+
+        $parameters = [
+            'charset' => $info->getCharset(),
+            'timezone' => $info->getTimeZone(),
+            'environment' => $info->getEnvironment(),
+            'version' => $info->getVersion(),
+
+            'bundles' => $info->getBundles(),
+            'runtimePackages' => $packages['runtime'] ?? [],
+            'debugPackages' => $packages['debug'] ?? [],
+
+            'runtimeRoutes' => $routes['runtime'] ?? [],
+            'debugRoutes' => $routes['debug'] ?? [],
+
+            'projectDir' => $info->getProjectDir(),
+            'cacheDir' => $info->getCacheInfo(),
+            'logDir' => $info->getLogInfo(),
+
+            'endOfLife' => $info->getEndOfLifeInfo(),
+            'endOfMaintenance' => $info->getEndOfMaintenanceInfo(),
+
+            'locale' => $localeName . ' - ' . $locale,
+
+            'debug' => $info->isDebug(),
+            'apcu_enabled' => $info->isApcuLoaded(),
+            'xdebug_enabled' => $info->isXdebugLoaded(),
+            'zend_opcache_enabled' => $info->isZendCacheLoaded(),
+        ];
+        $content = $this->renderView('about/symfony_content.html.twig', $parameters);
+
+        return $this->jsonTrue([
+            'content' => $content,
+        ]);
+    }
+
+    /**
+     * Gets the Apache version.
+     *
+     * @return string|bool the Apache version on success or <code>false</code> on failure
+     */
+    private function getApacheVersion(Request $request)
+    {
+        $matches = [];
+        $regex = '/Apache\/(?P<version>[1-9][0-9]*\.[0-9][^\s]*)/i';
+
+        if (\function_exists('apache_get_version')) {
+            if (($version = apache_get_version()) && \preg_match($regex, $version, $matches)) {
+                return $matches['version'];
+            }
+        }
+
+        $server = $request->server;
+        $software = $server->get('SERVER_SOFTWARE', false);
+        if ($software && false !== \stripos($software, 'apache')) {
+            if (\preg_match($regex, $software, $matches)) {
+                return $matches['version'];
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets the cache adapter class.
+     */
+    private function getCacheClass(): string
+    {
+        return $this->getApplication()->getCacheClass();
+    }
+
+    /**
      * Gets the home page URL.
      */
     private function getHomeUrl(): string
@@ -207,5 +365,18 @@ class AboutController extends AbstractController
         }
 
         return \rtrim($url, '/');
+    }
+
+    /**
+     * Returns a string with the names of all modules compiled and loaded.
+     *
+     * @return string all the modules names
+     */
+    private function getLoadedExtensions(): string
+    {
+        $extensions = \array_map('strtolower', \get_loaded_extensions());
+        \sort($extensions);
+
+        return \implode(', ', $extensions);
     }
 }

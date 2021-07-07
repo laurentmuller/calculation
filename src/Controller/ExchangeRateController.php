@@ -103,8 +103,7 @@ class ExchangeRateController extends AbstractController
             return $this->json($lastError);
         }
 
-        return $this->json([
-            'result' => true,
+        return $this->jsonTrue([
             'rate' => $result['rate'],
             'next' => FormatUtils::formatDateTime($result['next']),
             'update' => FormatUtils::formatDateTime($result['update']),

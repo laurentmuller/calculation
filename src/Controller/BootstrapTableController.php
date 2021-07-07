@@ -214,10 +214,10 @@ class BootstrapTableController extends AbstractController
             $view = (string) $request->get(TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
             $session->set(TableInterface::PARAM_VIEW, $view);
 
-            return new JsonResponse(true);
+            return $this->json(true);
         }
 
-        return new JsonResponse(false);
+        return $this->json(false);
     }
 
     /**
@@ -289,7 +289,7 @@ class BootstrapTableController extends AbstractController
 
             // callback?
             if ($query->callback) {
-                $response = new JsonResponse($results);
+                $response = $this->json($results);
             } else {
                 // empty?
                 if (0 === $results->totalNotFiltered && !$table->isEmptyAllowed()) {
@@ -317,7 +317,7 @@ class BootstrapTableController extends AbstractController
             ];
 
             if ($request->isXmlHttpRequest()) {
-                return new JsonResponse($parameters, $status);
+                return $this->json($parameters, $status);
             }
 
             return $this->renderForm('bundles/TwigBundle/Exception/error.html.twig', $parameters);

@@ -704,6 +704,16 @@ class FormHelper
     }
 
     /**
+     * Sets the priority.
+     *
+     * @param int $priority the priority to set. Fields with higher priorities are rendered first and fields with same priority are rendered in their original order.
+     */
+    public function priority(int $priority): self
+    {
+        return $this->updateOption('priority', $priority);
+    }
+
+    /**
      * Sets the read-only property to true.
      */
     public function readonly(): self

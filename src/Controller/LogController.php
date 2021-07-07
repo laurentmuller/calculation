@@ -17,7 +17,7 @@ use App\Report\LogReport;
 use App\Service\LogService;
 use App\Spreadsheet\LogDocument;
 use App\Util\FileUtils;
-use App\Util\SymfonyUtils;
+use App\Util\SymfonyInfo;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -82,7 +82,7 @@ class LogController extends AbstractController
      *
      * @Route("/delete", name="log_delete")
      */
-    public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
+    public function delete(Request $request, LogService $service, LoggerInterface $logger, SymfonyInfo $info): Response
     {
         // get entries
         if (!$service->getEntries()) {
@@ -117,11 +117,11 @@ class LogController extends AbstractController
         }
 
         $parameters = [
-            'route' => $request->get('route'),
             'form' => $form,
             'file' => $file,
-            'size' => SymfonyUtils::formatFileSize($file),
-            'entries' => SymfonyUtils::getLines($file),
+            'route' => $request->get('route'),
+            'entries' => FileUtils::getLines($file),
+            'size' => FileUtils::formatSize($file),
         ];
 
         // display

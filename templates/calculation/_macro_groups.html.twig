@@ -4,8 +4,8 @@
 {% import 'macros/_icons.html.twig' as icons %}
 {% import 'calculation/_macro_categories.html.twig' as macroCategories %}
 
-<thead{% if editable %} data-prototype="{{ macroCategories.printCategoryRow(group.categories.vars.prototype, editable, false, false)|e('html_attr') }}"{% endif -%}>
-    <tr class="drag-skip bg-light border-left border-right group">
+<thead class="group"{% if editable %} data-prototype="{{ macroCategories.printCategoryRow(group.categories.vars.prototype, editable, false, false)|e('html_attr') }}"{% endif -%}>
+    <tr class="drag-skip bg-light border-left border-right">
         {{ form_widget(group.group) }}
         {{ form_widget(group.code) }}
         {{ form_widget(group.position) }}

@@ -66,7 +66,7 @@ override form errors. Rendered example:
     {{ parent() }}
     <div class="input-group-append">
         <span class="btn btn-outline-secondary btn-password{% if not value %} disabled{% endif %}" title="{{ 'common.toggle_password'|trans }}">
-            <i class="far fa-eye" aria-hidden="true"></i>
+            <i class="fa-fw far fa-eye" aria-hidden="true"></i>
         </span>
     </div>
 </div>
@@ -194,7 +194,7 @@ override form errors. Rendered example:
 {%- set image_title = 'captcha.title'|trans -%}
 {%- set image_style = theme_dark(app.request) ? ' style="margin-top: 1px; margin-bottom: 1px;"' : '' -%}
 {%- if remote|default(false) -%}
-    {%- set attr = attr|merge({'remote': remote}) -%}
+    {%- set attr = attr|merge({'data-remote': remote}) -%}
 {%- endif -%}
 {%- if refresh|default(false) -%}
     {%- set attr = attr|merge({'data-refresh': refresh}) -%}
@@ -202,13 +202,13 @@ override form errors. Rendered example:
 <div class="input-group">
     <div class="input-group-prepend">
         <span class="input-group-text py-0 px-1 bg-white"{{ image_style }}>
-            <img id="image{{ id }}" alt="{{ image_title }}" title="{{ image_title }}" src="{{ image }}" width="150" height="30">
+            <img id="{{ id }}_image" name="{{ id }}_image" class="captcha-image" alt="{{ image_title }}" title="{{ image_title }}" src="{{ image }}" width="150" height="30">
         </span>
     </div>
     {{- block('form_widget_simple') -}}
     {% if refresh|default(false) %}
     <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" id="refresh{{ id }}" title="{{ 'captcha.refresh'|trans }}">
+        <button id="{{ id }}_refresh" name="{{ id }}_refresh" class="btn btn-outline-secondary captcha-refresh" type="button" title="{{ 'captcha.refresh'|trans }}">
             <i class="fas fa-sync" aria-hidden="true"></i>
         </button>
     </div>

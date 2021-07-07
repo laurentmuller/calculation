@@ -28,7 +28,7 @@ $.fn.extend({
      *            $table - the parent table.
      * @return {boolean} this function returns always true.
      */
-    updateRow: function($table) {
+    updateRow: function ($table) {
         'use strict';
         const $row = $(this);
         const options = $table.getOptions();
@@ -74,17 +74,17 @@ $.fn.extend({
      *            excludeAttributes - the attributes to exclude.
      * @return {jQuery} the elements for chaining.
      */
-    tagName: function(newTag, excludeAttributes){
+    tagName: function (newTag, excludeAttributes){
         'use strict';
         newTag = "<" + newTag + ">";
         excludeAttributes = excludeAttributes || [];
 
-        return $(this).each(function(index, element){
+        return $(this).each(function (index, element){
             const $element = $(element);
             const $newTag = $(newTag, {
                 html: $element.html()
             });
-            $.each(element.attributes, function(i, attribute) {
+            $.each(element.attributes, function (i, attribute) {
                 if (!excludeAttributes.includes(attribute.name)) {
                     $newTag.attr(attribute.name, attribute.value);
                 }
@@ -101,7 +101,7 @@ $.fn.extend({
      * @param {Object}
      *            params - the query parameters.
      */
-    updateLink: function(row, params) {
+    updateLink: function (row, params) {
         'use strict';
         const $link = $(this);
         const regex = /\bid=\d+/;
@@ -128,20 +128,20 @@ $.fn.extend({
      *            options - the options to merge with default.
      * @return {jQuery} this instance for chaining.
      */
-    initBootstrapTable: function(options) {
+    initBootstrapTable: function (options) {
         'use strict';
         const $this = $(this);
 
         // settings
         const defaults = {
             // select row on click
-            onClickRow: function(row, $element) {
+            onClickRow: function (row, $element) {
                 $element.updateRow($this);
                 $this.enableKeys();
             },
 
             // edit row on double-click
-            onDblClickRow: function(row, $element, field) {
+            onDblClickRow: function (row, $element, field) {
                 $element.updateRow($this);
                 if(field !== 'action') {
                     $this.editRow($element);
@@ -149,7 +149,7 @@ $.fn.extend({
             },
 
             // update UI on post page load
-            onPostBody: function(content) {
+            onPostBody: function (content) {
                 const isData = content.length !== 0;
                 if(isData) {
                     // select first row if none
@@ -162,7 +162,7 @@ $.fn.extend({
                 $this.updateHistory().toggleClass('table-hover', isData);
 
                 // update pagination
-                $('.fixed-table-pagination .page-link').each(function(index, element) {
+                $('.fixed-table-pagination .page-link').each(function (index, element) {
                     const $element = $(element);
                     $element.attr('title', $element.attr('aria-label'));
                 });
@@ -170,7 +170,7 @@ $.fn.extend({
                 $('.fixed-table-pagination .page-item.active .page-link').tagName('span', ['href']);
             },
 
-            onCustomViewPostBody: function(data) {
+            onCustomViewPostBody: function (data) {
                 const $view = $this.getCustomView();
 
                 // data?
@@ -180,9 +180,9 @@ $.fn.extend({
 
                     const params = $this.getParameters();
                     const selector = '.custom-view-actions:eq(%index%)';
-                    const callback = $.isFunction(options.onRenderCustomView) ? options.onRenderCustomView: false;
+                    const callback = $.isFunction (options.onRenderCustomView) ? options.onRenderCustomView: false;
 
-                    $this.find('tbody tr .actions').each(function(index, element) {
+                    $this.find('tbody tr .actions').each(function (index, element) {
                         // copy actions
                         const $rowActions = $(element).children();
                         const $cardActions = $view.find(selector.replace('%index%', index));
@@ -209,7 +209,7 @@ $.fn.extend({
             },
 
             // save parameters
-            onToggle: function() {
+            onToggle: function () {
                 $this.saveParameters();
             }
         };
@@ -220,20 +220,20 @@ $.fn.extend({
         $this.enableKeys().highlight();
 
         // select row on right click
-        $this.find('tbody').on('mousedown', 'tr', function(e) {
+        $this.find('tbody').on('mousedown', 'tr', function (e) {
             if(e.button === 2) {
                 $(this).updateRow($this);
             }
         });
 
         // handle items in custom view
-        $this.parents('.bootstrap-table').on('mousedown', '.custom-item', function() {
+        $this.parents('.bootstrap-table').on('mousedown', '.custom-item', function () {
             const index = $(this).parent().index();
             const $row = $this.find('tbody tr:eq(' + index + ')');
             if ($row.length) {
                 $row.updateRow($this);
             }
-        }).on('dblclick', '.custom-item.table-primary div:not(.rowlink-skip)', function(e) {
+        }).on('dblclick', '.custom-item.table-primary div:not(.rowlink-skip)', function (e) {
             if(e.button === 0) {
                 $this.editRow();
             }
@@ -247,7 +247,7 @@ $.fn.extend({
      *
      * @return {Object} the options.
      */
-    getOptions: function() {
+    getOptions: function () {
         'use strict';
         return $(this).bootstrapTable('getOptions');
     },
@@ -257,7 +257,7 @@ $.fn.extend({
      *
      * @return {Object} the parameters.
      */
-    getParameters: function() {
+    getParameters: function () {
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
@@ -276,7 +276,7 @@ $.fn.extend({
         }
 
         // query parameters function?
-        if($.isFunction(options.queryParams)) {
+        if($.isFunction (options.queryParams)) {
             return $.extend(params, options.queryParams(params));
         }
         return params;
@@ -287,7 +287,7 @@ $.fn.extend({
      *
      * @return {string} the search text.
      */
-    getSearchText: function() {
+    getSearchText: function () {
         'use strict';
         return '' + $(this).getOptions().searchText;
     },
@@ -297,7 +297,7 @@ $.fn.extend({
      *
      * @return {boolean} true if a search text is present.
      */
-    isSearchText: function() {
+    isSearchText: function () {
         'use strict';
         return $(this).getSearchText().length > 0;
     },
@@ -307,7 +307,7 @@ $.fn.extend({
      *
      * @return {boolean} true if the card view mode is displayed.
      */
-    isCardView: function() {
+    isCardView: function () {
         'use strict';
         return $(this).getOptions().cardView;
     },
@@ -317,7 +317,7 @@ $.fn.extend({
      *
      * @return {boolean} true if the custom view mode is displayed.
      */
-    isCustomView: function() {
+    isCustomView: function () {
         'use strict';
         const data = $(this).getBootstrapTable();
         return data && data.showCustomView;
@@ -328,7 +328,7 @@ $.fn.extend({
      *
      * @return {boolean} true if not data is displayed.
      */
-    isEmpty: function() {
+    isEmpty: function () {
         'use strict';
         return $(this).getData().length === 0;
     },
@@ -339,7 +339,7 @@ $.fn.extend({
      *
      * @return {array} the loaded data.
      */
-    getData: function() {
+    getData: function () {
         'use strict';
         return $(this).bootstrapTable('getData');
     },
@@ -359,7 +359,7 @@ $.fn.extend({
      *
      * @return {jQuery} the selected row, if any; null otherwise.
      */
-    getSelection: function() {
+    getSelection: function () {
         'use strict';
         const $this = $(this);
         const $row = $this.find($this.getOptions().rowSelector);
@@ -371,7 +371,7 @@ $.fn.extend({
      *
      * @return {int} the selected row index, if any; -1 otherwise.
      */
-    getSelectionIndex: function() {
+    getSelectionIndex: function () {
         'use strict';
         const $row  = $(this).getSelection();
         return $row ? $row.index() : -1;
@@ -382,7 +382,7 @@ $.fn.extend({
      *
      * @return {JQuery} the custom view container, if displayed, null otherwise.
      */
-    getCustomView: function() {
+    getCustomView: function () {
         'use strict';
         const $this = $(this);
         if ($this.isCustomView()) {
@@ -396,7 +396,7 @@ $.fn.extend({
      *
      * @return {jQuery} this instance for chaining.
      */
-    saveParameters: function() {
+    saveParameters: function () {
         'use strict';
         const $this = $(this);
         const url = $this.getOptions().saveUrl;
@@ -413,14 +413,14 @@ $.fn.extend({
      *            rows - the rendered data.
      * @return {jQuery} this instance for chaining.
      */
-    updateHref: function(rows) {
+    updateHref: function (rows) {
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
         const params = $this.getParameters();
-        const callback = $.isFunction(options.onRenderAction) ? options.onRenderAction : false;
+        const callback = $.isFunction (options.onRenderAction) ? options.onRenderAction : false;
 
-        $this.find('tbody tr .dropdown-item-path').each(function() {
+        $this.find('tbody tr .dropdown-item-path').each(function () {
             const $link = $(this);
             const $row = $link.parents('tr');
             const row = rows[$row.index()];
@@ -432,8 +432,8 @@ $.fn.extend({
         });
 
         // actions row callback
-        if($.isFunction(options.onUpdateHref)) {
-            $this.find('tbody tr').each(function() {
+        if($.isFunction (options.onUpdateHref)) {
+            $this.find('tbody tr').each(function () {
                 const $paths = $(this).find('.dropdown-item-path');
                 if($paths.length) {
                     options.onUpdateHref($this, $paths);
@@ -448,7 +448,7 @@ $.fn.extend({
      *
      * @return {jQuery} this instance for chaining.
      */
-    updateCardView: function() {
+    updateCardView: function () {
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
@@ -457,10 +457,10 @@ $.fn.extend({
         }
 
         const $body = $this.find('tbody');
-        const callback = $.isFunction(options.onRenderCardView) ? options.onRenderCardView : false;
+        const callback = $.isFunction (options.onRenderCardView) ? options.onRenderCardView : false;
         const data = callback ? $this.getData() : null;
         const columns = options.columns[0].filter((c) => c.visible && c.cardVisible);
-        $body.find('tr').each(function() {
+        $body.find('tr').each(function () {
             const $row = $(this);
             const $views = $row.find('.card-views:first');
 
@@ -471,14 +471,14 @@ $.fn.extend({
                     class: 'actions d-print-none rowlink-skip'
                 });
                 $actions.removeAttr('class').appendTo($td);
-                $td.appendTo($row).on('click', function() {
+                $td.appendTo($row).on('click', function () {
                     $row.updateRow($this);
                 });
                 $views.find('.card-view:last').remove();
             }
 
             // update class
-            $views.find('.card-view-value').each(function(index, element) {
+            $views.find('.card-view-value').each(function (index, element) {
                 if(columns[index].cardClass) {
                     $(element).addClass(columns[index].cardClass);
                 }
@@ -506,7 +506,7 @@ $.fn.extend({
      *            options - the optional options.
      * @return {jQuery} this instance for chaining.
      */
-    refresh: function(options) {
+    refresh: function (options) {
         'use strict';
         return $(this).bootstrapTable('refresh', options || {});
     },
@@ -518,7 +518,7 @@ $.fn.extend({
      *            text - the optional search text.
      * @return {jQuery} this instance for chaining.
      */
-    resetSearch: function(text) {
+    resetSearch: function (text) {
         'use strict';
         return $(this).bootstrapTable('resetSearch', text || '');
     },
@@ -530,7 +530,7 @@ $.fn.extend({
      *            options - the options to refresh.
      * @return {jQuery} this instance for chaining.
      */
-    refreshOptions: function(options) {
+    refreshOptions: function (options) {
         'use strict';
         return $(this).bootstrapTable('refreshOptions', options || {});
     },
@@ -540,7 +540,7 @@ $.fn.extend({
      *
      * @return {jQuery} this instance for chaining.
      */
-    toggleView: function() {
+    toggleView: function () {
         'use strict';
         return $(this).bootstrapTable('toggleView');
     },
@@ -550,7 +550,7 @@ $.fn.extend({
      *
      * @return {jQuery} this instance for chaining.
      */
-    toggleCustomView: function() {
+    toggleCustomView: function () {
         'use strict';
         return $(this).bootstrapTable('toggleCustomView');
     },
@@ -562,7 +562,7 @@ $.fn.extend({
      *            mode the display mode to set ('table', 'card' or 'custom').
      * @return {jQuery} this instance for chaining.
      */
-    setDisplayMode: function(mode) {
+    setDisplayMode: function (mode) {
         'use strict';
         const $this = $(this);
         switch (mode) {
@@ -596,7 +596,7 @@ $.fn.extend({
      *
      * @return {string} the display mode ('table', 'card' or 'custom').
      */
-    getDisplayMode : function() {
+    getDisplayMode : function () {
         'use strict';
         const $this = $(this);
         if ($this.isCustomView()) {
@@ -613,7 +613,7 @@ $.fn.extend({
      *
      * @return {jQuery} this instance for chaining.
      */
-    highlight: function() {
+    highlight: function () {
         'use strict';
         const $this = $(this);
         const text = $this.getSearchText();
@@ -640,13 +640,13 @@ $.fn.extend({
      *            selectLast - true to select the last row.
      * @return {boolean} true if the previous page is displayed.
      */
-    showPreviousPage: function(selectLast) {
+    showPreviousPage: function (selectLast) {
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
         if(options.pageNumber > 1) {
             if(selectLast || false) {
-                $this.one('post-body.bs.table', function() {
+                $this.one('post-body.bs.table', function () {
                     $this.selectLastRow();
                 });
             }
@@ -661,7 +661,7 @@ $.fn.extend({
      *
      * @return {boolean} true if the next page is displayed.
      */
-    showNextPage: function() {
+    showNextPage: function () {
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
@@ -677,7 +677,7 @@ $.fn.extend({
      *
      * @return {boolean} true if the first row is selected.
      */
-    selectFirstRow: function() {
+    selectFirstRow: function () {
         'use strict';
         const $this = $(this);
         const $row = $this.getSelection();
@@ -693,7 +693,7 @@ $.fn.extend({
      *
      * @return {boolean} true if the first last is selected.
      */
-    selectLastRow: function() {
+    selectLastRow: function () {
         'use strict';
         const $this = $(this);
         const $row = $this.getSelection();
@@ -709,7 +709,7 @@ $.fn.extend({
      *
      * @return {boolean} true if the previous row is selected.
      */
-    selectPreviousRow: function() {
+    selectPreviousRow: function () {
         'use strict';
         const $this = $(this);
         const $row = $this.getSelection();
@@ -726,7 +726,7 @@ $.fn.extend({
      *
      * @return {boolean} true if the next row is selected.
      */
-    selectNextRow: function() {
+    selectNextRow: function () {
         'use strict';
         const $this = $(this);
         const $row = $this.getSelection();
@@ -745,7 +745,7 @@ $.fn.extend({
      *            actionSelector - the action selector.
      * @return{JQuery} the action, if found; null otherwise.
      */
-    findAction: function(actionSelector) {
+    findAction: function (actionSelector) {
         'use strict';
         let $link;
         let $parent;
@@ -767,7 +767,7 @@ $.fn.extend({
      *
      * @return {boolean} true if the action is called.
      */
-    editRow: function() {
+    editRow: function () {
         'use strict';
         const $link = $(this).findAction('a.btn-default');
         if($link) {
@@ -782,7 +782,7 @@ $.fn.extend({
      *
      * @return {boolean} true if the action is called.
      */
-    deleteRow: function() {
+    deleteRow: function () {
         'use strict';
         const $link = $(this).findAction('a.btn-delete');
         if($link) {
@@ -797,14 +797,14 @@ $.fn.extend({
      *
      * @return {jQuery} this instance for chaining.
      */
-    enableKeys: function() {
+    enableKeys: function () {
         'use strict';
         const $this = $(this);
 
         // get or create the key handler
         let keyHandler = $this.data('keys.handler');
         if(!keyHandler) {
-            keyHandler = function(e) {
+            keyHandler = function (e) {
                 if((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
                     return;
                 }
@@ -867,7 +867,7 @@ $.fn.extend({
      *
      * @return {jQuery} this instance for chaining.
      */
-    disableKeys: function() {
+    disableKeys: function () {
         'use strict';
         const $this = $(this);
         const keyHandler = $this.data('keys.handler');
@@ -880,7 +880,7 @@ $.fn.extend({
     /**
      * Update the history state.
      */
-    updateHistory: function() {
+    updateHistory: function () {
         'use strict';
         const $this = $(this);
         const params = $this.getParameters();
@@ -898,7 +898,7 @@ $.fn.extend({
     /**
      * Hide the empty data message in custom view.
      */
-    hideCustomViewMessage: function() {
+    hideCustomViewMessage: function () {
         'use strict';
         const $view = $(this).getCustomView();
         if ($view) {
@@ -909,7 +909,7 @@ $.fn.extend({
     /**
      * Show the empty data message in custom view.
      */
-    showCustomViewMessage: function() {
+    showCustomViewMessage: function () {
         'use strict';
         const $this = $(this);
         const $view = $this.getCustomView();

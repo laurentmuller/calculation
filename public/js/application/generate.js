@@ -4,7 +4,7 @@
 
 /**
  * Creates a row for the given values.
- * 
+ *
  * @param {array}
  *            values - the cell values.
  * @param {array}
@@ -28,7 +28,7 @@ function createRow(values, classes) {
 
 /**
  * Creates rows for the given items.
- * 
+ *
  * @param {array}
  *            items - the items to render.
  * @param {function}
@@ -55,7 +55,7 @@ function createRows(items, valuesCallback, classes, rowCallback) {
 
 /**
  * Fill the table with the generated calculations
- * 
+ *
  * @param {array}
  *            calculations - the calculations to render.
  */
@@ -75,7 +75,7 @@ function renderCalculations(calculations) {
 
 /**
  * Fill the table with the generated customers
- * 
+ *
  * @param {array}
  *            customers - the customers to render.
  */
@@ -153,7 +153,7 @@ function generate() {
 
     // init validation
     const options = {
-        submitHandler: function() {
+        submitHandler: function () {
             generate();
         }
     };

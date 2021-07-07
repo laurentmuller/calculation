@@ -160,7 +160,7 @@ const Application = {
      *
      * @return {Object} the dialog.
      */
-    getItemDialog:function() {
+    getItemDialog: function () {
         'use strict';
         if (!this.itemDialog) {
             this.itemDialog = new EditItemDialog(this);
@@ -173,7 +173,7 @@ const Application = {
      *
      * @return {Object} the dialog.
      */
-    getTaskDialog:function() {
+    getTaskDialog: function () {
         'use strict';
         if (!this.taskDialog) {
             this.taskDialog = new EditTaskDialog(this);
@@ -186,7 +186,7 @@ const Application = {
      *
      * @return {Application} This instance for chaining.
      */
-    initDragDialog: function() {
+    initDragDialog: function () {
         'use strict';
 
         // already initialized?
@@ -196,7 +196,7 @@ const Application = {
         }
 
         // draggable edit dialog
-        $('.modal .modal-header').on('mousedown', function(e) {
+        $('.modal .modal-header').on('mousedown', function (e) {
             // left button?
             if (event.which !== 1) {
                 return;
@@ -223,7 +223,7 @@ const Application = {
             $draggable.toggleClass('bg-primary text-white');
             $close.toggleClass('bg-primary text-white');
 
-            $('body').on('mousemove.draggable', function(e) {
+            $('body').on('mousemove.draggable', function (e) {
                 // compute
                 const left = Math.max(margin, Math.min(right, e.pageX - startX));
                 const top = Math.max(margin, Math.min(bottom, e.pageY - startY));
@@ -234,7 +234,7 @@ const Application = {
                     top: top
                 });
 
-            }).one('mouseup', function() {
+            }).one('mouseup', function () {
                 $('body').off('mousemove.draggable');
                 $draggable.toggleClass('bg-primary text-white');
                 $close.toggleClass('bg-primary text-white');
@@ -243,9 +243,9 @@ const Application = {
                 }
             });
 
-            $draggable.closest('.modal').one('hide.bs.modal', function() {
+            $draggable.closest('.modal').one('hide.bs.modal', function () {
                 $('body').off('mousemove.draggable');
-            }).one('hidden.bs.modal', function() {
+            }).one('hidden.bs.modal', function () {
                 $dialog.removeAttr('style');
             });
         });
@@ -345,7 +345,7 @@ const Application = {
      *
      * @return {Application} This instance for chaining.
      */
-    updateAll: function() {
+    updateAll: function () {
         'use strict';
         this.updatePositions();
         this.updateButtons();
@@ -366,7 +366,7 @@ const Application = {
         let disabled = true;
         $('#data-table-edit tbody').each(function (index, element) {
             const $body = $(element);
-            const $rows = $body.find('tr:not(:first)');
+            const $rows = $body.find('.item');
             const lastIndex = $rows.length - 1;
 
             // run over rows
@@ -386,12 +386,12 @@ const Application = {
         });
 
         if (disabled) {
-            const $head = $('#data-table-edit thead');
-            if ($head.length > 1) {
+            const $groups= this.getGroups();
+            if ($groups.length > 1) {
                 disabled = false;
             } else {
-                $head.each(function () {
-                    const $body = $(this).nextUntil('thead');
+                $groups.each(function () {
+                    const $body = $(this).nextUntil('.group');
                     if ($body.length > 1) {
                         disabled = false;
                         return false;
@@ -503,12 +503,8 @@ const Application = {
     disable: function (message) {
         'use strict';
 
-        $(':submit').fadeOut();
-        $('.btn-adjust').fadeOut();
-        $('.btn-add-item').fadeOut();
-        $('#totals-panel').fadeOut();
-        $('#edit-form :input').attr('readonly', 'readonly');
-        $('#item_form :input').attr('readonly', 'readonly');
+        $('#edit-form :input, #item_form :input').attr('readonly', 'readonly');
+        $(':submit, .btn-adjust, .btn-add-item, #totals-panel, #data-table-edit div.dropdown').fadeOut();
 
         $('#data-table-edit *').css('cursor', 'auto');
         $('#data-table-edit a.btn-add-item').removeClass('btn-add-item');
@@ -516,8 +512,6 @@ const Application = {
         $('#data-table-edit a.btn-delete-item').removeClass('btn-delete-item');
         $('#data-table-edit a.btn-delete-group').removeClass('btn-delete-group');
         $('#data-table-edit a.btn-sort-group').removeClass('btn-sort-group');
-        // $('#item_delete_button').remove();
-        $('#data-table-edit div.dropdown').fadeOut();
         $('#error-all > p').html('<br>').addClass('small').removeClass('text-right');
 
         $.contextMenu('destroy');
@@ -538,19 +532,53 @@ const Application = {
     },
 
     /**
+     * Gets groups.
+     *
+     * @returns {jQuery} - the groups.
+     */
+    getGroups: function () {
+        'use strict';
+        return $('#data-table-edit .group');
+    },
+
+    /**
+     * Gets the categories for the given group.
+     *
+     * @param {jQuery}
+     *            $group - the group (thead) to search categories for.
+     * @returns {jQuery} - the categories.
+     */
+    getCategories: function ($group) {
+        'use strict';
+        return $group.nextUntil('.group').find('.category');
+    },
+
+    /**
+     * Gets the items for the given category.
+     *
+     * @param {jQuery} -
+     *            $category - the category (th) to serach items for.
+     * @returns {jQuery} - the items.
+     */
+    getItems: function ($category) {
+        'use strict';
+        return $category.parents('tbody').find('.item');
+    },
+
+    /**
      * Finds or create the table head for the given group.
      *
      * @param {Object}
      *            group - the group data used to find row.
      * @returns {jQuery} - the table head.
      */
-    getGroup: function (group) {
+    findOrCreateGroup: function (group) {
         'use strict';
 
-        // find
-        const $head = $("#data-table-edit thead:has(input[name*='group'][value=" + group.id + "])");
-        if ($head.length !== 0 ) {
-            return $head;
+        const selector = ":has(input[name*='group'][value=" + group.id + "])";
+        const $group = this.getGroups().filter(selector);
+        if ($group.length > 0 ) {
+            return $group;
         }
 
         // append
@@ -566,11 +594,11 @@ const Application = {
      *            category - the category data used to update row.
      * @returns {jQuery} - the table body.
      */
-    getCategory: function ($group, category) {
+    findOrCreateCategory: function ($group, category) {
         'use strict';
 
         const $body = $("#data-table-edit tbody:has(input[name*='category'][value=" + category.id + "])");
-        if ($body.length !== 0) {
+        if ($body.length > 0) {
             return $body;
         }
 
@@ -612,13 +640,13 @@ const Application = {
         // get rows
         const that = this;
         const $tbody = $element.closest('tbody');
-        const $rows = $tbody.find('tr:not(:first)');
-        if ($rows.length < 2) {
+        const $items = $tbody.find('.item');
+        if ($items.length < 2) {
             return that;
         }
 
         // sort
-        $rows.sort(function (rowA, rowB) {
+        $items.sort(function (rowA, rowB) {
             const textA = $('td:first', rowA).text();
             const textB = $('td:first', rowB).text();
             return that.compareStrings(textA, textB);
@@ -640,11 +668,11 @@ const Application = {
         'use strict';
 
         const that = this;
-        let $head = $element.parents('thead');
-        if ($head.length === 0) {
-            $head = $element.parents('tbody').prev();
+        let $group = $element.closest('.group');
+        if ($group.length === 0) {
+            $group = $element.parents('tbody').prev();
         }
-        const $bodies = $head.nextUntil('thead');
+        const $bodies = $group.nextUntil('.group');
         if ($bodies.length < 2) {
             return that;
         }
@@ -654,7 +682,7 @@ const Application = {
           const textB = $('th:first', b).text();
           return that.compareStrings(textA, textB);
         });
-        $head.after($bodies);
+        $group.after($bodies);
 
         return that;
     },
@@ -668,12 +696,12 @@ const Application = {
         'use strict';
 
         const that = this;
-        const $heads = $('#data-table-edit thead');
-        if ($heads.length < 2) {
+        const $groups = that.getGroups();
+        if ($groups.length < 2) {
             return that;
         }
 
-        $heads.sort(function (a, b) {
+        $groups.sort(function (a, b) {
             const textA = $('th:first', a).text();
             const textB = $('th:first', b).text();
             return that.compareStrings(textA, textB);
@@ -692,7 +720,7 @@ const Application = {
 
         const that = this;
         that.sortGroups($(this));
-        $('#data-table-edit thead').each(function () {
+        that.getGroups().each(function () {
             that.sortCategories($(this));
         });
         $('#data-table-edit tbody').each(function () {
@@ -714,7 +742,7 @@ const Application = {
         // find the next group where to insert this group before
         const that = this;
         let $nextGroup = null;
-        $('#data-table-edit thead').each(function() {
+        that.getGroups().each(function () {
             const $head = $(this);
             const text = $head.find('th:first').text();
             if (that.compareStrings(text, group.code) > 0) {
@@ -759,7 +787,7 @@ const Application = {
         // find the next category where to insert this category before
         const that = this;
         let $nextCategory = null;
-        $group.nextUntil('thead').each(function() {
+        $group.nextUntil('.group').each(function () {
             const $body = $(this);
             const text = $body.find('th:first').text();
             if (that.compareStrings(text, category.code) > 0) {
@@ -779,7 +807,7 @@ const Application = {
         if ($nextCategory) {
             $category.insertBefore($nextCategory);
         } else {
-            const $last = $group.nextUntil('thead').last();
+            const $last = $group.nextUntil('.group').last();
             if ($last.length) {
                 $last.after($category);
             } else {
@@ -851,8 +879,8 @@ const Application = {
         'use strict';
 
         const that = this;
-        const $head = $element.closest('thead');
-        const $elements = $head.add($head.nextUntil('thead'));
+        const $head = $element.closest('.group');
+        const $elements = $head.add($head.nextUntil('.group'));
         $elements.removeFadeOut(function () {
             that.updateAll();
         });
@@ -877,7 +905,7 @@ const Application = {
         const $next = $body.next();
 
         // if it is the last category then remove the group
-        if ($prev.is('thead') && ($next.length === 0 || $next.is('thead'))) {
+        if ($prev.is('.group') && ($next.length === 0 || $next.is('.group'))) {
             return that.removeGroup($prev);
         }
 
@@ -930,8 +958,8 @@ const Application = {
         const item = dialog.getItem();
 
         // get or create group and category
-        const $group = this.getGroup(group);
-        const $category = this.getCategory($group, category);
+        const $group = this.findOrCreateGroup(group);
+        const $category = this.findOrCreateCategory($group, category);
 
         // append
         const $row = $category.appendRow(item);
@@ -962,7 +990,7 @@ const Application = {
         const item = dialog.getItem();
 
         const $oldBody = $editingRow.parents('tbody');
-        let $oldHead = $oldBody.prevUntil('thead').prev();
+        let $oldHead = $oldBody.prevUntil('.group').prev();
         if ($oldHead.length === 0) {
             $oldHead = $oldBody.prev();
         }
@@ -981,14 +1009,14 @@ const Application = {
         // same group and category?
         if (oldGroupId !== group.id || oldCategoryId !== category.id) {
             // get or create group and category
-            const $group = this.getGroup(group);
-            const $category = this.getCategory($group, category);
+            const $group = this.findOrCreateGroup(group);
+            const $category = this.findOrCreateCategory($group, category);
 
             // append
             const $row = $category.appendRow(item);
 
             // check if empty
-            const $next = $oldHead.nextUntil('thead');
+            const $next = $oldHead.nextUntil('.group');
             const isEmptyCategory = $oldBody.children().length === 2;
             const isEmptyGroup = isEmptyCategory && $next.length === 1;
 
@@ -1021,16 +1049,16 @@ const Application = {
         const dialog = this.getTaskDialog().hide();
 
         // get dialog values
-        const group = dialog .getGroup();
-        const category = dialog .getCategory();
+        const group = dialog.getGroup();
+        const category = dialog.getCategory();
         const items = dialog.getItems();
 
         // get or create group and category
-        const $group = this.getGroup(group);
-        const $category = this.getCategory($group, category);
+        const $group = this.findOrCreateGroup(group);
+        const $category = this.findOrCreateCategory($group, category);
 
         // append items and select
-        items.forEach(function(item) {
+        items.forEach(function (item) {
             const $row = $category.appendRow(item);
             $row.scrollInViewport().timeoutToggle('table-success');
         });
@@ -1117,22 +1145,22 @@ const Application = {
         const that = this;
 
         // groups
-        const $groups = $('#data-table-edit thead');
-        $groups.each(function (i, element) {
-            const $group = $(element);
-            $group.findNamedInput('position').val(i);
+        const $groups = that.getGroups();
+        $groups.each(function (idxGroup, group) {
+            const $group = $(group);
+            $group.findNamedInput('position').val(idxGroup);
 
             // categories
-            const $categories = $group.nextUntil('thead').find('tr:first');
-            $categories.each(function (i, element) {
-                const $category = $(element);
-                $category.findNamedInput('position').val(i);
+            const $categories = that.getCategories($group);
+            $categories.each(function (idxCategory, category) {
+                const $category = $(category);
+                $category.findNamedInput('position').val(idxCategory);
 
                 // items
-                const $items = $category.parents('tbody').find('tr:not(:first)');
-                $items.each(function (i, element) {
-                    const $item = $(element);
-                    $item.findNamedInput('position').val(i);
+                const $items = that.getItems($category);
+                $items.each(function (idxItem, item) {
+                    const $item = $(item);
+                    $item.findNamedInput('position').val(idxItem);
                 });
             });
         });
@@ -1188,7 +1216,7 @@ $.fn.extend({
 
         const $this = $(this);
         const lastIndex = $this.length - 1;
-        $this.each(function(i, element) {
+        $this.each(function (i, element) {
             $(element).fadeOut(400, function () {
                 $(this).remove();
                 if (i === lastIndex && $.isFunction(callback)) {
@@ -1214,7 +1242,7 @@ $.fn.extend({
 
         // get and update index
         const $table = $('#data-table-edit');
-        const index = $table.data(key);
+        const index = Number.parseInt($table.data(key), 10);
         $table.data(key, index + 1);
 
         // get prototype
@@ -1406,7 +1434,6 @@ const MoveRowHandler = {
             } else {
                 $source.insertAfter($target);
             }
-            // $source.swapIdAndNames($target).scrollInViewport().timeoutToggle('table-success');
             $source.scrollInViewport().timeoutToggle('table-success');
             Application.updateButtons().updatePositions();
         }
@@ -1517,9 +1544,6 @@ const MoveRowHandler = {
     // errors
     updateErrors();
 
-    // main form validation
-    $('#edit-form').initValidator();
-
     // user margin
     const $margin = $('#calculation_userMargin');
     $margin.on('input propertychange', function () {
@@ -1527,5 +1551,29 @@ const MoveRowHandler = {
             Application.updateTotals();
         }, 250);
     });
+
+    // main form validation
+    $('#edit-form').initValidator();
+
+    // test
+    // const $groups = Application.getGroups();
+    // $groups.each(function (idxGroup, group) {
+    // const $group = $(group);
+    // console.log($group.find('th:first').text());
+    //
+    // // categories
+    // const $categories = Application.getCategories($group);
+    // $categories.each(function (idxCategory, category) {
+    // const $category = $(category);
+    // console.log(' ' + $category.find('th:first').text());
+    //
+    // // items
+    // const $items = Application.getItems($category);
+    // $items.each(function (idxItem, item) {
+    // const $item = $(item);
+    // console.log(' ' + $item.find('td:first').text());
+    // });
+    // });
+    // });
 
 }(jQuery));

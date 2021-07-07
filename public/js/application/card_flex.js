@@ -4,14 +4,14 @@
 
 /**
  * Gets the query input.
- * 
+ *
  * @returns {jQuery} the input element or null if none.
  */
 function getQueryInput() {
     'use strict';
-    
+
     const $query = $('.form-query-input');
-    return $query.length ? $query: null; 
+    return $query.length ? $query: null;
 }
 
 /**
@@ -27,19 +27,19 @@ function updateLinks() {
             const $this = $(this);
             const parts = $this.attr('href').split('?');
             const params = new URLSearchParams(parts.length === 2 ? parts[1] : '');
-            
+
             // check if update is needed
             if (!text && !params.has("query")) {
                 return false;
             }
-            
+
             // update parameters
             if (text) {
                 params.set('query', text);
             } else if (params.has("query")) {
                 params.delete("query");
             }
-            
+
             // update href
             $this.attr('href', parts[0] + params.toQuery());
         });
@@ -68,12 +68,12 @@ function updateCounter() {
 
 /**
  * Upate counter and hyperlinks.
- * 
+ *
  * @returns
  */
 function updateUI() {
     'use strict';
-    
+
     updateCounter();
     updateLinks();
 }
@@ -83,7 +83,7 @@ function updateUI() {
  */
 function showAll() {
     'use strict';
-    
+
     const $elements = $('.card-flex.d-none');
     if ($elements.length) {
         $elements.removeClass('d-none');
@@ -96,7 +96,7 @@ function showAll() {
  */
 function onQueryChange() {
     'use strict';
-    
+
     const query = getQueryInput().val().clean();
     if (query.length) {
         const selector = '.data-search:icontains(' + query + ')';
@@ -119,7 +119,7 @@ function onQueryChange() {
         $query.on('input', function () {
             $query.updateTimer(onQueryChange, 250);
         });
-        $('.btn-query-clear').on('click', function() {
+        $('.btn-query-clear').on('click', function () {
             $query.val('').selectFocus();
             showAll();
         });

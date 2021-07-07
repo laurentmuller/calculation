@@ -17,9 +17,9 @@
         rules: {
             'form[captcha]': {
                 remote: {
-                    url: $captcha.attr('remote'),
+                    url: $captcha.data('remote'),
                     data: {
-                        _captcha: function () {
+                        captcha: function () {
                             return $captcha.val();
                         }
                     }
@@ -30,10 +30,10 @@
 
     // image
     const url = $captcha.data('refresh');
-    $('#refreshform_captcha').on('click', function () {
+    $('.captcha-refresh').on('click', function () {
         $.get(url, function (response) {
             if (response.result) {
-                $('#imageform_captcha').attr('src', response.data);
+                $('.captcha-image').attr('src', response.data);
                 $captcha.val('').focus();
             }
         });

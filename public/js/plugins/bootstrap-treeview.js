@@ -3,7 +3,7 @@
 /**
  * Ready function
  */
-(function($) {
+(function ($) {
     'use strict';
 
     // -----------------------------
@@ -45,7 +45,7 @@
             if (options.data) {
                 // get data
                 if (options.data.isPrototypeOf(String)) {
-                    options.data = $.parseJSON(options.data);
+                    options.data = JSON.parse(options.data);
                 }
                 that.tree = $.extend(true, [], options.data);
 
@@ -66,7 +66,7 @@
                 $.getJSON(options.url, function (data) {
                     // get data
                     if (data.isPrototypeOf(String)) {
-                        data = $.parseJSON(data);
+                        data = JSON.parse(data);
                     }
                     that.tree = $.extend(true, [], data);
 
@@ -86,7 +86,7 @@
             }
 
             // add handlers
-            // $element.on('click', '.state-icon', function() {
+            // $element.on('click', '.state-icon', function () {
             // console.log('state-icon');
             // });
 

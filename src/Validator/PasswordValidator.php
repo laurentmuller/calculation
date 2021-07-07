@@ -43,7 +43,7 @@ class PasswordValidator extends AbstractConstraintValidator
      *
      * @param Password $constraint
      */
-    protected function doValidate($value, Constraint $constraint): void
+    protected function doValidate(string $value, Constraint $constraint): void
     {
         if ($constraint->all) {
             $this->checkLetters($constraint, $value);

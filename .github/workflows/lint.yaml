@@ -52,7 +52,7 @@ jobs:
 
             - name: Lint Doctrine entities
               if: always() && steps.install.outcome == 'success'
-              run: 'php bin/console doctrine:schema:validate -vvv --no-interaction'
+              run: 'php bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction'
 
             - name: Lint Composer config
               if: always() && steps.install.outcome == 'success'

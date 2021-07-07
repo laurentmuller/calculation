@@ -63,7 +63,7 @@ recaptcha:
     required: Vous devez cocher la case "Je ne suis pas un robot".
 captcha:
     invalid: Le code de contrôle est invalide.
-    timeout: Le délai d'attente est atteint. Essayez de recharger la page ou l'image.
+    timeout: Le délai d'attente est atteint. Essayez de recharger la page ou de génerer une nouvelle image.
     generate: Impossible de générer une nouvelle image.
 task:
     unique_name: Ce nom est déjà utilisé par une autre tâche.

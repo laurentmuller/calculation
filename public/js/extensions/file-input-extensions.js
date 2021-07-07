@@ -18,20 +18,20 @@
             const $parent =  $(this).parents('.form-group');
             return $parent.findExists('.fileinput.input-group, .fileinput-preview.img-thumbnail');
         },
-        
-        
+
+
         /**
          * Intitialize a file input.
-         * 
+         *
          * @param {function}
          *            callback - the optional callback function to use after
          *            change.
          */
-        initFileInput: function(callback) {
-            return this.each(function() {
+        initFileInput: function (callback) {
+            return this.each(function () {
                 const $that = $(this);
                 const isThumbnail = $that.parents('.form-group').findExists('.img-thumbnail');
-                $that.on('change', function() {
+                $that.on('change', function () {
                     $that.valid();
                     if ($.isFunction(callback)) {
                         callback($that);
@@ -46,18 +46,18 @@
                 const $group = $that.findFileInput();
                 if ($group) {
                     // update class
-                    $that.on('focus', function() {
+                    $that.on('focus', function () {
                         if ($that.hasClass('is-invalid')) {
                             $group.addClass('field-invalid');
                         } else {
                             $group.addClass('field-valid');
                         }
-                    }).on('blur', function() {
+                    }).on('blur', function () {
                         $group.removeClass('field-valid field-invalid');
                     });
 
                     // focus when select file
-                    $group.find('.fileinput-filename,.fileinput-exists').on('click', function() {
+                    $group.find('.fileinput-filename,.fileinput-exists').on('click', function () {
                         $that.focus();
                     });
                 }

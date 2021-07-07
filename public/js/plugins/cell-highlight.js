@@ -141,7 +141,7 @@
             that.horizontal = that.vertical = false;
         },
 
-        getTableRows: function() {
+        getTableRows: function () {
             const selector = this.options.rowSelector;
             return this.$element.find(selector);
         },

@@ -24,7 +24,7 @@ function customViewFormatter(data) { // jshint ignore:line
 
         // fields
         let html = $template.html();
-        Object.keys(row).forEach(function(key) {
+        Object.keys(row).forEach(function (key) {
             html = html.replaceAll('%' + key + '%', row[key] || '&#160;');
         });
 
@@ -319,7 +319,7 @@ function formatActions(value, row) { // jshint ignore:line
     const substr = '$1' + value;
     const regex = /(\/|\bid=)(\d+)/;
     const $actions = $('#dropdown-actions').clone().removeClass('d-none');
-    $actions.find('.dropdown-item-path').each(function() {
+    $actions.find('.dropdown-item-path').each(function () {
         const $link = $(this);
         const source = $link.attr('href');
         const target = source.replace(regex, substr);
@@ -333,7 +333,7 @@ function formatActions(value, row) { // jshint ignore:line
  */
 $.fn.extend({
 
-    getDataValue: function() {
+    getDataValue: function () {
         'use strict';
         return $(this).data('value') || null;
     },
@@ -377,7 +377,7 @@ $.fn.extend({
         return $this.data('value', value);
     },
 
-    initDropdown: function(copyText, copyIcon) {
+    initDropdown: function (copyText, copyIcon) {
         'use strict';
         const $this = $(this);
         const $menu = $this.next('.dropdown-menu');
@@ -387,7 +387,7 @@ $.fn.extend({
         if ($.isUndefined(copyIcon) || copyIcon === null) {
             copyIcon = false;
         }
-        $menu.on('click', '.dropdown-item', function() {
+        $menu.on('click', '.dropdown-item', function () {
             const $item = $(this);
             const newValue = $item.getDataValue();
             const oldValue = $this.getDataValue();
@@ -396,7 +396,7 @@ $.fn.extend({
             }
             $this.focus();
         });
-        $this.parent().on('shown.bs.dropdown', function() {
+        $this.parent().on('shown.bs.dropdown', function () {
             $menu.find('.active').focus();
         });
         return $this;
@@ -407,7 +407,7 @@ $.fn.extend({
      *
      * @return {object} the context menu items.
      */
-    getContextMenuItems: function() {
+    getContextMenuItems: function () {
         'use strict';
         let $parent;
         const $this = $(this);
@@ -425,7 +425,7 @@ $.fn.extend({
 /**
  * Ready function
  */
-(function($) {
+(function ($) {
     'use strict';
 
     const $table = $('#table-edit');
@@ -438,8 +438,8 @@ $.fn.extend({
 
     // initialize table
     const options = {
-        queryParams: function(params) {
-            $inputs.each(function() {
+        queryParams: function (params) {
+            $inputs.each(function () {
                 const $this = $(this);
                 const value = $this.getDataValue();
                 if(value) {
@@ -449,7 +449,7 @@ $.fn.extend({
             return params;
         },
 
-        onPreBody: function(data) {
+        onPreBody: function (data) {
             // options
             const options = $table.getOptions();
 
@@ -466,7 +466,7 @@ $.fn.extend({
                     $pageButton.toggleDisabled(true);
                 } else {
                     const pageSize = Number.parseInt(options.pageSize, 10);
-                    const $links = pageList.map(function(page) {
+                    const $links = pageList.map(function (page) {
                         const $link = $('<button/>', {
                             'class': 'dropdown-page dropdown-item',
                             'data-value': page,
@@ -487,7 +487,7 @@ $.fn.extend({
             if ($clearButton.length) {
                 let enabled = $table.isSearchText();
                 if (!enabled && $inputs.length) {
-                    $inputs.each(function() {
+                    $inputs.each(function () {
                         if ($(this).getDataValue()) {
                             enabled = true;
                             return false;
@@ -519,11 +519,11 @@ $.fn.extend({
         },
 
         // for debug purpose
-        // onAll: function(name) {
+        // onAll: function (name) {
         // console.log(name, Array.from(arguments).slice(1));
         // },
 
-        onPageChange: function() {
+        onPageChange: function () {
             // hide
             if ($table.isCustomView()) {
                 $('.bootstrap-table .fixed-table-custom-view .custom-item').animate({'opacity': '0'}, 200);
@@ -555,7 +555,7 @@ $.fn.extend({
             }
         },
 
-        onRenderCardView: function($table, row, $item) {
+        onRenderCardView: function ($table, row, $item) {
             // border color
             if (typeof row.color !== 'undefined') {
                 const $cell = $item.find('td:first');
@@ -572,7 +572,7 @@ $.fn.extend({
             }
         },
 
-        onRenderAction: function($table, row, $element, $action) {
+        onRenderAction: function ($table, row, $element, $action) {
             if($action.is('.btn-user-switch')) {
                 updateUserSwitchAction($table, row, $element, $action);
             } else if($action.is('.btn-user-message, .btn-user-delete')) {
@@ -588,14 +588,14 @@ $.fn.extend({
             }
         },
 
-        onUpdateHref: function($table, $actions) {
+        onUpdateHref: function ($table, $actions) {
             if($actions.length === 1) {
                 $actions.addClass('btn-default');
             }
         },
 
         // show message
-        onLoadError: function(status, jqXHR) {
+        onLoadError: function (status, jqXHR) {
             if ('abort' !== jqXHR.statusText) {
                 const title = $('.card-title').text();
                 const message = $table.data('errorMessage');
@@ -608,7 +608,7 @@ $.fn.extend({
     // update add button
     const $addButton = $('.add-link');
     if ($addButton.length) {
-        $table.on('update-row.bs.table', function() {
+        $table.on('update-row.bs.table', function () {
             const $source =  $table.findAction('.btn-add');
             if ($source) {
                 $addButton.attr('href', $source.attr('href'));
@@ -617,19 +617,19 @@ $.fn.extend({
     }
 
     // handle drop-down input buttons
-    $inputs.each(function() {
-        $(this).initDropdown().on('input', function() {
+    $inputs.each(function () {
+        $(this).initDropdown().on('input', function () {
             $table.refresh();
         });
     });
 
     // handle clear search button
     if ($clearButton.length) {
-        $clearButton.on('click', function() {
+        $clearButton.on('click', function () {
             const isSearchText = $table.isSearchText();
             const isQueryParams = !$.isEmptyObject(options.queryParams({}));
             // clear drop-down
-            $inputs.each(function() {
+            $inputs.each(function () {
                 $(this).setDataValue(null);
             });
             if(isSearchText) {
@@ -643,7 +643,7 @@ $.fn.extend({
 
     // handle the page button
     if ($pageButton.length) {
-        $pageButton.initDropdown().on('input', function() {
+        $pageButton.initDropdown().on('input', function () {
             const pageSize = $pageButton.getDataValue();
             $table.refresh({
                 pageSize: pageSize
@@ -652,13 +652,13 @@ $.fn.extend({
     }
 
     // handle view buttons
-    $('#button_view').initDropdown(false, true).on('input', function() {
+    $('#button_view').initDropdown(false, true).on('input', function () {
         const view = $(this).getDataValue();
         $table.setDisplayMode(view);
     });
 
     // handle sort buttons
-    $('.dropdown-menu-sort').on('click', function() {
+    $('.dropdown-menu-sort').on('click', function () {
         const $this = $(this);
         const sortName = $this.data('sort');
         const sortOrder = $this.data('order');
@@ -669,20 +669,20 @@ $.fn.extend({
              $table.refresh();
          }
     });
-    $('.btn-group-sort').on('shown.bs.dropdown', function() {
+    $('.btn-group-sort').on('shown.bs.dropdown', function () {
         $(this).find('.dropdown-menu-sort.active').focus();
     });
 
     // handle keys enablement
-    $('body').on('focus', 'a, input, .btn, .dropdown-item, .rowlink-skip', function() {
+    $('body').on('focus', 'a, input, .btn, .dropdown-item, .rowlink-skip', function () {
         $table.disableKeys();
-    }).on('blur', 'a, input, .btn, .dropdown-item, .rowlink-skip', function() {
+    }).on('blur', 'a, input, .btn, .dropdown-item, .rowlink-skip', function () {
         $table.enableKeys();
     });
 
     // initialize context menu
     const ctxSelector =  'tr.table-primary td:not(.rowlink-skip), .custom-item.table-primary div:not(.rowlink-skip)';
-    const show = function() {
+    const show = function () {
         $('.dropdown-menu.show').removeClass('show');
         return true;
     };

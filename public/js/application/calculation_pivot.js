@@ -4,10 +4,10 @@
  * -------------- jQuery extensions --------------
  */
 $.fn.extend({
-    
+
     /**
      * Toogle total cells class.
-     * 
+     *
      * @param {string}
      *            oldClass the old class.
      * @param {string}
@@ -16,7 +16,7 @@ $.fn.extend({
      */
     toggleCell(oldClass, newClass) {
         'use strict';
-        
+
          return $(this).each(function () {
              const $that = $(this);
              const firstClass = oldClass.split(' ')[0];
@@ -26,10 +26,10 @@ $.fn.extend({
          });
     }
 });
-    
+
 /**
  * Toogle the cell highlight enablement.
- * 
+ *
  * @param {jQuery}
  *            $source - The highlight checkbox.
  * @param {jQuery}
@@ -50,13 +50,13 @@ function toggleHighlight($source, $table, save) {
                 cellSelector: 'td:not(.not-hover), th:not(.not-hover)',
                 highlightHorizontal: 'table-primary',
                 highlightVertical: 'table-primary'
-                    
+
             }).on('cellhighlight.mouseenter', function (e, { horizontal, vertical}) {
-                $.each($.merge(horizontal, vertical), function() {
+                $.each($.merge(horizontal, vertical), function () {
                     $(this).toggleCell('bg-success text-white', 'table-cell');
                 });
             }).on('cellhighlight.mouseleave', function (e, { horizontal, vertical}) {
-                $.each($.merge(horizontal, vertical), function() {
+                $.each($.merge(horizontal, vertical), function () {
                     $(this).toggleCell('table-cell', 'bg-success text-white');
                 });
             });
@@ -72,19 +72,19 @@ function toggleHighlight($source, $table, save) {
     // save to session
     if (save) {
         const url = $('#pivot').data('session');
-        const data =  { 
-            name: 'highlight', 
+        const data =  {
+            name: 'highlight',
             value: checked
         };
         $.post(url, data);
     }
-    
+
     return $source;
 }
 
 /**
  * Toogle the popover enablement.
- * 
+ *
  * @param {jQuery}
  *            $source - The popover checkbox.
  * @param {jQuery}
@@ -101,7 +101,7 @@ function togglePopover($source, $selector, save) {
     if (checked) {
         if (popover) {
             $selector.popover('enable');
-        } else {            
+        } else {
             $selector.popover({
                 html: true,
                 trigger: 'hover',
@@ -118,17 +118,17 @@ function togglePopover($source, $selector, save) {
             $selector.popover('disable');
         }
     }
-    
+
     // save to session
     if (save) {
         const url = $('#pivot').data('session');
-        const data =  { 
-            name: 'popover', 
+        const data =  {
+            name: 'popover',
             value: checked
         };
         $.post(url, data);
-    }   
-    
+    }
+
     return $source;
 }
 
@@ -137,7 +137,7 @@ function togglePopover($source, $selector, save) {
  */
 (function ($) {
     'use strict';
-    
+
     // get elements
     const $table = $('#pivot');
     const $popover = $('#popover');
@@ -159,7 +159,7 @@ function togglePopover($source, $selector, save) {
     $highlight.on('input', function () {
         toggleHighlight($(this), $table, true);
     });
-    
+
     // hover
     $selector.on('mouseenter', function () {
         $(this).addClass('text-hover');

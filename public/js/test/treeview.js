@@ -50,17 +50,15 @@ function formatCountry(country) {
     });
 
     // countries
-    const data = $('#countries div').map(function () {
-        const $this = $(this);
-        const id = $this.data('id');
-        const text = $this.text();
+    const $country = $('#country');
+    const countries = $country.data('countries');
+    const data = Object.keys(countries).map(function (key) {
         return {
-            id: id,
-            text: text
+            id: key,
+            text: countries[key]
         };
-    }).toArray();
-    $('#countries').remove();
-    $('#country').initSelect2({
+    });
+    $country.removeAttr('data-countries').initSelect2({
         data: data,
         templateResult: formatCountry,
         templateSelection: formatCountry

@@ -627,7 +627,7 @@ class TestController extends AbstractController
                 'badgeValue' => $count,
             ];
 
-            return new JsonResponse([$root]);
+            return $this->json([$root]);
         }
 
         return $this->renderForm('test/treeview.html.twig', [
@@ -685,16 +685,14 @@ class TestController extends AbstractController
      */
     public function verifyAkismetComment(AkismetService $akismetservice, FakerService $fakerService): JsonResponse
     {
-        /** @var \Faker\Generator $faker */
         $faker = $fakerService->getFaker();
         $comment = $faker->realText(145, 2);
-
         $value = $akismetservice->verifyComment($comment);
         if ($lastError = $akismetservice->getLastError()) {
-            return new JsonResponse($lastError);
+            return $this->json($lastError);
         }
 
-        return new JsonResponse([
+        return $this->json([
             'comment' => $comment,
             'spam' => $value,
         ]);
@@ -706,9 +704,9 @@ class TestController extends AbstractController
     public function verifyAkismetKey(AkismetService $service): JsonResponse
     {
         if (false === $result = $service->verifyKey()) {
-            return new JsonResponse($service->getLastError());
+            return $this->json($service->getLastError());
         }
 
-        return new JsonResponse(['valid_key' => $result]);
+        return $this->json(['valid_key' => $result]);
     }
 }

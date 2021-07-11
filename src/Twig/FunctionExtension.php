@@ -35,10 +35,8 @@ final class FunctionExtension extends AbstractExtension
 {
     /**
      * The asset extension.
-     *
-     * @var AssetExtension
      */
-    private $asset;
+    private ?AssetExtension $asset = null;
 
     /**
      * The URL generator service.
@@ -344,7 +342,9 @@ final class FunctionExtension extends AbstractExtension
     private function getAssetUrl(Environment $env, string $path, ?string $packageName = null): string
     {
         if (null === $this->asset) {
-            $this->asset = $env->getExtension(AssetExtension::class); // @phpstan-ignore-line
+            /** @var AssetExtension $asset */
+            $asset = $env->getExtension(AssetExtension::class);
+            $this->asset = $asset;
         }
 
         return $this->asset->getAssetUrl($path, $packageName);

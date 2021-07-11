@@ -1,0 +1,54 @@
+/**! compression tag for ftp-deployment */
+
+.clock-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.clock-container .clock {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.clock-container .needle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 65px;
+    width: 3px;
+    transition: all 0.5s ease-in;
+    transform-origin: bottom center;
+    transform: translate(-50%, -100%) rotate(0deg);
+}
+
+.clock-container .needle.minute,
+.clock-container .needle.second {
+    height: 100px;
+}
+
+.clock-container .center-point {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    --center-color: var(--dark);
+}
+
+.clock-container .center-point::after {
+    content: '';
+    width: 5px;
+    height: 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background-color: var(--center-color);
+}

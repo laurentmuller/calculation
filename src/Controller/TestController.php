@@ -71,6 +71,25 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TestController extends AbstractController
 {
     /**
+     * Show analog clock.
+     *
+     * @Route("/clock", name="test_clock")
+     */
+    public function clock(Request $request): Response
+    {
+        $session = $request->getSession();
+        $dark = (bool) $session->get('clock_dark', false);
+        if ($request->request->has('clock_dark')) {
+            $dark = (bool) $request->request->get('clock_dark', false);
+            $session->set('clock_dark', $dark);
+
+            return $this->jsonTrue(['clock_dark' => $dark]);
+        }
+
+        return $this->renderForm('test/clock.html.twig', ['dark' => $dark]);
+    }
+
+    /**
      * Update calculations with random customers.
      *
      * @Route("/flex", name="test_flex")

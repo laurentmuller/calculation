@@ -5,7 +5,7 @@
 
 [![php-cs-fixer](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml) [![Lint](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml) [![PHP-Stan](https://github.com/laurentmuller/calculation/actions/workflows/php-stan.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-stan.yaml) [![PHP-Units](https://github.com/laurentmuller/calculation/actions/workflows/unit-tests.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/unit-tests.yaml)
 
-![Symfony](https://img.shields.io/badge/Symfony-5.3.3-informational?logo=symfony) ![PHP](https://img.shields.io/badge/PHP-7.4.20-informational?logo=php) ![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)
+[![Symfony](https://img.shields.io/badge/Symfony-5.3.3-informational?logo=symfony)](https://symfony.com) [![PHP](https://img.shields.io/badge/PHP-7.4.20-informational?logo=php)](https://www.php.net) [![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)](https://www.mysql.com)
 
 This bundle provides calculations within the <a href="https://symfony.com" target="_blank">Symfony</a> framework.
 

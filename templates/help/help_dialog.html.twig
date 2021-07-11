@@ -116,11 +116,19 @@
     {%- set text = dialog.forbidden.text|default('help.labels.forbidden_text'|trans) -%}
     {%- set image = dialog.forbidden.image|default(false) -%}
     {%- set action = dialog.forbidden.action|default(false) -%}
-    <p class="mt-2 mb-0">{{ text }}</p>
+    <p class="my-2 mb-0">{{ text }}</p>
     {% if image %}{{- tools.output_image(image, false) -}}{% endif %}
     {% if action %}
         <p class="mt-2 mb-0">{{ 'help.labels.edit_actions'|trans }}</p>
         {{ tools.output_table_actions({action}, table_class, head_class, service) }}
     {% endif %}
+{%- endif %}
+
+{# entity #}
+{% if dialog.entity|default(false) -%}
+{%- set entity_name = (dialog.entity ~ '.name')|trans -%}
+{% set href = path('help_entity', {'id': dialog.entity}) %}
+<hr class="my-1">
+<p>{{ 'help.labels.see_also'|trans }} <a href="{{ href }}">{{ entity_name }}</a></p>
 {%- endif %}
 {%- endblock %}

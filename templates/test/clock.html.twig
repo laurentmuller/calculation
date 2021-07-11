@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{# parameters #}
+{% set title = 'Horloge analogique' %}
+{% set dark = dark|default(false) %}
+{% set date_time_class = dark ? ' text-light' : '' %}
+{% set background_class = dark ? 'light' : 'dark' %}
+
+{% block body -%}
+<div class="d-flex flex-column justify-content-center" style="height: 80vh">
+	<div class="d-flex justify-content-center">
+    	<div class="clock-container rounded p-4 {% if dark %} bg-dark{% else %}border{% endif %}" data-url="{{ url('test_clock') }}">
+            <div class="clock">
+                <div class="needle hour bg-{{ background_class }}"></div>
+                <div class="needle minute bg-{{ background_class }}"></div>
+                <div class="needle second bg-danger"></div>
+                <div class="center-point bg-danger" style="--center-color: var(--{{ background_class }})"></div>
+            </div>
+            <div class="time display-4{{ date_time_class }}"></div>
+            <div class="date text-capitalize{{ date_time_class }}"></div>
+        </div>
+	</div>
+    <div class="d-flex justify-content-center mt-2">
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="dark" name="dark"{% if dark %} checked="checked"{% endif %}>
+            <label class="custom-control-label" for="dark">Mode sombre</label>
+        </div>
+    </div>
+</div>
+{%- endblock %}
+
+{% block stylesheets -%}
+{{ parent() }}
+{{ asset_css('css/clock.css') }}
+{% endblock %}
+
+{% block javascripts -%}
+{{ parent() }}
+{{ asset_js('js/test/clock.js') }}
+{% endblock %}

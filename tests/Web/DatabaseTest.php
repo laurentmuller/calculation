@@ -14,6 +14,7 @@ namespace App\Tests\Web;
 
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
+use App\Repository\AbstractRepository;
 use App\Repository\CalculationGroupRepository;
 use App\Repository\CalculationItemRepository;
 use App\Repository\CalculationRepository;
@@ -26,7 +27,6 @@ use App\Repository\ProductRepository;
 use App\Repository\PropertyRepository;
 use App\Repository\UserRepository;
 use App\Tests\DatabaseTrait;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -102,15 +102,15 @@ class DatabaseTest extends KernelTestCase
     /**
      * @dataProvider getRepositories
      *
-     * @template T
+     * @template T of \App\Entity\AbstractEntity
      *
      * @param class-string<T> $className
      */
     public function testRepository(string $className, int $expected): void
     {
         /**
-         * @var EntityRepository $repository
-         * @psalm-var EntityRepository<T> $repository
+         * @var AbstractRepository $repository
+         * @psalm-var AbstractRepository<T> $repository
          */
         $repository = self::$container->get($className);
         $this->assertNotNull($repository);

@@ -1132,10 +1132,13 @@ help:
         forbidden_text: Si l'objet sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.
         description: 'Description :'
         constraints: 'Les contraintes suivantes sont appliquées :'
+        see_also: 'Voir aussi :'
     actions:
-        toggle: Afficher la vue
+        search: Rechercher
+        toggle: Affichage
         clear: Effacer les critères de recherche
         pages: Lignes par page
+        sort: Trier
     fields:
         field: Champ
         column: Colonne

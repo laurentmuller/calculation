@@ -108,7 +108,7 @@ class HelpReport extends AbstractReport
 
     private function formatFieldType(array $field): string
     {
-        $type = $this->trans('help.types.' . $field['type']);
+        $type = $this->trans('help.types.' . ($field['type'] ?? 'text'));
         if ($length = $field['length'] ?? null) {
             return "$type ($length)";
         }
@@ -340,7 +340,7 @@ class HelpReport extends AbstractReport
                 ->add($this->formatFieldName($item, $field))
                 ->add($field['description'])
                 ->add($this->formatFieldType($field))
-                ->add($this->formatRequired($field['required']))
+                ->add($this->formatRequired($field['required'] ?? true))
                 ->endRow();
         }
     }

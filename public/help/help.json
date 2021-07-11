@@ -8,35 +8,29 @@
 				{
 					"name": "description",
 					"description": "Description de l'article.",
-					"required": true,
-					"type": "text",
 					"length": "255"
 				},
 				{
 					"name": "category",
 					"description": "Catégorie à laquelle appartient l'article.",
-					"required": true,
 					"type": "reference",
 					"entity": "category"
 				},
 				{
 					"name": "price",
 					"description": "Prix unitaire de l'article.",
-					"required": true,
 					"type": "amount"
 				},
 				{
 					"name": "unit",
 					"description": "Unité de l'article.",
 					"required": false,
-					"type": "text",
 					"length": "30"
 				},
 				{
 					"name": "supplier",
 					"description": "Nom du fournisseur de l'article.",
 					"required": false,
-					"type": "text",
 					"length": "255"
 				}
 			],
@@ -83,14 +77,11 @@
 				{
 					"name": "name",
 					"description": "Description de la tâche.",
-					"required": true,
-					"type": "text",
 					"length": "255"
 				},
 				{
 					"name": "category",
 					"description": "Catégorie à laquelle appartient la tâche.",
-					"required": true,
 					"type": "reference",
 					"entity": "category"
 				},
@@ -98,7 +89,6 @@
 					"name": "unit",
 					"description": "Unité de la tâche.",
 					"required": false,
-					"type": "text",
 					"length": "30"
 				},
 				{
@@ -109,7 +99,8 @@
 				}
 			],
 			"constraints": [
-				"La description de la tâche doit être unique à travers tout le catalogue."
+				"Le nom de la tâche doit être unique à travers tout le catalogue.",
+				"Le nom des opérations de chaque tâche doit être unique."
 			],
 			"actions": [
 				{
@@ -152,21 +143,17 @@
 				{
 					"name": "code",
 					"description": "Nom de la catégorie.",
-					"required": true,
-					"type": "text",
 					"length": "30"
 				},
 				{
 					"name": "description",
 					"description": "Description de la catégorie.",
 					"required": false,
-					"type": "text",
 					"length": "255"
 				},
 				{
 					"name": "group",
 					"description": "Groupe à laquelle appartient la catégorie.",
-					"required": true,
 					"type": "reference",
 					"entity": "group"
 				},
@@ -224,15 +211,12 @@
 				{
 					"name": "code",
 					"description": "Nom du groupe.",
-					"required": true,
-					"type": "text",
 					"length": "30"
 				},
 				{
 					"name": "description",
 					"description": "Description du groupe.",
 					"required": false,
-					"type": "text",
 					"length": "255"
 				},
 				{
@@ -283,20 +267,17 @@
 				{
 					"name": "minimum",
 					"description": "Valeur minimale (inclus) pour laquelle la marge est appliquée.",
-					"required": true,
 					"type": "amount"
 				},
 				{
 					"name": "maximum",
 					"description": "Valeur maximale (exclus) pour laquelle la marge est appliquée.",
-					"required": true,
 					"type": "amount"
 				},
 				{
 					"name": "margin",
 					"description": "Marge à appliquer à la calculation.",
-					"type": "percent",
-					"required": true
+					"type": "percent"
 				}
 			],
 			"constraints": [
@@ -336,33 +317,26 @@
 				{
 					"name": "id",
 					"description": "Numéro unique identifiant la calculation. Ce numéro est généré automatiquement par l'application.",
-					"required": true,
 					"type": "identifier"
 				},
 				{
 					"name": "customer",
 					"description": "Nom du client.",
-					"required": true,
-					"type": "text",
 					"length": "255"
 				},
 				{
 					"name": "description",
 					"description": "Description de la calculation.",
-					"required": true,
-					"type": "text",
 					"length": "255"
 				},
 				{
 					"name": "date",
 					"description": "Date de la calculation. La valeur par défaut est la date du jour.",
-					"required": true,
 					"type": "date"
 				},
 				{
 					"name": "state",
 					"description": "Statut de la calculation.",
-					"required": true,
 					"type": "reference",
 					"entity2": "calculationstate"
 				},
@@ -399,13 +373,11 @@
 				{
 					"name": "created",
 					"description": "Date et nom de l'utilisateur qui a crée la calculation.",
-					"type": "text",
 					"required": false
 				},
 				{
 					"name": "updated",
 					"description": "Date et nom de l'utilisateur qui a modifié la calculation en dernier.",
-					"type": "text",
 					"required": false
 				}
 			],
@@ -467,19 +439,16 @@
 				{
 					"name": "level",
 					"description": "Niveau d'erreur.",
-					"type": "text",
 					"required": false
 				},
 				{
 					"name": "message",
 					"description": "Message d'information ou d'erreur.",
-					"type": "text",
 					"required": false
 				},
 				{
 					"name": "context",
 					"description": "Contexte d'information ou d'erreur.",
-					"type": "text",
 					"required": false
 				}
 			],
@@ -494,7 +463,7 @@
 	],
 	"mainMenu": {
 		"image": "navigation.png",
-		"description": "Le menu principal (menu de navigation) est une partie de l'interface d'utilisateur permettant de parcourir les pages du site.",
+		"description": "Le menu principal est une partie de l'interface d'utilisateur permettant de parcourir les pages du site.",
 		"menus": [
 			{
 				"id": "index.title",
@@ -504,7 +473,8 @@
 			{
 				"id": "calculation.list.title",
 				"icon": "calculator",
-				"description": "Liste des calculations."
+				"description": "Liste des calculations.",
+				"dialog": "calculation.list.title"
 			},
 			{
 				"id": "index.menu_data",
@@ -603,6 +573,151 @@
 	},
 	"dialogs": [
 		{
+			"id": "calculation.list.title",
+			"entity": "calculation",
+			"image": "calculation/calculation_list.png",
+			"description": "Gestion des calculations.",
+			"displayEntityColumns": true,
+			"displayEntityActions": true,
+			"globalActions": [
+				{
+					"id": "help.actions.search",
+					"icon": "square far",
+					"description": "Zone de text pour rechercher des articles."
+				},
+				{
+					"id": "category.name",
+					"icon": "folder far",
+					"description": "Menu déroulant permattant de filter les articles d'une catégorie."
+				},
+				{
+					"id": "help.actions.clear",
+					"icon": "eraser",
+					"description": "Efface tous les critères de recherche."
+				},
+				{
+					"id": "help.actions.sort",
+					"icon": "sort-amount-down-alt",
+					"description": "Menu déroulant permattant de trier les articles."
+				},
+				{
+					"id": "help.actions.toggle",
+					"icon": "table",
+					"description": "Menu déroulant permattant de choisir le mode d'affichage (table, détaillé ou mosaïque)."
+				},
+				{
+					"id": "help.actions.pages",
+					"icon": "sort-down",
+					"description": "Menu déroulant permattant de sélectionner le nombre de lignes affichées par page."
+				},
+				{
+					"id": "calculation.list.pdf_title",
+					"icon": "file-pdf far",
+					"description": "Exporte la liste des calculations au format PDF."
+				},
+				{
+					"id": "calculation.list.excel_title",
+					"icon": "file-excel far",
+					"description": "Exporte la liste des calculations au format Microsoft® Excel®."
+				}
+			]
+		},
+		{
+			"id": "calculation.show.title",
+			"entity": "calculation",
+			"image": "calculation/calculation_show.png",
+			"icon": "tv",
+			"description": "Cette page affiche les propriétés de la calculation.",
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Retourne à la page précédente."
+				},
+				{
+					"id": "common.button_edit",
+					"description": "Affiche la page d'édition de la calculation.",
+					"dialog": "calculation.edit.title_short"
+				},
+				{
+					"id": "common.button_delete",
+					"description": "Affiche la page de suppression de la calculation.",
+					"dialog": "calculation.delete.title"
+				},
+				{
+					"id": "common.button_pdf",
+					"icon": "file-pdf far",
+					"description": "Exporte la calculation au format PDF."
+				}
+			]
+		},
+		{
+			"id": "calculation.edit.title_short",
+			"entity": "calculation",
+			"image": "calculation/calculation_edit_main.png",
+			"description": "Cette page permet de modifier une calculation.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "calculation.add.title",
+			"entity": "calculation",
+			"image": "calculation/calculation_edit_new.png",
+			"description": "Cette page permet de créer une nouvelle calculation.",
+			"displayEntityFields": true,
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "calculation.delete.title",
+			"entity": "calculation",
+			"image": "calculation/calculation_delete.png",
+			"icon": "times",
+			"description": "Cette page permet de confirmer la suppression d'une calculation.",
+			"editActions": [
+				{
+					"id": "common.button_delete",
+					"description": "Supprime la calculation et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule la suppression et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "calculation.list.state_title",
+			"entity": "calculation",
+			"image": "calculation/calculation_edit_state.png",
+			"description": "Permet de modifier le statut d'une calculation.",
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Enregistre les modifications et retourne à la page précédente."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Annule les modifications et retourne à la page précédente."
+				}
+			]
+		},
+		{
 			"id": "product.list.title",
 			"entity": "product",
 			"image": "product/product_list.png",
@@ -611,19 +726,34 @@
 			"displayEntityActions": true,
 			"globalActions": [
 				{
+					"id": "help.actions.search",
+					"icon": "square far",
+					"description": "Zone de text pour rechercher des articles."
+				},
+				{
+					"id": "category.name",
+					"icon": "folder far",
+					"description": "Menu déroulant permattant de filter les articles d'une catégorie."
+				},
+				{
 					"id": "help.actions.clear",
 					"icon": "eraser",
 					"description": "Efface tous les critères de recherche."
 				},
 				{
+					"id": "help.actions.sort",
+					"icon": "sort-amount-down-alt",
+					"description": "Menu déroulant permattant de trier les articles."
+				},
+				{
 					"id": "help.actions.toggle",
-					"icon": "toggle-on",
-					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
+					"icon": "table",
+					"description": "Menu déroulant permattant de choisir le mode d'affichage (table, détaillé ou mosaïque)."
 				},
 				{
 					"id": "help.actions.pages",
-					"icon": "sort-amount-down",
-					"description": "Sélectionne le nombre de lignes affichées par page."
+					"icon": "sort-down",
+					"description": "Menu déroulant permattant de sélectionner le nombre de lignes affichées par page."
 				},
 				{
 					"id": "product.list.pdf_title",
@@ -746,7 +876,7 @@
 			"entity": "task",
 			"image": "task/task_show.png",
 			"icon": "tv",
-			"description": "Cette page affiche les propriétés de la tâches.",
+			"description": "Cette page affiche les propriétés de la tâche.",
 			"editActions": [
 				{
 					"id": "common.button_ok",
@@ -822,8 +952,8 @@
 			"icon": "keyboard",
 			"description": "Permet de calculer une tâche.",
 			"details": [
-				"L'utilisateur doit sélectionner une <b>tâche</b> et une <b>quantitée</b>.",
-				"L'utilisateur doit également sélectionner une ou plusieurs <b>opérations</b>.",
+				"L'utilisateur doit sélectionner une <b>tâche</b>, une <b>quantitée</b>",
+				"et une ou plusieurs <b>opérations</b>.",
 				"Le programme recalcule automatiquement le <b>totale générale</b> à chaque changement."
 			],
 			"editActions": [

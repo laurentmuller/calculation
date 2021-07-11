@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -71,6 +72,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      * For mime type add: (mimeTypes={"image/png", "image/jpeg", "image/gif", "image/x-ms-bmp"}).
      * </p>.
      *
+     * @Ignore
      * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
      * @Assert\Image(maxSize="10485760")
      */
@@ -133,19 +135,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      * The prefered view.
      */
     private string $view = TableInterface::VIEW_TABLE;
-
-    /**
-     * Used because the $imageFile property can not be serialized.
-     *
-     * @return string[]
-     */
-    public function __sleep(): array
-    {
-        $vars = \get_object_vars($this);
-        unset($vars['imageFile']);
-
-        return \array_keys($vars);
-    }
 
     /**
      * {@inheritdoc}

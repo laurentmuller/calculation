@@ -101,7 +101,7 @@ services:
         class: Monolog\Formatter\LineFormatter
         arguments: ["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", "d.m.Y H:i:s"]
 
-    # custom AppVariable
+    # custom Twig AppVariable
     twig.app_variable:
         class: App\Service\ApplicationService
         public: false

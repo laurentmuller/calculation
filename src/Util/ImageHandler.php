@@ -186,9 +186,9 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param string $filename the path to the PNG image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on errors
+     * @return ImageHandler|null an image handler on success, <code>null</code> on error
      */
-    public static function fromBmp(string $filename)
+    public static function fromBmp(string $filename): ?self
     {
         if (false !== $image = \imagecreatefrombmp($filename)) {
             return new self($image, $filename);
@@ -202,9 +202,9 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param string $filename the path to the PNG image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on errors
+     * @return ImageHandler|null an image handler on success, <code>null</code> on error
      */
-    public static function fromGif(string $filename)
+    public static function fromGif(string $filename): ?self
     {
         if (false !== $image = \imagecreatefromgif($filename)) {
             return new self($image, $filename);
@@ -218,9 +218,9 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param string $filename the path to the PNG image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on errors
+     * @return ImageHandler|null an image handler on success, <code>null</code> on error
      */
-    public static function fromJpeg(string $filename)
+    public static function fromJpeg(string $filename): ?self
     {
         if (false !== $image = \imagecreatefromjpeg($filename)) {
             return new self($image, $filename);
@@ -234,9 +234,9 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param string $filename the path to the image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on errors
+     * @return ImageHandler|null an image handler on success, <code>null</code> on error
      */
-    public static function fromName(string $filename)
+    public static function fromName(string $filename): ?self
     {
         $ext = \strtolower(\pathinfo($filename, \PATHINFO_EXTENSION));
         switch ($ext) {
@@ -266,9 +266,9 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param string $filename the path to the PNG image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on errors
+     * @return ImageHandler|null an image handler on success, <code>null</code> on error
      */
-    public static function fromPng(string $filename)
+    public static function fromPng(string $filename): ?self
     {
         if (false !== $image = \imagecreatefrompng($filename)) {
             return new self($image, $filename);
@@ -283,9 +283,9 @@ class ImageHandler implements ImageExtensionInterface
      * @param int $width  the image width
      * @param int $height the image height
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on errors
+     * @return ImageHandler|null an image handler on success, <code>null</code> on error
      */
-    public static function fromTrueColor(int $width, int $height)
+    public static function fromTrueColor(int $width, int $height): ?self
     {
         if (false !== $image = \imagecreatetruecolor($width, $height)) {
             return new self($image);
@@ -299,9 +299,9 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param string $filename the path to the WBMP (Wireless Bitmaps) image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on errors
+     * @return ImageHandler|null an image handler on success, <code>null</code> on error
      */
-    public static function fromWbmp(string $filename)
+    public static function fromWbmp(string $filename): ?self
     {
         if (false !== $image = \imagecreatefromwbmp($filename)) {
             return new self($image, $filename);
@@ -315,9 +315,9 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param string $filename the path to the WebP image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on errors
+     * @return ImageHandler|null an image handler on success, <code>null</code> on error
      */
-    public static function fromWebp(string $filename)
+    public static function fromWebp(string $filename): ?self
     {
         if (false !== $image = \imagecreatefromwebp($filename)) {
             return new self($image, $filename);
@@ -331,9 +331,9 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param string $filename the path to the PNG image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on errors
+     * @return ImageHandler|null an image handler on success, <code>null</code> on error
      */
-    public static function fromXbm(string $filename)
+    public static function fromXbm(string $filename): ?self
     {
         if (false !== $image = \imagecreatefromxbm($filename)) {
             return new self($image, $filename);
@@ -347,9 +347,9 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @param string $filename the path to the XPM image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on errors
+     * @return ImageHandler|null an image handler on success, <code>null</code> on error
      */
-    public static function fromXpm(string $filename)
+    public static function fromXpm(string $filename): ?self
     {
         if (false !== $image = \imagecreatefromxpm($filename)) {
             return new self($image, $filename);
@@ -359,9 +359,7 @@ class ImageHandler implements ImageExtensionInterface
     }
 
     /**
-     * Gets the loaded file name.
-     *
-     * @return string|null the file name
+     * Gets the loaded file name, if any.
      */
     public function getFilename(): ?string
     {

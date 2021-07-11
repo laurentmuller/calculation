@@ -116,8 +116,7 @@ class CaptchaImageService
         $text = $this->generateRandomString($length);
 
         // image
-        $image = $this->createImage($text, $width, $height);
-        if ($image instanceof ImageHandler) {
+        if (null !== $image = $this->createImage($text, $width, $height)) {
             // convert image
             $data = self::IMAGE_PREFIX . $this->encodeImage($image);
 
@@ -190,7 +189,7 @@ class CaptchaImageService
      *               </tr>
      *               </table>
      */
-    protected function computeText(ImageHandler $image, float $size, string $font, string $text): array
+    private function computeText(ImageHandler $image, float $size, string $font, string $text): array
     {
         return \array_map(function (string $char) use ($image, $size, $font): array {
             $angle = \random_int(-8, 8);
@@ -212,13 +211,13 @@ class CaptchaImageService
      * @param int    $width  the image width
      * @param int    $height the image height
      *
-     * @return ImageHandler|bool the image resource identifier on success, false on errors
+     * @return ImageHandler the image resource identifier on success, null on error
      */
-    protected function createImage(string $text, int $width, int $height)
+    private function createImage(string $text, int $width, int $height): ?ImageHandler
     {
         // create image
-        if (!$image = ImageHandler::fromTrueColor($width, $height)) {
-            return false;
+        if (null === $image = ImageHandler::fromTrueColor($width, $height)) {
+            return null;
         }
 
         // draw
@@ -235,7 +234,7 @@ class CaptchaImageService
      *
      * @param ImageHandler $image the image to draw to
      */
-    protected function drawBackground(ImageHandler $image): self
+    private function drawBackground(ImageHandler $image): self
     {
         $color = $image->allocateWhite();
         if (\is_int($color)) {
@@ -252,7 +251,7 @@ class CaptchaImageService
      * @param int          $width  the image width
      * @param int          $height the image height
      */
-    protected function drawLines(ImageHandler $image, int $width, int $height): self
+    private function drawLines(ImageHandler $image, int $width, int $height): self
     {
         $color = $image->allocate(195, 195, 195);
         if (\is_int($color)) {
@@ -274,7 +273,7 @@ class CaptchaImageService
      * @param int          $width  the image width
      * @param int          $height the image height
      */
-    protected function drawPoints(ImageHandler $image, int $width, int $height): self
+    private function drawPoints(ImageHandler $image, int $width, int $height): self
     {
         $color = $image->allocate(0, 0, 255);
         if (\is_int($color)) {
@@ -297,7 +296,7 @@ class CaptchaImageService
      * @param int          $height the image height
      * @param string       $text   the text to draw
      */
-    protected function drawText(ImageHandler $image, int $width, int $height, string $text): self
+    private function drawText(ImageHandler $image, int $width, int $height, string $text): self
     {
         // font and color
         $font = $this->font;
@@ -336,7 +335,7 @@ class CaptchaImageService
      *
      * @return string the encoded image
      */
-    protected function encodeImage(ImageHandler $image): string
+    private function encodeImage(ImageHandler $image): string
     {
         // save
         \ob_start();
@@ -355,7 +354,7 @@ class CaptchaImageService
      *
      * @return string the random string
      */
-    protected function generateRandomString(int $length): string
+    private function generateRandomString(int $length): string
     {
         $length = \min(\max($length, 2), \strlen(self::ALLOWED_VALUES));
         $result = \str_shuffle(self::ALLOWED_VALUES);

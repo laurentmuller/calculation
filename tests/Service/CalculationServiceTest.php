@@ -21,6 +21,7 @@ use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
+use App\Repository\AbstractRepository;
 use App\Service\ApplicationService;
 use App\Service\CalculationService;
 use App\Tests\DatabaseTrait;
@@ -60,17 +61,17 @@ class CalculationServiceTest extends KernelTestCase
         $this->assertEquals(1, $calculation->getGroupsCount());
         $this->assertEquals(1, $calculation->getCategoriesCount());
 
-        $this->assertCount(1, $calculation->getGroups());
-        $this->assertCount(1, $calculation->getGroups()[0]->getCategories());
-
         /** @var CalculationGroup $group */
-        $group = $calculation->getGroups()[0];
+        $group = $calculation->getGroups()->first();
+
+        $this->assertCount(1, $calculation->getGroups());
+        $this->assertCount(1, $group->getCategories());
 
         /** @var CalculationCategory $category */
-        $category = $group->getCategories()[0];
+        $category = $group->getCategories()->first();
 
         /** @var CalculationItem $item */
-        $item = $category->getItems()[0];
+        $item = $category->getItems()->first();
 
         $totalItem = self::PRODUCT_PRICE * self::QUANTITY;
         $totalGroup = $totalItem * self::MARGIN_PERCENT;
@@ -91,7 +92,7 @@ class CalculationServiceTest extends KernelTestCase
         $this->assertEquals($totalItem, $category->getAmount());
         $this->assertEquals($category->getAmount(), $item->getTotal());
 
-//         // calculation
+        // assert
         $this->assertEquals($totalItem, $calculation->getItemsTotal());
         $this->assertEquals($totalGroup, $calculation->getGroupsTotal());
         $this->assertEquals(self::MARGIN_PERCENT, $calculation->getGlobalMargin());
@@ -190,7 +191,7 @@ class CalculationServiceTest extends KernelTestCase
     }
 
     /**
-     * @template T
+     * @template T of \App\Entity\AbstractEntity
      *
      * @param class-string<T> $entityName
      * @psalm-return EntityRepository<T> $repository
@@ -198,8 +199,8 @@ class CalculationServiceTest extends KernelTestCase
     protected function initRepository(EntityManager $manager, string $entityName): EntityRepository
     {
         /**
-         *  @var EntityRepository $repository
-         *  @psalm-var EntityRepository<T> $repository
+         *  @var AbstractRepository $repository
+         *  @psalm-var AbstractRepository<T> $repository
          */
         $repository = $manager->getRepository($entityName);
 

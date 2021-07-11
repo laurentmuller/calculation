@@ -1,20 +1,21 @@
 {# macros for help templates #}
 
 {% macro output_type(field) -%}
-{%- set type = ('help.types.' ~ field.type)|trans -%}
+{%- set type = ('help.types.' ~ field.type|default('text'))|trans -%}
 {%- set length = field.length|default(false) -%}
 {{ type }}{% if length  %} ({{ length }}){% endif %}
 {%- endmacro %}
 
 {% macro output_required(field) -%}
-{{ (field.required ? 'common.value_true' : 'common.value_false')|trans }}
+{%- set required = field.required is defined ? field.required : true -%}
+{{ (required ? 'common.value_true' : 'common.value_false')|trans }}
 {%- endmacro %}
 
 {% macro output_image(path, screenshot=true) -%}
 {%- set image = asset_if('/help/images/' ~ path) -%}
 {% if image %}
 {% if screenshot %}<p class="mb-1">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
-<img src="{{ asset(image) }}" class="img-fluid mx-auto d-block">
+<img src="{{ asset(image) }}" class="img-fluid d-block">
 {% endif %}
 {%- endmacro %}
 
@@ -37,12 +38,18 @@
 {% macro output_row_action(action, service) -%}
 {%- set dialog = service.findDialog(action.dialog|default(action.id)) -%}
 {%- set href = dialog ? path('help_dialog', {'id': dialog.id}) : false -%}
+{%- set icon = action.icon|default(false) -%}
 <tr>
     <td>
         {%- if href -%}
-            <a href="{{ href }}">{{- _self.output_icon(action.icon|default(false), action.id) -}}</a>
+            {%- if icon -%}
+                {{- _self.output_icon(icon) -}}
+                <a class="ml-1" href="{{ href }}">{{ action.id|trans }}</a>
+            {%- else -%}
+                <a href="{{ href }}">{{ action.id|trans }}</a>
+            {%- endif -%}
         {%- else -%}
-            {{- _self.output_icon(action.icon|default(false), action.id) -}}
+            {{- _self.output_icon(icon, action.id) -}}
         {%- endif -%}
     </td>
     <td>{{ action.description }}</td>
@@ -55,9 +62,9 @@
     {%- set values = text|split('|') -%}
     {%- set text = values[0] -%}
     {%- set domain = values|length > 1 ? values[1] : null -%}
-    {{- icons.icon(icon, text, domain) -}}
+    {{- icons.icon(icon ? icon ~ ' fa-fw' : null, text, domain) -}}
 {%- else -%}
-    {{- icons.icon(icon, text) -}}
+    {{- icons.icon(icon ? icon ~ ' fa-fw' : null, text) -}}
 {%- endif -%}
 {%- endmacro %}
 

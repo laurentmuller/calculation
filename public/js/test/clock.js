@@ -17,28 +17,23 @@ function getTimeTransform(value, maximum) {
 
 /**
  * Update UI.
+ *
+ * @param {DateTimeFormat}
+ *            dateFormat - the format used for the date.
+ * @param {DateTimeFormat}
+ *            timeFormat - the format used for the time.
  */
-function updateTime() {
+function updateTime(dateFormat, timeFormat) {
     'use strict';
     const date = new Date();
     const hours = date.getHours() % 12;
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
-    const dateOptions = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    };
-    const timeOptions = {
-        timeStyle: 'short'
-    };
-
     $('.clock-container .hour').css('transform', getTimeTransform(hours, 11));
     $('.clock-container .minute').css('transform', getTimeTransform(minutes, 59));
     $('.clock-container .second').css('transform', getTimeTransform(seconds, 59));
-    $('.clock-container .date').html(date.toLocaleDateString(undefined, dateOptions));
-    $('.clock-container .time').html(date.toLocaleTimeString(undefined, timeOptions));
+    $('.clock-container .date').html(dateFormat.format(date));
+    $('.clock-container .time').html(timeFormat.format(date));
 }
 
 /**
@@ -66,13 +61,21 @@ function updateTheme(dark) {
 
 /**
  * Initialize the clock.
- *
- * @returns
  */
 function initTime() {
     'use strict';
-    updateTime();
-    setInterval(updateTime, 1000);
+    const lang = navigator.language;
+    const dateFormat = new Intl.DateTimeFormat(lang, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    const timeFormat = new Intl.DateTimeFormat(lang, {
+        timeStyle: 'short'
+    });
+    updateTime(dateFormat, timeFormat);
+    setInterval(updateTime, 1000, dateFormat, timeFormat);
 }
 
 /**

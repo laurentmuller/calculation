@@ -3,13 +3,9 @@
 {# parameters #}
 {%- set title = 'update.title' -%}
 {%- set title_icon = 'edit' -%}
+{%- set title_description = 'update.description' -%}
 {%- set submit_text = 'update.submit_text' -%}
 {%- set form_attr = form_attr|default({})|merge({'action': url('update_customer')}) -%}
-
-{% block card_header %}
-{{ parent() }}
-<p class="ml-4 mb-0">{{ 'update.description'|trans }}</p>
-{% endblock %}
 
 {% block javascripts %}
 {{ parent() }}

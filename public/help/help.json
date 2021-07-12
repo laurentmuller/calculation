@@ -320,6 +320,11 @@
 					"type": "identifier"
 				},
 				{
+					"name": "date",
+					"description": "Date de la calculation. La valeur par défaut est la date du jour.",
+					"type": "date"
+				},
+				{
 					"name": "customer",
 					"description": "Nom du client.",
 					"length": "255"
@@ -328,11 +333,6 @@
 					"name": "description",
 					"description": "Description de la calculation.",
 					"length": "255"
-				},
-				{
-					"name": "date",
-					"description": "Date de la calculation. La valeur par défaut est la date du jour.",
-					"type": "date"
 				},
 				{
 					"name": "state",
@@ -586,9 +586,9 @@
 					"description": "Zone de text pour rechercher des articles."
 				},
 				{
-					"id": "category.name",
-					"icon": "folder far",
-					"description": "Menu déroulant permattant de filter les articles d'une catégorie."
+					"id": "calculationstate.name",
+					"icon": "flag far",
+					"description": "Menu déroulant permattant de filter les calculations d'un statut."
 				},
 				{
 					"id": "help.actions.clear",
@@ -598,7 +598,7 @@
 				{
 					"id": "help.actions.sort",
 					"icon": "sort-amount-down-alt",
-					"description": "Menu déroulant permattant de trier les articles."
+					"description": "Menu déroulant permattant de trier les calculations."
 				},
 				{
 					"id": "help.actions.toggle",

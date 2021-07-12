@@ -5,14 +5,10 @@
 {# parameters #}
 {%- set title = 'calculation.update.title' -%}
 {%- set title_icon = 'pencil-alt' -%}
+{%- set title_description = 'calculation.result.description' -%}
 {%- set tabular = app.displayTabular -%}
 {%- set empty_path = tabular ? path('empty_table') : path('empty_card') -%}
 {%- set duplicate_path = tabular ? path('duplicate_table') : path('duplicate_card') -%}
-
-{% block card_header %}
-{{ parent() }}
-<p class="ml-4 mb-0">{{ 'calculation.result.description'|trans }}
-{% endblock %}
 
 {% block card_body %}
 <table class="table table-hover table-sm mb-0">

@@ -3,13 +3,8 @@
 {# parameters #}
 {%- set title_icon = 'envelope far' -%}
 {%- set title = isMail ? 'user.message.title' : 'user.comment.title' -%}
-{%- set description = isMail ? 'user.message.description'|trans : 'user.comment.description'|trans -%}
+{%- set title_description = isMail ? 'user.message.description' : 'user.comment.description' -%}
 {%- set page_list = isMail ? 'user_table' : 'homepage' -%}
-
-{% block card_header %}
-{{ parent() }}
-<p class="ml-4 mb-0">{{ description }}</p>
-{% endblock %}
 
 {% block card_body %}
 {% if isMail %}

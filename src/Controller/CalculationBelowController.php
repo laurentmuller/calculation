@@ -136,6 +136,7 @@ class CalculationBelowController extends AbstractController
         $attributes = [
             'min_margin' => $minMargin,
             'min_margin_text' => $margin_text,
+            'itemsCount' => \count($items),
         ];
 
         // parameters

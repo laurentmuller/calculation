@@ -27,11 +27,11 @@
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'empty.description'|trans }}
+<small>{{ 'empty.description'|trans }}
 {% if attributes.itemsCount > 0 and results.data|length > 0 -%}
     {{ 'empty.count'|trans({'%calculations%': results.recordsTotal, '%items%': attributes.itemsCount}) }}
 {%- endif %}
-</p>
+</small>
 {%- endblock %}
 
 {# other actions #}

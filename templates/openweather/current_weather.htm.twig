@@ -45,7 +45,7 @@
     <div class="row">
         <div class="col-md-6">
             {{ parent() }}
-            <p class="mb-0 ml-4 small">{{ 'openweather.current.date_calculation'|trans({'%date%': current.dt_date_time_medium}) }}</p>
+            <small>{{ 'openweather.current.date_calculation'|trans({'%date%': current.dt_date_time_medium}) }}</small>
         </div>
         <div class="col-md-6 text-md-right d-print-none">
             {% if units_system == 'metric' %}

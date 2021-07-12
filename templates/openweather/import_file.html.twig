@@ -4,13 +4,9 @@
 {# parameters #}
 {%- set title = 'openweather.import.title' -%}
 {%- set title_icon = 'download' -%}
+{%- set title_description = 'openweather.import.description' -%}
 {%- set cancel_path = path('openweather_search') -%}
 {%- set cancel_text = 'common.button_search' -%}
-
-{% block card_header %}
-{{ parent() }}
-<p class="ml-4 mb-0">{{ 'openweather.import.description'|trans }}</p>
-{% endblock %}
 
 {% block card_body %}
 {{ parent() }}

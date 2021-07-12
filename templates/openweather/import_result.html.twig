@@ -4,11 +4,7 @@
 {# parameters #}
 {%- set title = 'openweather.import.title' -%}
 {%- set title_icon = 'download' -%}
-
-{% block card_header %}
-{{ parent() }}
-<p class="ml-4 mb-0">{{ 'import.results'|trans }}
-{% endblock %}
+{%- set title_description = 'import.results' -%}
 
 {% block card_class -%}
 {% if result %}{{ parent() }}{% else %} border-danger{% endif %}

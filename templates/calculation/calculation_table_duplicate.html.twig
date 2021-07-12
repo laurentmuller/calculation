@@ -26,11 +26,11 @@
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'duplicate.description'|trans }}
+<small>{{ 'duplicate.description'|trans }}
 {% if attributes.itemsCount > 0 and results.data|length > 0 -%}
     {{ 'duplicate.count'|trans({'%calculations%': results.data|length, '%items%': attributes.itemsCount}) }}
 {%- endif %}
-</p>
+</small>
 {%- endblock %}
 
 {# other actions #}

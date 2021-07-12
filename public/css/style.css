@@ -13,6 +13,7 @@
     margin-bottom: 20px;
     padding-bottom: 0.5rem;
     padding-top: 0.5rem;
+    transition: top 0.3s;
 }
 
 /*
@@ -39,7 +40,8 @@
 span.required:after,
 label.required:after,
 legend.required:after,
-th.required:after {
+th.required:after,
+td.required:after {
     content: "*";
     color: var(--danger);
 }

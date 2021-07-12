@@ -7,13 +7,19 @@
     'use strict';
 
     $('#date').focus();
-    $('form#search .btn-submit').on('click', function () {
-        const spinner = '<span class="spinner-border spinner-border-sm"></span>';
-        $(this).addClass('disabled').html(spinner);
-    });
 
-    $('#interval').on('input', function () {
+    const updateCursor = function () {
+        $('*').css('cursor', 'wait');
+        setTimeout(function () {
+            $('*').css('cursor', '');
+        }, 250);
+    };
+
+    $('.btn-previous, .btn-today, .btn-next, .btn-submit').on('click', updateCursor);
+
+    $('#interval, #date').on('input', function () {
         $(this).updateTimer(function () {
+            updateCursor();
             $('form#search').submit();
         }, 500);
     });

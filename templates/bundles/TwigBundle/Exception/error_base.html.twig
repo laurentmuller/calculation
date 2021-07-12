@@ -13,15 +13,11 @@
         {%- set title = 'error_page.default_title' -%}
     {% endif %}
 {% endif %}
+{%- set title_description = 'error_page.description' -%}
 
 {% block card_container_class '' %}
 {% block card_class ' border-danger' %}
 {% block card_header_class ' text-white bg-danger' %}
-
-{% block card_header %}
-{{ parent() }}
-<p class="mb-0 ml-4">{{ 'error_page.description'|trans }}</p>
-{% endblock %}
 
 {% block card_body %}
 <p>

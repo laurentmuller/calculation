@@ -16,6 +16,9 @@
                 <h1 class="card-title">
                     {{- icons.icon(title_icon, title, title_domain|default(null), title_parameters|default({})) -}}
                 </h1>
+                {% if title_description is defined and title_description %}
+                <small>{{ title_description|trans }}</small>
+                {% endif %}
                 {%- endblock %}
             </div>
             {# card body #}

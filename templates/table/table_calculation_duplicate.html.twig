@@ -8,11 +8,11 @@
 
 {% block card_header -%}
 {{ parent() }}
-{% if customData.itemsCount and rows|length -%}<small>{{ 'duplicate.count'|trans({'%calculations%': rows|length, '%items%': customData.itemsCount}) }}</small>{%- endif %}
+<small>{{ 'duplicate.description'|trans }}</small>
 {%- endblock %}
 
 {% block header_actions -%}
-<small>{{ 'duplicate.description'|trans }}</small>
+{% if customData.itemsCount and rows|length -%}<small>{{ 'duplicate.count'|trans({'%calculations%': rows|length, '%items%': customData.itemsCount}) }}</small>{%- endif %}
 {%- endblock %}
 
 {% block global_actions -%}

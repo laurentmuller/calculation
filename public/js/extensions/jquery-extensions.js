@@ -514,6 +514,7 @@
                 }, options);
 
                 const $select = $(this);
+                const radius = $select.css('border-radius');
                 $select.select2(settings).on('select2:opening', function () {
                     $('.select2-hidden-accessible').each(function () {
                         if ($(this) !== $select) {
@@ -521,16 +522,17 @@
                         }
                     });
                 }).on('select2:open', function () {
-                    const $search = $('.select2-search--dropdown .select2-search__field');
-                    if ($search.length) {
-                        $search.addClass('form-control');
-                        $search[0].focus();
-                    }
                     const $dropdown = $('.select2-dropdown.select2-dropdown--below');
                     if ($dropdown.length) {
-                        $dropdown.addClass('border-top rounded-top');
+                        $dropdown.addClass('border-top').css('border-radius', radius);
+                    }
+                    const $search = $('.select2-search--dropdown .select2-search__field');
+                    if ($search.length) {
+                        $search.addClass('form-control form-control-sm').css('border-radius', radius);
+                        $search[0].focus();
                     }
                 });
+                $('.select2-container--bootstrap4 .select2-selection').css('border-radius', radius);
             });
         }
     });

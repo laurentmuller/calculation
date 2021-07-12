@@ -17,15 +17,11 @@
 {# parameters #}
 {%- set title = 'exchangerate.title' -%}
 {%- set title_icon = 'hand-holding-usd' -%}
+{%- set title_description = 'exchangerate.description' -%}
 {%- set cancel_text = 'common.button_close' -%}
 {%- set form_attr = form_attr|default({})|merge({
 	'action': url('exchange_rate'),
 	'data-error': 'unknown'|trans({}, 'exchangerate')}) -%}
-
-{% block card_header %}
-{{ parent() }}
-<p class="ml-4 mb-0">{{ 'exchangerate.description'|trans }}</p>
-{% endblock %}
 
 {% block card_body %}
 {{ parent() }}

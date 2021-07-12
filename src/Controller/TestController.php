@@ -79,11 +79,11 @@ class TestController extends AbstractController
     {
         $session = $request->getSession();
         $dark = (bool) $session->get('clock_dark', false);
-        if ($request->request->has('clock_dark')) {
-            $dark = (bool) $request->request->get('clock_dark', false);
+        if ($request->request->has('dark')) {
+            $dark = \filter_var($request->request->get('dark', $dark), \FILTER_VALIDATE_BOOLEAN);
             $session->set('clock_dark', $dark);
 
-            return $this->jsonTrue(['clock_dark' => $dark]);
+            return $this->jsonTrue(['dark' => $dark]);
         }
 
         return $this->renderForm('test/clock.html.twig', ['dark' => $dark]);

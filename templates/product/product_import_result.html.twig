@@ -5,11 +5,7 @@
 {# parameters #}
 {%- set title = 'product.import.title' -%}
 {%- set title_icon = 'download' -%}
-
-{% block card_header %}
-{{ parent() }}
-<p class="ml-4 mb-0">{{ 'product.import.results'|trans }}
-{% endblock %}
+{%- set title_description = 'product.import.results' -%}
 
 {% block card_class -%}
 {% if valid %}{{ parent() }}{% else %} border-danger{% endif %}

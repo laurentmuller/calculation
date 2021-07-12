@@ -3,15 +3,9 @@
 {# parameters #}
 {%- set title = 'generate.title' -%}
 {%- set title_icon = 'random' -%}
+{%- set title_description = 'generate.description' -%}
 {%- set submit_text = 'generate.submit_text' -%}
 {%- set cancel_text = 'common.button_close' -%}
-
-{% block card_container_class '' %}
-
-{% block card_header %}
-{{ parent() }}
-<p class="ml-4 mb-0">{{ 'generate.description'|trans }}</p>
-{% endblock %}
 
 {% block card_body %}
 <div class="form-row">

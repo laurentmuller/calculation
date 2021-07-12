@@ -24,19 +24,21 @@ function updateTime() {
     const hours = date.getHours() % 12;
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
-
-    $('.clock-container .hour').css('transform', getTimeTransform(hours, 11));
-    $('.clock-container .minute').css('transform', getTimeTransform(minutes, 59));
-    $('.clock-container .second').css('transform', getTimeTransform(seconds, 59));
-    $('.clock-container .date').html(date.toLocaleDateString(undefined, {
+    const dateOptions = {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
         day: 'numeric'
-    }));
-    $('.clock-container .time').html(date.toLocaleTimeString(undefined, {
+    };
+    const timeOptions = {
         timeStyle: 'short'
-    }));
+    };
+
+    $('.clock-container .hour').css('transform', getTimeTransform(hours, 11));
+    $('.clock-container .minute').css('transform', getTimeTransform(minutes, 59));
+    $('.clock-container .second').css('transform', getTimeTransform(seconds, 59));
+    $('.clock-container .date').html(date.toLocaleDateString(undefined, dateOptions));
+    $('.clock-container .time').html(date.toLocaleTimeString(undefined, timeOptions));
 }
 
 /**
@@ -57,9 +59,20 @@ function updateTheme(dark) {
     const url = $('.clock-container').data('url');
     if (url) {
         $.post(url, {
-            clock_dark: dark
+            dark: dark
         });
     }
+}
+
+/**
+ * Initialize the clock.
+ *
+ * @returns
+ */
+function initTime() {
+    'use strict';
+    updateTime();
+    setInterval(updateTime, 1000);
 }
 
 /**
@@ -67,9 +80,11 @@ function updateTheme(dark) {
  */
 (function ($) {
     'use strict';
-    updateTime();
-    setInterval(updateTime, 1000);
-    $('#dark').on('click', function () {
-        updateTheme($(this).isChecked());
-    });
+    initTime();
+    const $button = $('#dark');
+    if ($button.length) {
+        $('#dark').on('click', function () {
+            updateTheme($(this).isChecked());
+        });
+    }
 }(jQuery));

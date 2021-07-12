@@ -37,17 +37,13 @@
 {# parameters #}
 {%- set title = 'parameters.title' -%}
 {%- set title_icon = 'cogs' -%}
+{%- set title_description = 'parameters.description' -%}
 {%- set super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
 {%- set cancel_path = path('homepage') -%}
 {%- set form_attr = form_attr|default({})|merge({
                         'data-random': url('ajax_random_text'),
                         'data-title': 'parameters.title'|trans,
                         'data-failure': 'parameters.failure'|trans}) -%}
-
-{% block card_header -%}
-{{ parent() }}
-<p class="ml-4 mb-0">{{ 'parameters.description'|trans }}
-{%- endblock %}
 
 {% block card_body -%}
 <label class="horizontal-line font-weight-bold">{{ 'parameters.group_customer'|trans }}</label>

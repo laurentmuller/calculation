@@ -4,12 +4,21 @@
 
 /**! compression tag for ftp-deployment */
 
-/**
-  * To display full item height.
-  */
-.select2-container--bootstrap4 .select2-results > .select2-results__options {
-  max-height: 15.75em;
-}
 .select2-search--dropdown {
-  padding: 2px;
+    padding: 2px;
+}
+
+.select2-container--bootstrap4 .select2-results__option {
+    color: initial;
+    padding: 0 0.75rem;
+}
+
+.select2-search--dropdown .select2-search__field {
+    margin-bottom: 1px;
+}
+
+.select2-container .select2-selection--single,
+.select2-container .select2-selection--multiple,
+.select2-results__option--selectable {
+    cursor: inherit;
 }

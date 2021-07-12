@@ -3,12 +3,8 @@
 {# parameters #}
 {%- set title = 'calculation.update.title' -%}
 {%- set title_icon = 'pencil-alt' -%}
+{%- set title_description = 'calculation.update.description' -%}
 {%- set cancel_path = path('homepage') -%}
-
-{% block card_header %}
-{{ parent() }}
-<p class="ml-4 mb-0">{{ 'calculation.update.description'|trans }}
-{% endblock %}
 
 {% block card_body %}
 {{ parent() }}

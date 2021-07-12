@@ -3,13 +3,9 @@
 {# parameters #}
 {%- set title = 'theme.title' -%}
 {%- set title_icon = 'file-image far' -%}
+{%- set title_description = 'theme.description' -%}
 {%- set cancel_path = path('homepage') -%}
 {%- set form_attr = form_attr|default({})|merge({'data-asset': asset_base}) -%}
-
-{% block card_header %}
-{{ parent() }}
-<p class="ml-4 mb-0">{{ 'theme.description'|trans }}
-{% endblock %}
 
 {% block card_body %}
 {# fields #}

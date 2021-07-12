@@ -30,11 +30,11 @@
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'duplicate.description'|trans }}
+<small>{{ 'duplicate.description'|trans }}
 {% if items|length %}
     {{ 'duplicate.count'|trans({'%calculations%': items|length, '%items%': items_count}) }}
 {% endif %}
-</p>
+</small>
 {%- endblock %}
 
 {% block calculation_properties -%}

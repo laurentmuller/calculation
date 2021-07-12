@@ -28,7 +28,11 @@
 
 {% block card_header -%}
 {{ parent() }}
-<p class="ml-4 mb-0">{{ 'below.description'|trans({'%margin%': attributes.min_margin|percent}) }}</p>
+<small>{{ 'below.description'|trans({'%margin%': attributes.min_margin|percent}) }}
+{% if attributes.itemsCount > 0 %}
+    {{ 'below.count'|trans({'%calculations%': attributes.itemsCount}) }}
+{% endif %}
+</small>
 {%- endblock %}
 
 {# other actions #}

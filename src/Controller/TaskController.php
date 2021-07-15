@@ -24,7 +24,7 @@ use App\Report\TasksReport;
 use App\Repository\CategoryRepository;
 use App\Repository\TaskRepository;
 use App\Service\TaskService;
-use App\Spreadsheet\TaskDocument;
+use App\Spreadsheet\TasksDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -200,7 +200,7 @@ class TaskController extends AbstractEntityController
             throw new NotFoundHttpException($message);
         }
 
-        $doc = new TaskDocument($this, $entities);
+        $doc = new TasksDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }

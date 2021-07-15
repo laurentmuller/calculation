@@ -23,7 +23,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  *
  * @author Laurent Muller
  */
-class TaskDocument extends AbstractArrayDocument
+class TasksDocument extends AbstractArrayDocument
 {
     /**
      * @var bool

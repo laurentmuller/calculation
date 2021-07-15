@@ -27,7 +27,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  *
  * @author Laurent Muller
  */
-class UserDocument extends AbstractArrayDocument
+class UsersDocument extends AbstractArrayDocument
 {
     /**
      * The mapping factory.

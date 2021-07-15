@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\DataTable\LogDataTable;
 use App\Report\LogReport;
 use App\Service\LogService;
-use App\Spreadsheet\LogDocument;
+use App\Spreadsheet\LogsDocument;
 use App\Util\FileUtils;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
@@ -141,7 +141,7 @@ class LogController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        $doc = new LogDocument($this, (array) $entries);
+        $doc = new LogsDocument($this, (array) $entries);
 
         return $this->renderExcelDocument($doc);
     }

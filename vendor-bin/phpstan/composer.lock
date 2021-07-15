@@ -247,16 +247,16 @@
         },
         {
             "name": "phpstan/phpstan-phpunit",
-            "version": "0.12.20",
+            "version": "0.12.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-phpunit.git",
-                "reference": "efc009981af383eb3303f0ca9868c29acad7ce74"
+                "reference": "6aaff1196c4f808769774b49a94a60e5fdf18de7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/efc009981af383eb3303f0ca9868c29acad7ce74",
-                "reference": "efc009981af383eb3303f0ca9868c29acad7ce74",
+                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/6aaff1196c4f808769774b49a94a60e5fdf18de7",
+                "reference": "6aaff1196c4f808769774b49a94a60e5fdf18de7",
                 "shasum": ""
             },
             "require": {
@@ -295,9 +295,9 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-phpunit/issues",
-                "source": "https://github.com/phpstan/phpstan-phpunit/tree/0.12.20"
+                "source": "https://github.com/phpstan/phpstan-phpunit/tree/0.12.21"
             },
-            "time": "2021-06-17T08:28:30+00:00"
+            "time": "2021-07-14T10:48:30+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
@@ -439,16 +439,16 @@
         },
         {
             "name": "spaze/phpstan-disallowed-calls",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spaze/phpstan-disallowed-calls.git",
-                "reference": "146482f2794609f7d652cf5eda713252c05024b5"
+                "reference": "7d86d0d785b874c27ae27dd27c2fca73e94f6d19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spaze/phpstan-disallowed-calls/zipball/146482f2794609f7d652cf5eda713252c05024b5",
-                "reference": "146482f2794609f7d652cf5eda713252c05024b5",
+                "url": "https://api.github.com/repos/spaze/phpstan-disallowed-calls/zipball/7d86d0d785b874c27ae27dd27c2fca73e94f6d19",
+                "reference": "7d86d0d785b874c27ae27dd27c2fca73e94f6d19",
                 "shasum": ""
             },
             "require": {
@@ -488,9 +488,9 @@
             "description": "Disallowed method and function calls plug-in for PHPStan",
             "support": {
                 "issues": "https://github.com/spaze/phpstan-disallowed-calls/issues",
-                "source": "https://github.com/spaze/phpstan-disallowed-calls/tree/v1.4.0"
+                "source": "https://github.com/spaze/phpstan-disallowed-calls/tree/v1.5.0"
             },
-            "time": "2021-03-03T10:43:29+00:00"
+            "time": "2021-07-15T05:26:19+00:00"
         },
         {
             "name": "taptima/phpstan-custom",

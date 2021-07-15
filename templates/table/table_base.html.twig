@@ -243,8 +243,8 @@
 <div id="dropdown-actions" class="dropdown d-print-none d-none">
     {{ icons.dropdownEllipsis() }}
     <div class="dropdown-menu dropdown-menu-right dropdown-menu-actions">
-        {% if allow_edit %}{% block edit_actions -%}{%- endblock %}{% endif %}
         {% if allow_show %}{% block show_actions -%}{%- endblock %}{% endif %}
+        {% if allow_edit %}{% block edit_actions -%}{%- endblock %}{% endif %}
         {% if allow_delete %}{% block delete_actions -%}{%- endblock %}{% endif %}
         {% if allow_add %}{% block add_actions -%}{%- endblock %}{% endif %}
         {% block other_actions -%}{%- endblock %}

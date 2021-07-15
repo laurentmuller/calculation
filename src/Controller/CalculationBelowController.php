@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\DataTable\CalculationBelowDataTable;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
-use App\Spreadsheet\CalculationDocument;
+use App\Spreadsheet\CalculationsDocument;
 use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -78,7 +78,7 @@ class CalculationBelowController extends AbstractController
             return $this->redirectToHomePage();
         }
 
-        $doc = new CalculationDocument($this, $items);
+        $doc = new CalculationsDocument($this, $items);
         $doc->setTitle('below.title');
 
         return $this->renderExcelDocument($doc);

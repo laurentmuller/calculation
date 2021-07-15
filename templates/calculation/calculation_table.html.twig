@@ -25,7 +25,8 @@
 {%- set excel_path = path('calculation_excel') -%}
 {%- set clone_path = path('calculation_clone', params) -%}
 {%- set state_path = path('calculation_state', params) -%}
-{%- set single_path = path('calculation_pdf_id', params) -%}
+{%- set single_pdf_path = path('calculation_pdf_id', params) -%}
+{%- set single_excel_path = path('calculation_excel_id', params) -%}
 
 {# titles #}
 {%- set add_title = 'calculation.add.title' %}
@@ -59,7 +60,8 @@
 {{ _self.item_data(clone_path, 'common.button_clone', 'copy far') }}
 {{ _self.item_data(state_path, 'calculation.list.state_title', 'flag far') }}
 {{ icons.dropdownSeparator() }}
-{{ _self.item_data_external(single_path, 'calculation.list.pdf_single_title', 'file-pdf far') }}
+{{ _self.item_data_external(single_pdf_path, 'calculation.list.pdf_single_title', 'file-pdf far') }}
+{{ _self.item_data_external(single_excel_path, 'calculation.list.excel_single_title', 'file-excel far') }}
 {{ icons.dropdownSeparator() }}
 {{ parent() }}
 {{ icons.dropdownSeparator() }}

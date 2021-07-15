@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
-use App\Interfaces\EntityVoterInterface;
 use App\Repository\CalculationRepository;
 use Doctrine\Common\Collections\Criteria;
 
@@ -50,7 +49,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      */
     public function getEntityClassName(): ?string
     {
-        return EntityVoterInterface::ENTITY_CALCULATION;
+        return $this->repository->getClassName();
     }
 
     /**

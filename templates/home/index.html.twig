@@ -20,7 +20,11 @@
 <div class="row no-gutters">
 {% if enabled %}
     <div class="col">
-        {%- include 'home/panel_table.html.twig' -%}
+        {%- if app.isDisplayTabular -%}
+            {%- include 'home/panel_table.html.twig' -%}
+        {%- else -%}
+            {%- include 'home/panel_card.html.twig' -%}
+        {%- endif -%}
         {%- include 'home/panel_state.html.twig' -%}
         {%- include 'home/panel_month.html.twig' -%}
         {%- include 'user/user_switch.html.twig' -%}
@@ -28,7 +32,7 @@
 {% else %}
     <div class="col my-auto h-50">
         {%- include 'home/panel_disabled.html.twig' -%}
-        {%- include 'user/user_switch.html.twig' -%}            
+        {%- include 'user/user_switch.html.twig' -%}
     </div>
 {% endif %}
 </div>

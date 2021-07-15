@@ -20,7 +20,7 @@ use App\Form\Customer\CustomerType;
 use App\Pdf\PdfResponse;
 use App\Report\CustomersReport;
 use App\Repository\CustomerRepository;
-use App\Spreadsheet\CustomerDocument;
+use App\Spreadsheet\CustomersDocument;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -140,7 +140,7 @@ class CustomerController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new CustomerDocument($this, $entities);
+        $doc = new CustomersDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }

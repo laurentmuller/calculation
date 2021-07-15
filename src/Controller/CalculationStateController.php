@@ -21,7 +21,7 @@ use App\Interfaces\ApplicationServiceInterface;
 use App\Pdf\PdfResponse;
 use App\Report\CalculationStatesReport;
 use App\Repository\CalculationRepository;
-use App\Spreadsheet\CalculationStateDocument;
+use App\Spreadsheet\CalculationStatesDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -162,7 +162,7 @@ class CalculationStateController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new CalculationStateDocument($this, $entities);
+        $doc = new CalculationStatesDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }

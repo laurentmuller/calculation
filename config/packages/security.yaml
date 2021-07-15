@@ -48,7 +48,7 @@ security:
         # - { path: ^/register$,             roles: PUBLIC_ACCESS  }
         - { path: ^/about/policy,          roles: PUBLIC_ACCESS  }
         - { path: ^/about/licence,         roles: PUBLIC_ACCESS  }
-        - { path: ^/ajax/checkexist,       roles: PUBLIC_ACCESS  }
+        - { path: ^/ajax/checkuser,        roles: PUBLIC_ACCESS  }
         - { path: ^/ajax/captcha/image,    roles: PUBLIC_ACCESS  }
         - { path: ^/ajax/captcha/validate, roles: PUBLIC_ACCESS  }
         - { path: ^/admin/,                roles: ROLE_ADMIN }

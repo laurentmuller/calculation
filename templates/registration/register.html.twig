@@ -35,6 +35,11 @@
 </div>
 {% endblock %}
 
+{% block actions_form %}
+{{ parent() }}
+{{ icons.link(path('app_login'), 'security.link', 'btn btn-form btn-link') }}
+{% endblock %}
+
 {% block stylesheets -%}
 {{ asset_css('css/center.css') }}
 {% endblock %}

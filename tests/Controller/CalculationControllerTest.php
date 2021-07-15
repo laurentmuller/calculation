@@ -75,6 +75,10 @@ class CalculationControllerTest extends AbstractControllerTest
             ['/calculation/excel', self::ROLE_USER],
             ['/calculation/excel', self::ROLE_ADMIN],
             ['/calculation/excel', self::ROLE_SUPER_ADMIN],
+
+            ['/calculation/excel/1', self::ROLE_USER],
+            ['/calculation/excel/1', self::ROLE_ADMIN],
+            ['/calculation/excel/1', self::ROLE_SUPER_ADMIN],
         ];
     }
 

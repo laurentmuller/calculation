@@ -7,11 +7,11 @@
     'use strict';
 
     // remove pattern attribute
-    $("#username").removeAttr("pattern");
+    $('#username').removeAttr('pattern');
 
     // delete checkbox handler
     let callback = null;
-    const $delete = $("#imageFile_delete");
+    const $delete = $('#imageFile_delete');
     if ($delete.length) {
         callback = function ($file) {
             const source = $file.data('src') || '';
@@ -21,35 +21,35 @@
     }
 
     // image file handler
-    $("#imageFile_file").initFileInput(callback);
+    $('#imageFile_file').initFileInput(callback);
 
     // options
-    const urlName = $("form").data("check_name");
-    const urlEmail = $("form").data("check_email");
+    const urlName = $('#edit-form').data('check-name');
+    const urlEmail = $('#edit-form').data('check-email');
     const options = {
         rules: {
-            "fos_user_profile_form[username]": {
+            'username': {
                 remote: {
                     url: urlName,
                     data: {
                         id: function () {
-                            return $("#id").val();
+                            return $('#id').val();
                         },
                         username: function () {
-                            return $("#username").val();
+                            return $('#username').val();
                         }
                     }
                 }
             },
-            "fos_user_profile_form[email]": {
+            'email': {
                 remote: {
                     url: urlEmail,
                     data: {
                         id: function () {
-                            return $("#id").val();
+                            return $('#id').val();
                         },
                         email: function () {
-                            return $("#email").val();
+                            return $('#email').val();
                         }
                     }
                 }
@@ -58,5 +58,5 @@
     };
 
     // validation
-    $("#edit-form").initValidator(options);
+    $('#edit-form').initValidator(options);
 }(jQuery));

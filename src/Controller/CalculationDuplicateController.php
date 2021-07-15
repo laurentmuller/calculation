@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\DataTable\CalculationDuplicateDataTable;
 use App\Report\CalculationDuplicateReport;
 use App\Repository\CalculationRepository;
-use App\Spreadsheet\CalculationDuplicateDocument;
+use App\Spreadsheet\CalculationsDuplicateDocument;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -96,7 +96,7 @@ class CalculationDuplicateController extends AbstractController
         }
 
         $items = $this->getItems($repository);
-        $doc = new CalculationDuplicateDocument($this, $items);
+        $doc = new CalculationsDuplicateDocument($this, $items);
 
         return $this->renderExcelDocument($doc);
     }

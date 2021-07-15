@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\DataTable\CalculationEmptyDataTable;
 use App\Report\CalculationEmptyReport;
 use App\Repository\CalculationRepository;
-use App\Spreadsheet\CalculationEmptyDocument;
+use App\Spreadsheet\CalculationsEmptyDocument;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -92,7 +92,7 @@ class CalculationEmptyController extends AbstractController
         }
 
         $items = $this->getItems($repository);
-        $doc = new CalculationEmptyDocument($this, $items);
+        $doc = new CalculationsEmptyDocument($this, $items);
 
         return $this->renderExcelDocument($doc);
     }

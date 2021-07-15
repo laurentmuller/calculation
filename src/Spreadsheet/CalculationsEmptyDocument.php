@@ -20,7 +20,7 @@ use App\Traits\MathTrait;
  *
  * @author Laurent Muller
  */
-class CalculationEmptyDocument extends AbstractCalculationItemsDocument
+class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
 {
     use MathTrait;
 

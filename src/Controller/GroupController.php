@@ -20,7 +20,7 @@ use App\Form\Group\GroupType;
 use App\Pdf\PdfResponse;
 use App\Report\GroupsReport;
 use App\Repository\CalculationGroupRepository;
-use App\Spreadsheet\GroupDocument;
+use App\Spreadsheet\GroupsDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -180,7 +180,7 @@ class GroupController extends AbstractEntityController
             throw new NotFoundHttpException($message);
         }
 
-        $doc = new GroupDocument($this, $groups);
+        $doc = new GroupsDocument($this, $groups);
 
         return $this->renderExcelDocument($doc);
     }

@@ -67,6 +67,7 @@ calculation:
         pdf_title: Télécharger la liste des calculations
         pdf_single_title: Télécharger la calculation
         excel_title: Exporter la liste des calculations
+        excel_single_title: Exporter la calculation
         state_title: Modifier le statut
         state_all_text: Tous
         state_all_description: Toutes les calculations
@@ -963,7 +964,7 @@ resetting:
     not_found_password_token: Aucun jeton de réinitialisation du mot de passe n'a été trouvé dans l'URL ou dans la session.
     request:
         title: Réinitialiser le mot de passe
-        username: Nom d'utilisateur ou adresse e-mail
+        user: Nom d'utilisateur ou adresse e-mail
         submit: Réinitialiser
     check_email: |
         Un e-mail vous a été envoyé. Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.

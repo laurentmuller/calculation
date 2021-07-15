@@ -103,10 +103,6 @@ function styleBorderColor(value, row) { // jshint ignore:line
  *
  * @param {float}
  *            value - the product price.
- * @param {object}
- *            row - the row record data..
- * @param {int}
- *            index - the row index.
  * @returns {object} the cell classes.
  */
 function styleProductPrice(value) { // jshint ignore:line
@@ -278,7 +274,7 @@ function updateCalculationEditAction($table, row, $element, $action) {
  * @param $action
  *            {jQuery} the action to update
  */
-function updateCalculationPdfAction($table, row, $element, $action) {
+function updateCalculationAction($table, row, $element, $action) {
     'use strict';
     const href = $action.attr('href').split('?')[0];
     $action.attr('href', href);
@@ -580,7 +576,9 @@ $.fn.extend({
             } else if($action.is('.btn-calculation-edit')) {
                 updateCalculationEditAction($table, row, $element, $action);
             } else if($action.is('.btn-calculation-pdf')) {
-                updateCalculationPdfAction($table, row, $element, $action);
+                updateCalculationAction($table, row, $element, $action);
+            } else if($action.is('.btn-calculation-excel')) {
+                updateCalculationAction($table, row, $element, $action);
             } else if($action.is('.btn-search')) {
                 updateSearchAction($table, row, $element, $action);
             } else if($action.is('.btn-task-compute')) {
@@ -674,9 +672,10 @@ $.fn.extend({
     });
 
     // handle keys enablement
-    $('body').on('focus', 'a, input, .btn, .dropdown-item, .rowlink-skip', function () {
+    const keysSelector = 'a, input, .btn, .dropdown-item, .rowlink-skip';
+    $('body').on('focus', keysSelector, function () {
         $table.disableKeys();
-    }).on('blur', 'a, input, .btn, .dropdown-item, .rowlink-skip', function () {
+    }).on('blur', keysSelector, function () {
         $table.enableKeys();
     });
 

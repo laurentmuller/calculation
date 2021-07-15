@@ -8,6 +8,7 @@
 {%- set title_icon = 'eraser' -%}
 {%- set submit_text = 'resetting.request.submit' -%}
 {%- set cancel_path = false -%}
+{%- set form_attr = form_attr|default({})|merge({'data-check-user': url('ajax_check_user')}) -%}
 
 {# class styles #}
 {% block card_container_class ' col-xl-8 offset-xl-2 my-auto h-50' %}

@@ -23,7 +23,7 @@ use App\Repository\CalculationCategoryRepository;
 use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
 use App\Repository\TaskRepository;
-use App\Spreadsheet\CategoryDocument;
+use App\Spreadsheet\CategoriesDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -188,7 +188,7 @@ class CategoryController extends AbstractEntityController
             throw new NotFoundHttpException($message);
         }
 
-        $doc = new CategoryDocument($this, $entities);
+        $doc = new CategoriesDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }

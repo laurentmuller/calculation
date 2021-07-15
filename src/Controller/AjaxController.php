@@ -100,38 +100,6 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Check if an user's e-mail already exists.
-     *
-     * @Route("/checkemail", name="ajax_check_email")
-     * @IsGranted("ROLE_USER")
-     */
-    public function checkEmail(Request $request, UserRepository $repository): JsonResponse
-    {
-        // get values
-        $id = (int) $request->get('id', 0);
-        $email = $request->get('email', null);
-
-        // check length
-        if (null === $email) {
-            $response = $this->trans('email.blank', [], 'validators');
-        } elseif (\strlen($email) < 2) {
-            $response = $this->trans('email.short', [], 'validators');
-        } elseif (\strlen($email) > 180) {
-            $response = $this->trans('email.long', [], 'validators');
-        } else {
-            // find user and check if same
-            $user = $repository->findByEmail($email);
-            if (null !== $user && $id !== $user->getId()) {
-                $response = $this->trans('email.already_used', [], 'validators');
-            } else {
-                $response = true;
-            }
-        }
-
-        return $this->json($response);
-    }
-
-    /**
      * Check if the given reCaptcha response (if any) is valid.
      *
      * @Route("/checkrecaptcha", name="ajax_check_recaptcha")
@@ -166,54 +134,88 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Check if an user's name already exists.
+     * Check if an user name or e-mail exist.
      *
-     * @Route("/checkname", name="ajax_check_name")
+     * @Route("/checkuser", name="ajax_check_user")
+     * @IsGranted("PUBLIC_ACCESS")
+     */
+    public function checkUser(Request $request, UserRepository $repository): JsonResponse
+    {
+        // find user name
+        $usernameOrEmail = $request->get('user');
+        if (null !== $usernameOrEmail && null !== $repository->findByUsernameOrEmail($usernameOrEmail)) {
+            return $this->json(true);
+        }
+
+        return $this->json($this->trans('username.not_found', [], 'validators'));
+    }
+
+    /**
+     * Check if an user e-mail already exists.
+     *
+     * @Route("/checkuseremail", name="ajax_check_user_email")
+     * @IsGranted("ROLE_USER")
+     */
+    public function checkUserEmail(Request $request, UserRepository $repository): JsonResponse
+    {
+        // get values
+        $id = (int) $request->get('id', 0);
+        $email = $request->get('email', null);
+
+        // check
+        $message = null;
+        if (empty($email)) {
+            $message = 'email.blank';
+        } elseif (\strlen($email) < 2) {
+            $message = 'email.short';
+        } elseif (\strlen($email) > 180) {
+            $message = 'email.long';
+        } else {
+            $user = $repository->findByEmail($email);
+            if (null !== $user && $id !== $user->getId()) {
+                $message = 'email.already_used';
+            }
+        }
+
+        if (null !== $message) {
+            return $this->json($this->trans($message, [], 'validators'));
+        }
+
+        return $this->json(true);
+    }
+
+    /**
+     * Check if an user name already exists.
+     *
+     * @Route("/checkusername", name="ajax_check_user_name")
      * @IsGranted("ROLE_USER")
      */
     public function checkUsername(Request $request, UserRepository $repository): JsonResponse
     {
         // get values
         $id = (int) $request->get('id', 0);
-        $username = $request->get('username', null);
+        $username = $request->get('username');
 
-        // check length
-        if (null === $username) {
-            $response = $this->trans('username.blank', [], 'validators');
+        // check
+        $message = null;
+        if (empty($username)) {
+            $message = 'username.blank';
         } elseif (\strlen($username) < 2) {
-            $response = $this->trans('username.short', [], 'validators');
+            $message = 'username.short';
         } elseif (\strlen($username) > 180) {
-            $response = $this->trans('username.long', [], 'validators');
+            $message = 'username.long';
         } else {
-            // find user and check if same
             $user = $repository->findByUsername($username);
             if (null !== $user && $id !== $user->getId()) {
-                $response = $this->trans('username.already_used', [], 'validators');
-            } else {
-                $response = true;
+                $message = 'username.already_used';
             }
         }
 
-        return $this->json($response);
-    }
-
-    /**
-     * Check if an user's name or an user's e-mail exists.
-     *
-     * @Route("/checkexist", name="ajax_check_exist")
-     * @IsGranted("PUBLIC_ACCESS")
-     */
-    public function checkUsernameOrEmail(Request $request, UserRepository $repository): JsonResponse
-    {
-        // find user name
-        $usernameOrEmail = $request->get('username');
-        if (null !== $usernameOrEmail && null !== $repository->findByUsernameOrEmail($usernameOrEmail)) {
-            $response = true;
-        } else {
-            $response = $this->trans('username.not_found', [], 'validators');
+        if (null !== $message) {
+            return $this->json($this->trans($message, [], 'validators'));
         }
 
-        return $this->json($response);
+        return $this->json(true);
     }
 
     /**

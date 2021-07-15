@@ -19,7 +19,7 @@ use App\Excel\ExcelResponse;
 use App\Form\GlobalMargin\GlobalMarginType;
 use App\Pdf\PdfResponse;
 use App\Report\GlobalMarginsReport;
-use App\Spreadsheet\GlobalMarginDocument;
+use App\Spreadsheet\GlobalMarginsDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -131,7 +131,7 @@ class GlobalMarginController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new GlobalMarginDocument($this, $entities);
+        $doc = new GlobalMarginsDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }

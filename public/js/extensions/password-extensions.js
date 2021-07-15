@@ -21,13 +21,15 @@
                 if ($button.length) {
                     const $icon = $button.find('i');
                     $button.on('mousedown', function (e) {
-                        if (e.which === 1) {
+                        if (e.which === 1 && $element.prop('type') === 'password' && $element.val().length > 0) {
                             $element.prop('type', 'text');
-                            $icon.addClass('fa-eye-slash').removeClass('fa-eye');
+                            $icon.toggleClass('fa-eye-slash fa-eye');
                         }
                     }).on('mouseup mouseout', function () {
-                        $element.prop('type', 'password').select();
-                        $icon.addClass('fa-eye').removeClass('fa-eye-slash');
+                        if ($element.prop('type') === 'text') {
+                            $element.prop('type', 'password').focus();
+                            $icon.toggleClass('fa-eye-slash fa-eye');
+                        }
                     });
                     $element.on('input', function () {
                         $button.toggleClass('disabled', $element.val().length === 0);

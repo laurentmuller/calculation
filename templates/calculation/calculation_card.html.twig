@@ -18,7 +18,8 @@
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set edit_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
 {%- set show_page = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
-{%- set single_page = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
+{%- set single_page_pdf = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
+{%- set single_page_excel = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_excel_id' : null -%}
 {%- set default_page = app.actionEdit ? edit_page|default(show_page) : show_page|default(edit_page) -%}
 {%- set row_link = not app.actionNone and (edit_page or show_page) -%}
 
@@ -41,12 +42,12 @@
 {% block item_title %}
 {%- set item_title = item.id|identifier -%}
 <div class="text-border" style="{{ properties.stateCss(item.stateColor) }}">
-    {%- if row_link and default_page -%}       
+    {%- if row_link and default_page -%}
         {%- set default_path = path(default_page, params) -%}
-        <a href="{{ default_path }}" class="text-body  rowlink-skip ml-1">{{ item_title }}</a>    
+        <a href="{{ default_path }}" class="text-body  rowlink-skip ml-1">{{ item_title }}</a>
     {%- else -%}
         <span class="ml-1">{{ item_title }}</span>
-    {%- endif -%}   
+    {%- endif -%}
 </div>
 {% endblock %}
 
@@ -69,15 +70,19 @@
 {%- endblock %}
 
 {% block actions -%}
-{%- if state_page or single_page -%}
+{%- if state_page or single_page_pdf or single_page_excel -%}
     {{ icons.dropdownSeparator }}
     {%- if state_page -%}
-        {%- set state_path = path(state_page, {'id': item.id}) -%}
-        {{ icons.dropdownItem(state_path, 'calculation.list.state_title', 'edit') }}
+        {%- set path = path(state_page, {'id': item.id}) -%}
+        {{ icons.dropdownItem(path, 'calculation.list.state_title', 'edit') }}
     {%- endif -%}
-    {%- if single_page -%}
-        {%- set single_path = path(single_page, {'id': item.id}) -%}
-        {{ icons.dropdownItemExternal(single_path, 'calculation.list.pdf_single_title', 'file-pdf far') }}            
+    {%- if single_page_pdf -%}
+        {%- set path = path(single_page_pdf, {'id': item.id}) -%}
+        {{ icons.dropdownItemExternal(path, 'calculation.list.pdf_single_title', 'file-pdf far') }}
+    {%- endif -%}
+    {%- if single_page_excel -%}
+        {%- set path = path(single_page_excel, {'id': item.id}) -%}
+        {{ icons.dropdownItemExternal(path, 'calculation.list.excel_single_title', 'file-excel far') }}
     {%- endif -%}
 {%- endif -%}
 {%- endblock %}
@@ -85,8 +90,8 @@
 {% block edit_action %}
 {{ parent() }}
 {%- if clone_page -%}
-    {% set clone_path = path(clone_page, {'id': item.id, 'caller': caller}) %}
-    {{ icons.dropdownItem(clone_path, 'common.button_clone', 'copy far') }}
+    {% set path = path(clone_page, {'id': item.id, 'caller': caller}) %}
+    {{ icons.dropdownItem(path, 'common.button_clone', 'copy far') }}
 {%- endif -%}
 {% endblock %}
 

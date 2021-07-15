@@ -28,8 +28,8 @@ use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
 use App\Repository\AbstractRepository;
 use App\Security\EntityVoter;
-use App\Spreadsheet\UserDocument;
 use App\Spreadsheet\UserRightsDocument;
+use App\Spreadsheet\UsersDocument;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
@@ -157,7 +157,7 @@ class UserController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new UserDocument($this, $entities, $factory, $storage);
+        $doc = new UsersDocument($this, $entities, $factory, $storage);
 
         return $this->renderExcelDocument($doc);
     }

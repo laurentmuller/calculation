@@ -7,11 +7,11 @@
     'use strict';
 
     // image
-    const $imageFile = $("#user_imageFile_file");
+    const $imageFile = $('#user_imageFile_file');
     if ($imageFile.length) {
         // delete checkbox handler
         let callback = null;
-        const $delete = $("#user_imageFile_delete");
+        const $delete = $('#user_imageFile_delete');
         if ($delete.length) {
             callback = function ($file) {
                 const source = $file.data('src') || '';
@@ -25,8 +25,8 @@
     }
 
     // options
-    const urlName = $('#edit-form').data('check_name');
-    const urlEMail = $('#edit-form').data('check_email');
+    const urlName = $('#edit-form').data('check-name');
+    const urlEmail = $('#edit-form').data('check-email');
     let options = {
         fileInput: true,
         rules: {
@@ -45,7 +45,7 @@
             },
             'user[email]': {
                 remote: {
-                    url: urlEMail,
+                    url: urlEmail,
                     data: {
                         id: function () {
                             return $('#user_id').val();
@@ -65,7 +65,7 @@
         const message = $('#edit-form').data('equal_to');
         options = $.extend(true, options, {
             rules: {
-                "user[plainPassword][first]": {
+                'user[plainPassword][first]': {
                     password: 3,
                     notEmail: true,
                     notUsername: '#user_username'

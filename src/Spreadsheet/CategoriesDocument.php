@@ -20,7 +20,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
  *
  * @author Laurent Muller
  */
-class CategoryDocument extends AbstractArrayDocument
+class CategoriesDocument extends AbstractArrayDocument
 {
     /**
      * {@inheritdoc}

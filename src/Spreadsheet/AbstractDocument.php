@@ -46,11 +46,13 @@ abstract class AbstractDocument extends ExcelDocument
     abstract public function render(): bool;
 
     /**
-     * Ends render this document by selecting the 'A2' cell.
+     * Ends render this document by selecting the given cell.
+     *
+     * @param string $selection the cell to select
      */
-    protected function finish(): self
+    protected function finish(string $selection = 'A2'): self
     {
-        $this->setSelectedCell('A2');
+        $this->setSelectedCell($selection);
 
         return $this;
     }

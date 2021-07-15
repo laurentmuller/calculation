@@ -25,7 +25,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  *
  * @author Laurent Muller
  */
-class LogDocument extends AbstractArrayDocument
+class LogsDocument extends AbstractArrayDocument
 {
     /**
      * {@inheritdoc}

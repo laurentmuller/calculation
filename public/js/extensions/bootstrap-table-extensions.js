@@ -444,6 +444,17 @@ $.fn.extend({
     },
 
     /**
+     * Gets the visible columns of the card view.
+     *
+     * @return {array} the visible columns.
+     */
+    getVisibleCardViewColumns: function() {
+        'use strict';
+        const columns = $(this).bootstrapTable('getVisibleColumns');
+        return columns.filter((c) => c.cardVisible);
+    },
+
+    /**
      * Update this card view UI.
      *
      * @return {jQuery} this instance for chaining.
@@ -457,9 +468,10 @@ $.fn.extend({
         }
 
         const $body = $this.find('tbody');
+        const columns = $this.getVisibleCardViewColumns();
         const callback = $.isFunction (options.onRenderCardView) ? options.onRenderCardView : false;
         const data = callback ? $this.getData() : null;
-        const columns = options.columns[0].filter((c) => c.visible && c.cardVisible);
+
         $body.find('tr').each(function () {
             const $row = $(this);
             const $views = $row.find('.card-views:first');
@@ -559,7 +571,7 @@ $.fn.extend({
      * Toggles the display mode.
      *
      * @param {string}
-     *            mode the display mode to set ('table', 'card' or 'custom').
+     *            mode - the display mode to set ('table', 'card' or 'custom').
      * @return {jQuery} this instance for chaining.
      */
     setDisplayMode: function (mode) {
@@ -691,7 +703,7 @@ $.fn.extend({
     /**
      * Select the last row.
      *
-     * @return {boolean} true if the first last is selected.
+     * @return {boolean} true if the last row is selected.
      */
     selectLastRow: function () {
         'use strict';
@@ -743,7 +755,7 @@ $.fn.extend({
      *
      * @param {string}
      *            actionSelector - the action selector.
-     * @return{JQuery} the action, if found; null otherwise.
+     * @return {JQuery} the action, if found; null otherwise.
      */
     findAction: function (actionSelector) {
         'use strict';
@@ -913,7 +925,7 @@ $.fn.extend({
         'use strict';
         const $this = $(this);
         const $view = $this.getCustomView();
-        if ($view) {
+        if ($view && $view.find('.no-records-found').length === 0) {
             $('<p/>', {
                 class:'no-records-found text-center border-top p-2 mb-1',
                 text: $this.getOptions().formatNoMatches()

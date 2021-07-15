@@ -46,12 +46,27 @@ class ExcelDocument extends Spreadsheet
     public const HEADER_FOOTER_MARGIN = 0.51;
 
     /**
+     * The date time format ('dd/mm/yyyy hh:mm').
+     */
+    private const FORMAT_DATE_TIME = 'dd/mm/yyyy hh:mm';
+
+    /**
+     * The identifier format ('000000').
+     */
+    private const FORMAT_ID = '000000';
+
+    /**
+     * The integer format ('#,##0').
+     */
+    private const FORMAT_INT = '#,##0';
+
+    /**
      * The file title.
      */
     protected ?string $title = null;
 
     /**
-     * The boolean format.
+     * The boolean formats.
      *
      * @var string[]
      */
@@ -411,7 +426,7 @@ class ExcelDocument extends Spreadsheet
      */
     public function setFormatDateTime(int $columnIndex): self
     {
-        return $this->setFormat($columnIndex, 'dd/mm/yyyy hh:mm');
+        return $this->setFormat($columnIndex, self::FORMAT_DATE_TIME);
     }
 
     /**
@@ -421,7 +436,7 @@ class ExcelDocument extends Spreadsheet
      */
     public function setFormatId(int $columnIndex): self
     {
-        return $this->setFormat($columnIndex, '000000');
+        return $this->setFormat($columnIndex, self::FORMAT_ID);
     }
 
     /**
@@ -431,7 +446,7 @@ class ExcelDocument extends Spreadsheet
      */
     public function setFormatInt(int $columnIndex): self
     {
-        return $this->setFormat($columnIndex, '#,##0');
+        return $this->setFormat($columnIndex, self::FORMAT_INT);
     }
 
     /**
@@ -524,8 +539,9 @@ class ExcelDocument extends Spreadsheet
      *                           horizontal alignment or if is an array, the horizontal and the vertical
      *                           alignments
      * @param int   $columnIndex the starting column index (A = 1)
+     * @param int   $rowIndex    the row index (1 = First row)
      */
-    public function setHeaderValues(array $headers, int $columnIndex = 1): self
+    public function setHeaderValues(array $headers, int $columnIndex = 1, int $rowIndex = 1): self
     {
         $sheet = $this->getActiveSheet();
 
@@ -543,19 +559,19 @@ class ExcelDocument extends Spreadsheet
                     ->setHorizontal($alignment);
             }
             $sheet->getColumnDimension($name)->setAutoSize(true);
-            $sheet->setCellValue("{$name}1", $this->trans($id));
+            $sheet->setCellValue("{$name}{$rowIndex}", $this->trans($id));
         }
 
         $firstName = $this->stringFromColumnIndex($columnIndex);
         $lastName = $this->stringFromColumnIndex($columnIndex + \count($headers) - 1);
-        $sheet->getStyle("{$firstName}1:{$lastName}1")->getFont()->setBold(true);
-        $sheet->freezePane('A2');
+        $sheet->getStyle("{$firstName}{$rowIndex}:{$lastName}{$rowIndex}")->getFont()->setBold(true);
+        $sheet->freezePane('A' . ($rowIndex + 1));
 
         $sheet->getPageSetup()
             ->setFitToWidth(1)
             ->setFitToHeight(0)
             ->setHorizontalCentered(true)
-            ->setRowsToRepeatAtTopByStartAndEnd(1, 1);
+            ->setRowsToRepeatAtTopByStartAndEnd($rowIndex, $rowIndex);
 
         return $this;
     }

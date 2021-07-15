@@ -21,7 +21,7 @@ use App\Pdf\PdfResponse;
 use App\Report\ProductsReport;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
-use App\Spreadsheet\ProductDocument;
+use App\Spreadsheet\ProductsDocument;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -159,7 +159,7 @@ class ProductController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new ProductDocument($this, $entities);
+        $doc = new ProductsDocument($this, $entities);
 
         return $this->renderExcelDocument($doc);
     }

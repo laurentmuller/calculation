@@ -27,6 +27,7 @@ use App\Report\CalculationsReport;
 use App\Repository\CalculationStateRepository;
 use App\Service\CalculationService;
 use App\Spreadsheet\CalculationDocument;
+use App\Spreadsheet\CalculationsDocument;
 use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -193,7 +194,19 @@ class CalculationController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new CalculationDocument($this, $entities);
+        $doc = new CalculationsDocument($this, $entities);
+
+        return $this->renderExcelDocument($doc);
+    }
+
+    /**
+     * Export a single calculation to an Excel document.
+     *
+     * @Route("/excel/{id}", name="calculation_excel_id", requirements={"id" = "\d+" })
+     */
+    public function excelById(Calculation $calculation): ExcelResponse
+    {
+        $doc = new CalculationDocument($this, $calculation);
 
         return $this->renderExcelDocument($doc);
     }

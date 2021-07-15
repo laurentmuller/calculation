@@ -20,7 +20,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
  *
  * @author Laurent Muller
  */
-class GlobalMarginDocument extends AbstractArrayDocument
+class GlobalMarginsDocument extends AbstractArrayDocument
 {
     /**
      * {@inheritdoc}

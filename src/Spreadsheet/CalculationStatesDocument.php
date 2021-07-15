@@ -22,7 +22,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
  *
  * @author Laurent Muller
  */
-class CalculationStateDocument extends AbstractArrayDocument
+class CalculationStatesDocument extends AbstractArrayDocument
 {
     /**
      * {@inheritdoc}

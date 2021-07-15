@@ -10,5 +10,20 @@
     $('#captcha').initCaptcha();
 
     // initialize validator
-    $("#edit-form").initValidator();
+    const url = $('#edit-form').data('check-user');
+    const options = {
+        rules: {
+            'user': {
+                remote: {
+                    url: url,
+                    data: {
+                        user: function () {
+                            return $('#user').val();
+                        }
+                    }
+                }
+            }
+        }
+    };
+    $('#edit-form').initValidator(options);
 }(jQuery));

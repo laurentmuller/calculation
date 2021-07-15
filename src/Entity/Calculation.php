@@ -376,7 +376,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getGlobalMarginAmount(): float
     {
-        return $this->getGroupsTotal() * $this->globalMargin;
+        return $this->getGroupsTotal() * ($this->globalMargin - 1);
     }
 
     /**
@@ -566,11 +566,11 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get total net.
+     * Get total net. This is total of the groups multiplied by the global margin.
      */
     public function getTotalNet(): float
     {
-        return $this->getGroupsTotal() * (1 + $this->globalMargin);
+        return $this->getGroupsTotal() * $this->globalMargin;
     }
 
     /**
@@ -587,6 +587,14 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function getUserMarginAmount(): float
     {
         return $this->getTotalNet() * $this->userMargin;
+    }
+
+    /**
+     * Get user toal margin amount.
+     */
+    public function getUserMarginTotal(): float
+    {
+        return $this->getTotalNet() * (1 + $this->userMargin);
     }
 
     /**

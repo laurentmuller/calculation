@@ -15,7 +15,7 @@ namespace App\Spreadsheet;
 use App\Controller\AbstractController;
 
 /**
- * Excel document for the list of calculations with duplicate items.
+ * Spreadsheet document for the list of calculations with duplicate items.
  *
  * @author Laurent Muller
  */

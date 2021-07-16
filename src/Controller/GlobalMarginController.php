@@ -15,11 +15,11 @@ namespace App\Controller;
 use App\DataTable\GlobalMarginDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\GlobalMargin;
-use App\Excel\ExcelResponse;
 use App\Form\GlobalMargin\GlobalMarginType;
 use App\Pdf\PdfResponse;
 use App\Report\GlobalMarginsReport;
 use App\Spreadsheet\GlobalMarginsDocument;
+use App\Spreadsheet\SpreadsheetResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -116,13 +116,13 @@ class GlobalMarginController extends AbstractEntityController
     }
 
     /**
-     * Export the global margins to an Excel document.
+     * Export the global margins to a Spreadsheet document.
      *
      * @Route("/excel", name="globalmargin_excel")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      */
-    public function excel(): ExcelResponse
+    public function excel(): SpreadsheetResponse
     {
         /** @var GlobalMargin[] $entities */
         $entities = $this->getEntities('minimum');
@@ -133,7 +133,7 @@ class GlobalMarginController extends AbstractEntityController
 
         $doc = new GlobalMarginsDocument($this, $entities);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

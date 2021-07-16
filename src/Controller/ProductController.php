@@ -15,13 +15,13 @@ namespace App\Controller;
 use App\DataTable\ProductDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Product;
-use App\Excel\ExcelResponse;
 use App\Form\Product\ProductType;
 use App\Pdf\PdfResponse;
 use App\Report\ProductsReport;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Spreadsheet\ProductsDocument;
+use App\Spreadsheet\SpreadsheetResponse;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -144,13 +144,13 @@ class ProductController extends AbstractEntityController
     }
 
     /**
-     * Export the products to an Excel document.
+     * Export the products to a Spreadsheet document.
      *
      * @Route("/excel", name="product_excel")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no product is found
      */
-    public function excel(ProductRepository $repository): ExcelResponse
+    public function excel(ProductRepository $repository): SpreadsheetResponse
     {
         /** @var Product[] $entities */
         $entities = $repository->findAllByGroup();
@@ -161,7 +161,7 @@ class ProductController extends AbstractEntityController
 
         $doc = new ProductsDocument($this, $entities);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

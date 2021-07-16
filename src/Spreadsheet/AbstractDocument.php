@@ -13,14 +13,13 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Excel\ExcelDocument;
 
 /**
- * Asbtract Excel document.
+ * Asbtract Spreadsheet document.
  *
  * @author Laurent Muller
  */
-abstract class AbstractDocument extends ExcelDocument
+abstract class AbstractDocument extends SpreadsheetDocument
 {
     /**
      * The parent controller.

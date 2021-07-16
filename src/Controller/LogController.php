@@ -128,7 +128,7 @@ class LogController extends AbstractController
     }
 
     /**
-     * Export the logs to an Excel document.
+     * Export the logs to a Spreadsheet document.
      *
      * @Route("/excel", name="log_excel")
      */
@@ -143,7 +143,7 @@ class LogController extends AbstractController
 
         $doc = new LogsDocument($this, (array) $entries);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

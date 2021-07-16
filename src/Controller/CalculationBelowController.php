@@ -64,7 +64,7 @@ class CalculationBelowController extends AbstractController
     }
 
     /**
-     * Export the calculations to an Excel document.
+     * Export the calculations to a Spreadsheet document.
      *
      * @Route("/excel", name="below_excel")
      */
@@ -81,7 +81,7 @@ class CalculationBelowController extends AbstractController
         $doc = new CalculationsDocument($this, $items);
         $doc->setTitle('below.title');
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

@@ -15,12 +15,12 @@ namespace App\Controller;
 use App\DataTable\GroupDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Group;
-use App\Excel\ExcelResponse;
 use App\Form\Group\GroupType;
 use App\Pdf\PdfResponse;
 use App\Report\GroupsReport;
 use App\Repository\CalculationGroupRepository;
 use App\Spreadsheet\GroupsDocument;
+use App\Spreadsheet\SpreadsheetResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -165,13 +165,13 @@ class GroupController extends AbstractEntityController
     }
 
     /**
-     * Export the groups to an Excel document.
+     * Export the groups to a Spreadsheet document.
      *
      * @Route("/excel", name="group_excel")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no group is found
      */
-    public function excel(): ExcelResponse
+    public function excel(): SpreadsheetResponse
     {
         /** @var Group[] $groups */
         $groups = $this->getEntities('code');
@@ -182,7 +182,7 @@ class GroupController extends AbstractEntityController
 
         $doc = new GroupsDocument($this, $groups);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

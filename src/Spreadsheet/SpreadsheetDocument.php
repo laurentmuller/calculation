@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Excel;
+namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Traits\TranslatorTrait;
@@ -31,7 +31,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class ExcelDocument extends Spreadsheet
+class SpreadsheetDocument extends Spreadsheet
 {
     use TranslatorTrait;
 
@@ -602,6 +602,18 @@ class ExcelDocument extends Spreadsheet
             ->setBottom($margins)
             ->setLeft($margins)
             ->setRight($margins);
+
+        return $this;
+    }
+
+    /**
+     * Sets the page break at the given row.
+     *
+     * @param int $row the row index (1 = First row)
+     */
+    public function setPageBreak(int $row): self
+    {
+        $this->getActiveSheet()->setBreakByColumnAndRow(1, $row, Worksheet::BREAK_ROW);
 
         return $this;
     }

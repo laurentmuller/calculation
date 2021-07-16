@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\DataTable\CategoryDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
-use App\Excel\ExcelResponse;
 use App\Form\Category\CategoryType;
 use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
@@ -24,6 +23,7 @@ use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
 use App\Repository\TaskRepository;
 use App\Spreadsheet\CategoriesDocument;
+use App\Spreadsheet\SpreadsheetResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -173,13 +173,13 @@ class CategoryController extends AbstractEntityController
     }
 
     /**
-     * Export the categories to an Excel document.
+     * Export the categories to a Spreadsheetl document.
      *
      * @Route("/excel", name="category_excel")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no category is found
      */
-    public function excel(): ExcelResponse
+    public function excel(): SpreadsheetResponse
     {
         /** @var Category[] $entities */
         $entities = $this->getEntities('code');
@@ -190,7 +190,7 @@ class CategoryController extends AbstractEntityController
 
         $doc = new CategoriesDocument($this, $entities);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

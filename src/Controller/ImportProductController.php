@@ -14,7 +14,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use App\Excel\ExcelResponse;
+use App\Spreadsheet\SpreadsheetResponse;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -30,7 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\File;
 
 /**
- * Controller to import products from an Excel Sheet.
+ * Controller to import products from a Spreadsheet.
  *
  * @author Laurent Muller
  *
@@ -124,14 +124,14 @@ class ImportProductController extends AbstractController
 
         // file constraints
         $constraints = new File([
-            'mimeTypes' => ExcelResponse::MIME_TYPE_EXCEL,
+            'mimeTypes' => SpreadsheetResponse::MIME_TYPE_EXCEL,
             'mimeTypesMessage' => $this->trans('import.error.mime_type'),
         ]);
 
         // fields
         $helper->field('file')
             ->updateOption('constraints', $constraints)
-            ->updateAttribute('accept', ExcelResponse::MIME_TYPE_EXCEL)
+            ->updateAttribute('accept', SpreadsheetResponse::MIME_TYPE_EXCEL)
             ->addFileType();
 
         $helper->field('simulate')
@@ -236,7 +236,7 @@ class ImportProductController extends AbstractController
     }
 
     /**
-     * Opens the given Excel file path and select the first sheet.
+     * Opens the given Spreadsheet file path and select the first sheet.
      *
      * @param string $path the file path
      *

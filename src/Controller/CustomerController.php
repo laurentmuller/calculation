@@ -15,12 +15,12 @@ namespace App\Controller;
 use App\DataTable\CustomerDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Customer;
-use App\Excel\ExcelResponse;
 use App\Form\Customer\CustomerType;
 use App\Pdf\PdfResponse;
 use App\Report\CustomersReport;
 use App\Repository\CustomerRepository;
 use App\Spreadsheet\CustomersDocument;
+use App\Spreadsheet\SpreadsheetResponse;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -125,13 +125,13 @@ class CustomerController extends AbstractEntityController
     }
 
     /**
-     * Export the customers to an Excel document.
+     * Export the customers to a Spreadsheet document.
      *
      * @Route("/excel", name="customer_excel")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
      */
-    public function excel(CustomerRepository $repository): ExcelResponse
+    public function excel(CustomerRepository $repository): SpreadsheetResponse
     {
         /** @var Customer[] $entities */
         $entities = $repository->findAllByNameAndCompany();
@@ -142,7 +142,7 @@ class CustomerController extends AbstractEntityController
 
         $doc = new CustomersDocument($this, $entities);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

@@ -16,7 +16,7 @@ use App\Entity\Customer;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
- * Excel document for the list of customers.
+ * Spreadsheet document for the list of customers.
  *
  * @author Laurent Muller
  */

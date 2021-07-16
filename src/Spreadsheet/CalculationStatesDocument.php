@@ -18,7 +18,7 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 /**
- * Excel document for the list of calculation state.
+ * Spreadsheet document for the list of calculation state.
  *
  * @author Laurent Muller
  */

@@ -14,13 +14,13 @@ namespace App\Controller;
 
 use App\DataTable\Model\AbstractEntityDataTable;
 use App\Entity\AbstractEntity;
-use App\Excel\ExcelDocument;
-use App\Excel\ExcelResponse;
 use App\Interfaces\EntityVoterInterface;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfResponse;
 use App\Repository\AbstractRepository;
 use App\Security\EntityVoter;
+use App\Spreadsheet\SpreadsheetDocument;
+use App\Spreadsheet\SpreadsheetResponse;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Exception;
@@ -367,21 +367,21 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * {@inheritdoc}
      */
-    protected function renderExcelDocument(ExcelDocument $doc, bool $inline = true, string $name = ''): ExcelResponse
-    {
-        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_EXPORT);
-
-        return parent::renderExcelDocument($doc, $inline, $name);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
         $this->checkPermission(EntityVoterInterface::ATTRIBUTE_EXPORT);
 
         return parent::renderPdfDocument($doc, $inline, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
+    {
+        $this->checkPermission(EntityVoterInterface::ATTRIBUTE_EXPORT);
+
+        return parent::renderSpreadsheetDocument($doc, $inline, $name);
     }
 
     /**

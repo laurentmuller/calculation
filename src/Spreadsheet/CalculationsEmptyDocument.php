@@ -16,7 +16,7 @@ use App\Controller\AbstractController;
 use App\Traits\MathTrait;
 
 /**
- * Excel document for the list of calculations with empty items.
+ * Spreadsheet document for the list of calculations with empty items.
  *
  * @author Laurent Muller
  */

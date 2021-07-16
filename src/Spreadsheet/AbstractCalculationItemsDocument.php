@@ -17,7 +17,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 
 /**
- * Abstract Excel document for the list of calculations with invalid items.
+ * Abstract Spreadsheet document for the list of calculations with invalid items.
  *
  * @author Laurent Muller
  */

@@ -15,13 +15,13 @@ namespace App\Controller;
 use App\DataTable\CalculationStateDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
-use App\Excel\ExcelResponse;
 use App\Form\CalculationState\CalculationStateType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Pdf\PdfResponse;
 use App\Report\CalculationStatesReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationStatesDocument;
+use App\Spreadsheet\SpreadsheetResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -147,13 +147,13 @@ class CalculationStateController extends AbstractEntityController
     }
 
     /**
-     * Export the calculation states to an Excel document.
+     * Export the calculation states to a Spreadsheet document.
      *
      * @Route("/excel", name="calculationstate_excel")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      */
-    public function excel(): ExcelResponse
+    public function excel(): SpreadsheetResponse
     {
         /** @var CalculationState[] $entities */
         $entities = $this->getEntities('code');
@@ -164,7 +164,7 @@ class CalculationStateController extends AbstractEntityController
 
         $doc = new CalculationStatesDocument($this, $entities);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

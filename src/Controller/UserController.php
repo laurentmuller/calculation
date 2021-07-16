@@ -16,7 +16,6 @@ use App\DataTable\UserDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Comment;
 use App\Entity\User;
-use App\Excel\ExcelResponse;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
 use App\Form\User\UserImageType;
@@ -28,6 +27,7 @@ use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
 use App\Repository\AbstractRepository;
 use App\Security\EntityVoter;
+use App\Spreadsheet\SpreadsheetResponse;
 use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Util\Utils;
@@ -142,13 +142,13 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Export the customers to an Excel document.
+     * Export the customers to a Spreadsheet document.
      *
      * @Route("/excel", name="user_excel")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
-    public function excel(PropertyMappingFactory $factory, StorageInterface $storage): ExcelResponse
+    public function excel(PropertyMappingFactory $factory, StorageInterface $storage): SpreadsheetResponse
     {
         /** @var User[] $entities */
         $entities = $this->getEntities('username');
@@ -159,7 +159,7 @@ class UserController extends AbstractEntityController
 
         $doc = new UsersDocument($this, $entities, $factory, $storage);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**
@@ -366,13 +366,13 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Export the user access rights to an Excel document.
+     * Export the user access rights to a Spreadsheet document.
      *
      * @Route("/rights/excel", name="user_rights_excel")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
-    public function rightsExcel(): ExcelResponse
+    public function rightsExcel(): SpreadsheetResponse
     {
         /** @var User[] $entities */
         $entities = $this->getEntities('username');
@@ -383,7 +383,7 @@ class UserController extends AbstractEntityController
 
         $doc = new UserRightsDocument($this, $entities);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

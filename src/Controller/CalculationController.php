@@ -16,7 +16,6 @@ use App\DataTable\CalculationDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\Task;
-use App\Excel\ExcelResponse;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
 use App\Form\Dialog\EditItemDialogType;
@@ -28,6 +27,7 @@ use App\Repository\CalculationStateRepository;
 use App\Service\CalculationService;
 use App\Spreadsheet\CalculationDocument;
 use App\Spreadsheet\CalculationsDocument;
+use App\Spreadsheet\SpreadsheetResponse;
 use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -179,13 +179,13 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * Export the calculations to an Excel document.
+     * Export the calculations to a Spreadsheet document.
      *
      * @Route("/excel", name="calculation_excel")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      */
-    public function excel(): ExcelResponse
+    public function excel(): SpreadsheetResponse
     {
         /** @var Calculation[] $entities */
         $entities = $this->getEntities('id');
@@ -196,19 +196,19 @@ class CalculationController extends AbstractEntityController
 
         $doc = new CalculationsDocument($this, $entities);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**
-     * Export a single calculation to an Excel document.
+     * Export a single calculation to a Spreadsheet document.
      *
      * @Route("/excel/{id}", name="calculation_excel_id", requirements={"id" = "\d+" })
      */
-    public function excelById(Calculation $calculation): ExcelResponse
+    public function excelById(Calculation $calculation): SpreadsheetResponse
     {
         $doc = new CalculationDocument($this, $calculation);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

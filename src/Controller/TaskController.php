@@ -16,7 +16,6 @@ use App\DataTable\TaskDataTable;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Entity\Task;
-use App\Excel\ExcelResponse;
 use App\Form\Task\TaskServiceType;
 use App\Form\Task\TaskType;
 use App\Pdf\PdfResponse;
@@ -24,6 +23,7 @@ use App\Report\TasksReport;
 use App\Repository\CategoryRepository;
 use App\Repository\TaskRepository;
 use App\Service\TaskService;
+use App\Spreadsheet\SpreadsheetResponse;
 use App\Spreadsheet\TasksDocument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -185,13 +185,13 @@ class TaskController extends AbstractEntityController
     }
 
     /**
-     * Export the tasks to an Excel document.
+     * Export the tasks to a Spreadsheet document.
      *
      * @Route("/excel", name="task_excel")
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no category is found
      */
-    public function excel(): ExcelResponse
+    public function excel(): SpreadsheetResponse
     {
         /** @var Category[] $entities */
         $entities = $this->getEntities('name');
@@ -202,7 +202,7 @@ class TaskController extends AbstractEntityController
 
         $doc = new TasksDocument($this, $entities);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Excel;
+namespace App\Spreadsheet;
 
 use App\Util\Utils;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -18,13 +18,13 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * The ExcelResponse represents an HTTP streamed response within an Excel 2007 (.xlsx) document.
+ * The SpreadsheetResponse represents an HTTP streamed response within an Excel 2007 (.xlsx) document.
  *
  * @author Laurent Muller
  *
- * @see ExcelDocument
+ * @see SpreadsheetDocument
  */
-class ExcelResponse extends StreamedResponse
+class SpreadsheetResponse extends StreamedResponse
 {
     /**
      * The application download mime type.
@@ -39,12 +39,12 @@ class ExcelResponse extends StreamedResponse
     /**
      * Constructor.
      *
-     * @param ExcelDocument $doc    the document to output
-     * @param bool          $inline <code>true</code> to send the file inline to the browser. The Spreasheet viewer is used if available.
-     *                              <code>false</code> to send to the browser and force a file download with the name given.
-     * @param string        $name   the name of the document file or <code>''</code> to use the default name ('document.xlsx')
+     * @param SpreadsheetDocument $doc    the document to output
+     * @param bool                $inline <code>true</code> to send the file inline to the browser. The Spreasheet viewer is used if available.
+     *                                    <code>false</code> to send to the browser and force a file download with the name given.
+     * @param string              $name   the name of the document file or <code>''</code> to use the default name ('document.xlsx')
      */
-    public function __construct(ExcelDocument $doc, bool $inline = true, string $name = '')
+    public function __construct(SpreadsheetDocument $doc, bool $inline = true, string $name = '')
     {
         $name = empty($name) ? 'document.xlsx' : \basename($name);
         $encoded = Utils::ascii($name);

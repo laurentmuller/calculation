@@ -23,7 +23,7 @@ use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
- * Excel document for the list of users.
+ * Spreadsheet document for the list of users.
  *
  * @author Laurent Muller
  */

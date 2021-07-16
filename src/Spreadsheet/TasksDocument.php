@@ -19,7 +19,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
- * Excel document for the list of tasks.
+ * Spreadsheet document for the list of tasks.
  *
  * @author Laurent Muller
  */

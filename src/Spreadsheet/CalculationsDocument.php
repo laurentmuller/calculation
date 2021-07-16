@@ -16,7 +16,7 @@ use App\Entity\Calculation;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
- * Excel document for the list of calculations.
+ * Spreadsheet document for the list of calculations.
  *
  * @author Laurent Muller
  */

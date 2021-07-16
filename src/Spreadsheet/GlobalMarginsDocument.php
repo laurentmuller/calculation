@@ -16,7 +16,7 @@ use App\Entity\GlobalMargin;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
- * Excel document for the list of global margins.
+ * Spreadsheet document for the list of global margins.
  *
  * @author Laurent Muller
  */

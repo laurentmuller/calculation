@@ -16,7 +16,7 @@ use App\Entity\Group;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
- * Excel document for the list of groups.
+ * Spreadsheet document for the list of groups.
  *
  * @author Laurent Muller
  */

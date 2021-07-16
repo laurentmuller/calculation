@@ -21,7 +21,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
- * Excel document for application logs.
+ * Spreadsheet document for application logs.
  *
  * @author Laurent Muller
  */

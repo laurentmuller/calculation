@@ -83,7 +83,7 @@ class CalculationDuplicateController extends AbstractController
     }
 
     /**
-     * Export the duplicate items to an Excel document.
+     * Export the duplicate items to a Spreadsheet document.
      *
      * @Route("/excel", name="duplicate_excel")
      */
@@ -98,7 +98,7 @@ class CalculationDuplicateController extends AbstractController
         $items = $this->getItems($repository);
         $doc = new CalculationsDuplicateDocument($this, $items);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

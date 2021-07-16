@@ -79,7 +79,7 @@ class CalculationEmptyController extends AbstractController
     }
 
     /**
-     * Export the empty items to an Excel document.
+     * Export the empty items to a Spreadsheet document.
      *
      * @Route("/excel", name="empty_excel")
      */
@@ -94,7 +94,7 @@ class CalculationEmptyController extends AbstractController
         $items = $this->getItems($repository);
         $doc = new CalculationsEmptyDocument($this, $items);
 
-        return $this->renderExcelDocument($doc);
+        return $this->renderSpreadsheetDocument($doc);
     }
 
     /**

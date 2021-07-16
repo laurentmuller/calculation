@@ -15,7 +15,7 @@ namespace App\Spreadsheet;
 use App\Controller\AbstractController;
 
 /**
- * Asbtract Excel document to render an array of objects.
+ * Asbtract Spreadsheet document to render an array of objects.
  *
  * @author Laurent Muller
  */

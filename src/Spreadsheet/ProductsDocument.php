@@ -16,7 +16,7 @@ use App\Entity\Product;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
- * Excel document for the list of products.
+ * Spreadsheet document for the list of products.
  *
  * @author Laurent Muller
  */

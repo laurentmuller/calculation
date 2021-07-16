@@ -16,7 +16,7 @@ use App\Entity\Category;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
- * Excel document for the list of categories.
+ * Spreadsheet document for the list of categories.
  *
  * @author Laurent Muller
  */

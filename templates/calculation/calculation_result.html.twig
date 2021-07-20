@@ -2,6 +2,13 @@
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
+{% macro add_line_info(name, value) -%}
+</tr>
+    <td>{{ name|trans }}</td>
+    <td class="text-right">{{ value|raw }}</td>
+</tr>
+{%- endmacro %}
+
 {# parameters #}
 {%- set title = 'calculation.update.title' -%}
 {%- set title_icon = 'pencil-alt' -%}
@@ -25,37 +32,23 @@
         </tr>
     {% endif %}
     {% if sorted > 0 %}
-        <tr>
-            <td>{{ 'calculation.result.sorted'|trans }}</td>
-            <td class="text-right">{{ sorted|integer }}</td>
-        </tr>
+        {{ _self.add_line_info('calculation.result.sorted', sorted|integer) }}
     {% endif %}
     {% if empty > 0 or duplicated > 0 or sorted > 0 %}
-        <tr class="not-hover">
-            <td colspan="2">&nbsp;</td>
-        </tr>
+        <tr class="not-hover"><td colspan="2">&nbsp;</td></tr>
     {% endif %}
-    <tr>
-        <td>{{ 'calculation.result.updated'|trans }}</td>
-        <td class="text-right">{{ updated|integer }}</td>
-    </tr>
-    <tr>
-        <td>{{ 'calculation.result.skipped'|trans }}</td>
-        <td class="text-right">{{ skipped|integer }}</td>
-    </tr>
+    {{ _self.add_line_info('calculation.result.updated', updated|integer) }}
+    {{ _self.add_line_info('calculation.result.skipped', skipped|integer) }}
     {% if unmodifiable > 0 %}
-        <tr>
-            <td>{{ 'calculation.result.unmodifiable'|trans }}</td>
-            <td class="text-right">{{ unmodifiable|integer }}</td>
-        </tr>
+        {{ _self.add_line_info('calculation.result.unmodifiable', unmodifiable|integer) }}
     {% endif %}
     <tr>
-        <td class="font-weight-bold">{{ 'calculation.result.total'|trans }}</<td>
-        <td class="font-weight-bold text-right">{{ total|integer }}</td>
+        <th>{{ 'calculation.result.total'|trans }}</<th>
+        <th class="text-right">{{ total|integer }}</th>
     </tr>
 </table>
 {% if simulated %}
-    <hr class="my-1">
+    <hr class="mt-0">
     <p class="text-right my-0 small">{{ 'calculation.result.simulated'|trans }}</p>
 {% endif %}
 {% endblock %}

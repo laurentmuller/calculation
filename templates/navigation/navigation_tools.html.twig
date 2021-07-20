@@ -9,7 +9,8 @@
         {{- icons.dropdownItem(path('search'), 'search.title', 'search') -}}
         {% if is_admin %}
         {{- icons.dropdownSeparator -}}
-        {{- icons.dropdownItem(path('admin_update'), 'calculation.update.title', 'pencil-alt') -}}
+        {{- icons.dropdownItem(path('admin_calculation'), 'calculation.update.title', 'pencil-alt') -}}
+        {{- icons.dropdownItem(path('admin_product'), 'product.update.title', 'wrench') -}}
         {{- icons.dropdownSeparator -}}
         {%- set href = is_tabular ? path('below_table') : path('below_card') -%}
         {{- icons.dropdownItem(href, 'below.title', 'percent') -}}

@@ -8,10 +8,10 @@
 
 {% block card_body %}
 {{ parent() }}
-{% if last_update %}
+{% if last_update is defined and last_update %}
     {%- set date = last_update|localedatetime('long', 'short') -%}
-    <hr class="mt-3 mb-0">
-      <p class="mt-2 mb-0 text-right text-muted small">{{ 'calculation.update.last_update'|trans({'%date%': date}) }}</p>
+    <hr class="my-2">
+    <p class="mb-0 text-right text-muted small">{{ 'calculation.update.last_update'|trans({'%date%': date}) }}</p>
 {% endif %}
 {% endblock %}
 
@@ -20,8 +20,8 @@
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/application/validation_edit.js') }}
+{{ asset_js('js/application/calculation_update.js') }}
 {% else %}
-{{ asset_js('js/validation_edit.js') }}
+{{ asset_js('js/calculation_update.js') }}
 {% endif %}
 {% endblock %}

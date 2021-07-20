@@ -6,9 +6,7 @@
 {%- set defer_url = url('table_globalmargin') -%}
 {%- set object_type = ENTITY_GLOBAL_MARGIN -%}
 
-{# classes
 {% block card_container_class %} col-md-8 offset-md-2{% endblock -%}
- #}
 
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('globalmargin_add', params) }}">{{ 'globalmargin.add.title'|trans }}</a>{% endif %}

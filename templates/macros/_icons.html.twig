@@ -143,3 +143,9 @@
 {% macro linkTable(route_name, parameters=[]) -%}
 {% if route_name %}{{ _self.link(path(route_name, parameters), '', 'btn btn-secondary', 'table', 'common.button_table') }}{% endif %}
 {%- endmacro %}
+
+{% macro button_close_modal() -%}
+<button type="button" class="close" data-dismiss="modal" aria-label="{{ 'common.button_close'|trans }}" title="{{ 'common.button_close'|trans }}" >
+    <span aria-hidden="true">&times;</span>
+</button>
+{%- endmacro %}

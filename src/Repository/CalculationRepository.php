@@ -90,6 +90,18 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
+     * Returns the number of distinct years and months.
+     */
+    public function countDistinctMonths(): int
+    {
+        $query = $this->createQueryBuilder('c')
+            ->select("COUNT (DISTINCT DATE_FORMAT(c.date, '%Y-%m'))")
+            ->getQuery();
+
+        return (int) $query->getSingleScalarResult();
+    }
+
+    /**
      * Count the number of calculations with duplicate items. Items are duplicate if the descriptions are equal.
      *
      * @return int the number of calculations

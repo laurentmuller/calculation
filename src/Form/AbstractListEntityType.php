@@ -49,6 +49,9 @@ abstract class AbstractListEntityType extends AbstractType
         $this->className = $className;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

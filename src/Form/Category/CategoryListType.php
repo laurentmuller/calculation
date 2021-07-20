@@ -41,6 +41,7 @@ class CategoryListType extends AbstractListEntityType
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'choice_label' => 'code',
             'group_by' => 'groupCode',

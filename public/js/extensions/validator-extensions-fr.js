@@ -41,6 +41,10 @@
         return this.optional(element) || /^[1-9]\d{3}$/.test(value);
     });
 
+    $.validator.addMethod("notEqualToZero", function (value, element) {
+        return this.optional(element) || Number.parseFloat(value) !== 0;
+    });
+
     $.extend($.validator, {
         /**
          * Format message within the label (if any).
@@ -397,6 +401,15 @@
         lessThanEqualValueLabel: 'Le champ \"{0}\" doit avoir une valeur égale ou inférieure au champ {1}.',
         lessThanEqualValue: function (parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.lessThanEqualValueLabel, $.validator.messages.lessThanEqualValueFallback, parameters);
+        },
+
+        /*
+         * notEqualToZero
+         */
+        notEqualToZeroFallback: 'Veuillez fournir une valeur différente de 0.',
+        notEqualToZeroLabel: 'Le champ \"{0}\" doit être différent de 0.',
+        notEqualToZero: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.notEqualToZeroLabel, $.validator.messages.notEqualToZeroFallback, parameters);
         },
 
         /*

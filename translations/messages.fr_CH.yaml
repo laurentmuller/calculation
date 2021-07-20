@@ -81,7 +81,7 @@ calculation:
         success: Le statut de la calculation Nº <b>%name%</b> a été mis à jour avec succès.
     update:
         title: Mise à jour des calculations
-        description: Permet de mettre à jour le total des calculations.
+        description: Cette page vous permet de mettre à jour le total des calculations.
         closed: Mettre à jour toutes les calculations
         closed_help: Inclus les calculations avec le statut non-modifiables.
         sorted: Trier les articles
@@ -318,6 +318,29 @@ product:
         category_help: Afficher les articles pour la catégorie sélectionnée
     show:
         title: Propriétés de l'article
+    update:
+        title: Mise à jour des articles
+        description: Cette page vous permet de mettre à jour le prix des articles.
+        count_products: 'Nombre d''articles : %d%'
+        type: Type de mise à jour
+        percent: Pourcentage
+        percent_help: 'Example : 50.00 + 12 % = 56.00'
+        fixed: Montant fixe
+        fixed_help: 'Example : 50.00 + 10.00 = 60.00'
+        round: Arrondir au 5 centimes
+        round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
+        simulated: Simuler la mise à jour
+        simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
+        confirm: Confirmer la mise à jour des données
+        last_update: 'Dernière mise à jour : %date%'
+    result:
+        description: Résultats de la mise à jour.
+        simulated: La mise à jour a été simulée. Aucun article n'a été modifié dans la base de données.
+        empty: Aucun article n'a été mise à jour.
+        updated: Mises à jour
+        value: Valeur
+        old_price: Ancien prix
+        new_price: Nouveau prix
     import:
         title: Importer des articles
         description: Permet d'importer des articles depuis une feuille de calcul Excel (*.xlsx).

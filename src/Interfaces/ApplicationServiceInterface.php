@@ -115,11 +115,6 @@ interface ApplicationServiceInterface
     public const P_LAST_IMPORT = 'last_import';
 
     /**
-     * The property name for the last calculations update (date).
-     */
-    public const P_LAST_UPDATE = 'last_update';
-
-    /**
      * The property name for the number items displayed in the tables (integer).
      */
     public const P_LIST_LENGTH = 'list-length';
@@ -148,6 +143,16 @@ interface ApplicationServiceInterface
      * The property name for the minimum password strength (int).
      */
     public const P_MIN_STRENGTH = 'minstrength';
+
+    /**
+     * The property name for the last calculations update (date).
+     */
+    public const P_UPDATE_CALCULATIONS = 'update_calculations';
+
+    /**
+     * The property name for the last products update (date).
+     */
+    public const P_UPDATE_PRODUCTS = 'update_products';
 
     /**
      * The property name for the user role rights (string).

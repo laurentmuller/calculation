@@ -31,6 +31,21 @@ use Doctrine\Persistence\ManagerRegistry;
 class CategoryRepository extends AbstractRepository
 {
     /**
+     * The filter type to display all categories.
+     */
+    public const FILTER_NONE = 0;
+
+    /**
+     * The filter type to display only categories that contain one or more products.
+     */
+    public const FILTER_PRODUCTS = 1;
+
+    /**
+     * The filter type to display only categories that contain one or more taks.
+     */
+    public const FILTER_TASKS = 2;
+
+    /**
      * The alias for the group entity.
      */
     public const GROUP_ALIAS = 'g';
@@ -99,17 +114,26 @@ class CategoryRepository extends AbstractRepository
     /**
      * Gets the query builder for the list of categories sorted by the parent's group code and then by the code.
      *
-     * @param string $alias the default entity alias
+     * @param int    $filterType the filter type to apply. One of the FILTER_* constants.
+     * @param string $alias      the default entity alias
      */
-    public function getQueryBuilderByGroup(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    public function getQueryBuilderByGroup(int $filterType = self::FILTER_NONE, string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         $field = $this->getSortField('code', $alias);
         $groupField = self::GROUP_ALIAS . '.code';
 
-        return $this->createQueryBuilder($alias)
+        $builder = $this->createQueryBuilder($alias)
             ->innerJoin("$alias.group", self::GROUP_ALIAS)
             ->orderBy($groupField)
             ->addOrderBy($field);
+
+        if (self::FILTER_PRODUCTS === $filterType) {
+            $builder->innerJoin("$alias.products", 'p');
+        } elseif (self::FILTER_TASKS === $filterType) {
+            $builder->innerJoin("$alias.tasks", 't');
+        }
+
+        return $builder;
     }
 
     /**

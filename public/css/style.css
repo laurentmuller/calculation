@@ -794,3 +794,16 @@ span.color-value {
   color: inherit !important;
   background-color: inherit !important;
 }
+
+/**
+ * Reset bottom border of headers
+ */
+.table:not(.table-borderless) thead th {
+    border-bottom-width: 1px;
+}
+
+.text-currency-scroll {
+    text-align: right;
+    width: 120px;
+    white-space: nowrap;
+}

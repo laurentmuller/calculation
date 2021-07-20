@@ -224,16 +224,6 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     }
 
     /**
-     * Gets the last calculations update.
-     *
-     * @return \DateTime|null the last update or null if none
-     */
-    public function getLastUpdate(): ?\DateTime
-    {
-        return $this->getPropertyDate(self::P_LAST_UPDATE);
-    }
-
-    /**
      * Gets the position of the flashbag messages (default: 'bottom-right').
      *
      * @return string the position
@@ -293,7 +283,8 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
             self::P_MESSAGE_TIMEOUT => $this->getMessageTimeout(),
             self::P_MESSAGE_SUB_TITLE => $this->isMessageSubTitle(),
 
-            self::P_LAST_UPDATE => $this->getLastUpdate(),
+            self::P_UPDATE_CALCULATIONS => $this->getUpdateCalculations(),
+            self::P_UPDATE_PRODUCTS => $this->getUpdateProducts(),
             self::P_LAST_IMPORT => $this->getLastImport(),
 
             self::P_MIN_MARGIN => $this->getMinMargin(),
@@ -398,6 +389,26 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
         }
 
         return $default;
+    }
+
+    /**
+     * Gets the last calculations update.
+     *
+     * @return \DateTime|null the last update or null if none
+     */
+    public function getUpdateCalculations(): ?\DateTime
+    {
+        return $this->getPropertyDate(self::P_UPDATE_CALCULATIONS);
+    }
+
+    /**
+     * Gets the last products update.
+     *
+     * @return \DateTime|null the last update or null if none
+     */
+    public function getUpdateProducts(): ?\DateTime
+    {
+        return $this->getPropertyDate(self::P_UPDATE_PRODUCTS);
     }
 
     /**

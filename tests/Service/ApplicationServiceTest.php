@@ -53,7 +53,8 @@ class ApplicationServiceTest extends KernelTestCase implements ApplicationServic
         $this->assertEquals('customer_url', $service->getCustomerUrl());
 
         $this->assertNull($service->getLastImport());
-        $this->assertNull($service->getLastUpdate());
+        $this->assertNull($service->getUpdateCalculations());
+        $this->assertNull($service->getUpdateProducts());
 
         $this->assertNull($service->getDefaultState());
         $this->assertEquals(0, $service->getDefaultStateId());

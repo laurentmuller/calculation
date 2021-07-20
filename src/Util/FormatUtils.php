@@ -248,6 +248,27 @@ final class FormatUtils
     }
 
     /**
+     * Gets the percent symbol for the current locale.
+     *
+     * @return string the percent symbol
+     */
+    public static function getPercent(): string
+    {
+        static $percent;
+        if ($percent) {
+            return $percent;
+        }
+
+        // special case for Swiss French
+        $locale = \Locale::getDefault();
+        /** @var \NumberFormatter $formatter */
+        $formatter = \NumberFormatter::create($locale, \NumberFormatter::PERCENT);
+        $percent = $formatter->getSymbol(\NumberFormatter::PERCENT_SYMBOL);
+
+        return $percent;
+    }
+
+    /**
      * Gets the time type format.
      *
      * @return int type of time formatting, one of the format type constants

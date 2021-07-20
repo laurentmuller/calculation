@@ -12,17 +12,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Calculation;
 use App\Entity\Role;
 use App\Form\Admin\ParametersType;
-use App\Form\FormHelper;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
-use App\Repository\CalculationRepository;
+use App\Repository\CategoryRepository;
 use App\Security\EntityVoter;
-use App\Service\CalculationService;
-use App\Service\SuspendEventListenerService;
+use App\Service\CalculationUpdater;
+use App\Service\ProductUpdater;
 use App\Service\SwissPostService;
 use App\Util\SymfonyInfo;
 use Psr\Log\LoggerInterface;
@@ -159,7 +157,8 @@ class AdminController extends AbstractController
         // properties
         $service = $this->getApplication();
         $data = $service->getProperties([
-            ApplicationServiceInterface::P_LAST_UPDATE,
+            ApplicationServiceInterface::P_UPDATE_CALCULATIONS,
+            ApplicationServiceInterface::P_UPDATE_PRODUCTS,
             ApplicationServiceInterface::P_LAST_IMPORT,
         ]);
 
@@ -220,15 +219,15 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Update calculation totals.
+     * Update calculations.
      *
-     * @Route("/update", name="admin_update")
+     * @Route("/calculation", name="admin_calculation")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function update(Request $request, CalculationRepository $repository, CalculationService $service, LoggerInterface $logger, SuspendEventListenerService $listener): Response
+    public function updateCalculation(Request $request, CalculationUpdater $updater): Response
     {
         // create form helper
-        $helper = $this->createUpdateHelper();
+        $helper = $updater->createHelper();
 
         // handle request
         $form = $helper->createForm();
@@ -238,154 +237,63 @@ class AdminController extends AbstractController
             $includeSorted = (bool) $data['sorted'];
             $includeEmpty = (bool) $data['empty'];
             $includeDuplicated = (bool) $data['duplicated'];
-            $isSimulated = (bool) $data['simulated'];
+            $simulated = (bool) $data['simulated'];
 
-            $updated = 0;
-            $skipped = 0;
-            $empty = 0;
-            $duplicated = 0;
-            $sorted = 0;
-            $unmodifiable = 0;
+            $results = $updater->update($includeClosed, $includeSorted, $includeEmpty, $includeDuplicated, $simulated);
 
-            try {
-                $listener->disableListeners();
-
-                /** @var Calculation[] $calculations */
-                $calculations = $repository->findAll();
-                foreach ($calculations as $calculation) {
-                    if ($includeClosed || $calculation->isEditable()) {
-                        $changed = false;
-                        if ($includeEmpty && $calculation->hasEmptyItems()) {
-                            $empty += $calculation->removeEmptyItems();
-                            $changed = true;
-                        }
-                        if ($includeDuplicated && $calculation->hasDuplicateItems()) {
-                            $duplicated += $calculation->removeDuplicateItems();
-                            $changed = true;
-                        }
-                        if ($includeSorted && $calculation->sort()) {
-                            ++$sorted;
-                            $changed = true;
-                        }
-                        if ($service->updateTotal($calculation) || $changed) {
-                            ++$updated;
-                        } else {
-                            ++$skipped;
-                        }
-                    } else {
-                        ++$unmodifiable;
-                    }
-                }
-
-                if ($updated > 0 && !$isSimulated) {
-                    $this->getManager()->flush();
-                }
-            } finally {
-                $listener->enableListeners();
+            // update last update
+            if ($results['result'] && !$simulated) {
+                $this->getApplication()->setProperties([ApplicationServiceInterface::P_UPDATE_CALCULATIONS => new \DateTime()]);
             }
 
-            $total = \count($calculations);
-
-            if (!$isSimulated) {
-                // update last update
-                $this->getApplication()->setProperties([ApplicationServiceInterface::P_LAST_UPDATE => new \DateTime()]);
-
-                // log results
-                $context = [
-                    $this->trans('calculation.result.empty') => $empty,
-                    $this->trans('calculation.result.duplicated') => $duplicated,
-                    $this->trans('calculation.result.sorted') => $sorted,
-                    $this->trans('calculation.result.updated') => $updated,
-                    $this->trans('calculation.result.skipped') => $skipped,
-                    $this->trans('calculation.result.unmodifiable') => $unmodifiable,
-                    $this->trans('calculation.result.total') => $total,
-                ];
-                $message = $this->trans('calculation.update.title');
-                $logger->info($message, $context);
-            }
-
-            // display results
-            $data = [
-                'empty' => $empty,
-                'duplicated' => $duplicated,
-                'sorted' => $sorted,
-                'updated' => $updated,
-                'skipped' => $skipped,
-                'unmodifiable' => $unmodifiable,
-                'simulated' => $isSimulated,
-                'total' => $total,
-            ];
-
-            // save values to session
-            $this->setSessionValue('admin.update.closed', $includeClosed);
-            $this->setSessionValue('admin.update.empty', $includeEmpty);
-            $this->setSessionValue('admin.update.duplicated', $includeDuplicated);
-            $this->setSessionValue('admin.update.sorted', $includeSorted);
-            $this->setSessionValue('admin.update.simulated', $isSimulated);
-
-            return $this->renderForm('calculation/calculation_result.html.twig', $data);
+            return $this->renderForm('calculation/calculation_result.html.twig', $results);
         }
 
         // display
         return $this->renderForm('calculation/calculation_update.html.twig', [
-            'last_update' => $this->getApplication()->getLastUpdate(),
+            'last_update' => $this->getApplication()->getUpdateCalculations(),
             'form' => $form,
         ]);
     }
 
     /**
-     * Creates the form helper and add fields for the update calculations.
+     * Update calculation totals.
+     *
+     * @Route("/product", name="admin_product")
+     * @IsGranted("ROLE_ADMIN")
      */
-    private function createUpdateHelper(): FormHelper
+    public function updateProduct(Request $request, CategoryRepository $respository, ProductUpdater $updater): Response
     {
-        // create form
-        $data = [
-            'closed' => $this->isSessionBool('admin.update.closed', false),
-            'sorted' => $this->isSessionBool('admin.update.sorted', true),
-            'empty' => $this->isSessionBool('admin.update.empty', true),
-            'duplicated' => $this->isSessionBool('admin.update.duplicated', false),
-            'simulated' => $this->isSessionBool('admin.update.simulated', true),
-        ];
-        $helper = $this->createFormHelper('calculation.update.', $data);
+        // create form helper
+        $helper = $updater->createHelper();
 
-        // fields
-        $helper->field('closed')
-            ->help('calculation.update.closed_help')
-            ->helpClass('ml-4 mb-2')
-            ->notRequired()
-            ->addCheckboxType();
+        // handle request
+        $form = $helper->createForm();
+        if ($this->handleRequestForm($request, $form)) {
+            $data = $form->getData();
+            $category = $data['category'];
+            $percent = (float) $data['percent'];
+            $fixed = (float) $data['fixed'];
+            $isPercent = ProductUpdater::UPDATE_PERCENT === $data['type'];
+            $round = (bool) $data['round'];
+            $simulated = (bool) $data['simulated'];
+            $value = $isPercent ? $percent : $fixed;
 
-        $helper->field('empty')
-            ->help('calculation.update.empty_help')
-            ->helpClass('ml-4 mb-2')
-            ->notRequired()
-            ->addCheckboxType();
+            $results = $updater->update($category, $value, $isPercent, $round, $simulated);
 
-        $helper->field('duplicated')
-            ->help('calculation.update.duplicated_help')
-            ->helpClass('ml-4 mb-2')
-            ->notRequired()
-            ->addCheckboxType();
+            // update last update
+            if ($results['result'] && !$simulated) {
+                $this->getApplication()->setProperties([ApplicationServiceInterface::P_UPDATE_PRODUCTS => new \DateTime()]);
+            }
 
-        $helper->field('sorted')
-            ->help('calculation.update.sorted_help')
-            ->helpClass('ml-4 mb-2')
-            ->notRequired()
-            ->addCheckboxType();
+            return $this->renderForm('product/product_result.html.twig', $results);
+        }
 
-        $helper->field('simulated')
-            ->help('calculation.update.simulated_help')
-            ->helpClass('ml-4 mb-2')
-            ->notRequired()
-            ->addCheckboxType();
-
-        $helper->field('confirm')
-            ->notMapped()
-            ->helpClass('mb-0')
-            ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
-            ->addCheckboxType();
-
-        return $helper;
+        return $this->renderForm('product/product_update.html.twig', [
+            'last_update' => $this->getApplication()->getUpdateProducts(),
+            'products' => $updater->getAllProducts(),
+            'form' => $form,
+        ]);
     }
 
     /**

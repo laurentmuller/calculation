@@ -42,9 +42,11 @@ class ChartController extends AbstractController
     public function byMonth(int $count = 12, CalculationRepository $repository, ThemeService $service): Response
     {
         $tabular = $this->isDisplayTabular();
-        $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_list');
+        $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_card');
+
         $data = $this->getChartMonthData($count, $repository, $service, $url);
-        $data['tabular'] = \json_encode($tabular);
+        $data['tabular'] = $tabular;
+        $data['allowed_months'] = $this->getAllowedMonths($repository);
 
         return $this->renderForm('chart/last_month_chart.html.twig', $data);
     }
@@ -58,7 +60,7 @@ class ChartController extends AbstractController
     {
         $tabular = $this->isDisplayTabular();
         $data = $this->getChartStateData($repository, $service, $tabular);
-        $data['tabular'] = \json_encode($tabular);
+        $data['tabular'] = $tabular;
 
         return $this->renderForm('chart/by_state_chart.html.twig', $data);
     }
@@ -91,13 +93,35 @@ class ChartController extends AbstractController
                 'search[0][value]' => $state['id'],
             ];
         } else {
-            $route = 'calculation_list';
+            $route = 'calculation_card';
             $parameters = [
                 'query' => $state['code'],
             ];
         }
 
         return $this->generateUrl($route, $parameters);
+    }
+
+    /**
+     * Gets the allowed months to display.
+     */
+    private function getAllowedMonths(CalculationRepository $repository): array
+    {
+        $values = [4, 6, 12, 18, 24];
+        $maxMonths = $repository->countDistinctMonths();
+
+        if (\end($values) <= $maxMonths) {
+            return $values;
+        }
+
+        for ($i = 0, $count = \count($values); $i < $count; ++$i) {
+            if ($values[$i] >= $maxMonths) {
+                return \array_slice($values, 0, $i + 1);
+            }
+        }
+
+        // must never been here!
+        return $values;
     }
 
     /**

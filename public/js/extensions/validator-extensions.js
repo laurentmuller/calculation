@@ -62,6 +62,17 @@
         },
 
         /**
+         * Remove validation class and error
+         */
+        removeValidation: function () {
+            return this.each(function () {
+                const $this = $(this);
+                $this.removeClass('is-invalid');
+                $this.parents('.form-group').find('.is-invalid.invalid-feedback').remove();
+            });
+        },
+
+        /**
          * Initialize default validator options.
          *
          * @returns the validator.

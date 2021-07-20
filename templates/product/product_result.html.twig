@@ -1,0 +1,59 @@
+{% extends 'cards/card_base.html.twig' %}
+{# imports #}
+{% import 'macros/_icons.html.twig' as icons %}
+
+{% macro add_line_info(name, value) -%}
+</tr>
+    <td class="w-30">{{ name|trans }}</td>
+    <td>{{ value|raw }}</td>
+</tr>
+{%- endmacro %}
+
+{%- set title = 'product.update.title' -%}
+{%- set title_icon = 'wrench' -%}
+{%- set title_description = 'product.result.description' -%}
+
+{% block card_body %}
+<table class="table table-sm">
+    {{ _self.add_line_info('category.fields.group', category.groupCode) }}
+    {{ _self.add_line_info('product.fields.category', category.code) }}
+    {{ _self.add_line_info('product.update.type', (percent ? 'product.update.percent' : 'product.update.fixed')|trans) }}
+    {{ _self.add_line_info('product.result.value', percent ? value|percent : value|amount) }}
+    {{ _self.add_line_info('product.update.round', (round ? 'common.value_true' : 'common.value_false')|trans) }}
+    {% if result %}
+        {{ _self.add_line_info('product.result.updated', 'counters.products'|trans({count: products|length})) }}
+    {% endif %}
+</table>
+{% if result %}
+    <div class="table-responsive" style="max-height: 276px;">
+        <table class="table table-hover table-sm mb-0">
+            <thead>
+                <tr>
+                    <th>{{ 'product.name'|trans }}</th>
+                    <th class="text-currency-scroll">{{ 'product.result.old_price'|trans }}</th>
+                    <th class="text-currency-scroll">{{ 'product.result.new_price'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for product in products -%}
+            <tr>
+                <td>{{ product.description }}</td>
+                <td class="text-currency-scroll">{{ product.oldPrice|amount }}</td>
+                <td class="text-currency-scroll">{{ product.newPrice|amount }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if simulated %}
+        <hr class="mt-0">
+        <p class="text-right my-0 small">{{ 'product.result.simulated'|trans }}</p>
+    {% endif %}
+{% else %}
+    <div class="alert alert-warning mb-0" role="alert">{{ 'product.result.empty'|trans }}</div>
+{% endif %}
+{% endblock %}
+
+{% block card_footer %}
+{{ icons.homepage() }}
+{% endblock %}

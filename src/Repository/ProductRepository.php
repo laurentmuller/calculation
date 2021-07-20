@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
@@ -56,6 +57,30 @@ class ProductRepository extends AbstractCategoryItemRepository
             ->addOrderBy($descriptionField);
 
         return $builder->getQuery()->getResult();
+    }
+
+    /**
+     * Gets all products for the given category.
+     *
+     * @param Category $category     the category to serach products for
+     * @param bool     $excludeEmpty true to exclude products with an empty price (0.00)
+     *
+     * @return Product[] the products
+     */
+    public function findByCategory(Category $category, bool $excludeEmpty = true): array
+    {
+        $builder = $this->createDefaultQueryBuilder('e')
+            ->where('e.category = :category')
+            ->setParameter('category', $category)
+            ->orderBy('e.description');
+
+        if ($excludeEmpty) {
+            $builder->andWhere('e.price != 0');
+        }
+
+        return $builder
+            ->getQuery()
+            ->getResult();
     }
 
     /**

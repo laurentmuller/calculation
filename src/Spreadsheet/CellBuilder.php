@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -82,13 +83,11 @@ class CellBuilder
     /**
      * Sets the cell value and style at the given coordinate.
      *
-     * @param int   $column the column index (A = 1)
-     * @param int   $row    the row index (1 = First row)
-     * @param mixed $value  the value of the cell
+     * @param string $coordinate the coordinate of the cell, eg: 'A1'
+     * @param mixed  $value      the value of the cell
      */
-    public function apply(int $column, int $row, $value): self
+    public function apply(string $coordinate, $value): self
     {
-        $coordinate = $this->getCoordinate($column, $row);
         $style = $this->sheet->getStyle($coordinate);
         if ($this->bold) {
             $style->getFont()->setBold(true);
@@ -105,9 +104,31 @@ class CellBuilder
         if (!empty($this->format)) {
             $style->getNumberFormat()->setFormatCode($this->format);
         }
-        $this->sheet->setCellValue($coordinate, $value);
+        if (null !== $value) {
+            if ($value instanceof \DateTimeInterface) {
+                $value = Date::PHPToExcel($value);
+            } elseif (\is_bool($value)) {
+                $value = $value ? 1 : 0;
+            }
+            $this->sheet->setCellValue($coordinate, $value);
+        }
 
         return $this;
+    }
+
+    /**
+     * Sets the cell value and style at the given coordinate.
+     *
+     * @param int   $column the column index (A = 1)
+     * @param int   $row    the row index (1 = First row)
+     * @param mixed $value  the value of the cell
+     */
+    public function applyByColumnAndRow(int $column, int $row, $value): self
+    {
+        $name = Coordinate::stringFromColumnIndex($column);
+        $coordinate = $name . $row;
+
+        return $this->apply($coordinate, $value);
     }
 
     public function bold(bool $bold = true): self
@@ -214,18 +235,5 @@ class CellBuilder
     public function verticalTop(): self
     {
         return $this->vertical(Alignment::VERTICAL_TOP);
-    }
-
-    /**
-     * Get the string coordinate from the given column and row (eg. 2,10 => 'B10').
-     *
-     * @param int $column the column index (A = 1)
-     * @param int $row    the row index (1 = First row)
-     */
-    private function getCoordinate(int $column, int $row): string
-    {
-        $name = Coordinate::stringFromColumnIndex($column);
-
-        return $name . $row;
     }
 }

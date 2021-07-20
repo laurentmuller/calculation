@@ -55,6 +55,19 @@ trait SessionTrait
     }
 
     /**
+     * Gets a session attribute, as float value.
+     *
+     * @param string $key     the attribute name
+     * @param float  $default the default value if not found
+     *
+     * @return float the session value, if found; the default value otherwise
+     */
+    protected function getSessionFloat(string $key, ?float $default): ?float
+    {
+        return (float) $this->getSessionValue($key, $default);
+    }
+
+    /**
      * Gets a session attribute, as integer value.
      *
      * @param string $key     the attribute name

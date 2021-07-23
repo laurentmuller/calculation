@@ -26,28 +26,28 @@ final class DateUtils
      *
      * @var string[]
      */
-    private static $monthNames;
+    private static ?array $monthNames = null;
 
     /**
      * The short month names.
      *
      * @var string[]
      */
-    private static $shortMonthNames;
+    private static ?array $shortMonthNames = null;
 
     /**
      * The short week day names.
      *
      * @var string[]
      */
-    private static $shortWeekNames;
+    private static ?array $shortWeekNames = null;
 
     /**
      * The week day names.
      *
      * @var string[]
      */
-    private static $weekNames;
+    private static ?array $weekNames = null;
 
     // prevent instance creation
     private function __construct()
@@ -103,7 +103,7 @@ final class DateUtils
      */
     public static function getMonths(): array
     {
-        if (!self::$monthNames) {
+        if (null === self::$monthNames) {
             self::$monthNames = self::getMonthNames('%B');
         }
 
@@ -123,7 +123,7 @@ final class DateUtils
      */
     public static function getShortMonths(): array
     {
-        if (!self::$shortMonthNames) {
+        if (null === self::$shortMonthNames) {
             self::$shortMonthNames = self::getMonthNames('%b');
         }
 
@@ -146,7 +146,7 @@ final class DateUtils
      */
     public static function getShortWeekdays(string $firstday = 'sunday'): array
     {
-        if (!self::$shortWeekNames) {
+        if (null === self::$shortWeekNames) {
             self::$shortWeekNames = self::getDayNames('%a', $firstday);
         }
 
@@ -177,7 +177,7 @@ final class DateUtils
      */
     public static function getWeekdays(string $firstday = 'sunday'): array
     {
-        if (!self::$weekNames) {
+        if (null === self::$weekNames) {
             self::$weekNames = self::getDayNames('%A', $firstday);
         }
 

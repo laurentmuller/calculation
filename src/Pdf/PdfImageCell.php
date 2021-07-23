@@ -27,38 +27,28 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
 
     /**
      * The image height.
-     *
-     * @var int
      */
-    protected $height;
+    protected int $height;
 
     /**
      * The original image height.
-     *
-     * @var int
      */
-    protected $originalHeight;
+    protected int $originalHeight;
 
     /**
      * The original image width.
-     *
-     * @var int
      */
-    protected $originalWidth;
+    protected int $originalWidth;
 
     /**
      * The full image path.
-     *
-     * @var string
      */
-    protected $path;
+    protected string $path;
 
     /**
      * The image width.
-     *
-     * @var int
      */
-    protected $width;
+    protected int $width;
 
     /**
      * Constructor.

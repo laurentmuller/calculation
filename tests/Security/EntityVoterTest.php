@@ -30,10 +30,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  */
 class EntityVoterTest extends TestCase implements EntityVoterInterface
 {
-    /**
-     * @var EntityVoter
-     */
-    private $voter;
+    private ?EntityVoter $voter = null;
 
     /**
      * {@inheritdoc}

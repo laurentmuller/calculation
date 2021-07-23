@@ -5,7 +5,7 @@
 
 {% macro output_dialog(item) -%}
 {% set href = path('help_dialog', {'id': item.id}) %}
-<dt class="font-weight-normal"><a href="{{ href }}">{{ item.id|trans }}</a></dt>
+<dt class="font-weight-normal"><a href="{{ href }}">{{ item.name|default(item.id)|trans }}</a></dt>
 <dd>{{ item.description }}</dd>
 {%- endmacro %}
 
@@ -26,13 +26,13 @@
 {%- set href = false -%}
 {%- set description = menu.description %}
 {%- set dialog = menu.dialog|default(false) -%}
-{%- if dialog -%}    
+{%- if dialog -%}
     {%- set target = help.dialogs|filter(d => d.id == dialog) -%}
     {%- if target|length -%}
         {%- set target = target|first -%}
         {%- set href = path('help_dialog', {'id': target.id}) -%}
-        {%- set description = target.description -%}
-    {%- endif -%}    
+        {%- set description = description|default(target.description) -%}
+    {%- endif -%}
 {%- endif -%}
 
 {%- set menus = menu.menus|default(false) -%}
@@ -44,16 +44,18 @@
     {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
 {%- endif -%}
 </dt>
+{% if description %}
 <dd>{{ description }}
     {%- if menus %}{{ _self.output_menus(menus, help, indent + 2) }}{% endif -%}
 </dd>
+{% endif %}
 {%- endmacro %}
 
 {# parameters #}
 {%- set title = 'help.title' -%}
+{%- set menus = help.mainMenu.menus|default(false) -%}
 {%- set dialogs = help.dialogs|default(false) -%}
 {%- set entities = help.entities|default(false) -%}
-{%- set menus = help.mainMenu.menus|default(false) -%}
 
 {%- block container_class 'container-fluid' -%}
 
@@ -67,7 +69,7 @@
 <hr class="mt-1">
 <div class="row">
 {# main menu #}
-    {% if menus %}
+{% if menus %}
     <div class="col-xl-4 col-lg-6">
         <h5>{{ 'help.main_menu'|trans }}</h5>
         <hr class="my-1">
@@ -75,7 +77,7 @@
         {% if description %}<p class="small mb-1">{{ description }}</p>{% endif %}
         {{ _self.output_menus(menus, help) }}
     </div>
-{% endif %}
+{%- endif %}
 {# dialogs #}
 {% if dialogs %}
     <div class="col-xl-4 col-lg-6">
@@ -87,7 +89,7 @@
         {% endfor %}
         </dl>
     </div>
-{% endif %}
+{%- endif %}
 {# entities #}
 {% if entities %}
     <div class="col-xl-4 col-lg-6">
@@ -99,7 +101,7 @@
         {% endfor %}
         </dl>
     </div>
-{% endif %}
+{%- endif %}
 </div>
 {%- endblock %}
 

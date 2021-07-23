@@ -21,10 +21,8 @@ trait PdfAlignmentTrait
 {
     /**
      * The alignment.
-     *
-     * @var string
      */
-    protected $alignment = PdfConstantsInterface::ALIGN_LEFT;
+    protected string $alignment = PdfConstantsInterface::ALIGN_LEFT;
 
     /**
      * Gets the alignment.

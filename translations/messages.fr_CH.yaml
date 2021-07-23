@@ -95,7 +95,7 @@ calculation:
         confirm: Confirmer la mise à jour des données
         last_update: 'Dernière mise à jour : %date%'
     result:
-        description: Résultats de la mise à jour.
+        description: Résultats de la mise à jour des calculations.
         simulated: La mise à jour a été simulée. Aucune calculation n'a été modifiée dans la base de données.
         updated: Calculations mises à jour
         skipped: Calculations inchangées
@@ -326,7 +326,7 @@ product:
         percent: Pourcentage
         percent_help: 'Example : 50.00 + 12 % = 56.00'
         fixed: Montant fixe
-        fixed_help: 'Example : 50.00 + 10.00 = 60.00'
+        fixed_help: 'Example : 50.00 + 12.00 = 62.00'
         round: Arrondir au 5 centimes
         round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
         simulated: Simuler la mise à jour
@@ -334,7 +334,7 @@ product:
         confirm: Confirmer la mise à jour des données
         last_update: 'Dernière mise à jour : %date%'
     result:
-        description: Résultats de la mise à jour.
+        description: Résultats de la mise à jour des articles.
         simulated: La mise à jour a été simulée. Aucun article n'a été modifié dans la base de données.
         empty: Aucun article n'a été mise à jour.
         updated: Mises à jour

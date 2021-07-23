@@ -23,31 +23,23 @@ class PdfRectangle
 {
     /**
      * The height.
-     *
-     * @var float
      */
-    protected $height;
+    protected float $height;
 
     /**
      * The width.
-     *
-     * @var float
      */
-    protected $width;
+    protected float $width;
 
     /**
      * The x coordinate.
-     *
-     * @var float
      */
-    protected $x;
+    protected float $x;
 
     /**
      * The y coordinate.
-     *
-     * @var float
      */
-    protected $y;
+    protected float $y;
 
     /**
      * Constructor.

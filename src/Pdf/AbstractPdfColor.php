@@ -36,24 +36,18 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 
     /**
      * The blue component.
-     *
-     * @var int
      */
-    protected $blue;
+    protected int $blue;
 
     /**
      * The green component.
-     *
-     * @var int
      */
-    protected $green;
+    protected int $green;
 
     /**
      * The red component.
-     *
-     * @var int
      */
-    protected $red;
+    protected int $red;
 
     /**
      * Constructor.

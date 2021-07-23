@@ -28,10 +28,8 @@ class PdfLine implements PdfDocumentUpdaterInterface
 
     /**
      * The line width.
-     *
-     * @var float
      */
-    protected $width;
+    protected float $width;
 
     /**
      * Constructor.

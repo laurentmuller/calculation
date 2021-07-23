@@ -88,24 +88,18 @@ class PdfFont implements PdfDocumentUpdaterInterface
 
     /**
      * The name.
-     *
-     * @var string
      */
-    protected $name;
+    protected string $name = self::DEFAULT_NAME;
 
     /**
      * The size.
-     *
-     * @var float
      */
-    protected $size;
+    protected float $size = self::DEFAULT_SIZE;
 
     /**
      * The style.
-     *
-     * @var string
      */
-    protected $style;
+    protected string $style = self::DEFAULT_STYLE;
 
     /**
      * Constructor.

@@ -59,6 +59,7 @@ class UrlGeneratorService
         TableInterface::PARAM_VIEW,
         TableInterface::PARAM_LIMIT,
 
+        // entities
         LogTable::PARAM_LEVEL,
         LogTable::PARAM_CHANNEL,
 
@@ -74,8 +75,6 @@ class UrlGeneratorService
 
     /**
      * Constructor.
-     *
-     * @param UrlGeneratorInterface $generator the URL generator
      */
     public function __construct(UrlGeneratorInterface $generator)
     {
@@ -84,12 +83,6 @@ class UrlGeneratorService
 
     /**
      * Generate the cancel URL.
-     *
-     * @param Request $request      the request
-     * @param int     $id           the entity identifier
-     * @param string  $defaultRoute the default route to use
-     *
-     * @return string the cancel URL
      */
     public function cancelUrl(Request $request, ?int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
     {
@@ -97,12 +90,11 @@ class UrlGeneratorService
         $params = $this->routeParams($request, $id);
 
         // caller?
-        if (isset($params[self::PARAM_CALLER]) && !empty($params[self::PARAM_CALLER])) {
-            $caller = $params[self::PARAM_CALLER];
-            unset($params[self::PARAM_CALLER]);
-
-            $caller .= (false === \strpos($caller, '?')) ? '?' : '&';
-            $caller .= \http_build_query($params);
+        if (null !== $caller = $this->getCaller($params)) {
+            if (!empty($params)) {
+                $caller .= (false === \strpos($caller, '?')) ? '?' : '&';
+                $caller .= \http_build_query($params);
+            }
 
             return $caller;
         }
@@ -113,10 +105,6 @@ class UrlGeneratorService
 
     /**
      * Generate the cancel URL and returns a redirect response.
-     *
-     * @param Request $request      the request
-     * @param int     $id           the entity identifier
-     * @param string  $defaultRoute the default route to use
      */
     public function redirect(Request $request, ?int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): RedirectResponse
     {
@@ -126,12 +114,7 @@ class UrlGeneratorService
     }
 
     /**
-     * Gets a route parameters.
-     *
-     * @param Request $request the request
-     * @param int     $id      the entity identifier
-     *
-     * @return array the parameters
+     * Gets the request parameters.
      */
     public function routeParams(Request $request, ?int $id = 0): array
     {
@@ -150,5 +133,20 @@ class UrlGeneratorService
         }
 
         return $params;
+    }
+
+    /**
+     * Gets the caller parameter.
+     */
+    private function getCaller(array &$params): ?string
+    {
+        $caller = $params[self::PARAM_CALLER] ?? null;
+        if (!empty($caller)) {
+            unset($params[self::PARAM_CALLER]);
+
+            return \rtrim($caller, '/');
+        }
+
+        return null;
     }
 }

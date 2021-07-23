@@ -25,24 +25,18 @@ class PdfColumn implements PdfConstantsInterface
 
     /**
      * The fixed width.
-     *
-     * @var bool
      */
-    protected $fixed = false;
+    protected bool $fixed = false;
 
     /**
      * The column's text.
-     *
-     * @var string
      */
-    protected $text;
+    protected ?string $text = null;
 
     /**
      * The column's wdith.
-     *
-     * @var float
      */
-    protected $width = 0.0;
+    protected float $width = 0.0;
 
     /**
      * Constructor.

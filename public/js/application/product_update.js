@@ -6,15 +6,15 @@
 (function ($) {
     'use strict';
 
-    // bind events
+    const $type = $('#form_type');
+    const $fixed = $('#form_fixed');
+    const $percent = $('#form_percent');
     $('#edit-form :radio').on('click', function () {
-        const $type = $('#form_type');
-        const $fixed = $('#form_fixed');
-        const $percent = $('#form_percent');
         const isPercent = $('#form_type_percent').isChecked();
 
         $fixed.attr('disabled', isPercent);
         $percent.attr('disabled', !isPercent);
+
         if (isPercent) {
             $fixed.removeValidation();
             $type.val($percent.data('type'));
@@ -24,7 +24,7 @@
         }
     });
 
-     $('#form_simulated').on('input', function () {
+    $('#form_simulated').on('input', function () {
         if ($(this).isChecked()) {
             $('#form_confirm').attr('disabled', true).removeValidation();
         } else {
@@ -32,30 +32,29 @@
         }
     });
 
+    const $category = $('#form_category');
+    const $counter = $('#count_products');
+    const $rows = $('#products tbody tr');
     $('#products').on('show.bs.modal', function () {
-        // filter
-        const newId = $('#form_category').val();
-        const oldId = $('#form_category').data('id');
+        // same category?
+        const newId = $category.val();
+        const oldId = $category.data('id');
         if (newId === oldId) {
             return;
         }
-        $('#products tbody tr').each(function () {
-            const $this = $(this);
-            $this.toggleClass('d-none', newId !== $this.attr('category'));
-        });
 
-        // count products
-        const $counter = $('#count_products');
-        const count = $('#products tbody tr:not(.d-none)').length;
+        // toggle visibility
+        $rows.filter(':not(.d-none)').addClass('d-none');
+        const count = $rows.filter('[category="' + newId + '"]').removeClass('d-none').length;
+
+        // update count products
         $counter.text($counter.data('text').replace('%d%', count));
-        $('#form_category').data('id', newId);
+        $category.data('id', newId);
 
     }).on('hide.bs.modal', function () {
         $('#products .table-responsive').scrollTop(0);
-
     }).on('hidden.bs.modal', function () {
-        $('#form_category').focus();
-
+        $category.focus();
     });
 
     // validation

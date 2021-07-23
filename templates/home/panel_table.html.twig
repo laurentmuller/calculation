@@ -3,8 +3,8 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set caller = path('homepage') -%}
 {%- set selection = app.request.get('id', 0) -%}
+{%- set caller = path('homepage') -%}
 
 {# actions #}
 {%- set object_type = ENTITY_CALCULATION -%}

@@ -44,7 +44,7 @@ abstract class AbstractController extends BaseController
     use TranslatorFlashMessageTrait;
 
     /**
-     * The home page route.
+     * The home route name.
      */
     public const HOME_PAGE = 'homepage';
 

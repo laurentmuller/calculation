@@ -25,15 +25,9 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  */
 class TasksDocument extends AbstractArrayDocument
 {
-    /**
-     * @var bool
-     */
-    private $writeItem;
+    private bool $writeItem = false;
 
-    /**
-     * @var bool
-     */
-    private $writeTask;
+    private bool $writeTask = false;
 
     /**
      * {@inheritdoc}

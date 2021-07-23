@@ -44,10 +44,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     public const ROLE_SUPER_ADMIN = RoleInterface::ROLE_SUPER_ADMIN;
     public const ROLE_USER = RoleInterface::ROLE_USER;
 
-    /**
-     * @var KernelBrowser
-     */
-    protected $client = null;
+    protected ?KernelBrowser $client = null;
 
     /**
      * {@inheritdoc}

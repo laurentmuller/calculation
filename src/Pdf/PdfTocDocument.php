@@ -21,24 +21,18 @@ class PdfTocDocument extends PdfDocument
 {
     /**
      * The current page.
-     *
-     * @var int
      */
-    private $currentPage = 1;
+    private int $currentPage = 1;
 
     /**
      * The numbering pages TOC state.
-     *
-     * @var bool
      */
-    private $numbering = false;
+    private bool $numbering = false;
 
     /**
      * The numbering footer pages TOC state.
-     *
-     * @var bool
      */
-    private $numberingFooter = false;
+    private bool $numberingFooter = false;
 
     /**
      * The TOC entries.

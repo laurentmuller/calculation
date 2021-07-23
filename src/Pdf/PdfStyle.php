@@ -25,45 +25,33 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * The draw color.
-     *
-     * @var PdfDrawColor
      */
-    protected $drawColor;
+    protected PdfDrawColor $drawColor;
 
     /**
      * The fill color.
-     *
-     * @var PdfFillColor
      */
-    protected $fillColor;
+    protected PdfFillColor $fillColor;
 
     /**
      * The font.
-     *
-     * @var PdfFont
      */
-    protected $font;
+    protected PdfFont $font;
 
     /**
      * The left indent.
-     *
-     * @var int
      */
-    protected $indent;
+    protected int $indent = 0;
 
     /**
      * The line.
-     *
-     * @var PdfLine
      */
-    protected $line;
+    protected PdfLine $line;
 
     /**
      * The text color.
-     *
-     * @var PdfTextColor
      */
-    protected $textColor;
+    protected PdfTextColor $textColor;
 
     /**
      * Constructor.

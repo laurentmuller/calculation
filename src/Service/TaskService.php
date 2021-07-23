@@ -42,13 +42,6 @@ class TaskService implements \JsonSerializable
     private ?Task $task = null;
 
     /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Compute values.
      */
     public function compute(Request $request = null): void

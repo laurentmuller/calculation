@@ -35,10 +35,8 @@ class PdfGroup implements PdfDocumentUpdaterInterface, PdfConstantsInterface
 
     /**
      * The style.
-     *
-     * @var PdfStyle
      */
-    protected $style;
+    protected ?PdfStyle $style = null;
 
     /**
      * Constructor.

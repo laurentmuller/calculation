@@ -22,24 +22,18 @@ class PdfGroupTableBuilder extends PdfTableBuilder
 {
     /**
      * The group.
-     *
-     * @var PdfGroup
      */
-    protected $group;
+    protected ?PdfGroup $group = null;
 
     /**
      * The group render listener.
-     *
-     * @var PdfGroupListenerInterface|null
      */
-    protected $groupListener;
+    protected ?PdfGroupListenerInterface $groupListener = null;
 
     /**
      * The outputing group state.
-     *
-     * @var bool
      */
-    private $inProgress = false;
+    protected bool $inProgress = false;
 
     /**
      * Constructor.
@@ -71,8 +65,6 @@ class PdfGroupTableBuilder extends PdfTableBuilder
 
     /**
      * Gets the group.
-     *
-     * @return PdfGroup
      */
     public function getGroup(): ?PdfGroup
     {
@@ -81,8 +73,6 @@ class PdfGroupTableBuilder extends PdfTableBuilder
 
     /**
      * Gets the group listener.
-     *
-     * @return \App\Pdf\PdfGroupListenerInterface
      */
     public function getGroupListener(): ?PdfGroupListenerInterface
     {
@@ -99,14 +89,12 @@ class PdfGroupTableBuilder extends PdfTableBuilder
 
     /**
      * Output the group (if any).
-     *
-     * @return self this instance
      */
     public function outputGroup(): self
     {
         if ($this->group->isKey() && !$this->inProgress) {
             $this->inProgress = true;
-            if (!$this->groupListener || !$this->groupListener->onOutputGroup($this, $this->group)) {
+            if (null === $this->groupListener || !$this->groupListener->onOutputGroup($this, $this->group)) {
                 $this->group->output($this);
             }
             $this->inProgress = false;
@@ -161,8 +149,6 @@ class PdfGroupTableBuilder extends PdfTableBuilder
 
     /**
      * Sets the group listener.
-     *
-     * @param PdfGroupListenerInterface $groupListener the listener to set
      */
     public function setGroupListener(?PdfGroupListenerInterface $groupListener): self
     {
@@ -173,10 +159,6 @@ class PdfGroupTableBuilder extends PdfTableBuilder
 
     /**
      * Sets the group style.
-     *
-     * @param PdfStyle $style the new group style
-     *
-     * @return self this instance
      */
     public function setGroupStyle(?PdfStyle $style): self
     {

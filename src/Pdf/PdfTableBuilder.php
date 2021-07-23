@@ -54,38 +54,28 @@ class PdfTableBuilder implements PdfConstantsInterface
 
     /**
      * The heder style.
-     *
-     * @var PdfStyle|null
      */
-    protected $headerStyle;
+    protected ?PdfStyle $headerStyle = null;
 
     /**
      * The cell listener.
-     *
-     * @var PdfCellListenerInterface|null
      */
-    protected $listener;
+    protected ?PdfCellListenerInterface $listener = null;
 
     /**
      * The parent document.
-     *
-     * @var PdfDocument
      */
-    protected $parent;
+    protected PdfDocument $parent;
 
     /**
      * Print headers when a new page is added.
-     *
-     * @var bool
      */
-    protected $repeatHeader = true;
+    protected bool $repeatHeader = true;
 
     /**
      * The current row style.
-     *
-     * @var PdfStyle|null
      */
-    protected $rowStyle;
+    protected ?PdfStyle $rowStyle = null;
 
     /**
      * Constructor.

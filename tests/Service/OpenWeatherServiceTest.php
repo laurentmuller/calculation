@@ -26,10 +26,7 @@ class OpenWeatherServiceTest extends KernelTestCase
 
     public const CITY_VALID = 2660718;
 
-    /**
-     * @var OpenWeatherService
-     */
-    private $service;
+    private ?OpenWeatherService $service = null;
 
     protected function setUp(): void
     {

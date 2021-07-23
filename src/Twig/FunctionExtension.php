@@ -55,10 +55,8 @@ final class FunctionExtension extends AbstractExtension
 
     /**
      * The real path of the public directory.
-     *
-     * @var string
      */
-    private $webDir;
+    private string $webDir;
 
     /**
      * Constructor.

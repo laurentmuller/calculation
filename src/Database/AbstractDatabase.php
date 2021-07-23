@@ -172,6 +172,23 @@ abstract class AbstractDatabase extends \SQLite3
     }
 
     /**
+     * Set a pragma statement.
+     *
+     * @param string $name  the pragma name
+     * @param mixed  $value the optional pragma value
+     *
+     * @return bool true if the succeeded, false on failure
+     */
+    public function pragma(string $name, $value = null): bool
+    {
+        if (null !== $value) {
+            return $this->exec("PRAGMA $name = $value");
+        }
+
+        return $this->exec("PRAGMA $name");
+    }
+
+    /**
      * Rollback the current transaction (if any).
      *
      * @return bool true if success, false on failure

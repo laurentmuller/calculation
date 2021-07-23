@@ -28,6 +28,7 @@ use Doctrine\ORM\QueryBuilder;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -76,9 +77,9 @@ class ProductUpdater
     }
 
     /**
-     * Creates the form helper for update products.
+     * Creates the edit form.
      */
-    public function createHelper(): FormHelper
+    public function createForm(): FormInterface
     {
         // get values from session
         $category = $this->getCategory($this->getSessionInt('product.update.category', 0));
@@ -134,11 +135,11 @@ class ProductUpdater
         $helper->field('type')
             ->addHiddenType();
 
-        return $helper;
+        return $helper->createForm();
     }
 
     /**
-     * Gets all products.
+     * Gets all products with a not empty price.
      *
      * @return Product[] the products
      */
@@ -182,15 +183,11 @@ class ProductUpdater
             return $results;
         }
 
-        if ($percent) {
-            $value += 1.0; // add 100%
-        }
-
         // compute price
         foreach ($products as $product) {
             $oldPrice = $product->getPrice();
             if ($percent) {
-                $newPrice = $oldPrice * $value;
+                $newPrice = $oldPrice * (1 + $value);
             } else {
                 $newPrice = $oldPrice + $value;
             }
@@ -215,7 +212,7 @@ class ProductUpdater
             $context = [
                 $this->trans('product.fields.category') => $category->getCode(),
                 $this->trans('product.result.updated') => $this->trans('counters.products', ['count' => \count($products)]),
-                $this->trans('product.result.value') => $percent ? FormatUtils::formatPercent($value - 1.0) : FormatUtils::formatAmount($value),
+                $this->trans('product.result.value') => $percent ? FormatUtils::formatPercent($value) : FormatUtils::formatAmount($value),
             ];
             $message = $this->trans('product.update.title');
             $this->logInfo($message, $context);
@@ -226,7 +223,7 @@ class ProductUpdater
         $this->setSessionValue('product.update.simulated', $simulated);
         $this->setSessionValue('product.update.round', $round);
         if ($percent) {
-            $this->setSessionValue('product.update.percent', $value - 1.0);
+            $this->setSessionValue('product.update.percent', $value);
             $this->setSessionValue('product.update.type', self::UPDATE_PERCENT);
         } else {
             $this->setSessionValue('product.update.fixed', $value);

@@ -22,9 +22,9 @@ use App\Controller\AbstractController;
 abstract class AbstractArrayReport extends AbstractReport
 {
     /**
-     * @var array
+     * The entities to output.
      */
-    protected $entities;
+    protected array $entities;
 
     /**
      * Constructor.

@@ -356,6 +356,14 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
     }
 
     /**
+     * Gets the current page.
+     */
+    public function getCurrentPage(): int
+    {
+        return $this->page;
+    }
+
+    /**
      * Gets the current page size.
      *
      * @return string the current page size. Is one of the of the SIZE_XX contants.

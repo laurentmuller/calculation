@@ -61,7 +61,7 @@
 {%- endmacro %}
 
 {# parameters #}
-{%- set dialog_name = dialog.id -%}
+{%- set dialog_name = dialog.name|default(dialog.id) -%}
 {%- set title = 'help.title_name' -%}
 {%- set title_parameters = {'%name%': dialog_name|trans} -%}
 
@@ -124,11 +124,15 @@
     {% endif %}
 {%- endif %}
 
+{# links and entity #}
+{% set links = dialog.links|default([]) %}
 {# entity #}
 {% if dialog.entity|default(false) -%}
-{%- set entity_name = (dialog.entity ~ '.name')|trans -%}
-{% set href = path('help_entity', {'id': dialog.entity}) %}
-<hr class="my-1">
-<p>{{ 'help.labels.see_also'|trans }} <a href="{{ href }}">{{ entity_name }}</a></p>
+    {% set link = {'id': dialog.entity, 'type': 'entity'} %}
+    {% set links = links|merge({link}) %}
 {%- endif %}
+{% if links|length -%}
+    {{ tools.output_links(links, service) }}
+{%- endif %}
+
 {%- endblock %}

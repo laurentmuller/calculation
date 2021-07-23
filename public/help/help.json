@@ -526,28 +526,35 @@
 					},
 					{
 						"id": "calculation.update.title",
-						"icon": "pencil-alt",
-						"description": "Page de mise à jour des calculations."
+						"icon": "calculator",
+						"description": "Page pour mettre à jour les calculations.",
+						"dialog": "calculation.update.title"
+					},
+					{
+						"id": "product.update.title",
+						"icon": "file-alt far",
+						"description": "Page pour mettre à jour le prix des articles.",
+						"dialog": "product.update.title"
 					},
 					{
 						"id": "below.title",
 						"icon": "percent",
-						"description": "Page des calculations contenant une marge globale inférieure au seuil définit."
+						"description": "Page pour afficher les calculations contenant une marge globale inférieure au seuil définit."
 					},
 					{
 						"id": "duplicate.title",
 						"icon": "copy far",
-						"description": "Page des calculations contenant le même article plus d'une fois."
+						"description": "Page pour afficher les calculations contenant le même article plus d'une fois."
 					},
 					{
 						"id": "empty.title",
 						"icon": "file-code far",
-						"description": "Page des calculations contenant un article avec une quantité ou un prix égale à 0."
+						"description": "Page pour afficher les calculations contenant un article avec une quantité ou un prix égale à 0."
 					},
 					{
 						"id": "taskcompute.title",
 						"icon": "keyboard",
-						"description": "Permet de calculer une tâche.",
+						"description": "Page pour calculer une tâche.",
 						"dialog": "taskcompute.title"
 					}
 				]
@@ -718,6 +725,50 @@
 			]
 		},
 		{
+			"id": "calculation.update.title",
+			"image": "calculation/calculation_update.png",
+			"icon": "calculator",
+			"entity": "calculation",
+			"description": "Cette page permet de mettre jour les calculations.",
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Met à jour les calculations et affiche les résultats de la mise à jour."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Retourne à la page principale de l'application."
+				}
+			],
+			"links": [
+				{
+					"id": "calculation.result.title",
+					"type": "dialog"
+				}
+			]
+		},
+		{
+			"id": "calculation.result.title",
+			"name": "calculation.result.description",
+			"image": "calculation/calculation_result.png",
+			"icon": "calculator",
+			"entity": "calculation",
+			"description": "Cette page affiche le résultat de la mise à jour des calculations.",
+			"editActions": [
+				{
+					"id": "index.title",
+					"icon": "home",
+					"description": "Retourne à la page principale de l'application."
+				}
+			],
+			"links": [
+				{
+					"id": "calculation.update.title",
+					"type": "dialog"
+				}
+			]
+		},
+		{
 			"id": "product.list.title",
 			"entity": "product",
 			"image": "product/product_list.png",
@@ -838,6 +889,50 @@
 				{
 					"id": "common.button_cancel",
 					"description": "Annule la suppression et retourne à la page précédente."
+				}
+			]
+		},
+		{
+			"id": "product.update.title",
+			"image": "product/product_update.png",
+			"icon": "file-alt far",
+			"entity": "product",
+			"description": "Cette page permet de mettre jour le prix des articles pour une catégorie.",
+			"editActions": [
+				{
+					"id": "common.button_ok",
+					"description": "Met à jour le prix des articles et affiche les résultats de la mise à jour."
+				},
+				{
+					"id": "common.button_cancel",
+					"description": "Retourne à la page principale de l'application."
+				}
+			],
+			"links": [
+				{
+					"id": "product.result.title",
+					"type": "dialog"
+				}
+			]
+		},
+		{
+			"id": "product.result.title",
+			"name": "product.result.description",
+			"image": "product/product_result.png",
+			"icon": "file-alt far",
+			"entity": "product",
+			"description": "Cette page affiche le résultat de la mise à jour des articles.",
+			"editActions": [
+				{
+					"id": "index.title",
+					"icon": "home",
+					"description": "Retourne à la page principale de l'application."
+				}
+			],
+			"links": [
+				{
+					"id": "product.update.title",
+					"type": "dialog"
 				}
 			]
 		},

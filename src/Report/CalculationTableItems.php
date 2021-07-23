@@ -76,11 +76,13 @@ class CalculationTableItems extends PdfGroupTableBuilder
             ->outputHeaders();
 
         foreach ($groups as $group) {
+            $this->checkLines(3);
             $groupStyle->resetIndent();
             $this->setGroupKey($group->getCode());
 
             /** @var CalculationCategory $category */
             foreach ($group->getCategories() as $category) {
+                $this->checkLines(2);
                 $groupStyle->setIndent(self::INDENT);
                 $this->setGroupKey($category->getCode());
 
@@ -161,5 +163,19 @@ class CalculationTableItems extends PdfGroupTableBuilder
         $parent = $this->parent;
 
         return $parent->trans($key);
+    }
+
+    /**
+     * Check if the given number of lines can be outputed.
+     */
+    private function checkLines(int $lines): bool
+    {
+        $this->inProgress = true;
+        $this->repeatHeader = false;
+        $result = $this->checkNewPage($lines * self::LINE_HEIGHT);
+        $this->repeatHeader = false;
+        $this->inProgress = false;
+
+        return $result;
     }
 }

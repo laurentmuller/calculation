@@ -23,52 +23,38 @@ class PdfCell
 
     /**
      * The bottom border style.
-     *
-     * @var ?PdfCellBorder
      */
-    protected $borderBottom;
+    protected ?PdfCellBorder $borderBottom = null;
 
     /**
      * The left border style.
-     *
-     * @var ?PdfCellBorder
      */
-    protected $borderLeft;
+    protected ?PdfCellBorder $borderLeft = null;
 
     /**
      * The right border style.
-     *
-     * @var ?PdfCellBorder
      */
-    protected $borderRight;
+    protected ?PdfCellBorder $borderRight = null;
 
     /**
      * The top border style.
-     *
-     * @var ?PdfCellBorder
      */
-    protected $borderTop;
+    protected ?PdfCellBorder $borderTop = null;
 
     /**
      * The cell columns span.
-     *
-     * @var int
      */
-    protected $cols;
+    protected int $cols = 1;
 
     /**
      * The cell style.
-     *
-     * @var PdfStyle
      */
-    protected $style;
+    protected ?PdfStyle $style = null;
 
     /**
      * The cell text.
-     *
-     * @var string
      */
-    protected $text;
+    protected ?string $text = null;
 
     /**
      * Constructor.

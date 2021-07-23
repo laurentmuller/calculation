@@ -76,10 +76,8 @@ class SwissPostService
 
     /**
      * The source file to import.
-     *
-     * @var string
      */
-    private $sourceFile;
+    private ?string $sourceFile = null;
 
     /**
      * The original import (uploaded) file name.

@@ -28,10 +28,7 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
 {
     use DatabaseTrait;
 
-    /**
-     * @var ValidatorInterface
-     */
-    protected $validator;
+    protected ?ValidatorInterface $validator = null;
 
     /**
      * {@inheritdoc}

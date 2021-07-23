@@ -21,6 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -66,9 +67,9 @@ class CalculationUpdater
     }
 
     /**
-     * Creates the form helper for update calculations.
+     * Creates the edit form.
      */
-    public function createHelper(): FormHelper
+    public function createForm(): FormInterface
     {
         // get values from session
         $data = [
@@ -120,7 +121,7 @@ class CalculationUpdater
             ->notMapped()
             ->addCheckboxType();
 
-        return $helper;
+        return $helper->createForm();
     }
 
     /**

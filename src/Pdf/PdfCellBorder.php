@@ -25,17 +25,13 @@ class PdfCellBorder implements PdfDocumentUpdaterInterface
 {
     /**
      * The border color.
-     *
-     * @var PdfDrawColor
      */
-    protected $color;
+    protected PdfDrawColor $color;
 
     /**
      * The line width.
-     *
-     * @var PdfLine
      */
-    protected $line;
+    protected PdfLine $line;
 
     /**
      * Constructor.

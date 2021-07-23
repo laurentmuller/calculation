@@ -47,7 +47,7 @@
 
 {# parameters #}
 {%- set title = 'product.update.title' -%}
-{%- set title_icon = 'wrench' -%}
+{%- set title_icon = 'file-alt far' -%}
 {%- set title_description = 'product.update.description' -%}
 {%- set cancel_path = path('homepage') -%}
 {%- set is_percent = form.type.vars.value == 'percent' -%}
@@ -58,12 +58,12 @@
 {{ form_row(form.category) }}
 <label class="required">{{ 'product.update.type'|trans }}</label>
 <div class="row mb-3">
-    <div class="col">
+    <div class="col-md-6">
         <div class="form-group">
             {{ form_widget(form.percent, {'attr': percent_attr, 'options': {'is_percent': is_percent}}) }}
         </div>
     </div>
-    <div class="col">
+    <div class="col-md-6">
         <div class="form-group">
 	        {{ form_widget(form.fixed, {'attr': fixed_attr, 'options': {'is_percent': is_percent}}) }}
         </div>
@@ -98,7 +98,7 @@
                         </thead>
                         <tbody>
                         {% for product in products -%}
-                            <tr category="{{ product.category.id }}">
+                            <tr category="{{ product.categoryId }}">
                                 <td>{{ product.description }}</td>
                                 <td class="text-currency">{{ product.price|amount }}</td>
                                 <td class="text-unit">{{ product.unit }}</td>

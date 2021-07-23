@@ -29,14 +29,12 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @var int[]
      */
-    protected $colors = [];
+    protected array $colors = [];
 
     /**
      * The image file name.
-     *
-     * @var string|null
      */
-    protected $filename;
+    protected ?string $filename = null;
 
     /**
      * The image to handle.
@@ -56,7 +54,7 @@ class ImageHandler implements ImageExtensionInterface
     public function __construct($image, ?string $filename = null)
     {
         if (!\is_resource($image)) {
-            throw new \InvalidArgumentException('The image must be resource.');
+            throw new \InvalidArgumentException('The image must be a resource.');
         }
 
         $this->image = $image;

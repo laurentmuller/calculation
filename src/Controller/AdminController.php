@@ -17,7 +17,6 @@ use App\Form\Admin\ParametersType;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
-use App\Repository\CategoryRepository;
 use App\Security\EntityVoter;
 use App\Service\CalculationUpdater;
 use App\Service\ProductUpdater;
@@ -226,11 +225,10 @@ class AdminController extends AbstractController
      */
     public function updateCalculation(Request $request, CalculationUpdater $updater): Response
     {
-        // create form helper
-        $helper = $updater->createHelper();
+        // create form
+        $form = $updater->createForm();
 
         // handle request
-        $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
             $includeClosed = (bool) $data['closed'];
@@ -262,13 +260,12 @@ class AdminController extends AbstractController
      * @Route("/product", name="admin_product")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function updateProduct(Request $request, CategoryRepository $respository, ProductUpdater $updater): Response
+    public function updateProduct(Request $request, ProductUpdater $updater): Response
     {
-        // create form helper
-        $helper = $updater->createHelper();
+        // create form
+        $form = $updater->createForm();
 
         // handle request
-        $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $data = $form->getData();
             $category = $data['category'];

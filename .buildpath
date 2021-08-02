@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <buildpath>
-	<buildpathentry external="true" kind="lib" path="C:/wamp64/php-unit/phpunit-9.5.6.phar"/>
+	<buildpathentry external="true" kind="lib" path="C:/wamp64/php-unit/phpunit-9.5.7.phar"/>
 	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
 	<buildpathentry kind="src" path="src">
 		<attributes>

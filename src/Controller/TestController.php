@@ -17,7 +17,6 @@ use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Group;
 use App\Form\Admin\ParametersType;
-use App\Form\FormHelper;
 use App\Form\Type\CaptchaImageType;
 use App\Form\Type\ImportanceType;
 use App\Form\Type\MinStrengthType;
@@ -214,7 +213,7 @@ class TestController extends AbstractController
 
         $helper->field('captcha')
             ->label('captcha.label')
-            ->updateOption('image', $service->generateImage(false))
+            ->updateOption('image', $service->generateImage())
             ->updateOption('constraints', [
                 new NotBlank(),
                 new Captcha(),
@@ -230,7 +229,7 @@ class TestController extends AbstractController
             // options
             foreach ($options as $option) {
                 if ($data[$option]) {
-                    $message .= '<li>' . $this->trans("password.{$option}") . '</li>';
+                    $message .= '<li>' . $this->trans("password.$option") . '</li>';
                 }
             }
 
@@ -249,9 +248,7 @@ class TestController extends AbstractController
                 ->redirectToHomePage();
         }
 
-        return $this->renderForm('test/password.html.twig', [
-            'form' => $form,
-        ]);
+        return $this->renderForm('test/password.html.twig', ['form' => $form]);
     }
 
     /**
@@ -267,10 +264,9 @@ class TestController extends AbstractController
         ];
 
         $recaptcha_action = 'login';
-        $builder = $this->createFormBuilder($data);
-        $builder->setAttribute('block_name', '');
+        $helper = $this->createFormHelper('user.fields.', $data);
+        $helper->getBuilder()->setAttribute('block_name', '');
 
-        $helper = new FormHelper($builder, 'user.fields.');
         $helper->field('subject')
             ->addTextType();
 
@@ -281,7 +277,7 @@ class TestController extends AbstractController
             ->addHiddenType();
 
         // render
-        $form = $builder->getForm();
+        $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             // get values
             $data = $form->getData();

@@ -46,7 +46,7 @@ class CategoryTransformer implements DataTransformerInterface
      */
     public function reverseTransform($id): ?Category
     {
-        if (!$id) {
+        if (empty($id)) {
             return null;
         }
 

@@ -65,7 +65,7 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
         if ($this->displayCaptcha) {
             $helper->field('captcha')
                 ->label('captcha.label')
-                ->updateOption('image', $this->service->generateImage(false))
+                ->updateOption('image', $this->service->generateImage())
                 ->updateOption('constraints', [
                     new NotBlank(),
                     new Captcha(),

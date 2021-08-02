@@ -102,7 +102,7 @@ class CaptchaImageService
      *
      * @return string the image encoded with the base 64 or null if the image canot be created
      */
-    public function generateImage(bool $force, int $length = 6, int $width = 150, int $height = 30): ?string
+    public function generateImage(bool $force = false, int $length = 6, int $width = 150, int $height = 30): ?string
     {
         // not force and valid?
         if (!$force && $this->validateTimeout() && $this->hasSessionValue(self::KEY_DATA)) {

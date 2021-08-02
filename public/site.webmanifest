@@ -3,7 +3,7 @@
 	"short_name": "Calculation",
 	"lang": "fr-CH",
 	"description": "Programe de calculation",
-	"display": "standalone",
+	"display": "fullscreen",
 	"orientation": "landscape",
 	"theme_color": "Peru",
 	"background_color": "Peru",

@@ -49,7 +49,7 @@ class GroupTransformer implements DataTransformerInterface
      */
     public function reverseTransform($id): ?Group
     {
-        if (!$id) {
+        if (empty($id)) {
             return null;
         }
 

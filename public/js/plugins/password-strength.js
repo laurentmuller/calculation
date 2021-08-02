@@ -11,7 +11,7 @@
     // ----------------------------------------------
     // PasswordStrength public class definition
     // ----------------------------------------------
-    var PasswordStrength = function (element, options) {
+    const PasswordStrength = function (element, options) {
         const that = this;
         that.$element = $(element);
         that.options = $.extend(true, {}, PasswordStrength.DEFAULTS, options);

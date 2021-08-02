@@ -30,8 +30,6 @@ class ThemeType extends AbstractHelperType
 
     /**
      * The backgound choices.
-     *
-     * @var array
      */
     public const BACKGROUND_CHOICES = [
         'theme.background.dark' => 'bg-dark',
@@ -47,8 +45,6 @@ class ThemeType extends AbstractHelperType
 
     /**
      * The navigation bar choices.
-     *
-     * @var array
      */
     public const FOREGROUND_CHOICES = [
         'theme.foreground.dark' => 'navbar-dark',
@@ -59,9 +55,6 @@ class ThemeType extends AbstractHelperType
 
     /**
      * Constructor.
-     *
-     * @param ThemeService        $service    the service to get themes
-     * @param TranslatorInterface $translator the translator service
      */
     public function __construct(ThemeService $service, TranslatorInterface $translator)
     {

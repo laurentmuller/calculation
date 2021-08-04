@@ -30,7 +30,7 @@ $rules = [
     //--------------------------------------------------------------
 
     'method_chaining_indentation' => true,
-    'native_function_invocation'  => true,
+    'native_function_invocation'  => ['include' => ['@internal', 'all']],
     'final_internal_class'        => true,
     'header_comment'              => ['header' => $comment, 'location' => 'after_open', 'separate' => 'bottom'],
     'blank_line_before_statement' => ['statements' => ['declare', 'try', 'return']],

@@ -270,8 +270,15 @@ class CalculationDocument extends AbstractDocument
      */
     private function renderAmount(int $column, int $row, $value, bool $bold = false): self
     {
-        return $this->renderCell($column, $row, $value, $bold, 0,
-              Alignment::HORIZONTAL_RIGHT, NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+        return $this->renderCell(
+            $column,
+            $row,
+            $value,
+            $bold,
+            0,
+            Alignment::HORIZONTAL_RIGHT,
+            NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1
+        );
     }
 
     /**
@@ -390,8 +397,7 @@ class CalculationDocument extends AbstractDocument
      */
     private function renderPercent(int $column, int $row, float $value, bool $bold = false, string $format = NumberFormat::FORMAT_PERCENTAGE): self
     {
-        return $this->renderCell($column, $row, $value, $bold, 0,
-            Alignment::HORIZONTAL_RIGHT, $format);
+        return $this->renderCell($column, $row, $value, $bold, 0, Alignment::HORIZONTAL_RIGHT, $format);
     }
 
     /**

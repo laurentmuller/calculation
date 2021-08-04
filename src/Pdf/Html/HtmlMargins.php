@@ -61,8 +61,7 @@ class HtmlMargins
     {
         $shortName = Utils::getShortName($this);
 
-        return \sprintf('%s(L:%0.2f, R:%0.2f, T:%0.2f, B:%0.2f))', $shortName,
-            $this->left, $this->right, $this->top, $this->bottom);
+        return \sprintf('%s(L:%0.2f, R:%0.2f, T:%0.2f, B:%0.2f))', $shortName, $this->left, $this->right, $this->top, $this->bottom);
     }
 
     /**

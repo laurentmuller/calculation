@@ -8,6 +8,10 @@ parameters:
     - src
     - tests
 
+    scanFiles:
+    - vendor/twig/twig/src/Extension/CoreExtension.php
+    - vendor/symfony/polyfill-php80/Resources/stubs/Stringable.php
+
     doctrine:
         repositoryClass: App\Repository\AbstractRepository
 
@@ -16,9 +20,6 @@ parameters:
 
     # PHP 7.4
     checkUninitializedProperties: true
-
-    scanFiles:
-    - vendor/twig/twig/src/Extension/CoreExtension.php
 
     ignoreErrors:
     # disallowed-execution-calls

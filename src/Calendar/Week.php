@@ -62,8 +62,7 @@ class Week extends AbstractCalendarItem
         $first = FormatUtils::formatDate($this->getFirstDate());
         $last = FormatUtils::formatDate($this->getLastDate());
 
-        return \sprintf('%s(%d-%d, %s - %s)',
-            $name, $this->getNumber(), $this->getYear(), $first, $last);
+        return \sprintf('%s(%d-%d, %s - %s)', $name, $this->getNumber(), $this->getYear(), $first, $last);
     }
 
     /**

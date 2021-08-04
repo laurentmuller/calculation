@@ -323,8 +323,10 @@ class CompileAssetsCommand extends AbstractAssetsCommand
             $command,
             [['pipe', 'r'], ['pipe', 'w'], ['pipe', 'w']],
             $pipes,
-            null, null, ['bypass_shell' => $bypassShell]
-            );
+            null,
+            null,
+            ['bypass_shell' => $bypassShell]
+        );
 
         \fwrite($pipes[0], $input);
         \fclose($pipes[0]);

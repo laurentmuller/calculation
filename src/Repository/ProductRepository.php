@@ -109,9 +109,9 @@ class ProductRepository extends AbstractCategoryItemRepository
         $param = ':search';
         $expr = $builder->expr();
         $or = $expr->orx(
-                $expr->like('p.description', $param),
-                $expr->like('c.code', $param),
-                $expr->like('g.code', $param),
+            $expr->like('p.description', $param),
+            $expr->like('c.code', $param),
+            $expr->like('g.code', $param),
         );
         $builder->where($or)
             ->setParameter($param, "%{$value}%", Types::STRING);

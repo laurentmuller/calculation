@@ -8,9 +8,9 @@
 
     $('#form_simulated').on('input', function () {
         if ($(this).isChecked()) {
-            $('#form_confirm').attr('disabled', true).removeValidation();
+            $('#form_confirm').toggleDisabled(true).removeValidation();
         } else {
-            $('#form_confirm').attr('disabled', false);
+            $('#form_confirm').toggleDisabled(false);
         }
     });
 

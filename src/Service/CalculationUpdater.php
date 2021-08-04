@@ -47,14 +47,15 @@ class CalculationUpdater
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager,
-            CalculationService $service,
-            SuspendEventListenerService $listener,
-            FormFactoryInterface $factory,
-            LoggerInterface $logger,
-            RequestStack $requestStack,
-            TranslatorInterface $translator)
-    {
+    public function __construct(
+        EntityManagerInterface $manager,
+        CalculationService $service,
+        SuspendEventListenerService $listener,
+        FormFactoryInterface $factory,
+        LoggerInterface $logger,
+        RequestStack $requestStack,
+        TranslatorInterface $translator
+    ) {
         $this->manager = $manager;
         $this->service = $service;
         $this->listener = $listener;

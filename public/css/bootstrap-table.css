@@ -62,26 +62,27 @@
 .bootstrap-table .fixed-table-container .table thead th .both,
 .bootstrap-table .fixed-table-container .table thead th .asc,
 .bootstrap-table .fixed-table-container .table thead th .desc {
-    background-image: none !important;
+    background-image: none;
 }
 
 .bootstrap-table .fixed-table-container .table thead th .sortable:after {
     font-family: "Font Awesome 5 Free";
-    opacity: 0.3 !important;
     padding-left: 0.25rem;
+    opacity: 0.3;
 }
+
 .bootstrap-table .fixed-table-container .table thead th .both:after {
     content: "\f0dc";
 }
 
 .bootstrap-table .fixed-table-container .table thead th .asc:after {
-    content: "\f0d8" !important;
-    opacity: 1 !important;
+    content: "\f0d8";
+    opacity: 1;
 }
 
 .bootstrap-table .fixed-table-container .table thead th .desc:after {
-    content: "\f0d7" !important;
-    opacity: 1 !important;
+    content: "\f0d7";
+    opacity: 1;
 }
 
 /*

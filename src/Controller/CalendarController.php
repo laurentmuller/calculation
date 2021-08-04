@@ -49,8 +49,7 @@ class CalendarController extends AbstractController
      * @param int|null              $month      the month to search for or <code>null</code> for the current
      *                                          month
      */
-    public function month(CalendarService $service, CalculationRepository $repository,
-        ?int $year = null, ?int $month = null): Response
+    public function month(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $month = null): Response
     {
         // validate values
         $year = $this->validateYear($year);
@@ -68,15 +67,16 @@ class CalendarController extends AbstractController
         $next = $this->nextMonth($yearsMonths, $year, $month);
         $currentMonth = $calendar->getMonth(Month::formatKey($year, $month));
 
-        return $this->renderForm('calendar/calendar_month.html.twig',
-            [
-                'calendar' => $calendar,
-                'month' => $currentMonth,
-                'calculations' => $calculations,
-                'today' => $today,
-                'previous' => $previous,
-                'next' => $next,
-            ]);
+        $parameters = [
+            'calendar' => $calendar,
+            'month' => $currentMonth,
+            'calculations' => $calculations,
+            'today' => $today,
+            'previous' => $previous,
+            'next' => $next,
+        ];
+
+        return $this->renderForm('calendar/calendar_month.html.twig', $parameters);
     }
 
     /**
@@ -91,8 +91,7 @@ class CalendarController extends AbstractController
      * @param int|null              $week       the week to search for or <code>null</code> for the current
      *                                          week
      */
-    public function week(CalendarService $service, CalculationRepository $repository,
-        ?int $year = null, ?int $week = null): Response
+    public function week(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $week = null): Response
     {
         // validate values
         $year = $this->validateYear($year);
@@ -109,15 +108,16 @@ class CalendarController extends AbstractController
         $next = $this->nextWeek($yearsWeeks, $year, $week);
         $currentWeek = $calendar->getWeek(Week::formatKey($year, $week));
 
-        return $this->renderForm('calendar/calendar_week.html.twig',
-            [
-                'calendar' => $calendar,
-                'week' => $currentWeek,
-                'calculations' => $calculations,
-                'today' => $today,
-                'previous' => $previous,
-                'next' => $next,
-            ]);
+        $parameters = [
+            'calendar' => $calendar,
+            'week' => $currentWeek,
+            'calculations' => $calculations,
+            'today' => $today,
+            'previous' => $previous,
+            'next' => $next,
+        ];
+
+        return $this->renderForm('calendar/calendar_week.html.twig', $parameters);
     }
 
     /**
@@ -146,15 +146,16 @@ class CalendarController extends AbstractController
         $previous = $this->previousYear($years, $year);
         $next = $this->nextYear($years, $year);
 
-        return $this->renderForm('calendar/calendar_year.html.twig',
-            [
-                'calendar' => $calendar,
-                'calculations' => $calculations,
-                'years' => $years,
-                'today' => $today,
-                'previous' => $previous,
-                'next' => $next,
-            ]);
+        $parameters = [
+            'calendar' => $calendar,
+            'calculations' => $calculations,
+            'years' => $years,
+            'today' => $today,
+            'previous' => $previous,
+            'next' => $next,
+        ];
+
+        return $this->renderForm('calendar/calendar_year.html.twig', $parameters);
     }
 
     /**
@@ -212,10 +213,12 @@ class CalendarController extends AbstractController
     private function nextMonth(array $yearsMonths, int $year, int $month)
     {
         $yearMonth = $year * 1000 + $month;
-        $filtered = \array_filter($yearsMonths,
+        $filtered = \array_filter(
+            $yearsMonths,
             function (array $current) use ($yearMonth): bool {
                 return $current['year_month'] > $yearMonth;
-            });
+            }
+        );
 
         return \reset($filtered);
     }
@@ -232,10 +235,12 @@ class CalendarController extends AbstractController
     private function nextWeek(array $yearsWeeks, int $year, int $week)
     {
         $yearWeek = $year * 1000 + $week;
-        $filtered = \array_filter($yearsWeeks,
+        $filtered = \array_filter(
+            $yearsWeeks,
             function (array $current) use ($yearWeek): bool {
                 return $current['year_week'] > $yearWeek;
-            });
+            }
+        );
 
         return \reset($filtered);
     }
@@ -250,10 +255,12 @@ class CalendarController extends AbstractController
      */
     private function nextYear(array $years, int $year)
     {
-        $filtered = \array_filter($years,
+        $filtered = \array_filter(
+            $years,
             function (int $current) use ($year): bool {
                 return $current > $year;
-            });
+            }
+        );
 
         return \reset($filtered);
     }
@@ -270,10 +277,12 @@ class CalendarController extends AbstractController
     private function previousMonth(array $yearsMonths, int $year, int $month)
     {
         $yearMonth = $year * 1000 + $month;
-        $filtered = \array_filter($yearsMonths,
+        $filtered = \array_filter(
+            $yearsMonths,
             function (array $current) use ($yearMonth): bool {
                 return $current['year_month'] < $yearMonth;
-            });
+            }
+        );
 
         return \end($filtered);
     }
@@ -290,10 +299,12 @@ class CalendarController extends AbstractController
     private function previousWeek(array $yearsWeeks, int $year, int $week)
     {
         $yearWeek = $year * 1000 + $week;
-        $filtered = \array_filter($yearsWeeks,
+        $filtered = \array_filter(
+            $yearsWeeks,
             function (array $current) use ($yearWeek): bool {
                 return $current['year_week'] < $yearWeek;
-            });
+            }
+        );
 
         return \end($filtered);
     }
@@ -308,10 +319,12 @@ class CalendarController extends AbstractController
      */
     private function previousYear(array $years, int $year)
     {
-        $filtered = \array_filter($years,
+        $filtered = \array_filter(
+            $years,
             function (int $current) use ($year): bool {
                 return $current < $year;
-            });
+            }
+        );
 
         return \end($filtered);
     }
@@ -331,10 +344,12 @@ class CalendarController extends AbstractController
         $todayMonth = (int) \date('n');
         if ($year !== $todayYear || $month !== $todayMonth) {
             $yearMonth = $todayYear * 1000 + $todayMonth;
-            $filtered = \array_filter($yearsMonths,
+            $filtered = \array_filter(
+                $yearsMonths,
                 function (array $current) use ($yearMonth): bool {
                     return $current['year_month'] === $yearMonth;
-                });
+                }
+            );
 
             return \reset($filtered);
         }
@@ -357,10 +372,12 @@ class CalendarController extends AbstractController
         $todayWeek = (int) \date('W');
         if ($year !== $todayYear || $week !== $todayWeek) {
             $yearWeek = $year * 1000 + $week;
-            $filtered = \array_filter($yearsWeeks,
+            $filtered = \array_filter(
+                $yearsWeeks,
                 function (array $current) use ($yearWeek): bool {
                     return $current['year_week'] === $yearWeek;
-                });
+                }
+            );
 
             return \reset($filtered);
         }

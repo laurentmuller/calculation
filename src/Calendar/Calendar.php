@@ -134,8 +134,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
         $first = FormatUtils::formatDate($firstDate);
         $last = FormatUtils::formatDate($lastDate);
 
-        return \sprintf('%s(%d, %s - %s)',
-            $name, $this->getNumber(), $first, $last);
+        return \sprintf('%s(%d, %s - %s)', $name, $this->getNumber(), $first, $last);
     }
 
     /**

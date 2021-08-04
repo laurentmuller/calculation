@@ -267,19 +267,11 @@ class AdminController extends AbstractController
 
         // handle request
         if ($this->handleRequestForm($request, $form)) {
-            $data = $form->getData();
-            $category = $data['category'];
-            $percent = (float) $data['percent'];
-            $fixed = (float) $data['fixed'];
-            $isPercent = ProductUpdater::UPDATE_PERCENT === $data['type'];
-            $round = (bool) $data['round'];
-            $simulated = (bool) $data['simulated'];
-            $value = $isPercent ? $percent : $fixed;
-
-            $results = $updater->update($category, $value, $isPercent, $round, $simulated);
+            // update
+            $results = $updater->update($form->getData());
 
             // update last update
-            if ($results['result'] && !$simulated) {
+            if ($results['result'] && !$results['simulated']) {
                 $this->getApplication()->setProperties([ApplicationServiceInterface::P_UPDATE_PRODUCTS => new \DateTime()]);
             }
 
@@ -288,7 +280,6 @@ class AdminController extends AbstractController
 
         return $this->renderForm('product/product_update.html.twig', [
             'last_update' => $this->getApplication()->getUpdateProducts(),
-            'products' => $updater->getAllProducts(),
             'form' => $form,
         ]);
     }

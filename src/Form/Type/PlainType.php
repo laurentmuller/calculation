@@ -105,12 +105,14 @@ class PlainType extends AbstractType
         parent::buildView($view, $form, $options);
 
         $data = $form->getViewData();
-        $view->vars = \array_replace($view->vars,
+        $view->vars = \array_replace(
+            $view->vars,
             [
                 'expanded' => $options['expanded'],
                 'hidden_input' => $options['hidden_input'],
                 'value' => $this->transformValue($data, $options),
-            ]);
+            ]
+        );
     }
 
     /**

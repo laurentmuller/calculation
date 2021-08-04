@@ -183,12 +183,9 @@ class AboutController extends AbstractController
         $array = $info->asArray();
 
         // create headers
-        $disposition = HeaderUtils::makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'php_info.json'
-        );
+        $disposition = HeaderUtils::makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'php_info.json');
         $headers = [
             'Content-Disposition' => $disposition,
-            //'Content-Type' => 'application/x-download',
             'Cache-Control' => 'private, max-age=0, must-revalidate',
         ];
 

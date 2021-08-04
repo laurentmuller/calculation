@@ -27,8 +27,8 @@ function updateUI() {
     let position = 0;
     $('#items .item').each(function (index, item) {
         const $item = $(item);
-        $item.find('.btn-up-item').attr('disabled', $item.is(':first-of-type'));
-        $item.find('.btn-down-item').attr('disabled', $item.is(':last-of-type'));
+        $item.find('.btn-up-item').toggleDisabled($item.is(':first-of-type'));
+        $item.find('.btn-down-item').toggleDisabled($item.is(':last-of-type'));
         $item.find('.unique-name').rules('add', {
             unique: '.unique-name'
         });

@@ -26,6 +26,7 @@ use App\Util\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -61,12 +62,13 @@ class ProductUpdater
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager,
+    public function __construct(
+        EntityManagerInterface $manager,
         FormFactoryInterface $factory,
         LoggerInterface $logger,
         RequestStack $requestStack,
-        TranslatorInterface $translator)
-    {
+        TranslatorInterface $translator
+    ) {
         $this->manager = $manager;
         $this->factory = $factory;
 
@@ -85,6 +87,8 @@ class ProductUpdater
         $category = $this->getCategory($this->getSessionInt('product.update.category', 0));
         $data = [
             'category' => $category,
+            'products' => $this->getProducts($category),
+            'all_products' => true,
             'percent' => $this->getSessionFloat('product.update.percent', 0),
             'fixed' => $this->getSessionFloat('product.update.fixed', 0),
             'type' => $this->getSessionString('product.update.type', self::UPDATE_PERCENT),
@@ -103,6 +107,26 @@ class ProductUpdater
                 return $repository->getQueryBuilderByGroup(CategoryRepository::FILTER_PRODUCTS);
             })
             ->add(CategoryListType::class);
+
+        $helper->field('all_products')
+            ->notRequired()
+            ->rowClass('mb-1')
+            ->addCheckboxType();
+
+        $helper->field('products')
+            ->label('product.list.title')
+            ->updateOption('multiple', true)
+            ->updateOption('expanded', true)
+            ->updateOption('class', Product::class)
+            ->updateOption('choices', $this->getAllProducts())
+            ->updateOption('choice_label', 'description')
+            ->updateOption('choice_attr', function (Product $product) {
+                return [
+                    'price' => $product->getPrice(),
+                    'category' => $product->getCategoryId(),
+                ];
+            })
+            ->add(EntityType::class);
 
         $helper->field('percent')
             ->updateAttribute('data-type', self::UPDATE_PERCENT)
@@ -139,35 +163,25 @@ class ProductUpdater
     }
 
     /**
-     * Gets all products with a not empty price.
+     * Update the products.
      *
-     * @return Product[] the products
-     */
-    public function getAllProducts(): array
-    {
-        /** @var ProductRepository $repository */
-        $repository = $this->manager->getRepository(Product::class);
-
-        return $repository->createDefaultQueryBuilder('e')
-            ->orderBy('e.description')
-            ->where('e.price != 0')
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Update products.
-     *
-     * @param Category $category  the category to get products for
-     * @param float    $value     the value to multiply by (percent) or to add (fixed amount)
-     * @param bool     $percent   true if the value is a percent, false if is a fixed amount
-     * @param bool     $round     true to round up price to the nearest 0.05
-     * @param bool     $simulated true to simulate the update, false to save changes to the database
+     * @param array $data the form data
      *
      * @return array the result of the update
      */
-    public function update(Category $category, float $value, bool $percent, bool $round, bool $simulated): array
+    public function update(array $data): array
     {
+        // get values
+        $category = $data['category'];
+        $products = $data['products'];
+        $round = (bool) $data['round'];
+        $fixed = (float) $data['fixed'];
+        $percent = (float) $data['percent'];
+        $simulated = (bool) $data['simulated'];
+        $all_products = (bool) $data['all_products'];
+        $isPercent = self::UPDATE_PERCENT === $data['type'];
+        $value = $isPercent ? $percent : $fixed;
+
         $results = [
             'result' => false,
             'category' => $category,
@@ -177,13 +191,14 @@ class ProductUpdater
             'round' => $round,
         ];
 
-        /** @var Product[] $products */
-        $products = $this->getProducts($category);
+        if ($all_products) {
+            $products = $this->getProducts($category);
+        }
         if (empty($products)) {
             return $results;
         }
 
-        // compute price
+        /** @var Product $product */
         foreach ($products as $product) {
             $oldPrice = $product->getPrice();
             if ($percent) {
@@ -236,6 +251,23 @@ class ProductUpdater
     }
 
     /**
+     * Gets all products with a not empty price.
+     *
+     * @return Product[] the products
+     */
+    private function getAllProducts(): array
+    {
+        /** @var ProductRepository $repository */
+        $repository = $this->manager->getRepository(Product::class);
+
+        return $repository->createDefaultQueryBuilder('e')
+            ->orderBy('e.description')
+            ->where('e.price != 0')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Gets the category for the given identifier.
      *
      * @param int $id the category identifier to find
@@ -254,11 +286,15 @@ class ProductUpdater
      *
      * @return Product[] the products
      */
-    private function getProducts(Category $category): array
+    private function getProducts(?Category $category): array
     {
-        /** @var ProductRepository $repository */
-        $repository = $this->manager->getRepository(Product::class);
+        if (null !== $category) {
+            /** @var ProductRepository $repository */
+            $repository = $this->manager->getRepository(Product::class);
 
-        return $repository->findByCategory($category);
+            return $repository->findByCategory($category);
+        }
+
+        return [];
     }
 }

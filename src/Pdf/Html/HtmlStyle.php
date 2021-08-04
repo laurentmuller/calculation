@@ -60,8 +60,7 @@ class HtmlStyle extends PdfStyle
     {
         $shortName = Utils::getShortName($this);
 
-        return \sprintf('%s(%s, Margins(L:%g, R:%g, T:%g, B:%g))', $shortName, $this->font,
-            $this->leftMargin, $this->rightMargin, $this->topMargin, $this->bottomMargin);
+        return \sprintf('%s(%s, Margins(L:%g, R:%g, T:%g, B:%g))', $shortName, $this->font, $this->leftMargin, $this->rightMargin, $this->topMargin, $this->bottomMargin);
     }
 
     /**

@@ -2,16 +2,13 @@
 {% import 'macros/_icons.html.twig' as icons %}
 {% form_theme form _self %}
 
-{% block _form_category_widget -%}
-<div class="input-group">
-    {{ block('choice_widget') }}
-    <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#products" title="{{ 'product.list.category_help'|trans }}">
-            <i class="far fa-eye"></i>
-        </button>
-    </div>
-</div>
-{%- endblock %}
+{% macro add_product(item, category_id) -%}
+{%- set data_id = item.vars.attr.category -%}
+<tr category="{{ data_id }}" class="user-select-none{% if data_id != category_id %} d-none{% endif %}">
+	<td>{{- form_widget(item, {attr: {'disabled': 'disabled'}}) -}}</td>
+    <td class="text-currency">{{ item.vars.attr.price|amount }}</td>
+</tr>
+{%- endmacro %}
 
 {% block _form_percent_widget -%}
 <div class="input-group">
@@ -51,11 +48,32 @@
 {%- set title_description = 'product.update.description' -%}
 {%- set cancel_path = path('homepage') -%}
 {%- set is_percent = form.type.vars.value == 'percent' -%}
-{%- set percent_attr = is_percent ? {} : {'disabled': 'disabled'} %}
-{%- set fixed_attr = is_percent ? {'disabled': 'disabled'} : {} %}
+{%- set percent_attr = is_percent ? {} : {'disabled': 'disabled'} -%}
+{%- set fixed_attr = is_percent ? {'disabled': 'disabled'} : {} -%}
+{%- set category_id = form.category.vars.value.id|default(0) -%}
 
 {% block card_body %}
 {{ form_row(form.category) }}
+{{ form_row(form.all_products) }}
+<div class="form-group">
+    <div class="overflow-auto border-bottom" style="max-height: 174px;">
+        <table class="table table-hover table-sm text-secondary mb-0" id="form_products">
+            <tbody>
+        	{% for key, item in form.products.children -%}
+                {{- _self.add_product(item, category_id) }}
+            {%- endfor %}
+            </tbody>
+        </table>
+    </div>
+    <small id="products-error" class="invalid-feedback">{{ 'product.update.products_error'|trans }}</small>
+</div>
+<div class="text-right">
+    <div class="btn-group btn-group-sm" role="group">
+        <button type="button" class="btn btn-form-sm btn-outline-primary btn-all" disabled="disabled">{{ 'product.update.check_all'|trans }}</button>
+        <button type="button" class="btn btn-form-sm btn-outline-secondary btn-none" disabled="disabled">{{ 'product.update.check_none'|trans }}</button>
+        <button type="button" class="btn btn-form-sm btn-outline-success btn-reverse" disabled="disabled">{{ 'product.update.check_reverse'|trans }}</button>
+    </div>
+</div>
 <label class="required">{{ 'product.update.type'|trans }}</label>
 <div class="row mb-3">
     <div class="col-md-6">
@@ -75,49 +93,6 @@
     <hr class="my-2">
     <p class="mb-0 text-right text-muted small">{{ 'product.update.last_update'|trans({'%date%': date}) }}</p>
 {% endif %}
-{% endblock %}
-
-{% block body -%}
-{{ parent() }}
-<div class="modal fade" id="products" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="dialog-title"><i class="far fa-file-alt" aria-hidden="true"></i> {{ 'product.list.title'|trans }}</h5>
-                {{ icons.button_close_modal }}
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive" style="max-height: 276px;">
-                    <table class="table table-sm mb-0">
-                        <thead>
-                            <tr>
-                                <th>{{ 'product.fields.description'|trans }}</th>
-                                <th class="text-currency-scroll">{{ 'product.fields.price'|trans }}</th>
-                                <th class="text-unit">{{ 'product.fields.unit'|trans }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for product in products -%}
-                            <tr category="{{ product.categoryId }}">
-                                <td>{{ product.description }}</td>
-                                <td class="text-currency">{{ product.price|amount }}</td>
-                                <td class="text-unit">{{ product.unit }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-	           </div>
-               <hr class="mt-0 mb-1">
-               <p class="mb-0 font-weight-bold" id="count_products" data-text="{{ 'product.update.count_products'|trans }}"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-form btn-primary" data-dismiss="modal">
-	                {{- 'common.button_close'|trans -}}
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block javascripts %}

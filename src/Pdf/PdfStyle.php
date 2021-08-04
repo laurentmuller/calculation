@@ -78,14 +78,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     {
         $name = Utils::getShortName($this);
 
-        return \sprintf('%s(%s, %s, %s, %s, %s, %s)',
-            $name,
-            $this->font,
-            $this->drawColor,
-            $this->fillColor,
-            $this->textColor,
-            $this->line,
-            $this->getBorderText());
+        return \sprintf('%s(%s, %s, %s, %s, %s, %s)', $name, $this->font, $this->drawColor, $this->fillColor, $this->textColor, $this->line, $this->getBorderText());
     }
 
     /**

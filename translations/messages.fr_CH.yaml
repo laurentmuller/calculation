@@ -321,7 +321,6 @@ product:
     update:
         title: Mise à jour des articles
         description: Cette page vous permet de mettre à jour le prix des articles.
-        count_products: 'Nombre d''articles : %d%'
         type: Type de mise à jour
         percent: Pourcentage
         percent_help: 'Example : 50.00 + 12 % = 56.00'
@@ -333,6 +332,11 @@ product:
         simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
         confirm: Confirmer la mise à jour des données
         last_update: 'Dernière mise à jour : %date%'
+        all_products: Mettre à jour tous les articles
+        products_error: Un ou plusieurs articles doivent être sélectionnés.
+        check_all: Tous
+        check_none: Aucun
+        check_reverse: Inverser
     result:
         description: Résultats de la mise à jour des articles.
         simulated: La mise à jour a été simulée. Aucun article n'a été modifié dans la base de données.

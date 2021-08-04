@@ -37,7 +37,9 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 /**
@@ -185,12 +187,18 @@ class FormHelper
     /**
      * Add a collection type to the builder with the given entry type and reset all values to default.
      *
-     * @param string $entryType    the entry type class
+     * @param string $entryType    the entry type class, must be a subclass of FormTypeInterface class
      * @param bool   $allow_add    true to allow user to add a new entry
      * @param bool   $allow_delete true to allow user to delete an entry
+     *
+     * @throws UnexpectedValueException if the entry type is not an instance of FormTypeInterface class
      */
     public function addCollectionType(string $entryType, bool $allow_add = true, bool $allow_delete = true): self
     {
+        if (!\is_a($entryType, FormTypeInterface::class, true)) {
+            throw new UnexpectedValueException($entryType, FormTypeInterface::class);
+        }
+
         return $this->updateOption('entry_type', $entryType)
             ->updateOption('by_reference', false)
             ->updateOption('allow_add', $allow_add)
@@ -407,13 +415,17 @@ class FormHelper
     public function addRepeatPasswordType(string $passwordLabel = 'user.password.label', string $confirmLabel = 'user.password.confirmation'): self
     {
         if ('user.password.label' !== $passwordLabel) {
-            $first_options = \array_replace_recursive(RepeatPasswordType::getFirstOptions(),
-                ['label' => $passwordLabel]);
+            $first_options = \array_replace_recursive(
+                RepeatPasswordType::getFirstOptions(),
+                ['label' => $passwordLabel]
+            );
             $this->updateOption('first_options', $first_options);
         }
         if ('user.password.confirmation' !== $confirmLabel) {
-            $second_options = \array_replace_recursive(RepeatPasswordType::getSecondOptions(),
-                ['label' => $confirmLabel]);
+            $second_options = \array_replace_recursive(
+                RepeatPasswordType::getSecondOptions(),
+                ['label' => $confirmLabel]
+            );
             $this->updateOption('second_options', $second_options);
         }
 

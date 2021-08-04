@@ -213,37 +213,12 @@ class BingTranslatorService extends AbstractTranslatorService
         $headers = [
             'Accept-language' => self::getAcceptLanguage(),
             'Ocp-Apim-Subscription-Key' => $this->key,
-            'X-ClientTraceId' => $this->createGUID(),
         ];
 
         return [
             self::BASE_URI => self::HOST_NAME,
             self::HEADERS => $headers,
         ];
-    }
-
-    /**
-     * Generate a globally unique identifier (GUID).
-     */
-    private function createGUID(): string
-    {
-        if (\function_exists('com_create_guid')) {
-            if ($guid = \com_create_guid()) {
-                return \trim($guid, '{}');
-            }
-        }
-
-        return \sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            \random_int(0, 0xffff),
-            \random_int(0, 0xffff),
-            \random_int(0, 0xffff),
-            \random_int(0, 0x0fff) | 0x4000,
-            \random_int(0, 0x3fff) | 0x8000,
-            \random_int(0, 0xffff),
-            \random_int(0, 0xffff),
-            \random_int(0, 0xffff)
-        );
     }
 
     /**

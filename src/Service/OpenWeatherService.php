@@ -197,7 +197,9 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter)
     {
-        parent::__construct($kernel, $adapter, $params->get(self::PARAM_KEY));
+        /** @var string $key */
+        $key = $params->get(self::PARAM_KEY);
+        parent::__construct($kernel, $adapter, $key);
         $this->dataDirectory = $kernel->getProjectDir() . self::DATA_PATH;
     }
 
@@ -599,6 +601,8 @@ class OpenWeatherService extends AbstractHttpClientService
                     $result['dt_date_time_locale'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
 
                     $result['dt_date_time_medium'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT);
+                    $result['dt_date_time_medium_locale'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT, $timezone);
+
                     unset($result['dt_txt']);
                     break;
 

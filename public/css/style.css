@@ -801,9 +801,3 @@ span.color-value {
 .table:not(.table-borderless) thead th {
     border-bottom-width: 1px;
 }
-
-.text-currency-scroll {
-    text-align: right;
-    width: 120px;
-    white-space: nowrap;
-}

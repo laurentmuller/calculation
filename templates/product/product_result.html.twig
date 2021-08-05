@@ -17,8 +17,8 @@
 <table class="table table-sm">
     {{ _self.add_line_info('category.fields.group', category.groupCode) }}
     {{ _self.add_line_info('product.fields.category', category.code) }}
-    {{ _self.add_line_info('product.update.type', (percent ? 'product.update.percent' : 'product.update.fixed')|trans) }}
-    {{ _self.add_line_info('product.result.value', percent ? value|percent : value|amount) }}
+    {{ _self.add_line_info('product.update.type', (use_percent ? 'product.update.percent' : 'product.update.fixed')|trans) }}
+    {{ _self.add_line_info('product.result.value', use_percent ? value|percent : value|amount) }}
     {{ _self.add_line_info('product.update.round', (round ? 'common.value_true' : 'common.value_false')|trans) }}
     {% if result %}
         {{ _self.add_line_info('product.result.updated', 'counters.products'|trans({count: products|length})) }}
@@ -38,8 +38,8 @@
             {% for product in products -%}
             <tr>
                 <td>{{ product.description }}</td>
-                <td class="text-currency-scroll">{{ product.oldPrice|amount }}</td>
-                <td class="text-currency-scroll">{{ product.newPrice|amount }}</td>
+                <td class="text-currency">{{ product.oldPrice|amount }}</td>
+                <td class="text-currency">{{ product.newPrice|amount }}</td>
             </tr>
             {% endfor %}
             </tbody>

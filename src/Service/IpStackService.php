@@ -54,7 +54,9 @@ class IpStackService extends AbstractHttpClientService
      */
     public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter, TranslatorInterface $translator)
     {
-        parent::__construct($kernel, $adapter, $params->get(self::PARAM_KEY));
+        /** @var string $key */
+        $key = $params->get(self::PARAM_KEY);
+        parent::__construct($kernel, $adapter, $key);
         $this->translator = $translator;
     }
 

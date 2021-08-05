@@ -339,6 +339,7 @@ class PlainType extends AbstractType
 
         // array?
         if (\is_array($value)) {
+            // @phpstan-ignore-next-line
             $callback = function ($item) use ($options): ?string {
                 return $this->transformValue($item, $options);
             };

@@ -62,6 +62,7 @@ final class Utils
      */
     public static function arrayReduceKey(array $array, callable $callback, $initial = null)
     {
+        // @phpstan-ignore-next-line
         return \array_reduce(\array_keys($array), function ($carry, $key) use ($callback, $array) {
             return $callback($carry, $key, $array[$key]);
         }, $initial);
@@ -351,6 +352,8 @@ final class Utils
     public static function sortField(array &$array, string $field, bool $ascending = true): void
     {
         $accessor = self::getAccessor();
+
+        // @phpstan-ignore-next-line
         \usort($array, function ($a, $b) use ($accessor, $field, $ascending) {
             return self::compare($a, $b, $field, $accessor, $ascending);
         });
@@ -373,6 +376,7 @@ final class Utils
             self::sortField($array, $field, $ascending);
         } elseif ($count > 1) {
             $accessor = self::getAccessor();
+            // @phpstan-ignore-next-line
             \usort($array, function ($a, $b) use ($accessor, $fields): int {
                 $result = 0;
                 foreach ($fields as $field => $ascending) {

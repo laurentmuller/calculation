@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use App\Util\FileUtils;
 use Symfony\Component\Dotenv\Dotenv;
 
+// clean log file
 $logfile = \dirname(__DIR__) . '/var/log/test.log';
-
-// @phpstan-ignore-next-line
-if (\file_exists($logfile)) {
-    \file_put_contents($logfile, '');
+if (FileUtils::exists($logfile)) {
+    FileUtils::dumpFile($logfile, '');
 }
 
 require \dirname(__DIR__) . '/vendor/autoload.php';

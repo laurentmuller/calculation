@@ -72,18 +72,18 @@ final class FileUtils
      */
     public static function dumpFile($file, $content, bool $useNative = false): bool
     {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getRealPath();
-        }
+        $file = self::getRealPath($file);
 
         try {
             if ($useNative) {
-                return false !== \file_put_contents((string) $file, $content);
+                // @phpstan-ignore-next-line
+                return false !== \file_put_contents($file, $content);
             }
-            self::getFilesystem()->dumpFile((string) $file, $content);
+            self::getFilesystem()->dumpFile($file, $content);
 
             return true;
         } catch (IOException $e) {
+            // ignore
         }
 
         return false;
@@ -98,11 +98,9 @@ final class FileUtils
      */
     public static function exists($file): bool
     {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getRealPath();
-        }
+        $file = self::getRealPath($file);
 
-        return self::getFilesystem()->exists((string) $file);
+        return self::getFilesystem()->exists($file);
     }
 
     /**
@@ -197,29 +195,25 @@ final class FileUtils
      */
     public static function isFile($file): bool
     {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getRealPath();
-        }
+        $file = self::getRealPath($file);
 
-        return \is_file((string) $file);
+        return \is_file($file);
     }
 
     /**
      * Deletes a file or a directory.
      *
-     * @param string|\SplFileInfo|resource $file the file to delete
+     * @param string|\SplFileInfo $file the file to delete
      *
      * @return bool true on success, false on failure
      */
     public static function remove($file): bool
     {
-        if ($file instanceof \SplFileInfo) {
-            $file = $file->getRealPath();
-        }
+        $file = self::getRealPath($file);
 
         try {
-            if (self::exists((string) $file)) {
-                self::getFilesystem()->remove((string) $file);
+            if (self::exists($file)) {
+                self::getFilesystem()->remove($file);
 
                 return true;
             }
@@ -260,5 +254,19 @@ final class FileUtils
     public static function tempfile(string $prefix = 'tmp'): ?string
     {
         return self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
+    }
+
+    /**
+     * Gets the real path of the given file.
+     *
+     * @param string|\SplFileInfo $file
+     */
+    private static function getRealPath($file): string
+    {
+        if ($file instanceof \SplFileInfo) {
+            return (string) $file->getRealPath();
+        }
+
+        return (string) $file;
     }
 }

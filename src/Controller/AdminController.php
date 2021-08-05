@@ -230,17 +230,11 @@ class AdminController extends AbstractController
 
         // handle request
         if ($this->handleRequestForm($request, $form)) {
-            $data = $form->getData();
-            $includeClosed = (bool) $data['closed'];
-            $includeSorted = (bool) $data['sorted'];
-            $includeEmpty = (bool) $data['empty'];
-            $includeDuplicated = (bool) $data['duplicated'];
-            $simulated = (bool) $data['simulated'];
-
-            $results = $updater->update($includeClosed, $includeSorted, $includeEmpty, $includeDuplicated, $simulated);
+            // update
+            $results = $updater->update($form->getData());
 
             // update last update
-            if ($results['result'] && !$simulated) {
+            if ($results['result'] && !$results['simulated']) {
                 $this->getApplication()->setProperties([ApplicationServiceInterface::P_UPDATE_CALCULATIONS => new \DateTime()]);
             }
 

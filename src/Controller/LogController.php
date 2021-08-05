@@ -60,6 +60,7 @@ class LogController extends AbstractController
     {
         $content = (string) \file_get_contents('php://input');
         if ($data = \json_decode($content, true)) {
+            // @phpstan-ignore-next-line
             $context = \array_filter($data['csp-report'], function ($value): bool {
                 return Utils::isString($value);
             });

@@ -74,8 +74,10 @@ class ExchangeRateService extends AbstractHttpClientService
      */
     public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter, TranslatorInterface $translator)
     {
-        parent::__construct($kernel, $adapter, $params->get(self::PARAM_KEY));
-        $this->endpoint = \sprintf(self::HOST_NAME, $this->key);
+        /** @var string $key */
+        $key = $params->get(self::PARAM_KEY);
+        parent::__construct($kernel, $adapter, $key);
+        $this->endpoint = \sprintf(self::HOST_NAME, $key);
         $this->translator = $translator;
     }
 

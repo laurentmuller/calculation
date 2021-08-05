@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use App\Util\FileUtils;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -59,7 +60,7 @@ trait LogErrorTrait
             $content = "<html>$response<pre>Error message: $message\nFailing test: $testClass::$testName\nStacktrace:\n$trace</pre></html>";
         }
 
-        $logDir = $this->getLogDir();
-        \file_put_contents("$logDir/$fileName", $content);
+        $file = $this->getLogDir() . \DIRECTORY_SEPARATOR . $fileName;
+        FileUtils::dumpFile($file, $content);
     }
 }

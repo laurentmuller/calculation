@@ -74,9 +74,7 @@ final class DatabaseInfo
                 $result[$key] = $params[$key] ?? null;
             }
 
-            /*
-             * @psalm-param mixed $value
-             */
+            // @phpstan-ignore-next-line
             return \array_filter($result, function ($value): bool {
                 return Utils::isString($value);
             });

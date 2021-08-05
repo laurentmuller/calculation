@@ -84,17 +84,7 @@ class ProductUpdater
     public function createForm(): FormInterface
     {
         // get values from session
-        $category = $this->getCategory($this->getSessionInt('product.update.category', 0));
-        $data = [
-            'category' => $category,
-            'products' => $this->getProducts($category),
-            'all_products' => true,
-            'percent' => $this->getSessionFloat('product.update.percent', 0),
-            'fixed' => $this->getSessionFloat('product.update.fixed', 0),
-            'type' => $this->getSessionString('product.update.type', self::UPDATE_PERCENT),
-            'round' => $this->isSessionBool('product.update.round', false),
-            'simulated' => $this->isSessionBool('product.update.simulated', true),
-        ];
+        $data = $this->loadFromSession();
 
         // create helper
         $builder = $this->factory->createBuilder(FormType::class, $data);
@@ -175,20 +165,18 @@ class ProductUpdater
         $category = $data['category'];
         $products = $data['products'];
         $round = (bool) $data['round'];
-        $fixed = (float) $data['fixed'];
-        $percent = (float) $data['percent'];
         $simulated = (bool) $data['simulated'];
         $all_products = (bool) $data['all_products'];
-        $isPercent = self::UPDATE_PERCENT === $data['type'];
-        $value = $isPercent ? $percent : $fixed;
+        $use_percent = self::UPDATE_PERCENT === $data['type'];
+        $value = $use_percent ? (float) $data['percent'] : (float) $data['fixed'];
 
         $results = [
             'result' => false,
             'category' => $category,
             'simulated' => $simulated,
-            'percent' => $percent,
-            'value' => $value,
             'round' => $round,
+            'use_percent' => $use_percent,
+            'value' => $value,
         ];
 
         if ($all_products) {
@@ -201,17 +189,10 @@ class ProductUpdater
         /** @var Product $product */
         foreach ($products as $product) {
             $oldPrice = $product->getPrice();
-            if ($percent) {
-                $newPrice = $oldPrice * (1 + $value);
-            } else {
-                $newPrice = $oldPrice + $value;
-            }
-            if ($round) {
-                $newPrice = \round($newPrice * 20, 0) / 20;
-            }
-            $newPrice = $this->round($newPrice);
+            $newPrice = $this->computeNewPrice($oldPrice, $value, $use_percent, $round);
 
             $product->setPrice($newPrice);
+
             $results['products'][] = [
                 'description' => $product->getDescription(),
                 'oldPrice' => $oldPrice,
@@ -224,30 +205,40 @@ class ProductUpdater
             $this->manager->flush();
 
             // log results
-            $context = [
-                $this->trans('product.fields.category') => $category->getCode(),
-                $this->trans('product.result.updated') => $this->trans('counters.products', ['count' => \count($products)]),
-                $this->trans('product.result.value') => $percent ? FormatUtils::formatPercent($value) : FormatUtils::formatAmount($value),
-            ];
-            $message = $this->trans('product.update.title');
-            $this->logInfo($message, $context);
+            $this->logResults($category, $products, $value, $use_percent);
         }
 
         // save values to session
-        $this->setSessionValue('product.update.category', $category->getId());
-        $this->setSessionValue('product.update.simulated', $simulated);
-        $this->setSessionValue('product.update.round', $round);
-        if ($percent) {
-            $this->setSessionValue('product.update.percent', $value);
-            $this->setSessionValue('product.update.type', self::UPDATE_PERCENT);
-        } else {
-            $this->setSessionValue('product.update.fixed', $value);
-            $this->setSessionValue('product.update.type', self::UPDATE_FIXED);
-        }
+        $this->saveToSession($category, $simulated, $round, $value, $use_percent);
 
+        // ok
         $results['result'] = true;
 
         return $results;
+    }
+
+    /**
+     * Compute the new product price.
+     *
+     * @param float $oldPrice    the old price of the product
+     * @param float $value       the value to update with
+     * @param bool  $use_percent true if the value is a percentage, false if is a fixed amount
+     * @param bool  $round       true to round new value up to 0.05
+     *
+     * @return float the new price
+     */
+    private function computeNewPrice(float $oldPrice, float $value, bool $use_percent, bool $round): float
+    {
+        if ($use_percent) {
+            $newPrice = $oldPrice * (1 + $value);
+        } else {
+            $newPrice = $oldPrice + $value;
+        }
+        if ($round) {
+            $newPrice = \round($newPrice * 20, 0) / 20;
+        }
+
+        return $this->round($newPrice);
     }
 
     /**
@@ -296,5 +287,55 @@ class ProductUpdater
         }
 
         return [];
+    }
+
+    /**
+     * Load user settings from session.
+     */
+    private function loadFromSession(): array
+    {
+        $category = $this->getCategory($this->getSessionInt('product.update.category', 0));
+
+        return [
+            'all_products' => true,
+            'category' => $category,
+            'products' => $this->getProducts($category),
+            'percent' => $this->getSessionFloat('product.update.percent', 0),
+            'fixed' => $this->getSessionFloat('product.update.fixed', 0),
+            'type' => $this->getSessionString('product.update.type', self::UPDATE_PERCENT),
+            'round' => $this->isSessionBool('product.update.round', false),
+            'simulated' => $this->isSessionBool('product.update.simulated', true),
+        ];
+    }
+
+    /**
+     * Log update results.
+     */
+    private function logResults(Category $category, array $products, float $value, bool $use_percent): void
+    {
+        $context = [
+            $this->trans('product.fields.category') => $category->getCode(),
+            $this->trans('product.result.updated') => $this->trans('counters.products', ['count' => \count($products)]),
+            $this->trans('product.result.value') => $use_percent ? FormatUtils::formatPercent($value) : FormatUtils::formatAmount($value),
+        ];
+        $message = $this->trans('product.update.title');
+        $this->logInfo($message, $context);
+    }
+
+    /**
+     * Save user settings to session.
+     */
+    private function saveToSession(Category $category, bool $simulated, bool $round, float $value, bool $use_percent): void
+    {
+        $this->setSessionValue('product.update.category', $category->getId());
+        $this->setSessionValue('product.update.simulated', $simulated);
+        $this->setSessionValue('product.update.round', $round);
+        if ($use_percent) {
+            $this->setSessionValue('product.update.percent', $value);
+            $this->setSessionValue('product.update.type', self::UPDATE_PERCENT);
+        } else {
+            $this->setSessionValue('product.update.fixed', $value);
+            $this->setSessionValue('product.update.type', self::UPDATE_FIXED);
+        }
     }
 }

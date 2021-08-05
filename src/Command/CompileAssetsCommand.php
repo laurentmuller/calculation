@@ -314,11 +314,13 @@ class CompileAssetsCommand extends AbstractAssetsCommand
     /**
      * Executes a command.
      *
-     * @return array [success, output]
+     * @return array the success result at index 0 and the output string at index 1
      */
     private function executeCommand(string $command, string $input, bool $bypassShell = true): array
     {
         $pipes = [];
+
+        // @phpstan-ignore-next-line
         $process = \proc_open(
             $command,
             [['pipe', 'r'], ['pipe', 'w'], ['pipe', 'w']],
@@ -339,8 +341,11 @@ class CompileAssetsCommand extends AbstractAssetsCommand
         $output = \str_replace("\r\n", "\n", (string) $output);
         $output = \trim($output);
 
+        // @phpstan-ignore-next-line
+        $result = 0 === \proc_close($process);
+
         return [
-            0 === \proc_close($process),
+            $result,
             $output,
         ];
     }

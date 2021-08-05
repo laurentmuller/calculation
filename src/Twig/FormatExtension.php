@@ -70,14 +70,15 @@ final class FormatExtension extends AbstractExtension
      * @param string|null                    $dateFormat the date format
      * @param \DateTimeZone|string|null      $timezone   the time zone
      * @param string|null                    $calendar   the calendar type
+     * @param string|null                    $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
      * @throws SyntaxError if the date format or the time format is unknown
      */
-    public function dateFilter(Environment $env, $date, ?string $dateFormat = null, $timezone = null, ?string $calendar = 'gregorian'): string
+    public function dateFilter(Environment $env, $date, ?string $dateFormat = null, $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
-        return $this->dateTimeFilter($env, $date, $dateFormat, 'none', $timezone, $calendar);
+        return $this->dateTimeFilter($env, $date, $dateFormat, 'none', $timezone, $calendar, $pattern);
     }
 
     /**
@@ -89,12 +90,13 @@ final class FormatExtension extends AbstractExtension
      * @param string|null                    $timeFormat the time format
      * @param \DateTimeZone|string|null      $timezone   the time zone
      * @param string|null                    $calendar   the calendar type
+     * @param string|null                    $pattern    the optional pattern to use when formatting
      *
      * @throws SyntaxError if the date format or the time format is unknown
      *
      * @return string the formatted date
      */
-    public function dateTimeFilter(Environment $env, $date, ?string $dateFormat = null, ?string $timeFormat = null, $timezone = null, ?string $calendar = 'gregorian'): string
+    public function dateTimeFilter(Environment $env, $date, ?string $dateFormat = null, ?string $timeFormat = null, $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
         static $formats = [
             'none' => \IntlDateFormatter::NONE,
@@ -117,7 +119,7 @@ final class FormatExtension extends AbstractExtension
         $timetype = $timeFormat ? $formats[$timeFormat] : null;
 
         // no date and time format?
-        if (\IntlDateFormatter::NONE === $datetype && \IntlDateFormatter::NONE === $timetype) {
+        if (\IntlDateFormatter::NONE === $datetype && \IntlDateFormatter::NONE === $timetype && null === $pattern) {
             return '';
         }
 
@@ -126,7 +128,7 @@ final class FormatExtension extends AbstractExtension
         $calendar = 'gregorian' === $calendar ? \IntlDateFormatter::GREGORIAN : \IntlDateFormatter::TRADITIONAL;
 
         // format
-        return FormatUtils::formatDateTime($date, $datetype, $timetype, $timezone, $calendar);
+        return FormatUtils::formatDateTime($date, $datetype, $timetype, $timezone, $calendar, $pattern);
     }
 
     /**
@@ -163,13 +165,14 @@ final class FormatExtension extends AbstractExtension
      * @param string|null                    $timeFormat the time format
      * @param \DateTimeZone|string|null      $timezone   the time zone
      * @param string|null                    $calendar   the calendar type
+     * @param string|null                    $pattern    the optional pattern to use when formatting
      *
      * @throws SyntaxError if the date format or the time format is unknown
      *
      * @return string the formatted date
      */
-    public function timeFilter(Environment $env, $date, ?string $timeFormat = null, $timezone = null, ?string $calendar = 'gregorian'): string
+    public function timeFilter(Environment $env, $date, ?string $timeFormat = null, $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
     {
-        return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $timezone, $calendar);
+        return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $timezone, $calendar, $pattern);
     }
 }

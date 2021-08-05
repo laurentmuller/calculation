@@ -110,10 +110,12 @@ class ResponseListener implements EventSubscriberInterface
      */
     public function __construct(KernelInterface $kernel, RouterInterface $router, ParameterBagInterface $params, NonceExtension $extension)
     {
+        /** @var string $asset */
+        $asset = $params->get('asset_base');
         $this->debug = $kernel->isDebug();
         $this->reportUrl = $router->generate('log_csp');
-        $this->asset = $params->get('asset_base');
         $this->extension = $extension;
+        $this->asset = $asset;
     }
 
     /**

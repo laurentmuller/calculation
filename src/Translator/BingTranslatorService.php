@@ -65,7 +65,9 @@ class BingTranslatorService extends AbstractTranslatorService
      */
     public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $adapter)
     {
-        parent::__construct($kernel, $adapter, $params->get(self::PARAM_KEY));
+        /** @var string $key */
+        $key = $params->get(self::PARAM_KEY);
+        parent::__construct($kernel, $adapter, $key);
     }
 
     /**

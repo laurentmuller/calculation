@@ -9,8 +9,15 @@
         <tbody>
             {% for data in daily.list %}
             <tr>
-                <td class="ow-date">{{ data.dt_date }}{% if loop.index0 == 0 %}<br><span class="small text-muted">{{ 'openweather.current.today'|trans }}</span>{% endif %}</td>
-                <td class="ow-icon"><img alt="Icon" src="{{ data.weather.icon_small }}" width="40" height="40">
+                <td class="ow-date">
+                    {%- if loop.index == 1 -%}
+                        {{- 'openweather.current.today'|trans -}}
+	                {%- else -%}
+                        {{- data.dt|localedate(pattern='eeee')|capitalize }}
+                    {%- endif -%}
+                    <br><span class="small text-muted">{{ data.dt_date }}</span>
+                </td>
+                <td class="ow-icon"><img alt="Daily" src="{{ data.weather.icon_small }}" width="40" height="40">
                 <td class="ow-temperature">
                     <span class="ow-temperature-pills ow-temperature-day" title="{{ 'openweather.fields.temp_day'|trans }}">{{ tools.value_temp(data.temp.day, units_temp) }}</span>
                     <span class="ow-temperature-pills ow-temperature-night" title="{{ 'openweather.fields.temp_night'|trans }}">{{ tools.value_temp(data.temp.night, units_temp) }}</span><br>

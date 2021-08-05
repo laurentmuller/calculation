@@ -314,7 +314,7 @@ class TestController extends AbstractController
                 return $this->redirectToHomePage();
             }
 
-            // translate errors
+            // @phpstan-ignore-next-line
             $errorCodes = \array_map(function ($code) use ($translator): string {
                 return $translator->trans("recaptcha.{$code}", [], 'validators');
             }, $result->getErrorCodes());

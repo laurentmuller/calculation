@@ -20,13 +20,3 @@ parameters:
 
     # PHP 7.4
     checkUninitializedProperties: true
-
-    ignoreErrors:
-    # disallowed-execution-calls
-    - '#proc_open#'                             # Command\CompileAssetsCommand.php
-    - '#proc_close#'                            # Command\CompileAssetsCommand.php
-
-    # slam/phpstan-extensions
-    - '#function has no typehint#'              # callbacks
-    - '#file_put_contents#'
-    - '#array\|bool\|float\|int\|string\|null#' # ParameterBagInterface

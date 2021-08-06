@@ -4,7 +4,7 @@
 
 {% macro add_product(item, category_id) -%}
 {%- set data_id = item.vars.attr.category -%}
-<tr category="{{ data_id }}" class="user-select-none{% if data_id != category_id %} d-none{% endif %}">
+<tr category="{{ data_id }}" class="text-secondary user-select-none{% if data_id != category_id %} d-none{% endif %}">
 	<td>{{- form_widget(item, {attr: {'disabled': 'disabled'}}) -}}</td>
     <td class="text-currency">{{ item.vars.attr.price|amount }}</td>
 </tr>
@@ -19,9 +19,11 @@
         </div>
     </div>
     {{ block('form_widget_simple') }}
+    {#
     <div class="input-group-append">
         <span class="input-group-text">%</span>
     </div>
+    #}
 </div>
 {{ block('form_help') }}
 {%- endblock %}
@@ -35,9 +37,11 @@
         </div>
     </div>
     {{ block('form_widget_simple') }}
+    {#
     <div class="input-group-append">
         <span class="input-group-text">CHF</span>
     </div>
+    #}
 </div>
 {{ block('form_help') }}
 {%- endblock %}
@@ -54,28 +58,35 @@
 
 {% block card_body %}
 {{ form_row(form.category) }}
-{{ form_row(form.all_products) }}
-<div class="form-group">
-    <div class="overflow-auto border-bottom" style="max-height: 174px;">
-        <table class="table table-hover table-sm text-secondary mb-0" id="form_products">
-            <tbody>
-        	{% for key, item in form.products.children -%}
-                {{- _self.add_product(item, category_id) }}
-            {%- endfor %}
-            </tbody>
-        </table>
+<div class="row mb-2">
+    <div class="col-md-6">
+        {{ form_row(form.all_products) }}
     </div>
-    <small id="products-error" class="invalid-feedback">{{ 'product.update.products_error'|trans }}</small>
+    <div class="col-md-6 text-md-right d-print-none">
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" id="btn-all" class="btn btn-outline-secondary" disabled="disabled" title="{{ 'product.update.check_all'|trans }}">
+                <i class="fa-fw fas fa-check-double"></i>
+            </button>
+            <button type="button" id="btn-none" class="btn btn-outline-secondary" disabled="disabled" title="{{ 'product.update.check_none'|trans }}">
+                <i class="fa-fw fas fa-eraser"></i>
+            </button>
+            <button type="button" id="btn-reverse" class="btn btn-outline-secondary" disabled="disabled" title="{{ 'product.update.check_reverse'|trans }}">
+                <i class="fa-fw fas fa-toggle-on"></i>
+            </button>
+        </div>
+    </div>
 </div>
-<div class="text-right">
-    <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn btn-form-sm btn-outline-primary btn-all" disabled="disabled">{{ 'product.update.check_all'|trans }}</button>
-        <button type="button" class="btn btn-form-sm btn-outline-secondary btn-none" disabled="disabled">{{ 'product.update.check_none'|trans }}</button>
-        <button type="button" class="btn btn-form-sm btn-outline-success btn-reverse" disabled="disabled">{{ 'product.update.check_reverse'|trans }}</button>
-    </div>
+<div class="overflow-auto border-bottom mb-2" style="max-height: 174px;">
+    <table class="table table-hover table-sm mb-0" id="form_products">
+        <tbody>
+    	{% for key, item in form.products.children -%}
+            {{- _self.add_product(item, category_id) }}
+        {%- endfor %}
+        </tbody>
+    </table>
 </div>
 <label class="required">{{ 'product.update.type'|trans }}</label>
-<div class="row mb-3">
+<div class="row">
     <div class="col-md-6">
         <div class="form-group">
             {{ form_widget(form.percent, {'attr': percent_attr, 'options': {'is_percent': is_percent}}) }}

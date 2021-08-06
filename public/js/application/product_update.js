@@ -12,16 +12,6 @@ function getVisibleProducts() {
 }
 
 /**
- * Retuns if the error message for products is displayed.
- *
- * @returns {boolean} - true if displayed.
- */
-function isProductsError() {
-    'use strict';
-    return $('#products-error').is(":visible");
-}
-
-/**
  * Returns a value indicating if all products checkbox is checked.
  *
  * @returns {boolean} - true if checked.
@@ -34,26 +24,25 @@ function isAllProducts() {
 /**
  * Validate the products selection.
  *
- * @param {boolean}
- *            focus - true to set focus to the first product if not valid.
  * @returns {boolean} - true if valid.
  */
-function validateProducts(focus) {
+function validateProducts() {
     'use strict';
-    if (isAllProducts()) {
-        $('#products-error').hide();
-        return true;
+    const validator = $('#edit-form').validate();
+    return validator.element("#form_all_products");
+}
+
+/**
+ * Check if products selection is requiered.
+ *
+ * @returns {boolean} true if requiered; false if not.
+ */
+function isProductsRequired() {
+    'use strict';
+    if (isAllProducts() || getVisibleProducts().filter(':checked').length > 0) {
+        return false;
     }
-    const $products = getVisibleProducts();
-    if ($products.filter(':checked').length > 0) {
-        $('#products-error').hide();
-        return true;
-    }
-    if (focus) {
-        $products.first().focus();
-    }
-    $('#products-error').show();
-    return false;
+    return true;
 }
 
 /**
@@ -62,11 +51,38 @@ function validateProducts(focus) {
 (function ($) {
     'use strict';
 
+    // get widgets
     const $type = $('#form_type');
     const $fixed = $('#form_fixed');
     const $percent = $('#form_percent');
     const $category = $('#form_category');
 
+    // validation
+    $('#edit-form').initValidator({
+        rules: {
+            'form[percent]': {
+                notEqualToZero: true
+            },
+            'form[fixed]': {
+                notEqualToZero: true
+            },
+            'form[all_products]': {
+                required: isProductsRequired
+            }
+        },
+        submitHandler: function (form) {
+            if (isAllProducts()) {
+                $('#form_products :checkbox').setChecked(false);
+            } else {
+                const id = $category.val();
+                $('#form_products :checkbox[category!="' + id + '"]').setChecked(false);
+            }
+            $(form).showSpinner();
+            form.submit();
+        }
+    });
+
+    // handle events
     $('#form_type_percent, #form_type_fixed').on('click', function () {
         const isPercent = $('#form_type_percent').isChecked();
         $fixed.toggleDisabled(isPercent);
@@ -90,20 +106,13 @@ function validateProducts(focus) {
 
     $category.on('input', function () {
         const id = $(this).val();
-
-        // toggle visibility
         $('#form_products tbody tr[category="' + id + '"]').removeClass('d-none');
         $('#form_products tbody tr[category!="' + id + '"]').addClass('d-none');
-
-        // check all if none
         const $products = getVisibleProducts();
         if ($products.find(':checked').length === 0) {
             $products.setChecked(true);
         }
-
-        if (isProductsError()) {
-            validateProducts(false);
-        }
+        validateProducts();
     });
     $category.trigger('input');
 
@@ -111,63 +120,34 @@ function validateProducts(focus) {
         const $checkbox = $(this).find(':checkbox');
         if (!isAllProducts() && !$checkbox.is(':hover')) {
             $checkbox.toggleChecked();
-            if (isProductsError()) {
-                validateProducts(false);
-            }
+            validateProducts();
         }
     });
 
     $('#form_products :checkbox').on('click', function () {
-        if (isProductsError() && $(this).isChecked()) {
-            validateProducts(false);
-        }
+        validateProducts();
     });
 
     $('#form_all_products').on('click', function () {
         const disabled = $(this).isChecked();
-        $('#form_products').toggleClass('text-secondary', disabled);
-        $('.btn-all, .btn-none, .btn-reverse, #form_products :checkbox').toggleDisabled(disabled);
-        if (isProductsError()) {
-            validateProducts(false);
-        }
-    });
-    $('.btn-all').on('click', function () {
-        getVisibleProducts().setChecked(true);
-        if (isProductsError()) {
-            validateProducts(false);
-        }
-    });
-    $('.btn-none').on('click', function () {
-        getVisibleProducts().setChecked(false);
-    });
-    $('.btn-reverse').on('click', function () {
-        getVisibleProducts().toggleChecked();
-        if (isProductsError()) {
-            validateProducts(false);
-        }
+        $('#form_products tr').toggleClass('text-secondary', disabled);
+        $('#btn-all, #btn-none, #btn-reverse, #form_products :checkbox').toggleDisabled(disabled);
+        validateProducts();
     });
 
-    // validation
-    $('#edit-form').initValidator({
-        rules: {
-            'form[percent]': {
-                notEqualToZero: true
-            },
-            'form[fixed]': {
-                notEqualToZero: true
-            }
-        },
-        submitHandler: function (form) {
-            if (!validateProducts(true)) {
-                return;
-            }
-            if (isAllProducts()) {
-                $('#form_products :checkbox').setChecked(false);
-            } else {
-                const id = $category.val();
-                $('#form_products :checkbox[category!="' + id + '"]').setChecked(false);
-            }
-            form.submit();
-        }
+    $('#btn-all').on('click', function () {
+        getVisibleProducts().setChecked(true);
+        validateProducts();
     });
+
+    $('#btn-none').on('click', function () {
+        getVisibleProducts().setChecked(false);
+        validateProducts();
+    });
+
+    $('#btn-reverse').on('click', function () {
+        getVisibleProducts().toggleChecked();
+        validateProducts();
+    });
+
 }(jQuery));

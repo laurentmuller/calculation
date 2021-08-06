@@ -100,7 +100,8 @@ class ProductUpdater
 
         $helper->field('all_products')
             ->notRequired()
-            ->rowClass('mb-1')
+            ->rowClass('mb-0')
+            ->updateAttribute('data-error', $this->trans('product.update.products_error'))
             ->addCheckboxType();
 
         $helper->field('products')

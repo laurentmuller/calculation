@@ -238,16 +238,13 @@
                             $toUpdate.removeClass('field-invalid').addClass('field-valid');
                         }
                     }
-                }
+                },
+
             };
 
-            // add spinner on submit
             if (!options.submitHandler) {
                 defaults.submitHandler = function (form) {
-                    const $form = $(form);
-                    const spinner = '<span class="spinner-border spinner-border-sm"></span>';
-                    $form.find(':submit').toggleDisabled(true).html(spinner);
-                    $form.find('.btn-cancel').toggleDisabled(true);
+                    $(form).showSpinner();
                     form.submit();
                 };
             }
@@ -339,6 +336,16 @@
             $that[0].reset();
             $that.find('.is-invalid').removeClass('is-invalid');
             return $that;
+        },
+
+        /**
+         * Show a spinner when form is submitted.
+         */
+        showSpinner: function() {
+            const $this = $(this);
+            const spinner = '<span class="spinner-border spinner-border-sm"></span>';
+            $this.find(':submit').toggleDisabled(true).html(spinner);
+            $this.find('.btn-cancel').toggleDisabled(true);
         }
     });
 

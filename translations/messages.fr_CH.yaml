@@ -334,9 +334,9 @@ product:
         last_update: 'Dernière mise à jour : %date%'
         all_products: Mettre à jour tous les articles
         products_error: Un ou plusieurs articles doivent être sélectionnés.
-        check_all: Tous
-        check_none: Aucun
-        check_reverse: Inverser
+        check_all: Sélectionner tous les articles
+        check_none: Supprimer la sélection des articles
+        check_reverse: Inverser la sélection des articles
     result:
         description: Résultats de la mise à jour des articles.
         simulated: La mise à jour a été simulée. Aucun article n'a été modifié dans la base de données.

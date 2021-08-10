@@ -28,18 +28,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UtilsTest extends TestCase
 {
-    public function getArrayValue(): array
-    {
-        return [
-            [[], 'fake', null],
-            [[], null, null],
-            [['a'], 'fake', null],
-            [['a'], null, null],
-            [['k' => 'a'], 'k', 'a'],
-            [['k' => 'a'], 'f', 'b', 'b'],
-        ];
-    }
-
     public function getCapitalize(): array
     {
         return [
@@ -258,19 +246,6 @@ class UtilsTest extends TestCase
     public function testExportVar($var, $expected): void
     {
         $actual = Utils::exportVar($var);
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @dataProvider getArrayValue
-     *
-     * @param mixed $key
-     * @param mixed $expected
-     * @param mixed $default
-     */
-    public function testGetArrayValue(array $array, $key, $expected, $default = null): void
-    {
-        $actual = Utils::getArrayValue($array, $key, $default);
         $this->assertEquals($expected, $actual);
     }
 

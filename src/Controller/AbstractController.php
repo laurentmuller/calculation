@@ -338,7 +338,6 @@ abstract class AbstractController extends BaseController
      * @param string      $name   the name of the PDF file or null to use default ('document.pdf')
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report can not be rendered
-     * @throws \Symfony\Component\Finder\Exception\AccessDeniedException     if the access is denied
      */
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
@@ -365,7 +364,6 @@ abstract class AbstractController extends BaseController
      * @param string              $name   the name of the Spreadsheet file or null to use default ('document.xlsx')
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report can not be rendered
-     * @throws \Symfony\Component\Finder\Exception\AccessDeniedException     if the access is denied
      */
     protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
     {

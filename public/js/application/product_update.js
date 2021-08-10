@@ -1,9 +1,9 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Gets the visible products.
+ * Gets the visible product's checkboxes.
  *
- * @returns {JQuery} - the visible products.
+ * @returns {JQuery} - the checkboxes.
  */
 function getVisibleProducts() {
     'use strict';
@@ -22,7 +22,7 @@ function isAllProducts() {
 }
 
 /**
- * Validate the products selection.
+ * Validate the product's selection.
  *
  * @returns {boolean} - true if valid.
  */
@@ -43,6 +43,58 @@ function isProductsRequired() {
         return false;
     }
     return true;
+}
+
+/**
+ * Compute the new product price.
+ *
+ * @param {number}
+ *            oldPrice - the old price of the product.
+ * @param {number}
+ *            value - the value to update with.
+ * @param {boolean}
+ *            use_percent - true if the value is a percentage, false if is a
+ *            fixed amount
+ * @param {boolean}
+ *            round - true to round new value up to 0.05
+ * @returns {number} the new price or Number.NaN if not applicable.
+ */
+function computePrice(oldPrice, value, use_percent, round) {
+    'use strict';
+    const newPrice = use_percent ? oldPrice * (1.0 + value / 100.0) : oldPrice + value;
+    return round ? Math.round(newPrice * 20) / 20 : newPrice;
+}
+
+/**
+ * Update the product's prices.
+ */
+function updatePrices() {
+    'use strict';
+
+    let value;
+    const round = $('#form_round').isChecked();
+    const use_percent = $('#form_type_percent').isChecked();
+    if (use_percent) {
+        value = Number.parseFloat($('#form_percent').val());
+    } else {
+        value = Number.parseFloat($('#form_fixed').val());
+    }
+    const result = !Number.isNaN(value);
+    const formatter = new Intl.NumberFormat('de-CH', {
+        'minimumFractionDigits': 2,
+        'maximumFractionDigits': 2
+    });
+
+    getVisibleProducts().each(function () {
+        let text = '-.--';
+        const $this = $(this);
+        if (result) {
+            const oldPrice = Number.parseFloat($this.attr('price'));
+            const newPrice = computePrice(oldPrice, value, use_percent, round);
+            text = formatter.format(newPrice);
+        }
+        $this.closest('tr').find('td:eq(2)').text(text);
+    });
 }
 
 /**
@@ -94,7 +146,10 @@ function isProductsRequired() {
             $percent.removeValidation();
             $type.val($fixed.data('type'));
         }
+        updatePrices();
     });
+
+    $('#form_percent, #form_fixed, #form_round').on('input', updatePrices);
 
     $('#form_simulated').on('input', function () {
         if ($(this).isChecked()) {
@@ -113,13 +168,14 @@ function isProductsRequired() {
             $products.setChecked(true);
         }
         validateProducts();
+        updatePrices();
     });
     $category.trigger('input');
 
-    $('#form_products tbody tr').on('click', function () {
-        const $checkbox = $(this).find(':checkbox');
-        if (!isAllProducts() && !$checkbox.is(':hover')) {
-            $checkbox.toggleChecked();
+    $('#form_products tbody').on('mousedown', 'td', function (e) {
+        const $target = $(e.target);
+        if (e.which === 1 && !$target.is(':checkbox') && !$target.is('label') && !isAllProducts()) {
+            $(this).closest('tr').find(':checkbox').toggleChecked().focus();
             validateProducts();
         }
     });
@@ -130,7 +186,7 @@ function isProductsRequired() {
 
     $('#form_all_products').on('click', function () {
         const disabled = $(this).isChecked();
-        $('#form_products tr').toggleClass('text-secondary', disabled);
+        $('#form_products tbody tr').toggleClass('text-secondary', disabled);
         $('#btn-all, #btn-none, #btn-reverse, #form_products :checkbox').toggleDisabled(disabled);
         validateProducts();
     });
@@ -149,5 +205,4 @@ function isProductsRequired() {
         getVisibleProducts().toggleChecked();
         validateProducts();
     });
-
 }(jQuery));

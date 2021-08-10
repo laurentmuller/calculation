@@ -77,9 +77,7 @@
 {# details #}
 {%- if dialog.details|default([])|length -%}
     <p class="mt-2 mb-0">{{ 'help.labels.description'|trans }}</p>
-    <p class="mb-0 ml">
-    {% for detail in dialog.details -%}{{ detail|raw }} {% endfor %}
-    </p>
+    <p class="mb-0 ml">{% for detail in dialog.details -%}{{ detail|raw }} {% endfor %}</p>
 {%- endif -%}
 
 {# entity columns #}

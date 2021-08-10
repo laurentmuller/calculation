@@ -16,12 +16,13 @@
 
 {# parameters #}
 {%- set title = 'exchangerate.title' -%}
-{%- set title_icon = 'hand-holding-usd' -%}
+{%- set title_icon = 'comments-dollar' -%}
 {%- set title_description = 'exchangerate.description' -%}
 {%- set cancel_text = 'common.button_close' -%}
 {%- set form_attr = form_attr|default({})|merge({
 	'action': url('exchange_rate'),
-	'data-error': 'unknown'|trans({}, 'exchangerate')}) -%}
+	'data-error': 'unknown'|trans({}, 'exchangerate'),
+	'data-rate': 'exchangerate.rate'|trans}) -%}
 
 {% block card_body %}
 {{ parent() }}
@@ -35,7 +36,7 @@
         </div>
     </div>
     <div class="col-md-2">
-        <div class="form-group text-center">
+        <div class="form-group text-md-center">
             <label>{{ 'exchangerate.swap_label'|trans }}</label>
             <a href="#" role="button" class="btn btn-swap btn-secondary form-control" title="{{ 'exchangerate.swap_label'|trans }}">
                 <i class="fas fa-exchange-alt" aria-hidden="true"></i>
@@ -82,6 +83,7 @@
 {%- endblock %}
 
 {% block stylesheets %}
+{{ asset_css('js/vendor/currency-flags/currency-flags.css') }}
 {{ asset_css('css/select2.css') }}
 {%- endblock -%}
 

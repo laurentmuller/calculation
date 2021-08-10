@@ -1,7 +1,7 @@
 {# data menu #}
 {% import 'macros/_icons.html.twig' as icons %}
-
-{%- if is_granted_product or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_customer or is_granted_task -%}
+{%- set is_granted_data = is_granted_product or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_task -%}
+{%- if is_granted_data or is_granted_customer -%}
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="dataDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{- icons.icon('database', 'index.menu_data') -}}
@@ -21,7 +21,7 @@
     {%- endif -%}
     {%- if is_granted_group -%}
         {%- set href = is_tabular ? path('group_table') : path('group_card') -%}
-        {{- icons.dropdownItem(href, 'group.list.title', 'code-branch') -}}                    
+        {{- icons.dropdownItem(href, 'group.list.title', 'code-branch') -}}
     {%- endif -%}
     {%- if is_granted_calculation_state -%}
         {%- set href = is_tabular ? path('calculationstate_table') : path('calculationstate_card') -%}
@@ -33,7 +33,7 @@
     {%- endif -%}
     {%- if is_granted_customer %}
         {%- set href = is_tabular ? path('customer_table') : path('customer_card') -%}
-        {{- icons.dropdownSeparator -}}
+        {%- if is_granted_data -%}{{- icons.dropdownSeparator -}}{% endif %}
         {{- icons.dropdownItem(href, 'customer.list.title', 'address-card far') -}}
     {%- endif -%}
     </div>

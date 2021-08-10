@@ -236,20 +236,6 @@ final class Utils
     }
 
     /**
-     * Gets the value in an array for the given key.
-     *
-     * @param array $array   the array to search in
-     * @param mixed $key     the key to search for
-     * @param mixed $default the default value if the key is not found
-     *
-     * @return mixed the value, if found; the default value otherwise
-     */
-    public static function getArrayValue(array $array, $key, $default = null)
-    {
-        return $array[$key] ?? $default;
-    }
-
-    /**
      * Gets the context for the given exception,.
      *
      * @param \Exception $e the exception to get the context for

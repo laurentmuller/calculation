@@ -29,8 +29,8 @@ function showError($form, message) {
 function updateDate($element, date) {
     'use strict';
     const source = $element.data('text');
-    const target = source.replace('%date%', date);
-    $element.text(target);
+    const text = source.replace('%date%', date);
+    $element.text(text);
     return $element;
 }
 
@@ -58,17 +58,17 @@ function compute() {
             const result = amount * rate;
 
             const $baseOption = $('#baseCode').getSelectedOption();
-            const $baseCode = $baseOption.data('name');
-            const $baseDigits = $baseOption.data('digits');
-            const $baseText = parseFloat(1).toFixed($baseDigits) + ' ' + $baseCode;
+            const baseCode = $baseOption.data('name');
+            const baseDigits = $baseOption.data('digits');
+            const baseText = parseFloat(1).toFixed(baseDigits) + ' ' + baseCode;
 
             const $targetOption = $('#targetCode').getSelectedOption();
-            const $targetCode = $targetOption.data('name');
-            const $targetDigits = $targetOption.data('digits');
-            const $targetText = rate + ' ' + $targetCode;
+            const targetCode = $targetOption.data('name');
+            const targetDigits = $targetOption.data('digits');
+            const targetText = rate + ' ' + targetCode;
 
-            $('#result').val(result.toFixed($targetDigits));
-            $('#rate').text($baseText + ' = ' + $targetText);
+            $('#result').val(result.toFixed(targetDigits));
+            $('#rate').text($form.data('rate').replace('%base%', baseText).replace('%target%', targetText));
             updateDate($('#last-update'), response.update);
             updateDate($('#next-update'), response.next);
 
@@ -83,14 +83,46 @@ function compute() {
 }
 
 /**
+ * Format the currency entry.
+ *
+ * @param {Object}
+ *            currency - the currency data.
+ * @returns the formated currency.
+ */
+function formatCurrency(currency) {
+    'use strict';
+    const id = currency.id;
+    const text = currency.text;
+    if (!id) {
+        return text;
+    }
+
+    const $flag = $('<span/>', {
+        'class': 'mr-1 currency-flag currency-flag-' + id.toLowerCase(),
+    });
+    const $text = $('<span/>', {
+        'class': 'text-truncate',
+        'text': text
+    });
+    const $div = $('<div/>', {
+        'class': 'd-inline-flex align-items-center w-100'
+    });
+    return $div.append($flag).append($text);
+}
+
+/**
  * Handle swap button click event.
  */
 function swapCodes() {
     'use strict';
-    const temp = $('#baseCode').val();
-    $('#baseCode').val($('#targetCode').val()).trigger('change');
-    $('#targetCode').val(temp).trigger('change');
-    compute();
+    const $baseCode = $('#baseCode');
+    const $targetCode = $('#targetCode');
+    const temp = $baseCode.val();
+    if (temp) {
+        $baseCode.val($targetCode.val()).trigger('change');
+        $targetCode.val(temp).trigger('change');
+        compute();
+    }
 }
 
 /**
@@ -100,7 +132,10 @@ function swapCodes() {
     'use strict';
 
     // initialize select
-    $('#baseCode, #targetCode').initSelect2();
+    $('#baseCode, #targetCode').initSelect2({
+        templateSelection: formatCurrency,
+        templateResult: formatCurrency
+    });
 
     // bind events
     $('.btn-swap').on('click', function () {

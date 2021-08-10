@@ -51,6 +51,11 @@ class ResponseListener implements EventSubscriberInterface
     private const CSP_UNSAFE_INLINE = "'unsafe-inline'";
 
     /**
+     * The currency flag image url.
+     */
+    private const CURRENCY_FLAG_URL = 'https://wise.com';
+
+    /**
      * The Google API font url.
      */
     private const GOOGLE_FONT_API_URL = 'https://fonts.googleapis.com';
@@ -201,7 +206,7 @@ class ResponseListener implements EventSubscriberInterface
         $csp['font-src'] = [self::CSP_SELF, self::GOOGLE_FONT_STATIC_URL, $asset];
         $csp['style-src'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
         $csp['style-src-elem'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
-        $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, self::OPEN_WEATHER_URL, self::ROBOHASH_URL, $asset];
+        $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, self::OPEN_WEATHER_URL, self::ROBOHASH_URL, self::CURRENCY_FLAG_URL, $asset];
 
         // PDF response
         if ($response instanceof PdfResponse) {

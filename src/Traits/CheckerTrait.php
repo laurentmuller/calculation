@@ -27,7 +27,7 @@ trait CheckerTrait
      *
      * @var AuthorizationCheckerInterface
      */
-    protected $checker;
+    protected ?AuthorizationCheckerInterface $checker = null;
 
     /**
      * The granted values.
@@ -59,6 +59,18 @@ trait CheckerTrait
     }
 
     /**
+     * Returns if the given subject can be added.
+     *
+     * @param string $subject the subject (entity name)
+     *
+     * @return bool true if the subject can be added
+     */
+    protected function isGrantedAdd(string $subject): bool
+    {
+        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_ADD, $subject);
+    }
+
+    /**
      * Returns if the given subject can be deleted.
      *
      * @param string $subject the subject (entity name)
@@ -80,6 +92,30 @@ trait CheckerTrait
     protected function isGrantedEdit(string $subject): bool
     {
         return $this->isGranted(EntityVoterInterface::ATTRIBUTE_EDIT, $subject);
+    }
+
+    /**
+     * Returns if the given subject can be exported.
+     *
+     * @param string $subject the subject (entity name)
+     *
+     * @return bool true if the subject can be exported
+     */
+    protected function isGrantedExport(string $subject): bool
+    {
+        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_EXPORT, $subject);
+    }
+
+    /**
+     * Returns if the given list of subjects can be displayed.
+     *
+     * @param string $subject the subject (entity name)
+     *
+     * @return bool true if the list of subjects can be displayed
+     */
+    protected function isGrantedList(string $subject): bool
+    {
+        return $this->isGranted(EntityVoterInterface::ATTRIBUTE_LIST, $subject);
     }
 
     /**

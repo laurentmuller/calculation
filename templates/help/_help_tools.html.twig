@@ -23,7 +23,7 @@
 <table class="{{ table_class }}">
     <thead class="{{ head_class }}">
         <tr>
-            <th class="w-30">{{ 'help.fields.action'|trans }}</th>
+            <th class="w-25">{{ 'help.fields.action'|trans }}</th>
             <th>{{ 'help.fields.description'|trans }}</th>
         </tr>
     </thead>
@@ -38,18 +38,19 @@
 {% macro output_row_action(action, service) -%}
 {%- set dialog = service.findDialog(action.dialog|default(action.id)) -%}
 {%- set href = dialog ? path('help_dialog', {'id': dialog.id}) : false -%}
+{%- set text = action.label|default(action.id) -%}
 {%- set icon = action.icon|default(false) -%}
 <tr>
-    <td>
+    <td class="w-25">
         {%- if href -%}
             {%- if icon -%}
                 {{- _self.output_icon(icon) -}}
-                <a class="ml-1" href="{{ href }}">{{ action.id|trans }}</a>
+                <a class="ml-1" href="{{ href }}">{{ text|trans }}</a>
             {%- else -%}
-                <a href="{{ href }}">{{ action.id|trans }}</a>
+                <a href="{{ href }}">{{ text|trans }}</a>
             {%- endif -%}
         {%- else -%}
-            {{- _self.output_icon(icon, action.id) -}}
+            {{- _self.output_icon(icon, text) -}}
         {%- endif -%}
     </td>
     <td>{{ action.description }}</td>

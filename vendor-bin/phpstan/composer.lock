@@ -439,16 +439,16 @@
         },
         {
             "name": "spaze/phpstan-disallowed-calls",
-            "version": "v1.7.0",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spaze/phpstan-disallowed-calls.git",
-                "reference": "e4813b87f2bb8b21fa756cb640e7f60deae457fe"
+                "reference": "5187d0097cd9eef5616fbb711b1b53480e143562"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spaze/phpstan-disallowed-calls/zipball/e4813b87f2bb8b21fa756cb640e7f60deae457fe",
-                "reference": "e4813b87f2bb8b21fa756cb640e7f60deae457fe",
+                "url": "https://api.github.com/repos/spaze/phpstan-disallowed-calls/zipball/5187d0097cd9eef5616fbb711b1b53480e143562",
+                "reference": "5187d0097cd9eef5616fbb711b1b53480e143562",
                 "shasum": ""
             },
             "require": {
@@ -456,6 +456,7 @@
                 "phpstan/phpstan": "^0.12"
             },
             "require-dev": {
+                "nette/neon": "^3.2",
                 "php-parallel-lint/php-console-highlighter": "^0.5.0",
                 "php-parallel-lint/php-parallel-lint": "^1.2",
                 "phpunit/phpunit": "^7.0 || ^9.4.2",
@@ -488,9 +489,9 @@
             "description": "Disallowed method and function calls plug-in for PHPStan",
             "support": {
                 "issues": "https://github.com/spaze/phpstan-disallowed-calls/issues",
-                "source": "https://github.com/spaze/phpstan-disallowed-calls/tree/v1.7.0"
+                "source": "https://github.com/spaze/phpstan-disallowed-calls/tree/v1.8.0"
             },
-            "time": "2021-08-02T14:34:54+00:00"
+            "time": "2021-08-10T01:41:24+00:00"
         },
         {
             "name": "taptima/phpstan-custom",

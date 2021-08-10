@@ -339,7 +339,7 @@
          * @return {boolean} The checked value.
          */
         isChecked: function () {
-            return $(this).is(':checked'); // .prop('checked');
+            return $(this).is(':checked');
         },
 
         /**

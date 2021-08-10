@@ -468,7 +468,8 @@
 			{
 				"id": "index.title",
 				"icon": "home",
-				"description": "Page principale de l'application."
+				"description": "Page principale de l'application.",
+				"dialog": "index.title"
 			},
 			{
 				"id": "calculation.list.title",
@@ -579,6 +580,17 @@
 		]
 	},
 	"dialogs": [
+		{
+			"id": "index.title",
+			"image": "home.png",
+			"description": "Page principale de l'application.",
+			"details": [
+				"Cette page est divisée en trois parties<br>",
+				"- La partie principale contient la liste des dernières calculations.<br>",
+				"- La deuxième partie contient la liste des calculations regroupées par status.<br>",
+				"- La troisième partie contient la liste des calculations regroupées par mois."
+			]
+		},
 		{
 			"id": "calculation.list.title",
 			"entity": "calculation",
@@ -737,7 +749,8 @@
 				},
 				{
 					"id": "common.button_cancel",
-					"description": "Retourne à la page principale de l'application."
+					"description": "Retourne à la page principale de l'application.",
+					"dialog": "index.title"
 				}
 			],
 			"links": [
@@ -758,7 +771,13 @@
 				{
 					"id": "index.title",
 					"icon": "home",
-					"description": "Retourne à la page principale de l'application."
+					"description": "Retourne à la page principale de l'application.",
+					"dialog": "index.title"
+				},
+				{
+					"id": "calculation.update.title",
+					"label": "calculation.result.new_update",
+					"description": "Retourne à la page de mise à jour des calculations."
 				}
 			],
 			"links": [
@@ -905,7 +924,8 @@
 				},
 				{
 					"id": "common.button_cancel",
-					"description": "Retourne à la page principale de l'application."
+					"description": "Retourne à la page principale de l'application.",
+					"dialog": "index.title"
 				}
 			],
 			"links": [
@@ -926,7 +946,13 @@
 				{
 					"id": "index.title",
 					"icon": "home",
-					"description": "Retourne à la page principale de l'application."
+					"description": "Retourne à la page principale de l'application.",
+					"dialog": "index.title"
+				},
+				{
+					"id": "product.update.title",
+					"label": "product.result.new_update",
+					"description": "Retourne à la page de mise à jour des articles."
 				}
 			],
 			"links": [

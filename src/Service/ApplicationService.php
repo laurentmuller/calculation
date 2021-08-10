@@ -312,16 +312,11 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     public function getPropertyArray(string $name, array $default): array
     {
         $value = $this->getItemValue($name, $default);
-
+        if (\is_string($value)) {
+            $value = \json_decode($value);
+        }
         if (\is_array($value) && \count($value) === \count($default)) {
             return $value;
-        }
-
-        if (\is_string($value)) {
-            $values = \json_decode($value);
-            if ($values && \count($values) === \count($default)) {
-                return $values;
-            }
         }
 
         return $default;

@@ -267,12 +267,9 @@ class TaskController extends AbstractEntityController
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
-        /** @var Task $item */
-        $parameters = [
-            'item_index' => $item->count(),
-            'margin_index' => $item->countMargins(),
-            'success' => $item->isNew() ? 'task.add.success' : 'task.edit.success',
-        ];
+        $parameters['item_index'] = $item->count();
+        $parameters['margin_index'] = $item->countMargins();
+        $parameters['success'] = $item->isNew() ? 'task.add.success' : 'task.edit.success';
 
         return parent::editEntity($request, $item, $parameters);
     }

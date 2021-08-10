@@ -19,11 +19,13 @@ use App\Entity\Customer;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
+use App\Traits\CheckerTrait;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Service to search data in all entities.
@@ -32,6 +34,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class SearchService
 {
+    use CheckerTrait;
+
     /**
      * The content column name.
      */
@@ -98,13 +102,11 @@ class SearchService
 
     /**
      * Constructor.
-     *
-     * @param EntityManagerInterface $manager the manager to query
-     * @param KernelInterface        $kernel  the kernel to get debug mode
      */
-    public function __construct(EntityManagerInterface $manager, KernelInterface $kernel)
+    public function __construct(EntityManagerInterface $manager, AuthorizationCheckerInterface $checker, KernelInterface $kernel)
     {
         $this->manager = $manager;
+        $this->checker = $checker;
         $this->debug = $kernel->isDebug();
     }
 
@@ -186,16 +188,18 @@ class SearchService
     /**
      * Create the SQL query for the calculation dates.
      */
-    protected function createCalculationDatesQuery(): self
+    private function createCalculationDatesQuery(): self
     {
         $class = Calculation::class;
-        $fields = ['date', 'createdAt', 'updatedAt'];
-        foreach ($fields as $field) {
-            $content = "date_format(e.{$field}, '%d.%m.%Y')";
-            $key = $this->getKey($class, $field);
-            $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
-                ->getQuery()
-                ->getSQL();
+        if ($this->isGrantedSearch($class)) {
+            $fields = ['date', 'createdAt', 'updatedAt'];
+            foreach ($fields as $field) {
+                $content = "date_format(e.{$field}, '%d.%m.%Y')";
+                $key = $this->getKey($class, $field);
+                $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
+                    ->getQuery()
+                    ->getSQL();
+            }
         }
 
         return $this;
@@ -204,17 +208,19 @@ class SearchService
     /**
      * Create the SQL query for the calculation groups.
      */
-    protected function createCalculationGroupQuery(): self
+    private function createCalculationGroupQuery(): self
     {
         $class = Calculation::class;
-        $field = 'group';
-        $content = 'g.code';
-        $key = $this->getKey($class, $field);
+        if ($this->isGrantedSearch($class)) {
+            $field = 'group';
+            $content = 'g.code';
+            $key = $this->getKey($class, $field);
 
-        $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
-            ->join('e.groups', 'g')
-            ->getQuery()
-            ->getSQL();
+            $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
+                ->join('e.groups', 'g')
+                ->getQuery()
+                ->getSQL();
+        }
 
         return $this;
     }
@@ -222,19 +228,21 @@ class SearchService
     /**
      * Create the SQL query for the calculation items.
      */
-    protected function createCalculationItemQuery(): self
+    private function createCalculationItemQuery(): self
     {
         $class = Calculation::class;
-        $field = 'item';
-        $content = 'i.description';
-        $key = $this->getKey($class, $field);
+        if ($this->isGrantedSearch($class)) {
+            $field = 'item';
+            $content = 'i.description';
+            $key = $this->getKey($class, $field);
 
-        $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
-            ->join('e.groups', 'g')
-            ->join('g.categories', 'c')
-            ->join('c.items', 'i')
-            ->getQuery()
-            ->getSQL();
+            $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
+                ->join('e.groups', 'g')
+                ->join('g.categories', 'c')
+                ->join('c.items', 'i')
+                ->getQuery()
+                ->getSQL();
+        }
 
         return $this;
     }
@@ -242,17 +250,19 @@ class SearchService
     /**
      * Create the SQL query for the calculation state.
      */
-    protected function createCalculationStateQuery(): self
+    private function createCalculationStateQuery(): self
     {
         $class = Calculation::class;
-        $field = 'state';
-        $content = 's.code';
-        $key = $this->getKey($class, $field);
+        if ($this->isGrantedSearch($class)) {
+            $field = 'state';
+            $content = 's.code';
+            $key = $this->getKey($class, $field);
 
-        $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
-            ->join('e.state', 's')
-            ->getQuery()
-            ->getSQL();
+            $this->queries[$key] = $this->createQueryBuilder($class, $field, $content)
+                ->join('e.state', 's')
+                ->getQuery()
+                ->getSQL();
+        }
 
         return $this;
     }
@@ -263,13 +273,16 @@ class SearchService
      * @param string   $class  the entity class
      * @param string[] $fields the entity fields to search in
      */
-    protected function createEntityQueries(string $class, array $fields): self
+    private function createEntityQueries(string $class, array $fields): self
     {
-        foreach ($fields as $field) {
-            $key = $this->getKey($class, $field);
-            $this->queries[$key] = $this->createQueryBuilder($class, $field)
-                ->getQuery()
-                ->getSQL();
+        // granted?
+        if ($this->isGrantedSearch($class)) {
+            foreach ($fields as $field) {
+                $key = $this->getKey($class, $field);
+                $this->queries[$key] = $this->createQueryBuilder($class, $field)
+                    ->getQuery()
+                    ->getSQL();
+            }
         }
 
         return $this;
@@ -282,7 +295,7 @@ class SearchService
      * @param string $field   the field name
      * @param string $content the field content to search in or null to use the field name
      */
-    protected function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
+    private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
         $name = Utils::getShortName($class);
         $content = $content ?: "e.{$field}";
@@ -304,7 +317,7 @@ class SearchService
      * @param string $entity the entity to search in or null for all
      * @param string $extra  a SQL statement to add to the default native SELECT SQL statement
      */
-    protected function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
+    private function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
     {
         // queries:
         $queries = $this->getQueries();
@@ -314,6 +327,11 @@ class SearchService
             $queries = \array_filter($queries, function (string $key) use ($entity): bool {
                 return 0 === \stripos($key, $entity);
             }, \ARRAY_FILTER_USE_KEY);
+        }
+
+        // empty?
+        if (empty($queries)) {
+            return [];
         }
 
         // SQL
@@ -329,11 +347,38 @@ class SearchService
     }
 
     /**
+     * Gets the entity name for the given class.
+     *
+     * @param string $class the entity class
+     *
+     * @return string the entity name
+     */
+    private function getEntityName(string $class): string
+    {
+        return \strtolower(Utils::getShortName($class));
+    }
+
+    /**
+     * Gets the query key for the given class name and field.
+     *
+     * @param string $class the class name
+     * @param string $field the field
+     *
+     * @return string the key
+     */
+    private function getKey(string $class, string $field): string
+    {
+        $shortName = \strtolower(Utils::getShortName($class));
+
+        return "$shortName.$field";
+    }
+
+    /**
      * Gets the SQL queries.
      *
      * @return string[] the SQL queries
      */
-    protected function getQueries(): array
+    private function getQueries(): array
     {
         // created?
         if (empty($this->queries)) {
@@ -376,7 +421,7 @@ class SearchService
     /**
      * Gets the result set mapping.
      */
-    protected function getResultSetMapping(): ResultSetMapping
+    private function getResultSetMapping(): ResultSetMapping
     {
         if (!$this->mapping) {
             $this->mapping = new ResultSetMapping();
@@ -389,29 +434,14 @@ class SearchService
     }
 
     /**
-     * Gets the entity name for the given class.
+     * Returns if the given subject can be listed and displayed.
      *
-     * @param string $class the entity class
+     * @param string $class the subject (entity name)
      *
-     * @return string the entity name
+     * @return bool true if the subject can be listed and displayed
      */
-    private function getEntityName(string $class): string
+    private function isGrantedSearch(string $class): bool
     {
-        return \strtolower(Utils::getShortName($class));
-    }
-
-    /**
-     * Gets the query key for the given class name and field.
-     *
-     * @param string $class the class name
-     * @param string $field the field
-     *
-     * @return string the key
-     */
-    private function getKey(string $class, string $field): string
-    {
-        $shortName = \strtolower(Utils::getShortName($class));
-
-        return "$shortName.$field";
+        return $this->isGrantedList($class) && $this->isGrantedShow($class);
     }
 }

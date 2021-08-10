@@ -104,6 +104,7 @@ calculation:
         duplicated: Articles en double
         unmodifiable: Calculations non-modifiables
         total: Total
+        new_update: Nouvelle mise à jour
 calculationgroup:
     name: Groupe
     fields:
@@ -345,6 +346,7 @@ product:
         value: Valeur
         old_price: Ancien prix
         new_price: Nouveau prix
+        new_update: Nouvelle mise à jour
     import:
         title: Importer des articles
         description: Permet d'importer des articles depuis une feuille de calcul Excel (*.xlsx).
@@ -1226,6 +1228,7 @@ exchangerate:
     target: Devise étrangère
     amount: Montant
     result: Résultat
+    rate: 'Taux de change : %base% = %target%'
 importance:
     name: Importance
     urgent: Urgente

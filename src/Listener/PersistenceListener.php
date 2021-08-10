@@ -18,7 +18,9 @@ use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Customer;
 use App\Entity\GlobalMargin;
+use App\Entity\Group;
 use App\Entity\Product;
+use App\Entity\Task;
 use App\Entity\User;
 use App\Traits\TranslatorFlashMessageTrait;
 use App\Util\Utils;
@@ -47,14 +49,11 @@ class PersistenceListener implements EventSubscriber
         Category::class,
         Customer::class,
         GlobalMargin::class,
+        Group::class,
         Product::class,
+        Task::class,
         User::class,
     ];
-
-    /**
-     * The message title.
-     */
-    private const TITLE = 'Debug';
 
     /**
      * The application name.
@@ -67,14 +66,21 @@ class PersistenceListener implements EventSubscriber
     private bool $debug;
 
     /**
+     * The message title.
+     */
+    private string $title;
+
+    /**
      * Constructor.
      */
     public function __construct(RequestStack $requestStack, TranslatorInterface $translator, KernelInterface $kernel, string $appName)
     {
         $this->requestStack = $requestStack;
-        $this->translator = $translator;
         $this->debug = $kernel->isDebug();
+        $this->translator = $translator;
         $this->appName = $appName;
+
+        $this->title = $this->trans('environment.' . $kernel->getEnvironment());
     }
 
     /**
@@ -213,6 +219,6 @@ class PersistenceListener implements EventSubscriber
     {
         $message = $this->trans($id, $parameters, $domain);
 
-        return self::TITLE . '|' . $message;
+        return $this->title . '|' . $message;
     }
 }

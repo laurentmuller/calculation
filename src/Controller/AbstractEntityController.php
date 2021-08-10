@@ -112,12 +112,13 @@ abstract class AbstractEntityController extends AbstractController
                 $this->deleteFromDatabase($item);
 
                 // message
-                $message = Utils::getArrayValue($parameters, 'success', 'common.delete_success');
-                $this->warningTrans($message, ['%name%' => $display]);
+                $message = $parameters['success'] ?? 'common.delete_success';
+                $message = $this->trans($message, ['%name%' => $display]);
+                $this->warning($message);
             } catch (Exception $e) {
                 // show error
                 $parameters['exception'] = $e;
-                $failure = Utils::getArrayValue($parameters, 'failure', 'common.delete_failure');
+                $failure = $parameters['failure'] ?? 'common.delete_failure';
                 $parameters['failure'] = $this->trans($failure, ['%name%' => $display]);
 
                 return $this->renderForm('@Twig/Exception/exception.html.twig', $parameters);
@@ -125,14 +126,14 @@ abstract class AbstractEntityController extends AbstractController
 
             // redirect
             $id = 0;
-            $route = Utils::getArrayValue($parameters, 'route', $this->getDefaultRoute());
+            $route = $parameters['route'] ?? $this->getDefaultRoute();
 
             return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
 
         // get parameters
-        $title = Utils::getArrayValue($parameters, 'title', 'common.delete_title');
-        $message = Utils::getArrayValue($parameters, 'message', 'common.delete_message');
+        $title = $parameters['title'] ?? 'common.delete_title';
+        $message = $parameters['message'] ?? 'common.delete_message';
         $message = $this->trans($message, ['%name%' => $display]);
 
         // update parameters
@@ -184,20 +185,16 @@ abstract class AbstractEntityController extends AbstractController
 
             // message
             if ($isNew) {
-                $message = Utils::getArrayValue($parameters, 'success', 'common.add_success');
+                $message = $parameters['success'] ?? 'common.add_success';
             } else {
-                $message = Utils::getArrayValue($parameters, 'success', 'common.edit_success');
+                $message = $parameters['success'] ?? 'common.edit_success';
             }
             $message = $this->trans($message, ['%name%' => $item->getDisplay()]);
-            if ($title = Utils::getArrayValue($parameters, 'title')) {
-                $title = $this->trans($title);
-                $message = "{$title}|{$message}";
-            }
             $this->succes($message);
 
             // redirect
             $id = $item->getId();
-            $route = Utils::getArrayValue($parameters, 'route', $this->getDefaultRoute());
+            $route = $parameters['route'] ?? $this->getDefaultRoute();
 
             return $this->getUrlGenerator()->redirect($request, $id, $route);
         }
@@ -366,6 +363,8 @@ abstract class AbstractEntityController extends AbstractController
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
      */
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
@@ -376,6 +375,8 @@ abstract class AbstractEntityController extends AbstractController
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
      */
     protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
     {

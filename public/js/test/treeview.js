@@ -14,9 +14,17 @@ function formatCountry(country) {
     if (!id) {
         return text;
     }
-    const url = $('#country').data('url');
-    const className = 'flag flag-' + id.toLowerCase();
-    return $('<span><img src="' + url + '" class="' + className + '" alt="' + text + '"> ' + text + '</span>');
+
+    const $img = $('<img/>', {
+        'class': 'mr-1 flag flag-' + id.toLowerCase(),
+        'src': $('#country').data('url'),
+        'alt': ''
+    });
+    const $span = $('<span/>', {
+        'class': 'text-truncate',
+        'text': text
+    });
+    return $span.prepend($img);
 }
 
 /**
@@ -50,18 +58,9 @@ function formatCountry(country) {
     });
 
     // countries
-    const $country = $('#country');
-    const countries = $country.data('countries');
-    const data = Object.keys(countries).map(function (key) {
-        return {
-            id: key,
-            text: countries[key]
-        };
-    });
-    $country.removeAttr('data-countries').initSelect2({
-        data: data,
-        templateResult: formatCountry,
-        templateSelection: formatCountry
+    $('#country').initSelect2({
+        templateSelection: formatCountry,
+        templateResult: formatCountry
     }).val('CH').trigger('change');
 
 }(jQuery));

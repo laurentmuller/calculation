@@ -10,14 +10,8 @@
 
 {% block card_header %}
 <div class="row">
-    <div class="col-lg-5 mt-1">
-        {{ parent() }}
-    </div>
-    <div class="col-lg-7 text-lg-right d-print-none">
-        <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
-            {{ rights.actions() }}
-        </div>
-    </div>
+    <div class="col-lg-5 mt-1">{{ parent() }}</div>
+    <div class="col-lg-7 text-lg-right d-print-none">{{ rights.actions() }}</div>
 </div>
 {%- endblock %}
 

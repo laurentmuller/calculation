@@ -299,6 +299,13 @@
 			"files": [
 				"select2-bootstrap4.css"
 			]
+		},
+		{
+			"name": "currency-flags",
+			"version": "3.2.1",
+			"files": [
+				"currency-flags.css"
+			]
 		}
 	]
 }

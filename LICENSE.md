@@ -152,4 +152,4 @@ Nous vous conseillons de consulter la présente politique de confidentialité p�
 ## Nous contacter
 Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par courrier électronique.
 
-Avril 2020
+Août 2021

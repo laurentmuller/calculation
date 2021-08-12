@@ -7,9 +7,13 @@
 
 [![Symfony](https://img.shields.io/badge/Symfony-5.3.6-informational?logo=symfony)](https://symfony.com) [![PHP](https://img.shields.io/badge/PHP-7.4.20-informational?logo=php)](https://www.php.net) [![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)](https://www.mysql.com)
 
-This bundle provides calculations within the Symfony 5.x framework.
+Programme de calculs basé sur l'environnement de développement Symfony 5.x. 
 
-License
+## Capture d'écran
+
+![Screenshot](public/help/images/home.png)
+
+Licence
 -------
-This bundle is under its own license. See the [complete license](LICENSE.md).
+Ce programme est distribué sous une [licence propriétaire](LICENSE.md).
 

@@ -53,15 +53,15 @@ function isProductsRequired() {
  * @param {number}
  *            value - the value to update with.
  * @param {boolean}
- *            use_percent - true if the value is a percentage, false if is a
+ *            isPercent - true if the value is a percentage, false if is a
  *            fixed amount
  * @param {boolean}
  *            round - true to round new value up to 0.05
  * @returns {number} the new price or Number.NaN if not applicable.
  */
-function computePrice(oldPrice, value, use_percent, round) {
+function computePrice(oldPrice, value, isPercent, round) {
     'use strict';
-    const newPrice = use_percent ? oldPrice * (1.0 + value / 100.0) : oldPrice + value;
+    const newPrice = isPercent ? oldPrice * (1.0 + value / 100.0) : oldPrice + value;
     return round ? Math.round(newPrice * 20) / 20 : newPrice;
 }
 
@@ -73,8 +73,8 @@ function updatePrices() {
 
     let value;
     const round = $('#form_round').isChecked();
-    const use_percent = $('#form_type_percent').isChecked();
-    if (use_percent) {
+    const isPercent = $('#form_type_percent').isChecked();
+    if (isPercent) {
         value = Number.parseFloat($('#form_percent').val());
     } else {
         value = Number.parseFloat($('#form_fixed').val());
@@ -90,8 +90,10 @@ function updatePrices() {
         const $this = $(this);
         if (result) {
             const oldPrice = Number.parseFloat($this.attr('price'));
-            const newPrice = computePrice(oldPrice, value, use_percent, round);
-            text = formatter.format(newPrice);
+            const newPrice = computePrice(oldPrice, value, isPercent, round);
+            if (!Number.isNaN(newPrice)) {
+                text = formatter.format(newPrice);
+            }
         }
         $this.closest('tr').find('td:eq(2)').text(text);
     });

@@ -1,4 +1,4 @@
-![Icon](public/images/icons/icon-032x032.png)Calculation
+![Icon](public/images/icons/icon-032x032.png) Calculation
 -----------
 Programme de calculs basé sur l'environnement de développement Symfony 5.x. 
 

@@ -1,5 +1,9 @@
 /**! compression tag for ftp-deployment */
 
+:root {
+  --center-color: var(--dark);
+}
+
 .clock-container {
     display: flex;
     flex-direction: column;
@@ -38,7 +42,6 @@
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    --center-color: var(--dark);
 }
 
 .clock-container .center-point::after {

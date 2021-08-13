@@ -18,6 +18,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Util\FormatUtils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Report for a calculation.
@@ -66,6 +67,14 @@ class CalculationReport extends AbstractReport
     }
 
     /**
+     * Gets the translator.
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function Header(): void
@@ -106,12 +115,8 @@ class CalculationReport extends AbstractReport
         CalculationTableItems::render($this);
         $this->Ln(3);
 
-        // check if totals by group and overall totals fit in the current page
-        $lines = $calculation->getGroupsCount() + 2;
-        $lines += empty($calculation->getUserMargin()) ? 2 : 4;
-        if (!$this->isPrintable(2 + self::LINE_HEIGHT * $lines)) {
-            $this->AddPage();
-        }
+        // check new page
+        $this->checkTablesHeight($calculation);
 
         // totals by group
         CalculationTableGroups::render($this);
@@ -120,6 +125,28 @@ class CalculationReport extends AbstractReport
         CalculationTableOverall::render($this);
 
         return true;
+    }
+
+    /**
+     * Checks if the groups table and the overall table fit within the current page.
+     */
+    private function checkTablesHeight(Calculation $calculation): void
+    {
+        // groups header + groups count + groups footer
+        $lines = $calculation->getGroupsCount() + 2;
+
+        // net total + user margin
+        if (!empty($calculation->getUserMargin())) {
+            $lines += 2;
+        }
+
+        // overall margin + overall total + time stampable
+        $lines += 3;
+
+        // check
+        if (!$this->isPrintable(2 + self::LINE_HEIGHT * $lines)) {
+            $this->AddPage();
+        }
     }
 
     /**
@@ -136,8 +163,7 @@ class CalculationReport extends AbstractReport
 
         $state = $calculation->getStateCode();
         $date = FormatUtils::formatDate($calculation->getDate());
-        $style = PdfStyle::getHeaderStyle()->setFontRegular()
-            ->setBorder('tbr');
+        $style = PdfStyle::getHeaderStyle()->setBorder('tbr');
 
         $table = new PdfTableBuilder($this);
         $table->setHeaderStyle(PdfStyle::getHeaderStyle()->setBorder('tbl'));

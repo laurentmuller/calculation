@@ -14,6 +14,7 @@ namespace App\Listener;
 
 use App\Traits\TranslatorFlashMessageTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Event\LogoutEvent;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -49,17 +50,9 @@ class LogoutListener implements EventSubscriberInterface
      */
     public function onLogout(LogoutEvent $event): void
     {
+        $username = $this->getUsername($event);
         $request = $event->getRequest();
-        if ($request->hasSession()) {
-            $this->session = $request->getSession();
-            if ($username = $this->getUsername($event)) {
-                $params = [
-                    '%username%' => $username,
-                    '%appname%' => $this->appNameVersion,
-                ];
-                $this->succesTrans('security.logout.success', $params);
-            }
-        }
+        $this->notify($request, $username);
     }
 
     /**
@@ -67,10 +60,24 @@ class LogoutListener implements EventSubscriberInterface
      */
     private function getUsername(LogoutEvent $event): ?string
     {
-        if ($token = $event->getToken()) {
+        if (null !== $token = $event->getToken()) {
             return $token->getUserIdentifier();
         }
 
         return null;
+    }
+
+    /**
+     * Notify the success logout of the user.
+     */
+    private function notify(Request $request, ?string $username): void
+    {
+        if (null !== $username && $this->setSessionFromRequest($request)) {
+            $params = [
+                '%username%' => $username,
+                '%appname%' => $this->appNameVersion,
+            ];
+            $this->succesTrans('security.logout.success', $params);
+        }
     }
 }

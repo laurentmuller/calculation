@@ -18,6 +18,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
 use App\Util\FormatUtils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Table to render the overall totals of a calculation.
@@ -26,15 +27,11 @@ use App\Util\FormatUtils;
  */
 class CalculationTableOverall extends PdfTableBuilder
 {
-    /**
-     * The calculation to render.
-     */
     private Calculation $calculation;
 
-    /**
-     * The minimum margin.
-     */
     private float $minMargin;
+
+    private TranslatorInterface $translator;
 
     /**
      * Constructor.
@@ -43,6 +40,7 @@ class CalculationTableOverall extends PdfTableBuilder
     {
         parent::__construct($parent);
         $this->calculation = $parent->getCalculation();
+        $this->translator = $parent->getTranslator();
         $this->minMargin = $parent->getMinMargin();
     }
 
@@ -108,6 +106,18 @@ class CalculationTableOverall extends PdfTableBuilder
             ->add(FormatUtils::formatAmount($calculation->getOverallMarginAmount()))
             ->add(FormatUtils::formatAmount($calculation->getOverallTotal()))
             ->endRow();
+
+        // created and updated
+        $this->parent->Ln(1);
+        $style = PdfStyle::getNoBorderStyle()
+            ->setFontItalic()
+            ->setFontSize(7);
+        $oldMargins = $this->parent->setCellMargin(0);
+        $this->startRow()
+            ->add($calculation->getCreatedText($this->translator), 1, $style, self::ALIGN_LEFT)
+            ->add($calculation->getUpdatedText($this->translator), 4, $style, self::ALIGN_RIGHT)
+            ->endRow();
+        $this->parent->setCellMargin($oldMargins);
     }
 
     /**

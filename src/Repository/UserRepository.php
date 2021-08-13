@@ -38,8 +38,6 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
 
     /**
      * Constructor.
-     *
-     * @param ManagerRegistry $registry The connections and entity managers registry
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -73,11 +71,7 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
     }
 
     /**
-     * Finds a user by its email.
-     *
-     * @param string $email the email to search for
-     *
-     * @return User|null the user instance or null if the user can not be found
+     * Finds a user by their email.
      */
     public function findByEmail(string $email): ?User
     {
@@ -85,11 +79,7 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
     }
 
     /**
-     * Find a user by its user name.
-     *
-     * @param string $username the user name to search for
-     *
-     * @return User|null the user instance or null if the user can not be found
+     * Finds a user by their user name.
      */
     public function findByUsername(string $username): ?User
     {
@@ -97,19 +87,12 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
     }
 
     /**
-     * Finds a user by its user name or email.
-     *
-     * @param string $usernameOrEmail the user name or the email to search for
-     *
-     * @return User|null the user instance or null if the user can not be found
+     * Finds a user by their user name or email.
      */
     public function findByUsernameOrEmail(string $usernameOrEmail): ?User
     {
-        if (\preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
-            $user = $this->findByEmail($usernameOrEmail);
-            if (null !== $user) {
-                return $user;
-            }
+        if (false !== \filter_var($usernameOrEmail, \FILTER_VALIDATE_EMAIL)) {
+            return $this->findByEmail($usernameOrEmail);
         }
 
         return $this->findByUsername($usernameOrEmail);
@@ -178,20 +161,5 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
 
         $resetPasswordRequest->eraseResetPasswordRequest();
         $this->_em->flush();
-    }
-
-    /**
-     * Update the date of last login for the given user.
-     *
-     * @param User $user the user to update
-     *
-     * @return bool this function returns always true
-     */
-    public function updateLastLogin(User $user): bool
-    {
-        $user->setLastLogin(new \DateTimeImmutable());
-        $this->_em->flush();
-
-        return true;
     }
 }

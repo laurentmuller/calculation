@@ -814,8 +814,7 @@ class PdfDocument extends Fpdf implements PdfConstantsInterface
     }
 
     /**
-     * Sets the left and right cell margins.
-     * The minimum value allowed is 0.
+     * Sets the cell margins. The minimum value allowed is 0.
      *
      * @param float $margin
      *                      the margins to set

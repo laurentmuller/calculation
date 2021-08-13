@@ -60,7 +60,7 @@ class SwitchUserListener implements EventSubscriberInterface
     {
         // session?
         $request = $event->getRequest();
-        if (!$request->hasSession()) {
+        if (!$this->setSessionFromRequest($request)) {
             return;
         }
 
@@ -72,14 +72,13 @@ class SwitchUserListener implements EventSubscriberInterface
         // get message
         if (self::EXIT_VALUE === $action) {
             $id = 'user.switch.exit.sucess';
-        } elseif ($original) {
+        } elseif (null !== $original) {
             $id = 'user.switch.take.sucess';
         } else {
             $id = 'user.switch.take.default';
         }
 
         //display message
-        $this->session = $request->getSession();
         $this->succesTrans($id, [
             '%orignal%' => $original,
             '%name%' => $name,

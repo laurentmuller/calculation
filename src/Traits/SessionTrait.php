@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -172,6 +173,22 @@ trait SessionTrait
         }
 
         return null;
+    }
+
+    /**
+     * Sets this session within the given request.
+     *
+     * @return bool true if the session is set; false otherwise
+     */
+    protected function setSessionFromRequest(Request $request): bool
+    {
+        if ($request->hasSession()) {
+            $this->session = $request->getSession();
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

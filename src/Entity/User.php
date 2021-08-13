@@ -38,7 +38,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @UniqueEntity(fields={"username"}, message="username.already_used")
  * @Vich\Uploadable
  */
-class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface, RoleInterface, ResetPasswordRequestInterface
+class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface, RoleInterface, ResetPasswordRequestInterface, \Serializable
 {
     use RightsTrait;
 
@@ -133,19 +133,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      * The prefered view.
      */
     private string $view = TableInterface::VIEW_TABLE;
-
-    /**
-     * Used because the $imageFile property can not be serialized.
-     *
-     * @return string[]
-     */
-    public function __sleep(): array
-    {
-        $vars = \get_object_vars($this);
-        unset($vars['imageFile']);
-
-        return \array_keys($vars);
-    }
 
     /**
      * {@inheritdoc}
@@ -421,6 +408,15 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this->verified;
     }
 
+    public function serialize(): string
+    {
+        return \serialize([
+            $this->id,
+            $this->username,
+            $this->password,
+        ]);
+    }
+
     /**
      * Sets the e-mail.
      */
@@ -469,16 +465,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function setImageName(?string $imageName): self
     {
         $this->imageName = $imageName;
-
-        return $this;
-    }
-
-    /**
-     * Sets the date of the last login.
-     */
-    public function setLastLogin(\DateTimeInterface $lastLogin): self
-    {
-        $this->lastLogin = $lastLogin;
 
         return $this;
     }
@@ -558,6 +544,25 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
                     $this->view = TableInterface::VIEW_TABLE;
                     break;
         }
+
+        return $this;
+    }
+
+    public function unserialize($serialized): void
+    {
+        [
+            $this->id,
+            $this->username,
+            $this->password,
+            ] = \unserialize($serialized);
+    }
+
+    /**
+     * Sets the last login date to now.
+     */
+    public function updateLastLogin(): self
+    {
+        $this->lastLogin = new \DateTimeImmutable();
 
         return $this;
     }

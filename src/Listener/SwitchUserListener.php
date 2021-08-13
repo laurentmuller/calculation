@@ -16,7 +16,6 @@ use App\Traits\TranslatorFlashMessageTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
-use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -48,9 +47,7 @@ class SwitchUserListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return [
-            SecurityEvents::SWITCH_USER => 'onSwitchUser',
-        ];
+        return [SwitchUserEvent::class => 'onSwitchUser'];
     }
 
     /**

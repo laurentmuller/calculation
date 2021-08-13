@@ -46,9 +46,7 @@ class LoginListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return [
-            LoginSuccessEvent::class => 'onLoginSuccess',
-        ];
+        return [LoginSuccessEvent::class => 'onLoginSuccess'];
     }
 
     /**

@@ -44,11 +44,10 @@ function updateTime(dateFormat, timeFormat) {
  */
 function updateTheme(dark) {
     'use strict';
-    const color = dark ? 'light' : 'dark';
     $('.clock-container .hour, .clock-container .minute').toggleClass('bg-light bg-dark');
     $('.clock-container .time, .clock-container .date').toggleClass('text-light', dark);
     $('.clock-container').toggleClass('bg-dark', dark).toggleClass('border', !dark);
-    $('.clock-container .center-point').css('--center-color', 'var(--' + color + ')');
+    $('.clock-container .center-point').toggleClass('dark light');
 
     // save
     const url = $('.clock-container').data('url');

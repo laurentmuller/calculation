@@ -40,9 +40,7 @@ class LogoutListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return [
-            LogoutEvent::class => 'onLogout',
-        ];
+        return [LogoutEvent::class => 'onLogout'];
     }
 
     /**

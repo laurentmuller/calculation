@@ -17,6 +17,7 @@ use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Group;
 use App\Form\Admin\ParametersType;
+use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
 use App\Form\Type\ImportanceType;
 use App\Form\Type\MinStrengthType;
@@ -29,6 +30,7 @@ use App\Pdf\PdfTocDocument;
 use App\Report\HtmlReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Service\AbstractHttpClientService;
 use App\Service\AkismetService;
@@ -52,6 +54,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
@@ -219,6 +222,10 @@ class TestController extends AbstractController
                 new Captcha(),
             ])
             ->add(CaptchaImageType::class);
+
+        $helper->field('alpha')
+            ->label('captcha.label')
+            ->add(AlphaCaptchaType::class);
 
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
@@ -600,7 +607,7 @@ class TestController extends AbstractController
     /**
      * @Route("/tree", name="test_tree")
      */
-    public function treeView(Request $request, GroupRepository $repository): Response
+    public function treeView(Request $request, GroupRepository $repository, CategoryRepository $categories, CalculationStateRepository $states): Response
     {
         // JSON?
         if ($request->isXmlHttpRequest()) {
@@ -646,7 +653,10 @@ class TestController extends AbstractController
         }
 
         return $this->renderForm('test/treeview.html.twig', [
+            'categories' => $categories->findBy([], ['code' => 'ASC']),
+            'currencies' => $this->getCurrencies(),
             'countries' => Countries::getNames(),
+            'states' => $states->getList(),
         ]);
     }
 
@@ -723,5 +733,28 @@ class TestController extends AbstractController
         }
 
         return $this->json(['valid_key' => $result]);
+    }
+
+    private function getCurrencies(): array
+    {
+        $currencies = \array_map(function (string $code): array {
+            $name = \ucfirst(Currencies::getName($code));
+            $symbol = Currencies::getSymbol($code);
+
+            return [
+                'code' => $code,
+                'name' => "$name - $symbol",
+            ];
+        }, Currencies::getCurrencyCodes());
+
+        $currencies = \array_filter($currencies, function (array $currency): bool {
+            return 0 === \preg_match('/\d|\(/', $currency['name']);
+        });
+
+        \usort($currencies, function (array $left, array $right): int {
+            return \strnatcasecmp($left['name'], $right['name']);
+        });
+
+        return $currencies;
     }
 }

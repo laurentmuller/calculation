@@ -22,3 +22,41 @@
 .select2-results__option--selectable {
     cursor: inherit;
 }
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
+    margin-top: 3px;
+    margin-left: 2px;
+    padding-right: 0;
+}
+
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice__remove {
+    float: right;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__rendered {
+    padding: 0;
+    margin-top: 2px;
+}
+
+.select2-container--bootstrap4 .select2-results__option--highlighted,
+.select2-container--bootstrap4 .select2-results__option--highlighted.select2-results__option[aria-selected="true"] {
+    color: var(--white);
+    background-color: var(--primary);
+}
+
+.select2-container--bootstrap4.form-control {
+    height: auto;
+    padding: 0px;
+    border-style: inherit;
+}
+
+.select2-container--bootstrap4.form-control.select2-container--focus {
+    z-index: 3;
+}

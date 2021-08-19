@@ -21,13 +21,15 @@
 {# empty block because errors are displayed after input #}
 {% block form_label_errors -%}{%- endblock %}
 
-{#
-override form errors. Rendered example:
-<small id="form_message-error" class="is-invalid invalid-feedback">Ce champ est obligatoire.</small>
-#}
 {% block form_errors -%}
 {%- if errors|length > 0 -%}
     {%- set messages = [] -%}
+    {#%- for error in errors -%}
+        {%- if error.message not in messages -%}
+            <small class="is-invalid invalid-feedback">{{ error.message }}</small>
+        {%- endif -%}
+        {%- set messages = messages|merge([error.message]) -%}
+    {%- endfor -%#}
     <span class="invalid-feedback d-block">
         {%- for error in errors -%}
             {%- if error.message not in messages -%}
@@ -255,3 +257,15 @@ override form errors. Rendered example:
     {{- block('form_widget_simple') -}}
 </div>
 {%- endblock %}
+
+{%- block alpha_captcha_widget -%}
+{%- set attr = attr|merge({class: (attr.class|default('') ~ ' text-uppercase text-center')|trim}) -%}
+<div class="row">
+    <label for="{{ id }}" class="col-sm-10 col-form-label">
+        {{- question -}}
+    </label>
+    <div class="col-sm-2">
+        {{- block('form_widget_simple') -}}
+    </div>
+</div>
+{%- endblock -%}

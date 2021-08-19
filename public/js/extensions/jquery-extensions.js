@@ -501,39 +501,15 @@
         },
 
         /**
-         * Initialize a select with select2 plugin.
+         * Returns if the given attribute exist and is not false or null.
          *
-         * @param {object}
-         *            options - The select2 options.
+         * @param {string}
+         *            name - the attribute name to check existance for.
+         * @return {boolean} true if the attribute name is set.
          */
-        initSelect2: function (options) {
-            return this.each(function () {
-                const settings = $.extend(true, {
-                    theme: 'bootstrap4',
-                    dropdownAutoWidth: true
-                }, options);
-
-                const $select = $(this);
-                const radius = $select.css('border-radius');
-                $select.select2(settings).on('select2:opening', function () {
-                    $('.select2-hidden-accessible').each(function () {
-                        if ($(this) !== $select) {
-                            $(this).select2('close');
-                        }
-                    });
-                }).on('select2:open', function () {
-                    const $dropdown = $('.select2-dropdown.select2-dropdown--below');
-                    if ($dropdown.length) {
-                        $dropdown.addClass('border-top').css('border-radius', radius);
-                    }
-                    const $search = $('.select2-search--dropdown .select2-search__field');
-                    if ($search.length) {
-                        $search.addClass('form-control form-control-sm').css('border-radius', radius);
-                        $search[0].focus();
-                    }
-                });
-                $('.select2-container--bootstrap4 .select2-selection').css('border-radius', radius);
-            });
+        hasAttr: function (name) {
+            const attr = $(this).attr(name);
+            return typeof attr !== "undefined" && attr !== false && attr !== null;
         }
     });
 

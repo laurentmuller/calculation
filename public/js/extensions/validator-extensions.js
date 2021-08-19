@@ -276,7 +276,7 @@
             // :hidden:not(.must-validate)
 
             // find first invalid field
-            $that.find('span.form-error-message, span.invalid-feedback').each(function () {
+            $that.find('.invalid-feedback').each(function () {
                 const $group = $(this).closest('.form-group');
                 if ($group.length) {
                     const $input = $group.find(toFind).filter(selector);

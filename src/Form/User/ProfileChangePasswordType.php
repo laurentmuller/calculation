@@ -105,7 +105,7 @@ class ProfileChangePasswordType extends AbstractEntityType
                 new UserPassword(['message' => 'current_password.invalid']),
             ])
             ->notMapped()
-            ->updateAttribute('autocomplete', 'current-password')
+            ->autocomplete('current-password')
             ->add(PasswordType::class);
 
         // new password

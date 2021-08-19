@@ -1,21 +1,19 @@
-Invalid credentials.: Le nom de l'utilisateur ou le mot de passe est invalide.
-Invalid CSRF token.: Le jeton de falsification de requête inter-sites (CSRF) est invalide.
-
 # reCAPTCHA
-recaptcha.missing-input-secret: Le paramètre secret reCAPTCHA est manquant. Essayez de recharger cette page.
-recaptcha.invalid-input-secret: Le paramètre secret reCAPTCHA est invalide ou malformé. Essayez de recharger cette page.
-recaptcha.missing-input-response: Le paramètre de réponse reCAPTCHA est manquant. Essayez de recharger cette page.
-recaptcha.invalid-input-response: Le paramètre de réponse reCAPTCHA est invalide ou malformé. Essayez de recharger cette page.
-recaptcha.bad-request: La demande reCAPTCHA est invalide ou malformée. Essayez de recharger cette page.
-recaptcha.invalid-json: La réponse reCAPTCHA a un format JSON invalide.
-recaptcha.connection-failed: Impossible de se connecter au service reCAPTCHA. Essayez de recharger cette page.
-recaptcha.bad-response: Le service reCAPTCHA n'a pas retourné le code 200. Essayez de recharger cette page.
-recaptcha.unknown-error: Une erreur inconnue s'est produite durant de la validation reCAPTCHA. Essayez de recharger cette page.
-recaptcha.hostname-mismatch: Le nom d'hôte reCAPTCHA ne correspond pas. Essayez de recharger cette page.
-recaptcha.action-mismatch: L'action reCAPTCHA ne correspond pas. Essayez de recharger cette page.
-recaptcha.score-threshold-not-met: Le seuil de points reCAPTCHA n'est pas atteint. Essayez de recharger cette page.
-recaptcha.challenge-timeout: Le délai d'attente du défi reCAPTCHA est atteint. Essayez de recharger cette page.
-recaptcha.timeout-or-duplicate: Le délai d'attente reCAPTCHA est atteint ou la validation a été appelée deux fois. Essayez de recharger cette page.
+recaptcha:
+    missing-input-secret: Le paramètre secret reCAPTCHA est manquant. Essayez de recharger cette page.
+    invalid-input-secret: Le paramètre secret reCAPTCHA est invalide ou malformé. Essayez de recharger cette page.
+    missing-input-response: Le paramètre de réponse reCAPTCHA est manquant. Essayez de recharger cette page.
+    invalid-input-response: Le paramètre de réponse reCAPTCHA est invalide ou malformé. Essayez de recharger cette page.
+    bad-request: La demande reCAPTCHA est invalide ou malformée. Essayez de recharger cette page.
+    invalid-json: La réponse reCAPTCHA a un format JSON invalide.
+    connection-failed: Impossible de se connecter au service reCAPTCHA. Essayez de recharger cette page.
+    bad-response: Le service reCAPTCHA n'a pas retourné le code 200. Essayez de recharger cette page.
+    unknown-error: Une erreur inconnue s'est produite durant de la validation reCAPTCHA. Essayez de recharger cette page.
+    hostname-mismatch: Le nom d'hôte reCAPTCHA ne correspond pas. Essayez de recharger cette page.
+    action-mismatch: L'action reCAPTCHA ne correspond pas. Essayez de recharger cette page.
+    score-threshold-not-met: Le seuil de points reCAPTCHA n'est pas atteint. Essayez de recharger cette page.
+    challenge-timeout: Le délai d'attente du défi reCAPTCHA est atteint. Essayez de recharger cette page.
+    timeout-or-duplicate: Le délai d'attente reCAPTCHA est atteint ou la validation a été appelée deux fois. Essayez de recharger cette page.
 
 # captcha image
 captcha:
@@ -34,3 +32,6 @@ registration:
     invalid_signature: Le lien pour vérifier votre courriel n'est pas valide. Veuillez demander un nouveau lien.
     wrong_email_verify: Le lien pour vérifier votre courriel semble être pour un compte ou un courriel différent. Veuillez demander un nouveau lien.
     send_email_error:  Il y a eu un problème lors de l'envoi du courrier électronique.
+
+Invalid credentials.: Le nom de l'utilisateur ou le mot de passe est invalide.
+Invalid CSRF token.: Le jeton de falsification de requête inter-sites (CSRF) est invalide.

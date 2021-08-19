@@ -40,10 +40,64 @@
             </select>
         </div>
     </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group">
+            <label for="currency">Monnaie</label>
+            <select id="currency" class="form-control">
+                {% for currency in currencies -%}
+                <option value="{{ currency.code }}">{{ currency.name }}</option>
+                {%- endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group">
+            <label for="state">Status</label>
+            <div class="input-group">
+                <select id="state" class="form-control" multiple="multiple">
+                    {% for state in states -%}
+                    <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
+                    {%- endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un élément">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les éléments">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group">
+            <label for="category">Catégorie</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                </div>
+                <select id="category" class="form-control" multiple="multiple">
+                    {% for category in categories -%}
+                    <option value="{{ category.id }}">{{ category.code }}</option>
+                    {%- endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un élément">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les éléments">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {%- endblock %}
 
 {% block stylesheets -%}
+{{ asset_css('js/vendor/currency-flags/currency-flags.css') }}
 {{ asset_css('css/select2.css') }}
 {{ asset_css('css/flags.css') }}
 {% endblock %}
@@ -53,5 +107,6 @@
 {{ asset_js('js/plugins/bootstrap-treeview.js') }}
 {{ asset_js('js/vendor/select2/js/select2.js') }}
 {{ asset_js('js/vendor/select2/js/i18n/fr.min.js') }}
+{{ asset_js('js/extensions/select2-extensions.js') }}
 {{ asset_js('js/test/treeview.js') }}
 {% endblock %}

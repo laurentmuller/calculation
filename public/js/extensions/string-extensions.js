@@ -118,3 +118,17 @@ String.prototype.format = function () {
     }
     return formatted;
 };
+
+/**
+ * Returns if this string start with the given value, ignoring case
+ * consideration.
+ *
+ * @param {String}
+ *            s - the string to compare to.
+ * @return {boolean} true if match.
+ */
+/* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
+String.prototype.startsWithIgnoreCase = function (s) {
+    'use strict';
+    return this.match(new RegExp('^' + s, 'i'));
+};

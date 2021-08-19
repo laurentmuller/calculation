@@ -283,7 +283,7 @@
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/dist/{file}",
 			"name": "select2",
-			"version": "4.1.0-rc.0",
+			"version": "4.0.13",
 			"files": [
 				"js/select2.js",
 				"js/i18n/fr.min.js",

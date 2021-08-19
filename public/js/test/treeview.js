@@ -27,6 +27,113 @@ function formatCountry(country) {
     return $span.prepend($img);
 }
 
+function formatState(state) {
+    'use strict';
+    const id = state.id;
+    const text = state.text;
+    if (!id) {
+        return text;
+    }
+    const color = $(state.element).data('color');
+    const $color = $('<span/>', {
+        'class': 'border border-secondary mr-1',
+        'css': {
+            'background-color': color,
+            'display': 'inline-block',
+            'height': '0.75rem',
+            'width': '1rem'
+        }
+    });
+    const $span = $('<div/>', {
+        'class': 'text-truncate',
+        'text': text
+    });
+    return $span.prepend($color);
+}
+
+function formatStateSelection(state) {
+    'use strict';
+    const id = state.id;
+    const text = state.text;
+    if (!id) {
+        return text;
+    }
+    const color = $(state.element).data('color');
+    const $color = $('<span/>', {
+        'class': 'border border-secondary mr-1',
+        'css': {
+            'background-color': color,
+            'display': 'inline-block',
+            'height': '0.75rem',
+            'width': '1rem'
+        }
+    });
+    const $span = $('<span/>', {
+        'class': 'mx-1',
+        'text': text
+    });
+    return $span.prepend($color);
+}
+
+function formatCurrency(currency) {
+    'use strict';
+    const id = currency.id;
+    const text = currency.text;
+    if (!id) {
+        return text;
+    }
+
+    const $flag = $('<span/>', {
+        'class': 'mr-1 currency-flag currency-flag-' + id.toLowerCase(),
+    });
+    const $text = $('<span/>', {
+        'class': 'text-truncate',
+        'text': text
+    });
+    const $div = $('<div/>', {
+        'class': 'd-inline-flex align-items-center w-100'
+    });
+    return $div.append($flag).append($text);
+}
+
+function formatCategory(category) {
+    'use strict';
+    const id = category.id;
+    const text = category.text;
+    if (!id) {
+        return text;
+    }
+
+    const $icon = $('<i/>', {
+        'class': 'fas fa-folder fa-fw',
+    });
+    const $span = $('<span/>', {
+        'class': 'text-truncate',
+        'text': text
+    });
+
+    return $span.prepend($icon);
+}
+
+function formatCategorySelection(category) {
+    'use strict';
+    const id = category.id;
+    const text = category.text;
+    if (!id) {
+        return text;
+    }
+
+    const $icon = $('<i/>', {
+        'class': 'fas fa-folder fa-fw',
+    });
+    const $span = $('<span/>', {
+        'text': text,
+        'class': 'mx-1'
+    });
+
+    return $span.prepend($icon);
+}
+
 /**
  * Ready function
  */
@@ -62,5 +169,31 @@ function formatCountry(country) {
         templateSelection: formatCountry,
         templateResult: formatCountry
     }).val('CH').trigger('change');
+
+    // currency
+    $('#currency').initSelect2({
+        templateSelection: formatCurrency,
+        templateResult: formatCurrency
+    }).val('CHF').trigger('change');
+
+    // states
+    $('#state').initSelect2({
+        templateResult: formatState,
+        templateSelection: formatStateSelection,
+        minimumResultsForSearch: Infinity
+    }).val(['1', '5']).trigger('change');
+
+    // categories
+    $('#category').initSelect2({
+        templateResult: formatCategory,
+        templateSelection: formatCategorySelection
+    }).val(['1', '2', '3', '4', '5', '6']).trigger('change');
+
+    $('.btn-search').on('click', function () {
+        $(this).parents('.form-group').find('select').select2('open');
+    });
+    $('.btn-clear').on('click', function () {
+        $(this).parents('.form-group').find('select').val('').trigger('change').focus();
+    });
 
 }(jQuery));

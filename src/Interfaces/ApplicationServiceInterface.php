@@ -42,6 +42,11 @@ interface ApplicationServiceInterface
     public const DEFAULT_POSITION = 'bottom-right';
 
     /**
+     * The default output qr-code (boolean).
+     */
+    public const DEFAULT_QR_CODE = false;
+
+    /**
      * The default display message sub-title (boolean).
      */
     public const DEFAULT_SUB_TITLE = false;
@@ -143,6 +148,11 @@ interface ApplicationServiceInterface
      * The property name for the minimum password strength (int).
      */
     public const P_MIN_STRENGTH = 'minstrength';
+
+    /**
+     * The property name to output a qr-code at the end of the PDF document.
+     */
+    public const P_QR_CODE = 'qr_code';
 
     /**
      * The property name for the last calculations update (date).

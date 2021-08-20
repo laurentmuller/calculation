@@ -17,7 +17,12 @@ use App\Entity\Calculation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
+use App\QrCode\PdfWriterExt;
 use App\Util\FormatUtils;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -27,6 +32,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationReport extends AbstractReport
 {
+    private const QR_CODE_SIZE = 30;
+
     /**
      * The calculation.
      */
@@ -38,16 +45,19 @@ class CalculationReport extends AbstractReport
     private float $minMargin;
 
     /**
-     * Constructor.
-     *
-     * @param AbstractController $controller  the parent controller
-     * @param Calculation        $calculation the calculation to render
+     * The QR code url.
      */
-    public function __construct(AbstractController $controller, Calculation $calculation)
+    private ?string $qrcode;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(AbstractController $controller, Calculation $calculation, ?string $qrcode = null)
     {
         parent::__construct($controller);
         $this->calculation = $calculation;
         $this->minMargin = $controller->getApplication()->getMinMargin();
+        $this->qrcode = $qrcode;
     }
 
     /**
@@ -124,6 +134,9 @@ class CalculationReport extends AbstractReport
         // overall totals
         CalculationTableOverall::render($this);
 
+        // qr-code
+        $this->renderQrCode();
+
         return true;
     }
 
@@ -143,8 +156,15 @@ class CalculationReport extends AbstractReport
         // overall margin + overall total + time stampable
         $lines += 3;
 
+        // total height
+        $total = 2 + self::LINE_HEIGHT * $lines;
+
+        // qr-code?
+        if (null !== $this->qrcode) {
+            $total += self::QR_CODE_SIZE;
+        }
         // check
-        if (!$this->isPrintable(2 + self::LINE_HEIGHT * $lines)) {
+        if (!$this->isPrintable($total)) {
             $this->AddPage();
         }
     }
@@ -177,5 +197,36 @@ class CalculationReport extends AbstractReport
             ->add($calculation->getDescription())
             ->add($date, 1, $style)
             ->endRow();
+    }
+
+    /**
+     * Render the QR code image.
+     */
+    private function renderQrCode(): void
+    {
+        if (null !== $this->qrcode) {
+            // output to the bottom right
+            $x = $this->GetPageWidth()- $this->getRightMargin() - self::QR_CODE_SIZE;
+            $y = $this->getPrintableHeight();
+
+            // options
+            $options = [
+                PdfWriterExt::WRITER_OPTION_PDF => $this,
+                PdfWriterExt::WRITER_OPTION_X => $x,
+                PdfWriterExt::WRITER_OPTION_Y => $y,
+            ];
+
+            // build
+            Builder::create()
+                ->errorCorrectionLevel(new ErrorCorrectionLevelLow())
+                ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+                ->encoding(new Encoding('UTF-8'))
+                ->writer(new PdfWriterExt())
+                ->size(self::QR_CODE_SIZE)
+                ->writerOptions($options)
+                ->data($this->qrcode)
+                ->margin(0)
+                ->build();
+        }
     }
 }

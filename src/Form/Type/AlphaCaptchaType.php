@@ -74,7 +74,6 @@ class AlphaCaptchaType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        //$view->vars['label'] = $this->question;
         $view->vars['question'] = $this->question;
     }
 

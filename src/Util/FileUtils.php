@@ -218,6 +218,7 @@ final class FileUtils
                 return true;
             }
         } catch (IOException $e) {
+            // ignore
         }
 
         return false;
@@ -239,6 +240,7 @@ final class FileUtils
 
             return true;
         } catch (IOException $e) {
+            // ignore
         }
 
         return false;
@@ -253,7 +255,13 @@ final class FileUtils
      */
     public static function tempfile(string $prefix = 'tmp'): ?string
     {
-        return self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
+        try {
+            return self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
+        } catch (IOException $e) {
+            // ignore
+        }
+
+        return null;
     }
 
     /**

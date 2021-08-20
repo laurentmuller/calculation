@@ -20,3 +20,6 @@ parameters:
 
     # PHP 7.4
     checkUninitializedProperties: true
+
+    excludePaths:
+        - src/DataTable/*

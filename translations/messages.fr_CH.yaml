@@ -733,6 +733,7 @@ parameters:
     group_display: Affichage
     group_security: Sécurité
     group_password: Options du mot de passe
+    group_options: Options
     action_display: Afficher
     action_test: Tester
     editAction:
@@ -743,8 +744,8 @@ parameters:
         show: Afficher
         hide: Masquer
     display_parameters:
-        show: Afficher le groupe de paramètres
-        hide: Masquer le groupe de paramètres
+        show: Afficher le groupe %name%
+        hide: Masquer le groupe %name%
     tabular:
         table: Tabulaire
         flex: Mosaïque
@@ -781,6 +782,9 @@ parameters:
         display_captcha: Code de contrôle
         display_tabular: Mode d'affichage
         mintrength: Force minimum
+        qr_code: Code QR sur les calculations
+    helps:
+        qr_code: Un code QR est imprimé à la fin du document PDF.
 clear_cache:
     title: Vider le cache
     message: Êtes-vous sûr de vouloir vider le cache de l'application ?

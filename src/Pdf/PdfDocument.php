@@ -13,14 +13,14 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Traits\MathTrait;
-use Fpdf\Fpdf;
+use FPDF;
 
 /**
  * PDF document with default header and footer.
  *
  * @author Laurent Muller
  */
-class PdfDocument extends Fpdf implements PdfConstantsInterface
+class PdfDocument extends FPDF implements PdfConstantsInterface
 {
     use MathTrait;
 

@@ -20,12 +20,12 @@ namespace App\Faker;
 class CustomPerson extends \Faker\Provider\fr_CH\Person
 {
     /**
-     * @var string[]
+     * @var mixed
      */
     protected static $titleFemale = ['Madame', 'Mademoiselle'];
 
     /**
-     * @var string[]
+     * @var mixed
      */
     protected static $titleMale = ['Monsieur'];
 }

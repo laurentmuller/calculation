@@ -20,7 +20,7 @@ namespace App\Faker;
 class CustomAddress extends \Faker\Provider\fr_CH\Address
 {
     /**
-     * @var string[]
+     * @var mixed
      */
     protected static $postcode = [
         '1###',

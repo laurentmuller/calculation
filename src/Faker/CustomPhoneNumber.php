@@ -22,7 +22,7 @@ class CustomPhoneNumber extends \Faker\Provider\fr_CH\PhoneNumber
     /**
      * Swiss phone number formats.
      *
-     * @var string[]
+     * @var mixed
      */
     protected static $formats = [
         '0## ### ## ##',
@@ -30,8 +30,6 @@ class CustomPhoneNumber extends \Faker\Provider\fr_CH\PhoneNumber
 
     /**
      * Swiss mobile (cell) phone number formats.
-     *
-     * @var string[]
      */
     protected static $mobileFormats = [
         // Local

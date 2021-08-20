@@ -16,6 +16,8 @@ counters:
     weather_daily: '{count, plural, =0 {Aucune prévision journalière} one {Prévisions à 1 jour} other {Prévisions à # jours}}'
     weather_forecast: '{count, plural, =0 {Aucune prévision horaire} one {Prévisions à 1 heure} other {Prévisions à # heures}}'
     weather_cities: '{count, plural, =0 {Aucune localité ne correspond aux critères de recherche.} one {1 localité correspond aux critères de recherche.} other {# localités correspond aux critères de recherche.}}'
+    seconds: '{count, plural, =0 {0 seconde} one {1 seconde} other {# secondes}}'
+    minutes: '{count, plural, =0 {0 minute} one {1 minute} other {# minutes}}'
     hours: '{count, plural, =0 {0 heure} one {1 heure} other {# heures}}'
     days: '{count, plural, =0 {0 jour} one {1 jour} other {# jours}}'
     weeks: '{count, plural, =0 {0 semaine} one {1 semaine} other {# semaines}}'

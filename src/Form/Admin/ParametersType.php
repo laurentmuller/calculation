@@ -74,6 +74,11 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         // flashbag
         $this->addFlashbagSection($helper);
 
+        // options
+        if ($this->superAdmin) {
+            $this->addOptionsSection($helper);
+        }
+
         // security
         if ($this->superAdmin) {
             $this->addSecuritySection($helper);
@@ -137,6 +142,16 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
                 'parameters.display.show' => true,
                 'parameters.display.hide' => false,
             ]);
+    }
+
+    private function addOptionsSection(FormHelper $helper): void
+    {
+        $helper->field(self::P_QR_CODE)
+            ->updateAttribute('data-default', (int) self::DEFAULT_QR_CODE)
+            ->help('parameters.helps.' . self::P_QR_CODE)
+            ->rowClass('ml-3 mt-2')
+            ->notRequired()
+            ->addCheckboxType();
     }
 
     private function addSecuritySection(FormHelper $helper): void

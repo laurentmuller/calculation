@@ -3,10 +3,11 @@
 
 {# macros #}
 {% macro collapseLine(href) %}
-{%- set show = 'parameters.display_parameters.show'|trans -%}
-{%- set hide = 'parameters.display_parameters.hide'|trans -%}
+{%- set name = ('parameters.group_' ~ href)|trans -%}
+{%- set show = 'parameters.display_parameters.show'|trans({'%name%': name}) -%}
+{%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
 <div class="d-flex flex-row" style="margin-right: -8px;" data-show="{{ show }}" data-hide="{{ hide }}">
-    <a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" class="horizontal-line flex-fill">{{ ('parameters.group_' ~ href)|trans }}</a>
+    <a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" class="horizontal-line flex-fill">{{ name }}</a>
     <a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" data-show="{{ show }}" data-hide="{{ hide }}"><i class="fas fa-fw fa-lg fa-caret-left"></i></a>
 </div>
 {% endmacro %}
@@ -90,6 +91,10 @@
         </div>
     </div>
     {% if super_admin %}
+    {{ _self.collapseLine('options') }}
+    <div class="toggle-icon collapse" id="options" data-parent="#parent_accordion">
+        {{ form_row(form.qr_code) }}
+    </div>
     {{ _self.collapseLine('security') }}
     <div class="toggle-icon collapse" id="security" data-parent="#parent_accordion">
         <div class="form-row ml-0 mt-1">

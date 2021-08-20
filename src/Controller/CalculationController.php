@@ -35,6 +35,7 @@ use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Controller for calculation entities.
@@ -238,9 +239,15 @@ class CalculationController extends AbstractEntityController
      *
      * @Route("/pdf/{id}", name="calculation_pdf_id", requirements={"id" = "\d+" })
      */
-    public function pdfById(Calculation $calculation): PdfResponse
+    public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator): PdfResponse
     {
-        $doc = new CalculationReport($this, $calculation);
+        $qrcode = null;
+        if ($this->getApplication()->isQrCode()) {
+            $name = 'calculation_show';
+            $parameters = ['id' => (int) $calculation->getId()];
+            $qrcode = $generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+        }
+        $doc = new CalculationReport($this, $calculation, $qrcode);
 
         return $this->renderPdfDocument($doc);
     }

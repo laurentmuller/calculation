@@ -291,6 +291,8 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
 
             self::P_DISPLAY_TABULAR => $this->isDisplayTabular(),
             self::P_DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
+
+            self::P_QR_CODE => $this->isQrCode(),
         ];
 
         // exlude keys
@@ -517,6 +519,16 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     public function isPropertyBoolean(string $name, bool $default = false): bool
     {
         return (bool) $this->getItemValue($name, $default);
+    }
+
+    /**
+     * Gets a value indicating if output a qr-code at the end of the PDF document.
+     *
+     * @return bool true to output; false if none
+     */
+    public function isQrCode(): bool
+    {
+        return $this->isPropertyBoolean(self::P_QR_CODE, self::DEFAULT_QR_CODE);
     }
 
     /**

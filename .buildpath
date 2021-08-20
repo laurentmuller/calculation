@@ -12,6 +12,11 @@
 			<attribute name="composer" value="source"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/bacon/bacon-qr-code/src">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/bamarni/composer-bin-plugin/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -33,6 +38,11 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/composer/package-versions-deprecated/src/PackageVersions">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/dasprid/enum/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
@@ -117,17 +127,17 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/endroid/qr-code/src">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/ezyang/htmlpurifier/library">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/fakerphp/faker/src/Faker">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/fpdf/fpdf/src/Fpdf">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
@@ -433,6 +443,11 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/sensio/framework-extra-bundle/src">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/setasign/fpdf">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

@@ -206,7 +206,7 @@ class CalculationReport extends AbstractReport
     {
         if (null !== $this->qrcode) {
             // output to the bottom right
-            $x = $this->GetPageWidth()- $this->getRightMargin() - self::QR_CODE_SIZE;
+            $x = $this->GetPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE;
             $y = $this->getPrintableHeight();
 
             // options

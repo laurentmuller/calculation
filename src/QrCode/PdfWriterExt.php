@@ -61,38 +61,42 @@ final class PdfWriterExt implements WriterInterface
             throw new \Exception('PDF Writer does not support alpha channels');
         }
 
+        $outerSize = $matrix->getOuterSize();
+        $blockCount = $matrix->getBlockCount();
+        $marginLeft = $matrix->getMarginLeft();
+        $blockSize = $matrix->getBlockSize();
+
         if (isset($options[self::WRITER_OPTION_PDF])) {
             $fpdf = $options[self::WRITER_OPTION_PDF];
             if (!$fpdf instanceof \FPDF) {
-                throw new \Exception('pdf option must be an instance of FPDF');
+                throw new \Exception('fpdf option must be an instance of FPDF');
             }
         } else {
-            // @todo Check how to add label height later
-            $fpdf = new \FPDF('P', $unit, [$matrix->getOuterSize(), $matrix->getOuterSize() + $labelSpace]);
+            $fpdf = new \FPDF('P', $unit, [$outerSize, $outerSize + $labelSpace]);
             $fpdf->AddPage();
         }
 
         $x = 0;
         if (isset($options[self::WRITER_OPTION_X])) {
-            $x = $options[self::WRITER_OPTION_X];
+            $x = (int) $options[self::WRITER_OPTION_X];
         }
         $y = 0;
         if (isset($options[self::WRITER_OPTION_Y])) {
-            $y = $options[self::WRITER_OPTION_Y];
+            $y = (int) $options[self::WRITER_OPTION_Y];
         }
 
         $fpdf->SetFillColor($backgroundColor->getRed(), $backgroundColor->getGreen(), $backgroundColor->getBlue());
-        $fpdf->Rect($x, $y, $matrix->getOuterSize(), $matrix->getOuterSize(), 'F');
+        $fpdf->Rect($x, $y, $outerSize, $outerSize, 'F');
         $fpdf->SetFillColor($foregroundColor->getRed(), $foregroundColor->getGreen(), $foregroundColor->getBlue());
 
-        for ($rowIndex = 0; $rowIndex < $matrix->getBlockCount(); ++$rowIndex) {
-            for ($columnIndex = 0; $columnIndex < $matrix->getBlockCount(); ++$columnIndex) {
+        for ($rowIndex = 0; $rowIndex < $blockCount; ++$rowIndex) {
+            for ($columnIndex = 0; $columnIndex < $blockCount; ++$columnIndex) {
                 if (1 === $matrix->getBlockValue($rowIndex, $columnIndex)) {
                     $fpdf->Rect(
-                        $x + $matrix->getMarginLeft() + ($columnIndex * $matrix->getBlockSize()),
-                        $y + $matrix->getMarginLeft() + ($rowIndex * $matrix->getBlockSize()),
-                        $matrix->getBlockSize(),
-                        $matrix->getBlockSize(),
+                        $x + $marginLeft + ($columnIndex * $blockSize),
+                        $y + $marginLeft + ($rowIndex * $blockSize),
+                        $blockSize,
+                        $blockSize,
                         'F'
                     );
                 }
@@ -100,19 +104,19 @@ final class PdfWriterExt implements WriterInterface
         }
 
         if ($logo instanceof LogoInterface) {
-            $this->addLogo($logo, $fpdf, $x, $y, $matrix->getOuterSize());
+            $this->addLogo($logo, $fpdf, $x, $y, $outerSize);
         }
 
         if ($label instanceof LabelInterface) {
-            $fpdf->SetXY($x, $y + $matrix->getOuterSize() + $labelSpace - 25);
+            $fpdf->SetXY($x, $y + $outerSize + $labelSpace - 25);
             $fpdf->SetFont('Helvetica', null, $label->getFont()->getSize());
-            $fpdf->Cell($matrix->getOuterSize(), 0, $label->getText(), 0, 0, 'C');
+            $fpdf->Cell($outerSize, 0, $label->getText(), 0, 0, 'C');
         }
 
         return new PdfResult($fpdf);
     }
 
-    private function addLogo(LogoInterface $logo, \FPDF $fpdf, float $x, float $y, float $size): void
+    private function addLogo(LogoInterface $logo, \FPDF $fpdf, int $x, int $y, int $size): void
     {
         $logoPath = $logo->getPath();
         $logoHeight = $logo->getResizeToHeight();

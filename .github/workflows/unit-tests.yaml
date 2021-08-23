@@ -32,7 +32,7 @@ jobs:
 
       - name: Download dependencies
         run: |
-          composer update --no-interaction --no-progress --optimize-autoloader
+          composer update --no-interaction
           ./vendor/bin/simple-phpunit install
 
       - name: Run PHPUnit

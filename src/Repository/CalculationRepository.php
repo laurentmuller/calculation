@@ -232,11 +232,12 @@ class CalculationRepository extends AbstractRepository
     {
         // build
         $builder = $this->createQueryBuilder('c')
-            ->select('COUNT(c.id)               as count')
-            ->addSelect('SUM(c.itemsTotal)      as items')
-            ->addSelect('SUM(c.overallTotal)    as total')
-            ->addSelect('YEAR(c.date)           as year')
-            ->addSelect('MONTH(c.date)          as month')
+            ->select('COUNT(c.id) as count')
+            ->addSelect('SUM(c.itemsTotal) as items')
+            ->addSelect('SUM(c.overallTotal) as total')
+            ->addSelect('YEAR(c.date) as year')
+            ->addSelect('MONTH(c.date) as month')
+            ->addSelect('SUM(c.overallTotal) / sum(c.itemsTotal) as margin')
             ->addGroupBy('year')
             ->addGroupBy('month')
             ->orderBy('year', Criteria::DESC)
@@ -253,6 +254,11 @@ class CalculationRepository extends AbstractRepository
             $dt = new \DateTime();
             $dt->setDate($y, $m, 1);
             $item['date'] = $dt;
+            $item['items'] = (float) $item['items'];
+            $item['total'] = (float) $item['total'];
+            $item['margin'] = (float) $item['margin'];
+            $item['year'] = (float) $item['year'];
+            $item['month'] = (int) $item['month'];
         }
 
         //reverse

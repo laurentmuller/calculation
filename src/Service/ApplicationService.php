@@ -489,12 +489,10 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     public function isMarginBelow($value): bool
     {
-        if (\is_float($value)) {
-            return $value < $this->getMinMargin();
-        } elseif ($value instanceof Calculation) {
+        if ($value instanceof Calculation) {
             return $value->isMarginBelow($this->getMinMargin());
         } else {
-            return false;
+            return (float) $value < $this->getMinMargin();
         }
     }
 

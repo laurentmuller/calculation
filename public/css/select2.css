@@ -17,6 +17,10 @@
     margin-bottom: 1px;
 }
 
+.select2-selection--multiple .select2-search__field {
+    margin-left: 0.25rem;
+}
+
 .select2-container .select2-selection--single,
 .select2-container .select2-selection--multiple,
 .select2-results__option--selectable {
@@ -38,6 +42,7 @@
     vertical-align: middle;
     background-color: transparent;
     border-color: transparent;
+    margin: 2px;
 }
 
 .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__rendered {

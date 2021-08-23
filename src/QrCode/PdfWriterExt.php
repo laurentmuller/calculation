@@ -30,8 +30,19 @@ final class PdfWriterExt implements WriterInterface
 
     public function write(QrCodeInterface $qrCode, LogoInterface $logo = null, LabelInterface $label = null, array $options = []): ResultInterface
     {
-        $matrixFactory = new MatrixFactory();
-        $matrix = $matrixFactory->create($qrCode);
+        if (!\class_exists(\FPDF::class)) {
+            throw new \Exception('Unable to find FPDF: check your installation');
+        }
+
+        $foregroundColor = $qrCode->getForegroundColor();
+        if ($foregroundColor->getAlpha() > 0) {
+            throw new \Exception('PDF Writer does not support alpha channels');
+        }
+
+        $backgroundColor = $qrCode->getBackgroundColor();
+        if ($backgroundColor->getAlpha() > 0) {
+            throw new \Exception('PDF Writer does not support alpha channels');
+        }
 
         $unit = 'mm';
         if (isset($options[self::WRITER_OPTION_UNIT])) {
@@ -43,22 +54,12 @@ final class PdfWriterExt implements WriterInterface
             throw new \Exception(\sprintf('PDF Measure unit should be one of [%s]', \implode(', ', $allowedUnits)));
         }
 
+        $matrixFactory = new MatrixFactory();
+        $matrix = $matrixFactory->create($qrCode);
+
         $labelSpace = 0;
         if ($label instanceof LabelInterface) {
             $labelSpace = 30;
-        }
-
-        if (!\class_exists(\FPDF::class)) {
-            throw new \Exception('Unable to find FPDF: check your installation');
-        }
-
-        $foregroundColor = $qrCode->getForegroundColor();
-        if ($foregroundColor->getAlpha() > 0) {
-            throw new \Exception('PDF Writer does not support alpha channels');
-        }
-        $backgroundColor = $qrCode->getBackgroundColor();
-        if ($backgroundColor->getAlpha() > 0) {
-            throw new \Exception('PDF Writer does not support alpha channels');
         }
 
         $outerSize = $matrix->getOuterSize();
@@ -108,12 +109,17 @@ final class PdfWriterExt implements WriterInterface
         }
 
         if ($label instanceof LabelInterface) {
-            $fpdf->SetXY($x, $y + $outerSize + $labelSpace - 25);
-            $fpdf->SetFont('Helvetica', null, $label->getFont()->getSize());
-            $fpdf->Cell($outerSize, 0, $label->getText(), 0, 0, 'C');
+            $this->addLabel($label, $fpdf, $x, $y + $outerSize + $labelSpace - 25, $outerSize);
         }
 
         return new PdfResult($fpdf);
+    }
+
+    private function addLabel(LabelInterface $label, \FPDF $fpdf, int $x, int $y, int $size): void
+    {
+        $fpdf->SetXY($x, $y);
+        $fpdf->SetFont('Helvetica', null, $label->getFont()->getSize());
+        $fpdf->Cell($size, 0, $label->getText(), 0, 0, 'C');
     }
 
     private function addLogo(LogoInterface $logo, \FPDF $fpdf, int $x, int $y, int $size): void

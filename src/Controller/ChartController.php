@@ -48,7 +48,7 @@ class ChartController extends AbstractController
         $data['tabular'] = $tabular;
         $data['allowed_months'] = $this->getAllowedMonths($repository);
 
-        return $this->renderForm('chart/last_month_chart.html.twig', $data);
+        return $this->renderForm('chart/by_month_chart.html.twig', $data);
     }
 
     /**
@@ -163,17 +163,7 @@ class ChartController extends AbstractController
 
         // margins (percent)
         $marginsPercent = \array_map(function (array $item): float {
-            $items = (float) ($item['items']);
-            $total = (float) ($item['total']);
-            if ($this->isFloatZero($total)) {
-                return 0;
-            }
-            $margin = $this->safeDivide($total, $items);
-            if (!$this->isFloatZero($margin)) {
-                --$margin;
-            }
-
-            return $margin;
+            return (float) $item['margin'];
         }, $data);
 
         // margins (amount)
@@ -291,9 +281,6 @@ class ChartController extends AbstractController
         $total = \array_sum($sumData);
         $marginAmount = $total - $items;
         $marginPercent = $this->safeDivide($total, $items);
-        if (!$this->isFloatZero($marginPercent)) {
-            --$marginPercent;
-        }
 
         return [
             'chart' => $chart,
@@ -321,15 +308,18 @@ class ChartController extends AbstractController
         // get values
         $states = $repository->getListCountCalculations();
 
-        // update percents
+        // update
         $count = \array_reduce($states, function (float $carry, array $state) {
             return $carry + $state['count'];
         }, 0);
         $total = \array_reduce($states, function (float $carry, array $state) {
             return $carry + $state['total'];
         }, 0);
+        $items = \array_reduce($states, function (float $carry, array $state) {
+            return $carry + $state['items'];
+        }, 0);
         foreach ($states as &$state) {
-            $state['percent'] = $this->safeDivide((float) $state['total'], $total);
+            $state['percent'] = $this->safeDivide((float) $state['count'], $count);
         }
 
         // title
@@ -406,6 +396,7 @@ class ChartController extends AbstractController
             'data' => $states,
             'count' => $count,
             'total' => $total,
+            'margin' => $this->safeDivide($total, $items),
         ];
     }
 

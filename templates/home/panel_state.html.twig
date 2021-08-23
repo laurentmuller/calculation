@@ -1,17 +1,32 @@
 {# macros #}
-{% macro cardEntry(count, total, text, color, list_path, parameters=[]) -%}
+{% macro sup_margin(margin, min_margin) -%}
+{%- if margin < min_margin -%}
+    {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) -%}
+    {%- set class_name = 'text-danger has-tooltip' -%}
+{% else %}
+    {%- set margin_title = 'calculation.fields.globalMargin'|trans -%}
+    {%- set class_name = '' -%}
+{%- endif -%}
+<sup title="{{ margin_title }}" class="{{ class_name }}" data-html="true"><small>{{ margin|percent }}</small></sup>
+{%- endmacro %}
+
+{% macro cardEntry(count, total, text, color, list_path, parameters=[], percentage, margin, min_margin) -%}
 {% import 'macros/_properties.html.twig' as properties %}
-<div class="card text-center m-1{% if color %} text-border{% endif %}"{% if color %} style="{{ properties.stateCss(color) }}"{% endif %}>
-    <div class="card-header p-1">
+<div class="card m-1{% if color %} text-border{% endif %}"{% if color %} style="{{ properties.stateCss(color) }}"{% endif %}>
+    <div class="card-body card-body-tootlip p-2">
+    <div class="card-title mb-1">
     {%- if list_path -%}
-        <a href="{{ path(list_path, parameters) }}" class="card-link">{{ text }}</a>
+        <a href="{{ path(list_path, parameters) }}" class="card-link" title="{{ 'index.panel_state_title'|trans }}">{{ text }}</a>
     {%- else -%}
         <span>{{ text }}</span>
     {%- endif -%}
     </div>
-    <div class="card-body px-1 pt-1 pb-0">
-        <p class="h4 font-weight-normal mb-1">{{ count|integer }}</p>
-        <p class="m-0 mb-1">{{ total|amount }}</p>
+        <h3 class="font-weight-normal my-1">
+            {{- total|integer }} {{ _self.sup_margin(margin, min_margin) -}}
+        </h3>
+        <p class="card-text">
+            {{- 'counters.calculations_lower'|trans({'%count%': count|integer}) }} <sup>{{ percentage|percent }}</sup>
+        </p>
     </div>
 </div>
 {%- endmacro %}
@@ -40,9 +55,9 @@
     {% if states|length %}
         {% for state in states %}
             {%- set parameters = app.displayTabular ? {'search[0][index]': 8, 'search[0][value]': state.id} : {'query': state.code} -%}
-            {{ _self.cardEntry(state.count, state.total, state.code, state.color, list_path, parameters) }}
+            {{ _self.cardEntry(state.count, state.total, state.code, state.color, list_path, parameters, state.count / states_count, state.margin, min_margin) }}
         {% endfor %}
-        {{ _self.cardEntry(states_count, states_total, 'calculation.fields.total'|trans, '', list_path) }}
+        {{ _self.cardEntry(states_count, states_total, 'calculation.fields.total'|trans, '', list_path, [], 1, states_margin, min_margin) }}
     {% else %}
         <div class="alert alert-warning flex-fill mb-0 py-2 text-center" role="alert">
             {{ 'calculation.list.empty'|trans }}

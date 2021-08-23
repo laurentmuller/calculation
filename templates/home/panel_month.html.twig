@@ -1,17 +1,32 @@
 {# macros #}
-{% macro cardEntry(count, total, date, list_path) -%}
-<div class="card text-center m-1">
-    <div class="card-header p-1">
-    {%- set text = date|strftime('%b %Y') -%}
-    {%- if list_path -%}
-        <a href="{{ path(list_path, {'query': date|strftime('%m.%Y')}) }}" class="card-link">{{ text }}</a>
-    {%- else -%}
-        <span>{{ text }}</span>
-    {%- endif -%}
-    </div>
-    <div class="card-body px-1 pt-1 pb-0">
-        <p class="h4 font-weight-normal mb-1">{{ count|integer }}</p>
-        <p class="m-0 mb-1">{{ total|amount }}</p>
+{% macro sup_margin(margin, min_margin) -%}
+{%- if margin < min_margin -%}
+    {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) -%}
+    {%- set class_name = 'text-danger has-tooltip' -%}
+{% else %}
+    {%- set margin_title = 'calculation.fields.globalMargin'|trans -%}
+    {%- set class_name = '' -%}
+{%- endif -%}
+<sup title="{{ margin_title }}" class="{{ class_name }}" data-html="true"><small>{{ margin|percent }}</small></sup>
+{%- endmacro %}
+
+{% macro cardEntry(count, total, date, margin, list_path, min_margin) -%}
+<div class="card m-1">
+    <div class="card-body card-body-tootlip p-2">
+        <div class="card-title mb-1">
+        {%- set text = date|strftime('%B %Y') -%}
+        {%- if list_path -%}
+            <a href="{{ path(list_path, {'query': date|strftime('%m.%Y')}) }}" class="card-link" title="{{ 'index.panel_month_title'|trans }}">{{ text }}</a>
+        {%- else -%}
+            <span>{{ text }}</span>
+        {%- endif -%}
+        </div>
+        <h3 class="font-weight-normal my-1">
+            {{- total|integer }} {{ _self.sup_margin(margin, min_margin) -}}
+        </h3>
+        <p class="card-text">
+            {{- 'counters.calculations_lower'|trans({'%count%': count|integer}) -}}
+        </p>
     </div>
 </div>
 {%- endmacro %}
@@ -39,7 +54,7 @@
     <div class="card-body card-deck py-2">
     {% if months|length %}
         {% for month in months %}
-            {{ _self.cardEntry(month.count, month.total, month.date, list_path) }}
+            {{ _self.cardEntry(month.count, month.total, month.date, month.margin, list_path, min_margin) }}
         {% endfor %}
     {% else %}
         <div class="alert alert-warning flex-fill mb-0 py-2 text-center" role="alert">

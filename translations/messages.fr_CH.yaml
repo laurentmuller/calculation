@@ -601,7 +601,9 @@ index:
     menu_chart_title: Afficher le graphique
     panel_last: Dernières calculations
     panel_month: Résumé par mois
+    panel_month_title: Afficher les calculations pour ce mois
     panel_state: Calculations par statut
+    panel_state_title: Afficher les calculations pour ce statut
     toggle_navigation: Basculer la navigation
     disabled: Vous ne pouvez pas accéder à ce site car votre profile a été désactivé.<br><br>Veuillez demander à votre supérieur ou à l'administrateur du site pour vous octroyer les droits nécessaires.
 about:

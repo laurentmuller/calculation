@@ -105,7 +105,7 @@ function formatCategory(category) {
     }
 
     const $icon = $('<i/>', {
-        'class': 'fas fa-folder fa-fw',
+        'class': 'far fa-folder fa-fw',
     });
     const $span = $('<span/>', {
         'class': 'text-truncate',
@@ -124,7 +124,7 @@ function formatCategorySelection(category) {
     }
 
     const $icon = $('<i/>', {
-        'class': 'fas fa-folder fa-fw',
+        'class': 'far fa-folder fa-fw',
     });
     const $span = $('<span/>', {
         'text': text,

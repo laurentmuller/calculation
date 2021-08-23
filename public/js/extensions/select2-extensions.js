@@ -117,14 +117,8 @@
                         $search[0].focus();
                     }
                 }).on('change', function () {
-                    $('.select2-selection__choice__remove span').text('').addClass('fa-fw fas fa-times');
-                });
-
-                // update css
-                $('.select2').css('width', '');
-                // $('.select2-container--bootstrap4
-                // .select2-selection').css('border-radius', radius);
-                $('.select2-selection__choice__remove span').text('').addClass('fa-fw fas fa-times');
+                    $('.select2-selection__choice__remove').text('').addClass('fas fa-times');
+                }).css('width', '');
 
                 const select2 = $select.data('select2');
                 if ($select.hasAttr('multiple')) {

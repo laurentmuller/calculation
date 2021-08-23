@@ -69,7 +69,14 @@ class CalculationStateRepository extends AbstractRepository
             ->andWhere('(c.overallTotal / c.itemsTotal) < :margin')
             ->setParameter('margin', $margin, Types::FLOAT);
 
-        return $builder->getQuery()->getArrayResult();
+        $results = $builder->getQuery()->getArrayResult();
+        foreach ($results as &$result) {
+            $result['total'] = (float) $result['total'];
+            $result['items'] = (float) $result['items'];
+            $result['margin'] = (float) $result['margin'];
+        }
+
+        return $results;
     }
 
     /**
@@ -81,9 +88,16 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getListCountCalculations(): array
     {
-        return $this->getListCountQueryBuilder()
+        $results = $this->getListCountQueryBuilder()
             ->getQuery()
             ->getArrayResult();
+        foreach ($results as &$result) {
+            $result['total'] = (float) $result['total'];
+            $result['items'] = (float) $result['items'];
+            $result['margin'] = (float) $result['margin'];
+        }
+
+        return $results;
     }
 
     /**
@@ -109,8 +123,10 @@ class CalculationStateRepository extends AbstractRepository
             ->addSelect('s.code')
             ->addSelect('s.editable')
             ->addSelect('s.color')
-            ->addSelect('COUNT(c.id)         as count')
+            ->addSelect('COUNT(c.id) as count')
             ->addSelect('SUM(c.overallTotal) as total')
+            ->addSelect('SUM(c.itemsTotal) as items')
+            ->addSelect('SUM(c.overallTotal) / sum(c.itemsTotal) as margin')
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
             ->orderBy('s.code', Criteria::ASC);

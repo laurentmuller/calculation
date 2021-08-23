@@ -16,6 +16,7 @@
                 <th class="text-currency">{{ 'fields.count'|trans }}</th>
                 <th class="text-currency">{{ 'fields.percent'|trans }}</th>
                 <th class="text-currency">{{ 'fields.sum'|trans }}</th>
+                <th class="text-currency">{{ 'fields.margin'|trans }}</th>
             </tr>
         </thead>
         <tbody data-link="row" class="rowlink">
@@ -26,8 +27,9 @@
                     <span class="mr-1 text-border" style="{{ properties.stateCss(item.color) }}"></span><a href="{{ path(list_path, parameters) }}">{{ item.code }}</a>
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
-                <td class="text-currency">{{ item.percent|percent(true, 1) }}</td>
+                <td class="text-currency">{{ item.percent|percent(true) }}</td>
                 <td class="text-currency">{{ item.total|amount }}</td>
+                <td class="text-currency{% if app.marginBelow(item.margin) %} text-danger{% endif %}">{{ item.margin|percent(true) }}</td>
             </tr>
             {% endfor -%}
         </tbody>
@@ -35,8 +37,9 @@
             <tr>
                 <td class="font-weight-bold">{{ 'fields.total'|trans }}</td>
                 <td class="font-weight-bold text-currency">{{ count|integer }}</td>
-                <td class="font-weight-bold text-currency">{{ 1|percent(true, 1) }}</td>
+                <td class="font-weight-bold text-currency">{{ 1|percent(true) }}</td>
                 <td class="font-weight-bold text-currency">{{ total|amount }}</td>
+                <td class="font-weight-bold text-currency{% if app.marginBelow(margin) %} text-danger{% endif %}">{{ margin|percent(true) }}</td>
             </tr>
         </tfoot>
     </table>

@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Traits\MathTrait;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,6 +26,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class HomeController extends AbstractController
 {
+    use MathTrait;
+
     /**
      * Display the home page.
      *
@@ -43,12 +46,15 @@ class HomeController extends AbstractController
         $min_margin = $this->getApplication()->getMinMargin();
 
         // get states count and total
-        [$states_count, $states_total] = \array_reduce($states, function (array $carry, array $state) {
+        [$states_count, $states_total, $states_items] = \array_reduce($states, function (array $carry, array $state) {
             $carry[0] += $state['count'];
             $carry[1] += $state['total'];
+            $carry[2] += $state['items'];
 
             return $carry;
-        }, [0, 0]);
+        }, [0, 0, 0]);
+
+        $states_margin = $this->safeDivide($states_total, $states_items);
 
         // render view
         return $this->renderForm('home/index.html.twig', [
@@ -56,6 +62,7 @@ class HomeController extends AbstractController
             'min_margin' => $min_margin,
             'states_count' => $states_count,
             'states_total' => $states_total,
+            'states_margin' => $states_margin,
             'states' => $states,
             'months' => $months,
         ]);

@@ -9,7 +9,7 @@ $.fn.extend({
 
     /**
      * Creates the context menu items.
-     * 
+     *
      * @returns {Object} the context menu items.
      */
     getContextMenuItems: function () {
@@ -66,4 +66,11 @@ $.fn.extend({
             customClass: 'tooltip-danger overall-card'
         });
     }
+
+    // enable tooltips
+    $('.card-body-tootlip').tooltip({
+        selector: '.has-tooltip',
+        customClass: 'tooltip-danger'
+    });
+
 }(jQuery));

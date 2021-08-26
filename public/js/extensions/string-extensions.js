@@ -78,7 +78,7 @@ String.prototype.dasherize = function () {
 /* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.camelize = function () {
     'use strict';
-    return this.trim().replace(/[-_\s]+(.)?/g, function (match, c) {
+    return this.trim().replace(/[-_\s]+(.)?/g, function (_match, c) {
         return c ? c.toUpperCase() : '';
     });
 };

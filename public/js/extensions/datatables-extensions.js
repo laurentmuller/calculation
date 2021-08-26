@@ -313,7 +313,7 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
     }).on('preDraw', function () {
         $('.has-tooltip').tooltip('hide');
 
-    }).on('draw', function (e, settings) {
+    }).on('draw', function (_e, settings) {
         // select
         if (lastPageCalled) {
             table.selectLastRow();
@@ -331,19 +331,19 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
     }).on('length.dt', function () {
         enableKeys();
 
-    }).on('key-focus', function (e, datatable, cell) {
+    }).on('key-focus', function (_e, datatable, cell) {
         // select row
         const row = datatable.row(cell.index().row);
         $(row.node()).addClass('table-primary').scrollInViewport(0, 60);
         datatable.updateButtons();
 
-    }).on('key-blur', function (e, datatable, cell) {
+    }).on('key-blur', function (_event, datatable, cell) {
         // unselect row
         const row = datatable.row(cell.index().row);
         $(row.node()).removeClass('table-primary');
         datatable.updateButtons();
 
-    }).on('key', function (e, datatable, key, cell, event) {
+    }).on('key', function (_e, _datatable, key, _cell, event) {
         switch (key) {
         case 13: // enter
             return $table.editOrShow(event);

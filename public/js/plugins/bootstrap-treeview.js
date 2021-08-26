@@ -492,7 +492,7 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-            const event = $.Event('collapseall', {
+            const event = $.Event('collapseall', { // jshint ignore:line
                 'items': $items});
             if (!that.trigger(event)) {
                 return that;
@@ -521,7 +521,7 @@
                 return $(this).prev('.list-group-item');
             });
             // jshint ignore:line
-            const event = $.Event('expandall', {
+            const event = $.Event('expandall', { // jshint ignore:line
                 'items': $items});
             if (!that.trigger(event)) {
                 return that;

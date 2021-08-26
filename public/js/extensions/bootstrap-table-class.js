@@ -22,12 +22,12 @@ BootstrapTable.prototype.init = function () {
 
     const that = this;
 
-    that.onClickRow = function (row, $element) {
+    that.onClickRow = function (_row, $element) {
         that.updateRow($element);
         that.enableKeys();
     };
 
-    that.onDblClickRow = function (row, $element, field) {
+    that.onDblClickRow = function (_row, $element, field) {
         that.updateRow($element);
         if(field !== 'action') {
             that.editRow($element);
@@ -57,7 +57,7 @@ BootstrapTable.prototype.init = function () {
         that.updateHistory().toggleClass('table-hover', isData);
 
         // update pagination
-        $('.fixed-table-pagination .page-link').each(function (index, element) {
+        $('.fixed-table-pagination .page-link').each(function (_index, element) {
             const $element = $(element);
             $element.attr('title', $element.attr('aria-label'));
         });
@@ -721,12 +721,12 @@ BootstrapTable.prototype.tagName = function ($source, newTag, excludeAttributes)
     newTag = "<" + newTag + ">";
     excludeAttributes = excludeAttributes || [];
 
-    return $source.each(function (index, element){
+    return $source.each(function (_index, element){
         const $element = $(element);
         const $newTag = $(newTag, {
             html: $element.html()
         });
-        $.each(element.attributes, function (i, attribute) {
+        $.each(element.attributes, function (_index, attribute) {
             if (!excludeAttributes.includes(attribute.name)) {
                 $newTag.attr(attribute.name, attribute.value);
             }

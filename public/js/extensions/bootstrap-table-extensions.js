@@ -79,12 +79,12 @@ $.fn.extend({
         newTag = "<" + newTag + ">";
         excludeAttributes = excludeAttributes || [];
 
-        return $(this).each(function (index, element){
+        return $(this).each(function (_index, element){
             const $element = $(element);
             const $newTag = $(newTag, {
                 html: $element.html()
             });
-            $.each(element.attributes, function (i, attribute) {
+            $.each(element.attributes, function (_index, attribute) {
                 if (!excludeAttributes.includes(attribute.name)) {
                     $newTag.attr(attribute.name, attribute.value);
                 }
@@ -135,13 +135,13 @@ $.fn.extend({
         // settings
         const defaults = {
             // select row on click
-            onClickRow: function (row, $element) {
+            onClickRow: function (_row, $element) {
                 $element.updateRow($this);
                 $this.enableKeys();
             },
 
             // edit row on double-click
-            onDblClickRow: function (row, $element, field) {
+            onDblClickRow: function (_row, $element, field) {
                 $element.updateRow($this);
                 if(field !== 'action') {
                     $this.editRow($element);
@@ -162,7 +162,7 @@ $.fn.extend({
                 $this.updateHistory().toggleClass('table-hover', isData);
 
                 // update pagination
-                $('.fixed-table-pagination .page-link').each(function (index, element) {
+                $('.fixed-table-pagination .page-link').each(function (_index, element) {
                     const $element = $(element);
                     $element.attr('title', $element.attr('aria-label'));
                 });

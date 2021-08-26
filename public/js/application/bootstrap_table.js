@@ -81,12 +81,12 @@ function formatProductClass(row) { // jshint ignore:line
  * Cell style for a border column (calculations, status or log).
  *
  * @param {number}
- *            value - the field value.
+ *            _value - the field value.
  * @param {object}
  *            row - the record data.
  * @returns {object} the cell style.
  */
-function styleBorderColor(value, row) { // jshint ignore:line
+function styleBorderColor(_value, row) { // jshint ignore:line
     'use strict';
     if (typeof row.color !== 'undefined') {
         return {
@@ -163,12 +163,12 @@ function isConnectedUser($table, row) {
  *            {jQuery} the parent table.
  * @param row
  *            {object} the row data.
- * @param $element
+ * @param _$element
  *            {jQuery} the table row.
  * @param $action
  *            {jQuery} the action to update
  */
-function updateUserAction($table, row, $element, $action) {
+function updateUserAction($table, row, _$element, $action) {
     'use strict';
     if(isConnectedUser($table, row)) {
         $action.remove();
@@ -182,12 +182,12 @@ function updateUserAction($table, row, $element, $action) {
  *            {jQuery} the parent table.
  * @param row
  *            {object} the row data.
- * @param $element
+ * @param _$element
  *            {jQuery} the table row.
  * @param $action
  *            {jQuery} the action to update
  */
-function updateUserSwitchAction($table, row, $element, $action) {
+function updateUserSwitchAction($table, row, _$element, $action) {
     'use strict';
     if(isConnectedUser($table, row)) {
         $action.prev('.dropdown-divider').remove();
@@ -209,12 +209,12 @@ function updateUserSwitchAction($table, row, $element, $action) {
  *            {jQuery} the parent table.
  * @param row
  *            {object} the row data.
- * @param $element
+ * @param _$element
  *            {jQuery} the table row.
  * @param $action
  *            {jQuery} the action to update
  */
-function updateSearchAction($table, row, $element, $action) {
+function updateSearchAction($table, row, _$element, $action) {
     'use strict';
     if($action.is('.btn-show') && !row.showGranted) {
         $action.remove();
@@ -239,7 +239,7 @@ function updateSearchAction($table, row, $element, $action) {
 /**
  * Update the edit calculation action.
  *
- * @param $table
+ * @param _$table
  *            {jQuery} the parent table.
  * @param row
  *            {object} the row data.
@@ -248,7 +248,7 @@ function updateSearchAction($table, row, $element, $action) {
  * @param $action
  *            {jQuery} the action to update
  */
-function updateCalculationEditAction($table, row, $element, $action) {
+function updateCalculationEditAction(_$table, row, $element, $action) {
     'use strict';
     const textMuted = Number.parseInt(row.textMuted, 10);
     if(!Number.isNaN(textMuted) && textMuted === 0) {
@@ -265,16 +265,16 @@ function updateCalculationEditAction($table, row, $element, $action) {
 /**
  * Update the export calculation action.
  *
- * @param $table
+ * @param _$table
  *            {jQuery} the parent table.
- * @param row
+ * @param _row
  *            {object} the row data.
- * @param $element
+ * @param _$element
  *            {jQuery} the table row.
  * @param $action
  *            {jQuery} the action to update
  */
-function updateCalculationAction($table, row, $element, $action) {
+function updateCalculationAction(_$table, _row, _$element, $action) {
     'use strict';
     const href = $action.attr('href').split('?')[0];
     $action.attr('href', href);
@@ -283,16 +283,16 @@ function updateCalculationAction($table, row, $element, $action) {
 /**
  * Update the task compute action.
  *
- * @param $table
+ * @param _$table
  *            {jQuery} the parent table.
  * @param row
  *            {object} the row data.
- * @param $element
+ * @param _$element
  *            {jQuery} the table row.
  * @param $action
  *            {jQuery} the action to update
  */
-function updateTaskComputeAction($table, row, $element, $action) {
+function updateTaskComputeAction(_$table, row, _$element, $action) {
     'use strict';
     const items = Number.parseInt(row.items, 10);
     if(Number.isNaN(items) || items === 0) {
@@ -307,10 +307,10 @@ function updateTaskComputeAction($table, row, $element, $action) {
  * @param {number}
  *            value - the field value (id).
  * @param {object}
- *            row - the row record data.
+ *            _row - the row record data.
  * @returns {string} the rendered cell.
  */
-function formatActions(value, row) { // jshint ignore:line
+function formatActions(value, _row) { // jshint ignore:line
     'use strict';
     const substr = '$1' + value;
     const regex = /(\/|\bid=)(\d+)/;
@@ -527,7 +527,7 @@ $.fn.extend({
             }
         },
 
-        onRenderCustomView: function ($table, row, $item) {
+        onRenderCustomView: function (_$table, row, $item) {
             // update border color
             if (typeof row.color !== 'undefined') {
                 const style = 'border-left-color: ' + row.color + ' !important';
@@ -551,7 +551,7 @@ $.fn.extend({
             }
         },
 
-        onRenderCardView: function ($table, row, $item) {
+        onRenderCardView: function (_$table, row, $item) {
             // border color
             if (typeof row.color !== 'undefined') {
                 const $cell = $item.find('td:first');
@@ -586,14 +586,14 @@ $.fn.extend({
             }
         },
 
-        onUpdateHref: function ($table, $actions) {
+        onUpdateHref: function (_$table, $actions) {
             if($actions.length === 1) {
                 $actions.addClass('btn-default');
             }
         },
 
         // show message
-        onLoadError: function (status, jqXHR) {
+        onLoadError: function (_status, jqXHR) {
             if ('abort' !== jqXHR.statusText) {
                 const title = $('.card-title').text();
                 const message = $table.data('errorMessage');

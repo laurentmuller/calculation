@@ -216,14 +216,14 @@
          * element.
          *
          * @param {function}
-         *            callback - The callback function that will be executed
+         *            _callback - The callback function that will be executed
          *            after the timer expires.
          * @param {int}
-         *            timeout - The number of milliseconds to wait before
+         *            _timeout - The number of milliseconds to wait before
          *            executing the callback.
          * @return {jQuery} The jQuery element for chaining.
          */
-        updateTimer: function (callback, timeout) {// jshint ignore:line
+        updateTimer: function (_callback, _timeout) {// jshint ignore:line
             $(this).removeTimer();
             return $.fn.createTimer.apply(this, arguments);
         },
@@ -276,13 +276,13 @@
          * callback and timeout values.
          *
          * @param {function}
-         *            callback - The callback function that will be executed.
+         *            _callback - The callback function that will be executed.
          * @param {int}
-         *            timeout - The intervals (in milliseconds) on how often to
+         *            _timeout - The intervals (in milliseconds) on how often to
          *            execute the callback.
          * @return {jQuery} The jQuery element for chaining.
          */
-        updateInterval: function (callback, timeout) { // jshint ignore:line
+        updateInterval: function (_callback, _timeout) { // jshint ignore:line
             $(this).removeInterval();
             return $.fn.createInterval.apply(this, arguments);
         },
@@ -475,7 +475,7 @@
          * @return {jQuery} The jQuery element for chaining.
          */
         removeDuplicateClasses: function () {
-            return this.each(function (i, element) {
+            return this.each(function (_index, element) {
                 const $this = $(element);
                 const source = $this.attr('class');
                 const target = source.split(' ').unique();

@@ -13,19 +13,15 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 /**
- * Unit test for {@link App\Controller\HomeController} class.
+ * Unit test for {@link App\Controller\SiteMapController} class.
  *
  * @author Laurent Muller
  */
-class HomeControllerTest extends AbstractControllerTest
+class SiteMapControllerTest extends AbstractControllerTest
 {
     public function getRoutes(): array
     {
         return [
-            ['/', self::ROLE_USER],
-            ['/', self::ROLE_ADMIN],
-            ['/', self::ROLE_SUPER_ADMIN],
-
             ['/sitemap', self::ROLE_USER],
             ['/sitemap', self::ROLE_ADMIN],
             ['/sitemap', self::ROLE_SUPER_ADMIN],

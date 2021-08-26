@@ -11,34 +11,29 @@
     // ----------------------------------------------
     // PasswordStrength public class definition
     // ----------------------------------------------
-    const PasswordStrength = function (element, options) {
-        const that = this;
-        that.$element = $(element);
-        that.options = $.extend(true, {}, PasswordStrength.DEFAULTS, options);
-
-        // add handler
-        that.$element.on('keyup', function () {
-            that.onKeyup();
-        });
-        if (that.$element.val()) {
-            that.onKeyup();
-        }
-    };
-
-    // -----------------------------
-    // Prototype functions
-    // -----------------------------
-    PasswordStrength.prototype = {
+    const PasswordStrength = class {
 
         /**
          * Constrcutor.
          */
-        constructor: PasswordStrength,
+        constructor(element, options) {
+            const that = this;
+            that.$element = $(element);
+            that.options = $.extend(true, {}, PasswordStrength.DEFAULTS, options);
+
+            // add handler
+            that.$element.on('keyup', function () {
+                that.onKeyup();
+            });
+            if (that.$element.val()) {
+                that.onKeyup();
+            }
+        }
 
         /**
          * Handles the password key up event.
          */
-        onKeyup: function () {
+        onKeyup() {
             let result;
             const that = this;
             const text = that.$element.val();
@@ -103,12 +98,12 @@
             if ($.isFunction(options.onScore)) {
                 options.onScore(verdict);
             }
-        },
+        }
 
         /**
          * Gets the verdict.
          */
-        getVerdict: function (result, options) {
+        getVerdict(result, options) {
             // value?
             if (!result) {
                 return {
@@ -128,12 +123,12 @@
                 percent: (score + 1) * 20,
                 text: text
             };
-        },
+        }
 
         /**
          * Gets the UI container.
          */
-        getContainer: function (options) {
+        getContainer(options) {
             // already set?
             const that = this;
             if (that.$container) {
@@ -147,12 +142,12 @@
             }
 
             return that.$container;
-        },
+        }
 
         /**
          * Gets or create the progress bars container.
          */
-        getProgress: function (options) {
+        getProgress(options) {
             // already created?
             const that = this;
             if (that.$progress) {
@@ -187,12 +182,12 @@
             }
 
             return that.$progress;
-        },
+        }
 
         /**
          * Gets or create the verdict label
          */
-        getLabel: function (options) {
+        getLabel(options) {
             // already created?
             const that = this;
             if (that.$label) {
@@ -215,24 +210,23 @@
             that.$label = that.createControl('span').appendTo($labelContainer);
 
             return that.$label;
-
-        },
+        }
 
         /**
          * Creates a HTML element.
          */
-        createControl: function (type, className) {
+        createControl(type, className) {
             const $element = $('<' + type + '/>');
             if (className) {
                 $element.addClass(className);
             }
             return $element;
-        },
+        }
 
         /**
          * Gets the content of the given named input.
          */
-        getInputValue: function (name) {
+        getInputValue(name) {
             if (name) {
                 return $(name).val() || false;
             }
@@ -289,7 +283,7 @@
     // -----------------------------------
     const oldPasswordStrength = $.fn.passwordstrength;
 
-    $.fn.passwordstrength = function (options) {
+    $.fn.passwordstrength = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
             let data = $this.data('passwordstrength');

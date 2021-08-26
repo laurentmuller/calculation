@@ -9,31 +9,17 @@
     /**
      * Table editor.
      */
-    var TableEditor = function (element, options) {
-        this.$element = $(element);
-        this.options = $.extend(true, {}, TableEditor.DEFAULTS, options);
-        this.options.dotCellClass = this.space2Dot(this.options.cellClass);
-        this.options.dotInputClass = this.space2Dot(this.options.inputClass);
-        this.init();
-    };
+    const TableEditor = class {
 
-    TableEditor.DEFAULTS = {
-        'cellClass': 'cell-editable',
-        'inputType': 'text',
-        'inputClass': 'form-control cell-editor',
-        'inputCss': {},
-        'onCreateInput': $.noop,
-        'onRemoveInput': $.noop,
-        'onKeyDown': $.noop,
-        'onInput': $.noop,
-        'onSave': $.noop,
-    };
+        constructor(element, options) {
+            this.$element = $(element);
+            this.options = $.extend(true, {}, TableEditor.DEFAULTS, options);
+            this.options.dotCellClass = this.space2Dot(this.options.cellClass);
+            this.options.dotInputClass = this.space2Dot(this.options.inputClass);
+            this.init();
+        }
 
-    TableEditor.prototype = {
-
-        constructor: TableEditor,
-
-        init: function () {
+        init() {
             // proxies
             this.clickProxy = $.proxy(this.click, this);
             this.keydownProxy = $.proxy(this.keydown, this);
@@ -46,9 +32,9 @@
             this.$element.on('keydown', options.dotInputClass, this.keydownProxy);
             this.$element.on('input', options.dotInputClass, this.inputProxy);
             this.$element.on('blur', options.dotInputClass, this.blurProxy);
-        },
+        }
 
-        destroy: function () {
+        destroy() {
             // remove handlers
             const options = this.options;
             this.$element.off('click', options.dotCellClass, this.clickProxy);
@@ -58,9 +44,9 @@
 
             // remove
             this.$element.removeData('tableEditor');
-        },
+        }
 
-        click: function (e) {
+        click(e) {
             const options = this.options;
             const $this = $(e.currentTarget);
 
@@ -97,9 +83,9 @@
 
             // show
             $input.select().focus();
-        },
+        }
 
-        keydown: function (e) {
+        keydown(e) {
             const $input = $(e.currentTarget);
             const keyCode = e.keyCode || e.which;
 
@@ -121,19 +107,19 @@
                 }
                 break;
             }
-        },
+        }
 
-        input: function (e) {
+        input(e) {
             if (this.isFunction(this.options.onInput)) {
                 this.options.onInput(e, $(e.currentTarget));
             }
-        },
+        }
 
-        blur: function (e) {
+        blur(e) {
             this.update(e, $(e.currentTarget));
-        },
+        }
 
-        save: function (e, $input) {
+        save(e, $input) {
             if (this.isFunction(this.options.onSave)) {
                 this.options.onSave(e, $input);
             }
@@ -141,9 +127,9 @@
                 e.preventDefault();
                 this.update(e, $input, $input.val());
             }
-        },
+        }
 
-        update: function (e, $input, content) {
+        update(e, $input, content) {
             const $parent = $input.parents('td');
             if (this.isFunction(this.options.onRemoveInput)) {
                 this.options.onRemoveInput(e, $input);
@@ -151,25 +137,37 @@
             content = content || $input.data('content');
             $parent.html(content).removeClass('p-0');
             $input.remove();
-        },
+        }
 
-        space2Dot: function (className) {
+        space2Dot(className) {
             // remove consecutive spaces
             className = className.replaceAll(/\s{2,}/g, ' ').trim();
             return '.' + className.replaceAll(' ', '.').trim();
-        },
+        }
 
-        isFunction: function (value) {
+        isFunction(value) {
             if (typeof value === 'function') {
                 return value !== $.noop;
             }
             return false;
-        },
+        }
+    };
+
+    TableEditor.DEFAULTS = {
+        'cellClass': 'cell-editable',
+        'inputType': 'text',
+        'inputClass': 'form-control cell-editor',
+        'inputCss': {},
+        'onCreateInput': $.noop,
+        'onRemoveInput': $.noop,
+        'onKeyDown': $.noop,
+        'onInput': $.noop,
+        'onSave': $.noop,
     };
 
     // TableEditor plugin definition
     const oldTableEditor = $.fn.tableEditor;
-    $.fn.tableEditor = function (options) {
+    $.fn.tableEditor = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
             let data = $this.data('tableEditor');

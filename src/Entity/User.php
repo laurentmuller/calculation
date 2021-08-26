@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\RoleInterface;
-use App\Interfaces\TableInterface;
 use App\Traits\RightsTrait;
 use App\Util\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
@@ -130,11 +129,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private bool $verified = false;
 
     /**
-     * The prefered view.
-     */
-    private string $view = TableInterface::VIEW_TABLE;
-
-    /**
      * {@inheritdoc}
      *
      * @see UserInterface
@@ -199,7 +193,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     public function getDisplay(): string
     {
-        return (string) $this->getUsername();
+        return $this->getUsername();
     }
 
     /**
@@ -331,7 +325,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->username;
+        return $this->getUsername();
     }
 
     /**
@@ -342,14 +336,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function getUsername(): string
     {
         return (string) $this->username;
-    }
-
-    /**
-     * Gets the preferred view.
-     */
-    public function getView(): string
-    {
-        return $this->view;
     }
 
     /**
@@ -408,6 +394,9 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this->verified;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function serialize(): string
     {
         return \serialize([
@@ -526,24 +515,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function setVerified(bool $verified): self
     {
         $this->verified = $verified;
-
-        return $this;
-    }
-
-    /**
-     * Sets the preferred view.
-     */
-    public function setView(string $view): self
-    {
-        switch ($view) {
-            case TableInterface::VIEW_CARD:
-            case TableInterface::VIEW_CUSTOM:
-                $this->view = $view;
-                break;
-                default:
-                    $this->view = TableInterface::VIEW_TABLE;
-                    break;
-        }
 
         return $this;
     }

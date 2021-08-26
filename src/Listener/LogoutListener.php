@@ -72,7 +72,7 @@ class LogoutListener implements EventSubscriberInterface
     {
         if (null !== $username && $this->setSessionFromRequest($request)) {
             $params = [
-                '%username%' => $username,
+                '%username%' => (string) $username,
                 '%appname%' => $this->appNameVersion,
             ];
             $this->succesTrans('security.logout.success', $params);

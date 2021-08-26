@@ -5,25 +5,23 @@
 /**
  * Edit task dialog handler.
  */
-var EditTaskDialog = function (application) {
-    'use strict';
-    this.application = application;
-    this._init();
-};
-
-EditTaskDialog.prototype = {
+const EditTaskDialog = class { /* exported EditTaskDialog */
 
     /**
      * Constructor.
      */
-    constructor: EditTaskDialog,
+    constructor(application) {
+        'use strict';
+        this.application = application;
+        this._init();
+    }
 
     /**
      * Display the add task dialog.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
-    showAdd: function () {
+    showAdd() {
         'use strict';
         // initialize
         this.application.initDragDialog();
@@ -36,53 +34,53 @@ EditTaskDialog.prototype = {
         this.$modal.modal('show');
 
         return this;
-    },
+    }
 
     /**
      * Hide the dialog.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
-    hide: function () {
+    hide() {
         'use strict';
         this.$modal.modal('hide');
         return this;
-    },
+    }
 
     /**
      * Gets the selected group.
      *
      * @returns {Object} the group.
      */
-    getGroup: function () {
+    getGroup() {
         'use strict';
         const $selection = this.$category.getSelectedOption();
         return {
             id: parseInt($selection.data('groupId'), 10),
             code: $selection.data('groupCode')
         };
-    },
+    }
 
     /**
      * Gets the selected category.
      *
      * @returns {Object} the category.
      */
-    getCategory: function () {
+    getCategory() {
         'use strict';
         const $selection = this.$category.getSelectedOption();
         return {
             id: this.$category.intVal(),
             code: $selection.text()
         };
-    },
+    }
 
     /**
      * Gets the selected items.
      *
      * @return {Object} the items.
      */
-    getItems: function () {
+    getItems() {
         'use strict';
 
         const quantity = this.$quantity.floatVal();
@@ -102,14 +100,14 @@ EditTaskDialog.prototype = {
                 total: total
             };
         }).get();
-    },
+    }
 
     /**
      * Initialize.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
-    _init: function () {
+    _init() {
         'use strict';
 
         // get elements
@@ -152,7 +150,7 @@ EditTaskDialog.prototype = {
             },
             rules: {
                 'task[quantity]': {
-                    greaterThanValue: 0
+                    greaterThanEqualValue: 0
                 }
             }
         };
@@ -160,21 +158,21 @@ EditTaskDialog.prototype = {
         that._update();
 
         return that;
-    },
+    }
 
     /**
      * Abort the ajax call.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
-    _abort: function () {
+    _abort() {
         'use strict';
         if (this.jqXHR) {
             this.jqXHR.abort();
             this.jqXHR = null;
         }
         return this;
-    },
+    }
 
     /**
      * Send data to server and update UI.
@@ -183,10 +181,11 @@ EditTaskDialog.prototype = {
      *            data - the data to send.
      * @return {EditTaskDialog} This instance for chaining.
      */
-    _send: function (data) {
+    _send(data) {
         'use strict';
         const that = this;
         const url = that.$form.data('url');
+        $('*').css('cursor', 'wait');
         that.jqXHR = $.post(url, data, function (response) {
             if (response.result) {
                 // update
@@ -201,20 +200,22 @@ EditTaskDialog.prototype = {
             } else {
                 that.showError(response.message);
             }
-        }).fail(function (jqXHR, textStatus) {
+        }).fail(function (_jqXHR, textStatus) {
             if (textStatus !== 'abort') {
                 that.showError(that.$form.data('failed'));
             }
+        }).always(function () {
+            $('*').css('cursor', '');
         });
         return that;
-    },
+    }
 
     /**
      * Gets UI values and send to the server.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
-    _update: function () {
+    _update() {
         'use strict';
 
         const that = this;
@@ -244,7 +245,7 @@ EditTaskDialog.prototype = {
 
         // cancel and send
         return that._abort()._send(data);
-    },
+    }
 
     /**
      * Format a value with 2 fixed decimals and grouping separator.
@@ -253,44 +254,44 @@ EditTaskDialog.prototype = {
      *            value - the value to format.
      * @returns {string} - the formatted value.
      */
-    _formatValue: function (value) {
+    _formatValue(value) {
         'use strict';
         return this.application.formatValue(value);
-    },
+    }
 
     /**
      * Gets selected items.
      *
      * @return {array} - the selected item identifiers.
      */
-    _getItems: function () {
+    _getItems() {
         'use strict';
         return $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
             return Number.parseInt($(this).attr('value'), 10);
         }).get();
-    },
+    }
 
     /**
      * Gets the selected category identifier.
      *
      * @return {int} the category identifier.
      */
-    _getCategory: function () {
+    _getCategory() {
         'use strict';
         const $selection = this.$task.getSelectedOption();
         return $selection.data('categoryId');
-    },
+    }
 
     /**
      * Gets the selected unit.
      *
      * @return {string} the unit.
      */
-    _getUnit: function () {
+    _getUnit() {
         'use strict';
         const $selection = this.$task.getSelectedOption();
         return $selection.data('unit');
-    },
+    }
 
     /**
      * Update a plain-text.
@@ -301,30 +302,30 @@ EditTaskDialog.prototype = {
      *            value - the value to format.
      * @return {EditTaskDialog} This instance for chaining.
      */
-    _updateValue: function (id, value) {
+    _updateValue(id, value) {
         'use strict';
         $('#' + id).text(this._formatValue(value));
         return this;
-    },
+    }
 
     /**
      * Update all plain-texts to 0.00.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
-    _resetValues: function () {
+    _resetValues() {
         'use strict';
         const value = this._formatValue(0);
         this.$form.find('.form-control-plaintext').text(value);
         return this;
-    },
+    }
 
     /**
      * Shows the error.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
-    _showError: function (message) {
+    _showError(message) {
         'use strict';
         this.resetValues();
         this.$submit.toggleDisabled(true);
@@ -332,27 +333,27 @@ EditTaskDialog.prototype = {
         const title = this.$modal.find('.dialog-title').text();
         Toaster.danger(message || this.$form.data('failed'), title, $('#flashbags').data());
         return this;
-    },
+    }
 
     /**
      * Handles the dialog show event.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
-    _onDialogShow: function () {
+    _onDialogShow() {
         'use strict';
         const key = this.$editingRow ? 'edit' : 'add';
         const title = this.$form.data(key);
         this.$modal.find('.dialog-title').text(title);
         return this;
-    },
+    }
 
     /**
      * Handles the dialog visible event.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
-    _onDialogVisible: function () {
+    _onDialogVisible() {
         'use strict';
         if (this.$editingRow) {
             this.$editingRow.addClass('table-primary');
@@ -365,26 +366,26 @@ EditTaskDialog.prototype = {
             this.$task.focus();
         }
         return this;
-    },
+    }
 
     /**
      * Handles the dialog hide event.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
-    _onDialogHide: function () {
+    _onDialogHide() {
         'use strict';
         // this.$editingRow = null;
         $('tr.table-primary').removeClass('table-primary');
         return this;
-    },
+    }
 
     /**
      * Handle the task input event.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
-    _onTaskChanged: function () {
+    _onTaskChanged() {
         'use strict';
 
         // toogle rows visibility

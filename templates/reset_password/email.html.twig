@@ -6,14 +6,16 @@
         font-size: 14px;
     }
 </style>
-<p><b>Bonjour {{ username }}</b></p>
+<p>Bonjour {{ username }},</p>
 <p>
-    Vous pouvez réinitialiser votre mot de passe en cliquant sur le lien suivant : <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">Réinitialiser le mot de passe</a>.<br>
-    <b>Remarque :</b> Ce lien expirera dans {{ token_life_time }} à partir de la demande de réinitialisation.
-<p/>
+    Vous pouvez réinitialiser votre mot de passe en cliquant sur le lien suivant : <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">Réinitialiser le mot de passe</a>.
+</p>
 <p>
     Si cette demande de réinitialisation n'a pas été effectuée par vous-même, aucune action n'est nécessaire et vous pouvez ignorer ce message.<br>
     Si vous avez besoin d'aide, veuillez contacter l'administrateur du site.
+</p>
+<p>
+    <b>Remarque :</b> Ce lien expirera dans {{ token_life_time }} à partir de la demande de réinitialisation.
 </p>
 <p>
     Cordialement,<br>

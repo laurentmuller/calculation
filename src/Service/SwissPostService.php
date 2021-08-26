@@ -211,7 +211,7 @@ class SwissPostService
         }
 
         // create a temporary file
-        if (!$tempName = FileUtils::tempfile('sql')) {
+        if (null === $temp_name = FileUtils::tempfile('sql')) {
             return [
                 'valid' => false,
                 'message' => $this->trans('import.error.temp_file'),
@@ -270,7 +270,7 @@ class SwissPostService
             }
 
             // open database
-            $db = new SwissDatabase($tempName);
+            $db = new SwissDatabase($temp_name);
             $db->beginTransaction();
 
             /** @var \DateTime|null $validity */
@@ -406,12 +406,9 @@ class SwissPostService
 
                 // move to new location
                 if ($valid) {
-                    FileUtils::rename($tempName, $this->getDatabaseName(), true);
+                    FileUtils::rename($temp_name, $this->getDatabaseName(), true);
                 }
             }
-
-            // delete temp file (if any)
-            FileUtils::remove($tempName);
         }
     }
 

@@ -356,7 +356,7 @@
     /*
      * check password score
      */
-    $.validator.addMethod('password', function (value, element, param) {
+    $.validator.addMethod('password', function (_value, element, param) {
         if (this.optional(element)) {
             return true;
         }

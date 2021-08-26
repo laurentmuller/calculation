@@ -198,7 +198,7 @@ const Application = {
         // draggable edit dialog
         $('.modal .modal-header').on('mousedown', function (e) {
             // left button?
-            if (event.which !== 1) {
+            if (e.which !== 1) {
                 return;
             }
 
@@ -364,7 +364,7 @@ const Application = {
 
         // run hover bodies
         let disabled = true;
-        $('#data-table-edit tbody').each(function (index, element) {
+        $('#data-table-edit tbody').each(function (_index, element) {
             const $body = $(element);
             const $rows = $body.find('.item');
             const lastIndex = $rows.length - 1;
@@ -484,7 +484,7 @@ const Application = {
             updateErrors();
             return that;
 
-        }).fail(function (jqXHR, textStatus) {
+        }).fail(function (_jqXHR, textStatus) {
             if (textStatus !== 'abort') {
                 return that.disable(null);
             }
@@ -1554,26 +1554,4 @@ const MoveRowHandler = {
 
     // main form validation
     $('#edit-form').initValidator();
-
-    // test
-    // const $groups = Application.getGroups();
-    // $groups.each(function (idxGroup, group) {
-    // const $group = $(group);
-    // console.log($group.find('th:first').text());
-    //
-    // // categories
-    // const $categories = Application.getCategories($group);
-    // $categories.each(function (idxCategory, category) {
-    // const $category = $(category);
-    // console.log(' ' + $category.find('th:first').text());
-    //
-    // // items
-    // const $items = Application.getItems($category);
-    // $items.each(function (idxItem, item) {
-    // const $item = $(item);
-    // console.log(' ' + $item.find('td:first').text());
-    // });
-    // });
-    // });
-
 }(jQuery));

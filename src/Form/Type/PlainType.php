@@ -370,6 +370,6 @@ class PlainType extends AbstractType
         }
 
         // error
-        throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', \is_object($value) ? \get_class($value) : \gettype($value)));
+        throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', get_debug_type($value)));
     }
 }

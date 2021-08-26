@@ -105,7 +105,7 @@ function update(form) {
         } else {
             showError(response.message || $form.data('failed'));
         }
-    }).fail(function (jqXHR, textStatus) {
+    }).fail(function (_jqXHR, textStatus) {
         if (textStatus !== 'abort') {
             showError($form.data('failed'));
         }

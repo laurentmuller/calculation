@@ -3,27 +3,25 @@
 /**
  * Edit item dialog handler.
  */
-var EditItemDialog = function (application) {
-    'use strict';
-    this.application = application;
-    this._init();
-};
-
-EditItemDialog.prototype = {
+const EditItemDialog = class { /* exported EditItemDialog */
 
     /**
      * Constructor.
      */
-    constructor: EditItemDialog,
+    constructor(application) {
+        'use strict';
+        this.application = application;
+        this._init();
+    }
 
     /**
      * Display the add item dialog.
      *
      * @param {jQuery}
      *            $row - the selected row.
-     * @return {EditItemDialog} - the selected row.
+     * @return {EditItemDialog} This instance for chaining.
      */
-    showAdd: function ($row) {
+    showAdd($row) {
         'use strict';
 
         // initialize
@@ -48,7 +46,7 @@ EditItemDialog.prototype = {
         this.$modal.modal('show');
 
         return this;
-    },
+    }
 
     /**
      * Display the edit item dialog. This function copy the element to the
@@ -58,7 +56,7 @@ EditItemDialog.prototype = {
      *            $row - the selected row.
      * @return {EditItemDialog} This instance for chaining.
      */
-    showEdit: function ($row) {
+    showEdit($row) {
         'use strict';
 
         // initialize
@@ -80,53 +78,53 @@ EditItemDialog.prototype = {
         this.$modal.modal('show');
 
         return this;
-    },
+    }
 
     /**
      * Hide the dialog.
      *
      * @return {EditItemDialog} This instance for chaining.
      */
-    hide: function () {
+    hide() {
         'use strict';
         this.$modal.modal('hide');
         return this;
-    },
+    }
 
     /**
      * Gets the selected group.
      *
      * @returns {Object} the group.
      */
-    getGroup: function () {
+    getGroup() {
         'use strict';
         const $selection = this.$category.getSelectedOption();
         return {
             id: parseInt($selection.data('groupId'), 10),
             code: $selection.data('groupCode')
         };
-    },
+    }
 
     /**
      * Gets the selected category.
      *
      * @returns {Object} the category.
      */
-    getCategory: function () {
+    getCategory() {
         'use strict';
         const $selection = this.$category.getSelectedOption();
         return {
             id: this.$category.intVal(),
             code: $selection.text()
         };
-    },
+    }
 
     /**
      * Gets the selected item.
      *
      * @returns {Object} the item.
      */
-    getItem: function () {
+    getItem() {
         'use strict';
         const price = this.$price.floatVal();
         const quantity = this.$quantity.floatVal();
@@ -139,24 +137,24 @@ EditItemDialog.prototype = {
             quantity: quantity,
             total: total
         };
-    },
+    }
 
     /**
      * Gets the editing row.
      *
      * @return {JQuery} the row or null if none.
      */
-    getEditingRow: function () {
+    getEditingRow() {
         'use strict';
         return this.$editingRow;
-    },
+    }
 
     /**
      * Initialize.
      *
      * @return {EditItemDialog} This instance for chaining.
      */
-    _init: function () {
+    _init() {
         'use strict';
 
         const that = this;
@@ -200,23 +198,23 @@ EditItemDialog.prototype = {
         that.$deleteButton.on('click', $.proxy(that._onDelete, that));
 
         return that;
-    },
+    }
 
     /**
      * Update the total line.
      */
-    _updateTotal: function () {
+    _updateTotal() {
         'use strict';
         const price = this.$price.floatVal();
         const quantity = this.$quantity.floatVal();
         const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
         this.$total.text(this._formatValue(total));
-    },
+    }
 
     /**
      * Handles the delete click event.
      */
-    _onDelete: function () {
+    _onDelete() {
         'use strict';
         this.hide();
         if (this.$editingRow) {
@@ -225,12 +223,12 @@ EditItemDialog.prototype = {
                 this.application.removeItem(button);
             }
         }
-    },
+    }
 
     /**
      * Handles the dialog show event.
      */
-    _onDialogShow: function () {
+    _onDialogShow() {
         'use strict';
         const key = this.$editingRow ? 'edit' : 'add';
         const title = this.$form.data(key);
@@ -242,12 +240,12 @@ EditItemDialog.prototype = {
             this.$searchRow.show();
             this.$deleteButton.hide();
         }
-    },
+    }
 
     /**
      * Handles the dialog visible event.
      */
-    _onDialogVisible: function () {
+    _onDialogVisible() {
         'use strict';
         if (this.$price.attr('readonly')) {
             this.$cancelButton.focus();
@@ -261,16 +259,15 @@ EditItemDialog.prototype = {
         } else {
             this.$search.selectFocus();
         }
-    },
+    }
 
     /**
      * Handles the dialog hide event.
      */
-    _onDialogHide: function () {
+    _onDialogHide() {
         'use strict';
-        // this.$editingRow = null;
         $('tr.table-primary').removeClass('table-primary');
-    },
+    }
 
     /**
      * Format a value with 2 fixed decimals and grouping separator.
@@ -279,9 +276,8 @@ EditItemDialog.prototype = {
      *            value - the value to format.
      * @returns {string} - the formatted value.
      */
-    _formatValue: function (value) {
+    _formatValue(value) {
         'use strict';
         return this.application.formatValue(value);
     }
 };
-

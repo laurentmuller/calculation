@@ -308,7 +308,7 @@ class ChartController extends AbstractController
         // get values
         $states = $repository->getListCountCalculations();
 
-        // update
+        // convert
         $count = \array_reduce($states, function (float $carry, array $state) {
             return $carry + $state['count'];
         }, 0);
@@ -321,9 +321,6 @@ class ChartController extends AbstractController
         foreach ($states as &$state) {
             $state['percent'] = $this->safeDivide((float) $state['count'], $count);
         }
-
-        // title
-        $title = $this->trans('title_by_state', [], 'chart');
 
         // data
         $data = \array_map(function (array $state) use ($tabular): array {
@@ -338,6 +335,9 @@ class ChartController extends AbstractController
         $colors = \array_map(function (array $state): string {
             return $state['color'];
         }, $states);
+
+        // title
+        $title = $this->trans('title_by_state', [], 'chart');
 
         // series
         $series = [

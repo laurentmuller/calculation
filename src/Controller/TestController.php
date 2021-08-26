@@ -92,6 +92,105 @@ class TestController extends AbstractController
     }
 
     /**
+     * Test sending notification mail.
+     *
+     * @Route("/simple", name="test_simple")
+     */
+    public function editorSimple(Request $request, MailerInterface $mailer, TranslatorInterface $translator, LoggerInterface $logger): Response
+    {
+        $data = [
+            'email' => 'bibi@bibi.nu',
+            'importance' => NotificationEmail::IMPORTANCE_LOW,
+        ];
+
+        $helper = $this->createFormHelper('user.fields.', $data);
+        $helper->field('email')
+            ->addEmailType();
+        $helper->field('importance')
+            ->label('importance.name')
+            ->add(ImportanceType::class);
+        $helper->field('message')
+            ->updateAttribute('minlength', 10)
+            ->add(SimpleEditorType::class);
+
+        $form = $helper->createForm();
+        if ($this->handleRequestForm($request, $form)) {
+            $data = $form->getData();
+            $email = (string) $data['email'];
+            $importance = $translator->trans('importance.full.' . $data['importance']);
+            $message = "<p style=\"font-weight: bold;\">$importance</p>" . $data['message'];
+
+            try {
+                /** @var \App\Entity\User $user */
+                $user = $this->getUser();
+                $comment = new Comment(true);
+                $comment->setFromAddress(new Address($email))
+                    ->setToUser($user)
+                    ->setSubject($this->trans('user.comment.title'))
+                    ->setMessage($message);
+                $comment->send($mailer);
+
+                $this->succesTrans('user.comment.success');
+
+                return $this->redirectToHomePage();
+            } catch (\Exception $e) {
+                $logger->error($this->trans('user.comment.error'), [
+                    'class' => Utils::getShortName($e),
+                    'message' => $e->getMessage(),
+                    'code' => (int) $e->getCode(),
+                    'file' => $e->getFile() . ':' . $e->getLine(),
+                ]);
+
+                return $this->renderForm('@Twig/Exception/exception.html.twig', [
+                    'message' => $message,
+                    'exception' => $e,
+                ]);
+            }
+        }
+
+        return $this->renderForm('test/editor_simple.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    /**
+     * Display Tinymce editor.
+     *
+     * @Route("/tinymce", name="test_tinymce")
+     */
+    public function editorTinymce(Request $request): Response
+    {
+        $data = [
+            'email' => 'bibi@bibi.nu',
+            'message' => '',
+        ];
+
+        // create form
+        $helper = $this->createFormHelper('user.fields.', $data);
+
+        $helper->field('email')
+            ->addEmailType();
+
+        $helper->field('message')
+            ->updateAttribute('minlength', 10)
+            ->add(TinyMceEditorType::class);
+
+        // handle request
+        $form = $helper->createForm();
+        if ($this->handleRequestForm($request, $form)) {
+            $data = $form->getData();
+            $message = 'Message :<br>' . (string) $data['message'];
+            $this->succes($message);
+
+            return $this->redirectToHomePage();
+        }
+
+        return $this->renderForm('test/editor_tinymce.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    /**
      * Update calculations with random customers.
      *
      * @Route("/flex", name="test_flex")
@@ -341,68 +440,6 @@ class TestController extends AbstractController
     }
 
     /**
-     * Test sending notification mail.
-     *
-     * @Route("/simple", name="test_simple")
-     */
-    public function simpleEditor(Request $request, MailerInterface $mailer, TranslatorInterface $translator, LoggerInterface $logger): Response
-    {
-        $data = [
-            'email' => 'bibi@bibi.nu',
-            'importance' => NotificationEmail::IMPORTANCE_LOW,
-        ];
-
-        $helper = $this->createFormHelper('user.fields.', $data);
-        $helper->field('email')
-            ->addEmailType();
-        $helper->field('importance')
-            ->label('importance.name')
-            ->add(ImportanceType::class);
-        $helper->field('message')
-            ->updateAttribute('minlength', 10)
-            ->add(SimpleEditorType::class);
-
-        $form = $helper->createForm();
-        if ($this->handleRequestForm($request, $form)) {
-            $data = $form->getData();
-            $email = (string) $data['email'];
-            $importance = $translator->trans('importance.full.' . $data['importance']);
-            $message = "<p style=\"font-weight: bold;\">$importance</p>" . $data['message'];
-
-            try {
-                /** @var \App\Entity\User $user */
-                $user = $this->getUser();
-                $comment = new Comment(true);
-                $comment->setFromAddress(new Address($email))
-                    ->setToUser($user)
-                    ->setSubject($this->trans('user.comment.title'))
-                    ->setMessage($message);
-                $comment->send($mailer);
-
-                $this->succesTrans('user.comment.success');
-
-                return $this->redirectToHomePage();
-            } catch (\Exception $e) {
-                $logger->error($this->trans('user.comment.error'), [
-                    'class' => Utils::getShortName($e),
-                    'message' => $e->getMessage(),
-                    'code' => (int) $e->getCode(),
-                    'file' => $e->getFile() . ':' . $e->getLine(),
-                ]);
-
-                return $this->renderForm('@Twig/Exception/exception.html.twig', [
-                    'message' => $message,
-                    'exception' => $e,
-                ]);
-            }
-        }
-
-        return $this->renderForm('test/simpleeditor.html.twig', [
-            'form' => $form,
-        ]);
-    }
-
-    /**
      * Test service.
      *
      * @Route("/swiss", name="test_swiss")
@@ -484,43 +521,6 @@ class TestController extends AbstractController
         ];
 
         return $this->renderForm('test/timeline.html.twig', $parameters);
-    }
-
-    /**
-     * Display Tinymce editor.
-     *
-     * @Route("/tinymce", name="test_tinymce")
-     */
-    public function tinymce(Request $request): Response
-    {
-        $data = [
-            'email' => 'bibi@bibi.nu',
-            'message' => '',
-        ];
-
-        // create form
-        $helper = $this->createFormHelper('user.fields.', $data);
-
-        $helper->field('email')
-            ->addEmailType();
-
-        $helper->field('message')
-            ->updateAttribute('minlength', 10)
-            ->add(TinyMceEditorType::class);
-
-        // handle request
-        $form = $helper->createForm();
-        if ($this->handleRequestForm($request, $form)) {
-            $data = $form->getData();
-            $message = 'Message :<br>' . (string) $data['message'];
-            $this->succes($message);
-
-            return $this->redirectToHomePage();
-        }
-
-        return $this->renderForm('test/tinymce.html.twig', [
-            'form' => $form,
-        ]);
     }
 
     /**

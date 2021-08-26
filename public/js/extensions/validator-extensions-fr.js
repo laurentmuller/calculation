@@ -103,7 +103,7 @@
          */
         requiredFallback: 'Ce champ est requis.',
         requiredLabel: 'Le champ \"{0}\" est requis.',
-        required: function (parameters, element) {
+        required: function (_parameters, element) {
             // error message?
             const error = $(element).data('error');
             if (error) {
@@ -117,7 +117,7 @@
          */
         emailFallback: 'Veuillez fournir une adresse électronique valide.',
         emailLabel: 'Le champ \"{0}\" doit contenir une adresse électronique valide.',
-        email: function (parameters, element) {
+        email: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.emailLabel, $.validator.messages.emailFallback);
         },
 
@@ -126,7 +126,7 @@
          */
         urlFallback: 'Veuillez fournir une adresse URL valide.',
         urlLabel: 'Le champ \"{0}\" doit contenir une adresse URL valide.',
-        url: function (parameters, element) {
+        url: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.urlLabel, $.validator.messages.urlFallback);
         },
 
@@ -135,7 +135,7 @@
          */
         dateFallback: 'Veuillez fournir une date valide.',
         dateLabel: 'Le champ \"{0}\" doit contenir une date valide.',
-        date: function (parameters, element) {
+        date: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.dateLabel, $.validator.messages.dateFallback);
         },
 
@@ -144,7 +144,7 @@
          */
         acceptFallback: 'Ce champ doit contenir un type de fichier valide.',
         acceptLabel: 'Le champ \"{0}\" doit contenir un type de fichier valide.',
-        accept: function (parameters, element) {
+        accept: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.acceptLabel, $.validator.messages.acceptFallback);
         },
 
@@ -166,7 +166,7 @@
          */
         notUsernameFallback: 'Ce champ ne peut pas contenir le nom de l\'utilisateur.',
         notUsernameLabel: 'Le champ \"{0}\" ne peut pas contenir le nom de l\'utilisateur.',
-        notUsername: function (parameters, element) {
+        notUsername: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.notUsernameLabel, $.validator.messages.notUsernameFallback);
         },
 
@@ -175,7 +175,7 @@
          */
         notEmailFallback: 'Ce champ ne peut pas être une adresse e-mail.',
         notEmailLabel: 'Le champ \"{0}\" ne peut pas être une adresse e-mail.',
-        notEmail: function (parameters, element) {
+        notEmail: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.notEmailLabel, $.validator.messages.notEmailFallback);
         },
 
@@ -184,7 +184,7 @@
          */
         lowercaseFallback: 'Ce champ doit contenir un caractère minuscule.',
         lowercaseLabel: 'Le champ \"{0}\" doit contenir un caractère minuscule.',
-        lowercase: function (parameters, element) {
+        lowercase: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.lowercaseLabel, $.validator.messages.lowercaseFallback);
         },
 
@@ -193,7 +193,7 @@
          */
         uppercaseFallback: 'Ce champ doit contenir un caractère majuscule.',
         uppercaseLabel: 'Le champ \"{0}\" doit contenir un caractère majuscule.',
-        uppercase: function (parameters, element) {
+        uppercase: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.uppercaseLabel, $.validator.messages.uppercaseFallback);
         },
 
@@ -202,7 +202,7 @@
          */
         mixedcaseFallback: 'Ce champ doit contenir un caractère minuscule et majuscule.',
         mixedcaseLabel: 'Le champ \"{0}\" doit contenir un caractère minuscule et majuscule.',
-        mixedcase: function (parameters, element) {
+        mixedcase: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.mixedcaseLabel, $.validator.messages.mixedcaseFallback);
         },
 
@@ -211,7 +211,7 @@
          */
         digitFallback: 'Ce champ doit contenir un chiffre.',
         digitLabel: 'Le champ \"{0}\" doit contenir un chiffre.',
-        digit: function (parameters, element) {
+        digit: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.digitLabel, $.validator.messages.digitFallback);
         },
 
@@ -220,7 +220,7 @@
          */
         specialcharFallback: 'Ce champ doit contenir un caractère spécial.',
         specialcharLabel: 'Le champ \"{0}\" doit contenir un caractère spécial.',
-        specialchar: function (parameters, element) {
+        specialchar: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.specialcharLabel, $.validator.messages.specialcharFallback);
         },
 
@@ -229,7 +229,7 @@
          */
         letterFallback: 'Ce champ doit contenir un caractère alphabétique.',
         letterLabel: 'Le champ \"{0}\" doit contenir un caractère alphabétique.',
-        letter: function (parameters, element) {
+        letter: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.letterLabel, $.validator.messages.letterFallback);
         },
 
@@ -435,7 +435,7 @@
          */
         alphanumericFallback: 'Ce champ ne doit contenir que des lettres, nombres, espaces et soulignages.',
         alphanumericLabel: 'Le champ \"{0}\" ne doit contenir que des lettres, nombres, espaces et soulignages.',
-        alphanumeric: function (parameters, element) {
+        alphanumeric: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.alphanumericLabel, $.validator.messages.alphanumericFallback);
         },
 
@@ -444,7 +444,7 @@
          */
         lettersonlyFallback: 'Ce champ ne doit contenir que des lettres.',
         lettersonlyLabel: 'Le champ \"{0}\" ne doit contenir que des lettres.',
-        lettersonly: function (parameters, element) {
+        lettersonly: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.lettersonlyLabel, $.validator.messages.lettersonlyFallback);
         },
 
@@ -453,7 +453,7 @@
          */
         nowhitespaceFallback: 'Ce champ ne doit pas contenir d\'espace.',
         nowhitespaceLabel: 'Le champ \"{0}\" ne doit pas contenir d\'espace.',
-        nowhitespace: function (parameters, element) {
+        nowhitespace: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.nowhitespaceLabel, $.validator.messages.nowhitespaceFallback);
         },
 
@@ -462,7 +462,7 @@
          */
         zipcodeChFallback: "Ce champ doit contenir un numéro postal valide.",
         zipcodeChLabel: "Le champ \"{0}\" doit contenir un numéro postal valide.",
-        zipcodeCH: function (parameters, element) {
+        zipcodeCH: function (_parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.zipcodeChLabel, $.validator.messages.zipcodeChFallback);
         },
 

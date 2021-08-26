@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -57,7 +56,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="user_register")
      */
-    public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils, UrlGeneratorInterface $generator): Response
+    public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils): Response
     {
         $user = new User();
         $form = $this->createForm(UserRegistrationType::class, $user);
@@ -84,7 +83,7 @@ class RegistrationController extends AbstractController
             try {
                 $this->verifier->sendEmailConfirmation('app_verify_email', $user, $email);
 
-                return $this->createRedirectResponse($request, $generator);
+                return $this->redirectToHomePage();
             } catch (TransportException $e) {
                 if ($request->hasSession()) {
                     $exception = new CustomUserMessageAuthenticationException('registration.send_email_error');
@@ -129,23 +128,9 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute(self::REGISTER_ROUTE);
         }
 
-        $this->succesTrans('registration.confirmed', [' %username%' => $user->getUserName()]);
+        $this->succesTrans('registration.confirmed', [' %username%' => (string) $user]);
 
         return $this->redirectToHomePage();
-    }
-
-    /**
-     * Creates a redirect response.
-     */
-    private function createRedirectResponse(Request $request, UrlGeneratorInterface $generator): Response
-    {
-        if ($request->hasSession() && $targetPath = $this->getTargetPath($request->getSession(), 'main')) {
-            return new RedirectResponse($targetPath);
-        }
-
-        $url = $generator->generate(self::HOME_PAGE);
-
-        return new RedirectResponse($url);
     }
 
     /**

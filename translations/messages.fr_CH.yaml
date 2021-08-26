@@ -723,6 +723,7 @@ test:
     recaptcha: reCAPTCHA
     tinymce: Editeur TinyMCE
     simple_editor: Editeur Simple
+    trix_editor: Editeur Trix
 parameters:
     title: Paramètres
     description: Définition des paramètres de l'application.
@@ -786,7 +787,7 @@ parameters:
         mintrength: Force minimum
         qr_code: Code QR sur les calculations
     helps:
-        qr_code: Un code QR est imprimé à la fin du document PDF.
+        qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
 clear_cache:
     title: Vider le cache
     message: Êtes-vous sûr de vouloir vider le cache de l'application ?
@@ -977,7 +978,7 @@ security:
     link: Déjà un compte ?
     login:
         title: Connexion à l'application
-        success: Bienvenue <b>%username%</b> sur votre compte de l'application <b>%appname%</b>.
+        success: Bienvenue <b>%username%</b>. Vous êtes maintenant connecté à l'application <b>%appname%</b>.
         error: Le nom de l'utilisateur ou le mot de passe est invalide.
         username: Nom d'utilisateur
         password: Mot de passe
@@ -998,6 +999,7 @@ profile:
 resetting:
     link: Mot de passe oublié ?
     not_found_password_token: Aucun jeton de réinitialisation du mot de passe n'a été trouvé dans l'URL ou dans la session.
+    success: <b>%username%</b>, votre mot de passe a été réinitialisé avec succès.
     request:
         title: Réinitialiser le mot de passe
         user: Nom d'utilisateur ou adresse e-mail
@@ -1015,17 +1017,6 @@ registration:
     agreeTerms:
         label: J'accepte les conditions générales d'utilisation de l'application.
         error: Vous devez accepter les conditions générales d'utilisation.
-    email:
-        subject: Bienvenue %username% !
-        message: |
-            Bonjour %username% !
-
-            Pour valider votre compte utilisateur, merci de vous rendre sur %confirmationUrl%
-
-            Ce lien ne peut être utilisé qu'une seule fois pour valider votre compte.
-
-            Cordialement,
-            L'équipe
     confirmed: Félicitations %username%, votre compte est maintenant activé.
 timeline:
     title: Chronologie

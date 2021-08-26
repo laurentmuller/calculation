@@ -230,13 +230,6 @@ class AjaxController extends AbstractController
         $id = (int) $request->get('id', 0);
         $quantity = (float) $request->get('quantity', 0.0);
 
-        // validate
-        if ($quantity <= 0) {
-            return $this->jsonFalse([
-                'message' => $this->trans('taskcompute.error.quantity'),
-            ]);
-        }
-
         /** @var ?\App\Entity\Task $task */
         $task = $repository->find($id);
         if (null === $task) {

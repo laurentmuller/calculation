@@ -27,47 +27,42 @@
     // ------------------------------------
     // Rowlink public class definition
     // ------------------------------------
-    const Rowlink = function (element, options) {
-        this.$element = $(element);
-        this.options = $.extend({}, Rowlink.DEFAULTS, options);
-        this.proxy = $.proxy(this.click, this);
-        this.enabled = false;
-        this.enable();
-    };
+    const Rowlink = class {
 
-    Rowlink.DEFAULTS = {
-        target: 'a'
-    };
-
-    Rowlink.prototype = {
         // -----------------------------
         // public functions
         // -----------------------------
-        constructor: Rowlink,
+        constructor(element, options) {
+            this.$element = $(element);
+            this.options = $.extend({}, Rowlink.DEFAULTS, options);
+            this.proxy = $.proxy(this.click, this);
+            this.enabled = false;
+            this.enable();
+        }
 
-        enable: function () {
+        enable() {
             if (!this.enabled) {
                 this.$element.on('click.bs.rowlink', 'td:not(.rowlink-skip)', this.proxy);
                 this.enabled = true;
             }
-        },
+        }
 
-        disable: function () {
+        disable() {
             if (this.enabled) {
                 this.$element.off('click.bs.rowlink', 'td:not(.rowlink-skip)', this.proxy);
                 this.enabled = false;
             }
-        },
+        }
 
-        destroy: function () {
+        destroy() {
             this.disable();
             this.$element.removeData('bs.rowlink');
-        },
+        }
 
         // -----------------------------
         // private functions
         // -----------------------------
-        click: function (e, ctrlKey) {
+        click(e, ctrlKey) {
             const target = $(e.currentTarget).closest('tr').find(this.options.target)[0];
             if (typeof target === 'undefined' || $(e.target)[0] === target) {
                 return;
@@ -89,12 +84,16 @@
         }
     };
 
+    Rowlink.DEFAULTS = {
+        target: 'a'
+    };
+
     // ------------------------------------
     // Rowlink plugin definition
     // ------------------------------------
     const oldRowlink = $.fn.rowlink;
 
-    $.fn.rowlink = function (options) {
+    $.fn.rowlink = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
             let data = $this.data('bs.rowlink');

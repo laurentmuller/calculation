@@ -30,6 +30,7 @@ use App\Spreadsheet\CalculationsDocument;
 use App\Spreadsheet\SpreadsheetResponse;
 use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -239,7 +240,7 @@ class CalculationController extends AbstractEntityController
      *
      * @Route("/pdf/{id}", name="calculation_pdf_id", requirements={"id" = "\d+" })
      */
-    public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator): PdfResponse
+    public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
     {
         $qrcode = null;
         if ($this->getApplication()->isQrCode()) {
@@ -248,6 +249,7 @@ class CalculationController extends AbstractEntityController
             $qrcode = $generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
         }
         $doc = new CalculationReport($this, $calculation, $qrcode);
+        $doc->setLogger($logger);
 
         return $this->renderPdfDocument($doc);
     }

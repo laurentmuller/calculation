@@ -9,28 +9,23 @@
     // -----------------------------
     // Initialization
     // -----------------------------
-    var BoostrapTreeView = function (element, options) {
-        this.$element = $(element);
-        this.options = $.extend(true, {}, BoostrapTreeView.DEFAULTS, this.$element.data(), options);
-        this.init();
-    };
-
-    // -----------------------------
-    // Prototype functions
-    // -----------------------------
-    BoostrapTreeView.prototype = {
+    const BoostrapTreeView = class {
 
         /**
          * Constructor.
          */
-        constructor: BoostrapTreeView,
+        constructor(element, options) {
+            this.$element = $(element);
+            this.options = $.extend(true, {}, BoostrapTreeView.DEFAULTS, this.$element.data(), options);
+            this.init();
+        }
 
         /**
          * Initialize widget.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        init: function () {
+        init() {
             const that = this;
             const options = that.options;
             const $element = that.$element;
@@ -95,18 +90,18 @@
             $element.on('keydown', '.list-group-item', that.keydownProxy);
 
             return that;
-        },
+        }
 
         /**
          * Initialize data.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        initData: function (node) {
+        initData(node) {
             const that = this;
             if (node.nodes && node.nodes.length) {
                 const parent = node;
-                $.each(node.nodes, function (index, node) {
+                $.each(node.nodes, function (_index, node) {
                     node.nodeId = that.nodes.length;
                     node.parentId = parent.nodeId;
                     that.nodes.push(node);
@@ -116,14 +111,14 @@
                 });
             }
             return that;
-        },
+        }
 
         /**
          * Build nodes.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        build: function ($parent, nodes, depth) {
+        build($parent, nodes, depth) {
             const that = this;
             const options = that.options;
             const templates = options.templates;
@@ -136,7 +131,7 @@
             depth++;
 
             // add each node and sub-nodes
-            $.each(nodes, function (index, node) {
+            $.each(nodes, function (_index, node) {
                 // create node element.
                 const $item = $(templates.item)
                     .css('padding-left', paddingLeft + 'rem')
@@ -208,7 +203,7 @@
                 }
             });
             return that;
-        },
+        }
 
         /**
          * Handle item and state icon click.
@@ -217,7 +212,7 @@
          *            e - the source event.
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        click: function (e) {
+        click(e) {
             const $target = $(e.currentTarget);
             const $item = $target.closest('.list-group-item');
             if ($target.is('.state-icon')) {
@@ -234,7 +229,7 @@
             }
 
             return this.setSelection($item);
-        },
+        }
 
         /**
          * Handle the item double-click.
@@ -243,11 +238,11 @@
          *            e - the source event.
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        doubleclick: function (e) {
+        doubleclick(e) {
             const $target = $(e.currentTarget);
             this.toggleGroup($target.next('.list-group'));
             return this.setSelection($target);
-        },
+        }
 
 
         /**
@@ -257,7 +252,7 @@
          *            e - the source event.
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        keydown: function (e) {
+        keydown(e) {
             if (this.toggling) {
                 return this;
             }
@@ -335,7 +330,7 @@
             }
 
             return this;
-        },
+        }
 
         /**
          * Toggle the visibility of the given group.
@@ -344,7 +339,7 @@
          *            $group - the group to toggle.
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        toggleGroup: function ($group) {
+        toggleGroup($group) {
             const that = this;
             if ($group && $group.length) {
                 const options = that.options;
@@ -368,41 +363,41 @@
 
             }
             return that;
-        },
+        }
 
         /**
          * Update the borders.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        updateBorders: function () {
+        updateBorders() {
             this.$element.find('.list-group-item:first').removeClass('border-top-0');
             this.$element.find('.list-group-item.rounded-bottom').removeClass('rounded-bottom');
             this.$element.find('.list-group-item:visible:last').addClass('rounded-bottom');
             return this;
-        },
+        }
 
         /**
          * Destroy.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        destroy: function () {
+        destroy() {
             this.$element.off('click', '.list-group-item, .state-icon', this.clickProxy);
             this.$element.off('dblclick', '.list-group-item', this.doubleclickProxy);
             this.$element.off('keydown', '.list-group-item', this.keydownProxy);
             this.$element.removeData('boostrapTreeView');
             return this;
-        },
+        }
 
         /**
          * Select the first element.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        selectFirst: function () {
+        selectFirst() {
             return this.setSelection(this.$element.find('.list-group-item:first'));
-        },
+        }
 
         /**
          * Select the given element.
@@ -411,34 +406,34 @@
          *            $$selection - the item to select.
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        setSelection: function ($selection) {
+        setSelection($selection) {
             const selectionClass = this.options.selectionClass;
             if ($selection && $selection.length) {
                 this.$element.find('.list-group-item').removeClass(selectionClass);
                 $selection.addClass(selectionClass).focus();
             }
             return this;
-        },
+        }
 
         /**
          * Gets the selected item.
          *
          * @return {jQuery} the selected item, if any; null otherwise.
          */
-        getSelection: function () {
+        getSelection() {
             const selectionClass = this.options.selectionClass;
             const $filter = this.$element.find('.list-group-item:visible').filter(function () {
                 return $(this).hasClass(selectionClass);
             });
             return $filter.length ? $filter : null;
-        },
+        }
 
         /**
          * Set focus to the selected item.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        focus: function () {
+        focus() {
             const $selection = this.getSelection();
             if ($selection) {
                 $selection.focus();
@@ -446,7 +441,7 @@
                 this.$element.focus();
             }
             return this;
-        },
+        }
 
         /**
          * Trigger the given event.
@@ -455,20 +450,20 @@
          *            e - the event to trigger.
          * @return true if the event is not prevented; false otherwise.
          */
-        trigger: function (e) {
+        trigger(e) {
             if (e) {
                 this.$element.trigger(e);
                 return !e.isDefaultPrevented();
             }
             return false;
-        },
+        }
 
         /**
          * Refresh data.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        refresh: function () {
+        refresh() {
             // remove handlers
             this.$element.off('click', '.list-group-item, .state-icon', this.clickProxy);
             this.$element.off('dblclick', '.list-group-item', this.doubleclickProxy);
@@ -479,14 +474,14 @@
             this.init();
 
             return this;
-        },
+        }
 
         /**
          * Collapse all items.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        collapseAll: function () {
+        collapseAll() {
             const that = this;
             const $groups = that.$element.find('.list-group:visible');
             if ($groups.length === 0) {
@@ -507,14 +502,14 @@
             });
 
             return that.selectFirst();
-        },
+        }
 
         /**
          * Expand all items.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        expandAll: function () {
+        expandAll() {
             const that = this;
             const $groups = this.$element.find('.list-group:not(:visible)');
             if ($groups.length === 0) {
@@ -536,7 +531,7 @@
             });
 
             return that;
-        },
+        }
 
         /**
          * Expand to the given level.
@@ -545,7 +540,7 @@
          *            level - the level.
          * @return {BoostrapTreeView} this instance for chaining.
          */
-        expandToLevel: function (level) {
+        expandToLevel(level) {
             const that = this;
             const $groups = that.$element.find('.list-group').filter(function () {
                 const $this = $(this);
@@ -607,7 +602,7 @@
     // -----------------------------------
     const oldBoostrapTreeView = $.fn.boostrapTreeView;
 
-    $.fn.boostrapTreeView = function (options) {
+    $.fn.boostrapTreeView = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
             let data = $this.data('boostrapTreeView');

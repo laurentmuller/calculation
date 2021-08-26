@@ -67,7 +67,7 @@ class LoginListener implements EventSubscriberInterface
     {
         if ($this->setSessionFromRequest($request)) {
             $params = [
-                '%username%' => $user,
+                '%username%' => $user->getUserIdentifier(),
                 '%appname%' => $this->appNameVersion,
             ];
             $this->succesTrans('security.login.success', $params);

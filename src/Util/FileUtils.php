@@ -110,20 +110,7 @@ final class FileUtils
      */
     public static function formatSize(string $path): string
     {
-        if (self::isFile($path)) {
-            $size = \filesize($path) ?: 0;
-        } else {
-            $size = 0;
-            $flags = \RecursiveDirectoryIterator::SKIP_DOTS;
-            $innerIterator = new \RecursiveDirectoryIterator($path, $flags);
-            $outerIterator = new \RecursiveIteratorIterator($innerIterator);
-            foreach ($outerIterator as $file) {
-                if ($file->isReadable()) {
-                    $size += $file->getSize();
-                }
-            }
-        }
-
+        $size = self::size($path);
         if (0 === $size) {
             return 'empty';
         }
@@ -227,9 +214,9 @@ final class FileUtils
     /**
      * Renames a file or a directory.
      *
-     * @param string $origin    the source file
-     * @param string $target    the target file
-     * @param bool   $overwrite true to overwrite the target file
+     * @param string $origin    the source file or directory
+     * @param string $target    the target file or directory
+     * @param bool   $overwrite true to overwrite the target
      *
      * @return bool true on success, false on failure
      */
@@ -247,16 +234,50 @@ final class FileUtils
     }
 
     /**
+     * Gets the size, in bytes, of the given path.
+     *
+     * @param string $path the file or directory path
+     */
+    public static function size(string $path): int
+    {
+        if (self::isFile($path)) {
+            return \filesize($path) ?: 0;
+        }
+
+        $size = 0;
+        $flags = \RecursiveDirectoryIterator::SKIP_DOTS;
+        $innerIterator = new \RecursiveDirectoryIterator($path, $flags);
+        $outerIterator = new \RecursiveIteratorIterator($innerIterator);
+
+        /** @var \SplFileInfo $file */
+        foreach ($outerIterator as $file) {
+            if ($file->isReadable()) {
+                $size += $file->getSize() ?: 0;
+            }
+        }
+
+        return $size;
+    }
+
+    /**
      * Create temporary file with an unique name.
      *
-     * @param string $prefix the prefix of the generated temporary file name
+     * @param string $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first three characters of prefix.
+     * @param bool   $deleteOnExit if true, the file is deleted at the end of the script
      *
-     * @return string|null the new temporary file name (with path), or null on failure
+     * @return string|null the new temporary file name (with path); null on failure
      */
-    public static function tempfile(string $prefix = 'tmp'): ?string
+    public static function tempfile(string $prefix = 'tmp', bool $deleteOnExit = true): ?string
     {
         try {
-            return self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
+            $file = self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
+            if ($deleteOnExit) {
+                \register_shutdown_function(function () use ($file): void {
+                    self::remove($file);
+                });
+            }
+
+            return $file;
         } catch (IOException $e) {
             // ignore
         }

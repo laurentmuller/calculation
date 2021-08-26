@@ -21,59 +21,51 @@
     // ------------------------------------
     // CellHighlight public class definition
     // ------------------------------------
-    var CellHighlight = function (element, options) {
-        this.$element = $(element);
-        this.options = $.extend(true, {}, CellHighlight.DEFAULTS, options);
-        this.tableIndex = this.indexTable();
-        this.enabled = false;
+    const CellHighlight = class {
 
-        // bind events
-        const enabled = this.isUndefined(this.options.enabled) ? true : this.options.enabled;
-        if (enabled) {
-            this.enable();
-        }
-    };
-
-    CellHighlight.DEFAULTS = {
-        rowSelector: 'tr',
-        cellSelector: 'td, th',
-        highlightVertical: null,
-        highlightHorizontal: null
-    };
-
-    CellHighlight.prototype = {
         // -----------------------------
         // public functions
         // -----------------------------
-        constructor: CellHighlight,
+        constructor(element, options) {
+            this.$element = $(element);
+            this.options = $.extend(true, {}, CellHighlight.DEFAULTS, options);
+            this.tableIndex = this.indexTable();
+            this.enabled = false;
 
-        enable: function () {
+            // bind events
+            const enabled = this.isUndefined(this.options.enabled) ? true : this.options.enabled;
+            if (enabled) {
+                this.enable();
+            }
+        }
+
+        enable() {
             if (!this.enabled) {
                 const selector = this.options.cellSelector;
                 this.$element.on('mouseenter', selector, $.proxy(this.mouseenter, this));
                 this.$element.on('mouseleave', selector, $.proxy(this.mouseleave, this));
                 this.enabled = true;
             }
-        },
+        }
 
-        disable: function () {
+        disable() {
             if (this.enabled) {
                 const selector = this.options.cellSelector;
                 this.$element.off('mouseenter', selector, $.proxy(this.mouseenter, this));
                 this.$element.off('mouseleave', selector, $.proxy(this.mouseleave, this));
                 this.enabled = false;
             }
-        },
+        }
 
-        destroy: function () {
+        destroy() {
             this.disable();
             this.$element.removeData('cellhighlight');
-        },
+        }
 
         // -----------------------------
         // private functions
         // -----------------------------
-        mouseenter: function (e) {
+        mouseenter(e) {
             const that = this;
             const $target = $(e.currentTarget);
             const rowspan = $target.rowspan();
@@ -84,13 +76,13 @@
 
             // add horizontal cells
             that.horizontal = $([]);
-            $.each(tableIndex.slice(offsetInMatrix[1], offsetInMatrix[1] + rowspan), function (n, cell) {
+            $.each(tableIndex.slice(offsetInMatrix[1], offsetInMatrix[1] + rowspan), function (_n, cell) {
                 that.horizontal = that.horizontal.add(cell);
             });
 
             // add vertical cells
             that.vertical = $([]);
-            $.each(tableIndex, function (n, rowIndex) {
+            $.each(tableIndex, function (_n, rowIndex) {
                 that.vertical = that.vertical.add(rowIndex.slice(offsetInMatrix[0], offsetInMatrix[0] + colspan));
             });
 
@@ -111,9 +103,9 @@
                 horizontal: that.horizontal,
                 vertical: that.vertical
             });
-        },
+        }
 
-        mouseleave: function () {
+        mouseleave() {
             const that = this;
             const options = that.options;
             if (!that.horizontal && !that.vertical) {
@@ -139,14 +131,14 @@
 
             // clean
             that.horizontal = that.vertical = false;
-        },
+        }
 
-        getTableRows: function () {
+        getTableRows() {
             const selector = this.options.rowSelector;
             return this.$element.find(selector);
-        },
+        }
 
-        getTableMaxCellLength: function () {
+        getTableMaxCellLength() {
             let maxWidth = 0;
             const that  = this;
             that.getTableRows().each(function () {
@@ -156,32 +148,32 @@
                 }
             });
             return maxWidth;
-        },
+        }
 
-        getRowCellLength: function ($row) {
+        getRowCellLength($row) {
             let width = 0;
             $row.children('td, th').each(function () {
                 width += $(this).colspan();
             });
             return width;
-        },
+        }
 
-        generateTableMatrix: function () {
+        generateTableMatrix() {
             const that = this;
             const width = that.getTableMaxCellLength();
             const height = that.getTableRows().length;
             return that.generateMatrix(width, height);
-        },
+        }
 
-        generateMatrix: function (width, height) {
+        generateMatrix(width, height) {
             const matrix = [];
             while (height--) {
                 matrix.push(new Array(width));
             }
             return matrix;
-        },
+        }
 
-        indexTable: function () {
+        indexTable() {
             let i, j;
             let colspan, rowspan;
             const that = this;
@@ -223,19 +215,29 @@
             });
 
             return tableIndex;
-        },
+        }
 
-        isUndefined: function (value) {
+        isUndefined(value) {
             return typeof value === 'undefined';
         }
     };
 
     // -----------------------------
-    // CellHighlight plugin definition
+    // CellHighlight default options
     // -----------------------------
+    CellHighlight.DEFAULTS = {
+        rowSelector: 'tr',
+        cellSelector: 'td, th',
+        highlightVertical: null,
+        highlightHorizontal: null
+    };
+
+    // -------------------------------
+    // CellHighlight plugin definition
+    // -------------------------------
     const oldCellHighlight = $.fn.cellhighlight;
 
-    $.fn.cellhighlight = function (options) {
+    $.fn.cellhighlight = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
             let data = $this.data('cellhighlight');

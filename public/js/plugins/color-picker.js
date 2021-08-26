@@ -9,27 +9,22 @@
     // -----------------------------
     // Initialization
     // -----------------------------
-    var ColorPicker = function (element, options) {
-        this.$element = $(element);
-        this.options = $.extend(true, {}, ColorPicker.DEFAULTS, this.$element.data(), options);
-        this.$element.removeDataAttributes();
-        this.init();
-    };
-
-    // -----------------------------
-    // Prototype functions
-    // -----------------------------
-    ColorPicker.prototype = {
+    const ColorPicker = class {
 
         /**
          * Constructor.
          */
-        constructor: ColorPicker,
+        constructor(element, options) {
+            this.$element = $(element);
+            this.options = $.extend(true, {}, ColorPicker.DEFAULTS, this.$element.data(), options);
+            this.$element.removeDataAttributes();
+            this.init();
+        }
 
         /**
          * Initialize widget.
          */
-        init: function () {
+        init() {
             const that = this;
             const $element = that.$element;
             const focused = $element.is(':focus');
@@ -54,20 +49,20 @@
             if (focused || that.options.focus) {
                 that.setFocus();
             }
-        },
+        }
 
         /**
          * Destroy color-picker.
          */
-        destroy: function () {
+        destroy() {
             this.$dropdown.before(this.$dropdown).remove();
             this.$element.removeClasss('d-none').removeData('colorpicker');
-        },
+        }
 
         /**
          * Creates the drop-down element, if applicable.
          */
-        createDropDown: function () {
+        createDropDown() {
             const that = this;
             const options = that.options;
 
@@ -121,12 +116,12 @@
             that.$dropdown.parents('.form-group').find('label').on('click', function () {
                 that.setFocus();
             });
-        },
+        }
 
         /**
          * Create the palette element.
          */
-        createPalette: function () {
+        createPalette() {
             const that = this;
             const options = that.options;
             const colors = this.options.colors;
@@ -196,7 +191,7 @@
             that.$palette.on('keydown', '.color-button', function (e) {
                 that.onColorButtonKeyDown(e);
             });
-        },
+        }
 
         // -----------------------------
         // Handlers functions
@@ -205,24 +200,24 @@
         /**
          * Handles the color input event.
          */
-        onElementInput: function () {
+        onElementInput() {
             this.updateUI();
             this.setFocus();
-        },
+        }
 
         /**
          * Handles the dropdown before show event.
          */
-        onDropdownBeforeVisible: function () {
+        onDropdownBeforeVisible() {
             if (!this.$palette) {
                 this.createPalette();
             }
-        },
+        }
 
         /**
          * Handles the dropdown after show event.
          */
-        onDropdownAfterVisible: function () {
+        onDropdownAfterVisible() {
             // get value
             const value = (this.$element.val() || '').toUpperCase();
 
@@ -236,7 +231,7 @@
                     row: 0
                 });
             }
-        },
+        }
 
         /**
          * Handles the custom button click event.
@@ -244,11 +239,11 @@
          * @param {Event}
          *            e - the event.
          */
-        onCustomButtonClick: function (e) {
+        onCustomButtonClick(e) {
             e.preventDefault();
             this.$element.trigger('click');
             this.setFocus();
-        },
+        }
 
         /**
          * Handles the color button click event.
@@ -256,7 +251,7 @@
          * @param {Event}
          *            e - the event.
          */
-        onColorButtonClick: function (e) {
+        onColorButtonClick(e) {
             e.preventDefault();
             const $button = $(e.target);
             const oldValue = this.$element.val();
@@ -265,7 +260,7 @@
                 this.$element.val(newValue);
                 this.$element.trigger('input');
             }
-        },
+        }
 
         /**
          * Handles the color button key down event.
@@ -273,7 +268,7 @@
          * @param {Event}
          *            e - the event.
          */
-        onColorButtonKeyDown: function (e) {
+        onColorButtonKeyDown(e) {
             const cols = this.cols;
             const lastCol = this.cols - 1;
             const lastRow = this.rows - 1;
@@ -356,7 +351,7 @@
             // update
             this.setSelection(selection);
             e.preventDefault();
-        },
+        }
 
         // -----------------------------
         // Utility functions
@@ -365,21 +360,21 @@
         /**
          * Sets focus to the dropdown toggle.
          */
-        setFocus: function () {
+        setFocus() {
             this.$dropdownToggle.focus();
-        },
+        }
 
         /**
          * Update the UI.
          */
-        updateUI: function () {
+        updateUI() {
             const value = this.$element.val();
             this.$spanColor.css('background-color', value);
             if (this.$spanText) {
                 const text = this.getColorName(value);
                 this.$spanText.text(text);
             }
-        },
+        }
 
         /**
          * Gets the selected color button.
@@ -388,7 +383,7 @@
          *            $button - the clicked button element.
          * @returns {Object} the row and column index of the selected button.
          */
-        getSelection: function ($button) {
+        getSelection($button) {
             // find focus
             const $focused = this.findButton('.color-button:focus');
             if ($focused) {
@@ -409,7 +404,7 @@
                     row: 0
                 };
             }
-        },
+        }
 
         /**
          * Finds color buttons for the given selector.
@@ -418,10 +413,10 @@
          *            selector - the buttons selector.
          * @returns {jQuery} the buttons, if found; null otherwise.
          */
-        findButton: function (selector) {
+        findButton(selector) {
             const $button = this.$palette.find(selector);
             return $button.length ? $button : null;
-        },
+        }
 
         /**
          * Sets the selected (focus) color button.
@@ -431,14 +426,14 @@
          *            and a 'col' fields).
          * @returns {jQuery} the button, if found; null otherwise.
          */
-        setSelection: function (selection) {
+        setSelection(selection) {
             const selector = '.color-row:eq(' + selection.row + ') .color-button:eq(' + selection.col + ')';
             const $button = this.findButton(selector);
             if ($button) {
                 return $button.focus();
             }
             return null;
-        },
+        }
 
         /**
          * Find the name for the given hexadecimal color.
@@ -448,7 +443,7 @@
          * @returns {string} the color name, if found; the custom text
          *          otherwise.
          */
-        getColorName: function (color) {
+        getColorName(color) {
             color = color || '';
             const colors = this.options.colors;
             const values = Object.values(colors);
@@ -459,7 +454,7 @@
 
             // custom text
             return this.options.customText;
-        },
+        }
 
         /**
          * Find the hexadecimal color for the given name.
@@ -469,7 +464,7 @@
          * @returns {string} the hexadecimal color, if found; the first color
          *          otherwise.
          */
-        getColorHex: function (name) {
+        getColorHex(name) {
             name = name || '';
             const colors = this.options.colors;
             const names = Object.keys(colors);
@@ -480,7 +475,7 @@
 
             // first color
             return colors[names[0]];
-        },
+        }
     };
 
     // -----------------------------------
@@ -492,14 +487,6 @@
         // classes
         dropdownClass: 'form-control',
         dropdownToggleClass: 'btn',
-
-        // dropdownMenuClass: 'dropdown-menu d-print-none',
-        // dropdownColorClass: 'drowpdown-color',
-        // dropdownTextClass: 'drowpdown-text',
-        // paletteClass: 'color-palette',
-        // paletteRrowClass: 'color-row',
-        // paletteButtonClass: 'color-button',
-        // paletteCustomClass: 'btn btn-sm btn-outline-secondary mt-1 w-100',
 
         columns: 8, // the number of columns
         displayText: true, // false to hide text
@@ -588,7 +575,7 @@
     // -----------------------------------
     const oldColorPicker = $.fn.colorpicker;
 
-    $.fn.colorpicker = function (options) {
+    $.fn.colorpicker = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
             let data = $this.data('colorpicker');

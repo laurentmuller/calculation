@@ -21,17 +21,17 @@
 {% if enabled %}
     <div class="col">
         {%- if app.isDisplayTabular -%}
-            {%- include 'home/panel_table.html.twig' -%}
+            {%- include 'index/panel_table.html.twig' -%}
         {%- else -%}
-            {%- include 'home/panel_card.html.twig' -%}
+            {%- include 'index/panel_card.html.twig' -%}
         {%- endif -%}
-        {%- include 'home/panel_state.html.twig' -%}
-        {%- include 'home/panel_month.html.twig' -%}
+        {%- include 'index/panel_state.html.twig' -%}
+        {%- include 'index/panel_month.html.twig' -%}
         {%- include 'user/user_switch.html.twig' -%}
     </div>
 {% else %}
     <div class="col my-auto h-50">
-        {%- include 'home/panel_disabled.html.twig' -%}
+        {%- include 'index/panel_disabled.html.twig' -%}
         {%- include 'user/user_switch.html.twig' -%}
     </div>
 {% endif %}

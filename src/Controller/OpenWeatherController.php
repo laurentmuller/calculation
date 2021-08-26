@@ -253,11 +253,10 @@ class OpenWeatherController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             $db = null;
             $file = null;
-            $temp_name = null;
 
             try {
                 // get temp file
-                if (!$temp_name = FileUtils::tempfile('sql')) {
+                if (null === $temp_name = FileUtils::tempfile('sql')) {
                     return $this->renderErrorResult('import.error.temp_file');
                 }
 
@@ -321,9 +320,6 @@ class OpenWeatherController extends AbstractController
             } finally {
                 if (null !== $db) {
                     $db->close();
-                }
-                if (null !== $temp_name) {
-                    FileUtils::remove($temp_name);
                 }
                 if (null !== $file) {
                     FileUtils::remove($file);

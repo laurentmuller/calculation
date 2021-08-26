@@ -17,12 +17,13 @@ use App\Entity\Calculation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
-use App\QrCode\PdfWriterExt;
+use App\Traits\LoggerTrait;
+use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
-use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeNone;
+use Endroid\QrCode\Writer\PngWriter;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -32,7 +33,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationReport extends AbstractReport
 {
-    private const QR_CODE_SIZE = 30;
+    use LoggerTrait;
 
     /**
      * The calculation.
@@ -91,7 +92,6 @@ class CalculationReport extends AbstractReport
     {
         parent::Header();
         $this->renderCalculation();
-        $this->Ln(3);
     }
 
     /**
@@ -141,7 +141,17 @@ class CalculationReport extends AbstractReport
     }
 
     /**
-     * Checks if the groups table and the overall table fit within the current page.
+     * Set the logger.
+     */
+    public function setLogger(LoggerInterface $logger): self
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
+    /**
+     * Checks if the groups table, the overall table and the QR code (if any) fit within the current page.
      */
     private function checkTablesHeight(Calculation $calculation): void
     {
@@ -159,10 +169,11 @@ class CalculationReport extends AbstractReport
         // total height
         $total = 2 + self::LINE_HEIGHT * $lines;
 
-        // qr-code?
+        // qr-code
         if (null !== $this->qrcode) {
-            $total += self::QR_CODE_SIZE;
+            $total += $this->getQrCodeSize() - 1;
         }
+
         // check
         if (!$this->isPrintable($total)) {
             $this->AddPage();
@@ -170,7 +181,35 @@ class CalculationReport extends AbstractReport
     }
 
     /**
-     * Render the calculation properties.
+     * Gets the QR code link or an empty string if none.
+     */
+    private function getQrCodeLink(): string
+    {
+        if (null !== $this->qrcode) {
+            if (false !== \filter_var($this->qrcode, \FILTER_VALIDATE_EMAIL)) {
+                return 'mailto:' . $this->qrcode;
+            }
+
+            return $this->qrcode;
+        }
+
+        return '';
+    }
+
+    /**
+     * Gets the QR code size.
+     */
+    private function getQrCodeSize(): float
+    {
+        if (null !== $this->qrcode) {
+            return $this->pixels2UserUnit(100);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Render the calculation properties (header).
      */
     private function renderCalculation(): void
     {
@@ -192,41 +231,45 @@ class CalculationReport extends AbstractReport
             ->add($calculation->getCustomer())
             ->add($state, 1, $style)
             ->endRow()
-
             ->startHeaderRow()
             ->add($calculation->getDescription())
             ->add($date, 1, $style)
             ->endRow();
+
+        $this->Ln(3);
     }
 
     /**
-     * Render the QR code image.
+     * Render the QR code (if any).
      */
     private function renderQrCode(): void
     {
         if (null !== $this->qrcode) {
-            // output to the bottom right
-            $x = $this->GetPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE;
-            $y = $this->getPrintableHeight();
+            try {
+                // temp file
+                $path = FileUtils::tempfile('qr_code');
 
-            // options
-            $options = [
-                PdfWriterExt::WRITER_OPTION_PDF => $this,
-                PdfWriterExt::WRITER_OPTION_X => $x,
-                PdfWriterExt::WRITER_OPTION_Y => $y,
-            ];
+                // build
+                $result = Builder::create()
+                    ->roundBlockSizeMode(new RoundBlockSizeModeNone())
+                    ->writer(new PngWriter())
+                    ->data($this->qrcode)
+                    ->margin(0)
+                    ->build();
 
-            // build
-            Builder::create()
-                ->errorCorrectionLevel(new ErrorCorrectionLevelLow())
-                ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
-                ->encoding(new Encoding('UTF-8'))
-                ->writer(new PdfWriterExt())
-                ->size(self::QR_CODE_SIZE)
-                ->writerOptions($options)
-                ->data($this->qrcode)
-                ->margin(0)
-                ->build();
+                // save
+                $result->saveToFile($path);
+
+                // position
+                $size = $this->getQrCodeSize();
+                $x = $this->GetPageWidth() - $this->getRightMargin() - $size;
+                $y = $this->GetPageHeight() + self::FOOTER_OFFSET - $size - 1;
+
+                //render
+                $this->Image($path, $x, $y, $size, $size, 'png', $this->getQrCodeLink());
+            } catch (\Exception $e) {
+                $this->logException($e, $this->trans('generate.error.failed'));
+            }
         }
     }
 }

@@ -25,7 +25,7 @@ function updateUI() {
 
     // update actions, rule and position
     let position = 0;
-    $('#items .item').each(function (index, item) {
+    $('#items .item').each(function (_index, item) {
         const $item = $(item);
         $item.find('.btn-up-item').toggleDisabled($item.is(':first-of-type'));
         $item.find('.btn-down-item').toggleDisabled($item.is(':last-of-type'));

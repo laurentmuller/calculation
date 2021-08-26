@@ -20,11 +20,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * The home controler (home page, search and site map).
+ * The index controler for home page.
  *
  * @author Laurent Muller
  */
-class HomeController extends AbstractController
+class IndexController extends AbstractController
 {
     use MathTrait;
 
@@ -45,7 +45,7 @@ class HomeController extends AbstractController
         $calculations = $calculRepository->getLastCalculations($tabular ? 10 : 6);
         $min_margin = $this->getApplication()->getMinMargin();
 
-        // get states count and total
+        // get state count, overall total and items total
         [$states_count, $states_total, $states_items] = \array_reduce($states, function (array $carry, array $state) {
             $carry[0] += $state['count'];
             $carry[1] += $state['total'];
@@ -57,7 +57,7 @@ class HomeController extends AbstractController
         $states_margin = $this->safeDivide($states_total, $states_items);
 
         // render view
-        return $this->renderForm('home/index.html.twig', [
+        return $this->renderForm('index/index.html.twig', [
             'calculations' => $calculations,
             'min_margin' => $min_margin,
             'states_count' => $states_count,

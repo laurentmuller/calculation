@@ -7,24 +7,15 @@
     'use strict';
 
     // InputNumberFormat public class definition
-    const InputNumberFormat = function (element, options) {
-        this.$element = $(element);
-        this.options = $.extend(true, {}, InputNumberFormat.DEFAULTS, options);
-        this.init();
-    };
+    const InputNumberFormat = class {
 
-    InputNumberFormat.DEFAULTS = {
-        'decimal': 2,
-        'decimalAuto': 2,
-        'separator': '.',
-        'separatorAuthorized': ['.', ',']
-    };
+        constructor(element, options) {
+            this.$element = $(element);
+            this.options = $.extend(true, {}, InputNumberFormat.DEFAULTS, options);
+            this.init();
+        }
 
-    InputNumberFormat.prototype = {
-
-        constructor: InputNumberFormat,
-
-        init: function () {
+        init() {
             // build regex
             const options = this.options;
             var pattern = '^[0-9]+';
@@ -42,18 +33,18 @@
 
             // format
             this.update();
-        },
+        }
 
-        destroy: function () {
+        destroy() {
             // remove handlers and data
             const $element = this.$element;
             $element.off('keypress', $.proxy(this.keypress, this));
             $element.off('blur', $.proxy(this.update, this));
             $element.off('change', $.proxy(this.update, this));
             $element.removeData('inputNumberFormat');
-        },
+        }
 
-        formatValue: function (value) {
+        formatValue(value) {
             if (!value) {
                 return value;
             }
@@ -78,9 +69,9 @@
             }
 
             return value;
-        },
+        }
 
-        keypress: function (e) {
+        keypress(e) {
             if (e.ctrlKey || e.key.length > 1 || e.keyCode === 13) {
                 return;
             }
@@ -100,20 +91,28 @@
                 e.preventDefault();
                 return;
             }
-        },
+        }
 
-        update: function () {
+        update() {
             const oldValue = this.$element.val();
             const newValue = this.formatValue(oldValue);
             if (oldValue !== newValue) {
                 this.$element.val(newValue);
             }
-        },
+        }
+    };
+
+    InputNumberFormat.DEFAULTS = {
+        'decimal': 2,
+        'decimalAuto': 2,
+        'separator': '.',
+        'separatorAuthorized': ['.', ',']
     };
 
     // InputNumberFormat plugin definition
     const oldInputNumberFormat = $.fn.inputNumberFormat;
-    $.fn.inputNumberFormat = function (options) {
+
+    $.fn.inputNumberFormat = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
             let data = $this.data('inputNumberFormat');
@@ -123,6 +122,7 @@
             }
         });
     };
+
     $.fn.inputNumberFormat.Constructor = InputNumberFormat;
 
     // InputNumberFormat no conflict

@@ -125,8 +125,8 @@ final class PdfWriterExt implements WriterInterface
     private function addLogo(LogoInterface $logo, \FPDF $fpdf, int $x, int $y, int $size): void
     {
         $logoPath = $logo->getPath();
-        $logoHeight = $logo->getResizeToHeight();
         $logoWidth = $logo->getResizeToWidth();
+        $logoHeight = $logo->getResizeToHeight();
 
         if (null === $logoHeight || null === $logoWidth) {
             // @phpstan-ignore-next-line

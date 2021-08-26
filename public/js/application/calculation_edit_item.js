@@ -205,10 +205,8 @@ const EditItemDialog = class { /* exported EditItemDialog */
      */
     _updateTotal() {
         'use strict';
-        const price = this.$price.floatVal();
-        const quantity = this.$quantity.floatVal();
-        const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
-        this.$total.text(this._formatValue(total));
+        const item = this.getItem();
+        this.$total.text(this._formatValue(item.total));
     }
 
     /**

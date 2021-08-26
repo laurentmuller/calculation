@@ -167,7 +167,7 @@
 
         generateMatrix(width, height) {
             const matrix = [];
-            while (height--) {
+            for (let i = 0; i < height; i++) {
                 matrix.push(new Array(width));
             }
             return matrix;

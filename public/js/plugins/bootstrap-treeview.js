@@ -383,9 +383,7 @@
          * @return {BoostrapTreeView} this instance for chaining.
          */
         destroy() {
-            this.$element.off('click', '.list-group-item, .state-icon', this.clickProxy);
-            this.$element.off('dblclick', '.list-group-item', this.doubleclickProxy);
-            this.$element.off('keydown', '.list-group-item', this.keydownProxy);
+            this.removeProxies();
             this.$element.removeData('boostrapTreeView');
             return this;
         }
@@ -464,16 +462,19 @@
          * @return {BoostrapTreeView} this instance for chaining.
          */
         refresh() {
-            // remove handlers
+            this.removeProxies();
+            this.$element.children().remove();
+            this.init();
+            return this;
+        }
+
+        /**
+         * Remove handlers proxies.
+         */
+        removeProxies() {
             this.$element.off('click', '.list-group-item, .state-icon', this.clickProxy);
             this.$element.off('dblclick', '.list-group-item', this.doubleclickProxy);
             this.$element.off('keydown', '.list-group-item', this.keydownProxy);
-
-            // clear and initialize
-            this.$element.children().remove();
-            this.init();
-
-            return this;
         }
 
         /**
@@ -491,7 +492,7 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-            const event = $.Event('collapseall', { // jshint ignore:line
+            const event = $.Event('collapseall', {
                 'items': $items});
             if (!that.trigger(event)) {
                 return that;
@@ -520,7 +521,7 @@
                 return $(this).prev('.list-group-item');
             });
             // jshint ignore:line
-            const event = $.Event('expandall', { // jshint ignore:line
+            const event = $.Event('expandall', {
                 'items': $items});
             if (!that.trigger(event)) {
                 return that;

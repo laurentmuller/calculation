@@ -35,6 +35,7 @@
             that.clickProxy = $.proxy(that.click, that);
             that.doubleclickProxy = $.proxy(that.doubleclick, that);
             that.keydownProxy = $.proxy(that.keydown, that);
+            that.toggling = false;
 
             // retrieve Json Data.
             if (options.data) {
@@ -79,11 +80,6 @@
                     $('*').css('cursor', '');
                 });
             }
-
-            // add handlers
-            // $element.on('click', '.state-icon', function () {
-            // console.log('state-icon');
-            // });
 
             $element.on('click', '.list-group-item, .state-icon', that.clickProxy);
             $element.on('dblclick', '.list-group-item', that.doubleclickProxy);
@@ -141,6 +137,7 @@
                 if (node.nodes && node.nodes.length) {
                     $(templates.stateIcon)
                         .addClass(node.expanded ? options.expandIcon : options.collapseIcon)
+                        .attr('title', node.expanded ? options.texts.collapse : options.texts.expand)
                         .appendTo($item);
                 }
 
@@ -358,7 +355,14 @@
                 $group.toggle(options.toggleDuration, function () {
                     $icon.toggleClass(options.collapseIcon)
                         .toggleClass(options.expandIcon);
+                    if ($icon.hasClass(options.collapseIcon)) {
+                        $icon.attr('title', options.texts.expand);
+                    } else {
+                        $icon.attr('title', options.texts.collapse);
+                    }
+
                     that.updateBorders().toggling = false;
+
                 });
 
             }
@@ -520,7 +524,7 @@
             const $items = $groups.map(function () {
                 return $(this).prev('.list-group-item');
             });
-            // jshint ignore:line
+
             const event = $.Event('expandall', { // jshint ignore:line
                 'items': $items});
             if (!that.trigger(event)) {
@@ -588,6 +592,10 @@
         openNodeLinkOnNewTab: true,
         badgeCount: false,
         badgeClass: 'badge-pill badge-primary',
+        texts: {
+            expand: 'Expand',
+            collapse: 'Collapse'
+        },
         templates: {
             item: '<button type="button" role="treeitem" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2 border-top-0" />',
             stateIcon: '<i class="state-icon mr-1" />',

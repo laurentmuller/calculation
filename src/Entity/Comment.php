@@ -270,8 +270,9 @@ class Comment
      */
     private function getHtmlMessage(): string
     {
+        /** @var string[] $lines */
         $lines = (array) \preg_split('/\r\n|\r|\n/', $this->message);
-        $result = \array_filter($lines, function (string $line): bool {
+        $result = \array_filter($lines, static function (string $line): bool {
             return !empty($line) && 0 !== \strcasecmp('<p>&nbsp;</p>', $line);
         });
 

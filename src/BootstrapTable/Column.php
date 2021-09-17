@@ -151,7 +151,7 @@ class Column implements SortModeInterface
 
                 try {
                     $accessor->setValue($column, $key, $value);
-                } catch (AccessException | UnexpectedTypeException $e) {
+                } catch (AccessException|UnexpectedTypeException $e) {
                     $message = "Cannot set the property '$key'.";
                     throw new \InvalidArgumentException($message, 0, $e);
                 }

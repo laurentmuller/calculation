@@ -39,15 +39,11 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * The data field.
-     *
-     * @var PivotField
      */
     private ?PivotField $dataField = null;
 
     /**
      * The key field.
-     *
-     * @var PivotField
      */
     private ?PivotField $keyField = null;
 

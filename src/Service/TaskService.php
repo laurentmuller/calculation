@@ -158,7 +158,7 @@ class TaskService implements \JsonSerializable
             return false;
         }
 
-        return !empty($this->getTaskItems());
+        return !$this->getTaskItems()->isEmpty();
     }
 
     /**

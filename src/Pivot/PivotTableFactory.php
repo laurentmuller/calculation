@@ -41,10 +41,8 @@ class PivotTableFactory
 
     /**
      * The data field.
-     *
-     * @var PivotField
      */
-    private $dataField;
+    private ?PivotField $dataField = null;
 
     /**
      * The data source.
@@ -53,10 +51,8 @@ class PivotTableFactory
 
     /**
      * The key field.
-     *
-     * @var PivotField|null
      */
-    private $keyField;
+    private ?PivotField $keyField = null;
 
     /**
      * The row fields.

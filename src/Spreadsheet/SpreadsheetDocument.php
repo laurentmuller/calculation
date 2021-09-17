@@ -524,10 +524,8 @@ class SpreadsheetDocument extends Spreadsheet
             $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
             $headerFooter->setOddHeader($header);
         }
-        if (!empty($footer)) {
-            $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
-            $headerFooter->setOddFooter($footer);
-        }
+        $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
+        $headerFooter->setOddFooter($footer);
 
         return $this;
     }

@@ -6,7 +6,7 @@
         <div class="alert alert-warning my-2" role="alert">
             <div class="row">
                 <div class="col-md-7">
-                    {{- 'user.switch.connected'|trans({'%original%': app.token.originalToken.username, '%current%': app.user.username})|raw -}}
+                    {{- 'user.switch.connected'|trans({'%original%': app.token.originalToken.userIdentifier, '%current%': app.user.username})|raw -}}
                 </div>
                 <div class="col-md-5 text-md-right">
                     {%- set route = app.displayTabular ? 'user_table' : 'user_card' -%}

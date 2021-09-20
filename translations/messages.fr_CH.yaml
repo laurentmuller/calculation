@@ -605,7 +605,7 @@ index:
     panel_state: Calculations par statut
     panel_state_title: Afficher les calculations pour ce statut
     toggle_navigation: Basculer la navigation
-    disabled: Vous ne pouvez pas accéder à ce site car votre profile a été désactivé.<br><br>Veuillez demander à votre supérieur ou à l'administrateur du site pour vous octroyer les droits nécessaires.
+    disabled: <b>%username%</b>, vous ne pouvez pas accéder à ce site car votre profile a été désactivé.<br><br>Veuillez demander à votre supérieur hiérarchique de vous octroyer les droits nécessaires ou à l'administrateur du site de réactiver votre compte.
 about:
     title: A propos de
     app_customer: Client
@@ -1056,7 +1056,7 @@ generate:
         failed: Une erreur s'est produite lors de la génération des données.
 update:
     title: Mise à jour des données
-    description: Cet outil permet de mettre à jour des données de façon aléatoire.
+    description: Cet outil permet de mettre à jour les objets sélectionnés avec des données aléatoires.
     submit_text: Mettre à jour
     fields:
         entity: Objet à mettre à jour
@@ -1064,7 +1064,7 @@ update:
     error:
         confirm: Vous devez cochez le message de confirmation.
     help:
-        customer: Remplace le nom et le prénom du contact, le nom de la société et l'e-mail.
+        customer: Remplace le nom, le prénom, la société et l'e-mail.
         calculation: Remplace le nom du client, la description et le statut.
 task:
     name: Tâche

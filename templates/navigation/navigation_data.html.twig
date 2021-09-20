@@ -1,7 +1,7 @@
 {# data menu #}
 {% import 'macros/_icons.html.twig' as icons %}
-{%- set is_granted_data = is_granted_product or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_task -%}
-{%- if is_granted_data or is_granted_customer -%}
+{%- set is_granted_data = is_granted_product or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin or is_granted_task or is_granted_customer -%}
+{%- if is_granted_data -%}
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="dataDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{- icons.icon('database', 'index.menu_data') -}}

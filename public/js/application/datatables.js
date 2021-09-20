@@ -95,7 +95,7 @@ $.fn.dataTable.renderTooltip = function (td, cellData) {
  * @param {any}
  *            rowData - the data source object / array for the whole row.
  */
-$.fn.dataTable.renderStateColor = function (td, cellData, rowData) {
+$.fn.dataTable.renderStateColor = function (td, _cellData, rowData) {
     'use strict';
 
     const color = rowData.find((value) => value.match(/^#([0-9a-f]{6}|[0-9a-f]{3})$/i));
@@ -114,7 +114,7 @@ $.fn.dataTable.renderStateColor = function (td, cellData, rowData) {
  * @param {any}
  *            rowData - the data source object / array for the whole row.
  */
-$.fn.dataTable.renderLog = function (td, cellData, rowData) {
+$.fn.dataTable.renderLog = function (td, _cellData, rowData) {
     'use strict';
 
     const level = rowData[3].toLowerCase();

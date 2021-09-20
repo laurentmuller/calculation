@@ -50,8 +50,10 @@
 {%- endblock %}
 
 {% block table_actions -%}
+{% if is_granted(ATTRIBUTE_ADD, object_type) %}
 {{ _self.item_data(clone_path, 'common.button_clone', 'copy far') }}
 {{ icons.dropdownSeparator() }}
+{% endif %}
 {{ _self.item_data(compute_path, 'taskcompute.title', 'keyboard') }}
 {{ icons.dropdownSeparator() }}
 {{ parent() }}

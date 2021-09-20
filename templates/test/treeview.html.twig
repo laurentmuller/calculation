@@ -54,16 +54,16 @@
         <div class="form-group">
             <label for="state">Status</label>
             <div class="input-group">
-                <select id="state" class="form-control" multiple="multiple">
+                <select id="state" class="form-control" multiple="multiple" data-delete="Supprimer le statut">
                     {% for state in states -%}
                     <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
                     {%- endfor %}
                 </select>
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un élément">
+                    <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un statut">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les éléments">
+                    <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les statuts">
                         <i class="far fa-trash-alt"></i>
                     </button>
                 </div>
@@ -77,16 +77,16 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">@</span>
                 </div>
-                <select id="category" class="form-control" multiple="multiple">
+                <select id="category" class="form-control" multiple="multiple" data-delete="Supprimer la catégorie">
                     {% for category in categories -%}
                     <option value="{{ category.id }}">{{ category.code }}</option>
                     {%- endfor %}
                 </select>
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un élément">
+                    <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter une catégorie">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les éléments">
+                    <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer toutes les catégories">
                         <i class="far fa-trash-alt"></i>
                     </button>
                 </div>

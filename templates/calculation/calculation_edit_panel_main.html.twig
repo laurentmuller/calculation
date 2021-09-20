@@ -2,7 +2,7 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 <div id="main-panel" class="card mb-3">
-    <div class="card-header d-print-none">
+    <div class="card-header">
         <h1 class="card-title">
             {{- icons.icon('calculator', title, null, title_parameters) -}}
         </h1>
@@ -24,27 +24,14 @@
             </div>
         </div>
     </div>
-
-    <div class="card-footer d-print-none">
-        {%- if editable -%}
-            <div class="row">
-                <div class="col-md-9">
-                    {{ icons.button_submit() }}
-                    {{ icons.button_cancel(cancel_path) }}
-                </div>
-                <div class="col-md-3 text-md-right mt-1">
-                    <small>{{ 'common.required'|trans|raw }}</small>
-                </div>
+    <div class="card-footer py-1{% if new %} d-none{% endif %}">
+        <div class="row">
+            <div class="col small text-muted my-2 mx-1">
+               <span>{{ created_item|raw }}</span>
             </div>
-        {%- else -%}
-            <div class="row">
-                <div class="col-md-3">
-                    {{ icons.button_ok(cancel_path) }}
-                </div>
-                <div class="col-md-9 text-md-right">
-                    <small class="text-danger">{{ 'calculation.edit.read_only'|trans({'%name%': item.stateCode}) }}</small>
-                </div>
+            <div class="col small text-muted my-2 mx-1 text-right">
+                <span>{{ updated_item|raw }}</span>
             </div>
-        {%- endif -%}
+        </div>
     </div>
 </div>

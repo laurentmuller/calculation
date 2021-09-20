@@ -164,7 +164,7 @@ $.fn.extend({
                 // update pagination
                 $('.fixed-table-pagination .page-link').each(function (_index, element) {
                     const $element = $(element);
-                    $element.attr('title', $element.attr('aria-label'));
+                    $element.attr('href', '#').attr('title', $element.attr('aria-label')).removeAttr('aria-label');
                 });
                 $('.fixed-table-pagination .page-item.disabled .page-link').tagName('span', ['href']);
                 $('.fixed-table-pagination .page-item.active .page-link').tagName('span', ['href']);

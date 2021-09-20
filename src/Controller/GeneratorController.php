@@ -43,10 +43,11 @@ class GeneratorController extends AbstractController
      */
     public function generate(): Response
     {
-        $helper = $this->createFormHelper('generate.fields.', [
+        $data = [
             'count' => 1,
             'simulate' => $this->isSessionBool('admin.generate.simulate', true),
-        ]);
+        ];
+        $helper = $this->createFormHelper('generate.fields.', $data);
 
         $helper->field('entity')
             ->addChoiceType([
@@ -68,6 +69,7 @@ class GeneratorController extends AbstractController
         $helper->field('confirm')
             ->notMapped()
             ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
+            ->updateAttribute('disabled', $data['simulate'] ? 'disabled' : null)
             ->addCheckboxType();
 
         return $this->renderForm('admin/generate.html.twig', [

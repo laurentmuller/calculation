@@ -57,7 +57,7 @@
 {%- set class = ('text-currency ' ~ class|default(''))|trim -%}
 {% if cell %}
     {%- set popover = 'not-hover' not in class -%}
-    {%- set value = _self.format(cell.value) -%}    
+    {%- set value = _self.format(cell.value) -%}
     <td class="{{ class }}"{% if popover %} data-toggle="popover" data-body="{{ _self.outputPopover(cell, value)|e }}"{% endif %}>{{ value }}</td>
 {% else %}
     <td class="{{ class }} not-hover">&nbsp;</td>
@@ -72,7 +72,7 @@
 {% macro outputCells(table, columns, row) -%}
 {%- for column in columns %}
     {{ _self.outputCell(table, column, row, 'hover') }}
-{%- endfor -%} 
+{%- endfor -%}
     {{ _self.outputValue(row, 'not-hover bg-success text-white') -}}
 {%- endmacro %}
 
@@ -147,7 +147,7 @@
                 {{ _self.outputHeaders(table.column.childrenAtLevel(i)) }}
                 {%- if i == 1 -%}<td{{ _self.rowspan(col_level) }} class="text-currency bg-success text-white not-hover align-bottom">{{ total_title }}</td>{%- endif -%}
             </tr>
-            {%- endfor -%} 
+            {%- endfor -%}
         </thead>
         <tbody>
             {%- set columns = table.column.lastChildren -%}

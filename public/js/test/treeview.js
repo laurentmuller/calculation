@@ -181,13 +181,13 @@ function formatCategorySelection(category) {
         templateResult: formatState,
         templateSelection: formatStateSelection,
         minimumResultsForSearch: Infinity
-    }).val(['1', '5']).trigger('change');
+    }).val([1, 5]).trigger('change');
 
     // categories
     $('#category').initSelect2({
         templateResult: formatCategory,
         templateSelection: formatCategorySelection
-    }).val(['1', '2', '3', '4', '5', '6']).trigger('change');
+    }).val([1, 2, 3, 4, 5, 6]).trigger('change');
 
     $('.btn-search').on('click', function () {
         $(this).parents('.form-group').find('select').select2('open');

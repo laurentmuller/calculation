@@ -51,11 +51,11 @@ function toggleHighlight($source, $table, save) {
                 highlightHorizontal: 'table-primary',
                 highlightVertical: 'table-primary'
 
-            }).on('cellhighlight.mouseenter', function (e, { horizontal, vertical}) {
+            }).on('cellhighlight.mouseenter', function (_e, { horizontal, vertical}) {
                 $.each($.merge(horizontal, vertical), function () {
                     $(this).toggleCell('bg-success text-white', 'table-cell');
                 });
-            }).on('cellhighlight.mouseleave', function (e, { horizontal, vertical}) {
+            }).on('cellhighlight.mouseleave', function (_e, { horizontal, vertical}) {
                 $.each($.merge(horizontal, vertical), function () {
                     $(this).toggleCell('table-cell', 'bg-success text-white');
                 });

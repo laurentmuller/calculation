@@ -151,7 +151,15 @@ function generate() {
 (function ($) {
     'use strict';
 
-    // init validation
+    $('#form_simulate').on('input', function () {
+        if ($(this).isChecked()) {
+            $('#form_confirm').toggleDisabled(true).removeValidation();
+        } else {
+            $('#form_confirm').toggleDisabled(false);
+        }
+    });
+
+    // validation
     const options = {
         submitHandler: function () {
             generate();

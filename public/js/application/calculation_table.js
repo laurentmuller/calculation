@@ -40,7 +40,7 @@ $.fn.extend({
  */
 clearSearch = (function ($parent) { // jshint ignore:line
     'use strict';
-    return function ($element, table) {
+    return function (_$element, table) {
         const $state = $('#state');
         if ($state.length && $state.val() !== '') {
             $('.dropdown-state:first').updateState();

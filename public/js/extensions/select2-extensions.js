@@ -90,11 +90,12 @@
         initSelect2: function (options) {
             return this.each(function () {
                 const $select = $(this);
+                const multiple = $select.hasAttr('multiple');
                 const settings = $.extend(true, {
                     // dropdownAutoWidth: true,
                     theme: 'bootstrap4',
+                    // closeOnSelect: !multiple,
                     placeholder: $select.data('placeholder'),
-                    closeOnSelect: !$select.attr('multiple'),
                     allowClear: Boolean($select.data('allow-clear')),
                     width: $select.data('width') ? $select.data('width') : $select.hasClass('w-100') ? '100%' : 'style'
                 }, options);
@@ -117,11 +118,18 @@
                         $search[0].focus();
                     }
                 }).on('change', function () {
-                    $('.select2-selection__choice__remove').text('').addClass('fas fa-times');
+                    const $removes = $select.next('.select2').find('.select2-selection__choice__remove');
+                    if ($removes.length) {
+                        $removes.text('').addClass('fas fa-times border-left');
+                        const title = $select.data('delete');
+                        if (title) {
+                            $removes.attr('title', title);
+                        }
+                    }
                 }).css('width', '');
 
                 const select2 = $select.data('select2');
-                if ($select.hasAttr('multiple')) {
+                if (multiple) {
                     select2.$container.addClass('form-control');
                 } else {
                     select2.on('keypress', function (e) {

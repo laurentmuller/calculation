@@ -52,7 +52,17 @@
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="form-group">
-            <label for="state">Status</label>
+            <label for="state_single">Status (simple)</label>
+            <select id="state_single" class="form-control">
+                {% for state in states -%}
+                <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
+                {%- endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group">
+            <label for="state">Status (multiple)</label>
             <div class="input-group">
                 <select id="state" class="form-control" multiple="multiple" data-delete="Supprimer le statut">
                     {% for state in states -%}

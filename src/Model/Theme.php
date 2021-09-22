@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Model;
 
 use App\Service\ThemeService;
 use App\Util\FileUtils;
@@ -38,27 +38,27 @@ class Theme implements \JsonSerializable
     /**
      * The style sheet path.
      */
-    protected string $css;
+    private string $css;
 
     /**
      * The dark style.
      */
-    protected ?bool $dark = null;
+    private ?bool $dark = null;
 
     /**
      * The description.
      */
-    protected string $description;
+    private string $description;
 
     /**
      * The path exist.
      */
-    protected ?bool $exist = null;
+    private ?bool $exist = null;
 
     /**
      * The name.
      */
-    protected string $name;
+    private string $name;
 
     /**
      * Constructor.

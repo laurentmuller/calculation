@@ -10,8 +10,9 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Model;
 
+use App\Entity\User;
 use App\Util\Utils;
 use SimpleHtmlToText\Parser;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -252,7 +253,7 @@ class Comment
      */
     private function addAttachment(Email $email, ?UploadedFile $file): Email
     {
-        if ($file && $file->isValid()) {
+        if (null !== $file && $file->isValid()) {
             $path = $file->getPathname();
             $name = $file->getClientOriginalName();
             $type = $file->getClientMimeType();

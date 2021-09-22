@@ -19,35 +19,38 @@
 
 {% block card_body %}
 <table class="table table-hover table-sm mb-0">
-    {% if empty > 0 %}
+    {% if result.empty > 0 %}
         <tr>
             <td>{{ 'calculation.result.empty'|trans }}</td>
-            <td class="text-right"><a href="{{ empty_path }}" title="{{ 'empty.description'|trans }}">{{ empty|integer }}</a></td>
+            <td class="text-right"><a href="{{ empty_path }}" title="{{ 'empty.description'|trans }}">{{ result.empty|integer }}</a></td>
         </tr>
     {% endif %}
-    {% if duplicated > 0 %}
+    {% if result.duplicated > 0 %}
         <tr>
             <td>{{ 'calculation.result.duplicated'|trans }}</td>
-            <td class="text-right"><a href="{{ duplicate_path }}" title="{{ 'duplicate.description'|trans }}">{{ duplicated|integer }}</a></td>
+            <td class="text-right"><a href="{{ duplicate_path }}" title="{{ 'duplicate.description'|trans }}">{{ result.duplicated|integer }}</a></td>
         </tr>
     {% endif %}
-    {% if sorted > 0 %}
-        {{ _self.add_line_info('calculation.result.sorted', sorted|integer) }}
+    {% if result.sorted > 0 %}
+        {{ _self.add_line_info('calculation.result.sorted', result.sorted|integer) }}
     {% endif %}
-    {% if empty > 0 or duplicated > 0 or sorted > 0 %}
+    {% if result.codes > 0 %}
+        {{ _self.add_line_info('calculation.result.codes', result.codes|integer) }}
+    {% endif %}
+    {% if result.empty > 0 or result.duplicated > 0 or result.sorted > 0 or result.codes > 0 %}
         <tr class="not-hover"><td colspan="2">&nbsp;</td></tr>
     {% endif %}
-    {{ _self.add_line_info('calculation.result.updated', updated|integer) }}
-    {{ _self.add_line_info('calculation.result.skipped', skipped|integer) }}
-    {% if unmodifiable > 0 %}
-        {{ _self.add_line_info('calculation.result.unmodifiable', unmodifiable|integer) }}
+    {{ _self.add_line_info('calculation.result.updated', result.updated|integer) }}
+    {{ _self.add_line_info('calculation.result.skipped', result.skipped|integer) }}
+    {% if result.unmodifiable > 0 %}
+        {{ _self.add_line_info('calculation.result.unmodifiable', result.unmodifiable|integer) }}
     {% endif %}
     <tr>
         <th>{{ 'calculation.result.total'|trans }}</<th>
-        <th class="text-right">{{ total|integer }}</th>
+        <th class="text-right">{{ result.total|integer }}</th>
     </tr>
 </table>
-{% if simulated %}
+{% if query.simulated %}
     <hr class="mt-0">
     <p class="text-right my-0 small">{{ 'calculation.result.simulated'|trans }}</p>
 {% endif %}

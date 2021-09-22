@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Theme;
+use App\Model\Theme;
 use App\Traits\CacheTrait;
 use App\Util\FileUtils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -191,7 +191,7 @@ class ThemeService
     /**
      * Gets the themes.
      *
-     * @return \App\Entity\Theme[]
+     * @return \App\Model\Theme[]
      */
     public function getThemes(): array
     {

@@ -16,6 +16,8 @@ use App\Entity\Category;
 use App\Entity\Product;
 use App\Form\Category\CategoryListType;
 use App\Form\FormHelper;
+use App\Model\ProductUpdateQuery;
+use App\Model\ProductUpdateResult;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Traits\LoggerTrait;
@@ -45,18 +47,7 @@ class ProductUpdater
     use SessionTrait;
     use TranslatorTrait;
 
-    /**
-     * Update products with a fixed amount.
-     */
-    public const UPDATE_FIXED = 'fixed';
-
-    /**
-     * Update products with a percent.
-     */
-    public const UPDATE_PERCENT = 'percent';
-
     private FormFactoryInterface $factory;
-
     private EntityManagerInterface $manager;
 
     /**
@@ -81,24 +72,21 @@ class ProductUpdater
     /**
      * Creates the edit form.
      */
-    public function createForm(): FormInterface
+    public function createForm(ProductUpdateQuery $query): FormInterface
     {
-        // get values from session
-        $data = $this->loadFromSession();
-
         // create helper
-        $builder = $this->factory->createBuilder(FormType::class, $data);
+        $builder = $this->factory->createBuilder(FormType::class, $query);
         $helper = new FormHelper($builder, 'product.update.');
 
         // add fields
         $helper->field('category')
             ->label('product.fields.category')
-            ->updateOption('query_builder', function (CategoryRepository $repository): QueryBuilder {
+            ->updateOption('query_builder', static function (CategoryRepository $repository): QueryBuilder {
                 return $repository->getQueryBuilderByGroup(CategoryRepository::FILTER_PRODUCTS);
             })
             ->add(CategoryListType::class);
 
-        $helper->field('all_products')
+        $helper->field('allProducts')
             ->notRequired()
             ->rowClass('mb-0')
             ->updateAttribute('data-error', $this->trans('product.update.products_error'))
@@ -111,7 +99,7 @@ class ProductUpdater
             ->updateOption('class', Product::class)
             ->updateOption('choices', $this->getAllProducts())
             ->updateOption('choice_label', 'description')
-            ->updateOption('choice_attr', function (Product $product) {
+            ->updateOption('choice_attr', static function (Product $product) {
                 return [
                     'price' => $product->getPrice(),
                     'category' => $product->getCategoryId(),
@@ -120,12 +108,12 @@ class ProductUpdater
             ->add(EntityType::class);
 
         $helper->field('percent')
-            ->updateAttribute('data-type', self::UPDATE_PERCENT)
+            ->updateAttribute('data-type', ProductUpdateQuery::UPDATE_PERCENT)
             ->help('product.update.percent_help')
             ->addPercentType();
 
         $helper->field('fixed')
-            ->updateAttribute('data-type', self::UPDATE_FIXED)
+            ->updateAttribute('data-type', ProductUpdateQuery::UPDATE_FIXED)
             ->help('product.update.fixed_help')
             ->addMoneyType();
 
@@ -143,7 +131,7 @@ class ProductUpdater
 
         $helper->field('confirm')
             ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
-            ->updateAttribute('disabled', $data['simulated'] ? 'disabled' : null)
+            ->updateAttribute('disabled', $query->isSimulated() ? 'disabled' : null)
             ->notMapped()
             ->addCheckboxType();
 
@@ -154,88 +142,94 @@ class ProductUpdater
     }
 
     /**
-     * Update the products.
-     *
-     * @param array $data the form data
-     *
-     * @return array the result of the update
+     * Create the update query from session.
      */
-    public function update(array $data): array
+    public function createUpdateQuery(): ProductUpdateQuery
     {
-        // get values
-        $category = $data['category'];
-        $products = $data['products'];
-        $round = (bool) $data['round'];
-        $simulated = (bool) $data['simulated'];
-        $all_products = (bool) $data['all_products'];
-        $use_percent = self::UPDATE_PERCENT === $data['type'];
-        $value = $use_percent ? (float) $data['percent'] : (float) $data['fixed'];
+        $id = $this->getSessionInt('product.update.category', 0);
+        $category = $this->getCategory($id);
 
-        $results = [
-            'result' => false,
-            'category' => $category,
-            'simulated' => $simulated,
-            'round' => $round,
-            'use_percent' => $use_percent,
-            'value' => $value,
-        ];
+        $query = new ProductUpdateQuery();
+        $query->setAllProducts(true)
+            ->setCategory($category)
+            ->setProducts($this->getProducts($category))
+            ->setPercent($this->getSessionFloat('product.update.percent', 0))
+            ->setFixed($this->getSessionFloat('product.update.fixed', 0))
+            ->setType($this->getSessionString('product.update.type', ProductUpdateQuery::UPDATE_PERCENT))
+            ->setRound($this->isSessionBool('product.update.round', false))
+            ->setSimulated($this->isSessionBool('product.update.simulated', true));
 
-        if ($all_products) {
-            $products = $this->getProducts($category);
+        return $query;
+    }
+
+    /**
+     *  Save the update request to session.
+     */
+    public function saveUpdateQuery(ProductUpdateQuery $query): void
+    {
+        $this->setSessionValue('product.update.category', $query->getCategoryId());
+        $this->setSessionValue('product.update.simulated', $query->isSimulated());
+        $this->setSessionValue('product.update.round', $query->isRound());
+        if ($query->isPercent()) {
+            $this->setSessionValue('product.update.percent', $query->getValue());
+            $this->setSessionValue('product.update.type', ProductUpdateQuery::UPDATE_PERCENT);
+        } else {
+            $this->setSessionValue('product.update.fixed', $query->getValue());
+            $this->setSessionValue('product.update.type', ProductUpdateQuery::UPDATE_FIXED);
+        }
+    }
+
+    /**
+     * Update the products.
+     */
+    public function update(ProductUpdateQuery $query): ProductUpdateResult
+    {
+        $result = new ProductUpdateResult();
+
+        if ($query->isAllProducts()) {
+            $products = $this->getProducts($query->getCategory());
+        } else {
+            $products = $query->getProducts();
         }
         if (empty($products)) {
-            return $results;
+            return $result;
         }
 
         /** @var Product $product */
         foreach ($products as $product) {
             $oldPrice = $product->getPrice();
-            $newPrice = $this->computeNewPrice($oldPrice, $value, $use_percent, $round);
-
+            $newPrice = $this->computePrice($oldPrice, $query);
             $product->setPrice($newPrice);
 
-            $results['products'][] = [
+            $result->addProduct([
                 'description' => $product->getDescription(),
                 'oldPrice' => $oldPrice,
                 'newPrice' => $newPrice,
-            ];
+            ]);
         }
 
-        if (!$simulated) {
+        if (!$query->isSimulated() && $result->isValid()) {
             // save
             $this->manager->flush();
 
             // log results
-            $this->logResults($category, $products, $value, $use_percent);
+            $this->logResult($query, $result);
         }
 
-        // save values to session
-        $this->saveToSession($category, $simulated, $round, $value, $use_percent);
-
-        // ok
-        $results['result'] = true;
-
-        return $results;
+        return $result;
     }
 
     /**
      * Compute the new product price.
-     *
-     * @param float $oldPrice    the old price of the product
-     * @param float $value       the value to update with
-     * @param bool  $use_percent true if the value is a percentage, false if is a fixed amount
-     * @param bool  $round       true to round new value up to 0.05
-     *
-     * @return float the new price
      */
-    private function computeNewPrice(float $oldPrice, float $value, bool $use_percent, bool $round): float
+    private function computePrice(float $oldPrice, ProductUpdateQuery $query): float
     {
-        if ($use_percent) {
-            $newPrice = $oldPrice * (1 + $value);
+        if ($query->isPercent()) {
+            $newPrice = $oldPrice * (1 + $query->getValue());
         } else {
-            $newPrice = $oldPrice + $value;
+            $newPrice = $oldPrice + $query->getValue();
         }
-        if ($round) {
+        if ($query->isRound()) {
             $newPrice = \round($newPrice * 20, 0) / 20;
         }
 
@@ -291,52 +285,16 @@ class ProductUpdater
     }
 
     /**
-     * Load user settings from session.
+     * Log results.
      */
-    private function loadFromSession(): array
-    {
-        $category = $this->getCategory($this->getSessionInt('product.update.category', 0));
-
-        return [
-            'all_products' => true,
-            'category' => $category,
-            'products' => $this->getProducts($category),
-            'percent' => $this->getSessionFloat('product.update.percent', 0),
-            'fixed' => $this->getSessionFloat('product.update.fixed', 0),
-            'type' => $this->getSessionString('product.update.type', self::UPDATE_PERCENT),
-            'round' => $this->isSessionBool('product.update.round', false),
-            'simulated' => $this->isSessionBool('product.update.simulated', true),
-        ];
-    }
-
-    /**
-     * Log update results.
-     */
-    private function logResults(Category $category, array $products, float $value, bool $use_percent): void
+    private function logResult(ProductUpdateQuery $query, ProductUpdateResult $result): void
     {
         $context = [
-            $this->trans('product.fields.category') => $category->getCode(),
-            $this->trans('product.result.updated') => $this->trans('counters.products', ['count' => \count($products)]),
-            $this->trans('product.result.value') => $use_percent ? FormatUtils::formatPercent($value) : FormatUtils::formatAmount($value),
+            $this->trans('product.fields.category') => $query->getCategoryCode(),
+            $this->trans('product.result.updated') => $this->trans('counters.products', ['count' => $result->count()]),
+            $this->trans('product.result.value') => $query->isPercent() ? FormatUtils::formatPercent($query->getValue()) : FormatUtils::formatAmount($query->getValue()),
         ];
         $message = $this->trans('product.update.title');
         $this->logInfo($message, $context);
-    }
-
-    /**
-     * Save user settings to session.
-     */
-    private function saveToSession(Category $category, bool $simulated, bool $round, float $value, bool $use_percent): void
-    {
-        $this->setSessionValue('product.update.category', $category->getId());
-        $this->setSessionValue('product.update.simulated', $simulated);
-        $this->setSessionValue('product.update.round', $round);
-        if ($use_percent) {
-            $this->setSessionValue('product.update.percent', $value);
-            $this->setSessionValue('product.update.type', self::UPDATE_PERCENT);
-        } else {
-            $this->setSessionValue('product.update.fixed', $value);
-            $this->setSessionValue('product.update.type', self::UPDATE_FIXED);
-        }
     }
 }

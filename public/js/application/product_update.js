@@ -18,7 +18,7 @@ function getVisibleProducts() {
  */
 function isAllProducts() {
     'use strict';
-    return $('#form_all_products').isChecked();
+    return $('#form_allProducts').isChecked();
 }
 
 /**
@@ -29,7 +29,7 @@ function isAllProducts() {
 function validateProducts() {
     'use strict';
     const validator = $('#edit-form').validate();
-    return validator.element("#form_all_products");
+    return validator.element("#form_allProducts");
 }
 
 /**
@@ -53,8 +53,8 @@ function isProductsRequired() {
  * @param {number}
  *            value - the value to update with.
  * @param {boolean}
- *            isPercent - true if the value is a percentage, false if is a
- *            fixed amount
+ *            isPercent - true if the value is a percentage, false if is a fixed
+ *            amount
  * @param {boolean}
  *            round - true to round new value up to 0.05
  * @returns {number} the new price or Number.NaN if not applicable.
@@ -120,7 +120,7 @@ function updatePrices() {
             'form[fixed]': {
                 notEqualToZero: true
             },
-            'form[all_products]': {
+            'form[allProducts]': {
                 required: isProductsRequired
             }
         },
@@ -186,7 +186,7 @@ function updatePrices() {
         validateProducts();
     });
 
-    $('#form_all_products').on('click', function () {
+    $('#form_allProducts').on('click', function () {
         const disabled = $(this).isChecked();
         $('#form_products tbody tr').toggleClass('text-secondary', disabled);
         $('#btn-all, #btn-none, #btn-reverse, #form_products :checkbox').toggleDisabled(disabled);

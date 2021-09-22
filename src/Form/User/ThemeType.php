@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
-use App\Entity\Theme;
 use App\Form\AbstractHelperType;
 use App\Form\FormHelper;
+use App\Model\Theme;
 use App\Service\ThemeService;
 use App\Traits\TranslatorTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;

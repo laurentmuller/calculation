@@ -72,7 +72,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @ORM\OrderBy({"position" = "ASC", "code" = "ASC"})
      * @Assert\Valid
      *
-     * @var CalculationGroup|Collection
+     * @var CalculationGroup[]|Collection
      * @psalm-var Collection<int, CalculationGroup>
      */
     protected $groups;
@@ -901,6 +901,31 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         return $changed;
+    }
+
+    /**
+     * Update the group and category codes.
+     *
+     * @return int the number of update
+     */
+    public function updateCodes(): int
+    {
+        $total = 0;
+
+        /** @var CalculationGroup $group */
+        foreach ($this->groups as $group) {
+            if ($group->updateCode()) {
+                ++$total;
+            }
+            /** @var CalculationCategory $category */
+            foreach ($group->getCategories()  as $category) {
+                if ($category->updateCode()) {
+                    ++$total;
+                }
+            }
+        }
+
+        return $total;
     }
 
     /**

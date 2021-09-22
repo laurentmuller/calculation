@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Entity\Theme;
+use App\Model\Theme;
 use App\Service\ThemeService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

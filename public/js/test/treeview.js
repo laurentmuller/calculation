@@ -177,10 +177,14 @@ function formatCategorySelection(category) {
     }).val('CHF').trigger('change');
 
     // states
-    $('#state').initSelect2({
+    $('#state_single').initSelect2({
         templateResult: formatState,
         templateSelection: formatStateSelection,
         minimumResultsForSearch: Infinity
+    });
+    $('#state').initSelect2({
+        templateResult: formatState,
+        templateSelection: formatStateSelection,
     }).val([1, 5]).trigger('change');
 
     // categories

@@ -14,7 +14,6 @@ namespace App\Controller;
 
 use App\DataTable\UserDataTable;
 use App\Entity\AbstractEntity;
-use App\Entity\Comment;
 use App\Entity\User;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
@@ -22,6 +21,7 @@ use App\Form\User\UserImageType;
 use App\Form\User\UserRightsType;
 use App\Form\User\UserType;
 use App\Interfaces\RoleInterface;
+use App\Model\Comment;
 use App\Pdf\PdfResponse;
 use App\Report\UsersReport;
 use App\Report\UsersRightsReport;

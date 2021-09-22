@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Comment;
 use App\Form\User\UserCommentType;
+use App\Model\Comment;
 use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

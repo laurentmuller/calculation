@@ -14,6 +14,8 @@ namespace App\Service;
 
 use App\Entity\Calculation;
 use App\Form\FormHelper;
+use App\Model\CalculationUpdateQuery;
+use App\Model\CalculationUpdateResult;
 use App\Traits\LoggerTrait;
 use App\Traits\SessionTrait;
 use App\Traits\TranslatorTrait;
@@ -37,11 +39,8 @@ class CalculationUpdater
     use TranslatorTrait;
 
     private FormFactoryInterface $factory;
-
     private SuspendEventListenerService $listener;
-
     private EntityManagerInterface $manager;
-
     private CalculationService $service;
 
     /**
@@ -70,13 +69,10 @@ class CalculationUpdater
     /**
      * Creates the edit form.
      */
-    public function createForm(): FormInterface
+    public function createForm(CalculationUpdateQuery $query): FormInterface
     {
-        // get values from session
-        $data = $this->loadFromSession();
-
         // create helper
-        $builder = $this->factory->createBuilder(FormType::class, $data);
+        $builder = $this->factory->createBuilder(FormType::class, $query);
         $helper = new FormHelper($builder, 'calculation.update.');
 
         // add fields
@@ -98,6 +94,12 @@ class CalculationUpdater
             ->notRequired()
             ->addCheckboxType();
 
+        $helper->field('codes')
+            ->help('calculation.update.codes_help')
+            ->helpClass('ml-4 mb-2')
+            ->notRequired()
+            ->addCheckboxType();
+
         $helper->field('sorted')
             ->help('calculation.update.sorted_help')
             ->helpClass('ml-4 mb-2')
@@ -112,7 +114,7 @@ class CalculationUpdater
 
         $helper->field('confirm')
             ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
-            ->updateAttribute('disabled', $data['simulated'] ? 'disabled' : null)
+            ->updateAttribute('disabled', $query->isSimulated() ? 'disabled' : null)
             ->notMapped()
             ->addCheckboxType();
 
@@ -120,29 +122,40 @@ class CalculationUpdater
     }
 
     /**
-     * Update calculations.
-     *
-     * @param array $data the form data
-     *
-     * @return array the result of the update
+     * Create the update query from session.
      */
-    public function update(array $data): array
+    public function createUpdateQuery(): CalculationUpdateQuery
     {
-        // get values
-        $includeClosed = (bool) $data['closed'];
-        $includeSorted = (bool) $data['sorted'];
-        $includeEmpty = (bool) $data['empty'];
-        $includeDuplicated = (bool) $data['duplicated'];
-        $simulated = (bool) $data['simulated'];
+        $query = new CalculationUpdateQuery();
+        $query->setCodes($this->isSessionBool('calculation.update.codes', true))
+            ->setEmpty($this->isSessionBool('calculation.update.empty', true))
+            ->setSorted($this->isSessionBool('calculation.update.sorted', true))
+            ->setClosed($this->isSessionBool('calculation.update.closed', false))
+            ->setSimulated($this->isSessionBool('calculation.update.simulated', true))
+            ->setDuplicated($this->isSessionBool('calculation.update.duplicated', false));
 
-        // counters
-        $updated = 0;
-        $skipped = 0;
-        $empty = 0;
-        $duplicated = 0;
-        $sorted = 0;
-        $unmodifiable = 0;
-        $total = 0;
+        return $query;
+    }
+
+    /**
+     * Save the update request to session.
+     */
+    public function saveUpdateQuery(CalculationUpdateQuery $query): void
+    {
+        $this->setSessionValue('calculation.update.codes', $query->isCodes());
+        $this->setSessionValue('calculation.update.empty', $query->isEmpty());
+        $this->setSessionValue('calculation.update.sorted', $query->isSorted());
+        $this->setSessionValue('calculation.update.closed', $query->isClosed());
+        $this->setSessionValue('calculation.update.simulated', $query->isSimulated());
+        $this->setSessionValue('calculation.update.duplicated', $query->isDuplicated());
+    }
+
+    /**
+     * Update calculations.
+     */
+    public function update(CalculationUpdateQuery $query): CalculationUpdateResult
+    {
+        $result = new CalculationUpdateResult();
 
         try {
             $this->listener->disableListeners();
@@ -151,57 +164,53 @@ class CalculationUpdater
             $calculations = $this->getCalculations();
 
             foreach ($calculations as $calculation) {
-                if ($includeClosed || $calculation->isEditable()) {
+                if ($query->isClosed() || $calculation->isEditable()) {
                     $changed = false;
-                    if ($includeEmpty && $calculation->hasEmptyItems()) {
-                        $empty += $calculation->removeEmptyItems();
+                    if ($query->isEmpty() && $calculation->hasEmptyItems()) {
+                        $result->addEmpty($calculation->removeEmptyItems());
                         $changed = true;
                     }
-                    if ($includeDuplicated && $calculation->hasDuplicateItems()) {
-                        $duplicated += $calculation->removeDuplicateItems();
+
+                    if ($query->isCodes()) {
+                        if (0 !== $count = $calculation->updateCodes()) {
+                            $result->addCodes($count);
+                            $changed = true;
+                        }
+                    }
+
+                    if ($query->isDuplicated() && $calculation->hasDuplicateItems()) {
+                        $result->addDuplicated($calculation->removeDuplicateItems());
                         $changed = true;
                     }
-                    if ($includeSorted && $calculation->sort()) {
-                        ++$sorted;
+
+                    if ($query->isSorted() && $calculation->sort()) {
+                        $result->addSorted(1);
                         $changed = true;
                     }
+
                     if ($this->service->updateTotal($calculation) || $changed) {
-                        ++$updated;
+                        $result->addUpdated(1);
                     } else {
-                        ++$skipped;
+                        $result->addSkipped(1);
                     }
                 } else {
-                    ++$unmodifiable;
+                    $result->addUnmodifiable(1);
                 }
+                $result->addTotal(1);
             }
 
-            $total = \count($calculations);
-
-            if (!$simulated && $updated > 0) {
+            if (!$query->isSimulated() && $result->isValid()) {
                 // save
                 $this->manager->flush();
 
                 // log results
-                $this->logResults($empty, $duplicated, $sorted, $updated, $skipped, $unmodifiable, $total);
+                $this->logResult($result);
             }
         } finally {
             $this->listener->enableListeners();
         }
 
-        // save values to session
-        $this->saveToSession($includeClosed, $includeEmpty, $includeDuplicated, $includeSorted, $simulated);
-
-        return [
-            'result' => 0 !== $updated,
-            'empty' => $empty,
-            'duplicated' => $duplicated,
-            'sorted' => $sorted,
-            'updated' => $updated,
-            'skipped' => $skipped,
-            'unmodifiable' => $unmodifiable,
-            'simulated' => $simulated,
-            'total' => $total,
-        ];
+        return $result;
     }
 
     /**
@@ -215,46 +224,22 @@ class CalculationUpdater
     }
 
     /**
-     * Load user settings from session.
-     */
-    private function loadFromSession(): array
-    {
-        return [
-            'closed' => $this->isSessionBool('calculation.update.closed', false),
-            'sorted' => $this->isSessionBool('calculation.update.sorted', true),
-            'empty' => $this->isSessionBool('calculation.update.empty', true),
-            'duplicated' => $this->isSessionBool('calculation.update.duplicated', false),
-            'simulated' => $this->isSessionBool('calculation.update.simulated', true),
-        ];
-    }
-
-    /**
      * Log update results.
      */
-    private function logResults(int $empty, int $duplicated, int $sorted, int $updated, int $skipped, int $unmodifiable, int $total): void
+    private function logResult(CalculationUpdateResult $result): void
     {
         $context = [
-            $this->trans('calculation.result.empty') => $empty,
-            $this->trans('calculation.result.duplicated') => $duplicated,
-            $this->trans('calculation.result.sorted') => $sorted,
-            $this->trans('calculation.result.updated') => $updated,
-            $this->trans('calculation.result.skipped') => $skipped,
-            $this->trans('calculation.result.unmodifiable') => $unmodifiable,
-            $this->trans('calculation.result.total') => $total,
+            $this->trans('calculation.result.total') => $result->getTotal(),
+            $this->trans('calculation.result.updated') => $result->getUpdated(),
+            $this->trans('calculation.result.skipped') => $result->getSkipped(),
+            $this->trans('calculation.result.unmodifiable') => $result->getUnmodifiable(),
+
+            $this->trans('calculation.result.codes') => $result->getCodes(),
+            $this->trans('calculation.result.empty') => $result->getEmpty(),
+            $this->trans('calculation.result.sorted') => $result->getSorted(),
+            $this->trans('calculation.result.duplicated') => $result->getDuplicated(),
         ];
         $message = $this->trans('calculation.update.title');
         $this->logInfo($message, $context);
-    }
-
-    /**
-     * Save user settings to session.
-     */
-    private function saveToSession(bool $includeClosed, bool $includeEmpty, bool $includeDuplicated, bool $includeSorted, bool $simulated): void
-    {
-        $this->setSessionValue('calculation.update.closed', $includeClosed);
-        $this->setSessionValue('calculation.update.empty', $includeEmpty);
-        $this->setSessionValue('calculation.update.duplicated', $includeDuplicated);
-        $this->setSessionValue('calculation.update.sorted', $includeSorted);
-        $this->setSessionValue('calculation.update.simulated', $simulated);
     }
 }

@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Entity\Theme;
 use App\Form\User\ThemeType;
+use App\Model\Theme;
 use App\Service\ThemeService;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Extension\AbstractExtension;

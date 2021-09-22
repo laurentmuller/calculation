@@ -14,7 +14,6 @@ namespace App\Controller;
 
 use App\Entity\Calculation;
 use App\Entity\Category;
-use App\Entity\Comment;
 use App\Entity\Group;
 use App\Form\Admin\ParametersType;
 use App\Form\Type\AlphaCaptchaType;
@@ -25,6 +24,7 @@ use App\Form\Type\SimpleEditorType;
 use App\Form\Type\TinyMceEditorType;
 use App\Interfaces\StrengthInterface;
 use App\Mime\NotificationEmail;
+use App\Model\Comment;
 use App\Pdf\PdfResponse;
 use App\Pdf\PdfTocDocument;
 use App\Report\HtmlReport;

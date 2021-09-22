@@ -341,6 +341,20 @@ class CalculationCategory extends AbstractEntity implements \Countable
     }
 
     /**
+     * Update this code.
+     */
+    public function updateCode(): bool
+    {
+        if (null !== $this->category && $this->code !== $this->category->getCode()) {
+            $this->code = $this->category->getCode();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Update position of items.
      */
     public function updatePositions(): self

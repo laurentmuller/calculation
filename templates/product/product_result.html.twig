@@ -15,16 +15,16 @@
 
 {% block card_body %}
 <table class="table table-sm">
-    {{ _self.add_line_info('category.fields.group', category.groupCode) }}
-    {{ _self.add_line_info('product.fields.category', category.code) }}
-    {{ _self.add_line_info('product.update.type', (use_percent ? 'product.update.percent' : 'product.update.fixed')|trans) }}
-    {{ _self.add_line_info('product.result.value', use_percent ? value|percent : value|amount) }}
-    {{ _self.add_line_info('product.update.round', (round ? 'common.value_true' : 'common.value_false')|trans) }}
-    {% if result %}
-        {{ _self.add_line_info('product.result.updated', 'counters.products'|trans({count: products|length})) }}
+    {{ _self.add_line_info('category.fields.group', query.groupCode) }}
+    {{ _self.add_line_info('product.fields.category', query.categoryCode) }}
+    {{ _self.add_line_info('product.update.type', (query.percent ? 'product.update.percent' : 'product.update.fixed')|trans) }}
+    {{ _self.add_line_info('product.result.value', query.percent ? query.value|percent : query.value|amount) }}
+    {{ _self.add_line_info('product.update.round', (query.round ? 'common.value_true' : 'common.value_false')|trans) }}
+    {% if result.valid %}
+        {{ _self.add_line_info('product.result.updated', 'counters.products'|trans({count: result.products|length})) }}
     {% endif %}
 </table>
-{% if result and products|length %}
+{% if result.valid %}
     <div class="overflow-auto border-bottom" style="max-height: 209px;">
         <table class="table table-hover table-sm mb-0">
             <thead class="thead-light">
@@ -35,7 +35,7 @@
                 </tr>
             </thead>
             <tbody>
-            {% for product in products -%}
+            {% for product in result.products -%}
             <tr>
                 <td>{{ product.description }}</td>
                 <td class="text-currency">{{ product.oldPrice|amount }}</td>
@@ -45,7 +45,7 @@
             </tbody>
         </table>
     </div>
-    {% if simulated %}
+    {% if query.simulated %}
         <p class="text-right small mb-0 mt-1">{{ 'product.result.simulated'|trans }}</p>
     {% endif %}
 {% else %}

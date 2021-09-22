@@ -52,7 +52,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
      * @ORM\OrderBy({"position" = "ASC", "code" = "ASC"})
      * @Assert\Valid
      *
-     * @var Collection|CalculationCategory[]
+     * @var CalculationCategory[]|Collection
      * @psalm-var Collection<int, CalculationCategory>
      */
     protected $categories;
@@ -384,6 +384,20 @@ class CalculationGroup extends AbstractEntity implements \Countable
         $margin = $this->group->findPercent($amount);
 
         return $this->setAmount($amount)->setMargin($margin);
+    }
+
+    /**
+     * Update this code.
+     */
+    public function updateCode(): bool
+    {
+        if (null !== $this->group && $this->code !== $this->group->getCode()) {
+            $this->code = $this->group->getCode();
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

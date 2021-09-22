@@ -226,19 +226,26 @@ class AdminController extends AbstractController
     public function updateCalculation(Request $request, CalculationUpdater $updater): Response
     {
         // create form
-        $form = $updater->createForm();
+        $query = $updater->createUpdateQuery();
+        $form = $updater->createForm($query);
 
         // handle request
         if ($this->handleRequestForm($request, $form)) {
-            // update
-            $results = $updater->update($form->getData());
+            // save query
+            $updater->saveUpdateQuery($query);
 
-            // update last update
-            if ($results['result'] && !$results['simulated']) {
+            // update
+            $result = $updater->update($query);
+
+            // update last date
+            if (!$query->isSimulated() && $result->isValid()) {
                 $this->getApplication()->setProperties([ApplicationServiceInterface::P_UPDATE_CALCULATIONS => new \DateTime()]);
             }
 
-            return $this->renderForm('calculation/calculation_result.html.twig', $results);
+            return $this->renderForm('calculation/calculation_result.html.twig', [
+                'result' => $result,
+                'query' => $query,
+            ]);
         }
 
         // display
@@ -257,19 +264,26 @@ class AdminController extends AbstractController
     public function updateProduct(Request $request, ProductUpdater $updater): Response
     {
         // create form
-        $form = $updater->createForm();
+        $query = $updater->createUpdateQuery();
+        $form = $updater->createForm($query);
 
         // handle request
         if ($this->handleRequestForm($request, $form)) {
-            // update
-            $results = $updater->update($form->getData());
+            // save query
+            $updater->saveUpdateQuery($query);
 
-            // update last update
-            if ($results['result'] && !$results['simulated']) {
+            // update
+            $result = $updater->update($query);
+
+            // update last date
+            if (!$query->isSimulated() && $result->isValid()) {
                 $this->getApplication()->setProperties([ApplicationServiceInterface::P_UPDATE_PRODUCTS => new \DateTime()]);
             }
 
-            return $this->renderForm('product/product_result.html.twig', $results);
+            return $this->renderForm('product/product_result.html.twig', [
+                'result' => $result,
+                'query' => $query,
+            ]);
         }
 
         return $this->renderForm('product/product_update.html.twig', [

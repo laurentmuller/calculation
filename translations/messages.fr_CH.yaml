@@ -90,6 +90,8 @@ calculation:
         empty_help: Supprime les articles avec une quantité ou un prix égale à 0.
         duplicated: Supprimer les articles en double
         duplicated_help: Supprime les articles contenu plus d'une fois dans une calculation.
+        codes: Mettre à jour les groupes et les catégories.
+        codes_help: Copie les noms des groupes et des catégories depuis le catalogue.
         simulated: Simuler la mise à jour
         simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
         confirm: Confirmer la mise à jour des données
@@ -100,6 +102,7 @@ calculation:
         updated: Calculations mises à jour
         skipped: Calculations inchangées
         sorted: Calculations triées
+        codes: Groupes et catégories
         empty: Articles vides
         duplicated: Articles en double
         unmodifiable: Calculations non-modifiables
@@ -324,7 +327,7 @@ product:
         description: Cette page vous permet de mettre à jour le prix des articles.
         type: Type de mise à jour
         percent: Pourcentage
-        percent_help: 'Example : 50.00 + 12 % = 56.00'
+        percent_help: 'Example : 50.00 + 12% = 56.00'
         fixed: Montant fixe
         fixed_help: 'Example : 50.00 + 12.00 = 62.00'
         round: Arrondir au 5 centimes
@@ -333,7 +336,7 @@ product:
         simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
         confirm: Confirmer la mise à jour des données
         last_update: 'Dernière mise à jour : %date%'
-        all_products: Mettre à jour tous les articles
+        allProducts: Mettre à jour tous les articles
         products_error: Un ou plusieurs articles doivent être sélectionnés.
         check_all: Sélectionner tous les articles
         check_none: Supprimer la sélection des articles

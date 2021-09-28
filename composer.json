@@ -35,7 +35,7 @@
 		"fakerphp/faker": "^1.14",
 		"google/recaptcha": "^1.2",
 		"imagine/imagine": "^1.2",
-		"league/commonmark": "^1.5",
+		"league/commonmark": "^2.0",
 		"ob/highcharts-bundle": "^1.7",
 		"phpoffice/phpspreadsheet": "^1.16",
 		"robquistnl/simplehtmltotext": "^1.1",

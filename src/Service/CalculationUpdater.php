@@ -138,7 +138,27 @@ class CalculationUpdater
     }
 
     /**
-     * Save the update request to session.
+     * Log the update result.
+     */
+    public function logResult(CalculationUpdateResult $result): void
+    {
+        $context = [
+            $this->trans('calculation.result.total') => $result->getTotal(),
+            $this->trans('calculation.result.updated') => $result->getUpdated(),
+            $this->trans('calculation.result.skipped') => $result->getSkipped(),
+            $this->trans('calculation.result.unmodifiable') => $result->getUnmodifiable(),
+
+            $this->trans('calculation.result.codes') => $result->getCodes(),
+            $this->trans('calculation.result.empty') => $result->getEmpty(),
+            $this->trans('calculation.result.sorted') => $result->getSorted(),
+            $this->trans('calculation.result.duplicated') => $result->getDuplicated(),
+        ];
+        $message = $this->trans('calculation.update.title');
+        $this->logInfo($message, $context);
+    }
+
+    /**
+     * Save the update query to session.
      */
     public function saveUpdateQuery(CalculationUpdateQuery $query): void
     {
@@ -202,8 +222,6 @@ class CalculationUpdater
             if (!$query->isSimulated() && $result->isValid()) {
                 // save
                 $this->manager->flush();
-
-                // log results
                 $this->logResult($result);
             }
         } finally {
@@ -221,25 +239,5 @@ class CalculationUpdater
     private function getCalculations(): array
     {
         return $this->manager->getRepository(Calculation::class)->findAll();
-    }
-
-    /**
-     * Log update results.
-     */
-    private function logResult(CalculationUpdateResult $result): void
-    {
-        $context = [
-            $this->trans('calculation.result.total') => $result->getTotal(),
-            $this->trans('calculation.result.updated') => $result->getUpdated(),
-            $this->trans('calculation.result.skipped') => $result->getSkipped(),
-            $this->trans('calculation.result.unmodifiable') => $result->getUnmodifiable(),
-
-            $this->trans('calculation.result.codes') => $result->getCodes(),
-            $this->trans('calculation.result.empty') => $result->getEmpty(),
-            $this->trans('calculation.result.sorted') => $result->getSorted(),
-            $this->trans('calculation.result.duplicated') => $result->getDuplicated(),
-        ];
-        $message = $this->trans('calculation.update.title');
-        $this->logInfo($message, $context);
     }
 }

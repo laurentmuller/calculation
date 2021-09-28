@@ -19,7 +19,10 @@ namespace App\Model;
  */
 class ProductUpdateResult implements \Countable
 {
+    private ?string $code = null;
+    private bool $percent = true;
     private array $products = [];
+    private float $value = 0;
 
     public function addProduct(array $values): self
     {
@@ -33,13 +36,49 @@ class ProductUpdateResult implements \Countable
         return \count($this->products);
     }
 
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
     public function getProducts(): array
     {
         return $this->products;
     }
 
+    public function getValue(): float
+    {
+        return $this->value;
+    }
+
+    public function isPercent(): bool
+    {
+        return $this->percent;
+    }
+
     public function isValid(): bool
     {
         return !empty($this->products);
+    }
+
+    public function setCode(string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function setPercent(bool $percent): self
+    {
+        $this->percent = $percent;
+
+        return $this;
+    }
+
+    public function setValue(float $value): self
+    {
+        $this->value = $value;
+
+        return $this;
     }
 }

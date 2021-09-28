@@ -163,7 +163,21 @@ class ProductUpdater
     }
 
     /**
-     *  Save the update request to session.
+     * Log the update result.
+     */
+    public function logResult(ProductUpdateResult $result): void
+    {
+        $context = [
+            $this->trans('product.fields.category') => $result->getCode(),
+            $this->trans('product.result.updated') => $this->trans('counters.products', ['count' => $result->count()]),
+            $this->trans('product.result.value') => $result->isPercent() ? FormatUtils::formatPercent($result->getValue()) : FormatUtils::formatAmount($result->getValue()),
+        ];
+        $message = $this->trans('product.update.title');
+        $this->logInfo($message, $context);
+    }
+
+    /**
+     *  Save the update query to session.
      */
     public function saveUpdateQuery(ProductUpdateQuery $query): void
     {
@@ -185,6 +199,9 @@ class ProductUpdater
     public function update(ProductUpdateQuery $query): ProductUpdateResult
     {
         $result = new ProductUpdateResult();
+        $result->setCode($query->getCategoryCode())
+            ->setPercent($query->isPercent())
+            ->setValue($query->getValue());
 
         if ($query->isAllProducts()) {
             $products = $this->getProducts($query->getCategory());
@@ -211,9 +228,7 @@ class ProductUpdater
         if (!$query->isSimulated() && $result->isValid()) {
             // save
             $this->manager->flush();
-
-            // log results
-            $this->logResult($query, $result);
+            $this->logResult($result);
         }
 
         return $result;
@@ -282,19 +297,5 @@ class ProductUpdater
         }
 
         return [];
-    }
-
-    /**
-     * Log results.
-     */
-    private function logResult(ProductUpdateQuery $query, ProductUpdateResult $result): void
-    {
-        $context = [
-            $this->trans('product.fields.category') => $query->getCategoryCode(),
-            $this->trans('product.result.updated') => $this->trans('counters.products', ['count' => $result->count()]),
-            $this->trans('product.result.value') => $query->isPercent() ? FormatUtils::formatPercent($query->getValue()) : FormatUtils::formatAmount($query->getValue()),
-        ];
-        $message = $this->trans('product.update.title');
-        $this->logInfo($message, $context);
     }
 }

@@ -27,17 +27,13 @@ class CustomersReport extends AbstractArrayReport
 {
     /**
      * The group customers by first letter.
-     *
-     * @var bool
      */
-    private $grouped = true;
+    private bool $grouped = true;
 
     /**
      * The other group name.
-     *
-     * @var string
      */
-    private $other;
+    private ?string $other = null;
 
     /**
      * Constructor.

@@ -75,7 +75,7 @@ class CalculationState extends AbstractEntity
      * @var Collection|Calculation[]
      * @psalm-var Collection<int, Calculation>
      */
-    private $calculations;
+    private Collection $calculations;
 
     /**
      * Constructor.

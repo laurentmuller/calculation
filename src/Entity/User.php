@@ -115,7 +115,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private ?\DateTime $updatedAt = null; // @phpstan-ignore-line
+    private ?\DateTimeInterface $updatedAt = null; // @phpstan-ignore-line
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -490,11 +490,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     public function setRole(?string $role): self
     {
-        if (RoleInterface::ROLE_USER === $role) {
-            $this->role = null;
-        } else {
-            $this->role = $role;
-        }
+        $this->role = RoleInterface::ROLE_USER === $role ? null : $role;
 
         return $this;
     }

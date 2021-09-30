@@ -35,17 +35,13 @@ class CalculationEmptyDataTable extends AbstractCalculationItemsDataTable
 
     /**
      * The price label.
-     *
-     * @var string
      */
-    private $priceLabel;
+    private string $priceLabel;
 
     /**
      * The quantity label.
-     *
-     * @var string
      */
-    private $quantityLabel;
+    private string $quantityLabel;
 
     /**
      * Constructor.

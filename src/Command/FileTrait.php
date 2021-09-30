@@ -65,7 +65,7 @@ trait FileTrait
      */
     protected function getFilesystem(): Filesystem
     {
-        if (!$this->fs) {
+        if (null === $this->fs) {
             $this->fs = new Filesystem();
         }
 
@@ -77,7 +77,7 @@ trait FileTrait
      */
     protected function getHttpClient(): HttpClientInterface
     {
-        if (!$this->client) {
+        if (null === $this->client) {
             $this->client = HttpClient::create();
         }
 

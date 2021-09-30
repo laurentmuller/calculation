@@ -38,7 +38,7 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface
      * @param Calendar  $calendar the parent calendar
      * @param \DateTime $date     the date
      */
-    public function __construct(Calendar $calendar, \DateTime $date)
+    public function __construct(Calendar $calendar, \DateTimeInterface $date)
     {
         $this->date = \DateTimeImmutable::createFromMutable($date);
         $key = $date->format(self::KEY_FORMAT);

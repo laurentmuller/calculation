@@ -146,7 +146,7 @@ class AkismetService extends AbstractHttpClientService
      */
     public function verifyComment(string $content, array $options = []): bool
     {
-        if ($request = $this->stack->getCurrentRequest()) {
+        if (($request = $this->stack->getCurrentRequest()) !== null) {
             /** @var \App\Entity\User $user */
             $user = $this->security->getUser();
             $headers = $request->headers;
@@ -208,7 +208,7 @@ class AkismetService extends AbstractHttpClientService
             return $verified;
         }
 
-        if ($request = $this->stack->getCurrentRequest()) {
+        if (($request = $this->stack->getCurrentRequest()) !== null) {
             $body = [
                 'key' => $this->key,
                 'blog' => $request->getSchemeAndHttpHost(),
@@ -247,13 +247,10 @@ class AkismetService extends AbstractHttpClientService
     private function checkError(ResponseInterface $response): void
     {
         $headers = $response->getHeaders();
-        if (isset($headers['x-akismet-debug-help'][0])) {
-            $help = $headers['x-akismet-debug-help'][0];
-            if ($help) {
-            }
+        $help = (string) ($headers['x-akismet-debug-help'][0] ?? '');
+        if ('' !== $help) {
         }
         $code = (int) ($headers['X-akismet-alert-code'][0] ?? 0);
-
         if (0 !== $code) {
             $message = $this->trans((string) $code, [], 'askimet');
             if ($message === (string) $code) {

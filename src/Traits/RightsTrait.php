@@ -120,11 +120,7 @@ trait RightsTrait
      */
     public function setRights(?array $rights): self
     {
-        if (empty($rights) || 0 === \array_sum($rights)) {
-            $this->rights = null;
-        } else {
-            $this->rights = $rights;
-        }
+        $this->rights = empty($rights) || 0 === \array_sum($rights) ? null : $rights;
 
         return $this;
     }

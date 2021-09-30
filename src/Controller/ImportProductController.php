@@ -228,11 +228,7 @@ class ImportProductController extends AbstractController
      */
     private function isValid(Product $product): bool
     {
-        if (Utils::isString($product->getDescription()) && null !== $product->getCategory()) {
-            return true;
-        }
-
-        return false;
+        return Utils::isString($product->getDescription()) && null !== $product->getCategory();
     }
 
     /**
@@ -246,11 +242,9 @@ class ImportProductController extends AbstractController
     {
         $reader = new Xlsx();
         $reader->setReadDataOnly(true);
-
         $workbook = $reader->load($path);
-        $sheet = $workbook->setActiveSheetIndex(0);
 
-        return $sheet;
+        return $workbook->setActiveSheetIndex(0);
     }
 
     /**

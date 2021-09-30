@@ -40,15 +40,9 @@ class UserDataTable extends AbstractEntityDataTable
      */
     public const ID = User::class;
 
-    /**
-     * @var bool
-     */
-    private $superAdmin = false;
+    private bool $superAdmin = false;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Constructor.
@@ -59,7 +53,7 @@ class UserDataTable extends AbstractEntityDataTable
         $this->translator = $translator;
 
         // check if current user has the super admin role
-        if ($user = $security->getUser()) {
+        if (($user = $security->getUser()) !== null) {
             $this->superAdmin = $user instanceof User && $user->isSuperAdmin();
         }
     }

@@ -423,7 +423,7 @@ class SearchService
      */
     private function getResultSetMapping(): ResultSetMapping
     {
-        if (!$this->mapping) {
+        if (null === $this->mapping) {
             $this->mapping = new ResultSetMapping();
             foreach (self::COLUMNS as $name => $type) {
                 $this->mapping->addScalarResult($name, $name, $type);

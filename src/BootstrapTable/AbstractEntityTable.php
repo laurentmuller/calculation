@@ -208,7 +208,7 @@ abstract class AbstractEntityTable extends AbstractTable
                     }
                 }
             }
-            if ($expr->count()) {
+            if (0 !== $expr->count()) {
                 $builder->andWhere($expr)
                     ->setParameter(TableInterface::PARAM_SEARCH, "%{$search}%");
             }

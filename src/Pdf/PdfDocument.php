@@ -147,45 +147,33 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
 
     /**
      * The application name.
-     *
-     * @var string
      */
-    protected $applicationName;
+    protected ?string $applicationName = null;
 
     /**
      * The company name.
-     *
-     * @var string
      */
-    protected $company;
+    protected ?string $company = null;
 
     /**
      * The company web site.
-     *
-     * @var string
      */
-    protected $companyUrl;
+    protected ?string $companyUrl = null;
 
     /**
      * The header description.
-     *
-     * @var string
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
      * The owner web site.
-     *
-     * @var string
      */
-    protected $ownerUrl;
+    protected ?string $ownerUrl = null;
 
     /**
      * The title.
-     *
-     * @var string
      */
-    protected $title;
+    protected ?string $title = null;
 
     /**
      * Constructor.

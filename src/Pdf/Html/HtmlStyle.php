@@ -27,31 +27,23 @@ class HtmlStyle extends PdfStyle
 
     /**
      * The bottom margin.
-     *
-     * @var float
      */
-    protected $bottomMargin;
+    protected float $bottomMargin = 0;
 
     /**
      * The left margin.
-     *
-     * @var float
      */
-    protected $leftMargin;
+    protected float $leftMargin = 0;
 
     /**
      * The right margin.
-     *
-     * @var float
      */
-    protected $rightMargin;
+    protected float $rightMargin = 0;
 
     /**
      * The top margin.
-     *
-     * @var float
      */
-    protected $topMargin;
+    protected float $topMargin = 0;
 
     /**
      * {@inheritdoc}

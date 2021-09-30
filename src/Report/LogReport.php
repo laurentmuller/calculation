@@ -51,35 +51,27 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
      *
      * @var ?PdfDrawColor[]
      */
-    private $colors;
+    private ?array $colors = null;
 
     /**
      * The draw cards state.
-     *
-     * @var bool
      */
-    private $drawCards;
+    private ?bool $drawCards = null;
 
     /**
      * The SQL formatter for doctrine message.
-     *
-     * @var SqlFormatter
      */
-    private $formatter;
+    private ?SqlFormatter $formatter = null;
 
     /**
      * The current level.
-     *
-     * @var string
      */
-    private $level;
+    private ?string $level = null;
 
     /**
      * The started page state.
-     *
-     * @var bool
      */
-    private $started;
+    private ?bool $started = null;
 
     /**
      * {@inheritdoc}
@@ -242,11 +234,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
      */
     private function getMessage(Log $log): string
     {
-        if ('doctrine' === $log->getChannel()) {
-            $message = $this->formatSql($log->getMessage());
-        } else {
-            $message = $log->getMessage();
-        }
+        $message = 'doctrine' === $log->getChannel() ? $this->formatSql($log->getMessage()) : $log->getMessage();
         if (!empty($log->getContext())) {
             $message .= "\n" . Utils::exportVar($log->getContext());
         }

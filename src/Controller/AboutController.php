@@ -321,20 +321,16 @@ class AboutController extends AbstractController
     private function getApacheVersion(Request $request)
     {
         $matches = [];
-        $regex = '/Apache\/(?P<version>[1-9][0-9]*\.[0-9][^\s]*)/i';
+        $regex = '/Apache\/(?P<version>[1-9]\d*\.\d[^\s]*)/i';
 
-        if (\function_exists('apache_get_version')) {
-            if (($version = apache_get_version()) && \preg_match($regex, $version, $matches)) {
-                return $matches['version'];
-            }
+        if (\function_exists('apache_get_version') && (($version = apache_get_version()) && \preg_match($regex, $version, $matches))) {
+            return $matches['version'];
         }
 
         $server = $request->server;
         $software = $server->get('SERVER_SOFTWARE', false);
-        if ($software && false !== \stripos($software, 'apache')) {
-            if (\preg_match($regex, $software, $matches)) {
-                return $matches['version'];
-            }
+        if ($software && false !== \stripos($software, 'apache') && \preg_match($regex, $software, $matches)) {
+            return $matches['version'];
         }
 
         return false;

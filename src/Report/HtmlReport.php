@@ -26,31 +26,23 @@ class HtmlReport extends AbstractReport
 {
     /**
      * the HTML content.
-     *
-     * @var string
      */
-    private $content;
+    private ?string $content = null;
 
     /**
      * The debug mode.
-     *
-     * @var bool
      */
-    private $debug;
+    private bool $debug;
 
     /**
      * The left margin.
-     *
-     * @var float
      */
-    private $leftMargin;
+    private ?float $leftMargin = null;
 
     /**
      * The right margin.
-     *
-     * @var float
      */
-    private $rightMargin;
+    private ?float $rightMargin = null;
 
     /**
      * Constructor.
@@ -103,7 +95,7 @@ class HtmlReport extends AbstractReport
     {
         // parse
         $parser = new HtmlParser($this->content);
-        if ($root = $parser->parse()) {
+        if (($root = $parser->parse()) !== null) {
             if ($this->debug) {
                 $this->AddPage();
                 $this->outputDebug($root);

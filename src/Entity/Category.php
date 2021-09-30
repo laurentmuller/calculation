@@ -62,7 +62,7 @@ class Category extends AbstractEntity
      * @var Collection|Product[]
      * @psalm-var Collection<int, Product>
      */
-    private $products;
+    private Collection $products;
 
     /**
      * The list of taks that fall into this category.
@@ -72,7 +72,7 @@ class Category extends AbstractEntity
      * @var Collection|Task[]
      * @psalm-var Collection<int, Task>
      */
-    private $tasks;
+    private Collection $tasks;
 
     /**
      * Constructor.
@@ -203,7 +203,7 @@ class Category extends AbstractEntity
      */
     public function getGroupCode(): ?string
     {
-        return $this->group ? $this->group->getCode() : null;
+        return null !== $this->group ? $this->group->getCode() : null;
     }
 
     /**
@@ -211,7 +211,7 @@ class Category extends AbstractEntity
      */
     public function getGroupId(): ?int
     {
-        return $this->group ? $this->group->getId() : null;
+        return null !== $this->group ? $this->group->getId() : null;
     }
 
     /**
@@ -259,10 +259,8 @@ class Category extends AbstractEntity
      */
     public function removeProduct(Product $product): self
     {
-        if ($this->products->removeElement($product)) {
-            if ($product->getCategory() === $this) {
-                $product->setCategory(null);
-            }
+        if ($this->products->removeElement($product) && $product->getCategory() === $this) {
+            $product->setCategory(null);
         }
 
         return $this;
@@ -270,10 +268,8 @@ class Category extends AbstractEntity
 
     public function removeTask(Task $task): self
     {
-        if ($this->tasks->removeElement($task)) {
-            if ($task->getCategory() === $this) {
-                $task->setCategory(null);
-            }
+        if ($this->tasks->removeElement($task) && $task->getCategory() === $this) {
+            $task->setCategory(null);
         }
 
         return $this;

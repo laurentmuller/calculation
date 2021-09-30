@@ -96,7 +96,7 @@ trait LoggerTrait
      */
     protected function write(string $message, string $tag = 'info'): void
     {
-        if ($this->io) {
+        if (null !== $this->io) {
             $concat = $this->concat($message);
             $this->io->writeln("<$tag>$concat</$tag>");
         }
@@ -109,7 +109,7 @@ trait LoggerTrait
      */
     protected function writeError(string $message): void
     {
-        if ($this->io) {
+        if (null !== $this->io) {
             $concat = $this->concat($message);
             $this->io->error($concat);
         }
@@ -122,7 +122,7 @@ trait LoggerTrait
      */
     protected function writeNote(string $message): void
     {
-        if ($this->io) {
+        if (null !== $this->io) {
             $concat = $this->concat($message);
             $this->io->note($concat);
         }
@@ -135,7 +135,7 @@ trait LoggerTrait
      */
     protected function writeSuccess(string $message): void
     {
-        if ($this->io) {
+        if (null !== $this->io) {
             $concat = $this->concat($message);
             $this->io->success($concat);
         }

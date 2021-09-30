@@ -91,7 +91,7 @@ class CalculationItem extends AbstractEntity
      */
     public function getCalculation(): ?Calculation
     {
-        return $this->category ? $this->category->getCalculation() : null;
+        return null !== $this->category ? $this->category->getCalculation() : null;
     }
 
     /**

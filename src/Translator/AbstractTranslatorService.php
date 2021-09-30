@@ -48,10 +48,8 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      */
     public function findLanguage(?string $tag): ?string
     {
-        if ($tag && $languages = $this->getLanguages()) {
-            if ($name = \array_search($tag, (array) $languages, true)) {
-                return (string) $name;
-            }
+        if ($tag && ($languages = $this->getLanguages()) && ($name = \array_search($tag, (array) $languages, true))) {
+            return (string) $name;
         }
 
         return null;
@@ -133,7 +131,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      */
     protected function getPropertyAccessor(): PropertyAccessor
     {
-        if (!$this->accessor) {
+        if (null === $this->accessor) {
             $this->accessor = PropertyAccess::createPropertyAccessor();
         }
 

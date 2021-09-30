@@ -74,9 +74,9 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
         }
 
         $factors = [
-            'k' => 1000,
+            'k' => 1_000,
             'ki' => 1 << 10,
-            'm' => 1000000,
+            'm' => 1_000_000,
             'mi' => 1 << 20,
         ];
 

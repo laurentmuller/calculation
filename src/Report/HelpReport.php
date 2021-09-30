@@ -29,17 +29,13 @@ class HelpReport extends AbstractReport
 {
     /**
      * The absolute path to the images.
-     *
-     * @var string
      */
-    private $imagePath;
+    private string $imagePath;
 
     /**
      * The help service.
-     *
-     * @var HelpService
      */
-    private $service;
+    private HelpService $service;
 
     /**
      * Constructor.
@@ -209,12 +205,10 @@ class HelpReport extends AbstractReport
             }
 
             // actions
-            if (isset($item['displayEntityActions']) && $item['displayEntityActions']) {
-                if ($actions = $entity['actions'] ?? false) {
-                    $this->Ln(3);
-                    $this->outputText('help.labels.entity_actions');
-                    $this->outputActions($actions);
-                }
+            if (isset($item['displayEntityActions']) && $item['displayEntityActions'] && ($actions = $entity['actions'] ?? false)) {
+                $this->Ln(3);
+                $this->outputText('help.labels.entity_actions');
+                $this->outputActions($actions);
             }
         }
 

@@ -103,7 +103,7 @@ class PivotTableFactory
         // build
         foreach ($this->dataset as $row) {
             // key
-            if ($keyField) {
+            if (null !== $keyField) {
                 $key = $keyField->getValue($row);
                 if (\in_array($key, $keys, true)) {
                     continue;
@@ -118,7 +118,7 @@ class PivotTableFactory
             $currentCol = $table->getColumn();
             foreach ($colFields as $field) {
                 $key = $field->getValue($row);
-                if (!$child = $currentCol->find($key)) {
+                if (($child = $currentCol->find($key)) === null) {
                     $aggregator = $this->createAggregator();
                     $title = (string) $field->getDisplayValue($key);
                     $currentCol = $currentCol
@@ -136,7 +136,7 @@ class PivotTableFactory
             $currentRow = $table->getRow();
             foreach ($rowFields as $field) {
                 $key = $field->getValue($row);
-                if (!$child = $currentRow->find($key)) {
+                if (($child = $currentRow->find($key)) === null) {
                     $aggregator = $this->createAggregator();
                     $title = (string) $field->getDisplayValue($key);
                     $currentRow = $currentRow
@@ -151,7 +151,7 @@ class PivotTableFactory
             $currentRow->addValue($value);
 
             // update or create cell
-            if ($cell = $table->findCellByNode($currentCol, $currentRow)) {
+            if (($cell = $table->findCellByNode($currentCol, $currentRow)) !== null) {
                 $cell->addValue($value);
             } else {
                 $aggregator = $this->createAggregator();
@@ -258,11 +258,7 @@ class PivotTableFactory
      */
     public function isValid(): bool
     {
-        if (empty($this->dataset) || empty($this->columnFields) || empty($this->rowFields) || empty($this->dataField)) {
-            return false;
-        }
-
-        return true;
+        return !(empty($this->dataset) || empty($this->columnFields) || empty($this->rowFields) || empty($this->dataField));
     }
 
     /**
@@ -354,7 +350,7 @@ class PivotTableFactory
     private function buildFieldsTitle(array $fields): string
     {
         return \array_reduce($fields, function (string $carry, PivotField $field): string {
-            if (\strlen($carry)) {
+            if (0 !== \strlen($carry)) {
                 return $carry . '\\' . $field->getTitle();
             } else {
                 return $field->getTitle();

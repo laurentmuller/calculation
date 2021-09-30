@@ -81,7 +81,9 @@ trait CacheTrait
     public function deleteCacheItems(array $keys): bool
     {
         if (null !== $this->adapter) {
-            $keys = \array_map([$this, 'cleanKey'], $keys);
+            $keys = \array_map(function (string $key) {
+                return $this->cleanKey($key);
+            }, $keys);
 
             return $this->adapter->deleteItems($keys);
         }
@@ -122,7 +124,9 @@ trait CacheTrait
     public function getCacheItems(array $keys)
     {
         if (null !== $this->adapter) {
-            $keys = \array_map([$this, 'cleanKey'], $keys);
+            $keys = \array_map(function (string $key) {
+                return $this->cleanKey($key);
+            }, $keys);
 
             return $this->adapter->getItems($keys);
         }
@@ -144,10 +148,8 @@ trait CacheTrait
         // clean key
         $key = $this->cleanKey($key);
 
-        if ($item = $this->getCacheItem($key)) {
-            if ($item->isHit()) {
-                return $item->get();
-            }
+        if (($item = $this->getCacheItem($key)) && $item->isHit()) {
+            return $item->get();
         }
 
         if (\is_callable($default)) {

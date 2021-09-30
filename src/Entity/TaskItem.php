@@ -41,7 +41,7 @@ class TaskItem extends AbstractEntity implements \Countable
      * @var Collection|TaskItemMargin[]
      * @psalm-var Collection<int, TaskItemMargin>
      */
-    private $margins;
+    private Collection $margins;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -146,10 +146,8 @@ class TaskItem extends AbstractEntity implements \Countable
 
     public function removeMargin(TaskItemMargin $margin): self
     {
-        if ($this->margins->removeElement($margin)) {
-            if ($margin->getTaskItem() === $this) {
-                $margin->setTaskItem(null);
-            }
+        if ($this->margins->removeElement($margin) && $margin->getTaskItem() === $this) {
+            $margin->setTaskItem(null);
         }
 
         return $this;

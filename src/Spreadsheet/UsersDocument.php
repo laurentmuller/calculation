@@ -31,24 +31,18 @@ class UsersDocument extends AbstractArrayDocument
 {
     /**
      * The mapping factory.
-     *
-     * @var PropertyMappingFactory
      */
-    private $factory;
+    private PropertyMappingFactory $factory;
 
     /**
      * The configured file property name.
-     *
-     * @var string|null
      */
-    private $fieldName;
+    private ?string $fieldName = null;
 
     /**
      * The image storage.
-     *
-     * @var StorageInterface
      */
-    private $storage;
+    private StorageInterface $storage;
 
     /**
      * Constructor.

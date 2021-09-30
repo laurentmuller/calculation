@@ -444,7 +444,7 @@ class Column implements SortModeInterface
      */
     private function updateProperty(): self
     {
-        if ($this->field) {
+        if ('' !== $this->field) {
             $this->property = \str_replace('.', '].[', '[' . $this->field . ']');
         }
 

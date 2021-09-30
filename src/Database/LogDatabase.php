@@ -102,12 +102,8 @@ class LogDatabase extends AbstractDatabase
 
     /**
      * Converts a date to an integer.
-     *
-     * @param \DateTime $date the date to convert
-     *
-     * @return int the converted date
      */
-    private function dateToInt(?\DateTime $date): int
+    private function dateToInt(?\DateTimeInterface $date): int
     {
         $date ??= new \DateTime();
 

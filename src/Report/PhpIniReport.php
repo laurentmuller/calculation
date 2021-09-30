@@ -27,10 +27,8 @@ class PhpIniReport extends AbstractReport
 {
     /**
      * The content to export.
-     *
-     * @var array
      */
-    private $content;
+    private ?array $content = null;
 
     /**
      * Constructor.

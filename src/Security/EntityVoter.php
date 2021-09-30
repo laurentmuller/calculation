@@ -242,11 +242,8 @@ class EntityVoter extends Voter implements EntityVoterInterface
         if (self::ENTITY_LOG === $name) {
             return true;
         }
-        if (!\array_key_exists($name, self::ENTITY_OFFSETS)) {
-            return false;
-        }
 
-        return true;
+        return \array_key_exists($name, self::ENTITY_OFFSETS);
     }
 
     /**

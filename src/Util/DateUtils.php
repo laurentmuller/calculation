@@ -58,17 +58,18 @@ final class DateUtils
     /**
      * Retuns a new date with the given interval added.
      *
-     * @param \DateTime            $date     the date
+     * @param \DateTimeInterface   $date     the date
      * @param \DateInterval|string $interval the interval to add
      *
-     * @return \DateTime the new date
+     * @return \DateTimeInterface the new date
      */
-    public static function add(\DateTime $date, $interval): \DateTime
+    public static function add(\DateTimeInterface $date, $interval): \DateTimeInterface
     {
         if (\is_string($interval)) {
             $interval = new \DateInterval($interval);
         }
 
+        // @phpstan-ignore-next-line
         return (clone $date)->add($interval);
     }
 
@@ -187,17 +188,18 @@ final class DateUtils
     /**
      * Retuns a new date with the given interval subtracted.
      *
-     * @param \DateTime            $date     the date
+     * @param \DateTimeInterface   $date     the date
      * @param \DateInterval|string $interval the interval to subtract
      *
-     * @return \DateTime the new date
+     * @return \DateTimeInterface the new date
      */
-    public static function sub(\DateTime $date, $interval): \DateTime
+    public static function sub(\DateTimeInterface $date, $interval): \DateTimeInterface
     {
         if (\is_string($interval)) {
             $interval = new \DateInterval($interval);
         }
 
+        // @phpstan-ignore-next-line
         return (clone $date)->sub($interval);
     }
 

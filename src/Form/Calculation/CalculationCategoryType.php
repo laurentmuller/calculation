@@ -27,10 +27,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class CalculationCategoryType extends AbstractEntityType
 {
-    /**
-     * @var CategoryTransformer
-     */
-    private $transformer;
+    private CategoryTransformer $transformer;
 
     /**
      * Constructor.

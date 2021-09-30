@@ -90,6 +90,8 @@ class UserType extends AbstractEntityType
             ->addVichImageType();
 
         // add listener
-        $helper->addPreSetDataListener([$this, 'onPreSetData']);
+        $helper->addPreSetDataListener(function (FormEvent $event): void {
+            $this->onPreSetData($event);
+        });
     }
 }

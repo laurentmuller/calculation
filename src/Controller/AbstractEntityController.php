@@ -184,12 +184,8 @@ abstract class AbstractEntityController extends AbstractController
             $this->saveToDatabase($item);
 
             // message
-            if ($isNew) {
-                $message = $parameters['success'] ?? 'common.add_success';
-            } else {
-                $message = $parameters['success'] ?? 'common.edit_success';
-            }
-            $message = $this->trans($message, ['%name%' => $item->getDisplay()]);
+            $key = $isNew ? $parameters['success'] ?? 'common.add_success' : $parameters['success'] ?? 'common.edit_success';
+            $message = $this->trans($key, ['%name%' => $item->getDisplay()]);
             $this->succes($message);
 
             // redirect

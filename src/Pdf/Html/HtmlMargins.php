@@ -23,31 +23,23 @@ class HtmlMargins
 {
     /**
      * The bottom margin.
-     *
-     * @var float
      */
-    protected $bottom;
+    protected float $bottom;
 
     /**
      * The left margin.
-     *
-     * @var float
      */
-    protected $left;
+    protected float $left;
 
     /**
      * The right margin.
-     *
-     * @var float
      */
-    protected $right;
+    protected float $right;
 
     /**
      * The top margin.
-     *
-     * @var float
      */
-    protected $top;
+    protected float $top;
 
     /**
      * Constructor.

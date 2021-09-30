@@ -83,7 +83,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
             }
             if ($child instanceof self) {
                 $chunk = $child->findChild(...$names);
-                if ($chunk) {
+                if (null !== $chunk) {
                     return $chunk;
                 }
             }
@@ -167,7 +167,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
             $this->moveY($report, $this->getBottomMargin());
 
             // restore style
-            if ($this->getParent()) {
+            if (null !== $this->getParent()) {
                 $this->getParent()->applyStyle($report);
             }
         });
@@ -222,11 +222,8 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
         if ($child->isNewLine()) {
             return true;
         }
-        if ($child instanceof self && $child->isLastNewLine($child)) {
-            return true;
-        }
 
-        return false;
+        return $child instanceof self && $child->isLastNewLine($child);
     }
 
     /**

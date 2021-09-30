@@ -38,7 +38,7 @@ class Customer extends AbstractEntity
      * @ORM\Column(type="date", nullable=true)
      * @Assert\Date
      */
-    protected ?\DateTime $birthday = null;
+    protected ?\DateTimeInterface $birthday = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -98,8 +98,6 @@ class Customer extends AbstractEntity
 
     /**
      * Get address.
-     *
-     * @return string
      */
     public function getAddress(): ?string
     {
@@ -108,18 +106,14 @@ class Customer extends AbstractEntity
 
     /**
      * Get birthday.
-     *
-     * @return \DateTime
      */
-    public function getBirthday(): ?\DateTime
+    public function getBirthday(): ?\DateTimeInterface
     {
         return $this->birthday;
     }
 
     /**
      * Get city.
-     *
-     * @return string
      */
     public function getCity(): ?string
     {
@@ -128,8 +122,6 @@ class Customer extends AbstractEntity
 
     /**
      * Get company.
-     *
-     * @return string
      */
     public function getCompany(): ?string
     {
@@ -138,8 +130,6 @@ class Customer extends AbstractEntity
 
     /**
      * Get country.
-     *
-     * @return string
      */
     public function getCountry(): ?string
     {
@@ -162,8 +152,6 @@ class Customer extends AbstractEntity
 
     /**
      * Get email.
-     *
-     * @return string
      */
     public function getEmail(): ?string
     {
@@ -172,8 +160,6 @@ class Customer extends AbstractEntity
 
     /**
      * Get firstName.
-     *
-     * @return string
      */
     public function getFirstName(): ?string
     {
@@ -182,8 +168,6 @@ class Customer extends AbstractEntity
 
     /**
      * Gets the last name and the first name separate by a space character.
-     *
-     * @return string the last name and the first name,
      */
     public function getFullName(): string
     {
@@ -192,8 +176,6 @@ class Customer extends AbstractEntity
 
     /**
      * Get lastName.
-     *
-     * @return string
      */
     public function getLastName(): ?string
     {
@@ -202,8 +184,6 @@ class Customer extends AbstractEntity
 
     /**
      * Gets the full name and the company separate by a comma character.
-     *
-     * @return string the full name and the company
      *
      * @see \App\Entity\Customer::getFullName()
      */
@@ -214,8 +194,6 @@ class Customer extends AbstractEntity
 
     /**
      * Gets the full name or if null the company.
-     *
-     * @return string
      */
     public function getNameOrCompany(): ?string
     {
@@ -224,8 +202,6 @@ class Customer extends AbstractEntity
 
     /**
      * Get title.
-     *
-     * @return string
      */
     public function getTitle(): ?string
     {
@@ -234,8 +210,6 @@ class Customer extends AbstractEntity
 
     /**
      * Get web site.
-     *
-     * @return string
      */
     public function getWebSite(): ?string
     {
@@ -244,8 +218,6 @@ class Customer extends AbstractEntity
 
     /**
      * Gets the zip code and the city separate by a space character.
-     *
-     * @return string the zip code and the city
      */
     public function getZipCity(): string
     {
@@ -254,8 +226,6 @@ class Customer extends AbstractEntity
 
     /**
      * Get zip code.
-     *
-     * @return string
      */
     public function getZipCode(): ?string
     {
@@ -264,8 +234,6 @@ class Customer extends AbstractEntity
 
     /**
      * Set address.
-     *
-     * @param string $address
      */
     public function setAddress(?string $address): self
     {
@@ -276,10 +244,8 @@ class Customer extends AbstractEntity
 
     /**
      * Set birthday.
-     *
-     * @param \DateTime $birthday
      */
-    public function setBirthday(?\DateTime $birthday): self
+    public function setBirthday(?\DateTimeInterface $birthday): self
     {
         $this->birthday = $birthday;
 
@@ -288,8 +254,6 @@ class Customer extends AbstractEntity
 
     /**
      * Set city.
-     *
-     * @param string $city
      */
     public function setCity(?string $city): self
     {
@@ -300,8 +264,6 @@ class Customer extends AbstractEntity
 
     /**
      * Set company.
-     *
-     * @param string $company
      */
     public function setCompany(?string $company): self
     {
@@ -312,8 +274,6 @@ class Customer extends AbstractEntity
 
     /**
      * Set country.
-     *
-     * @param string $country
      */
     public function setCountry(?string $country): self
     {
@@ -324,8 +284,6 @@ class Customer extends AbstractEntity
 
     /**
      * Set email.
-     *
-     * @param string $email
      */
     public function setEmail(?string $email): self
     {
@@ -335,9 +293,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set firstName.
-     *
-     * @param string $firstName
+     * Set first name.
      */
     public function setFirstName(?string $firstName): self
     {
@@ -347,9 +303,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set lastName.
-     *
-     * @param string $lastName
+     * Set last name.
      */
     public function setLastName(?string $lastName): self
     {
@@ -360,8 +314,6 @@ class Customer extends AbstractEntity
 
     /**
      * Set title.
-     *
-     * @param string $title
      */
     public function setTitle(?string $title): self
     {
@@ -372,8 +324,6 @@ class Customer extends AbstractEntity
 
     /**
      * Set web site.
-     *
-     * @param string $webSite
      */
     public function setWebSite(?string $webSite): self
     {
@@ -388,8 +338,6 @@ class Customer extends AbstractEntity
 
     /**
      * Set zip code.
-     *
-     * @param string $zipCode
      */
     public function setZipCode(?string $zipCode): self
     {
@@ -400,8 +348,6 @@ class Customer extends AbstractEntity
 
     /**
      * @Assert\Callback
-     *
-     * @param ExecutionContextInterface $context the execution context
      */
     public function validate(ExecutionContextInterface $context): void
     {

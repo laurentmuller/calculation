@@ -40,9 +40,9 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
     private const SEARCH_PARAMETER = 'search';
 
     /**
-     * @var ?Environment
+     * The Twig environment.
      */
-    protected $environment;
+    protected ?Environment $environment;
 
     /**
      * The repository to get entities.
@@ -129,7 +129,9 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
         $items = $builder->getQuery()->getResult();
 
         // transform
-        $results->data = \array_map([$this, 'getCellValues'], $items);
+        $results->data = \array_map(function ($data): array {
+            return $this->getCellValues($data);
+        }, $items);
 
         return $results;
     }
@@ -160,7 +162,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
 
         // add remaining default orders
         foreach ($defaultOrder as $name => $direction) {
-            if ($definition = $this->findDefinition($definitions, $name)) {
+            if (($definition = $this->findDefinition($definitions, $name)) !== null) {
                 $builder->addOrderBy($definition->getSortField(), $direction);
             }
         }
@@ -292,7 +294,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
      */
     protected function renderTemplate(string $template, array $context = []): string
     {
-        if (isset($this->environment)) {
+        if (null !== $this->environment) {
             return $this->environment->render($template, $context);
         }
 

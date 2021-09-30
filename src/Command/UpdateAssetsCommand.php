@@ -108,7 +108,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             // parse plugins
             foreach ($plugins as $plugin) {
                 // disabled?
-                if (isset($plugin->disabled) && $plugin->disabled) {
+                if (\property_exists($plugin, 'disabled') && null !== $plugin->disabled && $plugin->disabled) {
                     continue;
                 }
 
@@ -143,7 +143,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
             //check loaded files
             $expected = \array_reduce($plugins, function (int $carry, \stdClass $plugin) {
-                if (isset($plugin->disabled) && $plugin->disabled) {
+                if (\property_exists($plugin, 'disabled') && null !== $plugin->disabled && $plugin->disabled) {
                     return $carry;
                 }
 
@@ -336,7 +336,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
 
         // add suffix
         if (isset($suffixes[$ext])) {
-            $content = $content . $suffixes[$ext];
+            $content .= $suffixes[$ext];
         }
 
         // rename
@@ -378,7 +378,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         $result = [];
         $matches = [];
         foreach ($entries as $entry) {
-            $pattern = '/^\s*' . \preg_quote($entry) . '\s*:\s*.*;/m';
+            $pattern = '/^\s*' . \preg_quote($entry, '/') . '\s*:\s*.*;/m';
             if (!empty(\preg_match_all($pattern, $style, $matches, \PREG_SET_ORDER, 0))) {
                 foreach ($matches as $matche) {
                     $result[] = (string) $matche[0];
@@ -400,7 +400,7 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
     private function findStyles(string $content, string $style)
     {
         $matches = [];
-        $pattern = '/^' . \preg_quote($style) . '\s+\{([^}]+)\}/m';
+        $pattern = '/^' . \preg_quote($style, '/') . '\s+\{([^}]+)\}/m';
         if (!empty(\preg_match_all($pattern, $content, $matches, \PREG_SET_ORDER, 0))) {
             $result = [];
             foreach ($matches as $matche) {
@@ -446,12 +446,12 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         $version = $plugin->version;
 
         // source
-        if (isset($plugin->source)) {
-            $source = $plugin->source;
+        if (\property_exists($plugin, 'source') && null !== $plugin->source) {
+            $source = (string) $plugin->source;
         }
 
         // format
-        if (isset($plugin->format)) {
+        if (\property_exists($plugin, 'format') && null !== $plugin->format) {
             $format = (string) $plugin->format;
         }
 

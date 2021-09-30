@@ -187,7 +187,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     {
         $current = $this;
         foreach ($keys as $key) {
-            if (!$found = $current->find($key)) {
+            if (($found = $current->find($key)) === null) {
                 return null;
             }
             $current = $found;
@@ -208,7 +208,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
         foreach ($this->children as $child) {
             if ($child->equalsKey($key)) {
                 return $child;
-            } elseif ($found = $child->findRecursive($key)) {
+            } elseif (($found = $child->findRecursive($key)) !== null) {
                 return $found;
             }
         }
@@ -421,7 +421,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      */
     public function index(): int
     {
-        if ($this->parent) {
+        if (null !== $this->parent) {
             $index = 0;
             foreach ($this->parent->getChildren() as $child) {
                 if ($child === $this) {
@@ -607,7 +607,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
             }
         }
 
-        if ($this->parent) {
+        if (null !== $this->parent) {
             $this->parent->update();
         }
 

@@ -23,8 +23,8 @@ use Symfony\Component\Filesystem\Filesystem;
 final class FileUtils
 {
     private const SIZES = [
-        1073741824 => '%.1f GB',
-        1048576 => '%.1f MB',
+        1_073_741_824 => '%.1f GB',
+        1_048_576 => '%.1f MB',
         1024 => '%.0f KB',
         0 => '%.0f B',
     ];
@@ -163,9 +163,8 @@ final class FileUtils
             $file = new \SplFileObject($filename, 'r');
             $file->setFlags($flags);
             $file->seek(\PHP_INT_MAX);
-            $lines = $file->key() + 1;
 
-            return $lines;
+            return $file->key() + 1;
         } catch (\Exception $e) {
             return 0;
         } finally {

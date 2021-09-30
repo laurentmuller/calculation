@@ -141,7 +141,7 @@ class ThemeService
      */
     public function getCurrentTheme(?Request $request = null): Theme
     {
-        if ($request = $this->getRequest($request)) {
+        if (($request = $this->getRequest($request)) !== null) {
             $css = (string) $request->cookies->get(self::KEY_CSS, self::DEFAULT_CSS);
 
             return $this->findTheme($css);
@@ -155,7 +155,7 @@ class ThemeService
      */
     public static function getDefaultTheme(): Theme
     {
-        if (!self::$defaultTheme) {
+        if (null === self::$defaultTheme) {
             self::$defaultTheme = new Theme([
                 'name' => self::DEFAULT_NAME,
                 'description' => self::DEFAULT_DESCRIPTION,
@@ -181,7 +181,7 @@ class ThemeService
      */
     public function getThemeBackground(?Request $request = null): string
     {
-        if ($request = $this->getRequest($request)) {
+        if (($request = $this->getRequest($request)) !== null) {
             return (string) $request->cookies->get(self::KEY_BACKGROUND, self::DEFAULT_BACKGROUND);
         }
 

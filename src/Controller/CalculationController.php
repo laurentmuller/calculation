@@ -89,7 +89,7 @@ class CalculationController extends AbstractEntityController
     {
         // create
         $item = new Calculation();
-        if ($state = $this->getApplication()->getDefaultState()) {
+        if (($state = $this->getApplication()->getDefaultState()) !== null) {
             $item->setState($state);
         }
 

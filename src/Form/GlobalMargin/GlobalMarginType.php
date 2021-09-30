@@ -30,10 +30,8 @@ class GlobalMarginType extends AbstractMarginType
 {
     /**
      * The entity manager to check overlap.
-     *
-     * @var GlobalMarginRepository
      */
-    private $repository;
+    private GlobalMarginRepository $repository;
 
     /**
      * Constructor.
@@ -53,7 +51,9 @@ class GlobalMarginType extends AbstractMarginType
 
         $resolver->setDefaults([
             'constraints' => [
-                new Callback([$this, 'validate']),
+                new Callback(function (GlobalMargin $data, ExecutionContextInterface $context): void {
+                    $this->validate($data, $context);
+                }),
             ],
         ]);
     }

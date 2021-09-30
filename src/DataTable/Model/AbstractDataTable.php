@@ -84,7 +84,7 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
      *
      * @var DataColumn[]
      */
-    protected $columns;
+    protected ?array $columns = null;
 
     /**
      * The datatables to handle request.
@@ -93,10 +93,8 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
 
     /**
      * The parameter prefix for session.
-     *
-     * @var ?string
      */
-    protected $sessionPrefix;
+    protected ?string $sessionPrefix = null;
 
     /**
      * Constructor.

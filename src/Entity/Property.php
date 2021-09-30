@@ -80,7 +80,7 @@ class Property extends AbstractEntity
     /**
      * Gets this property value as date.
      */
-    public function getDate(): ?\DateTime
+    public function getDate(): ?\DateTimeInterface
     {
         $timestamp = $this->getInteger();
         if (self::FALSE_VALUE !== $timestamp) {
@@ -156,7 +156,7 @@ class Property extends AbstractEntity
      */
     public function setDate(?\DateTimeInterface $value): self
     {
-        return $this->setInteger($value ? $value->getTimestamp() : self::FALSE_VALUE);
+        return $this->setInteger(null !== $value ? $value->getTimestamp() : self::FALSE_VALUE);
     }
 
     /**

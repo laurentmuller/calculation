@@ -297,11 +297,7 @@ class PlainType extends AbstractType
      */
     private function getOptionString(array $options, string $name, ?string $defaultValue = null, bool $translate = false): ?string
     {
-        if (isset($options[$name]) && \is_string($options[$name])) {
-            $value = $options[$name];
-        } else {
-            $value = $defaultValue;
-        }
+        $value = isset($options[$name]) && \is_string($options[$name]) ? $options[$name] : $defaultValue;
 
         return $translate ? $this->trans($value) : $value;
     }
@@ -333,7 +329,7 @@ class PlainType extends AbstractType
         }
 
         // value?
-        if (null === $value || (\is_string($value) && 0 === \strlen($value))) {
+        if (null === $value || (\is_string($value) && '' === $value)) {
             return $this->getOptionString($options, 'empty_value', 'common.value_null', true);
         }
 

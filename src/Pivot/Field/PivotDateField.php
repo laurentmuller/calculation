@@ -62,10 +62,8 @@ class PivotDateField extends PivotField
      */
     public function getValue(array $row)
     {
-        if (isset($row[$this->name]) && $value = $row[$this->name]) {
-            if ($value instanceof \DateTimeInterface) {
-                return $this->doGetValue($value);
-            }
+        if (isset($row[$this->name]) && ($value = $row[$this->name]) && $value instanceof \DateTimeInterface) {
+            return $this->doGetValue($value);
         }
 
         return parent::getValue($row);

@@ -47,7 +47,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @ORM\Column(type="date")
      * @Assert\NotNull
      */
-    protected \DateTime $date;
+    protected \DateTimeInterface $date;
 
     /**
      * The description.
@@ -75,7 +75,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @var CalculationGroup[]|Collection
      * @psalm-var Collection<int, CalculationGroup>
      */
-    protected $groups;
+    protected Collection $groups;
 
     /**
      * The total of all items.
@@ -176,7 +176,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         $copy = clone $this;
 
         // copy default values
-        if ($state) {
+        if (null !== $state) {
             $copy->setState($state);
         }
         if ($description) {
@@ -279,7 +279,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Get date.
      */
-    public function getDate(): \DateTime
+    public function getDate(): \DateTimeInterface
     {
         return $this->date;
     }
@@ -498,9 +498,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function getOverallMargin(): float
     {
         $value = $this->safeDivide($this->overallTotal, $this->itemsTotal);
-        $value = \floor($value * 100) / 100;
 
-        return $value;
+        return \floor($value * 100) / 100;
     }
 
     /**
@@ -554,7 +553,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getStateCode(): ?string
     {
-        return $this->state ? $this->state->getCode() : null;
+        return null !== $this->state ? $this->state->getCode() : null;
     }
 
     /**
@@ -562,7 +561,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getStateColor(): ?string
     {
-        return $this->state ? $this->state->getColor() : null;
+        return null !== $this->state ? $this->state->getColor() : null;
     }
 
     /**
@@ -801,7 +800,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Set date.
      */
-    public function setDate(\DateTime $date): self
+    public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
 

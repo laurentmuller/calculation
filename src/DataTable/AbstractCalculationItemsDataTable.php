@@ -30,23 +30,19 @@ use Twig\Environment;
 abstract class AbstractCalculationItemsDataTable extends AbstractDataTable
 {
     /**
-     * @var Environment
+     * The Twig environment.
      */
-    protected $environment;
+    protected Environment $environment;
 
     /**
      * The number of items.
-     *
-     * @var int
      */
-    private $itemsCount = 0;
+    private int $itemsCount = 0;
 
     /**
      * The repository to get entities.
-     *
-     * @var CalculationRepository
      */
-    private $repository;
+    private CalculationRepository $repository;
 
     /**
      * Constructor.
@@ -119,14 +115,12 @@ abstract class AbstractCalculationItemsDataTable extends AbstractDataTable
         // filter
         $offset = $query->start;
         $limit = $query->length;
-        if (-1 === $limit) {
-            $filtered = \array_slice($items, $offset);
-        } else {
-            $filtered = \array_slice($items, $offset, $limit);
-        }
+        $filtered = -1 === $limit ? \array_slice($items, $offset) : \array_slice($items, $offset, $limit);
 
         // transform
-        $results->data = \array_map([$this, 'getCellValues'], $filtered);
+        $results->data = \array_map(function ($data): array {
+            return $this->getCellValues($data);
+        }, $filtered);
 
         return $results;
     }

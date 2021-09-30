@@ -51,7 +51,9 @@ class ProfileChangePasswordType extends AbstractEntityType
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'constraints' => [
-                new Callback([$this, 'validate']),
+                new Callback(function (User $user, ExecutionContextInterface $context): void {
+                    $this->validate($user, $context);
+                }),
             ],
         ]);
     }
@@ -85,10 +87,8 @@ class ProfileChangePasswordType extends AbstractEntityType
         ]);
 
         // if compromised assign the error to the password field
-        if ($violations instanceof ConstraintViolationList && $violations->count() > 0) {
-            if ($password instanceof Form) {
-                $password->addError(new FormError((string) $violations));
-            }
+        if ($violations instanceof ConstraintViolationList && $violations->count() > 0 && $password instanceof Form) {
+            $password->addError(new FormError((string) $violations));
         }
     }
 

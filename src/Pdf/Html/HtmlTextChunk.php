@@ -39,10 +39,8 @@ class HtmlTextChunk extends AbstractHtmlChunk
 
     /**
      * The text.
-     *
-     * @var string
      */
-    protected $text;
+    protected ?string $text = null;
 
     /**
      * {@inheritdoc}
@@ -80,7 +78,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
     public function isNewLine(): bool
     {
         // check if the next chunk is a parent chunk
-        if ($parent = $this->parent) {
+        if (($parent = $this->parent) !== null) {
             $index = $this->index();
             $count = $parent->count();
             if (-1 !== $index && $index < $count - 1) {

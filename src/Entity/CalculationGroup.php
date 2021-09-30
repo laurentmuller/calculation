@@ -55,7 +55,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
      * @var CalculationCategory[]|Collection
      * @psalm-var Collection<int, CalculationCategory>
      */
-    protected $categories;
+    protected Collection $categories;
 
     /**
      * The code.

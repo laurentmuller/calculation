@@ -63,7 +63,9 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      */
     public function getGlobals(): array
     {
-        return $this->getCacheValue(self::CACHE_KEY, [$this, 'callback']);
+        return $this->getCacheValue(self::CACHE_KEY, function (): array {
+            return $this->callback();
+        });
     }
 
     /**

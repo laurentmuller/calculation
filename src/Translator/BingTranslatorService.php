@@ -159,10 +159,8 @@ class BingTranslatorService extends AbstractTranslatorService
         }
 
         // from
-        if ($detectedLanguage = $this->getProperty($result, 'detectedLanguage', false)) {
-            if ($language = $this->getProperty($detectedLanguage, 'language', false)) {
-                $from = $language;
-            }
+        if (($detectedLanguage = $this->getProperty($result, 'detectedLanguage', false)) && ($language = $this->getProperty($detectedLanguage, 'language', false))) {
+            $from = $language;
         }
 
         return [

@@ -203,11 +203,7 @@ class ProductUpdater
             ->setPercent($query->isPercent())
             ->setValue($query->getValue());
 
-        if ($query->isAllProducts()) {
-            $products = $this->getProducts($query->getCategory());
-        } else {
-            $products = $query->getProducts();
-        }
+        $products = $query->isAllProducts() ? $this->getProducts($query->getCategory()) : $query->getProducts();
         if (empty($products)) {
             return $result;
         }
@@ -239,11 +235,7 @@ class ProductUpdater
      */
     private function computePrice(float $oldPrice, ProductUpdateQuery $query): float
     {
-        if ($query->isPercent()) {
-            $newPrice = $oldPrice * (1 + $query->getValue());
-        } else {
-            $newPrice = $oldPrice + $query->getValue();
-        }
+        $newPrice = $query->isPercent() ? $oldPrice * (1 + $query->getValue()) : $oldPrice + $query->getValue();
         if ($query->isRound()) {
             $newPrice = \round($newPrice * 20, 0) / 20;
         }

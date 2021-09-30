@@ -118,7 +118,7 @@ class ReverseReader
         \fseek($this->handle, 1, \SEEK_CUR);
 
         // reverse
-        return 0 === \strlen($line) ? null : \strrev($line);
+        return '' === $line ? null : \strrev($line);
     }
 
     /**

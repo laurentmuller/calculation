@@ -149,11 +149,7 @@ class SearchTable extends AbstractTable
         $entity = $query->customData[self::PARAM_ENTITY];
 
         // search
-        if (\strlen($search) > 1) {
-            $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);
-        } else {
-            $items = [];
-        }
+        $items = \strlen($search) > 1 ? $this->service->search($search, $entity, SearchService::NO_LIMIT) : [];
 
         // total
         $results->totalNotFiltered = $results->filtered = \count($items);

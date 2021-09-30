@@ -1,30 +1,33 @@
 <?php
 declare(strict_types = 1);
 
-use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
+use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
+use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Core\Configuration\Option;
-use Rector\Php74\Rector\Property\TypedPropertyRector;
+use Rector\Core\ValueObject\PhpVersion;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
+use Rector\Set\ValueObject\DowngradeSetList;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    // get parameters
+    // parameters
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set(Option::PATHS, [
-       __DIR__ . '/src'
+    // bootstrap files
+    $parameters->set(Option::BOOTSTRAP_FILES, [
+        __DIR__ . '/vendor/autoload.php'
     ]);
 
-    $parameters->set(Option::AUTOLOAD_PATHS, [
-        __DIR__ . '/vendor',
-    ]);
+    // rules to skip
+    $parameters->set(Option::SKIP,
+        [
+            ClosureToArrowFunctionRector::class,
+            FlipTypeControlToUseExclusiveTypeRector::class,
+            CallableThisArrayToAnonymousFunctionRector::class
+        ]);
 
-    // Define what rule sets will be applied
-    // $container Configurator import (SetList::CODE_QUALITY)
-
-    // get services (needed for register a single rule)
-    $services = $containerConfigurator->services();
-
-    // register a single rule
-    $services->set(ExplicitBoolCompareRector::class);
+    // rules to apply
+    $containerConfigurator->import(SetList::PHP_74);
+    $containerConfigurator->import(SetList::CODE_QUALITY);
 };

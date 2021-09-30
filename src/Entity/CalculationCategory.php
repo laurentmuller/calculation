@@ -72,7 +72,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * @var Collection|CalculationItem[]
      * @psalm-var Collection<int, CalculationItem>
      */
-    protected $items;
+    protected Collection $items;
 
     /**
      * Constructor.
@@ -157,7 +157,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
      */
     public function getCalculation(): ?Calculation
     {
-        return $this->group ? $this->group->getCalculation() : null;
+        return null !== $this->group ? $this->group->getCalculation() : null;
     }
 
     /**

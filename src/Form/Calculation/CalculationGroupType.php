@@ -27,10 +27,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class CalculationGroupType extends AbstractEntityType
 {
-    /**
-     * @var GroupTransformer
-     */
-    private $transformer;
+    private GroupTransformer $transformer;
 
     /**
      * Constructor.

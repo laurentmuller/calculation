@@ -36,10 +36,8 @@ class PdfTocDocument extends PdfDocument
 
     /**
      * The TOC entries.
-     *
-     * @var array
      */
-    private $tocEntries = [];
+    private array $tocEntries = [];
 
     /**
      * {@inheritdoc}

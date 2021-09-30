@@ -29,17 +29,13 @@ final class DefaultOrder
      * The column name.
      *
      * @Required
-     *
-     * @var string
      */
-    public $name;
+    public string $name = '';
 
     /**
      * The column order.
      *
      * @Enum({"asc", "desc"})
-     *
-     * @var string
      */
-    public $order = 'asc';
+    public string $order = 'asc';
 }

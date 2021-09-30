@@ -35,10 +35,7 @@ class CalculationStateDataTable extends AbstractEntityDataTable
      */
     public const ID = CalculationState::class;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Constructor.

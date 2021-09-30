@@ -56,7 +56,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      *
      * @var string[]
      */
-    protected $monthNames;
+    protected ?array $monthNames = null;
 
     /**
      * Array with instances of Month objects.
@@ -70,7 +70,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      *
      * @var string[]
      */
-    protected $monthShortNames;
+    protected ?array $monthShortNames = null;
 
     /**
      * The today day.
@@ -87,7 +87,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      *
      * @var string[]
      */
-    protected $weekNames;
+    protected ?array $weekNames = null;
 
     /**
      * Array with instances of Week objects.
@@ -101,7 +101,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      *
      * @var string[]
      */
-    protected $weekShortNames;
+    protected ?array $weekShortNames = null;
 
     /**
      * Year for calendar.
@@ -118,7 +118,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
         parent::__construct($this, (string) ($year ?? 0));
 
         // generate if applicable
-        if ($year) {
+        if (null !== $year) {
             $this->generate($year);
         }
     }
@@ -504,7 +504,7 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
      *
      * @param \DateTime $date the day date
      */
-    private function createDay(\DateTime $date): Day
+    private function createDay(\DateTimeInterface $date): Day
     {
         /** @var Day $day */
         $day = new $this->dayModel($this, $date);

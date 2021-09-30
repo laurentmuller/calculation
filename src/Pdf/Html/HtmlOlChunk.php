@@ -53,10 +53,8 @@ class HtmlOlChunk extends HtmlParentChunk
 
     /**
      * The numbered type.
-     *
-     * @var string
      */
-    protected $type;
+    protected string $type;
 
     /**
      * Constructor.
@@ -240,7 +238,7 @@ class HtmlOlChunk extends HtmlParentChunk
             $result .= \str_repeat($roman, $multiplier);
 
             // substract that from the number
-            $number = $number % $value;
+            $number %= $value;
         }
 
         return $result;

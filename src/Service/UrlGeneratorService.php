@@ -144,7 +144,8 @@ class UrlGeneratorService
         if (!empty($caller)) {
             unset($params[self::PARAM_CALLER]);
 
-            return \rtrim($caller, '/');
+            // root?
+            return ('/' === $caller) ? $caller : \rtrim($caller, '/');
         }
 
         return null;

@@ -54,7 +54,7 @@ class NotificationEmail extends BaseNotificationEmail
     private function translateSubject(): ?string
     {
         $subject = $this->getSubject();
-        if ($this->translator) {
+        if (null !== $this->translator) {
             $importance = $this->getContext()['importance'] ?? self::IMPORTANCE_LOW;
             $translated = $this->translator->trans("importance.full.$importance");
 

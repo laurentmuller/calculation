@@ -116,11 +116,7 @@ final class Utils
         $result = 0;
         $valueA = $accessor->getValue($a, $field);
         $valueB = $accessor->getValue($b, $field);
-        if (\is_string($valueA) && \is_string($valueB)) {
-            $result = \strnatcasecmp($valueA, $valueB);
-        } else {
-            $result = $valueA <=> $valueB;
-        }
+        $result = \is_string($valueA) && \is_string($valueB) ? \strnatcasecmp($valueA, $valueB) : $valueA <=> $valueB;
 
         return $ascending ? $result : -$result;
     }
@@ -181,9 +177,8 @@ final class Utils
                 "/=>[ ]?\n[ ]+\[/" => '=> [',
                 "/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
             ];
-            $export = \preg_replace(\array_keys($patterns), \array_values($patterns), $export);
 
-            return $export;
+            return \preg_replace(\array_keys($patterns), \array_values($patterns), $export);
         } catch (\Exception $e) {
             return $expression;
         }

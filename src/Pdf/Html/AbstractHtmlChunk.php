@@ -28,38 +28,28 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 {
     /**
      * The class name.
-     *
-     * @var string|null
      */
-    protected $className;
+    protected ?string $className = null;
 
     /**
      * The css style.
-     *
-     * @var string|null
      */
-    protected $css;
+    protected ?string $css = null;
 
     /**
      * The tag name.
-     *
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * The parent chunk.
-     *
-     * @var ?HtmlParentChunk
      */
-    protected $parent;
+    protected ?HtmlParentChunk $parent = null;
 
     /**
      * The style.
-     *
-     * @var HtmlStyle
      */
-    protected $style;
+    protected ?HtmlStyle $style = null;
 
     /**
      * Constructor.
@@ -73,7 +63,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
         $this->name = $name;
 
         // add to parent
-        if ($parent) {
+        if (null !== $parent) {
             $parent->add($this);
         }
 
@@ -257,7 +247,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
      */
     public function index(): int
     {
-        if ($this->parent) {
+        if (null !== $this->parent) {
             return $this->parent->indexOf($this);
         }
 
@@ -375,7 +365,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
      */
     protected function applyFont(HtmlReport $report, ?PdfFont $font, callable $callback): void
     {
-        if ($font) {
+        if (null !== $font) {
             $oldFont = $report->applyFont($font);
             $callback($report);
             $report->applyFont($oldFont);
@@ -532,8 +522,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
     /**
      * Sets the parent.
-     *
-     * @param \App\Pdf\Html\HtmlParentChunk|null $parent
      */
     protected function setParent(?HtmlParentChunk $parent): self
     {
@@ -560,7 +548,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
                     switch ($name) {
                         case 'color':
                             $color = PdfTextColor::create($value);
-                            if ($color) {
+                            if (null !== $color) {
                                 $style->setTextColor($color);
                                 $update = true;
                             }
@@ -568,7 +556,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
 
                         case 'background-color':
                             $color = PdfFillColor::create($value);
-                            if ($color) {
+                            if (null !== $color) {
                                 $style->setFillColor($color);
                                 $update = true;
                             }
@@ -592,7 +580,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     {
         // create style by tag name
         $style = HtmlStyleFactory::create($this->name);
-        if (!$style) {
+        if (null === $style) {
             return $this->setStyle(null);
         }
 

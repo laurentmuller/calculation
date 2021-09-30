@@ -100,7 +100,9 @@ class AlphaCaptchaType extends AbstractType
                 'class' => 'mb-0',
             ],
             'constraints' => [
-                new Callback([$this, 'validate']),
+                new Callback(function (?string $data, ExecutionContextInterface $context): void {
+                    $this->validate($data, $context);
+                }),
             ],
             'mapped' => false,
         ]);
@@ -116,7 +118,7 @@ class AlphaCaptchaType extends AbstractType
 
     public function validate(?string $data, ExecutionContextInterface $context): void
     {
-        if (!Utils::isString($data) || false === $this->captcha->checkAnswer($data, $this->previousAnswer)) {
+        if (!Utils::isString($data) || !$this->captcha->checkAnswer($data, $this->previousAnswer)) {
             $context
                 ->buildViolation('error')
                 ->setTranslationDomain('captcha')

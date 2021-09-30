@@ -26,17 +26,13 @@ class CalculationEmptyReport extends AbstractCalculationItemsReport
 
     /**
      * The price label.
-     *
-     * @var string
      */
-    private $priceLabel;
+    private string $priceLabel;
 
     /**
      * The quantity label.
-     *
-     * @var string
      */
-    private $quantityLabel;
+    private string $quantityLabel;
 
     /**
      * Constructor.

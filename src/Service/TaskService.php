@@ -166,9 +166,9 @@ class TaskService implements \JsonSerializable
      */
     public function jsonSerialize()
     {
-        $id = $this->task ? $this->task->getId() : null;
-        $unit = $this->task ? $this->task->getUnit() : null;
-        $categoryId = $this->task ? $this->task->getCategoryId() : null;
+        $id = null !== $this->task ? $this->task->getId() : null;
+        $unit = null !== $this->task ? $this->task->getUnit() : null;
+        $categoryId = null !== $this->task ? $this->task->getCategoryId() : null;
 
         return [
             'id' => $id,

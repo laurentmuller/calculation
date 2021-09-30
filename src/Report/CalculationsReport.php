@@ -33,24 +33,18 @@ class CalculationsReport extends AbstractArrayReport
 
     /**
      * Set if the calculations are grouped by state.
-     *
-     * @var bool
      */
-    protected $grouped = false;
+    protected bool $grouped = false;
 
     /**
      * The minimum margin style.
-     *
-     * @var PdfStyle|null
      */
-    protected $marginStyle;
+    protected ?PdfStyle $marginStyle = null;
 
     /**
      * The minimum margin.
-     *
-     * @var float
      */
-    protected $minMargin;
+    protected float $minMargin;
 
     /**
      * Constructor.
@@ -78,11 +72,7 @@ class CalculationsReport extends AbstractArrayReport
         $this->AddPage();
 
         // grouping?
-        if ($this->grouped) {
-            $table = $this->outputByGroup($entities);
-        } else {
-            $table = $this->outputByList($entities);
-        }
+        $table = $this->grouped ? $this->outputByGroup($entities) : $this->outputByList($entities);
 
         // totals
         $items = 0.0;
@@ -152,7 +142,7 @@ class CalculationsReport extends AbstractArrayReport
     private function getMarginStyle(Calculation $calculation): ?PdfStyle
     {
         if ($calculation->isMarginBelow($this->minMargin)) {
-            if (!$this->marginStyle) {
+            if (null === $this->marginStyle) {
                 $this->marginStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
             }
 

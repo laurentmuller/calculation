@@ -104,11 +104,7 @@ class LogsDocument extends AbstractArrayDocument
      */
     private function getMessage(Log $log): string
     {
-        if ('doctrine' === $log->getChannel()) {
-            $message = $this->formatSql($log->getMessage());
-        } else {
-            $message = $log->getMessage();
-        }
+        $message = 'doctrine' === $log->getChannel() ? $this->formatSql($log->getMessage()) : $log->getMessage();
         if (!empty($log->getContext())) {
             $message .= "\n" . Utils::exportVar($log->getContext());
         }

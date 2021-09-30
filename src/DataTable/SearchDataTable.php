@@ -75,10 +75,8 @@ class SearchDataTable extends AbstractDataTable
 
     /**
      * The service to search entities.
-     *
-     * @var SearchService
      */
-    private $service;
+    private SearchService $service;
 
     /**
      * Constructor.

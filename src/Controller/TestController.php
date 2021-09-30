@@ -728,7 +728,7 @@ class TestController extends AbstractController
      */
     public function verifyAkismetKey(AkismetService $service): JsonResponse
     {
-        if (false === $result = $service->verifyKey()) {
+        if (!($result = $service->verifyKey())) {
             return $this->json($service->getLastError());
         }
 

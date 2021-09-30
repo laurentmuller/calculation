@@ -116,7 +116,7 @@ abstract class AbstractTable implements SortModeInterface
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
         // sort and order
-        if ($column = $this->getDefaultColumn()) {
+        if (null !== ($column = $this->getDefaultColumn())) {
             $query->sort = $column->getField();
             $query->order = $column->getOrder();
         }
@@ -287,13 +287,13 @@ abstract class AbstractTable implements SortModeInterface
         $key = $useSessionKey ? $this->getSessionKey($name) : $name;
         $session = $request->hasSession() ? $request->getSession() : null;
 
-        if ($session) {
+        if (null !== $session) {
             $default = $session->get($key, $default);
         }
 
         $value = $request->get($name, $default);
 
-        if ($session) {
+        if (null !== $session) {
             $session->set($key, $value);
         }
 

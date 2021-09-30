@@ -25,31 +25,23 @@ class DataColumn implements SortModeInterface
 {
     /**
      * The function name used to update the cell.
-     *
-     * @var string
      */
-    protected $callback;
+    protected ?string $callback = null;
 
     /**
      * The class name.
-     *
-     * @var ?string
      */
-    protected $class;
+    protected ?string $class = null;
 
     /**
      * The default sortable column.
-     *
-     * @var bool
      */
-    protected $default = false;
+    protected bool $default = false;
 
     /**
      * The sorting direction ('asc' or 'desc').
-     *
-     * @var string
      */
-    protected $direction = self::SORT_ASC;
+    protected string $direction = self::SORT_ASC;
 
     /**
      * Either a sprintf compatible format string, or a callable function providing rendering conversion, or default null.
@@ -60,73 +52,55 @@ class DataColumn implements SortModeInterface
 
     /**
      * The header class name.
-     *
-     * @var string
      */
-    protected $headerClass;
+    protected ?string $headerClass = null;
 
     /**
      * The mapped fields.
      *
      * @var string[]
      */
-    protected $map;
+    protected array $map = [];
 
     /**
      * The field name.
-     *
-     * @var string
      */
-    protected $name;
+    protected ?string $name = '';
 
     /**
      * The orderable behavior.
-     *
-     * @var bool
      */
-    protected $orderable = true;
-
-    /**
-     * The property path for array object.
-     *
-     * @var string
-     */
-    protected $property;
+    protected bool $orderable = true;
 
     /**
      * The cell renderer behavior.
-     *
-     * @var bool
      */
-    protected $rawData = false;
+    protected bool $rawData = false;
 
     /**
      * The function name used to render a cell.
-     *
-     * @var string
      */
-    protected $render;
+    protected ?string $render = null;
 
     /**
      * The searchable behavior.
-     *
-     * @var bool
      */
-    protected $searchable = true;
+    protected bool $searchable = true;
 
     /**
      * The title (to be translated).
-     *
-     * @var string
      */
-    protected $title;
+    protected ?string $title = null;
 
     /**
      * The visibility behavior.
-     *
-     * @var bool
      */
-    protected $visible = true;
+    protected bool $visible = true;
+
+    /**
+     * The property path for array object.
+     */
+    private string $property = '';
 
     /**
      * Constructor.
@@ -601,7 +575,7 @@ class DataColumn implements SortModeInterface
      */
     private function updateProperty(): self
     {
-        if ($this->name) {
+        if ('' !== $this->name) {
             $this->property = \str_replace('.', '].[', '[' . $this->name . ']');
         }
 

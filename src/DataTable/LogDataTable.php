@@ -165,16 +165,19 @@ class LogDataTable extends AbstractDataTable
 
         // filter
         $skipChannel = false;
-        if ($value = $query->columns[2]->search->value) {
-            $logs = LogService::filterChannel($logs, $value);
+        $channel = $query->columns[2]->search->value;
+        if (Utils::isString($channel)) {
+            $logs = LogService::filterChannel($logs, $channel);
             $skipChannel = true;
         }
         $skipLevel = false;
-        if ($value = $query->columns[3]->search->value) {
-            $logs = LogService::filterLevel($logs, $value);
+        $level = $query->columns[3]->search->value;
+        if (Utils::isString($level)) {
+            $logs = LogService::filterLevel($logs, $level);
             $skipLevel = true;
         }
-        if ($value = $query->search->value) {
+        $value = $query->search->value;
+        if (Utils::isString($value)) {
             $logs = LogService::filter($logs, $value, $skipChannel, $skipLevel);
         }
         $results->recordsFiltered = \count($logs);
@@ -189,7 +192,9 @@ class LogDataTable extends AbstractDataTable
 
         // restrict and convert
         $logs = \array_slice($logs, $query->start, $query->length);
-        $results->data = \array_map([$this, 'getCellValues'], $logs);
+        $results->data = \array_map(function ($data): array {
+            return $this->getCellValues($data);
+        }, $logs);
 
         // copy
         $this->channels = $entries[LogService::KEY_CHANNELS];

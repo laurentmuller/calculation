@@ -34,10 +34,8 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfCellList
 
     /**
      * The started page.
-     *
-     * @var bool
      */
-    private $started = false;
+    private bool $started = false;
 
     /**
      * {@inheritdoc}

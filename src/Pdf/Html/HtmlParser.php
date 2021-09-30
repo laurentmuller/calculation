@@ -23,10 +23,8 @@ class HtmlParser
 {
     /**
      * The HTML content.
-     *
-     * @var string
      */
-    protected $html;
+    protected ?string $html;
 
     /**
      * Constructor.
@@ -56,7 +54,7 @@ class HtmlParser
         }
 
         // find body
-        if (!$body = $this->findBody($dom)) {
+        if (($body = $this->findBody($dom)) === null) {
             return null;
         }
 
@@ -157,7 +155,7 @@ class HtmlParser
         /** @var \DOMText $nodeText */
         $nodeText = $node;
         $value = $nodeText->wholeText;
-        if (\strlen(\trim($value))) {
+        if (0 !== \strlen(\trim($value))) {
             $chunk = new HtmlTextChunk($name, $parent);
             $chunk->setClassName($class);
             $chunk->setText($value);
@@ -193,7 +191,7 @@ class HtmlParser
     private function findBody(\DOMDocument $dom): ?\DOMNode
     {
         $bodies = $dom->getElementsByTagName('body');
-        if ($bodies->length) {
+        if (0 !== $bodies->length) {
             return $bodies->item(0);
         }
 
@@ -213,7 +211,7 @@ class HtmlParser
     {
         if ($node->hasAttributes()) {
             $attributes = $node->attributes;
-            if ($attribute = $attributes->getNamedItem($name)) {
+            if (($attribute = $attributes->getNamedItem($name)) !== null) {
                 $value = \trim($attribute->nodeValue);
                 if (Utils::isString($value)) {
                     return $value;

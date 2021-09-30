@@ -118,7 +118,7 @@ class CalculationStateRepository extends AbstractRepository
      */
     private function getListCountQueryBuilder(): QueryBuilder
     {
-        $builder = $this->createQueryBuilder('s')
+        return $this->createQueryBuilder('s')
             ->select('s.id')
             ->addSelect('s.code')
             ->addSelect('s.editable')
@@ -130,7 +130,5 @@ class CalculationStateRepository extends AbstractRepository
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
             ->orderBy('s.code', Criteria::ASC);
-
-        return $builder;
     }
 }

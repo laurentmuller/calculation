@@ -54,7 +54,7 @@ abstract class AbstractAssetsCommand extends Command
     {
         /** @var \Symfony\Bundle\FrameworkBundle\Console\Application|null $application */
         $application = $this->getApplication();
-        if (!$application) {
+        if (null === $application) {
             $this->writeError('The Application is not defined.');
 
             return null;
@@ -62,7 +62,7 @@ abstract class AbstractAssetsCommand extends Command
 
         /** @var \Symfony\Component\HttpKernel\KernelInterface|null $kernel */
         $kernel = $application->getKernel();
-        if (!$kernel) {
+        if (null === $kernel) {
             $this->writeError('The Kernel is not defined.');
 
             return null;

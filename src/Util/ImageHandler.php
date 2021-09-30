@@ -403,10 +403,8 @@ class ImageHandler implements ImageExtensionInterface
      */
     public function resolution(int $default = self::DEFAULT_RESOLUTION): int
     {
-        if (\function_exists('imageresolution')) {
-            if ($resolutions = \imageresolution($this->image)) {
-                return $resolutions[0];
-            }
+        if (\function_exists('imageresolution') && $resolutions = \imageresolution($this->image)) {
+            return $resolutions[0];
         }
 
         return $default;

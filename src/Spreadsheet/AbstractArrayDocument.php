@@ -21,10 +21,7 @@ use App\Controller\AbstractController;
  */
 abstract class AbstractArrayDocument extends AbstractDocument
 {
-    /**
-     * @var array
-     */
-    protected $entities;
+    protected array $entities;
 
     /**
      * Constructor.

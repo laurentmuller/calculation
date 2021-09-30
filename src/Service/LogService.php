@@ -134,11 +134,7 @@ class LogService
                     return true;
                 }
 
-                if (Utils::contains($log->getMessage(), $value, true)) {
-                    return true;
-                }
-
-                return false;
+                return Utils::contains($log->getMessage(), $value, true);
             };
 
             return \array_filter($logs, $filter);
@@ -332,9 +328,9 @@ class LogService
      *
      * @param string $value the source
      *
-     * @return \DateTime|null a new DateTime instance or null on failure
+     * @return \DateTimeInterface|null a new DateTime instance or null on failure
      */
-    private function parseDate(string $value): ?\DateTime
+    private function parseDate(string $value): ?\DateTimeInterface
     {
         $date = \DateTime::createFromFormat(self::DATE_FORMAT, $value);
 
@@ -401,7 +397,7 @@ class LogService
                 if (6 !== \count($values)) {
                     continue;
                 }
-                if (!$date = self::parseDate($values[0])) {
+                if (($date = self::parseDate($values[0])) === null) {
                     continue;
                 }
 

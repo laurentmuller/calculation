@@ -22,35 +22,17 @@ use DataTables\Column;
  */
 class DataDefinitition
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     * @var bool
-     */
-    private $orderable;
+    private bool $orderable;
 
-    /**
-     * @var string
-     */
-    private $seachValue;
+    private ?string $seachValue;
 
-    /**
-     * @var bool
-     */
-    private $searchable;
+    private bool $searchable;
 
-    /**
-     * @var string[]
-     */
-    private $searchFields;
+    private array $searchFields;
 
-    /**
-     * @var string
-     */
-    private $sortField;
+    private string $sortField;
 
     /**
      * Constructor.

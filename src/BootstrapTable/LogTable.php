@@ -180,7 +180,7 @@ class LogTable extends AbstractTable implements \Countable
         if ($channel = $query->customData[self::PARAM_CHANNEL]) {
             $entities = LogService::filterChannel($entities, $channel);
         }
-        if ($search = $query->search) {
+        if ('' !== $search = $query->search) {
             $entities = LogService::filter($entities, $search, Utils::isString($level), Utils::isString($channel));
         }
         $results->filtered = \count($entities);

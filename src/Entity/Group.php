@@ -39,7 +39,7 @@ class Group extends AbstractEntity
      * @var Collection|Category[]
      * @psalm-var Collection<int, Category>
      */
-    private $categories;
+    private Collection $categories;
 
     /**
      * The unique code.
@@ -68,7 +68,7 @@ class Group extends AbstractEntity
      * @var Collection|GroupMargin[]
      * @psalm-var Collection<int, GroupMargin>
      */
-    private $margins;
+    private Collection $margins;
 
     /**
      * Constructor.
@@ -136,9 +136,7 @@ class Group extends AbstractEntity
     public function countItems(): int
     {
         return $this->reduceCategories(function (int $carry, Category $category): int {
-            $carry += $category->countItems();
-
-            return $carry;
+            return $carry + $category->countItems();
         });
     }
 
@@ -156,9 +154,7 @@ class Group extends AbstractEntity
     public function countProducts(): int
     {
         return $this->reduceCategories(function (int $carry, Category $category): int {
-            $carry += $category->countProducts();
-
-            return $carry;
+            return $carry + $category->countProducts();
         });
     }
 
@@ -168,9 +164,7 @@ class Group extends AbstractEntity
     public function countTasks(): int
     {
         return $this->reduceCategories(function (int $carry, Category $category): int {
-            $carry += $category->countTasks();
-
-            return $carry;
+            return $carry + $category->countTasks();
         });
     }
 
@@ -208,7 +202,7 @@ class Group extends AbstractEntity
     {
         $margin = $this->findMargin($amount);
 
-        return $margin ? $margin->getMargin() : 0;
+        return null !== $margin ? $margin->getMargin() : 0;
     }
 
     /**
@@ -288,10 +282,8 @@ class Group extends AbstractEntity
      */
     public function removeCategory(Category $category): self
     {
-        if ($this->categories->removeElement($category)) {
-            if ($category->getGroup() === $this) {
-                $category->setGroup(null);
-            }
+        if ($this->categories->removeElement($category) && $category->getGroup() === $this) {
+            $category->setGroup(null);
         }
 
         return $this;
@@ -302,10 +294,8 @@ class Group extends AbstractEntity
      */
     public function removeMargin(GroupMargin $margin): self
     {
-        if ($this->margins->removeElement($margin)) {
-            if ($margin->getGroup() === $this) {
-                $margin->setGroup(null);
-            }
+        if ($this->margins->removeElement($margin) && $margin->getGroup() === $this) {
+            $margin->setGroup(null);
         }
 
         return $this;

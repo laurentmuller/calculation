@@ -64,17 +64,13 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     /**
      * The right cell style.
-     *
-     * @var PdfStyle
      */
-    private $rightStyle;
+    private ?PdfStyle $rightStyle = null;
 
     /**
      * The title cell style.
-     *
-     * @var PdfStyle
      */
-    private $titleStyle;
+    private ?PdfStyle $titleStyle = null;
 
     /**
      * {@inheritdoc}

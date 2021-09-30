@@ -34,7 +34,7 @@ class Log extends AbstractEntity
     /**
      * @ORM\Column(type="datetime")
      */
-    private \DateTime $createdAt;
+    private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="array", nullable=true)
@@ -100,7 +100,7 @@ class Log extends AbstractEntity
     /**
      * Gets the creation date.
      */
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -160,7 +160,7 @@ class Log extends AbstractEntity
     /**
      * Sets creation date.
      */
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 

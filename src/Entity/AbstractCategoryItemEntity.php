@@ -49,7 +49,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getCategoryCode(): ?string
     {
-        return $this->category ? $this->category->getCode() : null;
+        return null !== $this->category ? $this->category->getCode() : null;
     }
 
     /**
@@ -57,7 +57,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getCategoryId(): ?int
     {
-        return $this->category ? $this->category->getId() : null;
+        return null !== $this->category ? $this->category->getId() : null;
     }
 
     /**
@@ -65,7 +65,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getGroup(): ?Group
     {
-        return $this->category ? $this->category->getGroup() : null;
+        return null !== $this->category ? $this->category->getGroup() : null;
     }
 
     /**
@@ -73,7 +73,7 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
      */
     public function getGroupCode(): ?string
     {
-        return $this->category ? $this->category->getGroupCode() : null;
+        return null !== $this->category ? $this->category->getGroupCode() : null;
     }
 
     /**

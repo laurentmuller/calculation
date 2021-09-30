@@ -71,7 +71,7 @@ class PivotController extends AbstractController
             // callback
             $callback = function () use ($dataset): void {
                 // data?
-                if (\count($dataset)) {
+                if (\count($dataset) > 0) {
                     // open
                     /** @var resource $handle */
                     $handle = \fopen('php://output', 'w+');

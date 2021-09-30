@@ -48,7 +48,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable
      * @var Collection|TaskItem[]
      * @psalm-var Collection<int, TaskItem>
      */
-    private $items;
+    private Collection $items;
 
     /**
      * The name.
@@ -103,10 +103,10 @@ class Task extends AbstractCategoryItemEntity implements \Countable
         $copy = clone $this;
 
         // copy default values
-        if ($name) {
+        if (null !== $name) {
             $copy->setName($name);
         }
-        if ($category) {
+        if (null !== $category) {
             $copy->setCategory($category);
         }
 

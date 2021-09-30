@@ -191,11 +191,9 @@ class CalculationUpdater
                         $changed = true;
                     }
 
-                    if ($query->isCodes()) {
-                        if (0 !== $count = $calculation->updateCodes()) {
-                            $result->addCodes($count);
-                            $changed = true;
-                        }
+                    if ($query->isCodes() && 0 !== $count = $calculation->updateCodes()) {
+                        $result->addCodes($count);
+                        $changed = true;
                     }
 
                     if ($query->isDuplicated() && $calculation->hasDuplicateItems()) {

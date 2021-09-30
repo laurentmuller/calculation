@@ -29,5 +29,5 @@ final class DefaultOrders
      *
      * @var DefaultOrder[]
      */
-    public $value = [];
+    public array $value = [];
 }

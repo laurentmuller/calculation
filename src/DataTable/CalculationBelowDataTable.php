@@ -35,10 +35,8 @@ class CalculationBelowDataTable extends CalculationDataTable
 
     /**
      * The application service.
-     *
-     * @var ApplicationService
      */
-    private $application;
+    private ApplicationService $application;
 
     /**
      * Constructor.

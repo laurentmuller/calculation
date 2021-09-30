@@ -54,15 +54,9 @@ class UserRightsDocument extends AbstractArrayDocument
         'user.name' => EntityVoterInterface::ENTITY_USER,
     ];
 
-    /**
-     * @var bool
-     */
-    private $writeName;
+    private ?bool $writeName = null;
 
-    /**
-     * @var bool
-     */
-    private $writeRights;
+    private ?bool $writeRights = null;
 
     /**
      * {@inheritdoc}

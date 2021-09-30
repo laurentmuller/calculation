@@ -38,13 +38,11 @@ trait TranslatorTrait
      */
     public function isTransDefined(string $id, ?string $domain = null, ?string $locale = null): bool
     {
-        if ($translator = $this->doGetTranslator()) {
-            if ($translator instanceof TranslatorBagInterface) {
-                /** @var \Symfony\Component\Translation\MessageCatalogueInterface $catalogue */
-                $catalogue = $translator->getCatalogue($locale);
+        if (($translator = $this->doGetTranslator()) && $translator instanceof TranslatorBagInterface) {
+            /** @var \Symfony\Component\Translation\MessageCatalogueInterface $catalogue */
+            $catalogue = $translator->getCatalogue($locale);
 
-                return $catalogue->defines($id, $domain ?? 'messages');
-            }
+            return $catalogue->defines($id, $domain ?? 'messages');
         }
 
         return $id !== $this->trans($id, [], $domain, $locale);

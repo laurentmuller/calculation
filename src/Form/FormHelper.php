@@ -865,7 +865,7 @@ class FormHelper
 
         $newValues = \array_filter(\explode(' ', $name));
         $oldValues = \array_filter(\explode(' ', $array['class'] ?? ''));
-        $className = \implode(' ', \array_unique(\array_merge($oldValues, $newValues)));
+        $className = \implode(' ', \array_unique([...$oldValues, ...$newValues]));
 
         return $this->updateEntry($array, 'class', '' === $className ? null : $className, false);
     }

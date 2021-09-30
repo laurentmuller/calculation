@@ -216,9 +216,9 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     /**
      * Gets the last import of Swiss cities.
      *
-     * @return \DateTime|null the last import or NULL if none
+     * @return \DateTimeInterface|null the last import or NULL if none
      */
-    public function getLastImport(): ?\DateTime
+    public function getLastImport(): ?\DateTimeInterface
     {
         return $this->getPropertyDate(self::P_LAST_IMPORT);
     }
@@ -327,18 +327,16 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     /**
      * Gets a date property.
      *
-     * @param string         $name    the property name to search for
-     * @param \DateTime|null $default the default value if the property is not found
+     * @param string                  $name    the property name to search for
+     * @param \DateTimeInterface|null $default the default value if the property is not found
      *
-     * @return \DateTime|null the date value, if found; the default value otherwise
+     * @return \DateTimeInterface|null the date value, if found; the default value otherwise
      */
-    public function getPropertyDate(string $name, ?\DateTime $default = null): ?\DateTime
+    public function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
     {
         $timestamp = $this->getPropertyInteger($name);
-        if (Property::FALSE_VALUE !== $timestamp) {
-            if ($date = \DateTime::createFromFormat('U', (string) $timestamp)) {
-                return $date;
-            }
+        if (Property::FALSE_VALUE !== $timestamp && ($date = \DateTime::createFromFormat('U', (string) $timestamp))) {
+            return $date;
         }
 
         return $default;
@@ -391,9 +389,9 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     /**
      * Gets the last calculations update.
      *
-     * @return \DateTime|null the last update or null if none
+     * @return \DateTimeInterface|null the last update or null if none
      */
-    public function getUpdateCalculations(): ?\DateTime
+    public function getUpdateCalculations(): ?\DateTimeInterface
     {
         return $this->getPropertyDate(self::P_UPDATE_CALCULATIONS);
     }
@@ -401,9 +399,9 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     /**
      * Gets the last products update.
      *
-     * @return \DateTime|null the last update or null if none
+     * @return \DateTimeInterface|null the last update or null if none
      */
-    public function getUpdateProducts(): ?\DateTime
+    public function getUpdateProducts(): ?\DateTimeInterface
     {
         return $this->getPropertyDate(self::P_UPDATE_PRODUCTS);
     }

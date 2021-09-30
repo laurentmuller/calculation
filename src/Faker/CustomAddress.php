@@ -20,7 +20,7 @@ namespace App\Faker;
 class CustomAddress extends \Faker\Provider\fr_CH\Address
 {
     /**
-     * @var mixed
+     * @var string[]
      */
     protected static $postcode = [
         '1###',
@@ -34,10 +34,7 @@ class CustomAddress extends \Faker\Provider\fr_CH\Address
         '9###',
     ];
 
-    /**
-     * @var string
-     */
-    protected static $postcodeCity = '{{postcode}} {{city}}';
+    protected static string $postcodeCity = '{{postcode}} {{city}}';
 
     /**
      * Returns the postal code (zip) and the city name.

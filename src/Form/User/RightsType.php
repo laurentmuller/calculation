@@ -69,7 +69,9 @@ class RightsType extends AbstractHelperType
     protected function addFormFields(FormHelper $helper): void
     {
         // add listener
-        $helper->addPreSetDataListener([$this, 'onPreSetData']);
+        $helper->addPreSetDataListener(function (FormEvent $event): void {
+            $this->onPreSetData($event);
+        });
 
         $this->addRightType($helper, EntityVoterInterface::ENTITY_CALCULATION, 'calculation.list.title')
             ->addRightType($helper, EntityVoterInterface::ENTITY_PRODUCT, 'product.list.title')

@@ -85,8 +85,6 @@ abstract class AbstractMargin extends AbstractEntity
 
     /**
      * Gets the margin amount for the given value.
-     *
-     * @param float $amount the amount
      */
     public function getMarginAmount(float $amount): float
     {

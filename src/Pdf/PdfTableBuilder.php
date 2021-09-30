@@ -36,21 +36,19 @@ class PdfTableBuilder implements PdfConstantsInterface
      *
      * @var PdfCell[]
      */
-    protected $cells = [];
+    protected array $cells = [];
 
     /**
      * The columns.
      *
      * @var PdfColumn[]
      */
-    protected $columns = [];
+    protected array $columns = [];
 
     /**
      * Use the document width.
-     *
-     * @var bool
      */
-    protected $fullWidth = false;
+    protected bool $fullWidth = false;
 
     /**
      * The heder style.
@@ -757,9 +755,8 @@ class PdfTableBuilder implements PdfConstantsInterface
         // image?
         if ($cell instanceof PdfImageCell) {
             $height = $parent->pixels2UserUnit($cell->getHeight());
-            $height += 2 * $parent->getCellMargin();
 
-            return $height;
+            return $height + 2 * $parent->getCellMargin();
         }
 
         $style->apply($parent);
@@ -784,9 +781,7 @@ class PdfTableBuilder implements PdfConstantsInterface
     protected function getCellsSpan(): int
     {
         return \array_reduce($this->cells, function (int $carry, PdfCell $cell) {
-            $carry += $cell->getCols();
-
-            return $carry;
+            return $carry + $cell->getCols();
         }, 0);
     }
 

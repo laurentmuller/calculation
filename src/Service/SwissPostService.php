@@ -298,7 +298,7 @@ class SwissPostService
             while ($process && false !== ($data = \fgetcsv($stream, 0, ';'))) {
                 switch ((int) $data[0]) {
                     case self::REC_VALIDITY:
-                        if (!$validity = $this->processValidity($data)) {
+                        if (($validity = $this->processValidity($data)) === null) {
                             return [
                                 'valid' => false,
                                 'message' => $this->trans('import.error.no_validity', ['%name%' => $name]),
@@ -352,7 +352,7 @@ class SwissPostService
             $db->commitTransaction();
 
             // validity?
-            if (!$validity) {
+            if (null === $validity) {
                 return [
                     'valid' => false,
                     'message' => $this->trans('import.error.no_validity', ['%name%' => $name]),
@@ -398,7 +398,7 @@ class SwissPostService
             }
 
             //close database
-            if ($db) {
+            if (null !== $db) {
                 if ($valid) {
                     $db->compact();
                 }
@@ -462,17 +462,16 @@ class SwissPostService
         $valid = 0;
         $error = 0;
         $filename = $this->dataDirectory . self::STATE_FILE;
-        if (FileUtils::exists($filename)) {
-            if (false !== ($handle = \fopen($filename, 'r'))) {
-                while (false !== ($data = \fgetcsv($handle, 0, ';'))) {
-                    if ($db->insertState($data)) {
-                        ++$valid;
-                    } else {
-                        ++$error;
-                    }
+
+        if (FileUtils::exists($filename) && false !== ($handle = \fopen($filename, 'r'))) {
+            while (false !== ($data = \fgetcsv($handle, 0, ';'))) {
+                if ($db->insertState($data)) {
+                    ++$valid;
+                } else {
+                    ++$error;
                 }
-                \fclose($handle);
             }
+            \fclose($handle);
         }
 
         return [$valid, $error];
@@ -525,9 +524,9 @@ class SwissPostService
      *
      * @param array $data the data to process
      *
-     * @return \DateTime|null the validity date or null on failure
+     * @return \DateTimeInterface|null the validity date or null on failure
      */
-    private function processValidity(array $data): ?\DateTime
+    private function processValidity(array $data): ?\DateTimeInterface
     {
         if (\count($data) > 1 && false !== $date = \DateTime::createFromFormat(self::DATE_PATTERN, $data[1])) {
             return $date->setTime(0, 0, 0, 0);

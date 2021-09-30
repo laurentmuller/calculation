@@ -32,31 +32,23 @@ class CompileAssetsCommand extends AbstractAssetsCommand
 
     /**
      * The cleancss arguments.
-     *
-     * @var string
      */
-    private static $cleanCssArgs = '--compatibility ie9 -O2';
+    private string $cleanCssArgs = '--compatibility ie9 -O2';
 
     /**
      * Path to clean-css binary.
-     *
-     * @var string|null
      */
-    private static $cleanCssBinary = 'cleancss';
+    private ?string $cleanCssBinary = 'cleancss';
 
     /**
      * The uglifyjs arguments.
-     *
-     * @var string
      */
-    private static $uglifyJsArgs = '--compress --mangle';
+    private string $uglifyJsArgs = '--compress --mangle';
 
     /**
      * Path to UglifyJS binary.
-     *
-     * @var string|null
      */
-    private static $uglifyJsBinary = 'uglifyjs';
+    private ?string $uglifyJsBinary = 'uglifyjs';
 
     /**
      * Constructor.
@@ -142,7 +134,7 @@ class CompileAssetsCommand extends AbstractAssetsCommand
 
         try {
             // create finder
-            if (!$finder = $this->createFinder($source, $configuration)) {
+            if (null === $finder = $this->createFinder($source, $configuration)) {
                 $this->writeVerbose("No file to process in '{$source}' directory.");
 
                 return Command::SUCCESS;

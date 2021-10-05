@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -113,13 +112,13 @@ class ResponseListener implements EventSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel, RouterInterface $router, ParameterBagInterface $params, NonceExtension $extension)
+    public function __construct(RouterInterface $router, ParameterBagInterface $params, NonceExtension $extension, bool $isDebug)
     {
         /** @var string $asset */
         $asset = $params->get('asset_base');
-        $this->debug = $kernel->isDebug();
         $this->reportUrl = $router->generate('log_csp');
         $this->extension = $extension;
+        $this->debug = $isDebug;
         $this->asset = $asset;
     }
 

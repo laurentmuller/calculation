@@ -18,7 +18,6 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -78,13 +77,13 @@ abstract class AbstractHttpClientService
      *
      * @throws \InvalidArgumentException if the API key is null or empty
      */
-    public function __construct(KernelInterface $kernel, AdapterInterface $adapter, string $key)
+    public function __construct(AdapterInterface $adapter, bool $isDebug, string $key)
     {
         // check key
         if (empty($key)) {
             throw new \InvalidArgumentException('The API key is empty.');
         }
-        if (!$kernel->isDebug()) {
+        if (!$isDebug) {
             $this->adapter = $adapter;
         }
         $this->key = $key;

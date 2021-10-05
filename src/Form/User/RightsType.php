@@ -17,7 +17,6 @@ use App\Form\FormHelper;
 use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\RoleInterface;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
@@ -40,10 +39,10 @@ class RightsType extends AbstractHelperType
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel, RoleHierarchyInterface $roleHierarchy)
+    public function __construct(RoleHierarchyInterface $roleHierarchy, bool $isDebug)
     {
-        $this->debug = $kernel->isDebug();
         $this->roleHierarchy = $roleHierarchy;
+        $this->debug = $isDebug;
     }
 
     /**

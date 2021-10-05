@@ -24,7 +24,6 @@ use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
@@ -103,11 +102,11 @@ class SearchService
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, AuthorizationCheckerInterface $checker, KernelInterface $kernel)
+    public function __construct(EntityManagerInterface $manager, AuthorizationCheckerInterface $checker, bool $isDebug)
     {
         $this->manager = $manager;
         $this->checker = $checker;
-        $this->debug = $kernel->isDebug();
+        $this->debug = $isDebug;
     }
 
     /**

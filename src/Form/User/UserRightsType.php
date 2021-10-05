@@ -16,7 +16,6 @@ use App\Entity\User;
 use App\Form\FormHelper;
 use App\Traits\TranslatorTrait;
 use App\Util\Utils;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -33,9 +32,9 @@ class UserRightsType extends RightsType
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel, RoleHierarchyInterface $roleHierarchy, TranslatorInterface $translator)
+    public function __construct(RoleHierarchyInterface $roleHierarchy, bool $isDebug, TranslatorInterface $translator)
     {
-        parent::__construct($kernel, $roleHierarchy);
+        parent::__construct($roleHierarchy, $isDebug);
         $this->translator = $translator;
     }
 

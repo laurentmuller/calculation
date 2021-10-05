@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Util;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Result;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -38,27 +40,26 @@ final class DatabaseInfo
      */
     public function getConfiguration(): array
     {
-        $result = [];
+        $values = [];
 
         try {
             $sql = 'SHOW VARIABLES';
-            $connection = $this->getConnection();
-            $statement = $connection->prepare($sql);
-            $entries = $statement->executeQuery()->fetchAllAssociative();
-            $statement->free();
+            $result = $this->executeQuery($sql);
+            $entries = $result->fetchAllAssociative();
+            $result->free();
 
             // convert
             foreach ($entries as $entry) {
                 if (0 !== \strlen($entry['Value'])) {
                     $key = $entry['Variable_name'];
-                    $result[$key] = $entry['Value'];
+                    $values[$key] = $entry['Value'];
                 }
             }
         } catch (\Exception $e) {
             // ignore
         }
 
-        return $result;
+        return $values;
     }
 
     /**
@@ -92,13 +93,12 @@ final class DatabaseInfo
     {
         try {
             $sql = 'SHOW VARIABLES LIKE "version"';
-            $connection = $this->getConnection();
-            $statement = $connection->prepare($sql);
-            $result = $statement->executeQuery()->fetchAssociative();
-            $statement->free();
+            $result = $this->executeQuery($sql);
+            $entries = $result->fetchAssociative();
+            $result->free();
 
-            if (false !== $result) {
-                return $result['Value'];
+            if (false !== $entries) {
+                return $entries['Value'];
             }
         } catch (\Exception $e) {
             // ignore
@@ -108,11 +108,20 @@ final class DatabaseInfo
     }
 
     /**
-     * Gets the connection.
-     *
-     * @return \Doctrine\DBAL\Connection
+     * Prepares an SQL statement and return the result.
      */
-    private function getConnection()
+    private function executeQuery(string $sql): Result
+    {
+        $connection = $this->getConnection();
+        $statement = $connection->prepare($sql);
+
+        return $statement->executeQuery();
+    }
+
+    /**
+     * Gets the connection.
+     */
+    private function getConnection(): Connection
     {
         return $this->manager->getConnection();
     }

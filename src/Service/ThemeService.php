@@ -18,7 +18,6 @@ use App\Util\FileUtils;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Service to manage Bootstrap themes.
@@ -91,22 +90,18 @@ class ThemeService
 
     private static ?Theme $defaultTheme = null;
 
-    private KernelInterface $kernel;
+    private string $projectDir;
 
     private RequestStack $stack;
 
     /**
      * Constructor.
-     *
-     * @param KernelInterface  $kernel  the kernel to get themes file
-     * @param RequestStack     $stack   the request stack to get current theme
-     * @param AdapterInterface $adapter the cache used to save or retrieve themes
      */
-    public function __construct(KernelInterface $kernel, RequestStack $stack, AdapterInterface $adapter)
+    public function __construct(RequestStack $stack, AdapterInterface $adapter, string $projectDir, bool $isDebug)
     {
-        $this->kernel = $kernel;
         $this->stack = $stack;
-        if (!$kernel->isDebug()) {
+        $this->projectDir = $projectDir;
+        if (!$isDebug) {
             $this->adapter = $adapter;
         }
     }
@@ -269,8 +264,6 @@ class ThemeService
      */
     private function getThemesFile(): string
     {
-        $rootDir = $this->kernel->getProjectDir();
-
-        return $rootDir . self::JSON_FILE_PATH . self::JSON_FILE_NAME;
+        return $this->projectDir . self::JSON_FILE_PATH . self::JSON_FILE_NAME;
     }
 }

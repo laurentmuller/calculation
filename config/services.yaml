@@ -55,6 +55,8 @@ services:
         bind: # Binded parameters
             $appName: '%app_name%'
             $appNameVersion: '%app_name% v%app_version%'
+            $isDebug: '%kernel.debug%'
+            $projectDir: '%kernel.project_dir%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -67,10 +69,6 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-
-    # App\Listener\PersistenceListener:
-    #     tags:
-    #         - { name: 'doctrine.event_subscriber' }
 
     # make public to use with vich_uploader
     App\Service\UserNamer:
@@ -86,7 +84,12 @@ services:
         exclude:  '../src/DataTable/Model'
         tags: [datatable]
 
-    # used to update calculation when groups or items change
+    # used to display flash message when entities change
+    # App\Listener\PersistenceListener:
+    #     tags:
+    #         - { name: 'doctrine.event_subscriber' }
+
+    # used to update calculation when groups, categories or items change
     App\Listener\CalculationListener:
         tags:
             - { name: doctrine.event_listener, event: onFlush}

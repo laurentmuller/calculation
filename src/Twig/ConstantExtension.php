@@ -16,7 +16,6 @@ use App\Interfaces\EntityVoterInterface;
 use App\Service\CalculationService;
 use App\Traits\CacheTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 
@@ -37,9 +36,9 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     /**
      * Constructor.
      */
-    public function __construct(AdapterInterface $adapter, KernelInterface $kernel)
+    public function __construct(AdapterInterface $adapter, bool $isDebug)
     {
-        if (!$kernel->isDebug()) {
+        if (!$isDebug) {
             $this->adapter = $adapter;
         }
     }

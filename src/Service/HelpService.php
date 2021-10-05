@@ -15,7 +15,6 @@ namespace App\Service;
 use App\Traits\CacheTrait;
 use App\Traits\TranslatorTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -56,14 +55,14 @@ class HelpService
     /**
      * Constructor.
      */
-    public function __construct(AdapterInterface $adapter, TranslatorInterface $translator, KernelInterface $kernel)
+    public function __construct(AdapterInterface $adapter, TranslatorInterface $translator, string $projectDir, bool $isDebug)
     {
-        if (!$kernel->isDebug()) {
+        if (!$isDebug) {
             $this->adapter = $adapter;
         }
         $this->translator = $translator;
-        $this->file = $kernel->getProjectDir() . self::FILE_PATH;
-        $this->imagePath = $kernel->getProjectDir() . self::IMAGE_PATH;
+        $this->file = $projectDir . self::FILE_PATH;
+        $this->imagePath = $projectDir . self::IMAGE_PATH;
     }
 
     /**

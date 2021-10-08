@@ -5,6 +5,7 @@
 {%- set title_icon = 'calculator' -%}
 {%- set title_description = 'calculation.update.description' -%}
 {%- set cancel_path = path('homepage') -%}
+{%- set show_required = false -%}
 
 {% block card_body %}
 {{ parent() }}
@@ -14,8 +15,6 @@
     <p class="mb-0 text-right text-muted small">{{ 'calculation.update.last_update'|trans({'%date%': date}) }}</p>
 {% endif %}
 {% endblock %}
-
-{% block required_form %}{% endblock %}
 
 {% block javascripts %}
 {% if app.debug %}

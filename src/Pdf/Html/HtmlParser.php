@@ -155,7 +155,7 @@ class HtmlParser
         /** @var \DOMText $nodeText */
         $nodeText = $node;
         $value = $nodeText->wholeText;
-        if (0 !== \strlen(\trim($value))) {
+        if ('' !== (\trim($value))) {
             $chunk = new HtmlTextChunk($name, $parent);
             $chunk->setClassName($class);
             $chunk->setText($value);

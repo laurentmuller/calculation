@@ -399,16 +399,16 @@ class OpenWeatherController extends AbstractController
 
             // load current weather by chunk of 20 items
             $group = false;
-            for ($i = 0, $len = \count($cities); $i < $len; ++$i) {
-                if (0 === $i % OpenWeatherService::MAX_GROUP) {
+            foreach (\array_keys($cities) as $key) {
+                if (0 === $key % OpenWeatherService::MAX_GROUP) {
                     $ids = \array_splice($cityIds, 0, OpenWeatherService::MAX_GROUP);
                     $group = $this->service->group($ids, $units);
                 }
                 /** @var array $group */
-                if ($group) {
-                    $cities[$i]['name'] = $group['list'][$i % 20]['name'];
-                    $cities[$i]['current'] = $group['list'][$i % 20];
-                    $cities[$i]['units'] = $group['units'];
+                if (false !== $group) {
+                    $cities[$key]['name'] = $group['list'][$key % 20]['name'];
+                    $cities[$key]['current'] = $group['list'][$key % 20];
+                    $cities[$key]['units'] = $group['units'];
                 }
             }
 

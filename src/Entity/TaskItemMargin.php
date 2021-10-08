@@ -15,7 +15,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Task item margin.
+ * Represents a margin of a task item.
  *
  * @author Laurent Muller
  *

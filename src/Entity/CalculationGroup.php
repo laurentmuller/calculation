@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represents a group of calculation categories.
+ * Represents a group of a calculation.
  *
  * @author Laurent Muller
  *
@@ -41,7 +41,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
      * The parent's calculation.
      *
      * @ORM\ManyToOne(targetEntity=Calculation::class, inversedBy="groups")
-     * @ORM\JoinColumn(name="calculation_id", onDelete="CASCADE", nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      */
     protected ?Calculation $calculation = null;
 
@@ -70,7 +70,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
      * The parent's group.
      *
      * @ORM\ManyToOne(targetEntity=Group::class)
-     * @ORM\JoinColumn(name="group_id", nullable=false)
+     * @ORM\JoinColumn(nullable=false)
      */
     protected ?Group $group = null;
 
@@ -168,7 +168,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
     /**
      * Get the calculation categories.
      *
-     * @return Collection|CalculationCategory[]
+     * @return CalculationCategory[]|Collection
      * @psalm-return Collection<int, CalculationCategory>
      */
     public function getCategories(): Collection

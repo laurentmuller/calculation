@@ -42,7 +42,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     protected ?string $customer = null;
 
     /**
-     * The calculation date.
+     * The date.
      *
      * @ORM\Column(type="date")
      * @Assert\NotNull
@@ -66,7 +66,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     protected float $globalMargin = 0.0;
 
     /**
-     * The calculation groups.
+     * The groups.
      *
      * @ORM\OneToMany(targetEntity=CalculationGroup::class, mappedBy="calculation", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"position" = "ASC", "code" = "ASC"})
@@ -92,7 +92,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     protected float $overallTotal = 0.0;
 
     /**
-     * The calculation state.
+     * The state.
      *
      * @ORM\ManyToOne(targetEntity=CalculationState::class, inversedBy="calculations")
      * @ORM\JoinColumn(nullable=false)

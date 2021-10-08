@@ -116,11 +116,11 @@ abstract class AbstractController extends BaseController
      */
     public static function getSubscribedServices(): array
     {
-        return \array_merge([
+        return \array_merge(parent::getSubscribedServices(), [
             ApplicationService::class,
             TranslatorInterface::class,
             UrlGeneratorService::class,
-        ], parent::getSubscribedServices());
+        ]);
     }
 
     /**

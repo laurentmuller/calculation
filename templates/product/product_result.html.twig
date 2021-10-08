@@ -14,43 +14,71 @@
 {%- set title_description = 'product.result.description' -%}
 
 {% block card_body %}
-<table class="table table-sm">
+<table class="table table-sm border-bottom">
     {{ _self.add_line_info('category.fields.group', query.groupCode) }}
     {{ _self.add_line_info('product.fields.category', query.categoryCode) }}
     {{ _self.add_line_info('product.update.type', (query.percent ? 'product.update.percent' : 'product.update.fixed')|trans) }}
     {{ _self.add_line_info('product.result.value', query.percent ? query.value|percent : query.value|amount) }}
     {{ _self.add_line_info('product.update.round', (query.round ? 'common.value_true' : 'common.value_false')|trans) }}
     {% if result.valid %}
-        {{ _self.add_line_info('product.result.updated', 'counters.products'|trans({count: result.products|length})) }}
+        <tr>
+            <td class="w-30">{{ 'product.result.updated'|trans }}</td>
+            <td>
+                <a href="#" data-toggle="modal" data-target="#resultModal" title="{{ 'product.result.updated'|trans }}">
+                    {{- result.products|length|integer -}}
+                </a>
+            </td>
+        </tr>
     {% endif %}
 </table>
 {% if result.valid %}
-    <div class="overflow-auto border-bottom" style="max-height: 209px;">
-        <table class="table table-hover table-sm mb-0">
-            <thead class="thead-light">
-                <tr>
-                    <th class="font-weight-normal">{{ 'product.name'|trans }}</th>
-                    <th class="font-weight-normal text-currency">{{ 'product.result.old_price'|trans }}</th>
-                    <th class="font-weight-normal text-currency">{{ 'product.result.new_price'|trans }}</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for product in result.products -%}
-            <tr>
-                <td>{{ product.description }}</td>
-                <td class="text-currency">{{ product.oldPrice|amount }}</td>
-                <td class="text-currency">{{ product.newPrice|amount }}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
     {% if query.simulated %}
-        <p class="text-right small mb-0 mt-1">{{ 'product.result.simulated'|trans }}</p>
+        <p class="mb-0 text-right text-muted small">{{ 'product.result.simulated'|trans }}</p>
     {% endif %}
 {% else %}
     <div class="alert alert-warning mb-0" role="alert">{{ 'product.result.empty'|trans }}</div>
 {% endif %}
+
+{% if result.valid %}
+<div class="modal fade" id="resultModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'product.update.title'|trans }}</h5>
+                {{ icons.button_close_modal }}
+            </div>
+            <div class="modal-body">
+                <p class="mb-2 font-weight-bold">{{ 'product.result.updated'|trans }}</p>
+                <div class="overflow-auto" style="max-height: 209px;">
+                    <table class="table table-hover table-sm border-bottom mb-0">
+                        <thead>
+                            <tr>
+                                <th class="font-weight-normal">{{ 'product.fields.description'|trans }}</th>
+                                <th class="font-weight-normal text-currency">{{ 'product.result.old_price'|trans }}</th>
+                                <th class="font-weight-normal text-currency">{{ 'product.result.new_price'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in result.products -%}
+                        <tr>
+                            <td>{{ product.description }}</td>
+                            <td class="text-currency">{{ product.oldPrice|amount }}</td>
+                            <td class="text-currency">{{ product.newPrice|amount }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-2 mb-0 text-right">{{ 'counters.products'|trans({count: result.products|length}) }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">{{ 'common.button_close'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% endblock %}
 
 {% block card_footer %}

@@ -4,8 +4,7 @@
 {%- set title = 'user.image.title' -%}
 {%- set title_icon = 'image far' -%}
 {%- set page_list = 'user_table' -%}
-
-{% block required_form -%}{%- endblock %}
+{%- set show_required = false -%}
 
 {% block stylesheets %}
 {{ asset_css('css/fileinput.css') }}

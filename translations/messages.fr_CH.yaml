@@ -345,7 +345,7 @@ product:
         description: Résultats de la mise à jour des articles.
         simulated: La mise à jour a été simulée. Aucun article n'a été modifié dans la base de données.
         empty: Aucun article n'a été mise à jour.
-        updated: Mises à jour
+        updated: Articles mises à jour
         value: Valeur
         old_price: Ancien prix
         new_price: Nouveau prix
@@ -426,6 +426,7 @@ user:
         reset: Mot de passe oublié
     rights:
         title: Droits d'accès
+        description: Définition des droits d'accès à l'application.
         table_title: Objets / Actions
         all_title: Tous les droits
         none_title: Aucun droit

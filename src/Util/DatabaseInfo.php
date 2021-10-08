@@ -50,7 +50,7 @@ final class DatabaseInfo
 
             // convert
             foreach ($entries as $entry) {
-                if (0 !== \strlen($entry['Value'])) {
+                if ('' !== $entry['Value']) {
                     $key = $entry['Variable_name'];
                     $values[$key] = $entry['Value'];
                 }

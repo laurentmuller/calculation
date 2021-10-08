@@ -1,6 +1,7 @@
 {% extends 'cards/card_base.html.twig' %}
 {# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
+{% import 'macros/_properties.html.twig' as properties %}
 
 {% macro add_line_info(name, value) -%}
 </tr>
@@ -40,7 +41,18 @@
     {% if result.empty > 0 or result.duplicated > 0 or result.sorted > 0 or result.codes > 0 %}
         <tr class="not-hover"><td colspan="2">&nbsp;</td></tr>
     {% endif %}
-    {{ _self.add_line_info('calculation.result.updated', result.updated|integer) }}
+    {% if result.updated > 0 %}
+        <tr>
+            <td>{{ 'calculation.result.updated'|trans }}</td>
+            <td class="text-right">
+                <a href="#" data-toggle="modal" data-target="#resultModal" title="{{ 'calculation.result.updated'|trans }}">
+                    {{- result.updated|integer -}}
+                </a>
+            </td>
+        </tr>
+    {% else %}
+        {{ _self.add_line_info('calculation.result.updated', result.updated|integer) }}
+    {% endif %}
     {{ _self.add_line_info('calculation.result.skipped', result.skipped|integer) }}
     {% if result.unmodifiable > 0 %}
         {{ _self.add_line_info('calculation.result.unmodifiable', result.unmodifiable|integer) }}
@@ -50,10 +62,47 @@
         <th class="text-right">{{ result.total|integer }}</th>
     </tr>
 </table>
+
 {% if query.simulated %}
     <hr class="mt-0">
-    <p class="text-right my-0 small">{{ 'calculation.result.simulated'|trans }}</p>
+    <p class="mb-0 text-right text-muted small">{{ 'calculation.result.simulated'|trans }}</p>
 {% endif %}
+
+{% if result.calculations|length %}
+<div class="modal fade" id="resultModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'calculation.update.title'|trans }}</h5>
+                {{ icons.button_close_modal }}
+            </div>
+            <div class="modal-body">
+                <p class="mb-2 font-weight-bold">{{ 'calculation.result.updated'|trans }}</p>
+                <div class="overflow-auto" style="max-height: 209px;">
+                    <table class="table table-hover table-sm mb-0 border-bottom">
+                    {% for calculation in result.calculations %}
+                        {%- set margin_class = app.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' -%}
+                        <tr>
+                            <td class="text-id text-border" style="{{ properties.stateCss(calculation.stateColor) }}">{{ calculation.id|identifier }}</td>
+                            <td class="text-state">{{ calculation.state.code }}</td>
+                            <td>{{ calculation.customer }}</td>
+                            <td>{{ calculation.description }}</td>
+                            <td class="{{ margin_class }}">{{ calculation.overallMargin|percent }}</td>
+                            <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+                <p class="mt-2 mb-0 text-right">{{ 'counters.calculations'|trans({count: result.calculations|length}) }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">{{ 'common.button_close'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% endblock %}
 
 {% block card_footer %}

@@ -72,7 +72,7 @@ class CalculationState extends AbstractEntity
      *
      * @ORM\OneToMany(targetEntity=Calculation::class, mappedBy="state")
      *
-     * @var Collection|Calculation[]
+     * @var Calculation[]|Collection
      * @psalm-var Collection<int, Calculation>
      */
     private Collection $calculations;
@@ -113,7 +113,7 @@ class CalculationState extends AbstractEntity
     /**
      * Gets the calculations.
      *
-     * @return Collection|Calculation[]
+     * @return Calculation[]|Collection
      * @psalm-return Collection<int, Calculation>
      */
     public function getCalculations(): Collection

@@ -80,13 +80,13 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
      */
     protected function checkRoute(string $url, string $username, int $expected = Response::HTTP_OK, string $method = Request::METHOD_GET): void
     {
-        $excel = false !== \stripos($url, '/excel');
+        $isExcel = false !== \stripos($url, '/excel');
         $this->loginUserName($username);
-        if ($excel) {
+        if ($isExcel) {
             \ob_start();
         }
         $this->client->request($method, $url);
-        if ($excel) {
+        if ($isExcel) {
             \ob_get_clean();
         }
         $this->checkResponse($url, $username, $expected);

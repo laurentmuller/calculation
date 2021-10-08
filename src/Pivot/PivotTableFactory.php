@@ -350,7 +350,7 @@ class PivotTableFactory
     private function buildFieldsTitle(array $fields): string
     {
         return \array_reduce($fields, function (string $carry, PivotField $field): string {
-            if (0 !== \strlen($carry)) {
+            if ('' !== $carry) {
                 return $carry . '\\' . $field->getTitle();
             } else {
                 return $field->getTitle();

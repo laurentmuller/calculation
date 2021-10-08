@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represents a category of calculation items.
+ * Represents a category of calculation group.
  *
  * @author Laurent Muller
  *
@@ -41,7 +41,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * The parent's category.
      *
      * @ORM\ManyToOne(targetEntity=Category::class)
-     * @ORM\JoinColumn(name="category_id", nullable=false)
+     * @ORM\JoinColumn(nullable=false)
      */
     protected ?Category $category = null;
 
@@ -58,7 +58,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * The parent's group.
      *
      * @ORM\ManyToOne(targetEntity=CalculationGroup::class, inversedBy="categories")
-     * @ORM\JoinColumn(name="group_id", onDelete="CASCADE", nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      */
     protected ?CalculationGroup $group = null;
 
@@ -69,7 +69,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
      * @ORM\OrderBy({"position" = "ASC"})
      * @Assert\Valid
      *
-     * @var Collection|CalculationItem[]
+     * @var CalculationItem[]|Collection
      * @psalm-var Collection<int, CalculationItem>
      */
     protected Collection $items;
@@ -197,7 +197,7 @@ class CalculationCategory extends AbstractEntity implements \Countable
     /**
      * Get calculation items.
      *
-     * @return Collection|CalculationItem[]
+     * @return CalculationItem[]|Collection
      * @psalm-return Collection<int, CalculationItem>
      */
     public function getItems(): Collection

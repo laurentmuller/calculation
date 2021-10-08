@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represent a Task.
+ * Represents a task.
  *
  * @author Laurent Muller
  *
@@ -42,10 +42,10 @@ class Task extends AbstractCategoryItemEntity implements \Countable
      * The task items.
      *
      * @ORM\OneToMany(targetEntity=TaskItem::class, mappedBy="task", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @Assert\Valid
      * @ORM\OrderBy({"position" = "ASC"})
+     * @Assert\Valid
      *
-     * @var Collection|TaskItem[]
+     * @var TaskItem[]|Collection
      * @psalm-var Collection<int, TaskItem>
      */
     private Collection $items;
@@ -54,6 +54,8 @@ class Task extends AbstractCategoryItemEntity implements \Countable
      * The name.
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(max=255)
      */
     private ?string $name = null;
 
@@ -141,7 +143,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable
      *
      * @param \Closure $p the predicate used for filtering
      *
-     * @return Collection|TaskItem[] the collection with the results of the filter operation
+     * @return TaskItem[]|Collection the collection with the results of the filter operation
      * @psalm-return Collection<int, TaskItem>
      */
     public function filter(\Closure $p): Collection
@@ -158,7 +160,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable
     }
 
     /**
-     * @return Collection|TaskItem[]
+     * @return TaskItem[]|Collection
      * @psalm-return Collection<int, TaskItem>
      */
     public function getItems(): Collection

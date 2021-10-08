@@ -70,17 +70,11 @@ trait TimestampableTrait
     }
 
     /**
-     * Gets the created date and user name text.
+     * Gets the text for the created date and user name.
      */
     public function getCreatedText(TranslatorInterface $translator): string
     {
-        $date = $this->getCreatedAt() ? FormatUtils::formatDateTime($this->getCreatedAt()) : $translator->trans('common.empty_date');
-        $user = $this->getCreatedBy() ?: $translator->trans('common.empty_user');
-
-        return $translator->trans('common.entity_created', [
-            '%date%' => $date,
-            '%user%' => $user,
-        ]);
+        return $this->formatDateAndUser($this->createdAt, $this->createdBy, $translator, 'common.entity_created');
     }
 
     /**
@@ -100,17 +94,11 @@ trait TimestampableTrait
     }
 
     /**
-     * Gets the updated date and user name text.
+     * Gets the text for the updated date and user name.
      */
     public function getUpdatedText(TranslatorInterface $translator): string
     {
-        $date = $this->getUpdatedAt() ? FormatUtils::formatDateTime($this->getUpdatedAt()) : $translator->trans('common.empty_date');
-        $user = $this->getUpdatedBy() ?: $translator->trans('common.empty_user');
-
-        return $translator->trans('common.entity_updated', [
-            '%date%' => $date,
-            '%user%' => $user,
-        ]);
+        return $this->formatDateAndUser($this->updatedAt, $this->updatedBy, $translator, 'common.entity_updated');
     }
 
     /**
@@ -134,7 +122,7 @@ trait TimestampableTrait
     }
 
     /**
-     * Sets the updated date and the updated user name.
+     * Sets the updated date and user name.
      */
     public function setUpdated(\DateTimeInterface $updatedAt, string $updatedBy): self
     {
@@ -159,5 +147,21 @@ trait TimestampableTrait
         $this->updatedBy = $updatedBy;
 
         return $this;
+    }
+
+    /**
+     * Format the date and user.
+     */
+    private function formatDateAndUser(?\DateTimeInterface $date, ?string $user, TranslatorInterface $translator, string $key): string
+    {
+        $date = null !== $date ? FormatUtils::formatDateTime($date) : $translator->trans('common.empty_date');
+        if (null === $user || '' === $user) {
+            $user = $translator->trans('common.empty_user');
+        }
+
+        return $translator->trans($key, [
+            '%date%' => $date,
+            '%user%' => $user,
+        ]);
     }
 }

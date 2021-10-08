@@ -219,9 +219,9 @@ abstract class AbstractTable implements SortModeInterface
             return $sizes;
         }
 
-        for ($i = 0, $count = \count($sizes); $i < $count; ++$i) {
-            if ($sizes[$i] >= $totalNotFiltered) {
-                return \array_slice($sizes, 0, $i + 1);
+        foreach ($sizes as $index => $size) {
+            if ($size >= $totalNotFiltered) {
+                return \array_slice($sizes, 0, $index + 1);
             }
         }
 

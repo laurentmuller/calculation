@@ -34,7 +34,7 @@ trait CheckerTrait
      *
      * @var bool[]
      */
-    private $rights = [];
+    private array $rights = [];
 
     /**
      * Returns if the given action for the given subject is granted.

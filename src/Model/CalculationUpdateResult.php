@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Entity\Calculation;
+
 /**
  * Contains result of updated calculations.
  *
@@ -19,6 +21,7 @@ namespace App\Model;
  */
 class CalculationUpdateResult
 {
+    private array $calculations = [];
     private int $codes = 0;
     private int $duplicated = 0;
     private int $empty = 0;
@@ -26,7 +29,13 @@ class CalculationUpdateResult
     private int $sorted = 0;
     private int $total = 0;
     private int $unmodifiable = 0;
-    private int $updated = 0;
+
+    public function addCalculation(Calculation $calculation): self
+    {
+        $this->calculations[$calculation->getId()] = $calculation;
+
+        return $this;
+    }
 
     public function addCodes(int $value): self
     {
@@ -77,11 +86,9 @@ class CalculationUpdateResult
         return $this;
     }
 
-    public function addUpdated(int $value): self
+    public function getCalculations(): array
     {
-        $this->updated += $value;
-
-        return $this;
+        return $this->calculations;
     }
 
     public function getCodes(): int
@@ -121,11 +128,11 @@ class CalculationUpdateResult
 
     public function getUpdated(): int
     {
-        return $this->updated;
+        return \count($this->calculations);
     }
 
     public function isValid(): bool
     {
-        return $this->updated > 0;
+        return !empty($this->calculations);
     }
 }

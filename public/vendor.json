@@ -306,6 +306,17 @@
 			"files": [
 				"currency-flags.css"
 			]
+		},
+		{
+			"name": "font-mfizz",
+			"version": "2.4.1",
+			"files": [
+				"font-mfizz.css",
+				"font-mfizz.eot",
+				"font-mfizz.svg",
+				"font-mfizz.ttf",
+				"font-mfizz.woff"
+			]
 		}
 	]
 }

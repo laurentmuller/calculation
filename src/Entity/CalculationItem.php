@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represents an item in a calculation category.
+ * Represents an item of a calculation category.
  *
  * @author Laurent Muller
  *
@@ -34,7 +34,7 @@ class CalculationItem extends AbstractEntity
      * The parent's category.
      *
      * @ORM\ManyToOne(targetEntity=CalculationCategory::class, inversedBy="items")
-     * @ORM\JoinColumn(name="category_id", onDelete="CASCADE", nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      */
     protected ?CalculationCategory $category = null;
 

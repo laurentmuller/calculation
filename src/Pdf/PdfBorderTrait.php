@@ -23,7 +23,7 @@ trait PdfBorderTrait
     /**
      * The border style.
      *
-     * @var mixed
+     * @var string|int
      */
     protected $border = PdfConstantsInterface::BORDER_ALL;
 
@@ -109,7 +109,7 @@ trait PdfBorderTrait
             $result[] = 'All';
         } elseif (PdfConstantsInterface::BORDER_INHERITED === $border) {
             $result[] = 'Inherited';
-        } else {
+        } elseif (\is_string($border)) {
             for ($i = 0, $count = \strlen($border); $i < $count; ++$i) {
                 switch ($border[$i]) {
                     case PdfConstantsInterface::BORDER_LEFT:

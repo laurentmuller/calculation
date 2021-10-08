@@ -320,7 +320,7 @@ final class Utils
      */
     public static function isString($var): bool
     {
-        return \is_string($var) && 0 !== \strlen($var);
+        return \is_string($var) && '' !== $var;
     }
 
     /**

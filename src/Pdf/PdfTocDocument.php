@@ -176,7 +176,7 @@ class PdfTocDocument extends PdfDocument
      */
     private function tocOuputTitle(string $title, float $fontSize, string $fontName): void
     {
-        if (\strlen($title) > 0) {
+        if ('' !== $title) {
             $this->SetFont($fontName, 'B', $fontSize);
             $this->Cell(0, $this->FontSize, $title, 0, 1, 'C');
             $this->Ln(10);

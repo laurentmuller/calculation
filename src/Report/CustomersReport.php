@@ -99,7 +99,7 @@ class CustomersReport extends AbstractArrayReport
      */
     private function getFirstChar(string $text): string
     {
-        if (0 !== \strlen($text)) {
+        if ('' !== $text) {
             return (string) \strtoupper($text[0]);
         }
 

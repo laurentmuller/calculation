@@ -5,10 +5,10 @@
 {%- set submit_text = submit_text|default('common.button_delete') -%}
 {%- set submit_class = submit_class|default('btn btn-form btn-danger') -%}
 {%- set cancel_path = cancel_url(app.request, item.id|default(0), page_list|default('homepage')) -%}
-         
+{%- set show_required = false -%}
+
 {% block card_class ' border-danger' %}
 {% block card_header_class ' text-white bg-danger' %}
-{% block required_form %}{% endblock %}
 
 {% block card_body -%}
 <p class="mb-0">{{ message|raw }}</p>

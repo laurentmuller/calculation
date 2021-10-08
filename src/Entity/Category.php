@@ -59,7 +59,7 @@ class Category extends AbstractEntity
      *
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="category")
      *
-     * @var Collection|Product[]
+     * @var Product[]|Collection
      * @psalm-var Collection<int, Product>
      */
     private Collection $products;
@@ -69,7 +69,7 @@ class Category extends AbstractEntity
      *
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="category")
      *
-     * @var Collection|Task[]
+     * @var Task[]|Collection
      * @psalm-var Collection<int, Task>
      */
     private Collection $tasks;
@@ -217,7 +217,7 @@ class Category extends AbstractEntity
     /**
      * Get products.
      *
-     * @return Collection|Product[]
+     * @return Product[]|Collection
      * @psalm-return Collection<int, Product>
      */
     public function getProducts(): Collection
@@ -226,7 +226,7 @@ class Category extends AbstractEntity
     }
 
     /**
-     * @return Collection|Task[]
+     * @return Task[]|Collection
      * @psalm-return Collection<int, Task>
      */
     public function getTasks(): Collection

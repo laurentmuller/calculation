@@ -114,9 +114,9 @@ class ChartController extends AbstractController
             return $values;
         }
 
-        for ($i = 0, $count = \count($values); $i < $count; ++$i) {
-            if ($values[$i] >= $maxMonths) {
-                return \array_slice($values, 0, $i + 1);
+        foreach ($values as $index => $value) {
+            if ($value >= $maxMonths) {
+                return \array_slice($values, 0, $index + 1);
             }
         }
 
@@ -265,14 +265,14 @@ class ChartController extends AbstractController
 
         // data
         $data = [];
-        for ($i = 0, $count = \count($dates); $i < $count; ++$i) {
+        foreach ($dates as $index => $date) {
             $data[] = [
-                'date' => ($dates[$i] / 1000),
-                'count' => $countData[$i],
-                'sum' => $sumData[$i],
-                'items' => $itemsData[$i],
-                'marginAmount' => $marginsAmount[$i],
-                'marginPercent' => $marginsPercent[$i],
+                'date' => ($date / 1000),
+                'count' => $countData[$index],
+                'sum' => $sumData[$index],
+                'items' => $itemsData[$index],
+                'marginAmount' => $marginsAmount[$index],
+                'marginPercent' => $marginsPercent[$index],
             ];
         }
 

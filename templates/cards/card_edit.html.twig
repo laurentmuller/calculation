@@ -8,6 +8,7 @@
 {%- set submit_params = submit_params|default({}) -%}
 {%- set form_attr = form_attr|default({})|merge({'id': 'edit-form'}) -%}
 {%- set cancel_text = cancel_text|default('common.button_cancel') -%}
+
 {%- if cancel_path is not defined -%}
 {%- set cancel_path = cancel_url(app.request, item.id|default(0), page_list|default('homepage')) -%}
 {%- endif -%}
@@ -29,18 +30,21 @@
 {% endblock %}
 
 {% block card_footer -%}
+{%- set show_required = show_required is defined ? show_required : true -%}
 <div class="row no-gutters">
-    <div class="col-md-9">
+    <div class="col{% if show_required %}-md-9{% endif %}">
     {% block actions_form -%}
         {{ icons.button_submit(submit_text, submit_class, submit_params) }}
-        {% if cancel_path|default(false) %}
+        {% if cancel_path|default(false) -%}
             {{ icons.button_cancel(cancel_path, cancel_text) }}
-        {% endif %}
+        {%- endif %}
     {%- endblock %}
     </div>
+    {% if show_required -%}
     <div class="col-md-3 text-md-right mt-1">
         {% block required_form -%}<small>{{ 'common.required'|trans|raw }}</small>{%- endblock %}
     </div>
+    {%- endif %}
 </div>
 {%- endblock %}
 

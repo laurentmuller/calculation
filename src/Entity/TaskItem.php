@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * Task item.
+ * Represents an item of a task.
  *
  * @author Laurent Muller
  *
@@ -38,13 +38,15 @@ class TaskItem extends AbstractEntity implements \Countable
      * @ORM\OrderBy({"minimum" = "ASC"})
      * @Assert\Valid
      *
-     * @var Collection|TaskItemMargin[]
+     * @var TaskItemMargin[]|Collection
      * @psalm-var Collection<int, TaskItemMargin>
      */
     private Collection $margins;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(max=255)
      */
     private ?string $name = null;
 
@@ -118,7 +120,7 @@ class TaskItem extends AbstractEntity implements \Countable
     }
 
     /**
-     * @return Collection|TaskItemMargin[]
+     * @return TaskItemMargin[]|Collection
      * @psalm-return Collection<int, TaskItemMargin>
      */
     public function getMargins(): Collection

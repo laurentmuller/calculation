@@ -43,6 +43,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Length(max=180)
      * @Assert\NotBlank
      * @Assert\Email
      */
@@ -60,6 +61,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
+     * @Assert\Length(max=100)
      */
     private ?string $hashedToken = null;
 
@@ -89,7 +91,8 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private ?\DateTimeInterface $lastLogin = null;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max=255)
      * @Assert\NotBlank
      */
     private ?string $password = null;
@@ -107,6 +110,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
+     * @Assert\Length(max=20)
      */
     private ?string $selector = null; // @phpstan-ignore-line
 
@@ -119,6 +123,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Length(max=180)
      * @Assert\NotBlank
      */
     private ?string $username = null;

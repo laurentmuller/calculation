@@ -16,6 +16,7 @@ use App\Entity\Calculation;
 use App\Form\FormHelper;
 use App\Model\CalculationUpdateQuery;
 use App\Model\CalculationUpdateResult;
+use App\Repository\CalculationRepository;
 use App\Traits\LoggerTrait;
 use App\Traits\SessionTrait;
 use App\Traits\TranslatorTrait;
@@ -207,7 +208,7 @@ class CalculationUpdater
                     }
 
                     if ($this->service->updateTotal($calculation) || $changed) {
-                        $result->addUpdated(1);
+                        $result->addCalculation($calculation);
                     } else {
                         $result->addSkipped(1);
                     }
@@ -230,12 +231,15 @@ class CalculationUpdater
     }
 
     /**
-     * Gets all calculations.
+     * Gets all calculations ordered by identifier.
      *
      * @return Calculation[] the calculations
      */
     private function getCalculations(): array
     {
-        return $this->manager->getRepository(Calculation::class)->findAll();
+        /** @var CalculationRepository $repository */
+        $repository = $this->manager->getRepository(Calculation::class);
+
+        return $repository->findBy([], ['id' => 'ASC']);
     }
 }

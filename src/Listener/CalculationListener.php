@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace App\Listener;
 
 use App\Entity\Calculation;
-use App\Entity\CalculationGroup;
-use App\Entity\CalculationItem;
+use App\Interfaces\ParentCalculationInterface;
 use Doctrine\ORM\UnitOfWork;
 
 /**
@@ -26,43 +25,49 @@ final class CalculationListener extends TimestampableListener
 {
     /**
      * {@inheritDoc}
-     *
-     * @return Calculation[]
-     */
-    protected function filterEntities(array $entities): array
-    {
-        $result = [];
-
-        foreach ($entities as $entity) {
-            // calculation is already updated by the parent class
-            if ($entity instanceof Calculation) {
-                continue;
-            }
-
-            if ($entity instanceof CalculationItem) {
-                $entity = $entity->getCalculation();
-            } elseif ($entity instanceof CalculationGroup) {
-                $entity = $entity->getCalculation();
-            }
-
-            // calculation?
-            if ($entity instanceof Calculation) {
-                $result[(int) $entity->getId()] = $entity;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * {@inheritDoc}
      */
     protected function getEntities(UnitOfWork $unitOfWork): array
     {
-        return [
-            ...$unitOfWork->getScheduledEntityInsertions(),
-            ...$unitOfWork->getScheduledEntityDeletions(),
+        $entities = [
             ...$unitOfWork->getScheduledEntityUpdates(),
+            ...$unitOfWork->getScheduledEntityDeletions(),
+            ...$unitOfWork->getScheduledEntityInsertions(),
         ];
+
+        $result = [];
+        foreach ($entities as $entity) {
+            if (null !== $calculation = $this->getParentCalculation($entity)) {
+                $result[(int) $calculation->getId()] = $calculation;
+            }
+        }
+
+        // exclude deleted and inserted calculations
+        $deleted = $this->getCalculations($unitOfWork->getScheduledEntityDeletions());
+        $inserted = $this->getCalculations($unitOfWork->getScheduledEntityInsertions());
+
+        return \array_diff($result, $deleted, $inserted);
+    }
+
+    /**
+     * @return Calculation[]
+     */
+    private function getCalculations(array $entities): array
+    {
+        // @phpstan-ignore-next-line
+        return \array_filter($entities, static function ($entity): bool {
+            return $entity instanceof Calculation;
+        });
+    }
+
+    /**
+     * @param mixed $entity
+     */
+    private function getParentCalculation($entity): ?Calculation
+    {
+        if ($entity instanceof ParentCalculationInterface) {
+            return $entity->getCalculation();
+        } else {
+            return null;
+        }
     }
 }

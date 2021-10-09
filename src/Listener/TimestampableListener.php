@@ -62,10 +62,6 @@ class TimestampableListener implements DisableListenerInterface
         if (empty($entities)) {
             return;
         }
-        $entities = $this->filterEntities($entities);
-        if (empty($entities)) {
-            return;
-        }
 
         // get update values
         $user = $this->getUserName();
@@ -84,27 +80,21 @@ class TimestampableListener implements DisableListenerInterface
     }
 
     /**
-     * Filter the entities to update.
+     * Gets the entities to update.
      *
      * @return TimestampableInterface[]
      */
-    protected function filterEntities(array $entities): array
+    protected function getEntities(UnitOfWork $unitOfWork): array
     {
+        $entities = [
+            ...$unitOfWork->getScheduledEntityInsertions(),
+            ...$unitOfWork->getScheduledEntityUpdates(),
+        ];
+
         // @phpstan-ignore-next-line
         return \array_filter($entities, static function ($entity): bool {
             return $entity instanceof TimestampableInterface;
         });
-    }
-
-    /**
-     * Gets the entities to update.
-     */
-    protected function getEntities(UnitOfWork $unitOfWork): array
-    {
-        return [
-            ...$unitOfWork->getScheduledEntityInsertions(),
-            ...$unitOfWork->getScheduledEntityUpdates(),
-        ];
     }
 
     /**

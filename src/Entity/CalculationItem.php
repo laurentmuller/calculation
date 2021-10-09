@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ParentCalculationInterface;
 use App\Traits\MathTrait;
 use App\Traits\PositionTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\CalculationItemRepository")
  * @ORM\Table(name="sy_CalculationItem")
  */
-class CalculationItem extends AbstractEntity
+class CalculationItem extends AbstractEntity implements ParentCalculationInterface
 {
     use MathTrait;
     use PositionTrait;
@@ -85,9 +86,7 @@ class CalculationItem extends AbstractEntity
     }
 
     /**
-     * Gets the parent's calculation.
-     *
-     * @return Calculation|null the calculation, if any; null otherwise
+     * {@inheritDoc}
      */
     public function getCalculation(): ?Calculation
     {

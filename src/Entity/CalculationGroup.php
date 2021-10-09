@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ParentCalculationInterface;
 use App\Traits\PositionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\CalculationGroupRepository")
  * @ORM\Table(name="sy_CalculationGroup")
  */
-class CalculationGroup extends AbstractEntity implements \Countable
+class CalculationGroup extends AbstractEntity implements \Countable, ParentCalculationInterface
 {
     use PositionTrait;
 
@@ -158,7 +159,7 @@ class CalculationGroup extends AbstractEntity implements \Countable
     }
 
     /**
-     * Get the parent's calculation.
+     * {@inheritDoc}
      */
     public function getCalculation(): ?Calculation
     {

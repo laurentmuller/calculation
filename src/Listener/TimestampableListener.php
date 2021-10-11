@@ -32,7 +32,6 @@ class TimestampableListener implements DisableListenerInterface
     use DisableListenerTrait;
 
     private string $emptyUser;
-
     private Security $security;
 
     /**
@@ -68,14 +67,16 @@ class TimestampableListener implements DisableListenerInterface
         $date = new \DateTimeImmutable();
 
         foreach ($entities as $entity) {
-            // update
-            $this->updateEntity($entity, $user, $date);
-            $em->persist($entity);
+            // update?
+            if ($this->updateEntity($entity, $user, $date)) {
+                // persist
+                $em->persist($entity);
 
-            // recompute
-            $class_name = \get_class($entity);
-            $metadata = $em->getClassMetadata($class_name);
-            $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
+                // recompute
+                $class_name = \get_class($entity);
+                $metadata = $em->getClassMetadata($class_name);
+                $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
+            }
         }
     }
 
@@ -106,22 +107,32 @@ class TimestampableListener implements DisableListenerInterface
             return $user->getUserIdentifier();
         }
 
-        // default user
         return $this->emptyUser;
     }
 
     /**
      * Update the given entity.
      */
-    private function updateEntity(TimestampableInterface $entity, string $user, \DateTimeImmutable $date): void
+    private function updateEntity(TimestampableInterface $entity, string $user, \DateTimeImmutable $date): bool
     {
+        $changed = false;
         if (null === $entity->getCreatedAt()) {
             $entity->setCreatedAt($date);
+            $changed = true;
         }
         if (null === $entity->getCreatedBy()) {
             $entity->setCreatedBy($user);
+            $changed = true;
         }
-        $entity->setUpdatedAt($date)
-            ->setUpdatedBy($user);
+        if ($date !== $entity->getUpdatedAt()) {
+            $entity->setUpdatedAt($date);
+            $changed = true;
+        }
+        if ($user !== $entity->getUpdatedBy()) {
+            $entity->setUpdatedBy($user);
+            $changed = true;
+        }
+
+        return $changed;
     }
 }

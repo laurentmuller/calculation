@@ -195,6 +195,11 @@ const Application = {
             return that;
         }
 
+        // constants
+        const $body = $('body');
+        const eventName = 'mousemove.draggable';
+        const className = 'bg-primary text-white';
+
         // draggable edit dialog
         $('.modal .modal-header').on('mousedown', function (e) {
             // left button?
@@ -220,33 +225,31 @@ const Application = {
             const bottom = windowHeight - $content.height();
 
             // update style
-            $draggable.toggleClass('bg-primary text-white');
-            $close.toggleClass('bg-primary text-white');
+            $draggable.toggleClass(className);
+            $close.toggleClass(className);
 
-            $('body').on('mousemove.draggable', function (e) {
+            $body.on(eventName, function (e) {
                 // compute
                 const left = Math.max(margin, Math.min(right, e.pageX - startX));
                 const top = Math.max(margin, Math.min(bottom, e.pageY - startY));
-
                 // move
                 $dialog.offset({
                     left: left,
                     top: top
                 });
-
             }).one('mouseup', function () {
-                $('body').off('mousemove.draggable');
-                $draggable.toggleClass('bg-primary text-white');
-                $close.toggleClass('bg-primary text-white');
+                $body.off(eventName);
+                $draggable.toggleClass(className);
+                $close.toggleClass(className);
                 if ($focused.length) {
                     $focused.focus();
                 }
             });
 
             $draggable.closest('.modal').one('hide.bs.modal', function () {
-                $('body').off('mousemove.draggable');
+                $body.off(eventName);
             }).one('hidden.bs.modal', function () {
-                $dialog.removeAttr('style');
+                $dialog.css({'left': '', 'top': ''});
             });
         });
 

@@ -43,6 +43,18 @@ abstract class AbstractTable implements SortModeInterface
      */
     private ?string $prefix = null;
 
+    /**
+     * Gets the empty message if empty is not allowed and this is empty.
+     */
+    public function checkEmpty(): ?string
+    {
+        if (!$this->isEmptyAllowed() && $this instanceof \Countable && 0 === $this->count()) {
+            return $this->getEmptyMessage();
+        }
+
+        return null;
+    }
+
     public function formatAmount(float $value): string
     {
         return FormatUtils::formatAmount($value);
@@ -166,34 +178,6 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Save the request parameter value to the session.
-     *
-     * @param Request $request the request to get value from
-     * @param string  $name    the parameter name
-     * @param mixed   $default the default value if not found
-     *
-     * @return bool true if the parameter value is saved to the session; false otherwise
-     */
-    public function saveRequestValue(Request $request, string $name, $default = null): bool
-    {
-        if ($request->hasSession()) {
-            $session = $request->getSession();
-            $key = $this->getSessionKey($name);
-            $default = $session->get($key, $default);
-            $value = $request->get($name, $default);
-            if (null === $value) {
-                $session->remove($key);
-            } else {
-                $session->set($key, $value);
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Create the columns.
      *
      * @return Column[] the columns
@@ -287,12 +271,18 @@ abstract class AbstractTable implements SortModeInterface
         $key = $useSessionKey ? $this->getSessionKey($name) : $name;
         $session = $request->hasSession() ? $request->getSession() : null;
 
+        // find in session
         if (null !== $session) {
             $default = $session->get($key, $default);
         }
 
+        // find in cookies
+        $default = $request->cookies->get(\strtoupper($key), $default);
+
+        // find in request
         $value = $request->get($name, $default);
 
+        // save
         if (null !== $session) {
             $session->set($key, $value);
         }

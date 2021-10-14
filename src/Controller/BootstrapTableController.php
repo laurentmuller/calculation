@@ -35,13 +35,14 @@ use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Controler for the Bootstrap Tables.
+ * Controler for the Bootstrap tables.
  *
  * @author Laurent Muller
  *
@@ -209,15 +210,24 @@ class BootstrapTableController extends AbstractController
      */
     public function save(Request $request): JsonResponse
     {
-        if ($request->hasSession()) {
-            $session = $request->getSession();
-            $view = (string) $request->get(TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
-            $session->set(TableInterface::PARAM_VIEW, $view);
-
-            return $this->json(true);
+        $view = (string) $request->get(TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+        switch ($view) {
+            case TableInterface::VIEW_CARD:
+                $limit = (int) $request->get(TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE_CARD);
+                break;
+            case TableInterface::VIEW_CUSTOM:
+                $limit = (int) $request->get(TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE_CUSTOM);
+                break;
+            default: // TableInterface::VIEW_TABLE
+                $limit = (int) $request->get(TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
+                break;
         }
 
-        return $this->json(false);
+        $response = $this->json(true);
+        $this->setCookie($response, TableInterface::PARAM_VIEW, $view);
+        $this->setCookie($response, TableInterface::PARAM_LIMIT, $limit);
+
+        return $response;
     }
 
     /**
@@ -256,6 +266,16 @@ class BootstrapTableController extends AbstractController
         return $this->handleTableRequest($request, $table, 'table/table_user.html.twig');
     }
 
+    private function clearCookie(Response $response, string $key): void
+    {
+        $response->headers->clearCookie(\strtoupper($key));
+    }
+
+    private function getInputBag(Request $request): InputBag
+    {
+        return Request::METHOD_POST === $request->getMethod() ? $request->request : $request->query;
+    }
+
     /**
      * Handle the table request.
      *
@@ -272,12 +292,13 @@ class BootstrapTableController extends AbstractController
             $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $subject);
         }
 
-        // update query
-        $this->updateQuery($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+        // update request
+        $this->updateRequest($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+        $this->updateRequest($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
 
-        // countable and empty?
-        if ($table instanceof \Countable && 0 === $table->count() && !$table->isEmptyAllowed()) {
-            $this->infoTrans($table->getEmptyMessage());
+        // check empty
+        if (null !== $emptyMessage = $table->checkEmpty()) {
+            $this->infoTrans($emptyMessage);
 
             return $this->redirectToHomePage();
         }
@@ -325,35 +346,38 @@ class BootstrapTableController extends AbstractController
     }
 
     /**
-     * @param mixed|null $default the default value if the input key does not exist
+     * @param mixed|null $default the default value if the result parameter is null
      */
     private function saveCookie(Response $response, DataResults $results, string $key, $default): void
     {
-        $name = \strtoupper($key);
         $value = $results->getParams($key, $default);
-        if ($value) {
-            $expire = (new \DateTime())->modify('+1 year');
-            $cookie = new Cookie($name, (string) $value, $expire);
-            $response->headers->setCookie($cookie);
+        if (null !== $value) {
+            $this->setCookie($response, $key, $value);
         } else {
-            $response->headers->clearCookie($name);
+            $this->clearCookie($response, $key);
         }
+    }
+
+    /**
+     * @param mixed $value the cookie value
+     */
+    private function setCookie(Response $response, string $key, $value): void
+    {
+        $expire = (new \DateTime())->modify('+1 year');
+        $cookie = new Cookie(\strtoupper($key), (string) $value, $expire);
+        $response->headers->setCookie($cookie);
     }
 
     /**
      * @param mixed|null $default the default value if the input key does not exist
      */
-    private function updateQuery(Request $request, string $key, $default = null): void
+    private function updateRequest(Request $request, string $key, $default = null): void
     {
         $value = $request->get($key);
         if (null === $value) {
-            $value = $request->cookies->get(\strtoupper($key), null === $default ? null : (string) $default);
+            $value = $request->cookies->get(\strtoupper($key), $default);
             if (null !== $value) {
-                if (Request::METHOD_POST === $request->getMethod()) {
-                    $request->request->set($key, $value);
-                } else {
-                    $request->query->set($key, $value);
-                }
+                $this->getInputBag($request)->set($key, $value);
             }
         }
     }

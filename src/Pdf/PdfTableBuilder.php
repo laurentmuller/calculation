@@ -467,7 +467,7 @@ class PdfTableBuilder implements PdfConstantsInterface
     /**
      * Sets the header style.
      *
-     * @param PdfStyle|null $headerStyle the custom header style to set or null to use the default header style.$this
+     * @param PdfStyle|null $headerStyle the custom header style to set or null to use the default header style
      *
      * @see PdfStyle::getHeaderStyle()
      */

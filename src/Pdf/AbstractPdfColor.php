@@ -30,7 +30,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     protected const MAX_VALUE = 255;
 
     /**
-     * The minimum value allowed a component (inclusive).
+     * The minimum value allowed for a component (inclusive).
      */
     protected const MIN_VALUE = 0;
 

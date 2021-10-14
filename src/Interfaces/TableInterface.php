@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * Contains constants for boostrap tables.
+ * Contains constants for Bootstrap tables.
  *
  * @author Laurent Muller
  */

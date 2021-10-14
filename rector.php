@@ -9,6 +9,8 @@ use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\PHPStanRules\Rules\Explicit\ExplicitMethodCallOverMagicGetSetRector;
+use Symplify\PHPStanRules\Rules\Explicit\ExplicitMethodCallOverMagicGetSetRule;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // parameters
@@ -24,7 +26,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         [
             ClosureToArrowFunctionRector::class,
             FlipTypeControlToUseExclusiveTypeRector::class,
-            CallableThisArrayToAnonymousFunctionRector::class
+            CallableThisArrayToAnonymousFunctionRector::class,
+            ExplicitMethodCallOverMagicGetSetRector::class,
+            ExplicitMethodCallOverMagicGetSetRule::class,
         ]);
 
     // rules to apply

@@ -29,25 +29,6 @@ use Symfony\Component\Routing\RouterInterface;
 final class SymfonyInfo
 {
     /**
-     * The build-in routes.
-     */
-    private const BUILT_IN_ROUTES = [
-        '_profiler',
-        '_profiler_exception',
-        '_profiler_exception_css',
-        '_profiler_home',
-        '_profiler_info',
-        '_profiler_open_file',
-        '_profiler_phpinfo',
-        '_profiler_router',
-        '_profiler_search',
-        '_profiler_search_bar',
-        '_profiler_search_results',
-        '_twig_error_test',
-        '_wdt',
-    ];
-
-    /**
      * The properties to get for a package.
      */
     private const PACKAGE_PROPERTIES = [
@@ -88,20 +69,17 @@ final class SymfonyInfo
     public function getBundles(): array
     {
         $bundles = [];
-        $rootDir = \realpath($this->kernel->getProjectDir() . '/..') . \DIRECTORY_SEPARATOR;
+        $rootDir = \realpath($this->kernel->getProjectDir()) . \DIRECTORY_SEPARATOR;
         foreach ($this->kernel->getBundles() as $key => $bundleObject) {
-            $bundle = [
+            $bundles[$key] = [
                 'name' => $key,
                 'namespace' => $bundleObject->getNamespace(),
                 'path' => \str_replace($rootDir, '', $bundleObject->getPath()),
             ];
-            $bundles[$key] = $bundle;
         }
 
         // sort
-        if (!empty($bundle)) {
-            \ksort($bundles);
-        }
+        \ksort($bundles);
 
         return $bundles;
     }
@@ -265,18 +243,16 @@ final class SymfonyInfo
     {
         if (null === $this->routes) {
             $result = [];
-            $collection = $this->router->getRouteCollection();
-            foreach ($collection->all() as $name => $routeObject) {
-                $route = [
+            $routes = $this->router->getRouteCollection()->all();
+            foreach ($routes as $name => $route) {
+                $item = [
                     'name' => $name,
-                    'path' => $routeObject->getPath(),
-                    'php_class' => \get_class($routeObject),
+                    'path' => $route->getPath(),
                 ];
-
-                if (\in_array($name, self::BUILT_IN_ROUTES, true)) {
-                    $result['debug'][$name] = $route;
+                if (str_starts_with($name, '_')) {
+                    $result['debug'][$name] = $item;
                 } else {
-                    $result['runtime'][$name] = $route;
+                    $result['runtime'][$name] = $item;
                 }
             }
 

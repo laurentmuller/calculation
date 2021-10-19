@@ -17,7 +17,6 @@ use App\Report\LogReport;
 use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
 use App\Util\FileUtils;
-use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,10 +59,7 @@ class LogController extends AbstractController
     {
         $content = (string) \file_get_contents('php://input');
         if ($data = \json_decode($content, true)) {
-            // @phpstan-ignore-next-line
-            $context = \array_filter($data['csp-report'], function ($value): bool {
-                return Utils::isString($value);
-            });
+            $context = \array_filter($data['csp-report'], 'strlen');
             $title = 'CSP Violation';
             if (isset($context['document-uri'])) {
                 $title .= ': ' . $context['document-uri'];

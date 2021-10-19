@@ -20,7 +20,7 @@
             <tr class="h">
                 <td colspan="2">
                     <p>
-                        <img alt="Application" width="64" height="64" class="rounded-lg" src="{{ asset('images/icons/icon-064x064.png') }}">
+                        <img alt="Application" width="64" height="64" class="rounded-lg" src="{{ asset('images/icons/android-icon-72x72.png') }}">
                         <h1 class="p">{{ 'about.version'|trans({'%version%': app_version}) }}</h1>
                     </p>
                 </td>
@@ -49,7 +49,7 @@
 <div class="row no-gutters mt-2 pb-3 d-print-none">
     <div class="col mr-auto">
         {{ icons.homepage() }}
-        {{ icons.link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far') }}
+        {{ icons.link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
     </div>
     {% if app.debug or app_mode == 'dev' -%}
     <div class="col text-right">

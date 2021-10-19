@@ -211,21 +211,11 @@ class BootstrapTableController extends AbstractController
     public function save(Request $request): JsonResponse
     {
         $view = (string) $request->get(TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
-        switch ($view) {
-            case TableInterface::VIEW_CARD:
-                $limit = (int) $request->get(TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE_CARD);
-                break;
-            case TableInterface::VIEW_CUSTOM:
-                $limit = (int) $request->get(TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE_CUSTOM);
-                break;
-            default: // TableInterface::VIEW_TABLE
-                $limit = (int) $request->get(TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
-                break;
-        }
+        $limit = AbstractTable::getDefaultPageSize($view);
 
         $response = $this->json(true);
         $this->setCookie($response, TableInterface::PARAM_VIEW, $view);
-        $this->setCookie($response, TableInterface::PARAM_LIMIT, $limit);
+        $this->setCookie($response, TableInterface::PARAM_LIMIT, $limit, $view);
 
         return $response;
     }
@@ -266,9 +256,15 @@ class BootstrapTableController extends AbstractController
         return $this->handleTableRequest($request, $table, 'table/table_user.html.twig');
     }
 
-    private function clearCookie(Response $response, string $key): void
+    private function clearCookie(Response $response, string $key, string $prefix = ''): void
     {
-        $response->headers->clearCookie(\strtoupper($key));
+        $name = $this->getCookieName($key, $prefix);
+        $response->headers->clearCookie($name);
+    }
+
+    private function getCookieName(string $key, string $prefix = ''): string
+    {
+        return '' === $prefix ? \strtoupper($key) : \strtoupper("$prefix.$key");
     }
 
     private function getInputBag(Request $request): InputBag
@@ -293,8 +289,8 @@ class BootstrapTableController extends AbstractController
         }
 
         // update request
-        $this->updateRequest($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
-        $this->updateRequest($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
+        $view = $this->updateRequest($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+        $this->updateRequest($request, TableInterface::PARAM_LIMIT, AbstractTable::getDefaultPageSize($view), $view);
 
         // check empty
         if (null !== $emptyMessage = $table->checkEmpty()) {
@@ -325,6 +321,7 @@ class BootstrapTableController extends AbstractController
 
             // save results
             $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
+            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE, $query->view);
 
             return $response;
         } catch (\Exception $e) {
@@ -348,37 +345,43 @@ class BootstrapTableController extends AbstractController
     /**
      * @param mixed|null $default the default value if the result parameter is null
      */
-    private function saveCookie(Response $response, DataResults $results, string $key, $default): void
+    private function saveCookie(Response $response, DataResults $results, string $key, $default, string $prefix = ''): void
     {
         $value = $results->getParams($key, $default);
         if (null !== $value) {
-            $this->setCookie($response, $key, $value);
+            $this->setCookie($response, $key, $value, $prefix);
         } else {
-            $this->clearCookie($response, $key);
+            $this->clearCookie($response, $key, $prefix);
         }
     }
 
     /**
      * @param mixed $value the cookie value
      */
-    private function setCookie(Response $response, string $key, $value): void
+    private function setCookie(Response $response, string $key, $value, string $prefix = ''): void
     {
+        $name = $this->getCookieName($key, $prefix);
         $expire = (new \DateTime())->modify('+1 year');
-        $cookie = new Cookie(\strtoupper($key), (string) $value, $expire);
+        $cookie = new Cookie($name, (string) $value, $expire);
         $response->headers->setCookie($cookie);
     }
 
     /**
      * @param mixed|null $default the default value if the input key does not exist
+     *
+     * @return mixed the request value, the cookie value or the default value
      */
-    private function updateRequest(Request $request, string $key, $default = null): void
+    private function updateRequest(Request $request, string $key, $default = null, string $prefix = '')
     {
         $value = $request->get($key);
         if (null === $value) {
-            $value = $request->cookies->get(\strtoupper($key), $default);
+            $name = $this->getCookieName($key, $prefix);
+            $value = $request->cookies->get($name, $default);
             if (null !== $value) {
                 $this->getInputBag($request)->set($key, $value);
             }
         }
+
+        return $value;
     }
 }

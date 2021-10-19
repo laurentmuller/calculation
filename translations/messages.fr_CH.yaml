@@ -589,6 +589,7 @@ http_error_503:
     suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
 index:
     title: Accueil
+    title_help: Afficher la page d'accueil
     change_password: Modifier le mot de passe
     login: Connexion
     logout: Déconnexion
@@ -671,6 +672,8 @@ cookiebanner:
     message: Afin de vous proposer le meilleur service possible, ce site utilise des cookies. En acceptant de continuer sur ce site, vous déclarez accepter leurs utilisations.
     link: En savoir plus
     close: J'accepte
+    close_title: Accepter la politique de confidentialité
+    accept: Accepter
 theme:
     title: Thème
     default: Valeurs par défaut

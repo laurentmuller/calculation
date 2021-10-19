@@ -67,7 +67,6 @@ String.prototype.dasherize = function () {
     const first = trim.substring(0, 1).toLowerCase();
     const other = trim.substring(1);
     return first + other.replace(/([A-Z])/g, '-$1');
-    // .replace(/[-_\s]+/g, '-').toLowerCase();
 };
 
 /**

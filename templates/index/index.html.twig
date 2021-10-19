@@ -45,11 +45,11 @@
 {% block javascripts %}
 {% if enabled %}
     {% if app.debug %}
-        {{- parent() -}}
+        {{ parent() }}
         {{- asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
-        {{- asset_js('js/plugins/plugin-rowlink.js') }}
-        {{- asset_js('js/extensions/contextmenu-extensions.js') }}
-        {{- asset_js('js/application/index.js') }}
+        {{ asset_js('js/plugins/plugin-rowlink.js') }}
+        {{ asset_js('js/extensions/contextmenu-extensions.js') }}
+        {{ asset_js('js/application/index.js') }}
     {% else %}
         {{- asset_js('js/index.js') }}
     {% endif %}

@@ -100,25 +100,20 @@
     /**
      * Constructor
      */
-    function Cookiebanner() {
-    }
-
-    /**
-     * Functions
-     */
-    Cookiebanner.prototype = {
-
+    const Cookiebanner = class {
+        
         /**
          * Create the banner div.
          */
-        createBanner: function (settings) {
+        createBanner(settings) {
             const $banner = $('<div/>', {
                 'id': 'cookie-banner-div',
                 'class': settings.bannerClass,
                 'css': {
-                    'z-index': settings.zindex,
+                    'z-index': settings.zIndex,
                     'font-size': settings.fontSize,
-                    'font-family': settings.fontFamily
+                    'font-family': settings.fontFamily,
+                    //'visibility': visibility
                 }
             });
             const $message = $('<div/>', {
@@ -136,6 +131,7 @@
                     'href': settings.linkUrl,
                     'class': settings.linkClass,
                     'text': settings.linkMessage,
+                    'title': settings.linkTitle,
                     'target': settings.linkTarget
                 });
                 $message.append($link);
@@ -144,60 +140,32 @@
                 'id': 'cookie-banner-close',
                 'class': settings.closeClass,
                 'text': settings.closeMessage,
-                'href': '#'
+                'title': settings.closeTitle,
+                'href': '#',
+                'css': {
+                    //'visibility': visibility
+                }
             });
             $banner.append($message, $close);
 
             $(settings.appendTo).append($banner);
-        },
+        }
 
         /**
          * Remove the banner div.
          */
-        removeBanner: function () {
+        removeBanner() {
             $('#cookie-banner-div').fadeOut(400, function () {
                 $(this).remove();
             });
-        },
-
-        /**
-         * Gets the default options.
-         */
-        defaults: function () {
-            return {
-                cookieName: 'POLICY-ACCEPTED',
-                cookiePath: '/',
-                cookieDomain: null,
-                cookieSecure: false,
-                cookieExpire: Infinity,
-                cookieSamesite: 'lax',
-
-                message: 'This website uses cookies to provide you a better navigation experience. By closing this banner you agree to the use of cookies.',
-                linkMessage: 'Learn more',
-                closeMessage: 'Close',
-
-                bannerClass: 'd-flex d-print-none fixed-bottom bg-secondary text-white p-1',
-                messageClass: 'flex-fill',
-                linkClass: 'ml-1 text-white-50',
-                closeClass: 'text-white align-self-center ml-2',
-
-                linkTarget: '_blank',
-                linkUrl: 'http://aboutcookies.org',
-                linkRel: 'noopener noreferrer',
-
-                fontSize: '0.8rem',
-                textAlign: 'center',
-                appendTo: 'body',
-                zindex: 1000
-            };
-        },
+        }
 
         /**
          * Initialize the cookie banner.
          */
-        init: function (options) {
+        init(options) {
             // merge settings
-            const settings = $.extend({}, this.defaults(), options);
+            const settings = $.extend({}, Cookiebanner.DEFAULTS, options);
 
             // check cookie
             if (!Cookies.has(settings.cookieName)) {
@@ -217,6 +185,39 @@
         }
     };
 
+    /**
+     * Default options
+     */
+    Cookiebanner.DEFAULTS = {
+        cookieName: 'POLICY-ACCEPTED',
+        cookiePath: '/',
+        cookieDomain: null,
+        cookieSecure: false,
+        cookieExpire: Infinity,
+        cookieSamesite: 'lax',
+
+        message: 'This website uses cookies to provide you a better navigation experience. By closing this banner you agree to the use of cookies.',
+        linkMessage: 'Learn more',
+        linkTitle: null,
+        closeMessage: 'Close',
+        closeTitle: null,
+
+        bannerClass: 'd-flex d-print-none fixed-bottom bg-secondary text-white p-1',
+        messageClass: 'flex-fill',
+        linkClass: 'mx-1 text-white-50',
+        closeClass: 'text-white mx-2',
+
+        linkTarget: '_blank',
+        linkUrl: 'http://aboutcookies.org',
+        linkRel: 'noopener noreferrer',
+
+        fontSize: '0.8rem',
+        textAlign: 'left',
+        appendTo: 'body',
+        zIndex: 1000
+    };
+
+
     // initialized?
     if (!$.cookiebanner) {
         // find script
@@ -224,8 +225,9 @@
         for (var i = 0, len = scripts.length; i < len; i++) {
             if ('cookiebanner' === scripts[i].id) {
                 // initialize
-                const script = scripts[i];
-                const options = $(script).data();
+                const $script = $(scripts[i]);
+                const options = $script.data();
+                $script.removeDataAttributes();
                 $.cookiebanner = new Cookiebanner();
                 $.cookiebanner.init(options);
                 break;
@@ -234,3 +236,4 @@
     }
 
 }(jQuery));
+

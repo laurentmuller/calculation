@@ -5,6 +5,7 @@
 {# parameters #}
 {%- set title = 'about.policy' -%}
 {%- set title_icon = 'info-circle' -%}
+{%- set accepted = app.request.cookies.get('POLICY-ACCEPTED') -%}
 
 {% block card_container_class '' %}
 
@@ -14,8 +15,21 @@
 
 {% block card_footer %}
 {{ icons.homepage() }}
+{% if not accepted %}
+<button type="button" class="btn btn-form btn-success btn-accept" data-target="{{ path('homepage') }}" title="{{ 'cookiebanner.close_title'|trans }}">
+	{{- 'cookiebanner.accept'|trans -}}
+</button>
+{% endif %}
+{{ icons.link(path('about_licence'), 'about.licence', 'btn btn-form btn-outline-info') }}
 {% if app.debug or app_mode == 'dev' %}
     {{ icons.button_pdf('about_policy_pdf') }}
 {% endif %}
-{{ icons.link(path('about_licence'), 'about.licence', 'btn btn-form btn-outline-success') }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{% if not accepted %}
+    {% include 'cookie_banner.html.twig' with {'link_url': null} %}
+    {{ asset_js('js/application/about_accept.js') }}
+{% endif %}
 {% endblock %}

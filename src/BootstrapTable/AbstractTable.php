@@ -113,17 +113,8 @@ abstract class AbstractTable implements SortModeInterface
         $query->view = (string) $this->getRequestValue($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE, false);
 
         // limit, offset and page
-        switch ($query->view) {
-            case TableInterface::VIEW_CARD:
-                $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE_CARD);
-                break;
-            case TableInterface::VIEW_CUSTOM:
-                $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE_CUSTOM);
-                break;
-            default: // TableInterface::VIEW_TABLE
-                $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, TableInterface::PAGE_SIZE);
-                break;
-        }
+        $defaultSize = self::getDefaultPageSize($query->view);
+        $query->limit = (int) $this->getRequestValue($request, TableInterface::PARAM_LIMIT, $defaultSize, false, $query->view);
         $query->offset = (int) $request->get(TableInterface::PARAM_OFFSET, 0);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
@@ -136,6 +127,21 @@ abstract class AbstractTable implements SortModeInterface
         $query->order = (string) $this->getRequestValue($request, TableInterface::PARAM_ORDER, $query->order);
 
         return $query;
+    }
+
+    /**
+     * Gets the default page size for the given view.
+     */
+    public static function getDefaultPageSize(string $view): int
+    {
+        switch ($view) {
+            case TableInterface::VIEW_CARD:
+                return TableInterface::PAGE_SIZE_CARD;
+            case TableInterface::VIEW_CUSTOM:
+                return TableInterface::PAGE_SIZE_CUSTOM;
+            default: // TableInterface::VIEW_TABLE
+                return TableInterface::PAGE_SIZE;
+        }
     }
 
     /**
@@ -266,7 +272,7 @@ abstract class AbstractTable implements SortModeInterface
      *
      * @return mixed the parameter value
      */
-    protected function getRequestValue(Request $request, string $name, $default = null, bool $useSessionKey = true)
+    protected function getRequestValue(Request $request, string $name, $default = null, bool $useSessionKey = true, string $prefix = '')
     {
         $key = $useSessionKey ? $this->getSessionKey($name) : $name;
         $session = $request->hasSession() ? $request->getSession() : null;
@@ -277,7 +283,8 @@ abstract class AbstractTable implements SortModeInterface
         }
 
         // find in cookies
-        $default = $request->cookies->get(\strtoupper($key), $default);
+        $cookieName = '' === $prefix ? \strtoupper($key) : \strtoupper("$prefix.$key");
+        $default = $request->cookies->get($cookieName, $default);
 
         // find in request
         $value = $request->get($name, $default);

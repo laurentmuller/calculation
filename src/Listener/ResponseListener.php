@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Listener;
 
 use App\Pdf\PdfResponse;
+use App\Spreadsheet\SpreadsheetResponse;
 use App\Twig\NonceExtension;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -80,11 +81,6 @@ class ResponseListener implements EventSubscriberInterface
     private const OPEN_WEATHER_URL = 'https://openweathermap.org';
 
     /**
-     * The PDF plugin type.
-     */
-    private const PDF_TYPE = 'application/pdf';
-
-    /**
      * The Robohash image url (used for user avatar).
      */
     private const ROBOHASH_URL = 'https://robohash.org';
@@ -116,6 +112,7 @@ class ResponseListener implements EventSubscriberInterface
     {
         /** @var string $asset */
         $asset = $params->get('asset_base');
+
         $this->reportUrl = $router->generate('log_csp');
         $this->extension = $extension;
         $this->debug = $isDebug;
@@ -128,14 +125,14 @@ class ResponseListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::RESPONSE => 'updateResponse',
+            KernelEvents::RESPONSE => 'onKernelResponse',
         ];
     }
 
     /**
      * Handle kernel response event.
      */
-    public function updateResponse(ResponseEvent $event): void
+    public function onKernelResponse(ResponseEvent $event): void
     {
         // master request?
         if (!$event->isMainRequest()) {
@@ -184,45 +181,50 @@ class ResponseListener implements EventSubscriberInterface
         $asset = $this->asset;
         $nonce = $this->getNonce();
 
-        // none
-        $csp['base-uri'] = self::CSP_NONE;
-        $csp['media-src'] = self::CSP_NONE;
-        $csp['object-src'] = self::CSP_NONE;
+        $csp = [
+            // none
+            'base-uri' => self::CSP_NONE,
+            'media-src' => self::CSP_NONE,
+            'object-src' => self::CSP_NONE,
 
-        // self
-        $csp['default-src'] = self::CSP_SELF;
-        $csp['form-action'] = self::CSP_SELF;
-        $csp['frame-ancestors'] = self::CSP_SELF;
-        $csp['manifest-src'] = self::CSP_SELF;
+            // self
+            'default-src' => self::CSP_SELF,
+            'form-action' => self::CSP_SELF,
+            'manifest-src' => self::CSP_SELF,
+            'frame-ancestors' => self::CSP_SELF,
 
-        // nonce + asset
-        $csp['script-src'] = [$nonce]; //, $asset];
-        $csp['script-src-elem'] = [$nonce, $asset, self::CSP_UNSAFE_INLINE, self::ICONIFY_URL];
+            // nonce + asset
+            'script-src' => [$nonce], //, $asset;
+            'script-src-elem' => [$nonce, $asset, self::CSP_UNSAFE_INLINE, self::ICONIFY_URL],
 
-        // self + asset
-        $csp['connect-src'] = [self::CSP_SELF, $asset];
-        $csp['frame-src'] = [self::CSP_SELF, self::GOOGLE_FRAME_URL];
-        $csp['font-src'] = [self::CSP_SELF, self::GOOGLE_FONT_STATIC_URL, $asset];
-        $csp['style-src'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
-        $csp['style-src-elem'] = [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset];
-        $csp['img-src'] = [self::CSP_SELF, self::CSP_DATA, self::OPEN_WEATHER_URL, self::ROBOHASH_URL, self::CURRENCY_FLAG_URL, $asset];
+            // self + asset
+            'connect-src' => [self::CSP_SELF, $asset],
+            'frame-src' => [self::CSP_SELF, self::GOOGLE_FRAME_URL],
+            'font-src' => [self::CSP_SELF, self::GOOGLE_FONT_STATIC_URL, $asset],
+            'style-src' => [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset],
+            'style-src-elem' => [self::CSP_SELF, self::GOOGLE_FONT_API_URL, self::CSP_UNSAFE_INLINE, $asset],
+            'img-src' => [self::CSP_SELF, self::CSP_DATA, self::OPEN_WEATHER_URL, self::ROBOHASH_URL, self::CURRENCY_FLAG_URL, $asset],
 
-        // PDF response
+            // reporting. see: https://mathiasbynens.be/notes/csp-reports
+            'report-uri' => $this->reportUrl,
+        ];
+
+        // PDF response?
         if ($response instanceof PdfResponse) {
             $csp['object-src'] = self::CSP_SELF;
-            $csp['plugin-types'] = self::PDF_TYPE;
+            $csp['plugin-types'] = PdfResponse::MIME_TYPE_PDF;
         }
 
-        // reporting
-        // see: https://mathiasbynens.be/notes/csp-reports
-        if ($this->debug) {
-            $csp['report-uri'] = $this->reportUrl;
+        // Spreadsheet response?
+        if ($response instanceof SpreadsheetResponse) {
+            $csp['object-src'] = self::CSP_SELF;
+            $csp['plugin-types'] = SpreadsheetResponse::MIME_TYPE_EXCEL;
         }
 
         // build
         $result = '';
         foreach ($csp as $key => $entries) {
-            $value = \is_array($entries) ? \implode(' ', $entries) : $entries;
+            $value = \implode(' ', (array) $entries);
             $result .= "{$key} {$value};";
         }
 
@@ -266,6 +268,6 @@ class ResponseListener implements EventSubscriberInterface
     {
         $agent = $request->headers->get('user-agent');
 
-        return $agent && false !== \stripos($agent, 'edge');
+        return null !== $agent && false !== \stripos($agent, 'edge');
     }
 }

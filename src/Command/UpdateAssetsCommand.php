@@ -459,9 +459,8 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
         $format = \str_ireplace('{source}', $source, $format);
         $format = \str_ireplace('{name}', $name, $format);
         $format = \str_ireplace('{version}', $version, $format);
-        $format = \str_ireplace('{file}', $file, $format);
 
-        return $format;
+        return \str_ireplace('{file}', $file, $format);
     }
 
     /**

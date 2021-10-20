@@ -54,7 +54,7 @@ class GroupTransformer implements DataTransformerInterface
         }
 
         $group = $this->repository->find((int) $id);
-        if (null === $group) {
+        if (!$group instanceof Group) {
             $message = $this->trans('group.id_not_found', ['%id%' => $id], 'validators');
             throw new TransformationFailedException($message);
         }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\User\RequestChangePasswordType;
 use App\Form\User\ResetChangePasswordType;
 use App\Repository\UserRepository;
@@ -183,7 +184,7 @@ class ResetPasswordController extends AbstractController
         $user = $this->repository->findByUsernameOrEmail($usernameOrEmail);
 
         // Do not reveal whether a user account was found or not.
-        if (null === $user) {
+        if (!$user instanceof User) {
             return $this->redirectToRoute('app_check_email');
         }
 

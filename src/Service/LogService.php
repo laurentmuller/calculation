@@ -334,7 +334,7 @@ class LogService
     {
         $date = \DateTime::createFromFormat(self::DATE_FORMAT, $value);
 
-        return false === $date ? null : $date;
+        return $date instanceof \DateTime ? $date : null;
     }
 
     /**

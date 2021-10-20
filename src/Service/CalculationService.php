@@ -193,7 +193,7 @@ final class CalculationService
             }
 
             $group = $this->getGroup($key);
-            if (null === $group) {
+            if (!$group instanceof Group) {
                 continue;
             }
 

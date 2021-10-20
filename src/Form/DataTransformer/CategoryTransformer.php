@@ -51,7 +51,7 @@ class CategoryTransformer implements DataTransformerInterface
         }
 
         $category = $this->repository->find((int) $id);
-        if (null === $category) {
+        if (!$category instanceof Category) {
             $message = $this->trans('category.id_not_found', ['%id%' => $id], 'validators');
             throw new TransformationFailedException($message);
         }

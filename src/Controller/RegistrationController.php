@@ -113,7 +113,7 @@ class RegistrationController extends AbstractController
         }
 
         $user = $repository->find($id);
-        if (null === $user) {
+        if (!$user instanceof User) {
             return $this->redirectToRoute(self::REGISTER_ROUTE);
         }
 

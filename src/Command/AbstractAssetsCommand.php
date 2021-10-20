@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Abstrac command for assets.
@@ -52,17 +54,15 @@ abstract class AbstractAssetsCommand extends Command
      */
     protected function getProjectDir(): ?string
     {
-        /** @var \Symfony\Bundle\FrameworkBundle\Console\Application|null $application */
         $application = $this->getApplication();
-        if (null === $application) {
+        if (!$application instanceof Application) {
             $this->writeError('The Application is not defined.');
 
             return null;
         }
 
-        /** @var \Symfony\Component\HttpKernel\KernelInterface|null $kernel */
         $kernel = $application->getKernel();
-        if (null === $kernel) {
+        if (!$kernel instanceof KernelInterface) {
             $this->writeError('The Kernel is not defined.');
 
             return null;

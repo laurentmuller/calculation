@@ -14,6 +14,7 @@ namespace App\Pdf;
 
 /**
  * This trait allows class to have a border property.
+ *
  * The default value is <code>PdfConstantsInterface::BORDER_ALL</code>.
  *
  * @author Laurent Muller
@@ -100,12 +101,10 @@ trait PdfBorderTrait
      */
     protected function getBorderText(): string
     {
-        $border = $this->border;
-
         $result = [];
-        if (empty($border)) {
-            $result[] = 'None';
-        } elseif (PdfConstantsInterface::BORDER_ALL === $border) {
+        $border = $this->getBorder();
+
+        if (PdfConstantsInterface::BORDER_ALL === $border) {
             $result[] = 'All';
         } elseif (PdfConstantsInterface::BORDER_INHERITED === $border) {
             $result[] = 'Inherited';

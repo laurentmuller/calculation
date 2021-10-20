@@ -1,4 +1,4 @@
-![Icon](public/images/icons/icon-032x032.png) Calculation
+![Icon](public/images/icons/android-icon-36x36.png) Calculation
 -----------
 Programme de calculs basé sur l'environnement de développement Symfony 5.x. 
 
@@ -10,7 +10,7 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md).
 
 Versions
 --------
-[![Symfony](https://img.shields.io/badge/Symfony-5.3.9-informational?logo=symfony)](https://symfony.com) [![PHP](https://img.shields.io/badge/PHP-7.4.20-informational?logo=php)](https://www.php.net) [![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)](https://www.mysql.com)
+[![Symfony](https://img.shields.io/badge/Symfony-5.3.9-informational?logo=symfony)](https://symfony.com) [![PHP](https://img.shields.io/badge/PHP-7.4.24-informational?logo=php)](https://www.php.net) [![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)](https://www.mysql.com)
 
 Qualité du code
 ----------------

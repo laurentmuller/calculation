@@ -580,7 +580,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface, PdfConstants
     {
         // create style by tag name
         $style = HtmlStyleFactory::create($this->name);
-        if (null === $style) {
+        if (!$style instanceof HtmlStyle) {
             return $this->setStyle(null);
         }
 

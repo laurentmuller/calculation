@@ -465,7 +465,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
      */
     public function isRoot(): bool
     {
-        return null === $this->parent;
+        return !$this->parent instanceof self;
     }
 
     /**

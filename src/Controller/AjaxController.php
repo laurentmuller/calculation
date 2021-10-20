@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Task;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CustomerRepository;
@@ -230,9 +231,8 @@ class AjaxController extends AbstractController
         $id = (int) $request->get('id', 0);
         $quantity = (float) $request->get('quantity', 0.0);
 
-        /** @var ?\App\Entity\Task $task */
         $task = $repository->find($id);
-        if (null === $task) {
+        if (!$task instanceof Task) {
             return $this->jsonFalse([
                 'message' => $this->trans('taskcompute.error.task'),
             ]);

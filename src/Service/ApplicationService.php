@@ -335,8 +335,11 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     public function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
     {
         $timestamp = $this->getPropertyInteger($name);
-        if (Property::FALSE_VALUE !== $timestamp && ($date = \DateTime::createFromFormat('U', (string) $timestamp))) {
-            return $date;
+        if (Property::FALSE_VALUE !== $timestamp) {
+            $date = \DateTime::createFromFormat('U', (string) $timestamp);
+            if ($date instanceof \DateTime) {
+                return $date;
+            }
         }
 
         return $default;

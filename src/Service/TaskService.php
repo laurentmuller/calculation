@@ -154,7 +154,7 @@ class TaskService implements \JsonSerializable
      */
     public function isValid(): bool
     {
-        if (null === $this->task || $this->quantity <= 0 || empty($this->items)) {
+        if (!$this->task instanceof Task || $this->quantity <= 0 || empty($this->items)) {
             return false;
         }
 

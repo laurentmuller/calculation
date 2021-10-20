@@ -129,9 +129,8 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         $obj = $event->getObject();
         $mapping = $event->getMapping();
 
-        /** @var ?UploadedFile $file */
         $file = $mapping->getFile($obj);
-        if (null === $file || !$file->isReadable()) {
+        if (!$file instanceof UploadedFile || !$file->isReadable()) {
             return;
         }
 

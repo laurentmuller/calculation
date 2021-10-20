@@ -321,14 +321,14 @@ final class SymfonyInfo
     /**
      * Gets the number of days before expiration.
      *
-     * @param string $date the date to get for
+     * @param string $date the date (month/year) to get for
      *
-     * @return string the number of days
+     * @return string the number of days, if applicable; '' otherwise
      */
     private function formatDays(string $date): string
     {
         $datetime = \DateTime::createFromFormat('d/m/Y', '01/' . $date);
-        if (false !== $datetime) {
+        if ($datetime instanceof \DateTime) {
             return (new \DateTime())->diff($datetime->modify('last day of this month 23:59:59'))->format('%R%a days');
         }
 
@@ -338,14 +338,14 @@ final class SymfonyInfo
     /**
      * Format the expired date.
      *
-     * @param string $date the date to format
+     * @param string $date the date (month/year) to format
      *
      * @return string the formatted date, if applicable; 'Unknown' otherwise
      */
     private function formatExpired(string $date): string
     {
         $datetime = \DateTime::createFromFormat('m/Y', $date);
-        if (false !== $datetime) {
+        if ($datetime instanceof \DateTime) {
             return (string) FormatUtils::formatDate($datetime->modify('last day of this month 23:59:59'));
         }
 

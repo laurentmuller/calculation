@@ -54,6 +54,10 @@ class PasswordValidator extends AbstractConstraintValidator
             $this->checkStrength($constraint, $value);
             $this->checkPwned($constraint, $value);
         } else {
+            /**
+              * @noRector \Rector\CodeQuality\Rector\If_\ShortenElseIfRector
+              * @noRector \Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector
+              */
             $this->checkLetters($constraint, $value)
                     || $this->checkCaseDiff($constraint, $value)
                     || $this->checkNumber($constraint, $value)

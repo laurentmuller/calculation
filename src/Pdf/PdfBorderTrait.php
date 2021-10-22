@@ -25,6 +25,8 @@ trait PdfBorderTrait
      * The border style.
      *
      * @var string|int
+     *
+     * @noRector \Rector\Php74\Rector\Property\TypedPropertyRector
      */
     protected $border = PdfConstantsInterface::BORDER_ALL;
 

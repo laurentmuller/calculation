@@ -23,6 +23,7 @@ class CalculationUpdateResult
 {
     private array $calculations = [];
     private int $codes = 0;
+    private array $descriptions = [];
     private int $duplicated = 0;
     private int $empty = 0;
     private int $skipped = 0;
@@ -31,11 +32,13 @@ class CalculationUpdateResult
     private int $unmodifiable = 0;
 
     /**
-     * Add a calculation to the list of updated calculations.
+     * Add a calculation and the update descriptions to the list of updated calculations.
      */
-    public function addCalculation(Calculation $calculation): self
+    public function addCalculation(Calculation $calculation, array $descriptions): self
     {
-        $this->calculations[$calculation->getId()] = $calculation;
+        $id = $calculation->getId();
+        $this->calculations[$id] = $calculation;
+        $this->descriptions[$id] = $descriptions;
 
         return $this;
     }
@@ -124,6 +127,14 @@ class CalculationUpdateResult
     public function getCodes(): int
     {
         return $this->codes;
+    }
+
+    /**
+     * Gets the update descriptions.
+     */
+    public function getDescriptions(): array
+    {
+        return $this->descriptions;
     }
 
     /**

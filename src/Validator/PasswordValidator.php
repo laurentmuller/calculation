@@ -46,25 +46,9 @@ class PasswordValidator extends AbstractConstraintValidator
     protected function doValidate(string $value, Constraint $constraint): void
     {
         if ($constraint->all) {
-            $this->checkLetters($constraint, $value);
-            $this->checkCaseDiff($constraint, $value);
-            $this->checkNumber($constraint, $value);
-            $this->checkSpecialChar($constraint, $value);
-            $this->checkEmail($constraint, $value);
-            $this->checkStrength($constraint, $value);
-            $this->checkPwned($constraint, $value);
+            $this->checkAll($value, $constraint);
         } else {
-            /**
-              * @noRector \Rector\CodeQuality\Rector\If_\ShortenElseIfRector
-              * @noRector \Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector
-              */
-            $this->checkLetters($constraint, $value)
-                    || $this->checkCaseDiff($constraint, $value)
-                    || $this->checkNumber($constraint, $value)
-                    || $this->checkSpecialChar($constraint, $value)
-                    || $this->checkEmail($constraint, $value)
-                    || $this->checkStrength($constraint, $value)
-                    || $this->checkPwned($constraint, $value);
+            $this->checkAny($value, $constraint);
         }
     }
 
@@ -86,6 +70,40 @@ class PasswordValidator extends AbstractConstraintValidator
             ->addViolation();
 
         return true;
+    }
+
+    /**
+     * Check all constraints.
+     */
+    private function checkAll(string $value, Password $constraint): void
+    {
+        $this->checkLetters($constraint, $value);
+        $this->checkCaseDiff($constraint, $value);
+        $this->checkNumber($constraint, $value);
+        $this->checkSpecialChar($constraint, $value);
+        $this->checkEmail($constraint, $value);
+        $this->checkStrength($constraint, $value);
+        $this->checkPwned($constraint, $value);
+    }
+
+    /**
+     * Check util a violation is added.
+     */
+    private function checkAny(string $value, Password $constraint): void
+    {
+        /**
+         * @var bool $result
+         * @phpstan-ignore-next-line
+         * @noRector \Rector\CodeQuality\Rector\If_\ShortenElseIfRector
+         * @noRector \Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector
+         */
+        $result = $this->checkLetters($constraint, $value)
+            || $this->checkCaseDiff($constraint, $value)
+            || $this->checkNumber($constraint, $value)
+            || $this->checkSpecialChar($constraint, $value)
+            || $this->checkEmail($constraint, $value)
+            || $this->checkStrength($constraint, $value)
+            || $this->checkPwned($constraint, $value);
     }
 
     /**

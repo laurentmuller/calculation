@@ -186,31 +186,39 @@ class CalculationUpdater
 
             foreach ($calculations as $calculation) {
                 if ($query->isClosed() || $calculation->isEditable()) {
+                    $descriptions = [];
                     $changed = false;
                     if ($query->isEmpty() && $calculation->hasEmptyItems()) {
                         $result->addEmpty($calculation->removeEmptyItems());
+                        $descriptions[] = $this->trans('calculation.update.empty');
                         $changed = true;
                     }
 
                     if ($query->isCodes() && 0 !== $count = $calculation->updateCodes()) {
                         $result->addCodes($count);
+                        $descriptions[] = $this->trans('calculation.update.codes');
                         $changed = true;
                     }
 
                     if ($query->isDuplicated() && $calculation->hasDuplicateItems()) {
                         $result->addDuplicated($calculation->removeDuplicateItems());
+                        $descriptions[] = $this->trans('calculation.update.duplicated');
                         $changed = true;
                     }
 
                     if ($query->isSorted() && $calculation->sort()) {
                         $result->addSorted(1);
+                        $descriptions[] = $this->trans('calculation.update.sorted');
                         $changed = true;
                     }
 
-                    if ($this->service->updateTotal($calculation) || $changed) {
-                        $result->addCalculation($calculation);
-                    } else {
-                        $result->addSkipped(1);
+                    if ($this->service->updateTotal($calculation)) {
+                        $descriptions[] = $this->trans('calculation.update.total');
+                        $changed = true;
+                    }
+
+                    if ($changed) {
+                        $result->addCalculation($calculation, $descriptions);
                     }
                 } else {
                     $result->addUnmodifiable(1);

@@ -18,6 +18,7 @@
 {%- set single_page_excel = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_excel_id' : null -%}
 {%- set default_page = app.actionEdit ? edit_page : show_page -%}
 {%- set row_link = not app.actionNone and (edit_page or show_page) -%}
+{%- set is_drop_down = show_page or edit_page or delete_page or state_page or single_page_pdf or single_page_excel or add_path -%}
 
 <div class="card mb-2">
     <div class="card-header">
@@ -40,7 +41,10 @@
                 {%- set id = calculation.id -%}
                 {%- set menu_id = 'dropdownMenuLast_' ~ id -%}
                 {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
-                <tr{% if id == selection %} class="table-primary"{% endif %}>
+                {%- set class_primary = id == selection ? 'table-primary' : '' -%}
+                {%- set class_muted = calculation.editable ? '' : 'text-muted' -%}
+                {%- set class_name = (class_primary ~ ' ' ~ class_muted)|trim -%}
+                <tr{% if class_name %} class="{{ class_name }}"{% endif %}>
                     <td class="text-id text-border user-select-none" style="{{ properties.stateCss(calculation.stateColor) }}">
                     {%- if row_link -%}
                         <a href="{{ path(default_page, params) }}">{{ calculation.id|identifier }}</a>
@@ -59,7 +63,7 @@
                         <td class="text-percent user-select-none">{{ calculation.overallMargin|percent }}</td>
                     {%- endif -%}
                     <td class="text-currency user-select-none">{{ calculation.overallTotal|amount }}</td>
-                    {%- if show_page or edit_page or delete_page or state_page or single_page_pdf or single_page_excel or add_path -%}
+                    {%- if is_drop_down -%}
                         <td class="actions rowlink-skip d-print-none">
                             <div class="dropdown dropleft text-right">
                                 {{ icons.dropdownEllipsis(menu_id) }}

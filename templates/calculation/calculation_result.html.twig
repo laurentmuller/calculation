@@ -10,6 +10,14 @@
 </tr>
 {%- endmacro %}
 
+{% macro add_descriptions(descriptions) -%}
+<ul>
+{% for description in descriptions %}
+	<li>{{ description }}</li>
+{% endfor %}
+</ul>
+{%- endmacro %}
+
 {# parameters #}
 {%- set title = 'calculation.update.title' -%}
 {%- set title_icon = 'calculator' -%}
@@ -78,11 +86,12 @@
             </div>
             <div class="modal-body">
                 <p class="mb-2 font-weight-bold">{{ 'calculation.result.updated'|trans }}</p>
-                <div class="overflow-auto" style="max-height: 209px;">
+                <div class="overflow-auto" style="max-height: 211px;">
                     <table class="table table-hover table-sm mb-0 border-bottom">
                     {% for calculation in result.calculations %}
+                        {%- set row_title = 'calculation.fields.updatedBy'|trans ~ ' : ' ~ result.descriptions[calculation.id]|default([])|join(', ') -%}
                         {%- set margin_class = app.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' -%}
-                        <tr>
+                        <tr title="{{ row_title }}">
                             <td class="text-id text-border" style="{{ properties.stateCss(calculation.stateColor) }}">{{ calculation.id|identifier }}</td>
                             <td class="text-state">{{ calculation.state.code }}</td>
                             <td>{{ calculation.customer }}</td>
@@ -108,4 +117,9 @@
 {% block card_footer %}
 {{ icons.homepage() }}
 {{ icons.link(path('admin_calculation'), 'calculation.result.new_update', 'btn btn-outline-secondary', null) }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ asset_js('js/application/all_popover.js') }}
 {% endblock %}

@@ -94,6 +94,7 @@ calculation:
         codes_help: Copie les noms des groupes et des catégories depuis le catalogue.
         simulated: Simuler la mise à jour
         simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
+        total: Mise à jour du total
         confirm: Confirmer la mise à jour des données
         last_update: 'Dernière mise à jour : %date%'
     result:

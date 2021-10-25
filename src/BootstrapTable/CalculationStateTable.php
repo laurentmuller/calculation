@@ -84,4 +84,15 @@ class CalculationStateTable extends AbstractEntityTable
     {
         return ['code' => self::SORT_ASC];
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function updateResults(DataQuery $query, DataResults &$results): void
+    {
+        parent::updateResults($query, $results);
+        if (!$query->callback) {
+            $results->addAttribute('row-style', 'styleTextMuted');
+        }
+    }
 }

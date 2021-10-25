@@ -28,6 +28,19 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
     private const EMPTY_MESSAGE = 'empty';
 
+    public function getConstraints(): array
+    {
+        return [
+            ['casediff'],
+            ['email'],
+            ['letters'],
+            ['numbers'],
+            ['specialchar'],
+            ['pwned'],
+            ['minstrength', StrengthInterface::LEVEL_MAX],
+        ];
+    }
+
     public function getInvalids(): array
     {
         return [
@@ -65,9 +78,14 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
-    public function testEmptyStringIsValid(): void
+    /**
+     * @param mixed $value
+     *
+     * @dataProvider getConstraints
+     */
+    public function testEmptyStringIsValid(string $constraint, $value = true): void
     {
-        $constraint = $this->createPassword(['casediff' => true]);
+        $constraint = $this->createPassword([$constraint => $value]);
         $this->validator->validate('', $constraint);
         $this->assertNoViolation();
     }
@@ -87,9 +105,14 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             ->assertRaised();
     }
 
-    public function testNullIsValid(): void
+    /**
+     * @param mixed $value
+     *
+     * @dataProvider getConstraints
+     */
+    public function testNullIsValid(string $constraint, $value = true): void
     {
-        $constraint = $this->createPassword(['casediff' => true]);
+        $constraint = $this->createPassword([$constraint => $value]);
         $this->validator->validate(null, $constraint);
         $this->assertNoViolation();
     }

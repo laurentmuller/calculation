@@ -127,7 +127,7 @@ function styleProductPrice(value) { // jshint ignore:line
  *            index - the row index.
  * @returns {object} the row classes.
  */
-function styleTextMuted(row, index) { // jshint ignore:line
+function styleTextMuted(row, index) {
     'use strict';
     const value = Number.parseInt(row.textMuted, 10);
     if (!Number.isNaN(value) && value === 0) {

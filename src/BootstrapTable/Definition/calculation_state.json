@@ -42,5 +42,10 @@
     {
         "field": "color",
         "visible": false
+    },
+    {
+        "field": "editable",
+        "alias": "textMuted",
+        "visible": false
     }
 ]

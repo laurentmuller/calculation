@@ -18,6 +18,7 @@
 {%- set single_page_excel = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_excel_id' : null -%}
 {%- set default_page = app.actionEdit ? edit_page : show_page -%}
 {%- set row_link = not app.actionNone and (edit_page or show_page) -%}
+{%- set is_drop_down = show_page or edit_page or delete_page or state_page or single_page_pdf or single_page_excel or add_path -%}
 
 <div class="card mb-2">
     <div class="card-header">
@@ -50,7 +51,7 @@
                         {%- endif -%}
                     </div>
                 </div>
-                {%- if show_page or edit_page or delete_page or state_page or single_page_pdf or single_page_excel or add_path -%}
+                {%- if is_drop_down -%}
                 <div class="col-1 d-print-none">
                     <div class="dropdown dropleft text-right">
                         {%- set menu_id = 'dropdownMenuLast_' ~ id -%}

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Doctrine;
 
-use Doctrine\DBAL\Driver\Result;
+use Doctrine\DBAL\Result;
 use Doctrine\ORM\Internal\Hydration\ArrayHydrator;
 
 /**

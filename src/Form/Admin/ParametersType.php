@@ -51,7 +51,7 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     public function __construct(Security $security, ApplicationService $application)
     {
         $this->application = $application;
-        if (($user = $security->getUser()) !== null) {
+        if (null !== ($user = $security->getUser())) {
             $this->superAdmin = $user instanceof RoleInterface && $user->isSuperAdmin();
         }
     }

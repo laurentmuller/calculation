@@ -103,7 +103,7 @@ class TimestampableListener implements DisableListenerInterface
      */
     private function getUserName(): string
     {
-        if (($user = $this->security->getUser()) !== null) {
+        if (null !== ($user = $this->security->getUser())) {
             return $user->getUserIdentifier();
         }
 

@@ -118,7 +118,7 @@ class PivotTableFactory
             $currentCol = $table->getColumn();
             foreach ($colFields as $field) {
                 $key = $field->getValue($row);
-                if (($child = $currentCol->find($key)) === null) {
+                if (null === ($child = $currentCol->find($key))) {
                     $aggregator = $this->createAggregator();
                     $title = (string) $field->getDisplayValue($key);
                     $currentCol = $currentCol
@@ -136,7 +136,7 @@ class PivotTableFactory
             $currentRow = $table->getRow();
             foreach ($rowFields as $field) {
                 $key = $field->getValue($row);
-                if (($child = $currentRow->find($key)) === null) {
+                if (null === ($child = $currentRow->find($key))) {
                     $aggregator = $this->createAggregator();
                     $title = (string) $field->getDisplayValue($key);
                     $currentRow = $currentRow
@@ -151,7 +151,7 @@ class PivotTableFactory
             $currentRow->addValue($value);
 
             // update or create cell
-            if (($cell = $table->findCellByNode($currentCol, $currentRow)) !== null) {
+            if (null !== ($cell = $table->findCellByNode($currentCol, $currentRow))) {
                 $cell->addValue($value);
             } else {
                 $aggregator = $this->createAggregator();

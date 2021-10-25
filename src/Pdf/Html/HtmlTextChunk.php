@@ -78,7 +78,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
     public function isNewLine(): bool
     {
         // check if the next chunk is a parent chunk
-        if (($parent = $this->parent) !== null) {
+        if (null !== ($parent = $this->parent)) {
             $index = $this->index();
             $count = $parent->count();
             if (-1 !== $index && $index < $count - 1) {

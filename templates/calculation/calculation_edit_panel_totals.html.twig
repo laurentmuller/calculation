@@ -25,10 +25,15 @@
             </div>
         {%- else -%}
             <div class="row">
-                <div class="col-md-3">
-                    {{ icons.button_ok(cancel_path) }}
+                <div class="col-md-6">
+                    {{ icons.button_ok(cancel_path, 'common.button_close') }}
+                    {% if is_granted(ATTRIBUTE_EDIT, ENTITY_CALCULATION) %}
+                        {%- set state_params = route_params(app.request, item.id) -%}
+                        {%- set state_path = path('calculation_state', state_params) -%}
+                        {{ icons.link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-secondary') -}}
+                    {% endif %}
                 </div>
-                <div class="col-md-9 text-md-right">
+                <div class="col-md-6 text-md-right">
                     <small class="text-danger">{{ 'calculation.edit.read_only'|trans({'%name%': item.stateCode}) }}</small>
                 </div>
             </div>

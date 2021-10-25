@@ -49,7 +49,7 @@ class HtmlLiChunk extends HtmlParentChunk
      */
     protected function getOutputText(): ?string
     {
-        if (($parent = $this->getParentList()) !== null) {
+        if (null !== ($parent = $this->getParentList())) {
             if ($parent instanceof HtmlUlChunk) {
                 return \chr(149);
             } elseif ($parent instanceof HtmlOlChunk) {
@@ -101,7 +101,7 @@ class HtmlLiChunk extends HtmlParentChunk
     {
         $width = 0;
         $text = null;
-        if (($parent = $this->getParentList()) !== null) {
+        if (null !== ($parent = $this->getParentList())) {
             if ($parent instanceof HtmlUlChunk) {
                 $text = \chr(149);
             } elseif ($parent instanceof HtmlOlChunk) {

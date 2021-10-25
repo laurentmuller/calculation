@@ -103,7 +103,7 @@ class PersistenceListener implements EventSubscriber
      */
     public function postPersist(LifecycleEventArgs $args): void
     {
-        if (($entity = $this->getEntity($args)) !== null) {
+        if (null !== ($entity = $this->getEntity($args))) {
             $id = $this->getId($entity, '.add.success');
             $params = $this->getParameters($entity);
             $this->info($this->translateMessage($id, $params));
@@ -115,7 +115,7 @@ class PersistenceListener implements EventSubscriber
      */
     public function postRemove(LifecycleEventArgs $args): void
     {
-        if (($entity = $this->getEntity($args)) !== null) {
+        if (null !== ($entity = $this->getEntity($args))) {
             $id = $this->getId($entity, '.delete.success');
             $params = $this->getParameters($entity);
             $this->warning($this->translateMessage($id, $params));
@@ -127,7 +127,7 @@ class PersistenceListener implements EventSubscriber
      */
     public function postUpdate(LifecycleEventArgs $args): void
     {
-        if (($entity = $this->getEntity($args)) !== null) {
+        if (null !== ($entity = $this->getEntity($args))) {
             // special case for user entity when last login change
             if ($entity instanceof User && $this->isLastLogin($args, $entity)) {
                 $id = 'security.login.success';

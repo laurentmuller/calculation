@@ -298,7 +298,7 @@ class SwissPostService
             while ($process && false !== ($data = \fgetcsv($stream, 0, ';'))) {
                 switch ((int) $data[0]) {
                     case self::REC_VALIDITY:
-                        if (($validity = $this->processValidity($data)) === null) {
+                        if (null === ($validity = $this->processValidity($data))) {
                             return [
                                 'valid' => false,
                                 'message' => $this->trans('import.error.no_validity', ['%name%' => $name]),

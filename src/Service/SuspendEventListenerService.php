@@ -37,8 +37,6 @@ class SuspendEventListenerService
 
     /**
      * Constructor.
-     *
-     * @param EntityManagerInterface $manager the entity manager get listeners
      */
     public function __construct(EntityManagerInterface $manager)
     {

@@ -162,7 +162,7 @@ abstract class AbstractEntityDataTable extends AbstractDataTable
 
         // add remaining default orders
         foreach ($defaultOrder as $name => $direction) {
-            if (($definition = $this->findDefinition($definitions, $name)) !== null) {
+            if (null !== ($definition = $this->findDefinition($definitions, $name))) {
                 $builder->addOrderBy($definition->getSortField(), $direction);
             }
         }

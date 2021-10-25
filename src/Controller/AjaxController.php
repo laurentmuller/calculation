@@ -575,7 +575,7 @@ class AjaxController extends AbstractController
     public function translate(Request $request, TranslatorFactory $factory): JsonResponse
     {
         // ajax call ?
-        if (($response = $this->checkAjaxCall($request)) !== null) {
+        if (null !== ($response = $this->checkAjaxCall($request))) {
             return $response;
         }
 
@@ -638,7 +638,7 @@ class AjaxController extends AbstractController
     public function updateCalculation(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
     {
         // ajax call ?
-        if (($response = $this->checkAjaxCall($request)) !== null) {
+        if (null !== ($response = $this->checkAjaxCall($request))) {
             return $response;
         }
 

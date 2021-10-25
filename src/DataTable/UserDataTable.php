@@ -53,7 +53,7 @@ class UserDataTable extends AbstractEntityDataTable
         $this->translator = $translator;
 
         // check if current user has the super admin role
-        if (($user = $security->getUser()) !== null) {
+        if (null !== ($user = $security->getUser())) {
             $this->superAdmin = $user instanceof User && $user->isSuperAdmin();
         }
     }

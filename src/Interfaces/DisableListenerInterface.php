@@ -20,6 +20,13 @@ namespace App\Interfaces;
 interface DisableListenerInterface
 {
     /**
+     * Gets the enabled state.
+     *
+     * @return bool true if enabled; false if disabled
+     */
+    public function isEnabled(): bool;
+
+    /**
      * Sets the enabled state.
      *
      * @param bool $enabled true to enable; false to disable

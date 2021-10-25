@@ -397,7 +397,7 @@ class LogService
                 if (6 !== \count($values)) {
                     continue;
                 }
-                if (($date = self::parseDate($values[0])) === null) {
+                if (null === ($date = self::parseDate($values[0]))) {
                     continue;
                 }
 

@@ -145,7 +145,7 @@ class AkismetService extends AbstractHttpClientService
      */
     public function verifyComment(string $content, array $options = []): bool
     {
-        if (($request = $this->stack->getCurrentRequest()) !== null) {
+        if (null !== ($request = $this->stack->getCurrentRequest())) {
             /** @var \App\Entity\User $user */
             $user = $this->security->getUser();
             $headers = $request->headers;
@@ -207,7 +207,7 @@ class AkismetService extends AbstractHttpClientService
             return $verified;
         }
 
-        if (($request = $this->stack->getCurrentRequest()) !== null) {
+        if (null !== ($request = $this->stack->getCurrentRequest())) {
             $body = [
                 'key' => $this->key,
                 'blog' => $request->getSchemeAndHttpHost(),

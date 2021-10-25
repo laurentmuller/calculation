@@ -54,7 +54,7 @@ class HtmlParser
         }
 
         // find body
-        if (($body = $this->findBody($dom)) === null) {
+        if (null === ($body = $this->findBody($dom))) {
             return null;
         }
 
@@ -211,7 +211,7 @@ class HtmlParser
     {
         if ($node->hasAttributes()) {
             $attributes = $node->attributes;
-            if (($attribute = $attributes->getNamedItem($name)) !== null) {
+            if (null !== ($attribute = $attributes->getNamedItem($name))) {
                 $value = \trim($attribute->nodeValue);
                 if (Utils::isString($value)) {
                     return $value;

@@ -95,7 +95,7 @@ class HtmlReport extends AbstractReport
     {
         // parse
         $parser = new HtmlParser($this->content);
-        if (($root = $parser->parse()) !== null) {
+        if (null !== ($root = $parser->parse())) {
             if ($this->debug) {
                 $this->AddPage();
                 $this->outputDebug($root);

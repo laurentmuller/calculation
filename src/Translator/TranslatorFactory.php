@@ -17,7 +17,6 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Factory to provide translator services.
@@ -34,25 +33,25 @@ class TranslatorFactory
     public const DEFAULT_SERVICE = BingTranslatorService::class;
 
     /**
-     * The name of the key to save/retrieve the last translation service used.
+     * The name of the key to save/retrieve the last used translation service.
      */
     private const KEY_LAST_SERVICE = 'translator_service';
 
     private AdapterInterface $cache;
 
-    private KernelInterface $kernel;
+    private bool $isDebug;
 
     private ParameterBagInterface $params;
 
     /**
      * Constructor.
      */
-    public function __construct(ParameterBagInterface $params, KernelInterface $kernel, AdapterInterface $cache, RequestStack $requestStack)
+    public function __construct(ParameterBagInterface $params, AdapterInterface $cache, RequestStack $requestStack, bool $isDebug)
     {
         $this->params = $params;
-        $this->kernel = $kernel;
         $this->cache = $cache;
         $this->requestStack = $requestStack;
+        $this->isDebug = $isDebug;
     }
 
     /**
@@ -92,7 +91,7 @@ class TranslatorFactory
         }
 
         // create and save service
-        $service = new $class($this->params, $this->kernel, $this->cache);
+        $service = new $class($this->params, $this->cache, $this->isDebug);
         $this->setSessionValue(self::KEY_LAST_SERVICE, $class);
 
         return $service;

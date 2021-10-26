@@ -18,6 +18,7 @@
 {# actions #}
 {%- set list_path = app.displayTabular ? 'calculation_table' : 'calculation_card' -%}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) and item.editable ? path('calculation_edit', params) : null -%}
+{%- set state_path = is_granted(ATTRIBUTE_EDIT, item) and not item.editable ? path('calculation_state', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('calculation_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, id, list_path) -%}
 {%- set pdf_export = is_granted(ATTRIBUTE_EXPORT, item) -%}
@@ -151,9 +152,12 @@
 <div class="row">
     <div class="col-md-8">
     {{ parent() }}
-    {%- if pdf_export -%}
+    {% if state_path %}
+        {{ icons.link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
+    {% endif %}
+    {% if pdf_export %}
         {{ icons.button_pdf('calculation_pdf_id', {'id': id}) }}
-    {%- endif -%}
+    {%- endif %}
     </div>
     <div class="col-md-4 text-md-right">
         <p id="error-all" class="mb-0" class="d-none">

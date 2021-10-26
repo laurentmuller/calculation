@@ -30,7 +30,7 @@
                     {% if is_granted(ATTRIBUTE_EDIT, ENTITY_CALCULATION) %}
                         {%- set state_params = route_params(app.request, item.id) -%}
                         {%- set state_path = path('calculation_state', state_params) -%}
-                        {{ icons.link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-secondary') -}}
+                        {{ icons.link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
                     {% endif %}
                 </div>
                 <div class="col-md-6 text-md-right">

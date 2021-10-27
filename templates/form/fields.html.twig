@@ -201,6 +201,7 @@
 {%- if refresh|default(false) -%}
     {%- set attr = attr|merge({'data-refresh': refresh}) -%}
 {%- endif -%}
+{%- set attr = attr|merge({class: (attr.class|default('') ~ ' text-lowercase')|trim}) -%}
 <div class="input-group">
     <div class="input-group-prepend">
         <span class="input-group-text py-0 px-1 bg-white"{{ image_style }}>

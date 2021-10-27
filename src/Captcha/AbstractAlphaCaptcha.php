@@ -46,7 +46,7 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface
      */
     public function checkAnswer(string $givenAnswer, string $expectedAnswer): bool
     {
-        return \strtoupper($givenAnswer) === \strtoupper($expectedAnswer);
+        return 0 === \strcasecmp($givenAnswer, $expectedAnswer);
     }
 
     /**

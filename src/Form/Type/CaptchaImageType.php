@@ -61,9 +61,10 @@ class CaptchaImageType extends AbstractType
             'refresh' => $this->generate('ajax_captcha_image'),
             'remote' => $this->generate('ajax_captcha_validate'),
             'attr' => [
+                'autocapitalize' => 'none',
                 'autocomplete' => 'off',
                 'spellcheck' => 'false',
-                'class' => 'text-lowercase',
+                'autocorrect' => 'off',
             ],
         ]);
 

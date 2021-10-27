@@ -37,10 +37,7 @@ class AlphaCaptchaType extends AbstractType
 
     private const SESSION_KEY = 'alpha_captcha_answer';
 
-    /**
-     * @var AlphaCaptchaInterface
-     */
-    private $captcha;
+    private AlphaCaptchaInterface $captcha;
 
     private ?string $previousAnswer = null;
 
@@ -84,10 +81,9 @@ class AlphaCaptchaType extends AbstractType
     {
         $resolver->setDefaults([
             'attr' => [
-                //'class' => 'text-uppercase text-center col-sm-2',
                 'data-error' => $this->required,
-                'autocomplete' => 'disabled',
                 'autocapitalize' => 'none',
+                'autocomplete' => 'off',
                 'spellcheck' => 'false',
                 'autocorrect' => 'off',
                 'maxlength' => 1,
@@ -119,8 +115,7 @@ class AlphaCaptchaType extends AbstractType
     public function validate(?string $data, ExecutionContextInterface $context): void
     {
         if (!Utils::isString($data) || !$this->captcha->checkAnswer($data, $this->previousAnswer)) {
-            $context
-                ->buildViolation('error')
+            $context->buildViolation('error')
                 ->setTranslationDomain('captcha')
                 ->addViolation();
         }

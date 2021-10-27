@@ -13,15 +13,15 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use App\Traits\SessionTrait;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Factory to provide translator services.
  *
  * @author Laurent Muller
+ *
+ * @see TranslatorServiceInterface
  */
 class TranslatorFactory
 {
@@ -33,94 +33,74 @@ class TranslatorFactory
     public const DEFAULT_SERVICE = BingTranslatorService::class;
 
     /**
-     * The name of the key to save/retrieve the last used translation service.
+     * The key to save/retrieve the last used service.
      */
     private const KEY_LAST_SERVICE = 'translator_service';
 
-    private AdapterInterface $cache;
-
-    private bool $isDebug;
-
-    private ParameterBagInterface $params;
+    /**
+     * @var TranslatorServiceInterface[]
+     */
+    private array $translators = [];
 
     /**
      * Constructor.
+     *
+     * @param \Traversable<TranslatorServiceInterface> $translators
      */
-    public function __construct(ParameterBagInterface $params, AdapterInterface $cache, RequestStack $requestStack, bool $isDebug)
+    public function __construct(RequestStack $requestStack, \Traversable $translators)
     {
-        $this->params = $params;
-        $this->cache = $cache;
         $this->requestStack = $requestStack;
-        $this->isDebug = $isDebug;
+        $this->translators = \iterator_to_array($translators);
     }
 
     /**
      * Returns if the given translator service exists.
      *
-     * @param string $class the service class to be tested
+     * @param string $class the service class name to be tested
      *
      * @return bool true if exist
      */
     public function exists(string $class): bool
     {
-        $services = $this->getServices();
-        foreach ($services as $service) {
-            if ($class === $service['class']) {
-                return true;
+        return null !== $this->find($class);
+    }
+
+    /**
+     * Finds the translator service for the given class.
+     *
+     * @param string $class the service class name to find
+     *
+     * @return TranslatorServiceInterface|null the service, if found; null otherwise
+     */
+    public function find(string $class): ?TranslatorServiceInterface
+    {
+        foreach ($this->translators as $translator) {
+            if ($class === \get_class($translator)) {
+                return $translator;
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
-     * Gets a translator service.
+     * Gets a translator service from the given class name.
      *
-     * @param string $class the service class. Can be one of this defined constants.
+     * @param string $class the service class name to return
      *
      * @return TranslatorServiceInterface the translator service
      *
-     * @throws ParameterNotFoundException if the service can not be found or if the API key parameter is not defined
-     * @template T of TranslatorServiceInterface
-     * @psalm-param class-string<T> $class
+     * @throws ServiceNotFoundException if the service can not be found
      */
     public function getService(string $class): TranslatorServiceInterface
     {
-        if (!$this->exists($class)) {
-            throw new ParameterNotFoundException("The translator service '{$class}' can not be found.");
+        $service = $this->find($class);
+        if (!$service instanceof TranslatorServiceInterface) {
+            throw new ServiceNotFoundException($class);
         }
-
-        // create and save service
-        $service = new $class($this->params, $this->cache, $this->isDebug);
         $this->setSessionValue(self::KEY_LAST_SERVICE, $class);
 
         return $service;
-    }
-
-    /**
-     * Gets the defined services.
-     *
-     * Each entry contains the following values:
-     * <ul>
-     * <li><code>'name'</code>: The service name.</li>
-     * <li><code>'class'</code>: The class name.</li>
-     * <li><code>'api'</code>: The URL for the API documentation.</li>
-     * </ul>
-     */
-    public function getServices(): array
-    {
-        return [
-            [
-                'name' => BingTranslatorService::getName(),
-                'class' => BingTranslatorService::getClassName(),
-                'api' => BingTranslatorService::getApiUrl(),
-            ],
-            [
-                'name' => GoogleTranslatorService::getName(),
-                'class' => GoogleTranslatorService::getClassName(),
-                'api' => GoogleTranslatorService::getApiUrl(),
-            ],
-        ];
     }
 
     /**
@@ -136,5 +116,15 @@ class TranslatorFactory
         }
 
         return $this->getService($class);
+    }
+
+    /**
+     * Gets the registred translator services.
+     *
+     * @return TranslatorServiceInterface[]
+     */
+    public function getTranslators(): array
+    {
+        return $this->translators;
     }
 }

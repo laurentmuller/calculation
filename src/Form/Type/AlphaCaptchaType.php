@@ -46,9 +46,9 @@ class AlphaCaptchaType extends AbstractType
     private string $required;
 
     /**
-     * @param \Traversable $captchas
+     * @param \Traversable<AlphaCaptchaInterface> $captchas
      */
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, iterable $captchas)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, \Traversable $captchas)
     {
         $this->requestStack = $requestStack;
         $captchas = \iterator_to_array($captchas);

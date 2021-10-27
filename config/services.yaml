@@ -114,11 +114,19 @@ services:
             - [setTokenStorage, ['@security.token_storage']]
             - [setRequestStack, ['@request_stack']]
 
-    # AlphaCaptchaInterface
+
     _instanceof:
+        # AlphaCaptchaInterface
         App\Captcha\AlphaCaptchaInterface:
             tags: ['captcha_challenge']
+        # TranslatorServiceInterface
+        App\Translator\TranslatorServiceInterface:
+            tags: ['translators_service']
 
     App\Form\Type\AlphaCaptchaType:
         arguments:
             $captchas: !tagged_iterator captcha_challenge
+
+    App\Translator\TranslatorFactory:
+        arguments:
+            $translators: !tagged_iterator translators_service

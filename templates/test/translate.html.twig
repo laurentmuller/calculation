@@ -55,8 +55,8 @@
         <div class="form-group">
             <label for="service" class="required">{{ 'translator.service_label'|trans }}</label>
             <select id="service" name="service" class="form-control" data-languages="{{ path('ajax_languages') }}">
-                {% for entry in services -%}
-                    <option value="{{ entry.class }}" data-api="{{ entry.api }}"{% if entry.name == service_name %} selected="selected"{% endif %}>{{ entry.name }}</option>
+                {% for translator in translators -%}
+                    <option value="{{ translator.className }}" data-api="{{ translator.apiUrl }}"{% if translator.name == service.name %} selected="selected"{% endif %}>{{ translator.name }}</option>
                 {% endfor -%}
             </select>
         </div>
@@ -81,7 +81,7 @@
         <span id="detected" class="text-muted"></span>
     </div>
     <div class="col-md-6 text-md-right">
-        <a id="api-url" name="api-url" href="{{ service_url }}" target="_blank" rel="noopener noreferrer">Documentation (API)</a>
+        <a id="api-url" name="api-url" href="{{ service.apiUrl }}" target="_blank" rel="noopener noreferrer">Documentation (API)</a>
     </div>
 </div>
 {% endblock %}

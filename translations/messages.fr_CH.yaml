@@ -919,8 +919,10 @@ import:
         empty_archive: L'archive '%name%' ne contient aucune donnée.
         entry_not_one: L'archive '%name%' ne contient pas une entrée valide.
         validity_before: La date de validité du %validity% de l'archive '%name%' est antérieure ou égale à la date de la dernière importation (%import%).
-        source_file: Aucun fichier à importer n'a été défini.
+        file_empty: Aucun fichier à importer n'a été défini.
+        file_not_exist: Le fichier à importer n'existe pas.
         mime_type: Le type de fichier sélectionné n'est pas valide.
+        rename_database: Impossible de renommer la base de données.
 openweather:
     import:
         title: Importer les localités

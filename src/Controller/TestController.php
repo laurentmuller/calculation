@@ -450,8 +450,6 @@ class TestController extends AbstractController
         $city = $request->get('city');
         $street = $request->get('street');
         $limit = (int) $request->get('limit', 25);
-        $transaction = (bool) $request->get('transaction', false);
-        $import = (bool) $request->get('import', false);
 
         if ($zip) {
             $rows = $service->findZip($zip, $limit);
@@ -459,34 +457,17 @@ class TestController extends AbstractController
             $rows = $service->findCity($city, $limit);
         } elseif ($street) {
             $rows = $service->findStreet($street, $limit);
-        } elseif ($transaction) {
-            $db = $service->getDatabase(false);
-            if ($db->beginTransaction()) {
-                $db->commitTransaction();
-            }
-            if ($db->beginTransaction()) {
-                $db->rollbackTransaction();
-            }
-            $db->close();
-
-            $rows = [];
-        } elseif ($import) {
-            $rows = $service->import();
         } else {
             $rows = [];
         }
 
-        if ($import) {
-            $data = $rows;
-        } else {
-            $data = [
-                'result' => !empty($rows),
-                'query' => $zip ?? $city ?? $street ?? '',
-                'limit' => $limit,
-                'count' => \count($rows),
-                'rows' => $rows,
-            ];
-        }
+        $data = [
+            'result' => !empty($rows),
+            'query' => $zip ?? $city ?? $street ?? '',
+            'limit' => $limit,
+            'count' => \count($rows),
+            'rows' => $rows,
+        ];
 
         return $this->json($data);
     }

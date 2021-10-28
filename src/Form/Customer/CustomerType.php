@@ -41,6 +41,7 @@ class CustomerType extends AbstractEntityType
         $helper->field('title')
             ->maxLength(50)
             ->notRequired()
+            ->autocomplete('disabled')
             ->addTextType();
 
         $helper->field('lastName')

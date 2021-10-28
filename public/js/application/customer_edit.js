@@ -8,147 +8,100 @@
 (function ($) {
     'use strict';
 
-    // error handler
-    const errorHandler = function () {
-        const title = $('#edit-form').data('title');
-        const message = $('#edit-form').data('error');
-        Toaster.danger(message, title, $('#flashbags').data());
-    };
-    
-    // title
-    const $title = $('#customer_title');
-    const titleUrl = $('#edit-form').data('search-title');
-    const titleOptions = {
-        valueField: false,
+    // default typeahead options
+    const defaultOptions = {
         alignWidth: false,
-        onError: errorHandler,
-
+        displayField: 'display',
         ajax: {
-            url: titleUrl,
-            triggerLength: 1
+            triggerLength: 2
         },
-
-        onSelect: function () {
-            $title.select();
-        },
-
-        // overridden functions (all are set in the server side)
         matcher: function () {
             return true;
         },
         grepper: function (data) {
             return data;
+        },
+        onError: function () {
+            const title = $('#edit-form').data('title');
+            const message = $('#edit-form').data('error');
+            Toaster.danger(message, title, $('#flashbags').data());
         }
     };
-    $title.typeahead(titleOptions);
 
-    // controls
-    const addressUrl = $('#edit-form').data('search-address');
+    // get controls
+    const $title = $('#customer_title');
     const $address = $('#customer_address');
     const $zip = $('#customer_zipCode');
     const $city = $('#customer_city');
+    const addressUrl = $('#edit-form').data('search-address');
 
-    // address
-    const addressOptions = {
+    // title typeahead
+    $title.typeahead($.extend({}, defaultOptions, {
+        valueField: false,
+        displayField: 'name',
+        ajax: {
+            url: $('#edit-form').data('search-title'),
+            triggerLength: 1
+        },
+
+        onSelect: function () {
+            $title.select();
+        }
+    }));
+
+    // address typeahead
+    $address.typeahead($.extend({}, defaultOptions, {
         valueField: 'street',
-        displayField: 'display',
-        alignWidth: false,
-        onError: errorHandler,
-
         ajax: {
             url: addressUrl,
-            triggerLength: 2,
             preDispatch: function (query) {
                 return {
                     street: query
                 };
             }
         },
-
-        // copy
         onSelect: function (item) {
             $zip.val(item.zip);
             $city.val(item.city);
             $address.val($address.val() + ' ');
         },
+    }));
 
-        // overridden functions (all are set in the server side)
-        matcher: function () {
-            return true;
-        },
-        grepper: function (data) {
-            return data;
-        }
-    };
-    $address.typeahead(addressOptions);
-
-    // zip
-    const zipOptions = {
+    // zip typeahead
+    $zip.typeahead($.extend({}, defaultOptions, {
         valueField: 'zip',
-        displayField: 'display',
-        alignWidth: false,
-        onError: errorHandler,
-
         ajax: {
             url: addressUrl,
-            triggerLength: 2,
             preDispatch: function (query) {
                 return {
                     zip: query
                 };
             }
         },
-
-        // copy
         onSelect: function (item) {
-            $city.val(item.name);
+            $city.val(item.city);
             $zip.select();
         },
+    }));
 
-        // overridden functions (all are set in the server side)
-        matcher: function () {
-            return true;
-        },
-        grepper: function (data) {
-            return data;
-        }
-    };
-    $zip.typeahead(zipOptions);
-
-    // city
-    const cityOptions = {
+    // city typeahead
+    $city.typeahead($.extend({}, defaultOptions, {
         valueField: 'name',
-        displayField: 'display',
-        alignWidth: false,
-        onError: errorHandler,
-
         ajax: {
             url: addressUrl,
-            triggerLength: 2,
             preDispatch: function (query) {
                 return {
                     city: query
                 };
             }
         },
-
-        // copy
         onSelect: function (item) {
             $zip.val(item.zip);
             $city.select();
         },
+    }));
 
-        // overridden functions (all are set in the server side)
-        matcher: function () {
-            return true;
-        },
-        grepper: function (data) {
-            return data;
-        }
-    };
-    $city.typeahead(cityOptions);
-
-    // options
+    // validator options
     const options = {
         rules: {
             'customer[firstName]': {

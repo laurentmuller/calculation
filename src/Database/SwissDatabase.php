@@ -26,10 +26,10 @@ class SwissDatabase extends AbstractDatabase
      */
     private const CREATE_CITY = <<<'sql'
         CREATE TABLE IF NOT EXISTS city (
-            id    INTEGER NOT NULL,
+            id       INTEGER NOT NULL,
             zip      INTEGER NOT NULL,
-            name  TEXT NOT NULL,
-            state TEXT NOT NULL,
+            name     TEXT NOT NULL,
+            state_id TEXT NOT NULL,
             PRIMARY KEY(id)
         ) WITHOUT ROWID
         sql;
@@ -41,7 +41,7 @@ class SwissDatabase extends AbstractDatabase
      */
     private const CREATE_STATE = <<<'sql'
         CREATE TABLE "state" (
-            id        TEXT NOT NULL,
+            id      TEXT NOT NULL,
             name    TEXT NOT NULL,
             PRIMARY KEY(id)
         ) WITHOUT ROWID
@@ -66,8 +66,8 @@ class SwissDatabase extends AbstractDatabase
      * @var string
      */
     private const INSERT_CITY = <<<'sql'
-        INSERT INTO city(id, zip, name, state)
-            VALUES(:id, :zip, :name, :state)
+        INSERT INTO city(id, zip, name, state_id)
+            VALUES(:id, :zip, :name, :state_id)
         sql;
 
     /**
@@ -97,15 +97,16 @@ class SwissDatabase extends AbstractDatabase
      */
     private const SEARCH_CITY = <<<'sql'
         SELECT
-            name,
-            zip,
-            state,
-            printf('%s (%s)', name, zip) as display
+            city.name,
+            city.zip,
+            state.name as state,
+            printf('%s, %s', city.name, city.zip) as display
         FROM city
-        WHERE name LIKE :value
+        INNER JOIN state on city.state_id = state.id
+        WHERE city.name LIKE :value
         ORDER BY
-            name,
-            zip
+            city.name,
+            city.zip
         LIMIT :limit
         sql;
 
@@ -118,11 +119,12 @@ class SwissDatabase extends AbstractDatabase
         SELECT
             street.name as street,
             city.zip,
-            city.name   as city,
-            city.state,
-            printf('%s - %s %s', street.name, city.zip, city.name) as display
+            city.name as city,
+            state.name as state,
+            printf('%s, %s %s', street.name, city.zip, city.name) as display
         FROM street
         INNER JOIN city on street.city_id = city.id
+        INNER JOIN state on city.state_id = state.id
         WHERE street.name LIKE :value
         ORDER BY
             street.name,
@@ -138,15 +140,16 @@ class SwissDatabase extends AbstractDatabase
      */
     private const SEARCH_ZIP = <<<'sql'
         SELECT
-            zip,
-            name,
-            state,
-            printf('%s %s', zip, name) as display
+            city.zip,
+            city.name as city,
+            state.name as state,
+            printf('%s %s', city.zip, city.name) as display
         FROM city
-        WHERE zip LIKE :value
+        INNER JOIN state on city.state_id = state.id
+        WHERE city.zip LIKE :value
         ORDER BY
-            zip,
-            name
+            city.zip,
+            city.name
         LIMIT :limit
         sql;
 
@@ -222,7 +225,7 @@ class SwissDatabase extends AbstractDatabase
         $stmt->bindParam(':id', $data[0], \SQLITE3_INTEGER);
         $stmt->bindParam(':zip', $data[1], \SQLITE3_INTEGER);
         $stmt->bindParam(':name', $data[2], \SQLITE3_TEXT);
-        $stmt->bindParam(':state', $data[3], \SQLITE3_TEXT);
+        $stmt->bindParam(':state_id', $data[3], \SQLITE3_TEXT);
 
         // execute
         return false !== $stmt->execute();

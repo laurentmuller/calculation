@@ -8,15 +8,15 @@
 {%- set title_description = 'import.results' -%}
 
 {% block card_class -%}
-{% if data.valid %}{{ parent() }}{% else %} border-danger{% endif %}
+{% if results.valid %}{{ parent() }}{% else %} border-danger{% endif %}
 {%- endblock %}
 {% block card_header_class -%}
-{% if data.valid %}{{ parent() }}{% else %} text-white bg-danger{% endif %}
+{% if results.valid %}{{ parent() }}{% else %} text-white bg-danger{% endif %}
 {%- endblock %}
 
 {% block card_body %}
-{%- if data.valid %}
-<p>{{ 'import.success'|trans({'%date%': data.validity|localedate('long')}) }}</p>
+{%- if results.valid %}
+<p>{{ 'import.success'|trans({'%date%': results.validity|localedate('long')}) }}</p>
 <table class="table table-bordered table-sm mb-0">
     <thead>
         <tr>
@@ -28,29 +28,29 @@
     <tbody>
         <tr>
             <td>{{ 'import.states'|trans }}</td>
-            <td class="text-currency">{{ data.states.error|integer }}</td>
-            <td class="text-currency">{{ data.states.valid|integer }}</td>
+            <td class="text-currency">{{ results.errorStates|integer }}</td>
+            <td class="text-currency">{{ results.validStates|integer }}</td>
         </tr>
         <tr>
             <td>{{ 'import.cities'|trans }}</td>
-            <td class="text-currency">{{ data.cities.error|integer }}</td>
-            <td class="text-currency">{{ data.cities.valid|integer }}</td>
+            <td class="text-currency">{{ results.errorCities|integer }}</td>
+            <td class="text-currency">{{ results.validCities|integer }}</td>
         </tr>
         <tr>
             <td>{{ 'import.streets'|trans }}</td>
-            <td class="text-currency">{{ data.streets.error|integer }}</td>
-            <td class="text-currency">{{ data.streets.valid|integer }}</td>
+            <td class="text-currency">{{ results.errorStreets|integer }}</td>
+            <td class="text-currency">{{ results.validStreets|integer }}</td>
         </tr>
         <tr>
             <th>{{ 'import.total'|trans }}</<th>
-            <th class="text-currency">{{ (data.states.error + data.cities.error + data.streets.error)|integer }}</th>
-            <th class="text-currency">{{ (data.states.valid + data.cities.valid + data.streets.valid)|integer }}</th>
+            <th class="text-currency">{{ (results.errors)|integer }}</th>
+            <th class="text-currency">{{ (results.valids)|integer }}</th>
         </tr>
     </tbody>
 </table>
 {%- else -%}
 <p>{{ 'import.failure'|trans }}</p>
-{% if data.message is defined and data.message -%}<p class="mb-0">{{ data.message }}</p>{%- endif %}
+{% if results.error -%}<p class="mb-0">{{ results.error }}</p>{%- endif %}
 {%- endif %}
 {% endblock %}
 

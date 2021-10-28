@@ -20,7 +20,7 @@ use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\CalculationUpdater;
 use App\Service\ProductUpdater;
-use App\Service\SwissPostService;
+use App\Service\SwissPostUpdater;
 use App\Util\SymfonyInfo;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -31,7 +31,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\File;
 
 /**
  * Controller for administation tasks.
@@ -102,45 +101,30 @@ class AdminController extends AbstractController
      * @Route("/import", name="admin_import")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function import(Request $request, SwissPostService $service): Response
+    public function import(Request $request, SwissPostUpdater $updater): Response
     {
-        // clear
-        if ($this->getApplication()->getDebug()) {
-            $this->getApplication()->clearCache();
-        }
+        // clear cache
+        $application = $this->getApplication();
+        $application->clearCache();
 
         // create form
-        $helper = $this->createFormHelper();
-
-        // constraints
-        $constraints = new File([
-            'mimeTypes' => ['application/zip', 'application/x-zip-compressed'],
-            'mimeTypesMessage' => $this->trans('import.error.mime_type'),
-        ]);
-
-        // fields
-        $helper->field('file')
-            ->label('import.file')
-            ->updateOption('constraints', $constraints)
-            ->updateAttribute('accept', 'application/x-zip-compressed')
-            ->addFileType();
+        $form = $updater->createForm();
 
         // handle request
-        $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             // import
             $file = $form->getData()['file'];
-            $data = $service->setSourceFile($file)->import();
+            $results = $updater->import($file);
 
             // display result
             return $this->renderForm('admin/import_result.html.twig', [
-                'data' => $data,
+                'results' => $results,
             ]);
         }
 
         // display
         return $this->renderForm('admin/import_file.html.twig', [
-            'last_import' => $this->getApplication()->getLastImport(),
+            'last_import' => $application->getLastImport(),
             'form' => $form,
         ]);
     }
@@ -154,8 +138,8 @@ class AdminController extends AbstractController
     public function parameters(Request $request): Response
     {
         // properties
-        $service = $this->getApplication();
-        $data = $service->getProperties([
+        $application = $this->getApplication();
+        $data = $application->getProperties([
             ApplicationServiceInterface::P_UPDATE_CALCULATIONS,
             ApplicationServiceInterface::P_UPDATE_PRODUCTS,
             ApplicationServiceInterface::P_LAST_IMPORT,
@@ -163,7 +147,7 @@ class AdminController extends AbstractController
 
         // password options
         foreach (ParametersType::PASSWORD_OPTIONS as $option) {
-            $data[$option] = $service->isPropertyBoolean($option);
+            $data[$option] = $application->isPropertyBoolean($option);
         }
 
         // form
@@ -171,7 +155,7 @@ class AdminController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             //save properties
             $data = $form->getData();
-            $service->setProperties($data);
+            $application->setProperties($data);
             $this->succesTrans('parameters.success');
 
             return $this->redirectToHomePage();
@@ -228,6 +212,7 @@ class AdminController extends AbstractController
         // create form
         $query = $updater->createUpdateQuery();
         $form = $updater->createForm($query);
+        $application = $this->getApplication();
 
         // handle request
         if ($this->handleRequestForm($request, $form)) {
@@ -239,7 +224,7 @@ class AdminController extends AbstractController
 
             // update last date
             if (!$query->isSimulated() && $result->isValid()) {
-                $this->getApplication()->setProperties([ApplicationServiceInterface::P_UPDATE_CALCULATIONS => new \DateTime()]);
+                $application->setProperties([ApplicationServiceInterface::P_UPDATE_CALCULATIONS => new \DateTime()]);
             }
 
             return $this->renderForm('calculation/calculation_result.html.twig', [
@@ -250,7 +235,7 @@ class AdminController extends AbstractController
 
         // display
         return $this->renderForm('calculation/calculation_update.html.twig', [
-            'last_update' => $this->getApplication()->getUpdateCalculations(),
+            'last_update' => $application->getUpdateCalculations(),
             'form' => $form,
         ]);
     }
@@ -266,6 +251,7 @@ class AdminController extends AbstractController
         // create form
         $query = $updater->createUpdateQuery();
         $form = $updater->createForm($query);
+        $application = $this->getApplication();
 
         // handle request
         if ($this->handleRequestForm($request, $form)) {
@@ -277,7 +263,7 @@ class AdminController extends AbstractController
 
             // update last date
             if (!$query->isSimulated() && $result->isValid()) {
-                $this->getApplication()->setProperties([ApplicationServiceInterface::P_UPDATE_PRODUCTS => new \DateTime()]);
+                $application->setProperties([ApplicationServiceInterface::P_UPDATE_PRODUCTS => new \DateTime()]);
             }
 
             return $this->renderForm('product/product_result.html.twig', [
@@ -287,7 +273,7 @@ class AdminController extends AbstractController
         }
 
         return $this->renderForm('product/product_update.html.twig', [
-            'last_update' => $this->getApplication()->getUpdateProducts(),
+            'last_update' => $application->getUpdateProducts(),
             'form' => $form,
         ]);
     }

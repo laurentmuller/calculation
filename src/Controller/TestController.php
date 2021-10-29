@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Entity\Calculation;
 use App\Entity\Category;
 use App\Entity\Group;
+use App\Entity\User;
 use App\Form\Admin\ParametersType;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
@@ -56,7 +57,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -113,19 +113,20 @@ class TestController extends AbstractController
             ->updateAttribute('minlength', 10)
             ->add(SimpleEditorType::class);
 
+        // handle request
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
+            /** @var User $user */
+            $user = $this->getUser();
             $data = $form->getData();
             $email = (string) $data['email'];
             $importance = $translator->trans('importance.full.' . $data['importance']);
             $message = "<p style=\"font-weight: bold;\">$importance</p>" . $data['message'];
 
             try {
-                /** @var \App\Entity\User $user */
-                $user = $this->getUser();
                 $comment = new Comment(true);
-                $comment->setFromAddress(new Address($email))
-                    ->setToUser($user)
+                $comment->setFromAddress($email)
+                    ->setToAddress($user)
                     ->setSubject($this->trans('user.comment.title'))
                     ->setMessage($message);
                 $comment->send($mailer);

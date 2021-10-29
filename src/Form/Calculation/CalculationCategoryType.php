@@ -31,8 +31,6 @@ class CalculationCategoryType extends AbstractEntityType
 
     /**
      * Constructor.
-     *
-     * @param CategoryTransformer $transformer the transformer to convert the category field
      */
     public function __construct(CategoryTransformer $transformer)
     {

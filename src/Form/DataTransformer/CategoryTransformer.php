@@ -42,17 +42,22 @@ class CategoryTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
-     * @param int|null $id
+     * @param int|null $value
      */
-    public function reverseTransform($id): ?Category
+    public function reverseTransform($value): ?Category
     {
-        if (empty($id)) {
+        if (null === $value) {
             return null;
         }
 
-        $category = $this->repository->find((int) $id);
+        if (!\is_numeric($value)) {
+            $message = \sprintf('A number expected, a "%s" given.', get_debug_type($value));
+            throw new TransformationFailedException($message);
+        }
+
+        $category = $this->repository->find((int) $value);
         if (!$category instanceof Category) {
-            $message = $this->trans('category.id_not_found', ['%id%' => $id], 'validators');
+            $message = $this->trans('category.id_not_found', ['%id%' => $value], 'validators');
             throw new TransformationFailedException($message);
         }
 
@@ -62,14 +67,19 @@ class CategoryTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
-     * @param Category|null $category
+     * @param Category|null $value
      */
-    public function transform($category): ?int
+    public function transform($value): ?int
     {
-        if (null !== $category) {
-            return $category->getId();
+        if (null === $value) {
+            return null;
         }
 
-        return null;
+        if (!$value instanceof Category) {
+            $message = \sprintf('A category expected, a "%s" given.', get_debug_type($value));
+            throw new TransformationFailedException($message);
+        }
+
+        return $value->getId();
     }
 }

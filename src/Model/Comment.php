@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Entity\User;
-use App\Util\Utils;
 use SimpleHtmlToText\Parser;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -23,7 +22,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represent a comment to send.
+ * Represent a comment (e-mail) to send.
  *
  * @author Laurent Muller
  */
@@ -75,7 +74,7 @@ class Comment
     /**
      * Constructor.
      *
-     * @param bool $mail true if e-mail, false if comment
+     * @param bool $mail true to send an e-mail, false to send a comment
      */
     public function __construct(bool $mail)
     {
@@ -90,14 +89,6 @@ class Comment
     public function getAttachments(): array
     {
         return $this->attachments ?? [];
-    }
-
-    /**
-     * Gets the "from" e-mail and name (if any).
-     */
-    public function getFrom(): ?string
-    {
-        return Utils::formatAddress($this->fromAddress);
     }
 
     /**
@@ -125,14 +116,6 @@ class Comment
     }
 
     /**
-     * Gets the "to" e-mail and name (if any).
-     */
-    public function getTo(): ?string
-    {
-        return Utils::formatAddress($this->toAddress);
-    }
-
-    /**
      * Gets the "to" address.
      */
     public function getToAddress(): ?Address
@@ -152,8 +135,6 @@ class Comment
 
     /**
      * Sends this message using the given mailer.
-     *
-     * @param MailerInterface $mailer the mailer service
      *
      * @throws TransportExceptionInterface if the email can not be send
      */
@@ -189,20 +170,20 @@ class Comment
 
     /**
      * Sets the "from" address.
+     *
+     * @param Address|User|string $fromAddress
+     *
+     * @throws \InvalidArgumentException if the parameter is not an instanceof of Address, User or string
      */
-    public function setFromAddress(Address $fromAddress): self
+    public function setFromAddress($fromAddress): self
     {
-        $this->fromAddress = $fromAddress;
+        if ($fromAddress instanceof User) {
+            $this->fromAddress = $fromAddress->getAddress();
+        } else {
+            $this->fromAddress = Address::create($fromAddress);
+        }
 
         return $this;
-    }
-
-    /**
-     * Sets the "from" user.
-     */
-    public function setFromUser(User $user): self
-    {
-        return $this->setFromAddress($user->getAddress());
     }
 
     /**
@@ -227,29 +208,24 @@ class Comment
 
     /**
      * Sets the "to" address.
+     *
+     * @param Address|User|string $toAddress
+     *
+     * @throws \InvalidArgumentException if the parameter is not an instanceof of Address, User or string
      */
-    public function setToAddress(Address $toAddress): self
+    public function setToAddress($toAddress): self
     {
-        $this->toAddress = $toAddress;
+        if ($toAddress instanceof User) {
+            $this->toAddress = $toAddress->getAddress();
+        } else {
+            $this->toAddress = Address::create($toAddress);
+        }
 
         return $this;
     }
 
     /**
-     * Sets the "to" user.
-     */
-    public function setToUser(User $user): self
-    {
-        return $this->setToAddress($user->getAddress());
-    }
-
-    /**
      * Adds the given uploaded file as attachment to the given email.
-     *
-     * @param Email        $email the email to attach file for
-     * @param UploadedFile $file  the file to attach
-     *
-     * @return Email the email parameter
      */
     private function addAttachment(Email $email, ?UploadedFile $file): Email
     {
@@ -266,8 +242,6 @@ class Comment
 
     /**
      * Remove empty lines for the given message.
-     *
-     * @return string the cleaned message
      */
     private function getHtmlMessage(): string
     {
@@ -282,8 +256,6 @@ class Comment
 
     /**
      * Convert the given message as plain text.
-     *
-     * @return string the cleaned message
      */
     private function getTextMessage(): string
     {

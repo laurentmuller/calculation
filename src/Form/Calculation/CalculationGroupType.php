@@ -31,8 +31,6 @@ class CalculationGroupType extends AbstractEntityType
 
     /**
      * Constructor.
-     *
-     * @param GroupTransformer $transformer the transformer to convert the group field
      */
     public function __construct(GroupTransformer $transformer)
     {

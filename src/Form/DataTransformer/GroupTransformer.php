@@ -32,9 +32,6 @@ class GroupTransformer implements DataTransformerInterface
 
     /**
      * Constructor.
-     *
-     * @param GroupRepository     $repository the repository to find group
-     * @param TranslatorInterface $translator the translator used for error messages
      */
     public function __construct(GroupRepository $repository, TranslatorInterface $translator)
     {
@@ -45,17 +42,22 @@ class GroupTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
-     * @param int|null $id
+     * @param int|null $value
      */
-    public function reverseTransform($id): ?Group
+    public function reverseTransform($value): ?Group
     {
-        if (empty($id)) {
+        if (null === $value) {
             return null;
         }
 
-        $group = $this->repository->find((int) $id);
+        if (!\is_numeric($value)) {
+            $message = \sprintf('A number expected, a "%s" given.', get_debug_type($value));
+            throw new TransformationFailedException($message);
+        }
+
+        $group = $this->repository->find((int) $value);
         if (!$group instanceof Group) {
-            $message = $this->trans('group.id_not_found', ['%id%' => $id], 'validators');
+            $message = $this->trans('group.id_not_found', ['%id%' => $value], 'validators');
             throw new TransformationFailedException($message);
         }
 
@@ -65,14 +67,19 @@ class GroupTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
-     * @param Group|null $group
+     * @param Group|null $value
      */
-    public function transform($group): ?int
+    public function transform($value): ?int
     {
-        if (null !== $group) {
-            return $group->getId();
+        if (null === $value) {
+            return null;
         }
 
-        return null;
+        if (!$value instanceof Group) {
+            $message = \sprintf('An group expected, a "%s" given.', get_debug_type($value));
+            throw new TransformationFailedException($message);
+        }
+
+        return $value->getId();
     }
 }

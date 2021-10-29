@@ -66,9 +66,17 @@ class SwissPostUpdater
     private const STATE_FILE = 'swiss_state.csv';
 
     private ApplicationService $application;
+
+    private ?\ZipArchive $archive = null;
+    private ?SwissDatabase $database = null;
     private string $databaseName;
-    private String $dataDirectory;
+    private string $dataDirectory;
     private FormFactoryInterface $factory;
+    private ?SwissPostUpdateResult $results = null;
+    private ?string $sourceName = null;
+
+    /** @var resource|bool */
+    private $stream = false;
 
     public function __construct(TranslatorInterface $translator, ApplicationService $application, FormFactoryInterface $factory, SwissPostService $service)
     {
@@ -110,142 +118,77 @@ class SwissPostUpdater
      */
     public function import($sourceFile): SwissPostUpdateResult
     {
-        $results = new SwissPostUpdateResult();
+        $this->results = new SwissPostUpdateResult();
 
         // check source file
         if (null === $sourceFile || '' === $sourceFile) {
-            return $results->setError($this->trans('import.error.file_empty'));
+            return $this->setError('import.error.file_empty');
         }
 
         // get path and name
         if ($sourceFile instanceof UploadedFile) {
-            $name = $sourceFile->getClientOriginalName();
+            $this->sourceName = $sourceFile->getClientOriginalName();
             $sourceFile = $sourceFile->getPathname();
         } else {
             $sourceFile = (string) $sourceFile;
-            $name = \basename($sourceFile);
+            $this->sourceName = \basename($sourceFile);
         }
 
         // exist?
         if (!FileUtils::exists($sourceFile)) {
-            return $results->setError($this->trans('import.error.file_not_exist'));
+            return $this->setError('import.error.file_not_exist');
         }
 
         // create a temporary file
         if (null === $temp_name = FileUtils::tempfile('sql')) {
-            return $results->setError($this->trans('import.error.temp_file'));
+            return $this->setError('import.error.temp_file');
         }
 
         // same as current database?
         if (0 === \strcasecmp($sourceFile, $this->databaseName)) {
-            return $results->setError($this->trans('import.error.open_database'));
+            return $this->setError('import.error.open_database');
         }
-
-        $db = null;
-        $archive = null;
-        $stream = null;
-        $opened = false;
 
         try {
             // open archive
-            $archive = new \ZipArchive();
-            if (true !== $opened = $archive->open($sourceFile)) {
-                return $results->setError($this->trans('import.error.open_archive', ['%name%' => $name]));
+            if (!$this->openArchive($sourceFile)) {
+                return $this->results;
             }
 
-            // check if only 1 entry is present
-            if (1 !== $archive->count()) {
-                return $results->setError($this->trans('import.error.entry_not_one', ['%name%' => $name]));
-            }
-
-            // open entry
-            $streamName = (string) $archive->getNameIndex(0);
-            if (false === $stream = $archive->getStream($streamName)) {
-                return $results->setError($this->trans('import.error.open_stream', [
-                    '%name%' => $name,
-                    '%streamName%' => $streamName,
-                ]));
+            // open stream
+            if (!$this->openStream()) {
+                return $this->results;
             }
 
             // open database
-            $db = new SwissDatabase($temp_name);
-            $db->beginTransaction();
+            $this->openDatabase($temp_name);
 
-            $lastImport = null;
-            if (FileUtils::exists($this->databaseName)) {
-                $lastImport = $this->application->getLastImport();
+            // process states
+            $this->processStates();
+
+            // process stream
+            if (!$this->processStream()) {
+                return $this->results;
             }
-
-            // states
-            $this->processStates($db, $results);
-
-            // process content
-            $process = true;
-            $total = $results->getValids();
-            while ($process && false !== ($data = \fgetcsv($stream, 0, ';'))) {
-                switch ((int) $data[0]) {
-                    case self::REC_VALIDITY:
-                        if (!$this->processValidity($data, $results, $lastImport, $name)) {
-                            return $results;
-                        }
-                        break;
-
-                    case self::REC_CITY:
-                        $this->processCity($db, $data, $results);
-                        break;
-
-                    case self::REC_STREET:
-                        $this->processStreet($db, $data, $results);
-                        break;
-
-                    case self::REC_STOP_PROCESS:
-                        $process = false;
-                        break;
-                }
-
-                // commit
-                if (0 === ++$total % 50000) {
-                    $db->commitTransaction();
-                    $db->beginTransaction();
-                }
-            }
-
-            // last commit
-            $db->commitTransaction();
 
             // imported data?
-            if (0 === $results->getValids()) {
-                return $results->setError($this->trans('import.error.empty_archive', ['%name%' => $name]));
+            if (0 === $this->results->getValids()) {
+                return $this->setError('import.error.empty_archive', ['%name%' => $this->sourceName]);
             }
         } finally {
-            // close archive
-            if (\is_resource($stream)) {
-                \fclose($stream);
-            }
-            if ($opened) {
-                $archive->close();
-            }
+            // close all
+            $this->closeStream();
+            $this->closeArchive();
+            $this->closeDatabase();
 
-            // close database
-            if (null !== $db) {
-                if ($results->isValid()) {
-                    $db->compact();
-                }
-                $db->close();
-
-                // move to new location
-                if ($results->isValid() && !FileUtils::rename($temp_name, $this->databaseName, true)) {
-                    $results->setError($this->trans('import.error.rename_database'));
-                }
-            }
+            // move to new location
+            $this->renameDatabase($temp_name);
         }
 
         // save date
-        if ($results->isValid()) {
-            $this->application->setProperties([ApplicationServiceInterface::P_LAST_IMPORT => $results->getValidity()]);
-        }
+        $this->updateValidity();
 
-        return $results;
+        return $this->results;
     }
 
     /**
@@ -259,34 +202,131 @@ class SwissPostUpdater
     }
 
     /**
+     * Close the Zip archive.
+     */
+    private function closeArchive(): void
+    {
+        if (null !== $this->archive) {
+            $this->archive->close();
+        }
+        $this->archive = null;
+    }
+
+    /**
+     * Close the database.
+     */
+    private function closeDatabase(): void
+    {
+        if (null !== $this->database) {
+            if ($this->results->isValid()) {
+                $this->database->compact();
+            }
+            $this->database->close();
+            $this->database = null;
+        }
+    }
+
+    /**
+     * Close the Zip archive entry stream.
+     */
+    private function closeStream(): void
+    {
+        if (\is_resource($this->stream)) {
+            \fclose($this->stream);
+        }
+        $this->stream = false;
+    }
+
+    /**
+     * Gets the date of the last import.
+     */
+    private function getLastImport(): ?\DateTimeInterface
+    {
+        return FileUtils::exists($this->databaseName) ? $this->application->getLastImport() : null;
+    }
+
+    /**
+     * Open the Zip archive.
+     */
+    private function openArchive(string $sourceFile): bool
+    {
+        // open archive
+        $this->archive = new \ZipArchive();
+        if (true !== $this->archive->open($sourceFile)) {
+            $this->setError('import.error.open_archive', ['%name%' => $this->sourceName]);
+
+            return false;
+        }
+
+        // check if only 1 entry is present
+        if (1 !== $this->archive->count()) {
+            $this->setError('import.error.entry_not_one', ['%name%' => $this->sourceName]);
+            $this->closeArchive();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Open the database.
+     */
+    private function openDatabase(string $filename): void
+    {
+        $this->database = new SwissDatabase($filename);
+        $this->database->beginTransaction();
+    }
+
+    /**
+     * Open the Zip archive entry stream.
+     */
+    private function openStream(): bool
+    {
+        // open entry
+        $streamName = (string) $this->archive->getNameIndex(0);
+        if (false === $this->stream = $this->archive->getStream($streamName)) {
+            $this->setError('import.error.open_stream', [
+                '%name%' => $this->sourceName,
+                '%streamName%' => $streamName,
+            ]);
+            $this->closeArchive();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Insert a city record to the database.
      */
-    private function processCity(SwissDatabase $db, array $data, SwissPostUpdateResult $results): void
+    private function processCity(array $data): void
     {
-        if (\count($data) > 9 && $db->insertCity([
+        if (\count($data) > 9 && $this->database->insertCity([
                 $data[1],               // id
                 $data[4],               // zip code
                 $this->clean($data[8]), // city name
                 $data[9],               // state (canton)
         ])) {
-            $results->addValidCities();
+            $this->results->addValidCities();
         } else {
-            $results->addErrorCities();
+            $this->results->addErrorCities();
         }
     }
 
     /**
      * Imports the states (canton) to the database.
      */
-    private function processStates(SwissDatabase $db, SwissPostUpdateResult $results): void
+    private function processStates(): void
     {
         $filename = $this->dataDirectory . self::STATE_FILE;
         if (FileUtils::exists($filename) && false !== ($handle = \fopen($filename, 'r'))) {
             while (false !== ($data = \fgetcsv($handle, 0, ';'))) {
-                if ($db->insertState($data)) {
-                    $results->addValidStates();
+                if ($this->database->insertState($data)) {
+                    $this->results->addValidStates();
                 } else {
-                    $results->addErrorStates();
+                    $this->results->addErrorStates();
                 }
             }
             \fclose($handle);
@@ -294,24 +334,71 @@ class SwissPostUpdater
     }
 
     /**
+     * Process the Zip archive entry stream.
+     */
+    private function processStream(): bool
+    {
+        /** @var resource $stream */
+        $stream = $this->stream;
+        $process = true;
+        while ($process && false !== ($data = \fgetcsv($stream, 0, ';'))) {
+            switch ((int) $data[0]) {
+                case self::REC_VALIDITY:
+                    if (!$this->processValidity($data)) {
+                        $this->closeStream();
+
+                        return false;
+                    }
+                    break;
+
+                case self::REC_CITY:
+                    $this->processCity($data);
+                    break;
+
+                case self::REC_STREET:
+                    $this->processStreet($data);
+                    break;
+
+                case self::REC_STOP_PROCESS:
+                    $process = false;
+                    break;
+            }
+
+            // commit
+            if (0 === $this->results->getValids() % 50000) {
+                $this->database->commitTransaction();
+                $this->database->beginTransaction();
+            }
+        }
+
+        // last commit
+        $this->database->commitTransaction();
+
+        //close
+        $this->closeStream();
+
+        return true;
+    }
+
+    /**
      * Insert a street record to the database.
      */
-    private function processStreet(SwissDatabase $db, array $data, SwissPostUpdateResult $results): void
+    private function processStreet(array $data): void
     {
-        if (\count($data) > 6 && $db->insertStreet([
+        if (\count($data) > 6 && $this->database->insertStreet([
                 $data[2],                         // city Id
                 \ucfirst($this->clean($data[6])), // street name
         ])) {
-            $results->addValidStreets();
+            $this->results->addValidStreets();
         } else {
-            $results->addErrorStreets();
+            $this->results->addErrorStreets();
         }
     }
 
     /**
      * Process the validity record.
      */
-    private function processValidity(array $data, SwissPostUpdateResult $results, ?\DateTimeInterface $lastImport, string $name): bool
+    private function processValidity(array $data): bool
     {
         $validity = null;
         if (\count($data) > 1) {
@@ -322,22 +409,51 @@ class SwissPostUpdater
         }
 
         if (!$validity instanceof \DateTimeInterface) {
-            $results->setError($this->trans('import.error.no_validity', ['%name%' => $name]));
+            $this->setError('import.error.no_validity', ['%name%' => $this->sourceName]);
 
             return false;
         }
 
-        $results->setValidity($validity);
+        $this->results->setValidity($validity);
+        $lastImport = $this->getLastImport();
         if ($lastImport instanceof \DateTimeInterface && $validity <= $lastImport) {
-            $results->setError($this->trans('import.error.validity_before', [
+            $this->setError('import.error.validity_before', [
                 '%validity%' => FormatUtils::formatDate($validity, \IntlDateFormatter::LONG),
                 '%import%' => FormatUtils::formatDate($lastImport, \IntlDateFormatter::LONG),
-                '%name%' => $name,
-            ]));
+                '%name%' => $this->sourceName,
+            ]);
 
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Rename the database.
+     */
+    private function renameDatabase(string $source): void
+    {
+        if ($this->results->isValid() && !FileUtils::rename($source, $this->databaseName, true)) {
+            $this->setError('import.error.rename_database');
+        }
+    }
+
+    /**
+     * Sets error message.
+     */
+    private function setError(string $id, array $parameters = []): SwissPostUpdateResult
+    {
+        return $this->results->setError($this->trans($id, $parameters));
+    }
+
+    /**
+     * Update the last imported date.
+     */
+    private function updateValidity(): void
+    {
+        if ($this->results->isValid() && null !== $validity = $this->results->getValidity()) {
+            $this->application->setProperties([ApplicationServiceInterface::P_LAST_IMPORT => $validity]);
+        }
     }
 }

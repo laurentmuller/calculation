@@ -220,8 +220,8 @@ class UserController extends AbstractEntityController
         $currentUser = $this->getUser();
         $comment = new Comment(true);
         $comment->setSubject($this->getApplicationName())
-            ->setFromUser($currentUser)
-            ->setToUser($user);
+            ->setFromAddress($currentUser)
+            ->setToAddress($user);
 
         // create and handle request
         $form = $this->createForm(UserCommentType::class, $comment);

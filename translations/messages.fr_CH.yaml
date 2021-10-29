@@ -375,8 +375,8 @@ user:
         role: Rôle
         lastLogin: Connexion
         imageFile: Image
-        from: Auteur
-        to: Destinataire
+        fromAddress: Auteur
+        toAddress: Destinataire
         subject: Objet
         message: Message
         attachments: Fichier

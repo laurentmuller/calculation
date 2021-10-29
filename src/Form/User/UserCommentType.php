@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
+use App\Form\DataTransformer\AddressTransformer;
 use App\Form\FormHelper;
 use App\Form\Type\TinyMceEditorType;
 use Symfony\Component\Form\AbstractType;
@@ -24,6 +25,16 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class UserCommentType extends AbstractType
 {
+    private AddressTransformer $transformer;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(AddressTransformer $transformer)
+    {
+        $this->transformer = $transformer;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -35,10 +46,10 @@ class UserCommentType extends AbstractType
         $helper = new FormHelper($builder, 'user.fields.');
 
         if ($isMail) {
-            $helper->field('to')
+            $helper->field('toAddress')
                 ->addPlainType(true);
         } else {
-            $helper->field('from')
+            $helper->field('fromAddress')
                 ->addPlainType(true);
         }
 
@@ -56,5 +67,12 @@ class UserCommentType extends AbstractType
             ->updateOption('maxsizetotal', '30mi')
             ->notRequired()
             ->addFileType();
+
+        // transformer
+        if ($isMail) {
+            $builder->get('toAddress')->addModelTransformer($this->transformer);
+        } else {
+            $builder->get('fromAddress')->addModelTransformer($this->transformer);
+        }
     }
 }

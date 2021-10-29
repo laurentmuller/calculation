@@ -189,7 +189,7 @@ class SwissPostUpdateResult
     /**
      * Sets the validity date.
      */
-    public function setValidity(?\DateTimeInterface $validity): self
+    public function setValidity(\DateTimeInterface $validity): self
     {
         $this->validity = $validity;
 

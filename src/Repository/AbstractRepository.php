@@ -22,6 +22,11 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * Base repository.
  *
+ * @method T|null find($id, $lockMode = null, $lockVersion = null)
+ * @method T|null findOneBy(array $criteria, array $orderBy = null)
+ * @method T[]    findAll()
+ * @method T[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
  * @author Laurent Muller
  * @template T of \App\Entity\AbstractEntity
  * @template-extends ServiceEntityRepository<T>

@@ -1,11 +1,10 @@
 {% extends 'cards/card_base.html.twig' %}
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set title = 'import.title' -%}
+{%- set title = 'swisspost.title' -%}
 {%- set title_icon = 'download' -%}
-{%- set title_description = 'import.results' -%}
+{%- set title_description = 'swisspost.result.description' -%}
 
 {% block card_class -%}
 {% if results.valid %}{{ parent() }}{% else %} border-danger{% endif %}
@@ -16,44 +15,47 @@
 
 {% block card_body %}
 {%- if results.valid %}
-<p>{{ 'import.success'|trans({'%date%': results.validity|localedate('long')}) }}</p>
+<p>{{ 'swisspost.result.success'|trans({'%date%': results.validity|localedate('long')}) }}</p>
 <table class="table table-bordered table-sm mb-0">
     <thead>
         <tr>
-            <th>{{ 'import.objects'|trans }}</th>
-            <th class="text-currency">{{ 'import.errors'|trans }}</th>
-            <th class="text-currency">{{ 'import.valids'|trans }}</th>
+            <th>{{ 'swisspost.fields.objects'|trans }}</th>
+            <th class="text-currency">{{ 'swisspost.fields.errors'|trans }}</th>
+            <th class="text-currency">{{ 'swisspost.fields.valids'|trans }}</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>{{ 'import.states'|trans }}</td>
+            <td>{{ 'swisspost.fields.states'|trans }}</td>
             <td class="text-currency">{{ results.errorStates|integer }}</td>
             <td class="text-currency">{{ results.validStates|integer }}</td>
         </tr>
         <tr>
-            <td>{{ 'import.cities'|trans }}</td>
+            <td>{{ 'swisspost.fields.cities'|trans }}</td>
             <td class="text-currency">{{ results.errorCities|integer }}</td>
             <td class="text-currency">{{ results.validCities|integer }}</td>
         </tr>
         <tr>
-            <td>{{ 'import.streets'|trans }}</td>
+            <td>{{ 'swisspost.fields.streets'|trans }}</td>
             <td class="text-currency">{{ results.errorStreets|integer }}</td>
             <td class="text-currency">{{ results.validStreets|integer }}</td>
         </tr>
         <tr>
-            <th>{{ 'import.total'|trans }}</<th>
+            <th>{{ 'swisspost.fields.total'|trans }}</<th>
             <th class="text-currency">{{ (results.errors)|integer }}</th>
             <th class="text-currency">{{ (results.valids)|integer }}</th>
         </tr>
     </tbody>
 </table>
 {%- else -%}
-<p>{{ 'import.failure'|trans }}</p>
+<p>{{ 'swisspost.result.failure'|trans }}</p>
 {% if results.error -%}<p class="mb-0">{{ results.error }}</p>{%- endif %}
 {%- endif %}
 {% endblock %}
 
 {% block card_footer %}
 {{- icons.homepage() -}}
+{% if not results.valid %}
+	{{ icons.link(path('admin_import'), 'swisspost.result.new_import', 'btn btn-outline-secondary', null) -}}
+{%- endif %}
 {% endblock %}

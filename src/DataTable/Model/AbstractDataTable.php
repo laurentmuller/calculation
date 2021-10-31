@@ -250,12 +250,13 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
         // save parameters
         $this->setSessionValue(self::PARAM_PAGE_LENGTH, $query->length);
         if (empty($query->order)) {
-            $this->removeSessionValue(self::PARAM_ORDER_COLUMN);
-            $this->removeSessionValue(self::PARAM_ORDER_DIR);
+            $this->removeSessionValues([self::PARAM_ORDER_COLUMN, self::PARAM_ORDER_DIR]);
         } else {
             $order = $query->order[0];
-            $this->setSessionValue(self::PARAM_ORDER_COLUMN, $order->column);
-            $this->setSessionValue(self::PARAM_ORDER_DIR, $order->dir);
+            $this->setSessionValues([
+                self::PARAM_ORDER_COLUMN => $order->column,
+                self::PARAM_ORDER_DIR => $order->dir,
+            ]);
         }
 
         return $results;

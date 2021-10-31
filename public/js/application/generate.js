@@ -4,17 +4,15 @@
 
 /**
  * Creates a row for the given values.
- *
+ * 
  * @param {array}
  *            values - the cell values.
  * @param {array}
- *            classes - the cell classes. This array must have the same length
- *            as the values.
+ *            classes - the cell classes. This array must have the same length as the values.
  * @returns {jQuery} the created row.
  */
 function createRow(values, classes) {
     'use strict';
-
     const $row = $('<tr/>');
     values.forEach(function (value, index) {
         $row.append($('<td/>', {
@@ -22,13 +20,12 @@ function createRow(values, classes) {
             'class': classes[index]
         }));
     });
-
     return $row;
 }
 
 /**
  * Creates rows for the given items.
- *
+ * 
  * @param {array}
  *            items - the items to render.
  * @param {function}
@@ -55,7 +52,7 @@ function createRows(items, valuesCallback, classes, rowCallback) {
 
 /**
  * Fill the table with the generated calculations
- *
+ * 
  * @param {array}
  *            calculations - the calculations to render.
  */
@@ -75,18 +72,34 @@ function renderCalculations(calculations) {
 
 /**
  * Fill the table with the generated customers
- *
+ * 
  * @param {array}
  *            customers - the customers to render.
  */
 function renderCustomers(customers) {
     'use strict';
 
-    const valuesCallback = function (c) {
+    const callback = function (c) {
         return [c.nameAndCompany, c.address, c.zipCity];
     };
     const classes = ['w-50', 'w-25', 'w-25'];
-    createRows(customers, valuesCallback, classes);
+    createRows(customers, callback, classes);
+}
+
+/**
+ * Fill the table with the generated products
+ * 
+ * @param {array}
+ *            products - the products to render.
+ */
+function renderProducts(products) {
+    'use strict';
+
+    const callback = function (p) {
+        return [p.description, p.group + ' / ' + p.category, p.price, '/', p.unit];
+    };
+    const classes = ['w-50', 'w-50', 'text-currency', '', 'text-unit'];
+    createRows(products, callback, classes);
 }
 
 /**
@@ -130,18 +143,31 @@ function generate() {
         enableButtons();
         const title = $(".card-title").text();
         $('#form_confirm').setChecked(false);
-        if (response.result) {
-            const index = $('#form_entity').prop('selectedIndex');
-            if (index === 0) {
-                renderCustomers(response.items);
-            } else {
-                renderCalculations(response.items);
-            }
-            $('#content').slideDown();
-            Toaster.success(response.message, title, $("#flashbags").data());
-        } else {
-            Toaster.danger(response.message, title, $("#flashbags").data());
+        if (!response.result) {
+            Toaster.danger(response.message || $('#edit-form').data('error'), title, $("#flashbags").data());
+            return;
+        } else if (!response.count) {
+            Toaster.warning($('#edit-form').data('empty'), title, $("#flashbags").data());
+            return;
         }
+
+        const key = $('#form_entity').getSelectedOption().data('key');
+        switch (key) {
+        case 'customer.name':
+            renderCustomers(response.items);
+            break;
+        case 'calculation.name':
+            renderCalculations(response.items);
+            break;
+        case 'product.name':
+            renderProducts(response.items);
+            break;
+        default:
+            Toaster.warning($('#edit-form').data('empty'), title, $("#flashbags").data());
+            return;
+        }
+        Toaster.success(response.message, title, $("#flashbags").data());
+        $('#content').slideDown();
     });
 }
 

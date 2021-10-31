@@ -15,7 +15,7 @@ namespace App\Service;
 use App\Database\SwissDatabase;
 
 /**
- * Service to import zip code and city from Switzerland.
+ * Service to search zip codes, cities and streets from Switzerland.
  *
  * @author Laurent Muller
  */
@@ -45,6 +45,23 @@ class SwissPostService
     }
 
     /**
+     * Finds values by searching in streets, zip codes and cities.
+     *
+     * @param string $value the value to search for
+     * @param int    $limit the maximum number of rows to return
+     *
+     * @return array an array, maybe empty, of matching values
+     */
+    public function findAll(string $value, int $limit = 25): array
+    {
+        $db = $this->getDatabase(true);
+        $result = $db->findAll($value, $limit);
+        $db->close();
+
+        return $result;
+    }
+
+    /**
      * Finds cities by name.
      *
      * @param string $name  the name to search for
@@ -67,7 +84,7 @@ class SwissPostService
      * @param string $name  the name to search for
      * @param int    $limit the maximum number of rows to return
      *
-     * @return array an array, maybe empty, of matching cities
+     * @return array an array, maybe empty, of matching streets
      */
     public function findStreet(string $name, int $limit = 25): array
     {
@@ -84,7 +101,7 @@ class SwissPostService
      * @param string $zip   the zip code to search for
      * @param int    $limit the maximum number of rows to return
      *
-     * @return array an array, maybe empty, of matching cities
+     * @return array an array, maybe empty, of matching zip codes
      */
     public function findZip(string $zip, int $limit = 25): array
     {
@@ -99,8 +116,6 @@ class SwissPostService
      * Gets the database.
      *
      * @param bool $readonly true open the database for reading only
-     *
-     * @return SwissDatabase the database
      */
     public function getDatabase(bool $readonly = false): SwissDatabase
     {
@@ -116,9 +131,7 @@ class SwissPostService
     }
 
     /**
-     * Gets the data directory.
-     *
-     * @return string
+     * Gets the directory of the database.
      */
     public function getDataDirectory(): ?string
     {

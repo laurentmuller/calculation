@@ -383,8 +383,8 @@ class AjaxController extends AbstractController
         // get parameters
         $maxNbChars = (int) $request->get('maxNbChars', 145);
         $indexSize = (int) $request->get('indexSize', 2);
-        $faker = $service->getFaker();
-        $text = $faker->realText($maxNbChars, $indexSize);
+        $generator = $service->getGenerator();
+        $text = $generator->realText($maxNbChars, $indexSize);
 
         return $this->jsonTrue([
             'content' => $text,

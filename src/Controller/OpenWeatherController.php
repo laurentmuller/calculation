@@ -223,9 +223,11 @@ class OpenWeatherController extends AbstractController
         $daily = $this->service->daily($cityId, $count, $units);
 
         if (false !== $current) {
-            $this->setSessionValue(self::KEY_CITY_ID, $cityId);
-            $this->setSessionValue(self::KEY_UNITS, $units);
-            $this->setSessionValue(self::KEY_COUNT, $count);
+            $this->setSessionValues([
+                self::KEY_CITY_ID => $cityId,
+                self::KEY_UNITS => $units,
+                self::KEY_COUNT => $count,
+            ]);
         }
 
         return $this->renderForm('openweather/current_weather.htm.twig', [
@@ -413,10 +415,12 @@ class OpenWeatherController extends AbstractController
             }
 
             // save
-            $this->setSessionValue(self::KEY_QUERY, $query);
-            $this->setSessionValue(self::KEY_UNITS, $units);
-            $this->setSessionValue(self::KEY_LIMIT, $limit);
-            $this->setSessionValue(self::KEY_COUNT, $count);
+            $this->setSessionValues([
+                self::KEY_QUERY => $query,
+                self::KEY_UNITS => $units,
+                self::KEY_LIMIT => $limit,
+                self::KEY_COUNT => $count,
+            ]);
 
             // display
             return $this->renderForm('openweather/search_city.html.twig', [

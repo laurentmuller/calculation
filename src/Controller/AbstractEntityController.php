@@ -321,10 +321,14 @@ abstract class AbstractEntityController extends AbstractController
         // check permission
         $this->checkPermission(EntityVoterInterface::ATTRIBUTE_LIST);
 
-        // get session values
+        // keys
         $key = Utils::getShortName($this->className);
-        $field = $this->getSessionString($key . '.sortField', $sortField);
-        $mode = $this->getSessionString($key . '.sortMode', $sortMode);
+        $keyField = $key . '.sortField';
+        $keySort = $key . '.sortMode';
+
+        // get session values
+        $field = $this->getSessionString($keyField, $sortField);
+        $mode = $this->getSessionString($keySort, $sortMode);
 
         // get request values
         $id = (int) $request->get('id', 0);
@@ -334,11 +338,12 @@ abstract class AbstractEntityController extends AbstractController
 
         // update session values
         if ($sortField === $field && $sortMode === $mode) {
-            $this->removeSessionValue($key . '.sortField');
-            $this->removeSessionValue($key . '.sortMode');
+            $this->removeSessionValues([$keyField, $keySort]);
         } else {
-            $this->setSessionValue($key . '.sortField', $field);
-            $this->setSessionValue($key . '.sortMode', $mode);
+            $this->setSessionValues([
+                $keyField => $field,
+                $keySort => $mode,
+            ]);
         }
 
         // get items

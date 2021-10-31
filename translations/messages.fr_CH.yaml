@@ -178,7 +178,8 @@ category:
         title: Supprimer la catégorie
         message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
         success: La catégorie <b>%name%</b> a été supprimée avec succès.
-        failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans :'
+        failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée
+            dans :'
     list:
         title: Catégories
         empty: Aucune catégorie définie.
@@ -211,7 +212,8 @@ group:
         title: Supprimer le groupe
         message: Êtes-vous sûr de vouloir supprimer le groupe <b>%name%</b> ?
         success: Le groupe <b>%name%</b> a été supprimé avec succès.
-        failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans :'
+        failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé
+            dans :'
     list:
         title: Groupes
         empty: Aucun groupe défini.
@@ -799,7 +801,8 @@ parameters:
 clear_cache:
     title: Vider le cache
     message: Êtes-vous sûr de vouloir vider le cache de l'application ?
-    note: '<b>Note : </b>Cette opération peut durer un certain temps (taille actuelle : %size%).'
+    note: '<b>Note : </b>Cette opération peut durer un certain temps (taille actuelle
+        : %size%).'
     success: Le cache de l'application a été vidé avec succés.
     failure: Impossible de vider le cache de l'application.
     submit: Vider
@@ -894,22 +897,27 @@ password:
         strong: Forte
         very_strong: Très forte
     input: Mot de passe
-    success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
-import:
+    success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées
+        :'
+swisspost:
     title: Importer les localités et les noms de rue
-    file: Fichier
-    description: Permet de mettre à jour la liste des localités et des noms de rue de Suisse.
-    last_import: 'Date de validité de la dernière importation : %date%.'
-    success: L'importation des localités et des noms de rue a été réalisée avec succès. La nouvelle date de validité est le %date%.
-    failure: Une erreur s'est produite lors de l'importation des localités et des noms de rue.
-    results: Résultat de l'importation.
-    objects: Objets
-    states: Cantons
-    cities: Localités
-    streets: Rues
-    valids: Valides
-    errors: Erreurs
-    total: Total
+    import:
+        description: Permet de mettre à jour la liste des localités et des noms de rue de Suisse.
+        last_import: 'Date de validité de la dernière importation : %date%.'
+    fields:
+        file: Fichier d'archive
+        objects: Objets
+        states: Cantons
+        cities: Localités
+        streets: Rues
+        valids: Valides
+        errors: Erreurs
+        total: Total
+    result:
+        description: Résultat de l'importation.
+        success: L'importation des localités et des noms de rue a été réalisée avec succès. La nouvelle date de validité est le %date%.
+        failure: Une erreur s'est produite lors de l'importation des localités et des noms de rue.
+        new_import: Nouvelle importation
     error:
         temp_file: Impossible de créer un fichier temporaire.
         open_database: Impossible d'ouvrir la base de de données.
@@ -917,10 +925,10 @@ import:
         open_stream: Impossible d'ouvrir le flux de données '%stream%' de l'archive '%name%'.
         no_validity: L'archive '%name%' ne contient aucune date de validité.
         empty_archive: L'archive '%name%' ne contient aucune donnée.
-        entry_not_one: L'archive '%name%' ne contient pas une entrée valide.
+        entry_not_one: L'archive '%name%' ne contient aucune entrée valide.
         validity_before: La date de validité du %validity% de l'archive '%name%' est antérieure ou égale à la date de la dernière importation (%import%).
         file_empty: Aucun fichier à importer n'a été défini.
-        file_not_exist: Le fichier à importer n'existe pas.
+        file_not_exist: Le fichier à importer est introuvable ou n'existe pas.
         mime_type: Le type de fichier sélectionné n'est pas valide.
         rename_database: Impossible de renommer la base de données.
 openweather:
@@ -1054,6 +1062,7 @@ generate:
     title: Générateur de données
     description: Cet outil permet de générer des données aléatoires.
     submit_text: Générer
+    result_text: Données générées
     fields:
         entity: Objet à générer
         count: Nombre
@@ -1064,6 +1073,7 @@ generate:
     error:
         confirm: Vous devez cochez le message de confirmation.
         failed: Une erreur s'est produite lors de la génération des données.
+        empty: Aucune donnée n'a été générée.
 update:
     title: Mise à jour des données
     description: Cet outil permet de mettre à jour les objets sélectionnés avec des données aléatoires.
@@ -1163,7 +1173,8 @@ help:
         entity_fields: 'Les champs sont définis comme suit :'
         entity_empty: Cet objet ne contient aucun champ.
         entity_actions: 'Les actions possibles sur l''objet sont les suivantes :'
-        global_actions: 'Les actions globales suivantes peuvent être sélectionnées :'
+        global_actions: 'Les actions globales suivantes peuvent être sélectionnées
+            :'
         edit_actions: 'Les actions suivantes peuvent être sélectionnées :'
         edit_fields: 'Les champs de saisie sont définis comme suit :'
         edit_columns: 'La table contient les colonnes suivantes :'

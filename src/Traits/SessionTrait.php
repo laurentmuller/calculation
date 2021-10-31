@@ -176,6 +176,20 @@ trait SessionTrait
     }
 
     /**
+     * Removes session attributes.
+     *
+     * @param string[] $keys the attribute names to remove
+     *
+     * @return array<mixed> the removed values
+     */
+    protected function removeSessionValues(array $keys): array
+    {
+        return \array_map(function (string $key) {
+            return $this->removeSessionValue($key);
+        }, $keys);
+    }
+
+    /**
      * Sets this session within the given request.
      *
      * @return bool true if the session is set; false otherwise
@@ -202,6 +216,20 @@ trait SessionTrait
         if ($session = $this->getSession()) {
             $sessionKey = $this->getSessionKey($key);
             $session->set($sessionKey, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets session attributes.
+     *
+     * @param array<string, mixed> $attributes the keys and values to save
+     */
+    protected function setSessionValues(array $attributes): self
+    {
+        foreach ($attributes as $key => $value) {
+            $this->setSessionValue($key, $value);
         }
 
         return $this;

@@ -6,6 +6,10 @@
 {%- set title_description = 'generate.description' -%}
 {%- set submit_text = 'generate.submit_text' -%}
 {%- set cancel_text = 'common.button_close' -%}
+{%- set form_attr = form_attr|default({})|merge({
+	'data-empty': 'generate.error.empty'|trans,
+	'data-error': 'generate.error.failed'|trans
+}) -%}
 
 {% block card_body %}
 <div class="form-row">
@@ -18,10 +22,11 @@
 </div>
 {{ form_row(form.simulate) }}
 {{ form_row(form.confirm) }}
-<div class="row" id="content" style="display: none;">
-    <div class="col">
-        <table class="table table-sm mb-0" id="result"></table>
-    </div>
+<div id="content" style="display: none;">
+	<label>{{ 'generate.result_text'|trans }}</label>
+	<div class="overflow-auto" style="max-height: 208px;">
+		<table class="table table-hover table-sm mb-0" id="result"></table>
+	</div>
 </div>
 {% endblock %}
 

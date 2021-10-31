@@ -73,7 +73,7 @@ abstract class AbstractDatabase extends \SQLite3
 
         parent::__construct($filename, $flags, $encryption_key);
 
-        // schema
+        // create schema
         if ($create) {
             $this->createSchema();
         }

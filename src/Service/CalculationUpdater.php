@@ -163,12 +163,14 @@ class CalculationUpdater
      */
     public function saveUpdateQuery(CalculationUpdateQuery $query): void
     {
-        $this->setSessionValue('calculation.update.codes', $query->isCodes());
-        $this->setSessionValue('calculation.update.empty', $query->isEmpty());
-        $this->setSessionValue('calculation.update.sorted', $query->isSorted());
-        $this->setSessionValue('calculation.update.closed', $query->isClosed());
-        $this->setSessionValue('calculation.update.simulated', $query->isSimulated());
-        $this->setSessionValue('calculation.update.duplicated', $query->isDuplicated());
+        $this->setSessionValues([
+            'calculation.update.codes' => $query->isCodes(),
+            'calculation.update.empty' => $query->isEmpty(),
+            'calculation.update.sorted' => $query->isSorted(),
+            'calculation.update.closed' => $query->isClosed(),
+            'calculation.update.simulated' => $query->isSimulated(),
+            'calculation.update.duplicated' => $query->isDuplicated(),
+        ]);
     }
 
     /**

@@ -85,9 +85,7 @@ class CaptchaImageService
      */
     public function clear(): self
     {
-        $this->removeSessionValue(self::KEY_TEXT);
-        $this->removeSessionValue(self::KEY_TIME);
-        $this->removeSessionValue(self::KEY_DATA);
+        $this->removeSessionValues([self::KEY_TEXT, self::KEY_TIME, self::KEY_DATA]);
 
         return $this;
     }
@@ -121,9 +119,11 @@ class CaptchaImageService
             $data = self::IMAGE_PREFIX . $this->encodeImage($image);
 
             // save
-            $this->setSessionValue(self::KEY_TEXT, $text);
-            $this->setSessionValue(self::KEY_DATA, $data);
-            $this->setSessionValue(self::KEY_TIME, \time());
+            $this->setSessionValues([
+                self::KEY_TEXT => $text,
+                self::KEY_DATA => $data,
+                self::KEY_TIME => \time(),
+            ]);
 
             return $data;
         }

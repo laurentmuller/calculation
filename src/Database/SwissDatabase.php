@@ -91,6 +91,33 @@ class SwissDatabase extends AbstractDatabase
         sql;
 
     /**
+     * SQL statement to find all.
+     *
+     * @var string
+     */
+    private const SEARCH_ALL = <<<'sql'
+        SELECT
+            street.name as street,
+            city.zip,
+            city.name as city,
+            state.name as state,
+            printf('%s, %s %s', street.name, city.zip, city.name) as display
+        FROM street
+        INNER JOIN city on street.city_id = city.id
+        INNER JOIN state on city.state_id = state.id
+        WHERE
+            street.name LIKE :value
+            OR
+            city.zip LIKE :value
+            OR
+            city.name LIKE :value
+        ORDER BY
+            street.name,
+            city.zip,
+            city.name
+        LIMIT :limit
+        sql;
+    /**
      * SQL statement to find a city.
      *
      * @var string
@@ -152,6 +179,19 @@ class SwissDatabase extends AbstractDatabase
             city.name
         LIMIT :limit
         sql;
+
+    /**
+     * Finds values by searching in streets, zip codes and cities.
+     *
+     * @param string $value the value to search for
+     * @param int    $limit the maximum number of rows to return
+     *
+     * @return array an array, maybe empty, of matching values
+     */
+    public function findAll(string $value, int $limit = 25): array
+    {
+        return $this->search(self::SEARCH_ALL, $value, $limit);
+    }
 
     /**
      * Finds cities.

@@ -81,7 +81,7 @@ class UpdateController extends AbstractController
     public function updateCalculation(EntityManagerInterface $manager, FakerService $service, SuspendEventListenerService $listener): RedirectResponse
     {
         $styles = [0, 1, 2];
-        $faker = $service->getFaker();
+        $generator = $service->getGenerator();
         $states = $this->getCalculationState($manager);
 
         /** @var \App\Entity\Calculation[] $calculations */
@@ -90,23 +90,23 @@ class UpdateController extends AbstractController
         try {
             $listener->disableListeners();
             foreach ($calculations as $calculation) {
-                $style = $faker->randomElement($styles);
+                $style = $generator->randomElement($styles);
                 switch ($style) {
                     case 0:
-                        $calculation->setCustomer($faker->company());
+                        $calculation->setCustomer($generator->company());
                         break;
 
                     case 1:
-                        $calculation->setCustomer($faker->name(Person::GENDER_MALE));
+                        $calculation->setCustomer($generator->name(Person::GENDER_MALE));
                         break;
 
                     default:
-                        $calculation->setCustomer($faker->name(Person::GENDER_FEMALE));
+                        $calculation->setCustomer($generator->name(Person::GENDER_FEMALE));
                         break;
                 }
-                $description = $faker->catchPhrase(); // @phpstan-ignore-line
+                $description = $generator->catchPhrase();
                 $calculation->setDescription($description)
-                    ->setState($faker->randomElement($states));
+                    ->setState($generator->randomElement($states));
             }
 
             $manager->flush();
@@ -130,7 +130,7 @@ class UpdateController extends AbstractController
         $styles = [0, 1, 2];
         $genders = $this->getGenders();
         $accessor = PropertyAccess::createPropertyAccessor();
-        $faker = $service->getFaker();
+        $generator = $service->getGenerator();
 
         /** @var \App\Entity\Customer[] $customers */
         $customers = $manager->getRepository(Customer::class)->findAll();
@@ -138,37 +138,37 @@ class UpdateController extends AbstractController
         try {
             $listener->disableListeners();
             foreach ($customers as $customer) {
-                $style = $faker->randomElement($styles);
-                $gender = $faker->randomElement($genders);
+                $style = $generator->randomElement($styles);
+                $gender = $generator->randomElement($genders);
 
                 switch ($style) {
                     case 0: // company
-                        $this->replace($accessor, $customer, 'company', $faker->company())
+                        $this->replace($accessor, $customer, 'company', $generator->company())
                             ->replace($accessor, $customer, 'title', null)
                             ->replace($accessor, $customer, 'firstName', null)
                             ->replace($accessor, $customer, 'lastName', null)
-                            ->replace($accessor, $customer, 'email', $faker->companyEmail());
+                            ->replace($accessor, $customer, 'email', $generator->companyEmail());
                         break;
                     case 1: // contact
                         $this->replace($accessor, $customer, 'company', null)
-                            ->replace($accessor, $customer, 'title', $faker->title($gender))
-                            ->replace($accessor, $customer, 'firstName', $faker->firstName($gender))
-                            ->replace($accessor, $customer, 'lastName', $faker->lastName())
-                            ->replace($accessor, $customer, 'email', $faker->email());
+                            ->replace($accessor, $customer, 'title', $generator->title($gender))
+                            ->replace($accessor, $customer, 'firstName', $generator->firstName($gender))
+                            ->replace($accessor, $customer, 'lastName', $generator->lastName())
+                            ->replace($accessor, $customer, 'email', $generator->email());
                         break;
                     default: // both
-                        $this->replace($accessor, $customer, 'company', $faker->company())
-                            ->replace($accessor, $customer, 'title', $faker->title($gender))
-                            ->replace($accessor, $customer, 'firstName', $faker->firstName($gender))
-                            ->replace($accessor, $customer, 'lastName', $faker->lastName())
-                            ->replace($accessor, $customer, 'email', $faker->email());
+                        $this->replace($accessor, $customer, 'company', $generator->company())
+                            ->replace($accessor, $customer, 'title', $generator->title($gender))
+                            ->replace($accessor, $customer, 'firstName', $generator->firstName($gender))
+                            ->replace($accessor, $customer, 'lastName', $generator->lastName())
+                            ->replace($accessor, $customer, 'email', $generator->email());
                         break;
                 }
 
                 // other fields
-                $this->replace($accessor, $customer, 'address', $faker->streetAddress())
-                    ->replace($accessor, $customer, 'zipCode', $faker->postcode())
-                    ->replace($accessor, $customer, 'city', $faker->city());
+                $this->replace($accessor, $customer, 'address', $generator->streetAddress())
+                    ->replace($accessor, $customer, 'zipCode', $generator->postcode())
+                    ->replace($accessor, $customer, 'city', $generator->city());
             }
             $manager->flush();
         } finally {

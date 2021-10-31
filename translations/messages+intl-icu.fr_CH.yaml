@@ -7,6 +7,7 @@ counters:
     calculations_update: '{count, plural, =0 {Aucune calculation n''a été mise à jour avec succès.} one {1 calculation a été mise à jour avec succès.} other {# calculations ont été mises à jour avec succès.}}'
     products: '{count, plural, =0 {Aucun article} one {1 article} other {# articles}}'
     products_lower: '{count, plural, =0 {aucun article} one {1 article} other {# articles}}'
+    products_generate: '{count, plural, =0 {Aucun article n''a été générée.} one {1 article a été généré avec succès.} other {# articles ont été générés avec succès.}}'
     categories: '{count, plural, =0 {Aucune catégorie} one {1 catégorie} other {# catégories}}'
     categories_lower: '{count, plural, =0 {aucune catégorie} one {1 catégorie} other {# catégories}}'
     groups: '{count, plural, =0 {Aucun groupe} one {1 groupe} other {# groupes}}'

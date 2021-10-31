@@ -441,22 +441,26 @@ class TestController extends AbstractController
     }
 
     /**
-     * Test service.
+     * Search zip codes, cities and streets from Switzerland.
      *
      * @Route("/swiss", name="test_swiss")
      */
     public function swiss(Request $request, SwissPostService $service): Response
     {
+        $all = $request->get('all');
         $zip = $request->get('zip');
         $city = $request->get('city');
         $street = $request->get('street');
+
         $limit = (int) $request->get('limit', 25);
 
-        if ($zip) {
+        if (null !== $all) {
+            $rows = $service->findAll($all, $limit);
+        } elseif (null !== $zip) {
             $rows = $service->findZip($zip, $limit);
-        } elseif ($city) {
+        } elseif (null !== $city) {
             $rows = $service->findCity($city, $limit);
-        } elseif ($street) {
+        } elseif (null !== $street) {
             $rows = $service->findStreet($street, $limit);
         } else {
             $rows = [];
@@ -464,7 +468,7 @@ class TestController extends AbstractController
 
         $data = [
             'result' => !empty($rows),
-            'query' => $zip ?? $city ?? $street ?? '',
+            'query' => $all ?? $zip ?? $city ?? $street ?? '',
             'limit' => $limit,
             'count' => \count($rows),
             'rows' => $rows,
@@ -691,8 +695,8 @@ class TestController extends AbstractController
      */
     public function verifyAkismetComment(AkismetService $akismetservice, FakerService $fakerService): JsonResponse
     {
-        $faker = $fakerService->getFaker();
-        $comment = $faker->realText(145, 2);
+        $generator = $fakerService->getGenerator();
+        $comment = $generator->realText(145, 2);
         $value = $akismetservice->verifyComment($comment);
         if ($lastError = $akismetservice->getLastError()) {
             return $this->json($lastError);

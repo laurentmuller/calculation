@@ -12,14 +12,17 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Faker\CalculationProvider;
+use App\Faker\CalculationStateProvider;
+use App\Faker\CategoryProvider;
 use App\Faker\CustomAddress;
 use App\Faker\CustomCompany;
 use App\Faker\CustomPerson;
 use App\Faker\CustomPhoneNumber;
+use App\Faker\Factory;
+use App\Faker\Generator;
+use App\Faker\ProductProvider;
+use App\Faker\UserProvider;
 use Doctrine\ORM\EntityManagerInterface;
-use Faker\Factory;
-use Faker\Generator;
 
 /**
  * Service for the Faker bundle.
@@ -30,7 +33,7 @@ use Faker\Generator;
  */
 class FakerService
 {
-    private ?Generator $faker = null;
+    private ?Generator $generator = null;
 
     private EntityManagerInterface $manager;
 
@@ -45,19 +48,28 @@ class FakerService
     /**
      * Gets the faker generator.
      */
-    public function getFaker(): Generator
+    public function getGenerator(): Generator
     {
-        if (null === $this->faker) {
+        if (null === $this->generator) {
+            $manager = $this->manager;
             $locale = \Locale::getDefault();
-            $faker = Factory::create($locale);
-            $faker->addProvider(new CustomPerson($faker));
-            $faker->addProvider(new CustomCompany($faker));
-            $faker->addProvider(new CustomAddress($faker));
-            $faker->addProvider(new CustomPhoneNumber($faker));
-            $faker->addProvider(new CalculationProvider($faker, $this->manager));
-            $this->faker = $faker;
+            $generator = Factory::create($locale);
+
+            // custom providers
+            $generator->addProvider(new CustomPerson($generator));
+            $generator->addProvider(new CustomCompany($generator));
+            $generator->addProvider(new CustomAddress($generator));
+            $generator->addProvider(new CustomPhoneNumber($generator));
+
+            // entity providers
+            $generator->addProvider(new UserProvider($generator, $manager));
+            $generator->addProvider(new ProductProvider($generator, $manager));
+            $generator->addProvider(new CategoryProvider($generator, $manager));
+            $generator->addProvider(new CalculationStateProvider($generator, $manager));
+
+            $this->generator = $generator;
         }
 
-        return $this->faker;
+        return $this->generator;
     }
 }

@@ -96,7 +96,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Import streets and cities for Switzerland.
+     * Import zip codes, cities and streets from Switzerland.
      *
      * @Route("/import", name="admin_import")
      * @IsGranted("ROLE_ADMIN")
@@ -249,9 +249,9 @@ class AdminController extends AbstractController
     public function updateProduct(Request $request, ProductUpdater $updater): Response
     {
         // create form
+        $application = $this->getApplication();
         $query = $updater->createUpdateQuery();
         $form = $updater->createForm($query);
-        $application = $this->getApplication();
 
         // handle request
         if ($this->handleRequestForm($request, $form)) {

@@ -7,7 +7,7 @@ parameters:
     # fixed
     locale:             fr_CH
     app_name:           Calculation
-    app_version:        1.5.3.9
+    app_version:        1.5.3.10
     app_owner:          bibi.nu
     app_owner_url:      https://www.bibi.nu
     app_owner_city:     Montévraz

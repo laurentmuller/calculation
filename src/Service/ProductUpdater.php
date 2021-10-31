@@ -181,16 +181,16 @@ class ProductUpdater
      */
     public function saveUpdateQuery(ProductUpdateQuery $query): void
     {
-        $this->setSessionValue('product.update.category', $query->getCategoryId());
-        $this->setSessionValue('product.update.simulated', $query->isSimulated());
-        $this->setSessionValue('product.update.round', $query->isRound());
-        if ($query->isPercent()) {
-            $this->setSessionValue('product.update.percent', $query->getValue());
-            $this->setSessionValue('product.update.type', ProductUpdateQuery::UPDATE_PERCENT);
-        } else {
-            $this->setSessionValue('product.update.fixed', $query->getValue());
-            $this->setSessionValue('product.update.type', ProductUpdateQuery::UPDATE_FIXED);
-        }
+        $percent = $query->isPercent();
+        $key = $percent ? 'product.update.percent' : 'product.update.fixed';
+        $value = $percent ? ProductUpdateQuery::UPDATE_PERCENT : ProductUpdateQuery::UPDATE_FIXED;
+
+        $this->setSessionValues([
+            'product.update.category' => $query->getCategoryId(),
+            'product.update.simulated' => $query->isSimulated(),
+            'product.update.round' => $query->isRound(),
+            $key => $value,
+        ]);
     }
 
     /**

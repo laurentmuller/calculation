@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Service to import zip codes, cities and street names from Switzerland.
+ * Service to import zip codes, cities and streets from Switzerland.
  *
  * @author Laurent Muller
  */
@@ -83,7 +83,6 @@ class SwissPostUpdater
         $this->translator = $translator;
         $this->application = $application;
         $this->factory = $factory;
-
         $this->databaseName = $service->getDatabaseName();
         $this->dataDirectory = $service->getDataDirectory();
     }
@@ -94,12 +93,12 @@ class SwissPostUpdater
     public function createForm(): FormInterface
     {
         $builder = $this->factory->createBuilder(FormType::class);
-        $helper = new FormHelper($builder, 'import.');
+        $helper = new FormHelper($builder, 'swisspost.fields.');
 
         // file constraints
         $constraints = new File([
             'mimeTypes' => ['application/zip', 'application/x-zip-compressed'],
-            'mimeTypesMessage' => $this->trans('import.error.mime_type'),
+            'mimeTypesMessage' => $this->trans('swisspost.error.mime_type'),
         ]);
 
         // fields
@@ -122,7 +121,7 @@ class SwissPostUpdater
 
         // check source file
         if (null === $sourceFile || '' === $sourceFile) {
-            return $this->setError('import.error.file_empty');
+            return $this->setError('file_empty');
         }
 
         // get path and name
@@ -136,17 +135,17 @@ class SwissPostUpdater
 
         // exist?
         if (!FileUtils::exists($sourceFile)) {
-            return $this->setError('import.error.file_not_exist');
+            return $this->setError('file_not_exist');
         }
 
         // create a temporary file
         if (null === $temp_name = FileUtils::tempfile('sql')) {
-            return $this->setError('import.error.temp_file');
+            return $this->setError('temp_file');
         }
 
         // same as current database?
         if (0 === \strcasecmp($sourceFile, $this->databaseName)) {
-            return $this->setError('import.error.open_database');
+            return $this->setError('open_database');
         }
 
         try {
@@ -173,7 +172,7 @@ class SwissPostUpdater
 
             // imported data?
             if (0 === $this->results->getValids()) {
-                return $this->setError('import.error.empty_archive', ['%name%' => $this->sourceName]);
+                return $this->setError('empty_archive', ['%name%' => $this->sourceName]);
             }
         } finally {
             // close all
@@ -253,14 +252,14 @@ class SwissPostUpdater
         // open archive
         $this->archive = new \ZipArchive();
         if (true !== $this->archive->open($sourceFile)) {
-            $this->setError('import.error.open_archive', ['%name%' => $this->sourceName]);
+            $this->setError('open_archive', ['%name%' => $this->sourceName]);
 
             return false;
         }
 
         // check if only 1 entry is present
         if (1 !== $this->archive->count()) {
-            $this->setError('import.error.entry_not_one', ['%name%' => $this->sourceName]);
+            $this->setError('entry_not_one', ['%name%' => $this->sourceName]);
             $this->closeArchive();
 
             return false;
@@ -286,7 +285,7 @@ class SwissPostUpdater
         // open entry
         $streamName = (string) $this->archive->getNameIndex(0);
         if (false === $this->stream = $this->archive->getStream($streamName)) {
-            $this->setError('import.error.open_stream', [
+            $this->setError('open_stream', [
                 '%name%' => $this->sourceName,
                 '%streamName%' => $streamName,
             ]);
@@ -409,7 +408,7 @@ class SwissPostUpdater
         }
 
         if (!$validity instanceof \DateTimeInterface) {
-            $this->setError('import.error.no_validity', ['%name%' => $this->sourceName]);
+            $this->setError('no_validity', ['%name%' => $this->sourceName]);
 
             return false;
         }
@@ -417,7 +416,7 @@ class SwissPostUpdater
         $this->results->setValidity($validity);
         $lastImport = $this->getLastImport();
         if ($lastImport instanceof \DateTimeInterface && $validity <= $lastImport) {
-            $this->setError('import.error.validity_before', [
+            $this->setError('validity_before', [
                 '%validity%' => FormatUtils::formatDate($validity, \IntlDateFormatter::LONG),
                 '%import%' => FormatUtils::formatDate($lastImport, \IntlDateFormatter::LONG),
                 '%name%' => $this->sourceName,
@@ -435,7 +434,7 @@ class SwissPostUpdater
     private function renameDatabase(string $source): void
     {
         if ($this->results->isValid() && !FileUtils::rename($source, $this->databaseName, true)) {
-            $this->setError('import.error.rename_database');
+            $this->setError('rename_database');
         }
     }
 
@@ -444,7 +443,7 @@ class SwissPostUpdater
      */
     private function setError(string $id, array $parameters = []): SwissPostUpdateResult
     {
-        return $this->results->setError($this->trans($id, $parameters));
+        return $this->results->setError($this->trans("swisspost.error.$id", $parameters));
     }
 
     /**

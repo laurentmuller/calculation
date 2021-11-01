@@ -20,16 +20,18 @@ use Doctrine\ORM\EntityManagerInterface;
  *
  * @author Laurent Muller
  *
- *  @template-extends EntityProvider<Product>
+ * @template-extends EntityProvider<Product>
  */
 class ProductProvider extends EntityProvider
 {
+    /** @var string[] */
+    private static array $adjective = ['Petit', 'Ergonomique', 'Rustique', 'Intelligent', 'Magnifique', 'Incroyable', 'Fantastique', 'Pratique', 'Elégant', 'Génial', 'Enorme', 'Médiocre', 'Synergique', 'Robuste', 'Léger', 'Aérodynamique', 'Durable'];
 
-    protected static $productName = [
-        'adjective' => ['Small', 'Ergonomic', 'Rustic', 'Intelligent', 'Gorgeous', 'Incredible', 'Fantastic', 'Practical', 'Sleek', 'Awesome', 'Enormous', 'Mediocre', 'Synergistic', 'Heavy Duty', 'Lightweight', 'Aerodynamic', 'Durable'],
-        'material' => ['Steel', 'Wooden', 'Concrete', 'Plastic', 'Cotton', 'Granite', 'Rubber', 'Leather', 'Silk', 'Wool', 'Linen', 'Marble', 'Iron', 'Bronze', 'Copper', 'Aluminum', 'Paper'],
-        'product' => ['Chair', 'Car', 'Computer', 'Gloves', 'Pants', 'Shirt', 'Table', 'Shoes', 'Hat', 'Plate', 'Knife', 'Bottle', 'Coat', 'Lamp', 'Keyboard', 'Bag', 'Bench', 'Clock', 'Watch', 'Wallet'],
-    ];
+    /** @var string[] */
+    private static array $material = ['acier', 'bois', 'béton', 'plastique', 'coton', 'granit', 'caoutchouc', 'cuir', 'soie', 'laine', 'lin', 'marbre', 'fer', 'bronze', 'cuivre', 'aluminium', 'papier'];
+
+    /** @var string[] */
+    private static array $product = ['tabouret', 'camoin', 'ordinateur', 'gants', 'pantalon', 'chemisier', 'tabouret', 'chausse-pied', 'chapeau', 'vase', 'couteau', 'récipient', 'manteau', 'carnet', 'clavier', 'sac', 'banc', 'stylo', 'boitier', 'portefeuille'];
 
     /**
      * Constructor.
@@ -53,6 +55,18 @@ class ProductProvider extends EntityProvider
     public function productExist(string $description): bool
     {
         return null !== $this->getRepository()->findOneBy(['description' => $description]);
+    }
+
+    /**
+     * Gets a random product name.
+     */
+    public function productName(): string
+    {
+        $adjective = static::randomElement(self::$adjective);
+        $product = static::randomElement(self::$product);
+        $material = static::randomElement(self::$material);
+
+        return "$adjective $product en $material";
     }
 
     /**
@@ -98,15 +112,5 @@ class ProductProvider extends EntityProvider
     public function productUnit(): ?string
     {
         return $this->distinctValue('unit');
-    }
-
-    /**
-     * Gets a product name.
-     */
-    public function productName(): string
-    {
-        return static::randomElement(static::$productName['adjective'])
-            . ' ' . static::randomElement(static::$productName['material'])
-            . ' ' . static::randomElement(static::$productName['product']);
     }
 }

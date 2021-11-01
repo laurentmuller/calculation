@@ -35,16 +35,15 @@ class ProductGenerator extends AbstractEntityGenerator
             $products = [];
             for ($i = 0; $i < $count; ++$i) {
                 $product = new Product();
-                //$description = $generator->sentence(3);
                 $description = $generator->productName();
                 while ($generator->productExist($description)) {
                     $description = $generator->productName();
                 }
                 $product->setDescription($description)
-                    ->setCategory($generator->category())
                     ->setPrice($generator->randomFloat(2, 1, 50))
                     ->setSupplier($generator->productSupplier())
-                    ->setUnit($generator->productUnit());
+                    ->setUnit($generator->productUnit())
+                    ->setCategory($generator->category());
 
                 // save
                 if (!$simulate) {

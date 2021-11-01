@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
  *
  * @author Laurent Muller
  *
- *  @template-extends EntityProvider<User>
+ * @template-extends EntityProvider<User>
  */
 class UserProvider extends EntityProvider
 {

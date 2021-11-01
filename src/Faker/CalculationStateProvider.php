@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
  *
  * @author Laurent Muller
  *
- *  @template-extends EntityProvider<CalculationState>
+ * @template-extends EntityProvider<CalculationState>
  */
 class CalculationStateProvider extends EntityProvider
 {

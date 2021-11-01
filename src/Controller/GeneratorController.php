@@ -43,7 +43,7 @@ class GeneratorController extends AbstractController
     /**
      * @Route("", name="generate")
      */
-    public function generate(Request $request): Response
+    public function generate(): Response
     {
         $data = [
             'count' => $this->getSessionInt(self::KEY_COUNT, 1),

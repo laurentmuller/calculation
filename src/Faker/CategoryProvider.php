@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
  *
  * @author Laurent Muller
  *
- *  @template-extends EntityProvider<Category>
+ * @template-extends EntityProvider<Category>
  */
 class CategoryProvider extends EntityProvider
 {

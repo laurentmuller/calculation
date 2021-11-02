@@ -357,8 +357,7 @@ class OpenWeatherController extends AbstractController
 
         $helper->field(self::KEY_QUERY)
             ->updateOption('constraints', new Length(['min' => 2]))
-            ->updateAttribute('placeholder', 'openweather.search.place_holder')
-            ->updateAttribute('minlength', 2)
+            ->updateAttributes(['placeholder' => 'openweather.search.place_holder', 'minlength' => 2])
             ->add(SearchType::class);
 
         $helper->field(self::KEY_UNITS)

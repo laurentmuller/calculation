@@ -114,8 +114,7 @@ class CalculationUpdater
             ->addCheckboxType();
 
         $helper->field('confirm')
-            ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
-            ->updateAttribute('disabled', $query->isSimulated() ? 'disabled' : null)
+            ->updateAttributes(['data-error' => $this->trans('generate.error.confirm'), 'disabled' => $query->isSimulated() ? 'disabled' : null])
             ->notMapped()
             ->addCheckboxType();
 

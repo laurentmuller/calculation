@@ -100,10 +100,7 @@ class ProfileChangePasswordType extends AbstractEntityType
         // current password
         $helper->field('current_password')
             ->label('user.password.current')
-            ->updateOption('constraints', [
-                new NotBlank(),
-                new UserPassword(['message' => 'current_password.invalid']),
-            ])
+            ->updateOption('constraints', [new NotBlank(), new UserPassword(['message' => 'current_password.invalid'])])
             ->notMapped()
             ->autocomplete('current-password')
             ->add(PasswordType::class);

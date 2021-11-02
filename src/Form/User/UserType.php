@@ -80,9 +80,10 @@ class UserType extends AbstractEntityType
 
         $helper->field('lastLogin')
             ->widgetClass('text-center')
-            ->updateOption('date_format', PlainType::FORMAT_SHORT)
-            ->updateOption('time_format', PlainType::FORMAT_SHORT)
-            ->updateOption('empty_value', 'common.value_none')
+            ->updateOptions([
+                'date_format' => PlainType::FORMAT_SHORT,
+                'time_format' => PlainType::FORMAT_SHORT,
+                'empty_value' => 'common.value_none', ])
             ->addPlainType(true);
 
         $helper->field('imageFile')

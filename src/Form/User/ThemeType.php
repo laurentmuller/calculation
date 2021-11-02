@@ -125,10 +125,11 @@ class ThemeType extends AbstractHelperType
             ];
         };
         $helper->field('theme')
-            ->updateOption('choice_label', 'name')
-            ->updateOption('choice_value', 'name')
-            ->updateOption('choice_attr', $choice_attr)
-            ->updateOption('choice_translation_domain', false)
+            ->updateOptions([
+                'choice_label' => 'name',
+                'choice_value' => 'name',
+                'choice_attr' => $choice_attr,
+                'choice_translation_domain' => false, ])
             ->addChoiceType($themes);
 
         return $this;

@@ -61,10 +61,11 @@ class UserCommentType extends AbstractType
             ->add(TinyMceEditorType::class);
 
         $helper->field('attachments')
-            ->updateOption('multiple', true)
-            ->updateOption('maxfiles', 3)
-            ->updateOption('maxsize', '10mi')
-            ->updateOption('maxsizetotal', '30mi')
+            ->updateOptions([
+                'multiple' => true,
+                'maxfiles' => 3,
+                'maxsize' => '10mi',
+                'maxsizetotal' => '30mi', ])
             ->notRequired()
             ->addFileType();
 

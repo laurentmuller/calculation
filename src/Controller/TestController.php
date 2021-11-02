@@ -299,10 +299,7 @@ class TestController extends AbstractController
         $helper->field('input')
             ->widgetClass('password-strength')
             ->minLength(6)
-            ->updateOption('constraints', [
-                new Length(['min' => 6]),
-                $constraint,
-            ])
+            ->updateOption('constraints', [new Length(['min' => 6]), $constraint])
             ->addTextType();
 
         foreach ($options as $option) {
@@ -316,11 +313,7 @@ class TestController extends AbstractController
 
         $helper->field('captcha')
             ->label('captcha.label')
-            ->updateOption('image', $service->generateImage())
-            ->updateOption('constraints', [
-                new NotBlank(),
-                new Captcha(),
-            ])
+            ->updateOptions(['image' => $service->generateImage(), 'constraints' => [new NotBlank(), new Captcha()]])
             ->add(CaptchaImageType::class);
 
         $helper->field('alpha')

@@ -199,12 +199,13 @@ class FormHelper
             throw new UnexpectedValueException($entryType, FormTypeInterface::class);
         }
 
-        return $this->updateOption('entry_type', $entryType)
-            ->updateOption('by_reference', false)
-            ->updateOption('allow_add', $allow_add)
-            ->updateOption('allow_delete', $allow_delete)
-            ->updateOption('label', false)
-            ->updateOption('entry_options', ['label' => false])
+        return $this->updateOptions([
+                'entry_type' => $entryType,
+                'by_reference' => false,
+                'allow_add' => $allow_add,
+                'allow_delete' => $allow_delete,
+                'label' => false,
+                'entry_options' => ['label' => false], ])
             ->add(CollectionType::class);
     }
 
@@ -313,7 +314,7 @@ class FormHelper
     public function addPercentType(int $min = \PHP_INT_MIN, int $max = \PHP_INT_MAX, float $step = 1.0): self
     {
         $this->widgetClass('text-right')
-            ->updateOption('html5', true)
+            ->updateOptions(['html5' => true, 'rounding_mode' => \NumberFormatter::ROUND_HALFUP])
             ->autocomplete('off');
 
         if (\PHP_INT_MIN !== $min) {
@@ -325,9 +326,6 @@ class FormHelper
         if (-1 !== $step) {
             $this->updateAttribute('step', $step);
         }
-
-        // needed for Symfony v5.1
-        $this->updateOption('rounding_mode', \NumberFormatter::ROUND_HALFUP);
 
         return $this->add(PercentType::class);
     }
@@ -478,10 +476,8 @@ class FormHelper
     public function addVichImageType(): self
     {
         //see https://github.com/kartik-v/bootstrap-fileinput
-        $this->updateOption('translation_domain', 'messages')
+        $this->updateOptions(['translation_domain' => 'messages', 'download_uri' => false])
             ->updateAttribute('accept', 'image/gif,image/jpeg,image/png,image/bmp')
-            //->updateAttribute('accept', 'image/*')
-            ->updateOption('download_uri', false)
             ->notRequired();
 
         // labels
@@ -794,6 +790,21 @@ class FormHelper
     }
 
     /**
+     * Update attributes.
+     *
+     * @param array<string, mixed> $attributes the attributes names and values
+     * @param bool                 $force      true to put the option, even if the value is null
+     */
+    public function updateAttributes(array $attributes, bool $force = false): self
+    {
+        foreach ($attributes as $name => $value) {
+            $this->updateAttribute($name, $value, $force);
+        }
+
+        return $this;
+    }
+
+    /**
      * Updates a help attribute.
      *
      * @param string $name  the attribute name
@@ -827,6 +838,21 @@ class FormHelper
     public function updateOption(string $name, $value, bool $force = false): self
     {
         return $this->updateEntry($this->options, $name, $value, $force);
+    }
+
+    /**
+     * Update options.
+     *
+     * @param array<string, mixed> $options the options names and values
+     * @param bool                 $force   true to put the option, even if the value is null
+     */
+    public function updateOptions(array $options, bool $force = false): self
+    {
+        foreach ($options as $name => $value) {
+            $this->updateOption($name, $value, $force);
+        }
+
+        return $this;
     }
 
     /**

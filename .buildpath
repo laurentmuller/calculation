@@ -187,32 +187,12 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/markbaker/complex/classes/src/functions">
+	<buildpathentry kind="src" path="vendor/markbaker/complex/classes/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry excluding="functions/|operations/" kind="src" path="vendor/markbaker/complex/classes/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/markbaker/complex/classes/src/operations">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/markbaker/matrix/classes/src/Functions">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry excluding="Functions/|Operations/" kind="src" path="vendor/markbaker/matrix/classes/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/markbaker/matrix/classes/src/Operations">
+	<buildpathentry kind="src" path="vendor/markbaker/matrix/classes/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

@@ -32,13 +32,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class GeneratorController extends AbstractController
 {
-    private const ENTITY_CALCULATION = 'calculation.name';
-    private const ENTITY_CUSTOMER = 'customer.name';
-    private const ENTITY_PRODUCT = 'product.name';
-
     private const KEY_COUNT = 'admin.generate.count';
     private const KEY_ENTITY = 'admin.generate.entity';
     private const KEY_SIMULATE = 'admin.generate.simulate';
+
+    private const ROUTE_CALCULATION = 'generate_calculation';
+    private const ROUTE_CUSTOMER = 'generate_customer';
+    private const ROUTE_PRODUCT = 'generate_product';
 
     /**
      * @Route("", name="generate")
@@ -47,7 +47,7 @@ class GeneratorController extends AbstractController
     {
         $data = [
             'count' => $this->getSessionInt(self::KEY_COUNT, 1),
-            'entity' => $this->getSessionString(self::KEY_ENTITY, self::ENTITY_CUSTOMER),
+            'entity' => $this->getSessionString(self::KEY_ENTITY),
             'simulate' => $this->isSessionBool(self::KEY_SIMULATE, true),
         ];
         $helper = $this->createFormHelper('generate.fields.', $data);
@@ -56,14 +56,13 @@ class GeneratorController extends AbstractController
             ->updateOption('choice_attr', function (string $choice, string $key): array {
                 return ['data-key' => $key];
             })->addChoiceType([
-                self::ENTITY_CUSTOMER => $this->generateUrl('generate_customer'),
-                self::ENTITY_CALCULATION => $this->generateUrl('generate_calculation'),
-                self::ENTITY_PRODUCT => $this->generateUrl('generate_product'),
+                'customer.name' => $this->generateUrl(self::ROUTE_CUSTOMER),
+                'calculation.name' => $this->generateUrl(self::ROUTE_CALCULATION),
+                'product.name' => $this->generateUrl(self::ROUTE_PRODUCT),
             ]);
 
         $helper->field('count')
-            ->updateAttribute('min', 1)
-            ->updateAttribute('max', 20)
+            ->updateAttributes(['min' => 1, 'max' => 20])
             ->addNumberType(0);
 
         $helper->field('simulate')
@@ -74,8 +73,7 @@ class GeneratorController extends AbstractController
 
         $helper->field('confirm')
             ->notMapped()
-            ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
-            ->updateAttribute('disabled', $data['simulate'] ? 'disabled' : null)
+            ->updateAttributes(['data-error' => $this->trans('generate.error.confirm'), 'disabled' => $data['simulate'] ? 'disabled' : null])
             ->addCheckboxType();
 
         return $this->renderForm('admin/generate.html.twig', [
@@ -90,7 +88,7 @@ class GeneratorController extends AbstractController
      */
     public function generateCalculations(Request $request, CalculationGenerator $generator): JsonResponse
     {
-        return $this->generateEntities($request, $generator, self::ENTITY_CALCULATION);
+        return $this->generateEntities($request, $generator);
     }
 
     /**
@@ -100,7 +98,7 @@ class GeneratorController extends AbstractController
      */
     public function generateCustomers(Request $request, CustomerGenerator $generator): JsonResponse
     {
-        return $this->generateEntities($request, $generator, self::ENTITY_CUSTOMER);
+        return $this->generateEntities($request, $generator);
     }
 
     /**
@@ -110,21 +108,22 @@ class GeneratorController extends AbstractController
      */
     public function generateProducts(Request $request, ProductGenerator $generator): JsonResponse
     {
-        return $this->generateEntities($request, $generator, self::ENTITY_PRODUCT);
+        return $this->generateEntities($request, $generator);
     }
 
     /**
      * Generate entities.
      */
-    private function generateEntities(Request $request, GeneratorInterface $generator, string $entity): JsonResponse
+    private function generateEntities(Request $request, GeneratorInterface $generator): JsonResponse
     {
         $count = $this->getRequestInt($request, 'count');
         $simulate = $this->getRequestBoolean($request, 'simulate', true);
+        $entity = $this->generateUrl($request->attributes->get('_route', self::ROUTE_CUSTOMER));
 
         $this->setSessionValues([
             self::KEY_COUNT => $count,
-            self::KEY_ENTITY => $entity,
             self::KEY_SIMULATE => $simulate,
+            self::KEY_ENTITY => $entity,
         ]);
 
         return $generator->generate($count, $simulate);

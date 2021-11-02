@@ -209,13 +209,17 @@ trait SessionTrait
      * Sets a session attribute.
      *
      * @param string $key   the attribute name
-     * @param mixed  $value the value to save
+     * @param mixed  $value the attribute value or null to remove
      */
     protected function setSessionValue(string $key, $value): self
     {
         if ($session = $this->getSession()) {
             $sessionKey = $this->getSessionKey($key);
-            $session->set($sessionKey, $value);
+            if (null === $value) {
+                $session->remove($key);
+            } else {
+                $session->set($sessionKey, $value);
+            }
         }
 
         return $this;

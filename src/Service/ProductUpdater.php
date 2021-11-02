@@ -94,17 +94,19 @@ class ProductUpdater
 
         $helper->field('products')
             ->label('product.list.title')
-            ->updateOption('multiple', true)
-            ->updateOption('expanded', true)
-            ->updateOption('class', Product::class)
-            ->updateOption('choices', $this->getAllProducts())
-            ->updateOption('choice_label', 'description')
-            ->updateOption('choice_attr', static function (Product $product) {
-                return [
-                    'price' => $product->getPrice(),
-                    'category' => $product->getCategoryId(),
-                ];
-            })
+            ->updateOptions([
+                'multiple' => true,
+                'expanded' => true,
+                'class' => Product::class,
+                'choice_label' => 'description',
+                'choices' => $this->getAllProducts(),
+                'choice_attr' => static function (Product $product) {
+                    return [
+                        'price' => $product->getPrice(),
+                        'category' => $product->getCategoryId(),
+                    ];
+                },
+            ])
             ->add(EntityType::class);
 
         $helper->field('percent')

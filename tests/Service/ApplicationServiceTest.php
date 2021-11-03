@@ -43,7 +43,7 @@ class ApplicationServiceTest extends KernelTestCase implements ApplicationServic
     public function testService(): void
     {
         /** @var ApplicationService $service */
-        $service = self::$container->get(ApplicationService::class);
+        $service = static::getContainer()->get(ApplicationService::class);
 
         $service->setProperties([
             self::P_CUSTOMER_NAME => 'customer_name',

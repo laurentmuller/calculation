@@ -111,7 +111,7 @@ class CalculationServiceTest extends KernelTestCase
     protected function getManager(): EntityManager
     {
         /** @var ManagerRegistry $registry */
-        $registry = self::$container->get('doctrine');
+        $registry = static::getContainer()->get('doctrine');
 
         /** @var EntityManager $manager */
         $manager = $registry->getManager();
@@ -122,9 +122,9 @@ class CalculationServiceTest extends KernelTestCase
     protected function getService(EntityManager $manager): CalculationService
     {
         /** @var ApplicationService $application */
-        $application = self::$container->get(ApplicationService::class);
+        $application = static::getContainer()->get(ApplicationService::class);
         /** @var TranslatorInterface $translator */
-        $translator = self::$container->get(TranslatorInterface::class);
+        $translator = static::getContainer()->get(TranslatorInterface::class);
 
         return new CalculationService($manager, $application, $translator);
     }

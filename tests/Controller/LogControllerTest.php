@@ -30,7 +30,7 @@ class LogControllerTest extends AbstractControllerTest
         parent::setUp();
 
         /** @var LoggerInterface $logger */
-        $logger = self::$container->get(LoggerInterface::class);
+        $logger = static::getContainer()->get(LoggerInterface::class);
         $logger->info('LogControllerTest: A message for testing purposes.');
     }
 

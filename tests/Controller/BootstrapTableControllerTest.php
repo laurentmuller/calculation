@@ -41,7 +41,7 @@ class BootstrapTableControllerTest extends AbstractControllerTest
         parent::setUp();
 
         /** @var LoggerInterface $logger */
-        $logger = self::$container->get(LoggerInterface::class);
+        $logger = static::getContainer()->get(LoggerInterface::class);
         $logger->info('BootstrapTableControllerTest: A message for testing purposes.');
     }
 

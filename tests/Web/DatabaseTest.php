@@ -112,7 +112,7 @@ class DatabaseTest extends KernelTestCase
          * @var AbstractRepository $repository
          * @psalm-var AbstractRepository<T> $repository
          */
-        $repository = self::$container->get($className);
+        $repository = static::getContainer()->get($className);
         $this->assertNotNull($repository);
 
         $result = $repository->findAll();
@@ -135,7 +135,7 @@ class DatabaseTest extends KernelTestCase
     public function testUser(string $username, string $role): void
     {
         /** @var UserRepository $repository */
-        $repository = self::$container->get(UserRepository::class);
+        $repository = static::getContainer()->get(UserRepository::class);
         $this->assertNotNull($repository);
 
         /** @var User $user */

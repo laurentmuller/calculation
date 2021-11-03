@@ -60,7 +60,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
         $adminRight = EntityVoter::getRoleAdmin()->getRights();
 
         /** @var ApplicationService $application */
-        $application = self::$container->get(ApplicationService::class);
+        $application = static::getContainer()->get(ApplicationService::class);
         $application->setProperties([
             ApplicationServiceInterface::P_USER_RIGHTS => $userRight,
             ApplicationServiceInterface::P_ADMIN_RIGHTS => $adminRight,
@@ -102,7 +102,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     protected function loadUser(string $username, bool $verify = true): ?User
     {
         /** @var UserRepository $repository */
-        $repository = self::$container->get(UserRepository::class);
+        $repository = static::getContainer()->get(UserRepository::class);
         $this->assertNotNull($repository, 'The user respository is null.');
 
         /** @var User $user */

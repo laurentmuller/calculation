@@ -33,7 +33,7 @@ class OpenWeatherServiceTest extends KernelTestCase
         self::bootKernel();
 
         /** @var OpenWeatherService $service */
-        $service = self::$container->get(OpenWeatherService::class);
+        $service = static::getContainer()->get(OpenWeatherService::class);
         $this->service = $service;
     }
 

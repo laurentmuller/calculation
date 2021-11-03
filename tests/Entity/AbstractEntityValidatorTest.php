@@ -36,11 +36,9 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        static::bootKernel();
 
         /** @var ValidatorInterface $validator */
-        $validator = self::$container->get(ValidatorInterface::class);
-
+        $validator = static::getContainer()->get(ValidatorInterface::class);
         $this->validator = $validator;
     }
 
@@ -54,7 +52,7 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
     protected function getManager(): EntityManager
     {
         /** @var ManagerRegistry $doctrine */
-        $doctrine = self::$container->get('doctrine');
+        $doctrine = static::getContainer()->get('doctrine');
 
         /** @var EntityManager $manager */
         $manager = $doctrine->getManager();

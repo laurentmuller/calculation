@@ -123,7 +123,7 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
     protected static function getManager(): EntityManager
     {
         /** @var ManagerRegistry $doctrine */
-        $doctrine = self::$container->get('doctrine');
+        $doctrine = static::getContainer()->get('doctrine');
 
         /** @var EntityManager $manager */
         $manager = $doctrine->getManager();

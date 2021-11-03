@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
- * Unit test for EntityVoter class.
+ * Unit test for {@link App\Security\EntityVoter} class.
  *
  * @author Laurent Muller
  *

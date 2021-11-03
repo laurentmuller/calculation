@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 /**
- * Unit test for {@link App\Controller\AboutController} class.
+ * Unit test for {@link App\Controller\AbstractController} class.
  *
  * @author Laurent Muller
  */

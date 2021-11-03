@@ -16,7 +16,7 @@ use App\Entity\Customer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for SearchTrait.
+ * Unit test for {@link App\Traits\SearchTrait} class.
  *
  * @author Laurent Muller
  */

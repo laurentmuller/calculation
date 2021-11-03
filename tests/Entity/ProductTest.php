@@ -17,7 +17,7 @@ use App\Entity\Group;
 use App\Entity\Product;
 
 /**
- * Unit test for validate product constraints.
+ * Unit test for {@link App\Entity\Product} class.
  *
  * @author Laurent Muller
  */

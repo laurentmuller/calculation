@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\GlobalMargin;
 
 /**
- * Unit test for validate global margin constraints.
+ * Unit test for {@link App\Entity\GlobalMargin} class.
  *
  * @author Laurent Muller
  */

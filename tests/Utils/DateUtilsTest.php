@@ -16,7 +16,7 @@ use App\Util\DateUtils;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for DateUtils.
+ * Unit test for {@link App\Util\DateUtils} class.
  *
  * @author Laurent Muller
  *

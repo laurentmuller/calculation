@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\Tests\Data\Database;
+use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Trait to manage database test.
@@ -45,5 +47,19 @@ trait DatabaseTrait
             self::$database->close();
             self::$database = Database::deleteDatabase();
         }
+    }
+
+    /**
+     * Gets the entity manager.
+     */
+    protected function getManager(): EntityManager
+    {
+        /** @var ManagerRegistry $registry */
+        $registry = static::getContainer()->get('doctrine');
+
+        /** @var EntityManager $manager */
+        $manager = $registry->getManager();
+
+        return $manager;
     }
 }

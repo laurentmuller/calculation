@@ -14,13 +14,11 @@ namespace App\Tests\Entity;
 
 use App\Entity\AbstractEntity;
 use App\Tests\DatabaseTrait;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Abstract unit test for validate entity constraints.
+ * Unit test for {@link App\Entity\AbstractEntity} class.
  *
  * @author Laurent Muller
  */
@@ -47,17 +45,6 @@ abstract class AbstractEntityValidatorTest extends KernelTestCase
         $manager = $this->getManager();
         $manager->remove($object);
         $manager->flush();
-    }
-
-    protected function getManager(): EntityManager
-    {
-        /** @var ManagerRegistry $doctrine */
-        $doctrine = static::getContainer()->get('doctrine');
-
-        /** @var EntityManager $manager */
-        $manager = $doctrine->getManager();
-
-        return $manager;
     }
 
     protected function saveEntity(AbstractEntity $object): void

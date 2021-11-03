@@ -16,7 +16,7 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 
 /**
- * Unit test for validate calculation constraints.
+ * Unit test for {@link App\Entity\Calculation} class.
  *
  * @author Laurent Muller
  */

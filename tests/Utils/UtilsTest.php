@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Unit test for Utils.
+ * Unit test for {@link App\Util\Utils} class.
  *
  * @author Laurent Muller
  *

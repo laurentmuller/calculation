@@ -16,7 +16,7 @@ use App\Service\OpenWeatherService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Test case for OpenWeatherService.
+ * Unit test for {@link App\Service\OpenWeatherService} class.
  *
  * @author Laurent Muller
  */

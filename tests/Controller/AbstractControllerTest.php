@@ -14,12 +14,11 @@ namespace App\Tests\Controller;
 
 use App\Entity\AbstractEntity;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * Unit test for {@link App\Controller\AboutController} class.
  * Asbtract unit test for controllers.
  *
  * @author Laurent Muller
@@ -115,19 +114,5 @@ abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
         }
 
         return null;
-    }
-
-    /**
-     * Gets the entity manager.
-     */
-    protected static function getManager(): EntityManager
-    {
-        /** @var ManagerRegistry $doctrine */
-        $doctrine = static::getContainer()->get('doctrine');
-
-        /** @var EntityManager $manager */
-        $manager = $doctrine->getManager();
-
-        return $manager;
     }
 }

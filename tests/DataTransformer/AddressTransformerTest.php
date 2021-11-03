@@ -18,7 +18,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Mime\Address;
 
 /**
- * AddressTransformer test case.
+ * Test for the {@link App\Form\DataTransformer\AddressTransformer} class.
  *
  * @author Laurent Muller
  */
@@ -51,13 +51,14 @@ class AddressTransformerTest extends TestCase
         yield [25, null, true];
         yield ['user@root.com', new Address('user@root.com')];
         yield ['username <user@root.com>', new Address('user@root.com', 'username')];
-        yield ['email-invalid', '', true];
+        yield ['email-invalid', null, true];
     }
 
     public function getTransformValues(): \Generator
     {
         yield [null, null];
         yield [true, null, true];
+        yield [25, null, true];
         yield [new Address('user@root.com'), 'user@root.com'];
         yield [new Address('user@root.com', 'username'), \htmlentities('username <user@root.com>')];
     }
@@ -65,7 +66,6 @@ class AddressTransformerTest extends TestCase
     /**
      * @param mixed $value
      * @param mixed $expected
-     *
      * @dataProvider getReverseTransformValues
      */
     public function testReverseTransform($value, $expected, bool $exception = false): void
@@ -80,7 +80,6 @@ class AddressTransformerTest extends TestCase
     /**
      * @param mixed $value
      * @param mixed $expected
-     *
      * @dataProvider getTransformValues
      */
     public function testTransform($value, $expected, bool $exception = false): void
@@ -90,5 +89,10 @@ class AddressTransformerTest extends TestCase
         }
         $actual = $this->transformer->transform($value);
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testTransformerNotNull(): void
+    {
+        $this->assertNotNull($this->transformer);
     }
 }

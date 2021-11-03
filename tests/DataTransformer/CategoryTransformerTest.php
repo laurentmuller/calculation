@@ -12,25 +12,27 @@ declare(strict_types=1);
 
 namespace App\Tests\DataTransformer;
 
+use App\Entity\Category;
 use App\Entity\Group;
-use App\Form\DataTransformer\GroupTransformer;
-use App\Repository\GroupRepository;
+use App\Form\DataTransformer\CategoryTransformer;
+use App\Repository\CategoryRepository;
 use App\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Test for the {@link App\Form\DataTransformer\GroupTransformer} class.
+ * Test for the {@link App\Form\DataTransformer\CategoryTransformer} class.
  *
  * @author Laurent Muller
  */
-class GroupTransformerTest extends KernelTestCase
+class CategoryTransformerTest extends KernelTestCase
 {
     use DatabaseTrait;
 
+    private ?Category $category = null;
     private ?Group $group = null;
-    private ?GroupTransformer $transformer = null;
+    private ?CategoryTransformer $transformer = null;
 
     /**
      * {@inheritDoc}
@@ -40,9 +42,10 @@ class GroupTransformerTest extends KernelTestCase
         parent::setUp();
 
         $this->group = $this->createGroup();
-        $repository = $this->getService(GroupRepository::class);
+        $this->category = $this->createCategory($this->group);
+        $repository = $this->getService(CategoryRepository::class);
         $translator = $this->getService(TranslatorInterface::class);
-        $this->transformer = new GroupTransformer($repository, $translator);
+        $this->transformer = new CategoryTransformer($repository, $translator);
     }
 
     /**
@@ -50,6 +53,7 @@ class GroupTransformerTest extends KernelTestCase
      */
     protected function tearDown(): void
     {
+        $this->category = $this->deleteCategory();
         $this->group = $this->deleteGroup();
         $this->transformer = null;
         parent::tearDown();
@@ -65,6 +69,11 @@ class GroupTransformerTest extends KernelTestCase
     {
         yield [null, null];
         yield [true, null, true];
+    }
+
+    public function testCategoryNotNull(): void
+    {
+        $this->assertNotNull($this->category);
     }
 
     public function testGroupNotNull(): void
@@ -90,13 +99,13 @@ class GroupTransformerTest extends KernelTestCase
     {
         $this->expectException(TransformationFailedException::class);
         $actual = $this->transformer->reverseTransform(-1);
-        $this->assertEquals($this->group, $actual);
+        $this->assertEquals($this->category, $actual);
     }
 
     public function testReverseTransformValid(): void
     {
-        $actual = $this->transformer->reverseTransform($this->group->getId());
-        $this->assertEquals($this->group, $actual);
+        $actual = $this->transformer->reverseTransform($this->category->getId());
+        $this->assertEquals($this->category, $actual);
     }
 
     /**
@@ -120,8 +129,21 @@ class GroupTransformerTest extends KernelTestCase
 
     public function testTransformValid(): void
     {
-        $actual = $this->transformer->transform($this->group);
-        $this->assertEquals($this->group->getId(), $actual);
+        $actual = $this->transformer->transform($this->category);
+        $this->assertEquals($this->category->getId(), $actual);
+    }
+
+    protected function createCategory(Group $group): Category
+    {
+        $category = new Category();
+        $category->setCode('Test')
+            ->setGroup($group);
+
+        $manager = $this->getManager();
+        $manager->persist($category);
+        $manager->flush();
+
+        return $category;
     }
 
     protected function createGroup(): Group
@@ -134,6 +156,18 @@ class GroupTransformerTest extends KernelTestCase
         $manager->flush();
 
         return $group;
+    }
+
+    protected function deleteCategory(): ?Category
+    {
+        if (null !== $this->category) {
+            $manager = $this->getManager();
+            $manager->remove($this->category);
+            $manager->flush();
+            $this->category = null;
+        }
+
+        return $this->category;
     }
 
     protected function deleteGroup(): ?Group

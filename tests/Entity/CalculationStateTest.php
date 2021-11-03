@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\CalculationState;
 
 /**
- * Unit test for validate CalculationState constraints.
+ * Unit test for {@link App\Entity\CalculationState} class.
  *
  * @author Laurent Muller
  */

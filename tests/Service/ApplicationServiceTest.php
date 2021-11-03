@@ -18,7 +18,7 @@ use App\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Test for the application service.
+ * Unit test for the {@link App\Service\ApplicationService} class.
  *
  * @author Laurent Muller
  */

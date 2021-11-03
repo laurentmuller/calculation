@@ -27,12 +27,11 @@ use App\Service\CalculationService;
 use App\Tests\DatabaseTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Test for the calculation service.
+ * Unit test for {@link App\Service\CalculationService} class.
  *
  * @author Laurent Muller
  */
@@ -106,17 +105,6 @@ class CalculationServiceTest extends KernelTestCase
     protected function echo(string $name, $value): void
     {
         echo \sprintf("\n%-15s: %s", $name, $value);
-    }
-
-    protected function getManager(): EntityManager
-    {
-        /** @var ManagerRegistry $registry */
-        $registry = static::getContainer()->get('doctrine');
-
-        /** @var EntityManager $manager */
-        $manager = $registry->getManager();
-
-        return $manager;
     }
 
     protected function getService(EntityManager $manager): CalculationService

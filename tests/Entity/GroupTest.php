@@ -16,7 +16,7 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 
 /**
- * Unit test for validate category constraints.
+ * Unit test for {@link App\Entity\Group} class.
  *
  * @author Laurent Muller
  */

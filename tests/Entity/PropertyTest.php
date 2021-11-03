@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\Property;
 
 /**
- * Unit test for validate property constraints.
+ * Unit test for {@link App\Entity\Property} class.
  *
  * @author Laurent Muller
  */

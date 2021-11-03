@@ -48,24 +48,22 @@ parameters:
     container.dumper.inline_factories: true
 
 services:
-    # default configuration for services in *this* file
+    # default configuration for services
     _defaults:
-        autowire: true # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        bind: # Binded parameters
+        autowire: true
+        autoconfigure: true
+        bind:
             $appName: '%app_name%'
             $appNameVersion: '%app_name% v%app_version%'
             $isDebug: '%kernel.debug%'
             $projectDir: '%kernel.project_dir%'
 
     # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
+    # controllers are imported separately
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']

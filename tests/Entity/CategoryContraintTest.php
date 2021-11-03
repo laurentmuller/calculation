@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints\NotNullValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
- * Unit test for Category entity.
+ * Unit test for {@link App\Entity\Group} class.
  *
  * @author Laurent Muller
  *

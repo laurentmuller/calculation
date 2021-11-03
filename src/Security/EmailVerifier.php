@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 /**
@@ -32,6 +33,9 @@ class EmailVerifier
     private MailerInterface $mailer;
     private EntityManagerInterface $manager;
 
+    /**
+     * Constructor.
+     */
     public function __construct(VerifyEmailHelperInterface $helper, MailerInterface $mailer, EntityManagerInterface $manager)
     {
         $this->helper = $helper;
@@ -46,8 +50,7 @@ class EmailVerifier
      */
     public function handleEmailConfirmation(Request $request, User $user): void
     {
-        $this->helper->validateEmailConfirmation($request->getUri(), (string) $user->getId(), $user->getEmail());
-
+        $this->validateEmailConfirmation($request, $user);
         $user->setVerified(true);
 
         $this->manager->persist($user);
@@ -61,20 +64,42 @@ class EmailVerifier
      */
     public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, TemplatedEmail $email): void
     {
-        $signature = $this->helper->generateSignature(
-            $verifyEmailRouteName,
-            (string) $user->getId(),
-            $user->getEmail(),
-            ['id' => $user->getId()]
-        );
+        $signature = $this->generateSignature($verifyEmailRouteName, $user);
 
-        $context = $email->getContext();
-        $context['signedUrl'] = $signature->getSignedUrl();
-        $context['expiresAtMessageKey'] = $signature->getExpirationMessageKey();
-        $context['expiresAtMessageData'] = $signature->getExpirationMessageData();
-        $context['username'] = $user->getUsername();
-        $email->context($context);
+        $context = [
+            'username' => $user->getUsername(),
+            'signedUrl' => $signature->getSignedUrl(),
+            'expiresAtMessageKey' => $signature->getExpirationMessageKey(),
+            'expiresAtMessageData' => $signature->getExpirationMessageData(),
+        ];
+        $email->context(\array_merge($email->getContext(), $context));
 
         $this->mailer->send($email);
+    }
+
+    /**
+     * Generate signature.
+     */
+    private function generateSignature(string $routeName, User $user): VerifyEmailSignatureComponents
+    {
+        $userId = (string) $user->getId();
+        $userEmail = $user->getEmail();
+        $parameters = ['id' => $userId];
+
+        return $this->helper->generateSignature($routeName, $userId, $userEmail, $parameters);
+    }
+
+    /**
+     * Validate email confirmation.
+     *
+     * @throws VerifyEmailExceptionInterface
+     */
+    private function validateEmailConfirmation(Request $request, User $user): void
+    {
+        $signedUrl = $request->getUri();
+        $userId = (string) $user->getId();
+        $userEmail = $user->getEmail();
+
+        $this->helper->validateEmailConfirmation($signedUrl, $userId, $userEmail);
     }
 }

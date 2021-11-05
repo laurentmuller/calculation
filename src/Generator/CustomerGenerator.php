@@ -101,6 +101,7 @@ class CustomerGenerator extends AbstractEntityGenerator
                 'result' => true,
                 'items' => $items,
                 'count' => \count($items),
+                'simulate' => $simulate,
                 'message' => $this->trans('counters.customers_generate', ['count' => $count]),
             ]);
         } catch (\Exception $e) {

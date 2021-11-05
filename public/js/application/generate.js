@@ -126,6 +126,19 @@ function enableButtons() {
 }
 
 /**
+ * Notify a message.
+ * 
+ * @param {string}
+ *            type - the message type.
+ * @param {string}
+ *            message - the message to display.
+ */
+function notifyMessage(type, message) {
+    const title = $(".card-title").text();
+    Toaster.notify(type, message, title, $("#flashbags").data());
+}
+
+/**
  * Generate values.
  */
 function generate() {
@@ -134,20 +147,18 @@ function generate() {
     disableButtons();
     $('#content').slideUp();
 
+    const title = $(".card-title").text();
     const url = $('#form_entity').val();
     const data = {
         count: $('#form_count').intVal(),
         simulate: $('#form_simulate').isChecked()
     };
     $.getJSON(url, data, function (response) {
-        enableButtons();
-        const title = $(".card-title").text();
-        $('#form_confirm').setChecked(false);
         if (!response.result) {
-            Toaster.danger(response.message || $('#edit-form').data('error'), title, $("#flashbags").data());
+            notifyMessage('danger', response.message || $('#edit-form').data('error'));
             return;
         } else if (!response.count) {
-            Toaster.warning($('#edit-form').data('empty'), title, $("#flashbags").data());
+            notifyMessage('warning', $('#edit-form').data('empty'));
             return;
         }
 
@@ -163,11 +174,20 @@ function generate() {
             renderProducts(response.items);
             break;
         default:
-            Toaster.warning($('#edit-form').data('empty'), title, $("#flashbags").data());
+            notifyMessage('warning', $('#edit-form').data('empty'));
             return;
         }
-        Toaster.success(response.message, title, $("#flashbags").data());
+        $('#message').text(response.message);
+        $('#simulated').toggleClass('d-none', !response.simulate);
         $('#content').slideDown();
+        $('#overflow').scrollTop(0);
+
+    }).always(function () {
+        enableButtons();
+        $('#form_confirm').setChecked(false);
+        
+    }).fail(function () {
+        notifyMessage('danger', $('#edit-form').data('error'));
     });
 }
 

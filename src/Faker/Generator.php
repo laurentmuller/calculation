@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Faker;
 
-use Faker\Generator as BaseGenerator;
-
 /**
  * Extends Genrator with custom methods.
  *
@@ -34,6 +32,6 @@ use Faker\Generator as BaseGenerator;
  *
  * @author Laurent Muller
  */
-class Generator extends BaseGenerator
+class Generator extends \Faker\Generator
 {
 }

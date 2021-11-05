@@ -31,7 +31,7 @@ class ProductProvider extends EntityProvider
     private static array $material = ['acier', 'bois', 'béton', 'plastique', 'coton', 'granit', 'caoutchouc', 'cuir', 'soie', 'laine', 'lin', 'marbre', 'fer', 'bronze', 'cuivre', 'aluminium', 'papier'];
 
     /** @var string[] */
-    private static array $product = ['tabouret', 'camoin', 'ordinateur', 'gants', 'pantalon', 'chemisier', 'tabouret', 'chausse-pied', 'chapeau', 'vase', 'couteau', 'récipient', 'manteau', 'carnet', 'clavier', 'sac', 'banc', 'stylo', 'boitier', 'portefeuille'];
+    private static array $product = ['tabouret', 'camoin', 'ordinateur', 'gants', 'pantalon', 'chemisier', 'tabouret', 'chausse-pied', 'chapeau', 'vase', 'couteau', 'récipient', 'manteau', 'carnet', 'clavier', 'sac', 'banc', 'stylo', 'boîtier', 'portefeuille'];
 
     /**
      * Constructor.
@@ -58,7 +58,7 @@ class ProductProvider extends EntityProvider
     }
 
     /**
-     * Gets a random product name.
+     * Gets a random product's name.
      */
     public function productName(): string
     {
@@ -99,15 +99,15 @@ class ProductProvider extends EntityProvider
     }
 
     /**
-     * Gets a random supplier.
+     * Gets a random product's supplier.
      */
     public function productSupplier(): ?string
     {
-        return $this->distinctValue('supplier');
+        return $this->distinctValue('supplier', true);
     }
 
     /**
-     * Gets a random unit.
+     * Gets a random product's unit.
      */
     public function productUnit(): ?string
     {

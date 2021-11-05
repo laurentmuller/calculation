@@ -35,10 +35,7 @@ class ProductGenerator extends AbstractEntityGenerator
             $products = [];
             for ($i = 0; $i < $count; ++$i) {
                 $product = new Product();
-                $description = $generator->productName();
-                while ($generator->productExist($description)) {
-                    $description = $generator->productName();
-                }
+                $description = $this->getDescription($generator);
                 $product->setDescription($description)
                     ->setPrice($generator->randomFloat(2, 1, 50))
                     ->setSupplier($generator->productSupplier())
@@ -76,6 +73,7 @@ class ProductGenerator extends AbstractEntityGenerator
                 'result' => true,
                 'items' => $items,
                 'count' => \count($items),
+                'simulate' => $simulate,
                 'message' => $this->trans('counters.products_generate', ['count' => $count]),
             ]);
         } catch (\Exception $e) {
@@ -89,5 +87,20 @@ class ProductGenerator extends AbstractEntityGenerator
                 'exception' => $context,
             ]);
         }
+    }
+
+    /**
+     * Gets a product's description.
+     */
+    private function getDescription(Generator $generator): string
+    {
+        $try = 0;
+        $description = $generator->productName();
+        while ($try < 10 && $generator->productExist($description)) {
+            $description = $generator->productName();
+            ++$try;
+        }
+
+        return $description;
     }
 }

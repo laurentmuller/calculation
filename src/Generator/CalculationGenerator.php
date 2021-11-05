@@ -120,6 +120,7 @@ class CalculationGenerator extends AbstractEntityGenerator
                 'result' => true,
                 'items' => $items,
                 'count' => \count($items),
+                'simulate' => $simulate,
                 'message' => $this->trans('counters.calculations_generate', ['count' => $count]),
             ]);
         } catch (\Exception $e) {

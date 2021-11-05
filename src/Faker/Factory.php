@@ -12,14 +12,12 @@ declare(strict_types=1);
 
 namespace App\Faker;
 
-use Faker\Factory as BaseFactory;
-
 /**
  * Extends Factory with custom generator.
  *
  * @author Laurent Muller
  */
-class Factory extends BaseFactory
+class Factory extends \Faker\Factory
 {
     /**
      * {@inheritDoc}

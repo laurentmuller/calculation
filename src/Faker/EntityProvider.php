@@ -25,6 +25,13 @@ use Faker\Provider\Base;
 class EntityProvider extends Base
 {
     /**
+     * The cached distinct values.
+     *
+     * @var array<string, array<mixed>>
+     */
+    private array $distincValues = [];
+
+    /**
      * The entities.
      *
      * @psalm-var T[]
@@ -56,18 +63,24 @@ class EntityProvider extends Base
     /**
      * Gets a random value for the given column.
      *
-     * @param string $field the field name (column) to get values for
-     * @param string $value a value to search within the column or <code>null</code> for all
-     * @param int    $limit the maximum number of results to retrieve (the "limit") or <code>-1</code> for all
+     * @param string $field     the field name (column) to get values for
+     * @param bool   $allowNull true to allow the return of a null value
      *
      * @return mixed|null a random value or null if none
      */
-    protected function distinctValue(string $field, ?string $value = null, int $limit = -1)
+    protected function distinctValue(string $field, bool $allowNull = false)
     {
-        $repository = $this->getRepository();
-        $values = $repository->getDistinctValues($field, $value, $limit);
+        // already loaded?
+        if (!\array_key_exists($field, $this->distincValues) || empty($this->distincValues[$field])) {
+            $repository = $this->getRepository();
+            $this->distincValues[$field] = $repository->getDistinctValues($field);
+        }
 
-        return $this->randomElement($values);
+        if ($allowNull) {
+            return $this->randomElement(\array_merge($this->distincValues[$field], [null]));
+        }
+
+        return $this->randomElement($this->distincValues[$field]);
     }
 
     /**

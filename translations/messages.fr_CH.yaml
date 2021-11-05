@@ -1063,6 +1063,7 @@ generate:
     description: Cet outil permet de générer des données aléatoires.
     submit_text: Générer
     result_text: Données générées
+    result_simulated: La mise à jour a été simulée. Aucune donnée n'a été ajoutée dans la base de données.
     fields:
         entity: Objet à générer
         count: Nombre

@@ -755,13 +755,13 @@
 			],
 			"links": [
 				{
-					"id": "calculation.result.title",
+					"id": "calculation.result.description",
 					"type": "dialog"
 				}
 			]
 		},
 		{
-			"id": "calculation.result.title",
+			"id": "calculation.result.description",
 			"name": "calculation.result.description",
 			"image": "calculation/calculation_result.png",
 			"icon": "calculator",
@@ -930,13 +930,13 @@
 			],
 			"links": [
 				{
-					"id": "product.result.title",
+					"id": "product.result.description",
 					"type": "dialog"
 				}
 			]
 		},
 		{
-			"id": "product.result.title",
+			"id": "product.result.description",
 			"name": "product.result.description",
 			"image": "product/product_result.png",
 			"icon": "file-alt far",

@@ -9,7 +9,7 @@
     $.fn.extend({
         /**
          * Returns the label text of the input element.
-         *
+         * 
          * @return {jQuery|boolean} the label text, if found; false otherwise.
          */
         getLabelText: function () {
@@ -48,20 +48,18 @@
     $.extend($.validator, {
         /**
          * Format message within the label (if any).
-         *
+         * 
          * @param {HTMLElement}
          *            element - The element to search in.
          * @param {string}
          *            message - the message to use when label text is found.
          * @param {string}
-         *            fallback - the default message to use when label text is
-         *            not found.
+         *            defaultMessage - the default message to use when label text is not found.
          * @param {any}
-         *            params - the optional parameters to use for formatting the
-         *            message.
+         *            params - the optional parameters to use for formatting the message.
          * @return {string} the formatted message.
          */
-        formatLabel: function (element, message, fallback, params) {
+        formatLabel: function (element, message, defaultMessage, params) {
             // check parameters
             if ($.isUndefined(params)) {
                 params = [];
@@ -79,12 +77,12 @@
                 params.unshift(text);
                 return $.validator.format(message, params);
             }
-            return $.validator.format(fallback, params);
+            return $.validator.format(defaultMessage, params);
         },
 
         /**
          * Translate the given size.
-         *
+         * 
          * @param {int}
          *            size - the size, in bytes, to translate.
          * @return {string} the translated size.
@@ -491,6 +489,15 @@
         uniqueLabel: 'Le champ \"{0}\" doit être unique.',
         unique: function (parameters, element) {
             return $.validator.formatLabel(element, $.validator.messages.uniqueLabel, $.validator.messages.uniqueFallback, parameters);
+        },
+
+        /*
+         * step
+         */
+        stepFallback: 'La valeur doit être un multiple de {0}.',
+        stepLabel: 'Le champ \"{0}\" doit être un multiple de {1}.',
+        step: function (parameters, element) {
+            return $.validator.formatLabel(element, $.validator.messages.stepLabel, $.validator.messages.stepFallback, parameters);
         }
 
     });

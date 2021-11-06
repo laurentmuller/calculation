@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Doctrine\ColumnHydrator;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use Doctrine\Common\Collections\Criteria;
@@ -279,7 +278,7 @@ class CalculationRepository extends AbstractRepository
             ->orderBy($year);
 
         $result = $builder->getQuery()
-            ->getResult(ColumnHydrator::NAME);
+            ->getSingleColumnResult();
 
         return \array_map('intval', $result);
     }

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Doctrine\ColumnHydrator;
 use App\Util\Utils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -85,7 +84,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
 
         return $builder->getQuery()
-            ->getResult(ColumnHydrator::NAME);
+            ->getSingleColumnResult();
     }
 
     /**

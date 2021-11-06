@@ -62,7 +62,7 @@ class GeneratorController extends AbstractController
             ]);
 
         $helper->field('count')
-            ->updateAttributes(['min' => 1, 'max' => 20])
+            ->updateAttributes(['min' => 1, 'max' => 20, 'step' => 1])
             ->addNumberType(0);
 
         $helper->field('simulate')

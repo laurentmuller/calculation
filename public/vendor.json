@@ -64,7 +64,7 @@
 		},
 		{
 			"name": "highcharts",
-			"version": "9.3.0",
+			"version": "9.3.1",
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/{file}",
 			"files": [
@@ -159,7 +159,7 @@
 		},
 		{
 			"name": "tinymce",
-			"version": "5.10.0",
+			"version": "5.10.1",
 			"files": [
 				"tinymce.min.js",
 				"jquery.tinymce.min.js",

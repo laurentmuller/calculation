@@ -34,7 +34,6 @@ use Doctrine\ORM\EntityManagerInterface;
 class FakerService
 {
     private ?Generator $generator = null;
-
     private EntityManagerInterface $manager;
 
     /**

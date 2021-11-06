@@ -185,7 +185,7 @@ function generate() {
     }).always(function () {
         enableButtons();
         $('#form_confirm').setChecked(false);
-        
+
     }).fail(function () {
         notifyMessage('danger', $('#edit-form').data('error'));
     });
@@ -205,7 +205,6 @@ function generate() {
         }
     });
 
-    // validation
     const options = {
         submitHandler: function () {
             generate();

@@ -61,7 +61,7 @@ services:
     # makes classes in src/ available to be used as services
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Entity,Faker, Migrations,Tests,Traits,Kernel.php}'
 
     # controllers are imported separately
     App\Controller\:

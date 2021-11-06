@@ -32,7 +32,7 @@ jobs:
 
       - name: Download dependencies
         id: install
-        run: composer update --no-interaction
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Lint YAML files
         if: always() && steps.install.outcome == 'success'

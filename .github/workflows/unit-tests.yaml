@@ -32,8 +32,8 @@ jobs:
 
       - name: Download dependencies
         run: |
-          composer update --no-interaction
-          ./vendor/bin/simple-phpunit install
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          ./vendor/bin/simple-phpunit install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run PHPUnit
         run: |

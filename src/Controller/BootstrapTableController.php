@@ -264,7 +264,7 @@ class BootstrapTableController extends AbstractController
 
     private function getCookieName(string $key, string $prefix = ''): string
     {
-        return '' === $prefix ? \strtoupper($key) : \strtoupper("$prefix.$key");
+        return '' === $prefix ? \strtoupper($key) : \strtoupper("{$prefix}_{$key}");
     }
 
     private function getInputBag(Request $request): InputBag
@@ -345,7 +345,7 @@ class BootstrapTableController extends AbstractController
     /**
      * @param mixed|null $default the default value if the result parameter is null
      */
-    private function saveCookie(Response $response, DataResults $results, string $key, $default, string $prefix = ''): void
+    private function saveCookie(Response $response, DataResults $results, string $key, $default = null, string $prefix = ''): void
     {
         $value = $results->getParams($key, $default);
         if (null !== $value) {

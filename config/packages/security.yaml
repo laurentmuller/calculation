@@ -36,6 +36,7 @@ security:
                 invalidate_session: false
 
             remember_me:
+                signature_properties: [email, password]
                 remember_me_parameter: remember_me
                 secret: '%app_secret%'
                 path:   '%cookie_path%'

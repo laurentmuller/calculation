@@ -36,6 +36,5 @@ jobs:
           composer bin phpstan install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run PHPStan
-        run: |
-          vendor/bin/phpstan analyze --no-progress
+        run: vendor/bin/phpstan analyze --no-progress
 

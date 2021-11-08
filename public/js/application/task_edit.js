@@ -309,25 +309,24 @@ function sortMargins($caller) {
 }
 
 /**
- * Inititalize the search units.
+ * Initialize a search for an element.
  *
- * @returns {jQuery} The tak unit for chaining.
+ * @param {jQuery}
+ *            $element - The element to handle.
+ * @param {String]
+ *            url - The search URL.
+ * @param {string}
+ *            error - The message to display on search error.
+ * @returns {jQuery} The element for chaining.
  */
-function initSearchUnit() {
+function initSearchElement($element, url, error) {
     'use strict';
 
-    const $form = $('#edit-form');
-    const $element = $('#task_unit');
-    const url = $form.data("unit-search");
-    const error = $form.data("unit-error");
-
-    // search units url
-    const options = {
+    $element.typeahead({
         valueField: '',
         ajax: {
             url: url
         },
-        // overridden functions (all are set in the server side)
         matcher: function () {
             return true;
         },
@@ -338,11 +337,10 @@ function initSearchUnit() {
             $element.select();
         },
         onError: function () {
-            const title = $form.data("title");
+            const title = $("#edit-form").data("title");
             Toaster.danger(error, title, $("#flashbags").data());
         }
-    };
-    $element.typeahead(options);
+    });
 
     return $element;
 }
@@ -391,12 +389,13 @@ function initSearchUnit() {
     });
 
     // initalize search
-    initSearchUnit();
+    const $form = $("#edit-form");
+    initSearchElement($("#task_unit"), $form.data("unit-search"), $form.data("unit-error"));
+    initSearchElement($("#task_supplier"), $form.data("supplier-search"), $form.data("supplier-error"));
 
     // validation
     $('#edit-form').initValidator();
 
     // update UI
     updateUI();
-
 }(jQuery));

@@ -465,7 +465,7 @@ class AjaxController extends AbstractController
      */
     public function searchDistinct(Request $request, EntityManagerInterface $manager): JsonResponse
     {
-        $className = 'App\\Entity\\' . $request->get('entity', '');
+        $className = 'App\\Entity\\' . \ucfirst($request->get('entity', ''));
         if (!\class_exists($className)) {
             return $this->jsonFalse([
                 'values' => [],
@@ -518,14 +518,14 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Search distinct product's suppliers in existing products.
+     * Search distinct product and task suppliers.
      *
      * @Route("/search/supplier", name="ajax_search_supplier")
      * @IsGranted("ROLE_USER")
      */
-    public function searchSupplier(Request $request, ProductRepository $repository): JsonResponse
+    public function searchSupplier(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository): JsonResponse
     {
-        return $this->getDistinctValues($request, $repository, 'supplier');
+        return $this->getDistincValuesForCategoryItem($request, $productRepository, $taskRepository, 'supplier');
     }
 
     /**
@@ -547,23 +547,7 @@ class AjaxController extends AbstractController
      */
     public function searchUnit(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository): JsonResponse
     {
-        $search = (string) $request->get('query', '');
-        if (Utils::isString($search)) {
-            $limit = (int) $request->get('limit', 15);
-            $productUnits = $productRepository->getDistinctValues('unit', $search);
-            $taskUnits = $taskRepository->getDistinctValues('unit', $search);
-            $values = \array_unique(\array_merge($productUnits, $taskUnits));
-            \sort($values, \SORT_NATURAL);
-            $values = \array_slice($values, 0, $limit);
-            if (!empty($values)) {
-                return $this->json($values);
-            }
-        }
-
-        // empty
-        return $this->jsonFalse([
-            'values' => [],
-        ]);
+        return $this->getDistincValuesForCategoryItem($request, $productRepository, $taskRepository, 'unit');
     }
 
     /**
@@ -729,8 +713,6 @@ class AjaxController extends AbstractController
      * @param AbstractRepository $repository the respository to search in
      * @param string             $field      the field name to search for
      *
-     * @return JsonResponse the found values
-     *
      * @template T of \App\Entity\AbstractEntity
      * @psalm-param AbstractRepository<T> $repository
      */
@@ -741,6 +723,39 @@ class AjaxController extends AbstractController
             if (Utils::isString($search)) {
                 $limit = (int) $request->get('limit', 15);
                 $values = $repository->getDistinctValues($field, $search, $limit);
+                if (!empty($values)) {
+                    return $this->json($values);
+                }
+            }
+
+            // empty
+            return $this->jsonFalse([
+                'values' => [],
+            ]);
+        } catch (\Exception $e) {
+            return $this->jsonException($e);
+        }
+    }
+
+    /**
+     * Search distinct values from products and tasks.
+     *
+     * @param Request           $request           the request to get search parameters
+     * @param ProductRepository $productRepository the product respository to search in
+     * @param TaskRepository    $taskRepository    the task respository to search in
+     * @param string            $field             the field name to search for
+     */
+    private function getDistincValuesForCategoryItem(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository, string $field): JsonResponse
+    {
+        try {
+            $search = (string) $request->get('query', '');
+            if (Utils::isString($search)) {
+                $limit = (int) $request->get('limit', 15);
+                $productValues = $productRepository->getDistinctValues($field, $search);
+                $taskValues = $taskRepository->getDistinctValues($field, $search);
+                $values = \array_unique(\array_merge($productValues, $taskValues));
+                \sort($values, \SORT_LOCALE_STRING);
+                $values = \array_slice($values, 0, $limit);
                 if (!empty($values)) {
                     return $this->json($values);
                 }

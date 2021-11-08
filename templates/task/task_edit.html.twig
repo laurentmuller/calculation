@@ -108,7 +108,9 @@
                      'data-show': 'taskitem.edit.items_show'|trans,
                      'data-hide': 'taskitem.edit.items_hide'|trans,
                      'data-unit-search': url('ajax_search_unit'),
-                     'data-unit-error': 'product.edit.error_search_unit'|trans}) -%}
+                     'data-unit-error': 'product.edit.error_search_unit'|trans,
+                     'data-supplier-search': url('ajax_search_supplier'),
+                     'data-supplier-error': 'product.edit.error_search_supplier'|trans}) -%}
 
 {% block card_header %}
 <div class="row">
@@ -118,15 +120,16 @@
 {% endblock %}
 
 {% block card_body %}
+{{ form_row(form.name) }}
 <div class="form-row">
-    <div class="col-md-6">
-        {{ form_row(form.name) }}
-    </div>
-    <div class="col-md-4">
+    <div class="col-md-5">
         {{ form_row(form.category) }}
     </div>
     <div class="col-md-2">
         {{ form_row(form.unit) }}
+    </div>
+    <div class="col-md-5">
+        {{ form_row(form.supplier) }}
     </div>
 </div>
 <div class="items accordion" id="items" data-item-index="{{ item_index }}" data-margin-index="{{ margin_index }}" data-prototype="{{ _self.printTaskItem(form.items.vars.prototype, true)|e('html_attr') }}">

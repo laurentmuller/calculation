@@ -44,6 +44,9 @@ class LoginListener implements EventSubscriberInterface
         $this->appNameVersion = $appNameVersion;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
         return [LoginSuccessEvent::class => 'onLoginSuccess'];

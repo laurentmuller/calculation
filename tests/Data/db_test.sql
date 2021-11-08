@@ -140,27 +140,28 @@ CREATE TABLE IF NOT EXISTS "sy_User" (
 );
 
 CREATE TABLE IF NOT EXISTS "sy_Task" (
-      "id"                integer PRIMARY KEY AUTOINCREMENT,
-      "category_id"       integer NOT NULL,
-      "name"              varchar(255) NOT NULL,
-      "unit"              varchar(15)  DEFAULT NULL
+    "id"                integer PRIMARY KEY AUTOINCREMENT,
+    "category_id"       integer NOT NULL,
+    "name"              varchar(255) NOT NULL,
+    "unit"              varchar(15)  DEFAULT NULL,
+    "supplier"          varchar(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "sy_TaskItem" (
-      "id"                integer PRIMARY KEY AUTOINCREMENT,
-      "task_id"           integer NOT NULL,
-      "name"              varchar(255) NOT NULL,
-      "position"          integer NOT NULL DEFAULT '0',
-      FOREIGN KEY(task_id) REFERENCES sy_Task(id)
+    "id"                integer PRIMARY KEY AUTOINCREMENT,
+    "task_id"           integer NOT NULL,
+    "name"              varchar(255) NOT NULL,
+    "position"          integer NOT NULL DEFAULT '0',
+    FOREIGN KEY(task_id) REFERENCES sy_Task(id)
 );
 
 CREATE TABLE IF NOT EXISTS "sy_TaskItemMargin" (
-      "id"                integer PRIMARY KEY AUTOINCREMENT,
-      "task_item_id"      integer NOT NULL,
-      "maximum"           double NOT NULL DEFAULT '0',
-      "minimum"           double NOT NULL DEFAULT '0',
-      "value"             double NOT NULL DEFAULT '0',
-      FOREIGN KEY(task_item_id) REFERENCES sy_TaskItem(id)
+    "id"                integer PRIMARY KEY AUTOINCREMENT,
+    "task_item_id"      integer NOT NULL,
+    "maximum"           double NOT NULL DEFAULT '0',
+    "minimum"           double NOT NULL DEFAULT '0',
+    "value"             double NOT NULL DEFAULT '0',
+    FOREIGN KEY(task_item_id) REFERENCES sy_TaskItem(id)
 );
 
 INSERT INTO "sy_User"

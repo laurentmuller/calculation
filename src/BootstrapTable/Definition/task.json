@@ -1,44 +1,49 @@
 [
-    {
-        "field": "id",
-        "visible": false
-    },
-    {
-        "field": "name",
-        "title": "task.fields.name",
-        "default": true,
-        "class": " w-100 text-cell",
-        "cardClass": "font-weight-bold"
-    },
-    {
-        "field": "group.code",
-        "title": "task.fields.group",
-        "class": "text-group"
-    },
-    {
-        "field": "category.code",
-        "title": "task.fields.category",
-        "class": "text-category"
-    },
-    {
-        "field": "unit",
-        "title": "task.fields.unit",
-        "class": " text-unit"
-    },
-    {
-        "field": "items",
-        "title": "task.fields.items",
-        "sortable": false,
-        "searchable": false,
-        "class": "text-operation",
-        "fieldFormatter": "formatCountable"
-    },
-    {
-        "field": "id",
-        "alias": "action",
-        "sortable": false,
-        "searchable": false,
-        "class": "actions rowlink-skip d-print-none",
-        "cellFormatter": "formatActions"
-    }
+	{
+		"field": "id",
+		"visible": false
+	},
+	{
+		"field": "name",
+		"title": "task.fields.name",
+		"default": true,
+		"class": " w-100 text-cell",
+		"cardClass": "font-weight-bold"
+	},
+	{
+		"field": "group.code",
+		"title": "task.fields.group",
+		"class": "text-group"
+	},
+	{
+		"field": "category.code",
+		"title": "task.fields.category",
+		"class": "text-category"
+	},
+	{
+		"field": "unit",
+		"title": "task.fields.unit",
+		"class": " text-unit"
+	},
+	{
+		"field": "supplier",
+		"title": "product.fields.supplier",
+		"class": "text-supplier"
+	},
+	{
+		"field": "items",
+		"title": "task.fields.items",
+		"sortable": false,
+		"searchable": false,
+		"class": "text-operation",
+		"fieldFormatter": "formatCountable"
+	},
+	{
+		"field": "id",
+		"alias": "action",
+		"sortable": false,
+		"searchable": false,
+		"class": "actions rowlink-skip d-print-none",
+		"cellFormatter": "formatActions"
+	}
 ]

@@ -51,6 +51,12 @@ class TaskType extends AbstractEntityType
             ->maxLength(15)
             ->addTextType();
 
+        $helper->field('supplier')
+            ->autocomplete('off')
+            ->maxLength(255)
+            ->notRequired()
+            ->addTextType();
+
         $helper->field('items')
             ->updateOption('prototype_name', '__itemIndex__')
             ->addCollectionType(TaskItemType::class);

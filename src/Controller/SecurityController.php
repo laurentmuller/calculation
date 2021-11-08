@@ -37,7 +37,6 @@ class SecurityController extends AbstractController
             'remember_me' => true,
         ]);
 
-        // display form
         return $this->renderForm('security/login.html.twig', [
             'form' => $form,
             'error' => $error,
@@ -49,6 +48,6 @@ class SecurityController extends AbstractController
      */
     public function logout(): void
     {
-        throw new \LogicException('This method can be blank. It will be intercepted by the logout key on your firewall.');
+        throw new \LogicException('This method should never be reached.');
     }
 }

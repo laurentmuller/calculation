@@ -1094,6 +1094,7 @@ task:
         group: Groupe
         category: Catégorie
         unit: Unité
+        supplier: Fournisseur
         items: Opérations
     add:
         title: Nouvelle tâche

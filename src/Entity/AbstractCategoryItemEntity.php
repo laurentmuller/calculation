@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Abstract entity with a category and an unit.
+ * Abstract entity with a category, a unit and an supplier.
  *
  * A protected $category variable must declared.
  *
@@ -28,6 +28,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 abstract class AbstractCategoryItemEntity extends AbstractEntity
 {
+    /**
+     * The supplier.
+     *
+     * @ORM\Column(length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    protected ?string $supplier = null;
     /**
      * The unit.
      *
@@ -77,6 +84,14 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
     }
 
     /**
+     * Gets the supplier.
+     */
+    public function getSupplier(): ?string
+    {
+        return $this->supplier;
+    }
+
+    /**
      * Get unit.
      */
     public function getUnit(): ?string
@@ -90,6 +105,16 @@ abstract class AbstractCategoryItemEntity extends AbstractEntity
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Sets the supplier.
+     */
+    public function setSupplier(?string $supplier): self
+    {
+        $this->supplier = $this->trim($supplier);
 
         return $this;
     }

@@ -4,7 +4,7 @@
 
 /**
  * Creates a row for the given values.
- * 
+ *
  * @param {array}
  *            values - the cell values.
  * @param {array}
@@ -25,7 +25,7 @@ function createRow(values, classes) {
 
 /**
  * Creates rows for the given items.
- * 
+ *
  * @param {array}
  *            items - the items to render.
  * @param {function}
@@ -52,7 +52,7 @@ function createRows(items, valuesCallback, classes, rowCallback) {
 
 /**
  * Fill the table with the generated calculations
- * 
+ *
  * @param {array}
  *            calculations - the calculations to render.
  */
@@ -72,7 +72,7 @@ function renderCalculations(calculations) {
 
 /**
  * Fill the table with the generated customers
- * 
+ *
  * @param {array}
  *            customers - the customers to render.
  */
@@ -88,7 +88,7 @@ function renderCustomers(customers) {
 
 /**
  * Fill the table with the generated products
- * 
+ *
  * @param {array}
  *            products - the products to render.
  */
@@ -127,13 +127,14 @@ function enableButtons() {
 
 /**
  * Notify a message.
- * 
+ *
  * @param {string}
  *            type - the message type.
  * @param {string}
  *            message - the message to display.
  */
 function notifyMessage(type, message) {
+    'use strict';
     const title = $(".card-title").text();
     Toaster.notify(type, message, title, $("#flashbags").data());
 }
@@ -147,7 +148,6 @@ function generate() {
     disableButtons();
     $('#content').slideUp();
 
-    const title = $(".card-title").text();
     const url = $('#form_entity').val();
     const data = {
         count: $('#form_count').intVal(),

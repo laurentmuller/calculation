@@ -38,6 +38,9 @@ class LogoutListener implements EventSubscriberInterface
         $this->appNameVersion = $appNameVersion;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
         return [LogoutEvent::class => 'onLogout'];
@@ -48,8 +51,8 @@ class LogoutListener implements EventSubscriberInterface
      */
     public function onLogout(LogoutEvent $event): void
     {
-        $username = $this->getUsername($event);
         $request = $event->getRequest();
+        $username = $this->getUsername($event);
         $this->notify($request, $username);
     }
 
@@ -72,7 +75,7 @@ class LogoutListener implements EventSubscriberInterface
     {
         if (null !== $username && $this->setSessionFromRequest($request)) {
             $params = [
-                '%username%' => (string) $username,
+                '%username%' => $username,
                 '%appname%' => $this->appNameVersion,
             ];
             $this->succesTrans('security.logout.success', $params);

@@ -11,19 +11,16 @@
  *            url - The search URL.
  * @param {string}
  *            error - The message to display on search error.
- *
  * @returns {jQuery} The element for chaining.
  */
 function initSearchElement($element, url, error) {
     'use strict';
 
-    // search units url
-    const options = {
+    $element.typeahead({
         valueField: '',
         ajax: {
             url: url
         },
-        // overridden functions (all are set in the server side)
         matcher: function () {
             return true;
         },
@@ -37,8 +34,7 @@ function initSearchElement($element, url, error) {
             const title = $("#edit-form").data("title");
             Toaster.danger(error, title, $("#flashbags").data());
         }
-    };
-    $element.typeahead(options);
+    });
 
     return $element;
 }
@@ -48,9 +44,15 @@ function initSearchElement($element, url, error) {
  */
 (function ($) {
     'use strict';
+
+    // initalize search
     const $form = $("#edit-form");
     initSearchElement($("#product_unit"), $form.data("unit-search"), $form.data("unit-error"));
     initSearchElement($("#product_supplier"), $form.data("supplier-search"), $form.data("supplier-error"));
+
+    // initalize price
     $('#product_price').inputNumberFormat();
+
+    // validation
     $form.initValidator();
 }(jQuery));

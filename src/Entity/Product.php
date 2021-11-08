@@ -54,14 +54,6 @@ class Product extends AbstractCategoryItemEntity
     private float $price = 0.0;
 
     /**
-     * The supplier.
-     *
-     * @ORM\Column(length=255, nullable=true)
-     * @Assert\Length(max=255)
-     */
-    private ?string $supplier = null;
-
-    /**
      * Clone this product.
      *
      * @param string $description the new description
@@ -103,14 +95,6 @@ class Product extends AbstractCategoryItemEntity
     }
 
     /**
-     * Gets the supplier.
-     */
-    public function getSupplier(): ?string
-    {
-        return $this->supplier;
-    }
-
-    /**
      * Set the description.
      *
      * @param string $description
@@ -128,16 +112,6 @@ class Product extends AbstractCategoryItemEntity
     public function setPrice(float $price): self
     {
         $this->price = $this->round($price);
-
-        return $this;
-    }
-
-    /**
-     * Sets the supplier.
-     */
-    public function setSupplier(?string $supplier): self
-    {
-        $this->supplier = $this->trim($supplier);
 
         return $this;
     }

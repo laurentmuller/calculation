@@ -1,6 +1,8 @@
-{% if not app.request.cookies.has('POLICY-ACCEPTED') %}
+
+{% if not app.request.cookies.has('POLICY_ACCEPTED') %}
 {{ asset_js('js/plugins/cookie-banner.js', {
     'id': "cookiebanner",
+    'data-cookie-name': 'POLICY_ACCEPTED',
     'data-cookie-path': cookie_path,
     'data-cookie-secure': cookie_secure|json_encode(),
     'data-cookie-same-site': cookie_same_site,

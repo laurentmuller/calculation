@@ -2,7 +2,7 @@
 
 /**
  * Gets the loading template.
- *
+ * 
  * @param {string}
  *            message - the loading message.
  * @returns {string} the loading template.
@@ -23,7 +23,7 @@ $.fn.extend({
 
     /**
      * Update the selected row.
-     *
+     * 
      * @param {jQuery}
      *            $table - the parent table.
      * @return {boolean} this function returns always true.
@@ -67,7 +67,7 @@ $.fn.extend({
 
     /**
      * Replace the tag name.
-     *
+     * 
      * @param {string}
      *            newTag - the new tag name.
      * @param {array} -
@@ -95,7 +95,7 @@ $.fn.extend({
 
     /**
      * Update the href attribute of the action.
-     *
+     * 
      * @param {Object}
      *            row - the row data.
      * @param {Object}
@@ -123,7 +123,7 @@ $.fn.extend({
 
     /**
      * Initialize the table-boostrap.
-     *
+     * 
      * @param {object}
      *            options - the options to merge with default.
      * @return {jQuery} this instance for chaining.
@@ -244,7 +244,7 @@ $.fn.extend({
 
     /**
      * Gets the boostrap-table option.
-     *
+     * 
      * @return {Object} the options.
      */
     getOptions: function () {
@@ -254,7 +254,7 @@ $.fn.extend({
 
     /**
      * Gets the boostrap-table parameters.
-     *
+     * 
      * @return {Object} the parameters.
      */
     getParameters: function () {
@@ -284,7 +284,7 @@ $.fn.extend({
 
     /**
      * Gets the search text.
-     *
+     * 
      * @return {string} the search text.
      */
     getSearchText: function () {
@@ -294,7 +294,7 @@ $.fn.extend({
 
     /**
      * Return if a search text is present.
-     *
+     * 
      * @return {boolean} true if a search text is present.
      */
     isSearchText: function () {
@@ -304,7 +304,7 @@ $.fn.extend({
 
     /**
      * Return if the card view mode is displayed.
-     *
+     * 
      * @return {boolean} true if the card view mode is displayed.
      */
     isCardView: function () {
@@ -314,7 +314,7 @@ $.fn.extend({
 
     /**
      * Return if the custom view mode is displayed.
-     *
+     * 
      * @return {boolean} true if the custom view mode is displayed.
      */
     isCustomView: function () {
@@ -325,7 +325,7 @@ $.fn.extend({
 
     /**
      * Returns if no loaded data (rows) is displayed.
-     *
+     * 
      * @return {boolean} true if not data is displayed.
      */
     isEmpty: function () {
@@ -334,9 +334,8 @@ $.fn.extend({
     },
 
     /**
-     * Get the loaded data (rows) of table at the moment that this method is
-     * called.
-     *
+     * Get the loaded data (rows) of table at the moment that this method is called.
+     * 
      * @return {array} the loaded data.
      */
     getData: function () {
@@ -346,7 +345,7 @@ $.fn.extend({
 
     /**
      * Gets the bootstrap table.
-     *
+     * 
      * @return {object} the bootstrap table.
      */
     getBootstrapTable: function () {
@@ -356,7 +355,7 @@ $.fn.extend({
 
     /**
      * Gets the selected row.
-     *
+     * 
      * @return {jQuery} the selected row, if any; null otherwise.
      */
     getSelection: function () {
@@ -368,7 +367,7 @@ $.fn.extend({
 
     /**
      * Gets the selected row index.
-     *
+     * 
      * @return {int} the selected row index, if any; -1 otherwise.
      */
     getSelectionIndex: function () {
@@ -379,7 +378,7 @@ $.fn.extend({
 
     /**
      * Gets the custom view container.
-     *
+     * 
      * @return {JQuery} the custom view container, if displayed, null otherwise.
      */
     getCustomView: function () {
@@ -393,7 +392,7 @@ $.fn.extend({
 
     /**
      * Save parameters to the session.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     saveParameters: function () {
@@ -408,7 +407,7 @@ $.fn.extend({
 
     /**
      * Update the href attribute of the actions.
-     *
+     * 
      * @param {array}
      *            rows - the rendered data.
      * @return {jQuery} this instance for chaining.
@@ -445,7 +444,7 @@ $.fn.extend({
 
     /**
      * Gets the visible columns of the card view.
-     *
+     * 
      * @return {array} the visible columns.
      */
     getVisibleCardViewColumns: function() {
@@ -456,7 +455,7 @@ $.fn.extend({
 
     /**
      * Update this card view UI.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     updateCardView: function () {
@@ -513,7 +512,7 @@ $.fn.extend({
 
     /**
      * Refresh/reload the remote server data.
-     *
+     * 
      * @param {object}
      *            options - the optional options.
      * @return {jQuery} this instance for chaining.
@@ -525,7 +524,7 @@ $.fn.extend({
 
     /**
      * Reset the search text.
-     *
+     * 
      * @param {string}
      *            text - the optional search text.
      * @return {jQuery} this instance for chaining.
@@ -537,7 +536,7 @@ $.fn.extend({
 
     /**
      * Refresh the table options.
-     *
+     * 
      * @param {Object}
      *            options - the options to refresh.
      * @return {jQuery} this instance for chaining.
@@ -549,7 +548,7 @@ $.fn.extend({
 
     /**
      * Toggle the card/table view.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     toggleView: function () {
@@ -559,7 +558,7 @@ $.fn.extend({
 
     /**
      * Toggles the view between the table and the custom view.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     toggleCustomView: function () {
@@ -569,7 +568,7 @@ $.fn.extend({
 
     /**
      * Toggles the display mode.
-     *
+     * 
      * @param {string}
      *            mode - the display mode to set ('table', 'card' or 'custom').
      * @return {jQuery} this instance for chaining.
@@ -577,6 +576,9 @@ $.fn.extend({
     setDisplayMode: function (mode) {
         'use strict';
         const $this = $(this);
+        if ($this.getDisplayMode() === mode) {
+            return $this;
+        }
         switch (mode) {
         case 'custom':
             if (!$this.isCustomView()) {
@@ -600,12 +602,12 @@ $.fn.extend({
             }
             break;
         }
-        return $this;
+        return $this.saveParameters();
     },
 
     /**
      * Gets the display mode.
-     *
+     * 
      * @return {string} the display mode ('table', 'card' or 'custom').
      */
     getDisplayMode : function () {
@@ -622,7 +624,7 @@ $.fn.extend({
 
     /**
      * Highlight matching text.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     highlight: function () {
@@ -647,7 +649,7 @@ $.fn.extend({
 
     /**
      * Shows the previous page.
-     *
+     * 
      * @param {boolean}
      *            selectLast - true to select the last row.
      * @return {boolean} true if the previous page is displayed.
@@ -670,7 +672,7 @@ $.fn.extend({
 
     /**
      * Shows the next page.
-     *
+     * 
      * @return {boolean} true if the next page is displayed.
      */
     showNextPage: function () {
@@ -686,7 +688,7 @@ $.fn.extend({
 
     /**
      * Select the first row.
-     *
+     * 
      * @return {boolean} true if the first row is selected.
      */
     selectFirstRow: function () {
@@ -702,7 +704,7 @@ $.fn.extend({
 
     /**
      * Select the last row.
-     *
+     * 
      * @return {boolean} true if the last row is selected.
      */
     selectLastRow: function () {
@@ -718,7 +720,7 @@ $.fn.extend({
 
     /**
      * Select the previous row.
-     *
+     * 
      * @return {boolean} true if the previous row is selected.
      */
     selectPreviousRow: function () {
@@ -735,7 +737,7 @@ $.fn.extend({
 
     /**
      * Select the next row.
-     *
+     * 
      * @return {boolean} true if the next row is selected.
      */
     selectNextRow: function () {
@@ -752,7 +754,7 @@ $.fn.extend({
 
     /**
      * Finds an action for the given selector
-     *
+     * 
      * @param {string}
      *            actionSelector - the action selector.
      * @return {JQuery} the action, if found; null otherwise.
@@ -776,7 +778,7 @@ $.fn.extend({
 
     /**
      * Call the edit action for the selected row (if any).
-     *
+     * 
      * @return {boolean} true if the action is called.
      */
     editRow: function () {
@@ -791,7 +793,7 @@ $.fn.extend({
 
     /**
      * Call the delete action for the selected row (if any).
-     *
+     * 
      * @return {boolean} true if the action is called.
      */
     deleteRow: function () {
@@ -806,7 +808,7 @@ $.fn.extend({
 
     /**
      * Enable the key handler.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     enableKeys: function () {
@@ -876,7 +878,7 @@ $.fn.extend({
 
     /**
      * Disable the key handler.
-     *
+     * 
      * @return {jQuery} this instance for chaining.
      */
     disableKeys: function () {

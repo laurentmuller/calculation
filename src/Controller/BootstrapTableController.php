@@ -272,15 +272,6 @@ class BootstrapTableController extends AbstractController
         return Request::METHOD_POST === $request->getMethod() ? $request->request : $request->query;
     }
 
-    /**
-     * Handle the table request.
-     *
-     * @param Request       $request  the request to handle
-     * @param AbstractTable $table    the table to get parameters for
-     * @param string        $template the template to render
-     *
-     * @return Response the response
-     */
     private function handleTableRequest(Request $request, AbstractTable $table, string $template): Response
     {
         // check permission
@@ -288,7 +279,7 @@ class BootstrapTableController extends AbstractController
             $this->denyAccessUnlessGranted(EntityVoterInterface::ATTRIBUTE_LIST, $subject);
         }
 
-        // update request
+        // update request parameters
         $view = $this->updateRequest($request, TableInterface::PARAM_VIEW, TableInterface::VIEW_TABLE);
         $this->updateRequest($request, TableInterface::PARAM_LIMIT, AbstractTable::getDefaultPageSize($view), $view);
 
@@ -345,11 +336,11 @@ class BootstrapTableController extends AbstractController
     /**
      * @param mixed|null $default the default value if the result parameter is null
      */
-    private function saveCookie(Response $response, DataResults $results, string $key, $default = null, string $prefix = ''): void
+    private function saveCookie(Response $response, DataResults $results, string $key, $default = null, string $prefix = '', string $modify = '+1 year'): void
     {
         $value = $results->getParams($key, $default);
         if (null !== $value) {
-            $this->setCookie($response, $key, $value, $prefix);
+            $this->setCookie($response, $key, $value, $prefix, $modify);
         } else {
             $this->clearCookie($response, $key, $prefix);
         }
@@ -358,10 +349,10 @@ class BootstrapTableController extends AbstractController
     /**
      * @param mixed $value the cookie value
      */
-    private function setCookie(Response $response, string $key, $value, string $prefix = ''): void
+    private function setCookie(Response $response, string $key, $value, string $prefix = '', string $modify = '+1 year'): void
     {
         $name = $this->getCookieName($key, $prefix);
-        $expire = (new \DateTime())->modify('+1 year');
+        $expire = (new \DateTime())->modify($modify);
         $cookie = new Cookie($name, (string) $value, $expire);
         $response->headers->setCookie($cookie);
     }
@@ -373,12 +364,13 @@ class BootstrapTableController extends AbstractController
      */
     private function updateRequest(Request $request, string $key, $default = null, string $prefix = '')
     {
-        $value = $request->get($key);
+        $input = $this->getInputBag($request);
+        $value = $input->get($key);
         if (null === $value) {
             $name = $this->getCookieName($key, $prefix);
             $value = $request->cookies->get($name, $default);
             if (null !== $value) {
-                $this->getInputBag($request)->set($key, $value);
+                $input->set($key, $value);
             }
         }
 

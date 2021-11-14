@@ -133,7 +133,7 @@
             // default buttons options
             let buttonOptions = {
                 'type': 'button',
-                'class': 'btn color-button',
+                'class': 'btn btn-color',
             };
             if (display) {
                 buttonOptions['data-toggle'] = 'tooltip';
@@ -178,17 +178,17 @@
 
             // tooltip
             if (display) {
-                that.findButton('.color-button').tooltip();
+                that.findButton('.btn-color').tooltip();
             }
 
             // add handlers
             that.$customButton.on('click', function (e) {
                 that.onCustomButtonClick(e);
             });
-            that.$palette.on('click', '.color-button', function (e) {
+            that.$palette.on('click', '.btn-color', function (e) {
                 that.onColorButtonClick(e);
             });
-            that.$palette.on('keydown', '.color-button', function (e) {
+            that.$palette.on('keydown', '.btn-color', function (e) {
                 that.onColorButtonKeyDown(e);
             });
         }
@@ -222,7 +222,7 @@
             const value = (this.$element.val() || '').toUpperCase();
 
             // find button
-            const $button = this.findButton('.color-button[data-value="' + value + '"]:first');
+            const $button = this.findButton('.btn-color[data-value="' + value + '"]:first');
             if ($button) {
                 $button.focus();
             } else {
@@ -274,7 +274,7 @@
             const lastRow = this.rows - 1;
             const $button = $(e.target);
             const selection = this.getSelection($button);
-            const count =  this.$palette.find('.color-button').length;
+            const count =  this.$palette.find('.btn-color').length;
             let index = selection.row * this.cols + selection.col;
 
             switch (e.which || e.keyCode) {
@@ -385,7 +385,7 @@
          */
         getSelection($button) {
             // find focus
-            const $focused = this.findButton('.color-button:focus');
+            const $focused = this.findButton('.btn-color:focus');
             if ($focused) {
                 return {
                     col: $focused.index(),
@@ -427,7 +427,7 @@
          * @returns {jQuery} the button, if found; null otherwise.
          */
         setSelection(selection) {
-            const selector = '.color-row:eq(' + selection.row + ') .color-button:eq(' + selection.col + ')';
+            const selector = '.color-row:eq(' + selection.row + ') .btn-color:eq(' + selection.col + ')';
             const $button = this.findButton(selector);
             if ($button) {
                 return $button.focus();

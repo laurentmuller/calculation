@@ -113,7 +113,7 @@
                     'z-index': settings.zIndex,
                     'font-size': settings.fontSize,
                     'font-family': settings.fontFamily,
-                    //'visibility': visibility
+                    // 'visibility': visibility
                 }
             });
             const $message = $('<div/>', {
@@ -134,6 +134,12 @@
                     'title': settings.linkTitle,
                     'target': settings.linkTarget
                 });
+                if (settings.linkToggleClass) {
+                    const toggle = function() {
+                        $link.toggleClass(settings.linkToggleClass);
+                    };
+                    $link.hover(toggle, toggle);
+                }
                 $message.append($link);
             }
             const $close = $('<a/>', {
@@ -143,7 +149,7 @@
                 'title': settings.closeTitle,
                 'href': '#',
                 'css': {
-                    //'visibility': visibility
+                    // 'visibility': visibility
                 }
             });
             $banner.append($message, $close);
@@ -205,6 +211,7 @@
         bannerClass: 'd-flex d-print-none fixed-bottom bg-secondary text-white p-1',
         messageClass: 'flex-fill',
         linkClass: 'mx-1 text-white-50',
+        linkToggleClass: 'text-white-50 text-white',
         closeClass: 'text-white mx-2',
 
         linkTarget: '_blank',

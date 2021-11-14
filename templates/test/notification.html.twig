@@ -1,9 +1,10 @@
 {% extends 'cards/card_base.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
 {% macro button(type, icon) -%}
-<button type="button" data-type="{{ type }}" class="mb-2 btn btn-notify btn-form btn-{{ type }}">
-    {{- ('theme.background.' ~ type)|trans -}}
+<button type="button" data-type="{{ type }}" class="mx-2 mb-2 btn btn-notify btn-form btn-{{ type }}">
+    {{- ('theme.background.' ~ type)|trans -}} 
 </button>
 {%- endmacro %}
 
@@ -20,7 +21,7 @@
 
 {% macro checkbox(id, text, checked=true) -%}
 <div class="custom-control custom-switch custom-control-inline">
-  <input type="checkbox" class="custom-control-input" id="{{ id }}"{% if checked %} checked="checked"{% endif %}>
+  <input type="checkbox" class="custom-control-input" name="{{ id }}" id="{{ id }}" data-default="{{ checked|json_encode }}"{% if checked %} checked="checked"{% endif %}>
   <label class="custom-control-label" for="{{ id }}">{{ text }}</label>
 </div>
 {%- endmacro %}
@@ -35,27 +36,21 @@
         <label class="horizontal-line">Type de message</label>
     </div>
 </div>
-<div class="form-row">
-    <div class="col text-center">
-        {{ _self.button('success') }}
-        {{ _self.button('warning') }}
-        {{ _self.button('danger') }}
-        {{ _self.button('info') }}
-    </div>
-</div>
-<div class="form-row">
-    <div class="col text-center">
-        {{ _self.button('primary') }}
-        {{ _self.button('secondary') }}
-        {{ _self.button('dark') }}
-    </div>
+<div class="form-row justify-content-center">
+    {{ _self.button('success') }}
+    {{ _self.button('warning') }}
+    {{ _self.button('danger') }}
+    {{ _self.button('info') }}
+    {{ _self.button('primary') }}
+    {{ _self.button('secondary') }}
+    {{ _self.button('dark') }}
 </div>
 <hr>
 <div class="form-row">
-    <div class="col-7">
+    <div class="col-md-7">
         <div class="form-group">
             <label for="position">{{ 'parameters.fields.message_position'|trans }}</label>
-            <select id="position" name="position" class="form-control" data-position="{{ position }}" data-random="{{ url('ajax_random_text') }}">
+            <select id="position" name="position" class="form-control" data-default="{{ position }}" data-position="{{ position }}" data-random="{{ url('ajax_random_text') }}">
                 {{ _self.position('top-left', position) }}
                 {{ _self.position('top-center', position) }}
                 {{ _self.position('top-right', position) }}
@@ -70,10 +65,10 @@
             </select>
         </div>
     </div>
-    <div class="col-5">
+    <div class="col-md-5">
         <div class="form-group">
             <label for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
-            <select id="timeout" name="timeout" class="form-control">
+            <select id="timeout" name="timeout" data-default="{{ timeout }}" class="form-control">
                 {{ _self.timeout(1000, timeout) }}
                 {{ _self.timeout(2000, timeout) }}
                 {{ _self.timeout(3000, timeout) }}
@@ -88,22 +83,19 @@
         <label class="horizontal-line">Options</label>
     </div>
 </div>
-<div class="form-row">
-    <div class="col">
-        <div class="form-group mb-0">
-            <div class="text-center ml-3">
-                {{ _self.checkbox('title', 'Titre') }}
-                {{ _self.checkbox('icon', 'Icône') }}
-                {{ _self.checkbox('subtitle', 'Sous-titre', subtitle) }}
-                {{ _self.checkbox('close', 'Fermer') }}
-                {{ _self.checkbox('autohide', 'Masquer automatiquement') }}
-            </div>
-        </div>
-    </div>
+<div class="form-row flex-column flex-md-row justify-content-md-around px-2">
+    {{ _self.checkbox('title', 'Titre') }}
+    {{ _self.checkbox('icon', 'Icône') }}
+    {{ _self.checkbox('subtitle', 'Sous-titre', subtitle) }}
+    {{ _self.checkbox('close', 'Fermer') }}
+    {{ _self.checkbox('autohide', 'Masquer automatiquement') }}
 </div>
 {% endblock %}
 
-{% block card_footer_class ' d-none' %}
+{% block card_footer %}
+{{ icons.homepage() }}
+<button type="button" class="btn btn-default btn-outline-secondary">{{ 'theme.default'|trans }}</button>
+{% endblock %}
 
 {% block javascripts -%}
 {{ parent() }}

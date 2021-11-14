@@ -1,0 +1,121 @@
+/**! compression tag for ftp-deployment */
+
+.actions {
+    width: 30px;
+    text-align: center;
+}
+.text-border {
+    border-left: 0.3rem solid transparent !important;
+}
+
+.text-currency {
+    text-align: right;
+    width: 90px;
+    white-space: nowrap;
+}
+
+.text-percent {
+    text-align: right;
+    width: 70px;
+    white-space: nowrap;
+}
+
+.text-date {
+    text-align: center;
+    width: 100px;
+    white-space: nowrap;
+}
+
+.text-date-time {
+    width: 150px;
+    white-space: nowrap;
+}
+
+.text-boolean {
+    text-align: center;
+    width: 140px;
+    white-space: nowrap;
+}
+
+.text-id {
+    width: 90px;
+    white-space: nowrap;
+}
+
+.text-color {
+    text-align: center;
+    width: 80px;
+}
+
+.text-unit {
+    width: 90px;
+}
+
+.text-code {
+    width: 180px;
+}
+
+.text-state {
+    width: 100px;
+}
+
+.text-category {
+    width: 140px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.text-group {
+    width: 160px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.text-supplier{
+    width: 160px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.text-image {
+    width: 75px;
+    text-align: center;
+}
+
+.text-image img {
+    mix-blend-mode: multiply;
+}
+
+.text-nowrap {
+    white-space: nowrap;
+}
+
+.text-cell {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 0;
+}
+
+.text-operation {
+    text-align: right;
+    width: 95px;
+    white-space: nowrap;
+}
+
+.text-editable{
+    width: 110px;
+}
+
+.text-calculation {
+    text-align: right;
+    width: 110px;
+}
+
+.text-hover {
+    background-color: var(--primary) !important;
+    color: var(--white) !important;
+}

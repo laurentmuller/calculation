@@ -4,7 +4,7 @@
 
 /**
  * Display a notification.
- * 
+ *
  * @param {string}
  *            type - the message type.
  * @param {string}
@@ -12,7 +12,7 @@
  * @param {Object}
  *            options - the custom options.
  */
-function notify(type, title, options, clear) {
+function notify(type, title, options) {
     'use strict';
 
     // get random text

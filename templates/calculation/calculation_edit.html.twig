@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% form_theme form _self %}
 
 {# customize the user margin field to display a tooltip #}
 {% block _calculation_userMargin_widget -%}
@@ -19,7 +20,6 @@
         </div>
     </div>
 {%- endblock %}
-{% form_theme form _self %}
 
 {# parameters #}
 {%- set title = new ? 'calculation.add.title' : 'calculation.edit.title' -%}

@@ -50,28 +50,40 @@ class AdminController extends AbstractController
     public function clearCache(Request $request, KernelInterface $kernel, LoggerInterface $logger, SymfonyInfo $info): Response
     {
         // handle request
-        $form = $this->getForm();
+        $form = $this->createForm();
         if ($this->handleRequestForm($request, $form)) {
             // first clear application service cache
             $this->getApplication()->clearCache();
 
             try {
+                // old command
                 $options = [
                     'command' => 'cache:clear',
                     '--env' => $kernel->getEnvironment(),
                     '--no-warmup' => true,
                 ];
 
+                // new command
+                $options = [
+                    'command' => 'cache:pool:clear',
+                    'pools' => ['cache.global_clearer'],
+                    '--env' => $kernel->getEnvironment(),
+                ];
+
                 $input = new ArrayInput($options);
                 $output = new BufferedOutput();
+
                 $application = new Application($kernel);
                 $application->setCatchExceptions(false);
                 $application->setAutoExit(false);
+
                 $result = $application->run($input, $output);
+                $content = $output->fetch();
 
                 $context = [
                     'result' => $result,
                     'options' => $options,
+                    'content' => $content,
                 ];
                 $message = $this->succesTrans('clear_cache.success');
                 $logger->info($message, $context);

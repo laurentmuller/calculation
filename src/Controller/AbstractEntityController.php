@@ -105,7 +105,7 @@ abstract class AbstractEntityController extends AbstractController
         $parameters['item'] = $item;
 
         // create form and handle request
-        $form = $this->getForm();
+        $form = $this->createForm();
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // remove

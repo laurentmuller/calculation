@@ -443,7 +443,7 @@ body {
 
 /**
  * bootstrap-select (color picker)
- 
+
 span.color-value {
     width: 1.5rem;
     height: 1rem;
@@ -547,9 +547,9 @@ span.color-value {
  */
  .context-menu-list {
     -webkit-box-shadow: inherit !important;
-       -moz-box-shadow: inset !important;
-         -o-box-shadow: inset !important;
-            box-shadow: inset !important;
+       -moz-box-shadow: inherit !important;
+         -o-box-shadow: inherit !important;
+            box-shadow: inherit !important;
 }
 .context-menu-separator {
     padding: 0 !important;
@@ -559,8 +559,8 @@ span.color-value {
 .context-menu-icon.context-menu-icon--fa5 svg {
     position: inherit !important;
     color: inherit !important;
-    top: inherit !important;
     left: inherit !important;
+    top: inherit !important;
     margin-right: 0.3rem;
 }
 
@@ -584,11 +584,4 @@ span.color-value {
 .table-hover tbody tr.not-hover:hover {
   color: inherit !important;
   background-color: inherit !important;
-}
-
-/**
- * Reset bottom border of headers
- */
-.table:not(.table-borderless) thead th {
-    border-bottom-width: 1px;
 }

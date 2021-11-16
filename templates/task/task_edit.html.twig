@@ -1,5 +1,39 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% import 'macros/_icons.html.twig' as icons %}
+{#% form_theme form with _self %#}
+
+{% block _task_items_entry_name_widget -%}
+<div class="input-group">
+    <div class="input-group-prepend d-print-none">
+        <button class="btn btn-edit btn-outline-primary" type="button" title="{{ 'taskitem.edit.items_show'|trans }}">
+            <i class="fas fa-fw fa-caret-right" aria-hidden="true"></i>
+        </button>
+    </div>
+    {{ block('form_widget_simple') }}
+    <div class="input-group-append d-print-none">
+        <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'task.edit.move_up_item'|trans }}" disabled="disabled">
+            <i class="fas fa-angle-up" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-edit btn-outline-secondary btn-down-item" title="{{ 'task.edit.move_down_item'|trans }}" disabled="disabled">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-edit btn-outline-danger btn-delete-item" title="{{ 'task.edit.delete_item'|trans }}">
+            <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+{%- endblock %}
+
+{% block _task_items_entry_margins_entry_value_widget -%}
+<div class="input-group">
+    {{ block('form_widget_simple') }}
+    <div class="input-group-append d-print-none">
+        <button type="button" class="btn btn-edit btn-outline-danger btn-delete-item" title="{{ 'taskitem.edit.delete_item'|trans }}">
+            <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+{%- endblock %}
 
 {# macros #}
 {% macro printTaskItemMargin(margin) %}

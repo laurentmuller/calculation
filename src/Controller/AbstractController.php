@@ -26,7 +26,7 @@ use App\Traits\TranslatorFlashMessageTrait;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -197,11 +197,19 @@ abstract class AbstractController extends BaseController
     }
 
     /**
+     * {@inheritDoc} Override the parent function to allow to use the default type like defined in the <code>FormFactoryInterface</code>.
+     *
+     * @param mixed $data the initial data
+     */
+    protected function createForm(string $type = FormType::class, $data = null, array $options = []): FormInterface
+    {
+        return parent::createForm($type, $data, $options);
+    }
+
+    /**
      * Creates and returns a form helper instance.
      *
-     * @param string $labelPrefix the label prefix. If the prefix is not null,
-     *                            the label is automatically added when the field property is
-     *                            set.
+     * @param string $labelPrefix the label prefix. If the prefix is not null, the label is automatically added when the field property is set.
      * @param mixed  $data        the initial data
      * @param array  $options     the initial options
      */
@@ -210,19 +218,6 @@ abstract class AbstractController extends BaseController
         $builder = $this->createFormBuilder($data, $options);
 
         return new FormHelper($builder, $labelPrefix);
-    }
-
-    /**
-     * Creates and returns a form instance.
-     *
-     * @param mixed $data    the initial data
-     * @param array $options the initial options
-     *
-     * @see FormBuilderInterface::getForm()
-     */
-    protected function getForm($data = null, array $options = []): FormInterface
-    {
-        return $this->createFormBuilder($data, $options)->getForm();
     }
 
     /**

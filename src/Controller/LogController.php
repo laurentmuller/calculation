@@ -89,7 +89,7 @@ class LogController extends AbstractController
 
         // handle request
         $file = $service->getFileName();
-        $form = $this->getForm();
+        $form = $this->createForm();
         if ($this->handleRequestForm($request, $form)) {
             try {
                 // empty file

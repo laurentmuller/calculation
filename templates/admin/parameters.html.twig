@@ -1,5 +1,6 @@
 {# See http://symfony.com/doc/current/cookbook/form/form_customization.html#how-to-customize-an-individual-field #}
 {% extends 'cards/card_edit.html.twig' %}
+{% form_theme form with _self %}
 
 {# macros #}
 {% macro collapseLine(href) %}
@@ -31,9 +32,6 @@
     </div>
 </div>
 {%- endblock %}
-
-{# imports #}
-{% form_theme form with _self %}
 
 {# parameters #}
 {%- set title = 'parameters.title' -%}

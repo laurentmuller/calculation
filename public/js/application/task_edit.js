@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster */
+/* globals Toaster, sortable */
 
 /**
  * Update the user interface.
@@ -23,7 +23,7 @@ function updateUI() {
     });
     $('.empty-items').toggleClass('d-none', $('#items .item').length !== 0);
 
-    // update actions, rule and position
+    // update actions, rules and positions
     let position = 0;
     $('#items .item').each(function (_index, item) {
         const $item = $(item);
@@ -37,11 +37,40 @@ function updateUI() {
 }
 
 /**
+ * Starts the drag and drop of items.
+ */
+function startDragItems() {
+    'use strict';
+    const $items = $('#items');
+
+    // destroy
+    if ($items.data('sortable')) {
+        $items.off('sortupdate', updateUI);
+        $items.data('sortable', false);
+        sortable($items, 'destroy');
+    }
+
+    // items?
+    if ($items.find('.item').length > 1) {
+        const isRadius = $('.card:first').css('border-radius') !== '0px';
+        const placeholderClass = 'border border-primary' + (isRadius ? ' rounded' : '');
+        sortable($items, {
+            items: '.item',
+            handle: '.stretched-link',
+            forcePlaceholderSize: true,
+            placeholderClass: placeholderClass
+        });
+        $items.on('sortupdate', updateUI);
+        $items.data('sortable', true);
+    }
+}
+
+/**
  * Gets the maximum of the maximum column.
- *
+ * 
  * @param {JQuery}
  *            table - the parent table.
- * @returns float - the maximum value.
+ * @returns float - the maximum.
  */
 function getMaxValue($table) {
     'use strict';
@@ -55,10 +84,10 @@ function getMaxValue($table) {
 
 /**
  * Gets the minimum of the value column.
- *
+ * 
  * @param {JQuery}
  *            table - the parent table.
- * @returns float - the minimum amount value.
+ * @returns float - the minimum.
  */
 function getMinValue($table) {
     'use strict';
@@ -72,7 +101,7 @@ function getMinValue($table) {
 
 /**
  * Gets the next available item index used for the prototype.
- *
+ * 
  * @returns int the next index.
  */
 function getNextItemIndex() {
@@ -87,7 +116,7 @@ function getNextItemIndex() {
 
 /**
  * Gets the next available margin index used for the prototype.
- *
+ * 
  * @returns int the next index.
  */
 function getNextMarginIndex() {
@@ -102,7 +131,7 @@ function getNextMarginIndex() {
 
 /**
  * Gets the item prototype.
- *
+ * 
  * @returns string the prototype.
  */
 function getItemPrototype() {
@@ -112,7 +141,7 @@ function getItemPrototype() {
 
 /**
  * Gets the margin prototype.
- *
+ * 
  * @param {JQuery}
  *            table - the parent table.
  * @returns string the prototype.
@@ -124,7 +153,7 @@ function getMarginPrototype($table) {
 
 /**
  * Adds a new item.
- *
+ * 
  * @return {jQuery} the newly created item for chaining.
  */
 function addItem() {
@@ -150,12 +179,15 @@ function addItem() {
     // expand
     $('#items').find('.collapse:last').addClass('show');
 
+    // drag and drop
+    startDragItems();
+
     return $item;
 }
 
 /**
  * Remove an item.
- *
+ * 
  * @param {jQuery}
  *            $caller - the caller (normally a button).
  */
@@ -165,12 +197,13 @@ function removeItem($caller) {
     $caller.closest('.item').fadeOut(200, function () {
         $(this).remove();
         updateUI();
+        startDragItems();
     });
 }
 
 /**
  * Move up an item.
- *
+ * 
  * @param {jQuery}
  *            $caller - the caller (normally a button).
  * @return {jQuery} the item for chaining.
@@ -199,7 +232,7 @@ function moveUpItem($caller) {
 
 /**
  * Move down an item.
- *
+ * 
  * @param {jQuery}
  *            $caller - the caller (normally a button).
  * @return {jQuery} the item for chaining.
@@ -228,7 +261,7 @@ function moveDownItem($caller) {
 
 /**
  * Adds a new margin.
- *
+ * 
  * @param {jQuery}
  *            $caller - the caller (normally a button).
  */
@@ -263,7 +296,7 @@ function addMargin($caller) {
 
 /**
  * Remove a margin (row).
- *
+ * 
  * @param {jQuery}
  *            $caller - the caller.
  */
@@ -278,7 +311,7 @@ function removeMargin($caller) {
 
 /**
  * Sort margins.
- *
+ * 
  * @param {jQuery}
  *            $caller - the caller.
  */
@@ -310,7 +343,7 @@ function sortMargins($caller) {
 
 /**
  * Initialize a search for an element.
- *
+ * 
  * @param {jQuery}
  *            $element - The element to handle.
  * @param {String]
@@ -393,7 +426,10 @@ function initSearchElement($element, url, error) {
     initSearchElement($("#task_unit"), $form.data("unit-search"), $form.data("unit-error"));
     initSearchElement($("#task_supplier"), $form.data("supplier-search"), $form.data("supplier-error"));
 
-    // validation
+    // start drag & drop
+    startDragItems();
+
+    // initalize validation
     $('#edit-form').initValidator();
 
     // update UI

@@ -9,7 +9,7 @@ const SearchHelper = {
 
     /**
      * Initialize type ahead searches.
-     *
+     * 
      * @return {SearchHelper} this instance for chaining.
      */
     init: function () {
@@ -24,7 +24,7 @@ const SearchHelper = {
 
     /**
      * Initialize the type ahead search customers.
-     *
+     * 
      * @return {Typeahead} The type ahead instance.
      */
     initSearchCustomer: function () {
@@ -39,7 +39,7 @@ const SearchHelper = {
 
     /**
      * Initialize the type ahead search products.
-     *
+     * 
      * @return {Typeahead} The type ahead instance.
      */
     initSearchProduct: function () {
@@ -77,7 +77,7 @@ const SearchHelper = {
 
     /**
      * Initialize the type ahead search product units.
-     *
+     * 
      * @return {Typeahead} The type ahead instance.
      */
     initSearchUnits: function () {
@@ -98,7 +98,7 @@ const Application = {
 
     /**
      * Initialize application.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     init: function () {
@@ -108,7 +108,7 @@ const Application = {
 
     /**
      * Initialize the drag and drop.
-     *
+     * 
      * @param {boolean}
      *            destroy - true to destroy the existing sortable (if any).
      * @return {Application} This instance for chaining.
@@ -140,10 +140,10 @@ const Application = {
         // create sortable
         const $bodies = $('#data-table-edit tbody');
         sortable($bodies, {
-            placeholderClass: 'table-primary',
-            forcePlaceholderSize: false,
+            acceptFrom: 'tbody',
             items: 'tr:not(.drag-skip)',
-            acceptFrom: 'tbody'
+            forcePlaceholderSize: true,
+            placeholderClass: 'table-primary'
         });
 
         // update bodies
@@ -157,7 +157,7 @@ const Application = {
 
     /**
      * Gets the item dialog.
-     *
+     * 
      * @return {Object} the dialog.
      */
     getItemDialog: function () {
@@ -170,7 +170,7 @@ const Application = {
 
     /**
      * Gets the task dialog.
-     *
+     * 
      * @return {Object} the dialog.
      */
     getTaskDialog: function () {
@@ -183,7 +183,7 @@ const Application = {
 
     /**
      * Initialize the draggable edit dialogs.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     initDragDialog: function () {
@@ -260,7 +260,7 @@ const Application = {
 
     /**
      * Initialize group and item menus.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     initMenus: function () {
@@ -318,7 +318,7 @@ const Application = {
 
     /**
      * Format a value with 2 fixed decimals and grouping separator.
-     *
+     * 
      * @param {Number}
      *            value - the value to format.
      * @returns {string} - the formatted value.
@@ -345,7 +345,7 @@ const Application = {
 
     /**
      * Update the buttons, the total and initialize the drag-drop.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     updateAll: function () {
@@ -359,7 +359,7 @@ const Application = {
 
     /**
      * Update the move up/down and sort buttons.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     updateButtons: function () {
@@ -411,7 +411,7 @@ const Application = {
 
     /**
      * Update the totals.
-     *
+     * 
      * @param {boolean}
      *            adjust - true to adjust the user margin.
      * @return {Application} This instance for chaining.
@@ -498,7 +498,7 @@ const Application = {
 
     /**
      * Disable edition.
-     *
+     * 
      * @param {string}
      *            message - the error message to display.
      * @return {Application} This instance for chaining.
@@ -536,7 +536,7 @@ const Application = {
 
     /**
      * Gets groups.
-     *
+     * 
      * @returns {jQuery} - the groups.
      */
     getGroups: function () {
@@ -546,7 +546,7 @@ const Application = {
 
     /**
      * Gets the categories for the given group.
-     *
+     * 
      * @param {jQuery}
      *            $group - the group (thead) to search categories for.
      * @returns {jQuery} - the categories.
@@ -558,7 +558,7 @@ const Application = {
 
     /**
      * Gets the items for the given category.
-     *
+     * 
      * @param {jQuery} -
      *            $category - the category (th) to serach items for.
      * @returns {jQuery} - the items.
@@ -570,7 +570,7 @@ const Application = {
 
     /**
      * Finds or create the table head for the given group.
-     *
+     * 
      * @param {Object}
      *            group - the group data used to find row.
      * @returns {jQuery} - the table head.
@@ -590,7 +590,7 @@ const Application = {
 
     /**
      * Find or create the table body for the given category.
-     *
+     * 
      * @param {jQuery}
      *            $group - the parent group (thead).
      * @param {Object}
@@ -610,14 +610,12 @@ const Application = {
 
     /**
      * Compare 2 strings with language sensitive.
-     *
+     * 
      * @param {string}
      *            string1 - the first string to compare.
      * @param {string}
      *            string2 - the second string to compare.
-     * @return {int} a negative value if string1 comes before string2; a
-     *         positive value if string1 comes after string2; 0 if they are
-     *         considered equal.
+     * @return {int} a negative value if string1 comes before string2; a positive value if string1 comes after string2; 0 if they are considered equal.
      */
     compareStrings: function (string1, string2) {
         'use strict';
@@ -631,10 +629,9 @@ const Application = {
 
     /**
      * Sort items of a category.
-     *
+     * 
      * @param {jQuery}
-     *            $element - the caller element (button or tbody) used to find
-     *            the category.
+     *            $element - the caller element (button or tbody) used to find the category.
      * @return {Application} This instance for chaining.
      */
     sortItems: function ($element) {
@@ -661,10 +658,9 @@ const Application = {
 
     /**
      * Sort categories by name.
-     *
+     * 
      * @param {jQuery}
-     *            $element - the caller element (button, row or thead) used to
-     *            find the group and the categories.
+     *            $element - the caller element (button, row or thead) used to find the group and the categories.
      * @return {Application} This instance for chaining.
      */
     sortCategories: function ($element) {
@@ -692,7 +688,7 @@ const Application = {
 
     /**
      * Sort groups by name.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     sortGroups: function () {
@@ -715,7 +711,7 @@ const Application = {
 
     /**
      * Sort groups, categories and items.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     sortCalculation: function () {
@@ -734,7 +730,7 @@ const Application = {
 
     /**
      * Appends the given group to the table.
-     *
+     * 
      * @param {Object}
      *            group - the group data used to update row.
      * @returns {jQuery} - the appended group.
@@ -777,7 +773,7 @@ const Application = {
 
     /**
      * Appends the given category to the table.
-     *
+     * 
      * @param {jQuery}
      *            $group - the parent group (thead).
      * @param {Object}
@@ -826,7 +822,7 @@ const Application = {
 
     /**
      * Display the add item dialog.
-     *
+     * 
      * @param {jQuery}
      *            $source - the caller element (normally a button).
      */
@@ -855,9 +851,8 @@ const Application = {
 
 
     /**
-     * Display the edit item dialog. This function copy the element to the
-     * dialog and display it.
-     *
+     * Display the edit item dialog. This function copy the element to the dialog and display it.
+     * 
      * @param {jQuery}
      *            $source - the caller element (normally a button).
      */
@@ -873,7 +868,7 @@ const Application = {
 
     /**
      * Remove a calculation group.
-     *
+     * 
      * @param {jQuery}
      *            $element - the caller element (normally a button).
      * @return {Application} This instance for chaining.
@@ -892,9 +887,8 @@ const Application = {
     },
 
     /**
-     * Remove a calculation category. If the parent group is empty after
-     * deletion, then group is also deleted.
-     *
+     * Remove a calculation category. If the parent group is empty after deletion, then group is also deleted.
+     * 
      * @param {jQuery}
      *            $element - the caller element (normally a button).
      * @return {Application} This instance for chaining.
@@ -920,7 +914,7 @@ const Application = {
 
     /**
      * Remove a calculation item.
-     *
+     * 
      * @param {jQuery}
      *            $element - the caller element (button).
      * @return {Application} This instance for chaining.
@@ -946,7 +940,7 @@ const Application = {
 
     /**
      * Handle the item dialog form submit event when adding an item.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     onAddItemDialogSubmit: function () {
@@ -974,7 +968,7 @@ const Application = {
 
     /**
      * Handle the item dialog form submit event when editing an item.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     onEditItemDialogSubmit: function () {
@@ -1042,7 +1036,7 @@ const Application = {
 
     /**
      * Handle the task dialog form submit event when adding a task.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     onAddTaskDialogSubmit: function () {
@@ -1072,7 +1066,7 @@ const Application = {
 
     /**
      * Handle the task dialog form submit event when editing a task.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     onEditTaskDialogSubmit: function () {
@@ -1092,7 +1086,7 @@ const Application = {
 
     /**
      * Handles the row drag stop event.
-     *
+     * 
      * @param {Event}
      *            e - the source event.
      */
@@ -1140,7 +1134,7 @@ const Application = {
 
     /**
      * Update positions of groups, categories and items.
-     *
+     * 
      * @return {Application} This instance for chaining.
      */
     updatePositions: function () {
@@ -1178,9 +1172,8 @@ const Application = {
 $.fn.extend({
 
     /**
-     * Gets the index, for a row, of the first item input. For example:
-     * calculation_groups_4_items_12_total will return 12.
-     *
+     * Gets the index, for a row, of the first item input. For example: calculation_groups_4_items_12_total will return 12.
+     * 
      * @returns {int} - the index, if found; -1 otherwise.
      */
     inputIndex() {
@@ -1192,9 +1185,8 @@ $.fn.extend({
     },
 
     /**
-     * Finds an input element that have the name attribute within a given
-     * substring.
-     *
+     * Finds an input element that have the name attribute within a given substring.
+     * 
      * @param {string}
      *            name - the partial attribute name.
      * @return {jQuery} - The input, if found; null otherwise.
@@ -1209,10 +1201,9 @@ $.fn.extend({
 
     /**
      * Fade out and remove the selected element.
-     *
+     * 
      * @param {function}
-     *            callback - the optional function to call after the element is
-     *            removed.
+     *            callback - the optional function to call after the element is removed.
      */
     removeFadeOut: function (callback) {
         'use strict';
@@ -1231,7 +1222,7 @@ $.fn.extend({
 
     /**
      * Gets the template prototype from the current element.
-     *
+     * 
      * @param {string}
      *            pattern - the regex pattern used to replace the index.
      * @param {string}
@@ -1257,7 +1248,7 @@ $.fn.extend({
 
     /**
      * Gets item values from the current row.
-     *
+     * 
      * @returns {Object} the item data.
      */
     getRowItem: function () {
@@ -1279,7 +1270,7 @@ $.fn.extend({
 
     /**
      * Create a new row and appends to this current parent category (tbody).
-     *
+     * 
      * @param {Object}
      *            item - the item values used to update the row
      * @returns {jQuery} - the created row.
@@ -1299,7 +1290,7 @@ $.fn.extend({
 
     /**
      * Copy the values of the item to the current row.
-     *
+     * 
      * @param {Object}
      *            item - the item to get values from.
      * @returns {jQuery} - The updated row.
@@ -1328,7 +1319,7 @@ $.fn.extend({
 
     /**
      * Initialize a type ahead search.
-     *
+     * 
      * @param {Object}
      *            options - the options to override.
      * @return {Typeahead} The type ahead instance.
@@ -1369,7 +1360,7 @@ $.fn.extend({
 
     /**
      * Gets the parent row.
-     *
+     * 
      * @returns {jQuery} - The parent row.
      */
     getParentRow: function () {
@@ -1379,7 +1370,7 @@ $.fn.extend({
 
     /**
      * Creates the context menu items.
-     *
+     * 
      * @returns {Object} the context menu items.
      */
     getContextMenuItems: function () {
@@ -1418,14 +1409,13 @@ const MoveRowHandler = {
 
     /**
      * Move a source row before or after the target row.
-     *
+     * 
      * @param {jQuery}
      *            $source - the row to move.
      * @param {jQuery}
      *            $target - the target row.
      * @param {boolean}
-     *            up - true to move before the target (up); false to move after
-     *            (down).
+     *            up - true to move before the target (up); false to move after (down).
      * @return {jQuery} - The moved row.
      */
     move: function ($source, $target, up) {
@@ -1445,7 +1435,7 @@ const MoveRowHandler = {
 
     /**
      * Move a calculation item to the first position.
-     *
+     * 
      * @param {jQuery}
      *            $row - the row to move.
      * @return {jQuery} - The parent row.
@@ -1463,7 +1453,7 @@ const MoveRowHandler = {
 
     /**
      * Move a calculation item to the last position.
-     *
+     * 
      * @param {jQuery}
      *            $row - the row to move.
      * @return {jQuery} - The parent row.
@@ -1482,7 +1472,7 @@ const MoveRowHandler = {
 
     /**
      * Move up a calculation item.
-     *
+     * 
      * @param {jQuery}
      *            $row - the row to move.
      * @return {jQuery} - The parent row.
@@ -1500,7 +1490,7 @@ const MoveRowHandler = {
 
     /**
      * Move down a calculation item.
-     *
+     * 
      * @param {jQuery}
      *            $row - the row to move.
      * @return {jQuery} - The parent row.

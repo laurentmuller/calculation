@@ -21,16 +21,16 @@ captcha:
     timeout: Le délai d'attente est atteint. Essayez de recharger la page ou l'image.
 
 reset:
-    expired_reset_password_token: Le lien dans votre courriel est expiré. Veuillez essayer de réinitialiser votre mot de passe.
+    expired_reset_password_token: Le lien dans votre adresse électronique est expiré. Veuillez essayer de réinitialiser votre mot de passe.
     invalid_reset_password_token: Le lien de réinitialisation du mot de passe n'est pas valide. Veuillez essayer de réinitialiser votre mot de passe.
     too_many_password_request: Vous avez déjà demandé une réinitialisation du mot de passe. Veuillez vérifier vos emails ou réessayer après %availableAt%.
     send_email_error:  Il y a eu un problème lors de l'envoi du courrier électronique.
     not_found_password_token: Aucun jeton de ré-initialisation du mot de passe n'a été trouvé dans l'URL ou dans la session.
 
 registration:
-    expired_signature: Le lien pour vérifier votre courriel a expiré. Veuillez demander un nouveau lien.
-    invalid_signature: Le lien pour vérifier votre courriel n'est pas valide. Veuillez demander un nouveau lien.
-    wrong_email_verify: Le lien pour vérifier votre courriel semble être pour un compte ou un courriel différent. Veuillez demander un nouveau lien.
+    expired_signature: Le lien pour vérifier votre adresse électronique a expiré. Veuillez demander un nouveau lien.
+    invalid_signature: Le lien pour vérifier votre adresse électronique n'est pas valide. Veuillez demander un nouveau lien.
+    wrong_email_verify: Le lien pour vérifier votre adresse électronique semble être pour un compte ou un courriel différent. Veuillez demander un nouveau lien.
     send_email_error:  Il y a eu un problème lors de l'envoi du courrier électronique.
 
 Invalid credentials.: Le nom de l'utilisateur ou le mot de passe est invalide.

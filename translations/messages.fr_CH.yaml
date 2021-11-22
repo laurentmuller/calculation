@@ -88,7 +88,7 @@ calculation:
         emptyCalculations: Supprimer les calculations vides
         emptyCalculations_help: Supprime les calculations ne contenant aucun article.
         emptyItems: Supprimer les articles vides
-        emptyItem_help: Supprime les articles avec une quantité ou un prix égale à 0.
+        emptyItems_help: Supprime les articles avec une quantité ou un prix égale à 0.
         sortItems: Trier les articles
         sortItems_help: Trie les articles par ordre alphabétique.
         duplicateItems: Supprimer les articles en double
@@ -106,7 +106,7 @@ calculation:
         skipCalculations: Calculations inchangées
         emptyCalculations: Calculations vides
         unmodifiableCalculations: Calculations non-modifiables
-        sortItems: Calculations triées
+        sortItems: Articles triées
         emptyItems: Articles vides
         duplicateItems: Articles en double
         copyCodes: Groupes et catégories
@@ -181,8 +181,7 @@ category:
         title: Supprimer la catégorie
         message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
         success: La catégorie <b>%name%</b> a été supprimée avec succès.
-        failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée
-            dans :'
+        failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans :'
     list:
         title: Catégories
         empty: Aucune catégorie définie.
@@ -215,8 +214,7 @@ group:
         title: Supprimer le groupe
         message: Êtes-vous sûr de vouloir supprimer le groupe <b>%name%</b> ?
         success: Le groupe <b>%name%</b> a été supprimé avec succès.
-        failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé
-            dans :'
+        failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans :'
     list:
         title: Groupes
         empty: Aucun groupe défini.
@@ -356,20 +354,6 @@ product:
         old_price: Ancien prix
         new_price: Nouveau prix
         new_update: Nouvelle mise à jour
-    import:
-        title: Importer des articles
-        description: Permet d'importer des articles depuis une feuille de calcul Excel (*.xlsx).
-        simulate_help: Simule l'importation sans enregister les changements dans la base de données.
-        submit_text: Importer
-        results: Résultat de l'importation.
-        success: L'importation des articles a été réalisée avec succès.
-        failure: Une erreur s'est produite lors de l'importation des articles.
-        fields:
-            file: Fichier
-            simulate: Simuler l'importation
-            confirm: Confirmer l'importation des données
-        error:
-            confirm: Vous devez cochez le message de confirmation.
 user:
     name: Utilisateur
     fields:
@@ -804,8 +788,7 @@ parameters:
 clear_cache:
     title: Vider le cache
     message: Êtes-vous sûr de vouloir vider le cache de l'application ?
-    note: '<b>Note : </b>Cette opération peut durer un certain temps (taille actuelle
-        : %size%).'
+    note: '<b>Note : </b>Cette opération peut durer un certain temps (taille actuelle : %size%).'
     success: Le cache de l'application a été vidé avec succés.
     failure: Impossible de vider le cache de l'application.
     submit: Vider
@@ -900,8 +883,7 @@ password:
         strong: Forte
         very_strong: Très forte
     input: Mot de passe
-    success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées
-        :'
+    success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
 swisspost:
     title: Importer les localités et les noms de rue
     import:
@@ -939,12 +921,20 @@ openweather:
         title: Importer les localités
         description: Permet de mettre à jour la liste des localités.
         link: Les données peuvent être téléchargées depuis le <a href="%s" target="_blank" rel="noopener noreferrer">répertoire de données</a> de <a href="%s" target="_blank" rel="noopener noreferrer">OpenWeather</a>.
+        file: Fichier d'archive
     error:
         empty_city: Aucune localité n'a été importée.
         move_database: Impossible de renommer la base de données.
+        mime_type: Le type de fichier est invalide.
     result:
+        description: Résultats de l'importation
         success: L'importation des localités a été réalisée avec succès.
         failure: Une erreur s'est produite lors de l'importation des localités.
+        objects: Objets
+        cities: Localités
+        errors: Erreurs
+        valids: Valides
+        total: Total
     current:
         title: Météo
         metric: Système métrique
@@ -1038,6 +1028,7 @@ registration:
     agreeTerms:
         label: J'accepte les conditions générales d'utilisation de l'application.
         error: Vous devez accepter les conditions générales d'utilisation.
+    subject: Création d'un compte
     confirmed: Félicitations %username%, votre compte est maintenant activé.
 timeline:
     title: Chronologie
@@ -1178,8 +1169,7 @@ help:
         entity_fields: 'Les champs sont définis comme suit :'
         entity_empty: Cet objet ne contient aucun champ.
         entity_actions: 'Les actions possibles sur l''objet sont les suivantes :'
-        global_actions: 'Les actions globales suivantes peuvent être sélectionnées
-            :'
+        global_actions: 'Les actions globales suivantes peuvent être sélectionnées :'
         edit_actions: 'Les actions suivantes peuvent être sélectionnées :'
         edit_fields: 'Les champs de saisie sont définis comme suit :'
         edit_columns: 'La table contient les colonnes suivantes :'

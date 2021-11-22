@@ -284,7 +284,7 @@ class OpenWeatherController extends AbstractController
                 $valids = 0;
                 $errors = 0;
                 foreach ($cities as $city) {
-                    if (!$db->insertCity($city['id'], $city['name'], $city['country'], $city['coord']['lat'], $city['coord']['lon'])) {
+                    if (!$db->insertCity((int) $city['id'], $city['name'], $city['country'], $city['coord']['lat'], $city['coord']['lon'])) {
                         ++$errors;
                     } elseif (0 === ++$valids % 50000) {
                         $db->commitTransaction();
@@ -306,7 +306,7 @@ class OpenWeatherController extends AbstractController
                 $target = $service->getDatabaseName();
 
                 try {
-                    if (!FileUtils::rename($temp_name, $target)) {
+                    if (!FileUtils::rename($temp_name, $target, true)) {
                         return $this->renderErrorResult('openweather.error.move_database');
                     }
                 } catch (IOException $e) {
@@ -469,12 +469,12 @@ class OpenWeatherController extends AbstractController
         // constraints
         $constraints = new File([
             'mimeTypes' => 'application/gzip',
-            'mimeTypesMessage' => $this->trans('import.error.mime_type'),
+            'mimeTypesMessage' => $this->trans('openweather.error.mime_type'),
         ]);
 
         // file input
         $helper->field('file')
-            ->label('import.file')
+            ->label('openweather.import.file')
             ->updateOption('constraints', $constraints)
             ->updateAttribute('accept', 'application/x-gzip')
             ->addFileType();

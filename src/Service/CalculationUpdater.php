@@ -108,7 +108,7 @@ class CalculationUpdater
             ->addCheckboxType();
 
         $helper->field('sortItems')
-            ->help('calculation.update.sortedItems_help')
+            ->help('calculation.update.sortItems_help')
             ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
@@ -199,8 +199,6 @@ class CalculationUpdater
 
             foreach ($calculations as $calculation) {
                 if ($query->isCloseCalculations() || $calculation->isEditable()) {
-                    $descriptions = [];
-                    $changed = false;
                     if ($query->isEmptyCalculations() && $calculation->isEmpty()) {
                         $result->addEmptyCalculations(1);
                         $result->addCalculation($calculation, $this->trans('calculation.update.emptyCalculations'), true);
@@ -209,37 +207,39 @@ class CalculationUpdater
                         }
                         continue;
                     }
+                    $messages = [];
+                    $changed = false;
                     if ($query->isEmptyItems() && $calculation->hasEmptyItems()) {
                         $result->addEmptyItems($calculation->removeEmptyItems());
-                        $descriptions[] = $this->trans('calculation.update.emptyItems');
+                        $messages[] = $this->trans('calculation.update.emptyItems');
                         $changed = true;
                     }
 
                     if ($query->isCopyCodes() && 0 !== $count = $calculation->updateCodes()) {
                         $result->addCopyCodes($count);
-                        $descriptions[] = $this->trans('calculation.update.copyCodes');
+                        $messages[] = $this->trans('calculation.update.copyCodes');
                         $changed = true;
                     }
 
                     if ($query->isDuplicateItems() && $calculation->hasDuplicateItems()) {
                         $result->addDuplicatedItems($calculation->removeDuplicateItems());
-                        $descriptions[] = $this->trans('calculation.update.duplicateItems');
+                        $messages[] = $this->trans('calculation.update.duplicateItems');
                         $changed = true;
                     }
 
                     if ($query->isSortItems() && $calculation->sort()) {
                         $result->addSortItems(1);
-                        $descriptions[] = $this->trans('calculation.update.sortItems');
+                        $messages[] = $this->trans('calculation.update.sortItems');
                         $changed = true;
                     }
 
                     if ($this->service->updateTotal($calculation)) {
-                        $descriptions[] = $this->trans('calculation.update.total');
+                        $messages[] = $this->trans('calculation.update.total');
                         $changed = true;
                     }
 
                     if ($changed) {
-                        $result->addCalculation($calculation, \implode('<br>', $descriptions));
+                        $result->addCalculation($calculation, $messages);
                     }
                 } else {
                     $result->addUnmodifiableCalculations(1);

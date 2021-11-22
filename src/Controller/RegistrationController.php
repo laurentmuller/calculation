@@ -73,7 +73,7 @@ class RegistrationController extends AbstractController
             $manager->flush();
 
             // generate a signed url and email it to the user
-            $subject = $this->trans('registration.email.subject', ['%username%' => $user->getUsername()]);
+            $subject = $this->trans('registration.subject');
             $email = (new TemplatedEmail())
                 ->from($this->getAddressFrom())
                 ->to((string) $user->getEmail())

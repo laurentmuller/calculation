@@ -62,11 +62,11 @@ class ConsonantCaptcha extends AbstractAlphaCaptcha
     protected function getQuestion(string $word, int $letterIndex): string
     {
         $params = [
-            '%index%' => $this->trans(self::INDEX_MAPPING[$letterIndex]),
-            '%letter%' => $this->trans('consonant'),
+            '%index%' => $this->trans(self::INDEX_MAPPING[$letterIndex], [], 'captcha'),
+            '%letter%' => $this->trans('consonant', [], 'captcha'),
             '%word%' => $word,
         ];
 
-        return $this->trans('sentence', $params);
+        return $this->trans('sentence', $params, 'captcha');
     }
 }

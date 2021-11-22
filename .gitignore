@@ -19,6 +19,7 @@ symfony.lock
 /public/images/users/
 /public/js/vendor
 /resources/data/swiss.sqlite
+/resources/data/openweather.sqlite
 ###< application ###
 
 ###> phpunit/phpunit ###

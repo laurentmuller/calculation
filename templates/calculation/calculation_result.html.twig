@@ -18,6 +18,12 @@
 </ul>
 {%- endmacro %}
 
+{% macro popover_content(messages) -%}
+{%- set title = '<p class="mb-2"><b>' ~ 'calculation.fields.updatedBy'|trans ~ '</b></p>' -%}
+{%- set items = '<ul>' ~ messages|reduce((carry, value) => carry ~ '<li>' ~ value ~ '</li>', '') ~ '</ul>' -%}
+{{- title ~ items -}}
+{%- endmacro %}
+
 {# parameters #}
 {%- set title = 'calculation.update.title' -%}
 {%- set title_icon = 'calculator' -%}
@@ -41,7 +47,7 @@
         </tr>
     {% endif %}
     {% if result.sortItems > 0 %}
-        {{ _self.add_line_info('calculation.result.sortedItems', result.sortItems|integer) }}
+        {{ _self.add_line_info('calculation.result.sortItems', result.sortItems|integer) }}
     {% endif %}
     {% if result.copyCodes > 0 %}
         {{ _self.add_line_info('calculation.result.copyCodes', result.copyCodes|integer) }}
@@ -89,14 +95,22 @@
                 <div class="overflow-auto" style="max-height: 211px;">
                     <table class="table table-hover table-sm mb-0 border-bottom">
                     {% for calculation in result.calculations %}
+                        {%- set deleted = calculation.deleted -%}
+                        {%- set custom_class = deleted ? 'popover-danger' : 'popover-info' -%}
+                        {%- set action_class = deleted ? 'actions text-danger' : 'actions text-info' -%}
                         {%- set margin_class = app.marginBelow(calculation.overallMargin) ? 'text-percent text-danger' : 'text-percent' -%}
-                        <tr title="{{ 'calculation.fields.updatedBy'|trans }}" data-toggle="popover" data-content="{{ calculation.message|raw }}" data-trigger="hover" data-placement="top" data-html="true" {% if calculation.deleted  %} class="strikeout-danger text-muted"{% endif %}>
+                        <tr{% if deleted %} class="strikeout-danger text-muted"{% endif %}>
                             <td class="text-id text-border" style="{{ properties.stateCss(calculation.stateColor) }}">{{ calculation.id|identifier }}</td>
                             <td class="text-state">{{ calculation.stateCode }}</td>
                             <td>{{ calculation.customer }}</td>
                             <td>{{ calculation.description }}</td>
                             <td class="{{ margin_class }}">{{ calculation.overallMargin|percent }}</td>
                             <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
+                            <td class="{{ action_class }}">
+                                <span data-toggle="popover" data-custom-class="{{ custom_class }}" data-content="{{ _self.popover_content(calculation.messages) }}" data-trigger="hover" data-placement="auto" data-html="true">
+                                    <i class="fas fa-info-circle"></i>
+                                </span>
+                            </td>
                         </tr>
                     {% endfor %}
                     </table>

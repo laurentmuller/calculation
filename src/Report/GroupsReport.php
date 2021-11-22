@@ -136,7 +136,7 @@ class GroupsReport extends AbstractArrayReport
                 $skip = true;
             }
         } else {
-            $empty = $this->trans('report.groups.empty_margins');
+            $empty = $this->trans('group.edit.empty_margins');
             $table->add($empty, 3)->endRow();
         }
     }

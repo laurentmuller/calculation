@@ -34,9 +34,11 @@ class CalculationUpdateResult
     private int $unmodifiableCalculations = 0;
 
     /**
-     * Add a calculation and the update descriptions to the list of updated calculations.
+     * Add a calculation to the list of updated calculations.
+     *
+     * @param string[]|string $messages
      */
-    public function addCalculation(Calculation $calculation, string $message, bool $deleted = false): self
+    public function addCalculation(Calculation $calculation, $messages, bool $deleted = false): self
     {
         $this->calculations[] = [
             'id' => $calculation->getId(),
@@ -47,7 +49,7 @@ class CalculationUpdateResult
             'overallTotal' => $calculation->getOverallTotal(),
             'stateCode' => $calculation->getStateCode(),
             'stateColor' => $calculation->getStateColor(),
-            'message' => $message,
+            'messages' => (array) $messages,
             'deleted' => $deleted,
         ];
 

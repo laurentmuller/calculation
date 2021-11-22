@@ -23,7 +23,7 @@ monolog:
             max_level: info
             formatter: monolog.custom_formatter
             channels:
-            - php
+            - 'php'
         #symfony_mailer:
             #type: symfony_mailer
             #from_email: calculation@bibi.nu
@@ -33,4 +33,4 @@ monolog:
             #formatter: monolog.formatter.html
             #content_type: text/html
             #channels:
-            #- app
+            #- 'app'

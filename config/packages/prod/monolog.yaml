@@ -28,4 +28,4 @@ monolog:
             max_level: info
             formatter: monolog.custom_formatter
             channels:
-            - php
+            - 'php'

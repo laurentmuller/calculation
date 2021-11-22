@@ -35,7 +35,7 @@
 		"fakerphp/faker": "^1.14",
 		"google/recaptcha": "^1.2",
 		"imagine/imagine": "^1.2",
-		"jms/metadata": "2.5",
+		"jms/metadata": "^2.5",
 		"league/commonmark": "^2.0",
 		"ob/highcharts-bundle": "^1.7",
 		"phpoffice/phpspreadsheet": "^1.16",

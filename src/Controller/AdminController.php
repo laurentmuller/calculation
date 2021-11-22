@@ -235,14 +235,11 @@ class AdminController extends AbstractController
             $result = $updater->update($query);
 
             // update last date
-            if (!$query->isSimulated() && $result->isValid()) {
+            if (!$query->isSimulate() && $result->isValid()) {
                 $application->setProperties([ApplicationServiceInterface::P_UPDATE_CALCULATIONS => new \DateTime()]);
             }
 
-            return $this->renderForm('calculation/calculation_result.html.twig', [
-                'result' => $result,
-                'query' => $query,
-            ]);
+            return $this->renderForm('calculation/calculation_result.html.twig', ['result' => $result]);
         }
 
         // display

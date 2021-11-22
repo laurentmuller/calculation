@@ -28,72 +28,71 @@
 
 {% block card_body %}
 <table class="table table-hover table-sm mb-0">
-    {% if result.empty > 0 %}
+    {% if result.emptyItems > 0 %}
         <tr>
-            <td>{{ 'calculation.result.empty'|trans }}</td>
-            <td class="text-right"><a href="{{ empty_path }}" title="{{ 'empty.description'|trans }}">{{ result.empty|integer }}</a></td>
+            <td>{{ 'calculation.result.emptyItems'|trans }}</td>
+            <td class="text-right"><a href="{{ empty_path }}" title="{{ 'empty.description'|trans }}">{{ result.emptyItems|integer }}</a></td>
         </tr>
     {% endif %}
-    {% if result.duplicated > 0 %}
+    {% if result.duplicateItems > 0 %}
         <tr>
-            <td>{{ 'calculation.result.duplicated'|trans }}</td>
-            <td class="text-right"><a href="{{ duplicate_path }}" title="{{ 'duplicate.description'|trans }}">{{ result.duplicated|integer }}</a></td>
+            <td>{{ 'calculation.result.duplicateItems'|trans }}</td>
+            <td class="text-right"><a href="{{ duplicate_path }}" title="{{ 'duplicate.description'|trans }}">{{ result.duplicateItems|integer }}</a></td>
         </tr>
     {% endif %}
-    {% if result.sorted > 0 %}
-        {{ _self.add_line_info('calculation.result.sorted', result.sorted|integer) }}
+    {% if result.sortItems > 0 %}
+        {{ _self.add_line_info('calculation.result.sortedItems', result.sortItems|integer) }}
     {% endif %}
-    {% if result.codes > 0 %}
-        {{ _self.add_line_info('calculation.result.codes', result.codes|integer) }}
+    {% if result.copyCodes > 0 %}
+        {{ _self.add_line_info('calculation.result.copyCodes', result.copyCodes|integer) }}
     {% endif %}
-    {% if result.empty > 0 or result.duplicated > 0 or result.sorted > 0 or result.codes > 0 %}
+    {% if result.emptyItems > 0 or result.duplicateItems > 0 or result.sortItems > 0 or result.copyCodes > 0 %}
         <tr class="not-hover"><td colspan="2">&nbsp;</td></tr>
     {% endif %}
-    {% if result.updated > 0 %}
+    {% if result.updateCalculations > 0 %}
         <tr>
-            <td>{{ 'calculation.result.updated'|trans }}</td>
+            <td>{{ 'calculation.result.updateCalculations'|trans }}</td>
             <td class="text-right">
-                <a href="#" data-toggle="modal" data-target="#resultModal" title="{{ 'calculation.result.updated'|trans }}">
-                    {{- result.updated|integer -}}
+                <a href="#" data-toggle="modal" data-target="#resultModal" title="{{ 'calculation.result.updateCalculations'|trans }}">
+                    {{- result.updateCalculations|integer -}}
                 </a>
             </td>
         </tr>
     {% else %}
-        {{ _self.add_line_info('calculation.result.updated', result.updated|integer) }}
+        {{ _self.add_line_info('calculation.result.updateCalculations', result.updateCalculations|integer) }}
     {% endif %}
-    {{ _self.add_line_info('calculation.result.skipped', result.skipped|integer) }}
-    {% if result.unmodifiable > 0 %}
-        {{ _self.add_line_info('calculation.result.unmodifiable', result.unmodifiable|integer) }}
+    {{ _self.add_line_info('calculation.result.skipCalculations', result.skipCalculations|integer) }}
+    {% if result.unmodifiableCalculations > 0 %}
+        {{ _self.add_line_info('calculation.result.unmodifiableCalculations', result.unmodifiableCalculations|integer) }}
     {% endif %}
     <tr>
         <th>{{ 'calculation.result.total'|trans }}</<th>
-        <th class="text-right">{{ result.total|integer }}</th>
+        <th class="text-right">{{ result.totalCalculations|integer }}</th>
     </tr>
 </table>
 
-{% if query.simulated %}
+{% if result.simulate %}
     <hr class="mt-0">
-    <p class="mb-0 text-right text-muted small">{{ 'calculation.result.simulated'|trans }}</p>
+    <p class="mb-0 text-right text-muted small">{{ 'calculation.result.simulate'|trans }}</p>
 {% endif %}
 
 {% if result.calculations|length %}
 <div class="modal fade" id="resultModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ 'calculation.update.title'|trans }}</h5>
                 {{ icons.button_close_modal }}
             </div>
             <div class="modal-body">
-                <p class="mb-2 font-weight-bold">{{ 'calculation.result.updated'|trans }}</p>
+                <p class="mb-2 font-weight-bold">{{ 'calculation.result.updateCalculations'|trans }}</p>
                 <div class="overflow-auto" style="max-height: 211px;">
                     <table class="table table-hover table-sm mb-0 border-bottom">
                     {% for calculation in result.calculations %}
-                        {%- set row_title = 'calculation.fields.updatedBy'|trans ~ ' : ' ~ result.descriptions[calculation.id]|default([])|join(', ') -%}
-                        {%- set margin_class = app.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' -%}
-                        <tr title="{{ row_title }}">
+                        {%- set margin_class = app.marginBelow(calculation.overallMargin) ? 'text-percent text-danger' : 'text-percent' -%}
+                        <tr title="{{ 'calculation.fields.updatedBy'|trans }}" data-toggle="popover" data-content="{{ calculation.message|raw }}" data-trigger="hover" data-placement="top" data-html="true" {% if calculation.deleted  %} class="strikeout-danger text-muted"{% endif %}>
                             <td class="text-id text-border" style="{{ properties.stateCss(calculation.stateColor) }}">{{ calculation.id|identifier }}</td>
-                            <td class="text-state">{{ calculation.state.code }}</td>
+                            <td class="text-state">{{ calculation.stateCode }}</td>
                             <td>{{ calculation.customer }}</td>
                             <td>{{ calculation.description }}</td>
                             <td class="{{ margin_class }}">{{ calculation.overallMargin|percent }}</td>

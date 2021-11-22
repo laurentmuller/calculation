@@ -81,34 +81,37 @@ calculation:
         success: Le statut de la calculation Nº <b>%name%</b> a été mis à jour avec succès.
     update:
         title: Mise à jour des calculations
-        description: Cette page vous permet de mettre à jour le total des calculations.
-        closed: Mettre à jour toutes les calculations
-        closed_help: Inclus les calculations avec le statut non-modifiables.
-        sorted: Trier les articles
-        sorted_help: Trie les articles par ordre alphabétique.
-        empty: Supprimer les articles vides
-        empty_help: Supprime les articles avec une quantité ou un prix égale à 0.
-        duplicated: Supprimer les articles en double
-        duplicated_help: Supprime les articles contenu plus d'une fois dans une calculation.
-        codes: Mettre à jour les groupes et les catégories.
-        codes_help: Copie les noms des groupes et des catégories depuis le catalogue.
-        simulated: Simuler la mise à jour
-        simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
-        total: Mise à jour du total
-        confirm: Confirmer la mise à jour des données
+        description: Cette page vous permet de mettre à jour les calculations.
         last_update: 'Dernière mise à jour : %date%'
+        closeCalculations: Mettre à jour toutes les calculations
+        closeCalculations_help: Inclus les calculations avec le statut non-modifiables.
+        emptyCalculations: Supprimer les calculations vides
+        emptyCalculations_help: Supprime les calculations ne contenant aucun article.
+        emptyItems: Supprimer les articles vides
+        emptyItem_help: Supprime les articles avec une quantité ou un prix égale à 0.
+        sortItems: Trier les articles
+        sortItems_help: Trie les articles par ordre alphabétique.
+        duplicateItems: Supprimer les articles en double
+        duplicateItems_help: Supprime les articles contenu plus d'une fois dans une calculation.
+        copyCodes: Mettre à jour les groupes et les catégories.
+        copyCodes_help: Copie les noms des groupes et des catégories depuis le catalogue.
+        simulate: Simuler la mise à jour
+        simulate_help: Simule une mise à jour sans enregister les changements dans la base de données.
+        confirm: Confirmer la mise à jour des données
+        total: Mise à jour du total
     result:
         description: Résultats de la mise à jour des calculations.
-        simulated: La mise à jour a été simulée. Aucune calculation n'a été modifiée dans la base de données.
-        updated: Calculations mises à jour
-        skipped: Calculations inchangées
-        sorted: Calculations triées
-        codes: Groupes et catégories
-        empty: Articles vides
-        duplicated: Articles en double
-        unmodifiable: Calculations non-modifiables
-        total: Total
+        simulate: La mise à jour a été simulée. Aucune calculation n'a été modifiée dans la base de données.
+        updateCalculations: Calculations mises à jour
+        skipCalculations: Calculations inchangées
+        emptyCalculations: Calculations vides
+        unmodifiableCalculations: Calculations non-modifiables
+        sortItems: Calculations triées
+        emptyItems: Articles vides
+        duplicateItems: Articles en double
+        copyCodes: Groupes et catégories
         new_update: Nouvelle mise à jour
+        total: Total
 calculationgroup:
     name: Groupe
     fields:

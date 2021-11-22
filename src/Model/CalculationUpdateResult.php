@@ -22,23 +22,34 @@ use App\Entity\Calculation;
 class CalculationUpdateResult
 {
     private array $calculations = [];
-    private int $codes = 0;
+    private int $copyCodes = 0;
     private array $descriptions = [];
-    private int $duplicated = 0;
-    private int $empty = 0;
-    private int $skipped = 0;
-    private int $sorted = 0;
-    private int $total = 0;
-    private int $unmodifiable = 0;
+    private int $duplicateItems = 0;
+    private int $emptyCalculations = 0;
+    private int $emptyItems = 0;
+    private bool $simulate = true;
+    private int $skipCalculations = 0;
+    private int $sortItems = 0;
+    private int $totalCalculations = 0;
+    private int $unmodifiableCalculations = 0;
 
     /**
      * Add a calculation and the update descriptions to the list of updated calculations.
      */
-    public function addCalculation(Calculation $calculation, array $descriptions): self
+    public function addCalculation(Calculation $calculation, string $message, bool $deleted = false): self
     {
-        $id = $calculation->getId();
-        $this->calculations[$id] = $calculation;
-        $this->descriptions[$id] = $descriptions;
+        $this->calculations[] = [
+            'id' => $calculation->getId(),
+            'date' => $calculation->getDate(),
+            'customer' => $calculation->getCustomer(),
+            'description' => $calculation->getDescription(),
+            'overallMargin' => $calculation->getOverallMargin(),
+            'overallTotal' => $calculation->getOverallTotal(),
+            'stateCode' => $calculation->getStateCode(),
+            'stateColor' => $calculation->getStateColor(),
+            'message' => $message,
+            'deleted' => $deleted,
+        ];
 
         return $this;
     }
@@ -46,9 +57,9 @@ class CalculationUpdateResult
     /**
      * Adds the number of updated groups or categories codes.
      */
-    public function addCodes(int $value): self
+    public function addCopyCodes(int $value): self
     {
-        $this->codes += $value;
+        $this->copyCodes += $value;
 
         return $this;
     }
@@ -56,9 +67,19 @@ class CalculationUpdateResult
     /**
      * Adds the number of duplicate items.
      */
-    public function addDuplicated(int $value): self
+    public function addDuplicatedItems(int $value): self
     {
-        $this->duplicated += $value;
+        $this->duplicateItems += $value;
+
+        return $this;
+    }
+
+    /**
+     * Adds the number of empty calculations.
+     */
+    public function addEmptyCalculations(int $value): self
+    {
+        $this->emptyCalculations += $value;
 
         return $this;
     }
@@ -66,9 +87,9 @@ class CalculationUpdateResult
     /**
      * Adds the number of empty items.
      */
-    public function addEmpty(int $value): self
+    public function addEmptyItems(int $value): self
     {
-        $this->empty += $value;
+        $this->emptyItems += $value;
 
         return $this;
     }
@@ -76,9 +97,9 @@ class CalculationUpdateResult
     /**
      * Adds the number of skipped calculations.
      */
-    public function addSkipped(int $value): self
+    public function addSkipCalculations(int $value): self
     {
-        $this->skipped += $value;
+        $this->skipCalculations += $value;
 
         return $this;
     }
@@ -86,9 +107,9 @@ class CalculationUpdateResult
     /**
      * Adds the number of sorted calculations.
      */
-    public function addSorted(int $value): self
+    public function addSortItems(int $value): self
     {
-        $this->sorted += $value;
+        $this->sortItems += $value;
 
         return $this;
     }
@@ -96,9 +117,9 @@ class CalculationUpdateResult
     /**
      * Adds the number of updated calculations.
      */
-    public function addTotal(int $value): self
+    public function addTotalCalculations(int $value): self
     {
-        $this->total += $value;
+        $this->totalCalculations += $value;
 
         return $this;
     }
@@ -106,9 +127,9 @@ class CalculationUpdateResult
     /**
      * Adds the number of unmodifiable calculations.
      */
-    public function addUnmodifiable(int $value): self
+    public function addUnmodifiableCalculations(int $value): self
     {
-        $this->unmodifiable += $value;
+        $this->unmodifiableCalculations += $value;
 
         return $this;
     }
@@ -122,15 +143,17 @@ class CalculationUpdateResult
     }
 
     /**
-     * Gets the number of updated groups or categories codes.
+     * Gets the number of updated groups and categories codes.
      */
-    public function getCodes(): int
+    public function getCopyCodes(): int
     {
-        return $this->codes;
+        return $this->copyCodes;
     }
 
     /**
      * Gets the update descriptions.
+     *
+     * @return array<int, string[]>
      */
     public function getDescriptions(): array
     {
@@ -140,57 +163,73 @@ class CalculationUpdateResult
     /**
      * Gets the number of duplicate items.
      */
-    public function getDuplicated(): int
+    public function getDuplicateItems(): int
     {
-        return $this->duplicated;
+        return $this->duplicateItems;
+    }
+
+    /**
+     * Gets the number of empty calculations.
+     */
+    public function getEmptyCalculations(): int
+    {
+        return $this->emptyCalculations;
     }
 
     /**
      * Gets the number of empty items.
      */
-    public function getEmpty(): int
+    public function getEmptyItems(): int
     {
-        return $this->empty;
+        return $this->emptyItems;
     }
 
     /**
      * Getd the number of skipped calculations.
      */
-    public function getSkipped(): int
+    public function getSkipCalculations(): int
     {
-        return $this->skipped;
+        return $this->skipCalculations;
     }
 
     /**
      * Gets the number of sorted calculations.
      */
-    public function getSorted(): int
+    public function getSortItems(): int
     {
-        return $this->sorted;
+        return $this->sortItems;
     }
 
     /**
      * Gets the number of calculations (updated and skipped).
      */
-    public function getTotal(): int
+    public function getTotalCalculations(): int
     {
-        return $this->total;
+        return $this->totalCalculations;
     }
 
     /**
      * Gets the number of unmodifiable calculations.
      */
-    public function getUnmodifiable(): int
+    public function getUnmodifiableCalculations(): int
     {
-        return $this->unmodifiable;
+        return $this->unmodifiableCalculations;
     }
 
     /**
      * Gets the number of updated calculations.
      */
-    public function getUpdated(): int
+    public function getUpdateCalculations(): int
     {
         return \count($this->calculations);
+    }
+
+    /**
+     * Returns a value indicating if the update is simulated (no flush changes in the database).
+     */
+    public function isSimulate(): bool
+    {
+        return $this->simulate;
     }
 
     /**
@@ -199,5 +238,15 @@ class CalculationUpdateResult
     public function isValid(): bool
     {
         return !empty($this->calculations);
+    }
+
+    /**
+     * Sets a value indicating if the update is simulated (no flush changes in the database).
+     */
+    public function setSimulate(bool $simulate): self
+    {
+        $this->simulate = $simulate;
+
+        return $this;
     }
 }

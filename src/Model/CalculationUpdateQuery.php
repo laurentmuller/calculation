@@ -19,67 +19,76 @@ namespace App\Model;
  */
 class CalculationUpdateQuery
 {
-    private bool $closed = false;
-    private bool $codes = true;
-    private bool $duplicated = false;
-    private bool $empty = true;
-    private bool $simulated = true;
-    private bool $sorted = true;
+    private bool $closeCalculations = false;
+    private bool $copyCodes = true;
+    private bool $duplicateItems = false;
+    private bool $emptyCalculations = true;
+    private bool $emptyItems = true;
+    private bool $simulate = true;
+    private bool $sortItems = true;
 
     /**
      * Returns a value indicating if all calculations must be updated.
      */
-    public function isClosed(): bool
+    public function isCloseCalculations(): bool
     {
-        return $this->closed;
+        return $this->closeCalculations;
     }
 
     /**
      * Returns a value indicating if the code for groups and categories must be updated.
      */
-    public function isCodes(): bool
+    public function isCopyCodes(): bool
     {
-        return $this->codes;
+        return $this->copyCodes;
     }
 
     /**
      * Returns a value indicating if the duplicated items must be removed.
      */
-    public function isDuplicated(): bool
+    public function isDuplicateItems(): bool
     {
-        return $this->duplicated;
+        return $this->duplicateItems;
+    }
+
+    /**
+     * Returns a value indicating if the empty calculations must be removed.
+     */
+    public function isEmptyCalculations(): bool
+    {
+        return $this->emptyCalculations;
     }
 
     /**
      * Returns a value indicating if the empty items must be removed.
      */
-    public function isEmpty(): bool
+    public function isEmptyItems(): bool
     {
-        return $this->empty;
+        return $this->emptyItems;
     }
 
     /**
      * Returns a value indicating if the update is simulated (no flush changes in the database).
      */
-    public function isSimulated(): bool
+    public function isSimulate(): bool
     {
-        return $this->simulated;
+        return $this->simulate;
     }
 
     /**
      * Returns a value indicating if the items must be sorted.
      */
-    public function isSorted(): bool
+    public function isSortItems(): bool
     {
-        return $this->sorted;
+        return $this->sortItems;
     }
 
     /**
      * Sets a value indicating if all calculations must be updated.
      */
-    public function setClosed(bool $closed): self
+    public function setCloseCalculations(bool $closeCalculations): self
     {
-        $this->closed = $closed;
+        $this->closeCalculations = $closeCalculations;
 
         return $this;
     }
@@ -87,9 +96,9 @@ class CalculationUpdateQuery
     /**
      * Sets a value indicating if the code for groups and categories must be updated.
      */
-    public function setCodes(bool $codes): self
+    public function setCopyCodes(bool $copyCodes): self
     {
-        $this->codes = $codes;
+        $this->copyCodes = $copyCodes;
 
         return $this;
     }
@@ -97,9 +106,19 @@ class CalculationUpdateQuery
     /**
      * Sets a value indicating if the duplicated items must be removed.
      */
-    public function setDuplicated(bool $duplicated): self
+    public function setDuplicateItems(bool $duplicateItems): self
     {
-        $this->duplicated = $duplicated;
+        $this->duplicateItems = $duplicateItems;
+
+        return $this;
+    }
+
+    /**
+     * Sets a value indicating if the empty calculations must be removed.
+     */
+    public function setEmptyCalculations(bool $emptyCalculations): self
+    {
+        $this->emptyCalculations = $emptyCalculations;
 
         return $this;
     }
@@ -107,9 +126,9 @@ class CalculationUpdateQuery
     /**
      * Sets a value indicating if the empty items must be removed.
      */
-    public function setEmpty(bool $empty): self
+    public function setEmptyItems(bool $emptyItems): self
     {
-        $this->empty = $empty;
+        $this->emptyItems = $emptyItems;
 
         return $this;
     }
@@ -117,9 +136,9 @@ class CalculationUpdateQuery
     /**
      * Sets a value indicating if the update is simulated (no flush changes in the database).
      */
-    public function setSimulated(bool $simulated): self
+    public function setSimulate(bool $simulate): self
     {
-        $this->simulated = $simulated;
+        $this->simulate = $simulate;
 
         return $this;
     }
@@ -127,9 +146,9 @@ class CalculationUpdateQuery
     /**
      * Sets a value indicating if the items must be sorted.
      */
-    public function setSorted(bool $sorted): self
+    public function setSortItems(bool $sortItems): self
     {
-        $this->sorted = $sorted;
+        $this->sortItems = $sortItems;
 
         return $this;
     }

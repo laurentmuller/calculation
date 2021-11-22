@@ -77,44 +77,50 @@ class CalculationUpdater
         $helper = new FormHelper($builder, 'calculation.update.');
 
         // add fields
-        $helper->field('closed')
-            ->help('calculation.update.closed_help')
+        $helper->field('closeCalculations')
+            ->help('calculation.update.closeCalculations_help')
             ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 
-        $helper->field('empty')
-            ->help('calculation.update.empty_help')
+        $helper->field('emptyCalculations')
+            ->help('calculation.update.emptyCalculations_help')
             ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 
-        $helper->field('duplicated')
-            ->help('calculation.update.duplicated_help')
+        $helper->field('emptyItems')
+            ->help('calculation.update.emptyItems_help')
             ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 
-        $helper->field('codes')
-            ->help('calculation.update.codes_help')
+        $helper->field('duplicateItems')
+            ->help('calculation.update.duplicateItems_help')
             ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 
-        $helper->field('sorted')
-            ->help('calculation.update.sorted_help')
+        $helper->field('copyCodes')
+            ->help('calculation.update.copyCodes_help')
             ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
 
-        $helper->field('simulated')
-            ->help('calculation.update.simulated_help')
+        $helper->field('sortItems')
+            ->help('calculation.update.sortedItems_help')
+            ->helpClass('ml-4 mb-2')
+            ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field('simulate')
+            ->help('calculation.update.simulate_help')
             ->helpClass('ml-4')
             ->notRequired()
             ->addCheckboxType();
 
         $helper->field('confirm')
-            ->updateAttributes(['data-error' => $this->trans('generate.error.confirm'), 'disabled' => $query->isSimulated() ? 'disabled' : null])
+            ->updateAttributes(['data-error' => $this->trans('generate.error.confirm'), 'disabled' => $query->isSimulate() ? 'disabled' : null])
             ->notMapped()
             ->addCheckboxType();
 
@@ -127,12 +133,13 @@ class CalculationUpdater
     public function createUpdateQuery(): CalculationUpdateQuery
     {
         $query = new CalculationUpdateQuery();
-        $query->setCodes($this->isSessionBool('calculation.update.codes', true))
-            ->setEmpty($this->isSessionBool('calculation.update.empty', true))
-            ->setSorted($this->isSessionBool('calculation.update.sorted', true))
-            ->setClosed($this->isSessionBool('calculation.update.closed', false))
-            ->setSimulated($this->isSessionBool('calculation.update.simulated', true))
-            ->setDuplicated($this->isSessionBool('calculation.update.duplicated', false));
+        $query->setCloseCalculations($this->isSessionBool('calculation.update.closeCalculations', false))
+            ->setEmptyCalculations($this->isSessionBool('calculation.update.emptyCalculations', true))
+            ->setEmptyItems($this->isSessionBool('calculation.update.emptyItems', true))
+            ->setDuplicateItems($this->isSessionBool('calculation.update.duplicateItems', false))
+            ->setSortItems($this->isSessionBool('calculation.update.sortItems', true))
+            ->setCopyCodes($this->isSessionBool('calculation.update.copyCodes', true))
+            ->setSimulate($this->isSessionBool('calculation.update.simulate', true));
 
         return $query;
     }
@@ -143,15 +150,16 @@ class CalculationUpdater
     public function logResult(CalculationUpdateResult $result): void
     {
         $context = [
-            $this->trans('calculation.result.total') => $result->getTotal(),
-            $this->trans('calculation.result.updated') => $result->getUpdated(),
-            $this->trans('calculation.result.skipped') => $result->getSkipped(),
-            $this->trans('calculation.result.unmodifiable') => $result->getUnmodifiable(),
+            $this->trans('calculation.result.total') => $result->getTotalCalculations(),
+            $this->trans('calculation.result.updateCalculations') => $result->getUpdateCalculations(),
+            $this->trans('calculation.result.skipCalculations') => $result->getSkipCalculations(),
+            $this->trans('calculation.result.unmodifiableCalculations') => $result->getUnmodifiableCalculations(),
+            $this->trans('calculation.result.emptyCalculations') => $result->getEmptyCalculations(),
 
-            $this->trans('calculation.result.codes') => $result->getCodes(),
-            $this->trans('calculation.result.empty') => $result->getEmpty(),
-            $this->trans('calculation.result.sorted') => $result->getSorted(),
-            $this->trans('calculation.result.duplicated') => $result->getDuplicated(),
+            $this->trans('calculation.result.emptyItems') => $result->getEmptyItems(),
+            $this->trans('calculation.result.duplicateItems') => $result->getDuplicateItems(),
+            $this->trans('calculation.result.sortItems') => $result->getSortItems(),
+            $this->trans('calculation.result.copyCodes') => $result->getCopyCodes(),
         ];
         $message = $this->trans('calculation.update.title');
         $this->logInfo($message, $context);
@@ -163,12 +171,15 @@ class CalculationUpdater
     public function saveUpdateQuery(CalculationUpdateQuery $query): void
     {
         $this->setSessionValues([
-            'calculation.update.codes' => $query->isCodes(),
-            'calculation.update.empty' => $query->isEmpty(),
-            'calculation.update.sorted' => $query->isSorted(),
-            'calculation.update.closed' => $query->isClosed(),
-            'calculation.update.simulated' => $query->isSimulated(),
-            'calculation.update.duplicated' => $query->isDuplicated(),
+            'calculation.update.closeCalculations' => $query->isCloseCalculations(),
+            'calculation.update.emptyCalculations' => $query->isEmptyCalculations(),
+
+            'calculation.update.emptyItems' => $query->isEmptyItems(),
+            'calculation.update.sortItems' => $query->isSortItems(),
+            'calculation.update.duplicateItems' => $query->isDuplicateItems(),
+            'calculation.update.copyCodes' => $query->isCopyCodes(),
+
+            'calculation.update.simulate' => $query->isSimulate(),
         ]);
     }
 
@@ -178,6 +189,7 @@ class CalculationUpdater
     public function update(CalculationUpdateQuery $query): CalculationUpdateResult
     {
         $result = new CalculationUpdateResult();
+        $result->setSimulate($query->isSimulate());
 
         try {
             $this->listener->disableListeners();
@@ -186,30 +198,38 @@ class CalculationUpdater
             $calculations = $this->getCalculations();
 
             foreach ($calculations as $calculation) {
-                if ($query->isClosed() || $calculation->isEditable()) {
+                if ($query->isCloseCalculations() || $calculation->isEditable()) {
                     $descriptions = [];
                     $changed = false;
-                    if ($query->isEmpty() && $calculation->hasEmptyItems()) {
-                        $result->addEmpty($calculation->removeEmptyItems());
-                        $descriptions[] = $this->trans('calculation.update.empty');
+                    if ($query->isEmptyCalculations() && $calculation->isEmpty()) {
+                        $result->addEmptyCalculations(1);
+                        $result->addCalculation($calculation, $this->trans('calculation.update.emptyCalculations'), true);
+                        if (!$query->isSimulate()) {
+                            $this->manager->remove($calculation);
+                        }
+                        continue;
+                    }
+                    if ($query->isEmptyItems() && $calculation->hasEmptyItems()) {
+                        $result->addEmptyItems($calculation->removeEmptyItems());
+                        $descriptions[] = $this->trans('calculation.update.emptyItems');
                         $changed = true;
                     }
 
-                    if ($query->isCodes() && 0 !== $count = $calculation->updateCodes()) {
-                        $result->addCodes($count);
-                        $descriptions[] = $this->trans('calculation.update.codes');
+                    if ($query->isCopyCodes() && 0 !== $count = $calculation->updateCodes()) {
+                        $result->addCopyCodes($count);
+                        $descriptions[] = $this->trans('calculation.update.copyCodes');
                         $changed = true;
                     }
 
-                    if ($query->isDuplicated() && $calculation->hasDuplicateItems()) {
-                        $result->addDuplicated($calculation->removeDuplicateItems());
-                        $descriptions[] = $this->trans('calculation.update.duplicated');
+                    if ($query->isDuplicateItems() && $calculation->hasDuplicateItems()) {
+                        $result->addDuplicatedItems($calculation->removeDuplicateItems());
+                        $descriptions[] = $this->trans('calculation.update.duplicateItems');
                         $changed = true;
                     }
 
-                    if ($query->isSorted() && $calculation->sort()) {
-                        $result->addSorted(1);
-                        $descriptions[] = $this->trans('calculation.update.sorted');
+                    if ($query->isSortItems() && $calculation->sort()) {
+                        $result->addSortItems(1);
+                        $descriptions[] = $this->trans('calculation.update.sortItems');
                         $changed = true;
                     }
 
@@ -219,15 +239,15 @@ class CalculationUpdater
                     }
 
                     if ($changed) {
-                        $result->addCalculation($calculation, $descriptions);
+                        $result->addCalculation($calculation, \implode('<br>', $descriptions));
                     }
                 } else {
-                    $result->addUnmodifiable(1);
+                    $result->addUnmodifiableCalculations(1);
                 }
-                $result->addTotal(1);
+                $result->addTotalCalculations(1);
             }
 
-            if (!$query->isSimulated() && $result->isValid()) {
+            if (!$query->isSimulate() && $result->isValid()) {
                 // save
                 $this->manager->flush();
                 $this->logResult($result);

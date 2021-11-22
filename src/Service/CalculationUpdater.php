@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Calculation;
+use App\Entity\CalculationState;
 use App\Form\FormHelper;
 use App\Model\CalculationUpdateQuery;
 use App\Model\CalculationUpdateResult;
@@ -79,6 +80,7 @@ class CalculationUpdater
         // add fields
         $helper->field('closeCalculations')
             ->help('calculation.update.closeCalculations_help')
+            ->helpParameters(['%codes%' => $this->getNonEditableCodes()])
             ->helpClass('ml-4 mb-2')
             ->notRequired()
             ->addCheckboxType();
@@ -270,5 +272,21 @@ class CalculationUpdater
         $repository = $this->manager->getRepository(Calculation::class);
 
         return $repository->findBy([], ['id' => 'ASC']);
+    }
+
+    /**
+     * Gets merged codes of non-editable calculation states.
+     */
+    private function getNonEditableCodes(): string
+    {
+        $repository = $this->manager->getRepository(CalculationState::class);
+        $codes = $repository->createQueryBuilder('e')
+            ->select('e.code')
+            ->orderBy('e.code')
+            ->where('e.editable = false')
+            ->getQuery()
+            ->getSingleColumnResult();
+
+        return \implode(', ', $codes);
     }
 }

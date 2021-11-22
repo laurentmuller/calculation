@@ -84,7 +84,7 @@ calculation:
         description: Cette page vous permet de mettre à jour les calculations.
         last_update: 'Dernière mise à jour : %date%'
         closeCalculations: Mettre à jour toutes les calculations
-        closeCalculations_help: Inclus les calculations avec le statut non-modifiables.
+        closeCalculations_help: Inclus les calculations avec le statut non-modifiables (%codes%).
         emptyCalculations: Supprimer les calculations vides
         emptyCalculations_help: Supprime les calculations ne contenant aucun article.
         emptyItems: Supprimer les articles vides

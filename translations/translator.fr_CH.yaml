@@ -51,10 +51,3 @@ Google:
     501: Méthode d'API non mise en oeuvre par le serveur.
     503: Le service est indisponible (serveur inactif).
     504: Délai de requête dépassé. Cela se produira uniquement si l'appelant définit un délai plus court que le délai par défaut de la méthode.
-Yandex:
-    401: La clé de l'application (API) est invalide.
-    402: La clé de l'application (API) est bloquée.
-    404: La limite quotidienne sur la quantité de texte traduit est dépassée.
-    413: La taille maximale du texte est dépassée.
-    422: Le texte ne peut pas être traduit.
-    501: La direction de traduction spécifiée n'est pas prise en charge.

@@ -646,6 +646,16 @@ class FormHelper
     }
 
     /**
+     * Sets the help parameters.
+     *
+     * @param array $parameters the help parameters
+     */
+    public function helpParameters(array $parameters): self
+    {
+        return $this->updateOption('help_translation_parameters', $parameters);
+    }
+
+    /**
      * Hides the label.
      */
     public function hideLabel(): self

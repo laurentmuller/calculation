@@ -27,7 +27,7 @@
     $.extend({
         /**
          * Returns if the given data is a string.
-         *
+         * 
          * @param {any}
          *            data - The data to evaluate.
          * @return {boolean} true if a string.
@@ -38,7 +38,7 @@
 
         /**
          * Returns if the given data is an object.
-         *
+         * 
          * @param {any}
          *            data - The data to evaluate.
          * @return {boolean} true if an object.
@@ -49,7 +49,7 @@
 
         /**
          * Returns if the given data is a boolean.
-         *
+         * 
          * @param {any}
          *            data - The data to evaluate.
          * @return {boolean} true if a boolean.
@@ -60,13 +60,31 @@
 
         /**
          * Returns if the given data is undefined.
-         *
+         * 
          * @param {any}
          *            data - The data to evaluate.
          * @return {boolean} true if undefined.
          */
         isUndefined: function (data) {
             return $.type(data) === 'undefined';
+        },
+
+        /**
+         * Returns if the input fields have a radius style.
+         * 
+         * @return {boolean} true if a border radius is set.
+         */
+        isBorderRadius: function () {
+            if ($.isUndefined(window.isBorderRadius)) {
+                const $input = $('<input>', {
+                    'class': 'form-control'
+                });
+                $('body').append($input);
+                const border = $input.css('border-radius');
+                $input.remove();
+                window.isBorderRadius = border && border !== '0px';
+            }
+            return window.isBorderRadius;
         }
     });
 
@@ -77,7 +95,7 @@
 
         /**
          * Check if the element is visible into area of the browser window.
-         *
+         * 
          * @param {int}
          *            bottomMargin - The bottom margin (default to 60).
          * @return {boolean} true if visible, false if not.
@@ -100,10 +118,9 @@
 
         /**
          * Scrolls the element into the visible area of the browser window.
-         *
+         * 
          * @param {int}
-         *            delay - The scroll animation delay in milliseconds
-         *            (default to 400).
+         *            delay - The scroll animation delay in milliseconds (default to 400).
          * @param {int}
          *            bottomMargin - The bottom margin (default to 60).
          * @return {jQuery} The jQuery element for chaining.
@@ -132,14 +149,12 @@
         },
 
         /**
-         * Add the given class to the element and remove it after a delay of
-         * 1500 ms.
-         *
+         * Add the given class to the element and remove it after a delay of 1500 ms.
+         * 
          * @param {string}
          *            className - The class name to toggle.
          * @param {function}
-         *            callback - The function to call after the class has been
-         *            removed.
+         *            callback - The function to call after the class has been removed.
          * @return {jQuery} The jQuery element for chaining.
          */
         timeoutToggle: function (className, callback) {
@@ -157,7 +172,7 @@
 
         /**
          * Sets the given attribute class name to the element.
-         *
+         * 
          * @param {string}
          *            className - The class name to set.
          * @return {jQuery} The jQuery element for chaining.
@@ -169,15 +184,12 @@
         },
 
         /**
-         * Create a timer within the element. Callback function parameters can
-         * be given after the callback and timeout values.
-         *
+         * Create a timer within the element. Callback function parameters can be given after the callback and timeout values.
+         * 
          * @param {function}
-         *            callback - The callback function that will be executed
-         *            after the timer expires.
+         *            callback - The callback function that will be executed after the timer expires.
          * @param {int}
-         *            timeout - The number of milliseconds to wait before
-         *            executing the callback.
+         *            timeout - The number of milliseconds to wait before executing the callback.
          * @return {jQuery} The jQuery element for chaining.
          */
         createTimer: function (callback, timeout) {
@@ -197,7 +209,7 @@
 
         /**
          * Clear the timer (if any) of the element.
-         *
+         * 
          * @return {jQuery} The jQuery element for chaining.
          */
         removeTimer: function () {
@@ -212,15 +224,12 @@
         },
 
         /**
-         * Clear the existing timer (if any) and create a new timer within the
-         * element.
-         *
+         * Clear the existing timer (if any) and create a new timer within the element.
+         * 
          * @param {function}
-         *            _callback - The callback function that will be executed
-         *            after the timer expires.
+         *            _callback - The callback function that will be executed after the timer expires.
          * @param {int}
-         *            _timeout - The number of milliseconds to wait before
-         *            executing the callback.
+         *            _timeout - The number of milliseconds to wait before executing the callback.
          * @return {jQuery} The jQuery element for chaining.
          */
         updateTimer: function (_callback, _timeout) {// jshint ignore:line
@@ -229,14 +238,12 @@
         },
 
         /**
-         * Create a timer interval within the element. Callback function
-         * parameters can be given after the callback and timeout values.
-         *
+         * Create a timer interval within the element. Callback function parameters can be given after the callback and timeout values.
+         * 
          * @param {function}
          *            callback - The callback function that will be executed.
          * @param {int}
-         *            timeout - The intervals (in milliseconds) on how often to
-         *            execute the callback.
+         *            timeout - The intervals (in milliseconds) on how often to execute the callback.
          * @return {jQuery} The jQuery element for chaining.
          */
         createInterval: function (callback, timeout) {
@@ -256,7 +263,7 @@
 
         /**
          * Clear the timer interval (if any) of the element.
-         *
+         * 
          * @return {jQuery} The jQuery element for chaining.
          */
         removeInterval: function () {
@@ -271,15 +278,12 @@
         },
 
         /**
-         * Clear the timer interval (if any) and create a timer interval within
-         * the element. Callback function parameters can be given after the
-         * callback and timeout values.
-         *
+         * Clear the timer interval (if any) and create a timer interval within the element. Callback function parameters can be given after the callback and timeout values.
+         * 
          * @param {function}
          *            _callback - The callback function that will be executed.
          * @param {int}
-         *            _timeout - The intervals (in milliseconds) on how often to
-         *            execute the callback.
+         *            _timeout - The intervals (in milliseconds) on how often to execute the callback.
          * @return {jQuery} The jQuery element for chaining.
          */
         updateInterval: function (_callback, _timeout) { // jshint ignore:line
@@ -289,10 +293,9 @@
 
         /**
          * Sets or gets the value as integer.
-         *
+         * 
          * @param {int}
-         *            value - if present the value to set; otherwise return the
-         *            value.
+         *            value - if present the value to set; otherwise return the value.
          * @return {int} The value if the value parameter is not set.
          */
         intVal: function (value) {
@@ -312,10 +315,9 @@
 
         /**
          * Sets or gets the value as float with 2 fixed decimals.
-         *
+         * 
          * @param {number}
-         *            value - if present the value to set; otherwise return the
-         *            value.
+         *            value - if present the value to set; otherwise return the value.
          * @return {number} The value if the value parameter is not set.
          */
         floatVal: function (value) {
@@ -335,7 +337,7 @@
 
         /**
          * Returns if the checkbox is checked.
-         *
+         * 
          * @return {boolean} The checked value.
          */
         isChecked: function () {
@@ -344,7 +346,7 @@
 
         /**
          * Sets the checkbox checked value.
-         *
+         * 
          * @param {boolean}
          *            checked - the checked value to set.
          * @return {jQuery} The jQuery element for chaining.
@@ -357,7 +359,7 @@
 
         /**
          * Toggle the checkbox checked value
-         *
+         * 
          * @return {jQuery} The jQuery element for chaining.
          */
         toggleChecked: function () {
@@ -369,9 +371,8 @@
 
         /**
          * Returns the first file (if any) from an input type file.
-         *
-         * @return {file|boolean} The first selected file, if any; false if none
-         *         or if not valid.
+         * 
+         * @return {file|boolean} The first selected file, if any; false if none or if not valid.
          */
         getInputFile: function () {
             // check files
@@ -403,7 +404,7 @@
 
         /**
          * Returns the files (if any) from an input type file.
-         *
+         * 
          * @return {array} The selected files, if any; an empty array otherwise.
          */
         getInputFiles: function () {
@@ -413,7 +414,7 @@
 
         /**
          * Select content and set focus.
-         *
+         * 
          * @return {jQuery} The jQuery element for chaining.
          */
         selectFocus: function () {
@@ -423,7 +424,7 @@
 
         /**
          * Select the first option in the list.
-         *
+         * 
          * @return {jQuery} The jQuery element for chaining.
          */
         selectFirstOption: function () {
@@ -433,7 +434,7 @@
 
         /**
          * Gets select option in the list.
-         *
+         * 
          * @return {Object|null} the selected element, if any; null otherwise.
          */
         getSelectedOption: function () {
@@ -441,14 +442,11 @@
         },
 
         /**
-         * Get the descendants of each element in the current set of matched
-         * elements, filtered by a selector, jQuery object, or element.
-         *
+         * Get the descendants of each element in the current set of matched elements, filtered by a selector, jQuery object, or element.
+         * 
          * @param {string}
-         *            selector - a string containing a selector expression to
-         *            match elements against.
-         * @return {jQuery} the selected element or null if matching elements
-         *         length is equal to 0.
+         *            selector - a string containing a selector expression to match elements against.
+         * @return {jQuery} the selected element or null if matching elements length is equal to 0.
          */
         findExists: function (selector) {
             const $elements = $(this).find(selector);
@@ -457,7 +455,7 @@
 
         /**
          * Remove all 'data' attributes.
-         *
+         * 
          * @return {jQuery} The jQuery element for chaining.
          */
         removeDataAttributes: function () {
@@ -471,7 +469,7 @@
 
         /**
          * Remove duplicate classes.
-         *
+         * 
          * @return {jQuery} The jQuery element for chaining.
          */
         removeDuplicateClasses: function () {
@@ -485,10 +483,9 @@
 
         /**
          * Toggle the disabled attribute.
-         *
+         * 
          * @param {boolean}
-         *            state - true to add attribute (disabled); false to remove
-         *            attribute (enabled).
+         *            state - true to add attribute (disabled); false to remove attribute (enabled).
          */
         toggleDisabled: function (state) {
             return this.each(function () {
@@ -502,7 +499,7 @@
 
         /**
          * Returns if the given attribute exist and is not false or null.
-         *
+         * 
          * @param {string}
          *            name - the attribute name to check existance for.
          * @return {boolean} true if the attribute name is set.

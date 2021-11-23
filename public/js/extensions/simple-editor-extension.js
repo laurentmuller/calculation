@@ -13,7 +13,7 @@
 
         /**
          * Finds the Simple-Editor container within the current element.
-         *
+         * 
          * @return {jQuery} the editor or null if not found.
          */
         findSimpleEditor: function () {
@@ -23,7 +23,7 @@
 
         /**
          * Set focus to the editor.
-         *
+         * 
          * @return {boolean} true if focused.
          */
         focusSimpleEditor: function () {
@@ -40,7 +40,7 @@
 
         /**
          * Gets the editor content as text.
-         *
+         * 
          * @return {string} the content.
          */
         getSimpleEditorContent: function () {
@@ -58,7 +58,7 @@
 
         /**
          * Initialize a Simple-Editor.
-         *
+         * 
          * @param {Object}
          *            options - the initialisation options.
          * @return {jQuery} the input for chaining.
@@ -76,10 +76,14 @@
             };
 
             options = options || {};
+            const borderRadius = $.isBorderRadius();
             return this.each(function () {
                 const $this = $(this);
                 const $editor = $this.parents('div.simple-editor');
                 const $content = $editor.find('div.simple-editor-content');
+                if (borderRadius) {
+                    $editor.addClass('rounded');
+                }
 
                 // actions
                 let oldGroup = false;
@@ -90,7 +94,7 @@
                     const state = exec && data.state || false;
                     const enabled = exec && data.enabled || false;
 
-                    if (index === 0) {
+                    if (index === 0 && borderRadius) {
                         $button.addClass('rounded-left');
                     }
                     // exec

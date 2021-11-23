@@ -101,8 +101,9 @@
                 help_tabs: help_tabs, // eslint-disable-line
                 setup: function (editor) {
                     editor.on('init', function () {
-                        const $container = $(editor.getContainer());
-                        $container.addClass('rounded');
+                        if ($.isBorderRadius()) {
+                            $(editor.getContainer()).addClass('rounded');
+                        }
                     });
                     editor.on('change', function () {
                         editor.save();

@@ -1,7 +1,7 @@
 [
 	{
 		"exec": "formatBlock",
-		"title": "header_h1",
+		"title": "h1",
 		"icon": "heading",
 		"group": "font",
 		"parameter": "<h1>"
@@ -41,21 +41,18 @@
 		"group": "script"
 	},
 	{
-		"title": "justify_left",
 		"exec": "justifyLeft",
 		"state": "justifyLeft",
 		"icon": "align-left",
 		"group": "align"
 	},
 	{
-		"title": "justify_center",
 		"exec": "justifyCenter",
 		"state": "justifyCenter",
 		"icon": "align-center",
 		"group": "align"
 	},
 	{
-		"title": "justify_right",
 		"exec": "justifyRight",
 		"state": "justifyRight",
 		"icon": "align-right",
@@ -72,21 +69,18 @@
 		"group": "paragraph"
 	},
 	{
-		"title": "ordered_list",
 		"exec": "insertOrderedList",
 		"state": "insertOrderedList",
 		"icon": "list-ol",
 		"group": "list"
 	},
 	{
-		"title": "unordered_list",
 		"exec": "insertUnorderedList",
 		"state": "insertUnorderedList",
 		"icon": "list-ul",
 		"group": "list"
 	},
 	{
-		"title": "remove_format",
 		"exec": "removeFormat",
 		"state": "removeFormat",
 		"enabled": "removeFormat",

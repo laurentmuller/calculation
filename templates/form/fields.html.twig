@@ -227,12 +227,12 @@
 {% block simple_editor_widget -%}
 {%- set type = type|default('hidden') -%}
 {%- set editor_id = form.vars.id ~ '_editor' -%}
-{%- set actions = form.vars.actions|default([])|filter(a => a.exec|default(false)) -%}
-<div class="simple-editor rounded border" id="{{ editor_id }}" name="{{ editor_id }}">
+{%- set actions = form.vars.actions|default([]) -%}
+<div class="simple-editor border" id="{{ editor_id }}" name="{{ editor_id }}">
     {% if actions|length -%}
     <div class="simple-editor-toolbar btn-group btn-group-sm d-print-none">
     {% for action in actions %}
-        {% set attributes = {'title': ('simple-editor.' ~ action.title|default(action.exec)), 'data-exec': action.exec|raw} %}
+        {% set attributes = {'title': action.title, 'data-exec': action.exec|raw} %}
         {% if action.parameter is defined %}
             {% set attributes = attributes|merge({'data-parameter': action.parameter|raw}) %}
         {%- endif %}
@@ -246,7 +246,7 @@
             {% set attributes = attributes|merge({'data-group': action.group|raw}) %}
         {%- endif %}
         <button type="button" class="btn btn-outline-secondary"{% with {attr: attributes} %}{{ block('attributes') }}{% endwith %}>
-            <i class="{{ 'fa-fw fas fa-' ~ action.icon }}"></i>
+        	{%- if action.iconText|default(false) -%}<b>{{- action.iconText -}}</b>{%- else -%}<i class="{{- 'fa-fw fas fa-' ~ action.icon -}}"></i>{%- endif -%}
         </button>
     {% endfor %}
     </div>

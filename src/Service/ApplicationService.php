@@ -304,18 +304,21 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     }
 
     /**
-     * Gets a integer array property.
+     * Gets an array property.
      *
      * @param string $name    the property name to search for
-     * @param int[]  $default the default value if the property is not found
+     * @param array  $default the default value if the property is not found
      *
-     * @return int[] the integer array values, if found; the default value otherwise
+     * @return array the array values, if found; the default value otherwise
      */
     public function getPropertyArray(string $name, array $default): array
     {
         $value = $this->getItemValue($name, $default);
         if (\is_string($value)) {
             $value = \json_decode($value);
+            if (\JSON_ERROR_NONE !== \json_last_error()) {
+                return $default;
+            }
         }
         if (\is_array($value) && \count($value) === \count($default)) {
             return $value;

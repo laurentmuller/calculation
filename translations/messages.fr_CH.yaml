@@ -1199,23 +1199,23 @@ help:
         percent: Pourcentage
         quantity: Quantité
         identifier: Identifiant
-simple-editor:
-    header_h1: Titre 1
+simple_editor:
+    h1: Titre 1
     bold: Gras
     italic: Italique
     underline: Souligné
     strikethrough: Barré
     superscript: Exposant
     subscript: Indice
-    justify_left: Aligner à gauche
-    justify_center: Centrer
-    justify_right: Aligner à droite
+    justifyLeft: Aligner à gauche
+    justifyCenter: Centrer
+    justifyRight: Aligner à droite
     justify_full: Justifier
     indent: Augmenter le retrait
     outdent: Diminuer le retrait
-    ordered_list: Liste numérotée
-    unordered_list: Liste à puces
-    remove_format: Supprimer le format
+    insertOrderedList: Liste numérotée
+    insertUnorderedList: Liste à puces
+    removeFormat: Supprimer le format
     line: Ligne horizontale
     undo: Annuler la dernière action
     redo: Rétablir la dernière action

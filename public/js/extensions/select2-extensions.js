@@ -83,23 +83,28 @@
     $.fn.extend({
         /**
          * Initialize a select with select2 plugin.
-         *
+         * 
          * @param {object}
          *            options - The select2 options.
          */
         initSelect2: function (options) {
+            const borderRadius = $.isBorderRadius();
             return this.each(function () {
                 const $select = $(this);
                 const multiple = $select.hasAttr('multiple');
                 const settings = $.extend(true, {
-                    // dropdownAutoWidth: true,
                     theme: 'bootstrap4',
+                    // dropdownAutoWidth: true,
                     // closeOnSelect: !multiple,
                     placeholder: $select.data('placeholder'),
                     allowClear: Boolean($select.data('allow-clear')),
-                    width: $select.data('width') ? $select.data('width') : $select.hasClass('w-100') ? '100%' : 'style'
+                    width: $select.data('width') ? $select.data('width') : $select.hasClass('w-100') ? '100%' : 'style',
+                    selectionCssClass: borderRadius ? '' : 'rounded-0'
                 }, options);
 
+                if (!borderRadius) {
+                    $select.css('border-radius', '');
+                }
                 const radius = $select.css('border-radius');
                 $select.select2(settings).on('select2:opening', function () {
                     $('.select2-hidden-accessible').each(function () {

@@ -34,7 +34,7 @@ class SimpleEditorType extends AbstractType
         if ($options['required']) {
             $view->vars['attr']['class'] = $this->getWidgetClass($view);
         }
-        $view->vars['actions'] = $options['actions'];
+        $view->vars['actions'] = $this->getActions($options);
     }
 
     /**
@@ -54,6 +54,23 @@ class SimpleEditorType extends AbstractType
     public function getParent()
     {
         return HiddenType::class;
+    }
+
+    /**
+     * Filter and update actions.
+     */
+    private function getActions(array $options): array
+    {
+        $actions = \array_filter($options['actions'] ?? [], static function (array $action): bool {
+            return !empty($action['exec']);
+        });
+
+        foreach ($actions as &$action) {
+            $action['title'] = 'simple_editor.' . ($action['title'] ?? $action['exec']);
+            $action['icon'] ??= $action['exec'];
+        }
+
+        return $actions;
     }
 
     /**

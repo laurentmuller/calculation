@@ -56,17 +56,17 @@ class ThemeService
     /**
      * The key name of the background style for the navigation bar.
      */
-    public const KEY_BACKGROUND = 'THEME-BACKGROUND';
+    public const KEY_BACKGROUND = 'THEME_BACKGROUND';
 
     /**
      * The key name for css theme.
      */
-    public const KEY_CSS = 'THEME-CSS';
+    public const KEY_CSS = 'THEME_CSS';
 
     /**
      * The key name for dark theme.
      */
-    public const KEY_DARK = 'THEME-DARK';
+    public const KEY_DARK = 'THEME_DARK';
 
     /**
      * The JSON themes file name.

@@ -70,6 +70,21 @@ class Property extends AbstractEntity
     }
 
     /**
+     * Gets this property value as an array. Internally the array is decoded as a JSON representation.
+     */
+    public function getArray(): ?array
+    {
+        if (!empty($this->value)) {
+            $result = \json_decode($this->value);
+            if (\JSON_ERROR_NONE === \json_last_error()) {
+                return $result;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Gets this property value as boolean.
      */
     public function getBoolean(): bool
@@ -130,13 +145,13 @@ class Property extends AbstractEntity
     }
 
     /**
-     * Sets the property value as an array of integer.
+     * Sets the property value as an array. Internally the array is encoded as a JSON representation.
      *
-     * @param int[] $value the value to set
+     * @param array $value the value to set
      */
-    public function setArray(array $value): self
+    public function setArray(?array $value): self
     {
-        return $this->setString((string) \json_encode($value));
+        return $this->setString(empty($value) ? null : \json_encode($value));
     }
 
     /**

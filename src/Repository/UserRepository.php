@@ -119,7 +119,7 @@ class UserRepository extends AbstractRepository implements ResetPasswordRequestR
      */
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        $field = (string) $this->getSortField('username', $alias);
+        $field = $this->getSortField('username', $alias);
 
         return $this->createQueryBuilder($alias)
             ->orderBy($field, Criteria::ASC);

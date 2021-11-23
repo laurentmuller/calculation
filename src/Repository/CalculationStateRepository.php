@@ -101,6 +101,21 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
+     * Gets the query builder for the list of states sorted by the editable and the code fields.
+     *
+     * @param string $alias the default entity alias
+     */
+    public function getQueryBuilderByEditable(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        $editField = $this->getSortField('editable', $alias);
+        $codeField = $this->getSortField('code', $alias);
+
+        return $this->createQueryBuilder($alias)
+            ->orderBy($editField, Criteria::DESC)
+            ->addOrderBy($codeField, Criteria::ASC);
+    }
+
+    /**
      * Gets the query builder for the list of states sorted by code.
      *
      * @param string $alias the default entity alias

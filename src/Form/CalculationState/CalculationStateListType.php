@@ -15,8 +15,10 @@ namespace App\Form\CalculationState;
 use App\Entity\CalculationState;
 use App\Form\AbstractListEntityType;
 use App\Repository\CalculationStateRepository;
+use App\Traits\TranslatorTrait;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to display a list of calculation states.
@@ -27,11 +29,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CalculationStateListType extends AbstractListEntityType
 {
+    use TranslatorTrait;
+
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(TranslatorInterface $translator)
     {
+        $this->translator = $translator;
         parent::__construct(CalculationState::class);
     }
 
@@ -43,8 +48,11 @@ class CalculationStateListType extends AbstractListEntityType
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'choice_label' => 'code',
+            'group_by' => function (CalculationState $entity): string {
+                return $this->trans('calculationstate.list.' . ($entity->isEditable() ? 'editable' : 'not_editable'));
+            },
             'query_builder' => function (CalculationStateRepository $repository): QueryBuilder {
-                return $repository->getSortedBuilder();
+                return $repository->getQueryBuilderByEditable();
             },
         ]);
     }

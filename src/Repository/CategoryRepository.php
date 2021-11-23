@@ -119,13 +119,13 @@ class CategoryRepository extends AbstractRepository
      */
     public function getQueryBuilderByGroup(int $filterType = self::FILTER_NONE, string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        $field = $this->getSortField('code', $alias);
-        $groupField = self::GROUP_ALIAS . '.code';
+        $groupField = $this->getSortField('group.code', $alias);
+        $codeField = $this->getSortField('code', $alias);
 
         $builder = $this->createQueryBuilder($alias)
             ->innerJoin("$alias.group", self::GROUP_ALIAS)
-            ->orderBy($groupField)
-            ->addOrderBy($field);
+            ->orderBy($groupField, Criteria::ASC)
+            ->addOrderBy($codeField, Criteria::ASC);
 
         if (self::FILTER_PRODUCTS === $filterType) {
             $builder->innerJoin("$alias.products", 'p');

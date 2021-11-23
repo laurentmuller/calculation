@@ -117,6 +117,7 @@ class CalculationReport extends AbstractReport
             $this->resetStyle()->Ln();
             $message = $this->trans('calculation.edit.empty');
             $this->Cell(0, 0, $message, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, self::ALIGN_CENTER);
+            $this->renderQrCode();
 
             return true;
         }

@@ -70,7 +70,7 @@ class Property extends AbstractEntity
     }
 
     /**
-     * Gets this property value as an array. Internally the array is decoded as a JSON representation.
+     * Gets this property value as an array. Internally the array is decoded from a JSON string.
      */
     public function getArray(): ?array
     {
@@ -145,13 +145,13 @@ class Property extends AbstractEntity
     }
 
     /**
-     * Sets the property value as an array. Internally the array is encoded as a JSON representation.
+     * Sets the property value as an array. Internally the array is encoded as JSON string.
      *
      * @param array $value the value to set
      */
     public function setArray(?array $value): self
     {
-        return $this->setString(empty($value) ? null : \json_encode($value));
+        return $this->setString(empty($value) ? null : (string) \json_encode($value));
     }
 
     /**

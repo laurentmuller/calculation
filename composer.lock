@@ -3563,16 +3563,16 @@
         },
         {
             "name": "slope-it/breadcrumb-bundle",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slope-it/breadcrumb-bundle.git",
-                "reference": "54a16a6a3bf6375183da491103665aecd283bb9b"
+                "reference": "9a42c464449e28156f584ce610fe290ee854f51b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slope-it/breadcrumb-bundle/zipball/54a16a6a3bf6375183da491103665aecd283bb9b",
-                "reference": "54a16a6a3bf6375183da491103665aecd283bb9b",
+                "url": "https://api.github.com/repos/slope-it/breadcrumb-bundle/zipball/9a42c464449e28156f584ce610fe290ee854f51b",
+                "reference": "9a42c464449e28156f584ce610fe290ee854f51b",
                 "shasum": ""
             },
             "require": {
@@ -3615,9 +3615,9 @@
             ],
             "support": {
                 "issues": "https://github.com/slope-it/breadcrumb-bundle/issues",
-                "source": "https://github.com/slope-it/breadcrumb-bundle/tree/1.0.1"
+                "source": "https://github.com/slope-it/breadcrumb-bundle/tree/1.1.0"
             },
-            "time": "2021-05-20T12:31:21+00:00"
+            "time": "2021-11-23T14:14:26+00:00"
         },
         {
             "name": "symfony/asset",
@@ -4873,16 +4873,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.17.4",
+            "version": "v1.17.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "4345d084aa9403a0c68e3e64c2cfd748449f7b04"
+                "reference": "3f0dc66dcddff035a2ab98ed7e666dfd478b2712"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/4345d084aa9403a0c68e3e64c2cfd748449f7b04",
-                "reference": "4345d084aa9403a0c68e3e64c2cfd748449f7b04",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/3f0dc66dcddff035a2ab98ed7e666dfd478b2712",
+                "reference": "3f0dc66dcddff035a2ab98ed7e666dfd478b2712",
                 "shasum": ""
             },
             "require": {
@@ -4918,7 +4918,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v1.17.4"
+                "source": "https://github.com/symfony/flex/tree/v1.17.5"
             },
             "funding": [
                 {
@@ -4934,7 +4934,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-23T10:12:56+00:00"
+            "time": "2021-11-23T11:08:47+00:00"
         },
         {
             "name": "symfony/form",

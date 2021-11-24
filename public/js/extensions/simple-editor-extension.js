@@ -13,7 +13,7 @@
 
         /**
          * Finds the Simple-Editor container within the current element.
-         * 
+         *
          * @return {jQuery} the editor or null if not found.
          */
         findSimpleEditor: function () {
@@ -23,7 +23,7 @@
 
         /**
          * Set focus to the editor.
-         * 
+         *
          * @return {boolean} true if focused.
          */
         focusSimpleEditor: function () {
@@ -40,7 +40,7 @@
 
         /**
          * Gets the editor content as text.
-         * 
+         *
          * @return {string} the content.
          */
         getSimpleEditorContent: function () {
@@ -58,7 +58,7 @@
 
         /**
          * Initialize a Simple-Editor.
-         * 
+         *
          * @param {Object}
          *            options - the initialisation options.
          * @return {jQuery} the input for chaining.
@@ -154,10 +154,23 @@
                     const child = $content[0].firstChild;
                     if (child && child.nodeType === 3) {
                         html = '<div>' + html + '</div>';
-                    } else if ($content.html() === '<br>') {
+                    } else if (html === '<br>') {
                         html = '';
                     }
                     $this.val(html).valid();
+                }).on('paste', function (e) {
+                    e = e.originalEvent;
+                    if (e && e.clipboardData && e.clipboardData.getData) {
+                        let html = e.clipboardData.getData('text/html');
+                        if (html && html.length) {
+                            const regex = /\r|\n|style="(.*?)"|class="(.*?)"|(?=<!--)([\s\S]*?)-->|<div.*>&nbsp;<\/div>/gm;
+                            html = html.replace(regex, '').trim();
+                            $content.html(html).trigger('input');
+                            e.stopPropagation();
+                            e.preventDefault();
+                            return false;
+                        }
+                    }
                 });
 
                 // copy value

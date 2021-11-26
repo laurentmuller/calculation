@@ -77,6 +77,7 @@
 
             options = options || {};
             const borderRadius = $.isBorderRadius();
+            const events = 'click focus keyup mouseup input';
             return this.each(function () {
                 const $this = $(this);
                 const $editor = $this.parents('div.simple-editor');
@@ -86,7 +87,6 @@
                 }
 
                 // actions
-                let oldGroup = false;
                 $editor.find('.simple-editor-toolbar button').each(function (index) {
                     const $button = $(this);
                     const data = $button.data();
@@ -97,6 +97,7 @@
                     if (index === 0 && borderRadius) {
                         $button.addClass('rounded-left');
                     }
+
                     // exec
                     if (exec) {
                         $button.on('click', function () {
@@ -105,35 +106,26 @@
                             }
                             return $content.focus();
                         });
-                    } else {
+                    } else if (!$button.hasClass('dropdown-toggle')) {
                         $button.toggleDisabled(true);
                     }
 
                     // state
                     if (state) {
-                        $content.on('click focus keyup mouseup input', function () {
+                        $content.on(events, function () {
                             $button.toggleClass('active', queryCommandState(state));
                         });
                     }
 
                     // enabled
                     if (enabled) {
-                        $content.on('click focus keyup mouseup input', function () {
+                        $content.on(events, function () {
                             $button.toggleDisabled(!queryCommandEnabled(enabled));
                         });
                     }
 
-                    // separator
-                    const newGroup = data.group || false;
-                    if (newGroup && oldGroup && newGroup !== oldGroup) {
-                        $('<div/>', {
-                            'class': 'border-left separator'
-                        }).insertBefore($button);
-                    }
-                    oldGroup = newGroup;
-
                     // remove attributes
-                    $button.removeAttr('data-exec data-parameter data-state data-enabled data-group');
+                    // $button.removeAttr('data-exec data-parameter data-state data-enabled');
                 });
 
                 // handle content events
@@ -154,10 +146,23 @@
                     const child = $content[0].firstChild;
                     if (child && child.nodeType === 3) {
                         html = '<div>' + html + '</div>';
-                    } else if ($content.html() === '<br>') {
+                    } else if (html === '<br>') {
                         html = '';
                     }
                     $this.val(html).valid();
+                }).on('paste', function (e) {
+                    e = e.originalEvent;
+                    if (e && e.clipboardData && e.clipboardData.getData) {
+                        let html = e.clipboardData.getData('text/html');
+                        if (html && html.length) {
+                            const regex = /\r|\n|style="(.*?)"|class="(.*?)"|(?=<!--)([\s\S]*?)-->|<div.*>&nbsp;<\/div>/gm;
+                            html = html.replace(regex, '').trim();
+                            $content.html(html).trigger('input');
+                            e.stopPropagation();
+                            e.preventDefault();
+                            return false;
+                        }
+                    }
                 });
 
                 // copy value

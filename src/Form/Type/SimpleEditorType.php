@@ -34,7 +34,13 @@ class SimpleEditorType extends AbstractType
         if ($options['required']) {
             $view->vars['attr']['class'] = $this->getWidgetClass($view);
         }
+
+        $actions = $this->getActions($options);
+        foreach ($actions as $action) {
+            $groups[$action['group']][] = $action;
+        }
         $view->vars['actions'] = $this->getActions($options);
+        $view->vars['groups'] = $groups ?? [];
     }
 
     /**
@@ -62,13 +68,9 @@ class SimpleEditorType extends AbstractType
     private function getActions(array $options): array
     {
         $actions = \array_filter($options['actions'] ?? [], static function (array $action): bool {
-            return !empty($action['exec']);
+            return !empty($action['exec']) || !empty($action['actions']);
         });
-
-        foreach ($actions as &$action) {
-            $action['title'] = 'simple_editor.' . ($action['title'] ?? $action['exec']);
-            $action['icon'] ??= $action['exec'];
-        }
+        $this->updateActions($actions);
 
         return $actions;
     }
@@ -96,5 +98,48 @@ class SimpleEditorType extends AbstractType
         $values[] = 'must-validate';
 
         return \implode(' ', \array_unique($values));
+    }
+
+    private function updateActions(array &$actions, string $class = 'btn btn-outline-secondary'): void
+    {
+        foreach ($actions as &$action) {
+            $action['group'] ??= 'default';
+            $action['icon'] ??= $action['exec'];
+            $action['attributes']['class'] = $class;
+            $action['attributes']['title'] = 'simple_editor.' . ($action['title'] ?? $action['exec']);
+
+            if (!empty($action['text'])) {
+                $action['text'] = 'simple_editor.' . $action['text'];
+                unset($action['icon']);
+            }
+            if (!empty($action['exec'])) {
+                $action['attributes']['data-exec'] = $action['exec'];
+                unset($action['exec']);
+            }
+            if (!empty($action['parameter'])) {
+                $action['attributes']['data-parameter'] = $action['parameter'];
+                unset($action['parameter']);
+            }
+            if (!empty($action['state'])) {
+                $action['attributes']['data-state'] = $action['state'];
+                unset($action['state']);
+            }
+            if (!empty($action['enabled'])) {
+                $action['attributes']['data-enabled'] = $action['enabled'];
+                unset($action['enabled']);
+            }
+            if (!empty($action['class'])) {
+                $action['attributes']['class'] .= ' ' . $action['class'];
+            }
+            unset($action['class']);
+
+            // drop-down items?
+            if (!empty($action['actions'])) {
+                $action['attributes']['aria-expanded'] = 'false';
+                $action['attributes']['data-toggle'] = 'dropdown';
+                $action['attributes']['class'] .= ' dropdown-toggle';
+                $this->updateActions($action['actions'], 'dropdown-item');
+            }
+        }
     }
 }

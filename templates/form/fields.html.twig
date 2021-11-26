@@ -224,31 +224,42 @@
     {{- block('form_row') -}}
 {%- endblock %}
 
+{% block editor_button %}
+{% set translation_domain = 'messages' %}
+{% set attr_translation_parameters = [] %}
+<button type="button"{% with {attr: current_action.attributes} %}{{ block('attributes') }}{% endwith %}>
+	{%- if current_action.text|default(false) -%}{{- current_action.text|trans -}}{%- else -%}<i class="{{- 'fa-fw fas fa-' ~ current_action.icon -}}"></i>{%- endif -%}
+</button>
+{% endblock %}
+
 {% block simple_editor_widget -%}
 {%- set type = type|default('hidden') -%}
 {%- set editor_id = form.vars.id ~ '_editor' -%}
 {%- set actions = form.vars.actions|default([]) -%}
 <div class="simple-editor border" id="{{ editor_id }}" name="{{ editor_id }}">
-    {% if actions|length -%}
-    <div class="simple-editor-toolbar btn-group btn-group-sm d-print-none">
-    {% for action in actions %}
-        {% set attributes = {'title': action.title, 'data-exec': action.exec|raw} %}
-        {% if action.parameter is defined %}
-            {% set attributes = attributes|merge({'data-parameter': action.parameter|raw}) %}
-        {%- endif %}
-        {% if action.state is defined %}
-            {% set attributes = attributes|merge({'data-state': action.state|raw}) %}
-        {%- endif %}
-        {% if action.enabled is defined %}
-            {% set attributes = attributes|merge({'data-enabled': action.enabled|raw}) %}
-        {%- endif %}
-        {% if action.group is defined %}
-            {% set attributes = attributes|merge({'data-group': action.group|raw}) %}
-        {%- endif %}
-        <button type="button" class="btn btn-outline-secondary"{% with {attr: attributes} %}{{ block('attributes') }}{% endwith %}>
-        	{%- if action.iconText|default(false) -%}<b>{{- action.iconText -}}</b>{%- else -%}<i class="{{- 'fa-fw fas fa-' ~ action.icon -}}"></i>{%- endif -%}
-        </button>
-    {% endfor %}
+    {% if groups|default([])|length -%}
+    <div class="simple-editor-toolbar btn-toolbar d-print-none" role="toolbar" >
+    	{% for group, actions in groups %}
+		<div class="btn-group btn-group-sm" role="group" aria-label="{{ group }}">
+		{% for action in actions %}
+    	    {% set current_action = action %}
+            {% if action.actions|default([])|length %}
+        	<div class="btn-group btn-group-sm" role="group">
+        		{{ block('editor_button') }}
+        		<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+        	    {% for child in action.actions %}
+        	        {% set current_action = child %}
+        	        {{- block('editor_button') -}}
+                {% endfor %}
+        		</div>
+        	</div>
+            {% else %}
+                {{- block('editor_button') -}}
+            {% endif %}
+        {% endfor %}
+        {% if not loop.last %}<div class="border-left separator"></div>{% endif %}
+		</div>
+    	{% endfor %}
     </div>
     {%- endif %}
     <div class="simple-editor-content border-top" contenteditable="true"></div>

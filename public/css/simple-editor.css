@@ -1,21 +1,23 @@
 @import 'style.css';
 
 /**! compression tag for ftp-deployment */
+
 .simple-editor {
-    background-color: var(--white);
+   	background-color: var(--white);
 }
 
 .simple-editor .simple-editor-toolbar {
+    /*overflow-x: scroll;*/
     border-bottom: 0;
-    overflow-x: auto;
-    width: 100%;
+    /*width: 100%;*/
 }
-
+/*
 @media (min-width : 768px) {
     .simple-editor .simple-editor-toolbar {
         width: auto;
     }
 }
+*/
 
 .simple-editor .simple-editor-toolbar::-webkit-scrollbar {
     height: 3px;
@@ -43,6 +45,51 @@
     padding: 0.5rem;
     height: 250px;
     outline: 0;
+}
+
+.simple-editor .simple-editor-toolbar .h1,
+.simple-editor .simple-editor-toolbar .h2,
+.simple-editor .simple-editor-toolbar .h3,
+.simple-editor .simple-editor-toolbar .h4,
+.simple-editor .simple-editor-toolbar .h5,
+.simple-editor .simple-editor-toolbar .h6,
+.simple-editor .simple-editor-content h1,
+.simple-editor .simple-editor-content h2,
+.simple-editor .simple-editor-content h3,
+.simple-editor .simple-editor-content h4,
+.simple-editor .simple-editor-content h5,
+.simple-editor .simple-editor-content h6 {
+	font-weight: 500;
+}
+
+.simple-editor .simple-editor-toolbar .h1,
+.simple-editor .simple-editor-content h1 {
+	font-size: 2em;
+}
+
+.simple-editor .simple-editor-toolbar .h2,
+.simple-editor .simple-editor-content h2 {
+	font-size: 1.75em;
+}
+
+.simple-editor .simple-editor-toolbar .h3,
+.simple-editor .simple-editor-content h3 {
+	font-size: 1.5em;
+}
+
+.simple-editor .simple-editor-toolbar .h4,
+.simple-editor .simple-editor-content h4 {
+  	font-size: 1.25em;
+}
+
+.simple-editor .simple-editor-toolbar .h5,
+.simple-editor .simple-editor-content h5 {
+  font-size: 1.1em;
+}
+
+.simple-editor .simple-editor-toolbar .h6,
+.simple-editor .simple-editor-content h6 {
+  font-size: 1em;
 }
 
 .simple-editor .separator {

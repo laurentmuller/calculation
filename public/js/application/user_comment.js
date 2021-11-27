@@ -7,7 +7,7 @@
     'use strict';
 
     // initialize editor
-    $("#user_comment_message").initTinymceEditor({
+    $("#user_comment_message").initSimpleEditor({
         focus: true
     });
 
@@ -16,7 +16,7 @@
 
     // initialize validator
     $("form").initValidator({
-        tinymceeditor: true,
+        simpleeditor: true,
         fileInput: true,
         focus: false
     });

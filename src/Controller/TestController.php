@@ -22,7 +22,6 @@ use App\Form\Type\CaptchaImageType;
 use App\Form\Type\ImportanceType;
 use App\Form\Type\MinStrengthType;
 use App\Form\Type\SimpleEditorType;
-use App\Form\Type\TinyMceEditorType;
 use App\Interfaces\StrengthInterface;
 use App\Mime\NotificationEmail;
 use App\Model\Comment;
@@ -150,43 +149,6 @@ class TestController extends AbstractController
         }
 
         return $this->renderForm('test/editor_simple.html.twig', [
-            'form' => $form,
-        ]);
-    }
-
-    /**
-     * Display Tinymce editor.
-     *
-     * @Route("/tinymce", name="test_tinymce")
-     */
-    public function editorTinymce(Request $request): Response
-    {
-        $data = [
-            'email' => 'bibi@bibi.nu',
-            'message' => '',
-        ];
-
-        // create form
-        $helper = $this->createFormHelper('user.fields.', $data);
-
-        $helper->field('email')
-            ->addEmailType();
-
-        $helper->field('message')
-            ->updateAttribute('minlength', 10)
-            ->add(TinyMceEditorType::class);
-
-        // handle request
-        $form = $helper->createForm();
-        if ($this->handleRequestForm($request, $form)) {
-            $data = $form->getData();
-            $message = 'Message :<br>' . (string) $data['message'];
-            $this->succes($message);
-
-            return $this->redirectToHomePage();
-        }
-
-        return $this->renderForm('test/editor_tinymce.html.twig', [
             'form' => $form,
         ]);
     }

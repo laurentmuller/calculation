@@ -611,64 +611,6 @@ class UpdateAssetsCommand extends AbstractAssetsCommand
             ['color', 'display', 'font-size', 'margin-bottom', 'white-space']
         );
 
-        // tinyMCE
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.modal-content',
-            '.tox-toolbar__primary',
-            ['background-color']
-        );
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.modal-content',
-            '.tox-statusbar',
-            ['background-color']
-        );
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.modal-content',
-            '.tox .tox-menu',
-            ['background-color']
-        );
-
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.modal-content',
-            '.tox-dialog',
-            ['background-color']
-        );
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.modal-content',
-            '.tox .tox-dialog__header',
-            ['background-color']
-        );
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.modal-content',
-            '.tox .tox-dialog__footer',
-            ['background-color']
-        );
-
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.modal-header',
-            '.tox .tox-dialog__header',
-            ['background-color', 'color']
-        );
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.modal-body',
-            '.tox .tox-dialog__body',
-            ['color']
-        );
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.modal-footer',
-            '.tox .tox-dialog__footer',
-            ['background-color', 'color']
-        );
-
         if (empty($toAppend)) {
             return $content;
         }

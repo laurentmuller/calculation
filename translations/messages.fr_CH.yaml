@@ -718,7 +718,6 @@ test:
     drag_drop: Drag & drop
     html: Exportation HTML
     recaptcha: reCAPTCHA
-    tinymce: Editeur TinyMCE
     simple_editor: Editeur Simple
     trix_editor: Editeur Trix
 parameters:

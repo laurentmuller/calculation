@@ -84,17 +84,13 @@
             const recaptcha = options.recaptcha;
             const fileInput = options.fileInput;
             const colorpicker = options.colorpicker;
-            const tinymceeditor = options.tinymceeditor;
             const simpleeditor = options.simpleeditor;
 
             // override elementValue function
-            if (tinymceeditor || simpleeditor) {
+            if (simpleeditor) {
                 $.validator.prototype.elementValue = (function (parent) {
                     return function (element) {
-                        if (tinymceeditor && $(element).findTinymceEditor()) {
-                            return $(element).getTinymceEditorContent();
-                        }
-                        if (simpleeditor && $(element).findSimpleEditor()) {
+                        if ($(element).findSimpleEditor()) {
                             return $(element).getSimpleEditorContent();
                         }
                         return parent.apply(this, arguments);
@@ -110,17 +106,10 @@
                         const $elements = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
 
                         // display if parent's accordion
-                         const $collapse = $elements.parents('.collapse:not(.show)');
-                         const $accordion = $elements.parents('.accordion');
-                         if ($collapse.length && $accordion.length) {
-                             $collapse.collapse('show');
-                         }
-
-                        // tinymceeditor
-                        if (tinymceeditor) {
-                            if ($elements.focusTinymceEditor()) {
-                                return;
-                            }
+                        const $collapse = $elements.parents('.collapse:not(.show)');
+                        const $accordion = $elements.parents('.accordion');
+                        if ($collapse.length && $accordion.length) {
+                            $collapse.collapse('show');
                         }
 
                         // simpleeditor
@@ -170,9 +159,6 @@
              */
             $.validator.prototype.findElement = function ($element) {
                 let $toUpdate = null;
-                if (tinymceeditor && !$toUpdate) {
-                    $toUpdate = $element.findTinymceEditor();
-                }
                 if (simpleeditor && !$toUpdate) {
                     $toUpdate = $element.findSimpleEditor();
                 }

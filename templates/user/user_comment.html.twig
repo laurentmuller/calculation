@@ -18,19 +18,17 @@
 {% endblock %}
 
 {% block stylesheets %}
-{{ asset_css('css/fileinput.css') }}
+{{ asset_css('css/simple-editor.css') }}
 {% endblock %}
 
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}
-{% else %}
-{{ asset_js('js/core_edit.js') }}
-{% endif %}
-{{ asset_js('js/vendor/tinymce/tinymce.js') }}
-{{ asset_js('js/vendor/tinymce/jquery.tinymce.js') }}
 {{ asset_js('js/plugins/plugin-fileinput.js') }}
 {{ asset_js('js/extensions/file-input-extensions.js') }}
-{{ asset_js('js/extensions/tinymce-extensions.js') }}
+{{ asset_js('js/extensions/simple-editor-extension.js') }}
 {{ asset_js('js/application/user_comment.js') }}
+{% else %}
+{{ asset_js('js/user_comment.js') }}
+{% endif %}
 {% endblock %}

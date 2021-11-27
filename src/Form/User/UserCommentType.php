@@ -14,7 +14,7 @@ namespace App\Form\User;
 
 use App\Form\DataTransformer\AddressTransformer;
 use App\Form\FormHelper;
-use App\Form\Type\TinyMceEditorType;
+use App\Form\Type\SimpleEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -58,7 +58,7 @@ class UserCommentType extends AbstractType
 
         $helper->field('message')
             ->minLength(10)
-            ->add(TinyMceEditorType::class);
+            ->add(SimpleEditorType::class);
 
         $helper->field('attachments')
             ->updateOptions([

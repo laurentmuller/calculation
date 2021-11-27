@@ -34,13 +34,7 @@ class SimpleEditorType extends AbstractType
         if ($options['required']) {
             $view->vars['attr']['class'] = $this->getWidgetClass($view);
         }
-
-        $actions = $this->getActions($options);
-        foreach ($actions as $action) {
-            $groups[$action['group']][] = $action;
-        }
-        $view->vars['actions'] = $this->getActions($options);
-        $view->vars['groups'] = $groups ?? [];
+        $view->vars['groups'] = $this->getGroupedActions($options);
     }
 
     /**
@@ -63,19 +57,6 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * Filter and update actions.
-     */
-    private function getActions(array $options): array
-    {
-        $actions = \array_filter($options['actions'] ?? [], static function (array $action): bool {
-            return !empty($action['exec']) || !empty($action['actions']);
-        });
-        $this->updateActions($actions);
-
-        return $actions;
-    }
-
-    /**
      * Gets the definition of the default actions.
      */
     private function getDefaultActions(): array
@@ -87,6 +68,24 @@ class SimpleEditorType extends AbstractType
         } catch (\InvalidArgumentException $e) {
             return [];
         }
+    }
+
+    /**
+     * Filter, update and group actions.
+     */
+    private function getGroupedActions(array $options): array
+    {
+        $actions = \array_filter($options['actions'] ?? [], static function (array $action): bool {
+            return !empty($action['exec']) || !empty($action['actions']);
+        });
+        $this->updateActions($actions);
+
+        $groups = [];
+        foreach ($actions as $action) {
+            $groups[$action['group']][] = $action;
+        }
+
+        return $groups;
     }
 
     /**

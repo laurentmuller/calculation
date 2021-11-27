@@ -2,13 +2,13 @@
 {% macro icon(icon, text, domain=null, parameters=[]) -%}
 {%- if icon -%}
     {%- if 'fab' in icon -%}
-        {%- set class = 'fab fa-' ~ icon|split(' ')|filter(c => c != 'fab')|join(' ') -%}
+        {%- set class = 'fa-brands fa-' ~ icon|split(' ')|filter(c => c != 'fab')|join(' ') -%}
     {%- elseif 'far' in icon -%}
-        {%- set class = 'far fa-' ~ icon|split(' ')|filter(c => c != 'far')|join(' ') -%}
+        {%- set class = 'fa-regular fa-' ~ icon|split(' ')|filter(c => c != 'far')|join(' ') -%}
     {%- else -%}
-        {%- set class = 'fas fa-' ~ icon -%}
+        {%- set class = 'fa-solid fa-' ~ icon -%}
     {%- endif -%}
-<i class="{{ class }}" aria-hidden="true"></i>
+<i class="{{ class }}"></i>
 {%- endif %}
 {%- if text %}{% if icon %} {% endif %}{{ text|trans(parameters, domain) -}}{%- endif -%}
 {%- endmacro %}

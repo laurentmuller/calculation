@@ -1,23 +1,14 @@
-@import 'style.css';
+@import 'fileinput.css';
 
 /**! compression tag for ftp-deployment */
 
 .simple-editor {
-   	background-color: var(--white);
+    background-color: var(--white);
 }
 
 .simple-editor .simple-editor-toolbar {
-    /*overflow-x: scroll;*/
     border-bottom: 0;
-    /*width: 100%;*/
 }
-/*
-@media (min-width : 768px) {
-    .simple-editor .simple-editor-toolbar {
-        width: auto;
-    }
-}
-*/
 
 .simple-editor .simple-editor-toolbar::-webkit-scrollbar {
     height: 3px;

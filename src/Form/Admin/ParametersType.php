@@ -92,6 +92,26 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
             ->updateAttribute('spellcheck', 'false')
             ->addTextType();
 
+        $helper->field(self::P_CUSTOMER_ADDRESS)
+            ->rowClass('ml-2')
+            ->notRequired()
+            ->addTextareaType();
+
+        $helper->field(self::P_CUSTOMER_PHONE)
+            ->notRequired()
+            ->rowClass('ml-2')
+            ->addTelType();
+
+        $helper->field(self::P_CUSTOMER_FAX)
+            ->notRequired()
+            ->rowClass('ml-2')
+            ->addFaxType();
+
+        $helper->field(self::P_CUSTOMER_EMAIL)
+            ->notRequired()
+            ->rowClass('ml-2')
+            ->addEmailType();
+
         $helper->field(self::P_CUSTOMER_URL)
             ->rowClass('ml-2')
             ->addUrlType();

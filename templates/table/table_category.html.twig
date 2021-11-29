@@ -14,7 +14,7 @@
 {% block toolbar_actions -%}
 <div class="input-group-append">
     <button id="groupId" data-value="{{ group_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'category.fields.group'|trans }}" title="{{ 'category.list.group_help'|trans }}">
-        <i class="fas fa-code-branch" aria-hidden="true"></i>&nbsp;{{- customData.group ? customData.group.code : 'category.fields.group'|trans -}}
+        <i class="fa-solid fa-code-branch" aria-hidden="true"></i>&nbsp;{{- customData.group ? customData.group.code : 'category.fields.group'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="groupId">
         {{ _self.output_dropdown('group', 0, group_id, 'datatable.all'|trans) }}

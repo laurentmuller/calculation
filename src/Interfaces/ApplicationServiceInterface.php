@@ -67,9 +67,29 @@ interface ApplicationServiceInterface
     public const P_ADMIN_RIGHTS = 'admin_rights';
 
     /**
+     * The property name for the customer address (string).
+     */
+    public const P_CUSTOMER_ADDRESS = 'customer_address';
+
+    /**
+     * The property name for the customer email (string).
+     */
+    public const P_CUSTOMER_EMAIL = 'customer_email';
+
+    /**
+     * The property name for the customer fax number (string).
+     */
+    public const P_CUSTOMER_FAX = 'customer_fax';
+
+    /**
      * The property name for the customer name (string).
      */
     public const P_CUSTOMER_NAME = 'customer_name';
+
+    /**
+     * The property name for the customer phone number (string).
+     */
+    public const P_CUSTOMER_PHONE = 'customer_phone';
 
     /**
      * The property name for the customer web site (string).

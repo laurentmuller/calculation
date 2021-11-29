@@ -6,19 +6,19 @@
 <div class="input-group">
     <div class="input-group-prepend d-print-none">
         <button class="btn btn-edit btn-outline-primary" type="button" title="{{ 'taskitem.edit.items_show'|trans }}">
-            <i class="fas fa-fw fa-caret-right" aria-hidden="true"></i>
+            <i class="fa-solid fa-fw fa-caret-right" aria-hidden="true"></i>
         </button>
     </div>
     {{ block('form_widget_simple') }}
     <div class="input-group-append d-print-none">
         <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'task.edit.move_up_item'|trans }}" disabled="disabled">
-            <i class="fas fa-angle-up" aria-hidden="true"></i>
+            <i class="fa-solid fa-angle-up" aria-hidden="true"></i>
         </button>
         <button type="button" class="btn btn-edit btn-outline-secondary btn-down-item" title="{{ 'task.edit.move_down_item'|trans }}" disabled="disabled">
-            <i class="fas fa-angle-down" aria-hidden="true"></i>
+            <i class="fa-solid fa-angle-down" aria-hidden="true"></i>
         </button>
         <button type="button" class="btn btn-edit btn-outline-danger btn-delete-item" title="{{ 'task.edit.delete_item'|trans }}">
-            <i class="fas fa-times" aria-hidden="true"></i>
+            <i class="fa-solid fa-times" aria-hidden="true"></i>
         </button>
     </div>
 </div>
@@ -29,7 +29,7 @@
     {{ block('form_widget_simple') }}
     <div class="input-group-append d-print-none">
         <button type="button" class="btn btn-edit btn-outline-danger btn-delete-item" title="{{ 'taskitem.edit.delete_item'|trans }}">
-            <i class="fas fa-times" aria-hidden="true"></i>
+            <i class="fa-solid fa-times" aria-hidden="true"></i>
         </button>
     </div>
 </div>
@@ -75,7 +75,7 @@
                 <div class="col">
                     <label for="{{ id }}_name">
                         <a href="#{{ id_content }}" class="stretched-link" title="{{ title|trans }}" data-toggle="collapse" aria-controls="{{ id_content }}" aria-expanded="{{ show|json_encode }}">
-                            <i class="d-print-none fas fa-fw fa-caret-{% if show %}down{% else %}right{% endif %}" aria-hidden="true"></i>
+                            <i class="d-print-none fa-solid fa-fw fa-caret-{% if show %}down{% else %}right{% endif %}" aria-hidden="true"></i>
                             <span class="required">{{ 'taskitem.fields.name'|trans }}</span>
                         </a>
                     </label>
@@ -83,13 +83,13 @@
                 <div class="col-auto d-print-none">
                     <div class="btn-group btn-group-sm">
                         <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'task.edit.move_up_item'|trans }}" disabled="disabled">
-                            <i class="fas fa-angle-up" aria-hidden="true"></i>
+                            <i class="fa-solid fa-angle-up" aria-hidden="true"></i>
                         </button>
                         <button type="button" class="btn btn-edit btn-outline-secondary btn-down-item" title="{{ 'task.edit.move_down_item'|trans }}" disabled="disabled">
-                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            <i class="fa-solid fa-angle-down" aria-hidden="true"></i>
                         </button>
                         <button type="button" class="btn btn-edit btn-outline-danger btn-delete-item" title="{{ 'task.edit.delete_item'|trans }}">
-                            <i class="fas fa-times" aria-hidden="true"></i>
+                            <i class="fa-solid fa-times" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                 </div>
                 <div class="col-auto d-print-none">
                     <a href="#" type="button" class="p-0 btn-add-margin btn btn-link ">{{ 'taskitem.edit.add_item'|trans }}</a>
-                    <a href="#" type="button" class="p-0 btn-sort-margin btn btn-link {% if count < 2 %} disabled{% endif %}" title="{{ 'taskitem.edit.sort_items'|trans }}"><i class="fas fa-sort-numeric-up"></i></a>
+                    <a href="#" type="button" class="p-0 btn-sort-margin btn btn-link {% if count < 2 %} disabled{% endif %}" title="{{ 'taskitem.edit.sort_items'|trans }}"><i class="fa-solid fa-sort-numeric-up"></i></a>
                 </div>
             </div>
             <hr class="my-0">

@@ -359,7 +359,7 @@ user:
     fields:
         username: Nom d'utilisateur
         username_short: Nom
-        email: Adresse e-mail
+        email: E-mail
         enabled: Statut
         role: Rôle
         lastLogin: Connexion
@@ -604,6 +604,9 @@ index:
 about:
     title: A propos de
     app_customer: Client
+    app_customer_phone: Téléphone
+    app_customer_fax: Télécopieur
+    app_customer_email: E-mail
     app_name: Application
     app_owner: Concepteur
     app_version: Version
@@ -773,7 +776,11 @@ parameters:
         grouping_separator: Séparateur de milliers
         decimal_separator: Séparateur de décimals
         customer_name: Nom
+        customer_address: Adresse
         customer_url: Site internet
+        customer_phone: Téléphone
+        customer_fax: Télécopieur
+        customer_email: E-mail
         message_position: Position
         message_timeout: Durée
         message_sub_title: Sous-titre

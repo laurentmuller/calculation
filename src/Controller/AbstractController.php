@@ -37,6 +37,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Provides common features needed in controllers.
  *
+ * @method ?User getUser()
+ *
  * @author Laurent Muller
  */
 abstract class AbstractController extends BaseController

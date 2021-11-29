@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Form\User\UserCommentType;
 use App\Model\Comment;
 use App\Util\Utils;
@@ -46,7 +45,6 @@ class CommentController extends AbstractController
      */
     public function invoke(Request $request, MailerInterface $mailer, LoggerInterface $logger): Response
     {
-        /** @var User $user */
         $user = $this->getUser();
         $comment = new Comment(false);
         $comment->setSubject($this->getApplicationName())

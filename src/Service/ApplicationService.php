@@ -115,8 +115,6 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
 
     /**
      * Gets this cache class short name.
-     *
-     * @return string the class name
      */
     public function getCacheClass(): string
     {
@@ -124,9 +122,46 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     }
 
     /**
+     * Gets the customer informations.
+     */
+    public function getCustomer(): array
+    {
+        return [
+            self::P_CUSTOMER_NAME => $this->getCustomerName(),
+            self::P_CUSTOMER_ADDRESS => $this->getCustomerAddress(),
+            self::P_CUSTOMER_PHONE => $this->getCustomerPhone(),
+            self::P_CUSTOMER_FAX => $this->getCustomerFax(),
+            self::P_CUSTOMER_EMAIL => $this->getCustomerEmail(),
+            self::P_CUSTOMER_URL => $this->getCustomerUrl(),
+        ];
+    }
+
+    /**
+     * Gets the customer address.
+     */
+    public function getCustomerAddress(): ?string
+    {
+        return $this->getPropertyString(self::P_CUSTOMER_ADDRESS);
+    }
+
+    /**
+     * Gets the customer e-mail.
+     */
+    public function getCustomerEmail(): ?string
+    {
+        return $this->getPropertyString(self::P_CUSTOMER_EMAIL);
+    }
+
+    /**
+     * Gets the customer fax number.
+     */
+    public function getCustomerFax(): ?string
+    {
+        return $this->getPropertyString(self::P_CUSTOMER_FAX);
+    }
+
+    /**
      * Gets the customer name.
-     *
-     * @return string|null the customer name
      */
     public function getCustomerName(): ?string
     {
@@ -134,9 +169,15 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     }
 
     /**
+     * Gets the customer phone number.
+     */
+    public function getCustomerPhone(): ?string
+    {
+        return $this->getPropertyString(self::P_CUSTOMER_PHONE);
+    }
+
+    /**
      * Gets the customer web site (URL).
-     *
-     * @return string|null the customer web site
      */
     public function getCustomerUrl(): ?string
     {
@@ -215,8 +256,6 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
 
     /**
      * Gets the last import of Swiss cities.
-     *
-     * @return \DateTimeInterface|null the last import or NULL if none
      */
     public function getLastImport(): ?\DateTimeInterface
     {
@@ -225,8 +264,6 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
 
     /**
      * Gets the position of the flashbag messages (default: 'bottom-right').
-     *
-     * @return string the position
      */
     public function getMessagePosition(): string
     {
@@ -235,8 +272,6 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
 
     /**
      * Gets the timeout, in milliseconds, of the flashbag messages (default: 4000 ms).
-     *
-     * @return int the timeout
      */
     public function getMessageTimeout(): int
     {
@@ -273,6 +308,10 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
 
         $result = [
             self::P_CUSTOMER_NAME => $this->getCustomerName(),
+            self::P_CUSTOMER_ADDRESS => $this->getCustomerAddress(),
+            self::P_CUSTOMER_PHONE => $this->getCustomerPhone(),
+            self::P_CUSTOMER_FAX => $this->getCustomerFax(),
+            self::P_CUSTOMER_EMAIL => $this->getCustomerEmail(),
             self::P_CUSTOMER_URL => $this->getCustomerUrl(),
 
             self::P_EDIT_ACTION => $this->getEditAction(),

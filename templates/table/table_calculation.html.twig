@@ -16,7 +16,7 @@
 {%- set state_id = customData.state.id|default(0) -%}
 <div class="input-group-append">
     <button id="stateId" data-value="{{ state_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'calculation.fields.state'|trans }}" title="{{ 'calculation.list.state_help'|trans }}">
-        <i class="far fa-flag" aria-hidden="true"></i>&nbsp;{{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
+        <i class="fa-regular fa-flag" aria-hidden="true"></i>&nbsp;{{- customData.state ? customData.state.code : 'calculation.fields.state'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="stateId">
         {{ _self.output_dropdown('state', 0, state_id, 'datatable.all'|trans) }}

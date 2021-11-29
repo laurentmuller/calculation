@@ -105,7 +105,7 @@
 
 {% macro homepage(href=null, text='index.title', class='btn btn-form btn-primary', domain=null) -%}
 {%- set href = href|default(path('homepage')) -%}
-{{- _self.link(href, text, class, 'fas fa-home', 'index.title_help', domain) -}}
+{{- _self.link(href, text, class, 'fa-solid fa-home', 'index.title_help', domain) -}}
 {%- endmacro %}
 
 {% macro button_submit(text='common.button_ok', class='btn btn-form btn-primary', parameters={}) -%}

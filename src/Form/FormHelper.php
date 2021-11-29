@@ -14,6 +14,7 @@ namespace App\Form;
 
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\Category\CategoryListType;
+use App\Form\Type\FaxType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
 use App\Form\Type\YesNoType;
@@ -31,6 +32,7 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -257,6 +259,15 @@ class FormHelper
     }
 
     /**
+     * Add a fax (telephone) type to the builder and reset all values to default.
+     */
+    public function addFaxType(string $pattern = null): self
+    {
+        return $this->updateAttribute('pattern', $pattern)
+            ->add(FaxType::class);
+    }
+
+    /**
      * Add a file type to the builder and reset all values to default.
      */
     public function addFileType(): self
@@ -431,11 +442,20 @@ class FormHelper
     }
 
     /**
+     * Add a telephone type to the builder and reset all values to default.
+     */
+    public function addTelType(string $pattern = null): self
+    {
+        return $this->updateAttribute('pattern', $pattern)
+            ->add(TelType::class);
+    }
+
+    /**
      * Add a text area type to the builder and reset all values to default.
      */
-    public function addTextareaType(): self
+    public function addTextareaType(int $rows = 2): self
     {
-        return $this->updateAttribute('rows', 4)
+        return $this->updateAttribute('rows', $rows)
             ->widgetClass('resizable')
             ->add(TextareaType::class);
     }

@@ -38,13 +38,13 @@
     <div class="col-lg-7 text-lg-right d-print-none">
         <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
             {% if show_granted %}
-            {{ _self.button('btn-table-show', 'common.button_show', 'show', 'fas fa-fw fa-tv') }}
+            {{ _self.button('btn-table-show', 'common.button_show', 'show', 'fa-solid fa-fw fa-tv') }}
             {% endif %}
             {% if edit_granted %}
-            {{ _self.button('btn-table-edit', 'common.button_edit', 'edit', 'fas fa-fw fa-pencil-alt') }}
+            {{ _self.button('btn-table-edit', 'common.button_edit', 'edit', 'fa-solid fa-fw fa-pencil-alt') }}
             {% endif %}
             {% if delete_granted %}
-            {{ _self.button('btn-table-delete', 'common.button_delete', 'delete', 'fas fa-fw fa-times') }}
+            {{ _self.button('btn-table-delete', 'common.button_delete', 'delete', 'fa-solid fa-fw fa-times') }}
             {% endif %}
         </div>
     </div>
@@ -70,7 +70,7 @@
                 </div>
                 <div class="input-group-append">
                     <button type="button" class="btn btn-clear btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
-                        <i class="fas fa-eraser" aria-hidden="true"></i>
+                        <i class="fa-solid fa-eraser" aria-hidden="true"></i>
                     </button>
                 </div>
              </div>

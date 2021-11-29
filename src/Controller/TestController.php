@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\Entity\Calculation;
 use App\Entity\Category;
 use App\Entity\Group;
-use App\Entity\User;
 use App\Form\Admin\ParametersType;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
@@ -115,7 +114,6 @@ class TestController extends AbstractController
         // handle request
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            /** @var User $user */
             $user = $this->getUser();
             $data = $form->getData();
             $email = (string) $data['email'];

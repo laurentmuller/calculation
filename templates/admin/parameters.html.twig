@@ -9,21 +9,11 @@
 {%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
 <div class="d-flex flex-row" style="margin-right: -8px;" data-show="{{ show }}" data-hide="{{ hide }}">
     <a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" class="horizontal-line flex-fill">{{ name }}</a>
-    <a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" data-show="{{ show }}" data-hide="{{ hide }}"><i class="fas fa-fw fa-lg fa-caret-left"></i></a>
+    <a href="#{{ href }}" role="button" aria-expanded="false" data-toggle="collapse" title="{{ show }}" data-show="{{ show }}" data-hide="{{ hide }}"><i class="fa-solid fa-fw fa-lg fa-caret-left"></i></a>
 </div>
 {% endmacro %}
 
 {# customized fields #}
-{% block _parameters_customer_url_widget -%}
-<div class="input-group">
-    {%- set type = type|default('url') -%}
-    {{- block('form_widget_simple') -}}
-    <div class="input-group-append d-print-none">
-        <button class="btn btn-url btn-outline-secondary" type="button">{{ 'parameters.action_display'|trans }}</button>
-    </div>
-</div>
-{%- endblock %}
-
 {% block _parameters_message_sub_title_widget -%}
 <div class="input-group">
     {{- block('choice_widget') -}}
@@ -47,7 +37,15 @@
 {% block card_body -%}
 <label class="horizontal-line font-weight-bold">{{ 'parameters.group_customer'|trans }}</label>
 {{ form_row(form.customer_name) }}
-{{ form_row(form.customer_url) }}
+{{ form_row(form.customer_address) }}
+<div class="row">
+	<div class="col-md-6">{{ form_row(form.customer_phone) }}</div>
+	<div class="col-md-6">{{ form_row(form.customer_fax) }}</div>
+</div>
+<div class="row">
+	<div class="col-md-6">{{ form_row(form.customer_email) }}</div>
+	<div class="col-md-6">{{ form_row(form.customer_url) }}</div>
+</div>
 <div class="accordion" id="parent_accordion">
     {{ _self.collapseLine('default') }}
     <div class="toggle-icon collapse" id="default" data-parent="#parent_accordion">

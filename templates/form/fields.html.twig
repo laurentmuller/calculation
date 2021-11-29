@@ -53,7 +53,7 @@
 {% block user_name_widget -%}
 <div class="input-group">
     <div class="input-group-prepend">
-        <span class="input-group-text"><i class="far fa-fw fa-user" aria-hidden="true"></i></span>
+        <span class="input-group-text"><i class="fa-regular fa-fw fa-user" aria-hidden="true"></i></span>
     </div>
     {{- block('form_widget_simple') -}}
 </div>
@@ -63,12 +63,12 @@
 {% block password_widget -%}
 <div class="input-group">
     <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fas fa-fw fa-lock" aria-hidden="true"></i></span>
+        <span class="input-group-text"><i class="fa-solid fa-fw fa-lock" aria-hidden="true"></i></span>
     </div>
     {{ parent() }}
     <div class="input-group-append">
         <span class="btn btn-outline-secondary btn-password{% if not value %} disabled{% endif %}" title="{{ 'common.toggle_password'|trans }}">
-            <i class="fa-fw far fa-eye" aria-hidden="true"></i>
+            <i class="fa-fw fa-regular fa-eye" aria-hidden="true"></i>
         </span>
     </div>
 </div>
@@ -113,9 +113,31 @@
 {%- set type = type|default('url') -%}
 <div class="input-group">
     <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fas fa-fw fa-globe" aria-hidden="true"></i></span>
+        <span class="input-group-text"><i class="fa-solid fa-fw fa-globe" aria-hidden="true"></i></span>
     </div>
     {{- parent() -}}
+</div>
+{%- endblock -%}
+
+{# prepend icon #}
+{%- block tel_widget -%}
+{%- set type = type|default('tel') -%}
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fa-solid fa-phone"></i></i></span>
+    </div>
+    {{- parent() -}}
+</div>
+{%- endblock -%}
+
+{# prepend icon #}
+{%- block fax_widget -%}
+{%- set type = type|default('tel') -%}
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fa-solid fa-fax"></i></i></span>
+    </div>
+    {{- block('form_widget_simple') -}}
 </div>
 {%- endblock -%}
 
@@ -123,7 +145,7 @@
 {%- block email_widget %}
 <div class="input-group">
     <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fas fa-fw fa-at" aria-hidden="true"></i></span>
+        <span class="input-group-text"><i class="fa-solid fa-at" aria-hidden="true"></i></span>
     </div>
     {{- parent() -}}
 </div>
@@ -167,7 +189,7 @@
                 {{- block('form_widget_simple') -}}
             </span>
             <span class="input-group-text fileinput-exists" data-dismiss="fileinput" title="{{ 'common.button_delete'|trans }}">
-                <i class="fas fa-times" aria-hidden="true"></i>
+                <i class="fa-solid fa-times" aria-hidden="true"></i>
             </span>
         </span>
     </div>
@@ -212,7 +234,7 @@
     {% if refresh|default(false) %}
     <div class="input-group-append">
         <button id="{{ id }}_refresh" name="{{ id }}_refresh" class="btn btn-outline-secondary captcha-refresh" type="button" title="{{ 'captcha.refresh'|trans }}">
-            <i class="fas fa-sync" aria-hidden="true"></i>
+            <i class="fa-solid fa-sync" aria-hidden="true"></i>
         </button>
     </div>
     {% endif %}
@@ -228,7 +250,7 @@
 {% set translation_domain = 'messages' %}
 {% set attr_translation_parameters = [] %}
 <button type="button"{% with {attr: current_action.attributes} %}{{ block('attributes') }}{% endwith %}>
-	{%- if current_action.text|default(false) -%}{{- current_action.text|trans -}}{%- else -%}<i class="{{- 'fa-fw fas fa-' ~ current_action.icon -}}"></i>{%- endif -%}
+	{%- if current_action.text|default(false) -%}{{- current_action.text|trans -}}{%- else -%}<i class="{{- 'fa-fw fa-solid fa-' ~ current_action.icon -}}"></i>{%- endif -%}
 </button>
 {% endblock %}
 

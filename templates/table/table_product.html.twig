@@ -14,7 +14,7 @@
 {% block toolbar_actions -%}
 <div class="input-group-append">
     <button id="categoryId" data-value="{{ category_id }}" class="btn btn-sm btn-outline-secondary dropdown-input dropdown-toggle" type="button" data-toggle="dropdown" data-default="{{ 'product.fields.category'|trans }}" title="{{ 'product.list.category_help'|trans }}">
-        <i class="far fa-folder" aria-hidden="true"></i>&nbsp;{{- customData.category ? customData.category.code : 'product.fields.category'|trans -}}
+        <i class="fa-regular fa-folder" aria-hidden="true"></i>&nbsp;{{- customData.category ? customData.category.code : 'product.fields.category'|trans -}}
     </button>
     <div class="dropdown-menu" aria-labelledby="categoryId">
         {{ _self.output_dropdown('category', 0, category_id, 'product.list.category_all_text'|trans) }}

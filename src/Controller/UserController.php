@@ -216,7 +216,6 @@ class UserController extends AbstractEntityController
             return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
         }
 
-        /** @var User $currentUser */
         $currentUser = $this->getUser();
         $comment = new Comment(true);
         $comment->setSubject($this->getApplicationName())

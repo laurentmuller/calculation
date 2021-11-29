@@ -14,7 +14,7 @@ namespace App\Service;
 
 use App\Traits\CacheTrait;
 use App\Util\Utils;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,7 +77,7 @@ abstract class AbstractHttpClientService
      *
      * @throws \InvalidArgumentException if the API key is null or empty
      */
-    public function __construct(AdapterInterface $adapter, bool $isDebug, string $key)
+    public function __construct(CacheItemPoolInterface $adapter, bool $isDebug, string $key)
     {
         // check key
         if (empty($key)) {

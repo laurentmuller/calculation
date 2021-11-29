@@ -25,10 +25,10 @@ use App\Security\EntityVoter;
 use App\Traits\LoggerTrait;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -55,7 +55,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
      */
     private const CACHE_TIMEOUT = 60 * 60;
 
-    private AdapterInterface $adapter;
+    private CacheItemPoolInterface $adapter;
 
     private EntityManagerInterface $manager;
 
@@ -607,10 +607,8 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
 
     /**
      * Check if cache is up to date and if not load data from respository.
-     *
-     * @return AdapterInterface the adapter
      */
-    private function getAdapter(): AdapterInterface
+    private function getAdapter(): CacheItemPoolInterface
     {
         $item = $this->adapter->getItem(self::CACHE_SAVED);
         if (!$item->isHit() || !(bool) ($item->get())) {
@@ -665,13 +663,13 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     /**
      * Sets a cache item value to be persisted later.
      *
-     * @param AdapterInterface $adapter the cache adapter
-     * @param string           $key     the key for which to return the corresponding cache item
-     * @param mixed            $value   the value to set
+     * @param CacheItemPoolInterface $adapter the cache adapter
+     * @param string                 $key     the key for which to return the corresponding cache item
+     * @param mixed                  $value   the value to set
      *
      * @return bool false if the item could not be queued or if a commit was attempted and failed; true otherwise
      */
-    private function saveDeferredItem(AdapterInterface $adapter, string $key, $value): bool
+    private function saveDeferredItem(CacheItemPoolInterface $adapter, string $key, $value): bool
     {
         $item = $adapter->getItem($key);
         $item->expiresAfter(self::CACHE_TIMEOUT)
@@ -708,10 +706,8 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
 
     /**
      * Update the content of the cache from the repository.
-     *
-     * @return AdapterInterface the adapter
      */
-    private function updateAdapter(): AdapterInterface
+    private function updateAdapter(): CacheItemPoolInterface
     {
         // clear
         $adapter = $this->adapter;

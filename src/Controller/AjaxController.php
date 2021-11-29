@@ -30,10 +30,10 @@ use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use ReCaptcha\ReCaptcha;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -256,7 +256,7 @@ class AjaxController extends AbstractController
      * @Route("/language", name="ajax_language")
      * @IsGranted("ROLE_USER")
      */
-    public function language(KernelInterface $kernel, AdapterInterface $cache): JsonResponse
+    public function language(KernelInterface $kernel, CacheItemPoolInterface $cache): JsonResponse
     {
         // check if cached
         if (!$kernel->isDebug()) {

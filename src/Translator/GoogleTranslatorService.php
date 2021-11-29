@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -56,7 +56,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
      * @throws ParameterNotFoundException if the API key parameter is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, AdapterInterface $adapter, bool $isDebug)
+    public function __construct(ParameterBagInterface $params, CacheItemPoolInterface $adapter, bool $isDebug)
     {
         /** @var string $key */
         $key = $params->get(self::PARAM_KEY);

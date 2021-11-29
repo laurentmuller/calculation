@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\Cache\CacheItem;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
@@ -26,7 +26,7 @@ trait CacheTrait
     /**
      * The cache adapter.
      */
-    protected ?AdapterInterface $adapter = null;
+    protected ?CacheItemPoolInterface $adapter = null;
 
     /**
      * Remove all reserved characters that cannot be used in a key.
@@ -96,12 +96,12 @@ trait CacheTrait
      *
      * @param string $key the key for which to return the corresponding item
      *
-     * @return CacheItem|null the cache item, if found; null otherwise
+     * @return CacheItemInterface|null the cache item, if found; null otherwise
      *
      * @throws \InvalidArgumentException
      *                                   If the $key string is not a legal value
      */
-    public function getCacheItem(string $key): ?CacheItem
+    public function getCacheItem(string $key): ?CacheItemInterface
     {
         if (null !== $this->adapter) {
             return $this->adapter->getItem($this->cleanKey($key));
@@ -115,9 +115,9 @@ trait CacheTrait
      *
      * @param string[] $keys An indexed array of keys of items to retrieve
      *
-     * @return \Traversable|CacheItem[] A traversable collection of Cache Items keyed by the cache keys of
-     *                                  each item. A Cache item will be returned for each key, even if that
-     *                                  key is not found.
+     * @return array|\Traversable A traversable collection of Cache Items keyed by the cache keys of
+     *                            each item. A Cache item will be returned for each key, even if that
+     *                            key is not found.
      *
      * @throws \InvalidArgumentException If any of the keys in $keys are not a legal value
      */

@@ -15,7 +15,7 @@ namespace App\Service;
 use App\Model\Theme;
 use App\Traits\CacheTrait;
 use App\Util\FileUtils;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -97,7 +97,7 @@ class ThemeService
     /**
      * Constructor.
      */
-    public function __construct(RequestStack $stack, AdapterInterface $adapter, string $projectDir, bool $isDebug)
+    public function __construct(RequestStack $stack, CacheItemPoolInterface $adapter, string $projectDir, bool $isDebug)
     {
         $this->stack = $stack;
         $this->projectDir = $projectDir;

@@ -31,6 +31,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -80,7 +81,7 @@ abstract class AbstractController extends BaseController
             return $this->application;
         } else {
             /** @var ApplicationService $service */
-            $service = $this->get(ApplicationService::class);
+            $service = $this->container->get(ApplicationService::class);
 
             return $this->application = $service;
         }
@@ -111,6 +112,14 @@ abstract class AbstractController extends BaseController
     public function getApplicationOwnerUrl(): string
     {
         return $this->getStringParameter('app_owner_url');
+    }
+
+    /**
+     * Gets the request stack.
+     */
+    public function getRequestStack(): RequestStack
+    {
+        return $this->container->get(RequestStack::class);
     }
 
     /**
@@ -229,8 +238,11 @@ abstract class AbstractController extends BaseController
      */
     protected function getManager(): EntityManagerInterface
     {
-        /** @var EntityManagerInterface $manager */
-        $manager = $this->getDoctrine()->getManager();
+        /**  Doctrine\Persistence\ManagerRegistry  $registry */
+        $registry = $this->container->get('doctrine');
+
+        /**  EntityManagerInterface $manager */
+        $manager = $registry->getManager();
 
         return $manager;
     }

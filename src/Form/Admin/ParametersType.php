@@ -88,32 +88,29 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
     private function addCustomerSection(FormHelper $helper): void
     {
         $helper->field(self::P_CUSTOMER_NAME)
-            ->rowClass('ml-2')
             ->updateAttribute('spellcheck', 'false')
+            ->rowClass('ml-1 mt-1')
             ->addTextType();
 
         $helper->field(self::P_CUSTOMER_ADDRESS)
-            ->rowClass('ml-2')
+            ->rowClass('ml-1 mt-1')
             ->notRequired()
             ->addTextareaType();
 
         $helper->field(self::P_CUSTOMER_PHONE)
             ->notRequired()
-            ->rowClass('ml-2')
             ->addTelType();
 
         $helper->field(self::P_CUSTOMER_FAX)
             ->notRequired()
-            ->rowClass('ml-2')
             ->addFaxType();
 
         $helper->field(self::P_CUSTOMER_EMAIL)
             ->notRequired()
-            ->rowClass('ml-2')
             ->addEmailType();
 
         $helper->field(self::P_CUSTOMER_URL)
-            ->rowClass('ml-2')
+            ->notRequired()
             ->addUrlType();
     }
 
@@ -169,6 +166,13 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         $helper->field(self::P_QR_CODE)
             ->updateAttribute('data-default', (int) self::DEFAULT_QR_CODE)
             ->help('parameters.helps.' . self::P_QR_CODE)
+            ->rowClass('ml-3 mt-2')
+            ->notRequired()
+            ->addCheckboxType();
+
+        $helper->field(self::P_PRINT_ADDRESS)
+            ->updateAttribute('data-default', (int) self::DEFAULT_PRINT_ADDRESS)
+            ->help('parameters.helps.' . self::P_PRINT_ADDRESS)
             ->rowClass('ml-3 mt-2')
             ->notRequired()
             ->addCheckboxType();

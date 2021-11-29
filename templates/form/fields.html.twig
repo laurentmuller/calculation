@@ -113,7 +113,7 @@
 {%- set type = type|default('url') -%}
 <div class="input-group">
     <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fa-solid fa-fw fa-globe" aria-hidden="true"></i></span>
+        <span class="input-group-text input-group-url"><i class="fa-solid fa-fw fa-globe" aria-hidden="true"></i></span>
     </div>
     {{- parent() -}}
 </div>
@@ -145,7 +145,7 @@
 {%- block email_widget %}
 <div class="input-group">
     <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fa-solid fa-at" aria-hidden="true"></i></span>
+        <span class="input-group-text input-group-email"><i class="fa-solid fa-at" aria-hidden="true"></i></span>
     </div>
     {{- parent() -}}
 </div>

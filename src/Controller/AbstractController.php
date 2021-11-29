@@ -158,7 +158,7 @@ abstract class AbstractController extends BaseController
     /**
      * Gets the connected user name.
      *
-     * @return string|null The user name or NULL if not connected
+     * @return string|null the user name or null if not connected
      */
     public function getUserName(): ?string
     {

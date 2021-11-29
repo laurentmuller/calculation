@@ -28,37 +28,7 @@
             {{ tools.rowInfo('about.app_name'|trans, app_name) }}
             {{ tools.rowInfo('about.app_version'|trans, app_version) }}
             {{ tools.rowInfo('about.app_environment'|trans, ('environment.' ~ app_mode)|trans) }}
-            <tr>
-            	<td class="e">{{ 'about.app_customer'|trans }}</td>
-            	<td class="v">
-            		<a href="{{ customer.customer_url }}" class="card-link" target="_blank" rel="noopener noreferrer">{{ customer.customer_name }}</a>
-            		{% if customer.customer_address %}<br>{{ customer.customer_address|nl2br }}{% endif %}
-            		{% if customer.customer_phone or customer.customer_fax or customer.customer_email %}
-            		<table class="table table-borderless table-sm">
-            			<body>
-                		{% if customer.customer_phone %}
-                			<tr class="">
-                				<td class="p-0 text-unit">{{ 'about.app_customer_phone'|trans }}</td>
-                				<td class="p-0">{{ customer.customer_phone }}</td>
-                			</tr>
-                	    {% endif %}
-                		{% if customer.customer_fax %}
-                			<tr>
-                				<td class="p-0 text-unit">{{ 'about.app_customer_fax'|trans }}</td>
-                				<td class="p-0">{{ customer.customer_fax }}</td>
-                			</tr>
-                		{% endif %}
-                		{% if customer.customer_email %}
-                			<tr>
-                				<td class="p-0 text-unit">{{ 'about.app_customer_email'|trans }}</td>
-                				<td class="p-0"><a class="card-link" href="mailto:{{ customer.customer_email }}&subject={{ app_name_version }}">{{ customer.customer_email }}</a></td>
-                			</tr>
-                		{% endif %}
-                		</body>
-                	</table>
-            		{% endif %}
-            	</td>
-            </tr>
+            {{ tools.rowInfoLink('about.app_customer'|trans, customer.customer_name, customer.customer_url) }}
             {{ tools.rowInfoLink('about.app_owner'|trans, app_owner, app_owner_url) }}
         </tbody>
     </table>

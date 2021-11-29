@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Entity\Role;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\RoleInterface;
+use App\Model\Role;
 use App\Security\EntityVoter;
 use App\Util\Utils;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;

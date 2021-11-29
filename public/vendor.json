@@ -57,7 +57,7 @@
 		},
 		{
 			"name": "highcharts",
-			"version": "9.3.1",
+			"version": "9.3.2",
 			"source": "https://cdn.jsdelivr.net/npm/",
 			"format": "{source}{name}@{version}/{file}",
 			"files": [

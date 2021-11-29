@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Role;
 use App\Form\Admin\ParametersType;
 use App\Form\User\RoleRightsType;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\RoleInterface;
+use App\Model\Role;
 use App\Security\EntityVoter;
 use App\Service\CalculationUpdater;
 use App\Service\ProductUpdater;

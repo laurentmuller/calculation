@@ -151,9 +151,14 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     protected ?string $applicationName = null;
 
     /**
+     * The company address.
+     */
+    protected ?string $companyAddress = null;
+
+    /**
      * The company name.
      */
-    protected ?string $company = null;
+    protected ?string $companyName = null;
 
     /**
      * The company web site.
@@ -285,8 +290,6 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
 
     /**
      * Gets the application name.
-     *
-     * @return string
      */
     public function getApplicationName(): ?string
     {
@@ -296,8 +299,6 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     /**
      * Gets the left and right cell margins.
      * The default value is 1 mm.
-     *
-     * @return float the cell margin
      */
     public function getCellMargin(): float
     {
@@ -305,19 +306,23 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Gets the company name.
-     *
-     * @return string
+     * Gets the company address.
      */
-    public function getCompany(): ?string
+    public function getCompanyAddress(): ?string
     {
-        return $this->company;
+        return $this->companyAddress;
+    }
+
+    /**
+     * Gets the company name.
+     */
+    public function getCompanyName(): ?string
+    {
+        return $this->companyName;
     }
 
     /**
      * Gets the company web site.
-     *
-     * @return string
      */
     public function getCompanyUrl(): ?string
     {
@@ -394,8 +399,6 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
 
     /**
      * Gets the document description.
-     *
-     * @return string
      */
     public function getDescription(): ?string
     {
@@ -526,8 +529,6 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
 
     /**
      * Gets printable width.
-     *
-     * @return float the printable width
      */
     public function getPrintableWidth(): float
     {
@@ -565,9 +566,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Gets the title.
-     *
-     * @return string
+     * Gets the document title.
      */
     public function getTitle(): ?string
     {
@@ -600,9 +599,8 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
         $margins = $this->setCellMargin(0);
 
         // get values
-        $title = $this->title ?: '';
-        $company = $this->company ?: '';
-        $description = $this->getDescription() ?: '';
+        $title = $this->getTitle() ?: '';
+        $company = $this->getCompanyName() ?: '';
 
         // title or company?
         if (!empty($title) || !empty($company)) {
@@ -615,15 +613,18 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
                 ->apply($this);
             $this->Cell($cellWidth, self::LINE_HEIGHT, $title, self::BORDER_BOTTOM, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
 
-            // company and compane web site (if any)
+            // company name and web site
             $style->setFontBold()
                 ->setFontSize(8)
                 ->apply($this);
-            $this->Cell($cellWidth, self::LINE_HEIGHT, $company, self::BORDER_BOTTOM, self::MOVE_TO_RIGHT, self::ALIGN_RIGHT, false, $this->companyUrl);
+            $url = $this->getCompanyUrl() ?: '';
+            $this->Cell($cellWidth, self::LINE_HEIGHT, $company, self::BORDER_BOTTOM, self::MOVE_TO_RIGHT, self::ALIGN_RIGHT, false, $url);
+
             $this->Ln();
         }
 
         // description
+        $description = $this->getDescription() ?: '';
         if (!empty($description)) {
             $style->reset()
                 ->setFontSize(8)
@@ -818,21 +819,27 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Sets the company name.
-     *
-     * @param string $company
+     * Sets the company address.
      */
-    public function setCompany(?string $company): self
+    public function setCompanyAddress(?string $companyAddress): self
     {
-        $this->company = (string) $company;
+        $this->companyAddress = (string) $companyAddress;
+
+        return $this;
+    }
+
+    /**
+     * Sets the company name.
+     */
+    public function setCompanyName(?string $companyName): self
+    {
+        $this->companyName = (string) $companyName;
 
         return $this;
     }
 
     /**
      * Sets the company web site.
-     *
-     * @param string $companyUrl
      */
     public function setCompanyUrl(?string $companyUrl): self
     {
@@ -843,8 +850,6 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
 
     /**
      * Sets the document description.
-     *
-     * @param string $description
      */
     public function setDescription(?string $description): self
     {
@@ -866,7 +871,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Defines the title of the document.
+     * Defines the document title.
      *
      * @param string $title  the title
      * @param bool   $isUTF8 indicates if the string is encoded in ISO-8859-1 (false) or UTF-8 (true)

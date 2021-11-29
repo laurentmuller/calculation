@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Entity\Calculation;
-use App\Entity\Role;
 use App\Interfaces\RoleInterface;
+use App\Model\Role;
 use App\Util\Utils;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;

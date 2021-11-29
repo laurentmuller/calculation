@@ -16,10 +16,10 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Property;
-use App\Entity\Role;
 use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\StrengthInterface;
+use App\Model\Role;
 use App\Repository\PropertyRepository;
 use App\Security\EntityVoter;
 use App\Traits\LoggerTrait;
@@ -332,6 +332,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
             self::P_DISPLAY_CAPTCHA => $this->isDisplayCaptcha(),
 
             self::P_QR_CODE => $this->isQrCode(),
+            self::P_PRINT_ADDRESS => $this->isPrintAddress(),
         ];
 
         // exlude keys
@@ -547,6 +548,16 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     public function isMessageSubTitle(): bool
     {
         return $this->isPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_SUB_TITLE);
+    }
+
+    /**
+     * Gets a value indicating if output the customer address in the PDF documents.
+     *
+     * @return bool true to output; false if none
+     */
+    public function isPrintAddress(): bool
+    {
+        return $this->isPropertyBoolean(self::P_PRINT_ADDRESS, self::DEFAULT_PRINT_ADDRESS);
     }
 
     /**

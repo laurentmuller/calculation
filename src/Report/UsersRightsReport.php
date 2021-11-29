@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Entity\Role;
 use App\Entity\User;
 use App\Interfaces\EntityVoterInterface;
+use App\Model\Role;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfGroup;

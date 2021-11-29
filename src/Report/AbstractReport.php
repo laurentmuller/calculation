@@ -59,7 +59,11 @@ abstract class AbstractReport extends PdfDocument
         $this->setApplicationName($appName)
             ->setOwnerUrl($controller->getApplicationOwnerUrl())
             ->setCompanyUrl($application->getCustomerUrl())
-            ->setCompany($application->getCustomerName());
+            ->setCompanyName($application->getCustomerName());
+
+        if ($application->isPrintAddress()) {
+            $this->setCompanyAddress($application->getCustomerAddress());
+        }
 
         $userName = $controller->getUserName();
         if (null !== $userName) {

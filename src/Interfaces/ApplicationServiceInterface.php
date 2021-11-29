@@ -42,6 +42,11 @@ interface ApplicationServiceInterface
     public const DEFAULT_POSITION = 'bottom-right';
 
     /**
+     * The default output customer address in PDF documents (boolean).
+     */
+    public const DEFAULT_PRINT_ADDRESS = false;
+
+    /**
      * The default output qr-code (boolean).
      */
     public const DEFAULT_QR_CODE = false;
@@ -170,7 +175,12 @@ interface ApplicationServiceInterface
     public const P_MIN_STRENGTH = 'minstrength';
 
     /**
-     * The property name to output a qr-code at the end of the PDF document.
+     * The property name to output the customer address in PDF documents.
+     */
+    public const P_PRINT_ADDRESS = 'print_address';
+
+    /**
+     * The property name to output a QR Code at the end of the PDF calculation document.
      */
     public const P_QR_CODE = 'qr_code';
 

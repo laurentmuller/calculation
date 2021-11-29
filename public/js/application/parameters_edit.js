@@ -83,16 +83,28 @@ function displayNotification() {
 /**
  * Display the customer URL in a blank window.
  */
-function displayUrl() {
+function displayUrl($url) {
     'use strict';
-
-    const $element = $('#parameters_customer_url');
-    if ($element.valid()) {
-        const $url = $element.val();
+    if ($url.valid() && $url.val().trim()) {
+        const url = $url.val().trim();
         // eslint-disable-next-line
-        window.open($url, '_blank');
+        window.open(url, '_blank');
     } else {
-        $element.focus();
+        $url.focus();
+    }
+}
+
+/**
+ * Display the customer mail to.
+ */
+function displayEmail($email) {
+    'use strict';
+    if ($email.valid() && $email.val().trim()) {
+        const email = 'mailto:' + $email.val().trim();
+        // eslint-disable-next-line
+        window.location.href = email;
+    } else {
+        $email.focus();
     }
 }
 
@@ -102,7 +114,7 @@ function displayUrl() {
 (function ($) {
     'use strict';
 
-    $('#edit-form').initValidator({
+    const validator = $('#edit-form').initValidator({
         inline: true,
         rules: {
             'parameters[customer_url]': {
@@ -135,8 +147,40 @@ function displayUrl() {
         e.preventDefault();
         displayNotification();
     });
-    $('.btn-url').on('click', function (e) {
-        e.preventDefault();
-        displayUrl();
-    });
+
+    const $url = $('#parameters_customer_url');
+    const $urlGroup = $url.parents('.input-group').find('.input-group-url');
+    if ($url.length && $urlGroup.length) {
+        const handler = function (e) {
+            e.preventDefault();
+            displayUrl($url);
+        }
+        $url.on('input', function () {
+            $urlGroup.off('click', handler);
+            $urlGroup.removeClass('cursor-pointer');
+            if ($url.valid()) {
+                $urlGroup.on('click', handler);
+                $urlGroup.addClass('cursor-pointer');
+            }
+        });
+        $url.trigger('input');
+    }
+
+    const $email = $('#parameters_customer_email');
+    const $emailGroup = $email.parents('.input-group').find('.input-group-email');
+    if ($email.length && $emailGroup.length) {
+        const handler = function (e) {
+            e.preventDefault();
+            displayEmail($email);
+        }
+        $email.on('input', function () {
+            $emailGroup.off('click', handler);
+            $emailGroup.removeClass('cursor-pointer');
+            if ($email.valid()) {
+                $emailGroup.on('click', handler);
+                $emailGroup.addClass('cursor-pointer');
+            }
+        });
+        $email.trigger('input');
+    }
 }(jQuery));

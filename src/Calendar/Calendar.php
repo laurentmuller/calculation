@@ -377,6 +377,8 @@ class Calendar extends AbstractCalendarItem implements MonthsInterface, WeekDays
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function jsonSerialize()
     {

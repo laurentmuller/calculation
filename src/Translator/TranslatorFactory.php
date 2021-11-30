@@ -45,7 +45,7 @@ class TranslatorFactory
     /**
      * Constructor.
      *
-     * @param \Traversable<TranslatorServiceInterface> $translators
+     * @psalm-param \Traversable<TranslatorServiceInterface> $translators
      */
     public function __construct(RequestStack $requestStack, \Traversable $translators)
     {

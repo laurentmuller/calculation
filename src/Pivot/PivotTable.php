@@ -268,6 +268,8 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function jsonSerialize()
     {

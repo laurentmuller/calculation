@@ -238,6 +238,8 @@ class Day extends AbstractCalendarItem implements WeekDaysInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function jsonSerialize()
     {

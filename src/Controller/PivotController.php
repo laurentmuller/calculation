@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Calculation;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotFieldFactory;
 use App\Pivot\PivotTable;
 use App\Pivot\PivotTableFactory;
+use App\Repository\CalculationRepository;
 use App\Util\FormatUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,6 +35,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PivotController extends AbstractController
 {
+    private CalculationRepository $repository;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(CalculationRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Show the pivot data table.
      *
@@ -130,10 +140,7 @@ class PivotController extends AbstractController
      */
     private function getPivotData(): array
     {
-        /** @var \App\Repository\CalculationRepository $repository */
-        $repository = $this->getDoctrine()->getRepository(Calculation::class);
-
-        return $repository->getPivot();
+        return $this->repository->getPivot();
     }
 
     /**

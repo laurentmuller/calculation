@@ -24,10 +24,11 @@ const MenuBuilder = class { /* exported MenuBuilder */
      */
     addItem($link, icon) {
         const key = 'entry_' + this.index++;
+        const newIcon = icon || $link.findIcon();
         this.items[key] = {
             link: $link,
             name: $link.findText(),
-            icon: icon || $link.findIcon()
+            icon: newIcon ? 'fal ' + newIcon : null
         };
         return this;
     }

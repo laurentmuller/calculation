@@ -20,6 +20,7 @@ use App\Interfaces\ApplicationServiceInterface;
 use App\Pdf\PdfResponse;
 use App\Report\CalculationStatesReport;
 use App\Repository\CalculationRepository;
+use App\Repository\CalculationStateRepository;
 use App\Spreadsheet\CalculationStatesDocument;
 use App\Spreadsheet\SpreadsheetResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -46,9 +47,9 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(CalculationStateRepository $repository)
     {
-        parent::__construct(CalculationState::class);
+        parent::__construct($repository);
     }
 
     /**

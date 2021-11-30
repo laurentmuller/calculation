@@ -18,6 +18,7 @@ use App\Entity\GlobalMargin;
 use App\Form\GlobalMargin\GlobalMarginType;
 use App\Pdf\PdfResponse;
 use App\Report\GlobalMarginsReport;
+use App\Repository\GlobalMarginRepository;
 use App\Spreadsheet\GlobalMarginsDocument;
 use App\Spreadsheet\SpreadsheetResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -52,9 +53,9 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(GlobalMarginRepository $repository)
     {
-        parent::__construct(GlobalMargin::class);
+        parent::__construct($repository);
     }
 
     /**

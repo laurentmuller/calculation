@@ -74,7 +74,7 @@ trait TranslatorTrait
      */
     protected function doGetTranslator(): ?TranslatorInterface
     {
-        if (!$this->translator && \method_exists($this, 'getTranslator')) {
+        if (null === $this->translator && \method_exists($this, 'getTranslator')) {
             return $this->translator = $this->getTranslator();
         }
 

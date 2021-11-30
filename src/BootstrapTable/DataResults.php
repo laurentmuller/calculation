@@ -138,6 +138,8 @@ class DataResults implements \JsonSerializable
 
     /**
      * {@inheritDoc}
+     *
+     * @return mixed
      */
     public function jsonSerialize()
     {

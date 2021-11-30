@@ -147,6 +147,8 @@ class Week extends AbstractCalendarItem
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function jsonSerialize()
     {

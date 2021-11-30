@@ -164,6 +164,8 @@ class Month extends AbstractCalendarItem
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function jsonSerialize()
     {

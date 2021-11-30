@@ -16,6 +16,7 @@ use App\Entity\User;
 use App\Form\User\RequestChangePasswordType;
 use App\Form\User\ResetChangePasswordType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,7 +103,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("/reset/{token}", name="app_reset_password")
      */
-    public function reset(Request $request, UserPasswordHasherInterface $hasher, ?string $token = null): Response
+    public function reset(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager, ?string $token = null): Response
     {
         if ($token) {
             // we store the token in session and remove it from the URL, to avoid the URL being
@@ -139,7 +140,7 @@ class ResetPasswordController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
             $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
-            $this->getManager()->flush();
+            $manager->flush();
 
             // the session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();

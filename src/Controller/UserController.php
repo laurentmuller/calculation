@@ -26,12 +26,14 @@ use App\Pdf\PdfResponse;
 use App\Report\UsersReport;
 use App\Report\UsersRightsReport;
 use App\Repository\AbstractRepository;
+use App\Repository\UserRepository;
 use App\Security\EntityVoter;
 use App\Spreadsheet\SpreadsheetResponse;
 use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -70,9 +72,9 @@ class UserController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(UserRepository $repository)
     {
-        parent::__construct(User::class);
+        parent::__construct($repository);
     }
 
     /**
@@ -325,7 +327,7 @@ class UserController extends AbstractEntityController
      *     {"label" = "user.rights.title" }
      * })
      */
-    public function rights(Request $request, User $item, RoleHierarchyInterface $hierarchy): Response
+    public function rights(Request $request, User $item, RoleHierarchyInterface $hierarchy, EntityManagerInterface $manager): Response
     {
         // same user?
         if ($this->isConnectedUser($item)) {
@@ -343,7 +345,7 @@ class UserController extends AbstractEntityController
         $form = $this->createForm(UserRightsType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
             // save
-            $this->getManager()->flush();
+            $manager->flush();
 
             // message
             $this->succesTrans('user.rights.success', ['%name%' => $item->getDisplay()]);

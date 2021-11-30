@@ -16,6 +16,7 @@ use App\Entity\User;
 use App\Form\User\UserRegistrationType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +57,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="user_register")
      */
-    public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils): Response
+    public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils, EntityManagerInterface $manager): Response
     {
         $user = new User();
         $form = $this->createForm(UserRegistrationType::class, $user);
@@ -68,7 +69,6 @@ class RegistrationController extends AbstractController
             $user->setPassword($encodedPassword);
 
             // save user
-            $manager = $this->getManager();
             $manager->persist($user);
             $manager->flush();
 

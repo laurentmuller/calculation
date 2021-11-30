@@ -164,6 +164,6 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
 
     private function getUserToken(User $user): UsernamePasswordToken
     {
-        return new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+        return new UsernamePasswordToken($user, 'main', $user->getRoles());
     }
 }

@@ -24,13 +24,14 @@ use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\SpreadsheetResponse;
 use App\Traits\TranslatorFlashMessageTrait;
 use App\Util\Utils;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -76,14 +77,11 @@ abstract class AbstractController extends BaseController
      */
     public function getApplication(): ApplicationService
     {
-        if (null !== $this->application) {
-            return $this->application;
-        } else {
-            /** @var ApplicationService $service */
-            $service = $this->get(ApplicationService::class);
-
-            return $this->application = $service;
+        if (!$this->application instanceof ApplicationService) {
+            $this->application = $this->getService(ApplicationService::class);
         }
+
+        return $this->application;
     }
 
     /**
@@ -114,6 +112,17 @@ abstract class AbstractController extends BaseController
     }
 
     /**
+     * Gets the request stack.
+     */
+    public function getRequestStack(): RequestStack
+    {
+        /** @var RequestStack $requestStack */
+        $requestStack = $this->container->get('request_stack');
+
+        return $requestStack;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedServices(): array
@@ -130,14 +139,11 @@ abstract class AbstractController extends BaseController
      */
     public function getTranslator(): TranslatorInterface
     {
-        if (null !== $this->translator) {
-            return $this->translator;
-        } else {
-            /** @var TranslatorInterface $service */
-            $service = $this->get(TranslatorInterface::class);
-
-            return $this->translator = $service;
+        if (!$this->translator instanceof TranslatorInterface) {
+            $this->translator = $this->getService(TranslatorInterface::class);
         }
+
+        return $this->translator;
     }
 
     /**
@@ -145,14 +151,11 @@ abstract class AbstractController extends BaseController
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
-        if (null !== $this->generatorService) {
-            return $this->generatorService;
-        } else {
-            /** @var UrlGeneratorService $service */
-            $service = $this->get(UrlGeneratorService::class);
-
-            return $this->generatorService = $service;
+        if (!$this->generatorService instanceof UrlGeneratorService) {
+            $this->generatorService = $this->getService(UrlGeneratorService::class);
         }
+
+        return $this->generatorService;
     }
 
     /**
@@ -223,19 +226,6 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets the named object manager.
-     *
-     * This is a shortcut to: <code>$this->getDoctrine()->getManager();</code>.
-     */
-    protected function getManager(): EntityManagerInterface
-    {
-        /** @var EntityManagerInterface $manager */
-        $manager = $this->getDoctrine()->getManager();
-
-        return $manager;
-    }
-
-    /**
      * Returns the request parameter value converted to boolean.
      *
      * @param Request $request the request to get parameter value from
@@ -244,9 +234,18 @@ abstract class AbstractController extends BaseController
      */
     protected function getRequestBoolean(Request $request, string $key, bool $default = false): bool
     {
-        $value = $request->get($key, $default);
+        $bag = $this->getRequestInputBag($request);
+        $value = $bag->get($key, $default);
 
         return (bool) \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Gets the request input bag, depending of the request method.
+     */
+    protected function getRequestInputBag(Request $request): InputBag
+    {
+        return Request::METHOD_POST === $request->getMethod() ? $request->request : $request->query;
     }
 
     /**
@@ -258,7 +257,25 @@ abstract class AbstractController extends BaseController
      */
     protected function getRequestInt(Request $request, string $key, int $default = 0): int
     {
-        return (int) $request->get($key, $default);
+        $bag = $this->getRequestInputBag($request);
+
+        return (int) $bag->get($key, $default);
+    }
+
+    /**
+     * Gets the service of the given class name.
+     *
+     * @param string $id the service identifier to get for
+     *
+     * @return mixed|null the service, if found; null otherwise
+     *
+     * @template T
+     * @psalm-param class-string<T> $id
+     * @psalm-return T|null
+     */
+    protected function getService(string $id)
+    {
+        return $this->container->has($id) ? $this->container->get($id) : null;
     }
 
     /**

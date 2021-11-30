@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -43,9 +43,7 @@ trait SessionTrait
     {
         if (null === $this->session) {
             if (null === $this->requestStack && $this instanceof AbstractController) {
-                /** @var RequestStack $requestStack */
-                $requestStack = $this->get('request_stack');
-                $this->requestStack = $requestStack;
+                $this->requestStack = $this->getRequestStack();
             }
             if (null !== $this->requestStack) {
                 $this->session = $this->requestStack->getSession();

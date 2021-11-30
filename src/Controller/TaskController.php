@@ -58,9 +58,9 @@ class TaskController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(TaskRepository $repository)
     {
-        parent::__construct(Task::class);
+        parent::__construct($repository);
     }
 
     /**

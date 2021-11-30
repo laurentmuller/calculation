@@ -23,13 +23,16 @@ use App\Form\Dialog\EditTaskDialogType;
 use App\Pdf\PdfResponse;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
+use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Repository\TaskRepository;
 use App\Service\CalculationService;
 use App\Spreadsheet\CalculationDocument;
 use App\Spreadsheet\CalculationsDocument;
 use App\Spreadsheet\SpreadsheetResponse;
 use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -61,20 +64,17 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class CalculationController extends AbstractEntityController
 {
-    /**
-     * The service to compute calculations.
-     */
     private CalculationService $service;
+    private TaskRepository $taskRepository;
 
     /**
      * Constructor.
-     *
-     * @param CalculationService $service the service to compute calculations
      */
-    public function __construct(CalculationService $service)
+    public function __construct(CalculationRepository $repository, CalculationService $service, TaskRepository $taskRepository)
     {
-        parent::__construct(Calculation::class);
+        parent::__construct($repository);
         $this->service = $service;
+        $this->taskRepository = $taskRepository;
     }
 
     /**
@@ -283,7 +283,7 @@ class CalculationController extends AbstractEntityController
      *     {"label" = "breadcrumb.edit" }
      * })
      */
-    public function state(Request $request, Calculation $item): Response
+    public function state(Request $request, Calculation $item, EntityManagerInterface $manager): Response
     {
         $oldState = $item->getState();
         $form = $this->createForm(CalculationEditStateType::class, $item);
@@ -291,7 +291,7 @@ class CalculationController extends AbstractEntityController
             //change?
             if ($oldState !== $item->getState()) {
                 // update
-                $this->getManager()->flush();
+                $manager->flush();
             }
 
             // message
@@ -398,10 +398,7 @@ class CalculationController extends AbstractEntityController
      */
     private function getTasks(): array
     {
-        /** @var \App\Repository\TaskRepository $repository */
-        $repository = $this->getManager()->getRepository(Task::class);
-
-        return $repository->getSortedBuilder(false)
+        return $this->taskRepository->getSortedBuilder(false)
             ->getQuery()
             ->getResult();
     }

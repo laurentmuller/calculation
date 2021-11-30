@@ -19,6 +19,7 @@ use App\Form\Category\CategoryType;
 use App\Pdf\PdfResponse;
 use App\Report\CategoriesReport;
 use App\Repository\CalculationCategoryRepository;
+use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
 use App\Repository\TaskRepository;
@@ -57,9 +58,9 @@ class CategoryController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(CategoryRepository $repository)
     {
-        parent::__construct(Category::class);
+        parent::__construct($repository);
     }
 
     /**

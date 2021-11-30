@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\User\ProfileChangePasswordType;
 use App\Form\User\ProfileEditType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -34,7 +35,7 @@ class ProfileController extends AbstractController
      *
      * @Route("/change-password", name="user_profile_change_password")
      */
-    public function changePassword(Request $request, UserPasswordHasherInterface $hasher): Response
+    public function changePassword(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager): Response
     {
         // get user
         $user = $this->getUser();
@@ -51,7 +52,7 @@ class ProfileController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
             $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
-            $this->getManager()->flush();
+            $manager->flush();
 
             $this->succesTrans('profile.change_password.success', ['%username%' => $user->getUsername()]);
 
@@ -69,7 +70,7 @@ class ProfileController extends AbstractController
      *
      * @Route("/edit", name="user_profile_edit")
      */
-    public function editProfil(Request $request): Response
+    public function editProfil(Request $request, EntityManagerInterface $manager): Response
     {
         // get user
         $user = $this->getUser();
@@ -82,7 +83,7 @@ class ProfileController extends AbstractController
         // create and validate form
         $form = $this->createForm(ProfileEditType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
-            $this->getManager()->flush();
+            $manager->flush();
             $this->succesTrans('profile.edit.success', ['%username%' => $user->getUsername()]);
 
             return $this->redirectToHomePage();

@@ -19,6 +19,7 @@ use App\Form\Group\GroupType;
 use App\Pdf\PdfResponse;
 use App\Report\GroupsReport;
 use App\Repository\CalculationGroupRepository;
+use App\Repository\GroupRepository;
 use App\Spreadsheet\GroupsDocument;
 use App\Spreadsheet\SpreadsheetResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -54,9 +55,9 @@ class GroupController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(GroupRepository $repository)
     {
-        parent::__construct(Group::class);
+        parent::__construct($repository);
     }
 
     /**

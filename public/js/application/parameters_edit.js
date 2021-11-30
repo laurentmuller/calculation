@@ -114,7 +114,7 @@ function displayEmail($email) {
 (function ($) {
     'use strict';
 
-    const validator = $('#edit-form').initValidator({
+    $('#edit-form').initValidator({
         inline: true,
         rules: {
             'parameters[customer_url]': {
@@ -154,7 +154,7 @@ function displayEmail($email) {
         const handler = function (e) {
             e.preventDefault();
             displayUrl($url);
-        }
+        };
         $url.on('input', function () {
             $urlGroup.off('click', handler);
             $urlGroup.removeClass('cursor-pointer');
@@ -172,7 +172,7 @@ function displayEmail($email) {
         const handler = function (e) {
             e.preventDefault();
             displayEmail($email);
-        }
+        };
         $email.on('input', function () {
             $emailGroup.off('click', handler);
             $emailGroup.removeClass('cursor-pointer');

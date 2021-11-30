@@ -10,7 +10,7 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md).
 
 Versions
 --------
-[![Application](https://img.shields.io/badge/Application-1.5.3.12-blue)](https://github.com/laurentmuller/calculation) [![Symfony](https://img.shields.io/badge/Symfony-5.3.12-informational?logo=symfony)](https://symfony.com) [![PHP](https://img.shields.io/badge/PHP-7.4.25-informational?logo=php)](https://www.php.net) [![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)](https://www.mysql.com)
+[![Application](https://img.shields.io/badge/Application-1.5.4.0-blue)](https://github.com/laurentmuller/calculation) [![Symfony](https://img.shields.io/badge/Symfony-5.4.0-informational?logo=symfony)](https://symfony.com) [![PHP](https://img.shields.io/badge/PHP-7.4.25-informational?logo=php)](https://www.php.net) [![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)](https://www.mysql.com)
 
 Qualité du code
 ----------------

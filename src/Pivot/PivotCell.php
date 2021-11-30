@@ -168,12 +168,14 @@ class PivotCell extends AbstractPivotAggregator
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function jsonSerialize()
     {
         return [
-            'col' => $this->getColumnPath(),
             'row' => $this->getRowPath(),
+            'col' => $this->getColumnPath(),
             'value' => $this->getAggregator()->getFormattedResult(),
         ];
     }

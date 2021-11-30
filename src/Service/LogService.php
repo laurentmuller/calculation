@@ -17,7 +17,7 @@ use App\Traits\CacheTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
 use App\Util\Utils;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -81,11 +81,8 @@ class LogService
 
     /**
      * Constructor.
-     *
-     * @param KernelInterface  $kernel  the kernel used to get the log file
-     * @param AdapterInterface $adapter the adapter to cache logs
      */
-    public function __construct(KernelInterface $kernel, AdapterInterface $adapter)
+    public function __construct(KernelInterface $kernel, CacheItemPoolInterface $adapter)
     {
         $this->adapter = $adapter;
         $this->fileName = $this->buildLogFile($kernel);

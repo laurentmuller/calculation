@@ -480,6 +480,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function jsonSerialize()
     {

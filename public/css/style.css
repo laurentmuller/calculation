@@ -589,8 +589,8 @@ span.color-value {
 /**
  * strikeout the row
  */
-tr.strikeout-danger td { 
-	position: relative; 
+tr.strikeout-danger td {
+	position: relative;
 }
 tr.strikeout-danger td:before {
   left: 0;
@@ -599,6 +599,6 @@ tr.strikeout-danger td:before {
   content: " ";
   position: absolute;
   border-bottom: 1px solid var(--danger);
-  
+
 }
 

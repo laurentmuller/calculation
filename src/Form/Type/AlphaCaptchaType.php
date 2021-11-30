@@ -39,13 +39,15 @@ class AlphaCaptchaType extends AbstractType
 
     private AlphaCaptchaInterface $captcha;
 
+    private string $dataError;
+
     private ?string $previousAnswer = null;
 
     private ?string $question = null;
 
-    private string $required;
-
     /**
+     * Constructor.
+     *
      * @param \Traversable<AlphaCaptchaInterface> $captchas
      */
     public function __construct(RequestStack $requestStack, TranslatorInterface $translator, \Traversable $captchas)
@@ -53,7 +55,7 @@ class AlphaCaptchaType extends AbstractType
         $this->requestStack = $requestStack;
         $captchas = \iterator_to_array($captchas);
         $this->captcha = $captchas[\array_rand($captchas)];
-        $this->required = $translator->trans('required', [], 'captcha');
+        $this->dataError = $translator->trans('required', [], 'captcha');
     }
 
     /**
@@ -81,18 +83,14 @@ class AlphaCaptchaType extends AbstractType
     {
         $resolver->setDefaults([
             'attr' => [
-                'data-error' => $this->required,
+                'data-error' => $this->dataError,
                 'autocapitalize' => 'none',
                 'autocomplete' => 'off',
                 'spellcheck' => 'false',
                 'autocorrect' => 'off',
                 'maxlength' => 1,
             ],
-            'row_attr' => [
-                //'class' => 'row no-gutters',
-            ],
             'label_attr' => [
-                //'class' => 'col-sm-10 col-form-label',
                 'class' => 'mb-0',
             ],
             'constraints' => [
@@ -107,7 +105,7 @@ class AlphaCaptchaType extends AbstractType
     /**
      * {@inheritDoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return TextType::class;
     }

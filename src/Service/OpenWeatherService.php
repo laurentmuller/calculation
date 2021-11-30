@@ -14,7 +14,7 @@ namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
 use App\Util\FormatUtils;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -194,7 +194,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * @throws ParameterNotFoundException if the API key parameter is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, AdapterInterface $adapter, string $projectDir, bool $isDebug)
+    public function __construct(ParameterBagInterface $params, CacheItemPoolInterface $adapter, string $projectDir, bool $isDebug)
     {
         /** @var string $key */
         $key = $params->get(self::PARAM_KEY);

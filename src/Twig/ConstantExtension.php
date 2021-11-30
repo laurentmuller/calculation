@@ -15,7 +15,7 @@ namespace App\Twig;
 use App\Interfaces\EntityVoterInterface;
 use App\Service\CalculationService;
 use App\Traits\CacheTrait;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 
@@ -36,7 +36,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     /**
      * Constructor.
      */
-    public function __construct(AdapterInterface $adapter, bool $isDebug)
+    public function __construct(CacheItemPoolInterface $adapter, bool $isDebug)
     {
         if (!$isDebug) {
             $this->adapter = $adapter;

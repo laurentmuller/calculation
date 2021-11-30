@@ -73,6 +73,8 @@ abstract class AbstractAggregator implements \JsonSerializable
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function jsonSerialize()
     {

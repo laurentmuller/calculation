@@ -56,9 +56,9 @@ class CustomerController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(CustomerRepository $repository)
     {
-        parent::__construct(Customer::class);
+        parent::__construct($repository);
     }
 
     /**

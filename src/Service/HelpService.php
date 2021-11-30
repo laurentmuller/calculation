@@ -14,7 +14,7 @@ namespace App\Service;
 
 use App\Traits\CacheTrait;
 use App\Traits\TranslatorTrait;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -55,7 +55,7 @@ class HelpService
     /**
      * Constructor.
      */
-    public function __construct(AdapterInterface $adapter, TranslatorInterface $translator, string $projectDir, bool $isDebug)
+    public function __construct(CacheItemPoolInterface $adapter, TranslatorInterface $translator, string $projectDir, bool $isDebug)
     {
         if (!$isDebug) {
             $this->adapter = $adapter;

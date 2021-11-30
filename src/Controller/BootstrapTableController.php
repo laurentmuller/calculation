@@ -35,7 +35,6 @@ use App\Util\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -267,11 +266,6 @@ class BootstrapTableController extends AbstractController
         return '' === $prefix ? \strtoupper($key) : \strtoupper("{$prefix}_{$key}");
     }
 
-    private function getInputBag(Request $request): InputBag
-    {
-        return Request::METHOD_POST === $request->getMethod() ? $request->request : $request->query;
-    }
-
     private function handleTableRequest(Request $request, AbstractTable $table, string $template): Response
     {
         // check permission
@@ -364,7 +358,7 @@ class BootstrapTableController extends AbstractController
      */
     private function updateRequest(Request $request, string $key, $default = null, string $prefix = '')
     {
-        $input = $this->getInputBag($request);
+        $input = $this->getRequestInputBag($request);
         $value = $input->get($key);
         if (null === $value) {
             $name = $this->getCookieName($key, $prefix);

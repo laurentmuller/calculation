@@ -27,7 +27,7 @@ class EditTaskDialogType extends AbstractHelperType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'task';
     }

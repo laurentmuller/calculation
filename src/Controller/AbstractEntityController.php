@@ -23,6 +23,7 @@ use App\Spreadsheet\SpreadsheetDocument;
 use App\Spreadsheet\SpreadsheetResponse;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,21 +50,22 @@ abstract class AbstractEntityController extends AbstractController
     protected string $lowerName;
 
     /**
+     * The repository.
+     *
+     * @psalm-var AbstractRepository<T>
+     */
+    protected AbstractRepository $repository;
+
+    /**
      * Constructor.
      *
-     * @param string $className the entity class name
-     * @psalm-param class-string<T> $className
-     *
-     * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractEntity class
+     * @psalm-param AbstractRepository<T> $repository
      */
-    public function __construct(string $className)
+    public function __construct(AbstractRepository $repository)
     {
-        if (!\is_subclass_of($className, AbstractEntity::class)) {
-            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', AbstractEntity::class, $className));
-        }
-
-        $this->className = $className;
-        $this->lowerName = \strtolower(Utils::getShortName($className));
+        $this->repository = $repository;
+        $this->className = $repository->getClassName();
+        $this->lowerName = \strtolower(Utils::getShortName($this->className));
     }
 
     /**
@@ -237,7 +239,7 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function getDistinctValues(string $field, ?string $search = null, int $limit = -1): array
     {
-        return $this->getRepository()->getDistinctValues($field, $search, $limit);
+        return $this->repository->getDistinctValues($field, $search, $limit);
     }
 
     /**
@@ -267,26 +269,17 @@ abstract class AbstractEntityController extends AbstractController
     {
         $sortedFields = null !== $field ? [$field => $mode] : [];
 
-        return $this->getRepository()
+        return $this->repository
             ->getSearchQuery($sortedFields, $criterias, $alias)
             ->getResult();
     }
 
     /**
-     * Gets the repository for the given manager.
-     *
-     * This function use the class name given at the constructor.
-     *
-     * @return \App\Repository\AbstractRepository the repository
-     *
-     * @psalm-return AbstractRepository<T> $repository
+     * Gets the entity manager.
      */
-    protected function getRepository(): AbstractRepository
+    protected function getManager(): EntityManagerInterface
     {
-        /** @psalm-var AbstractRepository<T> $repository */
-        $repository = $this->getManager()->getRepository($this->className);
-
-        return $repository;
+        return $this->repository->getEntityManager();
     }
 
     /**

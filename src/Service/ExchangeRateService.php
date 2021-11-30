@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\TranslatorTrait;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Intl\Currencies;
@@ -71,7 +71,7 @@ class ExchangeRateService extends AbstractHttpClientService
      * @throws ParameterNotFoundException if the API key is not defined
      * @throws \InvalidArgumentException  if the API key is null or empty
      */
-    public function __construct(ParameterBagInterface $params, AdapterInterface $adapter, bool $isDebug, TranslatorInterface $translator)
+    public function __construct(ParameterBagInterface $params, CacheItemPoolInterface $adapter, bool $isDebug, TranslatorInterface $translator)
     {
         /** @var string $key */
         $key = $params->get(self::PARAM_KEY);

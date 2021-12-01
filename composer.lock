@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9232850c5c6dc40716e6e3157e91c1bc",
+    "content-hash": "a349bdc902947e2cad2918614aa5ddcf",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -8786,23 +8786,23 @@
         },
         {
             "name": "symfonycasts/reset-password-bundle",
-            "version": "v1.10.0",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/reset-password-bundle.git",
-                "reference": "cfebb54e1090900dc5666be5ee1877cd50ae3241"
+                "reference": "09fcd0d893bbd58d4477787c6cb5a4ffc4fc9455"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/cfebb54e1090900dc5666be5ee1877cd50ae3241",
-                "reference": "cfebb54e1090900dc5666be5ee1877cd50ae3241",
+                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/09fcd0d893bbd58d4477787c6cb5a4ffc4fc9455",
+                "reference": "09fcd0d893bbd58d4477787c6cb5a4ffc4fc9455",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
                 "symfony/config": "^4.4 | ^5.0 | ^6.0",
                 "symfony/dependency-injection": "^4.4 | ^5.0 | ^6.0",
-                "symfony/deprecation-contracts": "^2.2",
+                "symfony/deprecation-contracts": "^2.2 | ^3.0",
                 "symfony/http-kernel": "^4.4 | ^5.0 | ^6.0"
             },
             "conflict": {
@@ -8830,29 +8830,29 @@
             "description": "Symfony bundle that adds password reset functionality.",
             "support": {
                 "issues": "https://github.com/SymfonyCasts/reset-password-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.10.0"
+                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.11.0"
             },
-            "time": "2021-11-19T00:31:19+00:00"
+            "time": "2021-11-30T17:32:21+00:00"
         },
         {
             "name": "symfonycasts/verify-email-bundle",
-            "version": "v1.6.0",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/verify-email-bundle.git",
-                "reference": "55487a5e55ab67ad77a84eefd1c92b0fab47e6ce"
+                "reference": "7b17b150c39d115141cb462862baac9c281a3de9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/verify-email-bundle/zipball/55487a5e55ab67ad77a84eefd1c92b0fab47e6ce",
-                "reference": "55487a5e55ab67ad77a84eefd1c92b0fab47e6ce",
+                "url": "https://api.github.com/repos/SymfonyCasts/verify-email-bundle/zipball/7b17b150c39d115141cb462862baac9c281a3de9",
+                "reference": "7b17b150c39d115141cb462862baac9c281a3de9",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
                 "symfony/config": "^4.4 | ^5.0 | ^6.0",
                 "symfony/dependency-injection": "^4.4 | ^5.0 | ^6.0",
-                "symfony/deprecation-contracts": "^2.2",
+                "symfony/deprecation-contracts": "^2.2 | ^3.0",
                 "symfony/http-kernel": "^4.4 | ^5.0 | ^6.0",
                 "symfony/routing": "^4.4 | ^5.0 | ^6.0"
             },
@@ -8879,9 +8879,9 @@
             "description": "Simple, stylish Email Verification for Symfony",
             "support": {
                 "issues": "https://github.com/SymfonyCasts/verify-email-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/verify-email-bundle/tree/v1.6.0"
+                "source": "https://github.com/SymfonyCasts/verify-email-bundle/tree/v1.7.0"
             },
-            "time": "2021-11-19T00:41:41+00:00"
+            "time": "2021-11-30T17:26:37+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -9412,16 +9412,16 @@
         },
         {
             "name": "webinarium/datatables-bundle",
-            "version": "2.4.0",
+            "version": "2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webinarium/DataTablesBundle.git",
-                "reference": "a7f0ec3cb186969cdef23a2d5f6e5c15f086351f"
+                "reference": "c2460dbf062f3ee501b20920e4c398cc70885253"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webinarium/DataTablesBundle/zipball/a7f0ec3cb186969cdef23a2d5f6e5c15f086351f",
-                "reference": "a7f0ec3cb186969cdef23a2d5f6e5c15f086351f",
+                "url": "https://api.github.com/repos/webinarium/DataTablesBundle/zipball/c2460dbf062f3ee501b20920e4c398cc70885253",
+                "reference": "c2460dbf062f3ee501b20920e4c398cc70885253",
                 "shasum": ""
             },
             "require": {
@@ -9462,9 +9462,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webinarium/DataTablesBundle/issues",
-                "source": "https://github.com/webinarium/DataTablesBundle/tree/master"
+                "source": "https://github.com/webinarium/DataTablesBundle/tree/2.4.1"
             },
-            "time": "2019-12-03T21:05:47+00:00"
+            "time": "2021-12-01T05:50:39+00:00"
         }
     ],
     "packages-dev": [
@@ -9578,16 +9578,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.13.1",
+            "version": "v4.13.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "63a79e8daa781cac14e5195e63ed8ae231dd10fd"
+                "reference": "210577fe3cf7badcc5814d99455df46564f3c077"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/63a79e8daa781cac14e5195e63ed8ae231dd10fd",
-                "reference": "63a79e8daa781cac14e5195e63ed8ae231dd10fd",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/210577fe3cf7badcc5814d99455df46564f3c077",
+                "reference": "210577fe3cf7badcc5814d99455df46564f3c077",
                 "shasum": ""
             },
             "require": {
@@ -9628,9 +9628,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.1"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.2"
             },
-            "time": "2021-11-03T20:52:16+00:00"
+            "time": "2021-11-30T19:35:32+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -11583,16 +11583,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.36.3",
+            "version": "v1.36.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "0f40c826c0725208c254ddcd3481690e6c7e5047"
+                "reference": "716eee9c8b10b33e682df1b7d80b9061887e9691"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/0f40c826c0725208c254ddcd3481690e6c7e5047",
-                "reference": "0f40c826c0725208c254ddcd3481690e6c7e5047",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/716eee9c8b10b33e682df1b7d80b9061887e9691",
+                "reference": "716eee9c8b10b33e682df1b7d80b9061887e9691",
                 "shasum": ""
             },
             "require": {
@@ -11602,7 +11602,7 @@
                 "symfony/config": "^4.4|^5.0|^6.0",
                 "symfony/console": "^4.4|^5.0|^6.0",
                 "symfony/dependency-injection": "^4.4|^5.0|^6.0",
-                "symfony/deprecation-contracts": "^2.2",
+                "symfony/deprecation-contracts": "^2.2|^3",
                 "symfony/filesystem": "^4.4|^5.0|^6.0",
                 "symfony/finder": "^4.4|^5.0|^6.0",
                 "symfony/framework-bundle": "^4.4|^5.0|^6.0",
@@ -11651,7 +11651,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.36.3"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.36.4"
             },
             "funding": [
                 {
@@ -11667,7 +11667,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-22T18:44:03+00:00"
+            "time": "2021-12-01T00:27:38+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",

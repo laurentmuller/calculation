@@ -16,6 +16,7 @@ use App\Entity\User;
 use App\Form\User\UserRegistrationType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
+use App\Service\UserExceptionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,14 +25,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\InvalidSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 
 /**
  * Controller to register a new user.
@@ -42,10 +39,8 @@ class RegistrationController extends AbstractController
 {
     use TargetPathTrait;
 
-    /**
-     * The register route name.
-     */
     private const REGISTER_ROUTE = 'user_register';
+    private const VERIFY_ROUTE = 'verify_email';
 
     private EmailVerifier $verifier;
 
@@ -55,9 +50,11 @@ class RegistrationController extends AbstractController
     }
 
     /**
+     * Display and process form to register a new user.
+     *
      * @Route("/register", name="user_register")
      */
-    public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils, EntityManagerInterface $manager): Response
+    public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils, EntityManagerInterface $manager, UserExceptionService $service): Response
     {
         $user = new User();
         $form = $this->createForm(UserRegistrationType::class, $user);
@@ -81,12 +78,12 @@ class RegistrationController extends AbstractController
                 ->htmlTemplate('registration/email.html.twig');
 
             try {
-                $this->verifier->sendEmailConfirmation('app_verify_email', $user, $email);
+                $this->verifier->sendEmailConfirmation(self::VERIFY_ROUTE, $user, $email);
 
                 return $this->redirectToHomePage();
             } catch (TransportException $e) {
                 if ($request->hasSession()) {
-                    $exception = new CustomUserMessageAuthenticationException('registration.send_email_error');
+                    $exception = $service->mapException($e);
                     $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
                 }
 
@@ -101,9 +98,11 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/verify/email", name="app_verify_email")
+     * Verify the user e-mail.
+     *
+     * @Route("/verify/email", name="verify_email")
      */
-    public function verifyUserEmail(Request $request, UserRepository $repository): RedirectResponse
+    public function verifyUserEmail(Request $request, UserRepository $repository, UserExceptionService $service): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -121,7 +120,7 @@ class RegistrationController extends AbstractController
             $this->verifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $e) {
             if ($request->hasSession()) {
-                $exception = $this->translateException($e);
+                $exception = $service->mapException($e);
                 $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
             }
 
@@ -131,31 +130,5 @@ class RegistrationController extends AbstractController
         $this->succesTrans('registration.confirmed', [' %username%' => (string) $user]);
 
         return $this->redirectToHomePage();
-    }
-
-    /**
-     * Creeates a custom user exception.
-     */
-    private function createUserException(string $message, \Throwable $previous): CustomUserMessageAuthenticationException
-    {
-        return new CustomUserMessageAuthenticationException($message, [], 0, $previous);
-    }
-
-    /**
-     * Translate the given exception.
-     */
-    private function translateException(VerifyEmailExceptionInterface $e): CustomUserMessageAuthenticationException
-    {
-        if ($e instanceof ExpiredSignatureException) {
-            return $this->createUserException('registration.expired_signature', $e);
-        }
-        if ($e instanceof InvalidSignatureException) {
-            return $this->createUserException('registration.invalid_signature', $e);
-        }
-        if ($e instanceof WrongEmailVerifyException) {
-            return $this->createUserException('registration.wrong_email_verify', $e);
-        }
-
-        return $this->createUserException($e->getReason(), $e);
     }
 }

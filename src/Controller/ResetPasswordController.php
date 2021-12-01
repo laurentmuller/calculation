@@ -16,7 +16,7 @@ use App\Entity\User;
 use App\Form\User\RequestChangePasswordType;
 use App\Form\User\ResetChangePasswordType;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\UserExceptionService;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,14 +25,10 @@ use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
-use SymfonyCasts\Bundle\ResetPassword\Exception\ExpiredResetPasswordTokenException;
-use SymfonyCasts\Bundle\ResetPassword\Exception\InvalidResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
-use SymfonyCasts\Bundle\ResetPassword\Exception\TooManyPasswordRequestsException;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 /**
@@ -46,13 +42,10 @@ class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
-    /**
-     * The forget password route name.
-     */
+    private const CHECK_ROUTE = 'app_check_email';
     private const FORGET_ROUTE = 'app_forgot_password_request';
 
     private ResetPasswordHelperInterface $helper;
-
     private UserRepository $repository;
 
     public function __construct(ResetPasswordHelperInterface $helper, UserRepository $repository)
@@ -68,9 +61,11 @@ class ResetPasswordController extends AbstractController
      */
     public function checkEmail(): Response
     {
-        // we prevent users from directly accessing this page
+        // Prevent users from directly accessing this page
+        // Generate a fake token if the user does not exist or someone hit this page directly.
         if (null === ($resetToken = $this->getTokenObjectFromSession())) {
-            return $this->redirectToRoute(self::FORGET_ROUTE);
+            $resetToken = $this->helper->generateFakeResetToken();
+            //return $this->redirectToRoute(self::FORGET_ROUTE);
         }
 
         return $this->renderForm('reset_password/check_email.html.twig', [
@@ -83,13 +78,13 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("", name="app_forgot_password_request")
      */
-    public function request(Request $request, MailerInterface $mailer, AuthenticationUtils $utils): Response
+    public function request(Request $request, MailerInterface $mailer, UserExceptionService $service, AuthenticationUtils $utils): Response
     {
         $form = $this->createForm(RequestChangePasswordType::class);
         if ($this->handleRequestForm($request, $form)) {
             $usernameOrEmail = $form->get('user')->getData();
 
-            return $this->sendPasswordResetEmail($request, $usernameOrEmail, $mailer);
+            return $this->sendPasswordResetEmail($request, $usernameOrEmail, $mailer, $service);
         }
 
         return $this->renderForm('reset_password/request.html.twig', [
@@ -103,7 +98,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("/reset/{token}", name="app_reset_password")
      */
-    public function reset(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager, ?string $token = null): Response
+    public function reset(Request $request, UserPasswordHasherInterface $hasher, UserExceptionService $service, ?string $token = null): Response
     {
         if ($token) {
             // we store the token in session and remove it from the URL, to avoid the URL being
@@ -115,7 +110,7 @@ class ResetPasswordController extends AbstractController
 
         $token = $this->getTokenFromSession();
         if (null === $token) {
-            throw $this->createNotFoundException($this->trans('resetting.not_found_password_token'));
+            throw $this->createNotFoundException($this->trans('reset_not_found_password_token'));
         }
 
         try {
@@ -123,7 +118,7 @@ class ResetPasswordController extends AbstractController
             $user = $this->helper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
             if ($request->hasSession()) {
-                $exception = $this->handleResetException($e);
+                $exception = $service->mapException($e);
                 $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
             }
 
@@ -140,7 +135,7 @@ class ResetPasswordController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
             $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
-            $manager->flush();
+            $this->repository->getEntityManager()->flush();
 
             // the session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -158,35 +153,15 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
-     * Translate the given exception.
-     */
-    private function handleResetException(ResetPasswordExceptionInterface $e): CustomUserMessageAuthenticationException
-    {
-        if ($e instanceof ExpiredResetPasswordTokenException) {
-            return new CustomUserMessageAuthenticationException('reset.expired_reset_password_token', [], 0, $e);
-        }
-        if ($e instanceof InvalidResetPasswordTokenException) {
-            return new CustomUserMessageAuthenticationException('reset.invalid_reset_password_token', [], 0, $e);
-        }
-        if ($e instanceof TooManyPasswordRequestsException) {
-            $data = ['%availableAt%' => $e->getAvailableAt()->format('H:i')];
-
-            return new CustomUserMessageAuthenticationException('reset.too_many_password_request', $data, 0, $e);
-        }
-
-        return new CustomUserMessageAuthenticationException($e->getReason(), [], 0, $e);
-    }
-
-    /**
      * Send an email to the user for resetting the password.
      */
-    private function sendPasswordResetEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer): RedirectResponse
+    private function sendPasswordResetEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer, UserExceptionService $service): RedirectResponse
     {
         $user = $this->repository->findByUsernameOrEmail($usernameOrEmail);
 
         // Do not reveal whether a user account was found or not.
         if (!$user instanceof User) {
-            return $this->redirectToRoute('app_check_email');
+            return $this->redirectToRoute(self::CHECK_ROUTE);
         }
 
         try {
@@ -194,7 +169,7 @@ class ResetPasswordController extends AbstractController
         } catch (ResetPasswordExceptionInterface $e) {
             // add session error
             if ($request->hasSession()) {
-                $exception = $this->handleResetException($e);
+                $exception = $service->mapException($e);
                 $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
             }
 
@@ -218,13 +193,13 @@ class ResetPasswordController extends AbstractController
         } catch (TransportException $e) {
             $this->helper->removeResetRequest($resetToken->getToken());
             if ($request->hasSession()) {
-                $exception = new CustomUserMessageAuthenticationException('reset.send_email_error');
+                $exception = $service->mapException($e);
                 $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
             }
 
             return $this->redirectToRoute(self::FORGET_ROUTE);
         }
 
-        return $this->redirectToRoute('app_check_email');
+        return $this->redirectToRoute(self::CHECK_ROUTE);
     }
 }

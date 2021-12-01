@@ -27,7 +27,8 @@ security:
 
             form_login:
                 enable_csrf: true
-                check_path: /login
+                login_path: app_login
+                check_path: app_login
                 username_parameter: username
                 password_parameter: password
 

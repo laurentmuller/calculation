@@ -33,7 +33,7 @@ class UserExceptionService
     /**
      * Creeates a custom user exception.
      */
-    public function createUserException(string $message, \Throwable $previous, array $parameters = [], int $code = 0): CustomUserMessageAuthenticationException
+    public function createUserException(string $message, \Throwable $previous = null, array $parameters = [], int $code = 0): CustomUserMessageAuthenticationException
     {
         return new CustomUserMessageAuthenticationException($message, $parameters, $code, $previous);
     }

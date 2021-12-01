@@ -65,7 +65,6 @@ class ResetPasswordController extends AbstractController
         // Generate a fake token if the user does not exist or someone hit this page directly.
         if (null === ($resetToken = $this->getTokenObjectFromSession())) {
             $resetToken = $this->helper->generateFakeResetToken();
-            //return $this->redirectToRoute(self::FORGET_ROUTE);
         }
 
         return $this->renderForm('reset_password/check_email.html.twig', [

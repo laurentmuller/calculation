@@ -96,8 +96,8 @@ class TestController extends AbstractController
     public function editor(Request $request, MailService $service, LoggerInterface $logger): Response
     {
         $data = [
-            'email' => 'bibi@bibi.nu',
-            'importance' => NotificationEmail::IMPORTANCE_LOW,
+            'email' => $this->getUserEmail(),
+            'importance' => NotificationEmail::IMPORTANCE_MEDIUM,
             'notification' => $this->isSessionBool('editor_notification', false),
         ];
 
@@ -120,9 +120,9 @@ class TestController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             $user = $this->getUser();
             $data = $form->getData();
+            $message = $data['message'];
             $email = (string) $data['email'];
             $importance = $data['importance'];
-            $message = $data['message'];
             $notification = (bool) $data['notification'];
             $this->setSessionValue('editor_notification', $notification);
 
@@ -136,12 +136,8 @@ class TestController extends AbstractController
 
                 return $this->redirectToHomePage();
             } catch (\Exception $e) {
-                $logger->error($this->trans('user.comment.error'), [
-                    'class' => Utils::getShortName($e),
-                    'message' => $e->getMessage(),
-                    'code' => (int) $e->getCode(),
-                    'file' => $e->getFile() . ':' . $e->getLine(),
-                ]);
+                $message = $this->trans('user.comment.error');
+                $logger->error($message, Utils::getExceptionContext($e));
 
                 return $this->renderForm('@Twig/Exception/exception.html.twig', [
                     'message' => $message,

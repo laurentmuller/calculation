@@ -47,10 +47,7 @@ class NotificationEmail extends BaseNotificationEmail
      */
     public function setFooterText(string $footerText): self
     {
-        $context = $this->getContext();
-        $context['footer_text'] = $footerText;
-
-        return $this->context($context);
+        return $this->updateContext('footer_text', $footerText);
     }
 
     /**
@@ -74,5 +71,19 @@ class NotificationEmail extends BaseNotificationEmail
         }
 
         return $subject;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function updateContext(string $name, $value): self
+    {
+        $property = new \ReflectionProperty(BaseNotificationEmail::class, 'context');
+        $property->setAccessible(true);
+        $context = $property->getValue($this);
+        $context[$name] = $value;
+        $property->setValue($this, $context);
+
+        return $this;
     }
 }

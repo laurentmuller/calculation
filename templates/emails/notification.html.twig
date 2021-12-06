@@ -1,9 +1,17 @@
 {% extends '@email/default/notification/body.html.twig' %}
 
+{% block style %}
+{{ parent() }}
+body {
+    background: white;
+}
+.wrapper.secondary {
+    background: white;
+}
+{% endblock %}
+
 {% block lead %}
-    {% if importance is not null %}
-        <small><strong>{{ ('importance.full.' ~ importance)|trans }}</strong></small>
-    {% endif %}
+    {% if importance is not null %}<small><strong>{{ ('importance.full.' ~ importance)|trans }}</strong></small>{% endif %}
     <p class="lead">
         {{ email.subject }}
     </p>

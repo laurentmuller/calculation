@@ -19,6 +19,7 @@ use App\Model\Comment;
 use App\Traits\TranslatorTrait;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extra\Markdown\MarkdownInterface;
 
@@ -48,7 +49,7 @@ class MailService
     /**
      * Send a comment.
      *
-     * @throws \Exception if an exception occurs while sending the comment
+     * @throws TransportExceptionInterface if an exception occurs while sending the comment
      */
     public function sendComment(User $user, string $email, string $message, string $importance): void
     {
@@ -66,7 +67,7 @@ class MailService
     /**
      * Send a notification.
      *
-     * @throws \Exception if an exception occurs while sending the notification
+     * @throws TransportExceptionInterface if an exception occurs while sending the notification
      */
     public function sendNotification(User $user, string $email, string $message, string $importance): void
     {

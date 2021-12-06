@@ -159,6 +159,21 @@ abstract class AbstractController extends BaseController
     }
 
     /**
+     * Gets the connected user e-mail.
+     *
+     * @return string|null the user e-mail or null if not connected
+     */
+    public function getUserEmail(): ?string
+    {
+        $user = $this->getUser();
+        if ($user instanceof User) {
+            return $user->getEmail();
+        }
+
+        return null;
+    }
+
+    /**
      * Gets the connected user name.
      *
      * @return string|null the user name or null if not connected

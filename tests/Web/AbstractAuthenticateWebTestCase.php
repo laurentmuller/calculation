@@ -19,7 +19,6 @@ use App\Repository\UserRepository;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use App\Tests\DatabaseTrait;
-use App\Tests\LogErrorTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -31,7 +30,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 {
     use DatabaseTrait;
-    use LogErrorTrait;
 
     public const ID_ADMIN = 2;
     public const ID_DISABLE = 4;

@@ -376,9 +376,8 @@ final class FunctionExtension extends AbstractExtension
     private function reduceParameters(array $parameters): string
     {
         if (!empty($parameters)) {
-            // @phpstan-ignore-next-line
-            $callback = function (string $carry, $key, $value) {
-                return $carry . ' ' . $key . '="' . \htmlspecialchars((string) $value) . '"';
+            $callback = function (string $carry, string $key, string $value) {
+                return $carry . ' ' . $key . '="' . \htmlspecialchars($value) . '"';
             };
 
             return Utils::arrayReduceKey($parameters, $callback, '');

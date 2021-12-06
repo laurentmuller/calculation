@@ -63,6 +63,11 @@ class EntityVoter extends Voter implements EntityVoterInterface
         self::ATTRIBUTE_SHOW => 32,
     ];
 
+    /**
+     * The entity prefix.
+     */
+    private const ENTITY_PREFIX = 'Entity';
+
     private ApplicationService $service;
 
     /**
@@ -109,8 +114,8 @@ class EntityVoter extends Voter implements EntityVoterInterface
             $name = \substr($name, $pos + 1);
         }
 
-        if (!Utils::startwith($name, EntityVoterInterface::ENTITY)) {
-            return EntityVoterInterface::ENTITY . $name;
+        if (!Utils::startwith($name, self::ENTITY_PREFIX)) {
+            return self::ENTITY_PREFIX . $name;
         }
 
         return $name;
@@ -223,6 +228,22 @@ class EntityVoter extends Voter implements EntityVoterInterface
         $role->{self::ENTITY_USER} = [];
 
         return $role;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function supportsAttribute(string $attribute): bool
+    {
+        return \array_key_exists($attribute, self::MASK_ATTRIBUTES);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function supportsType(string $subjectType): bool
+    {
+        return \is_string($subjectType);
     }
 
     /**

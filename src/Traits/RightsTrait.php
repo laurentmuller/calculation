@@ -94,7 +94,7 @@ trait RightsTrait
     }
 
     /**
-     * Gets a value indicating if this righs overwrite the default rights.
+     * Gets a value indicating if this rights overwrite the default rights.
      *
      * @return bool true if overwrite, false to use the default rights
      */
@@ -104,7 +104,7 @@ trait RightsTrait
     }
 
     /**
-     * Sets a value indicating if this righs overwrite the default rights.
+     * Sets a value indicating if this rights overwrite the default rights.
      */
     public function setOverwrite(bool $overwrite): self
     {
@@ -126,9 +126,7 @@ trait RightsTrait
     }
 
     /**
-     * Gets the rights for the given entity.
-     *
-     * @param string $entity the entity name
+     * Gets the rights for the given entity name.
      *
      * @return int[] the rights
      */
@@ -147,7 +145,7 @@ trait RightsTrait
         }
 
         // filter
-        return \array_filter(EntityVoter::MASK_ATTRIBUTES, function (int $attribute) use ($value) {
+        return \array_filter(EntityVoter::MASK_ATTRIBUTES, function (int $attribute) use ($value): bool {
             return $this->isBitSet($value, $attribute);
         });
     }

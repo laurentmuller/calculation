@@ -128,3 +128,7 @@ services:
     App\Translator\TranslatorFactory:
         arguments:
             $translators: !tagged_iterator translators_service
+            
+    App\Service\MailService:
+        calls:
+            - setMarkdown: ['@twig.markdown.default']

@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @see RightsTrait
  */
-class RightsTraitTest extends TestCase implements EntityVoterInterface
+class RightsTraitTest extends TestCase
 {
     use RightsTrait;
 
@@ -51,7 +51,7 @@ class RightsTraitTest extends TestCase implements EntityVoterInterface
      */
     public function testGetAdd(string $entity): void
     {
-        $this->checkAttribute($entity, self::ATTRIBUTE_ADD);
+        $this->checkAttribute($entity, EntityVoterInterface::ATTRIBUTE_ADD);
     }
 
     /**
@@ -59,7 +59,7 @@ class RightsTraitTest extends TestCase implements EntityVoterInterface
      */
     public function testGetDelete(string $entity): void
     {
-        $this->checkAttribute($entity, self::ATTRIBUTE_DELETE);
+        $this->checkAttribute($entity, EntityVoterInterface::ATTRIBUTE_DELETE);
     }
 
     /**
@@ -67,7 +67,7 @@ class RightsTraitTest extends TestCase implements EntityVoterInterface
      */
     public function testGetEdit(string $entity): void
     {
-        $this->checkAttribute($entity, self::ATTRIBUTE_EDIT);
+        $this->checkAttribute($entity, EntityVoterInterface::ATTRIBUTE_EDIT);
     }
 
     /**
@@ -75,12 +75,21 @@ class RightsTraitTest extends TestCase implements EntityVoterInterface
      */
     public function testGetEmpty(string $entity): void
     {
-        $this->assertEmpty($this->__get($entity));
+        $this->assertEmpty($this->$entity);
+    }
+
+    public function testInvalidAttribute(): void
+    {
+        $attribute = $this->getAttribute('UnknowAttribute');
+        $this->assertTrue(EntityVoter::INVALID_VALUE === $attribute);
     }
 
     public function testIsNotSet(): void
     {
-        $this->assertFalse($this->__isset('UnknowClass'));
+        $className = 'UnknowClass';
+        $this->assertFalse($this->__isset($className));
+        // @phpstan-ignore-next-line
+        $this->assertNull($this->$className);
     }
 
     /**
@@ -89,14 +98,16 @@ class RightsTraitTest extends TestCase implements EntityVoterInterface
     public function testIsSet(string $entity): void
     {
         $this->assertTrue($this->__isset($entity));
+        $this->assertIsArray($this->$entity);
+        $this->assertTrue(0 === \count($this->$entity));
     }
 
     private function checkAttribute(string $entity, string $key): void
     {
         $attribute = $this->getAttribute($key);
         $rights = [$key => $attribute];
-        $this->__set($entity, $rights);
-        $value = $this->__get($entity);
+        $this->$entity = $rights;
+        $value = $this->$entity;
         $this->assertSame($rights, $value);
     }
 

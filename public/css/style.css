@@ -57,13 +57,6 @@ td.required:after {
 }
 
 /*
- * card-body with a table overview child
- */
-.card-body-overview {
-    padding: 0.2em;
-}
-
-/*
  * card-title (same as h5)
  */
 h1.card-title {

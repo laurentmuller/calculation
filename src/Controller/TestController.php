@@ -23,7 +23,6 @@ use App\Form\Type\MinStrengthType;
 use App\Form\Type\SimpleEditorType;
 use App\Interfaces\StrengthInterface;
 use App\Mime\NotificationEmail;
-use App\Model\Comment;
 use App\Pdf\PdfResponse;
 use App\Pdf\PdfTocDocument;
 use App\Report\HtmlReport;
@@ -36,6 +35,7 @@ use App\Service\AkismetService;
 use App\Service\CaptchaImageService;
 use App\Service\FakerService;
 use App\Service\IpStackService;
+use App\Service\MailService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
 use App\Translator\TranslatorFactory;
@@ -54,7 +54,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -92,13 +91,14 @@ class TestController extends AbstractController
     /**
      * Test sending notification mail.
      *
-     * @Route("/simple", name="test_simple")
+     * @Route("/editor", name="test_editor")
      */
-    public function editorSimple(Request $request, MailerInterface $mailer, TranslatorInterface $translator, LoggerInterface $logger): Response
+    public function editor(Request $request, MailService $service, LoggerInterface $logger): Response
     {
         $data = [
             'email' => 'bibi@bibi.nu',
             'importance' => NotificationEmail::IMPORTANCE_LOW,
+            'notification' => $this->isSessionBool('editor_notification', false),
         ];
 
         $helper = $this->createFormHelper('user.fields.', $data);
@@ -110,6 +110,10 @@ class TestController extends AbstractController
         $helper->field('message')
             ->updateAttribute('minlength', 10)
             ->add(SimpleEditorType::class);
+        $helper->field('notification')
+            ->label('test.use_notification')
+            ->notRequired()
+            ->addCheckboxType();
 
         // handle request
         $form = $helper->createForm();
@@ -117,17 +121,17 @@ class TestController extends AbstractController
             $user = $this->getUser();
             $data = $form->getData();
             $email = (string) $data['email'];
-            $importance = $translator->trans('importance.full.' . $data['importance']);
-            $message = "<p style=\"font-weight: bold;\">$importance</p>" . $data['message'];
+            $importance = $data['importance'];
+            $message = $data['message'];
+            $notification = (bool) $data['notification'];
+            $this->setSessionValue('editor_notification', $notification);
 
             try {
-                $comment = new Comment(true);
-                $comment->setFromAddress($email)
-                    ->setToAddress($user)
-                    ->setSubject($this->trans('user.comment.title'))
-                    ->setMessage($message);
-                $comment->send($mailer);
-
+                if ($notification) {
+                    $service->sendNotification($user, $email, $message, $importance);
+                } else {
+                    $service->sendComment($user, $email, $message, $importance);
+                }
                 $this->succesTrans('user.comment.success');
 
                 return $this->redirectToHomePage();
@@ -146,7 +150,7 @@ class TestController extends AbstractController
             }
         }
 
-        return $this->renderForm('test/editor_simple.html.twig', [
+        return $this->renderForm('test/editor.html.twig', [
             'form' => $form,
         ]);
     }

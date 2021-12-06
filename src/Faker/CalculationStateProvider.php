@@ -51,8 +51,8 @@ class CalculationStateProvider extends EntityProvider
     /**
      * {@inheritDoc}
      */
-    protected function findAll()
+    protected function getCriteria(): array
     {
-        return $this->getRepository()->findBy(['editable' => true]);
+        return ['editable' => true];
     }
 }

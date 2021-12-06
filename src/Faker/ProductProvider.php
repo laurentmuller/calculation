@@ -111,6 +111,6 @@ class ProductProvider extends EntityProvider
      */
     public function productUnit(): ?string
     {
-        return $this->distinctValue('unit');
+        return $this->distinctValue('unit', true);
     }
 }

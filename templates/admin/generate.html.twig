@@ -1,4 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
+{% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
 {%- set title = 'generate.title' -%}
@@ -21,13 +22,32 @@
 </div>
 {{ form_row(form.simulate) }}
 {{ form_row(form.confirm) }}
-{# results #}
-<div id="content" style="display: none;">
-	<label id="message" for="result">{{ 'generate.result_text'|trans }}</label>
-	<div id="overflow" class="overflow-auto border-bottom" style="max-height: 208px;">
-		<table class="table table-hover table-sm mb-0" id="result"></table>
+{# results message #}
+<div id="message-result" class="text-center d-none">
+	<hr class="mb-2">
+	<a href="#" id="message" title="{{ 'generate.result_text'|trans }}" data-toggle="modal" data-target="#modal-result">{{ 'generate.result_text'|trans }}</a>
+</div>
+{# results dialog #}
+<div class="modal fade" id="modal-result" tabindex="-1">
+	<div class="modal-dialog modal-dialog-centered modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+                <h5 class="modal-title">{{ title|trans }}</h5>
+                {{ icons.button_close_modal }}
+            </div>
+    		<div class="modal-body">
+    			<label class="font-weight-bold">{{ 'generate.result_text'|trans }}</label>
+    			<div id="overflow" class="overflow-auto border-bottom" style="max-height: 308px;">
+    				<table class="table table-hover table-sm mb-0" id="result">
+    				</table>
+    			</div>
+        		<p id="simulated" class="text-muted text-right small mt-2 mb-0 d-none">{{ 'generate.result_simulated'|trans }}</p>
+    		</div>
+    		<div class="modal-footer">
+                <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">{{ 'common.button_close'|trans }}</button>
+            </div>
+		</div>
 	</div>
-	<p id="simulated" class="text-muted mb-0 d-none">{{ 'generate.result_simulated'|trans }}</p>
 </div>
 {% endblock %}
 

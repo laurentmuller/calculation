@@ -64,21 +64,16 @@ final class FileUtils
     /**
      * Atomically dumps content into a file.
      *
-     * @param string|\SplFileInfo $file      the file to write to
-     * @param string|resource     $content   the data to write into the file
-     * @param bool                $useNative true to use the native <code>file_put_contents</code> function, false to use the file system
+     * @param string|\SplFileInfo $file    the file to write to
+     * @param string|resource     $content the data to write into the file
      *
      * @return bool true on success, false on failure
      */
-    public static function dumpFile($file, $content, bool $useNative = false): bool
+    public static function dumpFile($file, $content): bool
     {
         $file = self::getRealPath($file);
 
         try {
-            if ($useNative) {
-                // @phpstan-ignore-next-line
-                return false !== \file_put_contents($file, $content);
-            }
             self::getFilesystem()->dumpFile($file, $content);
 
             return true;
@@ -148,7 +143,7 @@ final class FileUtils
      *
      * @return int the number of lines; 0 if an error occurs
      */
-    public static function getLines(string $filename, bool $skipEmpty = true): int
+    public static function getLinesCount(string $filename, bool $skipEmpty = true): int
     {
         if (!self::isFile($filename)) {
             return 0;

@@ -213,12 +213,9 @@ class CalendarController extends AbstractController
     private function nextMonth(array $yearsMonths, int $year, int $month)
     {
         $yearMonth = $year * 1000 + $month;
-        $filtered = \array_filter(
-            $yearsMonths,
-            function (array $current) use ($yearMonth): bool {
-                return $current['year_month'] > $yearMonth;
-            }
-        );
+        $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth): bool {
+            return $current['year_month'] > $yearMonth;
+        });
 
         return \reset($filtered);
     }
@@ -235,12 +232,9 @@ class CalendarController extends AbstractController
     private function nextWeek(array $yearsWeeks, int $year, int $week)
     {
         $yearWeek = $year * 1000 + $week;
-        $filtered = \array_filter(
-            $yearsWeeks,
-            function (array $current) use ($yearWeek): bool {
-                return $current['year_week'] > $yearWeek;
-            }
-        );
+        $filtered = \array_filter($yearsWeeks, function (array $current) use ($yearWeek): bool {
+            return $current['year_week'] > $yearWeek;
+        });
 
         return \reset($filtered);
     }
@@ -255,12 +249,9 @@ class CalendarController extends AbstractController
      */
     private function nextYear(array $years, int $year)
     {
-        $filtered = \array_filter(
-            $years,
-            function (int $current) use ($year): bool {
-                return $current > $year;
-            }
-        );
+        $filtered = \array_filter($years, function (int $current) use ($year): bool {
+            return $current > $year;
+        });
 
         return \reset($filtered);
     }
@@ -277,12 +268,9 @@ class CalendarController extends AbstractController
     private function previousMonth(array $yearsMonths, int $year, int $month)
     {
         $yearMonth = $year * 1000 + $month;
-        $filtered = \array_filter(
-            $yearsMonths,
-            function (array $current) use ($yearMonth): bool {
-                return $current['year_month'] < $yearMonth;
-            }
-        );
+        $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth): bool {
+            return $current['year_month'] < $yearMonth;
+        });
 
         return \end($filtered);
     }
@@ -299,12 +287,9 @@ class CalendarController extends AbstractController
     private function previousWeek(array $yearsWeeks, int $year, int $week)
     {
         $yearWeek = $year * 1000 + $week;
-        $filtered = \array_filter(
-            $yearsWeeks,
-            function (array $current) use ($yearWeek): bool {
-                return $current['year_week'] < $yearWeek;
-            }
-        );
+        $filtered = \array_filter($yearsWeeks, function (array $current) use ($yearWeek): bool {
+            return $current['year_week'] < $yearWeek;
+        });
 
         return \end($filtered);
     }
@@ -319,12 +304,9 @@ class CalendarController extends AbstractController
      */
     private function previousYear(array $years, int $year)
     {
-        $filtered = \array_filter(
-            $years,
-            function (int $current) use ($year): bool {
-                return $current < $year;
-            }
-        );
+        $filtered = \array_filter($years, function (int $current) use ($year): bool {
+            return $current < $year;
+        });
 
         return \end($filtered);
     }
@@ -344,12 +326,9 @@ class CalendarController extends AbstractController
         $todayMonth = (int) \date('n');
         if ($year !== $todayYear || $month !== $todayMonth) {
             $yearMonth = $todayYear * 1000 + $todayMonth;
-            $filtered = \array_filter(
-                $yearsMonths,
-                function (array $current) use ($yearMonth): bool {
-                    return $current['year_month'] === $yearMonth;
-                }
-            );
+            $filtered = \array_filter($yearsMonths, function (array $current) use ($yearMonth): bool {
+                return $current['year_month'] === $yearMonth;
+            });
 
             return \reset($filtered);
         }
@@ -372,12 +351,9 @@ class CalendarController extends AbstractController
         $todayWeek = (int) \date('W');
         if ($year !== $todayYear || $week !== $todayWeek) {
             $yearWeek = $year * 1000 + $week;
-            $filtered = \array_filter(
-                $yearsWeeks,
-                function (array $current) use ($yearWeek): bool {
-                    return $current['year_week'] === $yearWeek;
-                }
-            );
+            $filtered = \array_filter($yearsWeeks, function (array $current) use ($yearWeek): bool {
+                return $current['year_week'] === $yearWeek;
+            });
 
             return \reset($filtered);
         }

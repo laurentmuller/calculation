@@ -5,38 +5,21 @@
     <div class="card-header">
         <h1 class="card-title">{{ icons.icon('list-ul', 'calculation.edit.panel_resume') }}</h1>
     </div>
-    <div class="card-body card-body-overview">
+    <div class="card-body py-1">
         <table id="totals-table" class="table table-overview table-sm">
             <tbody>
                 {% include 'calculation/calculation_ajax_totals.html.twig' %}
             </tbody>
         </table>
     </div>
-    <div class="card-footer d-print-none">
-        {%- if editable -%}
-            <div class="row">
-                <div class="col-md-9">
-                    {{ icons.button_submit() }}
-                    {{ icons.button_cancel(cancel_path) }}
-                </div>
-                <div class="col-md-3 text-md-right mt-1">
-                    <small>{{ 'common.required'|trans|raw }}</small>
-                </div>
+    <div class="card-footer py-1{% if new %} d-none{% endif %}">
+        <div class="row">
+            <div class="col small text-muted my-2 ml-1">
+               <span>{{ created_item|raw }}</span>
             </div>
-        {%- else -%}
-            <div class="row">
-                <div class="col-md-6">
-                    {{ icons.button_ok(cancel_path, 'common.button_close') }}
-                    {% if is_granted(ATTRIBUTE_EDIT, ENTITY_CALCULATION) %}
-                        {%- set state_params = route_params(app.request, item.id) -%}
-                        {%- set state_path = path('calculation_state', state_params) -%}
-                        {{ icons.link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
-                    {% endif %}
-                </div>
-                <div class="col-md-6 text-md-right">
-                    <small class="text-danger">{{ 'calculation.edit.read_only'|trans({'%name%': item.stateCode}) }}</small>
-                </div>
+            <div class="col small text-muted my-2 mr-1 text-right">
+                <span>{{ updated_item|raw }}</span>
             </div>
-        {%- endif -%}
+        </div>
     </div>
 </div>

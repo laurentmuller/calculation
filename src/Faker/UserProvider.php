@@ -45,7 +45,9 @@ class UserProvider extends EntityProvider
      */
     public function userName(): ?string
     {
-        return $this->user()->getUsername();
+        $user = $this->user();
+
+        return ($user instanceof User) ? $user->getUsername() : null;
     }
 
     /**
@@ -59,8 +61,8 @@ class UserProvider extends EntityProvider
     /**
      * {@inheritDoc}
      */
-    protected function findAll()
+    protected function getCriteria(): array
     {
-        return $this->getRepository()->findBy(['enabled' => true]);
+        return ['enabled' => true];
     }
 }

@@ -315,9 +315,8 @@ class PlainType extends AbstractType
     private function transformValue($value, array $options): ?string
     {
         // transformer?
-        if (isset($options['transformer']) && \is_callable($options['transformer'])) {
-            $transformer = $options['transformer'];
-            $value = \call_user_func($transformer, $value);
+        if (\is_callable($options['transformer'] ?? false)) {
+            $value = \call_user_func($options['transformer'], $value);
         }
 
         // boolean?

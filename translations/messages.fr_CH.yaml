@@ -717,12 +717,12 @@ calendar:
     invalid_week: La semaine doit être comprises entre 1 et 53.
 test:
     notification: Notifications
+    use_notification: Utiliser une notification.
     minify: Minify
     drag_drop: Drag & drop
     html: Exportation HTML
     recaptcha: reCAPTCHA
-    simple_editor: Editeur Simple
-    trix_editor: Editeur Trix
+    editor: Editeur Simple
 parameters:
     title: Paramètres
     description: Définition des paramètres de l'application.

@@ -32,24 +32,28 @@ class EntityProvider extends Base
     private array $distincValues = [];
 
     /**
-     * The entities.
+     * The cached entities.
      *
      * @psalm-var T[]
      */
     private ?array $entities = null;
 
     /**
+     * The repository.
+     *
      * @var AbstractRepository<T>
      */
     private AbstractRepository $repository;
 
     /**
-     * @psalm-param class-string<T> $entityClass
+     * Constructor.
+     *
+     * @psalm-param class-string<T> $className the entity class name.
      */
-    public function __construct(Generator $generator, EntityManagerInterface $manager, string $entityClass)
+    public function __construct(Generator $generator, EntityManagerInterface $manager, string $className)
     {
         parent::__construct($generator);
-        $this->repository = $manager->getRepository($entityClass);
+        $this->repository = $manager->getRepository($className);
     }
 
     /**
@@ -72,8 +76,7 @@ class EntityProvider extends Base
     {
         // already loaded?
         if (!\array_key_exists($field, $this->distincValues) || empty($this->distincValues[$field])) {
-            $repository = $this->getRepository();
-            $this->distincValues[$field] = $repository->getDistinctValues($field);
+            $this->distincValues[$field] = $this->getRepository()->getDistinctValues($field);
         }
 
         if ($allowNull) {
@@ -94,14 +97,11 @@ class EntityProvider extends Base
     }
 
     /**
-     * Find all entities.
-
-     *
-     * @psalm-return T[]
+     * Gets the criteria used to filter entities.
      */
-    protected function findAll()
+    protected function getCriteria(): array
     {
-        return $this->getRepository()->findAll();
+        return [];
     }
 
     /**
@@ -111,17 +111,17 @@ class EntityProvider extends Base
      */
     protected function getEntities(): array
     {
-        if (null === $this->entities) {
-            $this->entities = $this->findAll();
+        if (empty($this->entities)) {
+            $criteria = $this->getCriteria();
+            $repository = $this->getRepository();
+            $this->entities = empty($criteria) ? $repository->findAll() : $repository->findBy($criteria);
         }
 
         return $this->entities;
     }
 
     /**
-     * Gets the repository.
-     *
-     * @psalm-return AbstractRepository<T>
+     * @return AbstractRepository<T>
      */
     protected function getRepository(): AbstractRepository
     {

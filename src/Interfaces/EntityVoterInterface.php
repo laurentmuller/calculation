@@ -50,11 +50,6 @@ interface EntityVoterInterface
     public const ATTRIBUTE_SHOW = 'show';
 
     /**
-     * The entity prefix.
-     */
-    public const ENTITY = 'Entity';
-
-    /**
      * The calculation rights.
      */
     public const ENTITY_CALCULATION = 'EntityCalculation';

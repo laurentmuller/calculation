@@ -20,6 +20,7 @@ use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
  * Unit test for {@link App\Security\EntityVoter} class.
@@ -28,7 +29,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  *
  * @see EntityVoter
  */
-class EntityVoterTest extends TestCase implements EntityVoterInterface
+class EntityVoterTest extends TestCase
 {
     private ?EntityVoter $voter = null;
 
@@ -45,16 +46,16 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
         $user = $this->getDefaultUser();
         $attribute = 'FakeAttribute';
         $subject = Calculation::class;
-        $expected = EntityVoter::ACCESS_ABSTAIN;
+        $expected = VoterInterface::ACCESS_ABSTAIN;
         $this->checkVote($user, $subject, $attribute, $expected);
     }
 
     public function testAbstainSubject(): void
     {
         $user = $this->getDefaultUser();
-        $attribute = self::ATTRIBUTE_ADD;
+        $attribute = EntityVoterInterface::ATTRIBUTE_ADD;
         $subject = static::class;
-        $expected = EntityVoter::ACCESS_ABSTAIN;
+        $expected = VoterInterface::ACCESS_ABSTAIN;
         $this->checkVote($user, $subject, $attribute, $expected);
     }
 
@@ -65,18 +66,18 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
             ->setRights($role->getRights())
             ->setOverwrite(true);
 
-        $attribute = self::ATTRIBUTE_ADD;
+        $attribute = EntityVoterInterface::ATTRIBUTE_ADD;
         $subject = User::class;
-        $expected = EntityVoter::ACCESS_GRANTED;
+        $expected = VoterInterface::ACCESS_GRANTED;
         $this->checkVote($user, $subject, $attribute, $expected);
     }
 
     public function testDisable(): void
     {
         $user = $this->getDisableUser();
-        $attribute = self::ATTRIBUTE_ADD;
+        $attribute = EntityVoterInterface::ATTRIBUTE_ADD;
         $subject = Calculation::class;
-        $expected = EntityVoter::ACCESS_DENIED;
+        $expected = VoterInterface::ACCESS_DENIED;
         $this->checkVote($user, $subject, $attribute, $expected);
     }
 
@@ -105,9 +106,9 @@ class EntityVoterTest extends TestCase implements EntityVoterInterface
     public function testSuperAdmin(): void
     {
         $user = $this->getSuperAdminUser();
-        $attribute = self::ATTRIBUTE_ADD;
+        $attribute = EntityVoterInterface::ATTRIBUTE_ADD;
         $subject = Calculation::class;
-        $expected = EntityVoter::ACCESS_GRANTED;
+        $expected = VoterInterface::ACCESS_GRANTED;
         $this->checkVote($user, $subject, $attribute, $expected);
     }
 

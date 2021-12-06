@@ -4,7 +4,7 @@
 
 /**
  * Creates a row for the given values.
- *
+ * 
  * @param {array}
  *            values - the cell values.
  * @param {array}
@@ -25,7 +25,7 @@ function createRow(values, classes) {
 
 /**
  * Creates rows for the given items.
- *
+ * 
  * @param {array}
  *            items - the items to render.
  * @param {function}
@@ -52,54 +52,59 @@ function createRows(items, valuesCallback, classes, rowCallback) {
 
 /**
  * Fill the table with the generated calculations
- *
+ * 
  * @param {array}
- *            calculations - the calculations to render.
+ *            items - the calculations to render.
  */
-function renderCalculations(calculations) {
+function renderCalculations(items) {
     'use strict';
 
-    const valuesCallback = function (c) {
-        return [c.id, c.date, c.state, c.description + "<br>" + c.customer, c.margin, c.total];
+    const valuesCallback = function (item) {
+        return [item.id, item.date, item.state, item.customer, item.description, item.margin, item.total];
     };
-    const rowCallback = function (c, $row) {
+    const rowCallback = function (item, $row) {
         const $cell = $row.find('td:first');
-        $cell[0].style.setProperty('border-left-color', c.color, 'important');
+        $cell[0].style.setProperty('border-left-color', item.color, 'important');
     };
-    const classes = ['text-id text-border', 'text-date', 'text-state', '', 'text-percent', 'text-currency'];
-    createRows(calculations, valuesCallback, classes, rowCallback);
+    const classes = ['text-id text-border', 'text-date', 'text-state', '', '', 'text-percent', 'text-currency'];
+    createRows(items, valuesCallback, classes, rowCallback);
 }
 
 /**
  * Fill the table with the generated customers
- *
+ * 
  * @param {array}
- *            customers - the customers to render.
+ *            items - the customers to render.
  */
-function renderCustomers(customers) {
+function renderCustomers(items) {
     'use strict';
 
-    const callback = function (c) {
-        return [c.nameAndCompany, c.address, c.zipCity];
+    const valuesCallback = function (item) {
+        return [item.nameAndCompany, item.address, item.zipCity];
     };
     const classes = ['w-50', 'w-25', 'w-25'];
-    createRows(customers, callback, classes);
+    createRows(items, valuesCallback, classes);
 }
 
 /**
  * Fill the table with the generated products
- *
+ * 
  * @param {array}
- *            products - the products to render.
+ *            items - the products to render.
  */
-function renderProducts(products) {
+function renderProducts(items) {
     'use strict';
 
-    const callback = function (p) {
-        return [p.description, p.group + ' / ' + p.category, p.price, '/', p.unit];
+    const valuesCallback = function (item) {
+        return [item.description, item.group + ' - ' + item.category, item.price, '/', item.unit];
     };
-    const classes = ['w-50', 'w-50', 'text-currency', '', 'text-unit'];
-    createRows(products, callback, classes);
+    const rowCallback = function (item, $row) {
+        if (!item.unit) {
+            $row.find('td:eq(3)').html('');
+        }
+    };
+    const classes = ['w-50', 'w-50', 'text-currency', 'px-0', 'text-unit'];
+    createRows(items, valuesCallback, classes, rowCallback);
 }
 
 /**
@@ -109,9 +114,10 @@ function disableButtons() {
     'use strict';
     const $form = $('#edit-form');
     const $submit = $form.find(':submit');
-    const spinner = '<span class="spinner-border spinner-border-sm"></span>';
-    $submit.data('text', $submit.text()).toggleDisabled(true).html(spinner);
+    $submit.data('focused', $submit.is(":focus")).toggleDisabled(true);
     $form.find('.btn-cancel').toggleDisabled(true);
+    $('#message-result').addClass('d-none');
+    $('*').css('cursor', 'wait');
 }
 
 /**
@@ -121,13 +127,17 @@ function enableButtons() {
     'use strict';
     const $form = $('#edit-form');
     const $submit = $form.find(':submit');
-    $submit.toggleDisabled(false).html($submit.data('text'));
+    $submit.toggleDisabled(false);
+    if ($submit.data('focused')) {
+        $submit.focus();
+    }
     $form.find('.btn-cancel').toggleDisabled(false);
+    $('*').css('cursor', '');
 }
 
 /**
  * Notify a message.
- *
+ * 
  * @param {string}
  *            type - the message type.
  * @param {string}
@@ -146,13 +156,12 @@ function generate() {
     'use strict';
 
     disableButtons();
-    $('#content').slideUp();
-
     const url = $('#form_entity').val();
     const data = {
         count: $('#form_count').intVal(),
         simulate: $('#form_simulate').isChecked()
     };
+
     $.getJSON(url, data, function (response) {
         if (!response.result) {
             notifyMessage('danger', response.message || $('#edit-form').data('error'));
@@ -177,14 +186,14 @@ function generate() {
             notifyMessage('warning', $('#edit-form').data('empty'));
             return;
         }
-        $('#message').text(response.message);
+
         $('#simulated').toggleClass('d-none', !response.simulate);
-        $('#content').slideDown();
-        $('#overflow').scrollTop(0);
+        $('#message').text(response.message);
+        $('#message-result').removeClass('d-none');
 
     }).always(function () {
-        enableButtons();
         $('#form_confirm').setChecked(false);
+        enableButtons();
 
     }).fail(function () {
         notifyMessage('danger', $('#edit-form').data('error'));
@@ -196,6 +205,10 @@ function generate() {
  */
 (function ($) {
     'use strict';
+
+    $('#modal-result').on('hide.bs.modal', function () {
+        $('#overflow').scrollTop(0);
+    });
 
     $('#form_simulate').on('input', function () {
         if ($(this).isChecked()) {

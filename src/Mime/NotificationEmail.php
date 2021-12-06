@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Mime;
 
+use App\Traits\TranslatorTrait;
 use Symfony\Bridge\Twig\Mime\NotificationEmail as BaseNotificationEmail;
 use Symfony\Component\Mime\Header\Headers;
 use Symfony\Component\Mime\Part\AbstractPart;
@@ -24,7 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class NotificationEmail extends BaseNotificationEmail
 {
-    private ?TranslatorInterface $translator = null;
+    use TranslatorTrait;
 
     public function __construct(TranslatorInterface $translator = null, Headers $headers = null, AbstractPart $body = null)
     {
@@ -42,6 +43,17 @@ class NotificationEmail extends BaseNotificationEmail
     }
 
     /**
+     * Sets the footer text.
+     */
+    public function setFooterText(string $footerText): self
+    {
+        $context = $this->getContext();
+        $context['footer_text'] = $footerText;
+
+        return $this->context($context);
+    }
+
+    /**
      * Sets the translator used to translate the subject.
      */
     public function setTranslator(TranslatorInterface $translator): self
@@ -56,7 +68,7 @@ class NotificationEmail extends BaseNotificationEmail
         $subject = $this->getSubject();
         if (null !== $this->translator) {
             $importance = $this->getContext()['importance'] ?? self::IMPORTANCE_LOW;
-            $translated = $this->translator->trans("importance.full.$importance");
+            $translated = $this->trans("importance.full.$importance");
 
             return \sprintf('%s - %s', $subject, $translated);
         }

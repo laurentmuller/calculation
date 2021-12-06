@@ -38,7 +38,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Provides common features needed in controllers.
  *
- * @method ?User getUser()
+ * @method ?User getUser() Gets the current user.
  *
  * @author Laurent Muller
  */

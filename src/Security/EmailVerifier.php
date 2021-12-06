@@ -52,7 +52,6 @@ class EmailVerifier
     {
         $this->validateEmailConfirmation($request, $user);
         $user->setVerified(true);
-
         $this->manager->persist($user);
         $this->manager->flush();
     }

@@ -24,6 +24,19 @@ use PHPUnit\Framework\TestCase;
  */
 class DateUtilsTest extends TestCase
 {
+    public function getCompletYears(): array
+    {
+        return [
+            [29, 2029],
+            [30, 2030],
+            [31, 1931],
+            [32, 1932],
+            [2, 2002],
+            [1932, 1932],
+            [2002, 2002],
+        ];
+    }
+
     public function testAddByInterval(): void
     {
         $date = new \DateTime('2020-01-10');
@@ -39,10 +52,12 @@ class DateUtilsTest extends TestCase
         $this->assertEquals('2020-01-17', $add->format('Y-m-d'));
     }
 
-    public function testCompletYear(): void
+    /**
+     *  @dataProvider getCompletYears
+     */
+    public function testCompletYear(int $value, int $expected): void
     {
-        $this->assertEquals(2002, DateUtils::completYear(2));
-        $this->assertEquals(2002, DateUtils::completYear(2002));
+        $this->assertEquals($expected, DateUtils::completYear($value));
     }
 
     public function testGetTimeZone(): void

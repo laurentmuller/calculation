@@ -47,6 +47,7 @@ class CalculationState extends AbstractEntity
      * The color used in the user interface (UI).
      *
      * @ORM\Column(type="string", length=10, options={"default" = "#000000"})
+     * @Assert\CssColor
      * @Assert\NotBlank
      * @Assert\Length(max=10)
      */

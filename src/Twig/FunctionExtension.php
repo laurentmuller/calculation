@@ -340,12 +340,23 @@ final class FunctionExtension extends AbstractExtension
     private function getAssetUrl(Environment $env, string $path, ?string $packageName = null): string
     {
         if (null === $this->asset) {
-            /** @var AssetExtension $asset */
-            $asset = $env->getExtension(AssetExtension::class);
-            $this->asset = $asset;
+            $this->asset = $this->getExtension($env, AssetExtension::class);
         }
 
         return $this->asset->getAssetUrl($path, $packageName);
+    }
+
+    /**
+     * @template T of \Twig\Extension\AbstractExtension
+     * @psalm-param class-string<T> $className
+     * @psalm-return T
+     */
+    private function getExtension(Environment $env, string $className)
+    {
+        /** @psalm-var T $result */
+        $result = $env->getExtension($className);
+
+        return $result;
     }
 
     /**
@@ -359,7 +370,7 @@ final class FunctionExtension extends AbstractExtension
     {
         if (null === $this->nonce) {
             /** @var NonceExtension $extension */
-            $extension = $env->getExtension(NonceExtension::class);
+            $extension = $this->getExtension($env, NonceExtension::class);
             $this->nonce = $extension->getNonce();
         }
 
@@ -376,8 +387,9 @@ final class FunctionExtension extends AbstractExtension
     private function reduceParameters(array $parameters): string
     {
         if (!empty($parameters)) {
-            $callback = function (string $carry, string $key, string $value) {
-                return $carry . ' ' . $key . '="' . \htmlspecialchars($value) . '"';
+             // @phpstan-ignore-next-line
+            $callback = function (string $carry, string $key, $value) {
+                return $carry . ' ' . $key . '="' . \htmlspecialchars((string) $value) . '"';
             };
 
             return Utils::arrayReduceKey($parameters, $callback, '');

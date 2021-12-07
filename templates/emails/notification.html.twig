@@ -2,12 +2,7 @@
 
 {% block style %}
 {{ parent() }}
-body {
-    background: white;
-}
-.wrapper.secondary {
-    background: white;
-}
+{{ source("@css/email.css") }}
 {% endblock %}
 
 {% block lead %}

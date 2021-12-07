@@ -98,7 +98,7 @@ class TestController extends AbstractController
         $data = [
             'email' => $this->getUserEmail(),
             'importance' => NotificationEmail::IMPORTANCE_MEDIUM,
-            'notification' => $this->isSessionBool('editor_notification', false),
+            'notification' => $this->isSessionBool('editor_notification', true),
         ];
 
         $helper = $this->createFormHelper('user.fields.', $data);

@@ -12,17 +12,13 @@ twig:
         app_owner_city: '%app_owner_city%'
         app_description: '%app_description%'
         app_mode: '%app_mode%'
-
         mailer_user_name: '%mailer_user_email%'
         mailer_user_email: '%mailer_user_email%'
-
         cookie_path: '%cookie_path%'
         cookie_secure: '%cookie_secure%'
         cookie_same_site: '%cookie_same_site%'
-
         google_recaptcha_site_key: '%google_recaptcha_site_key%'
         google_recaptcha_secret_key: '%google_recaptcha_secret_key%'
-
         link_dev: '%link_dev%'
         link_prod: '%link_prod%'
 
@@ -38,5 +34,9 @@ twig:
     form_themes:
     - form/fields.html.twig
 
+    paths:
+        '%kernel.project_dir%/public/css': css
+        '%kernel.project_dir%/public/images': images
+
 slope_it_breadcrumb:
-    template: 'breadcrumb.html.twig'
+    template: breadcrumb.html.twig

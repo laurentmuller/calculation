@@ -84,7 +84,7 @@ class MailService
     }
 
     /**
-     * Set the markdown.
+     * Set the markdown used to convert the message content.
      */
     public function setMarkdown(MarkdownInterface $markdown): self
     {

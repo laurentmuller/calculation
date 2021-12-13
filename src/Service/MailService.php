@@ -77,8 +77,8 @@ class MailService
             ->importance($importance)
             ->subject($this->trans('user.comment.title'))
             ->markdown($this->convert($message))
-            ->action($this->trans('index.title_help'), $this->homeUrl)
-            ->setFooterText($this->appNameVersion);
+            ->setFooterText($this->appNameVersion)
+            ->action($this->trans('index.title'), $this->homeUrl);
 
         $this->mailer->send($notification);
     }

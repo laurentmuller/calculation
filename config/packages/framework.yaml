@@ -4,9 +4,8 @@ framework:
 
     # session
     session:
+        enabled: true
         cookie_path: '%cookie_path%'
-        cookie_samesite: lax
-        cookie_secure: 'auto'
         storage_factory_id: session.storage.factory.native
 
     # errors

@@ -11,3 +11,10 @@
         {{ email.subject }}
     </p>
 {% endblock %}
+
+{% block exception %}
+    {% if exception %}
+        <spacer size="16"></spacer>
+        <p><em>La trace de la pile d'exception est en pièce jointe.</em></p>
+    {% endif %}
+{% endblock %}

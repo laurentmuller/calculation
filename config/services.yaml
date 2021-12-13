@@ -1,48 +1,43 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     # fixed
     locale:             fr_CH
     app_name:           Calculation
-    app_version:        1.5.4.0
+    app_version:        1.5.4.1
     app_owner:          bibi.nu
     app_owner_url:      https://www.bibi.nu
     app_owner_city:     Montévraz
     app_description:    Programme de calculation.
 
-    app_secret:         '%env(APP_SECRET)%'
-    app_mode:           '%env(APP_MODE)%'
+    app_secret:         '%env(string:APP_SECRET)%'
+    app_mode:           '%env(string:APP_MODE)%'
 
     # mailer
     mailer_user_name: Calculation
     mailer_user_email: calculation@bibi.nu
 
     # assets
-    asset_base: '%env(ASSET_BASE)%'
-    asset_locale: '%env(ASSET_LOCALE)%'
+    asset_base: '%env(string:ASSET_BASE)%'
+    asset_locale: '%env(string:ASSET_LOCALE)%'
 
     # cookies
-    cookie_path: '%env(COOKIE_PATH)%'
+    cookie_path: '%env(string:COOKIE_PATH)%'
     cookie_secure: '%env(bool:COOKIE_SECURE)%'
-    cookie_same_site: '%env(COOKIE_SAME_SITE)%'
 
     # keys
-    openweather_key: '%env(OPENWEATHER_KEY)%'
-    bing_translator_key:   '%env(BING_TRANSLATOR_KEY)%'
-    google_translator_key: '%env(GOOGLE_TRANSLATOR_KEY)%'
-    yandex_translator_key: '%env(YANDEX_TRANSLATOR_KEY)%'
-    google_recaptcha_secret_key: '%env(GOOGLE_RECAPTCHA_SECRET_KEY)%'
-    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
-    exchange_rate_key: '%env(EXCHANGE_RATE_KEY)%'
-    akismet_key: '%env(AKISMET_KEY)%'
-    ip_stack_key: '%env(IP_STACK_KEY)%'
+    openweather_key: '%env(string:OPENWEATHER_KEY)%'
+    bing_translator_key:   '%env(string:BING_TRANSLATOR_KEY)%'
+    google_translator_key: '%env(string:GOOGLE_TRANSLATOR_KEY)%'
+    google_recaptcha_secret_key: '%env(string:GOOGLE_RECAPTCHA_SECRET_KEY)%'
+    google_recaptcha_site_key: '%env(string:GOOGLE_RECAPTCHA_SITE_KEY)%'
+    exchange_rate_key: '%env(string:EXCHANGE_RATE_KEY)%'
+    akismet_key: '%env(string:AKISMET_KEY)%'
+    ip_stack_key: '%env(string:IP_STACK_KEY)%'
 
     #links
-    link_dev: '%env(LINK_DEV)%'
-    link_prod: '%env(LINK_PROD)%'
+    link_dev: '%env(string:LINK_DEV)%'
+    link_prod: '%env(string:LINK_PROD)%'
 
     # optimize
     container.dumper.inline_factories: true

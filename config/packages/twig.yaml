@@ -16,7 +16,6 @@ twig:
         mailer_user_email: '%mailer_user_email%'
         cookie_path: '%cookie_path%'
         cookie_secure: '%cookie_secure%'
-        cookie_same_site: '%cookie_same_site%'
         google_recaptcha_site_key: '%google_recaptcha_site_key%'
         google_recaptcha_secret_key: '%google_recaptcha_secret_key%'
         link_dev: '%link_dev%'

@@ -34,6 +34,9 @@ class NotificationEmail extends BaseNotificationEmail
         $this->translator = $translator;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getPreparedHeaders(): Headers
     {
         $headers = parent::getPreparedHeaders();

@@ -52,7 +52,6 @@ function translate(form) {
     // wait
     $buttonSubmit.toggleDisabled(true);
     $buttonCopy.toggleDisabled(true);
-    $('*').css('cursor', 'wait');
 
     // build parameters
     $('#text').val($('#text').val().trim());
@@ -100,7 +99,6 @@ function translate(form) {
         }
     }).always(function () {
         $buttonSubmit.toggleDisabled(false);
-        $('*').css('cursor', '');
     });
 }
 

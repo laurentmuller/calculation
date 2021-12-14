@@ -125,7 +125,6 @@ function disableButtons() {
     $submit.data('focused', $submit.is(":focus")).toggleDisabled(true);
     $form.find('.btn-cancel').toggleDisabled(true);
     $('#message-result').addClass('d-none');
-    $('*').css('cursor', 'wait');
 }
 
 /**
@@ -140,7 +139,6 @@ function enableButtons() {
         $submit.focus();
     }
     $form.find('.btn-cancel').toggleDisabled(false);
-    $('*').css('cursor', '');
 }
 
 /**

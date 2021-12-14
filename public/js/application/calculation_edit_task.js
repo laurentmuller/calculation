@@ -185,7 +185,6 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
         'use strict';
         const that = this;
         const url = that.$form.data('url');
-        $('*').css('cursor', 'wait');
         that.jqXHR = $.post(url, data, function (response) {
             if (response.result) {
                 // update
@@ -204,8 +203,6 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
             if (textStatus !== 'abort') {
                 that.showError(that.$form.data('failed'));
             }
-        }).always(function () {
-            $('*').css('cursor', '');
         });
         return that;
     }

@@ -50,7 +50,6 @@ function compute() {
         'targetCode': $('#targetCode').val()
     };
 
-    $('*').css('cursor', 'wait');
     $.getJSON(url, data, function (response) {
         if (response.result) {
             const rate = response.rate;
@@ -77,8 +76,6 @@ function compute() {
         }
     }).fail(function () {
         showError($form);
-    }).always(function () {
-        $('*').css('cursor', '');
     });
 }
 

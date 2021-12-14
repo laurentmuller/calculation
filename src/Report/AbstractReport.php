@@ -135,17 +135,17 @@ abstract class AbstractReport extends PdfDocument
     }
 
     /**
-     * Sets the title (to be translated).
+     * Sets the title to be translated.
      *
      * @param string $id         the title id (may also be an object that can be cast to string)
-     * @param array  $parameters an array of parameters for the title
      * @param bool   $isUTF8     true to encode to UTF-8
      */
-    public function setTitleTrans(string $id, array $parameters = [], $isUTF8 = false): self
+    public function setTitleTrans(string $id, array $parameters = [], $isUTF8 = false, ?string $domain = null, ?string $locale = null): self
     {
-        $title = $this->trans($id, $parameters);
+        $title = $this->trans($id, $parameters, $domain, $locale);
+        $this->SetTitle($title, $isUTF8);
 
-        return $this->SetTitle($title, $isUTF8);
+        return $this;
     }
 
     /**

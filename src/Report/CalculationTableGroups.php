@@ -17,6 +17,7 @@ use App\Entity\CalculationGroup;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
+use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
 use Doctrine\Common\Collections\Collection;
 
@@ -27,6 +28,8 @@ use Doctrine\Common\Collections\Collection;
  */
 class CalculationTableGroups extends PdfTableBuilder
 {
+    use TranslatorTrait;
+
     /**
      * The calculation to render.
      */
@@ -39,6 +42,7 @@ class CalculationTableGroups extends PdfTableBuilder
     {
         parent::__construct($parent);
         $this->calculation = $parent->getCalculation();
+        $this->translator = $parent->getTranslator();
     }
 
     /**
@@ -105,22 +109,5 @@ class CalculationTableGroups extends PdfTableBuilder
         $table->output();
 
         return $table;
-    }
-
-    /**
-     * Translates the given message.
-     *
-     * @param string $id the message id (may also be an object that can be cast to string)
-     *
-     * @return string the translated string
-     *
-     * @throws \InvalidArgumentException if the locale contains invalid characters
-     */
-    private function trans($id): string
-    {
-        /** @var AbstractReport $parent */
-        $parent = $this->parent;
-
-        return $parent->trans($id);
     }
 }

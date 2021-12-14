@@ -146,34 +146,14 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     public const ZOOM_REAL = 'real';
 
     /**
-     * The application name.
+     * The footer.
      */
-    protected ?string $applicationName = null;
+    protected PdfFooter $footer;
 
     /**
-     * The company address.
+     * The header.
      */
-    protected ?string $companyAddress = null;
-
-    /**
-     * The company name.
-     */
-    protected ?string $companyName = null;
-
-    /**
-     * The company web site.
-     */
-    protected ?string $companyUrl = null;
-
-    /**
-     * The header description.
-     */
-    protected ?string $description = null;
-
-    /**
-     * The owner web site.
-     */
-    protected ?string $ownerUrl = null;
+    protected PdfHeader $header;
 
     /**
      * The title.
@@ -191,7 +171,10 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     public function __construct(string $orientation = self::ORIENTATION_PORTRAIT, string $unit = self::UNIT_MILLIMETER, $size = self::SIZE_A4)
     {
         parent::__construct($orientation, $unit, $size);
+
         $this->SetDisplayMode(self::ZOOM_FULL_PAGE, self::LAYOUT_SINGLE);
+        $this->header = new PdfHeader();
+        $this->footer = new PdfFooter();
         $this->AliasNbPages();
     }
 
@@ -260,40 +243,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      */
     public function Footer(): void
     {
-        // font and color
-        $style = PdfStyle::getDefaultStyle()->setFontSize(8);
-        $style->apply($this);
-
-        // margins
-        $margins = $this->setCellMargin(0);
-
-        // position and cells width
-        $this->SetY(self::FOOTER_OFFSET);
-        $cellWidth = $this->getPrintableWidth() / 3;
-
-        // pages
-        $text = 'Page ' . $this->PageNo() . ' / {nb}';
-        $this->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
-
-        // program and version and owner link (if any)
-        $text = $this->applicationName ?: '';
-        $this->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_CENTER, false, $this->ownerUrl);
-
-        // date
-        $text = \date('d.m.Y - H:i');
-        $this->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_RIGHT);
-
-        // reset
-        $this->setCellMargin($margins);
-        $style->reset()->apply($this);
-    }
-
-    /**
-     * Gets the application name.
-     */
-    public function getApplicationName(): ?string
-    {
-        return $this->applicationName;
+        $this->footer->apply($this);
     }
 
     /**
@@ -303,30 +253,6 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     public function getCellMargin(): float
     {
         return $this->cMargin;
-    }
-
-    /**
-     * Gets the company address.
-     */
-    public function getCompanyAddress(): ?string
-    {
-        return $this->companyAddress;
-    }
-
-    /**
-     * Gets the company name.
-     */
-    public function getCompanyName(): ?string
-    {
-        return $this->companyName;
-    }
-
-    /**
-     * Gets the company web site.
-     */
-    public function getCompanyUrl(): ?string
-    {
-        return $this->companyUrl;
     }
 
     /**
@@ -398,19 +324,27 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Gets the document description.
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
      * Gets the current font size in user unit.
      */
     public function getFontSize(): float
     {
         return $this->FontSize;
+    }
+
+    /**
+     * Gets the footer.
+     */
+    public function getFooter(): PdfFooter
+    {
+        return $this->footer;
+    }
+
+    /**
+     * Gets the header.
+     */
+    public function getHeader(): PdfHeader
+    {
+        return $this->header;
     }
 
     /**
@@ -508,16 +442,6 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Gets the owner web site.
-     *
-     * @return string
-     */
-    public function getOwnerUrl(): ?string
-    {
-        return $this->ownerUrl;
-    }
-
-    /**
      * Gets printable height.
      *
      * @return float the printable height
@@ -591,52 +515,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      */
     public function Header(): void
     {
-        // style
-        $style = PdfStyle::getDefaultStyle();
-        $style->apply($this);
-
-        // margins
-        $margins = $this->setCellMargin(0);
-
-        // get values
-        $title = $this->getTitle() ?: '';
-        $company = $this->getCompanyName() ?: '';
-
-        // title or company?
-        if (!empty($title) || !empty($company)) {
-            // cells width
-            $cellWidth = $this->getPrintableWidth() / 2;
-
-            // title
-            $style->setFontBold()
-                ->setFontSize(10)
-                ->apply($this);
-            $this->Cell($cellWidth, self::LINE_HEIGHT, $title, self::BORDER_BOTTOM, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
-
-            // company name and web site
-            $style->setFontBold()
-                ->setFontSize(8)
-                ->apply($this);
-            $url = $this->getCompanyUrl() ?: '';
-            $this->Cell($cellWidth, self::LINE_HEIGHT, $company, self::BORDER_BOTTOM, self::MOVE_TO_RIGHT, self::ALIGN_RIGHT, false, $url);
-
-            $this->Ln();
-        }
-
-        // description
-        $description = $this->getDescription() ?: '';
-        if (!empty($description)) {
-            $style->reset()
-                ->setFontSize(8)
-                ->apply($this);
-            $this->Cell($this->getPrintableWidth(), self::LINE_HEIGHT, $description);
-            $this->Ln();
-        }
-
-        // reset
-        $this->setCellMargin($margins);
-        $style->reset()->apply($this);
-        $this->Ln(3);
+        $this->header->apply($this);
     }
 
     /**
@@ -791,18 +670,6 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Sets the application name.
-     *
-     * @param string $applicationName
-     */
-    public function setApplicationName(?string $applicationName): self
-    {
-        $this->applicationName = (string) $applicationName;
-
-        return $this;
-    }
-
-    /**
      * Sets the cell margins. The minimum value allowed is 0.
      *
      * @param float $margin
@@ -819,53 +686,21 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     }
 
     /**
-     * Sets the company address.
+     * Sets the footer.
      */
-    public function setCompanyAddress(?string $companyAddress): self
+    public function setFooter(PdfFooter $footer): self
     {
-        $this->companyAddress = (string) $companyAddress;
+        $this->footer = $footer;
 
         return $this;
     }
 
     /**
-     * Sets the company name.
+     * Sets the header.
      */
-    public function setCompanyName(?string $companyName): self
+    public function setHeader(PdfHeader $header): self
     {
-        $this->companyName = (string) $companyName;
-
-        return $this;
-    }
-
-    /**
-     * Sets the company web site.
-     */
-    public function setCompanyUrl(?string $companyUrl): self
-    {
-        $this->companyUrl = (string) $companyUrl;
-
-        return $this;
-    }
-
-    /**
-     * Sets the document description.
-     */
-    public function setDescription(?string $description): self
-    {
-        $this->description = (string) $description;
-
-        return $this;
-    }
-
-    /**
-     * Sets the owner web site.
-     *
-     * @param string $ownerUrl
-     */
-    public function setOwnerUrl(?string $ownerUrl): self
-    {
-        $this->ownerUrl = $ownerUrl;
+        $this->header = $header;
 
         return $this;
     }

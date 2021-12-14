@@ -121,7 +121,7 @@ class LogReport extends AbstractArrayReport implements PdfCellListenerInterface
         $file = $this->trans('log.list.file', [
             '%file%' => $entities['file'],
         ]);
-        $this->setDescription($file);
+        $this->header->setDescription($file);
 
         // new page
         $this->AddPage();

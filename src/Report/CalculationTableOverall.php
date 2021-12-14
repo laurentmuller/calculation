@@ -17,8 +17,8 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
+use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Table to render the overall totals of a calculation.
@@ -27,11 +27,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationTableOverall extends PdfTableBuilder
 {
+    use TranslatorTrait;
+
     private Calculation $calculation;
 
     private float $minMargin;
-
-    private TranslatorInterface $translator;
 
     /**
      * Constructor.
@@ -129,13 +129,5 @@ class CalculationTableOverall extends PdfTableBuilder
         $table->output();
 
         return $table;
-    }
-
-    private function trans(string $id): string
-    {
-        /** @var CalculationReport $parent */
-        $parent = $this->getParent();
-
-        return $parent->trans($id);
     }
 }

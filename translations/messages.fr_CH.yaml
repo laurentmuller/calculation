@@ -792,7 +792,7 @@ parameters:
         print_address: Imprimer l'adresse
     helps:
         qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
-        print_address: Imprimer l'adresse complète dans les documents PDF.
+        print_address: L'adresse du client est imprimée sur les entêtes des documents PDF.
 clear_cache:
     title: Vider le cache
     message: Êtes-vous sûr de vouloir vider le cache de l'application ?

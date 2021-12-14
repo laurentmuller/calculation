@@ -55,20 +55,22 @@ abstract class AbstractReport extends PdfDocument
         $application = $controller->getApplication();
         $appName = $controller->getApplicationName();
 
+        // meta-data
         $this->SetCreator($appName);
-        $this->setApplicationName($appName)
-            ->setOwnerUrl($controller->getApplicationOwnerUrl())
-            ->setCompanyUrl($application->getCustomerUrl())
-            ->setCompanyName($application->getCustomerName());
-
-        if ($application->isPrintAddress()) {
-            $this->setCompanyAddress($application->getCustomerAddress());
-        }
-
-        $userName = $controller->getUserName();
-        if (null !== $userName) {
+        if (null !== $userName = $controller->getUserName()) {
             $this->SetAuthor($userName);
         }
+
+        // header
+        $this->header->setCompanyName($application->getCustomerName())
+            ->setCompanyUrl($application->getCustomerUrl());
+        if ($application->isPrintAddress()) {
+            $this->header->setCompanyAddress($application->getCustomerAddress());
+        }
+
+        // footer
+        $this->footer->setApplicationName($appName)
+            ->setOwnerUrl($controller->getApplicationOwnerUrl());
     }
 
     /**
@@ -142,9 +144,8 @@ abstract class AbstractReport extends PdfDocument
     public function setTitleTrans(string $id, array $parameters = [], $isUTF8 = false): self
     {
         $title = $this->trans($id, $parameters);
-        $this->SetTitle($title, $isUTF8);
 
-        return $this;
+        return $this->SetTitle($title, $isUTF8);
     }
 
     /**

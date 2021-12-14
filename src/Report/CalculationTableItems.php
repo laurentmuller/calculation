@@ -20,6 +20,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
+use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
 
 /**
@@ -29,6 +30,8 @@ use App\Util\FormatUtils;
  */
 class CalculationTableItems extends PdfGroupTableBuilder
 {
+    use TranslatorTrait;
+
     /**
      * The categories and items indent.
      */
@@ -46,6 +49,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
     {
         parent::__construct($parent);
         $this->calculation = $parent->getCalculation();
+        $this->translator = $parent->getTranslator();
     }
 
     /**
@@ -148,21 +152,6 @@ class CalculationTableItems extends PdfGroupTableBuilder
         $this->add($item->getDescription(), 1, $style);
 
         return $this;
-    }
-
-    /**
-     * Translate a string.
-     *
-     * @param string $key The key
-     *
-     * @return string The translated key
-     */
-    protected function trans(string $key): string
-    {
-        /** @var AbstractReport $parent */
-        $parent = $this->parent;
-
-        return $parent->trans($key);
     }
 
     /**

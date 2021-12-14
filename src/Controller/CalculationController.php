@@ -242,12 +242,7 @@ class CalculationController extends AbstractEntityController
      */
     public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
     {
-        $qrcode = null;
-        if ($this->getApplication()->isQrCode()) {
-            $name = 'calculation_show';
-            $parameters = ['id' => (int) $calculation->getId()];
-            $qrcode = $generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-        }
+        $qrcode = $this->getQrCode($generator, $calculation);
         $doc = new CalculationReport($this, $calculation, $qrcode);
         $doc->setLogger($logger);
 
@@ -389,6 +384,21 @@ class CalculationController extends AbstractEntityController
     {
         $this->service->updateTotal($item);
         parent::saveToDatabase($item);
+    }
+
+    /**
+     * Gets the QR-code for the given calculation.
+     */
+    private function getQrCode(UrlGeneratorInterface $generator, Calculation $calculation): ?string
+    {
+        if ($this->getApplication()->isQrCode()) {
+            $name = 'calculation_show';
+            $parameters = ['id' => (int) $calculation->getId()];
+
+            return $generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+        }
+
+        return null;
     }
 
     /**

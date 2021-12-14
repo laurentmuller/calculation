@@ -103,8 +103,8 @@ class CalculationBelowController extends AbstractController
         $description = $this->trans('below.description', ['%margin%' => $percent]);
 
         $doc = new CalculationsReport($this, $items);
-        $doc->setTitleTrans('below.title')
-            ->setDescription($description);
+        $doc->setTitleTrans('below.title');
+        $doc->getHeader()->setDescription($description);
 
         return $this->renderPdfDocument($doc);
     }

@@ -40,6 +40,14 @@ class CalculationUpdater
     use SessionTrait;
     use TranslatorTrait;
 
+    private const KEY_CLOSE_CALCULATIONS = 'calculation.update.closeCalculations';
+    private const KEY_COPY_CODE = 'calculation.update.copyCodes';
+    private const KEY_DUPLICATE_ITEMS = 'calculation.update.duplicateItems';
+    private const KEY_EMPTY_CALCULATIONS = 'calculation.update.emptyCalculations';
+    private const KEY_EMPTY_ITEMS = 'calculation.update.emptyItems';
+    private const KEY_SIMULATE = 'calculation.update.simulated';
+    private const KEY_SORT_ITEMS = 'calculation.update.sortItems';
+
     private FormFactoryInterface $factory;
     private SuspendEventListenerService $listener;
     private EntityManagerInterface $manager;
@@ -135,13 +143,13 @@ class CalculationUpdater
     public function createUpdateQuery(): CalculationUpdateQuery
     {
         $query = new CalculationUpdateQuery();
-        $query->setCloseCalculations($this->isSessionBool('calculation.update.closeCalculations', false))
-            ->setEmptyCalculations($this->isSessionBool('calculation.update.emptyCalculations', true))
-            ->setEmptyItems($this->isSessionBool('calculation.update.emptyItems', true))
-            ->setDuplicateItems($this->isSessionBool('calculation.update.duplicateItems', false))
-            ->setSortItems($this->isSessionBool('calculation.update.sortItems', true))
-            ->setCopyCodes($this->isSessionBool('calculation.update.copyCodes', true))
-            ->setSimulate($this->isSessionBool('calculation.update.simulate', true));
+        $query->setCloseCalculations($this->isSessionBool(self::KEY_CLOSE_CALCULATIONS, false))
+            ->setEmptyCalculations($this->isSessionBool(self::KEY_EMPTY_CALCULATIONS, true))
+            ->setEmptyItems($this->isSessionBool(self::KEY_EMPTY_ITEMS, true))
+            ->setDuplicateItems($this->isSessionBool(self::KEY_DUPLICATE_ITEMS, false))
+            ->setSortItems($this->isSessionBool(self::KEY_SORT_ITEMS, true))
+            ->setCopyCodes($this->isSessionBool(self::KEY_COPY_CODE, true))
+            ->setSimulate($this->isSessionBool(self::KEY_SIMULATE, true));
 
         return $query;
     }
@@ -173,15 +181,15 @@ class CalculationUpdater
     public function saveUpdateQuery(CalculationUpdateQuery $query): void
     {
         $this->setSessionValues([
-            'calculation.update.closeCalculations' => $query->isCloseCalculations(),
-            'calculation.update.emptyCalculations' => $query->isEmptyCalculations(),
+            self::KEY_CLOSE_CALCULATIONS => $query->isCloseCalculations(),
+            self::KEY_EMPTY_CALCULATIONS => $query->isEmptyCalculations(),
 
-            'calculation.update.emptyItems' => $query->isEmptyItems(),
-            'calculation.update.sortItems' => $query->isSortItems(),
-            'calculation.update.duplicateItems' => $query->isDuplicateItems(),
-            'calculation.update.copyCodes' => $query->isCopyCodes(),
+            self::KEY_EMPTY_ITEMS => $query->isEmptyItems(),
+            self::KEY_SORT_ITEMS => $query->isSortItems(),
+            self::KEY_DUPLICATE_ITEMS => $query->isDuplicateItems(),
+            self::KEY_COPY_CODE => $query->isCopyCodes(),
 
-            'calculation.update.simulate' => $query->isSimulate(),
+            self::KEY_SIMULATE => $query->isSimulate(),
         ]);
     }
 

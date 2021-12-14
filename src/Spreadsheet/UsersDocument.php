@@ -14,8 +14,8 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
-use App\Util\Utils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
@@ -29,6 +29,8 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  */
 class UsersDocument extends AbstractArrayDocument
 {
+    use RoleTranslatorTrait;
+
     /**
      * The mapping factory.
      */
@@ -91,7 +93,7 @@ class UsersDocument extends AbstractArrayDocument
             $this->setRowValues($row, [
                 $entity->getUsername(),
                 $entity->getEmail(),
-                Utils::translateRole($this->translator, $entity),
+                $this->translateRole($entity),
                 $entity->isEnabled(),
                 $this->formatLastLogin($entity->getLastLogin()),
             ]);

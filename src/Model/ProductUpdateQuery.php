@@ -38,7 +38,7 @@ class ProductUpdateQuery
     private float $percent = 0;
     private array $products = [];
     private bool $round = false;
-    private bool $simulated = true;
+    private bool $simulate = true;
     private string $type = self::UPDATE_PERCENT;
 
     /**
@@ -150,9 +150,9 @@ class ProductUpdateQuery
     /**
      * Returns a value indicating if the update is simulated (no flush changes in the database).
      */
-    public function isSimulated(): bool
+    public function isSimulate(): bool
     {
-        return $this->simulated;
+        return $this->simulate;
     }
 
     /**
@@ -220,9 +220,9 @@ class ProductUpdateQuery
     /**
      * Sets a value indicating if the update is simulated (no flush changes in the database).
      */
-    public function setSimulated(bool $simulated): self
+    public function setSimulate(bool $simulate): self
     {
-        $this->simulated = $simulated;
+        $this->simulate = $simulate;
 
         return $this;
     }

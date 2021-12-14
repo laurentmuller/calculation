@@ -38,6 +38,7 @@ use App\Service\IpStackService;
 use App\Service\MailService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
+use App\Traits\StrengthTranslatorTrait;
 use App\Translator\TranslatorFactory;
 use App\Util\DateUtils;
 use App\Util\FormatUtils;
@@ -69,6 +70,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TestController extends AbstractController
 {
+    use StrengthTranslatorTrait;
+
     /**
      * Show analog clock.
      *
@@ -128,9 +131,9 @@ class TestController extends AbstractController
 
             try {
                 if ($notification) {
-                    $service->sendNotification($user, $email, $message, $importance);
+                    $service->sendNotification($email, $user, $message, $importance);
                 } else {
-                    $service->sendComment($user, $email, $message, $importance);
+                    $service->sendComment($email, $user, $message, $importance);
                 }
                 $this->succesTrans('user.comment.success');
 
@@ -298,7 +301,7 @@ class TestController extends AbstractController
                 $message .= '<li>';
                 $message .= $this->trans('password.minstrength');
                 $message .= ' : ';
-                $message .= Utils::translateLevel($this->translator, $data['minstrength']);
+                $message .= $this->translateLevel($data['minstrength']);
                 $message .= '</li>';
             }
 
@@ -323,7 +326,7 @@ class TestController extends AbstractController
             'message' => 'My message',
         ];
 
-        $recaptcha_action = 'login';
+        $action = 'login';
         $helper = $this->createFormHelper('user.fields.', $data);
         $helper->getBuilder()->setAttribute('block_name', '');
 
@@ -347,7 +350,7 @@ class TestController extends AbstractController
 
             // verify
             $recaptcha = new ReCaptcha($secret);
-            $recaptcha->setExpectedAction($recaptcha_action)
+            $recaptcha->setExpectedAction($action)
                 ->setExpectedHostname($hostname)
                 ->setChallengeTimeout(60)
                 ->setScoreThreshold(0.5);
@@ -389,7 +392,7 @@ class TestController extends AbstractController
 
         return $this->renderForm('test/recaptcha.html.twig', [
             'form' => $form,
-            'recaptcha_action' => $recaptcha_action,
+            'recaptcha_action' => $action,
         ]);
     }
 

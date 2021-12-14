@@ -13,11 +13,8 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Entity\Calculation;
-use App\Interfaces\RoleInterface;
-use App\Model\Role;
 use App\Util\Utils;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Unit test for {@link App\Util\Utils} class.
@@ -181,19 +178,6 @@ class UtilsTest extends TestCase
         ];
     }
 
-    public function getTranslateRoles(): array
-    {
-        return [
-            [RoleInterface::ROLE_USER, 'user'],
-            [RoleInterface::ROLE_ADMIN, 'admin'],
-            [RoleInterface::ROLE_SUPER_ADMIN, 'super_admin'],
-
-            [new Role(RoleInterface::ROLE_USER), 'user'],
-            [new Role(RoleInterface::ROLE_ADMIN), 'admin'],
-            [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'super_admin'],
-        ];
-    }
-
     public function testAccessor(): void
     {
         $accessor = Utils::getAccessor();
@@ -327,46 +311,11 @@ class UtilsTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider getTranslateLevels
-     */
-    public function testTranslateLevel(int $level, string $message): void
-    {
-        $translator = $this->getTranslator();
-        $actual = Utils::translateLevel($translator, $level);
-        $expected = "password.strength_level.$message";
-        $this->assertEquals($actual, $expected);
-    }
-
-    /**
-     * @param string|RoleInterface $role the role to translate
-     *
-     * @dataProvider getTranslateRoles
-     */
-    public function testTranslateRole($role, string $message): void
-    {
-        $translator = $this->getTranslator();
-        $actual = Utils::translateRole($translator, $role);
-        $expected = "user.roles.$message";
-        $this->assertEquals($actual, $expected);
-    }
-
     private function createData(int $value, string $string): \stdClass
     {
         return (object) [
             'value' => $value,
             'string' => $string,
         ];
-    }
-
-    private function getTranslator(): TranslatorInterface
-    {
-        $translator = $this->getMockBuilder(TranslatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $translator->method('trans')
-            ->willReturn($this->returnArgument(0));
-
-        return $translator;
     }
 }

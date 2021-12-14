@@ -51,14 +51,14 @@ class MailService
      *
      * @throws TransportExceptionInterface if an exception occurs while sending the comment
      */
-    public function sendComment(User $user, string $email, string $message, string $importance): void
+    public function sendComment(string $fromEmail, User $toUser, string $message, string $importance = NotificationEmail::IMPORTANCE_LOW): void
     {
         $importance = $this->trans("importance.full.$importance");
         $message = "<p style=\"font-weight: bold;\">$importance</p>$message";
 
         $comment = new Comment(true);
-        $comment->setFromAddress($email)
-            ->setToAddress($user)
+        $comment->setFromAddress($fromEmail)
+            ->setToAddress($toUser)
             ->setSubject($this->trans('user.comment.title'))
             ->setMessage($message);
         $comment->send($this->mailer);
@@ -69,11 +69,11 @@ class MailService
      *
      * @throws TransportExceptionInterface if an exception occurs while sending the notification
      */
-    public function sendNotification(User $user, string $email, string $message, string $importance): void
+    public function sendNotification(string $fromEmail, User $toUser, string $message, string $importance = NotificationEmail::IMPORTANCE_LOW): void
     {
         $notification = new NotificationEmail($this->translator);
-        $notification->from($email)
-            ->to($user->getAddress())
+        $notification->from($fromEmail)
+            ->to($toUser->getAddress())
             ->importance($importance)
             ->subject($this->trans('user.comment.title'))
             ->markdown($this->convert($message))

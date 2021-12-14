@@ -17,7 +17,7 @@ use App\Interfaces\EntityVoterInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Security\EntityVoter;
-use App\Util\Utils;
+use App\Traits\RoleTranslatorTrait;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -27,6 +27,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  */
 class UserRightsDocument extends AbstractArrayDocument
 {
+    use RoleTranslatorTrait;
+
     /**
      * The attribute names.
      */
@@ -131,7 +133,7 @@ class UserRightsDocument extends AbstractArrayDocument
      */
     private function getEntityName(RoleInterface $entity): string
     {
-        $role = Utils::translateRole($this->translator, $entity);
+        $role = $this->translateRole($entity);
         $description = $this->trans('user.fields.role') . ' ';
 
         if ($entity instanceof Role) {

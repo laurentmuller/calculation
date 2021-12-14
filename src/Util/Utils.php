@@ -12,12 +12,9 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-use App\Interfaces\RoleInterface;
-use App\Interfaces\StrengthInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\String\UnicodeString;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Utility class for strings and sort.
@@ -406,44 +403,6 @@ final class Utils
     public static function toString($var): string
     {
         return \is_string($var) ? $var : (string) $var;
-    }
-
-    /**
-     * Translate a password strength level.
-     *
-     * @param TranslatorInterface $translator the translator
-     * @param int                 $level      the strength level (-1 to 4) to translate
-     *
-     * @return string the translated level
-     */
-    public static function translateLevel(TranslatorInterface $translator, int $level): string
-    {
-        if ($level <= StrengthInterface::LEVEL_NONE) {
-            $level = StrengthInterface::LEVEL_NONE;
-        } elseif ($level >= StrengthInterface::LEVEL_MAX) {
-            $level = StrengthInterface::LEVEL_MAX;
-        }
-        $id = StrengthInterface::LEVEL_TO_LABEL[$level];
-
-        return $translator->trans($id);
-    }
-
-    /**
-     * Translate the given role.
-     *
-     * @param TranslatorInterface  $translator the translator
-     * @param string|RoleInterface $role       the role to translate
-     *
-     * @return string the translated role
-     */
-    public static function translateRole(TranslatorInterface $translator, $role): string
-    {
-        if ($role instanceof RoleInterface) {
-            $role = $role->getRole();
-        }
-        $role = \strtolower(\str_replace('ROLE_', 'user.roles.', $role));
-
-        return $translator->trans($role);
     }
 
     /**

@@ -47,6 +47,13 @@ class ProductUpdater
     use SessionTrait;
     use TranslatorTrait;
 
+    private const KEY_CATEGORY = 'product.update.category';
+    private const KEY_FIXED = 'product.update.fixed';
+    private const KEY_PERCENT = 'product.update.percent';
+    private const KEY_ROUND = 'product.update.round';
+    private const KEY_SIMULATE = 'product.update.simulated';
+    private const KEY_TYPE = 'product.update.type';
+
     private FormFactoryInterface $factory;
     private EntityManagerInterface $manager;
 
@@ -125,15 +132,15 @@ class ProductUpdater
             ->helpClass('ml-4')
             ->addCheckboxType();
 
-        $helper->field('simulated')
-            ->help('product.update.simulated_help')
+        $helper->field('simulate')
+            ->help('product.update.simulate_help')
             ->helpClass('ml-4')
             ->notRequired()
             ->addCheckboxType();
 
         $helper->field('confirm')
             ->updateAttribute('data-error', $this->trans('generate.error.confirm'))
-            ->updateAttribute('disabled', $query->isSimulated() ? 'disabled' : null)
+            ->updateAttribute('disabled', $query->isSimulate() ? 'disabled' : null)
             ->notMapped()
             ->addCheckboxType();
 
@@ -148,18 +155,18 @@ class ProductUpdater
      */
     public function createUpdateQuery(): ProductUpdateQuery
     {
-        $id = $this->getSessionInt('product.update.category', 0);
+        $id = $this->getSessionInt(self::KEY_CATEGORY, 0);
         $category = $this->getCategory($id);
 
         $query = new ProductUpdateQuery();
         $query->setAllProducts(true)
             ->setCategory($category)
             ->setProducts($this->getProducts($category))
-            ->setPercent($this->getSessionFloat('product.update.percent', 0))
-            ->setFixed($this->getSessionFloat('product.update.fixed', 0))
-            ->setType($this->getSessionString('product.update.type', ProductUpdateQuery::UPDATE_PERCENT))
-            ->setRound($this->isSessionBool('product.update.round', false))
-            ->setSimulated($this->isSessionBool('product.update.simulated', true));
+            ->setPercent($this->getSessionFloat(self::KEY_PERCENT, 0))
+            ->setFixed($this->getSessionFloat(self::KEY_FIXED, 0))
+            ->setType($this->getSessionString(self::KEY_TYPE, ProductUpdateQuery::UPDATE_PERCENT))
+            ->setSimulate($this->isSessionBool(self::KEY_SIMULATE, true))
+            ->setRound($this->isSessionBool(self::KEY_ROUND, false));
 
         return $query;
     }
@@ -184,14 +191,15 @@ class ProductUpdater
     public function saveUpdateQuery(ProductUpdateQuery $query): void
     {
         $percent = $query->isPercent();
-        $key = $percent ? 'product.update.percent' : 'product.update.fixed';
-        $value = $percent ? ProductUpdateQuery::UPDATE_PERCENT : ProductUpdateQuery::UPDATE_FIXED;
+        $type = $percent ? ProductUpdateQuery::UPDATE_PERCENT : ProductUpdateQuery::UPDATE_FIXED;
+        $key = $percent ? self::KEY_PERCENT : self::KEY_FIXED;
 
         $this->setSessionValues([
-            'product.update.category' => $query->getCategoryId(),
-            'product.update.simulated' => $query->isSimulated(),
-            'product.update.round' => $query->isRound(),
-            $key => $value,
+            self::KEY_CATEGORY => $query->getCategoryId(),
+            self::KEY_SIMULATE => $query->isSimulate(),
+            self::KEY_ROUND => $query->isRound(),
+            self::KEY_TYPE => $type,
+            $key => $query->getValue(),
         ]);
     }
 
@@ -223,7 +231,7 @@ class ProductUpdater
             ]);
         }
 
-        if (!$query->isSimulated() && $result->isValid()) {
+        if (!$query->isSimulate() && $result->isValid()) {
             // save
             $this->manager->flush();
             $this->logResult($result);

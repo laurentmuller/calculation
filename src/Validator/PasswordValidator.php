@@ -12,8 +12,9 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
+use App\Interfaces\StrengthInterface;
+use App\Traits\StrengthTranslatorTrait;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
@@ -27,7 +28,7 @@ use ZxcvbnPhp\Zxcvbn;
  */
 class PasswordValidator extends AbstractConstraintValidator
 {
-    private TranslatorInterface $translator;
+    use StrengthTranslatorTrait;
 
     /**
      * Constructor.
@@ -116,11 +117,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkCaseDiff(Password $constraint, string $value): bool
     {
-        if ($constraint->casediff && !\preg_match('/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u', $value)) {
-            return $this->addViolation($constraint->casediffMessage, $value);
-        }
-
-        return false;
+        return $this->validateRegex($constraint->casediff, '/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u', $value, $constraint->casediffMessage);
     }
 
     /**
@@ -150,11 +147,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkLetters(Password $constraint, string $value): bool
     {
-        if ($constraint->letters && !\preg_match('/\pL/u', $value)) {
-            return $this->addViolation($constraint->lettersMessage, $value);
-        }
-
-        return false;
+        return $this->validateRegex($constraint->letters, '/\pL/u', $value, $constraint->lettersMessage);
     }
 
     /**
@@ -167,11 +160,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkNumber(Password $constraint, string $value): bool
     {
-        if ($constraint->numbers && !\preg_match('/\pN/u', $value)) {
-            return $this->addViolation($constraint->numbersMessage, $value);
-        }
-
-        return false;
+        return $this->validateRegex($constraint->numbers, '/\pN/u', $value, $constraint->numbersMessage);
     }
 
     /**
@@ -205,11 +194,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkSpecialChar(Password $constraint, string $value): bool
     {
-        if ($constraint->specialchar && !\preg_match('/[^p{Ll}\p{Lu}\pL\pN]/u', $value)) {
-            return $this->addViolation($constraint->specialcharMessage, $value);
-        }
-
-        return false;
+        return $this->validateRegex($constraint->specialchar, '/[^p{Ll}\p{Lu}\pL\pN]/u', $value, $constraint->specialcharMessage);
     }
 
     /**
@@ -222,13 +207,13 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkStrength(Password $constraint, string $value): bool
     {
-        if ($constraint->minstrength >= 0) {
-            $zx = new Zxcvbn();
-            $strength = $zx->passwordStrength($value);
+        if ($constraint->minstrength > StrengthInterface::LEVEL_NONE) {
+            $zxcvbn = new Zxcvbn();
+            $strength = $zxcvbn->passwordStrength($value);
             $score = $strength['score'];
             if ($score < $constraint->minstrength) {
-                $strength_min = Utils::translateLevel($this->translator, $constraint->minstrength);
-                $strength_current = Utils::translateLevel($this->translator, $score);
+                $strength_min = $this->translateLevel($constraint->minstrength);
+                $strength_current = $this->translateLevel($score);
                 $parameters = [
                     '{{strength_min}}' => $strength_min,
                     '{{strength_current}}' => $strength_current,
@@ -255,7 +240,7 @@ class PasswordValidator extends AbstractConstraintValidator
         $hashPrefix = \substr($hash, 0, 5);
 
         // load
-        $url = "https://api.pwnedpasswords.com/range/{$hashPrefix}";
+        $url = \sprintf('https://api.pwnedpasswords.com/range/%s', $hashPrefix);
         $lines = \file($url, \FILE_IGNORE_NEW_LINES | \FILE_SKIP_EMPTY_LINES);
         if (empty($lines)) {
             return 0;
@@ -270,5 +255,14 @@ class PasswordValidator extends AbstractConstraintValidator
         }
 
         return 0;
+    }
+
+    private function validateRegex(bool $apply, string $pattern, string $value, string $message): bool
+    {
+        if ($apply && !\preg_match($pattern, $value)) {
+            return $this->addViolation($message, $value);
+        }
+
+        return false;
     }
 }

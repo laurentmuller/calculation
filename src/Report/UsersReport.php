@@ -20,9 +20,9 @@ use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
+use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -33,6 +33,8 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  */
 class UsersReport extends AbstractArrayReport
 {
+    use RoleTranslatorTrait;
+
     /**
      * The mapping factory.
      */
@@ -93,7 +95,7 @@ class UsersReport extends AbstractArrayReport
             $enabled = $entity->isEnabled();
             $style = $enabled ? $enabledStyle : $disabledStyle;
             $text = $this->booleanFilter($enabled, 'common.value_enabled', 'common.value_disabled', true);
-            $role = Utils::translateRole($this->translator, $entity->getRole());
+            $role = $this->translateRole($entity->getRole());
             $cell = $this->getImageCell($entity);
 
             $table->startRow()

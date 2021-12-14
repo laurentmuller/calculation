@@ -336,8 +336,8 @@ product:
         fixed_help: 'Example : 50.00 + 12.00 = 62.00'
         round: Arrondir au 5 centimes
         round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
-        simulated: Simuler la mise à jour
-        simulated_help: Simule une mise à jour sans enregister les changements dans la base de données.
+        simulate: Simuler la mise à jour
+        simulate_help: Simule une mise à jour sans enregister les changements dans la base de données.
         confirm: Confirmer la mise à jour des données
         last_update: 'Dernière mise à jour : %date%'
         allProducts: Mettre à jour tous les articles

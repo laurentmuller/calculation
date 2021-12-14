@@ -53,9 +53,9 @@ class SearchTraitTest extends TestCase
      */
     public function testMatch(string $term, string $query, bool $expected = true): void
     {
-        $c = new Customer();
-        $c->setCompany($term);
-        $result = $c->match($query);
+        $customer = new Customer();
+        $customer->setCompany($term);
+        $result = $customer->match($query);
         $this->assertEquals($expected, $result);
     }
 }

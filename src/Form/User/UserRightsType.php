@@ -14,8 +14,7 @@ namespace App\Form\User;
 
 use App\Entity\User;
 use App\Form\FormHelper;
-use App\Traits\TranslatorTrait;
-use App\Util\Utils;
+use App\Traits\RoleTranslatorTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -27,7 +26,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserRightsType extends RightsType
 {
-    use TranslatorTrait;
+    use RoleTranslatorTrait;
 
     /**
      * Constructor.
@@ -60,18 +59,6 @@ class UserRightsType extends RightsType
         $enabled = \filter_var($enabled, \FILTER_VALIDATE_BOOLEAN);
 
         return $this->trans($enabled ? 'common.value_enabled' : 'common.value_disabled');
-    }
-
-    /**
-     * Translate the given role.
-     *
-     * @param string $role the role name
-     *
-     * @return string the translated role
-     */
-    public function translateRole(string $role): string
-    {
-        return Utils::translateRole($this->translator, $role);
     }
 
     /**

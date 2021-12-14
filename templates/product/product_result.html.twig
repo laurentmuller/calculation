@@ -32,7 +32,7 @@
     {% endif %}
 </table>
 {% if result.valid %}
-    {% if query.simulated %}
+    {% if query.simulate %}
         <p class="mb-0 text-right text-muted small">{{ 'product.result.simulated'|trans }}</p>
     {% endif %}
 {% else %}
@@ -49,13 +49,13 @@
             </div>
             <div class="modal-body">
                 <p class="mb-2 font-weight-bold">{{ 'product.result.updated'|trans }}</p>
-                <div class="overflow-auto" style="max-height: 209px;">
-                    <table class="table table-hover table-sm border-bottom mb-0">
+                <div class="overflow-auto border-bottom" style="max-height: 209px;">
+                    <table class="table table-hover table-list table-sm">
                         <thead>
                             <tr>
-                                <th class="font-weight-normal">{{ 'product.fields.description'|trans }}</th>
-                                <th class="font-weight-normal text-currency">{{ 'product.result.old_price'|trans }}</th>
-                                <th class="font-weight-normal text-currency">{{ 'product.result.new_price'|trans }}</th>
+                                <th>{{ 'product.fields.description'|trans }}</th>
+                                <th class="text-currency">{{ 'product.result.old_price'|trans }}</th>
+                                <th class="text-currency">{{ 'product.result.new_price'|trans }}</th>
                             </tr>
                         </thead>
                         <tbody>

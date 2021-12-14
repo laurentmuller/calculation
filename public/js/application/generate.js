@@ -4,11 +4,12 @@
 
 /**
  * Creates a row for the given values.
- * 
+ *
  * @param {array}
  *            values - the cell values.
  * @param {array}
- *            classes - the cell classes. This array must have the same length as the values.
+ *            classes - the cell classes. This array must have the same length
+ *            as the values.
  * @returns {jQuery} the created row.
  */
 function createRow(values, classes) {
@@ -25,7 +26,7 @@ function createRow(values, classes) {
 
 /**
  * Creates rows for the given items.
- * 
+ *
  * @param {array}
  *            items - the items to render.
  * @param {function}
@@ -34,11 +35,16 @@ function createRow(values, classes) {
  *            classes - the cell classes.
  * @param {function}
  *            rowCallback - the optional function to update the row.
+ * @param {string}
+ *            header - the table headers to display.
  */
-function createRows(items, valuesCallback, classes, rowCallback) {
+function createRows(items, valuesCallback, classes, rowCallback, headers) {
     'use strict';
 
-    const $body = $('<tbody/>');
+    // build
+    const $body = $('<tbody/>', {
+        'id': 'result'
+    });
     items.forEach(function (item) {
         const values = valuesCallback(item);
         const $row = createRow(values, classes);
@@ -47,12 +53,19 @@ function createRows(items, valuesCallback, classes, rowCallback) {
         }
         $body.append($row);
     });
-    $('#result').html($body);
+    $('#result').replaceWith($body);
+
+    // update displayed headers
+    $('#result').parents('table').find('thead').each(function () {
+        const $this = $(this);
+        $this.toggleClass('d-none', !$this.hasClass(headers));
+    });
+
 }
 
 /**
  * Fill the table with the generated calculations
- * 
+ *
  * @param {array}
  *            items - the calculations to render.
  */
@@ -67,12 +80,12 @@ function renderCalculations(items) {
         $cell[0].style.setProperty('border-left-color', item.color, 'important');
     };
     const classes = ['text-id text-border', 'text-date', 'text-state', '', '', 'text-percent', 'text-currency'];
-    createRows(items, valuesCallback, classes, rowCallback);
+    createRows(items, valuesCallback, classes, rowCallback, 'calculation');
 }
 
 /**
  * Fill the table with the generated customers
- * 
+ *
  * @param {array}
  *            items - the customers to render.
  */
@@ -83,12 +96,12 @@ function renderCustomers(items) {
         return [item.nameAndCompany, item.address, item.zipCity];
     };
     const classes = ['w-50', 'w-25', 'w-25'];
-    createRows(items, valuesCallback, classes);
+    createRows(items, valuesCallback, classes, null, 'customer');
 }
 
 /**
  * Fill the table with the generated products
- * 
+ *
  * @param {array}
  *            items - the products to render.
  */
@@ -96,15 +109,10 @@ function renderProducts(items) {
     'use strict';
 
     const valuesCallback = function (item) {
-        return [item.description, item.group + ' - ' + item.category, item.price, '/', item.unit];
+        return [item.description, item.group, item.category, item.price, item.unit];
     };
-    const rowCallback = function (item, $row) {
-        if (!item.unit) {
-            $row.find('td:eq(3)').html('');
-        }
-    };
-    const classes = ['w-50', 'w-50', 'text-currency', 'px-0', 'text-unit'];
-    createRows(items, valuesCallback, classes, rowCallback);
+    const classes = ['w-50', 'text-group', 'text-category', 'text-currency', 'text-unit'];
+    createRows(items, valuesCallback, classes, null, 'product');
 }
 
 /**
@@ -137,7 +145,7 @@ function enableButtons() {
 
 /**
  * Notify a message.
- * 
+ *
  * @param {string}
  *            type - the message type.
  * @param {string}

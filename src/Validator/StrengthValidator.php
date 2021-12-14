@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace App\Validator;
 
 use App\Interfaces\StrengthInterface;
-use App\Traits\MathTrait;
-use App\Util\Utils;
+use App\Traits\StrengthTranslatorTrait;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
@@ -28,17 +27,15 @@ use ZxcvbnPhp\Zxcvbn;
  */
 class StrengthValidator extends AbstractConstraintValidator
 {
-    use MathTrait;
-
-    private TranslatorInterface $translator;
+    use StrengthTranslatorTrait;
 
     /**
      * Constructor.
      */
     public function __construct(TranslatorInterface $translator)
     {
-        $this->translator = $translator;
         parent::__construct(Strength::class);
+        $this->translator = $translator;
     }
 
     /**
@@ -48,13 +45,13 @@ class StrengthValidator extends AbstractConstraintValidator
      */
     protected function doValidate(string $value, Constraint $constraint): void
     {
-        if ($constraint->minstrength >= StrengthInterface::LEVEL_MIN) {
+        if ($constraint->minstrength > StrengthInterface::LEVEL_NONE) {
             $zx = new Zxcvbn();
             $strength = $zx->passwordStrength($value);
             $score = $strength['score'];
             if ($score < $constraint->minstrength) {
-                $strength_min = Utils::translateLevel($this->translator, $constraint->minstrength);
-                $strength_current = Utils::translateLevel($this->translator, $score);
+                $strength_min = $this->translateLevel($constraint->minstrength);
+                $strength_current = $this->translateLevel($score);
                 $parameters = [
                     '{{strength_min}}' => $strength_min,
                     '{{strength_current}}' => $strength_current,

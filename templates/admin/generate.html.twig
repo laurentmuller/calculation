@@ -32,19 +32,53 @@
 	<div class="modal-dialog modal-dialog-centered modal-xl">
 		<div class="modal-content">
 			<div class="modal-header">
-                <h5 class="modal-title">{{ title|trans }}</h5>
-                {{ icons.button_close_modal }}
+                <h5 class="modal-title">{{ title|trans }}</h5>{{ icons.button_close_modal }}
             </div>
     		<div class="modal-body">
     			<label class="font-weight-bold">{{ 'generate.result_text'|trans }}</label>
-    			<div id="overflow" class="overflow-auto border-bottom" style="max-height: 308px;">
-    				<table class="table table-hover table-sm mb-0" id="result">
+                <div id="overflow" class="overflow-auto border-bottom" style="max-height: 209px;">
+    				<table class="table table-hover table-list table-sm">
+                        <thead class="d-none calculation">
+                            <tr>
+                                <th class="text-id">{{ 'calculation.fields.id'|trans }}</th>
+                                <th class="text-date">{{ 'calculation.fields.date'|trans }}</th>
+                                <th class="text-state">{{ 'calculation.fields.state'|trans }}</th>
+                                <th>{{ 'calculation.fields.customer'|trans }}</th>
+                                <th>{{ 'calculation.fields.description'|trans }}</th>
+                                <th class="text-percent">{{ 'calculation.fields.margin'|trans }}</th>
+                                <th class="text-currency">{{ 'calculation.fields.total'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <thead class="d-none product">
+                            <tr>
+                                <th class="w-50">{{ 'product.fields.description'|trans }}</th>
+                                <th class="text-group">{{ 'product.fields.group'|trans }}</th>
+                                <th class="text-category">{{ 'product.fields.category'|trans }}</th>
+                                <th class="text-currency">{{ 'product.fields.price'|trans }}</th>
+                                <th class="text-unit">{{ 'product.fields.unit'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <thead class="d-none customer">
+                            <tr>
+                                <th class="w-50">{{ 'customer.fields.nameAndCompany'|trans }}</th>
+                                <th class="w-25">{{ 'customer.fields.address'|trans }}</th>
+                                <th class="w-25">{{ 'customer.fields.zipCity'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="result"></tbody>
     				</table>
     			</div>
-        		<p id="simulated" class="text-muted text-right small mt-2 mb-0 d-none">{{ 'generate.result_simulated'|trans }}</p>
     		</div>
     		<div class="modal-footer">
-                <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">{{ 'common.button_close'|trans }}</button>
+                <div class="row no-gutters w-100">
+                    <div class="col-9">
+                        <p id="simulated" class="small mt-2 mb-0 d-none">{{ 'generate.result_simulated'|trans }}</p>
+                    </div>
+                    <div class="col-3 text-right">
+                        <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">{{ 'common.button_close'|trans }}</button>
+                    </div>
+                </div>
+
             </div>
 		</div>
 	</div>

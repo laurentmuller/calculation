@@ -27,6 +27,6 @@ class MinStrengthType extends AbstractChoiceType
      */
     protected function getChoices(): array
     {
-        return \array_flip(StrengthInterface::LEVEL_TO_LABEL);
+        return \array_flip(StrengthInterface::CHOICE_LEVELS);
     }
 }

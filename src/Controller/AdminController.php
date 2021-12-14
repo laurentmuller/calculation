@@ -271,7 +271,7 @@ class AdminController extends AbstractController
             $result = $updater->update($query);
 
             // update last date
-            if (!$query->isSimulated() && $result->isValid()) {
+            if (!$query->isSimulate() && $result->isValid()) {
                 $application->setProperties([ApplicationServiceInterface::P_UPDATE_PRODUCTS => new \DateTime()]);
             }
 

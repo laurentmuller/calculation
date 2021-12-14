@@ -14,6 +14,7 @@ namespace App\BootstrapTable;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Traits\RoleTranslatorTrait;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -27,10 +28,7 @@ use Twig\Environment;
  */
 class UserTable extends AbstractEntityTable
 {
-    /**
-     * The translator.
-     */
-    private TranslatorInterface $translator;
+    use RoleTranslatorTrait;
 
     /**
      * The template renderer.
@@ -103,7 +101,7 @@ class UserTable extends AbstractEntityTable
      */
     public function formatRole(string $role): string
     {
-        return Utils::translateRole($this->translator, $role);
+        return $this->translateRole($role);
     }
 
     /**

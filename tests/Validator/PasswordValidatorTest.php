@@ -37,7 +37,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             ['numbers'],
             ['specialchar'],
             ['pwned'],
-            ['minstrength', StrengthInterface::LEVEL_MAX],
+            ['minstrength', StrengthInterface::LEVEL_VERY_STRONG],
         ];
     }
 
@@ -66,11 +66,11 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         return [
             ['ABCabc', ['casediff' => true]],
             ['test', ['email' => true]],
-            ['123*9-*55sA', ['minstrength' => 0]],
-            ['123*9-*55sA', ['minstrength' => 1]],
-            ['123*9-*55sA', ['minstrength' => 2]],
-            ['123*9-*55sA', ['minstrength' => 3]],
-            ['123*9-*55sA', ['minstrength' => 4]],
+            ['123*9-*55sA', ['minstrength' => StrengthInterface::LEVEL_VERY_WEEK]],
+            ['123*9-*55sA', ['minstrength' => StrengthInterface::LEVEL_WEEK]],
+            ['123*9-*55sA', ['minstrength' => StrengthInterface::LEVEL_MEDIUM]],
+            ['123*9-*55sA', ['minstrength' => StrengthInterface::LEVEL_STRONG]],
+            ['123*9-*55sA', ['minstrength' => StrengthInterface::LEVEL_VERY_STRONG]],
             ['abc', ['letters' => true]],
             ['123', ['numbers' => true]],
             ['123*9-*55sA', ['pwned' => true]],

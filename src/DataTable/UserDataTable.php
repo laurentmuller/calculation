@@ -18,7 +18,7 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
-use App\Util\Utils;
+use App\Traits\RoleTranslatorTrait;
 use DataTables\DataTablesInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -35,14 +35,14 @@ use Twig\Environment;
  */
 class UserDataTable extends AbstractEntityDataTable
 {
+    use RoleTranslatorTrait;
+
     /**
      * The datatable identifier.
      */
     public const ID = User::class;
 
     private bool $superAdmin = false;
-
-    private TranslatorInterface $translator;
 
     /**
      * Constructor.
@@ -69,7 +69,7 @@ class UserDataTable extends AbstractEntityDataTable
     {
         $key = $enabled ? 'common.value_enabled' : 'common.value_disabled';
 
-        return $this->translator->trans($key);
+        return $this->trans($key);
     }
 
     /**
@@ -95,7 +95,7 @@ class UserDataTable extends AbstractEntityDataTable
     public function formatLastLogin(?\DateTimeInterface $date): string
     {
         if (null === $date) {
-            return $this->translator->trans('common.value_none');
+            return $this->trans('common.value_none');
         }
 
         return $this->formatDateTime($date);
@@ -110,7 +110,7 @@ class UserDataTable extends AbstractEntityDataTable
      */
     public function formatRole(string $role): string
     {
-        return Utils::translateRole($this->translator, $role);
+        return $this->translateRole($role);
     }
 
     /**

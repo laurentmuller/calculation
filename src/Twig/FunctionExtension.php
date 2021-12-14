@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
-use App\Interfaces\RoleInterface;
 use App\Service\UrlGeneratorService;
+use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
 use App\Util\Utils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
@@ -33,6 +33,8 @@ use Twig\TwigFunction;
  */
 final class FunctionExtension extends AbstractExtension
 {
+    use RoleTranslatorTrait;
+
     /**
      * The asset extension.
      */
@@ -47,11 +49,6 @@ final class FunctionExtension extends AbstractExtension
      * The nonce value.
      */
     private ?string $nonce = null;
-
-    /**
-     * The translator service.
-     */
-    private TranslatorInterface $translator;
 
     /**
      * The real path of the public directory.
@@ -266,6 +263,14 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
+     * Gets the translator.
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
+    /**
      * This filter replaces duplicated spaces and/or linebreaks with single space.
      *
      * It also remove whitespace from the beginning and at the end of the string.
@@ -296,18 +301,6 @@ final class FunctionExtension extends AbstractExtension
     public function routeParams(Request $request, int $id = 0): array
     {
         return $this->generator->routeParams($request, $id);
-    }
-
-    /**
-     * Translate the given role.
-     *
-     * @param string|RoleInterface $role the role to translate
-     *
-     * @return string the translated role
-     */
-    public function translateRole($role): string
-    {
-        return Utils::translateRole($this->translator, $role);
     }
 
     /**

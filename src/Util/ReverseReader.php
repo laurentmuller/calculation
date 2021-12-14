@@ -75,8 +75,6 @@ class ReverseReader
 
     /**
      * Gets the current line.
-     *
-     * @return string|null the line, if any, null otherwise
      */
     public function current(): ?string
     {

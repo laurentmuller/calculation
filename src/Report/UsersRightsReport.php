@@ -22,7 +22,7 @@ use App\Pdf\PdfGroupListenerInterface;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Security\EntityVoter;
-use App\Util\Utils;
+use App\Traits\RoleTranslatorTrait;
 
 /**
  * Report for the list of user rights.
@@ -31,6 +31,8 @@ use App\Util\Utils;
  */
 class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
+    use RoleTranslatorTrait;
+
     /**
      * The attribute names.
      */
@@ -81,7 +83,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $description = $this->translator->trans('user.fields.role') . ' ';
 
         if ($key instanceof Role) {
-            $description .= Utils::translateRole($this->translator, $key);
+            $description .= $this->translateRole($key);
             $parent->singleLine($description, $group->getStyle());
 
             return true;
@@ -90,7 +92,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         if ($key instanceof User) {
             $text = $key->getUsername();
             if ($key->isEnabled()) {
-                $description .= Utils::translateRole($this->translator, $key);
+                $description .= $this->translateRole($key);
             } else {
                 $description .= $this->translator->trans('common.value_disabled');
             }

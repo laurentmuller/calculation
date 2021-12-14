@@ -20,29 +20,44 @@ namespace App\Interfaces;
 interface StrengthInterface
 {
     /**
-     * The maximum strength level.
+     * The map between level values and translatable texts.
      */
-    public const LEVEL_MAX = 4;
+    public const CHOICE_LEVELS = [
+        self::LEVEL_NONE => 'password.strength_level.none',
+        self::LEVEL_VERY_WEEK => 'password.strength_level.very_weak',
+        self::LEVEL_WEEK => 'password.strength_level.weak',
+        self::LEVEL_MEDIUM => 'password.strength_level.medium',
+        self::LEVEL_STRONG => 'password.strength_level.strong',
+        self::LEVEL_VERY_STRONG => 'password.strength_level.very_strong',
+    ];
 
     /**
-     * The minimum strength level.
+     * The medium level.
      */
-    public const LEVEL_MIN = 0;
+    public const LEVEL_MEDIUM = 2;
 
     /**
-     * The strength level indicating no validation.
+     * The no validation level.
      */
     public const LEVEL_NONE = -1;
 
     /**
-     * The map between strength value and strengh text.
+     * The strong level.
      */
-    public const LEVEL_TO_LABEL = [
-        -1 => 'password.strength_level.none',
-        0 => 'password.strength_level.very_weak',
-        1 => 'password.strength_level.weak',
-        2 => 'password.strength_level.medium',
-        3 => 'password.strength_level.strong',
-        4 => 'password.strength_level.very_strong',
-    ];
+    public const LEVEL_STRONG = 3;
+
+    /**
+     * The very stong level.
+     */
+    public const LEVEL_VERY_STRONG = 4;
+
+    /**
+     * The very weak level.
+     */
+    public const LEVEL_VERY_WEEK = 0;
+
+    /**
+     * The weak level.
+     */
+    public const LEVEL_WEEK = 1;
 }

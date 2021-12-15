@@ -19,6 +19,7 @@ use App\Entity\Property;
 use App\Interfaces\ActionInterface;
 use App\Interfaces\ApplicationServiceInterface;
 use App\Interfaces\StrengthInterface;
+use App\Model\CustomerInformation;
 use App\Model\Role;
 use App\Repository\PropertyRepository;
 use App\Security\EntityVoter;
@@ -124,16 +125,18 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     /**
      * Gets the customer informations.
      */
-    public function getCustomer(): array
+    public function getCustomer(): CustomerInformation
     {
-        return [
-            self::P_CUSTOMER_NAME => $this->getCustomerName(),
-            self::P_CUSTOMER_ADDRESS => $this->getCustomerAddress(),
-            self::P_CUSTOMER_PHONE => $this->getCustomerPhone(),
-            self::P_CUSTOMER_FAX => $this->getCustomerFax(),
-            self::P_CUSTOMER_EMAIL => $this->getCustomerEmail(),
-            self::P_CUSTOMER_URL => $this->getCustomerUrl(),
-        ];
+        $info = new CustomerInformation();
+        $info->setName($this->getCustomerName())
+            ->setAddress($this->getCustomerAddress())
+            ->setPhone($this->getCustomerPhone())
+            ->setFax($this->getCustomerFax())
+            ->setEmail($this->getCustomerEmail())
+            ->setUrl($this->getCustomerUrl())
+            ->setPrintAddress($this->isPrintAddress());
+
+        return $info;
     }
 
     /**

@@ -62,15 +62,10 @@ abstract class AbstractReport extends PdfDocument
         }
 
         // header
-        $this->header->setCompanyName($application->getCustomerName())
-            ->setCompanyUrl($application->getCustomerUrl());
-        if ($application->isPrintAddress()) {
-            $this->header->setCompanyAddress($application->getCustomerAddress());
-        }
+        $this->header->setCustomer($application->getCustomer());
 
         // footer
-        $this->footer->setApplicationName($appName)
-            ->setOwnerUrl($controller->getApplicationOwnerUrl());
+        $this->footer->setContent($appName, $controller->getApplicationOwnerUrl());
     }
 
     /**
@@ -137,8 +132,8 @@ abstract class AbstractReport extends PdfDocument
     /**
      * Sets the title to be translated.
      *
-     * @param string $id         the title id (may also be an object that can be cast to string)
-     * @param bool   $isUTF8     true to encode to UTF-8
+     * @param string $id     the title id (may also be an object that can be cast to string)
+     * @param bool   $isUTF8 true to encode to UTF-8
      */
     public function setTitleTrans(string $id, array $parameters = [], $isUTF8 = false, ?string $domain = null, ?string $locale = null): self
     {

@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Model\CustomerInformation;
+use App\Report\AbstractReport;
+
 /**
  * Class to output header in PDF documents.
  *
@@ -20,19 +23,9 @@ namespace App\Pdf;
 class PdfHeader implements PdfDocumentUpdaterInterface, PdfConstantsInterface
 {
     /**
-     * The company address.
+     * The customer information.
      */
-    protected ?string $companyAddress = null;
-
-    /**
-     * The company name.
-     */
-    protected ?string $companyName = null;
-
-    /**
-     * The company web site.
-     */
-    protected ?string $companyUrl = null;
+    protected ?CustomerInformation $customer = null;
 
     /**
      * The document description.
@@ -51,42 +44,32 @@ class PdfHeader implements PdfDocumentUpdaterInterface, PdfConstantsInterface
         // margins
         $margins = $doc->setCellMargin(0);
 
-        // get values
-        $title = $doc->getTitle() ?: '';
-        $company = $this->getCompanyName() ?: '';
-        $address = $this->getCompanyAddress() ?: '';
-        $url = $this->getCompanyUrl() ?: '';
+        // total width
         $printableWidth = $doc->getPrintableWidth();
 
-        // title or company?
-        if (!empty($title) || !empty($company)) {
-            // cells width and border
+        //save position
+        [$x, $y] = $doc->GetXY();
+
+        if ($this->isPrintAddress()) {
+            // name (left) + title(center) + contact(right)
+            $cellWidth = $printableWidth / 3;
+            $this->outputName($doc, $style, $cellWidth);
+            $this->outputTitle($doc, $style, $cellWidth);
+            $this->outputContact($doc, $style, $cellWidth);
+
+            // address (left)
+            $doc->SetXY($x, $y + self::LINE_HEIGHT);
+            $this->outputAddress($doc, $style, $printableWidth);
+        } else {
+            // title(left) + name(right)
             $cellWidth = $printableWidth / 2;
-            $border = empty($address) ? self::BORDER_BOTTOM : self::BORDER_NONE;
-
-            // title
-            $style->setFontBold()->setFontSize(10)->apply($doc);
-            $doc->Cell($cellWidth, self::LINE_HEIGHT, $title, $border, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
-
-            // company name and web site
-            $style->setFontBold()->setFontSize(8)->apply($doc);
-            $doc->Cell($cellWidth, self::LINE_HEIGHT, $company, $border, self::MOVE_TO_RIGHT, self::ALIGN_RIGHT, false, $url);
+            $this->outputTitle($doc, $style, $cellWidth);
+            $this->outputName($doc, $style, $cellWidth);
             $doc->Ln();
-
-            // company address
-            if (!empty($address)) {
-                $style->setFontRegular()->apply($doc);
-                $doc->MultiCell($printableWidth, self::LINE_HEIGHT - 1, $address, self::BORDER_BOTTOM, self::ALIGN_RIGHT, false);
-            }
         }
 
         // description
-        $description = $this->getDescription() ?: '';
-        if (!empty($description)) {
-            $style->reset()->setFontSize(8)->apply($doc);
-            $doc->Cell($printableWidth, self::LINE_HEIGHT, $description);
-            $doc->Ln();
-        }
+        $this->outputDescription($doc, $style, $printableWidth);
 
         // reset
         $doc->setCellMargin($margins);
@@ -94,63 +77,11 @@ class PdfHeader implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     }
 
     /**
-     * Gets the company address.
+     * Sets the customer informations.
      */
-    public function getCompanyAddress(): ?string
+    public function setCustomer(CustomerInformation $customer): self
     {
-        return $this->companyAddress;
-    }
-
-    /**
-     * Gets the company name.
-     */
-    public function getCompanyName(): ?string
-    {
-        return $this->companyName;
-    }
-
-    /**
-     * Gets the company web site.
-     */
-    public function getCompanyUrl(): ?string
-    {
-        return $this->companyUrl;
-    }
-
-    /**
-     * Gets the document description.
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * Sets the company address.
-     */
-    public function setCompanyAddress(?string $companyAddress): self
-    {
-        $this->companyAddress = $companyAddress;
-
-        return $this;
-    }
-
-    /**
-     * Sets the company name.
-     */
-    public function setCompanyName(?string $companyName): self
-    {
-        $this->companyName = $companyName;
-
-        return $this;
-    }
-
-    /**
-     * Sets the company web site.
-     */
-    public function setCompanyUrl(?string $companyUrl): self
-    {
-        $this->companyUrl = $companyUrl;
+        $this->customer = $customer;
 
         return $this;
     }
@@ -163,5 +94,107 @@ class PdfHeader implements PdfDocumentUpdaterInterface, PdfConstantsInterface
         $this->description = $description;
 
         return $this;
+    }
+
+    private function getAddress(): ?string
+    {
+        if ($this->isPrintAddress()) {
+            return $this->customer->getAddress();
+        }
+
+        return null;
+    }
+
+    private function getEmail(): ?string
+    {
+        return null === $this->customer ? null : $this->customer->getEmail();
+    }
+
+    private function getFax(PdfDocument $doc): string
+    {
+        if (null !== $this->customer) {
+            $fax = $this->customer->getFax() ?: '';
+            if ($doc instanceof AbstractReport) {
+                return $doc->trans('report.fax', ['{0}' => $fax]);
+            }
+
+            return "F: $fax";
+        }
+
+        return '';
+    }
+
+    private function getName(): ?string
+    {
+        return null === $this->customer ? null : $this->customer->getName();
+    }
+
+    private function getPhone(PdfDocument $doc): string
+    {
+        if (null !== $this->customer) {
+            $phone = $this->customer->getPhone() ?: '';
+            if ($doc instanceof AbstractReport) {
+                return $doc->trans('report.phone', ['{0}' => $phone]);
+            }
+
+            return "T: $phone";
+        }
+
+        return '';
+    }
+
+    private function getUrl(): ?string
+    {
+        return null === $this->customer ? null : $this->customer->getUrl();
+    }
+
+    private function isPrintAddress(): bool
+    {
+        return null !== $this->customer && $this->customer->isPrintAddress() && !empty($this->customer->getAddress());
+    }
+
+    private function outputAddress(PdfDocument $doc, PdfStyle $style, float $width): void
+    {
+        $style->reset()->setFontSize(8)->apply($doc);
+        $doc->MultiCell($width, self::LINE_HEIGHT - 1, $this->getAddress(), self::BORDER_BOTTOM, self::ALIGN_LEFT, false);
+    }
+
+    private function outputContact(PdfDocument $doc, PdfStyle $style, float $width): void
+    {
+        $phone = $this->getPhone($doc);
+        $fax = $this->getFax($doc);
+        $email = $this->getEmail() ?: '';
+        $text = "$phone\n$fax\n$email";
+        $style->reset()->setFontSize(8)->apply($doc);
+        $doc->MultiCell($width, self::LINE_HEIGHT - 1, $text, self::BORDER_NONE, self::ALIGN_RIGHT, false);
+    }
+
+    private function outputDescription(PdfDocument $doc, PdfStyle $style, float $width): void
+    {
+        if (!empty($this->description)) {
+            $style->reset()->setFontSize(8)->apply($doc);
+            $doc->Cell($width, self::LINE_HEIGHT, $this->description);
+            $doc->Ln();
+        }
+    }
+
+    private function outputName(PdfDocument $doc, PdfStyle $style, float $width): void
+    {
+        $name = $this->getName() ?: '';
+        $address = $this->isPrintAddress();
+        $style->setFontBold()->setFontSize(8)->apply($doc);
+        $align = $address ? self::ALIGN_LEFT : self::ALIGN_RIGHT;
+        $border = $address ? self::BORDER_NONE : self::BORDER_BOTTOM;
+        $doc->Cell($width, self::LINE_HEIGHT, $name, $border, self::MOVE_TO_RIGHT, $align, false, $this->getUrl() ?: '');
+    }
+
+    private function outputTitle(PdfDocument $doc, PdfStyle $style, float $width): void
+    {
+        $title = $doc->getTitle() ?: '';
+        $address = $this->isPrintAddress();
+        $style->setFontBold()->setFontSize(10)->apply($doc);
+        $align = $address ? self::ALIGN_CENTER : self::ALIGN_LEFT;
+        $border = $address ? self::BORDER_NONE : self::BORDER_BOTTOM;
+        $doc->Cell($width, self::LINE_HEIGHT, $title, $border, self::MOVE_TO_RIGHT, $align);
     }
 }

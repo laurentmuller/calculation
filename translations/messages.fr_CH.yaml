@@ -644,6 +644,9 @@ pagination:
     page_next: Page suivante (%page%)
 report:
     other: Autre
+    page: Page {0} / {1}
+    phone: 'T: {0}'
+    fax: 'F: {0}'
     calculation:
         amount: Montant
         margin_amount: Marge (Fr.)

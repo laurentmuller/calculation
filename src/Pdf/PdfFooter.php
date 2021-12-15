@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Report\AbstractReport;
+use App\Util\FormatUtils;
+
 /**
  * Class to output footer in PDF documents.
  *
@@ -20,14 +23,14 @@ namespace App\Pdf;
 class PdfFooter implements PdfDocumentUpdaterInterface, PdfConstantsInterface
 {
     /**
-     * The application name.
+     * The footer text.
      */
-    protected ?string $applicationName = null;
+    protected ?string $text = null;
 
     /**
-     * The owner URL.
+     * The footer URL.
      */
-    protected ?string $ownerUrl = null;
+    protected ?string $url = null;
 
     /**
      * {@inheritDoc}
@@ -46,16 +49,13 @@ class PdfFooter implements PdfDocumentUpdaterInterface, PdfConstantsInterface
         $cellWidth = $doc->getPrintableWidth() / 3;
 
         // pages
-        $text = 'Page ' . $doc->PageNo() . ' / {nb}';
-        $doc->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
+        $doc->Cell($cellWidth, self::LINE_HEIGHT, $this->getPage($doc), self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
 
-        // program and version and owner link (if any)
-        $text = $this->applicationName ?: '';
-        $doc->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_CENTER, false, $this->ownerUrl);
+        // text and url (if any)
+        $doc->Cell($cellWidth, self::LINE_HEIGHT, $this->text ?: '', self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_CENTER, false, $this->url);
 
         // date
-        $text = \date('d.m.Y - H:i');
-        $doc->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_RIGHT);
+        $doc->Cell($cellWidth, self::LINE_HEIGHT, $this->getDate(), self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_RIGHT);
 
         // reset
         $doc->setCellMargin($margins);
@@ -63,38 +63,34 @@ class PdfFooter implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     }
 
     /**
-     * Gets the application name.
+     * Sets the content.
      */
-    public function getApplicationName(): ?string
+    public function setContent(string $text, ?string $url): self
     {
-        return $this->applicationName;
-    }
-
-    /**
-     * Gets the owner URL.
-     */
-    public function getOwnerUrl(): ?string
-    {
-        return $this->ownerUrl;
-    }
-
-    /**
-     * Sets the application name.
-     */
-    public function setApplicationName(?string $applicationName): self
-    {
-        $this->applicationName = $applicationName;
+        $this->text = $text;
+        $this->url = $url;
 
         return $this;
     }
 
     /**
-     * Sets the owner URL.
+     * Gets the current formatted date.
      */
-    public function setOwnerUrl(?string $ownerUrl): self
+    private function getDate(): string
     {
-        $this->ownerUrl = $ownerUrl;
+        return FormatUtils::formatDateTime(new \DateTime(), \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
+    }
 
-        return $this;
+    /**
+     * Gets the formatted current page and total pages.
+     */
+    private function getPage(PdfDocument $doc): string
+    {
+        $page = $doc->PageNo();
+        if ($doc instanceof AbstractReport) {
+            return $doc->trans('report.page', ['{0}' => $page, '{1}' => '{nb}']);
+        }
+
+        return "Page $page / {nb}";
     }
 }

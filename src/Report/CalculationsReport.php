@@ -66,7 +66,9 @@ class CalculationsReport extends AbstractArrayReport
     protected function doRender(array $entities): bool
     {
         // title
-        $this->setTitleTrans('calculation.list.title');
+        if (empty($this->title)) {
+            $this->setTitleTrans('calculation.list.title');
+        }
 
         // new page
         $this->AddPage();
@@ -89,13 +91,18 @@ class CalculationsReport extends AbstractArrayReport
             '%count%' => \count($entities),
         ]);
 
+        $style = null;
+        if (!$this->isFloatZero($margins) && $margins < $this->minMargin) {
+            $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
+        }
+
         $columns = $table->getColumnsCount() - 3;
         $table->getColumns()[0]->setAlignment(PdfConstantsInterface::ALIGN_LEFT)
             ->setFixed(false);
         $table->startHeaderRow()
             ->add($text, $columns)
             ->add(FormatUtils::formatAmount($items))
-            ->add(FormatUtils::formatPercent($margins))
+            ->add(FormatUtils::formatPercent($margins), 1, $style)
             ->add(FormatUtils::formatAmount($overall))
             ->endRow();
 

@@ -5,7 +5,7 @@
 {% macro add_product(item, category_id) -%}
 {%- set product_category_id = item.vars.attr.category -%}
 <tr category="{{ product_category_id }}" class="text-secondary user-select-none{% if product_category_id != category_id %} d-none{% endif %}">
-	<td>{{- form_widget(item, {attr: {'disabled': 'disabled'}}) -}}</td>
+    <td>{{- form_widget(item, {attr: {'disabled': 'disabled'}}) -}}</td>
     <td class="text-currency">{{ item.vars.attr.price|amount }}</td>
     <td class="text-currency">{{ item.vars.attr.price|amount }}</td>
 </tr>
@@ -13,9 +13,9 @@
 
 {% block _form_percent_widget -%}
 <div class="input-group">
-	<div class="input-group-prepend">
-    	<div class="input-group-text">
-        	<input type="radio" id="form_type_percent" name="form_type" class="mr-1"{% if options.is_percent %} checked="checked"{% endif %}>
+    <div class="input-group-prepend">
+        <div class="input-group-text">
+            <input type="radio" id="form_type_percent" name="form_type" class="mr-1"{% if options.is_percent %} checked="checked"{% endif %}>
             <label class="form-check-label" for="form_type_percent">{{ 'product.update.percent'|trans }}</label>
         </div>
     </div>
@@ -79,7 +79,7 @@
             </tr>
         </thead>
         <tbody>
-    	{% for key, item in form.products.children -%}
+        {% for key, item in form.products.children -%}
             {{- _self.add_product(item, category_id) }}
         {%- endfor %}
         </tbody>
@@ -94,7 +94,7 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-	        {{ form_widget(form.fixed, {'attr': fixed_attr, 'options': {'is_percent': is_percent}}) }}
+            {{ form_widget(form.fixed, {'attr': fixed_attr, 'options': {'is_percent': is_percent}}) }}
         </div>
     </div>
 </div>

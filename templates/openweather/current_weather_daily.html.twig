@@ -11,7 +11,7 @@
                 <td class="ow-date">
                     {%- if loop.index == 1 -%}
                         {{- 'openweather.current.today'|trans -}}
-	                {%- else -%}
+                    {%- else -%}
                         {{- data.dt|localedate(pattern='eeee')|capitalize }}
                     {%- endif -%}
                     <br><span class="small text-muted">{{ data.dt_date }}</span>

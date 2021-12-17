@@ -35,7 +35,7 @@
             <label for="country">Pays</label>
             <select id="country" class="form-control" data-url="{{ asset('images/flags/flag_blank.png') }}">
                 {% for key, value in countries -%}
-	            <option value="{{ key }}">{{ value }}</option>
+                <option value="{{ key }}">{{ value }}</option>
                 {%- endfor %}
             </select>
         </div>

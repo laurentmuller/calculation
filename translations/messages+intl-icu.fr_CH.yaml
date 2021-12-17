@@ -12,7 +12,7 @@ counters:
     categories_lower: '{count, plural, =0 {aucune catégorie} one {1 catégorie} other {# catégories}}'
     groups: '{count, plural, =0 {Aucun groupe} one {1 groupe} other {# groupes}}'
     groups_lower: '{count, plural, =0 {Aucun groupe} one {1 groupe} other {# groupes}}'
-    margins: '{count, plural, =0 {aucune marge} one {1 marge} other {# marges}}'
+    margins: '{count, plural, =0 {Aucune marge} one {1 marge} other {# marges}}'
     margins_lower: '{count, plural, =0 {aucune marge} one {1 marge} other {# marges}}'
     weather_daily: '{count, plural, =0 {Aucune prévision journalière} one {Prévisions à 1 jour} other {Prévisions à # jours}}'
     weather_forecast: '{count, plural, =0 {Aucune prévision horaire} one {Prévisions à 1 heure} other {Prévisions à # heures}}'

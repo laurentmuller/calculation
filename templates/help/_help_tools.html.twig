@@ -84,7 +84,7 @@
            {%- set dialog = service.findDialog(link.id) -%}
            {%- set href = path('help_dialog', {'id': dialog.id}) -%}
            <li><a href="{{ href }}">{{ dialog.name|default(dialog.id)|trans }}</a></li>
-	    {% elseif link.type == 'entity' %}
+        {% elseif link.type == 'entity' %}
             {%- set entity = service.findEntity(link.id) -%}
             {%- set href = path('help_entity', {'id': entity.id}) -%}
             <li><a href="{{ href }}">{{ (entity.id ~ '.name')|trans }}</a></li>

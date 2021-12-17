@@ -109,7 +109,7 @@ class UsersReport extends AbstractArrayReport
         }
 
         // count
-        return $this->renderCount(\count($entities));
+        return $this->renderCount($entities);
     }
 
     /**

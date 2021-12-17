@@ -95,7 +95,12 @@ class ParametersType extends AbstractType implements ApplicationServiceInterface
         $helper->field(self::P_CUSTOMER_ADDRESS)
             ->rowClass('ml-1 mt-1')
             ->notRequired()
-            ->addTextareaType();
+            ->addTextType();
+
+        $helper->field(self::P_CUSTOMER_ZIP_CITY)
+            ->rowClass('ml-1 mt-1')
+            ->notRequired()
+            ->addTextType();
 
         $helper->field(self::P_CUSTOMER_PHONE)
             ->notRequired()

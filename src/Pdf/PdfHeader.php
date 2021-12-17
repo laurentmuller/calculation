@@ -20,7 +20,7 @@ use App\Report\AbstractReport;
  *
  * @author Laurent Muller
  */
-class PdfHeader implements PdfDocumentUpdaterInterface, PdfConstantsInterface
+class PdfHeader implements PdfConstantsInterface
 {
     /**
      * The customer information.
@@ -33,47 +33,42 @@ class PdfHeader implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     protected ?string $description = null;
 
     /**
-     * {@inheritDoc}
+     * the parent document.
      */
-    public function apply(PdfDocument $doc): void
+    protected PdfDocument $parent;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(PdfDocument $parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * Output this content to the parent document.
+     */
+    public function output(): void
     {
         // style
         $style = PdfStyle::getDefaultStyle();
-        $style->apply($doc);
+        $style->apply($this->parent);
 
         // margins
-        $margins = $doc->setCellMargin(0);
+        $margins = $this->parent->setCellMargin(0);
 
-        // total width
-        $printableWidth = $doc->getPrintableWidth();
-
-        //save position
-        [$x, $y] = $doc->GetXY();
-
-        if ($this->isPrintAddress()) {
-            // name (left) + title(center) + contact(right)
-            $cellWidth = $printableWidth / 3;
-            $this->outputName($doc, $style, $cellWidth);
-            $this->outputTitle($doc, $style, $cellWidth);
-            $this->outputContact($doc, $style, $cellWidth);
-
-            // address (left)
-            $doc->SetXY($x, $y + self::LINE_HEIGHT);
-            $this->outputAddress($doc, $style, $printableWidth);
-        } else {
-            // title(left) + name(right)
-            $cellWidth = $printableWidth / 2;
-            $this->outputTitle($doc, $style, $cellWidth);
-            $this->outputName($doc, $style, $cellWidth);
-            $doc->Ln();
+        // lines
+        $isAddress = $this->isPrintAddress();
+        $printableWidth = $this->parent->getPrintableWidth();
+        $this->line1($style, $printableWidth, $isAddress);
+        if ($isAddress) {
+            $this->line2($style, $printableWidth);
+            $this->line3($style, $printableWidth);
         }
 
-        // description
-        $this->outputDescription($doc, $style, $printableWidth);
-
         // reset
-        $doc->setCellMargin($margins);
-        $doc->resetStyle()->Ln(3);
+        $this->parent->setCellMargin($margins);
+        $this->parent->resetStyle()->Ln(2);
     }
 
     /**
@@ -82,6 +77,11 @@ class PdfHeader implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     public function setCustomer(CustomerInformation $customer): self
     {
         $this->customer = $customer;
+
+        // update bottom margin
+        if ($this->customer->isPrintAddress()) {
+        } else {
+        }
 
         return $this;
     }
@@ -96,105 +96,169 @@ class PdfHeader implements PdfDocumentUpdaterInterface, PdfConstantsInterface
         return $this;
     }
 
-    private function getAddress(): ?string
+    private function getAddress(): string
     {
-        if ($this->isPrintAddress()) {
-            return $this->customer->getAddress();
-        }
-
-        return null;
+        return null === $this->customer ? '' : ($this->customer->getAddress() ?? '');
     }
 
-    private function getEmail(): ?string
+    private function getEmail(): string
     {
-        return null === $this->customer ? null : $this->customer->getEmail();
+        return null === $this->customer ? '' : ($this->customer->getEmail() ?? '');
     }
 
-    private function getFax(PdfDocument $doc): string
+    private function getFax(): string
     {
         if (null !== $this->customer) {
             $fax = $this->customer->getFax() ?: '';
-            if ($doc instanceof AbstractReport) {
-                return $doc->trans('report.fax', ['{0}' => $fax]);
+            if ($this->parent instanceof AbstractReport) {
+                return $this->parent->trans('report.fax', ['{0}' => $fax]);
             }
 
-            return "F: $fax";
+            return "Fax : $fax";
         }
 
         return '';
     }
 
-    private function getName(): ?string
+    private function getName(): string
     {
-        return null === $this->customer ? null : $this->customer->getName();
+        return null === $this->customer ? '' : ($this->customer->getName() ?? '');
     }
 
-    private function getPhone(PdfDocument $doc): string
+    private function getPhone(): string
     {
         if (null !== $this->customer) {
             $phone = $this->customer->getPhone() ?: '';
-            if ($doc instanceof AbstractReport) {
-                return $doc->trans('report.phone', ['{0}' => $phone]);
+            if ($this->parent instanceof AbstractReport) {
+                return $this->parent->trans('report.phone', ['{0}' => $phone]);
             }
 
-            return "T: $phone";
+            return "Tél. : $phone";
         }
 
         return '';
     }
 
-    private function getUrl(): ?string
+    private function getUrl(): string
     {
-        return null === $this->customer ? null : $this->customer->getUrl();
+        return null === $this->customer ? '' : ($this->customer->getUrl() ?? '');
+    }
+
+    private function getZipCity(): string
+    {
+        return null === $this->customer ? '' : ($this->customer->getZipCity() ?? '');
     }
 
     private function isPrintAddress(): bool
     {
-        return null !== $this->customer && $this->customer->isPrintAddress() && !empty($this->customer->getAddress());
+        return null !== $this->customer && $this->customer->isPrintAddress();
     }
 
-    private function outputAddress(PdfDocument $doc, PdfStyle $style, float $width): void
+    private function line1(PdfStyle $style, float $printableWidth, bool $isAddress): void
     {
-        $style->reset()->setFontSize(8)->apply($doc);
-        $doc->MultiCell($width, self::LINE_HEIGHT - 1, $this->getAddress(), self::BORDER_BOTTOM, self::ALIGN_LEFT, false);
-    }
+        if ($isAddress) {
+            // name (left) + title (center) + phone (right)
+            $cellWidth = $printableWidth / 3;
+            $this->outputName($style, $cellWidth, true);
+            $this->outputTitle($style, $cellWidth, true);
+            $this->outputPhone($style, $cellWidth);
+        } else {
+            // title (left) + name (right)
+            $cellWidth = $printableWidth / 2;
+            $this->outputTitle($style, $cellWidth, false);
+            $this->outputName($style, $cellWidth, false);
 
-    private function outputContact(PdfDocument $doc, PdfStyle $style, float $width): void
-    {
-        $phone = $this->getPhone($doc);
-        $fax = $this->getFax($doc);
-        $email = $this->getEmail() ?: '';
-        $text = "$phone\n$fax\n$email";
-        $style->reset()->setFontSize(8)->apply($doc);
-        $doc->MultiCell($width, self::LINE_HEIGHT - 1, $text, self::BORDER_NONE, self::ALIGN_RIGHT, false);
-    }
-
-    private function outputDescription(PdfDocument $doc, PdfStyle $style, float $width): void
-    {
-        if (!empty($this->description)) {
-            $style->reset()->setFontSize(8)->apply($doc);
-            $doc->Cell($width, self::LINE_HEIGHT, $this->description);
-            $doc->Ln();
+            // description
+            $this->outputDescription($style, $printableWidth, false);
         }
     }
 
-    private function outputName(PdfDocument $doc, PdfStyle $style, float $width): void
+    private function line2(PdfStyle $style, float $printableWidth): void
     {
-        $name = $this->getName() ?: '';
-        $address = $this->isPrintAddress();
-        $style->setFontBold()->setFontSize(8)->apply($doc);
-        $align = $address ? self::ALIGN_LEFT : self::ALIGN_RIGHT;
-        $border = $address ? self::BORDER_NONE : self::BORDER_BOTTOM;
-        $doc->Cell($width, self::LINE_HEIGHT, $name, $border, self::MOVE_TO_RIGHT, $align, false, $this->getUrl() ?: '');
+        if (null !== $this->description) {
+            // address (left) + description (center) + fax (right)
+            $cellWidth = $printableWidth / 3;
+            $this->outputAddress($style, $cellWidth);
+            $this->outputDescription($style, $cellWidth, true);
+            $this->outputFax($style, $cellWidth);
+        } else {
+            // address (left) + fax (right)
+            $cellWidth = $printableWidth / 2;
+            $this->outputAddress($style, $cellWidth);
+            $this->outputFax($style, $cellWidth);
+        }
     }
 
-    private function outputTitle(PdfDocument $doc, PdfStyle $style, float $width): void
+    private function line3(PdfStyle $style, float $printableWidth): void
     {
-        $title = $doc->getTitle() ?: '';
-        $address = $this->isPrintAddress();
-        $style->setFontBold()->setFontSize(10)->apply($doc);
-        $align = $address ? self::ALIGN_CENTER : self::ALIGN_LEFT;
-        $border = $address ? self::BORDER_NONE : self::BORDER_BOTTOM;
-        $doc->Cell($width, self::LINE_HEIGHT, $title, $border, self::MOVE_TO_RIGHT, $align);
+        // zip city (left) + e-mail (right)
+        $cellWidth = $printableWidth / 2;
+        $this->outputZipCity($style, $cellWidth);
+        $this->outputEmail($style, $cellWidth);
+    }
+
+    private function outputAddress(PdfStyle $style, float $width): void
+    {
+        $text = $this->getAddress();
+        $style->reset()->setFontSize(8)->apply($this->parent);
+        $this->parent->Cell($width, self::LINE_HEIGHT - 1, $text, self::BORDER_NONE, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
+    }
+
+    private function outputDescription(PdfStyle $style, float $width, bool $isAddress): void
+    {
+        if (!empty($this->description)) {
+            $style->reset()->setFontSize(8)->apply($this->parent);
+            $align = $isAddress ? self::ALIGN_CENTER : self::ALIGN_LEFT;
+            $move = $isAddress ? self::MOVE_TO_RIGHT : self::MOVE_TO_NEW_LINE;
+            $this->parent->Cell($width, self::LINE_HEIGHT, $this->description, self::BORDER_NONE, $move, $align);
+        }
+    }
+
+    private function outputEmail(PdfStyle $style, float $width): void
+    {
+        $text = $this->getEmail();
+        $link = empty($text) ? '' : "mailto:$text";
+        $style->reset()->setFontSize(8)->apply($this->parent);
+        $this->parent->Cell($width, self::LINE_HEIGHT - 1, $text, self::BORDER_BOTTOM, self::MOVE_TO_NEW_LINE, self::ALIGN_RIGHT, false, $link);
+    }
+
+    private function outputFax(PdfStyle $style, float $width): void
+    {
+        $text = $this->getFax();
+        $style->reset()->setFontSize(8)->apply($this->parent);
+        $this->parent->Cell($width, self::LINE_HEIGHT - 1, $text, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, self::ALIGN_RIGHT);
+    }
+
+    private function outputName(PdfStyle $style, float $width, bool $isAddress): void
+    {
+        $name = $this->getName();
+        $style->setFontBold()->setFontSize(8)->apply($this->parent);
+        $align = $isAddress ? self::ALIGN_LEFT : self::ALIGN_RIGHT;
+        $border = $isAddress ? self::BORDER_NONE : self::BORDER_BOTTOM;
+        $move = $isAddress ? self::MOVE_TO_RIGHT : self::MOVE_TO_NEW_LINE;
+        $this->parent->Cell($width, self::LINE_HEIGHT, $name, $border, $move, $align, false, $this->getUrl() ?: '');
+    }
+
+    private function outputPhone(PdfStyle $style, float $width): void
+    {
+        $text = $this->getPhone();
+        $style->reset()->setFontSize(8)->apply($this->parent);
+        $this->parent->Cell($width, self::LINE_HEIGHT - 1, $text, self::BORDER_NONE, self::MOVE_TO_NEW_LINE, self::ALIGN_RIGHT);
+    }
+
+    private function outputTitle(PdfStyle $style, float $width, bool $isAddress): void
+    {
+        $title = $this->parent->getTitle() ?: '';
+        $style->setFontBold()->setFontSize(10)->apply($this->parent);
+        $align = $isAddress ? self::ALIGN_CENTER : self::ALIGN_LEFT;
+        $border = $isAddress ? self::BORDER_NONE : self::BORDER_BOTTOM;
+        $this->parent->Cell($width, self::LINE_HEIGHT, $title, $border, self::MOVE_TO_RIGHT, $align);
+    }
+
+    private function outputZipCity(PdfStyle $style, float $width): void
+    {
+        $text = $this->getZipCity();
+        $style->reset()->setFontSize(8)->apply($this->parent);
+        $this->parent->Cell($width, self::LINE_HEIGHT - 1, $text, self::BORDER_BOTTOM, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
     }
 }

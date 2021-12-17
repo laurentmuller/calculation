@@ -17,7 +17,7 @@
 {{ icons.homepage() }}
 {% if not accepted %}
 <button type="button" class="btn btn-form btn-success btn-accept" data-target="{{ path('homepage') }}" title="{{ 'cookiebanner.close_title'|trans }}">
-	{{- 'cookiebanner.accept'|trans -}}
+    {{- 'cookiebanner.accept'|trans -}}
 </button>
 {% endif %}
 {{ icons.link(path('about_policy'), 'about.policy', 'btn btn-form btn-outline-info') }}

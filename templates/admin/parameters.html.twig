@@ -36,19 +36,20 @@
 
 {% block card_body -%}
 <div class="accordion" id="parent_accordion">
-	{{ _self.collapseLine('customer') }}
-	<div class="toggle-icon collapse show" id="customer" data-parent="#parent_accordion" aria-expanded="true">
-		{{ form_row(form.customer_name) }}
+    {{ _self.collapseLine('customer') }}
+    <div class="toggle-icon collapse show" id="customer" data-parent="#parent_accordion" aria-expanded="true">
+        {{ form_row(form.customer_name) }}
         {{ form_row(form.customer_address) }}
-    	<div class="form-row ml-0 mt-1">
-        	<div class="col-md-6">{{ form_row(form.customer_phone) }}</div>
-        	<div class="col-md-6">{{ form_row(form.customer_fax) }}</div>
+        {{ form_row(form.customer_zip_city) }}
+        <div class="form-row ml-0 mt-1">
+            <div class="col-md-6">{{ form_row(form.customer_phone) }}</div>
+            <div class="col-md-6">{{ form_row(form.customer_fax) }}</div>
         </div>
         <div class="form-row ml-0 mt-1">
-        	<div class="col-md-6">{{ form_row(form.customer_email) }}</div>
-        	<div class="col-md-6">{{ form_row(form.customer_url) }}</div>
+            <div class="col-md-6">{{ form_row(form.customer_email) }}</div>
+            <div class="col-md-6">{{ form_row(form.customer_url) }}</div>
         </div>
-	</div>
+    </div>
     {{ _self.collapseLine('default') }}
     <div class="toggle-icon collapse" id="default" data-parent="#parent_accordion">
         <div class="form-row ml-0 mt-1">

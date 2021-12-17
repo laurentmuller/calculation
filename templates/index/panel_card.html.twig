@@ -81,7 +81,7 @@
                             {%- if single_page_pdf or single_page_excel -%}
                                 {{ icons.dropdownSeparator }}
                                 {%- if single_page_pdf -%}
-                                	{%- set path = path(single_page_pdf, {'id': id}) -%}
+                                    {%- set path = path(single_page_pdf, {'id': id}) -%}
                                     {{ icons.dropdownItemExternal(path, 'calculation.list.pdf_single_title', 'file-pdf far') }}
                                 {% endif %}
                                 {%- if single_page_excel -%}

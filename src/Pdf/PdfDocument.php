@@ -172,10 +172,12 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
     {
         parent::__construct($orientation, $unit, $size);
 
-        $this->SetDisplayMode(self::ZOOM_FULL_PAGE, self::LAYOUT_SINGLE);
-        $this->header = new PdfHeader();
-        $this->footer = new PdfFooter();
+        $this->header = new PdfHeader($this);
+        $this->footer = new PdfFooter($this);
+
         $this->AliasNbPages();
+        $this->SetAutoPageBreak(true, $this->bMargin - self::LINE_HEIGHT);
+        $this->SetDisplayMode(self::ZOOM_FULL_PAGE, self::LAYOUT_SINGLE);
     }
 
     /**
@@ -243,7 +245,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      */
     public function Footer(): void
     {
-        $this->footer->apply($this);
+        $this->footer->output();
     }
 
     /**
@@ -515,7 +517,7 @@ class PdfDocument extends FPDF implements PdfConstantsInterface
      */
     public function Header(): void
     {
-        $this->header->apply($this);
+        $this->header->output();
     }
 
     /**

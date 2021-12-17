@@ -645,8 +645,8 @@ pagination:
 report:
     other: Autre
     page: Page {0} / {1}
-    phone: 'T: {0}'
-    fax: 'F: {0}'
+    phone: 'Tél. : {0}'
+    fax: 'Fax : {0}'
     calculation:
         amount: Montant
         margin_amount: Marge (Fr.)
@@ -780,6 +780,7 @@ parameters:
         decimal_separator: Séparateur de décimals
         customer_name: Nom
         customer_address: Adresse
+        customer_zip_city: NPA / Localité
         customer_url: Site internet
         customer_phone: Téléphone
         customer_fax: Télécopieur

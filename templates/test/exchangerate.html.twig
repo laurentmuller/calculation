@@ -20,9 +20,9 @@
 {%- set title_description = 'exchangerate.description' -%}
 {%- set cancel_text = 'common.button_close' -%}
 {%- set form_attr = form_attr|default({})|merge({
-	'action': url('exchange_rate'),
-	'data-error': 'unknown'|trans({}, 'exchangerate'),
-	'data-rate': 'exchangerate.rate'|trans}) -%}
+    'action': url('exchange_rate'),
+    'data-error': 'unknown'|trans({}, 'exchangerate'),
+    'data-rate': 'exchangerate.rate'|trans}) -%}
 
 {% block card_body %}
 {{ parent() }}

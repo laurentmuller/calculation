@@ -20,8 +20,12 @@ use App\Util\FormatUtils;
  *
  * @author Laurent Muller
  */
-class PdfFooter implements PdfDocumentUpdaterInterface, PdfConstantsInterface
+class PdfFooter implements PdfConstantsInterface
 {
+    /**
+     * the parent document.
+     */
+    protected PdfDocument $parent;
     /**
      * The footer text.
      */
@@ -33,33 +37,36 @@ class PdfFooter implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     protected ?string $url = null;
 
     /**
-     * {@inheritDoc}
+     * Constructor.
      */
-    public function apply(PdfDocument $doc): void
+    public function __construct(PdfDocument $parent)
     {
-        // font
-        $style = PdfStyle::getDefaultStyle()->setFontSize(8);
-        $style->apply($doc);
+        $this->parent = $parent;
+    }
 
+    /**
+     * Output this content to the parent document.
+     */
+    public function output(): void
+    {
         // margins
-        $margins = $doc->setCellMargin(0);
+        $margins = $this->parent->setCellMargin(0);
 
         // position and cells width
-        $doc->SetY(PdfDocument::FOOTER_OFFSET);
-        $cellWidth = $doc->getPrintableWidth() / 3;
+        $this->parent->SetY(PdfDocument::FOOTER_OFFSET);
+        $cellWidth = $this->parent->getPrintableWidth() / 3;
 
-        // pages
-        $doc->Cell($cellWidth, self::LINE_HEIGHT, $this->getPage($doc), self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_LEFT);
+        // style
+        PdfStyle::getDefaultStyle()->setFontSize(8)->apply($this->parent);
 
-        // text and url (if any)
-        $doc->Cell($cellWidth, self::LINE_HEIGHT, $this->text ?: '', self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_CENTER, false, $this->url);
-
-        // date
-        $doc->Cell($cellWidth, self::LINE_HEIGHT, $this->getDate(), self::BORDER_TOP, self::MOVE_TO_RIGHT, self::ALIGN_RIGHT);
+        // pages (left) +  text and url (center) + date (right)
+        $this->ouputText($this->getPage(), $cellWidth, self::ALIGN_LEFT)
+            ->ouputText($this->text ?? '', $cellWidth, self::ALIGN_CENTER, $this->url ?? '')
+            ->ouputText($this->getDate(), $cellWidth, self::ALIGN_RIGHT);
 
         // reset
-        $doc->setCellMargin($margins);
-        $doc->resetStyle();
+        $this->parent->setCellMargin($margins);
+        $this->parent->resetStyle();
     }
 
     /**
@@ -84,13 +91,23 @@ class PdfFooter implements PdfDocumentUpdaterInterface, PdfConstantsInterface
     /**
      * Gets the formatted current page and total pages.
      */
-    private function getPage(PdfDocument $doc): string
+    private function getPage(): string
     {
-        $page = $doc->PageNo();
-        if ($doc instanceof AbstractReport) {
-            return $doc->trans('report.page', ['{0}' => $page, '{1}' => '{nb}']);
+        $page = $this->parent->PageNo();
+        if ($this->parent instanceof AbstractReport) {
+            return $this->parent->trans('report.page', ['{0}' => $page, '{1}' => '{nb}']);
         }
 
         return "Page $page / {nb}";
+    }
+
+    /**
+     * Output the given text.
+     */
+    private function ouputText(string $text, float $cellWidth, string $align, string $link = ''): self
+    {
+        $this->parent->Cell($cellWidth, self::LINE_HEIGHT, $text, self::BORDER_TOP, self::MOVE_TO_RIGHT, $align, false, $link);
+
+        return $this;
     }
 }

@@ -7,37 +7,37 @@
 {%- set title_description = 'generate.description' -%}
 {%- set submit_text = 'generate.submit_text' -%}
 {%- set form_attr = form_attr|default({})|merge({
-	'data-empty': 'generate.error.empty'|trans,
-	'data-error': 'generate.error.failed'|trans
+    'data-empty': 'generate.error.empty'|trans,
+    'data-error': 'generate.error.failed'|trans
 }) -%}
 
 {% block card_body %}
 <div class="form-row">
-	<div class="col-md-8">
-		{{ form_row(form.entity) }}
-	</div>
-	<div class="col-md-4">
-		{{ form_row(form.count) }}
-	</div>
+    <div class="col-md-8">
+        {{ form_row(form.entity) }}
+    </div>
+    <div class="col-md-4">
+        {{ form_row(form.count) }}
+    </div>
 </div>
 {{ form_row(form.simulate) }}
 {{ form_row(form.confirm) }}
 {# results message #}
 <div id="message-result" class="text-center d-none">
-	<hr class="mb-2">
-	<a href="#" id="message" title="{{ 'generate.result_text'|trans }}" data-toggle="modal" data-target="#modal-result">{{ 'generate.result_text'|trans }}</a>
+    <hr class="mb-2">
+    <a href="#" id="message" title="{{ 'generate.result_text'|trans }}" data-toggle="modal" data-target="#modal-result">{{ 'generate.result_text'|trans }}</a>
 </div>
 {# results dialog #}
 <div class="modal fade" id="modal-result" tabindex="-1">
-	<div class="modal-dialog modal-dialog-centered modal-xl">
-		<div class="modal-content">
-			<div class="modal-header">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h5 class="modal-title">{{ title|trans }}</h5>{{ icons.button_close_modal }}
             </div>
-    		<div class="modal-body">
-    			<label class="font-weight-bold">{{ 'generate.result_text'|trans }}</label>
+            <div class="modal-body">
+                <label class="font-weight-bold">{{ 'generate.result_text'|trans }}</label>
                 <div id="overflow" class="overflow-auto border-bottom" style="max-height: 209px;">
-    				<table class="table table-hover table-list table-sm">
+                    <table class="table table-hover table-list table-sm">
                         <thead class="d-none calculation">
                             <tr>
                                 <th class="text-id">{{ 'calculation.fields.id'|trans }}</th>
@@ -66,10 +66,10 @@
                             </tr>
                         </thead>
                         <tbody id="result"></tbody>
-    				</table>
-    			</div>
-    		</div>
-    		<div class="modal-footer">
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
                 <div class="row no-gutters w-100">
                     <div class="col-9">
                         <p id="simulated" class="small mt-2 mb-0 d-none">{{ 'generate.result_simulated'|trans }}</p>
@@ -80,8 +80,8 @@
                 </div>
 
             </div>
-		</div>
-	</div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 

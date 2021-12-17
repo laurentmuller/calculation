@@ -105,6 +105,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
         }
 
         // total
+        $this->inProgress = true;
         $total = $calculation->getItemsTotal();
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.itemsTotal'), 4)
@@ -139,7 +140,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
     }
 
     /**
-     * Adds descriptoin with an error style if duplicate.
+     * Adds description with an error style if duplicate.
      *
      * @param CalculationItem $item           the item to get description for
      * @param array           $duplicateItems the duplicate items
@@ -160,9 +161,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
     private function checkLines(int $lines): bool
     {
         $this->inProgress = true;
-        $this->repeatHeader = false;
         $result = $this->checkNewPage($lines * self::LINE_HEIGHT);
-        $this->repeatHeader = false;
         $this->inProgress = false;
 
         return $result;

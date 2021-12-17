@@ -138,7 +138,7 @@
 {%- set title_icon = 'tasks' -%}
 {%- set page_list = 'task_table' -%}
 {%- set form_attr = form_attr|default({})|merge({
-					 'data-title': title|trans,
+                     'data-title': title|trans,
                      'data-show': 'taskitem.edit.items_show'|trans,
                      'data-hide': 'taskitem.edit.items_hide'|trans,
                      'data-unit-search': url('ajax_search_unit'),

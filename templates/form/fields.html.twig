@@ -250,7 +250,7 @@
 {% set translation_domain = 'messages' %}
 {% set attr_translation_parameters = [] %}
 <button type="button"{% with {attr: current_action.attributes} %}{{ block('attributes') }}{% endwith %}>
-	{%- if current_action.text|default(false) -%}{{- current_action.text|trans -}}{%- else -%}<i class="{{- 'fa-fw fa-solid fa-' ~ current_action.icon -}}"></i>{%- endif -%}
+    {%- if current_action.text|default(false) -%}{{- current_action.text|trans -}}{%- else -%}<i class="{{- 'fa-fw fa-solid fa-' ~ current_action.icon -}}"></i>{%- endif -%}
 </button>
 {% endblock %}
 
@@ -261,27 +261,27 @@
 <div class="simple-editor border" id="{{ editor_id }}" name="{{ editor_id }}">
     {% if groups|default([])|length -%}
     <div class="simple-editor-toolbar btn-toolbar d-print-none" role="toolbar" >
-    	{% for group, actions in groups %}
-		<div class="btn-group btn-group-sm" role="group" aria-label="{{ group }}">
-		{% for action in actions %}
-    	    {% set current_action = action %}
+        {% for group, actions in groups %}
+        <div class="btn-group btn-group-sm" role="group" aria-label="{{ group }}">
+        {% for action in actions %}
+            {% set current_action = action %}
             {% if action.actions|default([])|length %}
-        	<div class="btn-group btn-group-sm" role="group">
-        		{{ block('editor_button') }}
-        		<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-        	    {% for child in action.actions %}
-        	        {% set current_action = child %}
-        	        {{- block('editor_button') -}}
+            <div class="btn-group btn-group-sm" role="group">
+                {{ block('editor_button') }}
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                {% for child in action.actions %}
+                    {% set current_action = child %}
+                    {{- block('editor_button') -}}
                 {% endfor %}
-        		</div>
-        	</div>
+                </div>
+            </div>
             {% else %}
                 {{- block('editor_button') -}}
             {% endif %}
         {% endfor %}
         {% if not loop.last %}<div class="border-left separator"></div>{% endif %}
-		</div>
-    	{% endfor %}
+        </div>
+        {% endfor %}
     </div>
     {%- endif %}
     <div class="simple-editor-content border-top" contenteditable="true"></div>

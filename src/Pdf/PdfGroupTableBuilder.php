@@ -49,8 +49,6 @@ class PdfGroupTableBuilder extends PdfTableBuilder
 
     /**
      * {@inheritdoc}
-     *
-     * @see \App\Pdf\PdfTableBuilder::checkNewPage()
      */
     public function checkNewPage(float $height): bool
     {

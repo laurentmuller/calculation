@@ -26,6 +26,7 @@ class CustomerInformation
     private ?string $phone = null;
     private bool $printAddress = false;
     private ?string $url = null;
+    private ?string $zipCity = null;
 
     /**
      * Gets the address.
@@ -73,6 +74,14 @@ class CustomerInformation
     public function getUrl(): ?string
     {
         return $this->url;
+    }
+
+    /**
+     * Gets the zip code and city.
+     */
+    public function getZipCity(): ?string
+    {
+        return $this->zipCity;
     }
 
     /**
@@ -149,6 +158,16 @@ class CustomerInformation
     public function setUrl(?string $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Sets the zip code and city.
+     */
+    public function setZipCity(?string $zipCity): self
+    {
+        $this->zipCity = $zipCity;
 
         return $this;
     }

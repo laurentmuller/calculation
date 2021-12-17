@@ -130,6 +130,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
         $info = new CustomerInformation();
         $info->setName($this->getCustomerName())
             ->setAddress($this->getCustomerAddress())
+            ->setZipCity($this->getCustomerZipCity())
             ->setPhone($this->getCustomerPhone())
             ->setFax($this->getCustomerFax())
             ->setEmail($this->getCustomerEmail())
@@ -185,6 +186,14 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     public function getCustomerUrl(): ?string
     {
         return $this->getPropertyString(self::P_CUSTOMER_URL);
+    }
+
+    /**
+     * Gets the customer zip code and city.
+     */
+    public function getCustomerZipCity(): ?string
+    {
+        return $this->getPropertyString(self::P_CUSTOMER_ZIP_CITY);
     }
 
     /**
@@ -312,6 +321,7 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
         $result = [
             self::P_CUSTOMER_NAME => $this->getCustomerName(),
             self::P_CUSTOMER_ADDRESS => $this->getCustomerAddress(),
+            self::P_CUSTOMER_ZIP_CITY => $this->getCustomerZipCity(),
             self::P_CUSTOMER_PHONE => $this->getCustomerPhone(),
             self::P_CUSTOMER_FAX => $this->getCustomerFax(),
             self::P_CUSTOMER_EMAIL => $this->getCustomerEmail(),

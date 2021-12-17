@@ -5,8 +5,8 @@
 {%- set title_icon = 'pencil-alt' -%}
 {%- set cancel_path = path('homepage') -%}
 {%- set form_attr = form_attr|default({})|merge({
-						'data-check-name': url('ajax_check_user_name'),
-						'data-check-email': url('ajax_check_user_email')}) -%}
+                        'data-check-name': url('ajax_check_user_name'),
+                        'data-check-email': url('ajax_check_user_email')}) -%}
 
 {% block stylesheets %}
 {{ asset_css('css/fileinput.css') }}

@@ -102,6 +102,11 @@ interface ApplicationServiceInterface
     public const P_CUSTOMER_URL = 'customer_url';
 
     /**
+     * The property name for the customer zip code and city (string).
+     */
+    public const P_CUSTOMER_ZIP_CITY = 'customer_zip_city';
+
+    /**
      * The property name for the default category (integer).
      */
     public const P_DEFAULT_CATEGORY = 'default_category';

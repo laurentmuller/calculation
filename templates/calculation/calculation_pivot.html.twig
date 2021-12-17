@@ -1,6 +1,4 @@
 {% extends 'base.html.twig' %}
-
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
@@ -16,8 +14,7 @@
 {% if value > 1 %} rowspan="{{ value }}"{% endif %}
 {%- endmacro %}
 
-{% macro outputPopover(cell, value) -%}
-{%- set sep = '&nbsp;&nbsp;<i class="fa-solid fa-caret-right" aria-hidden="true"></i>&nbsp;&nbsp;' -%}
+{% macro outputPopover(cell, value, separator) -%}
 <table class="table table-borderless table-sm mb-0">
     <tbody>
         <tr>
@@ -26,67 +23,66 @@
         </tr>
         <tr>
             <td class="border-top font-weight-bold">{{ 'pivot.line'|trans }}</td>
-            <td class="border-top">{{ cell.rowTitle(sep)|raw }}</td>
+            <td class="border-top">{{ cell.rowTitle(separator)|raw }}</td>
             <td class="border-top text-currency">{{ _self.format(cell.row.value) }}</td>
         </tr>
         <tr>
             <td class="font-weight-bold">{{ 'pivot.column'|trans }}</td>
-            <td>{{ cell.columnTitle(sep)|raw }}</td>
+            <td>{{ cell.columnTitle(separator)|raw }}</td>
             <td class="text-currency">{{ _self.format(cell.column.value) }}</td>
         </tr>
     </tbody>
 </table>
 {%- endmacro %}
 
-{% macro outputPopoverTitle(cell, row=false) -%}
-{%- set sep = '&nbsp;&nbsp;<i class="fa-solid fa-caret-right" aria-hidden="true"></i>&nbsp;&nbsp;' -%}
-<p class="mb-0">{{ cell.titles|join(sep)|raw }}{{ sep|raw }}{{ _self.format(cell.value) }}</p>
+{% macro outputPopoverTitle(cell, row=false, separator) -%}
+<p class="mb-0">{{ cell.titles|join(separator)|raw }}{{ separator|raw }}{{ _self.format(cell.value) }}</p>
 {%- endmacro %}
 
-{% macro outputHeaders(nodes) -%}
+{% macro outputHeaders(nodes, separator) -%}
 {%- for node in nodes %}
     {%- if node.leaf -%}
-        <td class="text-currency not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node)|e }}">{{ node.title|raw }}</td>
+        <td class="text-currency not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node, false, separator)|e }}">{{ node.title|raw }}</td>
     {%- else -%}
-        <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node)|e }}"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
+        <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node, false, separator)|e }}"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
     {%- endif -%}
 {%- endfor -%}
 {%- endmacro %}
 
-{% macro outputValue(cell, class) -%}
+{% macro outputValue(cell, class, separator) -%}
 {%- set class = ('text-currency ' ~ class|default(''))|trim -%}
 {% if cell %}
     {%- set popover = 'not-hover' not in class -%}
     {%- set value = _self.format(cell.value) -%}
-    <td class="{{ class }}"{% if popover %} data-toggle="popover" data-body="{{ _self.outputPopover(cell, value)|e }}"{% endif %}>{{ value }}</td>
+    <td class="{{ class }}"{% if popover %} data-toggle="popover" data-body="{{ _self.outputPopover(cell, value, separator)|e }}"{% endif %}>{{ value }}</td>
 {% else %}
     <td class="{{ class }} not-hover">&nbsp;</td>
 {% endif %}
 {%- endmacro %}
 
-{% macro outputCell(table, column, row, class) -%}
+{% macro outputCell(table, column, row, class, separator) -%}
 {%- set cell = table.findCellByNode(column, row) -%}
-{{ _self.outputValue(cell, class) }}
+{{ _self.outputValue(cell, class, separator) }}
 {%- endmacro %}
 
-{% macro outputCells(table, columns, row) -%}
+{% macro outputCells(table, columns, row, separator) -%}
 {%- for column in columns %}
-    {{ _self.outputCell(table, column, row, 'hover') }}
+    {{ _self.outputCell(table, column, row, 'hover', separator) }}
 {%- endfor -%}
-    {{ _self.outputValue(row, 'not-hover bg-success text-white') -}}
+    {{ _self.outputValue(row, 'not-hover bg-success text-white', separator) -}}
 {%- endmacro %}
 
-{% macro outputRow(table, columns, row) %}
+{% macro outputRow(table, columns, row, separator) %}
 {% if row.index >= row.level - 1 -%}
 <tr>
 {% endif -%}
-    <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(row, true)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>
+    <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(row, true, separator)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>
 {%- if row.leaf -%}
-    {{ _self.outputCells(table, columns, row) -}}
+    {{ _self.outputCells(table, columns, row, separator) -}}
 </tr>
 {% else -%}
     {%- for child in row.children %}
-        {{- _self.outputRow(table, columns, child) -}}
+        {{- _self.outputRow(table, columns, child, separator) -}}
     {%- endfor -%}
 {%- endif -%}
 {% endmacro %}
@@ -116,7 +112,7 @@
 {%- set row_level = table.row.maxLevel -%}
 {%- set col_level = table.column.maxLevel -%}
 {%- set total_title = table.totalTitle|default('calculation.fields.total'|trans) -%}
-
+{%- set separator = separator|default('&nbsp;&nbsp;<i class="fa-solid fa-caret-right" aria-hidden="true"></i>&nbsp;&nbsp;') -%}
 {% block container_class 'container-fluid' %}
 
 {# header #}
@@ -125,7 +121,7 @@
     <div class="col-auto mr-auto">
         <h4>{{ icons.icon(title_icon, title) }}</h4>
     </div>
-    <div class="col-auto  d-print-none">
+    <div class="col-auto d-print-none">
         <div class="form-inline">
             <div class="custom-control custom-switch mr-2">
                 <input type="checkbox" class="custom-control-input" id="popover" name="popover"{% if popover %} checked="checked"{% endif %}>
@@ -144,7 +140,7 @@
             {%- for i in 1..col_level -%}
             <tr>
                 {%- if i == 1 -%}<td  class="text-nowrap not-hover p-0"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table, col_level) }}</td>{%- endif -%}
-                {{ _self.outputHeaders(table.column.childrenAtLevel(i)) }}
+                {{ _self.outputHeaders(table.column.childrenAtLevel(i), separator) }}
                 {%- if i == 1 -%}<td{{ _self.rowspan(col_level) }} class="text-currency bg-success text-white not-hover align-bottom">{{ total_title }}</td>{%- endif -%}
             </tr>
             {%- endfor -%}
@@ -152,16 +148,16 @@
         <tbody>
             {%- set columns = table.column.lastChildren -%}
             {%- for row in table.row.children %}
-                {{ _self.outputRow(table, columns, row) }}
+                {{ _self.outputRow(table, columns, row, separator) }}
             {%- endfor -%}
         </tbody>
         <tfoot>
             <tr>
                 <td class="text-nowrap not-hover bg-success text-white"{{ _self.colspan(row_level) }}>{{ total_title }}</td>
                 {%- for col in table.column.lastChildren %}
-                    {{ _self.outputValue(col, 'not-hover bg-success text-white') }}
+                    {{ _self.outputValue(col, 'not-hover bg-success text-white', separator) }}
                 {%- endfor -%}
-                {{ _self.outputValue(table, 'not-hover bg-success text-white') }}
+                {{ _self.outputValue(table, 'not-hover bg-success text-white', separator) }}
             </tr>
         </tfoot>
     </table>

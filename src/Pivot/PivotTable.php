@@ -24,6 +24,11 @@ use App\Util\Utils;
 class PivotTable extends AbstractPivotAggregator
 {
     /**
+     * The default path separator.
+     */
+    public const PATH_SEPARATOR = \DIRECTORY_SEPARATOR;
+
+    /**
      * The cell data.
      *
      * @var PivotCell[]
@@ -268,10 +273,8 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $result = [];
         $this->serialize($result, 'title', $this->title)
@@ -363,8 +366,8 @@ class PivotTable extends AbstractPivotAggregator
      * Serialize a value. Do nothing if the value is null.
      *
      * @param array  $result the array to update
-     * @param string $name   the variable name
-     * @param mixed  $value  the value to put
+     * @param string $name   the array key
+     * @param mixed  $value  the array value
      */
     private function serialize(array &$result, string $name, $value): self
     {

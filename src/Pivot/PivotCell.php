@@ -97,9 +97,9 @@ class PivotCell extends AbstractPivotAggregator
     /**
      * Gets the column path.
      */
-    public function getColumnPath(): string
+    public function getColumnPath(string $separator = PivotTable::PATH_SEPARATOR): string
     {
-        return $this->column->getPath();
+        return $this->column->getPath($separator);
     }
 
     /**
@@ -109,7 +109,7 @@ class PivotCell extends AbstractPivotAggregator
      *
      * @see PivotNode::getTitles()
      */
-    public function getColumnTitle(string $separator = ' \\ '): string
+    public function getColumnTitle(string $separator = PivotTable::PATH_SEPARATOR): string
     {
         $titles = $this->column->getTitles();
 
@@ -147,9 +147,9 @@ class PivotCell extends AbstractPivotAggregator
     /**
      * Gets the row path.
      */
-    public function getRowPath(): string
+    public function getRowPath(string $separator = PivotTable::PATH_SEPARATOR): string
     {
-        return $this->row->getPath();
+        return $this->row->getPath($separator);
     }
 
     /**
@@ -159,7 +159,7 @@ class PivotCell extends AbstractPivotAggregator
      *
      * @see PivotNode::getTitles()
      */
-    public function getRowTitle(string $separator = ' \\ '): string
+    public function getRowTitle(string $separator = PivotTable::PATH_SEPARATOR): string
     {
         $titles = $this->row->getTitles();
 
@@ -168,10 +168,8 @@ class PivotCell extends AbstractPivotAggregator
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'row' => $this->getRowPath(),

@@ -8,11 +8,12 @@
 {%- set list_path = tabular ? 'calculation_table' : 'calculation_card' -%}
 
 {% block data %}
-<div class="col my-2">
+<div class="col my-2 table-responsive">
     <table class="table table-bordered table-hover table-list table-sm">
         <thead>
             <tr>
-                <th>{{ 'fields.state'|trans }}</th>
+                <th class="text-nowrap">{{ 'fields.state'|trans }}</th>
+                <th class="text-state">{{ 'fields.editable'|trans }}</th>
                 <th class="text-currency">{{ 'fields.count'|trans }}</th>
                 <th class="text-currency">{{ 'fields.percent'|trans }}</th>
                 <th class="text-currency">{{ 'fields.sum'|trans }}</th>
@@ -23,9 +24,10 @@
             {% for item in data -%}
             {%- set parameters = tabular ? {'search[0][index]': 8, 'search[0][value]': item.id} : {'query': item.code} -%}
             <tr title="{{ 'row_by_state'|trans({'%name%': item.code}) }}">
-                <td>
-                    <span class="mr-1 text-border" style="{{ properties.stateCss(item.color) }}"></span><a href="{{ path(list_path, parameters) }}">{{ item.code }}</a>
+                <td class="text-nowrap">
+                    <span class="mr-2 text-border" style="border-left-width: 1.25rem !important; {{ properties.stateCss(item.color) }}"></span><a href="{{ path(list_path, parameters) }}">{{- item.code }}</a>
                 </td>
+                <td class="text-state">{{ (item.editable ? 'common.value_true' : 'common.value_false')|trans([], 'messages') }}</td>
                 <td class="text-currency">{{ item.count|integer }}</td>
                 <td class="text-currency">{{ item.percent|percent(true) }}</td>
                 <td class="text-currency">{{ item.total|amount }}</td>
@@ -35,7 +37,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td class="font-weight-bold">{{ 'fields.total'|trans }}</td>
+                <td class="font-weight-bold text-nowrap" colspan="2">{{ 'fields.total'|trans }}</td>
                 <td class="font-weight-bold text-currency">{{ count|integer }}</td>
                 <td class="font-weight-bold text-currency">{{ 1|percent(true) }}</td>
                 <td class="font-weight-bold text-currency">{{ total|amount }}</td>

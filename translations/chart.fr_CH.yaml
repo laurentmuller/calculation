@@ -24,6 +24,7 @@ fields:
     date: Date
     month: Mois
     state: Statut
+    editable: Modifiable
     sum: Montant Total
     percent: Pourcentage
     total: Total

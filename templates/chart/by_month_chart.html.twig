@@ -35,11 +35,11 @@
 {%- endblock %}
 
 {% block data %}
-<div class="col my-2">
+<div class="col my-2 table-responsive">
     <table class="table table-bordered table-hover table-list table-sm">
         <thead>
             <tr>
-                <th>{{ 'fields.month'|trans }}</th>
+                <th class="text-nowrap">{{ 'fields.month'|trans }}</th>
                 <th class="text-currency">{{ 'fields.count'|trans }}</th>
                 <th class="text-currency" style="border: 2px solid darkgreen;">{{ 'fields.net'|trans }}</th>
                 <th class="text-percent">{{ 'fields.margin_percent'|trans }}</th>
@@ -51,7 +51,7 @@
             {% for item in data -%}
             {%- set month = item.date|strftime('%B %Y') -%}
             <tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
-                <td>
+                <td class="text-nowrap">
                     <a href="{{ path(list_path, {'query': item.date|strftime('%m.%Y')}) }}">{{ month }}</a>
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>

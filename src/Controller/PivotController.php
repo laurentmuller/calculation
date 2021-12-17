@@ -55,15 +55,11 @@ class PivotController extends AbstractController
         // create table
         $table = $this->getPivotTable();
 
-        // options
-        $popover = $this->isSessionBool('popover', true);
-        $highlight = $this->isSessionBool('highlight', false);
-
         // render
         return $this->renderForm('calculation/calculation_pivot.html.twig', [
+            'highlight' => $this->isSessionBool('highlight', false),
+            'popover' => $this->isSessionBool('popover', true),
             'table' => $table,
-            'popover' => $popover,
-            'highlight' => $highlight,
         ]);
     }
 

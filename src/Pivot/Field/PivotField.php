@@ -122,10 +122,8 @@ class PivotField implements \JsonSerializable
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $result = [
             'name' => $this->name,

@@ -24,11 +24,6 @@ use App\Util\Utils;
 class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeInterface
 {
     /**
-     * The path separator.
-     */
-    public const PATH_SEPARATOR = '/';
-
-    /**
      * The children.
      *
      * @var PivotNode[]
@@ -362,14 +357,13 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
     /**
      * Gets the path.
      */
-    public function getPath(): string
+    public function getPath(string $separator = PivotTable::PATH_SEPARATOR): string
     {
-        $sep = self::PATH_SEPARATOR;
         if (!$this->isRoot()) {
-            return $sep . \implode($sep, $this->getKeys());
+            return \implode($separator, $this->getKeys());
         }
 
-        return $sep;
+        return '';
     }
 
     /**
@@ -480,10 +474,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, SortModeI
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $result = [];
         if ($this->key) {

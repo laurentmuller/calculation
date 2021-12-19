@@ -11,7 +11,9 @@
 
 {# macros #}
 {% macro output_dropdown(suffix, value, selection, text) -%}
-<button type="button" data-value="{{ value }}" class="dropdown-item dropdown-{{ suffix }}{% if value == selection %} active{% endif %}">{{ text|default(value)|capitalize }}</button>
+<button type="button" data-value="{{ value }}" class="dropdown-item dropdown-{{ suffix }}{% if value == selection %} active{% endif %}">
+    {{- text|default(value)|capitalize -}}
+</button>
 {%- endmacro %}
 
 {% macro item_path(path, text, icon, class='') %}
@@ -41,11 +43,11 @@
 {%- set icon = column.numeric ? 'numeric' : 'alpha' -%}
 {%- set active = (column.field == sort and 'asc' == order) ? ' active' : '' -%}
 <button type="button" class="dropdown-item dropdown-menu-sort{{ active }}" data-sort="{{ column.field }}" data-order="asc">
-    <i class="fa-solid fa-fw fa-sort-{{ icon }}-up" aria-hidden="true"></i>{{ 'list.sort_ascending_title'|trans({'%name%': column.title|trans}) }}
+	{{- icons.icon('solid fa-fw fa-sort-' ~ icon ~ '-up', 'list.sort_ascending_title', null, {'%name%': column.title|trans}) -}}
 </button>
 {%- set active = (column.field == sort and 'desc' == order) ? ' active' : '' -%}
 <button type="button" class="dropdown-item dropdown-menu-sort{{ active }}" data-sort="{{ column.field }}" data-order="desc">
-    <i class="fa-solid fa-fw fa-sort-{{ icon }}-down" aria-hidden="true"></i>{{ 'list.sort_desscending_title'|trans({'%name%': column.title|trans}) }}
+	{{- icons.icon('solid fa-fw fa-sort-' ~ icon ~ '-down', 'list.sort_desscending_title', null, {'%name%': column.title|trans}) -}}
 </button>
 {%- endmacro %}
 
@@ -76,7 +78,9 @@
 {%- endmacro %}
 
 {% macro button_view(text, icon, view, selection) %}
-<button type="button" class="dropdown-item dropdown-menu-view{% if view == selection %} active{% endif %}" data-value="{{ view }}"><i class="fa-fw {{ icon }}" aria-hidden="true"></i> {{ text|trans }}</button>
+<button type="button" class="dropdown-item dropdown-menu-view{% if view == selection %} active{% endif %}" data-value="{{ view }}">
+	{{- icons.icon('solid fa-fw fa-' ~ icon, text) -}}
+</button>
 {%- endmacro %}
 
 {# granted actions #}
@@ -158,7 +162,7 @@
                     {% block toolbar_actions -%}{%- endblock %}
                     <div class="input-group-append">
                         <button id="clear_search" name="clear_search" type="button" class="btn btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
-                            <i class="fa-solid fa-eraser" aria-hidden="true"></i>
+                            <i class="fa-solid fa-eraser"></i>
                         </button>
                     </div>
                  </div>
@@ -170,10 +174,10 @@
         <div class="btn-group btn-group-sm btn-group-toolbar" role="group">
             <div class="btn-group btn-group-sm btn-group-sort" role="group">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_sort" data-toggle="dropdown" title="{{ 'list.sort_title'|trans }}">
-                    <i class="fa-solid fa-sort-amount-down-alt" aria-hidden="true"></i>
+                    <i class="fa-solid fa-sort-amount-down-alt"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="button_sort">
-                {% for column in columns|filter(c => c.sortable and c.visible) -%}
+    		    {% for column in columns|filter(c => c.sortable and c.visible) -%}
                     {{ _self.output_sort(column, params.sort, params.order) }}
                     {% if not loop.last %}{{ _self.item_separator }}{% endif %}
                 {%- endfor %}
@@ -191,25 +195,25 @@
             <div class="btn-group btn-group-sm" role="group">
                 <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="button_view" data-toggle="dropdown" title="{{ 'common.view_title'|trans }}">
                 {%- if params.view == 'card' -%}
-                    <i class="fa-fw fa-solid fa-grip-horizontal" aria-hidden="true"></i>
+                    <i class="fa-fw fa-solid fa-grip-horizontal"></i>
                 {%- elseif params.view == 'custom' -%}
-                    <i class="fa-fw fa-solid fa-border-none" aria-hidden="true"></i>
+                    <i class="fa-fw fa-solid fa-border-none"></i>
                 {%- else -%}
-                    <i class="fa-fw fa-solid fa-table" aria-hidden="true"></i>
+                    <i class="fa-fw fa-solid fa-table"></i>
                 {%- endif -%}
                 </button>
                 <div class="dropdown-menu" aria-labelledby="button_view">
-                    {{ _self.button_view('common.view_table', 'fa-solid fa-table', 'table', params.view) }}
-                    {{ _self.button_view('common.view_card', 'fa-solid fa-grip-horizontal', 'card', params.view) }}
+                    {{ _self.button_view('common.view_table', 'table', 'table', params.view) }}
+                    {{ _self.button_view('common.view_card', 'grip-horizontal', 'card', params.view) }}
                     {% if custom_view %}
-                    {{ _self.button_view('common.view_custom', 'fa-solid fa-border-none', 'custom', params.view) }}
+                    {{ _self.button_view('common.view_custom', 'border-none', 'custom', params.view) }}
                     {% endif %}
                 </div>
             </div>
             {% if allow_global %}
             <div class="btn-group btn-group-sm" role="group">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-toggle="dropdown" title="{{ 'common.other_actions'|trans }}">
-                    <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                    <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="button_other_actions">
                 {% block global_actions -%}{%- endblock %}

@@ -35,18 +35,25 @@
 </table>
 {%- endmacro %}
 
-{% macro outputPopoverTitle(cell, row=false, separator) -%}
-<p class="mb-0">{{ cell.titles|join(separator)|raw }}{{ separator|raw }}{{ _self.format(cell.value) }}</p>
+{% macro outputPopoverTitle(cell, separator) -%}
+{%- set titles = cell.titles|default(cell.title)|default('') -%}
+<p class="mb-0">{{ titles|join(separator)|raw }}{{ separator|raw }}{{ _self.format(cell.value) }}</p>
 {%- endmacro %}
 
 {% macro outputHeaders(nodes, separator) -%}
 {%- for node in nodes %}
     {%- if node.leaf -%}
-        <td class="text-currency not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node, false, separator)|e }}">{{ node.title|raw }}</td>
+        <td class="text-currency not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node, separator)|e }}">{{ node.title|raw }}</td>
     {%- else -%}
-        <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node, false, separator)|e }}"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
+        <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(node, separator)|e }}"{{ _self.colspan(node.lastChildren|length) }}>{{ node.title|raw }}</td>
     {%- endif -%}
 {%- endfor -%}
+{%- endmacro %}
+
+{% macro outputPopoverTotal(cell, separator) -%}
+<td class="bg-success text-white text-currency" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(cell, separator)|e }}">
+	{{- _self.format(cell.value) -}}
+</td>
 {%- endmacro %}
 
 {% macro outputValue(cell, class, separator) -%}
@@ -69,14 +76,14 @@
 {%- for column in columns %}
     {{ _self.outputCell(table, column, row, 'hover', separator) }}
 {%- endfor -%}
-    {{ _self.outputValue(row, 'not-hover bg-success text-white', separator) -}}
+{{ _self.outputPopoverTotal(row, separator) }}
 {%- endmacro %}
 
 {% macro outputRow(table, columns, row, separator) %}
 {% if row.index >= row.level - 1 -%}
 <tr>
 {% endif -%}
-    <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(row, true, separator)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>
+    <td class="text-nowrap not-hover" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(row, separator)|e }}"{{ _self.rowspan(row.lastChildren|length) }}>{{ row.title }}</td>
 {%- if row.leaf -%}
     {{ _self.outputCells(table, columns, row, separator) -}}
 </tr>
@@ -92,7 +99,7 @@
     <tbody>
         <tr class="skip">
             <td class="not-hover font-weight-bold">{{ table.title|default('&nbsp;')|raw }}</td>
-            <td class="not-hover text-right">{% if table.column.title %}{{ table.column.title }} <i class="fa-solid fa-fw fa-arrow-right" aria-hidden="true"></i>{% else %}&nbsp;{% endif %}</td>
+            <td class="not-hover text-right">{% if table.column.title %}{{ table.column.title }} <i class="fa-solid fa-fw fa-arrow-right"></i>{% else %}&nbsp;{% endif %}</td>
         </tr>
         {%- for i in 2..col_level - 1 -%}
         <tr class="skip">
@@ -100,7 +107,7 @@
         </tr>
         {%- endfor -%}
         <tr class="skip">
-            <td class="not-hover" colspan="2">{% if table.row.title %}<i class="fa-solid fa-fw fa-arrow-down" aria-hidden="true"></i> {{ table.row.title }}{% else %}&nbsp;{% endif %}</td>
+            <td class="not-hover" colspan="2">{% if table.row.title %}<i class="fa-solid fa-fw fa-arrow-down"></i> {{ table.row.title }}{% else %}&nbsp;{% endif %}</td>
         </tr>
     </tbody>
 </table>
@@ -112,7 +119,8 @@
 {%- set row_level = table.row.maxLevel -%}
 {%- set col_level = table.column.maxLevel -%}
 {%- set total_title = table.totalTitle|default('calculation.fields.total'|trans) -%}
-{%- set separator = separator|default('&nbsp;&nbsp;<i class="fa-solid fa-caret-right" aria-hidden="true"></i>&nbsp;&nbsp;') -%}
+{%- set icon = '<i class="fa-solid fa-caret-right"></i>' -%}
+{%- set separator = separator|default('&nbsp;&nbsp;' ~ icon ~ '&nbsp;&nbsp;') -%}
 {% block container_class 'container-fluid' %}
 
 {# header #}
@@ -153,11 +161,11 @@
         </tbody>
         <tfoot>
             <tr>
-                <td class="text-nowrap not-hover bg-success text-white"{{ _self.colspan(row_level) }}>{{ total_title }}</td>
-                {%- for col in table.column.lastChildren %}
-                    {{ _self.outputValue(col, 'not-hover bg-success text-white', separator) }}
-                {%- endfor -%}
-                {{ _self.outputValue(table, 'not-hover bg-success text-white', separator) }}
+            	<td class="text-nowrap not-hover bg-success text-white"{{ _self.colspan(row_level) }}>{{ total_title }}</td>
+            	{%- for cell in table.column.childrenAtLevel(col_level) -%}
+            		{{ _self.outputPopoverTotal(cell, separator) }}
+            	{%- endfor -%}
+            	{{ _self.outputPopoverTotal(table, separator) }}
             </tr>
         </tfoot>
     </table>

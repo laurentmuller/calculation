@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Pdf\PdfResponse;
 use App\Report\HtmlReport;
 use App\Report\PhpIniReport;
+use App\Response\PdfResponse;
 use App\Util\DatabaseInfo;
 use App\Util\PhpInfo;
 use App\Util\SymfonyInfo;

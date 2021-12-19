@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
-use App\Pdf\PdfResponse;
-use App\Spreadsheet\SpreadsheetResponse;
+use App\Interfaces\IResponseInterface;
 use App\Twig\NonceExtension;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -209,16 +208,10 @@ class ResponseListener implements EventSubscriberInterface
             'report-uri' => $this->reportUrl,
         ];
 
-        // PDF response?
-        if ($response instanceof PdfResponse) {
+        // response interface?
+        if ($response instanceof IResponseInterface) {
             $csp['object-src'] = self::CSP_SELF;
-            $csp['plugin-types'] = PdfResponse::MIME_TYPE_PDF;
-        }
-
-        // Spreadsheet response?
-        if ($response instanceof SpreadsheetResponse) {
-            $csp['object-src'] = self::CSP_SELF;
-            $csp['plugin-types'] = SpreadsheetResponse::MIME_TYPE_EXCEL;
+            $csp['plugin-types'] = $response->getMimeType();
         }
 
         // build

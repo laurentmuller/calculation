@@ -10,10 +10,11 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Response;
 
-use App\Util\Utils;
-use Symfony\Component\HttpFoundation\HeaderUtils;
+use App\Interfaces\IResponseInterface;
+use App\Pdf\PdfDocument;
+use App\Traits\ResponseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -23,13 +24,9 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @see PdfDocument
  */
-class PdfResponse extends Response
+class PdfResponse extends Response implements IResponseInterface
 {
-    /**
-     * The application download mime type.
-     */
-    public const MIME_TYPE_DOWNLOAD = 'application/x-download';
-
+    use ResponseTrait;
     /**
      * The application PDF mime type.
      */
@@ -46,25 +43,16 @@ class PdfResponse extends Response
     public function __construct(PdfDocument $doc, bool $inline = true, string $name = '')
     {
         $name = empty($name) ? 'document.pdf' : \basename($name);
-        $encoded = Utils::ascii($name);
-
-        if ($inline) {
-            $type = self::MIME_TYPE_PDF;
-            $disposition = HeaderUtils::DISPOSITION_INLINE;
-        } else {
-            $type = self::MIME_TYPE_DOWNLOAD;
-            $disposition = HeaderUtils::DISPOSITION_ATTACHMENT;
-        }
-
-        $headers = [
-            'Pragma' => 'public',
-            'Content-Type' => $type,
-            'Cache-Control' => 'private, max-age=0, must-revalidate',
-            'Content-Disposition' => HeaderUtils::makeDisposition($disposition, $name, $encoded),
-        ];
-
+        $headers = $this->buildHeaders($name, self::MIME_TYPE_PDF, $inline);
         $content = $doc->Output(PdfDocument::OUTPUT_STRING);
-
         parent::__construct($content, self::HTTP_OK, $headers);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMimeType(): string
+    {
+        return self::MIME_TYPE_PDF;
     }
 }

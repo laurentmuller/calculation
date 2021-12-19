@@ -48,9 +48,9 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             ['myemail@website.com', ['email' => true], 'password.email'],
             ['123', ['letters' => true], 'password.letters'],
             ['abc', ['numbers' => true], 'password.numbers'],
-            ['123', ['pwned' => true], 'password.pwned', ['{{count}}' => FormatUtils::formatInt(1078184)]],
             ['123', ['specialchar' => true], 'password.specialchar'],
             ['@@@', ['letters' => true, 'numbers' => true], 'password.letters'],
+            ['123456', ['pwned' => true], 'password.pwned', ['{{count}}' => FormatUtils::formatInt(37359195)]],
         ];
     }
 

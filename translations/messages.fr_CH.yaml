@@ -632,6 +632,8 @@ list:
     empty_list: Aucune donnée correspondante.
     filter: 'Filtre : {0}/{1}'
     sort_title: Trier
+    sort_ascending: Tri croissant
+    sort_desscending: Tri décroissant
     sort_default_title: Tri par défaut
     sort_ascending_title: '%name% - Croissant'
     sort_desscending_title: '%name% - Décroissant'

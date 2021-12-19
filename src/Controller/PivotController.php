@@ -17,12 +17,11 @@ use App\Pivot\Field\PivotFieldFactory;
 use App\Pivot\PivotTable;
 use App\Pivot\PivotTableFactory;
 use App\Repository\CalculationRepository;
+use App\Response\CsvResponse;
 use App\Util\FormatUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -52,66 +51,50 @@ class PivotController extends AbstractController
      */
     public function pivot(): Response
     {
-        // create table
-        $table = $this->getPivotTable();
-
-        // render
         return $this->renderForm('calculation/calculation_pivot.html.twig', [
             'highlight' => $this->isSessionBool('highlight', false),
             'popover' => $this->isSessionBool('popover', true),
-            'table' => $table,
+            'table' => $this->getTable(),
         ]);
     }
 
     /**
      * Export pivot data to CSV.
      *
-     * @Route("/export", name="calculation_pivot_export")
+     * @Route("/csv", name="calculation_pivot_csv")
      */
-    public function pivotExport(): Response
+    public function pivotCsv(): CsvResponse
     {
-        try {
-            // load data
-            $dataset = $this->getPivotData();
+        // load data
+        $dataset = $this->getDataset();
 
-            // callback
-            $callback = function () use ($dataset): void {
-                // data?
-                if ([] !== $dataset) {
-                    // open
-                    /** @var resource $handle */
-                    $handle = \fopen('php://output', 'w+');
+        // callback
+        $callback = function () use ($dataset): void {
+            // data?
+            if ([] !== $dataset) {
+                /** @var resource $handle */
+                $handle = \fopen('php://output', 'w+');
 
-                    // headers
-                    \fputcsv($handle, \array_keys($dataset[0]), ';');
+                // utf-8
+                \fprintf($handle, \chr(0xEF) . \chr(0xBB) . \chr(0xBF));
 
-                    // rows
-                    foreach ($dataset as $row) {
-                        // convert
-                        $row['calculation_date'] = FormatUtils::formatDate($row['calculation_date']);
-                        $row['calculation_overall_margin'] = \round($row['calculation_overall_margin'], 3);
-                        $row['item_total'] = \round($row['item_total'], 2);
+                // headers
+                \fputcsv($handle, \array_keys($dataset[0]), ';');
 
-                        \fputcsv($handle, $row, ';');
-                    }
-
-                    // close
-                    \fclose($handle);
+                // rows
+                foreach ($dataset as $row) {
+                    $row['calculation_date'] = FormatUtils::formatDate($row['calculation_date']);
+                    $row['calculation_overall_margin'] = \round($row['calculation_overall_margin'], 3);
+                    $row['item_total'] = \round($row['item_total'], 2);
+                    \fputcsv($handle, $row, ';');
                 }
-            };
 
-            // create response
-            $response = new StreamedResponse($callback);
+                // close
+                \fclose($handle);
+            }
+        };
 
-            // headers
-            $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, 'data.csv');
-            $response->headers->set('Content-Type', 'text/csv');
-            $response->headers->set('Content-Disposition', $disposition);
-
-            return $response;
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
+        return new CsvResponse($callback);
     }
 
     /**
@@ -121,20 +104,15 @@ class PivotController extends AbstractController
      */
     public function pivotJson(): JsonResponse
     {
-        try {
-            // create table
-            $table = $this->getPivotTable();
+        $table = $this->getTable();
 
-            return $this->json($table);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
+        return $this->json($table);
     }
 
     /**
-     * Gets the pivot data.
+     * Gets the pivot dataset.
      */
-    private function getPivotData(): array
+    private function getDataset(): array
     {
         return $this->repository->getPivot();
     }
@@ -142,7 +120,7 @@ class PivotController extends AbstractController
     /**
      * Gets the pivot table.
      */
-    private function getPivotTable(): ?PivotTable
+    private function getTable(): ?PivotTable
     {
         // callbacks
         $semesterFormatter = function (int $semestre) {
@@ -169,13 +147,11 @@ class PivotController extends AbstractController
             PivotFieldFactory::month('calculation_date', $this->trans('pivot.fields.month')),
         ];
 
-        $dataset = $this->getPivotData();
+        $dataset = $this->getDataset();
         $title = $this->trans('calculation.list.title');
 
         // create pivot table
         return PivotTableFactory::instance($dataset, $title)
-            //->setAggregatorClass(AverageAggregator::class)
-            //->setAggregatorClass(CountAggregator::class)
             ->setAggregatorClass(SumAggregator::class)
             ->setColumnFields($columns)
             ->setRowFields($rows)

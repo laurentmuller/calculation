@@ -39,9 +39,9 @@ class PivotControllerTest extends AbstractControllerTest
 //             ['/pivot', self::ROLE_ADMIN],
 //             ['/pivot', self::ROLE_SUPER_ADMIN],
 
-            ['/pivot/export', self::ROLE_USER],
-            ['/pivot/export', self::ROLE_ADMIN],
-            ['/pivot/export', self::ROLE_SUPER_ADMIN],
+            ['/pivot/csv', self::ROLE_USER],
+            ['/pivot/csv', self::ROLE_ADMIN],
+            ['/pivot/csv', self::ROLE_SUPER_ADMIN],
 
 //             ['/pivot/json', self::ROLE_USER],
 //             ['/pivot/json', self::ROLE_ADMIN],

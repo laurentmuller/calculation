@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Pdf\PdfResponse;
 use App\Report\HelpReport;
+use App\Response\PdfResponse;
 use App\Service\HelpService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;

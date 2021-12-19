@@ -10,11 +10,12 @@
 
 declare(strict_types=1);
 
-namespace App\Spreadsheet;
+namespace App\Response;
 
-use App\Util\Utils;
+use App\Interfaces\IResponseInterface;
+use App\Spreadsheet\SpreadsheetDocument;
+use App\Traits\ResponseTrait;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -24,13 +25,9 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  *
  * @see SpreadsheetDocument
  */
-class SpreadsheetResponse extends StreamedResponse
+class SpreadsheetResponse extends StreamedResponse implements IResponseInterface
 {
-    /**
-     * The application download mime type.
-     */
-    public const MIME_TYPE_DOWNLOAD = 'application/x-download';
-
+    use ResponseTrait;
     /**
      * The application Microsoft Excel (OpenXML) mime type.
      */
@@ -47,28 +44,19 @@ class SpreadsheetResponse extends StreamedResponse
     public function __construct(SpreadsheetDocument $doc, bool $inline = true, string $name = '')
     {
         $name = empty($name) ? 'document.xlsx' : \basename($name);
-        $encoded = Utils::ascii($name);
-
-        if ($inline) {
-            $type = self::MIME_TYPE_EXCEL;
-            $disposition = HeaderUtils::DISPOSITION_INLINE;
-        } else {
-            $type = self::MIME_TYPE_DOWNLOAD;
-            $disposition = HeaderUtils::DISPOSITION_ATTACHMENT;
-        }
-
-        $headers = [
-            'Pragma' => 'public',
-            'Content-Type' => $type,
-            'Cache-Control' => 'private, max-age=0, must-revalidate',
-            'Content-Disposition' => HeaderUtils::makeDisposition($disposition, $name, $encoded),
-        ];
-
+        $headers = $headers = $this->buildHeaders($name, self::MIME_TYPE_EXCEL, $inline);
         $callback = function () use ($doc): void {
             $writer = IOFactory::createWriter($doc, 'Xlsx');
             $writer->save('php://output');
         };
-
         parent::__construct($callback, self::HTTP_OK, $headers);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMimeType(): string
+    {
+        return self::MIME_TYPE_EXCEL;
     }
 }

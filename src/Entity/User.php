@@ -66,11 +66,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private ?string $hashedToken = null;
 
     /**
-     * The image file.
-     * <p>
-     * NOTE: This is not a mapped field of entity metadata, just a simple property.
-     * For mime type add: (mimeTypes={"image/png", "image/jpeg", "image/gif", "image/x-ms-bmp"}).
-     * </p>.
+     * The image file. NB: This is not a mapped field of entity metadata, just a simple property.
      *
      * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
      * @Assert\Image(maxSize="10485760")

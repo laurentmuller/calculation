@@ -19,6 +19,7 @@ title_by_month: Calculations par mois
 title_by_state: Calculations par statut
 row_by_month: Afficher les calculations pour %name%
 row_by_state: Afficher les calculations pour le statut %name%
+row_show_all: Afficher toutes les calculations
 fields:
     count: Calculations
     date: Date

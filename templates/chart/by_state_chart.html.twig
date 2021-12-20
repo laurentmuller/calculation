@@ -15,7 +15,7 @@
                 <th class="text-nowrap">{{ 'fields.state'|trans }}</th>
                 <th class="text-state">{{ 'fields.editable'|trans }}</th>
                 <th class="text-currency">{{ 'fields.count'|trans }}</th>
-                <th class="text-currency">{{ 'fields.percent'|trans }}</th>
+                <th class="text-percent">{{ 'fields.percent'|trans }}</th>
                 <th class="text-currency">{{ 'fields.sum'|trans }}</th>
                 <th class="text-currency">{{ 'fields.margin'|trans }}</th>
             </tr>
@@ -29,19 +29,21 @@
                 </td>
                 <td class="text-state">{{ (item.editable ? 'common.value_true' : 'common.value_false')|trans([], 'messages') }}</td>
                 <td class="text-currency">{{ item.count|integer }}</td>
-                <td class="text-currency">{{ item.percent|percent(true) }}</td>
+                <td class="text-percent">{{ item.percent|percent(true) }}</td>
                 <td class="text-currency">{{ item.total|amount }}</td>
                 <td class="text-currency{% if app.marginBelow(item.margin) %} text-danger{% endif %}">{{ item.margin|percent(true) }}</td>
             </tr>
             {% endfor -%}
         </tbody>
-        <tfoot>
-            <tr>
-                <td class="font-weight-bold text-nowrap" colspan="2">{{ 'fields.total'|trans }}</td>
+        <tfoot data-link="row" class="rowlink">
+            <tr title="{{ 'row_show_all'|trans }}">
+                <td class="font-weight-bold text-nowrap" colspan="2">
+                    <a href="{{ path(list_path) }}">{{ 'fields.total'|trans }}</a>
+                </td>
                 <td class="font-weight-bold text-currency">{{ count|integer }}</td>
-                <td class="font-weight-bold text-currency">{{ 1|percent(true) }}</td>
+                <td class="font-weight-bold text-percent">{{ 1.0|percent(true) }}</td>
                 <td class="font-weight-bold text-currency">{{ total|amount }}</td>
-                <td class="font-weight-bold text-currency{% if app.marginBelow(margin) %} text-danger{% endif %}">{{ margin|percent(true) }}</td>
+                <td class="font-weight-bold text-currency{% if app.marginBelow(margin) %} text-danger{% endif %}">{{- margin|percent(true) -}}</td>
             </tr>
         </tfoot>
     </table>

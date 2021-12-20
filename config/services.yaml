@@ -66,6 +66,10 @@ services:
     # make public to use with vich_uploader
     App\Service\UserNamer:
         public: true
+    App\Service\EntityFileNamer:
+        public: true
+    App\Service\EntityDirectoryNamer:
+        public: true
 
     # validators
     App\Validator\RecaptchaValidator:
@@ -123,7 +127,7 @@ services:
     App\Translator\TranslatorFactory:
         arguments:
             $translators: !tagged_iterator translators_service
-            
+
     App\Service\MailService:
         calls:
             - setMarkdown: ['@twig.markdown.default']

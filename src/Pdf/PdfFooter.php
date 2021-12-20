@@ -56,7 +56,7 @@ class PdfFooter implements PdfConstantsInterface
         $this->parent->SetY(PdfDocument::FOOTER_OFFSET);
         $cellWidth = $this->parent->getPrintableWidth() / 3;
 
-        // style
+        // style and line color
         PdfStyle::getDefaultStyle()->setFontSize(8)->apply($this->parent);
 
         // pages (left) +  text and url (center) + date (right)
@@ -81,7 +81,7 @@ class PdfFooter implements PdfConstantsInterface
     }
 
     /**
-     * Gets the current formatted date.
+     * Gets the formatted current date.
      */
     private function getDate(): string
     {
@@ -89,7 +89,7 @@ class PdfFooter implements PdfConstantsInterface
     }
 
     /**
-     * Gets the formatted current page and total pages.
+     * Gets the formatted current and total pages.
      */
     private function getPage(): string
     {

@@ -61,8 +61,8 @@
 {{ form_end(form) }}
 {# dialogs #}
 {% if editable -%}
-    {%- include 'dialogs/edit_item_dialog.html.twig' with {'form': item_dialog} only %}
-    {%- include 'dialogs/edit_task_dialog.html.twig' with {'form': task_dialog, 'tasks': tasks} only %}
+    {%- include 'dialog/edit_item_dialog.html.twig' with {'form': item_dialog} only %}
+    {%- include 'dialog/edit_task_dialog.html.twig' with {'form': task_dialog, 'tasks': tasks} only %}
 {%- endif %}
 {%- endblock %}
 

@@ -44,7 +44,7 @@ class ChartController extends AbstractController
         $tabular = $this->isDisplayTabular();
         $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_card');
 
-        $data = $this->getChartMonthData($count, $repository, $service, $url);
+        $data = $this->getMonthData($count, $repository, $service, $url);
         $data['tabular'] = $tabular;
         $data['allowed_months'] = $this->getAllowedMonths($repository);
 
@@ -59,7 +59,7 @@ class ChartController extends AbstractController
     public function byState(CalculationStateRepository $repository, ThemeService $service): Response
     {
         $tabular = $this->isDisplayTabular();
-        $data = $this->getChartStateData($repository, $service, $tabular);
+        $data = $this->getStateData($repository, $service, $tabular);
         $data['tabular'] = $tabular;
 
         return $this->renderForm('chart/by_state_chart.html.twig', $data);
@@ -125,11 +125,21 @@ class ChartController extends AbstractController
     }
 
     /**
-     * Gets data used by the chart for the calculations by month.
+     * Gets the chart's label foreground.
      *
-     * @return array the data
+     * @param ThemeService $service the service to get theme style
+     *
+     * @return string the foreground
      */
-    private function getChartMonthData(int $count, CalculationRepository $repository, ThemeService $service, string $url): array
+    private function getForeground(ThemeService $service): string
+    {
+        return $service->isDarkTheme() ? 'white' : 'black';
+    }
+
+    /**
+     * Gets data used by the chart for the calculations by month.
+     */
+    private function getMonthData(int $count, CalculationRepository $repository, ThemeService $service, string $url): array
     {
         $months = \max(1, $count);
 
@@ -296,14 +306,8 @@ class ChartController extends AbstractController
 
     /**
      * Gets data used by the chart for the calculations by state.
-     *
-     * @param CalculationStateRepository $repository the repository to get data
-     * @param ThemeService               $service    the service to get theme style
-     * @param bool                       $tabular    true to display link to table, false to link to card
-     *
-     * @return array the data
      */
-    private function getChartStateData(CalculationStateRepository $repository, ThemeService $service, bool $tabular): array
+    private function getStateData(CalculationStateRepository $repository, ThemeService $service, bool $tabular): array
     {
         // get values
         $states = $repository->getListCountCalculations();
@@ -319,7 +323,7 @@ class ChartController extends AbstractController
             return $carry + $state['items'];
         }, 0);
         foreach ($states as &$state) {
-            $state['percent'] = $this->safeDivide((float) $state['count'], $count);
+            $state['percent'] = $this->safeDivide((float) $state['total'], $total);
         }
 
         // data
@@ -389,7 +393,7 @@ class ChartController extends AbstractController
 
         // tooltip
         $chart->tooltip->headerFormat('');
-        $chart->tooltip->pointFormat('<span><b>{point.name} : {point.y:,.2f}</b> ({point.percentage:.1f}%)</span>');
+        $chart->tooltip->pointFormat('<span><b>{point.name} : {point.y:,.2f}</b> ({point.percentage:.0f}%)</span>');
 
         return [
             'chart' => $chart,
@@ -398,17 +402,5 @@ class ChartController extends AbstractController
             'total' => $total,
             'margin' => $this->safeDivide($total, $items),
         ];
-    }
-
-    /**
-     * Gets the chart's label foreground.
-     *
-     * @param ThemeService $service the service to get theme style
-     *
-     * @return string the foreground
-     */
-    private function getForeground(ThemeService $service): string
-    {
-        return $service->isDarkTheme() ? 'white' : 'black';
     }
 }

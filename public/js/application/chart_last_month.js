@@ -29,7 +29,7 @@ function onMonthsChange($months) {
     const index = href.lastIndexOf('/');
     let value = Number.parseInt(href.substr(index + 1), 10);
     if (isNaN(value)) {
-        value = 12;
+        value = 6;
     }
     $months.data('months', value).val(value);
 

@@ -248,16 +248,12 @@ class CalculationRepository extends AbstractRepository
 
         // create dates
         foreach ($result as &$item) {
-            $y = (int) ($item['year']);
-            $m = (int) ($item['month']);
-            $dt = new \DateTime();
-            $dt->setDate($y, $m, 1);
-            $item['date'] = $dt;
+            $item['year'] = (int) $item['year'];
+            $item['month'] = (int) $item['month'];
+            $item['date'] = $this->convertToDate($item);
             $item['items'] = (float) $item['items'];
             $item['total'] = (float) $item['total'];
             $item['margin'] = (float) $item['margin'];
-            $item['year'] = (float) $item['year'];
-            $item['month'] = (int) $item['month'];
         }
 
         //reverse
@@ -605,6 +601,13 @@ class CalculationRepository extends AbstractRepository
             default:
                 return parent::getSortField($field, $alias);
         }
+    }
+
+    private function convertToDate(array $item): \DateTimeInterface
+    {
+        $datetime = \sprintf('%s-%s-1', $item['year'], $item['month']);
+
+        return new \DateTime($datetime);
     }
 
     /**

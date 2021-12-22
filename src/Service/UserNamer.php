@@ -28,16 +28,13 @@ class UserNamer implements NamerInterface, ImageExtensionInterface
     /**
      * Gets the base file name.
      *
-     * @param User        $user the user
-     * @param int         $size the image size to use
-     * @param string|null $ext  the optional file extension
-     *
-     * @return string the file name
+     * @param User|int $key
      */
-    public static function getBaseName(User $user, int $size, ?string $ext = null): string
+    public static function getBaseName($key, int $size, ?string $ext = null): string
     {
-        $name = \sprintf('USER_%06d_%03d', (int) $user->getId(), $size);
-        if ($ext) {
+        $id = (int) ($key instanceof User ? $key->getId() : $key);
+        $name = \sprintf('USER_%06d_%03d', $id, $size);
+        if (null !== $ext && '' !== $ext) {
             return "{$name}.{$ext}";
         }
 

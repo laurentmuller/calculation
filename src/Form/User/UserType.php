@@ -17,7 +17,9 @@ use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Form\Type\EnabledDisabledType;
 use App\Form\Type\PlainType;
+use Symfony\Component\Form\Event\SubmitEvent;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * User edit type.
@@ -28,12 +30,15 @@ use Symfony\Component\Form\FormEvent;
  */
 class UserType extends AbstractEntityType
 {
+    private UserPasswordHasherInterface $hasher;
+
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(UserPasswordHasherInterface $hasher)
     {
         parent::__construct(User::class);
+        $this->hasher = $hasher;
     }
 
     /**
@@ -41,14 +46,28 @@ class UserType extends AbstractEntityType
      */
     public function onPreSetData(FormEvent $event): void
     {
-        /* @var User $user */
+        /** @var User $user */
         $user = $event->getData();
         $form = $event->getForm();
         if ($user->isNew()) {
             $form->remove('lastLogin');
-            $form->remove('imageFile');
         } else {
             $form->remove('plainPassword');
+        }
+    }
+
+    /**
+     * Handles the submit event.
+     */
+    public function onSubmit(SubmitEvent $event): void
+    {
+        $form = $event->getForm();
+        if ($form->has('plainPassword')) {
+            /** @var User $user */
+            $user = $event->getData();
+            $plainPassword = $form->get('plainPassword')->getData();
+            $encodedPassword = $this->hasher->hashPassword($user, $plainPassword);
+            $user->setPassword($encodedPassword);
         }
     }
 
@@ -90,9 +109,12 @@ class UserType extends AbstractEntityType
             ->updateOption('maxsize', '10mi')
             ->addVichImageType();
 
-        // add listener
+        // add listeners
         $helper->addPreSetDataListener(function (FormEvent $event): void {
             $this->onPreSetData($event);
+        });
+        $helper->addSubmitListener(function (SubmitEvent $event): void {
+            $this->onSubmit($event);
         });
     }
 }

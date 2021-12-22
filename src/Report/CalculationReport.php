@@ -23,7 +23,7 @@ use App\Util\FormatUtils;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeNone;
 use Endroid\QrCode\Writer\PngWriter;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -31,7 +31,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class CalculationReport extends AbstractReport
+class CalculationReport extends AbstractReport implements LoggerAwareInterface
 {
     use LoggerTrait;
 
@@ -139,16 +139,6 @@ class CalculationReport extends AbstractReport
         $this->renderQrCode();
 
         return true;
-    }
-
-    /**
-     * Set the logger.
-     */
-    public function setLogger(LoggerInterface $logger): self
-    {
-        $this->logger = $logger;
-
-        return $this;
     }
 
     /**

@@ -143,7 +143,7 @@
 
             // palette
             that.$palette = $('<div/>', {
-                'class': 'color-palette',
+                'class': 'color-palette'
             });
 
             let $row;

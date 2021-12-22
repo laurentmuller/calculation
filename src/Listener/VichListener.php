@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
+use App\Entity\User;
 use App\Interfaces\ImageExtensionInterface;
 use App\Service\ImageResizer;
 use App\Service\UserNamer;
@@ -21,6 +22,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Event\Events;
+use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\Polyfill\FileExtensionTrait;
 
 /**
@@ -55,21 +57,22 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
     }
 
     /**
-     * Handles post-upload event.
-     *
      * Create the small and medium image if applicable.
-     *
-     * @param Event $event the event
      */
     public function onPostUpload(Event $event): void
     {
-        /** @var \App\Entity\User $obj */
-        $obj = $event->getObject();
+        /** @var \App\Entity\User $user */
+        $user = $event->getObject();
         $mapping = $event->getMapping();
 
-        $file = $mapping->getFile($obj);
-        if (!$file || !$file->isReadable()) {
+        $file = $mapping->getFile($user);
+        if (!$file instanceof File || !$file->isReadable()) {
             return;
+        }
+
+        // new?
+        if (\preg_match('/0{6}/m', $file->getFilename())) {
+            $file = $this->rename($mapping, $user, $file);
         }
 
         // get values
@@ -78,64 +81,56 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         $path = $file->getPath() . \DIRECTORY_SEPARATOR;
 
         // create medium image
-        $target = $path . UserNamer::getBaseName($obj, self::SIZE_MEDIUM, $extension);
+        $target = $path . UserNamer::getBaseName($user, self::SIZE_MEDIUM, $extension);
         $this->resizer->resizeMedium($source, $target);
 
         // create small image
-        $target = $path . UserNamer::getBaseName($obj, self::SIZE_SMALL, $extension);
+        $target = $path . UserNamer::getBaseName($user, self::SIZE_SMALL, $extension);
         $this->resizer->resizeSmall($source, $target);
     }
 
     /**
-     * Handles pre-remove event.
-     *
      * Remove the small and medium image if applicable.
-     *
-     * @param Event $event the event
      */
     public function onPreRemove(Event $event): void
     {
-        /** @var \App\Entity\User $obj */
-        $obj = $event->getObject();
+        /** @var \App\Entity\User $user */
+        $user = $event->getObject();
         $mapping = $event->getMapping();
 
         // directory
         $path = $mapping->getUploadDestination() . \DIRECTORY_SEPARATOR;
 
         // get file extension
-        $filename = $mapping->getFileName($obj);
+        $filename = $mapping->getFileName($user);
         $file = new File($filename, false);
         $ext = $file->getExtension();
 
         // delete medium image
-        $filename = $path . UserNamer::getBaseName($obj, self::SIZE_MEDIUM, $ext);
+        $filename = $path . UserNamer::getBaseName($user, self::SIZE_MEDIUM, $ext);
         FileUtils::remove($filename);
 
         // delete small image
-        $filename = $path . UserNamer::getBaseName($obj, self::SIZE_SMALL, $ext);
+        $filename = $path . UserNamer::getBaseName($user, self::SIZE_SMALL, $ext);
         FileUtils::remove($filename);
     }
 
     /**
-     * Handles pre-upload event.
-     *
-     * Resize the image if applicable.
-     *
-     * @param Event $event the event
+     * Rename and resize the image if applicable.
      */
     public function onPreUpload(Event $event): void
     {
-        /** @var \App\Entity\User $obj */
-        $obj = $event->getObject();
+        /** @var \App\Entity\User $user */
+        $user = $event->getObject();
         $mapping = $event->getMapping();
 
-        $file = $mapping->getFile($obj);
+        $file = $mapping->getFile($user);
         if (!$file instanceof UploadedFile || !$file->isReadable()) {
             return;
         }
 
         // target file name
-        if ('' === $name = $mapping->getUploadName($obj)) {
+        if ('' === $name = $mapping->getUploadName($user)) {
             return;
         }
 
@@ -147,7 +142,7 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         $extension = $this->getFileExtension($file);
         if (self::EXTENSION_PNG !== $extension) {
             $newName = \substr_replace($name, self::EXTENSION_PNG, \strrpos($name, '.') + 1);
-            $mapping->setFileName($obj, $newName);
+            $mapping->setFileName($user, $newName);
         }
     }
 
@@ -159,5 +154,18 @@ class VichListener implements EventSubscriberInterface, ImageExtensionInterface
         $extension = $this->getExtension($file);
 
         return empty($extension) ? self::EXTENSION_PNG : \strtolower($extension);
+    }
+
+    private function rename(PropertyMapping &$mapping, User $user, File $file): File
+    {
+        $name = UserNamer::getBaseName($user, self::SIZE_DEFAULT, $file->getExtension());
+        $newFile = new File($file->getPath() . \DIRECTORY_SEPARATOR . $name, false);
+
+        FileUtils::rename($file->getPathname(), $newFile->getPathname());
+
+        $mapping->setFileName($user, $name);
+        $mapping->setFile($user, $newFile);
+
+        return $newFile;
     }
 }

@@ -46,7 +46,6 @@
         listen() {
             this.$input.on('change.bs.fileinput', $.proxy(this.change, this));
             $(this.$input[0].form).on('reset.bs.fileinput', $.proxy(this.reset, this));
-
             this.$element.find('[data-trigger="fileinput"]').on('click.bs.fileinput', $.proxy(this.trigger, this));
             this.$element.find('[data-dismiss="fileinput"]').on('click.bs.fileinput', $.proxy(this.clear, this));
         }
@@ -114,8 +113,7 @@
                     element.find('.fileinput-filename').text(file.name);
 
                     // if parent has max-height, using `(max-)height: 100%` on
-                    // child
-                    // doesn't take padding and border into account
+                    // child doesn't take padding and border into account
                     if (preview.css('max-height') !== 'none') {
                         const mh = parseInt(preview.css('max-height'), 10) || 0;
                         const pt = parseInt(preview.css('padding-top'), 10) || 0;
@@ -267,8 +265,7 @@
            }
 
            // ie8+ doesn't support changing the value of input with type=file
-            // so
-           // clone instead
+            // so clone instead
            if (isIE) {
                const inputClone = this.$input.clone(true);
                this.$input.after(inputClone);

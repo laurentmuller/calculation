@@ -20,7 +20,6 @@ use App\Service\FakerService;
 use App\Util\FormatUtils;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -36,9 +35,9 @@ class CalculationGenerator extends AbstractEntityGenerator
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, CalculationService $service, FakerService $fakerService, LoggerInterface $logger, TranslatorInterface $translator)
+    public function __construct(EntityManagerInterface $manager, CalculationService $service, FakerService $fakerService, TranslatorInterface $translator)
     {
-        parent::__construct($manager, $fakerService, $logger, $translator);
+        parent::__construct($manager, $fakerService, $translator);
         $this->service = $service;
     }
 

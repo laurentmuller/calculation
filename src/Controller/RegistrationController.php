@@ -57,10 +57,10 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $hasher, AuthenticationUtils $utils, EntityManagerInterface $manager, UserExceptionService $service): Response
     {
         $user = new User();
+        $user->setPassword('fake');
         $form = $this->createForm(UserRegistrationType::class, $user);
-
         if ($this->handleRequestForm($request, $form)) {
-            // encode the plain password
+            // encode password
             $plainPassword = $form->get('plainPassword')->getData();
             $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
@@ -70,11 +70,10 @@ class RegistrationController extends AbstractController
             $manager->flush();
 
             // generate a signed url and email it to the user
-            $subject = $this->trans('registration.subject');
             $email = (new TemplatedEmail())
                 ->from($this->getAddressFrom())
                 ->to((string) $user->getEmail())
-                ->subject($subject)
+                ->subject($this->trans('registration.subject'))
                 ->htmlTemplate('registration/email.html.twig');
 
             try {
@@ -127,7 +126,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute(self::REGISTER_ROUTE);
         }
 
-        $this->succesTrans('registration.confirmed', [' %username%' => (string) $user]);
+        $this->succesTrans('registration.confirmed', ['%username%' => $user->getUsername()]);
 
         return $this->redirectToHomePage();
     }

@@ -61,8 +61,6 @@
                 <td class="text-currency">{{ item.sum|integer }}</td>
             </tr>
             {% endfor -%}
-        </tbody>
-        <tfoot data-link="row" class="rowlink">
             <tr title="{{ 'row_show_all'|trans }}">
                 <td class="font-weight-bold">
                     <a href="{{ path(list_path) }}">{{ 'fields.total'|trans }}</a>
@@ -73,7 +71,7 @@
                 <td class="font-weight-bold text-currency">{{ marginAmount|integer }}</td>
                 <td class="font-weight-bold text-currency">{{ total|integer }}</td>
             </tr>
-        </tfoot>
+        </tbody>
     </table>
 </div>
 {% endblock %}

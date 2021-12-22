@@ -6,8 +6,8 @@
 {%- set page_list = 'user_table' -%}
 {%- set form_attr = form_attr|default({})|merge({
                         'data-check-name': url('ajax_check_user_name'),
-                         'data-check-email': url('ajax_check_user_email'),
-                         'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
+                        'data-check-email': url('ajax_check_user_email'),
+                        'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
 
 {% block card_body %}
 {{ form_row(form.username) }}
@@ -35,7 +35,7 @@
     </div>
 </div>
 {% endif %}
-{% if not new -%}{{ form_row(form.imageFile) }}{%- endif %}
+{{ form_row(form.imageFile) }}
 {% endblock %}
 
 {% block stylesheets %}

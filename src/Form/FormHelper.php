@@ -442,6 +442,22 @@ class FormHelper
     }
 
     /**
+     * Adds asubmit event listener.
+     *
+     * The SUBMIT event is dispatched after the Form::submit() method
+     * has changed the view data by the request data.
+     *
+     * @param callable $listener the event listener
+     * @param int      $priority The priority of the listener. Listeners
+     *                           with a higher priority are called before
+     *                           listeners with a lower priority.
+     */
+    public function addSubmitListener(callable $listener, int $priority = 0): self
+    {
+        return $this->addEventListener(FormEvents::SUBMIT, $listener, $priority);
+    }
+
+    /**
      * Add a telephone type to the builder and reset all values to default.
      */
     public function addTelType(string $pattern = null): self
@@ -496,9 +512,15 @@ class FormHelper
     public function addVichImageType(): self
     {
         //see https://github.com/kartik-v/bootstrap-fileinput
-        $this->updateOptions(['translation_domain' => 'messages', 'download_uri' => false])
-            ->updateAttribute('accept', 'image/gif,image/jpeg,image/png,image/bmp')
-            ->notRequired();
+        $this->notRequired()
+            ->updateRowAttribute('class', 'mb-0')
+            ->updateOptions([
+                'translation_domain' => 'messages',
+                'download_uri' => false, ])
+            ->updateAttributes([
+                'accept' => 'image/gif,image/jpeg,image/png,image/bmp',
+                'title' => '',
+            ]);
 
         // labels
         if (!isset($this->options['delete_label'])) {

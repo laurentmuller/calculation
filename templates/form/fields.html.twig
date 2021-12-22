@@ -159,21 +159,19 @@
     {%- set thumbnail_alt = thumbnail_alt|default('filetype.image') -%}
     {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
     <div class="fileinput {{ thumbnail_src ? 'fileinput-exists' : 'fileinput-new' }}" data-provides="fileinput">
-        <div class="text-center">
-            <div class="fileinput-preview img-thumbnail" data-trigger="fileinput">
-                {% if thumbnail_src or empty_image -%}
-                    <img alt="{{ thumbnail_alt|trans }}" src="{{ thumbnail_src|default(empty_image) }}">
-                {%- endif %}
-            </div>
-            <div>
-                <span class="btn btn-file btn-form btn-outline-secondary">
-                    <span class="fileinput-new">{{ 'common.button_browse'|trans }}</span>
-                    <span class="fileinput-exists">{{ 'common.button_edit'|trans }}</span>
-                    {% set attr = attr|merge({'aria-label': thumbnail_alt|trans}) -%}
-                    {{- block('form_widget_simple') -}}
-                </span>
-                <a href="#" class="btn btn-form btn-outline-danger fileinput-exists" data-dismiss="fileinput">{{ 'common.button_delete'|trans }}</a>
-            </div>
+		<div class="fileinput-preview img-thumbnail" data-trigger="fileinput">
+        {% if thumbnail_src or empty_image -%}
+            <img alt="{{ thumbnail_alt|trans }}" title="{{ thumbnail_alt|trans }}" src="{{ thumbnail_src|default(empty_image) }}">
+        {%- endif %}
+		</div>
+		<div>
+        	<span class="btn btn-file btn-sm btn-form-sm btn-outline-secondary">
+            	<span class="fileinput-new">{{ 'common.button_browse'|trans }}</span>
+                <span class="fileinput-exists">{{ 'common.button_edit'|trans }}</span>
+                {% set attr = attr|merge({'aria-label': thumbnail_alt|trans}) -%}
+                {{- block('form_widget_simple') -}}
+            </span>
+            <button type="button" class="btn btn-sm btn-form-sm btn-outline-danger fileinput-exists" data-dismiss="fileinput">{{ 'common.button_delete'|trans }}</button>
         </div>
     </div>
 {%- else -%}

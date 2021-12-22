@@ -35,6 +35,22 @@ trait SessionTrait
     protected ?SessionInterface $session = null;
 
     /**
+     * Sets the request stack.
+     */
+    public function setRequestStack(RequestStack $requestStack): void
+    {
+        $this->requestStack = $requestStack;
+    }
+
+    /**
+     * Sets the session.
+     */
+    public function setSession(SessionInterface $session): void
+    {
+        $this->session = $session;
+    }
+
+    /**
      * Gets the session.
      *
      * @return SessionInterface|null the session, if found; null otherwise

@@ -51,17 +51,18 @@ class UserRegistrationType extends AbstractUserCaptchaType
      */
     protected function addFormFields(FormHelper $helper): void
     {
-        $helper->field('email')
-            ->label('user.fields.email')
-            ->addEmailType();
-
         $helper->field('username')
             ->label('user.fields.username')
             ->autocomplete('username')
             ->maxLength(180)
             ->add(UserNameType::class);
 
+        $helper->field('email')
+            ->label('user.fields.email')
+            ->addEmailType();
+
         $helper->field('plainPassword')
+            ->notMapped()
             ->addRepeatPasswordType();
 
         parent::addFormFields($helper);

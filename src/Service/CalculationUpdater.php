@@ -22,7 +22,7 @@ use App\Traits\LoggerTrait;
 use App\Traits\SessionTrait;
 use App\Traits\TranslatorTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -34,7 +34,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class CalculationUpdater
+class CalculationUpdater implements LoggerAwareInterface
 {
     use LoggerTrait;
     use SessionTrait;
@@ -61,7 +61,6 @@ class CalculationUpdater
         CalculationService $service,
         SuspendEventListenerService $listener,
         FormFactoryInterface $factory,
-        LoggerInterface $logger,
         RequestStack $requestStack,
         TranslatorInterface $translator
     ) {
@@ -71,7 +70,6 @@ class CalculationUpdater
         $this->factory = $factory;
 
         // traits
-        $this->logger = $logger;
         $this->requestStack = $requestStack;
         $this->translator = $translator;
     }

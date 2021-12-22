@@ -41,6 +41,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
@@ -271,16 +272,20 @@ class UserController extends AbstractEntityController
      *     {"label" = "user.change_password.title" }
      * })
      */
-    public function password(Request $request, User $item): Response
+    public function password(Request $request, User $item, UserPasswordHasherInterface $hasher): Response
     {
-        // form
         $form = $this->createForm(UserChangePasswordType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
+            // encode password
+            $plainPassword = $form->get('plainPassword')->getData();
+            $encodedPassword = $hasher->hashPassword($item, $plainPassword);
+            $item->setPassword($encodedPassword);
+
             // save
             $this->saveToDatabase($item);
 
             // message
-            $this->succesTrans('user.change_password.success', ['%name%' => $item->getDisplay()]);
+            $this->succesTrans('user.change_password.change_success', ['%name%' => $item->getDisplay()]);
 
             // redirect
             return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());

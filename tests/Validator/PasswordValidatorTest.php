@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Validator;
 
 use App\Interfaces\StrengthInterface;
-use App\Util\FormatUtils;
 use App\Validator\Password;
 use App\Validator\PasswordValidator;
+use function PHPUnit\Framework\assertSame;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -50,7 +50,14 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             ['abc', ['numbers' => true], 'password.numbers'],
             ['123', ['specialchar' => true], 'password.specialchar'],
             ['@@@', ['letters' => true, 'numbers' => true], 'password.letters'],
-            ['123456', ['pwned' => true], 'password.pwned', ['{{count}}' => FormatUtils::formatInt(37359195)]],
+        ];
+    }
+
+    public function getPwneds(): array
+    {
+        return [
+            ['123456', true],
+            ['123*9-*55sA', false],
         ];
     }
 
@@ -115,6 +122,25 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         $constraint = $this->createPassword([$constraint => $value]);
         $this->validator->validate(null, $constraint);
         $this->assertNoViolation();
+    }
+
+    /**
+     * @dataProvider getPwneds
+     */
+    public function testPwned(string $value, bool $violation = true): void
+    {
+        $options = ['pwned' => true];
+        $constraint = $this->createPassword($options);
+        $this->validator->validate($value, $constraint);
+        if ($violation) {
+            $violations = $this->context->getViolations();
+            assertSame(1, \count($violations));
+            $first = $violations[0];
+            assertSame('password.pwned', $first->getMessageTemplate());
+            assertSame($value, $first->getInvalidValue());
+        } else {
+            $this->assertNoViolation();
+        }
     }
 
     /**

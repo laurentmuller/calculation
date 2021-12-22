@@ -18,7 +18,7 @@ use Vich\UploaderBundle\Naming\DirectoryNamerInterface;
 use Vich\UploaderBundle\Util\Transliterator;
 
 /**
- * Default directory namer.
+ * Default directory namer. The directory name is created with the simple class name.
  *
  * @author Laurent Muller
  */

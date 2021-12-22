@@ -95,6 +95,11 @@ services:
     App\Listener\TimestampableListener:
         tags:
             - { name: doctrine.event_listener, event: onFlush}
+ 
+    # used to update user image
+    App\Listener\UserImageListener:
+        tags:
+            - { name: doctrine.event_listener, event: postPersist}
 
     # custom line formatter for monolog
     monolog.custom_formatter:

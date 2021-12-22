@@ -18,7 +18,7 @@ use App\Traits\TranslatorTrait;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -26,7 +26,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class ImageResizer implements ImageExtensionInterface
+class ImageResizer implements LoggerAwareInterface, ImageExtensionInterface
 {
     use LoggerTrait;
     use TranslatorTrait;
@@ -43,9 +43,8 @@ class ImageResizer implements ImageExtensionInterface
     /**
      * Constructor.
      */
-    public function __construct(LoggerInterface $logger, TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator)
     {
-        $this->logger = $logger;
         $this->translator = $translator;
 
         try {

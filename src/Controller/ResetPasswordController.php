@@ -83,7 +83,7 @@ class ResetPasswordController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             $usernameOrEmail = $form->get('user')->getData();
 
-            return $this->sendPasswordResetEmail($request, $usernameOrEmail, $mailer, $service);
+            return $this->sendEmail($request, $usernameOrEmail, $mailer, $service);
         }
 
         return $this->renderForm('reset_password/request.html.twig', [
@@ -127,10 +127,10 @@ class ResetPasswordController extends AbstractController
         // the token is valid; allow the user to change their password.
         $form = $this->createForm(ResetChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
-            // a password reset token should be used only once, remove it.
+            // a password reset token should be used only once, remove it
             $this->helper->removeResetRequest($token);
 
-            // encode the plain password, and set it.
+            // encode password
             $plainPassword = $form->get('plainPassword')->getData();
             $encodedPassword = $hasher->hashPassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
@@ -154,7 +154,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Send an email to the user for resetting the password.
      */
-    private function sendPasswordResetEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer, UserExceptionService $service): RedirectResponse
+    private function sendEmail(Request $request, string $usernameOrEmail, MailerInterface $mailer, UserExceptionService $service): RedirectResponse
     {
         $user = $this->repository->findByUsernameOrEmail($usernameOrEmail);
 

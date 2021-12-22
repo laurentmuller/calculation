@@ -36,9 +36,9 @@
             </div>
             <div class="modal-body">
                 <label class="font-weight-bold">{{ 'generate.result_text'|trans }}</label>
-                <div id="overflow" class="overflow-auto border-bottom" style="max-height: 209px;">
-                    <table class="table table-hover table-list table-sm">
-                        <thead class="d-none calculation">
+                <div id="overflow" class="overflow-auto table-fixed-header border-bottom"">
+                    <table class="table table-hover table-fixed-header table-sm">
+                        <thead class="d-none calculation thead-light">
                             <tr>
                                 <th class="text-id">{{ 'calculation.fields.id'|trans }}</th>
                                 <th class="text-date">{{ 'calculation.fields.date'|trans }}</th>
@@ -49,7 +49,7 @@
                                 <th class="text-currency">{{ 'calculation.fields.total'|trans }}</th>
                             </tr>
                         </thead>
-                        <thead class="d-none product">
+                        <thead class="d-none product thead-light">
                             <tr>
                                 <th class="w-50">{{ 'product.fields.description'|trans }}</th>
                                 <th class="text-group">{{ 'product.fields.group'|trans }}</th>
@@ -58,7 +58,7 @@
                                 <th class="text-unit">{{ 'product.fields.unit'|trans }}</th>
                             </tr>
                         </thead>
-                        <thead class="d-none customer">
+                        <thead class="d-none customer thead-light">
                             <tr>
                                 <th class="w-50">{{ 'customer.fields.nameAndCompany'|trans }}</th>
                                 <th class="w-25">{{ 'customer.fields.address'|trans }}</th>

@@ -18,7 +18,7 @@ use App\Service\FakerService;
 use App\Traits\LoggerTrait;
 use App\Traits\TranslatorTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -27,7 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-abstract class AbstractEntityGenerator implements GeneratorInterface
+abstract class AbstractEntityGenerator implements LoggerAwareInterface, GeneratorInterface
 {
     use LoggerTrait;
     use TranslatorTrait;
@@ -38,11 +38,10 @@ abstract class AbstractEntityGenerator implements GeneratorInterface
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, LoggerInterface $logger, TranslatorInterface $translator)
+    public function __construct(EntityManagerInterface $manager, FakerService $fakerService, TranslatorInterface $translator)
     {
         $this->manager = $manager;
         $this->generator = $fakerService->getGenerator();
-        $this->logger = $logger;
         $this->translator = $translator;
     }
 

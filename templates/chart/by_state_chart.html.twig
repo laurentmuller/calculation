@@ -34,8 +34,6 @@
                 <td class="text-currency{% if app.marginBelow(item.margin) %} text-danger{% endif %}">{{ item.margin|percent(true) }}</td>
             </tr>
             {% endfor -%}
-        </tbody>
-        <tfoot data-link="row" class="rowlink">
             <tr title="{{ 'row_show_all'|trans }}">
                 <td class="font-weight-bold text-nowrap" colspan="2">
                     <a href="{{ path(list_path) }}">{{ 'fields.total'|trans }}</a>
@@ -45,7 +43,7 @@
                 <td class="font-weight-bold text-currency">{{ total|amount }}</td>
                 <td class="font-weight-bold text-currency{% if app.marginBelow(margin) %} text-danger{% endif %}">{{- margin|percent(true) -}}</td>
             </tr>
-        </tfoot>
+        </tbody>
     </table>
 </div>
 {% endblock %}

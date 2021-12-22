@@ -27,6 +27,7 @@ use App\Traits\LoggerTrait;
 use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
@@ -37,7 +38,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *
  * @author Laurent Muller
  */
-class ApplicationService extends AppVariable implements ApplicationServiceInterface
+class ApplicationService extends AppVariable implements LoggerAwareInterface, ApplicationServiceInterface
 {
     use LoggerTrait;
 
@@ -57,22 +58,19 @@ class ApplicationService extends AppVariable implements ApplicationServiceInterf
     private const CACHE_TIMEOUT = 60 * 60;
 
     private CacheItemPoolInterface $adapter;
-
     private EntityManagerInterface $manager;
 
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager, LoggerInterface $logger, KernelInterface $kernel)
+    public function __construct(EntityManagerInterface $manager, KernelInterface $kernel, LoggerInterface $logger)
     {
         $this->manager = $manager;
-        $this->logger = $logger;
+        $this->adapter = AbstractAdapter::createSystemCache(self::CACHE_NAME_SPACE, self::CACHE_TIMEOUT, '', $kernel->getCacheDir(), $logger);
 
+        $this->setLogger($logger);
         $this->setDebug($kernel->isDebug());
         $this->setEnvironment($kernel->getEnvironment());
-
-        $dir = $kernel->getCacheDir();
-        $this->adapter = AbstractAdapter::createSystemCache(self::CACHE_NAME_SPACE, self::CACHE_TIMEOUT, '', $dir, $logger);
     }
 
     /**

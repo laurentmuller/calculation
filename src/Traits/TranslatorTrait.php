@@ -49,6 +49,14 @@ trait TranslatorTrait
     }
 
     /**
+     * Sets the translator.
+     */
+    public function setTranslator(TranslatorInterface $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
      * Translates the given message.
      *
      * @param string      $id         the message id (may also be an object that can be cast to string)

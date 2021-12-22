@@ -27,7 +27,7 @@ use App\Traits\TranslatorTrait;
 use App\Util\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -40,7 +40,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Laurent Muller
  */
-class ProductUpdater
+class ProductUpdater implements LoggerAwareInterface
 {
     use LoggerTrait;
     use MathTrait;
@@ -63,7 +63,6 @@ class ProductUpdater
     public function __construct(
         EntityManagerInterface $manager,
         FormFactoryInterface $factory,
-        LoggerInterface $logger,
         RequestStack $requestStack,
         TranslatorInterface $translator
     ) {
@@ -71,7 +70,6 @@ class ProductUpdater
         $this->factory = $factory;
 
         // traits
-        $this->logger = $logger;
         $this->requestStack = $requestStack;
         $this->translator = $translator;
     }
@@ -232,7 +230,6 @@ class ProductUpdater
         }
 
         if (!$query->isSimulate() && $result->isValid()) {
-            // save
             $this->manager->flush();
             $this->logResult($result);
         }

@@ -167,6 +167,14 @@ trait CacheTrait
     }
 
     /**
+     * Sets the adapter.
+     */
+    public function setAdatper(CacheItemPoolInterface $adpter): void
+    {
+        $this->adapter = $adpter;
+    }
+
+    /**
      * Save the given value to the cache.
      *
      * @param string                 $key   The key for which to save the value

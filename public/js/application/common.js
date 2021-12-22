@@ -7,7 +7,6 @@
  */
 function showFlashbag() {
     'use strict';
-
     // get first element (if any)
     const $element = $('.flashbag:first');
     if ($element.length) {
@@ -21,7 +20,6 @@ function showFlashbag() {
 
         // display
         if (text) {
-            // containerId
             Toaster.notify(type, text, title, $("#flashbags").data());
         }
 
@@ -39,7 +37,6 @@ function showFlashbag() {
  */
 function initSearchToolbar() {
     'use strict';
-
     // search form?
     const $form = $("#navigation-search-form");
     if ($form.length === 0) {
@@ -103,7 +100,6 @@ function initSearchToolbar() {
  */
 function initBackToTop() {
     'use strict';
-
     const $button = $('.btn-back-to-top');
     if ($button.length) {
         $(window).on('scroll', function () {
@@ -124,11 +120,28 @@ function initBackToTop() {
 }
 
 /**
+ * Update the rounded class.
+ */
+function initRounded() {
+    'use strict';
+    const $button = $('<button/>', {
+        'class': 'btn'
+    });
+    $('body').append($button);
+    const border = $button.css('border-radius');
+    $('.rounded').each(function () {
+        $(this)[0].style.setProperty('border-radius', border, 'important');
+    });
+    $button.remove();
+}
+
+/**
  * Ready function
  */
 (function ($) { // jshint ignore:line
     'use strict';
-    showFlashbag();
+    initRounded();
     initBackToTop();
     initSearchToolbar();
+    showFlashbag();
 }(jQuery));

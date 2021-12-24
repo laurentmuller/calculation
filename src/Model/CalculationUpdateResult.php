@@ -27,7 +27,6 @@ class CalculationUpdateResult
     private int $duplicateItems = 0;
     private int $emptyCalculations = 0;
     private int $emptyItems = 0;
-    private bool $simulate = true;
     private int $skipCalculations = 0;
     private int $sortItems = 0;
     private int $totalCalculations = 0;
@@ -227,28 +226,10 @@ class CalculationUpdateResult
     }
 
     /**
-     * Returns a value indicating if the update is simulated (no flush changes in the database).
-     */
-    public function isSimulate(): bool
-    {
-        return $this->simulate;
-    }
-
-    /**
      * Returns if the update is valid.
      */
     public function isValid(): bool
     {
         return !empty($this->calculations);
-    }
-
-    /**
-     * Sets a value indicating if the update is simulated (no flush changes in the database).
-     */
-    public function setSimulate(bool $simulate): self
-    {
-        $this->simulate = $simulate;
-
-        return $this;
     }
 }

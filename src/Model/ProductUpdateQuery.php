@@ -14,6 +14,7 @@ namespace App\Model;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Util\FormatUtils;
 
 /**
  * Contains query parameters to update products.
@@ -71,6 +72,14 @@ class ProductUpdateQuery
     public function getFixed(): float
     {
         return $this->fixed;
+    }
+
+    /**
+     * Gets the formatted value, depending of the percent state.
+     */
+    public function getFormattedValue(): string
+    {
+        return $this->isPercent() ? FormatUtils::formatPercent($this->getValue()) : FormatUtils::formatAmount($this->getValue());
     }
 
     /**

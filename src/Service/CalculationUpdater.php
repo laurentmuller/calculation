@@ -153,27 +153,6 @@ class CalculationUpdater implements LoggerAwareInterface
     }
 
     /**
-     * Log the update result.
-     */
-    public function logResult(CalculationUpdateResult $result): void
-    {
-        $context = [
-            $this->trans('calculation.result.total') => $result->getTotalCalculations(),
-            $this->trans('calculation.result.updateCalculations') => $result->getUpdateCalculations(),
-            $this->trans('calculation.result.skipCalculations') => $result->getSkipCalculations(),
-            $this->trans('calculation.result.unmodifiableCalculations') => $result->getUnmodifiableCalculations(),
-            $this->trans('calculation.result.emptyCalculations') => $result->getEmptyCalculations(),
-
-            $this->trans('calculation.result.emptyItems') => $result->getEmptyItems(),
-            $this->trans('calculation.result.duplicateItems') => $result->getDuplicateItems(),
-            $this->trans('calculation.result.sortItems') => $result->getSortItems(),
-            $this->trans('calculation.result.copyCodes') => $result->getCopyCodes(),
-        ];
-        $message = $this->trans('calculation.update.title');
-        $this->logInfo($message, $context);
-    }
-
-    /**
      * Save the update query to session.
      */
     public function saveUpdateQuery(CalculationUpdateQuery $query): void
@@ -197,7 +176,6 @@ class CalculationUpdater implements LoggerAwareInterface
     public function update(CalculationUpdateQuery $query): CalculationUpdateResult
     {
         $result = new CalculationUpdateResult();
-        $result->setSimulate($query->isSimulate());
 
         try {
             $this->listener->disableListeners();
@@ -213,6 +191,7 @@ class CalculationUpdater implements LoggerAwareInterface
                         if (!$query->isSimulate()) {
                             $this->manager->remove($calculation);
                         }
+                        $result->addTotalCalculations(1);
                         continue;
                     }
                     $messages = [];
@@ -248,6 +227,8 @@ class CalculationUpdater implements LoggerAwareInterface
 
                     if ($changed) {
                         $result->addCalculation($calculation, $messages);
+                    } else {
+                        $result->addSkipCalculations(1);
                     }
                 } else {
                     $result->addUnmodifiableCalculations(1);
@@ -294,5 +275,26 @@ class CalculationUpdater implements LoggerAwareInterface
             ->getSingleColumnResult();
 
         return \implode(', ', $codes);
+    }
+
+    /**
+     * Log the update result.
+     */
+    private function logResult(CalculationUpdateResult $result): void
+    {
+        $context = [
+            $this->trans('calculation.result.total') => $result->getTotalCalculations(),
+            $this->trans('calculation.result.updateCalculations') => $result->getUpdateCalculations(),
+            $this->trans('calculation.result.skipCalculations') => $result->getSkipCalculations(),
+            $this->trans('calculation.result.unmodifiableCalculations') => $result->getUnmodifiableCalculations(),
+            $this->trans('calculation.result.emptyCalculations') => $result->getEmptyCalculations(),
+
+            $this->trans('calculation.result.emptyItems') => $result->getEmptyItems(),
+            $this->trans('calculation.result.duplicateItems') => $result->getDuplicateItems(),
+            $this->trans('calculation.result.sortItems') => $result->getSortItems(),
+            $this->trans('calculation.result.copyCodes') => $result->getCopyCodes(),
+        ];
+        $message = $this->trans('calculation.update.title');
+        $this->logInfo($message, $context);
     }
 }

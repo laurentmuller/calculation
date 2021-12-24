@@ -21,10 +21,7 @@ use App\Entity\Product;
  */
 class ProductUpdateResult implements \Countable
 {
-    private ?string $code = null;
-    private bool $percent = true;
     private array $products = [];
-    private float $value = 0;
 
     /**
      * Add a product to the list of updated products.
@@ -45,14 +42,6 @@ class ProductUpdateResult implements \Countable
     }
 
     /**
-     * Gets the selected category code.
-     */
-    public function getCode(): ?string
-    {
-        return $this->code;
-    }
-
-    /**
      * Gets the updated products.
      *
      * @return Product[]
@@ -63,56 +52,10 @@ class ProductUpdateResult implements \Countable
     }
 
     /**
-     * Gets the update value (percent or fixed amount).
-     */
-    public function getValue(): float
-    {
-        return $this->value;
-    }
-
-    /**
-     * Returns a value indicating if update is apply with the percent.
-     */
-    public function isPercent(): bool
-    {
-        return $this->percent;
-    }
-
-    /**
      * Returns if the update is valid.
      */
     public function isValid(): bool
     {
         return !empty($this->products);
-    }
-
-    /**
-     * Sets the selected category code.
-     */
-    public function setCode(string $code): self
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-    /**
-     * Sets the percent to update for.
-     */
-    public function setPercent(bool $percent): self
-    {
-        $this->percent = $percent;
-
-        return $this;
-    }
-
-    /**
-     * Sets the update value (percent or fixed amount).
-     */
-    public function setValue(float $value): self
-    {
-        $this->value = $value;
-
-        return $this;
     }
 }

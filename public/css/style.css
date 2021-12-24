@@ -596,9 +596,12 @@ tr.strikeout-danger td:before {
 }
 
 /**
- * Fixed header
+ * Fixed table header
  */
  div.overflow-auto.table-fixed-header {
+    max-height: 312px;
+ } 
+div.overflow-auto.table-fixed-header.table-fixed-header-sm {
     max-height: 207px;
  } 
 table.table-fixed-header {

@@ -239,7 +239,10 @@ class AdminController extends AbstractController
                 $application->setProperties([ApplicationServiceInterface::P_UPDATE_CALCULATIONS => new \DateTime()]);
             }
 
-            return $this->renderForm('calculation/calculation_result.html.twig', ['result' => $result]);
+            return $this->renderForm('calculation/calculation_result.html.twig', [
+                'result' => $result,
+                'query' => $query,
+            ]);
         }
 
         // display

@@ -102,6 +102,7 @@ calculation:
     result:
         description: Résultats de la mise à jour des calculations.
         simulate: La mise à jour a été simulée. Aucune calculation n'a été modifiée dans la base de données.
+        empty: Aucune calculation n'a été mise à jour.
         updateCalculations: Calculations mises à jour
         skipCalculations: Calculations inchangées
         emptyCalculations: Calculations vides
@@ -1075,6 +1076,7 @@ generate:
     description: Cet outil permet de générer des données aléatoires.
     submit_text: Générer
     result_text: Données générées
+    result_link: Afficher les données
     result_simulated: La mise à jour a été simulée. Aucune donnée n'a été ajoutée dans la base de données.
     fields:
         entity: Objet à générer
@@ -1246,8 +1248,8 @@ simple_editor:
     redo: Rétablir la dernière action
 footer:
     about_title: Afficher les informations à propos de l'application
-    copyright: Copyright © %year% %owner%
-    copyright_title: Afficher les informations à propos du concepteur de l'application
+    copyright: Copyright © 2020 - %year% %owner%
+    copyright_title: Afficher le site du concepteur de l'application
     environment_title: Environnement d'exécution de l'application
     breadcrumb_title: Accéder à la page %title%
 breadcrumb:

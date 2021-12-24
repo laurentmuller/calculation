@@ -22,4 +22,4 @@
 /**
  * Common Files
  */
-<!--#include file="application/common.js" -->
+<!--#include file="application/core_common.js" -->

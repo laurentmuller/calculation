@@ -77,6 +77,9 @@ class ProductProvider extends EntityProvider
     public function products(int $count = 1, bool $allowDuplicates = false): array
     {
         $products = $this->randomElements($this->getEntities(), $count, $allowDuplicates);
+        if (\count($products) < 2) {
+            return $products;
+        }
 
         \usort($products, static function (Product $a, Product $b) {
             $result = \strcasecmp($a->getCategoryCode(), $b->getCategoryCode());

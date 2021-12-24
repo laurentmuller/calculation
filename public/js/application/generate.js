@@ -4,12 +4,11 @@
 
 /**
  * Creates a row for the given values.
- *
+ * 
  * @param {array}
  *            values - the cell values.
  * @param {array}
- *            classes - the cell classes. This array must have the same length
- *            as the values.
+ *            classes - the cell classes. This array must have the same length as the values.
  * @returns {jQuery} the created row.
  */
 function createRow(values, classes) {
@@ -26,7 +25,7 @@ function createRow(values, classes) {
 
 /**
  * Creates rows for the given items.
- *
+ * 
  * @param {array}
  *            items - the items to render.
  * @param {function}
@@ -65,7 +64,7 @@ function createRows(items, valuesCallback, classes, rowCallback, headers) {
 
 /**
  * Fill the table with the generated calculations
- *
+ * 
  * @param {array}
  *            items - the calculations to render.
  */
@@ -85,7 +84,7 @@ function renderCalculations(items) {
 
 /**
  * Fill the table with the generated customers
- *
+ * 
  * @param {array}
  *            items - the customers to render.
  */
@@ -101,7 +100,7 @@ function renderCustomers(items) {
 
 /**
  * Fill the table with the generated products
- *
+ * 
  * @param {array}
  *            items - the products to render.
  */
@@ -124,7 +123,7 @@ function disableButtons() {
     const $submit = $form.find(':submit');
     $submit.data('focused', $submit.is(":focus")).toggleDisabled(true);
     $form.find('.btn-cancel').toggleDisabled(true);
-    $('#message-result').addClass('d-none');
+    $('#message-result').slideUp();
 }
 
 /**
@@ -143,7 +142,7 @@ function enableButtons() {
 
 /**
  * Notify a message.
- *
+ * 
  * @param {string}
  *            type - the message type.
  * @param {string}
@@ -195,7 +194,7 @@ function generate() {
 
         $('#simulated').toggleClass('d-none', !response.simulate);
         $('#message').text(response.message);
-        $('#message-result').removeClass('d-none');
+        $('#message-result').slideDown();
 
     }).always(function () {
         $('#form_confirm').setChecked(false);

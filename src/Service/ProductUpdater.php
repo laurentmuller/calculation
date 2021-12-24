@@ -24,7 +24,6 @@ use App\Traits\LoggerTrait;
 use App\Traits\MathTrait;
 use App\Traits\SessionTrait;
 use App\Traits\TranslatorTrait;
-use App\Util\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Psr\Log\LoggerAwareInterface;
@@ -170,20 +169,6 @@ class ProductUpdater implements LoggerAwareInterface
     }
 
     /**
-     * Log the update result.
-     */
-    public function logResult(ProductUpdateResult $result): void
-    {
-        $context = [
-            $this->trans('product.fields.category') => $result->getCode(),
-            $this->trans('product.result.updated') => $this->trans('counters.products', ['count' => $result->count()]),
-            $this->trans('product.result.value') => $result->isPercent() ? FormatUtils::formatPercent($result->getValue()) : FormatUtils::formatAmount($result->getValue()),
-        ];
-        $message = $this->trans('product.update.title');
-        $this->logInfo($message, $context);
-    }
-
-    /**
      *  Save the update query to session.
      */
     public function saveUpdateQuery(ProductUpdateQuery $query): void
@@ -207,9 +192,6 @@ class ProductUpdater implements LoggerAwareInterface
     public function update(ProductUpdateQuery $query): ProductUpdateResult
     {
         $result = new ProductUpdateResult();
-        $result->setCode($query->getCategoryCode())
-            ->setPercent($query->isPercent())
-            ->setValue($query->getValue());
 
         $products = $query->isAllProducts() ? $this->getProducts($query->getCategory()) : $query->getProducts();
         if (empty($products)) {
@@ -231,7 +213,7 @@ class ProductUpdater implements LoggerAwareInterface
 
         if (!$query->isSimulate() && $result->isValid()) {
             $this->manager->flush();
-            $this->logResult($result);
+            $this->logResult($query, $result);
         }
 
         return $result;
@@ -296,5 +278,19 @@ class ProductUpdater implements LoggerAwareInterface
         }
 
         return [];
+    }
+
+    /**
+     * Log the update result.
+     */
+    private function logResult(ProductUpdateQuery $query, ProductUpdateResult $result): void
+    {
+        $context = [
+            $this->trans('product.fields.category') => $query->getCategoryCode(),
+            $this->trans('product.result.updated') => $this->trans('counters.products', ['count' => $result->count()]),
+            $this->trans('product.result.value') => $query->getFormattedValue(),
+        ];
+        $message = $this->trans('product.update.title');
+        $this->logInfo($message, $context);
     }
 }

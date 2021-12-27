@@ -249,7 +249,7 @@ class TestController extends AbstractController
         // default values
         $data = [
             'input' => 'aB123456#*/82568A',
-            'minstrength' => 2,
+            'minstrength' => StrengthInterface::LEVEL_MEDIUM,
         ];
         foreach ($options as $option) {
             $data[$option] = true;

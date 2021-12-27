@@ -23,10 +23,22 @@ use App\Interfaces\StrengthInterface;
 class MinStrengthType extends AbstractChoiceType
 {
     /**
+     * The map between level values and translatable texts.
+     */
+    public const CHOICE_LEVELS = [
+        StrengthInterface::LEVEL_NONE => 'password.strength_level.none',
+        StrengthInterface::LEVEL_VERY_WEEK => 'password.strength_level.very_weak',
+        StrengthInterface::LEVEL_WEEK => 'password.strength_level.weak',
+        StrengthInterface::LEVEL_MEDIUM => 'password.strength_level.medium',
+        StrengthInterface::LEVEL_STRONG => 'password.strength_level.strong',
+        StrengthInterface::LEVEL_VERY_STRONG => 'password.strength_level.very_strong',
+    ];
+
+    /**
      * {@inheritdoc}
      */
     protected function getChoices(): array
     {
-        return \array_flip(StrengthInterface::CHOICE_LEVELS);
+        return \array_flip(self::CHOICE_LEVELS);
     }
 }

@@ -90,15 +90,9 @@ class PasswordValidator extends AbstractConstraintValidator
     /**
      * Check util a violation is added.
      */
-    private function checkAny(string $value, Password $constraint): void
+    private function checkAny(string $value, Password $constraint): bool
     {
-        /**
-         * @var bool $result
-         * @phpstan-ignore-next-line
-         * @noRector \Rector\CodeQuality\Rector\If_\ShortenElseIfRector
-         * @noRector \Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector
-         */
-        $result = $this->checkLetters($constraint, $value)
+        return $this->checkLetters($constraint, $value)
             || $this->checkCaseDiff($constraint, $value)
             || $this->checkNumber($constraint, $value)
             || $this->checkSpecialChar($constraint, $value)
@@ -207,7 +201,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkStrength(Password $constraint, string $value): bool
     {
-        if ($constraint->minstrength > StrengthInterface::LEVEL_NONE) {
+        if (StrengthInterface::LEVEL_NONE !== $constraint->minstrength) {
             $zxcvbn = new Zxcvbn();
             $strength = $zxcvbn->passwordStrength($value);
             $score = $strength['score'];

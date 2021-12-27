@@ -20,15 +20,15 @@ namespace App\Interfaces;
 interface StrengthInterface
 {
     /**
-     * The map between level values and translatable texts.
+     * The allowed level values.
      */
-    public const CHOICE_LEVELS = [
-        self::LEVEL_NONE => 'password.strength_level.none',
-        self::LEVEL_VERY_WEEK => 'password.strength_level.very_weak',
-        self::LEVEL_WEEK => 'password.strength_level.weak',
-        self::LEVEL_MEDIUM => 'password.strength_level.medium',
-        self::LEVEL_STRONG => 'password.strength_level.strong',
-        self::LEVEL_VERY_STRONG => 'password.strength_level.very_strong',
+    public const ALLOWED_LEVELS = [
+        self::LEVEL_NONE,
+        self::LEVEL_VERY_WEEK,
+        self::LEVEL_WEEK,
+        self::LEVEL_MEDIUM,
+        self::LEVEL_STRONG,
+        self::LEVEL_VERY_STRONG,
     ];
 
     /**

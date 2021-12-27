@@ -34,6 +34,7 @@ use App\Spreadsheet\UsersDocument;
 use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Bundle\TimeBundle\DateTimeFormatter;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
@@ -151,7 +152,7 @@ class UserController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
-    public function excel(PropertyMappingFactory $factory, StorageInterface $storage): SpreadsheetResponse
+    public function excel(PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter): SpreadsheetResponse
     {
         /** @var User[] $entities */
         $entities = $this->getEntities('username');
@@ -160,7 +161,7 @@ class UserController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new UsersDocument($this, $entities, $factory, $storage);
+        $doc = new UsersDocument($this, $entities, $factory, $storage, $formatter);
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -309,7 +310,7 @@ class UserController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      */
-    public function pdf(PropertyMappingFactory $factory, StorageInterface $storage): PdfResponse
+    public function pdf(PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter): PdfResponse
     {
         /** @var User[] $entities */
         $entities = $this->getEntities('username');
@@ -318,7 +319,7 @@ class UserController extends AbstractEntityController
             throw $this->createNotFoundException($message);
         }
 
-        $doc = new UsersReport($this, $entities, $factory, $storage);
+        $doc = new UsersReport($this, $entities, $factory, $storage, $formatter);
 
         return $this->renderPdfDocument($doc);
     }

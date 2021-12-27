@@ -69,6 +69,32 @@ class CustomerInformation
     }
 
     /**
+     * Gets the translated fax number.
+     */
+    public function getTranslatedFax(object $translator): string
+    {
+        $fax = $this->getFax() ?? '';
+        if (\method_exists($translator, 'trans')) {
+            return $translator->trans('report.fax', ['{0}' => $fax]);
+        }
+
+        return empty($fax) ? '' : "Fax: $fax";
+    }
+
+    /**
+     * Gets the translated phone number.
+     */
+    public function getTranslatedPhone(object $translator): string
+    {
+        $phone = $this->getPhone() ?? '';
+        if (\method_exists($translator, 'trans')) {
+            return $translator->trans('report.phone', ['{0}' => $phone]);
+        }
+
+        return empty($phone) ? '' : "Phone: $phone";
+    }
+
+    /**
      * Gets the url.
      */
     public function getUrl(): ?string

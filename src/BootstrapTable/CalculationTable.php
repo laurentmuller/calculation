@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\BootstrapTable;
 
+use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
@@ -54,11 +55,14 @@ class CalculationTable extends AbstractEntityTable
     }
 
     /**
-     * Formats the overall margin column.
+     * Render the overall margin column.
      */
-    public function formatOverallMargin(float $margin): string
+    public function formatOverallMargin(float $margin, Calculation $entity): string
     {
-        return $this->twig->render('table/_cell_calculation_margin.html.twig', ['margin' => $margin]);
+        return $this->twig->render('table/_cell_calculation_margin.html.twig', [
+            'empty' => $entity->isEmpty(),
+            'margin' => $margin,
+        ]);
     }
 
     /**

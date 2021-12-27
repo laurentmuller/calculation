@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
+use App\Model\CustomerInformation;
 use App\Traits\TranslatorTrait;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -36,12 +37,17 @@ class SpreadsheetDocument extends Spreadsheet
     use TranslatorTrait;
 
     /**
-     * The default margins (0.4" = 10 millimeters).
+     * The default margins (10 millimeters = 0.4").
      */
     public const DEFAULT_MARGIN = 0.4;
 
     /**
-     * The top and bottom margins when header and/or footer is present (0.51" = 13 millimeters).
+     * The top margins when customer header is present (24 millimeters = 0.94").
+     */
+    public const HEADER_CUSTOMER_MARGIN = 0.94;
+
+    /**
+     * The top and bottom margins when header and/or footer is present (13 millimeters = 0.51").
      */
     public const HEADER_FOOTER_MARGIN = 0.51;
 
@@ -143,15 +149,15 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function initialize(AbstractController $controller, string $title, bool $landscape = false): self
     {
-        $company = $controller->getApplication()->getCustomerName();
+        $customer = $controller->getApplication()->getCustomer();
         $application = $controller->getApplicationName();
         $username = $controller->getUserName();
         $title = $this->trans($title);
 
-        $this->setHeaderFooter($title, $company, $application)
+        $this->setHeaderFooter($title, $application, $customer)
             ->setTitle($title)
             ->setActiveTitle($title)
-            ->setCompany($company)
+            ->setCompany($customer->getName())
             ->setUserName($username)
             ->setCategory($application)
             ->setPrintGridlines(true);
@@ -484,48 +490,42 @@ class SpreadsheetDocument extends Spreadsheet
 
     /**
      * Sets the header and footer texts.
-     *
-     * The header contains:
-     * <ul>
-     * <li>The title on the left with bold style.</li>
-     * <li>The company name on the right with bold style.</li>
-     * </ul>
-     * The footer contains:
-     * <ul>
-     * <li>The current page and the total pages on the left.</li>
-     * <li>The application name on the center.</li>
-     * <li>The date and the time on the right.</li>
-     * </ul>
-     *
-     * @param string $title       the title
-     * @param string $company     the company name
-     * @param string $application the application name
      */
-    public function setHeaderFooter(?string $title, ?string $company, ?string $application): self
+    public function setHeaderFooter(?string $title, ?string $application, CustomerInformation $customer): self
     {
-        $header = '';
-        if ($title) {
-            $header .= '&L&B' . $this->cleanHeaderFooter($title);
-        }
-        if ($company) {
-            $header .= '&R&B' . $this->cleanHeaderFooter($company);
-        }
-
-        $footer = '&LPage &P / &N'; // pages
-        if ($application) {
-            $footer .= '&C' . $this->cleanHeaderFooter($application);
-        }
-        $footer .= '&R&D - &T'; // date and time
-
         $sheet = $this->getActiveSheet();
         $pageMargins = $sheet->getPageMargins();
-        $headerFooter = $sheet->getHeaderFooter();
-        if (!empty($header)) {
-            $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
-            $headerFooter->setOddHeader($header);
-        }
         $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
-        $headerFooter->setOddFooter($footer);
+
+        $header = new HeaderFooter(true);
+        if ($customer->isPrintAddress()) {
+            $header->addLeft($customer->getName() ?? '', true);
+            $header->addLeft($customer->getAddress() ?? '');
+            $header->addLeft($customer->getZipCity() ?? '');
+
+            if ($title) {
+                $header->addCenter($title, true);
+            }
+
+            $header->addRight($customer->getTranslatedPhone($this));
+            $header->addRight($customer->getTranslatedFax($this));
+            $header->addRight($customer->getEmail() ?? '');
+            $pageMargins->setTop(self::HEADER_CUSTOMER_MARGIN);
+        } else {
+            $header->addLeft($title ?? '', true);
+            $header->addRight($customer->getName() ?? '', true);
+            $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
+        }
+
+        $footer = new HeaderFooter(false);
+        $footer->addLeft('Page &P / &N', false, false);
+        if ($application) {
+            $footer->addCenter($application);
+        }
+        $footer->addRight('&D - &T', false, false);
+
+        $header->apply($sheet);
+        $footer->apply($sheet);
 
         return $this;
     }
@@ -802,15 +802,5 @@ class SpreadsheetDocument extends Spreadsheet
     public function stringFromColumnIndex(int $columnIndex): string
     {
         return Coordinate::stringFromColumnIndex($columnIndex);
-    }
-
-    /**
-     * Clean a header/footer property.
-     *
-     * @param string $value the property to clean
-     */
-    private function cleanHeaderFooter(string $value): string
-    {
-        return \str_replace('&', '&&', $value);
     }
 }

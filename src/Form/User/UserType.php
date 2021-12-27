@@ -16,7 +16,7 @@ use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Form\Type\EnabledDisabledType;
-use App\Form\Type\PlainType;
+use Knp\Bundle\TimeBundle\DateTimeFormatter;
 use Symfony\Component\Form\Event\SubmitEvent;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -30,15 +30,29 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
  */
 class UserType extends AbstractEntityType
 {
+    private DateTimeFormatter $formatter;
     private UserPasswordHasherInterface $hasher;
 
     /**
      * Constructor.
      */
-    public function __construct(UserPasswordHasherInterface $hasher)
+    public function __construct(UserPasswordHasherInterface $hasher, DateTimeFormatter $formatter)
     {
         parent::__construct(User::class);
         $this->hasher = $hasher;
+        $this->formatter = $formatter;
+    }
+
+    /**
+     * @param \DateTimeInterface|string $lastLogin
+     */
+    public function formatLastLogin($lastLogin): ?string
+    {
+        if ($lastLogin instanceof \DateTimeInterface) {
+            return $this->formatter->formatDiff($lastLogin, new \DateTime());
+        }
+
+        return null;
     }
 
     /**
@@ -98,11 +112,8 @@ class UserType extends AbstractEntityType
             ->add(EnabledDisabledType::class);
 
         $helper->field('lastLogin')
-            ->widgetClass('text-center')
-            ->updateOptions([
-                'date_format' => PlainType::FORMAT_SHORT,
-                'time_format' => PlainType::FORMAT_SHORT,
-                'empty_value' => 'common.value_none', ])
+            ->updateOption('transformer', [$this, 'formatLastLogin'])
+            ->updateOption('empty_value', 'common.value_none')
             ->addPlainType(true);
 
         $helper->field('imageFile')

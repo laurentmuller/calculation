@@ -14,6 +14,7 @@ namespace App\Tests\Validator;
 
 use App\Validator\Strength;
 use App\Validator\StrengthValidator;
+use Symfony\Component\Validator\Exception\InvalidArgumentException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -26,9 +27,15 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
 {
     private const EMPTY_MESSAGE = 'empty';
 
+    public function getStrengthInvalids(): \Generator
+    {
+        yield [-2];
+        yield [5];
+    }
+
     public function getStrengths(): \Generator
     {
-        for ($i = -2; $i < 6; ++$i) {
+        for ($i = -1; $i < 5; ++$i) {
             yield ['123', $i, $i > 0];
         }
     }
@@ -38,8 +45,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
      */
     public function testStrength(string $value, int $minstrength, bool $violation = true): void
     {
-        $options = ['minstrength' => $minstrength];
-        $constraint = new Strength($options);
+        $constraint = new Strength($minstrength);
         $this->validator->validate($value, $constraint);
 
         if ($violation) {
@@ -54,6 +60,15 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         } else {
             $this->assertNoViolation();
         }
+    }
+
+    /**
+     * @dataProvider getStrengthInvalids
+     */
+    public function testStrengthInvalid(int $minstrength): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Strength($minstrength);
     }
 
     /**

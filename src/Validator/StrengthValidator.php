@@ -14,7 +14,11 @@ namespace App\Validator;
 
 use App\Interfaces\StrengthInterface;
 use App\Traits\StrengthTranslatorTrait;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ZxcvbnPhp\Zxcvbn;
 
@@ -29,13 +33,16 @@ class StrengthValidator extends AbstractConstraintValidator
 {
     use StrengthTranslatorTrait;
 
+    private ?PropertyAccessorInterface $propertyAccessor;
+
     /**
      * Constructor.
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator, PropertyAccessorInterface $propertyAccessor = null)
     {
         parent::__construct(Strength::class);
         $this->translator = $translator;
+        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
@@ -45,23 +52,61 @@ class StrengthValidator extends AbstractConstraintValidator
      */
     protected function doValidate(string $value, Constraint $constraint): void
     {
-        if ($constraint->minstrength > StrengthInterface::LEVEL_NONE) {
-            $zx = new Zxcvbn();
-            $strength = $zx->passwordStrength($value);
-            $score = $strength['score'];
-            if ($score < $constraint->minstrength) {
-                $strength_min = $this->translateLevel($constraint->minstrength);
-                $strength_current = $this->translateLevel($score);
-                $parameters = [
-                    '{{strength_min}}' => $strength_min,
-                    '{{strength_current}}' => $strength_current,
-                ];
+        $minstrength = $constraint->minstrength;
+        if (StrengthInterface::LEVEL_NONE === $minstrength) {
+            return;
+        }
 
-                $this->context->buildViolation($constraint->minstrengthMessage)
-                    ->setParameters($parameters)
-                    ->setInvalidValue($value)
-                    ->addViolation();
+        $zx = new Zxcvbn();
+        $userInputs = $this->getUserInputs($constraint);
+        $strength = $zx->passwordStrength($value, $userInputs);
+        $score = $strength['score'];
+        if ($score < $minstrength) {
+            $strength_min = $this->translateLevel($constraint->minstrength);
+            $strength_current = $this->translateLevel($score);
+            $parameters = [
+                '{{strength_min}}' => $strength_min,
+                '{{strength_current}}' => $strength_current,
+            ];
+
+            $this->context->buildViolation($constraint->minstrengthMessage)
+                ->setParameters($parameters)
+                ->setInvalidValue($value)
+                ->addViolation();
+        }
+    }
+
+    private function getPropertyAccessor(): PropertyAccessorInterface
+    {
+        if (null === $this->propertyAccessor) {
+            $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        }
+
+        return $this->propertyAccessor;
+    }
+
+    private function getUserInputs(Strength $constraint): array
+    {
+        $userInputs = [];
+        if (null === $object = $this->context->getObject()) {
+            return $userInputs;
+        }
+
+        if ($path = $constraint->userNamePath) {
+            try {
+                $userInputs[] = $this->getPropertyAccessor()->getValue($object, $path);
+            } catch (NoSuchPropertyException $e) {
+                throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, get_debug_type($constraint)) . $e->getMessage(), 0, $e);
             }
         }
+        if ($path = $constraint->emailPath) {
+            try {
+                $userInputs[] = $this->getPropertyAccessor()->getValue($object, $path);
+            } catch (NoSuchPropertyException $e) {
+                throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided to "%s" constraint: ', $path, get_debug_type($constraint)) . $e->getMessage(), 0, $e);
+            }
+        }
+
+        return $userInputs;
     }
 }

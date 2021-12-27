@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Form\Type\MinStrengthType;
 use App\Interfaces\StrengthInterface;
 
 /**
@@ -26,7 +27,7 @@ trait StrengthTranslatorTrait
     /**
      * Translate the password strength level.
      *
-     * @param int $level the strength level (-1 to 4) to translate
+     * @param int $level the strength level (-1 to 4 inclusive) to translate
      *
      * @return string the translated level
      */
@@ -37,7 +38,7 @@ trait StrengthTranslatorTrait
         } elseif ($level > StrengthInterface::LEVEL_VERY_STRONG) {
             $level = StrengthInterface::LEVEL_VERY_STRONG;
         }
-        $id = StrengthInterface::CHOICE_LEVELS[$level];
+        $id = MinStrengthType::CHOICE_LEVELS[$level];
 
         return $this->trans($id);
     }

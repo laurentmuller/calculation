@@ -22,7 +22,7 @@ use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
 use App\Traits\RoleTranslatorTrait;
 use App\Util\FileUtils;
-use App\Util\FormatUtils;
+use Knp\Bundle\TimeBundle\DateTimeFormatter;
 use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -35,34 +35,20 @@ class UsersReport extends AbstractArrayReport
 {
     use RoleTranslatorTrait;
 
-    /**
-     * The mapping factory.
-     */
     private PropertyMappingFactory $factory;
-
-    /**
-     * The configured file property name.
-     */
     private ?string $fieldName = null;
-
-    /**
-     * The image storage.
-     */
+    private DateTimeFormatter $formatter;
     private StorageInterface $storage;
 
     /**
      * Constructor.
-     *
-     * @param AbstractController     $controller the parent controller
-     * @param User[]                 $entities   the users to export
-     * @param PropertyMappingFactory $factory    the factory to get mapping informations
-     * @param StorageInterface       $storage    the storage to get images path
      */
-    public function __construct(AbstractController $controller, array $entities, PropertyMappingFactory $factory, StorageInterface $storage)
+    public function __construct(AbstractController $controller, array $entities, PropertyMappingFactory $factory, StorageInterface $storage, DateTimeFormatter $formatter)
     {
         parent::__construct($controller, $entities);
         $this->factory = $factory;
         $this->storage = $storage;
+        $this->formatter = $formatter;
     }
 
     /**
@@ -114,26 +100,18 @@ class UsersReport extends AbstractArrayReport
 
     /**
      * Format the last login date.
-     *
-     * @param \DateTimeInterface $date the date to format
-     *
-     * @return string the formatted date
      */
     private function formatLastLogin(?\DateTimeInterface $date): string
     {
-        if (null === $date) {
-            return $this->trans('common.value_none');
+        if ($date instanceof \DateTimeInterface) {
+            return $this->formatter->formatDiff($date, new \DateTime());
         }
 
-        return FormatUtils::formatDateTime($date);
+        return $this->trans('common.value_none');
     }
 
     /**
      * Gets the configured file property name used to resolve path.
-     *
-     * @param User $user the user to get field name
-     *
-     * @return string|null the configured file property name or null if none
      */
     private function getFieldName(User $user): ?string
     {
@@ -149,10 +127,6 @@ class UsersReport extends AbstractArrayReport
 
     /**
      * Gets the image cell for the given user.
-     *
-     * @param User $user the user
-     *
-     * @return PdfCell the image cell, if applicable, an empty cell otherwise
      */
     private function getImageCell(User $user): PdfCell
     {
@@ -177,10 +151,6 @@ class UsersReport extends AbstractArrayReport
 
     /**
      * Gets the user's image full path.
-     *
-     * @param User $user the user to get image path for
-     *
-     * @return string|null the image path, if exists; null otherwise
      */
     private function getImagePath(User $user): ?string
     {

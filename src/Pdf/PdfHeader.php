@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Model\CustomerInformation;
-use App\Report\AbstractReport;
 
 /**
  * Class to output header in PDF documents.
@@ -144,12 +143,7 @@ class PdfHeader implements PdfConstantsInterface
     private function getFax(): string
     {
         if ($this->isCustomer()) {
-            $fax = $this->toEmpty($this->customer->getFax());
-            if ($this->parent instanceof AbstractReport) {
-                return $this->parent->trans('report.fax', ['{0}' => $fax]);
-            }
-
-            return "Fax : $fax";
+            return $this->customer->getTranslatedFax($this->parent);
         }
 
         return '';
@@ -163,12 +157,7 @@ class PdfHeader implements PdfConstantsInterface
     private function getPhone(): string
     {
         if ($this->isCustomer()) {
-            $phone = $this->toEmpty($this->customer->getPhone());
-            if ($this->parent instanceof AbstractReport) {
-                return $this->parent->trans('report.phone', ['{0}' => $phone]);
-            }
-
-            return "Tél. : $phone";
+            return $this->customer->getTranslatedPhone($this->parent);
         }
 
         return '';

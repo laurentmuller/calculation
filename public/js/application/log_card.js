@@ -2,7 +2,7 @@
 
 /**
  * Gets the selection filter.
- * 
+ *
  * @param {string}
  *            prefix - the selector prefix.
  * @param {string}
@@ -32,14 +32,14 @@ function getSelection(prefix, separator, filter) {
 
 /**
  * Gets the hidden card filter.
- * 
+ *
  * @returns {string} the filter.
  */
 function getHiddenCards() {
     'use strict';
 
     // calback
-    const $callback = function ($this, key, type, border) {
+    const $callback = function ($this, _key, _type, border) {
         return !$this.hasClass(border);
     };
 
@@ -49,14 +49,14 @@ function getHiddenCards() {
 
 /**
  * Gets the hidden levels filter.
- * 
+ *
  * @returns {string} the filter.
  */
 function getHiddenLevels() {
     'use strict';
 
     // calback
-    const $callback = function ($this, key, type, border) {
+    const $callback = function ($this, _key, type, border) {
         return type === 'level' && !$this.hasClass(border);
     };
 
@@ -66,14 +66,14 @@ function getHiddenLevels() {
 
 /**
  * Gets the hidden channels filter.
- * 
+ *
  * @returns {string} the filter.
  */
 function getHiddenChannels() {
     'use strict';
 
     // calback
-    const $callback = function ($this, key, type, border) {
+    const $callback = function ($this, _key, type, border) {
         return type === 'channel' && !$this.hasClass(border);
     };
 

@@ -37,19 +37,19 @@ class SpreadsheetDocument extends Spreadsheet
     use TranslatorTrait;
 
     /**
-     * The default margins (10 millimeters = 0.4").
+     * The default margins (10 millimeters).
      */
     public const DEFAULT_MARGIN = 0.4;
 
     /**
-     * The top margins when customer header is present (24 millimeters = 0.94").
+     * The top margins when customer header is present (21 millimeters).
      */
-    public const HEADER_CUSTOMER_MARGIN = 0.94;
+    public const HEADER_CUSTOMER_MARGIN = 0.83;
 
     /**
-     * The top and bottom margins when header and/or footer is present (13 millimeters = 0.51").
+     * The top and bottom margins when header and/or footer is present (12 millimeters).
      */
-    public const HEADER_FOOTER_MARGIN = 0.51;
+    public const HEADER_FOOTER_MARGIN = 0.47;
 
     /**
      * The date time format ('dd/mm/yyyy hh:mm').
@@ -495,17 +495,14 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $sheet = $this->getActiveSheet();
         $pageMargins = $sheet->getPageMargins();
-        $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
 
-        $header = new HeaderFooter(true);
+        $header = new HeaderFooter(true, 9);
         if ($customer->isPrintAddress()) {
             $header->addLeft($customer->getName() ?? '', true);
             $header->addLeft($customer->getAddress() ?? '');
             $header->addLeft($customer->getZipCity() ?? '');
 
-            if ($title) {
-                $header->addCenter($title, true);
-            }
+            $header->addCenter($title ?? '', true);
 
             $header->addRight($customer->getTranslatedPhone($this));
             $header->addRight($customer->getTranslatedFax($this));
@@ -516,15 +513,11 @@ class SpreadsheetDocument extends Spreadsheet
             $header->addRight($customer->getName() ?? '', true);
             $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
         }
-
-        $footer = new HeaderFooter(false);
-        $footer->addLeft('Page &P / &N', false, false);
-        if ($application) {
-            $footer->addCenter($application);
-        }
-        $footer->addRight('&D - &T', false, false);
-
         $header->apply($sheet);
+
+        $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
+        $footer = new HeaderFooter(false, 9);
+        $footer->addPages()->addDateTime();
         $footer->apply($sheet);
 
         return $this;

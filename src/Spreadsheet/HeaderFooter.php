@@ -21,46 +21,85 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  */
 class HeaderFooter
 {
-    public const CENTER_PART = '&C';
-    public const LEFT_PART = '&L';
-    public const RIGTH_PART = '&R';
+    public const DEFAULT_FONT_SIZE = 11;
 
-    private String $center = '';
-    private bool $header;
-    private String $left = '';
-    private String $right = '';
+    public const PART_CENTER = '&C';
+    public const PART_LEFT = '&L';
+    public const PART_RIGHT = '&R';
+
+    private int $fontSize;
+    private bool $isHeader;
+    private String $textCenter = '';
+    private String $textLeft = '';
+    private String $textRight = '';
 
     /**
      * Constructor.
      *
-     * @param bool $header true to apply to the work sheet header, false to apply to the work sheet footer
+     * @param bool $isHeader true to apply to the work sheet header, false to apply to the work sheet footer
      */
-    public function __construct(bool $header)
+    public function __construct(bool $isHeader, int $fontSize = self::DEFAULT_FONT_SIZE)
     {
-        $this->header = $header;
+        $this->isHeader = $isHeader;
+        $this->fontSize = $fontSize;
     }
 
+    /**
+     * Adds the given text to the center.
+     */
     public function addCenter(string $text, bool $bold = false, bool $clean = true): self
     {
-        return $this->updateText($this->center, $text, $bold, $clean);
+        return $this->updateText($this->textCenter, $text, $bold, $clean);
     }
 
-    public function addDateTime(string $part): void
+    /**
+     * Add the date and the time to the given part.
+     */
+    public function addDateTime(string $part = self::PART_RIGHT): self
     {
+        $text = '&D - &T';
+        switch ($part) {
+            case self::PART_LEFT:
+                return $this->addLeft($text, false, false);
+            case self::PART_CENTER:
+                return $this->addCenter($text, false, false);
+            case self::PART_RIGHT:
+            default:
+                return $this->addRight($text, false, false);
+        }
     }
 
+    /**
+     * Adds the given text to the left.
+     */
     public function addLeft(string $text, bool $bold = false, bool $clean = true): self
     {
-        return $this->updateText($this->left, $text, $bold, $clean);
+        return $this->updateText($this->textLeft, $text, $bold, $clean);
     }
 
-    public function addPages(string $part): void
+    /**
+     * Add the current page and the total pages to the given part.
+     */
+    public function addPages(string $part = self::PART_LEFT): self
     {
+        $text = 'Page &P / &N';
+        switch ($part) {
+            case self::PART_CENTER:
+                return $this->addCenter($text, false, false);
+            case self::PART_RIGHT:
+                return $this->addRight($text, false, false);
+            case self::PART_LEFT:
+            default:
+                return $this->addLeft($text, false, false);
+        }
     }
 
+    /**
+     * Adds the given text to the right.
+     */
     public function addRight(string $text, bool $bold = false, bool $clean = true): self
     {
-        return $this->updateText($this->right, $text, $bold, $clean);
+        return $this->updateText($this->textRight, $text, $bold, $clean);
     }
 
     /**
@@ -70,7 +109,7 @@ class HeaderFooter
     {
         $content = $this->getContent();
         $headerFooter = $sheet->getHeaderFooter();
-        if ($this->header) {
+        if ($this->isHeader) {
             $headerFooter->setOddHeader($content);
         } else {
             $headerFooter->setOddFooter($content);
@@ -79,31 +118,37 @@ class HeaderFooter
         return $this;
     }
 
+    /**
+     * Gets all content.
+     */
     public function getContent(): string
     {
         $content = '';
-        if (!empty($this->left)) {
-            $content .= self::LEFT_PART . $this->left;
+        if (!empty($this->textLeft)) {
+            $content .= self::PART_LEFT . $this->textLeft;
         }
-        if (!empty($this->center)) {
-            $content .= self::CENTER_PART . $this->center;
+        if (!empty($this->textCenter)) {
+            $content .= self::PART_CENTER . $this->textCenter;
         }
-        if (!empty($this->right)) {
-            $content .= self::RIGTH_PART . $this->right;
+        if (!empty($this->textRight)) {
+            $content .= self::PART_RIGHT . $this->textRight;
         }
 
         return $content;
     }
 
-    private function cleanText(string $text): string
-    {
-        return \str_replace('&', '&&', $text);
-    }
-
     private function updateText(string &$value, string $text, bool $bold, bool $clean): self
     {
+        if ('' === $text) {
+            return $this;
+        }
+
         if (!empty($value)) {
             $value .= "\n";
+        }
+
+        if (self::DEFAULT_FONT_SIZE !== $this->fontSize) {
+            $value .= '&' . $this->fontSize;
         }
 
         if ($bold) {
@@ -111,8 +156,9 @@ class HeaderFooter
         } else {
             $value .= '&"-,Regular"';
         }
+
         if ($clean) {
-            $text = $this->cleanText($text);
+            $text = \str_replace('&', '&&', $text);
         }
         $value .= $text;
 

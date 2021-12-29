@@ -340,7 +340,7 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * @template T of \Twig\Extension\AbstractExtension
+     * @template T of \Twig\Extension\ExtensionInterface
      * @psalm-param class-string<T> $className
      * @psalm-return T
      */

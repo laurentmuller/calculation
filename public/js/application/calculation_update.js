@@ -6,7 +6,7 @@
 (function ($) {
     'use strict';
 
-    $('#form_simulated').on('input', function () {
+    $('#form_simulate').on('input', function () {
         if ($(this).isChecked()) {
             $('#form_confirm').toggleDisabled(true).removeValidation();
         } else {

@@ -205,6 +205,7 @@ BootstrapTable.prototype.getCustomView = function () {
     }
     return null;
 };
+
 /**
  * Sets the display mode.
  *

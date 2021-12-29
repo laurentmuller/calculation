@@ -41,6 +41,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
@@ -560,6 +561,18 @@ class FormHelper
     public function autofocus(): self
     {
         return $this->updateAttribute('autofocus', true);
+    }
+
+    /**
+     * Sets the constraints option.
+     */
+    public function constraints(Constraint ...$constrains): self
+    {
+        if (1 === \count($constrains)) {
+            $constrains = \reset($constrains);
+        }
+
+        return $this->updateOption('constraints', $constrains);
     }
 
     /**

@@ -250,15 +250,15 @@ function updateSearchAction($table, row, _$element, $action) {
  */
 function updateCalculationEditAction(_$table, row, $element, $action) {
     'use strict';
-    const textMuted = Number.parseInt(row.textMuted, 10);
-    if(!Number.isNaN(textMuted) && textMuted === 0) {
+    const value = Number.parseInt(row.textMuted, 10);
+    if(!Number.isNaN(value) && value === 0) {
         const $state = $element.find('.btn-state');
         if ($state.length) {
             $state.addClass('btn-default');
         } else {
             $element.find('.btn-show').addClass('btn-default');
         }
-        $action.remove();
+        $action.removeClass('btn-default');
     }
 }
 
@@ -706,7 +706,8 @@ $.fn.extend({
     }
 
     // focus
-    if($table.isEmpty()) {
+    if ($table.isEmpty()) {
         $('input.search-input').focus();
     }
+
 }(jQuery));

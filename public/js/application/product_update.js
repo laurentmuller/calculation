@@ -153,7 +153,7 @@ function updatePrices() {
 
     $('#form_percent, #form_fixed, #form_round').on('input', updatePrices);
 
-    $('#form_simulated').on('input', function () {
+    $('#form_simulate').on('input', function () {
         if ($(this).isChecked()) {
             $('#form_confirm').toggleDisabled(true).removeValidation();
         } else {

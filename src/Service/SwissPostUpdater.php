@@ -96,14 +96,14 @@ class SwissPostUpdater
         $helper = new FormHelper($builder, 'swisspost.fields.');
 
         // file constraints
-        $constraints = new File([
+        $constraint = new File([
             'mimeTypes' => ['application/zip', 'application/x-zip-compressed'],
             'mimeTypesMessage' => $this->trans('swisspost.error.mime_type'),
         ]);
 
         // fields
         $helper->field('file')
-            ->updateOption('constraints', $constraints)
+            ->constraints($constraint)
             ->updateAttribute('accept', 'application/x-zip-compressed')
             ->addFileType();
 

@@ -30,7 +30,7 @@
 {%- set tabular = app.displayTabular -%}
 {%- set empty_path = tabular ? path('empty_table') : path('empty_card') -%}
 {%- set duplicate_path = tabular ? path('duplicate_table') : path('duplicate_card') -%}
-{%- set separator = false -%} 
+{%- set separator = false -%}
 {% block card_body %}
 <table class="table table-sm border-bottom">
     {% if query.simulate and result.emptyItems > 0 %}
@@ -99,7 +99,7 @@
             </div>
             <div class="modal-body">
                 <p class="mb-2 font-weight-bold">{{ 'calculation.result.updateCalculations'|trans }}</p>
-                <div class="overflow-auto table-fixed-header border-right border-bottom border-top" style="max-height: 209px;">
+                <div class="overflow-auto table-fixed-header border-right border-bottom border-top" style="max-height: 309px;">
                     <table class="table table-hover table-fixed-header table-sm">
                         <thead class="thead-light">
                             <tr>

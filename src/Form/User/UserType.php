@@ -103,6 +103,7 @@ class UserType extends AbstractEntityType
             ->addEmailType();
 
         $helper->field('plainPassword')
+            ->notMapped()
             ->addRepeatPasswordType();
 
         $helper->field('role')

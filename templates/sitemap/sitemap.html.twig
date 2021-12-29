@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-{# imports #}
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# macros #}
@@ -27,27 +26,27 @@
 {# rights #}
 {%- set is_list_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
 {%- set is_add_calculation = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION) -%}
-{%- set is_pdf_calculation = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) -%}
+{%- set is_export_calculation = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) -%}
 
 {%- set is_list_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
 {%- set is_add_product = is_granted(ATTRIBUTE_ADD, ENTITY_PRODUCT) -%}
-{%- set is_pdf_product = is_granted(ATTRIBUTE_EXPORT, ENTITY_PRODUCT) -%}
+{%- set is_export_product = is_granted(ATTRIBUTE_EXPORT, ENTITY_PRODUCT) -%}
 
 {%- set is_list_category = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) -%}
 {%- set is_add_category = is_granted(ATTRIBUTE_ADD, ENTITY_CATEGORY) -%}
-{%- set is_pdf_category = is_granted(ATTRIBUTE_EXPORT, ENTITY_CATEGORY) -%}
+{%- set is_export_category = is_granted(ATTRIBUTE_EXPORT, ENTITY_CATEGORY) -%}
 
 {%- set is_list_state = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
 {%- set is_add_state = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION_STATE) -%}
-{%- set is_pdf_state = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION_STATE) -%}
+{%- set is_export_state = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION_STATE) -%}
 
 {%- set is_list_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
 {%- set is_add_margin = is_granted(ATTRIBUTE_ADD, ENTITY_GLOBAL_MARGIN) -%}
-{%- set is_pdf_margin = is_granted(ATTRIBUTE_EXPORT, ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_export_margin = is_granted(ATTRIBUTE_EXPORT, ENTITY_GLOBAL_MARGIN) -%}
 
 {%- set is_list_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_dev -%}
 {%- set is_add_customer = is_granted(ATTRIBUTE_ADD, ENTITY_CUSTOMER) and is_dev -%}
-{%- set is_pdf_customer = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_dev -%}
+{%- set is_export_customer = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_dev -%}
 
 {# class #}
 {% block container_class 'container-fluid' %}
@@ -79,14 +78,15 @@
             <li>
                 {% set route = is_tabular ? 'calculation_table' : 'calculation_card' %}
                 <ul>{{ _self.link(route, 'calculation.list.title', 'calculator') }}
-                    {% if is_add_calculation or is_pdf_calculation %}
+                    {% if is_add_calculation or is_export_calculation %}
                     <li>
                         <ul>
                             {% if is_add_calculation %}
                             <li>{{ _self.link('calculation_add', 'calculation.add.title', 'file far', null, route_params) }}</li>
                             {% endif %}
-                            {% if is_pdf_calculation %}
+                            {% if is_export_calculation %}
                             <li>{{ _self.linkExternal('calculation_pdf', 'calculation.list.pdf_title', 'file-pdf far') }}</li>
+                            <li>{{ _self.linkExternal('calculation_excel', 'calculation.list.excel_title', 'file-excel far') }}</li>
                             {% endif %}
                         </ul>
                     </li>
@@ -101,13 +101,14 @@
                     {% if is_list_product  %}
                     {% set route = is_tabular ? 'product_table' : 'product_card' %}
                     <li>{{ _self.link(route, 'product.list.title', 'file-alt far') }}
-                        {% if is_add_product or is_pdf_product %}
+                        {% if is_add_product or is_export_product %}
                         <ul>
                             {% if is_add_product %}
                             <li>{{ _self.link('product_add', 'product.add.title', 'file far', null, route_params) }}</li>
                             {% endif %}
-                            {% if is_pdf_product %}
+                            {% if is_export_product %}
                             <li>{{ _self.linkExternal('product_pdf', 'product.list.pdf_title', 'file-pdf far') }}</li>
+                            <li>{{ _self.linkExternal('product_excel', 'product.list.excel_title', 'file-excel far') }}</li>
                             {% endif %}
                         </ul>
                         {% endif %}
@@ -116,13 +117,14 @@
                     {% if is_list_category  %}
                     {% set route = is_tabular ? 'category_table' : 'category_card' %}
                     <li>{{ _self.link(route, 'category.list.title', 'folder far') }}
-                        {% if is_add_category or is_pdf_category %}
+                        {% if is_add_category or is_export_category %}
                         <ul>
                             {% if is_add_category %}
                             <li>{{ _self.link('category_add', 'category.add.title', 'file far', null, route_params) }}</li>
                             {% endif %}
-                            {% if is_pdf_category %}
+                            {% if is_export_category %}
                             <li>{{ _self.linkExternal('category_pdf', 'category.list.pdf_title', 'file-pdf far') }}</li>
+                            <li>{{ _self.linkExternal('category_excel', 'category.list.excel_title', 'file-excel far') }}</li>
                             {% endif %}
                         </ul>
                         {% endif %}
@@ -131,13 +133,14 @@
                     {% if is_list_state  %}
                     {% set route = is_tabular ? 'calculationstate_table' : 'calculationstate_card' %}
                     <li>{{ _self.link(route, 'calculationstate.list.title', 'flag far') }}
-                        {% if is_add_state or is_pdf_state %}
+                        {% if is_add_state or is_export_state %}
                         <ul>
                             {% if is_add_state %}
                             <li>{{ _self.link('calculationstate_add', 'calculationstate.add.title', 'file far', null, route_params) }}</li>
                             {% endif %}
-                            {% if is_pdf_state %}
+                            {% if is_export_state %}
                             <li>{{ _self.linkExternal('calculationstate_pdf', 'calculationstate.list.pdf_title', 'file-pdf far') }}</li>
+                            <li>{{ _self.linkExternal('calculationstate_excel', 'calculationstate.list.excel_title', 'file-excel far') }}</li>
                             {% endif %}
                         </ul>
                         {% endif %}
@@ -146,13 +149,14 @@
                     {% if is_list_margin %}
                     {% set route = is_tabular ? 'globalmargin_table' : 'globalmargin_card' %}
                     <li>{{ _self.link(route, 'globalmargin.list.title', 'percent') }}
-                        {% if is_add_margin or is_pdf_margin %}
+                        {% if is_add_margin or is_export_margin %}
                         <ul>
                             {% if is_add_margin %}
                             <li>{{ _self.link('globalmargin_add', 'globalmargin.add.title', 'file far', null, route_params) }}</li>
                             {% endif %}
-                            {% if is_pdf_margin %}
+                            {% if is_export_margin %}
                             <li>{{ _self.linkExternal('globalmargin_pdf', 'globalmargin.list.pdf_title', 'file-pdf far') }}</li>
+                            <li>{{ _self.linkExternal('globalmargin_excel', 'globalmargin.list.excel_title', 'file-excel far') }}</li>
                             {% endif %}
                         </ul>
                         {% endif %}
@@ -161,13 +165,14 @@
                     {% if is_list_customer %}
                     {% set route = is_tabular ? 'customer_table' : 'customer_card' %}
                     <li>{{ _self.link(route, 'customer.list.title', 'address-card far') }}
-                        {% if is_add_customer or is_pdf_customer %}
+                        {% if is_add_customer or is_export_customer %}
                         <ul>
                             {% if is_add_customer %}
                             <li>{{ _self.link('customer_add', 'customer.add.title', 'file far', null, route_params) }}</li>
                             {% endif %}
-                            {% if is_pdf_customer %}
+                            {% if is_export_customer %}
                             <li>{{ _self.linkExternal('customer_pdf', 'customer.list.pdf_title', 'file-pdf far') }}</li>
+                            <li>{{ _self.linkExternal('customer_excel', 'customer.list.excel_title', 'file-excel far') }}</li>
                             {% endif %}
                         </ul>
                         {% endif %}

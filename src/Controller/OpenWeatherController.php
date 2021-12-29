@@ -356,7 +356,7 @@ class OpenWeatherController extends AbstractController
         $helper = $this->createFormHelper('openweather.search.', $data);
 
         $helper->field(self::KEY_QUERY)
-            ->updateOption('constraints', new Length(['min' => 2]))
+            ->constraints(new Length(['min' => 2]))
             ->updateAttributes(['placeholder' => 'openweather.search.place_holder', 'minlength' => 2])
             ->add(SearchType::class);
 
@@ -467,7 +467,7 @@ class OpenWeatherController extends AbstractController
         $helper = $this->createFormHelper();
 
         // constraints
-        $constraints = new File([
+        $constraint = new File([
             'mimeTypes' => 'application/gzip',
             'mimeTypesMessage' => $this->trans('openweather.error.mime_type'),
         ]);
@@ -475,7 +475,7 @@ class OpenWeatherController extends AbstractController
         // file input
         $helper->field('file')
             ->label('openweather.import.file')
-            ->updateOption('constraints', $constraints)
+            ->constraints($constraint)
             ->updateAttribute('accept', 'application/x-gzip')
             ->addFileType();
 

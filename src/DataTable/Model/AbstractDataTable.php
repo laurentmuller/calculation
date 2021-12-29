@@ -319,9 +319,9 @@ abstract class AbstractDataTable extends AbstractDataTableHandler implements Sor
         $query = $request->get('query');
         $page = (int) $this->getRequestValue($request, self::PARAM_PAGE_INDEX, self::PAGE_START);
         $pagelength = (int) $this->getRequestValue($request, self::PARAM_PAGE_LENGTH, self::PAGE_LENGTH);
-        $ordercolumn = $this->getRequestValue($request, self::PARAM_ORDER_COLUMN);
-        $orderdir = $this->getRequestValue($request, self::PARAM_ORDER_DIR);
-        $searchColumns = $this->getRequestValue($request, self::PARAM_SEARCH_COLUMNS, []);
+        $ordercolumn = (string) $this->getRequestValue($request, self::PARAM_ORDER_COLUMN);
+        $orderdir = (string) $this->getRequestValue($request, self::PARAM_ORDER_DIR);
+        $searchColumns = (array) $this->getRequestValue($request, self::PARAM_SEARCH_COLUMNS, []);
 
         // convert search columns
         $searchColumns = \array_reduce($searchColumns, function (array $carry, array $entry) {

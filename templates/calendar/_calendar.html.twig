@@ -16,14 +16,14 @@
 </table>
 {%- endmacro %}
 
-{% macro dataRow(calculation, class='') %}
+{% macro dataRow(calculation) %}
 {% import 'macros/_properties.html.twig' as properties %}
 {% set margin_class = app.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}
 <tr>
     <td class="text-id text-border" style="{{ properties.stateCss(calculation.stateColor) }}">{{ calculation.id|identifier }}</td>
     <td class="text-state">{{ calculation.state.code }}</td>
-    <td{% if class %} class="{{ class }}"{% endif %}>{{ calculation.customer }}</td>
-    <td{% if class %} class="{{ class }}"{% endif %}>{{ calculation.description }}</td>
+    <td class="text-customer">{{ calculation.customer }}</td>
+    <td class="text-description">{{ calculation.description }}</td>
     <td class="{{ margin_class }}">{{ calculation.overallMargin|percent }}</td>
     <td class="text-currency">{{ calculation.overallTotal|amount }}</td>
 </tr>
@@ -35,21 +35,21 @@
 {%- set class = 'text-center align-middle' ~ (small ? ' border' : '') -%}
 {%- set link = false -%}
 
-{% if day.inMonth(month) -%}    
+{% if day.inMonth(month) -%}
     {%- set title = day.date|localedate('long') -%}
-    {%- set calculations = day.calculations -%} 
+    {%- set calculations = day.calculations -%}
     {% if calculations %}
         {%- set link = true -%}
-        {%- set count = calculations|length -%}        
+        {%- set count = calculations|length -%}
         {%- set class = class ~ (small ? ' small' : '') ~ ' text-white' ~ (day.current ? ' bg-primary' : ' bg-success') -%}
         {%- set href = path('table_calculation', {'search': day.date|localedate('short')}) -%}
-        {%- set content = _self.dataContent(calculations) -%}        
+        {%- set content = _self.dataContent(calculations) -%}
     {%- elseif day.current -%}
         {%- set class = class ~ ' bg-primary text-white' -%}
     {% elseif day.weekEnd %}
-        {%- set class = class ~ ' bg-light' -%}   
+        {%- set class = class ~ ' bg-light' -%}
     {%- endif %}
-{% elseif day.weekEnd %}    
+{% elseif day.weekEnd %}
     {%- set class = class ~ ' bg-light' -%}
     {%- set text = '&nbsp;' -%}
 {% else %}

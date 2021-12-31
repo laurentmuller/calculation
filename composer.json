@@ -85,8 +85,7 @@
 		"symfony/css-selector": "5.4.*",
 		"symfony/debug-bundle": "5.4.*",
 		"symfony/maker-bundle": "^1.0",
-                "symfony/phpunit-bridge": "^6.0",
-		"symfony/stopwatch": "5.4.*",
+        "symfony/phpunit-bridge": "^6.0",
 		"symfony/var-dumper": "5.4.*",
 		"symfony/web-profiler-bundle": "5.4.*"
 	},
@@ -108,7 +107,13 @@
 		"preferred-install" : {
 			"*" : "dist"
 		},
-		"sort-packages" : true
+		"sort-packages" : true,
+		"allow-plugins": {
+			"composer/package-versions-deprecated": true,
+			"bamarni/composer-bin-plugin": true,
+			"symfony/runtime": true,
+			"symfony/flex": true
+		}
 	},
 	"extra" : {
 		"symfony" : {

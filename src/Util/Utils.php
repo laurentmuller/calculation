@@ -252,22 +252,16 @@ final class Utils
      *
      * Any additional keys (if any) will be used for grouping the next set of sub-arrays.
      *
-     * @param array                    $array the array to be grouped
-     * @param string|int|callable|null $key   a set of keys to group by
+     * @param array               $array the array to be grouped
+     * @param string|int|callable $key   a set of keys to group by
      */
     public static function groupBy(array $array, $key): array
     {
-        // check key
-        if (!\is_string($key) && !\is_int($key) && !\is_callable($key)) { // && !\is_float($key)
-            \trigger_error('groupBy(): The key should be a string, an integer or a function', \E_USER_ERROR);
-        }
-
         $callable = \is_callable($key) ? $key : null;
 
         // load the new array, splitting by the target key
         $grouped = [];
         foreach ($array as $value) {
-            $groupKey = null;
             if ($callable) {
                 $groupKey = $callable($value);
             } elseif (\is_object($value)) {
@@ -324,9 +318,9 @@ final class Utils
     /**
      * Sorts an array for the given fields.
      *
-     * @param array $array  the array to sort
-     * @param array $fields the array where the key is field name to sort and the value is ascending state
-     *                      (true to sort in ascending, false to sort in descending)
+     * @param array $array          the array to sort
+     * @param array $fields<string, bool> the array where the key is field name to sort and the value is ascending state
+     *                              (true to sort in ascending, false to sort in descending)
      * @psalm-param array<string, boolean> $fields
      */
     public static function sortFields(array &$array, array $fields): void

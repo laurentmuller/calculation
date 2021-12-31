@@ -7,7 +7,7 @@
 {%- endmacro %}
 
 {# add all flashbag messages #}
-<div id=flashbags class="d-none" data-position="{{ app.messagePosition() }}" data-timeout="{{ app.messageTimeout }}" data-margin-top="85px" data-margin-bottom="55px" data-subtitle="{{ app_name_version }}" data-display-subtitle="{{ app.messageSubTitle|json_encode() }}" data-close-text="{{ 'common.button_close'|trans }}">
+<div id=flashbags class="d-none" data-position="{{ app.messagePosition() }}" data-timeout="{{ app.messageTimeout }}" data-margin-top="85px" data-margin-bottom="45px" data-subtitle="{{ app_name_version }}" data-display-subtitle="{{ app.messageSubTitle|json_encode() }}" data-close-text="{{ 'common.button_close'|trans }}">
 {%- for key, messages in app.flashes -%}
     {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
 {%- endfor -%}

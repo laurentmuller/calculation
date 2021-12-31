@@ -9,7 +9,7 @@
         {{ form_widget(group.group) }}
         {{ form_widget(group.code) }}
         {{ form_widget(group.position) }}
-        <th class="rowlink-skip pb-1" colspan="5">{{ group.code.vars.value }}</th>
+        <th class="rowlink-skip text-description text-cell pb-1" colspan="5">{{ group.code.vars.value }}</th>
         {% if editable -%}
         <th class="rowlink-skip actions d-print-none">
             {# menu #}

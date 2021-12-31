@@ -10,7 +10,7 @@
     },
     {
         "name": "date",
-        "title": "calculation.fields.date",        
+        "title": "calculation.fields.date",
         "direction": "desc",
         "class": "text-date",
         "formatter": "formatDate"
@@ -23,12 +23,12 @@
     {
         "name": "customer",
         "title": "calculation.fields.customer",
-        "class": "text-cell w-25"
+        "class": "text-customer text-cell"
     },
     {
         "name": "description",
         "title": "calculation.fields.description",
-        "class": "text-cell w-25"
+        "class": "text-description text-cell"
     },
     {
         "name": "items",

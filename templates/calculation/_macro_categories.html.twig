@@ -9,7 +9,7 @@
         {{ form_widget(category.category) }}
         {{ form_widget(category.code) }}
         {{ form_widget(category.position) }}
-        <th class="rowlink-skip" colspan="5">{{ category.code.vars.value }}</th>
+        <th class="rowlink-skip text-description text-cell" colspan="5">{{ category.code.vars.value }}</th>
         {% if editable -%}
         <th class="rowlink-skip actions d-print-none">
             {# menu #}

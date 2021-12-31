@@ -8,7 +8,7 @@
 
 /**
  * Returns the parameters length.
- * 
+ *
  * @returns {int} the parameters length.
  */
 URLSearchParams.prototype.length = function () {
@@ -18,7 +18,7 @@ URLSearchParams.prototype.length = function () {
 
 /**
  * Returns the parameters query.
- * 
+ *
  * @returns {string} the parameters query.
  */
 URLSearchParams.prototype.toQuery = function () {
@@ -28,30 +28,40 @@ URLSearchParams.prototype.toQuery = function () {
 
 /**
  * Returns the parameter value or the default value if none.
- * 
+ *
  * @param {string}
  *            name -the parameter name.
  * @param {any}
  *            defaultValue - the default value if the parameter is not found.
- * 
+ *
  * @returns {any} the parameter value, if found; the default value otherwise.
  */
 URLSearchParams.prototype.getOrDefault = function (name, defaultValue) {
     'use strict';
-    return this.has(name) ? this.get(name) : defaultValue;
+    if (!this.has(name)) {
+        return defaultValue;
+    }
+    return this.get(name);
 };
 
 /**
  * Returns the parameter value, as integer, or the default value if none.
- * 
+ *
  * @param {string}
  *            name -the parameter name.
  * @param {int}
  *            defaultValue - the default value if the parameter is not found.
- * 
+ *
  * @returns {int} the parameter value, if found; the default value otherwise.
  */
 URLSearchParams.prototype.getIntOrDefault = function (name, defaultValue) {
     'use strict';
-    return this.has(name) ? parseInt(this.get(name), 10) : defaultValue;
+    if (!this.has(name)) {
+        return defaultValue;
+    }
+    const value = Number.parseInt(this.get(name), 10);
+    if (!Number.isInteger(value)) {
+        return defaultValue;
+    }
+    return value;
 };

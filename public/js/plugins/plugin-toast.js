@@ -17,7 +17,7 @@
 
         /**
          * Display a toast.
-         * 
+         *
          * @param {string}
          *            type - The type.
          * @param {string}
@@ -81,7 +81,7 @@
 
         /**
          * Display a toast with info style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -96,7 +96,7 @@
 
         /**
          * Display a toast with success style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -111,7 +111,7 @@
 
         /**
          * Display a toast with warning style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -126,7 +126,7 @@
 
         /**
          * Display a toast with danger style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -141,7 +141,7 @@
 
         /**
          * Display a toast with primary style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -156,7 +156,7 @@
 
         /**
          * Display a toast with secondary style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -171,7 +171,7 @@
 
         /**
          * Display a toast with dark style.
-         * 
+         *
          * @param {string}
          *            message - The message.
          * @param {string}
@@ -186,7 +186,7 @@
 
         /**
          * Remove this toasts DIV container.
-         * 
+         *
          * @returns {jQuery} this instance.
          */
         removeContainer: function () {
@@ -283,7 +283,7 @@
 
         /**
          * Check the notification type.
-         * 
+         *
          * @param {string}
          *            type - The type to valdiate.
          * @returns {string} A valid type.
@@ -306,7 +306,7 @@
 
         /**
          * Check the position type.
-         * 
+         *
          * @param {string}
          *            position - The position to valdiate.
          * @returns {string} A valid position.
@@ -332,7 +332,7 @@
 
         /**
          * Returns if toast must be prepend or append to the list; depending of the position.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
          * @returns {boolean} true to prepend, false to append.
@@ -354,7 +354,7 @@
 
         /**
          * Gets or creates the toasts container div.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
          * @returns {jQuery} The toasts container.
@@ -397,7 +397,7 @@
 
         /**
          * Creates the div title.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
          * @returns {jQuery} The div title or null if no title.
@@ -442,7 +442,7 @@
 
         /**
          * Creates the icon title.
-         * 
+         *
          * @param {Object}
          *            options - The options.
          * @returns {jQuery} The icon or null if no icon.
@@ -482,7 +482,7 @@
 
         /**
          * Creates the sub-title.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
          * @returns {jQuery} The sub-title or null if no sub-title defined.
@@ -499,7 +499,7 @@
 
         /**
          * Creates the close button.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
          * @returns {jQuery} The close button or null if no button.
@@ -525,7 +525,7 @@
 
         /**
          * Creates the div message.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
          * @returns {jQuery} The div message.
@@ -539,7 +539,7 @@
 
         /**
          * Creates the div toast.
-         * 
+         *
          * @param {Object}
          *            options - The toast options.
          * @returns {jQuery} The div toast.
@@ -559,7 +559,7 @@
 
         /**
          * Show the toast.
-         * 
+         *
          * @param {jQuery}
          *            $toast - The toast to show.
          * @param {Object}

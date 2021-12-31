@@ -4,7 +4,7 @@ parameters:
     # fixed
     locale:             fr_CH
     app_name:           Calculation
-    app_version:        1.5.4.1
+    app_version:        1.5.4.2
     app_owner:          bibi.nu
     app_owner_url:      https://www.bibi.nu
     app_owner_city:     Montévraz
@@ -89,17 +89,19 @@ services:
     # used to update calculation when groups, categories or items change
     App\Listener\CalculationListener:
         tags:
-            - { name: doctrine.event_listener, event: onFlush}
+            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Entity\CalculationGroup'}
+            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Entity\CalculationCategory'}
+            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Entity\CalculationItem'}
 
     # used to update TimestampableInterface
     App\Listener\TimestampableListener:
         tags:
-            - { name: doctrine.event_listener, event: onFlush}
- 
+            - { name: doctrine.event_listener, event: onFlush, lazy: true, entity: 'App\Listener\TimestampableListener'}
+
     # used to update user image
     App\Listener\UserImageListener:
         tags:
-            - { name: doctrine.event_listener, event: postPersist}
+            - { name: doctrine.event_listener, event: postPersist, lazy: true}
 
     # custom line formatter for monolog
     monolog.custom_formatter:

@@ -772,11 +772,6 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/symfony/stopwatch">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry excluding="Resources/" kind="src" path="vendor/symfony/string">
 		<attributes>
 			<attribute name="composer" value="vendor"/>

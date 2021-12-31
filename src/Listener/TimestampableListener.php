@@ -87,10 +87,15 @@ class TimestampableListener implements DisableListenerInterface
      */
     protected function getEntities(UnitOfWork $unitOfWork): array
     {
+        /** @var array $entities */
         $entities = [
             ...$unitOfWork->getScheduledEntityInsertions(),
             ...$unitOfWork->getScheduledEntityUpdates(),
         ];
+
+        if ([] === $entities) {
+            return [];
+        }
 
         // @phpstan-ignore-next-line
         return \array_filter($entities, static function ($entity): bool {

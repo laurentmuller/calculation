@@ -28,17 +28,26 @@ final class CalculationListener extends TimestampableListener
      */
     protected function getEntities(UnitOfWork $unitOfWork): array
     {
+        /** @var array $entities */
         $entities = [
             ...$unitOfWork->getScheduledEntityUpdates(),
             ...$unitOfWork->getScheduledEntityDeletions(),
             ...$unitOfWork->getScheduledEntityInsertions(),
         ];
 
+        if ([] === $entities) {
+            return [];
+        }
+
         $result = [];
         foreach ($entities as $entity) {
             if (null !== $calculation = $this->getParentCalculation($entity)) {
                 $result[(int) $calculation->getId()] = $calculation;
             }
+        }
+
+        if ([] === $result) {
+            return $result;
         }
 
         // exclude deleted and inserted calculations
@@ -66,8 +75,8 @@ final class CalculationListener extends TimestampableListener
     {
         if ($entity instanceof ParentCalculationInterface) {
             return $entity->getCalculation();
-        } else {
-            return null;
         }
+
+        return null;
     }
 }

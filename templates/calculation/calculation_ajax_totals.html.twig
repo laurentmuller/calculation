@@ -7,35 +7,35 @@
         <td class="text-muted">{{ group.description }}</td>
     {% case ROW_GROUP %}
         {# group #}
-        <td class="nowrap">{{ group.description }}</td>
+        <td class="text-customer">{{ group.description }}</td>
         <td class="text-currency">{{ group.amount|amount }}</td>
         <td class="text-percent">{{ group.margin|percent }}</td>
         <td class="text-currency">{{ group.margin_amount|amount }}</td>
         <td class="text-currency">{{ group.total|amount }}</td>
     {% case ROW_TOTAL_GROUP %}
         {# total group #}
-        <td class="font-weight-bold nowrap">{{ group.description }}</td>
+        <td class="text-customer font-weight-bold">{{ group.description }}</td>
         <td class="text-currency">{{ group.amount|amount }}</td>
         <td class="text-percent">{{ group.margin|percent }}</td>
         <td class="text-currency">{{ group.margin_amount|amount }}</td>
         <td class="font-weight-bold text-currency">{{ group.total|amount }}</td>
     {% case ROW_GLOBAL_MARGIN %}
         {# global margin #}
-        <td class="nowrap" colspan="2">{{ group.description }}</td>
+        <td class="text-customer" colspan="2">{{ group.description }}</td>
         <td class="text-percent">{{ group.margin|percent }}</td>
         <td colspan="2" class="text-currency">{{ group.total|amount }}</td>
     {% case ROW_TOTAL_NET %}
         {# total net #}
-        <td class="font-weight-bold nowrap" colspan="4">{{ group.description }}</td>
+        <td class="text-customer font-weight-bold" colspan="4">{{ group.description }}</td>
         <td class="font-weight-bold text-currency">{{ group.total|amount }}</td>
     {% case ROW_USER_MARGIN %}
         {# user margin #}
-        <td class="nowrap" colspan="2">{{ group.description }}</td>
+        <td class="text-customer" colspan="2">{{ group.description }}</td>
         <td class="text-percent">{{ group.margin|percent }}</td>
         <td colspan="2" class="text-currency">{{ group.total|amount }}</td>
     {% case ROW_OVERALL_TOTAL %}
         {# overall total #}
-        <td class="font-weight-bold nowrap">{{ group.description }}</td>
+        <td class="text-customer font-weight-bold">{{ group.description }}</td>
         <td class="font-weight-bold text-currency">{{ group.amount|amount }}</td>
         {%- if overall_below -%}
             {%- set margin_below_title = 'calculation.list.margin_below'|trans({'%margin%': group.margin|percent, '%minimum%': min_margin|percent}) -%}

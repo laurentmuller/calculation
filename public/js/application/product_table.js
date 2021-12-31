@@ -40,7 +40,7 @@ $.fn.extend({
  */
 clearSearch = (function ($parent) { // jshint ignore:line
     'use strict';
-    return function ($element, table) {
+    return function (_$element, table) {
         const $category = $('#category');
         if ($category.val() !== '') {
             $('.dropdown-category:first').updateCategory();

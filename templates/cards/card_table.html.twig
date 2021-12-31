@@ -156,18 +156,20 @@
           'data-orderdir': orderdir,
         'data-debug': app.debug
 }) -%}
-<table{{ tools.attribs(attributes) }}>
-    {{ helper.headers(columns) }}
-    <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
-        {% for row in results.data -%}
-            <tr{% if row[0] == id %} class="datatables-selection"{% endif %}>
-            {% for cell in row -%}
-                <td class="{{ columns[loop.index0].class }}">{{ columns[loop.index0].rawData ? cell|raw : cell }}</td>
+<div class="table-responsive">
+    <table{{ tools.attribs(attributes) }}>
+        {{ helper.headers(columns) }}
+        <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
+            {% for row in results.data -%}
+                <tr{% if row[0] == id %} class="datatables-selection"{% endif %}>
+                {% for cell in row -%}
+                    <td class="{{ columns[loop.index0].class }}">{{ columns[loop.index0].rawData ? cell|raw : cell }}</td>
+                {%- endfor %}
+                </tr>
             {%- endfor %}
-            </tr>
-        {%- endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 {% endblock %}
 
 {% block stylesheets %}

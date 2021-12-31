@@ -187,10 +187,12 @@ $.fn.dataTable.Api.register('getParameters()', function (id) {
     const info = this.page.info();
     const params = {
         page: info.page,
-        pagelength: info.length,
         caller: window.location.href.split('?')[0],
         id: id
     };
+    if (info.length !== -1) {
+        params.pagelength = info.length;
+    }
     const order = this.order();
     if (order.length) {
         params.ordercolumn = order[0][0];
@@ -285,7 +287,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
     }
 
     // parameters
-    const defaultLength = parseInt($table.data('pagelength') || 15, 10);
+    const defaultLength = Number.parseInt($table.data('pagelength') || 15, 10);
     const params = new URLSearchParams(window.location.search);
     const paging = total > 10;
     const id = params.getIntOrDefault('id', 0);
@@ -438,6 +440,9 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
                     const text = $cell.text().trim();
                     const $image = $cell.find('img');
                     const params = table.getParameters(id);
+                    if (params.pagelength === -1) {
+                        delete params['pagelength'];
+                    }
                     const href = path.replace('0', id) + '?' + $.param(params);
 
                     // create link and replace content

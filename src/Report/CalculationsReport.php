@@ -125,8 +125,8 @@ class CalculationsReport extends AbstractArrayReport
             $columns[] = PdfColumn::left($this->trans('calculation.fields.state'), 12, false);
         }
         $columns = \array_merge($columns, [
-            PdfColumn::left($this->trans('calculation.fields.customer'), 50, false),
-            PdfColumn::left($this->trans('calculation.fields.description'), 50, false),
+            PdfColumn::left($this->trans('calculation.fields.customer'), 35, false),
+            PdfColumn::left($this->trans('calculation.fields.description'), 65, false),
             PdfColumn::right($this->trans('report.calculation.amount'), 25, true),
             PdfColumn::right($this->trans('report.calculation.margin_percent'), 20, true),
             PdfColumn::right($this->trans('calculation.fields.total'), 25, true),

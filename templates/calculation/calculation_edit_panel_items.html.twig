@@ -23,7 +23,7 @@
     </div>
     <div class="card-body p-2">
         <div class="form-row">
-            <div class="col">
+            <div class="col table-responsive">
                 <table id="data-table-edit" class="table table-edit table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ group_index }}" data-category-index="{{ category_index }}" data-item-index="{{ item_index }}" data-prototype="{{ macroGroups.printGroupRow(form.groups.vars.prototype, editable)|e('html_attr') }}"{% endif -%}>
                 {# groups and items #}
                 {% for group in form.groups %}

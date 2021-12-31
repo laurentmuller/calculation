@@ -63,7 +63,7 @@
             </thead>
             <tbody>
             {% for calculation in day.calculations -%}
-                 {{ helper.dataRow(calculation, 'text-cell') -}}
+                 {{ helper.dataRow(calculation) -}}
             {%- endfor %}
             </tbody>
         </table>

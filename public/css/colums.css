@@ -115,6 +115,14 @@
     width: 110px;
 }
 
+.text-customer {
+    min-width: 200px;
+}
+
+.text-description {
+    min-width: 300px;
+}
+
 .text-hover {
     background-color: var(--primary) !important;
     color: var(--white) !important;

@@ -249,8 +249,7 @@ abstract class AbstractController extends BaseController
      */
     protected function getRequestBoolean(Request $request, string $key, bool $default = false): bool
     {
-        $bag = $this->getRequestInputBag($request);
-        $value = $bag->get($key, $default);
+        $value = $this->getRequestInputBag($request)->get($key, $default);
 
         return (bool) \filter_var($value, \FILTER_VALIDATE_BOOLEAN);
     }
@@ -272,9 +271,7 @@ abstract class AbstractController extends BaseController
      */
     protected function getRequestInt(Request $request, string $key, int $default = 0): int
     {
-        $bag = $this->getRequestInputBag($request);
-
-        return (int) $bag->get($key, $default);
+        return (int) $this->getRequestInputBag($request)->get($key, $default);
     }
 
     /**

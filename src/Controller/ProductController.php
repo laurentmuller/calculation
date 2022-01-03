@@ -70,7 +70,12 @@ class ProductController extends AbstractEntityController
      */
     public function add(Request $request): Response
     {
-        return $this->editEntity($request, new Product());
+        $item = new Product();
+        if (null !== ($category = $this->getApplication()->getDefaultCategory())) {
+            $item->setCategory($category);
+        }
+
+        return $this->editEntity($request, $item);
     }
 
     /**

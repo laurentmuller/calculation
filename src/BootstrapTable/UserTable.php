@@ -46,10 +46,6 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Translate the user's enabled state.
-     *
-     * @param bool $enabled the user enablement state
-     *
-     * @return string the translated enabled state
      */
     public function formatEnabled(bool $enabled): string
     {
@@ -60,11 +56,6 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Format the image user URL.
-     *
-     * @param string $image the image name
-     * @param User   $user  the user
-     *
-     * @return string the image cell content
      */
     public function formatImage(?string $image, User $user): string
     {
@@ -77,10 +68,6 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Format the last login date.
-     *
-     * @param \DateTimeInterface|null $date the last login date
-     *
-     * @return string the formatted date
      */
     public function formatLastLogin(?\DateTimeInterface $date): string
     {
@@ -93,10 +80,6 @@ class UserTable extends AbstractEntityTable
 
     /**
      * Translate the user's role.
-     *
-     * @param string $role the user's role
-     *
-     * @return string the translated role
      */
     public function formatRole(string $role): string
     {

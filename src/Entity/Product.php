@@ -55,14 +55,11 @@ class Product extends AbstractCategoryItemEntity
 
     /**
      * Clone this product.
-     *
-     * @param string $description the new description
      */
     public function clone(?string $description = null): self
     {
         /** @var Product $copy */
         $copy = clone $this;
-
         if ($description) {
             $copy->setDescription($description);
         }

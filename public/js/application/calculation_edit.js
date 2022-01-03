@@ -342,6 +342,17 @@ const Application = {
     },
 
     /**
+     * Rounds the given value with 2 decimals.
+     *
+     * @param {Number}
+     *            value - the value to roud.
+     * @returns {Number} - the rounded value.
+     */
+    roundValue: function(value) {
+        return Math.round((value + Number.EPSILON) * 100) / 100;
+    },
+
+    /**
      * Update the buttons, the total and initialize the drag-drop.
      *
      * @return {Application} This instance for chaining.
@@ -613,9 +624,7 @@ const Application = {
      *            string1 - the first string to compare.
      * @param {string}
      *            string2 - the second string to compare.
-     * @return {int} a negative value if string1 comes before string2; a
-     *         positive value if string1 comes after string2; 0 if they are
-     *         considered equal.
+     * @return {int} a negative value if string1 comes before string2; a positive value if string1 comes after string2; 0 if they are considered equal.
      */
     compareStrings: function (string1, string2) {
         'use strict';
@@ -631,8 +640,7 @@ const Application = {
      * Sort items of a category.
      *
      * @param {jQuery}
-     *            $element - the caller element (button or tbody) used to find
-     *            the category.
+     *            $element - the caller element (button or tbody) used to find the category.
      * @return {Application} This instance for chaining.
      */
     sortItems: function ($element) {
@@ -661,8 +669,7 @@ const Application = {
      * Sort categories by name.
      *
      * @param {jQuery}
-     *            $element - the caller element (button, row or thead) used to
-     *            find the group and the categories.
+     *            $element - the caller element (button, row or thead) used to find the group and the categories.
      * @return {Application} This instance for chaining.
      */
     sortCategories: function ($element) {
@@ -853,8 +860,7 @@ const Application = {
 
 
     /**
-     * Display the edit item dialog. This function copy the element to the
-     * dialog and display it.
+     * Display the edit item dialog. This function copy the element to the dialog and display it.
      *
      * @param {jQuery}
      *            $source - the caller element (normally a button).
@@ -890,8 +896,7 @@ const Application = {
     },
 
     /**
-     * Remove a calculation category. If the parent group is empty after
-     * deletion, then group is also deleted.
+     * Remove a calculation category. If the parent group is empty after deletion, then group is also deleted.
      *
      * @param {jQuery}
      *            $element - the caller element (normally a button).
@@ -1176,8 +1181,7 @@ const Application = {
 $.fn.extend({
 
     /**
-     * Gets the index, for a row, of the first item input. For example:
-     * calculation_groups_4_items_12_total will return 12.
+     * Gets the index, for a row, of the first item input. For example: calculation_groups_4_items_12_total will return 12.
      *
      * @returns {int} - the index, if found; -1 otherwise.
      */
@@ -1190,8 +1194,7 @@ $.fn.extend({
     },
 
     /**
-     * Finds an input element that have the name attribute within a given
-     * substring.
+     * Finds an input element that have the name attribute within a given substring.
      *
      * @param {string}
      *            name - the partial attribute name.
@@ -1209,8 +1212,7 @@ $.fn.extend({
      * Fade out and remove the selected element.
      *
      * @param {function}
-     *            callback - the optional function to call after the element is
-     *            removed.
+     *            callback - the optional function to call after the element is removed.
      */
     removeFadeOut: function (callback) {
         'use strict';
@@ -1264,7 +1266,7 @@ $.fn.extend({
         const $row = $(this);
         const price = $row.findNamedInput('price').floatVal();
         const quantity = $row.findNamedInput('quantity').floatVal();
-        const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
+        const total = Application.roundValue(price * quantity);
 
         return {
             description: $row.findNamedInput('description').val(),
@@ -1384,6 +1386,67 @@ $.fn.extend({
         'use strict';
         const $elements = $(this).getParentRow().find('.dropdown-menu').children();
         return (new MenuBuilder()).fill($elements).getItems();
+    },
+
+    /**
+     * Edit the content of the cell.
+     *
+     * @return {jQuery} - The cell for chaining.
+     */
+    editCellValue: function(e) {
+        e.stopPropagation();
+        const $cell = $(this);
+        if ($cell.find('input').is(':focus')) {
+            return $cell;
+        }
+
+        let html = $cell.html();
+        let value = Number.parseFloat(html);
+        const $input = $('<input>', {
+            'class': 'text-right form-control form-control-sm m-0 py-0 px-1',
+            'type': 'number',
+            'value': value
+        });
+        $cell.removeClass('empty-cell').empty().append($input);
+        $input.select().on('blur', function() {
+            $input.remove();
+            $cell.html(html);
+        }).on('keydown', function(e) {
+            switch (e.which) {
+            // case 9: // tab
+            case 13: // enter
+                e.stopPropagation();
+
+                // update value
+                value = Application.roundValue($input.floatVal());
+                html = Application.formatValue(value);
+                $input.remove();
+                $cell.html(html);
+
+                // update target
+                const $target = $($cell.data('target'));
+                if (0 === $target.length || value === $target.floatVal()) {
+                    return;
+                }
+
+                // update row and totals
+                $target.val(value);
+                const $row = $cell.parents('tr');
+                if ($row.length) {
+                    const item = $row.getRowItem();
+                    $row.updateRow(item);
+                }
+                Application.updateTotals(false);
+                break;
+            case 27: // escape
+                e.stopPropagation();
+                $input.remove();
+                $cell.html(html);
+                break;
+            }
+        });
+
+        return $cell;
     }
 });
 
@@ -1422,8 +1485,7 @@ const MoveRowHandler = {
      * @param {jQuery}
      *            $target - the target row.
      * @param {boolean}
-     *            up - true to move before the target (up); false to move after
-     *            (down).
+     *            up - true to move before the target (up); false to move after (down).
      * @return {jQuery} - The moved row.
      */
     move: function ($source, $target, up) {
@@ -1532,7 +1594,7 @@ const MoveRowHandler = {
     Application.init();
 
     // context menu
-    const selector = '.table-edit th:not(.d-print-none), .table-edit td:not(.d-print-none)';
+    const selector = '.table-edit th:not(.d-print-none),.table-edit td:not(.d-print-none,.text-editable)';
     const show = function () {
         $('.dropdown-menu.show').removeClass('show');
         $(this).parent().addClass('table-primary');
@@ -1541,6 +1603,11 @@ const MoveRowHandler = {
         $(this).parent().removeClass('table-primary');
     };
     $('.table-edit').initContextMenu(selector, show, hide);
+
+    // edit in place (price and quantity)
+    $('.table-edit').on('click', 'td.text-editable', function(e) {
+        $(this).editCellValue(e);
+    });
 
     // errors
     updateErrors();

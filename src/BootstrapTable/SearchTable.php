@@ -187,8 +187,6 @@ class SearchTable extends AbstractTable
 
     /**
      * Update items.
-     *
-     * @param array $items the items to update
      */
     private function processItems(array &$items): void
     {
@@ -225,10 +223,6 @@ class SearchTable extends AbstractTable
 
     /**
      * Sorts items.
-     *
-     * @param array  $items the items to sort
-     * @param string $sort  the sorted column
-     * @param string $order the sorted direction ('asc' or 'desc')
      */
     private function sortItems(array &$items, string $sort, string $order): void
     {

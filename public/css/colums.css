@@ -123,6 +123,10 @@
     min-width: 300px;
 }
 
+.text-total {
+    min-width: 150px;
+}
+
 .text-hover {
     background-color: var(--primary) !important;
     color: var(--white) !important;

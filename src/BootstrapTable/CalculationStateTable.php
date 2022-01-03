@@ -60,6 +60,9 @@ class CalculationStateTable extends AbstractEntityTable
         ]);
     }
 
+    /**
+     * Format the editable state.
+     */
     public function formatEditable(bool $value): string
     {
         if ($value) {

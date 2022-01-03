@@ -73,7 +73,6 @@ class TaskController extends AbstractEntityController
      */
     public function add(Request $request): Response
     {
-        // create
         $item = new Task();
         if (null !== ($category = $this->getApplication()->getDefaultCategory())) {
             $item->setCategory($category);
@@ -102,10 +101,8 @@ class TaskController extends AbstractEntityController
      */
     public function clone(Request $request, Task $item): Response
     {
-        // clone
-        $category = $this->getApplication()->getDefaultCategory();
         $name = $this->trans('common.clone_description', ['%description%' => $item->getName()]);
-        $clone = $item->clone($name, $category);
+        $clone = $item->clone($name);
         $parameters = [
             'params' => ['id' => $item->getId()],
         ];

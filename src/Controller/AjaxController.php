@@ -356,7 +356,7 @@ class AjaxController extends AbstractController
         $message = $this->trans('translator.languages_error');
         if ($error = $service->getLastError()) {
             // translate message
-            $id = $service->getName() . '.' . $error['code'];
+            $id = $service->getDefaultIndexName() . '.' . $error['code'];
             if ($this->isTransDefined($id, 'translator')) {
                 $error['message'] = $this->trans($id, [], 'translator');
             }
@@ -594,7 +594,7 @@ class AjaxController extends AbstractController
             $message = $this->trans('translator.translate_error');
             if ($error = $service->getLastError()) {
                 // translate message
-                $id = $service->getName() . '.' . $error['code'];
+                $id = $service->getDefaultIndexName() . '.' . $error['code'];
                 if ($this->isTransDefined($id, 'translator')) {
                     $error['message'] = $this->trans($id, [], 'translator');
                 }

@@ -48,14 +48,14 @@ class AlphaCaptchaType extends AbstractType
     /**
      * Constructor.
      *
-     * @param \Traversable<AlphaCaptchaInterface> $captchas
+     * @param iterable<AlphaCaptchaInterface> $captchas
      */
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, \Traversable $captchas)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, iterable $captchas)
     {
         $this->requestStack = $requestStack;
-        $captchas = \iterator_to_array($captchas);
-        $this->captcha = $captchas[\array_rand($captchas)];
         $this->dataError = $translator->trans('required', [], 'captcha');
+        $captchas = $captchas instanceof \Traversable ? \iterator_to_array($captchas) : $captchas;
+        $this->captcha = $captchas[\array_rand($captchas)];
     }
 
     /**

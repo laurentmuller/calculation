@@ -41,6 +41,7 @@
             const $container = this.getContainer(settings);
             const $title = this.createTitle(settings);
             const $message = this.createMessage(settings);
+            const $progress = this.createProgressBar(settings);
             const $toast = this.createToast(settings);
 
             // save identifier
@@ -51,6 +52,9 @@
                 $toast.append($title);
             }
             $toast.append($message);
+            if ($progress) {
+                $toast.append($progress);
+            }
             if (this.isPrepend(settings)) {
                 $container.prepend($toast);
             } else {
@@ -242,7 +246,7 @@
             displaySubtitle: false,
 
             // the toasts width
-            containerWidth: 350,
+            containerWidth: '350px',
 
             // the toasts position
             position: 'bottom-right',
@@ -266,6 +270,12 @@
             // - true: The default icon is displayed depending on the type.
             // - string: A custom icon is displayed.
             icon: true,
+
+            // display a progress bar at the bottom
+            progress: true,
+
+            // the progress bar height
+            progressHeight: '1px',
 
             // the toast z-index
             zindex: 3,
@@ -551,10 +561,41 @@
                 'aria-live': 'assertive',
                 'class': 'toast border-' + options.type,
                 'css': {
-                    'max-width': options.containerWidth + 'px',
-                    'flex-basis': options.containerWidth + 'px'
+                    'max-width': options.containerWidth,
+                    'flex-basis': options.containerWidth,
+                    'border-style': 'solid',
+                    'border-width': '1px'
                  }
             });
+        },
+
+        /**
+         * Creates the progress bar.
+         *
+         * @param {Object}
+         *            options - The toast options.
+         * @returns {jQuery} The progress bar or null if no progress.
+         */
+        createProgressBar: function(options) {
+            if (!options.progress) {
+                return null;
+            }
+            const $bar =  $('<div/>', {
+                'class': 'progress-bar bg-' + options.type,
+                'role': 'progressbar',
+                'css': {
+                    'width': '100%'
+                }
+            });
+            const $progress = $('<div/>', {
+                'class': 'progress bg-transparent',
+                'css': {
+                    'height': options.progressHeight
+                },
+            });
+            $progress.append($bar);
+
+            return $progress;
         },
 
         /**
@@ -567,17 +608,47 @@
          * @return {Object} This instance.
          */
         showToast: function ($toast, options) {
+            const that = this;
             $toast.toast({
                 delay: options.timeout,
                 autohide: options.autohide
+            }).on('show.bs.toast', function() {
+                if (options.progress) {
+                    const timeout = options.timeout;
+                    const endTime = new Date().getTime() + timeout;
+                    const $progress = $toast.find('.progress-bar');
+                    $toast.createInterval(that.updateProgress, 10, $progress, endTime, timeout);
+                }
+            }).on('hide.bs.toast', function () {
+                if (options.progress) {
+                    $toast.removeInterval();
+                }
             }).on('hidden.bs.toast', function () {
                 $toast.remove();
                 if ($.isFunction(options.onHide)) {
                     options.onHide(options);
                 }
             }).toast('show');
+            return that;
+        },
 
-            return this;
+        /**
+         * Update the progress bar.
+         *
+         * @param {jQuery}
+         *            $progress - the progress bar to update.
+         * @param {Number}
+         *            endTime - The end time.
+         * @param {Number}
+         *            timeout - The time out.
+         */
+        updateProgress: function($progress, endTime, timeout) {
+            let percent = ((endTime - (new Date().getTime())) / timeout) * 100;
+            percent = Number.parseInt(percent, 10);
+            $progress.css('width', percent + '%');
+            if (percent === 0) {
+                $progress.parents('.toast').removeInterval();
+            }
         }
     };
 

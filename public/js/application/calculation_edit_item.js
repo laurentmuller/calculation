@@ -100,7 +100,7 @@ const EditItemDialog = class { /* exported EditItemDialog */
         'use strict';
         const $selection = this.$category.getSelectedOption();
         return {
-            id: parseInt($selection.data('groupId'), 10),
+            id: Number.parseInt($selection.data('groupId'), 10),
             code: $selection.data('groupCode')
         };
     }
@@ -126,13 +126,14 @@ const EditItemDialog = class { /* exported EditItemDialog */
      */
     getItem() {
         'use strict';
-        const price = this.$price.floatVal();
-        const quantity = this.$quantity.floatVal();
-        const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
+        const that = this;
+        const price = that.$price.floatVal();
+        const quantity = that.$quantity.floatVal();
+        const total = that._roundValue(price * quantity);
 
         return {
-            description: this.$description.val(),
-            unit: this.$unit.val(),
+            description: that.$description.val(),
+            unit: that.$unit.val(),
             price: price,
             quantity: quantity,
             total: total
@@ -277,5 +278,17 @@ const EditItemDialog = class { /* exported EditItemDialog */
     _formatValue(value) {
         'use strict';
         return this.application.formatValue(value);
+    }
+
+    /**
+     * Rounds the given value with 2 decimals.
+     *
+     * @param {Number}
+     *            value - the value to roud.
+     * @returns {Number} - the rounded value.
+     */
+    _roundValue(value) {
+        'use strict';
+        return this.application.roundValue(value);
     }
 };

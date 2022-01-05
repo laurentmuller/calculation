@@ -114,7 +114,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * {@inheritdoc}
      */
-    public static function getName(): string
+    public static function getDefaultIndexName(): string
     {
         return 'Google';
     }

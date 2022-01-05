@@ -30,4 +30,9 @@ interface AlphaCaptchaInterface
      * @return string[] the question and the answer
      */
     public function getChallenge(): array;
+
+    /**
+     * Gets the default index name.
+     */
+    public static function getDefaultIndexName(): string;
 }

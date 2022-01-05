@@ -29,6 +29,14 @@ class LetterCaptcha extends AbstractAlphaCaptcha
     ];
 
     /**
+     * Gets the default index name.
+     */
+    public static function getDefaultIndexName(): string
+    {
+        return 'LetterCaptcha';
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function getAnswer(string $word, int $letterIndex): string

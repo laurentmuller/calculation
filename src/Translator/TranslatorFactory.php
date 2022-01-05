@@ -45,12 +45,12 @@ class TranslatorFactory
     /**
      * Constructor.
      *
-     * @psalm-param \Traversable<TranslatorServiceInterface> $translators
+     * @psalm-param iterable<TranslatorServiceInterface> $translators
      */
-    public function __construct(RequestStack $requestStack, \Traversable $translators)
+    public function __construct(RequestStack $requestStack, iterable $translators)
     {
         $this->requestStack = $requestStack;
-        $this->translators = \iterator_to_array($translators);
+        $this->translators = $translators instanceof \Traversable ? \iterator_to_array($translators) : $translators;
     }
 
     /**

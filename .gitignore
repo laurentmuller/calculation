@@ -21,8 +21,3 @@ symfony.lock
 /resources/data/swiss.sqlite
 /resources/data/openweather.sqlite
 ###< application ###
-
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###

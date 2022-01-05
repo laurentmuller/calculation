@@ -63,6 +63,7 @@ function random() {
         options.position = $('#position').val();
         options.timeout = $('#timeout').intVal();
         options.closeButton = $('#close').isChecked();
+        options.progress = $('#progress').isChecked();
         options.autohide = $('#autohide').isChecked();
         options.displaySubtitle = $('#subtitle').isChecked();
 

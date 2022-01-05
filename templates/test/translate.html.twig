@@ -56,7 +56,7 @@
             <label for="service" class="required">{{ 'translator.service_label'|trans }}</label>
             <select id="service" name="service" class="form-control" data-languages="{{ path('ajax_languages') }}">
                 {% for translator in translators -%}
-                    <option value="{{ translator.className }}" data-api="{{ translator.apiUrl }}"{% if translator.name == service.name %} selected="selected"{% endif %}>{{ translator.name }}</option>
+                    <option value="{{ translator.className }}" data-api="{{ translator.apiUrl }}"{% if translator.defaultIndexName == service.defaultIndexName %} selected="selected"{% endif %}>{{ translator.defaultIndexName }}</option>
                 {% endfor -%}
             </select>
         </div>

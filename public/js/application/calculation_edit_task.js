@@ -56,7 +56,7 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
         'use strict';
         const $selection = this.$category.getSelectedOption();
         return {
-            id: parseInt($selection.data('groupId'), 10),
+            id: Number.parseInt($selection.data('groupId'), 10),
             code: $selection.data('groupCode')
         };
     }
@@ -83,15 +83,16 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
     getItems() {
         'use strict';
 
-        const quantity = this.$quantity.floatVal();
-        const task = this.$task.getSelectedOption().text();
-        const unit = this.$unit.val();
+        const that = this;
+        const quantity = that.$quantity.floatVal();
+        const task = that.$task.getSelectedOption().text();
+        const unit = that.$unit.val();
 
         return $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
             const $row = $(this).parents('.task-item-row');
             const text = $row.find('.custom-control-label').text();
-            const price = parseFloat($row.find('.task_value').text());
-            const total = Math.round(price * quantity * 100 + Number.EPSILON) / 100;
+            const price = Number.parseFloat($row.find('.task_value').text());
+            const total = that._roundValue(price * quantity);
             return {
                 description: task + ' - ' + text,
                 unit: unit,
@@ -236,7 +237,7 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
         // get data
         const data = {
             'id': that.$task.intVal(),
-            'quantity': that.$quantity.floatVal().toFixed(2),
+            'quantity': that._roundValue(that.$quantity.floatVal()),
             'items': items
         };
 
@@ -254,6 +255,19 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
     _formatValue(value) {
         'use strict';
         return this.application.formatValue(value);
+    }
+
+
+    /**
+     * Rounds the given value with 2 decimals.
+     *
+     * @param {Number}
+     *            value - the value to roud.
+     * @returns {Number} - the rounded value.
+     */
+    _roundValue(value) {
+        'use strict';
+        return this.application.roundValue(value);
     }
 
     /**

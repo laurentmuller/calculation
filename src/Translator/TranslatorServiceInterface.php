@@ -44,6 +44,11 @@ interface TranslatorServiceInterface
     public static function getClassName(): string;
 
     /**
+     * Gets the default index name (the service name).
+     */
+    public static function getDefaultIndexName(): string;
+
+    /**
      * Gets the set of languages currently supported by other operations of the service.
      *
      * @return array|bool an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
@@ -56,11 +61,6 @@ interface TranslatorServiceInterface
      * @return array|null the last error with the 'code' and the 'message' entries; null if none
      */
     public function getLastError(): ?array;
-
-    /**
-     * Gets the service name.
-     */
-    public static function getName(): string;
 
     /**
      * Translates a text.

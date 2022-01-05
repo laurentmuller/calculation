@@ -29,6 +29,14 @@ class ConsonantCaptcha extends AbstractAlphaCaptcha
     ];
 
     /**
+     * Gets the default index name.
+     */
+    public static function getDefaultIndexName(): string
+    {
+        return 'ConsonantCaptcha';
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function getAnswer(string $word, int $letterIndex): string

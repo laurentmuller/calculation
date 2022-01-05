@@ -325,9 +325,9 @@ const Application = {
         'use strict';
 
         // get value
-        let parsedValue = parseFloat(value);
-        if (isNaN(parsedValue)) {
-            parsedValue = parseFloat(0);
+        let parsedValue = Number.parseFloat(value);
+        if (Number.isNaN(parsedValue)) {
+            parsedValue = Number.parseFloat(0);
         }
 
         // created?
@@ -1190,7 +1190,7 @@ $.fn.extend({
         const $input = $(this).find('input:first');
         const values = $input.attr('id').split('_');
         const value = Number.parseInt(values[values.length - 2], 10);
-        return isNaN(value) ? - 1 : value;
+        return Number.isNaN(value) ? - 1 : value;
     },
 
     /**
@@ -1202,7 +1202,6 @@ $.fn.extend({
      */
     findNamedInput: function (name) {
         'use strict';
-
         const selector = "input[name*='" + name + "']";
         const $result = $(this).find(selector);
         return $result.length ? $result : null;
@@ -1256,7 +1255,7 @@ $.fn.extend({
     },
 
     /**
-     * Gets item values from the current row.
+     * Gets item values from the this row.
      *
      * @returns {Object} the item data.
      */
@@ -1298,7 +1297,7 @@ $.fn.extend({
     },
 
     /**
-     * Copy the values of the item to the current row.
+     * Copy the values of the item to this row.
      *
      * @param {Object}
      *            item - the item to get values from.
@@ -1323,6 +1322,22 @@ $.fn.extend({
         $row.find('td:eq(3)').text(Application.formatValue(item.quantity));
         $row.find('td:eq(4)').text(Application.formatValue(item.total));
 
+        return $row;
+    },
+
+    /**
+     * Update the total cell of this row.
+     *
+     * @returns {jQuery} - The updated row.
+     */
+    updateTotal: function() {
+        'use strict';
+
+        const $row = $(this);
+        const price = $row.findNamedInput('price').floatVal();
+        const quantity = $row.findNamedInput('quantity').floatVal();
+        const total = Application.roundValue(price * quantity);
+        $row.find('td:eq(4)').text(Application.formatValue(total));
         return $row;
     },
 
@@ -1402,6 +1417,11 @@ $.fn.extend({
 
         let html = $cell.html();
         let value = Number.parseFloat(html);
+        const $target = $($cell.data('target'));
+        if ($target.length) {
+            value = $target.floatVal();
+        }
+
         const $input = $('<input>', {
             'class': 'text-right form-control form-control-sm m-0 py-0 px-1',
             'type': 'number',
@@ -1423,18 +1443,16 @@ $.fn.extend({
                 $input.remove();
                 $cell.html(html);
 
-                // update target
-                const $target = $($cell.data('target'));
+                // same value?
                 if (0 === $target.length || value === $target.floatVal()) {
                     return;
                 }
 
                 // update row and totals
-                $target.val(value);
+                $target.floatVal(value);
                 const $row = $cell.parents('tr');
                 if ($row.length) {
-                    const item = $row.getRowItem();
-                    $row.updateRow(item);
+                    $row.updateTotal();
                 }
                 Application.updateTotals(false);
                 break;

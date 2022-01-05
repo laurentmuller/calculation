@@ -29,6 +29,14 @@ class VowelCaptcha extends AbstractAlphaCaptcha
     private const VOWEL = 'AEIOUY';
 
     /**
+     * Gets the default index name.
+     */
+    public static function getDefaultIndexName(): string
+    {
+        return 'VowelCaptcha';
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function getAnswer(string $word, int $letterIndex): string

@@ -92,9 +92,11 @@
         getGroup() {
             'use strict';
             const $selection = this.$category.getSelectedOption();
+            const id = Number.parseInt($selection.data('groupId'), 10);
+            const code = $selection.data('groupCode');
             return {
-                id: Number.parseInt($selection.data('groupId'), 10),
-                code: $selection.data('groupCode')
+                id: id,
+                code: code
             };
         }
 
@@ -106,9 +108,11 @@
         getCategory() {
             'use strict';
             const $selection = this.$category.getSelectedOption();
+            const id = this.$category.intVal();
+            const code = $selection.text();
             return {
-                id: this.$category.intVal(),
-                code: $selection.text()
+                id: id,
+                code: code
             };
         }
 

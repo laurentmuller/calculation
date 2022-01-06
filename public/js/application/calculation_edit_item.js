@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* global EditDialog */
+
 /**
  * Edit item dialog handler.
  *
@@ -19,10 +21,11 @@ class EditItemDialog extends EditDialog {
         const price = that.$price.floatVal();
         const quantity = that.$quantity.floatVal();
         const total = that._roundValue(price * quantity);
-
+        const description = that.$description.val();
+        const unit = that.$unit.val();
         return {
-            description: that.$description.val(),
-            unit: that.$unit.val(),
+            description: description,
+            unit: unit,
             price: price,
             quantity: quantity,
             total: total

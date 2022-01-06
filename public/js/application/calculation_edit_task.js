@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster */
+/* globals EditDialog, Toaster */
 
 /**
  * Edit task dialog handler.
@@ -26,10 +26,11 @@ class EditTaskDialog extends EditDialog {
         return $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
             const $row = $(this).parents('.task-item-row');
             const text = $row.find('.custom-control-label').text();
-            const price = Number.parseFloat($row.find('.task_value').text());
+            const price = Number.parseFloat($row.find('.task_value').data('value'));
             const total = that._roundValue(price * quantity);
+            const description = task + ' - ' + text;
             return {
-                description: task + ' - ' + text,
+                description: description,
                 unit: unit,
                 price: price,
                 quantity: quantity,
@@ -198,12 +199,13 @@ class EditTaskDialog extends EditDialog {
      * @param {string}
      *            id - the plain-text identifier.
      * @param {number}
-     *            value - the value to format.
+     *            value - the value.
      * @return {EditTaskDialog} This instance for chaining.
      */
     _updateValue(id, value) {
         'use strict';
-        $('#' + id).text(this._formatValue(value));
+        const $item = $('#' + id);
+        $item.data('value', value).text(this._formatValue(value));
         return this;
     }
 

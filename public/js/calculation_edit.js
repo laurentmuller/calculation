@@ -27,6 +27,7 @@
  * Specific Files
  */
 <!--#include file="application/calculation_error.js" -->
+<!--#include file="application/calculation_edit_dialog.js" -->
 <!--#include file="application/calculation_edit_item.js" -->
 <!--#include file="application/calculation_edit_task.js" -->
 <!--#include file="application/calculation_edit.js" -->

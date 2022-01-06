@@ -2,122 +2,11 @@
 
 /**
  * Edit item dialog handler.
+ *
+ * @class EditItemDialog
+ * @extends {EditDialog}
  */
-const EditItemDialog = class { /* exported EditItemDialog */
-
-    /**
-     * Constructor.
-     */
-    constructor(application) {
-        'use strict';
-        this.application = application;
-        this._init();
-    }
-
-    /**
-     * Display the add item dialog.
-     *
-     * @param {jQuery}
-     *            $row - the selected row.
-     * @return {EditItemDialog} This instance for chaining.
-     */
-    showAdd($row) {
-        'use strict';
-
-        // initialize
-        this.application.initDragDialog();
-        this.$editingRow = null;
-
-        // reset
-        this.$form.resetValidator();
-
-        // update values
-        if ($row) {
-            const $input = $row.siblings(':first').findNamedInput('category');
-            if ($input) {
-                this.$category.val($input.val());
-            }
-        }
-        this.$price.floatVal(1);
-        this.$quantity.floatVal(1);
-        this.$total.text(this._formatValue(1));
-
-        // show
-        this.$modal.modal('show');
-
-        return this;
-    }
-
-    /**
-     * Display the edit item dialog. This function copy the element to the
-     * dialog and display it.
-     *
-     * @param {jQuery}
-     *            $row - the selected row.
-     * @return {EditItemDialog} This instance for chaining.
-     */
-    showEdit($row) {
-        'use strict';
-
-        // initialize
-        this.application.initDragDialog();
-        this.$editingRow = $row;
-
-        // reset
-        this.$form.resetValidator();
-
-        // copy values
-        this.$description.val($row.findNamedInput('description').val());
-        this.$unit.val($row.findNamedInput('unit').val());
-        this.$category.val($row.parent().findNamedInput('category').val());
-        this.$price.floatVal($row.findNamedInput('price').floatVal());
-        this.$quantity.floatVal($row.findNamedInput('quantity').floatVal());
-        this.$total.text(this._formatValue($row.findNamedInput('total').floatVal()));
-
-        // show
-        this.$modal.modal('show');
-
-        return this;
-    }
-
-    /**
-     * Hide the dialog.
-     *
-     * @return {EditItemDialog} This instance for chaining.
-     */
-    hide() {
-        'use strict';
-        this.$modal.modal('hide');
-        return this;
-    }
-
-    /**
-     * Gets the selected group.
-     *
-     * @returns {Object} the group.
-     */
-    getGroup() {
-        'use strict';
-        const $selection = this.$category.getSelectedOption();
-        return {
-            id: Number.parseInt($selection.data('groupId'), 10),
-            code: $selection.data('groupCode')
-        };
-    }
-
-    /**
-     * Gets the selected category.
-     *
-     * @returns {Object} the category.
-     */
-    getCategory() {
-        'use strict';
-        const $selection = this.$category.getSelectedOption();
-        return {
-            id: this.$category.intVal(),
-            code: $selection.text()
-        };
-    }
+class EditItemDialog extends EditDialog {
 
     /**
      * Gets the selected item.
@@ -141,13 +30,52 @@ const EditItemDialog = class { /* exported EditItemDialog */
     }
 
     /**
-     * Gets the editing row.
+     * Initialize the dialog add.
      *
-     * @return {JQuery} the row or null if none.
+     * @param {jQuery}
+     *            _$row - the selected row.
+     *
+     * @return {EditItemDialog} This instance for chaining.
      */
-    getEditingRow() {
+    _initAdd($row) {
         'use strict';
-        return this.$editingRow;
+
+        // update values
+        if ($row) {
+            const $input = $row.siblings(':first').findNamedInput('category');
+            if ($input) {
+                this.$category.val($input.val());
+            }
+        }
+
+        // set values
+        this.$price.floatVal(1);
+        this.$quantity.floatVal(1);
+        this.$total.text(this._formatValue(1));
+
+        return super._initAdd($row);
+    }
+
+    /**
+     * Initialize the dialog edit.
+     *
+     * @param {jQuery}
+     *            _$row - the selected row.
+     *
+     * @return {EditItemDialog} This instance for chaining.
+     */
+    _initEdit($row) {
+        'use strict';
+
+        // copy values
+        this.$description.val($row.findNamedInput('description').val());
+        this.$unit.val($row.findNamedInput('unit').val());
+        this.$category.val($row.parent().findNamedInput('category').val());
+        this.$price.floatVal($row.findNamedInput('price').floatVal());
+        this.$quantity.floatVal($row.findNamedInput('quantity').floatVal());
+        this.$total.text(this._formatValue($row.findNamedInput('total').floatVal()));
+
+        return super._initEdit($row);
     }
 
     /**
@@ -158,6 +86,7 @@ const EditItemDialog = class { /* exported EditItemDialog */
     _init() {
         'use strict';
 
+        // get elements
         const that = this;
         that.$form = $('#item_form');
         that.$modal = $('#item_modal');
@@ -173,7 +102,18 @@ const EditItemDialog = class { /* exported EditItemDialog */
         that.$cancelButton = $('#item_cancel_button');
         that.$deleteButton = $('#item_delete_button');
 
-        // validator
+        // handle dialog events
+        that._initDialog();
+
+        // handle input events
+        const updateProxy = $.proxy(that._updateTotal, that);
+        that.$price.on('input', updateProxy);
+        that.$quantity.on('input', updateProxy);
+
+        // handle delete button
+        that.$deleteButton.on('click', $.proxy(that._onDelete, that));
+
+        // init validator
         const options = {
             submitHandler: function () {
                 if (that.$editingRow) {
@@ -185,20 +125,7 @@ const EditItemDialog = class { /* exported EditItemDialog */
         };
         that.$form.initValidator(options);
 
-        // handle dialog events
-        that.$modal.on('show.bs.modal', $.proxy(that._onDialogShow, that));
-        that.$modal.on('shown.bs.modal', $.proxy(that._onDialogVisible, that));
-        that.$modal.on('hide.bs.modal', $.proxy(that._onDialogHide, that));
-
-        // handle input events
-        const updateProxy = $.proxy(that._updateTotal, that);
-        that.$price.on('input', updateProxy);
-        that.$quantity.on('input', updateProxy);
-
-        // handle delete button
-        that.$deleteButton.on('click', $.proxy(that._onDelete, that));
-
-        return that;
+        return super._init();
     }
 
     /**
@@ -226,12 +153,11 @@ const EditItemDialog = class { /* exported EditItemDialog */
 
     /**
      * Handles the dialog show event.
+     *
+     * @return {EditItemDialog} This instance for chaining.
      */
     _onDialogShow() {
         'use strict';
-        const key = this.$editingRow ? 'edit' : 'add';
-        const title = this.$form.data(key);
-        this.$modal.find('.dialog-title').text(title);
         if (this.$editingRow) {
             this.$searchRow.hide();
             this.$deleteButton.show();
@@ -239,17 +165,19 @@ const EditItemDialog = class { /* exported EditItemDialog */
             this.$searchRow.show();
             this.$deleteButton.hide();
         }
+        return super._onDialogShow();
     }
 
     /**
      * Handles the dialog visible event.
+     *
+     * @return {EditItemDialog} This instance for chaining.
      */
     _onDialogVisible() {
         'use strict';
         if (this.$price.attr('readonly')) {
             this.$cancelButton.focus();
         } else if (this.$editingRow) {
-            this.$editingRow.addClass('table-primary');
             if (this.$price.isEmptyValue()) {
                 this.$price.selectFocus();
             } else {
@@ -258,37 +186,6 @@ const EditItemDialog = class { /* exported EditItemDialog */
         } else {
             this.$search.selectFocus();
         }
+        return super._onDialogVisible();
     }
-
-    /**
-     * Handles the dialog hide event.
-     */
-    _onDialogHide() {
-        'use strict';
-        $('tr.table-primary').removeClass('table-primary');
-    }
-
-    /**
-     * Format a value with 2 fixed decimals and grouping separator.
-     *
-     * @param {Number}
-     *            value - the value to format.
-     * @returns {string} - the formatted value.
-     */
-    _formatValue(value) {
-        'use strict';
-        return this.application.formatValue(value);
-    }
-
-    /**
-     * Rounds the given value with 2 decimals.
-     *
-     * @param {Number}
-     *            value - the value to roud.
-     * @returns {Number} - the rounded value.
-     */
-    _roundValue(value) {
-        'use strict';
-        return this.application.roundValue(value);
-    }
-};
+}

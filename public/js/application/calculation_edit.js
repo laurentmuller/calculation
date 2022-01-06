@@ -154,9 +154,9 @@ const Application = {
     },
 
     /**
-     * Gets the item dialog.
+     * Gets the edit item dialog.
      *
-     * @return {Object} the dialog.
+     * @return {EditItemDialog} the dialog.
      */
     getItemDialog: function () {
         'use strict';
@@ -167,9 +167,9 @@ const Application = {
     },
 
     /**
-     * Gets the task dialog.
+     * Gets the edit task dialog.
      *
-     * @return {Object} the dialog.
+     * @return {EditTaskDialog} the dialog.
      */
     getTaskDialog: function () {
         'use strict';
@@ -847,15 +847,18 @@ const Application = {
 
     /**
      * Display the add task dialog.
+     *
+     * @param {jQuery}
+     *            $source - the caller element (normally a button).
      */
-    showAddTaskDialog: function () {
+    showAddTaskDialog: function ($source) {
         'use strict';
 
         // reset
         $('tr.table-success').removeClass('table-success');
 
         // show dialog
-        this.getTaskDialog().showAdd();
+        this.getTaskDialog().showAdd($source.getParentRow());
     },
 
 
@@ -1334,10 +1337,8 @@ $.fn.extend({
         'use strict';
 
         const $row = $(this);
-        const price = $row.findNamedInput('price').floatVal();
-        const quantity = $row.findNamedInput('quantity').floatVal();
-        const total = Application.roundValue(price * quantity);
-        $row.find('td:eq(4)').text(Application.formatValue(total));
+        const item = $row.getRowItem();
+        $row.find('td:eq(4)').text(Application.formatValue(item.total));
         return $row;
     },
 

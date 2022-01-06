@@ -4,76 +4,11 @@
 
 /**
  * Edit task dialog handler.
+ *
+ * @class EditTaskDialog
+ * @extends {EditDialog}
  */
-const EditTaskDialog = class { /* exported EditTaskDialog */
-
-    /**
-     * Constructor.
-     */
-    constructor(application) {
-        'use strict';
-        this.application = application;
-        this._init();
-    }
-
-    /**
-     * Display the add task dialog.
-     *
-     * @return {EditTaskDialog} This instance for chaining.
-     */
-    showAdd() {
-        'use strict';
-        // initialize
-        this.application.initDragDialog();
-        this.$editingRow = null;
-
-        // reset
-        this.$form.resetValidator();
-
-        // show
-        this.$modal.modal('show');
-
-        return this;
-    }
-
-    /**
-     * Hide the dialog.
-     *
-     * @return {EditTaskDialog} This instance for chaining.
-     */
-    hide() {
-        'use strict';
-        this.$modal.modal('hide');
-        return this;
-    }
-
-    /**
-     * Gets the selected group.
-     *
-     * @returns {Object} the group.
-     */
-    getGroup() {
-        'use strict';
-        const $selection = this.$category.getSelectedOption();
-        return {
-            id: Number.parseInt($selection.data('groupId'), 10),
-            code: $selection.data('groupCode')
-        };
-    }
-
-    /**
-     * Gets the selected category.
-     *
-     * @returns {Object} the category.
-     */
-    getCategory() {
-        'use strict';
-        const $selection = this.$category.getSelectedOption();
-        return {
-            id: this.$category.intVal(),
-            code: $selection.text()
-        };
-    }
+class EditTaskDialog extends EditDialog {
 
     /**
      * Gets the selected items.
@@ -122,12 +57,10 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
         that.$submit = $('#task_submit_button');
         that.$itemsEmpty = $('.task-items-empty');
 
-        // handld dialog events
-        that.$modal.on('show.bs.modal', $.proxy(that._onDialogShow, that));
-        that.$modal.on('shown.bs.modal', $.proxy(that._onDialogVisible, that));
-        that.$modal.on('hide.bs.modal', $.proxy(that._onDialogHide, that));
+        // handle dialog events
+        that._initDialog();
 
-        // handld input events
+        // handle input events
         const taskProxy = $.proxy(that._onTaskChanged, that);
         that.$task.on('input', function () {
             $(this).updateTimer(taskProxy, 250);
@@ -140,7 +73,7 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
             $(this).updateTimer(updateProxy, 250);
         });
 
-        // validator
+        // init validator
         const options = {
             submitHandler: function () {
                 if (that.$editingRow) {
@@ -156,9 +89,11 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
             }
         };
         that.$form.initValidator(options);
+
+        // update values
         that._update();
 
-        return that;
+        return super._init();
     }
 
     /**
@@ -209,7 +144,7 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
     }
 
     /**
-     * Gets UI values and send to the server.
+     * Gets input values and send to the server.
      *
      * @return {EditTaskDialog} This instance for chaining.
      */
@@ -246,32 +181,7 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
     }
 
     /**
-     * Format a value with 2 fixed decimals and grouping separator.
-     *
-     * @param {Number}
-     *            value - the value to format.
-     * @returns {string} - the formatted value.
-     */
-    _formatValue(value) {
-        'use strict';
-        return this.application.formatValue(value);
-    }
-
-
-    /**
-     * Rounds the given value with 2 decimals.
-     *
-     * @param {Number}
-     *            value - the value to roud.
-     * @returns {Number} - the rounded value.
-     */
-    _roundValue(value) {
-        'use strict';
-        return this.application.roundValue(value);
-    }
-
-    /**
-     * Gets selected items.
+     * Gets selected item identifiers.
      *
      * @return {array} - the selected item identifiers.
      */
@@ -280,28 +190,6 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
         return $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
             return Number.parseInt($(this).attr('value'), 10);
         }).get();
-    }
-
-    /**
-     * Gets the selected category identifier.
-     *
-     * @return {int} the category identifier.
-     */
-    _getCategory() {
-        'use strict';
-        const $selection = this.$task.getSelectedOption();
-        return $selection.data('categoryId');
-    }
-
-    /**
-     * Gets the selected unit.
-     *
-     * @return {string} the unit.
-     */
-    _getUnit() {
-        'use strict';
-        const $selection = this.$task.getSelectedOption();
-        return $selection.data('unit');
     }
 
     /**
@@ -347,19 +235,6 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
     }
 
     /**
-     * Handles the dialog show event.
-     *
-     * @return {EditTaskDialog} This instance for chaining.
-     */
-    _onDialogShow() {
-        'use strict';
-        const key = this.$editingRow ? 'edit' : 'add';
-        const title = this.$form.data(key);
-        this.$modal.find('.dialog-title').text(title);
-        return this;
-    }
-
-    /**
      * Handles the dialog visible event.
      *
      * @return {EditTaskDialog} This instance for chaining.
@@ -367,7 +242,6 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
     _onDialogVisible() {
         'use strict';
         if (this.$editingRow) {
-            this.$editingRow.addClass('table-primary');
             if (this.$quantity.isEmptyValue()) {
                 this.$quantity.selectFocus();
             } else {
@@ -376,19 +250,7 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
         } else {
             this.$task.focus();
         }
-        return this;
-    }
-
-    /**
-     * Handles the dialog hide event.
-     *
-     * @return {EditTaskDialog} This instance for chaining.
-     */
-    _onDialogHide() {
-        'use strict';
-        // this.$editingRow = null;
-        $('tr.table-primary').removeClass('table-primary');
-        return this;
+        return super._onDialogVisible();
     }
 
     /**
@@ -417,4 +279,4 @@ const EditTaskDialog = class { /* exported EditTaskDialog */
         }
         return this._update();
     }
-};
+}

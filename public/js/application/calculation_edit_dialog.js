@@ -140,16 +140,16 @@
          * Initialize the modal dialog.
          *
          * @param {jQuery}
-         *            _$row - the selected row.
+         *            $modal - the modal dialog.
          *
          * @return {EditDialog} This instance for chaining.
          */
-        _initDialog() {
+        _initDialog($modal) {
             // handle dialog events
             const that = this;
-            that.$modal.on('show.bs.modal', $.proxy(that._onDialogShow, that));
-            that.$modal.on('shown.bs.modal', $.proxy(that._onDialogVisible, that));
-            that.$modal.on('hide.bs.modal', $.proxy(that._onDialogHide, that));
+            $modal.on('show.bs.modal', $.proxy(that._onDialogShow, that));
+            $modal.on('shown.bs.modal', $.proxy(that._onDialogVisible, that));
+            $modal.on('hide.bs.modal', $.proxy(that._onDialogHide, that));
             return that;
         }
 

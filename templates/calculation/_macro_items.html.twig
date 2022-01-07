@@ -16,8 +16,8 @@
         {%- endif -%}
     </td>
     <td class="text-unit">{{ item.unit.vars.value }}</td>
-    <td class="text-currency text-editable rowlink-skip" data-target="#{{ item.price.vars.id }}">{{ item.price.vars.value|amount }}</td>
-    <td class="text-currency text-editable rowlink-skip" data-target="#{{ item.quantity.vars.id }}">{{ item.quantity.vars.value|amount }}</td>
+    <td class="text-currency text-editable rowlink-skip" data-target="#{{ item.price.vars.id }}" title="{{ 'calculation.edit.edit_cell'|trans }}">{{ item.price.vars.value|amount }}</td>
+    <td class="text-currency text-editable rowlink-skip" data-target="#{{ item.quantity.vars.id }}" title="{{ 'calculation.edit.edit_cell'|trans }}">{{ item.quantity.vars.value|amount }}</td>
     <td class="text-currency">{{ item.total.vars.value|amount }}</td>
     {% if editable %}
     <td class="actions d-print-none rowlink-skip">

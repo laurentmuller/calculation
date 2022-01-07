@@ -59,7 +59,7 @@ class EditTaskDialog extends EditDialog {
         that.$itemsEmpty = $('.task-items-empty');
 
         // handle dialog events
-        that._initDialog();
+        that._initDialog(that.$modal);
 
         // handle input events
         const taskProxy = $.proxy(that._onTaskChanged, that);

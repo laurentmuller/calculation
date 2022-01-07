@@ -49,6 +49,7 @@ calculation:
         delete_task: Supprimer la tâche
         read_only: Calculation non-modifiable (Statut %name%).
         adjust_title: Ajuster la marge utilisateur pour atteindre le seuil minimal de <b>%minimum%</b>
+        edit_cell: Cliquez pour modifier directement la valeur
         error:
             update_total: Une erreur s'est produite lors de la mise à jour des totaux de la calculation.<br><br>Veuillez ne plus modifier cette calculation et cliquer sur le boutton <b>Annuler</b>.
             search_product: Erreur lors de la recherche des articles.

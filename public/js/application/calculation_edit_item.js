@@ -93,7 +93,6 @@ class EditItemDialog extends EditDialog {
         const that = this;
         that.$form = $('#item_form');
         that.$modal = $('#item_modal');
-
         that.$description = $('#item_description');
         that.$unit = $('#item_unit');
         that.$category = $('#item_category');
@@ -106,7 +105,7 @@ class EditItemDialog extends EditDialog {
         that.$deleteButton = $('#item_delete_button');
 
         // handle dialog events
-        that._initDialog();
+        that._initDialog(that.$modal);
 
         // handle input events
         const updateProxy = $.proxy(that._updateTotal, that);

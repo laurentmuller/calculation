@@ -1424,7 +1424,7 @@ $.fn.extend({
         }
 
         const $input = $('<input>', {
-            'class': 'text-right form-control form-control-sm m-0 py-0 px-1',
+            'class': 'text-right form-control form-control-sm m-0 py-0 px-1 my-n1',
             'type': 'number',
             'value': value
         });
@@ -1613,13 +1613,13 @@ const MoveRowHandler = {
     Application.init();
 
     // context menu
-    const selector = '.table-edit th:not(.d-print-none),.table-edit td:not(.d-print-none,.text-editable)';
+    const selector = 'th:not(.d-print-none),td:not(.d-print-none,:has(:input))';
     const show = function () {
         $('.dropdown-menu.show').removeClass('show');
-        $(this).parent().addClass('table-primary');
+        $(this).parents('tr').addClass('table-primary');
     };
     const hide = function () {
-        $(this).parent().removeClass('table-primary');
+        $(this).parents('tr').removeClass('table-primary');
     };
     $('.table-edit').initContextMenu(selector, show, hide);
 

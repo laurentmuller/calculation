@@ -12,7 +12,7 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
         {{- icons.dropdownItem(path('app_logout'), 'index.logout', 'sign-out-alt') -}}
-        {{- icons.dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'pencil-alt') -}}
+        {{- icons.dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') -}}
         {{- icons.dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock-alt') -}}
         {% if is_test %}
         {{- icons.dropdownItem(path('user_theme'), 'index.menu_theme', 'file-image far', null, {'%name%': theme_name(app.request)}) -}}

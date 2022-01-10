@@ -30,7 +30,7 @@
 {%- set show_class = show_class ~ ' btn-search btn-show' -%}
 {%- set edit_class = show_class ~ ' btn-search btn-edit' -%}
 {{- _self.item_path(path ~ '_type_/show/_id_', 'common.button_show', 'tv', show_class) }}
-{{- _self.item_path(path ~ '_type_/edit/_id_', 'common.button_edit', 'pencil-alt', edit_class) }}
+{{- _self.item_path(path ~ '_type_/edit/_id_', 'common.button_edit', 'pencil', edit_class) }}
 {{- _self.item_path(path ~ '_type_/delete/_id_', 'common.button_delete', 'times', 'btn-search btn-delete') }}
 {%- endblock %}
 

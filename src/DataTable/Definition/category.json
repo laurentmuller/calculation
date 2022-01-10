@@ -1,59 +1,59 @@
 [
-	{
-		"name": "id",
-		"visible": false,
-		"orderable": false,
-		"searchable": false
-	},
-	{
-		"name": "code",
-		"title": "category.fields.code",
-		"default": true,
-		"class": "text-code text-nowrap"
-	},
-	{
-		"name": "description",
-		"title": "category.fields.description",
-		"class": "w-auto text-cell"
-	},
-	{
-		"name": "group.code",
-		"title": "category.fields.group",
-		"class": "text-code",
-		"orderable": true,
-		"searchable": false
-	},
-	{
-		"name": "products",
-		"title": "category.fields.products",
-		"orderable": false,
-		"searchable": false,
-		"rawData": true,
-		"class": "text-currency rowlink-skip",
-		"formatter": "formatProducts"
-	},
-	{
-		"name": "tasks",
-		"title": "category.fields.tasks",
-		"orderable": false,
-		"searchable": false,
-		"rawData": true,
-		"class": "text-currency rowlink-skip",
-		"formatter": "formatTasks"
-	},
-	{
-		"name": "group.id",
-		"visible": false,
-		"orderable": false,
-		"searchable": true
-	},
-	{
-		"name": "id",
-		"title": "common.empty",
-		"orderable": false,
-		"searchable": false,
-		"rawData": true,
-		"formatter": "formatActions",
-		"class": "actions rowlink-skip d-print-none"
-	}
+    {
+        "name": "id",
+        "visible": false,
+        "orderable": false,
+        "searchable": false
+    },
+    {
+        "name": "code",
+        "title": "category.fields.code",
+        "default": true,
+        "class": "text-code text-nowrap"
+    },
+    {
+        "name": "description",
+        "title": "category.fields.description",
+        "class": "w-auto text-cell"
+    },
+    {
+        "name": "group.code",
+        "title": "category.fields.group",
+        "class": "text-code",
+        "orderable": true,
+        "searchable": false
+    },
+    {
+        "name": "products",
+        "title": "category.fields.products",
+        "orderable": false,
+        "searchable": false,
+        "rawData": true,
+        "class": "text-currency rowlink-skip",
+        "formatter": "formatProducts"
+    },
+    {
+        "name": "tasks",
+        "title": "category.fields.tasks",
+        "orderable": false,
+        "searchable": false,
+        "rawData": true,
+        "class": "text-currency rowlink-skip",
+        "formatter": "formatTasks"
+    },
+    {
+        "name": "group.id",
+        "visible": false,
+        "orderable": false,
+        "searchable": true
+    },
+    {
+        "name": "id",
+        "title": "common.empty",
+        "orderable": false,
+        "searchable": false,
+        "rawData": true,
+        "formatter": "formatActions",
+        "class": "actions rowlink-skip d-print-none"
+    }
 ]

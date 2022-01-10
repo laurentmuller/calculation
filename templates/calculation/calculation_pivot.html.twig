@@ -52,7 +52,7 @@
 
 {% macro outputPopoverTotal(cell, separator) -%}
 <td class="bg-success text-white text-currency" data-toggle="popover" data-body="{{ _self.outputPopoverTitle(cell, separator)|e }}">
-	{{- _self.format(cell.value) -}}
+    {{- _self.format(cell.value) -}}
 </td>
 {%- endmacro %}
 
@@ -161,11 +161,11 @@
         </tbody>
         <tfoot>
             <tr>
-            	<td class="text-nowrap not-hover bg-success text-white"{{ _self.colspan(row_level) }}>{{ total_title }}</td>
-            	{%- for cell in table.column.childrenAtLevel(col_level) -%}
-            		{{ _self.outputPopoverTotal(cell, separator) }}
-            	{%- endfor -%}
-            	{{ _self.outputPopoverTotal(table, separator) }}
+                <td class="text-nowrap not-hover bg-success text-white"{{ _self.colspan(row_level) }}>{{ total_title }}</td>
+                {%- for cell in table.column.childrenAtLevel(col_level) -%}
+                    {{ _self.outputPopoverTotal(cell, separator) }}
+                {%- endfor -%}
+                {{ _self.outputPopoverTotal(table, separator) }}
             </tr>
         </tfoot>
     </table>

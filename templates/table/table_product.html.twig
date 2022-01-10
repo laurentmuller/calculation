@@ -30,7 +30,7 @@
 {{- _self.item_external(path('product_excel'), 'product.list.excel_title', 'file-excel far') }}
 {% if is_granted('ROLE_ADMIN') -%}
     {{- _self.item_separator() }}
-    {{- _self.item_path(path('admin_product'), 'product.update.title', 'pencil-alt') }}
+    {{- _self.item_path(path('admin_product'), 'product.update.title', 'pencil') }}
 {%- endif %}
 {%- endblock %}
 
@@ -39,7 +39,7 @@
 {%- endblock %}
 
 {% block edit_actions -%}
-{{- _self.item_path(path('product_edit', params), 'product.edit.title', 'pencil-alt', edit_class) }}
+{{- _self.item_path(path('product_edit', params), 'product.edit.title', 'pencil', edit_class) }}
 {%- endblock %}
 
 {% block delete_actions -%}

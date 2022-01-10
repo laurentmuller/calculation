@@ -63,7 +63,7 @@
             {% if is_super_admin %}
             <li>{{ _self.link('user_register', 'registration.register.title', 'user-plus') }}</li>
             {% endif %}
-            <li>{{ _self.link('user_profile_edit', 'profile.edit.title', 'pencil-alt') }}</li>
+            <li>{{ _self.link('user_profile_edit', 'profile.edit.title', 'pencil') }}</li>
             {% if is_remembered %}
             <li>{{ _self.link('app_logout', 'index.logout', 'sign-out-alt') }}</li>
             {% else %}
@@ -186,7 +186,7 @@
                 <ul>
                     <li>{{ _self.link('search', 'search.title', 'search') }}</li>
                     {% if is_admin %}
-                    <li>{{ _self.link('admin_calculation', 'calculation.update.title', 'pencil-alt') }}</li>
+                    <li>{{ _self.link('admin_calculation', 'calculation.update.title', 'pencil') }}</li>
                     <li>{{ _self.link('below_table', 'below.title', 'percent') }}</li>
                     <li>{{ _self.link('duplicate_table', 'duplicate.title', 'copy far') }}</li>
                     <li>{{ _self.link('empty_table', 'empty.title', 'file-code far') }}</li>

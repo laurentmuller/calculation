@@ -1,53 +1,53 @@
 [
-	{
-		"name": "id",
-		"visible": false,
-		"orderable": false,
-		"searchable": false
-	},
-	{
-		"name": "name",
-		"title": "task.fields.name",
-		"default": true,
-		"class": "w-100 text-cell"
-	},
-	{
-		"name": "group.code",
-		"title": "task.fields.group",
-		"class": "text-group"
-	},
-	{
-		"name": "category.code",
-		"title": "task.fields.category",
-		"class": "text-category"
-	},
-	{
-		"name": "unit",
-		"title": "task.fields.unit",
-		"class": " text-unit"
-	},
-	{
-		"name": "items",
-		"title": "task.fields.items",
-		"orderable": false,
-		"searchable": false,
-		"rawData": true,
-		"class": "text-currency",
-		"formatter": "formatCountable"
-	},
-	{
-		"name": "category.id",
-		"visible": false,
-		"orderable": false,
-		"searchable": true
-	},
-	{
-		"name": "id",
-		"title": "common.empty",
-		"orderable": false,
-		"searchable": false,
-		"rawData": true,
-		"formatter": "formatActions",
-		"class": "actions rowlink-skip d-print-none"
-	}
+    {
+        "name": "id",
+        "visible": false,
+        "orderable": false,
+        "searchable": false
+    },
+    {
+        "name": "name",
+        "title": "task.fields.name",
+        "default": true,
+        "class": "w-100 text-cell"
+    },
+    {
+        "name": "group.code",
+        "title": "task.fields.group",
+        "class": "text-group"
+    },
+    {
+        "name": "category.code",
+        "title": "task.fields.category",
+        "class": "text-category"
+    },
+    {
+        "name": "unit",
+        "title": "task.fields.unit",
+        "class": " text-unit"
+    },
+    {
+        "name": "items",
+        "title": "task.fields.items",
+        "orderable": false,
+        "searchable": false,
+        "rawData": true,
+        "class": "text-currency",
+        "formatter": "formatCountable"
+    },
+    {
+        "name": "category.id",
+        "visible": false,
+        "orderable": false,
+        "searchable": true
+    },
+    {
+        "name": "id",
+        "title": "common.empty",
+        "orderable": false,
+        "searchable": false,
+        "rawData": true,
+        "formatter": "formatActions",
+        "class": "actions rowlink-skip d-print-none"
+    }
 ]

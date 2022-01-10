@@ -309,6 +309,12 @@ const Application = {
         }).on('click', '.btn-delete-group', function (e) {
             e.preventDefault();
             that.removeGroup($(this));
+        }).on('click', '.btn-edit-price', function (e) {
+            e.preventDefault();
+            that.editItemPrice($(this));
+        }).on('click', '.btn-edit-quantity', function (e) {
+            e.preventDefault();
+            that.editItemQuantity($(this));
         });
 
         return that;
@@ -839,10 +845,11 @@ const Application = {
         'use strict';
 
         // reset
-        $('tr.table-success').removeClass('table-success');
+        $('.table-edit tr.table-success').removeClass('table-success');
 
         // show dialog
-        this.getItemDialog().showAdd($source.getParentRow());
+        const $row = $source.getParentRow();
+        this.getItemDialog().showAdd($row);
     },
 
     /**
@@ -855,10 +862,11 @@ const Application = {
         'use strict';
 
         // reset
-        $('tr.table-success').removeClass('table-success');
+        $('.table-edit tr.table-success').removeClass('table-success');
 
         // show dialog
-        this.getTaskDialog().showAdd($source.getParentRow());
+        const $row = $source.getParentRow();
+        this.getTaskDialog().showAdd($row);
     },
 
 
@@ -1093,7 +1101,7 @@ const Application = {
      */
     onDragStart: function () {
         'use strict';
-        $('tr.table-success').removeClass('table-success');
+        $('.table-edit tr.table-success').removeClass('table-success');
     },
 
     /**
@@ -1175,6 +1183,34 @@ const Application = {
         });
 
         return that;
+    },
+
+    /**
+     * Edit the calculation item's price.
+     *
+     * @param {jQuery}
+     *            $element - the caller element (button).
+     * @return {Application} This instance for chaining.
+     */
+    editItemPrice: function($element) {
+        'use strict';
+        const $row = $element.getParentRow();
+        $row.find('td:eq(2)').trigger('click');
+        return this;
+    },
+
+    /**
+     * Edit the calculation item's quantity.
+     *
+     * @param {jQuery}
+     *            $element - the caller element (button).
+     * @return {Application} This instance for chaining.
+     */
+    editItemQuantity: function($element) {
+        'use strict';
+        const $row = $element.getParentRow();
+        $row.find('td:eq(3)').trigger('click');
+        return this;
     }
 };
 
@@ -1405,7 +1441,7 @@ $.fn.extend({
     },
 
     /**
-     * Edit the content of the cell.
+     * Edit the number content of the cell.
      *
      * @return {jQuery} - The cell for chaining.
      */
@@ -1422,50 +1458,86 @@ $.fn.extend({
         if ($target.length) {
             value = $target.floatVal();
         }
+        const $row = $cell.parents('tr').addClass('table-primary');
+        $('.dropdown-menu.show').removeClass('show');
 
         const $input = $('<input>', {
-            'class': 'text-right form-control form-control-sm m-0 py-0 px-1 my-n1',
+            'class': 'text-edit-cell text-right form-control form-control-sm py-0 px-1 my-n1',
+            'data-title': $cell.data('tooltip'),
+            'data-error': $cell.data('error'),
+            'title': $cell.data('tooltip'),
+            'required': 'required',
             'type': 'number',
             'value': value
         });
         $cell.removeClass('empty-cell').empty().append($input);
-        $input.select().on('blur', function() {
-            $input.remove();
-            $cell.html(html);
+        $input.select().on('blur', function(e) {
+            $input.cancelCellValue(e, html);
+        }).on('input', function() {
+            const title = $input.val() ? $input.data('title') : $input.data('error');
+            if ($input.attr('data-original-title') === title) {
+                return;
+            }
+            if ($input.val()) {
+                $input.removeClass('is-invalid');
+                $input.data("customClass", "tooltip-secondary");
+            } else {
+                $input.addClass('is-invalid');
+                $input.data("customClass", "tooltip-danger");
+            }
+            $input.attr("title", title).tooltip('dispose').tooltip('toggle');
         }).on('keydown', function(e) {
             switch (e.which) {
-            // case 9: // tab
             case 13: // enter
-                e.stopPropagation();
+                // value?
+                if (!$input.val()) {
+                    e.stopPropagation();
+                    return;
+                }
 
-                // update value
+                // get value
                 value = Application.roundValue($input.floatVal());
                 html = Application.formatValue(value);
-                $input.remove();
-                $cell.html(html);
+
+                // update UI
+                $input.cancelCellValue(e, html);
+                $row.timeoutToggle('table-success');
 
                 // same value?
                 if (0 === $target.length || value === $target.floatVal()) {
                     return;
                 }
 
-                // update row and totals
+                // update
                 $target.floatVal(value);
-                const $row = $cell.parents('tr');
-                if ($row.length) {
-                    $row.updateTotal();
-                }
+                $row.updateTotal();
                 Application.updateTotals(false);
                 break;
             case 27: // escape
-                e.stopPropagation();
-                $input.remove();
-                $cell.html(html);
+                $input.cancelCellValue(e, html);
                 break;
             }
         });
-
         return $cell;
+    },
+
+    /**
+     * Cancel the cell edition.
+     *
+     * @param {Event}
+     *            e - the event.
+     * @param {String}
+     *            html - the HTML cell content.
+     */
+    cancelCellValue: function(e, html) {
+        e.stopPropagation();
+        const $input = $(this);
+        const $cell = $input.parents('td');
+        const $row = $cell.parents('tr');
+        $input.tooltip('dispose');
+        $input.remove();
+        $row.removeClass('table-primary');
+        $cell.html(html);
     }
 });
 
@@ -1613,7 +1685,7 @@ const MoveRowHandler = {
     Application.init();
 
     // context menu
-    const selector = 'th:not(.d-print-none),td:not(.d-print-none,:has(:input))';
+    const selector = '.table-edit th:not(.d-print-none),.table-edit td:not(.d-print-none,:has(:input))';
     const show = function () {
         $('.dropdown-menu.show').removeClass('show');
         $(this).parents('tr').addClass('table-primary');
@@ -1626,6 +1698,10 @@ const MoveRowHandler = {
     // edit in place (price and quantity)
     $('.table-edit').on('click', 'td.text-editable', function(e) {
         $(this).editCellValue(e);
+    });
+    $('.table-edit').tooltip({
+        customClass: 'tooltip-secondary',
+        selector: '.text-edit-cell'
     });
 
     // errors

@@ -3,21 +3,21 @@
 
 <div id="main-panel" class="card mb-3">
     <div class="card-header">
-	{%- if editable -%}
-		<h1 class="card-title">
+    {%- if editable -%}
+        <h1 class="card-title">
             {{- icons.icon('calculator', title, null, title_parameters) -}}
-		</h1>
+        </h1>
     {% else %}
-    	<div class="row">
-    		<div class="col-xl-5">
-    			<h1 class="card-title">
+        <div class="row">
+            <div class="col-xl-5">
+                <h1 class="card-title">
                     {{- icons.icon('calculator', title, null, title_parameters) -}}
-        		</h1>
-    		</div>
-    		<div class="col-xl-7 text-xl-right">
-    			 <small class="text-danger">{{ 'calculation.edit.read_only'|trans({'%name%': item.stateCode}) }}</small>
-    		</div>
-    	</div>
+                </h1>
+            </div>
+            <div class="col-xl-7 text-xl-right">
+                 <small class="text-danger">{{ 'calculation.edit.read_only'|trans({'%name%': item.stateCode}) }}</small>
+            </div>
+        </div>
     {% endif %}
         <div>{{ form_errors(form) }}</div>
     </div>

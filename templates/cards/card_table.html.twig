@@ -68,7 +68,7 @@
                 {{ _self.button(show_path|default(false), 'common.button_show', 'btn-table-show disabled', show_title ?? false, 'tv') }}
             {% endif %}
             {% if edit_path|default(false) and is_granted(ATTRIBUTE_EDIT, object_type) %}
-                {{ _self.button(edit_path|default(false), 'common.button_edit', 'btn-table-edit disabled', edit_title ?? false, 'pencil-alt') }}
+                {{ _self.button(edit_path|default(false), 'common.button_edit', 'btn-table-edit disabled', edit_title ?? false, 'pencil') }}
             {% endif %}
             {% if delete_path|default(false) and is_granted(ATTRIBUTE_DELETE, object_type) %}
                 {{ _self.button(delete_path|default(false), 'common.button_delete', 'btn-table-delete disabled', delete_title ?? false, 'times', true) }}

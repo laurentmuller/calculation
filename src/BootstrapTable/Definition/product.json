@@ -10,7 +10,7 @@
         "class": "w-100 text-cell",
         "cardClass": "font-weight-bold"
     },
-	{
+    {
         "field": "group.code",
         "title": "product.fields.group",
         "class": "text-group"

@@ -41,18 +41,18 @@
         </tr>
     {% endif %}
     {% if query.simulate and result.duplicateItems > 0 %}
-    	{%- set separator = true -%}
+        {%- set separator = true -%}
         <tr>
             <td>{{ 'calculation.result.duplicateItems'|trans }}</td>
             <td class="text-right"><a href="{{ duplicate_path }}" title="{{ 'duplicate.description'|trans }}">{{ result.duplicateItems|integer }}</a></td>
         </tr>
     {% endif %}
     {% if result.sortItems > 0 %}
-    	{%- set separator = true -%}
+        {%- set separator = true -%}
         {{ _self.add_line_info('calculation.result.sortItems', result.sortItems|integer) }}
     {% endif %}
     {% if result.copyCodes > 0 %}
-    	{%- set separator = true -%}
+        {%- set separator = true -%}
         {{ _self.add_line_info('calculation.result.copyCodes', result.copyCodes|integer) }}
     {% endif %}
     {% if separator %}
@@ -71,7 +71,7 @@
         {{ _self.add_line_info('calculation.result.updateCalculations', result.updateCalculations|integer) }}
     {% endif %}
     {% if result.skipCalculations > 0 %}
-    	{{ _self.add_line_info('calculation.result.skipCalculations', result.skipCalculations|integer) }}
+        {{ _self.add_line_info('calculation.result.skipCalculations', result.skipCalculations|integer) }}
     {% endif %}
     {% if result.unmodifiableCalculations > 0 %}
         {{ _self.add_line_info('calculation.result.unmodifiableCalculations', result.unmodifiableCalculations|integer) }}
@@ -82,11 +82,11 @@
     </tr>
 </table>
 {% if result.valid %}
-	{% if query.simulate %}
-		<p class="mb-0 text-right text-muted small">{{ 'calculation.result.simulate'|trans }}</p>
+    {% if query.simulate %}
+        <p class="mb-0 text-right text-muted small">{{ 'calculation.result.simulate'|trans }}</p>
     {% endif %}
 {% else %}
-	<div class="alert alert-warning mb-0" role="alert">{{ 'calculation.result.empty'|trans }}</div>
+    <div class="alert alert-warning mb-0" role="alert">{{ 'calculation.result.empty'|trans }}</div>
 {% endif %}
 {# dialog #}
 {% if result.valid %}
@@ -137,7 +137,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-            	<div class="row no-gutters w-100">
+                <div class="row no-gutters w-100">
                     <div class="col-3">
                         <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">{{ 'common.button_close'|trans }}</button>
                     </div>

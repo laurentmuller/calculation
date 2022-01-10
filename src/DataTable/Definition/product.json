@@ -1,55 +1,55 @@
 [
-	{
-		"name": "id",
-		"visible": false,
-		"orderable": false,
-		"searchable": false
-	},
-	{
-		"name": "description",
-		"title": "product.fields.description",
-		"default": true,
-		"class": "w-100 text-cell"
-	},
-	{
-		"name": "group.code",
-		"title": "product.fields.group",
-		"class": "text-group"
-	},
-	{
-		"name": "category.code",
-		"title": "product.fields.category",
-		"class": "text-category"
-	},
-	{
-		"name": "price",
-		"title": "product.fields.price",
-		"class": "text-currency",
-		"formatter": "formatAmount"
-	},
-	{
-		"name": "unit",
-		"title": "product.fields.unit",
-		"class": "text-unit"
-	},
-	{
-		"name": "supplier",
-		"title": "product.fields.supplier",
-		"class": "text-supplier"
-	},
-	{
-		"name": "category.id",
-		"visible": false,
-		"orderable": false,
-		"searchable": true
-	},
-	{
-		"name": "id",
-		"title": "common.empty",
-		"orderable": false,
-		"searchable": false,
-		"rawData": true,
-		"formatter": "formatActions",
-		"class": "actions rowlink-skip d-print-none"
-	}
+    {
+        "name": "id",
+        "visible": false,
+        "orderable": false,
+        "searchable": false
+    },
+    {
+        "name": "description",
+        "title": "product.fields.description",
+        "default": true,
+        "class": "w-100 text-cell"
+    },
+    {
+        "name": "group.code",
+        "title": "product.fields.group",
+        "class": "text-group"
+    },
+    {
+        "name": "category.code",
+        "title": "product.fields.category",
+        "class": "text-category"
+    },
+    {
+        "name": "price",
+        "title": "product.fields.price",
+        "class": "text-currency",
+        "formatter": "formatAmount"
+    },
+    {
+        "name": "unit",
+        "title": "product.fields.unit",
+        "class": "text-unit"
+    },
+    {
+        "name": "supplier",
+        "title": "product.fields.supplier",
+        "class": "text-supplier"
+    },
+    {
+        "name": "category.id",
+        "visible": false,
+        "orderable": false,
+        "searchable": true
+    },
+    {
+        "name": "id",
+        "title": "common.empty",
+        "orderable": false,
+        "searchable": false,
+        "rawData": true,
+        "formatter": "formatActions",
+        "class": "actions rowlink-skip d-print-none"
+    }
 ]

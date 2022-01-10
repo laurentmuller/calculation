@@ -1,32 +1,35 @@
 {# Macro for a calculation items #}
 {% macro printItemRow(item, editable, first, last) -%}
 {% import 'macros/_icons.html.twig' as icons %}
+{% set edit_class = editable ? 'text-editable text-currency rowlink-skip' : 'text-currency' %}
 <tr class="item">
+    {# hidden inputs #}
     {{ form_widget(item.unit) }}
     {{ form_widget(item.price) }}
     {{ form_widget(item.quantity) }}
     {{ form_widget(item.total) }}
     {{ form_widget(item.description) -}}
     {{ form_widget(item.position) -}}
-    <td class="text-description text-cell pl-3">
-        {%- if editable -%}
-            <a href='#' class="btn-edit-item">{{ item.description.vars.value }}</a>
-        {%- else -%}
-            {{ item.description.vars.value }}
-        {%- endif -%}
-    </td>
-    <td class="text-unit">{{ item.unit.vars.value }}</td>
-    <td class="text-currency text-editable rowlink-skip" data-target="#{{ item.price.vars.id }}" title="{{ 'calculation.edit.edit_cell'|trans }}">{{ item.price.vars.value|amount }}</td>
-    <td class="text-currency text-editable rowlink-skip" data-target="#{{ item.quantity.vars.id }}" title="{{ 'calculation.edit.edit_cell'|trans }}">{{ item.quantity.vars.value|amount }}</td>
-    <td class="text-currency">{{ item.total.vars.value|amount }}</td>
     {% if editable %}
+    <td class="text-description text-cell pl-3"><a href='#' class="btn-edit-item">{{ item.description.vars.value }}</a></td>
+    <td class="text-unit">{{ item.unit.vars.value }}</td>
+    <td class="text-editable text-currency rowlink-skip" title="{{ 'calculation.edit.price.title'|trans }}" data-target="#{{ item.price.vars.id }}" data-tooltip="{{ 'calculation.edit.price.tootlip'|trans }}" data-error="{{ 'calculation.edit.price.error'|trans }}">
+        {{- item.price.vars.value|amount -}}
+    </td>
+    <td class="text-editable text-currency rowlink-skip" title="{{ 'calculation.edit.quantity.title'|trans }}" data-target="#{{ item.quantity.vars.id }}" data-tooltip="{{ 'calculation.edit.quantity.tootlip'|trans }}" data-error="{{ 'calculation.edit.quantity.error'|trans }}">
+        {{- item.quantity.vars.value|amount -}}
+    </td>
+    <td class="text-currency">{{ item.total.vars.value|amount }}</td>
     <td class="actions d-print-none rowlink-skip">
         <div class="dropdown">
             {%- set menu_id = 'dropdownMenuItem_' ~ item.vars.id -%}
             {{ icons.dropdownEllipsis(menu_id) }}
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
-                {{ icons.dropdownItemWithClass('#', 'calculation.edit.edit_item', 'pencil-alt', 'btn-edit-item') }}
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
+                {{ icons.dropdownItemWithClass('#', 'calculation.edit.edit_item', 'pencil', 'btn-edit-item') }}
                 {{ icons.dropdownItemWithClass('#', 'calculation.edit.delete_item', 'times', 'btn-delete-item') }}
+                {{ icons.dropdownSeparator() }}
+                {{ icons.dropdownItemWithClass('#', 'calculation.edit.price.edit', 'highlighter', 'btn-edit-price') }}
+                {{ icons.dropdownItemWithClass('#', 'calculation.edit.quantity.edit', 'paint-brush', 'btn-edit-quantity') }}
                 {{ icons.dropdownSeparator(first and last) }}
                 {{ icons.dropdownItemWithClass('#', 'calculation.edit.move_first_item', 'step-backward fa-rotate-90', 'btn-first-item', first) }}
                 {{ icons.dropdownItemWithClass('#', 'calculation.edit.move_up_item', 'chevron-up', 'btn-up-item', first) }}
@@ -35,9 +38,15 @@
                 {{ icons.dropdownSeparator() }}
                 {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_item', 'file far', 'btn-add-item') }}
                 {{ icons.dropdownItemWithClass('#', 'calculation.edit.add_task', 'tasks', 'btn-add-task') }}
-              </div>
+            </div>
         </div>
     </td>
+    {% else %}
+    <td class="text-description text-cell pl-3">{{ item.description.vars.value }}</td>
+    <td class="text-unit">{{ item.unit.vars.value }}</td>
+    <td class="text-currency">{{ item.price.vars.value|amount }}</td>
+    <td class="text-currency">{{ item.quantity.vars.value|amount }}</td>
+    <td class="text-currency">{{ item.total.vars.value|amount }}</td>
     {% endif %}
 </tr>
 {%- endmacro %}

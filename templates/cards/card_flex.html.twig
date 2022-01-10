@@ -125,7 +125,7 @@
                         {%- block edit_action -%}
                         {%- if edit_page -%}
                             {% set edit_path = path(edit_page, params) %}
-                            {{ icons.dropdownItem(edit_path, edit_title|default('common.button_edit'), 'pencil-alt') }}
+                            {{ icons.dropdownItem(edit_path, edit_title|default('common.button_edit'), 'pencil') }}
                         {%- endif -%}
                         {% endblock %}
                         {%- block delete_action -%}

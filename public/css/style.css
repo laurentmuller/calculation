@@ -186,8 +186,8 @@ span.state-color {
 /*
  * Bottom width for header in bordered table
  */
-.table-bordered thead td,
-.table-bordered thead th {
+.table-bordered thead td:last-child,
+.table-bordered thead th:last-child {
     border-bottom-width: 1px;
 }
 
@@ -435,25 +435,6 @@ body {
 }
 
 /**
- * bootstrap-select (color picker)
-
-span.color-value {
-    width: 1.5rem;
-    height: 1rem;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 0.5rem;
-    margin-bottom: 0.25rem;
-}
-.bootstrap-select > .dropdown-toggle {
-    color: initial !important;
-}
-.bootstrap-select .dropdown-menu li a {
-    padding-left: 0.5rem;
-}
-*/
-
-/**
  * widths 25%, 50%, 75% and 100% are already set by Boostrap
  */
 .w-15 {
@@ -592,27 +573,26 @@ tr.strikeout-danger td:before {
   content: " ";
   position: absolute;
   border-bottom: 1px solid var(--danger);
-
 }
 
 /**
  * Fixed table header
  */
- div.overflow-auto.table-fixed-header {
+div.overflow-auto.table-fixed-header {
     max-height: 312px;
- } 
+}
 div.overflow-auto.table-fixed-header.table-fixed-header-sm {
     max-height: 207px;
- } 
+}
 table.table-fixed-header {
-    margin-bottom: 0;   
+    margin-bottom: 0;
 }
 table.table-fixed-header thead th {
     top: 0;
     z-index: 1;
     position: sticky;
     border-top-width: 0;
-    background: var(--white);       
+    background: var(--white);
 }
 table.table-fixed-header .thead-light th {
     font-weight: normal;

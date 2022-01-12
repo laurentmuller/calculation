@@ -26,11 +26,15 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class AbstractControllerTest extends AbstractAuthenticateWebTestCase
 {
     /**
-     * Gets the route to test.
+     * Gets the routes to test.
      *
-     * Each entry must contains an URL, an user name and an expected result.
+     * Each entry must contains an URL, an user name, an expected result and the request method.
+     *
+     * @return array|\Generator
+     *
+     * @see AbstractControllerTest::testRoutes()
      */
-    abstract public function getRoutes(): array;
+    abstract public function getRoutes();
 
     /**
      * Checks the given route.

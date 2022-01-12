@@ -564,7 +564,7 @@ body {
  * strikeout the row
  */
 tr.strikeout-danger td {
-	position: relative;
+    position: relative;
 }
 tr.strikeout-danger td:before {
   left: 0;

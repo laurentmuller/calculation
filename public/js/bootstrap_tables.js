@@ -15,6 +15,11 @@
 <!--#include file="vendor/contextmenu/jquery.contextMenu.js" -->
 
 /**
+ * Plugin Files
+ */
+<!--#include file="plugins/plugin-rowlink.js" -->
+
+/**
  * Extensions files
  */
 <!--#include file="extensions/bootstrap-table-extensions.js" -->

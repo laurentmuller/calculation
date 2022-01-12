@@ -156,7 +156,7 @@
           'data-orderdir': orderdir,
         'data-debug': app.debug
 }) -%}
-<div class="table-responsive">
+<div class="table-responsive-sm">
     <table{{ tools.attribs(attributes) }}>
         {{ helper.headers(columns) }}
         <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>

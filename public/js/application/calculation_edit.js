@@ -373,7 +373,7 @@ const Application = {
     },
 
     /**
-     * Update the move up/down and sort buttons.
+     * Update the move up/down buttons.
      *
      * @return {Application} This instance for chaining.
      */
@@ -396,7 +396,7 @@ const Application = {
                 $row.find('.btn-up-item').toggleClass('d-none', hideUp);
                 $row.find('.btn-down-item').toggleClass('d-none', hideDown);
                 $row.find('.btn-last-item').toggleClass('d-none', hideDown);
-                $row.find('.dropdown-divider:first').toggleClass('d-none', hideUp && hideDown);
+                $row.find('.btn-first-item').prev('.dropdown-divider').toggleClass('d-none', hideUp && hideDown);
             });
             if ($rows.length > 1) {
                 disabled = false;
@@ -1195,7 +1195,9 @@ const Application = {
     editItemPrice: function($element) {
         'use strict';
         const $row = $element.getParentRow();
-        $row.find('td:eq(2)').trigger('click');
+        if ($row && $row.length) {
+            $row.find('td:eq(2)').trigger('click');
+        }
         return this;
     },
 
@@ -1209,7 +1211,9 @@ const Application = {
     editItemQuantity: function($element) {
         'use strict';
         const $row = $element.getParentRow();
-        $row.find('td:eq(3)').trigger('click');
+        if ($row && $row.length) {
+            $row.find('td:eq(3)').trigger('click');
+        }
         return this;
     }
 };
@@ -1718,3 +1722,4 @@ const MoveRowHandler = {
     // main form validation
     $('#edit-form').initValidator();
 }(jQuery));
+

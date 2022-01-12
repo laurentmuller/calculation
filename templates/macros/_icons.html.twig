@@ -81,26 +81,22 @@
 <div role="separator" class="{{ class }}"></div>
 {%- endmacro %}
 
-{% macro dropdownEllipsis(id=0, title='common.actions', class='btn btn-sm border-0 pt-0') -%}
-{% apply spaceless %}
+{% macro dropdownEllipsis(id=null, title='common.actions', class='btn btn-sm border-0 pt-0') -%}
 {% if not ('btn-outline' in class) %}
-    {% set class = class ~ ' btn-outline-secondary' %}
+    {% set class = (class ~ ' btn-outline-secondary')|trim %}
 {% endif %}
-<button class="{{ class }}" type="button"{% if id %} id="{{ id }}"{% endif %} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
+<button class="{{ class }}" type="button"{% if id %} id="{{ id }}"{% endif %} data-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
     {{- _self.icon('ellipsis-v') -}}
 </button>
-{% endapply %}
 {%- endmacro %}
 
 {% macro dropdownBars(id, title='common.actions', class='btn btn-sm border-0 py-0') -%}
-{% apply spaceless %}
 {% if not ('btn-' in class) %}
-    {% set class = class ~ ' btn-secondary' %}
+    {% set class = (class ~ ' btn-secondary')|trim %}
 {% endif %}
 <button class="{{ class }}" type="button" id="{{ id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ title|trans }}">
     {{- _self.icon('bars') -}}
 </button>
-{% endapply %}
 {%- endmacro %}
 
 {% macro homepage(href=null, text='index.title', class='btn btn-form btn-primary', domain=null) -%}

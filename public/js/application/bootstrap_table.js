@@ -688,7 +688,7 @@ $.fn.extend({
     $table.parents('.bootstrap-table').initContextMenu(ctxSelector, show);
 
     // initialize danger tooltips
-    if($table.data('danger-tooltip-selector')) {
+    if ($table.data('danger-tooltip-selector')) {
         $table.parents('.bootstrap-table').tooltip({
             customClass: 'tooltip-danger',
             selector: $table.data('danger-tooltip-selector')
@@ -705,9 +705,16 @@ $.fn.extend({
         $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
     }
 
+    // set focus on page item click
+    $('.fixed-table-pagination').on('keydown mousedown', 'a.page-link', function(e) {
+        const $item = $(this).parents('.page-item');
+        if (e.type == 'keydown' && e.which == 13 || e.type == 'mousedown' &&  e.button === 0 && !$item.hasClass('active')) {
+            $table.data('focusPageItem', true);
+        }
+    });
+
     // focus
     if ($table.isEmpty()) {
         $('input.search-input').focus();
     }
-
 }(jQuery));

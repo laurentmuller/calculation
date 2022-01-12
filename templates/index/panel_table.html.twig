@@ -3,8 +3,8 @@
 {% import 'macros/_icons.html.twig' as icons %}
 
 {# parameters #}
-{%- set selection = app.request.get('id', 0) -%}
 {%- set caller = path('homepage') -%}
+{%- set selection = app.request.get('id', 0) -%}
 
 {# actions #}
 {%- set object_type = ENTITY_CALCULATION -%}
@@ -47,7 +47,7 @@
                     {%- set class_name = (class_primary ~ ' ' ~ class_muted)|trim -%}
                     <tr{% if class_name %} class="{{ class_name }}"{% endif %}>
                         <td class="text-id text-border user-select-none" style="{{ properties.stateCss(calculation.stateColor) }}">
-                        {%- if row_link -%}
+                        {%- if row_link and default_page -%}
                             <a href="{{ path(default_page, params) }}">{{ calculation.id|identifier }}</a>
                         {%- else -%}
                             {{- calculation.id|identifier -}}

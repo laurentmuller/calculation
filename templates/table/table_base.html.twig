@@ -233,7 +233,7 @@
             {% endfor %}
         </tr>
     </thead>
-    <tbody>
+    <tbody{% if row_link|default(true) %} data-link="row" class="rowlink" data-target="a.btn-default"{% endif %}>
         {% for row in rows %}
         <tr{% if row.id == id %} class="{{ row_selector }}"{%- set row_selector = '' -%}{% endif %}>
             {% for column in columns %}
@@ -282,6 +282,7 @@
 {{ asset_js('js/vendor/bootstrap-table/bootstrap-table-defer-url.js') }}
 {{ asset_js('js/vendor/bootstrap-table/bootstrap-table-custom-view.js') }}
 {{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
+{{ asset_js('js/plugins/plugin-rowlink.js') }}
 {{ asset_js('js/extensions/bootstrap-table-extensions.js') }}
 {{ asset_js('js/extensions/bootstrap-table-fr-CH.js') }}
 {{ asset_js('js/extensions/contextmenu-extensions.js') }}

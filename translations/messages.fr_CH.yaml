@@ -1018,6 +1018,7 @@ security:
     link: Déjà un compte ?
     login:
         title: Connexion à l'application
+        description: Connectez-vous avec votre nom d'utilisateur et votre mot de passe
         success: Bienvenue <b>%username%</b>. Vous êtes maintenant connecté à l'application <b>%appname%</b>.
         error: Le nom de l'utilisateur ou le mot de passe est invalide.
         username: Nom d'utilisateur
@@ -1042,6 +1043,7 @@ resetting:
     success: <b>%username%</b>, votre mot de passe a été réinitialisé avec succès.
     request:
         title: Réinitialiser le mot de passe
+        description: Entrez votre nom d'utilisateur ou votre adresse e-mail pour demander une réinitialisation du mot de passe.
         user: Nom d'utilisateur ou adresse e-mail
         submit: Réinitialiser
     check_email: |

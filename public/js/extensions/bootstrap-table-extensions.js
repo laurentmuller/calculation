@@ -39,7 +39,7 @@ $.fn.extend({
         }
 
         // no data?
-        if($row.hasClass('no-records-found')) {
+        if ($row.hasClass('no-records-found')) {
             return true;
         }
 
@@ -66,34 +66,6 @@ $.fn.extend({
     },
 
     /**
-     * Replace the tag name.
-     *
-     * @param {string}
-     *            newTag - the new tag name.
-     * @param {array} -
-     *            excludeAttributes - the attributes to exclude.
-     * @return {jQuery} the elements for chaining.
-     */
-    tagName: function (newTag, excludeAttributes){
-        'use strict';
-        newTag = "<" + newTag + ">";
-        excludeAttributes = excludeAttributes || [];
-
-        return $(this).each(function (_index, element){
-            const $element = $(element);
-            const $newTag = $(newTag, {
-                html: $element.html()
-            });
-            $.each(element.attributes, function (_index, attribute) {
-                if (!excludeAttributes.includes(attribute.name)) {
-                    $newTag.attr(attribute.name, attribute.value);
-                }
-            });
-            $element.replaceWith($newTag);
-        });
-    },
-
-    /**
      * Update the href attribute of the action.
      *
      * @param {Object}
@@ -108,7 +80,7 @@ $.fn.extend({
         const values = $link.attr('href').split('?');
 
         values[0] = values[0].replace(/\/\d+/, '/' + row.action);
-        if(values.length > 1 && values[1].match(regex)) {
+        if (values.length > 1 && values[1].match(regex)) {
             params.id = row.action;
         } else {
             delete params.id;
@@ -143,7 +115,7 @@ $.fn.extend({
             // edit row on double-click
             onDblClickRow: function (_row, $element, field) {
                 $element.updateRow($this);
-                if(field !== 'action') {
+                if (field !== 'action') {
                     $this.editRow($element);
                 }
             },
@@ -151,7 +123,7 @@ $.fn.extend({
             // update UI on post page load
             onPostBody: function (content) {
                 const isData = content.length !== 0;
-                if(isData) {
+                if (isData) {
                     // select first row if none
                     if (!$this.getSelection()) {
                         $this.selectFirstRow();
@@ -161,17 +133,15 @@ $.fn.extend({
                 }
                 $this.updateHistory().toggleClass('table-hover', isData);
 
-                // update pagination
+                // update pagination links
                 $('.fixed-table-pagination .page-link').each(function (_index, element) {
                     const $element = $(element);
-                    $element.attr('href', '#').attr('title', $element.attr('aria-label')).removeAttr('aria-label');
+                    const href = $element.closest('.page-item').hasClass('disabled') ? null : '#';
+                    $element.attr('href', href).attr('title', $element.attr('aria-label')).removeAttr('aria-label');
                 });
 
-                // set focus on selected page item
-                if ($this.data('focusPageItem')) {
-                    $('.fixed-table-pagination .page-item.active .page-link').focus();
-                    $this.removeData('focusPageItem');
-                }
+                // set focus on selected page item (if any)
+                $this.selectPageItem();
             },
 
             onCustomViewPostBody: function (data) {
@@ -225,7 +195,7 @@ $.fn.extend({
 
         // select row on right click
         $this.find('tbody').on('mousedown', 'tr', function (e) {
-            if(e.button === 2) {
+            if (e.button === 2) {
                 $(this).updateRow($this);
             }
         });
@@ -238,8 +208,26 @@ $.fn.extend({
                 $row.updateRow($this);
             }
         }).on('dblclick', '.custom-item.table-primary div:not(.rowlink-skip)', function (e) {
-            if(e.button === 0) {
+            if (e.button === 0) {
                 $this.editRow();
+            }
+        });
+
+        // handle page item click
+        $('.fixed-table-pagination').on('keydown mousedown', '.page-link', function(e) {
+            const $that = $(this);
+            const isKeyEnter = e.type === 'keydown' && e.which === 13;
+            const isActive = $that.parents('.page-item').hasClass('active');
+            const isMouseDown = e.type === 'mousedown' &&  e.button === 0 && !isActive;
+            if (isKeyEnter || isMouseDown) {
+                const $parent = $that.parents('li');
+                if ($parent.hasClass('page-pre')) {
+                    $this.data('focusPageItem', 'previous');
+                } else if ($parent .hasClass('page-next')) {
+                    $this.data('focusPageItem', 'next');
+                } else {
+                    $this.data('focusPageItem', 'active');
+                }
             }
         });
 
@@ -275,12 +263,12 @@ $.fn.extend({
         };
 
         // add search
-        if(('' + options.searchText).length) {
+        if (('' + options.searchText).length) {
             params.search = options.searchText;
         }
 
         // query parameters function?
-        if($.isFunction (options.queryParams)) {
+        if ($.isFunction (options.queryParams)) {
             return $.extend(params, options.queryParams(params));
         }
         return params;
@@ -403,7 +391,7 @@ $.fn.extend({
         'use strict';
         const $this = $(this);
         const url = $this.getOptions().saveUrl;
-        if(url) {
+        if (url) {
             $.post(url, $this.getParameters());
         }
         return $this;
@@ -428,17 +416,17 @@ $.fn.extend({
             const $row = $link.parents('tr');
             const row = rows[$row.index()];
             $link.updateLink(row, params);
-            if(callback) {
+            if (callback) {
                 callback($this, row, $row, $link);
             }
 
         });
 
         // actions row callback
-        if($.isFunction (options.onUpdateHref)) {
+        if ($.isFunction (options.onUpdateHref)) {
             $this.find('tbody tr').each(function () {
                 const $paths = $(this).find('.dropdown-item-path');
-                if($paths.length) {
+                if ($paths.length) {
                     options.onUpdateHref($this, $paths);
                 }
             });
@@ -466,7 +454,7 @@ $.fn.extend({
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
-        if(!options.cardView) {
+        if (!options.cardView) {
             return $this;
         }
 
@@ -481,7 +469,7 @@ $.fn.extend({
 
             // move actions (if any) to a new column
             const $actions = $views.find('.card-view-value:last:has(button)');
-            if($actions.length) {
+            if ($actions.length) {
                 const $td = $('<td/>', {
                     class: 'actions d-print-none rowlink-skip'
                 });
@@ -494,13 +482,13 @@ $.fn.extend({
 
             // update class
             $views.find('.card-view-value').each(function (index, element) {
-                if(columns[index].cardClass) {
+                if (columns[index].cardClass) {
                     $(element).addClass(columns[index].cardClass);
                 }
             });
 
             // callback
-            if(callback) {
+            if (callback) {
                 const row = data[$row.index()];
                 callback($this, row, $row);
             }
@@ -635,7 +623,7 @@ $.fn.extend({
         'use strict';
         const $this = $(this);
         const text = $this.getSearchText();
-        if(text.length > 0) {
+        if (text.length > 0) {
             const options = {
                 element: 'span',
                 className: 'text-success',
@@ -662,8 +650,8 @@ $.fn.extend({
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
-        if(options.pageNumber > 1) {
-            if(selectLast || false) {
+        if (options.pageNumber > 1) {
+            if (selectLast || false) {
                 $this.one('post-body.bs.table', function () {
                     $this.selectLastRow();
                 });
@@ -683,7 +671,7 @@ $.fn.extend({
         'use strict';
         const $this = $(this);
         const options = $this.getOptions();
-        if(options.pageNumber < options.totalPages) {
+        if (options.pageNumber < options.totalPages) {
             $this.bootstrapTable('nextPage');
             return true;
         }
@@ -700,7 +688,7 @@ $.fn.extend({
         const $this = $(this);
         const $row = $this.getSelection();
         const $first = $this.find('tbody tr:first');
-        if($first.length && $first !== $row) {
+        if ($first.length && $first !== $row) {
             return $first.updateRow($this);
         }
         return false;
@@ -716,7 +704,7 @@ $.fn.extend({
         const $this = $(this);
         const $row = $this.getSelection();
         const $last = $this.find('tbody tr:last');
-        if($last.length && $last !== $row) {
+        if ($last.length && $last !== $row) {
             return $last.updateRow($this);
         }
         return false;
@@ -732,7 +720,7 @@ $.fn.extend({
         const $this = $(this);
         const $row = $this.getSelection();
         const $prev = $row.prev('tr');
-        if($row.length && $prev.length) {
+        if ($row.length && $prev.length) {
             return $prev.updateRow($this);
         }
         // previous page
@@ -749,7 +737,7 @@ $.fn.extend({
         const $this = $(this);
         const $row = $this.getSelection();
         const $next = $row.next('tr');
-        if($row.length && $next.length) {
+        if ($row.length && $next.length) {
             return $next.updateRow($this);
         }
         // next page
@@ -788,7 +776,7 @@ $.fn.extend({
     editRow: function () {
         'use strict';
         const $link = $(this).findAction('a.btn-default');
-        if($link) {
+        if ($link) {
             $link[0].click();
             return true;
         }
@@ -803,7 +791,7 @@ $.fn.extend({
     deleteRow: function () {
         'use strict';
         const $link = $(this).findAction('a.btn-delete');
-        if($link) {
+        if ($link) {
             $link[0].click();
             return true;
         }
@@ -821,52 +809,52 @@ $.fn.extend({
 
         // get or create the key handler
         let keyHandler = $this.data('keys.handler');
-        if(!keyHandler) {
+        if (!keyHandler) {
             keyHandler = function (e) {
-                if((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
+                if ((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
                     return;
                 }
 
                 switch(e.keyCode) {
                     case 13:  // enter (edit action on selected row)
-                        if($this.editRow()) {
+                        if ($this.editRow()) {
                             e.preventDefault();
                         }
                         break;
                     case 33: // page up (previous page)
-                        if($this.showPreviousPage(false)) {
+                        if ($this.showPreviousPage(false)) {
                             e.preventDefault();
                         }
                         break;
                     case 34: // page down (next page)
-                        if($this.showNextPage()) {
+                        if ($this.showNextPage()) {
                             e.preventDefault();
                         }
                         break;
                     case 35: // end (last row of the current page)
-                        if($this.selectLastRow()) {
+                        if ($this.selectLastRow()) {
                             e.preventDefault();
                         }
                         break;
                     case 36: // home (first row of the current page)
-                        if($this.selectFirstRow()) {
+                        if ($this.selectFirstRow()) {
                             e.preventDefault();
                         }
                         break;
                     case 37: // left arrow (previous row of the current page)
                     case 38: // up arrow
-                        if($this.selectPreviousRow()) {
+                        if ($this.selectPreviousRow()) {
                             e.preventDefault();
                         }
                         break;
                     case 39: // right arrow (next row of the current page)
                     case 40: // down arrow
-                        if($this.selectNextRow()) {
+                        if ($this.selectNextRow()) {
                             e.preventDefault();
                         }
                         break;
                     case 46: // delete (delete action of the selected row)
-                        if($this.deleteRow()) {
+                        if ($this.deleteRow()) {
                             e.preventDefault();
                         }
                         break;
@@ -889,7 +877,7 @@ $.fn.extend({
         'use strict';
         const $this = $(this);
         const keyHandler = $this.data('keys.handler');
-        if(keyHandler) {
+        if (keyHandler) {
             $(document).off('keydown.bs.table', keyHandler);
         }
         return $this;
@@ -937,5 +925,36 @@ $.fn.extend({
                 text: $this.getOptions().formatNoMatches()
             }).appendTo($view);
         }
+    },
+
+    /**
+     * Set focus on selected page item (if any).
+     */
+    selectPageItem: function() {
+        'use strict';
+        const $this = $(this);
+        const page = $this.data('focusPageItem') || '';
+
+        let selector = false;
+        switch (page) {
+            case 'previous':
+                selector = '.fixed-table-pagination li.page-pre:not(.disabled) .page-link';
+                break;
+            case 'next':
+                selector = '.fixed-table-pagination li.page-next:not(.disabled) .page-link';
+                break;
+            case 'active':
+                selector = '.fixed-table-pagination li.active .page-link';
+                break;
+        }
+        if (selector) {
+            let $link = $(selector);
+            if (0 === $link.length) {
+                $link = $('.fixed-table-pagination li.active .page-link');
+            }
+            $link.focus();
+        }
+        $this.removeData('focusPageItem');
+        return $this;
     }
 });

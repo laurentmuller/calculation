@@ -33,7 +33,7 @@ function customViewFormatter(data) { // jshint ignore:line
         while ((match = regex.exec(html)) !== null) {
             let value = '';
             const callback = match[1];
-            if(typeof window[callback] !== 'undefined' ) {
+            if (typeof window[callback] !== 'undefined' ) {
                 value = window[callback](row) || '&#160;';
             }
             html = html.replaceAll(match[0], value);
@@ -170,7 +170,7 @@ function isConnectedUser($table, row) {
  */
 function updateUserAction($table, row, _$element, $action) {
     'use strict';
-    if(isConnectedUser($table, row)) {
+    if (isConnectedUser($table, row)) {
         $action.remove();
     }
 }
@@ -189,7 +189,7 @@ function updateUserAction($table, row, _$element, $action) {
  */
 function updateUserSwitchAction($table, row, _$element, $action) {
     'use strict';
-    if(isConnectedUser($table, row)) {
+    if (isConnectedUser($table, row)) {
         $action.prev('.dropdown-divider').remove();
         $action.remove();
     } else {
@@ -216,11 +216,11 @@ function updateUserSwitchAction($table, row, _$element, $action) {
  */
 function updateSearchAction($table, row, _$element, $action) {
     'use strict';
-    if($action.is('.btn-show') && !row.showGranted) {
+    if ($action.is('.btn-show') && !row.showGranted) {
         $action.remove();
-    } else if($action.is('.btn-edit') && !row.editGranted) {
+    } else if ($action.is('.btn-edit') && !row.editGranted) {
         $action.remove();
-    } else if($action.is('.btn-delete') && !row.deleteGranted) {
+    } else if ($action.is('.btn-delete') && !row.deleteGranted) {
         $action.remove();
     } else {
         const id = row.id;
@@ -228,9 +228,9 @@ function updateSearchAction($table, row, _$element, $action) {
         const href = $action.attr('href').replace('_type_', type).replace('_id_', id);
         $action.attr('href', href);
         const defaultAction = $table.data('defaultAction');
-        if($action.is('.btn-show') && defaultAction === 'show') {
+        if ($action.is('.btn-show') && defaultAction === 'show') {
             $action.addClass('btn-default');
-        } else if($action.is('.btn-edit') && defaultAction === 'edit') {
+        } else if ($action.is('.btn-edit') && defaultAction === 'edit') {
             $action.addClass('btn-default');
         }
     }
@@ -251,7 +251,7 @@ function updateSearchAction($table, row, _$element, $action) {
 function updateCalculationEditAction(_$table, row, $element, $action) {
     'use strict';
     const value = Number.parseInt(row.textMuted, 10);
-    if(!Number.isNaN(value) && value === 0) {
+    if (!Number.isNaN(value) && value === 0) {
         const $state = $element.find('.btn-state');
         if ($state.length) {
             $state.addClass('btn-default');
@@ -295,7 +295,7 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
 function updateTaskComputeAction(_$table, row, _$element, $action) {
     'use strict';
     const items = Number.parseInt(row.items, 10);
-    if(Number.isNaN(items) || items === 0) {
+    if (Number.isNaN(items) || items === 0) {
         $action.prev('.dropdown-divider').remove();
         $action.remove();
     }
@@ -387,7 +387,7 @@ $.fn.extend({
             const $item = $(this);
             const newValue = $item.getDataValue();
             const oldValue = $this.getDataValue();
-            if(newValue !== oldValue) {
+            if (newValue !== oldValue) {
                 $this.setDataValue(newValue || '', $item, copyText, copyIcon).trigger('input');
             }
             $this.focus();
@@ -438,7 +438,7 @@ $.fn.extend({
             $inputs.each(function () {
                 const $this = $(this);
                 const value = $this.getDataValue();
-                if(value) {
+                if (value) {
                     params[$this.attr('id')] = value;
                 }
             });
@@ -453,12 +453,12 @@ $.fn.extend({
             if ($pageButton.length) {
                 let pageList = options.pageList;
                 for(let i = 0; i < pageList.length; i++) {
-                    if(pageList[i] >= options.totalRows) {
+                    if (pageList[i] >= options.totalRows) {
                         pageList = pageList.splice(0, i + 1);
                         break;
                     }
                 }
-                if(pageList.length <= 1) {
+                if (pageList.length <= 1) {
                     $pageButton.toggleDisabled(true);
                 } else {
                     const pageSize = Number.parseInt(options.pageSize, 10);
@@ -468,7 +468,7 @@ $.fn.extend({
                             'data-value': page,
                             'text': page
                         });
-                        if(page === pageSize) {
+                        if (page === pageSize) {
                             $link.addClass('active');
                         }
                         return $link;
@@ -569,25 +569,25 @@ $.fn.extend({
         },
 
         onRenderAction: function ($table, row, $element, $action) {
-            if($action.is('.btn-user-switch')) {
+            if ($action.is('.btn-user-switch')) {
                 updateUserSwitchAction($table, row, $element, $action);
-            } else if($action.is('.btn-user-message, .btn-user-delete')) {
+            } else if ($action.is('.btn-user-message, .btn-user-delete')) {
                 updateUserAction($table, row, $element, $action);
-            } else if($action.is('.btn-calculation-edit')) {
+            } else if ($action.is('.btn-calculation-edit')) {
                 updateCalculationEditAction($table, row, $element, $action);
-            } else if($action.is('.btn-calculation-pdf')) {
+            } else if ($action.is('.btn-calculation-pdf')) {
                 updateCalculationAction($table, row, $element, $action);
-            } else if($action.is('.btn-calculation-excel')) {
+            } else if ($action.is('.btn-calculation-excel')) {
                 updateCalculationAction($table, row, $element, $action);
-            } else if($action.is('.btn-search')) {
+            } else if ($action.is('.btn-search')) {
                 updateSearchAction($table, row, $element, $action);
-            } else if($action.is('.btn-task-compute')) {
+            } else if ($action.is('.btn-task-compute')) {
                 updateTaskComputeAction($table, row, $element, $action);
             }
         },
 
         onUpdateHref: function (_$table, $actions) {
-            if($actions.length === 1) {
+            if ($actions.length === 1) {
                 $actions.addClass('btn-default');
             }
         },
@@ -630,9 +630,9 @@ $.fn.extend({
             $inputs.each(function () {
                 $(this).setDataValue(null);
             });
-            if(isSearchText) {
+            if (isSearchText) {
                 $table.resetSearch();
-            } else if(isQueryParams) {
+            } else if (isQueryParams) {
                 $table.refresh();
             }
             $('input.search-input').focus();
@@ -704,14 +704,6 @@ $.fn.extend({
     if ($searchMinimum.length) {
         $searchMinimum.toggleClass('d-none', $table.getSearchText().length > 1);
     }
-
-    // set focus on page item click
-    $('.fixed-table-pagination').on('keydown mousedown', 'a.page-link', function(e) {
-        const $item = $(this).parents('.page-item');
-        if (e.type == 'keydown' && e.which == 13 || e.type == 'mousedown' &&  e.button === 0 && !$item.hasClass('active')) {
-            $table.data('focusPageItem', true);
-        }
-    });
 
     // focus
     if ($table.isEmpty()) {

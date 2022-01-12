@@ -12,6 +12,7 @@ $.fn.bootstrapTable.methods.push('getCustomView', 'setDisplayMode', 'getDisplayM
 $.fn.bootstrapTable.methods.push('isEmpty', 'getSelection', 'getSelectionIndex');
 $.fn.bootstrapTable.methods.push('highlight', 'selectFirstRow');
 $.fn.bootstrapTable.methods.push('enableKeys', 'disableKeys');
+$.fn.bootstrapTable.methods.push('selectPageItem');
 
 /**
  * Initialize.
@@ -22,6 +23,24 @@ BootstrapTable.prototype.init = function () {
 
     const that = this;
 
+    // handle page item click
+    that.$pagination.on('keydown mousedown', '.page-link', function(e) {
+        const $this = $(this);
+        const isKeyEnter = e.type === 'keydown' && e.which === 13;
+        const isActive = $this.parents('.page-item').hasClass('active');
+        const isMouseDown = e.type === 'mousedown' &&  e.button === 0 && !isActive;
+        if (isKeyEnter || isMouseDown) {
+            const $parent = $this.parents('li');
+            if ($parent.hasClass('page-pre')) {
+                that.focusPageItem = 'previous';
+            } else if ($parent .hasClass('page-next')) {
+                that.focusPageItem = 'next';
+            } else {
+                that.focusPageItem = 'active';
+            }
+        }
+    });
+
     that.onClickRow = function (_row, $element) {
         that.updateRow($element);
         that.enableKeys();
@@ -29,7 +48,7 @@ BootstrapTable.prototype.init = function () {
 
     that.onDblClickRow = function (_row, $element, field) {
         that.updateRow($element);
-        if(field !== 'action') {
+        if (field !== 'action') {
             that.editRow($element);
         }
     };
@@ -46,7 +65,7 @@ BootstrapTable.prototype.init = function () {
 
     that.onPostBody = function (content) {
         const isData = content.length !== 0;
-        if(isData) {
+        if (isData) {
             // select first row if none
             if (!that.getSelection()) {
                 that.selectFirstRow();
@@ -56,13 +75,17 @@ BootstrapTable.prototype.init = function () {
         }
         that.updateHistory().toggleClass('table-hover', isData);
 
-        // update pagination
-        $('.fixed-table-pagination .page-link').each(function (_index, element) {
+        // update pagination links
+        that.$pagination.find('.page-link').each(function (_index, element) {
             const $element = $(element);
-            $element.attr('title', $element.attr('aria-label'));
+            const href = $element.closest('.page-item').hasClass('disabled') ? null : '#';
+            $element.attr('href', href).attr('title', $element.attr('aria-label')).removeAttr('aria-label');
         });
-        that.tagName($('.fixed-table-pagination .page-item.disabled .page-link'), 'span', ['href']);
-        that.tagName($('.fixed-table-pagination .page-item.active .page-link'), 'span', ['href']);
+
+        // set focus on selected page item
+        if (that.focusPageItem) {
+            that.selectPageItem();
+        }
     };
 
     that.onCustomViewPostBody = function (data) {
@@ -112,7 +135,7 @@ BootstrapTable.prototype.init = function () {
 
     // select row on right click
     that.$body.on('mousedown', 'tr', function (e) {
-        if(e.button === 2) {
+        if (e.button === 2) {
             that.updateRow($(this));
         }
     });
@@ -331,7 +354,7 @@ BootstrapTable.prototype.editRow = function () {
     const $row = this.getSelection();
     if ($row) {
         const $link = this.findAction('a.btn-default');
-        if($link) {
+        if ($link) {
             $link[0].click();
             return true;
         }
@@ -349,7 +372,7 @@ BootstrapTable.prototype.deleteRow = function () {
     const $row = this.getSelection();
     if ($row) {
         const $link = this.findAction('a.btn-delete');
-        if($link) {
+        if ($link) {
             $link[0].click();
             return true;
         }
@@ -451,12 +474,12 @@ BootstrapTable.prototype.getParameters = function () {
     };
 
     // add search
-    if(('' + options.searchText).length) {
+    if (('' + options.searchText).length) {
         params.search = options.searchText;
     }
 
     // query parameters function?
-    if($.isFunction (options.queryParams)) {
+    if ($.isFunction (options.queryParams)) {
         return $.extend(params, options.queryParams(params));
     }
     return params;
@@ -545,15 +568,15 @@ BootstrapTable.prototype.enableKeys = function () {
     // get or create the key handler
     let keyHandler = this.keysHandler;
 
-    if(!keyHandler) {
+    if (!keyHandler) {
         keyHandler = function (e) {
-            if((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
+            if ((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
                 return;
             }
 
             switch(e.keyCode) {
                 case 13:  // enter (edit action on selected row)
-                    if(this.editRow()) {
+                    if (this.editRow()) {
                         e.preventDefault();
                     }
                     break;
@@ -570,29 +593,29 @@ BootstrapTable.prototype.enableKeys = function () {
                     }
                     break;
                 case 35: // end (last row of the current page)
-                    if(this.selectLastRow()) {
+                    if (this.selectLastRow()) {
                         e.preventDefault();
                     }
                     break;
                 case 36: // home (first row of the current page)
-                    if(this.selectFirstRow()) {
+                    if (this.selectFirstRow()) {
                         e.preventDefault();
                     }
                     break;
                 case 37: // left arrow (previous row of the current page)
                 case 38: // up arrow
-                    if(this.selectPreviousRow()) {
+                    if (this.selectPreviousRow()) {
                         e.preventDefault();
                     }
                     break;
                 case 39: // right arrow (next row of the current page)
                 case 40: // down arrow
-                    if(this.selectNextRow()) {
+                    if (this.selectNextRow()) {
                         e.preventDefault();
                     }
                     break;
                 case 46: // delete (delete action of the selected row)
-                    if(this.deleteRow()) {
+                    if (this.deleteRow()) {
                         e.preventDefault();
                     }
                     break;
@@ -615,7 +638,7 @@ BootstrapTable.prototype.enableKeys = function () {
 BootstrapTable.prototype.disableKeys = function () {
     'use strict';
     const keyHandler = this.keyHandler;
-    if(keyHandler) {
+    if (keyHandler) {
         $(document).off('keydown.bs.table', keyHandler);
     }
     return this;
@@ -629,7 +652,7 @@ BootstrapTable.prototype.disableKeys = function () {
 BootstrapTable.prototype.saveParameters = function () {
     'use strict';
     const url = this.options.saveUrl;
-    if(url) {
+    if (url) {
         $.post(url, this.getParameters());
     }
     return this;
@@ -655,7 +678,7 @@ BootstrapTable.prototype.updateHref = function (rows) {
         const $row = $link.parents('tr');
         const row = rows[$row.index()];
         that.updateLink($link, row, params);
-        if(callback) {
+        if (callback) {
             callback($table, row, $row, $link);
         }
 
@@ -664,15 +687,15 @@ BootstrapTable.prototype.updateHref = function (rows) {
     // set default action if only one by row
     this.$body.find('tr').each(function () {
         const $actions = $(this).find('.dropdown-item-path');
-        if($actions.length === 1) {
+        if ($actions.length === 1) {
             $actions.addClass('btn-default');
         }
     });
 
-    // if($.isFunction (options.onUpdateHref)) {
+    // if ($.isFunction (options.onUpdateHref)) {
     // this.$body.find('tr').each(function () {
     // const $paths = $(this).find('.dropdown-item-path');
-    // if($paths.length) {
+    // if ($paths.length) {
     // options.onUpdateHref($table, $paths);
     // }
     // });
@@ -697,7 +720,7 @@ BootstrapTable.prototype.updateLink = function ($link, row, params) {
     const values = $link.attr('href').split('?');
 
     values[0] = values[0].replace(/\/\d+/, '/' + row.action);
-    if(values.length > 1 && values[1].match(regex)) {
+    if (values.length > 1 && values[1].match(regex)) {
         params.id = row.action;
     } else {
         delete params.id;
@@ -705,37 +728,6 @@ BootstrapTable.prototype.updateLink = function ($link, row, params) {
     const href = values[0] + '?' + $.param(params);
     $link.attr('href', href);
 };
-
-/**
- * Replace the tag name.
- *
- * @param {JQuery}
- *            $source - the source to update.
- * @param {string}
- *            newTag - the new tag name.
- * @param {array} -
- *            excludeAttributes - the attributes to exclude.
- * @return {jQuery} the elements for chaining.
- */
-BootstrapTable.prototype.tagName = function ($source, newTag, excludeAttributes){
-    'use strict';
-    newTag = "<" + newTag + ">";
-    excludeAttributes = excludeAttributes || [];
-
-    return $source.each(function (_index, element){
-        const $element = $(element);
-        const $newTag = $(newTag, {
-            html: $element.html()
-        });
-        $.each(element.attributes, function (_index, attribute) {
-            if (!excludeAttributes.includes(attribute.name)) {
-                $newTag.attr(attribute.name, attribute.value);
-            }
-        });
-        $element.replaceWith($newTag);
-    });
-};
-
 
 /**
  * Gets the visible columns of the card view.
@@ -772,7 +764,7 @@ BootstrapTable.prototype.updateCardView = function () {
 
         // move actions (if any) to a new column
         const $actions = $views.find('.card-view-value:last:has(button)');
-        if($actions.length) {
+        if ($actions.length) {
             const $td = $('<td/>', {
                 class: 'actions d-print-none rowlink-skip'
             });
@@ -785,13 +777,13 @@ BootstrapTable.prototype.updateCardView = function () {
 
         // update class
         $views.find('.card-view-value').each(function (index, element) {
-            if(columns[index].cardClass) {
+            if (columns[index].cardClass) {
                 $(element).addClass(columns[index].cardClass);
             }
         });
 
         // callback
-        if(callback) {
+        if (callback) {
             const row = data[$row.index()];
             callback($table, row, $row);
         }
@@ -802,5 +794,34 @@ BootstrapTable.prototype.updateCardView = function () {
     $body.find('.card-view-title, .card-view-value').addClass('user-select-none');
     $body.find('.card-view-title').addClass('text-muted');
 
+    return this;
+};
+
+/**
+ * Set focus on selected page item (if any).
+ */
+BootstrapTable.prototype.selectPageItem = function () {
+    'use strict';
+    let selector = false;
+    const page = this.focusPageItem || '';
+    switch (page) {
+        case 'previous':
+            selector = 'li.page-pre:not(.disabled) .page-link';
+            break;
+        case 'next':
+            selector = 'li.page-next:not(.disabled) .page-link';
+            break;
+        case 'active':
+            selector = 'li.active .page-link';
+            break;
+    }
+    if (selector) {
+        let $link = this.$pagination.find(selector);
+        if (0 === $link.length) {
+            $link = this.$pagination.find('li.active .page-link');
+        }
+        $link.focus();
+    }
+    this.focusPageItem = false;
     return this;
 };

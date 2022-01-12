@@ -17,22 +17,6 @@ $.fn.extend({
             down: 40
         };
 
-        // function getSelectionText() {
-        // var element = document.activeElement;
-        // var tagName = element ? element.tagName.toLowerCase() : null;
-        // if (tagName === 'textarea' || tagName === 'input' &&
-        // /^(?:text|search|password|tel|url)$/i.test(element.type) &&
-        // typeof
-        // element.selectionStart === 'number') {
-        // return element.value.slice(element.selectionStart,
-        // element.selectionEnd);
-        // }
-        // if (window.getSelection) {
-        // return window.getSelection().toString();
-        // }
-        // return '';
-        // }
-
         this.on('keydown', 'input', function (e) {
             // this.find('input').keydown(function (e) {
             // shortcut for key other than arrow keys

@@ -155,7 +155,7 @@
             const reader = new FileReader();
             reader.onload = function () {
                 const view = new DataView(reader.result);
-                const exif = Fileinput.getImageExif(view);
+                const exif = Fileinput.getImageExif (view);
                 if (exif) {
                     Fileinput.resetOrientation($img, exif);
                 }
@@ -164,7 +164,7 @@
             reader.readAsArrayBuffer(file);
         }
 
-       getImageExif(view) {
+       getImageExif (view) {
             if (view.getUint16(0, false) !== 0xFFD8) {
                 return -2;
             }

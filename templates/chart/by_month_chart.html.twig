@@ -49,10 +49,10 @@
         </thead>
         <tbody data-link="row" class="rowlink">
             {% for item in data -%}
-            {%- set month = item.date|strftime('%B %Y') -%}
+            {%- set month = item.date|localedate('none', null, 'gregorian', 'MMMM Y')|capitalize -%}
             <tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
                 <td class="text-nowrap">
-                    <a href="{{ path(list_path, {'query': item.date|strftime('%m.%Y')}) }}">{{ month }}</a>
+                    <a href="{{ path(list_path, {'query': item.date|localedate('none', null, 'gregorian', 'MM.Y')}) }}">{{ month }}</a>
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
                 <td class="text-currency">{{ item.items|integer }}</td>

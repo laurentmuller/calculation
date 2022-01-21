@@ -252,8 +252,8 @@ final class Utils
      *
      * Any additional keys (if any) will be used for grouping the next set of sub-arrays.
      *
-     * @param array               $array the array to be grouped
-     * @param string|int|callable $key   a set of keys to group by
+     * @param array               $array   the array to be grouped
+     * @param string|int|callable $key,... a set of keys to group by
      */
     public static function groupBy(array $array, $key): array
     {

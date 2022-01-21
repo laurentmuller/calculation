@@ -147,4 +147,4 @@ Sauf définition contraire, les termes utilisés dans la présente politique de 
 <h4>Nous contacter</h4>
 <p class="text-justify">Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par courrier éléctronique.</p>
 
-{% if policy_date ?? true %}<p class="mb-0 text-right">{{ app_owner_city }}, {{ "now"|strftime('%B %G') }}</p>{% endif %}
+{% if policy_date ?? true %}<p class="mb-0 text-right">{{ app_owner_city }}, {{ "now"|localedate('none', null, 'gregorian', 'MMMM Y')|capitalize }}</p>{% endif %}

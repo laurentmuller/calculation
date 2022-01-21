@@ -163,7 +163,6 @@ final class FormatUtils
         if (!isset($formatters[$hash])) {
             /** @var \IntlDateFormatter $formatter */
             $formatter = \IntlDateFormatter::create($locale, $datetype, $timetype, $timezone, $calendar, $pattern);
-            $formatter->setLenient(true);
 
             // check if year pattern is present within 4 digits
             $pattern = $formatter->getPattern();

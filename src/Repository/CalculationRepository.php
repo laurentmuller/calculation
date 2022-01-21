@@ -237,7 +237,7 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('YEAR(c.date) as year')
             ->addSelect('MONTH(c.date) as month')
             ->addSelect('SUM(c.overallTotal) / sum(c.itemsTotal) as margin')
-            ->addGroupBy('year')
+            ->groupBy('year')
             ->addGroupBy('month')
             ->orderBy('year', Criteria::DESC)
             ->addOrderBy('month', Criteria::DESC)
@@ -605,7 +605,8 @@ class CalculationRepository extends AbstractRepository
 
     private function convertToDate(array $item): \DateTimeInterface
     {
-        $datetime = \sprintf('%s-%s-1', $item['year'], $item['month']);
+        // the day must be greater than 5
+        $datetime = \sprintf('%s-%s-10', $item['year'], $item['month']);
 
         return new \DateTime($datetime);
     }

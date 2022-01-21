@@ -25,6 +25,16 @@ use PHPUnit\Framework\TestCase;
  */
 class UtilsTest extends TestCase
 {
+    public function getAscii(): array
+    {
+        return [
+            ['home', 'home'],
+            ['नमस्ते', 'namaste'],
+            ['さよなら', 'sayonara'],
+            ['спасибо', 'spasibo'],
+        ];
+    }
+
     public function getCapitalize(): array
     {
         return [
@@ -185,6 +195,15 @@ class UtilsTest extends TestCase
     }
 
     /**
+     * @dataProvider getAscii
+     */
+    public function testAscii(string $value, string $expected): void
+    {
+        $result = Utils::ascii($value);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
      * @dataProvider getCapitalize
      */
     public function testCapitalize(string $value, string $expected): void
@@ -221,6 +240,26 @@ class UtilsTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testExceptionContext(): void
+    {
+        $code = 200;
+        $message = 'My message';
+        $e = new \Exception($message, $code);
+
+        $result = Utils::getExceptionContext($e);
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('message', $result);
+        $this->assertArrayHasKey('code', $result);
+        $this->assertArrayHasKey('file', $result);
+        $this->assertArrayHasKey('line', $result);
+        $this->assertArrayHasKey('trace', $result);
+
+        $this->assertSame($message, $result['message']);
+        $this->assertSame($code, $result['code']);
+        $this->assertSame(__FILE__, $result['file']);
+    }
+
     /**
      * @dataProvider getExportVar
      *
@@ -246,6 +285,95 @@ class UtilsTest extends TestCase
         }
         $actual = Utils::getShortName($var);
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testGroupByArrays(): void
+    {
+        $array = [
+            ['id' => 1, 'value' => '1'],
+            ['id' => 2, 'value' => '2'],
+            ['id' => 2, 'value' => '3'],
+        ];
+        $key = 'id';
+        $result = Utils::groupBy($array, $key);
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey(1, $result);
+        $this->assertArrayHasKey(2, $result);
+        $this->assertCount(1, $result[1]);
+        $this->assertCount(2, $result[2]);
+    }
+
+    public function testGroupByCallable(): void
+    {
+        $array = [
+            ['id' => 1, 'value' => '1'],
+            ['id' => 2, 'value' => '2'],
+            ['id' => 2, 'value' => '3'],
+        ];
+        $key = function (array $value) {
+            return $value['id'];
+        };
+        $result = Utils::groupBy($array, $key);
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey(1, $result);
+        $this->assertArrayHasKey(2, $result);
+        $this->assertCount(1, $result[1]);
+        $this->assertCount(2, $result[2]);
+    }
+
+    public function testGroupByMultiple(): void
+    {
+        $array = [
+            ['id0' => 1, 'id1' => '1', 'value' => '1'],
+            ['id0' => 1, 'id1' => '1', 'value' => '2'],
+            ['id0' => 1, 'id1' => '2', 'value' => '2'],
+
+            ['id0' => 2, 'id1' => '1', 'value' => '2'],
+            ['id0' => 2, 'id1' => '1', 'value' => '2'],
+            ['id0' => 2, 'id1' => '2', 'value' => '2'],
+        ];
+        $result = Utils::groupBy($array, 'id0', 'id1');
+
+        $this->assertIsArray($result);
+
+        // first level
+        $this->assertArrayHasKey(1, $result);
+        $this->assertArrayHasKey(2, $result);
+        $this->assertCount(2, $result[1]);
+        $this->assertCount(2, $result[2]);
+
+        // second level - first
+        $result1 = $result[1];
+        $this->assertArrayHasKey(1, $result1);
+        $this->assertArrayHasKey(2, $result1);
+        $this->assertCount(2, $result1[1]);
+        $this->assertCount(1, $result1[2]);
+
+        // second level - second
+        $result2 = $result[2];
+        $this->assertArrayHasKey(1, $result2);
+        $this->assertArrayHasKey(2, $result2);
+        $this->assertCount(2, $result2[1]);
+        $this->assertCount(1, $result2[2]);
+    }
+
+    public function testGroupByObjects(): void
+    {
+        $array = [
+            $this->createData(1, '1'),
+            $this->createData(2, '2'),
+            $this->createData(2, '3'),
+        ];
+        $key = 'value';
+        $result = Utils::groupBy($array, $key);
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey(1, $result);
+        $this->assertArrayHasKey(2, $result);
+        $this->assertCount(1, $result[1]);
+        $this->assertCount(2, $result[2]);
     }
 
     /**

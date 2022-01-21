@@ -14,9 +14,9 @@
 <div class="card m-1">
     <div class="card-body card-body-tootlip p-2">
         <div class="card-title mb-1">
-        {%- set text = date|strftime('%B %Y') -%}
+        {%- set text = date|localedate('none', null, 'gregorian', 'MMMM Y')|capitalize -%}
         {%- if list_path -%}
-            <a href="{{ path(list_path, {'query': date|strftime('%m.%Y')}) }}" class="card-link" title="{{ 'index.panel_month_title'|trans }}">{{ text }}</a>
+            <a href="{{ path(list_path, {'query': date|localedate('none', null, 'gregorian', 'MM.Y')}) }}" class="card-link" title="{{ 'index.panel_month_title'|trans }}">{{ text }}</a>
         {%- else -%}
             <span>{{ text }}</span>
         {%- endif -%}

@@ -186,9 +186,9 @@ span.state-color {
 /*
  * Bottom width for header in bordered table
  */
-.table-bordered thead td:last-child,
-.table-bordered thead th:last-child {
-    border-bottom-width: 1px;
+.table-bordered thead td,
+.table-bordered thead th {
+    border-bottom-width: inherit;
 }
 
 /*

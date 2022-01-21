@@ -20,6 +20,11 @@ namespace App\Util;
 final class FormatUtils
 {
     /**
+     * The Swiss french locale.
+     */
+    private const LOCALE_FR_CH = 'fr_CH';
+
+    /**
      * Format a number for the current locale with 2 decimals (Ex: 2312.5 -> 2'312.50).
      *
      * @param float|int $number the value to format
@@ -37,11 +42,11 @@ final class FormatUtils
     /**
      * Format a date for the current locale; ignoring the time part.
      *
-     * @param \DateTimeInterface|int|null $date     the date to format
-     * @param int|null                    $datetype the type of date formatting, one of the format type constants or null to use default
-     * @param \DateTimeZone|string|null   $timezone the timezone identifier
-     * @param int                         $calendar the calendar to use for formatting; default is Gregorian
-     * @param string|null                 $pattern  the optional pattern to use when formatting
+     * @param \DateTimeInterface|int|null             $date     the date to format
+     * @param int|null                                $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null                             $pattern  the optional pattern to use when formatting
      *
      * @return string|null the formatted date or null if formatting failed or if the date is null
      */
@@ -53,12 +58,12 @@ final class FormatUtils
     /**
      * Format a date and time for the current locale.
      *
-     * @param \DateTimeInterface|int|null $date     the date and time to format
-     * @param int|null                    $datetype the type of date formatting, one of the format type constants or null to use default
-     * @param int|null                    $timetype the type of time formatting, one of the format type constants or null to use default
-     * @param \DateTimeZone|string|null   $timezone the timezone identifier
-     * @param int                         $calendar the calendar to use for formatting; default is Gregorian
-     * @param string|null                 $pattern  the optional pattern to use when formatting
+     * @param \DateTimeInterface|int|null             $date     the date and time to format
+     * @param int|null                                $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param int|null                                $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null                             $pattern  the optional pattern to use when formatting
      *
      * @return string|null the formatted date and time or null if formatting failed or if the date is null
      */
@@ -120,11 +125,11 @@ final class FormatUtils
     /**
      * Format a time for the current locale; ignoring the date part.
      *
-     * @param \DateTimeInterface|int|null $date     the time to format
-     * @param int|null                    $timetype the type of date formatting, one of the format type constants or null to use default
-     * @param \DateTimeZone|string|null   $timezone the timezone identifier
-     * @param int                         $calendar the calendar to use for formatting; default is Gregorian
-     * @param string|null                 $pattern  the optional pattern to use when formatting
+     * @param \DateTimeInterface|int|null             $date     the time to format
+     * @param int|null                                $timetype the type of date formatting, one of the format type constants or null to use default
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null                             $pattern  the optional pattern to use when formatting
      *
      * @return string|null the formatted time or null if formatting failed or if the date is null
      */
@@ -136,37 +141,45 @@ final class FormatUtils
     /**
      * Creates a date formatter for the current locale.
      *
-     * @param int|null                  $datetype the type of date formatting, one of the format type constants or null to use default
-     * @param int|null                  $timetype the type of time formatting, one of the format type constants or null to use default
-     * @param \DateTimeZone|string|null $timezone the timezone identifier
-     * @param int                       $calendar the calendar to use for formatting; default is Gregorian
-     * @param string|null               $pattern  the optional pattern to use when formatting
+     * @param int|null                                $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param int|null                                $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
+     * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
+     * @param string|null                             $pattern  the optional pattern to use when formatting
      *
      * @return \IntlDateFormatter the date formatter
      */
     public static function getDateFormatter(?int $datetype = null, ?int $timetype = null, $timezone = null, int $calendar = \IntlDateFormatter::GREGORIAN, ?string $pattern = null): \IntlDateFormatter
     {
+        static $formatters = [];
+
         // check values
-        $pattern = $pattern ?: '';
-        $datetype = $datetype ?: self::getDateType();
-        $timetype = $timetype ?: self::getTimeType();
+        $pattern ??= '';
+        $locale = \Locale::getDefault();
+        $datetype ??= self::getDateType();
+        $timetype ??= self::getTimeType();
 
-        /** @var \IntlDateFormatter $formatter */
-        $formatter = \IntlDateFormatter::create(\Locale::getDefault(), $datetype, $timetype, $timezone, $calendar, $pattern);
-        $formatter->setLenient(true);
+        $hash = $pattern . '|' . $locale . '|' . $datetype . '|' . $timetype . '|' . $calendar . '|' . self::hashTimeZone($timezone);
+        if (!isset($formatters[$hash])) {
+            /** @var \IntlDateFormatter $formatter */
+            $formatter = \IntlDateFormatter::create($locale, $datetype, $timetype, $timezone, $calendar, $pattern);
+            $formatter->setLenient(true);
 
-        // check if year pattern is present within 4 digits
-        $pattern = $formatter->getPattern();
-        if (false === \strpos($pattern, 'yyyy') && false !== \strpos($pattern, 'yy')) {
-            $pattern = \str_replace('yy', 'yyyy', $pattern);
-            $formatter->setPattern($pattern);
+            // check if year pattern is present within 4 digits
+            $pattern = $formatter->getPattern();
+            if (self::LOCALE_FR_CH === $locale && false === \strpos($pattern, 'yyyy') && false !== \strpos($pattern, 'yy')) {
+                $pattern = \str_replace('yy', 'yyyy', $pattern);
+                $formatter->setPattern($pattern);
+            }
+
+            $formatters[$hash] = $formatter;
         }
 
-        return $formatter;
+        return $formatters[$hash];
     }
 
     /**
-     * Gets the date type format.
+     * Gets the default date type format.
      *
      * @return int type of date formatting, one of the format type constants
      */
@@ -176,7 +189,7 @@ final class FormatUtils
     }
 
     /**
-     * Gets the decimal separator for the current locale.
+     * Gets the default decimal separator for the current locale.
      *
      * @return string the decimal separator
      */
@@ -189,7 +202,7 @@ final class FormatUtils
 
         // special case for Swiss French
         $locale = \Locale::getDefault();
-        if ('fr_CH' === $locale) {
+        if (self::LOCALE_FR_CH === $locale) {
             $decimal = '.';
         } else {
             /** @var \NumberFormatter $formatter */
@@ -201,7 +214,7 @@ final class FormatUtils
     }
 
     /**
-     * Gets the grouping separator for the current locale.
+     * Gets the default grouping separator for the current locale.
      *
      * @return string the grouping separator
      */
@@ -214,7 +227,7 @@ final class FormatUtils
 
         // special case for Swiss French
         $locale = \Locale::getDefault();
-        if ('fr_CH' === $locale) {
+        if (self::LOCALE_FR_CH === $locale) {
             $grouping = '\'';
         } else {
             /** @var \NumberFormatter $formatter */
@@ -238,13 +251,20 @@ final class FormatUtils
      */
     public static function getNumberFormatter(int $style, int $digits): \NumberFormatter
     {
-        /** @var \NumberFormatter $formatter */
-        $formatter = \NumberFormatter::create(\Locale::getDefault(), $style);
-        $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $digits);
-        $formatter->setSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL, self::getGrouping());
-        $formatter->setSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL, self::getDecimal());
+        static $formatters = [];
 
-        return $formatter;
+        $locale = \Locale::getDefault();
+        $hash = $style . '|' . $digits . '|' . $locale;
+        if (!isset($formatters[$hash])) {
+            /** @var \NumberFormatter $formatter */
+            $formatter = \NumberFormatter::create($locale, $style);
+            $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $digits);
+            $formatter->setSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL, self::getGrouping());
+            $formatter->setSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL, self::getDecimal());
+            $formatters[$hash] = $formatter;
+        }
+
+        return $formatters[$hash];
     }
 
     /**
@@ -259,22 +279,36 @@ final class FormatUtils
             return $percent;
         }
 
-        // special case for Swiss French
-        $locale = \Locale::getDefault();
         /** @var \NumberFormatter $formatter */
-        $formatter = \NumberFormatter::create($locale, \NumberFormatter::PERCENT);
+        $formatter = \NumberFormatter::create(\Locale::getDefault(), \NumberFormatter::PERCENT);
         $percent = $formatter->getSymbol(\NumberFormatter::PERCENT_SYMBOL);
 
         return $percent;
     }
 
     /**
-     * Gets the time type format.
+     * Gets the default time type format.
      *
      * @return int type of time formatting, one of the format type constants
      */
     public static function getTimeType(): int
     {
         return \IntlDateFormatter::SHORT;
+    }
+
+    /**
+     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
+     */
+    private static function hashTimeZone($timezone): string
+    {
+        if ($timezone instanceof \IntlTimeZone) {
+            return $timezone->getID();
+        } elseif ($timezone instanceof \DateTimeZone) {
+            return $timezone->getName();
+        } elseif (\is_string($timezone)) {
+            return $timezone;
+        } else {
+            return '';
+        }
     }
 }

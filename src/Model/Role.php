@@ -14,6 +14,7 @@ namespace App\Model;
 
 use App\Interfaces\RoleInterface;
 use App\Traits\RightsTrait;
+use App\Traits\RoleTrait;
 
 /**
  * Implementation of the role interface with access rights.
@@ -23,6 +24,7 @@ use App\Traits\RightsTrait;
 class Role implements RoleInterface
 {
     use RightsTrait;
+    use RoleTrait;
 
     /**
      * The name.
@@ -30,15 +32,10 @@ class Role implements RoleInterface
     protected ?string $name = null;
 
     /**
-     * The role.
-     */
-    protected string $role;
-
-    /**
      * Constructor.
      *
      * @param string $role the role
-     * @param string $name the name
+     * @param string $name the optional name
      */
     public function __construct(string $role, string $name = null)
     {
@@ -57,40 +54,6 @@ class Role implements RoleInterface
     public function getName(): string
     {
         return $this->name ?? $this->role;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRole(): string
-    {
-        return $this->role;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see RoleInterface
-     */
-    public function hasRole(string $role): bool
-    {
-        return 0 === \strcasecmp($role, $this->getRole());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isAdmin(): bool
-    {
-        return $this->hasRole(RoleInterface::ROLE_ADMIN);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isSuperAdmin(): bool
-    {
-        return $this->hasRole(RoleInterface::ROLE_SUPER_ADMIN);
     }
 
     /**

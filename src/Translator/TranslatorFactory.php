@@ -40,12 +40,12 @@ class TranslatorFactory
     /**
      * @var TranslatorServiceInterface[]
      */
-    private array $translators = [];
+    private array $translators;
 
     /**
      * Constructor.
      *
-     * @psalm-param iterable<TranslatorServiceInterface> $translators
+     * @param iterable<TranslatorServiceInterface> $translators
      */
     public function __construct(RequestStack $requestStack, iterable $translators)
     {

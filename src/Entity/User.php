@@ -14,6 +14,7 @@ namespace App\Entity;
 
 use App\Interfaces\RoleInterface;
 use App\Traits\RightsTrait;
+use App\Traits\RoleTrait;
 use App\Util\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -40,6 +41,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface, RoleInterface, ResetPasswordRequestInterface, \Serializable
 {
     use RightsTrait;
+    use RoleTrait;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -97,12 +99,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private ?\DateTimeInterface $requestedAt = null;
-
-    /**
-     * @ORM\Column(type="string", length=25, nullable=true)
-     * @Assert\Choice({RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN})
-     */
-    private ?string $role = null;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -282,26 +278,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     /**
      * {@inheritdoc}
      *
-     * @see RoleInterface
-     */
-    public function getRole(): string
-    {
-        return $this->role ?? RoleInterface::ROLE_USER;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        return [$this->getRole()];
-    }
-
-    /**
-     * {@inheritdoc}
-     *
      * @see UserInterface
      */
     public function getSalt(): ?string
@@ -340,26 +316,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @see RoleInterface
-     */
-    public function hasRole(string $role): bool
-    {
-        return 0 === \strcasecmp($role, $this->getRole());
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see RoleInterface
-     */
-    public function isAdmin(): bool
-    {
-        return $this->hasRole(RoleInterface::ROLE_ADMIN);
-    }
-
-    /**
      * Returns a value indicating if this user is enabled.
      */
     public function isEnabled(): bool
@@ -375,16 +331,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function isExpired(): bool
     {
         return null === $this->expiresAt || $this->expiresAt->getTimestamp() <= \time();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see RoleInterface
-     */
-    public function isSuperAdmin(): bool
-    {
-        return $this->hasRole(RoleInterface::ROLE_SUPER_ADMIN);
     }
 
     /**
@@ -482,16 +428,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $this->expiresAt = $expiresAt;
         $this->selector = $selector;
         $this->hashedToken = $hashedToken;
-
-        return $this;
-    }
-
-    /**
-     * Sets role.
-     */
-    public function setRole(?string $role): self
-    {
-        $this->role = RoleInterface::ROLE_USER === $role ? null : $role;
 
         return $this;
     }

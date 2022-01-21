@@ -65,7 +65,8 @@ class UserImageListener implements ImageExtensionInterface
         // update user
         $entity->setImageName($newName);
         $manager = $event->getEntityManager();
-        $manager->flush($entity);
+        $manager->persist($entity);
+        $manager->flush();
     }
 
     private function rename(string $dir, int $id, int $size, string $ext): string

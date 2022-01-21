@@ -285,8 +285,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Add conditionals to the given column.
      *
-     * @param int         $columnIndex     the column index (A = 1)
-     * @param Conditional ...$conditionals the conditionals to add
+     * @param int $columnIndex the column index (A = 1)
      */
     public function setColumnConditional(int $columnIndex, Conditional ...$conditionals): self
     {

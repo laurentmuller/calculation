@@ -42,7 +42,7 @@ class CaptchaImageService
     private const FONT_PATH = '/resources/fonts/captcha.ttf';
 
     /**
-     * The image data prefix.
+     * The base 64 image data prefix.
      */
     private const IMAGE_PREFIX = 'data:image/png;base64,';
 
@@ -115,8 +115,8 @@ class CaptchaImageService
 
         // image
         if (null !== $image = $this->createImage($text, $width, $height)) {
-            // convert image
-            $data = self::IMAGE_PREFIX . $this->encodeImage($image);
+            // encode image
+            $data = $this->encodeImage($image);
 
             // save
             $this->setSessionValues([
@@ -133,8 +133,6 @@ class CaptchaImageService
 
     /**
      * Validate the timeout.
-     *
-     * @return bool true if the timeout valid
      */
     public function validateTimeout(): bool
     {
@@ -147,10 +145,6 @@ class CaptchaImageService
 
     /**
      * Validate the given token; ignoring case.
-     *
-     * @param string $token the token to validate
-     *
-     * @return bool true if the token is valid
      */
     public function validateToken(?string $token): bool
     {
@@ -159,11 +153,6 @@ class CaptchaImageService
 
     /**
      * Compute the text layout.
-     *
-     * @param ImageHandler $image the image to draw to
-     * @param float        $size  the font size
-     * @param string       $font  the font file
-     * @param string       $text  the text to compute
      *
      * @return array the text layout. Each entry is an array of 4 elements with the following values:<br><br>
      *               <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
@@ -206,12 +195,6 @@ class CaptchaImageService
 
     /**
      * Create an image.
-     *
-     * @param string $text   the text to output
-     * @param int    $width  the image width
-     * @param int    $height the image height
-     *
-     * @return ImageHandler the image resource identifier on success, null on error
      */
     private function createImage(string $text, int $width, int $height): ?ImageHandler
     {
@@ -231,8 +214,6 @@ class CaptchaImageService
 
     /**
      * Draws the white background image.
-     *
-     * @param ImageHandler $image the image to draw to
      */
     private function drawBackground(ImageHandler $image): self
     {
@@ -246,10 +227,6 @@ class CaptchaImageService
 
     /**
      * Draws horizontal gray lines in the background.
-     *
-     * @param ImageHandler $image  the image to draw to
-     * @param int          $width  the image width
-     * @param int          $height the image height
      */
     private function drawLines(ImageHandler $image, int $width, int $height): self
     {
@@ -268,10 +245,6 @@ class CaptchaImageService
 
     /**
      * Draws blue points in the background.
-     *
-     * @param ImageHandler $image  the image to draw to
-     * @param int          $width  the image width
-     * @param int          $height the image height
      */
     private function drawPoints(ImageHandler $image, int $width, int $height): self
     {
@@ -290,11 +263,6 @@ class CaptchaImageService
 
     /**
      * Draws the image text.
-     *
-     * @param ImageHandler $image  the image to draw to
-     * @param int          $width  the image width
-     * @param int          $height the image height
-     * @param string       $text   the text to draw
      */
     private function drawText(ImageHandler $image, int $width, int $height, string $text): self
     {
@@ -330,29 +298,21 @@ class CaptchaImageService
 
     /**
      * Encodes the image with MIME base64.
-     *
-     * @param ImageHandler $image the image to encode
-     *
-     * @return string the encoded image
      */
     private function encodeImage(ImageHandler $image): string
     {
         // save
         \ob_start();
         $image->toPng();
-        $buffer = \ob_get_clean();
+        $buffer = (string) \ob_get_clean();
         \ob_end_clean();
 
         // encode
-        return \base64_encode((string) $buffer);
+        return self::IMAGE_PREFIX . \base64_encode($buffer);
     }
 
     /**
      * Generate a random string.
-     *
-     * @param int $length the number of characters to output
-     *
-     * @return string the random string
      */
     private function generateRandomString(int $length): string
     {

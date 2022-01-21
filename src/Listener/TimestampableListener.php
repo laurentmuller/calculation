@@ -49,7 +49,7 @@ class TimestampableListener implements DisableListenerInterface
     public function onFlush(OnFlushEventArgs $args): void
     {
         // enabled?
-        if (!$this->enabled) {
+        if (!$this->isEnabled()) {
             return;
         }
 

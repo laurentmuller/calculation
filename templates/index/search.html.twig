@@ -38,13 +38,13 @@
     <div class="col-lg-7 text-lg-right d-print-none">
         <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
             {% if show_granted %}
-            {{ _self.button('btn-table-show', 'common.button_show', 'show', 'fa-solid fa-fw fa-tv') }}
+            {{ _self.button('btn-table-show', 'common.button_show', 'show', 'tv fa-fw') }}
             {% endif %}
             {% if edit_granted %}
-            {{ _self.button('btn-table-edit', 'common.button_edit', 'edit', 'fa-solid fa-fw fa-pencil') }}
+            {{ _self.button('btn-table-edit', 'common.button_edit', 'edit', 'pencil fa-fw') }}
             {% endif %}
             {% if delete_granted %}
-            {{ _self.button('btn-table-delete', 'common.button_delete', 'delete', 'fa-solid fa-fw fa-times') }}
+            {{ _self.button('btn-table-delete', 'common.button_delete', 'delete', 'times fa-fw') }}
             {% endif %}
         </div>
     </div>

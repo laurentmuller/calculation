@@ -101,7 +101,7 @@ services:
     # used to update user image
     App\Listener\UserImageListener:
         tags:
-            - { name: doctrine.event_listener, event: postPersist, lazy: true}
+            - { name: doctrine.event_listener, event: postPersist, lazy: true, entity: 'App\Entity\User'}
 
     # custom line formatter for monolog
     monolog.custom_formatter:
@@ -120,20 +120,24 @@ services:
 
 
     _instanceof:
-        # AlphaCaptchaInterface
         App\Captcha\AlphaCaptchaInterface:
-            tags: ['captcha_challenge']
-        # TranslatorServiceInterface
+            tags: ['alpha_captcha']
         App\Translator\TranslatorServiceInterface:
             tags: ['translators_service']
+        App\Interfaces\DisableListenerInterface:
+            tags: ['disable_listener']
 
     App\Form\Type\AlphaCaptchaType:
         arguments:
-            $captchas: !tagged_iterator captcha_challenge
+            $captchas: !tagged_iterator alpha_captcha
 
     App\Translator\TranslatorFactory:
         arguments:
             $translators: !tagged_iterator translators_service
+
+    App\Service\SuspendEventListenerService:
+        arguments:
+            $listeners: !tagged_iterator disable_listener
 
     App\Service\MailService:
         calls:

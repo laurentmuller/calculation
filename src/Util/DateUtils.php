@@ -24,30 +24,30 @@ final class DateUtils
     /**
      * The month names.
      *
-     * @var string[]
+     *  @var array<string, array<int, string>>
      */
-    private static ?array $monthNames = null;
+    private static array $monthNames = [];
 
     /**
      * The short month names.
      *
-     * @var string[]
+     *  @var array<string, array<int, string>>
      */
-    private static ?array $shortMonthNames = null;
+    private static array $shortMonthNames = [];
 
     /**
      * The short week day names.
      *
-     * @var string[]
+     * @var array<string, array<int, string>>
      */
-    private static ?array $shortWeekNames = null;
+    private static array $shortWeekNames = [];
 
     /**
      * The week day names.
      *
-     * @var string[]
+     * @var array<string, array<int, string>>
      */
-    private static ?array $weekNames = null;
+    private static array $weekNames = [];
 
     // prevent instance creation
     private function __construct()
@@ -69,12 +69,15 @@ final class DateUtils
             $interval = new \DateInterval($interval);
         }
 
-        // @phpstan-ignore-next-line
-        return (clone $date)->add($interval);
+        /** @var \DateTime $clone */
+        $clone = (clone $date);
+
+        return $clone->add($interval);
     }
 
     /**
      * Complete the give year with four digits.
+     *
      * For example, if year is set with 2 digits (10); the return value will be 2010.
      *
      * @param int $year   the year to complet
@@ -84,7 +87,7 @@ final class DateUtils
      */
     public static function completYear(int $year, int $change = 1930): int
     {
-        if ($year < 99) {
+        if ($year <= 99) {
             return 100 + $change + ($year - $change) % 100;
         }
 
@@ -100,15 +103,18 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @return string[]
+     * @param string $locale The locale to format names or null to use default
+     *
+     * @return array<int, string>
      */
-    public static function getMonths(): array
+    public static function getMonths(?string $locale = null): array
     {
-        if (null === self::$monthNames) {
-            self::$monthNames = self::getMonthNames('%B');
+        $locale ??= \Locale::getDefault();
+        if (empty(self::$monthNames[$locale])) {
+            self::$monthNames[$locale] = self::getMonthNames('MMMM', $locale);
         }
 
-        return self::$monthNames;
+        return self::$monthNames[$locale];
     }
 
     /**
@@ -120,15 +126,18 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @return string[]
+     * @param string $locale The locale to format names or null to use default
+     *
+     * @return array<int, string>
      */
-    public static function getShortMonths(): array
+    public static function getShortMonths(?string $locale = null): array
     {
-        if (null === self::$shortMonthNames) {
-            self::$shortMonthNames = self::getMonthNames('%b');
+        $locale ??= \Locale::getDefault();
+        if (empty(self::$shortMonthNames[$locale])) {
+            self::$shortMonthNames[$locale] = self::getMonthNames('MMM', $locale);
         }
 
-        return self::$shortMonthNames;
+        return self::$shortMonthNames[$locale];
     }
 
     /**
@@ -141,25 +150,20 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string $firstday The first day of the week like 'sunday' or 'monday'
+     * @param string $firstday The first day of the week, in english,  like 'sunday' or 'monday'
+     * @param string $locale   The locale to format names or null to use default
      *
-     * @return string[]
+     * @return array<int, string>
      */
-    public static function getShortWeekdays(string $firstday = 'sunday'): array
+    public static function getShortWeekdays(string $firstday = 'sunday', ?string $locale = null): array
     {
-        if (null === self::$shortWeekNames) {
-            self::$shortWeekNames = self::getDayNames('%a', $firstday);
+        $locale ??= \Locale::getDefault();
+        $key = "$firstday|$locale";
+        if (empty(self::$shortWeekNames[$key])) {
+            self::$shortWeekNames[$key] = self::getDayNames('eee', $firstday, $locale);
         }
 
-        return self::$shortWeekNames;
-    }
-
-    /**
-     * Gets the default time zone.
-     */
-    public static function getTimeZone(): string
-    {
-        return \date_default_timezone_get();
+        return self::$shortWeekNames[$key];
     }
 
     /**
@@ -172,17 +176,20 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string $firstday the first day of the week like 'sunday' or 'monday'
+     * @param string $firstday the first day of the week, in english, like 'sunday' or 'monday'
+     * @param string $locale   The locale to format names or null to use default
      *
-     * @return string[]
+     * @return array<int, string>
      */
-    public static function getWeekdays(string $firstday = 'sunday'): array
+    public static function getWeekdays(string $firstday = 'sunday', ?string $locale = null): array
     {
-        if (null === self::$weekNames) {
-            self::$weekNames = self::getDayNames('%A', $firstday);
+        $locale ??= \Locale::getDefault();
+        $key = "$firstday|$locale";
+        if (empty(self::$weekNames[$key])) {
+            self::$weekNames[$key] = self::getDayNames('eeee', $firstday, $locale);
         }
 
-        return self::$weekNames;
+        return self::$weekNames[$key];
     }
 
     /**
@@ -199,40 +206,32 @@ final class DateUtils
             $interval = new \DateInterval($interval);
         }
 
-        // @phpstan-ignore-next-line
-        return (clone $date)->sub($interval);
-    }
+        /** @var \DateTime $clone */
+        $clone = (clone $date);
 
-    /**
-     * Formats the given time.
-     *
-     * @param string $format the format
-     * @param int    $time   the time
-     *
-     * @return string The formatted time
-     */
-    private static function format(string $format, int $time): string
-    {
-        self::setDefaultLocale();
-        $name = \ucfirst((string) \strftime($format, $time));
-
-        return \utf8_encode($name);
+        return $clone->sub($interval);
     }
 
     /**
      * Gets week day names.
-     *
-     * @param string $format   the date format
-     * @param string $firstday the first day of the week like 'sunday' or 'monday'
-     *
-     * @return string[] the week day names
      */
-    private static function getDayNames(string $format, string $firstday = 'sunday'): array
+    private static function getDayNames(string $pattern, string $firstday, string $locale): array
     {
+        /** @var \IntlDateFormatter $formatter */
+        $formatter = \IntlDateFormatter::create(
+            $locale,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::NONE,
+            \date_default_timezone_get(),
+            \IntlDateFormatter::GREGORIAN,
+            $pattern
+        );
+
         $result = [];
         for ($i = 0; $i <= 6; ++$i) {
-            $time = \strtotime("last {$firstday} +{$i} day");
-            $result[$i + 1] = self::format($format, (int) $time);
+            $time = (int) \strtotime("last $firstday + $i day");
+            $value = (string) $formatter->format($time);
+            $result[$i + 1] = \ucfirst($value);
         }
 
         return $result;
@@ -240,34 +239,27 @@ final class DateUtils
 
     /**
      * Gets the month names.
-     *
-     * @param string $format the date format
-     *
-     * @return string[] the month names
      */
-    private static function getMonthNames(string $format): array
+    private static function getMonthNames(string $pattern, string $locale): array
     {
+        /** @var \IntlDateFormatter $formatter */
+        $formatter = \IntlDateFormatter::create(
+            $locale,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::NONE,
+            \date_default_timezone_get(),
+            \IntlDateFormatter::GREGORIAN,
+            $pattern
+        );
+
         $result = [];
+        $date = new \DateTime('2000-01-01');
+        $interval = new \DateInterval('P1M');
         for ($i = 1; $i <= 12; ++$i) {
-            $time = \mktime(0, 0, 0, $i, 1);
-            $result[$i] = self::format($format, (int) $time);
+            $result[$i] = \ucfirst((string) $formatter->format($date));
+            $date = $date->add($interval);
         }
 
         return $result;
-    }
-
-    /**
-     * Sets the default locale for time formats.
-     *
-     * @return bool true if set
-     */
-    private static function setDefaultLocale(): bool
-    {
-        $locale = \Locale::getDefault();
-        if (false === \setlocale(\LC_TIME, $locale)) {
-            return false !== \setlocale(\LC_TIME, \Locale::getPrimaryLanguage($locale));
-        }
-
-        return true;
     }
 }

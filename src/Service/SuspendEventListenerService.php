@@ -13,10 +13,9 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Interfaces\DisableListenerInterface;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Service to enable and disable doctrine listeners. Only listeners implementing
+ * Service to enable or disable listeners. Only listeners implementing
  * the <code>DisableListenerInterface</code> interface are taken into account.
  *
  * @author Laurent Muller
@@ -31,16 +30,18 @@ class SuspendEventListenerService
     private bool $disabled = false;
 
     /**
-     * The entity manager.
+     * @var DisableListenerInterface[]
      */
-    private EntityManagerInterface $manager;
+    private array $listeners;
 
     /**
      * Constructor.
+     *
+     * @param iterable<DisableListenerInterface> $listeners
      */
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(iterable $listeners)
     {
-        $this->manager = $manager;
+        $this->listeners = $listeners instanceof \Traversable ? \iterator_to_array($listeners) : $listeners;
     }
 
     /**
@@ -75,8 +76,6 @@ class SuspendEventListenerService
 
     /**
      * Returns a value indicating if the listeners are disabled.
-     *
-     * @return bool true if disabled; false if enabled
      */
     public function isDisabled(): bool
     {
@@ -85,18 +84,12 @@ class SuspendEventListenerService
 
     /**
      * Update listeners enablement.
-     *
-     * @param bool $enabled true to enable, false to disable
      */
     private function updateListeners(bool $enabled): void
     {
-        $manager = $this->manager->getEventManager();
-
-        foreach ($manager->getListeners() as $listeners) {
-            foreach ((array) $listeners as $listener) {
-                if ($listener instanceof DisableListenerInterface) {
-                    $listener->setEnabled($enabled);
-                }
+        foreach ($this->listeners as $listener) {
+            if ($listener instanceof DisableListenerInterface) {
+                $listener->setEnabled($enabled);
             }
         }
     }

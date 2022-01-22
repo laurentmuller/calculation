@@ -39,14 +39,20 @@ class ChartController extends AbstractController
      *
      * @Route("/month/{count}", name="chart_by_month", requirements={"count" = "\d+" })
      */
-    public function byMonth(int $count = 12, CalculationRepository $repository, ThemeService $service): Response
+    public function byMonth(int $count = 6, CalculationRepository $repository, ThemeService $service): Response
     {
         $tabular = $this->isDisplayTabular();
         $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_card');
+        $allowedMonths = $this->getAllowedMonths($repository);
+
+        // check count
+        if (!\in_array($count, $allowedMonths, true)) {
+            $count = \in_array(6, $allowedMonths, true) ? 6 : $allowedMonths[0];
+        }
 
         $data = $this->getMonthData($count, $repository, $service, $url);
+        $data['allowed_months'] = $allowedMonths;
         $data['tabular'] = $tabular;
-        $data['allowed_months'] = $this->getAllowedMonths($repository);
 
         return $this->renderForm('chart/by_month_chart.html.twig', $data);
     }
@@ -104,6 +110,8 @@ class ChartController extends AbstractController
 
     /**
      * Gets the allowed months to display.
+     *
+     * @return int[]
      */
     private function getAllowedMonths(CalculationRepository $repository): array
     {

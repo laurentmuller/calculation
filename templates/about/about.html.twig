@@ -51,7 +51,7 @@
         {{ icons.homepage() }}
         {{ icons.link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
     </div>
-    {% if app.debug or app_mode == 'dev' -%}
+    {% if app.debug or is_granted('ROLE_SUPER_ADMIN') -%}
     <div class="col text-right">
         {{ icons.button_pdf('about_pdf') }}
         {{ icons.link(path('about_php_ini'), 'about.php_ini', 'btn btn-form btn-outline-info') }}

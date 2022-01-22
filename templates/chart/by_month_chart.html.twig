@@ -2,8 +2,8 @@
 {% trans_default_domain 'chart' %}
 
 {# add a month option #}
-{% macro month(value, default) -%}
-<option value="{{ value }}" {% if value == default %} selected="selected" {% endif %}>
+{% macro month(value, selected) -%}
+<option value="{{ value }}"{% if selected %} selected="selected"{% endif %}>
     {{- 'counters.months'|trans({'%count%': value}, 'messages') -}}
 </option>
 {%- endmacro %}
@@ -25,8 +25,8 @@
         <div class="form-inline">
             <label class="mr-2">{{ 'last_month.period'|trans }}</label>
             <select id="months" name="months" data-months="{{ months }}" data-url="{{ path('chart_by_month') }}" class="form-control form-control-sm custom-select custom-select-sm">
-                {% for m in allowed_months %}
-                    {{ _self.month(m, m == months) }}
+                {% for current in allowed_months %}
+                    {{ _self.month(current, current == months) }}
                 {% endfor %}
             </select>
         </div>
@@ -49,10 +49,10 @@
         </thead>
         <tbody data-link="row" class="rowlink">
             {% for item in data -%}
-            {%- set month = item.date|localedate('none', null, 'gregorian', 'MMMM Y')|capitalize -%}
+            {%- set month = item.date|localedate('none', null, null, 'MMMM Y')|capitalize -%}
             <tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
                 <td class="text-nowrap">
-                    <a href="{{ path(list_path, {'query': item.date|localedate('none', null, 'gregorian', 'MM.Y')}) }}">{{ month }}</a>
+                    <a href="{{ path(list_path, {'query': item.date|localedate('none', null, null, 'MM.Y')}) }}">{{ month }}</a>
                 </td>
                 <td class="text-currency">{{ item.count|integer }}</td>
                 <td class="text-currency">{{ item.items|integer }}</td>

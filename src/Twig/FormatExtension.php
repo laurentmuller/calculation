@@ -106,26 +106,34 @@ final class FormatExtension extends AbstractExtension
             'full' => \IntlDateFormatter::FULL,
         ];
 
-        // check formats
+        static $calendars = [
+            'gregorian' => \IntlDateFormatter::GREGORIAN,
+            'traditional' => \IntlDateFormatter::TRADITIONAL,
+        ];
+
+        // check formats and calendar
         if ($dateFormat && !isset($formats[$dateFormat])) {
             throw new SyntaxError(\sprintf('The date format "%s" does not exist. Known formats are: "%s"', $dateFormat, \implode('", "', \array_keys($formats))));
         }
         if ($timeFormat && !isset($formats[$timeFormat])) {
             throw new SyntaxError(\sprintf('The time format "%s" does not exist. Known formats are: "%s"', $timeFormat, \implode('", "', \array_keys($formats))));
         }
+        if ($calendar && !isset($calendars[$calendar])) {
+            throw new SyntaxError(\sprintf('The calendar "%s" does not exist. Known calendars are: "%s"', $calendar, \implode('", "', \array_keys($calendars))));
+        }
 
-        // get types
+        // get types and calendar
         $datetype = $dateFormat ? $formats[$dateFormat] : null;
         $timetype = $timeFormat ? $formats[$timeFormat] : null;
+        $calendar = $calendars[$calendar ?? 'gregorian'];
 
-        // no date and time format?
+        // no formats and pattern?
         if (\IntlDateFormatter::NONE === $datetype && \IntlDateFormatter::NONE === $timetype && null === $pattern) {
             return '';
         }
 
         // convert
         $date = twig_date_converter($env, $date, $timezone);
-        $calendar = 'gregorian' === $calendar ? \IntlDateFormatter::GREGORIAN : \IntlDateFormatter::TRADITIONAL;
 
         // format
         return FormatUtils::formatDateTime($date, $datetype, $timetype, $timezone, $calendar, $pattern);

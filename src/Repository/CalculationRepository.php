@@ -605,10 +605,12 @@ class CalculationRepository extends AbstractRepository
 
     private function convertToDate(array $item): \DateTimeInterface
     {
-        // the day must be greater than 5
-        $datetime = \sprintf('%s-%s-10', $item['year'], $item['month']);
+        $year = $item['year'];
+        $month = $item['month'];
+        $day = 1 === $month ? 10 : 1;
+        $time = "$year-$month-$day";
 
-        return new \DateTime($datetime);
+        return new \DateTime($time);
     }
 
     /**

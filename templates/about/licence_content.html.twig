@@ -75,4 +75,4 @@ L'utilisation de l'application entraîne l'établissement d'un contrat de licenc
         domicile du preneur de licence ou à son siège.</p>
     </li>
 </ol>
-{% if licence_date ?? true %}<p class="mb-0 text-right">{{ app_owner_city }}, {{ "now"|localedate('none', null, 'gregorian', 'MMMM Y')|capitalize }}</p>{% endif %}
+<p class="mb-0 text-right">{{ app_owner_city }}, {{ "now"|localedate('none', null, null, 'MMMM Y')|capitalize }}</p>

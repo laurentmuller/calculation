@@ -56,23 +56,17 @@ class AboutController extends AbstractController
      *
      * @Route("/pdf", name="about_pdf")
      */
-    public function aboutPdf(): PdfResponse
+    public function aboutPdf(string $appName): PdfResponse
     {
         // content
         $content = $this->renderView('about/about_content.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
-            'display_date' => true,
-            'licence_date' => false,
-            'policy_date' => true,
             'link' => false,
         ]);
 
-        // title parameters
-        $parameters = ['%app_name%' => $this->getStringParameter('app_name')];
-
         // create report
         $report = new HtmlReport($this);
-        $report->setContent($content)->setTitleTrans('index.menu_info', $parameters, true);
+        $report->setContent($content)->setTitleTrans('index.menu_info', ['%app_name%' => $appName], true);
 
         // render
         return $this->renderPdfDocument($report);
@@ -87,7 +81,6 @@ class AboutController extends AbstractController
     {
         return $this->renderForm('about/licence.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
-            'licence_date' => true,
             'link' => true,
         ]);
     }
@@ -117,7 +110,6 @@ class AboutController extends AbstractController
         // get content
         $ontent = $this->renderView('about/licence_content.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
-            'licence_date' => true,
             'link' => false,
         ]);
 
@@ -221,7 +213,6 @@ class AboutController extends AbstractController
     {
         return $this->renderForm('about/policy.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
-            'policy_date' => true,
             'link' => true,
         ]);
     }
@@ -251,7 +242,6 @@ class AboutController extends AbstractController
         // get content
         $content = $this->renderView('about/policy_content.html.twig', [
             'app_home_url' => $this->getHomeUrl(),
-            'policy_date' => true,
             'link' => false,
         ]);
 

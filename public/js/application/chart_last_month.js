@@ -10,7 +10,7 @@ function onMonthsChange($months) {
     'use strict';
 
     const oldMonths = $months.data('months');
-    const newMonths = $months.val();
+    const newMonths = Number.parseInt($months.val(), 10);
     if (newMonths !== oldMonths) {
         const url = $months.data('url') + "/" + newMonths;
         window.location.assign(url);
@@ -23,19 +23,9 @@ function onMonthsChange($months) {
 (function ($) {
     'use strict';
 
-    // update input value
+    // handle months change
     const $months = $('#months');
-    const href = window.location.href;
-    const index = href.lastIndexOf('/');
-    let value = Number.parseInt(href.substr(index + 1), 10);
-    if (isNaN(value)) {
-        value = 6;
-    }
-    $months.data('months', value).val(value);
-
-    // handle input change
     $months.on('input', function () {
-        $months.updateTimer(onMonthsChange, 500, $months);
-    });
-    $months.focus();
+        $months.updateTimer(onMonthsChange, 250, $months);
+    }).focus();
 }(jQuery));

@@ -40,7 +40,7 @@ contenues dans le descriptif des prestations de l'abonnement.
 Le droit matériel suisse est applicable sur la présente relation contractuelle. Le siège du fournisseur est le for pour tout conflit juridique en lien
 avec ce contrat. Le fournisseur est autorisé à interpeller le tribunal au domicile du preneur de licence ou à son siège.
 
-# Politique de confidentialité
+## Politique de confidentialité
 **bibi.nu** (désigné ci-après par "Fournisseur") exploite le site web **Calculation** (ci-après désigné par le terme "Application").
 
 Cette page vous explique nos politiques en matière de collecte, d'utilisation et de communication des données à caractère personnel
@@ -151,4 +151,4 @@ Nous vous conseillons de consulter la présente politique de confidentialité p�
 ## Nous contacter
 Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par [courrier électronique](mailto:calculation@bibi.nu).
 
-<div style="text-align: right; font-size: small; color:DarkGray;">Dernière mise à jour : Janvier 2022</div>
+<p align="right"><i><small>Dernière mise à jour : Janvier 2022</small></i></p>

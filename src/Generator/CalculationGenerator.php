@@ -18,7 +18,6 @@ use App\Faker\Generator;
 use App\Service\CalculationService;
 use App\Service\FakerService;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -46,64 +45,63 @@ class CalculationGenerator extends AbstractEntityGenerator
      */
     protected function generateEntities(int $count, bool $simulate, EntityManagerInterface $manager, Generator $generator): JsonResponse
     {
-        try {
-            $calculations = [];
-            $id = $simulate ? (int) $manager->getRepository(Calculation::class)->getNextId() : 0;
+        $calculations = [];
+        $id = $simulate ? (int) $manager->getRepository(Calculation::class)->getNextId() : 0;
 
-            // products range
-            $productsCount = $generator->productsCount();
-            $min = \min(5, $productsCount);
-            $max = \min(15, $productsCount);
+        // products range
+        $productsCount = $generator->productsCount();
+        $min = \min(5, $productsCount);
+        $max = \min(15, $productsCount);
 
-            for ($i = 0; $i < $count; ++$i) {
-                $date = $generator->dateTimeBetween('first day of previous month', 'last day of next month');
+        for ($i = 0; $i < $count; ++$i) {
+            $date = $generator->dateTimeBetween('first day of previous month', 'last day of next month');
 
-                $calculation = new Calculation();
-                $calculation->setDate($date)
-                    ->setDescription($generator->catchPhrase())
-                    ->setUserMargin($generator->randomFloat(2, 0, 0.1))
-                    ->setState($generator->state())
-                    ->setCustomer($generator->name())
-                    ->setCreatedBy($generator->userName());
+            $calculation = new Calculation();
+            $calculation->setDate($date)
+                ->setDescription($generator->catchPhrase())
+                ->setUserMargin($generator->randomFloat(2, 0, 0.1))
+                ->setState($generator->state())
+                ->setCustomer($generator->name())
+                ->setCreatedBy($generator->userName());
 
-                // add products
-                $products = $generator->products($generator->numberBetween($min, $max));
-                foreach ($products as $product) {
-                    // copy
-                    $item = CalculationItem::create($product)->setQuantity($generator->numberBetween(1, 10));
-                    if ($item->isEmptyPrice()) {
-                        $item->setPrice($generator->randomFloat(2, 1, 10));
-                    }
-
-                    // find category
-                    $category = $calculation->findCategory($product->getCategory());
-
-                    // add
-                    $category->addItem($item);
+            // add products
+            $products = $generator->products($generator->numberBetween($min, $max));
+            foreach ($products as $product) {
+                // copy
+                $item = CalculationItem::create($product)->setQuantity($generator->numberBetween(1, 10));
+                if ($item->isEmptyPrice()) {
+                    $item->setPrice($generator->randomFloat(2, 1, 10));
                 }
 
-                // update
-                $this->service->updateTotal($calculation);
-
-                // save
-                if (!$simulate) {
-                    $manager->persist($calculation);
-                } else {
-                    $calculation->setId($id++);
-                }
+                // find category
+                $category = $calculation->findCategory($product->getCategory());
 
                 // add
-                $calculations[] = $calculation;
+                $category->addItem($item);
             }
+
+            // update
+            $this->service->updateTotal($calculation);
 
             // save
             if (!$simulate) {
-                $manager->flush();
+                $manager->persist($calculation);
+            } else {
+                $calculation->setId($id++);
             }
 
-            // serialize
-            $items = \array_map(static function (Calculation $c): array {
-                return [
+            // add
+            $calculations[] = $calculation;
+        }
+
+        // save
+        if (!$simulate) {
+            $manager->flush();
+        }
+
+        // map
+        $items = \array_map(static function (Calculation $c): array {
+            return [
                     'id' => FormatUtils::formatId((int) $c->getId()),
                     'date' => FormatUtils::formatDate($c->getDate()),
                     'state' => $c->getStateCode(),
@@ -113,25 +111,14 @@ class CalculationGenerator extends AbstractEntityGenerator
                     'total' => FormatUtils::formatAmount($c->getOverallTotal()),
                     'color' => $c->getStateColor(),
                 ];
-            }, $calculations);
+        }, $calculations);
 
-            return new JsonResponse([
+        return new JsonResponse([
                 'result' => true,
                 'items' => $items,
                 'count' => \count($items),
                 'simulate' => $simulate,
                 'message' => $this->trans('counters.calculations_generate', ['count' => $count]),
             ]);
-        } catch (\Exception $e) {
-            $message = $this->trans('generate.error.failed');
-            $context = Utils::getExceptionContext($e);
-            $this->logError($message, $context);
-
-            return new JsonResponse([
-                'result' => false,
-                'message' => $message,
-                'exception' => $context,
-            ]);
-        }
     }
 }

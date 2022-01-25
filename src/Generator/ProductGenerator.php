@@ -15,7 +15,6 @@ namespace App\Generator;
 use App\Entity\Product;
 use App\Faker\Generator;
 use App\Util\FormatUtils;
-use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -31,34 +30,33 @@ class ProductGenerator extends AbstractEntityGenerator
      */
     protected function generateEntities(int $count, bool $simulate, EntityManagerInterface $manager, Generator $generator): JsonResponse
     {
-        try {
-            $products = [];
-            for ($i = 0; $i < $count; ++$i) {
-                $product = new Product();
-                $description = $this->getDescription($generator);
-                $product->setDescription($description)
-                    ->setPrice($generator->randomFloat(2, 1, 50))
-                    ->setSupplier($generator->productSupplier())
-                    ->setUnit($generator->productUnit())
-                    ->setCategory($generator->category());
-
-                // save
-                if (!$simulate) {
-                    $manager->persist($product);
-                }
-
-                // add
-                $products[] = $product;
-            }
+        $products = [];
+        for ($i = 0; $i < $count; ++$i) {
+            $product = new Product();
+            $description = $this->getDescription($generator);
+            $product->setDescription($description)
+                ->setPrice($generator->randomFloat(2, 1, 50))
+                ->setSupplier($generator->productSupplier())
+                ->setUnit($generator->productUnit())
+                ->setCategory($generator->category());
 
             // save
             if (!$simulate) {
-                $manager->flush();
+                $manager->persist($product);
             }
 
-            // serialize
-            $items = \array_map(static function (Product $p): array {
-                return [
+            // add
+            $products[] = $product;
+        }
+
+        // save
+        if (!$simulate) {
+            $manager->flush();
+        }
+
+        // map
+        $items = \array_map(static function (Product $p): array {
+            return [
                     'id' => $p->getId(),
                     'group' => $p->getGroupCode(),
                     'category' => $p->getCategoryCode(),
@@ -67,26 +65,15 @@ class ProductGenerator extends AbstractEntityGenerator
                     'unit' => $p->getUnit(),
                     'supplier' => $p->getSupplier(),
                 ];
-            }, $products);
+        }, $products);
 
-            return new JsonResponse([
+        return new JsonResponse([
                 'result' => true,
                 'items' => $items,
                 'count' => \count($items),
                 'simulate' => $simulate,
                 'message' => $this->trans('counters.products_generate', ['count' => $count]),
             ]);
-        } catch (\Exception $e) {
-            $message = $this->trans('generate.error.failed');
-            $context = Utils::getExceptionContext($e);
-            $this->logError($message, $context);
-
-            return new JsonResponse([
-                'result' => false,
-                'message' => $message,
-                'exception' => $context,
-            ]);
-        }
     }
 
     /**

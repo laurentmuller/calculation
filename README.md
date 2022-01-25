@@ -1,6 +1,6 @@
 ![Icon](public/images/icons/android-icon-36x36.png) Calculation
 -----------
-Programme de calculs basé sur l'environnement de développement Symfony 5.x. 
+Programme de calculs basé sur l'environnement de développement Symfony 5.x.
 
 ![Screenshot](public/help/images/home.png)
 
@@ -19,3 +19,5 @@ Qualité du code
 Actions
 -------
 [![php-cs-fixer](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml) [![Lint](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml) [![PHP-Stan](https://github.com/laurentmuller/calculation/actions/workflows/php-stan.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-stan.yaml) [![PHP-Units](https://github.com/laurentmuller/calculation/actions/workflows/unit-tests.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/unit-tests.yaml)
+
+<div style="text-align: right; font-size: small; color:DarkGray;">Dernière mise à jour : Janvier 2022</div>

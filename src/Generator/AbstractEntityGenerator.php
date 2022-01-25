@@ -17,6 +17,7 @@ use App\Interfaces\GeneratorInterface;
 use App\Service\FakerService;
 use App\Traits\LoggerTrait;
 use App\Traits\TranslatorTrait;
+use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -50,7 +51,19 @@ abstract class AbstractEntityGenerator implements LoggerAwareInterface, Generato
      */
     public function generate(int $count, bool $simulate): JsonResponse
     {
-        return $this->generateEntities($count, $simulate, $this->manager, $this->generator);
+        try {
+            return $this->generateEntities($count, $simulate, $this->manager, $this->generator);
+        } catch (\Exception $e) {
+            $message = $this->trans('generate.error.failed');
+            $context = Utils::getExceptionContext($e);
+            $this->logError($message, $context);
+
+            return new JsonResponse([
+                'result' => false,
+                'message' => $message,
+                'exception' => $context,
+            ]);
+        }
     }
 
     /**

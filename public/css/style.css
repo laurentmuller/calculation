@@ -587,12 +587,14 @@ div.overflow-auto.table-fixed-header.table-fixed-header-sm {
 table.table-fixed-header {
     margin-bottom: 0;
 }
-table.table-fixed-header thead th {
+table.table-fixed-header th {
     top: 0;
-    z-index: 1;
+    z-index: 1020;
     position: sticky;
     border-top-width: 0;
     background: var(--white);
+    font-weight: normal;
+
 }
 table.table-fixed-header .thead-light th {
     font-weight: normal;

@@ -62,8 +62,10 @@ class GeneratorController extends AbstractController
             ]);
 
         $helper->field('count')
-            ->updateAttributes(['min' => 1, 'max' => 20, 'step' => 1])
-            ->addNumberType(0);
+            ->updateAttributes([
+                'min' => 1, 'max' => 20,
+                'step' => 1,
+            ])->addNumberType(0);
 
         $helper->field('simulate')
             ->help('generate.help.simulate')
@@ -73,8 +75,10 @@ class GeneratorController extends AbstractController
 
         $helper->field('confirm')
             ->notMapped()
-            ->updateAttributes(['data-error' => $this->trans('generate.error.confirm'), 'disabled' => $data['simulate'] ? 'disabled' : null])
-            ->addCheckboxType();
+            ->updateAttributes([
+                'data-error' => $this->trans('generate.error.confirm'),
+                'disabled' => $data['simulate'] ? 'disabled' : null,
+            ])->addCheckboxType();
 
         return $this->renderForm('admin/generate.html.twig', [
             'form' => $helper->createForm(),

@@ -14,7 +14,6 @@ namespace App\Generator;
 
 use App\Entity\Customer;
 use App\Faker\Generator;
-use App\Util\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Person;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,17 +30,16 @@ class CustomerGenerator extends AbstractEntityGenerator
      */
     protected function generateEntities(int $count, bool $simulate, EntityManagerInterface $manager, Generator $generator): JsonResponse
     {
-        try {
-            $customers = [];
-            $styles = [0, 1, 2];
-            $genders = [Person::GENDER_MALE, Person::GENDER_FEMALE];
+        $customers = [];
+        $styles = [0, 1, 2];
+        $genders = [Person::GENDER_MALE, Person::GENDER_FEMALE];
 
-            for ($i = 0; $i < $count; ++$i) {
-                $customer = new Customer();
-                $style = $generator->randomElement($styles);
-                $gender = $generator->randomElement($genders);
+        for ($i = 0; $i < $count; ++$i) {
+            $customer = new Customer();
+            $style = $generator->randomElement($styles);
+            $gender = $generator->randomElement($genders);
 
-                switch ($style) {
+            switch ($style) {
                     case 0: // company
                         $customer->setCompany($generator->company())
                             ->setEmail($generator->companyEmail());
@@ -63,27 +61,27 @@ class CustomerGenerator extends AbstractEntityGenerator
                         break;
                 }
 
-                $customer->setAddress($generator->streetAddress())
-                    ->setZipCode($generator->postcode())
-                    ->setCity($generator->city());
-
-                // save
-                if (!$simulate) {
-                    $manager->persist($customer);
-                }
-
-                // add
-                $customers[] = $customer;
-            }
+            $customer->setAddress($generator->streetAddress())
+                ->setZipCode($generator->postcode())
+                ->setCity($generator->city());
 
             // save
             if (!$simulate) {
-                $manager->flush();
+                $manager->persist($customer);
             }
 
-            // serialize
-            $items = \array_map(static function (Customer $c): array {
-                return [
+            // add
+            $customers[] = $customer;
+        }
+
+        // save
+        if (!$simulate) {
+            $manager->flush();
+        }
+
+        // map
+        $items = \array_map(static function (Customer $c): array {
+            return [
                     'id' => $c->getId(),
                     'company' => $c->getCompany(),
                     'firstName' => $c->getFirstName(),
@@ -95,25 +93,14 @@ class CustomerGenerator extends AbstractEntityGenerator
                     'city' => $c->getCity(),
                     'zipCity' => $c->getZipCity(),
                 ];
-            }, $customers);
+        }, $customers);
 
-            return new JsonResponse([
+        return new JsonResponse([
                 'result' => true,
                 'items' => $items,
                 'count' => \count($items),
                 'simulate' => $simulate,
                 'message' => $this->trans('counters.customers_generate', ['count' => $count]),
             ]);
-        } catch (\Exception $e) {
-            $message = $this->trans('generate.error.failed');
-            $context = Utils::getExceptionContext($e);
-            $this->logError($message, $context);
-
-            return new JsonResponse([
-                'result' => false,
-                'message' => $message,
-                'exception' => $context,
-            ]);
-        }
     }
 }

@@ -14,7 +14,6 @@
  */
 $.fn.updateHref = function (params) {
     'use strict';
-
     let href = '#';
     const $this = $(this);
     if (!$this.hasClass('disabled')) {
@@ -33,9 +32,7 @@ $.fn.updateHref = function (params) {
  */
 $.fn.getContextMenuItems = function () {
     'use strict';
-
     const builder = new MenuBuilder();
-
     $('.card-header a.btn[data-path]').each(function () {
         const $this = $(this);
         if ($this.isSelectable()) {
@@ -75,7 +72,6 @@ $.fn.getContextMenuItems = function () {
  */
 $.fn.dataTable.renderTooltip = function (td, cellData) {
     'use strict';
-
     const margin = parseFloat($('#data-table').attr('min_margin'));
     const value = parseFloat(cellData.replace(/[^\d\.\-]/g, '')) / 100.0;
     if (!isNaN(margin) && !isNaN(value) && value < margin) {
@@ -97,7 +93,6 @@ $.fn.dataTable.renderTooltip = function (td, cellData) {
  */
 $.fn.dataTable.renderStateColor = function (td, _cellData, rowData) {
     'use strict';
-
     const color = rowData.find((value) => value.match(/^#([0-9a-f]{6}|[0-9a-f]{3})$/i));
     if (!$.isUndefined(color)) {
         $(td).attr('style', 'border-left-color: ' + color + ' !important;');
@@ -116,7 +111,6 @@ $.fn.dataTable.renderStateColor = function (td, _cellData, rowData) {
  */
 $.fn.dataTable.renderLog = function (td, _cellData, rowData) {
     'use strict';
-
     const level = rowData[3].toLowerCase();
     $(td).addClass(level);
 };
@@ -129,7 +123,6 @@ $.fn.dataTable.renderLog = function (td, _cellData, rowData) {
  */
 $.fn.userSendMessage = function (row) {
     'use strict';
-
     // check if selection are equals.
     const $this = $(this);
     const userId = parseInt($this.data('id'), 10);
@@ -149,7 +142,6 @@ $.fn.userSendMessage = function (row) {
  */
 $.fn.userSwitch= function (row) {
     'use strict';
-
     // check if selection are equals.
     const $this = $(this);
     const userId = parseInt($this.data('id'), 10);
@@ -177,7 +169,6 @@ $.fn.userSwitch= function (row) {
  */
 $.fn.dataTable.Api.register('getParameters()', function (id) {
     'use strict';
-
     // row?
     if (id === 0) {
         return {};
@@ -226,7 +217,6 @@ $.fn.dataTable.Api.register('getParameters()', function (id) {
  */
 $.fn.dataTable.Api.register('updateButtons()', function () {
     'use strict';
-
     // get selection
     const row = this.getSelectedRow();
     const disabled = row === null;
@@ -265,7 +255,6 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
  */
 (function ($) {
     'use strict';
-
     // table
     const $table = $('#data-table');
 
@@ -335,7 +324,7 @@ $.fn.dataTable.Api.register('updateButtons()', function () {
 
         search: {
             search: query
-        },
+        }
     };
 
     // initialize

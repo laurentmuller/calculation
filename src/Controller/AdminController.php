@@ -22,6 +22,7 @@ use App\Service\CalculationUpdater;
 use App\Service\ProductUpdater;
 use App\Service\SwissPostUpdater;
 use App\Util\SymfonyInfo;
+use App\Util\Utils;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -90,13 +91,14 @@ class AdminController extends AbstractController
 
                 return $this->redirectToHomePage();
             } catch (\Exception $e) {
-                // show error
-                $parameters = [
-                    'exception' => $e,
-                    'failure' => $this->trans('clear_cache.failure'),
-                ];
+                $message = $this->trans('clear_cache.failure');
+                $context = Utils::getExceptionContext($e);
+                $logger->error($message, $context);
 
-                return $this->renderForm('@Twig/Exception/exception.html.twig', $parameters);
+                return $this->renderForm('@Twig/Exception/exception.html.twig', [
+                    'message' => $message,
+                    'exception' => $e,
+                ]);
             }
         }
 

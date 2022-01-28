@@ -1,0 +1,59 @@
+{% extends 'chart/chart_base.html.twig' %}
+{% import 'macros/_properties.html.twig' as properties %}
+{% trans_default_domain 'chart' %}
+
+{# parameters #}
+{%- set title = 'title_by_state' -%}
+{%- set title_icon = 'flag far' -%}
+{%- set list_path = tabular ? 'calculation_table' : 'calculation_card' -%}
+
+{# class #}
+{% block card_container_class '' -%}
+
+{% block data %}
+<div class="col my-2 table-responsive">
+    <table class="table table-bordered table-hover table-list table-sm">
+        <thead>
+            <tr>
+                <th class="text-nowrap">{{ 'fields.state'|trans }}</th>
+                <th class="text-currency">{{ 'fields.count'|trans }}</th>
+                <th class="text-percent">{{ 'fields.percent'|trans }}</th>
+                <th class="text-currency">{{ 'fields.net'|trans }}</th>
+                <th class="text-currency">{{ 'fields.margin_amount'|trans }}</th>
+                <th class="text-percent">{{ 'fields.margin_percent'|trans }}</th>
+                <th class="text-currency">{{ 'fields.sum'|trans }}</th>
+                <th class="text-percent">{{ 'fields.percent'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody data-link="row" class="rowlink">
+            {% for item in data -%}
+            {%- set parameters = tabular ? {'search[0][index]': 8, 'search[0][value]': item.id} : {'query': item.code} -%}
+            <tr title="{{ 'row_by_state'|trans({'%name%': item.code}) }}">
+                <td class="text-nowrap">
+                    <span class="mr-2 text-border" style="border-left-width: 2.5rem !important; {{ properties.stateCss(item.color) }}"></span><a href="{{ path(list_path, parameters) }}">{{- item.code }}</a>
+                </td>
+                <td class="text-currency">{{ item.count|integer }}</td>
+                <td class="text-percent">{{ item.percentCalculation|percent(true, 1, 4) }}</td>
+                <td class="text-currency">{{ item.items|integer }}</td>
+                <td class="text-currency">{{ item.marginAmount|integer }}</td>
+                <td class="text-percent{{ _self.margin_below_class(item.margin, min_margin) }}"{{ _self.margin_below_tooltip(item.margin, min_margin) }}>{{ item.margin|percent }}</td>
+                <td class="text-currency">{{ item.total|integer }}</td>
+                <td class="text-percent">{{ item.percentAmount|percent(true, 1, 4) }}</td>
+            </tr>
+            {% endfor -%}
+            <tr title="{{ 'row_show_all'|trans }}">
+                <td class="font-weight-bold text-nowrap">
+                    <a href="{{ path(list_path) }}">{{ 'fields.total'|trans }}</a>
+                </td>
+                <td class="font-weight-bold text-currency">{{ count|integer }}</td>
+                <td class="font-weight-bold text-percent">{{ 1.0|percent(true, 1, 4) }}</td>
+                <td class="font-weight-bold text-currency">{{ items|integer }}</td>
+                <td class="font-weight-bold text-currency">{{ marginAmount|integer }}</td>
+                <td class="font-weight-bold text-percent{{ _self.margin_below_class(margin, min_margin) }}"{{ _self.margin_below_tooltip(margin, min_margin) }}>{{- margin|percent(true) -}}</td>
+                <td class="font-weight-bold text-currency">{{ total|integer }}</td>
+                <td class="font-weight-bold text-percent">{{ 1.0|percent(true, 1, 4) }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

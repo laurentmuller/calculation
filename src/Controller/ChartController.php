@@ -39,7 +39,7 @@ class ChartController extends AbstractController
      *
      * @Route("/month/{count}", name="chart_by_month", requirements={"count" = "\d+" })
      */
-    public function byMonth(int $count = 6, CalculationRepository $repository, ThemeService $service): Response
+    public function month(int $count = 6, CalculationRepository $repository, ThemeService $service): Response
     {
         $tabular = $this->isDisplayTabular();
         $url = $this->generateUrl($tabular ? 'calculation_table' : 'calculation_card');
@@ -51,10 +51,11 @@ class ChartController extends AbstractController
         }
 
         $data = $this->getMonthData($count, $repository, $service, $url);
+        $data['min_margin'] = $this->getApplication()->getMinMargin();
         $data['allowed_months'] = $allowedMonths;
         $data['tabular'] = $tabular;
 
-        return $this->renderForm('chart/by_month_chart.html.twig', $data);
+        return $this->renderForm('chart/chart_month.html.twig', $data);
     }
 
     /**
@@ -62,13 +63,14 @@ class ChartController extends AbstractController
      *
      * @Route("/state", name="chart_by_state")
      */
-    public function byState(CalculationStateRepository $repository, ThemeService $service): Response
+    public function state(CalculationStateRepository $repository, ThemeService $service): Response
     {
         $tabular = $this->isDisplayTabular();
         $data = $this->getStateData($repository, $service, $tabular);
+        $data['min_margin'] = $this->getApplication()->getMinMargin();
         $data['tabular'] = $tabular;
 
-        return $this->renderForm('chart/by_state_chart.html.twig', $data);
+        return $this->renderForm('chart/chart_state.html.twig', $data);
     }
 
     /**
@@ -161,32 +163,32 @@ class ChartController extends AbstractController
 
         // count serie
         $countData = \array_map(function (array $item): int {
-            return (int) ($item['count']);
+            return $item['count'];
         }, $data);
 
         // items amount serie
         $itemsData = \array_map(function (array $item): float {
-            return (float) ($item['items']);
+            return $item['items'];
         }, $data);
 
         // margin amount serie
         $marginsData = \array_map(function (array $item): float {
-            return (float) ($item['total']) - (float) ($item['items']);
+            return $item['total'] - $item['items'];
         }, $data);
 
         // total serie
         $sumData = \array_map(function (array $item): float {
-            return (float) ($item['total']);
+            return $item['total'];
         }, $data);
 
         // margins (percent)
         $marginsPercent = \array_map(function (array $item): float {
-            return (float) $item['margin'];
+            return $item['margin'];
         }, $data);
 
         // margins (amount)
         $marginsAmount = \array_map(function (array $item): float {
-            return (float) ($item['total']) - (float) ($item['items']);
+            return $item['total'] - $item['items'];
         }, $data);
 
         // series
@@ -320,25 +322,26 @@ class ChartController extends AbstractController
         // get values
         $states = $repository->getListCountCalculations();
 
-        // convert
-        $count = \array_reduce($states, function (float $carry, array $state) {
-            return $carry + $state['count'];
-        }, 0);
-        $total = \array_reduce($states, function (float $carry, array $state) {
-            return $carry + $state['total'];
-        }, 0);
-        $items = \array_reduce($states, function (float $carry, array $state) {
-            return $carry + $state['items'];
-        }, 0);
+        // totals
+        [$count, $total, $items] = \array_reduce($states, function (array $carry, array $state) {
+            $carry[0] += $state['count'];
+            $carry[1] += $state['total'];
+            $carry[2] += $state['items'];
+
+            return $carry;
+        }, [0, 0, 0]);
+
+        // update
         foreach ($states as &$state) {
-            $state['percent'] = $this->safeDivide((float) $state['total'], $total);
+            $state['percentCalculation'] = $this->safeDivide($state['count'], $count);
+            $state['percentAmount'] = $this->safeDivide($state['total'], $total);
         }
 
         // data
         $data = \array_map(function (array $state) use ($tabular): array {
             return [
                 'name' => $state['code'],
-                'y' => (float) ($state['total']),
+                'y' => $state['total'],
                 'url' => $this->generateStateUrl($state, $tabular),
             ];
         }, $states);
@@ -401,14 +404,16 @@ class ChartController extends AbstractController
 
         // tooltip
         $chart->tooltip->headerFormat('');
-        $chart->tooltip->pointFormat('<span><b>{point.name} : {point.y:,.2f}</b> ({point.percentage:.0f}%)</span>');
+        $chart->tooltip->pointFormat('<span><b>{point.name} : {point.y:,.0f}</b> ({point.percentage:.1f}%)</span>');
 
         return [
             'chart' => $chart,
             'data' => $states,
             'count' => $count,
+            'items' => $items,
             'total' => $total,
             'margin' => $this->safeDivide($total, $items),
+            'marginAmount' => $total - $items,
         ];
     }
 }

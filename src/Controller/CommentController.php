@@ -63,12 +63,8 @@ class CommentController extends AbstractController
                 return $this->redirectToHomePage();
             } catch (TransportExceptionInterface $e) {
                 $message = $this->trans('user.comment.error');
-                $logger->error($message, [
-                    'class' => Utils::getShortName($e),
-                    'message' => $e->getMessage(),
-                    'code' => (int) $e->getCode(),
-                    'file' => $e->getFile() . ':' . $e->getLine(),
-                ]);
+                $context = Utils::getExceptionContext($e);
+                $logger->error($message, $context);
 
                 return $this->renderForm('@Twig/Exception/exception.html.twig', [
                     'message' => $message,

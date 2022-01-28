@@ -31,8 +31,8 @@ class AddressTransformerTest extends TestCase
      */
     protected function setUp(): void
     {
-        parent::setUp();
         $this->transformer = new AddressTransformer();
+        parent::setUp();
     }
 
     /**

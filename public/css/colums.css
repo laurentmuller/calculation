@@ -4,6 +4,7 @@
     width: 30px;
     text-align: center;
 }
+
 .text-border {
     border-left: 0.2rem solid transparent !important;
 }
@@ -130,4 +131,8 @@
 .text-hover {
     background-color: var(--primary) !important;
     color: var(--white) !important;
+}
+
+.thead-light th.text-border {
+    border-left-color: #e9ecef !important;
 }

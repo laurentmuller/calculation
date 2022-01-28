@@ -3,7 +3,7 @@
 /* globals clearSearch */
 
 /**
- * The state column index
+ * The state column index.
  */
 const STATE_COLUMN = 8;
 

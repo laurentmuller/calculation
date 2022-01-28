@@ -25,18 +25,27 @@ final class FormatUtils
     private const LOCALE_FR_CH = 'fr_CH';
 
     /**
+     * The date formatters.
+     *
+     * @var \IntlDateFormatter[]
+     */
+    private static array $dateFormatters = [];
+
+    /**
+     * The number formatters.
+     *
+     * @var \NumberFormatter[]
+     */
+    private static array $numberFormatters = [];
+
+    /**
      * Format a number for the current locale with 2 decimals (Ex: 2312.5 -> 2'312.50).
      *
      * @param float|int $number the value to format
      */
     public static function formatAmount($number): string
     {
-        static $formatter;
-        if (!$formatter) {
-            $formatter = self::getNumberFormatter(\NumberFormatter::DECIMAL, 2);
-        }
-
-        return $formatter->format((float) $number);
+        return self::getNumberFormatter(\NumberFormatter::DECIMAL, 2)->format((float) $number);
     }
 
     /**
@@ -97,26 +106,30 @@ final class FormatUtils
      */
     public static function formatInt($number): string
     {
-        static $formatter;
-        if (!$formatter) {
-            $formatter = self::getNumberFormatter(\NumberFormatter::DECIMAL, 0);
-        }
-
-        return $formatter->format((float) $number);
+        return self::getNumberFormatter(\NumberFormatter::DECIMAL, 0)->format((float) $number);
     }
 
     /**
      * Format for the current locale a number as percent.
      *
-     * @param float $number      the value to format
-     * @param bool  $includeSign true to include the percent sign
-     * @param int   $decimals    the number of decimals
+     * @param float|int $number       the value to format
+     * @param bool      $includeSign  true to include the percent sign
+     * @param int       $decimals     the number of decimals
+     * @param int       $roundingMode the rounding mode
      */
-    public static function formatPercent($number, bool $includeSign = true, int $decimals = 0): string
+    public static function formatPercent($number, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): string
     {
-        $formatter = self::getNumberFormatter(\NumberFormatter::PERCENT, $decimals);
-        if (!$includeSign) {
-            $formatter->setSymbol(\NumberFormatter::PERCENT_SYMBOL, '');
+        $style = \NumberFormatter::PERCENT;
+        $extraHash = $includeSign ? '1' : '0';
+        $hash = self::getNumberHash($style, $decimals, $roundingMode, $extraHash);
+
+        if (isset(self::$numberFormatters[$hash])) {
+            $formatter = self::$numberFormatters[$hash];
+        } else {
+            $formatter = self::getNumberFormatter($style, $decimals, $roundingMode, $extraHash);
+            if (!$includeSign) {
+                $formatter->setSymbol(\NumberFormatter::PERCENT_SYMBOL, '');
+            }
         }
 
         return $formatter->format((float) $number);
@@ -151,16 +164,14 @@ final class FormatUtils
      */
     public static function getDateFormatter(?int $datetype = null, ?int $timetype = null, $timezone = null, int $calendar = \IntlDateFormatter::GREGORIAN, ?string $pattern = null): \IntlDateFormatter
     {
-        static $formatters = [];
-
         // check values
         $pattern ??= '';
         $locale = \Locale::getDefault();
         $datetype ??= self::getDateType();
         $timetype ??= self::getTimeType();
 
-        $hash = $pattern . '|' . $locale . '|' . $datetype . '|' . $timetype . '|' . $calendar . '|' . self::hashTimeZone($timezone);
-        if (!isset($formatters[$hash])) {
+        $hash = $locale . '|' . $datetype . '|' . $timetype . '|' . self::hashTimeZone($timezone) . '|' . $calendar . '|' . $pattern;
+        if (!isset(self::$dateFormatters[$hash])) {
             /** @var \IntlDateFormatter $formatter */
             $formatter = \IntlDateFormatter::create($locale, $datetype, $timetype, $timezone, $calendar, $pattern);
 
@@ -171,16 +182,14 @@ final class FormatUtils
                 $formatter->setPattern($pattern);
             }
 
-            $formatters[$hash] = $formatter;
+            self::$dateFormatters[$hash] = $formatter;
         }
 
-        return $formatters[$hash];
+        return self::$dateFormatters[$hash];
     }
 
     /**
      * Gets the default date type format.
-     *
-     * @return int type of date formatting, one of the format type constants
      */
     public static function getDateType(): int
     {
@@ -189,8 +198,6 @@ final class FormatUtils
 
     /**
      * Gets the default decimal separator for the current locale.
-     *
-     * @return string the decimal separator
      */
     public static function getDecimal(): string
     {
@@ -214,8 +221,6 @@ final class FormatUtils
 
     /**
      * Gets the default grouping separator for the current locale.
-     *
-     * @return string the grouping separator
      */
     public static function getGrouping(): string
     {
@@ -245,31 +250,29 @@ final class FormatUtils
     /**
      * Gets a number formatter for the current locale.
      *
-     * @param int $style  the style of the formatter
-     * @param int $digits the number of fraction digits
+     * @param int    $style        the style of the formatter
+     * @param int    $digits       the number of fraction digits
+     * @param int    $roundingMode the rounding mode
+     * @param string $extraHash    an optional extra hash code used to check if the formatter is already created
      */
-    public static function getNumberFormatter(int $style, int $digits): \NumberFormatter
+    public static function getNumberFormatter(int $style, int $digits, int $roundingMode = \NumberFormatter::ROUND_HALFEVEN, string $extraHash = ''): \NumberFormatter
     {
-        static $formatters = [];
-
-        $locale = \Locale::getDefault();
-        $hash = $style . '|' . $digits . '|' . $locale;
-        if (!isset($formatters[$hash])) {
+        $hash = self::getNumberHash($style, $digits, $roundingMode, $extraHash);
+        if (!isset(self::$numberFormatters[$hash])) {
             /** @var \NumberFormatter $formatter */
-            $formatter = \NumberFormatter::create($locale, $style);
+            $formatter = \NumberFormatter::create(\Locale::getDefault(), $style);
             $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $digits);
+            $formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, $roundingMode);
             $formatter->setSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL, self::getGrouping());
             $formatter->setSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL, self::getDecimal());
-            $formatters[$hash] = $formatter;
+            self::$numberFormatters[$hash] = $formatter;
         }
 
-        return $formatters[$hash];
+        return self::$numberFormatters[$hash];
     }
 
     /**
      * Gets the percent symbol for the current locale.
-     *
-     * @return string the percent symbol
      */
     public static function getPercent(): string
     {
@@ -287,12 +290,18 @@ final class FormatUtils
 
     /**
      * Gets the default time type format.
-     *
-     * @return int type of time formatting, one of the format type constants
      */
     public static function getTimeType(): int
     {
         return \IntlDateFormatter::SHORT;
+    }
+
+    /**
+     * Gets a number formatter hash code for the current locale.
+     */
+    private static function getNumberHash(int $style, int $digits, int $roundingMode, string $extraHash = ''): string
+    {
+        return \Locale::getDefault() . '|' . $style . '|' . $digits . '|' . $roundingMode . '|' . $extraHash;
     }
 
     /**

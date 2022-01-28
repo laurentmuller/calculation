@@ -214,17 +214,18 @@ final class Utils
     /**
      * Gets the context for the given exception,.
      *
-     * @param \Exception $e the exception to get the context for
+     * @param \Throwable $e the exception to get the context for
      *
-     * @return array an array with the message, code, file, line and trace properties
+     * @return array an array with the message, class, code, file, line and trace properties
      */
-    public static function getExceptionContext(\Exception $e): array
+    public static function getExceptionContext(\Throwable $e): array
     {
         return [
             'message' => $e->getMessage(),
             'code' => $e->getCode(),
             'file' => $e->getFile(),
             'line' => $e->getLine(),
+            'class' => self::getShortName($e),
             'trace' => $e->getTraceAsString(),
         ];
     }

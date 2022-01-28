@@ -236,7 +236,7 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('SUM(c.overallTotal) as total')
             ->addSelect('YEAR(c.date) as year')
             ->addSelect('MONTH(c.date) as month')
-            ->addSelect('SUM(c.overallTotal) / sum(c.itemsTotal) as margin')
+            ->addSelect('SUM(c.overallTotal) / SUM(c.itemsTotal) as margin')
             ->groupBy('year')
             ->addGroupBy('month')
             ->orderBy('year', Criteria::DESC)
@@ -246,7 +246,7 @@ class CalculationRepository extends AbstractRepository
         // execute
         $result = $builder->getQuery()->getArrayResult();
 
-        // create dates
+        // convert and create dates
         foreach ($result as &$item) {
             $item['year'] = (int) $item['year'];
             $item['month'] = (int) $item['month'];
@@ -273,8 +273,7 @@ class CalculationRepository extends AbstractRepository
             ->distinct()
             ->orderBy($year);
 
-        $result = $builder->getQuery()
-            ->getSingleColumnResult();
+        $result = $builder->getQuery()->getSingleColumnResult();
 
         return \array_map('intval', $result);
     }
@@ -296,9 +295,9 @@ class CalculationRepository extends AbstractRepository
             ->orderBy($year)
             ->addOrderBy($month);
 
-        $result = $builder->getQuery()
-            ->getArrayResult();
+        $result = $builder->getQuery()->getArrayResult();
 
+        // convert
         foreach ($result as &$entry) {
             $entry['year'] = (int) ($entry['year']);
             $entry['month'] = (int) ($entry['month']);
@@ -325,9 +324,9 @@ class CalculationRepository extends AbstractRepository
             ->orderBy($year)
             ->addOrderBy($week);
 
-        $result = $builder->getQuery()
-            ->getArrayResult();
+        $result = $builder->getQuery()->getArrayResult();
 
+        // convert
         foreach ($result as &$entry) {
             $entry['year'] = (int) ($entry['year']);
             $entry['week'] = (int) ($entry['week']);
@@ -560,8 +559,7 @@ class CalculationRepository extends AbstractRepository
             ->where('e.itemsTotal != 0');
 
         // execute
-        return $builder->getQuery()
-            ->getArrayResult();
+        return $builder->getQuery()->getArrayResult();
     }
 
     /**

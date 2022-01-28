@@ -70,6 +70,8 @@ class CalculationStateRepository extends AbstractRepository
             ->setParameter('margin', $margin, Types::FLOAT);
 
         $results = $builder->getQuery()->getArrayResult();
+
+        // convert
         foreach ($results as &$result) {
             $result['total'] = (float) $result['total'];
             $result['items'] = (float) $result['items'];
@@ -91,10 +93,13 @@ class CalculationStateRepository extends AbstractRepository
         $results = $this->getListCountQueryBuilder()
             ->getQuery()
             ->getArrayResult();
+
+        // convert
         foreach ($results as &$result) {
             $result['total'] = (float) $result['total'];
             $result['items'] = (float) $result['items'];
             $result['margin'] = (float) $result['margin'];
+            $result['marginAmount'] = (float) $result['marginAmount'];
         }
 
         return $results;
@@ -139,9 +144,10 @@ class CalculationStateRepository extends AbstractRepository
             ->addSelect('s.editable')
             ->addSelect('s.color')
             ->addSelect('COUNT(c.id) as count')
-            ->addSelect('SUM(c.overallTotal) as total')
             ->addSelect('SUM(c.itemsTotal) as items')
+            ->addSelect('SUM(c.overallTotal) as total')
             ->addSelect('SUM(c.overallTotal) / sum(c.itemsTotal) as margin')
+            ->addSelect('SUM(c.overallTotal) - sum(c.itemsTotal) as marginAmount')
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
             ->orderBy('s.code', Criteria::ASC);

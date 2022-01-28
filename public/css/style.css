@@ -597,6 +597,41 @@ table.table-fixed-header th {
 
 }
 table.table-fixed-header .thead-light th {
-    font-weight: normal;
     border-bottom-width: 0;
+}
+
+/**
+ * Cards in index page.
+ */
+.index-parent {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.index-child {
+    flex: 1;
+    min-width: 15%;
+}
+
+@media (max-width: 1200px) {
+    .index-child {
+        min-width: 20%;
+    }
+}
+
+@media (max-width: 992px) {
+    .index-child {
+        min-width: 33.33%;
+    }
+}
+
+@media (max-width: 768px) {
+    .index-child {
+        min-width: 50%;
+    }
+}
+@media (max-width: 576px) {
+    .index-child {
+        min-width: 100%;
+    }
 }

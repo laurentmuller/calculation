@@ -22,6 +22,7 @@ use App\Repository\GroupRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GroupsDocument;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -111,7 +112,7 @@ class GroupController extends AbstractEntityController
      *     {"label" = "breadcrumb.delete" }
      * })
      */
-    public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository): Response
+    public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
     {
         // external references?
         $categories = $item->countCategories();
@@ -148,7 +149,7 @@ class GroupController extends AbstractEntityController
             'failure' => 'group.delete.failure',
         ];
 
-        return $this->deleteEntity($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $logger, $parameters);
     }
 
     /**

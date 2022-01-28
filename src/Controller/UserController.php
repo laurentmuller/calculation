@@ -111,7 +111,7 @@ class UserController extends AbstractEntityController
      *     {"label" = "breadcrumb.delete" }
      * })
      */
-    public function delete(Request $request, User $item): Response
+    public function delete(Request $request, User $item, LoggerInterface $logger): Response
     {
         // same?
         if ($this->isConnectedUser($item)) {
@@ -128,7 +128,7 @@ class UserController extends AbstractEntityController
             'failure' => 'user.delete.failure',
         ];
 
-        return $this->deleteEntity($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $logger, $parameters);
     }
 
     /**
@@ -238,12 +238,8 @@ class UserController extends AbstractEntityController
                 return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
             } catch (TransportExceptionInterface $e) {
                 $message = $this->trans('user.message.error');
-                $logger->error($message, [
-                        'class' => Utils::getShortName($e),
-                        'message' => $e->getMessage(),
-                        'code' => (int) $e->getCode(),
-                        'file' => $e->getFile() . ':' . $e->getLine(),
-                ]);
+                $context = Utils::getExceptionContext($e);
+                $logger->error($message, $context);
 
                 return $this->renderForm('@Twig/Exception/exception.html.twig', [
                     'message' => $message,

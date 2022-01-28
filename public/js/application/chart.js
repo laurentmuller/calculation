@@ -23,9 +23,17 @@ function onMonthsChange($months) {
 (function ($) {
     'use strict';
 
+    // tooltip
+    $('#data').tooltip({
+        selector: '.has-tooltip',
+        customClass: 'tooltip-danger overall-datatable'
+    });
+
     // handle months change
     const $months = $('#months');
-    $months.on('input', function () {
-        $months.updateTimer(onMonthsChange, 250, $months);
-    }).focus();
+    if ($months.length) {
+        $months.on('input', function () {
+            $months.updateTimer(onMonthsChange, 250, $months);
+        }).focus();
+    }
 }(jQuery));

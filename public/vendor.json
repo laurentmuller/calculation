@@ -1,235 +1,235 @@
 {
-	"source": "https://cdnjs.cloudflare.com/ajax/libs/",
-	"target": "js/vendor/",
-	"format": "{source}{name}/{version}/{file}",
-	"bootswatch": "https://bootswatch.com/api/4.json",
-	"prefixes": {
-		"js": "/**! compression tag for ftp-deployment */\n\n",
-		"css": "/**! compression tag for ftp-deployment */\n\n"
-	},
-	"renames": {
-		"\\.src\\.": "."
-	},
-	"plugins": [
-		{
-			"name": "jquery",
-			"version": "3.6.0",
-			"files": [
-				"jquery.js"
-			]
-		},
-		{
-			"name": "bootstrap",
-			"version": "4.6.0",
-			"source": "https://cdn.jsdelivr.net/npm/",
-			"format": "{source}{name}@{version}/dist/{file}",
-			"target": "twitter-bootstrap",
-			"files": [
-				"js/bootstrap.bundle.js",
-				"js/bootstrap.bundle.js.map",
-				"css/bootstrap.css",
-				"css/bootstrap.css.map"
-			]
-		},
-		{
-			"name": "font-awesome",
-			"version": "6.0.0-beta3",
-			"files": [
-				"css/all.css",
-				"webfonts/fa-brands-400.ttf",
-				"webfonts/fa-brands-400.woff2",
-				"webfonts/fa-regular-400.ttf",
-				"webfonts/fa-regular-400.woff2",
-				"webfonts/fa-solid-900.ttf",
-				"webfonts/fa-solid-900.woff2",
-				"webfonts/fa-v4compatibility.ttf",
-				"webfonts/fa-v4compatibility.woff2"
-			]
-		},
-		{
-			"name": "jquery-validate",
-			"version": "1.19.3",
-			"files": [
-				"jquery.validate.js",
-				"additional-methods.js",
-				"localization/messages_fr.js"
-			]
-		},
-		{
-			"name": "highcharts",
-			"version": "9.3.2",
-			"source": "https://cdn.jsdelivr.net/npm/",
-			"format": "{source}{name}@{version}/{file}",
-			"files": [
-				"highcharts.src.js"
-			]
-		},
-		{
-			"name": "html5sortable",
-			"version": "0.13.3",
-			"files": [
-				"html5sortable.js"
-			]
-		},
-		{
-			"name": "datatables",
-			"version": "1.10.22",
-			"source": "https://cdn.datatables.net/",
-			"format": "{source}{version}/{file}",
-			"files": [
-				"js/jquery.dataTables.js",
-				"js/dataTables.bootstrap4.js",
-				"css/dataTables.bootstrap4.css"
-			]
-		},
-		{
-			"name": "conditionalPaging",
-			"version": "1.10.22",
-			"source": "https://cdn.datatables.net/plug-ins/",
-			"format": "{source}{version}/features/{name}/{file}",
-			"target": "datatables/js",
-			"disabled": true,
-			"files": [
-				"dataTables.conditionalPaging.js"
-			]
-		},
-		{
-			"name": "keytable",
-			"version": "2.5.3",
-			"source": "http://cdn.datatables.net/",
-			"target": "datatables",
-			"files": [
-				"js/dataTables.keyTable.js"
-			]
-		},
-		{
-			"name": "mark.js",
-			"version": "1.10.22",
-			"source": "https://cdn.datatables.net/plug-ins/",
-			"format": "{source}{version}/features/{name}/{file}",
-			"target": "datatables/js",
-			"files": [
-				"datatables.mark.js"
-			]
-		},
-		{
-			"display": "mark.js-jquery-mark",
-			"name": "mark.js",
-			"version": "8.11.1",
-			"target": "jquery-mark",
-			"files": [
-				"jquery.mark.js"
-			]
-		},
-		{
-			"name": "zxcvbn",
-			"version": "4.4.2",
-			"files": [
-				"zxcvbn.js",
-				"zxcvbn.js.map"
-			]
-		},
-		{
-			"name": "jquery-contextmenu",
-			"version": "2.9.2",
-			"target": "contextmenu",
-			"files": [
-				"jquery.contextMenu.css",
-				"jquery.contextMenu.js",
-				"font/context-menu-icons.eot",
-				"font/context-menu-icons.ttf",
-				"font/context-menu-icons.woff",
-				"font/context-menu-icons.woff2"
-			]
-		},
-		{
-			"name": "clipboard.js",
-			"version": "2.0.8",
-			"target": "clipboard",
-			"files": [
-				"clipboard.js"
-			]
-		},
-		{
-			"name": "@iconify/iconify",
-			"version": "1.0.7",
-			"source": "https://cdn.jsdelivr.net/npm/",
-			"format": "{source}{name}@{version}/dist/{file}",
-			"target": "iconify",
-			"disabled": true,
-			"files": [
-				"iconify.js"
-			]
-		},
-		{
-			"name": "bootstrap-table",
-			"version": "1.19.1",
-			"target": "bootstrap-table",
-			"files": [
-				"bootstrap-table.js",
-				"bootstrap-table.css"
-			]
-		},
-		{
-			"display": "bootstrap-table-defer-url",
-			"name": "bootstrap-table",
-			"version": "1.19.1",
-			"source": "https://cdn.jsdelivr.net/npm/",
-			"format": "{source}{name}@{version}/dist/extensions/defer-url/{file}",
-			"target": "bootstrap-table",
-			"files": [
-				"bootstrap-table-defer-url.js"
-			]
-		},
-		{
-			"display": "bootstrap-table-custom-view",
-			"name": "bootstrap-table",
-			"version": "1.19.1",
-			"source": "https://cdn.jsdelivr.net/npm/",
-			"format": "{source}{name}@{version}/dist/extensions/custom-view/{file}",
-			"target": "bootstrap-table",
-			"files": [
-				"bootstrap-table-custom-view.js"
-			]
-		},
-		{
-			"source": "https://cdn.jsdelivr.net/npm/",
-			"format": "{source}{name}@{version}/dist/{file}",
-			"name": "select2",
-			"version": "4.1.0-rc.0",
-			"files": [
-				"js/select2.js",
-				"js/i18n/fr.js",
-				"css/select2.css"
-			]
-		},
-		{
-			"source": "https://cdn.jsdelivr.net/npm/@ttskch/",
-			"format": "{source}{name}@{version}/dist/{file}",
-			"name": "select2-bootstrap4-theme",
-			"version": "1.5.2",
-			"target": "select2/css",
-			"files": [
-				"select2-bootstrap4.css"
-			]
-		},
-		{
-			"name": "currency-flags",
-			"version": "3.3.0",
-			"files": [
-				"currency-flags.css"
-			]
-		},
-		{
-			"name": "font-mfizz",
-			"version": "2.4.1",
-			"files": [
-				"font-mfizz.css",
-				"font-mfizz.eot",
-				"font-mfizz.svg",
-				"font-mfizz.ttf",
-				"font-mfizz.woff"
-			]
-		}
-	]
+    "source": "https://cdnjs.cloudflare.com/ajax/libs/",
+    "target": "js/vendor/",
+    "format": "{source}{name}/{version}/{file}",
+    "bootswatch": "https://bootswatch.com/api/4.json",
+    "prefixes": {
+        "js": "/**! compression tag for ftp-deployment */\n\n",
+        "css": "/**! compression tag for ftp-deployment */\n\n"
+    },
+    "renames": {
+        "\\.src\\.": "."
+    },
+    "plugins": [
+        {
+            "name": "jquery",
+            "version": "3.6.0",
+            "files": [
+                "jquery.js"
+            ]
+        },
+        {
+            "name": "bootstrap",
+            "version": "4.6.0",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/{file}",
+            "target": "twitter-bootstrap",
+            "files": [
+                "js/bootstrap.bundle.js",
+                "js/bootstrap.bundle.js.map",
+                "css/bootstrap.css",
+                "css/bootstrap.css.map"
+            ]
+        },
+        {
+            "name": "font-awesome",
+            "version": "6.0.0-beta3",
+            "files": [
+                "css/all.css",
+                "webfonts/fa-brands-400.ttf",
+                "webfonts/fa-brands-400.woff2",
+                "webfonts/fa-regular-400.ttf",
+                "webfonts/fa-regular-400.woff2",
+                "webfonts/fa-solid-900.ttf",
+                "webfonts/fa-solid-900.woff2",
+                "webfonts/fa-v4compatibility.ttf",
+                "webfonts/fa-v4compatibility.woff2"
+            ]
+        },
+        {
+            "name": "jquery-validate",
+            "version": "1.19.3",
+            "files": [
+                "jquery.validate.js",
+                "additional-methods.js",
+                "localization/messages_fr.js"
+            ]
+        },
+        {
+            "name": "highcharts",
+            "version": "9.3.2",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/{file}",
+            "files": [
+                "highcharts.src.js"
+            ]
+        },
+        {
+            "name": "html5sortable",
+            "version": "0.13.3",
+            "files": [
+                "html5sortable.js"
+            ]
+        },
+        {
+            "name": "datatables",
+            "version": "1.10.22",
+            "source": "https://cdn.datatables.net/",
+            "format": "{source}{version}/{file}",
+            "files": [
+                "js/jquery.dataTables.js",
+                "js/dataTables.bootstrap4.js",
+                "css/dataTables.bootstrap4.css"
+            ]
+        },
+        {
+            "name": "conditionalPaging",
+            "version": "1.10.22",
+            "source": "https://cdn.datatables.net/plug-ins/",
+            "format": "{source}{version}/features/{name}/{file}",
+            "target": "datatables/js",
+            "disabled": true,
+            "files": [
+                "dataTables.conditionalPaging.js"
+            ]
+        },
+        {
+            "name": "keytable",
+            "version": "2.5.3",
+            "source": "http://cdn.datatables.net/",
+            "target": "datatables",
+            "files": [
+                "js/dataTables.keyTable.js"
+            ]
+        },
+        {
+            "name": "mark.js",
+            "version": "1.10.22",
+            "source": "https://cdn.datatables.net/plug-ins/",
+            "format": "{source}{version}/features/{name}/{file}",
+            "target": "datatables/js",
+            "files": [
+                "datatables.mark.js"
+            ]
+        },
+        {
+            "display": "mark.js-jquery-mark",
+            "name": "mark.js",
+            "version": "8.11.1",
+            "target": "jquery-mark",
+            "files": [
+                "jquery.mark.js"
+            ]
+        },
+        {
+            "name": "zxcvbn",
+            "version": "4.4.2",
+            "files": [
+                "zxcvbn.js",
+                "zxcvbn.js.map"
+            ]
+        },
+        {
+            "name": "jquery-contextmenu",
+            "version": "2.9.2",
+            "target": "contextmenu",
+            "files": [
+                "jquery.contextMenu.css",
+                "jquery.contextMenu.js",
+                "font/context-menu-icons.eot",
+                "font/context-menu-icons.ttf",
+                "font/context-menu-icons.woff",
+                "font/context-menu-icons.woff2"
+            ]
+        },
+        {
+            "name": "clipboard.js",
+            "version": "2.0.9",
+            "target": "clipboard",
+            "files": [
+                "clipboard.js"
+            ]
+        },
+        {
+            "name": "@iconify/iconify",
+            "version": "1.0.7",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/{file}",
+            "target": "iconify",
+            "disabled": true,
+            "files": [
+                "iconify.js"
+            ]
+        },
+        {
+            "name": "bootstrap-table",
+            "version": "1.19.1",
+            "target": "bootstrap-table",
+            "files": [
+                "bootstrap-table.js",
+                "bootstrap-table.css"
+            ]
+        },
+        {
+            "display": "bootstrap-table-defer-url",
+            "name": "bootstrap-table",
+            "version": "1.19.1",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/extensions/defer-url/{file}",
+            "target": "bootstrap-table",
+            "files": [
+                "bootstrap-table-defer-url.js"
+            ]
+        },
+        {
+            "display": "bootstrap-table-custom-view",
+            "name": "bootstrap-table",
+            "version": "1.19.1",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/extensions/custom-view/{file}",
+            "target": "bootstrap-table",
+            "files": [
+                "bootstrap-table-custom-view.js"
+            ]
+        },
+        {
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/{file}",
+            "name": "select2",
+            "version": "4.1.0-rc.0",
+            "files": [
+                "js/select2.js",
+                "js/i18n/fr.js",
+                "css/select2.css"
+            ]
+        },
+        {
+            "source": "https://cdn.jsdelivr.net/npm/@ttskch/",
+            "format": "{source}{name}@{version}/dist/{file}",
+            "name": "select2-bootstrap4-theme",
+            "version": "1.5.2",
+            "target": "select2/css",
+            "files": [
+                "select2-bootstrap4.css"
+            ]
+        },
+        {
+            "name": "currency-flags",
+            "version": "3.3.0",
+            "files": [
+                "currency-flags.css"
+            ]
+        },
+        {
+            "name": "font-mfizz",
+            "version": "2.4.1",
+            "files": [
+                "font-mfizz.css",
+                "font-mfizz.eot",
+                "font-mfizz.svg",
+                "font-mfizz.ttf",
+                "font-mfizz.woff"
+            ]
+        }
+    ]
 }

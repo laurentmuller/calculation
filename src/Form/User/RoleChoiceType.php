@@ -12,8 +12,10 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
+use App\Entity\User;
 use App\Form\AbstractChoiceType;
 use App\Interfaces\RoleInterface;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * A single role choice type.
@@ -22,15 +24,30 @@ use App\Interfaces\RoleInterface;
  */
 class RoleChoiceType extends AbstractChoiceType
 {
+    private bool $superAdmin;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(Security $security)
+    {
+        $user = $security->getUser();
+        $this->superAdmin = $user instanceof User && $user->isSuperAdmin();
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function getChoices(): array
     {
-        return [
+        $choices = [
             'user.roles.user' => RoleInterface::ROLE_USER,
             'user.roles.admin' => RoleInterface::ROLE_ADMIN,
-            'user.roles.super_admin' => RoleInterface::ROLE_SUPER_ADMIN,
         ];
+        if ($this->superAdmin) {
+            $choices['user.roles.super_admin'] = RoleInterface::ROLE_SUPER_ADMIN;
+        }
+
+        return $choices;
     }
 }

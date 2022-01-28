@@ -50,7 +50,7 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
         $view = $form->createView();
         $children = $view->children;
         foreach (\array_keys($data) as $key) {
-            static::assertArrayHasKey($key, $children);
+            $this->assertArrayHasKey($key, $children);
         }
     }
 

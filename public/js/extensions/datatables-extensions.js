@@ -56,7 +56,6 @@ function clearSearch($element, table, callback) {
  */
 function tableLengthCallback(table) {
     'use strict';
-
     const length = $('#table_length').intVal();
     if (table.page.len() !== length) {
         table.page.len(length).draw();
@@ -71,7 +70,6 @@ function tableLengthCallback(table) {
  */
 function searchCallback(table) {
     'use strict';
-
     const oldSearch = table.search() || '';
     const newSearch = $('#table_search').val().trim();
     if (oldSearch !== newSearch) {
@@ -106,28 +104,6 @@ function enableKeys(selector) {
 }
 
 /**
- * -------------- jQuery Extensions --------------
- */
-
-$.fn.extend({
-    /**
-     * Edit or show the selected item.
-     *
-     * @param {Object}
-     *            e - the source event.
-     * @returns {boolean} true if handle.
-     */
-    editOrShow: function (e) {
-        'use strict';
-        if ($(this).attr('edit-action').toBool()) {
-            return triggerClick(e, '.btn-table-edit') || triggerClick(e, '.btn-table-show');
-        } else {
-            return triggerClick(e, '.btn-table-show') || triggerClick(e, '.btn-table-edit');
-        }
-    }
-});
-
-/**
  * -------------- DataTables Extensions --------------
  */
 
@@ -145,7 +121,6 @@ $.extend($.fn.dataTable.ext.classes, {
  */
 $.fn.dataTable.Api.register('getSelectedRow()', function () {
     'use strict';
-
     const row = this.row('.table-primary');
     return row.length ? row : null;
 });
@@ -157,7 +132,6 @@ $.fn.dataTable.Api.register('getSelectedRow()', function () {
  */
 $.fn.dataTable.Api.register('selectFirstRow()', function () {
     'use strict';
-
     if (this.rows().count()) {
         this.cell(':first-child', '0:visIdx').focus();
     }
@@ -171,7 +145,6 @@ $.fn.dataTable.Api.register('selectFirstRow()', function () {
  */
 $.fn.dataTable.Api.register('selectLastRow()', function () {
     'use strict';
-
     if (this.rows().count()) {
         this.cell(':last-child', '0:visIdx').focus();
     }
@@ -185,7 +158,6 @@ $.fn.dataTable.Api.register('selectLastRow()', function () {
  */
 $.fn.dataTable.Api.register('updateTitles()', function () {
     'use strict';
-
     this.columns().every(function () {
         if (this.visible()) {
             const $header = $(this.header());
@@ -209,7 +181,6 @@ $.fn.dataTable.Api.register('updateTitles()', function () {
  */
 $.fn.dataTable.Api.register('removeDuplicateClasses()', function () {
     'use strict';
-
     this.cells().nodes().to$().removeDuplicateClasses();
     return this;
 });
@@ -224,7 +195,6 @@ $.fn.dataTable.Api.register('removeDuplicateClasses()', function () {
  */
 $.fn.dataTable.Api.register('conditionalPaging()', function (settings) {
     'use strict';
-
     const pages = this.page.info().pages;
     const $pagination = $('.dataTables_paginate');
     const duration = settings.iDraw === 1 ? 0 : 500;
@@ -248,7 +218,6 @@ $.fn.dataTable.Api.register('conditionalPaging()', function (settings) {
  */
 $.fn.dataTable.Api.register('initEvents()', function (id) {
     'use strict';
-
     const table = this;
     const $table = $(table.table().node());
     let lastPageCalled = false;
@@ -363,13 +332,11 @@ $.fn.dataTable.Api.register('initEvents()', function (id) {
  * @param {integer}
  *            columnIndex - the column index to bind with.
  * @param {jQuery}
- *            $targetFocus - the input to set focus after draw or null to use
- *            the source.
+ *            $targetFocus - the input to set focus after draw or null to use the source.
  * @returns {DataTables.Api} this instance.
  */
 $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex, $targetFocus) {
     'use strict';
-
     // check column
     if (columnIndex < 0 || columnIndex >= this.columns().count()) {
         return this;
@@ -413,7 +380,6 @@ $.fn.dataTable.Api.register('initSearchColumn()', function ($source, columnIndex
  */
 $.fn.getColumns = function (useName) {
     'use strict';
-
     const $that = $(this);
     const debug = $that.data('debug');
     return $that.find('th').map(function () {
@@ -458,7 +424,6 @@ $.fn.getColumns = function (useName) {
  */
 $.fn.getDefaultOrder = function (columns) {
     'use strict';
-
     // find first in table attributes
     const $table = $(this);
     const index = $table.data('ordercolumn');
@@ -488,8 +453,7 @@ $.fn.getDefaultOrder = function (columns) {
 };
 
 /**
- * Merge the default options within the given options and initialize the data
- * table.
+ * Merge the default options within the given options and initialize the data table.
  *
  * @param {Object}
  *            options - the options to merge with default values.
@@ -498,7 +462,6 @@ $.fn.getDefaultOrder = function (columns) {
  */
 $.fn.initDataTable = function (options) {
     'use strict';
-
     const $table = $(this);
 
     // remote
@@ -558,13 +521,12 @@ $.fn.initDataTable = function (options) {
         // dom: "<'row'<'col-sm-12'tr>>" + //
         // "<'row card-footer px-0 d-print-none '<'col-sm-12
         // col-md-5'i><'col-sm-12 col-md-7'p>>",
-
         dom: "<'row'<'col-sm-12'tr>>" + //
              "<'row table-footer '<'col-lg-auto py-2'i><'col-lg-auto ml-auto'p>>",
     };
 
     // merge
-    const settings = $.extend(true, defaultSettings, options);
+    const settings = $.extend({}, defaultSettings, options);
 
     // debug?
     if ($table.data('debug') || false) {
@@ -588,6 +550,23 @@ $.fn.initDataTable = function (options) {
  * -------------- jQuery extensions --------------
  */
 $.fn.extend({
+
+    /**
+     * Edit or show the selected item.
+     *
+     * @param {Object}
+     *            e - the source event.
+     * @returns {boolean} true if handle.
+     */
+    editOrShow: function (e) {
+        'use strict';
+        if ($(this).attr('edit-action').toBool()) {
+            return triggerClick(e, '.btn-table-edit') || triggerClick(e, '.btn-table-show');
+        } else {
+            return triggerClick(e, '.btn-table-show') || triggerClick(e, '.btn-table-edit');
+        }
+    },
+
     /**
      * Initialise the search input.
      *
@@ -598,7 +577,6 @@ $.fn.extend({
      */
     initSearchInput: function (table) {
         'use strict';
-
         const $this = $(this);
         const $clearButton = $('.btn-clear');
         if ($clearButton.length) {
@@ -621,7 +599,6 @@ $.fn.extend({
      */
     initTableLength: function (table) {
         'use strict';
-
         return $(this).handleKeys().on('input', function () {
             $(this).updateTimer(tableLengthCallback, 250, table);
         });
@@ -631,11 +608,9 @@ $.fn.extend({
      * Enabled/Disabled datatables keys.
      *
      * @param {string}
-     *            disableEvent - the event name to disable keys (default is
-     *            'focus').
+     *            disableEvent - the event name to disable keys (default is 'focus').
      * @param {string}
-     *            enableEvent - the event name to enable keys (default is
-     *            'blur').
+     *            enableEvent - the event name to enable keys (default is 'blur').
      * @param {string}
      *            selector - the data table selector (default is '#data-table').
      *
@@ -643,7 +618,6 @@ $.fn.extend({
      */
     handleKeys: function (disableEvent, enableEvent, selector) {
         'use strict';
-
         disableEvent = disableEvent || 'focus';
         enableEvent = enableEvent || 'blur';
 

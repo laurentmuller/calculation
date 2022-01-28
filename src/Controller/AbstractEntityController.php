@@ -25,6 +25,7 @@ use App\Util\Utils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -85,17 +86,18 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Delete an entity.
      *
-     * @param request        $request    the request
-     * @param AbstractEntity $item       the entity to delete
-     * @param array          $parameters the delete parameters. The following optional keys may be added:
-     *                                   <ul>
-     *                                   <li><code>title</code> : the dialog title.</li>
-     *                                   <li><code>message</code> : the dialog message.</li>
-     *                                   <li><code>success</code> : the message to display on success.</li>
-     *                                   <li><code>failure</code> : the message to display on failure.</li>
-     *                                   </ul>
+     * @param request         $request    the request
+     * @param AbstractEntity  $item       the entity to delete
+     * @param LoggerInterface $logger     the logger to log any exception
+     * @param array           $parameters the delete parameters. The following optional keys may be added:
+     *                                    <ul>
+     *                                    <li><code>title</code> : the dialog title.</li>
+     *                                    <li><code>message</code> : the dialog message.</li>
+     *                                    <li><code>success</code> : the message to display on success.</li>
+     *                                    <li><code>failure</code> : the message to display on failure.</li>
+     *                                    </ul>
      */
-    protected function deleteEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
+    protected function deleteEntity(Request $request, AbstractEntity $item, LoggerInterface $logger, array $parameters = []): Response
     {
         // check permission
         $this->checkPermission(EntityVoterInterface::ATTRIBUTE_DELETE);
@@ -118,12 +120,15 @@ abstract class AbstractEntityController extends AbstractController
                 $message = $this->trans($message, ['%name%' => $display]);
                 $this->warning($message);
             } catch (Exception $e) {
-                // show error
-                $parameters['exception'] = $e;
                 $failure = $parameters['failure'] ?? 'common.delete_failure';
-                $parameters['failure'] = $this->trans($failure, ['%name%' => $display]);
+                $message = $this->trans($failure, ['%name%' => $display]);
+                $context = Utils::getExceptionContext($e);
+                $logger->error($message, $context);
 
-                return $this->renderForm('@Twig/Exception/exception.html.twig', $parameters);
+                return $this->renderForm('@Twig/Exception/exception.html.twig', [
+                    'message' => $message,
+                    'exception' => $e,
+                ]);
             }
 
             // redirect

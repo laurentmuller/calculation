@@ -25,6 +25,7 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\TaskService;
 use App\Spreadsheet\TasksDocument;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -155,7 +156,7 @@ class TaskController extends AbstractEntityController
      *     {"label" = "breadcrumb.delete" }
      * })
      */
-    public function delete(Request $request, Task $item): Response
+    public function delete(Request $request, Task $item, LoggerInterface $logger): Response
     {
         $parameters = [
             'title' => 'task.delete.title',
@@ -164,7 +165,7 @@ class TaskController extends AbstractEntityController
             'failure' => 'task.delete.failure',
         ];
 
-        return $this->deleteEntity($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $logger, $parameters);
     }
 
     /**

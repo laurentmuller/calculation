@@ -40,8 +40,8 @@ class IndexController extends AbstractController
     {
         // get values to display
         $tabular = $this->isDisplayTabular();
-        $states = $stateRepository->getListCountCalculations();
         $months = $calculRepository->getByMonth();
+        $states = $stateRepository->getListCountCalculations();
         $calculations = $calculRepository->getLastCalculations($tabular ? 10 : 6);
         $min_margin = $this->getApplication()->getMinMargin();
 

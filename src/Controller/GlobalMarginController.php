@@ -21,6 +21,7 @@ use App\Repository\GlobalMarginRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GlobalMarginsDocument;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,7 +91,7 @@ class GlobalMarginController extends AbstractEntityController
      *     {"label" = "breadcrumb.delete" }
      * })
      */
-    public function delete(Request $request, GlobalMargin $item): Response
+    public function delete(Request $request, GlobalMargin $item, LoggerInterface $logger): Response
     {
         $parameters = [
             'title' => 'globalmargin.delete.title',
@@ -99,7 +100,7 @@ class GlobalMarginController extends AbstractEntityController
             'failure' => 'globalmargin.delete.failure',
         ];
 
-        return $this->deleteEntity($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $logger, $parameters);
     }
 
     /**

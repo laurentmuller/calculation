@@ -23,6 +23,7 @@ use App\Repository\CalculationStateRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CalculationStatesDocument;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -100,7 +101,7 @@ class CalculationStateController extends AbstractEntityController
      *     {"label" = "breadcrumb.delete" }
      * })
      */
-    public function delete(Request $request, CalculationState $item, CalculationRepository $repository): Response
+    public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
     {
         // calculation?
         $calculations = $repository->countStateReferences($item);
@@ -130,7 +131,7 @@ class CalculationStateController extends AbstractEntityController
             'failure' => 'calculationstate.delete.failure',
         ];
 
-        return $this->deleteEntity($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $logger, $parameters);
     }
 
     /**

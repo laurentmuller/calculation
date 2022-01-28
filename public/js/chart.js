@@ -14,3 +14,8 @@
  * Plugin Files
  */
 <!--#include file="plugins/plugin-rowlink.js" -->
+
+/**
+ * Specific Files
+ */
+<!--#include file="application/chart.js" -->

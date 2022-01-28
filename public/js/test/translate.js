@@ -12,9 +12,9 @@
  */
 function notify(type, message) {
     'use strict';
-
     const title = $('#edit-form').data('title');
-    Toaster.notify(type, message, title, $('#flashbags').data());
+    const options = $('#flashbags').data();
+    Toaster.notify(type, message, title, options);
 }
 
 /**
@@ -25,7 +25,6 @@ function notify(type, message) {
  */
 function handleError(response) {
     'use strict';
-
     let message = response.message;
     if (response.exception) {
         const error = $('#edit-form').data('last-error');
@@ -42,7 +41,6 @@ function handleError(response) {
  */
 function translate(form) {
     'use strict';
-
     const $form = $(form);
     const $buttonSubmit = $form.find(':submit');
     const $buttonCopy = $('.btn-copy');
@@ -107,7 +105,6 @@ function translate(form) {
  */
 function onCopySuccess(e) {
     'use strict';
-
     e.clearSelection();
     const message = $('#edit-form').data('copy-success');
     notify(Toaster.NotificationTypes.SUCCESS, message);
@@ -118,7 +115,6 @@ function onCopySuccess(e) {
  */
 function onCopyError(e) {
     'use strict';
-
     e.clearSelection();
     const message = $('#edit-form').data('copy-error');
     notify(Toaster.NotificationTypes.WARNING, message);
@@ -129,7 +125,6 @@ function onCopyError(e) {
  */
 function handleExchange() {
     'use strict';
-
     // exchange from and to language.
     const from = $('#from').val();
     if (from) {
@@ -143,7 +138,6 @@ function handleExchange() {
  */
 function handleSelection() {
     'use strict';
-
     // update exchange button.
     const from = $('#from').getSelectedOption().index();
     const to = $('#to').getSelectedOption().index();
@@ -157,7 +151,6 @@ function handleSelection() {
  */
 function getLocale() {
     'use strict';
-
     const locale = $('#edit-form').data('locale');
     return locale.split('_')[0];
 }
@@ -167,7 +160,6 @@ function getLocale() {
  */
 function handleService() {
     'use strict';
-
     // get selection
     const $service = $('#service');
     const $option = $service.getSelectedOption();
@@ -223,7 +215,6 @@ function handleService() {
  */
 (function ($) {
     'use strict';
-
     // initialize select
     $('#from, #to').initSelect2();
 
@@ -268,7 +259,6 @@ function handleService() {
             }
         }
     };
-
     $('#edit-form').initValidator(options);
     $('#text').focus();
 }(jQuery));

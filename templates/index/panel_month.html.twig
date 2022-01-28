@@ -2,16 +2,18 @@
 {% macro sup_margin(margin, min_margin) -%}
 {%- if margin < min_margin -%}
     {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}) -%}
+    {%- set class_badge = 'badge-danger has-tooltip' -%}
     {%- set class_name = 'text-danger has-tooltip' -%}
 {% else %}
     {%- set margin_title = 'calculation.fields.globalMargin'|trans -%}
+    {%- set class_badge = 'badge-success' -%}
     {%- set class_name = '' -%}
 {%- endif -%}
 <sup title="{{ margin_title }}" class="{{ class_name }}" data-html="true"><small>{{ margin|percent }}</small></sup>
 {%- endmacro %}
 
 {% macro cardEntry(count, total, date, margin, list_path, min_margin) -%}
-<div class="card m-1">
+<div class="card index-child m-1">
     <div class="card-body card-body-tootlip p-2">
         <div class="card-title mb-1">
         {%- set text = date|localedate('none', null, null, 'MMMM Y')|capitalize -%}
@@ -51,15 +53,17 @@
             </div>
         </div>
     </div>
-    <div class="card-body card-deck py-2">
     {% if months|length %}
-        {% for month in months %}
-            {{ _self.cardEntry(month.count, month.total, month.date, month.margin, list_path, min_margin) }}
-        {% endfor %}
-    {% else %}
-        <div class="alert alert-warning flex-fill mb-0 py-2 text-center" role="alert">
-            {{ 'calculation.list.empty'|trans }}
-        </div>
-    {% endif %}
+    <div class="card-body index-parent no-gutters p-2">
+    {% for month in months %}
+        {{ _self.cardEntry(month.count, month.total, month.date, month.margin, list_path, min_margin) }}
+    {% endfor %}
     </div>
+    {% else %}
+    <div class="card-body p-2">
+        <div class="alert alert-warning m-1 text-center" role="alert">
+            {{- 'calculation.list.empty'|trans -}}
+        </div>
+    </div>
+    {% endif %}
 </div>

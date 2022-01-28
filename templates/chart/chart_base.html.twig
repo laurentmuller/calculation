@@ -1,6 +1,15 @@
 {% extends 'cards/card_base.html.twig' %}
 {% trans_default_domain 'chart' %}
 
+{# macros #}
+{% macro margin_below_class(margin, min_margin) -%}
+{% if margin < min_margin %} text-danger has-tooltip{% endif %}
+{%- endmacro %}
+
+{% macro margin_below_tooltip(margin, min_margin) -%}
+{% if margin < min_margin %} title="{{ 'calculation.list.margin_below'|trans({'%margin%': margin|percent, '%minimum%': min_margin|percent}, 'messages') }}" data-html="true"{% endif %}
+{%- endmacro %}
+
 {# parameters #}
 {%- set title_domain = 'chart' -%}
 {%- set title_icon = title_icon|default('area-chart') -%}
@@ -25,6 +34,7 @@
 {{ parent() }}
 {{ asset_js('js/vendor/highcharts/highcharts.js') }}
 {{ asset_js('js/plugins/plugin-rowlink.js') }}
+{{ asset_js('js/application/chart.js') }}
 {% else %}
 {{ asset_js('js/chart.js') }}
 {% endif %}

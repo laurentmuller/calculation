@@ -14,13 +14,14 @@ function showFlashbag() {
         const text = $element.text();
         const type = $element.data('type');
         const title = $element.data('title');
+        const options = $("#flashbags").data();
 
         // remove
         $element.remove();
 
         // display
         if (text) {
-            Toaster.notify(type, text, title, $("#flashbags").data());
+            Toaster.notify(type, text, title, options);
         }
 
         // show next
@@ -130,10 +131,10 @@ function initRounded() {
     });
     $('body').append($button);
     const border = $button.css('border-radius');
+    $button.remove();
     $('.rounded').each(function () {
         $(this)[0].style.setProperty('border-radius', border, 'important');
     });
-    $button.remove();
 }
 
 /**

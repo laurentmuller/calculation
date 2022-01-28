@@ -150,7 +150,7 @@ class CalculationController extends AbstractEntityController
      *     {"label" = "breadcrumb.delete"}
      * })
      */
-    public function delete(Request $request, Calculation $item): Response
+    public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
     {
         // parameters
         $parameters = [
@@ -161,7 +161,7 @@ class CalculationController extends AbstractEntityController
         ];
 
         // delete
-        return $this->deleteEntity($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $logger, $parameters);
     }
 
     /**

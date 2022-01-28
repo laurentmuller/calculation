@@ -23,6 +23,7 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\ProductsDocument;
 use Doctrine\Common\Collections\Criteria;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use SlopeIt\BreadcrumbBundle\Annotation\Breadcrumb;
 use Symfony\Component\HttpFoundation\Request;
@@ -122,7 +123,7 @@ class ProductController extends AbstractEntityController
      *     {"label" = "breadcrumb.delete" }
      * })
      */
-    public function delete(Request $request, Product $item): Response
+    public function delete(Request $request, Product $item, LoggerInterface $logger): Response
     {
         $parameters = [
             'title' => 'product.delete.title',
@@ -131,7 +132,7 @@ class ProductController extends AbstractEntityController
             'failure' => 'product.delete.failure',
         ];
 
-        return $this->deleteEntity($request, $item, $parameters);
+        return $this->deleteEntity($request, $item, $logger, $parameters);
     }
 
     /**

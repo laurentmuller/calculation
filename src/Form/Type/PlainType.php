@@ -133,6 +133,9 @@ class PlainType extends AbstractType
             'time_zone' => null,
             'calendar' => null,
             'number_pattern' => null,
+            'percent_sign' => true,
+            'percent_decimals' => 2,
+            'percent_rounding_mode' => \NumberFormatter::ROUND_HALFEVEN,
             'empty_value' => null,
             'compound' => false,
             'expanded' => false,
@@ -189,9 +192,23 @@ class PlainType extends AbstractType
             self::NUMBER_AMOUNT,
         ]);
 
+        $resolver->setAllowedTypes('percent_sign', 'bool')
+            ->setAllowedTypes('percent_decimals', 'int')
+            ->setAllowedTypes('percent_rounding_mode', 'int')
+            ->setAllowedValues('percent_rounding_mode', [
+                \NumberFormatter::ROUND_CEILING,
+                \NumberFormatter::ROUND_FLOOR,
+                \NumberFormatter::ROUND_DOWN,
+                \NumberFormatter::ROUND_UP,
+                \NumberFormatter::ROUND_HALFEVEN,
+                \NumberFormatter::ROUND_HALFDOWN,
+                \NumberFormatter::ROUND_HALFUP,
+            ]);
+
         $resolver->setAllowedTypes('empty_value', [
             'null',
             'string',
+            'callable',
         ]);
 
         $resolver->setAllowedTypes('separator', [
@@ -235,13 +252,18 @@ class PlainType extends AbstractType
     private function formatNumber($value, array $options): string
     {
         $type = $this->getOptionString($options, 'number_pattern', '');
+
         switch ($type) {
             case self::NUMBER_IDENTIFIER:
                 return FormatUtils::formatId($value);
             case self::NUMBER_INTEGER:
                 return FormatUtils::formatInt($value);
             case self::NUMBER_PERCENT:
-                return FormatUtils::formatPercent($value, true);
+                $includeSign = $this->getOptionBool($options, 'percent_sign', true);
+                $decimals = $this->getOptionInt($options, 'percent_decimals', 2);
+                $roundingMode = $this->getOptionInt($options, 'percent_rounding_mode', \NumberFormatter::ROUND_HALFEVEN);
+
+                return FormatUtils::formatPercent($value, $includeSign, $decimals, $roundingMode);
             case self::NUMBER_AMOUNT:
                 return FormatUtils::formatAmount($value);
             default:
@@ -265,6 +287,24 @@ class PlainType extends AbstractType
         $calendar = $this->getOptionString($options, 'calendar', self::CALENDAR_GREGORIAN);
 
         return self::CALENDAR_GREGORIAN === $calendar ? \IntlDateFormatter::GREGORIAN : \IntlDateFormatter::TRADITIONAL;
+    }
+
+    /**
+     * Gets the boolean value from the array options.
+     *
+     * @param array  $options      the array options
+     * @param string $name         the option name
+     * @param bool   $defaultValue the default value if option is not set
+     *
+     * @return bool the option value
+     */
+    private function getOptionBool(array $options, string $name, bool $defaultValue): bool
+    {
+        if (isset($options[$name]) && \is_bool($options[$name])) {
+            return (bool) $options[$name];
+        }
+
+        return $defaultValue;
     }
 
     /**
@@ -329,6 +369,10 @@ class PlainType extends AbstractType
 
         // value?
         if (null === $value || (\is_string($value) && '' === $value)) {
+            if (\is_callable($options['empty_value'] ?? false)) {
+                return \call_user_func($options['empty_value'], $value);
+            }
+
             return $this->getOptionString($options, 'empty_value', 'common.value_null', true);
         }
 

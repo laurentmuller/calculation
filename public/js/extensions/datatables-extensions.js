@@ -15,7 +15,6 @@
  */
 function triggerClick(e, selector) { // jshint ignore:line
     'use strict';
-
     const $element = $(selector);
     if ($element.length && $element.isSelectable()) {
         e.stopPropagation();
@@ -502,15 +501,15 @@ $.fn.initDataTable = function (options) {
             clipboard: false,
             className: 'table-primary',
             keys: [//
-            13, // enter
-            33, // page up
-            34, // page down
-            35, // end
-            36, // home
-            38, // arrow up
-            40, // arrow down
-            46, // delete
-            93 // context-menu
+                13, // enter
+                33, // page up
+                34, // page down
+                35, // end
+                36, // home
+                38, // arrow up
+                40, // arrow down
+                46, // delete
+                93 // context-menu
             ]
         },
 

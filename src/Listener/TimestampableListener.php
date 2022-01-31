@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
+use App\Entity\AbstractEntity;
 use App\Interfaces\DisableListenerInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Traits\DisableListenerTrait;
@@ -58,7 +59,7 @@ class TimestampableListener implements DisableListenerInterface
 
         // get entities
         $entities = $this->getEntities($unitOfWork);
-        if (empty($entities)) {
+        if ([] === $entities) {
             return;
         }
 
@@ -97,8 +98,7 @@ class TimestampableListener implements DisableListenerInterface
             return [];
         }
 
-        // @phpstan-ignore-next-line
-        return \array_filter($entities, static function ($entity): bool {
+        return \array_filter($entities, static function (AbstractEntity $entity): bool {
             return $entity instanceof TimestampableInterface;
         });
     }

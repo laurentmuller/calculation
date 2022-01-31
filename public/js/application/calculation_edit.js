@@ -329,14 +329,7 @@ const Application = {
      */
     formatValue: function (value) {
         'use strict';
-
-        // get value
-        let parsedValue = Number.parseFloat(value);
-        if (Number.isNaN(parsedValue)) {
-            parsedValue = Number.parseFloat(0);
-        }
-
-        // created?
+        // format created?
         if (!this.formatter) {
             this.formatter = new Intl.NumberFormat('de-CH', {
                 'minimumFractionDigits': 2,
@@ -344,7 +337,25 @@ const Application = {
             });
         }
 
+        // parse and format
+        value = this.parseFloat(value);
         return this.formatter.format(value);
+    },
+
+    /**
+     * Parse the given value as float. If the parsed valus is NaN, 0 is returned.
+     *
+     * @param {string}
+     *            value - the value to parse.
+     * @returns {number} the parsed value.
+     */
+    parseFloat: function(value) {
+        'use strict';
+        let parsedValue = Number.parseFloat(value);
+        if (Number.isNaN(parsedValue)) {
+            parsedValue = Number.parseFloat(0);
+        }
+        return parsedValue;
     },
 
     /**
@@ -1443,106 +1454,6 @@ $.fn.extend({
         const $elements = $(this).getParentRow().find('.dropdown-menu').children();
         return (new MenuBuilder()).fill($elements).getItems();
     },
-
-    /**
-     * Edit the number content of the cell.
-     *
-     * @return {jQuery} - The cell for chaining.
-     */
-    editCellValue: function(e) {
-        e.stopPropagation();
-        const $cell = $(this);
-        if ($cell.find('input').is(':focus')) {
-            return $cell;
-        }
-
-        let html = $cell.html();
-        let value = Number.parseFloat(html);
-        const $target = $($cell.data('target'));
-        if ($target.length) {
-            value = $target.floatVal();
-        }
-        const $row = $cell.parents('tr').addClass('table-primary');
-        $('.dropdown-menu.show').removeClass('show');
-
-        const $input = $('<input>', {
-            'class': 'text-edit-cell text-right form-control form-control-sm py-0 px-1 my-n1',
-            'data-title': $cell.data('tooltip'),
-            'data-error': $cell.data('error'),
-            'title': $cell.data('tooltip'),
-            'required': 'required',
-            'type': 'number',
-            'value': value
-        });
-        $cell.removeClass('empty-cell').empty().append($input);
-        $input.select().on('blur', function(e) {
-            $input.cancelCellValue(e, html);
-        }).on('input', function() {
-            const title = $input.val() ? $input.data('title') : $input.data('error');
-            if ($input.attr('data-original-title') === title) {
-                return;
-            }
-            if ($input.val()) {
-                $input.removeClass('is-invalid');
-                $input.data("customClass", "tooltip-secondary");
-            } else {
-                $input.addClass('is-invalid');
-                $input.data("customClass", "tooltip-danger");
-            }
-            $input.attr("title", title).tooltip('dispose').tooltip('toggle');
-        }).on('keydown', function(e) {
-            switch (e.which) {
-            case 13: // enter
-                // value?
-                if (!$input.val()) {
-                    e.stopPropagation();
-                    return;
-                }
-
-                // get value
-                value = Application.roundValue($input.floatVal());
-                html = Application.formatValue(value);
-
-                // update UI
-                $input.cancelCellValue(e, html);
-                $row.timeoutToggle('table-success');
-
-                // same value?
-                if (0 === $target.length || value === $target.floatVal()) {
-                    return;
-                }
-
-                // update
-                $target.floatVal(value);
-                $row.updateTotal();
-                Application.updateTotals(false);
-                break;
-            case 27: // escape
-                $input.cancelCellValue(e, html);
-                break;
-            }
-        });
-        return $cell;
-    },
-
-    /**
-     * Cancel the cell edition.
-     *
-     * @param {Event}
-     *            e - the event.
-     * @param {String}
-     *            html - the HTML cell content.
-     */
-    cancelCellValue: function(e, html) {
-        e.stopPropagation();
-        const $input = $(this);
-        const $cell = $input.parents('td');
-        const $row = $cell.parents('tr');
-        $input.tooltip('dispose');
-        $input.remove();
-        $row.removeClass('table-primary');
-        $cell.html(html);
-    }
 });
 
 /**
@@ -1700,12 +1611,36 @@ const MoveRowHandler = {
     $('.table-edit').initContextMenu(selector, show, hide);
 
     // edit in place (price and quantity)
-    $('.table-edit').on('click', 'td.text-editable', function(e) {
-        $(this).editCellValue(e);
-    });
-    $('.table-edit').tooltip({
-        customClass: 'tooltip-secondary',
-        selector: '.text-edit-cell'
+    $('.table-edit').on('click', 'td.text-editable', function() {
+        const $cell = $(this);
+        $cell.celledit({
+            'inputClass': 'form-control form-control-sm text-right my-n1 mx-0',
+
+            'type': 'number',
+            'required': true,
+            'autoEdit': true,
+            'autoDispose': true,
+
+            'parser': function (value) {
+                return Application.parseFloat(value);
+            },
+            'formatter': function (value) {
+                return Application.formatValue(value);
+            },
+
+            'onStartEdit': function () {
+                $cell.removeClass('empty-cell')
+                $('.dropdown-menu.show').removeClass('show');
+            },
+            'onEndEdit': function (oldValue, newValue) {
+                const $row = $cell.parents('tr');
+                $row.timeoutToggle('table-success');
+                if (oldValue !== newValue) {
+                    $row.updateTotal();
+                    Application.updateTotals(false);
+                }
+            }
+        });
     });
 
     // errors

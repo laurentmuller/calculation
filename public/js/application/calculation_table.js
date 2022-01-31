@@ -18,7 +18,6 @@ $.fn.extend({
      */
     updateState: function () {
         'use strict';
-
         const $this = $(this);
         if ($this.length) {
             const id = $this.data('id');
@@ -61,7 +60,6 @@ clearSearch = (function ($parent) { // jshint ignore:line
  */
 (function ($) {
     'use strict';
-
     // get state
     const $state = $('#state');
     if ($state.length) {

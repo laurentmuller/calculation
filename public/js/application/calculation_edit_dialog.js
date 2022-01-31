@@ -239,4 +239,16 @@
             'use strict';
             return this.application.roundValue(value);
         }
+
+        /**
+         * Parse the given value as float.
+         *
+         * @param {string}
+         *            value - the value to parse.
+         * @returns {number} the parsed value.
+         */
+        _parseFloat(value) {
+            'use strict';
+            return this.application.roundValue(value);
+        }
     }

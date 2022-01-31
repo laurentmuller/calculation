@@ -108,7 +108,6 @@ calculation:
         simulate: Simuler la mise à jour
         simulate_help: Simule une mise à jour sans enregister les changements dans la base de données.
         confirm: Confirmer la mise à jour des données
-        total: Mise à jour du total
     result:
         description: Résultats de la mise à jour des calculations.
         simulate: La mise à jour a été simulée. Aucune calculation n'a été modifiée dans la base de données.
@@ -123,6 +122,13 @@ calculation:
         copyCodes: Groupes et catégories
         new_update: Nouvelle mise à jour
         total: Total
+        actions:
+            sortItems: Trie des articles.
+            emptyItems: Suppression des articles vides.
+            duplicateItems: Suppression des articles à double.
+            emptyCalculations: Suppression de la calculation vide.
+            copyCodes: Mise à jour des groupes et des catégories.
+            total: Mise à jour du total :<ul><li>Ancien montant %oldTotal%</li><li>Nouveau montant %newTotal%</li></ul>
 calculationgroup:
     name: Groupe
     fields:

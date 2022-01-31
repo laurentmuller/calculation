@@ -26,7 +26,7 @@ class EditTaskDialog extends EditDialog {
         return $('#table-task-edit > tbody > tr:not(.d-none) .item-input:checked').map(function () {
             const $row = $(this).parents('.task-item-row');
             const text = $row.find('.custom-control-label').text();
-            const price = Number.parseFloat($row.find('.task_value').data('value'));
+            const price = that._parseFloat($row.find('.task_value').data('value'));
             const total = that._roundValue(price * quantity);
             const description = task + ' - ' + text;
             return {

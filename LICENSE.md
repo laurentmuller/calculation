@@ -144,11 +144,11 @@ Nous ne recueillons pas sciemment de données personnelles nominatives auprès d
 Nous nous réservons le droit d'actualiser notre politique de confidentialité de temps à autre. Nous vous informerons de toute modification en publiant la
 nouvelle politique de confidentialité sur cette page.
 
-Avant que la modification ne prenne effet, nous vous en informerons par e-mail et/ ou en plaçant un avis bien en vue dans notre application et nous actualiserons la "date de prise d'effet" qui figure en haut de la présente politique de confidentialité.
+Avant que la modification ne prenne effet, nous vous en informerons par e-mail et/ou en plaçant un avis bien en vue dans notre application et nous actualiserons la "date de prise d'effet" qui figure en haut de la présente politique de confidentialité.
 
 Nous vous conseillons de consulter la présente politique de confidentialité périodiquement pour prendre connaissance de toute modification. Les modifications apportées à la présente politique de confidentialité prennent effet lorsqu'elles sont publiées sur cette page.
 
 ## Nous contacter
 Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter par [courrier électronique](mailto:calculation@bibi.nu).
 
-<p align="right"><i><small>Dernière mise à jour : Janvier 2022</small></i></p>
+<p align="right"><sup>Dernière mise à jour : Janvier 2022</sup></p>

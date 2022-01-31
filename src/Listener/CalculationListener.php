@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
+use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Interfaces\ParentCalculationInterface;
 use Doctrine\ORM\UnitOfWork;
@@ -51,27 +52,30 @@ final class CalculationListener extends TimestampableListener
         }
 
         // exclude deleted and inserted calculations
-        $deleted = $this->getCalculations($unitOfWork->getScheduledEntityDeletions());
-        $inserted = $this->getCalculations($unitOfWork->getScheduledEntityInsertions());
+        /** @var array $entities */
+        $entities = [
+            ...$unitOfWork->getScheduledEntityDeletions(),
+            ...$unitOfWork->getScheduledEntityInsertions(),
+        ];
+        if ([] === $entities) {
+            return $result;
+        }
+        $excluded = $this->getCalculations($entities);
+        if ([] === $excluded) {
+            return $result;
+        }
 
-        return \array_diff($result, $deleted, $inserted);
+        return \array_diff($result, $excluded);
     }
 
-    /**
-     * @return Calculation[]
-     */
     private function getCalculations(array $entities): array
     {
-        // @phpstan-ignore-next-line
-        return \array_filter($entities, static function ($entity): bool {
+        return \array_filter($entities, static function (AbstractEntity $entity): bool {
             return $entity instanceof Calculation;
         });
     }
 
-    /**
-     * @param mixed $entity
-     */
-    private function getParentCalculation($entity): ?Calculation
+    private function getParentCalculation(AbstractEntity $entity): ?Calculation
     {
         if ($entity instanceof ParentCalculationInterface) {
             return $entity->getCalculation();

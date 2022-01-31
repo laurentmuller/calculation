@@ -64,6 +64,7 @@
     {%- include 'dialog/edit_item_dialog.html.twig' with {'form': item_dialog} only %}
     {%- include 'dialog/edit_task_dialog.html.twig' with {'form': task_dialog, 'tasks': tasks} only %}
 {%- endif %}
+
 {%- endblock %}
 
 {% block stylesheets %}
@@ -86,6 +87,7 @@
 {{ asset_js('js/plugins/plugin-typeahead.js') }}
 {{ asset_js('js/plugins/plugin-rowlink.js') }}
 {{ asset_js('js/plugins/plugin-input.js') }}
+{{ asset_js('js/plugins/cell-edit.js') }}
 {{ asset_js('js/application/calculation_edit_dialog.js') }}
 {{ asset_js('js/application/calculation_edit_item.js') }}
 {{ asset_js('js/application/calculation_edit_task.js') }}

@@ -13,10 +13,10 @@
     {% if editable %}
     <td class="text-description text-cell pl-3"><a href='#' class="btn-edit-item">{{ item.description.vars.value }}</a></td>
     <td class="text-unit">{{ item.unit.vars.value }}</td>
-    <td class="text-editable text-currency rowlink-skip" title="{{ 'calculation.edit.price.title'|trans }}" data-target="#{{ item.price.vars.id }}" data-tooltip="{{ 'calculation.edit.price.tootlip'|trans }}" data-error="{{ 'calculation.edit.price.error'|trans }}">
+    <td class="text-editable text-currency rowlink-skip" title="{{ 'calculation.edit.price.title'|trans }}" data-target="#{{ item.price.vars.id }}" data-tooltip-edit="{{ 'calculation.edit.price.tootlip'|trans }}" data-tooltip-error="{{ 'calculation.edit.price.error'|trans }}">
         {{- item.price.vars.value|amount -}}
     </td>
-    <td class="text-editable text-currency rowlink-skip" title="{{ 'calculation.edit.quantity.title'|trans }}" data-target="#{{ item.quantity.vars.id }}" data-tooltip="{{ 'calculation.edit.quantity.tootlip'|trans }}" data-error="{{ 'calculation.edit.quantity.error'|trans }}">
+    <td class="text-editable text-currency rowlink-skip" title="{{ 'calculation.edit.quantity.title'|trans }}" data-target="#{{ item.quantity.vars.id }}" data-tooltip-edit="{{ 'calculation.edit.quantity.tootlip'|trans }}" data-tooltip-error="{{ 'calculation.edit.quantity.error'|trans }}">
         {{- item.quantity.vars.value|amount -}}
     </td>
     <td class="text-currency">{{ item.total.vars.value|amount }}</td>

@@ -21,6 +21,7 @@ use App\Repository\CalculationRepository;
 use App\Traits\LoggerTrait;
 use App\Traits\SessionTrait;
 use App\Traits\TranslatorTrait;
+use App\Util\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -187,7 +188,7 @@ class CalculationUpdater implements LoggerAwareInterface
                 if ($query->isCloseCalculations() || $calculation->isEditable()) {
                     if ($query->isEmptyCalculations() && $calculation->isEmpty()) {
                         $result->addEmptyCalculations(1);
-                        $result->addCalculation($calculation, $this->trans('calculation.update.emptyCalculations'), true);
+                        $result->addCalculation($calculation, $this->trans('calculation.result.actions.emptyCalculations'), true);
                         if (!$query->isSimulate()) {
                             $this->manager->remove($calculation);
                         }
@@ -198,30 +199,35 @@ class CalculationUpdater implements LoggerAwareInterface
                     $changed = false;
                     if ($query->isEmptyItems() && $calculation->hasEmptyItems()) {
                         $result->addEmptyItems($calculation->removeEmptyItems());
-                        $messages[] = $this->trans('calculation.update.emptyItems');
+                        $messages[] = $this->trans('calculation.result.actions.emptyItems');
                         $changed = true;
                     }
 
                     if ($query->isCopyCodes() && 0 !== $count = $calculation->updateCodes()) {
                         $result->addCopyCodes($count);
-                        $messages[] = $this->trans('calculation.update.copyCodes');
+                        $messages[] = $this->trans('calculation.result.actions.copyCodes');
                         $changed = true;
                     }
 
                     if ($query->isDuplicateItems() && $calculation->hasDuplicateItems()) {
                         $result->addDuplicatedItems($calculation->removeDuplicateItems());
-                        $messages[] = $this->trans('calculation.update.duplicateItems');
+                        $messages[] = $this->trans('calculation.result.actions.duplicateItems');
                         $changed = true;
                     }
 
                     if ($query->isSortItems() && $calculation->sort()) {
                         $result->addSortItems(1);
-                        $messages[] = $this->trans('calculation.update.sortItems');
+                        $messages[] = $this->trans('calculation.result.actions.sortItems');
                         $changed = true;
                     }
 
+                    $oldTotal = $calculation->getOverallTotal();
                     if ($this->service->updateTotal($calculation)) {
-                        $messages[] = $this->trans('calculation.update.total');
+                        $newTotal = $calculation->getOverallTotal();
+                        $messages[] = $this->trans('calculation.result.actions.total', [
+                            '%oldTotal%' => FormatUtils::formatAmount($oldTotal),
+                            '%newTotal%' => FormatUtils::formatAmount($newTotal),
+                        ]);
                         $changed = true;
                     }
 

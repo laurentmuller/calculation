@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Abstract margin used for global margins and categorie's margins.
+ * Abstract margin used for global margins and group's margins.
  *
  * @author Laurent Muller
  *

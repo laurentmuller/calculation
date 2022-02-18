@@ -1,4 +1,4 @@
-name: Psalm
+name: PHP-Psalm
 
 on: [push, pull_request]
 
@@ -34,8 +34,6 @@ jobs:
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           composer bin vimeo/psalm install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin psalm/plugin-symfony install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          composer bin weirdan/doctrine-psalm-plugin -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run Psalm
         run: vendor/bin/psalm

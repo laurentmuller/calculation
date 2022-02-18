@@ -68,29 +68,29 @@ class FormatUtilsTest extends TestCase
     public function getFormatDates(): array
     {
         return [
-            [new \DateTime('2022-02-20'), '20.02.2022'],
-            [new \DateTime('2022-02-20'), '20.02.2022', \IntlDateFormatter::SHORT],
-            [new \DateTime('2022-02-20'), '20 févr. 2022', \IntlDateFormatter::MEDIUM],
-            [new \DateTime('2022-02-20'), '20 février 2022', \IntlDateFormatter::LONG],
+            [$this->createDate('2022-02-20'), '20.02.2022'],
+            [$this->createDate('2022-02-20'), '20.02.2022', \IntlDateFormatter::SHORT],
+            [$this->createDate('2022-02-20'), '20 févr. 2022', \IntlDateFormatter::MEDIUM],
+            [$this->createDate('2022-02-20'), '20 février 2022', \IntlDateFormatter::LONG],
         ];
     }
 
     public function getFormatDateTimes(): array
     {
         return [
-            [new \DateTime('2022-02-20 12:59:59'), '20.02.2022 12:59'],
-            [new \DateTime('2022-02-20 12:59:59'), '20.02.2022 12:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT],
-            [new \DateTime('2022-02-20 12:59:59'), '20 févr. 2022 à 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT],
-            [new \DateTime('2022-02-20 12:59:59'), '20 février 2022 à 12:59', \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT],
+            [$this->createDate('2022-02-20 12:59:59'), '20.02.2022 12:59'],
+            [$this->createDate('2022-02-20 12:59:59'), '20.02.2022 12:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT],
+            [$this->createDate('2022-02-20 12:59:59'), '20 févr. 2022 à 12:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT],
+            [$this->createDate('2022-02-20 12:59:59'), '20 février 2022 à 12:59', \IntlDateFormatter::LONG, \IntlDateFormatter::SHORT],
 
-            [new \DateTime('2022-02-20 12:59:59'), '20.02.2022 12:59:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM],
-            [new \DateTime('2022-02-20 12:59:59'), '20.02.2022 12:59:59 UTC+1', \IntlDateFormatter::SHORT, \IntlDateFormatter::LONG],
+            [$this->createDate('2022-02-20 12:59:59'), '20.02.2022 12:59:59', \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM],
+            [$this->createDate('2022-02-20 12:59:59'), '20.02.2022 12:59:59 UTC+1', \IntlDateFormatter::SHORT, \IntlDateFormatter::LONG],
 
-            [new \DateTime('2022-02-20 12:59:59'), '20 févr. 2022 à 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM],
-            [new \DateTime('2022-02-20 12:59:59'), '20 févr. 2022 à 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG],
+            [$this->createDate('2022-02-20 12:59:59'), '20 févr. 2022 à 12:59:59', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM],
+            [$this->createDate('2022-02-20 12:59:59'), '20 févr. 2022 à 12:59:59 UTC+1', \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG],
 
-            [new \DateTime('2022-02-20 12:59:59'), '20 février 2022 à 12:59:59', \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM],
-            [new \DateTime('2022-02-20 12:59:59'), '20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::LONG, \IntlDateFormatter::LONG],
+            [$this->createDate('2022-02-20 12:59:59'), '20 février 2022 à 12:59:59', \IntlDateFormatter::LONG, \IntlDateFormatter::MEDIUM],
+            [$this->createDate('2022-02-20 12:59:59'), '20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::LONG, \IntlDateFormatter::LONG],
         ];
     }
 
@@ -140,10 +140,10 @@ class FormatUtilsTest extends TestCase
     public function getFormatTimes(): array
     {
         return [
-            [new \DateTime('12:59:59'), '12:59'],
-            [new \DateTime('12:59:59'), '12:59', \IntlDateFormatter::SHORT],
-            [new \DateTime('12:59:59'), '12:59:59', \IntlDateFormatter::MEDIUM],
-            [new \DateTime('12:59:59'), '12:59:59 UTC+1', \IntlDateFormatter::LONG],
+            [$this->createDate('12:59:59'), '12:59'],
+            [$this->createDate('12:59:59'), '12:59', \IntlDateFormatter::SHORT],
+            [$this->createDate('12:59:59'), '12:59:59', \IntlDateFormatter::MEDIUM],
+            [$this->createDate('12:59:59'), '12:59:59 UTC+1', \IntlDateFormatter::LONG],
         ];
     }
 
@@ -272,5 +272,10 @@ class FormatUtilsTest extends TestCase
     public function testTimeType(): void
     {
         $this->assertEquals(\IntlDateFormatter::SHORT, FormatUtils::getTimeType());
+    }
+
+    private function createDate(string $time): \DateTime
+    {
+        return new \DateTime($time, new \DateTimeZone(self::TIME_ZONE));
     }
 }

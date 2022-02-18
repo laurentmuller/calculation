@@ -57,7 +57,7 @@ class NotificationEmail extends BaseNotificationEmail
         $context = $this->getContext();
         $context['footer_text'] = $footerText;
         $this->context($context);
-        //return $this->updateContext('footer_text', $footerText);
+
         return $this;
     }
 
